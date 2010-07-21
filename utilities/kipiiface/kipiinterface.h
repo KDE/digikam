@@ -65,8 +65,6 @@ class Album;
 class PAlbum;
 class TAlbum;
 
-class KipiInterfacePrivate;
-
 class KipiInterface : public KIPI::Interface
 {
     Q_OBJECT
@@ -107,6 +105,7 @@ private Q_SLOTS:
 
 private:
 
+    class KipiInterfacePrivate;
     KipiInterfacePrivate* const d;
 };
 

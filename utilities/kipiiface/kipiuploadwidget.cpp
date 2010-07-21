@@ -7,7 +7,7 @@
  * Description : a widget to select an image collection
  *               to upload new items using digiKam album folder views
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Luka Renko <lure at kubuntu dot org>
  *
  * This program is free software; you can redistribute it
@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class KipiUploadWidgetPriv
+class KipiUploadWidget::KipiUploadWidgetPriv
 {
 public:
 
@@ -62,17 +62,17 @@ public:
         iface    = 0;
     }
 
-    AlbumSelectWidget *albumSel;
+    AlbumSelectWidget* albumSel;
 
-    KipiInterface     *iface;
+    KipiInterface*     iface;
 };
 
-KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
+KipiUploadWidget::KipiUploadWidget(KipiInterface* const iface, QWidget *parent)
                 : KIPI::UploadWidget(parent),
                   d(new KipiUploadWidgetPriv)
 {
     d->iface          = iface;
-    QVBoxLayout *vlay = new QVBoxLayout(this);
+    QVBoxLayout* vlay = new QVBoxLayout(this);
     d->albumSel       = new AlbumSelectWidget(this);
     vlay->addWidget(d->albumSel);
     vlay->setMargin(0);
@@ -92,13 +92,8 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
     KIPI::ImageCollection collection;
     if (d->iface)
     {
-#if KIPI_VERSION >= 0x000300
-        QString ext = d->iface->hostSetting("FileExtensions").toString();
-#else
-        QString ext = d->iface->fileExtensions();
-#endif
-
-        PAlbum *currentAlbum = d->albumSel->currentAlbum();
+        QString ext          = d->iface->hostSetting("FileExtensions").toString();
+        PAlbum* currentAlbum = d->albumSel->currentAlbum();
         if (currentAlbum)
         {
             collection = new KipiImageCollection(KipiImageCollection::AllItems, currentAlbum, ext);
@@ -109,7 +104,7 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 
 void KipiUploadWidget::slotSelectionChanged()
 {
-    PAlbum *currentAlbum = d->albumSel->currentAlbum();
+    PAlbum* currentAlbum = d->albumSel->currentAlbum();
 
     // TODO is this the desired semantic?
     if (!currentAlbum || (currentAlbum->isRoot()))

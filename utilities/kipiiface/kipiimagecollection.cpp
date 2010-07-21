@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class KipiImageCollectionPriv
+class KipiImageCollection::KipiImageCollectionPriv
 {
 public:
 
@@ -62,7 +62,7 @@ public:
     Album*                    album;
 };
 
-KipiImageCollection::KipiImageCollection(Type type, Album* album, const QString& filter)
+KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter)
                    : KIPI::ImageCollectionShared(), d(new KipiImageCollectionPriv)
 {
     d->type      = type;
@@ -177,7 +177,7 @@ KUrl::List KipiImageCollection::images()
 
 /** get the images from the Physical album in database and return the items found */
 
-KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* album) const
+KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* const album) const
 {
     // get the images from the database and return the items found
 
@@ -217,7 +217,7 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* album) const
 
 /** get the images from the Tags album in database and return the items found */
 
-KUrl::List KipiImageCollection::imagesFromTAlbum(TAlbum* album) const
+KUrl::List KipiImageCollection::imagesFromTAlbum(TAlbum* const album) const
 {
     QStringList urls;
     urls = DatabaseAccess().db()->getItemURLsInTag(album->id());

@@ -48,8 +48,6 @@
 namespace Digikam
 {
 
-class KipiImageCollectionPriv;
-
 class KipiImageCollection : public KIPI::ImageCollectionShared
 {
 
@@ -63,7 +61,7 @@ public:
 
 public:
 
-    KipiImageCollection(Type type, Album* album, const QString& filter);
+    KipiImageCollection(Type type, Album* const album, const QString& filter);
     ~KipiImageCollection();
 
     virtual QString name();
@@ -80,11 +78,12 @@ public:
 
 private:
 
-    KUrl::List imagesFromPAlbum(PAlbum* album) const;
-    KUrl::List imagesFromTAlbum(TAlbum* album) const;
+    KUrl::List imagesFromPAlbum(PAlbum* const album) const;
+    KUrl::List imagesFromTAlbum(TAlbum* const album) const;
 
 private:
 
+    class KipiImageCollectionPriv;
     KipiImageCollectionPriv* const d;
 };
 

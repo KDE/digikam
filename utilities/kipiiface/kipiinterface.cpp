@@ -55,15 +55,15 @@
 namespace Digikam
 {
 
-class KipiInterfacePrivate
+class KipiInterface::KipiInterfacePrivate
 {
 public:
 
     KipiInterfacePrivate()
     {
-      tagModel        = 0;
-      thumbLoadThread = 0;
-      albumManager    = 0;
+        tagModel        = 0;
+        thumbLoadThread = 0;
+        albumManager    = 0;
     }
 
     AlbumManager*        albumManager;

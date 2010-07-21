@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class KipiImageCollectionSelectorPriv
+class KipiImageCollectionSelector::KipiImageCollectionSelectorPriv
 {
 public:
 
@@ -117,7 +117,7 @@ public:
     }
 };
 
-KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* iface, QWidget* parent)
+KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const iface, QWidget* parent)
                            : KIPI::ImageCollectionSelector(parent),
                              d(new KipiImageCollectionSelectorPriv)
 {

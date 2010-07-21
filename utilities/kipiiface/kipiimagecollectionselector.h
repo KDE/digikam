@@ -43,7 +43,6 @@
 namespace Digikam
 {
 class KipiInterface;
-class KipiImageCollectionSelectorPriv;
 
 class KipiImageCollectionSelector : public KIPI::ImageCollectionSelector
 {
@@ -51,13 +50,14 @@ class KipiImageCollectionSelector : public KIPI::ImageCollectionSelector
 
 public:
 
-    explicit KipiImageCollectionSelector(KipiInterface* iface, QWidget* parent=0);
+    explicit KipiImageCollectionSelector(KipiInterface* const iface, QWidget* parent=0);
     ~KipiImageCollectionSelector();
 
     QList<KIPI::ImageCollection> selectedImageCollections() const;
 
 private:
 
+    class KipiImageCollectionSelectorPriv;
     KipiImageCollectionSelectorPriv* const d;
 };
 
