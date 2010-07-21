@@ -2639,7 +2639,7 @@ void DigikamApp::runFaceScanner(bool rebuildAll)
     connect(batchFaceDetector, SIGNAL(signalDetectAllFacesDone()),
             this, SLOT(slotScanForFacesDone()));
 
-    batchFaceDetector->show();
+//    batchFaceDetector->show();
 }
 void DigikamApp::slotRebuildFingerPrintsDone()
 {

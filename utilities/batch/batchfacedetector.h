@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "dprogressdlg.h"
+//#include "dprogressdlg.h"
 
 class QWidget;
 class KUrl;
@@ -43,7 +43,7 @@ class DImg;
 class LoadingDescription;
 class BatchFaceDetectorPriv;
 
-class BatchFaceDetector : public DProgressDlg
+class BatchFaceDetector : public QObject
 {
     Q_OBJECT
 
