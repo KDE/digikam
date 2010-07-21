@@ -100,7 +100,7 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
     d->faceIface = new KFaceIface::Database(KFaceIface::Database::InitDetection);
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
+            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
 
     setModal(false);
     setValue(0);
@@ -188,8 +188,8 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
     }
     
     
-    QPixmap pix = DImg(img).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
-    addedAction(pix, desc.filePath);
+//     QPixmap pix = DImg(img).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
+//     addedAction(pix, desc.filePath);
     advance(1);
     if (!d->allPicturesPath.isEmpty())
         d->allPicturesPath.removeFirst();
