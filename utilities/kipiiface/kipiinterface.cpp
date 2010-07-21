@@ -271,12 +271,12 @@ KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget* p
     return (new KipiImageCollectionSelector(this, parent));
 }
 
-KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget *parent)
+KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget* parent)
 {
     return (new KipiUploadWidget(this, parent));
 }
 
-QAbstractItemModel* KipiInterface::getTagTree()
+QAbstractItemModel* KipiInterface::getTagTree() const
 {
 
     if(!d->tagModel)

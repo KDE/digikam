@@ -91,8 +91,8 @@ public:
     void thumbnails( const KUrl::List& list, int size );
 
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
-    KIPI::UploadWidget* uploadWidget(QWidget *parent);
-    QAbstractItemModel* getTagTree();
+    KIPI::UploadWidget* uploadWidget(QWidget* parent);
+    QAbstractItemModel* getTagTree() const;
 
     QVariant hostSetting(const QString& settingName);
 
