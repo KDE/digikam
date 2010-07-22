@@ -171,7 +171,8 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
 
     d->stack            = parent;
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
+    updateScale();
+    
     // ------------------------------------------------------------
 
     d->back2AlbumAction   = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                    this);
@@ -413,21 +414,7 @@ void ImagePreviewViewV2::slotTogglePeople()
         // Scan for faces
         d->currentFaces.clear();
         d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().fileUrl().path()));
-        
-        int sceneWidth    = this->scene()->width();
-        int sceneHeight   = this->scene()->height();
-        int previewWidth  = d->item->image().width();
-        int previewHeight = d->item->image().height();
-        
-        if(1.*sceneWidth/previewWidth < 1.*sceneHeight/previewHeight)
-        {
-            d->scale = 1.*sceneWidth/previewWidth;
-        }
-        else
-        {
-            d->scale = 1.*sceneHeight/previewHeight;
-        }
-
+    
         Face face;
         kDebug() << "Found : " << d->currentFaces.size() << " faces.";
 
@@ -437,7 +424,7 @@ void ImagePreviewViewV2::slotTogglePeople()
             item->setVisible(false);
 
         d->faceitems.clear();
-
+        
         for(int i = 0; i < d->currentFaces.size(); ++i)
         {
             face = d->currentFaces[i];
@@ -448,5 +435,23 @@ void ImagePreviewViewV2::slotTogglePeople()
     }
     
 }
+
+void ImagePreviewViewV2::updateScale()
+{
+    int sceneWidth    = this->scene()->width();
+    int sceneHeight   = this->scene()->height();
+    int previewWidth  = d->item->image().width();
+    int previewHeight = d->item->image().height();
+
+    if (1.*sceneWidth/previewWidth < 1.*sceneHeight/previewHeight)
+    {
+        d->scale = 1.*sceneWidth/previewWidth;
+    }
+    else
+    {
+        d->scale = 1.*sceneHeight/previewHeight;
+    }
+}
+
 
 }  // namespace Digikam

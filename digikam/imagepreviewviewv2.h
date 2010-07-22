@@ -61,6 +61,11 @@ public:
 
     void showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent *event);
 
+    void updateScale();
+    void findFaces();
+    void drawFaceItems();
+    void clearFaceItems();
+    
 Q_SIGNALS:
 
     void signalNextItem();
