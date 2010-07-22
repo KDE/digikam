@@ -165,7 +165,7 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),     this);
     d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),    this);
     d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"),   this);
-    d->peopleToggleAction = new QAction(SmallIcon("user-identity"),       i18nc("@info:tooltip", "Show Face Tags"), this);
+    d->peopleToggleAction = new QAction(SmallIcon("user-identity"),       i18n("Show Face Tags"), this);
     
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
