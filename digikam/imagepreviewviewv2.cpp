@@ -416,20 +416,12 @@ void ImagePreviewViewV2::slotTogglePeople()
         d->peopleToggleAction->setText(i18n("Hide face tags"));
         d->peopleTagsShown = true;
         
-        // Clear old face items before performing a new detection and drawing new items
         clearFaceItems();
         
         // Scan for faces
         d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().fileUrl().path()));
-
-        Face face;
-        for(int i = 0; i < d->currentFaces.size(); ++i)
-        {
-            face = d->currentFaces[i];
-            d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale));
-            kDebug() << face.toRect()<<endl;
-        }
-
+        
+        drawFaceItems();
     }
     
 }
@@ -460,6 +452,17 @@ void ImagePreviewViewV2::clearFaceItems()
 
     d->faceitems.clear();
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
+}
+
+void ImagePreviewViewV2::drawFaceItems()
+{
+    Face face;
+    for (int i = 0; i < d->currentFaces.size(); ++i)
+    {
+        face = d->currentFaces[i];
+        d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale));
+        kDebug() << face.toRect()<<endl;
+    }
 }
 
 }  // namespace Digikam
