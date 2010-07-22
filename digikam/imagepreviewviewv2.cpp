@@ -64,6 +64,12 @@
 #include "tagspopupmenu.h"
 #include "themeengine.h"
 
+// libkface includes
+
+#include <libkface/faceitem.h>
+
+using namespace KFaceIface;
+
 namespace Digikam
 {
 
@@ -111,8 +117,12 @@ public:
         nextAction           = 0;
         rotLeftAction        = 0;
         rotRightAction       = 0;
+        peopleToggleAction   = 0;
+        peopleTagsShown      = 0;
     }
 
+    bool peopleTagsShown;
+    
     ImagePreviewViewItem *item;
 
     QAction*           back2AlbumAction;
@@ -120,10 +130,13 @@ public:
     QAction*           nextAction;
     QAction*           rotLeftAction;
     QAction*           rotRightAction;
-
+    QAction*           peopleToggleAction;
+    
     QToolBar*          toolBar;
 
     AlbumWidgetStack*  stack;
+    
+    QList<FaceItem *>  faceitems;
 };
 
 ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
@@ -147,18 +160,20 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
 
     // ------------------------------------------------------------
 
-    d->back2AlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                  this);
-    d->prevAction       = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
-    d->nextAction       = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
-    d->rotLeftAction    = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
-    d->rotRightAction   = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
-
+    d->back2AlbumAction   = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                    this);
+    d->prevAction         = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),    this);
+    d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),     this);
+    d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),    this);
+    d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"),   this);
+    d->peopleToggleAction = new QAction(SmallIcon("user-identity"),       i18nc("@info:tooltip", "Show Face Tags"), this);
+    
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
     d->toolBar->addAction(d->back2AlbumAction);
     d->toolBar->addAction(d->rotLeftAction);
     d->toolBar->addAction(d->rotRightAction);
+    d->toolBar->addAction(d->peopleToggleAction);
 
     connect(d->prevAction, SIGNAL(triggered()),
             this, SIGNAL(toPreviousImage()));
@@ -174,7 +189,10 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
 
     connect(d->rotRightAction, SIGNAL(triggered()),
             this, SLOT(slotRotateRight()));
-
+    
+    connect(d->peopleToggleAction, SIGNAL(triggered()),
+            this, SLOT(slotTogglePeople()));
+    
     // ------------------------------------------------------------
 
     connect(this, SIGNAL(toNextImage()),
@@ -357,6 +375,21 @@ void ImagePreviewViewV2::slotRotateRight()
             if (ac->objectName() == QString("rotate_cw"))
                 ac->trigger();
         }
+    }
+}
+
+void ImagePreviewViewV2::slotTogglePeople()
+{
+    if(d->peopleTagsShown)
+    {
+        d->peopleToggleAction->setText(i18n("Show face tags"));
+        d->peopleTagsShown = false;
+    }
+    
+    else
+    {
+        d->peopleToggleAction->setText(i18n("Hide face tags"));
+        d->peopleTagsShown = true;
     }
 }
 
