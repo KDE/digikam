@@ -171,7 +171,8 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
 
     d->stack            = parent;
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    updateScale();
+    
+    clearFaceItems();
     
     // ------------------------------------------------------------
 
@@ -234,6 +235,8 @@ ImagePreviewViewV2::~ImagePreviewViewV2()
 void ImagePreviewViewV2::reload()
 {
     previewItem()->reload();
+    
+    updateScale();
 }
 
 void ImagePreviewViewV2::imageLoaded()
@@ -243,6 +246,8 @@ void ImagePreviewViewV2::imageLoaded()
     emit signalPreviewLoaded(true);
     d->rotLeftAction->setEnabled(true);
     d->rotRightAction->setEnabled(true);
+    
+    updateScale();
 }
 
 void ImagePreviewViewV2::imageLoadingFailed()
@@ -411,20 +416,13 @@ void ImagePreviewViewV2::slotTogglePeople()
         d->peopleToggleAction->setText(i18n("Hide face tags"));
         d->peopleTagsShown = true;
         
-        // Scan for faces
-        d->currentFaces.clear();
-        d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().fileUrl().path()));
-    
-        Face face;
-        kDebug() << "Found : " << d->currentFaces.size() << " faces.";
-
-        FaceItem* item=0;
-    
-        foreach(item, d->faceitems)
-            item->setVisible(false);
-
-        d->faceitems.clear();
+        // Clear old face items before performing a new detection and drawing new items
+        clearFaceItems();
         
+        // Scan for faces
+        d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().fileUrl().path()));
+
+        Face face;
         for(int i = 0; i < d->currentFaces.size(); ++i)
         {
             face = d->currentFaces[i];
@@ -453,5 +451,15 @@ void ImagePreviewViewV2::updateScale()
     }
 }
 
+void ImagePreviewViewV2::clearFaceItems()
+{
+    FaceItem* item=0;
+
+    foreach(item, d->faceitems)
+        item->setVisible(false);
+
+    d->faceitems.clear();
+    kDebug() << "Found : " << d->currentFaces.size() << " faces.";
+}
 
 }  // namespace Digikam
