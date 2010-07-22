@@ -403,13 +403,13 @@ void ImagePreviewViewV2::slotRotateRight()
 
 void ImagePreviewViewV2::slotTogglePeople()
 {
+    clearFaceItems();
+    
     // Already shown, need to clean up
     if(d->peopleTagsShown)
     {
         d->peopleToggleAction->setText(i18n("Show face tags"));
         d->peopleTagsShown = false;
-        
-        clearFaceItems();
     }
     
     // Not shown, need to get faces and draw items
@@ -418,11 +418,9 @@ void ImagePreviewViewV2::slotTogglePeople()
         d->peopleToggleAction->setText(i18n("Hide face tags"));
         d->peopleTagsShown = true;
         
-        clearFaceItems();
         findFaces();
         drawFaceItems();
     }
-    
 }
 
 void ImagePreviewViewV2::updateScale()
