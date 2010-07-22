@@ -66,7 +66,13 @@
 
 // libkface includes
 
+#include <libkface/kface.h>
+#include <libkface/database.h>
 #include <libkface/faceitem.h>
+
+// KDE includes
+
+#include "kglobalsettings.h"
 
 using namespace KFaceIface;
 
@@ -109,6 +115,9 @@ public:
 
     ImagePreviewViewV2Priv()
     {
+        peopleTagsShown      = false;
+        scale                = 1.0;
+        
         item                 = 0;
         stack                = 0;
         toolBar              = 0;
@@ -118,25 +127,30 @@ public:
         rotLeftAction        = 0;
         rotRightAction       = 0;
         peopleToggleAction   = 0;
-        peopleTagsShown      = 0;
+        
+        faceIface            = new KFaceIface::Database(KFaceIface::Database::InitAll, "/home/aditya");
     }
 
-    bool peopleTagsShown;
-    
-    ImagePreviewViewItem *item;
+    bool                  peopleTagsShown;
+    double                scale;
 
-    QAction*           back2AlbumAction;
-    QAction*           prevAction;
-    QAction*           nextAction;
-    QAction*           rotLeftAction;
-    QAction*           rotRightAction;
-    QAction*           peopleToggleAction;
-    
-    QToolBar*          toolBar;
+    ImagePreviewViewItem* item;
 
-    AlbumWidgetStack*  stack;
+    QAction*              back2AlbumAction;
+    QAction*              prevAction;
+    QAction*              nextAction;
+    QAction*              rotLeftAction;
+    QAction*              rotRightAction;
+    QAction*              peopleToggleAction;
     
-    QList<FaceItem *>  faceitems;
+    QToolBar*             toolBar;
+
+    AlbumWidgetStack*     stack;
+    
+    QList<FaceItem* >     faceitems;
+    QList<Face>           currentFaces;
+
+    KFaceIface::Database* faceIface;
 };
 
 ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
@@ -383,17 +397,56 @@ void ImagePreviewViewV2::slotRotateRight()
 
 void ImagePreviewViewV2::slotTogglePeople()
 {
+    // Already shown, need to clean up
     if(d->peopleTagsShown)
     {
         d->peopleToggleAction->setText(i18n("Show face tags"));
         d->peopleTagsShown = false;
     }
     
+    // Not shown, need to get faces and draw items
     else
     {
         d->peopleToggleAction->setText(i18n("Hide face tags"));
         d->peopleTagsShown = true;
+        
+        // Scan for faces
+        d->currentFaces.clear();
+        d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().fileUrl().path()));
+        
+        int sceneWidth    = this->scene()->width();
+        int sceneHeight   = this->scene()->height();
+        int previewWidth  = d->item->image().width();
+        int previewHeight = d->item->image().height();
+        
+        if(1.*sceneWidth/previewWidth < 1.*sceneHeight/previewHeight)
+        {
+            d->scale = 1.*sceneWidth/previewWidth;
+        }
+        else
+        {
+            d->scale = 1.*sceneHeight/previewHeight;
+        }
+
+        Face face;
+        kDebug() << "Found : " << d->currentFaces.size() << " faces.";
+
+        FaceItem* item=0;
+    
+        foreach(item, d->faceitems)
+            item->setVisible(false);
+
+        d->faceitems.clear();
+
+        for(int i = 0; i < d->currentFaces.size(); ++i)
+        {
+            face = d->currentFaces[i];
+            d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale));
+            kDebug() << face.toRect()<<endl;
+        }
+
     }
+    
 }
 
 }  // namespace Digikam
