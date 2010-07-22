@@ -408,6 +408,8 @@ void ImagePreviewViewV2::slotTogglePeople()
     {
         d->peopleToggleAction->setText(i18n("Show face tags"));
         d->peopleTagsShown = false;
+        
+        clearFaceItems();
     }
     
     // Not shown, need to get faces and draw items
@@ -419,7 +421,7 @@ void ImagePreviewViewV2::slotTogglePeople()
         clearFaceItems();
         
         // Scan for faces
-        d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().fileUrl().path()));
+        d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().filePath()));
         
         drawFaceItems();
     }
