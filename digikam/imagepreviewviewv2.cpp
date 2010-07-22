@@ -271,6 +271,9 @@ void ImagePreviewViewV2::showContextMenu(const ImageInfo& info, QGraphicsSceneCo
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
+    cmhelper.addAction(d->peopleToggleAction, true);
+    popmenu.addSeparator();
+    // --------------------------------------------------------
     cmhelper.addAction(d->prevAction, true);
     cmhelper.addAction(d->nextAction, true);
     cmhelper.addAction(d->back2AlbumAction);
