@@ -419,10 +419,7 @@ void ImagePreviewViewV2::slotTogglePeople()
         d->peopleTagsShown = true;
         
         clearFaceItems();
-        
-        // Scan for faces
-        d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().filePath()));
-        
+        findFaces();
         drawFaceItems();
     }
     
@@ -465,6 +462,11 @@ void ImagePreviewViewV2::drawFaceItems()
         d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale));
         kDebug() << face.toRect()<<endl;
     }
+}
+
+void ImagePreviewViewV2::findFaces()
+{
+    d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().filePath()));
 }
 
 }  // namespace Digikam
