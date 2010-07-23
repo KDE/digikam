@@ -28,10 +28,12 @@
 #include <QGridLayout>
 #include <QTreeView>
 #include <QMenu>
+#include <QLabel>
 
 // KDE includes
 
 #include <KUrl>
+#include <KLocale>
 #include <KDebug>
 
 // Local includes
@@ -59,6 +61,7 @@ public:
     ImageFiltersHistoryModel*        model;
     QGridLayout*                     layout;
     ImageFiltersHistoryItemDelegate* delegate;
+    QLabel*                          headerLabel;
 };
 
 RemoveFilterAction::RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* parent)
@@ -70,11 +73,15 @@ RemoveFilterAction::RemoveFilterAction(const QString& label, const QModelIndex& 
 ImagePropertiesHistoryTab::ImagePropertiesHistoryTab(QWidget* parent)
                          : QWidget(parent), d(new ImagePropertiesHistoryTabPriv)
 {
-    d->layout   = new QGridLayout(this);
-    d->view     = new QTreeView(this);
-    d->delegate = new ImageFiltersHistoryItemDelegate(this);
-    d->model    = new ImageFiltersHistoryModel(0, KUrl());
+    d->layout      = new QGridLayout(this);
+    d->view        = new QTreeView(this);
+    d->delegate    = new ImageFiltersHistoryItemDelegate(this);
+    d->model       = new ImageFiltersHistoryModel(0, KUrl());
+    d->headerLabel = new QLabel(this);
 
+    d->headerLabel->setText(i18n("Used filters"));
+    
+    d->layout->addWidget(d->headerLabel);
     d->layout->addWidget(d->view);
 
     d->view->setItemDelegate(d->delegate);
