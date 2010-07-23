@@ -1465,7 +1465,7 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList& unch
     }
     DBActionType fieldValueList;
     fieldValueList.setValue(true); // In this case (map as object), the value flag is not important.
-    fieldValueList.setActionValue(fieldValueMap
+    fieldValueList.setActionValue(fieldValueMap);
 
     DBActionType fieldList;
     fieldList.setValue(false);
