@@ -6,7 +6,7 @@
  * Date        : 2009-04-16
  * Description : Qt Model for Albums - drag and drop handling
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albummodeldragdrophandler.h"
+#include "albummodeldragdrophandler.moc"
 
 // Qt includes
 
@@ -34,22 +34,22 @@
 namespace Digikam
 {
 
-AlbumModelDragDropHandler::AlbumModelDragDropHandler(AbstractAlbumModel *model)
-    : QObject(model), m_model(model)
+AlbumModelDragDropHandler::AlbumModelDragDropHandler(AbstractAlbumModel* model)
+                         : QObject(model), m_model(model)
 {
 }
 
-AbstractAlbumModel *AlbumModelDragDropHandler::model() const
+AbstractAlbumModel* AlbumModelDragDropHandler::model() const
 {
     return m_model;
 }
 
-bool AlbumModelDragDropHandler::dropEvent(QAbstractItemView *, const QDropEvent *, const QModelIndex &)
+bool AlbumModelDragDropHandler::dropEvent(QAbstractItemView*, const QDropEvent*, const QModelIndex&)
 {
     return false;
 }
 
-Qt::DropAction AlbumModelDragDropHandler::accepts(const QDropEvent *, const QModelIndex &)
+Qt::DropAction AlbumModelDragDropHandler::accepts(const QDropEvent*, const QModelIndex&)
 {
     return Qt::IgnoreAction;
 }
@@ -59,12 +59,12 @@ QStringList AlbumModelDragDropHandler::mimeTypes() const
     return QStringList();
 }
 
-QMimeData *AlbumModelDragDropHandler::createMimeData(const QList<Album*> &)
+QMimeData *AlbumModelDragDropHandler::createMimeData(const QList<Album*>&)
 {
     return 0;
 }
 
-bool AlbumModelDragDropHandler::acceptsMimeData(const QMimeData *mime)
+bool AlbumModelDragDropHandler::acceptsMimeData(const QMimeData* mime)
 {
     QStringList modelTypes = mimeTypes();
     for (int i = 0; i < modelTypes.count(); ++i)
@@ -75,5 +75,4 @@ bool AlbumModelDragDropHandler::acceptsMimeData(const QMimeData *mime)
     return false;
 }
 
-}
-
+} // namespace Digikam
