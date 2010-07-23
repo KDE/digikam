@@ -41,6 +41,7 @@
 
 namespace Digikam
 {
+    
 class ImagePropertiesHistoryTabPriv;
 
 class DIGIKAM_EXPORT RemoveFilterAction : public QAction
@@ -84,7 +85,7 @@ public:
     ImagePropertiesHistoryTab(QWidget* parent);
     ~ImagePropertiesHistoryTab();
 
-    void setCurrentURL(const KUrl& url=KUrl());
+    void setCurrentURL(const KUrl& url = KUrl());
 
 public Q_SLOTS:
 

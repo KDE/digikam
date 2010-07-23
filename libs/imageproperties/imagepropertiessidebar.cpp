@@ -84,7 +84,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
     appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
     appendTab(m_colorTab, SmallIcon("format-fill-color"), i18n("Colors"));
     appendTab(m_gpsTab, SmallIcon("applications-internet"), i18n("Geolocation"));
-    appendTab(m_historyTab, SmallIcon("view-history"), i18n("Filters History"));
+    appendTab(m_historyTab, SmallIcon("black-white"), i18n("Filters History"));
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
