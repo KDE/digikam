@@ -1238,6 +1238,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchwidget.cpp
        )
 
+    SET(libimageversionssidebar_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imageversionsmodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesversionstab.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesversionsdelegate.cpp
+       )
+
     SET(libtimeline_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
        )

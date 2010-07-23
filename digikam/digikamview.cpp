@@ -63,6 +63,7 @@
 #include "statusprogressbar.h"
 #include "tagfiltersidebarwidget.h"
 #include "tagmodificationhelper.h"
+#include "imagepropertiesversionstab.h"
 
 namespace Digikam
 {
@@ -136,6 +137,7 @@ public:
     ImagePropertiesSideBarDB* rightSideBar;
 
     TagFilterSideBarWidget *tagFilterWidget;
+    ImagePropertiesVersionsTab *versionsTabWidget;
 
     QString optionAlbumViewPrefix;
 
@@ -245,6 +247,9 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     // Tags Filter sidebar tab contents.
     d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
     d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("tag-assigned"), i18n("Tag Filters"));
+    
+    d->versionsTabWidget = new ImagePropertiesVersionsTab(d->rightSideBar);
+    d->rightSideBar->appendTab(d->versionsTabWidget, SmallIcon("view-catalog"), i18n("Image versions"));
 
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);
@@ -537,6 +542,12 @@ void DigikamView::setupConnections()
             
     connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
             d->albumHistory, SLOT(slotAlbumDeleted(Album*)));
+
+    // -- Image versions ----------------
+    connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
+            d->versionsTabWidget, SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
+    connect(this, SIGNAL(signalNoCurrentItem()),
+            d->versionsTabWidget, SLOT(slotDigikamViewNoCurrentItem()));
 }
 
 void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)
