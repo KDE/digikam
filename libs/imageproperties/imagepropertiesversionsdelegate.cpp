@@ -74,7 +74,7 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
 
     if(index.row() == 0 && index.model()->rowCount() > 1)
     {
-        painter->drawText(textRect, Qt::AlignVCenter, path.fileName().append(" (").append(i18n("Original")).append(")"));
+        painter->drawText(textRect, Qt::AlignVCenter, i18n("%1 (Original)").arg(path.fileName()));
     }
     else
     {
