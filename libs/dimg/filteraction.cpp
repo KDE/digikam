@@ -67,6 +67,16 @@ void FilterAction::setDescription(const QString& description)
   m_description = description;
 }
 
+QString FilterAction::displayableName() const
+{
+    return m_displayableName;
+}
+
+void FilterAction::setDisplayableName(const QString& displayableName)
+{
+    m_displayableName = displayableName;
+}
+
 bool FilterAction::hasParameter(const QString& key) const
 {
     return m_params.contains(key);

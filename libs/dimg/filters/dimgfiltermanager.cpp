@@ -70,12 +70,12 @@ void DImgFilterManagerPriv::setupBuiltinGenerators()
 {
     builtinGenerators
         << new BasicDImgFilterGenerator<BCGFilter>()
-        //<< new BasicDImgFilterGenerator<AutoExpoFilter>()
-        //<< new BasicDImgFilterGenerator<AutoLevelsFilter>()
-        << new BasicDImgFilterGenerator<EqualizeFilter>()
+        << new BasicDImgFilterGenerator<AutoExpoFilter>()
+        << new BasicDImgFilterGenerator<AutoLevelsFilter>();
+        //<< new BasicDImgFilterGenerator<EqualizeFilter>()
         //<< new BasicDImgFilterGenerator<NormalizeFilter>()
         //<< new BasicDImgFilterGenerator<StretchFilter>();
-        << new BasicDImgFilterGenerator<WBFilter>();
+        //<< new BasicDImgFilterGenerator<WBFilter>();
 }
 
 class DImgFilterManagerCreator { public: DImgFilterManager object; };
@@ -136,6 +136,14 @@ QList<int> DImgFilterManager::supportedVersions(const QString& filterIdentifier)
         return gen->supportedVersions(filterIdentifier);
     return QList<int>();
 }
+
+QString DImgFilterManager::displayableName(const QString& filterIdentifier)
+{
+    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
+    if (gen)
+        return gen->displayableName(filterIdentifier);
+}
+
 
 bool DImgFilterManager::isSupported(const QString& filterIdentifier)
 {

@@ -42,11 +42,12 @@ public:
 
     static DImgFilterManager* instance();
 
-    virtual QStringList supportedFilters();
-    virtual QList<int> supportedVersions(const QString& filterIdentifier);
+    QStringList supportedFilters();
+    QList<int> supportedVersions(const QString& filterIdentifier);
+    QString displayableName(const QString& filterIdentifier);
 
-    virtual bool isSupported(const QString& filterIdentifier);
-    virtual bool isSupported(const QString& filterIdentifier, int version);
+    bool isSupported(const QString& filterIdentifier);
+    bool isSupported(const QString& filterIdentifier, int version);
 
     DImgThreadedFilter *createFilter(const QString& filterIdentifier, int version);
 

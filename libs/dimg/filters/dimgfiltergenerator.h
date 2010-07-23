@@ -50,6 +50,8 @@ public:
     virtual QStringList supportedFilters() = 0;
     /// Returns a list with the supported versions for the given identifier
     virtual QList<int>  supportedVersions(const QString& filterIdentifier) = 0;
+    /// Returns a QString with filter name for displaying in views
+    virtual QString displayableName(const QString& filterIdentifier) = 0;
 
     /// Convenience methods
     virtual bool isSupported(const QString& filterIdentifier);
@@ -94,6 +96,13 @@ public:
             return t;
         }
         return 0;
+    }
+    
+    QString displayableName(const QString& filterIdentifier)
+    {
+        if (filterIdentifier == T::FilterIdentifier())
+            return T::DisplayableName();
+        return QString();
     }
 };
 

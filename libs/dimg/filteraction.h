@@ -74,6 +74,9 @@ public:
      */
     QString  description() const;
     void setDescription(const QString& description);
+    
+    QString displayableName() const;
+    void setDisplayableName(const QString& displayableName);
 
     bool hasParameter(const QString& key) const;
 
@@ -104,6 +107,7 @@ protected:
     QString  m_identifier;
     int      m_version;
     QString  m_description;
+    QString  m_displayableName;
     QHash<QString, QVariant> m_params;
 };
 
