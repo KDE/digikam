@@ -225,8 +225,10 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     connect(this, SIGNAL(toPreviousImage()),
             this, SIGNAL(signalPrevItem()));
 
+    /* I don't think that clicking on the view to get back to the album is a good idea anymore. When people play with
+     * the face tags, it is extremely difficult to avoid clicking the background sometimes.
     connect(this, SIGNAL(activated()),
-            this, SIGNAL(signalBack2Album()));
+            this, SIGNAL(signalBack2Album()));*/
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
