@@ -403,24 +403,10 @@ void ImagePreviewViewV2::slotRotateRight()
 
 void ImagePreviewViewV2::slotTogglePeople()
 {
-    clearFaceItems();
-    
-    // Already shown, need to clean up
     if(d->peopleTagsShown)
-    {
-        d->peopleToggleAction->setText(i18n("Show face tags"));
-        d->peopleTagsShown = false;
-    }
-    
-    // Not shown, need to get faces and draw items
+        slotHidePeopleTags();
     else
-    {
-        d->peopleToggleAction->setText(i18n("Hide face tags"));
-        d->peopleTagsShown = true;
-        
-        findFaces();
-        drawFaceItems();
-    }
+        slotShowPeopleTags();
 }
 
 void ImagePreviewViewV2::updateScale()
@@ -466,5 +452,25 @@ void ImagePreviewViewV2::findFaces()
 {
     d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().filePath()));
 }
+
+void ImagePreviewViewV2::slotShowPeopleTags()
+{
+    clearFaceItems();
+    
+    d->peopleToggleAction->setText(i18n("Hide face tags"));
+    d->peopleTagsShown = true;
+    
+    findFaces();
+    drawFaceItems();
+}
+
+void ImagePreviewViewV2::slotHidePeopleTags()
+{
+    clearFaceItems();
+    
+    d->peopleToggleAction->setText(i18n("Show face tags"));
+    d->peopleTagsShown = false;
+}
+
 
 }  // namespace Digikam

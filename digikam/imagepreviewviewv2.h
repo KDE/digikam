@@ -100,6 +100,8 @@ private Q_SLOTS:
     void slotRotateRight();
     
     void slotTogglePeople();
+    void slotHidePeopleTags();
+    void slotShowPeopleTags();
 
 private:
 
