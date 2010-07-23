@@ -27,6 +27,7 @@
 #include <QBrush>
 #include <QGradient>
 #include <QLinearGradient>
+#include <QApplication>
 
 // Local includes
 
@@ -60,6 +61,7 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
 {
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
+    QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
     QLinearGradient linearGradient((int)(option.rect.width()/2), option.rect.y(), (int)(option.rect.width()/2), option.rect.height());
     linearGradient.setColorAt(0.0, Qt::white);
@@ -76,7 +78,7 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     QRect textRect = option.rect;
     textRect.setLeft(textRect.left() + 8);
 
-    painter->drawText(textRect, Qt::AlignVCenter, index.model()->data(index, Qt::DisplayRole).toString() );
+    painter->drawText(textRect, Qt::AlignVCenter, index.data(Qt::DisplayRole).toString() );
     painter->restore();
 }
 
