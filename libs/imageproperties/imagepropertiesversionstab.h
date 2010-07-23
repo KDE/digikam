@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QWidget>
+#include <QModelIndex>
 
 // KDE includes
 
@@ -55,6 +56,10 @@ public:
 public slots:
     void slotDigikamViewNoCurrentItem();
     void slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
+    void slotViewItemSelected(QModelIndex index);
+
+signals:
+    void setCurrentUrlSignal(const KUrl& url);
 
 private:
     ImagePropertiesVersionsTabPriv* const d;

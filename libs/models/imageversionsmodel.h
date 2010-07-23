@@ -50,6 +50,7 @@ public:
     void clearModelData();
 
 private:
+    ///Complete paths with filenames
     QList<QVariant> *m_data;
     
 };

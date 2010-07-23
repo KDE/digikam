@@ -546,8 +546,12 @@ void DigikamView::setupConnections()
     // -- Image versions ----------------
     connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
             d->versionsTabWidget, SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
+    
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->versionsTabWidget, SLOT(slotDigikamViewNoCurrentItem()));
+    
+    connect(d->versionsTabWidget, SIGNAL(setCurrentUrlSignal(KUrl)),
+            d->iconView, SLOT(setCurrentUrl(KUrl)));
 }
 
 void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)

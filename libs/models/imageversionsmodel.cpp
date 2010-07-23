@@ -64,7 +64,7 @@ QVariant ImageVersionsModel::data(const QModelIndex& index, int role) const
     {   //TODO: make this text Italic
         return QVariant(QString(i18n("No image selected")));
     }
-    
+
     return QVariant();
 }
 

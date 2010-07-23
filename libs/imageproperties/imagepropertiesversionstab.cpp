@@ -28,12 +28,14 @@
 #include <QListView>
 #include <QGridLayout>
 #include <QLabel>
+#include <QModelIndex>
 
 // KDE includes
 
 #include <KDebug>
 #include <KLocale>
 #include <KIconLoader>
+#include <KUrl>
 
 // Local includes
 
@@ -94,6 +96,9 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
     
     d->layout->addLayout(d->iconTextLayout, 0, 0, 1, 1);
     d->layout->addWidget(d->view,           1, 0, 1, 1);
+
+    connect(d->view, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(slotViewItemSelected(QModelIndex)));
 }
 
 ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
@@ -135,12 +140,14 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
     d->model->setupModelData(list);
     d->view->setModel(d->model);
     d->view->update();
-    /*if(d->model->rowCount() == 0)
-        d->view->setDisabled(true);
-    else d->view->setEnabled(true);*/
-    
-//    delete thread;
 }
+
+void ImagePropertiesVersionsTab::slotViewItemSelected(QModelIndex index)
+{
+    KUrl url(index.data(Qt::DisplayRole).toString());
+    emit setCurrentUrlSignal(url);
+}
+
 
 
 } // namespace Digikam
