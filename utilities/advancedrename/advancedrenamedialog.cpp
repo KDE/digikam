@@ -169,7 +169,7 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
                     : KDialog(parent), d(new AdvancedRenameDialogPriv)
 {
     d->advancedRenameWidget = new AdvancedRenameWidget(this);
-    d->advancedRenameWidget->setAllowDirectoryCreation(true);
+    d->advancedRenameWidget->setAllowDirectoryCreation(false);
 
     // --------------------------------------------------------
 
@@ -280,6 +280,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
         QFileInfo info(urls.first().toLocalFile());
         d->advancedRenameWidget->setParseString(info.fileName());
         d->advancedRenameWidget->focusLineEdit();
+        d->advancedRenameWidget->highlightLineEdit(info.completeBaseName());
         d->singleFileModeOldFilename = info.fileName();
     }
     d->singleFileMode = (itemCount <= 1);

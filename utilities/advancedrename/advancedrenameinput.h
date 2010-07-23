@@ -138,6 +138,9 @@ public Q_SLOTS:
     void slotClearTextAndHistory();
     void slotSetFocus();
 
+    void slotHighlightLineEdit();
+    void slotHighlightLineEdit(const QString& word);
+
 protected:
 
     virtual void changeEvent(QEvent* e);

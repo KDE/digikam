@@ -23,13 +23,14 @@
 
 #include "tooltipdialog.moc"
 
-// Qt includes
-
-#include <QTextBrowser>
-
 // KDE includes
 
 #include <klocale.h>
+#include <ktextbrowser.h>
+
+// Local includes
+
+#include "tooltipcreator.h"
 
 namespace Digikam
 {
@@ -42,16 +43,17 @@ public:
         textBrowser(0)
     {}
 
-    QTextBrowser* textBrowser;
+    KTextBrowser* textBrowser;
 };
 
 TooltipDialog::TooltipDialog(QWidget* parent)
              : KDialog(parent), d(new TooltipDialogPriv)
 {
-    d->textBrowser = new QTextBrowser(this);
+    d->textBrowser = new KTextBrowser(this);
     d->textBrowser->setFrameStyle(QFrame::NoFrame);
     d->textBrowser->setOpenLinks(true);
     d->textBrowser->setOpenExternalLinks(true);
+
     setCaption(i18n("Information"));
     setButtons(KDialog::Close);
     setMainWidget(d->textBrowser);
@@ -65,6 +67,11 @@ TooltipDialog::~TooltipDialog()
 void TooltipDialog::setTooltip(const QString& tooltip)
 {
     clearTooltip();
+
+    // set image resources
+    d->textBrowser->document()->addResource(QTextDocument::ImageResource,
+                                            QUrl(TooltipCreator::getInstance().getInfoIconResourceName()),
+                                            TooltipCreator::getInstance().getInfoIcon());
     d->textBrowser->setHtml(tooltip);
 }
 

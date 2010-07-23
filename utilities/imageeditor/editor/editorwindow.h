@@ -233,6 +233,7 @@ protected Q_SLOTS:
 
     void slotThemeChanged();
 
+    virtual void slotPrepareToLoad();
     virtual void slotLoadingStarted(const QString& filename);
     virtual void slotLoadingFinished(const QString& filename, bool success);
     virtual void slotSavingStarted(const QString& filename);
@@ -275,9 +276,9 @@ private Q_SLOTS:
     void slotIncreaseZoom();
     void slotDecreaseZoom();
     void slotRawCameraList();
-    void slotPrepareToLoad();
     void slotShowMenuBar();
     void slotCloseTool();
+    void slotApplyTool();
     void slotKioMoveFinished(KJob *job);
     void slotUndoStateChanged(bool, bool, bool);
 

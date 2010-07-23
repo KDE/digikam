@@ -30,6 +30,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes
 
@@ -47,6 +48,45 @@ TooltipCreator& TooltipCreator::getInstance()
 {
     static TooltipCreator m_instance;
     return m_instance;
+}
+
+QString TooltipCreator::additionalInformation()
+{
+    QStringList infoItems;
+    infoItems << i18n("Modifiers can be applied to every renaming option.");
+    infoItems << i18n("It is possible to assign multiple modifiers to an option, "
+                      "they are applied in the order you assign them.");
+    infoItems << i18n("Be sure to use the quick access buttons: They might provide "
+                      "additional information about renaming and modifier options.");
+
+    QString information;
+
+    information += "<div style='margin-top:20px;'";
+
+    information += tableStart(90);
+    information += "<tr><td style='vertical-align:top;'><img src='" + getInfoIconResourceName() + "' /></td>";
+    information += "<td><ol>";
+    foreach (const QString& infoItem, infoItems)
+    {
+        information += "<li>" + infoItem + "</li>";
+
+    }
+    information += "</ol></td></tr>";
+    information += tableEnd();
+
+    information += "</div>";
+
+    return information;
+}
+
+QString TooltipCreator::getInfoIconResourceName()
+{
+    return QString("mydata://info.png");
+}
+
+QPixmap TooltipCreator::getInfoIcon()
+{
+    return SmallIcon("lighttable", KIconLoader::SizeMedium);
 }
 
 QString TooltipCreator::tooltip(Parser* parser)
@@ -67,9 +107,7 @@ QString TooltipCreator::tooltip(Parser* parser)
 
     if (!parser->modifiers().isEmpty())
     {
-        tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
-                        "It is possible to assign multiple modifiers to an option, "
-                        "they are applied in the order you assign them.</i></p>");
+        tooltip += additionalInformation();
     }
 
     tooltip += "</body>";
@@ -78,9 +116,15 @@ QString TooltipCreator::tooltip(Parser* parser)
     return tooltip;
 }
 
+QString TooltipCreator::tableStart(int width)
+{
+    QString w = QString::number(width) + "%";
+    return QString("<table width=\"%1\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">").arg(w);
+}
+
 QString TooltipCreator::tableStart()
 {
-    return QString("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
+    return tableStart(100);
 }
 
 QString TooltipCreator::tableEnd()

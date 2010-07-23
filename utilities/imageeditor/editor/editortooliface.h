@@ -78,7 +78,7 @@ public Q_SLOTS:
 
     void slotCloseTool();
     void slotToolAborted();
-    void slotToolApplied();
+    void slotApplyTool();
 
 private:
 

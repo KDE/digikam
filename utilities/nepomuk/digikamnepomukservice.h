@@ -6,7 +6,7 @@
  * Date        : 2009-06-19
  * Description : Service to sync digikam and nepomuk storages
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,8 +33,15 @@
 // Local includes
 
 class KJob;
-namespace KIO { class Job; }
-namespace Soprano { class Statement; }
+namespace KIO
+{
+    class Job;
+}
+
+namespace Soprano
+{
+    class Statement;
+}
 
 namespace Digikam
 {
@@ -83,19 +90,19 @@ protected Q_SLOTS:
 
     void cleanIgnoreList();
 
-    void slotFullSyncJobResult(KJob *job);
+    void slotFullSyncJobResult(KJob* job);
     void slotFullSyncJobData(KIO::Job*, const QByteArray& data);
 
 protected:
 
-    void connectToDatabase(const DatabaseParameters &params);
+    void connectToDatabase(const DatabaseParameters& params);
 
     enum SyncToNepomukSettings
     {
-        SyncNothing = 0,
-        SyncRating = 0x1,
-        SyncHasNoRating = 0x2,
-        SyncComment = 0x4
+        SyncNothing     = 0x00,
+        SyncRating      = 0x01,
+        SyncHasNoRating = 0x02,
+        SyncComment     = 0x04
     };
 
     void readConfig();
@@ -105,20 +112,20 @@ protected:
     void syncRatingToDigikam(const KUrl::List& filePaths, const QList<int>& ratings);
     void syncCommentToDigikam(const KUrl::List& filePaths, const QStringList& ratings);
     void syncTagsToDigikam(const KUrl::List& filePaths, const QList<QUrl>& tags);
-    void syncAddedImagesToDigikam(const QList<qlonglong> &ids);
+    void syncAddedImagesToDigikam(const QList<qlonglong>& ids);
     void removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
     void pushTagsToNepomuk(const QList<ImageInfo>& imageInfos);
 
     int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagName);
-    QString tagnameForNepomukTag(const QUrl& tagUri);
-    QDateTime lastSyncToDigikam();
     void markAsSyncedToDigikam();
     void clearSyncedToDigikam();
     bool hasSyncToNepomuk();
     void markAsSyncedToNepomuk();
     void clearSyncedToNepomuk();
-    DatabaseParameters databaseParameters();
-    KSharedConfig::Ptr digikamConfig();
+    QString tagnameForNepomukTag(const QUrl& tagUri) const;
+    QDateTime lastSyncToDigikam() const;
+    DatabaseParameters databaseParameters() const;
+    KSharedConfig::Ptr digikamConfig() const;
 
 private:
 
@@ -128,5 +135,3 @@ private:
 } // namespace Digikam
 
 #endif // DIGIKAMNEPOMUKSERVICE_H
-
-

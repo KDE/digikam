@@ -192,6 +192,12 @@ void EditorToolIface::slotCloseTool()
     if (tool) tool->slotCloseTool();
 }
 
+void EditorToolIface::slotApplyTool()
+{
+    EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
+    if (tool) tool->slotApplyTool();
+}
+
 void EditorToolIface::setupICC()
 {
     d->editor->setupICC();

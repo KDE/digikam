@@ -330,7 +330,7 @@ QSize Setup::sizeHint() const
             page == DcrawPage       ||
             page == MiscellaneousPage)
         {
-            KPageWidgetItem *item   = d->pageItem((Page)page);
+            KPageWidgetItem* item   = d->pageItem((Page)page);
             if (!item)
                 continue;
 
@@ -428,7 +428,7 @@ void Setup::slotOkClicked()
         if (result != KMessageBox::Yes)
             return;
 
-        BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this);
+        BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this);
         thumbsGenerator->show();
     }
 

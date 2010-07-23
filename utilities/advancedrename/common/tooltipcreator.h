@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QString>
+#include <QPixmap>
 
 namespace Digikam
 {
@@ -42,6 +43,9 @@ public:
 
     QString tooltip(Parser* parser);
 
+    QString getInfoIconResourceName();
+    QPixmap getInfoIcon();
+
 private:
 
     TooltipCreator() {};
@@ -50,7 +54,10 @@ private:
     // common methods
     QString markOption(const QString& str);
     QString tableStart();
+    QString tableStart(int width);
     QString tableEnd();
+
+    QString additionalInformation();
 
 
     // parse object related methods

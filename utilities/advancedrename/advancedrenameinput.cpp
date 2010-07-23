@@ -377,6 +377,19 @@ void AdvancedRenameInput::slotSetFocus()
     d->lineEdit->ensureCursorVisible();
 }
 
+void AdvancedRenameInput::slotHighlightLineEdit()
+{
+    d->lineEdit->selectAll();
+}
+
+void AdvancedRenameInput::slotHighlightLineEdit(const QString& word)
+{
+    QTextCursor cursor = d->lineEdit->textCursor();
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    d->lineEdit->setTextCursor(cursor);
+    d->lineEdit->find(word, QTextDocument::FindCaseSensitively);
+}
+
 void AdvancedRenameInput::enableHighlighter(bool enable)
 {
     if (d->highlighter)
