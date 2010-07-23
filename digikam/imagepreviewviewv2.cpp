@@ -422,6 +422,9 @@ void ImagePreviewViewV2::updateScale()
     int previewWidth  = d->item->image().width();
     int previewHeight = d->item->image().height();
 
+    // FIXME: This way doesn't always work. sceneWidth is probably not applicable at all times? 
+    // In the use-case when the default preview mode is to show a large-sized (not fit to window) preview,
+    // the rectangles are incorrectly drawn. Need to know why this happens
     if (1.*sceneWidth/previewWidth < 1.*sceneHeight/previewHeight)
     {
         d->scale = 1.*sceneWidth/previewWidth;
@@ -440,7 +443,6 @@ void ImagePreviewViewV2::clearFaceItems()
         item->setVisible(false);
 
     d->faceitems.clear();
-    kDebug() << "Found : " << d->currentFaces.size() << " faces.";
 }
 
 void ImagePreviewViewV2::drawFaceItems()
@@ -457,6 +459,7 @@ void ImagePreviewViewV2::drawFaceItems()
 void ImagePreviewViewV2::findFaces()
 {
     d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().filePath()));
+    kDebug() << "Found : " << d->currentFaces.size() << " faces.";
 }
 
 void ImagePreviewViewV2::slotShowPeopleTags()
