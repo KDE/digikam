@@ -43,6 +43,9 @@ namespace Digikam
 ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& url)
                         : QAbstractItemModel(parent)
 {
+    m_filterStack = new QList<FilterAction>();
+//    m_filterManager = new DImgFilterManager();
+
     if(!url.isEmpty())
     {
         kDebug() << "Creating model with url" << url.toLocalFile();
@@ -184,12 +187,15 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
     parents << parent;
 
     QString itemData;
+    m_filterStack->clear();
 
     for(int i = 0; i < entries.count(); i++)
     {
         if(entries.at(i).filterEntry)
         {
-            itemData = entries.at(i).action.identifier();
+            m_filterStack->append(entries.at(i).action);
+            
+            itemData = entries.at(i).action.displayableName();
             kDebug() << "Adding an entry: " << itemData;
             parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
             filters << parents.last()->child(parents.last()->childCount()-1);
@@ -224,7 +230,9 @@ bool ImageFiltersHistoryModel::removeRows(int row, int /*count*/, const QModelIn
     {
         beginResetModel();
         m_rootItem->removeChild(row);
+        m_filterStack->removeAt(row);
         endResetModel();
+        //TODO: emit signal starting FilterManager
         return true;
     }
     return false;

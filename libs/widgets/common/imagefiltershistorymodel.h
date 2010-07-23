@@ -37,6 +37,7 @@
 
 #include "dimagehistory.h"
 #include "digikam_export.h"
+#include "dimgfiltermanager.h"
 
 namespace Digikam
 {
@@ -73,7 +74,9 @@ private:
 
 private:
 
-    ImageFiltersHistoryTreeItem* m_rootItem;
+    ImageFiltersHistoryTreeItem *m_rootItem;
+    QList<FilterAction>         *m_filterStack;
+    DImgFilterManager           *m_filterManager;
 };
 
 } //namespace Digikam
