@@ -40,7 +40,13 @@
 
 namespace Digikam
 {
+AutoLevelsFilter::AutoLevelsFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
+    
 AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
                 : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter"),
                   m_refImage(*refImage)

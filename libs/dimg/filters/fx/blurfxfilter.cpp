@@ -1450,4 +1450,25 @@ void BlurFXFilter::MakeConvolution (DImg *orgImage, DImg *destImage, int Radius,
     delete [] pBlur;
 }
 
+FilterAction BlurFXFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("blurFXType", m_blurFXType);
+    action.addParameter("distance", m_distance);
+    action.addParameter("level", m_level);
+
+    return action;
+}
+
+void BlurFXFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_blurFXType = action.parameter("blurFXType").toInt();
+    m_distance = action.parameter("distance").toInt();
+    m_level = action.parameter("level").toInt();
+}
+
+
+
 }  // namespace Digikam

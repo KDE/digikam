@@ -7,6 +7,7 @@
  * Description : Chanels mixer filter
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -92,6 +93,15 @@ public:
 
     explicit MixerFilter(DImg* orgImage, QObject* parent=0, const MixerContainer& settings=MixerContainer());
     virtual ~MixerFilter();
+    
+    static QString          FilterIdentifier() { return "digikam:MixerFilter"; }
+    static QString          DisplayableName() { return "Channel Mixer Filter"; }
+    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
+    static int              CurrentVersion() { return 1; }
+    
+    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

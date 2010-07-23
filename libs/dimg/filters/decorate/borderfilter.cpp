@@ -9,6 +9,7 @@
  * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -422,5 +423,44 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
     // Copy original image.
     dest.bitBltImage(&tmp, borderWidth, borderWidth);
 }
+
+FilterAction BorderFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.setParameter("borderPath", d->settings.borderPath);
+    action.setParameter("borderPercent", d->settings.borderPercent);
+    action.setParameter("borderType", d->settings.borderType);
+    action.setParameter("borderWidth1", d->settings.borderWidth1);
+    action.setParameter("borderWidth2", d->settings.borderWidth2);
+    action.setParameter("borderWidth3", d->settings.borderWidth3);
+    action.setParameter("borderWidth4", d->settings.borderWidth4);
+    action.setParameter("preserveAspectRatio", d->settings.preserveAspectRatio);
+    action.setParameter("orgHeight", d->settings.orgHeight);
+    action.setParameter("orgWidth", d->settings.orgWidth);
+
+    //TODO: Add colors (QColor)
+
+    return action;
+}
+
+void BorderFilter::readParameters(const FilterAction& action)
+{
+    d->settings.borderPath = action.parameter("borderPath").toString();
+    d->settings.borderPercent = action.parameter("borderPercent").toDouble();
+    d->settings.borderType = action.parameter("borderType").toInt();
+    d->settings.borderWidth1 = action.parameter("borderWidth1").toInt();
+    d->settings.borderWidth2 = action.parameter("borderWidth2").toInt();
+    d->settings.borderWidth3 = action.parameter("borderWidth3").toInt();
+    d->settings.borderWidth4 = action.parameter("borderWidth4").toInt();
+    d->settings.preserveAspectRatio = action.parameter("preserveAspectRatio").toBool();
+    d->settings.orgHeight = action.parameter("orgHeight").toInt();
+    d->settings.orgWidth = action.parameter("orgWidth").toInt();
+
+    //TODO: Add colors (QColor)
+}
+
+
 
 }  // namespace Digikam

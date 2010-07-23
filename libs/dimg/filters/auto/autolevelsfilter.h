@@ -41,15 +41,17 @@ class DIGIKAM_EXPORT AutoLevelsFilter : public DImgThreadedFilter
 {
 
 public:
+    AutoLevelsFilter(QObject* parent = 0);
+    AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
+    virtual ~AutoLevelsFilter();
+
     static QString          FilterIdentifier() { return "digikam:autolevelsfilter"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
+    static QString          DisplayableName() { return "Auto Levels Filter"; }
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
-    
-    AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
-    virtual ~AutoLevelsFilter();
 
 private:
 

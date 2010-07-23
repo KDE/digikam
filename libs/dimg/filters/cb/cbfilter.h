@@ -7,6 +7,7 @@
  * Description : color balance filter
  *
  * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,6 +73,15 @@ public:
 
     explicit CBFilter(DImg* orgImage, QObject* parent=0, const CBContainer& settings=CBContainer());
     virtual ~CBFilter();
+
+    static QString          FilterIdentifier() { return "digikam:CBFilter"; }
+    static QString          DisplayableName() { return "Color Balance Filter"; }
+    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
+    static int              CurrentVersion() { return 1; }
+
+    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

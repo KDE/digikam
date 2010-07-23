@@ -209,7 +209,7 @@ void CharcoalTool::putPreviewData()
 void CharcoalTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Charcoal"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Charcoal"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void CharcoalTool::renderingFinished()

@@ -41,15 +41,16 @@ class DIGIKAM_EXPORT NormalizeFilter : public DImgThreadedFilter
 {
 
 public:
+    NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
+    virtual ~NormalizeFilter();
+
     static QString          FilterIdentifier() { return "digikam:normalizeFilter"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
+    static QString          DisplayableName() { return "Auto Normalize Filter"; }
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
-    
-    NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
-    virtual ~NormalizeFilter();
 
 private:
 

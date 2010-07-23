@@ -233,7 +233,7 @@ void TextureTool::putPreviewData()
 void TextureTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Texture"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Texture"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void TextureTool::renderingFinished()

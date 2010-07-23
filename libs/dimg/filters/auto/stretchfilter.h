@@ -48,6 +48,7 @@ public:
     static QString          FilterIdentifier() { return "digikam:stretchFilter"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
+    static QString          DisplayableName() { return "Stretch Contrast Filter"; }
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
