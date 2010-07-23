@@ -7,6 +7,7 @@
  * Description : pixels antialiasing filter
  *
  * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original channel mixer algorithm copyrighted 2002 by
  * Martin Guldahl <mguldahl at xmission dot com> from Gimp 2.2
@@ -142,5 +143,20 @@ inline int PixelsAliasFilter::setPositionAdjusted (int Width, int Height, int X,
     Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
     return (Y*Width*4 + 4*X);
 }
+
+FilterAction PixelsAliasFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    return action;
+}
+
+void PixelsAliasFilter::readParameters(const Digikam::FilterAction& action)
+{
+    Q_UNUSED(action)
+}
+
+
 
 }  // namespace Digikam

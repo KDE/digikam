@@ -180,7 +180,7 @@ void BlurTool::prepareFinal()
 void BlurTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Gaussian Blur"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void BlurTool::renderingFinished()

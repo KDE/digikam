@@ -211,7 +211,7 @@ void OilPaintTool::putPreviewData()
 void OilPaintTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Oil Paint"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Oil Paint"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void OilPaintTool::renderingFinished()

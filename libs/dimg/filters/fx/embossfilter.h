@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Emboss algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -44,6 +45,15 @@ public:
 
     explicit EmbossFilter(DImg* orgImage, QObject* parent=0, int depth=30);
     ~EmbossFilter(){};
+
+    static QString          FilterIdentifier() { return "digikam:EmbossFilter"; }
+    static QString          DisplayableName() { return "Emboss Filter"; }
+    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
+    static int              CurrentVersion() { return 1; }
+    
+    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -844,6 +845,27 @@ void DistortionFXFilter::tile(DImg *orgImage, DImg *destImage,
         if (progress%5 == 0)
             postProgress(progress);
     }
+}
+
+FilterAction DistortionFXFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+    
+    action.addParameter("antiAlias", m_antiAlias);
+    action.addParameter("effectType", m_effectType);
+    action.addParameter("iteration", m_iteration);
+    action.addParameter("level", m_level);
+    
+    return action;
+}
+
+void DistortionFXFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_antiAlias = action.parameter("antiAlias").toBool();
+    m_effectType = action.parameter("effectType").toInt();
+    m_iteration = action.parameter("iteration").toInt();
+    m_level = action.parameter("level").toInt();
 }
 
 // UNUSED

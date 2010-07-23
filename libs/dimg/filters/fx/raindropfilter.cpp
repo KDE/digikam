@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original RainDrop algorithm copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -461,5 +462,33 @@ bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits
 
     return (true);
 }
+
+FilterAction RainDropFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("amount", m_amount);
+    action.addParameter("coeff", m_coeff);
+    action.addParameter("drop", m_drop);
+    action.addParameter("selectedH", m_selectedH);
+    action.addParameter("selectedW", m_selectedW);
+    action.addParameter("selectedX", m_selectedX);
+    action.addParameter("selectedY", m_selectedY);
+
+    return action;
+}
+
+void RainDropFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_amount = action.parameter("amount").toInt();
+    m_coeff = action.parameter("coeff").toInt();
+    m_drop = action.parameter("drop").toInt();
+    m_selectedH = action.parameter("selectedH").toInt();
+    m_selectedW = action.parameter("selectedW").toInt();
+    m_selectedX = action.parameter("selectedX").toInt();
+    m_selectedY = action.parameter("selectedY").toInt();
+}
+
 
 }  // namespace Digikam
