@@ -26,6 +26,10 @@
 #include <QPainter>
 #include <QApplication>
 
+// KDE includes
+
+#include <KLocale>
+
 // Local includes
 
 #include "imagepropertiesversionsdelegate.h"
@@ -67,8 +71,15 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     QRect textRect = option.rect;
     textRect.setLeft(textRect.left() + 72);
     KUrl path(index.data(Qt::DisplayRole).toString());
-    
-    painter->drawText(textRect, Qt::AlignVCenter, path.fileName());
+
+    if(index.row() == 0 && index.model()->rowCount() > 1)
+    {
+        painter->drawText(textRect, Qt::AlignVCenter, path.fileName().append(" (").append(i18n("Original")).append(")"));
+    }
+    else
+    {
+        painter->drawText(textRect, Qt::AlignVCenter, path.fileName());
+    }
     painter->restore();
 }
 
