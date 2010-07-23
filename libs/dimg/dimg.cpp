@@ -2219,8 +2219,8 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     if(!m_priv->imageHistory.isEmpty()) {
         QString imageHistoryXml = m_priv->imageHistory.toXml();
         meta.setImageHistory(imageHistoryXml);
-        DImageHistory di(m_priv->imageHistory.fromXml(imageHistoryXml));
-        di.toXml();
+//         DImageHistory di(m_priv->imageHistory.fromXml(imageHistoryXml));
+//         di.toXml();
     }
 
     // Store new Exif/IPTC/XMP data into image.
@@ -2310,6 +2310,7 @@ void DImg::setFilterAction(const Digikam::FilterAction& action)
         HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
 
         m_priv->imageHistory << h;
+        kDebug() << "Path and Name: " << filePathAndName;
     }
 
     m_priv->imageHistory << action;

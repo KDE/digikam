@@ -83,8 +83,11 @@ public:
     const FilterAction& action(int i) const;
     const HistoryImageId& referredImages(int i) const;
 
-    void setOriginalFile(const QString& filePath);
-    QString originalFile();
+    void setOriginalFileName(const QString& fileName);
+    QString originalFileName();
+    
+    void setOriginalFilePath(const QString& filePath);
+    QString originalFilePath();
 
     QString toXml() const;
     static DImageHistory fromXml(const QString& xml);
