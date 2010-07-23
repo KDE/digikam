@@ -142,8 +142,7 @@ static inline void authorsRegistration(KAboutData& aboutData)
     aboutData.addCredit ( ki18n("Johannes Wienke"),
                           ki18n("Developer"),
                           "languitar at semipol dot de",
-                          "http://de-de.facebook.com/languitar"
-                          );
+                          "http://www.semipol.de");
 
     aboutData.addCredit ( ki18n("Risto Saukonpaa"),
                           ki18n("Design, icons, logo, banner, mockup, beta tester"),

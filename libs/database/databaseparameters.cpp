@@ -87,6 +87,7 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
 {
     databaseType   = url.queryItem("databaseType");
     databaseName   = url.queryItem("databaseName");
+    databaseNameThumbnails   = url.queryItem("databaseNameThumbnails");
     connectOptions = url.queryItem("connectOptions");
     hostName       = url.queryItem("hostName");
     QString queryPort = url.queryItem("port");
@@ -103,6 +104,7 @@ bool DatabaseParameters::operator==(const DatabaseParameters& other) const
 {
     return databaseType   == other.databaseType &&
            databaseName   == other.databaseName &&
+           databaseNameThumbnails == other.databaseNameThumbnails &&
            connectOptions == other.connectOptions &&
            hostName       == other.hostName &&
            port           == other.port &&
@@ -188,7 +190,7 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     connectOptions           = group.readEntry(configDatabaseConnectOptions, QString());
     internalServer           = group.readEntry(configInternalDatabaseServer, false);
 
-    if (!databaseName.isNull())
+    if (isSQLite() && !databaseName.isNull())
     {
         QString orgName = databaseName;
         setDatabasePath(orgName);

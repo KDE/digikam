@@ -52,7 +52,6 @@
 #include "kdatetimeedit.h"
 #include "addtagslineedit.h"
 #include "albumsettings.h"
-#include "albumlister.h"
 #include "albumthumbnailloader.h"
 #include "collectionscanner.h"
 #include "databasetransaction.h"
@@ -567,7 +566,6 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     int i = 0;
 
     DatabaseTransaction transaction;
-    AlbumLister::instance()->blockSignals(true);
     ScanController::instance()->suspendCollectionScan();
 
     CollectionScanner scanner;
@@ -589,7 +587,6 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     }
 
     ScanController::instance()->resumeCollectionScan();
-    AlbumLister::instance()->blockSignals(false);
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());

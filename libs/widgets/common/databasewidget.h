@@ -81,12 +81,13 @@ public:
     DatabaseParameters getDatabaseParameters();
 
     QString currentDatabaseType() const;
+    void setDatabaseInputFields(const QString&);
 
 public Q_SLOTS:
 
     void slotChangeDatabasePath(const KUrl&);
     void slotDatabasePathEdited(const QString&);
-    void setDatabaseInputFields(const QString&);
+    void slotHandleDBTypeIndexChanged(int index);
     void slotHandleInternalServerCheckbox(int enableFields);
     void checkDatabaseConnection();
 

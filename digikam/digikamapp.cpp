@@ -205,7 +205,6 @@ DigikamApp::DigikamApp()
     // ensure creation
     AlbumSettings::instance();
     AlbumManager::instance();
-    AlbumLister::instance();
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
     ThumbnailLoadThread::setDisplayingWidget(this);
@@ -302,7 +301,6 @@ DigikamApp::~DigikamApp()
 
     ScanController::instance()->shutDown();
     AlbumManager::instance()->cleanUp();
-    AlbumLister::cleanUp();
     ImageAttributesWatch::cleanUp();
     ThumbnailLoadThread::cleanUp();
     AlbumThumbnailLoader::instance()->cleanUp();

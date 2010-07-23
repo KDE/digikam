@@ -34,7 +34,6 @@
 #include "imageinfo.h"
 #include "albumsettings.h"
 #include "albummanager.h"
-#include "albumlister.h"
 #include "albumdb.h"
 #include "album.h"
 #include "imagelister.h"

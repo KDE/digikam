@@ -624,7 +624,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     {
         // See B.K.O #197285: LightRoom use '|' as separator.
         tagsPath = tagsPath.replaceInStrings("|", "/");
-        kDebug() << "Tags Path imported from LR: " << tagsPath;
+        kDebug() << "Tags Path imported from LightRoom: " << tagsPath;
         return true;
     }
 
@@ -640,7 +640,16 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     // let the capability to import it for interworking issues.
     tagsPath = getIptcKeywords();
     if (!tagsPath.isEmpty())
+    {
+        // Work around to Imach tags path list hosted in IPTC with '.' as separator.
+        QStringList ntp = tagsPath.replaceInStrings(".", "/");
+        if (ntp != tagsPath)
+        {
+            tagsPath = ntp;
+    	    kDebug() << "Tags Path imported from Imach: " << tagsPath;
+        }
         return true;
+    }
 
     return false;
 }

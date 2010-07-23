@@ -43,7 +43,6 @@
 
 // Local includes
 
-#include "albumlister.h"
 #include "digikam_export.h"
 
 class KAction;

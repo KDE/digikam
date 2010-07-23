@@ -1082,6 +1082,7 @@ void AbstractCheckableAlbumTreeView::restoreCheckStateForHierarchy(const QModelI
     {
         const QModelIndex child = checkableModel()->index(i, 0, index);
         restoreCheckState(child);
+        restoreCheckStateForHierarchy(child);
     }
 }
 

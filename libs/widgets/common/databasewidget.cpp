@@ -174,8 +174,8 @@ void DatabaseWidget::setupMainArea()
     connect(databasePathEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotDatabasePathEdited(const QString&)));
 
-    connect(databaseType, SIGNAL(currentIndexChanged(const QString&)),
-            this, SLOT(setDatabaseInputFields(const QString&)));
+    connect(databaseType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotHandleDBTypeIndexChanged(int)));
 
     connect(internalServer, SIGNAL(stateChanged(int)),
             this, SLOT(slotHandleInternalServerCheckbox(int)));
@@ -221,6 +221,12 @@ void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
 #endif
 
     checkDBPath();
+}
+
+void DatabaseWidget::slotHandleDBTypeIndexChanged(int index)
+{
+	const QString& dbType = databaseType->itemData(index).toString();
+	setDatabaseInputFields(dbType);
 }
 
 void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
@@ -311,6 +317,7 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings *settings)
 
     internalServer->setChecked(settings->getInternalDatabaseServer());
     databaseName->setText(settings->getDatabaseName());
+    databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
     hostName->setText(settings->getDatabaseHostName());
     hostPort->setValue(settings->getDatabasePort());
     connectionOptions->setText(settings->getDatabaseConnectoptions());
@@ -326,10 +333,9 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings *settings)
     {
         //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
           //            << "] with ["<< settings->getDatabaseType() << "]";
-        if (databaseType->itemText(i) == settings->getDatabaseType())
+        if (databaseType->itemData(i).toString() == settings->getDatabaseType())
         {
             databaseType->setCurrentIndex(i);
-            setDatabaseInputFields(databaseType->itemData(i).toString());
         }
     }
 }
@@ -349,10 +355,12 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
         if (parameters.databaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
         {
             parameters.databaseName = QDir::cleanPath(databasePathEdit->url().toLocalFile() + '/' + "digikam4.db");
+            parameters.databaseNameThumbnails = parameters.databaseName;
         }
         else
         {
             parameters.databaseName = databaseName->text();
+            parameters.databaseNameThumbnails = databaseNameThumbnails->text();
         }
     }
     else
