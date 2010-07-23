@@ -103,6 +103,7 @@ private Q_SLOTS:
     void slotTogglePeople();
     void slotHidePeopleTags();
     void slotShowPeopleTags();
+    void slotAddPersonTag();
 
 private:
 

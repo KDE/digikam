@@ -128,6 +128,7 @@ public:
         rotLeftAction        = 0;
         rotRightAction       = 0;
         peopleToggleAction   = 0;
+        addPersonAction      = 0;
         
         faceIface            = new KFaceIface::Database(KFaceIface::Database::InitAll, "/home/aditya");
     }
@@ -143,6 +144,7 @@ public:
     QAction*              rotLeftAction;
     QAction*              rotRightAction;
     QAction*              peopleToggleAction;
+    QAction*              addPersonAction;
     
     QToolBar*             toolBar;
 
@@ -183,6 +185,7 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),    this);
     d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"),   this);
     d->peopleToggleAction = new QAction(SmallIcon("user-identity"),       i18n("Show Face Tags"), this);
+    d->addPersonAction    = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"), this);
     
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
@@ -191,7 +194,8 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     d->toolBar->addAction(d->rotLeftAction);
     d->toolBar->addAction(d->rotRightAction);
     d->toolBar->addAction(d->peopleToggleAction);
-
+    d->toolBar->addAction(d->addPersonAction);
+    
     connect(d->prevAction, SIGNAL(triggered()),
             this, SIGNAL(toPreviousImage()));
 
@@ -209,6 +213,9 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     
     connect(d->peopleToggleAction, SIGNAL(triggered()),
             this, SLOT(slotTogglePeople()));
+    
+    connect(d->addPersonAction, SIGNAL(triggered()),
+            this, SLOT(slotAddPersonTag()));
     
     // ------------------------------------------------------------
 
@@ -294,6 +301,7 @@ void ImagePreviewViewV2::showContextMenu(const ImageInfo& info, QGraphicsSceneCo
 
     cmhelper.addAction(d->peopleToggleAction, true);
     popmenu.addSeparator();
+    cmhelper.addAction(d->addPersonAction, true);
     // --------------------------------------------------------
     cmhelper.addAction(d->prevAction, true);
     cmhelper.addAction(d->nextAction, true);
@@ -469,6 +477,7 @@ void ImagePreviewViewV2::slotShowPeopleTags()
     clearFaceItems();
     
     d->peopleToggleAction->setText(i18n("Hide face tags"));
+    d->addPersonAction->setVisible(true);
     d->peopleTagsShown = true;
     
     findFaces();
@@ -481,7 +490,18 @@ void ImagePreviewViewV2::slotHidePeopleTags()
     clearFaceItems();
     
     d->peopleToggleAction->setText(i18n("Show face tags"));
+    d->addPersonAction->setVisible(false);
     d->peopleTagsShown = false;
+}
+
+void ImagePreviewViewV2::slotAddPersonTag()
+{
+    int w = this->scene()->width()/2;
+    int h = w;
+    int x = this->scene()->width()/2 - w/2;
+    int y = this->scene()->height()/2 - w/2;
+    
+    d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale));
 }
 
 
