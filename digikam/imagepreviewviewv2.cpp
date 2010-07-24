@@ -490,7 +490,7 @@ void ImagePreviewViewV2::slotHidePeopleTags()
 {
     updateScale();
     clearFaceItems();
-    
+    d->currentFaces.clear();
     d->peopleToggleAction->setText(i18n("Show face tags"));
     d->addPersonAction->setVisible(false);
     d->peopleTagsShown = false;
