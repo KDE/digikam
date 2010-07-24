@@ -64,18 +64,7 @@ kio_digikammapimages::~kio_digikammapimages()
 
 void kio_digikammapimages::special(const QByteArray& data)
 {
-/*    QString strLat1 = metaData("lat1");
-    QString strLng1 = metaData("lng1");
-    QString strLat2 = metaData("lat2");
-    QString strLng2 = metaData("lng2");
-    int lat1 = strLat1.toInt();
-    int lng1 = strLng1.toInt();
-    int lat2 = strLat2.toInt();
-    int lng2 = strLng2.toInt();
-*/
     bool wantDirectQuery = (metaData("wantDirectQuery") == "true");
-
-    kDebug()<<"ENTERED IN SPECIAL KIO";
     
     KUrl    kurl;
     QString filter;

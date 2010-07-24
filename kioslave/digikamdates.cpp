@@ -78,7 +78,6 @@ void kio_digikamdates::special(const QByteArray& data)
 
     if (folders)
     {
-       kDebug()<<"ENTERED FOLDERS PART."; 
     
         QMap<QDateTime, int> dateNumberMap = Digikam::DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
 
@@ -89,8 +88,6 @@ void kio_digikamdates::special(const QByteArray& data)
     }
     else
     {
-        kDebug()<<"ENTERED IMAGELISTER PART";
-
         Digikam::ImageLister lister;
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
