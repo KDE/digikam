@@ -89,11 +89,8 @@ FilterAction InvertFilter::filterAction()
     return action;
 }
 
-void InvertFilter::readParameters(const Digikam::FilterAction& action)
+void InvertFilter::readParameters(const Digikam::FilterAction& /*action*/)
 {
-
 }
-
-
 
 }  // namespace Digikam
