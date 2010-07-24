@@ -108,10 +108,8 @@ FilterAction CurvesFilter::filterAction()
     return action;
 }
 
-void CurvesFilter::readParameters(const Digikam::FilterAction& action)
+void CurvesFilter::readParameters(const Digikam::FilterAction& /*action*/)
 {
-
 }
-
 
 }  // namespace Digikam
