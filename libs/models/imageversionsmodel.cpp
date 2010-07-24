@@ -33,7 +33,7 @@ namespace Digikam
 {
 
 ImageVersionsModel::ImageVersionsModel(QObject* parent)
-                   : QAbstractListModel(parent)
+                  : QAbstractListModel(parent)
 {
     m_data = new QList<QVariant>;
 }
@@ -74,13 +74,13 @@ int ImageVersionsModel::rowCount(const QModelIndex& parent) const
     return m_data->count();
 }
 
-void ImageVersionsModel::setupModelData(QList<QVariant> *data)
+void ImageVersionsModel::setupModelData(QList<QVariant>* data)
 {
     beginResetModel();
+
     if(!data->isEmpty())
     {
         m_data = data;
-
     }
     else 
     {
@@ -100,6 +100,5 @@ void ImageVersionsModel::clearModelData()
     }
     endResetModel();
 }
-
 
 } // namespace Digikam

@@ -40,21 +40,21 @@ class DIGIKAM_EXPORT ImageVersionsModel : public QAbstractListModel
 {
 
 public:
+
     ImageVersionsModel(QObject* parent = 0);
     ~ImageVersionsModel();
 
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    void setupModelData(QList< QVariant >* data);
+    void setupModelData(QList<QVariant>* data);
     void clearModelData();
 
 private:
-    ///Complete paths with filenames
-    QList<QVariant> *m_data;
-    
-};
 
+    ///Complete paths with filenames
+    QList<QVariant>* m_data;
+};
 
 } // namespace Digikam
 
