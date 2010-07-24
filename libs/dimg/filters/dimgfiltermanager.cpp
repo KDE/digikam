@@ -78,7 +78,13 @@ void DImgFilterManagerPriv::setupBuiltinGenerators()
         //<< new BasicDImgFilterGenerator<WBFilter>();
 }
 
-class DImgFilterManagerCreator { public: DImgFilterManager object; };
+class DImgFilterManagerCreator
+{
+public:
+
+    DImgFilterManager object;
+};
+
 K_GLOBAL_STATIC(DImgFilterManagerCreator, creator)
 
 DImgFilterManager* DImgFilterManager::instance()
@@ -134,6 +140,7 @@ QList<int> DImgFilterManager::supportedVersions(const QString& filterIdentifier)
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
     if (gen)
         return gen->supportedVersions(filterIdentifier);
+
     return QList<int>();
 }
 
@@ -142,8 +149,9 @@ QString DImgFilterManager::displayableName(const QString& filterIdentifier)
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
     if (gen)
         return gen->displayableName(filterIdentifier);
-}
 
+    return QString();
+}
 
 bool DImgFilterManager::isSupported(const QString& filterIdentifier)
 {
@@ -155,6 +163,7 @@ bool DImgFilterManager::isSupported(const QString& filterIdentifier, int version
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
     if (gen)
         return gen->isSupported(filterIdentifier, version);
+
     return false;
 }
 
@@ -164,6 +173,7 @@ DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentif
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
     if (gen)
         return gen->createFilter(filterIdentifier, version);
+
     return 0;
 }
 
