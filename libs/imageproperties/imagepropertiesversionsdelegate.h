@@ -32,11 +32,13 @@
 
 #include "digikam_export.h"
 
-namespace Digikam {
+namespace Digikam
+{
 
 class DIGIKAM_EXPORT ImagePropertiesVersionsDelegate : public QStyledItemDelegate
 {
 public:
+
     ImagePropertiesVersionsDelegate(QObject* parent = 0);
     ~ImagePropertiesVersionsDelegate();
     

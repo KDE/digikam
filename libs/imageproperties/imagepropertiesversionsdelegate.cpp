@@ -39,14 +39,12 @@ namespace Digikam
 {
 
 ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegate(QObject* parent)
-                                : QStyledItemDelegate(parent)
+                               : QStyledItemDelegate(parent)
 {
-
 }
 
 ImagePropertiesVersionsDelegate::~ImagePropertiesVersionsDelegate()
 {
-
 }
 
 QSize ImagePropertiesVersionsDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -82,7 +80,5 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     }
     painter->restore();
 }
-
-
 
 } // namespace Digikam

@@ -52,8 +52,10 @@
 namespace Digikam 
 {
 
-class ImagePropertiesVersionsTabPriv {
+class ImagePropertiesVersionsTab::ImagePropertiesVersionsTabPriv
+{
 public:
+
     ImagePropertiesVersionsTabPriv()
     {
         view     = 0;
@@ -62,23 +64,23 @@ public:
         delegate = 0;
     }
     
-    QListView *view;
-    ImageVersionsModel *model;
-    QGridLayout *layout;
-    QHBoxLayout *iconTextLayout;
-    QLabel *headerText;
-    QLabel *headerTextIcon;
-    ImagePropertiesVersionsDelegate *delegate;
+    QListView*                       view;
+    ImageVersionsModel*              model;
+    QGridLayout*                     layout;
+    QHBoxLayout*                     iconTextLayout;
+    QLabel*                          headerText;
+    QLabel*                          headerTextIcon;
+    ImagePropertiesVersionsDelegate* delegate;
 };
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
                            : QWidget(parent), d(new ImagePropertiesVersionsTabPriv)
 {
-    d->view = new QListView(this);
-    d->layout = new QGridLayout(this);
-    d->model = new ImageVersionsModel(0);
-    d->delegate = new ImagePropertiesVersionsDelegate(0);
-    d->headerText = new QLabel(this);
+    d->view           = new QListView(this);
+    d->layout         = new QGridLayout(this);
+    d->model          = new ImageVersionsModel(0);
+    d->delegate       = new ImagePropertiesVersionsDelegate(0);
+    d->headerText     = new QLabel(this);
     d->headerTextIcon = new QLabel(this);
     d->iconTextLayout = new QHBoxLayout(this);
     
@@ -120,7 +122,7 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
 
     QPixmap thumbnail;
     QString path;
-    QList<QVariant> *list = new QList<QVariant>;
+    QList<QVariant>* list = new QList<QVariant>;
 
     foreach(ImageInfo inf, selectedImage)
     {
@@ -133,7 +135,6 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
             kDebug() << "Original file path: " << path;
             list->append(path);
             list->append(inf.filePath());
-
         }
     }
     
@@ -147,7 +148,5 @@ void ImagePropertiesVersionsTab::slotViewItemSelected(QModelIndex index)
     KUrl url(index.data(Qt::DisplayRole).toString());
     emit setCurrentUrlSignal(url);
 }
-
-
 
 } // namespace Digikam

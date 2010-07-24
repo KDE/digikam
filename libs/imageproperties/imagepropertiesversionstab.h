@@ -41,27 +41,33 @@ namespace Digikam
 {
 
 class DImageHistory;
-class ImagePropertiesVersionsTabPriv;
 class ImageInfoList;
 
 class DIGIKAM_EXPORT ImagePropertiesVersionsTab : public QWidget
 {
     Q_OBJECT
+
 public:
+
     ImagePropertiesVersionsTab(QWidget* parent);
     ~ImagePropertiesVersionsTab();
+
 //    void setCurrentURL(const KUrl& url = KUrl());
 //     void setImageHistory(const DImageHistory& history);
 
-public slots:
+public Q_SLOTS:
+
     void slotDigikamViewNoCurrentItem();
-    void slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
+    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
     void slotViewItemSelected(QModelIndex index);
 
-signals:
+Q_SIGNALS:
+
     void setCurrentUrlSignal(const KUrl& url);
 
 private:
+
+    class ImagePropertiesVersionsTabPriv;
     ImagePropertiesVersionsTabPriv* const d;
 };
 
