@@ -96,6 +96,11 @@ public:
     void listDateRange(ImageListerReceiver *receiver, const QDate& startDate, const QDate& endDate);
 
     /**
+     * List the images whose coordinates are between coordinates contained in areaCoordinates(lat1, lng1, lat2, lng2) 
+     */
+    void listAreaRange(ImageListerReceiver *receiver, QList<qreal> areaCoordinates);
+
+    /**
      * Execute the search specified by search XML
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query

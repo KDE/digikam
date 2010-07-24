@@ -32,6 +32,10 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 
+// KDE includes
+
+#include "kdebug.h"
+
 namespace Digikam
 {
 
@@ -151,6 +155,26 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate& startDate,
     return url;
 }
 
+DatabaseUrl DatabaseUrl::mapImagesUrl(const DatabaseParameters& parameters)
+{
+    DatabaseUrl url;
+    url.setProtocol("digikammapimages");
+    url.setParameters(parameters);
+    return url;
+}
+
+DatabaseUrl DatabaseUrl::fromAreaRange(const qreal lat1, const qreal lat2,
+                                       const qreal lng1, const qreal lng2,
+                                       const DatabaseParameters& parameters)
+{
+    DatabaseUrl url;
+    url.setProtocol("digikammapimages");
+    url.setPath(QString("%1").arg(lat1) + '/' + QString("%1").arg(lat2) + '/' + QString("%1").arg(lng1) + '/' + QString("%1").arg(lng2));
+    url.setParameters(parameters);
+    kDebug()<<"URL FOR fromAreaRange:"<<url;
+    return url;
+}
+
 DatabaseUrl DatabaseUrl::searchUrl(int id,
                                    const DatabaseParameters& parameters)
 {
@@ -227,6 +251,11 @@ bool DatabaseUrl::isTagUrl() const
 bool DatabaseUrl::isDateUrl() const
 {
     return protocol() == QString("digikamdates");
+}
+
+bool DatabaseUrl::isMapImagesUrl() const
+{
+    return protocol() == QString("digikammapimages");
 }
 
 bool DatabaseUrl::isSearchUrl() const
@@ -318,6 +347,22 @@ QDate DatabaseUrl::endDate() const
         return QDate::fromString(dates[1], Qt::ISODate);
     else
         return QDate();
+}
+
+// --- MapImages URL ---
+
+QList<qreal> DatabaseUrl::areaCoordinates() const
+{
+    QStringList strCoordinates = path().split('/');
+    QList<qreal> areaGPSCoordinates;
+    areaGPSCoordinates<<strCoordinates[0].toDouble();
+    areaGPSCoordinates<<strCoordinates[1].toDouble();
+    areaGPSCoordinates<<strCoordinates[2].toDouble();
+    areaGPSCoordinates<<strCoordinates[3].toDouble();
+
+    kDebug()<<"AREACOORDINATES():"<<areaGPSCoordinates;
+    
+    return areaGPSCoordinates;
 }
 
 // --- Search URL ---

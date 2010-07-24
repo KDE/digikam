@@ -3621,11 +3621,33 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
     QList<QVariant> boundValues;
     boundValues << values[0] << values[1] << values[2] << values[3];
     boundValues << dstAlbumID;
-
+    
+    //shouldn't we have a ; at the end of the query?
     d->db->execSql( QString("UPDATE Albums SET date=?, caption=?, "
                             "collection=?, icon=? WHERE id=?"),
                     boundValues );
     return true;
 }
+
+
+QList<QVariant> AlbumDB::getImageIdsFromArea( qreal lat1, qreal lat2, qreal lng1, qreal lng2, int sortMode, QString sortBy )
+{
+    QList<QVariant> values;
+    QList<QVariant> boundValues;
+    boundValues<<lat1<<lat2<<lng1<<lng2;
+
+    //DatabaseAccess access;
+
+    d->db->execSql( QString("Select ImageInformation.imageid, ImageInformation.rating, ImagePositions.latitudeNumber, ImagePositions.longitudeNumber"
+                            " FROM ImageInformation INNER JOIN ImagePositions"
+                            " ON ImageInformation.imageid = ImagePositions.imageid"
+                            " WHERE (ImagePositions.latitudeNumber>? AND ImagePositions.latitudeNumber<?)"
+                            " AND (ImagePositions.longitudeNumber>? AND ImagePositions.longitudeNumber<?);"),
+                            boundValues,&values);
+
+    return values;
+}
+
+
 
 }  // namespace Digikam

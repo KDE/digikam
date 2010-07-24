@@ -1130,6 +1130,9 @@ public:
      */
     int addToDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date);
 
+
+    QList<QVariant> getImageIdsFromArea(qreal lat1, qreal lng1, qreal lat2, qreal lng2, int sortMode, QString sortBy );
+
     // ----------- Static helper methods for constructing SQL queries -----------
 
     static QStringList imagesFieldList(DatabaseFields::Images fields);

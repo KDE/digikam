@@ -32,6 +32,10 @@
 
 #include "worldmapwidget.h"
 
+// libkmap includes
+
+#include <libkmap/kmap.h>
+
 namespace Digikam
 {
 

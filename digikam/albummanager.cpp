@@ -2768,6 +2768,8 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
+    kDebug()<<"ENTERED SLOTDATES JOB DATA";
+
     // insert all the DAlbums into a qmap for quick access
     QMap<QDate, DAlbum*> mAlbumMap;
     QMap<int, DAlbum*>   yAlbumMap;

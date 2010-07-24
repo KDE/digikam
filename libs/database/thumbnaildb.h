@@ -105,6 +105,8 @@ public:
 
     QHash<QString, int> getFilePathsWithThumbnail();
 
+    //QStringList getAllThumbnailPaths();
+    
 private:
 
     friend class Digikam::ThumbnailDatabaseAccess;

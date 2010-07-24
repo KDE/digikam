@@ -60,6 +60,7 @@
 #include "imageposition.h"
 #include "searchtextbar.h"
 #include "searchxml.h"
+#include "gpsmarkertiler.h"
 
 namespace Digikam
 {
@@ -117,6 +118,9 @@ public:
 
     GPSSearchWidget*     gpsSearchWidget;
     WorldMapThemeBtn*    mapThemeBtn;
+
+    KMapIface::KMap*     mapSearchWidget;
+    GPSMarkerTiler*      gpsMarkerTiler;
 };
 
 GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
@@ -147,12 +151,23 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
 #endif // MARBLE_VERSION >= 0x000800
 #endif // HAVE_MARBLEWIDGET
 
+
+
     d->gpsSearchWidget->setWhatsThis(gpsWhatsThisText);
+
+    d->mapSearchWidget = new KMapIface::KMap(this);
+    //d->mapSearchWidget->setBackend("marble");
+
+    GPSMarkerTiler* markerTiler = new GPSMarkerTiler(this);
+    d->mapSearchWidget->setGroupedModel(markerTiler);
+
+    d->gpsMarkerTiler = new GPSMarkerTiler(this);
 
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
-    vlay2->addWidget(d->gpsSearchWidget);
+    vlay2->addWidget(d->mapSearchWidget);
+    vlay2->addWidget(d->mapSearchWidget->getControlWidget());
     vlay2->setMargin(0);
     vlay2->setSpacing(0);
 
@@ -475,6 +490,9 @@ bool GPSSearchView::checkAlbum(const QString& name) const
 
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
+
+    //d->gpsMarkerTiler->secondTestDatabase(5.1,80.3,20.4,130.6);
+
     if (d->gpsSearchWidget->hasSelection())
     {
         d->nameEdit->setEnabled(true);
