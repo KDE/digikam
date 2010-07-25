@@ -1,3 +1,27 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2010-07-20
+ * Description : GPS searck marker tiler
+ *
+ * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
+ * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #include "gpsmarkertiler.moc"
 
@@ -23,7 +47,7 @@ class InternalJobs
 public:
 
     InternalJobs()
-    : dataFromDatabase()
+        : dataFromDatabase()
     {
         kioJob = 0;
         level = 0;
@@ -34,50 +58,48 @@ public:
     QList<QVariant> dataFromDatabase;
 };
 
-class GPSMarkerTilerPrivate
+class GPSMarkerTiler::GPSMarkerTilerPrivate
 {
 public:
 
     GPSMarkerTilerPrivate()
-    : returnedImageInfo(),
-      levelList(),
-      jobsList(),
-      dataFromDatabaseList()
+        : returnedImageInfo(),
+          levelList(),
+          jobsList(),
+          dataFromDatabaseList()
     {
         mapImagesJob = 0;
     }
 
-    KIO::TransferJob* mapImagesJob;
+    KIO::TransferJob*                                              mapImagesJob;
     QList<KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo> returnedImageInfo;
-    QList<int> levelList;
-    QList<KIO::Job*> jobsList;
-    QList<QList<QVariant> >  dataFromDatabaseList; 
+    QList<int>                                                     levelList;
+    QList<KIO::Job*>                                               jobsList;
+    QList<QList<QVariant> >                                        dataFromDatabaseList;
 
-    QList<InternalJobs> jobs;
-    ThumbnailLoadThread* thumbnailLoadThread;
+    QList<InternalJobs>                                            jobs;
+    ThumbnailLoadThread*                                           thumbnailLoadThread;
 };
 
 GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
-:KMapIface::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
+              : KMapIface::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
 {
     d->thumbnailLoadThread = new ThumbnailLoadThread();
 
  /*   ThumbnailDatabaseAccess thumbAccess;
     QHash<QString, int> filePathsHash = thumbAccess.db()->getFilePathsWithThumbnail();
-    const QList<QString> filePaths = filePathsHash.keys(); 
+    const QList<QString> filePaths = filePathsHash.keys();
 
     for(int i=0; i<filePaths.count(); i++)
     {
         d->thumbnailLoadThread->find(filePaths.at(i));
-    }    
+    }
  */
-
 }
 
 GPSMarkerTiler::~GPSMarkerTiler()
 {
     delete d;
-
 }
 
 bool GPSMarkerTiler::isItemModelBased() const
@@ -87,12 +109,12 @@ bool GPSMarkerTiler::isItemModelBased() const
 
 QItemSelectionModel* GPSMarkerTiler::getSelectionModel() const
 {
-    return NULL;
+    return 0;
 }
 
 QAbstractItemModel* GPSMarkerTiler::getModel() const
 {
-    return NULL;
+    return 0;
 }
 
 QList<QPersistentModelIndex> GPSMarkerTiler::getTileMarkerIndices(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex)
@@ -102,7 +124,6 @@ QList<QPersistentModelIndex> GPSMarkerTiler::getTileMarkerIndices(const KMapIfac
 
 void GPSMarkerTiler::regenerateTiles()
 {
-
 }
 
 void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,const KMapIface::WMWGeoCoordinate& lowerRight, int level)
@@ -111,7 +132,7 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
     kDebug()<<"Started tiles prepairing";
 
     DatabaseUrl u = DatabaseUrl::mapImagesUrl();
-    
+
     qreal lat1 = upperLeft.lat();
     qreal lng1 = upperLeft.lon();
     qreal lat2 = lowerRight.lat();
@@ -123,7 +144,7 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
     QByteArray baLng2 = QString("%1").arg(lng2).toAscii();
 
     KIO::Job* currentJob = ImageLister::startListJob(u);
-    
+
     currentJob->addMetaData("lat1", baLat1.constData());
     currentJob->addMetaData("lat2", baLat2.constData());
     currentJob->addMetaData("lng1", baLng1.constData());
@@ -143,16 +164,14 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
 
     connect(currentJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotMapImagesJobData(KIO::Job*, const QByteArray&)));
-
 }
 
 KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const bool stopIfEmpty)
 {
-
-//    if (isDirty())
+//   if (isDirty())
 //   {
-//        regenerateTiles();
-//    }
+//       regenerateTiles();
+//   }
 
     KMAP_ASSERT(tileIndex.level()<=KMapIface::AbstractMarkerTiler::TileIndex::MaxLevel);
 
@@ -187,9 +206,9 @@ KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::A
 int GPSMarkerTiler::getTileMarkerCount(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex)
 {
     KMapIface::AbstractMarkerTiler::Tile* tile = getTile(tileIndex);
-    if(tile) 
+    if(tile)
         return tile->imagesFromTileInfo.count();
-    
+
     return 0;
 }
 
@@ -203,7 +222,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMa
     //TODO: sort the markers using sortKey
 
     KMapIface::AbstractMarkerTiler::Tile* tile = getTile(tileIndex, true);
-    QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> bestRep;    
+    QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> bestRep;
     QVariant v;
 
     if(tile != NULL)
@@ -222,7 +241,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
 {
     //TODO: sort the markers using sortKey
     QVariant v;
-    QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> bestRep;    
+    QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> bestRep;
     int bestRating = -2;
 
     for(int i=0; i<indices.count(); ++i)
@@ -264,7 +283,7 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
     QPixmap thumbnail;
     ImageInfo info(indexForPixmap.second);
     QString path = info.filePath();
-    
+
     if(d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
         return thumbnail;
     else
@@ -280,6 +299,7 @@ KMapIface::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMapIfac
 {
     return KMapIface::WMWSelectionState();
 }
+
 /*
 void GPSMarkerTiler::secondTestDatabase(qreal lat1, qreal lat2, qreal lng1, qreal lng2)
 {
@@ -288,7 +308,7 @@ void GPSMarkerTiler::secondTestDatabase(qreal lat1, qreal lat2, qreal lng1, qrea
     {
         d->mapImagesJob->kill();
         d->mapImagesJob = 0;
-    }    
+    }
 
     kDebug()<<"We now make the test with wantDirectQuery=true";
 
@@ -311,7 +331,6 @@ void GPSMarkerTiler::secondTestDatabase(qreal lat1, qreal lat2, qreal lng1, qrea
 
     connect(d->mapImagesJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotMapImagesJobData(KIO::Job*, const QByteArray&)));
-   
 }
 
 void GPSMarkerTiler::secondTestDatabase(int lat1, int lat2, int lng1, int lng2)
@@ -334,7 +353,6 @@ void GPSMarkerTiler::secondTestDatabase(int lat1, int lat2, int lng1, int lng2)
     connect(d->mapImagesJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotMapImagesJobData(KIO::Job*, const QByteArray&)));
 }
-
 */
 
 void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
@@ -344,7 +362,6 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
         kDebug()<<"We Have Empty Data.";
         return;
     }
-
 
     QList<QVariant> currentData;
     QByteArray di(data);
@@ -362,7 +379,6 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 
 void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 {
-    
     if(job->error())
     {
         kWarning()<<"Failed to list images in selected area:"<<job->errorString();
@@ -380,7 +396,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
             foundIndex = i;
 
             for(QList<QVariant>::const_iterator it = d->jobs.at(i).dataFromDatabase.constBegin(); it!= d->jobs.at(i).dataFromDatabase.constEnd();)
-            {   
+            {
                 KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo info;
                 info.id               = (*it).toInt();
                 ++it;
@@ -394,7 +410,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
                 KMapIface::WMWGeoCoordinate coordinate;
                 coordinate.setLatLon(latitudeNumber, longitudeNumber);
                 info.coordinate       = coordinate;
-   
+
                 currentReturnedImageInfo<<info;
             }
         }
@@ -415,21 +431,21 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
         for(int currentLevel = 0; currentLevel <= wantedLevel; ++currentLevel)
         {
-            bool found = false;     
+            bool found = false;
             for(int counter = 0; counter < currentTile->imagesFromTileInfo.count(); ++counter)
                 if(currentImageInfo.id == currentTile->imagesFromTileInfo.at(counter).id)
-                    found = true;                
-            
+                    found = true;
+
             if(!found)
-                currentTile->imagesFromTileInfo.append(currentImageInfo); 
+                currentTile->imagesFromTileInfo.append(currentImageInfo);
 
 
             if(currentTile->children.isEmpty())
                 currentTile->prepareForChildren(KMapIface::QIntPair(KMapIface::AbstractMarkerTiler::TileIndex::Tiling, KMapIface::AbstractMarkerTiler::TileIndex::Tiling));
-      
+
             const KMapIface::AbstractMarkerTiler::TileIndex markerTileIndex = KMapIface::AbstractMarkerTiler::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
             const int newTileIndex = markerTileIndex.toIntList().last();
-            
+
             KMapIface::AbstractMarkerTiler::Tile* newTile = currentTile->children.at(newTileIndex);
 
             if(newTile == 0)
@@ -449,7 +465,6 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     d->jobs[foundIndex].kioJob = 0;
     d->jobs.removeAt(foundIndex);
     }
-    
 }
 
 } // namespace Digikam
