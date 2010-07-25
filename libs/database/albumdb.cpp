@@ -7,8 +7,8 @@
  * Description :database album interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,7 @@ extern "C"
 namespace Digikam
 {
 
-class AlbumDBPriv
+class AlbumDB::AlbumDBPriv
 {
 
 public:
@@ -70,11 +70,11 @@ public:
         db = 0;
     }
 
-    DatabaseBackend *db;
-    QList<int>  recentlyAssignedTags;
+    DatabaseBackend* db;
+    QList<int>       recentlyAssignedTags;
 };
 
-AlbumDB::AlbumDB(DatabaseBackend *backend)
+AlbumDB::AlbumDB(DatabaseBackend* backend)
        : d(new AlbumDBPriv)
 {
     d->db = backend;
@@ -158,8 +158,6 @@ void AlbumDB::changeAlbumRootType(int rootId, AlbumRoot::Type newType)
                     (int)newType, rootId);
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::PropertiesChanged));
 }
-
-
 
 AlbumInfo::List AlbumDB::scanAlbums()
 {
@@ -1944,13 +1942,13 @@ QList<qlonglong> AlbumDB::getImagesRelatingTo(qlonglong objectId, DatabaseRelati
     return imageIds;
 }
 
-bool AlbumDB::hasHaarFingerprints()
+bool AlbumDB::hasHaarFingerprints() const
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT imageid FROM ImageHaarMatrix "
-                            "WHERE matrix IS NOT NULL LIMIT 1;"),
-                    &values);
+    d->db->execSql(QString("SELECT imageid FROM ImageHaarMatrix "
+                           "WHERE matrix IS NOT NULL LIMIT 1;"),
+                   &values);
 
     // return true if there is at least one fingerprint
     return !values.isEmpty();
@@ -2386,7 +2384,7 @@ void AlbumDB::removeItemTag(qlonglong imageID, int tagID)
     d->db->recordChangeset(ImageTagChangeset(imageID, tagID, ImageTagChangeset::Removed));
 }
 
-void AlbumDB::removeItemAllTags(qlonglong imageID, QList<int> currentTagIds)
+void AlbumDB::removeItemAllTags(qlonglong imageID, const QList<int>& currentTagIds)
 {
     d->db->execSql( QString("DELETE FROM ImageTags "
                             "WHERE imageID=?;"),
@@ -2395,7 +2393,7 @@ void AlbumDB::removeItemAllTags(qlonglong imageID, QList<int> currentTagIds)
     d->db->recordChangeset(ImageTagChangeset(imageID, currentTagIds, ImageTagChangeset::RemovedAll));
 }
 
-void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
+void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, const QList<int>& tagIDs)
 {
     SqlQuery query = d->db->prepareQuery("DELETE FROM ImageTags WHERE imageID=? AND tagid=?;");
 
@@ -3362,7 +3360,7 @@ void AlbumDB::removeItemsFromAlbum(int albumID)
     d->db->recordChangeset(CollectionImageChangeset(QList<qlonglong>(), albumID, CollectionImageChangeset::RemovedAll));
 }
 
-void AlbumDB::removeItems(QList<qlonglong> itemIDs, QList<int> albumIDs)
+void AlbumDB::removeItems(QList<qlonglong> itemIDs, const QList<int>& albumIDs)
 {
     SqlQuery query = d->db->prepareQuery( QString("UPDATE Images SET status=?, album=NULL WHERE id=?;") );
 
@@ -3389,7 +3387,7 @@ void AlbumDB::deleteRemovedItems()
     d->db->recordChangeset(CollectionImageChangeset(QList<qlonglong>(), QList<int>(), CollectionImageChangeset::RemovedDeleted));
 }
 
-void AlbumDB::deleteRemovedItems(QList<int> albumIds)
+void AlbumDB::deleteRemovedItems(const QList<int>& albumIds)
 {
     SqlQuery query = d->db->prepareQuery( QString("DELETE FROM Images WHERE status=? AND album=?;") );
 
@@ -3621,7 +3619,7 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
     QList<QVariant> boundValues;
     boundValues << values[0] << values[1] << values[2] << values[3];
     boundValues << dstAlbumID;
-    
+
     //shouldn't we have a ; at the end of the query?
     d->db->execSql( QString("UPDATE Albums SET date=?, caption=?, "
                             "collection=?, icon=? WHERE id=?"),
@@ -3629,8 +3627,7 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
     return true;
 }
 
-
-QList<QVariant> AlbumDB::getImageIdsFromArea( qreal lat1, qreal lat2, qreal lng1, qreal lng2, int sortMode, QString sortBy )
+QList<QVariant> AlbumDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1, qreal lng2, int /*sortMode*/, const QString& /*sortBy*/)
 {
     QList<QVariant> values;
     QList<QVariant> boundValues;
@@ -3647,7 +3644,5 @@ QList<QVariant> AlbumDB::getImageIdsFromArea( qreal lat1, qreal lat2, qreal lng1
 
     return values;
 }
-
-
 
 }  // namespace Digikam

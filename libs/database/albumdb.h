@@ -7,8 +7,8 @@
  * Description :database album interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,6 @@ namespace Digikam
 {
 
 class DatabaseBackend;
-class AlbumDBPriv;
 
 class DIGIKAM_DATABASE_EXPORT AlbumDB
 {
@@ -82,13 +81,13 @@ public:
      * Returned is a joint result of main and user settings.
      * If you are not interested in a specific value, pass 0.
      */
-    void getFilterSettings(QStringList *imageFilter, QStringList *videoFilter, QStringList *audioFilter);
+    void getFilterSettings(QStringList* imageFilter, QStringList* videoFilter, QStringList* audioFilter);
 
     /**
      * Returns the user-configurable filter settings.
      * If you are not interested in a specific value, pass 0.
      */
-    void getUserFilterSettings(QString *imageFilterString, QString *videoFilterString, QString *audioFilterString);
+    void getUserFilterSettings(QString* imageFilterString, QString* videoFilterString, QString* audioFilterString);
 
     /**
      * Sets the main filter settings of the database. Should only be called at schema update.
@@ -312,7 +311,7 @@ public:
      * @param iconAlbumRelativePath Returns the path below the album root of the image
      * @returns true if there is an icon set.
      */
-    bool getAlbumIcon(int albumID, int *iconAlbumRootId, QString *iconAlbumRelativePath);
+    bool getAlbumIcon(int albumID, int* iconAlbumRootId, QString* iconAlbumRelativePath);
 
     /**
      * Given an albumid, this returns the album root id for that album
@@ -393,7 +392,7 @@ public:
     void deleteTag(int tagID);
 
     /**
-     * Set a new name for the tag. 
+     * Set a new name for the tag.
      * @param tagID the id of the tag
      * @param name  the new name for the tag
      */
@@ -419,7 +418,7 @@ public:
      * @param icon an icon name that can be loaded by the system iconloader
      * @returns true if there is an icon set.
      */
-    bool getTagIcon(int tagID, int *iconAlbumRootId, QString *iconAlbumRelativePath, QString *icon);
+    bool getTagIcon(int tagID, int* iconAlbumRootId, QString* iconAlbumRelativePath, QString* icon);
 
     /**
      * Set the parent tagid for the tag. This is equivalent to reparenting
@@ -528,7 +527,7 @@ public:
      * @param albumIDs this parameter is purely informational.
      *                 it shall contain the albums that the items are removed from.
      */
-    void removeItems(QList<qlonglong> itemIDs, QList<int> albumIDs = QList<int>());
+    void removeItems(QList<qlonglong> itemIDs, const QList<int>& albumIDs = QList<int>());
 
     /**
      * Delete all items from the database that are marked as removed.
@@ -540,7 +539,7 @@ public:
      * Delete from the database all items
      * in the specified albums that are marked as removed.
      */
-    void deleteRemovedItems(QList<int> albumIDs);
+    void deleteRemovedItems(const QList<int>& albumIDs);
 
     // ----------- Finding items -----------
 
@@ -749,7 +748,7 @@ public:
      * 12) Int       WhiteBalanceColorTemperature
      * 13) Int       meteringMode
      * 14) Double    subjectDistance
-     * 15) Double    subjectDistanceCategory  
+     * 15) Double    subjectDistanceCategory
      * You can leave out entries from this list. Indicate the values that you have
      * passed in the ImageMetadata flag in the third parameters.
      */
@@ -936,8 +935,8 @@ public:
      * Returns if there are valid entries in the ImageHaarMatrix table.
      * Returns false if the table is empty.
      */
-    bool hasHaarFingerprints();
-    
+    bool hasHaarFingerprints() const;
+
     /**
      * Returns a list of all images where the Haar fingerprint has either not been generated
      * yet, or is outdated because the file is identified as changed since
@@ -946,7 +945,7 @@ public:
      */
     QList<qlonglong> getDirtyOrMissingFingerprints();
     QStringList getDirtyOrMissingFingerprintURLs();
-    
+
     /**
      * Returns a list of all images where the Faces have either not been detected
      * yet, or is outdated because the file is identified as changed since
@@ -1001,13 +1000,13 @@ public:
      * @param imageID the ID of the item
      * @param currentTagIds the current tags ids assigned to the item
      */
-    void removeItemAllTags(qlonglong imageID, QList<int> currentTagIds);
+    void removeItemAllTags(qlonglong imageID, const QList<int>& currentTagIds);
 
     /**
      * Remove each tag from a list of tags
      * from a each member of a list of items.
      */
-    void removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs);
+    void removeTagsFromItems(QList<qlonglong> imageIDs, const QList<int>& tagIDs);
 
     /**
      * Get a list of names of all the tags for the item
@@ -1130,8 +1129,7 @@ public:
      */
     int addToDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date);
 
-
-    QList<QVariant> getImageIdsFromArea(qreal lat1, qreal lng1, qreal lat2, qreal lng2, int sortMode, QString sortBy );
+    QList<QVariant> getImageIdsFromArea(qreal lat1, qreal lng1, qreal lat2, qreal lng2, int sortMode, const QString& sortBy);
 
     // ----------- Static helper methods for constructing SQL queries -----------
 
@@ -1149,7 +1147,7 @@ public:
     /**
      * Constructor
      */
-    AlbumDB(DatabaseBackend *backend);
+    AlbumDB(DatabaseBackend* backend);
 
     /**
      * Destructor
@@ -1158,6 +1156,7 @@ public:
 
 private:
 
+    class AlbumDBPriv;
     AlbumDBPriv* const d;
 };
 
