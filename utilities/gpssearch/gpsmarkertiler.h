@@ -42,6 +42,17 @@
 #include <libkmap/kmap.h>
 #include <libkmap/abstractmarkertiler.h>
 
+// local includes
+
+#include "imagelister.h"
+#include "databaseaccess.h"
+#include "albumdb.h"
+#include "imageinfo.h"
+#include "thumbnailloadthread.h"
+#include "thumbnaildatabaseaccess.h"
+#include "thumbnaildb.h"
+
+
 namespace Digikam
 {
 
@@ -78,6 +89,7 @@ private Q_SLOTS:
 
     void slotMapImagesJobResult(KJob* job);
     void slotMapImagesJobData(KIO::Job* job, const QByteArray& data);
+    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
 private:
 

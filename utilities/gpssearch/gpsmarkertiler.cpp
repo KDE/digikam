@@ -30,7 +30,7 @@
 #include <QPair>
 
 // local includes
-
+/*
 #include "imagelister.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
@@ -38,6 +38,10 @@
 #include "thumbnailloadthread.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
+*/
+// Qt includes
+
+#include <QRectF>
 
 namespace Digikam
 {
@@ -79,12 +83,18 @@ public:
 
     QList<InternalJobs>                                            jobs;
     ThumbnailLoadThread*                                           thumbnailLoadThread;
+    QMap<QString, QVariant>                                        thumbnailMap;
+    QList<QRectF>                                                  rectList;
+    QList<int>                                                     rectLevel; 
 };
 
 GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
               : KMapIface::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
 {
     d->thumbnailLoadThread = new ThumbnailLoadThread();
+
+    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
  /*   ThumbnailDatabaseAccess thumbAccess;
     QHash<QString, int> filePathsHash = thumbAccess.db()->getFilePathsWithThumbnail();
@@ -125,7 +135,17 @@ QList<QPersistentModelIndex> GPSMarkerTiler::getTileMarkerIndices(const KMapIfac
 void GPSMarkerTiler::regenerateTiles()
 {
 }
-
+/*
+bool GPSMarkerTiler::pointIsContainedInArea(qreal pointLat, qreal pointLng, QList<qreal> rectangle)
+{
+    qreal rectLat1 = rectangle.at(1);
+    qreal rectLng1 = rectangle.at(2);
+    qreal rectLat2 = rectangle.at(3);
+    qreal rectLng2 = rectangle.at(4);
+    
+    return pointLat>rectLat1 && pointLat<rectLat2 && pointLng>rectLng1 && pointLng<rectLng2;
+}
+*/
 void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,const KMapIface::WMWGeoCoordinate& lowerRight, int level)
 {
 
@@ -137,7 +157,85 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
     qreal lng1 = upperLeft.lon();
     qreal lat2 = lowerRight.lat();
     qreal lng2 = lowerRight.lon();
+    QRect requestedRect(lat1, lng1, lat2-lat1, lng2-lng1);
 
+    bool found = false;
+    for(int i=0; i<d->rectList.count(); ++i)
+    {
+        if(level != d->rectLevel.at(i))
+            continue;
+
+        qreal rectLat1, rectLng1, rectLat2, rectLng2;
+        QRectF currentRect = d->rectList.at(i);
+        currentRect.getCoords(&rectLat1, &rectLng1, &rectLat2, &rectLng2);
+
+        kDebug()<<"currentRect:"<<rectLat1<<" "<<rectLng1<<" "<<rectLat2<<" "<<rectLng2;
+ 
+        //do nothing if this rectangle was already requested
+        if(currentRect.contains(requestedRect))
+            return;
+
+        if(currentRect.contains(lat1,lng1))
+        {
+            if(currentRect.contains(lat2, lng1))
+            {
+                lng1 = rectLng2;
+                found = true;
+            }
+            /*else if(currentRect.contains(lat1, lng2))
+            {
+                lat1 = rectLat2;
+                found = true;
+            }*/
+        }
+        else if(currentRect.contains(lat2, lng1))
+        {
+          /*  if(currentRect.contains(lat1, lng1))
+            {
+                lng1 = rectLng2;
+                found = true;
+            }*/
+            if(currentRect.contains(lat2, lng2))
+            {
+                lat2 = rectLng1;
+                found = true;
+            }
+        }
+        else if(currentRect.contains(lat2, lng2))
+        {
+         /*   if(currentRect.contains(lat2, lng1))
+            {
+                lat2 = rectLat1;
+                found = true;
+            }*/
+            if(currentRect.contains(lat1, lng2))
+            {
+                lng2 = rectLng1;
+                found = true;
+            }
+        }
+        else if(currentRect.contains(lat1, lng2))
+        {
+            if(currentRect.contains(lat1, lng1))
+            {
+                lat1 = rectLat2;
+                found = true;
+            }
+          /*  else if(currentRect.contains(lat2, lng2))
+            {
+                lng2 = rectLat1;
+                found = true;
+            }*/
+        }
+
+        if(found)
+            break;            
+    }
+    
+    QRectF newRect(lat1, lng1, lat2-lat1, lng2-lng1);
+    d->rectList.append(newRect);
+    d->rectLevel.append(level);
+        
     QByteArray baLat1 = QString("%1").arg(lat1).toAscii();
     QByteArray baLat2 = QString("%1").arg(lat2).toAscii();
     QByteArray baLng1 = QString("%1").arg(lng1).toAscii();
@@ -285,9 +383,17 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
     QString path = info.filePath();
 
     if(d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
+    {
+        kDebug()<<"THUMBNAIL REQUESTED IN PIXMAPFORREPRESENTATIVEINDEX:"<<path;
+
+        //emit signalThumbnailAvailableForIndex(index, thumbnail);
         return thumbnail;
+    }
     else
+    {
+        kDebug()<<"THUMBNAIL REQUESTED BUT DIDN'T FIND ANY:"<<path;
         return QPixmap();
+    }
 }
 
 bool GPSMarkerTiler::indicesEqual(const QVariant& /*a*/, const QVariant& /*b*/) const
@@ -464,6 +570,17 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     d->jobs[foundIndex].kioJob = 0;
     d->jobs.removeAt(foundIndex);
     }
+}
+
+void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
+{
+    kDebug()<<"THUMBNAIL LOADED IN SLOTTHUMBNAILLOADED:"<<loadingDescription.filePath;
+    QVariant index = d->thumbnailMap.value(loadingDescription.filePath);
+
+    QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> indexForPixmap = index.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();    
+
+    emit signalThumbnailAvailableForIndex(index, thumbnail);
+
 }
 
 } // namespace Digikam
