@@ -212,12 +212,12 @@ int GPSMarkerTiler::getTileMarkerCount(const KMapIface::AbstractMarkerTiler::Til
     return 0;
 }
 
-int GPSMarkerTiler::getTileSelectedCount(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex)
+int GPSMarkerTiler::getTileSelectedCount(const KMapIface::AbstractMarkerTiler::TileIndex& /*tileIndex*/)
 {
     return 0;
 }
 
-QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMarkerTiler::TileIndex& /*tileIndex*/, const int /*sortKey*/)
+QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const int /*sortKey*/)
 {
     //TODO: sort the markers using sortKey
 
@@ -227,9 +227,9 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMa
 
     if(tile != NULL)
     {
-        bestRep.first = tileIndex;
+        bestRep.first  = tileIndex;
         bestRep.second = tile->imagesFromTileInfo.first().id;
-        //int bestId = tile->imagesFromTileInfo.first().id;
+        //int bestId     = tile->imagesFromTileInfo.first().id;
         const QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> returnedMarker = bestRep;
         v.setValue(bestRep);
         return v;
