@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-20
- * Description : a kio-slave to process search on digiKam albums
+ * Description : a kio-slave to process map search
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
  * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -43,4 +42,3 @@ public:
 };
 
 #endif /* DIGIKAMMAPIMAGES_H */
-

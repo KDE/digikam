@@ -49,7 +49,6 @@ TARGET_LINK_LIBRARIES(kio_digikamdates
                       ${QT_QTCORE_LIBRARY}
                      )
 
-
 # # digiKam MapImages kio slave ###########################################################
 
 SET(kio_digikammapimages_PART_SRCS digikammapimages.cpp)
@@ -64,11 +63,9 @@ TARGET_LINK_LIBRARIES(kio_digikammapimages
                       ${QT_QTCORE_LIBRARY}
                      )
 
-
 # # digiKam Search kio slave #########################################################
 
 SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp )
-
 
 KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
 
