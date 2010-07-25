@@ -117,7 +117,7 @@ QAbstractItemModel* GPSMarkerTiler::getModel() const
     return 0;
 }
 
-QList<QPersistentModelIndex> GPSMarkerTiler::getTileMarkerIndices(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex)
+QList<QPersistentModelIndex> GPSMarkerTiler::getTileMarkerIndices(const KMapIface::AbstractMarkerTiler::TileIndex& /*tileIndex*/)
 {
     return QList<QPersistentModelIndex>();
 }
@@ -217,7 +217,7 @@ int GPSMarkerTiler::getTileSelectedCount(const KMapIface::AbstractMarkerTiler::T
     return 0;
 }
 
-QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const int sortKey)
+QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMarkerTiler::TileIndex& /*tileIndex*/, const int /*sortKey*/)
 {
     //TODO: sort the markers using sortKey
 
@@ -237,7 +237,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMa
     return QVariant();
 }
 
-QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey)
+QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int /*sortKey*/)
 {
     //TODO: sort the markers using sortKey
     QVariant v;
@@ -290,12 +290,12 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
         return QPixmap();
 }
 
-bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
+bool GPSMarkerTiler::indicesEqual(const QVariant& /*a*/, const QVariant& /*b*/) const
 {
     return false;
 }
 
-KMapIface::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex)
+KMapIface::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMapIface::AbstractMarkerTiler::TileIndex& /*tileIndex*/)
 {
     return KMapIface::WMWSelectionState();
 }
@@ -303,14 +303,13 @@ KMapIface::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMapIfac
 /*
 void GPSMarkerTiler::secondTestDatabase(qreal lat1, qreal lat2, qreal lng1, qreal lng2)
 {
-
     if(d->mapImagesJob)
     {
         d->mapImagesJob->kill();
         d->mapImagesJob = 0;
     }
 
-    kDebug()<<"We now make the test with wantDirectQuery=true";
+    kDebug() << "We now make the test with wantDirectQuery=true";
 
     DatabaseUrl u = DatabaseUrl::mapImagesUrl();
 
