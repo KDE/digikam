@@ -73,38 +73,16 @@ public:
     GPSSearchViewPriv() :
         configSplitterStateEntry("SplitterState"),
         saveBtn(0),
-        zoomInBtn(0),
-        zoomOutBtn(0),
-#ifdef HAVE_MARBLEWIDGET
-#if MARBLE_VERSION >= 0x000800
-        panBtn(0),
-        filterBtn(0),
-        selectBtn(0),
-        clusterZoomBtn(0),
-#endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET
         nameEdit(0),
         imageInfoJob(),
         searchGPSBar(0),
         searchTreeView(0),
-        splitter(0),
-        gpsSearchWidget(0),
-        mapThemeBtn(0)
+        splitter(0)
     {}
 
     const QString configSplitterStateEntry;
 
     QToolButton*         saveBtn;
-    QToolButton*         zoomInBtn;
-    QToolButton*         zoomOutBtn;
-#ifdef HAVE_MARBLEWIDGET
-#if MARBLE_VERSION >= 0x000800
-    QToolButton*         panBtn;
-    QToolButton*         filterBtn;
-    QToolButton*         selectBtn;
-    QToolButton*         clusterZoomBtn;
-#endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET
 
     KLineEdit*           nameEdit;
 
@@ -117,7 +95,6 @@ public:
     QSplitter*           splitter;
 
     GPSSearchWidget*     gpsSearchWidget;
-    WorldMapThemeBtn*    mapThemeBtn;
 
     KMapIface::KMap*     mapSearchWidget;
     GPSMarkerTiler*      gpsMarkerTiler;
@@ -139,24 +116,6 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
     mapPanel->setMinimumWidth(256);
     mapPanel->setMinimumHeight(256);
     QVBoxLayout *vlay2 = new QVBoxLayout(mapPanel);
-    /*d->gpsSearchWidget = new GPSSearchWidget(mapPanel);
-    QString gpsWhatsThisText = i18n("To perform a search over the map, use CTRL+left mouse button "
-                                 "to draw a rectangle where you want to find items.");
-
-#ifdef HAVE_MARBLEWIDGET
-#if MARBLE_VERSION >= 0x000800
-    gpsWhatsThisText        += i18n("\n\nOnce you have found items, click on an item using "
-                                   "SHIFT+left mouse button to select it, "
-                                   "click using CTRL+left mouse button to filter using an item "
-                                   "(add SHIFT to filter using multiple items) and click "
-                                   "using CTRL+right mouse button to zoom into an item.");
-#endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET
-
-
-
-    d->gpsSearchWidget->setWhatsThis(gpsWhatsThisText);
-    */
     d->mapSearchWidget = new KMapIface::KMap(mapPanel);
     //d->mapSearchWidget->setBackend("marble");
 
@@ -169,7 +128,6 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     vlay2->addWidget(d->mapSearchWidget);
-    vlay2->addWidget(d->mapSearchWidget->getControlWidget());
     vlay2->setMargin(0);
     vlay2->setSpacing(0);
 
@@ -179,46 +137,12 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
     hbox->setMargin(0);
     hbox->setSpacing(KDialog::spacingHint());
 
-    /*d->mapThemeBtn = new WorldMapThemeBtn(d->gpsSearchWidget, hbox);
-    d->zoomOutBtn  = new QToolButton(hbox);
-    d->zoomInBtn   = new QToolButton(hbox);
-    
-    d->zoomOutBtn->setDefaultAction(d->gpsSearchWidget->getZoomAction(false));
-    d->zoomInBtn->setDefaultAction(d->gpsSearchWidget->getZoomAction(true));
-
-#ifdef HAVE_MARBLEWIDGET
-#if MARBLE_VERSION >= 0x000800
-    d->panBtn = new QToolButton(hbox);
-    d->panBtn->setDefaultAction(d->gpsSearchWidget->getMouseModeAction(MarkerClusterHolder::MouseModePan));
-    d->filterBtn = new QToolButton(hbox);
-    d->filterBtn->setDefaultAction(d->gpsSearchWidget->getMouseModeAction(MarkerClusterHolder::MouseModeFilter));
-    d->selectBtn = new QToolButton(hbox);
-    d->selectBtn->setDefaultAction(d->gpsSearchWidget->getMouseModeAction(MarkerClusterHolder::MouseModeSelect));
-    d->clusterZoomBtn = new QToolButton(hbox);
-    d->clusterZoomBtn->setDefaultAction(d->gpsSearchWidget->getMouseModeAction(MarkerClusterHolder::MouseModeZoomCluster));
-
-    QHBoxLayout* boxLayout = qobject_cast<QHBoxLayout*>(hbox->layout());
-    if (boxLayout)
-        boxLayout->addStretch();
-    
-    KHBox *hbox2 = new KHBox(this);
-    hbox2->setMargin(0);
-    hbox2->setSpacing(KDialog::spacingHint());
-#else
-    KHBox *hbox2 = hbox;
-#endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET
-*/
-//#ifndef HAVE_MARBLEWIDGET
-    KHBox *hbox2 = hbox;
-//#endif // HAVE_MARBLEWIDGET
-    
-    d->nameEdit = new KLineEdit(hbox2);
+    d->nameEdit = new KLineEdit(hbox);
     d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current map search to save in the "
                                    "\"My Map Searches\" view."));
 
-    d->saveBtn  = new QToolButton(hbox2);
+    d->saveBtn  = new QToolButton(hbox);
     d->saveBtn->setIcon(SmallIcon("document-save"));
     d->saveBtn->setEnabled(false);
     d->saveBtn->setToolTip(i18n("Save current map search to a new virtual album."));
@@ -245,12 +169,8 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
     QFrame* const frameTop = new QFrame(d->splitter);
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
+    vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
     vlayTop->addWidget(hbox);
-#ifdef HAVE_MARBLEWIDGET
-#if MARBLE_VERSION >= 0x000800
-    vlayTop->addWidget(hbox2);
-#endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET
     vlayTop->setStretchFactor(mapPanel, 10);
     vlayTop->setMargin(0);
     vlayTop->setSpacing(KDialog::spacingHint());
@@ -270,7 +190,7 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
 
     // ---------------------------------------------------------------
 
-    /*connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
+    connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
 
     connect(d->saveBtn, SIGNAL(clicked()),
@@ -282,17 +202,17 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
     connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
             d->saveBtn, SLOT(animateClick()));
 
-    connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
-            this, SLOT(slotSelectionChanged()));
-
-    connect(d->gpsSearchWidget, SIGNAL(signalSelectedItems(const GPSInfoList)),
-            this, SLOT(slotMapSelectedItems(const GPSInfoList&)));
-
-    connect(d->gpsSearchWidget, SIGNAL(signalSoloItems(const GPSInfoList)),
-            this, SLOT(slotMapSoloItems(const GPSInfoList&)));
-
-    connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
-            this, SLOT(slotItemsInfo(const ImageInfoList&)));*/
+//     connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
+//             this, SLOT(slotSelectionChanged()));
+// 
+//     connect(d->gpsSearchWidget, SIGNAL(signalSelectedItems(const GPSInfoList)),
+//             this, SLOT(slotMapSelectedItems(const GPSInfoList&)));
+// 
+//     connect(d->gpsSearchWidget, SIGNAL(signalSoloItems(const GPSInfoList)),
+//             this, SLOT(slotMapSoloItems(const GPSInfoList&)));
+// 
+//     connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
+//             this, SLOT(slotItemsInfo(const ImageInfoList&)));*/
 
     // ---------------------------------------------------------------
 
