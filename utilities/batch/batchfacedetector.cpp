@@ -171,6 +171,7 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
     if (!img.isNull())
     {
         // FIXME: Detect faces from the DImg here, instead of giving a file path?
+        kDebug()<<"Height = "<< img.height()<< ", Width = "<< img.width();
         QList<KFaceIface::Face> faceList = d->faceIface->detectFaces(desc.filePath);
         QListIterator<KFaceIface::Face> it(faceList);
         kDebug()<<"Faces detected in "<<desc.filePath;
