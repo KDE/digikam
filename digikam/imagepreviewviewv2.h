@@ -104,6 +104,7 @@ private Q_SLOTS:
     void slotHidePeopleTags();
     void slotShowPeopleTags();
     void slotAddPersonTag();
+    void slotUpdatePersonTagScales();
 
 private:
 

@@ -217,6 +217,9 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     connect(d->addPersonAction, SIGNAL(triggered()),
             this, SLOT(slotAddPersonTag()));
     
+    connect(this, SIGNAL(resized()),
+            this, SLOT(slotUpdatePersonTagScales()));
+    
     // ------------------------------------------------------------
 
     connect(this, SIGNAL(toNextImage()),
@@ -446,6 +449,23 @@ void ImagePreviewViewV2::updateScale()
     }
 }
 
+void ImagePreviewViewV2::slotUpdatePersonTagScales()
+{
+    kDebug()<<"Image Resized."<<endl;
+    
+    updateScale();
+    
+    FaceItem* item=0;
+    foreach(item, d->faceitems)
+    {
+        item->setVisible(false);
+        d->faceitems.erase(d->faceitems.find(item));
+        d->faceitems.append(new FaceItem(0, this->scene(), item->originalRect(), d->scale, item->text(), item->originalScale()));
+        delete item;
+    }
+}
+
+
 void ImagePreviewViewV2::clearFaceItems()
 {
     FaceItem* item=0;
@@ -462,7 +482,7 @@ void ImagePreviewViewV2::drawFaceItems()
     for (int i = 0; i < d->currentFaces.size(); ++i)
     {
         face = d->currentFaces[i];
-        d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale));
+        d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale, "", d->scale));
         kDebug() << face.toRect()<<endl;
     }
 }
@@ -503,7 +523,7 @@ void ImagePreviewViewV2::slotAddPersonTag()
     int x = this->scene()->width()/2 - w/2;
     int y = this->scene()->height()/2 - w/2;
     
-    d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale));
+    d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale , "", d->scale));
 }
 
 
