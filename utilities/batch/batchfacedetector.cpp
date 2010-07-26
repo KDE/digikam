@@ -102,12 +102,6 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
             this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
 
-//     setModal(false);
-//     setValue(0);
-//     setCaption(d->rebuildAll ? i18n("Rescan all images for faces") : i18n("Rescan all changed images for faces"));
-//     setLabel(i18n("<b>Updating face database. Please wait...</b>"));
-//     setButtonText(i18n("&Abort"));
-
     QTimer::singleShot(500, this, SLOT(slotDetectFaces()));
 }
 
@@ -159,11 +153,7 @@ void BatchFaceDetector::complete()
 {
     QTime t;
     t = t.addMSecs(d->duration.elapsed());
-    /*setLabel(i18n("<b>Face scanning complete.</b>"));
-    setTitle(i18n("Duration: %1", t.toString()));
-    setButtonGuiItem(KStandardGuiItem::ok());
-    setButtonText(i18n("&Close"));
-    */
+    
     // Pop-up a message to bring user when all is done.
     KNotificationWrapper("facescanningcomplete", i18n("Face scanning complete."),
                          new QWidget, i18n("Faces"));
@@ -180,18 +170,14 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
 
     if (!img.isNull())
     {
-        // FIXME: Detect faces from the DImg here ?
+        // FIXME: Detect faces from the DImg here, instead of giving a file path?
         QList<KFaceIface::Face> faceList = d->faceIface->detectFaces(desc.filePath);
         QListIterator<KFaceIface::Face> it(faceList);
         kDebug()<<"Faces detected in "<<desc.filePath;
         while(it.hasNext())
             kDebug()<<it.next();
     }
-    
-    
-//     QPixmap pix = DImg(img).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
-//     addedAction(pix, desc.filePath);
-//     advance(1);
+        
     if (!d->allPicturesPath.isEmpty())
         d->allPicturesPath.removeFirst();
     if (d->allPicturesPath.isEmpty())
