@@ -282,7 +282,7 @@ KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::A
         if (tile->children.isEmpty())
         {
             //shoud be return tile; instead of return 0; ?
-            return 0;
+            return tile;
         }
         childTile = tile->children.at(currentIndex);
 
@@ -381,12 +381,11 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
     QPixmap thumbnail;
     ImageInfo info(indexForPixmap.second);
     QString path = info.filePath();
+    d->thumbnailMap.insert(path, index);
 
     if(d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
     {
         kDebug()<<"THUMBNAIL REQUESTED IN PIXMAPFORREPRESENTATIVEINDEX:"<<path;
-
-        //emit signalThumbnailAvailableForIndex(index, thumbnail);
         return thumbnail;
     }
     else
@@ -396,8 +395,17 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
     }
 }
 
-bool GPSMarkerTiler::indicesEqual(const QVariant& /*a*/, const QVariant& /*b*/) const
+bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
 {
+    QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> firstIndex = a.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();
+    QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> secondIndex = b.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();
+
+    //if(firstIndex.first == secondIndex.first && firstIndex.second == secondIndex.second)
+    //    return true;
+
+    if(firstIndex.second == secondIndex.second)   
+        return true;
+
     return false;
 }
 
@@ -534,7 +542,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
         //for now, info contains id,coordinates and rating
         KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo currentImageInfo = resultedImages.at(i);
 
-        for(int currentLevel = 0; currentLevel <= wantedLevel; ++currentLevel)
+        for(int currentLevel = 0; currentLevel <= KMapIface::AbstractMarkerTiler::TileIndex::MaxLevel; ++currentLevel)
         {
             bool found = false;
             for(int counter = 0; counter < currentTile->imagesFromTileInfo.count(); ++counter)
@@ -543,7 +551,6 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
             if(!found)
                 currentTile->imagesFromTileInfo.append(currentImageInfo);
-
 
             if(currentTile->children.isEmpty())
                 currentTile->prepareForChildren(KMapIface::QIntPair(KMapIface::AbstractMarkerTiler::TileIndex::Tiling, KMapIface::AbstractMarkerTiler::TileIndex::Tiling));
@@ -574,11 +581,11 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
 void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
 {
-    kDebug()<<"THUMBNAIL LOADED IN SLOTTHUMBNAILLOADED:"<<loadingDescription.filePath;
     QVariant index = d->thumbnailMap.value(loadingDescription.filePath);
 
     QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> indexForPixmap = index.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();    
 
+    kDebug()<<"THUMBNAIL LOADED IN SLOTTHUMBNAILLOADED:"<<loadingDescription.filePath<<" "<<indexForPixmap.second;
     emit signalThumbnailAvailableForIndex(index, thumbnail);
 
 }
