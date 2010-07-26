@@ -159,7 +159,6 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
     qreal lng2 = lowerRight.lon();
     QRect requestedRect(lat1, lng1, lat2-lat1, lng2-lng1);
 
-    bool found = false;
     for(int i=0; i<d->rectList.count(); ++i)
     {
         if(level != d->rectLevel.at(i))
@@ -168,8 +167,6 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
         qreal rectLat1, rectLng1, rectLat2, rectLng2;
         QRectF currentRect = d->rectList.at(i);
         currentRect.getCoords(&rectLat1, &rectLng1, &rectLat2, &rectLng2);
-
-        kDebug()<<"currentRect:"<<rectLat1<<" "<<rectLng1<<" "<<rectLat2<<" "<<rectLng2;
  
         //do nothing if this rectangle was already requested
         if(currentRect.contains(requestedRect))
@@ -180,38 +177,23 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
             if(currentRect.contains(lat2, lng1))
             {
                 lng1 = rectLng2;
-                found = true;
+                break;
             }
-            /*else if(currentRect.contains(lat1, lng2))
-            {
-                lat1 = rectLat2;
-                found = true;
-            }*/
         }
         else if(currentRect.contains(lat2, lng1))
         {
-          /*  if(currentRect.contains(lat1, lng1))
-            {
-                lng1 = rectLng2;
-                found = true;
-            }*/
             if(currentRect.contains(lat2, lng2))
             {
                 lat2 = rectLng1;
-                found = true;
+                break;
             }
         }
         else if(currentRect.contains(lat2, lng2))
         {
-         /*   if(currentRect.contains(lat2, lng1))
-            {
-                lat2 = rectLat1;
-                found = true;
-            }*/
             if(currentRect.contains(lat1, lng2))
             {
                 lng2 = rectLng1;
-                found = true;
+                break;
             }
         }
         else if(currentRect.contains(lat1, lng2))
@@ -219,17 +201,10 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
             if(currentRect.contains(lat1, lng1))
             {
                 lat1 = rectLat2;
-                found = true;
+                break;
             }
-          /*  else if(currentRect.contains(lat2, lng2))
-            {
-                lng2 = rectLat1;
-                found = true;
-            }*/
         }
 
-        if(found)
-            break;            
     }
     
     QRectF newRect(lat1, lng1, lat2-lat1, lng2-lng1);
@@ -296,6 +271,18 @@ KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::A
                     KMapIface::AbstractMarkerTiler::Tile* newTile = new KMapIface::AbstractMarkerTiler::Tile();
                     newTile->imagesFromTileInfo.append(currentImageInfo);
                     tile->addChild(newTileIndex, newTile);
+                }
+                else
+                {
+                    bool found = false;
+                    for(int j=0; j<newTile->imagesFromTileInfo.count(); ++j)
+                    {
+                        if(newTile->imagesFromTileInfo.at(j).id == currentImageInfo.id)
+                            found = true;
+
+                        if(!found)
+                            newTile->imagesFromTileInfo.append(currentImageInfo);
+                    }
                 }
             }
 
@@ -420,7 +407,11 @@ bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
     //if(firstIndex.first == secondIndex.first && firstIndex.second == secondIndex.second)
     //    return true;
 
-    if(firstIndex.second == secondIndex.second)   
+    //bool equal=false;
+    QList<int> aIndicesList = firstIndex.first.toIntList();
+    QList<int> bIndicesList = secondIndex.first.toIntList();
+
+    if(firstIndex.second == secondIndex.second && aIndicesList == bIndicesList)   
         return true;
 
     return false;
@@ -559,7 +550,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
         //for now, info contains id,coordinates and rating
         KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo currentImageInfo = resultedImages.at(i);
 
-        for(int currentLevel = 0; currentLevel <= wantedLevel; ++currentLevel)
+        for(int currentLevel = 0; currentLevel <= wantedLevel+1; ++currentLevel)
         {
             bool found = false;
             for(int counter = 0; counter < currentTile->imagesFromTileInfo.count(); ++counter)
@@ -581,7 +572,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
             {
                 newTile = new KMapIface::AbstractMarkerTiler::Tile();
 
-                if(currentLevel == wantedLevel)
+                if(currentLevel == wantedLevel+1)
                 {
                     newTile->imagesFromTileInfo.append(currentImageInfo);
                 }                
