@@ -281,8 +281,25 @@ KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::A
         KMapIface::AbstractMarkerTiler::Tile* childTile = 0;
         if (tile->children.isEmpty())
         {
-            //shoud be return tile; instead of return 0; ?
-            return tile;
+            tile->prepareForChildren(KMapIface::QIntPair(KMapIface::AbstractMarkerTiler::TileIndex::Tiling, KMapIface::AbstractMarkerTiler::TileIndex::Tiling));
+
+            for(int i=0; i<tile->imagesFromTileInfo.count(); ++i)
+            {
+                KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo currentImageInfo = tile->imagesFromTileInfo.at(i); 
+                const KMapIface::AbstractMarkerTiler::TileIndex markerTileIndex = KMapIface::AbstractMarkerTiler::TileIndex::fromCoordinates(currentImageInfo.coordinate, level);
+                const int newTileIndex = markerTileIndex.toIntList().last();
+
+                KMapIface::AbstractMarkerTiler::Tile* newTile = tile->children.at(newTileIndex);
+
+                if(newTile == 0)
+                {
+                    KMapIface::AbstractMarkerTiler::Tile* newTile = new KMapIface::AbstractMarkerTiler::Tile();
+                    newTile->imagesFromTileInfo.append(currentImageInfo);
+                    tile->addChild(newTileIndex, newTile);
+                }
+            }
+
+            //return 0;
         }
         childTile = tile->children.at(currentIndex);
 
@@ -293,7 +310,7 @@ KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::A
                 // there will be no markers in this tile, therefore stop
                 return 0;
             }
-            //childTile = new Tile();
+            //childTile = new KMapIface::AbstractMarkerTiler::Tile();
             //tile->addChild(currentIndex, childTile);
         }
         tile = childTile;
@@ -542,7 +559,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
         //for now, info contains id,coordinates and rating
         KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo currentImageInfo = resultedImages.at(i);
 
-        for(int currentLevel = 0; currentLevel <= KMapIface::AbstractMarkerTiler::TileIndex::MaxLevel; ++currentLevel)
+        for(int currentLevel = 0; currentLevel <= wantedLevel; ++currentLevel)
         {
             bool found = false;
             for(int counter = 0; counter < currentTile->imagesFromTileInfo.count(); ++counter)
@@ -563,6 +580,12 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
             if(newTile == 0)
             {
                 newTile = new KMapIface::AbstractMarkerTiler::Tile();
+
+                if(currentLevel == wantedLevel)
+                {
+                    newTile->imagesFromTileInfo.append(currentImageInfo);
+                }                
+
                 currentTile->addChild(newTileIndex, newTile);
                 currentTile = newTile;
             }
