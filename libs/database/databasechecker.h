@@ -25,9 +25,9 @@
 #define DATABASECHECKER_H
 
 // Local includes
+
 #include "databaseparameters.h"
 #include "databasebackend.h"
-
 #include "digikam_export.h"
 
 namespace Digikam
@@ -35,15 +35,18 @@ namespace Digikam
 
 class DIGIKAM_DATABASE_EXPORT DatabasePrivilegesChecker
 {
+
 public:
-    DatabasePrivilegesChecker(const DatabaseParameters parameters);
+
+    DatabasePrivilegesChecker(const DatabaseParameters& parameters);
     ~DatabasePrivilegesChecker();
 
     bool checkPrivileges(QStringList& insufficientRights);
-    bool checkPriv(DatabaseBackend& dbBackend, const QString dbActionName);
+    bool checkPriv(DatabaseBackend& dbBackend, const QString& dbActionName);
 
 private:
-    DatabaseParameters parameters;
+
+    DatabaseParameters m_parameters;
 };
 
 }  // namespace Digikam

@@ -28,48 +28,59 @@
 #include <QSqlDatabase>
 
 // KDE includes
+
 #include <klocale.h>
 #include <kdebug.h>
 
 // Local includes
+
 #include "databasebackend.h"
 
 namespace Digikam
 {
 
-DatabasePrivilegesChecker::DatabasePrivilegesChecker(const DatabaseParameters parameters)
+DatabasePrivilegesChecker::DatabasePrivilegesChecker(const DatabaseParameters& parameters)
 {
-    this->parameters = parameters;
+    m_parameters = parameters;
 }
 
 DatabasePrivilegesChecker::~DatabasePrivilegesChecker()
 {
-
 }
 
 bool DatabasePrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
 {
-    bool result=true;
+    bool result = true;
     DatabaseLocking fromLocking;
     DatabaseBackend fromDBbackend(&fromLocking, "PrivilegesCheckDatabase");
-    if (!fromDBbackend.open(parameters))
+
+    if (!fromDBbackend.open(m_parameters))
     {
         return false;
     }
 
-    if (!checkPriv(fromDBbackend, "CheckPriv_CREATE_TABLE")){
+    if (!checkPriv(fromDBbackend, "CheckPriv_CREATE_TABLE"))
+    {
         insufficientRights.append("CREATE TABLE");
         result = false;
-    }else if (!checkPriv(fromDBbackend, "CheckPriv_ALTER_TABLE")){
+    }
+    else if (!checkPriv(fromDBbackend, "CheckPriv_ALTER_TABLE"))
+    {
         insufficientRights.append("ALTER TABLE");
         result = false;
-    }else if (!checkPriv(fromDBbackend, "CheckPriv_CREATE_TRIGGER")){
+    }
+    else if (!checkPriv(fromDBbackend, "CheckPriv_CREATE_TRIGGER"))
+    {
         insufficientRights.append("CREATE TRIGGER");
         result = false;
-    }else if (!checkPriv(fromDBbackend, "CheckPriv_DROP_TRIGGER")){
+    }
+    else if (!checkPriv(fromDBbackend, "CheckPriv_DROP_TRIGGER"))
+    {
         insufficientRights.append("DROP TRIGGER");
         result = false;
-    }else if (!checkPriv(fromDBbackend, "CheckPriv_DROP_TABLE")){
+    }
+    else if (!checkPriv(fromDBbackend, "CheckPriv_DROP_TABLE"))
+    {
         insufficientRights.append("DROP TABLE");
         result = false;
     }
@@ -80,17 +91,22 @@ bool DatabasePrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
     return result;
 }
 
-bool DatabasePrivilegesChecker::checkPriv(DatabaseBackend& dbBackend, const QString dbActionName)
+bool DatabasePrivilegesChecker::checkPriv(DatabaseBackend& dbBackend, const QString& dbActionName)
 {
     QMap<QString, QVariant> bindingMap;
     // now perform the copy action
     QList<QString> columnNames;
-    DatabaseCoreBackend::QueryState queryStateResult = dbBackend.execDBAction(dbBackend.getDBAction(dbActionName), bindingMap) ;
-    if (queryStateResult != DatabaseCoreBackend::NoErrors && dbBackend.lastSQLError().isValid() && dbBackend.lastSQLError().number()!=0)
+    DatabaseCoreBackend::QueryState queryStateResult = dbBackend.execDBAction(dbBackend.getDBAction(dbActionName),
+                                                                              bindingMap);
+
+    if (queryStateResult != DatabaseCoreBackend::NoErrors &&
+        dbBackend.lastSQLError().isValid()                &&
+        dbBackend.lastSQLError().number() != 0)
     {
         kDebug() << "Error while creating a trigger. Details: " << dbBackend.lastSQLError();
         return false;
     }
+
     return true;
 }
 
