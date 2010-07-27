@@ -132,9 +132,7 @@ public:
         peopleToggleAction   = 0;
         addPersonAction      = 0;
 
-	// FIXME : set file path of face DB properly
-        KStandardDirs       dir;
-        faceIface            = new KFaceIface::Database(KFaceIface::Database::InitAll, dir.localkdedir()+QString("facedata"));
+        faceIface            = new KFaceIface::Database(KFaceIface::Database::InitAll, KStandardDirs::locateLocal("data", "libkface"));
     }
 
     bool                  peopleTagsShown;
