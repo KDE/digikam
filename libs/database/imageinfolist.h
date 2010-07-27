@@ -47,6 +47,8 @@ public:
     ImageInfoList(const QList<qlonglong>& idList);
     ImageInfoList(const QList<ImageInfo>& list)
         : QList<ImageInfo>(list) {}
+
+    QList<qlonglong> toImageIdList() const;
 };
 
 typedef ImageInfoList::iterator ImageInfoListIterator;

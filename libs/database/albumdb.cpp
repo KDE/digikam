@@ -1407,6 +1407,57 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
     return values;
 }
 
+QVariantList AlbumDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseFields::ImagePositions fields)
+{
+    QVariantList values;
+    if (fields != DatabaseFields::ImagePositionsNone)
+    {
+        QString sql("SELECT ");
+        QStringList fieldNames = imagePositionsFieldList(fields);
+        sql += fieldNames.join(", ");
+        sql += (" FROM ImagePositions WHERE imageid=?;");
+
+        SqlQuery query = d->db->prepareQuery(sql);
+
+        foreach (const qlonglong& imageid, imageIDs)
+        {
+            QVariantList singleValueList;
+            query.bindValue(0, imageid);
+            d->db->exec(query);
+            if (!d->db->handleQueryResult(query, &singleValueList, 0))
+                break;
+            values << singleValueList;
+        }
+
+        // For some reason REAL values may come as QString QVariants. Convert here.
+        if (values.size() == fieldNames.size() &&
+            (fields & DatabaseFields::LatitudeNumber ||
+             fields & DatabaseFields::LongitudeNumber ||
+             fields & DatabaseFields::Altitude ||
+             fields & DatabaseFields::PositionOrientation ||
+             fields & DatabaseFields::PositionTilt ||
+             fields & DatabaseFields::PositionRoll ||
+             fields & DatabaseFields::PositionAccuracy)
+           )
+        {
+            for (int i=0; i<values.size(); ++i)
+            {
+                if (values[i].type() == QVariant::String &&
+                    (fieldNames[i] == "latitudeNumber" ||
+                     fieldNames[i] == "longitudeNumber" ||
+                     fieldNames[i] == "altitude" ||
+                     fieldNames[i] == "orientation" ||
+                     fieldNames[i] == "tilt" ||
+                     fieldNames[i] == "roll" ||
+                     fieldNames[i] == "accuracy")
+                   )
+                    values[i] = values[i].toDouble();
+            }
+        }
+    }
+    return values;
+}
+
 void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageInformation fields)
 {
     if (fields == DatabaseFields::ImageInformationNone)

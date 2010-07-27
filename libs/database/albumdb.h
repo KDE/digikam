@@ -803,6 +803,8 @@ public:
     QVariantList getImagePosition(qlonglong imageID,
                                   DatabaseFields::ImagePositions positionFields = DatabaseFields::ImagePositionsAll);
 
+    QVariantList getImagePositions(QList<qlonglong> imageIDs, DatabaseFields::ImagePositions fields);
+
     /**
      * Remove the entry in ImagePositions for the given image
      */
