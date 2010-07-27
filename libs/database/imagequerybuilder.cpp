@@ -1029,6 +1029,30 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         sql += " ?)) ";
         *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
     }
+    else if (name == "imagetagproperty")
+    {
+        QStringList keyValue = reader.valueToStringList();
+        if (keyValue.size() == 2)
+        {
+            sql += " (Images.id IN "
+                " (SELECT imageid FROM ImageTagProperties "
+                "  WHERE property=? AND value ";
+            ImageQueryBuilder::addSqlRelation(sql, relation);
+            sql += " ?)) ";
+            *boundValues << keyValue[0] << keyValue[1];
+        }
+        else
+        {
+            kWarning() << "imagetagproperty requires a list of two strings";
+        }
+    }
+    else if (name == "hasimagetagproperty")
+    {
+        sql += " (Images.id IN "
+               " (SELECT imageid FROM ImageTagProperties "
+               "  WHERE property=?)); ";
+        *boundValues << reader.value();
+    }
     else if (name == "keyword")
     {
         // keyword is the common search in the text fields
