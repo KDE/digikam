@@ -467,8 +467,6 @@ void ImagePreviewViewV2::updateScale()
 
 void ImagePreviewViewV2::slotUpdatePersonTagScales()
 {
-    kDebug() << "Image Resized.";
-
     updateScale();
 
     FaceItem* item = 0;
@@ -498,7 +496,6 @@ void ImagePreviewViewV2::drawFaceItems()
     {
         face = d->currentFaces[i];
         d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale, "", d->scale));
-        kDebug() << face.toRect()<<endl;
     }
 }
 
