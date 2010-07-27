@@ -1,5 +1,4 @@
 Priority    Description
 ==================================================================================================================
-High        Fix slowly growing memory usage when face detection scans all faces
 Low         Parallelize different face detection operations
 Low         Fix the redraw artifacts made when dragging and resizing face items.
