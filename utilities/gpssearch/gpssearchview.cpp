@@ -376,6 +376,12 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     d->imageInfoJob.allItemsFromAlbum(salbum);
     d->searchTreeView->slotSelectAlbum(salbum);
     
+    d->imageAlbumModel->openAlbum(salbum);
+    if(d->existsSelection) 
+    {
+        d->mapSearchWidget->setGroupedModel(d->markerTilerModelBased); 
+        d->removeCurrentSelectionButton->setEnabled(true);
+    }
 }
 
 void GPSSearchView::slotAlbumSelected(Album* a)
@@ -404,13 +410,6 @@ void GPSSearchView::slotAlbumSelected(Album* a)
     }
 
     d->imageInfoJob.allItemsFromAlbum(salbum);
-  
-    d->imageAlbumModel->openAlbum(salbum);
-    if(d->existsSelection) 
-    {
-        d->mapSearchWidget->setGroupedModel(d->markerTilerModelBased); 
-        d->removeCurrentSelectionButton->setEnabled(true);
-    }
 }
 
 void GPSSearchView::slotItemsInfo(const ImageInfoList& /*items*/)
