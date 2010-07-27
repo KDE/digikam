@@ -72,13 +72,11 @@ void kio_digikammapimages::special(const QByteArray& data)
     ds >> kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
+    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikammapimages-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     if (wantDirectQuery)
     {
-        //QMap<QDateTime, int> dateNumberMap = Digikam::DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
-
         QString strLat1 = metaData("lat1");
         QString strLng1 = metaData("lng1");
         QString strLat2 = metaData("lat2");
