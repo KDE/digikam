@@ -405,7 +405,55 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
     return d->filter.matches(d->imageModel->imageInfo(source_row));
 }
 
+void ImageFilterModel::setSendImageInfoSignals(bool sendSignals)
+{
+    if (sendSignals)
+    {
+        connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+                this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+        connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+                this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+    }
+    else
+    {
+        disconnect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+                   this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+        disconnect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+                   this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+    }
+}
+
+void ImageFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int start, int end)
+{
+    QList<ImageInfo> infos;
+    for (int i=start; i>end; i++)
+        infos << imageInfo(index(i, 0));
+    emit imageInfosAdded(infos);
+}
+
+void ImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end)
+{
+    QList<ImageInfo> infos;
+    for (int i=start; i>end; i++)
+        infos << imageInfo(index(i, 0));
+    emit imageInfosAboutToBeRemoved(infos);
+}
+
 // -------------- Threaded preparation & filtering --------------
+
+void ImageFilterModel::addPrepareHook(ImageFilterModelPrepareHook *hook)
+{
+    Q_D(ImageFilterModel);
+    QMutexLocker lock(&d->mutex);
+    d->prepareHooks << hook;
+}
+
+void ImageFilterModel::removePrepareHook(ImageFilterModelPrepareHook *hook)
+{
+    Q_D(ImageFilterModel);
+    QMutexLocker lock(&d->mutex);
+    d->prepareHooks.removeAll(hook);
+}
 
 void ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo>& infos)
 {
@@ -529,10 +577,12 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
 
     // get thread-local copy
     bool needPrepareTags, needPrepareComments;
+    QList<ImageFilterModelPrepareHook*> prepareHooks;
     {
         QMutexLocker lock(&d->mutex);
         needPrepareTags = d->needPrepareTags;
         needPrepareComments = d->needPrepareComments;
+        prepareHooks = d->prepareHooks;
     }
 
     //TODO: Make efficient!!
@@ -558,6 +608,9 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
             info.tagIds();
         }
     }
+
+    foreach (ImageFilterModelPrepareHook *hook, prepareHooks)
+        hook->prepare(package.infos);
 
     emit processed(package);
 }

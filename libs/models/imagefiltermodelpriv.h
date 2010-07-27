@@ -105,6 +105,8 @@ public:
     bool                       hasOneMatch;
     bool                       hasOneMatchForText;
 
+    QList<ImageFilterModelPrepareHook*> prepareHooks;
+
     /*QHash<int, QSet<qlonglong> >
                                categoryCountHashInt;
     QHash<QString, QSet<qlonglong> >

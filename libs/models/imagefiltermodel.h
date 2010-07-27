@@ -42,6 +42,13 @@ class ImageChangeset;
 class ImageTagChangeset;
 class ImageFilterModelPrivate;
 
+class DIGIKAM_DATABASE_EXPORT ImageFilterModelPrepareHook
+{
+public:
+    virtual ~ImageFilterModelPrepareHook();
+    virtual void prepare(const QVector<ImageInfo>& infos) = 0;
+};
+
 class DIGIKAM_DATABASE_EXPORT ImageFilterModel : public KCategorizedSortFilterProxyModel
 {
     Q_OBJECT
@@ -71,6 +78,10 @@ public:
 
     ImageModel *sourceModel() const;
 
+    /** Add a hook to get added images for preparation tasks before they are added in the model */
+    void addPrepareHook(ImageFilterModelPrepareHook *hook);
+    void removePrepareHook(ImageFilterModelPrepareHook *hook);
+
     /// Convenience methods mapped to ImageModel
     QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
     QList<QModelIndex> mapListFromSource(const QList<QModelIndex>& sourceIndexes) const;
@@ -92,6 +103,9 @@ public:
     ImageSortSettings   imageSortSettings() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+
+    /// Enables sending imageInfosAdded and imageInfosAboutToBeRemoved
+    void setSendImageInfoSignals(bool sendSignals);
 
 public Q_SLOTS:
 
@@ -132,6 +146,10 @@ Q_SIGNALS:
         (the model may not yet have been updated) */
     void filterSettingsChanged(const ImageFilterSettings &settings);
 
+    /** These signals need to be explicitly enabled with setSendImageInfoSignals() */
+    void imageInfosAdded(const QList<ImageInfo>& infos);
+    void imageInfosAboutToBeRemoved(const QList<ImageInfo>& infos);
+
 protected:
 
     virtual void setSourceModel(QAbstractItemModel* model);
@@ -161,6 +179,9 @@ protected Q_SLOTS:
 
     void slotImageTagChange(const ImageTagChangeset& changeset);
     void slotImageChange(const ImageChangeset& changeset);
+
+    void slotRowsInserted(const QModelIndex& parent, int start, int end);
+    void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
 
 private:
 
