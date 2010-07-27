@@ -33,6 +33,7 @@
 
 #include "statesavingobject.h"
 #include "worldmapwidget.h"
+#include "imagealbummodel.h"
 
 class QDragEnterEvent;
 class QDropEvent;
@@ -74,6 +75,7 @@ public Q_SLOTS:
     void slotDigikamViewNoCurrentItem();
     void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, 
                                       const ImageInfoList& allImages);
+    void slotRemoveCurrentSelection();
 
 private:
 

@@ -38,6 +38,7 @@
 
 // KDE includes
 
+#include <kaction.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -48,6 +49,10 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+
+// libkmap includes
+
+#include <libkmap/itemmarkertiler.h>
 
 // Local includes
 
@@ -61,6 +66,7 @@
 #include "searchtextbar.h"
 #include "searchxml.h"
 #include "gpsmarkertiler.h"
+#include "mapwidgetview.h"
 
 namespace Digikam
 {
@@ -80,24 +86,32 @@ public:
         splitter(0)
     {}
 
-    const QString configSplitterStateEntry;
+    const QString               configSplitterStateEntry;
 
-    QToolButton*            saveBtn;
+    QToolButton*                saveBtn;
 
-    KLineEdit*              nameEdit;
+    KLineEdit*                  nameEdit;
 
-    ImageInfoJob            imageInfoJob;
+    ImageInfoJob                imageInfoJob;
 
-    SearchTextBar*          searchGPSBar;
+    SearchTextBar*              searchGPSBar;
 
-    EditableSearchTreeView* searchTreeView;
+    EditableSearchTreeView*     searchTreeView;
 
-    QSplitter*              splitter;
+    QSplitter*                  splitter;
 
-    GPSSearchWidget*        gpsSearchWidget;
+    GPSSearchWidget*            gpsSearchWidget;
 
-    KMapIface::KMap*        mapSearchWidget;
-    GPSMarkerTiler*         gpsMarkerTiler;
+    KMapIface::KMap*            mapSearchWidget;
+    GPSMarkerTiler*             gpsMarkerTiler;
+   
+    KAction*                    actionRemoveCurrentSelection;
+    ImageAlbumModel*            imageAlbumModel;
+    QItemSelectionModel*        selectionModel;
+    MapViewModelHelper*         mapViewModelHelper;
+    KMapIface::ItemMarkerTiler* markerTilerModelBased;
+    QToolButton*                removeCurrentSelectionButton;
+    bool                        existsSelection;
 };
 
 GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
@@ -107,6 +121,12 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setAcceptDrops(true);
+
+    d->imageAlbumModel    = new ImageAlbumModel(this);
+    d->selectionModel     = new QItemSelectionModel(d->imageAlbumModel);
+    d->mapViewModelHelper = new MapViewModelHelper(d->imageAlbumModel, d->selectionModel, this);
+
+    d->markerTilerModelBased = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
 
     // ---------------------------------------------------------------
 
@@ -119,10 +139,9 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->mapSearchWidget = new KMapIface::KMap(mapPanel);
     d->mapSearchWidget->setBackend("marble");
 
-    GPSMarkerTiler* markerTiler = new GPSMarkerTiler(this);
-    d->mapSearchWidget->setGroupedModel(markerTiler);
 
     d->gpsMarkerTiler = new GPSMarkerTiler(this);
+    d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
@@ -170,6 +189,18 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
+
+    d->actionRemoveCurrentSelection = new KAction(this);
+    d->actionRemoveCurrentSelection->setIcon(SmallIcon(""));
+    d->actionRemoveCurrentSelection->setToolTip(i18n("Removes the current selection and shows all images on the map."));
+    
+
+    d->removeCurrentSelectionButton = new QToolButton(this);
+    d->removeCurrentSelectionButton->setDefaultAction(d->actionRemoveCurrentSelection);
+    d->mapSearchWidget->addWidgetToControlWidget(d->removeCurrentSelectionButton);
+    d->removeCurrentSelectionButton->setEnabled(false);
+    d->existsSelection              = false; 
+
     vlayTop->addWidget(hbox);
     vlayTop->setStretchFactor(mapPanel, 10);
     vlayTop->setMargin(0);
@@ -189,6 +220,9 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     vlay->addWidget(d->splitter);
 
     // ---------------------------------------------------------------
+
+    connect(d->actionRemoveCurrentSelection, SIGNAL(triggered()),
+            this, SLOT(slotRemoveCurrentSelection()));
 
     connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
@@ -288,24 +322,24 @@ void GPSSearchView::setActive(bool /*val*/)
     */
 }
 
-void GPSSearchView::changeAlbumFromHistory(SAlbum* /*album*/)
+void GPSSearchView::changeAlbumFromHistory(SAlbum* album)
 {
-//    d->searchTreeView->slotSelectAlbum(album);
+    d->searchTreeView->slotSelectAlbum(album);
 }
 
 void GPSSearchView::slotSaveGPSSAlbum()
 {
- /*
+ 
     QString name = d->nameEdit->text();
     if (!checkName(name))
         return;
 
-    createNewGPSSearchAlbum(name);
-    */
+    createNewGPSSearchAlbum(name);    
 }
 
 void GPSSearchView::slotSelectionChanged()
 {
+    d->existsSelection = true;
     slotCheckNameEditGPSConditions();
     createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
 }
@@ -337,8 +371,6 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     writer.finishField();
     writer.finishGroup();
 
-    kDebug()<< "SearchXmlWriter finished well.";
-
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
@@ -349,9 +381,8 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 void GPSSearchView::slotAlbumSelected(Album* a)
 {
 
-    //SAlbum *salbum = dynamic_cast<SAlbum*> (a);
-
     SAlbum *salbum = dynamic_cast<SAlbum*> (a);
+
 
     if (!salbum)
         return;
@@ -368,14 +399,18 @@ void GPSSearchView::slotAlbumSelected(Album* a)
         QList<double> list;
         list << reader.valueToDoubleList();
 
-        kDebug()<<"The selection after clicking an album name."<<list;
-
         d->mapSearchWidget->setSelectionCoordinates(list);
         slotCheckNameEditGPSConditions();
     }
 
     d->imageInfoJob.allItemsFromAlbum(salbum);
-    
+  
+    d->imageAlbumModel->openAlbum(salbum);
+    if(d->existsSelection) 
+    {
+        d->mapSearchWidget->setGroupedModel(d->markerTilerModelBased); 
+        d->removeCurrentSelectionButton->setEnabled(true);
+    }
 }
 
 void GPSSearchView::slotItemsInfo(const ImageInfoList& /*items*/)
@@ -402,9 +437,9 @@ void GPSSearchView::slotItemsInfo(const ImageInfoList& /*items*/)
 */
 }
 
-bool GPSSearchView::checkName(QString& /*name*/)
+bool GPSSearchView::checkName(QString& name)
 {
- /* 
+  
     bool checked = checkAlbum(name);
 
     while (!checked)
@@ -420,14 +455,14 @@ bool GPSSearchView::checkName(QString& /*name*/)
     }
 
     return true;
-    */
+    
 
-    return false;
+    //return false;
 }
 
-bool GPSSearchView::checkAlbum(const QString& /*name*/) const
+bool GPSSearchView::checkAlbum(const QString& name) const
 {
-/*
+
     const AlbumList list = AlbumManager::instance()->allSAlbums();
 
     for (AlbumList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
@@ -437,9 +472,16 @@ bool GPSSearchView::checkAlbum(const QString& /*name*/) const
             return false;
     }
     return true;
-    */
+    
 
-    return false;
+    //return false;
+}
+
+void GPSSearchView::slotRemoveCurrentSelection()
+{
+    d->existsSelection = false;
+    d->removeCurrentSelectionButton->setEnabled(d->existsSelection);
+    d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 }
 
 void GPSSearchView::slotCheckNameEditGPSConditions()
@@ -535,5 +577,7 @@ void GPSSearchView::slotMapSoloItems(const GPSInfoList& /*gpsList*/)
     emit(signalMapSoloItems(urlList, "gpssearch"));
 */
 }
+
+
 
 }  // namespace Digikam
