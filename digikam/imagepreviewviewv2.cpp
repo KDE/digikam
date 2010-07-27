@@ -64,6 +64,7 @@
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
 #include "themeengine.h"
+#include "previewlayout.h"
 
 // libkface includes
 
@@ -220,7 +221,7 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     connect(d->addPersonAction, SIGNAL(triggered()),
             this, SLOT(slotAddPersonTag()));
 
-    connect(this, SIGNAL(resized()),
+    connect(this->layout(), SIGNAL( zoomFactorChanged(double)),
             this, SLOT(slotUpdatePersonTagScales()));
 
     // ------------------------------------------------------------
