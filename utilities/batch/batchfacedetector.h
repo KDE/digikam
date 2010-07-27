@@ -7,6 +7,7 @@
  * Description : batch face detection
  *
  * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +31,7 @@
 
 // Local includes
 
-//#include "dprogressdlg.h"
+#include "dprogressdlg.h"
 
 class QWidget;
 class KUrl;
@@ -41,9 +42,8 @@ namespace Digikam
 
 class DImg;
 class LoadingDescription;
-class BatchFaceDetectorPriv;
 
-class BatchFaceDetector : public QObject
+class BatchFaceDetector : public DProgressDlg
 {
     Q_OBJECT
 
@@ -77,6 +77,7 @@ private Q_SLOTS:
 
 private:
 
+    class BatchFaceDetectorPriv;
     BatchFaceDetectorPriv* const d;
 };
 

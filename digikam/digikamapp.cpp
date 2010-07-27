@@ -2622,7 +2622,7 @@ void DigikamApp::slotScanForFaces()
 
 void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
 {
-    FingerPrintsGenerator *fingerprintsGenerator = new FingerPrintsGenerator(this, rebuildAll);
+    FingerPrintsGenerator* fingerprintsGenerator = new FingerPrintsGenerator(this, rebuildAll);
 
     connect(fingerprintsGenerator, SIGNAL(signalRebuildAllFingerPrintsDone()),
             this, SLOT(slotRebuildFingerPrintsDone()));
@@ -2632,12 +2632,12 @@ void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
 
 void DigikamApp::runFaceScanner(bool rebuildAll)
 {
-    BatchFaceDetector *batchFaceDetector = new BatchFaceDetector(this, rebuildAll);
+    BatchFaceDetector* batchFaceDetector = new BatchFaceDetector(this, rebuildAll);
 
     connect(batchFaceDetector, SIGNAL(signalDetectAllFacesDone()),
             this, SLOT(slotScanForFacesDone()));
 
-//    batchFaceDetector->show();
+    batchFaceDetector->show();
 }
 void DigikamApp::slotRebuildFingerPrintsDone()
 {

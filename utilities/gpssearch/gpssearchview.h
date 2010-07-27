@@ -6,7 +6,7 @@
  * Date        : 2008-05-30
  * Description : GPS search sidebar tab contents.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -57,24 +57,25 @@ class GPSSearchView : public QWidget, public StateSavingObject
 
 public:
 
-    GPSSearchView(QWidget *parent, SearchModel *searchModel,
-                  SearchModificationHelper *searchModificationHelper);
+    GPSSearchView(QWidget* parent, SearchModel* searchModel,
+                  SearchModificationHelper* searchModificationHelper);
     ~GPSSearchView();
 
     void setActive(bool val);
 
-    void changeAlbumFromHistory(SAlbum *album);
+    void changeAlbumFromHistory(SAlbum* album);
 
     virtual void setConfigGroup(KConfigGroup group);
     void doLoadState();
     void doSaveState();
 
 public Q_SLOTS:
+
     void slotDigikamViewNoCurrentItem();
-    void slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
+    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, 
+                                      const ImageInfoList& allImages);
 
 private:
-
 
     bool checkName(QString& name);
     bool checkAlbum(const QString& name) const;
@@ -91,11 +92,12 @@ private Q_SLOTS:
     void slotSelectionChanged();
 
     void slotItemsInfo(const ImageInfoList&);
-    
+
     void slotMapSelectedItems(const GPSInfoList& gpsList);
     void slotMapSoloItems(const GPSInfoList& gpsList);
-    
+
 Q_SIGNALS:
+
     void signalMapSelectedItems(const KUrl::List url);
     void signalMapSoloItems(const KUrl::List url, const QString& id);
 

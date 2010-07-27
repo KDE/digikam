@@ -7,6 +7,7 @@
  * Description : batch face detection
  *
  * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +31,6 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDateTime>
-//#include <QPixmap>
 #include <QCloseEvent>
 
 // KDE includes
@@ -65,7 +65,7 @@
 namespace Digikam
 {
 
-class BatchFaceDetectorPriv
+class BatchFaceDetector::BatchFaceDetectorPriv
 {
 public:
 
@@ -91,16 +91,22 @@ public:
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
-                 :  d(new BatchFaceDetectorPriv)
+                 : DProgressDlg(0), d(new BatchFaceDetectorPriv)
 {
     d->rebuildAll        = rebuildAll;
     d->previewLoadThread = new PreviewLoadThread();
-    
+
     // For now, start the faceIface in detection mode
     d->faceIface = new KFaceIface::Database(KFaceIface::Database::InitDetection);
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
+            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
+
+    setModal(false);
+    setValue(0);
+    setCaption(d->rebuildAll ? i18n("Rebuild All Faces") : i18n("Build Missing Faces"));
+    setLabel(i18n("<b>Updating faces database. Please wait...</b>"));
+    setButtonText(i18n("&Abort"));
 
     QTimer::singleShot(500, this, SLOT(slotDetectFaces()));
 }
@@ -112,7 +118,7 @@ BatchFaceDetector::~BatchFaceDetector()
 
 void BatchFaceDetector::slotDetectFaces()
 {
-//     setTitle(i18n("Processing..."));
+    setTitle(i18n("Processing..."));
     const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
@@ -131,7 +137,7 @@ void BatchFaceDetector::slotDetectFaces()
         d->allPicturesPath = DatabaseAccess().db()->getDirtyOrMissingFaceImageUrls();
     }
 
-//     setMaximum(d->allPicturesPath.count());
+     setMaximum(d->allPicturesPath.count());
 
     if (d->allPicturesPath.isEmpty())
     {
@@ -153,7 +159,10 @@ void BatchFaceDetector::complete()
 {
     QTime t;
     t = t.addMSecs(d->duration.elapsed());
-    
+    setLabel(i18n("<b>Update of faces database complete.</b>"));
+    setTitle(i18n("Duration: %1", t.toString()));
+    setButtonGuiItem(KStandardGuiItem::ok());
+    setButtonText(i18n("&Close"));
     // Pop-up a message to bring user when all is done.
     KNotificationWrapper("facescanningcomplete", i18n("Face scanning complete."),
                          new QWidget, i18n("Faces"));
@@ -168,17 +177,24 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
     if (d->allPicturesPath.first() != desc.filePath)
         return;
 
-    if (!img.isNull())
+    DImg dimg(img);
+
+    if (!dimg.isNull())
     {
         // FIXME: Detect faces from the DImg here, instead of giving a file path?
-        kDebug()<<"Height = "<< img.height()<< ", Width = "<< img.width();
-        QList<KFaceIface::Face> faceList = d->faceIface->detectFaces(desc.filePath);
+        kDebug() << desc.filePath << " => " << "Height= " << img.height() << ", Width= " << img.width();
+
+        KFaceIface::Image fimg(dimg.copyQImage());
+        QList<KFaceIface::Face> faceList = d->faceIface->detectFaces(fimg);
         QListIterator<KFaceIface::Face> it(faceList);
-        kDebug()<<"Faces detected in "<<desc.filePath;
+        kDebug() << "Faces detected in " << desc.filePath;
         while(it.hasNext())
             kDebug()<<it.next();
     }
-        
+
+    QPixmap pix = dimg.smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
+    addedAction(pix, desc.filePath);
+    advance(1);
     if (!d->allPicturesPath.isEmpty())
         d->allPicturesPath.removeFirst();
     if (d->allPicturesPath.isEmpty())
@@ -190,6 +206,7 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
 void BatchFaceDetector::slotCancel()
 {
     abort();
+    done(Cancel);
 }
 
 void BatchFaceDetector::closeEvent(QCloseEvent* e)

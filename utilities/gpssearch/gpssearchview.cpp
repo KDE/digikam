@@ -6,7 +6,7 @@
  * Date        : 2008-05-30
  * Description : GPS search sidebar tab contents.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -82,26 +82,26 @@ public:
 
     const QString configSplitterStateEntry;
 
-    QToolButton*         saveBtn;
+    QToolButton*            saveBtn;
 
-    KLineEdit*           nameEdit;
+    KLineEdit*              nameEdit;
 
-    ImageInfoJob         imageInfoJob;
+    ImageInfoJob            imageInfoJob;
 
-    SearchTextBar*       searchGPSBar;
+    SearchTextBar*          searchGPSBar;
 
-    EditableSearchTreeView *searchTreeView;
+    EditableSearchTreeView* searchTreeView;
 
-    QSplitter*           splitter;
+    QSplitter*              splitter;
 
-    GPSSearchWidget*     gpsSearchWidget;
+    GPSSearchWidget*        gpsSearchWidget;
 
-    KMapIface::KMap*     mapSearchWidget;
-    GPSMarkerTiler*      gpsMarkerTiler;
+    KMapIface::KMap*        mapSearchWidget;
+    GPSMarkerTiler*         gpsMarkerTiler;
 };
 
-GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
-                SearchModificationHelper *searchModificationHelper)
+GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
+                             SearchModificationHelper* searchModificationHelper)
              : QWidget(parent), StateSavingObject(this),
                d(new GPSSearchViewPriv)
 {
@@ -110,12 +110,12 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
 
     // ---------------------------------------------------------------
 
-    QVBoxLayout *vlay  = new QVBoxLayout(this);
+    QVBoxLayout* vlay  = new QVBoxLayout(this);
 
-    QFrame *mapPanel   = new QFrame(this);
+    QFrame* mapPanel   = new QFrame(this);
     mapPanel->setMinimumWidth(256);
     mapPanel->setMinimumHeight(256);
-    QVBoxLayout *vlay2 = new QVBoxLayout(mapPanel);
+    QVBoxLayout* vlay2 = new QVBoxLayout(mapPanel);
     d->mapSearchWidget = new KMapIface::KMap(mapPanel);
     //d->mapSearchWidget->setBackend("marble");
 
@@ -133,7 +133,7 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox = new KHBox(this);
+    KHBox* hbox = new KHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(KDialog::spacingHint());
 
@@ -166,7 +166,7 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
     d->splitter = new QSplitter(Qt::Vertical, this);
     d->splitter->setOpaqueResize(KGlobalSettings::opaqueResize());
 
-    QFrame* const frameTop = new QFrame(d->splitter);
+    QFrame* const frameTop     = new QFrame(d->splitter);
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
@@ -174,7 +174,7 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
     vlayTop->setStretchFactor(mapPanel, 10);
     vlayTop->setMargin(0);
     vlayTop->setSpacing(KDialog::spacingHint());
-    QFrame* const frameBottom = new QFrame(d->splitter);
+    QFrame* const frameBottom     = new QFrame(d->splitter);
     QVBoxLayout* const vlayBottom = new QVBoxLayout(frameBottom);
     vlayBottom->addWidget(d->searchTreeView);
     vlayBottom->addWidget(d->searchGPSBar);
@@ -224,16 +224,18 @@ GPSSearchView::~GPSSearchView()
     delete d;
 }
 
-void GPSSearchView::setConfigGroup(KConfigGroup group)
+void GPSSearchView::setConfigGroup(KConfigGroup /*group*/)
 {
-    /*StateSavingObject::setConfigGroup(group);
-    d->searchTreeView->setConfigGroup(group);*/
+    /*
+    StateSavingObject::setConfigGroup(group);
+    d->searchTreeView->setConfigGroup(group);
+    */
 }
 
 void GPSSearchView::doLoadState()
 {
-
-   /* KConfigGroup group = getConfigGroup();
+   /*
+   KConfigGroup group = getConfigGroup();
 
     if (group.hasKey(entryName(d->configSplitterStateEntry)))
     {
@@ -245,23 +247,27 @@ void GPSSearchView::doLoadState()
     }
 
     d->gpsSearchWidget->readConfig(group);
-    d->searchTreeView->loadState();*/
+    d->searchTreeView->loadState();
+    */
 }
 
 void GPSSearchView::doSaveState()
 {
-  /*  KConfigGroup group = getConfigGroup();
+  /*
+    KConfigGroup group = getConfigGroup();
 
     group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
     d->gpsSearchWidget->writeConfig(group);
     d->searchTreeView->saveState();
 
-    group.sync();*/
+    group.sync();
+    */
 }
 
-void GPSSearchView::setActive(bool val)
+void GPSSearchView::setActive(bool /*val*/)
 {
-/*    if (!val)
+/*
+    if (!val)
     {
         // make sure we reset the custom filters set by the MarkerClusterer:
         emit(signalMapSoloItems(KUrl::List(), "gpssearch"));
@@ -275,21 +281,24 @@ void GPSSearchView::setActive(bool val)
     else if (val)
     {
         // TODO
-    }*/
+    }
+    */
 }
 
-void GPSSearchView::changeAlbumFromHistory(SAlbum *album)
+void GPSSearchView::changeAlbumFromHistory(SAlbum* /*album*/)
 {
 //    d->searchTreeView->slotSelectAlbum(album);
 }
 
 void GPSSearchView::slotSaveGPSSAlbum()
 {
- /*   QString name = d->nameEdit->text();
+ /*
+    QString name = d->nameEdit->text();
     if (!checkName(name))
         return;
 
-    createNewGPSSearchAlbum(name);*/
+    createNewGPSSearchAlbum(name);
+    */
 }
 
 void GPSSearchView::slotSelectionChanged()
@@ -298,9 +307,10 @@ void GPSSearchView::slotSelectionChanged()
 //    createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
 }
 
-void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
+void GPSSearchView::createNewGPSSearchAlbum(const QString& /*name*/)
 {
-/*    AlbumManager::instance()->setCurrentAlbum(0);
+/*
+    AlbumManager::instance()->setCurrentAlbum(0);
 
     // clear positions shown on the map:
     d->gpsSearchWidget->clearGPSPositions();
@@ -327,13 +337,14 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
-    d->searchTreeView->slotSelectAlbum(salbum);*/
+    d->searchTreeView->slotSelectAlbum(salbum);
+    */
 }
 
-void GPSSearchView::slotAlbumSelected(Album* a)
+void GPSSearchView::slotAlbumSelected(Album* /*a*/)
 {
-
-/*    SAlbum *salbum = dynamic_cast<SAlbum*> (a);
+/*
+    SAlbum *salbum = dynamic_cast<SAlbum*> (a);
 
     if (!salbum)
         return;
@@ -353,12 +364,14 @@ void GPSSearchView::slotAlbumSelected(Album* a)
         slotCheckNameEditGPSConditions();
     }
 
-    d->imageInfoJob.allItemsFromAlbum(salbum);*/
+    d->imageInfoJob.allItemsFromAlbum(salbum);
+    */
 }
 
-void GPSSearchView::slotItemsInfo(const ImageInfoList& items)
+void GPSSearchView::slotItemsInfo(const ImageInfoList& /*items*/)
 {
-/*    GPSInfoList list;
+/*
+    GPSInfoList list;
     foreach(ImageInfo inf, items)
     {
         ImagePosition pos = inf.imagePosition();
@@ -379,9 +392,10 @@ void GPSSearchView::slotItemsInfo(const ImageInfoList& items)
 */
 }
 
-bool GPSSearchView::checkName(QString& name)
+bool GPSSearchView::checkName(QString& /*name*/)
 {
- /*   bool checked = checkAlbum(name);
+ /* 
+    bool checked = checkAlbum(name);
 
     while (!checked)
     {
@@ -395,13 +409,16 @@ bool GPSSearchView::checkName(QString& name)
         checked = checkAlbum(name);
     }
 
-    return true;*/
+    return true;
+    */
+
     return false;
 }
 
-bool GPSSearchView::checkAlbum(const QString& name) const
+bool GPSSearchView::checkAlbum(const QString& /*name*/) const
 {
-/*    const AlbumList list = AlbumManager::instance()->allSAlbums();
+/*
+    const AlbumList list = AlbumManager::instance()->allSAlbums();
 
     for (AlbumList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
@@ -409,13 +426,14 @@ bool GPSSearchView::checkAlbum(const QString& name) const
         if ( album->title() == name )
             return false;
     }
-    return true;*/
+    return true;
+    */
+
     return false;
 }
 
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
-
     //d->gpsMarkerTiler->secondTestDatabase(5.1,80.3,20.4,130.6);
 /*
     if (d->gpsSearchWidget->hasSelection())
@@ -445,11 +463,14 @@ void GPSSearchView::slotDigikamViewNoCurrentItem()
  * @brief Slot which gets called when the user selects images in the icon view
  * @param selectedImage List of selected images
  */
-void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages)
+void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, 
+                                                 const ImageInfoList& allImages)
 {
-/*    Q_UNUSED(hasPrevious)
+    Q_UNUSED(selectedImage)
+    Q_UNUSED(hasPrevious)
     Q_UNUSED(hasNext)
     Q_UNUSED(allImages)
+/*
     GPSInfoList list;
     foreach(ImageInfo inf, selectedImage)
     {
@@ -476,9 +497,10 @@ void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList &selectedIm
  * @brief Slot which gets called when the user selected items on the map
  * @param gpsList List of GPSInfos of selected items
  */
-void GPSSearchView::slotMapSelectedItems(const GPSInfoList& gpsList)
+void GPSSearchView::slotMapSelectedItems(const GPSInfoList& /*gpsList*/)
 {
-/*    KUrl::List urlList;
+/*
+    KUrl::List urlList;
     for (GPSInfoList::const_iterator it = gpsList.constBegin(); it!=gpsList.constEnd(); ++it)
     {
         urlList << it->url;
@@ -492,9 +514,10 @@ void GPSSearchView::slotMapSelectedItems(const GPSInfoList& gpsList)
  * @brief Slot which gets called when the user makes items 'solo' on the map
  * @param gpsList List of GPSInfos which are 'solo'
  */
-void GPSSearchView::slotMapSoloItems(const GPSInfoList& gpsList)
+void GPSSearchView::slotMapSoloItems(const GPSInfoList& /*gpsList*/)
 {
-/*    KUrl::List urlList;
+/*
+    KUrl::List urlList;
     for (GPSInfoList::const_iterator it = gpsList.constBegin(); it!=gpsList.constEnd(); ++it)
     {
         urlList << it->url;
