@@ -50,6 +50,9 @@ public:
     QString connectionName(QThread* thread);
 
     QSqlDatabase databaseForThread();
+    QSqlError    databaseErrorForThread();
+    void         setDatabaseErrorForThread(QSqlError lastError);
+
     void closeDatabaseForThread();
     bool open(QSqlDatabase& db);
     bool incrementTransactionCount();
@@ -85,6 +88,8 @@ public:
     QHash<QThread*, int>                      databasesValid;
     // for recursive transactions
     QHash<QThread*, int>                      transactionCount;
+
+    QHash<QThread*, QSqlError>                databaseErrors;
 
     bool                                      isInTransaction;
 

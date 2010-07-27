@@ -147,9 +147,20 @@ void DatabaseCoreBackendPrivate::closeDatabaseForThread()
             db.close();
     }
     threadDatabases.remove(thread);
+    databaseErrors.remove(thread);
     databasesValid[thread] = 0;
     transactionCount.remove(thread);
     QSqlDatabase::removeDatabase(connectionName(thread));
+}
+
+QSqlError DatabaseCoreBackendPrivate::databaseErrorForThread(){
+    QThread *thread = QThread::currentThread();
+    return databaseErrors[thread];
+}
+
+void DatabaseCoreBackendPrivate::setDatabaseErrorForThread(QSqlError lastError){
+    QThread *thread = QThread::currentThread();
+    databaseErrors.insert(thread, lastError);
 }
 
 QString DatabaseCoreBackendPrivate::connectionName(QThread* thread)
@@ -1035,7 +1046,20 @@ bool DatabaseCoreBackend::queryErrorHandling(SqlQuery& query, int retries)
 
     d->debugOutputFailedQuery(query);
 
-    if (d->reconnectOnError())
+    /*
+     * Check if the error is query or database related.
+     * It seems, that insufficient privileges results only in query errors,
+     * the database gives an invalid lastError() value.
+     */
+    if (query.lastError().isValid())
+    {
+        d->setDatabaseErrorForThread(query.lastError());
+    }else
+    {
+        d->setDatabaseErrorForThread(d->databaseForThread().lastError());
+    }
+
+    if (d->isConnectionError(query) && d->reconnectOnError())
     {
         d->closeDatabaseForThread();
         query = copyQuery(query);
@@ -1239,7 +1263,7 @@ QStringList DatabaseCoreBackend::tables()
 QSqlError DatabaseCoreBackend::lastSQLError()
 {
     Q_D(DatabaseCoreBackend);
-    return d->databaseForThread().lastError();
+    return d->databaseErrorForThread();
 }
 
 QString DatabaseCoreBackend::lastError()
