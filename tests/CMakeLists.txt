@@ -186,6 +186,7 @@ SET(albummodeltest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupicc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupplugins.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupslideshow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupscriptmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmisc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch/batchthumbsgenerator.cpp
