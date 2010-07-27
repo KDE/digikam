@@ -38,6 +38,39 @@
         <dbinitcmd></dbinitcmd>
 
         <dbactions>
+           	<dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
+        		CREATE TRIGGER privcheck_trigger DELETE ON PrivCheck
+        			BEGIN
+                                SELECT * FROM PrivCheck;
+  				END;
+        	</statement>
+        	</dbaction>
+
+        	<dbaction name="CheckPriv_DROP_TRIGGER"><statement mode="plain">
+        		DROP TRIGGER privcheck_trigger;
+        	</statement>
+        	</dbaction>
+        	        	
+        	<dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
+        		CREATE TABLE PrivCheck
+        		(
+ 				   id   INT,
+    			           name VARCHAR(35)
+				);
+        	</statement>
+        	</dbaction>
+
+        	<dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
+        		ALTER TABLE PrivCheck ADD COLUMN addedColumn;
+        	</statement>
+			</dbaction>        	
+        	
+        	<dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
+        		DROP TABLE PrivCheck;
+        	</statement>
+        	</dbaction>
+        
+        
             <dbaction name="CreateDB" mode="transaction"><statement mode="plain">CREATE TABLE AlbumRoots
                             (id INTEGER PRIMARY KEY,
                             label TEXT,
@@ -648,6 +681,37 @@
         <dbinitcmd>${INITCMD_MYSQL}</dbinitcmd>
 
         <dbactions>
+        	<dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
+        		CREATE TRIGGER privcheck_trigger AFTER DELETE ON PrivCheck
+ 				 FOR EACH ROW BEGIN
+  				END;
+        	</statement>
+        	</dbaction>
+
+        	<dbaction name="CheckPriv_DROP_TRIGGER"><statement mode="plain">
+        		DROP TRIGGER privcheck_trigger;
+        	</statement>
+        	</dbaction>
+        	        	
+        	<dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
+        		CREATE TABLE PrivCheck
+        		(
+ 				   id   INT,
+    			   name VARCHAR(35)
+				);
+        	</statement>
+        	</dbaction>
+
+        	<dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
+        		ALTER TABLE PrivCheck DROP COLUMN name;
+        	</statement>
+			</dbaction>        	
+        	
+        	<dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
+        		DROP TABLE PrivCheck;
+        	</statement>
+        	</dbaction>
+        
             <dbaction name="CreateDB" mode="transaction"><statement mode="plain">  CREATE TABLE AlbumRoots
             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
             label LONGTEXT,
@@ -802,7 +866,7 @@
                 <statement mode="plain">CREATE INDEX hash_index ON Images (uniqueHash);</statement>
                 <statement mode="plain">CREATE INDEX tag_index  ON ImageTags (tagid);</statement>
                 <statement mode="plain">CREATE INDEX tag_id_index  ON ImageTags (imageid);</statement>
-                <statement mode="plain">CREATE INDEX image_name_index ON Images (name);</statement>
+                <statement mode="plain">CREATE INDEX image_name_index ON Images (name(996));</statement>
                 <statement mode="plain">CREATE INDEX creationdate_index ON ImageInformation (creationDate);</statement>
                 <statement mode="plain">CREATE INDEX comments_imageid_index ON ImageComments (imageid);</statement>
                 <statement mode="plain">CREATE INDEX copyright_imageid_index ON ImageCopyright (imageid);</statement>
@@ -1198,7 +1262,7 @@
                              property TEXT CHARACTER SET utf8,
                              value LONGTEXT CHARACTER SET utf8);</statement>
             <statement mode="plain">CREATE INDEX tag_id_index  ON ImageTags (imageid);</statement>
-            <statement mode="plain">CREATE INDEX image_name_index ON Images (name);</statement>
+            <statement mode="plain">CREATE INDEX image_name_index ON Images (name(996));</statement>
             <statement mode="plain">CREATE INDEX creationdate_index ON ImageInformation (creationDate);</statement>
             <statement mode="plain">CREATE INDEX comments_imageid_index ON ImageComments (imageid);</statement>
             <statement mode="plain">CREATE INDEX copyright_imageid_index ON ImageCopyright (imageid);</statement>
@@ -1210,7 +1274,7 @@
             <statement mode="plain">CREATE INDEX imagetagproperties_imageid_index ON ImageTagProperties (imageid);</statement>
             <statement mode="plain">CREATE INDEX imagetagproperties_tagid_index ON ImageTagProperties (tagid);</statement>
             <statement mode="plain">ALTER TABLE Images CHANGE uniqueHash uniqueHash VARCHAR(128);</statement>
-            <statement mode="plain">DROP TRIGGER delete_image;</statement>
+            <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
             <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
                     FOR EACH ROW BEGIN
                         DELETE FROM ImageTags          WHERE imageid=OLD.id;
@@ -1228,7 +1292,7 @@
                         UPDATE Tags SET icon=null      WHERE icon=OLD.id;
                     END;
             </statement>
-            <statement mode="plain">DROP TRIGGER delete_tag;</statement>
+            <statement mode="plain">DROP TRIGGER IF EXISTS delete_tag;</statement>
             <statement mode="plain">CREATE TRIGGER delete_tag AFTER DELETE ON Tags
                 FOR EACH ROW BEGIN
                     DELETE FROM ImageTags          WHERE tagid=OLD.id;

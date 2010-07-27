@@ -47,6 +47,7 @@
 
 #include "databasebackend.h"
 #include "databasetransaction.h"
+#include "databasechecker.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
@@ -119,6 +120,32 @@ void SchemaUpdater::setObserver(InitializationObserver *observer)
 
 bool SchemaUpdater::startUpdates()
 {
+    // Do we have sufficient privileges
+    QStringList insufficientRights;
+    DatabasePrivilegesChecker checker(m_Parameters);
+    if (!checker.checkPrivileges(insufficientRights))
+    {
+
+
+            kError() << "Insufficient rights on databse.";
+            QString errorMsg = i18n(
+                    "You have insufficient privileges on the database.\n"
+                    "Following privileges are not assigned to you:\n %1"
+                    "\nCheck your privileges on the database and restart digikam again.",
+                    insufficientRights.join(",\n")
+                                   );
+
+            m_LastErrorMessage=errorMsg;
+            if (m_observer)
+            {
+                m_observer->error(errorMsg);
+                m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+            }
+            return false;
+        }
+
+
+
     // First step: do we have an empty database?
     QStringList tables = m_Backend->tables();
 
