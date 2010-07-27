@@ -60,13 +60,13 @@ public:
     void setImagePath(const QString& path=QString());
     void setPreviousNextPaths(const QString& previous, const QString& next);
 
-    void showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent *event);
+    void showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event);
 
     void updateScale();
     void findFaces();
     void drawFaceItems();
     void clearFaceItems();
-    
+
 Q_SIGNALS:
 
     void signalNextItem();
@@ -99,7 +99,7 @@ private Q_SLOTS:
 
     void slotRotateLeft();
     void slotRotateRight();
-    
+
     void slotTogglePeople();
     void slotHidePeopleTags();
     void slotShowPeopleTags();

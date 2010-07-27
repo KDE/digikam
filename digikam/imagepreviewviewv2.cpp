@@ -84,11 +84,11 @@ class ImagePreviewViewItem : public DImgPreviewItem
 {
 public:
 
-    ImagePreviewViewItem(ImagePreviewViewV2 *view) : m_view(view)
+    ImagePreviewViewItem(ImagePreviewViewV2* view) : m_view(view)
     {
     }
 
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     {
         m_view->showContextMenu(m_info, event);
     }
@@ -98,7 +98,7 @@ public:
         m_info = info;
         setPath(info.filePath());
     }
-    
+
     ImageInfo imageInfo() const
     {
         return m_info;
@@ -106,8 +106,8 @@ public:
 
 protected:
 
-    ImagePreviewViewV2 *m_view;
-    ImageInfo m_info;
+    ImagePreviewViewV2* m_view;
+    ImageInfo           m_info;
 };
 
 class ImagePreviewViewV2Priv
@@ -118,7 +118,7 @@ public:
     {
         peopleTagsShown      = false;
         scale                = 1.0;
-        
+
         item                 = 0;
         stack                = 0;
         toolBar              = 0;
@@ -129,7 +129,8 @@ public:
         rotRightAction       = 0;
         peopleToggleAction   = 0;
         addPersonAction      = 0;
-        
+
+	// FIXME : set file path of face DB properly
         faceIface            = new KFaceIface::Database(KFaceIface::Database::InitAll, "/home/aditya");
     }
 
@@ -145,11 +146,11 @@ public:
     QAction*              rotRightAction;
     QAction*              peopleToggleAction;
     QAction*              addPersonAction;
-    
+
     QToolBar*             toolBar;
 
     AlbumWidgetStack*     stack;
-    
+
     QList<FaceItem* >     faceitems;
     QList<Face>           currentFaces;
 
@@ -157,7 +158,7 @@ public:
 };
 
 ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
-                : GraphicsDImgView(parent), d(new ImagePreviewViewV2Priv)
+                  : GraphicsDImgView(parent), d(new ImagePreviewViewV2Priv)
 {
     d->item = new ImagePreviewViewItem(this);
     setItem(d->item);
@@ -172,11 +173,11 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
 
     // ------------------------------------------------------------
 
-    d->stack            = parent;
+    d->stack = parent;
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    
+
     clearFaceItems();
-    
+
     // ------------------------------------------------------------
 
     d->back2AlbumAction   = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                    this);
@@ -186,7 +187,7 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"),   this);
     d->peopleToggleAction = new QAction(SmallIcon("user-identity"),       i18n("Show Face Tags"), this);
     d->addPersonAction    = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"), this);
-    
+
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
@@ -195,7 +196,7 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     d->toolBar->addAction(d->rotRightAction);
     d->toolBar->addAction(d->peopleToggleAction);
     d->toolBar->addAction(d->addPersonAction);
-    
+
     connect(d->prevAction, SIGNAL(triggered()),
             this, SIGNAL(toPreviousImage()));
 
@@ -210,16 +211,16 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
 
     connect(d->rotRightAction, SIGNAL(triggered()),
             this, SLOT(slotRotateRight()));
-    
+
     connect(d->peopleToggleAction, SIGNAL(triggered()),
             this, SLOT(slotTogglePeople()));
-    
+
     connect(d->addPersonAction, SIGNAL(triggered()),
             this, SLOT(slotAddPersonTag()));
-    
+
     connect(this, SIGNAL(resized()),
             this, SLOT(slotUpdatePersonTagScales()));
-    
+
     // ------------------------------------------------------------
 
     connect(this, SIGNAL(toNextImage()),
@@ -248,7 +249,7 @@ ImagePreviewViewV2::~ImagePreviewViewV2()
 void ImagePreviewViewV2::reload()
 {
     previewItem()->reload();
-    
+
     slotHidePeopleTags();
 }
 
@@ -259,7 +260,7 @@ void ImagePreviewViewV2::imageLoaded()
     emit signalPreviewLoaded(true);
     d->rotLeftAction->setEnabled(true);
     d->rotRightAction->setEnabled(true);
-    
+
     slotHidePeopleTags();
 }
 
@@ -287,7 +288,7 @@ ImageInfo ImagePreviewViewV2::getImageInfo() const
     return d->item->imageInfo();
 }
 
-void ImagePreviewViewV2::showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent *event)
+void ImagePreviewViewV2::showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event)
 {
     if (info.isNull())
         return;
@@ -307,30 +308,42 @@ void ImagePreviewViewV2::showContextMenu(const ImageInfo& info, QGraphicsSceneCo
     cmhelper.addAction(d->peopleToggleAction, true);
     popmenu.addSeparator();
     cmhelper.addAction(d->addPersonAction, true);
+
     // --------------------------------------------------------
+
     cmhelper.addAction(d->prevAction, true);
     cmhelper.addAction(d->nextAction, true);
     cmhelper.addAction(d->back2AlbumAction);
     cmhelper.addGotoMenu(idList);
     popmenu.addSeparator();
+
     // --------------------------------------------------------
+
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems);
     cmhelper.addKipiActions(idList);
     popmenu.addSeparator();
+
     // --------------------------------------------------------
+
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     popmenu.addSeparator();
+
     // --------------------------------------------------------
+
     cmhelper.addActionItemDelete(this, SIGNAL(signalDeleteItem()));
     popmenu.addSeparator();
+
     // --------------------------------------------------------
+
     cmhelper.addAssignTagsMenu(idList);
     cmhelper.addRemoveTagsMenu(idList);
     popmenu.addSeparator();
+
     // --------------------------------------------------------
+
     cmhelper.addRatingMenu();
 
     // special action handling --------------------------------
@@ -385,7 +398,7 @@ void ImagePreviewViewV2::slotSetupChanged()
 {
     previewItem()->setLoadFullImageSize(AlbumSettings::instance()->getPreviewLoadFullImageSize());
     previewItem()->setExifRotate(AlbumSettings::instance()->getExifRotate());
-    
+
     slotHidePeopleTags();
 }
 
@@ -401,7 +414,7 @@ void ImagePreviewViewV2::slotRotateLeft()
                 ac->trigger();
         }
     }
-    
+
     slotHidePeopleTags();
 }
 
@@ -417,7 +430,7 @@ void ImagePreviewViewV2::slotRotateRight()
                 ac->trigger();
         }
     }
-    
+
     slotHidePeopleTags();
 }
 
@@ -452,9 +465,9 @@ void ImagePreviewViewV2::updateScale()
 void ImagePreviewViewV2::slotUpdatePersonTagScales()
 {
     kDebug()<<"Image Resized."<<endl;
-    
+
     updateScale();
-    
+
     FaceItem* item=0;
     foreach(item, d->faceitems)
     {
@@ -497,11 +510,11 @@ void ImagePreviewViewV2::slotShowPeopleTags()
 {
     updateScale();
     clearFaceItems();
-    
+
     d->peopleToggleAction->setText(i18n("Hide face tags"));
     d->addPersonAction->setVisible(true);
     d->peopleTagsShown = true;
-    
+
     findFaces();
     drawFaceItems();
 }
@@ -522,9 +535,8 @@ void ImagePreviewViewV2::slotAddPersonTag()
     int h = w;
     int x = this->scene()->width()/2 - w/2;
     int y = this->scene()->height()/2 - w/2;
-    
+
     d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale , "", d->scale));
 }
-
 
 }  // namespace Digikam
