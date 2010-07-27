@@ -55,6 +55,7 @@ public:
 Q_SIGNALS:
 
     void signalDetectAllFacesDone();
+    void signalOneDetected(const LoadingDescription&, const DImg&);
 
 private:
 
@@ -74,6 +75,7 @@ private Q_SLOTS:
 
     void slotDetectFaces();
     void slotGotImagePreview(const LoadingDescription&, const DImg&);
+    void slotShowOneDetected(const LoadingDescription& desc, const DImg& dimg);
 
 private:
 

@@ -100,7 +100,10 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
     d->faceIface = new KFaceIface::Database(KFaceIface::Database::InitDetection);
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
+            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
+    
+    connect(this, SIGNAL(signalOneDetected(const LoadingDescription&, const DImg&)),
+            this, SLOT(slotShowOneDetected(const LoadingDescription&, const DImg&)));
 
     setModal(false);
     setValue(0);
@@ -184,7 +187,7 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
         // FIXME: Detect faces from the DImg here, instead of giving a file path?
         kDebug() << desc.filePath << " => " << "Height= " << img.height() << ", Width= " << img.width();
 
-        KFaceIface::Image fimg(dimg.copyQImage());
+        KFaceIface::Image fimg(desc.filePath);
         QList<KFaceIface::Face> faceList = d->faceIface->detectFaces(fimg);
         QListIterator<KFaceIface::Face> it(faceList);
         kDebug() << "Faces detected in " << desc.filePath;
@@ -192,9 +195,7 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
             kDebug()<<it.next();
     }
 
-    QPixmap pix = dimg.smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
-    addedAction(pix, desc.filePath);
-    advance(1);
+        emit signalOneDetected(desc, dimg);
     if (!d->allPicturesPath.isEmpty())
         d->allPicturesPath.removeFirst();
     if (d->allPicturesPath.isEmpty())
@@ -220,5 +221,14 @@ void BatchFaceDetector::abort()
     d->cancel = true;
     emit signalDetectAllFacesDone();
 }
+
+
+void BatchFaceDetector::slotShowOneDetected(const Digikam::LoadingDescription& desc, const Digikam::DImg& dimg)
+{
+    QPixmap pix = DImg(dimg).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
+    addedAction(pix, desc.filePath);
+    advance(1);
+}
+
 
 } // namespace Digikam
