@@ -117,7 +117,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     mapPanel->setMinimumHeight(256);
     QVBoxLayout* vlay2 = new QVBoxLayout(mapPanel);
     d->mapSearchWidget = new KMapIface::KMap(mapPanel);
-    //d->mapSearchWidget->setBackend("marble");
+    d->mapSearchWidget->setBackend("marble");
 
     GPSMarkerTiler* markerTiler = new GPSMarkerTiler(this);
     d->mapSearchWidget->setGroupedModel(markerTiler);
@@ -202,7 +202,10 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
             d->saveBtn, SLOT(animateClick()));
 
-//     connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
+    connect(d->mapSearchWidget, SIGNAL(signalNewSelectionFromMap()),
+            this, SLOT(slotSelectionChanged()));
+
+//    connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
 //             this, SLOT(slotSelectionChanged()));
 // 
 //     connect(d->gpsSearchWidget, SIGNAL(signalSelectedItems(const GPSInfoList)),
@@ -216,7 +219,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     // ---------------------------------------------------------------
 
-    //slotCheckNameEditGPSConditions();
+    slotCheckNameEditGPSConditions();
 }
 
 GPSSearchView::~GPSSearchView()
@@ -303,26 +306,26 @@ void GPSSearchView::slotSaveGPSSAlbum()
 
 void GPSSearchView::slotSelectionChanged()
 {
-//    slotCheckNameEditGPSConditions();
-//    createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
+    slotCheckNameEditGPSConditions();
+    createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
 }
 
-void GPSSearchView::createNewGPSSearchAlbum(const QString& /*name*/)
+void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
-/*
+
     AlbumManager::instance()->setCurrentAlbum(0);
 
     // clear positions shown on the map:
-    d->gpsSearchWidget->clearGPSPositions();
+    //d->gpsSearchWidget->clearGPSPositions();
 
-    if (!d->gpsSearchWidget->hasSelection())
+    if (!d->mapSearchWidget->hasSelection())
         return;
 
     // We query database here
 
     // NOTE: coordinates as lon1, lat1, lon2, lat2 (or West, North, East, South)
     // as left/top, right/bottom rectangle.
-    QList<double> coordinates = d->gpsSearchWidget->selectionCoordinates();
+    QList<double> coordinates = d->mapSearchWidget->selectionCoordinates();
 
     kDebug() << "West, North, East, South: " << coordinates;
 
@@ -334,23 +337,27 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& /*name*/)
     writer.finishField();
     writer.finishGroup();
 
+    kDebug()<< "SearchXmlWriter finished well.";
+
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
     d->searchTreeView->slotSelectAlbum(salbum);
-    */
+    
 }
 
-void GPSSearchView::slotAlbumSelected(Album* /*a*/)
+void GPSSearchView::slotAlbumSelected(Album* a)
 {
-/*
+
+    //SAlbum *salbum = dynamic_cast<SAlbum*> (a);
+
     SAlbum *salbum = dynamic_cast<SAlbum*> (a);
 
     if (!salbum)
         return;
 
     // clear positions shown on the map:
-    d->gpsSearchWidget->clearGPSPositions();
+    //d->gpsSearchWidget->clearGPSPositions();
 
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
@@ -360,12 +367,15 @@ void GPSSearchView::slotAlbumSelected(Album* /*a*/)
     {
         QList<double> list;
         list << reader.valueToDoubleList();
-        d->gpsSearchWidget->setSelectionCoordinates(list);
+
+        kDebug()<<"The selection after clicking an album name."<<list;
+
+        d->mapSearchWidget->setSelectionCoordinates(list);
         slotCheckNameEditGPSConditions();
     }
 
     d->imageInfoJob.allItemsFromAlbum(salbum);
-    */
+    
 }
 
 void GPSSearchView::slotItemsInfo(const ImageInfoList& /*items*/)
@@ -435,8 +445,8 @@ bool GPSSearchView::checkAlbum(const QString& /*name*/) const
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
     //d->gpsMarkerTiler->secondTestDatabase(5.1,80.3,20.4,130.6);
-/*
-    if (d->gpsSearchWidget->hasSelection())
+
+    if (d->mapSearchWidget->hasSelection())
     {
         d->nameEdit->setEnabled(true);
 
@@ -448,7 +458,7 @@ void GPSSearchView::slotCheckNameEditGPSConditions()
         d->nameEdit->setEnabled(false);
         d->saveBtn->setEnabled(false);
     }
-*/
+
 }
 
 /**

@@ -46,6 +46,14 @@
 namespace Digikam
 {
 
+class EntryFromDatabase
+{
+    public:
+        qlonglong id;
+        int       rating;
+        KMapIface::WMWGeoCoordinate coordinate;
+};
+
 class InternalJobs
 {
 public:
@@ -59,7 +67,9 @@ public:
 
     KIO::Job* kioJob;
     int level;
-    QList<QVariant> dataFromDatabase;
+
+
+    QList<EntryFromDatabase> dataFromDatabase;
 };
 
 class GPSMarkerTiler::GPSMarkerTilerPrivate
@@ -149,14 +159,15 @@ bool GPSMarkerTiler::pointIsContainedInArea(qreal pointLat, qreal pointLng, QLis
 void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,const KMapIface::WMWGeoCoordinate& lowerRight, int level)
 {
 
-    kDebug()<<"Started tiles prepairing";
+    //kDebug()<<"Started tiles prepairing";
 
-    DatabaseUrl u = DatabaseUrl::mapImagesUrl();
+    //DatabaseUrl u = DatabaseUrl::mapImagesUrl();
 
     qreal lat1 = upperLeft.lat();
     qreal lng1 = upperLeft.lon();
     qreal lat2 = lowerRight.lat();
     qreal lng2 = lowerRight.lon();
+    kDebug() << "Unedited" << lat1 << lat2 << lng1 << lng2;
     QRect requestedRect(lat1, lng1, lat2-lat1, lng2-lng1);
 
     for(int i=0; i<d->rectList.count(); ++i)
@@ -206,11 +217,17 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
         }
 
     }
-    
+
     QRectF newRect(lat1, lng1, lat2-lat1, lng2-lng1);
     d->rectList.append(newRect);
     d->rectLevel.append(level);
-        
+
+    kDebug() << "Listing" << lat1 << lat2 << lng1 << lng2;
+    DatabaseUrl u = DatabaseUrl::fromAreaRange(lat1, lat2, lng1, lng2);
+    KIO::Job* currentJob = ImageLister::startListJob(u);
+    currentJob->addMetaData("wantDirectQuery", "false");
+
+    /*
     QByteArray baLat1 = QString("%1").arg(lat1).toAscii();
     QByteArray baLat2 = QString("%1").arg(lat2).toAscii();
     QByteArray baLng1 = QString("%1").arg(lng1).toAscii();
@@ -223,11 +240,10 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
     currentJob->addMetaData("lng1", baLng1.constData());
     currentJob->addMetaData("lng2", baLng2.constData());
     currentJob->addMetaData("wantDirectQuery", "true");
+    */
 
     InternalJobs currentJobInfo;
     currentJobInfo.kioJob           = currentJob;
-    QList<QVariant> currentList;
-    currentJobInfo.dataFromDatabase = currentList;
     currentJobInfo.level            = level;
 
     d->jobs.append(currentJobInfo);
@@ -389,12 +405,12 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     if(d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
     {
-        kDebug()<<"THUMBNAIL REQUESTED IN PIXMAPFORREPRESENTATIVEINDEX:"<<path;
+        //kDebug()<<"Thumnbnail requested in PixmapForRepresentativeIndex:"<<path;
         return thumbnail;
     }
     else
     {
-        kDebug()<<"THUMBNAIL REQUESTED BUT DIDN'T FIND ANY:"<<path;
+        //kDebug()<<"Thumbnail requested but didn't find any:"<<path;
         return QPixmap();
     }
 }
@@ -484,16 +500,31 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
         return;
     }
 
-    QList<QVariant> currentData;
     QByteArray di(data);
     QDataStream ds(&di, QIODevice::ReadOnly);
-    ds>>currentData;
 
-    for(int i=0; i<d->jobs.count(); ++i)
+    QList<EntryFromDatabase> newEntries;
+    while (!ds.atEnd())
     {
-        if(job == d->jobs.at(i).kioJob)
+        ImageListerRecord record(ImageListerRecord::ExtraValueFormat);
+        ds >> record;
+
+        EntryFromDatabase entry;
+
+        entry.id = record.imageID;
+        entry.rating = record.rating;
+        if (!record.extraValues.count() < 2)
+            entry.coordinate.setLatLon(record.extraValues.first().toDouble(), record.extraValues.last().toDouble());
+
+        newEntries << entry;
+    }
+    kDebug() << "Received" << newEntries.size();
+
+    for (int i=0; i<d->jobs.count(); ++i)
+    {
+        if (job == d->jobs.at(i).kioJob)
         {
-            d->jobs[i].dataFromDatabase.append(currentData);
+            d->jobs[i].dataFromDatabase << newEntries;
         }
     }
 }
@@ -516,23 +547,15 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
         {
             foundIndex = i;
 
-            for(QList<QVariant>::const_iterator it = d->jobs.at(i).dataFromDatabase.constBegin(); it!= d->jobs.at(i).dataFromDatabase.constEnd();)
+            foreach (const EntryFromDatabase& entry, d->jobs.at(i).dataFromDatabase)
             {
                 KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo info;
-                info.id               = (*it).toInt();
-                ++it;
-                info.rating           = (*it).toInt();
-                ++it;
-                qreal latitudeNumber  = (*it).toDouble();
-                ++it;
-                qreal longitudeNumber = (*it).toDouble();
-                ++it;
 
-                KMapIface::WMWGeoCoordinate coordinate;
-                coordinate.setLatLon(latitudeNumber, longitudeNumber);
-                info.coordinate       = coordinate;
+                info.id               = entry.id;
+                info.rating           = entry.rating;
+                info.coordinate       = entry.coordinate;
 
-                currentReturnedImageInfo<<info;
+                currentReturnedImageInfo << info;
             }
         }
     }
@@ -599,7 +622,7 @@ void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescri
 
     QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> indexForPixmap = index.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();    
 
-    kDebug()<<"THUMBNAIL LOADED IN SLOTTHUMBNAILLOADED:"<<loadingDescription.filePath<<" "<<indexForPixmap.second;
+    kDebug()<<"Thumbnail loaded in slotThumbnailLoaded:"<<loadingDescription.filePath<<" "<<indexForPixmap.second;
     emit signalThumbnailAvailableForIndex(index, thumbnail);
 
 }
