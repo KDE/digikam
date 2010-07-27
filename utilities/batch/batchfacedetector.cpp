@@ -84,9 +84,7 @@ public:
     QTime                 duration;
 
     QStringList           allPicturesPath;
-
     PreviewLoadThread*    previewLoadThread;
-
     KFaceIface::Database* faceIface;
 };
 
@@ -195,7 +193,8 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
             kDebug()<<it.next();
     }
 
-        emit signalOneDetected(desc, dimg);
+    emit signalOneDetected(desc, dimg);
+    
     if (!d->allPicturesPath.isEmpty())
         d->allPicturesPath.removeFirst();
     if (d->allPicturesPath.isEmpty())

@@ -503,7 +503,7 @@ void ImagePreviewViewV2::drawFaceItems()
 
 void ImagePreviewViewV2::findFaces()
 {
-    d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(getImageInfo().filePath()));
+    d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(d->item->image().copyQImage()));
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
 }
 
