@@ -77,6 +77,9 @@ QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record)
     os << record.fileSize;
     os << record.imageSize;
 
+    if (record.binaryFormat == ImageListerRecord::ExtraValueFormat)
+        os << record.extraValues;
+
     return os;
 }
 
@@ -96,6 +99,9 @@ QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record)
     ds >> record.modificationDate;
     ds >> record.fileSize;
     ds >> record.imageSize;
+
+    if (record.binaryFormat == ImageListerRecord::ExtraValueFormat)
+        ds >> record.extraValues;
 
     return ds;
 }
@@ -145,9 +151,9 @@ void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl& url)
     }
     else if (url.isMapImagesUrl())
     {
-        //TODO: make a function listAreaRange(receiver, url.lat1(), url.lng1(), url.lat2(), url.lng2());   
-        kDebug()<<"Entered list"; 
-        listAreaRange(receiver, url.areaCoordinates());
+        double lat1, lat2, lon1, lon2;
+        url.areaCoordinates(&lat1, &lat2, &lon1, &lon2);
+        listAreaRange(receiver, lat1, lat2, lon1, lon2);
     }
 }
 
@@ -370,71 +376,54 @@ void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate& star
 }
 
 void ImageLister::listAreaRange(ImageListerReceiver *receiver,
-                                QList<qreal> areaCoordinates)
+                                double lat1, double lat2, double lon1, double lon2)
 {
     QList<QVariant> values;
     QList<QVariant> boundValues;
-    boundValues<<areaCoordinates[0]<<areaCoordinates[1]<<areaCoordinates[2]<<areaCoordinates[3];
+    boundValues << lat1 << lat2 << lon1 << lon2;
 
-    kDebug()<<"ENTERED LIST AREA RANGE.";
+    kDebug() << "Listing area" << lat1 << lat2 << lon1 << lon2;
 
     DatabaseAccess access;
    
-    access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, Images.album, "
-                                          "       Albums.albumRoot, "
-                                          "       ImageInformation.rating, Images.category, "
-                                          "       ImageInformation.format, ImageInformation.creationDate, "
-                                          "       Images.modificationDate, Images.fileSize, "
-                                          "       ImageInformation.width, ImageInformation.height "
+    access.backend()->execSql(QString("SELECT DISTINCT Images.id, "
+                                          "       Albums.albumRoot, ImageInformation.rating, "
+                                          "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                                           " FROM Images "
                                           "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                           "       INNER JOIN Albums ON Albums.id=Images.album "
+                                          "       INNER JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
                                           " WHERE Images.status=1 "
                                           "   AND (ImagePositions.latitudeNumber>? AND ImagePositions.latitudeNumber<?) "
-                                          "   AND (ImagePositions.longitudeNumber>? AND ImagePositions.longitudeNumber<?) "
-                                          " ORDER BY Albums.id;"),
+                                          "   AND (ImagePositions.longitudeNumber>? AND ImagePositions.longitudeNumber<?);"),
                                   boundValues,
                                   &values);
 
 
+    kDebug() << "Results:" << values.size() / 14;
     QSet<int> albumRoots = albumRootsToList();
 
-    int width, height;
+    double lat, lon;
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
-        ImageListerRecord record;
+        ImageListerRecord record(ImageListerRecord::ExtraValueFormat);
 
         record.imageID           = (*it).toLongLong();
         ++it;
-        record.name              = (*it).toString();
-        ++it;
-        record.albumID           = (*it).toInt();
-        ++it;
         record.albumRootID       = (*it).toInt();
-        ++it;
-        record.rating            = (*it).toInt();
-        ++it;
-        record.category          = (DatabaseItem::Category)(*it).toInt();
-        ++it;
-        record.format            = (*it).toString();
-        ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-            : QDateTime::fromString((*it).toString(), Qt::ISODate);
-        ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-            : QDateTime::fromString((*it).toString(), Qt::ISODate);
-        ++it;
-        record.fileSize          = (*it).toInt();
-        ++it;
-        width                    = (*it).toInt();
-        ++it;
-        height                   = (*it).toInt();
         ++it;
 
         if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
             continue;
 
-        record.imageSize         = QSize(width, height);
+        record.rating            = (*it).toInt();
+        ++it;
+        lat                      = (*it).toDouble();
+        ++it;
+        lon                      = (*it).toDouble();
+        ++it;
+
+        record.extraValues       << lat << lon;
 
         receiver->receive(record);
     }
