@@ -45,7 +45,16 @@ class DIGIKAM_DATABASE_EXPORT ImageListerRecord
 
 public:
 
-    ImageListerRecord()
+    enum BinaryFormat
+    {
+        TraditionalFormat,
+        ExtraValueFormat
+    };
+
+    BinaryFormat binaryFormat;
+
+    ImageListerRecord(BinaryFormat format = TraditionalFormat)
+        : binaryFormat(format)
     {
         imageID     = -1;
         albumID     = -1;
@@ -70,6 +79,8 @@ public:
     QSize                  imageSize;
 
     DatabaseItem::Category category;
+
+    QList<QVariant>        extraValues;
 };
 
 DIGIKAM_DATABASE_EXPORT QDataStream& operator<<(QDataStream& os, const ImageListerRecord& record);
