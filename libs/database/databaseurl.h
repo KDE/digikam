@@ -232,10 +232,11 @@ public:
     /// MapImages URL
 
     /**
-     * Returns the coordinates surrounding the map area
+     * Returns the coordinates surrounding the map area.
+     * Returns true if the string to number conversion was ok.
      */
 
-    QList<qreal> areaCoordinates() const;
+    bool areaCoordinates(double *lat1, double *lat2, double *lon1, double *lon2) const;
 
     /// Search URL
 

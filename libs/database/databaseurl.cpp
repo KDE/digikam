@@ -169,7 +169,10 @@ DatabaseUrl DatabaseUrl::fromAreaRange(const qreal lat1, const qreal lat2,
 {
     DatabaseUrl url;
     url.setProtocol("digikammapimages");
-    url.setPath(QString("%1").arg(lat1) + '/' + QString("%1").arg(lat2) + '/' + QString("%1").arg(lng1) + '/' + QString("%1").arg(lng2));
+    url.addQueryItem("lat1", QString::number(lat1));
+    url.addQueryItem("lon1", QString::number(lng1));
+    url.addQueryItem("lat2", QString::number(lat2));
+    url.addQueryItem("lon2", QString::number(lng2));
     url.setParameters(parameters);
     kDebug()<<"URL FOR fromAreaRange:"<<url;
     return url;
@@ -351,18 +354,19 @@ QDate DatabaseUrl::endDate() const
 
 // --- MapImages URL ---
 
-QList<qreal> DatabaseUrl::areaCoordinates() const
+bool DatabaseUrl::areaCoordinates(double *lat1, double *lat2, double *lon1, double *lon2) const
 {
-    QStringList strCoordinates = path().split('/');
-    QList<qreal> areaGPSCoordinates;
-    areaGPSCoordinates<<strCoordinates[0].toDouble();
-    areaGPSCoordinates<<strCoordinates[1].toDouble();
-    areaGPSCoordinates<<strCoordinates[2].toDouble();
-    areaGPSCoordinates<<strCoordinates[3].toDouble();
+    bool ok, allOk = true;
+    *lat1 = queryItem("lat1").toDouble(&ok);
+    allOk = ok && allOk;
+    *lat2 = queryItem("lat2").toDouble(&ok);
+    allOk = ok && allOk;
+    *lon1 = queryItem("lon1").toDouble(&ok);
+    allOk = ok && allOk;
+    *lon2 = queryItem("lon2").toDouble(&ok);
+    allOk = ok && allOk;
 
-    kDebug()<<"AREACOORDINATES():"<<areaGPSCoordinates;
-    
-    return areaGPSCoordinates;
+    return allOk;
 }
 
 // --- Search URL ---
