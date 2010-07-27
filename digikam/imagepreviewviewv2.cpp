@@ -74,6 +74,7 @@
 // KDE includes
 
 #include "kglobalsettings.h"
+#include <kstandarddirs.h>
 
 using namespace KFaceIface;
 
@@ -131,7 +132,8 @@ public:
         addPersonAction      = 0;
 
 	// FIXME : set file path of face DB properly
-        faceIface            = new KFaceIface::Database(KFaceIface::Database::InitAll, "/home/aditya");
+        KStandardDirs       dir;
+        faceIface            = new KFaceIface::Database(KFaceIface::Database::InitAll, dir.localkdedir()+QString("facedata"));
     }
 
     bool                  peopleTagsShown;
