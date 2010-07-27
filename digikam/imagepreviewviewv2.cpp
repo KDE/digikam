@@ -464,24 +464,23 @@ void ImagePreviewViewV2::updateScale()
 
 void ImagePreviewViewV2::slotUpdatePersonTagScales()
 {
-    kDebug()<<"Image Resized."<<endl;
+    kDebug() << "Image Resized.";
 
     updateScale();
 
-    FaceItem* item=0;
+    FaceItem* item = 0;
     foreach(item, d->faceitems)
     {
         item->setVisible(false);
-        d->faceitems.erase(d->faceitems.find(item));
+        d->faceitems.removeAt(d->faceitems.indexOf(item));
         d->faceitems.append(new FaceItem(0, this->scene(), item->originalRect(), d->scale, item->text(), item->originalScale()));
         delete item;
     }
 }
 
-
 void ImagePreviewViewV2::clearFaceItems()
 {
-    FaceItem* item=0;
+    FaceItem* item = 0;
 
     foreach(item, d->faceitems)
         item->setVisible(false);
