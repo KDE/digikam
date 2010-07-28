@@ -31,7 +31,6 @@
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QHash>
 #include <QtCore/QList>
-
 #include <QSharedDataPointer>
 #include <QString>
 #include <QVariant>
@@ -45,7 +44,6 @@
 namespace Digikam
 {
 
-
 class DIGIKAM_EXPORT DImageHistory
 {
 public:
@@ -58,6 +56,8 @@ public:
         FilterAction   action;
         HistoryImageId referredImages;
     };
+
+public:
 
     DImageHistory();
     DImageHistory(const DImageHistory& other);
@@ -91,9 +91,13 @@ public:
     QString toXml() const;
     static DImageHistory fromXml(const QString& xml);
 
+public:
+
+    // Set as public there because of ImageHistoryPrivSharedNull
+    class ImageHistoryPriv;
+
 private:
 
-    class ImageHistoryPriv;
     QSharedDataPointer<ImageHistoryPriv> d;
 };
 

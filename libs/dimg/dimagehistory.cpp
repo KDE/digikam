@@ -41,17 +41,6 @@
 namespace Digikam
 {
 
-class ImageHistoryPrivSharedNull : public QSharedDataPointer<ImageHistoryPriv>
-{
-public:
-
-    ImageHistoryPrivSharedNull() : QSharedDataPointer<ImageHistoryPriv>(new ImageHistoryPriv) {}
-};
-
-K_GLOBAL_STATIC(ImageHistoryPrivSharedNull, imageHistoryPrivSharedNull)
-
-// -----------------------------------------------------------------------------------------------
-
 class DImageHistory::ImageHistoryPriv : public QSharedData
 {
 public:
@@ -66,6 +55,19 @@ public:
     qlonglong                   imageid;
     QList<DImageHistory::Entry> entries;
 };
+
+// -----------------------------------------------------------------------------------------------
+
+class ImageHistoryPrivSharedNull : public QSharedDataPointer<DImageHistory::ImageHistoryPriv>
+{
+public:
+
+    ImageHistoryPrivSharedNull() : QSharedDataPointer<DImageHistory::ImageHistoryPriv>(new DImageHistory::ImageHistoryPriv) {}
+};
+
+K_GLOBAL_STATIC(ImageHistoryPrivSharedNull, imageHistoryPrivSharedNull)
+
+// -----------------------------------------------------------------------------------------------
 
 DImageHistory::DImageHistory()
              : d(*imageHistoryPrivSharedNull)
