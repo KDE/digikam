@@ -83,7 +83,7 @@ public:
     {
         delete faceIface;
     }
-    
+
     bool                  cancel;
     bool                  rebuildAll;
 
@@ -92,7 +92,6 @@ public:
     QStringList           allPicturesPath;
     PreviewLoadThread*    previewLoadThread;
     KFaceIface::Database* faceIface;
-    
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
@@ -103,7 +102,7 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
             this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
-    
+
     connect(this, SIGNAL(signalOneDetected(const LoadingDescription&, const DImg&)),
             this, SLOT(slotShowOneDetected(const LoadingDescription&, const DImg&)));
 
@@ -198,7 +197,7 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
     }
 
     emit signalOneDetected(desc, dimg);
-    
+
     if (!d->allPicturesPath.isEmpty())
         d->allPicturesPath.removeFirst();
     if (d->allPicturesPath.isEmpty())
@@ -225,13 +224,11 @@ void BatchFaceDetector::abort()
     emit signalDetectAllFacesDone();
 }
 
-
 void BatchFaceDetector::slotShowOneDetected(const Digikam::LoadingDescription& desc, const Digikam::DImg& dimg)
 {
     QPixmap pix = DImg(dimg).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
     addedAction(pix, desc.filePath);
     advance(1);
 }
-
 
 } // namespace Digikam
