@@ -127,8 +127,10 @@ public:
     KIO::PreviewJob                *kdeJob;
 
     LoadingDescription createLoadingDescription(const QString filePath, int size);
+    LoadingDescription createLoadingDescription(const QString filePath, int size, const QRect& detailRect);
     bool checkDescription(const LoadingDescription &description);
     QList<LoadingDescription> makeDescriptions(const QStringList& filePaths, int size);
+    QList<LoadingDescription> makeDescriptions(const QList<QPair<QString, QRect> >& filePathsAndRects, int size);
     bool hasHighlightingBorder() const;
     int pixmapSizeForThumbnailSize(int thumbnailSize) const;
     int thumbnailSizeForPixmapSize(int pixmapSize) const;
@@ -313,6 +315,25 @@ LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QStri
     return description;
 }
 
+LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QString filePath, int size, const QRect& detailRect)
+{
+    size = thumbnailSizeForPixmapSize(size);
+
+    LoadingDescription description(filePath, size, exifRotate,
+                                   LoadingDescription::NoColorConversion,
+                                   LoadingDescription::PreviewParameters::DetailThumbnail);
+
+    description.previewParameters.extraParameter = detailRect;
+
+    if (IccSettings::instance()->isEnabled())
+    {
+        description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
+        description.postProcessingParameters.setProfile(IccManager::displayProfile(static_d->displayingWidget));
+    }
+
+    return description;
+}
+
 bool ThumbnailLoadThreadPriv::checkDescription(const LoadingDescription &description)
 {
     QString cacheKey = description.cacheKey();
@@ -348,10 +369,33 @@ QList<LoadingDescription> ThumbnailLoadThreadPriv::makeDescriptions(const QStrin
     return descriptions;
 }
 
-bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int size)
+QList<LoadingDescription> ThumbnailLoadThreadPriv::makeDescriptions(const QList<QPair<QString, QRect> >& filePathsAndRects, int size)
+{
+    QList<LoadingDescription> descriptions;
+    {
+        LoadingDescription description = createLoadingDescription(QString(), size, QRect(1,1,1,1));
+        typedef QPair<QString, QRect> StringRectPair;
+        foreach(const StringRectPair& pair, filePathsAndRects)
+        {
+            description.filePath = pair.first;
+            if (!checkDescription(description))
+                continue;
+            description.previewParameters.extraParameter = pair.second;
+            descriptions << description;
+        }
+    }
+    return descriptions;
+}
+
+bool ThumbnailLoadThread::find(const QString& filePath, int size, QPixmap* retPixmap, bool emitSignal, const QRect& detailRect)
 {
     const QPixmap *pix;
-    LoadingDescription description = d->createLoadingDescription(filePath, size);
+    LoadingDescription description;
+    if (detailRect.isNull())
+        description = d->createLoadingDescription(filePath, size);
+    else
+        description = d->createLoadingDescription(filePath, size, detailRect);
+
     QString cacheKey = description.cacheKey();
 
     {
@@ -362,7 +406,10 @@ bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int 
 
     if (pix)
     {
-        retPixmap = QPixmap(*pix);
+        if (retPixmap)
+            *retPixmap = *pix;
+        if (emitSignal)
+            emit signalThumbnailLoaded(description, QPixmap(*pix));
         return true;
     }
 
@@ -377,6 +424,11 @@ bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int 
     return false;
 }
 
+bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int size)
+{
+    return find(filePath, size, &retPixmap, false, QRect());
+}
+
 void ThumbnailLoadThread::find(const QString& filePath)
 {
     find(filePath, d->size);
@@ -384,30 +436,7 @@ void ThumbnailLoadThread::find(const QString& filePath)
 
 void ThumbnailLoadThread::find(const QString& filePath, int size)
 {
-    const QPixmap *pix;
-    LoadingDescription description = d->createLoadingDescription(filePath, size);
-    QString cacheKey = description.cacheKey();
-
-    {
-        LoadingCache *cache = LoadingCache::cache();
-        LoadingCache::CacheLock lock(cache);
-        pix = cache->retrieveThumbnailPixmap(cacheKey);
-    }
-
-    if (pix)
-    {
-        emit signalThumbnailLoaded(description, QPixmap(*pix));
-        return;
-    }
-
-    {
-        // If there is a result waiting for conversion to pixmap, return false - pixmap will come shortly
-        QMutexLocker lock(&d->resultsMutex);
-        if (d->collectedResults.contains(cacheKey))
-            return;
-    }
-
-    load(description);
+    find(filePath, size, 0, true, QRect());
 }
 
 void ThumbnailLoadThread::findGroup(const QStringList& filePaths)
@@ -424,18 +453,40 @@ void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
     ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
 }
 
-void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths)
+// --
+
+bool ThumbnailLoadThread::find(const QString& filePath, const QRect& rect, QPixmap& pixmap)
 {
-    preloadGroup(filePaths, d->size);
+    return find(filePath, rect, pixmap, d->size);
 }
 
-void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths, int size)
+bool ThumbnailLoadThread::find(const QString& filePath, const QRect& rect, QPixmap& pixmap, int size)
+{
+    return find(filePath, size, &pixmap, false, rect);
+}
+
+void ThumbnailLoadThread::find(const QString& filePath, const QRect& rect)
+{
+    find(filePath, rect, d->size);
+}
+
+void ThumbnailLoadThread::find(const QString& filePath, const QRect& rect, int size)
+{
+    find(filePath, size, 0, true, rect);
+}
+
+void ThumbnailLoadThread::findGroup(const QList<QPair<QString, QRect> >& filePathAndRects)
+{
+    findGroup(filePathAndRects, d->size);
+}
+
+void ThumbnailLoadThread::findGroup(const QList<QPair<QString, QRect> >& filePathsAndRects, int size)
 {
     if (!checkSize(size))
         return;
 
-    QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
-    ManagedLoadSaveThread::preloadThumbnailGroup(descriptions);
+    QList<LoadingDescription> descriptions = d->makeDescriptions(filePathsAndRects, size);
+    ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
 }
 
 void ThumbnailLoadThread::preload(const QString& filePath)
@@ -448,6 +499,36 @@ void ThumbnailLoadThread::preload(const QString& filePath, int size)
     LoadingDescription description = d->createLoadingDescription(filePath, size);
     if (d->checkDescription(description))
         load(description, true);
+}
+
+void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths)
+{
+    pregenerateGroup(filePaths, d->size);
+}
+
+void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths, int size)
+{
+    if (!checkSize(size))
+        return;
+
+    QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
+    ManagedLoadSaveThread::preloadThumbnailGroup(descriptions);
+}
+
+void ThumbnailLoadThread::pregenerateGroup(const QStringList& filePaths)
+{
+    pregenerateGroup(filePaths, d->size);
+}
+
+void ThumbnailLoadThread::pregenerateGroup(const QStringList& filePaths, int size)
+{
+    if (!checkSize(size))
+        return;
+
+    QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
+    for (int i=0; i<descriptions.size(); i++)
+        descriptions[i].previewParameters.onlyPregenerate = true;
+    ManagedLoadSaveThread::preloadThumbnailGroup(descriptions);
 }
 
 void ThumbnailLoadThread::load(const LoadingDescription& desc)
@@ -675,6 +756,16 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
     }
 
     return pix;
+}
+
+void ThumbnailLoadThread::storeDetailThumbnail(const QString& filePath, const QRect& detailRect, const QImage& image)
+{
+    d->creator->storeDetailThumbnail(filePath, detailRect, image);
+}
+
+int ThumbnailLoadThread::storedSize() const
+{
+    return d->creator->storedSize();
 }
 
 void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)

@@ -113,6 +113,12 @@ QString LoadingDescription::cacheKey() const
     // Thumbnail loading. This one is easy.
     if (previewParameters.type == PreviewParameters::Thumbnail)
         return filePath + "-thumbnail-" + QString::number(previewParameters.size);
+    else if (previewParameters.type == PreviewParameters::DetailThumbnail)
+    {
+        QRect rect =  previewParameters.extraParameter.toRect();
+        QString rectString = QString("%1,%2-%3x%4-").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
+        return filePath + "-thumbnail-" + rectString + QString::number(previewParameters.size);
+    }
 
     // DImg loading
 
@@ -160,7 +166,8 @@ QStringList LoadingDescription::lookupCacheKeys() const
     // Build a hierarchy which cache entries may be used for this LoadingDescription.
 
     // Thumbnail loading. No other cache key included!
-    if (previewParameters.type == PreviewParameters::Thumbnail)
+    if (previewParameters.type == PreviewParameters::Thumbnail
+        || previewParameters.type == PreviewParameters::DetailThumbnail)
         return QStringList() << cacheKey();
 
     // DImg loading.
@@ -269,7 +276,8 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription& other) con
 
 bool LoadingDescription::isThumbnail() const
 {
-    return previewParameters.type == PreviewParameters::Thumbnail;
+    return previewParameters.type == PreviewParameters::Thumbnail
+          || previewParameters.type == PreviewParameters::DetailThumbnail;
 }
 
 bool LoadingDescription::isPreviewImage() const

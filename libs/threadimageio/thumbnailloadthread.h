@@ -113,12 +113,30 @@ public:
     void findGroup(const QStringList& filePaths, int size);
 
     /**
+     * All tastes of find() methods, for loading the thumbnail of a detail
+     */
+    bool find(const QString& filePath, const QRect& rect, QPixmap& pixmap);
+    bool find(const QString& filePath, const QRect& rect, QPixmap& pixmap, int size);
+    void find(const QString& filePath, const QRect& rect);
+    void find(const QString& filePath, const QRect& rect, int size);
+    void findGroup(const QList<QPair<QString, QRect> >& filePathAndRects);
+    void findGroup(const QList<QPair<QString, QRect> >& filePathsAndRects, int size);
+
+    /**
      * Preload the thumbnail or thumbnail group.
+     * This is essentially the same as loading, but with a lower priority.
      */
     void preload(const QString& filePath);
     void preload(const QString& filePath, int size);
     void preloadGroup(const QStringList& filePaths);
     void preloadGroup(const QStringList& filePaths, int size);
+
+    /**
+     * Pregenerate the thumbnail group.
+     * No signals will be emitted when these are loaded.
+     */
+    void pregenerateGroup(const QStringList& filePaths);
+    void pregenerateGroup(const QStringList& filePaths, int size);
 
     /**
      * Load a thumbnail.
@@ -195,6 +213,15 @@ public:
     void setSendSurrogatePixmap(bool send);
 
     /**
+     * Stores the given detail thumbnail on disk.
+     * Use this if possible because generation of detail thumbnails
+     * is potentially slower.
+     * The image should at least have storedSize().
+     */
+    void storeDetailThumbnail(const QString& filePath, const QRect& detailRect, const QImage& image);
+    int storedSize() const;
+
+    /**
      * This is a tool to force regeneration of thumbnails.
      * All thumbnail files for the given file will be removed from disk,
      * and the cached instances will be removed as well.
@@ -219,7 +246,8 @@ protected:
 
 private:
 
-    void load(const LoadingDescription& description, bool preload);
+    bool find(const QString& filePath, int size, QPixmap* retPixmap, bool emitSignal, const QRect& detailRect);
+    void load(const LoadingDescription& description, bool pregenerate);
     void loadWithKDE(const LoadingDescription& description);
     void startKdePreviewJob();
     QPixmap surrogatePixmap(const LoadingDescription& loadingDescription);

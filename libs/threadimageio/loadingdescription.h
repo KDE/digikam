@@ -56,19 +56,23 @@ public:
         {
             NoPreview,
             PreviewImage,
-            Thumbnail
+            Thumbnail,
+            DetailThumbnail
         };
 
         PreviewParameters()
         {
-            type       = NoPreview;
-            size       = 0;
-            exifRotate = false;
+            type            = NoPreview;
+            size            = 0;
+            exifRotate      = false;
+            onlyPregenerate = false;
         }
 
         PreviewType type;
         int  size;
         bool exifRotate;
+        bool onlyPregenerate;
+        QVariant extraParameter;
 
         bool operator==(const PreviewParameters& other) const;
     };
