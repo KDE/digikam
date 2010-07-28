@@ -51,7 +51,7 @@ namespace Digikam
 
 int ThumbnailSchemaUpdater::schemaVersion()
 {
-    return 1;
+    return 2;
 }
 
 ThumbnailSchemaUpdater::ThumbnailSchemaUpdater(ThumbnailDatabaseAccess *access)
