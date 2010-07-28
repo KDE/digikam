@@ -31,8 +31,6 @@
 namespace Digikam
 {
 
-class PeopleWidgetPriv;
-
 class PeopleWidget : public QWidget
 {
     Q_OBJECT
@@ -56,6 +54,7 @@ public:
 
 private:
 
+    class PeopleWidgetPriv;
     PeopleWidgetPriv* const d;
 };
 

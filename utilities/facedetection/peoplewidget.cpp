@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class PeopleWidgetPriv
+class PeopleWidget::PeopleWidgetPriv
 {
 
 public:
@@ -54,7 +54,6 @@ PeopleWidget::PeopleWidget(QWidget* parent, int numPeople)
     d->peopleCount->setNum(numPeople);
     d->label->setText("Number of People");
 }
-
 
 PeopleWidget::~PeopleWidget()
 {
