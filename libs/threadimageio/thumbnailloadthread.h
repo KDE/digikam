@@ -229,6 +229,7 @@ Q_SIGNALS:
 
     // For internal use
     void thumbnailsAvailable();
+    void ThumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& thumb);
 
 private Q_SLOTS:
 

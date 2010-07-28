@@ -102,6 +102,7 @@ public:
     ThumbnailLoadThreadPriv()
     {
         size               = ThumbnailSize::Huge;
+        wantPixmap         = true;
         exifRotate         = true;
         highlight          = true;
         sendSurrogate      = true;
@@ -111,6 +112,7 @@ public:
     }
 
     bool                            exifRotate;
+    bool                            wantPixmap;
     bool                            highlight;
     bool                            sendSurrogate;
     bool                            notifiedForResults;
@@ -147,7 +149,9 @@ ThumbnailLoadThread::ThumbnailLoadThread()
         d->creator->setThumbnailInfoProvider(static_d->provider);
     d->creator->setOnlyLargeThumbnails(true);
     d->creator->setRemoveAlphaChannel(true);
-    setPixmapRequested(true);
+
+    connect(this, SIGNAL(thumbnailsAvailable()),
+            this, SLOT(slotThumbnailsAvailable()));
 }
 
 ThumbnailLoadThread::~ThumbnailLoadThread()
@@ -241,12 +245,7 @@ void ThumbnailLoadThread::setSendSurrogatePixmap(bool send)
 
 void ThumbnailLoadThread::setPixmapRequested(bool wantPixmap)
 {
-    if (wantPixmap)
-        connect(this, SIGNAL(thumbnailsAvailable()),
-                this, SLOT(slotThumbnailsAvailable()));
-    else
-        disconnect(this, SIGNAL(thumbnailsAvailable()),
-                   this, SLOT(slotThumbnailsAvailable()));
+    d->wantPixmap = wantPixmap;
 }
 
 void ThumbnailLoadThread::setHighlightPixmap(bool highlight)
@@ -489,6 +488,9 @@ void ThumbnailLoadThread::thumbnailLoaded(const LoadingDescription& loadingDescr
 {
     // call parent to send signalThumbnailLoaded(LoadingDescription, QImage) - signal is part of public API
     ManagedLoadSaveThread::thumbnailLoaded(loadingDescription, img);
+
+    if (!d->wantPixmap)
+        return;
 
     // Store result in our list and fire one signal
     // This means there can be several results per pixmap,
