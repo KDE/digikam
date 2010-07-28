@@ -183,12 +183,13 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
 
     DImg dimg(img);
 
-    if (!dimg.isNull())
+    // FIXME: Ignore xcf images for now, till the problem with xcf is solved.
+    if (!dimg.isNull() && !desc.filePath.endsWith("xcf", Qt::CaseInsensitive))
     {
-        // FIXME: Detect faces from the DImg here, instead of giving a file path?
         kDebug() << desc.filePath << " => " << "Height= " << img.height() << ", Width= " << img.width();
-
-        KFaceIface::Image fimg(dimg.copyQImage());
+        
+        QImage qimg = dimg.copyQImage();
+        KFaceIface::Image fimg(qimg);
         QList<KFaceIface::Face> faceList = d->faceIface->detectFaces(fimg);
         QListIterator<KFaceIface::Face> it(faceList);
         kDebug() << "Faces detected in " << desc.filePath;
