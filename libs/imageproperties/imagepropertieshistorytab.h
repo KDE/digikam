@@ -41,8 +41,6 @@
 
 namespace Digikam
 {
-    
-class ImagePropertiesHistoryTabPriv;
 
 class DIGIKAM_EXPORT RemoveFilterAction : public QAction
 {
@@ -93,6 +91,7 @@ public Q_SLOTS:
 
 private:
 
+    class ImagePropertiesHistoryTabPriv;
     ImagePropertiesHistoryTabPriv* const d;
 };
 

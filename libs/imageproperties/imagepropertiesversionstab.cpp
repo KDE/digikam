@@ -63,7 +63,7 @@ public:
         layout   = 0;
         delegate = 0;
     }
-    
+
     QListView*                       view;
     ImageVersionsModel*              model;
     QGridLayout*                     layout;
@@ -83,11 +83,11 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
     d->headerText     = new QLabel(this);
     d->headerTextIcon = new QLabel(this);
     d->iconTextLayout = new QHBoxLayout(this);
-    
+
     d->headerText->setText(i18n("Available versions"));
     d->headerTextIcon->setPixmap(SmallIcon("image-x-generic"));
     d->headerTextIcon->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    
+
     d->view->setItemDelegate(d->delegate);
     d->view->setSelectionRectVisible(true);
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -95,7 +95,7 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
 
     d->iconTextLayout->addWidget(d->headerTextIcon);
     d->iconTextLayout->addWidget(d->headerText);
-    
+
     d->layout->addLayout(d->iconTextLayout, 0, 0, 1, 1);
     d->layout->addWidget(d->view,           1, 0, 1, 1);
 
@@ -137,7 +137,7 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
             list->append(inf.filePath());
         }
     }
-    
+
     d->model->setupModelData(list);
     d->view->setModel(d->model);
     d->view->update();

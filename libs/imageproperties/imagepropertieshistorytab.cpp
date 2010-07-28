@@ -45,7 +45,16 @@
 namespace Digikam
 {
 
-class ImagePropertiesHistoryTabPriv
+
+RemoveFilterAction::RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* parent)
+                  : QAction(label, parent)
+{
+    m_index = index;
+}
+
+// -------------------------------------------------------------------------------------------------------
+
+class ImagePropertiesHistoryTab::ImagePropertiesHistoryTabPriv
 {
 public:
 
@@ -64,12 +73,6 @@ public:
     QLabel*                          headerLabel;
 };
 
-RemoveFilterAction::RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* parent)
-                  : QAction(label, parent)
-{
-    m_index = index;
-}
-
 ImagePropertiesHistoryTab::ImagePropertiesHistoryTab(QWidget* parent)
                          : QWidget(parent), d(new ImagePropertiesHistoryTabPriv)
 {
@@ -80,7 +83,7 @@ ImagePropertiesHistoryTab::ImagePropertiesHistoryTab(QWidget* parent)
     d->headerLabel = new QLabel(this);
 
     d->headerLabel->setText(i18n("Used filters"));
-    
+
     d->layout->addWidget(d->headerLabel);
     d->layout->addWidget(d->view);
 
@@ -133,4 +136,4 @@ void ImagePropertiesHistoryTab::showCustomContextMenu(const QPoint& position)
         QMenu::exec(actions, d->view->mapToGlobal(position));
 }
 
-} //namespace Digikam
+} // namespace Digikam
