@@ -41,7 +41,18 @@
 namespace Digikam
 {
 
-class ImageHistoryPriv : public QSharedData
+class ImageHistoryPrivSharedNull : public QSharedDataPointer<ImageHistoryPriv>
+{
+public:
+
+    ImageHistoryPrivSharedNull() : QSharedDataPointer<ImageHistoryPriv>(new ImageHistoryPriv) {}
+};
+
+K_GLOBAL_STATIC(ImageHistoryPrivSharedNull, imageHistoryPrivSharedNull)
+
+// -----------------------------------------------------------------------------------------------
+
+class DImageHistory::ImageHistoryPriv : public QSharedData
 {
 public:
 
@@ -55,13 +66,6 @@ public:
     qlonglong                   imageid;
     QList<DImageHistory::Entry> entries;
 };
-
-class ImageHistoryPrivSharedNull : public QSharedDataPointer<ImageHistoryPriv>
-{
-    public:
-    ImageHistoryPrivSharedNull() : QSharedDataPointer<ImageHistoryPriv>(new ImageHistoryPriv) {}
-};
-K_GLOBAL_STATIC(ImageHistoryPrivSharedNull, imageHistoryPrivSharedNull)
 
 DImageHistory::DImageHistory()
              : d(*imageHistoryPrivSharedNull)
@@ -102,7 +106,7 @@ int DImageHistory::size() const
 DImageHistory& DImageHistory::operator<<(const FilterAction& action)
 {
     Entry entry;
-    entry.action        = action;
+    entry.action      = action;
     entry.filterEntry = true;
     d->entries << entry;
     kDebug() << "Entry added, total count " << d->entries.count();
@@ -113,7 +117,7 @@ DImageHistory& DImageHistory::operator<<(const HistoryImageId& imageId)
 {
     Entry entry;
     entry.referredImages = imageId;
-    entry.filterEntry  = false;
+    entry.filterEntry    = false;
     d->entries << entry;
     return *this;
 }
@@ -261,9 +265,9 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             stream.readNext();
             if(stream.attributes().value("type") == "original")
             {
-                originalUUID = stream.attributes().value("fileUUID").toString();
+                originalUUID         = stream.attributes().value("fileUUID").toString();
                 entry.referredImages = HistoryImageId(originalUUID, "", stream.attributes().value("filePath").toString() + "/" + stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
-                entry.filterEntry = false;
+                entry.filterEntry    = false;
                 h << entry;
                 //h.setOriginalFile(stream.attributes().value("filePath").toString() + "/" + stream.attributes().value("fileName").toString());
                 h.setOriginalFileName(stream.attributes().value("fileName").toString());
@@ -273,7 +277,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             else
             {
                 entry.referredImages = HistoryImageId(originalUUID, stream.attributes().value("fileUUID").toString(), stream.attributes().value("filePath").toString() + "/" + stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
-                entry.filterEntry = false;
+                entry.filterEntry    = false;
                 //stream.readNextStartElement();
             }
         }
@@ -281,6 +285,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
         {
             //kDebug() << "Parsing filter tag";
             FilterAction::Category c;
+
             switch(stream.attributes().value("filterCategory").toString().toInt())
             {
                 case 0: 
@@ -304,6 +309,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             if(stream.name() != "params") continue;
             stream.readNext(); //param .. tag
             //kDebug() << "Parsing params tag";
+
             while(stream.name() != "params")
             {
                 stream.readNext();
@@ -317,11 +323,13 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 
         h << entry;
     }
+
     if (stream.hasError())
     {
         //TODO: error handling
         kDebug() << "An error ocurred during parsing: " << stream.errorString();
     }
+
     //kDebug() << "Parsing done";
     return h;
 }
@@ -346,6 +354,4 @@ void DImageHistory::setOriginalFilePath(const QString& filePath)
     d->originalPath = filePath;
 }
 
-
-
-} //namespace digikam
+} // namespace digikam

@@ -45,7 +45,6 @@
 namespace Digikam
 {
 
-class ImageHistoryPriv;
 
 class DIGIKAM_EXPORT DImageHistory
 {
@@ -85,7 +84,7 @@ public:
 
     void setOriginalFileName(const QString& fileName);
     QString originalFileName();
-    
+
     void setOriginalFilePath(const QString& filePath);
     QString originalFilePath();
 
@@ -94,6 +93,7 @@ public:
 
 private:
 
+    class ImageHistoryPriv;
     QSharedDataPointer<ImageHistoryPriv> d;
 };
 
