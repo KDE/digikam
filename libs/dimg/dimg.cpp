@@ -1478,7 +1478,7 @@ QImage DImg::copyQImage()
     return img;
 }
 
-QImage DImg::copyQImage(QRect rect)
+QImage DImg::copyQImage(const QRect& rect)
 {
     return (copyQImage(rect.x(), rect.y(), rect.width(), rect.height()));
 }
@@ -1652,7 +1652,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
 // basic imaging operations
 
 
-void DImg::crop(QRect rect)
+void DImg::crop(const QRect& rect)
 {
     crop(rect.x(), rect.y(), rect.width(), rect.height());
 }
