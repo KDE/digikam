@@ -142,9 +142,9 @@ FIND_PACKAGE(Kface)
 FIND_PACKAGE(Kmap)
 
 #---------------following code is to add the QtScript libraries-----------------------
-TARGET_LINK_LIBRARIES(
-    ${QT_QTSCRIPT_LIBRARY}
-)
+
+TARGET_LINK_LIBRARIES(${QT_QTSCRIPT_LIBRARY})
+
 #-------------------------------------------------------------------------------------
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313, #228483
@@ -157,32 +157,6 @@ IF ("${jpeglib_version}" LESS 80)
 ELSE ("${jpeglib_version}" LESS 80)
     SET(DIGIKAM_LIBJPEG_DIR libjpeg-80)
 ENDIF ("${jpeglib_version}" LESS 80)
-
-# Check KDcraw version installed to compile fine.
-IF(NOT WIN32)
-    FIND_PACKAGE(PkgConfig)
-    PKG_CHECK_MODULES(Kdcraw libkdcraw>=1.1.0)
-    IF(Kdcraw_FOUND)
-        SET(KDCRAW_FOR_DIGIKAM TRUE)
-    ELSE(Kdcraw_FOUND)
-        SET(KDCRAW_FOR_DIGIKAM FALSE)
-    ENDIF(Kdcraw_FOUND)
-ELSE(NOT WIN32)
-    SET(KDCRAW_FOR_DIGIKAM TRUE)
-ENDIF(NOT WIN32)
-
-# Check KExiv2 version installed to compile fine.
-IF(NOT WIN32)
-    FIND_PACKAGE(PkgConfig)
-    PKG_CHECK_MODULES(Kexiv2 libkexiv2>=1.2.0)
-    IF(Kexiv2_FOUND)
-        SET(KEXIV2_FOR_DIGIKAM TRUE)
-    ELSE(Kexiv2_FOUND)
-        SET(KEXIV2_FOR_DIGIKAM FALSE)
-    ENDIF(Kexiv2_FOUND)
-ELSE(NOT WIN32)
-    SET(KEXIV2_FOR_DIGIKAM TRUE)
-ENDIF(NOT WIN32)
 
 # Check MySQL executables
 FIND_PROGRAM( SERVERCMD_MYSQL mysqld
@@ -276,9 +250,9 @@ PRINT_LIBRARY_STATUS("libtiff" "http://www.remotesensing.org/libtiff" "" TIFF_FO
 PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (version >= 1.2.7)" PNG_FOUND)
 PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JASPER_FOUND)
 PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
-PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 0.2.0)" KIPI_FOUND)
-PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KEXIV2_FOR_DIGIKAM)
-PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KDCRAW_FOR_DIGIKAM)
+PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KIPI_FOUND)
+PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KEXIV2_FOUND)
+PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KDCRAW_FOUND)
 PRINT_LIBRARY_STATUS("libkface" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KFACE_FOUND)
 PRINT_LIBRARY_STATUS("libkmap" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KMAP_FOUND)
 
@@ -377,13 +351,13 @@ ELSE(DOXYGEN_FOUND)
 
 ENDIF(DOXYGEN_FOUND)
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
     MESSAGE(STATUS " digiKam will be compiled................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")

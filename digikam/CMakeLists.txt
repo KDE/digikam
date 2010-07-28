@@ -169,6 +169,10 @@ KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 ADD_DEPENDENCIES(digikamcore digikam-svnversion)
 
 TARGET_LINK_LIBRARIES(digikamcore
+                      ${QT_QT3SUPPORT_LIBRARY}
+                      ${QT_QTSQL_LIBRARY}
+                      ${QT_QTSCRIPT_LIBRARY}
+
                       ${KDE4_KDECORE_LIBS}
                       ${KDE4_KIO_LIBS}
                       ${KDE4_KFILE_LIBS}
@@ -177,9 +181,6 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_KDEUI_LIBS}
                       ${KDE4_KUTILS_LIBS}
                       ${KDE4_SOLID_LIBS}
-                      ${QT_QTSQL_LIBRARY}
-                      ${QT_QT3SUPPORT_LIBRARY}
-                      ${QT_QTSCRIPT_LIBRARY} 
 
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
@@ -246,15 +247,18 @@ KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamdatabase
                       digikamcore
+                      ${QT_QTCORE_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTSQL_LIBRARY}
+                      ${QT_QTSCRIPT_LIBRARY}
+
                       ${KDE4_KIO_LIBS}
                       ${KDE4_SOLID_LIBS}
+
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
                       ${KFACE_LIBRARIES}
                       ${KMAP_LIBRARIES}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTSQL_LIBRARY}
                      )
 
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 2.0.0 SOVERSION 2)
@@ -273,17 +277,20 @@ IF (NEPOMUK_FOUND)
     KDE4_ADD_PLUGIN(digikamnepomukservice ${digikamnepomukservices_SRCS})
 
     TARGET_LINK_LIBRARIES(digikamnepomukservice
+                          ${QT_QTSQL_LIBRARY}
+                          ${QT_QTSCRIPT_LIBRARY}
+
                           ${KDE4_KIO_LIBS}
                           ${KDE4_SOLID_LIBS}
+                          ${KDE4_KDEUI_LIBS}
+
                           ${KIPI_LIBRARIES}
                           ${KEXIV2_LIBRARIES}
                           ${KDCRAW_LIBRARIES}
-                          ${QT_QTSQL_LIBRARY}
                           ${SOPRANO_CLIENT_LIBRARIES}
                           ${SOPRANO_LIBRARIES}
-                          ${KDE4_KDEUI_LIBS}
-                          ${KDE4_KIO_LIBS}
                           ${NEPOMUK_LIBRARIES}
+
                           digikamcore
                           digikamdatabase
                          )
@@ -331,23 +338,27 @@ KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam
+                      ${QT_QT3SUPPORT_LIBRARY}
+                      ${QT_QTSQL_LIBRARY}
+                      ${QT_QTSCRIPT_LIBRARY}
+
                       ${KDE4_KPARTS_LIBS}
                       ${KDE4_PHONON_LIBS}
                       ${KDE4_KHTML_LIBS}
                       ${KDE4_KUTILS_LIBS}
                       ${KDE4_KNOTIFYCONFIG_LIBRARY}
                       ${KDE4_SOLID_LIBS}
+
                       ${KIPI_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
                       ${KFACE_LIBRARIES}
                       ${KMAP_LIBRARIES}
-                      ${QT_QTSQL_LIBRARY}
-                      ${QT_QT3SUPPORT_LIBRARY}
+
+                      ${GPHOTO2_LIBRARIES}
                       ${STRIGI_LIBRARIES}
                       ${LCMS_LIBRARIES}
-                      ${GPHOTO2_LIBRARIES}
-                      ${QT_QTSCRIPT_LIBRARY}
+
                       digikamcore
                       digikamdatabase
                      )

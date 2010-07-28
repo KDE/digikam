@@ -91,7 +91,7 @@ libqt           >= 4.6.x                      http://www.qtsoftware.com         
 kdelibs         >= 4.4.x                      http://www.kde.org                         Nepomuk support introduced with KDE 4.3.x.
 libkipi         >= 1.2.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository.
 libkexiv2       >= 1.2.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Exiv2 >= 0.20.0 shared library recommended.
-libkdcraw       >= 1.1.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository.
+libkdcraw       >= 1.2.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository.
 libkface        >= 0.1.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository.
 libkmap         >= 0.1.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository.
 liblcms         >= 1.17.x                     http://www.littlecms.com
