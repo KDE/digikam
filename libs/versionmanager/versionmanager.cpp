@@ -101,12 +101,13 @@ QString VersionManager::getVersionedFilename(const QString& originalPath, const 
     return QString();
 }
 
-VersionManager *VersionManager::m_instance = 0;
+VersionManager* VersionManager::m_instance = 0;
 
-VersionManager *VersionManager::instance()
+VersionManager* VersionManager::instance()
 {
     if (!m_instance)
         m_instance = new VersionManager;
+
     return m_instance;
 }
 
