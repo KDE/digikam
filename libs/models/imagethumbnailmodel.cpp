@@ -125,7 +125,7 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
             d->preloadThread = new ThumbnailLoadThread;
             d->preloadThread->setPixmapRequested(false);
             d->preloadThread->setExifRotate(d->exifRotate);
-            d->preloadThread->setPriority(QThread::LowPriority);
+            d->preloadThread->setPriority(QThread::LowestPriority);
         }
         connect(this, SIGNAL(allRefreshingFinished()),
                 this, SLOT(preloadAllThumbnails()));
@@ -177,7 +177,7 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
         filePaths << info.filePath();
     }
     d->preloadThread->stopAllTasks();
-    d->preloadThread->preloadGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->pregenerateGroup(filePaths, d->preloadThumbnailSize());
 }
 
 void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
@@ -191,7 +191,7 @@ void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
         filePaths << imageInfoRef(index).filePath();
     }
     d->preloadThread->stopAllTasks();
-    d->preloadThread->preloadGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->pregenerateGroup(filePaths, d->preloadThumbnailSize());
 }
 
 void ImageThumbnailModel::preloadAllThumbnails()
