@@ -128,6 +128,21 @@ DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString &path)
     return info;
 }
 
+DatabaseThumbnailInfo ThumbnailDB::findByCustomIdentifier(const QString &id)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT id, type, modificationDate, orientationHint, data "
+                            "FROM CustomIdentifiers "
+                            "   INNER JOIN Thumbnails ON thumbId = id "
+                            "WHERE identifier=?;"),
+                    id,
+                    &values );
+
+    DatabaseThumbnailInfo info;
+    fillThumbnailInfo(values, info);
+    return info;
+}
+
 QHash<QString, int> ThumbnailDB::getFilePathsWithThumbnail()
 {
     SqlQuery query = d->db->prepareQuery(QString("SELECT path, id "
@@ -161,6 +176,12 @@ DatabaseCoreBackend::QueryState ThumbnailDB::insertFilePath(const QString &path,
                    path, thumbId);
 }
 
+DatabaseCoreBackend::QueryState ThumbnailDB::insertCustomIdentifier(const QString &path, int thumbId)
+{
+    return d->db->execSql("REPLACE INTO CustomIdentifiers (identifier, thumbId) VALUES (?,?)",
+                   path, thumbId);
+}
+
 DatabaseCoreBackend::QueryState ThumbnailDB::removeByUniqueHash(const QString &uniqueHash, int fileSize)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
@@ -176,6 +197,18 @@ DatabaseCoreBackend::QueryState ThumbnailDB::removeByFilePath(const QString &pat
     QMap<QString, QVariant> parameters;
     parameters.insert(":path", path);
     return d->db->execDBAction(d->db->getDBAction(QString("Delete_Thumbnail_ByPath")), parameters);
+}
+
+DatabaseCoreBackend::QueryState ThumbnailDB::removeByCustomIdentifier(const QString &id)
+{
+    // There is no trigger here. It is not defined if any path or hash points to the thumbnail.
+    QList<QVariant> values;
+    d->db->execSql("SELECT thumbId FROM CustomIdentifiers WHERE identifier=?;",
+                   id, &values );
+    if (values.isEmpty())
+        return DatabaseCoreBackend::NoErrors;
+    d->db->execSql("DELETE FROM CustomIdentifiers WHERE thumbId=?;", values.first());
+    return d->db->execSql("DELETE FROM Thumbnails WHERE id=?;", values.first());
 }
 
 DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo &info, QVariant *lastInsertId)
