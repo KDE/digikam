@@ -20,5 +20,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 212848 : Crashed in slideshow while viewing.
 014 ==> 245061 : [patch] "Restore Tag Filters" is broken, works only for top level nodes.
 015 ==> 245336 : Image editor does not remember camera profile under Custom.
-016 ==> 
+016 ==> 243692 : digiKam uses all memory with thumbnails.
+017 ==> 
+
 
