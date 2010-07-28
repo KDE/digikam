@@ -460,6 +460,7 @@
                                 BEGIN
                                 DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id;
                                 DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id;
+                                DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = OLD.id;
                                 END;
                     </statement>
                 </dbaction>
@@ -593,11 +594,15 @@
             </statement></dbaction>
 
             <dbaction name="Delete_Thumbnail_ByPath"><statement mode="query">
-                DELETE FROM Thumbnails WHERE id IN  (SELECT thumbId FROM FilePaths WHERE path=:path);
+                DELETE FROM Thumbnails WHERE id IN (SELECT thumbId FROM FilePaths WHERE path=:path);
             </statement></dbaction>
 
             <dbaction name="Delete_Thumbnail_ByUniqueHashId"><statement mode="query">
                 DELETE FROM Thumbnails WHERE id IN (SELECT thumbId FROM UniqueHashes WHERE uniqueHash=:uniqueHash AND fileSize=:filesize);
+            </statement></dbaction>
+
+            <dbaction name="Delete_Thumbnail_ByCustomIdentifier"><statement mode="query">
+                DELETE FROM Thumbnails WHERE id IN (SELECT thumbId FROM CustomIdentifiers WHERE identifier=:identifier);
             </statement></dbaction>
 
             <!-- Migration from DB Version 5 (0.10 - 1.4) to Version 6 (1.5-) -->
@@ -666,6 +671,14 @@
                         UNIQUE(identifier))
                 </statement>
                 <statement mode="plain">CREATE INDEX id_customIdentifiers ON CustomIdentifiers (thumbId);</statement>
+                <statement mode="plain">DROP TRIGGER delete_thumbnails;</statement>
+                <statement mode="plain">CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails
+                            BEGIN
+                            DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id;
+                            DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id;
+                            DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = OLD.id;
+                            END;
+                </statement>
             </dbaction>
 
         </dbactions>
@@ -1234,6 +1247,24 @@
                 </statement>
                 <statement mode="query">
                     DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM Thumbnails WHERE id = @thumbsId;
+                </statement>
+            </dbaction>
+
+            <dbaction name="Delete_Thumbnail_ByCustomIdentifier" mode="query">
+                <statement mode="query">
+                    SELECT @thumbsId := thumbId FROM CustomIdentifiers WHERE identifier=:identifier
+                </statement>
+                <statement mode="query">
+                    DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = @thumbsId;
                 </statement>
                 <statement mode="query">
                     DELETE FROM Thumbnails WHERE id = @thumbsId;

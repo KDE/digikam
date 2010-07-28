@@ -201,14 +201,10 @@ DatabaseCoreBackend::QueryState ThumbnailDB::removeByFilePath(const QString &pat
 
 DatabaseCoreBackend::QueryState ThumbnailDB::removeByCustomIdentifier(const QString &id)
 {
-    // There is no trigger here. It is not defined if any path or hash points to the thumbnail.
-    QList<QVariant> values;
-    d->db->execSql("SELECT thumbId FROM CustomIdentifiers WHERE identifier=?;",
-                   id, &values );
-    if (values.isEmpty())
-        return DatabaseCoreBackend::NoErrors;
-    d->db->execSql("DELETE FROM CustomIdentifiers WHERE thumbId=?;", values.first());
-    return d->db->execSql("DELETE FROM Thumbnails WHERE id=?;", values.first());
+    // UniqueHashes + FilePaths entries are removed by trigger
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":identifier", id);
+    return d->db->execDBAction(d->db->getDBAction(QString("Delete_Thumbnail_ByCustomIdentifier")), parameters);
 }
 
 DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo &info, QVariant *lastInsertId)
