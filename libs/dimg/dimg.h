@@ -407,6 +407,13 @@ public:
     void       rotate(ANGLE angle);
     void       flip(FLIP direction);
 
+    /** Rotates and/or flip the DImg according to the given DMetadata::Orientation,
+     *  so that the current state is orientation and the resulting step is normal orientation.
+     *  Returns true if the image was actually rotated or flipped (e.g. if ORIENTATION_NORMAL
+     *  is given, returns false, because no action is taken).
+     */
+    bool       rotateAndFlip(int orientation);
+
     QPixmap    convertToPixmap();
     QPixmap    convertToPixmap(IccTransform& monitorICCtrans);
 
