@@ -71,7 +71,9 @@ public:
         // Wait for loading and saving tasks, stop and remove preloading tasks
         TerminationPolicyTerminatePreloading,
         // Wait for all pending tasks
-        TerminationPolicyWait
+        TerminationPolicyWait,
+        // Stop all pending tasks
+        TerminationPolicyTerminateAll
     };
 
     enum LoadingTaskFilter
@@ -117,6 +119,8 @@ public:
     void setTerminationPolicy(TerminationPolicy terminationPolicy);
 
 protected:
+
+    void shutdownThread();
 
     void load(const LoadingDescription& description, LoadingMode loadingMode,
               LoadingPolicy policy = LoadingPolicyAppend, AccessMode mode = AccessModeReadWrite);

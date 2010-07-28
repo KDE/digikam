@@ -44,12 +44,18 @@ ManagedLoadSaveThread::ManagedLoadSaveThread()
 
 ManagedLoadSaveThread::~ManagedLoadSaveThread()
 {
-    LoadingTask *loadingTask;
+    shutdownThread();
+    // LoadSaveThread wait()s
+}
+
+void ManagedLoadSaveThread::shutdownThread()
+{
     switch (m_terminationPolicy)
     {
         case TerminationPolicyTerminateLoading:
         {
             QMutexLocker lock(threadMutex());
+            LoadingTask *loadingTask;
             if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)) )
                 loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
             removeLoadingTasks(LoadingDescription(QString()), LoadingTaskFilterAll);
@@ -58,6 +64,7 @@ ManagedLoadSaveThread::~ManagedLoadSaveThread()
         case TerminationPolicyTerminatePreloading:
         {
             QMutexLocker lock(threadMutex());
+            LoadingTask *loadingTask;
             if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)) )
                 loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
             removeLoadingTasks(LoadingDescription(QString()), LoadingTaskFilterPreloading);
@@ -65,6 +72,11 @@ ManagedLoadSaveThread::~ManagedLoadSaveThread()
         }
         case TerminationPolicyWait:
             break;
+        case TerminationPolicyTerminateAll:
+        {
+            stopAllTasks();
+            break;
+        }
     }
 }
 
