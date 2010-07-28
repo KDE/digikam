@@ -7,6 +7,7 @@
  * Description : Widget showing a throbber ("working" animation)
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,11 +21,15 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #include "workingwidget.moc"
 
 // Qt includes
 
 #include <QImage>
+#include <QTimer>
+#include <QList>
+#include <QPixmap>
 
 // KDE includes
 
@@ -37,8 +42,23 @@
 namespace Digikam
 {
 
+class WorkingWidget::WorkingWidgetPriv
+{
+
+public:
+
+    WorkingWidgetPriv()
+    {
+        currentPixmap = 0;
+    }
+
+    QList<QPixmap> pixmaps;
+    int            currentPixmap;
+    QTimer         timer;
+};
+
 WorkingWidget::WorkingWidget(QWidget* parent)
-              : QLabel(parent), currentPixmap(0)
+             : QLabel(parent), d(new WorkingWidgetPriv)
 {
     KIconLoader iconLoader;
     QString iconName("process-working.png");
@@ -46,32 +66,35 @@ WorkingWidget::WorkingWidget(QWidget* parent)
     img.load(iconLoader.iconPath(iconName, KIconLoader::Dialog));
 
     // frames in the image, the "process-working.png" has 8
-    int imageCount = 8;
+    int imageCount     = 8;
     int subImageHeight = img.height() / imageCount;
 
     for (int i = 0; i < imageCount; i++)
     {
         QImage subImage = img.copy(0, i * subImageHeight, img.width(), subImageHeight);
-        pixmaps.push_back(QPixmap::fromImage(subImage));
+        d->pixmaps.push_back(QPixmap::fromImage(subImage));
     }
 
-    connect(&timer, SIGNAL(timeout()), SLOT(changeImage()));
-    timer.start(100);
+    connect(&d->timer, SIGNAL(timeout()), 
+            this, SLOT(changeImage()));
+
+    d->timer.start(100);
     changeImage();
 }
 
 WorkingWidget::~WorkingWidget()
 {
+    delete d;
 }
 
 void WorkingWidget::changeImage()
 {
-    if (currentPixmap >= pixmaps.length())
-        currentPixmap = 0;
+    if (d->currentPixmap >= d->pixmaps.length())
+        d->currentPixmap = 0;
 
-    setPixmap(pixmaps.at(currentPixmap));
+    setPixmap(d->pixmaps.at(d->currentPixmap));
 
-    currentPixmap++;
+    d->currentPixmap++;
 }
 
 } // namespace Digikam
