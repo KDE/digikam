@@ -66,6 +66,11 @@ public:
         onlyLargeThumbnails = false;
 
         digiKamFingerPrint  = QString("Digikam Thumbnail Generator");
+
+        fastRawSettings.optimizeTimeLoading();
+        fastRawSettings.halfSizeColorImage = true;
+        fastRawSettings.sixteenBitsImage   = false;
+
     }
 
     bool                            exifRotate;
@@ -86,6 +91,7 @@ public:
 
     DImgLoaderObserver*             observer;
     DRawDecoding                    rawSettings;
+    DRawDecoding                    fastRawSettings;
 };
 
 }  // namespace Digikam
