@@ -97,28 +97,12 @@ void WelcomePageView::slotUrlOpen(const KUrl& url)
 QString WelcomePageView::infoPage() const
 {
     QStringList newFeatures;
-    newFeatures << i18n("Designed from the ground-up for KDE4, using KDE4 technology:"
-                        "<ul><li>Hardware handling with <a href=\"http://solid.kde.org\">Solid</a> interface;</li>"
-                        "<li>More comprehensive multimedia file handling using <a href=\"http://phonon.kde.org\">Phonon</a> interface;</li>"
-                        "<li>Easy Geolocation with <a href=\"http://edu.kde.org/marble\">Marble</a> interface;</li>"
-                        "<li>Social Semantic Desktop synchronization using <a href=\"http://nepomuk.semanticdesktop.org\">Nepomuk</a> interface.</li></ul>");
-    newFeatures << i18n("MySQL database support;");
-    newFeatures << i18n("XMP metadata support;");
-    newFeatures << i18n("TIFF/EP RAW metadata editing;");
-    newFeatures << i18n("Customizable file storage for the digiKam database, supporting remote albums;");
-    newFeatures << i18n("Support of multiple root album paths (no more importing into one giant album);");
-    newFeatures << i18n("Thumbnail-bar integration for easy navigation and editing;");
+    newFeatures << i18n("XMP metadata sidecar support;");
+    newFeatures << i18n("Reverse geocoding support;");
+    newFeatures << i18n("Image versionning support;");
+    newFeatures << i18n("Face detection support;");
     newFeatures << i18n("Supports the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>;");
-    newFeatures << i18n("New/revamped tools:"
-                        "<ul><li>Batch queue manager;</li>"
-                        "<li>Revamped camera import wizard;</li>"
-                        "<li><a href=\"http://lensfun.berlios.de\">LensFun</a> integration: auto-correction of lens distortion;</li>"
-                        "<li>Fuzzy searches based on hand-drawn sketches;</li>"
-                        "<li>Advanced searches using image meta-information, such as keywords and dates;</li>"
-                        "<li>User-friendly map searching that gives you the power to search for global photo locations;</li>"
-                        "<li>Advanced searches for duplicate and similar images;</li></ul>");
     newFeatures << i18n("...and much more.");
-
 
     QString featureItems;
     for (int i = 0 ; i < newFeatures.count() ; ++i)
@@ -186,7 +170,7 @@ QString WelcomePageView::infoPage() const
     QString(digikam_version),            // %1 : current digiKam version
     "help:/digikam/index.html",          // %2 : digiKam help:// Url
     webProjectUrl().url(),               // %3 : digiKam homepage Url
-    "0.9.6",                             // %4 : prior digiKam version
+    "1.4.0",                             // %4 : prior digiKam version
     featureItems,                        // %5 : prior KDE version
     QString(),                           // %6 : generated list of new features
     QString());                          // %7 : previous digiKam release.
