@@ -40,6 +40,7 @@
 #include <klocale.h>
 #include <kstandardguiitem.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
 // Libkface includes
 
@@ -74,10 +75,15 @@ public:
         cancel            = false;
         rebuildAll        = true;
         previewLoadThread = 0;
-        faceIface         = 0;
+        faceIface         = new KFaceIface::Database(KFaceIface::Database::InitDetection);
         duration.start();
     }
 
+    ~BatchFaceDetectorPriv()
+    {
+        delete faceIface;
+    }
+    
     bool                  cancel;
     bool                  rebuildAll;
 
@@ -86,6 +92,7 @@ public:
     QStringList           allPicturesPath;
     PreviewLoadThread*    previewLoadThread;
     KFaceIface::Database* faceIface;
+    
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
@@ -93,9 +100,6 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
 {
     d->rebuildAll        = rebuildAll;
     d->previewLoadThread = new PreviewLoadThread();
-
-    // For now, start the faceIface in detection mode
-    d->faceIface = new KFaceIface::Database(KFaceIface::Database::InitDetection);
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
             this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
