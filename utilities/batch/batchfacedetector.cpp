@@ -99,10 +99,10 @@ public:
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
                  : DProgressDlg(0), d(new BatchFaceDetectorPriv)
 {
-    d->rebuildAll        = rebuildAll;
-    d->previewLoadThread = new PreviewLoadThread();
+    d->rebuildAll          = rebuildAll;
+    d->previewLoadThread   = new PreviewLoadThread();
     d->thumbnailLoadThread = ThumbnailLoadThread::defaultIconViewThread();
-    
+
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
             this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
 
@@ -190,23 +190,22 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
     if (!dimg.isNull() && !desc.filePath.endsWith("xcf", Qt::CaseInsensitive))
     {
         kDebug() << desc.filePath << " => " << "Height= " << img.height() << ", Width= " << img.width();
-        
+
         QImage qimg = dimg.copyQImage();
         KFaceIface::Image fimg(qimg);
         QList<KFaceIface::Face> faceList = d->faceIface->detectFaces(fimg);
         QListIterator<KFaceIface::Face> it(faceList);
         kDebug() << "Faces detected in " << desc.filePath;
-        
+
         if (d->rebuildAll)
             d->thumbnailLoadThread->deleteThumbnail(desc.filePath);
 
         while(it.hasNext())
         {
             KFaceIface::Face face = it.next();
-            kDebug()<<face;
+            kDebug() << face;
             d->thumbnailLoadThread->storeDetailThumbnail(desc.filePath, face.toRect(), face.getImage());
         }
-        
     }
 
     emit signalOneDetected(desc, dimg);

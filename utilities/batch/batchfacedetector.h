@@ -34,8 +34,6 @@
 #include "dprogressdlg.h"
 
 class QWidget;
-class KUrl;
-class QPixmap;
 
 namespace Digikam
 {
