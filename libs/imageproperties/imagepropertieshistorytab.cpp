@@ -117,8 +117,9 @@ void ImagePropertiesHistoryTab::showCustomContextMenu(const QPoint& position)
     {
         QModelIndex index = d->view->indexAt(position);
 
-        QString s("Remove entry");
+        QString s(i18n("Remove filter"));
         RemoveFilterAction *removeFilterAction = new RemoveFilterAction(s, index, 0);
+        removeFilterAction->setDisabled(true);
 
         if(!index.model()->parent(index).isValid())
         {

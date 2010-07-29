@@ -29,9 +29,15 @@
 #include <QLinearGradient>
 #include <QApplication>
 
+// KDE includes
+
+#include <KIcon>
+#include <KLocale>
+
 // Local includes
 
 #include "imagefiltershistoryitemdelegate.h"
+#include "dimgfiltermanager.h"
 
 namespace Digikam
 {
@@ -49,7 +55,7 @@ QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& /*op
 {
     if(!index.model()->parent(index).isValid())
     {
-        return QSize(250, 30);
+        return QSize(250, 32);
     }
     else
     {
@@ -70,15 +76,26 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
 
     if(!index.model()->parent(index).isValid())
     {
-        //painter->
-        //painter->fillRect(option.rect, QBrush(QColor(235, 235, 240)));
         painter->drawRect(option.rect);
+
+        QString iconName = DImgFilterManager::instance()->getFilterIcon(index.data(Qt::DecorationRole).toString());
+        painter->drawPixmap(option.rect.left()+4, option.rect.top()+5, KIcon(iconName).pixmap(QSize(22,22)));
     }
 
     QRect textRect = option.rect;
-    textRect.setLeft(textRect.left() + 8);
+    textRect.setLeft(textRect.left() + 32);
 
-    painter->drawText(textRect, Qt::AlignVCenter, index.data(Qt::DisplayRole).toString() );
+    if(!index.data(Qt::DisplayRole).toString().isEmpty())
+    {
+        painter->drawText(textRect, Qt::AlignVCenter, index.data(Qt::DisplayRole).toString());
+    }
+    else
+    {
+        //infoIcon.setToolTip(i18n("This filter's name is unknown, so you see only its identifier"));    //FIXME: better string?
+        painter->drawPixmap(option.rect.right() - 22, option.rect.top() + 8, KIcon("dialog-information").pixmap(QSize(16,16)));
+        painter->drawText(textRect, Qt::AlignVCenter, index.data(Qt::DecorationRole).toString());
+        
+    }
     painter->restore();
 }
 

@@ -96,23 +96,32 @@ void ImageFiltersHistoryModel::setUrl(const KUrl& url)
 
 int ImageFiltersHistoryModel::columnCount(const QModelIndex& parent) const
 {
+    return 1;/*
     if (parent.isValid())
         return static_cast<ImageFiltersHistoryTreeItem*>(parent.internalPointer())->columnCount();
     else
-        return m_rootItem->columnCount();
+        return m_rootItem->columnCount();*/
 }
 
 QVariant ImageFiltersHistoryModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
+    
+    ImageFiltersHistoryTreeItem* item;
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
+    if(role == Qt::DecorationRole)
+    {
+        item = static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer());
+        return item->data(1);
+    }
+    else if (role == Qt::DisplayRole)
+    {
+        item = static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer());
+        return item->data(index.column());
+    }
 
-    ImageFiltersHistoryTreeItem* item = static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer());
-
-    return item->data(index.column());
+    return QVariant();
 }
 
 Qt::ItemFlags ImageFiltersHistoryModel::flags(const QModelIndex& index) const
@@ -186,7 +195,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
     QList<ImageFiltersHistoryTreeItem*> filters;
     parents << parent;
 
-    QString itemData;
+    QList<QVariant> itemData;
     m_filterStack->clear();
 
     for(int i = 0; i < entries.count(); i++)
@@ -195,7 +204,8 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         {
             m_filterStack->append(entries.at(i).action);
             
-            itemData = entries.at(i).action.displayableName();
+            itemData.append(entries.at(i).action.displayableName());
+            itemData.append(entries.at(i).action.identifier());
             kDebug() << "Adding an entry: " << itemData;
             parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
             filters << parents.last()->child(parents.last()->childCount()-1);
