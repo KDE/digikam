@@ -95,6 +95,8 @@ void WorkingWidget::changeImage()
     setPixmap(d->pixmaps.at(d->currentPixmap));
 
     d->currentPixmap++;
+
+    emit animationStep();
 }
 
 } // namespace Digikam

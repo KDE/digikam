@@ -45,6 +45,9 @@ public:
     WorkingWidget(QWidget* parent = 0);
     ~WorkingWidget();
 
+Q_SIGNALS:
+    void animationStep();
+
 private Q_SLOTS:
 
     void changeImage();
