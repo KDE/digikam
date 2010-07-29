@@ -22,4 +22,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 245336 : Image editor does not remember camera profile under Custom.
 016 ==> 243692 : digiKam uses all memory with thumbnails.
 017 ==> 226544 : Suspicious QModelIndex messages at startup.
-018 ==> 
+018 ==> 240945 : Picture size does not report correctly after gimp.
+019 ==> 
+
