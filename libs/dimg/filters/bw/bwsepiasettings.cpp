@@ -345,30 +345,29 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
 
     // -------------------------------------------------------------
 
-    QWidget* curveBox = new QWidget();
+    QWidget* lumBox = new QWidget();
     // NOTE: add a method to be able to use curves widget without image data as simple curve editor.
-    if (!img->isNull()) d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit(), curveBox);
-    else                d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true, curveBox);
+    if (!img->isNull()) d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit(), lumBox);
+    else                d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true, lumBox);
     d->curvesBox->enableCurveTypes(true);
     d->curvesBox->enableResetButton(true);
     d->curvesBox->setWhatsThis(i18n("This is the curve adjustment of the image luminosity"));
 
     // -------------------------------------------------------------
 
-    d->cInput = new RIntNumInput(curveBox);
+    d->cInput = new RIntNumInput(lumBox);
     d->cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     d->cInput->setRange(-100, 100, 1);
     d->cInput->setSliderEnabled(true);
     d->cInput->setDefaultValue(0);
     d->cInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 
-    QGridLayout* gridTab2 = new QGridLayout();
+    QGridLayout* gridTab2 = new QGridLayout(lumBox);
     gridTab2->addWidget(d->curvesBox, 0, 0, 1, 1);
     gridTab2->addWidget(d->cInput,    1, 0, 1, 1);
     gridTab2->setRowStretch(2, 10);
     gridTab2->setMargin(KDialog::spacingHint());
     gridTab2->setSpacing(0);
-    curveBox->setLayout(gridTab2);
 
     // -------------------------------------------------------------
 
@@ -379,7 +378,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
                     i18n("Lens Filters"), QString("Lens Filters"), false);
     d->tab->addItem(d->bwTone, SmallIcon("fill-color"),
                     i18n("Tone"), QString("Tone"), false);
-    d->tab->addItem(d->curvesBox, SmallIcon("adjustcurves"),
+    d->tab->addItem(lumBox, SmallIcon("adjustcurves"),
                     i18n("Luminosity"), QString("Luminosity"), false);
     d->tab->addStretch();
 
