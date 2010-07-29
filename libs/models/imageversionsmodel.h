@@ -36,9 +36,11 @@
 namespace Digikam 
 {
 
+class WorkingWidget;
+
 class DIGIKAM_EXPORT ImageVersionsModel : public QAbstractListModel
 {
-
+    Q_OBJECT
 public:
 
     ImageVersionsModel(QObject* parent = 0);
@@ -49,6 +51,9 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     void setupModelData(QList<QVariant>* data);
     void clearModelData();
+
+public Q_SLOTS:
+    void slotAnimationStep();
 
 private:
 

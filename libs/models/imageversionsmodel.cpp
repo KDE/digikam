@@ -24,10 +24,12 @@
 // KDE includes
 
 #include <KLocale>
+#include <KDebug>
 
 // Local includes
 
 #include "imageversionsmodel.h"
+#include "workingwidget.h"
 
 namespace Digikam 
 {
@@ -99,6 +101,11 @@ void ImageVersionsModel::clearModelData()
         m_data->clear();
     }
     endResetModel();
+}
+
+void ImageVersionsModel::slotAnimationStep()
+{
+    emit dataChanged(createIndex(0, 0), createIndex(rowCount()-1, 1));
 }
 
 } // namespace Digikam

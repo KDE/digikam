@@ -101,11 +101,15 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent, ImageVer
 
     connect(d->view, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(slotViewItemSelected(QModelIndex)));
+
+    connect(d->delegate, SIGNAL(throbberUpdated()),
+            d->model, SLOT(slotAnimationStep()));
 }
 
 ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
 {
     delete d->delegate;
+    delete d;
 }
 
 void ImagePropertiesVersionsTab::slotDigikamViewNoCurrentItem()
