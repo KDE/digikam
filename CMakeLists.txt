@@ -771,6 +771,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbardock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbartooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/rexpanderboxexclusive.cpp
        )
 
     SET(libiccprofileswidgets_SRCS

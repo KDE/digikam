@@ -27,7 +27,6 @@
 // Qt includes
 
 #include <QPixmap>
-#include <QHeaderView>
 #include <QTimer>
 #include <QPainter>
 #include <QMap>
@@ -49,7 +48,7 @@
 namespace Digikam
 {
 
-class PreviewThreadWrapperPriv
+class PreviewThreadWrapper::PreviewThreadWrapperPriv
 {
 
 public:
@@ -134,7 +133,7 @@ void PreviewThreadWrapper::stopFilters()
 
 // ---------------------------------------------------------------------
 
-class PreviewListItemPriv
+class PreviewListItem::PreviewListItemPriv
 {
 
 public:
@@ -149,8 +148,8 @@ public:
     int  id;
 };
 
-PreviewListItem::PreviewListItem(QTreeWidget* parent)
-               : QTreeWidgetItem(parent), d(new PreviewListItemPriv)
+PreviewListItem::PreviewListItem(QListWidget* parent)
+               : QListWidgetItem(parent), d(new PreviewListItemPriv)
 {
 }
 
@@ -161,7 +160,15 @@ PreviewListItem::~PreviewListItem()
 
 void PreviewListItem::setPixmap(const QPixmap& pix)
 {
-    setIcon(0, QIcon(pix));
+    QIcon icon = QIcon(pix);
+    //  We make sure the preview icon stays the same regardless of the role
+    icon.addPixmap(pix, QIcon::Selected, QIcon::On);
+    icon.addPixmap(pix, QIcon::Selected, QIcon::Off);
+    icon.addPixmap(pix, QIcon::Active, QIcon::On);
+    icon.addPixmap(pix, QIcon::Active, QIcon::Off);
+    icon.addPixmap(pix, QIcon::Normal, QIcon::On);
+    icon.addPixmap(pix, QIcon::Normal, QIcon::Off);
+    setIcon(icon);
 }
 
 void PreviewListItem::setId(int id)
@@ -169,7 +176,7 @@ void PreviewListItem::setId(int id)
     d->id = id;
 }
 
-int PreviewListItem::id()
+int PreviewListItem::id() const
 {
     return d->id;
 }
@@ -179,19 +186,19 @@ void PreviewListItem::setBusy(bool b)
     d->busy = b;
 }
 
-bool PreviewListItem::isBusy()
+bool PreviewListItem::isBusy() const
 {
     return d->busy;
 }
 
 // ---------------------------------------------------------------------
 
-class PreviewListPriv
+class PreviewList::PreviewListPriv
 {
 
 public:
 
-    PreviewListPriv()
+    PreviewListPriv() 
     {
         wrapper       = 0;
         progressCount = 0;
@@ -209,20 +216,26 @@ public:
 };
 
 PreviewList::PreviewList(QObject* /*parent*/)
-           : QTreeWidget(), d(new PreviewListPriv)
+           : QListWidget(), d(new PreviewListPriv)
 {
     d->wrapper = new PreviewThreadWrapper(this);
 
     setSelectionMode(QAbstractItemView::SingleSelection);
     setDropIndicatorShown(true);
     setSortingEnabled(false);
-    setAllColumnsShowFocus(true);
-    setRootIsDecorated(false);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setColumnCount(1);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     setIconSize(QSize(128, 128));
-    setHeaderHidden(true);
-    header()->setResizeMode(QHeaderView::Stretch);
+    setViewMode(QListView::IconMode);
+    setWrapping(true);
+    setWordWrap(false);
+    setMovement(QListView::Static);
+    setSpacing(5);
+    setGridSize(QSize(130,130 + fontMetrics().height()));
+    setMinimumHeight(400);    
+    setResizeMode(QListView::Adjust);
+    setTextElideMode(Qt::ElideRight);
+    setCursor(Qt::PointingHandCursor);
+    setStyleSheet("QListWidget::item:selected:!active {show-decoration-selected: 0}");
 
     d->progressTimer = new QTimer(this);
     d->progressTimer->setInterval(300);
@@ -262,17 +275,19 @@ PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString&
     d->wrapper->registerFilter(id, filter);
 
     PreviewListItem* item = new PreviewListItem(this);
-    item->setText(0, txt);
+    item->setText(txt);
+    //  in case text is mangled by textelide, it is displayed by hovering.
+    item->setToolTip(txt);
     item->setId(id);
     return item;
 }
 
-PreviewListItem* PreviewList::findItem(int id)
+PreviewListItem* PreviewList::findItem(int id) const
 {
-    QTreeWidgetItemIterator it(this);
-    while (*it)
+    int it = 0;
+    while (it <= this->count())
     {
-        PreviewListItem* item = dynamic_cast<PreviewListItem*>(*it);
+        PreviewListItem* item = dynamic_cast<PreviewListItem*>(this->item(it));
         if (item && item->id() == id)
             return item;
 
@@ -283,10 +298,11 @@ PreviewListItem* PreviewList::findItem(int id)
 
 void PreviewList::setCurrentId(int id)
 {
-    QTreeWidgetItemIterator it(this);
-    while (*it)
+    int it = 0;
+    while (it <= this->count())
     {
-        PreviewListItem* item = dynamic_cast<PreviewListItem*>(*it);
+
+        PreviewListItem* item = dynamic_cast<PreviewListItem*>(this->item(it));
         if (item && item->id() == id)
         {
             setCurrentItem(item);
@@ -297,7 +313,7 @@ void PreviewList::setCurrentId(int id)
     }
 }
 
-int PreviewList::currentId()
+int PreviewList::currentId() const
 {
     PreviewListItem* item = dynamic_cast<PreviewListItem*>(currentItem());
     if (item ) return item->id();
@@ -314,10 +330,13 @@ void PreviewList::slotProgressTimerDone()
     p.drawPixmap((pixmap.width()/2) - (ppix.width()/2), (pixmap.height()/2) - (ppix.height()/2), ppix);
 
     int busy = 0;
-    QTreeWidgetItemIterator it(this);
-    while (*it)
+    int it = 0;
+    PreviewListItem* selectedItem;
+
+    while (it <= this->count())
     {
-        PreviewListItem* item = dynamic_cast<PreviewListItem*>(*it);
+        PreviewListItem* item = dynamic_cast<PreviewListItem*>(this->item(it));
+        if (item && item->isSelected()) selectedItem = item;
         if (item && item->isBusy())
         {
             item->setPixmap(pixmap);
@@ -330,7 +349,13 @@ void PreviewList::slotProgressTimerDone()
     if (d->progressCount == 8) d->progressCount = 0;
 
     if (!busy)
+    {
         d->progressTimer->stop();
+        // Qt 4.5 doesn't display icons correctly centred over i18n(text),
+        // Qt 4.6 doesn't even reset the previous selection correctly.
+        this->reset();
+        setCurrentItem(selectedItem);
+    }
 }
 
 void PreviewList::slotFilterStarted(int id)
@@ -349,4 +374,4 @@ void PreviewList::slotFilterFinished(int id, const QPixmap& pix)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -17,6 +17,7 @@ INSTALL(FILES histogramwidget.h
               previewwidget.h
               searchtextbar.h
               knotificationwrapper.h
+              rexpanderboxexclusive.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel
         )
 

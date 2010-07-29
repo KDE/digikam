@@ -41,7 +41,6 @@
 namespace Digikam
 {
 
-class BWSepiaSettingsPriv;
 
 class DIGIKAM_EXPORT BWSepiaSettings : public QWidget
 {
@@ -78,6 +77,7 @@ private Q_SLOTS:
 
 private:
 
+    class BWSepiaSettingsPriv;
     BWSepiaSettingsPriv* const d;
 };
 
