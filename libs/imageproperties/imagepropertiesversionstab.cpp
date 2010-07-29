@@ -82,7 +82,9 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent, ImageVer
     d->delegate       = new ImagePropertiesVersionsDelegate(0);
     d->headerText     = new QLabel(this);
     d->headerTextIcon = new QLabel(this);
-    d->iconTextLayout = new QHBoxLayout(this);
+    d->iconTextLayout = new QHBoxLayout();
+
+    setLayout(d->layout);
 
     d->headerText->setText(i18n("Available versions"));
     d->headerTextIcon->setPixmap(SmallIcon("image-x-generic"));
