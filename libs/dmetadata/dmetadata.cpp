@@ -513,7 +513,7 @@ QString DMetadata::getImageHistory() const
     return QString();
 }
 
-bool DMetadata::hasImageHistoryTag()
+bool DMetadata::hasImageHistoryTag() const
 {
     if(hasXmp())
     {
@@ -522,6 +522,38 @@ bool DMetadata::hasImageHistoryTag()
             return true;
         }
         else return false;
+    }
+    return false;
+}
+
+QString DMetadata::getImageUniqueId() const
+{
+    if (hasXmp())
+    {
+        QString uuid = getXmpTagString("Xmp.digiKam.ImageUniqueID");
+        if (!uuid.isEmpty())
+            return uuid;
+
+        QString exifUid = getXmpTagString("Xmp.exif.ImageUniqueId");
+        if (exifUid.isEmpty())
+            exifUid = getExifTagString("Exif.Image.ImageUniqueId");
+
+        // same makers may choose to use a "click counter" to generate the id,
+        // which is then weak and not a universally unique id
+        // The Exif ImageUniqueID is 128bit, or 32 hex digits.
+        // If the first 20 are zero, it's probably a counter,
+        // the left 12 are sufficient for more then 10^14 clicks.
+        if (!exifUid.isEmpty() && !exifUid.startsWith("00000000000000000000"))
+            return exifUid;
+    }
+    return QString();
+}
+
+bool DMetadata::setImageUniqueId(const QString& uuid) const
+{
+    if (supportXmp())
+    {
+        return setExifTagString("Xmp.digiKam.ImageUniqueID", uuid);
     }
     return false;
 }
