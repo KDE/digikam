@@ -46,6 +46,8 @@ public:
     QList<int> supportedVersions(const QString& filterIdentifier);
     QString displayableName(const QString& filterIdentifier);
 
+    QString getFilterIcon(const QString& filterIdentifier);
+
     bool isSupported(const QString& filterIdentifier);
     bool isSupported(const QString& filterIdentifier, int version);
 

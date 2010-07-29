@@ -24,6 +24,7 @@
 // Qt includes
 
 #include <QMap>
+#include <QHash>
 
 // KDE includes
 
@@ -60,10 +61,13 @@ public:
     }
 
     void setupBuiltinGenerators();
+    void setupFilterIcons();
 
     QMap<QString, DImgFilterGenerator*> filterMap;
 
     QList<DImgFilterGenerator*> builtinGenerators;
+
+    QHash<QString, QString> filterIcons;
 };
 
 void DImgFilterManagerPriv::setupBuiltinGenerators()
@@ -76,6 +80,36 @@ void DImgFilterManagerPriv::setupBuiltinGenerators()
         //<< new BasicDImgFilterGenerator<NormalizeFilter>()
         //<< new BasicDImgFilterGenerator<StretchFilter>();
         //<< new BasicDImgFilterGenerator<WBFilter>();
+}
+
+void DImgFilterManagerPriv::setupFilterIcons()
+{
+    //Please keep this list sorted alphabetically
+    filterIcons.insert("digikam:autoExpoFilter", "autocorrection");
+    filterIcons.insert("digikam:autolevelsfilter", "autocorrection");
+    filterIcons.insert("digikam:BCGFilter", "contrast");
+    filterIcons.insert("digikam:BlurFilter", "blurimage");
+    filterIcons.insert("digikam:BlurFXFilter", "blurfx");
+    filterIcons.insert("digikam:BorderFilter", "bordertool");
+    filterIcons.insert("digikam:BWSepiaFilter", "bwtonal");
+    filterIcons.insert("digikam:CBFilter", "adjustrgb");
+    filterIcons.insert("digikam:CharcoalFilter", "charcoaltool");
+    filterIcons.insert("digikam:CurvesFilter", "adjustcurves");
+    filterIcons.insert("digikam:DistortionFXFilter", "distortionfx");
+    filterIcons.insert("digikam:EmbossFilter", "embosstool");
+    filterIcons.insert("digikam:equalizeFilter", "autocorrection");
+    filterIcons.insert("digikam:FilmGrainFilter", "filmgrain");
+    filterIcons.insert("digikam:InfraredFilter", "unknownapp");         //FIXME
+    filterIcons.insert("digikam:InvertFilter", "invertimage");
+    filterIcons.insert("digikam:MixerFilter", "channelmixer");
+    filterIcons.insert("digikam:normalizeFilter", "autocorrection");
+    filterIcons.insert("digikam:OilPaintFilter", "oilpaint");
+    filterIcons.insert("digikam:PixlesAliasFilter", "unknownapp");      //FIXME
+    filterIcons.insert("digikam:RainDropFilter", "raindrop");
+    filterIcons.insert("digikam:stretchFilter", "autocorrection");
+    filterIcons.insert("digikam:TextureFilter", "texture");
+    filterIcons.insert("digikam:TonalityFilter", "tonemap");
+    filterIcons.insert("digikam:whiteBalance", "whitebalance");
 }
 
 class DImgFilterManagerCreator
@@ -96,6 +130,7 @@ DImgFilterManager::DImgFilterManager()
                  : d(new DImgFilterManagerPriv)
 {
     d->setupBuiltinGenerators();
+    d->setupFilterIcons();
     foreach (DImgFilterGenerator* gen, d->builtinGenerators)
         addGenerator(gen);
 }
@@ -151,6 +186,11 @@ QString DImgFilterManager::displayableName(const QString& filterIdentifier)
         return gen->displayableName(filterIdentifier);
 
     return QString();
+}
+
+QString DImgFilterManager::getFilterIcon(const QString& filterIdentifier)
+{
+    return d->filterIcons.value(filterIdentifier, "unknownapp");
 }
 
 bool DImgFilterManager::isSupported(const QString& filterIdentifier)
