@@ -29,8 +29,8 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QTreeWidgetItem>
+#include <QListWidget>
+#include <QListWidgetItem>
 
 // Local includes
 
@@ -38,9 +38,8 @@
 
 namespace Digikam
 {
-  
+
 class DImgThreadedFilter;
-class PreviewThreadWrapperPriv;
 
 class DIGIKAM_EXPORT PreviewThreadWrapper : public QObject
 {
@@ -50,9 +49,9 @@ public:
 
     PreviewThreadWrapper(QObject* parent=0);
     ~PreviewThreadWrapper();
-    
+
     void registerFilter(int id, DImgThreadedFilter* filter);
-    
+
     void startFilters();
     void stopFilters();
 
@@ -60,7 +59,7 @@ Q_SIGNALS:
 
     void signalFilterStarted(int);
     void signalFilterFinished(int, const QPixmap&);
-    
+
 private Q_SLOTS:
 
     void slotFilterStarted();
@@ -69,39 +68,37 @@ private Q_SLOTS:
 
 private:
 
-    PreviewThreadWrapperPriv* const d;  
-};  
+    class PreviewThreadWrapperPriv;
+    PreviewThreadWrapperPriv* const d;
+};
 
 // -------------------------------------------------------------------
 
-class PreviewListItemPriv;
-
-class DIGIKAM_EXPORT PreviewListItem : public QTreeWidgetItem
+class DIGIKAM_EXPORT PreviewListItem : public QListWidgetItem
 {
 
 public:
 
-    PreviewListItem(QTreeWidget* parent=0);
+    PreviewListItem(QListWidget* parent=0);
     ~PreviewListItem();
 
     void setPixmap(const QPixmap& pix);
 
     void setId(int id);
-    int  id();
+    int  id() const;
 
     void setBusy(bool b);
-    bool isBusy();
+    bool isBusy() const;
 
 private:
 
+    class PreviewListItemPriv;
     PreviewListItemPriv* const d;
 };
 
 // -------------------------------------------------------------------
 
-class PreviewListPriv;
-
-class DIGIKAM_EXPORT PreviewList : public QTreeWidget
+class DIGIKAM_EXPORT PreviewList : public QListWidget
 {
     Q_OBJECT
 
@@ -113,7 +110,7 @@ public:
     PreviewListItem* addItem(DImgThreadedFilter* filter, const QString& txt, int id);
 
     void setCurrentId(int id);
-    int currentId();
+    int currentId() const;
 
     void startFilters();
     void stopFilters();
@@ -126,10 +123,11 @@ private Q_SLOTS:
 
 private:
 
-    PreviewListItem* findItem(int id);
+    PreviewListItem* findItem(int id) const;
 
 private:
 
+    class PreviewListPriv;
     PreviewListPriv* const d;
 };
 

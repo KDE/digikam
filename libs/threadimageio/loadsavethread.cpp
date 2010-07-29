@@ -64,19 +64,8 @@ LoadSaveThread::LoadSaveThread()
 
 LoadSaveThread::~LoadSaveThread()
 {
-    shutdownThread();
-
-    if (d->lastTask)
-        delete d->lastTask;
-    foreach (LoadSaveTask *task, m_todo)
-        delete task;
-    delete d;
-}
-
-void LoadSaveThread::shutdownThread()
-{
-    stop();
     wait();
+    delete d;
 }
 
 void LoadSaveThread::load(LoadingDescription description)

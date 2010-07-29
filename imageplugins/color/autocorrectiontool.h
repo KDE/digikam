@@ -38,7 +38,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class AutoCorrectionToolPriv;
 
 class AutoCorrectionTool : public EditorToolThreaded
 {
@@ -79,6 +78,7 @@ private:
 
 private:
 
+    class AutoCorrectionToolPriv;
     AutoCorrectionToolPriv* const d;
 };
 

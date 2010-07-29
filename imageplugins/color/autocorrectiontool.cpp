@@ -53,7 +53,7 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class AutoCorrectionToolPriv
+class AutoCorrectionTool::AutoCorrectionToolPriv
 {
 public:
 
@@ -103,7 +103,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     ImageIface iface(0, 0);
     DImg thumbImage       = iface.getOriginalImg()->smoothScale(128, 128, Qt::KeepAspectRatio);
-    PreviewListItem *item = 0;
+    PreviewListItem* item = 0;
     d->gboxSettings       = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
@@ -117,7 +117,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Auto Levels"), AutoLevelsCorrection);
-    item->setWhatsThis(0, i18n("<b>Auto Levels</b>:"
+    item->setWhatsThis(i18n("<b>Auto Levels</b>:"
                                "<p>This option maximizes the tonal range in the Red, "
                                "Green, and Blue channels. It searches the image shadow and highlight "
                                "limit values and adjusts the Red, Green, and Blue channels "
@@ -125,7 +125,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     item = d->correctionTools->addItem(new NormalizeFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Normalize"), NormalizeCorrection);
-    item->setWhatsThis(0, i18n("<b>Normalize</b>:"
+    item->setWhatsThis(i18n("<b>Normalize</b>:"
                                "<p>This option scales brightness values across the active "
                                "image so that the darkest point becomes black, and the "
                                "brightest point becomes as bright as possible without "
@@ -135,7 +135,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     item = d->correctionTools->addItem(new EqualizeFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Equalize"), EqualizeCorrection);
-    item->setWhatsThis(0, i18n("<b>Equalize</b>:"
+    item->setWhatsThis(i18n("<b>Equalize</b>:"
                                "<p>This option adjusts the brightness of colors across the "
                                "active image so that the histogram for the value channel "
                                "is as nearly as possible flat, that is, so that each possible "
@@ -147,7 +147,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     item = d->correctionTools->addItem(new StretchFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Stretch Contrast"), StretchContrastCorrection);
-    item->setWhatsThis(0, i18n("<b>Stretch Contrast</b>:"
+    item->setWhatsThis(i18n("<b>Stretch Contrast</b>:"
                                "<p>This option enhances the contrast and brightness "
                                "of the RGB values of an image by stretching the lowest "
                                "and highest values to their fullest range, adjusting "
@@ -155,7 +155,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     item = d->correctionTools->addItem(new AutoExpoFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Auto Exposure"), AutoExposureCorrection);
-    item->setWhatsThis(0, i18n("<b>Auto Exposure</b>:"
+    item->setWhatsThis(i18n("<b>Auto Exposure</b>:"
                                "<p>This option enhances the contrast and brightness "
                                "of the RGB values of an image to calculate optimal "
                                "exposition and black level using image histogram "

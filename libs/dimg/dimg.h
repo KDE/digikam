@@ -381,12 +381,12 @@ public:
     /** QImage wrapper methods
      */
     QImage     copyQImage();
-    QImage     copyQImage(QRect rect);
+    QImage     copyQImage(const QRect& rect);
     QImage     copyQImage(int x, int y, int w, int h);
 
     /** Crop image to the specified region
      */
-    void       crop(QRect rect);
+    void       crop(const QRect& rect);
     void       crop(int x, int y, int w, int h);
 
     /** Set width and height of this image, smoothScale it to the given size
