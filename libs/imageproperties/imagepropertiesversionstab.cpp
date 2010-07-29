@@ -73,12 +73,12 @@ public:
     ImagePropertiesVersionsDelegate* delegate;
 };
 
-ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
+ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent, ImageVersionsModel* model)
                            : QWidget(parent), d(new ImagePropertiesVersionsTabPriv)
 {
     d->view           = new QListView(this);
     d->layout         = new QGridLayout(this);
-    d->model          = new ImageVersionsModel(0);
+    d->model          = model;
     d->delegate       = new ImagePropertiesVersionsDelegate(0);
     d->headerText     = new QLabel(this);
     d->headerTextIcon = new QLabel(this);
@@ -105,7 +105,6 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
 
 ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
 {
-    delete d->model;
     delete d->delegate;
 }
 
@@ -120,13 +119,14 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
     Q_UNUSED(hasNext)
     Q_UNUSED(allImages)
 
-    QPixmap thumbnail;
     QString path;
     QList<QVariant>* list = new QList<QVariant>;
 
+    kDebug() << "Getting data for versions model";
+
     foreach(ImageInfo inf, selectedImage)
     {
-        //kDebug() << inf.imageHistory().originalFilePath();
+        kDebug() << inf.imageHistory().originalFileName();
         if(!inf.imageHistory().originalFileName().isEmpty())
         {
             path = inf.imageHistory().originalFilePath();
@@ -134,8 +134,8 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
             path.append(inf.imageHistory().originalFileName());
             kDebug() << "Original file path: " << path;
             list->append(path);
-            list->append(inf.filePath());
         }
+        list->append(inf.filePath());
     }
 
     d->model->setupModelData(list);

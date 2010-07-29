@@ -40,6 +40,7 @@
 namespace Digikam 
 {
 
+class ImageVersionsModel;
 class DImageHistory;
 class ImageInfoList;
 
@@ -49,7 +50,7 @@ class DIGIKAM_EXPORT ImagePropertiesVersionsTab : public QWidget
 
 public:
 
-    ImagePropertiesVersionsTab(QWidget* parent);
+    ImagePropertiesVersionsTab(QWidget* parent, ImageVersionsModel* model);
     ~ImagePropertiesVersionsTab();
 
 //    void setCurrentURL(const KUrl& url = KUrl());

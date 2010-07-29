@@ -32,6 +32,7 @@
 #include "abstractalbummodel.h"
 #include "albumfiltermodel.h"
 #include "albummodel.h"
+#include "imageversionsmodel.h"
 
 namespace Digikam
 {
@@ -56,6 +57,7 @@ public:
     TagModel *getTagFilterModel() const;
     SearchModel *getSearchModel() const;
     DateAlbumModel *getDateAlbumModel() const;
+    ImageVersionsModel *getImageVersionsModel() const;
 
 private Q_SLOTS:
 

@@ -248,7 +248,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
     d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("tag-assigned"), i18n("Tag Filters"));
     
-    d->versionsTabWidget = new ImagePropertiesVersionsTab(d->rightSideBar);
+    d->versionsTabWidget = new ImagePropertiesVersionsTab(d->rightSideBar, d->modelCollection->getImageVersionsModel());
     d->rightSideBar->appendTab(d->versionsTabWidget, SmallIcon("view-catalog"), i18n("Image versions"));
 
     d->selectionTimer = new QTimer(this);

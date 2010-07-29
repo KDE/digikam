@@ -39,11 +39,12 @@ class DigikamModelCollectionPriv
 
 public:
 
-    AlbumModel     *albumModel;
-    TagModel       *tagModel;
-    TagModel       *tagFilterModel;
-    SearchModel    *searchModel;
-    DateAlbumModel *dateAlbumModel;
+    AlbumModel         *albumModel;
+    TagModel           *tagModel;
+    TagModel           *tagFilterModel;
+    SearchModel        *searchModel;
+    DateAlbumModel     *dateAlbumModel;
+    ImageVersionsModel *imageVersionModel;
 };
 
 DigikamModelCollection::DigikamModelCollection() :
@@ -59,6 +60,9 @@ DigikamModelCollection::DigikamModelCollection() :
     d->searchModel = new SearchModel();
 
     d->dateAlbumModel = new DateAlbumModel();
+
+    d->imageVersionModel = new ImageVersionsModel();
+    
     // set icons initially
     albumSettingsChanged();
 
@@ -74,6 +78,7 @@ DigikamModelCollection::~DigikamModelCollection()
     delete d->albumModel;
     delete d->searchModel;
     delete d->dateAlbumModel;
+    delete d->imageVersionModel;
 
     delete d;
 }
@@ -114,5 +119,11 @@ void DigikamModelCollection::albumSettingsChanged()
                                     "view-calendar-month",
                                     AlbumSettings::instance()->getTreeViewIconSize()));
 }
+
+ImageVersionsModel* DigikamModelCollection::getImageVersionsModel() const
+{
+    return d->imageVersionModel;
+}
+
 
 }
