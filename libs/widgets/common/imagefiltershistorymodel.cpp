@@ -210,6 +210,11 @@ int ImageFiltersHistoryModel::rowCount(const QModelIndex& parent) const
 void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>& entries, 
                                               ImageFiltersHistoryTreeItem* parent)
 {
+    if(!parent)
+    {
+        parent = d->rootItem;
+    }
+
     kDebug() << "Initializing model data, got" << entries.count() << "entries";
     beginResetModel();
     QList<ImageFiltersHistoryTreeItem*> parents;
@@ -239,6 +244,8 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
                 columnData << iter.key() << iter.value();
                 filters.last()->appendChild(new ImageFiltersHistoryTreeItem(columnData, filters.last()));
             }
+
+            itemData.clear();
         }
         else
         {
