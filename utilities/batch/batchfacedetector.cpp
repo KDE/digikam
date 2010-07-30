@@ -181,8 +181,9 @@ void BatchFaceDetector::slotDetectFaces()
         }
     }
 
-     setMaximum(d->allPicturesPath.count());
-
+     setMaximum(pathList.count());
+     setValue(pathList.count() - d->allPicturesPath.count());
+     
     if (d->allPicturesPath.isEmpty())
     {
         slotCancel();
