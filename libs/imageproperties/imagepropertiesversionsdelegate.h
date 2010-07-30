@@ -37,10 +37,10 @@ namespace Digikam
 
 class WorkingWidget;
 
-
 class DIGIKAM_EXPORT ImagePropertiesVersionsDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
+
 public:
 
     ImagePropertiesVersionsDelegate(QObject* parent = 0);
@@ -48,15 +48,18 @@ public:
 
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    WorkingWidget* getWidget();
+    WorkingWidget* getWidget() const;
 
 public Q_SLOTS:
+
     void slotAnimationStep();
 
 Q_SIGNALS:
+
     void throbberUpdated();
 
 private:
+
     WorkingWidget* m_workingWidget;
 };
 

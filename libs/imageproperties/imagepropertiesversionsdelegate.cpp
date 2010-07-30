@@ -20,6 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #include "imagepropertiesversionsdelegate.moc"
 
 // Qt includes
@@ -100,9 +101,10 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
         //when the thumbnail is not loaded yet, start the animation
         connect(m_workingWidget, SIGNAL(animationStep()),
                 dynamic_cast<const ImageVersionsModel*>(index.model()), SLOT(slotAnimationStep()));
+
         thumbnail = QPixmap::grabWidget(m_workingWidget);
     }
-    
+
     painter->drawPixmap(thumbRect.left()+(32-(int)(thumbnail.width()/2)), thumbRect.top()+(24-(int)(thumbnail.height()/2)), thumbnail);
 
     QRect textRect = option.rect;
@@ -124,7 +126,7 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     painter->restore();
 }
 
-WorkingWidget* ImagePropertiesVersionsDelegate::getWidget()
+WorkingWidget* ImagePropertiesVersionsDelegate::getWidget() const
 {
     return m_workingWidget;
 }
