@@ -63,6 +63,17 @@
 #include "knotificationwrapper.h"
 #include "config-digikam.h"
 
+#include "tagproperties.h"
+#include "tagscache.h"
+#include "imagetagpair.h"
+/*
+#include <libs/database/tagproperties.h>
+#include <libs/database/imagetagpair.h>
+#include <libs/dimg/dimg.h>
+#include <libs/threadimageio/loadingdescription.h>
+#include <libs/database/imageinfo.h>*/
+// #include <libs/database/imagetagpair.h>
+
 namespace Digikam
 {
 
@@ -77,6 +88,11 @@ public:
         previewLoadThread   = 0;
         thumbnailLoadThread = 0;
         faceIface           = new KFaceIface::Database(KFaceIface::Database::InitDetection);
+        
+        tagsCache = TagsCache::instance();
+        unknownTagId = tagsCache->createTag("/People/Unknown");
+        kDebug()<<"Created tag "<<tagsCache->tagName(unknownTagId)<<" with Id = "<<unknownTagId;
+        
         duration.start();
     }
 
@@ -94,6 +110,8 @@ public:
     PreviewLoadThread*    previewLoadThread;
     ThumbnailLoadThread*  thumbnailLoadThread;
     KFaceIface::Database* faceIface;
+    int                   unknownTagId;
+    TagsCache*            tagsCache;
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
@@ -101,7 +119,8 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
 {
     d->rebuildAll          = rebuildAll;
     d->previewLoadThread   = new PreviewLoadThread();
-    d->thumbnailLoadThread = ThumbnailLoadThread::defaultIconViewThread();
+    d->thumbnailLoadThread = ThumbnailLoadThread::defaultThread();
+    d->thumbnailLoadThread->setThumbnailSize(256, true);
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
             this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
@@ -115,7 +134,9 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
     setLabel(i18n("<b>Updating faces database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
 
+    
     QTimer::singleShot(500, this, SLOT(slotDetectFaces()));
+    
 }
 
 BatchFaceDetector::~BatchFaceDetector()
@@ -203,8 +224,19 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
         while(it.hasNext())
         {
             KFaceIface::Face face = it.next();
-            kDebug() << face;
-            d->thumbnailLoadThread->storeDetailThumbnail(desc.filePath, face.toRect(), face.getImage());
+            QRect faceRect = face.toRect();
+            kDebug() << faceRect;
+            d->thumbnailLoadThread->storeDetailThumbnail(desc.filePath, faceRect, face.getImage(), true);
+            
+            // Assign the "/People/Unknown" id to all detected faces. For now. Later, this will change when we attempt recognition.
+            ImageInfo info(desc.filePath);
+            ImageTagPair pair(info.id(), d->unknownTagId);
+            pair.addProperty("unknownFace", QString("<rect x=\"")+QString(faceRect.x())+
+                                            QString("\" y=\"")+QString(faceRect.y())+
+                                            QString("\" width=\"")+QString(faceRect.width())+
+                                            QString("\" height=\"")+QString(faceRect.height())+ QString("\" />")
+                            );
+            pair.assignTag();
         }
     }
 

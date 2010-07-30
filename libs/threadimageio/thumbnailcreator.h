@@ -187,7 +187,7 @@ public:
      */
     void store(const QString& path, const QImage& image) const;
 
-    void storeDetailThumbnail(const QString& path, const QRect& detailRect, const QImage& image) const;
+    void storeDetailThumbnail(const QString& path, const QRect& detailRect, const QImage& image, bool isFace = false) const;
 
     /**
      * Returns the last error that occurred.
@@ -209,7 +209,7 @@ private:
     void initialize();
 
     QImage load(const QString& path, const QRect& rect, bool pregenerate) const;
-    ThumbnailImage createThumbnail(const ThumbnailInfo& info, const QRect& detailRect = QRect()) const;
+    ThumbnailImage createThumbnail(const Digikam::ThumbnailInfo& info, const QRect& detailRect = QRect(), bool isFace = false) const;
     QImage loadWithDImg(const QString& path, IccProfile* profile) const;
     QImage loadDetail(const QString& path, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const;
     QImage loadImagePreview(const DMetadata& metadata) const;
@@ -218,11 +218,11 @@ private:
     QImage exifRotate(const QImage& thumb, int orientation) const;
     QImage loadPNG(const QString& path) const;
 
-    void store(const QString& path, const QImage& i, const QRect& rect) const;
+    void store(const QString& path, const QImage& i, const QRect& rect, bool isFace = false) const;
 
     ThumbnailInfo makeThumbnailInfo(const QString& path, const QRect& rect) const;
     QString identifierForDetail(const QString& path, const QRect& rect) const;
-    QImage scaleForStorage(const QImage& qimage) const;
+    QImage scaleForStorage(const QImage& qimage, bool isFace) const;
 
     void storeInDatabase(const ThumbnailInfo& info, const ThumbnailImage& image) const;
     DatabaseThumbnailInfo loadDatabaseThumbnailInfo(const ThumbnailInfo& info) const;

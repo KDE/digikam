@@ -153,7 +153,7 @@ public:
      * Set the requested thumbnail size.
      * Default value: 128
      */
-    void setThumbnailSize(int size);
+    void setThumbnailSize(int size, bool forFace = false);
 
     /**
      * Returns the maximum possible size of a thumbnail.
@@ -218,7 +218,7 @@ public:
      * is potentially slower.
      * The image should at least have storedSize().
      */
-    void storeDetailThumbnail(const QString& filePath, const QRect& detailRect, const QImage& image);
+    void storeDetailThumbnail(const QString& filePath, const QRect& detailRect, const QImage& image, bool isFace = false);
     int storedSize() const;
 
     /**

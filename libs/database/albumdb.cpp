@@ -688,6 +688,28 @@ QList<TagProperty> AlbumDB::getTagProperties(int tagId)
     return properties;
 }
 
+QList< int > AlbumDB::getTagsWithProperty(const QString& property)
+{
+    QList<QVariant> values;
+
+    d->db->execSql( "SELECT tagid, value FROM TagProperties WHERE property=?;",
+                    property, &values );
+
+    QList<int> tagIds;
+
+    if (values.isEmpty())
+        return tagIds;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        int id;
+        id = (*it).toInt();
+        tagIds << id;
+    }
+    return tagIds;
+}
+
+
 void AlbumDB::addTagProperty(int tagId, const QString& property, const QString& value)
 {
     d->db->execSql("INSERT INTO TagProperties (tagid, property, value) VALUES(?, ?, ?);",

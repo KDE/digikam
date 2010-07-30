@@ -448,6 +448,13 @@ public:
      * removes all properties for the given tag.
      */
     void removeTagProperties(int tagId, const QString& property = QString(), const QString& value = QString());
+    
+    /**
+     * Returns a list of tag ids with the specified property.
+     * FIXME: Not tested, might not work at all.
+     */
+    QList<int> getTagsWithProperty(const QString& property);
+    
 
     // ----------- Operations on SAlbums -----------
 

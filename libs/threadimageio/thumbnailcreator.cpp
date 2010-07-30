@@ -270,9 +270,10 @@ QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool prege
     return image.qimage;
 }
 
-QImage ThumbnailCreator::scaleForStorage(const QImage& qimage) const
+QImage ThumbnailCreator::scaleForStorage(const QImage& qimage, bool isFace) const
 {
-    if (qimage.width() > d->cachedSize || qimage.height() > d->cachedSize)
+    // If it is a face, it is likely to be smaller than the cached size. In that case, just go ahead and scale it.
+    if (qimage.width() > d->cachedSize || qimage.height() > d->cachedSize || isFace)
     {
         /*
         Cheat scaling is disabled because of quality problems - see bug #224999
@@ -280,7 +281,10 @@ QImage ThumbnailCreator::scaleForStorage(const QImage& qimage) const
         int cheatSize = maxSize - (3*(maxSize - d->cachedSize) / 4);
         qimage        = qimage.scaled(cheatSize, cheatSize, Qt::KeepAspectRatio, Qt::FastTransformation);
         */
-        return qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        kDebug()<<"cachedSize : "<<d->cachedSize;
+        QImage scaledThumb = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+        return scaledThumb;
     }
     return qimage;
 }
@@ -315,22 +319,24 @@ void ThumbnailCreator::store(const QString& path, const QImage& i) const
     store(path, i, QRect());
 }
 
-void ThumbnailCreator::storeDetailThumbnail(const QString& path, const QRect& detailRect, const QImage& i) const
+void ThumbnailCreator::storeDetailThumbnail(const QString& path, const QRect& detailRect, const QImage& i, bool isFace) const
 {
-    store(path, i, detailRect);
+    store(path, i, detailRect, isFace);
 }
 
-void ThumbnailCreator::store(const QString& path, const QImage& i, const QRect& rect) const
+void ThumbnailCreator::store(const QString& path, const QImage& i, const QRect& rect, bool isFace) const
 {
     if (i.isNull())
         return;
 
-    QImage qimage = scaleForStorage(i);
-
+    // FIXME: qimage is kept a null image after this.
+    QImage qimage = scaleForStorage(i, isFace);
+    
     ThumbnailInfo info = makeThumbnailInfo(path, rect);
-
+    
     ThumbnailImage image;
     image.qimage = qimage;
+
     switch (d->thumbnailStorage)
     {
         case ThumbnailDatabase:
@@ -366,7 +372,7 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath) const
 // --------------- Thumbnail generation and image handling -----------------------
 
 
-ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, const QRect& detailRect) const
+ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, const QRect& detailRect, bool isFace) const
 {
     QString path = info.filePath;
     if (!info.isAccessible)
@@ -474,7 +480,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         return ThumbnailImage();
     }
 
-    qimage = scaleForStorage(qimage);
+    qimage = scaleForStorage(qimage, isFace);
 
     if (colorManage && !profile.isNull())
     {

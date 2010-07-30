@@ -212,9 +212,11 @@ void ThumbnailLoadThread::setDisplayingWidget(QWidget *widget)
     static_d->displayingWidget = widget;
 }
 
-void ThumbnailLoadThread::setThumbnailSize(int size)
+void ThumbnailLoadThread::setThumbnailSize(int size, bool forFace)
 {
     d->size = size;
+    if(forFace)
+        d->creator->setThumbnailSize(size);
 }
 
 int ThumbnailLoadThread::maximumThumbnailSize()
@@ -760,9 +762,9 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
     return pix;
 }
 
-void ThumbnailLoadThread::storeDetailThumbnail(const QString& filePath, const QRect& detailRect, const QImage& image)
+void ThumbnailLoadThread::storeDetailThumbnail(const QString& filePath, const QRect& detailRect, const QImage& image, bool isFace)
 {
-    d->creator->storeDetailThumbnail(filePath, detailRect, image);
+    d->creator->storeDetailThumbnail(filePath, detailRect, image, isFace);
 }
 
 int ThumbnailLoadThread::storedSize() const
