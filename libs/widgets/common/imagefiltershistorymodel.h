@@ -74,9 +74,8 @@ private:
 
 private:
 
-    ImageFiltersHistoryTreeItem *m_rootItem;
-    QList<FilterAction>         *m_filterStack;
-    DImgFilterManager           *m_filterManager;
+    class ImageFiltersHistoryModelPriv;
+    ImageFiltersHistoryModelPriv* const d;
 };
 
 } //namespace Digikam

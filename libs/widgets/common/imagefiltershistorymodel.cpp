@@ -40,36 +40,53 @@
 namespace Digikam
 {
 
-ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& url)
-                        : QAbstractItemModel(parent)
+class ImageFiltersHistoryModel::ImageFiltersHistoryModelPriv
 {
-    m_filterStack = new QList<FilterAction>();
-//    m_filterManager = new DImgFilterManager();
+public:
+
+    ImageFiltersHistoryModelPriv()
+    {
+        rootItem      = 0;
+        filterStack   = 0;
+        filterManager = 0;
+    }
+
+    ImageFiltersHistoryTreeItem* rootItem;
+    QList<FilterAction>*         filterStack;
+    DImgFilterManager*           filterManager;
+};
+
+ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& url)
+                        : QAbstractItemModel(parent), d(new ImageFiltersHistoryModelPriv)
+{
+    d->filterStack = new QList<FilterAction>();
+//    d->filterManager = new DImgFilterManager();
 
     if(!url.isEmpty())
     {
         kDebug() << "Creating model with url" << url.toLocalFile();
         QList<QVariant> rootData;
         rootData << url.fileName();
-        m_rootItem = new ImageFiltersHistoryTreeItem(rootData);
+        d->rootItem = new ImageFiltersHistoryTreeItem(rootData);
 
         DMetadata metadata(url.toLocalFile());
         QString xml     = metadata.getImageHistory();
         DImageHistory h = DImageHistory::fromXml(xml);
-        setupModelData(h.entries(), m_rootItem);
+        setupModelData(h.entries(), d->rootItem);
     }
     else
     {
         //kDebug() << "Creating empty model";
         QList<QVariant> rootData;
         rootData << "Generic";
-        m_rootItem = new ImageFiltersHistoryTreeItem(rootData);
+        d->rootItem = new ImageFiltersHistoryTreeItem(rootData);
     }
 }
 
 ImageFiltersHistoryModel::~ImageFiltersHistoryModel()
 {
-    delete m_rootItem;
+    delete d->rootItem;
+    delete d;
 }
 
 void ImageFiltersHistoryModel::setUrl(const KUrl& url)
@@ -77,37 +94,39 @@ void ImageFiltersHistoryModel::setUrl(const KUrl& url)
     if(!url.isEmpty())
     {
         //delete the current model data
-        delete m_rootItem;
+        delete d->rootItem;
 
         QList<QVariant> rootData;
         rootData << url.fileName() << "Params";
-        m_rootItem = new ImageFiltersHistoryTreeItem(rootData);
+        d->rootItem = new ImageFiltersHistoryTreeItem(rootData);
         //kDebug() << "Updating model data with url" << rootData.first();
         DMetadata metadata(url.toLocalFile());
-        setupModelData(DImageHistory::fromXml(metadata.getImageHistory()).entries(), m_rootItem);
+        setupModelData(DImageHistory::fromXml(metadata.getImageHistory()).entries(), d->rootItem);
     }
-    /*
+/*
     else
     {
         kDebug() << "Model not updated; url is" << url.pathOrUrl();
     }
-    */
+*/
 }
 
-int ImageFiltersHistoryModel::columnCount(const QModelIndex& parent) const
+int ImageFiltersHistoryModel::columnCount(const QModelIndex& /*parent*/) const
 {
-    return 1;/*
+    return 1;
+/*
     if (parent.isValid())
         return static_cast<ImageFiltersHistoryTreeItem*>(parent.internalPointer())->columnCount();
     else
-        return m_rootItem->columnCount();*/
+        return d->rootItem->columnCount();
+*/
 }
 
 QVariant ImageFiltersHistoryModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
-    
+
     ImageFiltersHistoryTreeItem* item;
 
     if(role == Qt::DecorationRole)
@@ -135,7 +154,7 @@ Qt::ItemFlags ImageFiltersHistoryModel::flags(const QModelIndex& index) const
 QVariant ImageFiltersHistoryModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        return m_rootItem->data(section);
+        return d->rootItem->data(section);
 
     return QVariant();
 }
@@ -148,7 +167,7 @@ QModelIndex ImageFiltersHistoryModel::index(int row, int column, const QModelInd
     ImageFiltersHistoryTreeItem* parentItem;
 
     if (!parent.isValid())
-        parentItem = m_rootItem;
+        parentItem = d->rootItem;
     else
         parentItem = static_cast<ImageFiltersHistoryTreeItem*>(parent.internalPointer());
 
@@ -164,10 +183,10 @@ QModelIndex ImageFiltersHistoryModel::parent(const QModelIndex& index) const
     if (!index.isValid())
         return QModelIndex();
 
-    ImageFiltersHistoryTreeItem *childItem  = static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer());
-    ImageFiltersHistoryTreeItem *parentItem = childItem->parent();
+    ImageFiltersHistoryTreeItem* childItem  = static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer());
+    ImageFiltersHistoryTreeItem* parentItem = childItem->parent();
 
-    if (parentItem == m_rootItem)
+    if (parentItem == d->rootItem)
         return QModelIndex();
 
     return createIndex(parentItem->row(), 0, parentItem);
@@ -180,14 +199,15 @@ int ImageFiltersHistoryModel::rowCount(const QModelIndex& parent) const
         return 0;
 
     if (!parent.isValid())
-        parentItem = m_rootItem;
+        parentItem = d->rootItem;
     else
         parentItem = static_cast<ImageFiltersHistoryTreeItem*>(parent.internalPointer());
 
     return parentItem->childCount();
 }
 
-void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent)
+void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>& entries, 
+                                              ImageFiltersHistoryTreeItem* parent)
 {
     kDebug() << "Initializing model data, got" << entries.count() << "entries";
     beginResetModel();
@@ -196,14 +216,14 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
     parents << parent;
 
     QList<QVariant> itemData;
-    m_filterStack->clear();
+    d->filterStack->clear();
 
     for(int i = 0; i < entries.count(); i++)
     {
         if(entries.at(i).filterEntry)
         {
-            m_filterStack->append(entries.at(i).action);
-            
+            d->filterStack->append(entries.at(i).action);
+
             itemData.append(entries.at(i).action.displayableName());
             itemData.append(entries.at(i).action.identifier());
             kDebug() << "Adding an entry: " << itemData;
@@ -239,8 +259,8 @@ bool ImageFiltersHistoryModel::removeRows(int row, int /*count*/, const QModelIn
     if(!parent.isValid())
     {
         beginResetModel();
-        m_rootItem->removeChild(row);
-        m_filterStack->removeAt(row);
+        d->rootItem->removeChild(row);
+        d->filterStack->removeAt(row);
         endResetModel();
         //TODO: emit signal starting FilterManager
         return true;
