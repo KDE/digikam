@@ -356,4 +356,23 @@ void DImageHistory::setOriginalFilePath(const QString& filePath)
     d->originalPath = filePath;
 }
 
+void DImageHistory::removeLastFilter()
+{
+    if(d->entries.last().filterEntry)
+    {
+        d->entries.removeLast();
+    }
+    else
+    {
+        for(int i = d->entries.size()-1; i >= 0; i--)
+        {
+            if(d->entries.at(i).filterEntry)
+            {
+                d->entries.removeAt(i);
+                break;
+            }
+        }
+    }
+}
+
 } // namespace digikam

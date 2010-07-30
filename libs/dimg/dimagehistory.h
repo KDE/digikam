@@ -91,6 +91,8 @@ public:
     QString toXml() const;
     static DImageHistory fromXml(const QString& xml);
 
+    void removeLastFilter();
+
 public:
 
     // Set as public there because of ImageHistoryPrivSharedNull
