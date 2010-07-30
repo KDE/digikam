@@ -37,7 +37,6 @@
 
 #include "dimagehistory.h"
 #include "digikam_export.h"
-#include "dimgfiltermanager.h"
 
 namespace Digikam
 {
@@ -70,7 +69,7 @@ public Q_SLOTS:
 
 private:
 
-    void setupModelData(const QList<Digikam::DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent);
+    void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent);
 
 private:
 

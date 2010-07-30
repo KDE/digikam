@@ -34,6 +34,7 @@
 
 // Local includes
 
+#include "dimgfiltermanager.h"
 #include "dmetadata.h"
 #include "imagefiltershistorytreeitem.h"
 
