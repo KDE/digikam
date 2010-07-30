@@ -25,8 +25,12 @@
 #ifndef HISTORYIMAGEID_H
 #define HISTORYIMAGEID_H
 
+// Qt includes
+
 #include <QString>
 #include <QDateTime>
+
+// Local includes
 
 #include "digikam_export.h"
 
@@ -45,25 +49,27 @@ public:
     bool isEmpty() const;
     bool isOriginalFile() const;
 
+public:
+
     /**
      * A unique identifier designating the _original image_ from which the referred
      * image was created. Typically, this is a RAW or JPEG created by the camera in
      * the moment of taking the photograph.
      */
-    QString m_originalUUID;
+    QString   m_originalUUID;
 
     /// The creationDate of the original image
     QDateTime m_creationDate;
     /// The filename of the referred file
-    QString m_fileName;
+    QString   m_fileName;
     /// The path of the referred file
-    QString m_filePath;
+    QString   m_filePath;
 
     /**
      * A unique identifier for the referred file. This id shall be changed each time
      * the image is edited.
      */
-    QString m_fileUUID;
+    QString   m_fileUUID;
 };
 
 } // namespace Digikam
