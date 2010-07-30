@@ -90,7 +90,12 @@ public:
         faceIface           = new KFaceIface::Database(KFaceIface::Database::InitDetection);
         
         tagsCache = TagsCache::instance();
+        
+        // Create a tag for People and a subtag for Unknown people
         unknownTagId = tagsCache->createTag("/People/Unknown");
+        // Create a tag for Scanned images, and a subtag for Images that have been scanned for faces.
+        // Other batch jobs can put their respective scan indicator tags as subtags under the "Scanned" tag.
+        // Thus, since we want to hide these tags from the user, we just hide everything below the "Scanned" tag.
         scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
         
         kDebug()<<"Created tag "<<tagsCache->tagName(unknownTagId)<<" with Id = "<<unknownTagId;
