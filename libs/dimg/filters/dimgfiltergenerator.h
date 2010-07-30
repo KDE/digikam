@@ -97,7 +97,7 @@ public:
         }
         return 0;
     }
-    
+
     QString displayableName(const QString& filterIdentifier)
     {
         if (filterIdentifier == T::FilterIdentifier())

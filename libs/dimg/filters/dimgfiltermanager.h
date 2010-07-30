@@ -51,7 +51,7 @@ public:
     bool isSupported(const QString& filterIdentifier);
     bool isSupported(const QString& filterIdentifier, int version);
 
-    DImgThreadedFilter *createFilter(const QString& filterIdentifier, int version);
+    DImgThreadedFilter* createFilter(const QString& filterIdentifier, int version);
 
     /**
      * Registers all filter provided by this generator.
@@ -61,12 +61,13 @@ public:
 
 private:
 
-    friend class DImgFilterManagerCreator;
     DImgFilterManager();
     ~DImgFilterManager();
 
-    DImgFilterManagerPriv* const d;
+private:
 
+    friend class DImgFilterManagerCreator;
+    DImgFilterManagerPriv* const d;
 };
 
 } // namespace Digikam
