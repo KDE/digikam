@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class QueueSettingsViewPriv
+class QueueSettingsView::QueueSettingsViewPriv
 {
 
 public:
@@ -108,7 +108,7 @@ QueueSettingsView::QueueSettingsView(QWidget* parent)
 
     QVBoxLayout* layout    = new QVBoxLayout(panel);
     d->conflictLabel       = new QLabel(i18n("If Target File Exists:"), panel);
-    QWidget *conflictBox   = new QWidget(panel);
+    QWidget* conflictBox   = new QWidget(panel);
     QVBoxLayout* vlay      = new QVBoxLayout(conflictBox);
     d->conflictButtonGroup = new QButtonGroup(conflictBox);
     d->overwriteButton     = new QRadioButton(i18n("Overwrite automatically"), conflictBox);
@@ -134,7 +134,7 @@ QueueSettingsView::QueueSettingsView(QWidget* parent)
     // --------------------------------------------------------
 
     QScrollArea* sv2 = new QScrollArea(this);
-    KVBox *vbox2     = new KVBox(sv2->viewport());
+    KVBox* vbox2     = new KVBox(sv2->viewport());
     sv2->setWidget(vbox2);
     sv2->setWidgetResizable(true);
 

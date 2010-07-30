@@ -36,7 +36,6 @@ namespace Digikam
 {
 
 class BatchTool;
-class ToolsViewPriv;
 
 class ToolsView : public KTabWidget
 {
@@ -66,6 +65,7 @@ private Q_SLOTS:
 
 private:
 
+    class ToolsViewPriv;
     ToolsViewPriv* const d;
 };
 

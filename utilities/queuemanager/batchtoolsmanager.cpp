@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class BatchToolsManagerPriv
+class BatchToolsManager::BatchToolsManagerPriv
 {
 
 public:

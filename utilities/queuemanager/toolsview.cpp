@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class ToolsViewPriv
+class ToolsView::ToolsViewPriv
 {
 
 public:

@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager GUI
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,6 @@ namespace Digikam
 class ActionData;
 class BatchToolsManager;
 class AssignedBatchTools;
-class QueueMgrWindowPriv;
 
 class QueueMgrWindow : public KXmlGuiWindow
 {
@@ -59,7 +58,7 @@ public:
 
     ~QueueMgrWindow();
 
-    static QueueMgrWindow *queueManagerWindow();
+    static QueueMgrWindow* queueManagerWindow();
     static bool            queueManagerWindowCreated();
 
     bool isBusy() const;
@@ -83,8 +82,8 @@ Q_SIGNALS:
 
 protected:
 
-    void moveEvent(QMoveEvent *e);
-    bool event(QEvent *e);
+    void moveEvent(QMoveEvent* e);
+    bool event(QEvent* e);
 
 
 public Q_SLOTS:
@@ -147,6 +146,7 @@ private Q_SLOTS:
 
 private:
 
+    class QueueMgrWindowPriv;
     QueueMgrWindowPriv* const d;
 
     static QueueMgrWindow *m_instance;

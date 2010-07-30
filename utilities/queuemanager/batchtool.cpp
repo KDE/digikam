@@ -46,7 +46,7 @@ namespace Digikam
 
 class BatchToolObserver;
 
-class BatchToolPriv
+class BatchTool::BatchToolPriv
 {
 
 public:
@@ -61,31 +61,31 @@ public:
         observer               = 0;
     }
 
-    bool                       exifResetOrientation;
-    bool                       exifCanEditOrientation;
-    bool                       cancel;
-    bool                       last;
+    bool                      exifResetOrientation;
+    bool                      exifCanEditOrientation;
+    bool                      cancel;
+    bool                      last;
 
-    QString                    toolTitle;          // User friendly tool title.
-    QString                    toolDescription;    // User friendly tool description.
+    QString                   toolTitle;          // User friendly tool title.
+    QString                   toolDescription;    // User friendly tool description.
 
-    QWidget*                   settingsWidget;
+    QWidget*                  settingsWidget;
 
-    KIcon                      toolIcon;
+    KIcon                     toolIcon;
 
-    KUrl                       inputUrl;
-    KUrl                       outputUrl;
-    KUrl                       workingUrl;
+    KUrl                      inputUrl;
+    KUrl                      outputUrl;
+    KUrl                      workingUrl;
 
-    DImg                       image;
+    DImg                      image;
 
-    DRawDecoding               rawDecodingSettings;
+    DRawDecoding              rawDecodingSettings;
 
-    BatchToolSettings          settings;
+    BatchToolSettings         settings;
 
-    BatchToolObserver*         observer;
+    BatchToolObserver*        observer;
 
-    BatchTool::BatchToolGroup  toolGroup;
+    BatchTool::BatchToolGroup toolGroup;
 };
 
 class BatchToolObserver : public DImgLoaderObserver
@@ -93,7 +93,7 @@ class BatchToolObserver : public DImgLoaderObserver
 
 public:
 
-    BatchToolObserver(BatchToolPriv* priv)
+    BatchToolObserver(BatchTool::BatchToolPriv* priv)
         : DImgLoaderObserver(), d(priv)
     {
     }
@@ -107,7 +107,7 @@ public:
         return !d->cancel;
     }
 
-    BatchToolPriv* const d;
+    BatchTool::BatchToolPriv* const d;
 };
 
 BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* parent)

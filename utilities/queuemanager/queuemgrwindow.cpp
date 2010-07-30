@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager GUI
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -194,12 +194,12 @@ void QueueMgrWindow::closeEvent(QCloseEvent* e)
 void QueueMgrWindow::setupUserArea()
 {
     QWidget* mainW          = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout(mainW);
+    QVBoxLayout* mainLayout = new QVBoxLayout(mainW);
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *queuesBox = new QGroupBox(i18n("Queues"), mainW);
-    QVBoxLayout *vlay1   = new QVBoxLayout(queuesBox);
+    QGroupBox* queuesBox = new QGroupBox(i18n("Queues"), mainW);
+    QVBoxLayout* vlay1   = new QVBoxLayout(queuesBox);
     d->queuePool         = new QueuePool(queuesBox);
     vlay1->addWidget(d->queuePool);
     vlay1->setSpacing(0);
@@ -207,8 +207,8 @@ void QueueMgrWindow::setupUserArea()
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *queueSettingsBox = new QGroupBox(i18n("Queue Settings"), mainW);
-    QVBoxLayout *vlay2          = new QVBoxLayout(queueSettingsBox);
+    QGroupBox* queueSettingsBox = new QGroupBox(i18n("Queue Settings"), mainW);
+    QVBoxLayout* vlay2          = new QVBoxLayout(queueSettingsBox);
     d->queueSettingsView        = new QueueSettingsView(queueSettingsBox);
     vlay2->addWidget(d->queueSettingsView);
     vlay2->setSpacing(0);
@@ -216,8 +216,8 @@ void QueueMgrWindow::setupUserArea()
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *toolsBox = new QGroupBox(i18n("Batch Tools Available / History"), mainW);
-    QVBoxLayout *vlay3  = new QVBoxLayout(toolsBox);
+    QGroupBox* toolsBox = new QGroupBox(i18n("Batch Tools Available / History"), mainW);
+    QVBoxLayout* vlay3  = new QVBoxLayout(toolsBox);
     d->toolsView        = new ToolsView(toolsBox);
     vlay3->addWidget(d->toolsView);
     vlay3->setSpacing(0);
@@ -225,8 +225,8 @@ void QueueMgrWindow::setupUserArea()
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *assignBox = new QGroupBox(i18n("Assigned Tools"), mainW);
-    QVBoxLayout *vlay4   = new QVBoxLayout(assignBox);
+    QGroupBox* assignBox = new QGroupBox(i18n("Assigned Tools"), mainW);
+    QVBoxLayout* vlay4   = new QVBoxLayout(assignBox);
     d->assignedList      = new AssignedListView(assignBox);
     vlay4->addWidget(d->assignedList);
     vlay4->setSpacing(0);
@@ -234,8 +234,8 @@ void QueueMgrWindow::setupUserArea()
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *toolSettingsBox = new QGroupBox(i18n("Tool Settings"), mainW);
-    QVBoxLayout *vlay5         = new QVBoxLayout(toolSettingsBox);
+    QGroupBox* toolSettingsBox = new QGroupBox(i18n("Tool Settings"), mainW);
+    QVBoxLayout* vlay5         = new QVBoxLayout(toolSettingsBox);
     d->toolSettings            = new ToolSettingsView(toolSettingsBox);
     vlay5->addWidget(d->toolSettings);
     vlay5->setSpacing(0);
@@ -515,7 +515,7 @@ void QueueMgrWindow::applySettings()
     // Do not apply general settings from config panel if BQM is busy.
     if (d->busy) return;
 
-    AlbumSettings *settings   = AlbumSettings::instance();
+    AlbumSettings* settings   = AlbumSettings::instance();
     KSharedConfig::Ptr config = KGlobal::config();
 
     d->thread->setResetExifOrientationAllowed(settings->getExifSetOrientation());
@@ -531,9 +531,9 @@ void QueueMgrWindow::applySettings()
 
     DRawDecoding         rawDecodingSettings;
     ICCSettingsContainer ICCSettings = IccSettings::instance()->settings();
-    
+
     rawDecodingSettings.readSettings(group);
-    
+
     if (ICCSettings.enableCM)
     {
         if (ICCSettings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
@@ -633,8 +633,8 @@ void QueueMgrWindow::slotToggleFullScreen()
 
         if (d->removeFullScreenButton)
         {
-            QList<KToolBar *> toolbars = toolBars();
-            foreach(KToolBar *toolbar, toolbars)
+            QList<KToolBar*> toolbars = toolBars();
+            foreach(KToolBar* toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -661,9 +661,9 @@ void QueueMgrWindow::slotToggleFullScreen()
         {
             showToolBars();
 
-            QList<KToolBar *> toolbars = toolBars();
-            KToolBar *mainToolbar = 0;
-            foreach(KToolBar *toolbar, toolbars)
+            QList<KToolBar*> toolbars = toolBars();
+            KToolBar* mainToolbar = 0;
+            foreach(KToolBar* toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -699,8 +699,8 @@ void QueueMgrWindow::slotEscapePressed()
 
 void QueueMgrWindow::showToolBars()
 {
-    QList<KToolBar *> toolbars = toolBars();
-    foreach(KToolBar *toolbar, toolbars)
+    QList<KToolBar*> toolbars = toolBars();
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -708,8 +708,8 @@ void QueueMgrWindow::showToolBars()
 
 void QueueMgrWindow::hideToolBars()
 {
-    QList<KToolBar *> toolbars = toolBars();
-    foreach(KToolBar *toolbar, toolbars)
+    QList<KToolBar*> toolbars = toolBars();
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->hide();
     }
@@ -831,7 +831,7 @@ void QueueMgrWindow::slotItemSelectionChanged()
 void QueueMgrWindow::populateToolsList()
 {
     BatchToolsList list = d->batchToolsMgr->toolsList();
-    foreach(BatchTool *tool, list)
+    foreach(BatchTool* tool, list)
     {
         d->toolsView->addTool(tool);
     }
@@ -1242,13 +1242,13 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
     return true;
 }
 
-void QueueMgrWindow::moveEvent(QMoveEvent *e)
+void QueueMgrWindow::moveEvent(QMoveEvent* e)
 {
     Q_UNUSED(e)
     emit signalWindowHasMoved();
 }
 
-bool QueueMgrWindow::event(QEvent *e)
+bool QueueMgrWindow::event(QEvent* e)
 {
     switch (e->type())
     {

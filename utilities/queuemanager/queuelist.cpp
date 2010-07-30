@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager items list.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,8 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-#define ICONSIZE 64
 
 #include "queuelist.moc"
 
@@ -58,7 +56,7 @@
 namespace Digikam
 {
 
-class QueueListViewItemPriv
+class QueueListViewItem::QueueListViewItemPriv
 {
 
 public:
@@ -77,7 +75,7 @@ public:
     ImageInfo info;
 };
 
-QueueListViewItem::QueueListViewItem(QTreeWidget *view, const ImageInfo& info)
+QueueListViewItem::QueueListViewItem(QTreeWidget* view, const ImageInfo& info)
                  : QTreeWidgetItem(view), d(new QueueListViewItemPriv)
 {
     setThumb(SmallIcon("image-x-generic", KIconLoader::SizeLarge, KIconLoader::DisabledState));
@@ -100,14 +98,28 @@ ImageInfo QueueListViewItem::info() const
     return d->info;
 }
 
+void QueueListViewItem::setPixmap(const QPixmap& pix)
+{
+    QIcon icon = QIcon(pix);
+    //  We make sure the preview icon stays the same regardless of the role
+    icon.addPixmap(pix, QIcon::Selected, QIcon::On);
+    icon.addPixmap(pix, QIcon::Selected, QIcon::Off);
+    icon.addPixmap(pix, QIcon::Active,   QIcon::On);
+    icon.addPixmap(pix, QIcon::Active,   QIcon::Off);
+    icon.addPixmap(pix, QIcon::Normal,   QIcon::On);
+    icon.addPixmap(pix, QIcon::Normal,   QIcon::Off);
+    setIcon(0, icon);
+}
+
 void QueueListViewItem::setThumb(const QPixmap& pix)
 {
-    QPixmap pixmap(ICONSIZE+2, ICONSIZE+2);
+    QSize iSize = treeWidget()->iconSize();
+    QPixmap pixmap(iSize.width()+2, iSize.height()+2);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
     p.drawPixmap((pixmap.width()/2) - (pix.width()/2), (pixmap.height()/2) - (pix.height()/2), pix);
     d->preview = pixmap;
-    setIcon(0, QIcon(d->preview));
+    setPixmap(d->preview);
 }
 
 void QueueListViewItem::setProgressIcon(const QPixmap& icon)
@@ -118,26 +130,26 @@ void QueueListViewItem::setProgressIcon(const QPixmap& icon)
     QPainter p(&preview);
     p.drawPixmap(0, 0, mask);
     p.drawPixmap((preview.width()/2) - (icon.width()/2), (preview.height()/2) - (icon.height()/2), icon);
-    setIcon(0, QIcon(preview));
+    setPixmap(preview);
 }
 
 void QueueListViewItem::setCanceled()
 {
-    setIcon(0, QIcon(d->preview));
+    setPixmap(d->preview);
     setIcon(1, SmallIcon("dialog-cancel"));
     d->done = false;
 }
 
 void QueueListViewItem::setFailed()
 {
-    setIcon(0, QIcon(d->preview));
+    setPixmap(d->preview);
     setIcon(1, SmallIcon("dialog-error"));
     d->done = false;
 }
 
 void QueueListViewItem::setDone()
 {
-    setIcon(0, QIcon(d->preview));
+    setPixmap(d->preview);
     setIcon(1, SmallIcon("dialog-ok"));
     d->done = true;
 }
@@ -149,7 +161,7 @@ bool QueueListViewItem::isDone()
 
 void QueueListViewItem::reset()
 {
-    setIcon(0, QIcon(d->preview));
+    setPixmap(d->preview);
     setIcon(1, QIcon());
     d->done = false;
 }
@@ -179,7 +191,7 @@ QString QueueListViewItem::destSuffix() const
 
 // ---------------------------------------------------------------------------
 
-class QueueListViewPriv
+class QueueListView::QueueListViewPriv
 {
 
 public:
@@ -194,6 +206,7 @@ public:
 public:
 
     QueueListViewPriv()
+        : iconSize(64)
     {
         showTips        = false;
         toolTipTimer    = 0;
@@ -203,6 +216,8 @@ public:
     }
 
     bool                 showTips;
+
+    const int            iconSize;
 
     QTimer*              toolTipTimer;
 
@@ -217,10 +232,10 @@ public:
     QueueListViewItem*   toolTipItem;
 };
 
-QueueListView::QueueListView(QWidget *parent)
+QueueListView::QueueListView(QWidget* parent)
              : QTreeWidget(parent), d(new QueueListViewPriv)
 {
-    setIconSize(QSize(ICONSIZE, ICONSIZE));
+    setIconSize(QSize(d->iconSize, d->iconSize));
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setWhatsThis(i18n("This is the list of images to batch process."));
 
@@ -295,7 +310,7 @@ QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
         }
     }
 
-    DItemDrag *mimeData = new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
+    DItemDrag* mimeData = new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
     return mimeData;
 }
 
@@ -328,19 +343,19 @@ void QueueListView::startDrag(Qt::DropActions /*supportedActions*/)
     p.drawText(r, Qt::AlignCenter, text);
     p.end();
 
-    QDrag *drag = new QDrag(this);
+    QDrag* drag = new QDrag(this);
     drag->setMimeData(mimeData(items));
     drag->setPixmap(pix);
     drag->exec();
 }
 
-void QueueListView::dragEnterEvent(QDragEnterEvent *e)
+void QueueListView::dragEnterEvent(QDragEnterEvent* e)
 {
     QTreeWidget::dragEnterEvent(e);
     e->accept();
 }
 
-void QueueListView::dragMoveEvent(QDragMoveEvent *e)
+void QueueListView::dragMoveEvent(QDragMoveEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
@@ -375,7 +390,7 @@ void QueueListView::dragMoveEvent(QDragMoveEvent *e)
     e->ignore();
 }
 
-void QueueListView::dropEvent(QDropEvent *e)
+void QueueListView::dropEvent(QDropEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
@@ -565,7 +580,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
         // Check if the new item already exist in the list.
 
         bool find               = false;
-        QueueListViewItem *item = 0;
+        QueueListViewItem* item = 0;
 
         QTreeWidgetItemIterator iter(this);
         while (*iter)
@@ -597,9 +612,9 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
         if (item->info().fileUrl() == KUrl(desc.filePath))
         {
             if (pix.isNull())
-                item->setThumb(SmallIcon("image-x-generic", ICONSIZE, KIconLoader::DisabledState));
+                item->setThumb(SmallIcon("image-x-generic", d->iconSize, KIconLoader::DisabledState));
             else
-                item->setThumb(pix.scaled(ICONSIZE, ICONSIZE, Qt::KeepAspectRatio));
+                item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
 
             return;
         }
@@ -852,7 +867,10 @@ void QueueListView::updateDestFileNames()
             {
                 ParseSettings settings(info);
                 settings.parseString = parseString;
-                settings.fileUrl     = KUrl(QString("%1/%2.%3").arg(fi.absolutePath()).arg(fi.completeBaseName()).arg(newSuffix));
+                settings.fileUrl     = KUrl(QString("%1/%2.%3")
+                                            .arg(fi.absolutePath())
+                                            .arg(fi.completeBaseName())
+                                            .arg(newSuffix));
                 newName              = p.parse(settings);
             }
 
@@ -866,7 +884,7 @@ void QueueListView::slotContextMenu()
 {
     if (!viewport()->isEnabled()) return;
 
-    KActionCollection *acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
+    KActionCollection* acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
     KMenu popmenu(this);
     popmenu.addAction(acol->action("queuemgr_removeitemssel"));
     popmenu.addSeparator();

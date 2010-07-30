@@ -79,7 +79,6 @@ public:
 // --------------------------------------------------------
 
 class AssignedBatchTools;
-class QueueSettingsViewPriv;
 
 class QueueSettingsView : public KTabWidget
 {
@@ -107,6 +106,7 @@ private Q_SLOTS:
 
 private:
 
+    class QueueSettingsViewPriv;
     QueueSettingsViewPriv* const d;
 };
 

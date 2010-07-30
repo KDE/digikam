@@ -108,7 +108,7 @@ void AssignedListViewItem::setProgressIcon(const QPixmap& icon)
 
 // ---------------------------------------------------------------------------
 
-AssignedListView::AssignedListView(QWidget *parent)
+AssignedListView::AssignedListView(QWidget* parent)
                 : QTreeWidget(parent)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -363,7 +363,7 @@ QStringList AssignedListView::mimeTypes() const
 
 QMimeData* AssignedListView::mimeData(const QList<QTreeWidgetItem*> items) const
 {
-    QMimeData *mimeData = new QMimeData();
+    QMimeData* mimeData = new QMimeData();
     QByteArray encodedData;
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
@@ -383,13 +383,13 @@ QMimeData* AssignedListView::mimeData(const QList<QTreeWidgetItem*> items) const
     return mimeData;
 }
 
-void AssignedListView::dragEnterEvent(QDragEnterEvent *e)
+void AssignedListView::dragEnterEvent(QDragEnterEvent* e)
 {
     QTreeWidget::dragEnterEvent(e);
     e->accept();
 }
 
-void AssignedListView::dragMoveEvent(QDragMoveEvent *e)
+void AssignedListView::dragMoveEvent(QDragMoveEvent* e)
 {
     if (e->mimeData()->formats().contains("digikam/batchtoolslist") ||
         e->mimeData()->formats().contains("digikam/assignedbatchtool"))
@@ -401,7 +401,7 @@ void AssignedListView::dragMoveEvent(QDragMoveEvent *e)
     e->ignore();
 }
 
-void AssignedListView::dropEvent(QDropEvent *e)
+void AssignedListView::dropEvent(QDropEvent* e)
 {
     if (e->mimeData()->formats().contains("digikam/batchtoolslist"))
     {
@@ -436,10 +436,10 @@ void AssignedListView::dropEvent(QDropEvent *e)
                 ds >> name;
                 ds >> settings;
 
-                BatchTool *tool = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
+                BatchTool* tool = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
                                   ->findTool(name, (BatchTool::BatchToolGroup)group);
 
-                AssignedListViewItem *preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
+                AssignedListViewItem* preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
 
                 BatchToolSet set;
                 set.tool                   = tool;
@@ -504,7 +504,7 @@ void AssignedListView::slotAssignTools(const QMap<int, QString>& map)
     assignTools(map, 0);
 }
 
-void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListViewItem *preceding)
+void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListViewItem* preceding)
 {
     // We pop all items in reverse order to have same order than selection from Batch Tools list.
     QMapIterator<int, QString> it(map);
@@ -514,11 +514,11 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
         it.previous();
         BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
         QString name                    = it.value();
-        BatchTool *tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()->findTool(name, group);
+        BatchTool* tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()->findTool(name, group);
         BatchToolSet set;
-        set.tool                   = tool;
-        set.settings               = tool->defaultSettings();
-        AssignedListViewItem* item = insertTool(preceding, set);
+        set.tool                        = tool;
+        set.settings                    = tool->defaultSettings();
+        AssignedListViewItem* item      = insertTool(preceding, set);
         setCurrentItem(item);
     }
 }
@@ -527,7 +527,7 @@ void AssignedListView::slotContextMenu()
 {
     if (!viewport()->isEnabled()) return;
 
-    KActionCollection *acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
+    KActionCollection* acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
     KMenu popmenu(this);
     popmenu.addAction(acol->action("queuemgr_toolup"));
     popmenu.addAction(acol->action("queuemgr_tooldown"));

@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager items list.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,15 +42,12 @@
 namespace Digikam
 {
 
-class QueueListViewItemPriv;
-class QueueListPriv;
-
 class QueueListViewItem : public QTreeWidgetItem
 {
 
 public:
 
-    QueueListViewItem(QTreeWidget *view, const ImageInfo& info);
+    QueueListViewItem(QTreeWidget* view, const ImageInfo& info);
     ~QueueListViewItem();
 
     void setInfo(const ImageInfo& info);
@@ -78,13 +75,17 @@ public:
 
 private:
 
+    void setPixmap(const QPixmap& pix);
+
+private:
+
+    class QueueListViewItemPriv;
     QueueListViewItemPriv* const d;
 };
 
 // -------------------------------------------------------------------------
 
 class CollectionImageChangeset;
-class QueueListViewPriv;
 
 class QueueListView : public QTreeWidget
 {
@@ -92,7 +93,7 @@ class QueueListView : public QTreeWidget
 
 public:
 
-    QueueListView(QWidget *parent);
+    QueueListView(QWidget* parent);
     ~QueueListView();
 
     int  itemsCount();
@@ -104,7 +105,7 @@ public:
     int           pendingTasksCount();
 
     QueueListViewItem* findItemByUrl(const KUrl& url);
-    QueueListViewItem*  findItemById(qlonglong id);
+    QueueListViewItem* findItemById(qlonglong id);
 
     void setSettings(const QueueSettings& settings);
     QueueSettings settings();
@@ -157,6 +158,7 @@ private:
 
 private:
 
+    class QueueListViewPriv;
     QueueListViewPriv* const d;
 };
 

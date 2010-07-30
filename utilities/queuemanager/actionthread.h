@@ -41,15 +41,13 @@
 namespace Digikam
 {
 
-class ActionThreadPriv;
-
 class ActionThread : public QThread
 {
     Q_OBJECT
 
 public:
 
-    ActionThread(QObject *parent);
+    ActionThread(QObject* parent);
     ~ActionThread();
 
     void setWorkingUrl(const KUrl& workingUrl);
@@ -71,6 +69,7 @@ protected:
 
 private:
 
+    class ActionThreadPriv;
     ActionThreadPriv* const d;
 };
 
