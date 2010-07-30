@@ -38,7 +38,6 @@ namespace Digikam
 {
 
 class QueueSettings;
-class AssignedListPriv;
 
 class AssignedListViewItem : public QTreeWidgetItem
 {

@@ -35,8 +35,6 @@
 namespace Digikam
 {
 
-class BatchToolsManagerPriv;
-
 class BatchToolsManager : public QObject
 {
     Q_OBJECT
@@ -55,6 +53,7 @@ public:
 
 private:
 
+    class BatchToolsManagerPriv;
     BatchToolsManagerPriv* const d;
 };
 

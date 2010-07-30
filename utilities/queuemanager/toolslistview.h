@@ -41,8 +41,6 @@
 namespace Digikam
 {
 
-class ToolListPriv;
-
 class ToolListViewGroup : public QTreeWidgetItem
 {
 

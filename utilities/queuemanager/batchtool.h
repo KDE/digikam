@@ -52,8 +52,6 @@ namespace Digikam
  */
 typedef QMap<QString, QVariant> BatchToolSettings;
 
-class BatchToolPriv;
-
 class BatchTool : public QObject
 {
     Q_OBJECT
@@ -102,7 +100,7 @@ public:
     /** Assign no settings view to tool. A label is just displayed.
      */
     void setNoSettingsWidget();
-    
+
     /** Manage customized settings widget on settings view.
      */
     void setSettingsWidget(QWidget* settingsWidget);
@@ -127,7 +125,7 @@ public:
      */
     void setWorkingUrl(const KUrl& workingUrl);
     KUrl workingUrl() const;
-    
+
     /** Manage instance of current image data container loaded by this tool.
      */
     void setImageData(const DImg& img);
@@ -232,6 +230,11 @@ protected Q_SLOTS:
         This method is called by setSettings().
      */
     virtual void slotAssignSettings2Widget()=0;
+
+public:
+
+    // Declared as public due to BatchToolObserver class.
+    class BatchToolPriv;
 
 private:
 

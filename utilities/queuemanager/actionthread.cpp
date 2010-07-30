@@ -50,7 +50,7 @@ extern "C"
 namespace Digikam
 {
 
-class ActionThreadPriv
+class ActionThread::ActionThreadPriv
 {
 public:
 
@@ -71,21 +71,21 @@ public:
             AssignedBatchTools item;
     };
 
-    bool            running;
-    bool            cancel;
-    bool            exifSetOrientation;
+    bool           running;
+    bool           cancel;
+    bool           exifSetOrientation;
 
-    QMutex          mutex;
+    QMutex         mutex;
 
-    QWaitCondition  condVar;
+    QWaitCondition condVar;
 
-    QList<Task*>    todo;
+    QList<Task*>   todo;
 
-    KUrl            workingUrl;
+    KUrl           workingUrl;
 
-    BatchTool*      tool;
+    BatchTool*     tool;
 
-    DRawDecoding    rawDecodingSettings;
+    DRawDecoding   rawDecodingSettings;
 };
 
 ActionThread::ActionThread(QObject* parent)
@@ -121,7 +121,7 @@ void ActionThread::setRawDecodingSettings(const DRawDecoding& settings)
 
 void ActionThread::processFile(const AssignedBatchTools& item)
 {
-    ActionThreadPriv::Task *t = new ActionThreadPriv::Task;
+    ActionThreadPriv::Task* t = new ActionThreadPriv::Task;
     t->item                   = item;
 
     QMutexLocker lock(&d->mutex);
@@ -146,7 +146,7 @@ void ActionThread::run()
 
     while (d->running)
     {
-        ActionThreadPriv::Task *t = 0;
+        ActionThreadPriv::Task* t = 0;
         {
             QMutexLocker lock(&d->mutex);
             if (!d->todo.isEmpty())

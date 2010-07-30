@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-ToolListViewGroup::ToolListViewGroup(QTreeWidget *parent, BatchTool::BatchToolGroup group)
+ToolListViewGroup::ToolListViewGroup(QTreeWidget* parent, BatchTool::BatchToolGroup group)
                  : QTreeWidgetItem(parent)
 {
     setFlags(Qt::ItemIsEnabled);
