@@ -69,10 +69,11 @@ public Q_SLOTS:
 
 private:
 
-    void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent);
+    friend class ImagePropertiesHistoryTab;
+    void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent = 0);
 
 private:
-
+    
     class ImageFiltersHistoryModelPriv;
     ImageFiltersHistoryModelPriv* const d;
 };

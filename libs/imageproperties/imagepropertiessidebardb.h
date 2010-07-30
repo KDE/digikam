@@ -68,6 +68,10 @@ public:
     void populateTags(void);
     void refreshTagsView();
 
+    ///This is for image editor to be able to update the filter list in sidebar
+    ImagePropertiesHistoryTab* getFiltersHistoryTab();
+    void setFiltersHistoryDirty(bool dirty);
+
 Q_SIGNALS:
 
     void signalFirstItem();

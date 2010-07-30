@@ -137,4 +137,9 @@ void ImagePropertiesHistoryTab::showCustomContextMenu(const QPoint& position)
         QMenu::exec(actions, d->view->mapToGlobal(position));
 }
 
+void ImagePropertiesHistoryTab::setModelData(const QList< DImageHistory::Entry >& entries)
+{
+    d->model->setupModelData(entries);
+}
+
 } // namespace Digikam

@@ -550,4 +550,14 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
     }
 }
 
+ImagePropertiesHistoryTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
+{
+    return m_historyTab;
+}
+
+void ImagePropertiesSideBarDB::setFiltersHistoryDirty(bool dirty)
+{
+    m_dirtyHistoryTab = dirty;
+}
+
 }  // namespace Digikam

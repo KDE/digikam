@@ -213,6 +213,11 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
     if(!parent)
     {
         parent = d->rootItem;
+        //we need to delete all but the rootItem
+        for(int i = 0; i < d->rootItem->childCount(); i++)
+        {
+            delete d->rootItem->child(i);
+        }
     }
 
     kDebug() << "Initializing model data, got" << entries.count() << "entries";
