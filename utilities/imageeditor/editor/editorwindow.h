@@ -90,6 +90,7 @@ Q_SIGNALS:
     void signalSelectionChanged(const QRect&);
     void signalNoCurrentItem();
     void signalPreviewModeChanged(int);
+    void signalToolApplied();
 
 protected:
 

@@ -156,6 +156,8 @@ private Q_SLOTS:
 
     void slotSidebarTabTitleStyleChanged();
 
+    void slotUpdateFiltersHistorySidebar();
+
 private:
 
     ImageWindowPriv* const d;

@@ -141,7 +141,8 @@ void UndoManager::undo()
     {
         action->rollBack();
     }
-
+    
+    d->dimgiface->removeLastFilterFromImageHistory();
     d->undoActions.removeLast();
     d->redoActions << action;
     d->origin--;

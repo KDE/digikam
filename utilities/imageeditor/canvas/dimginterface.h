@@ -159,6 +159,7 @@ public:
     KExiv2Data            getMetadata();
     DImageHistory         getImageHistory();
     DImageHistory         getInitialImageHistory();
+    void                  removeLastFilterFromImageHistory();
 
     QString               getImageFileName();
     QString               getImageFilePath();

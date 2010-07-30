@@ -114,6 +114,7 @@
 #include "globals.h"
 #include "uifilevalidator.h"
 #include "albummodel.h"
+#include "imagepropertieshistorytab.h"
 
 namespace Digikam
 {
@@ -260,6 +261,11 @@ ImageWindow::~ImageWindow()
 
 void ImageWindow::closeEvent(QCloseEvent* e)
 {
+    if (hasChangesToSave())
+    {
+        saveNewVersion();
+    }
+    
     if (!queryClose())
     {
         e->ignore();
@@ -345,6 +351,9 @@ void ImageWindow::setupConnections()
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
+
+    connect(this, SIGNAL(signalToolApplied()),
+            this, SLOT(slotUpdateFiltersHistorySidebar()));
 }
 
 void ImageWindow::setupUserArea()
@@ -1508,6 +1517,12 @@ void ImageWindow::slotSidebarTabTitleStyleChanged()
 {
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->applySettings();
+}
+
+void ImageWindow::slotUpdateFiltersHistorySidebar()
+{
+    d->rightSideBar->getFiltersHistoryTab()->setModelData(m_canvas->interface()->getImageHistory().entries());
+    d->rightSideBar->setFiltersHistoryDirty(true);
 }
 
 }  // namespace Digikam

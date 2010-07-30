@@ -226,7 +226,8 @@ void EditorToolIface::setPreviewModeMask(int mask)
 
 void EditorToolIface::slotToolApplied()
 {
-    d->editor->saveNewVersion();
+    //d->editor->saveNewVersion();
+    emit d->editor->signalToolApplied();
 }
 
 
