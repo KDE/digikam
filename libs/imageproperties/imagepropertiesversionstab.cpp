@@ -49,7 +49,7 @@
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnailloadthread.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 class ImagePropertiesVersionsTab::ImagePropertiesVersionsTabPriv
@@ -74,7 +74,7 @@ public:
 };
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent, ImageVersionsModel* model)
-                           : QWidget(parent), d(new ImagePropertiesVersionsTabPriv)
+                          : QWidget(parent), d(new ImagePropertiesVersionsTabPriv)
 {
     d->view           = new QListView(this);
     d->layout         = new QGridLayout(this);
