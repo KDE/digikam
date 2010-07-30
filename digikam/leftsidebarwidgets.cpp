@@ -1106,9 +1106,10 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
+    
     d->rescanButton = new QPushButton;
-    d->rescanButton->setText("Rescan collection for faces");
-        
+    d->rescanButton->setText("Scan collection for faces");
+
     layout->addWidget(d->rescanButton);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
@@ -1117,7 +1118,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
     
     connect(d->rescanButton, SIGNAL(pressed()),
-            this, SIGNAL( signalScanForFacesFirstTime() ) );
+            this, SIGNAL( signalDetectFaces() ) );
 
 }
 

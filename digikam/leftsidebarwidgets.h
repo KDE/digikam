@@ -339,6 +339,7 @@ Q_SIGNALS:
 
     void signalDetectFaces();
     void signalScanForFacesFirstTime();
+    void signalResumeScanForFaces();
     void signalFindDuplicatesInAlbum(Album*);
     
 private:

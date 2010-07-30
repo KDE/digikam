@@ -198,6 +198,7 @@ private Q_SLOTS:
     void slotRebuildFingerPrints();
     void slotRebuildFingerPrintsDone();
     void slotDetectFacesFirstTime();
+    
     void slotScanForFaces();
     void slotScanForFacesDone();
 

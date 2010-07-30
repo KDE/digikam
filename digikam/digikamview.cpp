@@ -410,9 +410,9 @@ void DigikamView::setupConnections()
     connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
             d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));
 
-    connect(d->peopleSideBar, SIGNAL(signalScanForFacesFirstTime()),
-            d->parent, SLOT(slotDetectFacesFirstTime()));
-
+    connect(d->peopleSideBar, SIGNAL(signalDetectFaces()),
+            d->parent, SLOT(slotScanForFaces()));
+    
     /*connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
             d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));*/
     

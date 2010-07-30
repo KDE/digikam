@@ -150,19 +150,35 @@ void BatchFaceDetector::slotDetectFaces()
     const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
+    
+    QStringList pathList;
+    
+    for (AlbumList::ConstIterator it = palbumList.constBegin();
+            !d->cancel && (it != palbumList.constEnd()); ++it)
+    {
+        pathList += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+    }
 
     if (d->rebuildAll)
     {
-        for (AlbumList::ConstIterator it = palbumList.constBegin();
-             !d->cancel && (it != palbumList.constEnd()); ++it)
-        {
-            d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
-        }
+        d->allPicturesPath = pathList;
     }
     else
     {
-        // FIXME: Currently the table query is only implemented in AlbumDB. Need to implement it in other files too
-        d->allPicturesPath = DatabaseAccess().db()->getDirtyOrMissingFaceImageUrls();
+        for (QStringList::ConstIterator i = pathList.constBegin();
+                !d->cancel && (i != pathList.constEnd()); ++i)
+        {
+            ImageInfo info(*i);
+            ImageTagPair pair(info.id(), d->unknownTagId);
+
+            if (pair.hasProperty("scannedForFaces"))
+            {
+                kDebug()<<"Ignoring image "<<(*i)<<", it has aready been scanned.";
+                continue;
+            }
+
+            d->allPicturesPath << (*i);
+        }
     }
 
      setMaximum(d->allPicturesPath.count());
@@ -231,6 +247,7 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
             // Assign the "/People/Unknown" id to all detected faces. For now. Later, this will change when we attempt recognition.
             ImageInfo info(desc.filePath);
             ImageTagPair pair(info.id(), d->unknownTagId);
+            pair.addProperty("scannedForFaces", "");
             pair.addProperty("unknownFace", QString("<rect x=\"")+QString(faceRect.x())+
                                             QString("\" y=\"")+QString(faceRect.y())+
                                             QString("\" width=\"")+QString(faceRect.width())+
