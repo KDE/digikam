@@ -31,7 +31,7 @@
 #include "imageversionsmodel.h"
 #include "workingwidget.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 ImageVersionsModel::ImageVersionsModel(QObject* parent)

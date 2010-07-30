@@ -41,6 +41,7 @@ class WorkingWidget;
 class DIGIKAM_EXPORT ImageVersionsModel : public QAbstractListModel
 {
     Q_OBJECT
+
 public:
 
     ImageVersionsModel(QObject* parent = 0);
@@ -53,6 +54,7 @@ public:
     void clearModelData();
 
 public Q_SLOTS:
+
     void slotAnimationStep();
 
 private:
