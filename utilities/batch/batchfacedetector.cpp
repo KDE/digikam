@@ -91,6 +91,8 @@ public:
         
         tagsCache = TagsCache::instance();
         unknownTagId = tagsCache->createTag("/People/Unknown");
+        scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
+        
         kDebug()<<"Created tag "<<tagsCache->tagName(unknownTagId)<<" with Id = "<<unknownTagId;
         
         duration.start();
@@ -111,6 +113,7 @@ public:
     ThumbnailLoadThread*  thumbnailLoadThread;
     KFaceIface::Database* faceIface;
     int                   unknownTagId;
+    int                   scannedForFacesTagId;
     TagsCache*            tagsCache;
 };
 
@@ -169,7 +172,7 @@ void BatchFaceDetector::slotDetectFaces()
                 !d->cancel && (i != pathList.constEnd()); ++i)
         {
             ImageInfo info(*i);
-            ImageTagPair pair(info.id(), d->unknownTagId);
+            ImageTagPair pair(info.id(), d->scannedForFacesTagId);
 
             if (pair.hasProperty("scannedForFaces"))
             {
@@ -237,7 +240,12 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
 
         if (d->rebuildAll)
             d->thumbnailLoadThread->deleteThumbnail(desc.filePath);
-
+        
+        ImageInfo info(desc.filePath);
+        ImageTagPair pairScanned(info.id(), d->scannedForFacesTagId);
+        pairScanned.addProperty("scannedForFaces", "");
+        pairScanned.assignTag();
+        
         while(it.hasNext())
         {
             KFaceIface::Face face = it.next();
@@ -246,9 +254,8 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
             d->thumbnailLoadThread->storeDetailThumbnail(desc.filePath, faceRect, face.getImage(), true);
             
             // Assign the "/People/Unknown" id to all detected faces. For now. Later, this will change when we attempt recognition.
-            ImageInfo info(desc.filePath);
+            
             ImageTagPair pair(info.id(), d->unknownTagId);
-            pair.addProperty("scannedForFaces", "");
             pair.addProperty("unknownFace", QString("<rect x=\"")+QString(faceRect.x())+
                                             QString("\" y=\"")+QString(faceRect.y())+
                                             QString("\" width=\"")+QString(faceRect.width())+
