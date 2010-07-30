@@ -93,69 +93,70 @@ public:
         modelCollection       = 0;
     }
 
-    QString userPresentableAlbumTitle(const QString& album);
+    QString                       userPresentableAlbumTitle(const QString& album);
 
-    bool                      needDispatchSelection;
-    bool                      cancelSlideShow;
-    bool                      useAlbumHistory;
+    bool                          needDispatchSelection;
+    bool                          cancelSlideShow;
+    bool                          useAlbumHistory;
 
-    int                       initialAlbumID;
-    int                       thumbSize;
+    int                           initialAlbumID;
+    int                           thumbSize;
 
-    QMainWindow*              dockArea;
+    QMainWindow*                  dockArea;
 
-    SidebarSplitter*          splitter;
+    SidebarSplitter*              splitter;
 
-    QTimer*                   selectionTimer;
-    QTimer*                   thumbSizeTimer;
+    QTimer*                       selectionTimer;
+    QTimer*                       thumbSizeTimer;
 
     // left side bar
-    AlbumFolderViewSideBarWidget *albumFolderSideBar;
-    TagViewSideBarWidget         *tagViewSideBar;
-    DateFolderViewSideBarWidget  *dateViewSideBar;
-    TimelineSideBarWidget        *timelineSideBar;
-    SearchSideBarWidget          *searchSideBar;
-    FuzzySearchSideBarWidget     *fuzzySearchSideBar;
+    AlbumFolderViewSideBarWidget* albumFolderSideBar;
+    TagViewSideBarWidget*         tagViewSideBar;
+    DateFolderViewSideBarWidget*  dateViewSideBar;
+    TimelineSideBarWidget*        timelineSideBar;
+    SearchSideBarWidget*          searchSideBar;
+    FuzzySearchSideBarWidget*     fuzzySearchSideBar;
+
 #ifdef HAVE_MARBLEWIDGET
-    GPSSearchSideBarWidget       *gpsSearchSideBar;
+    GPSSearchSideBarWidget*       gpsSearchSideBar;
 #endif
-    PeopleSideBarWidget          *peopleSideBar;
-    
-    DigikamApp*               parent;
 
-    DigikamImageView*         iconView;
-    MapWidgetView*            mapView;
-    AlbumManager*             albumManager;
-    AlbumHistory*             albumHistory;
-    AlbumWidgetStack*         albumWidgetStack;
+    PeopleSideBarWidget*          peopleSideBar;
 
-    AlbumModificationHelper*  albumModificationHelper;
-    TagModificationHelper*    tagModificationHelper;
-    SearchModificationHelper* searchModificationHelper;
+    DigikamApp*                   parent;
 
-    Sidebar*                  leftSideBar;
-    ImagePropertiesSideBarDB* rightSideBar;
+    DigikamImageView*             iconView;
+    MapWidgetView*                mapView;
+    AlbumManager*                 albumManager;
+    AlbumHistory*                 albumHistory;
+    AlbumWidgetStack*             albumWidgetStack;
 
-    TagFilterSideBarWidget *tagFilterWidget;
-    ImagePropertiesVersionsTab *versionsTabWidget;
+    AlbumModificationHelper*      albumModificationHelper;
+    TagModificationHelper*        tagModificationHelper;
+    SearchModificationHelper*     searchModificationHelper;
 
-    QString optionAlbumViewPrefix;
+    Sidebar*                      leftSideBar;
+    ImagePropertiesSideBarDB*     rightSideBar;
 
-    QList<SidebarWidget*> leftSideBarWidgets;
+    TagFilterSideBarWidget*       tagFilterWidget;
+    ImagePropertiesVersionsTab*   versionsTabWidget;
 
-    DigikamModelCollection *modelCollection;
+    QString                       optionAlbumViewPrefix;
 
+    QList<SidebarWidget*>         leftSideBarWidgets;
+
+    DigikamModelCollection*       modelCollection;
 };
 
-DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollection)
+DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollection)
            : KHBox(parent), d(new DigikamViewPriv)
 {
-    d->parent       = static_cast<DigikamApp*>(parent);
+    d->parent          = static_cast<DigikamApp*>(parent);
     d->modelCollection = modelCollection;
-    d->albumManager = AlbumManager::instance();
+    d->albumManager    = AlbumManager::instance();
 
-    d->albumModificationHelper = new AlbumModificationHelper(this, this);
-    d->tagModificationHelper = new TagModificationHelper(this, this);
+    d->albumModificationHelper  = new AlbumModificationHelper(this, this);
+    d->tagModificationHelper    = new TagModificationHelper(this, this);
     d->searchModificationHelper = new SearchModificationHelper(this, this);
 
     d->splitter = new SidebarSplitter;
@@ -226,13 +227,11 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
                     d->searchModificationHelper);
     d->leftSideBarWidgets << d->gpsSearchSideBar;
 #endif
-    
+
     // People Sidebar
     d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
                     d->modelCollection->getTagModel());
     d->leftSideBarWidgets << d->peopleSideBar;
-
-
 
     foreach(SidebarWidget *leftWidget, d->leftSideBarWidgets)
     {
@@ -247,7 +246,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     // Tags Filter sidebar tab contents.
     d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
     d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("tag-assigned"), i18n("Tag Filters"));
-    
+
     d->versionsTabWidget = new ImagePropertiesVersionsTab(d->rightSideBar, d->modelCollection->getImageVersionsModel());
     d->rightSideBar->appendTab(d->versionsTabWidget, SmallIcon("view-catalog"), i18n("Image versions"));
 
@@ -539,17 +538,17 @@ void DigikamView::setupConnections()
 
     connect(d->albumHistory, SIGNAL(signalSetSelectedUrls(KUrl::List)),
             d->iconView, SLOT(setSelectedUrls(KUrl::List)));
-            
+
     connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
             d->albumHistory, SLOT(slotAlbumDeleted(Album*)));
 
     // -- Image versions ----------------
     connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
             d->versionsTabWidget, SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
-    
+
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->versionsTabWidget, SLOT(slotDigikamViewNoCurrentItem()));
-    
+
     connect(d->versionsTabWidget, SIGNAL(setCurrentUrlSignal(KUrl)),
             d->iconView, SLOT(setCurrentUrl(KUrl)));
 }
@@ -1305,7 +1304,6 @@ void DigikamView::slotImagePreview()
 // This method toggle between AlbumView and ImagePreview Modes, depending of context.
 void DigikamView::slotTogglePreviewMode(const ImageInfo &info)
 {
-    
     if(d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
     {
 
