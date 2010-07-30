@@ -51,13 +51,12 @@ public:
     int columnCount() const;
     QVariant data(int column) const;
     int row() const;
-    ImageFiltersHistoryTreeItem *parent();
+    ImageFiltersHistoryTreeItem* parent() const;
 
 private:
 
-     QList<ImageFiltersHistoryTreeItem*> m_childItems;
-     QList<QVariant>                     m_itemData;
-     ImageFiltersHistoryTreeItem*        m_parentItem;
+     class ImageFiltersHistoryTreeItemPriv;
+     ImageFiltersHistoryTreeItemPriv* const d;
 };
 
 } // namespace Digikam
