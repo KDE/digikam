@@ -81,6 +81,12 @@ TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject *parent)
     setupThumbnailLoading();
 }
 
+void TagModel::setColumnHeader(const QString& header)
+{
+    m_columnHeader = header;
+}
+
+
 TAlbum *TagModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<TAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));

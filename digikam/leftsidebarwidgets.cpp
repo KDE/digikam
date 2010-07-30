@@ -1093,11 +1093,11 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
                     : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
 {
     setObjectName("People Sidebar");
-
+    
     d->tagModel = model;
-
+    
     QVBoxLayout* layout = new QVBoxLayout(this);
-
+    
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
@@ -1108,7 +1108,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
     d->rescanButton = new QPushButton;
     d->rescanButton->setText("Rescan collection for faces");
-    
+        
     layout->addWidget(d->rescanButton);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);

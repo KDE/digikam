@@ -61,7 +61,8 @@ public:
     explicit TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
 
     TAlbum *albumForIndex(const QModelIndex& index) const;
-
+    void setColumnHeader(const QString& header);
+    
 protected:
 
     virtual QVariant decorationRoleData(Album *a) const;
