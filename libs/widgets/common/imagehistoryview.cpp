@@ -26,7 +26,7 @@
 namespace Digikam
 {
 
-class ImageHistoryViewPriv
+class ImageHistoryView::ImageHistoryViewPriv
 {
 };
 

@@ -31,7 +31,6 @@
 namespace Digikam
 {
 
-class ImageHistoryViewPriv;
 
 class ImageHistoryView : QTreeView
 {
@@ -44,6 +43,7 @@ public:
 
 private:
 
+    class ImageHistoryViewPriv;
     ImageHistoryViewPriv* const d;
 };
 
