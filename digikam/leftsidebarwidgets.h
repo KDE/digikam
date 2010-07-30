@@ -339,7 +339,8 @@ Q_SIGNALS:
 
     void signalDetectFaces();
     void signalScanForFacesFirstTime();
-
+    void signalFindDuplicatesInAlbum(Album*);
+    
 private:
 
     PeopleSideBarWidgetPriv* const d;

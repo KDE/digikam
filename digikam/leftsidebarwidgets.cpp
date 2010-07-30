@@ -1092,7 +1092,7 @@ public:
 PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
                     : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
 {
-    setObjectName("TagView Sidebar");
+    setObjectName("People Sidebar");
 
     d->tagModel = model;
 
@@ -1102,7 +1102,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
-    d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
+    d->tagSearchBar  = new SearchTextBar(this, "DigikamViewPeopleSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
@@ -1116,9 +1116,6 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
     
-    /*connect(d->rescanButton, SIGNAL(pressed()),
-            this, SIGNAL(signalUpdateFingerPrints()));
-*/
     connect(d->rescanButton, SIGNAL(pressed()),
             this, SIGNAL( signalScanForFacesFirstTime() ) );
 
