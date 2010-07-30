@@ -21,6 +21,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #include "filteraction.h"
 
 namespace Digikam
@@ -28,43 +29,43 @@ namespace Digikam
 
 FilterAction::FilterAction()
 {
-  
-}
-FilterAction::FilterAction(const QString& identifier, int version, FilterAction::Category category)
-{
-  m_identifier = identifier;
-  m_version = version;
-  m_category = category; 
 }
 
-bool FilterAction::isNull() const 
+FilterAction::FilterAction(const QString& identifier, int version, FilterAction::Category category)
 {
-  return m_identifier.isEmpty();
+    m_identifier = identifier;
+    m_version    = version;
+    m_category   = category;
+}
+
+bool FilterAction::isNull() const
+{
+    return m_identifier.isEmpty();
 }
 
 FilterAction::Category FilterAction::category() const
 {
-  return m_category;
+    return m_category;
 }
 
 QString FilterAction::identifier() const
 {
-  return m_identifier;
+    return m_identifier;
 }
 
 int FilterAction::version() const
 {
-  return m_version;
+    return m_version;
 }
 
 QString FilterAction::description() const
 {
-  return m_description;
+    return m_description;
 }
 
 void FilterAction::setDescription(const QString& description)
 {
-  m_description = description;
+    m_description = description;
 }
 
 QString FilterAction::displayableName() const
@@ -109,21 +110,20 @@ void FilterAction::removeParameters(const QString& key)
 
 void FilterAction::clearParameters()
 {
-  m_params.clear();
+    m_params.clear();
 }
-
 
 const QHash<QString,QVariant> &FilterAction::parameters() const
 {
     return m_params;
 }
 
-QHash<QString,QVariant> &FilterAction::parameters()
+QHash<QString, QVariant> &FilterAction::parameters()
 {
     return m_params;
 }
 
-void Digikam::FilterAction::addSetOfParameters(const QHash< QString, QVariant > values)
+void Digikam::FilterAction::addSetOfParameters(const QHash<QString, QVariant>& values)
 {
     m_params = values;
 }
@@ -133,5 +133,4 @@ bool FilterAction::isEmpty() const
     return m_params.isEmpty();
 }
 
-
-}
+} // namespace Digikam

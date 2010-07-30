@@ -25,13 +25,17 @@
 #ifndef FILTERACTION_H
 #define FILTERACTION_H
 
+// Qt includes
+
 #include <QVariant>
 #include <QHash>
 #include <QString>
 
+// Local includes
+
 #include "digikam_export.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT FilterAction
@@ -55,26 +59,31 @@ public:
         DocumentedHistory
     };
 
+public:
+
     FilterAction();
     FilterAction(const QString& identifier, int version, Category category = ReproducibleFilter);
 
     bool isNull() const;
 
     Category category() const;
+
     /** Returns a technical identifier for the filter used to produce this action.
      *  Can include a namespace. Example: digikam:charcoal */
     QString  identifier() const;
+
     /** Returns the version (>= 1) of the filter used to produce this action.
      *  When a filter / plugin is found by the identifier, it can decide
      *  by the version if it supports this action and which parameters it expects.
      */
     int      version() const;
+
     /** Returns a description / comment for this action.
      *  In the case of DocumentedHistory, this may be the most useful value.
      */
     QString  description() const;
     void setDescription(const QString& description);
-    
+
     QString displayableName() const;
     void setDisplayableName(const QString& displayableName);
 
@@ -95,22 +104,23 @@ public:
     /// Clear all parameters
     void clearParameters();
     /// Adds a set of parameters
-    void addSetOfParameters(const QHash<QString, QVariant> values);
+    void addSetOfParameters(const QHash<QString, QVariant>& values);
 
-    const QHash<QString,QVariant> &parameters() const;
-    QHash<QString,QVariant> &parameters();
+    const QHash<QString,QVariant>& parameters() const;
+    QHash<QString, QVariant>& parameters();
+
     bool isEmpty() const;
 
 protected:
 
-    Category m_category;
-    QString  m_identifier;
-    int      m_version;
-    QString  m_description;
-    QString  m_displayableName;
+    Category                 m_category;
+    QString                  m_identifier;
+    int                      m_version;
+    QString                  m_description;
+    QString                  m_displayableName;
     QHash<QString, QVariant> m_params;
 };
 
-}
+} // namespace Digikam
 
 #endif // FILTERACTION_H
