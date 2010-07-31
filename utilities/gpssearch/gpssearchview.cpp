@@ -239,6 +239,9 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     connect(d->mapSearchWidget, SIGNAL(signalNewSelectionFromMap()),
             this, SLOT(slotSelectionChanged()));
 
+    connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentSelection()),
+            this, SLOT(slotRemoveCurrentSelection()));
+
 //    connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
 //             this, SLOT(slotSelectionChanged()));
 // 
@@ -480,6 +483,7 @@ void GPSSearchView::slotRemoveCurrentSelection()
 {
     d->existsSelection = false;
     d->removeCurrentSelectionButton->setEnabled(d->existsSelection);
+    d->imageAlbumModel->clearImageInfos();
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 }
 

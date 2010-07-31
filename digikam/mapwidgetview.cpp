@@ -171,6 +171,9 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMapIface::WM
 
 QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
 {
+    if(index == QPersistentModelIndex())
+        return QPixmap();
+
     QPixmap thumbnail;
     ImageInfo info = d->model->imageInfoRef(index); 
     QString path   = info.filePath();
