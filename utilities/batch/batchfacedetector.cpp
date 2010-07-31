@@ -216,7 +216,8 @@ void BatchFaceDetector::complete()
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
-
+// Pop-up a message to bring user when all is done.
+    
     emit signalDetectAllFacesDone();
 }
 

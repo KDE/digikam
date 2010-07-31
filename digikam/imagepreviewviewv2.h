@@ -66,6 +66,8 @@ public:
     void findFaces();
     void drawFaceItems();
     void clearFaceItems();
+    
+    bool hasBeenScanned();
 
 Q_SIGNALS:
 

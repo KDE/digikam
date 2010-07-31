@@ -65,6 +65,8 @@
 #include "tagspopupmenu.h"
 #include "themeengine.h"
 #include "previewlayout.h"
+#include "tagscache.h"
+#include "imagetagpair.h"
 
 // libkface includes
 
@@ -133,11 +135,15 @@ public:
         addPersonAction      = 0;
 
         faceIface            = new KFaceIface::Database(KFaceIface::Database::InitAll, KStandardDirs::locateLocal("data", "libkface"));
+        
+        tagsCache = TagsCache::instance();
+        scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
     }
 
     bool                  peopleTagsShown;
     double                scale;
-
+    int                   scannedForFacesTagId;
+    
     ImagePreviewViewItem* item;
 
     QAction*              back2AlbumAction;
@@ -156,6 +162,8 @@ public:
     QList<Face>           currentFaces;
 
     KFaceIface::Database* faceIface;
+    
+    TagsCache*            tagsCache;
 };
 
 ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
@@ -499,6 +507,11 @@ void ImagePreviewViewV2::drawFaceItems()
 
 void ImagePreviewViewV2::findFaces()
 {
+    if(hasBeenScanned())
+    {
+        kDebug()<<"Image already has been scanned.";
+        return;
+    }
     d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(d->item->image().copyQImage()));
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
 }
@@ -535,5 +548,12 @@ void ImagePreviewViewV2::slotAddPersonTag()
 
     d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale , "", d->scale));
 }
+
+bool ImagePreviewViewV2::hasBeenScanned()
+{
+    ImageTagPair pair(d->item->imageInfo().id(), d->scannedForFacesTagId);
+    return pair.hasProperty("scannedForFaces");
+}
+
 
 }  // namespace Digikam

@@ -145,7 +145,8 @@ namespace DatabaseSearch
         HaarSearch,
         MapSearch,
         DuplicatesSearch,
-        FaceSearch
+        FaceSearch,
+        UnknownFaceSearch
     };
 
     enum HaarSearchType

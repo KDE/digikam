@@ -75,6 +75,8 @@
 #include <ktoolbarpopupaction.h>
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
+#include <knotificationwrapper.h>
+
 #include <solid/camera.h>
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
@@ -2646,6 +2648,10 @@ void DigikamApp::slotRebuildFingerPrintsDone()
 
 void DigikamApp::slotScanForFacesDone()
 {
+    // Pop-up a message to bring user when all is done.
+    kDebug()<<"Done, in diigkamapp";
+    KNotificationWrapper("facescanningcompleted", i18n("Update of people database completed."),
+                         this, windowTitle());
     d->config->group("General Settings").writeEntry("Face Scanner First Run", true);
 }
 
