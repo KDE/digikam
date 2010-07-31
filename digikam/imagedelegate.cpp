@@ -50,6 +50,7 @@
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
+#include <KIcon>
 
 namespace Digikam
 {
@@ -149,6 +150,12 @@ void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbData.value<QPixmap>());
     if (!actualPixmapRect.isNull())
         const_cast<ImageDelegate*>(this)->updateActualPixmapRect(info.id(), actualPixmapRect);
+
+    // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
+    if(info.hasImageHistory())
+    {
+        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22,22));
+    }
 
     if (!d->ratingRect.isNull())
     {
