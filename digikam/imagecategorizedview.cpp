@@ -509,6 +509,11 @@ void ImageCategorizedView::paintEvent(QPaintEvent *e)
     DCategorizedView::paintEvent(e);
 }
 
+QItemSelectionModel* ImageCategorizedView::getSelectionModel()
+{
+    return selectionModel();
+}
+
 ImageModelDragDropHandler *ImageCategorizedView::dragDropHandler() const
 {
     return d->model->dragDropHandler();

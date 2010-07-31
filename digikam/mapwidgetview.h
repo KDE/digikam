@@ -81,7 +81,7 @@ class MapWidgetView : public QWidget
 
 public: 
 
-    MapWidgetView(ImageAlbumModel* model, QWidget* parent);
+    MapWidgetView(ImageAlbumModel* model,QItemSelectionModel* selectionModel, QWidget* parent);
     ~MapWidgetView();
 
     void openAlbum(Album* album);

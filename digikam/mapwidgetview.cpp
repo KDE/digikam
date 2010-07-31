@@ -77,12 +77,13 @@ public:
     MapViewModelHelper* mapViewModelHelper;
 };
 
-MapWidgetView::MapWidgetView(ImageAlbumModel* model, QWidget* parent)
+MapWidgetView::MapWidgetView(ImageAlbumModel* model,QItemSelectionModel* selectionModel, QWidget* parent)
              : QWidget(parent), d(new MapWidgetViewPriv)
 {
 
     d->imageModel = model;
-    d->selectionModel = new QItemSelectionModel(d->imageModel);
+    //d->selectionModel = new QItemSelectionModel(d->imageModel);
+    d->selectionModel = selectionModel;
     d->mapViewModelHelper = new MapViewModelHelper(d->imageModel, d->selectionModel, this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
 

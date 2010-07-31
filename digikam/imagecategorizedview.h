@@ -103,6 +103,8 @@ public:
 
     void addSelectionOverlay();
 
+    QItemSelectionModel* getSelectionModel();
+    
 public Q_SLOTS:
 
     void openAlbum(Album *album);
