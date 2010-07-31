@@ -245,6 +245,7 @@ public:
      */
     DImageHistory imageHistory() const;
     void setImageHistory(const DImageHistory& history);
+    bool hasImageHistory() const;
 
     /**
      * Retrieves and sets this' images UUID

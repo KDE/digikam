@@ -1833,6 +1833,16 @@ void AlbumDB::removeImageCopyrightProperties(qlonglong imageID, const QString& p
     }
 }
 
+bool AlbumDB::hasImageHistory(qlonglong imageId)
+{
+    QList<QVariant> values;
+
+    d->db->execSql( "SELECT history FROM ImageHistory WHERE imageid=?;",
+                    imageId, &values);
+
+    return !values.isEmpty();
+}
+
 ImageHistoryEntry AlbumDB::getImageHistory(qlonglong imageId)
 {
     QList<QVariant> values;

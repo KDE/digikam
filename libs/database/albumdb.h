@@ -920,6 +920,11 @@ public:
     void setImageHistory(qlonglong imageId, const QString& history);
     void setImageUuid(qlonglong imageId, const QString& uuid);
 
+    /**
+     * Returns true if the image has a history stored in DB
+     * If not, it returns false
+     */
+    bool hasImageHistory(qlonglong imageId);
 
     /**
      * Adds an image relation entry

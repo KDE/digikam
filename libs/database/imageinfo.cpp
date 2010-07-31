@@ -594,6 +594,14 @@ void ImageInfo::setImageHistory(const DImageHistory& history)
     DatabaseAccess().db()->setImageHistory(m_data->id, history.toXml());
 }
 
+bool ImageInfo::hasImageHistory() const
+{
+    if (!m_data)
+        return false;
+
+    return DatabaseAccess().db()->hasImageHistory(m_data->id);
+}
+
 QString ImageInfo::uuid() const
 {
     if (!m_data)
