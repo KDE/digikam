@@ -191,7 +191,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
 
     d->actionRemoveCurrentSelection = new KAction(this);
-    d->actionRemoveCurrentSelection->setIcon(SmallIcon(""));
+    d->actionRemoveCurrentSelection->setIcon(SmallIcon("edit-clear"));
     d->actionRemoveCurrentSelection->setToolTip(i18n("Removes the current selection and shows all images on the map."));
     
 
