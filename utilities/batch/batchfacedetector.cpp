@@ -212,13 +212,11 @@ void BatchFaceDetector::complete()
 {
     QTime t;
     t = t.addMSecs(d->duration.elapsed());
-    setLabel(i18n("<b>Update of faces database complete.</b>"));
+    setLabel(i18n("<b>Scanning for people completed.</b>"));
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper("facescanningcomplete", i18n("Face scanning complete."),
-                         new QWidget, i18n("Faces"));
+
     emit signalDetectAllFacesDone();
 }
 

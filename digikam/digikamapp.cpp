@@ -2605,14 +2605,14 @@ void DigikamApp::slotRebuildFingerPrints()
 
 void DigikamApp::slotScanForFaces()
 {
-    QString msg = i18n("Scanning for faces can take a lot of time.\n"
+    QString msg = i18n("Scanning for people in photographs can take a lot of time.\n"
                        "Which would you prefer?\n"
-                       "- Scan for changed or non-cataloged items in the database (quick)\n"
+                       "- Resume scanning photographs from where the scanning was stopped last time\n"
                        "- Rescan all photographs (takes a long time)");
     int result = KMessageBox::questionYesNoCancel(this, msg,
                                                   i18n("Warning"),
-                                                  KGuiItem(i18n("Scan")),
-                                                  KGuiItem(i18n("Rescan All")));
+                                                  KGuiItem(i18n("Resume scan")),
+                                                  KGuiItem(i18n("Rescan all from scratch")));
 
     if (result == KMessageBox::Cancel)
         return;
