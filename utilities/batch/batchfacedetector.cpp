@@ -62,7 +62,7 @@
 #include "thumbnaildb.h"
 #include "knotificationwrapper.h"
 #include "config-digikam.h"
-
+#include "searchxml.h"
 #include "tagproperties.h"
 #include "tagscache.h"
 #include "imagetagpair.h"
@@ -73,6 +73,8 @@
 #include <libs/threadimageio/loadingdescription.h>
 #include <libs/database/imageinfo.h>*/
 // #include <libs/database/imagetagpair.h>
+// #include <libs/database/searchxml.h>
+// #include <libs/database/tagscache.h>
 
 namespace Digikam
 {
@@ -257,10 +259,11 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
             kDebug() << faceRect;
             d->thumbnailLoadThread->storeDetailThumbnail(desc.filePath, faceRect, face.getImage(), true);
             
-            // Assign the "/People/Unknown" id to all detected faces. For now. Later, this will change when we attempt recognition.
-            
-            ImageTagPair pair(info.id(), d->unknownTagId);
-            pair.addProperty("unknownFace", QString("<rect x=\"")+QString(faceRect.x())+
+            // Assign the "/People/Unknown" tag. The property for this tag is "faceRegion", which has an SVG rect associated with it.
+            // When we assign a name for a person in the image, we assign a new tag "/People/<Person Name>" to this image, and move the
+            // "faceRegion" property to this tag, and delete it from the unknown tag."
+            ImageTagPair pair(info.id(), d->tagsCache->tagForPath("/People/Unknown"));
+            pair.addProperty("faceRegion", QString("<rect x=\"")+QString(faceRect.x())+
                                             QString("\" y=\"")+QString(faceRect.y())+
                                             QString("\" width=\"")+QString(faceRect.width())+
                                             QString("\" height=\"")+QString(faceRect.height())+ QString("\" />")
