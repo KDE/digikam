@@ -163,6 +163,15 @@ void ImageTagPair::assignTag()
     }
 }
 
+void ImageTagPair::unAssignTag()
+{
+    if(d->isAssigned)
+    {
+        d->info.removeTag(d->tagId);
+        d->isAssigned = false;
+    }
+}
+
 bool ImageTagPair::hasProperty(const QString& key) const
 {
     d->checkProperties();

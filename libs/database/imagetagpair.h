@@ -78,6 +78,9 @@ public:
 
     /** Assigns the tag to the image */
     void assignTag();
+    
+    /** Removes the tag from the image */
+    void unAssignTag();
 
     /// Returns true if the property is set
     bool hasProperty(const QString& key) const;
