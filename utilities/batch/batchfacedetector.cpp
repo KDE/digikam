@@ -263,11 +263,14 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
             // When we assign a name for a person in the image, we assign a new tag "/People/<Person Name>" to this image, and move the
             // "faceRegion" property to this tag, and delete it from the unknown tag."
             ImageTagPair pair(info.id(), d->tagsCache->tagForPath("/People/Unknown"));
-            pair.addProperty("faceRegion", QString("<rect x=\"")+QString(faceRect.x())+
-                                            QString("\" y=\"")+QString(faceRect.y())+
-                                            QString("\" width=\"")+QString(faceRect.width())+
-                                            QString("\" height=\"")+QString(faceRect.height())+ QString("\" />")
-                            );
+            
+            QString s = QString("<rect x=\"")+QString::number(faceRect.x())+
+                        QString("\" y=\"")+QString::number(faceRect.y())+
+                        QString("\" width=\"")+QString::number(faceRect.width())+
+                        QString("\" height=\"")+QString::number(faceRect.height())+ QString("\" />");
+                                            
+            kDebug()<<s;
+            pair.addProperty("faceRegion", s);
             pair.assignTag();
         }
     }
