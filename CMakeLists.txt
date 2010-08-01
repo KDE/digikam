@@ -1227,6 +1227,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     
     SET(libfacedetection_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/peoplewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/face/faceiface.cpp
        )
 
     SET(libadvancedrename_SRCS
