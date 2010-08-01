@@ -27,17 +27,22 @@
 // Qt includes
 
 #include <QWidget>
+#include <QSortFilterProxyModel>
 
 // libkmap includes
 
 #include <libkmap/kmap_primitives.h>
+
+// KDE includes
+
+#include "kcategorizedsortfilterproxymodel.h"
 
 // local includes
 
 #include "digikam_export.h"
 #include "imagealbummodel.h"
 #include "thumbnailloadthread.h"
-
+#include "imagefiltermodel.h"
 
 namespace Digikam
 {
@@ -53,7 +58,7 @@ class MapViewModelHelper : public KMapIface::WMWModelHelper
 
 public:
 
-    MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* selection  , QObject* const parent = 0);
+    MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* selection,ImageFilterModel* const filterModel, QObject* const parent = 0);
     virtual ~MapViewModelHelper();
 
     virtual QAbstractItemModel* model() const;
@@ -81,7 +86,7 @@ class MapWidgetView : public QWidget
 
 public: 
 
-    MapWidgetView(ImageAlbumModel* model,QItemSelectionModel* selectionModel, QWidget* parent);
+    MapWidgetView(ImageAlbumModel* model,QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent);
     ~MapWidgetView();
 
     void openAlbum(Album* album);

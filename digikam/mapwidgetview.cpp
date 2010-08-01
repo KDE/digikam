@@ -54,7 +54,7 @@ namespace Digikam
 
 
 class ImageAlbumModel;
-
+class ImageFilterModel;
 
 class MapWidgetViewPriv
 {
@@ -77,14 +77,14 @@ public:
     MapViewModelHelper* mapViewModelHelper;
 };
 
-MapWidgetView::MapWidgetView(ImageAlbumModel* model,QItemSelectionModel* selectionModel, QWidget* parent)
+MapWidgetView::MapWidgetView(ImageAlbumModel* model,QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent)
              : QWidget(parent), d(new MapWidgetViewPriv)
 {
 
     d->imageModel = model;
     //d->selectionModel = new QItemSelectionModel(d->imageModel);
     d->selectionModel = selectionModel;
-    d->mapViewModelHelper = new MapViewModelHelper(d->imageModel, d->selectionModel, this);
+    d->mapViewModelHelper = new MapViewModelHelper(d->imageModel, d->selectionModel, imageFilterModel, this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
 
     d->mapWidget = new KMapIface::KMap(this);
@@ -121,18 +121,18 @@ public:
         selectionModel = 0;
     }
 
-    ImageAlbumModel*        model;
+    ImageFilterModel*        model;
     QItemSelectionModel*    selectionModel;
     ThumbnailLoadThread*    thumbnailLoadThread;
 
 };
 
 
-MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* const selection, QObject* const parent)
+MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* const selection,ImageFilterModel* const filterModel, QObject* const parent)
 : KMapIface::WMWModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
 
-    d->model                = model;
+    d->model                = filterModel;
     d->selectionModel       = selection;
     d->thumbnailLoadThread  = new ThumbnailLoadThread();
     
@@ -158,11 +158,14 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
 bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMapIface::WMWGeoCoordinate * const coordinates) const
 {
     ImageInfo info          = d->model->imageInfo(index);
+
+    if(info.isNull())
+        return false;
+
     ImagePosition imagePos  = info.imagePosition();
     if (imagePos.isEmpty())
-    {
         return false;
-    }
+   
 
     const KMapIface::WMWGeoCoordinate gpsCoordinates(imagePos.latitudeNumber(), imagePos.longitudeNumber());
     *coordinates = gpsCoordinates;
@@ -176,19 +179,26 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
         return QPixmap();
 
     QPixmap thumbnail;
-    ImageInfo info = d->model->imageInfoRef(index); 
-    QString path   = info.filePath();
+    ImageInfo info = d->model->imageInfo(index);
+    if(!info.isNull())
+    { 
+        QString path   = info.filePath();
 
-    if(d->thumbnailLoadThread->find(path, thumbnail,qMax(size.width(), size.height())))
-        return thumbnail;
-    else
-        return QPixmap(); 
+        if(d->thumbnailLoadThread->find(path, thumbnail,qMax(size.width(), size.height())))
+            return thumbnail;
+        else
+            return QPixmap(); 
+    }
+    return QPixmap();
 }
 
 QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList( const QList<QPersistentModelIndex>& list, const int sortKey)
 {
     const bool oldestFirst = sortKey & 1;
     QList<QModelIndex> indexList;
+
+    if(list.isEmpty())
+        return QPersistentModelIndex();
 
     for(int i=0; i<list.count(); ++i)
     {

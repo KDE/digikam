@@ -107,6 +107,7 @@ public:
    
     //KAction*                    actionRemoveCurrentSelection;
     ImageAlbumModel*            imageAlbumModel;
+    ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     MapViewModelHelper*         mapViewModelHelper;
     KMapIface::ItemMarkerTiler* markerTilerModelBased;
@@ -124,7 +125,11 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     d->imageAlbumModel    = new ImageAlbumModel(this);
     d->selectionModel     = itemSelectionModel;
-    d->mapViewModelHelper = new MapViewModelHelper(d->imageAlbumModel, d->selectionModel, this);
+
+    d->imageFilterModel   = new ImageFilterModel(this);
+    d->imageFilterModel->setSourceImageModel(d->imageAlbumModel);
+
+    d->mapViewModelHelper = new MapViewModelHelper(d->imageAlbumModel, d->selectionModel, d->imageFilterModel, this);
 
     d->markerTilerModelBased = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
 
