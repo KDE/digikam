@@ -43,9 +43,12 @@
 #include "albummanager.h"
 #include "dimg.h"
 
+#include <libkface/database.h>
+#include <libkface/kface.h>
+
 namespace Digikam
 {
-    
+
 class FaceIfacePriv
 {
 public:
@@ -56,6 +59,7 @@ public:
         tagsCache            = TagsCache::instance();
         scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
         peopleTagId          = tagsCache->createTag("/People");
+        unknownPeopleTagId   = tagsCache->createTag("/People/Unknown");
     }
     
     ~FaceIfacePriv()
@@ -65,10 +69,18 @@ public:
     
     int                   scannedForFacesTagId;
     int                   peopleTagId;
+    int                   unknownPeopleTagId;
     
     KFaceIface::Database* libkface;
     TagsCache*            tagsCache;
 };   
+
+FaceIface::FaceIface()
+    : d( new FaceIfacePriv() )
+{
+
+}
+
 
 FaceIface::~FaceIface()
 {
@@ -103,6 +115,7 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
         // Assign the "/People/Unknown" tag. The property for this tag is "faceRegion", which has an SVG rect associated with it.
         // When we assign a name for a person in the image, we assign a new tag "/People/<Person Name>" to this image, and move the
         // "faceRegion" property to this tag, and delete it from the unknown tag."
+        // See README.FACE for a nicer explanation.
         ImageTagPair pair(imageid, d->tagsCache->tagForPath("/People/Unknown"));
 
         QRect faceRect = face.toRect();
@@ -115,6 +128,8 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
         kDebug()<<s;
         pair.addProperty("faceRegion", s);
         pair.assignTag();
+        
+        kDebug()<<"Applied tag.";
     }
     
     return faceList;

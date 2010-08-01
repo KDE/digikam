@@ -42,6 +42,7 @@ INCLUDE_DIRECTORIES(
                      # database libs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/face                    
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
 
                      # shared utilities

@@ -44,7 +44,7 @@
 
 // Libkface includes
 
-#include <libkface/database.h>
+#include <libkface/kface.h>
 
 // Local includes
 
@@ -66,6 +66,8 @@
 #include "tagproperties.h"
 #include "tagscache.h"
 #include "imagetagpair.h"
+#include "faceiface.h"
+
 /*
 #include <libs/database/tagproperties.h>
 #include <libs/database/imagetagpair.h>
@@ -89,18 +91,8 @@ public:
         rebuildAll          = true;
         previewLoadThread   = 0;
         thumbnailLoadThread = 0;
-        faceIface           = new KFaceIface::Database(KFaceIface::Database::InitDetection);
         
-        tagsCache = TagsCache::instance();
-        
-        // Create a tag for People and a subtag for Unknown people
-        unknownTagId = tagsCache->createTag("/People/Unknown");
-        // Create a tag for Scanned images, and a subtag for Images that have been scanned for faces.
-        // Other batch jobs can put their respective scan indicator tags as subtags under the "Scanned" tag.
-        // Thus, since we want to hide these tags from the user, we just hide everything below the "Scanned" tag.
-        scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
-        
-        kDebug()<<"Created tag "<<tagsCache->tagName(unknownTagId)<<" with Id = "<<unknownTagId;
+        faceIface           = new FaceIface();
         
         duration.start();
     }
@@ -118,10 +110,8 @@ public:
     QStringList           allPicturesPath;
     PreviewLoadThread*    previewLoadThread;
     ThumbnailLoadThread*  thumbnailLoadThread;
-    KFaceIface::Database* faceIface;
-    int                   unknownTagId;
-    int                   scannedForFacesTagId;
-    TagsCache*            tagsCache;
+    
+    FaceIface* faceIface;
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
@@ -179,14 +169,12 @@ void BatchFaceDetector::slotDetectFaces()
                 !d->cancel && (i != pathList.constEnd()); ++i)
         {
             ImageInfo info(*i);
-            ImageTagPair pair(info.id(), d->scannedForFacesTagId);
-
-            if (pair.hasProperty("scannedForFaces"))
+            
+            if(d->faceIface->hasBeenScanned(info.id()))
             {
-                kDebug()<<"Ignoring image "<<(*i)<<", it has aready been scanned.";
+                kDebug()<< "Image " << info.filePath() << "has already been scanned.";
                 continue;
             }
-
             d->allPicturesPath << (*i);
         }
     }
@@ -232,46 +220,25 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
         return;
 
     DImg dimg(img);
-
+    
     // FIXME: Ignore xcf images for now, till the problem with xcf is solved.
     if (!dimg.isNull() && !desc.filePath.endsWith("xcf", Qt::CaseInsensitive))
     {
-        kDebug() << desc.filePath << " => " << "Height= " << img.height() << ", Width= " << img.width();
+        kDebug() << "Will detect faces in " << desc.filePath << " => " << "Height= " << img.height() << ", Width= " << img.width();
 
-        QImage qimg = dimg.copyQImage();
-        KFaceIface::Image fimg(qimg);
-        QList<KFaceIface::Face> faceList = d->faceIface->detectFaces(fimg);
-        QListIterator<KFaceIface::Face> it(faceList);
-        kDebug() << "Faces detected in " << desc.filePath;
-
+        // If we're to rebuild everything, delete old thumbnails. 
+        // FIXME: We have multiple thumbs per image, but deletethumbnail deletes all.
         if (d->rebuildAll)
             d->thumbnailLoadThread->deleteThumbnail(desc.filePath);
         
-        ImageInfo info(desc.filePath);
-        ImageTagPair pairScanned(info.id(), d->scannedForFacesTagId);
-        pairScanned.addProperty("scannedForFaces", "");
-        pairScanned.assignTag();
+        // Find all faces, and create and associate their face thumbnails with the image.
+        QList<KFaceIface::Face> faceList = d->faceIface->findAndTagFaces(dimg, ImageInfo(desc.filePath).id() );
         
+        QListIterator<KFaceIface::Face> it(faceList);
         while(it.hasNext())
         {
             KFaceIface::Face face = it.next();
-            QRect faceRect = face.toRect();
-            kDebug() << faceRect;
-            d->thumbnailLoadThread->storeDetailThumbnail(desc.filePath, faceRect, face.getImage(), true);
-            
-            // Assign the "/People/Unknown" tag. The property for this tag is "faceRegion", which has an SVG rect associated with it.
-            // When we assign a name for a person in the image, we assign a new tag "/People/<Person Name>" to this image, and move the
-            // "faceRegion" property to this tag, and delete it from the unknown tag."
-            ImageTagPair pair(info.id(), d->tagsCache->tagForPath("/People/Unknown"));
-            
-            QString s = QString("<rect x=\"")+QString::number(faceRect.x())+
-                        QString("\" y=\"")+QString::number(faceRect.y())+
-                        QString("\" width=\"")+QString::number(faceRect.width())+
-                        QString("\" height=\"")+QString::number(faceRect.height())+ QString("\" />");
-                                            
-            kDebug()<<s;
-            pair.addProperty("faceRegion", s);
-            pair.assignTag();
+            d->thumbnailLoadThread->storeDetailThumbnail(desc.filePath, face.toRect(), face.getImage(), true);
         }
     }
 
