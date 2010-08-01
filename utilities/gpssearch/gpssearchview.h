@@ -59,7 +59,7 @@ class GPSSearchView : public QWidget, public StateSavingObject
 public:
 
     GPSSearchView(QWidget* parent, SearchModel* searchModel,
-                  SearchModificationHelper* searchModificationHelper);
+                  SearchModificationHelper* searchModificationHelper, QItemSelectionModel* itemSelectionModel);
     ~GPSSearchView();
 
     void setActive(bool val);

@@ -275,7 +275,7 @@ class GPSSearchSideBarWidget : public SidebarWidget
 
 public:
 
-    GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel, SearchModificationHelper* searchModificationHelper);
+    GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel, SearchModificationHelper* searchModificationHelper,QItemSelectionModel* itemSelectionModel);
     virtual ~GPSSearchSideBarWidget();
 
     void setActive(bool active);

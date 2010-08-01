@@ -1008,14 +1008,14 @@ public:
 };
 
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                                               SearchModificationHelper* searchModificationHelper)
+                                               SearchModificationHelper* searchModificationHelper, QItemSelectionModel* itemSelectionModel)
                       : SidebarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
 {
     setObjectName("GPS Search Sidebar");
 
     d->searchModel   = searchModel;
 
-    d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper);
+    d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
 
     QVBoxLayout* layout = new QVBoxLayout(this);
