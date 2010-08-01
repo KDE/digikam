@@ -67,6 +67,7 @@
 #include "previewlayout.h"
 #include "tagscache.h"
 #include "imagetagpair.h"
+#include "albummanager.h"
 
 // libkface includes
 
@@ -510,6 +511,17 @@ void ImagePreviewViewV2::findFaces()
     if(hasBeenScanned())
     {
         kDebug()<<"Image already has been scanned.";
+        //d->item->imageInfo().
+//         ImageTagPair pair(d->item->imageInfo().id(), tagId); //relevant tagId must be passed to delegate
+//         QRect rect = fromSVG(pair.value("region"));
+    
+        AlbumManager *man = AlbumManager::instance();
+        QList <int> peopleTagIds = man->subTags(d->tagsCache->tagForPath("/People"), true);
+        
+        QListIterator<int> it(peopleTagIds);
+        while(it.hasNext())
+            kDebug()<< d->tagsCache->tagName(it.next());
+        
         return;
     }
     d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(d->item->image().copyQImage()));

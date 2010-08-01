@@ -450,7 +450,7 @@ public:
      */
     QHash<int, QString> tagNames() const;
     
-    QList<int> subTags(int tagId);
+    QList<int> subTags(int tagId, bool recursive = false);
 
     //@}
 

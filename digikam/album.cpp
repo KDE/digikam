@@ -111,16 +111,15 @@ Album* Album::prev() const
 QList< Album* > Album::childAlbums(bool recursive)
 {
     QList<Album*> childList;
-    
-    childList += m_firstChild;
-    
-    Album* sibling = m_firstChild;
-    
-    // NOTE: The next() function doesn't cycle.
-    while(sibling->next())
-    {   
-        sibling = sibling->next();
-        childList += sibling;
+
+    for (Album *child = this->firstChild(); child; child = child->next())
+    {
+        childList += child;
+        
+        if (recursive)
+        {
+            childList += child->childAlbums(recursive);
+        }
     }
     
     return childList;
@@ -130,7 +129,7 @@ QList< int > Album::childAlbumIds(bool recursive)
 {
     QList <int> ids;
     
-    QList<Album *> childList = this->childAlbums();
+    QList<Album *> childList = this->childAlbums(recursive);
     
     QListIterator<Album *> it(childList);
     

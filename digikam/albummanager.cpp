@@ -2492,10 +2492,10 @@ QHash<int, QString> AlbumManager::tagNames() const
     return hash;
 }
 
-QList< int > AlbumManager::subTags(int tagId)
+QList< int > AlbumManager::subTags(int tagId, bool recursive)
 {
     TAlbum* album = this->findTAlbum(tagId);
-    return album->childAlbumIds();
+    return album->childAlbumIds(recursive);
 }
 
 
