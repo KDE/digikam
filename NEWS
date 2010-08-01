@@ -24,6 +24,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 226544 : Suspicious QModelIndex messages at startup.
 018 ==> 240945 : Picture size does not report correctly after gimp.
 019 ==> 245380 : Improve the ergonomics of the bwsepia filter ui.
-020 ==> 
-
+020 ==> 204568 : Metadata not being written to files.
+021 ==> 
 
