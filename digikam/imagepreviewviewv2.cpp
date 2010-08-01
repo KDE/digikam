@@ -156,7 +156,8 @@ public:
     QAction*              rotRightAction;
     QAction*              peopleToggleAction;
     QAction*              addPersonAction;
-
+    QAction*              forgetFacesAction;
+    
     QToolBar*             toolBar;
 
     AlbumWidgetStack*     stack;
@@ -199,7 +200,8 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
     d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"),   this);
     d->peopleToggleAction = new QAction(SmallIcon("user-identity"),       i18n("Show Face Tags"), this);
     d->addPersonAction    = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"), this);
-
+    d->forgetFacesAction  = new QAction(SmallIcon("list-remove-user"),    i18n("Forget all faces from this image"), this);
+    
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
@@ -229,6 +231,9 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
 
     connect(d->addPersonAction, SIGNAL(triggered()),
             this, SLOT(slotAddPersonTag()));
+    
+    connect(d->forgetFacesAction, SIGNAL(triggered()),
+            this, SLOT(slotForgetFaces()));
 
     connect(this->layout(), SIGNAL( zoomFactorChanged(double)),
             this, SLOT(slotUpdatePersonTagScales()));
@@ -320,6 +325,7 @@ void ImagePreviewViewV2::showContextMenu(const ImageInfo& info, QGraphicsSceneCo
     cmhelper.addAction(d->peopleToggleAction, true);
     popmenu.addSeparator();
     cmhelper.addAction(d->addPersonAction, true);
+    cmhelper.addAction(d->forgetFacesAction, true);
 
     // --------------------------------------------------------
 
@@ -562,7 +568,7 @@ bool ImagePreviewViewV2::hasBeenScanned()
     return pair.hasProperty("scannedForFaces");
 }
 
-void ImagePreviewViewV2::forgetFaces()
+void ImagePreviewViewV2::slotForgetFaces()
 {
     clearFaceItems();
     d->currentFaces.clear();
@@ -571,6 +577,7 @@ void ImagePreviewViewV2::forgetFaces()
     {
         // Remove the "scanned for faces" tag.
         ImageTagPair pair1(d->item->imageInfo().id(), d->scannedForFacesTagId);
+        pair1.removeProperties("scannedForFaces");
         pair1.unAssignTag();
             
         // Populate the peopleTagIds list with all people tags. This includes the "/People" tag and all other subtags of it.

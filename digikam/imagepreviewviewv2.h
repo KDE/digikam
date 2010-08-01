@@ -68,8 +68,6 @@ public:
     void clearFaceItems();
     
     bool hasBeenScanned();
-    
-    void forgetFaces();
 
 Q_SIGNALS:
 
@@ -110,6 +108,8 @@ private Q_SLOTS:
     void slotAddPersonTag();
     void slotUpdatePersonTagScales();
 
+    void slotForgetFaces();
+    
 private:
 
     ImagePreviewViewV2Priv* const d;
