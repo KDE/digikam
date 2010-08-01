@@ -139,11 +139,13 @@ public:
         
         tagsCache = TagsCache::instance();
         scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
+        peopleTagId = tagsCache->createTag("/People");
     }
 
     bool                  peopleTagsShown;
     double                scale;
     int                   scannedForFacesTagId;
+    int                   peopleTagId;
     
     ImagePreviewViewItem* item;
 
@@ -515,13 +517,6 @@ void ImagePreviewViewV2::findFaces()
 //         ImageTagPair pair(d->item->imageInfo().id(), tagId); //relevant tagId must be passed to delegate
 //         QRect rect = fromSVG(pair.value("region"));
     
-        AlbumManager *man = AlbumManager::instance();
-        QList <int> peopleTagIds = man->subTags(d->tagsCache->tagForPath("/People"), true);
-        
-        QListIterator<int> it(peopleTagIds);
-        while(it.hasNext())
-            kDebug()<< d->tagsCache->tagName(it.next());
-        
         return;
     }
     d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(d->item->image().copyQImage()));
@@ -577,9 +572,22 @@ void ImagePreviewViewV2::forgetFaces()
         // Remove the "scanned for faces" tag.
         ImageTagPair pair1(d->item->imageInfo().id(), d->scannedForFacesTagId);
         pair1.unAssignTag();
+            
+        // Populate the peopleTagIds list with all people tags. This includes the "/People" tag and all other subtags of it.
+        AlbumManager *man = AlbumManager::instance();
+        QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
+        peopleTagIds += d->peopleTagId;
         
-        // Remove the "People" tag and all subtags of it.
-        //FIXME: How to do the above?
+        // Now unassign all these tags from the image. This removes the properties for the Image-tag pair too, which stored the rect
+        QListIterator<int> it(peopleTagIds);
+        while(it.hasNext())
+        {
+            int currentTag = it.next();
+            ImageTagPair peopleTags(d->item->imageInfo().id(), currentTag );
+            peopleTags.unAssignTag();
+            kDebug()<<" Removed tag "<< d->tagsCache->tagName(currentTag);
+        }
+    
     }
 }
 
