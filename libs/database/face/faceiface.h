@@ -43,7 +43,7 @@ class QImage;
 namespace Digikam
 {
 
-class Dimg;
+class DImg;
 class FaceIfacePriv;
 
 class DIGIKAM_DATABASE_EXPORT FaceIface
@@ -54,7 +54,7 @@ public:
     ~FaceIface();
 
     bool hasBeenScanned(qlonglong imageid);
-    QList<Face> findAndTagFaces(qlonglong imageid);
+    QList<Face> findAndTagFaces(DImg& image, qlonglong imageid);
     void forgetFaceTags(qlonglong imageid);
     
 private:

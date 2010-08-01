@@ -41,6 +41,7 @@
 #include "tagscache.h"
 #include "imagetagpair.h"
 #include "albummanager.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -78,6 +79,45 @@ bool FaceIface::hasBeenScanned(qlonglong imageid)
 {
     ImageTagPair pair(imageid, d->scannedForFacesTagId);
     return pair.hasProperty("scannedForFaces");
+}
+
+QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
+{
+    QImage qimg = image.copyQImage();
+    
+    KFaceIface::Image fimg(qimg);
+    QList<KFaceIface::Face> faceList = d->libkface->detectFaces(fimg);
+    
+    // Mark the image as scanned.
+    ImageTagPair pairScanned(imageid, d->scannedForFacesTagId);
+    pairScanned.addProperty("scannedForFaces", "");
+    pairScanned.assignTag();
+
+    // Apply region tags to the image for each face that has been detected.
+    QListIterator<KFaceIface::Face> it(faceList);
+    
+    while (it.hasNext())
+    {
+        KFaceIface::Face face = it.next();
+        
+        // Assign the "/People/Unknown" tag. The property for this tag is "faceRegion", which has an SVG rect associated with it.
+        // When we assign a name for a person in the image, we assign a new tag "/People/<Person Name>" to this image, and move the
+        // "faceRegion" property to this tag, and delete it from the unknown tag."
+        ImageTagPair pair(imageid, d->tagsCache->tagForPath("/People/Unknown"));
+
+        QRect faceRect = face.toRect();
+        kDebug() << faceRect;
+        QString s = QString("<rect x=\"")+QString::number(faceRect.x())+
+                    QString("\" y=\"")+QString::number(faceRect.y())+
+                    QString("\" width=\"")+QString::number(faceRect.width())+
+                    QString("\" height=\"")+QString::number(faceRect.height())+ QString("\" />");
+
+        kDebug()<<s;
+        pair.addProperty("faceRegion", s);
+        pair.assignTag();
+    }
+    
+    return faceList;
 }
 
 void FaceIface::forgetFaceTags(qlonglong imageid)
