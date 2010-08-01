@@ -39,12 +39,16 @@
 #include "searchxml.h"
 #include "sqlquery.h"
 #include "tagscache.h"
+#include "imagetagpair.h"
+#include "albummanager.h"
 
 namespace Digikam
 {
     
 class FaceIfacePriv
 {
+public:
+    
     FaceIfacePriv()
     {
         libkface             = new KFaceIface::Database(KFaceIface::Database::InitAll, KStandardDirs::locateLocal("data", "libkface"));
@@ -56,8 +60,8 @@ class FaceIfacePriv
     ~FaceIfacePriv()
     {
         delete libkface;
-        delete tagsCache;
     }
+    
     int                   scannedForFacesTagId;
     int                   peopleTagId;
     
@@ -65,14 +69,42 @@ class FaceIfacePriv
     TagsCache*            tagsCache;
 };   
 
-FaceIface::FaceIface()
-{
-
-}
-
 FaceIface::~FaceIface()
 {
     delete d;
+}
+
+bool FaceIface::hasBeenScanned(qlonglong imageid)
+{
+    ImageTagPair pair(imageid, d->scannedForFacesTagId);
+    return pair.hasProperty("scannedForFaces");
+}
+
+void FaceIface::forgetFaceTags(qlonglong imageid)
+{
+    if (!hasBeenScanned(imageid))
+        return;
+
+    // Remove the "scanned for faces" tag.
+    ImageTagPair pair1(imageid, d->scannedForFacesTagId);
+    pair1.removeProperties("scannedForFaces");
+    pair1.unAssignTag();
+
+    // Populate the peopleTagIds list with all people tags. This includes the "/People" tag and all other subtags of it.
+    AlbumManager *man = AlbumManager::instance();
+    QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
+    peopleTagIds += d->peopleTagId;
+
+    // Now unassign all these tags from the image. This removes the properties for the Image-tag pair too, which stored the rect
+    QListIterator<int> it(peopleTagIds);
+    while (it.hasNext())
+    {
+        int currentTag = it.next();
+        ImageTagPair peopleTags(imageid, currentTag );
+        peopleTags.removeProperties("faceRegion");
+        peopleTags.unAssignTag();
+        kDebug()<<" Removed tag "<< d->tagsCache->tagName(currentTag);
+    }
 }
 
 

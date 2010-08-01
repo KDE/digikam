@@ -50,10 +50,10 @@ class DIGIKAM_DATABASE_EXPORT FaceIface
 {
 
 public:
-
-    FaceIface();
+    
     ~FaceIface();
 
+    bool hasBeenScanned(qlonglong imageid);
     QList<Face> findAndTagFaces(qlonglong imageid);
     void forgetFaceTags(qlonglong imageid);
     
