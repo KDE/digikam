@@ -525,6 +525,7 @@ void ImagePreviewViewV2::findFaces()
     
         return;
     }
+    
     d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(d->item->image().copyQImage()));
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
 }
@@ -591,6 +592,7 @@ void ImagePreviewViewV2::slotForgetFaces()
         {
             int currentTag = it.next();
             ImageTagPair peopleTags(d->item->imageInfo().id(), currentTag );
+            peopleTags.removeProperties("faceRegion");
             peopleTags.unAssignTag();
             kDebug()<<" Removed tag "<< d->tagsCache->tagName(currentTag);
         }
