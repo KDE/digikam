@@ -68,11 +68,11 @@
 #include "tagscache.h"
 #include "imagetagpair.h"
 #include "albummanager.h"
+#include "faceiface.h"
 
 // libkface includes
 
 #include <libkface/kface.h>
-#include <libkface/database.h>
 #include <libkface/faceitem.h>
 
 // KDE includes
@@ -135,17 +135,11 @@ public:
         peopleToggleAction   = 0;
         addPersonAction      = 0;
 
-        faceIface            = new KFaceIface::Database(KFaceIface::Database::InitAll, KStandardDirs::locateLocal("data", "libkface"));
-        
-        tagsCache = TagsCache::instance();
-        scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
-        peopleTagId = tagsCache->createTag("/People");
+        faceIface            = new FaceIface;
     }
 
     bool                  peopleTagsShown;
     double                scale;
-    int                   scannedForFacesTagId;
-    int                   peopleTagId;
     
     ImagePreviewViewItem* item;
 
@@ -165,9 +159,7 @@ public:
     QList<FaceItem* >     faceitems;
     QList<Face>           currentFaces;
 
-    KFaceIface::Database* faceIface;
-    
-    TagsCache*            tagsCache;
+    FaceIface*            faceIface;
 };
 
 ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
@@ -519,14 +511,12 @@ void ImagePreviewViewV2::findFaces()
     if(hasBeenScanned())
     {
         kDebug()<<"Image already has been scanned.";
-        //d->item->imageInfo().
-//         ImageTagPair pair(d->item->imageInfo().id(), tagId); //relevant tagId must be passed to delegate
-//         QRect rect = fromSVG(pair.value("region"));
     
         return;
     }
     
-    d->currentFaces = d->faceIface->detectFaces(KFaceIface::Image(d->item->image().copyQImage()));
+    DImg dimg(d->item->image());
+    d->currentFaces = d->faceIface->findAndTagFaces(dimg, d->item->imageInfo().id());
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
 }
 
@@ -565,8 +555,7 @@ void ImagePreviewViewV2::slotAddPersonTag()
 
 bool ImagePreviewViewV2::hasBeenScanned()
 {
-    ImageTagPair pair(d->item->imageInfo().id(), d->scannedForFacesTagId);
-    return pair.hasProperty("scannedForFaces");
+    return d->faceIface->hasBeenScanned(d->item->imageInfo().id());
 }
 
 void ImagePreviewViewV2::slotForgetFaces()
@@ -574,30 +563,7 @@ void ImagePreviewViewV2::slotForgetFaces()
     clearFaceItems();
     d->currentFaces.clear();
     
-    if(hasBeenScanned())
-    {
-        // Remove the "scanned for faces" tag.
-        ImageTagPair pair1(d->item->imageInfo().id(), d->scannedForFacesTagId);
-        pair1.removeProperties("scannedForFaces");
-        pair1.unAssignTag();
-            
-        // Populate the peopleTagIds list with all people tags. This includes the "/People" tag and all other subtags of it.
-        AlbumManager *man = AlbumManager::instance();
-        QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
-        peopleTagIds += d->peopleTagId;
-        
-        // Now unassign all these tags from the image. This removes the properties for the Image-tag pair too, which stored the rect
-        QListIterator<int> it(peopleTagIds);
-        while(it.hasNext())
-        {
-            int currentTag = it.next();
-            ImageTagPair peopleTags(d->item->imageInfo().id(), currentTag );
-            peopleTags.removeProperties("faceRegion");
-            peopleTags.unAssignTag();
-            kDebug()<<" Removed tag "<< d->tagsCache->tagName(currentTag);
-        }
-    
-    }
+    d->faceIface->forgetFaceTags(d->item->imageInfo().id());
 }
 
 }  // namespace Digikam

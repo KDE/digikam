@@ -138,7 +138,10 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
 void FaceIface::forgetFaceTags(qlonglong imageid)
 {
     if (!hasBeenScanned(imageid))
+    {
+        kDebug()<<"Image has not been scanned yet.";
         return;
+    }
 
     // Remove the "scanned for faces" tag.
     ImageTagPair pair1(imageid, d->scannedForFacesTagId);
