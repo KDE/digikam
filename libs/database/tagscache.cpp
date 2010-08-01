@@ -41,6 +41,7 @@
 #include "databaseaccess.h"
 #include "databasewatch.h"
 
+
 namespace Digikam
 {
 
@@ -426,12 +427,6 @@ int TagsCache::getOrCreateTag(const QString& tagPath)
     return id;
 }
 
-QList< int > TagsCache::getAllSubtags(int tagId)
-{
-    
-}
-
-
 void TagsCache::slotTagChanged(const TagChangeset& changeset)
 {
     if (!d->changingDB && changeset.operation() != TagChangeset::IconChanged)
@@ -444,5 +439,6 @@ void TagsCache::slotTagChanged(const TagChangeset& changeset)
     else if (changeset.operation() == TagChangeset::Deleted)
         emit tagDeleted(changeset.tagId());
 }
+
 
 } // namespace Digikam

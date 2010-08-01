@@ -84,7 +84,7 @@ public:
      * @return the last child of this album or 0 if no children
      */
     Album*  lastChild() const;
-
+    
     /**
      * @return the next sibling of this album of this album or 0
      * if no next sibling
@@ -99,6 +99,16 @@ public:
      */
     Album*  prev() const;
 
+    /**
+     * @return a list of all child Albums
+     */
+    QList<Album*>  childAlbums(bool recursive = false);
+    
+    /**
+     * @return a list of all child Albums
+     */
+    QList<int>  childAlbumIds(bool recursive = false);
+    
     /**
      * @return the type of album
      * @see Type

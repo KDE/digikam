@@ -2492,6 +2492,13 @@ QHash<int, QString> AlbumManager::tagNames() const
     return hash;
 }
 
+QList< int > AlbumManager::subTags(int tagId)
+{
+    TAlbum* album = this->findTAlbum(tagId);
+    return album->childAlbumIds();
+}
+
+
 QHash<int, QString> AlbumManager::albumTitles() const
 {
     QHash<int, QString> hash;

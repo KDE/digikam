@@ -115,8 +115,6 @@ public:
      */
     int getOrCreateTag(const QString& tagPath);
     QList<int> getOrCreateTags(const QStringList& tagPaths);
-    
-    QList<int> getAllSubtags(int tagId);
 
 signals:
 

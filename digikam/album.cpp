@@ -108,6 +108,40 @@ Album* Album::prev() const
     return m_prev;
 }
 
+QList< Album* > Album::childAlbums(bool recursive)
+{
+    QList<Album*> childList;
+    
+    childList += m_firstChild;
+    
+    Album* sibling = m_firstChild;
+    
+    // NOTE: The next() function doesn't cycle.
+    while(sibling->next())
+    {   
+        sibling = sibling->next();
+        childList += sibling;
+    }
+    
+    return childList;
+}
+
+QList< int > Album::childAlbumIds(bool recursive)
+{
+    QList <int> ids;
+    
+    QList<Album *> childList = this->childAlbums();
+    
+    QListIterator<Album *> it(childList);
+    
+    while( it.hasNext() )
+        ids += it.next()->id();
+    
+    return ids;
+}
+
+
+
 void Album::insertChild(Album* child)
 {
     if (!child)

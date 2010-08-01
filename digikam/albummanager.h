@@ -449,6 +449,8 @@ public:
      * @return A hash with the tag names for all tag IDs.
      */
     QHash<int, QString> tagNames() const;
+    
+    QList<int> subTags(int tagId);
 
     //@}
 
