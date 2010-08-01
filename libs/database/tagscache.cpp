@@ -426,6 +426,12 @@ int TagsCache::getOrCreateTag(const QString& tagPath)
     return id;
 }
 
+QList< int > TagsCache::getAllSubtags(int tagId)
+{
+    
+}
+
+
 void TagsCache::slotTagChanged(const TagChangeset& changeset)
 {
     if (!d->changingDB && changeset.operation() != TagChangeset::IconChanged)

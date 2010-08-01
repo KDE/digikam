@@ -98,6 +98,7 @@ public:
     void addProperty(const QString& key, const QString& value);
     /// Remove all occurrences of the property
     void removeProperties(const QString& key);
+    
 
 private:
 

@@ -555,5 +555,20 @@ bool ImagePreviewViewV2::hasBeenScanned()
     return pair.hasProperty("scannedForFaces");
 }
 
+void ImagePreviewViewV2::forgetFaces()
+{
+    clearFaceItems();
+    d->currentFaces.clear();
+    
+    if(hasBeenScanned())
+    {
+        // Remove the "scanned for faces" tag.
+        ImageTagPair pair1(d->item->imageInfo().id(), d->scannedForFacesTagId);
+        pair1.unAssignTag();
+        
+        // Remove the "People" tag and all subtags of it.
+        //FIXME: How to do the above?
+    }
+}
 
 }  // namespace Digikam

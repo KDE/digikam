@@ -68,6 +68,8 @@ public:
     void clearFaceItems();
     
     bool hasBeenScanned();
+    
+    void forgetFaces();
 
 Q_SIGNALS:
 
