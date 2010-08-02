@@ -353,6 +353,11 @@ void Canvas::readMetadataFromFile(const QString& file)
     d->im->readMetadataFromFile(file);
 }
 
+void Canvas::setCurrentHistoryUuid(const QString& uuid)
+{
+    d->im->setCurrentHistoryUuid(uuid);
+}
+
 void Canvas::clearUndoHistory()
 {
     d->im->clearUndoManager();

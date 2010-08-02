@@ -158,6 +158,8 @@ private Q_SLOTS:
 
     void slotUpdateFiltersHistorySidebar();
 
+    virtual void slotLoadingFinished(const QString& filename, bool success);
+
 private:
 
     ImageWindowPriv* const d;

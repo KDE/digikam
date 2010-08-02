@@ -631,6 +631,18 @@ void ImageWindow::slotLoadCurrent()
     setViewToURL(d->urlCurrent);
 }
 
+void ImageWindow::slotLoadingFinished(const QString& filename, bool success)
+{
+    EditorWindow::slotLoadingFinished(filename, success);
+
+    if (!d->imageInfoCurrent.isNull())
+    {
+        // if there is no UUID in metadata (and only then will this call have an effect)
+        // we assign a UUID in the database at least. Introduce this UUID here.
+        m_canvas->setCurrentHistoryUuid(d->imageInfoCurrent.uuid());
+    }
+}
+
 void ImageWindow::setViewToURL(const KUrl& url)
 {
     emit signalURLChanged(url);

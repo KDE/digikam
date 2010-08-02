@@ -80,6 +80,7 @@ public:
     void    applyTransform(const IccTransform& transform);
     void    setModified();
     void    readMetadataFromFile(const QString& file);
+    void    setCurrentHistoryUuid(const QString& uuid);
     void    clearUndoHistory();
     void    setUndoHistoryOrigin();
     void    updateUndoState();
