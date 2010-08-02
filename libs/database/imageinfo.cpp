@@ -618,6 +618,22 @@ void ImageInfo::setUuid(const QString& uuid)
     DatabaseAccess().db()->setImageUuid(m_data->id, uuid);
 }
 
+HistoryImageId ImageInfo::historyImageId() const
+{
+    if (!m_data)
+        return HistoryImageId();
+
+    HistoryImageId id(uuid());
+    id.setCreationDate(dateTime());
+    id.setFileName(name());
+    id.setPathOnDisk(filePath());
+
+    ItemScanInfo info = DatabaseAccess().db()->getItemScanInfo(m_data->id);
+    id.setUniqueHash(info.uniqueHash, info.fileSize);
+
+    return id;
+}
+
 ImageCommonContainer ImageInfo::imageCommonContainer() const
 {
     if (!m_data)

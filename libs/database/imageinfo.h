@@ -49,6 +49,7 @@ namespace Digikam
 {
 
 class DImageHistory;
+class HistoryImageId;
 class ImageComments;
 class ImageCommonContainer;
 class ImageCopyright;
@@ -252,6 +253,11 @@ public:
      */
     QString uuid() const;
     void setUuid(const QString& uuid);
+
+    /**
+     * Constructs a HistoryImageId with all available information for this image.
+     */
+    HistoryImageId historyImageId() const;
 
     /**
      * Retrieve information about images from which this image
