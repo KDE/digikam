@@ -28,56 +28,71 @@
 
 #include <QtCore/QFileInfo>
 
+// KDE includes
+
+#include <kurl.h>
+
 namespace Digikam 
 {
 
 HistoryImageId::HistoryImageId()
+            : m_type(InvalidType), m_fileSize(0)
 {
 }
 
-HistoryImageId::HistoryImageId(const QString& originalUUID, const QString& fileUUID, 
-                               const QString& filePathAndName, const QDateTime& creationDate)
+HistoryImageId::HistoryImageId(const QString& uuid, Type type)
+            : m_type(type), m_uuid(uuid)
 {
-    QFileInfo info(filePathAndName);
-    m_originalUUID = originalUUID;
-    m_fileUUID     = fileUUID;
-    m_fileName 	   = info.fileName();
-    m_filePath     = info.absolutePath();
+}
+
+void HistoryImageId::setType(HistoryImageId::Type type)
+{
+    m_type = type;
+}
+
+void HistoryImageId::setUuid(const QString& uuid)
+{
+    m_uuid = uuid;
+}
+
+void HistoryImageId::setFileName(const QString& fileName)
+{
+    m_fileName = fileName;
+}
+
+void HistoryImageId::setCreationDate(const QDateTime& creationDate)
+{
     m_creationDate = creationDate;
 }
 
-bool HistoryImageId::matches(const Digikam::HistoryImageId& other) const
+void HistoryImageId::setPathOnDisk(const QString& filePath)
 {
-    if(m_originalUUID == other.m_originalUUID && m_fileUUID == other.m_fileUUID)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    KUrl url = KUrl::fromPath(filePath);
+    m_filePath = url.directory(KUrl::ObeyTrailingSlash);
 }
 
-bool HistoryImageId::isEmpty() const
+void HistoryImageId::setUniqueHash(const QString& uniqueHash, int fileSize)
 {
-    if(m_originalUUID.isEmpty() && m_fileUUID.isEmpty())
-    {
-        return true;
-    }
-    else return false;
+    m_uniqueHash = uniqueHash;
+    m_fileSize   = fileSize;
 }
 
-bool HistoryImageId::isOriginalFile() const
+bool HistoryImageId::isValid() const
 {
-    if( (!m_originalUUID.isEmpty() && m_fileUUID.isEmpty() ) ||
-        (!m_originalUUID.isEmpty() && (m_originalUUID == m_fileUUID) ) )
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (m_type != InvalidType)
+        && (!m_uuid.isEmpty() || !m_fileName.isEmpty());
+}
+
+bool HistoryImageId::operator==(const HistoryImageId& other) const
+{
+    return m_uuid         == other.m_uuid
+       &&  m_type         == other.m_type
+       &&  m_fileName     == other.m_fileName
+       &&  m_filePath     == other.m_filePath
+       &&  m_creationDate == other.m_creationDate
+       &&  m_uniqueHash   == other.m_uniqueHash
+       &&  m_fileSize     == other.m_fileSize
+       &&  m_originalUUID == other.m_originalUUID;
 }
 
 } // namespace Digikam
