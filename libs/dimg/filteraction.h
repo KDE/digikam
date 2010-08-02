@@ -44,19 +44,23 @@ public:
 
     enum Category
     {
+        // Do not change existing values, they are written to XML in files!
         /** When given the set of stored parameters and the original data,
          *  an identical result will be produced. */
-        ReproducibleFilter,
+        ReproducibleFilter = 0,
         /**
          *  The operation is documented and a number of parameters may be known,
          *  but the identical result cannot be reproduced.
          *  It may be possible to produce a sufficiently similar result.
          */
-        ComplexFilter,
+        ComplexFilter = 1,
         /** The source images are known, a textual description may be added,
          *  but there is no way to automatically replay
          */
-        DocumentedHistory
+        DocumentedHistory = 2,
+
+        CategoryFirst = ReproducibleFilter,
+        CategoryLast  = DocumentedHistory
     };
 
 public:
@@ -65,6 +69,8 @@ public:
     FilterAction(const QString& identifier, int version, Category category = ReproducibleFilter);
 
     bool isNull() const;
+
+    bool operator==(const FilterAction& other) const;
 
     Category category() const;
 

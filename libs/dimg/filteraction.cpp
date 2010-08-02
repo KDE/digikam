@@ -43,6 +43,16 @@ bool FilterAction::isNull() const
     return m_identifier.isEmpty();
 }
 
+bool FilterAction::operator==(const FilterAction& other) const
+{
+    return m_identifier      == other.m_identifier
+      &&   m_version         == other.m_version
+      &&   m_category        == other.m_category
+      &&   m_description     == other.m_description
+      &&   m_displayableName == other.m_displayableName
+      &&   m_params          == other.m_params;
+}
+
 FilterAction::Category FilterAction::category() const
 {
     return m_category;
