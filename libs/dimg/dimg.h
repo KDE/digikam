@@ -199,7 +199,7 @@ public:
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
     bool        load(const QString& filePath,
-                     bool loadMetadata, bool loadICCData, bool loadUniqueHash,
+                     bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadHistory,
                      DImgLoaderObserver *observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
 
@@ -211,7 +211,8 @@ public:
         If loadICCData is true, the ICC profile will be available with getICCProfile.
      */
     bool        loadImageInfo(const QString& filePath, bool loadMetadata = true,
-                              bool loadICCData = true, bool loadUniqueHash = false);
+                              bool loadICCData = true, bool loadUniqueHash = true,
+                              bool loadImageHistory = true);
 
     bool        isNull()         const;
     uint        width()          const;
@@ -308,13 +309,15 @@ public:
 
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;
-    
+
     DImageHistory getImageHistory() const;
     void          setImageHistory(const DImageHistory& history);
     bool          hasImageHistory() const;
-    
-    void       setFilterAction(const QString& identifier, const int version, const Digikam::FilterAction::Category category, QString param, const QVariant value);
-    void       setFilterAction(const QString& identifier, const int version, const Digikam::FilterAction::Category category, QHash<QString, QVariant> values);
+
+    void       setFilterAction(const QString& identifier, int version, Digikam::FilterAction::Category category,
+                               const QString& param, const QVariant& value);
+    void       setFilterAction(const QString& identifier, int version, Digikam::FilterAction::Category category,
+                               const QHash<QString, QVariant>& values);
     void       setFilterAction(const FilterAction& action);
 
     /** Use this method to update lead metadata after image transformations.
@@ -322,9 +325,34 @@ public:
         'destMimeType' is destination type mime. In some case, any metadata are not updated by the same way.
         'originalFileName' is original file name. Can be empty.
         'resetExifOrientationTag' is used to force Exif orientation flag to normal.
+        'updateImageHistory' sets a new image UUID. If the image is changed in any way, set this to true.
      */
     void       updateMetadata(const QString& destMimeType, const QString& originalFileName,
-                              bool resetExifOrientationTag);
+                              bool resetExifOrientationTag, bool updateImageHistory);
+
+    /** If you have saved this DImg to filePath, and want to continue using this DImg object
+     *  to add further changes to the image history, you can call this method to add to the image history
+     *  a reference to the just saved image.
+     *  First call updateMetadata(), then call save(), then call addAsReferredImage().
+     *  Do not call this directly after loading, before applying any changes,
+     *  the history is correctly initialized when loading.
+     */
+    void       addAsReferredImage(const QString& filePath, HistoryImageId::Type type = HistoryImageId::Intermediate);
+    void       addAsReferredImage(const HistoryImageId& id);
+
+
+    /** In the history, adjusts the UUID of the ImageHistoryId of the current file.
+     *  Call this if you have associated a UUID with this file which is not written to the metadata.
+     *  If there is already a UUID present, read from metadata, it will not be replaced.
+     */
+    void       addCurrentUniqueImageId(const QString& uuid);
+
+    /** This method makes the last referred image that was added (as intermediate)
+     *  the new Current image. Use in conjunction with switchOriginToLastSaved(),
+     *  If you have added the saved image with addAsReferredImage(path),
+     *  which is not done automatically at save().
+     */
+    void       switchHistoryOriginToLastReferredImage();
 
     /** When loaded from a file, some attributes like format and isReadOnly still depend on this
         originating file. When saving in a different format to a different file,
@@ -440,9 +468,10 @@ public:
     void       fill(const DColor& color);
 
 
-    /** This methods return a 16-byte MD5 hex digest which is meant to uniquely identify
+    /** This methods return a 128-bit MD5 hex digest which is meant to uniquely identify
         the file. The hash is calculated on parts of the file and the file metadata.
         It cannot be used to find similar images. It is not calculated from the image data.
+        The hash will be returned as a 32-byte hexadecimal string.
 
         If you already have a DImg object of the file, use the member method.
         The object does not need to have the full image data loaded, but it shall at least
@@ -456,8 +485,17 @@ public:
         You do not need a DImg object of the file to retrieve the unique hash;
         Use the static method and pass just the file path.
      */
-    QByteArray getUniqueHash();
+    QByteArray getUniqueHash() const;
     static QByteArray getUniqueHash(const QString& filePath);
+
+    /** This method creates a new 256-bit UUID meant to be globally unique.
+     *  The UUID will be returned as a 64-byte hexadecimal string.
+     *  At least 128bits of the UUID will be created by the platform random number
+     *  generator. The rest may be created from a content-based hash similar to the uniqueHash, see above.
+     *  This method only generates a new UUID for this image without in any way changing this image object
+     *  or saving the UUID anywhere.
+     */
+    QByteArray createImageUniqueId() const;
 
 private:
 

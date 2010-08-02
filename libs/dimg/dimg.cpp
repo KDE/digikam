@@ -50,6 +50,7 @@ extern "C"
 #include <QPixmap>
 #include <QSysInfo>
 #include <QDebug>
+#include <QUuid>
 
 // KDE includes
 
@@ -323,7 +324,7 @@ void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, boo
 //---------------------------------------------------------------------------------------------------
 // load and save
 
-bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash)
+bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory)
 {
     DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo;
     if (loadMetadata)
@@ -332,6 +333,8 @@ bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadIC
         loadFlags |= DImgLoader::LoadICCData;
     if (loadUniqueHash)
         loadFlags |= DImgLoader::LoadUniqueHash;
+    if (loadImageHistory)
+        loadFlags |= DImgLoader::LoadImageHistory;
 
     return load(filePath, loadFlags, 0, DRawDecoding());
 }
@@ -342,7 +345,7 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
     return load(filePath, DImgLoader::LoadAll, observer, rawDecodingSettings);
 }
 
-bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash,
+bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory,
                 DImgLoaderObserver *observer, DRawDecoding rawDecodingSettings)
 {
     DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo | DImgLoader::LoadImageData;
@@ -352,6 +355,8 @@ bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bo
         loadFlags |= DImgLoader::LoadICCData;
     if (loadUniqueHash)
         loadFlags |= DImgLoader::LoadUniqueHash;
+    if (loadImageHistory)
+        loadFlags |= DImgLoader::LoadImageHistory;
 
     return load(filePath, loadFlags, observer, rawDecodingSettings);
 }
@@ -938,6 +943,16 @@ void DImg::switchOriginToLastSaved()
         setAttribute("isreadonly", readonly);
 
     removeAttribute("rawDecodingSettings");
+}
+
+void DImg::switchHistoryOriginToLastReferredImage()
+{
+    if (!m_priv->imageHistory.isEmpty())
+    {
+        m_priv->imageHistory.adjustReferredImages();
+        if (!m_priv->imageHistory.entries().last().referredImages.isEmpty())
+            m_priv->imageHistory.entries().last().referredImages.last().setType(HistoryImageId::Current);
+    }
 }
 
 DColor DImg::getPixelColor(uint x, uint y) const
@@ -2180,7 +2195,7 @@ void DImg::fill(const DColor& color)
     }
 }
 
-QByteArray DImg::getUniqueHash()
+QByteArray DImg::getUniqueHash() const
 {
     if (m_priv->attributes.contains("uniqueHash"))
         return m_priv->attributes["uniqueHash"].toByteArray();
@@ -2198,8 +2213,7 @@ QByteArray DImg::getUniqueHash()
 
     QByteArray hash = DImgLoader::uniqueHash(filePath, *this, false);
 
-    if (!hash.isNull())
-        setAttribute("uniqueHash", hash);
+    // attribute is written by DImgLoader
 
     return hash;
 }
@@ -2209,7 +2223,16 @@ QByteArray DImg::getUniqueHash(const QString& filePath)
     return DImgLoader::uniqueHash(filePath, DImg(), true);
 }
 
-void DImg::updateMetadata(const QString& destMimeType, const QString& originalFileName, bool resetExifOrientationTag)
+QByteArray DImg::createImageUniqueId() const
+{
+    QUuid randomUuid = QUuid::createUuid();
+    QByteArray imageUUID = randomUuid.toString().remove('{').remove('}').remove('-').toLatin1();
+    imageUUID += getUniqueHash();
+    return imageUUID;
+}
+
+void DImg::updateMetadata(const QString& destMimeType, const QString& originalFileName,
+                          bool resetExifOrientationTag, bool updateImageHistory)
 {
     // Get image Exif/IPTC data.
     DMetadata meta(getMetadata());
@@ -2270,23 +2293,48 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     if(resetExifOrientationTag)
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
     
-    if(!m_priv->imageHistory.isEmpty()) {
-        QString imageHistoryXml = m_priv->imageHistory.toXml();
+    if(!m_priv->imageHistory.isEmpty())
+    {
+        DImageHistory forSaving(m_priv->imageHistory);
+        forSaving.adjustReferredImages();
+        QString imageHistoryXml = forSaving.toXml();
         meta.setImageHistory(imageHistoryXml);
-//         DImageHistory di(m_priv->imageHistory.fromXml(imageHistoryXml));
-//         di.toXml();
+    }
+
+    if (updateImageHistory)
+    {
+        meta.setImageUniqueId(createImageUniqueId());
     }
 
     // Store new Exif/IPTC/XMP data into image.
     setMetadata(meta.data());
-    
 }
 
-void DImg::setFilterAction(const QString& identifier, const int version, const FilterAction::Category category, QHash<QString, QVariant> values)
+void DImg::addAsReferredImage(const QString& filePath, HistoryImageId::Type type)
 {
+    HistoryImageId id = DImgLoader::createHistoryImageId(filePath, *this, DMetadata(getMetadata()));
+    id.setType(type);
+    addAsReferredImage(id);
+}
+
+void DImg::addAsReferredImage(const HistoryImageId& id)
+{
+    m_priv->imageHistory << id;
+}
+
+void DImg::addCurrentUniqueImageId(const QString& uuid)
+{
+    m_priv->imageHistory.adjustCurrentUuid(uuid);
+}
+
+void DImg::setFilterAction(const QString& identifier, int version, FilterAction::Category category,
+                           const QHash<QString, QVariant>& values)
+{
+    /*
     // add the original file to the entries
     if(m_priv->imageHistory.isEmpty())
     {
+        HistoryImageId id;
         QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
         QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
         QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
@@ -2306,22 +2354,25 @@ void DImg::setFilterAction(const QString& identifier, const int version, const F
         
         m_priv->imageHistory << h;    
     }
+    */
     FilterAction f(identifier, version, category);
     
     QHashIterator<QString, QVariant> iter(values);
-    while (iter.hasNext()) 
+    while (iter.hasNext())
     {
-      iter.next();   
-      f.addParameter(iter.key(), iter.value());
-      //setFilterAction(identifier, version, category, iter.key(), iter.value());
+        iter.next();
+        f.addParameter(iter.key(), iter.value());
+        //setFilterAction(identifier, version, category, iter.key(), iter.value());
     }
-    
+
     m_priv->imageHistory << f;
 }
 
-void DImg::setFilterAction(const QString& identifier, const int version, const FilterAction::Category category, QString param, const QVariant value)
+void DImg::setFilterAction(const QString& identifier, int version, FilterAction::Category category,
+                           const QString& param, const QVariant& value)
 {
     // add the original file to the entries
+    /*
     if(m_priv->imageHistory.isEmpty())
     {
         QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
@@ -2343,6 +2394,7 @@ void DImg::setFilterAction(const QString& identifier, const int version, const F
         
         m_priv->imageHistory << h;    
     }
+    */
     
     FilterAction f(identifier, version, category);
     f.addParameter(param, value);
@@ -2354,6 +2406,7 @@ void DImg::setFilterAction(const QString& identifier, const int version, const F
 
 void DImg::setFilterAction(const Digikam::FilterAction& action)
 {
+    /*
     // add the original file to the entries
     if(m_priv->imageHistory.isEmpty())
     {
@@ -2366,12 +2419,12 @@ void DImg::setFilterAction(const Digikam::FilterAction& action)
         m_priv->imageHistory << h;
         kDebug() << "Path and Name: " << filePathAndName;
     }
+    */
 
     m_priv->imageHistory << action;
 
     kDebug() << "FilterAction added by reference";
 }
-
 
 DImageHistory DImg::getImageHistory() const
 {
