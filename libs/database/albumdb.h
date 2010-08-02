@@ -898,6 +898,10 @@ public:
                                         const QString& extraValue = QString(),
                                         const QString& value = QString() /* NOTE parameter order */);
 
+    /**
+     * Returns all items with the given file name and creation date.
+     */
+    QList<qlonglong> findByNameAndCreationDate(const QString& fileName, const QDateTime& creationDate);
 
     /**
      * Retrieves the history entry for the given image.
@@ -946,6 +950,15 @@ public:
     QList<qlonglong> getImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
 
     /**
+     * For the given image id, retrieves all relations of all related images:
+     * Each pair (a,b) means "a is related to b".
+     * Each a and b in the list will have a direct or indirect relation to the initial imageId.
+     * If type is given, filters by type, otherwise returns all types.
+     */
+    QList<QPair<qlonglong, qlonglong> > getRelationCloud(qlonglong imageId,
+                                                         DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+
+    /**
      * Returns if there are valid entries in the ImageHaarMatrix table.
      * Returns false if the table is empty.
      */
@@ -977,7 +990,7 @@ public:
      * If this is -1, no id is excluded.
      */
     QList<ItemScanInfo> getIdenticalFiles(qlonglong id);
-    QList<ItemScanInfo> getIdenticalFiles(int fileSize, const QString& uniqueHash, qlonglong sourceId = -1);
+    QList<ItemScanInfo> getIdenticalFiles(const QString& uniqueHash, int fileSize, qlonglong sourceId = -1);
 
     // ----------- Items and their tags -----------
 

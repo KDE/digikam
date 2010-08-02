@@ -692,20 +692,12 @@ QList< int > AlbumDB::getTagsWithProperty(const QString& property)
 {
     QList<QVariant> values;
 
-    d->db->execSql( "SELECT tagid, value FROM TagProperties WHERE property=?;",
+    d->db->execSql( "SELECT DISTINCT tagid FROM TagProperties WHERE property=?;",
                     property, &values );
 
     QList<int> tagIds;
-
-    if (values.isEmpty())
-        return tagIds;
-
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
-    {
-        int id;
-        id = (*it).toInt();
-        tagIds << id;
-    }
+    foreach (const QVariant& var, values)
+        tagIds << var.toInt();
     return tagIds;
 }
 
@@ -1444,10 +1436,7 @@ QVariantList AlbumDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseField
         foreach (const qlonglong& imageid, imageIDs)
         {
             QVariantList singleValueList;
-            query.bindValue(0, imageid);
-            d->db->exec(query);
-            if (!d->db->handleQueryResult(query, &singleValueList, 0))
-                break;
+            d->db->execSql(query, imageid, &singleValueList);
             values << singleValueList;
         }
 
@@ -1833,6 +1822,21 @@ void AlbumDB::removeImageCopyrightProperties(qlonglong imageID, const QString& p
     }
 }
 
+QList<qlonglong> AlbumDB::findByNameAndCreationDate(const QString& fileName, const QDateTime& creationDate)
+{
+    QList<QVariant> values;
+
+    d->db->execSql( "SELECT id FROM Images "
+                    " INNER JOIN ImageInformation ON id=imageid "
+                    "WHERE name=? AND creationDate=?;",
+                    fileName, creationDate.toString(Qt::ISODate), &values);
+
+    QList<qlonglong> ids;
+    foreach (const QVariant& var, values)
+        ids << var.toLongLong();
+    return ids;
+}
+
 bool AlbumDB::hasImageHistory(qlonglong imageId)
 {
     QList<QVariant> values;
@@ -1981,6 +1985,56 @@ QList<qlonglong> AlbumDB::getImagesRelatingTo(qlonglong objectId, DatabaseRelati
     return imageIds;
 }
 
+QList<QPair<qlonglong, qlonglong> > AlbumDB::getRelationCloud(qlonglong imageId, DatabaseRelation::Type type)
+{
+    QSet<qlonglong> todo, done;
+    QSet<QPair<qlonglong, qlonglong> > pairs;
+    todo << imageId;
+
+    QString sql;
+    if (type == DatabaseRelation::UndefinedType)
+        sql = "SELECT subject, object FROM ImageRelations "
+              "INNER JOIN Images ON ImageRelations.subject=Images.id "
+              "WHERE (subject=? OR object=?) AND status!=3;";
+    else
+        sql = "SELECT subject, object FROM ImageRelations "
+              "INNER JOIN Images ON ImageRelations.subject=Images.id "
+              "WHERE (subject=? OR object=?) AND type=? AND status!=3;";
+
+    SqlQuery query = d->db->prepareQuery(sql);
+
+    QList<QVariant> values;
+    qlonglong subject, object;
+    while (!todo.isEmpty())
+    {
+        qlonglong id = *todo.begin();
+        todo.erase(todo.begin());
+        done << id;
+
+        if (type == DatabaseRelation::UndefinedType)
+            d->db->execSql(query, id, id, &values);
+        else
+            d->db->execSql(query, id, id, type, &values);
+
+        for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); )
+        {
+            subject = (*it).toLongLong();
+            ++it;
+            object = (*it).toLongLong();
+            ++it;
+
+            pairs << qMakePair(subject, object);
+
+            if (!done.contains(subject))
+                todo << subject;
+            if (!done.contains(object))
+                todo << object;
+        }
+    }
+
+    return pairs.toList();
+}
+
 bool AlbumDB::hasHaarFingerprints() const
 {
     QList<QVariant> values;
@@ -2096,10 +2150,10 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(qlonglong id)
     QString uniqueHash = values[0].toString();
     int fileSize       = values[1].toInt();
 
-    return getIdenticalFiles(fileSize, uniqueHash, id);
+    return getIdenticalFiles(uniqueHash, fileSize, id);
 }
 
-QList<ItemScanInfo> AlbumDB::getIdenticalFiles(int fileSize, const QString& uniqueHash, qlonglong sourceId)
+QList<ItemScanInfo> AlbumDB::getIdenticalFiles(const QString& uniqueHash, int fileSize, qlonglong sourceId)
 {
     // enforce validity
     if (uniqueHash.isEmpty() || fileSize <= 0)
