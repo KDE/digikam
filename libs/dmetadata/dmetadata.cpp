@@ -536,7 +536,7 @@ QString DMetadata::getImageUniqueId() const
 
         QString exifUid = getXmpTagString("Xmp.exif.ImageUniqueId");
         if (exifUid.isEmpty())
-            exifUid = getExifTagString("Exif.Image.ImageUniqueId");
+            exifUid = getExifTagString("Exif.Photo.ImageUniqueID");
 
         // same makers may choose to use a "click counter" to generate the id,
         // which is then weak and not a universally unique id
@@ -545,6 +545,12 @@ QString DMetadata::getImageUniqueId() const
         // the left 12 are sufficient for more then 10^14 clicks.
         if (!exifUid.isEmpty() && !exifUid.startsWith("00000000000000000000"))
             return exifUid;
+
+        // Exif.Image.ImageID can also be a pathname, so it's not sufficiently unique
+
+        QString dngUid = getExifTagString("Exif.Image.RawDataUniqueID");
+        if (!dngUid.isEmpty())
+            return dngUid;
     }
     return QString();
 }
