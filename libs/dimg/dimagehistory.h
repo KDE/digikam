@@ -31,6 +31,7 @@
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QHash>
 #include <QtCore/QList>
+#include <QMetaType>
 #include <QSharedDataPointer>
 #include <QString>
 #include <QVariant>
@@ -52,9 +53,8 @@ public:
     {
     public:
 
-        bool           filterEntry;
-        FilterAction   action;
-        HistoryImageId referredImages;
+        FilterAction          action;
+        QList<HistoryImageId> referredImages;
     };
 
 public:
@@ -69,10 +69,19 @@ public:
     bool isEmpty() const;
 
     int size() const;
+    bool operator==(const DImageHistory& other) const;
 
+    /**
+     * Appends a new filter action to the history.
+     */
     DImageHistory& operator<<(const FilterAction& action);
+    /**
+     * Appends a new referred image, representing the current state
+     * of the history.
+     * If you add an id of type Current, adjustReferredImages() will be called.
+     */
     DImageHistory& operator<<(const HistoryImageId& imageId);
-    DImageHistory& operator<<(const Entry& entry);
+
     bool operator<(const DImageHistory& other);
     bool operator>(const DImageHistory& other);
 
@@ -80,7 +89,11 @@ public:
     const QList<DImageHistory::Entry>& entries() const;
 
     const FilterAction& action(int i) const;
-    const HistoryImageId& referredImages(int i) const;
+    QList<HistoryImageId>& referredImages(int i);
+    const QList<HistoryImageId>& referredImages(int i) const;
+
+    QList<HistoryImageId> allReferredImages() const;
+    bool hasCurrentReferredImage() const;
 
     void setOriginalFileName(const QString& fileName);
     QString originalFileName();
@@ -93,6 +106,17 @@ public:
 
     void removeLastFilter();
 
+    /**
+     * Adjusts the type of a Current HistoryImageId:
+     * If it is the first entry, it becomes Original,
+     * if it is in an intermediate entry, it becomes Intermediate,
+     * if in the last entry, it stays current.
+     */
+    void adjustReferredImages();
+
+    /// Changes the UUID of the current (last added current) referred image
+    void adjustCurrentUuid(const QString& uuid);
+
 public:
 
     // Set as public there because of ImageHistoryPrivSharedNull
@@ -104,5 +128,7 @@ private:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::DImageHistory)
 
 #endif // DIMAGEHISTORY_H
