@@ -87,6 +87,7 @@ public:
     void   setModified();
     void   setModified(FilterAction& action);
     void   readMetadataFromFile(const QString& file);
+    void   setCurrentHistoryUuid(const QString& uuid);
     void   clearUndoManager();
     void   setUndoManagerOrigin();
     void   updateUndoState();

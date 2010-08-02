@@ -205,7 +205,7 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
                                          LoadingDescription::RawDecodingGlobalSettings,
                                          LoadingDescription::ConvertForEditor);
 
-        if (iofileSettings->useRAWImport)
+        if (EditorToolIface::editorToolIface() && iofileSettings->useRAWImport)
         {
             d->nextRawDescription = description;
 
@@ -232,11 +232,14 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
 
 void DImgInterface::slotLoadRawFromTool()
 {
-    RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
-    if (rawImport)
+    if (EditorToolIface::editorToolIface())
     {
-        d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
-        d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
+        RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
+        if (rawImport)
+        {
+            d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
+            d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
+        }
     }
     slotLoadRaw();
 }
@@ -264,7 +267,8 @@ void DImgInterface::load(const LoadingDescription& description)
         emit signalImageLoaded(d->filename, true);
     }
 
-    EditorToolIface::editorToolIface()->unLoadTool();
+    if (EditorToolIface::editorToolIface())
+        EditorToolIface::editorToolIface()->unLoadTool();
 }
 
 void DImgInterface::applyTransform(const IccTransform& transform)
@@ -276,7 +280,8 @@ void DImgInterface::applyTransform(const IccTransform& transform)
     d->currentDescription.postProcessingParameters.setTransform(transform);
     loadCurrent();
 
-    EditorToolIface::editorToolIface()->unLoadTool();
+    if (EditorToolIface::editorToolIface())
+        EditorToolIface::editorToolIface()->unLoadTool();
 }
 
 void DImgInterface::loadCurrent()
@@ -296,7 +301,8 @@ void DImgInterface::restore()
 
 void DImgInterface::resetImage()
 {
-    EditorToolIface::editorToolIface()->unLoadTool();
+    if (EditorToolIface::editorToolIface())
+        EditorToolIface::editorToolIface()->unLoadTool();
     resetValues();
     d->image.reset();
 }
@@ -565,7 +571,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     d->savingFilename = fileName;
 
-    d->image.updateMetadata(mimeType, getImageFileName(), setExifOrientationTag);
+    d->image.updateMetadata(mimeType, getImageFileName(), setExifOrientationTag, true);
 
     d->thread->save(d->image, fileName, mimeType); 
 }
@@ -577,6 +583,9 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
 
     if (!success)
         kWarning() << "error saving image '" << QFile::encodeName(filePath).data();
+
+    // add reference, as Intermediate for now. In switchToLastSaved, it may become Current
+    d->image.addAsReferredImage(d->savingFilename);
 
     emit signalImageSaved(filePath, success);
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
@@ -594,13 +603,20 @@ void DImgInterface::abortSaving()
     d->thread->stopSaving(d->savingFilename);
 }
 
+void DImgInterface::setCurrentHistoryUuid(const QString& uuid)
+{
+    d->image.addCurrentUniqueImageId(uuid);
+}
+
 void DImgInterface::switchToLastSaved(const QString& newFilename)
 {
     // Higher level wants to use the current DImg object to represent the file
     // it has previously been saved to.
     d->filename = newFilename;
-    d->imageHistoryWhenLoaded = d->image.getImageHistory();
     d->image.switchOriginToLastSaved();
+    // we have added all saved images as intermediates
+    d->image.switchHistoryOriginToLastReferredImage();
+    d->imageHistoryWhenLoaded = d->image.getImageHistory();
 }
 
 void DImgInterface::setModified()
