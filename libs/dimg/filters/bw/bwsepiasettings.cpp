@@ -56,6 +56,7 @@
 #include "curvesbox.h"
 #include "curveswidget.h"
 #include "imagecurves.h"
+#include "rexpanderboxexclusive.h"
 
 using namespace KDcrawIface;
 
