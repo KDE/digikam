@@ -50,19 +50,19 @@ namespace Digikam
 {
 
 ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
-            : m_hasImage(false), m_hasMetadata(false),
+            : m_hasImage(false), m_hasMetadata(false), m_historyResolved(true),
               m_fileInfo(info), m_scanInfo(scanInfo), m_scanMode(ModifiedScan)
 {
 }
 
 ImageScanner::ImageScanner(const QFileInfo& info)
-            : m_hasImage(false), m_hasMetadata(false),
+            : m_hasImage(false), m_hasMetadata(false), m_historyResolved(true),
               m_fileInfo(info), m_scanMode(ModifiedScan)
 {
 }
 
 ImageScanner::ImageScanner(qlonglong imageid)
-            : m_hasImage(false), m_hasMetadata(false), m_scanMode(ModifiedScan)
+            : m_hasImage(false), m_hasMetadata(false), m_historyResolved(true),  m_scanMode(ModifiedScan)
 {
     ItemShortInfo shortInfo;
     {
@@ -150,8 +150,8 @@ bool lessThanForIdentity(const ItemScanInfo &a, const ItemScanInfo &b)
 bool ImageScanner::scanFromIdenticalFile()
 {
     // Get a list of other images that are identical. Source image shall not be included.
-    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles(m_scanInfo.fileSize,
-                                                            m_scanInfo.uniqueHash, m_scanInfo.id);
+    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles(m_scanInfo.uniqueHash,
+                                                                    m_scanInfo.fileSize, m_scanInfo.id);
 
     if (!candidates.isEmpty())
     {
@@ -487,13 +487,109 @@ void ImageScanner::scanImageHistory()
     {
         DatabaseAccess().db()->setImageHistory(m_scanInfo.id, historyXml);
     }
-    //TODO implement UUID management
-    //TODO implement filling of the ImageRelationsTable:
-    //      - infrastructure to resolve a history image id in the database
-    //      - if resolution of history references is incomplete,
+
+    QString uuid = DatabaseAccess().db()->getImageUuid(m_scanInfo.id);
+    // if there is no uuid in the image, at least for our limited purposes,
+    // we create one. It is recommended to write a UUID to all images.
+    if (uuid.isNull())
+    {
+        uuid = m_img.createImageUniqueId();
+    }
+    DatabaseAccess().db()->setImageUuid(m_scanInfo.id, uuid);
+
+    m_historyResolved = resolveImageHistory(m_scanInfo.id, historyXml);
+    //TODO if resolution of history references is incomplete,
     //        think how to repeat this step later on
     //          a) mark the image in the database as unresolved history
     //          b) just communicate this to the CollectionScanner, who will do it again when the directory is finished
+}
+
+bool ImageScanner::historyIsCompletelyResolved() const
+{
+    return m_historyResolved;
+}
+
+bool ImageScanner::resolveImageHistory(qlonglong id)
+{
+    ImageHistoryEntry history = DatabaseAccess().db()->getImageHistory(id);
+    return resolveImageHistory(id, history.history);
+}
+
+bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& historyXml)
+{
+    if (historyXml.isNull())
+        return true; // "true" means nothing is left to resolve
+
+    DImageHistory history = DImageHistory::fromXml(historyXml);
+    bool completelyResolved = true;
+    QList<HistoryImageId> historyIds = history.allReferredImages();
+    foreach (const HistoryImageId& historyId, historyIds)
+    {
+        QList<qlonglong> ids = resolveHistoryImageId(historyId);
+        completelyResolved = completelyResolved && !ids.isEmpty();
+        foreach (qlonglong id, ids)
+        {
+            if (id != imageId)
+                DatabaseAccess().db()->addImageRelation(imageId, id, DatabaseRelation::DerivedFrom);
+        }
+    }
+    return completelyResolved;
+}
+
+QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& historyId)
+{
+    // first and foremost: UUID
+    if (!historyId.m_uuid.isNull())
+    {
+        QList<qlonglong> uuidList = DatabaseAccess().db()->getItemsForUuid(historyId.m_uuid);
+        if (!uuidList.isEmpty())
+            return uuidList;
+    }
+
+    // Second: uniqueHash + fileSize. Sufficient to assume that a file is identical, but subject to frequent change.
+    if (!historyId.m_uniqueHash.isNull() && historyId.m_fileSize)
+    {
+        QList<ItemScanInfo> infos = DatabaseAccess().db()->getIdenticalFiles(historyId.m_uniqueHash, historyId.m_fileSize);
+        if (!infos.isEmpty())
+        {
+            QList<qlonglong> ids;
+            foreach (const ItemScanInfo& info, infos)
+                ids << info.id;
+            return ids;
+        }
+    }
+
+    // As a third combination, we try file name and creation date. Susceptible to renaming,
+    // but not to metadata changes.
+    if (!historyId.m_fileName.isNull() && !historyId.m_creationDate.isNull())
+    {
+        QList<qlonglong> ids = DatabaseAccess().db()->findByNameAndCreationDate(historyId.m_fileName, historyId.m_creationDate);
+        if (!ids.isEmpty())
+            return ids;
+    }
+
+    // Another possibility: If the original UUID is given, we can find all relations for the image with this UUID,
+    // and make an assumption from this group of images. Currently not implemented.
+
+    // resolve old-style by full file path
+    if (!historyId.m_filePath.isNull())
+    {
+        QFileInfo file(historyId.m_filePath);
+        if (file.exists())
+        {
+            CollectionLocation location = CollectionManager::instance()->locationForPath(historyId.m_filePath);
+            if (!location.isNull())
+            {
+                QString album = CollectionManager::instance()->album(file.path());
+                QString name  = file.fileName();
+                ItemShortInfo info = DatabaseAccess().db()->getItemShortInfo(location.id(), album, name);
+                if (info.id)
+                    return QList<qlonglong>() << info.id;
+            }
+        }
+    }
+
+    return QList<qlonglong>();
 }
 
 void ImageScanner::scanVideoFile()
@@ -607,7 +703,7 @@ void ImageScanner::loadFromDisk()
 {
     m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
     if (m_scanInfo.category == DatabaseItem::Image)
-        m_hasImage = m_img.loadImageInfo(m_fileInfo.filePath(), false, false);
+        m_hasImage = m_img.loadImageInfo(m_fileInfo.filePath(), false, false, false, false);
     else
         m_hasImage = false;
 

@@ -113,6 +113,13 @@ public:
     void copiedFrom(int albumId, qlonglong srcId);
 
     /**
+     * Returns true if the images referenced by any available image history could be
+     * completely identified. Returns false if any referenced images where not found,
+     * indicating necessity to repeat the attempt.
+     */
+    bool historyIsCompletelyResolved() const;
+
+    /**
      * Copy all relevant attributes like comments, tags, rating from source to destination.
      */
     static void copyProperties(qlonglong source, qlonglong destination);
@@ -122,6 +129,18 @@ public:
      * Use this as a fallback if metadata is not available.
      */
     static QDateTime creationDateFromFilesystem(const QFileInfo &info);
+
+    /**
+     * Resolves the image history of the image id by filling the ImageRelations table
+     * for all contained referred images.
+     */
+    static bool resolveImageHistory(qlonglong id);
+    static bool resolveImageHistory(qlonglong imageId, const QString& historyXml);
+
+    /**
+     * Returns all image ids fulfilling the given image id.
+     */
+    static QList<qlonglong> resolveHistoryImageId(const HistoryImageId& historyId);
 
     /**
      * Returns containers with user-presentable information.
@@ -182,6 +201,8 @@ protected:
 
     bool         m_hasImage;
     bool         m_hasMetadata;
+
+    bool         m_historyResolved;
 
     QFileInfo    m_fileInfo;
 
