@@ -231,32 +231,24 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
 
     for(int i = 0; i < entries.count(); i++)
     {
-        if(entries.at(i).filterEntry)
+        d->filterStack->append(entries.at(i).action);
+
+        itemData.append(entries.at(i).action.displayableName());
+        itemData.append(entries.at(i).action.identifier());
+        kDebug() << "Adding an entry: " << itemData;
+        parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
+        filters << parents.last()->child(parents.last()->childCount()-1);
+
+        QHashIterator<QString, QVariant> iter(entries.at(i).action.parameters());
+        while (iter.hasNext())
         {
-            d->filterStack->append(entries.at(i).action);
-
-            itemData.append(entries.at(i).action.displayableName());
-            itemData.append(entries.at(i).action.identifier());
-            kDebug() << "Adding an entry: " << itemData;
-            parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
-            filters << parents.last()->child(parents.last()->childCount()-1);
-
-            QHashIterator<QString, QVariant> iter(entries.at(i).action.parameters());
-            while (iter.hasNext())
-            {
-                QList<QVariant> columnData;
-                iter.next();
-                columnData << iter.key() << iter.value();
-                filters.last()->appendChild(new ImageFiltersHistoryTreeItem(columnData, filters.last()));
-            }
-
-            itemData.clear();
+            QList<QVariant> columnData;
+            iter.next();
+            columnData << iter.key() << iter.value();
+            filters.last()->appendChild(new ImageFiltersHistoryTreeItem(columnData, filters.last()));
         }
-        else
-        {
-            kDebug() << "Not a filter entry, skipping";
-            //itemData = entries.at(i).referredImages.m_fileName;
-        }
+
+        itemData.clear();
     }
 
     endResetModel();

@@ -344,11 +344,11 @@ bool BatchTool::savefromDImg()
     if (frm.isEmpty())
     {
         // In case of output support is not set for ex. with all tool which do not convert to new format.
-        d->image.updateMetadata(DImg::formatToMimeType(detectedFormat), QString(), resetOrientation);
+        d->image.updateMetadata(DImg::formatToMimeType(detectedFormat), QString(), resetOrientation, true);
         return( d->image.save(outputUrl().toLocalFile(), detectedFormat, d->observer) );
     }
 
-    d->image.updateMetadata(frm, QString(), resetOrientation);
+    d->image.updateMetadata(frm, QString(), resetOrientation, true);
     bool b   = d->image.save(outputUrl().toLocalFile(), frm, d->observer);
     d->image = DImg();
     return b;
