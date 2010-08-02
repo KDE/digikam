@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QFile>
+#include <QFileInfo>
 
 // KDE includes
 
@@ -167,7 +168,7 @@ unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
 
 bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 {
-    if (! (m_loadFlags & LoadMetadata || m_loadFlags & LoadUniqueHash) )
+    if (! (m_loadFlags & LoadMetadata || m_loadFlags & LoadUniqueHash || m_loadFlags & LoadImageHistory) )
         return false;
 
     DMetadata metaDataFromFile;
@@ -178,9 +179,51 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
     }
 
     m_image->setMetadata(metaDataFromFile.data());
-    m_image->setImageHistory(DImageHistory::fromXml(metaDataFromFile.getImageHistory()));
+
+    if (m_loadFlags & LoadImageHistory)
+    {
+        DImageHistory history = DImageHistory::fromXml(metaDataFromFile.getImageHistory());
+
+        HistoryImageId id = createHistoryImageId(filePath, *m_image, metaDataFromFile);
+        id.m_type = HistoryImageId::Current;
+        history << id;
+
+        m_image->setImageHistory(history);
+    }
 
     return true;
+}
+
+// copied from imagescanner.cpp
+static QDateTime creationDateFromFilesystem(const QFileInfo &info)
+{
+    // creation date is not what it seems on Unix
+    QDateTime ctime = info.created();
+    QDateTime mtime = info.lastModified();
+    if (ctime.isNull())
+        return mtime;
+    if (mtime.isNull())
+        return ctime;
+    return qMin(ctime, mtime);
+}
+
+HistoryImageId DImgLoader::createHistoryImageId(const QString& filePath, const DImg& image, const DMetadata &metadata)
+{
+    QFileInfo file(filePath);
+    if (!file.exists())
+        return HistoryImageId();
+
+    HistoryImageId id(metadata.getImageUniqueId());
+
+    QDateTime dt = metadata.getImageDateTime();
+    if (dt.isNull())
+        dt = creationDateFromFilesystem(file);
+    id.setCreationDate(dt);
+    id.setFileName(file.fileName());
+    id.setPathOnDisk(file.path());
+    id.setUniqueHash(uniqueHash(filePath, image, false), file.size());
+
+    return id;
 }
 
 bool DImgLoader::saveMetadata(const QString& filePath)
@@ -239,19 +282,22 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     int readlen = 0;
     QByteArray size = 0;
 
+    QByteArray hash;
+
     if( qfile.open( QIODevice::Unbuffered | QIODevice::ReadOnly ) )
     {
-        if( ( readlen = qfile.read( databuf, 8192 ) ) > 0 )
+        if ( ( readlen = qfile.read( databuf, 8192 ) ) > 0 )
         {
             md5.update( databuf, readlen );
             md5.update( size.setNum( qfile.size() ) );
             return md5.hexDigest();
         }
-        else
-            return QByteArray();
     }
 
-    return QByteArray();
+    if (!hash.isNull())
+        const_cast<DImg&>(img).setAttribute("uniqueHash", hash);
+
+    return hash;
 }
 
 }  // namespace Digikam

@@ -41,6 +41,7 @@ namespace Digikam
 {
 
 class DImgLoaderObserver;
+class DMetadata;
 
 class DImgLoader
 {
@@ -53,7 +54,8 @@ public:
         LoadICCData    = 4,
         LoadImageData  = 8,
         LoadUniqueHash = 16,
-        LoadAll        = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData
+        LoadImageHistory = 32,
+        LoadAll        = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData | LoadImageHistory
     };
     Q_DECLARE_FLAGS(LoadFlags, LoadFlag)
 
@@ -70,6 +72,7 @@ public:
     virtual bool hasLoadedData() const;
 
     static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
+    static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata &metadata);
 
 protected:
 
