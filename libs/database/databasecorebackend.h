@@ -235,6 +235,7 @@ public:
      * If you are not interested in the returned data, set values to 0.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      * If you want the last inserted id (and your query is suitable), sett lastInsertId to the address of a QVariant.
+     * Additionally, methods are provided for prepared statements.
      */
     QueryState execSql(const QString& sql, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
     QueryState execSql(const QString& sql, const QVariant& boundValue1,
@@ -250,6 +251,22 @@ public:
                        const QVariant& boundValue3, const QVariant& boundValue4,
                        QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
     QueryState execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+
+    QueryState execSql(SqlQuery& preparedQuery, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execSql(SqlQuery& preparedQuery, const QVariant& boundValue1,
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execSql(SqlQuery& preparedQuery,
+                       const QVariant& boundValue1, const QVariant& boundValue2,
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execSql(SqlQuery& preparedQuery,
+                       const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execSql(SqlQuery& preparedQuery,
+                       const QVariant& boundValue1, const QVariant& boundValue2,
+                       const QVariant& boundValue3, const QVariant& boundValue4,
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execSql(SqlQuery& preparedQuery, const QList<QVariant>& boundValues,
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
 
     /**
      * Checks if there was a connection error. If so DatabaseCoreBackend::ConnectionError is returned.
@@ -292,6 +309,19 @@ public:
                        const QVariant& boundValue1, const QVariant& boundValue2,
                        const QVariant& boundValue3, const QVariant& boundValue4);
     SqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
+
+    /**
+     * Binds the values and executes the prepared query.
+     */
+    void execQuery(SqlQuery& preparedQuery, const QVariant& boundValue1);
+    void execQuery(SqlQuery& preparedQuery,
+                       const QVariant& boundValue1, const QVariant& boundValue2);
+    void execQuery(SqlQuery& preparedQuery,
+                       const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
+    void execQuery(SqlQuery& preparedQuery,
+                       const QVariant& boundValue1, const QVariant& boundValue2,
+                       const QVariant& boundValue3, const QVariant& boundValue4);
+    void execQuery(SqlQuery& preparedQuery, const QList<QVariant>& boundValues);
 
     /**
      * Method which accept a hashmap with key, values which are used for named binding

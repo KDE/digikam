@@ -734,6 +734,8 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery&
     return DatabaseCoreBackend::NoErrors;
 }
 
+// --
+
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, QList<QVariant>* values, QVariant* lastInsertId)
 {
     SqlQuery query = execQuery(sql);
@@ -780,6 +782,8 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
     return handleQueryResult(query, values, lastInsertId);
 }
 
+// --
+
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
                                                              QList<QVariant>* values, QVariant* lastInsertId)
 {
@@ -787,14 +791,63 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
     return handleQueryResult(query, values, lastInsertId);
 }
 
+// --
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQuery, QList<QVariant>* values, QVariant* lastInsertId)
+{
+    exec(preparedQuery);
+    return handleQueryResult(preparedQuery, values, lastInsertId);
+}
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQuery, const QVariant& boundValue1,
+                                                             QList<QVariant>* values, QVariant* lastInsertId)
+{
+    execQuery(preparedQuery, boundValue1);
+    return handleQueryResult(preparedQuery, values, lastInsertId);
+}
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQuery,
+                                                             const QVariant& boundValue1, const QVariant& boundValue2,
+                                                             QList<QVariant>* values, QVariant* lastInsertId)
+{
+    execQuery(preparedQuery, boundValue1, boundValue2);
+    return handleQueryResult(preparedQuery, values, lastInsertId);
+}
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQuery,
+                              const QVariant& boundValue1, const QVariant& boundValue2,
+                              const QVariant& boundValue3, QList<QVariant>* values,
+                              QVariant* lastInsertId)
+{
+    execQuery(preparedQuery, boundValue1, boundValue2, boundValue3);
+    return handleQueryResult(preparedQuery, values, lastInsertId);
+}
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQuery,
+                const QVariant& boundValue1, const QVariant& boundValue2,
+                const QVariant& boundValue3, const QVariant& boundValue4,
+                QList<QVariant>* values, QVariant* lastInsertId)
+{
+    execQuery(preparedQuery, boundValue1, boundValue2, boundValue3, boundValue4);
+    return handleQueryResult(preparedQuery, values, lastInsertId);
+}
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQuery, const QList<QVariant>& boundValues,
+                              QList<QVariant>* values, QVariant* lastInsertId)
+{
+    execQuery(preparedQuery, boundValues);
+    return handleQueryResult(preparedQuery, values, lastInsertId);
+}
+
+// --
+
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QVariant& boundValue1)
 {
     SqlQuery query = prepareQuery(sql);
 #ifdef DATABASCOREBACKEND_DEBUG
     kDebug() << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
 #endif
-    query.bindValue(0, boundValue1);
-    exec(query);
+    execQuery(query, boundValue1);
     return query;
 }
 
@@ -802,9 +855,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql,
                                         const QVariant& boundValue1, const QVariant& boundValue2)
 {
     SqlQuery query = prepareQuery(sql);
-    query.bindValue(0, boundValue1);
-    query.bindValue(1, boundValue2);
-    exec(query);
+    execQuery(query, boundValue1, boundValue2);
     return query;
 }
 
@@ -812,10 +863,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql,
                                         const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3)
 {
     SqlQuery query = prepareQuery(sql);
-    query.bindValue(0, boundValue1);
-    query.bindValue(1, boundValue2);
-    query.bindValue(2, boundValue3);
-    exec(query);
+    execQuery(query, boundValue1, boundValue2, boundValue3);
     return query;
 }
 
@@ -824,20 +872,14 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql,
                                         const QVariant& boundValue3, const QVariant& boundValue4)
 {
     SqlQuery query = prepareQuery(sql);
-    query.bindValue(0, boundValue1);
-    query.bindValue(1, boundValue2);
-    query.bindValue(2, boundValue3);
-    query.bindValue(3, boundValue4);
-    exec(query);
+    execQuery(query, boundValue1, boundValue2, boundValue3, boundValue4);
     return query;
 }
 
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QList<QVariant>& boundValues)
 {
     SqlQuery query = prepareQuery(sql);
-    for (int i=0; i<boundValues.size(); ++i)
-        query.bindValue(i, boundValues[i]);
-    exec(query);
+    execQuery(query, boundValues);
     return query;
 }
 
@@ -850,6 +892,52 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql)
     exec(query);
     return query;
 }
+
+// --
+
+void DatabaseCoreBackend::execQuery(SqlQuery& query, const QVariant& boundValue1)
+{
+    query.bindValue(0, boundValue1);
+    exec(query);
+}
+
+void DatabaseCoreBackend::execQuery(SqlQuery& query,
+                                    const QVariant& boundValue1, const QVariant& boundValue2)
+{
+    query.bindValue(0, boundValue1);
+    query.bindValue(1, boundValue2);
+    exec(query);
+}
+
+void DatabaseCoreBackend::execQuery(SqlQuery& query,
+                                    const QVariant& boundValue1, const QVariant& boundValue2,
+                                    const QVariant& boundValue3)
+{
+    query.bindValue(0, boundValue1);
+    query.bindValue(1, boundValue2);
+    query.bindValue(2, boundValue3);
+    exec(query);
+}
+
+void DatabaseCoreBackend::execQuery(SqlQuery& query,
+                                    const QVariant& boundValue1, const QVariant& boundValue2,
+                                    const QVariant& boundValue3, const QVariant& boundValue4)
+{
+    query.bindValue(0, boundValue1);
+    query.bindValue(1, boundValue2);
+    query.bindValue(2, boundValue3);
+    query.bindValue(3, boundValue4);
+    exec(query);
+}
+
+void DatabaseCoreBackend::execQuery(SqlQuery& query, const QList<QVariant>& boundValues)
+{
+    for (int i=0; i<boundValues.size(); ++i)
+        query.bindValue(i, boundValues[i]);
+    exec(query);
+}
+
+// --
 
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap)
 {
