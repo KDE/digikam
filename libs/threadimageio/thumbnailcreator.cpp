@@ -497,7 +497,7 @@ QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile) 
 {
     DImg img;
     img.setAttribute("scaledLoadingSize", d->cachedSize);
-    img.load(path, false, profile ? true : false, false, d->observer, d->rawSettings);
+    img.load(path, false, profile ? true : false, false, false, d->observer, d->rawSettings);
     *profile = img.getIccProfile();
     return img.copyQImage();
 }
@@ -505,7 +505,7 @@ QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile) 
 QImage ThumbnailCreator::loadDetail(const QString& path, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const
 {
     DImg img;
-    img.load(path, false, profile ? true : false, false, d->observer, d->fastRawSettings);
+    img.load(path, false, profile ? true : false, false, false, d->observer, d->fastRawSettings);
     *profile = img.getIccProfile();
 
     // We must rotate before clipping because the rect refers to the oriented image.
