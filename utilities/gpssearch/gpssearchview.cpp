@@ -105,29 +105,28 @@ public:
     KMapIface::KMap*            mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
    
-    //KAction*                    actionRemoveCurrentSelection;
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     MapViewModelHelper*         mapViewModelHelper;
     KMapIface::ItemMarkerTiler* markerTilerModelBased;
-    //QToolButton*                removeCurrentSelectionButton;
     bool                        existsSelection;
 };
 
 GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
-                             SearchModificationHelper* searchModificationHelper, QItemSelectionModel* itemSelectionModel)
+                             SearchModificationHelper* searchModificationHelper,
+                             ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel)
              : QWidget(parent), StateSavingObject(this),
                d(new GPSSearchViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setAcceptDrops(true);
 
-    d->imageAlbumModel    = new ImageAlbumModel(this);
+    d->imageAlbumModel    = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());      
     d->selectionModel     = itemSelectionModel;
 
-    d->imageFilterModel   = new ImageFilterModel(this);
-    d->imageFilterModel->setSourceImageModel(d->imageAlbumModel);
+    d->imageFilterModel   = imageFilterModel;
+    //d->imageFilterModel->setSourceImageModel(d->imageAlbumModel);
 
     d->mapViewModelHelper = new MapViewModelHelper(d->imageAlbumModel, d->selectionModel, d->imageFilterModel, this);
 
@@ -195,15 +194,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
 
-//    d->actionRemoveCurrentSelection = new KAction(this);
-//    d->actionRemoveCurrentSelection->setIcon(SmallIcon("edit-clear"));
-//    d->actionRemoveCurrentSelection->setToolTip(i18n("Removes the current selection and shows all images on the map."));
-    
-
-//    d->removeCurrentSelectionButton = new QToolButton(this);
-//    d->removeCurrentSelectionButton->setDefaultAction(d->actionRemoveCurrentSelection);
-//    d->mapSearchWidget->addWidgetToControlWidget(d->removeCurrentSelectionButton);
-//    d->removeCurrentSelectionButton->setEnabled(false);
     d->existsSelection              = false; 
 
     vlayTop->addWidget(hbox);
@@ -225,9 +215,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     vlay->addWidget(d->splitter);
 
     // ---------------------------------------------------------------
-
-    //connect(d->actionRemoveCurrentSelection, SIGNAL(triggered()),
-    //        this, SLOT(slotRemoveCurrentSelection()));
 
     connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
@@ -291,9 +278,9 @@ void GPSSearchView::doLoadState()
         }
     }
 
-    d->gpsSearchWidget->readConfig(group);
+    d->gpsSearchWidget->readConfig(group); */
     d->searchTreeView->loadState();
-    */
+    
 }
 
 void GPSSearchView::doSaveState()
@@ -302,11 +289,11 @@ void GPSSearchView::doSaveState()
     KConfigGroup group = getConfigGroup();
 
     group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
-    d->gpsSearchWidget->writeConfig(group);
+    d->gpsSearchWidget->writeConfig(group); */
     d->searchTreeView->saveState();
 
-    group.sync();
-    */
+    //group.sync();
+    
 }
 
 void GPSSearchView::setActive(bool /*val*/)
@@ -462,9 +449,6 @@ bool GPSSearchView::checkName(QString& name)
     }
 
     return true;
-    
-
-    //return false;
 }
 
 bool GPSSearchView::checkAlbum(const QString& name) const
@@ -479,15 +463,11 @@ bool GPSSearchView::checkAlbum(const QString& name) const
             return false;
     }
     return true;
-    
-
-    //return false;
 }
 
 void GPSSearchView::slotRemoveCurrentSelection()
 {
     d->existsSelection = false;
-    //d->removeCurrentSelectionButton->setEnabled(d->existsSelection);
     d->imageAlbumModel->clearImageInfos();
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 }

@@ -34,6 +34,8 @@
 #include "statesavingobject.h"
 #include "worldmapwidget.h"
 #include "imagealbummodel.h"
+#include "imagefiltermodel.h"
+
 
 class QDragEnterEvent;
 class QDropEvent;
@@ -59,7 +61,8 @@ class GPSSearchView : public QWidget, public StateSavingObject
 public:
 
     GPSSearchView(QWidget* parent, SearchModel* searchModel,
-                  SearchModificationHelper* searchModificationHelper, QItemSelectionModel* itemSelectionModel);
+                  SearchModificationHelper* searchModificationHelper,
+                  ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel);
     ~GPSSearchView();
 
     void setActive(bool val);

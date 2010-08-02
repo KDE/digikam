@@ -36,6 +36,8 @@
 #include "imagealbumfiltermodel.h"
 #include "searchmodificationhelper.h"
 #include "sidebarwidget.h"
+#include "imagefiltermodel.h"
+
 
 namespace Digikam
 {
@@ -275,7 +277,7 @@ class GPSSearchSideBarWidget : public SidebarWidget
 
 public:
 
-    GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel, SearchModificationHelper* searchModificationHelper,QItemSelectionModel* itemSelectionModel);
+    GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel, SearchModificationHelper* searchModificationHelper, ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel);
     virtual ~GPSSearchSideBarWidget();
 
     void setActive(bool active);
