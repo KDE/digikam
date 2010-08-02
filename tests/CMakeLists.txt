@@ -216,6 +216,20 @@ TARGET_LINK_LIBRARIES(albummodeltest
 
 #------------------------------------------------------------------------
 
+SET(dimagehistorytest_SRCS
+    dimagehistorytest.cpp
+)
+KDE4_ADD_UNIT_TEST(dimagehistorytest ${dimagehistorytest_SRCS})
+TARGET_LINK_LIBRARIES(dimagehistorytest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      )
+
+
+#------------------------------------------------------------------------
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf
                    )
