@@ -508,14 +508,15 @@ void ImagePreviewViewV2::drawFaceItems()
 
 void ImagePreviewViewV2::findFaces()
 {
+    DImg dimg(d->item->image());
+
     if(hasBeenScanned())
     {
         kDebug()<<"Image already has been scanned.";
-    
+        d->currentFaces = d->faceIface->findFacesFromTags(dimg, d->item->imageInfo().id());
         return;
     }
     
-    DImg dimg(d->item->image());
     d->currentFaces = d->faceIface->findAndTagFaces(dimg, d->item->imageInfo().id());
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
 }

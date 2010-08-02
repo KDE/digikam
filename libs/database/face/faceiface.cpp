@@ -23,6 +23,7 @@
 // Qt includes
 
 #include <QImage>
+#include <QtSvg>
 
 // KDE includes
 
@@ -42,6 +43,8 @@
 #include "imagetagpair.h"
 #include "albummanager.h"
 #include "dimg.h"
+
+// Libkface Includes
 
 #include <libkface/database.h>
 #include <libkface/kface.h>
@@ -95,8 +98,8 @@ bool FaceIface::hasBeenScanned(qlonglong imageid)
 
 QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
 {
+    // Find faces
     QImage qimg = image.copyQImage();
-    
     KFaceIface::Image fimg(qimg);
     QList<KFaceIface::Face> faceList = d->libkface->detectFaces(fimg);
     
@@ -117,16 +120,9 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
         // "faceRegion" property to this tag, and delete it from the unknown tag."
         // See README.FACE for a nicer explanation.
         ImageTagPair pair(imageid, d->tagsCache->tagForPath("/People/Unknown"));
-
         QRect faceRect = face.toRect();
         kDebug() << faceRect;
-        QString s = QString("<rect x=\"")+QString::number(faceRect.x())+
-                    QString("\" y=\"")+QString::number(faceRect.y())+
-                    QString("\" width=\"")+QString::number(faceRect.width())+
-                    QString("\" height=\"")+QString::number(faceRect.height())+ QString("\" />");
-
-        kDebug()<<s;
-        pair.addProperty("faceRegion", s);
+        pair.addProperty("faceRegion", rectToString(faceRect));
         pair.assignTag();
         
         kDebug()<<"Applied tag.";
@@ -134,6 +130,55 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
     
     return faceList;
 }
+
+QList< Face > FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
+{
+    if (!hasBeenScanned(imageid))
+    {
+        kDebug()<<"Image has not been scanned yet.";
+        return QList<Face>();
+    }
+    
+    QImage qimg = image.copyQImage();
+    
+    QList<Face> faceList;
+    
+    // Get all people tags assigned to the image, iterate through each of them, and load all found regions into the Face List.
+    AlbumManager *man = AlbumManager::instance();
+    QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
+    
+    QListIterator<int> it(peopleTagIds);
+    
+    while (it.hasNext())
+    {
+        int currentTag = it.next();
+        
+        ImageTagPair peopleTags(imageid, currentTag);
+        QString tagName = d->tagsCache->tagName(currentTag);
+        
+        // The only people tags with a face region property are either "Unknown" or "<Name of Person>". So assign them to the Face name
+        if(peopleTags.hasProperty("faceRegion"))
+        {
+            QRect rect = stringToRect(peopleTags.value("faceRegion"));
+            kDebug()<<"rect found as "<<rectToString(rect);
+            
+            // FIXME: Later, need support for putting the cropped image in Face f too. I tried it, but I get weird crashes. Will see.
+            Face f;
+            f.setRect(rect);
+                       
+            if(tagName == "Unknown")
+                f.setName("");
+            else
+                f.setName(tagName);
+            
+            faceList += f;
+        }
+        
+    }
+    
+    return faceList;
+}
+
 
 void FaceIface::forgetFaceTags(qlonglong imageid)
 {
@@ -163,6 +208,29 @@ void FaceIface::forgetFaceTags(qlonglong imageid)
         peopleTags.unAssignTag();
         kDebug()<<" Removed tag "<< d->tagsCache->tagName(currentTag);
     }
+}
+
+QString FaceIface::rectToString(const QRect& rect) const
+{
+    return ( QString::number(rect.x()) + "," 
+           + QString::number(rect.y()) + "," 
+           + QString::number(rect.width()) + "," 
+           + QString::number(rect.height()) );
+}
+
+QRect FaceIface::stringToRect(const QString& string) const
+{
+    QRect rect;
+    
+    QStringList list = string.split(",");
+    kDebug()<<list;
+    
+    rect.setX( list[0].toInt() );
+    rect.setY( list[1].toInt() );
+    rect.setWidth( list[2].toInt() );
+    rect.setHeight( list[3].toInt() );
+    
+    return rect;
 }
 
 
