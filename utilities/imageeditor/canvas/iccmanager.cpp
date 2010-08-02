@@ -361,6 +361,9 @@ void IccManager::transformForDisplay(const IccProfile& profile)
 
 IccProfile IccManager::displayProfile(QWidget *displayingWidget)
 {
+    if (!IccSettings::instance()->isEnabled())
+        return IccProfile::sRGB();
+
     IccProfile profile = IccSettings::instance()->monitorProfile(displayingWidget);
     if (profile.open())
         return profile;
