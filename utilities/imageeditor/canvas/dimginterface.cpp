@@ -584,9 +584,6 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
     if (!success)
         kWarning() << "error saving image '" << QFile::encodeName(filePath).data();
 
-    // add reference, as Intermediate for now. In switchToLastSaved, it may become Current
-    d->image.addAsReferredImage(d->savingFilename);
-
     emit signalImageSaved(filePath, success);
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
@@ -603,9 +600,22 @@ void DImgInterface::abortSaving()
     d->thread->stopSaving(d->savingFilename);
 }
 
-void DImgInterface::setCurrentHistoryUuid(const QString& uuid)
+QString DImgInterface::ensureHasCurrentUuid()
 {
-    d->image.addCurrentUniqueImageId(uuid);
+    if (d->image.getImageHistory().currentReferredImage().m_uuid.isNull())
+    {
+        // if there is no uuid in the image, we create one.
+        QString uuid = d->image.createImageUniqueId();
+        d->image.addCurrentUniqueImageId(uuid);
+    }
+    return d->image.getImageHistory().currentReferredImage().m_uuid;
+}
+
+void DImgInterface::addLastSavedToHistory(const QString& filename)
+{
+    // add reference, as Intermediate for now. In switchToLastSaved, it may become Current
+    // We cannot do it in slotImageSaved because we may operate on a temporary filename.
+    d->image.addAsReferredImage(filename);
 }
 
 void DImgInterface::switchToLastSaved(const QString& newFilename)
@@ -614,7 +624,6 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
     // it has previously been saved to.
     d->filename = newFilename;
     d->image.switchOriginToLastSaved();
-    // we have added all saved images as intermediates
     d->image.switchHistoryOriginToLastReferredImage();
     d->imageHistoryWhenLoaded = d->image.getImageHistory();
 }

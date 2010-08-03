@@ -631,18 +631,6 @@ void ImageWindow::slotLoadCurrent()
     setViewToURL(d->urlCurrent);
 }
 
-void ImageWindow::slotLoadingFinished(const QString& filename, bool success)
-{
-    EditorWindow::slotLoadingFinished(filename, success);
-
-    if (!d->imageInfoCurrent.isNull())
-    {
-        // if there is no UUID in metadata (and only then will this call have an effect)
-        // we assign a UUID in the database at least. Introduce this UUID here.
-        m_canvas->setCurrentHistoryUuid(d->imageInfoCurrent.uuid());
-    }
-}
-
 void ImageWindow::setViewToURL(const KUrl& url)
 {
     emit signalURLChanged(url);
@@ -1047,9 +1035,8 @@ void ImageWindow::saveAsIsComplete()
     }
 }
 
-bool ImageWindow::save()
+void ImageWindow::prepareImageToSave()
 {
-    // Sanity check. Just to be homogeneous with SaveAs.
     if (!d->imageInfoCurrent.isNull())
     {
         // Write metadata from database to DImg
@@ -1057,25 +1044,28 @@ bool ImageWindow::save()
         hub.load(d->imageInfoCurrent);
         DImg image(m_canvas->currentImage());
         hub.write(image, MetadataHub::FullWrite);
-    }
 
+        // Ensure there is a UUID for the source image in the database,
+        // even if not in the source image's metadata
+        if (d->imageInfoCurrent.uuid().isNull())
+        {
+            QString uuid = m_canvas->ensureHasCurrentUuid();
+            d->imageInfoCurrent.setUuid(uuid);
+        }
+    }
+}
+
+bool ImageWindow::save()
+{
+    prepareImageToSave();
     startingSave(d->urlCurrent);
     return true;
 }
 
 bool ImageWindow::saveAs()
 {
-    // If image editor is started from CameraGUI, there is no ImageInfo instance to use.
-    if (!d->imageInfoCurrent.isNull())
-    {
-        // Write metadata from database to DImg
-        MetadataHub hub;
-        hub.load(d->imageInfoCurrent);
-        DImg image(m_canvas->currentImage());
-        hub.write(image, MetadataHub::FullWrite);
-    }
-
-    return ( startingSaveAs(d->urlCurrent) );
+    prepareImageToSave();
+    return startingSaveAs(d->urlCurrent);
 }
 
 bool ImageWindow::saveNewVersion() {

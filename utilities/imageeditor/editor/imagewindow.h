@@ -101,6 +101,8 @@ private:
     KUrl saveDestinationUrl();
     bool hasChangesToSave();
 
+    void prepareImageToSave();
+
     void saveIsComplete();
     void saveAsIsComplete();
     void setViewToURL(const KUrl& url);
@@ -157,8 +159,6 @@ private Q_SLOTS:
     void slotSidebarTabTitleStyleChanged();
 
     void slotUpdateFiltersHistorySidebar();
-
-    virtual void slotLoadingFinished(const QString& filename, bool success);
 
 private:
 

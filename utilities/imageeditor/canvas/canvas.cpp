@@ -333,6 +333,11 @@ void Canvas::slotImageSaved(const QString& filePath, bool success)
     emit signalSavingFinished(filePath, success);
 }
 
+void Canvas::addLastSavedToHistory(const QString& filename)
+{
+    d->im->addLastSavedToHistory(filename);
+}
+
 void Canvas::switchToLastSaved(const QString& newFilename)
 {
     d->im->switchToLastSaved(newFilename);
@@ -353,9 +358,9 @@ void Canvas::readMetadataFromFile(const QString& file)
     d->im->readMetadataFromFile(file);
 }
 
-void Canvas::setCurrentHistoryUuid(const QString& uuid)
+QString Canvas::ensureHasCurrentUuid()
 {
-    d->im->setCurrentHistoryUuid(uuid);
+    return d->im->ensureHasCurrentUuid();
 }
 
 void Canvas::clearUndoHistory()

@@ -1433,6 +1433,8 @@ void EditorWindow::movingSaveFileFinished(bool successful)
     }
 
     m_canvas->setUndoHistoryOrigin();
+    // now that we know the real destination file name, pass it to be recorded in image history
+    m_canvas->addLastSavedToHistory(m_savingContext->destinationURL.toLocalFile());
 
     // remove image from cache since it has changed
     LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.toLocalFile());

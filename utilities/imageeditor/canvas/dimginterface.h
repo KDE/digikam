@@ -82,17 +82,18 @@ public:
     void   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
                   bool setExifOrientationTag, const QString& mimeType=QString());
 
+    void   addLastSavedToHistory(const QString& filename);
     void   switchToLastSaved(const QString& newFilename);
     void   abortSaving();
     void   setModified();
     void   setModified(FilterAction& action);
     void   readMetadataFromFile(const QString& file);
-    void   setCurrentHistoryUuid(const QString& uuid);
     void   clearUndoManager();
     void   setUndoManagerOrigin();
     void   updateUndoState();
     void   resetImage();
     bool   hasChangesToSave();
+    QString ensureHasCurrentUuid();
 
     void   zoom(double val);
 
