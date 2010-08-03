@@ -488,14 +488,9 @@ void ImageScanner::scanImageHistory()
         DatabaseAccess().db()->setImageHistory(m_scanInfo.id, historyXml);
     }
 
-    QString uuid = DatabaseAccess().db()->getImageUuid(m_scanInfo.id);
-    // if there is no uuid in the image, at least for our limited purposes,
-    // we create one. It is recommended to write a UUID to all images.
-    if (uuid.isNull())
-    {
-        uuid = m_img.createImageUniqueId();
-    }
-    DatabaseAccess().db()->setImageUuid(m_scanInfo.id, uuid);
+    QString uuid = m_metadata.getImageUniqueId();
+    if (!uuid.isNull())
+        DatabaseAccess().db()->setImageUuid(m_scanInfo.id, uuid);
 
     m_historyResolved = resolveImageHistory(m_scanInfo.id, historyXml);
     //TODO if resolution of history references is incomplete,
@@ -526,6 +521,7 @@ bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& history
     foreach (const HistoryImageId& historyId, historyIds)
     {
         QList<qlonglong> ids = resolveHistoryImageId(historyId);
+        //kDebug() << ids << historyId.m_uuid << historyId.m_fileName;
         completelyResolved = completelyResolved && !ids.isEmpty();
         foreach (qlonglong id, ids)
         {
