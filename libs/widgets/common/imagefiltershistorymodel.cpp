@@ -231,6 +231,10 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
 
     for(int i = 0; i < entries.count(); i++)
     {
+        // the first entry, for the original, may not have an Action
+        if (entries.at(i).action.isNull())
+            continue;
+
         d->filterStack->append(entries.at(i).action);
 
         itemData.append(entries.at(i).action.displayableName());
