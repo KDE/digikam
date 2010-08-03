@@ -50,11 +50,13 @@ public:
         rootItem      = 0;
         filterStack   = 0;
         filterManager = 0;
+        lastUrl       = 0;
     }
 
     ImageFiltersHistoryTreeItem* rootItem;
     QList<FilterAction>*         filterStack;
     DImgFilterManager*           filterManager;
+    KUrl                         lastUrl;
 };
 
 ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& url)
@@ -66,9 +68,8 @@ ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& 
     if(!url.isEmpty())
     {
         kDebug() << "Creating model with url" << url.toLocalFile();
-        QList<QVariant> rootData;
-        rootData << url.fileName();
-        d->rootItem = new ImageFiltersHistoryTreeItem(rootData);
+        d->rootItem = new ImageFiltersHistoryTreeItem(url.fileName());
+        d->lastUrl = url;
 
         DMetadata metadata(url.toLocalFile());
         QString xml     = metadata.getImageHistory();
@@ -78,9 +79,7 @@ ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& 
     else
     {
         //kDebug() << "Creating empty model";
-        QList<QVariant> rootData;
-        rootData << "Generic";
-        d->rootItem = new ImageFiltersHistoryTreeItem(rootData);
+        d->rootItem = new ImageFiltersHistoryTreeItem("Generic");
     }
 }
 
@@ -97,9 +96,8 @@ void ImageFiltersHistoryModel::setUrl(const KUrl& url)
         //delete the current model data
         delete d->rootItem;
 
-        QList<QVariant> rootData;
-        rootData << url.fileName() << "Params";
-        d->rootItem = new ImageFiltersHistoryTreeItem(rootData);
+        d->rootItem = new ImageFiltersHistoryTreeItem(url.fileName());
+        d->lastUrl = url;
         //kDebug() << "Updating model data with url" << rootData.first();
         DMetadata metadata(url.toLocalFile());
         setupModelData(DImageHistory::fromXml(metadata.getImageHistory()).entries(), d->rootItem);
@@ -210,18 +208,15 @@ int ImageFiltersHistoryModel::rowCount(const QModelIndex& parent) const
 void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>& entries, 
                                               ImageFiltersHistoryTreeItem* parent)
 {
+    beginResetModel();
     if(!parent)
     {
+        delete d->rootItem;
+        d->rootItem = new ImageFiltersHistoryTreeItem(d->lastUrl.fileName());
         parent = d->rootItem;
-        //we need to delete all but the rootItem
-        for(int i = 0; i < d->rootItem->childCount(); i++)
-        {
-            delete d->rootItem->child(i);
-        }
     }
 
     kDebug() << "Initializing model data, got" << entries.count() << "entries";
-    beginResetModel();
     QList<ImageFiltersHistoryTreeItem*> parents;
     QList<ImageFiltersHistoryTreeItem*> filters;
     parents << parent;
@@ -237,13 +232,20 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
 
         d->filterStack->append(entries.at(i).action);
 
-        itemData.append(entries.at(i).action.displayableName());
-        itemData.append(entries.at(i).action.identifier());
+        if (entries.at(i).action.displayableName().isEmpty() && entries.at(i).action.identifier().isEmpty())
+        {
+            itemData.append("Unknown filter");
+        }
+        else
+        {
+            itemData.append(entries.at(i).action.displayableName());
+            itemData.append(entries.at(i).action.identifier());
+        }
         kDebug() << "Adding an entry: " << itemData;
         parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
         filters << parents.last()->child(parents.last()->childCount()-1);
 
-        QHashIterator<QString, QVariant> iter(entries.at(i).action.parameters());
+/*        QHashIterator<QString, QVariant> iter(entries.at(i).action.parameters());
         while (iter.hasNext())
         {
             QList<QVariant> columnData;
@@ -251,6 +253,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
             columnData << iter.key() << iter.value();
             filters.last()->appendChild(new ImageFiltersHistoryTreeItem(columnData, filters.last()));
         }
+*/
 
         itemData.clear();
     }
