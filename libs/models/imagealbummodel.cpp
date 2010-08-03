@@ -302,6 +302,12 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
     if (hasScheduledRefresh())
         return;
 
+    // this is for the case that _only_ the status changes, i.e., explicit setVisible()
+    if ((DatabaseFields::Images)changeset.changes() == DatabaseFields::Status)
+    {
+        scheduleIncrementalRefresh();
+    }
+
     if (d->currentAlbum->type() == Album::SEARCH)
     {
         // For searches any touched field can require a refresh.
