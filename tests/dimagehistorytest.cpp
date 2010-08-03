@@ -217,6 +217,8 @@ void DImageHistoryTest::slotImageSaved(const QString& fileName, bool success)
 {
     QVERIFY(success);
 
+    im->addLastSavedToHistory(fileName);
+
     DImg img(fileName);
     DImageHistory history = img.getImageHistory();
     //qDebug() << history.toXml();
