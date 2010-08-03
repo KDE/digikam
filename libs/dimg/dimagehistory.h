@@ -94,6 +94,7 @@ public:
 
     QList<HistoryImageId> allReferredImages() const;
     bool hasCurrentReferredImage() const;
+    HistoryImageId currentReferredImage() const;
 
     void setOriginalFileName(const QString& fileName);
     QString originalFileName();

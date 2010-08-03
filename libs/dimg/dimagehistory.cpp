@@ -191,6 +191,19 @@ bool DImageHistory::hasCurrentReferredImage() const
     return false;
 }
 
+HistoryImageId DImageHistory::currentReferredImage() const
+{
+    foreach (const Entry& entry, d->entries)
+    {
+        foreach (const HistoryImageId& id, entry.referredImages)
+        {
+            if (id.isCurrentFile())
+                return id;
+        }
+    }
+    return HistoryImageId();
+}
+
 bool DImageHistory::operator<(const Digikam::DImageHistory& other)
 {
     if(d->entries.size() < other.size())
