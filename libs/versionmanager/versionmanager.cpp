@@ -42,10 +42,10 @@ namespace Digikam
 {
 
 QString VersionManager::getVersionedFilename(const QString& originalPath, const QString& originalName, 
-                                             qint64 fileSize, bool editingOriginal, bool fork)
+                                             qint64 fileSize, bool editingOriginal, bool fork, bool editingRAW)
 {
     kDebug() << "Original path: " << originalPath << " | Original name: " << originalName
-             << " | Editing original: " << editingOriginal;
+             << " | Editing original: " << editingOriginal << " | Subversion: " << fork;
 
     //check if we have enough free space for another file
     KDiskFreeSpaceInfo diskInfo = KDiskFreeSpaceInfo::freeSpaceInfo(originalPath);
@@ -55,7 +55,7 @@ QString VersionManager::getVersionedFilename(const QString& originalPath, const 
         //DMetadata metadata(originalPath + "/" + originalName);
         QString newFileName;
 
-        if(!editingOriginal)
+        if(!editingOriginal && !fork)
         {
             //the user is editing some subversion of the original image
             if(fork)
@@ -82,10 +82,20 @@ QString VersionManager::getVersionedFilename(const QString& originalPath, const 
             {
                 newFileName.clear();
                 newFileName.append(fileInfo.completeBaseName());
-                newFileName.append("_v");
+                if(fork)
+                    newFileName.append("v");
+                else newFileName.append("_v");
                 newFileName.append(QString::number(i));
                 newFileName.append(".");
-                newFileName.append(fileInfo.suffix());
+                if(editingRAW)
+                {
+                    //TODO: add user setting from options here
+                    newFileName.append("jpg");
+                }
+                else
+                {
+                    newFileName.append(fileInfo.suffix());
+                }
                 kDebug() << newFileName;
                 QFile newFile(originalPath + QString("/") + newFileName);
                 if(!newFile.exists()) 

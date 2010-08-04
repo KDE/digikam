@@ -45,7 +45,7 @@ public:
 
     static VersionManager* instance();
     QString getVersionedFilename(const QString& originalPath, const QString& originalName, 
-                                 qint64 fileSize, bool editingOriginal = true, bool fork = false);
+                                 qint64 fileSize, bool editingOriginal = true, bool fork = false, bool editingRAW = false);
 
 private:
 
