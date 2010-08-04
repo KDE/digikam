@@ -62,15 +62,12 @@ public:
     QModelIndex parent(const QModelIndex& index) const;
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     bool removeRows(int row, int count, const QModelIndex& parent);
-
+    void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent = 0);
+    
 public Q_SLOTS:
 
     void removeEntry(QModelIndex index);
-
-private:
-
-    friend class ImagePropertiesHistoryTab;
-    void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent = 0);
+    void disableEntry(QModelIndex index, bool disable);
 
 private:
     

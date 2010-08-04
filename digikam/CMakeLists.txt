@@ -310,6 +310,7 @@ ENDIF (NEPOMUK_FOUND)
 SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libdeletedialog_SRCS}
                  ${libimagepropertiesdigikam_SRCS}
+                 ${libimageversionssidebar_SRCS}
                  ${libsetup_SRCS}
                  ${libcameragui_SRCS}
                  ${liblighttable_SRCS}
@@ -328,7 +329,6 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libfacedetection_SRCS}
                  ${libscriptiface_SRCS}
-                 ${libimageversionssidebar_SRCS}
                  main.cpp
     )
 

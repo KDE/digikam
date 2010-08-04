@@ -52,6 +52,8 @@ public:
     QVariant data(int column) const;
     int row() const;
     ImageFiltersHistoryTreeItem* parent() const;
+    void setDisabled(bool disabled) const;
+    bool isDisabled() const;
 
 private:
 

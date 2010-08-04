@@ -251,9 +251,6 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
     d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("tag-assigned"), i18n("Tag Filters"));
 
-    d->versionsTabWidget = new ImagePropertiesVersionsTab(d->rightSideBar, d->modelCollection->getImageVersionsModel());
-    d->rightSideBar->appendTab(d->versionsTabWidget, SmallIcon("view-catalog"), i18n("Image versions"));
-
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);
     d->selectionTimer->setInterval(75);
@@ -548,13 +545,16 @@ void DigikamView::setupConnections()
 
     // -- Image versions ----------------
     connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
-            d->versionsTabWidget, SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
+            d->rightSideBar->getFiltersHistoryTab(), SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
-            d->versionsTabWidget, SLOT(slotDigikamViewNoCurrentItem()));
+            d->rightSideBar->getFiltersHistoryTab(), SLOT(slotDigikamViewNoCurrentItem()));
 
-    connect(d->versionsTabWidget, SIGNAL(setCurrentUrlSignal(KUrl)),
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(setCurrentUrlSignal(KUrl)),
             d->iconView, SLOT(setCurrentUrl(KUrl)));
+
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(updateMainViewSignal()),
+            d->iconView, SLOT(update()));
 }
 
 void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)

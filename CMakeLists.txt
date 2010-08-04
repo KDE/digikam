@@ -672,7 +672,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertieshistorytab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
        )
 
@@ -754,10 +753,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogramwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrampainter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagedelegateoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorytreeitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorymodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryitemdelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewhoverbutton.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
@@ -1220,6 +1215,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imageversionsmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesversionstab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesversionsdelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/versionswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filtershistorywidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorytreeitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorymodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryitemdelegate.cpp
        )
 
     SET(libtimeline_SRCS

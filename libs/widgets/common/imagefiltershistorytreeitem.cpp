@@ -38,6 +38,7 @@ public:
     QList<ImageFiltersHistoryTreeItem*> childItems;
     QList<QVariant>                     itemData;
     ImageFiltersHistoryTreeItem*        parentItem;
+    bool                                disabled;
 };
 
 ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QList<QVariant>& data,
@@ -104,6 +105,16 @@ void ImageFiltersHistoryTreeItem::removeChild(int row)
 {
     delete child(row);
     d->childItems.removeAt(row);
+}
+
+bool ImageFiltersHistoryTreeItem::isDisabled() const
+{
+    return d->disabled;
+}
+
+void ImageFiltersHistoryTreeItem::setDisabled(bool disabled) const
+{
+    d->disabled = disabled;
 }
 
 } // namespace Digikam

@@ -53,7 +53,7 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
-#include "imagepropertieshistorytab.h"
+#include "imagepropertiesversionstab.h"
 #include "databaseinfocontainers.h"
 #include "imageposition.h"
 
@@ -78,6 +78,7 @@ public:
     ImageInfoList         currentInfos;
 
     ImageDescEditTab     *desceditTab;
+    ImagePropertiesVersionsTab *versionsHistoryTab;
 
     bool                  hasPrevious;
     bool                  hasNext;
@@ -91,9 +92,10 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplit
                           d(new ImagePropertiesSideBarDBPriv)
 {
     d->desceditTab = new ImageDescEditTab(parent);
+    d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
-
+    appendTab(d->versionsHistoryTab, SmallIcon("view-catalog"), i18n("Image Versions/Used Filters"));
     // ----------------------------------------------------------
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
@@ -241,9 +243,9 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             m_gpsTab->setCurrentURL(m_currentURL);
             m_dirtyGpsTab = true;
         }
-        else if (tab == m_historyTab && !m_dirtyHistoryTab)
+        else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
-            m_historyTab->setCurrentURL(m_currentURL);
+//            d->versionsHistoryTab->setCurrentURL(m_currentURL);
             m_dirtyHistoryTab = true;
         }
     }
@@ -297,9 +299,9 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
             m_dirtyGpsTab = true;
         }
-        else if (tab == m_historyTab && !m_dirtyHistoryTab)
+        else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
-            m_historyTab->setCurrentURL(m_currentURL);
+//            d->versionsHistoryTab->setCurrentURL(m_currentURL);
             m_dirtyHistoryTab = true;
         }
     }
@@ -356,11 +358,10 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             }
             m_dirtyGpsTab = true;
         }
-        else if (tab == m_historyTab && !m_dirtyHistoryTab)
+        else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
-            m_historyTab->setCurrentURL(m_currentURL);
+//            d->versionsHistoryTab->setCurrentURL(m_currentURL);
             m_dirtyHistoryTab = true;
-            
         }
     }
 
@@ -550,9 +551,9 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
     }
 }
 
-ImagePropertiesHistoryTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
+ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
 {
-    return m_historyTab;
+    return d->versionsHistoryTab;
 }
 
 void ImagePropertiesSideBarDB::setFiltersHistoryDirty(bool dirty)

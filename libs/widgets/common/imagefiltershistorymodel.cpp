@@ -280,4 +280,12 @@ bool ImageFiltersHistoryModel::removeRows(int row, int /*count*/, const QModelIn
     return false;
 }
 
+void ImageFiltersHistoryModel::disableEntry(QModelIndex index, bool disable)
+{
+    if(index.isValid())
+    {
+        d->rootItem->child(index.row())->setDisabled(disable);
+    }
+}
+
 } // namespace Digikam

@@ -76,17 +76,18 @@ int ImageVersionsModel::rowCount(const QModelIndex& parent) const
     return m_data->count();
 }
 
-void ImageVersionsModel::setupModelData(QList<QVariant>* data)
+void ImageVersionsModel::setupModelData(QList<QVariant>& data)
 {
     beginResetModel();
 
-    if(!data->isEmpty())
+    m_data->clear();
+
+    if(!data.isEmpty())
     {
-        m_data = data;
+        m_data->append(data);
     }
     else 
     {
-        m_data->clear();
         m_data->append(QString(i18n("This is original image")));
     }
 
@@ -106,6 +107,21 @@ void ImageVersionsModel::clearModelData()
 void ImageVersionsModel::slotAnimationStep()
 {
     emit dataChanged(createIndex(0, 0), createIndex(rowCount()-1, 1));
+}
+
+QString ImageVersionsModel::currentSelectedImage() const
+{
+    return m_currentSelectedImage;
+}
+
+void ImageVersionsModel::setCurrentSelectedImage(const QString& path)
+{
+    m_currentSelectedImage = path;
+}
+
+QModelIndex ImageVersionsModel::currentSelectedImageIndex() const
+{
+    return index(m_data->indexOf(m_currentSelectedImage), 0);
 }
 
 } // namespace Digikam

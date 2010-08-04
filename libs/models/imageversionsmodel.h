@@ -50,8 +50,11 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    void setupModelData(QList<QVariant>* data);
+    void setupModelData(QList<QVariant>& data);
     void clearModelData();
+    QString currentSelectedImage() const;
+    void setCurrentSelectedImage(const QString& path);
+    QModelIndex currentSelectedImageIndex() const;
 
 public Q_SLOTS:
 
@@ -61,6 +64,8 @@ private:
 
     ///Complete paths with filenames
     QList<QVariant>* m_data;
+    ///This is for delegate to paint it as selected
+    QString m_currentSelectedImage;
 };
 
 } // namespace Digikam

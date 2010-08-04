@@ -48,6 +48,8 @@
 #include "imagepropertiesversionsdelegate.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnailloadthread.h"
+#include "versionswidget.h"
+#include "filtershistorywidget.h"
 
 namespace Digikam
 {
@@ -58,101 +60,154 @@ public:
 
     ImagePropertiesVersionsTabPriv()
     {
-        view     = 0;
-        model    = 0;
-        layout   = 0;
-        delegate = 0;
+        versionsWidget          = 0;
+        filtersHistoryWidget    = 0;
+        versionsList            = 0;
     }
 
-    QListView*                       view;
-    ImageVersionsModel*              model;
-    QGridLayout*                     layout;
-    QHBoxLayout*                     iconTextLayout;
-    QLabel*                          headerText;
-    QLabel*                          headerTextIcon;
-    ImagePropertiesVersionsDelegate* delegate;
+    VersionsWidget*         versionsWidget;
+    FiltersHistoryWidget*   filtersHistoryWidget;
+    QList<ImageInfo>*       versionsList;
+    QString                 currentSelectedImage;
+    int                     currentSelectedImageListPosition;
+    
 };
 
-ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent, ImageVersionsModel* model)
-                          : QWidget(parent), d(new ImagePropertiesVersionsTabPriv)
+ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
+                          : KTabWidget(parent), d(new ImagePropertiesVersionsTabPriv)
 {
-    d->view           = new QListView(this);
-    d->layout         = new QGridLayout(this);
-    d->model          = model;
-    d->delegate       = new ImagePropertiesVersionsDelegate(0);
-    d->headerText     = new QLabel(this);
-    d->headerTextIcon = new QLabel(this);
-    d->iconTextLayout = new QHBoxLayout();
+    d->versionsList = new QList<ImageInfo>;
+    
+    d->versionsWidget = new VersionsWidget(this);
+    insertTab(0, d->versionsWidget, i18n("Versions"));
 
-    setLayout(d->layout);
+    d->filtersHistoryWidget = new FiltersHistoryWidget(this);
+    insertTab(1, d->filtersHistoryWidget, i18n("Used Filters"));
 
-    d->headerText->setText(i18n("Available versions"));
-    d->headerTextIcon->setPixmap(SmallIcon("image-x-generic"));
-    d->headerTextIcon->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    connect(d->versionsWidget, SIGNAL(newVersionSelected(KUrl)),
+            this, SLOT(slotNewVersionSelected(KUrl)));
 
-    d->view->setItemDelegate(d->delegate);
-    d->view->setSelectionRectVisible(true);
-    d->view->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->view->setSelectionBehavior(QAbstractItemView::SelectItems);
-
-    d->iconTextLayout->addWidget(d->headerTextIcon);
-    d->iconTextLayout->addWidget(d->headerText);
-
-    d->layout->addLayout(d->iconTextLayout, 0, 0, 1, 1);
-    d->layout->addWidget(d->view,           1, 0, 1, 1);
-
-    connect(d->view, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(slotViewItemSelected(QModelIndex)));
-
-    connect(d->delegate, SIGNAL(throbberUpdated()),
-            d->model, SLOT(slotAnimationStep()));
+    //connect(d->versionsWidget, SIGNAL(doubleClicked(QModelIndex)),
+    //        this, SLOT(slotViewItemSelected(QModelIndex)));
 }
 
 ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
 {
-    delete d->delegate;
     delete d;
 }
 
 void ImagePropertiesVersionsTab::slotDigikamViewNoCurrentItem()
 {
-    d->model->clearModelData();
+    d->versionsWidget->slotDigikamViewNoCurrentItem();
 }
 
-void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList& allImages)
+void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const Digikam::ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const Digikam::ImageInfoList& allImages) const
 {
     Q_UNUSED(hasPrevious)
     Q_UNUSED(hasNext)
     Q_UNUSED(allImages)
-
+    
     QString path;
-    QList<QVariant>* list = new QList<QVariant>;
-
+    
+    //QList<DImageHistory::Entry>* filtersList = new QList<DImageHistory::Entry>;
+    
     kDebug() << "Getting data for versions model";
-
+    
     foreach(ImageInfo inf, selectedImage)
     {
-        kDebug() << inf.imageHistory().originalFileName();
-        if(!inf.imageHistory().originalFileName().isEmpty())
+        d->currentSelectedImage = inf.fileUrl().path();
+
+        if(d->versionsList->contains(inf))
         {
-            path = inf.imageHistory().originalFilePath();
-            path.append("/");
-            path.append(inf.imageHistory().originalFileName());
-            kDebug() << "Original file path: " << path;
-            list->append(path);
+            break;
         }
-        list->append(inf.filePath());
+        else
+        {
+            d->versionsList->clear();
+        }
+
+        QList<ImageInfo> infoList = inf.allAvailVersions();
+        if(infoList.isEmpty())
+        {
+            d->versionsList->append(inf);
+        }
+        else
+        {
+            d->versionsList->append(infoList);
+            d->currentSelectedImageListPosition = d->versionsList->indexOf(inf);
+        }
     }
 
-    d->model->setupModelData(list);
-    d->view->setModel(d->model);
-    d->view->update();
+    setupVersionsData();
+    setupFiltersData();
 }
 
 void ImagePropertiesVersionsTab::slotViewItemSelected(QModelIndex index)
 {
-    KUrl url(index.data(Qt::DisplayRole).toString());
+    d->versionsWidget->slotViewItemSelected(index);
+}
+
+void ImagePropertiesVersionsTab::disableEntry(bool disable)
+{
+    d->filtersHistoryWidget->disableEntry(disable);
+}
+
+void ImagePropertiesVersionsTab::setModelData(const QList<DImageHistory::Entry>& entries)
+{
+    d->filtersHistoryWidget->setModelData(entries);
+}
+
+void ImagePropertiesVersionsTab::showCustomContextMenu(const QPoint& position)
+{
+    d->filtersHistoryWidget->showCustomContextMenu(position);
+}
+
+void ImagePropertiesVersionsTab::setupVersionsData() const
+{
+    if(!d->versionsList->isEmpty())
+    {
+        QList<QVariant> l;
+        for(int i = 0; i < d->versionsList->size(); i++)
+        {
+            l.append(d->versionsList->at(i).fileUrl().path());
+        }
+
+        d->versionsWidget->setupModelData(l);
+        d->versionsWidget->setCurrentSelectedImage(d->currentSelectedImage);
+    }
+}
+
+void ImagePropertiesVersionsTab::setupFiltersData() const
+{
+    if(!d->versionsList->isEmpty() && d->currentSelectedImageListPosition > -1 && d->currentSelectedImageListPosition < d->versionsList->size())
+        d->filtersHistoryWidget->setModelData(d->versionsList->at(d->currentSelectedImageListPosition).imageHistory().entries());
+}
+
+void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
+{
+    ImageInfo current;
+    ImageInfo newOne;
+    for(int i = 0; i < d->versionsList->size(); i++)
+    {
+        if(d->versionsList->at(i).fileUrl() == url)
+        {
+            newOne = d->versionsList->at(i);
+            d->currentSelectedImageListPosition = i;
+        }
+        else if(d->versionsList->at(i).fileUrl() == d->currentSelectedImage)
+        {
+            current = d->versionsList->at(i);
+        }
+    }
+    current.setVisible(false);
+    newOne.setVisible(true);
+
+    d->currentSelectedImage = url.path();
+
+    setupFiltersData();
+    
     emit setCurrentUrlSignal(url);
+    emit updateMainViewSignal();
 }
 
 } // namespace Digikam

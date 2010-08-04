@@ -47,6 +47,7 @@ class SidebarSplitter;
 class ImageInfo;
 class ImageChangeset;
 class ImagePropertiesSideBarDBPriv;
+class ImagePropertiesVersionsTab;
 
 class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 {
@@ -69,7 +70,7 @@ public:
     void refreshTagsView();
 
     ///This is for image editor to be able to update the filter list in sidebar
-    ImagePropertiesHistoryTab* getFiltersHistoryTab();
+    ImagePropertiesVersionsTab* getFiltersHistoryTab();
     void setFiltersHistoryDirty(bool dirty);
 
 Q_SIGNALS:

@@ -28,14 +28,17 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <QPoint>
 
 // KDE includes
 
 #include <KUrl>
+#include <KTabWidget>
 
 // Local includes
 
 #include "digikam_export.h"
+#include "dimagehistory.h"
 
 namespace Digikam 
 {
@@ -44,27 +47,36 @@ class ImageVersionsModel;
 class DImageHistory;
 class ImageInfoList;
 
-class DIGIKAM_EXPORT ImagePropertiesVersionsTab : public QWidget
+class DIGIKAM_EXPORT ImagePropertiesVersionsTab : public KTabWidget
 {
     Q_OBJECT
 
 public:
 
-    ImagePropertiesVersionsTab(QWidget* parent, ImageVersionsModel* model);
+    ImagePropertiesVersionsTab(QWidget* parent);
     ~ImagePropertiesVersionsTab();
-
+    void setupVersionsData() const;
+    void setupFiltersData() const;
 //    void setCurrentURL(const KUrl& url = KUrl());
 //     void setImageHistory(const DImageHistory& history);
 
 public Q_SLOTS:
 
+    //versions tab slots
     void slotDigikamViewNoCurrentItem();
-    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
+    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages) const;
     void slotViewItemSelected(QModelIndex index);
+    void slotNewVersionSelected(KUrl url);
+
+    //filters history tab slots
+    void showCustomContextMenu(const QPoint& position);
+    void setModelData(const QList<DImageHistory::Entry>& entries);
+    void disableEntry(bool disable);
 
 Q_SIGNALS:
 
     void setCurrentUrlSignal(const KUrl& url);
+    void updateMainViewSignal();
 
 private:
 
