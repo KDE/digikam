@@ -496,6 +496,21 @@ QString TAlbum::icon() const
     return m_icon;
 }
 
+bool TAlbum::hasProperty(const QString& key) const
+{
+    return m_properties.contains(key);
+}
+
+QString TAlbum::property(const QString& key) const
+{
+    return m_properties.value(key);
+}
+
+QMap<QString, QString> TAlbum::properties() const
+{
+    return m_properties;
+}
+
 // --------------------------------------------------------------------------
 
 int DAlbum::m_uniqueID = 0;

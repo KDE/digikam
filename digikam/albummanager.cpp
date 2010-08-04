@@ -99,6 +99,7 @@ extern "C"
 #include "config-digikam.h"
 #include "setupcollections.h"
 #include "tagscache.h"
+#include "tagproperties.h"
 
 namespace Digikam
 {
@@ -1536,6 +1537,7 @@ void AlbumManager::scanTAlbums()
         // Create the new TAlbum
         TAlbum* album = new TAlbum(info.name, info.id, false);
         album->m_icon = info.icon;
+        album->m_properties = TagProperties(info.id).properties();
         insertTAlbum(album, parent);
 
         // also insert it in the map we are doing lookup of parent tags
@@ -2940,9 +2942,15 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
              */
             break;
         case TagChangeset::PropertiesChanged:
-            /**
-             * @todo what happens here?
-             */
+        {
+            TAlbum *tag = findTAlbum(changeset.tagId());
+            if (tag)
+            {
+                TagProperties props(tag->id());
+                tag->m_properties = props.properties();
+                emit signalTagPropertiesChanged(tag);
+            }
+        }
         case TagChangeset::Unknown:
             break;
     }

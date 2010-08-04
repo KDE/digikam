@@ -384,6 +384,10 @@ public:
     QString     icon() const;
     QList<int>  tagIDs() const;
 
+    bool        hasProperty(const QString& key) const;
+    QString     property(const QString& key) const;
+    QMap<QString, QString> properties() const;
+
 private:
 
     int     m_pid;
@@ -392,6 +396,8 @@ private:
 
     bool    m_person;
     
+    QMap<QString, QString> m_properties;
+
     friend class AlbumManager;
 };
 
