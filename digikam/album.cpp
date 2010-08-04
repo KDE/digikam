@@ -669,6 +669,8 @@ QString SAlbum::displayTitle() const
                 return i18n("Current Duplicates Search");
             case DatabaseSearch::FaceSearch:
                 return i18n("Current Face Search");
+            case DatabaseSearch::UnknownFaceSearch:
+                return i18n("Current Unknown Face Search");
             case DatabaseSearch::UndefinedType:
                 break;
         }
@@ -694,6 +696,8 @@ QString SAlbum::getTemporaryTitle(DatabaseSearch::Type type, DatabaseSearch::Haa
             return "_Current_Duplicates_Search_";
         case DatabaseSearch::FaceSearch:
             return "_Current_Face_Search_";
+        case DatabaseSearch::UnknownFaceSearch:
+            return "_Current_Unknown_Face_Search_";
         default:
             kError() << "Untreated temporary search type " << type;
             return "_Current_Unknown_Search_";

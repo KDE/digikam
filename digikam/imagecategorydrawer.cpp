@@ -295,6 +295,8 @@ void ImageCategoryDrawer::textForSAlbum(SAlbum *salbum, int count, QString *head
         title = i18n("Fuzzy Sketch Search");
     else if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
         title = i18n("Fuzzy Image Search");
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::UnknownFaceSearch))
+        title = i18n("Unknown Face Search");
     else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
         title = i18n("Map Search");
     else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch) ||

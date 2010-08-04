@@ -511,16 +511,28 @@ void ImagePreviewViewV2::drawFaceItems()
 void ImagePreviewViewV2::findFaces()
 {
     DImg dimg(d->item->image());
-
+    int i;
+    
     if(hasBeenScanned())
     {
         kDebug()<<"Image already has been scanned.";
         d->currentFaces = d->faceIface->findFacesFromTags(dimg, d->item->imageInfo().id());
+        
+        for(i = 0; i < d->currentFaces.size(); ++i)
+        {
+            kDebug()<<d->currentFaces.at(i);
+        }
+    
         return;
     }
     
     d->currentFaces = d->faceIface->findAndTagFaces(dimg, d->item->imageInfo().id());
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
+    
+    for(i = 0; i < d->currentFaces.size(); ++i)
+    {
+        kDebug()<<d->currentFaces.at(i);
+    }
 }
 
 void ImagePreviewViewV2::slotShowPeopleTags()

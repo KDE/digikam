@@ -128,13 +128,15 @@ public Q_SLOTS:
     void slotAlbumWriteMetadata();
     void slotAlbumReadMetadata();
     void slotAlbumSelected(Album* album);
-
+    
     void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
     void slotGotoDateAndItem(const ImageInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
 
     void slotSelectAlbum(const KUrl& url);
 
+    void showFaceAlbum(int tagID);
+    
     // Tag action slots
     void slotNewTag();
     void slotDeleteTag();

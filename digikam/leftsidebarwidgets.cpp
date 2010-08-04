@@ -1122,6 +1122,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     connect(d->rescanButton, SIGNAL(pressed()),
             this, SIGNAL( signalDetectFaces() ) );
 
+
 }
 
 QPixmap PeopleSideBarWidget::getIcon()
@@ -1147,8 +1148,19 @@ void PeopleSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        //AlbumManager::instance()->setCurrentAlbum(
-         //               d->PeopleFolderView->currentAlbum());
+        
+        kDebug()<<"Here";
+        
+        SearchXmlWriter writer;
+        writer.writeGroup();
+        writer.writeField("imagetagproperty", SearchXml::Equal);
+        writer.writeValue(QStringList() << "face" << "Unknown");
+        writer.finishField();
+        writer.finishGroup();
+        SAlbum* salbum = AlbumManager::instance()->createSAlbum("face",
+                    DatabaseSearch::UnknownFaceSearch, writer.xml());
+        // search types defined in albuminfo.h. Can be a better name.
+        AlbumManager::instance()->setCurrentAlbum(salbum);
     }
 }
 
@@ -1181,6 +1193,13 @@ void PeopleSideBarWidget::changeAlbumFromHistory(Album* /*album*/)
 {
     //d->timeLineFolderView->slotSelectAlbum(album);
 }
+
+void PeopleSideBarWidget::slotAlbumSelected ( Album* )
+{
+    
+
+}
+
 
 PeopleSideBarWidget::~PeopleSideBarWidget()
 {

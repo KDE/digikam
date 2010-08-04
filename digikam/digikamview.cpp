@@ -64,6 +64,8 @@
 #include "tagfiltersidebarwidget.h"
 #include "tagmodificationhelper.h"
 #include "imagepropertiesversionstab.h"
+#include "tagscache.h"
+#include "searchxml.h"
 
 namespace Digikam
 {
@@ -967,6 +969,25 @@ void DigikamView::slotAlbumSelected(Album* album)
     else if (album->type() == Album::TAG)
     {
         emit signalAlbumSelected(false);
+        
+        kDebug()<<"Album "<<album->title()<<" selected." ;
+        
+        // Now loop through children of the people album and check if this album is a child.
+        Album* peopleAlbum = AlbumManager::instance()->findTAlbum(TagsCache::instance()->tagForPath("/People"));
+        int thisAlbumId = album->id();
+        
+        QList<int> children =  peopleAlbum->childAlbumIds(true);
+        
+        foreach(int id, children)
+        {
+            if(id == thisAlbumId)
+            {
+                kDebug()<<"Is a people tag";
+                showFaceAlbum(thisAlbumId);
+                return;
+            }
+        }
+        
         emit signalTagSelected(true);
     }
 
@@ -988,6 +1009,26 @@ void DigikamView::slotAlbumSelected(Album* album)
                 d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
         }
 }
+
+void DigikamView::showFaceAlbum ( int tagID )
+{
+    QString personname = TagsCache::instance()->tagName(tagID);
+    
+    SearchXmlWriter writer;
+    writer.writeGroup();
+    writer.writeField ( "imagetagproperty", SearchXml::Equal );
+    writer.writeValue ( QStringList() << "face" << personname );
+    writer.finishField();
+    writer.finishGroup();
+        
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum ( personname,
+                     DatabaseSearch::UnknownFaceSearch, writer.xml() );
+    
+    // search types defined in albuminfo.h. Can be a better name.
+    AlbumManager::instance()->setCurrentAlbum ( salbum );
+}
+
+
 
 void DigikamView::slotAlbumOpenInKonqui()
 {

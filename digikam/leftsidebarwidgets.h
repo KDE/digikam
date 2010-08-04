@@ -334,7 +334,7 @@ private Q_SLOTS:
 //     void slotSelectionChanged();
 //     void slotResetSelection();
 //     void slotSaveSelection();
-//     void slotAlbumSelected(Album*);
+    void slotAlbumSelected(Album*);
 //     void slotCheckAboutSelection();
     
 Q_SIGNALS:

@@ -100,6 +100,9 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
 {
     // Find faces
     QImage qimg = image.copyQImage();
+    
+    kDebug()<<"Image dimensions : "<<qimg.rect();
+    
     KFaceIface::Image fimg(qimg);
     QList<KFaceIface::Face> faceList = d->libkface->detectFaces(fimg);
     
@@ -123,6 +126,7 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
         QRect faceRect = face.toRect();
         kDebug() << faceRect;
         pair.addProperty("faceRegion", rectToString(faceRect));
+        pair.addProperty("face", "Unknown");
         pair.assignTag();
         
         kDebug()<<"Applied tag.";
@@ -173,7 +177,6 @@ QList< Face > FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
             
             faceList += f;
         }
-        
     }
     
     return faceList;
@@ -205,6 +208,7 @@ void FaceIface::forgetFaceTags(qlonglong imageid)
         int currentTag = it.next();
         ImageTagPair peopleTags(imageid, currentTag );
         peopleTags.removeProperties("faceRegion");
+        peopleTags.removeProperties("face");
         peopleTags.unAssignTag();
         kDebug()<<" Removed tag "<< d->tagsCache->tagName(currentTag);
     }
