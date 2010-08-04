@@ -28,19 +28,6 @@
 // Qt includes
 
 #include <QPair>
-
-// local includes
-/*
-#include "imagelister.h"
-#include "databaseaccess.h"
-#include "albumdb.h"
-#include "imageinfo.h"
-#include "thumbnailloadthread.h"
-#include "thumbnaildatabaseaccess.h"
-#include "thumbnaildb.h"
-*/
-// Qt includes
-
 #include <QRectF>
 
 namespace Digikam
@@ -226,21 +213,6 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
     DatabaseUrl u = DatabaseUrl::fromAreaRange(lat1, lat2, lng1, lng2);
     KIO::Job* currentJob = ImageLister::startListJob(u);
     currentJob->addMetaData("wantDirectQuery", "false");
-
-    /*
-    QByteArray baLat1 = QString("%1").arg(lat1).toAscii();
-    QByteArray baLat2 = QString("%1").arg(lat2).toAscii();
-    QByteArray baLng1 = QString("%1").arg(lng1).toAscii();
-    QByteArray baLng2 = QString("%1").arg(lng2).toAscii();
-
-    KIO::Job* currentJob = ImageLister::startListJob(u);
-
-    currentJob->addMetaData("lat1", baLat1.constData());
-    currentJob->addMetaData("lat2", baLat2.constData());
-    currentJob->addMetaData("lng1", baLng1.constData());
-    currentJob->addMetaData("lng2", baLng2.constData());
-    currentJob->addMetaData("wantDirectQuery", "true");
-    */
 
     InternalJobs currentJobInfo;
     currentJobInfo.kioJob           = currentJob;

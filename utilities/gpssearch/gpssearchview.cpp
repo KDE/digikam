@@ -111,6 +111,8 @@ public:
     MapViewModelHelper*         mapViewModelHelper;
     KMapIface::ItemMarkerTiler* markerTilerModelBased;
     bool                        existsSelection;
+
+    SearchModel*                searchModel;    
 };
 
 GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
@@ -124,12 +126,12 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     d->imageAlbumModel    = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());      
     d->selectionModel     = itemSelectionModel;
-
     d->imageFilterModel   = imageFilterModel;
+    d->searchModel        = searchModel;
     //d->imageFilterModel->setSourceImageModel(d->imageAlbumModel);
 
-    d->mapViewModelHelper = new MapViewModelHelper(d->imageAlbumModel, d->selectionModel, d->imageFilterModel, this);
 
+    d->mapViewModelHelper = new MapViewModelHelper(d->imageAlbumModel, d->selectionModel, d->imageFilterModel, this);
     d->markerTilerModelBased = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
 
     // ---------------------------------------------------------------
@@ -176,7 +178,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     // ---------------------------------------------------------------
 
-    d->searchTreeView = new EditableSearchTreeView(this, searchModel, searchModificationHelper);
+    d->searchTreeView = new EditableSearchTreeView(this, d->searchModel, searchModificationHelper);
     d->searchTreeView->filteredModel()->setFilterSearchType(DatabaseSearch::MapSearch);
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
     d->searchTreeView->setAlbumManagerCurrentAlbum(true);
@@ -234,6 +236,9 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentSelection()),
             this, SLOT(slotRemoveCurrentSelection()));
 
+    connect(d->mapViewModelHelper, SIGNAL(signalFilteredImages(const QList<qlonglong>&)),
+            this, SLOT(slotMapSoloItems(const QList<qlonglong>&)));
+
 //    connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
 //             this, SLOT(slotSelectionChanged()));
 // 
@@ -279,7 +284,10 @@ void GPSSearchView::doLoadState()
     }
 
     d->gpsSearchWidget->readConfig(group); */
-    d->searchTreeView->loadState();
+    //d->searchTreeView->loadState();
+
+    d->searchTreeView->clearSelection();
+    d->imageAlbumModel->clearImageInfos();
     
 }
 
@@ -290,31 +298,31 @@ void GPSSearchView::doSaveState()
 
     group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
     d->gpsSearchWidget->writeConfig(group); */
-    d->searchTreeView->saveState();
+    //d->searchTreeView->saveState();
 
     //group.sync();
     
 }
 
-void GPSSearchView::setActive(bool /*val*/)
+void GPSSearchView::setActive(bool val)
 {
-/*
+
     if (!val)
     {
         // make sure we reset the custom filters set by the MarkerClusterer:
-        emit(signalMapSoloItems(KUrl::List(), "gpssearch"));
+     //   emit(signalMapSoloItems(KUrl::List(), "gpssearch"));
     }
 
     if (val && d->searchTreeView->currentAlbum())
     {
-        AlbumManager::instance()->setCurrentAlbum(
+       AlbumManager::instance()->setCurrentAlbum(
                         d->searchTreeView->currentAlbum());
     }
     else if (val)
     {
-        // TODO
+       d->imageAlbumModel->clearImageInfos();
     }
-    */
+    
 }
 
 void GPSSearchView::changeAlbumFromHistory(SAlbum* album)
@@ -342,7 +350,7 @@ void GPSSearchView::slotSelectionChanged()
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
 
-    AlbumManager::instance()->setCurrentAlbum(0);
+    //AlbumManager::instance()->setCurrentAlbum(0);
 
     // clear positions shown on the map:
     //d->gpsSearchWidget->clearGPSPositions();
@@ -469,6 +477,24 @@ void GPSSearchView::slotRemoveCurrentSelection()
 {
     d->existsSelection = false;
     d->imageAlbumModel->clearImageInfos();
+
+    //KUrl::List emptyUrlList;
+    //emit signalMapSoloItems(emptyUrlList, "gpssearch");    
+
+    QList<qlonglong> emptyIdList;
+    emit signalMapSoloItems(emptyIdList, "gpssearch");
+
+/*    int rootAlbumId = 1;
+    PAlbum* rootAlbum = AlbumManager::instance()->findPAlbum(rootAlbumId);
+    d->imageAlbumModel->openAlbum(rootAlbum);
+
+    QList<Album *> selectedAlbums =  d->searchModel->checkedAlbums();
+    for(int i=0; i<selectedAlbums.count(); ++i)
+    {
+        d->searchModel->setChecked(selectedAlbums[i], true);
+    } 
+*/
+    d->searchTreeView->clearSelection();
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 }
 
@@ -553,7 +579,7 @@ void GPSSearchView::slotMapSelectedItems(const GPSInfoList& /*gpsList*/)
  * @brief Slot which gets called when the user makes items 'solo' on the map
  * @param gpsList List of GPSInfos which are 'solo'
  */
-void GPSSearchView::slotMapSoloItems(const GPSInfoList& /*gpsList*/)
+void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
 {
 /*
     KUrl::List urlList;
@@ -563,6 +589,7 @@ void GPSSearchView::slotMapSoloItems(const GPSInfoList& /*gpsList*/)
     }
     emit(signalMapSoloItems(urlList, "gpssearch"));
 */
+    emit(signalMapSoloItems(idList, "gpssearch"));
 }
 
 

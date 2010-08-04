@@ -314,6 +314,13 @@ void ImageFilterModel::setUrlWhitelist(const KUrl::List urlList, const QString& 
     setImageFilterSettings(d->filter);
 }
 
+void ImageFilterModel::setIdWhitelist(const QList<qlonglong>& idList, const QString& id)
+{
+    Q_D(ImageFilterModel);
+    d->filter.setIdWhitelist(idList,id);
+    setImageFilterSettings(d->filter);
+}
+
 void ImageFilterModel::setMimeTypeFilter(int mimeTypeFilter)
 {
     Q_D(ImageFilterModel);

@@ -427,8 +427,11 @@ void DigikamView::setupConnections()
     connect(d->gpsSearchSideBar, SIGNAL(signalMapSelectedItems(const KUrl::List)),
             d->iconView, SLOT(setSelectedUrls(const KUrl::List&)));
 
-    connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
-            d->iconView->imageFilterModel(), SLOT(setUrlWhitelist(const KUrl::List, const QString&)));
+//    connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
+//            d->iconView->imageFilterModel(), SLOT(setUrlWhitelist(const KUrl::List, const QString&)));
+
+     connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)),
+             d->iconView->imageFilterModel(), SLOT(setIdWhitelist(const QList<qlonglong>&, const QString&))); 
 #endif
 
     // -- Filter Bars Connections ---------------------------------

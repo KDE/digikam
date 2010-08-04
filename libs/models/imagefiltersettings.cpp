@@ -120,6 +120,18 @@ void ImageFilterSettings::setUrlWhitelist(const KUrl::List& urlList, const QStri
     }
 }
 
+void ImageFilterSettings::setIdWhitelist(const QList<qlonglong> idList, const QString id)
+{
+    if(idList.isEmpty())
+    {
+        idWhitelists.remove(id);
+    }
+    else
+    {
+        idWhitelists.insert(id, idList);
+    }
+}
+
 bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
 {
     if (foundText)
@@ -319,6 +331,17 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
         {
             match = it->contains(url);
             if (!match)
+                break;
+        }
+    }
+
+    if(match)
+    {
+        const qlonglong id = info.id();
+        for(QHash<QString, QList<qlonglong> >::const_iterator it = idWhitelists.constBegin(); it!=idWhitelists.constEnd(); ++it)
+        {
+            match = it->contains(id);
+            if(!match)
                 break;
         }
     }

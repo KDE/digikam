@@ -132,6 +132,7 @@ public Q_SLOTS:
     void setSortRole(ImageSortSettings::SortRole role);
     void setSortOrder(ImageSortSettings::SortOrder order);
     void setUrlWhitelist(const KUrl::List urlList, const QString& id);
+    void setIdWhitelist(const QList<qlonglong>& idList, const QString& id);
 
 Q_SIGNALS:
 

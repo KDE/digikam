@@ -99,12 +99,12 @@ private Q_SLOTS:
     void slotItemsInfo(const ImageInfoList&);
 
     void slotMapSelectedItems(const GPSInfoList& gpsList);
-    void slotMapSoloItems(const GPSInfoList& gpsList);
+    void slotMapSoloItems(const QList<qlonglong>& idList);
 
 Q_SIGNALS:
 
     void signalMapSelectedItems(const KUrl::List url);
-    void signalMapSoloItems(const KUrl::List url, const QString& id);
+    void signalMapSoloItems(const QList<qlonglong>& idList, const QString& id);
 
 private:
 

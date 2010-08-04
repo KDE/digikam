@@ -68,6 +68,12 @@ public:
     virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
     virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey);
 
+    virtual void onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices);
+
+Q_SIGNALS:
+
+    void signalFilteredImages(const QList<qlonglong>& idList);
+
 private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);

@@ -1026,8 +1026,8 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* parent, SearchModel* sea
     connect(d->gpsSearchView, SIGNAL(signalMapSelectedItems(const KUrl::List)),
             this, SIGNAL(signalMapSelectedItems(const KUrl::List&)));
 
-    connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
-            this, SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)));
+    connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)),
+            this, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)));
 }
 
 GPSSearchSideBarWidget::~GPSSearchSideBarWidget()

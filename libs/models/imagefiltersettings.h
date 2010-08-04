@@ -121,7 +121,11 @@ public:
     /// --- URL whitelist filter
     QHash<QString,KUrl::List> urlWhitelists;
     void setUrlWhitelist(const KUrl::List& urlList, const QString id);
-    
+   
+    /// --- ID whitelist filter
+    QHash<QString,QList<qlonglong> > idWhitelists;
+    void setIdWhitelist(const QList<qlonglong> idList, const QString id);
+ 
     /// --- Change notification ---
 
     /** Returns database fields a change in which would affect the current filtering.

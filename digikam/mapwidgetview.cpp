@@ -252,4 +252,29 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
     }
 } 
 
+void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices)
+{
+    //TODO: there isn't another way to convert QPersistentModelIndex to QModelIndex?
+    QList<QModelIndex> indexList;
+
+    for(int i=0; i<clickedIndices.count(); ++i)
+    {
+        QModelIndex newIndex(clickedIndices[i]);
+        indexList.append(newIndex);
+    }
+
+    QList<ImageInfo> imageInfoList = d->model->imageInfos(indexList);
+    //KUrl::List imagesUrlList;
+    QList<qlonglong> imagesIdList;
+
+    for(int i=0; i<imageInfoList.count(); ++i)
+    {
+        //imagesUrlList.append(imageInfoList[i].fileUrl());    
+        imagesIdList.append(imageInfoList[i].id());
+    }
+
+   // emit signalFilteredImages(imagesUrlList); 
+    emit signalFilteredImages(imagesIdList);
+}
+
 } //namespace Digikam

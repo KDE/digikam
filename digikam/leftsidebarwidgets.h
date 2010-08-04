@@ -291,7 +291,8 @@ public:
 Q_SIGNALS:
 
     void signalMapSelectedItems(const KUrl::List);
-    void signalMapSoloItems(const KUrl::List, const QString&);
+//    void signalMapSoloItems(const KUrl::List, const QString&);
+    void signalMapSoloItems(const QList<qlonglong>&, const QString&);
 
 public Q_SLOTS:
 
