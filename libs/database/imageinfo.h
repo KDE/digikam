@@ -269,6 +269,7 @@ public:
 
     QList<ImageInfo> derivedImages() const;
     QList<ImageInfo> ancestorImages() const;
+    QList<ImageInfo> allAvailVersions() const;
 
     /**
      * Add a relation to the database:
