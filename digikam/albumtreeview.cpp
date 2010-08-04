@@ -1177,6 +1177,11 @@ void AlbumTreeView::slotDIOResult(KJob *kjob)
 TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
+    m_filteredModel = new TagPropertiesFilterModel(this);
+    m_filteredModel->setSourceTagModel(model);
+
+    albumFilterModel()->setSourceAlbumModel(m_filteredModel);
+
     m_modificationHelper = new TagModificationHelper(this, this);
 
     albumModel()->setDragDropHandler(new TagDragDropHandler(albumModel()));
@@ -1203,6 +1208,11 @@ TagModel *TagTreeView::albumModel() const
     return static_cast<TagModel*>(m_albumModel);
 }
 
+TagPropertiesFilterModel *TagTreeView::filteredModel() const
+{
+    return m_filteredModel;
+}
+
 TAlbum* TagTreeView::currentAlbum() const
 {
     return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
@@ -1226,9 +1236,7 @@ SearchTreeView::SearchTreeView(QWidget *parent, SearchModel *searchModel)
     m_filteredModel = new SearchFilterModel(this);
     m_filteredModel->setSourceSearchModel(searchModel);
 
-    AlbumFilterModel *albumFilterModel = new AlbumFilterModel(this);
-    setAlbumFilterModel(albumFilterModel);
-    albumFilterModel->setSourceAlbumModel(m_filteredModel);
+    albumFilterModel()->setSourceAlbumModel(m_filteredModel);
 
     expand(m_albumFilterModel->rootAlbumIndex());
     setRootIsDecorated(false);

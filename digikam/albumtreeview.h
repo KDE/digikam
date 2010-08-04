@@ -450,6 +450,8 @@ public:
 
     explicit TagTreeView(TagModel* model, QWidget* parent = 0);
     TagModel* albumModel() const;
+    /// Contains only the tags filtered by properties - prefer to albumModel()
+    TagPropertiesFilterModel* filteredModel() const;
     TAlbum* currentAlbum() const;
     TAlbum* albumForIndex(const QModelIndex &index) const;
 
@@ -461,7 +463,8 @@ Q_SIGNALS:
 
 protected:
 
-    TagModificationHelper* m_modificationHelper;
+    TagPropertiesFilterModel *m_filteredModel;
+    TagModificationHelper    *m_modificationHelper;
 };
 
 // -------------------------------------------------------------------------------------
