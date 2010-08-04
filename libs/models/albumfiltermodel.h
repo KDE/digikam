@@ -215,6 +215,8 @@ protected:
  */
 class SearchFilterModel : public CheckableAlbumFilterModel
 {
+    Q_OBJECT
+
 public:
 
     SearchFilterModel(QObject *parent = 0);
@@ -238,12 +240,47 @@ public:
 protected:
 
     virtual bool matches(Album *album) const;
+    // make protected
     void setSourceAlbumModel(AbstractAlbumModel *source);
 
     void setTypeFilter(int type);
-    
+
     int                     m_searchType;
     bool                    m_listTemporary;
+};
+
+/**
+ * Filter model for tags that can filter by tag property
+ */
+class TagPropertiesFilterModel : public CheckableAlbumFilterModel
+{
+    Q_OBJECT
+
+public:
+
+    TagPropertiesFilterModel(QObject *parent = 0);
+    void setSourceTagModel(TagModel *source);
+    TagModel *sourceTagModel() const;
+
+    void listOnlyTagsWithProperty(const QString& property);
+    void removeListOnlyProperty(const QString& property);
+    void doNotListTagsWithProperty(const QString& property);
+    void removeDoNotListProperty(const QString& property);
+
+    virtual bool isFiltering() const;
+
+protected slots:
+
+    void tagPropertiesChanged(TAlbum*);
+
+protected:
+
+    virtual bool matches(Album *album) const;
+    // make protected
+    void setSourceAlbumModel(AbstractAlbumModel *source);
+
+    QStringList        m_propertiesBlackList;
+    QStringList        m_propertiesWhiteList;
 };
 
 } // namespace Digikam

@@ -35,6 +35,7 @@
 
 // Local includes
 
+#include "albummanager.h"
 #include "albummodel.h"
 #include "albumsettings.h"
 
@@ -412,6 +413,96 @@ bool SearchFilterModel::matches(Album *album) const
 }
 
 void SearchFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
+{
+    AlbumFilterModel::setSourceAlbumModel(source);
+}
+
+// -----------------------------------------------------------------------------
+
+TagPropertiesFilterModel::TagPropertiesFilterModel(QObject *parent)
+            : CheckableAlbumFilterModel(parent)
+{
+    connect(AlbumManager::instance(), SIGNAL(signalTagPropertiesChanged(TAlbum *)),
+            this, SLOT(tagPropertiesChanged(TAlbum*)));
+}
+
+void TagPropertiesFilterModel::setSourceTagModel(TagModel *source)
+{
+    setSourceModel(source);
+}
+
+TagModel *TagPropertiesFilterModel::sourceTagModel() const
+{
+    return dynamic_cast<TagModel*> (sourceModel());
+}
+
+void TagPropertiesFilterModel::listOnlyTagsWithProperty(const QString& property)
+{
+    if (m_propertiesWhiteList.contains(property))
+        return;
+    m_propertiesWhiteList << property;
+    invalidateFilter();
+    emit filterChanged();
+}
+
+void TagPropertiesFilterModel::removeListOnlyProperty(const QString& property)
+{
+    if (!m_propertiesWhiteList.contains(property))
+        return;
+    m_propertiesWhiteList.removeAll(property);
+    invalidateFilter();
+    emit filterChanged();
+}
+
+void TagPropertiesFilterModel::doNotListTagsWithProperty(const QString& property)
+{
+    if (m_propertiesBlackList.contains(property))
+        return;
+    m_propertiesBlackList << property;
+    invalidateFilter();
+    emit filterChanged();
+}
+
+void TagPropertiesFilterModel::removeDoNotListProperty(const QString& property)
+{
+    if (!m_propertiesBlackList.contains(property))
+        return;
+    m_propertiesBlackList.removeAll(property);
+    invalidateFilter();
+    emit filterChanged();
+}
+
+bool TagPropertiesFilterModel::isFiltering() const
+{
+    return !m_propertiesWhiteList.isEmpty() || !m_propertiesBlackList.isEmpty();
+}
+
+void TagPropertiesFilterModel::tagPropertiesChanged(TAlbum *)
+{
+    // I do not expect batch changes. Otherwise we'll need a timer.
+    if (isFiltering())
+        invalidateFilter();
+}
+
+bool TagPropertiesFilterModel::matches(Album *album) const
+{
+    if (!AlbumFilterModel::matches(album))
+        return false;
+
+    TAlbum *talbum = static_cast<TAlbum*>(album);
+
+    foreach (const QString& prop, m_propertiesBlackList)
+        if (talbum->hasProperty(prop))
+            return false;
+
+    foreach (const QString& prop, m_propertiesWhiteList)
+        if (!talbum->hasProperty(prop))
+            return false;
+
+    return true;
+}
+
+void TagPropertiesFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
 {
     AlbumFilterModel::setSourceAlbumModel(source);
 }
