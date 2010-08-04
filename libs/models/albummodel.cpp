@@ -160,7 +160,7 @@ void SearchModel::setPixmapForDuplicatesSearches(const QPixmap& pix)
 
 QVariant SearchModel::albumData(Album *a, int role) const
 {
-    if (role == Qt::DisplayRole || role == AlbumTitleRole)
+    if (role == Qt::DisplayRole || role == AlbumTitleRole || role == Qt::ToolTipRole)
     {
         SAlbum *salbum = static_cast<SAlbum*>(a);
         QString title = a->title();
