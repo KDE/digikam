@@ -151,8 +151,18 @@ void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const
     if (!actualPixmapRect.isNull())
         const_cast<ImageDelegate*>(this)->updateActualPixmapRect(info.id(), actualPixmapRect);
 
+    /*if (info.hasImageHistory())
+    {
+        //         QVariant thumbsSet = index.data(ImageModel::ThumbnailSetRole);
+        //         QList<QPixmap> l = thumbsSet.value<QList>();
+        //         QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, l.at(1));
+        QRect thumbRect = actualPixmapRect;
+        p->drawRect(thumbRect.left()-6, thumbRect.top()-6, thumbRect.width(), thumbRect.height());
+        p->drawRect(thumbRect.left()-3, thumbRect.top()-3, thumbRect.width(), thumbRect.height());
+    }*/
+    
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
-    if(info.hasImageHistory())
+    if (info.hasImageHistory())
     {
         p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22,22));
     }
