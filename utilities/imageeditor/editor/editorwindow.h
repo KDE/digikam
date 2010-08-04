@@ -166,7 +166,7 @@ protected:
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
     bool startingSaveAs(const KUrl& url);
-    bool startingSaveNewVersion(const KUrl& url);
+    bool startingSaveNewVersion(const KUrl& url, bool subversion);
     bool checkPermissions(const KUrl& url);
     void moveFile();
     void colorManage();
@@ -194,6 +194,7 @@ protected:
     virtual bool saveAs()=0;
     virtual bool save()=0;
     virtual bool saveNewVersion()=0;
+    virtual bool saveNewSubversion()=0;
 
     /**
      * Hook method that subclasses must implement to return the destination url
@@ -211,6 +212,7 @@ protected:
 protected Q_SLOTS:
 
     void slotSave();
+    void slotSaveSubversion();
     void slotSaveAs() { saveAs(); };
 
     void slotEditKeys();

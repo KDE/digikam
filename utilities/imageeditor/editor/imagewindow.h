@@ -98,6 +98,7 @@ private:
     bool save();
     bool saveAs();
     bool saveNewVersion();
+    bool saveNewSubversion();
     KUrl saveDestinationUrl();
     bool hasChangesToSave();
 
@@ -159,6 +160,7 @@ private Q_SLOTS:
     void slotSidebarTabTitleStyleChanged();
 
     void slotUpdateFiltersHistorySidebar();
+    void slotDisableEntryInFiltersHistorySidebar();
 
 private:
 

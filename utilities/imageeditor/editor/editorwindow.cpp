@@ -338,7 +338,7 @@ void EditorWindow::setupStandardActions()
     connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("editorwindow_last", m_lastAction);
 
-    m_saveAction = KStandardAction::save(this, SLOT(slotSave()), this);
+    m_saveAction = KStandardAction::save(this, SLOT(slotSaveSubversion()), this);
     actionCollection()->addAction("editorwindow_save", m_saveAction);
 
     m_saveAsAction = KStandardAction::saveAs(this, SLOT(slotSaveAs()), this);
@@ -1264,9 +1264,14 @@ bool EditorWindow::waitForSavingToComplete()
     {
         // Waiting for asynchronous image file saving operation running in separate thread.
         m_savingContext->synchronizingState = SavingContextContainer::SynchronousSaving;
-        KMessageBox::queuedMessageBox(this,
+        /*QFrame processFrame;
+        StatusProgressBar *pb = m_nameLabel;
+        pb->setParent(&processFrame);
+        processFrame.show();*/
+/*      KMessageBox::queuedMessageBox(this,
                                       KMessageBox::Information,
                                       i18n("Please wait while the image is being saved..."));
+*/
         enterWaitingLoop();
         m_savingContext->synchronizingState = SavingContextContainer::NormalSaving;
     }
@@ -1410,6 +1415,14 @@ void EditorWindow::slotSave()
         saveAs();
     else if (promptForOverWrite())
         save();
+}
+
+void EditorWindow::slotSaveSubversion()
+{
+    if (m_canvas->isReadOnly())
+        saveAs();
+    //else if (promptForOverWrite())
+    saveNewSubversion();
 }
 
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
@@ -1906,7 +1919,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     return true;
 }
 
-bool EditorWindow::startingSaveNewVersion(const KUrl& url)
+bool EditorWindow::startingSaveNewVersion(const KUrl& url, bool subversion)
 {
     kDebug() << "Saving new image using versioning";
 
@@ -1915,20 +1928,27 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url)
 
     m_savingContext->srcURL = url;
     QFileInfo info(m_savingContext->srcURL.fileName());
+    bool editingRAW = false;
+
+    if(m_canvas->currentImageFileFormat() == "RAW")
+    {
+    // FIXME: Should these be applied when saving new version (to a new file)?
+        applyStandardSettings();
+        editingRAW = true;
+        m_savingContext->format = "jpg";
+    }
 
     bool editingOriginal = m_canvas->interface()->getInitialImageHistory().isEmpty();
     QString fileName = VersionManager::instance()->getVersionedFilename(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash), 
-                                                                        info.fileName(), info.size(), editingOriginal, false);
+                                                                        info.fileName(), info.size(), editingOriginal, subversion, editingRAW);
 
     if(fileName.isEmpty())
     {
         kWarning() << "Target file can't be determined, aborting saving";
     }
+
     KUrl newURL(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash) + QString("/") + fileName);
     kDebug() << "Writing file to " << newURL;
-
-    // TODO: Should these be applied when saving new version (to a new file)?
-    // applyStandardSettings();
 
     // select the format to save the image with
     // TODO: Which format should be the default to save to? Same as original? Or use everytime JPEG for example..

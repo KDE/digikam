@@ -85,6 +85,7 @@ private:
     void finishSaving(bool success);
     KUrl saveDestinationUrl();
     inline bool saveNewVersion() { return false; };
+    inline bool saveNewSubversion() { return false; };
 
     void saveIsComplete();
     void saveAsIsComplete();

@@ -851,6 +851,7 @@ void DImgInterface::rotate90(bool saveUndo)
     d->origHeight = d->image.height();
 
     FilterAction action("digikam:rotate90", 1);
+    action.setDisplayableName(i18n("Rotate right"));
 
     setModified(action);
 }
@@ -867,6 +868,7 @@ void DImgInterface::rotate180(bool saveUndo)
     d->origHeight = d->image.height();
 
     FilterAction action("digikam:rotate180", 1);
+    action.setDisplayableName(i18n("Rotate right"));
 
     setModified(action);
 }
@@ -883,6 +885,7 @@ void DImgInterface::rotate270(bool saveUndo)
     d->origHeight = d->image.height();
 
     FilterAction action("digikam:rotate270", 1);
+    action.setDisplayableName(i18n("Rotate left"));
 
     setModified(action);
 }
@@ -897,6 +900,7 @@ void DImgInterface::flipHoriz(bool saveUndo)
     d->image.flip(DImg::HORIZONTAL);
 
     FilterAction action("digikam:flipHorizontal", 1);
+    action.setDisplayableName(i18n("Flip horizontally"));
 
     setModified(action);
 }
@@ -911,6 +915,7 @@ void DImgInterface::flipVert(bool saveUndo)
     d->image.flip(DImg::VERTICAL);
 
     FilterAction action("digikam:flipVertical", 1);
+    action.setDisplayableName(i18n("Flip vertically"));
 
     setModified(action);
 }
@@ -925,6 +930,7 @@ void DImgInterface::crop(int x, int y, int w, int h)
     d->origHeight = d->image.height();
 
     FilterAction action("digikam:crop", 1);
+    action.setDisplayableName(i18n("Crop"));
     action.addParameter("x", x);
     action.addParameter("y", y);
     action.addParameter("w", w);
@@ -943,6 +949,7 @@ void DImgInterface::resize(int w, int h)
     d->origHeight = d->image.height();
 
     FilterAction action("digikam:resize", 1);
+    action.setDisplayableName(i18n("Resize to %1x%2").arg(w).arg(h));
     action.addParameter("w", w);
     action.addParameter("h", h);
     

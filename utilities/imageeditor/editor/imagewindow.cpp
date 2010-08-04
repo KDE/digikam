@@ -114,7 +114,7 @@
 #include "globals.h"
 #include "uifilevalidator.h"
 #include "albummodel.h"
-#include "imagepropertieshistorytab.h"
+#include "imagepropertiesversionstab.h"
 
 namespace Digikam
 {
@@ -1069,7 +1069,11 @@ bool ImageWindow::saveAs()
 }
 
 bool ImageWindow::saveNewVersion() {
-    return ( startingSaveNewVersion(d->urlCurrent) );
+    return ( startingSaveNewVersion(d->urlCurrent, false) );
+}
+
+bool ImageWindow::saveNewSubversion() {
+    return ( startingSaveNewVersion(d->urlCurrent, true) );
 }
 
 KUrl ImageWindow::saveDestinationUrl()
@@ -1523,8 +1527,14 @@ void ImageWindow::slotSidebarTabTitleStyleChanged()
 
 void ImageWindow::slotUpdateFiltersHistorySidebar()
 {
-    d->rightSideBar->getFiltersHistoryTab()->setModelData(m_canvas->interface()->getImageHistory().entries());
-    d->rightSideBar->setFiltersHistoryDirty(true);
+     d->rightSideBar->getFiltersHistoryTab()->setModelData(m_canvas->interface()->getImageHistory().entries());
+     d->rightSideBar->setFiltersHistoryDirty(true);
+}
+
+void ImageWindow::slotDisableEntryInFiltersHistorySidebar()
+{
+//     d->rightSideBar->getFiltersHistoryTab()->disableEntry(true);
+//     d->rightSideBar->setFiltersHistoryDirty(true);
 }
 
 }  // namespace Digikam
