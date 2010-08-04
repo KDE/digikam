@@ -102,6 +102,8 @@ public:
     void setOriginalFilePath(const QString& filePath);
     QString originalFilePath();
 
+    QString originalUUID() const;
+
     QString toXml() const;
     static DImageHistory fromXml(const QString& xml);
 

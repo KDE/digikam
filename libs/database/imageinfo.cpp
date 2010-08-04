@@ -523,6 +523,7 @@ QList<ImageInfo> ImageInfo::ancestorImages() const
 
 QList<ImageInfo> ImageInfo::allAvailVersions() const
 {
+    //kDebug() << ImageInfo(KUrl(QString("%1/%2").arg(imageHistory().originalFilePath(), imageHistory().originalFileName()))).id;
     QList<ImageInfo> list;
     QList<QPair<qlonglong, qlonglong> > l = DatabaseAccess().db()->getRelationCloud(id(),
                                                                                     DatabaseRelation::DerivedFrom);
@@ -540,12 +541,15 @@ QList<ImageInfo> ImageInfo::allAvailVersions() const
             }
         }
 */
+//        QString a = ImageInfo(l.at(i).first).name();
+//        QString b = ImageInfo(l.at(i).second).name();
         if(!list.contains(ImageInfo(l.at(i).second)))
         {
             list.append(ImageInfo(l.at(i).second));
         }
 
         list.append(ImageInfo(l.at(i).first));
+//        kDebug() << a << "is derived from" << b;
     }
 
     return list;

@@ -101,7 +101,7 @@ void ImagePropertiesVersionsTab::slotDigikamViewNoCurrentItem()
     d->versionsWidget->slotDigikamViewNoCurrentItem();
 }
 
-void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const Digikam::ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const Digikam::ImageInfoList& allImages) const
+void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList& allImages) const
 {
     Q_UNUSED(hasPrevious)
     Q_UNUSED(hasNext)
