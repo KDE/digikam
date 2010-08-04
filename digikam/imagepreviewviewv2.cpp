@@ -248,6 +248,8 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
+
+    slotSetupChanged();
 }
 
 ImagePreviewViewV2::~ImagePreviewViewV2()
