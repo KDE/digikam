@@ -158,7 +158,8 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->tagSearchBar = new SearchTextBar(tagBox, "KipiImageCollectionSelectorTagSearchBar");
     d->tagSearchBar->setEntryPrefix("TagSearchBar");
     d->tagSearchBar->setConfigGroup(configGroup);
-    d->tagSearchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->tagSearchBar->setModel(d->tagTreeView->filteredModel(),
+                              AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagTreeView->albumFilterModel());
 
     tagBox->setMargin(0);

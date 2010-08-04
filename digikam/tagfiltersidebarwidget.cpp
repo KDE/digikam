@@ -151,7 +151,8 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
     d->tagFilterView      = new TagFilterView(this, tagFilterModel);
     d->tagFilterView->setObjectName("DigikamViewTagFilterView");
     d->tagFilterSearchBar = new SearchTextBar(this, "DigikamViewTagFilterSearchBar");
-    d->tagFilterSearchBar->setModel(tagFilterModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->tagFilterSearchBar->setModel(d->tagFilterView->filteredModel(),
+                                    AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
     const QString notTaggedTitle = i18n("Images Without Tags");

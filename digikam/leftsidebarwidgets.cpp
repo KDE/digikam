@@ -1105,7 +1105,8 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewPeopleSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
-    d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->tagSearchBar->setModel(d->tagFolderView->filteredModel(),
+                              AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
     
     d->rescanButton = new QPushButton;
