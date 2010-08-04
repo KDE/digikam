@@ -97,7 +97,9 @@ bool DImageHistory::isNull() const
 
 bool DImageHistory::isEmpty() const
 {
-    return d->entries.isEmpty();
+    if(d->entries.count() == 1 && d->entries.at(0).referredImages.at(0).isCurrentFile())
+        return true;
+    else return d->entries.isEmpty();
 }
 
 int DImageHistory::size() const
@@ -495,6 +497,24 @@ void DImageHistory::setOriginalFilePath(const QString& filePath)
 void DImageHistory::removeLastFilter()
 {
     d->entries.removeLast();
+}
+
+QString DImageHistory::originalUUID() const
+{
+    for(int i = 0; i < entries().count(); i++)
+    {
+        if(!entries().at(i).referredImages.isEmpty())
+        {
+            for(int j = 0; j < entries().at(i).referredImages.size(); j++)
+            {
+                if(entries().at(i).referredImages.at(j).isOriginalFile())
+                {
+                    return entries().at(i).referredImages.at(j).m_uuid;
+                 }
+            }
+        }
+    }
+    return QString();
 }
 
 } // namespace digikam
