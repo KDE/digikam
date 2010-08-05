@@ -214,6 +214,20 @@ void FaceIface::forgetFaceTags(qlonglong imageid)
     }
 }
 
+QList< QRect > FaceIface::getTagRects(qlonglong imageid)
+{
+    QList< QRect > rectList;
+    
+    DImg img;
+    QList< Face > faceList = this->findFacesFromTags(img, imageid);
+    
+    foreach (Face f, faceList)
+        rectList += f.toRect();
+    
+    return rectList;
+}
+
+
 QString FaceIface::rectToString(const QRect& rect) const
 {
     return ( QString::number(rect.x()) + "," 

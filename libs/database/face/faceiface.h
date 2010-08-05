@@ -54,10 +54,11 @@ public:
     FaceIface();
     ~FaceIface();
 
-    bool        hasBeenScanned(qlonglong imageid);
-    QList<Face> findAndTagFaces(DImg& image, qlonglong imageid);
-    QList<Face> findFacesFromTags(DImg& image, qlonglong imageid);
-    void        forgetFaceTags(qlonglong imageid);
+    bool         hasBeenScanned(qlonglong imageid);
+    QList<Face>  findAndTagFaces(DImg& image, qlonglong imageid);
+    QList<Face>  findFacesFromTags(DImg& image, qlonglong imageid);
+    void         forgetFaceTags(qlonglong imageid);
+    QList<QRect> getTagRects(qlonglong imageid);
     
     QString rectToString(const QRect& rect)        const;
     QRect   stringToRect(const QString& string)   const;
