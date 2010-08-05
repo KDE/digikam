@@ -6,7 +6,7 @@
  * Date        : 2008-06-17
  * Description : Find Duplicates tree-view search album item.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,7 +71,16 @@ void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
     QPainter p(&pixmap);
     p.drawPixmap((pixmap.width()/2)  - (pix.width()/2),
                  (pixmap.height()/2) - (pix.height()/2), pix);
-    setIcon(0, QIcon(pixmap));
+
+    QIcon icon = QIcon(pixmap);
+    //  We make sure the preview icon stays the same regardless of the role
+    icon.addPixmap(pixmap, QIcon::Selected, QIcon::On);
+    icon.addPixmap(pixmap, QIcon::Selected, QIcon::Off);
+    icon.addPixmap(pixmap, QIcon::Active,   QIcon::On);
+    icon.addPixmap(pixmap, QIcon::Active,   QIcon::Off);
+    icon.addPixmap(pixmap, QIcon::Normal,   QIcon::On);
+    icon.addPixmap(pixmap, QIcon::Normal,   QIcon::Off);
+    setIcon(0, icon);
 }
 
 SAlbum* FindDuplicatesAlbumItem::album() const
@@ -90,6 +99,7 @@ bool FindDuplicatesAlbumItem::operator<(const QTreeWidgetItem& other) const
     int result = KStringHandler::naturalCompare(text(column), other.text(column));
     if (result < 0)
         return true;
+
     return false;
 }
 

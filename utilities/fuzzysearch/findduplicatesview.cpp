@@ -6,8 +6,8 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates View.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -22,8 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-#define ICONSIZE 64
 
 #include "findduplicatesview.moc"
 
@@ -59,27 +57,30 @@
 namespace Digikam
 {
 
-class FindDuplicatesViewPriv
+class FindDuplicatesView::FindDuplicatesViewPriv
 {
 
 public:
 
     FindDuplicatesViewPriv()
+        : iconSize(64)
     {
-        listView             = 0;
-        scanDuplicatesBtn    = 0;
-        updateFingerPrtBtn   = 0;
-        progressBar          = 0;
-        thumbLoadThread      = 0;
-        includeAlbumsLabel   = 0;
-        similarityLabel      = 0;
-        similarity           = 0;
-        albumSelectCB        = 0;
-        tagSelectCB          = 0;
-        albumModel           = 0;
-        tagModel             = 0;
-        searchJob            = NULL;
+        listView           = 0;
+        scanDuplicatesBtn  = 0;
+        updateFingerPrtBtn = 0;
+        progressBar        = 0;
+        thumbLoadThread    = 0;
+        includeAlbumsLabel = 0;
+        similarityLabel    = 0;
+        similarity         = 0;
+        albumSelectCB      = 0;
+        tagSelectCB        = 0;
+        albumModel         = 0;
+        tagModel           = 0;
+        searchJob          = NULL;
     }
+
+    const int                    iconSize;
 
     KIO::Job*                    searchJob;
 
@@ -118,7 +119,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
-    d->listView->setIconSize(QSize(ICONSIZE, ICONSIZE));
+    d->listView->setIconSize(QSize(d->iconSize, d->iconSize));
     d->listView->setSortingEnabled(true);
     d->listView->setColumnCount(2);
     d->listView->setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
@@ -298,14 +299,14 @@ void FindDuplicatesView::slotAlbumAdded(Album* a)
     if (!a || a->type() != Album::SEARCH)
         return;
 
-    SAlbum *salbum  = (SAlbum*)a;
+    SAlbum* salbum  = (SAlbum*)a;
 
     if (!salbum->isDuplicatesSearch())
         return;
 
     if (!salbum->extraData(this))
     {
-        FindDuplicatesAlbumItem *item = new FindDuplicatesAlbumItem(d->listView, salbum);
+        FindDuplicatesAlbumItem* item = new FindDuplicatesAlbumItem(d->listView, salbum);
         salbum->setExtraData(this, item);
         ThumbnailLoadThread::defaultThread()->find(item->refUrl().toLocalFile());
     }
@@ -339,7 +340,7 @@ void FindDuplicatesView::slotClear()
 {
     for(QTreeWidgetItemIterator it(d->listView); *it; ++it)
     {
-        SAlbum *salbum = static_cast<FindDuplicatesAlbumItem*>(*it)->album();
+        SAlbum* salbum = static_cast<FindDuplicatesAlbumItem*>(*it)->album();
         if (salbum)
             salbum->removeExtraData(this);
     }
@@ -355,9 +356,9 @@ void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, con
         if (item->refUrl().toLocalFile() == desc.filePath)
         {
             if (pix.isNull())
-                item->setThumb(SmallIcon("image-x-generic", ICONSIZE, KIconLoader::DisabledState));
+                item->setThumb(SmallIcon("image-x-generic", d->iconSize, KIconLoader::DisabledState));
             else
-                item->setThumb(pix.scaled(ICONSIZE, ICONSIZE, Qt::KeepAspectRatio));
+                item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
         }
         ++it;
     }
@@ -399,7 +400,7 @@ void FindDuplicatesView::slotFindDuplicates()
 
     double thresh = d->similarity->value() / 100.0;
 
-    KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
+    KIO::Job* job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
     job->addMetaData("duplicates", "normal");
     job->addMetaData("albumids",   albumsIdList.join(","));
     job->addMetaData("tagids",     tagsIdList.join(","));
@@ -417,7 +418,7 @@ void FindDuplicatesView::slotFindDuplicates()
 }
 
 void FindDuplicatesView::slotCancelButtonPressed()
-{   
+{
     if (d->searchJob)
     {
         d->searchJob->kill();
@@ -507,7 +508,7 @@ void FindDuplicatesView::slotSetSelectedTag(Album* album)
 bool FindDuplicatesView::checkForValidSettings()
 {
     bool valid = false;
-    valid = validAlbumSettings() || validTagSettings();
+    valid      = validAlbumSettings() || validTagSettings();
 
     d->scanDuplicatesBtn->setEnabled(valid);
     return valid;
