@@ -73,6 +73,11 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     painter->setRenderHint(QPainter::Antialiasing, true);
     QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
+    if(dynamic_cast<const ImageVersionsModel*>(index.model())->paintTree())
+    {
+        const_cast<QStyleOptionViewItem&>(option).rect.setLeft(option.rect.left() + (index.data(Qt::UserRole).toInt() * 16));
+    }
+
     QRect thumbRect(option.rect.left()+4, option.rect.top()+8, 64, 48);
     painter->setPen(Qt::black);
     painter->drawRect(thumbRect);

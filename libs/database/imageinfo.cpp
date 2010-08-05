@@ -521,23 +521,70 @@ QList<ImageInfo> ImageInfo::ancestorImages() const
     return ImageInfoList(DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
 }
 
-QList<ImageInfo> ImageInfo::allAvailVersions() const
+QList<QPair<ImageInfo, int> > ImageInfo::allAvailVersions() const
 {
-    QList<ImageInfo> list;
+    QList<QPair<ImageInfo, int> > list;
+
     QList<QPair<qlonglong, qlonglong> > l = DatabaseAccess().db()->getRelationCloud(id(),
                                                                                     DatabaseRelation::DerivedFrom);
     for(int i = 0; i < l.size(); i++)
     {
-        if(!list.contains(ImageInfo(l.at(i).second)))
-        {
-            list.append(ImageInfo(l.at(i).second));
-        }
+        QString a = ImageInfo(l.at(i).first).name();
+        QString b = ImageInfo(l.at(i).second).name();
 
-        list.append(ImageInfo(l.at(i).first));
+        kDebug() << a << "is derived from" << b;
     }
-
+    if(!l.isEmpty())
+    {
+        qlonglong original = l.at(0).second;
+        for(int i = 0; i < l.size(); i++)
+        {
+            if(l.at(i).first == original)
+            {
+                original = l.at(i).second;
+                i = 0;
+            }
+        }
+        return buildTree(l, original);
+    }
     return list;
 }
+
+QList<QPair<ImageInfo, int> > ImageInfo::buildTree(QList<QPair<qlonglong, qlonglong> >& list, qlonglong origin) const
+{
+    static QList<QPair<ImageInfo, int> > list1;
+    static int level = 0;
+    static int maxLevel = 0;
+    if(level == 0)
+        list1.clear();
+
+    ///if the image is in the list already, do not add it again
+    bool alreadyInList = false;
+    for(int i = 0; i <= maxLevel; i++)
+    {
+        if(list1.contains(qMakePair(ImageInfo(origin), i)))
+        {
+            alreadyInList = true;
+            break;
+        }
+    }
+    if(!alreadyInList)
+        list1.append(qMakePair(ImageInfo(origin), level));
+
+    for(int i = 0; i < list.size(); i++)
+    {
+        if(list.at(i).second == origin)
+        {
+            level++;
+            if(maxLevel < level) maxLevel = level;
+            buildTree(list, list.at(i).first);
+            level--;
+        }
+    }
+
+    return list1;
+}
+
 
 void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
 {

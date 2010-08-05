@@ -50,22 +50,28 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    void setupModelData(QList<QVariant>& data);
+    void setupModelData(QList<QPair<QString, int> >& data);
     void clearModelData();
     QString currentSelectedImage() const;
     void setCurrentSelectedImage(const QString& path);
     QModelIndex currentSelectedImageIndex() const;
+    bool paintTree() const;
+    int listIndexOf(const QString& item) const;
 
 public Q_SLOTS:
 
     void slotAnimationStep();
-
+    void setPaintTree(bool paint);
+    
 private:
 
-    ///Complete paths with filenames
-    QList<QVariant>* m_data;
+    ///Complete paths with filenames and tree level
+    QList<QPair<QString, int> >* m_data;
     ///This is for delegate to paint it as selected
     QString m_currentSelectedImage;
+    ///If true, the delegate will paint items as a tree
+    ///if false, it will be painted as a list
+    bool m_paintTree;
 };
 
 } // namespace Digikam

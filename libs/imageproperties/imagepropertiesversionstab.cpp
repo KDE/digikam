@@ -65,18 +65,18 @@ public:
         versionsList            = 0;
     }
 
-    VersionsWidget*         versionsWidget;
-    FiltersHistoryWidget*   filtersHistoryWidget;
-    QList<ImageInfo>*       versionsList;
-    QString                 currentSelectedImage;
-    int                     currentSelectedImageListPosition;
+    VersionsWidget*                 versionsWidget;
+    FiltersHistoryWidget*           filtersHistoryWidget;
+    QList<QPair<ImageInfo, int> >*  versionsList;
+    QString                         currentSelectedImage;
+    int                             currentSelectedImageListPosition;
     
 };
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
                           : KTabWidget(parent), d(new ImagePropertiesVersionsTabPriv)
 {
-    d->versionsList = new QList<ImageInfo>;
+    d->versionsList = new QList<QPair<ImageInfo, int> >;
     
     d->versionsWidget = new VersionsWidget(this);
     insertTab(0, d->versionsWidget, i18n("Versions"));
@@ -112,34 +112,51 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
     //QList<DImageHistory::Entry>* filtersList = new QList<DImageHistory::Entry>;
     
     kDebug() << "Getting data for versions model";
+    d->versionsList->clear();
     
     foreach(ImageInfo inf, selectedImage)
     {
         d->currentSelectedImage = inf.fileUrl().path();
 
-        if(d->versionsList->contains(inf))
+        if(hasImage(inf))
         {
             break;
         }
-        else
-        {
-            d->versionsList->clear();
-        }
 
-        QList<ImageInfo> infoList = inf.allAvailVersions();
+        QList<QPair<ImageInfo, int> > infoList = inf.allAvailVersions();
         if(infoList.isEmpty())
         {
-            d->versionsList->append(inf);
+            d->versionsList->append(qMakePair(inf,0));
         }
         else
         {
             d->versionsList->append(infoList);
-            d->currentSelectedImageListPosition = d->versionsList->indexOf(inf);
+            d->currentSelectedImageListPosition = findImagePositionInList(inf);
         }
     }
 
     setupVersionsData();
     setupFiltersData();
+}
+
+int ImagePropertiesVersionsTab::findImagePositionInList(Digikam::ImageInfo& info) const
+{
+    for(int i = 0; i < d->versionsList->size(); i++)
+    {
+        if(d->versionsList->at(i).first == info)
+            return i;
+    }
+    return -1;
+}
+
+bool ImagePropertiesVersionsTab::hasImage(ImageInfo& info) const
+{
+    for(int i = 0; i < d->versionsList->size(); i++)
+    {
+        if(d->versionsList->at(i).first == info)
+            return true;
+    }
+    return false;
 }
 
 void ImagePropertiesVersionsTab::slotViewItemSelected(QModelIndex index)
@@ -166,10 +183,10 @@ void ImagePropertiesVersionsTab::setupVersionsData() const
 {
     if(!d->versionsList->isEmpty())
     {
-        QList<QVariant> l;
+        QList<QPair<QString, int> > l;
         for(int i = 0; i < d->versionsList->size(); i++)
         {
-            l.append(d->versionsList->at(i).fileUrl().path());
+            l.append(qMakePair(d->versionsList->at(i).first.fileUrl().path(), d->versionsList->at(i).second));
         }
 
         d->versionsWidget->setupModelData(l);
@@ -180,7 +197,7 @@ void ImagePropertiesVersionsTab::setupVersionsData() const
 void ImagePropertiesVersionsTab::setupFiltersData() const
 {
     if(!d->versionsList->isEmpty() && d->currentSelectedImageListPosition > -1 && d->currentSelectedImageListPosition < d->versionsList->size())
-        d->filtersHistoryWidget->setModelData(d->versionsList->at(d->currentSelectedImageListPosition).imageHistory().entries());
+        d->filtersHistoryWidget->setModelData(d->versionsList->at(d->currentSelectedImageListPosition).first.imageHistory().entries());
 }
 
 void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
@@ -189,14 +206,14 @@ void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
     ImageInfo newOne;
     for(int i = 0; i < d->versionsList->size(); i++)
     {
-        if(d->versionsList->at(i).fileUrl() == url)
+        if(d->versionsList->at(i).first.fileUrl() == url)
         {
-            newOne = d->versionsList->at(i);
+            newOne = d->versionsList->at(i).first;
             d->currentSelectedImageListPosition = i;
         }
-        else if(d->versionsList->at(i).fileUrl() == d->currentSelectedImage)
+        else if(d->versionsList->at(i).first.fileUrl() == d->currentSelectedImage)
         {
-            current = d->versionsList->at(i);
+            current = d->versionsList->at(i).first;
         }
     }
     current.setVisible(false);

@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT VersionsWidget : public QWidget
 public:
     VersionsWidget(QWidget* parent = 0);
     ~VersionsWidget();
-    void setupModelData(QList<QVariant>& list) const;
+    void setupModelData(QList< QPair< QString, int > >& list) const;
     void setCurrentSelectedImage(const QString& path) const;
 
 public Q_SLOTS:

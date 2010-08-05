@@ -37,7 +37,8 @@ namespace Digikam
 ImageVersionsModel::ImageVersionsModel(QObject* parent)
                   : QAbstractListModel(parent)
 {
-    m_data = new QList<QVariant>;
+    m_data = new QList<QPair<QString, int> >;
+    m_paintTree = false;
 }
 
 ImageVersionsModel::~ImageVersionsModel()
@@ -60,8 +61,12 @@ QVariant ImageVersionsModel::data(const QModelIndex& index, int role) const
 
     if(role == Qt::DisplayRole && !m_data->isEmpty())
     {
-        return m_data->at(index.row());
+        return m_data->at(index.row()).first;
     }
+    else if(role == Qt::UserRole && !m_data->isEmpty())
+    {
+        return m_data->at(index.row()).second;
+    }    
     else if(role == Qt::DisplayRole && m_data->isEmpty())
     {   //TODO: make this text Italic
         return QVariant(QString(i18n("No image selected")));
@@ -76,7 +81,7 @@ int ImageVersionsModel::rowCount(const QModelIndex& parent) const
     return m_data->count();
 }
 
-void ImageVersionsModel::setupModelData(QList<QVariant>& data)
+void ImageVersionsModel::setupModelData(QList<QPair<QString, int> >& data)
 {
     beginResetModel();
 
@@ -88,7 +93,7 @@ void ImageVersionsModel::setupModelData(QList<QVariant>& data)
     }
     else 
     {
-        m_data->append(QString(i18n("This is original image")));
+        m_data->append(qMakePair(QString(i18n("This is original image")), 0));
     }
 
     endResetModel();
@@ -121,7 +126,27 @@ void ImageVersionsModel::setCurrentSelectedImage(const QString& path)
 
 QModelIndex ImageVersionsModel::currentSelectedImageIndex() const
 {
-    return index(m_data->indexOf(m_currentSelectedImage), 0);
+    return index(listIndexOf(m_currentSelectedImage), 0);
+}
+
+bool ImageVersionsModel::paintTree() const
+{
+    return m_paintTree;
+}
+
+void ImageVersionsModel::setPaintTree(bool paint)
+{
+    m_paintTree = paint;
+}
+
+int ImageVersionsModel::listIndexOf(const QString& item) const
+{
+    for(int i = 0; i < m_data->size(); i++)
+    {
+        if(m_data->at(i).first == item)
+            return i;
+    }
+    return -1;
 }
 
 } // namespace Digikam

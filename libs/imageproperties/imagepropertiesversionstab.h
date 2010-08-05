@@ -46,6 +46,7 @@ namespace Digikam
 class ImageVersionsModel;
 class DImageHistory;
 class ImageInfoList;
+class ImageInfo;
 
 class DIGIKAM_EXPORT ImagePropertiesVersionsTab : public KTabWidget
 {
@@ -57,6 +58,8 @@ public:
     ~ImagePropertiesVersionsTab();
     void setupVersionsData() const;
     void setupFiltersData() const;
+    int findImagePositionInList(ImageInfo& info) const;
+    bool hasImage(ImageInfo& info) const;
 //    void setCurrentURL(const KUrl& url = KUrl());
 //     void setImageHistory(const DImageHistory& history);
 
