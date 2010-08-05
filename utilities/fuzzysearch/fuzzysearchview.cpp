@@ -6,8 +6,8 @@
  * Date        : 2008-05-19
  * Description : Fuzzy search sidebar tab contents.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,7 +79,7 @@
 namespace Digikam
 {
 
-class FuzzySearchViewPriv
+class FuzzySearchView::FuzzySearchViewPriv
 {
 
 public:
@@ -195,8 +195,8 @@ public:
 };
 
 FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
-                SearchModificationHelper *searchModificationHelper,
-                QWidget *parent)
+                                 SearchModificationHelper *searchModificationHelper,
+                                 QWidget *parent)
                : QScrollArea(parent), StateSavingObject(this),
                  d(new FuzzySearchViewPriv)
 {
@@ -515,12 +515,12 @@ FuzzySearchView::~FuzzySearchView()
     delete d;
 }
 
-SAlbum *FuzzySearchView::currentAlbum() const
+SAlbum* FuzzySearchView::currentAlbum() const
 {
     return d->searchTreeView->currentAlbum();
 }
 
-void FuzzySearchView::setCurrentAlbum(SAlbum *album)
+void FuzzySearchView::setCurrentAlbum(SAlbum* album)
 {
     d->searchTreeView->slotSelectAlbum(album);
 }
@@ -800,13 +800,13 @@ void FuzzySearchView::slotCheckNameEditSketchConditions()
 
 // Similars Searches methods ----------------------------------------------------------------------
 
-void FuzzySearchView::dragEnterEvent(QDragEnterEvent *e)
+void FuzzySearchView::dragEnterEvent(QDragEnterEvent* e)
 {
     if (DItemDrag::canDecode(e->mimeData()))
         e->acceptProposedAction();
 }
 
-void FuzzySearchView::dropEvent(QDropEvent *e)
+void FuzzySearchView::dropEvent(QDropEvent* e)
 {
     if (DItemDrag::canDecode(e->mimeData()))
     {
@@ -879,12 +879,11 @@ void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const 
                                              Qt::SmoothTransformation));
 }
 
-void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name,
-                bool force)
+void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bool force)
 {
     AlbumManager::instance()->setCurrentAlbum(0);
     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(
-                    name, d->imageInfo, d->levelImage->value() / 100.0, force);
+                     name, d->imageInfo, d->levelImage->value() / 100.0, force);
     d->searchTreeView->slotSelectAlbum(d->imageSAlbum);
 }
 

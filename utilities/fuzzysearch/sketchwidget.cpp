@@ -6,8 +6,8 @@
  * Date        : 2008-05-19
  * Description : a widget to draw sketch.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,7 +71,9 @@ public:
     QPainterPath path;
 };
 
-class SketchWidgetPriv
+// ------------------------------------------------------------------------------
+
+class SketchWidget::SketchWidgetPriv
 {
 public:
 
@@ -100,7 +102,7 @@ public:
 
     QList<DrawEvent>     drawEventList;
 
-    void startDrawEvent(const QPoint &pos)
+    void startDrawEvent(const QPoint& pos)
     {
         // Remove all draw events from history map which are upper than current index.
         // If user redo actions and make new draw events, theses one will be queued at
@@ -118,7 +120,7 @@ public:
         eventIndex = drawEventList.count() - 1;
     }
 
-    DrawEvent &currentDrawEvent()
+    DrawEvent& currentDrawEvent()
     {
         QTime currentTime = QTime::currentTime();
         if (drawEventCreationTime.isNull() || drawEventCreationTime.msecsTo(currentTime) > 1000)
@@ -138,7 +140,7 @@ public:
     }
 };
 
-SketchWidget::SketchWidget(QWidget *parent)
+SketchWidget::SketchWidget(QWidget* parent)
             : QWidget(parent), d(new SketchWidgetPriv)
 {
     setWhatsThis(i18n("You simply draw here a rough sketch of what you want to find "
@@ -418,7 +420,7 @@ void SketchWidget::setSketchImage(const QImage& image)
     update();
 }
 
-void SketchWidget::mousePressEvent(QMouseEvent *e)
+void SketchWidget::mousePressEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::LeftButton)
     {
@@ -436,7 +438,7 @@ void SketchWidget::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void SketchWidget::mouseMoveEvent(QMouseEvent *e)
+void SketchWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if (rect().contains(e->x(), e->y()))
     {
@@ -455,7 +457,7 @@ void SketchWidget::mouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void SketchWidget::mouseReleaseEvent(QMouseEvent *e)
+void SketchWidget::mouseReleaseEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::LeftButton && d->drawing)
     {
