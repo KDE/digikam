@@ -66,6 +66,7 @@
 #include "imagepropertiesversionstab.h"
 #include "tagscache.h"
 #include "searchxml.h"
+#include "faceiface.h"
 
 namespace Digikam
 {
@@ -986,7 +987,9 @@ void DigikamView::slotAlbumSelected(Album* album)
             if(id == thisAlbumId)
             {
                 kDebug()<<"Is a people tag";
+                
                 showFaceAlbum(thisAlbumId);
+                emit signalTagSelected(true);
                 return;
             }
         }
@@ -1029,6 +1032,7 @@ void DigikamView::showFaceAlbum ( int tagID )
     
     // search types defined in albuminfo.h. Can be a better name.
     AlbumManager::instance()->setCurrentAlbum ( salbum );
+
 }
 
 
