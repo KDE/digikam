@@ -521,40 +521,9 @@ QList<ImageInfo> ImageInfo::ancestorImages() const
     return ImageInfoList(DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
 }
 
-QList<QPair<ImageInfo, int> > ImageInfo::allAvailVersions() const
+static QList<QPair<ImageInfo, int> > buildTree(QList<QPair<qlonglong, qlonglong> >& list, qlonglong origin,
+                                               QList<QPair<ImageInfo, int> >& list1, int& level, int& maxLevel)
 {
-    QList<QPair<ImageInfo, int> > list;
-
-    QList<QPair<qlonglong, qlonglong> > l = DatabaseAccess().db()->getRelationCloud(id(),
-                                                                                    DatabaseRelation::DerivedFrom);
-    for(int i = 0; i < l.size(); i++)
-    {
-        QString a = ImageInfo(l.at(i).first).name();
-        QString b = ImageInfo(l.at(i).second).name();
-
-        kDebug() << a << "is derived from" << b;
-    }
-    if(!l.isEmpty())
-    {
-        qlonglong original = l.at(0).second;
-        for(int i = 0; i < l.size(); i++)
-        {
-            if(l.at(i).first == original)
-            {
-                original = l.at(i).second;
-                i = 0;
-            }
-        }
-        return buildTree(l, original);
-    }
-    return list;
-}
-
-QList<QPair<ImageInfo, int> > ImageInfo::buildTree(QList<QPair<qlonglong, qlonglong> >& list, qlonglong origin) const
-{
-    static QList<QPair<ImageInfo, int> > list1;
-    static int level = 0;
-    static int maxLevel = 0;
     if(level == 0)
         list1.clear();
 
@@ -577,7 +546,7 @@ QList<QPair<ImageInfo, int> > ImageInfo::buildTree(QList<QPair<qlonglong, qlongl
         {
             level++;
             if(maxLevel < level) maxLevel = level;
-            buildTree(list, list.at(i).first);
+            buildTree(list, list.at(i).first, list1, level, maxLevel);
             level--;
         }
     }
@@ -585,6 +554,39 @@ QList<QPair<ImageInfo, int> > ImageInfo::buildTree(QList<QPair<qlonglong, qlongl
     return list1;
 }
 
+QList<QPair<ImageInfo, int> > ImageInfo::allAvailableVersions() const
+{
+    QList<QPair<ImageInfo, int> > list;
+
+    QList<QPair<qlonglong, qlonglong> > l = DatabaseAccess().db()->getRelationCloud(id(),
+                                                                                    DatabaseRelation::DerivedFrom);
+    for(int i = 0; i < l.size(); i++)
+    {
+        QString a = ImageInfo(l.at(i).first).name();
+        QString b = ImageInfo(l.at(i).second).name();
+
+        kDebug() << a << "is derived from" << b;
+    }
+
+    QList<QPair<ImageInfo, int> > list1;
+    int level = 0;
+    int maxLevel = 0;
+
+    if(!l.isEmpty())
+    {
+        qlonglong original = l.at(0).second;
+        for(int i = 0; i < l.size(); i++)
+        {
+            if(l.at(i).first == original)
+            {
+                original = l.at(i).second;
+                i = 0;
+            }
+        }
+        return buildTree(l, original, list1, level, maxLevel);
+    }
+    return list;
+}
 
 void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
 {

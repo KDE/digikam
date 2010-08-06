@@ -269,8 +269,10 @@ public:
 
     QList<ImageInfo> derivedImages() const;
     QList<ImageInfo> ancestorImages() const;
-    QList<QPair<ImageInfo, int> > allAvailVersions() const;
-    QList<QPair<ImageInfo, int> > buildTree(QList< QPair< qlonglong, qlonglong > >& list, qlonglong origin) const;
+
+    /**
+     */
+    QList<QPair<ImageInfo, int> > allAvailableVersions() const;
 
     /**
      * Add a relation to the database:

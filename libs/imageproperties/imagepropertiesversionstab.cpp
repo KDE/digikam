@@ -123,7 +123,7 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
             break;
         }
 
-        QList<QPair<ImageInfo, int> > infoList = inf.allAvailVersions();
+        QList<QPair<ImageInfo, int> > infoList = inf.allAvailableVersions();
         if(infoList.isEmpty())
         {
             d->versionsList->append(qMakePair(inf,0));
