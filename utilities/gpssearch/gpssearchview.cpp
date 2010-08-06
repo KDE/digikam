@@ -145,7 +145,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->mapSearchWidget = new KMapIface::KMap(mapPanel);
     d->mapSearchWidget->setBackend("marble");
 
-
     d->gpsMarkerTiler = new GPSMarkerTiler(this);
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 
@@ -195,6 +194,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
+    d->mapSearchWidget->setMouseModesVisibility(true);
 
     d->existsSelection              = false; 
 
@@ -238,18 +238,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     connect(d->mapViewModelHelper, SIGNAL(signalFilteredImages(const QList<qlonglong>&)),
             this, SLOT(slotMapSoloItems(const QList<qlonglong>&)));
-
-//    connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
-//             this, SLOT(slotSelectionChanged()));
-// 
-//     connect(d->gpsSearchWidget, SIGNAL(signalSelectedItems(const GPSInfoList)),
-//             this, SLOT(slotMapSelectedItems(const GPSInfoList&)));
-// 
-//     connect(d->gpsSearchWidget, SIGNAL(signalSoloItems(const GPSInfoList)),
-//             this, SLOT(slotMapSoloItems(const GPSInfoList&)));
-// 
-//     connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
-//             this, SLOT(slotItemsInfo(const ImageInfoList&)));*/
 
     // ---------------------------------------------------------------
 
@@ -350,10 +338,7 @@ void GPSSearchView::slotSelectionChanged()
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
 
-    //AlbumManager::instance()->setCurrentAlbum(0);
-
-    // clear positions shown on the map:
-    //d->gpsSearchWidget->clearGPSPositions();
+    AlbumManager::instance()->setCurrentAlbum(0);
 
     if (!d->mapSearchWidget->hasSelection())
         return;
@@ -383,7 +368,6 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     if(d->existsSelection) 
     {
         d->mapSearchWidget->setGroupedModel(d->markerTilerModelBased); 
-        //d->removeCurrentSelectionButton->setEnabled(true);
     }
 }
 
@@ -392,12 +376,8 @@ void GPSSearchView::slotAlbumSelected(Album* a)
 
     SAlbum *salbum = dynamic_cast<SAlbum*> (a);
 
-
     if (!salbum)
         return;
-
-    // clear positions shown on the map:
-    //d->gpsSearchWidget->clearGPSPositions();
 
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
@@ -478,21 +458,12 @@ void GPSSearchView::slotRemoveCurrentSelection()
     d->existsSelection = false;
     d->imageAlbumModel->clearImageInfos();
 
-    //KUrl::List emptyUrlList;
-    //emit signalMapSoloItems(emptyUrlList, "gpssearch");    
-
     QList<qlonglong> emptyIdList;
     emit signalMapSoloItems(emptyIdList, "gpssearch");
 
 /*    int rootAlbumId = 1;
     PAlbum* rootAlbum = AlbumManager::instance()->findPAlbum(rootAlbumId);
     d->imageAlbumModel->openAlbum(rootAlbum);
-
-    QList<Album *> selectedAlbums =  d->searchModel->checkedAlbums();
-    for(int i=0; i<selectedAlbums.count(); ++i)
-    {
-        d->searchModel->setChecked(selectedAlbums[i], true);
-    } 
 */
     d->searchTreeView->clearSelection();
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
@@ -535,27 +506,6 @@ void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList& selectedIm
     Q_UNUSED(hasPrevious)
     Q_UNUSED(hasNext)
     Q_UNUSED(allImages)
-/*
-    GPSInfoList list;
-    foreach(ImageInfo inf, selectedImage)
-    {
-        ImagePosition pos = inf.imagePosition();
-        if (!pos.isEmpty())
-        {
-            GPSInfo gps;
-            gps.latitude  = pos.latitudeNumber();
-            gps.longitude = pos.longitudeNumber();
-            gps.altitude  = pos.altitude();
-            gps.dateTime  = inf.dateTime();
-            gps.rating    = inf.rating();
-            gps.url       = inf.fileUrl();
-            list << gps;
-//             kDebug()<<gps.url;
-        }
-    }
-
-    d->gpsSearchWidget->slotSetSelectedImages(list);
-*/
 }
 
 /**
@@ -564,15 +514,6 @@ void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList& selectedIm
  */
 void GPSSearchView::slotMapSelectedItems(const GPSInfoList& /*gpsList*/)
 {
-/*
-    KUrl::List urlList;
-    for (GPSInfoList::const_iterator it = gpsList.constBegin(); it!=gpsList.constEnd(); ++it)
-    {
-        urlList << it->url;
-        kDebug()<<it->url;
-    }
-    emit(signalMapSelectedItems(urlList));
-*/
 }
 
 /**
@@ -581,14 +522,6 @@ void GPSSearchView::slotMapSelectedItems(const GPSInfoList& /*gpsList*/)
  */
 void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
 {
-/*
-    KUrl::List urlList;
-    for (GPSInfoList::const_iterator it = gpsList.constBegin(); it!=gpsList.constEnd(); ++it)
-    {
-        urlList << it->url;
-    }
-    emit(signalMapSoloItems(urlList, "gpssearch"));
-*/
     emit(signalMapSoloItems(idList, "gpssearch"));
 }
 

@@ -345,6 +345,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                     info.altitude  = pos.altitude();
                     info.dateTime  = (*it).dateTime();
                     info.url       = (*it).fileUrl();
+                    info.id        = (*it).id();
                     list.append(info);
                 }
             }

@@ -61,6 +61,7 @@ public:
       dateTime(),
       rating(0),
       url(),
+      id(-1),
       dimensions()
     {
     };
@@ -72,6 +73,7 @@ public:
     QDateTime dateTime;
     int       rating;
     KUrl      url;
+    qlonglong id;
     QSize     dimensions;
 };
 
@@ -190,5 +192,7 @@ private:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::GPSInfo);
 
 #endif /* WORLDMAPWIDGET_H */

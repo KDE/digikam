@@ -47,7 +47,7 @@ using namespace Marble;
 
 #include "thumbnailloadthread.h"
 
-Q_DECLARE_METATYPE(Digikam::GPSInfo)
+//Q_DECLARE_METATYPE(Digikam::GPSInfo)
 
 namespace Digikam
 {

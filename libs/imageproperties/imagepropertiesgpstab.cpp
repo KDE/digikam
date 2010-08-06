@@ -12,7 +12,7 @@
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
- * any later version.
+ * any later version
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -38,6 +38,8 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QMap>
 #include <QPushButton>
 #include <QToolButton>
+#include <QStandardItemModel>
+#include <QStandardItem>
 
 // KDE includes
 
@@ -48,6 +50,16 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
 #include <kdebug.h>
+
+// libkmap includes
+
+#include <libkmap/kmap.h>
+#include <libkmap/itemmarkertiler.h>
+
+// local includes
+
+#include "imagegpsitem.h"
+#include "imagegpsmodelhelper.h"
 
 namespace Digikam
 {
@@ -70,7 +82,7 @@ public:
         latitude     = 0;
         longitude    = 0;
         date         = 0;
-        zoomInBtn    = 0;
+      /*zoomInBtn    = 0;
         zoomOutBtn   = 0;
         mapThemeBtn  = 0;
 #ifdef HAVE_MARBLEWIDGET
@@ -78,40 +90,48 @@ public:
         panBtn       = 0;
         clusterZoomBtn = 0;
 #endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET
+#endif // HAVE_MARBLEWIDGET*/
     }
 
-    QLabel             *altLabel;
-    QLabel             *latLabel;
-    QLabel             *lonLabel;
-    QLabel             *dateLabel;
+    QLabel                     *altLabel;
+    QLabel                     *latLabel;
+    QLabel                     *lonLabel;
+    QLabel                     *dateLabel;
+    
+    QToolButton                *detailsBtn;
+    KComboBox                  *detailsCombo;
 
-    QToolButton        *detailsBtn;
-    QToolButton        *zoomInBtn;
-    QToolButton        *zoomOutBtn;
-#ifdef HAVE_MARBLEWIDGET
-#if MARBLE_VERSION >= 0x000800
-    QToolButton        *panBtn;
-    QToolButton        *clusterZoomBtn;
-#endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET
+    KSqueezedTextLabel         *altitude;
+    KSqueezedTextLabel         *latitude;
+    KSqueezedTextLabel         *longitude;
+    KSqueezedTextLabel         *date;
 
-    KComboBox          *detailsCombo;
+    KMapIface::KMap            *map;
+    KMapIface::ItemMarkerTiler *itemMarkerTiler;
+    GPSInfoList                gpsInfoList;
+    WorldMapThemeBtn           *mapThemeBtn;
 
-    KSqueezedTextLabel *altitude;
-    KSqueezedTextLabel *latitude;
-    KSqueezedTextLabel *longitude;
-    KSqueezedTextLabel *date;
-
-    WorldMapWidget     *map;
-    WorldMapThemeBtn   *mapThemeBtn;
+    QStandardItemModel         *itemModel;
+    ImageGPSModelHelper        *gpsModelHelper;
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
                      : QWidget(parent), d(new ImagePropertiesGPSTabPriv)
 {
     QGridLayout *layout = new QGridLayout(this);
-    d->map              = new WorldMapWidget(256, 256, this);
+    QFrame* mapPanel    = new QFrame(this);
+    mapPanel->setMinimumWidth(256);
+    mapPanel->setMinimumHeight(256);
+    d->map              = new KMapIface::KMap(mapPanel);
+    d->map->setBackend("marble");
+    mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
+
+    d->itemModel        = new QStandardItemModel(this);
+    d->gpsModelHelper   = new ImageGPSModelHelper(d->itemModel, this);
+    d->itemMarkerTiler  = new KMapIface::ItemMarkerTiler(d->gpsModelHelper, this);
+    d->map->setGroupedModel(d->itemMarkerTiler);
+    
     d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);
     d->latLabel         = new QLabel(i18n("<b>Latitude</b>:"),  this);
     d->lonLabel         = new QLabel(i18n("<b>Longitude</b>:"), this);
@@ -125,32 +145,13 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->longitude->setAlignment(Qt::AlignRight);
     d->date->setAlignment(Qt::AlignRight);
 
-    d->map->slotSetAllowItemSelection(false);
-    d->map->slotSetAllowItemFiltering(false);
-    d->map->slotSetFocusOnAddedItems(true);
-    d->map->slotSetEnableTooltips(true);
-
     // --------------------------------------------------------
 
-    QWidget* box2           = new QWidget(this);
-    QHBoxLayout* box2Layout = new QHBoxLayout(box2);
+    QWidget     *box       = new QWidget(this);
+    QHBoxLayout *boxLayout = new QHBoxLayout(box);
 
-    d->mapThemeBtn  = new WorldMapThemeBtn(d->map, box2);
-    d->zoomOutBtn   = new QToolButton(box2);
-    d->zoomInBtn    = new QToolButton(box2);
-    d->zoomOutBtn->setDefaultAction(d->map->getZoomAction(false));
-    d->zoomInBtn->setDefaultAction(d->map->getZoomAction(true));
-#ifdef HAVE_MARBLEWIDGET
-#if MARBLE_VERSION >= 0x000800
-    d->panBtn = new QToolButton(box2);
-    d->panBtn->setDefaultAction(d->map->getMouseModeAction(MarkerClusterHolder::MouseModePan));
-    d->clusterZoomBtn = new QToolButton(box2);
-    d->clusterZoomBtn->setDefaultAction(d->map->getMouseModeAction(MarkerClusterHolder::MouseModeZoomCluster));
-#endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET
-
-    d->detailsCombo = new KComboBox(box2);
-    d->detailsBtn   = new QToolButton(box2);
+    d->detailsCombo = new KComboBox(box);
+    d->detailsBtn   = new QToolButton(box);
     d->detailsBtn->setIcon(SmallIcon("internet-web-browser"));
     d->detailsBtn->setToolTip(i18n("See more info on the Internet"));
     d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
@@ -159,33 +160,22 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->detailsCombo->insertItem(MultiMap,      QString("MultiMap"));
     d->detailsCombo->insertItem(OpenStreetMap, QString("OpenStreetMap"));
 
-    box2Layout->addWidget(d->mapThemeBtn);
-    box2Layout->addWidget(d->zoomOutBtn);
-    box2Layout->addWidget(d->zoomInBtn);
-#ifdef HAVE_MARBLEWIDGET
-#if MARBLE_VERSION >= 0x000800
-    box2Layout->addWidget(d->panBtn);
-    box2Layout->addWidget(d->clusterZoomBtn);
-#endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET
-    box2Layout->addStretch(10);
-    box2Layout->addWidget(d->detailsCombo);
-    box2Layout->addWidget(d->detailsBtn);
-    box2Layout->setSpacing(0);
-    box2Layout->setMargin(0);
-
+    boxLayout->addWidget(d->detailsCombo);
+    boxLayout->addWidget(d->detailsBtn);
+    d->map->addWidgetToControlWidget(box);
+    
     // --------------------------------------------------------
 
-    layout->addWidget(d->map,       0, 0, 1, 2);
-    layout->addWidget(d->altLabel,  1, 0, 1, 1);
-    layout->addWidget(d->altitude,  1, 1, 1, 1);
-    layout->addWidget(d->latLabel,  2, 0, 1, 1);
-    layout->addWidget(d->latitude,  2, 1, 1, 1);
-    layout->addWidget(d->lonLabel,  3, 0, 1, 1);
-    layout->addWidget(d->longitude, 3, 1, 1, 1);
-    layout->addWidget(d->dateLabel, 4, 0, 1, 1);
-    layout->addWidget(d->date,      4, 1, 1, 1);
-    layout->addWidget(box2,         5, 0, 1, 2);
+    layout->addWidget(d->map,                     0, 0, 1, 2);
+    layout->addWidget(d->altLabel,                1, 0, 1, 1);
+    layout->addWidget(d->altitude,                1, 1, 1, 1);
+    layout->addWidget(d->latLabel,                2, 0, 1, 1);
+    layout->addWidget(d->latitude,                2, 1, 1, 1);
+    layout->addWidget(d->lonLabel,                3, 0, 1, 1);
+    layout->addWidget(d->longitude,               3, 1, 1, 1);
+    layout->addWidget(d->dateLabel,               4, 0, 1, 1);
+    layout->addWidget(d->date,                    4, 1, 1, 1);
+    layout->addWidget(d->map->getControlWidget(), 5, 0, 1, 2);
     layout->setRowStretch(0, 10);
     layout->setColumnStretch(1, 10);
     layout->setSpacing(0);
@@ -209,14 +199,14 @@ void ImagePropertiesGPSTab::readConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
-    d->map->readConfig(group);
+    //d->map->readConfig(group);
 }
 
 void ImagePropertiesGPSTab::writeConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
-    d->map->writeConfig(group);
+    //d->map->writeConfig(group);
     config->sync();
 }
 
@@ -234,6 +224,9 @@ void ImagePropertiesGPSTab::slotGPSDetails()
 {
     QString val, url;
 
+    if(d->gpsInfoList.isEmpty())
+        return;
+
     switch( getWebGPSLocator() )
     {
         case MapQuest:
@@ -241,18 +234,18 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             url.append("http://www.mapquest.com/maps/map.adp?searchtype=address"
                         "&formtype=address&latlongtype=decimal");
             url.append("&latitude=");
-            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
             url.append("&longitude=");
-            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
             break;
         }
 
         case GoogleMaps:
         {
             url.append("http://maps.google.com/?q=");
-            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
             url.append(",");
-            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
             url.append("&spn=0.05,0.05&t=h&om=1");
             break;
         }
@@ -261,9 +254,9 @@ void ImagePropertiesGPSTab::slotGPSDetails()
         {
             url.append("http://maps.msn.com/map.aspx?");
             url.append("&lats1=");
-            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
             url.append("&lons1=");
-            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
             url.append("&name=HERE");
             url.append("&alts1=7");
             break;
@@ -273,9 +266,9 @@ void ImagePropertiesGPSTab::slotGPSDetails()
         {
             url.append("http://www.multimap.com/map/browse.cgi?");
             url.append("lat=");
-            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
             url.append("&lon=");
-            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
             url.append("&scale=10000");
             url.append("&icon=x");
             break;
@@ -286,9 +279,9 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             // lat and lon would also work, but wouldn't show a marker
             url.append("http://www.openstreetmap.org/?");
             url.append("mlat=");
-            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
             url.append("&mlon=");
-            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
+            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
             url.append("&zoom=15");
             break;
         }
@@ -297,6 +290,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
 
     kDebug() << url;
     KToolInvocation::self()->invokeBrowser(url);
+    
 }
 
 void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
@@ -335,7 +329,7 @@ void ImagePropertiesGPSTab::setGPSInfo()
     d->latitude->setText(QString());
     d->longitude->setText(QString());
     d->date->setText(QString());
-    d->map->setGPSPositions(GPSInfoList());
+    d->itemModel->clear();
     setEnabled(false);
 }
 
@@ -364,8 +358,16 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     {
         setEnabled(true);
     }
+    
+    d->gpsInfoList.clear();
+    d->itemModel->clear();
 
-    d->map->setGPSPositions(list);
+    d->gpsInfoList = list;
+    for(int i=0; i<d->gpsInfoList.count(); ++i)
+    {
+        ImageGPSItem* currentImageGPSItem = new ImageGPSItem(d->gpsInfoList.at(i));
+        d->itemModel->setItem(i, 0, currentImageGPSItem);
+    }
 }
 
 }  // namespace Digikam

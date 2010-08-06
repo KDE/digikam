@@ -88,7 +88,7 @@ MapWidgetView::MapWidgetView(ImageAlbumModel* model,QItemSelectionModel* selecti
     QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
 
     d->mapWidget = new KMapIface::KMap(this);
-    d->mapWidget->setEditModeAvailable(true);
+//    d->mapWidget->setEditModeAvailable(false);
 
     KMapIface::ItemMarkerTiler* const kmapMarkerModel = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
@@ -220,19 +220,25 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList( const
             if(oldestFirst)
             {
                 takeThisIndex = currentInfo < bestImageInfo;
+                if(takeThisIndex)
+                    bestImageInfo = currentInfo;
+                
             }
             else
             {
                 takeThisIndex = bestImageInfo < currentInfo;
+                if(takeThisIndex)
+                    bestImageInfo = currentInfo;
             }
         }
         else
         {
             bestImageInfo = currentInfo;
-            bestIndex = d->model->indexForImageInfo(bestImageInfo);
+//            bestIndex = d->model->indexForImageInfo(bestImageInfo);
         }
     }
 
+    bestIndex = d->model->indexForImageInfo(bestImageInfo);
     QPersistentModelIndex returnedIndex(bestIndex);
     return returnedIndex;
 }

@@ -673,6 +673,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
        )
 
     IF(MARBLEWIDGET_FOUND)
