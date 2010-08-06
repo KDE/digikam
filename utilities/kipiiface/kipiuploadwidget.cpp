@@ -45,7 +45,6 @@
 
 #include "album.h"
 #include "albumselectwidget.h"
-#include "treefolderitem.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 
