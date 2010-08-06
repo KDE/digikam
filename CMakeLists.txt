@@ -974,6 +974,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
        )
 
+#    SET(libmaintenancemgr_SRCS
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenancemgr/maintenancemgrdlg.cpp
+#       )
+
     SET(libbatch_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfoalbumsjob.cpp
@@ -1226,7 +1230,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libtimeline_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
        )
-    
+
     SET(libfacedetection_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/face/faceiface.cpp
        )
@@ -1340,7 +1344,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
