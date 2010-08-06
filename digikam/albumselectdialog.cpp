@@ -8,7 +8,7 @@
  *               pictures from camera
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,6 @@
 
 // Local includes
 
-#include "treefolderitem.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumselectwidget.h"
@@ -54,22 +53,22 @@
 namespace Digikam
 {
 
-class AlbumSelectDialogPrivate
+class AlbumSelectDialog::AlbumSelectDialogPrivate
 {
 
 public:
 
     AlbumSelectDialogPrivate()
     {
-        albumSel           = 0;
-        searchBar          = 0;
+        albumSel  = 0;
+        searchBar = 0;
     }
 
     QString            newAlbumString;
 
-    AlbumSelectWidget *albumSel;
+    AlbumSelectWidget* albumSel;
 
-    SearchTextBar     *searchBar;
+    SearchTextBar*     searchBar;
 };
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
@@ -87,15 +86,15 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     // -------------------------------------------------------------
 
-    QWidget *page = new QWidget(this);
+    QWidget* page     = new QWidget(this);
     setMainWidget(page);
 
-    QGridLayout* grid       = new QGridLayout(page);
-    QLabel *logo            = new QLabel(page);
+    QGridLayout* grid = new QGridLayout(page);
+    QLabel* logo      = new QLabel(page);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                             .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    QLabel *message = new QLabel(page);
+    QLabel* message   = new QLabel(page);
     message->setWordWrap(true);
     if (!header.isEmpty())
         message->setText(header);
@@ -128,7 +127,7 @@ AlbumSelectDialog::~AlbumSelectDialog()
 
 void AlbumSelectDialog::slotSelectionChanged()
 {
-    PAlbum *currentAlbum = d->albumSel->currentAlbum();
+    PAlbum* currentAlbum = d->albumSel->currentAlbum();
 
     if (!currentAlbum || (currentAlbum->isRoot()))
     {
@@ -152,7 +151,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
         return 0;
     }
 
-    PAlbum *selectedAlbum = dlg->d->albumSel->currentAlbum();
+    PAlbum* selectedAlbum = dlg->d->albumSel->currentAlbum();
     if (!selectedAlbum || (selectedAlbum->isRoot()))
     {
         delete dlg;
