@@ -36,14 +36,13 @@
 
 #include "imageinfo.h"
 #include "thumbnailloadthread.h"
-#include "treefolderitem.h"
 
 namespace Digikam
 {
 
 class SAlbum;
 
-class FindDuplicatesAlbumItem : public TreeFolderItem
+class FindDuplicatesAlbumItem : public QTreeWidgetItem
 {
 
 public:
@@ -60,8 +59,8 @@ public:
 
 private:
 
-    SAlbum*   m_album;
-    ImageInfo m_refImgInfo;
+    class FindDuplicatesAlbumItemPriv;
+    FindDuplicatesAlbumItemPriv* const d;
 };
 
 }  // namespace Digikam

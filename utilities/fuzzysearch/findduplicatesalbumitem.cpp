@@ -26,10 +26,8 @@
 // Qt includes
 
 #include <QPainter>
-#include <QTreeWidget>
 
 // KDE includes
-
 
 #include <klocale.h>
 #include <kstringhandler.h>
@@ -42,16 +40,30 @@
 namespace Digikam
 {
 
-FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album)
-                       : TreeFolderItem(parent, QString())
+class FindDuplicatesAlbumItem::FindDuplicatesAlbumItemPriv
 {
-    m_album = album;
-    if (m_album)
-    {
-        m_refImgInfo = ImageInfo(m_album->title().toLongLong());
-        setText(0, m_refImgInfo.name());
 
-        SearchXmlReader reader(m_album->query());
+public:
+
+    FindDuplicatesAlbumItemPriv()
+    {
+        album = 0;
+    }
+
+    SAlbum*   album;
+    ImageInfo refImgInfo;
+};
+
+FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album)
+                       : QTreeWidgetItem(parent), d(new FindDuplicatesAlbumItemPriv)
+{
+    d->album = album;
+    if (d->album)
+    {
+        d->refImgInfo = ImageInfo(d->album->title().toLongLong());
+        setText(0, d->refImgInfo.name());
+
+        SearchXmlReader reader(d->album->query());
         reader.readToFirstField();
         QList<int> list;
         list << reader.valueToIntList();
@@ -61,6 +73,7 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* al
 
 FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
 {
+    delete d;
 }
 
 void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
@@ -85,12 +98,12 @@ void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
 
 SAlbum* FindDuplicatesAlbumItem::album() const
 {
-    return m_album;
+    return d->album;
 }
 
 KUrl FindDuplicatesAlbumItem::refUrl() const
 {
-    return m_refImgInfo.fileUrl();
+    return d->refImgInfo.fileUrl();
 }
 
 bool FindDuplicatesAlbumItem::operator<(const QTreeWidgetItem& other) const

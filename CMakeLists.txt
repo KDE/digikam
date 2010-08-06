@@ -1301,7 +1301,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
