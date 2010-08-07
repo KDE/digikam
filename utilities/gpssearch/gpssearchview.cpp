@@ -35,6 +35,7 @@
 #include <QSplitter>
 #include <QStyle>
 #include <QToolButton>
+#include <QTimer>
 
 // KDE includes
 
@@ -112,7 +113,7 @@ public:
     KMapIface::ItemMarkerTiler* markerTilerModelBased;
     bool                        existsSelection;
 
-    SearchModel*                searchModel;    
+    SearchModel*                searchModel;   
 };
 
 GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
@@ -128,8 +129,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->selectionModel     = itemSelectionModel;
     d->imageFilterModel   = imageFilterModel;
     d->searchModel        = searchModel;
-    //d->imageFilterModel->setSourceImageModel(d->imageAlbumModel);
-
 
     d->mapViewModelHelper = new MapViewModelHelper(d->imageAlbumModel, d->selectionModel, d->imageFilterModel, this);
     d->markerTilerModelBased = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
@@ -239,7 +238,11 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     connect(d->mapViewModelHelper, SIGNAL(signalFilteredImages(const QList<qlonglong>&)),
             this, SLOT(slotMapSoloItems(const QList<qlonglong>&)));
 
+    connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentFilter()),
+            this, SLOT(slotRemoveCurrentFilter()));
+
     // ---------------------------------------------------------------
+
 
     slotCheckNameEditGPSConditions();
 }
@@ -458,15 +461,18 @@ void GPSSearchView::slotRemoveCurrentSelection()
     d->existsSelection = false;
     d->imageAlbumModel->clearImageInfos();
 
-    QList<qlonglong> emptyIdList;
-    emit signalMapSoloItems(emptyIdList, "gpssearch");
-
 /*    int rootAlbumId = 1;
     PAlbum* rootAlbum = AlbumManager::instance()->findPAlbum(rootAlbumId);
     d->imageAlbumModel->openAlbum(rootAlbum);
 */
     d->searchTreeView->clearSelection();
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
+}
+
+void GPSSearchView::slotRemoveCurrentFilter()
+{
+    QList<qlonglong> emptyIdList;
+    emit signalMapSoloItems(emptyIdList, "gpssearch"); 
 }
 
 void GPSSearchView::slotCheckNameEditGPSConditions()

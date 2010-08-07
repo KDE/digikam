@@ -92,16 +92,6 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
 
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
-
- /*   ThumbnailDatabaseAccess thumbAccess;
-    QHash<QString, int> filePathsHash = thumbAccess.db()->getFilePathsWithThumbnail();
-    const QList<QString> filePaths = filePathsHash.keys();
-
-    for(int i=0; i<filePaths.count(); i++)
-    {
-        d->thumbnailLoadThread->find(filePaths.at(i));
-    }
- */
 }
 
 GPSMarkerTiler::~GPSMarkerTiler()
@@ -145,8 +135,6 @@ bool GPSMarkerTiler::pointIsContainedInArea(qreal pointLat, qreal pointLng, QLis
 */
 void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,const KMapIface::WMWGeoCoordinate& lowerRight, int level)
 {
-
-    //kDebug()<<"Started tiles prepairing";
 
     //DatabaseUrl u = DatabaseUrl::mapImagesUrl();
 
@@ -377,12 +365,10 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     if(d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
     {
-        //kDebug()<<"Thumnbnail requested in PixmapForRepresentativeIndex:"<<path;
         return thumbnail;
     }
     else
     {
-        //kDebug()<<"Thumbnail requested but didn't find any:"<<path;
         return QPixmap();
     }
 }
@@ -392,10 +378,6 @@ bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
     QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> firstIndex = a.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();
     QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> secondIndex = b.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();
 
-    //if(firstIndex.first == secondIndex.first && firstIndex.second == secondIndex.second)
-    //    return true;
-
-    //bool equal=false;
     QList<int> aIndicesList = firstIndex.first.toIntList();
     QList<int> bIndicesList = secondIndex.first.toIntList();
 
@@ -410,65 +392,10 @@ KMapIface::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMapIfac
     return KMapIface::WMWSelectionState();
 }
 
-/*
-void GPSMarkerTiler::secondTestDatabase(qreal lat1, qreal lat2, qreal lng1, qreal lng2)
-{
-    if(d->mapImagesJob)
-    {
-        d->mapImagesJob->kill();
-        d->mapImagesJob = 0;
-    }
-
-    kDebug() << "We now make the test with wantDirectQuery=true";
-
-    DatabaseUrl u = DatabaseUrl::mapImagesUrl();
-
-    QByteArray baLat1 = QString("%1").arg(lat1).toAscii();
-    QByteArray baLat2 = QString("%1").arg(lat2).toAscii();
-    QByteArray baLng1 = QString("%1").arg(lng1).toAscii();
-    QByteArray baLng2 = QString("%1").arg(lng2).toAscii();
-
-    d->mapImagesJob = ImageLister::startListJob(u);
-    d->mapImagesJob->addMetaData("lat1", baLat1.constData());
-    d->mapImagesJob->addMetaData("lat2", baLat2.constData());
-    d->mapImagesJob->addMetaData("lng1", baLng1.constData());
-    d->mapImagesJob->addMetaData("lng2", baLng2.constData());
-    d->mapImagesJob->addMetaData("wantDirectQuery", "true");
-
-    connect(d->mapImagesJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotMapImagesJobResult(KJob*)));
-
-    connect(d->mapImagesJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotMapImagesJobData(KIO::Job*, const QByteArray&)));
-}
-
-void GPSMarkerTiler::secondTestDatabase(int lat1, int lat2, int lng1, int lng2)
-{
-    if(d->mapImagesJob)
-    {
-        d->mapImagesJob->kill();
-        d->mapImagesJob = 0;
-    }
-
-    kDebug()<<"We now make the test with wantDirectQuery=false";
-
-    DatabaseUrl u = DatabaseUrl::fromAreaRange(lat1, lat2, lng1, lng2);
-    d->mapImagesJob = ImageLister::startListJob(u);
-    d->mapImagesJob->addMetaData("wantDirectQuery", "false");
-
-    connect(d->mapImagesJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotMapImagesJobResult(KJob*)));
-
-    connect(d->mapImagesJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotMapImagesJobData(KIO::Job*, const QByteArray&)));
-}
-*/
-
 void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 {
     if(data.isEmpty())
     {
-        kDebug()<<"We Have Empty Data.";
         return;
     }
 
@@ -490,7 +417,6 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 
         newEntries << entry;
     }
-    kDebug() << "Received" << newEntries.size();
 
     for (int i=0; i<d->jobs.count(); ++i)
     {
@@ -594,7 +520,6 @@ void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescri
 
     QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> indexForPixmap = index.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();    
 
-    kDebug()<<"Thumbnail loaded in slotThumbnailLoaded:"<<loadingDescription.filePath<<" "<<indexForPixmap.second;
     emit signalThumbnailAvailableForIndex(index, thumbnail);
 
 }
