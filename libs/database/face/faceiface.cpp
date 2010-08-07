@@ -163,19 +163,26 @@ QList< Face > FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
         // The only people tags with a face region property are either "Unknown" or "<Name of Person>". So assign them to the Face name
         if(peopleTags.hasProperty("faceRegion"))
         {
-            QRect rect = stringToRect(peopleTags.value("faceRegion"));
-            kDebug()<<"rect found as "<<rectToString(rect);
+            QList<QString> rectStringList = peopleTags.values("faceRegion");
             
-            // FIXME: Later, need support for putting the cropped image in Face f too. I tried it, but I get weird crashes. Will see.
-            Face f;
-            f.setRect(rect);
-                       
-            if(tagName == "Unknown")
-                f.setName("");
-            else
-                f.setName(tagName);
+            QListIterator<QString> i(rectStringList);
             
-            faceList += f;
+            while(i.hasNext())
+            {
+                QRect rect = stringToRect(i.next());
+                kDebug()<<"rect found as "<<rectToString(rect);
+                
+                // FIXME: Later, need support for putting the cropped image in Face f too. I tried it, but I get weird crashes. Will see.
+                Face f;
+                f.setRect(rect);
+                        
+                if(tagName == "Unknown")
+                    f.setName("");
+                else
+                    f.setName(tagName);
+                
+                faceList += f;
+            }
         }
     }
     
@@ -213,6 +220,36 @@ void FaceIface::forgetFaceTags(qlonglong imageid)
         kDebug()<<" Removed tag "<< d->tagsCache->tagName(currentTag);
     }
 }
+
+// QList< qlonglong > FaceIface::imagesWithPerson(int tagId, bool repeat)
+// {
+//     QList<qlonglong> imageIds;
+//     const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
+// 
+//     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
+//     
+//     QStringList pathList;
+//     
+//     for (AlbumList::ConstIterator it = palbumList.constBegin();
+//             it != palbumList.constEnd(); ++it)
+//     {
+//         pathList += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+//     }
+// 
+//     for (QStringList::ConstIterator i = pathList.constBegin();
+//             i != pathList.constEnd(); ++i)
+//     {
+//         ImageInfo info(*i);
+// 
+//         if (this->hasBeenScanned(info.id()))
+//         {
+//             kDebug()<< "Image " << info.filePath() << "has already been scanned.";
+//             continue;
+//         }
+//         imageIds += info.id();
+//     }
+// }
+
 
 QList< QRect > FaceIface::getTagRects(qlonglong imageid)
 {
