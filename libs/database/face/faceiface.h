@@ -59,7 +59,7 @@ public:
     QList<Face>         findFacesFromTags(DImg& image, qlonglong imageid);
     void                forgetFaceTags(qlonglong imageid);
     QList<QRect>        getTagRects(qlonglong imageid);
-//     QList<qlonglong>    imagesWithPerson(int tagId, bool repeat = false);
+    QList<qlonglong>    imagesWithPerson(int tagId, bool repeat = false);
     int                 numberOfFaces(qlonglong imageid);
     
     QString rectToString(const QRect& rect)        const;

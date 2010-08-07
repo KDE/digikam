@@ -43,6 +43,7 @@
 #include "imagetagpair.h"
 #include "albummanager.h"
 #include "dimg.h"
+#include "album.h"
 
 // Libkface Includes
 
@@ -228,34 +229,62 @@ void FaceIface::forgetFaceTags(qlonglong imageid)
     }
 }
 
-// QList< qlonglong > FaceIface::imagesWithPerson(int tagId, bool repeat)
-// {
-//     QList<qlonglong> imageIds;
-//     const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
-// 
-//     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
-//     
-//     QStringList pathList;
-//     
-//     for (AlbumList::ConstIterator it = palbumList.constBegin();
-//             it != palbumList.constEnd(); ++it)
-//     {
-//         pathList += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
-//     }
-// 
-//     for (QStringList::ConstIterator i = pathList.constBegin();
-//             i != pathList.constEnd(); ++i)
-//     {
-//         ImageInfo info(*i);
-// 
-//         if (this->hasBeenScanned(info.id()))
-//         {
-//             kDebug()<< "Image " << info.filePath() << "has already been scanned.";
-//             continue;
-//         }
-//         imageIds += info.id();
-//     }
-// }
+QList< qlonglong > FaceIface::imagesWithPerson(int tagId, bool repeat)
+{
+    QList<qlonglong> imageIds;
+    const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
+
+    // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
+    
+    QStringList pathList;
+    
+    for (AlbumList::ConstIterator it = palbumList.constBegin();
+            it != palbumList.constEnd(); ++it)
+    {
+        pathList += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+    }
+
+    for (QStringList::ConstIterator i = pathList.constBegin();
+            i != pathList.constEnd(); ++i)
+    {
+        ImageInfo info(*i);
+
+        if (this->hasBeenScanned(info.id()))
+        {
+            kDebug()<< "Image " << info.filePath() << "has already been scanned.";
+            
+            //dddddd
+            DImg img;
+            QList<Face> faceList = findFacesFromTags(img, info.id());
+            
+            QString nameString = d->tagsCache->tagName(tagId);
+            if(nameString == "Unknown")
+                nameString = "";    // Because we store names for unknown faces this way in the Face objects.
+                
+            QListIterator<Face> faceIt(faceList);
+            // The number of times the same face was found in this image
+            int count = 0;
+            while(faceIt.hasNext())
+            {
+                if(faceIt.next().name() == nameString)
+                {
+                    count++;
+                    // If we have been told to repeat the image n times if the face was found n times, then do so.
+                    if(repeat)
+                        imageIds += info.id();
+                    // If we have not been told to repeat, then only append the id if the count is 1
+                    else
+                    {
+                        if(count == 1)
+                            imageIds += info.id();
+                    }
+                }
+            }
+        }
+    }
+    
+    return imageIds;
+}
 
 
 QList< QRect > FaceIface::getTagRects(qlonglong imageid)
