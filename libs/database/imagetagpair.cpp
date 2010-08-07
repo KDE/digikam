@@ -184,6 +184,13 @@ QString ImageTagPair::value(const QString& key) const
     return d->properties.value(key);
 }
 
+QList< QString > ImageTagPair::values(const QString& key) const
+{
+    d->checkProperties();
+    return d->properties.values(key);
+}
+
+
 QStringList ImageTagPair::propertyKeys() const
 {
     d->checkProperties();
