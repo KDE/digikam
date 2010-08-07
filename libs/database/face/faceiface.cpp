@@ -108,7 +108,7 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
     
     // Mark the image as scanned.
     ImageTagPair pairScanned(imageid, d->scannedForFacesTagId);
-    pairScanned.addProperty("scannedForFaces", "");
+    pairScanned.addProperty("scannedForFaces", QString::number(faceList.size()));
     pairScanned.assignTag();
 
     // Apply region tags to the image for each face that has been detected.
@@ -134,6 +134,13 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
     
     return faceList;
 }
+
+int FaceIface::numberOfFaces(qlonglong imageid)
+{
+    ImageTagPair pairScanned(imageid, d->scannedForFacesTagId);
+    return pairScanned.value("scannedForFaces").toInt();
+}
+
 
 QList< Face > FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
 {
