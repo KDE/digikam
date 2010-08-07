@@ -58,6 +58,8 @@
 #include "dmetadata.h"
 #include "haariface.h"
 #include "sqlquery.h"
+#include "tagscache.h"
+#include "imagetagpair.h"
 
 namespace Digikam
 {
@@ -307,6 +309,44 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
         receiver->receive(record);
     }
 }
+
+void ImageLister::listFaces(ImageListerReceiver* receiver, int personId)
+{
+  
+    QList<qlonglong> list;
+        
+    QList<QVariant> values;
+
+    DatabaseAccess access;
+    access.backend()->execSql(QString("SELECT Images.id "
+                                      " FROM Images "
+                                      "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                      "       INNER JOIN Albums ON Albums.id="+
+                                      QString::number(personId)+
+                                      " WHERE Images.status=1 "
+                                      " ORDER BY Albums.id;"),
+                              &values);
+    
+    QListIterator<QVariant> it(values);
+    
+    while (it.hasNext())
+    {
+        TagsCache* cache;
+        cache = TagsCache::instance();
+        
+        ImageTagPair pair(list.last(), cache->tagForPath("/People/Unknown"));
+        QList<QString> nameList = pair.values("face");
+        
+        // push the image into the list every time a face with the name is found in the image
+        int count = nameList.count(cache->tagName(personId));
+        
+        for(int i = 0; i < count; ++i)
+            list += it.next().toLongLong();
+    }
+    
+    listFromIdList(receiver, list);
+}
+
 
 void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate& startDate, const QDate& endDate)
 {

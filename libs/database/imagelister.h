@@ -89,6 +89,13 @@ public:
      * List the images which have assigned the tag specified by tagId
      */
     void listTag(ImageListerReceiver *receiver, int tagId);
+    
+    /**
+     * List the images which have faces. An image with n faces will be listed n times.
+     * FIXME: Obviously an ugly way. Should be trashed later in favor of a better method.
+     */
+    void listFaces(ImageListerReceiver *receiver, int personId);
+    
     /**
       * List those images whose date lies in the range beginning with startDate (inclusive)
       * and ending before endDate (exclusive).
