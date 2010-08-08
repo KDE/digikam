@@ -47,6 +47,8 @@
 #include "albummanager.h"
 #include "dimg.h"
 #include "album.h"
+#include "databaseaccess.h"
+#include "albumdb.h"
 
 // Libkface Includes
 
@@ -344,6 +346,21 @@ bool FaceIface::isPerson ( int tagId )
     }
     
     return false;
+}
+
+int FaceIface::setName ( qlonglong imageid, const QRect& rect, const QString& name )
+{
+    int nameTagId          = d->tagsCache->createTag("/People/" + name);
+    ImageTagPair pairNamed   ( imageid, nameTagId );
+    
+    DatabaseAccess().db()->removeImageTagProperties(imageid, d->unknownPeopleTagId, "faceRegion", rectToString(rect));
+    
+    pairNamed.addProperty("faceRegion", rectToString(rect));
+    pairNamed.addProperty("face", name);
+    
+    pairNamed.assignTag();
+    
+    return nameTagId;
 }
 
 

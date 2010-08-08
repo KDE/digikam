@@ -110,6 +110,8 @@ public:
      */
     QList<int>          allPersonTags();
     
+    int                 setName(qlonglong imageid, const QRect& rect, const QString& name);
+    
     QString rectToString(const QRect& rect)        const;
     QRect   stringToRect(const QString& string)   const;
 private:
