@@ -120,6 +120,11 @@ public:
      */
     int                 setName(qlonglong imageid, const QRect& rect, const QString& name);
     
+    /** 
+     * Returns the number of faces a particular person has in the specified image
+     */
+    int                 faceCountForPersonInImage(qlonglong imageid, int tagId);
+    
     QString rectToString(const QRect& rect)        const;
     QRect   stringToRect(const QString& string)   const;
 private:

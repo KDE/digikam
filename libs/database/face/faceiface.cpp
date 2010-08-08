@@ -362,13 +362,24 @@ int FaceIface::setName ( qlonglong imageid, const QRect& rect, const QString& na
     
     pairNamed.assignTag();
     
+    if(faceCountForPersonInImage(imageid, d->unknownPeopleTagId) == 0)
+    {
+            ImageTagPair pair(imageid, d->unknownPeopleTagId);
+            pair.removeProperties("faceRegion");
+            pair.removeProperties("face");
+            pair.unAssignTag();
+    }
+        
     return nameTagId;
 }
 
 void FaceIface::removeRect ( qlonglong imageid, const QRect& rect , const QString& name)
 {
     if(name == "")
+    {
         DatabaseAccess().db()->removeImageTagProperties(imageid, d->unknownPeopleTagId, "faceRegion", rectToString(rect));
+    }
+    
     else
     {
         int nameTagId = d->tagsCache->tagForPath("/People/" + name);
@@ -377,8 +388,21 @@ void FaceIface::removeRect ( qlonglong imageid, const QRect& rect , const QStrin
         pair.removeProperties("face");
         pair.unAssignTag();
     }
+    
+    if(faceCountForPersonInImage(imageid, d->unknownPeopleTagId) == 0)
+    {
+            ImageTagPair pair(imageid, d->unknownPeopleTagId);
+            pair.removeProperties("faceRegion");
+            pair.removeProperties("face");
+            pair.unAssignTag();
+    }
 }
 
+int FaceIface::faceCountForPersonInImage ( qlonglong imageid, int tagId )
+{
+    ImageTagPair pair(imageid, tagId);
+    return pair.values("faceRegion").size();
+}
 
 
 } // Namespace Digikam
