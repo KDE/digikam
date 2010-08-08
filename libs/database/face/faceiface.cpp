@@ -373,7 +373,6 @@ void FaceIface::removeRect ( qlonglong imageid, const QRect& rect , const QStrin
         DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "faceRegion", rectToString(rect));
         DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "face", name);
     }
-    
 }
 
 

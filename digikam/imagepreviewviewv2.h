@@ -110,6 +110,9 @@ private Q_SLOTS:
 
     void slotForgetFaces();
     
+    void slotRemoveFaceTag(const QString&);
+    void slotTagPerson(const QString&);
+    
 private:
 
     ImagePreviewViewV2Priv* const d;

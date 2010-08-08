@@ -115,6 +115,9 @@ public:
      */
     void                removeRect(qlonglong imageid, const QRect& rect, const QString& name);
     
+    /**
+     * Assign the name tag for given name and rect
+     */
     int                 setName(qlonglong imageid, const QRect& rect, const QString& name);
     
     QString rectToString(const QRect& rect)        const;

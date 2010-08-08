@@ -581,4 +581,34 @@ void ImagePreviewViewV2::slotForgetFaces()
     d->faceIface->forgetFaceTags(d->item->imageInfo().id());
 }
 
+void ImagePreviewViewV2::slotTagPerson ( const QString& name)
+{
+    QRect rect;
+    foreach( FaceItem* f, d->faceitems)
+    {
+        if(f->text() == name)
+        {
+            rect = f->originalRect();
+            break;
+        }
+    }
+    
+    for(int i = 0; i < d->currentFaces.size(); ++i)
+    {
+        if(d->currentFaces[i].toRect() == rect)
+        {
+            d->currentFaces[i].setName(name);
+            break;
+        }
+    }
+    
+    d->faceIface->setName(getImageInfo().id(), rect, name);
+}
+
+void ImagePreviewViewV2::slotRemoveFaceTag ( const QString& )
+{
+
+}
+
+
 }  // namespace Digikam
