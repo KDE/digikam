@@ -100,6 +100,11 @@ public:
      */
     int                 numberOfFaces(qlonglong imageid);
     
+    /**
+     * Returns a boolean value indicating whether the given tagId represents a person
+     */
+    bool                isPerson(int tagId);
+    
     QString rectToString(const QRect& rect)        const;
     QRect   stringToRect(const QString& string)   const;
 private:

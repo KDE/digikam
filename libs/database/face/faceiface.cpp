@@ -327,5 +327,22 @@ QRect FaceIface::stringToRect(const QString& string) const
     return rect;
 }
 
+bool FaceIface::isPerson ( int tagId )
+{
+    // Make a list of all people tags available in the DB
+    AlbumManager *man = AlbumManager::instance();
+    QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
+    peopleTagIds += d->peopleTagId;
+    
+    // Now loop through and check if our tagId is in them
+    foreach(int id, peopleTagIds)
+    {
+        if(id == tagId)
+            return true;
+    }
+    
+    return false;
+}
+
 
 } // Namespace Digikam
