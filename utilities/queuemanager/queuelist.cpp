@@ -888,16 +888,23 @@ void QueueListView::updateDestFileNames()
             QFileInfo fi(info.filePath());
 
             // Update suffix using assigned batch tool rules.
+            bool extensionSet = false;
             tools.itemUrl     = item->info().fileUrl();
-            QString newSuffix = tools.targetSuffix();
+            QString newSuffix = tools.targetSuffix(&extensionSet);
             QString newName   = QString("%1.%2").arg(fi.completeBaseName()).arg(newSuffix);
 
             if (settings().renamingRule == QueueSettings::CUSTOMIZE && !renamingResults.isEmpty())
             {
                 QFileInfo fi2(renamingResults[fi.absoluteFilePath()]);
-                newName = QString("%1.%2").arg(fi2.completeBaseName())
-                                          .arg(newSuffix);
-
+                if (extensionSet)
+                {
+                    newName = QString("%1.%2").arg(fi2.completeBaseName())
+                                              .arg(newSuffix);
+                }
+                else
+                {
+                    newName = fi2.fileName();
+                }
             }
             item->setDestFileName(newName);
         }

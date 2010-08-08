@@ -65,7 +65,7 @@ public:
         CustomTool,               // List of tools grouped and customized by users.
 
         ColorTool,                // Tools to manage image colors (Curves, BCG, etc...)
-        EnhanceTool,              // Tools to ehance images (NR, sharp, etc...) 
+        EnhanceTool,              // Tools to ehance images (NR, sharp, etc...)
         TransformTool,            // Tools to transform images geometry (resize, rotate, flip, etc...)
         DecorateTool,             // Tools to decorate images (Border, watermark, etc...)
         FiltersTool,              // Tools to apply filters and special effects (film grain, BlurFx, etc...)
@@ -273,18 +273,30 @@ public:
 
     AssignedBatchTools(){};
 
-    QString targetSuffix()
+    QString targetSuffix(bool *extSet = 0)
     {
         QString suffix;
         foreach(BatchToolSet set, toolsMap)
         {
             QString s = set.tool->outputSuffix();
             if (!s.isEmpty())
+            {
                 suffix = s;
+                if (extSet != 0)
+                {
+                    *extSet = true;
+                }
+            }
         }
 
         if (suffix.isEmpty())
+        {
+            if (extSet != 0)
+            {
+                *extSet = false;
+            }
             return (QFileInfo(itemUrl.fileName()).suffix());
+        }
 
         return suffix;
     }
