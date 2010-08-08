@@ -205,6 +205,7 @@ AdvancedRenameManager* RenameCustomizer::renameManager() const
 
 QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime) const
 {
+    Q_UNUSED(dateTime)
 
     if (d->renameDefault->isChecked())
         return QString();
