@@ -486,6 +486,8 @@ void ImagePreviewViewV2::slotUpdatePersonTagScales()
         d->faceitems.append(new FaceItem(0, this->scene(), item->originalRect(), d->scale, item->text(), item->originalScale()));
         delete item;
     }
+    
+    makeFaceItemConnections();
 }
 
 void ImagePreviewViewV2::clearFaceItems()
@@ -506,6 +508,7 @@ void ImagePreviewViewV2::drawFaceItems()
         face = d->currentFaces[i];
         d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale, "", d->scale));
     }
+    makeFaceItemConnections();
 }
 
 void ImagePreviewViewV2::findFaces()
@@ -566,6 +569,8 @@ void ImagePreviewViewV2::slotAddPersonTag()
     int y = this->scene()->height()/2 - w/2;
 
     d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale , "", d->scale));
+    
+    makeFaceItemConnections();
 }
 
 bool ImagePreviewViewV2::hasBeenScanned()
@@ -610,5 +615,13 @@ void ImagePreviewViewV2::slotRemoveFaceTag ( const QString& )
 
 }
 
+void ImagePreviewViewV2::makeFaceItemConnections()
+{
+    for(int i = 0; i < d->faceitems.size(); ++i)
+    {
+        connect( d->faceitems[i], SIGNAL(acceptButtonClicked(QString)), 
+                 this, SLOT(slotTagPerson(QString)) );
+    }
+}
 
 }  // namespace Digikam

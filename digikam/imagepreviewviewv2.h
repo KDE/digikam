@@ -68,7 +68,8 @@ public:
     void clearFaceItems();
     
     bool hasBeenScanned();
-
+    
+    void makeFaceItemConnections();
 Q_SIGNALS:
 
     void signalNextItem();
