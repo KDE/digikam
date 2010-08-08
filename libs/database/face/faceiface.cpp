@@ -327,6 +327,16 @@ QRect FaceIface::stringToRect(const QString& string) const
     return rect;
 }
 
+QList< int > FaceIface::allPersonTags()
+{
+    AlbumManager *man = AlbumManager::instance();
+    QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
+    peopleTagIds += d->peopleTagId;
+    
+    return peopleTagIds;
+}
+
+
 bool FaceIface::isPerson ( int tagId )
 {
     // Make a list of all people tags available in the DB

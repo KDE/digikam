@@ -105,6 +105,11 @@ public:
      */
     bool                isPerson(int tagId);
     
+    /** 
+     * A method to return a list of all person tags in the DB
+     */
+    QList<int>          allPersonTags();
+    
     QString rectToString(const QRect& rect)        const;
     QRect   stringToRect(const QString& string)   const;
 private:
