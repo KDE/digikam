@@ -158,9 +158,7 @@ QList< Face > FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
     
     QList<Face> faceList;
     
-    // Get all people tags assigned to the image, iterate through each of them, and load all found regions into the Face List.
-    AlbumManager *man = AlbumManager::instance();
-    QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
+    QList<int> peopleTagIds = allPersonTags();
     
     QListIterator<int> it(peopleTagIds);
     
@@ -214,10 +212,7 @@ void FaceIface::forgetFaceTags(qlonglong imageid)
     pair1.removeProperties("scannedForFaces");
     pair1.unAssignTag();
 
-    // Populate the peopleTagIds list with all people tags. This includes the "/People" tag and all other subtags of it.
-    AlbumManager *man = AlbumManager::instance();
-    QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
-    peopleTagIds += d->peopleTagId;
+    QList<int> peopleTagIds = allPersonTags();
 
     // Now unassign all these tags from the image. This removes the properties for the Image-tag pair too, which stored the rect
     QListIterator<int> it(peopleTagIds);
@@ -339,10 +334,7 @@ QList< int > FaceIface::allPersonTags()
 
 bool FaceIface::isPerson ( int tagId )
 {
-    // Make a list of all people tags available in the DB
-    AlbumManager *man = AlbumManager::instance();
-    QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
-    peopleTagIds += d->peopleTagId;
+    QList<int> peopleTagIds = allPersonTags();
     
     // Now loop through and check if our tagId is in them
     foreach(int id, peopleTagIds)
