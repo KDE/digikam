@@ -47,6 +47,7 @@
 // Local includes
 
 #include "advancedrenamewidget.h"
+#include "defaultrenameparser.h"
 #include "album.h"
 #include "albumselectwidget.h"
 #include "batchtool.h"
@@ -61,27 +62,29 @@ public:
 
     QueueSettingsViewPriv()
     {
-        conflictLabel        = 0;
-        conflictButtonGroup  = 0;
-        overwriteButton      = 0;
-        promptButton         = 0;
-        albumSel             = 0;
-        advancedRenameWidget = 0;
+        conflictLabel         = 0;
+        conflictButtonGroup   = 0;
+        overwriteButton       = 0;
+        promptButton          = 0;
+        albumSel              = 0;
+        advancedRenameWidget  = 0;
+        advancedRenameManager = 0;
     }
 
-    QLabel*               conflictLabel;
+    QLabel*                conflictLabel;
 
-    QButtonGroup*         renamingButtonGroup;
-    QButtonGroup*         conflictButtonGroup;
+    QButtonGroup*          renamingButtonGroup;
+    QButtonGroup*          conflictButtonGroup;
 
-    QRadioButton*         renameOriginal;
-    QRadioButton*         renameManual;
-    QRadioButton*         overwriteButton;
-    QRadioButton*         promptButton;
+    QRadioButton*          renameOriginal;
+    QRadioButton*          renameManual;
+    QRadioButton*          overwriteButton;
+    QRadioButton*          promptButton;
 
-    AlbumSelectWidget*    albumSel;
+    AlbumSelectWidget*     albumSel;
 
-    AdvancedRenameWidget* advancedRenameWidget;
+    AdvancedRenameManager* advancedRenameManager;
+    AdvancedRenameWidget*  advancedRenameWidget;
 };
 
 QueueSettingsView::QueueSettingsView(QWidget* parent)
@@ -144,7 +147,11 @@ QueueSettingsView::QueueSettingsView(QWidget* parent)
                                          "filenames without modifications."));
 
     d->renameManual         = new QRadioButton(i18n("Customize filenames:"), vbox2);
-    d->advancedRenameWidget = new AdvancedRenameWidget(vbox2);
+
+    d->advancedRenameWidget  = new AdvancedRenameWidget(vbox2);
+    d->advancedRenameManager = new AdvancedRenameManager();
+    d->advancedRenameManager->setWidget(d->advancedRenameWidget);
+
     QWidget* space          = new QWidget(vbox2);
 
     d->renamingButtonGroup->setExclusive(true);

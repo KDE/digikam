@@ -44,6 +44,7 @@
 #include "advancedrenamewidget.h"
 #include "parser.h"
 #include "parsesettings.h"
+#include "advancedrenamemanager.h"
 
 namespace Digikam
 {
@@ -148,28 +149,31 @@ public:
         singleFileMode(false),
         minSizeDialog(450),
         listView(0),
+        advancedRenameManager(0),
         advancedRenameWidget(0)
     {}
 
-    const QString         configGroupName;
-    const QString         configLastUsedRenamePatternEntry;
-    const QString         configDialogSizeEntry;
+    const QString          configGroupName;
+    const QString          configLastUsedRenamePatternEntry;
+    const QString          configDialogSizeEntry;
 
-    QString               singleFileModeOldFilename;
+    QString                singleFileModeOldFilename;
 
-    bool                  singleFileMode;
-    int                   minSizeDialog;
+    bool                   singleFileMode;
+    int                    minSizeDialog;
 
-    QTreeWidget*          listView;
-    AdvancedRenameWidget* advancedRenameWidget;
-    NewNamesList          newNamesList;
+    QTreeWidget*           listView;
+    AdvancedRenameManager* advancedRenameManager;
+    AdvancedRenameWidget*  advancedRenameWidget;
+    NewNamesList           newNamesList;
 };
 
 AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
                     : KDialog(parent), d(new AdvancedRenameDialogPriv)
 {
-    d->advancedRenameWidget = new AdvancedRenameWidget(this);
-    d->advancedRenameWidget->setAllowDirectoryCreation(false);
+    d->advancedRenameManager  = new AdvancedRenameManager();
+    d->advancedRenameWidget   = new AdvancedRenameWidget(this);
+    d->advancedRenameManager->setWidget(d->advancedRenameWidget);
 
     // --------------------------------------------------------
 
@@ -219,6 +223,7 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 AdvancedRenameDialog::~AdvancedRenameDialog()
 {
     writeSettings();
+    delete d->advancedRenameManager;
     delete d;
 }
 
@@ -232,22 +237,24 @@ void AdvancedRenameDialog::slotReturnPressed()
 
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
-    d->newNamesList.clear();
-    d->advancedRenameWidget->parser()->reset();
+    if (!d->advancedRenameManager)
+        return;
 
+    d->newNamesList.clear();
+
+    // generate new file names
+    ParseSettings settings;
+    settings.useOriginalFileExtension = d->singleFileMode ? false : true;
+    d->advancedRenameManager->parseFiles(parseString, settings);
+
+    // fill the tree widget with the updated files
     QTreeWidgetItemIterator it(d->listView);
     while (*it)
     {
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            ParseSettings settings(ImageInfo(item->imageUrl()));
-            if (d->singleFileMode)
-            {
-                settings.useOriginalFileExtension = false;
-            }
-
-            QString newName = d->advancedRenameWidget->parse(settings);
+            QString newName = d->advancedRenameManager->newName(item->imageUrl().toLocalFile());
             item->setNewName(newName);
             d->newNamesList << NewNameInfo(item->imageUrl(), newName);
         }
@@ -263,13 +270,17 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
 {
     d->listView->clear();
+    d->advancedRenameManager->reset();
+    d->advancedRenameManager->addFiles(urls, AdvancedRenameManager::SortAscending);
+
     AdvancedRenameListItem* item = 0;
 
     int itemCount = 0;
-    for (KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    foreach (const QString& file, d->advancedRenameManager->fileList())
     {
         item = new AdvancedRenameListItem(d->listView);
-        item->setImageUrl(*it);
+        KUrl url(file);
+        item->setImageUrl(url);
         ++itemCount;
     }
 

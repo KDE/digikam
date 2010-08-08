@@ -48,9 +48,11 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmimetype.h>
+#include <kdebug.h>
 
 // Local includes
 
+#include "advancedrenamemanager.h"
 #include "cameraiconitem.h"
 #include "cameraiconviewtooltip.h"
 #include "cameraui.h"
@@ -230,17 +232,17 @@ void CameraIconView::addItem(const GPItemInfo& info)
 
     QString downloadName;
 
-    if (d->renamer)
-    {
-        if (!d->renamer->useDefault())
-        {
-            downloadName = getTemplatedName(&info);
-        }
-        else
-        {
-            downloadName = getCasedName( d->renamer->changeCase(), &info);
-        }
-    }
+//    if (d->renamer)
+//    {
+//        if (!d->renamer->useDefault())
+//        {
+//            downloadName = getTemplatedName(&info);
+//        }
+//        else
+//        {
+//            downloadName = getCasedName( d->renamer->changeCase(), &info);
+//        }
+//    }
 
     CameraIconItem* item = new CameraIconItem(d->groupItem, info, thumb, downloadName);
     d->itemDict.insert(info.folder+info.name, item);
@@ -354,6 +356,22 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     d->renamer->reset();
     d->renamer->setStartIndex(startIndex);
 
+    QStringList tmpFiles;
+
+    for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
+    {
+        CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
+        if ( (hasSelection && item->isSelected()) || !hasSelection)
+        {
+            QFileInfo fi;
+            fi.setFile(QDir(viewItem->itemInfo()->folder), viewItem->itemInfo()->name);
+            tmpFiles << fi.absoluteFilePath();
+        }
+    }
+
+    d->renamer->renameManager()->addFiles(tmpFiles);
+    d->renamer->renameManager()->parseFiles();
+
     for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
     {
         QString downloadName;
@@ -363,7 +381,10 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         {
             if (!useDefault)
             {
-                downloadName = getTemplatedName( viewItem->itemInfo());
+                QFileInfo fi;
+                fi.setFile(QDir(viewItem->itemInfo()->folder), viewItem->itemInfo()->name);
+                tmpFiles << fi.absoluteFilePath();
+                downloadName = d->renamer->renameManager()->newName(fi.absoluteFilePath());
             }
             else
             {

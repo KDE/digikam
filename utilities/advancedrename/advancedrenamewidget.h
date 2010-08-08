@@ -95,11 +95,6 @@ public:
     Parser* parser();
 
     /**
-     * @param allow     If set, "/" characters are allowed in the parse string to create directories
-     */
-    void setAllowDirectoryCreation(bool allow);
-
-    /**
      * evaluates the parse string and executes the parser
      * @param settings information about the file to be renamed
      * @return the new name of the file

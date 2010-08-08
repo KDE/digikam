@@ -31,6 +31,7 @@
 // Local includes
 
 #include "parser.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -48,7 +49,42 @@ CameraNameOption::CameraNameOption()
 
 QString CameraNameOption::parseOperation(ParseSettings& settings)
 {
-    return Parser::parseStringIsValid(settings.cameraName) ? settings.cameraName : QString();
+    QString result;
+
+    ImageInfo info(settings.fileUrl);
+    if (!info.isNull())
+    {
+        result = info.photoInfoContainer().make + " " + info.photoInfoContainer().model;
+    }
+    else
+    {
+        // If ImageInfo is not available, read the information from the EXIF data
+        QString make;
+        QString model;
+
+        DMetadata meta(settings.fileUrl.toLocalFile());
+        if (!meta.isEmpty())
+        {
+            KExiv2::MetaDataMap dataMap;
+            dataMap = meta.getExifTagsDataList(QStringList(), true);
+
+            foreach (const QString &key, dataMap.keys())
+            {
+                if (key.toLower().contains("exif.image.model"))
+                {
+                    model = dataMap[key];
+                }
+                else if (key.toLower().contains("exif.image.make"))
+                {
+                    make = dataMap[key];
+                }
+            }
+        }
+
+        result = make + " " + model;
+    }
+
+    return result.simplified();
 }
 
 } // namespace Digikam

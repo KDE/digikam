@@ -107,15 +107,11 @@ AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
                     : QWidget(parent), d(new AdvancedRenameWidgetPriv)
 {
     setupWidgets();
-    setParser(new DefaultRenameParser());
-    setAllowDirectoryCreation(false);
 }
 
 AdvancedRenameWidget::~AdvancedRenameWidget()
 {
     writeSettings();
-
-    delete d->parser;
     delete d;
 }
 
@@ -287,11 +283,6 @@ Parser* AdvancedRenameWidget::parser()
     return d->parser;
 }
 
-void AdvancedRenameWidget::setAllowDirectoryCreation(bool allow)
-{
-    d->renameInput->setAllowDirectoryCreation(allow);
-}
-
 void AdvancedRenameWidget::setParser(Parser* parser)
 {
     if (!parser)
@@ -299,10 +290,6 @@ void AdvancedRenameWidget::setParser(Parser* parser)
         return;
     }
 
-    if (d->parser)
-    {
-        delete d->parser;
-    }
     d->parser = parser;
 
     calculateLayout();

@@ -87,6 +87,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="extensionAware">
+     <property name="text">
+      <string>Extension aware numbering</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
