@@ -261,7 +261,7 @@ void ImagePreviewViewV2::reload()
 {
     previewItem()->reload();
 
-    slotHidePeopleTags();
+    slotRefreshPeopleTags();
 }
 
 void ImagePreviewViewV2::imageLoaded()
@@ -272,7 +272,7 @@ void ImagePreviewViewV2::imageLoaded()
     d->rotLeftAction->setEnabled(true);
     d->rotRightAction->setEnabled(true);
 
-    slotHidePeopleTags();
+    slotRefreshPeopleTags();
 }
 
 void ImagePreviewViewV2::imageLoadingFailed()
@@ -411,7 +411,7 @@ void ImagePreviewViewV2::slotSetupChanged()
     previewItem()->setLoadFullImageSize(AlbumSettings::instance()->getPreviewLoadFullImageSize());
     previewItem()->setExifRotate(AlbumSettings::instance()->getExifRotate());
 
-    slotHidePeopleTags();
+    slotRefreshPeopleTags();
 }
 
 void ImagePreviewViewV2::slotRotateLeft()
@@ -427,7 +427,7 @@ void ImagePreviewViewV2::slotRotateLeft()
         }
     }
 
-    slotHidePeopleTags();
+    slotRefreshPeopleTags();
 }
 
 void ImagePreviewViewV2::slotRotateRight()
@@ -443,7 +443,7 @@ void ImagePreviewViewV2::slotRotateRight()
         }
     }
 
-    slotHidePeopleTags();
+    slotRefreshPeopleTags();
 }
 
 void ImagePreviewViewV2::slotTogglePeople()
@@ -542,24 +542,34 @@ void ImagePreviewViewV2::slotShowPeopleTags()
 {
     updateScale();
     clearFaceItems();
-
+    findFaces();
+    drawFaceItems();
+    
     d->peopleToggleAction->setText(i18n("Hide face tags"));
     d->addPersonAction->setVisible(true);
     d->peopleTagsShown = true;
-
-    findFaces();
-    drawFaceItems();
 }
 
 void ImagePreviewViewV2::slotHidePeopleTags()
 {
     updateScale();
     clearFaceItems();
+    
     d->currentFaces.clear();
     d->peopleToggleAction->setText(i18n("Show face tags"));
     d->addPersonAction->setVisible(false);
     d->peopleTagsShown = false;
 }
+
+void ImagePreviewViewV2::slotRefreshPeopleTags()
+{
+    if(d->peopleTagsShown)
+    {
+        slotHidePeopleTags();
+        slotShowPeopleTags();
+    }
+}
+
 
 void ImagePreviewViewV2::slotAddPersonTag()
 {
