@@ -110,6 +110,11 @@ public:
      */
     QList<int>          allPersonTags();
     
+    /**
+     * Remove a certain rect from an image
+     */
+    void                removeRect(qlonglong imageid, const QRect& rect, const QString& name);
+    
     int                 setName(qlonglong imageid, const QRect& rect, const QString& name);
     
     QString rectToString(const QRect& rect)        const;

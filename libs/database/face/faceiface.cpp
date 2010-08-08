@@ -363,5 +363,19 @@ int FaceIface::setName ( qlonglong imageid, const QRect& rect, const QString& na
     return nameTagId;
 }
 
+void FaceIface::removeRect ( qlonglong imageid, const QRect& rect , const QString& name)
+{
+    if(name == "")
+        DatabaseAccess().db()->removeImageTagProperties(imageid, d->unknownPeopleTagId, "faceRegion", rectToString(rect));
+    else
+    {
+        int nameTagId = d->tagsCache->tagForName(name);
+        DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "faceRegion", rectToString(rect));
+        DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "face", name);
+    }
+    
+}
+
+
 
 } // Namespace Digikam
