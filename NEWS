@@ -3,6 +3,8 @@ digiKam 1.4.0 - Release date: 2010-08-xx
 
 NEW FEATURES:
 
+AdvancedRename : New modifier "Remove Doubles".
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 238285 : Nikkor 18-200mm not detected by lens autocorrection.
@@ -25,5 +27,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 240945 : Picture size does not report correctly after gimp.
 019 ==> 245380 : Improve the ergonomics of the bwsepia filter ui.
 020 ==> 204568 : Metadata not being written to files.
-021 ==> 
+021 ==>
 
