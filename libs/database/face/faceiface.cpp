@@ -371,9 +371,11 @@ void FaceIface::removeRect ( qlonglong imageid, const QRect& rect , const QStrin
         DatabaseAccess().db()->removeImageTagProperties(imageid, d->unknownPeopleTagId, "faceRegion", rectToString(rect));
     else
     {
-        int nameTagId = d->tagsCache->tagForName(name);
-        DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "faceRegion", rectToString(rect));
-        DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "face", name);
+        int nameTagId = d->tagsCache->tagForPath("/People/" + name);
+        ImageTagPair pair(imageid, nameTagId);
+        pair.removeProperties("faceRegion");
+        pair.removeProperties("face");
+        pair.unAssignTag();
     }
 }
 
