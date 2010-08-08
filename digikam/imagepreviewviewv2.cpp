@@ -506,7 +506,7 @@ void ImagePreviewViewV2::drawFaceItems()
     for (int i = 0; i < d->currentFaces.size(); ++i)
     {
         face = d->currentFaces[i];
-        d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale, "", d->scale));
+        d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale, face.name(), d->scale));
     }
     makeFaceItemConnections();
 }
@@ -610,9 +610,19 @@ void ImagePreviewViewV2::slotTagPerson ( const QString& name)
     d->faceIface->setName(getImageInfo().id(), rect, name);
 }
 
-void ImagePreviewViewV2::slotRemoveFaceTag ( const QString& )
+void ImagePreviewViewV2::slotRemoveFaceTag ( const QString& name)
 {
-
+    QRect rect;
+    foreach( FaceItem* f, d->faceitems)
+    {
+        if(f->text() == name)
+        {
+            rect = f->originalRect();
+            break;
+        }
+    }
+    
+    d->faceIface->removeRect(getImageInfo().id(), rect, name);
 }
 
 void ImagePreviewViewV2::makeFaceItemConnections()
@@ -621,6 +631,9 @@ void ImagePreviewViewV2::makeFaceItemConnections()
     {
         connect( d->faceitems[i], SIGNAL(acceptButtonClicked(QString)), 
                  this, SLOT(slotTagPerson(QString)) );
+        
+        connect( d->faceitems[i], SIGNAL(rejectButtonClicked(QString)),
+                this, SLOT(slotRemoveFaceTag(QString)) );
     }
 }
 
