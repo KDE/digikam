@@ -272,7 +272,9 @@ void ImagePreviewViewV2::imageLoaded()
     d->rotLeftAction->setEnabled(true);
     d->rotRightAction->setEnabled(true);
 
-    slotRefreshPeopleTags();
+    slotHidePeopleTags();
+    if(hasBeenScanned())
+        slotShowPeopleTags();
 }
 
 void ImagePreviewViewV2::imageLoadingFailed()
