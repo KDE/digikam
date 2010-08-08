@@ -111,8 +111,8 @@ private Q_SLOTS:
 
     void slotForgetFaces();
     
-    void slotRemoveFaceTag(const QString&);
-    void slotTagPerson(const QString&);
+    void slotRemoveFaceTag(const QString&, const QRect&);
+    void slotTagPerson(const QString&, const QRect&);
     
 private:
 

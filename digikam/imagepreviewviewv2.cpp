@@ -586,18 +586,8 @@ void ImagePreviewViewV2::slotForgetFaces()
     d->faceIface->forgetFaceTags(d->item->imageInfo().id());
 }
 
-void ImagePreviewViewV2::slotTagPerson ( const QString& name)
+void ImagePreviewViewV2::slotTagPerson ( const QString& name, const QRect& rect)
 {
-    QRect rect;
-    foreach( FaceItem* f, d->faceitems)
-    {
-        if(f->text() == name)
-        {
-            rect = f->originalRect();
-            break;
-        }
-    }
-    
     for(int i = 0; i < d->currentFaces.size(); ++i)
     {
         if(d->currentFaces[i].toRect() == rect)
@@ -610,14 +600,13 @@ void ImagePreviewViewV2::slotTagPerson ( const QString& name)
     d->faceIface->setName(getImageInfo().id(), rect, name);
 }
 
-void ImagePreviewViewV2::slotRemoveFaceTag ( const QString& name)
+void ImagePreviewViewV2::slotRemoveFaceTag ( const QString& name, const QRect& rect)
 {
-    QRect rect;
-    foreach( FaceItem* f, d->faceitems)
+    for(int i = 0; i < d->currentFaces.size(); ++i)
     {
-        if(f->text() == name)
+        if(d->currentFaces[i].toRect() == rect)
         {
-            rect = f->originalRect();
+            d->currentFaces.removeAt(i);
             break;
         }
     }
@@ -629,11 +618,11 @@ void ImagePreviewViewV2::makeFaceItemConnections()
 {
     for(int i = 0; i < d->faceitems.size(); ++i)
     {
-        connect( d->faceitems[i], SIGNAL(acceptButtonClicked(QString)), 
-                 this, SLOT(slotTagPerson(QString)) );
+        connect( d->faceitems[i], SIGNAL(acceptButtonClicked(QString, QRect)), 
+                 this, SLOT(slotTagPerson(QString, QRect)) );
         
-        connect( d->faceitems[i], SIGNAL(rejectButtonClicked(QString)),
-                this, SLOT(slotRemoveFaceTag(QString)) );
+        connect( d->faceitems[i], SIGNAL(rejectButtonClicked(QString, QRect)),
+                this, SLOT(slotRemoveFaceTag(QString, QRect)) );
     }
 }
 
