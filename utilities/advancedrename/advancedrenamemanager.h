@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : Aug 7, 2010
- * Description : XXXXXXXXXXXXXXXXXXXXXXXx
+ * Date        : 2010-08-08
+ * Description : a class that manages the files to be renamed
  *
- * Copyright (C) 2010 by andi <xxxxxxxxxxxxx>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
