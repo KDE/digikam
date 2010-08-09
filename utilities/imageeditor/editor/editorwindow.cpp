@@ -338,7 +338,8 @@ void EditorWindow::setupStandardActions()
     connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("editorwindow_last", m_lastAction);
 
-    m_saveAction = KStandardAction::save(this, SLOT(slotSaveSubversion()), this);
+    m_saveAction = new KAction(KIcon("document-save"), i18n("&New version"), this);
+    connect(m_saveAction, SIGNAL(triggered()), this, SLOT(slotSaveSubversion()));
     actionCollection()->addAction("editorwindow_save", m_saveAction);
 
     m_saveAsAction = KStandardAction::saveAs(this, SLOT(slotSaveAs()), this);

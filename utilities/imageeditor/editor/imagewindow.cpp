@@ -625,6 +625,8 @@ void ImageWindow::slotLoadCurrent()
     d->thumbBar->setSelected(d->thumbBar->findItemByUrl(d->urlCurrent));
     d->thumbBar->blockSignals(false);
 
+    d->rightSideBar->getFiltersHistoryTab()->slotUpdateImageInfo(d->imageInfoCurrent);
+    
     // Do this _after_ the canvas->load(), so that the main view histogram does not load
     // a smaller version if a raw image, and after that the DImgInterface loads the full version.
     // So first let DImgInterface create its loading task, only then any external objects.
