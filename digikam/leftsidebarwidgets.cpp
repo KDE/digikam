@@ -1087,6 +1087,8 @@ class PeopleSideBarWidgetPriv : public TagViewSideBarWidgetPriv
 {
 public:
     
+    QLabel*      personIcon;
+    QLabel*      textLabel;
     QPushButton* rescanButton;
 };
 
@@ -1098,6 +1100,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     d->tagModel = model;
     
     QVBoxLayout* layout = new QVBoxLayout(this);
+    QHBoxLayout* hlay = new QHBoxLayout(layout);
     
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
@@ -1112,6 +1115,17 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     d->rescanButton = new QPushButton;
     d->rescanButton->setText("Scan collection for faces");
 
+    QString s("user-identity");
+    KIcon* icon       = new KIcon(s);
+    QPixmap personPix = icon->pixmap(QSize(48, 48));
+    d->personIcon = new QLabel;
+    d->personIcon->setPixmap(personPix);
+    
+    d->textLabel = new QLabel("People Tags");
+    
+    hlay->addWidget(d->personIcon);
+    hlay->addWidget(d->textLabel);
+    
     layout->addWidget(d->rescanButton);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
@@ -1121,7 +1135,6 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     
     connect(d->rescanButton, SIGNAL(pressed()),
             this, SIGNAL( signalDetectFaces() ) );
-
 
 }
 
