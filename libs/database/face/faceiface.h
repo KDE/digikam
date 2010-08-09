@@ -132,6 +132,10 @@ public:
      */
     Face                faceForRectInImage(qlonglong imageid, const QRect& rect, const QString& name);
     
+    /**
+     * Updates libkface's face database with a list of Face objects
+     * Any faces that have a null name or image will be dropped.
+     */
     void                trainWithFaces(QList< Face > faceList);
     
     QString rectToString(const QRect& rect)        const;

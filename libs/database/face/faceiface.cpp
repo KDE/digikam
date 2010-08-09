@@ -425,7 +425,7 @@ void FaceIface::trainWithFaces ( QList< Face > faceList )
 {
     foreach(Face f, faceList)
     {
-        if(f.name() == "")
+        if(f.name() == "" || f.getImage().isNull())
             faceList.remove(f);
     }
     
