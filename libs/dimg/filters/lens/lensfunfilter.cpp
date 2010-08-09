@@ -255,7 +255,7 @@ FilterAction LensFunFilter::filterAction()
     action.setDisplayableName(DisplayableName());
 
     action.addParameter("filterCCA", d->iface->m_settings.filterCCA);
-    action.addParameter("filterCCI", d->iface->m_settings.filterCCI;
+    action.addParameter("filterCCI", d->iface->m_settings.filterCCI);
     action.addParameter("filterDist", d->iface->m_settings.filterDist);
     action.addParameter("filterGeom", d->iface->m_settings.filterGeom);
     action.addParameter("filterVig", d->iface->m_settings.filterVig);
