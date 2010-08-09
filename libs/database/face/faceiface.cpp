@@ -65,6 +65,7 @@ public:
     
     FaceIfacePriv()
     {
+        threshold            = 0.5;
         libkface             = new KFaceIface::Database(KFaceIface::Database::InitAll, KStandardDirs::locateLocal("data", "libkface"));
         tagsCache            = TagsCache::instance();
         scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
@@ -76,6 +77,8 @@ public:
     {
         delete libkface;
     }
+
+    double                threshold;
     
     int                   scannedForFacesTagId;
     int                   peopleTagId;
@@ -430,6 +433,23 @@ void FaceIface::trainWithFaces ( QList< Face > faceList )
     }
     
     d->libkface->updateFaces(faceList);
+}
+
+QString FaceIface::recognizedName ( const KFaceIface::Face& face )
+{
+    QList<Face> f;
+    f.append(face);
+    
+    if( face.getImage().isNull() )
+        return "";
+    else 
+    {
+        int distance = d->libkface->recognizeFaces(f).at(0);
+        if(distance > d->threshold)
+            return "";
+        else
+            return f[0].name();
+    }
 }
 
 

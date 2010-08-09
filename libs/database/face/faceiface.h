@@ -138,6 +138,13 @@ public:
      */
     void                trainWithFaces(QList< Face > faceList);
     
+    /**
+     * Tries to recognize a Face, returns a string containing the name for the face.
+     * Respects the match threshold.
+     */
+    
+    QString             recognizedName(const Face& face);
+    
     QString rectToString(const QRect& rect)        const;
     QRect   stringToRect(const QString& string)   const;
 private:
