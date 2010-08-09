@@ -619,6 +619,7 @@ void ImagePreviewViewV2::slotRemoveFaceTag ( const QString& name, const QRect& r
         if(d->currentFaces[i].toRect() == rect)
         {
             d->currentFaces.removeAt(i);
+            d->faceitems.removeAt(i);
             break;
         }
     }
