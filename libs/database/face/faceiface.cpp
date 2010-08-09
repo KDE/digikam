@@ -49,6 +49,7 @@
 #include "album.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
+#include "tagproperties.h"
 
 // Libkface Includes
 
@@ -71,6 +72,8 @@ public:
         scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
         peopleTagId          = tagsCache->createTag("/People");
         unknownPeopleTagId   = tagsCache->createTag("/People/Unknown");
+        tagProps = new TagProperties(unknownPeopleTagId);
+        tagProps->setProperty("person", "Unknown");
     }
     
     ~FaceIfacePriv()
@@ -86,6 +89,7 @@ public:
     
     KFaceIface::Database* libkface;
     TagsCache*            tagsCache;
+    TagProperties*        tagProps;
 };   
 
 FaceIface::FaceIface()
@@ -363,8 +367,10 @@ int FaceIface::setName ( qlonglong imageid, const QRect& rect, const QString& na
     
     pairNamed.addProperty("faceRegion", rectToString(rect));
     pairNamed.addProperty("face", name);
-    
     pairNamed.assignTag();
+    
+    d->tagProps = new TagProperties(nameTagId);
+    d->tagProps->setProperty("person", name);
     
     if(faceCountForPersonInImage(imageid, d->unknownPeopleTagId) == 0)
     {

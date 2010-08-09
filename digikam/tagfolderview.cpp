@@ -64,8 +64,8 @@ public:
 
 };
 
-TagFolderView::TagFolderView(QWidget *parent, TagModel *model) :
-    TagTreeView(model, parent), d(new TagFolderViewPriv)
+TagFolderView::TagFolderView(QWidget *parent, TagModel *model, bool people) :
+    TagTreeView(model, parent, people), d(new TagFolderViewPriv)
 {
 
     d->model = model;

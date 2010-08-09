@@ -1102,10 +1102,12 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     QVBoxLayout* layout = new QVBoxLayout(this);
     QHBoxLayout* hlay = new QHBoxLayout(layout);
     
-    d->tagFolderView = new TagFolderView(this, model);
+    d->tagFolderView = new TagFolderView(this, model, true);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
+    
+    
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewPeopleSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(d->tagFolderView->filteredModel(),
