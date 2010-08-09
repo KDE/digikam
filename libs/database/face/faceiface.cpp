@@ -54,6 +54,7 @@
 
 #include <libkface/database.h>
 #include <libkface/kface.h>
+#include <imageinfocache.h>
 
 namespace Digikam
 {
@@ -402,6 +403,33 @@ int FaceIface::faceCountForPersonInImage ( qlonglong imageid, int tagId )
 {
     ImageTagPair pair(imageid, tagId);
     return pair.values("faceRegion").size();
+}
+
+Face FaceIface::faceForRectInImage ( qlonglong imageid, const QRect& rect, const QString& name )
+{
+    Face f;
+    ImageInfo info(imageid);
+    
+    DImg image(info.filePath());
+    QImage qimg = image.copyQImage();
+    
+    f.setRect(rect);
+    f.setName(name);
+    f.setImage(qimg.copy(rect));
+    
+    return f;
+}
+
+
+void FaceIface::trainWithFaces ( QList< Face > faceList )
+{
+    foreach(Face f, faceList)
+    {
+        if(f.name() == "")
+            faceList.remove(f);
+    }
+    
+    d->libkface->updateFaces(faceList);
 }
 
 

@@ -125,6 +125,15 @@ public:
      */
     int                 faceCountForPersonInImage(qlonglong imageid, int tagId);
     
+    /**
+     * Returns a face object with a preloaded face image, and a name too, if the face has been named
+     * @param imageid ID of the image in the DB
+     * @param rect Face rectangle, the face image will be cropped from this
+     */
+    Face                faceForRectInImage(qlonglong imageid, const QRect& rect, const QString& name);
+    
+    void                trainWithFaces(QList< Face > faceList);
+    
     QString rectToString(const QRect& rect)        const;
     QRect   stringToRect(const QString& string)   const;
 private:
