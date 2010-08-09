@@ -37,8 +37,8 @@
 // Local includes
 
 #include "dmetadata.h"
-#include "worldmapwidget.h"
 #include "digikam_export.h"
+#include "imagegpsitem.h"
 
 namespace Digikam
 {

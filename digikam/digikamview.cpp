@@ -120,9 +120,7 @@ public:
     SearchSideBarWidget*          searchSideBar;
     FuzzySearchSideBarWidget*     fuzzySearchSideBar;
 
-#ifdef HAVE_MARBLEWIDGET
     GPSSearchSideBarWidget*       gpsSearchSideBar;
-#endif
 
     PeopleSideBarWidget*          peopleSideBar;
 
@@ -224,14 +222,12 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
                     d->searchModificationHelper);
     d->leftSideBarWidgets << d->fuzzySearchSideBar;
 
-#ifdef HAVE_MARBLEWIDGET
     d->gpsSearchSideBar = new GPSSearchSideBarWidget(d->leftSideBar,
                     d->modelCollection->getSearchModel(),
                     d->searchModificationHelper, 
                     d->iconView->imageFilterModel(),d->iconView->getSelectionModel());
 
     d->leftSideBarWidgets << d->gpsSearchSideBar;
-#endif
 
     // People Sidebar
     d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
@@ -418,7 +414,6 @@ void DigikamView::setupConnections()
     /*connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
             d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));*/
     
-#ifdef HAVE_MARBLEWIDGET
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->gpsSearchSideBar, SLOT(slotDigikamViewNoCurrentItem()));
 
@@ -433,7 +428,6 @@ void DigikamView::setupConnections()
 
      connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)),
              d->iconView->imageFilterModel(), SLOT(setIdWhitelist(const QList<qlonglong>&, const QString&))); 
-#endif
 
     // -- Filter Bars Connections ---------------------------------
 

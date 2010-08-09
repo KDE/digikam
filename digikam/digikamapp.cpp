@@ -86,9 +86,6 @@
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
 #include "config-digikam.h"
-#ifdef HAVE_MARBLEWIDGET
-#include <marble/global.h>
-#endif // HAVE_MARBLEWIDGET
 
 // LibKIPI includes
 

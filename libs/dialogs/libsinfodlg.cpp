@@ -23,6 +23,9 @@
 
 #include "libsinfodlg.moc"
 
+// TODO: still needed?
+#include "config-digikam.h"
+
 // Qt includes
 
 #include <QStringList>
@@ -32,14 +35,6 @@
 // KDE includes
 
 #include <klocale.h>
-
-// Marble widget includes
-
-#include "config-digikam.h"
-#ifdef HAVE_MARBLEWIDGET
-#include <marble/global.h>
-using namespace Marble;
-#endif // HAVE_MARBLEWIDGET
 
 // Libkexiv2 includes
 
@@ -124,10 +119,6 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibPGF"),                      libPGFVersion());
 
     list.insert(i18n("LibKMap"),                     KMapIface::KMap::version());
-
-#ifdef HAVE_MARBLEWIDGET
-    list.insert(i18n("Marble widget"),               QString(MARBLE_VERSION_STRING));
-#endif //HAVE_MARBLEWIDGET
 
     listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     setInfoMap(list);

@@ -60,7 +60,6 @@
 #include "album.h"
 #include "albummanager.h"
 #include "editablesearchtreeview.h"
-#include "gpssearchwidget.h"
 #include "imageinfo.h"
 #include "imageinfojob.h"
 #include "imageposition.h"
@@ -100,8 +99,6 @@ public:
     EditableSearchTreeView*     searchTreeView;
 
     QSplitter*                  splitter;
-
-    GPSSearchWidget*            gpsSearchWidget;
 
     KMapIface::KMap*            mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;

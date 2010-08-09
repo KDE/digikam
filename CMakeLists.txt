@@ -184,13 +184,6 @@ MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
-# Check MarbleWidget library for geolocation.
-MACRO_OPTIONAL_FIND_PACKAGE(MarbleWidget)
-MACRO_BOOL_TO_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
-IF (MARBLEWIDGET_FOUND)
-    INCLUDE(libs/imageproperties/markerclusterholderplugin/CheckPluginBuildable.cmake)
-ENDIF (MARBLEWIDGET_FOUND)
-
 # Check LensFun library for lens correction tool.
 MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
 MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
@@ -289,20 +282,6 @@ ELSE(KDEPIMLIBS_FOUND)
     MESSAGE(STATUS " digiKam will be compiled without address book support.")
     MESSAGE(STATUS "")
 ENDIF(KDEPIMLIBS_FOUND)
-
-IF(MARBLEWIDGET_FOUND)
-    MESSAGE(STATUS " libmarblewidget library found............ YES (optional)")
-    IF(MARBLEWIDGET_SUPPORTS_PLUGINS)
-      MESSAGE(STATUS " Can build Marble plugin.................. YES (optional)")
-    ELSE(MARBLEWIDGET_SUPPORTS_PLUGINS)
-      MESSAGE(STATUS " Can build Marble plugin.................. NO  (optional)")
-    ENDIF(MARBLEWIDGET_SUPPORTS_PLUGINS)
-ELSE(MARBLEWIDGET_FOUND)
-    MESSAGE(STATUS " libmarblewidget library found............ NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without geolocation using Marble widget support.")
-    MESSAGE(STATUS "")
-ENDIF(MARBLEWIDGET_FOUND)
 
 IF(NEPOMUK_FOUND)
     MESSAGE(STATUS " Nepomuk libraries found.................. YES (optional)")
@@ -449,10 +428,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(NEPOMUK_FOUND)
         INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDE_DIR})
     ENDIF(NEPOMUK_FOUND)
-
-    IF(MARBLEWIDGET_FOUND)
-        INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
-    ENDIF(MARBLEWIDGET_FOUND)
 
     # ==================================================================================================
     # LibLqr-1 library rules
@@ -672,16 +647,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
        )
-
-    IF(MARBLEWIDGET_FOUND)
-        SET(libimageproperties_SRCS ${libimageproperties_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholder.cpp
-        )
-    ENDIF(MARBLEWIDGET_FOUND)
 
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
     # digikam: camera download: auto-rotated images lose EXIF info ...
@@ -1212,7 +1180,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libgpssearch_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
        )
 

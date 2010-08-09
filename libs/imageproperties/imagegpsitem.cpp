@@ -27,7 +27,6 @@
 // local include
 
 #include "imagegpsitem.h"
-#include "worldmapwidget.h"
 
 namespace Digikam
 {

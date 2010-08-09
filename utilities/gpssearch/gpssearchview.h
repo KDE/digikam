@@ -32,13 +32,14 @@
 // local includes
 
 #include "statesavingobject.h"
-#include "worldmapwidget.h"
 #include "imagealbummodel.h"
 #include "imagefiltermodel.h"
+#include "imagegpsitem.h"
 
 
 class QDragEnterEvent;
 class QDropEvent;
+class QItemSelectionModel;
 class QPixmap;
 
 namespace Digikam

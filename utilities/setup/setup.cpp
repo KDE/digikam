@@ -258,11 +258,11 @@ Setup::Setup(QWidget* parent)
     d->page_camera->setIcon(KIcon("camera-photo"));
 
 
-    d->scriptManagerPage  = new SetupScriptManager();
-    d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
-    d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
-                                          "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
-    d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
+//     /*/*d->scriptManagerPage  = new SetupScriptManager();
+//     d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
+//     d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
+//                                           "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
+//     d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));*/*/
 
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
@@ -412,7 +412,7 @@ void Setup::slotOkClicked()
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     d->pluginsPage->applyPlugins();
-    d->scriptManagerPage->applySettings();
+//     d->scriptManagerPage->applySettings();
 
     AlbumSettings::instance()->emitSetupChanged();
 

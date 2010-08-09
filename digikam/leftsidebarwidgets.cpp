@@ -30,6 +30,7 @@
 #include <qlayout.h>
 #include <qscrollbar.h>
 #include <qtimer.h>
+#include <qtoolbutton.h>
 
 // KDE includes
 
@@ -992,8 +993,6 @@ void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
 
 // -----------------------------------------------------------------------------
 
-#ifdef HAVE_MARBLEWIDGET
-
 class GPSSearchSideBarWidgetPriv
 {
 public:
@@ -1078,8 +1077,6 @@ void GPSSearchSideBarWidget::slotDigikamViewImageSelected(const ImageInfoList &s
 {
     d->gpsSearchView->slotDigikamViewImageSelected(selectedImage, hasPrevious, hasNext, allImages);
 }
-
-#endif // HAVE_MARBLEWIDGET
 
 // -----------------------------------------------------------------------------
 

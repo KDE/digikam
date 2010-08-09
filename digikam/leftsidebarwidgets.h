@@ -264,7 +264,6 @@ private:
     FuzzySearchSideBarWidgetPriv* const d;
 };
 
-#ifdef HAVE_MARBLEWIDGET
 class GPSSearchSideBarWidgetPriv;
 /**
  * SideBarWidget for the gps search.
@@ -303,8 +302,6 @@ private:
 
     GPSSearchSideBarWidgetPriv* const d;
 };
-
-#endif // HAVE_MARBLEWIDGET
 
 class PeopleSideBarWidgetPriv;
 /**

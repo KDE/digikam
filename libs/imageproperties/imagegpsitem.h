@@ -34,9 +34,43 @@
 
 #include <libkmap/kmap.h>
 
-// local includes
+// TODO: move this somewhere central, because it is defined multiple times now
+#include "digikam_export.h"
+#include <QDateTime>
+namespace Digikam
+{
 
-#include "worldmapwidget.h"
+class DIGIKAM_EXPORT GPSInfo
+{
+public:
+
+    GPSInfo()
+    : latitude(0.0),
+      longitude(0.0),
+      altitude(0.0),
+      dateTime(),
+      rating(0),
+      url(),
+      id(-1),
+      dimensions()
+    {
+    };
+
+    double    latitude;
+    double    longitude;
+    double    altitude;
+
+    QDateTime dateTime;
+    int       rating;
+    KUrl      url;
+    qlonglong id;
+    QSize     dimensions;
+};
+
+typedef QList<GPSInfo> GPSInfoList;
+
+}
+Q_DECLARE_METATYPE(Digikam::GPSInfo)
 
 namespace Digikam
 {

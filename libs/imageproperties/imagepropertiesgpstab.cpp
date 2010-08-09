@@ -82,15 +82,6 @@ public:
         latitude     = 0;
         longitude    = 0;
         date         = 0;
-      /*zoomInBtn    = 0;
-        zoomOutBtn   = 0;
-        mapThemeBtn  = 0;
-#ifdef HAVE_MARBLEWIDGET
-#if MARBLE_VERSION >= 0x000800
-        panBtn       = 0;
-        clusterZoomBtn = 0;
-#endif // MARBLE_VERSION >= 0x000800
-#endif // HAVE_MARBLEWIDGET*/
     }
 
     QLabel                     *altLabel;
@@ -109,7 +100,6 @@ public:
     KMapIface::KMap            *map;
     KMapIface::ItemMarkerTiler *itemMarkerTiler;
     GPSInfoList                gpsInfoList;
-    WorldMapThemeBtn           *mapThemeBtn;
 
     QStandardItemModel         *itemModel;
     ImageGPSModelHelper        *gpsModelHelper;
