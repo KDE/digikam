@@ -521,8 +521,8 @@ QList<ImageInfo> ImageInfo::ancestorImages() const
     return ImageInfoList(DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
 }
 
-static QList<QPair<ImageInfo, int> > buildTree(QList<QPair<qlonglong, qlonglong> >& list, qlonglong origin,
-                                               QList<QPair<ImageInfo, int> >& list1, int& level, int& maxLevel)
+static QList<QPair<qlonglong, int> > buildTree(QList<QPair<qlonglong, qlonglong> >& list, qlonglong origin,
+                                               QList<QPair<qlonglong, int> >& list1, int& level, int& maxLevel)
 {
     if(level == 0)
         list1.clear();
@@ -531,14 +531,14 @@ static QList<QPair<ImageInfo, int> > buildTree(QList<QPair<qlonglong, qlonglong>
     bool alreadyInList = false;
     for(int i = 0; i <= maxLevel; i++)
     {
-        if(list1.contains(qMakePair(ImageInfo(origin), i)))
+        if(list1.contains(qMakePair(origin, i)))
         {
             alreadyInList = true;
             break;
         }
     }
     if(!alreadyInList)
-        list1.append(qMakePair(ImageInfo(origin), level));
+        list1.append(qMakePair(origin, level));
 
     for(int i = 0; i < list.size(); i++)
     {
@@ -554,9 +554,9 @@ static QList<QPair<ImageInfo, int> > buildTree(QList<QPair<qlonglong, qlonglong>
     return list1;
 }
 
-QList<QPair<ImageInfo, int> > ImageInfo::allAvailableVersions() const
+QList<QPair<qlonglong, int> > ImageInfo::allAvailableVersions() const
 {
-    QList<QPair<ImageInfo, int> > list;
+    QList<QPair<qlonglong, int> > list;
 
     QList<QPair<qlonglong, qlonglong> > l = DatabaseAccess().db()->getRelationCloud(id(),
                                                                                     DatabaseRelation::DerivedFrom);
@@ -568,7 +568,7 @@ QList<QPair<ImageInfo, int> > ImageInfo::allAvailableVersions() const
         kDebug() << a << "is derived from" << b;
     }
 
-    QList<QPair<ImageInfo, int> > list1;
+    QList<QPair<qlonglong, int> > list1;
     int level = 0;
     int maxLevel = 0;
 

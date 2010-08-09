@@ -67,7 +67,7 @@ public:
 
     VersionsWidget*                 versionsWidget;
     FiltersHistoryWidget*           filtersHistoryWidget;
-    QList<QPair<ImageInfo, int> >*  versionsList;
+    QList<QPair<qlonglong, int> >*  versionsList;
     QString                         currentSelectedImage;
     int                             currentSelectedImageListPosition;
     
@@ -76,7 +76,7 @@ public:
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
                           : KTabWidget(parent), d(new ImagePropertiesVersionsTabPriv)
 {
-    d->versionsList = new QList<QPair<ImageInfo, int> >;
+    d->versionsList = new QList<QPair<qlonglong, int> >;
     
     d->versionsWidget = new VersionsWidget(this);
     insertTab(0, d->versionsWidget, i18n("Versions"));
@@ -118,20 +118,21 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
     {
         d->currentSelectedImage = inf.fileUrl().path();
 
-        if(hasImage(inf))
+        if(hasImage(inf.id()))
         {
             break;
         }
 
-        QList<QPair<ImageInfo, int> > infoList = inf.allAvailableVersions();
+        QList<QPair<qlonglong, int> > infoList = inf.allAvailableVersions();
         if(infoList.isEmpty())
         {
-            d->versionsList->append(qMakePair(inf,0));
+            d->versionsList->append(qMakePair(inf.id(), 0));
+            d->currentSelectedImageListPosition = 0;
         }
         else
         {
             d->versionsList->append(infoList);
-            d->currentSelectedImageListPosition = findImagePositionInList(inf);
+            d->currentSelectedImageListPosition = findImagePositionInList(inf.id());
         }
     }
 
@@ -139,21 +140,21 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
     setupFiltersData();
 }
 
-int ImagePropertiesVersionsTab::findImagePositionInList(Digikam::ImageInfo& info) const
+int ImagePropertiesVersionsTab::findImagePositionInList(qlonglong id) const
 {
     for(int i = 0; i < d->versionsList->size(); i++)
     {
-        if(d->versionsList->at(i).first == info)
+        if(d->versionsList->at(i).first == id)
             return i;
     }
     return -1;
 }
 
-bool ImagePropertiesVersionsTab::hasImage(ImageInfo& info) const
+bool ImagePropertiesVersionsTab::hasImage(qlonglong id) const
 {
     for(int i = 0; i < d->versionsList->size(); i++)
     {
-        if(d->versionsList->at(i).first == info)
+        if(d->versionsList->at(i).first == id)
             return true;
     }
     return false;
@@ -186,7 +187,7 @@ void ImagePropertiesVersionsTab::setupVersionsData() const
         QList<QPair<QString, int> > l;
         for(int i = 0; i < d->versionsList->size(); i++)
         {
-            l.append(qMakePair(d->versionsList->at(i).first.fileUrl().path(), d->versionsList->at(i).second));
+            l.append(qMakePair(ImageInfo(d->versionsList->at(i).first).fileUrl().path(), d->versionsList->at(i).second));
         }
 
         d->versionsWidget->setupModelData(l);
@@ -197,34 +198,61 @@ void ImagePropertiesVersionsTab::setupVersionsData() const
 void ImagePropertiesVersionsTab::setupFiltersData() const
 {
     if(!d->versionsList->isEmpty() && d->currentSelectedImageListPosition > -1 && d->currentSelectedImageListPosition < d->versionsList->size())
-        d->filtersHistoryWidget->setModelData(d->versionsList->at(d->currentSelectedImageListPosition).first.imageHistory().entries());
+        d->filtersHistoryWidget->setModelData(ImageInfo(d->versionsList->at(d->currentSelectedImageListPosition).first).imageHistory().entries());
 }
 
 void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
 {
-    ImageInfo current;
-    ImageInfo newOne;
+    qlonglong current;
+    qlonglong newOne;
     for(int i = 0; i < d->versionsList->size(); i++)
     {
-        if(d->versionsList->at(i).first.fileUrl() == url)
+        if(ImageInfo(d->versionsList->at(i).first).fileUrl() == url)
         {
             newOne = d->versionsList->at(i).first;
             d->currentSelectedImageListPosition = i;
         }
-        else if(d->versionsList->at(i).first.fileUrl() == d->currentSelectedImage)
+        else if(ImageInfo(d->versionsList->at(i).first).fileUrl() == d->currentSelectedImage)
         {
             current = d->versionsList->at(i).first;
         }
     }
-    current.setVisible(false);
-    newOne.setVisible(true);
+    ImageInfo(current).setVisible(false);
+    ImageInfo(newOne).setVisible(true);
 
     d->currentSelectedImage = url.path();
 
     setupFiltersData();
-    
-    emit setCurrentUrlSignal(url);
+
     emit updateMainViewSignal();
+    emit setCurrentUrlSignal(url);
+}
+
+void ImagePropertiesVersionsTab::slotUpdateImageInfo(const ImageInfo& info)
+{
+    QString path;
+
+    kDebug() << "Getting data for versions model";
+    d->versionsList->clear();
+
+    d->currentSelectedImage = info.fileUrl().path();
+
+    if(!hasImage(info.id()))
+    {
+        QList<QPair<qlonglong, int> > infoList = info.allAvailableVersions();
+        if(infoList.isEmpty())
+        {
+            d->versionsList->append(qMakePair(info.id(),0));
+        }
+        else
+        {
+            d->versionsList->append(infoList);
+            d->currentSelectedImageListPosition = findImagePositionInList(info.id());
+        }
+
+        setupVersionsData();
+        setupFiltersData();
+    }
 }
 
 } // namespace Digikam

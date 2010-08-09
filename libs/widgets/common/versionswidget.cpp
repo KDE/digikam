@@ -116,7 +116,7 @@ VersionsWidget::VersionsWidget(QWidget* parent)
             d->model, SLOT(setPaintTree(bool)));
 
     connect(d->treeSwitchButton, SIGNAL(pressed()),
-            d->view, SLOT(repaint()));
+            d->view, SLOT(update()));
 }
 
 VersionsWidget::~VersionsWidget()

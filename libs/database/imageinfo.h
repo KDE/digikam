@@ -272,7 +272,7 @@ public:
 
     /**
      */
-    QList<QPair<ImageInfo, int> > allAvailableVersions() const;
+    QList< QPair< qlonglong, int > > allAvailableVersions() const;
 
     /**
      * Add a relation to the database:

@@ -209,11 +209,18 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
                                               ImageFiltersHistoryTreeItem* parent)
 {
     beginResetModel();
-    if(!parent)
+
+    if(!parent || entries.isEmpty())
     {
         delete d->rootItem;
         d->rootItem = new ImageFiltersHistoryTreeItem(d->lastUrl.fileName());
         parent = d->rootItem;
+        
+        if(entries.isEmpty())
+        {
+            endResetModel();
+            return;
+        }
     }
 
     kDebug() << "Initializing model data, got" << entries.count() << "entries";

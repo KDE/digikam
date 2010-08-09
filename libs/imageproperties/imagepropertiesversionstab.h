@@ -58,8 +58,8 @@ public:
     ~ImagePropertiesVersionsTab();
     void setupVersionsData() const;
     void setupFiltersData() const;
-    int findImagePositionInList(ImageInfo& info) const;
-    bool hasImage(ImageInfo& info) const;
+    int findImagePositionInList(qlonglong id) const;
+    bool hasImage(qlonglong id) const;
 //    void setCurrentURL(const KUrl& url = KUrl());
 //     void setImageHistory(const DImageHistory& history);
 
@@ -68,6 +68,7 @@ public Q_SLOTS:
     //versions tab slots
     void slotDigikamViewNoCurrentItem();
     void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages) const;
+    void slotUpdateImageInfo(const ImageInfo& info);
     void slotViewItemSelected(QModelIndex index);
     void slotNewVersionSelected(KUrl url);
 
