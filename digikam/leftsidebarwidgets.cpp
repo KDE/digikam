@@ -1107,7 +1107,6 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
     
-    
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewPeopleSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(d->tagFolderView->filteredModel(),
@@ -1161,22 +1160,7 @@ void PeopleSideBarWidget::slotInit()
 
 void PeopleSideBarWidget::setActive(bool active)
 {
-    if (active)
-    {
-        
-        kDebug()<<"Here";
-        
-        SearchXmlWriter writer;
-        writer.writeGroup();
-        writer.writeField("imagetagproperty", SearchXml::Equal);
-        writer.writeValue(QStringList() << "face" << "Unknown");
-        writer.finishField();
-        writer.finishGroup();
-        SAlbum* salbum = AlbumManager::instance()->createSAlbum("face",
-                    DatabaseSearch::UnknownFaceSearch, writer.xml());
-        // search types defined in albuminfo.h. Can be a better name.
-        AlbumManager::instance()->setCurrentAlbum(salbum);
-    }
+    d->tagFolderView->expandAll();
 }
 
 void PeopleSideBarWidget::doLoadState()

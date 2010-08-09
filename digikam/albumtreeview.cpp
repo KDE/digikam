@@ -1183,7 +1183,10 @@ TagTreeView::TagTreeView(TagModel *model, QWidget *parent, bool people)
         
     if(people)
     {
-        m_filteredModel->listOnlyTagsWithProperty("person");
+        SearchTextSettings s;
+        s.text = "People";
+        m_filteredModel->setSearchTextSettings(s);
+//         m_filteredModel->listOnlyTagsWithProperty("person");
     }
         
     
