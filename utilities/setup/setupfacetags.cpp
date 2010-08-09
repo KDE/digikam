@@ -69,6 +69,11 @@ public:
     QCheckBox*    enableFaceSuggestions;
     QSlider*      detectionAccuracySlider;
     QSlider*      suggestionThresholdSlider;
+    
+    QLabel*       detectionCBLabel;
+    QLabel*       suggestionCBLabel;
+    QLabel*       detectionSliderLabel;
+    QLabel*       suggestionSliderLabel;
 };
 
 SetupFaceTags::SetupFaceTags(QWidget* parent): QScrollArea(parent), d(new SetupFaceTagsPriv)
@@ -79,39 +84,70 @@ SetupFaceTags::SetupFaceTags(QWidget* parent): QScrollArea(parent), d(new SetupF
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
 
+    d->detectionSliderLabel = new QLabel;
+    d->detectionSliderLabel->setTextFormat(Qt::PlainText);
+    d->detectionSliderLabel->setText(i18n("The accuracy of face detection.\n"
+                                             "If you have a weak computer, it is a good idea to choose a lower value.\n"
+                                             "Choosing a higher value will increase the accuracy of face detection,\n"
+                                             "but will be slow.\n"));
+    
     d->detectionAccuracySlider = new QSlider(Qt::Horizontal, panel);
+    d->detectionAccuracySlider->setRange(1, 5);
+    d->detectionAccuracySlider->setTickInterval(1);
+    d->detectionAccuracySlider->setPageStep(1);
+    d->detectionAccuracySlider->setTickPosition(QSlider::TicksBelow);
+    
+    d->suggestionSliderLabel = new QLabel;
+    d->suggestionSliderLabel->setTextFormat(Qt::PlainText);
+    d->suggestionSliderLabel->setText(i18n("The threshold of face suggestions.\n"
+                                             "More suggestion threshold means that lesser suggestions will be presented,\n"
+                                             "however these will be more accurate.\n"));
+    
     d->suggestionThresholdSlider = new QSlider(Qt::Horizontal, panel);
-    d->detectionAccuracySlider->setWhatsThis( i18n("The accuracy of face detection."
-                                             "If you have a weak computer, it is a good idea to choose a lower value."
-                                             "Choosing a higher value will increase the accuracy of face detection,"
-                                             "but will be slow."));
+    d->suggestionThresholdSlider->setRange(1, 10);
+    d->suggestionThresholdSlider->setTickInterval(0.1);
+    d->suggestionThresholdSlider->setPageStep(0.1);
+    d->suggestionThresholdSlider->setTickPosition(QSlider::TicksBelow);
     
+    
+    d->detectionCBLabel = new QLabel;
+    d->detectionCBLabel->setTextFormat(Qt::PlainText);
+    d->detectionCBLabel->setText(i18n("If this option is enabled, digiKam will search for faces in your images,\n"
+                                               "thus making it easier to tag people in your photographs.\n"));
     d->enableFaceDetection = new QCheckBox(i18n("Enable face detection"), panel);
-    d->enableFaceDetection->setWhatsThis( i18n("If this option is enabled, digiKam will search for faces in your images,"
-                                               "thus making it easier to tag people in your photographs."));
-
-    d->enableFaceSuggestions = new QCheckBox(i18n("Enable face suggestion"), panel);
-    d->enableFaceSuggestions->setWhatsThis( i18n("If this option is enabled, digiKam will try to identify detected faces,"
-                                                 "and present you with suggestions of similar faces,"
-                                                 "thus making person tagging even faster."));
-
     
+    
+    d->suggestionCBLabel = new QLabel;
+    d->suggestionCBLabel->setTextFormat(Qt::PlainText);
+    d->suggestionCBLabel->setText(i18n("If this option is enabled, digiKam will try to identify detected faces,\n"
+                                                 "and present you with suggestions of similar faces,\n"
+                                                 "thus making person tagging even faster.\n"));
+    d->enableFaceSuggestions = new QCheckBox(i18n("Enable face suggestion"), panel);
+
+    layout->addWidget(d->detectionCBLabel);
     layout->addWidget(d->enableFaceDetection);
+    layout->addSpacing(20);
+    layout->addWidget(d->detectionSliderLabel);
     layout->addWidget(d->detectionAccuracySlider);
+    layout->addSpacing(20);
+    layout->addWidget(d->suggestionCBLabel);
     layout->addWidget(d->enableFaceSuggestions);
+    layout->addSpacing(20);
+    layout->addWidget(d->suggestionSliderLabel);
     layout->addWidget(d->suggestionThresholdSlider);
     
     layout->addStretch();
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
 
-    readSettings();
     
     connect(d->enableFaceDetection, SIGNAL(stateChanged(int)),
             this, SLOT(updateDetection(int)) );
     
     connect(d->enableFaceSuggestions, SIGNAL(stateChanged(int)),
             this, SLOT(updateSuggestion(int)) );
+    
+    readSettings();
     
     // --------------------------------------------------------
 
@@ -133,6 +169,10 @@ void SetupFaceTags::updateDetection(int value)
         d->enableFaceSuggestions->setCheckState(Qt::Unchecked);
         d->enableFaceSuggestions->setEnabled(false);
         d->suggestionThresholdSlider->setEnabled(false);
+        
+        d->detectionSliderLabel->setEnabled(false);
+        d->suggestionCBLabel->setEnabled(false);
+        d->suggestionSliderLabel->setEnabled(false);
     }
     
     else
@@ -141,15 +181,25 @@ void SetupFaceTags::updateDetection(int value)
         d->enableFaceSuggestions->setCheckState(Qt::Checked);
         d->enableFaceSuggestions->setEnabled(true);
         d->suggestionThresholdSlider->setEnabled(true);
+        
+        d->detectionSliderLabel->setEnabled(true);
+        d->suggestionCBLabel->setEnabled(true);
+        d->suggestionSliderLabel->setEnabled(true);
     }
 }
 
 void SetupFaceTags::updateSuggestion(int value)
 {
     if(!d->enableFaceSuggestions->isChecked())
+    {
         d->suggestionThresholdSlider->setEnabled(false);
+        d->suggestionSliderLabel->setEnabled(false);
+    }
     else
+    {
         d->suggestionThresholdSlider->setEnabled(true);
+        d->suggestionSliderLabel->setEnabled(true);
+    }
 }
 
 
