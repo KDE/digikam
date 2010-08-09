@@ -603,6 +603,7 @@ void ResizeTool::putFinalData()
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginalImage(i18n("Resize"),
+                            filter()->filterAction(),
                             targetImage.bits(),
                             targetImage.width(), targetImage.height());
 }

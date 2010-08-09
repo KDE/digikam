@@ -5,6 +5,7 @@
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -247,5 +248,29 @@ void LensFunFilter::filterImage()
     delete [] pos;
     d->modifier->Destroy();
 }
+
+FilterAction LensFunFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("filterCCA", d->iface->m_settings.filterCCA);
+    action.addParameter("filterCCI", d->iface->m_settings.filterCCI;
+    action.addParameter("filterDist", d->iface->m_settings.filterDist);
+    action.addParameter("filterGeom", d->iface->m_settings.filterGeom);
+    action.addParameter("filterVig", d->iface->m_settings.filterVig);
+
+    return action;
+}
+
+void LensFunFilter::readParameters(const Digikam::FilterAction& action)
+{
+    d->iface->m_settings.filterCCA = action.parameter("filterCCA").toBool();
+    d->iface->m_settings.filterCCI = action.parameter("filterCCI").toBool();
+    d->iface->m_settings.filterDist = action.parameter("filterDist").toBool();
+    d->iface->m_settings.filterGeom = action.parameter("filterGeom").toBool();
+    d->iface->m_settings.filterVig = action.parameter("filterVig").toBool();
+}
+
 
 }  // namespace Digikam

@@ -9,6 +9,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Marco Rossini <marco dot rossini at gmx dot net>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -506,6 +507,29 @@ void NRFilter::srgb2lab(float** fimg, int size)
 
         if (fimg[0][i] < 0)
             fimg[0][i] = 0;
+    }
+}
+
+FilterAction NRFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    for(int i = 0; i < 3; i++)
+    {
+        action.addParameter(QString("softness[%1]").arg(i), d->settings.softness[i]);
+        action.addParameter(QString("thresholds[%1]").arg(i), d->settings.thresholds[i]);
+    }
+
+    return action;
+}
+
+void NRFilter::readParameters(const Digikam::FilterAction& action)
+{
+    for(int i = 0; i < 3; i++)
+    {
+        d->settings.softness[i] =  action.parameter(QString("softness[%1]").arg(i)).toDouble();
+        d->settings.thresholds[i] =  action.parameter(QString("thresholds[%1]").arg(i)).toDouble();
     }
 }
 

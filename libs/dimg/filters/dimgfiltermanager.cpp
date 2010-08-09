@@ -85,31 +85,45 @@ void DImgFilterManagerPriv::setupBuiltinGenerators()
 void DImgFilterManagerPriv::setupFilterIcons()
 {
     //Please keep this list sorted alphabetically
-    filterIcons.insert("digikam:autoExpoFilter",     "autocorrection");
-    filterIcons.insert("digikam:autolevelsfilter",   "autocorrection");
-    filterIcons.insert("digikam:BCGFilter",          "contrast");
-    filterIcons.insert("digikam:BlurFilter",         "blurimage");
-    filterIcons.insert("digikam:BlurFXFilter",       "blurfx");
-    filterIcons.insert("digikam:BorderFilter",       "bordertool");
-    filterIcons.insert("digikam:BWSepiaFilter",      "bwtonal");
-    filterIcons.insert("digikam:CBFilter",           "adjustrgb");
-    filterIcons.insert("digikam:CharcoalFilter",     "charcoaltool");
-    filterIcons.insert("digikam:CurvesFilter",       "adjustcurves");
-    filterIcons.insert("digikam:DistortionFXFilter", "distortionfx");
-    filterIcons.insert("digikam:EmbossFilter",       "embosstool");
-    filterIcons.insert("digikam:equalizeFilter",     "autocorrection");
-    filterIcons.insert("digikam:FilmGrainFilter",    "filmgrain");
-    filterIcons.insert("digikam:InfraredFilter",     "unknownapp");         //FIXME
-    filterIcons.insert("digikam:InvertFilter",       "invertimage");
-    filterIcons.insert("digikam:MixerFilter",        "channelmixer");
-    filterIcons.insert("digikam:normalizeFilter",    "autocorrection");
-    filterIcons.insert("digikam:OilPaintFilter",     "oilpaint");
-    filterIcons.insert("digikam:PixlesAliasFilter",  "unknownapp");      //FIXME
-    filterIcons.insert("digikam:RainDropFilter",     "raindrop");
-    filterIcons.insert("digikam:stretchFilter",      "autocorrection");
-    filterIcons.insert("digikam:TextureFilter",      "texture");
-    filterIcons.insert("digikam:TonalityFilter",     "tonemap");
-    filterIcons.insert("digikam:whiteBalance",       "whitebalance");
+    filterIcons.insert("digikam:AntiVignettingFilter", "antivignetting");
+    filterIcons.insert("digikam:autoExpoFilter",       "autocorrection");
+    filterIcons.insert("digikam:autolevelsfilter",     "autocorrection");
+    filterIcons.insert("digikam:BCGFilter",            "contrast");
+    filterIcons.insert("digikam:BlurFilter",           "blurimage");
+    filterIcons.insert("digikam:BlurFXFilter",         "blurfx");
+    filterIcons.insert("digikam:BorderFilter",         "bordertool");
+    filterIcons.insert("digikam:BWSepiaFilter",        "bwtonal");
+    filterIcons.insert("digikam:CBFilter",             "adjustrgb");
+    filterIcons.insert("digikam:CharcoalFilter",       "charcoaltool");
+    filterIcons.insert("digikam:ContentAwareFilter",   "unknownapp");         //FIXME
+    filterIcons.insert("digikam:CurvesFilter",         "adjustcurves");
+    filterIcons.insert("digikam:DistortionFXFilter",   "distortionfx");
+    filterIcons.insert("digikam:EmbossFilter",         "embosstool");
+    filterIcons.insert("digikam:equalizeFilter",       "autocorrection");
+    filterIcons.insert("digikam:FilmGrainFilter",      "filmgrain");
+    filterIcons.insert("digikam:FreeRotationFilter",   "freerotation");
+    filterIcons.insert("digikam:GreycstorationFilter", "unknownapp");         //FIXME
+    filterIcons.insert("digikam:HSLFIlter",            "adjusthsl");
+    filterIcons.insert("digikam:InfraredFilter",       "unknownapp");         //FIXME
+    filterIcons.insert("digikam:InvertFilter",         "invertimage");
+    filterIcons.insert("digikam:LensDistortionFilter", "lensdistortion");
+    filterIcons.insert("digikam:LensFunFilter",        "unknownapp");         //FIXME
+    filterIcons.insert("digikam:LevelsFilter",         "adjustlevels");
+    filterIcons.insert("digikam:LocalContrastFilter",  "constrast");          //FIXME?
+    filterIcons.insert("digikam:MixerFilter",          "channelmixer");
+    filterIcons.insert("digikam:NRFilter",             "noisereduction");
+    filterIcons.insert("digikam:normalizeFilter",      "autocorrection");
+    filterIcons.insert("digikam:OilPaintFilter",       "oilpaint");
+    filterIcons.insert("digikam:PixlesAliasFilter",    "unknownapp");         //FIXME
+    filterIcons.insert("digikam:RainDropFilter",       "raindrop");
+    filterIcons.insert("digikam:RefocusFilter",        "sharpenimage");
+    filterIcons.insert("digikam:SharpenFilter",        "sharpenimage");
+    filterIcons.insert("digikam:ShearFilter",          "shear");
+    filterIcons.insert("digikam:stretchFilter",        "autocorrection");
+    filterIcons.insert("digikam:TextureFilter",        "texture");
+    filterIcons.insert("digikam:TonalityFilter",       "tonemap");
+    filterIcons.insert("digikam:UnsharpMaskFilter",    "sharpenimage");
+    filterIcons.insert("digikam:whiteBalance",         "whitebalance");
 }
 
 class DImgFilterManagerCreator

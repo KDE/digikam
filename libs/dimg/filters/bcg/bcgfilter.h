@@ -81,6 +81,7 @@ public:
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
+
 private:
 
     void filterImage();

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
  * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -257,6 +258,34 @@ void ContentAwareFilter::buildBias(const QImage& mask)
             lqr_carver_bias_add_xy(d->carver,bias, x, y);
         }
     }
+}
+
+FilterAction ContentAwareFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+    
+    action.addParameter("height", d->settings.height);
+    action.addParameter("preserve_skin_tones", d->settings.preserve_skin_tones);
+    action.addParameter("rigidity", d->settings.rigidity);
+    action.addParameter("side_switch_freq", d->settings.side_switch_freq);
+    action.addParameter("step", d->settings.step);
+    action.addParameter("width", d->settings.width);
+    //TODO:
+//    action.addParameter("func", d->settings.func);
+//    action.addParameter("resize_order", d->settings.resize_order);
+
+    return action;
+}
+
+void ContentAwareFilter::readParameters(const FilterAction& action)
+{
+    d->settings.height = action.parameter("height").toUInt();
+    d->settings.preserve_skin_tones = action.parameter("preserve_skin_tones").toBool();
+    d->settings.rigidity = action.parameter("rigidity").toDouble();
+    d->settings.side_switch_freq = action.parameter("side_switch_freq").toInt();
+    d->settings.step = action.parameter("step").toInt();
+    d->settings.width = action.parameter("width").toUInt();
 }
 
 // ------------------------------------------------------------------------------------

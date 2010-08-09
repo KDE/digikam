@@ -260,7 +260,7 @@ void ProfileConversionTool::putFinalData()
     ImageIface iface(0, 0);
     DImg imDest = filter()->getTargetImage();
 
-    iface.putOriginalImage(i18n("Color Profile Conversion"), imDest.bits());
+    iface.putOriginalImage(i18n("Color Profile Conversion"), filter()->filterAction(), imDest.bits());
     iface.putOriginalIccProfile(imDest.getIccProfile());
 }
 

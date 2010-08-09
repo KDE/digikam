@@ -249,7 +249,7 @@ void LensAutoFixTool::putPreviewData()
 void LensAutoFixTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Lens Auto-Correction"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void LensAutoFixTool::renderingFinished()

@@ -10,6 +10,7 @@
  * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
  * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -612,5 +613,37 @@ void LocalContrastFilter::hsv2rgb(const float& h, const float& s, const float& v
             break;
     }
 }
+
+FilterAction LocalContrastFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("function_id", d->par.function_id);
+    action.addParameter("high_saturation", d->par.high_saturation);
+    action.addParameter("low_saturation", d->par.low_saturation);
+    //TODO: Is this whole array needed? action.addParameter("stage", d->par.stage);
+    action.addParameter("stretch_contrast", d->par.stretch_contrast);
+    action.addParameter("unsharp_mask:blur", d->par.unsharp_mask.blur);
+    action.addParameter("unsharp_mask:enabled", d->par.unsharp_mask.enabled);
+    action.addParameter("unsharp_mask:power", d->par.unsharp_mask.power);
+    action.addParameter("unsharp_mask:threshold", d->par.unsharp_mask.threshold);
+
+    return action;
+}
+
+void LocalContrastFilter::readParameters(const Digikam::FilterAction& action)
+{
+    d->par.function_id = action.parameter("function_id").toInt();
+    d->par.high_saturation = action.parameter("high_saturation").toInt();
+    d->par.low_saturation = action.parameter("low_saturation").toInt();
+    //d->par.stage = action.parameter("stage").toInt();
+    d->par.stretch_contrast = action.parameter("stretch_contrast").toBool();
+    d->par.unsharp_mask.blur = action.parameter("unsharp_mask:blur").toFloat();
+    d->par.unsharp_mask.enabled = action.parameter("unsharp_mask:enabled").toBool();
+    d->par.unsharp_mask.power = action.parameter("unsharp_mask:power").toFloat();
+    d->par.unsharp_mask.threshold = action.parameter("unsharp_mask:threshold").toInt();
+}
+
 
 } // namespace Digikam

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Sharpen algorithm copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -130,6 +131,25 @@ void UnsharpMaskFilter::filterImage()
         if ( progress%5 == 0 )
            postProgress( progress );
     }
+}
+
+FilterAction UnsharpMaskFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("amount", m_amount);
+    action.addParameter("radius", m_radius);
+    action.addParameter("threshold", m_threshold);
+
+    return action;
+}
+
+void UnsharpMaskFilter::readParameters(const FilterAction& action)
+{
+    m_amount = action.parameter("amount").toDouble();
+    m_radius = action.parameter("radius").toInt();
+    m_threshold = action.parameter("threshold").toDouble();
 }
 
 } // namespace Digikam

@@ -331,7 +331,7 @@ void LensDistortionTool::putPreviewData()
 void LensDistortionTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Lens Distortion"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Lens Distortion"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void LensDistortionTool::renderingFinished()
