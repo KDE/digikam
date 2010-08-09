@@ -59,6 +59,7 @@
 #include "setuptooltip.h"
 #include "setupdatabase.h"
 #include "setupscriptmanager.h"
+#include "setupfacetags.h"
 
 namespace Digikam
 {
@@ -86,8 +87,9 @@ public:
         page_plugins       = 0;
         page_camera        = 0;
         page_scriptmanager = 0;
+        page_facetags      = 0;
         page_misc          = 0;
-
+        
         databasePage      = 0;
         collectionsPage   = 0;
         albumViewPage     = 0;
@@ -105,6 +107,7 @@ public:
         cameraPage        = 0;
         pluginsPage       = 0;
         scriptManagerPage = 0;
+        faceTagsPage      = 0;
         miscPage          = 0;
     }
 
@@ -126,7 +129,8 @@ public:
     KPageWidgetItem*    page_camera;
     KPageWidgetItem*    page_misc;
     KPageWidgetItem*    page_scriptmanager;
-
+    KPageWidgetItem*    page_facetags;
+    
     SetupDatabase*      databasePage;
     SetupCollections*   collectionsPage;
     SetupAlbumView*     albumViewPage;
@@ -145,6 +149,7 @@ public:
     SetupMisc*          miscPage;
     SetupPlugins*       pluginsPage;
     SetupScriptManager* scriptManagerPage;
+    SetupFaceTags*      faceTagsPage;
 
 public:
 
@@ -191,6 +196,13 @@ Setup::Setup(QWidget* parent)
                                     "<i>Customize information in tool-tips</i></qt>"));
     d->page_tooltip->setIcon(KIcon("dialog-information"));
 
+    
+    d->faceTagsPage  = new SetupFaceTags();
+    d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
+    d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
+                                          "<i>Configure digiKam's face detection and recognition</i></qt>"));
+    d->page_facetags->setIcon(KIcon("user-identity"));
+    
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
@@ -413,7 +425,8 @@ void Setup::slotOkClicked()
     d->miscPage->applySettings();
     d->pluginsPage->applyPlugins();
 //     d->scriptManagerPage->applySettings();
-
+    d->faceTagsPage->applySettings();
+    
     AlbumSettings::instance()->emitSetupChanged();
 
     kapp->restoreOverrideCursor();
@@ -476,6 +489,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_plugins)       return KipiPluginsPage;
     if (cur == d->page_camera)        return CameraPage;
     if (cur == d->page_scriptmanager) return ScriptManagerPage;
+    if (cur == d->page_facetags)      return FaceTagsPage;
     if (cur == d->page_misc)          return MiscellaneousPage;
 
     return DatabasePage;
@@ -519,6 +533,8 @@ KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page) const
             return page_camera;
         case Setup::ScriptManagerPage:
             return page_scriptmanager;
+        case Setup::FaceTagsPage:
+            return page_facetags;
         case Setup::MiscellaneousPage:
             return page_misc;
         default:

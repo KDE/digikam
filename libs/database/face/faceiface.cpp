@@ -368,7 +368,7 @@ int FaceIface::setName ( qlonglong imageid, const QRect& rect, const QString& na
     pairNamed.addProperty("faceRegion", rectToString(rect));
     pairNamed.addProperty("face", name);
     pairNamed.assignTag();
-    
+   
     d->tagProps = new TagProperties(nameTagId);
     d->tagProps->setProperty("person", name);
     

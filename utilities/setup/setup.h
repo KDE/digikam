@@ -54,6 +54,7 @@ public:
         AlbumViewPage,
         CategoryPage,
         ToolTipPage,
+        FaceTagsPage,
         MetadataPage,
         TemplatePage,
         MimePage,
