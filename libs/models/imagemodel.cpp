@@ -85,7 +85,6 @@ class ImageModelIncrementalUpdater
 {
 public:
     ImageModelIncrementalUpdater(ImageModelPriv *d);
-    void appendInfos(const QList<ImageInfo>& infos);
     void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     QList<QPair<int,int> > oldIndexes() const;
 
@@ -534,45 +533,45 @@ ImageModelIncrementalUpdater::ImageModelIncrementalUpdater(ImageModelPriv *d)
     oldExtraValues = d->extraValues;
 }
 
-void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos)
-{
-    Q_ASSERT(d->extraValues.isEmpty());
-    foreach (const ImageInfo &info, infos)
-    {
-        QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
-        if (it != oldIds.end())
-            oldIds.erase(it);
-        else
-            newInfos << info;
-    }
-}
-
 void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
 {
-    Q_ASSERT(info.size() == extraValues.size());
-    for (int i=0; i<infos.size(); i++)
+    if (extraValues.isEmpty())
     {
-        const ImageInfo& info = infos[i];
-        QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
-        bool found;
-        while (it != oldIds.end() && it.key() == info.id())
+        foreach (const ImageInfo &info, infos)
         {
-            if (extraValues[i] == oldExtraValues[it.value()])
+            QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
+            if (it != oldIds.end())
+                oldIds.erase(it);
+            else
+                newInfos << info;
+        }
+    }
+    else
+    {
+        for (int i=0; i<infos.size(); i++)
+        {
+            const ImageInfo& info = infos[i];
+            QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
+            bool found;
+            while (it != oldIds.end() && it.key() == info.id())
             {
-                found = true;
-                break;
+                if (extraValues[i] == oldExtraValues[it.value()])
+                {
+                    found = true;
+                    break;
+                }
             }
-        }
 
-        if (found)
-        {
-            oldIds.erase(it);
-            // dont erase from oldExtraValues - oldIds is a hash id -> index.
-        }
-        else
-        {
-            newInfos << info;
-            newExtraValues << extraValues[i];
+            if (found)
+            {
+                oldIds.erase(it);
+                // dont erase from oldExtraValues - oldIds is a hash id -> index.
+            }
+            else
+            {
+                newInfos << info;
+                newExtraValues << extraValues[i];
+            }
         }
     }
 }
