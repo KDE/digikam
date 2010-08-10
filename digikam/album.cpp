@@ -36,6 +36,7 @@
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -496,6 +497,11 @@ QString TAlbum::icon() const
     return m_icon;
 }
 
+bool TAlbum::isInternalTag() const
+{
+    return m_properties.contains(TagsCache::instance()->propertyNameDigikamInternalTag());
+}
+
 bool TAlbum::hasProperty(const QString& key) const
 {
     return m_properties.contains(key);
@@ -629,6 +635,16 @@ bool SAlbum::isMapSearch() const
 bool SAlbum::isDuplicatesSearch() const
 {
     return m_searchType == DatabaseSearch::DuplicatesSearch;
+}
+
+bool SAlbum::isFaceSearch() const
+{
+    return m_searchType == DatabaseSearch::FaceSearch;
+}
+
+bool SAlbum::isUnknownFaceSearch() const
+{
+    return m_searchType == DatabaseSearch::UnknownFaceSearch;
 }
 
 bool SAlbum::isTemporarySearch() const

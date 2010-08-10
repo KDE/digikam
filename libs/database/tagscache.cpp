@@ -40,6 +40,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
+#include "tagproperties.h"
 
 
 namespace Digikam
@@ -65,10 +66,14 @@ public:
     bool                     initialized;
     bool                     needUpdateInfos;
     bool                     needUpdateHash;
+    bool                     needUpdateProperties;
     bool                     changingDB;
     QReadWriteLock           lock;
     QList<TagShortInfo>      infos;
     QMultiHash<QString, int> nameHash;
+
+    QSet<int>                internalTags;
+    QSet<int>                doNotWriteTags;
 
     void checkInfos()
     {
@@ -92,6 +97,20 @@ public:
             {
                 nameHash.insert(info.name, info.id);
             }
+            needUpdateHash = false;
+        }
+    }
+
+    void checkProperties()
+    {
+        if (needUpdateProperties && initialized)
+        {
+            QWriteLocker locker(&lock);
+            internalTags = QSet<int>::fromList(
+                DatabaseAccess().db()->getTagsWithProperty(TagsCache::propertyNameDigikamInternalTag()));
+            // we could also employ a positive list, if needed
+            doNotWriteTags = QSet<int>::fromList(
+                DatabaseAccess().db()->getTagsWithProperty(TagsCache::propertyNameExcludedFromWriting()));
             needUpdateHash = false;
         }
     }
@@ -151,6 +170,26 @@ void TagsCache::initialize()
             Qt::DirectConnection);
 
     d->initialized = true;
+}
+
+QString TagsCache::tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy)
+{
+    if (slashPolicy == IncludeLeadingSlash)
+        return "/_Digikam_Internal_Tags_";
+    else
+        return "_Digikam_Internal_Tags_";
+}
+
+QString TagsCache::propertyNameDigikamInternalTag()
+{
+    // Do not change, is written to users' databases
+    return "_Digikam_Internal_Tag_";
+}
+
+QString TagsCache::propertyNameExcludedFromWriting()
+{
+    // Do not change, is written to users' databases
+    return "_Digikam_No_Metadata_Tag_";
 }
 
 QString TagsCache::tagName(int id)
@@ -427,12 +466,50 @@ int TagsCache::getOrCreateTag(const QString& tagPath)
     return id;
 }
 
+int TagsCache::getOrCreateTagWithProperty(const QString& tagPath, const QString& property, const QString& value)
+{
+    int tagId = getOrCreateTag(tagPath);
+    TagProperties props(tagId);
+    if (value.isNull())
+    {
+        if (!props.hasProperty(property))
+            props.setProperty(property, value);
+    }
+    else
+    {
+        if (!props.hasProperty(property, value))
+            props.setProperty(property, value);
+    }
+    return tagId;
+}
+
+bool TagsCache::isInternalTag(int tagId)
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    return d->internalTags.contains(tagId);
+}
+
+bool TagsCache::canBeWrittenToMetadata(int tagId)
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    return !d->internalTags.contains(tagId) && !d->doNotWriteTags.contains(tagId);
+}
+
+int TagsCache::getOrCreateInternalTag(const QString& tagName)
+{
+    QString tagPath = tagPathOfDigikamInternalTags(IncludeLeadingSlash) + '/' + tagName;
+    return getOrCreateTagWithProperty(tagPath, propertyNameDigikamInternalTag());
+}
+
 void TagsCache::slotTagChanged(const TagChangeset& changeset)
 {
     if (!d->changingDB && changeset.operation() != TagChangeset::IconChanged)
     {
         d->needUpdateInfos = true;
         d->needUpdateHash  = true;
+        d->needUpdateProperties = true;
     }
     if (changeset.operation() == TagChangeset::Added)
         emit tagAdded(changeset.tagId());

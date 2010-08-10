@@ -2500,6 +2500,35 @@ QList< int > AlbumManager::subTags(int tagId, bool recursive)
     return album->childAlbumIds(recursive);
 }
 
+AlbumList AlbumManager::findTagsWithProperty(const QString& property)
+{
+    AlbumList list;
+
+    AlbumIterator it(d->rootTAlbum);
+    while (it.current())
+    {
+        if (static_cast<TAlbum*>(*it)->hasProperty(property))
+            list << *it;
+        ++it;
+    }
+
+    return list;
+}
+
+AlbumList AlbumManager::findTagsWithProperty(const QString& property, const QString& value)
+{
+    AlbumList list;
+
+    AlbumIterator it(d->rootTAlbum);
+    while (it.current())
+    {
+        if (static_cast<TAlbum*>(*it)->property(property) == value)
+            list << *it;
+        ++it;
+    }
+
+    return list;
+}
 
 QHash<int, QString> AlbumManager::albumTitles() const
 {

@@ -449,7 +449,17 @@ public:
      * @return A hash with the tag names for all tag IDs.
      */
     QHash<int, QString> tagNames() const;
-    
+
+    /**
+     * Returns a list of TAlbums which have the given property,
+     * or the given property/value combination.
+     */
+    AlbumList findTagsWithProperty(const QString& property);
+    AlbumList findTagsWithProperty(const QString& property, const QString& value);
+
+    /**
+     * TODO
+     */
     QList<int> subTags(int tagId, bool recursive = false);
 
     //@}

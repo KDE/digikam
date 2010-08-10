@@ -384,6 +384,7 @@ public:
     QString     icon() const;
     QList<int>  tagIDs() const;
 
+    bool        isInternalTag() const;
     bool        hasProperty(const QString& key) const;
     QString     property(const QString& key) const;
     QMap<QString, QString> properties() const;
@@ -456,6 +457,8 @@ public:
     bool                 isHaarSearch() const;
     bool                 isMapSearch() const;
     bool                 isDuplicatesSearch() const;
+    bool                 isFaceSearch() const;
+    bool                 isUnknownFaceSearch() const;
 
     /**
      * Indicates whether this album is a temporary search or not.

@@ -116,6 +116,36 @@ public:
     int getOrCreateTag(const QString& tagPath);
     QList<int> getOrCreateTags(const QStringList& tagPaths);
 
+    /**
+     * Calls getOrCreateTag for the given path,
+     * and ensures that the tag has assigned the given property.
+     * If you pass a null string as value, then the value is not checked and not changed.
+     */
+    int getOrCreateTagWithProperty(const QString& tagPath, const QString& property, const QString& value = QString());
+
+    /**
+     * Returns if a tag is to be regarded program-internal, that is,
+     * a technical implementation detail not visible to the user at any time.
+     */
+    bool isInternalTag(int tagId);
+
+    /**
+     * Returns if a tag shall be written to the metadata of a file.
+     * Always returns false if the tag is a program-internal tag.
+     */
+    bool canBeWrittenToMetadata(int tagId);
+
+    /**
+     * For the given tag name (not path!), find the existing tag or
+     * creates a new internal tags under the usual tag path used for
+     * internal tags.
+     */
+    int getOrCreateInternalTag(const QString& tagName);
+
+    static QString tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
+    static QString propertyNameDigikamInternalTag();
+    static QString propertyNameExcludedFromWriting();
+
 signals:
 
     /** These signals are provided for convenience; for finer grained information

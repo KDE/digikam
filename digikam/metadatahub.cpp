@@ -563,6 +563,8 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
         QStringList oldTagsPathList, newTagsPathList, oldKeywords, newKeywords;
         for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
+            if (!TagsCache::instance()->canBeWrittenToMetadata(it.key()))
+                continue;
             // it is important that MetadataDisjoint keywords are not touched
             if (it.value() == MetadataAvailable)
             {
