@@ -146,11 +146,11 @@ void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
     {
         d->imageModel->setPreprocessor(d);
 
-        connect(d->imageModel, SIGNAL(preprocess(const QList<ImageInfo> &)),
-                d, SLOT(preprocessInfos(const QList<ImageInfo> &)));
+        connect(d->imageModel, SIGNAL(preprocess(const QList<ImageInfo> &, const QList<QVariant>&)),
+                d, SLOT(preprocessInfos(const QList<ImageInfo> &, const QList<QVariant>&)));
 
-        connect(d, SIGNAL(reAddImageInfos(const QList<ImageInfo> &)),
-                d->imageModel, SLOT(reAddImageInfos(const QList<ImageInfo> &)));
+        connect(d, SIGNAL(reAddImageInfos(const QList<ImageInfo> &, const QList<QVariant>&)),
+                d->imageModel, SLOT(reAddImageInfos(const QList<ImageInfo> &, const QList<QVariant>&)));
 
         connect(d, SIGNAL(reAddingFinished()),
                 d->imageModel, SLOT(reAddingFinished()));
@@ -357,7 +357,7 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
     //d->categoryCountHashInt.clear();
     //d->categoryCountHashString.clear();
     if (d->imageModel)
-        d->infosToProcess(d->imageModel->imageInfos(), false);
+        d->infosToProcess(d->imageModel->imageInfos());
     emit filterSettingsChanged(settings);
 }
 
@@ -462,9 +462,9 @@ void ImageFilterModel::removePrepareHook(ImageFilterModelPrepareHook *hook)
     d->prepareHooks.removeAll(hook);
 }
 
-void ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo>& infos)
+void ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
 {
-    infosToProcess(infos, true);
+    infosToProcess(infos, extraValues, true);
 }
 
 void ImageFilterModelPrivate::setupWorkers()
@@ -496,29 +496,45 @@ void ImageFilterModelPrivate::setupWorkers()
             this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage &)));
 }
 
-void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, bool forReAdd)
+void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos)
+{
+    infosToProcess(infos, QList<QVariant>(), false);
+}
+
+void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd)
 {
     // prepare and filter in chunks
     const int size = infos.size();
     const int maxChunkSize = needPrepare ? PrepareChunkSize : FilterChunkSize;
     QList<ImageInfo>::const_iterator it = infos.constBegin();
+    QList<QVariant>::const_iterator xit = extraValues.constBegin();
     int index = 0;
+    QVector<QVariant> extraValueVector;
     while (it != infos.constEnd())
     {
-        QVector<ImageInfo> vector(qMin(maxChunkSize, size - index));
-        QList<ImageInfo>::const_iterator end = it + vector.size();
-        qCopy(it, end, vector.begin());
+        QVector<ImageInfo> infoVector(qMin(maxChunkSize, size - index));
+        QList<ImageInfo>::const_iterator end = it + infoVector.size();
+        qCopy(it, end, infoVector.begin());
+
+        if (xit != extraValues.constEnd())
+        {
+            extraValueVector = QVector<QVariant>(infoVector.size());
+            QList<QVariant>::const_iterator xend = xit + extraValueVector.size();
+            qCopy(xit, xend, extraValueVector.begin());
+            xit = xend;
+        }
+
         it = end;
-        index += vector.size();
+        index += infoVector.size();
 
         ++sentOut;
         if (forReAdd)
             ++sentOutForReAdd;
 
         if (needPrepare)
-            emit packageToPrepare(ImageFilterModelTodoPackage(vector, version, forReAdd));
+            emit packageToPrepare(ImageFilterModelTodoPackage(infoVector, version, forReAdd, extraValueVector));
         else
-            emit packageToFilter(ImageFilterModelTodoPackage(vector, version, forReAdd));
+            emit packageToFilter(ImageFilterModelTodoPackage(infoVector, version, forReAdd, extraValueVector));
     }
 }
 
@@ -539,7 +555,7 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage&
     // re-add if necessary
     if (package.isForReAdd)
     {
-        emit reAddImageInfos(package.infos.toList());
+        emit reAddImageInfos(package.infos.toList(), package.extraValues.toList());
         if (sentOutForReAdd == 1) // last package
             emit reAddingFinished();
     }
@@ -729,7 +745,13 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
     Q_D(const ImageFilterModel);
     if (!left.isValid() || !right.isValid())
         return true;
-    return infosLessThan(d->imageModel->imageInfoRef(left), d->imageModel->imageInfoRef(right));
+    if (left == right)
+        return false;
+    const ImageInfo &leftInfo = d->imageModel->imageInfoRef(left);
+    const ImageInfo &rightInfo = d->imageModel->imageInfoRef(right);
+    if (leftInfo == rightInfo)
+        return d->sorter.lessThan(left.data(ImageModel::ExtraDataRole), right.data(ImageModel::ExtraDataRole));
+    return infosLessThan(leftInfo, rightInfo);
 }
 
 int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const

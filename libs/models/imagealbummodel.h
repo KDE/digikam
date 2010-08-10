@@ -99,7 +99,7 @@ protected Q_SLOTS:
 
 protected:
 
-    void startListJob(const KUrl& url);
+    void startListJob(Album *album);
 
 private:
 

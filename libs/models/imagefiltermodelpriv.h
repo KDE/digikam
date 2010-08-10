@@ -50,10 +50,12 @@ public:
 
     ImageFilterModelTodoPackage()
         : version(0), isForReAdd(false) {}
-    ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, int version, bool isForReAdd)
-        : infos(infos), version(version), isForReAdd(isForReAdd) {}
+    ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, int version, bool isForReAdd,
+                                const QVector<QVariant>& extraValues = QVector<QVariant>())
+        : infos(infos), extraValues(extraValues), version(version), isForReAdd(isForReAdd) {}
 
     QVector<ImageInfo>         infos;
+    QVector<QVariant>          extraValues;
     unsigned int               version;
     bool                       isForReAdd;
     QHash<qlonglong, bool>     filterResults;
@@ -73,7 +75,8 @@ public:
 
     void init(ImageFilterModel *q);
     void setupWorkers();
-    void infosToProcess(const QList<ImageInfo>& infos, bool forReAdd);
+    void infosToProcess(const QList<ImageInfo>& infos);
+    void infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd = true);
 
 public:
 
@@ -119,7 +122,7 @@ public:
 
 public Q_SLOTS:
 
-    void preprocessInfos(const QList<ImageInfo>& infos);
+    void preprocessInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void packageFinished(const ImageFilterModelTodoPackage& package);
     void packageDiscarded(const ImageFilterModelTodoPackage& package);
 
@@ -127,7 +130,7 @@ Q_SIGNALS:
 
     void packageToPrepare(const ImageFilterModelTodoPackage& package);
     void packageToFilter(const ImageFilterModelTodoPackage& package);
-    void reAddImageInfos(const QList<ImageInfo>& infos);
+    void reAddImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void reAddingFinished();
 };
 

@@ -57,6 +57,7 @@ public:
         incrementalTimer    = 0;
         recurseAlbums       = false;
         recurseTags         = false;
+        extraValueJob       = false;
     }
 
     Album                   *currentAlbum;
@@ -66,6 +67,8 @@ public:
 
     bool                     recurseAlbums;
     bool                     recurseTags;
+
+    bool                     extraValueJob;
 };
 
 ImageAlbumModel::ImageAlbumModel(QObject *parent)
@@ -179,7 +182,7 @@ void ImageAlbumModel::refresh()
 
     startRefresh();
 
-    startListJob(d->currentAlbum->databaseUrl());
+    startListJob(d->currentAlbum);
 }
 
 void ImageAlbumModel::incrementalRefresh()
@@ -200,7 +203,7 @@ void ImageAlbumModel::incrementalRefresh()
 
     startIncrementalRefresh();
 
-    startListJob(d->currentAlbum->databaseUrl());
+    startListJob(d->currentAlbum);
 }
 
 bool ImageAlbumModel::hasScheduledRefresh() const
@@ -241,11 +244,23 @@ void ImageAlbumModel::slotNextIncrementalRefresh()
         requestIncrementalRefresh();
 }
 
-void ImageAlbumModel::startListJob(const KUrl& url)
+void ImageAlbumModel::startListJob(Album *album)
 {
+    KUrl url = album->databaseUrl();
+    d->extraValueJob = false;
     d->job = ImageLister::startListJob(url);
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
     d->job->addMetaData("listTagsRecursively", d->recurseTags ? "true" : "false");
+
+    /*if (album->type() == Album::SEARCH)
+    {
+        SAlbum *salbum = static_cast<SAlbum*>(album);
+        if (salbum->isUnknownFaceSearch())
+        {
+            d->job->addMetaData("listByImageTagProperties", "true");
+            d->extraValueJob = true;
+        }
+    }*/
 
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));
@@ -281,16 +296,39 @@ void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
     QByteArray tmp(data);
     QDataStream ds(&tmp, QIODevice::ReadOnly);
 
-    while (!ds.atEnd())
+    if (d->extraValueJob)
     {
-        ImageListerRecord record;
-        ds >> record;
+        QList<QVariant> extraValues;
+        while (!ds.atEnd())
+        {
+            ImageListerRecord record(ImageListerRecord::ExtraValueFormat);
+            ds >> record;
 
-        ImageInfo info(record);
-        newItemsList << info;
+            ImageInfo info(record);
+            newItemsList << info;
+            if (record.extraValues.isEmpty())
+                extraValues  << QVariant();
+            else if (record.extraValues.size() == 1)
+                extraValues  << record.extraValues.first();
+            else
+                extraValues  << QVariant(record.extraValues); // uh-uh. List in List.
+        }
+
+        addImageInfos(newItemsList, extraValues);
     }
+    else
+    {
+        while (!ds.atEnd())
+        {
+            ImageListerRecord record;
+            ds >> record;
 
-    addImageInfos(newItemsList);
+            ImageInfo info(record);
+            newItemsList << info;
+        }
+
+        addImageInfos(newItemsList);
+    }
 }
 
 void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)

@@ -191,6 +191,11 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album *album) const
     if (album->isRoot() || (palbum && palbum->isAlbumRoot()))
         return SpecialMatch;
 
+    TAlbum *talbum = dynamic_cast<TAlbum*>(album);
+
+    if (talbum && talbum->isInternalTag())
+        return NoMatch;
+
     if (matches(album))
         return TitleMatch;
 

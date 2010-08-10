@@ -58,9 +58,11 @@ public:
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
         ThumbnailRole         = Qt::UserRole + 2,
-        ThumbnailSetRole         = Qt::UserRole + 4,
+        ThumbnailSetRole      = Qt::UserRole + 4,
         /// Returns a QDateTime with the creation date
         CreationDateRole      = Qt::UserRole + 3,
+        /// Return (optional) extraData field
+        ExtraDataRole         = Qt::UserRole + 5,
         // For use by subclasses
         SubclassRoles         = Qt::UserRole + 100,
         // For use by filter models
@@ -115,8 +117,11 @@ public:
     static ImageInfo retrieveImageInfo(const QModelIndex& index);
     static qlonglong retrieveImageId(const QModelIndex& index);
 
-    /** Main entry point for subclasses adding image infos to the model. */
+    /** Main entry point for subclasses adding image infos to the model.
+     *  If you list entries not unique per image id, you must add an extraValue
+     *  so that every entry is unique by imageId and extraValues. */
     void addImageInfos(const QList<ImageInfo>& infos);
+    void addImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     /** Clears image infos and resets model. */
     void clearImageInfos();
 
@@ -176,7 +181,7 @@ Q_SIGNALS:
     void imageInfosAdded(const QList<ImageInfo>& infos);
 
     /** Connect to this signal only if you are the current preprocessor */
-    void preprocess(const QList<ImageInfo>& infos);
+    void preprocess(const QList<ImageInfo>& infos, const QList<QVariant>&);
 
     /** If an ImageChangeset affected indexes of this model with changes as set in watchFlags(),
      *  this signal contains the changeset and the affected indexes. */
@@ -197,7 +202,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void reAddImageInfos(const QList<ImageInfo>& infos);
+    void reAddImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void reAddingFinished();
 
 protected:
@@ -234,8 +239,8 @@ protected Q_SLOTS:
 
 private:
 
-    void appendInfos(const QList<ImageInfo>& infos);
-    void publiciseInfos(const QList<ImageInfo>& infos);
+    void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void cleanSituationChecks();
 
     ImageModelPriv *const d;

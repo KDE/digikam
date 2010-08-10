@@ -58,6 +58,7 @@ public:
     }
 
     ImageInfoList         infos;
+    QList<QVariant>       extraValues;
     QHash<qlonglong, int> idHash;
 
     bool                  itemDrag;
@@ -85,10 +86,13 @@ class ImageModelIncrementalUpdater
 public:
     ImageModelIncrementalUpdater(ImageModelPriv *d);
     void appendInfos(const QList<ImageInfo>& infos);
+    void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     QList<QPair<int,int> > oldIndexes() const;
 
     QHash<qlonglong, int>    oldIds;
+    QList<QVariant>          oldExtraValues;
     QList<ImageInfo>         newInfos;
+    QList<QVariant>          newExtraValues;
 };
 
 ImageModel::ImageModel(QObject *parent)
@@ -258,18 +262,24 @@ ImageInfo ImageModel::imageInfo(const QString& filePath) const
 
 void ImageModel::addImageInfos(const QList<ImageInfo>& infos)
 {
+    addImageInfos(infos, QList<QVariant>());
+}
+
+void ImageModel::addImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+{
     if (infos.isEmpty())
         return;
 
     if (d->incrementalUpdater)
-        d->incrementalUpdater->appendInfos(infos);
+        d->incrementalUpdater->appendInfos(infos, extraValues);
     else
-        appendInfos(infos);
+        appendInfos(infos, extraValues);
 }
 
 void ImageModel::clearImageInfos()
 {
     d->infos.clear();
+    d->extraValues.clear();
     d->idHash.clear();
     d->filePathHash.clear();
     delete d->incrementalUpdater;
@@ -331,13 +341,13 @@ void ImageModel::unsetPreprocessor(QObject *preprocessor)
 {
     if (preprocessor && d->preprocessor == preprocessor)
     {
-        disconnect(this, SIGNAL(preprocess(const QList<ImageInfo> &)), 0, 0);
-        disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(const QList<ImageInfo> &)));
+        disconnect(this, SIGNAL(preprocess(const QList<ImageInfo> &, const QList<QVariant> &)), 0, 0);
+        disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(const QList<ImageInfo> &, const QList<QVariant> &)));
         disconnect(d->preprocessor, 0, this, SLOT(reAddingFinished()));
     }
 }
 
-void ImageModel::appendInfos(const QList<ImageInfo>& infos)
+void ImageModel::appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
 {
     if (infos.isEmpty())
         return;
@@ -345,16 +355,16 @@ void ImageModel::appendInfos(const QList<ImageInfo>& infos)
     if (d->preprocessor)
     {
         d->reAdding = true;
-        emit preprocess(infos);
+        emit preprocess(infos, extraValues);
     }
     else
-        publiciseInfos(infos);
+        publiciseInfos(infos, extraValues);
 }
 
-void ImageModel::reAddImageInfos(const QList<ImageInfo>& infos)
+void ImageModel::reAddImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
 {
     // addImageInfos -> appendInfos -> preprocessor -> reAddImageInfos
-    publiciseInfos(infos);
+    publiciseInfos(infos, extraValues);
 }
 
 void ImageModel::reAddingFinished()
@@ -398,21 +408,22 @@ void ImageModel::cleanSituationChecks()
     }
 }
 
-void ImageModel::publiciseInfos(const QList<ImageInfo>& infos)
+void ImageModel::publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
 {
     if (infos.isEmpty())
         return;
 
     emit imageInfosAboutToBeAdded(infos);
-    int firstNewIndex = d->infos.size();
-    int lastNewIndex = d->infos.size() + infos.size() - 1;
+    const int firstNewIndex = d->infos.size();
+    const int lastNewIndex  = d->infos.size() + infos.size() - 1;
     beginInsertRows(QModelIndex(), firstNewIndex, lastNewIndex);
     d->infos << infos;
+    d->extraValues << extraValues;
     for (int i=firstNewIndex; i<=lastNewIndex; ++i)
     {
-        ImageInfo &info = d->infos[i];
+        const ImageInfo &info = d->infos[i];
         qlonglong id = info.id();
-        d->idHash[id] = i;
+        d->idHash.insertMulti(id, i);
         if (d->keepFilePathCache)
             d->filePathHash[info.filePath()] = id;
     }
@@ -452,22 +463,20 @@ void ImageModel::finishIncrementalRefresh()
     // Remove old indexes
     // Keep in mind that when calling beginRemoveRows all structures announced to be removed
     // must still be valid, and this includes our hashes as well, which limits what we can optimize
-    QList<ImageInfo>::iterator beginIt, endIt;
+
     QList<QPair<int,int> > pairs = d->incrementalUpdater->oldIndexes();
-    int begin, end, removedRows, offset = 0;
+
+    int removedRows = 0, offset = 0;
     typedef QPair<int,int> IntPair; // to make foreach macro happy
     foreach (const IntPair &pair, pairs)
     {
-        begin = pair.first - offset;
-        end = pair.second - offset; // inclusive
+        const int begin = pair.first - offset;
+        const int end   = pair.second - offset; // inclusive
         removedRows = end - begin + 1;
         // when removing from the list, all subsequent indexes are affected
         offset += removedRows;
 
         beginRemoveRows(QModelIndex(), begin, end);
-
-        beginIt = d->infos.begin() + begin;
-        endIt   = d->infos.begin() + (end + 1); // exclusive
 
         // update idHash - which points to indexes of d->infos, and these change now!
         QHash<qlonglong, int>::iterator it;
@@ -491,7 +500,10 @@ void ImageModel::finishIncrementalRefresh()
         }
 
         // remove from list
-        d->infos.erase(beginIt, endIt);
+        d->infos.erase(d->infos.begin() + begin, d->infos.begin() + (end + 1));
+
+        if (!d->extraValues.isEmpty())
+            d->extraValues.erase(d->extraValues.begin() + begin, d->extraValues.begin() + (end + 1));
 
         endRemoveRows();
     }
@@ -510,7 +522,7 @@ void ImageModel::finishIncrementalRefresh()
     }
 
     // add new indexes
-    appendInfos(d->incrementalUpdater->newInfos);
+    appendInfos(d->incrementalUpdater->newInfos, d->incrementalUpdater->newExtraValues);
 
     delete d->incrementalUpdater;
     d->incrementalUpdater = 0;
@@ -519,10 +531,12 @@ void ImageModel::finishIncrementalRefresh()
 ImageModelIncrementalUpdater::ImageModelIncrementalUpdater(ImageModelPriv *d)
 {
     oldIds = d->idHash;
+    oldExtraValues = d->extraValues;
 }
 
 void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos)
 {
+    Q_ASSERT(d->extraValues.isEmpty());
     foreach (const ImageInfo &info, infos)
     {
         QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
@@ -530,6 +544,36 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos)
             oldIds.erase(it);
         else
             newInfos << info;
+    }
+}
+
+void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+{
+    Q_ASSERT(info.size() == extraValues.size());
+    for (int i=0; i<infos.size(); i++)
+    {
+        const ImageInfo& info = infos[i];
+        QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
+        bool found;
+        while (it != oldIds.end() && it.key() == info.id())
+        {
+            if (extraValues[i] == oldExtraValues[it.value()])
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if (found)
+        {
+            oldIds.erase(it);
+            // dont erase from oldExtraValues - oldIds is a hash id -> index.
+        }
+        else
+        {
+            newInfos << info;
+            newExtraValues << extraValues[i];
+        }
     }
 }
 
@@ -561,6 +605,7 @@ QList<QPair<int,int> > ImageModelIncrementalUpdater::oldIndexes() const
     return pairs;
 }
 
+
 // ------------ QAbstractItemModel implementation -------------
 
 QVariant ImageModel::data(const QModelIndex& index, int role) const
@@ -579,6 +624,11 @@ QVariant ImageModel::data(const QModelIndex& index, int role) const
             return index.row();
         case CreationDateRole:
             return d->infos[index.row()].dateTime();
+        case ExtraDataRole:
+            if (!d->extraValues.isEmpty())
+                return d->extraValues[index.row()];
+            else
+                return QVariant();
     }
     return QVariant();
 }
