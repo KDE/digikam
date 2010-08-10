@@ -66,7 +66,6 @@ public:
     
     FaceIfacePriv()
     {
-        threshold            = 0.5;
         libkface             = new KFaceIface::Database(KFaceIface::Database::InitAll, KStandardDirs::locateLocal("data", "libkface"));
         tagsCache            = TagsCache::instance();
         scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
@@ -81,7 +80,8 @@ public:
         delete libkface;
     }
 
-    double                threshold;
+    double                recognitionThreshold;
+    int                   detectionAccuracy;
     
     int                   scannedForFacesTagId;
     int                   peopleTagId;
@@ -95,7 +95,7 @@ public:
 FaceIface::FaceIface()
     : d( new FaceIfacePriv() )
 {
-
+    readConfigSettings();
 }
 
 
@@ -112,6 +112,7 @@ bool FaceIface::hasBeenScanned(qlonglong imageid)
 
 QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
 {
+    readConfigSettings();
     // Find faces
     QImage qimg = image.copyQImage();
     
@@ -432,6 +433,8 @@ Face FaceIface::faceForRectInImage ( qlonglong imageid, const QRect& rect, const
 
 void FaceIface::trainWithFaces ( QList< Face > faceList )
 {
+    readConfigSettings();
+    
     foreach(Face f, faceList)
     {
         if(f.name() == "" || f.getImage().isNull())
@@ -451,12 +454,23 @@ QString FaceIface::recognizedName ( const KFaceIface::Face& face )
     else 
     {
         int distance = d->libkface->recognizeFaces(f).at(0);
-        if(distance > d->threshold)
+        if(distance > d->recognitionThreshold)
             return "";
         else
             return f[0].name();
     }
 }
+
+void FaceIface::readConfigSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("Face Tags Settings");
+    d->detectionAccuracy      = group.readEntry("DetectionAccuracy", 4);
+    d->recognitionThreshold   = 1 - group.readEntry("SuggestionThreshold", 0.2);
+    
+    d->libkface->setDetectionAccuracy(d->detectionAccuracy);
+}
+
 
 
 } // Namespace Digikam
