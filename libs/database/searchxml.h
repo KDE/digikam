@@ -145,6 +145,7 @@ public:
 
     QList<int>          valueToIntOrIntList();
     QList<double>       valueToDoubleOrDoubleList();
+    QList<QString>      valueToStringOrStringList();
 
     /** General helper method: Reads XML a start element with the given
      *  name is found. The method goes to the next start element, and from
@@ -327,6 +328,7 @@ public:
     QList<QDateTime>    valueToDateTimeList();
     QList<int>          valueToIntOrIntList();
     QList<double>       valueToDoubleOrDoubleList();
+    QList<QString>      valueToStringOrStringList();
 
 protected:
 

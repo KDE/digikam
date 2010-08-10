@@ -69,7 +69,14 @@ public:
 
     /// Returns true if the property is set
     bool hasProperty(const QString& key) const;
-    /// Returns the value of the given property, or a null string if not set
+    /// Returns true if the property is set, with exactly the given value.
+    bool hasProperty(const QString& key, const QString& value) const;
+    /**
+     * Returns the value of the given property.
+     * If the property is not set, a null string is returned.
+     * But a null string is also returned if the property is set, but without a value.
+     * Use hasProperty to check that case.
+     */
     QString value(const QString& key) const;
     /// Returns all set property keys
     QStringList propertyKeys() const;

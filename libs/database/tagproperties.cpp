@@ -106,6 +106,15 @@ bool TagProperties::hasProperty(const QString& key) const
     return d->properties.contains(key);
 }
 
+bool TagProperties::hasProperty(const QString& key, const QString& value) const
+{
+    QMap<QString, QString>::const_iterator it = d->properties.find(key);
+    while (it != d->properties.end() && it.key() == key)
+        if (it.value() == value)
+            return true;
+    return false;
+}
+
 QString TagProperties::value(const QString& key) const
 {
     return d->properties.value(key);
