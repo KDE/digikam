@@ -93,6 +93,13 @@ ImageQueryBuilder::ImageQueryBuilder()
         m_shortMonths[i-1] = cal->monthName(i, 2000, KCalendarSystem::ShortName).toLower();
         m_longMonths[i-1]  = cal->monthName(i, 2000, KCalendarSystem::LongName).toLower();
     }
+
+    m_imageTagPropertiesJoined = false;
+}
+
+void ImageQueryBuilder::setImageTagPropertiesJoined(bool isJoined)
+{
+    m_imageTagPropertiesJoined = isJoined;
 }
 
 QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
@@ -1034,24 +1041,88 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         QStringList keyValue = reader.valueToStringList();
         if (keyValue.size() == 2)
         {
-            sql += " (Images.id IN "
-                " (SELECT imageid FROM ImageTagProperties "
-                "  WHERE property=? AND value ";
-            ImageQueryBuilder::addSqlRelation(sql, relation);
-            sql += " ?)) ";
-            *boundValues << keyValue[0] << keyValue[1];
+            if (m_imageTagPropertiesJoined)
+            {
+                sql += " (ImageTagProperties.property=? AND ImageTagProperties.value ";
+                ImageQueryBuilder::addSqlRelation(sql, relation);
+                sql += " ?) ";
+            }
+            else
+            {
+                sql += " (Images.id IN "
+                    " (SELECT imageid FROM ImageTagProperties "
+                    "  WHERE property=? AND value ";
+                ImageQueryBuilder::addSqlRelation(sql, relation);
+                sql += " ?)) ";
+            }
+            *boundValues << keyValue[0] << fieldQuery.prepareForLike(keyValue[1]);
         }
         else
         {
-            kWarning() << "imagetagproperty requires a list of two strings";
+            kWarning() << "imagetagproperty requires a list of 2 strings";
+        }
+    }
+    else if (name == "imagetagpropertyfortag")
+    {
+        QStringList keyValue = reader.valueToStringList();
+        if (keyValue.size() == 3)
+        {
+            if (m_imageTagPropertiesJoined)
+            {
+                sql += " (ImageTagProperties.tagid=? AND ImageTagProperties.property=? AND ImageTagProperties.value ";
+                ImageQueryBuilder::addSqlRelation(sql, relation);
+                sql += " ?) ";
+            }
+            else
+            {
+                sql += " (Images.id IN "
+                    " (SELECT imageid FROM ImageTagProperties "
+                    "  WHERE tagid=? AND property=? AND value ";
+                ImageQueryBuilder::addSqlRelation(sql, relation);
+                sql += " ?)) ";
+            }
+            *boundValues << keyValue[2].toInt() << keyValue[0] << fieldQuery.prepareForLike(keyValue[1]);
+        }
+        else
+        {
+            kWarning() << "imagetagpropertyfortag requires a list of 3 values";
         }
     }
     else if (name == "hasimagetagproperty")
     {
-        sql += " (Images.id IN "
-               " (SELECT imageid FROM ImageTagProperties "
-               "  WHERE property=?)); ";
+        if (m_imageTagPropertiesJoined)
+        {
+            sql += " (ImageTagProperties.property=?) ";
+        }
+        else
+        {
+            sql += " (Images.id IN "
+                " (SELECT imageid FROM ImageTagProperties "
+                "  WHERE property=?)); ";
+        }
         *boundValues << reader.value();
+    }
+    else if (name == "hasimagetagpropertyfortag")
+    {
+        QStringList values = reader.valueToStringList();
+        if (values.size() == 2)
+        {
+            if (m_imageTagPropertiesJoined)
+            {
+                sql += " (ImageTagProperties.tagid=? AND ImageTagProperties.property=?) ";
+            }
+            else
+            {
+                sql += " (Images.id IN "
+                    " (SELECT imageid FROM ImageTagProperties "
+                    "  WHERE tagid=? AND property=?)); ";
+            }
+            *boundValues << values[0] << values[1].toInt();
+        }
+        else
+        {
+            kWarning() << "imagetagpropertyfortag requires a list of 2 values";
+        }
     }
     else if (name == "keyword")
     {

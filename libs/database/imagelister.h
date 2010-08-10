@@ -73,6 +73,12 @@ public:
     void setListOnlyAvailable(bool listOnlyAvailable);
 
     /**
+     * Allow the binary protocol of ImageListerRecord using an extra value.
+     * Currently used for AreaRand and TagPropertySearch.
+     */
+    void setAllowExtraValues(bool useExtraValue);
+
+    /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
     void list(ImageListerReceiver *receiver,
@@ -118,6 +124,15 @@ public:
                     int limit = 0);
 
     /**
+     * Execute the search specified by search XML describing a Tag Properties search.
+     * Two special add-ons: Non-unique by image id; if enabled, uses the extended ImageRecord protocol
+     * to pass the property value in the record's extraValue.
+     * @param receiver receiver for the searches
+     * @param xml SearchXml describing the query
+     */
+    void listImageTagPropertySearch(ImageListerReceiver *receiver, const QString& xml);
+
+    /**
      * Execute the search specified by search XML describing a Haar search
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
@@ -134,6 +149,7 @@ private:
 
     bool m_recursive;
     bool m_listOnlyAvailableImages;
+    bool m_allowExtraValues;
 };
 
 }  // namespace Digikam

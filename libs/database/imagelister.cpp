@@ -112,6 +112,7 @@ ImageLister::ImageLister()
 {
     m_recursive = true;
     m_listOnlyAvailableImages = true;
+    m_allowExtraValues = false;
 }
 
 void ImageLister::setRecursive(bool recursive)
@@ -122,6 +123,11 @@ void ImageLister::setRecursive(bool recursive)
 void ImageLister::setListOnlyAvailable(bool listOnlyAvailable)
 {
     m_listOnlyAvailableImages = listOnlyAvailable;
+}
+
+void ImageLister::setAllowExtraValues(bool useExtraValue)
+{
+    m_allowExtraValues = useExtraValue;
 }
 
 KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl& url, int extraValue)
@@ -446,15 +452,12 @@ void ImageLister::listAreaRange(ImageListerReceiver *receiver,
     double lat, lon;
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
-        ImageListerRecord record(ImageListerRecord::ExtraValueFormat);
+        ImageListerRecord record(m_allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
 
         record.imageID           = (*it).toLongLong();
         ++it;
         record.albumRootID       = (*it).toInt();
         ++it;
-
-        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
-            continue;
 
         record.rating            = (*it).toInt();
         ++it;
@@ -462,6 +465,9 @@ void ImageLister::listAreaRange(ImageListerReceiver *receiver,
         ++it;
         lon                      = (*it).toDouble();
         ++it;
+
+        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+            continue;
 
         record.extraValues       << lat << lon;
 
@@ -493,10 +499,10 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
                "       ImageInformation.width, ImageInformation.height, "
                "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                " FROM Images "
-               "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-               "       LEFT JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
-               "       LEFT JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
-               "       LEFT JOIN Albums           ON Albums.id=Images.album "
+               "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+               "       LEFT  JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
+               "       LEFT  JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
+               "       INNER JOIN Albums           ON Albums.id=Images.album "
                "WHERE Images.status=1 AND ( ";
 
     // query body
@@ -569,6 +575,102 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
             continue;
 
         if (!hooks.checkPosition(lat, lon))
+            continue;
+
+        record.imageSize         = QSize(width, height);
+
+        receiver->receive(record);
+    }
+}
+
+void ImageLister::listImageTagPropertySearch(ImageListerReceiver *receiver, const QString& xml)
+{
+    if (xml.isEmpty())
+        return;
+
+    QList<QVariant> boundValues;
+    QList<QVariant> values;
+    QString sqlQuery;
+    QString errMsg;
+
+    // Currently, for optimization, this does not allow a general-purpose search,
+    // ImageMetadata and ImagePositions are not joined and hooks are ignored.
+
+    // query head
+    sqlQuery = "SELECT DISTINCT Images.id, Images.name, Images.album, "
+               "       Albums.albumRoot, "
+               "       ImageInformation.rating, Images.category, "
+               "       ImageInformation.format, ImageInformation.creationDate, "
+               "       Images.modificationDate, Images.fileSize, "
+               "       ImageInformation.width, ImageInformation.height, "
+               "       ImageTagProperties.value "
+               " FROM Images "
+               "       INNER JOIN ImageTagProperties ON ImageTagProperties.imageid=Images.id "
+               "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+               "       INNER JOIN Albums           ON Albums.id=Images.album "
+               "WHERE Images.status=1 AND ( ";
+
+    // query body
+    ImageQueryBuilder builder;
+    ImageQueryPostHooks hooks;
+    builder.setImageTagPropertiesJoined(true); // ImageTagProperties added by INNER JOIN
+    sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
+    sqlQuery += " );";
+
+    kDebug() << "Search query:\n" << sqlQuery << "\n" << boundValues;
+
+    bool executionSuccess;
+    {
+        DatabaseAccess access;
+        executionSuccess = access.backend()->execSql(sqlQuery, boundValues, &values);
+        if (!executionSuccess)
+            errMsg = access.backend()->lastError();
+    }
+
+    if (!executionSuccess)
+    {
+        receiver->error(errMsg);
+        return;
+    }
+    kDebug() << "Search result:" << values.size();
+
+    QSet<int> albumRoots = albumRootsToList();
+
+    int width, height;
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        ImageListerRecord record(m_allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
+
+        record.imageID           = (*it).toLongLong();
+        ++it;
+        record.name              = (*it).toString();
+        ++it;
+        record.albumID           = (*it).toInt();
+        ++it;
+        record.albumRootID       = (*it).toInt();
+        ++it;
+        record.rating            = (*it).toInt();
+        ++it;
+        record.category          = (DatabaseItem::Category)(*it).toInt();
+        ++it;
+        record.format            = (*it).toString();
+        ++it;
+        record.creationDate      = (*it).isNull() ? QDateTime()
+            : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        record.modificationDate  = (*it).isNull() ? QDateTime()
+            : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        record.fileSize          = (*it).toInt();
+        ++it;
+        width                    = (*it).toInt();
+        ++it;
+        height                   = (*it).toInt();
+        ++it;
+        record.extraValues      << (*it);
+        ++it;
+
+        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
             continue;
 
         record.imageSize         = QSize(width, height);

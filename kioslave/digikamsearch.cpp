@@ -61,6 +61,7 @@ kio_digikamsearch::~kio_digikamsearch()
 void kio_digikamsearch::special(const QByteArray& data)
 {
     bool duplicates = !metaData("duplicates").isEmpty();
+    bool listByImageTagProperties = !metaData("listByImageTagProperties").isEmpty();
 
     KUrl    kurl;
     int     listingType = 0;
@@ -89,6 +90,11 @@ void kio_digikamsearch::special(const QByteArray& data)
             Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
             if (info.type == Digikam::DatabaseSearch::HaarSearch)
                 lister.listHaarSearch(&receiver, info.query);
+            else if (listByImageTagProperties)
+            {
+                lister.setAllowExtraValues(true); // pass property value as extra value, different binary protocol
+                lister.listImageTagPropertySearch(&receiver, info.query);
+            }
             else
                 lister.listSearch(&receiver, info.query);
             if (!receiver.hasError)
