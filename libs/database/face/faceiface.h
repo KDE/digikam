@@ -110,6 +110,21 @@ public:
      */
     QList<int>          allPersonTags();
     
+    /** 
+     * A method to return a list of all person tag names in the DB
+     */
+    QList<QString>      allPersonNames();
+    
+    /** 
+     * A method to return a list of all person tag paths in the DB
+     */
+    QList<QString>      allPersonPaths();
+    
+    /**
+     * Looks for the given person name under the People tags tree, and returns an ID. Returns 0 if no name found.
+     */
+    int                 tagForPerson(const QString& name);
+    
     /**
      * Remove a certain rect from an image
      */

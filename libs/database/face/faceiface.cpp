@@ -342,6 +342,29 @@ QList< int > FaceIface::allPersonTags()
     return peopleTagIds;
 }
 
+QList< QString > FaceIface::allPersonNames()
+{
+    return d->tagsCache->tagNames(allPersonTags());
+}
+
+QList< QString > FaceIface::allPersonPaths()
+{
+    return d->tagsCache->tagPaths(allPersonTags());
+}
+
+int FaceIface::tagForPerson(const QString& name)
+{
+    QList<int> tagList = d->tagsCache->tagsForName(name);
+    
+    foreach(int id, tagList)
+    {
+        if(d->tagsCache->tagPath(id).startsWith("/People"))
+           return id;
+    }
+    
+    return 0;
+}
+
 
 bool FaceIface::isPerson ( int tagId )
 {
@@ -359,7 +382,14 @@ bool FaceIface::isPerson ( int tagId )
 
 int FaceIface::setName ( qlonglong imageid, const QRect& rect, const QString& name )
 {
-    int nameTagId          = d->tagsCache->createTag("/People/" + name);
+    // First look in all people tags. If the name is already there, then put it there. For ex, if the name of
+    // your "dad" is a subtag of "Family" in the People tags, then assigning a tag "dad" to a person should assign the
+    // tag under "Family", and not create a new tag just below "People".
+    
+    int nameTagId;
+    if(!(nameTagId = tagForPerson(name)))
+        nameTagId = d->tagsCache->createTag("/People/" + name);
+    
     ImageTagPair pairNamed   ( imageid, nameTagId );
     
     DatabaseAccess().db()->removeImageTagProperties(imageid, d->unknownPeopleTagId, "faceRegion", rectToString(rect));
@@ -393,7 +423,7 @@ void FaceIface::removeRect ( qlonglong imageid, const QRect& rect , const QStrin
     
     else
     {
-        int nameTagId = d->tagsCache->tagForPath("/People/" + name);
+        int nameTagId = tagForPerson(name);
         ImageTagPair pair(imageid, nameTagId);
         pair.removeProperties("faceRegion");
         pair.removeProperties("face");

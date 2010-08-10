@@ -426,7 +426,7 @@ void Setup::slotOkClicked()
     d->pluginsPage->applyPlugins();
 //     d->scriptManagerPage->applySettings();
     d->faceTagsPage->applySettings();
-    
+     
     AlbumSettings::instance()->emitSetupChanged();
 
     kapp->restoreOverrideCursor();
