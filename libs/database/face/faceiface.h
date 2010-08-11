@@ -154,6 +154,12 @@ public:
     void                trainWithFaces(QList< Face > faceList);
     
     /**
+     * Updates libkface's face database with a list of Face objects
+     * Any faces that have a null name or image will be dropped.
+     */
+    void                trainWithFace(Face face);
+    
+    /**
      * Tries to recognize a Face, returns a string containing the name for the face.
      * Respects the match threshold.
      */    
@@ -163,6 +169,7 @@ public:
     
     QString rectToString(const QRect& rect)        const;
     QRect   stringToRect(const QString& string)   const;
+    
 private:
     
     FaceIfacePriv* const d;

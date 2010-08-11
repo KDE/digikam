@@ -460,6 +460,11 @@ Face FaceIface::faceForRectInImage ( qlonglong imageid, const QRect& rect, const
     return f;
 }
 
+void FaceIface::trainWithFace(Face face)
+{
+    d->libkface->updateFaces(QList<Face>()+=face);
+}
+
 
 void FaceIface::trainWithFaces ( QList< Face > faceList )
 {
