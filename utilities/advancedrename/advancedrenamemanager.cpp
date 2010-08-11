@@ -55,18 +55,18 @@ public:
     {
     }
 
-    QStringList              files;
-    QMap<QString, int>       fileIndexMap;
-    QMap<QString, int>       fileGroupIndexMap;
-    QMap<QString, int>       directoryIndexMap;
-    QMap<QString, QString>   renamedFiles;
+    QStringList                       files;
+    QMap<QString, int>                fileIndexMap;
+    QMap<QString, int>                fileGroupIndexMap;
+    QMap<QString, int>                directoryIndexMap;
+    QMap<QString, QString>            renamedFiles;
 
-    Parser*                  parser;
-    AdvancedRenameWidget*    widget;
+    Parser*                           parser;
+    AdvancedRenameWidget*             widget;
     AdvancedRenameManager::ParserType parserType;
     AdvancedRenameManager::SortType   sortType;
 
-    int                      startIndex;
+    int                               startIndex;
 };
 
 AdvancedRenameManager::AdvancedRenameManager()
