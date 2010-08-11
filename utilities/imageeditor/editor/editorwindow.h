@@ -293,7 +293,7 @@ private:
     void setToolStartProgress(const QString& toolName);
     void setToolProgress(int progress);
     void setToolStopProgress();
-    
+
     void setToolInfoMessage(const QString& txt);
 
     void setPreviewModeMask(int mask);

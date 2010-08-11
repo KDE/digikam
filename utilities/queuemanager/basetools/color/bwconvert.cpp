@@ -53,6 +53,8 @@ BWConvert::BWConvert(QObject* parent)
     m_settingsView = new BWSepiaSettings(box, &m_preview);
     setSettingsWidget(box);
 
+    m_settingsView->startPreviewFilters();
+
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 }
@@ -63,7 +65,7 @@ BWConvert::~BWConvert()
 
 void BWConvert::slotResetSettingsToDefault()
 {
-    // We need to call this method there to reset all curves points. 
+    // We need to call this method there to reset all curves points.
     // Curves values are cleaned with default settings passed after.
     m_settingsView->resetToDefault();
     BatchTool::slotResetSettingsToDefault();
