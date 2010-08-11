@@ -88,7 +88,7 @@ public:
     QLabel                     *latLabel;
     QLabel                     *lonLabel;
     QLabel                     *dateLabel;
-    
+
     QToolButton                *detailsBtn;
     KComboBox                  *detailsCombo;
 
@@ -108,14 +108,24 @@ public:
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
                      : QWidget(parent), d(new ImagePropertiesGPSTabPriv)
 {
-    QGridLayout *layout = new QGridLayout(this);
-    QFrame* mapPanel    = new QFrame(this);
+    QGridLayout* const layout = new QGridLayout(this);
+
+    // --------------------------------------------------------
+
+    QFrame* const mapPanel    = new QFrame(this);
     mapPanel->setMinimumWidth(200);
     mapPanel->setMinimumHeight(200);
-    d->map              = new KMapIface::KMap(mapPanel);
-    d->map->setBackend("marble");
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
+
+    QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
+    d->map                    = new KMapIface::KMap(mapPanel);
+    d->map->setBackend("marble");
+    vlay2->addWidget(d->map);
+    vlay2->setMargin(0);
+    vlay2->setSpacing(0);
+
+    // --------------------------------------------------------
 
     d->itemModel        = new QStandardItemModel(this);
     d->gpsModelHelper   = new ImageGPSModelHelper(d->itemModel, this);
@@ -137,11 +147,15 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QWidget     *box       = new KHBox(this);
-    QHBoxLayout *boxLayout = new QHBoxLayout(box);
+    QWidget* const box = new KHBox(this);
+    QHBoxLayout* const hBoxLayout = reinterpret_cast<QHBoxLayout*>(box->layout());
+    if (hBoxLayout)
+    {
+        hBoxLayout->addStretch();
+    }
 
-    d->detailsCombo = new KComboBox(box);
-    d->detailsBtn   = new QToolButton(box);
+    d->detailsCombo    = new KComboBox(box);
+    d->detailsBtn      = new QToolButton(box);
     d->detailsBtn->setIcon(SmallIcon("internet-web-browser"));
     d->detailsBtn->setToolTip(i18n("See more info on the Internet"));
     d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
@@ -153,14 +167,14 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     //boxLayout->addWidget(d->detailsCombo);
     //boxLayout->addWidget(d->detailsBtn);
     //box->setMaximumWidth(100); 
-    d->map->addWidgetToControlWidget(box);
+//     d->map->addWidgetToControlWidget(box);
     //d->map->addWidgetToControlWidget(d->detailsCombo);
-    //d->map->addWidgetToControlWidget(d->detailsBtn);
+//     d->map->addWidgetToControlWidget(d->detailsBtn);
         
 
     // --------------------------------------------------------
 
-    layout->addWidget(d->map,                     0, 0, 1, 2);
+    layout->addWidget(mapPanel,                     0, 0, 1, 2);
     layout->addWidget(d->altLabel,                1, 0, 1, 1);
     layout->addWidget(d->altitude,                1, 1, 1, 1);
     layout->addWidget(d->latLabel,                2, 0, 1, 1);
@@ -169,8 +183,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     layout->addWidget(d->longitude,               3, 1, 1, 1);
     layout->addWidget(d->dateLabel,               4, 0, 1, 1);
     layout->addWidget(d->date,                    4, 1, 1, 1);
-    layout->addWidget(d->map->getControlWidget(), 5, 0, 1, 1);
-    //layout->addWidget(box,                        6, 0, 1, 2);
+    layout->addWidget(d->map->getControlWidget(), 5, 0, 1, 2);
+    layout->addWidget(box,                        6, 0, 1, 2);
     layout->setRowStretch(0, 10);
     layout->setColumnStretch(1, 10);
     layout->setSpacing(0);
@@ -194,14 +208,19 @@ void ImagePropertiesGPSTab::readConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
-    //d->map->readConfig(group);
+
+    KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
+    d->map->readSettingsFromGroup(&groupMapWidget);
 }
 
 void ImagePropertiesGPSTab::writeConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
-    //d->map->writeConfig(group);
+
+    KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
+    d->map->saveSettingsToGroup(&groupMapWidget);
+
     config->sync();
 }
 
@@ -296,14 +315,14 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
         return;
     }
 
-    DMetadata meta(url.toLocalFile());
+    const DMetadata meta(url.toLocalFile());
     setMetadata(meta, url);
 }
 
 void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
 {
     double alt, lat, lon;
-    QDateTime dt = meta.getImageDateTime();
+    const QDateTime dt = meta.getImageDateTime();
     if (meta.getGPSInfo(alt, lat, lon))
     {
         GPSInfo gpsInfo;
@@ -360,8 +379,8 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     d->gpsInfoList = list;
     for(int i=0; i<d->gpsInfoList.count(); ++i)
     {
-        ImageGPSItem* currentImageGPSItem = new ImageGPSItem(d->gpsInfoList.at(i));
-        d->itemModel->setItem(i, 0, currentImageGPSItem);
+        ImageGPSItem* const currentImageGPSItem = new ImageGPSItem(d->gpsInfoList.at(i));
+        d->itemModel->appendRow(currentImageGPSItem);
     }
 }
 
