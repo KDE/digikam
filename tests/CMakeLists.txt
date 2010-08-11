@@ -175,6 +175,7 @@ SET(albummodeltest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcollectionview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupalbumview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcategory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupfacetags.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuptooltip.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmetadata.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuptemplate.cpp

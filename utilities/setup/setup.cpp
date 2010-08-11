@@ -196,7 +196,6 @@ Setup::Setup(QWidget* parent)
                                     "<i>Customize information in tool-tips</i></qt>"));
     d->page_tooltip->setIcon(KIcon("dialog-information"));
 
-    
     d->faceTagsPage  = new SetupFaceTags();
     d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
     d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
@@ -268,7 +267,6 @@ Setup::Setup(QWidget* parent)
     d->page_camera->setHeader(i18n("<qt>Camera Settings<br/>"
                                    "<i>Manage your camera devices</i></qt>"));
     d->page_camera->setIcon(KIcon("camera-photo"));
-
 
     d->scriptManagerPage  = new SetupScriptManager();
     d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));

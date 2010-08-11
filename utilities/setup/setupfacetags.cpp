@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupfacetags.h"
+#include "setupfacetags.moc"
 
 // Qt includes
 
@@ -76,7 +76,8 @@ public:
     QLabel*       suggestionSliderLabel;
 };
 
-SetupFaceTags::SetupFaceTags(QWidget* parent): QScrollArea(parent), d(new SetupFaceTagsPriv)
+SetupFaceTags::SetupFaceTags(QWidget* parent)
+ : QScrollArea(parent), d(new SetupFaceTagsPriv)
 {
     QWidget *panel = new QWidget(viewport());
     setWidget(panel);
