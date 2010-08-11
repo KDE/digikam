@@ -110,8 +110,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 {
     QGridLayout *layout = new QGridLayout(this);
     QFrame* mapPanel    = new QFrame(this);
-    mapPanel->setMinimumWidth(256);
-    mapPanel->setMinimumHeight(256);
+    mapPanel->setMinimumWidth(200);
+    mapPanel->setMinimumHeight(200);
     d->map              = new KMapIface::KMap(mapPanel);
     d->map->setBackend("marble");
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
@@ -137,7 +137,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QWidget     *box       = new QWidget(this);
+    QWidget     *box       = new KHBox(this);
     QHBoxLayout *boxLayout = new QHBoxLayout(box);
 
     d->detailsCombo = new KComboBox(box);
@@ -150,10 +150,14 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->detailsCombo->insertItem(MultiMap,      QString("MultiMap"));
     d->detailsCombo->insertItem(OpenStreetMap, QString("OpenStreetMap"));
 
-    boxLayout->addWidget(d->detailsCombo);
-    boxLayout->addWidget(d->detailsBtn);
+    //boxLayout->addWidget(d->detailsCombo);
+    //boxLayout->addWidget(d->detailsBtn);
+    //box->setMaximumWidth(100); 
     d->map->addWidgetToControlWidget(box);
-    
+    //d->map->addWidgetToControlWidget(d->detailsCombo);
+    //d->map->addWidgetToControlWidget(d->detailsBtn);
+        
+
     // --------------------------------------------------------
 
     layout->addWidget(d->map,                     0, 0, 1, 2);
@@ -165,7 +169,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     layout->addWidget(d->longitude,               3, 1, 1, 1);
     layout->addWidget(d->dateLabel,               4, 0, 1, 1);
     layout->addWidget(d->date,                    4, 1, 1, 1);
-    layout->addWidget(d->map->getControlWidget(), 5, 0, 1, 2);
+    layout->addWidget(d->map->getControlWidget(), 5, 0, 1, 1);
+    //layout->addWidget(box,                        6, 0, 1, 2);
     layout->setRowStretch(0, 10);
     layout->setColumnStretch(1, 10);
     layout->setSpacing(0);
