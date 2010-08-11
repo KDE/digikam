@@ -58,7 +58,7 @@ public:
     QStringList                       files;
     QMap<QString, int>                fileIndexMap;
     QMap<QString, int>                fileGroupIndexMap;
-    QMap<QString, int>                directoryIndexMap;
+//    QMap<QString, int>                directoryIndexMap;
     QMap<QString, QString>            renamedFiles;
 
     Parser*                           parser;
@@ -259,7 +259,7 @@ void AdvancedRenameManager::clearMappings()
 {
     d->fileIndexMap.clear();
     d->fileGroupIndexMap.clear();
-    d->directoryIndexMap.clear();
+//    d->directoryIndexMap.clear();
     d->renamedFiles.clear();
 }
 
