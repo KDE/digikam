@@ -367,7 +367,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     d->imageAlbumModel->openAlbum(salbum);
     if(d->existsSelection) 
     {
-        d->mapSearchWidget->setGroupedModel(d->markerTilerModelBased); 
+        d->mapSearchWidget->setGroupedModel(d->markerTilerModelBased);
     }
 }
 
