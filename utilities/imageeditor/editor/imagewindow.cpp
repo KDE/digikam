@@ -361,6 +361,9 @@ void ImageWindow::setupConnections()
 
     connect(m_canvas, SIGNAL(signalRedoSteps(int)),
             this, SLOT(slotEnableEntriesInFiltersHistorySidebar(int)));
+
+    connect(m_canvas->interface(), SIGNAL(signalModified()),
+            this, SLOT(slotUpdateFiltersHistorySidebar()));
 }
 
 void ImageWindow::setupUserArea()

@@ -150,6 +150,7 @@ public:
 
     uchar* getImageSelection();
     void   putImageSelection(const QString& caller, uchar* data);
+    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* data);
 
     void   putIccProfile(const IccProfile& profile);
 

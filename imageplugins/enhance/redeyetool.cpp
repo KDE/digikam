@@ -418,7 +418,10 @@ void RedEyeTool::finalRendering()
 
     redEyeFilter(selection);
 
-    iface->putImageSelection(i18n("Red Eyes Correction"), selection.bits());
+    FilterAction action("digikam:redEyeFilter", 1);
+    action.setDisplayableName(i18n("Red Eye Filter"));
+
+    iface->putImageSelection(i18n("Red Eyes Correction"), action, selection.bits());
 
     kapp->restoreOverrideCursor();
 }

@@ -281,10 +281,15 @@ void ImageIface::putOriginalIccProfile(const IccProfile& profile)
 
 void ImageIface::putImageSelection(const QString& caller, uchar* data)
 {
+    putImageSelection(caller, FilterAction(), data);
+}
+
+void ImageIface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
+{
     if (!data)
         return;
 
-    DImgInterface::defaultInterface()->putImageSelection(caller, data);
+    DImgInterface::defaultInterface()->putImageSelection(caller, action, data);
 }
 
 int ImageIface::previewWidth()

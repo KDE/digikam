@@ -1098,8 +1098,15 @@ uchar* DImgInterface::getImageSelection()
 
 void DImgInterface::putImageSelection(const QString& caller, uchar* data)
 {
+    putImageSelection(caller, FilterAction(), data);
+}
+
+void DImgInterface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
+{
     if (!data || d->image.isNull())
         return;
+
+    d->image.setFilterAction(action);
 
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
 

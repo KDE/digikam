@@ -119,6 +119,7 @@ public:
         Caller is an i18n'ed string that will be shown as the undo/redo action name.
     */
     void   putImageSelection(const QString& caller, uchar* data);
+    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* data);
 
     /** Replace the stored target preview data with the given data.
         The characteristics of the data must match the characteristics of the current

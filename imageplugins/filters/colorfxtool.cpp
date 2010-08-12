@@ -390,7 +390,13 @@ void ColorFxTool::finalRendering()
                 break;
         }
 
-        iface->putOriginalImage(name, data);
+        FilterAction action("digikam:ColorFX", 1);
+        action.setDisplayableName(i18n("ColorFX Tool"));
+
+        action.addParameter("effectType", d->effectType->currentIndex());
+        action.addParameter("effectName", name);
+
+        iface->putOriginalImage(name, action, data);
         delete [] data;
     }
 

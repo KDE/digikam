@@ -969,7 +969,15 @@ void RatioCropTool::finalRendering()
     delete [] data;
     imOrg.crop(normalizedRegion);
 
-    iface->putOriginalImage(i18n("Aspect Ratio Crop"), imOrg.bits(), imOrg.width(), imOrg.height());
+    FilterAction action("digikam:ratioCrop", 1);
+    action.setDisplayableName(i18n("Aspect Ratio Crop"));
+
+    action.addParameter("x", currentRegion.x());
+    action.addParameter("y", currentRegion.y());
+    action.addParameter("width", currentRegion.width());
+    action.addParameter("height", currentRegion.height());
+
+    iface->putOriginalImage(i18n("Aspect Ratio Crop"), action, imOrg.bits(), imOrg.width(), imOrg.height());
 
     kapp->restoreOverrideCursor();
     writeSettings();
