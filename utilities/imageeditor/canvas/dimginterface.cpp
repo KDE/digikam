@@ -995,14 +995,14 @@ DImageHistory DImgInterface::getImageHistory()
     return d->image.getImageHistory();
 }
 
+void DImgInterface::setImageHistoryToCurrent()
+{
+    d->image.setImageHistory(d->undoMan->getCurrentImageHistory());
+}
+
 DImageHistory DImgInterface::getInitialImageHistory()
 {
     return d->imageHistoryWhenLoaded;
-}
-
-void DImgInterface::removeLastFilterFromImageHistory()
-{
-    d->image.getImageHistory().removeLastFilter();
 }
 
 void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h)
@@ -1022,9 +1022,11 @@ void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h, b
 
 void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this, caller));
-    //TODO: use action to write history, here, after set UndoAction is added
+    //FilterAction needs to be set before UndoManager, otherwise UM will always
+    //be one step behind with DImageHistory
     d->image.setFilterAction(action);
+
+    d->undoMan->addAction(new UndoActionIrreversible(this, caller));
     putImage(data, w, h, sixteenBit);
 }
 

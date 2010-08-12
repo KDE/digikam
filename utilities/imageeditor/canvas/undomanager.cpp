@@ -34,6 +34,8 @@
 
 #include <QList>
 
+#include <KDebug>
+
 // Local includes
 
 #include "dimginterface.h"
@@ -50,20 +52,22 @@ public:
 
     UndoManagerPriv()
     {
-        dimgiface = 0;
-        undoCache = 0;
-        origin    = 0;
+        dimgiface   = 0;
+        undoCache   = 0;
+        origin      = 0;
+        historyList = 0;
     }
 
-    QList<UndoAction*>  undoActions;
-    QList<UndoAction*>  redoActions;
-    int                 origin;
+    QList<UndoAction*>    undoActions;
+    QList<UndoAction*>    redoActions;
+    int                   origin;
 
-    UndoCache*          undoCache;
+    UndoCache*            undoCache;
 
-    DImgInterface*      dimgiface;
+    DImgInterface*        dimgiface;
 
-    DImageHistory       historyAtOrigin;
+    DImageHistory         historyAtOrigin;
+    QList<DImageHistory>* historyList;
 };
 
 UndoManager::UndoManager(DImgInterface* iface)
@@ -71,12 +75,14 @@ UndoManager::UndoManager(DImgInterface* iface)
 {
     d->dimgiface = iface;
     d->undoCache = new UndoCache;
+    d->historyList = new QList<DImageHistory>();
 }
 
 UndoManager::~UndoManager()
 {
     clear(true);
     delete d->undoCache;
+    delete d->historyList;
     delete d;
 }
 
@@ -88,7 +94,19 @@ void UndoManager::addAction(UndoAction* action)
     // All redo actions are invalid now
     clearRedoActions();
 
+    if (d->historyList->size() > d->origin+1)
+    {
+        kDebug() << d->origin << "||" << d->historyList->size();
+        for(int i = d->origin+1; i < d->historyList->size(); i++)
+        {
+            d->historyList->removeLast();
+        }
+        kDebug() << d->origin << "||" << d->historyList->size();
+    }
+
     d->undoActions << action;
+    d->historyList->append(d->dimgiface->getImageHistory());
+    kDebug() << d->historyList->last().toXml();
 
     if (typeid(*action) == typeid(UndoActionIrreversible))
     {
@@ -119,10 +137,10 @@ void UndoManager::undo()
     {
         // Save the current state for the redo operation
 
-        int w          = d->dimgiface->origWidth();
-        int h          = d->dimgiface->origHeight();
-        int bytesDepth = d->dimgiface->bytesDepth();
-        uchar* data    = d->dimgiface->getImage();
+        int w           = d->dimgiface->origWidth();
+        int h           = d->dimgiface->origHeight();
+        int bytesDepth  = d->dimgiface->bytesDepth();
+        uchar* data     = d->dimgiface->getImage();
 
         d->undoCache->erase(d->undoActions.size() + 1);
         d->undoCache->putData(d->undoActions.size() + 1, w, h, bytesDepth, data);
@@ -141,8 +159,7 @@ void UndoManager::undo()
     {
         action->rollBack();
     }
-    
-    d->dimgiface->removeLastFilterFromImageHistory();
+
     d->undoActions.removeLast();
     d->redoActions << action;
     d->origin--;
@@ -257,6 +274,14 @@ bool UndoManager::isAtOrigin()
 void UndoManager::setOrigin()
 {
     d->origin = 0;
+}
+
+DImageHistory UndoManager::getCurrentImageHistory()
+{
+    if(d->origin == 0)
+        return d->historyAtOrigin;
+
+    return d->historyList->at(d->origin-1);
 }
 
 }  // namespace Digikam

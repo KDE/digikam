@@ -134,6 +134,8 @@ protected:
     IOFileSettingsContainer *m_IOFileSettings;
     SavingContextContainer  *m_savingContext;
 
+    QString                  m_formatForRAWVersioning;
+
 protected:
 
     void saveStandardSettings();
@@ -245,6 +247,7 @@ protected Q_SLOTS:
     virtual void slotChangeTheme(const QString& theme);
 
     virtual void slotComponentsInfo();
+    virtual void slotSetCurrentImageHistory();
 
     virtual void slotFilePrint()=0;
     virtual void slotDeleteCurrentItem()=0;

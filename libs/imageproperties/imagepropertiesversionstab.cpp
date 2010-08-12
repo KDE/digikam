@@ -50,6 +50,7 @@
 #include "thumbnailloadthread.h"
 #include "versionswidget.h"
 #include "filtershistorywidget.h"
+#include "albumsettings.h"
 
 namespace Digikam
 {
@@ -165,9 +166,14 @@ void ImagePropertiesVersionsTab::slotViewItemSelected(QModelIndex index)
     d->versionsWidget->slotViewItemSelected(index);
 }
 
-void ImagePropertiesVersionsTab::disableEntry(bool disable)
+void ImagePropertiesVersionsTab::disableEntries(int count)
 {
-    d->filtersHistoryWidget->disableEntry(disable);
+    d->filtersHistoryWidget->disableEntries(count);
+}
+
+void ImagePropertiesVersionsTab::enableEntries(int count)
+{
+    d->filtersHistoryWidget->enableEntries(count);
 }
 
 void ImagePropertiesVersionsTab::setModelData(const QList<DImageHistory::Entry>& entries)
@@ -217,15 +223,21 @@ void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
             current = d->versionsList->at(i).first;
         }
     }
-    ImageInfo(current).setVisible(false);
-    ImageInfo(newOne).setVisible(true);
 
+    if(!AlbumSettings::instance()->getShowAllVersions())
+    {
+        ImageInfo(current).setVisible(false);
+        ImageInfo(newOne).setVisible(true);
+    }
+    
     d->currentSelectedImage = url.path();
 
     setupFiltersData();
 
     emit updateMainViewSignal();
+
     emit setCurrentUrlSignal(url);
+    emit setCurrentIdSignal(newOne);
 }
 
 void ImagePropertiesVersionsTab::slotUpdateImageInfo(const ImageInfo& info)

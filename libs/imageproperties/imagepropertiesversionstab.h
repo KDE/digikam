@@ -75,12 +75,14 @@ public Q_SLOTS:
     //filters history tab slots
     void showCustomContextMenu(const QPoint& position);
     void setModelData(const QList<DImageHistory::Entry>& entries);
-    void disableEntry(bool disable);
+    void disableEntries(int count);
+    void enableEntries(int count);
 
 Q_SIGNALS:
 
     void setCurrentUrlSignal(const KUrl& url);
     void updateMainViewSignal();
+    void setCurrentIdSignal(qlonglong id);
 
 private:
 

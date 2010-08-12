@@ -552,7 +552,10 @@ void DigikamView::setupConnections()
             d->iconView, SLOT(setCurrentUrl(KUrl)));
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(updateMainViewSignal()),
-            d->iconView, SLOT(update()));
+            d->iconView->imageAlbumModel(), SLOT(refresh()));
+    
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(setCurrentIdSignal(qlonglong)),
+            d->iconView, SLOT(setCurrentWhenAvailable(qlonglong)));
 }
 
 void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)

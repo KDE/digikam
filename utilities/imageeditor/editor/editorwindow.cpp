@@ -104,6 +104,7 @@
 
 // Local includes
 
+#include "albumsettings.h"
 #include "buttonicondisabler.h"
 #include "canvas.h"
 #include "colorcorrectiondlg.h"
@@ -155,8 +156,6 @@ EditorWindow::EditorWindow(const char *name)
     m_contextMenu            = 0;
     m_canvas                 = 0;
     m_imagePluginLoader      = 0;
-    m_undoAction             = 0;
-    m_redoAction             = 0;
     m_fullScreenAction       = 0;
     m_saveAction             = 0;
     m_saveAsAction           = 0;
@@ -390,6 +389,9 @@ void EditorWindow::setupStandardActions()
     connect(m_undoAction, SIGNAL(triggered()), d->undoSignalMapper, SLOT(map()));
     d->undoSignalMapper->setMapping(m_undoAction, 1);
 
+    connect(m_undoAction, SIGNAL(triggered()),
+            this, SLOT(slotSetCurrentImageHistory()));
+
     m_redoAction = new KToolBarPopupAction(KIcon("edit-redo"), i18n("Redo"), this);
     m_redoAction->setShortcut(KStandardShortcut::redo());
     m_redoAction->setEnabled(false);
@@ -405,6 +407,9 @@ void EditorWindow::setupStandardActions()
 
     connect(m_redoAction, SIGNAL(triggered()), d->redoSignalMapper, SLOT(map()));
     d->redoSignalMapper->setMapping(m_redoAction, 1);
+
+    connect(m_redoAction, SIGNAL(triggered()),
+            this, SLOT(slotSetCurrentImageHistory()));
 
     d->selectAllAction = new KAction(i18n("Select All"), this);
     d->selectAllAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_A));
@@ -1936,12 +1941,13 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url, bool subversion)
     // FIXME: Should these be applied when saving new version (to a new file)?
         applyStandardSettings();
         editingRAW = true;
-        m_savingContext->format = "jpg";
+        m_savingContext->format = m_formatForRAWVersioning.toLower(); //AlbumSettings::instance()->getFormatForStoringRAW().toLower();
     }
 
     bool editingOriginal = m_canvas->interface()->getInitialImageHistory().isEmpty();
     QString fileName = VersionManager::instance()->getVersionedFilename(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash), 
-                                                                        info.fileName(), info.size(), editingOriginal, subversion, editingRAW);
+                                                                        info.fileName(), info.size(), m_savingContext->format,
+                                                                        editingOriginal, subversion, editingRAW);
 
     if(fileName.isEmpty())
     {
@@ -2359,6 +2365,11 @@ PreviewToolBar::PreviewMode EditorWindow::previewMode()
 void EditorWindow::setToolInfoMessage(const QString& txt)
 {
     d->infoLabel->setText(txt);
+}
+
+void EditorWindow::slotSetCurrentImageHistory()
+{
+    m_canvas->interface()->setImageHistoryToCurrent();
 }
 
 }  // namespace Digikam

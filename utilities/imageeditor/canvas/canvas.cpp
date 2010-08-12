@@ -1296,6 +1296,8 @@ void Canvas::slotRestore()
 
 void Canvas::slotUndo(int steps)
 {
+    emit signalUndoSteps(steps);
+
     while(steps > 0)
     {
         d->im->undo();
@@ -1315,6 +1317,8 @@ void Canvas::getRedoHistory(QStringList& titles)
 
 void Canvas::slotRedo(int steps)
 {
+    emit signalRedoSteps(steps);
+
     while(steps > 0)
     {
         d->im->redo();

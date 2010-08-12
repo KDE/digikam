@@ -37,6 +37,7 @@
 namespace Digikam
 {
 
+class DImageHistory;
 class DImgInterface;
 class UndoManagerPriv;
 class UndoAction;
@@ -61,6 +62,8 @@ public:
     void setOrigin();
 
     void addAction(UndoAction* action);
+
+    DImageHistory getCurrentImageHistory();
 
 private:
 

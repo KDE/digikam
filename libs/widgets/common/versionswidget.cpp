@@ -129,11 +129,13 @@ VersionsWidget::~VersionsWidget()
 void VersionsWidget::setupModelData(QList<QPair<QString, int> >& list) const
 {
     d->model->setupModelData(list);
+    d->delegate->resetThumbsCounter();
 }
 
 void VersionsWidget::slotDigikamViewNoCurrentItem()
 {
     d->model->clearModelData();
+    d->delegate->resetThumbsCounter();
 }
 
 void VersionsWidget::slotViewItemSelected(QModelIndex index)

@@ -57,6 +57,8 @@ public:
     QList<FilterAction>*         filterStack;
     DImgFilterManager*           filterManager;
     KUrl                         lastUrl;
+
+    int                          disabledEntries;
 };
 
 ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& url)
@@ -64,6 +66,8 @@ ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& 
 {
     d->filterStack = new QList<FilterAction>();
 //    d->filterManager = new DImgFilterManager();
+
+    d->disabledEntries = 0;
 
     if(!url.isEmpty())
     {
@@ -137,6 +141,11 @@ QVariant ImageFiltersHistoryModel::data(const QModelIndex& index, int role) cons
     {
         item = static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer());
         return item->data(index.column());
+    }
+    else if (role == Qt::UserRole)
+    {
+        item = static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer());
+        return item->isDisabled();
     }
 
     return QVariant();
@@ -287,12 +296,25 @@ bool ImageFiltersHistoryModel::removeRows(int row, int /*count*/, const QModelIn
     return false;
 }
 
-void ImageFiltersHistoryModel::disableEntry(QModelIndex index, bool disable)
+void ImageFiltersHistoryModel::disableEntries(int count)
 {
-    if(index.isValid())
+    d->disabledEntries += count;
+    while(count > 0)
     {
-        d->rootItem->child(index.row())->setDisabled(disable);
+        d->rootItem->child(rowCount()-d->disabledEntries-1+count)->setDisabled(true);
+        --count;
     }
+}
+
+void ImageFiltersHistoryModel::enableEntries(int count)
+{
+    int tmp = count;
+    while(count > 0)
+    {
+        d->rootItem->child(rowCount()-d->disabledEntries-1+count)->setDisabled(false);
+        --count;
+    }
+    d->disabledEntries -= tmp;
 }
 
 } // namespace Digikam

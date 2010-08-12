@@ -33,6 +33,7 @@
 
 #include <KIcon>
 #include <KLocale>
+#include <KDebug>
 
 // Local includes
 
@@ -55,11 +56,11 @@ QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& /*op
 {
     if(!index.model()->parent(index).isValid())
     {
-        return QSize(250, 32);
+        return QSize(230, 32);
     }
     else
     {
-        return QSize(250, 18);
+        return QSize(230, 18);
     }
 }
 
@@ -69,21 +70,36 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     painter->setRenderHint(QPainter::Antialiasing, true);
     QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
-    QLinearGradient linearGradient((int)(option.rect.width()/2), option.rect.y(), (int)(option.rect.width()/2), option.rect.height());
-    linearGradient.setColorAt(0.0, Qt::white);
-    linearGradient.setColorAt(0.2, Qt::green);
-    linearGradient.setColorAt(1.0, Qt::black);
+    bool entryDisabled = index.data(Qt::UserRole).toBool();
 
     if(!index.model()->parent(index).isValid())
     {
         painter->drawRect(option.rect);
 
         QString iconName = DImgFilterManager::instance()->getFilterIcon(index.data(Qt::DecorationRole).toString());
-        painter->drawPixmap(option.rect.left()+4, option.rect.top()+5, KIcon(iconName).pixmap(QSize(22,22)));
+        if(entryDisabled)
+        {
+            painter->drawPixmap(option.rect.left()+4, option.rect.top()+5, KIcon(iconName).pixmap(QSize(22,22), QIcon::Disabled));
+        }
+        else
+        {
+            painter->drawPixmap(option.rect.left()+4, option.rect.top()+5, KIcon(iconName).pixmap(QSize(22,22)));
+        }
     }
 
     QRect textRect = option.rect;
     textRect.setLeft(textRect.left() + 32);
+
+    if(entryDisabled)
+    {
+        QFont disabledFont(QApplication::font());
+        disabledFont.setItalic(true);
+        
+        QPalette disabledColor;
+        
+        painter->setFont(disabledFont);
+        painter->setPen(disabledColor.color(QPalette::Disabled, QPalette::WindowText));
+    }
 
     if(!index.data(Qt::DisplayRole).toString().isEmpty())
     {
@@ -94,8 +110,13 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
         //infoIcon.setToolTip(i18n("This filter's name is unknown, so you see only its identifier"));    //FIXME: better string?
         painter->drawPixmap(option.rect.right() - 22, option.rect.top() + 8, KIcon("dialog-information").pixmap(QSize(16,16)));
         painter->drawText(textRect, Qt::AlignVCenter, index.data(Qt::DecorationRole).toString());
-        
     }
+
+    if(entryDisabled)
+    {
+        //painter->fillRect(option.rect, QColor(200,200,200,160));
+    }
+    
     painter->restore();
 }
 

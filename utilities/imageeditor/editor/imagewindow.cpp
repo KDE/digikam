@@ -246,6 +246,7 @@ ImageWindow::ImageWindow()
     d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
     slotSidebarTabTitleStyleChanged();
+    d->rightSideBar->getFiltersHistoryTab()->setCurrentIndex(1);
 }
 
 ImageWindow::~ImageWindow()
@@ -354,6 +355,12 @@ void ImageWindow::setupConnections()
 
     connect(this, SIGNAL(signalToolApplied()),
             this, SLOT(slotUpdateFiltersHistorySidebar()));
+
+    connect(m_canvas, SIGNAL(signalUndoSteps(int)),
+            this, SLOT(slotDisableEntriesInFiltersHistorySidebar(int)));
+
+    connect(m_canvas, SIGNAL(signalRedoSteps(int)),
+            this, SLOT(slotEnableEntriesInFiltersHistorySidebar(int)));
 }
 
 void ImageWindow::setupUserArea()
@@ -505,6 +512,7 @@ void ImageWindow::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     m_setExifOrientationTag = settings->getExifSetOrientation();
     m_canvas->setExifOrient(settings->getExifRotate());
+    m_formatForRAWVersioning = settings->getFormatForStoringRAW();
     d->thumbBar->applySettings();
     refreshView();
 }
@@ -1533,10 +1541,21 @@ void ImageWindow::slotUpdateFiltersHistorySidebar()
      d->rightSideBar->setFiltersHistoryDirty(true);
 }
 
-void ImageWindow::slotDisableEntryInFiltersHistorySidebar()
+void ImageWindow::slotDisableEntriesInFiltersHistorySidebar(int count)
 {
-//     d->rightSideBar->getFiltersHistoryTab()->disableEntry(true);
+     d->rightSideBar->getFiltersHistoryTab()->disableEntries(count);
+     
 //     d->rightSideBar->setFiltersHistoryDirty(true);
 }
+
+void ImageWindow::slotEnableEntriesInFiltersHistorySidebar(int count)
+{
+    d->rightSideBar->getFiltersHistoryTab()->enableEntries(count);
+}
+
+// void ImageWindow::slotSetCurrentImageHistory()
+// {
+//     m_canvas->interface()->setImageHistoryToCurrent();
+// }
 
 }  // namespace Digikam

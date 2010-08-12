@@ -160,7 +160,8 @@ private Q_SLOTS:
     void slotSidebarTabTitleStyleChanged();
 
     void slotUpdateFiltersHistorySidebar();
-    void slotDisableEntryInFiltersHistorySidebar();
+    void slotDisableEntriesInFiltersHistorySidebar(int count);
+    void slotEnableEntriesInFiltersHistorySidebar(int count);
 
 private:
 

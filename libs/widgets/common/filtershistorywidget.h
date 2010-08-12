@@ -89,7 +89,8 @@ public Q_SLOTS:
 
     void showCustomContextMenu(const QPoint& position);
     void setModelData(const QList<DImageHistory::Entry>& entries);
-    void disableEntry(bool disable);
+    void disableEntries(int count);
+    void enableEntries(int count);
 
 private:
 

@@ -141,9 +141,16 @@ void FiltersHistoryWidget::setModelData(const QList<DImageHistory::Entry>& entri
     d->model->setupModelData(entries);
 }
 
-void FiltersHistoryWidget::disableEntry(bool disable)
+void FiltersHistoryWidget::disableEntries(int count)
 {
-    d->model->disableEntry(d->model->index(d->model->rowCount(),0), disable);
+    d->model->disableEntries(count);
+    d->view->repaint();
+}
+
+void FiltersHistoryWidget::enableEntries(int count)
+{
+    d->model->enableEntries(count);
+    d->view->repaint();
 }
 
 } // namespace Digikam

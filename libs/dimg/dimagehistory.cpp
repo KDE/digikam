@@ -496,7 +496,8 @@ void DImageHistory::setOriginalFilePath(const QString& filePath)
 
 void DImageHistory::removeLastFilter()
 {
-    d->entries.removeLast();
+    if(!d->entries.last().action.isNull())
+        d->entries.removeLast();
 }
 
 QString DImageHistory::originalUUID() const

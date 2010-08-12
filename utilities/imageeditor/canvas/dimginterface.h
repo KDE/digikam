@@ -161,7 +161,9 @@ public:
     KExiv2Data            getMetadata();
     DImageHistory         getImageHistory();
     DImageHistory         getInitialImageHistory();
-    void                  removeLastFilterFromImageHistory();
+    /** This takes ImageHistory from UndoManager's current history point
+        and sets it as current image's ImageHistory */
+    void                  setImageHistoryToCurrent();
 
     QString               getImageFileName();
     QString               getImageFilePath();
