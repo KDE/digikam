@@ -299,16 +299,19 @@ void GPSSearchView::setActive(bool val)
     {
         // make sure we reset the custom filters set by the MarkerClusterer:
      //   emit(signalMapSoloItems(KUrl::List(), "gpssearch"));
+        d->mapSearchWidget->setActive(false);
     }
 
     if (val && d->searchTreeView->currentAlbum())
     {
-       AlbumManager::instance()->setCurrentAlbum(
+        d->mapSearchWidget->setActive(true);
+        AlbumManager::instance()->setCurrentAlbum(
                         d->searchTreeView->currentAlbum());
     }
     else if (val)
     {
-       d->imageAlbumModel->clearImageInfos();
+        d->mapSearchWidget->setActive(true);
+        d->imageAlbumModel->clearImageInfos();
     }
     
 }
@@ -331,6 +334,7 @@ void GPSSearchView::slotSaveGPSSAlbum()
 void GPSSearchView::slotSelectionChanged()
 {
     d->existsSelection = true;
+    d->mapSearchWidget->setSelectionStatus(d->existsSelection);
     slotCheckNameEditGPSConditions();
     createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
 }
@@ -340,7 +344,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 
     AlbumManager::instance()->setCurrentAlbum(0);
 
-    if (!d->mapSearchWidget->hasSelection())
+    if (!d->mapSearchWidget->getSelectionStatus())
         return;
 
     // We query database here
@@ -456,6 +460,7 @@ bool GPSSearchView::checkAlbum(const QString& name) const
 void GPSSearchView::slotRemoveCurrentSelection()
 {
     d->existsSelection = false;
+    d->mapSearchWidget->setSelectionStatus(d->existsSelection);
     d->imageAlbumModel->clearImageInfos();
 
 /*    int rootAlbumId = 1;
@@ -475,7 +480,7 @@ void GPSSearchView::slotRemoveCurrentFilter()
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
 
-    if (d->mapSearchWidget->hasSelection())
+    if (d->mapSearchWidget->getSelectionStatus())
     {
         d->nameEdit->setEnabled(true);
 
