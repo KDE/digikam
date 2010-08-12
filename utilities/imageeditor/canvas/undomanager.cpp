@@ -34,8 +34,6 @@
 
 #include <QList>
 
-#include <KDebug>
-
 // Local includes
 
 #include "dimginterface.h"
@@ -96,17 +94,14 @@ void UndoManager::addAction(UndoAction* action)
 
     if (d->historyList->size() > d->origin+1)
     {
-        kDebug() << d->origin << "||" << d->historyList->size();
         for(int i = d->origin+1; i < d->historyList->size(); i++)
         {
             d->historyList->removeLast();
         }
-        kDebug() << d->origin << "||" << d->historyList->size();
     }
 
     d->undoActions << action;
     d->historyList->append(d->dimgiface->getImageHistory());
-    kDebug() << d->historyList->last().toXml();
 
     if (typeid(*action) == typeid(UndoActionIrreversible))
     {
