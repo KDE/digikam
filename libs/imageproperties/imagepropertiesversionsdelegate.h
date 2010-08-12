@@ -49,6 +49,7 @@ public:
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     WorkingWidget* getWidget() const;
+    void           resetThumbsCounter();
 
 public Q_SLOTS:
 
@@ -61,6 +62,7 @@ Q_SIGNALS:
 private:
 
     WorkingWidget* m_workingWidget;
+    int            m_thumbsPainted;
 };
 
 } // namespace Digikam

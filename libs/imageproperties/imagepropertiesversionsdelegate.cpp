@@ -48,6 +48,7 @@ ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegate(QObject* parent
                                : QStyledItemDelegate(parent)
 {
     m_workingWidget = new WorkingWidget();
+    m_thumbsPainted = 0;
     //TODO: get system color for views as a background
     m_workingWidget->setStyleSheet("background-color: rgb(255, 255, 255);");
 
@@ -88,13 +89,14 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
         if(!thumbnail.isNull())
         {
             thumbnail = thumbnail.scaled(64, 48, Qt::KeepAspectRatio);
+            const_cast<ImagePropertiesVersionsDelegate*>(this)->m_thumbsPainted++;
         }
         else
         {
             //if the thumbnail pixmap is null, display an error icon instead
             thumbnail = BarIcon("task-reject");
         }
-        if(index.row() == index.model()->rowCount()-1)
+        if(m_thumbsPainted == index.model()->rowCount())
         {
             //the animation gets disconnected after the last thumbnail is drawn
             //this way it won't uselessly emit signals that model has updated data (which has not)
@@ -139,6 +141,11 @@ WorkingWidget* ImagePropertiesVersionsDelegate::getWidget() const
 void ImagePropertiesVersionsDelegate::slotAnimationStep()
 {
     emit throbberUpdated();
+}
+
+void ImagePropertiesVersionsDelegate::resetThumbsCounter()
+{
+    m_thumbsPainted = 0;
 }
 
 } // namespace Digikam
