@@ -515,7 +515,8 @@ void ImagePreviewViewV2::drawFaceItems()
 
 void ImagePreviewViewV2::findFaces()
 {
-    DImg dimg(d->item->image());
+    DImg dimg;
+    dimg.load(getImageInfo().filePath());
     int i;
     
     if(hasBeenScanned())
@@ -527,11 +528,16 @@ void ImagePreviewViewV2::findFaces()
         {
             kDebug()<<d->currentFaces.at(i);
         }
-    
+        
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group("Face Tags Settings");
+        if(group.readEntry("FaceSuggestion", false))
+            this->trainFaces();
         return;
     }
     
     d->currentFaces = d->faceIface->findAndTagFaces(dimg, d->item->imageInfo().id());
+    
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
     
     for(i = 0; i < d->currentFaces.size(); ++i)
@@ -546,6 +552,11 @@ void ImagePreviewViewV2::slotShowPeopleTags()
     clearFaceItems();
     findFaces();
     drawFaceItems();
+    
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group("Face Tags Settings");
+        if(group.readEntry("FaceSuggestion", false))
+            this->suggestFaces();
     
     d->peopleToggleAction->setText(i18n("Hide face tags"));
     d->addPersonAction->setVisible(true);
@@ -638,5 +649,61 @@ void ImagePreviewViewV2::makeFaceItemConnections()
                 this, SLOT(slotRemoveFaceTag(QString, QRect)) );
     }
 }
+
+void ImagePreviewViewV2::trainFaces()
+{
+    QList<Face> trainList;
+    foreach(Face f, d->currentFaces)
+    {
+        if(f.name() != "" && !d->faceIface->isFaceTrained(getImageInfo().id(), f.toRect(), f.name()))
+            trainList += f;
+    }
+    
+    kDebug()<<"Number of training faces"<<trainList.size();
+    
+    if(trainList.size()!=0)
+    {
+        d->faceIface->trainWithFaces(trainList);
+        d->faceIface->markFacesAsTrained(getImageInfo().id(), trainList);
+    }
+}
+
+void ImagePreviewViewV2::suggestFaces()
+{
+    // Assign tentative names to the face list
+    QList<Face> recogList;
+    foreach(Face f, d->currentFaces)
+    {
+        if(!d->faceIface->isFaceRecognized(getImageInfo().id(), f.toRect(), f.name()) && f.name() == "")
+        {
+            f.setName(d->faceIface->recognizedName(f));
+            d->faceIface->markFaceAsRecognized(getImageInfo().id(), f.toRect(), f.name());
+            
+            // If the face wasn't recognized (too distant) don't suggest anything
+            if(f.name() == "")
+                continue;
+            else
+                recogList += f;
+        }
+    }
+    
+    kDebug()<<"Number of suggestions = "<<recogList.size();
+    kDebug()<<"Number of faceitems = "<<d->faceitems.size();
+    // Now find the relevant face items and suggest faces
+    for(int i = 0; i < recogList.size(); ++i)
+    {
+        for(int j = 0; j < d->faceitems.size(); ++j)
+        {
+            if(recogList[i].toRect() == d->faceitems[j]->originalRect())
+            {
+                kDebug()<<"Suggesting a name "<<recogList[i].name();
+                d->faceitems[j]->suggest(recogList[i].name());
+                break;
+            }
+        }
+    }
+    
+}
+
 
 }  // namespace Digikam

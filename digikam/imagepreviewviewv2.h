@@ -64,6 +64,8 @@ public:
 
     void updateScale();
     void findFaces();
+    void trainFaces();
+    void suggestFaces();
     void drawFaceItems();
     void clearFaceItems();
     

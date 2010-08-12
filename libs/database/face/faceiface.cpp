@@ -66,6 +66,9 @@ public:
     
     FaceIfacePriv()
     {
+        if(!KStandardDirs::exists(KStandardDirs::locateLocal("data", "libkface")))
+            KStandardDirs::makeDir(KStandardDirs::locateLocal("data", "libkface"));
+        
         libkface             = new KFaceIface::Database(KFaceIface::Database::InitAll, KStandardDirs::locateLocal("data", "libkface"));
         tagsCache            = TagsCache::instance();
         scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
@@ -80,6 +83,8 @@ public:
         delete libkface;
     }
 
+    bool                  suggestionsAllowed;
+    
     double                recognitionThreshold;
     int                   detectionAccuracy;
     
@@ -195,7 +200,7 @@ QList< Face > FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
                 // FIXME: Later, need support for putting the cropped image in Face f too. I tried it, but I get weird crashes. Will see.
                 Face f;
                 f.setRect(rect);
-                        
+                f.setImage(qimg.copy(rect));
                 if(tagName == "Unknown")
                     f.setName("");
                 else
@@ -477,10 +482,15 @@ void FaceIface::trainWithFaces ( QList< Face > faceList )
     }
     
     d->libkface->updateFaces(faceList);
+    kDebug()<<"DB file is : "<<d->libkface->configPath();
+    d->libkface->saveConfig();
 }
 
 QString FaceIface::recognizedName ( const KFaceIface::Face& face )
 {
+    if(d->libkface->peopleCount() == 0)
+        return "";
+    
     QList<Face> f;
     f.append(face);
     
@@ -488,19 +498,118 @@ QString FaceIface::recognizedName ( const KFaceIface::Face& face )
         return "";
     else 
     {
-        int distance = d->libkface->recognizeFaces(f).at(0);
-        if(distance > d->recognitionThreshold)
+        double distance = d->libkface->recognizeFaces(f).at(0)/100000;
+        kDebug()<<"Possible : "<<f[0].name();
+        kDebug()<<"Distance is "<<distance;
+        if(distance > 100)
+        {
+            kDebug()<<"Dismissing ";
             return "";
+        }
         else
             return f[0].name();
     }
+}
+
+void FaceIface::markFaceAsTrained ( qlonglong imageid, const QRect& rect, const QString& name )
+{
+    if(name == "Unknown" || name == "")
+        return;
+    
+    int nameTagId = tagForPerson ( name );
+    ImageTagPair pair ( imageid, nameTagId );
+    pair.addProperty("trained", rectToString(rect));
+    pair.assignTag();
+    
+    kDebug()<<"Marked face of "<<name<<" as trained";
+}
+
+void FaceIface::markFaceAsTrained ( qlonglong imageid, const KFaceIface::Face& face )
+{
+    this->markFaceAsTrained(imageid, face.toRect(), face.name());
+}
+
+void FaceIface::markFacesAsTrained ( qlonglong imageid, QList< Face > faces )
+{
+    foreach(Face f, faces)
+    {
+        this->markFaceAsTrained(imageid, f.toRect(), f.name());
+    }
+}
+
+void FaceIface::markFaceAsRecognized ( qlonglong imageid, const QRect& rect, const QString& name )
+{
+    if(name == "Unknown" || name == "")
+        return;
+    
+    int nameTagId = tagForPerson ( name );
+    ImageTagPair pair ( imageid, nameTagId );
+    pair.addProperty("recognized", rectToString(rect));
+    pair.assignTag();
+    kDebug()<<"Marked face of "<<name<<" as recognized";
+}
+
+void FaceIface::markFaceAsRecognized ( qlonglong imageid, const KFaceIface::Face& face )
+{
+    this->markFaceAsRecognized(imageid, face.toRect(), face.name());
+}
+
+void FaceIface::markFacesAsRecognized ( qlonglong imageid, QList< Face > faces )
+{
+    foreach(Face f, faces)
+    {
+        this->markFaceAsRecognized(imageid, f.toRect(), f.name());
+    }
+}
+
+
+bool FaceIface::isFaceTrained ( qlonglong imageid, const QRect& rect, const QString& name )
+{
+    int nameTagId = tagForPerson ( name );
+    ImageTagPair pair ( imageid, nameTagId );
+    
+    if(pair.values("trained").contains(rectToString(rect)))
+    {
+        if(name == "Unknown" || name == "")
+        {
+            DatabaseAccess().db()->removeImageTagProperties( imageid, nameTagId, "trained", rectToString(rect)   );
+            return false;
+        }
+        
+        else
+            return true;
+    }
+    
+    return false;
+}
+
+bool FaceIface::isFaceRecognized ( qlonglong imageid, const QRect& rect, const QString& name )
+{
+    int nameTagId = tagForPerson ( name );
+    ImageTagPair pair ( imageid, nameTagId );
+    
+    if(pair.values("recognized").contains(rectToString(rect)))
+    {
+        if(name == "Unknown" || name == "")
+        {
+            DatabaseAccess().db()->removeImageTagProperties( imageid, nameTagId, "recognized", rectToString(rect)   );
+            return false;
+        }
+        
+        else
+            return true;
+    }
+    
+    return false;
 }
 
 void FaceIface::readConfigSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Face Tags Settings");
-    d->detectionAccuracy      = group.readEntry("DetectionAccuracy", 4);
+    
+    d->suggestionsAllowed     = group.readEntry("FaceSuggestion", false);
+    d->detectionAccuracy      = group.readEntry("DetectionAccuracy", 3);
     d->recognitionThreshold   = 1 - group.readEntry("SuggestionThreshold", 0.2);
     
     d->libkface->setDetectionAccuracy(d->detectionAccuracy);

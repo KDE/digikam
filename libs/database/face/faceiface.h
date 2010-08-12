@@ -145,7 +145,7 @@ public:
      * @param imageid ID of the image in the DB
      * @param rect Face rectangle, the face image will be cropped from this
      */
-    Face                faceForRectInImage(qlonglong imageid, const QRect& rect, const QString& name);
+    Face                faceForRectInImage(qlonglong imageid, const QRect& rect, const QString& name = "");
     
     /**
      * Updates libkface's face database with a list of Face objects
@@ -165,16 +165,60 @@ public:
      */    
     QString             recognizedName(const Face& face);
     
+    /**
+     * Reads configuration settings for detection accuracy and recognition suggestion threshold
+     * which were set in the settings page. Default values are assumed if the settings are not found.
+     * If any batch job is going on, it will immediately reflect the changes if they are made in the settings page.
+     */
     void                readConfigSettings();
     
+    /**
+     * Convert a QRect to a writable/readable string
+     */
     QString rectToString(const QRect& rect)        const;
+    
+    /**
+     * Convert a string that is assumed to hold a rectangle's info to a QRect
+     */
     QRect   stringToRect(const QString& string)   const;
+    
+    /**
+     * Method to mark a face as trained, so that we don't retrain it
+     */
+    void    markFaceAsTrained(qlonglong imageid, const QRect& rect, const QString& name);
+    void    markFaceAsTrained(qlonglong imageid, const Face& face);
+    
+    /**
+     * Method to mark a list of faces as trained, so that we don't retrain them
+     */
+    void    markFacesAsTrained(qlonglong imageid, QList<Face> faces);
+    
+    /**
+     * Method to mark a face as recognized, so we don't attempt to recognize it again
+     */
+    void    markFaceAsRecognized(qlonglong imageid, const QRect& rect, const QString& name);
+    void    markFaceAsRecognized(qlonglong imageid, const Face& face);
+    
+    /**
+     * Method to mark a list of faces as recognized, so that we don't attempt to identify them again
+     */
+    void    markFacesAsRecognized(qlonglong imageid, QList<Face> faces);
+    
+    /**
+     * Tells if the face has been marked as Trained
+     */
+    bool    isFaceTrained(qlonglong imageid, const QRect& rect, const QString& name);
+    
+    /**
+     * Tells if the face has been marked as recognized
+     */
+    bool    isFaceRecognized( qlonglong imageid, const QRect& rect, const QString& name);
     
 private:
     
     FaceIfacePriv* const d;
 
-};
+} ;
 
 }  // Namespace Digikam
 

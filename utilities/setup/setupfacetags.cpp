@@ -124,7 +124,8 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
                                                  "and present you with suggestions of similar faces,\n"
                                                  "thus making person tagging even faster.\n"));
     d->enableFaceSuggestions = new QCheckBox(i18n("Enable face suggestion"), panel);
-
+    d->enableFaceSuggestions->setCheckState(Qt::Unchecked);
+    
     layout->addWidget(d->detectionCBLabel);
     layout->addWidget(d->enableFaceDetection);
     layout->addSpacing(20);
@@ -224,8 +225,8 @@ void SetupFaceTags::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
     
     d->enableFaceDetection->setChecked(group.readEntry(d->configFaceDetectionEntry,                 true));
-    d->enableFaceSuggestions->setChecked(group.readEntry(d->configFaceSuggestionEntry,              true));
-    d->detectionAccuracySlider->setValue(group.readEntry(d->configDetectionAccuracyEntry,           4));
+    d->enableFaceSuggestions->setChecked(group.readEntry(d->configFaceSuggestionEntry,              false));
+    d->detectionAccuracySlider->setValue(group.readEntry(d->configDetectionAccuracyEntry,           3));
     d->suggestionThresholdSlider->setValue(group.readEntry(d->configSuggestionThresholdEntry,       0.8));
 }
 
