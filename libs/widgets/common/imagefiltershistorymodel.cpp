@@ -298,6 +298,9 @@ bool ImageFiltersHistoryModel::removeRows(int row, int /*count*/, const QModelIn
 
 void ImageFiltersHistoryModel::disableEntries(int count)
 {
+    if(count > rowCount())
+        count = rowCount();
+
     d->disabledEntries += count;
     while(count > 0)
     {
@@ -308,6 +311,9 @@ void ImageFiltersHistoryModel::disableEntries(int count)
 
 void ImageFiltersHistoryModel::enableEntries(int count)
 {
+    if(count > rowCount())
+        count = rowCount();
+
     int tmp = count;
     while(count > 0)
     {

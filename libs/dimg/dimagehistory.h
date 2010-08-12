@@ -67,6 +67,7 @@ public:
 
     bool isNull() const;
     bool isEmpty() const;
+    bool hasFilters() const;
 
     int size() const;
     bool operator==(const DImageHistory& other) const;

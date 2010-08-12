@@ -222,10 +222,16 @@ void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
         }
     }
 
+    ImageInfo newOneInfo(newOne);
+
     if(!AlbumSettings::instance()->getShowAllVersions())
     {
-        ImageInfo(newOne).setVisible(true);
+        newOneInfo.setVisible(true);
         ImageInfo(current).setVisible(false);
+    }
+    else if(!newOneInfo.isVisible())
+    {
+        newOneInfo.setVisible(true);
     }
 
     d->currentSelectedImagePath = url.path();

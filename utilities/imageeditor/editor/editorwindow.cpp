@@ -1952,6 +1952,7 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url, bool subversion)
     if(fileName.isEmpty())
     {
         kWarning() << "Target file can't be determined, aborting saving";
+        return false;
     }
 
     KUrl newURL(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash) + QString("/") + fileName);

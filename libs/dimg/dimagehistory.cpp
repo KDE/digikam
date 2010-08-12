@@ -102,6 +102,16 @@ bool DImageHistory::isEmpty() const
     else return d->entries.isEmpty();
 }
 
+bool DImageHistory::hasFilters() const
+{
+    for(int i = 0; i < d->entries.size(); i++)
+    {
+        if(!d->entries.at(i).action.isNull())
+            return true;
+    }
+    return false;
+}
+
 int DImageHistory::size() const
 {
     return d->entries.size();
