@@ -69,9 +69,9 @@ public:
     VersionsWidget*                 versionsWidget;
     FiltersHistoryWidget*           filtersHistoryWidget;
     QList<QPair<qlonglong, int> >*  versionsList;
-    QString                         currentSelectedImage;
+    QString                         currentSelectedImagePath;
     int                             currentSelectedImageListPosition;
-    
+    qlonglong                       currentSelectedImageId;
 };
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
@@ -87,9 +87,6 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
 
     connect(d->versionsWidget, SIGNAL(newVersionSelected(KUrl)),
             this, SLOT(slotNewVersionSelected(KUrl)));
-
-    //connect(d->versionsWidget, SIGNAL(doubleClicked(QModelIndex)),
-    //        this, SLOT(slotViewItemSelected(QModelIndex)));
 }
 
 ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
@@ -107,17 +104,16 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
     Q_UNUSED(hasPrevious)
     Q_UNUSED(hasNext)
     Q_UNUSED(allImages)
-    
+
     QString path;
-    
-    //QList<DImageHistory::Entry>* filtersList = new QList<DImageHistory::Entry>;
-    
+
     kDebug() << "Getting data for versions model";
     d->versionsList->clear();
-    
+
     foreach(ImageInfo inf, selectedImage)
     {
-        d->currentSelectedImage = inf.fileUrl().path();
+        d->currentSelectedImagePath = inf.fileUrl().path();
+        d->currentSelectedImageId = inf.id();
 
         if(hasImage(inf.id()))
         {
@@ -197,7 +193,7 @@ void ImagePropertiesVersionsTab::setupVersionsData() const
         }
 
         d->versionsWidget->setupModelData(l);
-        d->versionsWidget->setCurrentSelectedImage(d->currentSelectedImage);
+        d->versionsWidget->setCurrentSelectedImage(d->currentSelectedImagePath);
     }
 }
 
@@ -209,16 +205,18 @@ void ImagePropertiesVersionsTab::setupFiltersData() const
 
 void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
 {
+    qlonglong selectedImage = ImageInfo(url).id();
     qlonglong current;
     qlonglong newOne;
+
     for(int i = 0; i < d->versionsList->size(); i++)
     {
-        if(ImageInfo(d->versionsList->at(i).first).fileUrl() == url)
+        if(d->versionsList->at(i).first == selectedImage)
         {
             newOne = d->versionsList->at(i).first;
             d->currentSelectedImageListPosition = i;
         }
-        else if(ImageInfo(d->versionsList->at(i).first).fileUrl() == d->currentSelectedImage)
+        else if(d->versionsList->at(i).first == d->currentSelectedImageId)
         {
             current = d->versionsList->at(i).first;
         }
@@ -226,17 +224,17 @@ void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
 
     if(!AlbumSettings::instance()->getShowAllVersions())
     {
-        ImageInfo(current).setVisible(false);
         ImageInfo(newOne).setVisible(true);
+        ImageInfo(current).setVisible(false);
     }
-    
-    d->currentSelectedImage = url.path();
+
+    d->currentSelectedImagePath = url.path();
+    d->currentSelectedImageId = newOne;
 
     setupFiltersData();
 
-    emit updateMainViewSignal();
-
-    emit setCurrentUrlSignal(url);
+    //emit updateMainViewSignal();
+    //emit setCurrentUrlSignal(url);
     emit setCurrentIdSignal(newOne);
 }
 
@@ -247,7 +245,8 @@ void ImagePropertiesVersionsTab::slotUpdateImageInfo(const ImageInfo& info)
     kDebug() << "Getting data for versions model";
     d->versionsList->clear();
 
-    d->currentSelectedImage = info.fileUrl().path();
+    d->currentSelectedImagePath = info.fileUrl().path();
+    d->currentSelectedImageId = info.id();
 
     if(!hasImage(info.id()))
     {
