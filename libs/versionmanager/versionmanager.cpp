@@ -36,13 +36,13 @@
 // Local includes
 
 #include "versionmanager.h"
-#include "dmetadata.h"
 
 namespace Digikam
 {
 
 QString VersionManager::getVersionedFilename(const QString& originalPath, const QString& originalName, 
-                                             qint64 fileSize, bool editingOriginal, bool fork, bool editingRAW)
+                                             qint64 fileSize, const QString& formatForRAW,
+                                             bool editingOriginal, bool fork, bool editingRAW)
 {
     kDebug() << "Original path: " << originalPath << " | Original name: " << originalName
              << " | Editing original: " << editingOriginal << " | Subversion: " << fork;
@@ -57,17 +57,9 @@ QString VersionManager::getVersionedFilename(const QString& originalPath, const 
 
         if(!editingOriginal && !fork)
         {
-            //the user is editing some subversion of the original image
-            if(fork)
-            {
-                //user wants to create a fork of current version
-            }
-            else
-            {
-                kDebug() << "Subversion image, will use this version";
-                kDebug() << originalName;
-                return originalName;
-            }
+            kDebug() << "Subversion image, will use this version";
+            kDebug() << originalName;
+            return originalName;
         }
         else
         {
@@ -82,15 +74,14 @@ QString VersionManager::getVersionedFilename(const QString& originalPath, const 
             {
                 newFileName.clear();
                 newFileName.append(fileInfo.completeBaseName());
-                if(fork)
+                if(fork && !editingOriginal)
                     newFileName.append("v");
                 else newFileName.append("_v");
                 newFileName.append(QString::number(i));
                 newFileName.append(".");
                 if(editingRAW)
                 {
-                    //TODO: add user setting from options here
-                    newFileName.append("jpg");
+                    newFileName.append(formatForRAW);
                 }
                 else
                 {

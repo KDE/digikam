@@ -378,6 +378,18 @@ public:
     bool getInternalDatabaseServer() const;
     void setInternalDatabaseServer(const bool useInternalDBServer);
 
+    void setShowAllVersions(bool val);
+    bool getShowAllVersions() const;
+
+    void setSaveIntermediateVersions(bool val);
+    bool getSaveIntermediateVersions() const;
+
+    void setFormatForStoringRAW(const QString &val);
+    QString getFormatForStoringRAW() const;
+
+    void setKeepOriginalsInPlace(bool val);
+    bool getKeepOriginalsInPlace() const;
+
 public Q_SLOTS:
 
     void applyNepomukSettings() const;

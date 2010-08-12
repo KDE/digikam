@@ -122,7 +122,6 @@ SET(digikamcore_LIB_SRCS
                         ${libdmetadata_SRCS}
                         ${libdatabasecore_SRCS}
                         ${libhistogram_SRCS}
-                        ${libversionmanager_SRCS}
                         ${libwhitebalance_SRCS}
                         ${libcurves_SRCS}
                         ${liblevels_SRCS}
@@ -134,6 +133,7 @@ SET(digikamcore_LIB_SRCS
                         ${pgfutils_SRCS}
                         ${libdigikamhelpers_SRCS}
                         ${libtthread_SRCS}
+                        ${libversionmanager_SRCS}
 
                         # widgets and dialogs
                         ${libcommonwidgets_SRCS}

@@ -1,12 +1,11 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-06-18
- * Description : class for determining new file name in terms of version management
+ * Date        : 2010-08-06
+ * Description : setup tab for image versioning 
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -22,37 +21,35 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONMANAGER_H
-#define VERSIONMANAGER_H
+#ifndef SETUPVERSIONING_H
+#define SETUPVERSIONING_H
 
 // Qt includes
 
-#include <QString>
-
-// Local includes
-
-#include "digikam_export.h"
+#include <QScrollArea>
 
 namespace Digikam
 {
+class SetupVersioningPriv;
 
-class DIGIKAM_EXPORT VersionManager
+class SetupVersioning : public QScrollArea
 {
 public:
+    
+    SetupVersioning(QWidget* parent = 0);
+    ~SetupVersioning();
 
-    VersionManager() {};
-    ~VersionManager() {};
-
-    static VersionManager* instance();
-    QString getVersionedFilename(const QString& originalPath, const QString& originalName, 
-                                 qint64 fileSize, const QString& formatForRAW,
-                                 bool editingOriginal = true, bool fork = false, bool editingRAW = false);
+    void applySettings();
 
 private:
 
-    static VersionManager* m_instance;
+    void readSettings();
+
+private:
+
+    SetupVersioningPriv* const d;
 };
 
 } // namespace Digikam
 
-#endif // VERSIONMANAGER_H
+#endif // SETUPVERSIONING_H

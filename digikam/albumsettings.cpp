@@ -68,6 +68,7 @@ public:
         configGroupMetadata("Metadata Settings"),
         configGroupNepomuk("Nepomuk Settings"),
         configGroupGeneral("General Settings"),
+        configGroupVersioning("Versioning Settings"),
         configAlbumCollectionsEntry("Album Collections"),
         configAlbumSortOrderEntry("Album Sort Order"),
         configImageSortOrderEntry("Image Sort Order"),
@@ -137,7 +138,11 @@ public:
         configScanAtStartEntry("Scan At Start"),
         configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam"),
         configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk"),
-        configStringComparisonTypeEntry("String Comparison Type")
+        configStringComparisonTypeEntry("String Comparison Type"),
+        configShowAllVersionsEntry("Show All Available Versions"),
+        configSaveIntermediateVersionsEntry("Save Intermediate Versions"),
+        configFormatForStoringRAWEntry("Format For Storing Versions Of RAW Images"),
+        configKeepOriginalsInPlace("Keep Original Images In Place")
         {}
 
     const QString                       configGroupDefault;
@@ -145,6 +150,7 @@ public:
     const QString                       configGroupMetadata;
     const QString                       configGroupNepomuk;
     const QString                       configGroupGeneral;
+    const QString                       configGroupVersioning;
 
     const QString                       configAlbumCollectionsEntry;
     const QString                       configAlbumSortOrderEntry;
@@ -216,6 +222,10 @@ public:
     const QString                       configSyncNepomuktoDigikamEntry;
     const QString                       configSyncDigikamtoNepomukEntry;
     const QString                       configStringComparisonTypeEntry;
+    const QString                       configShowAllVersionsEntry;
+    const QString                       configSaveIntermediateVersionsEntry;
+    const QString                       configFormatForStoringRAWEntry;
+    const QString                       configKeepOriginalsInPlace;
 
     // start up setting
     bool                                showSplash;
@@ -326,6 +336,12 @@ public:
     // nepomuk settings
     bool                                syncToDigikam;
     bool                                syncToNepomuk;
+
+    // versioning settings
+    bool                                showAllVersions;
+    bool                                saveIntermediateVersions;
+    QString                             formatForStoringRAW;
+    bool                                keepOriginalsInPlace;
 
     //misc
     AlbumSettings::StringComparisonType stringComparisonType;
@@ -445,6 +461,11 @@ void AlbumSettings::init()
 
     d->syncToDigikam                = false;
     d->syncToNepomuk                = false;
+
+    d->showAllVersions              = true;
+    d->saveIntermediateVersions     = false;
+    d->formatForStoringRAW          = QString("JPG");
+    d->keepOriginalsInPlace         = true;
 
     d->stringComparisonType         = AlbumSettings::Natural;
 
@@ -580,6 +601,15 @@ void AlbumSettings::readSettings()
 
 #endif // HAVE_NEPOMUK
 
+    // ---------------------------------------------------------------------
+
+    group = config->group(d->configGroupVersioning);
+
+    d->showAllVersions          = group.readEntry(d->configShowAllVersionsEntry, true);
+    d->saveIntermediateVersions = group.readEntry(d->configSaveIntermediateVersionsEntry, false);
+    d->keepOriginalsInPlace     = group.readEntry(d->configKeepOriginalsInPlace, true);
+    d->formatForStoringRAW      = group.readEntry(d->configFormatForStoringRAWEntry, QString("JPG"));
+
     emit setupChanged();
     emit recurseSettingsChanged();
     emit nepomukSettingsChanged();
@@ -696,6 +726,15 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configSyncDigikamtoNepomukEntry, d->syncToNepomuk);
 
 #endif // HAVE_NEPOMUK
+
+    // ---------------------------------------------------------------------
+
+    group = config->group(d->configGroupVersioning);
+    
+    group.writeEntry(d->configShowAllVersionsEntry, d->showAllVersions);
+    group.writeEntry(d->configSaveIntermediateVersionsEntry, d->saveIntermediateVersions);
+    group.writeEntry(d->configKeepOriginalsInPlace, d->keepOriginalsInPlace);
+    group.writeEntry(d->configFormatForStoringRAWEntry, d->formatForStoringRAW);
 
     config->sync();
 }
@@ -1646,6 +1685,46 @@ void AlbumSettings::setStringComparisonType(AlbumSettings::StringComparisonType 
 AlbumSettings::StringComparisonType AlbumSettings::getStringComparisonType() const
 {
     return d->stringComparisonType;
+}
+
+void AlbumSettings::setShowAllVersions(bool val)
+{
+    d->showAllVersions = val;
+}
+
+bool AlbumSettings::getShowAllVersions() const
+{
+    return d->showAllVersions;
+}
+
+void AlbumSettings::setFormatForStoringRAW(const QString& val)
+{
+    d->formatForStoringRAW = val;
+}
+
+QString AlbumSettings::getFormatForStoringRAW() const
+{
+    return d->formatForStoringRAW;
+}
+
+void AlbumSettings::setSaveIntermediateVersions(bool val)
+{
+    d->saveIntermediateVersions = val;
+}
+
+bool AlbumSettings::getSaveIntermediateVersions() const
+{
+    return d->saveIntermediateVersions;
+}
+
+void AlbumSettings::setKeepOriginalsInPlace(bool val)
+{
+    d->keepOriginalsInPlace = val;
+}
+
+bool AlbumSettings::getKeepOriginalsInPlace() const
+{
+    return d->keepOriginalsInPlace;
 }
 
 void AlbumSettings::applyNepomukSettings() const

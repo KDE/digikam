@@ -55,6 +55,7 @@ public:
         CategoryPage,
         ToolTipPage,
         FaceTagsPage,
+        VersioningPage,
         MetadataPage,
         TemplatePage,
         MimePage,

@@ -60,6 +60,7 @@
 #include "setupdatabase.h"
 #include "setupscriptmanager.h"
 #include "setupfacetags.h"
+#include "setupversioning.h"
 
 namespace Digikam
 {
@@ -89,6 +90,7 @@ public:
         page_scriptmanager = 0;
         page_facetags      = 0;
         page_misc          = 0;
+        page_versioning    = 0;
         
         databasePage      = 0;
         collectionsPage   = 0;
@@ -109,6 +111,7 @@ public:
         scriptManagerPage = 0;
         faceTagsPage      = 0;
         miscPage          = 0;
+        versioningPage    = 0;
     }
 
     KPageWidgetItem*    page_database;
@@ -130,6 +133,7 @@ public:
     KPageWidgetItem*    page_misc;
     KPageWidgetItem*    page_scriptmanager;
     KPageWidgetItem*    page_facetags;
+    KPageWidgetItem*    page_versioning;
     
     SetupDatabase*      databasePage;
     SetupCollections*   collectionsPage;
@@ -150,6 +154,7 @@ public:
     SetupPlugins*       pluginsPage;
     SetupScriptManager* scriptManagerPage;
     SetupFaceTags*      faceTagsPage;
+    SetupVersioning*    versioningPage;
 
 public:
 
@@ -201,7 +206,13 @@ Setup::Setup(QWidget* parent)
     d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
                                           "<i>Configure digiKam's face detection and recognition</i></qt>"));
     d->page_facetags->setIcon(KIcon("user-identity"));
-    
+
+    d->versioningPage  = new SetupVersioning();
+    d->page_versioning = addPage(d->versioningPage, i18n("Image Versioning"));
+    d->page_versioning->setHeader(i18n("<qt>Image Versioning<br/>"
+                                     "<i>Configure non-destructive editing</i></qt>"));
+    d->page_versioning->setIcon(KIcon("view-catalog"));
+
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
@@ -424,6 +435,7 @@ void Setup::slotOkClicked()
     d->pluginsPage->applyPlugins();
 //     d->scriptManagerPage->applySettings();
     d->faceTagsPage->applySettings();
+    d->versioningPage->applySettings();
      
     AlbumSettings::instance()->emitSetupChanged();
 
@@ -489,6 +501,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_scriptmanager) return ScriptManagerPage;
     if (cur == d->page_facetags)      return FaceTagsPage;
     if (cur == d->page_misc)          return MiscellaneousPage;
+    if (cur == d->page_versioning)    return VersioningPage;
 
     return DatabasePage;
 }
@@ -535,6 +548,8 @@ KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page) const
             return page_facetags;
         case Setup::MiscellaneousPage:
             return page_misc;
+        case Setup::VersioningPage:
+            return page_versioning;
         default:
             return 0;
     }
