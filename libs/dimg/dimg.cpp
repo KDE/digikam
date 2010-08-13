@@ -1209,20 +1209,20 @@ void DImg::setPixelColor(uint x, uint y, const DColor& color)
 // copying operations
 
 
-DImg DImg::copy()
+DImg DImg::copy() const
 {
     DImg img(*this);
     img.detach();
     return img;
 }
 
-DImg DImg::copyImageData()
+DImg DImg::copyImageData() const
 {
     DImg img(width(), height(), sixteenBit(), hasAlpha(), bits(), true);
     return img;
 }
 
-DImg DImg::copyMetaData()
+DImg DImg::copyMetaData() const
 {
     DImg img;
     // copy width, height, alpha, sixteenBit, null
@@ -1234,12 +1234,12 @@ DImg DImg::copyMetaData()
     return img;
 }
 
-DImg DImg::copy(const QRect& rect)
+DImg DImg::copy(const QRect& rect) const
 {
     return copy(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-DImg DImg::copy(int x, int y, int w, int h)
+DImg DImg::copy(int x, int y, int w, int h) const
 {
     if ( isNull() || w <= 0 || h <= 0)
     {
@@ -1462,7 +1462,7 @@ void DImg::bitBlend (DColorComposer *composer, const uchar *src, uchar *dest,
 // QImage / QPixmap access
 
 
-QImage DImg::copyQImage()
+QImage DImg::copyQImage() const
 {
     if (isNull())
         return QImage();
@@ -1498,12 +1498,12 @@ QImage DImg::copyQImage()
     return img;
 }
 
-QImage DImg::copyQImage(const QRect& rect)
+QImage DImg::copyQImage(const QRect& rect) const
 {
     return (copyQImage(rect.x(), rect.y(), rect.width(), rect.height()));
 }
 
-QImage DImg::copyQImage(int x, int y, int w, int h)
+QImage DImg::copyQImage(int x, int y, int w, int h) const
 {
     if (isNull())
         return QImage();

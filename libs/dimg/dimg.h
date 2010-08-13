@@ -365,23 +365,23 @@ public:
 
     /** Return a deep copy of full image
       */
-    DImg       copy();
+    DImg       copy() const;
 
     /** Return a deep copy of the image, but do not include metadata.
      */
-    DImg       copyImageData();
+    DImg       copyImageData() const;
 
     /** Return an image that contains a deep copy of
         this image's metadata and the information associated
         with the image data (width, height, hasAlpha, sixteenBit),
         but no image data, i.e. isNull() is true.
      */
-    DImg       copyMetaData();
+    DImg       copyMetaData() const;
 
     /** Return a region of image
      */
-    DImg       copy(const QRect& rect);
-    DImg       copy(int x, int y, int w, int h);
+    DImg       copy(const QRect& rect) const;
+    DImg       copy(int x, int y, int w, int h) const;
 
     /** Copy a region of pixels from a source image to this image.
         Parameters:
@@ -408,9 +408,9 @@ public:
 
     /** QImage wrapper methods
      */
-    QImage     copyQImage();
-    QImage     copyQImage(const QRect& rect);
-    QImage     copyQImage(int x, int y, int w, int h);
+    QImage     copyQImage() const;
+    QImage     copyQImage(const QRect& rect) const;
+    QImage     copyQImage(int x, int y, int w, int h) const;
 
     /** Crop image to the specified region
      */
