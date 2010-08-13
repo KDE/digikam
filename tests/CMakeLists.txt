@@ -191,6 +191,8 @@ SET(albummodeltest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupversioning.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmisc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupfacetags.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupversioning.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch/batchthumbsgenerator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/abstractalbummodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/albumfiltermodel.cpp
