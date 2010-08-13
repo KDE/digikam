@@ -68,12 +68,12 @@ void ImageDelegatePrivate::clearRects()
     tagRect        = QRect(0, 0, 0, 0);
 }
 
-ImageDelegate::ImageDelegate(ImageCategorizedView *parent)
+ImageDelegate::ImageDelegate(QObject *parent)
              : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
 {
 }
 
-ImageDelegate::ImageDelegate(ImageDelegatePrivate &dd, ImageCategorizedView *parent)
+ImageDelegate::ImageDelegate(ImageDelegatePrivate &dd, QObject *parent)
              : ItemViewImageDelegate(dd, parent)
 {
 }
@@ -82,6 +82,63 @@ ImageDelegate::~ImageDelegate()
 {
     Q_D(ImageDelegate);
     delete d->categoryDrawer;
+}
+
+void ImageDelegate::setView(ImageCategorizedView *view)
+{
+    Q_D(ImageDelegate);
+    setViewOnAllOverlays(view);
+
+    if (d->currentView)
+    {
+        disconnect(d->currentView, 0, this, 0);
+    }
+
+    d->currentView = view;
+
+    setModel(view ? view->model() : 0);
+
+    if (d->currentView)
+    {
+        connect(d->currentView, SIGNAL(modelChanged()),
+                this, SLOT(modelChanged()));
+    }
+}
+
+void ImageDelegate::setModel(QAbstractItemModel* model)
+{
+    Q_D(ImageDelegate);
+
+    // 1) We only need the model to invalidate model-index based caches on change
+    // 2) We do not need to care for overlays. The view calls setActive() on them on model change
+
+    if (model == d->currentModel)
+        return;
+
+    if (d->currentModel)
+    {
+        disconnect(d->currentModel, 0, this, 0);
+    }
+
+    d->currentModel = model;
+
+    if (d->currentModel)
+    {
+        connect(d->currentModel, SIGNAL(layoutAboutToBeChanged()),
+                this, SLOT(modelContentsChanged()));
+
+        connect(d->currentModel, SIGNAL(modelAboutToBeReset()),
+                this, SLOT(modelContentsChanged()));
+
+        connect(d->currentModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int start, int end)),
+                this, SLOT(modelContentsChanged()));
+
+        connect(d->currentModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int start, int end)),
+                this, SLOT(modelContentsChanged()));
+
+        connect(d->currentModel, SIGNAL(dataChanged()),
+                this, SLOT(modelContentsChanged()));
+    }
 }
 
 void ImageDelegate::setSpacing(int spacing)
@@ -309,6 +366,18 @@ void ImageDelegate::clearCaches()
 {
     Q_D(ImageDelegate);
     ItemViewImageDelegate::clearCaches();
+    d->actualPixmapRectCache.clear();
+}
+
+void ImageDelegate::modelChanged()
+{
+    Q_D(ImageDelegate);
+    setModel(d->currentView ? d->currentView->model() : 0);
+}
+
+void ImageDelegate::modelContentsChanged()
+{
+    Q_D(ImageDelegate);
     d->actualPixmapRectCache.clear();
 }
 

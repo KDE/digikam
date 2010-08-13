@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT DItemDelegate : public QAbstractItemDelegate
 
 public:
 
-    DItemDelegate(DCategorizedView *parent);
+    DItemDelegate(QObject *parent = 0);
     ~DItemDelegate();
 
     /// Returns the gridsize to be set by the view. It's sizeHint plus spacing.

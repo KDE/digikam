@@ -76,6 +76,13 @@ void ImageRatingOverlay::setActive(bool active)
             connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
                     this, SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
     }
+    else
+    {
+        // widget is deleted
+
+        if (view()->model())
+            connect(view()->model(), 0, this, 0);
+    }
 }
 
 void ImageRatingOverlay::visualChange()

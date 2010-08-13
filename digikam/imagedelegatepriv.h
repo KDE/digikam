@@ -49,6 +49,8 @@ public:
         drawMouseOverFrame  = true;
         drawFocusFrame      = true;
         ratingOverThumbnail = false;
+        currentModel   = 0;
+        currentView    = 0;
 
         actualPixmapRectCache.setMaxCost(250);
     }
@@ -69,6 +71,9 @@ public:
 
     QCache<qlonglong, QRect>  actualPixmapRectCache;
     ImageCategoryDrawer      *categoryDrawer;
+
+    ImageCategorizedView     *currentView;
+    QAbstractItemModel       *currentModel;
 
     virtual void clearRects();
 };

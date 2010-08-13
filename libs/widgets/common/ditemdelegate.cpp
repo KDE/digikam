@@ -64,7 +64,7 @@ public:
 
 };
 
-DItemDelegate::DItemDelegate(DCategorizedView *parent)
+DItemDelegate::DItemDelegate(QObject *parent)
              : QAbstractItemDelegate(parent), d(new DItemDelegatePriv)
 {
 }

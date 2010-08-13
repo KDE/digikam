@@ -47,12 +47,13 @@ class ImageDelegate : public ItemViewImageDelegate
 
 public:
 
-    ImageDelegate(ImageCategorizedView *parent);
+    ImageDelegate(QObject *parent = 0);
     ~ImageDelegate();
 
     virtual void paint(QPainter * painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
 
+    void setView(ImageCategorizedView *view);
 
     ImageCategoryDrawer *categoryDrawer() const;
 
@@ -87,7 +88,14 @@ protected:
     virtual void invalidatePaintingCache();
     virtual void updateSizeRectsAndPixmaps();
 
-    ImageDelegate(ImageDelegatePrivate &dd, ImageCategorizedView *parent);
+    void setModel(QAbstractItemModel *model);
+
+    ImageDelegate(ImageDelegatePrivate &dd, QObject *parent);
+
+protected Q_SLOTS:
+
+    virtual void modelChanged();
+    virtual void modelContentsChanged();
 
 private:
 

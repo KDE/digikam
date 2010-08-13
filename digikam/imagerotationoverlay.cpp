@@ -96,6 +96,7 @@ void ImageRotateLeftOverlay::setActive(bool active)
         connect(button(), SIGNAL(clicked(bool)),
                 this, SLOT(slotClicked()));
     }
+    // if !active, button() is deleted
 }
 
 ItemViewHoverButton *ImageRotateLeftOverlay::createButton()
@@ -147,6 +148,7 @@ void ImageRotateRightOverlay::setActive(bool active)
         connect(button(), SIGNAL(clicked(bool)),
                 this, SLOT(slotClicked()));
     }
+    // if !active, button() is deleted
 }
 
 ItemViewHoverButton *ImageRotateRightOverlay::createButton()

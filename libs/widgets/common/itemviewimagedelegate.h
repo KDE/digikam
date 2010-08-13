@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate
 
 public:
 
-    ItemViewImageDelegate(DCategorizedView *parent);
+    ItemViewImageDelegate(QObject *parent = 0);
     ~ItemViewImageDelegate();
 
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex & index) const;
@@ -78,6 +78,7 @@ public:
     void installOverlay(ImageDelegateOverlay *overlay);
     void removeOverlay(ImageDelegateOverlay *overlay);
     void setAllOverlaysActive(bool active);
+    void setViewOnAllOverlays(QAbstractItemView *view);
     void removeAllOverlays();
     void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
 
@@ -114,7 +115,7 @@ protected:
     QPixmap ratingPixmap(int rating, bool selected) const;
 
     ItemViewImageDelegatePrivate *const d_ptr;
-    ItemViewImageDelegate(ItemViewImageDelegatePrivate &dd, DCategorizedView *parent);
+    ItemViewImageDelegate(ItemViewImageDelegatePrivate &dd, QObject *parent);
     
 private:
 

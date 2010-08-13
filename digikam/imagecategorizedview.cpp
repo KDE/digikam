@@ -182,6 +182,8 @@ void ImageCategorizedView::setModels(ImageModel *model, ImageFilterModel *filter
     connect(d->model, SIGNAL(imageInfosAdded(const QList<ImageInfo> &)),
             this, SLOT(slotImageInfosAdded()));
 
+    emit modelChanged();
+
     if (d->delegate)
         d->delegate->setAllOverlaysActive(true);
 }
@@ -223,10 +225,21 @@ ImageDelegate *ImageCategorizedView::delegate() const
 
 void ImageCategorizedView::setItemDelegate(ImageDelegate *delegate)
 {
+    ThumbnailSize oldSize = thumbnailSize();
+    if (d->delegate)
+    {
+        d->delegate->setAllOverlaysActive(false);
+        d->delegate->setView(0);
+    }
+
     d->delegate = delegate;
+    d->delegate->setThumbnailSize(oldSize);
     DCategorizedView::setItemDelegate(d->delegate);
     setCategoryDrawer(d->delegate->categoryDrawer());
     updateDelegateSizes();
+
+    d->delegate->setAllOverlaysActive(true);
+    d->delegate->setView(this);
 }
 
 Album *ImageCategorizedView::currentAlbum() const
@@ -314,9 +327,13 @@ void ImageCategorizedView::openAlbum(Album *album)
 
 ThumbnailSize ImageCategorizedView::thumbnailSize() const
 {
+    /*
     ImageThumbnailModel *thumbModel = imageThumbnailModel();
     if (thumbModel)
         return thumbModel->thumbnailSize();
+    */
+    if (d->delegate)
+        return d->delegate->thumbnailSize();
     return ThumbnailSize();
 }
 

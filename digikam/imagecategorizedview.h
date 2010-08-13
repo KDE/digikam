@@ -129,6 +129,9 @@ Q_SIGNALS:
     /// This signal is not emitted when the model is reset; then only selectionCleared is emitted.
     void deselected(const QList<ImageInfo>& nowDeselectedInfos);
 
+    /// Emitted when a new model is set
+    void modelChanged();
+
 protected Q_SLOTS:
 
     void slotImageInfosAdded();

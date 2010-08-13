@@ -97,13 +97,13 @@ void ItemViewImageDelegatePrivate::makeStarPolygon()
     starPolygonSize = QSize(15, 15);
 }
 
-ItemViewImageDelegate::ItemViewImageDelegate(DCategorizedView *parent)
+ItemViewImageDelegate::ItemViewImageDelegate(QObject *parent)
              : DItemDelegate(parent), d_ptr(new ItemViewImageDelegatePrivate)
 {
     d_ptr->init(this);
 }
 
-ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate &dd, DCategorizedView *parent)
+ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate &dd, QObject *parent)
              : DItemDelegate(parent), d_ptr(&dd)
 {
     d_ptr->init(this);
@@ -162,6 +162,15 @@ void ItemViewImageDelegate::setAllOverlaysActive(bool active)
     foreach (ImageDelegateOverlay *overlay, d->overlays)
     {
         overlay->setActive(active);
+    }
+}
+
+void ItemViewImageDelegate::setViewOnAllOverlays(QAbstractItemView *view)
+{
+    Q_D(ItemViewImageDelegate);
+    foreach (ImageDelegateOverlay *overlay, d->overlays)
+    {
+        overlay->setView(view);
     }
 }
 
