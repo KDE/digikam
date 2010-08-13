@@ -70,13 +70,13 @@ public:
 
     bool                           empty;
 
-    double                         latitudeNumber;
-    double                         longitudeNumber;
-    double                         altitude;
-    double                         orientation;
-    double                         tilt;
-    double                         roll;
-    double                         accuracy;
+    QVariant                       latitudeNumber;
+    QVariant                       longitudeNumber;
+    QVariant                       altitude;
+    QVariant                       orientation;
+    QVariant                       tilt;
+    QVariant                       roll;
+    QVariant                       accuracy;
 
     qlonglong                      imageId;
 
@@ -101,14 +101,14 @@ ImagePosition::ImagePosition(qlonglong imageId)
     {
         d->empty           = false;
         d->latitude        = values[0].toString();
-        d->latitudeNumber  = values[1].toDouble();
+        d->latitudeNumber  = values[1];
         d->longitude       = values[2].toString();
-        d->longitudeNumber = values[3].toDouble();
-        d->altitude        = values[4].toDouble();
-        d->orientation     = values[5].toDouble();
-        d->tilt            = values[6].toDouble();
-        d->roll            = values[7].toDouble();
-        d->accuracy        = values[8].toDouble();
+        d->longitudeNumber = values[3];
+        d->altitude        = values[4];
+        d->orientation     = values[5];
+        d->tilt            = values[6];
+        d->roll            = values[7];
+        d->accuracy        = values[8];
         d->description     = values[9].toString();
     }
 }
@@ -160,7 +160,7 @@ double ImagePosition::latitudeNumber() const
     if (!d)
         return 0;
 
-    return d->latitudeNumber;
+    return d->latitudeNumber.toDouble();
 }
 
 double ImagePosition::longitudeNumber() const
@@ -168,7 +168,7 @@ double ImagePosition::longitudeNumber() const
     if (!d)
         return 0;
 
-    return d->longitudeNumber;
+    return d->longitudeNumber.toDouble();
 }
 
 QString ImagePosition::latitudeFormatted() const
@@ -208,7 +208,7 @@ double ImagePosition::altitude() const
     if (!d)
         return 0;
 
-    return d->altitude;
+    return d->altitude.toDouble();
 }
 
 QString ImagePosition::altitudeFormatted() const
@@ -224,7 +224,7 @@ double ImagePosition::orientation() const
     if (!d)
         return 0;
 
-    return d->orientation;
+    return d->orientation.toDouble();
 }
 
 double ImagePosition::tilt() const
@@ -232,7 +232,7 @@ double ImagePosition::tilt() const
     if (!d)
         return 0;
 
-    return d->tilt;
+    return d->tilt.toDouble();
 }
 
 double ImagePosition::roll() const
@@ -240,7 +240,7 @@ double ImagePosition::roll() const
     if (!d)
         return 0;
 
-    return d->roll;
+    return d->roll.toDouble();
 }
 
 double ImagePosition::accuracy() const
@@ -248,7 +248,7 @@ double ImagePosition::accuracy() const
     if (!d)
         return 0;
 
-    return d->accuracy;
+    return d->accuracy.toDouble();
 }
 
 QString ImagePosition::description() const
@@ -257,6 +257,36 @@ QString ImagePosition::description() const
         return QString();
 
     return d->description;
+}
+
+bool ImagePosition::hasCoordinates() const
+{
+    return d && !d->latitudeNumber.isNull() && !d->longitudeNumber.isNull();
+}
+
+bool ImagePosition::hasAltitude() const
+{
+    return d && !d->altitude.isNull();
+}
+
+bool ImagePosition::hasOrientation() const
+{
+    return d && !d->orientation.isNull();
+}
+
+bool ImagePosition::hasTilt() const
+{
+    return d && !d->tilt.isNull();
+}
+
+bool ImagePosition::hasRoll() const
+{
+    return d && !d->roll.isNull();
+}
+
+bool ImagePosition::hasAccuracy() const
+{
+    return d && !d->accuracy.isNull();
 }
 
 bool ImagePosition::setLatitude(const QString& latitude)

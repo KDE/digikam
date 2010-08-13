@@ -234,6 +234,16 @@ public:
     ImagePosition imagePosition() const;
 
     /**
+     * Retrieves the coordinates and the altitude.
+     * Returns 0 if hasCoordinates(), or hasAltitude resp, is false.
+     */
+    double longitudeNumber() const;
+    double latitudeNumber() const;
+    double altitudeNumber() const;
+    bool hasCoordinates() const;
+    bool hasAltitude() const;
+
+    /**
      * Retrieve an ImageTagPair object for a single tag, or for all
      * image/tag pairs for which properties are available
      * (not necessarily the assigned tags)

@@ -67,6 +67,13 @@ public:
     QSize      imageSize;
     QList<int> tagIds;
 
+    double     longitude;
+    double     latitude;
+    double     altitude;
+
+    bool       hasCoordinates         : 1;
+    bool       hasAltitude            : 1;
+
     bool       defaultCommentCached   : 1;
     bool       ratingCached           : 1;
     bool       categoryCached         : 1;
@@ -76,6 +83,7 @@ public:
     bool       fileSizeCached         : 1;
     bool       imageSizeCached        : 1;
     bool       tagIdsCached           : 1;
+    bool       positionsCached        : 1;
 };
 
 }  // namespace Digikam

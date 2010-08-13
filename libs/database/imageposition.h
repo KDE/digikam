@@ -114,6 +114,13 @@ public:
     double accuracy() const;
     QString description() const;
 
+    bool hasCoordinates() const;
+    bool hasAltitude() const;
+    bool hasOrientation() const;
+    bool hasTilt() const;
+    bool hasRoll() const;
+    bool hasAccuracy() const;
+
     /**
      * Sets the latitude/longitude from the GPSCoordinate string as described by XMP.
      * Returns true if the format is accepted.

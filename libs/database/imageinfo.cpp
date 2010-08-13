@@ -71,6 +71,13 @@ ImageInfoData::ImageInfoData()
     category               = DatabaseItem::UndefinedCategory;
     fileSize               = 0;
 
+    longitude              = 0;
+    latitude               = 0;
+    altitude               = 0;
+
+    hasCoordinates         = 0;
+    hasAltitude            = 0;
+
     defaultCommentCached   = false;
     ratingCached           = false;
     categoryCached         = false;
@@ -80,6 +87,7 @@ ImageInfoData::ImageInfoData()
     fileSizeCached         = false;
     imageSizeCached        = false;
     tagIdsCached           = false;
+    positionsCached        = false;
 }
 
 ImageInfo::ImageInfo()
@@ -625,7 +633,75 @@ ImagePosition ImageInfo::imagePosition() const
     if (!m_data)
         return ImagePosition();
 
-    return ImagePosition(m_data->id);
+    ImagePosition pos(m_data->id);
+
+    if (!m_data->positionsCached)
+    {
+        m_data.constCastData()->longitude      = pos.longitudeNumber();
+        m_data.constCastData()->latitude       = pos.latitudeNumber();
+        m_data.constCastData()->altitude       = pos.altitude();
+        m_data.constCastData()->hasCoordinates = pos.hasCoordinates();
+        m_data.constCastData()->hasAltitude    = pos.hasAltitude();
+
+        m_data.constCastData()->positionsCached = true;
+    }
+
+    return pos;
+}
+
+double ImageInfo::longitudeNumber() const
+{
+    if (!m_data)
+        return 0;
+
+    if (!m_data->positionsCached)
+        imagePosition();
+
+    return m_data->longitude;
+}
+
+double ImageInfo::latitudeNumber() const
+{
+    if (!m_data)
+        return 0;
+
+    if (!m_data->positionsCached)
+        imagePosition();
+
+    return m_data->latitude;
+}
+
+double ImageInfo::altitudeNumber() const
+{
+    if (!m_data)
+        return 0;
+
+    if (!m_data->positionsCached)
+        imagePosition();
+
+    return m_data->altitude;
+}
+
+bool ImageInfo::hasCoordinates() const
+{
+    if (!m_data)
+        return 0;
+
+    if (!m_data->positionsCached)
+        imagePosition();
+
+    return m_data->hasCoordinates;
+}
+
+bool ImageInfo::hasAltitude() const
+{
+    if (!m_data)
+        return 0;
+
+    if (!m_data->positionsCached)
+        imagePosition();
+
+    return m_data->hasAltitude;
 }
 
 ImageTagPair ImageInfo::imageTagPair(int tagId) const
