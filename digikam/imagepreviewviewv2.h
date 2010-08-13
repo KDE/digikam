@@ -94,6 +94,7 @@ private Q_SLOTS:
 
     void imageLoaded();
     void imageLoadingFailed();
+    void imageLoadedWithSize(bool fullSize);
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);

@@ -137,9 +137,15 @@ void DImgPreviewItem::setPath(const QString& path)
     {
         d->state = Loading;
         if (d->loadFullImageSize)
+        {
             d->previewThread->loadHighQuality(d->path, d->exifRotate);
+            emit this->loadedWithSize(true);
+        }
         else
+        {
             d->previewThread->load(d->path, d->previewSize, d->exifRotate);
+            emit this->loadedWithSize(false);
+        }
     }
 }
 

@@ -122,6 +122,7 @@ public:
     ImagePreviewViewV2Priv()
     {
         peopleTagsShown      = false;
+        fullSize             = 0;
         scale                = 1.0;
 
         item                 = 0;
@@ -139,6 +140,7 @@ public:
     }
 
     bool                  peopleTagsShown;
+    bool                  fullSize;
     double                scale;
     
     ImagePreviewViewItem* item;
@@ -173,6 +175,9 @@ ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
 
     connect(d->item, SIGNAL(loadingFailed()),
             this, SLOT(imageLoadingFailed()));
+    
+    connect(d->item, SIGNAL(loadedWithSize(bool)),
+            this, SLOT(imageLoadedWithSize(bool)) );
 
     installPanIcon();
 
@@ -468,12 +473,22 @@ void ImagePreviewViewV2::updateScale()
 {
     int sceneWidth    = this->scene()->width();
     int sceneHeight   = this->scene()->height();
-    int previewWidth  = d->item->image().width();
-    int previewHeight = d->item->image().height();
+    int previewWidth;
+    int previewHeight;
+    
+    if(d->fullSize)
+    {
+        previewWidth  = d->item->image().width();
+        previewHeight = d->item->image().height();
+    }
+    else
+    {
+        DImg img(getImageInfo().filePath());
+        previewWidth = img.width();
+        previewHeight = img.height();
+    }
 
-    // FIXME: This way doesn't always work. sceneWidth is probably not applicable at all times? 
-    // In the use-case when the default preview mode is to show a large-sized (not fit to window) preview,
-    // the rectangles are incorrectly drawn. Need to know why this happens
+    // FIXME: This way doesn't always work. Only works with Full Sized preview.
     if (1.*sceneWidth/previewWidth < 1.*sceneHeight/previewHeight)
     {
         d->scale = 1.*sceneWidth/previewWidth;
@@ -513,6 +528,7 @@ void ImagePreviewViewV2::clearFaceItems()
 void ImagePreviewViewV2::drawFaceItems()
 {
     Face face;
+    
     for (int i = 0; i < d->currentFaces.size(); ++i)
     {
         face = d->currentFaces[i];
@@ -523,8 +539,8 @@ void ImagePreviewViewV2::drawFaceItems()
 
 void ImagePreviewViewV2::findFaces()
 {
-    DImg dimg;
-    dimg.load(getImageInfo().filePath());
+    DImg dimg(d->item->image());
+    DImg fullImg(getImageInfo().filePath());
     int i;
     
     if(hasBeenScanned())
@@ -544,7 +560,7 @@ void ImagePreviewViewV2::findFaces()
         return;
     }
     
-    d->currentFaces = d->faceIface->findAndTagFaces(dimg, d->item->imageInfo().id());
+    d->currentFaces = d->faceIface->findAndTagFaces(fullImg, d->item->imageInfo().id());
     
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
     
@@ -711,6 +727,11 @@ void ImagePreviewViewV2::suggestFaces()
         }
     }
     
+}
+
+void ImagePreviewViewV2::imageLoadedWithSize(bool fullSize)
+{
+    d->fullSize = fullSize;
 }
 
 

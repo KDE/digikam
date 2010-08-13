@@ -80,6 +80,7 @@ Q_SIGNALS:
 
     void loaded();
     void loadingFailed();
+    void loadedWithSize(bool fullSize);
 
 protected:
 
