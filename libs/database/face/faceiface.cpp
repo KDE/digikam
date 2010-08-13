@@ -120,7 +120,6 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
     readConfigSettings();
     // Find faces
     QImage qimg = image.copyQImage();
-    
     kDebug()<<"Image dimensions : "<<qimg.rect();
     
     KFaceIface::Image fimg(qimg);
@@ -151,7 +150,7 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
         
         kDebug()<<"Applied tag.";
     }
-    
+    qimg.reset();
     return faceList;
 }
 
@@ -211,6 +210,7 @@ QList< Face > FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
         }
     }
     
+    qimg.reset();
     return faceList;
 }
 
