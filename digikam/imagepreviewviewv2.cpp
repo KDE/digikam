@@ -162,6 +162,8 @@ public:
     QList<Face>           currentFaces;
 
     FaceIface*            faceIface;
+    
+    DImg                 cachedFullImg;
 };
 
 ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
@@ -473,22 +475,9 @@ void ImagePreviewViewV2::updateScale()
 {
     int sceneWidth    = this->scene()->width();
     int sceneHeight   = this->scene()->height();
-    int previewWidth;
-    int previewHeight;
-    
-    if(d->fullSize)
-    {
-        previewWidth  = d->item->image().width();
-        previewHeight = d->item->image().height();
-    }
-    else
-    {
-        DImg img(getImageInfo().filePath());
-        previewWidth = img.width();
-        previewHeight = img.height();
-    }
+    int previewWidth  = d->cachedFullImg.width();
+    int previewHeight = d->cachedFullImg.height();
 
-    // FIXME: This way doesn't always work. Only works with Full Sized preview.
     if (1.*sceneWidth/previewWidth < 1.*sceneHeight/previewHeight)
     {
         d->scale = 1.*sceneWidth/previewWidth;
@@ -539,14 +528,12 @@ void ImagePreviewViewV2::drawFaceItems()
 
 void ImagePreviewViewV2::findFaces()
 {
-    DImg dimg(d->item->image());
-    DImg fullImg(getImageInfo().filePath());
     int i;
     
     if(hasBeenScanned())
     {
         kDebug()<<"Image already has been scanned.";
-        d->currentFaces = d->faceIface->findFacesFromTags(dimg, d->item->imageInfo().id());
+        d->currentFaces = d->faceIface->findFacesFromTags(d->cachedFullImg, d->item->imageInfo().id());
         
         for(i = 0; i < d->currentFaces.size(); ++i)
         {
@@ -560,7 +547,7 @@ void ImagePreviewViewV2::findFaces()
         return;
     }
     
-    d->currentFaces = d->faceIface->findAndTagFaces(fullImg, d->item->imageInfo().id());
+    d->currentFaces = d->faceIface->findAndTagFaces(d->cachedFullImg, d->item->imageInfo().id());
     
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
     
@@ -732,6 +719,11 @@ void ImagePreviewViewV2::suggestFaces()
 void ImagePreviewViewV2::imageLoadedWithSize(bool fullSize)
 {
     d->fullSize = fullSize;
+    d->cachedFullImg.reset();
+    if(fullSize)
+        d->cachedFullImg = d->item->image();
+    else
+        d->cachedFullImg.load(getImageInfo().filePath());
 }
 
 
