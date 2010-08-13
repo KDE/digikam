@@ -225,6 +225,24 @@ void ImageTagPair::addProperty(const QString& key, const QString& value)
     DatabaseAccess().db()->addImageTagProperty(d->info.id(), d->tagId, key, value);
 }
 
+void ImageTagPair::removeProperty(const QString& key, const QString& value)
+{
+    if (d->info.isNull())
+        return;
+    d->checkProperties();
+
+    QMap<QString, QString>::iterator it = d->properties.find(key);
+    while (it != d->properties.end() && it.key() == key)
+    {
+        if (it.value() == value)
+        {
+            DatabaseAccess().db()->removeImageTagProperties(d->info.id(), d->tagId, key, value);
+            it = d->properties.erase(it);
+            break;
+        }
+    }
+}
+
 void ImageTagPair::removeProperties(const QString& key)
 {
     if (d->info.isNull())
@@ -236,6 +254,19 @@ void ImageTagPair::removeProperties(const QString& key)
         DatabaseAccess().db()->removeImageTagProperties(d->info.id(), d->tagId, key);
         d->properties.remove(key);
     }
+}
+
+void ImageTagPair::clearProperties()
+{
+    if (d->info.isNull())
+        return;
+
+    if (d->propertiesLoaded && d->properties.isEmpty())
+        return;
+
+    DatabaseAccess().db()->removeImageTagProperties(d->info.id(), d->tagId);
+    d->properties.clear();
+    d->propertiesLoaded = true;
 }
 
 }

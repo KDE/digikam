@@ -99,8 +99,11 @@ public:
      *  allowing multiple properties with the same key. */
     void addProperty(const QString& key, const QString& value);
     /// Remove all occurrences of the property
+    void removeProperty(const QString& key, const QString& value);
+    /// Remove all occurrences of the property
     void removeProperties(const QString& key);
-    
+    /// Removes all properties
+    void clearProperties();
 
 private:
 
