@@ -113,6 +113,13 @@ public:
     SearchModel*                searchModel;   
 };
 
+/**
+ * @brief Constructor
+ * @param parent Parent object.
+ * @param searchModel The model that stores the searches.
+ * @param imageFilterModel The image model used by displaying the selected images on map.
+ * @param itemSelectionModel The selection model used only when a selection is made on the map.
+ */
 GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
                              SearchModificationHelper* searchModificationHelper,
                              ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel)
@@ -244,6 +251,9 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     slotCheckNameEditGPSConditions();
 }
 
+/**
+ * @brief Destructor
+ */
 GPSSearchView::~GPSSearchView()
 {
     delete d;
@@ -292,6 +302,10 @@ void GPSSearchView::doSaveState()
     
 }
 
+/**
+ * @brief This function is called when GPSSearch widget is switch with another widget.
+ * @param val When true, the widget is enabled.
+ */
 void GPSSearchView::setActive(bool val)
 {
 
@@ -321,6 +335,9 @@ void GPSSearchView::changeAlbumFromHistory(SAlbum* album)
     d->searchTreeView->slotSelectAlbum(album);
 }
 
+/**
+ * This slot saves the current album.
+ */
 void GPSSearchView::slotSaveGPSSAlbum()
 {
  
@@ -331,6 +348,9 @@ void GPSSearchView::slotSaveGPSSAlbum()
     createNewGPSSearchAlbum(name);    
 }
 
+/**
+ * This slot is called when a new selection is made. It creates a new Search Album.
+ */
 void GPSSearchView::slotSelectionChanged()
 {
     d->existsSelection = true;
@@ -339,6 +359,10 @@ void GPSSearchView::slotSelectionChanged()
     createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
 }
 
+/**
+ * @brief This function creates a new Search Album.
+ * @param name The name of the new album.
+ */
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
 
@@ -399,30 +423,10 @@ void GPSSearchView::slotAlbumSelected(Album* a)
     d->imageInfoJob.allItemsFromAlbum(salbum);
 }
 
-void GPSSearchView::slotItemsInfo(const ImageInfoList& /*items*/)
-{
-/*
-    GPSInfoList list;
-    foreach(ImageInfo inf, items)
-    {
-        ImagePosition pos = inf.imagePosition();
-        if (!pos.isEmpty())
-        {
-            GPSInfo gps;
-            gps.latitude  = pos.latitudeNumber();
-            gps.longitude = pos.longitudeNumber();
-            gps.altitude  = pos.altitude();
-            gps.dateTime  = inf.dateTime();
-            gps.rating    = inf.rating();
-            gps.url       = inf.fileUrl();
-            gps.dimensions= inf.dimensions();
-            list << gps;
-        }
-    }
-    d->gpsSearchWidget->addGPSPositions(list);
-*/
-}
-
+/**
+ * @brief Checks if the new added search name doesn't already exist.
+ * @param name The name of the current search.
+ */
 bool GPSSearchView::checkName(QString& name)
 {
   
@@ -443,6 +447,10 @@ bool GPSSearchView::checkName(QString& name)
     return true;
 }
 
+/**
+ * @brief Checks if the new added album name doesn't already exist.
+ * @param name The name of the album.
+ */
 bool GPSSearchView::checkAlbum(const QString& name) const
 {
 
@@ -457,6 +465,9 @@ bool GPSSearchView::checkAlbum(const QString& name) const
     return true;
 }
 
+/**
+ * Slot that removes current selection.
+ */
 void GPSSearchView::slotRemoveCurrentSelection()
 {
     d->existsSelection = false;
@@ -471,12 +482,18 @@ void GPSSearchView::slotRemoveCurrentSelection()
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 }
 
+/**
+ * @brief Slot that removes the current filter.
+ */
 void GPSSearchView::slotRemoveCurrentFilter()
 {
     QList<qlonglong> emptyIdList;
     emit signalMapSoloItems(emptyIdList, "gpssearch"); 
 }
 
+/**
+ * @brief Slot that enables or disables the album saving.
+ */
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
 

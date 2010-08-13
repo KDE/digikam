@@ -98,8 +98,6 @@ private Q_SLOTS:
 
     void slotSelectionChanged();
 
-    void slotItemsInfo(const ImageInfoList&);
-
     void slotMapSelectedItems(const GPSInfoList& gpsList);
     void slotMapSoloItems(const QList<qlonglong>& idList);
 

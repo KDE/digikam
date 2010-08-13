@@ -93,7 +93,7 @@ public:
 };
 
 /**
- * Constructor
+ * @brief Constructor
  * @param parent Parent object
  */
 GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
@@ -106,7 +106,7 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
 }
 
 /**
- * Destructor
+ * @brief Destructor
  */
 GPSMarkerTiler::~GPSMarkerTiler()
 {
@@ -114,7 +114,7 @@ GPSMarkerTiler::~GPSMarkerTiler()
 }
 
 /**
- * This function returns false because it is not based on a model, but on database."
+ * @brief This function returns false because it is not based on a model, but on database."
  */
 bool GPSMarkerTiler::isItemModelBased() const
 {
@@ -298,6 +298,10 @@ KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::A
     return tile;
 }
 
+/**
+ * @param tileIndex The index of the current tile.
+ * @return The number of markers(thumbnails) found inside a tile.
+ */
 int GPSMarkerTiler::getTileMarkerCount(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex)
 {
     KMapIface::AbstractMarkerTiler::Tile* tile = getTile(tileIndex);
@@ -312,6 +316,11 @@ int GPSMarkerTiler::getTileSelectedCount(const KMapIface::AbstractMarkerTiler::T
     return 0;
 }
 
+/**
+ * @brief This function finds the "best" marker from a tile. This is needed to display a thumbnail for a marker group.
+ * @param tileIndex The index of the tile.
+ * @param sortKey   The order of sorting. If sortkey == 0, the sorting is made ascending. Else, it's descending.
+ */
 QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const int /*sortKey*/)
 {
     //TODO: sort the markers using sortKey
@@ -331,6 +340,12 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMa
     return QVariant();
 }
 
+/**
+ * @brief This function finds the "best" marker from a group of markers. This is needed to display a thumbnail for a marker group.
+ * @param indices A list containing markers.
+ * @param sortKey The order of sorting. If sortkey == 0, the sorting is made ascending. Else, it's descending.
+ * @return Returns the index of the marker.
+ */
 QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int /*sortKey*/)
 {
     //TODO: sort the markers using sortKey
@@ -370,6 +385,12 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
     return QVariant(v);
 }
 
+/**
+ * @brief This function calls for an index's thumbnail.
+ * @param index The marker's index.
+ * @param size The size of the thumbnail.
+ * @return Returns the thumbnail.
+ */
 QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size)
 {
     QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> indexForPixmap = index.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();
@@ -389,6 +410,9 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
     }
 }
 
+/**
+ * @brief This function compares two marker indices.
+ */
 bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
 {
     QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> firstIndex = a.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();
@@ -408,6 +432,9 @@ KMapIface::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMapIfac
     return KMapIface::WMWSelectionState();
 }
 
+/**
+ * @brief The marker data is returned from database in batches. This function takes and unites the batches.
+ */
 void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 {
     if(data.isEmpty())
@@ -443,6 +470,9 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
     }
 }
 
+/**
+ * @brief Now, all the marker data has been retrieved from database. Here, it is processed.
+ */
 void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 {
     if(job->error())
@@ -532,6 +562,9 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     }
 }
 
+/**
+ * @brief Sometimes, thumbnails aren't loaded yet at the time of requesting. When each thumbnail loads, this slot is called.
+ */
 void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
 {
     QVariant index = d->thumbnailMap.value(loadingDescription.filePath);
