@@ -289,21 +289,7 @@ void ImageCategoryDrawer::textForTAlbum(TAlbum *talbum, bool recursive, int coun
 
 void ImageCategoryDrawer::textForSAlbum(SAlbum *salbum, int count, QString *header, QString *subLine) const
 {
-    QString title = salbum->title();
-
-    if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
-        title = i18n("Fuzzy Sketch Search");
-    else if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
-        title = i18n("Fuzzy Image Search");
-    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::UnknownFaceSearch))
-        title = i18n("Unknown Face Search");
-    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
-        title = i18n("Map Search");
-    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch) ||
-             title == SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch))
-        title = i18n("Current Search");
-    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch))
-        title = i18n("Search By Time Line");
+    QString title = salbum->displayTitle();
 
     *header = title;
 
