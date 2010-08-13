@@ -164,17 +164,9 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->detailsCombo->insertItem(MultiMap,      QString("MultiMap"));
     d->detailsCombo->insertItem(OpenStreetMap, QString("OpenStreetMap"));
 
-    //boxLayout->addWidget(d->detailsCombo);
-    //boxLayout->addWidget(d->detailsBtn);
-    //box->setMaximumWidth(100); 
-//     d->map->addWidgetToControlWidget(box);
-    //d->map->addWidgetToControlWidget(d->detailsCombo);
-//     d->map->addWidgetToControlWidget(d->detailsBtn);
-        
-
     // --------------------------------------------------------
 
-    layout->addWidget(mapPanel,                     0, 0, 1, 2);
+    layout->addWidget(mapPanel,                   0, 0, 1, 2);
     layout->addWidget(d->altLabel,                1, 0, 1, 1);
     layout->addWidget(d->altitude,                1, 1, 1, 1);
     layout->addWidget(d->latLabel,                2, 0, 1, 1);
@@ -359,9 +351,12 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     {
         setEnabled(false);
     }
-    else if (list.count() == 1)
+    else if (list.count() >= 1)
     {
-        d->altitude->setText(QString("%1 m").arg(QString::number(list.first().altitude)));
+        if(!list.first().hasAltitude)
+            d->altitude->setText("Undefined");
+        else
+            d->altitude->setText(QString("%1 m").arg(QString::number(list.first().altitude)));
         d->latitude->setText(QString::number(list.first().latitude));
         d->longitude->setText(QString::number(list.first().longitude));
         d->date->setText(KGlobal::locale()->formatDateTime(list.first().dateTime,

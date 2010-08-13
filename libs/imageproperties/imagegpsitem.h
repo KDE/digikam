@@ -65,6 +65,7 @@ public:
     KUrl      url;
     qlonglong id;
     QSize     dimensions;
+    bool      hasAltitude;
 };
 
 typedef QList<GPSInfo> GPSInfoList;
