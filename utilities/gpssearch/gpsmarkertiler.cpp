@@ -59,6 +59,12 @@ public:
     QList<EntryFromDatabase> dataFromDatabase;
 };
 
+/**
+ * @class GPSMarkerTiler
+ * 
+ * @brief Marker model for storing data needed to display markers on the map. The data is retrieved from Digikam's database.
+ */
+
 class GPSMarkerTiler::GPSMarkerTilerPrivate
 {
 public:
@@ -67,7 +73,8 @@ public:
         : returnedImageInfo(),
           levelList(),
           jobsList(),
-          dataFromDatabaseList()
+          dataFromDatabaseList(),
+          activeState(true)
     {
         mapImagesJob = 0;
     }
@@ -77,14 +84,18 @@ public:
     QList<int>                                                     levelList;
     QList<KIO::Job*>                                               jobsList;
     QList<QList<QVariant> >                                        dataFromDatabaseList;
-
     QList<InternalJobs>                                            jobs;
     ThumbnailLoadThread*                                           thumbnailLoadThread;
     QMap<QString, QVariant>                                        thumbnailMap;
     QList<QRectF>                                                  rectList;
-    QList<int>                                                     rectLevel; 
+    QList<int>                                                     rectLevel;
+    bool                                                           activeState; 
 };
 
+/**
+ * Constructor
+ * @param parent Parent object
+ */
 GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
               : KMapIface::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
 {
@@ -94,11 +105,17 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 }
 
+/**
+ * Destructor
+ */
 GPSMarkerTiler::~GPSMarkerTiler()
 {
     delete d;
 }
 
+/**
+ * This function returns false because it is not based on a model, but on database."
+ */
 bool GPSMarkerTiler::isItemModelBased() const
 {
     return false;
@@ -114,6 +131,7 @@ QAbstractItemModel* GPSMarkerTiler::getModel() const
     return 0;
 }
 
+
 QList<QPersistentModelIndex> GPSMarkerTiler::getTileMarkerIndices(const KMapIface::AbstractMarkerTiler::TileIndex& /*tileIndex*/)
 {
     return QList<QPersistentModelIndex>();
@@ -122,27 +140,21 @@ QList<QPersistentModelIndex> GPSMarkerTiler::getTileMarkerIndices(const KMapIfac
 void GPSMarkerTiler::regenerateTiles()
 {
 }
-/*
-bool GPSMarkerTiler::pointIsContainedInArea(qreal pointLat, qreal pointLng, QList<qreal> rectangle)
-{
-    qreal rectLat1 = rectangle.at(1);
-    qreal rectLng1 = rectangle.at(2);
-    qreal rectLat2 = rectangle.at(3);
-    qreal rectLng2 = rectangle.at(4);
-    
-    return pointLat>rectLat1 && pointLat<rectLat2 && pointLng>rectLng1 && pointLng<rectLng2;
-}
-*/
+
+/**
+ * @brief This function calls the database for the images found inside a rectangle defined by upperLeft and lowerRight points. The images 
+ * are returned from database in batches.
+ * @param upperLeft The North-West point.
+ * @param lowerRight The South-East point.
+ * @param level The current zoom level of the map
+ */
 void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,const KMapIface::WMWGeoCoordinate& lowerRight, int level)
 {
-
-    //DatabaseUrl u = DatabaseUrl::mapImagesUrl();
 
     qreal lat1 = upperLeft.lat();
     qreal lng1 = upperLeft.lon();
     qreal lat2 = lowerRight.lat();
     qreal lng2 = lowerRight.lon();
-    kDebug() << "Unedited" << lat1 << lat2 << lng1 << lng2;
     QRect requestedRect(lat1, lng1, lat2-lat1, lng2-lng1);
 
     for(int i=0; i<d->rectList.count(); ++i)
@@ -215,6 +227,11 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
             this, SLOT(slotMapImagesJobData(KIO::Job*, const QByteArray&)));
 }
 
+/**
+ * @brief Returns information about a tile.
+ * @param tileIndex The index of a tile.
+ * @param stopIfEmpty The search of a tile is done recursively. If the search founds an empty tile, checks stopIfEmpty. If stopIfEmpty is true, the search stops.
+ */
 KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const bool stopIfEmpty)
 {
 //   if (isDirty())
@@ -307,7 +324,6 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMa
     {
         bestRep.first  = tileIndex;
         bestRep.second = tile->imagesFromTileInfo.first().id;
-        //int bestId     = tile->imagesFromTileInfo.first().id;
         const QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> returnedMarker = bestRep;
         v.setValue(bestRep);
         return v;
@@ -482,9 +498,11 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
                 currentTile->imagesFromTileInfo.append(currentImageInfo);
 
             if(currentTile->children.isEmpty())
-                currentTile->prepareForChildren(KMapIface::QIntPair(KMapIface::AbstractMarkerTiler::TileIndex::Tiling, KMapIface::AbstractMarkerTiler::TileIndex::Tiling));
+                currentTile->prepareForChildren(KMapIface::QIntPair(KMapIface::AbstractMarkerTiler::TileIndex::Tiling, 
+								    KMapIface::AbstractMarkerTiler::TileIndex::Tiling));
 
-            const KMapIface::AbstractMarkerTiler::TileIndex markerTileIndex = KMapIface::AbstractMarkerTiler::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
+            const KMapIface::AbstractMarkerTiler::TileIndex markerTileIndex = 
+                         KMapIface::AbstractMarkerTiler::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
             const int newTileIndex = markerTileIndex.toIntList().last();
 
             KMapIface::AbstractMarkerTiler::Tile* newTile = currentTile->children.at(newTileIndex);
@@ -517,11 +535,14 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
 {
     QVariant index = d->thumbnailMap.value(loadingDescription.filePath);
-
-    QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> indexForPixmap = index.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();    
-
+    QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> indexForPixmap = 
+                              index.value<QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> >();    
     emit signalThumbnailAvailableForIndex(index, thumbnail);
+}
 
+void GPSMarkerTiler::setActive(const bool state)
+{
+    d->activeState = state;
 }
 
 } // namespace Digikam

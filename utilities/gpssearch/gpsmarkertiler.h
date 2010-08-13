@@ -83,7 +83,7 @@ public:
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
     virtual KMapIface::WMWSelectionState getTileSelectedState(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex);
 
-    void secondTestDatabase(qreal, qreal, qreal, qreal);
+    virtual void setActive(const bool state);
 
 private Q_SLOTS:
 
