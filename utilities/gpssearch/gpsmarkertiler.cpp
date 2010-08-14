@@ -114,7 +114,7 @@ GPSMarkerTiler::~GPSMarkerTiler()
 }
 
 /**
- * @brief This function returns false because it is not based on a model, but on database."
+ * @brief This function returns false because it is not based on a model, but on the database."
  */
 bool GPSMarkerTiler::isItemModelBased() const
 {
@@ -146,7 +146,7 @@ void GPSMarkerTiler::regenerateTiles()
  * are returned from database in batches.
  * @param upperLeft The North-West point.
  * @param lowerRight The South-East point.
- * @param level The current zoom level of the map
+ * @param level The requested tiling level.
  */
 void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,const KMapIface::WMWGeoCoordinate& lowerRight, int level)
 {
@@ -228,9 +228,9 @@ void GPSMarkerTiler::prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,c
 }
 
 /**
- * @brief Returns information about a tile.
+ * @brief Returns a pointer to a tile.
  * @param tileIndex The index of a tile.
- * @param stopIfEmpty The search of a tile is done recursively. If the search founds an empty tile, checks stopIfEmpty. If stopIfEmpty is true, the search stops.
+ * @param stopIfEmpty Determines whether child tiles are also created for empty tiles.
  */
 KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const bool stopIfEmpty)
 {
@@ -300,7 +300,7 @@ KMapIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMapIface::A
 
 /**
  * @param tileIndex The index of the current tile.
- * @return The number of markers(thumbnails) found inside a tile.
+ * @return The number of markers found inside a tile.
  */
 int GPSMarkerTiler::getTileMarkerCount(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex)
 {
@@ -317,7 +317,7 @@ int GPSMarkerTiler::getTileSelectedCount(const KMapIface::AbstractMarkerTiler::T
 }
 
 /**
- * @brief This function finds the "best" marker from a tile. This is needed to display a thumbnail for a marker group.
+ * @brief This function finds the "best" marker from a tile. This is needed to display a thumbnail for a marker group. The sorting is made by rating or by creation date.
  * @param tileIndex The index of the tile.
  * @param sortKey   The order of sorting. If sortkey == 0, the sorting is made ascending. Else, it's descending.
  */
@@ -341,7 +341,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMa
 }
 
 /**
- * @brief This function finds the "best" marker from a group of markers. This is needed to display a thumbnail for a marker group.
+ * @brief This function finds the "best" marker from a group of markers. This is needed to display a thumbnail for a marker group. The sorting is made by rating or creation date.
  * @param indices A list containing markers.
  * @param sortKey The order of sorting. If sortkey == 0, the sorting is made ascending. Else, it's descending.
  * @return Returns the index of the marker.
@@ -386,10 +386,10 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
 }
 
 /**
- * @brief This function calls for an index's thumbnail.
+ * @brief This function retrieves the thumbnail for an index.
  * @param index The marker's index.
  * @param size The size of the thumbnail.
- * @return Returns the thumbnail.
+ * @return If the thumbnail has been loaded in the ThumbnailLoadThread instance, it is returned. If not, a QPixmap is returned and the ThumbnailLoadThread instance emits a signal when the thumbnail becomes available.
  */
 QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size)
 {
@@ -433,7 +433,7 @@ KMapIface::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMapIfac
 }
 
 /**
- * @brief The marker data is returned from database in batches. This function takes and unites the batches.
+ * @brief The marker data is returned from the database in batches. This function takes and unites the batches.
  */
 void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 {
@@ -471,7 +471,7 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 }
 
 /**
- * @brief Now, all the marker data has been retrieved from database. Here, it is processed.
+ * @brief Now, all the marker data has been retrieved from the database. Here, it is processed.
  */
 void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 {
@@ -563,7 +563,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 }
 
 /**
- * @brief Sometimes, thumbnails aren't loaded yet at the time of requesting. When each thumbnail loads, this slot is called.
+ * @brief Because of a call to pixmapFromRepresentativeIndex, thumbnails aren't loaded yet at the time of requesting. When each thumbnail loads, this slot is called.
  */
 void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
 {

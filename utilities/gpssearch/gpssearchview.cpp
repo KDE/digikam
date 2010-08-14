@@ -118,7 +118,7 @@ public:
  * @param parent Parent object.
  * @param searchModel The model that stores the searches.
  * @param imageFilterModel The image model used by displaying the selected images on map.
- * @param itemSelectionModel The selection model used only when a selection is made on the map.
+ * @param itemSelectionModel The selection model corresponding to the imageFilterModel.
  */
 GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
                              SearchModificationHelper* searchModificationHelper,
@@ -303,7 +303,10 @@ void GPSSearchView::doSaveState()
 }
 
 /**
- * @brief This function is called when GPSSearch widget is switch with another widget.
+ * @brief Sets the widget active or inactive. 
+ * 
+ * This function is called when the GPSSearch widget is switched with another widget.
+ *
  * @param val When true, the widget is enabled.
  */
 void GPSSearchView::setActive(bool val)
@@ -424,7 +427,7 @@ void GPSSearchView::slotAlbumSelected(Album* a)
 }
 
 /**
- * @brief Checks if the new added search name doesn't already exist.
+ * @brief Checks whether the newly added search name already exists.
  * @param name The name of the current search.
  */
 bool GPSSearchView::checkName(QString& name)
@@ -448,14 +451,12 @@ bool GPSSearchView::checkName(QString& name)
 }
 
 /**
- * @brief Checks if the new added album name doesn't already exist.
+ * @brief Checks whether the newly added album name already exists.
  * @param name The name of the album.
  */
 bool GPSSearchView::checkAlbum(const QString& name) const
 {
-
     const AlbumList list = AlbumManager::instance()->allSAlbums();
-
     for (AlbumList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         SAlbum *album = (SAlbum*)(*it);
@@ -466,7 +467,7 @@ bool GPSSearchView::checkAlbum(const QString& name) const
 }
 
 /**
- * Slot that removes current selection.
+ * Remove the current selection.
  */
 void GPSSearchView::slotRemoveCurrentSelection()
 {
@@ -483,7 +484,7 @@ void GPSSearchView::slotRemoveCurrentSelection()
 }
 
 /**
- * @brief Slot that removes the current filter.
+ * @brief Remove the current filter.
  */
 void GPSSearchView::slotRemoveCurrentFilter()
 {
@@ -492,7 +493,7 @@ void GPSSearchView::slotRemoveCurrentFilter()
 }
 
 /**
- * @brief Slot that enables or disables the album saving.
+ * @brief Enable or disable the album saving controls.
  */
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
