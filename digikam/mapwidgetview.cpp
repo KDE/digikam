@@ -176,15 +176,10 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMapIface::WM
 {
     ImageInfo info          = d->model->imageInfo(index);
 
-    if(info.isNull())
+    if(info.isNull() || !info.hasCoordinates())
         return false;
 
-    ImagePosition imagePos  = info.imagePosition();
-    if (imagePos.isEmpty())
-        return false;
-   
-
-    const KMapIface::WMWGeoCoordinate gpsCoordinates(imagePos.latitudeNumber(), imagePos.longitudeNumber());
+    const KMapIface::WMWGeoCoordinate gpsCoordinates(info.latitudeNumber(), info.longitudeNumber());
     *coordinates = gpsCoordinates;
 
     return true;
