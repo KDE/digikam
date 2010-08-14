@@ -32,7 +32,7 @@
 
 // libkmap includes
 
-#include <libkmap/kmap.h>
+#include <libkmap/kmap_primitives.h>
 
 // TODO: move this somewhere central, because it is defined multiple times now
 #include "digikam_export.h"

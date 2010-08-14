@@ -39,7 +39,6 @@
 
 // libkmap includes
 
-#include <libkmap/kmap.h>
 #include <libkmap/abstractmarkertiler.h>
 
 // local includes

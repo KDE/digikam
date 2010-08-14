@@ -39,7 +39,7 @@
 
 // libkmap includes
 
-#include <libkmap/kmap.h>
+#include <libkmap/kmapwidget.h>
 #include <libkmap/itemmarkertiler.h>
 
 //local includes
@@ -82,7 +82,7 @@ public:
     }
 
     KVBox                *vbox;
-    KMapIface::KMap      *mapWidget;
+    KMapIface::KMapWidget *mapWidget;
     ImageAlbumModel      *imageModel;
     QItemSelectionModel  *selectionModel;
     MapViewModelHelper   *mapViewModelHelper;
@@ -97,7 +97,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterMode
     d->mapViewModelHelper = new MapViewModelHelper(d->imageModel, d->selectionModel, imageFilterModel, this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
     
-    d->mapWidget = new KMapIface::KMap(this);
+    d->mapWidget = new KMapIface::KMapWidget(this);
     KMapIface::ItemMarkerTiler* const kmapMarkerModel = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
     d->mapWidget->setBackend("marble");

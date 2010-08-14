@@ -53,7 +53,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // libkmap includes
 
-#include <libkmap/kmap.h>
+#include <libkmap/kmapwidget.h>
 #include <libkmap/itemmarkertiler.h>
 
 // local includes
@@ -97,7 +97,7 @@ public:
     KSqueezedTextLabel         *longitude;
     KSqueezedTextLabel         *date;
 
-    KMapIface::KMap            *map;
+    KMapIface::KMapWidget      *map;
     KMapIface::ItemMarkerTiler *itemMarkerTiler;
     GPSInfoList                gpsInfoList;
 
@@ -119,7 +119,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
-    d->map                    = new KMapIface::KMap(mapPanel);
+    d->map                    = new KMapIface::KMapWidget(mapPanel);
     d->map->setBackend("marble");
     vlay2->addWidget(d->map);
     vlay2->setMargin(0);

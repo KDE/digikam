@@ -32,7 +32,6 @@
 
 // libkmap includes
 
-#include <libkmap/kmap.h>
 #include <libkmap/kmap_primitives.h>
 
 #include "thumbnailloadthread.h"

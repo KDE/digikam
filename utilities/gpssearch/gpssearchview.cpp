@@ -53,6 +53,7 @@
 
 // libkmap includes
 
+#include <libkmap/kmapwidget.h>
 #include <libkmap/itemmarkertiler.h>
 
 // Local includes
@@ -100,7 +101,7 @@ public:
 
     QSplitter*                  splitter;
 
-    KMapIface::KMap*            mapSearchWidget;
+    KMapIface::KMapWidget*      mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
    
     ImageAlbumModel*            imageAlbumModel;
@@ -145,7 +146,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     mapPanel->setMinimumWidth(256);
     mapPanel->setMinimumHeight(256);
     QVBoxLayout* vlay2 = new QVBoxLayout(mapPanel);
-    d->mapSearchWidget = new KMapIface::KMap(mapPanel);
+    d->mapSearchWidget = new KMapIface::KMapWidget(mapPanel);
     d->mapSearchWidget->setBackend("marble");
 
     d->gpsMarkerTiler = new GPSMarkerTiler(this);
