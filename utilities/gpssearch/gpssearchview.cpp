@@ -467,7 +467,7 @@ bool GPSSearchView::checkAlbum(const QString& name) const
 }
 
 /**
- * Remove the current selection.
+ * Remove the current selection rectangle and clear the selection made by it.
  */
 void GPSSearchView::slotRemoveCurrentSelection()
 {

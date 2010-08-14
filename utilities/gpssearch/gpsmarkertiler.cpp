@@ -114,7 +114,7 @@ GPSMarkerTiler::~GPSMarkerTiler()
 }
 
 /**
- * @brief This function returns false because it is not based on a model, but on the database."
+ * @brief This function returns false because it is not based on a model, but on the database.
  */
 bool GPSMarkerTiler::isItemModelBased() const
 {
@@ -317,7 +317,7 @@ int GPSMarkerTiler::getTileSelectedCount(const KMapIface::AbstractMarkerTiler::T
 }
 
 /**
- * @brief This function finds the "best" marker from a tile. This is needed to display a thumbnail for a marker group. The sorting is made by rating or by creation date.
+ * @brief This function finds the "best" marker from a tile. This is needed to display a thumbnail for a marker group.
  * @param tileIndex The index of the tile.
  * @param sortKey   The order of sorting. If sortkey == 0, the sorting is made ascending. Else, it's descending.
  */
@@ -341,7 +341,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMa
 }
 
 /**
- * @brief This function finds the "best" marker from a group of markers. This is needed to display a thumbnail for a marker group. The sorting is made by rating or creation date.
+ * @brief This function finds the "best" marker from a group of markers. This is needed to display a thumbnail for a marker group.
  * @param indices A list containing markers.
  * @param sortKey The order of sorting. If sortkey == 0, the sorting is made ascending. Else, it's descending.
  * @return Returns the index of the marker.
@@ -389,7 +389,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
  * @brief This function retrieves the thumbnail for an index.
  * @param index The marker's index.
  * @param size The size of the thumbnail.
- * @return If the thumbnail has been loaded in the ThumbnailLoadThread instance, it is returned. If not, a QPixmap is returned and the ThumbnailLoadThread instance emits a signal when the thumbnail becomes available.
+ * @return If the thumbnail has been loaded in the ThumbnailLoadThread instance, it is returned. If not, a QPixmap is returned and ThumbnailLoadThread's signal named signalThumbnailLoaded is emited when the thumbnail becomes available.
  */
 QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size)
 {
@@ -563,7 +563,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 }
 
 /**
- * @brief Because of a call to pixmapFromRepresentativeIndex, thumbnails aren't loaded yet at the time of requesting. When each thumbnail loads, this slot is called.
+ * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting. When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
  */
 void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
 {
