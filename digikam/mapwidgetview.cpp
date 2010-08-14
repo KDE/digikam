@@ -56,12 +56,23 @@ namespace Digikam
 class ImageAlbumModel;
 class ImageFilterModel;
 
+/**
+ * @class MapWidgetView
+ *
+ * @brief Class containing Digikam's central map view.
+ */
+
 class MapWidgetViewPriv
 {
 public:
 
     MapWidgetViewPriv()
-    : mapWidget(0)
+    :vbox(), 
+     mapWidget(),
+     imageModel(),
+     selectionModel(), 
+     mapViewModelHelper(),
+     activeState(false) 
     {
         mapWidget = 0;
         vbox = 0;
@@ -70,31 +81,26 @@ public:
         mapViewModelHelper = 0;
     }
 
-    KVBox           *vbox;
-    KMapIface::KMap *mapWidget;
-    ImageAlbumModel* imageModel;
-    QItemSelectionModel* selectionModel;
-    MapViewModelHelper* mapViewModelHelper;
+    KVBox                *vbox;
+    KMapIface::KMap      *mapWidget;
+    ImageAlbumModel      *imageModel;
+    QItemSelectionModel  *selectionModel;
+    MapViewModelHelper   *mapViewModelHelper;
+    bool                 activeState;
 };
 
-MapWidgetView::MapWidgetView(ImageAlbumModel* model,QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent)
+MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent)
              : QWidget(parent), d(new MapWidgetViewPriv)
 {
-
-    d->imageModel = model;
-    //d->selectionModel = new QItemSelectionModel(d->imageModel);
+    d->imageModel = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel = selectionModel;
     d->mapViewModelHelper = new MapViewModelHelper(d->imageModel, d->selectionModel, imageFilterModel, this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
-
+    
     d->mapWidget = new KMapIface::KMap(this);
-//    d->mapWidget->setEditModeAvailable(false);
-
     KMapIface::ItemMarkerTiler* const kmapMarkerModel = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
-
     d->mapWidget->setBackend("marble");
-
     vBoxLayout->addWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget->getControlWidget());
 }
@@ -107,6 +113,17 @@ MapWidgetView::~MapWidgetView()
 void MapWidgetView::openAlbum(Album* album)
 {
     d->imageModel->openAlbum(album);
+}
+
+void MapWidgetView::setActive(const bool state)
+{
+    d->activeState = state;
+    d->mapWidget->setActive(state);
+}
+
+bool MapWidgetView::getActiveState() const
+{
+    return d->activeState;
 }
 
 //-------------------------------------------------------------------------------------------------------------

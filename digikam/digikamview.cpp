@@ -1324,6 +1324,8 @@ void DigikamView::slotMapWidgetView()
     if(d->albumWidgetStack->previewMode() != AlbumWidgetStack::PreviewAlbumMode)
         slotIconView();
 
+    MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
+    mapView->setActive(true);
     d->albumWidgetStack->setMapViewMode();
 }
 
@@ -1336,9 +1338,12 @@ void DigikamView::slotIconView()
         emit signalTogglePreview(false);
     }
     
+    MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
+    if(mapView->getActiveState())
+        mapView->setActive(false);
+
     //and switch to icon view
     d->albumWidgetStack->setIconViewMode();
-
 }
 
 void DigikamView::slotImagePreview()

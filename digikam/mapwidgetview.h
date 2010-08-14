@@ -92,11 +92,12 @@ class MapWidgetView : public QWidget
 
 public: 
 
-    MapWidgetView(ImageAlbumModel* model,QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent);
+    MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent);
     ~MapWidgetView();
 
     void openAlbum(Album* album);
-
+    void setActive(const bool state);
+    bool getActiveState() const;
 private:
 
     MapWidgetViewPriv* const d;    
