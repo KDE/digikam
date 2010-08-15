@@ -70,7 +70,7 @@ bool ThumbnailSchemaUpdater::update()
     if (m_currentVersion)
         m_access->db()->setSetting("DBThumbnailsVersion", QString::number(m_currentVersion));
     if (m_currentRequiredVersion)
-        m_access->db()->setSetting("DBVersionRequired", QString::number(m_currentRequiredVersion));
+        m_access->db()->setSetting("DBThumbnailsVersionRequired", QString::number(m_currentRequiredVersion));
     return success;
 }
 
