@@ -68,7 +68,7 @@ public:
 
     bool        onMouseMovePreviewToggled;
     bool        capturePtMode;
-    
+
     int         renderingPreviewMode;
     int         oldRenderingPreviewMode;
     int         xpos;
@@ -169,7 +169,7 @@ bool ImageRegionWidget::capturePointMode()
 {
     return d->capturePtMode;
 }
-    
+
 void ImageRegionWidget::slotZoomFactorChanged()
 {
     emit signalContentsMovedEvent(true);
@@ -189,7 +189,7 @@ void ImageRegionWidget::viewportPaintExtraData()
         QPainter p(viewport());
         p.setRenderHint(QPainter::Antialiasing, true);
         p.setBackgroundMode(Qt::TransparentMode);
-         
+
         QRect region;
 
         // Original region.
@@ -198,7 +198,7 @@ void ImageRegionWidget::viewportPaintExtraData()
 
         // Target region.
         QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
-        
+
         p.translate(previewRect().topLeft());
 
         // Drawing separate view.
@@ -206,7 +206,7 @@ void ImageRegionWidget::viewportPaintExtraData()
         if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
             (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
         {
-           drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Original"));
+           drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Before"));
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                  d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
@@ -217,7 +217,7 @@ void ImageRegionWidget::viewportPaintExtraData()
             if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                 d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
             {
-                drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Target"));
+                drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("After"));
             }
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
@@ -236,8 +236,8 @@ void ImageRegionWidget::viewportPaintExtraData()
             p.setPen(QPen(Qt::red, 2, Qt::DotLine));
             p.drawLine(rt.topLeft().x(), rt.topLeft().y()+1, rt.bottomLeft().x(), rt.bottomLeft().y()-1);
 
-            drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Target"));        
-            drawText(&p,QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20),i18n("Original"));
+            drawText(&p,QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20),i18n("Before"));
+            drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("After"));
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
                  d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
@@ -255,8 +255,8 @@ void ImageRegionWidget::viewportPaintExtraData()
             p.setPen(QPen(Qt::red, 2, Qt::DotLine));
             p.drawLine(rt.topLeft().x()  , rt.topLeft().y(), rt.topRight().x()  , rt.topRight().y());
 
-            drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Target")); 
-            drawText(&p,QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20),i18n("Original"));
+            drawText(&p,QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20),i18n("Before"));
+            drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("After"));
         }
 
         // Drawing highlighted points.
@@ -547,8 +547,8 @@ void ImageRegionWidget::contentsMousePressEvent(QMouseEvent* e)
 
             if (!rt.contains(pt) && ro.contains(pt))
                 emitCapturedPointFromOriginal(pt - ro.topLeft());
-        }        
-        
+        }
+
         return;
     }
 

@@ -276,7 +276,7 @@ void ImageGuideWidget::updatePixmap()
         (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
     {
         p.drawPixmap(d->rect, *d->previewPixmap);
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Original"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
              d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
@@ -287,7 +287,7 @@ void ImageGuideWidget::updatePixmap()
         if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
             d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
         {
-            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Target"));
+            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("After"));
         }
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
@@ -320,8 +320,8 @@ void ImageGuideWidget::updatePixmap()
         p.drawLine(d->rect.x()+d->rect.width()/2-1, d->rect.y(),
                    d->rect.x()+d->rect.width()/2-1, d->rect.y()+d->rect.height());
 
-        drawText(&p, QPoint(d->rect.x() + d->rect.width()/2 + 20, d->rect.y() + 20), i18n("Target"));
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Original"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
+        drawText(&p, QPoint(d->rect.x() + d->rect.width()/2 + 20, d->rect.y() + 20), i18n("After"));
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
              d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
@@ -357,8 +357,8 @@ void ImageGuideWidget::updatePixmap()
                    d->rect.x()+d->rect.width(),
                    d->rect.y()+d->rect.height()/2-1);
 
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + d->rect.height()/2 + 20), i18n("Target"));
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Original"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + d->rect.height()/2 + 20), i18n("After"));
     }
 
     if (d->spotVisible)
