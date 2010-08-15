@@ -126,6 +126,10 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
                 (*it)->fileSizeCached = false;
             if (changes & DatabaseFields::Width || changes & DatabaseFields::Height)
                 (*it)->imageSizeCached = false;
+            if (changes & DatabaseFields::LatitudeNumber
+                || changes & DatabaseFields::LongitudeNumber
+                || changes & DatabaseFields::Altitude)
+                (*it)->positionsCached = false;
         }
     }
 }

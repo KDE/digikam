@@ -633,7 +633,8 @@ ImagePosition ImageInfo::imagePosition() const
     if (!m_data)
         return ImagePosition();
 
-    ImagePosition pos(m_data->id);
+    DatabaseAccess access;
+    ImagePosition pos(access, m_data->id);
 
     if (!m_data->positionsCached)
     {

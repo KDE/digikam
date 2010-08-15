@@ -85,7 +85,30 @@ public:
     QString                        longitude;
 
     DatabaseFields::ImagePositions dirtyFields;
+
+    void init(DatabaseAccess &access, qlonglong imageId);
 };
+
+void ImagePositionPriv::init(DatabaseAccess &access, qlonglong imageId)
+{
+    imageId = imageId;
+
+    QVariantList values = access.db()->getImagePosition(imageId);
+    if (values.size() == 10)
+    {
+        empty           = false;
+        latitude        = values[0].toString();
+        latitudeNumber  = values[1];
+        longitude       = values[2].toString();
+        longitudeNumber = values[3];
+        altitude        = values[4];
+        orientation     = values[5];
+        tilt            = values[6];
+        roll            = values[7];
+        accuracy        = values[8];
+        description     = values[9].toString();
+    }
+}
 
 ImagePosition::ImagePosition()
 {
@@ -94,23 +117,14 @@ ImagePosition::ImagePosition()
 ImagePosition::ImagePosition(qlonglong imageId)
 {
     d = new ImagePositionPriv;
-    d->imageId = imageId;
+    DatabaseAccess access;
+    d->init(access, imageId);
+}
 
-    QVariantList values = DatabaseAccess().db()->getImagePosition(imageId);
-    if (values.size() == 10)
-    {
-        d->empty           = false;
-        d->latitude        = values[0].toString();
-        d->latitudeNumber  = values[1];
-        d->longitude       = values[2].toString();
-        d->longitudeNumber = values[3];
-        d->altitude        = values[4];
-        d->orientation     = values[5];
-        d->tilt            = values[6];
-        d->roll            = values[7];
-        d->accuracy        = values[8];
-        d->description     = values[9].toString();
-    }
+ImagePosition::ImagePosition(DatabaseAccess& access, qlonglong imageId)
+{
+    d = new ImagePositionPriv;
+    d->init(access, imageId);
 }
 
 ImagePosition::ImagePosition(const ImagePosition& other)

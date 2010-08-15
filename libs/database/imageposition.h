@@ -40,6 +40,7 @@
 namespace Digikam
 {
 
+class DatabaseAccess;
 class ImagePositionPriv;
 
 class DIGIKAM_DATABASE_EXPORT ImagePosition
@@ -56,6 +57,7 @@ public:
      * The information is read from the database.
      */
     ImagePosition(qlonglong imageId);
+    ImagePosition(DatabaseAccess& access, qlonglong imageId);
 
     ImagePosition(const ImagePosition& other);
     ~ImagePosition();
