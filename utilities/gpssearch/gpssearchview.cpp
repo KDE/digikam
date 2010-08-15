@@ -36,6 +36,9 @@
 #include <QStyle>
 #include <QToolButton>
 #include <QTimer>
+#include <QMenu>
+#include <QActionGroup>
+#include <QAction>
 
 // KDE includes
 
@@ -84,34 +87,31 @@ public:
         imageInfoJob(),
         searchGPSBar(0),
         searchTreeView(0),
-        splitter(0)
+        splitter(0),
+        sortActionOldestFirst(),
+        sortActionYoungestFirst(),
+        sortActionRating()
     {}
 
     const QString               configSplitterStateEntry;
-
     QToolButton*                saveBtn;
-
     KLineEdit*                  nameEdit;
-
     ImageInfoJob                imageInfoJob;
-
     SearchTextBar*              searchGPSBar;
-
     EditableSearchTreeView*     searchTreeView;
-
     QSplitter*                  splitter;
-
     KMapIface::KMapWidget*      mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
-   
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     MapViewModelHelper*         mapViewModelHelper;
     KMapIface::ItemMarkerTiler* markerTilerModelBased;
     bool                        existsSelection;
-
-    SearchModel*                searchModel;   
+    SearchModel*                searchModel;  
+    KAction*                    sortActionOldestFirst;
+    KAction*                    sortActionYoungestFirst;
+    KAction*                    sortActionRating; 
 };
 
 /**
@@ -154,6 +154,28 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
+
+    QMenu* const sortMenu = new QMenu(this);
+    sortMenu->setTitle(i18n("Sorting"));
+    QActionGroup* const sortOrderExclusive = new QActionGroup(sortMenu);
+    sortOrderExclusive->setExclusive(true);
+    connect(sortOrderExclusive, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotSortOptionTriggered(QAction*)));
+
+    d->sortActionOldestFirst = new KAction(i18n("Show oldest first"), sortOrderExclusive);
+    d->sortActionOldestFirst->setCheckable(true);
+    sortMenu->addAction(d->sortActionOldestFirst);
+
+    d->sortActionYoungestFirst = new KAction(i18n("Show youngest first"), sortOrderExclusive);
+    d->sortActionYoungestFirst->setCheckable(true);
+    sortMenu->addAction(d->sortActionYoungestFirst);
+
+    d->sortActionRating = new KAction(i18n("Sort by rating"), sortOrderExclusive);
+    d->sortActionRating->setCheckable(true);
+    sortMenu->addAction(d->sortActionRating);
+
+    d->mapSearchWidget->setSortOptionsMenu(sortMenu);
+ 
 
     vlay2->addWidget(d->mapSearchWidget);
     vlay2->setMargin(0);
@@ -552,6 +574,17 @@ void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
     emit(signalMapSoloItems(idList, "gpssearch"));
 }
 
+void GPSSearchView::slotSortOptionTriggered(QAction* /*action*/)
+{
+    int newSortKey = SortYoungestFirst;
+    if(d->sortActionYoungestFirst->isChecked())
+        newSortKey = SortYoungestFirst;
+    else if(d->sortActionOldestFirst->isChecked())
+        newSortKey = SortOldestFirst;
+    else
+        newSortKey = SortRating;
 
+    d->mapSearchWidget->setSortKey(newSortKey);
+}
 
 }  // namespace Digikam

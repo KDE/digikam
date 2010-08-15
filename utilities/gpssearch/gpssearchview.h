@@ -81,6 +81,7 @@ public Q_SLOTS:
                                       const ImageInfoList& allImages);
     void slotRemoveCurrentSelection();
     void slotRemoveCurrentFilter();
+    void slotSortOptionTriggered(QAction* );
 
 private:
 

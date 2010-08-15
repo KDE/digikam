@@ -433,7 +433,7 @@ void ImageLister::listAreaRange(ImageListerReceiver *receiver,
     DatabaseAccess access;
    
     access.backend()->execSql(QString("SELECT DISTINCT Images.id, "
-                                          "       Albums.albumRoot, ImageInformation.rating, "
+                                          "       Albums.albumRoot, ImageInformation.rating, ImageInformation.creationDate, "
                                           "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                                           " FROM Images "
                                           "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
@@ -460,6 +460,8 @@ void ImageLister::listAreaRange(ImageListerReceiver *receiver,
         ++it;
 
         record.rating            = (*it).toInt();
+        ++it;
+        record.creationDate      = (*it).toDateTime();
         ++it;
         lat                      = (*it).toDouble();
         ++it;

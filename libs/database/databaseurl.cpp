@@ -174,7 +174,6 @@ DatabaseUrl DatabaseUrl::fromAreaRange(const qreal lat1, const qreal lat2,
     url.addQueryItem("lat2", QString::number(lat2));
     url.addQueryItem("lon2", QString::number(lng2));
     url.setParameters(parameters);
-    kDebug()<<"URL FOR fromAreaRange:"<<url;
     return url;
 }
 

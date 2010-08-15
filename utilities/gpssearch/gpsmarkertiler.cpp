@@ -36,8 +36,9 @@ namespace Digikam
 class EntryFromDatabase
 {
     public:
-        qlonglong id;
-        int       rating;
+        qlonglong                   id;
+        int                         rating;
+        QDateTime                   creationDate;    
         KMapIface::WMWGeoCoordinate coordinate;
 };
 
@@ -317,13 +318,14 @@ int GPSMarkerTiler::getTileSelectedCount(const KMapIface::AbstractMarkerTiler::T
 }
 
 /**
- * @brief This function finds the "best" marker from a tile. This is needed to display a thumbnail for a marker group.
- * @param tileIndex The index of the tile.
- * @param sortKey   The order of sorting. If sortkey == 0, the sorting is made ascending. Else, it's descending.
+ @brief This function finds the best representative marker from a group of markers. This is needed to display a thumbnail for a marker group.
+ * @param indices A list containing markers.
+ * @param sortKey Sets the criteria for selecting the representative thumbnail. When sortKey == 0 the most youngest thumbnail is chosen, when sortKey == 1 the most oldest thumbnail is chosen and when sortKey == 2 the thumbnail with the highest rating is chosen(if 2 thumbnails have the same rating, the youngest one is chosen).
+ * @return Returns the index of the marker.
  */
-QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const int /*sortKey*/)
+QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const int sortKey)
 {
-    //TODO: sort the markers using sortKey
+    //TODO: sort the markers using sortKey 
 
     KMapIface::AbstractMarkerTiler::Tile* tile = getTile(tileIndex, true);
     QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> bestRep;
@@ -331,8 +333,46 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMa
 
     if(tile != NULL)
     {
+        if(tile->imagesFromTileInfo.count() == 0)
+            return QVariant();
+        
+        KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo bestMarkerInfo = 
+                                                    tile->imagesFromTileInfo.first();
+        
+        for(int i=0; i<tile->imagesFromTileInfo.count(); ++i)
+        {
+            if(sortKey == SortYoungestFirst)
+            {
+                if(tile->imagesFromTileInfo.at(i).creationDate < bestMarkerInfo.creationDate)
+                {
+                    bestMarkerInfo = tile->imagesFromTileInfo.at(i);
+                }
+            }
+            else if(sortKey == SortOldestFirst)
+            {
+                if(tile->imagesFromTileInfo.at(i).creationDate > bestMarkerInfo.creationDate)
+                {
+                    bestMarkerInfo = tile->imagesFromTileInfo.at(i);
+                }
+            }
+            else
+            {
+                if(tile->imagesFromTileInfo.at(i).rating > bestMarkerInfo.rating)
+                {
+                    bestMarkerInfo = tile->imagesFromTileInfo.at(i);
+                }
+                else if(tile->imagesFromTileInfo.at(i).rating == bestMarkerInfo.rating)
+                {
+                    if(tile->imagesFromTileInfo.at(i).creationDate < bestMarkerInfo.creationDate)
+                    {
+                        bestMarkerInfo = tile->imagesFromTileInfo.at(i);  
+                    }
+                }
+            }
+        }
+
         bestRep.first  = tileIndex;
-        bestRep.second = tile->imagesFromTileInfo.first().id;
+        bestRep.second = bestMarkerInfo.id;
         const QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> returnedMarker = bestRep;
         v.setValue(bestRep);
         return v;
@@ -341,17 +381,16 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMapIface::AbstractMa
 }
 
 /**
- * @brief This function finds the "best" marker from a group of markers. This is needed to display a thumbnail for a marker group.
+ * @brief This function finds the best representative marker from a group of markers. This is needed to display a thumbnail for a marker group.
  * @param indices A list containing markers.
- * @param sortKey The order of sorting. If sortkey == 0, the sorting is made ascending. Else, it's descending.
+ * @param sortKey Sets the criteria for selecting the representative thumbnail. When sortKey == 0 the most youngest thumbnail is chosen, when sortKey == 1 the most oldest thumbnail is chosen and when sortKey == 2 the thumbnail with the highest rating is chosen(if 2 thumbnails have the same rating, the youngest one is chosen).
  * @return Returns the index of the marker.
  */
-QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int /*sortKey*/)
+QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey)
 {
-    //TODO: sort the markers using sortKey
     QVariant v;
     QPair<KMapIface::AbstractMarkerTiler::TileIndex, int> bestRep;
-    int bestRating = -2;
+    KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo bestMarkerInfo; 
 
     for(int i=0; i<indices.count(); ++i)
     {
@@ -363,17 +402,44 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
         {
             if(tile->imagesFromTileInfo.at(j).id == currentIndex.second)
             {
-                if(bestRating == -2)
+                if(bestMarkerInfo.id == -2)
                 {
                     bestRep = currentIndex;
-                    bestRating = tile->imagesFromTileInfo.at(j).rating;
+                    bestMarkerInfo = tile->imagesFromTileInfo.at(j);
                 }
                 else
                 {
-                    if(tile->imagesFromTileInfo.at(j).rating < bestRating)
+                    if(sortKey == SortYoungestFirst)
                     {
-                        bestRep = currentIndex;
-                        bestRating = tile->imagesFromTileInfo.at(j).rating;
+                        if(tile->imagesFromTileInfo.at(j).creationDate < bestMarkerInfo.creationDate)
+                        {
+                            bestRep        = currentIndex;
+                            bestMarkerInfo = tile->imagesFromTileInfo.at(j);
+                        }
+                    }
+                    else if(sortKey == SortOldestFirst)
+                    {
+                        if(tile->imagesFromTileInfo.at(j).creationDate > bestMarkerInfo.creationDate)
+                        {
+                            bestRep        = currentIndex;
+                            bestMarkerInfo = tile->imagesFromTileInfo.at(j);
+                        }
+                    }
+                    else
+                    {
+                        if(tile->imagesFromTileInfo.at(j).rating > bestMarkerInfo.rating)
+                        {
+                            bestRep        = currentIndex;
+                            bestMarkerInfo = tile->imagesFromTileInfo.at(j);
+                        }
+                        else if(tile->imagesFromTileInfo.at(j).rating == bestMarkerInfo.rating)
+                        {
+                            if(tile->imagesFromTileInfo.at(j).creationDate < bestMarkerInfo.creationDate)
+                            {
+                                bestRep        = currentIndex;
+                                bestMarkerInfo = tile->imagesFromTileInfo.at(j);
+                            }
+                        }
                     }
                 }
                 break;
@@ -453,8 +519,9 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 
         EntryFromDatabase entry;
 
-        entry.id = record.imageID;
-        entry.rating = record.rating;
+        entry.id           = record.imageID;
+        entry.rating       = record.rating;
+        entry.creationDate = record.creationDate; 
         if (!record.extraValues.count() < 2)
             entry.coordinate.setLatLon(record.extraValues.first().toDouble(), record.extraValues.last().toDouble());
 
@@ -471,7 +538,7 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 }
 
 /**
- * @brief Now, all the marker data has been retrieved from the database. Here, it is processed.
+ * @brief Now, all the marker data has been retrieved from the database. Here, the markers are sorted into tiles.
  */
 void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 {
@@ -497,6 +564,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
                 info.id               = entry.id;
                 info.rating           = entry.rating;
+                info.creationDate     = entry.creationDate;
                 info.coordinate       = entry.coordinate;
 
                 currentReturnedImageInfo << info;
@@ -514,7 +582,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     for(int i=0; i<resultedImages.count(); ++i)
     {
         KMapIface::AbstractMarkerTiler::Tile* currentTile = KMapIface::AbstractMarkerTiler::rootTile();
-        //for now, info contains id,coordinates and rating
+        
         KMapIface::AbstractMarkerTiler::Tile::ImageFromTileInfo currentImageInfo = resultedImages.at(i);
 
         for(int currentLevel = 0; currentLevel <= wantedLevel+1; ++currentLevel)

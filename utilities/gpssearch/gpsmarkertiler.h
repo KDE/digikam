@@ -55,6 +55,13 @@
 namespace Digikam
 {
 
+enum SortOptions {
+    
+    SortYoungestFirst = 0,
+    SortOldestFirst = 1,
+    SortRating = 2
+};
+
 class GPSMarkerTiler : public KMapIface::AbstractMarkerTiler
 {
     Q_OBJECT
