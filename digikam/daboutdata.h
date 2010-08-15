@@ -44,7 +44,7 @@ static inline KLocalizedString digiKamSloganFormated()
                   "Please translate using short words else the slogan can be truncated.",
                   "<qt><font color=\"white\">"
                   "<b>Manage</b> your <b>photographs</b> like <b>a professional</b> "
-                  "with the power of <b>open source</b>."
+                  "with the power of <b>open source</b>"
                   "</font></qt>"
                  );
 }
@@ -52,7 +52,7 @@ static inline KLocalizedString digiKamSloganFormated()
 static inline KLocalizedString digiKamSlogan()
 {
     return ki18n("Manage your photographs like a professional, "
-                 "with the power of open source.");
+                 "with the power of open source");
 }
 
 static inline KLocalizedString copyright()
