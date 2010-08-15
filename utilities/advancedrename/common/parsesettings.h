@@ -34,7 +34,7 @@
 
 #include "imageinfo.h"
 #include "parseresults.h"
-#include "photoinfocontainer.h"
+#include "advancedrenamemanager.h"
 
 namespace Digikam
 {
@@ -76,9 +76,6 @@ public:
 public:
 
     KUrl                     fileUrl;
-    QString                  cameraName;
-    QDateTime                dateTime;
-
     QString                  parseString;
     QString                  str2Modify;
     ParseResults             results;
@@ -86,9 +83,9 @@ public:
     ParseResults::ResultsKey currentResultsKey;
 
     int                      startIndex;
-    int                      currentIndex;
     bool                     useOriginalFileExtension;
     bool                     applyModifiers;
+    AdvancedRenameManager*   manager;
 
 private:
 
@@ -98,15 +95,13 @@ private:
         useOriginalFileExtension = true;
         applyModifiers           = true;
         str2Modify.clear();
+        manager                  = 0;
     };
 
     void init(const ImageInfo& info)
     {
         init();
-
-        fileUrl    = info.fileUrl();
-        cameraName = info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model;
-        dateTime   = info.dateTime();
+        fileUrl = info.fileUrl();
     }
 };
 

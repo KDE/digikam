@@ -844,8 +844,37 @@ void QueueListView::resetQueue()
 
 void QueueListView::updateDestFileNames()
 {
-    DefaultRenameParser p;
-    QString parseString      = settings().renamingParser;
+    QMap<QString, QString> renamingResults;
+
+    if (settings().renamingRule == QueueSettings::CUSTOMIZE)
+    {
+        AdvancedRenameManager manager;
+
+        ParseSettings psettings;
+        psettings.parseString = settings().renamingParser;
+
+        QStringList tmpFiles;
+
+        QTreeWidgetItemIterator it(this);
+        while (*it)
+        {
+            QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+            if (item)
+            {
+                // Update base name using queue renaming rules.
+                ImageInfo info = item->info();
+                QFileInfo fi(info.filePath());
+
+                tmpFiles << fi.absoluteFilePath();
+            }
+            ++it;
+        }
+
+        manager.addFiles(tmpFiles);
+        manager.parseFiles(psettings);
+        renamingResults = manager.newFileList();
+    }
+
     AssignedBatchTools tools = assignedTools();
 
     QTreeWidgetItemIterator it(this);
@@ -859,21 +888,24 @@ void QueueListView::updateDestFileNames()
             QFileInfo fi(info.filePath());
 
             // Update suffix using assigned batch tool rules.
+            bool extensionSet = false;
             tools.itemUrl     = item->info().fileUrl();
-            QString newSuffix = tools.targetSuffix();
+            QString newSuffix = tools.targetSuffix(&extensionSet);
             QString newName   = QString("%1.%2").arg(fi.completeBaseName()).arg(newSuffix);
 
-            if (settings().renamingRule == QueueSettings::CUSTOMIZE)
+            if (settings().renamingRule == QueueSettings::CUSTOMIZE && !renamingResults.isEmpty())
             {
-                ParseSettings settings(info);
-                settings.parseString = parseString;
-                settings.fileUrl     = KUrl(QString("%1/%2.%3")
-                                            .arg(fi.absolutePath())
-                                            .arg(fi.completeBaseName())
-                                            .arg(newSuffix));
-                newName              = p.parse(settings);
+                QFileInfo fi2(renamingResults[fi.absoluteFilePath()]);
+                if (extensionSet)
+                {
+                    newName = QString("%1.%2").arg(fi2.completeBaseName())
+                                              .arg(newSuffix);
+                }
+                else
+                {
+                    newName = fi2.fileName();
+                }
             }
-
             item->setDestFileName(newName);
         }
         ++it;

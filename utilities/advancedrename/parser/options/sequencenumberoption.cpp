@@ -63,11 +63,12 @@ SequenceNumberOption::SequenceNumberOption()
                     : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
                              SmallIcon("accessories-calculator"))
 {
-    addToken("#",                     i18n("Sequence number"));
-    addToken("#[||start||]",          i18n("Sequence number (custom start)"));
-    addToken("#[||start||,||step||]", i18n("Sequence number (custom start + step)"));
+    addToken("#",                                   i18n("Sequence number"));
+    addToken("#[||options||]",                      i18n("Sequence number (||options||: ||e|| = extension aware)"));
+    addToken("#[||options||,||start||]",            i18n("Sequence number (custom start)"));
+    addToken("#[||options||,||start||,||step||]",   i18n("Sequence number (custom start + step)"));
 
-    QRegExp reg("(#+)(\\[\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\])?");
+    QRegExp reg("(#+)(\\[(e,?)?((\\d+)(,(\\d+))?)?\\])?");
     setRegExp(reg);
 }
 
@@ -80,15 +81,30 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
     QString result;
     if (dlg->exec() == KDialog::Accepted)
     {
-        int digits = dlg->ui->digits->value();
-        int start  = dlg->ui->start->value();
-        int step   = dlg->ui->step->value();
+        int digits          = dlg->ui->digits->value();
+        int start           = dlg->ui->start->value();
+        int step            = dlg->ui->step->value();
+        bool extensionAware = dlg->ui->extensionAware->isChecked();
 
         result = QString("%1").arg("#", digits, QChar('#'));
 
-        if (start > 1 || step > 1)
+        if (start > 1 || step > 1 || extensionAware)
         {
-            result.append(QString("[%1").arg(QString::number(start)));
+            result.append(QChar('['));
+
+            if (extensionAware)
+            {
+                result.append(QChar('e'));
+            }
+
+            if (start > 1 || step > 1)
+            {
+                if (extensionAware)
+                {
+                    result.append(QChar(','));
+                }
+                result.append(QString::number(start));
+            }
 
             if (step > 1)
             {
@@ -106,19 +122,33 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
 
 QString SequenceNumberOption::parseOperation(ParseSettings& settings)
 {
+    QString result;
+    const QRegExp& reg = regExp();
+
     int slength = 0;
     int start   = 0;
     int step    = 0;
     int number  = 0;
-    int index   = settings.currentIndex;
+    int index   = 0;
+//    settings.currentIndex;
+
+    if (settings.manager)
+    {
+        if (reg.cap(3).isEmpty())
+        {
+            index = settings.manager->indexOfFile(settings.fileUrl.toLocalFile());
+        }
+        else
+        {
+            index = settings.manager->indexOfFileGroup(settings.fileUrl.toLocalFile());
+        }
+    }
 
     // --------------------------------------------------------
 
-    QString result;
-    const QRegExp& reg = regExp();
     slength            = reg.cap(1).length();
-    start              = reg.cap(3).isEmpty() ? settings.startIndex : reg.cap(3).toInt();
-    step               = reg.cap(4).isEmpty() ? 1 : reg.cap(4).toInt();
+    start              = reg.cap(5).isEmpty() ? settings.startIndex : reg.cap(5).toInt();
+    step               = reg.cap(7).isEmpty() ? 1 : reg.cap(7).toInt();
 
     number             = start + ((index - 1) * step);
     result             = QString("%1").arg(number, slength, 10, QChar('0'));

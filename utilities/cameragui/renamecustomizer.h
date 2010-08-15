@@ -40,6 +40,7 @@ class KLineEdit;
 namespace Digikam
 {
 
+class AdvancedRenameManager;
 class RenameCustomizerPriv;
 
 class RenameCustomizer : public QWidget
@@ -66,6 +67,8 @@ public:
     int     startIndex() const;
     void    setStartIndex(int startIndex);
     void    reset();
+
+    AdvancedRenameManager* renameManager() const;
 
 Q_SIGNALS:
 

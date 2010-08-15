@@ -116,6 +116,7 @@ extern "C"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
+#include "knotificationwrapper.h"
 
 namespace ShowFoto
 {
@@ -978,6 +979,10 @@ void ShowFoto::saveIsComplete()
 {
     Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
     d->thumbBar->invalidateThumb(d->currentItem);
+
+    // Pop-up a message to bring user when save is done.
+    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
+                                  this, windowTitle());
 }
 
 void ShowFoto::saveAsIsComplete()
@@ -998,6 +1003,10 @@ void ShowFoto::saveAsIsComplete()
     d->thumbBar->blockSignals(false);
     d->currentItem = foundItem;
     slotUpdateItemInfo();
+
+    // Pop-up a message to bring user when save is done.
+    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
+                                  this, windowTitle());
 }
 
 KUrl ShowFoto::saveDestinationUrl()

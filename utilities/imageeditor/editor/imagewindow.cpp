@@ -7,7 +7,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -115,6 +115,7 @@
 #include "uifilevalidator.h"
 #include "albummodel.h"
 #include "imagepropertiesversionstab.h"
+#include "knotificationwrapper.h"
 
 namespace Digikam
 {
@@ -947,6 +948,10 @@ void ImageWindow::saveIsComplete()
     // notify main app that file changed
     emit signalFileModified(m_savingContext->destinationURL);
 
+    // Pop-up a message to bring user when save is done.
+    KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
+                         this, windowTitle());
+
     // all that is done in slotLoadCurrent, except for loading
     int index = d->urlList.indexOf(d->urlCurrent);
 
@@ -1040,6 +1045,10 @@ void ImageWindow::saveAsIsComplete()
         d->thumbBar->blockSignals(false);
 
         slotUpdateItemInfo();
+
+        // Pop-up a message to bring user when save is done.
+        KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
+                             this, windowTitle());
     }
     else
     {

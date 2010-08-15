@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "advancedrenamemanager.h"
 #include "defaultrenameparser.h"
 #include "parsesettings.h"
 
@@ -57,13 +58,10 @@ private Q_SLOTS:
     void testNumberToken();
     void testNumberToken_data();
 
-    void testCameraToken();
-    void testCameraToken_data();
-
     /*
      * MODIFIER TESTS
      */
-    void testUniqueModifier();
+//    void testUniqueModifier();
 
     void testReplaceModifier();
     void testReplaceModifier_data();
@@ -78,11 +76,7 @@ private Q_SLOTS:
 
     void testLowercaseModifier();
 
-    void testTrimmedModifier();
-    void testTrimmedModifier_data();
-
     void testFirstLetterOfEachWordUppercaseModifier();
-    void testFirstLetterOfEachWordUppercaseModifier_data();
 
     void testChainedModifiers();
     void testChainedModifiers_data();

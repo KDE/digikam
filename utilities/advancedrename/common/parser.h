@@ -61,13 +61,13 @@ public:
     Parser();
     virtual ~Parser();
 
-    void          init(const ParseSettings& settings);
+//    void          init(const ParseSettings& settings);
     void          reset();
 
     QString       parse(ParseSettings& settings);
 
-    OptionsList   options()   const;
-    ModifierList  modifiers() const;
+    OptionsList            options()   const;
+    ModifierList           modifiers() const;
 
     bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos);
     bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos, int& start, int& length);

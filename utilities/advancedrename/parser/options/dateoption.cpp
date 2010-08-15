@@ -254,22 +254,20 @@ QString DateOption::parseOperation(ParseSettings& settings)
         token.chop(1);
     }
 
-    QDateTime dateTime = settings.dateTime;
+    QDateTime dateTime;
+
+    // lets try to re-read the file information
+    ImageInfo info(settings.fileUrl);
+    if (!info.isNull())
+    {
+        dateTime = info.dateTime();
+    }
+
     if (dateTime.isNull() || !dateTime.isValid())
     {
-        // lets try to re-read the file information
-        ImageInfo info(settings.fileUrl);
-        if (!info.isNull())
-        {
-            dateTime = info.dateTime();
-        }
-
-        if (dateTime.isNull() || !dateTime.isValid())
-        {
-            // still no date info, use Qt file information
-            QFileInfo fileInfo(settings.fileUrl.toLocalFile());
-            dateTime = fileInfo.created();
-        }
+        // still no date info, use Qt file information
+        QFileInfo fileInfo(settings.fileUrl.toLocalFile());
+        dateTime = fileInfo.created();
     }
 
     // do we have a valid date?

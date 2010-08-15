@@ -48,6 +48,7 @@
 #include "parser.h"
 #include "advancedrenamewidget.h"
 #include "importrenameparser.h"
+#include "advancedrenamemanager.h"
 
 namespace Digikam
 {
@@ -62,6 +63,7 @@ public:
         changedTimer          = 0;
         focusedWidget         = 0;
         advancedRenameWidget  = 0;
+        advancedRenameManager = 0;
         renameDefault         = 0;
         renameDefaultBox      = 0;
         renameDefaultCase     = 0;
@@ -70,25 +72,26 @@ public:
         startIndex            = 1;
 }
 
-    int                   startIndex;
+    int                    startIndex;
 
-    QButtonGroup*         buttonGroup;
+    QButtonGroup*          buttonGroup;
 
-    QLabel*               renameDefaultCase;
+    QLabel*                renameDefaultCase;
 
-    QRadioButton*         renameDefault;
-    QRadioButton*         renameCustom;
+    QRadioButton*          renameDefault;
+    QRadioButton*          renameCustom;
 
-    QString               cameraTitle;
+    QString                cameraTitle;
 
-    QTimer*               changedTimer;
+    QTimer*                changedTimer;
 
-    QWidget*              focusedWidget;
-    QWidget*              renameDefaultBox;
+    QWidget*               focusedWidget;
+    QWidget*               renameDefaultBox;
 
-    KComboBox*            renameDefaultCaseType;
+    KComboBox*             renameDefaultCaseType;
 
-    AdvancedRenameWidget* advancedRenameWidget;
+    AdvancedRenameWidget*  advancedRenameWidget;
+    AdvancedRenameManager* advancedRenameManager;
 };
 
 RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
@@ -132,10 +135,13 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     // ----------------------------------------------------------------------
 
-    d->renameCustom         = new QRadioButton(i18nc("Custom Image Renaming", "Customize"), this);
-    d->advancedRenameWidget = new AdvancedRenameWidget(this);
-    d->advancedRenameWidget->setLayoutStyle(AdvancedRenameWidget::LayoutCompact);
-    d->advancedRenameWidget->setParser(new ImportRenameParser());
+    d->renameCustom          = new QRadioButton(i18nc("Custom Image Renaming", "Customize"), this);
+
+    d->advancedRenameWidget  = new AdvancedRenameWidget(this);
+    d->advancedRenameManager = new AdvancedRenameManager();
+    d->advancedRenameManager->setParserType(AdvancedRenameManager::ImportParser);
+    d->advancedRenameManager->setWidget(d->advancedRenameWidget);
+
     d->buttonGroup->addButton(d->renameCustom, 2);
 
     mainLayout->addWidget(d->renameDefault,        0, 0, 1, 2);
@@ -183,38 +189,51 @@ int RenameCustomizer::startIndex() const
 
 void RenameCustomizer::setStartIndex(int startIndex)
 {
-    ParseSettings settings;
-    settings.startIndex = startIndex;
-    d->startIndex       = startIndex;
-    d->advancedRenameWidget->parser()->init(settings);
+    d->startIndex = startIndex;
+    d->advancedRenameManager->setStartIndex(startIndex);
 }
 
 void RenameCustomizer::reset()
 {
-    d->advancedRenameWidget->parser()->reset();
+    d->advancedRenameManager->reset();
+}
+
+AdvancedRenameManager* RenameCustomizer::renameManager() const
+{
+    return d->advancedRenameManager;
 }
 
 QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime) const
 {
+    Q_UNUSED(dateTime)
 
     if (d->renameDefault->isChecked())
         return QString();
 
-    QString name;
-    QString cameraName = QString("%1").arg(d->cameraTitle.simplified().remove(' '));
-
-    if (d->renameCustom->isChecked())
-    {
-        ParseSettings settings;
-        settings.fileUrl    = fileName;
-        settings.cameraName = cameraName;
-        settings.dateTime   = dateTime;
-
-        name = d->advancedRenameWidget->parse(settings);
-    }
-
-    return name;
+    return d->advancedRenameManager->newName(fileName);
 }
+
+//QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime) const
+//{
+//
+//    if (d->renameDefault->isChecked())
+//        return QString();
+//
+//    QString name;
+//    QString cameraName = QString("%1").arg(d->cameraTitle.simplified().remove(' '));
+//
+//    if (d->renameCustom->isChecked())
+//    {
+//        ParseSettings settings;
+//        settings.fileUrl    = fileName;
+//        settings.cameraName = cameraName;
+//        settings.dateTime   = dateTime;
+//
+//        name = d->advancedRenameWidget->parse(settings);
+//    }
+//
+//    return name;
+//}
 
 RenameCustomizer::Case RenameCustomizer::changeCase() const
 {

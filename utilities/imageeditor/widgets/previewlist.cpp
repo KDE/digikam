@@ -198,7 +198,7 @@ class PreviewList::PreviewListPriv
 
 public:
 
-    PreviewListPriv() 
+    PreviewListPriv()
     {
         wrapper       = 0;
         progressCount = 0;
@@ -231,7 +231,7 @@ PreviewList::PreviewList(QObject* /*parent*/)
     setMovement(QListView::Static);
     setSpacing(5);
     setGridSize(QSize(130,130 + fontMetrics().height()));
-    setMinimumHeight(400);    
+    setMinimumHeight(400);
     setResizeMode(QListView::Adjust);
     setTextElideMode(Qt::ElideRight);
     setCursor(Qt::PointingHandCursor);
@@ -329,9 +329,9 @@ void PreviewList::slotProgressTimerDone()
     QPainter p(&pixmap);
     p.drawPixmap((pixmap.width()/2) - (ppix.width()/2), (pixmap.height()/2) - (ppix.height()/2), ppix);
 
-    int busy = 0;
-    int it = 0;
-    PreviewListItem* selectedItem;
+    int busy                      = 0;
+    int it                        = 0;
+    PreviewListItem* selectedItem = 0;
 
     while (it <= this->count())
     {
@@ -354,7 +354,8 @@ void PreviewList::slotProgressTimerDone()
         // Qt 4.5 doesn't display icons correctly centred over i18n(text),
         // Qt 4.6 doesn't even reset the previous selection correctly.
         this->reset();
-        setCurrentItem(selectedItem);
+        if (selectedItem)
+            setCurrentItem(selectedItem);
     }
 }
 
