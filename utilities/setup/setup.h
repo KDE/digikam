@@ -38,7 +38,6 @@ namespace Digikam
 {
 
 class SetupPlugins;
-class SetupPrivate;
 
 class Setup : public KPageDialog
 {
@@ -100,6 +99,7 @@ private:
 
 private:
 
+    class SetupPrivate;
     SetupPrivate* const d;
 };
 

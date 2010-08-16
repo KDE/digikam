@@ -65,7 +65,7 @@
 namespace Digikam
 {
 
-class SetupPrivate
+class Setup::SetupPrivate
 {
 public:
 
@@ -91,7 +91,7 @@ public:
         page_facetags      = 0;
         page_misc          = 0;
         page_versioning    = 0;
-        
+
         databasePage      = 0;
         collectionsPage   = 0;
         albumViewPage     = 0;
@@ -134,7 +134,7 @@ public:
     KPageWidgetItem*    page_scriptmanager;
     KPageWidgetItem*    page_facetags;
     KPageWidgetItem*    page_versioning;
-    
+
     SetupDatabase*      databasePage;
     SetupCollections*   collectionsPage;
     SetupAlbumView*     albumViewPage;
@@ -204,13 +204,13 @@ Setup::Setup(QWidget* parent)
     d->faceTagsPage  = new SetupFaceTags();
     d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
     d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
-                                          "<i>Configure digiKam's face detection and recognition</i></qt>"));
-    d->page_facetags->setIcon(KIcon("user-identity"));
+                                     "<i>Configure digiKam's face detection and recognition</i></qt>"));
+    d->page_facetags->setIcon(KIcon("face-smile"));
 
     d->versioningPage  = new SetupVersioning();
     d->page_versioning = addPage(d->versioningPage, i18n("Image Versioning"));
     d->page_versioning->setHeader(i18n("<qt>Image Versioning<br/>"
-                                     "<i>Configure non-destructive editing</i></qt>"));
+                                       "<i>Configure non-destructive editing</i></qt>"));
     d->page_versioning->setIcon(KIcon("view-catalog"));
 
     d->metadataPage  = new SetupMetadata();
@@ -436,7 +436,7 @@ void Setup::slotOkClicked()
 //     d->scriptManagerPage->applySettings();
     d->faceTagsPage->applySettings();
     d->versioningPage->applySettings();
-     
+
     AlbumSettings::instance()->emitSetupChanged();
 
     kapp->restoreOverrideCursor();
@@ -506,7 +506,7 @@ Setup::Page Setup::activePageIndex()
     return DatabasePage;
 }
 
-KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page) const
+KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
 {
     switch(page)
     {
