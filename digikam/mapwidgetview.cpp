@@ -161,12 +161,12 @@ MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelect
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
-//     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
-//             this, SLOT(slotImageChange(const ImageChangeset &)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
+            this, SLOT(slotImageChange(const ImageChangeset &)));
 
     // TODO: disable this connection and rely only on the database based one above
-    connect(d->model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(signalModelChangedDrastically()));
+//     connect(d->model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+//             this, SLOT(signalModelChangedDrastically()));
 }
 
 MapViewModelHelper::~MapViewModelHelper()
