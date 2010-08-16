@@ -62,7 +62,7 @@ enum SortOptions {
     SortRating = 2
 };
 
-class GPSMarkerTiler : public KMapIface::AbstractMarkerTiler
+class GPSMarkerTiler : public KMap::AbstractMarkerTiler
 {
     Q_OBJECT
 
@@ -74,20 +74,20 @@ public:
     virtual bool isItemModelBased() const;
     virtual QItemSelectionModel* getSelectionModel() const;
     virtual QAbstractItemModel* getModel() const;
-    virtual QList<QPersistentModelIndex> getTileMarkerIndices(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex);
+    virtual QList<QPersistentModelIndex> getTileMarkerIndices(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
 
-    virtual void prepareTiles(const KMapIface::WMWGeoCoordinate& upperLeft,const KMapIface::WMWGeoCoordinate& lowerRight, int level);
+    virtual void prepareTiles(const KMap::WMWGeoCoordinate& upperLeft,const KMap::WMWGeoCoordinate& lowerRight, int level);
     virtual void regenerateTiles();
-    virtual KMapIface::AbstractMarkerTiler::Tile* getTile(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const bool stopIfEmpty = false);
-    virtual int getTileMarkerCount(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex);
-    virtual int getTileSelectedCount(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex);
+    virtual KMap::AbstractMarkerTiler::Tile* getTile(const KMap::AbstractMarkerTiler::TileIndex& tileIndex, const bool stopIfEmpty = false);
+    virtual int getTileMarkerCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
+    virtual int getTileSelectedCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
 
 
-    virtual QVariant getTileRepresentativeMarker(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex, const int sortKey);
+    virtual QVariant getTileRepresentativeMarker(const KMap::AbstractMarkerTiler::TileIndex& tileIndex, const int sortKey);
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey);
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size);
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
-    virtual KMapIface::WMWSelectionState getTileSelectedState(const KMapIface::AbstractMarkerTiler::TileIndex& tileIndex);
+    virtual KMap::WMWSelectionState getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
 
     virtual void setActive(const bool state);
 
@@ -105,7 +105,7 @@ private:
 
 } // namespace Digikam
 
-typedef QPair<KMapIface::AbstractMarkerTiler::TileIndex,int> MapPair;
+typedef QPair<KMap::AbstractMarkerTiler::TileIndex,int> MapPair;
 Q_DECLARE_METATYPE(MapPair);
 
 #endif //GPSMARKERTILER_H

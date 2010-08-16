@@ -47,7 +47,7 @@ public:
 };
 
 ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
-                    : KMapIface::WMWModelHelper(parent), d(new ImageGPSModelHelperPriv())
+                    : KMap::WMWModelHelper(parent), d(new ImageGPSModelHelperPriv())
 {
 
     d->itemModel           = itemModel;
@@ -76,13 +76,13 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
     return d->itemSelectionModel;
 }
 
-bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KMapIface::WMWGeoCoordinate* const coordinates) const
+bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KMap::WMWGeoCoordinate* const coordinates) const
 {
     ImageGPSItem *item =static_cast<ImageGPSItem*>(d->itemModel->itemFromIndex(index));
     QVariant var = item->data(RoleGPSInfo);
     GPSInfo currentGPSInfo = var.value<GPSInfo>();
 
-    KMapIface::WMWGeoCoordinate currentCoordinates(currentGPSInfo.latitude, currentGPSInfo.longitude);
+    KMap::WMWGeoCoordinate currentCoordinates(currentGPSInfo.latitude, currentGPSInfo.longitude);
     *coordinates = currentCoordinates;
 
     if(currentCoordinates.hasCoordinates())

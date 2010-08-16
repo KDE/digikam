@@ -97,8 +97,8 @@ public:
     KSqueezedTextLabel         *longitude;
     KSqueezedTextLabel         *date;
 
-    KMapIface::KMapWidget      *map;
-    KMapIface::ItemMarkerTiler *itemMarkerTiler;
+    KMap::KMapWidget      *map;
+    KMap::ItemMarkerTiler *itemMarkerTiler;
     GPSInfoList                gpsInfoList;
 
     QStandardItemModel         *itemModel;
@@ -119,9 +119,9 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
-    d->map                    = new KMapIface::KMapWidget(mapPanel);
-    d->map->setAvailableMouseModes(KMapIface::MouseModePan|KMapIface::MouseModeZoom);
-    d->map->setVisibleMouseModes(KMapIface::MouseModePan|KMapIface::MouseModeZoom);
+    d->map                    = new KMap::KMapWidget(mapPanel);
+    d->map->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
+    d->map->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
     vlay2->addWidget(d->map);
     vlay2->setMargin(0);
     vlay2->setSpacing(0);
@@ -130,7 +130,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     d->itemModel        = new QStandardItemModel(this);
     d->gpsModelHelper   = new ImageGPSModelHelper(d->itemModel, this);
-    d->itemMarkerTiler  = new KMapIface::ItemMarkerTiler(d->gpsModelHelper, this);
+    d->itemMarkerTiler  = new KMap::ItemMarkerTiler(d->gpsModelHelper, this);
     d->map->setGroupedModel(d->itemMarkerTiler);
     
     d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);

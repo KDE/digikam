@@ -42,7 +42,7 @@ namespace Digikam
 
 class ImageGPSModelHelperPriv;
 
-class ImageGPSModelHelper : public KMapIface::WMWModelHelper
+class ImageGPSModelHelper : public KMap::WMWModelHelper
 {
     Q_OBJECT
 
@@ -54,7 +54,7 @@ public:
     virtual QAbstractItemModel* model() const;
     virtual QItemSelectionModel* selectionModel() const;
 
-    virtual bool itemCoordinates(const QModelIndex& index, KMapIface::WMWGeoCoordinate* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index, KMap::WMWGeoCoordinate* const coordinates) const;
 
     virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
     virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey);

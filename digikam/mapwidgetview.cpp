@@ -84,7 +84,7 @@ public:
     }
 
     KVBox                *vbox;
-    KMapIface::KMapWidget *mapWidget;
+    KMap::KMapWidget *mapWidget;
     ImageAlbumModel      *imageModel;
     QItemSelectionModel  *selectionModel;
     MapViewModelHelper   *mapViewModelHelper;
@@ -99,10 +99,10 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterMode
     d->mapViewModelHelper = new MapViewModelHelper(d->imageModel, d->selectionModel, imageFilterModel, this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
     
-    d->mapWidget = new KMapIface::KMapWidget(this);
-    d->mapWidget->setAvailableMouseModes(KMapIface::MouseModePan|KMapIface::MouseModeZoom);
-    d->mapWidget->setVisibleMouseModes(KMapIface::MouseModePan|KMapIface::MouseModeZoom);
-    KMapIface::ItemMarkerTiler* const kmapMarkerModel = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
+    d->mapWidget = new KMap::KMapWidget(this);
+    d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
+    d->mapWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
+    KMap::ItemMarkerTiler* const kmapMarkerModel = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
     d->mapWidget->setBackend("marble");
     vBoxLayout->addWidget(d->mapWidget);
@@ -150,7 +150,7 @@ public:
 
 
 MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* const selection, ImageFilterModel* const filterModel, QObject* const parent)
-: KMapIface::WMWModelHelper(parent), d(new MapViewModelHelperPrivate())
+: KMap::WMWModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
     Q_UNUSED(model)
 
@@ -184,14 +184,14 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
     return d->selectionModel;
 }
 
-bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMapIface::WMWGeoCoordinate * const coordinates) const
+bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::WMWGeoCoordinate * const coordinates) const
 {
     ImageInfo info          = d->model->imageInfo(index);
 
     if(info.isNull() || !info.hasCoordinates())
         return false;
 
-    const KMapIface::WMWGeoCoordinate gpsCoordinates(info.latitudeNumber(), info.longitudeNumber());
+    const KMap::WMWGeoCoordinate gpsCoordinates(info.latitudeNumber(), info.longitudeNumber());
     *coordinates = gpsCoordinates;
 
     return true;

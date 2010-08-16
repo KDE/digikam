@@ -100,13 +100,13 @@ public:
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
     QSplitter*                  splitter;
-    KMapIface::KMapWidget*      mapSearchWidget;
+    KMap::KMapWidget*      mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     MapViewModelHelper*         mapViewModelHelper;
-    KMapIface::ItemMarkerTiler* markerTilerModelBased;
+    KMap::ItemMarkerTiler* markerTilerModelBased;
     bool                        existsSelection;
     SearchModel*                searchModel;  
     KAction*                    sortActionOldestFirst;
@@ -136,7 +136,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->searchModel        = searchModel;
 
     d->mapViewModelHelper = new MapViewModelHelper(d->imageAlbumModel, d->selectionModel, d->imageFilterModel, this);
-    d->markerTilerModelBased = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
+    d->markerTilerModelBased = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
 
     // ---------------------------------------------------------------
 
@@ -146,7 +146,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     mapPanel->setMinimumWidth(256);
     mapPanel->setMinimumHeight(256);
     QVBoxLayout* vlay2 = new QVBoxLayout(mapPanel);
-    d->mapSearchWidget = new KMapIface::KMapWidget(mapPanel);
+    d->mapSearchWidget = new KMap::KMapWidget(mapPanel);
     d->mapSearchWidget->setBackend("marble");
 
     d->gpsMarkerTiler = new GPSMarkerTiler(this);
@@ -220,8 +220,8 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
-    d->mapSearchWidget->setAvailableMouseModes(KMapIface::MouseModePan|KMapIface::MouseModeSelection|KMapIface::MouseModeZoom|KMapIface::MouseModeFilter|KMapIface::MouseModeSelectThumbnail);
-    d->mapSearchWidget->setVisibleMouseModes(KMapIface::MouseModePan|KMapIface::MouseModeSelection|KMapIface::MouseModeZoom|KMapIface::MouseModeFilter|KMapIface::MouseModeSelectThumbnail);
+    d->mapSearchWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
+    d->mapSearchWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
 
     d->existsSelection              = false; 
 

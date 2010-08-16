@@ -118,7 +118,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
     list.insert(i18n("LibPGF"),                      libPGFVersion());
 
-    list.insert(i18n("LibKMap"),                     KMapIface::KMapWidget::version());
+    list.insert(i18n("LibKMap"),                     KMap::KMapWidget::version());
 
     listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     setInfoMap(list);
