@@ -52,7 +52,8 @@ public:
       rating(0),
       url(),
       id(-1),
-      dimensions()
+      dimensions(),
+      hasAltitude(false)
     {
     };
 

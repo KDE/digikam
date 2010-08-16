@@ -317,14 +317,20 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
 
 void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
 {
-    double alt, lat, lon;
     const QDateTime dt = meta.getImageDateTime();
-    if (meta.getGPSInfo(alt, lat, lon))
+    double lat, lng;
+    const bool haveCoordinates = meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
+
+    if (haveCoordinates)
     {
+        double alt;
+        const bool haveAlt = meta.getGPSAltitude(&alt);
+
         GPSInfo gpsInfo;
-        gpsInfo.longitude = lon;
+        gpsInfo.longitude = lng;
         gpsInfo.latitude  = lat;
         gpsInfo.altitude  = alt;
+        gpsInfo.hasAltitude = haveAlt;
         gpsInfo.dateTime  = dt;
         gpsInfo.url       = url;
         setGPSInfoList(GPSInfoList() << gpsInfo);
