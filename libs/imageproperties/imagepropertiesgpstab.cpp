@@ -120,7 +120,6 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
     d->map                    = new KMapIface::KMapWidget(mapPanel);
-    d->map->setBackend("marble");
     vlay2->addWidget(d->map);
     vlay2->setMargin(0);
     vlay2->setSpacing(0);
@@ -183,6 +182,9 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     layout->setMargin(0);
 
     readConfig();
+
+    // TODO: actually, do this only if the tab is visible!
+    d->map->setActive(true);
 
     // --------------------------------------------------------
 
