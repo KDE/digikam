@@ -283,17 +283,14 @@ GPSSearchView::~GPSSearchView()
     delete d;
 }
 
-void GPSSearchView::setConfigGroup(KConfigGroup /*group*/)
+void GPSSearchView::setConfigGroup(KConfigGroup group)
 {
-    /*
     StateSavingObject::setConfigGroup(group);
     d->searchTreeView->setConfigGroup(group);
-    */
 }
 
 void GPSSearchView::doLoadState()
 {
-   /*
    KConfigGroup group = getConfigGroup();
 
     if (group.hasKey(entryName(d->configSplitterStateEntry)))
@@ -305,8 +302,9 @@ void GPSSearchView::doLoadState()
         }
     }
 
-    d->gpsSearchWidget->readConfig(group); */
-    //d->searchTreeView->loadState();
+    const KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
+    d->mapSearchWidget->readSettingsFromGroup(&groupMapWidget);
+    d->searchTreeView->loadState();
 
     d->searchTreeView->clearSelection();
     d->imageAlbumModel->clearImageInfos();
@@ -315,15 +313,15 @@ void GPSSearchView::doLoadState()
 
 void GPSSearchView::doSaveState()
 {
-  /*
     KConfigGroup group = getConfigGroup();
 
     group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
-    d->gpsSearchWidget->writeConfig(group); */
-    //d->searchTreeView->saveState();
 
-    //group.sync();
-    
+    KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
+    d->mapSearchWidget->saveSettingsToGroup(&groupMapWidget);
+    d->searchTreeView->saveState();
+
+    group.sync();
 }
 
 /**
