@@ -363,7 +363,7 @@ void ImageWindow::setupConnections()
     connect(m_canvas, SIGNAL(signalRedoSteps(int)),
             this, SLOT(slotEnableEntriesInFiltersHistorySidebar(int)));
 
-    connect(m_canvas->interface(), SIGNAL(signalModified()),
+    connect(m_canvas->interface(), SIGNAL(signalModifiedWithFilterAction()),
             this, SLOT(slotUpdateFiltersHistorySidebar()));
 }
 
@@ -1556,18 +1556,13 @@ void ImageWindow::slotUpdateFiltersHistorySidebar()
 void ImageWindow::slotDisableEntriesInFiltersHistorySidebar(int count)
 {
      d->rightSideBar->getFiltersHistoryTab()->disableEntries(count);
-     
-//     d->rightSideBar->setFiltersHistoryDirty(true);
+     d->rightSideBar->setFiltersHistoryDirty(true);
 }
 
 void ImageWindow::slotEnableEntriesInFiltersHistorySidebar(int count)
 {
     d->rightSideBar->getFiltersHistoryTab()->enableEntries(count);
+    d->rightSideBar->setFiltersHistoryDirty(true);
 }
-
-// void ImageWindow::slotSetCurrentImageHistory()
-// {
-//     m_canvas->interface()->setImageHistoryToCurrent();
-// }
 
 }  // namespace Digikam

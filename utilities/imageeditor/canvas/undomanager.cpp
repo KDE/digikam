@@ -279,4 +279,9 @@ DImageHistory UndoManager::getCurrentImageHistory()
     return d->historyList->at(d->origin-1);
 }
 
+void UndoManager::setCurrentImageHistory(const DImageHistory& history)
+{
+        d->historyList->append(history);
+}
+
 }  // namespace Digikam

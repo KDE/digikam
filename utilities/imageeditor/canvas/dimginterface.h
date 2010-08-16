@@ -180,6 +180,7 @@ protected Q_SLOTS:
 Q_SIGNALS:
 
     void   signalModified();
+    void   signalModifiedWithFilterAction();
     void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
 
     void   signalLoadingStarted(const QString& filename);

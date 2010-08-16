@@ -274,6 +274,8 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         itemData.clear();
     }
 
+    d->disabledEntries = 0;
+
     endResetModel();
 }
 

@@ -64,6 +64,7 @@ public:
     void addAction(UndoAction* action);
 
     DImageHistory getCurrentImageHistory();
+    void setCurrentImageHistory(const DImageHistory& history);
 
 private:
 

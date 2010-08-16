@@ -638,6 +638,8 @@ void DImgInterface::setModified(FilterAction& action)
 {
     d->image.setFilterAction(action);
     emit signalModified();
+    d->undoMan->setCurrentImageHistory(d->image.getImageHistory());
+    emit signalModifiedWithFilterAction();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
@@ -841,53 +843,56 @@ void DImgInterface::zoom(double val)
 
 void DImgInterface::rotate90(bool saveUndo)
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R90));
-    }
-
     d->image.rotate(DImg::ROT90);
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    FilterAction action("digikam:rotate90", 1);
-    action.setDisplayableName(i18n("Rotate right"));
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R90));
 
-    setModified(action);
+        FilterAction action("digikam:rotate90", 1);
+        action.setDisplayableName(i18n("Rotate right"));
+
+        setModified(action);
+    }
+    else setModified();
 }
 
 void DImgInterface::rotate180(bool saveUndo)
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R180));
-    }
-
     d->image.rotate(DImg::ROT180);
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    FilterAction action("digikam:rotate180", 1);
-    action.setDisplayableName(i18n("Rotate right"));
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R180));
 
-    setModified(action);
+        FilterAction action("digikam:rotate180", 1);
+        action.setDisplayableName(i18n("Rotate right"));
+
+        setModified(action);
+    }
+    else setModified();
 }
 
 void DImgInterface::rotate270(bool saveUndo)
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R270));
-    }
-
     d->image.rotate(DImg::ROT270);
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    FilterAction action("digikam:rotate270", 1);
-    action.setDisplayableName(i18n("Rotate left"));
+    if (saveUndo)
+    {
+        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R270));
 
-    setModified(action);
+        FilterAction action("digikam:rotate270", 1);
+        action.setDisplayableName(i18n("Rotate left"));
+
+        setModified(action);
+    }
+    else setModified();
 }
 
 void DImgInterface::flipHoriz(bool saveUndo)
