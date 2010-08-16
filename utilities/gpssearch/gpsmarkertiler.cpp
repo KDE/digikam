@@ -39,7 +39,7 @@ class EntryFromDatabase
         qlonglong                   id;
         int                         rating;
         QDateTime                   creationDate;    
-        KMap::WMWGeoCoordinate coordinate;
+        KMap::GeoCoordinates coordinate;
 };
 
 class InternalJobs
@@ -149,7 +149,7 @@ void GPSMarkerTiler::regenerateTiles()
  * @param lowerRight The South-East point.
  * @param level The requested tiling level.
  */
-void GPSMarkerTiler::prepareTiles(const KMap::WMWGeoCoordinate& upperLeft,const KMap::WMWGeoCoordinate& lowerRight, int level)
+void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft,const KMap::GeoCoordinates& lowerRight, int level)
 {
 
     qreal lat1 = upperLeft.lat();

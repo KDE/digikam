@@ -150,7 +150,7 @@ public:
 
 
 MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* const selection, ImageFilterModel* const filterModel, QObject* const parent)
-: KMap::WMWModelHelper(parent), d(new MapViewModelHelperPrivate())
+: KMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
     Q_UNUSED(model)
 
@@ -184,14 +184,14 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
     return d->selectionModel;
 }
 
-bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::WMWGeoCoordinate * const coordinates) const
+bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates * const coordinates) const
 {
     ImageInfo info          = d->model->imageInfo(index);
 
     if(info.isNull() || !info.hasCoordinates())
         return false;
 
-    const KMap::WMWGeoCoordinate gpsCoordinates(info.latitudeNumber(), info.longitudeNumber());
+    const KMap::GeoCoordinates gpsCoordinates(info.latitudeNumber(), info.longitudeNumber());
     *coordinates = gpsCoordinates;
 
     return true;

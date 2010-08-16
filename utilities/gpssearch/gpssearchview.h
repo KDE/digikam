@@ -29,6 +29,10 @@
 
 #include <QWidget>
 
+// libkmap includes
+
+#include <libkmap/kmap_modelhelper.h>
+
 // local includes
 
 #include "statesavingobject.h"

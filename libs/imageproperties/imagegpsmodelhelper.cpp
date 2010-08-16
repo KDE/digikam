@@ -47,7 +47,7 @@ public:
 };
 
 ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
-                    : KMap::WMWModelHelper(parent), d(new ImageGPSModelHelperPriv())
+                    : KMap::ModelHelper(parent), d(new ImageGPSModelHelperPriv())
 {
 
     d->itemModel           = itemModel;
@@ -58,7 +58,7 @@ ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QO
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
     connect(d->itemModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(signalModelChangedDrastically()));
+            this, SIGNAL(signalModelChangedDrastically()));
 }
 
 ImageGPSModelHelper::~ImageGPSModelHelper()
@@ -76,13 +76,13 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
     return d->itemSelectionModel;
 }
 
-bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KMap::WMWGeoCoordinate* const coordinates) const
+bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates* const coordinates) const
 {
     ImageGPSItem *item =static_cast<ImageGPSItem*>(d->itemModel->itemFromIndex(index));
     QVariant var = item->data(RoleGPSInfo);
     GPSInfo currentGPSInfo = var.value<GPSInfo>();
 
-    KMap::WMWGeoCoordinate currentCoordinates(currentGPSInfo.latitude, currentGPSInfo.longitude);
+    KMap::GeoCoordinates currentCoordinates(currentGPSInfo.latitude, currentGPSInfo.longitude);
     *coordinates = currentCoordinates;
 
     if(currentCoordinates.hasCoordinates())

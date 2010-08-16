@@ -76,7 +76,7 @@ public:
     virtual QAbstractItemModel* getModel() const;
     virtual QList<QPersistentModelIndex> getTileMarkerIndices(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
 
-    virtual void prepareTiles(const KMap::WMWGeoCoordinate& upperLeft,const KMap::WMWGeoCoordinate& lowerRight, int level);
+    virtual void prepareTiles(const KMap::GeoCoordinates& upperLeft,const KMap::GeoCoordinates& lowerRight, int level);
     virtual void regenerateTiles();
     virtual KMap::AbstractMarkerTiler::Tile* getTile(const KMap::AbstractMarkerTiler::TileIndex& tileIndex, const bool stopIfEmpty = false);
     virtual int getTileMarkerCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
