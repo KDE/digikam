@@ -56,6 +56,9 @@ ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QO
 
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+
+    connect(d->itemModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+            this, SLOT(signalModelChangedDrastically()));
 }
 
 ImageGPSModelHelper::~ImageGPSModelHelper()

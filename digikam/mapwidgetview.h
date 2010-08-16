@@ -49,6 +49,7 @@ namespace Digikam
 
 class MapWidgetViewPriv;
 class AlbumWidgetStack;
+class ImageChangeset;
 
 class MapViewModelHelperPrivate;
 
@@ -58,7 +59,7 @@ class MapViewModelHelper : public KMapIface::WMWModelHelper
 
 public:
 
-    MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* selection,ImageFilterModel* const filterModel, QObject* const parent = 0);
+    MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* selection, ImageFilterModel* const filterModel, QObject* const parent = 0);
     virtual ~MapViewModelHelper();
 
     virtual QAbstractItemModel* model() const;
@@ -77,6 +78,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+    void slotImageChange(const ImageChangeset& changeset);
 
 private:
 

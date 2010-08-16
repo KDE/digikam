@@ -47,6 +47,8 @@
 #include "imageposition.h"
 #include "imageinfo.h"
 #include "imagemodel.h"
+#include "databasewatch.h"
+#include "databasefields.h"
 
 
 namespace Digikam
@@ -98,6 +100,8 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterMode
     QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
     
     d->mapWidget = new KMapIface::KMapWidget(this);
+    d->mapWidget->setAvailableMouseModes(KMapIface::MouseModePan|KMapIface::MouseModeZoom);
+    d->mapWidget->setVisibleMouseModes(KMapIface::MouseModePan|KMapIface::MouseModeZoom);
     KMapIface::ItemMarkerTiler* const kmapMarkerModel = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
     d->mapWidget->setBackend("marble");
@@ -145,9 +149,10 @@ public:
 };
 
 
-MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* const selection,ImageFilterModel* const filterModel, QObject* const parent)
+MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* const selection, ImageFilterModel* const filterModel, QObject* const parent)
 : KMapIface::WMWModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
+    Q_UNUSED(model)
 
     d->model                = filterModel;
     d->selectionModel       = selection;
@@ -155,6 +160,13 @@ MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelect
     
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+
+//     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
+//             this, SLOT(slotImageChange(const ImageChangeset &)));
+
+    // TODO: disable this connection and rely only on the database based one above
+    connect(d->model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+            this, SLOT(signalModelChangedDrastically()));
 }
 
 MapViewModelHelper::~MapViewModelHelper()
@@ -293,6 +305,32 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
 
    // emit signalFilteredImages(imagesUrlList); 
     emit signalFilteredImages(imagesIdList);
+}
+
+void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
+{
+    kDebug()<<"---------------------------------------------------------------";
+    const DatabaseFields::Set changes = changeset.changes();
+    const DatabaseFields::ImagePositions imagePositionChanges = changes;
+    // TODO: more detailed check
+    if (   ( changes & DatabaseFields::LatitudeNumber )
+        || ( changes & DatabaseFields::LongitudeNumber )
+        || ( changes & DatabaseFields::Altitude ) )
+    {
+        kDebug()<<"changes!";
+        foreach (const qlonglong& id, changeset.ids())
+        {
+            QModelIndex index = d->model->indexForImageId(id);
+            kDebug()<<id<<index;
+            if (index.isValid())
+            {
+                kDebug()<<index;
+                emit(signalModelChangedDrastically());
+                break;
+            }
+        }
+    }
+    kDebug()<<"---------------------------------------------------------------";
 }
 
 } //namespace Digikam
