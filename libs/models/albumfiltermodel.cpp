@@ -45,6 +45,7 @@ namespace Digikam
 AlbumFilterModel::AlbumFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
+    m_filterBehavior = FullFiltering;
     m_chainedModel = 0;
     setSortRole(AbstractAlbumModel::AlbumSortRole);
     setSortCaseSensitivity(Qt::CaseInsensitive);
@@ -62,6 +63,15 @@ AlbumFilterModel::AlbumFilterModel(QObject *parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsUpdated(int)),
             this, SLOT(slotAlbumsHaveBeenUpdated(int)));
+}
+
+void AlbumFilterModel::setFilterBehavior(FilterBehavior behavior)
+{
+    if (behavior == m_filterBehavior)
+        return;
+
+    m_filterBehavior = behavior;
+    invalidateFilter();
 }
 
 void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
@@ -205,18 +215,24 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album *album) const
         return NoMatch;
 
     if (matches(album))
-        return TitleMatch;
+        return DirectMatch;
 
-    // check if any of the parents match the search
-    Album *parent = album->parent();
-    PAlbum* pparent = palbum ? static_cast<PAlbum*>(parent) : 0;
+    if (m_filterBehavior == SimpleFiltering)
+        return NoMatch;
 
-    while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
+    if (m_filterBehavior == FullFiltering)
     {
-        if (matches(parent))
-            return ParentMatch;
+        // check if any of the parents match the search
+        Album *parent = album->parent();
+        PAlbum* pparent = palbum ? static_cast<PAlbum*>(parent) : 0;
 
-        parent = parent->parent();
+        while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
+        {
+            if (matches(parent))
+                return ParentMatch;
+
+            parent = parent->parent();
+        }
     }
 
     // check if any of the children match the search

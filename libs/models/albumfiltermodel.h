@@ -72,13 +72,36 @@ public:
      */
     SearchTextSettings searchTextSettings() const;
 
+    enum FilterBehavior
+    {
+        /** If an index does not matched, the index and all its children are filtered out.
+         *  This is the Qt default behavior, but undesirable for album trees. */
+        SimpleFiltering,
+        /** Default behavior.
+         *  If an index matches, it is shown, which directly means all its parents are shown as well.
+         *  In addition, all its children are shown as well. */
+        FullFiltering,
+        /** If an index matches, it is shown, which directly means all its parents are shown as well.
+         *  Its children are not shown unless they also match. */
+        StrictFiltering
+    };
+
+    /**
+     * Sets the filter behavior. Default is FullFiltering.
+     */
+    void setFilterBehavior(FilterBehavior behavior);
+
     enum MatchResult
     {
         /// This enum can be used as a boolean value if match/no match only is needed
         NoMatch = 0,
-        TitleMatch,
+        /// The index itself is matched
+        DirectMatch,
+        /// A parent if the index is matched
         ParentMatch,
+        /// A child of the index is matched
         ChildMatch,
+        /// The index is matched not because of search settings, but because it has a special type
         SpecialMatch
     };
     /**
@@ -171,6 +194,7 @@ protected Q_SLOTS:
 
 protected:
 
+    FilterBehavior     m_filterBehavior;
     SearchTextSettings m_settings;
     AlbumFilterModel  *m_chainedModel;
 
