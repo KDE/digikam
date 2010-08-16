@@ -1303,6 +1303,9 @@ void AlbumManager::scanPAlbums()
         insertPAlbum(album, parent);
     }
 
+    if (!topMostOldAlbums.isEmpty() || !newAlbums.isEmpty())
+        emit signalAlbumsUpdated(Album::PHYSICAL);
+
     getAlbumItemsCount();
 }
 
@@ -1543,6 +1546,9 @@ void AlbumManager::scanTAlbums()
         // also insert it in the map we are doing lookup of parent tags
         tmap.insert(info.id, album);
     }
+
+    if (!tList.isEmpty())
+        emit signalAlbumsUpdated(Album::TAG);
 
     getTagItemsCount();
 }
@@ -2008,6 +2014,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     album->m_date    = date;
 
     insertPAlbum(album, parent);
+    emit signalAlbumsUpdated(Album::PHYSICAL);
 
     return album;
 }
@@ -2183,6 +2190,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     album->m_icon = iconkde;
 
     insertTAlbum(album, parent);
+    emit signalAlbumsUpdated(Album::TAG);
 
     return album;
 }
@@ -2279,6 +2287,7 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
     }
 
     removeTAlbum(album);
+    emit signalAlbumsUpdated(Album::TAG);
 
     return true;
 }

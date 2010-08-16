@@ -647,6 +647,7 @@ Q_SIGNALS:
     void signalFAlbumsDirty(const QMap<QString, int>&);
     void signalDatesMapDirty(const QMap<QDateTime, int>&);
     void signalTagPropertiesChanged(TAlbum *album);
+    void signalAlbumsUpdated(int type);
 
 private Q_SLOTS:
 

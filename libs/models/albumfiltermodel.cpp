@@ -46,7 +46,6 @@ AlbumFilterModel::AlbumFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
     m_chainedModel = 0;
-    setDynamicSortFilter(true);
     setSortRole(AbstractAlbumModel::AlbumSortRole);
     setSortCaseSensitivity(Qt::CaseInsensitive);
 
@@ -54,6 +53,15 @@ AlbumFilterModel::AlbumFilterModel(QObject *parent)
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(invalidate()));
 
+    // dynamicSortFilter does not work well for us: a dataChange may, because of our way of filtering,
+    // also affect parents and children of the changed index, which is not handled by QSortFilterProxyModel.
+    //setDynamicSortFilter(true);
+    // Instead, we listen directly to AlbumManager's relevant change signals
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsUpdated(int)),
+            this, SLOT(slotAlbumsHaveBeenUpdated(int)));
 }
 
 void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
@@ -247,6 +255,21 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
         }
     else
         return QSortFilterProxyModel::lessThan(left, right);
+}
+
+void AlbumFilterModel::slotAlbumRenamed(Album *album)
+{
+    if (!isFiltering())
+        return;
+    QModelIndex index = indexForAlbum(album);
+    if (index.isValid())
+        invalidateFilter();
+}
+
+void AlbumFilterModel::slotAlbumsHaveBeenUpdated(int type)
+{
+    if (isFiltering() && sourceAlbumModel() && sourceAlbumModel()->albumType() == type)
+        invalidateFilter();
 }
 
 // -----------------------------------------------------------------------------

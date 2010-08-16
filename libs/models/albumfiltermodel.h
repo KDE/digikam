@@ -164,6 +164,11 @@ protected:
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
     virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
 
+protected Q_SLOTS:
+
+    void slotAlbumRenamed(Album *album);
+    void slotAlbumsHaveBeenUpdated(int type);
+
 protected:
 
     SearchTextSettings m_settings;
