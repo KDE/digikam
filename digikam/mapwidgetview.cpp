@@ -39,7 +39,7 @@
 
 // libkmap includes
 
-#include <libkmap/kmapwidget.h>
+#include <libkmap/kmap_widget.h>
 #include <libkmap/itemmarkertiler.h>
 
 //local includes

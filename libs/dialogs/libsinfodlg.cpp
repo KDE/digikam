@@ -48,7 +48,7 @@
 
 // Libkmap includes
 
-#include <libkmap/kmapwidget.h>
+#include <libkmap/kmap_widget.h>
 
 // C ANSI includes
 
