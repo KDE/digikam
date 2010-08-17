@@ -89,9 +89,9 @@ public:
     void init(DatabaseAccess &access, qlonglong imageId);
 };
 
-void ImagePositionPriv::init(DatabaseAccess &access, qlonglong imageId)
+void ImagePositionPriv::init(DatabaseAccess &access, qlonglong id)
 {
-    imageId = imageId;
+    imageId = id;
 
     QVariantList values = access.db()->getImagePosition(imageId);
     if (values.size() == 10)
