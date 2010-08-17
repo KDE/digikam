@@ -23,9 +23,6 @@
 
 #include "libsinfodlg.moc"
 
-// TODO: still needed?
-#include "config-digikam.h"
-
 // Qt includes
 
 #include <QStringList>
@@ -119,6 +116,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibPGF"),                      libPGFVersion());
 
     list.insert(i18n("LibKMap"),                     KMap::KMapWidget::version());
+    list.insert(i18n("Marble Widget"),               KMap::KMapWidget::MarbleWidgetVersion());
 
     listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     setInfoMap(list);
