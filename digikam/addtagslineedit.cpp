@@ -200,7 +200,7 @@ AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForExistingTag(TAl
 
 AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForNewTag(const QString& newName, TAlbum* parent)
 {
-    int parentTagId = parentTag ? parentTag->id() : 0;
+    int parentTagId = parent ? parent->id() : 0;
 
     // If tag exists, do not add an entry to create it
     if (TagsCache::instance()->tagForName(newName, parentTagId))
