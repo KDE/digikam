@@ -56,12 +56,14 @@ public:
 
     ImagePropertiesVersionsTab(QWidget* parent);
     ~ImagePropertiesVersionsTab();
+
     void setupVersionsData() const;
     void setupFiltersData() const;
     int findImagePositionInList(qlonglong id) const;
     bool hasImage(qlonglong id) const;
+
 //    void setCurrentURL(const KUrl& url = KUrl());
-//     void setImageHistory(const DImageHistory& history);
+//    void setImageHistory(const DImageHistory& history);
 
 public Q_SLOTS:
 

@@ -61,24 +61,24 @@ public:
 
     ImagePropertiesVersionsTabPriv()
     {
-        versionsWidget          = 0;
-        filtersHistoryWidget    = 0;
-        versionsList            = 0;
+        versionsWidget       = 0;
+        filtersHistoryWidget = 0;
+        versionsList         = 0;
     }
 
-    VersionsWidget*                 versionsWidget;
-    FiltersHistoryWidget*           filtersHistoryWidget;
-    QList<QPair<qlonglong, int> >*  versionsList;
-    QString                         currentSelectedImagePath;
-    int                             currentSelectedImageListPosition;
-    qlonglong                       currentSelectedImageId;
+    VersionsWidget*                versionsWidget;
+    FiltersHistoryWidget*          filtersHistoryWidget;
+    QList<QPair<qlonglong, int> >* versionsList;
+    QString                        currentSelectedImagePath;
+    int                            currentSelectedImageListPosition;
+    qlonglong                      currentSelectedImageId;
 };
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
                           : KTabWidget(parent), d(new ImagePropertiesVersionsTabPriv)
 {
     d->versionsList = new QList<QPair<qlonglong, int> >;
-    
+
     d->versionsWidget = new VersionsWidget(this);
     insertTab(0, d->versionsWidget, i18n("Versions"));
 
