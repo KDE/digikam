@@ -60,49 +60,48 @@
 namespace Digikam
 {
 
-class FaceIfacePriv
+class FaceIface::FaceIfacePriv
 {
 public:
-    
+
     FaceIfacePriv()
     {
         if(!KStandardDirs::exists(KStandardDirs::locateLocal("data", "libkface")))
             KStandardDirs::makeDir(KStandardDirs::locateLocal("data", "libkface"));
-        
+
         libkface             = new KFaceIface::Database(KFaceIface::Database::InitAll, KStandardDirs::locateLocal("data", "libkface"));
         tagsCache            = TagsCache::instance();
         scannedForFacesTagId = tagsCache->createTag("/Scanned/Scanned for Faces");
         peopleTagId          = tagsCache->createTag("/People");
         unknownPeopleTagId   = tagsCache->createTag("/People/Unknown");
-        tagProps = new TagProperties(unknownPeopleTagId);
+        tagProps             = new TagProperties(unknownPeopleTagId);
         tagProps->setProperty("person", "Unknown");
     }
-    
+
     ~FaceIfacePriv()
     {
         delete libkface;
     }
 
     bool                  suggestionsAllowed;
-    
+
     double                recognitionThreshold;
     int                   detectionAccuracy;
-    
+
     int                   scannedForFacesTagId;
     int                   peopleTagId;
     int                   unknownPeopleTagId;
-    
+
     KFaceIface::Database* libkface;
     TagsCache*            tagsCache;
     TagProperties*        tagProps;
-};   
+};
 
 FaceIface::FaceIface()
-    : d( new FaceIfacePriv() )
+         : d( new FaceIfacePriv() )
 {
     readConfigSettings();
 }
-
 
 FaceIface::~FaceIface()
 {
@@ -115,16 +114,16 @@ bool FaceIface::hasBeenScanned(qlonglong imageid)
     return pair.hasProperty("scannedForFaces");
 }
 
-QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
+QList<Face> FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
 {
     readConfigSettings();
     // Find faces
     QImage qimg = image.copyQImage();
-    kDebug()<<"Image dimensions : "<<qimg.rect();
-    
+    kDebug() << "Image dimensions : " << qimg.rect();
+
     KFaceIface::Image fimg(qimg);
     QList<KFaceIface::Face> faceList = d->libkface->detectFaces(fimg);
-    
+
     // Mark the image as scanned.
     ImageTagPair pairScanned(imageid, d->scannedForFacesTagId);
     pairScanned.addProperty("scannedForFaces", QString::number(faceList.size()));
@@ -132,11 +131,11 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
 
     // Apply region tags to the image for each face that has been detected.
     QListIterator<KFaceIface::Face> it(faceList);
-    
+
     while (it.hasNext())
     {
         KFaceIface::Face face = it.next();
-        
+
         // Assign the "/People/Unknown" tag. The property for this tag is "faceRegion", which has an SVG rect associated with it.
         // When we assign a name for a person in the image, we assign a new tag "/People/<Person Name>" to this image, and move the
         // "faceRegion" property to this tag, and delete it from the unknown tag."
@@ -147,8 +146,8 @@ QList< Face > FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
         pair.addProperty("faceRegion", rectToString(faceRect));
         pair.addProperty("face", "Unknown");
         pair.assignTag();
-        
-        kDebug()<<"Applied tag.";
+
+        kDebug() << "Applied tag.";
     }
     qimg.reset();
     return faceList;
@@ -160,66 +159,64 @@ int FaceIface::numberOfFaces(qlonglong imageid)
     return pairScanned.value("scannedForFaces").toInt();
 }
 
-
-QList< Face > FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
+QList<Face> FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
 {
     if (!hasBeenScanned(imageid))
     {
-        kDebug()<<"Image has not been scanned yet.";
+        kDebug() << "Image has not been scanned yet.";
         return QList<Face>();
     }
-    
+
     QImage qimg = image.copyQImage();
-    
+
     QList<Face> faceList;
-    
+
     QList<int> peopleTagIds = allPersonTags();
-    
+
     QListIterator<int> it(peopleTagIds);
-    
+
     while (it.hasNext())
     {
         int currentTag = it.next();
-        
+
         ImageTagPair peopleTags(imageid, currentTag);
         QString tagName = d->tagsCache->tagName(currentTag);
-        
+
         // The only people tags with a face region property are either "Unknown" or "<Name of Person>". So assign them to the Face name
         if(peopleTags.hasProperty("faceRegion"))
         {
             QList<QString> rectStringList = peopleTags.values("faceRegion");
-            
+
             QListIterator<QString> i(rectStringList);
-            
+
             while(i.hasNext())
             {
                 QRect rect = stringToRect(i.next());
                 kDebug()<<"rect found as "<<rectToString(rect);
-                
+
                 // FIXME: Later, need support for putting the cropped image in Face f too. I tried it, but I get weird crashes. Will see.
                 Face f;
                 f.setRect(rect);
                 f.setImage(qimg.copy(rect));
-                if(tagName == "Unknown")
+                if(tagName == QString("Unknown"))
                     f.setName("");
                 else
                     f.setName(tagName);
-                
+
                 faceList += f;
             }
         }
     }
-    
+
     qimg.reset();
     return faceList;
 }
-
 
 void FaceIface::forgetFaceTags(qlonglong imageid)
 {
     if (!hasBeenScanned(imageid))
     {
-        kDebug()<<"Image has not been scanned yet.";
+        kDebug() << "Image has not been scanned yet.";
         return;
     }
 
@@ -239,7 +236,7 @@ void FaceIface::forgetFaceTags(qlonglong imageid)
         peopleTags.removeProperties("faceRegion");
         peopleTags.removeProperties("face");
         peopleTags.unAssignTag();
-        kDebug()<<" Removed tag "<< d->tagsCache->tagName(currentTag);
+        kDebug() << " Removed tag " << d->tagsCache->tagName(currentTag);
     }
 }
 
@@ -249,9 +246,9 @@ QList< qlonglong > FaceIface::imagesWithPerson(int tagId, bool repeat)
     const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
-    
+
     QStringList pathList;
-    
+
     for (AlbumList::ConstIterator it = palbumList.constBegin();
             it != palbumList.constEnd(); ++it)
     {
@@ -265,19 +262,20 @@ QList< qlonglong > FaceIface::imagesWithPerson(int tagId, bool repeat)
 
         if (this->hasBeenScanned(info.id()))
         {
-            kDebug()<< "Image " << info.filePath() << "has already been scanned.";
-            
+            kDebug() << "Image " << info.filePath() << "has already been scanned.";
+
             //dddddd
             DImg img;
             QList<Face> faceList = findFacesFromTags(img, info.id());
-            
+
             QString nameString = d->tagsCache->tagName(tagId);
-            if(nameString == "Unknown")
-                nameString = "";    // Because we store names for unknown faces this way in the Face objects.
-                
+            if(nameString == QString("Unknown"))
+                nameString = QString();    // Because we store names for unknown faces this way in the Face objects.
+
             QListIterator<Face> faceIt(faceList);
             // The number of times the same face was found in this image
             int count = 0;
+
             while(faceIt.hasNext())
             {
                 if(faceIt.next().name() == nameString)
@@ -296,7 +294,7 @@ QList< qlonglong > FaceIface::imagesWithPerson(int tagId, bool repeat)
             }
         }
     }
-    
+
     return imageIds;
 }
 
@@ -304,13 +302,13 @@ QList< qlonglong > FaceIface::imagesWithPerson(int tagId, bool repeat)
 QList< QRect > FaceIface::getTagRects(qlonglong imageid)
 {
     QList< QRect > rectList;
-    
+
     DImg img;
     QList< Face > faceList = this->findFacesFromTags(img, imageid);
-    
+
     foreach (Face f, faceList)
         rectList += f.toRect();
-    
+
     return rectList;
 }
 
@@ -326,24 +324,24 @@ QString FaceIface::rectToString(const QRect& rect) const
 QRect FaceIface::stringToRect(const QString& string) const
 {
     QRect rect;
-    
+
     QStringList list = string.split(",");
     kDebug()<<list;
-    
+
     rect.setX( list[0].toInt() );
     rect.setY( list[1].toInt() );
     rect.setWidth( list[2].toInt() );
     rect.setHeight( list[3].toInt() );
-    
+
     return rect;
 }
 
 QList< int > FaceIface::allPersonTags()
 {
-    AlbumManager *man = AlbumManager::instance();
+    AlbumManager* man = AlbumManager::instance();
     QList <int> peopleTagIds = man->subTags(d->peopleTagId, true);
     peopleTagIds += d->peopleTagId;
-    
+
     return peopleTagIds;
 }
 
@@ -360,28 +358,27 @@ QList< QString > FaceIface::allPersonPaths()
 int FaceIface::tagForPerson(const QString& name)
 {
     QList<int> tagList = d->tagsCache->tagsForName(name);
-    
+
     foreach(int id, tagList)
     {
         if(d->tagsCache->tagPath(id).startsWith("/People"))
            return id;
     }
-    
+
     return 0;
 }
-
 
 bool FaceIface::isPerson ( int tagId )
 {
     QList<int> peopleTagIds = allPersonTags();
-    
+
     // Now loop through and check if our tagId is in them
     foreach(int id, peopleTagIds)
     {
         if(id == tagId)
             return true;
     }
-    
+
     return false;
 }
 
@@ -390,24 +387,24 @@ int FaceIface::setName ( qlonglong imageid, const QRect& rect, const QString& na
     // First look in all people tags. If the name is already there, then put it there. For ex, if the name of
     // your "dad" is a subtag of "Family" in the People tags, then assigning a tag "dad" to a person should assign the
     // tag under "Family", and not create a new tag just below "People".
-    
+
     int nameTagId;
     if(!(nameTagId = tagForPerson(name)))
         nameTagId = d->tagsCache->createTag("/People/" + name);
-    
-    ImageTagPair pairNamed   ( imageid, nameTagId );
-    
+
+    ImageTagPair pairNamed(imageid, nameTagId);
+
     DatabaseAccess().db()->removeImageTagProperties(imageid, d->unknownPeopleTagId, "faceRegion", rectToString(rect));
     DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "faceRegion", rectToString(rect));
     DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "face", name);
-    
+
     pairNamed.addProperty("faceRegion", rectToString(rect));
     pairNamed.addProperty("face", name);
     pairNamed.assignTag();
-   
+
     d->tagProps = new TagProperties(nameTagId);
     d->tagProps->setProperty("person", name);
-    
+
     if(faceCountForPersonInImage(imageid, d->unknownPeopleTagId) == 0)
     {
             ImageTagPair pair(imageid, d->unknownPeopleTagId);
@@ -415,17 +412,16 @@ int FaceIface::setName ( qlonglong imageid, const QRect& rect, const QString& na
             pair.removeProperties("face");
             pair.unAssignTag();
     }
-        
+
     return nameTagId;
 }
 
 void FaceIface::removeRect ( qlonglong imageid, const QRect& rect , const QString& name)
 {
-    if(name == "")
+    if(name == QString())
     {
         DatabaseAccess().db()->removeImageTagProperties(imageid, d->unknownPeopleTagId, "faceRegion", rectToString(rect));
     }
-    
     else
     {
         int nameTagId = tagForPerson(name);
@@ -434,7 +430,7 @@ void FaceIface::removeRect ( qlonglong imageid, const QRect& rect , const QStrin
         pair.removeProperties("face");
         pair.unAssignTag();
     }
-    
+
     if(faceCountForPersonInImage(imageid, d->unknownPeopleTagId) == 0)
     {
             ImageTagPair pair(imageid, d->unknownPeopleTagId);
@@ -454,14 +450,14 @@ Face FaceIface::faceForRectInImage ( qlonglong imageid, const QRect& rect, const
 {
     Face f;
     ImageInfo info(imageid);
-    
+
     DImg image(info.filePath());
     QImage qimg = image.copyQImage();
-    
+
     f.setRect(rect);
     f.setName(name);
     f.setImage(qimg.copy(rect));
-    
+
     return f;
 }
 
@@ -470,58 +466,62 @@ void FaceIface::trainWithFace(Face face)
     d->libkface->updateFaces(QList<Face>()+=face);
 }
 
-
 void FaceIface::trainWithFaces ( QList< Face > faceList )
 {
     readConfigSettings();
-    
+
     foreach(Face f, faceList)
     {
         if(f.name() == "" || f.getImage().isNull())
             faceList.remove(f);
     }
-    
+
     d->libkface->updateFaces(faceList);
-    kDebug()<<"DB file is : "<<d->libkface->configPath();
+    kDebug() << "DB file is : " << d->libkface->configPath();
     d->libkface->saveConfig();
 }
 
 QString FaceIface::recognizedName ( const KFaceIface::Face& face )
 {
     if(d->libkface->peopleCount() == 0)
-        return "";
-    
+        return QString();
+
     QList<Face> f;
     f.append(face);
-    
+
     if( face.getImage().isNull() )
-        return "";
-    else 
+    {
+        return QString();
+    }
+    else
     {
         double distance = d->libkface->recognizeFaces(f).at(0)/100000;
-        kDebug()<<"Possible : "<<f[0].name();
-        kDebug()<<"Distance is "<<distance;
+        kDebug() << "Possible : " << f[0].name();
+        kDebug() << "Distance is " << distance;
+
         if(distance > 100)
         {
-            kDebug()<<"Dismissing ";
-            return "";
+            kDebug() << "Dismissing ";
+            return QString();
         }
         else
+        {
             return f[0].name();
+        }
     }
 }
 
 void FaceIface::markFaceAsTrained ( qlonglong imageid, const QRect& rect, const QString& name )
 {
-    if(name == "Unknown" || name == "")
+    if(name == QString("Unknown") || name == QString())
         return;
-    
+
     int nameTagId = tagForPerson ( name );
     ImageTagPair pair ( imageid, nameTagId );
     pair.addProperty("trained", rectToString(rect));
     pair.assignTag();
-    
-    kDebug()<<"Marked face of "<<name<<" as trained";
+
+    kDebug() << "Marked face of " << name << " as trained";
 }
 
 void FaceIface::markFaceAsTrained ( qlonglong imageid, const KFaceIface::Face& face )
@@ -539,14 +539,14 @@ void FaceIface::markFacesAsTrained ( qlonglong imageid, QList< Face > faces )
 
 void FaceIface::markFaceAsRecognized ( qlonglong imageid, const QRect& rect, const QString& name )
 {
-    if(name == "Unknown" || name == "")
+    if(name == QString("Unknown") || name == QString())
         return;
-    
+
     int nameTagId = tagForPerson ( name );
     ImageTagPair pair ( imageid, nameTagId );
     pair.addProperty("recognized", rectToString(rect));
     pair.assignTag();
-    kDebug()<<"Marked face of "<<name<<" as recognized";
+    kDebug() << "Marked face of " << name << " as recognized";
 }
 
 void FaceIface::markFaceAsRecognized ( qlonglong imageid, const KFaceIface::Face& face )
@@ -562,24 +562,24 @@ void FaceIface::markFacesAsRecognized ( qlonglong imageid, QList< Face > faces )
     }
 }
 
-
 bool FaceIface::isFaceTrained ( qlonglong imageid, const QRect& rect, const QString& name )
 {
     int nameTagId = tagForPerson ( name );
     ImageTagPair pair ( imageid, nameTagId );
-    
+
     if(pair.values("trained").contains(rectToString(rect)))
     {
-        if(name == "Unknown" || name == "")
+        if(name == QString("Unknown") || name == QString())
         {
-            DatabaseAccess().db()->removeImageTagProperties( imageid, nameTagId, "trained", rectToString(rect)   );
+            DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "trained", rectToString(rect));
             return false;
         }
-        
         else
+        {
             return true;
+	}
     }
-    
+
     return false;
 }
 
@@ -587,19 +587,20 @@ bool FaceIface::isFaceRecognized ( qlonglong imageid, const QRect& rect, const Q
 {
     int nameTagId = tagForPerson ( name );
     ImageTagPair pair ( imageid, nameTagId );
-    
+
     if(pair.values("recognized").contains(rectToString(rect)))
     {
-        if(name == "Unknown" || name == "")
+        if(name == QString("Unknown") || name == QString())
         {
-            DatabaseAccess().db()->removeImageTagProperties( imageid, nameTagId, "recognized", rectToString(rect)   );
+            DatabaseAccess().db()->removeImageTagProperties(imageid, nameTagId, "recognized", rectToString(rect));
             return false;
         }
-        
         else
+        {
             return true;
+	}
     }
-    
+
     return false;
 }
 
@@ -607,14 +608,12 @@ void FaceIface::readConfigSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Face Tags Settings");
-    
+
     d->suggestionsAllowed     = group.readEntry("FaceSuggestion", false);
     d->detectionAccuracy      = group.readEntry("DetectionAccuracy", 3);
     d->recognitionThreshold   = 1 - group.readEntry("SuggestionThreshold", 0.2);
-    
+
     d->libkface->setDetectionAccuracy(d->detectionAccuracy);
 }
-
-
 
 } // Namespace Digikam
