@@ -282,7 +282,9 @@ public:
 
     /**
      */
-    QList< QPair< qlonglong, int > > allAvailableVersions() const;
+    QList<QPair<qlonglong, int> > allAvailableVersions() const;
+
+    QList<QPair<qlonglong, int> > buildTree(const QList<QPair<qlonglong, qlonglong> >& pairs) const;
 
     /**
      * Add a relation to the database:
@@ -374,6 +376,22 @@ private:
 };
 
 inline uint qHash(const ImageInfo& info) { return info.hash(); }
+
+// ------------------------------------------------------------------
+
+class TreeNode
+{
+public:
+    TreeNode() : id(0), parent(0) {}
+    TreeNode(qlonglong id) : id(id), parent(0) {}
+    qlonglong id;
+    QList<qlonglong> ancestors;
+    qlonglong parent;
+    QList<qlonglong> children;
+};
+inline uint qHash(const TreeNode& node) { return qHash(node.id); }
+
+// ------------------------------------------------------------------
 
 DIGIKAM_DATABASE_EXPORT QDebug& operator<<(QDebug& stream, const ImageInfo& info);
 
