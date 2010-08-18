@@ -6,8 +6,8 @@
  * Date        : 2007-06-05
  * Description : Thumbnail loading
  *
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +35,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
+#include <kmessagebox.h>
 
 // Local includes
 
@@ -83,18 +84,17 @@ public:
         delete provider;
     }
 
-    ThumbnailCreator::StorageMethod  storageMethod;
-    ThumbnailInfoProvider           *provider;
-    QWidget                         *displayingWidget;
-
-    bool firstThreadCreated;
+    ThumbnailCreator::StorageMethod storageMethod;
+    ThumbnailInfoProvider*          provider;
+    QWidget*                        displayingWidget;
+    bool                            firstThreadCreated;
 };
 
 K_GLOBAL_STATIC(ThumbnailLoadThreadStaticPriv, static_d)
 
 // -------------------------------------------------------------------
 
-class ThumbnailLoadThreadPriv
+class ThumbnailLoadThread::ThumbnailLoadThreadPriv
 {
 
 public:
@@ -126,10 +126,12 @@ public:
 
     QList<LoadingDescription>       kdeTodo;
     QHash<KUrl, LoadingDescription> kdeJobHash;
-    KIO::PreviewJob                *kdeJob;
+    KIO::PreviewJob*                kdeJob;
 
-    LoadingDescription createLoadingDescription(const QString filePath, int size);
-    bool checkDescription(const LoadingDescription &description);
+public:
+
+    LoadingDescription createLoadingDescription(const QString& filePath, int size);
+    bool checkDescription(const LoadingDescription& description);
     QList<LoadingDescription> makeDescriptions(const QStringList& filePaths, int size);
     bool hasHighlightingBorder() const;
     int pixmapSizeForThumbnailSize(int thumbnailSize) const;
@@ -162,17 +164,17 @@ ThumbnailLoadThread::~ThumbnailLoadThread()
     delete d;
 }
 
-ThumbnailLoadThread *ThumbnailLoadThread::defaultIconViewThread()
+ThumbnailLoadThread* ThumbnailLoadThread::defaultIconViewThread()
 {
     return defaultIconViewObject;
 }
 
-ThumbnailLoadThread *ThumbnailLoadThread::defaultThread()
+ThumbnailLoadThread* ThumbnailLoadThread::defaultThread()
 {
     return defaultObject;
 }
 
-ThumbnailLoadThread *ThumbnailLoadThread::defaultThumbBarThread()
+ThumbnailLoadThread* ThumbnailLoadThread::defaultThumbBarThread()
 {
     return defaultThumbBarObject;
 }
@@ -184,7 +186,7 @@ void ThumbnailLoadThread::cleanUp()
     defaultThumbBarObject.destroy();
 }
 
-void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& params, ThumbnailInfoProvider *provider)
+void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& params, ThumbnailInfoProvider* provider)
 {
     if (static_d->firstThreadCreated)
     {
@@ -197,16 +199,17 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
     {
         kDebug() << "Thumbnail db ready for use";
         static_d->storageMethod = ThumbnailCreator::ThumbnailDatabase;
-        static_d->provider = provider;
+        static_d->provider      = provider;
     }
     else
     {
         kError() << "Failed to initialize thumbnail database at" << params.databaseName
-                                << "\n Error message:" << ThumbnailDatabaseAccess().lastError();
+                 << "\n Error message:" << ThumbnailDatabaseAccess().lastError();
+//        KMessageBox::information(0, "pb", "pb");//, QString(), KMessageBox::NoExec);
     }
 }
 
-void ThumbnailLoadThread::setDisplayingWidget(QWidget *widget)
+void ThumbnailLoadThread::setDisplayingWidget(QWidget* widget)
 {
     static_d->displayingWidget = widget;
 }
@@ -276,19 +279,19 @@ int ThumbnailLoadThread::thumbnailPixmapSize(bool withHighlight, int size)
     return size;
 }
 
-bool ThumbnailLoadThreadPriv::hasHighlightingBorder() const
+bool ThumbnailLoadThread::ThumbnailLoadThreadPriv::hasHighlightingBorder() const
 {
     return highlight && size >= 10;
 }
 
-int ThumbnailLoadThreadPriv::pixmapSizeForThumbnailSize(int thumbnailSize) const
+int ThumbnailLoadThread::ThumbnailLoadThreadPriv::pixmapSizeForThumbnailSize(int thumbnailSize) const
 {
     if (hasHighlightingBorder())
         return thumbnailSize + 2;
     return thumbnailSize;
 }
 
-int ThumbnailLoadThreadPriv::thumbnailSizeForPixmapSize(int pixmapSize) const
+int ThumbnailLoadThread::ThumbnailLoadThreadPriv::thumbnailSizeForPixmapSize(int pixmapSize) const
 {
     // bug #206666: Do not cut off one-pixel line for highlighting border
     if (hasHighlightingBorder())
@@ -296,7 +299,7 @@ int ThumbnailLoadThreadPriv::thumbnailSizeForPixmapSize(int pixmapSize) const
     return pixmapSize;
 }
 
-LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QString filePath, int size)
+LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv::createLoadingDescription(const QString& filePath, int size)
 {
     size = thumbnailSizeForPixmapSize(size);
 
@@ -313,12 +316,12 @@ LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QStri
     return description;
 }
 
-bool ThumbnailLoadThreadPriv::checkDescription(const LoadingDescription &description)
+bool ThumbnailLoadThread::ThumbnailLoadThreadPriv::checkDescription(const LoadingDescription& description)
 {
     QString cacheKey = description.cacheKey();
 
     {
-        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         if (cache->hasThumbnailPixmap(cacheKey))
             return false;
@@ -332,7 +335,8 @@ bool ThumbnailLoadThreadPriv::checkDescription(const LoadingDescription &descrip
     return true;
 }
 
-QList<LoadingDescription> ThumbnailLoadThreadPriv::makeDescriptions(const QStringList& filePaths, int size)
+QList<LoadingDescription> ThumbnailLoadThread::ThumbnailLoadThreadPriv::makeDescriptions(const QStringList& filePaths, 
+                                                                                         int size)
 {
     QList<LoadingDescription> descriptions;
     {
@@ -350,9 +354,9 @@ QList<LoadingDescription> ThumbnailLoadThreadPriv::makeDescriptions(const QStrin
 
 bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int size)
 {
-    const QPixmap *pix;
+    const QPixmap* pix             = 0;
     LoadingDescription description = d->createLoadingDescription(filePath, size);
-    QString cacheKey = description.cacheKey();
+    QString cacheKey               = description.cacheKey();
 
     {
         LoadingCache *cache = LoadingCache::cache();
@@ -384,12 +388,12 @@ void ThumbnailLoadThread::find(const QString& filePath)
 
 void ThumbnailLoadThread::find(const QString& filePath, int size)
 {
-    const QPixmap *pix;
+    const QPixmap* pix             = 0;
     LoadingDescription description = d->createLoadingDescription(filePath, size);
-    QString cacheKey = description.cacheKey();
+    QString cacheKey               = description.cacheKey();
 
     {
-        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         pix = cache->retrieveThumbnailPixmap(cacheKey);
     }
@@ -477,7 +481,7 @@ bool ThumbnailLoadThread::checkSize(int size)
     else if (size > ThumbnailSize::Huge)
     {
         kError() << "ThumbnailLoadThread::load: Thumbnail size " << size
-                      << " is larger than " << ThumbnailSize::Huge << ". Refusing to load.";
+                 << " is larger than " << ThumbnailSize::Huge << ". Refusing to load.";
         return false;
     }
     return true;
@@ -549,7 +553,7 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
 
     // put into cache
     {
-        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         cache->putThumbnail(description.cacheKey(), pix, description.filePath);
     }
@@ -607,7 +611,7 @@ void ThumbnailLoadThread::gotKDEPreview(const KFileItem& item, const QPixmap& kd
 
     // put into cache
     {
-        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         cache->putThumbnail(description.cacheKey(), pix, description.filePath);
     }
@@ -620,7 +624,7 @@ void ThumbnailLoadThread::failedKDEPreview(const KFileItem& item)
     gotKDEPreview(item, QPixmap());
 }
 
-void ThumbnailLoadThread::kdePreviewFinished(KJob *)
+void ThumbnailLoadThread::kdePreviewFinished(KJob*)
 {
     d->kdeJob = 0;
     startKdePreviewJob();
@@ -683,7 +687,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
 void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
 {
     {
-        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
 
         QStringList possibleKeys = LoadingDescription::possibleThumbnailCacheKeys(filePath);

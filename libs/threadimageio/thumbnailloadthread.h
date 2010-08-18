@@ -6,8 +6,8 @@
  * Date        : 2007-06-05
  * Description : Thumbnail loading
  *
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,6 @@ namespace Digikam
 class DatabaseParameters;
 class ThumbnailCreator;
 class ThumbnailInfoProvider;
-class ThumbnailLoadThreadPriv;
 
 class DIGIKAM_EXPORT ThumbnailLoadThread : public ManagedLoadSaveThread
 {
@@ -58,9 +57,9 @@ public:
      * It is perfectly all right to create an extra object of the class,
      * but it is useful to have default object
      */
-    static ThumbnailLoadThread *defaultIconViewThread();
-    static ThumbnailLoadThread *defaultThumbBarThread();
-    static ThumbnailLoadThread *defaultThread();
+    static ThumbnailLoadThread* defaultIconViewThread();
+    static ThumbnailLoadThread* defaultThumbBarThread();
+    static ThumbnailLoadThread* defaultThread();
 
     static void cleanUp();
 
@@ -70,13 +69,13 @@ public:
      * This need not be called, then the FreeDesktop standard is used.
      * You can optionally provide a thumbnail info provider.
      */
-    static void initializeThumbnailDatabase(const DatabaseParameters& params, ThumbnailInfoProvider *provider = 0);
+    static void initializeThumbnailDatabase(const DatabaseParameters& params, ThumbnailInfoProvider* provider = 0);
 
     /**
      * For color management, this sets the widget the thumbnails will be color managed for.
      * (currently it is only possible to set one global widget)
      */
-    static void setDisplayingWidget(QWidget *widget);
+    static void setDisplayingWidget(QWidget* widget);
 
     /**
      * Find a thumbnail.
@@ -211,7 +210,7 @@ Q_SIGNALS:
 public:
 
     // For internal use - may only be used from the thread
-    ThumbnailCreator *thumbnailCreator() const;
+    ThumbnailCreator* thumbnailCreator() const;
 
 protected:
 
@@ -235,12 +234,13 @@ private Q_SLOTS:
 
     void slotThumbnailsAvailable();
     void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& thumb);
-    void gotKDEPreview(const KFileItem &, const QPixmap& pix);
-    void failedKDEPreview(const KFileItem &);
-    void kdePreviewFinished(KJob *);
+    void gotKDEPreview(const KFileItem&, const QPixmap& pix);
+    void failedKDEPreview(const KFileItem&);
+    void kdePreviewFinished(KJob*);
 
 private:
 
+    class ThumbnailLoadThreadPriv;
     ThumbnailLoadThreadPriv* const d;
 };
 
