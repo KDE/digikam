@@ -33,6 +33,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <klocale.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
 #include <kmessagebox.h>
@@ -203,9 +204,8 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
     }
     else
     {
-        kError() << "Failed to initialize thumbnail database at" << params.databaseName
-                 << "\n Error message:" << ThumbnailDatabaseAccess().lastError();
-//        KMessageBox::information(0, "pb", "pb");//, QString(), KMessageBox::NoExec);
+        KMessageBox::information(0, i18n("Error message: %1").arg(ThumbnailDatabaseAccess().lastError()),
+                                 i18n("Failed to initialize thumbnail database"));
     }
 }
 
