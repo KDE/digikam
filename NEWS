@@ -32,7 +32,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 247590 : digiKam not checking if libexiv2 was compiled with xmp support.
 024 ==> 246774 : Create New Tag vs Create New Tag in.
 025 ==> 246675 : Crash on startup/scanning folders.
-026 ==> 
-
-
+026 ==> 225471 : Change digiKam to follow usability guidelines.
+027 ==> 
 
