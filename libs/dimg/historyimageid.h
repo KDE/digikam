@@ -58,6 +58,8 @@ public:
         Current
     };
 
+public:
+
     /// Creates an invalid HistoryImageId
     HistoryImageId();
 
@@ -79,6 +81,8 @@ public:
     void setCreationDate(const QDateTime& creationDate);
     void setPathOnDisk(const QString& filePath);
     void setUniqueHash(const QString& uniqueHash, int fileSize);
+
+public:
 
     /// Type of this History Image Id
     Type      m_type;
