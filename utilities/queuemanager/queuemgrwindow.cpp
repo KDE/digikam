@@ -335,12 +335,6 @@ void QueueMgrWindow::setupConnections()
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
 
-    connect(this, SIGNAL(signalWindowHasMoved()),
-            d->queueSettingsView, SLOT(slotUpdateTrackerPos()));
-
-    connect(this, SIGNAL(signalWindowLostFocus()),
-            d->queueSettingsView, SLOT(slotHideToolTipTracker()));
-
     connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int, qlonglong)),
             this, SLOT(slotHistoryEntryClicked(int, qlonglong)));
 

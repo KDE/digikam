@@ -7,7 +7,7 @@
  * Description : USB Mass Storage camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -154,19 +154,20 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
         return true;        // Nothing to do.
 
     QFileInfoList::const_iterator fi;
-    QFileInfo          thmlo, thmup;
-    DMetadata          meta;
-    PhotoInfoContainer pInfo;
+    QFileInfo                     thmlo, thmup;
+    DMetadata                     meta;
+    PhotoInfoContainer            pInfo;
+    QSize                         dims;
+    QDateTime                     dt;
+    GPItemInfo                    info;
+    QString                       mime;
 
     for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
-        QString mime = mimeType(fi->suffix().toLower());
+        mime = mimeType(fi->suffix().toLower());
 
         if (!mime.isEmpty())
         {
-            QSize      dims;
-            QDateTime  dt;
-            GPItemInfo info;
             thmlo.setFile(folder + QString("/") + fi->baseName() + QString(".thm"));
             thmup.setFile(folder + QString("/") + fi->baseName() + QString(".THM"));
 
@@ -188,7 +189,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             }
             else
             {
-                // If no thumbnail sidecar file available , try to load image metadata for files.
+                // If no thumbnail sidecar file available, try to load image metadata for files.
                 meta.load(fi->filePath());
                 dt    = meta.getImageDateTime();
                 dims  = meta.getImageDimensions();
@@ -265,7 +266,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     return false;
 }
 
-bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
+bool UMSCamera::getExif(const QString&, const QString&, char**, int&)
 {
     // Not necessary to implement this. read data directly from the file
     // (done in camera controller)
@@ -284,16 +285,14 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
     if ( !sFile.open(QIODevice::ReadOnly) )
     {
-        kWarning() << "Failed to open source file for reading: "
-                        << src;
+        kWarning() << "Failed to open source file for reading: " << src;
         return false;
     }
 
     if ( !dFile.open(QIODevice::WriteOnly) )
     {
         sFile.close();
-        kWarning() << "Failed to open dest file for writing: "
-                        << dest;
+        kWarning() << "Failed to open dest file for writing: " << dest;
         return false;
     }
 
@@ -473,13 +472,14 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
         return;
 
     QFileInfoList::const_iterator fi;
+    QString                       subfolder;
 
     for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
         if (fi->fileName() == "." || fi->fileName() == "..")
             continue;
 
-        QString subfolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
+        subfolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
         subFolderList.append(subfolder);
         listFolders(subfolder, subFolderList);
     }
