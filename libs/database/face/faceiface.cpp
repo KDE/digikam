@@ -36,6 +36,7 @@
 // Local includes
 
 #include "imageinfo.h"
+#include "imageinfocache.h"
 #include "databaseaccess.h"
 #include "databasetransaction.h"
 #include "albumdb.h"
@@ -55,7 +56,6 @@
 
 #include <libkface/database.h>
 #include <libkface/kface.h>
-#include <imageinfocache.h>
 
 namespace Digikam
 {
@@ -149,7 +149,7 @@ QList<Face> FaceIface::findAndTagFaces(DImg& image, qlonglong imageid)
 
         kDebug() << "Applied tag.";
     }
-    qimg.reset();
+    qimg = QImage();
     return faceList;
 }
 
@@ -208,7 +208,7 @@ QList<Face> FaceIface::findFacesFromTags(DImg& image, qlonglong imageid)
         }
     }
 
-    qimg.reset();
+    qimg = QImage();
     return faceList;
 }
 
@@ -473,7 +473,7 @@ void FaceIface::trainWithFaces ( QList< Face > faceList )
     foreach(Face f, faceList)
     {
         if(f.name() == "" || f.getImage().isNull())
-            faceList.remove(f);
+            faceList.removeAll(f);
     }
 
     d->libkface->updateFaces(faceList);
