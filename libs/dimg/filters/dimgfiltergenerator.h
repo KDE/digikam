@@ -79,6 +79,7 @@ public:
     {
         return QList<QString>() << T::FilterIdentifier();
     }
+
     QList<int> supportedVersions(const QString& filterIdentifier)
     {
         if (filterIdentifier == T::FilterIdentifier())
@@ -86,7 +87,7 @@ public:
         return QList<int>();
     }
 
-    DImgThreadedFilter *createFilter(const QString& filterIdentifier, int version)
+    DImgThreadedFilter* createFilter(const QString& filterIdentifier, int version)
     {
         if (filterIdentifier == T::FilterIdentifier() &&
             T::SupportedVersions().contains(version))

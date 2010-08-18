@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class DImgFilterManagerPriv
+class DImgFilterManager::DImgFilterManagerPriv
 {
 public:
 
@@ -70,7 +70,7 @@ public:
     void setupFilterIcons();
 };
 
-void DImgFilterManagerPriv::setupBuiltinGenerators()
+void DImgFilterManager::DImgFilterManagerPriv::setupBuiltinGenerators()
 {
     builtinGenerators
         << new BasicDImgFilterGenerator<BCGFilter>()
@@ -82,7 +82,7 @@ void DImgFilterManagerPriv::setupBuiltinGenerators()
         //<< new BasicDImgFilterGenerator<WBFilter>();
 }
 
-void DImgFilterManagerPriv::setupFilterIcons()
+void DImgFilterManager::DImgFilterManagerPriv::setupFilterIcons()
 {
     //Please keep this list sorted alphabetically
     filterIcons.insert("digikam:AntiVignettingFilter", "antivignetting");
@@ -125,6 +125,8 @@ void DImgFilterManagerPriv::setupFilterIcons()
     filterIcons.insert("digikam:UnsharpMaskFilter",    "sharpenimage");
     filterIcons.insert("digikam:whiteBalance",         "whitebalance");
 }
+
+// -----------------------------------------------------------------------------------------
 
 class DImgFilterManagerCreator
 {

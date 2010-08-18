@@ -34,8 +34,6 @@
 namespace Digikam
 {
 
-class DImgFilterManagerPriv;
-
 class DIGIKAM_EXPORT DImgFilterManager : public DImgFilterGenerator
 {
 public:
@@ -67,6 +65,8 @@ private:
 private:
 
     friend class DImgFilterManagerCreator;
+
+    class DImgFilterManagerPriv;
     DImgFilterManagerPriv* const d;
 };
 
