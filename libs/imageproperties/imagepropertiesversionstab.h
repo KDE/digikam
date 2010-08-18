@@ -43,8 +43,6 @@
 namespace Digikam 
 {
 
-class ImageVersionsModel;
-class DImageHistory;
 class ImageInfoList;
 class ImageInfo;
 
