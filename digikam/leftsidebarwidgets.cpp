@@ -1083,33 +1083,33 @@ void GPSSearchSideBarWidget::slotDigikamViewImageSelected(const ImageInfoList &s
 class PeopleSideBarWidgetPriv : public TagViewSideBarWidgetPriv
 {
 public:
-    
+
     QLabel*      personIcon;
     QLabel*      textLabel;
     QPushButton* rescanButton;
 };
 
 PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
-                    : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
+                   : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
 {
     setObjectName("People Sidebar");
-    
+
     d->tagModel = model;
-    
+
     QVBoxLayout* layout = new QVBoxLayout(this);
-    QHBoxLayout* hlay = new QHBoxLayout(layout);
-    
+    QHBoxLayout* hlay   = new QHBoxLayout();
+
     d->tagFolderView = new TagFolderView(this, model, true);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
-    
+
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewPeopleSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(d->tagFolderView->filteredModel(),
                               AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
-    
+
     d->rescanButton = new QPushButton;
     d->rescanButton->setText("Scan collection for faces");
 
@@ -1118,22 +1118,22 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     QPixmap personPix = icon->pixmap(QSize(48, 48));
     d->personIcon = new QLabel;
     d->personIcon->setPixmap(personPix);
-    
+
     d->textLabel = new QLabel("People Tags");
-    
+
     hlay->addWidget(d->personIcon);
     hlay->addWidget(d->textLabel);
-    
+
+    layout->addLayout(hlay);
     layout->addWidget(d->rescanButton);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
-    
+
     connect(d->rescanButton, SIGNAL(pressed()),
             this, SIGNAL( signalDetectFaces() ) );
-
 }
 
 QPixmap PeopleSideBarWidget::getIcon()
@@ -1155,7 +1155,7 @@ void PeopleSideBarWidget::slotInit()
     loadState();
 }
 
-void PeopleSideBarWidget::setActive(bool active)
+void PeopleSideBarWidget::setActive(bool /*active*/)
 {
     d->tagFolderView->expandAll();
 }
@@ -1192,10 +1192,7 @@ void PeopleSideBarWidget::changeAlbumFromHistory(Album* /*album*/)
 
 void PeopleSideBarWidget::slotAlbumSelected ( Album* )
 {
-    
-
 }
-
 
 PeopleSideBarWidget::~PeopleSideBarWidget()
 {
