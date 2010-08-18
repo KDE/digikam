@@ -47,7 +47,7 @@ QVariant ImageGPSItem::data(int role) const
     {
         return QVariant::fromValue(m_gpsInfo);
     }
-   
+
     return QStandardItem::data(role);
 
 }

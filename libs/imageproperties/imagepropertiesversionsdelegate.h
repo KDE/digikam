@@ -61,8 +61,8 @@ Q_SIGNALS:
 
 private:
 
-    WorkingWidget* m_workingWidget;
-    int            m_thumbsPainted;
+    class ImagePropertiesVersionsDelegatePriv;
+    ImagePropertiesVersionsDelegatePriv* const d;
 };
 
 } // namespace Digikam

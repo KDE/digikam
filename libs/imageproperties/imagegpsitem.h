@@ -29,6 +29,7 @@
 
 #include <QStandardItemModel>
 #include <QStandardItem>
+#include <QDateTime>
 
 // libkmap includes
 
@@ -36,7 +37,7 @@
 
 // TODO: move this somewhere central, because it is defined multiple times now
 #include "digikam_export.h"
-#include <QDateTime>
+
 namespace Digikam
 {
 
@@ -45,15 +46,15 @@ class DIGIKAM_EXPORT GPSInfo
 public:
 
     GPSInfo()
-    : latitude(0.0),
-      longitude(0.0),
-      altitude(0.0),
-      dateTime(),
-      rating(0),
-      url(),
-      id(-1),
-      dimensions(),
-      hasAltitude(false)
+      : latitude(0.0),
+        longitude(0.0),
+        altitude(0.0),
+        dateTime(),
+        rating(0),
+        url(),
+        id(-1),
+        dimensions(),
+        hasAltitude(false)
     {
     };
 
@@ -83,7 +84,7 @@ class ImageGPSItem : public QStandardItem
 {
 
 public:
-    
+
     ImageGPSItem(const GPSInfo& gpsInfo);
     ~ImageGPSItem();
 
@@ -94,7 +95,6 @@ public:
 private:
 
     GPSInfo m_gpsInfo;
-
 };
 
 } // namespace Digikam

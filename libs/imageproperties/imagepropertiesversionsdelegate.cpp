@@ -44,21 +44,36 @@
 namespace Digikam
 {
 
-ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegate(QObject* parent)
-                               : QStyledItemDelegate(parent)
+class ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegatePriv
 {
-    m_workingWidget = new WorkingWidget();
-    m_thumbsPainted = 0;
-    //TODO: get system color for views as a background
-    m_workingWidget->setStyleSheet("background-color: rgb(255, 255, 255);");
+public:
 
-    connect(m_workingWidget, SIGNAL(animationStep()),
+    ImagePropertiesVersionsDelegatePriv()
+    {
+        workingWidget = 0;
+        thumbsPainted = 0;
+    }
+
+    WorkingWidget* workingWidget;
+    int            thumbsPainted;
+};
+
+ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegate(QObject* parent)
+                               : QStyledItemDelegate(parent), d(new ImagePropertiesVersionsDelegatePriv)
+{
+    d->workingWidget = new WorkingWidget();
+    d->thumbsPainted = 0;
+    //TODO: get system color for views as a background
+    d->workingWidget->setStyleSheet("background-color: rgb(255, 255, 255);");
+
+    connect(d->workingWidget, SIGNAL(animationStep()),
             this, SLOT(slotAnimationStep()));
 }
 
 ImagePropertiesVersionsDelegate::~ImagePropertiesVersionsDelegate()
 {
-    delete m_workingWidget;
+    delete d->workingWidget;
+    delete d;
 }
 
 QSize ImagePropertiesVersionsDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -89,27 +104,27 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
         if(!thumbnail.isNull())
         {
             thumbnail = thumbnail.scaled(64, 48, Qt::KeepAspectRatio);
-            const_cast<ImagePropertiesVersionsDelegate*>(this)->m_thumbsPainted++;
+            const_cast<ImagePropertiesVersionsDelegate*>(this)->d->thumbsPainted++;
         }
         else
         {
             //if the thumbnail pixmap is null, display an error icon instead
             thumbnail = BarIcon("task-reject");
         }
-        if(m_thumbsPainted == index.model()->rowCount())
+        if(d->thumbsPainted == index.model()->rowCount())
         {
             //the animation gets disconnected after the last thumbnail is drawn
             //this way it won't uselessly emit signals that model has updated data (which has not)
-            disconnect(m_workingWidget, SIGNAL(animationStep()), 0, 0);
+            disconnect(d->workingWidget, SIGNAL(animationStep()), 0, 0);
         }
     }
     else
     {
         //when the thumbnail is not loaded yet, start the animation
-        connect(m_workingWidget, SIGNAL(animationStep()),
+        connect(d->workingWidget, SIGNAL(animationStep()),
                 dynamic_cast<const ImageVersionsModel*>(index.model()), SLOT(slotAnimationStep()));
 
-        thumbnail = QPixmap::grabWidget(m_workingWidget);
+        thumbnail = QPixmap::grabWidget(d->workingWidget);
     }
 
     painter->drawPixmap(thumbRect.left()+(32-(int)(thumbnail.width()/2)), thumbRect.top()+(24-(int)(thumbnail.height()/2)), thumbnail);
@@ -135,7 +150,7 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
 
 WorkingWidget* ImagePropertiesVersionsDelegate::getWidget() const
 {
-    return m_workingWidget;
+    return d->workingWidget;
 }
 
 void ImagePropertiesVersionsDelegate::slotAnimationStep()
@@ -145,7 +160,7 @@ void ImagePropertiesVersionsDelegate::slotAnimationStep()
 
 void ImagePropertiesVersionsDelegate::resetThumbsCounter()
 {
-    m_thumbsPainted = 0;
+    d->thumbsPainted = 0;
 }
 
 } // namespace Digikam
