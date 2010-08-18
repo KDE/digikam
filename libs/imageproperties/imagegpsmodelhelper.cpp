@@ -30,7 +30,7 @@
 namespace Digikam
 {
 
-class ImageGPSModelHelperPriv
+class ImageGPSModelHelper::ImageGPSModelHelperPriv
 {
 public:
 
@@ -41,13 +41,13 @@ public:
         thumbnailLoadThread = 0;
     }
 
-    QStandardItemModel  *itemModel;
-    QItemSelectionModel *itemSelectionModel;
-    ThumbnailLoadThread *thumbnailLoadThread;
+    QStandardItemModel*  itemModel;
+    QItemSelectionModel* itemSelectionModel;
+    ThumbnailLoadThread* thumbnailLoadThread;
 };
 
 ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
-                    : KMap::ModelHelper(parent), d(new ImageGPSModelHelperPriv())
+                   : KMap::ModelHelper(parent), d(new ImageGPSModelHelperPriv())
 {
 
     d->itemModel           = itemModel;
@@ -78,8 +78,8 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
 
 bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates* const coordinates) const
 {
-    ImageGPSItem *item =static_cast<ImageGPSItem*>(d->itemModel->itemFromIndex(index));
-    QVariant var = item->data(RoleGPSInfo);
+    ImageGPSItem* item     = static_cast<ImageGPSItem*>(d->itemModel->itemFromIndex(index));
+    QVariant var           = item->data(RoleGPSInfo);
     GPSInfo currentGPSInfo = var.value<GPSInfo>();
 
     KMap::GeoCoordinates currentCoordinates(currentGPSInfo.latitude, currentGPSInfo.longitude);
@@ -99,10 +99,10 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
     QPixmap     thumbnail;
     QModelIndex currentIndex(index);
 
-    ImageGPSItem *item     =static_cast<ImageGPSItem*>(d->itemModel->itemFromIndex(currentIndex));
+    ImageGPSItem* item     = static_cast<ImageGPSItem*>(d->itemModel->itemFromIndex(currentIndex));
     QVariant var           = item->data(RoleGPSInfo);
     GPSInfo currentGPSInfo = var.value<GPSInfo>();
-    
+
     if(d->thumbnailLoadThread->find(currentGPSInfo.url.path(), thumbnail, qMax(size.width(), size.height())))
         return thumbnail;
     else 
@@ -123,7 +123,7 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
         QVariant var           = item->data(RoleGPSInfo);
         GPSInfo currentGPSInfo = var.value<GPSInfo>();
         bool takeThisIndex     = (bestGPSInfo.id == -1); 
-        
+
         if(!takeThisIndex)
         {
             if(lowestRatedFirst)
@@ -140,7 +140,7 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
                 takeThisIndex = bestGPSInfo.rating < currentGPSInfo.rating;
                 if(takeThisIndex)
                 {
-                    bestGPSInfo = currentGPSInfo;                
+                    bestGPSInfo = currentGPSInfo;
                     bestIndex   = currentIndex;
                 }
             }
@@ -161,10 +161,10 @@ void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingD
 
     for(int i=0; i<d->itemModel->rowCount(); ++i)
     {
-        ImageGPSItem *item = static_cast<ImageGPSItem*>(d->itemModel->item(i));
+        ImageGPSItem* item     = static_cast<ImageGPSItem*>(d->itemModel->item(i));
         QVariant var           = item->data(RoleGPSInfo);
         GPSInfo currentGPSInfo = var.value<GPSInfo>();
-       
+
         if(currentGPSInfo.url.path() == loadingDescription.filePath)
         {
             QPersistentModelIndex goodIndex(d->itemModel->index(i,0));
@@ -173,4 +173,4 @@ void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingD
     }
 }
 
-}
+} // namespace Digikam

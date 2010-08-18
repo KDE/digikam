@@ -42,9 +42,6 @@
 namespace Digikam
 {
 
-
-class ImageGPSModelHelperPriv;
-
 class ImageGPSModelHelper : public KMap::ModelHelper
 {
     Q_OBJECT
@@ -68,11 +65,10 @@ private Q_SLOTS:
 
 private:
 
-    ImageGPSModelHelperPriv* const d;    
-
+    class ImageGPSModelHelperPriv;
+    ImageGPSModelHelperPriv* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // IMAGEGPSMODELHELPER_H
