@@ -495,7 +495,7 @@ bool DMetadata::setImageHistory(QString& imageHistoryXml) const
 {
     if (supportXmp())
     {
-        if (!setXmpTagString("Xmp.digiKam.imageHistory", imageHistoryXml, false))
+        if (!setXmpTagString("Xmp.digiKam.ImageHistory", imageHistoryXml, false))
             return false;
         else return true;
     }
@@ -506,7 +506,7 @@ QString DMetadata::getImageHistory() const
 {
     if (hasXmp())
     {
-        QString value = getXmpTagString("Xmp.digiKam.imageHistory", false);
+        QString value = getXmpTagString("Xmp.digiKam.ImageHistory", false);
         kDebug() << "Loading image history " << value;
         return value;
     }
@@ -517,7 +517,7 @@ bool DMetadata::hasImageHistoryTag() const
 {
     if(hasXmp())
     {
-        if(QString(getXmpTagString("Xmp.digiKam.imageHistory", false)).length() > 0)
+        if(QString(getXmpTagString("Xmp.digiKam.ImageHistory", false)).length() > 0)
         {
             return true;
         }
