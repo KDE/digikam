@@ -7,9 +7,9 @@
  * Description : Various operations on images
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,35 +62,30 @@ namespace Digikam
 
 const QString renameFileProperty("AdvancedRename source file");
 
-ImageViewUtilities::ImageViewUtilities(QWidget *parentWidget)
-            : QObject(parentWidget)
+ImageViewUtilities::ImageViewUtilities(QWidget* parentWidget)
+                  : QObject(parentWidget)
 {
     m_widget = parentWidget;
 }
 
-void ImageViewUtilities::setAsAlbumThumbnail(Album *album, const ImageInfo& imageInfo)
+void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo)
 {
     if(!album)
         return;
 
     if(album->type() == Album::PHYSICAL)
     {
-        PAlbum *palbum = static_cast<PAlbum*>(album);
+        PAlbum* palbum = static_cast<PAlbum*>(album);
 
         QString err;
-        AlbumManager::instance()->updatePAlbumIcon( palbum,
-                                                    imageInfo.id(),
-                                                    err );
+        AlbumManager::instance()->updatePAlbumIcon(palbum, imageInfo.id(), err);
     }
     else if (album->type() == Album::TAG)
     {
         TAlbum *talbum = static_cast<TAlbum*>(album);
 
         QString err;
-        AlbumManager::instance()->updateTAlbumIcon( talbum,
-                                                    QString(),
-                                                    imageInfo.id(),
-                                                    err );
+        AlbumManager::instance()->updateTAlbumIcon(talbum, QString(), imageInfo.id(), err);
     }
 }
 
@@ -130,8 +125,8 @@ void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl &, const KUrl&new
 
 bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)
 {
-    KUrl::List  urlList;
-    KUrl::List  kioUrlList;
+    KUrl::List urlList;
+    KUrl::List kioUrlList;
 
     foreach (const ImageInfo& info, infos)
     {
@@ -186,10 +181,9 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, boo
             this, SLOT(slotDIOResult(KJob*)));
 }
 
-
 void ImageViewUtilities::slotDIOResult(KJob* kjob)
 {
-    KIO::Job *job = static_cast<KIO::Job*>(kjob);
+    KIO::Job* job = static_cast<KIO::Job*>(kjob);
     if (job->error())
     {
         // this slot can be used by others, too.
@@ -224,9 +218,9 @@ void ImageViewUtilities::notifyFileContentChanged(const KUrl::List& urls)
     }
 }
 
-void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, Album *currentAlbum)
+void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, Album* currentAlbum)
 {
-    KUrl::List kioURLs;
+    KUrl::List       kioURLs;
     QList<qlonglong> imageIDs;
 
     foreach (const ImageInfo& info, infos)
@@ -244,7 +238,7 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, A
     QString header(i18n("<p>Please select the destination album from the digiKam library to "
                         "move the selected images into.</p>"));
 
-    Album *album = AlbumSelectDialog::selectAlbum(m_widget, static_cast<PAlbum*>(currentAlbum), header);
+    Album* album = AlbumSelectDialog::selectAlbum(m_widget, static_cast<PAlbum*>(currentAlbum), header);
     if (!album)
         return;
 
@@ -255,7 +249,7 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, A
 
 void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool addTo)
 {
-    LightTableWindow *ltview = LightTableWindow::lightTableWindow();
+    LightTableWindow* ltview = LightTableWindow::lightTableWindow();
 
     // If addTo is false, the light table will be emptied before adding
     // the images.
@@ -268,12 +262,11 @@ void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const 
     if (ltview->isMinimized())
         KWindowSystem::unminimizeWindow(ltview->winId());
     KWindowSystem::activateWindow(ltview->winId());
-
 }
 
 void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& /*current*/, bool newQueue)
 {
-    QueueMgrWindow *bqmview = QueueMgrWindow::queueManagerWindow();
+    QueueMgrWindow* bqmview = QueueMgrWindow::queueManagerWindow();
 
     if (bqmview->isHidden())
         bqmview->show();
@@ -290,7 +283,7 @@ void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, cons
 
 void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list, const ImageInfo& /*current*/, int queueid)
 {
-    QueueMgrWindow *bqmview = QueueMgrWindow::queueManagerWindow();
+    QueueMgrWindow* bqmview = QueueMgrWindow::queueManagerWindow();
     bqmview->loadImageInfos(list, queueid);
 }
 
@@ -301,12 +294,12 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
 
     QFileInfo fi(info.filePath());
     QString imagefilter = AlbumSettings::instance()->getImageFileFilter();
-    imagefilter += AlbumSettings::instance()->getRawFileFilter();
+    imagefilter         += AlbumSettings::instance()->getRawFileFilter();
 
     // If the current item is not an image file.
     if ( !imagefilter.contains(fi.suffix().toLower()) )
     {
-        KMimeType::Ptr mimePtr = KMimeType::findByUrl(info.fileUrl(), 0, true, true);
+        KMimeType::Ptr mimePtr      = KMimeType::findByUrl(info.fileUrl(), 0, true, true);
         const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
 
         if (offers.isEmpty())
@@ -320,7 +313,7 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
 
     // Run digiKam ImageEditor with all image from current Album.
 
-    ImageWindow *imview = ImageWindow::imagewindow();
+    ImageWindow* imview = ImageWindow::imagewindow();
 
     imview->disconnect(this);
     connect(imview, SIGNAL(signalURLChanged(const KUrl&)),

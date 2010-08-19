@@ -6,7 +6,7 @@
  * Date        : 2009-05-04
  * Description : Various operations on images
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,11 +38,13 @@
 #include "imageinfo.h"
 
 class KJob;
-namespace KIO { class Job; }
+namespace KIO
+{
+    class Job;
+}
 
 namespace Digikam
 {
-
 class Album;
 
 class ImageViewUtilities : public QObject
@@ -51,11 +53,11 @@ class ImageViewUtilities : public QObject
 
 public:
 
-    ImageViewUtilities(QWidget *parentWidget);
+    ImageViewUtilities(QWidget* parentWidget);
 
 public Q_SLOTS:
 
-    void createNewAlbumForInfos(const QList<ImageInfo>& infos, Album *currentAlbum);
+    void createNewAlbumForInfos(const QList<ImageInfo>& infos, Album* currentAlbum);
     bool deleteImages(const QList<ImageInfo>& infos, bool deletePermanently);
     void deleteImagesDirectly(const QList<ImageInfo>& infos, bool useTrash);
 
@@ -65,9 +67,9 @@ public Q_SLOTS:
 
     void notifyFileContentChanged(const KUrl::List& urls);
 
-    void openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album *currentAlbum);
+    void openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum);
     void rename(const KUrl& imageUrl, const QString& newName);
-    void setAsAlbumThumbnail(Album *album, const ImageInfo& imageInfo);
+    void setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo);
 
 Q_SIGNALS:
 
@@ -84,10 +86,9 @@ protected Q_SLOTS:
 
 protected:
 
-    QWidget *m_widget;
+    QWidget* m_widget;
 };
 
 } // namespace Digikam
 
 #endif /* IMAGEVIEWUTILITIES_H */
-

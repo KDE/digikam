@@ -6,9 +6,9 @@
  * Date        : 2008-01-14
  * Description : Basic search tree view with editing functionality
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <qevent.h>
+#include <QEvent>
 
 // KDE includes
 
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class EditableSearchTreeViewPriv
+class EditableSearchTreeView::EditableSearchTreeViewPriv
 {
 public:
     EditableSearchTreeViewPriv() :
@@ -54,15 +54,13 @@ public:
 
     QAction *renameSearchAction;
     QAction *deleteSearchAction;
-
 };
 
-EditableSearchTreeView::EditableSearchTreeView(QWidget *parent,
-                                             SearchModel *searchModel,
-                                             SearchModificationHelper *searchModificationHelper) :
-                SearchTreeView(parent, searchModel), d(new EditableSearchTreeViewPriv)
+EditableSearchTreeView::EditableSearchTreeView(QWidget* parent,
+                                             SearchModel* searchModel,
+                                             SearchModificationHelper* searchModificationHelper)
+                      : SearchTreeView(parent, searchModel), d(new EditableSearchTreeViewPriv)
 {
-
     d->searchModificationHelper = searchModificationHelper;
 
     d->renameSearchAction = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
@@ -71,7 +69,6 @@ EditableSearchTreeView::EditableSearchTreeView(QWidget *parent,
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
     setEnableContextMenu(true);
-
 }
 
 EditableSearchTreeView::~EditableSearchTreeView()
@@ -84,10 +81,9 @@ QString EditableSearchTreeView::contextMenuTitle() const
     return i18n("My Date Searches");
 }
 
-void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
+void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)
 {
-
-    SAlbum *searchAlbum = dynamic_cast<SAlbum*> (album);
+    SAlbum* searchAlbum = dynamic_cast<SAlbum*>(album);
 
     // disable actions if there is no album or the album is a temporary search
     bool activate = false;
@@ -101,14 +97,12 @@ void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh,
 
     cmh.addAction(d->renameSearchAction);
     cmh.addAction(d->deleteSearchAction);
-
 }
 
-void EditableSearchTreeView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
+void EditableSearchTreeView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
 {
-
-    Album *a = album;
-    SAlbum *searchAlbum = dynamic_cast<SAlbum*> (a);
+    Album* a            = album;
+    SAlbum* searchAlbum = dynamic_cast<SAlbum*>(a);
 
     if (!searchAlbum || !action)
     {
@@ -123,7 +117,6 @@ void EditableSearchTreeView::handleCustomContextMenuAction(QAction *action, Albu
     {
         d->searchModificationHelper->slotSearchDelete(searchAlbum);
     }
-
 }
 
-}
+} // namespace Digikam
