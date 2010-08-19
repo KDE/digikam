@@ -31,7 +31,6 @@
 namespace Digikam
 {
 
-
 class ImageHistoryView : QTreeView
 {
     Q_OBJECT
