@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a generic widget to display metadata
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,7 +68,7 @@
 namespace Digikam
 {
 
-class MetadataWidgetPriv
+class MetadataWidget::MetadataWidgetPriv
 {
 
 public:
@@ -84,24 +84,24 @@ public:
         searchBar    = 0;
     }
 
-    QWidget                *levelGBox;
-    QWidget                *toolsGBox;
+    QWidget*               levelGBox;
+    QWidget*               toolsGBox;
 
-    QGridLayout            *mainLayout;
+    QGridLayout*           mainLayout;
 
-    QButtonGroup           *toolButtons;
-    QButtonGroup           *levelButtons;
+    QButtonGroup*          toolButtons;
+    QButtonGroup*          levelButtons;
 
-    QString                 fileName;
+    QString                fileName;
 
-    QStringList             tagsFilter;
+    QStringList            tagsFilter;
 
-    MetadataListView       *view;
+    MetadataListView*      view;
 
-    SearchTextBar          *searchBar;
+    SearchTextBar*         searchBar;
 
-    DMetadata               metadata;
-    DMetadata::MetaDataMap  metaDataMap;
+    DMetadata              metadata;
+    DMetadata::MetaDataMap metaDataMap;
 };
 
 MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
@@ -116,10 +116,10 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     d->levelGBox       = new QWidget(this);
     d->levelButtons    = new QButtonGroup(d->levelGBox);
-    QHBoxLayout *hlay1 = new QHBoxLayout(d->levelGBox);
+    QHBoxLayout* hlay1 = new QHBoxLayout(d->levelGBox);
     d->levelButtons->setExclusive(true);
 
-    QToolButton *simpleLevel = new QToolButton(d->levelGBox);
+    QToolButton* simpleLevel = new QToolButton(d->levelGBox);
     simpleLevel->setIcon(iconLoader->loadIcon("user-identity", (KIconLoader::Group)KIconLoader::Toolbar));
     simpleLevel->setCheckable(true);
 #if KEXIV2_VERSION >= 0x010000
@@ -132,7 +132,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 #endif
     d->levelButtons->addButton(simpleLevel, CUSTOM);
 
-    QToolButton *fullLevel = new QToolButton(d->levelGBox);
+    QToolButton* fullLevel = new QToolButton(d->levelGBox);
     fullLevel->setIcon(iconLoader->loadIcon("view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar));
     fullLevel->setCheckable(true);
     fullLevel->setWhatsThis(i18n("Switch the tags view to a full list"));
@@ -148,21 +148,21 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     d->toolsGBox       = new QWidget(this);
     d->toolButtons     = new QButtonGroup(d->toolsGBox);
-    QHBoxLayout *hlay2 = new QHBoxLayout(d->toolsGBox);
+    QHBoxLayout* hlay2 = new QHBoxLayout(d->toolsGBox);
 
-    QToolButton *saveMetadata = new QToolButton(d->toolsGBox);
+    QToolButton* saveMetadata = new QToolButton(d->toolsGBox);
     saveMetadata->setIcon(iconLoader->loadIcon("document-save", (KIconLoader::Group)KIconLoader::Toolbar));
     saveMetadata->setWhatsThis(i18n("Save metadata to a binary file"));
     saveMetadata->setToolTip(i18n("Save metadata"));
     d->toolButtons->addButton(saveMetadata);
 
-    QToolButton *printMetadata = new QToolButton(d->toolsGBox);
+    QToolButton* printMetadata = new QToolButton(d->toolsGBox);
     printMetadata->setIcon(iconLoader->loadIcon("document-print", (KIconLoader::Group)KIconLoader::Toolbar));
     printMetadata->setWhatsThis(i18n("Print metadata to printer"));
     printMetadata->setToolTip(i18n("Print metadata"));
     d->toolButtons->addButton(printMetadata);
 
-    QToolButton *copy2ClipBoard = new QToolButton(d->toolsGBox);
+    QToolButton* copy2ClipBoard = new QToolButton(d->toolsGBox);
     copy2ClipBoard->setIcon( iconLoader->loadIcon("edit-copy", (KIconLoader::Group)KIconLoader::Toolbar));
     copy2ClipBoard->setWhatsThis(i18n("Copy metadata to clipboard"));
     copy2ClipBoard->setToolTip(i18n("Copy metadata to clipboard"));
@@ -226,7 +226,7 @@ void MetadataWidget::setTagsFilter(const QStringList& list)
     buildView();
 }
 
-MetadataListView* MetadataWidget::view()
+MetadataListView* MetadataWidget::view() const
 {
     return d->view;
 }
@@ -317,7 +317,7 @@ void MetadataWidget::slotCopy2Clipboard()
 {
     QString textmetadata  = i18n("File name: %1 (%2)",d->fileName,getMetadataTitle());
     int i                 = 0;
-    QTreeWidgetItem *item = 0;
+    QTreeWidgetItem* item = 0;
     do
     {
         item                      = d->view->topLevelItem(i);
@@ -329,7 +329,7 @@ void MetadataWidget::slotCopy2Clipboard()
             textmetadata.append(" <<<\n\n");
 
             int j                  = 0;
-            QTreeWidgetItem *item2 = 0;
+            QTreeWidgetItem* item2 = 0;
             do
             {
                 item2                         = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
@@ -349,7 +349,7 @@ void MetadataWidget::slotCopy2Clipboard()
     }
     while (item);
 
-    QMimeData *mimeData = new QMimeData();
+    QMimeData* mimeData = new QMimeData();
     mimeData->setText(textmetadata);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
@@ -360,7 +360,7 @@ void MetadataWidget::slotPrintMetadata()
                                 d->fileName, getMetadataTitle());
 
     int i                 = 0;
-    QTreeWidgetItem *item = 0;
+    QTreeWidgetItem* item = 0;
     do
     {
         item                      = d->view->topLevelItem(i);
@@ -372,7 +372,7 @@ void MetadataWidget::slotPrintMetadata()
             textmetadata.append("</b><br/><br/>");
 
             int j                  = 0;
-            QTreeWidgetItem *item2 = 0;
+            QTreeWidgetItem* item2 = 0;
             do
             {
                 item2                         = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
@@ -480,7 +480,7 @@ void MetadataWidget::setFileName(const QString& fileName)
 
 void MetadataWidget::setUserAreaWidget(QWidget *w)
 {
-    QVBoxLayout *vLayout = new QVBoxLayout();
+    QVBoxLayout* vLayout = new QVBoxLayout();
     vLayout->setSpacing(KDialog::spacingHint());
     vLayout->addWidget(w);
     vLayout->addStretch();

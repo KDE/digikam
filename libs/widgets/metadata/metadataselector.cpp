@@ -6,7 +6,7 @@
  * Date        : 2009-07-16
  * Description : metadata selector.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem *parent, const QString& key,
+MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem* parent, const QString& key,
                                            const QString& title, const QString& desc)
                     : QTreeWidgetItem(parent), m_key(key), m_parent(parent)
 {
@@ -111,7 +111,7 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
 
     uint               subItems = 0;
     QString            ifDItemName, currentIfDName;
-    MdKeyListViewItem *parentifDItem = 0;
+    MdKeyListViewItem* parentifDItem = 0;
 
     for (DMetadata::TagsMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
@@ -146,7 +146,7 @@ void MetadataSelector::setcheckedTagsList(const QStringList& list)
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
-        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
         if (item && list.contains(item->key()))
             item->setCheckState(0, Qt::Checked);
 
@@ -160,7 +160,7 @@ QStringList MetadataSelector::checkedTagsList()
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
     while (*it)
     {
-        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
         if (item)
             list.append(item->key());
 
@@ -174,7 +174,7 @@ void MetadataSelector::clearSelection()
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
     while (*it)
     {
-        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
         if (item)
             item->setCheckState(0, Qt::Unchecked);
 
@@ -187,7 +187,7 @@ void MetadataSelector::selectAll()
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
-        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
         if (item)
             item->setCheckState(0, Qt::Checked);
 
@@ -197,7 +197,7 @@ void MetadataSelector::selectAll()
 
 // ------------------------------------------------------------------------------------
 
-class MetadataSelectorViewPriv
+class MetadataSelectorView::MetadataSelectorViewPriv
 {
 public:
 
@@ -212,19 +212,19 @@ public:
 
     QStringList       defaultFilter;
 
-    KPushButton      *selectAllBtn;
-    KPushButton      *clearSelectionBtn;
-    KPushButton      *defaultSelectionBtn;
+    KPushButton*      selectAllBtn;
+    KPushButton*      clearSelectionBtn;
+    KPushButton*      defaultSelectionBtn;
 
-    MetadataSelector *selector;
+    MetadataSelector* selector;
 
-    SearchTextBar    *searchBar;
+    SearchTextBar*    searchBar;
 };
 
 MetadataSelectorView::MetadataSelectorView(QWidget* parent)
                     : QWidget(parent), d(new MetadataSelectorViewPriv)
 {
-    QGridLayout *grid      = new QGridLayout(this);
+    QGridLayout* grid      = new QGridLayout(this);
     d->selector            = new MetadataSelector(this);
     d->searchBar           = new SearchTextBar(this, "MetadataSelectorView");
     d->selectAllBtn        = new KPushButton(i18n("Select All"),this);
@@ -305,7 +305,7 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
     QTreeWidgetItemIterator it2(d->selector);
     while (*it2)
     {
-        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it2);
+        MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it2);
         if (item)
             item->setHidden(false);
         ++it2;
@@ -314,7 +314,7 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
     QTreeWidgetItemIterator it(d->selector);
     while (*it)
     {
-        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
         if (item)
         {
             bool match = item->text(0).contains(search, settings.caseSensitive) ||
@@ -343,7 +343,7 @@ void MetadataSelectorView::cleanUpMdKeyItem()
     QTreeWidgetItemIterator it(d->selector);
     while (*it)
     {
-        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it);
+        MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it);
         if (item)
         {
             int children   = item->childCount();
@@ -367,7 +367,7 @@ void MetadataSelectorView::slotDeflautSelection()
     QTreeWidgetItemIterator it(d->selector);
     while (*it)
     {
-        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
         if (item)
         {
             if (d->defaultFilter.contains(item->text(0)))

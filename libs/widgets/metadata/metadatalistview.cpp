@@ -7,7 +7,7 @@
  * Description : a generic list view widget to
  *               display metadata
  *
- * Copyright (c) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (c) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,7 @@ MetadataListView::MetadataListView(QWidget* parent)
     labels.append( "Value" );       // no i18n here: hidden header
     setHeaderLabels(labels);
 
-    m_parent = dynamic_cast<MetadataWidget *>(parent);
+    m_parent = dynamic_cast<MetadataWidget*>(parent);
 
     connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
             this, SLOT(slotSelectionChanged(QTreeWidgetItem*, int)));
@@ -73,7 +73,7 @@ QString MetadataListView::getCurrentItemKey()
 {
     if (currentItem() && currentItem()->flags() & Qt::ItemIsSelectable)
     {
-        MetadataListViewItem *item = static_cast<MetadataListViewItem *>(currentItem());
+        MetadataListViewItem* item = static_cast<MetadataListViewItem*>(currentItem());
         return item->getKey();
     }
 
@@ -86,7 +86,7 @@ void MetadataListView::setCurrentItemByKey(const QString& itemKey)
         return;
 
     int i                 = 0;
-    QTreeWidgetItem *item = 0;
+    QTreeWidgetItem* item = 0;
     do
     {
         item = topLevelItem(i);
@@ -109,16 +109,16 @@ void MetadataListView::setCurrentItemByKey(const QString& itemKey)
     while (item);
 }
 
-void MetadataListView::slotSelectionChanged(QTreeWidgetItem *item, int)
+void MetadataListView::slotSelectionChanged(QTreeWidgetItem* item, int)
 {
     if (!item)
         return;
 
-    MetadataListViewItem* viewItem = static_cast<MetadataListViewItem *>(item);
-    m_selectedItemKey = viewItem->getKey();
-    QString tagValue  = viewItem->getValue().simplified();
-    QString tagTitle  = m_parent->getTagTitle(m_selectedItemKey);
-    QString tagDesc   = m_parent->getTagDescription(m_selectedItemKey);
+    MetadataListViewItem* viewItem = static_cast<MetadataListViewItem*>(item);
+    m_selectedItemKey              = viewItem->getKey();
+    QString tagValue               = viewItem->getValue().simplified();
+    QString tagTitle               = m_parent->getTagTitle(m_selectedItemKey);
+    QString tagDesc                = m_parent->getTagDescription(m_selectedItemKey);
     if (tagValue.length() > 128)
     {
         tagValue.truncate(128);
@@ -136,7 +136,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     clear();
 
     uint               subItems      = 0;
-    MdKeyListViewItem *parentifDItem = 0;
+    MdKeyListViewItem* parentifDItem = 0;
     QStringList        filters       = tagsFilter;
     QString            ifDItemName;
 
@@ -154,7 +154,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                 delete parentifDItem;
 
             parentifDItem = new MdKeyListViewItem(this, currentIfDName);
-            subItems = 0;
+            subItems      = 0;
         }
 
         // We ignore all unknown tags if necessary.
@@ -200,7 +200,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     {
         foreach(const QString& key, filters)
         {
-            MdKeyListViewItem *pitem = findMdKeyItem(key);
+            MdKeyListViewItem* pitem = findMdKeyItem(key);
             if (!pitem)
                 pitem = new MdKeyListViewItem(this, key.section('.', 1, 1));
 
@@ -220,15 +220,14 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
     QStringList        filters       = tagsFilter;
     uint               subItems      = 0;
-    MdKeyListViewItem *parentifDItem = 0;
+    MdKeyListViewItem* parentifDItem = 0;
     if (ifds.count() == 0) return;
 
     for (QStringList::const_iterator itKeysFilter = keysFilter.constBegin();
          itKeysFilter != keysFilter.constEnd();
          ++itKeysFilter)
     {
-        subItems = 0;
-
+        subItems      = 0;
         parentifDItem = new MdKeyListViewItem(this, *itKeysFilter);
 
         DMetadata::MetaDataMap::const_iterator it = ifds.constEnd();
@@ -283,7 +282,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     {
         foreach(const QString &key, filters)
         {
-            MdKeyListViewItem *pitem = findMdKeyItem(key);
+            MdKeyListViewItem* pitem = findMdKeyItem(key);
             if (!pitem)
                 pitem = new MdKeyListViewItem(this, key.section('.', 1, 1));
 
@@ -305,7 +304,7 @@ void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
     QTreeWidgetItemIterator it2(this);
     while (*it2)
     {
-        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it2);
+        MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it2);
         if (item)
             item->setHidden(false);
         ++it2;
@@ -314,7 +313,7 @@ void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
-        MetadataListViewItem *item = dynamic_cast<MetadataListViewItem*>(*it);
+        MetadataListViewItem* item = dynamic_cast<MetadataListViewItem*>(*it);
         if (item)
         {
             if (item->text(0).contains(search, settings.caseSensitive) ||
@@ -342,10 +341,10 @@ void MetadataListView::cleanUpMdKeyItem()
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
-        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it);
+        MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it);
         if (item)
         {
-            int children   = item->childCount();
+            int children = item->childCount();
             int visibles = 0;
             for (int i = 0 ; i < children; ++i)
             {
@@ -365,7 +364,7 @@ MdKeyListViewItem* MetadataListView::findMdKeyItem(const QString& key)
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
-        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it);
+        MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it);
         if (item)
         {
             if (key.section('.', 1, 1) == item->getKey())
