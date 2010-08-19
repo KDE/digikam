@@ -6,7 +6,7 @@
  * Date        : 2000-12-05
  * Description : helper class used to modify search albums in views
  *
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class SearchModificationHelperPriv
+class SearchModificationHelper::SearchModificationHelperPriv
 {
 public:
 
@@ -51,12 +51,11 @@ public:
     {
     }
 
-    QWidget *dialogParent;
+    QWidget* dialogParent;
 };
 
-SearchModificationHelper::SearchModificationHelper(QObject *parent,
-                QWidget *dialogParent) : QObject(parent),
-                d(new SearchModificationHelperPriv)
+SearchModificationHelper::SearchModificationHelper(QObject* parent, QWidget* dialogParent)
+                        : QObject(parent), d(new SearchModificationHelperPriv)
 {
     d->dialogParent = dialogParent;
 }
@@ -66,7 +65,7 @@ SearchModificationHelper::~SearchModificationHelper()
     delete d;
 }
 
-void SearchModificationHelper::slotSearchDelete(SAlbum *searchAlbum)
+void SearchModificationHelper::slotSearchDelete(SAlbum* searchAlbum)
 {
     if (!searchAlbum)
     {
@@ -90,7 +89,7 @@ void SearchModificationHelper::slotSearchDelete(SAlbum *searchAlbum)
     AlbumManager::instance()->deleteSAlbum(searchAlbum);
 }
 
-bool SearchModificationHelper::checkAlbum(const QString &name) const
+bool SearchModificationHelper::checkAlbum(const QString& name) const
 {
     const AlbumList list = AlbumManager::instance()->allSAlbums();
 
@@ -105,7 +104,7 @@ bool SearchModificationHelper::checkAlbum(const QString &name) const
     return true;
 }
 
-bool SearchModificationHelper::checkName(QString &name)
+bool SearchModificationHelper::checkName(QString& name)
 {
     bool checked = checkAlbum(name);
 
@@ -128,7 +127,7 @@ bool SearchModificationHelper::checkName(QString &name)
     return true;
 }
 
-void SearchModificationHelper::slotSearchRename(SAlbum *searchAlbum)
+void SearchModificationHelper::slotSearchRename(SAlbum* searchAlbum)
 {
     if (!searchAlbum)
     {
@@ -155,8 +154,8 @@ void SearchModificationHelper::slotSearchRename(SAlbum *searchAlbum)
                                            name);
 }
 
-void SearchModificationHelper::slotCreateTimeLineSearch(const QString &desiredName,
-                                                        const DateRangeList &dateRanges,
+void SearchModificationHelper::slotCreateTimeLineSearch(const QString& desiredName,
+                                                        const DateRangeList& dateRanges,
                                                         bool overwriteIfExisting)
 {
     QString name = desiredName;
@@ -194,11 +193,11 @@ void SearchModificationHelper::slotCreateTimeLineSearch(const QString &desiredNa
 
 }
 
-SAlbum *SearchModificationHelper::createFuzzySearchFromSketch(
-                const QString& proposedName, SketchWidget *sketchWidget,
-                unsigned int numberOfResults, bool overwriteIfExisting)
+SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& proposedName,
+                                                              SketchWidget* sketchWidget,
+                                                              unsigned int numberOfResults,
+                                                              bool overwriteIfExisting)
 {
-
     if (sketchWidget->isClear())
     {
         return 0;
@@ -230,22 +229,21 @@ SAlbum *SearchModificationHelper::createFuzzySearchFromSketch(
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
     return salbum;
-
 }
 
-void SearchModificationHelper::slotCreateFuzzySearchFromSketch(
-                const QString& proposedName, SketchWidget *sketchWidget,
-                unsigned int numberOfResults, bool overwriteIfExisting)
+void SearchModificationHelper::slotCreateFuzzySearchFromSketch(const QString& proposedName,
+                                                               SketchWidget* sketchWidget,
+                                                               unsigned int numberOfResults,
+                                                               bool overwriteIfExisting)
 {
-    createFuzzySearchFromSketch(proposedName, sketchWidget, numberOfResults,
-                    overwriteIfExisting);
+    createFuzzySearchFromSketch(proposedName, sketchWidget, numberOfResults, overwriteIfExisting);
 }
 
-SAlbum *SearchModificationHelper::createFuzzySearchFromImage(
-                const QString &proposedName, const ImageInfo &image,
-                float threshold, bool overwriteIfExisting)
+SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& proposedName,
+                                                             const ImageInfo& image,
+                                                             float threshold,
+                                                             bool overwriteIfExisting)
 {
-
     if (image.isNull())
     {
         return 0;
@@ -275,15 +273,14 @@ SAlbum *SearchModificationHelper::createFuzzySearchFromImage(
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
     return salbum;
-
 }
 
-void SearchModificationHelper::slotCreateFuzzySearchFromImage(
-                const QString &proposedName, const ImageInfo &image,
-                float threshold, bool overwriteIfExisting)
+void SearchModificationHelper::slotCreateFuzzySearchFromImage(const QString& proposedName,
+                                                              const ImageInfo& image,
+                                                              float threshold,
+                                                              bool overwriteIfExisting)
 {
-    createFuzzySearchFromImage(proposedName, image, threshold,
-                    overwriteIfExisting);
+    createFuzzySearchFromImage(proposedName, image, threshold, overwriteIfExisting);
 }
 
-}
+} // namespace Digikam

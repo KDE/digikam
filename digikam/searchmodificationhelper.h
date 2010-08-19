@@ -6,7 +6,7 @@
  * Date        : 2000-12-05
  * Description : helper class used to modify search albums in views
  *
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,8 +48,6 @@ typedef QPair<QDateTime, QDateTime> DateRange;
  */
 typedef QList<DateRange> DateRangeList;
 
-class SearchModificationHelperPriv;
-
 /**
  * Utility class providing methods to modify search albums (SAlbum) in a way
  * useful to implement views.
@@ -58,7 +56,8 @@ class SearchModificationHelperPriv;
  */
 class SearchModificationHelper: public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
 
     /**
@@ -67,7 +66,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param dialogParent paret widget for dialogs displayed by this object
      */
-    SearchModificationHelper(QObject *parent, QWidget *dialogParent);
+    SearchModificationHelper(QObject* parent, QWidget* dialogParent);
 
     /**
      * Destructor.
@@ -78,8 +77,8 @@ public:
      * @see slotCreateFuzzySearchFromSketch()
      * @return the newly created album
      */
-    SAlbum *createFuzzySearchFromSketch(const QString& name,
-                                        SketchWidget *sketchWidget,
+    SAlbum* createFuzzySearchFromSketch(const QString& name,
+                                        SketchWidget* sketchWidget,
                                         unsigned int numberOfResults,
                                         bool overwriteIfExisting = false);
 
@@ -99,14 +98,14 @@ public Q_SLOTS:
      *
      * @param searchAlbum search to delete
      */
-    void slotSearchDelete(SAlbum *searchAlbum);
+    void slotSearchDelete(SAlbum* searchAlbum);
 
     /**
      * Renames the given search via a dialog.
      *
      * @param searchAlbum search to rename
      */
-    void slotSearchRename(SAlbum *searchAlbum);
+    void slotSearchRename(SAlbum* searchAlbum);
 
     /**
      * Creates a new timeline search.
@@ -120,8 +119,8 @@ public Q_SLOTS:
      *                            name will be overwritten without prompting the
      *                            user for a new name
      */
-    void slotCreateTimeLineSearch(const QString &desiredName,
-                                  const DateRangeList &dateRanges,
+    void slotCreateTimeLineSearch(const QString& desiredName,
+                                  const DateRangeList& dateRanges,
                                   bool overwriteIfExisting = false);
 
     /**
@@ -136,7 +135,7 @@ public Q_SLOTS:
      *                            user for a new name
      */
     void slotCreateFuzzySearchFromSketch(const QString& name,
-                                         SketchWidget *sketchWidget,
+                                         SketchWidget* sketchWidget,
                                          unsigned int numberOfResults,
                                          bool overwriteIfExisting = false);
 
@@ -151,21 +150,22 @@ public Q_SLOTS:
      *                            name will be overwritten without prompting the
      *                            user for a new name
      */
-    void slotCreateFuzzySearchFromImage(const QString &name,
-                                        const ImageInfo &image,
+    void slotCreateFuzzySearchFromImage(const QString& name,
+                                        const ImageInfo& image,
                                         float threshold,
                                         bool overwriteIfExisting = false);
 
 private:
 
-    bool checkAlbum(const QString &name) const;
-    bool checkName(QString &name);
+    bool checkAlbum(const QString& name) const;
+    bool checkName(QString& name);
 
 private:
-    SearchModificationHelperPriv *d;
 
+    class SearchModificationHelperPriv;
+    SearchModificationHelperPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* SEARCHMODIFICATIONHELPER_H */
