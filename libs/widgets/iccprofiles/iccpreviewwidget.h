@@ -8,6 +8,7 @@
  *               in file dialog preview.
  *
  * Copyright (C) 2006-2007 by Francisco J. Cruz <fj.cruz@supercable.es>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,8 +43,7 @@ class ICCProfileWidget;
 
 class DIGIKAM_EXPORT ICCPreviewWidget : public KPreviewWidgetBase
 {
-
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -61,7 +61,7 @@ protected:
 
 private :
 
-    ICCProfileWidget *m_iccProfileWidget;
+    ICCProfileWidget* m_iccProfileWidget;
 };
 
 } // namespace Digikam

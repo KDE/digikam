@@ -6,7 +6,7 @@
  * Date        : 2006-01-10
  * Description : a widget to display CIE tongue from an ICC profile.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
  * Copyright (C) 1998-2001 Marti Maria
@@ -152,7 +152,7 @@ namespace Digikam
         { 0.7347, 0.2653 }  // 780 nm
     };
 
-class CIETongueWidgetPriv
+class CIETongueWidget::CIETongueWidgetPriv
 {
 public:
 
@@ -203,7 +203,7 @@ public:
     MEASUREMENT      Measurement;
 };
 
-CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMonitor)
+CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMonitor)
                : QWidget(parent), d(new CIETongueWidgetPriv)
 {
     d->progressTimer = new QTimer(this);
@@ -305,7 +305,7 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
         d->loadingImageSucess   = false;
     }
 
-    d->loadingImageMode = false;
+    d->loadingImageMode  = false;
     d->uncalibratedColor = false;
 
     d->progressTimer->stop();
@@ -365,8 +365,8 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
     // Get target data stored in profile
 
     ZeroMemory(&(d->Measurement), sizeof(MEASUREMENT));
-    char*  CharTarget;
-    size_t CharTargetSize;
+    char*  CharTarget     = 0;
+    size_t CharTargetSize = 0;
 
     if (cmsTakeCharTargetData(hProfile, &CharTarget, &CharTargetSize))
     {
@@ -452,7 +452,6 @@ void CIETongueWidget::outlineTongue()
 
 void CIETongueWidget::fillTongue()
 {
-
     QImage Img = d->pixmap.toImage();
 
     int x;
@@ -848,7 +847,7 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
     p.drawPixmap(0, 0, d->pixmap);
 }
 
-void CIETongueWidget::resizeEvent(QResizeEvent * event)
+void CIETongueWidget::resizeEvent(QResizeEvent* event)
 {
     Q_UNUSED(event);
     d->needUpdatePixmap = true;

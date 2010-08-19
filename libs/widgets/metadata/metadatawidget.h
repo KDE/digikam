@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a generic widget to display metadata
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,6 @@ namespace Digikam
 {
 
 class MetadataListView;
-class MetadataWidgetPriv;
 
 class DIGIKAM_EXPORT MetadataWidget : public QWidget
 {
@@ -70,7 +69,7 @@ public:
     QString getCurrentItemKey() const;
     void    setCurrentItemByKey(const QString& itemKey);
 
-    void    setUserAreaWidget(QWidget *w);
+    void    setUserAreaWidget(QWidget* w);
 
     virtual QString getTagTitle(const QString& key);
     virtual QString getTagDescription(const QString& key);
@@ -92,7 +91,7 @@ protected:
 
     void   enabledToolButtons(bool);
     void   setFileName(const QString& fileName);
-    MetadataListView* view();
+    MetadataListView* view() const;
 
     bool   setMetadata(const DMetadata& data=DMetadata());
     const  DMetadata& getMetadata();
@@ -114,6 +113,7 @@ protected:
 
 private:
 
+    class MetadataWidgetPriv;
     MetadataWidgetPriv* const d;
 };
 

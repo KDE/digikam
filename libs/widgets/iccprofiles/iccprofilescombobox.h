@@ -6,7 +6,7 @@
  * Date        : 2009-08-11
  * Description : a combo box containing ICC profiles
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT IccProfilesComboBox : public KDcrawIface::SqueezedComboBox
 
 public:
 
-    IccProfilesComboBox(QWidget *parent = 0);
+    IccProfilesComboBox(QWidget* parent = 0);
     ~IccProfilesComboBox();
 
     /**
@@ -86,7 +86,7 @@ class DIGIKAM_EXPORT IccRenderingIntentComboBox : public KComboBox
 {
 public:
 
-    IccRenderingIntentComboBox(QWidget *parent = 0);
+    IccRenderingIntentComboBox(QWidget* parent = 0);
 
     void setIntent(int intent);
     int  intent() const;
@@ -100,8 +100,8 @@ class DIGIKAM_EXPORT IccProfilesMenuAction : public KActionMenu
 
 public:
 
-    IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject *parent);
-    IccProfilesMenuAction(const QString& text, QObject *parent);
+    IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject* parent);
+    IccProfilesMenuAction(const QString& text, QObject* parent);
 
     /**
      * Checks the given profiles for validity, creates a suitable description (ICC profile description, file path),
@@ -136,8 +136,8 @@ protected Q_SLOTS:
 
 protected:
 
-    QObject        *m_parent;
-    QSignalMapper  *m_mapper;
+    QObject*       m_parent;
+    QSignalMapper* m_mapper;
 };
 
 } // namespace Digikam

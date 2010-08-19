@@ -6,7 +6,7 @@
  * Date        : 2009-07-16
  * Description : metadata selector.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,7 @@ public:
 private:
 
     QString            m_key;
-    MdKeyListViewItem *m_parent;
+    MdKeyListViewItem* m_parent;
 };
 
 // ------------------------------------------------------------------------------------
@@ -84,8 +84,6 @@ public:
 };
 
 // ------------------------------------------------------------------------------------
-
-class MetadataSelectorViewPriv;
 
 class DIGIKAM_EXPORT MetadataSelectorView : public QWidget
 {
@@ -137,6 +135,7 @@ private:
 
 private:
 
+    class MetadataSelectorViewPriv;
     MetadataSelectorViewPriv* const d;
 };
 
