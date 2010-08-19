@@ -281,10 +281,25 @@ public:
     QList<ImageInfo> ancestorImages() const;
 
     /**
+     *  Returns the ancestors and derived images of this image.
+     *  The returned list gives an image id and the level of this image in a tree.
+     *  Starting from level 0 (original image), the list of children is iterated
+     *  until reaching a node with no children; then one level upwards to the last
+     *  node's sibling, etc.
+     *  Example:
+     *  1
+     *      2
+     *          8
+     *              19
+     *          9
+     *              20
+     *              21
+     *          10
+     *      3
+     *
+     *  becomes (1,0) (2,1) (8,3) (19,4) (9,3) (20,4) (21,4) (10,3) (3,1)
      */
     QList<QPair<qlonglong, int> > allAvailableVersions() const;
-
-    QList<QPair<qlonglong, int> > buildTree(const QList<QPair<qlonglong, qlonglong> >& pairs) const;
 
     /**
      * Add a relation to the database:
@@ -376,23 +391,6 @@ private:
 };
 
 inline uint qHash(const ImageInfo& info) { return info.hash(); }
-
-// ------------------------------------------------------------------
-
-class TreeNode
-{
-public:
-    TreeNode() : id(0), parent(0) {}
-    TreeNode(qlonglong id) : id(id), parent(0) {}
-    qlonglong id;
-    QList<qlonglong> ancestors;
-    qlonglong parent;
-    QList<qlonglong> children;
-};
-inline uint qHash(const TreeNode& node) { return qHash(node.id); }
-
-// ------------------------------------------------------------------
-
 DIGIKAM_DATABASE_EXPORT QDebug& operator<<(QDebug& stream, const ImageInfo& info);
 
 }  // namespace Digikam

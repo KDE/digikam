@@ -529,35 +529,67 @@ QList<ImageInfo> ImageInfo::ancestorImages() const
     return ImageInfoList(DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
 }
 
-static QList<QPair<qlonglong, int> > treeToList(QHash<qlonglong, TreeNode> nodes, QList<qlonglong> children, qlonglong origin, QList<QPair<qlonglong, int> >& list, int level)
+
+class TreeBuilder
 {
-    if(level == 0)
+public:
+
+    TreeBuilder(const QList<QPair<qlonglong, qlonglong> >& pairs);
+
+    QList<QPair<qlonglong, int> > toList() const;
+
+protected:
+
+    class TreeNode
     {
-        list.append(qMakePair(origin, level));
-        level++;
-    }
+    public:
+        TreeNode() : id(0), parent(0) {}
+        TreeNode(qlonglong id) : id(id), parent(0) {}
+        qlonglong id;
+        QList<qlonglong> ancestors;
+        qlonglong parent;
+        QList<qlonglong> children;
+    };
 
-    qSort(children);
+    QHash<qlonglong, TreeNode> m_nodes;
+    QList<qlonglong> m_origins;
 
-    for(int i = 0; i < children.size(); i++)
-    {
-        list.append(qMakePair(children.at(i), level));
+    void readPairs(const QList<QPair<qlonglong, qlonglong> >& pairs);
+    void treeToListRecursive(const QList<qlonglong>& children, int level,
+                             QList<QPair<qlonglong, int> >& list) const;
+};
 
-        if(!nodes[children.at(i)].children.isEmpty())
-        {
-            level++;
-            treeToList(nodes, nodes[children.at(i)].children, children.at(i), list, level);
-            level--;
-        }
-    }
+TreeBuilder::TreeBuilder(const QList<QPair<qlonglong, qlonglong> >& pairs)
+{
+    readPairs(pairs);
+}
+
+QList<QPair<qlonglong, int> > TreeBuilder::toList() const
+{
+    QList<QPair<qlonglong, int> > list;
+
+    treeToListRecursive(m_origins, 0, list);
 
     return list;
 }
 
-QList<QPair<qlonglong, int> > ImageInfo::buildTree(const QList<QPair<qlonglong, qlonglong> >& pairs) const
+void TreeBuilder::treeToListRecursive(const QList<qlonglong>& siblings, int level,
+                                      QList<QPair<qlonglong, int> >& result) const
 {
-    QHash<qlonglong, TreeNode> nodes;
+    foreach (qlonglong id, siblings)
+    {
+        result << qMakePair(id, level);
 
+        QHash<qlonglong, TreeNode>::const_iterator node = m_nodes.find(id);
+        if (node != m_nodes.end() && !node->children.isEmpty())
+        {
+            treeToListRecursive(node->children, level + 1, result);
+        }
+    }
+}
+
+void TreeBuilder::readPairs(const QList<QPair<qlonglong, qlonglong> >& pairs)
+{
     // 1) Collect all ancestors per id: Creates a treenode with id and ancestors
     qlonglong parentId, childId;
     typedef const QPair<qlonglong, qlonglong> Pair;
@@ -565,28 +597,28 @@ QList<QPair<qlonglong, int> > ImageInfo::buildTree(const QList<QPair<qlonglong, 
     {
         parentId = pair.second;
         childId  = pair.first;
-        
-        if (!nodes.contains(childId))
-            nodes[childId] = TreeNode(childId);
-        nodes[childId].ancestors << parentId;
-        if (!nodes.contains(parentId))
-            nodes[parentId] = TreeNode(parentId);
+
+        if (!m_nodes.contains(childId))
+            m_nodes[childId] = TreeNode(childId);
+        m_nodes[childId].ancestors << parentId;
+        if (!m_nodes.contains(parentId))
+            m_nodes[parentId] = TreeNode(parentId);
     }
-    
+
     // Sort ancestors list. Needed when comparing for exactMatch.
     QHash<qlonglong, TreeNode>::iterator it;
-    for (it = nodes.begin(); it != nodes.end(); ++it)
+    for (it = m_nodes.begin(); it != m_nodes.end(); ++it)
     {
         qSort(it->ancestors);
     }
-    
+
     // 2) Resolve parents
-    QList<qlonglong> origins;
-    for (it = nodes.begin(); it != nodes.end(); ++it)
+    QList<qlonglong> m_origins;
+    for (it = m_nodes.begin(); it != m_nodes.end(); ++it)
     {
         if (it->ancestors.size() == 0)
         {
-            origins << it->id;
+            m_origins << it->id;
         }
         else
         {
@@ -603,13 +635,13 @@ QList<QPair<qlonglong, int> > ImageInfo::buildTree(const QList<QPair<qlonglong, 
 
                 foreach (qlonglong p, it->ancestors)
                 {
-                    if (nodes.value(p).ancestors == exactMatch)
+                    if (m_nodes.value(p).ancestors == exactMatch)
                     {
                         it->parent = p;
                         break;
                     }
                 }
-                
+
                 // c) if no exact match is found, we score: direct parent
                 //    is the one with the most common ancestors to us
                 if (!it->parent)
@@ -617,7 +649,7 @@ QList<QPair<qlonglong, int> > ImageInfo::buildTree(const QList<QPair<qlonglong, 
                     int maxScore = 0;
                     foreach (qlonglong p, it->ancestors)
                     {
-                        const QList<qlonglong> &ancestorsAncestors = nodes.value(p).ancestors;
+                        const QList<qlonglong> &ancestorsAncestors = m_nodes.value(p).ancestors;
                         int score = 0;
                         foreach (qlonglong a, it->ancestors)
                             if (ancestorsAncestors.contains(a))
@@ -633,35 +665,33 @@ QList<QPair<qlonglong, int> > ImageInfo::buildTree(const QList<QPair<qlonglong, 
         }
     }
 
-    // 3) The tree is already complete. Resolve children for parent->child lookup.
-    for (it = nodes.begin(); it != nodes.end(); ++it)
+    // 3) The tree is already complete. Resolve children for parent->child lookup
+    for (it = m_nodes.begin(); it != m_nodes.end(); ++it)
     {
         if (it->parent)
-            nodes[it->parent].children << it->id;
+            m_nodes[it->parent].children << it->id;
     }
 
-    foreach (const TreeNode& node, nodes)
+    // and sort children
+    for (it = m_nodes.begin(); it != m_nodes.end(); ++it)
     {
-        kDebug() << node.id << "->" << node.children << origins;
+        qSort(it->children);
     }
 
-    QList<QPair<qlonglong, int> > list;
-
-    return treeToList(nodes, nodes[origins.first()].children, origins.first(), list, 0);
+    foreach (const TreeNode& node, m_nodes)
+    {
+        kDebug() << node.id << "->" << node.children << m_origins;
+    }
 }
 
 QList<QPair<qlonglong, int> > ImageInfo::allAvailableVersions() const
 {
-    QList<QPair<qlonglong, int> > list;
+    if (!m_data)
+        return QList<QPair<qlonglong, int> >();
 
-    QList<QPair<qlonglong, qlonglong> > l = DatabaseAccess().db()->getRelationCloud(id(),
-                                                                                    DatabaseRelation::DerivedFrom);
+    TreeBuilder treeBuilder(DatabaseAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom));
 
-    if(!l.isEmpty())
-    {
-        return buildTree(l);
-    }
-    return list;
+    return treeBuilder.toList();
 }
 
 void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
