@@ -62,16 +62,16 @@ public Q_SLOTS:
 
     void slotAnimationStep();
     void setPaintTree(bool paint);
-    
+
 private:
 
     ///Complete paths with filenames and tree level
     QList<QPair<QString, int> >* m_data;
     ///This is for delegate to paint it as selected
-    QString m_currentSelectedImage;
+    QString                      m_currentSelectedImage;
     ///If true, the delegate will paint items as a tree
     ///if false, it will be painted as a list
-    bool m_paintTree;
+    bool                         m_paintTree;
 };
 
 } // namespace Digikam

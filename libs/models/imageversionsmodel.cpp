@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "imageversionsmodel.moc"
+
 // KDE includes
 
 #include <KLocale>
@@ -28,7 +30,6 @@
 
 // Local includes
 
-#include "imageversionsmodel.h"
 #include "workingwidget.h"
 
 namespace Digikam
@@ -66,7 +67,7 @@ QVariant ImageVersionsModel::data(const QModelIndex& index, int role) const
     else if(role == Qt::UserRole && !m_data->isEmpty())
     {
         return m_data->at(index.row()).second;
-    }    
+    }
     else if(role == Qt::DisplayRole && m_data->isEmpty())
     {   //TODO: make this text Italic
         return QVariant(QString(i18n("No image selected")));
