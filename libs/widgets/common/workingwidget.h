@@ -46,6 +46,7 @@ public:
     ~WorkingWidget();
 
 Q_SIGNALS:
+
     void animationStep();
 
 private Q_SLOTS:
