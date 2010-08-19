@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "filtershistorywidget.moc"
+
 // Qt includes
 
 #include <QGridLayout>
@@ -36,7 +38,6 @@
 
 // Local includes
 
-#include "filtershistorywidget.h"
 #include "imagefiltershistorymodel.h"
 #include "imagefiltershistorytreeitem.h"
 #include "imagefiltershistoryitemdelegate.h"
