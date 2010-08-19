@@ -6,8 +6,8 @@
  * Date        : 2008-01-14
  * Description : Basic search tree view with editing functionality
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,13 +26,12 @@
 #define EDITABLESEARCHTREEVIEW_H
 
 // Local includes
+
 #include "albumtreeview.h"
 #include "searchmodificationhelper.h"
 
 namespace Digikam
 {
-
-class EditableSearchTreeViewPriv;
 
 /**
  * This tree view for searches adds basic editing functionality via the context
@@ -42,7 +41,8 @@ class EditableSearchTreeViewPriv;
  */
 class EditableSearchTreeView: public SearchTreeView
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
 
     /**
@@ -54,8 +54,8 @@ public:
      *                                 perform operations on the displayed
      *                                 searches
      */
-    EditableSearchTreeView(QWidget *parent, SearchModel *searchModel,
-                           SearchModificationHelper *searchModificationHelper);
+    EditableSearchTreeView(QWidget* parent, SearchModel* searchModel,
+                           SearchModificationHelper* searchModificationHelper);
 
     /**
      * Destructor.
@@ -70,19 +70,19 @@ protected:
     /**
      * Adds actions to delete or rename existing searches.
      */
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh,
-                                             Album *album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
 
     /**
      * Handles deletion and renaming actions.
      */
-    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
+    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 private:
-    EditableSearchTreeViewPriv *d;
 
+    class EditableSearchTreeViewPriv;
+    EditableSearchTreeViewPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* EDITABLESEARCHTREEVIEW_H */

@@ -81,7 +81,8 @@ ImageDelegate::ImageDelegate(ImageDelegatePrivate &dd, QObject *parent)
 ImageDelegate::~ImageDelegate()
 {
     Q_D(ImageDelegate);
-    delete d->categoryDrawer;
+    // crashes for a lot of people, see bug 230515. Cause unknown.
+    //delete d->categoryDrawer;
 }
 
 void ImageDelegate::setView(ImageCategorizedView *view)
