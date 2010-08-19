@@ -73,7 +73,7 @@ public:
 };
 
 FiltersHistoryWidget::FiltersHistoryWidget(QWidget* parent)
-                     : QWidget(parent), d(new FiltersHistoryWidgetPriv)
+                    : QWidget(parent), d(new FiltersHistoryWidgetPriv)
 {
     d->layout      = new QGridLayout(this);
     d->view        = new QTreeView(this);
