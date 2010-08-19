@@ -6,7 +6,7 @@
  * Date        : 2000-12-05
  * Description : helper class used to modify tag albums in views
  *
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,12 +24,14 @@
 #include "tagmodificationhelper.moc"
 
 // KDE includes
+
 #include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
 // Local includes
+
 #include "album.h"
 #include "albumdb.h"
 #include "databasetransaction.h"
@@ -42,21 +44,22 @@
 namespace Digikam
 {
 
-class TagModificationHelperPriv
+class TagModificationHelper::TagModificationHelperPriv
 {
 public:
-    
+
     TagModificationHelperPriv()
     {
-        parentTag         = 0;
+        parentTag    = 0;
+        dialogParent = 0;
     }
 
-    TAlbum  *parentTag;
-    QWidget *dialogParent;
+    TAlbum*  parentTag;
+    QWidget* dialogParent;
 };
 
-TagModificationHelper::TagModificationHelper(QObject *parent, QWidget *dialogParent) :
-    QObject(parent), d(new TagModificationHelperPriv)
+TagModificationHelper::TagModificationHelper(QObject* parent, QWidget* dialogParent)
+                     : QObject(parent), d(new TagModificationHelperPriv)
 {
     d->dialogParent = dialogParent;
 }
@@ -66,16 +69,15 @@ TagModificationHelper::~TagModificationHelper()
     delete d;
 }
 
-void TagModificationHelper::setParentTag(TAlbum *parent)
+void TagModificationHelper::setParentTag(TAlbum* parent)
 {
     d->parentTag = parent;
 }
 
-TAlbum *TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, const QString &iconName)
+TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString &title, const QString& iconName)
 {
-
     // ensure that there is a parent
-    TAlbum *p = parent;
+    TAlbum* p = parent;
     if (!p)
     {
         p = AlbumManager::instance()->findTAlbum(0);
@@ -86,7 +88,7 @@ TAlbum *TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, 
         }
     }
 
-    QString editTitle = title;
+    QString editTitle    = title;
     QString editIconName = iconName;
 
     if (title.isEmpty())
@@ -104,7 +106,7 @@ TAlbum *TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, 
 
     if (errMap.isEmpty() && !tList.isEmpty())
     {
-        TAlbum *tag = static_cast<TAlbum*>(tList.last());
+        TAlbum* tag = static_cast<TAlbum*>(tList.last());
         emit tagCreated(tag);
         return tag;
     }
@@ -112,10 +114,9 @@ TAlbum *TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, 
     {
         return 0;
     }
-
 }
 
-TAlbum *TagModificationHelper::slotTagNew()
+TAlbum* TagModificationHelper::slotTagNew()
 {
     if (d->parentTag)
     {
@@ -128,9 +129,8 @@ TAlbum *TagModificationHelper::slotTagNew()
     }
 }
 
-void TagModificationHelper::slotTagEdit(TAlbum *tag)
+void TagModificationHelper::slotTagEdit(TAlbum* tag)
 {
-
     if(!tag)
     {
         return;
@@ -162,7 +162,6 @@ void TagModificationHelper::slotTagEdit(TAlbum *tag)
     }
 
     emit tagEdited(tag);
-
 }
 
 void TagModificationHelper::slotTagEdit()
@@ -171,9 +170,8 @@ void TagModificationHelper::slotTagEdit()
         slotTagEdit(d->parentTag);
 }
 
-void TagModificationHelper::slotTagDelete(TAlbum *tag)
+void TagModificationHelper::slotTagDelete(TAlbum* tag)
 {
-
     if (!tag || tag->isRoot())
     {
         return;
@@ -246,4 +244,4 @@ void TagModificationHelper::slotTagDelete()
         slotTagDelete(d->parentTag);
 }
 
-}
+} // namespace Digikam
