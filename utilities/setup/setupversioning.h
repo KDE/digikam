@@ -30,12 +30,11 @@
 
 namespace Digikam
 {
-class SetupVersioningPriv;
 
 class SetupVersioning : public QScrollArea
 {
 public:
-    
+
     SetupVersioning(QWidget* parent = 0);
     ~SetupVersioning();
 
@@ -47,6 +46,7 @@ private:
 
 private:
 
+    class SetupVersioningPriv;
     SetupVersioningPriv* const d;
 };
 

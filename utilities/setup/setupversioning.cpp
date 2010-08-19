@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class SetupVersioningPriv
+class SetupVersioning::SetupVersioningPriv
 {
 public:
 
@@ -56,29 +56,29 @@ public:
         keepOriginalsInPlace     = 0;
     }
 
-    QLabel*       formatForStoringRAWLabel;
+    QLabel*    formatForStoringRAWLabel;
 
-    QCheckBox*    showAllVersions;
-    QCheckBox*    saveIntermediateVersions;
-    QCheckBox*    keepOriginalsInPlace;
+    QCheckBox* showAllVersions;
+    QCheckBox* saveIntermediateVersions;
+    QCheckBox* keepOriginalsInPlace;
 
-    KComboBox*    formatForStoringRAW;
+    KComboBox* formatForStoringRAW;
 };
 
 SetupVersioning::SetupVersioning(QWidget* parent)
                : QScrollArea(parent), d(new SetupVersioningPriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
-    
-    QVBoxLayout *layout = new QVBoxLayout(panel);
-    
+
+    QVBoxLayout* layout = new QVBoxLayout(panel);
+
     // --------------------------------------------------------
-    
-    QGroupBox *versioningOptionsGroup = new QGroupBox(i18n("Versioning Options"), panel);
-    QVBoxLayout *gLayout             = new QVBoxLayout(versioningOptionsGroup);
-    
+
+    QGroupBox* versioningOptionsGroup = new QGroupBox(i18n("Versioning Options"), panel);
+    QVBoxLayout* gLayout              = new QVBoxLayout(versioningOptionsGroup);
+
     d->showAllVersions = new QCheckBox(i18n("Show all available versions in the main view"), versioningOptionsGroup);
     d->showAllVersions->setWhatsThis(i18n("If enabled, you will see all available versions "
                                           "in the main images view. If disabled, you'll see "
@@ -91,7 +91,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     d->formatForStoringRAW->addItem("JPG", 0);
     d->formatForStoringRAW->addItem("PNG", 1);
     d->formatForStoringRAW->setToolTip(i18n("Set this option to configure in what format should be new versions of RAW images stored."));
-    
+
     d->saveIntermediateVersions = new QCheckBox(i18n("Create new file for every modification"),
                                             versioningOptionsGroup);
     d->saveIntermediateVersions->setWhatsThis(i18n("Set this option to automatically save each "
@@ -110,20 +110,20 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     gLayout->addWidget(d->keepOriginalsInPlace);
     gLayout->setMargin(KDialog::spacingHint());
     gLayout->setSpacing(0);
-    
+
     // --------------------------------------------------------
-    
+
     layout->addWidget(versioningOptionsGroup);
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
     layout->addStretch();
-    
+
     // --------------------------------------------------------
-    
+
     readSettings();
-    
+
     // --------------------------------------------------------
-    
+
     setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
     panel->setAutoFillBackground(false);
