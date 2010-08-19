@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT GraphicsDImgItemPrivate
+class DIGIKAM_EXPORT GraphicsDImgItem::GraphicsDImgItemPrivate
 {
 public:
 
@@ -57,7 +57,7 @@ public:
 class PreviewLoadThread;
 class DImgPreviewItem;
 
-class DIGIKAM_EXPORT DImgPreviewItemPrivate : public GraphicsDImgItemPrivate
+class DIGIKAM_EXPORT DImgPreviewItem::DImgPreviewItemPrivate : public GraphicsDImgItem::GraphicsDImgItemPrivate
 {
 public:
 
@@ -78,6 +78,3 @@ public:
 } // namespace Digikam
 
 #endif // DIMGITEMSPRIV_H
-
-
-

@@ -38,7 +38,6 @@ namespace Digikam
 {
 
 class DImg;
-class DImgPreviewItemPrivate;
 class ImageInfo;
 class LoadingDescription;
 
@@ -82,10 +81,6 @@ Q_SIGNALS:
     void loadingFailed();
     void loadedWithSize(bool fullSize);
 
-protected:
-
-    DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* parent = 0);
-
 private Q_SLOTS:
 
     void slotGotImagePreview(const LoadingDescription& loadingDescription, const DImg& image);
@@ -94,7 +89,12 @@ private Q_SLOTS:
 
 private:
 
+    class DImgPreviewItemPrivate;
     Q_DECLARE_PRIVATE(DImgPreviewItem)
+
+protected:
+
+    DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* parent = 0);
 };
 
 } // namespace Digikam

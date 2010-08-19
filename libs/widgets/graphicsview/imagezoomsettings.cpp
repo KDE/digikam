@@ -35,9 +35,6 @@
 
 #include <kdebug.h>
 
-// Local includes
-
-
 namespace Digikam
 {
 

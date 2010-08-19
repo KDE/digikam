@@ -35,7 +35,6 @@
 namespace Digikam
 {
 
-class GraphicsDImgViewPriv;
 class DImgPreviewItem;
 class SinglePhotoPreviewLayout;
 
@@ -71,7 +70,7 @@ Q_SIGNALS:
 
 protected:
 
-    void drawForeground(QPainter *painter, const QRectF &rect);
+    void drawForeground(QPainter* painter, const QRectF &rect);
     void drawText(QPainter* p, const QRectF& rect, const QString& text);
 
     void setItem(DImgPreviewItem* item);
@@ -96,6 +95,7 @@ protected Q_SLOTS:
 
 private:
 
+    class GraphicsDImgViewPriv;
     GraphicsDImgViewPriv* const d;
 };
 

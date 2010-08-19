@@ -39,7 +39,6 @@ class QGraphicsView;
 namespace Digikam
 {
 
-class SinglePhotoPreviewLayoutPriv;
 class GraphicsDImgItem;
 class GraphicsDImgView;
 
@@ -107,6 +106,7 @@ protected:
 
 private:
 
+    class SinglePhotoPreviewLayoutPriv;
     SinglePhotoPreviewLayoutPriv* const d;
 };
 

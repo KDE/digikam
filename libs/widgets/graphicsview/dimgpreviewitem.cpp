@@ -42,15 +42,6 @@
 namespace Digikam
 {
 
-DImgPreviewItemPrivate::DImgPreviewItemPrivate()
-{
-    state             = DImgPreviewItem::NoImage;
-    exifRotate        = true;
-    previewSize       = 1024;
-    loadFullImageSize = false;
-    previewThread     = 0;
-}
-
 DImgPreviewItem::DImgPreviewItem(QGraphicsItem* parent)
                : GraphicsDImgItem(*new DImgPreviewItemPrivate, parent)
 {
@@ -65,7 +56,16 @@ DImgPreviewItem::DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* pare
     d->init(this);
 }
 
-void DImgPreviewItemPrivate::init(DImgPreviewItem* q)
+DImgPreviewItem::DImgPreviewItemPrivate::DImgPreviewItemPrivate()
+{
+    state             = DImgPreviewItem::NoImage;
+    exifRotate        = true;
+    previewSize       = 1024;
+    loadFullImageSize = false;
+    previewThread     = 0;
+}
+
+void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* q)
 {
     previewThread = new PreviewLoadThread;
     preloadThread = new PreviewLoadThread;

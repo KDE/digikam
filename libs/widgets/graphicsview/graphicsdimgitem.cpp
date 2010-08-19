@@ -58,7 +58,7 @@ GraphicsDImgItem::GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* p
     d_ptr->init(this);
 }
 
-void GraphicsDImgItemPrivate::init(GraphicsDImgItem* q)
+void GraphicsDImgItem::GraphicsDImgItemPrivate::init(GraphicsDImgItem* q)
 {
     // ItemCoordinateCache is very slow, DeviceCoordinateCache makes severe render artifacts
     q->setCacheMode(QGraphicsItem::NoCache);

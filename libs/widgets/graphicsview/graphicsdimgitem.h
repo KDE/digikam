@@ -38,11 +38,9 @@ namespace Digikam
 {
 
 class DImg;
-class GraphicsDImgItemPrivate;
 class ImageZoomSettings;
 
-class DIGIKAM_EXPORT GraphicsDImgItem
-    : public QGraphicsObject
+class DIGIKAM_EXPORT GraphicsDImgItem : public QGraphicsObject
 {
     Q_OBJECT
 
@@ -68,6 +66,11 @@ public:
 Q_SIGNALS:
 
     void imageChanged();
+
+public:
+
+    // Declared public because of DImgPreviewItemPrivate.
+    class GraphicsDImgItemPrivate;
 
 protected:
 

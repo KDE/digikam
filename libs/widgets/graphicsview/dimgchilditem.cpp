@@ -56,7 +56,7 @@ public:
 };
 */
 
-class DImgChildItemPriv
+class DImgChildItem::DImgChildItemPriv
 {
 public:
 
@@ -90,7 +90,7 @@ void DImgChildItem::setRelativeSize(const QSizeF& relativeSize)
     prepareGeometryChange();
 }
 
-GraphicsDImgItem *DImgChildItem::parentDImgItem() const
+GraphicsDImgItem* DImgChildItem::parentDImgItem() const
 {
     return dynamic_cast<GraphicsDImgItem*>(parentItem());
 }

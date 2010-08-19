@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class SinglePhotoPreviewLayoutPriv
+class SinglePhotoPreviewLayout::SinglePhotoPreviewLayoutPriv
 {
 public:
 
@@ -68,7 +68,7 @@ public:
 
 public:
 
-    ImageZoomSettings *zoomSettings() const
+    ImageZoomSettings* zoomSettings() const
     {
         return item->zoomSettings();
     }
@@ -187,8 +187,8 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, const QPoint& givenAnchor
         return;
 
     QPoint  viewportAnchor = givenAnchor.isNull() ? d->view->viewport()->rect().center() : givenAnchor;
-    QPointF sceneAnchor = d->view->mapToScene(viewportAnchor);
-    QPointF imageAnchor = d->zoomSettings()->mapZoomToImage(sceneAnchor);
+    QPointF sceneAnchor    = d->view->mapToScene(viewportAnchor);
+    QPointF imageAnchor    = d->zoomSettings()->mapZoomToImage(sceneAnchor);
 
     setZoomFactor(z, flags);
 
@@ -266,7 +266,7 @@ void SinglePhotoPreviewLayout::updateLayout()
         return;
 
     d->view->scene()->setSceneRect(d->item->boundingRect());
-    d->item->setPos(0,0);
+    d->item->setPos(0, 0);
 }
 
 void SinglePhotoPreviewLayout::updateZoomAndSize()

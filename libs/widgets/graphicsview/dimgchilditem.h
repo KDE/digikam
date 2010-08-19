@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-class DImgChildItemPriv;
 class GraphicsDImgItem;
 
 class DIGIKAM_EXPORT AbstractDImgItemChild
@@ -91,7 +90,7 @@ public:
      * If the parent item is a GraphicsDImgItem, return it,
      * if the parent item is null or of a different class, returns 0.
      */
-    GraphicsDImgItem *parentDImgItem() const;
+    GraphicsDImgItem* parentDImgItem() const;
 
     /**
      * Reimplemented. Returns a rectangle starting at (0,0) (pos() in parent coordinates)
@@ -105,7 +104,8 @@ public:
 
 private:
 
-    DImgChildItemPriv *const d;
+    class DImgChildItemPriv;
+    DImgChildItemPriv* const d;
 };
 
 } // namespace Digikam

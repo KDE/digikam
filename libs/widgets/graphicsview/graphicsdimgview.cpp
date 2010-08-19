@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class GraphicsDImgViewPriv
+class GraphicsDImgView::GraphicsDImgViewPriv
 {
 public:
 
@@ -121,7 +121,7 @@ void GraphicsDImgView::installPanIcon()
             this, SLOT(slotCornerButtonPressed()));
 }
 
-void GraphicsDImgView::drawForeground(QPainter *p, const QRectF &rect)
+void GraphicsDImgView::drawForeground(QPainter* p, const QRectF &rect)
 {
     QGraphicsView::drawForeground(p, rect);
 
@@ -291,14 +291,18 @@ void GraphicsDImgView::scrollPointOnPoint(const QPointF& scenePos, const QPoint&
     // This is inspired from QGraphicsView's centerOn()
     QPointF viewPoint = matrix().map(scenePos);
 
-    if (horizontalScrollBar()->maximum()) {
-        if (isRightToLeft()) {
+    if (horizontalScrollBar()->maximum())
+    {
+        if (isRightToLeft())
+        {
             qint64 horizontal = 0;
             horizontal += horizontalScrollBar()->minimum();
             horizontal += horizontalScrollBar()->maximum();
             horizontal -= int(viewPoint.x() - viewportPos.x());
             horizontalScrollBar()->setValue(horizontal);
-        } else {
+        }
+        else
+        {
             horizontalScrollBar()->setValue(int(viewPoint.x() - viewportPos.x()));
         }
     }
