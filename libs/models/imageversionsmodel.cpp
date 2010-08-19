@@ -35,16 +35,35 @@
 namespace Digikam
 {
 
-ImageVersionsModel::ImageVersionsModel(QObject* parent)
-                  : QAbstractListModel(parent)
+class ImageVersionsModel::ImageVersionsModelPriv
 {
-    m_data = new QList<QPair<QString, int> >;
-    m_paintTree = false;
+public:
+
+    ImageVersionsModelPriv()
+    {
+        data      = 0;
+        paintTree = false;
+    }
+
+    ///Complete paths with filenames and tree level
+    QList<QPair<QString, int> >* data;
+    ///This is for delegate to paint it as selected
+    QString                      currentSelectedImage;
+    ///If true, the delegate will paint items as a tree
+    ///if false, it will be painted as a list
+    bool                         paintTree;
+};
+
+ImageVersionsModel::ImageVersionsModel(QObject* parent)
+                  : QAbstractListModel(parent), d(new ImageVersionsModelPriv)
+{
+    d->data = new QList<QPair<QString, int> >;
 }
 
 ImageVersionsModel::~ImageVersionsModel()
 {
-    //qDeleteAll(m_data);
+    //qDeleteAll(d->data);
+    delete d;
 }
 
 Qt::ItemFlags ImageVersionsModel::flags(const QModelIndex& index) const
@@ -60,15 +79,15 @@ QVariant ImageVersionsModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if(role == Qt::DisplayRole && !m_data->isEmpty())
+    if(role == Qt::DisplayRole && !d->data->isEmpty())
     {
-        return m_data->at(index.row()).first;
+        return d->data->at(index.row()).first;
     }
-    else if(role == Qt::UserRole && !m_data->isEmpty())
+    else if(role == Qt::UserRole && !d->data->isEmpty())
     {
-        return m_data->at(index.row()).second;
+        return d->data->at(index.row()).second;
     }
-    else if(role == Qt::DisplayRole && m_data->isEmpty())
+    else if(role == Qt::DisplayRole && d->data->isEmpty())
     {   //TODO: make this text Italic
         return QVariant(QString(i18n("No image selected")));
     }
@@ -79,22 +98,22 @@ QVariant ImageVersionsModel::data(const QModelIndex& index, int role) const
 int ImageVersionsModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
-    return m_data->count();
+    return d->data->count();
 }
 
 void ImageVersionsModel::setupModelData(QList<QPair<QString, int> >& data)
 {
     beginResetModel();
 
-    m_data->clear();
+    d->data->clear();
 
     if(!data.isEmpty())
     {
-        m_data->append(data);
+        d->data->append(data);
     }
     else 
     {
-        m_data->append(qMakePair(QString(i18n("This is original image")), 0));
+        d->data->append(qMakePair(QString(i18n("This is original image")), 0));
     }
 
     endResetModel();
@@ -103,9 +122,9 @@ void ImageVersionsModel::setupModelData(QList<QPair<QString, int> >& data)
 void ImageVersionsModel::clearModelData()
 {
     beginResetModel();
-    if(!m_data->isEmpty())
+    if(!d->data->isEmpty())
     {
-        m_data->clear();
+        d->data->clear();
     }
     endResetModel();
 }
@@ -117,34 +136,34 @@ void ImageVersionsModel::slotAnimationStep()
 
 QString ImageVersionsModel::currentSelectedImage() const
 {
-    return m_currentSelectedImage;
+    return d->currentSelectedImage;
 }
 
 void ImageVersionsModel::setCurrentSelectedImage(const QString& path)
 {
-    m_currentSelectedImage = path;
+    d->currentSelectedImage = path;
 }
 
 QModelIndex ImageVersionsModel::currentSelectedImageIndex() const
 {
-    return index(listIndexOf(m_currentSelectedImage), 0);
+    return index(listIndexOf(d->currentSelectedImage), 0);
 }
 
 bool ImageVersionsModel::paintTree() const
 {
-    return m_paintTree;
+    return d->paintTree;
 }
 
 void ImageVersionsModel::setPaintTree(bool paint)
 {
-    m_paintTree = paint;
+    d->paintTree = paint;
 }
 
 int ImageVersionsModel::listIndexOf(const QString& item) const
 {
-    for(int i = 0; i < m_data->size(); i++)
+    for(int i = 0; i < d->data->size(); i++)
     {
-        if(m_data->at(i).first == item)
+        if(d->data->at(i).first == item)
             return i;
     }
     return -1;
