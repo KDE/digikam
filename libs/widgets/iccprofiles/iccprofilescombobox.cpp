@@ -6,7 +6,7 @@
  * Date        : 2009-08-11
  * Description : a combo box containing ICC profiles
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-IccProfilesComboBox::IccProfilesComboBox(QWidget *parent)
+IccProfilesComboBox::IccProfilesComboBox(QWidget* parent)
                    : KDcrawIface::SqueezedComboBox( parent )
 {
 }
@@ -73,7 +73,7 @@ static QString profileUserString(const IccProfile& p)
 }
 
 // if needed outside this class, make it a public static method in a namespace
-static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProfile> *returnedProfiles, QStringList *userText)
+static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProfile>* returnedProfiles, QStringList* userText)
 {
     QList<IccProfile> profiles;
     QSet<QString>     filePaths;
@@ -163,7 +163,7 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
 
 // ------------------------------------------------------------------------------------------
 
-IccProfilesMenuAction::IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject *parent)
+IccProfilesMenuAction::IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject* parent)
                      : KActionMenu(icon, text, parent),
                        m_parent(parent)
 {
@@ -172,7 +172,7 @@ IccProfilesMenuAction::IccProfilesMenuAction(const KIcon& icon, const QString& t
             this, SLOT(slotTriggered(QObject*)));
 }
 
-IccProfilesMenuAction::IccProfilesMenuAction(const QString &text, QObject *parent)
+IccProfilesMenuAction::IccProfilesMenuAction(const QString &text, QObject* parent)
                      : KActionMenu(text, parent),
                        m_parent(parent)
 {
@@ -210,7 +210,7 @@ void IccProfilesMenuAction::addProfile(const IccProfile& profile, const QString&
     if (description.isNull())
         description = profileUserString(profile);
 
-    KAction *action = new KAction(d.left(50), m_parent);
+    KAction* action = new KAction(d.left(50), m_parent);
     action->setData(QVariant::fromValue(profile));
     addAction(action);
 
@@ -226,9 +226,9 @@ void IccProfilesMenuAction::disableIfEmpty()
         setEnabled(false);
 }
 
-void IccProfilesMenuAction::slotTriggered(QObject *obj)
+void IccProfilesMenuAction::slotTriggered(QObject* obj)
 {
-    KAction *action = static_cast<KAction*>(obj);
+    KAction* action = static_cast<KAction*>(obj);
     IccProfile profile = action->data().value<IccProfile>();
     if (!profile.isNull())
         emit triggered(profile);
@@ -236,7 +236,7 @@ void IccProfilesMenuAction::slotTriggered(QObject *obj)
 
 // ------------------------------------------------------------------------------------------
 
-IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget *parent)
+IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget* parent)
                           : KComboBox(parent)
 {
     addItem("Perceptual", IccTransform::Perceptual);

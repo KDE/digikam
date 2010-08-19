@@ -8,6 +8,7 @@
  *               in file dialog preview.
  *
  * Copyright (C) 2006-2007 by Francisco J. Cruz <fj.cruz@supercable.es>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "iccpreviewwidget.moc"
 
@@ -45,11 +45,11 @@
 namespace Digikam
 {
 
-ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
+ICCPreviewWidget::ICCPreviewWidget(QWidget* parent)
                 : KPreviewWidgetBase( parent )
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    QScrollArea *scrollArea = new QScrollArea;
+    QVBoxLayout* mainLayout = new QVBoxLayout;
+    QScrollArea* scrollArea = new QScrollArea;
     m_iccProfileWidget      = new ICCProfileWidget(this);
 
     scrollArea->setWidget(m_iccProfileWidget);
