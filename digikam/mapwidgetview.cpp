@@ -50,10 +50,8 @@
 #include "databasewatch.h"
 #include "databasefields.h"
 
-
 namespace Digikam
 {
-
 
 class ImageAlbumModel;
 class ImageFilterModel;
@@ -64,41 +62,41 @@ class ImageFilterModel;
  * @brief Class containing Digikam's central map view.
  */
 
-class MapWidgetViewPriv
+class MapWidgetView::MapWidgetViewPriv
 {
 public:
 
     MapWidgetViewPriv()
-    :vbox(), 
-     mapWidget(),
-     imageModel(),
-     selectionModel(), 
-     mapViewModelHelper(),
-     activeState(false) 
+        :vbox(), 
+        mapWidget(),
+        imageModel(),
+        selectionModel(), 
+        mapViewModelHelper(),
+        activeState(false) 
     {
-        mapWidget = 0;
-        vbox = 0;
-        imageModel = 0;
-        selectionModel = 0;
+        mapWidget          = 0;
+        vbox               = 0;
+        imageModel         = 0;
+        selectionModel     = 0;
         mapViewModelHelper = 0;
     }
 
-    KVBox                *vbox;
-    KMap::KMapWidget *mapWidget;
-    ImageAlbumModel      *imageModel;
-    QItemSelectionModel  *selectionModel;
-    MapViewModelHelper   *mapViewModelHelper;
+    KVBox*               vbox;
+    KMap::KMapWidget*    mapWidget;
+    ImageAlbumModel*     imageModel;
+    QItemSelectionModel* selectionModel;
+    MapViewModelHelper*  mapViewModelHelper;
     bool                 activeState;
 };
 
 MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent)
              : QWidget(parent), d(new MapWidgetViewPriv)
 {
-    d->imageModel = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
-    d->selectionModel = selectionModel;
-    d->mapViewModelHelper = new MapViewModelHelper(d->imageModel, d->selectionModel, imageFilterModel, this);
-    QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
-    
+    d->imageModel           = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+    d->selectionModel       = selectionModel;
+    d->mapViewModelHelper   = new MapViewModelHelper(d->imageModel, d->selectionModel, imageFilterModel, this);
+    QVBoxLayout* vBoxLayout = new QVBoxLayout(this);
+
     d->mapWidget = new KMap::KMapWidget(this);
     d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
     d->mapWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
@@ -132,9 +130,8 @@ bool MapWidgetView::getActiveState() const
 
 //-------------------------------------------------------------------------------------------------------------
 
-class MapViewModelHelperPrivate
+class MapViewModelHelper::MapViewModelHelperPrivate
 {
-
 public:
     MapViewModelHelperPrivate()
     {
@@ -142,22 +139,21 @@ public:
         selectionModel = 0;
     }
 
-    ImageFilterModel*        model;
-    QItemSelectionModel*    selectionModel;
-    ThumbnailLoadThread*    thumbnailLoadThread;
-
+    ImageFilterModel*    model;
+    QItemSelectionModel* selectionModel;
+    ThumbnailLoadThread* thumbnailLoadThread;
 };
 
-
-MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* const selection, ImageFilterModel* const filterModel, QObject* const parent)
-: KMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
+MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* const selection,
+                                       ImageFilterModel* const filterModel, QObject* const parent)
+                  : KMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
     Q_UNUSED(model)
 
-    d->model                = filterModel;
-    d->selectionModel       = selection;
-    d->thumbnailLoadThread  = new ThumbnailLoadThread();
-    
+    d->model               = filterModel;
+    d->selectionModel      = selection;
+    d->thumbnailLoadThread = new ThumbnailLoadThread();
+
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
@@ -186,7 +182,7 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
 
 bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates * const coordinates) const
 {
-    ImageInfo info          = d->model->imageInfo(index);
+    ImageInfo info = d->model->imageInfo(index);
 
     if(info.isNull() || !info.hasCoordinates())
         return false;
@@ -216,7 +212,8 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
     return QPixmap();
 }
 
-QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList( const QList<QPersistentModelIndex>& list, const int sortKey)
+QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, 
+                                                                          const int sortKey)
 {
     const bool oldestFirst = sortKey & 1;
     QList<QModelIndex> indexList;
@@ -238,7 +235,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList( const
     {
         ImageInfo currentInfo = imageInfoList.at(i);
         bool takeThisIndex    = (bestImageInfo.id() == -1);
-        
+
         if(!takeThisIndex)
         {
             if(oldestFirst)
@@ -246,7 +243,6 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList( const
                 takeThisIndex = currentInfo < bestImageInfo;
                 if(takeThisIndex)
                     bestImageInfo = currentInfo;
-                
             }
             else
             {
@@ -267,7 +263,6 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList( const
     return returnedIndex;
 }
 
-
 void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
     if(thumb.isNull())
@@ -280,7 +275,7 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
         QPersistentModelIndex goodIndex(currentIndex);
         emit(signalThumbnailAvailableForIndex(goodIndex, thumb));
     }
-} 
+}
 
 void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices)
 {
@@ -309,15 +304,17 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
 
 void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 {
-    kDebug()<<"---------------------------------------------------------------";
+    kDebug() << "---------------------------------------------------------------";
     const DatabaseFields::Set changes = changeset.changes();
     const DatabaseFields::ImagePositions imagePositionChanges = changes;
+
     // TODO: more detailed check
     if (   ( changes & DatabaseFields::LatitudeNumber )
         || ( changes & DatabaseFields::LongitudeNumber )
         || ( changes & DatabaseFields::Altitude ) )
     {
-        kDebug()<<"changes!";
+        kDebug() << "changes!";
+
         foreach (const qlonglong& id, changeset.ids())
         {
             QModelIndex index = d->model->indexForImageId(id);
@@ -330,7 +327,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
             }
         }
     }
-    kDebug()<<"---------------------------------------------------------------";
+    kDebug() << "---------------------------------------------------------------";
 }
 
 } //namespace Digikam

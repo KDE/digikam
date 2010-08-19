@@ -48,11 +48,8 @@
 namespace Digikam
 {
 
-class MapWidgetViewPriv;
 class AlbumWidgetStack;
 class ImageChangeset;
-
-class MapViewModelHelperPrivate;
 
 class MapViewModelHelper : public KMap::ModelHelper
 {
@@ -83,14 +80,14 @@ private Q_SLOTS:
 
 private:
 
+    class MapViewModelHelperPrivate;
     MapViewModelHelperPrivate* const d;
-
 };
 
+// ------------------------------------------------------------------------------------------------------------
 
 class MapWidgetView : public QWidget
 {
-
     Q_OBJECT
 
 public: 
@@ -101,15 +98,13 @@ public:
     void openAlbum(Album* album);
     void setActive(const bool state);
     bool getActiveState() const;
+
 private:
 
-    MapWidgetViewPriv* const d;    
-
+    class MapWidgetViewPriv;
+    MapWidgetViewPriv* const d;
 };
 
-
 } // namespace Digikam
-
-
 
 #endif  // MAPWIDGETVIEW_H
