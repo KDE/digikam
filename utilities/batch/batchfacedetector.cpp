@@ -67,16 +67,8 @@
 #include "tagscache.h"
 #include "imagetagpair.h"
 #include "faceiface.h"
-
-/*
-#include <libs/database/tagproperties.h>
-#include <libs/database/imagetagpair.h>
-#include <libs/dimg/dimg.h>
-#include <libs/threadimageio/loadingdescription.h>
-#include <libs/database/imageinfo.h>*/
-// #include <libs/database/imagetagpair.h>
-// #include <libs/database/searchxml.h>
-// #include <libs/database/tagscache.h>
+#include "dimg.h"
+#include "loadingdescription.h"
 
 namespace Digikam
 {
@@ -91,9 +83,8 @@ public:
         rebuildAll          = true;
         previewLoadThread   = 0;
         thumbnailLoadThread = 0;
-        
         faceIface           = new FaceIface();
-        
+
         duration.start();
     }
 
@@ -110,8 +101,8 @@ public:
     QStringList           allPicturesPath;
     PreviewLoadThread*    previewLoadThread;
     ThumbnailLoadThread*  thumbnailLoadThread;
-    
-    FaceIface* faceIface;
+
+    FaceIface*            faceIface;
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
@@ -134,9 +125,7 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
     setLabel(i18n("<b>Updating faces database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
 
-    
     QTimer::singleShot(500, this, SLOT(slotDetectFaces()));
-    
 }
 
 BatchFaceDetector::~BatchFaceDetector()
@@ -150,11 +139,11 @@ void BatchFaceDetector::slotDetectFaces()
     const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
-    
+
     QStringList pathList;
-    
+
     for (AlbumList::ConstIterator it = palbumList.constBegin();
-            !d->cancel && (it != palbumList.constEnd()); ++it)
+         !d->cancel && (it != palbumList.constEnd()); ++it)
     {
         pathList += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
     }
@@ -166,10 +155,10 @@ void BatchFaceDetector::slotDetectFaces()
     else
     {
         for (QStringList::ConstIterator i = pathList.constBegin();
-                !d->cancel && (i != pathList.constEnd()); ++i)
+             !d->cancel && (i != pathList.constEnd()); ++i)
         {
             ImageInfo info(*i);
-            
+
             if(d->faceIface->hasBeenScanned(info.id()))
             {
                 kDebug()<< "Image " << info.filePath() << "has already been scanned.";
@@ -181,7 +170,7 @@ void BatchFaceDetector::slotDetectFaces()
 
      setMaximum(pathList.count());
      setValue(pathList.count() - d->allPicturesPath.count());
-     
+
     if (d->allPicturesPath.isEmpty())
     {
         slotCancel();
@@ -206,8 +195,9 @@ void BatchFaceDetector::complete()
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
-// Pop-up a message to bring user when all is done.
-    
+    // Pop-up a message to bring user when all is done.
+    KNotificationWrapper("batchfacedetectioncompleted", i18n("The face detected database has been updated."),
+                         this, windowTitle());
     emit signalDetectAllFacesDone();
 }
 
@@ -220,7 +210,7 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
         return;
 
     DImg dimg(img);
-    
+
     // FIXME: Ignore xcf images for now, till the problem with xcf is solved.
     if (!dimg.isNull() && !desc.filePath.endsWith("xcf", Qt::CaseInsensitive))
     {
@@ -230,10 +220,10 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
         // FIXME: We have multiple thumbs per image, but deletethumbnail deletes all.
         if (d->rebuildAll)
             d->thumbnailLoadThread->deleteThumbnail(desc.filePath);
-        
+
         // Find all faces, and create and associate their face thumbnails with the image.
         QList<KFaceIface::Face> faceList = d->faceIface->findAndTagFaces(dimg, ImageInfo(desc.filePath).id() );
-        
+
         QListIterator<KFaceIface::Face> it(faceList);
         while(it.hasNext())
         {

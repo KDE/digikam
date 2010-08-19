@@ -355,3 +355,10 @@ Comment[x-test]=xxThe synchronization of the images' metadata with the database 
 Comment[zh_CN]=与数据库同步图像元数据已完成。
 Comment[zh_TW]=用資料庫同步影像的中繼資料已經完成。
 Action=Popup
+
+[Event/batchfacedetectioncompleted]
+Name=Update of face detected database complete
+Name[x-test]=xxUpdate of face detected database completexx
+Comment=The update of the face detected database has been completed.
+Comment[x-test]=xxThe update of the face detected database has been completed.xx
+Action=Popup
