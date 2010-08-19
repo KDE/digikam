@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "versionswidget.moc"
+
 // Qt includes
 
 #include <QListView>
@@ -37,7 +39,6 @@
 
 // Local includes
 
-#include "versionswidget.h"
 #include "imageversionsmodel.h"
 #include "imagepropertiesversionsdelegate.h"
 #include "imageinfo.h"
@@ -80,7 +81,7 @@ VersionsWidget::VersionsWidget(QWidget* parent)
     d->headerTextIcon       = new QLabel(this);
     d->iconTextLayout       = new QHBoxLayout();
     d->treeSwitchButton     = new QToolButton(this);
-    
+
     KIconLoader* iconLoader = KIconLoader::global();
 
     setLayout(d->layout);

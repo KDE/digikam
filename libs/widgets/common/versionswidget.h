@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-mm-dd
- * Description :
+ * Date        : 2010-08-03
+ * Description : widget displaying all image versions in a list
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -48,21 +48,23 @@ class DIGIKAM_EXPORT VersionsWidget : public QWidget
     Q_OBJECT
 
 public:
+
     VersionsWidget(QWidget* parent = 0);
     ~VersionsWidget();
     void setupModelData(QList< QPair< QString, int > >& list) const;
     void setCurrentSelectedImage(const QString& path) const;
 
 public Q_SLOTS:
-    
+
     void slotDigikamViewNoCurrentItem();
     void slotViewItemSelected(QModelIndex index);
-    
+
 Q_SIGNALS:
-    
+
     void newVersionSelected(KUrl url);
 
 private:
+
     class VersionsWidgetPriv;
     VersionsWidgetPriv* const d;
 };
