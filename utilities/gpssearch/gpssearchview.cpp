@@ -135,7 +135,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->imageFilterModel   = imageFilterModel;
     d->searchModel        = searchModel;
 
-    d->mapViewModelHelper = new MapViewModelHelper(d->imageAlbumModel, d->selectionModel, d->imageFilterModel, this);
+    d->mapViewModelHelper = new MapViewModelHelper(d->selectionModel, d->imageFilterModel, this);
     d->markerTilerModelBased = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
 
     // ---------------------------------------------------------------
@@ -418,12 +418,16 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     d->searchTreeView->slotSelectAlbum(salbum);
     
     d->imageAlbumModel->openAlbum(salbum);
-    if(d->existsSelection) 
+    if (d->existsSelection) 
     {
         d->mapSearchWidget->setGroupedModel(d->markerTilerModelBased);
     }
 }
 
+/**
+ * @brief An album is selected in the saved searches list.
+ * @param a This album will be selected.
+ */
 void GPSSearchView::slotAlbumSelected(Album* a)
 {
 
@@ -576,9 +580,9 @@ void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
 void GPSSearchView::slotSortOptionTriggered(QAction* /*action*/)
 {
     int newSortKey = SortYoungestFirst;
-    if(d->sortActionYoungestFirst->isChecked())
+    if (d->sortActionYoungestFirst->isChecked())
         newSortKey = SortYoungestFirst;
-    else if(d->sortActionOldestFirst->isChecked())
+    else if (d->sortActionOldestFirst->isChecked())
         newSortKey = SortOldestFirst;
     else
         newSortKey = SortRating;

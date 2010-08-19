@@ -57,7 +57,7 @@ class MapViewModelHelper : public KMap::ModelHelper
 
 public:
 
-    MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* selection, ImageFilterModel* const filterModel, QObject* const parent = 0);
+    MapViewModelHelper(QItemSelectionModel* selection, ImageFilterModel* const filterModel, QObject* const parent = 0);
     virtual ~MapViewModelHelper();
 
     virtual QAbstractItemModel* model() const;

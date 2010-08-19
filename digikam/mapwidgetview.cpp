@@ -89,12 +89,18 @@ public:
     bool                 activeState;
 };
 
+/**
+ * @brief Constructor
+ * @param selectionModel digiKam's selection model
+ * @param imageFilterModel digikam's filter model
+ * @param parent Parent object
+ */
 MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent)
              : QWidget(parent), d(new MapWidgetViewPriv)
 {
     d->imageModel           = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel       = selectionModel;
-    d->mapViewModelHelper   = new MapViewModelHelper(d->imageModel, d->selectionModel, imageFilterModel, this);
+    d->mapViewModelHelper   = new MapViewModelHelper(d->selectionModel, imageFilterModel, this);
     QVBoxLayout* vBoxLayout = new QVBoxLayout(this);
 
     d->mapWidget = new KMap::KMapWidget(this);
@@ -107,22 +113,36 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterMode
     vBoxLayout->addWidget(d->mapWidget->getControlWidget());
 }
 
+/**
+ * @brief Destructor
+ */
 MapWidgetView::~MapWidgetView()
 {
     delete d;
 }
 
+/**
+ * @brief Switch that opens the current album.
+ * @param album Current album.
+ */
 void MapWidgetView::openAlbum(Album* album)
 {
     d->imageModel->openAlbum(album);
 }
 
+/**
+ * @brief Set the map active/inactive.
+ * @param state If true, the map is active.
+ */
 void MapWidgetView::setActive(const bool state)
 {
     d->activeState = state;
     d->mapWidget->setActive(state);
 }
 
+/**
+ * @return The map's active state
+ */
 bool MapWidgetView::getActiveState() const
 {
     return d->activeState;
@@ -144,11 +164,10 @@ public:
     ThumbnailLoadThread* thumbnailLoadThread;
 };
 
-MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelectionModel* const selection,
+MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
                                        ImageFilterModel* const filterModel, QObject* const parent)
                   : KMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
-    Q_UNUSED(model)
 
     d->model               = filterModel;
     d->selectionModel      = selection;
@@ -165,26 +184,41 @@ MapViewModelHelper::MapViewModelHelper(ImageAlbumModel* const model, QItemSelect
 //             this, SLOT(signalModelChangedDrastically()));
 }
 
+/**
+ * @brief Destructor
+ */
 MapViewModelHelper::~MapViewModelHelper()
 {
     delete d;
 }
 
+/**
+ * @return Returns digiKam's filter model.
+ */
 QAbstractItemModel* MapViewModelHelper::model() const
 {
     return d->model;
 }
 
+/**
+ * @return Returns digiKam's selection model.
+ */
 QItemSelectionModel* MapViewModelHelper::selectionModel() const
 {
     return d->selectionModel;
 }
 
+/**
+ * @brief Gets the coordinates of a marker found at current model index.
+ * @param index Current model index.
+ * @param coordinates Here will be returned the coordinates of the current marker.
+ * @return True, if the marker has coordinates.
+ */
 bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates * const coordinates) const
 {
     ImageInfo info = d->model->imageInfo(index);
 
-    if(info.isNull() || !info.hasCoordinates())
+    if (info.isNull() || !info.hasCoordinates())
         return false;
 
     const KMap::GeoCoordinates gpsCoordinates(info.latitudeNumber(), info.longitudeNumber());
@@ -193,18 +227,24 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoor
     return true;
 }
 
+/**
+ * @brief This function retrieves the thumbnail for an index.
+ * @param index The marker's index.
+ * @param size The size of the thumbnail.
+ * @return If the thumbnail has been loaded in the ThumbnailLoadThread instance, it is returned. If not, a QPixmap is returned and ThumbnailLoadThread's signal named signalThumbnailLoaded is emited when the thumbnail becomes available.
+ */
 QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
 {
-    if(index == QPersistentModelIndex())
+    if (index == QPersistentModelIndex())
         return QPixmap();
 
     QPixmap thumbnail;
     ImageInfo info = d->model->imageInfo(index);
-    if(!info.isNull())
+    if (!info.isNull())
     { 
         QString path   = info.filePath();
 
-        if(d->thumbnailLoadThread->find(path, thumbnail,qMax(size.width(), size.height())))
+        if (d->thumbnailLoadThread->find(path, thumbnail,qMax(size.width(), size.height())))
             return thumbnail;
         else
             return QPixmap(); 
@@ -212,16 +252,22 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
     return QPixmap();
 }
 
+/**
+ * @brief This function finds the best representative marker from a group of markers. This is needed to display a thumbnail for a marker group.
+ * @param indices A list containing markers.
+ * @param sortKey Sets the criteria for selecting the representative thumbnail. When sortKey == 0 the most youngest thumbnail is chosen, when sortKey == 1 the most oldest thumbnail is chosen and when sortKey == 2 the thumbnail with the highest rating is chosen(if 2 thumbnails have the same rating, the youngest one is chosen).
+ * @return Returns the index of the marker.
+ */
 QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, 
                                                                           const int sortKey)
 {
     const bool oldestFirst = sortKey & 1;
     QList<QModelIndex> indexList;
 
-    if(list.isEmpty())
+    if (list.isEmpty())
         return QPersistentModelIndex();
 
-    for(int i=0; i<list.count(); ++i)
+    for (int i=0; i<list.count(); ++i)
     {
         QModelIndex newIndex(list[i]);
         indexList.append(newIndex);
@@ -231,30 +277,29 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     ImageInfo bestImageInfo;
     QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);    
 
-    for(int i=0; i<imageInfoList.count(); ++i)
+    for (int i=0; i<imageInfoList.count(); ++i)
     {
         ImageInfo currentInfo = imageInfoList.at(i);
         bool takeThisIndex    = (bestImageInfo.id() == -1);
 
-        if(!takeThisIndex)
+        if (!takeThisIndex)
         {
-            if(oldestFirst)
+            if (oldestFirst)
             {
                 takeThisIndex = currentInfo < bestImageInfo;
-                if(takeThisIndex)
+                if (takeThisIndex)
                     bestImageInfo = currentInfo;
             }
             else
             {
                 takeThisIndex = bestImageInfo < currentInfo;
-                if(takeThisIndex)
+                if (takeThisIndex)
                     bestImageInfo = currentInfo;
             }
         }
         else
         {
             bestImageInfo = currentInfo;
-//            bestIndex = d->model->indexForImageInfo(bestImageInfo);
         }
     }
 
@@ -263,42 +308,44 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     return returnedIndex;
 }
 
+/**
+ * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting. When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
+ */
 void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
-    if(thumb.isNull())
+    if (thumb.isNull())
         return;
 
     QModelIndex currentIndex = d->model->indexForPath(loadingDescription.filePath);
 
-    if(currentIndex.isValid())
+    if (currentIndex.isValid())
     {
         QPersistentModelIndex goodIndex(currentIndex);
         emit(signalThumbnailAvailableForIndex(goodIndex, thumb));
     }
 }
 
+/**
+ * This functions is called when one clicks on a thumbnail. 
+ * @param A list containing the marker indices belonging the group whose thumbnail has been clicked.
+ */
 void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices)
 {
     //TODO: there isn't another way to convert QPersistentModelIndex to QModelIndex?
     QList<QModelIndex> indexList;
-
-    for(int i=0; i<clickedIndices.count(); ++i)
+    for (int i=0; i<clickedIndices.count(); ++i)
     {
         QModelIndex newIndex(clickedIndices[i]);
         indexList.append(newIndex);
     }
 
     QList<ImageInfo> imageInfoList = d->model->imageInfos(indexList);
-    //KUrl::List imagesUrlList;
     QList<qlonglong> imagesIdList;
-
-    for(int i=0; i<imageInfoList.count(); ++i)
+    for (int i=0; i<imageInfoList.count(); ++i)
     {
-        //imagesUrlList.append(imageInfoList[i].fileUrl());    
         imagesIdList.append(imageInfoList[i].id());
     }
-
-   // emit signalFilteredImages(imagesUrlList); 
+    
     emit signalFilteredImages(imagesIdList);
 }
 
