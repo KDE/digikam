@@ -130,7 +130,7 @@ QVariant ImageFiltersHistoryModel::data(const QModelIndex& index, int role) cons
     if (!index.isValid())
         return QVariant();
 
-    ImageFiltersHistoryTreeItem* item;
+    ImageFiltersHistoryTreeItem* item = 0;
 
     if(role == Qt::DecorationRole)
     {
@@ -172,7 +172,7 @@ QModelIndex ImageFiltersHistoryModel::index(int row, int column, const QModelInd
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    ImageFiltersHistoryTreeItem* parentItem;
+    ImageFiltersHistoryTreeItem* parentItem = 0;
 
     if (!parent.isValid())
         parentItem = d->rootItem;
@@ -224,7 +224,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         delete d->rootItem;
         d->rootItem = new ImageFiltersHistoryTreeItem(d->lastUrl.fileName());
         parent = d->rootItem;
-        
+
         if(entries.isEmpty())
         {
             endResetModel();
@@ -261,7 +261,8 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
         filters << parents.last()->child(parents.last()->childCount()-1);
 
-/*        QHashIterator<QString, QVariant> iter(entries.at(i).action.parameters());
+/*
+        QHashIterator<QString, QVariant> iter(entries.at(i).action.parameters());
         while (iter.hasNext())
         {
             QList<QVariant> columnData;

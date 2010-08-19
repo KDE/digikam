@@ -94,9 +94,9 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     {
         QFont disabledFont(QApplication::font());
         disabledFont.setItalic(true);
-        
+
         QPalette disabledColor;
-        
+
         painter->setFont(disabledFont);
         painter->setPen(disabledColor.color(QPalette::Disabled, QPalette::WindowText));
     }
@@ -116,7 +116,7 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     {
         //painter->fillRect(option.rect, QColor(200,200,200,160));
     }
-    
+
     painter->restore();
 }
 
