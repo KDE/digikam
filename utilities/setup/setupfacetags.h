@@ -31,8 +31,6 @@
 namespace Digikam
 {
 
-class SetupFaceTagsPriv;
-
 class SetupFaceTags : public QScrollArea
 {
     Q_OBJECT
@@ -45,16 +43,17 @@ public:
     void applySettings();
 
 public Q_SLOTS:
-    
+
     void updateDetection(int value);
     void updateSuggestion(int value);
-    
+
 private:
 
     void readSettings();
 
 private:
 
+    class SetupFaceTagsPriv;
     SetupFaceTagsPriv* const d;
 };
 

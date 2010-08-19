@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class SetupFaceTagsPriv
+class SetupFaceTags::SetupFaceTagsPriv
 {
 public:
 
@@ -53,9 +53,9 @@ public:
         configDetectionAccuracyEntry("DetectionAccuracy"),
         configSuggestionThresholdEntry("SuggestionThreshold")
     {
-        enableFaceDetection = 0;
-        enableFaceSuggestions = 0;
-        detectionAccuracySlider = 0;
+        enableFaceDetection       = 0;
+        enableFaceSuggestions     = 0;
+        detectionAccuracySlider   = 0;
         suggestionThresholdSlider = 0;
     }
 
@@ -64,12 +64,12 @@ public:
     const QString configFaceSuggestionEntry;
     const QString configDetectionAccuracyEntry;
     const QString configSuggestionThresholdEntry;
-    
+
     QCheckBox*    enableFaceDetection;
     QCheckBox*    enableFaceSuggestions;
     QSlider*      detectionAccuracySlider;
     QSlider*      suggestionThresholdSlider;
-    
+
     QLabel*       detectionCBLabel;
     QLabel*       suggestionCBLabel;
     QLabel*       detectionSliderLabel;
@@ -77,13 +77,13 @@ public:
 };
 
 SetupFaceTags::SetupFaceTags(QWidget* parent)
- : QScrollArea(parent), d(new SetupFaceTagsPriv)
+             : QScrollArea(parent), d(new SetupFaceTagsPriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    QVBoxLayout* layout = new QVBoxLayout(panel);
 
     d->detectionSliderLabel = new QLabel;
     d->detectionSliderLabel->setTextFormat(Qt::PlainText);
@@ -91,33 +91,31 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
                                              "If you have a weak computer, it is a good idea to choose a lower value.\n"
                                              "Choosing a higher value will increase the accuracy of face detection,\n"
                                              "but will be slow.\n"));
-    
+
     d->detectionAccuracySlider = new QSlider(Qt::Horizontal, panel);
     d->detectionAccuracySlider->setRange(1, 5);
     d->detectionAccuracySlider->setTickInterval(1);
     d->detectionAccuracySlider->setPageStep(1);
     d->detectionAccuracySlider->setTickPosition(QSlider::TicksBelow);
-    
+
     d->suggestionSliderLabel = new QLabel;
     d->suggestionSliderLabel->setTextFormat(Qt::PlainText);
     d->suggestionSliderLabel->setText(i18n("The threshold of face suggestions.\n"
                                              "More suggestion threshold means that lesser suggestions will be presented,\n"
                                              "however these will be more accurate.\n"));
-    
+
     d->suggestionThresholdSlider = new QSlider(Qt::Horizontal, panel);
     d->suggestionThresholdSlider->setRange(1, 10);
     d->suggestionThresholdSlider->setTickInterval(0.1);
     d->suggestionThresholdSlider->setPageStep(0.1);
     d->suggestionThresholdSlider->setTickPosition(QSlider::TicksBelow);
-    
-    
+
     d->detectionCBLabel = new QLabel;
     d->detectionCBLabel->setTextFormat(Qt::PlainText);
     d->detectionCBLabel->setText(i18n("If this option is enabled, digiKam will search for faces in your images,\n"
                                                "thus making it easier to tag people in your photographs.\n"));
     d->enableFaceDetection = new QCheckBox(i18n("Enable face detection"), panel);
-    
-    
+
     d->suggestionCBLabel = new QLabel;
     d->suggestionCBLabel->setTextFormat(Qt::PlainText);
     d->suggestionCBLabel->setText(i18n("If this option is enabled, digiKam will try to identify detected faces,\n"
@@ -125,7 +123,7 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
                                                  "thus making person tagging even faster.\n"));
     d->enableFaceSuggestions = new QCheckBox(i18n("Enable face suggestion"), panel);
     d->enableFaceSuggestions->setCheckState(Qt::Unchecked);
-    
+
     layout->addWidget(d->detectionCBLabel);
     layout->addWidget(d->enableFaceDetection);
     layout->addSpacing(20);
@@ -137,20 +135,18 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
     layout->addSpacing(20);
     layout->addWidget(d->suggestionSliderLabel);
     layout->addWidget(d->suggestionThresholdSlider);
-    
     layout->addStretch();
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
 
-    
     connect(d->enableFaceDetection, SIGNAL(stateChanged(int)),
             this, SLOT(updateDetection(int)) );
-    
+
     connect(d->enableFaceSuggestions, SIGNAL(stateChanged(int)),
             this, SLOT(updateSuggestion(int)) );
-    
+
     readSettings();
-    
+
     // --------------------------------------------------------
 
     setAutoFillBackground(false);
@@ -171,19 +167,18 @@ void SetupFaceTags::updateDetection(int value)
         d->enableFaceSuggestions->setCheckState(Qt::Unchecked);
         d->enableFaceSuggestions->setEnabled(false);
         d->suggestionThresholdSlider->setEnabled(false);
-        
+
         d->detectionSliderLabel->setEnabled(false);
         d->suggestionCBLabel->setEnabled(false);
         d->suggestionSliderLabel->setEnabled(false);
     }
-    
     else
     {
         d->detectionAccuracySlider->setEnabled(true);
         d->enableFaceSuggestions->setCheckState(Qt::Checked);
         d->enableFaceSuggestions->setEnabled(true);
         d->suggestionThresholdSlider->setEnabled(true);
-        
+
         d->detectionSliderLabel->setEnabled(true);
         d->suggestionCBLabel->setEnabled(true);
         d->suggestionSliderLabel->setEnabled(true);
@@ -204,8 +199,6 @@ void SetupFaceTags::updateSuggestion(int value)
     }
 }
 
-
-
 void SetupFaceTags::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -223,11 +216,11 @@ void SetupFaceTags::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    
-    d->enableFaceDetection->setChecked(group.readEntry(d->configFaceDetectionEntry,                 true));
-    d->enableFaceSuggestions->setChecked(group.readEntry(d->configFaceSuggestionEntry,              false));
-    d->detectionAccuracySlider->setValue(group.readEntry(d->configDetectionAccuracyEntry,           3));
-    d->suggestionThresholdSlider->setValue(group.readEntry(d->configSuggestionThresholdEntry,       0.8));
+
+    d->enableFaceDetection->setChecked(group.readEntry(d->configFaceDetectionEntry,           true));
+    d->enableFaceSuggestions->setChecked(group.readEntry(d->configFaceSuggestionEntry,        false));
+    d->detectionAccuracySlider->setValue(group.readEntry(d->configDetectionAccuracyEntry,     3));
+    d->suggestionThresholdSlider->setValue(group.readEntry(d->configSuggestionThresholdEntry, 0.8));
 }
 
 }   // namespace Digikam
