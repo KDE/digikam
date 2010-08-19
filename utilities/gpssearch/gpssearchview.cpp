@@ -445,6 +445,7 @@ void GPSSearchView::slotAlbumSelected(Album* a)
         QList<double> list;
         list << reader.valueToDoubleList();
 
+        d->mapSearchWidget->setSelectionStatus(true);
         d->mapSearchWidget->setSelectionCoordinates(list);
         slotCheckNameEditGPSConditions();
     }
@@ -500,12 +501,8 @@ void GPSSearchView::slotRemoveCurrentSelection()
     d->existsSelection = false;
     d->mapSearchWidget->setSelectionStatus(d->existsSelection);
     d->imageAlbumModel->clearImageInfos();
-
-/*    int rootAlbumId = 1;
-    PAlbum* rootAlbum = AlbumManager::instance()->findPAlbum(rootAlbumId);
-    d->imageAlbumModel->openAlbum(rootAlbum);
-*/
     d->searchTreeView->clearSelection();
+    
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 }
 

@@ -234,7 +234,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
 {
     QString val, url;
 
-    if(d->gpsInfoList.isEmpty())
+    if (d->gpsInfoList.isEmpty())
         return;
 
     switch( getWebGPSLocator() )
@@ -363,7 +363,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     }
     else if (list.count() >= 1)
     {
-        if(!list.first().hasAltitude)
+        if (!list.first().hasAltitude)
             d->altitude->setText("Undefined");
         else
             d->altitude->setText(QString("%1 m").arg(QString::number(list.first().altitude)));
@@ -382,7 +382,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     d->itemModel->clear();
 
     d->gpsInfoList = list;
-    for(int i=0; i<d->gpsInfoList.count(); ++i)
+    for (int i=0; i<d->gpsInfoList.count(); ++i)
     {
         ImageGPSItem* const currentImageGPSItem = new ImageGPSItem(d->gpsInfoList.at(i));
         d->itemModel->appendRow(currentImageGPSItem);
