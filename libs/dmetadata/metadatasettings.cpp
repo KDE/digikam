@@ -64,13 +64,13 @@ public:
     MetadataSettings object;
 };
 
-K_GLOBAL_STATIC(MetadataSettingsCreator, creator)
+K_GLOBAL_STATIC(MetadataSettingsCreator, metatadaSettingsCreator)
 
 // -----------------------------------------------------------------------------------------------
 
 MetadataSettings* MetadataSettings::instance()
 {
-    return &creator->object;
+    return &metatadaSettingsCreator->object;
 }
 
 MetadataSettings::MetadataSettings()
