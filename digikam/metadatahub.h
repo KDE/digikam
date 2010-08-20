@@ -48,15 +48,14 @@ namespace Digikam
 class AlbumSettings;
 class ImageInfo;
 class Template;
-class MetadataHubPriv;
 
+/**
+    The class MetadataWriteSettings encapsulates all metadata related settings that are available
+    from the AlbumSettings.
+    This allows supply changed arguments to MetadataHub without changing the global settings
+*/
 class MetadataWriteSettings
 {
-    /**
-        The class MetadataWriteSettings encapsulates all metadata related settings that are available
-        from the AlbumSettings.
-        This allows supply changed arguments to MetadataHub without changing the global settings
-    */
 public:
 
     /**
@@ -148,8 +147,8 @@ public:
     MetadataHub();
     virtual ~MetadataHub();
     /// Copies by value - no sharing involved.
-    MetadataHub& operator=(const MetadataHub &);
-    MetadataHub(const MetadataHub &);
+    MetadataHub& operator=(const MetadataHub&);
+    MetadataHub(const MetadataHub&);
 
     void reset();
 
@@ -347,21 +346,19 @@ protected:
 
 private:
 
+    class MetadataHubPriv;
     MetadataHubPriv* const d;
 };
 
 // ----------------------------------------------------------------------------------------------------
 
-class MetadataHubOnTheRoadPriv;
-
+/** Use this class if you keep your MetadataHub for a longer time than
+ *  the current scope. It will watch for tag changes and update
+ *  its map, at least if it lives in a thread with an event loop to receive signals.
+ */
 class MetadataHubOnTheRoad : public QObject, public MetadataHub
 {
     Q_OBJECT
-
-    /** Use this class if you keep your MetadataHub for a longer time than
-     *  the current scope. It will watch for tag changes and update
-     *  its map, at least if it lives in a thread with an event loop to receive signals.
-     */
 
 public:
 
@@ -378,6 +375,10 @@ protected Q_SLOTS:
 private:
 
     virtual void applyChangeNotifications();
+
+private:
+
+    class MetadataHubOnTheRoadPriv;
     MetadataHubOnTheRoadPriv* const d;
 };
 

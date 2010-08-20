@@ -6,7 +6,7 @@
  * Date        : 2009-05-05
  * Description : Metadata operations on images
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,17 +40,32 @@ namespace Digikam
 class MetadataManagerDatabaseWorker;
 class MetadataManagerFileWorker;
 
-class MetadataManagerPriv : public QObject
+class MetadataManager::MetadataManagerPriv : public QObject
 {
     Q_OBJECT
 
 public:
 
-    MetadataManagerPriv(MetadataManager *q);
+    MetadataManagerPriv(MetadataManager* q);
     ~MetadataManagerPriv();
 
-    MetadataManagerDatabaseWorker *dbWorker;
-    MetadataManagerFileWorker *fileWorker;
+public:
+
+    int                            dbTodo;
+    int                            dbDone;
+    int                            writerTodo;
+    int                            writerDone;
+    QSet<qlonglong>                scheduledToWrite;
+    QString                        dbMessage;
+    QString                        writerMessage;
+    QMutex                         mutex;
+
+    MetadataManager*               q;
+
+    MetadataManagerDatabaseWorker* dbWorker;
+    MetadataManagerFileWorker*     fileWorker;
+
+public:
 
     // Signal-emitter glue code
     void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
@@ -64,16 +79,7 @@ public:
     void applyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub)
         { emit signalApplyMetadata(infos, hub); }
 
-    int              dbTodo;
-    int              dbDone;
-    int              writerTodo;
-    int              writerDone;
-    QSet<qlonglong>  scheduledToWrite;
-    QString          dbMessage;
-    QString          writerMessage;
-    QMutex           mutex;
-
-    MetadataManager* q;
+public:
 
     // -- Workflow controlling --
 
@@ -119,15 +125,15 @@ Q_SIGNALS:
     void signalAssignRating(const QList<ImageInfo>& infos, int rating);
     void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
     void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
-
 };
 
 class MetadataManagerWorker : public QObject
 {
     Q_OBJECT
+
 public:
 
-    MetadataManagerWorker(MetadataManagerPriv *d)
+    MetadataManagerWorker(MetadataManager::MetadataManagerPriv* d)
         : d(d) // do not install d as QObject parent, moveToThread wont work then
     {
         thread = new Thread(this);
@@ -135,19 +141,28 @@ public:
         thread->start();
     }
 
-    void shutDown() { thread->quit(); thread->wait(); }
+    void shutDown()
+    {
+        thread->quit(); 
+        thread->wait();
+    }
 
 protected:
 
     class Thread : public QThread
     {
         public:
-        Thread(QObject *parent = 0) : QThread(parent) {}
-        virtual void run() { exec(); }
-    };
-    Thread              *thread;
+            Thread(QObject* parent = 0)
+                : QThread(parent)
+                {
+                }
 
-    MetadataManagerPriv *d;
+            virtual void run() { exec(); }
+    };
+
+    Thread*                               thread;
+
+    MetadataManager::MetadataManagerPriv* d;
 };
 
 class MetadataManagerDatabaseWorker : public MetadataManagerWorker
@@ -156,7 +171,7 @@ class MetadataManagerDatabaseWorker : public MetadataManagerWorker
 
 public:
 
-    MetadataManagerDatabaseWorker(MetadataManagerPriv *d)
+    MetadataManagerDatabaseWorker(MetadataManager::MetadataManagerPriv* d)
         : MetadataManagerWorker(d) {}
 
 public Q_SLOTS:
@@ -184,18 +199,18 @@ class MetadataManagerFileWorker : public MetadataManagerWorker
 
 public:
 
-    MetadataManagerFileWorker(MetadataManagerPriv *d)
+    MetadataManagerFileWorker(MetadataManager::MetadataManagerPriv* d)
         : MetadataManagerWorker(d) {}
 
 public Q_SLOTS:
 
     void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
     void writeMetadataToFiles(const QList<ImageInfo>& infos);
-    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
+    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
 
 Q_SIGNALS:
 
-    void imageDataChanged(const QString &path, bool removeThumbnails, bool notifyCache);
+    void imageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
     void orientationChangeFailed(const QStringList& failedFileNames);
 };
 
