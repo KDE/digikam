@@ -7,10 +7,10 @@
  * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,7 +69,7 @@
 namespace Digikam
 {
 
-class ImageDescEditTabPriv
+class ImageDescEditTab::ImageDescEditTabPriv
 {
 
 public:
@@ -104,51 +104,50 @@ public:
         tagCheckView               = 0;
     }
 
-    bool                           modified;
-    bool                           ignoreImageAttributesWatch;
-    bool                           ignoreTagChanges;
+    bool                 modified;
+    bool                 ignoreImageAttributesWatch;
+    bool                 ignoreTagChanges;
 
-    QToolButton                   *recentTagsBtn;
-    QToolButton                   *assignedTagsBtn;
-    QToolButton                   *revertBtn;
+    QToolButton*         recentTagsBtn;
+    QToolButton*         assignedTagsBtn;
+    QToolButton*         revertBtn;
 
-    KMenu                         *moreMenu;
+    KMenu*               moreMenu;
 
-    QSignalMapper                 *recentTagsMapper;
+    QSignalMapper*       recentTagsMapper;
 
-    QPushButton                   *applyBtn;
-    QPushButton                   *moreButton;
+    QPushButton*         applyBtn;
+    QPushButton*         moreButton;
 
-    QWidget                       *lastSelectedWidget;
+    QWidget*             lastSelectedWidget;
 
-    CaptionEdit                   *captionsEdit;
+    CaptionEdit*         captionsEdit;
 
-    KDateTimeEdit                 *dateTimeEdit;
+    KDateTimeEdit*       dateTimeEdit;
 
-    KTabWidget                    *tabWidget;
+    KTabWidget*          tabWidget;
 
-    SearchTextBar                 *tagsSearchBar;
-    AddTagsLineEdit               *newTagEdit;
+    SearchTextBar*       tagsSearchBar;
+    AddTagsLineEdit*     newTagEdit;
 
-    ImageInfoList                  currInfos;
+    ImageInfoList        currInfos;
 
-    TagCheckView                  *tagCheckView;
+    TagCheckView*        tagCheckView;
 
-    TemplateSelector              *templateSelector;
-    TemplateViewer                *templateViewer;
+    TemplateSelector*    templateSelector;
+    TemplateViewer*      templateViewer;
 
-    RatingWidget                  *ratingWidget;
+    RatingWidget*        ratingWidget;
 
-    MetadataHubOnTheRoad           hub;
+    MetadataHubOnTheRoad hub;
 
-    TagModel                      *tagModel;
+    TagModel*            tagModel;
 
-    QTimer                        *metadataChangeTimer;
-    QList<int>                     metadataChangeIds;
-
+    QTimer*              metadataChangeTimer;
+    QList<int>           metadataChangeIds;
 };
 
-ImageDescEditTab::ImageDescEditTab(QWidget *parent)
+ImageDescEditTab::ImageDescEditTab(QWidget* parent)
                 : KVBox(parent), d(new ImageDescEditTabPriv)
 {
     setMargin(0);
@@ -161,23 +160,23 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Captions/Date/Rating view -----------------------------------
 
-    QScrollArea *sv = new QScrollArea(d->tabWidget);
+    QScrollArea* sv = new QScrollArea(d->tabWidget);
     sv->setFrameStyle(QFrame::NoFrame);
     sv->setWidgetResizable(true);
 
-    QWidget *captionTagsArea = new QWidget(sv->viewport());
-    QGridLayout *grid1       = new QGridLayout(captionTagsArea);
+    QWidget* captionTagsArea = new QWidget(sv->viewport());
+    QGridLayout* grid1       = new QGridLayout(captionTagsArea);
     sv->setWidget(captionTagsArea);
     sv->viewport()->setAutoFillBackground(false);
     captionTagsArea->setAutoFillBackground(false);
 
     d->captionsEdit = new CaptionEdit(captionTagsArea);
 
-    KHBox *dateBox  = new KHBox(captionTagsArea);
+    KHBox* dateBox  = new KHBox(captionTagsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
 
-    KHBox *ratingBox = new KHBox(captionTagsArea);
+    KHBox* ratingBox = new KHBox(captionTagsArea);
     new QLabel(i18n("Rating:"), ratingBox);
     d->ratingWidget  = new RatingWidget(ratingBox);
     ratingBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
@@ -200,7 +199,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     //                                 "'/' can be used to create a hierarchy of tags. "
     //                                 "',' can be used to create more than one hierarchy at the same time."));
 
-    KHBox *tagsSearch  = new KHBox(captionTagsArea);
+    KHBox* tagsSearch  = new KHBox(captionTagsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
@@ -215,7 +214,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     d->assignedTagsBtn->setCheckable(true);
 
     d->recentTagsBtn      = new QToolButton(tagsSearch);
-    KMenu *recentTagsMenu = new KMenu(d->recentTagsBtn);
+    KMenu* recentTagsMenu = new KMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
     d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents",
                               KIconLoader::NoGroup, KIconLoader::SizeSmall));
@@ -226,7 +225,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Buttons -----------------------------------------
 
-    KHBox *buttonsBox = new KHBox(this);
+    KHBox* buttonsBox = new KHBox(this);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn = new QToolButton(buttonsBox);
@@ -260,12 +259,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Information Managament View --------------------------------------
 
-    QScrollArea *sv2 = new QScrollArea(d->tabWidget);
+    QScrollArea* sv2 = new QScrollArea(d->tabWidget);
     sv2->setFrameStyle(QFrame::NoFrame);
     sv2->setWidgetResizable(true);
 
-    QWidget *infoArea = new QWidget(sv->viewport());
-    QGridLayout *grid2 = new QGridLayout(infoArea);
+    QWidget* infoArea = new QWidget(sv->viewport());
+    QGridLayout* grid2 = new QGridLayout(infoArea);
     sv2->setWidget(infoArea);
     sv2->viewport()->setAutoFillBackground(false);
     infoArea->setAutoFillBackground(false);
@@ -289,7 +288,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     connect(d->captionsEdit, SIGNAL(signalModified()),
             this, SLOT(slotCommentChanged()));
 
-    connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
+    connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime&)),
             this, SLOT(slotDateTimeChanged(const QDateTime&)));
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
@@ -333,7 +332,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Connect to attribute watch ------------------------------
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+    ImageAttributesWatch* watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalImageTagsChanged(qlonglong)),
             this, SLOT(slotImageTagsChanged(qlonglong)));
@@ -375,7 +374,7 @@ ImageDescEditTab::~ImageDescEditTab()
     //slotChangingItems();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group       = config->group("Image Properties SideBar");
+    KConfigGroup group        = config->group("Image Properties SideBar");
     group.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
     group.sync();
 
@@ -400,7 +399,7 @@ void ImageDescEditTab::slotChangingItems()
 
     if (!AlbumSettings::instance()->getApplySidebarChangesDirectly())
     {
-        KDialog *dialog = new KDialog(this);
+        KDialog* dialog = new KDialog(this);
 
         dialog->setCaption(i18n("Apply changes?"));
         dialog->setButtons(KDialog::Yes | KDialog::No);
@@ -564,7 +563,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
                                i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
-    int i = 0;
+    int i                         = 0;
 
     DatabaseTransaction transaction;
     ScanController::instance()->suspendCollectionScan();
@@ -600,9 +599,8 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                i18n("Writing metadata to files. Please wait..."));
-    MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
-    int i=0;
+    int i = 0;
     foreach(const ImageInfo& info, d->currInfos)
     {
         MetadataHub fileHub;
@@ -618,11 +616,11 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
 
-bool ImageDescEditTab::eventFilter(QObject *o, QEvent *e)
+bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
 {
     if ( e->type() == QEvent::KeyPress )
     {
-        QKeyEvent *k = static_cast<QKeyEvent *>(e);
+        QKeyEvent* k = static_cast<QKeyEvent*>(e);
 
         if (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return)
         {
@@ -650,9 +648,9 @@ void ImageDescEditTab::populateTags()
     //d->tagCheckView->loadViewState(group);
 }
 
-void ImageDescEditTab::slotTagStateChanged(Album *album, Qt::CheckState checkState)
+void ImageDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkState)
 {
-    TAlbum *tag = dynamic_cast<TAlbum*> (album);
+    TAlbum* tag = dynamic_cast<TAlbum*> (album);
     if (!tag || d->ignoreTagChanges)
     {
         return;
@@ -716,7 +714,7 @@ void ImageDescEditTab::slotCreateNewTag()
     {
         return;
     }
-    TAlbum *created = d->tagCheckView->tagModificationHelper()->
+    TAlbum* created = d->tagCheckView->tagModificationHelper()->
                             slotTagNew(d->tagCheckView->currentAlbum(), d->newTagEdit->text());
     if (created)
     {
@@ -727,7 +725,7 @@ void ImageDescEditTab::slotCreateNewTag()
 
 void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
 {
-    TAlbum *assigned = 0;
+    TAlbum* assigned = 0;
     if (action.shallAssignTag())
     {
         assigned = AlbumManager::instance()->findTAlbum(action.tagId());
@@ -736,7 +734,7 @@ void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
     }
     else if (action.shallCreateNewTag())
     {
-        TAlbum *parent = AlbumManager::instance()->findTAlbum(action.parentTagId());
+        TAlbum* parent = AlbumManager::instance()->findTAlbum(action.parentTagId());
         // tag is assigned automatically
         assigned = d->tagCheckView->tagModificationHelper()->slotTagNew(parent, action.newTagName());
     }
@@ -753,9 +751,8 @@ void ImageDescEditTab::assignRating(int rating)
     d->ratingWidget->setRating(rating);
 }
 
-void ImageDescEditTab::setTagState(TAlbum *tag, MetadataHub::TagStatus status)
+void ImageDescEditTab::setTagState(TAlbum* tag, MetadataHub::TagStatus status)
 {
-
     if (!tag)
     {
         return;
@@ -763,24 +760,22 @@ void ImageDescEditTab::setTagState(TAlbum *tag, MetadataHub::TagStatus status)
 
     switch(status.status)
     {
-    case MetadataHub::MetadataDisjoint:
-        d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
-        break;
-    case MetadataHub::MetadataAvailable:
-    case MetadataHub::MetadataInvalid:
-        d->tagModel->setChecked(tag, status.hasTag);
-        break;
-    default:
-        kWarning() << "Untreated tag status enum value " << status.status;
-        d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
+        case MetadataHub::MetadataDisjoint:
+            d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
+            break;
+        case MetadataHub::MetadataAvailable:
+        case MetadataHub::MetadataInvalid:
+            d->tagModel->setChecked(tag, status.hasTag);
+            break;
+        default:
+            kWarning() << "Untreated tag status enum value " << status.status;
+            d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
     }
-
 }
 
-void ImageDescEditTab::initializeTags(QModelIndex &parent)
+void ImageDescEditTab::initializeTags(QModelIndex& parent)
 {
-
-    TAlbum *tag = d->tagModel->albumForIndex(parent);
+    TAlbum* tag = d->tagModel->albumForIndex(parent);
     if (!tag)
     {
         return;
@@ -793,17 +788,15 @@ void ImageDescEditTab::initializeTags(QModelIndex &parent)
         QModelIndex index = d->tagModel->index(row, 0, parent);
         initializeTags(index);
     }
-
 }
 
 void ImageDescEditTab::updateTagsView()
 {
-
     // avoid that the automatic tag toggling handles these calls and
     // modification is indicated to this widget
     TagCheckView::ToggleAutoTags toggle = d->tagCheckView->getToggleAutoTags();
     d->tagCheckView->setToggleAutoTags(TagCheckView::NoToggleAuto);
-    d->ignoreTagChanges = true;
+    d->ignoreTagChanges                 = true;
 
     // first reset the tags completely
     d->tagModel->resetAllCheckedAlbums();
@@ -822,8 +815,6 @@ void ImageDescEditTab::updateTagsView()
     // See comments in these methods.
     if (d->assignedTagsBtn->isChecked())
         slotAssignedTagsToggled(d->assignedTagsBtn->isChecked());
-
-
 }
 
 void ImageDescEditTab::updateComments()
@@ -861,7 +852,7 @@ void ImageDescEditTab::updateTemplate()
     d->templateSelector->blockSignals(false);
 }
 
-void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget *widget)
+void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget* widget)
 {
     if (status == MetadataHub::MetadataDisjoint)
     {
@@ -915,7 +906,7 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
 
-    Album *a = AlbumManager::instance()->findAlbum(albumId);
+    Album* a = AlbumManager::instance()->findAlbum(albumId);
     if (d->currInfos.isEmpty() || !a || a->isRoot() || a->type() != Album::TAG)
         return;
 
@@ -990,7 +981,7 @@ void ImageDescEditTab::slotReloadForMetadataChange()
 
 void ImageDescEditTab::updateRecentTags()
 {
-    KMenu *menu = dynamic_cast<KMenu *>(d->recentTagsBtn->menu());
+    KMenu* menu = dynamic_cast<KMenu *>(d->recentTagsBtn->menu());
     if (!menu) return;
 
     menu->clear();
@@ -999,7 +990,7 @@ void ImageDescEditTab::updateRecentTags()
 
     if (recentTags.isEmpty())
     {
-        QAction *noTagsAction = menu->addAction(i18n("No Recently Assigned Tags"));
+        QAction* noTagsAction = menu->addAction(i18n("No Recently Assigned Tags"));
         noTagsAction->setEnabled(false);
     }
     else
@@ -1010,8 +1001,8 @@ void ImageDescEditTab::updateRecentTags()
             TAlbum* album = static_cast<TAlbum*>(*it);
             if (album)
             {
-                AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
-                QPixmap icon;
+                AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
+                QPixmap               icon;
                 if (!loader->getTagThumbnail(album, icon))
                 {
                     if (icon.isNull())
@@ -1051,13 +1042,11 @@ void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
 
 void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
 {
-
     Q_UNUSED(settings);
 
     // if we filter, we should reset the assignedTagsBtn again
     d->assignedTagsBtn->setChecked(false);
     slotAssignedTagsToggled(false);
-
 }
 
 void ImageDescEditTab::slotAssignedTagsToggled(bool t)
