@@ -625,6 +625,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET_SOURCE_FILES_PROPERTIES(${libdimgfilters_SRCS} PROPERTIES COMPILE_FLAGS ${KDE4_ENABLE_EXCEPTIONS})
 
     SET(libdmetadata_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettingscontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatainfo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/photoinfocontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/dmetadata.cpp
