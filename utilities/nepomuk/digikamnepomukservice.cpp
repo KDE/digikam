@@ -79,7 +79,7 @@ enum WatchedNepomukProperty
     NaoTags
 };
 
-class NepomukServicePriv
+class NepomukService::NepomukServicePriv
 {
 public:
 
@@ -137,7 +137,7 @@ class ChangingDB
 {
 public:
 
-    ChangingDB(NepomukServicePriv* d)
+    ChangingDB(NepomukService::NepomukServicePriv* d)
         : d(d)
     {
         d->changingDB = true;
@@ -148,14 +148,14 @@ public:
         d->changingDB = false;
     }
 
-    NepomukServicePriv* const d;
+    NepomukService::NepomukServicePriv* const d;
 };
 
 class ChangingNepomuk
 {
 public:
 
-    ChangingNepomuk(NepomukServicePriv* d)
+    ChangingNepomuk(NepomukService::NepomukServicePriv* d)
         : d(d)
     {
         d->changingNepomuk = true;
@@ -166,7 +166,7 @@ public:
         d->changingNepomuk = false;
     }
 
-    NepomukServicePriv* const d;
+    NepomukService::NepomukServicePriv* const d;
 };
 
 
