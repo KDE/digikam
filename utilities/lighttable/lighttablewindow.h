@@ -45,7 +45,6 @@ namespace Digikam
 {
 
 class SlideShowSettings;
-class LightTableWindowPriv;
 
 class LightTableWindow : public KXmlGuiWindow
 {
@@ -55,7 +54,7 @@ public:
 
     ~LightTableWindow();
 
-    static LightTableWindow *lightTableWindow();
+    static LightTableWindow* lightTableWindow();
     static bool              lightTableWindowCreated();
 
     void loadImageInfos(const ImageInfoList& list, const ImageInfo& imageInfoCurrent, bool addTo);
@@ -75,7 +74,7 @@ public Q_SLOTS:
 
 protected:
 
-    void moveEvent(QMoveEvent *e);
+    void moveEvent(QMoveEvent* e);
 
 private:
 
@@ -164,9 +163,10 @@ private Q_SLOTS:
 
 private:
 
+    class LightTableWindowPriv;
     LightTableWindowPriv* const d;
 
-    static LightTableWindow *m_instance;
+    static LightTableWindow* m_instance;
 };
 
 }  // namespace Digikam

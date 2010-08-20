@@ -226,7 +226,7 @@ void LightTableWindow::setupUserArea()
 {
     QWidget* mainW    = new QWidget(this);
     d->hSplitter      = new SidebarSplitter(Qt::Horizontal, mainW);
-    QHBoxLayout *hlay = new QHBoxLayout(mainW);
+    QHBoxLayout* hlay = new QHBoxLayout(mainW);
 
     // The left sidebar
     d->leftSideBar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
@@ -342,7 +342,7 @@ void LightTableWindow::setupConnections()
 
     connect(d->leftZoomBar, SIGNAL(signalZoomSliderChanged(int)),
            d->previewView, SLOT(slotLeftZoomSliderChanged(int)));
-           
+
     connect(d->leftZoomBar, SIGNAL(signalZoomValueEdited(double)),
             d->previewView, SLOT(setLeftZoomFactor(double)));
 
@@ -508,7 +508,7 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);
 
     // Left Panel Zoom Actions
-    
+
     d->leftZoomPlusAction  = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseLeftZoom()), this);
     d->leftZoomPlusAction->setEnabled(false);
     KShortcut leftKeysPlus = d->leftZoomPlusAction->shortcut();
@@ -560,7 +560,7 @@ void LightTableWindow::setupActions()
     d->rightZoomFitToWindowAction->setShortcut(KShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_E));
     connect(d->rightZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotRightFitToWindow()));
     actionCollection()->addAction("lighttable_zoomfit2window_right", d->rightZoomFitToWindowAction);
-    
+
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
@@ -642,7 +642,7 @@ void LightTableWindow::setupActions()
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    KAction *altBackwardAction = new KAction(i18n("Previous Image"), this);
+    KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("lighttable_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
@@ -761,7 +761,7 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
         d->previewView->checkForSelection(d->barView->currentItemImageInfo());
         d->barView->setOnLeftPanel(d->previewView->leftImageInfo());
 
-        LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(d->previewView->leftImageInfo()));
+        LightTableBarItem* item = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(d->previewView->leftImageInfo()));
         if (item) item->setOnLeftPanel(true);
 
         if (d->navigateByPairAction->isChecked() && item)
@@ -792,7 +792,7 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
         d->previewView->checkForSelection(d->barView->currentItemImageInfo());
         d->barView->setOnRightPanel(d->previewView->rightImageInfo());
 
-        LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(d->previewView->rightImageInfo()));
+        LightTableBarItem* item = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(d->previewView->rightImageInfo()));
         if (item) item->setOnRightPanel(true);
     }
 }
@@ -860,7 +860,7 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
     // We will check if first item from list is already stored in thumbbar
     // Note that the thumbbar stores all ImageInfo reference
     // in memory for preview object.
-    LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
+    LightTableBarItem* item = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
     if (item)
     {
         slotSetItemOnLeftPanel(item->info());
@@ -877,7 +877,7 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
     // We will check if first item from list is already stored in thumbbar
     // Note that the thumbbar stores all ImageInfo reference
     // in memory for preview object.
-    LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
+    LightTableBarItem* item = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
     if (item)
     {
         slotSetItemOnRightPanel(item->info());
@@ -895,7 +895,7 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList& list, bool addTo)
         return;
 
     ImageInfo info            = l.first();
-    LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
+    LightTableBarItem* ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
 
     if (l.count() == 1 && !addTo)
     {
@@ -1040,10 +1040,8 @@ void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 
     KUrl::List urlList;
     urlList.append(u);
-    if (!dialog.confirmDeleteList(urlList,
-            DeleteDialogMode::Files,
-            preselectDeletePermanently ?
-                    DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
+    if (!dialog.confirmDeleteList(urlList, DeleteDialogMode::Files, preselectDeletePermanently ?
+                                  DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
     {
         return;
     }
@@ -1074,7 +1072,8 @@ void LightTableWindow::slotRemoveItem()
 
 void LightTableWindow::slotRemoveItem(const ImageInfo& info)
 {
-/*    if (!d->previewView->leftImageInfo().isNull())
+/*
+    if (!d->previewView->leftImageInfo().isNull())
     {
         if (d->previewView->leftImageInfo() == info)
         {
@@ -1116,7 +1115,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
 
     if (!curr_linfo.isNull())
     {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(curr_linfo));
+        LightTableBarItem* ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(curr_linfo));
         if (ltItem)
         {
             LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(ltItem->next());
@@ -1129,7 +1128,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
 
     if (!curr_rinfo.isNull())
     {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(curr_rinfo));
+        LightTableBarItem* ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(curr_rinfo));
         if (ltItem)
         {
             LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(ltItem->next());
@@ -1238,7 +1237,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
         if (d->barView->countItems() > 1)
         {
             // See if there is an item next to the left one:
-            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_linfo));
+            LightTableBarItem* ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_linfo));
             LightTableBarItem* next   = 0;
             if (ltItem)
             {
@@ -1287,7 +1286,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
         //  make this the selected item if the left was active before
         if ( leftPanelActive)
         {
-            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_linfo));
+            LightTableBarItem* ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_linfo));
             d->barView->setSelectedItem(ltItem);
         }
     }
@@ -1305,7 +1304,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
         //  make this the selected item if the left was active before
         if (!leftPanelActive)
         {
-            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_rinfo));
+            LightTableBarItem* ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_rinfo));
             d->barView->setSelectedItem(ltItem);
         }
     }
@@ -1326,7 +1325,7 @@ void LightTableWindow::slotEditItem()
 
 void LightTableWindow::slotEditItem(const ImageInfo& info)
 {
-    ImageWindow *im    = ImageWindow::imagewindow();
+    ImageWindow* im    = ImageWindow::imagewindow();
     ImageInfoList list = d->barView->itemsImageInfoList();
 
     im->loadImageInfos(list, info, i18n("Light Table"), true);
@@ -1393,7 +1392,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
     {
         settings.exifRotate = AlbumSettings::instance()->getExifRotate();
 
-        SlideShow *slide = new SlideShow(settings);
+        SlideShow* slide = new SlideShow(settings);
         if (startWithCurrent)
             slide->setCurrent(d->barView->currentItemImageInfo().fileUrl());
 
@@ -1449,8 +1448,8 @@ void LightTableWindow::slotToggleFullScreen()
         {
             showToolBars();
 
-            QList<KToolBar *> toolbars = toolBars();
-            KToolBar *mainToolbar = 0;
+            QList<KToolBar*> toolbars = toolBars();
+            KToolBar* mainToolbar     = 0;
             foreach(KToolBar *toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
@@ -1490,8 +1489,8 @@ void LightTableWindow::slotEscapePressed()
 
 void LightTableWindow::showToolBars()
 {
-    QList<KToolBar *> toolbars = toolBars();
-    foreach(KToolBar *toolbar, toolbars)
+    QList<KToolBar*> toolbars = toolBars();
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -1499,8 +1498,8 @@ void LightTableWindow::showToolBars()
 
 void LightTableWindow::hideToolBars()
 {
-    QList<KToolBar *> toolbars = toolBars();
-    foreach(KToolBar *toolbar, toolbars)
+    QList<KToolBar*> toolbars = toolBars();
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->hide();
     }
@@ -1680,7 +1679,7 @@ void LightTableWindow::slotSidebarTabTitleStyleChanged()
     d->rightSideBar->applySettings();
 }
 
-void LightTableWindow::moveEvent(QMoveEvent *e)
+void LightTableWindow::moveEvent(QMoveEvent* e)
 {
     Q_UNUSED(e)
     emit signalWindowHasMoved();

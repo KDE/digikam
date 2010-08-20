@@ -7,8 +7,8 @@
  * Description : digital camera controller
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,6 @@ namespace Digikam
 
 class CameraCommand;
 class RenameResult;
-class CameraControllerPriv;
 
 class CameraController : public QThread
 {
@@ -134,7 +133,7 @@ public Q_SLOTS:
 protected:
 
     void run();
-    void executeCommand(CameraCommand *cmd);
+    void executeCommand(CameraCommand* cmd);
 
 private Q_SLOTS:
 
@@ -157,6 +156,7 @@ private:
 
 private:
 
+    class CameraControllerPriv;
     CameraControllerPriv* const d;
 };
 

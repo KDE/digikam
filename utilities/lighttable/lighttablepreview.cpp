@@ -69,7 +69,7 @@
 namespace Digikam
 {
 
-class LightTablePreviewPriv
+class LightTablePreview::LightTablePreviewPriv
 {
 public:
 
@@ -340,12 +340,12 @@ void LightTablePreview::slotContextMenu()
 
     //-- temporary actions -----------------------------------------------
 
-    QAction *zoomInAction    = new QAction(SmallIcon("zoom-in"), i18n("Zoom in"), this);
-    QAction *zoomOutAction   = new QAction(SmallIcon("zoom-out"), i18n("Zoom out"), this);
-    QAction *fitWindowAction = new QAction(SmallIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
-    QAction *slideshowAction = new QAction(SmallIcon("view-presentation"), i18n("Slideshow"), this);
-    QAction *editAction      = new QAction(SmallIcon("editimage"), i18n("Edit..."), this);
-    QAction *trashAction     = new QAction(SmallIcon("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
+    QAction* zoomInAction    = new QAction(SmallIcon("zoom-in"),           i18n("Zoom in"), this);
+    QAction* zoomOutAction   = new QAction(SmallIcon("zoom-out"),          i18n("Zoom out"), this);
+    QAction* fitWindowAction = new QAction(SmallIcon("zoom-fit-best"),     i18n("Fit to &Window"), this);
+    QAction* slideshowAction = new QAction(SmallIcon("view-presentation"), i18n("Slideshow"), this);
+    QAction* editAction      = new QAction(SmallIcon("editimage"),         i18n("Edit..."), this);
+    QAction* trashAction     = new QAction(SmallIcon("user-trash"),        i18nc("Non-pluralized", "Move to Trash"), this);
 
     // --------------------------------------------------------
 

@@ -38,16 +38,13 @@
 namespace Digikam
 {
 
-class LightTableViewPriv;
-
 class LightTableView : public QFrame
 {
-
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    LightTableView(QWidget *parent=0);
+    LightTableView(QWidget* parent=0);
     ~LightTableView();
 
     void   setSyncPreview(bool sync);
@@ -126,6 +123,7 @@ private :
 
 private :
 
+    class LightTableViewPriv;
     LightTableViewPriv* const d;
 };
 

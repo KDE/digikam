@@ -47,7 +47,6 @@ namespace Digikam
 
 class DImg;
 class LoadingDescription;
-class LightTablePreviewPriv;
 
 class LightTablePreview : public PreviewWidget
 {
@@ -90,7 +89,7 @@ Q_SIGNALS:
 protected:
 
     void resizeEvent(QResizeEvent* e);
-    void drawFrame(QPainter *p);
+    void drawFrame(QPainter* p);
 
 private Q_SLOTS:
 
@@ -118,6 +117,7 @@ private:
 
 private:
 
+    class LightTablePreviewPriv;
     LightTablePreviewPriv* const d;
 };
 

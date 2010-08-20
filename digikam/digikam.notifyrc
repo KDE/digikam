@@ -105,6 +105,7 @@ Action=Popup
 [Event/editorsavefilecompleted]
 Name=save file complete
 Name[da]=filen er blevet gemt
+Name[fr]=Enregistrement du fichier terminé
 Name[pt]=Gravação de ficheiro completa
 Name[pt_BR]=Gravação de arquivo concluída
 Name[sv]=spara fil klart
@@ -112,6 +113,7 @@ Name[uk]=Завершено зберігання файла
 Name[x-test]=xxsave file completexx
 Comment=A file from image editor is saved.
 Comment[da]=En fil fra billededitoren er blevet gemt.
+Comment[fr]=Un fichier provenant de l'éditeur d'images est enregistré.
 Comment[pt]=Foi gravado um ficheiro no editor de imagens.
 Comment[pt_BR]=Foi salvo um arquivo no editor de imagens.
 Comment[sv]=En fil från bildeditorn har sparats.

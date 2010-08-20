@@ -52,7 +52,6 @@ class ImageInfo;
 class ImageChangeset;
 class ImageTagChangeset;
 class TagChangeset;
-class NepomukServicePriv;
 
 class NepomukService : public Nepomuk::Service
 {
@@ -70,7 +69,7 @@ public Q_SLOTS:
      *  The parameter is the url() of a KUrl which contains the database parameters
      *  serialized by DatabaseParameters.
      */
-    Q_SCRIPTABLE void setDatabase(const QString &parameters);
+    Q_SCRIPTABLE void setDatabase(const QString& parameters);
     Q_SCRIPTABLE void enableSyncToDigikam(bool syncToDigikam);
     Q_SCRIPTABLE void enableSyncToNepomuk(bool syncToNepomuk);
     Q_SCRIPTABLE void triggerResync();
@@ -126,6 +125,11 @@ protected:
     QDateTime lastSyncToDigikam() const;
     DatabaseParameters databaseParameters() const;
     KSharedConfig::Ptr digikamConfig() const;
+
+public:
+
+    // Declared as public due to use in ChangingNepomuk and ChangingDB classes.
+    class NepomukServicePriv;
 
 private:
 
