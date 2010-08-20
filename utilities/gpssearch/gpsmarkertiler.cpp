@@ -81,7 +81,7 @@ public:
     }
 
     KIO::TransferJob*                                              mapImagesJob;
-    QList<KMap::AbstractMarkerTiler::Tile::ImageFromTileInfo> returnedImageInfo;
+    QList<GPSMarkerTiler::MyTile::ImageFromTileInfo>               returnedImageInfo;
     QList<int>                                                     levelList;
     QList<KIO::Job*>                                               jobsList;
     QList<QList<QVariant> >                                        dataFromDatabaseList;
@@ -100,6 +100,8 @@ public:
 GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
               : KMap::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
 {
+    resetRootTile();
+
     d->thumbnailLoadThread = new ThumbnailLoadThread();
 
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
@@ -112,30 +114,6 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
 GPSMarkerTiler::~GPSMarkerTiler()
 {
     delete d;
-}
-
-/**
- * @brief This function returns false because it is not based on a model, but on the database.
- */
-bool GPSMarkerTiler::isItemModelBased() const
-{
-    return false;
-}
-
-QItemSelectionModel* GPSMarkerTiler::getSelectionModel() const
-{
-    return 0;
-}
-
-QAbstractItemModel* GPSMarkerTiler::getModel() const
-{
-    return 0;
-}
-
-
-QList<QPersistentModelIndex> GPSMarkerTiler::getTileMarkerIndices(const KMap::AbstractMarkerTiler::TileIndex& /*tileIndex*/)
-{
-    return QList<QPersistentModelIndex>();
 }
 
 void GPSMarkerTiler::regenerateTiles()
@@ -240,29 +218,29 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::AbstractMar
 //       regenerateTiles();
 //   }
 
-    KMAP_ASSERT(tileIndex.level()<=KMap::AbstractMarkerTiler::TileIndex::MaxLevel);
+    KMAP_ASSERT(tileIndex.level()<=TileIndex::MaxLevel);
 
-    KMap::AbstractMarkerTiler::Tile* tile = KMap::AbstractMarkerTiler::rootTile();
+    MyTile* tile = static_cast<MyTile*>(rootTile());
     for (int level = 0; level < tileIndex.indexCount(); ++level)
     {
         const int currentIndex = tileIndex.linearIndex(level);
 
-        KMap::AbstractMarkerTiler::Tile* childTile = 0;
+        MyTile* childTile = 0;
         if (tile->children.isEmpty())
         {
-            tile->prepareForChildren(KMap::QIntPair(KMap::AbstractMarkerTiler::TileIndex::Tiling, KMap::AbstractMarkerTiler::TileIndex::Tiling));
+            tile->prepareForChildren(KMap::QIntPair(TileIndex::Tiling, TileIndex::Tiling));
 
             for (int i=0; i<tile->imagesFromTileInfo.count(); ++i)
             {
-                KMap::AbstractMarkerTiler::Tile::ImageFromTileInfo currentImageInfo = tile->imagesFromTileInfo.at(i); 
-                const KMap::AbstractMarkerTiler::TileIndex markerTileIndex = KMap::AbstractMarkerTiler::TileIndex::fromCoordinates(currentImageInfo.coordinate, level);
+                MyTile::ImageFromTileInfo currentImageInfo = tile->imagesFromTileInfo.at(i);
+                const TileIndex markerTileIndex = TileIndex::fromCoordinates(currentImageInfo.coordinate, level);
                 const int newTileIndex = markerTileIndex.toIntList().last();
 
-                KMap::AbstractMarkerTiler::Tile* newTile = tile->children.at(newTileIndex);
+                MyTile* newTile = static_cast<MyTile*>(tile->children.at(newTileIndex));
 
                 if (newTile == 0)
                 {
-                    KMap::AbstractMarkerTiler::Tile* newTile = new KMap::AbstractMarkerTiler::Tile();
+                    MyTile* newTile = static_cast<MyTile*>(tileNew());
                     newTile->imagesFromTileInfo.append(currentImageInfo);
                     tile->addChild(newTileIndex, newTile);
                 }
@@ -282,7 +260,7 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::AbstractMar
 
             //return 0;
         }
-        childTile = tile->children.at(currentIndex);
+        childTile = static_cast<MyTile*>(tile->children.at(currentIndex));
 
         if (childTile==0)
         {
@@ -305,15 +283,17 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::AbstractMar
  */
 int GPSMarkerTiler::getTileMarkerCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
 {
-    KMap::AbstractMarkerTiler::Tile* tile = getTile(tileIndex);
+    MyTile* tile = static_cast<MyTile*>(getTile(tileIndex));
     if (tile)
         return tile->imagesFromTileInfo.count();
 
     return 0;
 }
 
-int GPSMarkerTiler::getTileSelectedCount(const KMap::AbstractMarkerTiler::TileIndex& /*tileIndex*/)
+int GPSMarkerTiler::getTileSelectedCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
 {
+    Q_UNUSED(tileIndex)
+
     return 0;
 }
 
@@ -327,7 +307,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
 {
     //TODO: sort the markers using sortKey 
 
-    KMap::AbstractMarkerTiler::Tile* tile = getTile(tileIndex, true);
+    MyTile* tile = static_cast<MyTile*>(getTile(tileIndex, true));
     QPair<KMap::AbstractMarkerTiler::TileIndex, int> bestRep;
     QVariant v;
 
@@ -335,10 +315,10 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
     {
         if (tile->imagesFromTileInfo.count() == 0)
             return QVariant();
-        
-        KMap::AbstractMarkerTiler::Tile::ImageFromTileInfo bestMarkerInfo = 
+
+        MyTile::ImageFromTileInfo bestMarkerInfo =
                                                     tile->imagesFromTileInfo.first();
-        
+
         for (int i=0; i<tile->imagesFromTileInfo.count(); ++i)
         {
             if (sortKey == SortYoungestFirst)
@@ -373,7 +353,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
 
         bestRep.first  = tileIndex;
         bestRep.second = bestMarkerInfo.id;
-        const QPair<KMap::AbstractMarkerTiler::TileIndex, int> returnedMarker = bestRep;
+        const QPair<TileIndex, int> returnedMarker = bestRep;
         v.setValue(bestRep);
         return v;
     }
@@ -389,14 +369,14 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
 QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey)
 {
     QVariant v;
-    QPair<KMap::AbstractMarkerTiler::TileIndex, int> bestRep;
-    KMap::AbstractMarkerTiler::Tile::ImageFromTileInfo bestMarkerInfo; 
+    QPair<TileIndex, int> bestRep;
+    MyTile::ImageFromTileInfo bestMarkerInfo;
 
     for (int i=0; i<indices.count(); ++i)
     {
-        QPair<KMap::AbstractMarkerTiler::TileIndex, int> currentIndex = indices.at(i).value<QPair<KMap::AbstractMarkerTiler::TileIndex, int> >();
+        QPair<TileIndex, int> currentIndex = indices.at(i).value<QPair<TileIndex, int> >();
 
-        KMap::AbstractMarkerTiler::Tile* tile = getTile(currentIndex.first, true);
+        MyTile* tile = static_cast<MyTile*>(getTile(currentIndex.first, true));
 
         for (int j=0; j<tile->imagesFromTileInfo.count(); ++j)
         {
@@ -459,7 +439,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
  */
 QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size)
 {
-    QPair<KMap::AbstractMarkerTiler::TileIndex, int> indexForPixmap = index.value<QPair<KMap::AbstractMarkerTiler::TileIndex,int> >();
+    QPair<TileIndex, int> indexForPixmap = index.value<QPair<TileIndex,int> >();
 
     QPixmap thumbnail;
     ImageInfo info(indexForPixmap.second);
@@ -481,8 +461,8 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
  */
 bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
 {
-    QPair<KMap::AbstractMarkerTiler::TileIndex, int> firstIndex = a.value<QPair<KMap::AbstractMarkerTiler::TileIndex,int> >();
-    QPair<KMap::AbstractMarkerTiler::TileIndex, int> secondIndex = b.value<QPair<KMap::AbstractMarkerTiler::TileIndex,int> >();
+    QPair<TileIndex, int> firstIndex = a.value<QPair<TileIndex,int> >();
+    QPair<TileIndex, int> secondIndex = b.value<QPair<TileIndex,int> >();
 
     QList<int> aIndicesList = firstIndex.first.toIntList();
     QList<int> bIndicesList = secondIndex.first.toIntList();
@@ -493,8 +473,10 @@ bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
     return false;
 }
 
-KMap::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& /*tileIndex*/)
+KMap::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
 {
+    Q_UNUSED(tileIndex)
+
     return KMap::WMWSelectionState();
 }
 
@@ -549,7 +531,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     }
 
     KIO::Job* currentJob = qobject_cast<KIO::Job*>(job);
-    QList<KMap::AbstractMarkerTiler::Tile::ImageFromTileInfo> currentReturnedImageInfo;
+    QList<MyTile::ImageFromTileInfo> currentReturnedImageInfo;
 
     int foundIndex = -1;
     for (int i=0; i<d->jobs.count(); ++i)
@@ -560,7 +542,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
             foreach (const EntryFromDatabase& entry, d->jobs.at(i).dataFromDatabase)
             {
-                KMap::AbstractMarkerTiler::Tile::ImageFromTileInfo info;
+                MyTile::ImageFromTileInfo info;
 
                 info.id               = entry.id;
                 info.rating           = entry.rating;
@@ -576,14 +558,14 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     {
 
     int wantedLevel = d->jobs.at(foundIndex).level;
-    QList<KMap::AbstractMarkerTiler::Tile::ImageFromTileInfo> resultedImages = currentReturnedImageInfo;
+    QList<MyTile::ImageFromTileInfo> resultedImages = currentReturnedImageInfo;
     currentReturnedImageInfo.clear();
 
     for (int i=0; i<resultedImages.count(); ++i)
     {
-        KMap::AbstractMarkerTiler::Tile* currentTile = KMap::AbstractMarkerTiler::rootTile();
-        
-        KMap::AbstractMarkerTiler::Tile::ImageFromTileInfo currentImageInfo = resultedImages.at(i);
+        MyTile* currentTile = static_cast<MyTile*>(rootTile());
+
+        MyTile::ImageFromTileInfo currentImageInfo = resultedImages.at(i);
 
         for (int currentLevel = 0; currentLevel <= wantedLevel+1; ++currentLevel)
         {
@@ -596,18 +578,18 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
                 currentTile->imagesFromTileInfo.append(currentImageInfo);
 
             if (currentTile->children.isEmpty())
-                currentTile->prepareForChildren(KMap::QIntPair(KMap::AbstractMarkerTiler::TileIndex::Tiling, 
-								    KMap::AbstractMarkerTiler::TileIndex::Tiling));
+                currentTile->prepareForChildren(KMap::QIntPair(TileIndex::Tiling, 
+								    TileIndex::Tiling));
 
-            const KMap::AbstractMarkerTiler::TileIndex markerTileIndex = 
-                         KMap::AbstractMarkerTiler::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
+            const TileIndex markerTileIndex = 
+                         TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
             const int newTileIndex = markerTileIndex.toIntList().last();
 
-            KMap::AbstractMarkerTiler::Tile* newTile = currentTile->children.at(newTileIndex);
+            MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
 
             if (newTile == 0)
             {
-                newTile = new KMap::AbstractMarkerTiler::Tile();
+                newTile = static_cast<MyTile*>(tileNew());
 
                 if (currentLevel == wantedLevel+1)
                 {
@@ -648,6 +630,16 @@ void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescri
 void GPSMarkerTiler::setActive(const bool state)
 {
     d->activeState = state;
+}
+
+KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::tileNew()
+{
+    return new MyTile();
+}
+
+void GPSMarkerTiler::tileDelete(KMap::AbstractMarkerTiler::Tile* const tile)
+{
+    delete static_cast<MyTile*>(tile);
 }
 
 } // namespace Digikam

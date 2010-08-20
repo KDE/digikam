@@ -28,7 +28,6 @@
 
 // Qt includes
 
-#include <QPersistentModelIndex>
 #include <QByteArray>
 #include <QMetaType>
 
@@ -68,14 +67,46 @@ class GPSMarkerTiler : public KMap::AbstractMarkerTiler
 
 public:
 
+    class MyTile : public Tile
+    {
+    public:
+        MyTile()
+        : Tile(),
+          imagesFromTileInfo()
+        {
+        }
+
+        class ImageFromTileInfo
+        {
+        public:
+            ImageFromTileInfo()
+            :id(-2),
+             url(),
+             coordinate(),
+             rating(),
+             creationDate()
+            {
+            }
+
+            ~ImageFromTileInfo()
+            {
+            }
+
+            int                 id;
+            KUrl                url;
+            KMap::GeoCoordinates    coordinate;
+            int                 rating;
+            QDateTime           creationDate;
+        };
+
+        QList<ImageFromTileInfo>     imagesFromTileInfo;
+    };
+
     GPSMarkerTiler(QObject* const parent = 0);
     ~GPSMarkerTiler();
 
-    virtual bool isItemModelBased() const;
-    virtual QItemSelectionModel* getSelectionModel() const;
-    virtual QAbstractItemModel* getModel() const;
-    virtual QList<QPersistentModelIndex> getTileMarkerIndices(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
-
+    virtual Tile* tileNew();
+    virtual void tileDelete(Tile* const tile);
     virtual void prepareTiles(const KMap::GeoCoordinates& upperLeft,const KMap::GeoCoordinates& lowerRight, int level);
     virtual void regenerateTiles();
     virtual KMap::AbstractMarkerTiler::Tile* getTile(const KMap::AbstractMarkerTiler::TileIndex& tileIndex, const bool stopIfEmpty = false);
