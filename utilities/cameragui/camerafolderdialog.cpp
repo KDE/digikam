@@ -6,7 +6,7 @@
  * Date        : 2006-07-24
  * Description : a dialog to select a camera folders.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,10 +46,24 @@
 namespace Digikam
 {
 
-CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraView,
+class CameraFolderDialog::CameraFolderDialogPriv
+{
+public:
+
+    CameraFolderDialogPriv()
+    {
+        folderView = 0;
+    }
+
+    QString           rootPath;
+
+    CameraFolderView* folderView;
+};
+
+CameraFolderDialog::CameraFolderDialog(QWidget* parent, CameraIconView* cameraView,
                                        const QStringList& cameraFolderList,
                                        const QString& cameraName, const QString& rootPath)
-                  : KDialog(parent)
+                  : KDialog(parent), d(new CameraFolderDialogPriv)
 {
     setHelp("camerainterface.anchor", "digikam");
     setCaption(i18n("%1 - Select Camera Folder",cameraName));
@@ -58,15 +72,15 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
     enableButtonOk(false);
     setModal(true);
 
-    m_rootPath = rootPath;
+    d->rootPath = rootPath;
 
-    QFrame *page = new QFrame(this);
+    QFrame* page = new QFrame(this);
     setMainWidget(page);
 
     QGridLayout* grid = new QGridLayout(page);
-    m_folderView      = new CameraFolderView(page);
-    QLabel *logo      = new QLabel(page);
-    QLabel *message   = new QLabel(page);
+    d->folderView      = new CameraFolderView(page);
+    QLabel* logo      = new QLabel(page);
+    QLabel* message   = new QLabel(page);
 
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                             .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -77,13 +91,13 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
     grid->addWidget(logo,           0, 0, 1, 1);
     grid->addWidget(message,        1, 0, 1, 1);
-    grid->addWidget(m_folderView,   0, 1, 3, 1);
+    grid->addWidget(d->folderView,   0, 1, 3, 1);
     grid->setRowStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    m_folderView->addVirtualFolder(cameraName);
-    m_folderView->addRootFolder("/", cameraView->countItemsByFolder(rootPath));
+    d->folderView->addVirtualFolder(cameraName);
+    d->folderView->addRootFolder("/", cameraView->countItemsByFolder(rootPath));
 
     for (QStringList::const_iterator it = cameraFolderList.constBegin();
          it != cameraFolderList.constEnd(); ++it)
@@ -98,38 +112,39 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
             if (root.isEmpty()) root = QString("/");
 
             QString sub = folder.section( '/', -1 );
-            m_folderView->addFolder(root, sub, cameraView->countItemsByFolder(*it));
+            d->folderView->addFolder(root, sub, cameraView->countItemsByFolder(*it));
             kDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')";
         }
     }
 
-    connect(m_folderView, SIGNAL(signalFolderChanged(CameraFolderItem*)),
+    connect(d->folderView, SIGNAL(signalFolderChanged(CameraFolderItem*)),
             this, SLOT(slotFolderPathSelectionChanged(CameraFolderItem*)));
 
     resize(500, 500);
-    
+
     // make sure the ok button is properly set up
-    enableButtonOk( m_folderView->currentItem() != 0 );
+    enableButtonOk( d->folderView->currentItem() != 0 );
 }
 
 CameraFolderDialog::~CameraFolderDialog()
 {
+    delete d;
 }
 
 QString CameraFolderDialog::selectedFolderPath() const
 {
-    QTreeWidgetItem *item = m_folderView->currentItem();
+    QTreeWidgetItem* item = d->folderView->currentItem();
     if (!item) return QString();
 
-    CameraFolderItem *folderItem = dynamic_cast<CameraFolderItem *>(item);
+    CameraFolderItem* folderItem = dynamic_cast<CameraFolderItem*>(item);
     if (folderItem->isVirtualFolder())
-        return QString(m_rootPath);
+        return QString(d->rootPath);
 
     // Case of Gphoto2 cameras. No need to duplicate root '/'.
-    if (m_rootPath == QString("/"))
+    if (d->rootPath == QString("/"))
         return(folderItem->folderPath());
 
-    return(m_rootPath + folderItem->folderPath());
+    return(d->rootPath + folderItem->folderPath());
 }
 
 void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
