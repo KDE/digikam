@@ -231,8 +231,8 @@ void ImageTagPair::removeProperty(const QString& key, const QString& value)
         return;
     d->checkProperties();
 
-    QMap<QString, QString>::iterator it = d->properties.find(key);
-    while (it != d->properties.end() && it.key() == key)
+    QMap<QString, QString>::iterator it;
+    for (it = d->properties.find(key); it != d->properties.end() && it.key() == key;)
     {
         if (it.value() == value)
         {
@@ -240,6 +240,8 @@ void ImageTagPair::removeProperty(const QString& key, const QString& value)
             it = d->properties.erase(it);
             break;
         }
+        else
+            ++it;
     }
 }
 

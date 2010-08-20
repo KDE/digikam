@@ -551,9 +551,9 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
         for (int i=0; i<infos.size(); i++)
         {
             const ImageInfo& info = infos[i];
-            QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
             bool found;
-            while (it != oldIds.end() && it.key() == info.id())
+            QHash<qlonglong,int>::iterator it;
+            for (it = oldIds.find(info.id()); it != oldIds.end() && it.key() == info.id(); ++it)
             {
                 if (extraValues[i] == oldExtraValues[it.value()])
                 {

@@ -108,8 +108,8 @@ bool TagProperties::hasProperty(const QString& key) const
 
 bool TagProperties::hasProperty(const QString& key, const QString& value) const
 {
-    QMap<QString, QString>::const_iterator it = d->properties.find(key);
-    while (it != d->properties.end() && it.key() == key)
+    QMap<QString, QString>::const_iterator it;
+    for (it = d->properties.find(key); it != d->properties.end() && it.key() == key; ++it)
         if (it.value() == value)
             return true;
     return false;
