@@ -33,8 +33,6 @@ namespace Digikam
 
 class CollectionImageChangeset;
 class LightTableBarItem;
-class LightTableBarItemPriv;
-class LightTableBarPriv;
 
 class LightTableBar : public ImagePreviewBar
 {
@@ -90,6 +88,7 @@ private Q_SLOTS:
 
 private:
 
+    class LightTableBarPriv;
     LightTableBarPriv* const d;
 
     friend class LightTableBarItem;
@@ -111,6 +110,7 @@ public:
 
 private:
 
+    class LightTableBarItemPriv;
     LightTableBarItemPriv* const d;
 
     friend class LightTableBar;

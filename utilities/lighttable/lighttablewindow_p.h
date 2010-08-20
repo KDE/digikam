@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class LightTableWindowPriv
+class LightTableWindow::LightTableWindowPriv
 {
 
 public:

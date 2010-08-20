@@ -40,7 +40,6 @@
 
 // KDE includes
 
-
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -67,7 +66,7 @@
 namespace Digikam
 {
 
-class LightTableBarPriv
+class LightTableBar::LightTableBarPriv
 {
 
 public:
@@ -78,21 +77,6 @@ public:
     }
 
     bool navigateByPair;
-};
-
-class LightTableBarItemPriv
-{
-
-public:
-
-    LightTableBarItemPriv()
-    {
-        onLeftPanel  = false;
-        onRightPanel = false;
-    }
-
-    bool onLeftPanel;
-    bool onRightPanel;
 };
 
 LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
@@ -529,6 +513,21 @@ void LightTableBar::slotCollectionImageChange(const CollectionImageChangeset& ch
 }
 
 // -------------------------------------------------------------------------
+
+class LightTableBarItem::LightTableBarItemPriv
+{
+
+public:
+
+    LightTableBarItemPriv()
+    {
+        onLeftPanel  = false;
+        onRightPanel = false;
+    }
+
+    bool onLeftPanel;
+    bool onRightPanel;
+};
 
 LightTableBarItem::LightTableBarItem(LightTableBar* view, const ImageInfo& info)
                  : ImagePreviewBarItem(view, info.fileUrl()),

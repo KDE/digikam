@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class LightTableViewPriv
+class LightTableView::LightTableViewPriv
 {
 public:
 
@@ -66,7 +66,7 @@ public:
     LightTablePreview* rightPreview;
 };
 
-LightTableView::LightTableView(QWidget *parent)
+LightTableView::LightTableView(QWidget* parent)
               : QFrame(parent), d(new LightTableViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
