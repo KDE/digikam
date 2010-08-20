@@ -6,7 +6,7 @@
  * Date        : 2009-05-05
  * Description : Metadata operations on images
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,11 +49,11 @@ namespace Digikam
 {
 
 class MetadataManagerCreator { public: MetadataManager object; };
-K_GLOBAL_STATIC(MetadataManagerCreator, creator)
+K_GLOBAL_STATIC(MetadataManagerCreator, metadataManagercreator)
 
 MetadataManager* MetadataManager::instance()
 {
-    return &creator->object;
+    return &metadataManagercreator->object;
 }
 
 MetadataManager::MetadataManager()
@@ -175,8 +175,8 @@ void MetadataManager::applyMetadata(const QList<ImageInfo>& infos, const Metadat
 
 // --------------------------------------------------------------------------------------
 
-MetadataManagerPriv::MetadataManagerPriv(MetadataManager *q)
-                   : q(q)
+MetadataManager::MetadataManagerPriv::MetadataManagerPriv(MetadataManager* q)
+                                    : q(q)
 {
     dbWorker   = new MetadataManagerDatabaseWorker(this);
     fileWorker = new MetadataManagerFileWorker(this);
@@ -186,55 +186,53 @@ MetadataManagerPriv::MetadataManagerPriv(MetadataManager *q)
     writerTodo = 0;
     writerDone = 0;
 
-    connect(this, SIGNAL(signalAddTags(const QList<ImageInfo> &, const QList<int> &)),
-            dbWorker, SLOT(assignTags(const QList<ImageInfo> &, const QList<int> &)));
+    connect(this, SIGNAL(signalAddTags(const QList<ImageInfo>&, const QList<int>&)),
+            dbWorker, SLOT(assignTags(const QList<ImageInfo>&, const QList<int>&)));
 
-    connect(this, SIGNAL(signalRemoveTags(const QList<ImageInfo> &, const QList<int> &)),
-            dbWorker, SLOT(removeTags(const QList<ImageInfo> &, const QList<int> &)));
+    connect(this, SIGNAL(signalRemoveTags(const QList<ImageInfo>&, const QList<int>&)),
+            dbWorker, SLOT(removeTags(const QList<ImageInfo>&, const QList<int>&)));
 
-    connect(this, SIGNAL(signalAssignRating(const QList<ImageInfo> &, int)),
-            dbWorker, SLOT(assignRating(const QList<ImageInfo> &, int)));
+    connect(this, SIGNAL(signalAssignRating(const QList<ImageInfo>&, int)),
+            dbWorker, SLOT(assignRating(const QList<ImageInfo>&, int)));
 
-    connect(this, SIGNAL(signalSetExifOrientation(const QList<ImageInfo> &, int)),
-            dbWorker, SLOT(setExifOrientation(const QList<ImageInfo> &, int)));
+    connect(this, SIGNAL(signalSetExifOrientation(const QList<ImageInfo>&, int)),
+            dbWorker, SLOT(setExifOrientation(const QList<ImageInfo>&, int)));
 
     connect(this, SIGNAL(signalApplyMetadata(const QList<ImageInfo>&, MetadataHub*)),
             dbWorker, SLOT(applyMetadata(const QList<ImageInfo>&, MetadataHub*)));
 
+    connect(dbWorker, SIGNAL(writeMetadataToFiles(const QList<ImageInfo>&)),
+            fileWorker, SLOT(writeMetadataToFiles(const QList<ImageInfo>&)));
 
-    connect(dbWorker, SIGNAL(writeMetadataToFiles(const QList<ImageInfo> &)),
-            fileWorker, SLOT(writeMetadataToFiles(const QList<ImageInfo> &)));
-
-    connect(dbWorker, SIGNAL(writeOrientationToFiles(const QList<ImageInfo> &, int)),
-            fileWorker, SLOT(writeOrientationToFiles(const QList<ImageInfo> &, int)));
+    connect(dbWorker, SIGNAL(writeOrientationToFiles(const QList<ImageInfo>&, int)),
+            fileWorker, SLOT(writeOrientationToFiles(const QList<ImageInfo>&, int)));
 
     connect(dbWorker, SIGNAL(writeMetadata(const QList<ImageInfo>&, MetadataHub*)),
             fileWorker, SLOT(writeMetadata(const QList<ImageInfo>&, MetadataHub*)));
 
-
-    connect(fileWorker, SIGNAL(imageDataChanged(const QString &, bool, bool)),
-            this, SLOT(slotImageDataChanged(const QString &, bool, bool)));
+    connect(fileWorker, SIGNAL(imageDataChanged(const QString&, bool, bool)),
+            this, SLOT(slotImageDataChanged(const QString&, bool, bool)));
 }
 
-MetadataManagerPriv::~MetadataManagerPriv()
+MetadataManager::MetadataManagerPriv::~MetadataManagerPriv()
 {
     delete dbWorker;
     delete fileWorker;
 }
 
-void MetadataManagerPriv::schedulingForDB(int numberOfInfos)
+void MetadataManager::MetadataManagerPriv::schedulingForDB(int numberOfInfos)
 {
     dbTodo += numberOfInfos;
     updateProgress();
 }
 
-void MetadataManagerPriv::setDBAction(const QString& action)
+void MetadataManager::MetadataManagerPriv::setDBAction(const QString& action)
 {
     dbMessage = action;
     updateProgressMessage();
 }
 
-bool MetadataManagerPriv::shallSendForWriting(qlonglong id)
+bool MetadataManager::MetadataManagerPriv::shallSendForWriting(qlonglong id)
 {
     QMutexLocker lock(&mutex);
     if (scheduledToWrite.contains(id))
@@ -243,66 +241,66 @@ bool MetadataManagerPriv::shallSendForWriting(qlonglong id)
     return true;
 }
 
-void MetadataManagerPriv::dbProcessedOne()
+void MetadataManager::MetadataManagerPriv::dbProcessedOne()
 {
     if ( (dbDone++ % 10) == 0)
         updateProgress();
 }
 
-void MetadataManagerPriv::dbProcessed(int numberOfInfos)
+void MetadataManager::MetadataManagerPriv::dbProcessed(int numberOfInfos)
 {
     dbDone += numberOfInfos;
     updateProgress();
 }
 
-void MetadataManagerPriv::dbFinished(int numberOfInfos)
+void MetadataManager::MetadataManagerPriv::dbFinished(int numberOfInfos)
 {
     dbTodo -= numberOfInfos;
     updateProgress();
 }
 
-void MetadataManagerPriv::schedulingForWrite(int numberOfInfos)
+void MetadataManager::MetadataManagerPriv::schedulingForWrite(int numberOfInfos)
 {
     writerTodo += numberOfInfos;
     updateProgress();
 }
 
-void MetadataManagerPriv::schedulingForOrientationWrite(int numberOfInfos)
+void MetadataManager::MetadataManagerPriv::schedulingForOrientationWrite(int numberOfInfos)
 {
     schedulingForWrite(numberOfInfos);
 }
 
-void MetadataManagerPriv::setWriterAction(const QString& action)
+void MetadataManager::MetadataManagerPriv::setWriterAction(const QString& action)
 {
     writerMessage = action;
     updateProgressMessage();
 }
 
-void MetadataManagerPriv::startingToWrite(const QList<ImageInfo>& infos)
+void MetadataManager::MetadataManagerPriv::startingToWrite(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(&mutex);
     foreach (const ImageInfo& info, infos)
         scheduledToWrite.remove(info.id());
 }
 
-void MetadataManagerPriv::writtenToOne()
+void MetadataManager::MetadataManagerPriv::writtenToOne()
 {
     writerDone++;
     updateProgress();
 }
 
-void MetadataManagerPriv::orientationWrittenToOne()
+void MetadataManager::MetadataManagerPriv::orientationWrittenToOne()
 {
     writtenToOne();
 }
 
-void MetadataManagerPriv::finishedWriting(int numberOfInfos)
+void MetadataManager::MetadataManagerPriv::finishedWriting(int numberOfInfos)
 {
     writerTodo -= numberOfInfos;
     updateProgress();
 }
 
-void MetadataManagerPriv::updateProgressMessage()
+void MetadataManager::MetadataManagerPriv::updateProgressMessage()
 {
     QString message;
     if (dbTodo && writerTodo)
@@ -314,7 +312,7 @@ void MetadataManagerPriv::updateProgressMessage()
     emit progressMessageChanged(message);
 }
 
-void MetadataManagerPriv::updateProgress()
+void MetadataManager::MetadataManagerPriv::updateProgress()
 {
     if (dbTodo == 0 && writerTodo == 0)
     {
@@ -328,7 +326,7 @@ void MetadataManagerPriv::updateProgress()
     emit progressValueChanged(percent);
 }
 
-void MetadataManagerPriv::slotImageDataChanged(const QString &path, bool removeThumbnails, bool notifyCache)
+void MetadataManager::MetadataManagerPriv::slotImageDataChanged(const QString &path, bool removeThumbnails, bool notifyCache)
 {
     // must be done from the UI thread, touches pixmaps
     if (removeThumbnails)
@@ -352,10 +350,10 @@ void MetadataManagerDatabaseWorker::removeTags(const QList<ImageInfo>& infos, co
     changeTags(infos, tagIDs, false);
 }
 
-void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs, bool addOrRemove)
+void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos, 
+                                                                const QList<int>& tagIDs, bool addOrRemove)
 {
-    MetadataHub hub;
-
+    MetadataHub      hub;
     QList<ImageInfo> forWriting;
 
     {
@@ -396,8 +394,7 @@ void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, 
     d->setDBAction(i18n("Assigning image ratings. Please wait..."));
 
     rating = qMin(RatingMax, qMax(RatingMin, rating));
-    MetadataHub hub;
-
+    MetadataHub      hub;
     QList<ImageInfo> forWriting;
 
     {

@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class MetadataHubPriv
+class MetadataHub::MetadataHubPriv
 {
 public:
 
@@ -74,34 +74,34 @@ public:
         tagsChanged      = false;
     }
 
-    bool                                  dateTimeChanged;
-    bool                                  commentsChanged;
-    bool                                  ratingChanged;
-    bool                                  templateChanged;
-    bool                                  tagsChanged;
+    bool                              dateTimeChanged;
+    bool                              commentsChanged;
+    bool                              ratingChanged;
+    bool                              templateChanged;
+    bool                              tagsChanged;
 
-    int                                   rating;
-    int                                   highestRating;
-    int                                   count;
+    int                               rating;
+    int                               highestRating;
+    int                               count;
 
-    QDateTime                             dateTime;
-    QDateTime                             lastDateTime;
+    QDateTime                         dateTime;
+    QDateTime                         lastDateTime;
 
-    CaptionsMap                           comments;
+    CaptionsMap                       comments;
 
-    Template                              metadataTemplate;
+    Template                          metadataTemplate;
 
-    QMap<int, MetadataHub::TagStatus>     tags;
+    QMap<int, MetadataHub::TagStatus> tags;
 
-    QStringList                           tagList;
+    QStringList                       tagList;
 
-    MetadataHub::Status                   dateTimeStatus;
-    MetadataHub::Status                   commentsStatus;
-    MetadataHub::Status                   ratingStatus;
-    MetadataHub::Status                   templateStatus;
+    MetadataHub::Status               dateTimeStatus;
+    MetadataHub::Status               commentsStatus;
+    MetadataHub::Status               ratingStatus;
+    MetadataHub::Status               templateStatus;
 
-    template <class T> void loadWithInterval(const T &data, T &storage, T &highestStorage, MetadataHub::Status& status);
-    template <class T> void loadSingleValue(const T &data, T &storage, MetadataHub::Status& status);
+    template <class T> void loadWithInterval(const T& data, T& storage, T& highestStorage, MetadataHub::Status& status);
+    template <class T> void loadSingleValue(const T& data, T& storage, MetadataHub::Status& status);
 };
 
 // ------------------------------------------------------------------------------------------------
@@ -323,7 +323,10 @@ void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments, i
 }
 
 // template method to share code for dateTime and rating
-template <class T> void MetadataHubPriv::loadWithInterval(const T& data, T& storage, T& highestStorage, MetadataHub::Status& status)
+template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& data, 
+                                                                       T& storage, 
+                                                                       T& highestStorage, 
+                                                                       MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -358,7 +361,9 @@ template <class T> void MetadataHubPriv::loadWithInterval(const T& data, T& stor
 }
 
 // template method used by comment and template
-template <class T> void MetadataHubPriv::loadSingleValue(const T& data, T& storage, MetadataHub::Status& status)
+template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& data, 
+                                                                      T& storage, 
+                                                                      MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -872,7 +877,7 @@ void MetadataHub::setMetadataTemplate(const Template &t, Status status)
 void MetadataHub::setTag(int tagId, bool hasTag, Status status)
 {
     // DatabaseMode == ManagedTags is assumed
-    d->tags[tagId]   = TagStatus(status, hasTag);
+    d->tags[tagId] = TagStatus(status, hasTag);
     d->tagsChanged = true;
 }
 
@@ -889,9 +894,9 @@ void MetadataHub::applyChangeNotifications()
 {
 }
 
-// --------------------------------------------------
+// --------------------------------------------------------------------------------------
 
-class MetadataHubOnTheRoadPriv
+class MetadataHubOnTheRoad::MetadataHubOnTheRoadPriv
 {
 public:
 
@@ -899,12 +904,12 @@ public:
     {
     }
 
-    QMutex mutex;
+    QMutex     mutex;
     QList<int> tagIds;
 };
 
-MetadataHubOnTheRoad::MetadataHubOnTheRoad(QObject *parent)
-    : QObject(parent), d(new MetadataHubOnTheRoadPriv)
+MetadataHubOnTheRoad::MetadataHubOnTheRoad(QObject* parent)
+                    : QObject(parent), d(new MetadataHubOnTheRoadPriv)
 {
     connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
             this, SLOT(slotTagDeleted(int)),
@@ -916,19 +921,19 @@ MetadataHubOnTheRoad::~MetadataHubOnTheRoad()
     delete d;
 }
 
-MetadataHubOnTheRoad& MetadataHubOnTheRoad::operator=(const MetadataHub &other)
+MetadataHubOnTheRoad& MetadataHubOnTheRoad::operator=(const MetadataHub& other)
 {
     MetadataHub::operator=(other);
     return *this;
 }
 
-MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHub &other)
-    : QObject(0), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
+MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHub& other)
+                    : QObject(0), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
 {
 }
 
-MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHubOnTheRoad &other, QObject *parent)
-    : QObject(parent), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
+MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHubOnTheRoad& other, QObject* parent)
+                    : QObject(parent), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
 {
     applyChangeNotifications();
 }

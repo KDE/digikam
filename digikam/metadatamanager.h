@@ -33,7 +33,6 @@ namespace Digikam
 
 class MetadataHub;
 class MetadataHubOnTheRoad;
-class MetadataManagerPriv;
 
 class MetadataManager : public QObject
 {
@@ -73,6 +72,11 @@ Q_SIGNALS:
     void progressFinished();
 
     void orientationChangeFailed(const QStringList& failedFileNames);
+
+public:
+
+    // Declared public due to use by MetadataManagerWorker, MetadataManagerDatabaseWorker, and MetadataManagerFileWorker
+    class MetadataManagerPriv;
 
 private:
 
