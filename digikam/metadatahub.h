@@ -38,6 +38,7 @@
 
 // Local includes
 
+#include "metadatasettingscontainer.h"
 #include "captionvalues.h"
 #include "dmetadata.h"
 #include "dimg.h"
@@ -48,38 +49,6 @@ namespace Digikam
 class AlbumSettings;
 class ImageInfo;
 class Template;
-
-/**
-    The class MetadataWriteSettings encapsulates all metadata related settings that are available
-    from the AlbumSettings.
-    This allows supply changed arguments to MetadataHub without changing the global settings
-*/
-class MetadataWriteSettings
-{
-public:
-
-    /**
-        Constructs a MetadataWriteSettings object with all boolean values set to false,
-        all QString values set to QString()
-    */
-    MetadataWriteSettings();
-
-    /**
-        Constructs a MetadataWriteSettings object from the given AlbumSettings object
-    */
-    MetadataWriteSettings(AlbumSettings *albumsettings);
-
-    bool saveComments;
-    bool saveDateTime;
-    bool saveRating;
-    bool saveTemplate;
-    bool saveTags;
-    bool writeRawFiles;
-    bool useXMPSidecar;
-    bool updateFileTimeStamp;
-};
-
-// ----------------------------------------------------------------------------------------
 
 class MetadataHub
 {
@@ -187,7 +156,7 @@ public:
     /**
         Applies the set of metadata contained in this MetadataHub
         to the given DMetadata object.
-        The MetadataWriteSettings determine whether data is actually
+        The MetadataSettingsContainer determine whether data is actually
         set or not.
         The following metadata fields may be set (depending on settings):
         - Comment
@@ -204,7 +173,7 @@ public:
         @return Returns true if the metadata object has been touched
     */
     bool write(DMetadata& metadata, WriteMode writeMode = FullWrite,
-               const MetadataWriteSettings& settings = defaultWriteSettings());
+               const MetadataSettingsContainer& settings = MetadataSettingsContainer());
 
     /**
         Constructs a DMetadata object for given filePath,
@@ -213,7 +182,7 @@ public:
         @return Returns if the file has been touched
     */
     bool write(const QString& filePath, WriteMode writeMode = FullWrite,
-               const MetadataWriteSettings& settings = defaultWriteSettings());
+               const MetadataSettingsContainer& settings = MetadataSettingsContainer());
 
     /**
         Constructs a DMetadata object from the metadata stored in the given DImg object,
@@ -221,20 +190,15 @@ public:
         @return Returns if the DImg object has been touched
     */
     bool write(DImg& image, WriteMode writeMode = FullWrite,
-               const MetadataWriteSettings& settings = defaultWriteSettings());
-
-    /**
-        Constructs a MetadataWriteSettings object from the global AlbumSettings object.
-    */
-    static MetadataWriteSettings defaultWriteSettings();
+               const MetadataSettingsContainer& settings = MetadataSettingsContainer());
 
     /**
         With the currently applied changes, the given writeMode and settings,
         returns if write(DMetadata), write(QString) or write(DImg) will actually
         apply any changes.
     */
-    bool willWriteMetadata(WriteMode writeMode,
-                           const MetadataWriteSettings& settings = defaultWriteSettings()) const;
+    bool willWriteMetadata(WriteMode writeMode, 
+                           const MetadataSettingsContainer& settings = MetadataSettingsContainer()) const;
 
     // --------------------------------------------------
 

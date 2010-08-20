@@ -41,6 +41,7 @@
 #include "imageattributeswatch.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
+#include "metadatasettings.h"
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
 #include "globals.h"
@@ -472,8 +473,8 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
         DMetadata metadata(path);
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
         metadata.setImageOrientation(o);
-        metadata.setWriteRawFiles(AlbumSettings::instance()->getWriteRawFiles());
-        metadata.setUseXMPSidecar(AlbumSettings::instance()->getUseXMPSidecar());
+        metadata.setWriteRawFiles(MetadataSettings::instance()->settings().writeRawFiles);
+        metadata.setUseXMPSidecar(MetadataSettings::instance()->settings().useXMPSidecar);
 
         if (!metadata.applyChanges())
         {
@@ -525,7 +526,7 @@ void MetadataManagerFileWorker::writeMetadata(const QList<ImageInfo>& infos, Met
     d->setWriterAction(i18n("Writing metadata to files. Please wait..."));
     d->startingToWrite(infos);
 
-    MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
+    MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
 
     ScanController::instance()->suspendCollectionScan();
     foreach(const ImageInfo& info, infos)

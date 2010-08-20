@@ -37,10 +37,6 @@
 #include <ksharedconfig.h>
 #include <kdebug.h>
 
-// Local includes
-
-#include "dmetadata.h"
-
 namespace Digikam
 {
 

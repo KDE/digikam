@@ -40,6 +40,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
+#include "metadatasettings.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "digikamapp.h"
@@ -289,17 +290,22 @@ QAbstractItemModel* KipiInterface::getTagTree() const
 
 QVariant KipiInterface::hostSetting(const QString& settingName)
 {
+    MetadataSettings* mSettings = MetadataSettings::instance();
+    if (!mSettings) return QVariant();
+
+    MetadataSettingsContainer set = mSettings->settings();
+
     if (settingName == QString("WriteMetadataUpdateFiletimeStamp"))
     {
-        return (AlbumSettings::instance()->getUpdateFileTimeStamp());
+        return (set.updateFileTimeStamp);
     }
     else if (settingName == QString("WriteMetadataToRAW"))
     {
-        return (AlbumSettings::instance()->getWriteRawFiles());
+        return (set.writeRawFiles);
     }
     else if (settingName == QString("UseXMPSidecar"))
     {
-        return (AlbumSettings::instance()->getUseXMPSidecar());
+        return (set.useXMPSidecar);
     }
     else if (settingName == QString("FileExtensions"))
     {

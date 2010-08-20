@@ -50,7 +50,6 @@ class AlbumSettings;
 class Album;
 class AlbumIconViewFilter;
 class BatchSyncMetadata;
-class DigikamViewPriv;
 
 class DigikamView : public KHBox
 {
@@ -80,7 +79,7 @@ public:
 
     double zoomMin();
     double zoomMax();
-    
+
 Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
@@ -128,7 +127,7 @@ public Q_SLOTS:
     void slotAlbumWriteMetadata();
     void slotAlbumReadMetadata();
     void slotAlbumSelected(Album* album);
-    
+
     void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
     void slotGotoDateAndItem(const ImageInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
@@ -136,7 +135,7 @@ public Q_SLOTS:
     void slotSelectAlbum(const KUrl& url);
 
     void showFaceAlbum(int tagID);
-    
+
     // Tag action slots
     void slotNewTag();
     void slotDeleteTag();
@@ -234,6 +233,7 @@ private Q_SLOTS:
 
 private:
 
+    class DigikamViewPriv;
     DigikamViewPriv* const d;
 };
 

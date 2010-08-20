@@ -116,6 +116,7 @@
 #include "albummodel.h"
 #include "imagepropertiesversionstab.h"
 #include "knotificationwrapper.h"
+#include "metadatasettings.h"
 
 namespace Digikam
 {
@@ -513,10 +514,12 @@ void ImageWindow::setupActions()
 void ImageWindow::applySettings()
 {
     applyStandardSettings();
-    AlbumSettings *settings = AlbumSettings::instance();
-    m_setExifOrientationTag = settings->getExifSetOrientation();
-    m_canvas->setExifOrient(settings->getExifRotate());
-    m_formatForRAWVersioning = settings->getFormatForStoringRAW();
+    AlbumSettings* settings                 = AlbumSettings::instance();
+    m_formatForRAWVersioning                = settings->getFormatForStoringRAW();
+    MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
+    m_setExifOrientationTag                 = writeSettings.exifSetOrientation;
+    m_canvas->setExifOrient(writeSettings.exifRotate);
+
     d->thumbBar->applySettings();
     refreshView();
 }
@@ -1320,7 +1323,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     float cnt;
     int i                = 0;
     m_cancelSlideShow    = false;
-    settings.exifRotate  = AlbumSettings::instance()->getExifRotate();
+    settings.exifRotate  = MetadataSettings::instance()->settings().exifRotate;
     settings.ratingColor = ThemeEngine::instance()->textSpecialRegColor();
 
     if (!d->imageInfoList.isEmpty())
@@ -1373,10 +1376,10 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 
     if (!m_cancelSlideShow)
     {
-        settings.exifRotate = AlbumSettings::instance()->getExifRotate();
+        settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
         settings.fileList   = d->urlList;
 
-        SlideShow *slide = new SlideShow(settings);
+        SlideShow* slide = new SlideShow(settings);
         if (startWithCurrent)
             slide->setCurrent(d->urlCurrent);
 
@@ -1384,7 +1387,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     }
 }
 
-void ImageWindow::dragMoveEvent(QDragMoveEvent *e)
+void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;

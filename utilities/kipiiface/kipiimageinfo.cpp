@@ -49,6 +49,7 @@
 #include "imageposition.h"
 #include "globals.h"
 #include "tagscache.h"
+#include "metadatasettings.h"
 
 namespace Digikam
 {
@@ -283,8 +284,7 @@ void KipiImageInfo::clearAttributes()
 
 int KipiImageInfo::angle()
 {
-    AlbumSettings *settings = AlbumSettings::instance();
-    if (settings->getExifRotate())
+    if (MetadataSettings::instance()->settings().exifRotate)
     {
         //TODO: read from DB
         DMetadata metadata(_url.toLocalFile());

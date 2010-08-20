@@ -37,9 +37,12 @@ class KConfigGroup;
 namespace Digikam
 {
 
+/**
+    The class MetadataSettingsContainer encapsulates all metadata related settings.
+    NOTE: this allows supply changed arguments to MetadataHub without changing the global settings.
+*/
 class DIGIKAM_EXPORT MetadataSettingsContainer
 {
-
 public:
 
     MetadataSettingsContainer();
@@ -52,7 +55,19 @@ public:
 
 public:
 
-    bool UseXMPSidecar;
+    bool exifRotate;
+    bool exifSetOrientation;
+
+    bool saveComments;
+    bool saveDateTime;
+    bool saveRating;
+
+    bool saveTemplate;
+    bool saveTags;
+
+    bool writeRawFiles;
+    bool useXMPSidecar;
+    bool updateFileTimeStamp;
 };
 
 }  // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2008-18-03
  * Description : image preview thumbs bar
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@ namespace Digikam
 {
 
 class ImagePreviewBarItem;
-class ImagePreviewBarPriv;
 
 class ImagePreviewBar : public ThumbBarView
 {
@@ -85,7 +84,7 @@ protected:
      *          role like being selected etc.
      * @param tile the pixmap to draw on
      */
-    virtual void drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile);
+    virtual void drawItem(ThumbBarItem* item, QPainter &p, QPixmap &tile);
 
     /**
      * Hook method that can be implemented to draw a custom message if there are
@@ -101,7 +100,7 @@ protected:
     virtual void leaveEvent(QEvent*);
     virtual void focusOutEvent(QFocusEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
-    virtual bool eventFilter(QObject *obj, QEvent *ev);
+    virtual bool eventFilter(QObject* obj, QEvent* ev);
 
 private Q_SLOTS:
 
@@ -112,6 +111,7 @@ private Q_SLOTS:
 
 private:
 
+    class ImagePreviewBarPriv;
     ImagePreviewBarPriv* const d;
 
     friend class ImagePreviewBarItem;
@@ -132,7 +132,7 @@ public:
 
 protected:
 
-    ImageInfo        m_info;
+    ImageInfo m_info;
 
 private:
 
@@ -146,7 +146,7 @@ class ImagePreviewBarToolTip : public ThumbBarToolTip
 
 public:
 
-    ImagePreviewBarToolTip(ThumbBarView *parent);
+    ImagePreviewBarToolTip(ThumbBarView* parent);
     ~ImagePreviewBarToolTip();
 
 protected:

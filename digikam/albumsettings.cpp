@@ -120,16 +120,6 @@ public:
         configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size"),
         configShowThumbbarEntry("Show Thumbbar"),
         configShowFolderTreeViewItemsCountEntry("Show Folder Tree View Items Count"),
-        configEXIFRotateEntry("EXIF Rotate"),
-        configEXIFSetOrientationEntry("EXIF Set Orientation"),
-        configSaveTagsEntry("Save Tags"),
-        configSaveTemplateEntry("Save Template"),
-        configSaveEXIFCommentsEntry("Save EXIF Comments"),
-        configSaveDateTimeEntry("Save Date Time"),
-        configSaveRatingEntry("Save Rating"),
-        configWriteRAWFilesEntry("Write RAW Files"),
-        configUseXMPSidecarEntry("Use XMP Sidecar"),
-        configUpdateFileTimestampEntry("Update File Timestamp"),
         configShowSplashEntry("Show Splash"),
         configUseTrashEntry("Use Trash"),
         configShowTrashDeleteDialogEntry("Show Trash Delete Dialog"),
@@ -203,16 +193,6 @@ public:
     const QString                       configPreviewLoadFullImageSizeEntry;
     const QString                       configShowThumbbarEntry;
     const QString                       configShowFolderTreeViewItemsCountEntry;
-    const QString                       configEXIFRotateEntry;
-    const QString                       configEXIFSetOrientationEntry;
-    const QString                       configSaveTagsEntry;
-    const QString                       configSaveTemplateEntry;
-    const QString                       configSaveEXIFCommentsEntry;
-    const QString                       configSaveDateTimeEntry;
-    const QString                       configSaveRatingEntry;
-    const QString                       configWriteRAWFilesEntry;
-    const QString                       configUseXMPSidecarEntry;
-    const QString                       configUpdateFileTimestampEntry;
     const QString                       configShowSplashEntry;
     const QString                       configUseTrashEntry;
     const QString                       configShowTrashDeleteDialogEntry;
@@ -279,21 +259,6 @@ public:
     bool                                tooltipShowAlbumCollection;
     bool                                tooltipShowAlbumCategory;
     bool                                tooltipShowAlbumCaption;
-
-    // metadata settings
-    bool                                exifRotate;
-    bool                                exifSetOrientation;
-
-    bool                                saveTags;
-    bool                                saveTemplate;
-
-    bool                                saveComments;
-    bool                                saveDateTime;
-    bool                                saveRating;
-
-    bool                                writeRawFiles;
-    bool                                useXMPSidecar;
-    bool                                updateFileTimeStamp;
 
     // preview settings
     bool                                previewLoadFullImageSize;
@@ -437,20 +402,6 @@ void AlbumSettings::init()
     d->tooltipShowAlbumCategory     = true;
     d->tooltipShowAlbumCaption      = true;
 
-    d->exifRotate                   = true;
-    d->exifSetOrientation           = true;
-
-    d->saveTags                     = false;
-    d->saveTemplate                 = false;
-
-    d->saveComments                 = false;
-    d->saveDateTime                 = false;
-    d->saveRating                   = false;
-
-    d->writeRawFiles                = false;
-    d->useXMPSidecar                = false;
-    d->updateFileTimeStamp          = false;
-
     d->previewLoadFullImageSize     = false;
     d->showThumbbar                 = true;
 
@@ -556,28 +507,6 @@ void AlbumSettings::readSettings()
 
     // ---------------------------------------------------------------------
 
-    group = config->group(d->configGroupExif);
-
-    d->exifRotate         = group.readEntry(d->configEXIFRotateEntry,         true);
-    d->exifSetOrientation = group.readEntry(d->configEXIFSetOrientationEntry, true);
-
-    // ---------------------------------------------------------------------
-
-    group = config->group(d->configGroupMetadata);
-
-    d->saveTags               = group.readEntry(d->configSaveTagsEntry,     false);
-    d->saveTemplate           = group.readEntry(d->configSaveTemplateEntry, false);
-
-    d->saveComments           = group.readEntry(d->configSaveEXIFCommentsEntry, false);
-    d->saveDateTime           = group.readEntry(d->configSaveDateTimeEntry,     false);
-    d->saveRating             = group.readEntry(d->configSaveRatingEntry,       false);
-
-    d->writeRawFiles          = group.readEntry(d->configWriteRAWFilesEntry,       false);
-    d->useXMPSidecar          = group.readEntry(d->configUseXMPSidecarEntry,       false);
-    d->updateFileTimeStamp    = group.readEntry(d->configUpdateFileTimestampEntry, false);
-
-    // ---------------------------------------------------------------------
-
     group = config->group(d->configGroupGeneral);
 
     d->showSplash                = group.readEntry(d->configShowSplashEntry,                  true);
@@ -679,28 +608,6 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configShowThumbbarEntry,                 d->showThumbbar);
 
     group.writeEntry(d->configShowFolderTreeViewItemsCountEntry, d->showFolderTreeViewItemsCount);
-
-    // ---------------------------------------------------------------------
-
-    group = config->group(d->configGroupExif);
-
-    group.writeEntry(d->configEXIFRotateEntry, d->exifRotate);
-    group.writeEntry(d->configEXIFSetOrientationEntry, d->exifSetOrientation);
-
-    // ---------------------------------------------------------------------
-
-    group = config->group(d->configGroupMetadata);
-
-    group.writeEntry(d->configSaveTagsEntry,            d->saveTags);
-    group.writeEntry(d->configSaveTemplateEntry,        d->saveTemplate);
-
-    group.writeEntry(d->configSaveEXIFCommentsEntry,    d->saveComments);
-    group.writeEntry(d->configSaveDateTimeEntry,        d->saveDateTime);
-    group.writeEntry(d->configSaveRatingEntry,          d->saveRating);
-
-    group.writeEntry(d->configWriteRAWFilesEntry,       d->writeRawFiles);
-    group.writeEntry(d->configUseXMPSidecarEntry,       d->useXMPSidecar);
-    group.writeEntry(d->configUpdateFileTimestampEntry, d->updateFileTimeStamp);
 
     // ---------------------------------------------------------------------
 
@@ -1058,106 +965,6 @@ void AlbumSettings::setIconShowOverlays(bool val)
 bool AlbumSettings::getIconShowOverlays() const
 {
     return d->iconShowOverlays;
-}
-
-void AlbumSettings::setExifRotate(bool val)
-{
-    d->exifRotate = val;
-}
-
-bool AlbumSettings::getExifRotate() const
-{
-    return d->exifRotate;
-}
-
-void AlbumSettings::setExifSetOrientation(bool val)
-{
-    d->exifSetOrientation = val;
-}
-
-bool AlbumSettings::getExifSetOrientation() const
-{
-    return d->exifSetOrientation;
-}
-
-void AlbumSettings::setSaveTags(bool val)
-{
-    d->saveTags = val;
-}
-
-bool AlbumSettings::getSaveTags() const
-{
-    return d->saveTags;
-}
-
-void AlbumSettings::setSaveTemplate(bool val)
-{
-    d->saveTemplate = val;
-}
-
-bool AlbumSettings::getSaveTemplate() const
-{
-    return d->saveTemplate;
-}
-
-void AlbumSettings::setWriteRawFiles(bool val)
-{
-    d->writeRawFiles = val;
-}
-
-bool AlbumSettings::getWriteRawFiles() const
-{
-    return d->writeRawFiles;
-}
-
-void AlbumSettings::setUseXMPSidecar(bool val)
-{
-    d->useXMPSidecar = val;
-}
-
-bool AlbumSettings::getUseXMPSidecar() const
-{
-    return d->useXMPSidecar;
-}
-
-void AlbumSettings::setUpdateFileTimeStamp(bool val)
-{
-    d->updateFileTimeStamp = val;
-}
-
-bool AlbumSettings::getUpdateFileTimeStamp() const
-{
-    return d->updateFileTimeStamp;
-}
-
-void AlbumSettings::setSaveComments(bool val)
-{
-    d->saveComments = val;
-}
-
-bool AlbumSettings::getSaveComments() const
-{
-    return d->saveComments;
-}
-
-void AlbumSettings::setSaveDateTime(bool val)
-{
-    d->saveDateTime = val;
-}
-
-bool AlbumSettings::getSaveDateTime() const
-{
-    return d->saveDateTime;
-}
-
-bool AlbumSettings::getSaveRating() const
-{
-    return d->saveRating;
-}
-
-void AlbumSettings::setSaveRating(bool val)
-{
-    d->saveRating = val;
 }
 
 void AlbumSettings::setToolTipsFont(const QFont& font)

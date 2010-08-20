@@ -82,6 +82,7 @@
 #include "dlogoaction.h"
 #include "dmetadata.h"
 #include "albumsettings.h"
+#include "metadatasettings.h"
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
 #include "imagewindow.h"
@@ -512,7 +513,7 @@ void QueueMgrWindow::applySettings()
     AlbumSettings* settings   = AlbumSettings::instance();
     KSharedConfig::Ptr config = KGlobal::config();
 
-    d->thread->setResetExifOrientationAllowed(settings->getExifSetOrientation());
+    d->thread->setResetExifOrientationAllowed(MetadataSettings::instance()->settings().exifRotate);
     d->queuePool->setEnableToolTips(settings->getShowToolTips());
 
     // -- RAW images decoding settings ------------------------------------------------------

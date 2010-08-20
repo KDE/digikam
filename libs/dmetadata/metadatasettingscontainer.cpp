@@ -36,17 +36,50 @@ namespace Digikam
 
 MetadataSettingsContainer::MetadataSettingsContainer()
 {
-    UseXMPSidecar = false;
+    exifRotate          = true;
+    exifSetOrientation  = true;
+    saveComments        = false;
+    saveDateTime        = false;
+    saveRating          = false;
+    saveTemplate        = false;
+    saveTags            = false;
+    writeRawFiles       = false;
+    useXMPSidecar       = false;
+    updateFileTimeStamp = false;
 }
 
 void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
-    UseXMPSidecar = group.readEntry("Use XMP Sidecar", false);
+    exifRotate          = group.readEntry("EXIF Rotate",           true);
+    exifSetOrientation  = group.readEntry("EXIF Set Orientation",  true);
+
+    saveTags            = group.readEntry("Save Tags",             false);
+    saveTemplate        = group.readEntry("Save Template",         false);
+
+    saveComments        = group.readEntry("Save EXIF Comments",    false);
+    saveDateTime        = group.readEntry("Save Date Time",        false);
+    saveRating          = group.readEntry("Save Rating",           false);
+
+    writeRawFiles       = group.readEntry("Write RAW Files",       false);
+    useXMPSidecar       = group.readEntry("Use XMP Sidecar",       false);
+    updateFileTimeStamp = group.readEntry("Update File Timestamp", false);
 }
 
 void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
-    group.writeEntry("Use XMP Sidecar", UseXMPSidecar);
+    group.writeEntry("EXIF Rotate",           exifRotate);
+    group.writeEntry("EXIF Set Orientation",  exifSetOrientation);
+
+    group.writeEntry("Save Tags",             saveTags);
+    group.writeEntry("Save Template",         saveTemplate);
+
+    group.writeEntry("Save EXIF Comments",    saveComments);
+    group.writeEntry("Save Date Time",        saveDateTime);
+    group.writeEntry("Save Rating",           saveRating);
+
+    group.writeEntry("Write RAW Files",       writeRawFiles);
+    group.writeEntry("Use XMP Sidecar",       useXMPSidecar);
+    group.writeEntry("Update File Timestamp", updateFileTimeStamp);
 }
 
 }  // namespace Digikam

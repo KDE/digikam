@@ -38,7 +38,6 @@ namespace Digikam
 {
 
 class AlbumWidgetStack;
-class ImagePreviewViewV2Priv;
 class LoadingDescription;
 
 class ImagePreviewViewV2 : public GraphicsDImgView
@@ -68,9 +67,9 @@ public:
     void suggestFaces();
     void drawFaceItems();
     void clearFaceItems();
-    
+
     bool hasBeenScanned();
-    
+
     void makeFaceItemConnections();
 Q_SIGNALS:
 
@@ -114,12 +113,13 @@ private Q_SLOTS:
     void slotUpdatePersonTagScales();
 
     void slotForgetFaces();
-    
+
     void slotRemoveFaceTag(const QString&, const QRect&);
     void slotTagPerson(const QString&, const QRect&);
-    
+
 private:
 
+    class ImagePreviewViewV2Priv;
     ImagePreviewViewV2Priv* const d;
 };
 

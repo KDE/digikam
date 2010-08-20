@@ -104,32 +104,6 @@ public:
     template <class T> void loadSingleValue(const T& data, T& storage, MetadataHub::Status& status);
 };
 
-// ------------------------------------------------------------------------------------------------
-
-MetadataWriteSettings::MetadataWriteSettings()
-{
-    saveComments        = false;
-    saveDateTime        = false;
-    saveRating          = false;
-    saveTemplate        = false;
-    saveTags            = false;
-    writeRawFiles       = false;
-    useXMPSidecar       = false;
-    updateFileTimeStamp = false;
-}
-
-MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
-{
-    saveComments        = albumSettings->getSaveComments();
-    saveDateTime        = albumSettings->getSaveDateTime();
-    saveRating          = albumSettings->getSaveRating();
-    saveTemplate        = albumSettings->getSaveTemplate();
-    saveTags            = albumSettings->getSaveTags();
-    writeRawFiles       = albumSettings->getWriteRawFiles();
-    useXMPSidecar       = albumSettings->getUseXMPSidecar();
-    updateFileTimeStamp = albumSettings->getUpdateFileTimeStamp();
-}
-
 // ------------------------------------------------------------------------------------------
 
 MetadataHub::MetadataHub()
@@ -472,7 +446,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     return changed;
 }
 
-bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const MetadataWriteSettings& settings)
+bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -606,7 +580,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     return dirty;
 }
 
-bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const MetadataWriteSettings& settings)
+bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -625,7 +599,7 @@ bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const Meta
     return false;
 }
 
-bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataWriteSettings& settings)
+bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -640,7 +614,7 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataWriteSet
     return write(metadata, writeMode, settings);
 }
 
-bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSettings& settings) const
+bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsContainer& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes
@@ -686,15 +660,6 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSett
             (saveTags &&     (writeAllFields || d->tagsChanged))     ||
             (saveTemplate && (writeAllFields || d->templateChanged))
            );
-}
-
-MetadataWriteSettings MetadataHub::defaultWriteSettings()
-{
-    if (AlbumSettings::instance())
-        return MetadataWriteSettings(AlbumSettings::instance());
-    else
-        // is this check necessary?
-        return MetadataWriteSettings();
 }
 
 // --------------------------------------------------

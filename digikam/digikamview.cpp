@@ -55,6 +55,7 @@
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
 #include "mapwidgetview.h"
+#include "metadatasettings.h"
 #include "metadatamanager.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
@@ -71,7 +72,7 @@
 namespace Digikam
 {
 
-class DigikamViewPriv
+class DigikamView::DigikamViewPriv
 {
 public:
 
@@ -844,7 +845,7 @@ void DigikamView::getForwardHistory(QStringList& titles)
     }
 }
 
-QString DigikamViewPriv::userPresentableAlbumTitle(const QString& title)
+QString DigikamView::DigikamViewPriv::userPresentableAlbumTitle(const QString& title)
 {
     if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
         return i18n("Fuzzy Sketch Search");
@@ -1670,7 +1671,7 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
                                i18np("Preparing slideshow of 1 image. Please wait...","Preparing slideshow of %1 images. Please wait...", infoList.count()));
 
     SlideShowSettings settings;
-    settings.exifRotate           = AlbumSettings::instance()->getExifRotate();
+    settings.exifRotate           = MetadataSettings::instance()->settings().exifRotate;
     settings.ratingColor          = ThemeEngine::instance()->textSpecialRegColor();
     settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
     settings.printName            = group.readEntry("SlideShowPrintName", true);

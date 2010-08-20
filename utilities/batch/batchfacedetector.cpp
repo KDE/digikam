@@ -52,7 +52,6 @@
 #include "albumdb.h"
 #include "albuminfo.h"
 #include "albummanager.h"
-#include "albumsettings.h"
 #include "databaseaccess.h"
 #include "imageinfo.h"
 #include "previewloadthread.h"
@@ -69,6 +68,7 @@
 #include "faceiface.h"
 #include "dimg.h"
 #include "loadingdescription.h"
+#include "metadatasettings.h"
 
 namespace Digikam
 {
@@ -184,7 +184,7 @@ void BatchFaceDetector::processOne()
 {
     if (d->cancel) return;
     QString path = d->allPicturesPath.first();
-    d->previewLoadThread->loadHighQuality(path, AlbumSettings::instance()->getExifRotate());
+    d->previewLoadThread->loadHighQuality(path, MetadataSettings::instance()->settings().exifRotate);
 }
 
 void BatchFaceDetector::complete()

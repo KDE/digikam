@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,11 +59,12 @@
 #include "albumsettings.h"
 #include "config-digikam.h"
 #include "metadatapanel.h"
+#include "metadatasettings.h"
 
 namespace Digikam
 {
 
-class SetupMetadataPriv
+class SetupMetadata::SetupMetadataPriv
 {
 public:
 
@@ -117,12 +118,12 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget *panel          = new QWidget(d->tab);
+    QWidget* panel          = new QWidget(d->tab);
     QVBoxLayout *mainLayout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *ExifGroup     = new QGroupBox(i18n("EXIF Actions"), panel);
+    QGroupBox* ExifGroup     = new QGroupBox(i18n("EXIF Actions"), panel);
     QVBoxLayout *gLayout1    = new QVBoxLayout(ExifGroup);
 
     d->exifRotateBox         = new QCheckBox(ExifGroup);
@@ -138,8 +139,8 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), panel);
-    QVBoxLayout *gLayout2  = new QVBoxLayout(commonGroup);
+    QGroupBox* commonGroup = new QGroupBox(i18n("Common Metadata Actions"), panel);
+    QVBoxLayout* gLayout2  = new QVBoxLayout(commonGroup);
 
     d->saveTagsBox = new QCheckBox(commonGroup);
     d->saveTagsBox->setText(i18n("&Save image tags as \"Keywords\" tags in metadata embedded in files"));
@@ -176,7 +177,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->writeRawFilesBox->setEnabled(KExiv2Iface::KExiv2::supportMetadataWritting("image/x-raw"));
 
     d->useXMPSidecarBox = new QCheckBox(commonGroup);
-    d->useXMPSidecarBox->setText(i18n("&Read metadata from and write metadata to XMP sidecar files (experimental)"));
+    d->useXMPSidecarBox->setText(i18n("&Read metadata from and write metadata to XMP sidecar files"));
     d->useXMPSidecarBox->setWhatsThis( i18n("Turn on this option to write metadata into XMP sidecar files, "
                                             "and prefer metadata from XMP sidecar files when reading metadata."
                                             "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
@@ -207,11 +208,11 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QFrame      *box  = new QFrame(panel);
-    QGridLayout *grid = new QGridLayout(box);
+    QFrame*      box  = new QFrame(panel);
+    QGridLayout* grid = new QGridLayout(box);
     box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    KUrlLabel *exiv2LogoLabel = new KUrlLabel(box);
+    KUrlLabel* exiv2LogoLabel = new KUrlLabel(box);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setUrl("http://www.exiv2.org");
     exiv2LogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-exiv2.png")));
@@ -260,11 +261,11 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
 #ifdef HAVE_NEPOMUK
 
-    QWidget *nepoPanel      = new QWidget(d->tab);
-    QVBoxLayout *nepoLayout = new QVBoxLayout(nepoPanel);
+    QWidget* nepoPanel      = new QWidget(d->tab);
+    QVBoxLayout* nepoLayout = new QVBoxLayout(nepoPanel);
 
-    QGroupBox *nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
-    QVBoxLayout *gLayout3   = new QVBoxLayout(nepoGroup);
+    QGroupBox* nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
+    QVBoxLayout* gLayout3   = new QVBoxLayout(nepoGroup);
 
     d->saveToNepomukBox     = new QCheckBox;
     d->saveToNepomukBox->setText(i18n("Store metadata from digiKam in Nepomuk"));
@@ -296,11 +297,11 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QFrame      *nepoBox  = new QFrame(nepoPanel);
-    QGridLayout *nepoGrid = new QGridLayout(nepoBox);
+    QFrame*      nepoBox  = new QFrame(nepoPanel);
+    QGridLayout* nepoGrid = new QGridLayout(nepoBox);
     nepoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    QLabel *nepoLogoLabel = new QLabel;
+    QLabel* nepoLogoLabel = new QLabel;
     nepoLogoLabel->setPixmap(KIconLoader::global()->loadIcon("nepomuk", KIconLoader::NoGroup, KIconLoader::SizeLarge));
 
     QLabel* nepoExplanation = new QLabel(nepoBox);
@@ -371,49 +372,61 @@ void SetupMetadata::slotProcessExiv2Url(const QString& url)
 
 void SetupMetadata::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+    AlbumSettings* aSettings    = AlbumSettings::instance();
+    if (!aSettings) return;
 
-    settings->setExifRotate(d->exifRotateBox->isChecked());
-    settings->setExifSetOrientation(d->exifSetOrientationBox->isChecked());
-    settings->setSaveComments(d->saveCommentsBox->isChecked());
-    settings->setSaveDateTime(d->saveDateTimeBox->isChecked());
-    settings->setSaveRating(d->saveRatingBox->isChecked());
-    settings->setSaveTags(d->saveTagsBox->isChecked());
-    settings->setSaveTemplate(d->saveTemplateBox->isChecked());
-    settings->setWriteRawFiles(d->writeRawFilesBox->isChecked());
-    settings->setUseXMPSidecar(d->useXMPSidecarBox->isChecked());
-    settings->setUpdateFileTimeStamp(d->updateFileTimeStampBox->isChecked());
+    MetadataSettings* mSettings = MetadataSettings::instance();
+    if (!mSettings) return;
+
+    MetadataSettingsContainer set;
+    set.exifRotate          = d->exifRotateBox->isChecked();
+    set.exifSetOrientation  = d->exifSetOrientationBox->isChecked();
+    set.saveComments        = d->saveCommentsBox->isChecked();
+    set.saveDateTime        = d->saveDateTimeBox->isChecked();
+    set.saveRating          = d->saveRatingBox->isChecked();
+    set.saveTags            = d->saveTagsBox->isChecked();
+    set.saveTemplate        = d->saveTemplateBox->isChecked();
+    set.writeRawFiles       = d->writeRawFilesBox->isChecked();
+    set.useXMPSidecar       = d->useXMPSidecarBox->isChecked();
+    set.updateFileTimeStamp = d->updateFileTimeStampBox->isChecked();
+    mSettings->setSettings(set);
+
 #ifdef HAVE_NEPOMUK
-    settings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
-    settings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
+    aSettings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
+    aSettings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
     if (d->resyncButton->isEnabled() && d->resyncButton->isChecked())
-        settings->triggerResyncWithNepomuk();
+        aSettings->triggerResyncWithNepomuk();
 #endif
-    settings->saveSettings();
+
+    aSettings->saveSettings();
 
     d->tagsCfgPanel->applySettings();
 }
 
 void SetupMetadata::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+    AlbumSettings* aSettings    = AlbumSettings::instance();
+    if (!aSettings) return;
+    MetadataSettings* mSettings = MetadataSettings::instance();
+    if (!mSettings) return;
 
-    d->exifAutoRotateOrg = settings->getExifRotate();
+    MetadataSettingsContainer set = mSettings->settings();
+
+    d->exifAutoRotateOrg = set.exifRotate;
     d->exifRotateBox->setChecked(d->exifAutoRotateOrg);
-    d->exifSetOrientationBox->setChecked(settings->getExifSetOrientation());
-    d->saveCommentsBox->setChecked(settings->getSaveComments());
-    d->saveDateTimeBox->setChecked(settings->getSaveDateTime());
-    d->saveRatingBox->setChecked(settings->getSaveRating());
-    d->saveTagsBox->setChecked(settings->getSaveTags());
-    d->saveTemplateBox->setChecked(settings->getSaveTemplate());
-    d->writeRawFilesBox->setChecked(settings->getWriteRawFiles());
-    d->useXMPSidecarBox->setChecked(settings->getUseXMPSidecar());
-    d->updateFileTimeStampBox->setChecked(settings->getUpdateFileTimeStamp());
+    d->exifSetOrientationBox->setChecked(set.exifSetOrientation);
+    d->saveCommentsBox->setChecked(set.saveComments);
+    d->saveDateTimeBox->setChecked(set.saveDateTime);
+    d->saveRatingBox->setChecked(set.saveRating);
+    d->saveTagsBox->setChecked(set.saveTags);
+    d->saveTemplateBox->setChecked(set.saveTemplate);
+    d->writeRawFilesBox->setChecked(set.writeRawFiles);
+    d->useXMPSidecarBox->setChecked(set.useXMPSidecar);
+    d->updateFileTimeStampBox->setChecked(set.updateFileTimeStamp);
+
 #ifdef HAVE_NEPOMUK
-    d->saveToNepomukBox->setChecked(settings->getSyncDigikamToNepomuk());
-    d->readFromNepomukBox->setChecked(settings->getSyncNepomukToDigikam());
+    d->saveToNepomukBox->setChecked(aSettings->getSyncDigikamToNepomuk());
+    d->readFromNepomukBox->setChecked(aSettings->getSyncNepomukToDigikam());
     slotNepomukToggled();
 #endif
 }

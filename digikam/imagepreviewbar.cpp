@@ -6,7 +6,7 @@
  * Date        : 2008-18-03
  * Description : image preview thumbs bar
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,6 +56,7 @@
 #include "albumsettings.h"
 #include "ddragobjects.h"
 #include "imageattributeswatch.h"
+#include "metadatasettings.h"
 #include "metadatahub.h"
 #include "ratingpopupmenu.h"
 #include "ratingwidget.h"
@@ -66,7 +67,7 @@
 namespace Digikam
 {
 
-class ImagePreviewBarPriv
+class ImagePreviewBar::ImagePreviewBarPriv
 {
 
 public:
@@ -93,9 +94,9 @@ public:
 
     QPixmap       ratingPixmap;
 
-    ThumbBarItem *ratingItem;
+    ThumbBarItem* ratingItem;
 
-    RatingWidget *ratingWidget;
+    RatingWidget* ratingWidget;
 };
 
 ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRotate)
@@ -131,7 +132,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
 
     // ----------------------------------------------------------------
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+    ImageAttributesWatch* watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
             this, SLOT(slotImageRatingChanged(qlonglong)));
@@ -150,7 +151,7 @@ ImagePreviewBar::~ImagePreviewBar()
 
 void ImagePreviewBar::clear(bool updateView)
 {
-    ThumbBarItem *item = d->ratingItem;
+    ThumbBarItem* item = d->ratingItem;
     if (item)
     {
         unsetCursor();
@@ -194,7 +195,7 @@ void ImagePreviewBar::removeItem(ThumbBarItem* item)
 
 void ImagePreviewBar::rearrangeItems()
 {
-    ThumbBarItem *item = d->ratingItem;
+    ThumbBarItem* item = d->ratingItem;
     if (item)
     {
         unsetCursor();
@@ -210,7 +211,7 @@ void ImagePreviewBar::ensureItemVisible(ThumbBarItem* item)
 {
     if (!item) return;
 
-    ThumbBarItem *ritem = d->ratingItem;
+    ThumbBarItem* ritem = d->ratingItem;
     if (ritem)
     {
         unsetCursor();
@@ -224,7 +225,7 @@ void ImagePreviewBar::ensureItemVisible(ThumbBarItem* item)
 
 void ImagePreviewBar::leaveEvent(QEvent* e)
 {
-    ThumbBarItem *item = d->ratingItem;
+    ThumbBarItem* item = d->ratingItem;
     if (item)
     {
         unsetCursor();
@@ -238,7 +239,7 @@ void ImagePreviewBar::leaveEvent(QEvent* e)
 
 void ImagePreviewBar::focusOutEvent(QFocusEvent* e)
 {
-    ThumbBarItem *item = d->ratingItem;
+    ThumbBarItem* item = d->ratingItem;
     if (item)
     {
         unsetCursor();
@@ -252,7 +253,7 @@ void ImagePreviewBar::focusOutEvent(QFocusEvent* e)
 
 void ImagePreviewBar::contentsWheelEvent(QWheelEvent* e)
 {
-    ThumbBarItem *item = d->ratingItem;
+    ThumbBarItem* item = d->ratingItem;
     if (item)
     {
         unsetCursor();
@@ -276,15 +277,15 @@ QPixmap ImagePreviewBar::ratingPixmap() const
 
 void ImagePreviewBar::setSelectedItem(ImagePreviewBarItem* ltItem)
 {
-    ThumbBarItem *item = dynamic_cast<ThumbBarItem*>(ltItem);
+    ThumbBarItem* item = dynamic_cast<ThumbBarItem*>(ltItem);
     if (item) ThumbBarView::setSelected(item);
 }
 
 void ImagePreviewBar::slotImageRatingChanged(qlonglong imageId)
 {
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    for (ThumbBarItem* item = firstItem(); item; item = item->next())
     {
-        ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+        ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
         if (ltItem->info().id() == imageId)
         {
             triggerUpdate();
@@ -296,7 +297,7 @@ void ImagePreviewBar::slotImageRatingChanged(qlonglong imageId)
 void ImagePreviewBar::slotEditRatingFromItem(int rating)
 {
     if (!d->ratingItem) return;
-    ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(d->ratingItem);
+    ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(d->ratingItem);
 
     rating = qMin(5, qMax(0, rating));
     ImageInfo info = ltItem->info();
@@ -314,7 +315,7 @@ ImageInfo ImagePreviewBar::currentItemImageInfo() const
 {
     if (currentItem())
     {
-        ImagePreviewBarItem *item = dynamic_cast<ImagePreviewBarItem*>(currentItem());
+        ImagePreviewBarItem* item = dynamic_cast<ImagePreviewBarItem*>(currentItem());
         return item->info();
     }
 
@@ -325,9 +326,9 @@ ImageInfoList ImagePreviewBar::itemsImageInfoList()
 {
     ImageInfoList list;
 
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    for (ThumbBarItem* item = firstItem(); item; item = item->next())
     {
-        ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+        ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
         if (ltItem)
         {
             list << ltItem->info();
@@ -341,9 +342,9 @@ ImagePreviewBarItem* ImagePreviewBar::findItemByInfo(const ImageInfo& info) cons
 {
     if (!info.isNull())
     {
-        for (ThumbBarItem *item = firstItem(); item; item = item->next())
+        for (ThumbBarItem* item = firstItem(); item; item = item->next())
         {
-            ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+            ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
             if (ltItem)
             {
                 if (ltItem->info() == info)
@@ -356,10 +357,10 @@ ImagePreviewBarItem* ImagePreviewBar::findItemByInfo(const ImageInfo& info) cons
 
 ImagePreviewBarItem* ImagePreviewBar::findItemByPos(const QPoint& pos) const
 {
-    ThumbBarItem *item = findItem(pos);
+    ThumbBarItem* item = findItem(pos);
     if (item)
     {
-        ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+        ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
         return ltItem;
     }
 
@@ -370,10 +371,10 @@ void ImagePreviewBar::applySettings()
 {
     readToolTipSettings();
 
-    AlbumSettings* albumSettings = AlbumSettings::instance();
-    if (!albumSettings) return;
+    MetadataSettings* mSettings = MetadataSettings::instance();
+    if (!mSettings) return;
 
-    setExifRotate(albumSettings->getExifRotate());
+    setExifRotate(mSettings->settings().exifRotate);
 }
 
 void ImagePreviewBar::readToolTipSettings()
@@ -381,7 +382,7 @@ void ImagePreviewBar::readToolTipSettings()
     AlbumSettings* albumSettings = AlbumSettings::instance();
     if (!albumSettings) return;
 
-    Digikam::ThumbBarToolTipSettings settings;
+    ThumbBarToolTipSettings settings;
     settings.showToolTips   = albumSettings->getShowToolTips();
     settings.showFileName   = albumSettings->getToolTipsShowFileName();
     settings.showFileDate   = albumSettings->getToolTipsShowFileDate();
@@ -407,7 +408,7 @@ void ImagePreviewBar::startDrag()
     QList<int> albumIDs;
     QList<int> imageIDs;
 
-    ImagePreviewBarItem *item = dynamic_cast<ImagePreviewBarItem*>(currentItem());
+    ImagePreviewBarItem* item = dynamic_cast<ImagePreviewBarItem*>(currentItem());
 
     urls.append(item->info().fileUrl());
     kioURLs.append(item->info().databaseUrl());
@@ -434,7 +435,7 @@ void ImagePreviewBar::startDrag()
     p.drawPixmap(2, 2, icon);
     p.end();
 
-    QDrag *drag = new QDrag(this);
+    QDrag* drag = new QDrag(this);
     drag->setMimeData(new DItemDrag(urls, kioURLs, albumIDs, imageIDs));
     drag->setPixmap(pix);
     drag->exec();
@@ -446,7 +447,7 @@ void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent* e)
 
     if (e->buttons() == Qt::NoButton)
     {
-        ImagePreviewBarItem *item = dynamic_cast<ImagePreviewBarItem*>(findItem(e->pos()));
+        ImagePreviewBarItem* item = dynamic_cast<ImagePreviewBarItem*>(findItem(e->pos()));
         if (item)
         {
             QRect rect = clickToRateRect(item);

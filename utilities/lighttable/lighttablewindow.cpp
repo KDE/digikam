@@ -65,6 +65,7 @@
 #include "dimg.h"
 #include "dlogoaction.h"
 #include "dmetadata.h"
+#include "metadatasettings.h"
 #include "albumsettings.h"
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
@@ -258,7 +259,7 @@ void LightTableWindow::setupUserArea()
     d->barViewDock = new ThumbBarDock(viewContainer, Qt::Tool);
     d->barViewDock->setObjectName("lighttable_thumbbar");
     d->barView     = new LightTableBar(d->barViewDock, Qt::Horizontal,
-                                       AlbumSettings::instance()->getExifRotate());
+                                       MetadataSettings::instance()->settings().exifRotate);
     d->barViewDock->setWidget(d->barView);
     viewContainer->addDockWidget(Qt::TopDockWidgetArea, d->barViewDock);
     d->barViewDock->setFloating(false);
@@ -1345,7 +1346,7 @@ void LightTableWindow::slotToggleSlideShow()
     bool startWithCurrent     = group.readEntry("SlideShowStartCurrent", false);
 
     SlideShowSettings settings;
-    settings.exifRotate           = AlbumSettings::instance()->getExifRotate();
+    settings.exifRotate           = MetadataSettings::instance()->settings().exifRotate;
     settings.ratingColor          = ThemeEngine::instance()->textSpecialRegColor();
     settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
     settings.printName            = group.readEntry("SlideShowPrintName", true);
@@ -1390,7 +1391,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
     if (!d->cancelSlideShow)
     {
-        settings.exifRotate = AlbumSettings::instance()->getExifRotate();
+        settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
 
         SlideShow* slide = new SlideShow(settings);
         if (startWithCurrent)

@@ -61,6 +61,7 @@
 #include "dpopupmenu.h"
 #include "imageinfo.h"
 #include "metadatamanager.h"
+#include "metadatasettings.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
 #include "themeengine.h"
@@ -115,7 +116,7 @@ protected:
     ImageInfo           m_info;
 };
 
-class ImagePreviewViewV2Priv
+class ImagePreviewViewV2::ImagePreviewViewV2Priv
 {
 public:
 
@@ -142,7 +143,7 @@ public:
     bool                  peopleTagsShown;
     bool                  fullSize;
     double                scale;
-    
+
     ImagePreviewViewItem* item;
 
     QAction*              back2AlbumAction;
@@ -153,7 +154,7 @@ public:
     QAction*              peopleToggleAction;
     QAction*              addPersonAction;
     QAction*              forgetFacesAction;
-    
+
     QToolBar*             toolBar;
 
     AlbumWidgetStack*     stack;
@@ -162,8 +163,8 @@ public:
     QList<Face>           currentFaces;
 
     FaceIface*            faceIface;
-    
-    DImg                 cachedFullImg;
+
+    DImg                  cachedFullImg;
 };
 
 ImagePreviewViewV2::ImagePreviewViewV2(AlbumWidgetStack* parent)
@@ -426,7 +427,7 @@ void ImagePreviewViewV2::slotThemeChanged()
 void ImagePreviewViewV2::slotSetupChanged()
 {
     previewItem()->setLoadFullImageSize(AlbumSettings::instance()->getPreviewLoadFullImageSize());
-    previewItem()->setExifRotate(AlbumSettings::instance()->getExifRotate());
+    previewItem()->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
 
     slotRefreshPeopleTags();
 }

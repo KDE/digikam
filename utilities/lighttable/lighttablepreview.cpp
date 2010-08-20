@@ -60,6 +60,7 @@
 #include "dpopupmenu.h"
 #include "loadingdescription.h"
 #include "metadatahub.h"
+#include "metadatasettings.h"
 #include "previewloadthread.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
@@ -239,9 +240,9 @@ void LightTablePreview::setImagePath(const QString& path)
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(path, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->loadHighQuality(path, MetadataSettings::instance()->settings().exifRotate);
     else
-        d->previewThread->load(path, d->previewSize, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->load(path, d->previewSize, MetadataSettings::instance()->settings().exifRotate);
 }
 
 void LightTablePreview::slotGotImagePreview(const LoadingDescription& description, const DImg& preview)
@@ -268,7 +269,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
     else
     {
         DImg img(preview);
-        if (AlbumSettings::instance()->getExifRotate())
+        if (MetadataSettings::instance()->settings().exifRotate)
             d->previewThread->exifRotate(img, description.filePath);
         setImage(img);
         d->isLoaded = true;
@@ -298,9 +299,9 @@ void LightTablePreview::slotNextPreload()
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->loadHighQuality(loadPath, MetadataSettings::instance()->settings().exifRotate);
     else
-        d->previewThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->load(loadPath, d->previewSize, MetadataSettings::instance()->settings().exifRotate);
 }
 
 void LightTablePreview::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)

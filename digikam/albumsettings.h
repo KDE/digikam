@@ -194,36 +194,6 @@ public:
      */
     bool getIconShowOverlays() const;
 
-    void setExifRotate(bool val);
-    bool getExifRotate() const;
-
-    void setExifSetOrientation(bool val);
-    bool getExifSetOrientation() const;
-
-    void setSaveTags(bool val);
-    bool getSaveTags() const;
-
-    void setSaveTemplate(bool val);
-    bool getSaveTemplate() const;
-
-    void setWriteRawFiles(bool val);
-    bool getWriteRawFiles() const;
-
-    void setUseXMPSidecar(bool val);
-    bool getUseXMPSidecar() const;
-
-    void setUpdateFileTimeStamp(bool val);
-    bool getUpdateFileTimeStamp() const;
-
-    void setSaveComments(bool val);
-    bool getSaveComments() const;
-
-    void setSaveDateTime(bool val);
-    bool getSaveDateTime() const;
-
-    void setSaveRating(bool val);
-    bool getSaveRating() const;
-
     void setToolTipsFont(const QFont& font);
     QFont getToolTipsFont() const;
 

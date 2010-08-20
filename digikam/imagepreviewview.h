@@ -44,7 +44,6 @@ namespace Digikam
 {
 
 class AlbumWidgetStack;
-class ImagePreviewViewPriv;
 class LoadingDescription;
 
 class ImagePreviewView : public PreviewWidget
@@ -120,6 +119,7 @@ private:
 
 private:
 
+    class ImagePreviewViewPriv;
     ImagePreviewViewPriv* const d;
 };
 

@@ -68,6 +68,7 @@
 #include "imageinfo.h"
 #include "loadingdescription.h"
 #include "metadatahub.h"
+#include "metadatasettings.h"
 #include "previewloadthread.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
@@ -76,7 +77,7 @@
 namespace Digikam
 {
 
-class ImagePreviewViewPriv
+class ImagePreviewView::ImagePreviewViewPriv
 {
 public:
 
@@ -260,9 +261,9 @@ void ImagePreviewView::setImagePath(const QString& path)
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(path, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->loadHighQuality(path, MetadataSettings::instance()->settings().exifRotate);
     else
-        d->previewThread->load(path, d->previewSize, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->load(path, d->previewSize, MetadataSettings::instance()->settings().exifRotate);
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description, const DImg& preview)
@@ -292,7 +293,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
     else
     {
         DImg img(preview);
-        if (AlbumSettings::instance()->getExifRotate())
+        if (MetadataSettings::instance()->settings().exifRotate)
             d->previewThread->exifRotate(img, description.filePath);
         d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(img);
@@ -327,9 +328,9 @@ void ImagePreviewView::slotNextPreload()
     }
 
     if (d->loadFullImageSize)
-        d->previewPreloadThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
+        d->previewPreloadThread->loadHighQuality(loadPath, MetadataSettings::instance()->settings().exifRotate);
     else
-        d->previewPreloadThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
+        d->previewPreloadThread->load(loadPath, d->previewSize, MetadataSettings::instance()->settings().exifRotate);
 }
 
 void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)

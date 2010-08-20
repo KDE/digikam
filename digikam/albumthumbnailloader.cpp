@@ -6,7 +6,7 @@
  * Date        : 2006-04-14
  * Description : Load and cache tag thumbnails
  *
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,12 +40,12 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 
-
 // Local includes
 
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "metadatasettings.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 
@@ -55,7 +55,7 @@ namespace Digikam
 typedef QMap<QString, QList<int> > PathAlbumMap;
 typedef QMap<int, QPixmap> AlbumThumbnailMap;
 
-class AlbumThumbnailLoaderPrivate
+class AlbumThumbnailLoader::AlbumThumbnailLoaderPrivate
 {
 public:
 
@@ -67,21 +67,21 @@ public:
         iconTagThumbThread   = 0;
     }
 
-    int                     iconSize;
-    int                     minBlendSize;
+    int                  iconSize;
+    int                  minBlendSize;
 
-    ThumbnailLoadThread    *iconTagThumbThread;
-    ThumbnailLoadThread    *iconAlbumThumbThread;
+    ThumbnailLoadThread* iconTagThumbThread;
+    ThumbnailLoadThread* iconAlbumThumbThread;
 
-    PathAlbumMap            pathAlbumMap;
+    PathAlbumMap         pathAlbumMap;
 
-    AlbumThumbnailMap       thumbnailMap;
+    AlbumThumbnailMap    thumbnailMap;
 };
 
 class AlbumThumbnailLoaderCreator { public: AlbumThumbnailLoader object; };
 K_GLOBAL_STATIC(AlbumThumbnailLoaderCreator, creator)
 
-AlbumThumbnailLoader *AlbumThumbnailLoader::instance()
+AlbumThumbnailLoader* AlbumThumbnailLoader::instance()
 {
     return &creator->object;
 }
@@ -89,8 +89,8 @@ AlbumThumbnailLoader *AlbumThumbnailLoader::instance()
 AlbumThumbnailLoader::AlbumThumbnailLoader()
                     : d(new AlbumThumbnailLoaderPrivate)
 {
-    connect(this, SIGNAL(signalDispatchThumbnailInternal(int, const QPixmap &)),
-            this, SLOT(slotDispatchThumbnailInternal(int, const QPixmap &)));
+    connect(this, SIGNAL(signalDispatchThumbnailInternal(int, const QPixmap&)),
+            this, SLOT(slotDispatchThumbnailInternal(int, const QPixmap&)));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotIconChanged(Album*)));
@@ -103,7 +103,6 @@ AlbumThumbnailLoader::~AlbumThumbnailLoader()
 {
     delete d->iconTagThumbThread;
     delete d->iconAlbumThumbThread;
-
     delete d;
 }
 
@@ -125,7 +124,7 @@ QPixmap AlbumThumbnailLoader::getStandardTagRootIcon(RelativeSize relativeSize)
     return loadIcon("tag-folder", computeIconSize(relativeSize));
 }
 
-QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum *album, RelativeSize relativeSize)
+QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum* album, RelativeSize relativeSize)
 {
     if (album->isRoot())
         return getStandardTagRootIcon(relativeSize);
@@ -148,7 +147,7 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(RelativeSize relativeSize
     return loadIcon("folder-image", computeIconSize(relativeSize));
 }
 
-QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum *album, RelativeSize relativeSize)
+QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum* album, RelativeSize relativeSize)
 {
     if (album->isRoot() || album->isAlbumRoot())
         return getStandardAlbumRootIcon(relativeSize);
@@ -178,11 +177,11 @@ QRect AlbumThumbnailLoader::computeBlendRect(int iconSize)
 
 QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size)
 {
-    KIconLoader *iconLoader = KIconLoader::global();
+    KIconLoader* iconLoader = KIconLoader::global();
     return iconLoader->loadIcon(name, KIconLoader::NoGroup, size);
 }
 
-bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap& icon)
+bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* album, QPixmap& icon)
 {
     int size = computeIconSize(SmallerSize);
     /*
@@ -216,7 +215,7 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap& icon)
     }
 }
 
-QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum *album, bool blendIcon)
+QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* album, bool blendIcon)
 {
     int size = computeIconSize(SmallerSize);
 
@@ -251,7 +250,7 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum *album, bool blendI
     return getStandardTagIcon(album);
 }
 
-bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
+bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum* album)
 {
     if(!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
@@ -265,7 +264,7 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
     return true;
 }
 
-QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum *album)
+QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum* album)
 {
     if(!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
@@ -281,7 +280,7 @@ QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum *album)
     return getStandardAlbumIcon(album);
 }
 
-void AlbumThumbnailLoader::addUrl(Album *album, const KUrl& url)
+void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
 {
     /*
     QPixmap* pix = d->cache->find(album->iconKURL().toLocalFile());
@@ -317,7 +316,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl& url)
                 d->iconTagThumbThread = new ThumbnailLoadThread();
                 d->iconTagThumbThread->setThumbnailSize(d->iconSize);
                 d->iconTagThumbThread->setSendSurrogatePixmap(false);
-                d->iconTagThumbThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
+                d->iconTagThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconTagThumbThread,
                         SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
                         SLOT(slotGotThumbnailFromIcon(const LoadingDescription &, const QPixmap&)),
@@ -334,7 +333,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl& url)
                 d->iconAlbumThumbThread = new ThumbnailLoadThread();
                 d->iconAlbumThumbThread->setThumbnailSize(d->iconSize);
                 d->iconAlbumThumbThread->setSendSurrogatePixmap(false);
-                d->iconAlbumThumbThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
+                d->iconAlbumThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconAlbumThumbThread,
                         SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
                         SLOT(slotGotThumbnailFromIcon(const LoadingDescription &, const QPixmap&)),
