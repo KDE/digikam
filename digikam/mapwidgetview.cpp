@@ -177,7 +177,7 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
-            this, SLOT(slotImageChange(const ImageChangeset &)));
+            this, SLOT(slotImageChange(const ImageChangeset &)), Qt::QueuedConnection);
 
     // TODO: disable this connection and rely only on the database based one above
 //     connect(d->model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
