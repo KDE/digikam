@@ -35,6 +35,8 @@ DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView *qq)
     renameThread       = 0;
     rotateLeftOverlay  = 0;
     rotateRightOverlay = 0;
+    normalDelegate     = 0;
+    faceDelegate       = 0;
 }
 
 DigikamImageViewPriv::~DigikamImageViewPriv()

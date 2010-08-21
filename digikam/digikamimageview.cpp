@@ -59,6 +59,7 @@
 #include "ddragobjects.h"
 #include "digikamapp.h"
 #include "digikamimagedelegate.h"
+#include "digikamimagefacedelegate.h"
 #include "dio.h"
 #include "dpopupmenu.h"
 #include "imagealbumfiltermodel.h"
@@ -78,7 +79,9 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 {
     installDefaultModels();
 
-    setItemDelegate(new DigikamImageDelegate(this));
+    d->normalDelegate = new DigikamImageDelegate(this);
+    d->faceDelegate   = new DigikamImageFaceDelegate(this);
+    setItemDelegate(d->normalDelegate);
     setSpacing(10);
 
     AlbumSettings *settings = AlbumSettings::instance();
@@ -155,6 +158,18 @@ void DigikamImageView::slotSetupChanged()
     d->updateOverlays();
 
     ImageCategorizedView::slotSetupChanged();
+}
+
+void DigikamImageView::setFaceMode(bool on)
+{
+    if (on)
+    {
+        setItemDelegate(d->faceDelegate);
+    }
+    else
+    {
+        setItemDelegate(d->normalDelegate);
+    }
 }
 
 void DigikamImageView::activated(const ImageInfo& info)

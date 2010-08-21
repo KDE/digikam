@@ -72,6 +72,8 @@ public Q_SLOTS:
 
     void assignRating(const QModelIndex &index, int rating);
 
+    void setFaceMode(bool on);
+
 Q_SIGNALS:
 
     void previewRequested(const ImageInfo& info);

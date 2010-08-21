@@ -40,6 +40,9 @@
 namespace Digikam
 {
 
+class DigikamImageDelegate;
+class DigikamImageFaceDelegate;
+
 class DigikamImageViewPriv : public QObject
 {
     Q_OBJECT
@@ -52,6 +55,9 @@ public:
 
     ImageViewUtilities* utilities;
     RenameThread*       renameThread;
+
+    DigikamImageDelegate     *normalDelegate;
+    DigikamImageFaceDelegate *faceDelegate;
 
     bool overlaysActive;
 
