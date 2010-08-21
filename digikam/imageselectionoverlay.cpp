@@ -84,8 +84,11 @@ void ImageSelectionOverlay::setActive(bool active)
     {
         // button is deleted
 
-        disconnect(m_view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                   this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
+        if (m_view)
+        {
+            disconnect(m_view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+                       this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
+        }
     }
 }
 

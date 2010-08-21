@@ -24,6 +24,9 @@
  *
  * ============================================================ */
 
+#ifndef IMAGEDELEGATEPRIV_H
+#define IMAGEDELEGATEPRIV_H
+
 // Qt includes
 
 #include <QRect>
@@ -69,7 +72,7 @@ public:
     bool                      drawMouseOverFrame;
     bool                      ratingOverThumbnail;
 
-    QCache<qlonglong, QRect>  actualPixmapRectCache;
+    QCache<int, QRect>        actualPixmapRectCache;
     ImageCategoryDrawer      *categoryDrawer;
 
     ImageCategorizedView     *currentView;
@@ -79,3 +82,6 @@ public:
 };
 
 } // namespace Digikam
+
+#endif
+

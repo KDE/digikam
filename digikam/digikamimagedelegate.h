@@ -49,6 +49,8 @@ protected:
 
     virtual void updateRects();
 
+    DigikamImageDelegate(DigikamImageDelegatePrivate& dd, ImageCategorizedView *parent);
+
 private:
 
     Q_DECLARE_PRIVATE(DigikamImageDelegate)

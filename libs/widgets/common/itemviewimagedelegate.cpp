@@ -112,6 +112,7 @@ ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate &dd, Q
 ItemViewImageDelegate::~ItemViewImageDelegate()
 {
     Q_D(ItemViewImageDelegate);
+    removeAllOverlays();
     delete d;
 }
 
@@ -138,6 +139,12 @@ void ItemViewImageDelegate::setSpacing(int spacing)
         return;
     d->spacing = spacing;
     invalidatePaintingCache();
+}
+
+int ItemViewImageDelegate::spacing() const
+{
+    Q_D(const ItemViewImageDelegate);
+    return d->spacing;
 }
 
 void ItemViewImageDelegate::installOverlay(ImageDelegateOverlay *overlay)

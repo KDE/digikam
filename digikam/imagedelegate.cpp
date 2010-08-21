@@ -47,6 +47,7 @@
 #include "imagedelegateoverlay.h"
 #include "imagemodel.h"
 #include "imagefiltermodel.h"
+#include "imagethumbnailmodel.h"
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
@@ -131,13 +132,13 @@ void ImageDelegate::setModel(QAbstractItemModel* model)
         connect(d->currentModel, SIGNAL(modelAboutToBeReset()),
                 this, SLOT(modelContentsChanged()));
 
-        connect(d->currentModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int start, int end)),
+        connect(d->currentModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)),
                 this, SLOT(modelContentsChanged()));
 
-        connect(d->currentModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int start, int end)),
+        connect(d->currentModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
                 this, SLOT(modelContentsChanged()));
 
-        connect(d->currentModel, SIGNAL(dataChanged()),
+        connect(d->currentModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
                 this, SLOT(modelContentsChanged()));
     }
 }
@@ -174,6 +175,26 @@ QRect ImageDelegate::tagsRect() const
     return d->tagRect;
 }
 
+void ImageDelegate::prepareThumbnails(ImageThumbnailModel *thumbModel, const QList<QModelIndex>& indexes)
+{
+    thumbModel->prepareThumbnails(indexes, thumbnailSize());
+}
+
+QPixmap ImageDelegate::thumbnailPixmap(const QModelIndex& index) const
+{
+    Q_D(const ImageDelegate);
+    // work around constness
+    QAbstractItemModel *model = const_cast<QAbstractItemModel*>(index.model());
+    // set requested thumbnail size
+    model->setData(index, d->thumbSize.size(), ImageModel::ThumbnailRole);
+    // get data from model
+    QVariant thumbData = index.data(ImageModel::ThumbnailRole);
+    // reset to default thumbnail size
+    model->setData(index, QVariant(), ImageModel::ThumbnailRole);
+
+    return thumbData.value<QPixmap>();
+}
+
 void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ImageDelegate);
@@ -200,14 +221,9 @@ void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const
     p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
 
     // Thumbnail
-    QAbstractItemModel *model = const_cast<QAbstractItemModel*>(index.model());
-    model->setData(index, d->thumbSize.size(), ImageModel::ThumbnailRole);
-    QVariant thumbData = index.data(ImageModel::ThumbnailRole);
-    model->setData(index, QVariant(), ImageModel::ThumbnailRole);
-
-    QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbData.value<QPixmap>());
+    QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbnailPixmap(index));
     if (!actualPixmapRect.isNull())
-        const_cast<ImageDelegate*>(this)->updateActualPixmapRect(info.id(), actualPixmapRect);
+        const_cast<ImageDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
 
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
     if(info.hasImageHistory())
@@ -292,12 +308,7 @@ bool ImageDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect
 
 bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *returnRect) const
 {
-    qlonglong id = ImageModel::retrieveImageId(index);
-
-    if (!id)
-        return false;
-
-    QRect actualRect = actualPixmapRect(id);
+    QRect actualRect = actualPixmapRect(index);
     if (actualRect.isNull())
         return false;
 
@@ -370,35 +381,41 @@ void ImageDelegate::clearCaches()
     d->actualPixmapRectCache.clear();
 }
 
-void ImageDelegate::modelChanged()
-{
-    Q_D(ImageDelegate);
-    setModel(d->currentView ? d->currentView->model() : 0);
-}
-
-void ImageDelegate::modelContentsChanged()
+void ImageDelegate::clearModelDataCaches()
 {
     Q_D(ImageDelegate);
     d->actualPixmapRectCache.clear();
 }
 
-QRect ImageDelegate::actualPixmapRect(qlonglong imageid) const
+void ImageDelegate::modelChanged()
+{
+    Q_D(ImageDelegate);
+    clearModelDataCaches();
+    setModel(d->currentView ? d->currentView->model() : 0);
+}
+
+void ImageDelegate::modelContentsChanged()
+{
+    clearModelDataCaches();
+}
+
+QRect ImageDelegate::actualPixmapRect(const QModelIndex& index) const
 {
     Q_D(const ImageDelegate);
     // We do not recompute if not found. Assumption is cache is always properly updated.
-    QRect *rect = d->actualPixmapRectCache.object(imageid);
+    QRect *rect = d->actualPixmapRectCache.object(index.row());
     if (rect)
         return *rect;
     else
         return d->pixmapRect;
 }
 
-void ImageDelegate::updateActualPixmapRect(qlonglong imageid, const QRect& rect)
+void ImageDelegate::updateActualPixmapRect(const QModelIndex& index, const QRect& rect)
 {
     Q_D(ImageDelegate);
-    QRect *old = d->actualPixmapRectCache.object(imageid);
+    QRect *old = d->actualPixmapRectCache.object(index.row());
     if (!old || *old != rect)
-        d->actualPixmapRectCache.insert(imageid, new QRect(rect));
+        d->actualPixmapRectCache.insert(index.row(), new QRect(rect));
 }
 
 } // namespace Digikam

@@ -65,6 +65,8 @@ public:
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
                                    const QModelIndex& index, QRect *activationRect = 0) const;
 
+    int spacing() const;
+
     QRect rect() const;
 
     /** Can be used to temporarily disable drawing of the rating.

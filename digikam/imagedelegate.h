@@ -39,6 +39,7 @@ class ImageCategorizedView;
 class ImageDelegateOverlay;
 class ImageFilterModel;
 class ImageModel;
+class ImageThumbnailModel;
 class ImageDelegatePrivate;
 
 class ImageDelegate : public ItemViewImageDelegate
@@ -68,7 +69,11 @@ public:
     QRect ratingRect() const;
     QRect commentsRect() const;
     QRect tagsRect() const;
-    QRect actualPixmapRect(qlonglong imageid) const;
+    QRect actualPixmapRect(const QModelIndex& index) const;
+
+    /** Call this from a paint event, with all indexes expected to be painted immediately,
+     *  so that thumbnails become available in order. */
+    virtual void prepareThumbnails(ImageThumbnailModel *thumbModel, const QList<QModelIndex>& indexes);
 
 protected:
 
@@ -80,10 +85,15 @@ protected:
     virtual void updateRects() = 0;
 
     virtual void clearCaches();
+    /** Reimplement to clear caches based on model indexes (hash on row number etc.)
+     *  Change signals are listened to this is called whenever such properties become invalid. */
+    virtual void clearModelDataCaches();
+
+    virtual QPixmap thumbnailPixmap(const QModelIndex& index) const;
 
     bool onActualPixmapRect(const QPoint& pos, const QRect& visualRect,
-                            const QModelIndex & index, QRect *actualRect) const;
-    void updateActualPixmapRect(qlonglong imageid, const QRect& rect);
+                            const QModelIndex& index, QRect *actualRect) const;
+    void updateActualPixmapRect(const QModelIndex& index, const QRect& rect);
 
     virtual void invalidatePaintingCache();
     virtual void updateSizeRectsAndPixmaps();
@@ -94,8 +104,8 @@ protected:
 
 protected Q_SLOTS:
 
-    virtual void modelChanged();
-    virtual void modelContentsChanged();
+    void modelChanged();
+    void modelContentsChanged();
 
 private:
 

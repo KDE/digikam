@@ -152,10 +152,13 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
     {
         delete m_widget;
         m_widget = 0;
-        m_view->viewport()->removeEventFilter(this);
-        if (view()->model())
-            disconnect(m_view->model(), 0, this, 0);
-        disconnect(m_view, 0, this, 0);
+        if (m_view)
+        {
+            m_view->viewport()->removeEventFilter(this);
+            if (view()->model())
+                disconnect(m_view->model(), 0, this, 0);
+            disconnect(m_view, 0, this, 0);
+        }
     }
 }
 

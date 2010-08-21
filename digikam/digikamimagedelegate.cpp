@@ -41,29 +41,31 @@
 #include "imagedelegateoverlay.h"
 #include "imagemodel.h"
 #include "imagefiltermodel.h"
+#include "digikamimagedelegatepriv.h"
 
 namespace Digikam
 {
-
-class DigikamImageDelegatePrivate : public ImageDelegatePrivate
-{
-public:
-
-    DigikamImageDelegatePrivate()
-    {
-    }
-
-};
 
 DigikamImageDelegate::DigikamImageDelegate(ImageCategorizedView *parent)
              : ImageDelegate(*new DigikamImageDelegatePrivate, parent)
 {
     Q_D(DigikamImageDelegate);
+    d->init(this, parent);
+}
 
-    d->categoryDrawer = new ImageCategoryDrawer(parent);
+DigikamImageDelegate::DigikamImageDelegate(DigikamImageDelegatePrivate& dd, ImageCategorizedView *parent)
+             : ImageDelegate(dd, parent)
+{
+    Q_D(DigikamImageDelegate);
+    d->init(this, parent);
+}
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSetupChanged()));
+void DigikamImageDelegatePrivate::init(DigikamImageDelegate* q, ImageCategorizedView *parent)
+{
+    categoryDrawer = new ImageCategoryDrawer(parent);
+
+    QObject::connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+                     q, SLOT(slotSetupChanged()));
 }
 
 DigikamImageDelegate::~DigikamImageDelegate()

@@ -226,7 +226,8 @@ ImageDelegate *ImageCategorizedView::delegate() const
 void ImageCategorizedView::setItemDelegate(ImageDelegate *delegate)
 {
     ThumbnailSize oldSize = thumbnailSize();
-    if (d->delegate)
+    ImageDelegate *oldDelegate = d->delegate;
+    if (oldDelegate)
     {
         d->delegate->setAllOverlaysActive(false);
         d->delegate->setView(0);
@@ -234,12 +235,14 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate *delegate)
 
     d->delegate = delegate;
     d->delegate->setThumbnailSize(oldSize);
+    if (oldDelegate)
+        d->delegate->setSpacing(oldDelegate->spacing());
     DCategorizedView::setItemDelegate(d->delegate);
     setCategoryDrawer(d->delegate->categoryDrawer());
     updateDelegateSizes();
 
-    d->delegate->setAllOverlaysActive(true);
     d->delegate->setView(this);
+    d->delegate->setAllOverlaysActive(true);
 }
 
 Album *ImageCategorizedView::currentAlbum() const
@@ -520,7 +523,7 @@ void ImageCategorizedView::paintEvent(QPaintEvent *e)
     if (thumbModel)
     {
         QModelIndexList indexesToThumbnail = imageFilterModel()->mapListToSource(categorizedIndexesIn(viewport()->rect()));
-        thumbModel->prepareThumbnails(indexesToThumbnail, d->delegate->thumbnailSize());
+        d->delegate->prepareThumbnails(thumbModel, indexesToThumbnail);
     }
 
     DCategorizedView::paintEvent(e);
