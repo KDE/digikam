@@ -211,7 +211,7 @@ private:
     QImage load(const QString& path, const QRect& rect, bool pregenerate) const;
     ThumbnailImage createThumbnail(const Digikam::ThumbnailInfo& info, const QRect& detailRect = QRect(), bool isFace = false) const;
     QImage loadWithDImg(const QString& path, IccProfile* profile) const;
-    QImage loadDetail(const QString& path, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const;
+    QImage loadImageDetail(const QString& path, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const;
     QImage loadImagePreview(const DMetadata& metadata) const;
     QImage handleAlphaChannel(const QImage& thumb) const;
     int exifOrientation(const QString& filePath, const DMetadata& metadata, bool fromEmbeddedPreview, bool fromDetail) const;

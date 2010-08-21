@@ -281,7 +281,6 @@ QImage ThumbnailCreator::scaleForStorage(const QImage& qimage, bool isFace) cons
         int cheatSize = maxSize - (3*(maxSize - d->cachedSize) / 4);
         qimage        = qimage.scaled(cheatSize, cheatSize, Qt::KeepAspectRatio, Qt::FastTransformation);
         */
-        kDebug()<<"cachedSize : "<<d->cachedSize;
         QImage scaledThumb = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         return scaledThumb;
@@ -397,7 +396,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     if (!detailRect.isNull())
     {
         // when taking a detail, we have to load the image full size
-        qimage = loadDetail(path, detailRect);
+        qimage = loadImageDetail(path, metadata, detailRect, &profile);
         fromDetail = !qimage.isNull();
     }
 
@@ -502,7 +501,7 @@ QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile) 
     return img.copyQImage();
 }
 
-QImage ThumbnailCreator::loadDetail(const QString& path, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const
+QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const
 {
     DImg img;
     img.load(path, false, profile ? true : false, false, false, d->observer, d->fastRawSettings);

@@ -59,6 +59,7 @@ public:
     ThumbnailSize              thumbSize;
     ThumbnailSize              lastGlobalThumbSize;
     ThumbnailSize              preloadThumbSize;
+    QRect                      detailRect;
     bool                       emitDataChanged;
     bool                       exifRotate;
 
@@ -212,15 +213,21 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         QPixmap thumbnail;
         ImageInfo info = imageInfoRef(index);
         QString path = info.filePath();
-        if (d->thread->find(path, thumbnail, d->thumbSize.size()))
-            return thumbnail;
+        if (!d->detailRect.isNull())
+        {
+            if (d->thread->find(path, d->detailRect, thumbnail, d->thumbSize.size()))
+                return thumbnail;
+        }
         else
         {
-            return QVariant(QVariant::Pixmap);
+            if (d->thread->find(path, thumbnail, d->thumbSize.size()))
+                return thumbnail;
         }
+        return QVariant(QVariant::Pixmap);
     }
     if (role == ThumbnailSetRole && d->thread && index.isValid())
     {
+        //FIXME: Usecase? Clean implementation
         QPixmap thumbnail;
         QList<QVariant> thumbnailSet;
         ImageInfo info = imageInfoRef(index);
@@ -244,12 +251,28 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
 
 bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (role == ThumbnailRole && d->thread)
+    if (role == ThumbnailRole)
     {
-        if (value.isNull())
-            d->thumbSize = d->lastGlobalThumbSize;
-        else
-            d->thumbSize = value.toInt();
+        switch (value.type())
+        {
+            case QVariant::Invalid:
+                d->thumbSize = d->lastGlobalThumbSize;
+                d->detailRect = QRect();
+                break;
+            case QVariant::Int:
+                if (value.isNull())
+                    d->thumbSize = d->lastGlobalThumbSize;
+                else
+                    d->thumbSize = value.toInt();
+                break;
+            case QVariant::Rect:
+                if (value.isNull())
+                    d->detailRect = QRect();
+                else
+                    d->detailRect = value.toRect();
+            default:
+                break;
+        }
     }
     return ImageModel::setData(index, value, role);
 }

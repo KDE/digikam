@@ -302,6 +302,7 @@ QStringList LoadingDescription::possibleCacheKeys(const QString& filePath)
 
 QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString& filePath)
 {
+    //FIXME: With details, there is an endless number of possible cache keys. Need different approach.
     QStringList keys;
     // there are 256 possible keys...
     QString path = filePath + "-thumbnail-";
