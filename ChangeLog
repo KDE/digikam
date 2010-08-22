@@ -1,4 +1,1298 @@
+1.4.0 2010-08-22
+
+2010-08-21 08:32  cgilles
+
+	* NEWS: update
+
+2010-08-20 12:00  cgilles
+
+	* libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h: remove unused variable
+	  (about metadata write settings to use with metadatahub)
+	  use more private internal container
+	  usual coding style fixes
+
+2010-08-20 11:28  cgilles
+
+	* digikam/metadatahub.cpp, digikam/metadatahub.h,
+	  digikam/metadatamanager.cpp, digikam/metadatamanager.h,
+	  digikam/metadatamanager_p.h: more private internal container.
+	  Polish
+
+2010-08-20 09:02  cgilles
+
+	* utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/cameracontroller.h,
+	  utilities/cameragui/camerafolderdialog.cpp,
+	  utilities/cameragui/camerafolderdialog.h: use d private internal
+	  class
+	  more private internal container
+
+2010-08-20 08:52  cgilles
+
+	* utilities/nepomuk/digikamnepomukservice.cpp,
+	  utilities/nepomuk/digikamnepomukservice.h: more private internal
+	  container
+
+2010-08-20 08:45  cgilles
+
+	* utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablebar.h,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablepreview.h,
+	  utilities/lighttable/lighttableview.cpp,
+	  utilities/lighttable/lighttableview.h,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h,
+	  utilities/lighttable/lighttablewindow_p.h: more private internal
+	  container
+
+2010-08-20 07:38  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-08-19 13:41  cgilles
+
+	* libs/widgets/metadata/exifwidget.cpp,
+	  libs/widgets/metadata/exifwidget.h,
+	  libs/widgets/metadata/iptcwidget.cpp,
+	  libs/widgets/metadata/iptcwidget.h,
+	  libs/widgets/metadata/makernotewidget.cpp,
+	  libs/widgets/metadata/makernotewidget.h,
+	  libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  libs/widgets/metadata/mdkeylistviewitem.h,
+	  libs/widgets/metadata/metadatalistview.cpp,
+	  libs/widgets/metadata/metadatalistview.h,
+	  libs/widgets/metadata/metadatalistviewitem.cpp,
+	  libs/widgets/metadata/metadatalistviewitem.h,
+	  libs/widgets/metadata/metadatapanel.cpp,
+	  libs/widgets/metadata/metadatapanel.h,
+	  libs/widgets/metadata/metadataselector.cpp,
+	  libs/widgets/metadata/metadataselector.h,
+	  libs/widgets/metadata/metadatawidget.cpp,
+	  libs/widgets/metadata/metadatawidget.h,
+	  libs/widgets/metadata/xmpwidget.cpp,
+	  libs/widgets/metadata/xmpwidget.h: more d private internal
+	  container
+	  constify
+
+2010-08-19 13:24  cgilles
+
+	* libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.h,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/iccprofiles/iccpreviewwidget.h,
+	  libs/widgets/iccprofiles/iccprofilescombobox.cpp,
+	  libs/widgets/iccprofiles/iccprofilescombobox.h,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.h: use more d private
+	  internal container
+
+2010-08-19 12:27  cgilles
+
+	* digikam/tagmodificationhelper.cpp,
+	  digikam/tagmodificationhelper.h: constify and polish
+
+2010-08-19 12:19  cgilles
+
+	* digikam/searchmodificationhelper.cpp,
+	  digikam/searchmodificationhelper.h: constify and plosh
+
+2010-08-19 11:38  cgilles
+
+	* digikam/editablesearchtreeview.cpp,
+	  digikam/editablesearchtreeview.h, digikam/imageviewutilities.cpp,
+	  digikam/imageviewutilities.h: polish
+
+2010-08-19 09:04  mwiesweg
+
+	* digikam/imagedelegate.cpp: Based on the available debugging
+	  information, I can give no reason
+	  why this is crashing, and cannot reproduce.
+	  Nonetheless it is crashing for a lot of people, so try if
+	  removinf this statement helps
+	  (and, yes, it is apparently a memory leak, but only at
+	  application shutdown)
+	  
+	  CCBUG: 230515
+
+2010-08-18 11:02  cgilles
+
+	* libs/threadimageio/thumbnailloadthread.cpp: report thumb DB
+	  initialization errors on a KMessageBox intead to the console.
+	  This will be more explicit for end users.
+	  Marcel, let's me hear if all is fine for you...
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2010-08-18 10:49  cgilles
+
+	* libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: more d private internal
+	  class
+	  use const ref
+	  polish
+
+2010-08-18 05:21  cgilles
+
+	* NEWS: update
+
+2010-08-17 11:25  cgilles
+
+	* NEWS: update
+
+2010-08-17 10:48  cgilles
+
+	* NEWS: update
+
+2010-08-17 10:46  mwiesweg
+
+	* digikam/addtagslineedit.cpp: backport
+	  
+	  CCBUG: 246774
+
+2010-08-17 08:52  cgilles
+
+	* utilities/queuemanager/queuemgrwindow.cpp: invalid connection
+
+2010-08-17 08:46  cgilles
+
+	* utilities/cameragui/umscamera.cpp,
+	  utilities/cameragui/umscamera.h: to populate more quickly camera
+	  items in camera interface, don't reallocate Qt container in loop.
+
+2010-08-17 08:07  cgilles
+
+	* NEWS: update
+
+2010-08-15 13:45  cgilles
+
+	* NEWS: update
+
+2010-08-15 10:19  cgilles
+
+	* NEWS: update
+
+2010-08-15 10:14  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp: As
+	  LightRoom, use "Before" and "After" instead "Original" and
+	  "Target"
+
+2010-08-15 09:50  cgilles
+
+	* digikam/daboutdata.h: no need a dot at end of slogan
+
+2010-08-15 07:20  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-08-13 07:52  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-08-11 15:29  cgilles
+
+	* digikam/digikam.notifyrc,
+	  libs/dimg/filters/bw/bwsepiasettings.cpp, showfoto/showfoto.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/widgets/previewlist.cpp,
+	  utilities/queuemanager/basetools/color/bwconvert.cpp: - B&W
+	  converter for BQM : Add preview using default image preview from
+	  Oxygen. Fix crash due to a non initialized pointer.
+	  Please, always set a pointer to zero : in GDB, you will see an
+	  use of null pointer which is wrong of course. An unitialized
+	  pointer as a dumy
+	  which is impossible to identify as wrong quickly...
+	  - Add a new kde notifier event when editor as saved a file. This
+	  is usefull when you review RAW files in icon view and you edit
+	  item in editor.
+	  During a save operation, which can take a while, you can go back
+	  to icon view to continue to sort items before to perform RAW
+	  import. The notifier
+	  event will bring you when editor is ready to load a new item.
+	  CCBUGS: 245380
+
+2010-08-11 07:29  scripty
+
+	* showfoto/showfoto.desktop: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-08-11 05:22  aclemens
+
+	* utilities/advancedrename/advancedrenamemanager.cpp: This map is
+	  not used at the moment, disable it for now
+
+2010-08-11 05:22  aclemens
+
+	* utilities/advancedrename/advancedrenamemanager.cpp: polish
+
+2010-08-08 14:00  aclemens
+
+	* NEWS: update
+
+2010-08-08 14:00  aclemens
+
+	* NEWS: update
+
+2010-08-08 14:00  aclemens
+
+	* CMakeLists.txt, utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/parser/modifiers/removedoublesmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/removedoublesmodifier.h:
+	  New modifier: "Remove Doubles"
+	  
+	  This modifier will delete duplicate words from an renaming
+	  option.
+	  At least my camera produces some duplicate words when using the
+	  camera name
+	  option:
+	  
+	  [cam] => "Nikon Nikon D50"
+	  
+	  With the modifier you can remove those duplicate words:
+	  
+	  [cam]{removedoubles} => "Nikon D50"
+	  
+	  In the future this modifier can take parameters, like
+	  - remove only words that follow immediately each other
+	  - case insensitive
+	  - exclude some specific words
+
+2010-08-08 13:38  aclemens
+
+	* utilities/advancedrename/advancedrenamemanager.cpp,
+	  utilities/advancedrename/advancedrenamemanager.h: fix copyright
+	  header
+
+2010-08-08 13:31  aclemens
+
+	* utilities/queuemanager/batchtool.h,
+	  utilities/queuemanager/queuelist.cpp: Fix file extension handling
+	  in BQM.
+	  Still modifying the file extension is not possible when using a
+	  "Convert to..."
+	  BQM option.
+
+2010-08-08 13:16  aclemens
+
+	* utilities/cameragui/renamecustomizer.cpp: Not used for now
+
+2010-08-08 13:16  aclemens
+
+	* CMakeLists.txt, tests/advancedrenametest.cpp,
+	  tests/advancedrenametest.h,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamemanager.cpp,
+	  utilities/advancedrename/advancedrenamemanager.h,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h,
+	  utilities/advancedrename/common/parsesettings.h,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoptiondialogwidget.ui,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/cameragui/renamecustomizer.h,
+	  utilities/queuemanager/queuelist.cpp,
+	  utilities/queuemanager/queuesettingsview.cpp: Add new class
+	  AdvancedRenameManager that holds information about files to be
+	  renamed.
+	  Before this class renaming was done by parsing one file after the
+	  other, so the
+	  renaming options and modifiers had no information about already
+	  parsed files
+	  and how many files there will be renamed in general.
+	  
+	  For extension aware numbering it is important to know all files
+	  that should be
+	  parsed.
+	  In the future this class will maintain the whole parsing process.
+	  Right now it
+	  is just a "hack" to get things done, but to integrate it better
+	  into digiKam,
+	  a lot of code needs to be changed, especially in CameraUI and
+	  BQM.
+	  I don't have too much time at the moment, so this is the result
+	  :-)
+	  
+	  At least it works fine here.
+	  
+	  This commit also fixes some other problems:
+	  
+	  - BQM: when using the "Convert to..." options, file information
+	  could not be
+	  read, like camera name and metadata in general. This should be
+	  fixed now, BUT
+	  you are not able to modify the file extension in BQM (e.g. upper-
+	  or
+	  lowercase).
+	  
+	  - Date information was sometimes not available in CameraUI.
+	  
+	  BUG:246938
+
+2010-08-06 09:48  cgilles
+
+	* CMakeLists.txt, digikam/albumselectdialog.cpp,
+	  digikam/albumselectdialog.h, digikam/treefolderitem.cpp,
+	  digikam/treefolderitem.h,
+	  utilities/fuzzysearch/findduplicatesalbumitem.cpp,
+	  utilities/fuzzysearch/findduplicatesalbumitem.h,
+	  utilities/kipiiface/kipiuploadwidget.cpp: remove old
+	  treefolderitem class. We use Model view instead now.
+
+2010-08-05 15:29  cgilles
+
+	* utilities/fuzzysearch/findduplicatesalbumitem.cpp,
+	  utilities/fuzzysearch/findduplicatesalbumitem.h,
+	  utilities/fuzzysearch/findduplicatesview.cpp,
+	  utilities/fuzzysearch/findduplicatesview.h,
+	  utilities/fuzzysearch/fuzzysearchview.cpp,
+	  utilities/fuzzysearch/fuzzysearchview.h,
+	  utilities/fuzzysearch/sketchwidget.cpp,
+	  utilities/fuzzysearch/sketchwidget.h: do not overlay preview on
+	  duplicate list view item when it selected.
+	  More private internal containers
+
+2010-08-05 06:59  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-08-04 12:11  mwiesweg
+
+	* libs/models/albummodel.cpp: Fix showing the correct tooltip for
+	  special names
+
+2010-08-02 09:41  mwiesweg
+
+	* libs/threadimageio/thumbnailloadthread.cpp: Prevent crash: We
+	  must wait() before deleting creator!
+
+2010-08-02 07:02  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc: SVN_SILENT
+	  made messages (.desktop file)
+
+2010-08-01 07:11  aclemens
+
+	* NEWS: update
+
+2010-07-30 09:14  cgilles
+
+	* utilities/queuemanager/actions.h,
+	  utilities/queuemanager/actionthread.cpp,
+	  utilities/queuemanager/actionthread.h,
+	  utilities/queuemanager/assignedlist.cpp,
+	  utilities/queuemanager/assignedlist.h,
+	  utilities/queuemanager/batchtool.cpp,
+	  utilities/queuemanager/batchtool.h,
+	  utilities/queuemanager/batchtoolsmanager.cpp,
+	  utilities/queuemanager/batchtoolsmanager.h,
+	  utilities/queuemanager/iteminfoset.h,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuemgrwindow.h,
+	  utilities/queuemanager/queuemgrwindow_p.h,
+	  utilities/queuemanager/queuepool.cpp,
+	  utilities/queuemanager/queuepool.h,
+	  utilities/queuemanager/queuesettingsview.cpp,
+	  utilities/queuemanager/queuesettingsview.h,
+	  utilities/queuemanager/queuetooltip.cpp,
+	  utilities/queuemanager/queuetooltip.h,
+	  utilities/queuemanager/toolsettingsview.cpp,
+	  utilities/queuemanager/toolsettingsview.h,
+	  utilities/queuemanager/toolslistview.cpp,
+	  utilities/queuemanager/toolslistview.h,
+	  utilities/queuemanager/toolsview.cpp,
+	  utilities/queuemanager/toolsview.h: polish. more private internal
+	  container
+
+2010-07-30 08:34  cgilles
+
+	* utilities/queuemanager/queuelist.cpp,
+	  utilities/queuemanager/queuelist.h: use more private internal
+	  container.
+	  constify icon size
+	  factoring code to render preview icon
+	  preview icon is always visible if item is selected on the list
+
+2010-07-29 13:16  cgilles
+
+	* libs/widgets/common/rexpanderboxexclusive.cpp,
+	  libs/widgets/common/rexpanderboxexclusive.h: missing files
+
+2010-07-29 12:47  cgilles
+
+	* libs/dimg/filters/bw/bwsepiasettings.cpp: contrast adjustement
+	  have been dropped from the layout. Restore it in gui...
+	  CCBUGS: 245380
+
+2010-07-29 12:14  cgilles
+
+	* NEWS: update
+
+2010-07-29 12:14  cgilles
+
+	* CMakeLists.txt, imageplugins/color/autocorrectiontool.cpp,
+	  imageplugins/color/autocorrectiontool.h,
+	  libs/dimg/filters/bw/bwsepiasettings.cpp,
+	  libs/dimg/filters/bw/bwsepiasettings.h,
+	  libs/widgets/common/CMakeLists.txt,
+	  utilities/imageeditor/widgets/previewlist.cpp,
+	  utilities/imageeditor/widgets/previewlist.h: apply patch #49629
+	  from Manuel Viet to improve ergonomics of BW converter
+	  BUGS: 245380
+
+2010-07-29 08:59  cgilles
+
+	* NEWS: update
+
+2010-07-29 08:49  cgilles
+
+	* NEWS: update
+
+2010-07-28 19:43  cgilles
+
+	* NEWS: update
+
+2010-07-28 18:15  mwiesweg
+
+	* libs/threadimageio/loadsavethread.cpp,
+	  libs/threadimageio/loadsavethread.h,
+	  libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/managedloadsavethread.h: Terminate more
+	  gently: The LoadSaveThread should, be default, only wait.
+	  Saving tasks may need to complete.
+	  The ManagedLoadSaveThread manages stopping of tasks at shutdown.
+	  
+	  This may be related to the crash Gilles has experienced, but I'm
+	  not sure.
+
+2010-07-28 18:14  mwiesweg
+
+	* libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: Fix giant memory leak:
+	  For pixmap generation, results are stored in a list and harvested
+	  in the main thread,
+	  in a slot called by an interthread signal. As an optimization,
+	  for the thumbnail
+	  pregeneration thread, pixmap creation was switched off.
+	  Now these two facts interacted: Switching off pixmap creation was
+	  implemented by
+	  disconnecting the inter-thread signal, and all the thumbnail
+	  QImages were never harvested
+	  until application shutdown.
+	  
+	  BUG: 243692
+
+2010-07-28 09:52  cgilles
+
+	* libs/dimg/dimg.cpp, libs/dimg/dimg.h: use const ref
+
+2010-07-24 13:37  cgilles
+
+	* NEWS: update
+
+2010-07-23 07:46  cgilles
+
+	* libs/database/databaseserverstarter.cpp,
+	  libs/database/databaseserverstarter.h: handle moc file.
+	  usual polish
+
+2010-07-23 07:28  cgilles
+
+	* libs/models/albummodeldragdrophandler.cpp,
+	  libs/models/albummodeldragdrophandler.h: handle moc file
+	  usual polish
+
+2010-07-20 10:07  foerster
+
+	* libs/database/schemaupdater.h: Reverted schemaupdater class to
+	  the latest stable version.
+
+2010-07-20 06:58  cgilles
+
+	* digikam/uifilevalidator.cpp: polish
+
+2010-07-20 06:07  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: polish
+
+2010-07-19 17:55  foerster
+
+	* libs/database/databaseconfigelement.cpp,
+	  libs/database/databaseparameters.cpp,
+	  libs/database/schemaupdater.h,
+	  libs/widgets/common/databasewidget.cpp: Don't forget the
+	  thumbnails database name to be written on config.
+
+2010-07-19 08:38  cgilles
+
+	* utilities/setup/setupmisc.cpp, utilities/setup/setupmisc.h:
+	  backport from GoSC branch
+
+2010-07-19 08:34  cgilles
+
+	* utilities/setup/setup.cpp: constify
+
+2010-07-18 18:26  jwienke
+
+	* NEWS, digikam/albumtreeview.cpp: Fix restoring the check-state of
+	  tree views also for children.
+	  
+	  Thanks for the patch.
+	  
+	  BUG: 245061
+
+2010-07-17 14:19  jwienke
+
+	* digikam/daboutdata.h: changed my website url
+
+2010-07-17 12:07  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: polish
+
+2010-07-17 11:25  aclemens
+
+	* NEWS: update
+
+2010-07-17 11:21  aclemens
+
+	* NEWS: update
+
+2010-07-17 11:21  aclemens
+
+	* digikam/tagfiltersidebarwidget.cpp: I guess the plural form is
+	  better here
+
+2010-07-17 10:56  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: Fix tooltip
+
+2010-07-17 10:45  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h,
+	  utilities/cameragui/renamecustomizer.cpp: New layout mode:
+	  Compact.
+	  This is used in the CameraUI import dialog, but we should rethink
+	  the design in
+	  general. Having two layouts might be confusing for users.
+
+2010-07-17 10:11  eva
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h: Added new key action
+	  for Enter in editor.
+	  One can now open a tool and apply it immidiately using the enter
+	  key.
+	  This speeds things up a bit.
+	  also see #174391 for some thoughts.
+
+2010-07-17 06:54  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc: SVN_SILENT
+	  made messages (.desktop file)
+
+2010-07-13 19:03  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: polish
+
+2010-07-13 14:55  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: manage tags path list from Imach
+	  photo management program. tags path use '.' as separator in IPTC
+	  keywords
+
+2010-07-11 16:45  aclemens
+
+	* utilities/advancedrename/common/tooltipdialog.cpp: Whenever
+	  possible, use KDE classes instead of the Qt ones
+
+2010-07-11 16:45  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp: polish
+	  tooltip
+
+2010-07-11 16:45  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp: Use const
+	  reference
+
+2010-07-11 16:04  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h,
+	  utilities/advancedrename/common/tooltipdialog.cpp: polish
+
+2010-07-11 16:01  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h,
+	  utilities/advancedrename/common/tooltipdialog.cpp: polish API
+
+2010-07-11 13:57  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h,
+	  utilities/advancedrename/common/tooltipdialog.cpp: Add some more
+	  additional information to the AdvancedRename help dialog
+
+2010-07-11 09:55  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h: Forgot to commit
+	  one function
+
+2010-07-11 09:19  aclemens
+
+	* NEWS: update
+
+2010-07-11 09:19  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h: When in
+	  singleFileMode, select the full base name in the
+	  AdvancedRenameInput,
+	  for quickly changing the current file name. Avoid selecting the
+	  file extension.
+	  
+	  BUG:244151
+
+2010-07-11 09:19  aclemens
+
+	* digikam/digikamimageview.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp: Turn off
+	  directory creation for now, it doesn't work very well and at
+	  least I
+	  don't have too much time at the moment to think of a better
+	  solution.
+
+2010-07-10 12:27  cgilles
+
+	* utilities/nepomuk/digikamnepomukservice.cpp: fix compilation
+	  warnings with KDE 4.4.3
+
+2010-07-10 12:17  cgilles
+
+	* utilities/nepomuk/digikamnepomukservice.cpp,
+	  utilities/nepomuk/digikamnepomukservice.h: polish
+
+2010-07-10 12:00  cgilles
+
+	* NEWS: update
+
+2010-07-09 18:31  cgilles
+
+	* NEWS: update
+
+2010-07-07 16:45  mwiesweg
+
+	* libs/database/albumdb.cpp: Bugfix: The date/time values were
+	  properly converted for the fieldValueMap,
+	  but not for the value list.
+
+2010-07-07 07:47  cgilles
+
+	* NEWS: update
+
+2010-07-06 15:33  cgilles
+
+	* NEWS: update
+
+2010-07-06 11:24  foerster
+
+	* libs/widgets/common/databasewidget.cpp,
+	  utilities/setup/setupdatabase.cpp: DatabaseWidget / Database
+	  Setup: Added some extensions to choose the correct database type
+	  when load the settings.
+	  Renamed slots to match conventions.
+
+2010-07-05 22:26  lespitallier
+
+	* db_import: Commit mistake
+
+2010-07-05 20:11  lespitallier
+
+	* db_import, db_import/Makefile, db_import/Makefile.Debug,
+	  db_import/Makefile.Release, db_import/digiKam_db_import_tool.pro,
+	  db_import/digiKam_db_import_tool.pro.user, db_import/import.cpp,
+	  db_import/import.h, db_import/main.cpp, db_import/mainwindow.cpp,
+	  db_import/mainwindow.h, db_import/mainwindow.ui,
+	  db_import/ui_about.h, db_import/ui_mainwindow.h: Test commit (NPP
+	  db import)
+
+2010-07-05 16:13  cfeck
+
+	* digikam/imagepreviewbar.cpp,
+	  utilities/cameragui/cameraiconitem.cpp: SVN_SILENT compile
+
+2010-07-05 10:57  mwiesweg
+
+	* CMakeLists.txt, digikam/albumdragdrop.cpp,
+	  digikam/albumicongroupitem.cpp, digikam/albumicongroupitem.h,
+	  digikam/albumiconitem.cpp, digikam/albumiconitem.h,
+	  digikam/albumiconview.cpp, digikam/albumiconview.h,
+	  digikam/albumiconviewtooltip.cpp, digikam/albumiconviewtooltip.h,
+	  digikam/digikamapp.cpp, digikam/digikamapp.h, digikam/dio.cpp,
+	  digikam/tagmodificationhelper.cpp,
+	  libs/imageproperties/imagedescedittab.cpp: Cleanup: Remove old
+	  code
+
+2010-07-05 07:05  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/hotplug/digikam-opencamera.desktop.cmake,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-07-04 06:55  scripty
+
+	* digikam/digikam.notifyrc,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-07-02 14:03  cgilles
+
+	* utilities/kipiiface/kipiimageinfo.cpp,
+	  utilities/kipiiface/kipiimageinfo.h: constify
+
+2010-07-02 10:59  cgilles
+
+	* digikam/daboutdata.h: polish
+
+2010-07-02 10:58  cgilles
+
+	* libs/dialogs/infodlg.cpp, libs/dialogs/libsinfodlg.cpp: polish
+	  headers to use
+
+2010-07-02 10:49  cgilles
+
+	* NEWS: update
+
+2010-07-02 10:48  cgilles
+
+	* showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  utilities/imageeditor/editor/editorwindow.h: Handle menu actions
+	  properly in showfoto when an image is loaded, particuliary when
+	  Raw Import tool is used.
+	  BUGS: 242937
+
+2010-07-01 16:52  cgilles
+
+	* digikam/scancontroller.cpp: missing to fill label in progress dlg
+
+2010-07-01 06:54  scripty
+
+	* digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  kioslave/digikamtags.protocol: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-06-30 18:11  foerster
+
+	* libs/widgets/common/databasewidget.cpp,
+	  libs/widgets/common/databasewidget.h: Databasewidget : Use the
+	  index and then the associated value of the database type combobox
+	  instead of the text.
+	  This caused a bug, where the user was not able to switch to
+	  SQLite mode.
+
+2010-06-30 12:54  cgilles
+
+	* libs/dimg/filters/nr/nrsettings.cpp: red <=> blue
+
+2010-06-30 10:56  cgilles
+
+	* data/pics/splash-digikam.png, data/pics/splash-showfoto.png: i
+	  commited new 1.4.0 release spalsh to the wrong branch
+
+2010-06-30 09:23  cgilles
+
+	* README: polish
+
+2010-06-29 19:09  foerster
+
+	* data/database/dbconfig.xml.cmake: Update MySQL schema to use 32
+	  characters for MD5 hash values.
+	  Added schema update statements for next database schema version.
+	  
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2010-06-29 16:01  mwiesweg
+
+	* libs/threads/dynamicthread.cpp, libs/threads/dynamicthread.h: Add
+	  two more volatile flags.
+	  
+	  CCBUG: 243074
+
+2010-06-29 16:01  mwiesweg
+
+	* data/database/dbconfig.xml.cmake: whitespace cleanup only
+
+2010-06-29 10:39  cgilles
+
+	* AUTHORS: update
+
+2010-06-29 10:29  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-06-29 04:55  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-06-28 22:16  cgilles
+
+	* NEWS: update
+
+2010-06-28 14:46  cgilles
+
+	* libs/dialogs/dprogressdlg.cpp: polish
+
+2010-06-28 14:41  cgilles
+
+	* digikam/scancontroller.cpp, libs/dialogs/dprogressdlg.cpp,
+	  libs/dialogs/dprogressdlg.h,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchthumbsgenerator.cpp,
+	  utilities/batch/fingerprintsgenerator.cpp: remore QtreeView for
+	  DprogressDlg to limit memory consuming. We don't need actions
+	  list there.
+
+2010-06-28 13:30  cgilles
+
+	* libs/dialogs/dprogressdlg.cpp, libs/dialogs/dprogressdlg.h:
+	  polish
+
+2010-06-26 06:57  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  showfoto/showfoto.desktop,
+	  utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/hotplug/digikam-opencamera.desktop.cmake,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-06-25 06:07  cgilles
+
+	* NEWS: update
+
+2010-06-24 17:13  cgilles
+
+	* project/scripts/shell-msvc.bat: polish
+
+2010-06-24 06:33  scripty
+
+	* digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-06-23 13:56  cgilles
+
+	* libs/jpegutils/libjpeg-80/transupp.cpp: fix warnings
+
+2010-06-23 01:53  sengels
+
+	* CMakeLists.txt: also use the first compiler argument in case that
+	  is the real compiler name
+
+2010-06-22 22:29  pino
+
+	* tests/CMakeLists.txt: advancedrenametest needs kdcraw
+
+2010-06-22 21:44  cgilles
+
+	* digikam/addtagslineedit.cpp: Fix an infinite recursion call in
+	  this method. Thanks to Microsoft compiler to warn about this code
+	  under Windows...
+	  Really, why GCC compiler do not detect this stuff ???
+
+2010-06-22 21:43  cgilles
+
+	* digikam/addtagslineedit.cpp: polish
+
+2010-06-22 21:42  cgilles
+
+	* digikam/addtagslineedit.h: polish
+
+2010-06-22 15:38  cgilles
+
+	* libs/database/imageinfo.cpp, libs/database/imageinfo.h: Thanks to
+	  Microsof compiler : the export namespace is not the same between
+	  class and debug << operator. This result a null debug output on
+	  the console out this class
+
+2010-06-22 15:37  cgilles
+
+	* libs/dimg/filters/nr/nrfilter.cpp: usual MSVC warnings fix :
+	  double <=> float
+
+2010-06-20 21:54  cgilles
+
+	* imageplugins/color/CMakeLists.txt,
+	  imageplugins/enhance/CMakeLists.txt,
+	  imageplugins/filters/CMakeLists.txt,
+	  imageplugins/transform/CMakeLists.txt: link under MSVC
+
+2010-06-20 20:20  aclemens
+
+	* digikam/addtagslineedit.h: fix warning
+
+2010-06-20 19:54  mwiesweg
+
+	* CMakeLists.txt, libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h: Use the new
+	  AddTagsLineEdit in the imagedescedittab
+	  
+	  CCBUG: 237452
+
+2010-06-20 19:54  mwiesweg
+
+	* digikam/addtagslineedit.cpp, digikam/addtagslineedit.h: A line
+	  edit combined with a custom KCompletionBox (drop down box for
+	  completion)
+	  optimized for assigning tags and creating new tags with the
+	  keyboard.
+	  
+	  The drop down box shows the various choices:
+	  - existing tags matching the current input
+	  - for tags with the same name, the different occurrences in the
+	  hierarchy
+	  - creating a new tag
+	  - a tag can be created as child of the tag currently selected in
+	  the treeview,
+	  or a toplevel tag
+	  
+	  The user can choose his action, continue typing or assign with
+	  the Return key.
+	  
+	  CCBUG: 237452
+
+2010-06-20 19:29  mwiesweg
+
+	* libs/dimg/dimg.h, libs/dimg/dimg_p.h, libs/dmetadata/dmetadata.h:
+	  compile
+
+2010-06-20 19:28  mwiesweg
+
+	* digikam/albumthumbnailloader.cpp, digikam/albumthumbnailloader.h:
+	  Add a method to retrieve a standard icon for "Create New Tag"
+
+2010-06-20 19:28  mwiesweg
+
+	* libs/dmetadata/dmetadata.h, libs/dmetadata/dmetadatadata.h: Kill
+	  dmetadatadata.h, which was a workaround for older libkexiv2
+	  versions <1.0.
+	  We are now requiring 1.1.
+
+2010-06-20 19:28  mwiesweg
+
+	* libs/database/databasecorebackend.cpp: Whoops, calling a
+	  destructor explicitly? I guess deleting is the safe thing to do
+	  here.
+
+2010-06-20 19:28  mwiesweg
+
+	* libs/database/tagscache.cpp, libs/database/tagscache.h: Add
+	  method to get the tag id if the parent tag id and the tag name
+	  are known
+
+2010-06-19 08:01  cgilles
+
+	* libs/database/databasecorebackend.cpp,
+	  libs/database/databaseerrorhandler.h: Marcel, M$ Visual C++
+	  report that DatabaseErrorHandler do not have a method ~QObject().
+	  Re-implementing destructor and call it instead compile fine.
+	  Check if all is fine for you.
+	  
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2010-06-19 07:59  cgilles
+
+	* libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend_p.h: polish
+
+2010-06-19 07:43  cgilles
+
+	* libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend.h: usual M$ Visual C++ 2008
+	  coding style fix. Still an error about destructor in this class
+
+2010-06-17 10:42  cgilles
+
+	* CMakeLists.txt: disable temporally Nepomuk support under Win32
+
+2010-06-17 08:25  cgilles
+
+	* project/scripts/bootstrap.bat, project/scripts/shell-mingw.bat,
+	  project/scripts/shell-msvc.bat: polish
+
+2010-06-17 07:27  cgilles
+
+	* digikam/welcomepageview.cpp: use KUrl::toLocalFile() for win32
+
+2010-06-17 04:55  cgilles
+
+	* project/scripts/shell-mingw.bat, project/scripts/shell-msvc.bat:
+	  polish
+
+2010-06-17 04:54  cgilles
+
+	* project/scripts/bootstrap.bat: polish
+
+2010-06-16 07:04  cgilles
+
+	* NEWS: update
+
+2010-06-16 06:37  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/hotplug/digikam-opencamera.desktop.cmake,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-06-15 12:51  mwiesweg
+
+	* libs/dimg/dimg.cpp: Fix mimetype check
+
+2010-06-14 21:18  jwienke
+
+	* libs/dimg/loaders/tiffloader.cpp: Also enable tiffs with palette.
+	  Could not find any problems with a quick test. Please test that
+	  this solves the original issue.
+	  
+	  CCBUGS: 241418
+
+2010-06-13 15:05  mwiesweg
+
+	* CMakeLists.txt, libs/widgets/common/modelcompletion.cpp,
+	  libs/widgets/common/modelcompletion.h,
+	  libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h: Factorize the code feeding a
+	  KCompletion in SearchTextBar to a
+	  dedicated KCompletion subclass.
+
+2010-06-12 14:12  mwiesweg
+
+	* digikam/main.cpp: Fix reading db file from command line
+	  
+	  CCBUG: 235928
+
+2010-06-12 12:13  aclemens
+
+	* digikam/digikamimageview.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h: First
+	  implementation of "directory creation" with AdvancedRename.
+	  Right now this only works in the AlbumUI, not BQM or CameraUI.
+	  I guess we need something common for renaming, like a thread
+	  running in the
+	  background that is used by all the components, not only the
+	  AdvancedRenameDialog like it is done now.
+	  
+	  To test it, use some test images, and rename them by using a "/"
+	  character,
+	  for example:
+	  
+	  "[date]/[file]_####"
+	  
+	  or something like that.
+	  
+	  It can also be nested:
+	  
+	  "[ext]/[date]/[file]_####"
+	  
+	  But it is not really stable and some directory combinations don't
+	  work.
+	  So testing should really be done with some test images!!!
+	  
+	  Andi
+
+2010-06-12 11:24  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp: Remove old
+	  connections
+
+2010-06-12 11:24  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: use
+	  toLocalFile() instead of path()
+
+2010-06-12 08:00  cgilles
+
+	* project/scripts/shell-mingw.bat, project/scripts/shell-msvc.bat:
+	  polish
+
+2010-06-12 06:55  cgilles
+
+	* project/scripts/shell-mingw.bat, project/scripts/shell-msvc.bat:
+	  polish
+
+2010-06-11 12:11  cgilles
+
+	* project/scripts/shell-msvc.bat, project/scripts/shell.bat: Add
+	  NMake support
+
+2010-06-11 12:10  cgilles
+
+	* project/scripts/shell-mingw.bat: Add NMake support
+
+2010-06-11 12:09  cgilles
+
+	* project/scripts/bootstrap.bat: Add NMake support
+
+2010-06-10 08:24  cgilles
+
+	* NEWS: update
+
+2010-06-09 11:51  cgilles
+
+	* utilities/advancedrename/parser/options/database/dbheaderlistitem.h,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.h:
+	  Fix broken compilation under win32. No need to export these
+	  classes
+
+2010-06-09 11:42  cgilles
+
+	* utilities/advancedrename/parser/options/database/keys/commonkeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/commonkeys.h,
+	  utilities/advancedrename/parser/options/database/keys/metadatakeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/metadatakeys.h,
+	  utilities/advancedrename/parser/options/database/keys/positionkeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/positionkeys.h:
+	  polish
+
+2010-06-09 11:38  cgilles
+
+	* utilities/advancedrename/common/parseabledialog.cpp,
+	  utilities/advancedrename/common/parseabledialog.h: polish
+
+2010-06-09 11:37  cgilles
+
+	* utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/modifier.h: polish
+
+2010-06-09 07:01  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.cpp: fix win32
+	  warnings
+
+2010-06-09 06:44  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-06-08 15:21  cgilles
+
+	* CMakeLists.txt: 1.4.0
+
+2010-06-07 22:49  cgilles
+
+	* NEWS: polish
+
+2010-06-07 22:41  cgilles
+
+	* NEWS: update
+
+2010-06-07 22:32  cgilles
+
+	* project/NEWS.1.3.0: archive
+
+2010-06-07 22:20  nlecureuil
+
+	* NEWS: Open for 1.4.0
+
+
 1.3.0 2010-06-07
+
 2010-06-07 14:34  cgilles
 
 	* utilities/searchwindow/searchview.cpp,
