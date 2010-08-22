@@ -106,11 +106,17 @@ public:
     /** Return the index for the given ImageInfo or id, if contained in this model. */
     QModelIndex indexForImageInfo(const ImageInfo& info) const;
     QModelIndex indexForImageId(qlonglong id) const;
+    QList<QModelIndex> indexesForImageInfo(const ImageInfo& info) const;
+    QList<QModelIndex> indexesForImageId(qlonglong id) const;
     /** Returns the index or ImageInfo object from the underlying data
      *  for the given file path. This is fast if keepsFilePathCache is enabled.
-     *  The file path is as returned by ImageInfo.filePath(). */
+     *  The file path is as returned by ImageInfo.filePath().
+     *  In case of multiple occurrences of the same file, the simpler variants return
+     *  any one found first, use the QList methods to retrieve all occurrences. */
     QModelIndex indexForPath(const QString& filePath) const;
     ImageInfo imageInfo(const QString& filePath) const;
+    QList<QModelIndex> indexesForPath(const QString& filePath) const;
+    QList<ImageInfo> imageInfos(const QString& filePath) const;
 
     /** Retrieves the imageInfo object from the data() method of the given index.
      *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */

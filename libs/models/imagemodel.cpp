@@ -192,12 +192,25 @@ QModelIndex ImageModel::indexForImageInfo(const ImageInfo& info) const
     return indexForImageId(info.id());
 }
 
+QList<QModelIndex> ImageModel::indexesForImageInfo(const ImageInfo& info) const
+{
+    return indexesForImageId(info.id());
+}
+
 QModelIndex ImageModel::indexForImageId(qlonglong id) const
 {
     int index = d->idHash.value(id, -1);
     if (index != -1)
         return createIndex(index, 0);
     return QModelIndex();
+}
+
+QList<QModelIndex> ImageModel::indexesForImageId(qlonglong id) const
+{
+    QList<QModelIndex> indexes;
+    foreach (int index, d->idHash.values(id))
+        indexes << createIndex(index, 0);
+    return indexes;
 }
 
 // static method
@@ -238,6 +251,23 @@ QModelIndex ImageModel::indexForPath(const QString& filePath) const
     return QModelIndex();
 }
 
+QList<QModelIndex> ImageModel::indexesForPath(const QString& filePath) const
+{
+    if (d->keepFilePathCache)
+    {
+        return indexesForImageId(d->filePathHash.value(filePath));
+    }
+    else
+    {
+        QList<QModelIndex> indexes;
+        const int size = d->infos.size();
+        for (int i=0; i<size; ++i)
+            if (d->infos[i].filePath() == filePath)
+                indexes << createIndex(i, 0);
+        return indexes;
+    }
+}
+
 ImageInfo ImageModel::imageInfo(const QString& filePath) const
 {
     if (d->keepFilePathCache)
@@ -257,6 +287,27 @@ ImageInfo ImageModel::imageInfo(const QString& filePath) const
                 return info;
     }
     return ImageInfo();
+}
+
+QList<ImageInfo> ImageModel::imageInfos(const QString& filePath) const
+{
+    QList<ImageInfo> infos;
+    if (d->keepFilePathCache)
+    {
+        qlonglong id = d->filePathHash.value(filePath);
+        if (id)
+        {
+            foreach (int index, d->idHash.values(id))
+                infos << d->infos[index];
+        }
+    }
+    else
+    {
+        foreach (const ImageInfo& info, d->infos)
+            if (info.filePath() == filePath)
+                infos << info;
+    }
+    return infos;
 }
 
 void ImageModel::addImageInfos(const QList<ImageInfo>& infos)
