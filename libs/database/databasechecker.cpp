@@ -86,7 +86,7 @@ bool DatabasePrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
     }
 
     // Try to delete this table in any case
-    checkPriv(fromDBbackend, "CheckPriv_DROP_TABLE");
+    checkPriv(fromDBbackend, "CheckPriv_Cleanup");
 
     return result;
 }

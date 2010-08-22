@@ -68,6 +68,11 @@
         	<dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
         		DROP TABLE PrivCheck;
         	</statement>
+            </dbaction>
+            
+            <dbaction name="CheckPriv_Cleanup"><statement mode="plain">
+                DROP TABLE IF EXISTS PrivCheck;
+            </statement>
         	</dbaction>
         
         
@@ -441,7 +446,7 @@
                             thumbId INTEGER,
                             UNIQUE(identifier))
                     </statement>
-                    <statement mode="plain">CREATE TABLE Settings
+                    <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
                             (keyword TEXT NOT NULL UNIQUE,
                             value TEXT)
                     </statement>
@@ -724,6 +729,11 @@
         		DROP TABLE PrivCheck;
         	</statement>
         	</dbaction>
+        	
+        	<dbaction name="CheckPriv_Cleanup"><statement mode="plain">
+                DROP TABLE IF EXISTS PrivCheck;
+            </statement>
+            </dbaction>
         
             <dbaction name="CreateDB" mode="transaction"><statement mode="plain">  CREATE TABLE AlbumRoots
             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -1093,7 +1103,7 @@
                             thumbId INTEGER,
                             UNIQUE(identifier(333)))
                 </statement>
-                <statement mode="plain">CREATE TABLE Settings
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
                             (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
                             value LONGTEXT CHARACTER SET utf8,
                             UNIQUE(keyword(333)))
