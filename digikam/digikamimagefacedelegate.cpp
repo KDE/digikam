@@ -64,7 +64,7 @@ QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) cons
     if (extraData.isNull() || extraData.type() != QVariant::String)
         return DigikamImageDelegate::thumbnailPixmap(index);
 
-    QRect rect = FaceIface::svgToRect(extraData.toString());
+    QRect rect; /* = FaceIface::svgToRect(extraData.toString()); FIXME : It doesn't compile yet...*/
 
     // set requested thumbnail detail
     if (rect.isValid())
