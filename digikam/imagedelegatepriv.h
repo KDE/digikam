@@ -7,9 +7,9 @@
  * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,41 +47,43 @@ public:
 
     ImageDelegatePrivate()
     {
-        categoryDrawer = 0;
-        contentWidth   = 0;
+        categoryDrawer      = 0;
+        contentWidth        = 0;
         drawMouseOverFrame  = true;
         drawFocusFrame      = true;
         ratingOverThumbnail = false;
-        currentModel   = 0;
-        currentView    = 0;
+        currentModel        = 0;
+        currentView         = 0;
 
         actualPixmapRectCache.setMaxCost(250);
     }
 
-    int                       contentWidth;
+    int                   contentWidth;
 
-    QRect                     dateRect;
-    QRect                     modDateRect;
-    QRect                     pixmapRect;
-    QRect                     nameRect;
-    QRect                     commentsRect;
-    QRect                     resolutionRect;
-    QRect                     sizeRect;
-    QRect                     tagRect;
-    bool                      drawFocusFrame;
-    bool                      drawMouseOverFrame;
-    bool                      ratingOverThumbnail;
+    QRect                 dateRect;
+    QRect                 modDateRect;
+    QRect                 pixmapRect;
+    QRect                 nameRect;
+    QRect                 commentsRect;
+    QRect                 resolutionRect;
+    QRect                 sizeRect;
+    QRect                 tagRect;
+    bool                  drawFocusFrame;
+    bool                  drawMouseOverFrame;
+    bool                  ratingOverThumbnail;
 
-    QCache<int, QRect>        actualPixmapRectCache;
-    ImageCategoryDrawer      *categoryDrawer;
+    QCache<int, QRect>    actualPixmapRectCache;
+    ImageCategoryDrawer*  categoryDrawer;
 
-    ImageCategorizedView     *currentView;
-    QAbstractItemModel       *currentModel;
+    ImageCategorizedView* currentView;
+    QAbstractItemModel*   currentModel;
+
+public:
 
     virtual void clearRects();
 };
 
 } // namespace Digikam
 
-#endif
+#endif // IMAGEDELEGATEPRIV_H
 
