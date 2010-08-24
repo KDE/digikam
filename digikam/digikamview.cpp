@@ -608,6 +608,8 @@ void DigikamView::loadViewState()
 
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
 
+    MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
+    mapView->doLoadState();
 }
 
 void DigikamView::saveViewState()
@@ -641,6 +643,9 @@ void DigikamView::saveViewState()
     {
         group.writeEntry("InitialAlbumID", 0);
     }
+
+    MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
+    mapView->doSaveState();
 }
 
 KUrl::List DigikamView::allUrls() const

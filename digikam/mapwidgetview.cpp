@@ -96,7 +96,7 @@ public:
  * @param parent Parent object
  */
 MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent)
-             : QWidget(parent), d(new MapWidgetViewPriv)
+             : QWidget(parent), StateSavingObject(this), d(new MapWidgetViewPriv)
 {
     d->imageModel           = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel       = selectionModel;
@@ -106,6 +106,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterMode
     d->mapWidget = new KMap::KMapWidget(this);
     d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
     d->mapWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
+    d->mapWidget->setEditModeAvailable(true);
     KMap::ItemMarkerTiler* const kmapMarkerModel = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
     d->mapWidget->setBackend("marble");
@@ -119,6 +120,29 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterMode
 MapWidgetView::~MapWidgetView()
 {
     delete d;
+}
+
+void MapWidgetView::setConfigGroup(KConfigGroup group)
+{
+    StateSavingObject::setConfigGroup(group);
+}
+
+void MapWidgetView::doLoadState()
+{
+    KConfigGroup group = getConfigGroup();
+    const KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
+
+    d->mapWidget->readSettingsFromGroup(&groupCentralMap);
+}
+
+void MapWidgetView::doSaveState()
+{
+    KConfigGroup group = getConfigGroup();
+    KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
+
+    d->mapWidget->saveSettingsToGroup(&groupCentralMap);
+
+    group.sync();
 }
 
 /**

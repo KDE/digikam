@@ -36,6 +36,7 @@
 // local includes
 
 #include "statesavingobject.h"
+#include "digikam_export.h"
 #include "imagealbummodel.h"
 #include "imagefiltermodel.h"
 #include "imagegpsitem.h"

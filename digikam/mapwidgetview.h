@@ -40,6 +40,7 @@
 
 // local includes
 
+#include "statesavingobject.h"
 #include "digikam_export.h"
 #include "imagealbummodel.h"
 #include "thumbnailloadthread.h"
@@ -86,7 +87,7 @@ private:
 
 // ------------------------------------------------------------------------------------------------------------
 
-class MapWidgetView : public QWidget
+class MapWidgetView : public QWidget, public StateSavingObject
 {
     Q_OBJECT
 
@@ -98,6 +99,9 @@ public:
     void openAlbum(Album* album);
     void setActive(const bool state);
     bool getActiveState() const;
+    void setConfigGroup(KConfigGroup group);
+    void doLoadState();
+    void doSaveState();    
 
 private:
 

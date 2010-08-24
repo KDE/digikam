@@ -302,7 +302,7 @@ void GPSSearchView::doLoadState()
         }
     }
 
-    const KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
+    const KConfigGroup groupMapWidget = KConfigGroup(&group, "GPSSearch Map Widget");
     d->mapSearchWidget->readSettingsFromGroup(&groupMapWidget);
     d->searchTreeView->loadState();
 
@@ -317,7 +317,7 @@ void GPSSearchView::doSaveState()
 
     group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
 
-    KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
+    KConfigGroup groupMapWidget = KConfigGroup(&group, "GPSSearch Map Widget");
     d->mapSearchWidget->saveSettingsToGroup(&groupMapWidget);
     d->searchTreeView->saveState();
 
