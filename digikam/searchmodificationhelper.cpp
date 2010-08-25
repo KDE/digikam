@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "albummanager.h"
 #include "haariface.h"
 #include "imageinfo.h"
@@ -281,6 +282,57 @@ void SearchModificationHelper::slotCreateFuzzySearchFromImage(const QString& pro
                                                               bool overwriteIfExisting)
 {
     createFuzzySearchFromImage(proposedName, image, threshold, overwriteIfExisting);
+}
+
+SAlbum *SearchModificationHelper::createFaceSearch(const QString &proposedName,
+                                                   int tagId, FaceSearchContentFlags flags,
+                                                   bool overwriteIfExisting)
+{
+    QString name = proposedName;
+    if (!overwriteIfExisting && !checkName(name))
+    {
+        return 0;
+    }
+
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.setDefaultFieldOperator(SearchXml::Or);
+
+    QStringList properties;
+    if (flags & UnconfirmedFaces)
+        properties << "autodetectedFace";
+    if (flags & AssignedFaces)
+        properties << "tagRegion";
+
+    foreach (const QString& property, properties)
+    {
+        writer.writeField("imagetagproperty", SearchXml::Equal);
+        if (tagId)
+            writer.writeAttribute("tagid", QString::number(tagId));
+        writer.writeValue(property);
+        writer.finishField();
+    }
+
+    if (flags & TagAssigned && tagId)
+    {
+        writer.writeField("tagid", SearchXml::Equal);
+        writer.writeValue(tagId);
+        writer.finishField();
+    }
+
+    writer.finishGroup();
+
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name,
+                    DatabaseSearch::FaceSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(salbum);
+
+    return salbum;
+}
+
+void SearchModificationHelper::slotCreateCurrentFaceSearch(int tagId, FaceSearchContentFlags flags)
+{
+    createFaceSearch(SAlbum::getTemporaryTitle(DatabaseSearch::FaceSearch), tagId, flags, true);
 }
 
 } // namespace Digikam

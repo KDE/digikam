@@ -60,6 +60,19 @@ class SearchModificationHelper: public QObject
 
 public:
 
+    enum FaceSearchContentFlag
+    {
+        /// Faces found by autodetection
+        UnconfirmedFaces = 1 << 0,
+        /// Faces assigned or confirmed by user
+        AssignedFaces   = 1 << 1,
+        /// Tag assigned, but not tag region
+        TagAssigned      = 1 << 2,
+
+        AllFaces = UnconfirmedFaces | AssignedFaces
+    };
+    Q_DECLARE_FLAGS(FaceSearchContentFlags, FaceSearchContentFlag)
+
     /**
      * Constructor.
      *
@@ -82,7 +95,7 @@ public:
                                         unsigned int numberOfResults,
                                         bool overwriteIfExisting = false);
 
-    /*
+    /**
      * @see slotCreateFuzzySearchFromImage()
      * @return the newly created album
      */
@@ -90,6 +103,15 @@ public:
                                        const ImageInfo &image,
                                        float threshold,
                                        bool overwriteIfExisting = false);
+
+    /**
+     * @see slotCreateFaceSearch()
+     * @return the newly created album
+     */
+    SAlbum *createFaceSearch(const QString &proposedName,
+                             int tagId,
+                             FaceSearchContentFlags flags = AllFaces,
+                             bool overwriteIfExisting = false);
 
 public Q_SLOTS:
 
@@ -155,6 +177,12 @@ public Q_SLOTS:
                                         float threshold,
                                         bool overwriteIfExisting = false);
 
+    /**
+     * Creates a new face search for listing images by the tag region property
+     * and selects it in the album manager after creation.
+     */
+    void slotCreateCurrentFaceSearch(int tagId,
+                                     FaceSearchContentFlags flags = AllFaces);
 private:
 
     bool checkAlbum(const QString& name) const;
@@ -167,5 +195,7 @@ private:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::SearchModificationHelper::FaceSearchContentFlags)
 
 #endif /* SEARCHMODIFICATIONHELPER_H */
