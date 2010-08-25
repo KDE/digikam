@@ -183,13 +183,13 @@ QString TagsCache::tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy)
 QString TagsCache::propertyNameDigikamInternalTag()
 {
     // Do not change, is written to users' databases
-    return "_Digikam_Internal_Tag_";
+    return "internalTag";
 }
 
 QString TagsCache::propertyNameExcludedFromWriting()
 {
     // Do not change, is written to users' databases
-    return "_Digikam_No_Metadata_Tag_";
+    return "noMetadataTag";
 }
 
 QString TagsCache::tagName(int id)
@@ -499,6 +499,10 @@ bool TagsCache::canBeWrittenToMetadata(int tagId)
 
 int TagsCache::getOrCreateInternalTag(const QString& tagName)
 {
+    // ensure the parent tag exists, including the internal property
+    if (!tagForPath(tagPathOfDigikamInternalTags(IncludeLeadingSlash)))
+        getOrCreateTagWithProperty(tagPathOfDigikamInternalTags(IncludeLeadingSlash), propertyNameDigikamInternalTag());
+
     QString tagPath = tagPathOfDigikamInternalTags(IncludeLeadingSlash) + '/' + tagName;
     return getOrCreateTagWithProperty(tagPath, propertyNameDigikamInternalTag());
 }

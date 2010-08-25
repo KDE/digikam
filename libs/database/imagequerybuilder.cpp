@@ -1038,90 +1038,70 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "imagetagproperty")
     {
-        QStringList keyValue = reader.valueToStringList();
-        if (keyValue.size() == 2)
+        if (relation == SearchXml::Equal)
         {
-            if (m_imageTagPropertiesJoined)
+            // First, read attributes
+            QStringRef tagAttribute = reader.attributes().value("tagid");
+            int tagId = 0;
+            if (!tagAttribute.isEmpty())
+                tagId = tagAttribute.toString().toInt();
+
+            // read values: one or two strings
+            QStringList values = reader.valueToStringOrStringList();
+
+            if (values.size() == 1)
             {
-                sql += " (ImageTagProperties.property=? AND ImageTagProperties.value ";
-                ImageQueryBuilder::addSqlRelation(sql, relation);
-                sql += " ?) ";
+                // This indicates that the ImageTagProperties is joined in the SELECT query,
+                // so one entry is listed for each property entry (not for each image id)
+                if (m_imageTagPropertiesJoined)
+                {
+                    sql += " (";
+                    if (tagId)
+                        sql += "ImageTagProperties.tagid=? AND ";
+                    sql += "ImageTagProperties.property=?) ";
+                }
+                else
+                {
+                    sql += " (Images.id IN "
+                            " (SELECT imageid FROM ImageTagProperties WHERE ";
+                    if (tagId)
+                        sql += " tagid=? AND ";
+                    sql += "property=?)) ";
+                }
+                if (tagId)
+                    *boundValues << tagId;
+                *boundValues << values.first();
+            }
+            else if (values.size() == 2)
+            {
+                if (m_imageTagPropertiesJoined)
+                {
+                    sql += " (";
+                    if (tagId)
+                        sql += "ImageTagProperties.tagid=? AND ";
+                    sql += "ImageTagProperties.property=? AND ImageTagProperties.value ";
+                    ImageQueryBuilder::addSqlRelation(sql, relation);
+                    sql += " ?) ";
+                }
+                else
+                {
+                    sql += " (Images.id IN "
+                           " (SELECT imageid FROM ImageTagProperties WHERE ";
+                    if (tagId)
+                        sql += "tagid=? AND ";
+                    sql += "property=? AND value ";
+                    ImageQueryBuilder::addSqlRelation(sql, relation);
+                    sql += " ?)) ";
+                }
+
+                if (tagId)
+                    *boundValues << tagId;
+                *boundValues << values[0] << fieldQuery.prepareForLike(values[1]);
             }
             else
             {
-                sql += " (Images.id IN "
-                    " (SELECT imageid FROM ImageTagProperties "
-                    "  WHERE property=? AND value ";
-                ImageQueryBuilder::addSqlRelation(sql, relation);
-                sql += " ?)) ";
+                kDebug() << "The imagetagproperty field requires one value (property) or two values (property, value).";
             }
-            *boundValues << keyValue[0] << fieldQuery.prepareForLike(keyValue[1]);
-        }
-        else
-        {
-            kWarning() << "imagetagproperty requires a list of 2 strings";
-        }
-    }
-    else if (name == "imagetagpropertyfortag")
-    {
-        QStringList keyValue = reader.valueToStringList();
-        if (keyValue.size() == 3)
-        {
-            if (m_imageTagPropertiesJoined)
-            {
-                sql += " (ImageTagProperties.tagid=? AND ImageTagProperties.property=? AND ImageTagProperties.value ";
-                ImageQueryBuilder::addSqlRelation(sql, relation);
-                sql += " ?) ";
-            }
-            else
-            {
-                sql += " (Images.id IN "
-                    " (SELECT imageid FROM ImageTagProperties "
-                    "  WHERE tagid=? AND property=? AND value ";
-                ImageQueryBuilder::addSqlRelation(sql, relation);
-                sql += " ?)) ";
-            }
-            *boundValues << keyValue[2].toInt() << keyValue[0] << fieldQuery.prepareForLike(keyValue[1]);
-        }
-        else
-        {
-            kWarning() << "imagetagpropertyfortag requires a list of 3 values";
-        }
-    }
-    else if (name == "hasimagetagproperty")
-    {
-        if (m_imageTagPropertiesJoined)
-        {
-            sql += " (ImageTagProperties.property=?) ";
-        }
-        else
-        {
-            sql += " (Images.id IN "
-                " (SELECT imageid FROM ImageTagProperties "
-                "  WHERE property=?)); ";
-        }
-        *boundValues << reader.value();
-    }
-    else if (name == "hasimagetagpropertyfortag")
-    {
-        QStringList values = reader.valueToStringList();
-        if (values.size() == 2)
-        {
-            if (m_imageTagPropertiesJoined)
-            {
-                sql += " (ImageTagProperties.tagid=? AND ImageTagProperties.property=?) ";
-            }
-            else
-            {
-                sql += " (Images.id IN "
-                    " (SELECT imageid FROM ImageTagProperties "
-                    "  WHERE tagid=? AND property=?)); ";
-            }
-            *boundValues << values[0] << values[1].toInt();
-        }
-        else
-        {
-            kWarning() << "imagetagpropertyfortag requires a list of 2 values";
         }
     }
     else if (name == "keyword")
