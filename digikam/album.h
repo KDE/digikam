@@ -458,7 +458,6 @@ public:
     bool                 isMapSearch() const;
     bool                 isDuplicatesSearch() const;
     bool                 isFaceSearch() const;
-    bool                 isUnknownFaceSearch() const;
 
     /**
      * Indicates whether this album is a temporary search or not.
