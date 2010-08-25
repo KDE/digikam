@@ -1174,22 +1174,11 @@ void AlbumTreeView::slotDIOResult(KJob *kjob)
 
 // --------------------------------------- //
 
-TagTreeView::TagTreeView(TagModel *model, QWidget *parent, bool people)
+TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
     m_filteredModel = new TagPropertiesFilterModel(this);
     m_filteredModel->setSourceTagModel(model);
-    
-        
-    if(people)
-    {
-        SearchTextSettings s;
-        s.text = "People";
-        m_filteredModel->setSearchTextSettings(s);
-//         m_filteredModel->listOnlyTagsWithProperty("person");
-    }
-        
-    
     albumFilterModel()->setSourceAlbumModel(m_filteredModel);
 
     m_modificationHelper = new TagModificationHelper(this, this);

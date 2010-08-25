@@ -50,7 +50,7 @@ public:
      * @param parent parent for Qt's parent child mechanism
      * @param model tag model to display
      */
-    TagFolderView(QWidget* parent, Digikam::TagModel* model, bool people = false);
+    TagFolderView(QWidget* parent, Digikam::TagModel* model);
 
     /**
      * Destructor.

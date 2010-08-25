@@ -448,7 +448,7 @@ class TagTreeView : public AbstractCheckableAlbumTreeView
 
 public:
 
-    explicit TagTreeView(TagModel* model, QWidget* parent = 0, bool people = false);
+    explicit TagTreeView(TagModel* model, QWidget* parent = 0);
     TagModel* albumModel() const;
     /// Contains only the tags filtered by properties - prefer to albumModel()
     TagPropertiesFilterModel* filteredModel() const;
