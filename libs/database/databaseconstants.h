@@ -1,0 +1,149 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-04-21
+ * Description : Structures for use in AlbumDB
+ *
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#ifndef DATABASE_CONSTANTS_H
+#define DATABASE_CONSTANTS_H
+
+// Qt includes
+
+#include <QLatin1String>
+
+// Local includes
+
+#include "digikam_export.h"
+
+namespace Digikam
+{
+
+namespace AlbumRoot
+{
+    enum Type
+    {
+        // Keep values constant
+        UndefinedType   = 0,
+        VolumeHardWired = 1,
+        VolumeRemovable = 2,
+        Network         = 3
+    };
+}
+
+namespace DatabaseSearch
+{
+    enum Type
+    {
+        UndefinedType,
+        KeywordSearch,
+        AdvancedSearch,
+        LegacyUrlSearch,
+        TimeLineSearch,
+        HaarSearch,
+        MapSearch,
+        DuplicatesSearch,
+        FaceSearch
+    };
+
+    enum HaarSearchType
+    {
+        HaarImageSearch,
+        HaarSketchSearch
+    };
+}
+
+namespace DatabaseItem
+{
+    enum Status
+    {
+        // Keep values constant
+        UndefinedStatus = 0,
+        Visible         = 1,
+        Hidden          = 2,
+        Removed         = 3
+    };
+
+    enum Category
+    {
+        // Keep values constant
+        UndefinedCategory = 0,
+        Image             = 1,
+        Video             = 2,
+        Audio             = 3,
+        Other             = 4
+    };
+}
+
+namespace DatabaseRelation
+{
+    enum Type
+    {
+        UndefinedType = 0,
+        /** The subject is a derivative of the object */
+        DerivedFrom   = 1
+    };
+}
+
+namespace DatabaseComment
+{
+    enum Type
+    {
+        // Keep values constant
+        /// UndefinedType: Shall never appear in the database
+        UndefinedType   = 0,
+        /**
+         *  Comment: The default - a normal comment
+         *  This is what the user in digikam edits as the comment.
+         *  It is mapped to and from the JFIF comment,
+         *  the EXIF user comment, the IPTC Caption,
+         *  Dublin Core and Photoshop Description.
+         */
+        Comment         = 1,
+        /// Headline: as with IPTC or Photoshop
+        Headline        = 2,
+        /// Title: as with Dublin Core Title, Photoshop Title, IPTC Object Name
+        Title           = 3
+        // Feel free to add here any more types that you need!
+    };
+}
+
+class DIGIKAM_DATABASE_EXPORT TagPropertyName
+{
+public:
+    static QLatin1String person();
+    static QLatin1String unknownPerson();
+    static QLatin1String kfaceId();
+};
+
+class DIGIKAM_DATABASE_EXPORT ImageTagPropertyName
+{
+public:
+    static QLatin1String tagRegion();
+    static QLatin1String autodetectedFace();
+    static QLatin1String faceToTrain();
+};
+
+}
+
+
+#endif
+
+
