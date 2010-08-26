@@ -232,7 +232,11 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
 
     // People Sidebar
     d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getTagModel());
+                    d->modelCollection->getTagModel());//,
+                    //d->searchModificationHelper);
+    connect(d->peopleSideBar, SIGNAL(requestFaceMode(bool)),
+            d->iconView, SLOT(setFaceMode(bool)));
+
     d->leftSideBarWidgets << d->peopleSideBar;
 
     foreach(SidebarWidget *leftWidget, d->leftSideBarWidgets)
@@ -976,6 +980,7 @@ void DigikamView::slotAlbumSelected(Album* album)
     else if (album->type() == Album::TAG)
     {
         emit signalAlbumSelected(false);
+        /*
         
         kDebug()<<"Album "<<album->title()<<" selected." ;
         
@@ -996,7 +1001,8 @@ void DigikamView::slotAlbumSelected(Album* album)
                 return;
             }
         }
-        
+
+        */
         emit signalTagSelected(true);
     }
 
@@ -1019,6 +1025,7 @@ void DigikamView::slotAlbumSelected(Album* album)
         }
 }
 
+/*
 void DigikamView::showFaceAlbum ( int tagID )
 {
     QString personname = TagsCache::instance()->tagName(tagID);
@@ -1038,7 +1045,7 @@ void DigikamView::showFaceAlbum ( int tagID )
 
 }
 
-
+*/
 
 void DigikamView::slotAlbumOpenInKonqui()
 {
