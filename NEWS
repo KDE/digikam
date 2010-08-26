@@ -6,4 +6,5 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 247977 : libpgf relevant : digiKam crash while scrolling the thumbnail view.
+002 ==> 
