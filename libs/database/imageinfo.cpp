@@ -613,7 +613,6 @@ void TreeBuilder::readPairs(const QList<QPair<qlonglong, qlonglong> >& pairs)
     }
 
     // 2) Resolve parents
-    QList<qlonglong> m_origins;
     for (it = m_nodes.begin(); it != m_nodes.end(); ++it)
     {
         if (it->ancestors.size() == 0)
