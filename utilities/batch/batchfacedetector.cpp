@@ -216,20 +216,9 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
     {
         kDebug() << "Will detect faces in " << desc.filePath << " => " << "Height= " << img.height() << ", Width= " << img.width();
 
-        // If we're to rebuild everything, delete old thumbnails. 
-        // FIXME: We have multiple thumbs per image, but deletethumbnail deletes all.
-        if (d->rebuildAll)
-            d->thumbnailLoadThread->deleteThumbnail(desc.filePath);
-
         // Find all faces, and create and associate their face thumbnails with the image.
         QList<KFaceIface::Face> faceList = d->faceIface->findAndTagFaces(dimg, ImageInfo(desc.filePath).id() );
 
-        QListIterator<KFaceIface::Face> it(faceList);
-        while(it.hasNext())
-        {
-            KFaceIface::Face face = it.next();
-            d->thumbnailLoadThread->storeDetailThumbnail(desc.filePath, face.toRect(), face.getImage(), true);
-        }
     }
 
     emit signalOneDetected(desc, dimg);

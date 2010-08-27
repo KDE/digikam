@@ -462,7 +462,7 @@ int FaceIface::getOrCreateTagForPerson(const QString& name, const QString &given
     if (tagId)
         return tagId;
 
-    QString fullName = fullName.isNull() ? name : fullName;
+    QString fullName = givenFullName.isNull() ? name : givenFullName;
     QString kfaceId  = fullName;
     for (int i=0; d->findFirstTagWithProperty(TagPropertyName::kfaceId(), kfaceId); ++i)
         kfaceId = fullName + QString(" (%1)").arg(i);
