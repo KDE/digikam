@@ -47,6 +47,7 @@ namespace Digikam
 {
 
 class DImg;
+class ImageInfo;
 
 class DIGIKAM_DATABASE_EXPORT FaceIface
 {
@@ -59,7 +60,20 @@ public:
     /**
      * Tells if the image has been scanned for faces or not
      */
-    bool                hasBeenScanned(qlonglong imageid);
+    bool                hasBeenScanned(const ImageInfo& info) const;
+    bool                hasBeenScanned(qlonglong imageid) const;
+
+    /**
+     * Marks the image as scanned for faces.
+     */
+    void                markAsScanned(qlonglong imageid, bool hasBeenScanned = true) const;
+    void                markAsScanned(const ImageInfo& info, bool hasBeenScanned = true) const;
+
+    enum FaceRecognitionSteps
+    {
+        DetectFaceRegions,
+        DetectAndRecognize
+    };
 
     /**
      * Detects faces from the image and returns a list of faces
@@ -67,13 +81,13 @@ public:
      * @param imageid The image id from the database
      * @return A list of faces found in the given image. With cropped face images.
      */
-    QList<Face>         findAndTagFaces(DImg& image, qlonglong imageid);
+    QList<Face>         findAndTagFaces(const DImg& image, qlonglong imageid, FaceRecognitionSteps steps = DetectAndRecognize);
 
     /**
      * Reads rect tags in the specified image and returns a list of faces, read from these tags.
      * Very fast compared to findAndTagFaces. It is "read-only".
      */
-    QList<Face>         findFacesFromTags(DImg& image, qlonglong imageid);
+    QList<Face>         findFacesFromTags(const DImg& image, qlonglong imageid);
 
     /**
      * Unassigns all face tags from the image and sets it's scanned property to false.
@@ -92,9 +106,9 @@ public:
      * @param repeat If repeat is specified as true, then if person with id tagId is found n times in an image, 
      * that image's id will be pushed into the returned list n times. Useful for thumbnailing as I see it.
      */
-    QList<qlonglong>    imagesWithPerson(int tagId, bool repeat = false);
+    //QList<qlonglong>    imagesWithPerson(int tagId, bool repeat = false);
 
-    /** 
+    /**
      * Returns the number of faces present in an image.
      */
     int                 numberOfFaces(qlonglong imageid);
@@ -121,8 +135,16 @@ public:
 
     /**
      * Looks for the given person name under the People tags tree, and returns an ID. Returns 0 if no name found.
+     * Per default, fullName is the same as name.
      */
-    int                 tagForPerson(const QString& name);
+    int                 tagForPerson(const QString& name, const QString& fullName = QString());
+
+    /**
+     * First, looks for the given person name in person tags, and returns an ID.
+     * If not, creates a new tag.
+     * Per default, fullName is the same as name.
+     */
+    int                 getOrCreateTagForPerson(const QString& name, const QString& fullName = QString());
 
     /**
      * Remove a certain rect from an image
@@ -147,16 +169,22 @@ public:
     Face                faceForRectInImage(qlonglong imageid, const QRect& rect, const QString& name = QString());
 
     /**
-     * Updates libkface's face database with a list of Face objects
-     * Any faces that have a null name or image will be dropped.
+     * Translate between the name set in a face, and the tag used by digikam
      */
-    void                trainWithFaces(QList< Face > faceList);
+    int tagForFaceName(const QString& kfaceId);
+    QString faceNameForTag(int tagId);
 
     /**
      * Updates libkface's face database with a list of Face objects
      * Any faces that have a null name or image will be dropped.
      */
-    void                trainWithFace(Face face);
+    void                trainWithFaces(const QList< Face >& faceList);
+
+    /**
+     * Updates libkface's face database with a list of Face objects
+     * Any faces that have a null name or image will be dropped.
+     */
+    void                trainWithFace(const Face& face);
 
     /**
      * Tries to recognize a Face, returns a string containing the name for the face.
@@ -172,46 +200,36 @@ public:
     void                readConfigSettings();
 
     /**
-     * Convert a QRect to a writable/readable string
-     */
-    QString rectToString(const QRect& rect)        const;
-
-    /**
-     * Convert a string that is assumed to hold a rectangle's info to a QRect
-     */
-    QRect   stringToRect(const QString& string)   const;
-
-    /**
      * Method to mark a face as trained, so that we don't retrain it
      */
-    void    markFaceAsTrained(qlonglong imageid, const QRect& rect, const QString& name);
-    void    markFaceAsTrained(qlonglong imageid, const Face& face);
+    void                markFaceAsTrained(qlonglong imageid, const QRect& rect, const QString& name);
+    void                markFaceAsTrained(qlonglong imageid, const Face& face);
 
     /**
      * Method to mark a list of faces as trained, so that we don't retrain them
      */
-    void    markFacesAsTrained(qlonglong imageid, QList<Face> faces);
+    void                markFacesAsTrained(qlonglong imageid, QList<Face> faces);
 
     /**
      * Method to mark a face as recognized, so we don't attempt to recognize it again
      */
-    void    markFaceAsRecognized(qlonglong imageid, const QRect& rect, const QString& name);
-    void    markFaceAsRecognized(qlonglong imageid, const Face& face);
+    void                markFaceAsRecognized(qlonglong imageid, const QRect& rect, const QString& name);
+    void                markFaceAsRecognized(qlonglong imageid, const Face& face);
 
     /**
      * Method to mark a list of faces as recognized, so that we don't attempt to identify them again
      */
-    void    markFacesAsRecognized(qlonglong imageid, QList<Face> faces);
+    void                markFacesAsRecognized(qlonglong imageid, QList<Face> faces);
 
     /**
      * Tells if the face has been marked as Trained
      */
-    bool    isFaceTrained(qlonglong imageid, const QRect& rect, const QString& name);
+    bool                isFaceTrained(qlonglong imageid, const QRect& rect, const QString& name);
 
     /**
      * Tells if the face has been marked as recognized
      */
-    bool    isFaceRecognized( qlonglong imageid, const QRect& rect, const QString& name);
+    bool                isFaceRecognized( qlonglong imageid, const QRect& rect, const QString& name);
 
 private:
 
