@@ -985,6 +985,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechangesets.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconstants.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasethumbnailinfoprovider.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/downloadhistory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecomments.cpp
@@ -1008,6 +1009,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagscache.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagregion.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseservererror.cpp
        )
 
