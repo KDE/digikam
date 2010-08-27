@@ -276,7 +276,9 @@ class GPSSearchSideBarWidget : public SidebarWidget
 
 public:
 
-    GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel, SearchModificationHelper* searchModificationHelper, ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel);
+    GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
+                           SearchModificationHelper* searchModificationHelper,
+                           ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel);
     virtual ~GPSSearchSideBarWidget();
 
     void setActive(bool active);
@@ -315,7 +317,8 @@ class PeopleSideBarWidget : public SidebarWidget
 
 public:
 
-    PeopleSideBarWidget(QWidget* parent, TagModel* tagModel);
+    PeopleSideBarWidget(QWidget* parent, TagModel* tagModel,
+                        SearchModificationHelper* searchModificationHelper);
     virtual ~PeopleSideBarWidget();
 
     void setActive(bool active);
@@ -336,6 +339,8 @@ private Q_SLOTS:
 //     void slotCheckAboutSelection();
     
 Q_SIGNALS:
+
+    void requestFaceMode(bool on);
 
     void signalDetectFaces();
     void signalScanForFacesFirstTime();

@@ -1084,25 +1084,43 @@ class PeopleSideBarWidgetPriv : public TagViewSideBarWidgetPriv
 {
 public:
 
+    PeopleSideBarWidgetPriv()
+    {
+        personIcon   = 0;
+        textLabel    = 0;
+        rescanButton = 0;
+        searchModificationHelper = 0;
+    }
+    
     QLabel*      personIcon;
     QLabel*      textLabel;
     QPushButton* rescanButton;
+
+    SearchModificationHelper* searchModificationHelper;
 };
 
-PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
+PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
+                                         SearchModificationHelper* searchModificationHelper)
                    : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
 {
     setObjectName("People Sidebar");
 
     d->tagModel = model;
+    d->searchModificationHelper = searchModificationHelper;
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    QHBoxLayout* hlay   = new QHBoxLayout();
+    QVBoxLayout* layout = new QVBoxLayout;
+    QHBoxLayout* hlay = new QHBoxLayout;
 
-    d->tagFolderView = new TagFolderView(this, model, true);
+    d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
-    d->tagFolderView->setAlbumManagerCurrentAlbum(true);
+    d->tagFolderView->setAlbumManagerCurrentAlbum(false);
+
+    connect(d->tagFolderView, SIGNAL(currentAlbumChanged(Album*)),
+            this, SLOT(slotAlbumSelected(Album*)));
+
+    d->tagFolderView->filteredModel()->listOnlyTagsWithProperty("person");
+    d->tagFolderView->filteredModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);
 
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewPeopleSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
@@ -1129,6 +1147,8 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
+    setLayout(layout);
+
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
@@ -1148,50 +1168,39 @@ QString PeopleSideBarWidget::getCaption()
 
 void PeopleSideBarWidget::slotInit()
 {
-    // Date Maps are loaded from AlbumManager to PeopleWidget after the GUI is initialized.
-    // AlbumManager query Date KIO slave to stats items from database and it can take a while.
-    // We waiting than TimeLineWidget is ready before to set last config from users.
-
     loadState();
 }
 
-void PeopleSideBarWidget::setActive(bool /*active*/)
+void PeopleSideBarWidget::setActive(bool active)
 {
-    d->tagFolderView->expandAll();
+    emit requestFaceMode(active);
+    if (active)
+        slotAlbumSelected(d->tagFolderView->currentAlbum());
 }
 
 void PeopleSideBarWidget::doLoadState()
 {
-    KConfigGroup group = getConfigGroup();
-
-//    d->timeLineFolderView->loadState();
+    d->tagFolderView->loadState();
 }
 
 void PeopleSideBarWidget::doSaveState()
 {
-    KConfigGroup group = getConfigGroup();
-
- //   group.writeEntry(d->configHistogramTimeUnitEntry, d->timeUnitCB->currentIndex());
- //   group.writeEntry(d->configHistogramScaleEntry,    d->scaleBG->checkedId());
- //   group.writeEntry(d->configCursorPositionEntry,    d->timeLineWidget->cursorDateTime());
-
-    //d->timeLineFolderView->saveState();
-
-    group.sync();
+    d->tagFolderView->saveState();
 }
 
 void PeopleSideBarWidget::applySettings()
 {
-    // nothing to do here right now
 }
 
-void PeopleSideBarWidget::changeAlbumFromHistory(Album* /*album*/)
+void PeopleSideBarWidget::changeAlbumFromHistory(Album* album)
 {
-    //d->timeLineFolderView->slotSelectAlbum(album);
+    d->tagFolderView->slotSelectAlbum(album);
 }
 
-void PeopleSideBarWidget::slotAlbumSelected ( Album* )
+void PeopleSideBarWidget::slotAlbumSelected(Album* album)
 {
+    d->searchModificationHelper->slotCreateCurrentFaceSearch(album ? album->id() : 0,
+                                                             SearchModificationHelper::AllFaces);
 }
 
 PeopleSideBarWidget::~PeopleSideBarWidget()
