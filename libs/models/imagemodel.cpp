@@ -28,6 +28,10 @@
 #include <QHash>
 #include <QItemSelection>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "databasechangesets.h"
@@ -602,7 +606,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
         for (int i=0; i<infos.size(); i++)
         {
             const ImageInfo& info = infos[i];
-            bool found;
+            bool found = false;
             QHash<qlonglong,int>::iterator it;
             for (it = oldIds.find(info.id()); it != oldIds.end() && it.key() == info.id(); ++it)
             {
