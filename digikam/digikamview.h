@@ -134,8 +134,6 @@ public Q_SLOTS:
 
     void slotSelectAlbum(const KUrl& url);
 
-    void showFaceAlbum(int tagID);
-
     // Tag action slots
     void slotNewTag();
     void slotDeleteTag();

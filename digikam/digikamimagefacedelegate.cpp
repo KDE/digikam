@@ -36,6 +36,7 @@
 #include "albumsettings.h"
 #include "faceiface.h"
 #include "imagemodel.h"
+#include "tagregion.h"
 #include "digikamimagedelegatepriv.h"
 
 namespace Digikam
@@ -62,7 +63,7 @@ QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) cons
     if (extraData.isNull() || extraData.type() != QVariant::String)
         return DigikamImageDelegate::thumbnailPixmap(index);
 
-    QRect rect; /* = FaceIface::svgToRect(extraData.toString()); FIXME : It doesn't compile yet...*/
+    QRect rect = TagRegion(extraData.toString()).toRect();
 
     // set requested thumbnail detail
     if (rect.isValid())

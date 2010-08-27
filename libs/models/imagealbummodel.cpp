@@ -252,15 +252,15 @@ void ImageAlbumModel::startListJob(Album *album)
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
     d->job->addMetaData("listTagsRecursively", d->recurseTags ? "true" : "false");
 
-    /*if (album->type() == Album::SEARCH)
+    if (album->type() == Album::SEARCH)
     {
         SAlbum *salbum = static_cast<SAlbum*>(album);
-        if (salbum->isUnknownFaceSearch())
+        if (salbum->isFaceSearch())
         {
             d->job->addMetaData("listByImageTagProperties", "true");
             d->extraValueJob = true;
         }
-    }*/
+    }
 
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));
