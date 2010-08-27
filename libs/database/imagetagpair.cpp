@@ -178,13 +178,31 @@ bool ImageTagPair::hasProperty(const QString& key) const
     return d->properties.contains(key);
 }
 
+bool ImageTagPair::hasAnyProperty(const QStringList& keys) const
+{
+    d->checkProperties();
+    foreach (const QString& key, keys)
+        if (d->properties.contains(key))
+            return true;
+    return false;
+}
+
 QString ImageTagPair::value(const QString& key) const
 {
     d->checkProperties();
     return d->properties.value(key);
 }
 
-QList< QString > ImageTagPair::values(const QString& key) const
+QStringList ImageTagPair::allValues(const QStringList& keys) const
+{
+    d->checkProperties();
+    QStringList values;
+    foreach (const QString& key, keys)
+        values << d->properties.values(key);
+    return values;
+}
+
+QStringList ImageTagPair::values(const QString& key) const
 {
     d->checkProperties();
     return d->properties.values(key);

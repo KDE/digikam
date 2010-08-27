@@ -84,10 +84,14 @@ public:
 
     /// Returns true if the property is set
     bool hasProperty(const QString& key) const;
+    /// Returns true if any of the properties is set
+    bool hasAnyProperty(const QStringList& keys) const;
     /// Returns the value of the given property, or a null string if not set
     QString value(const QString& key) const;
+    /// Returns value() concatenated for all given keys
+    QStringList allValues(const QStringList& keys) const;
     /// Returns a list of values with the given property
-    QList<QString> values(const QString& key) const;
+    QStringList values(const QString& key) const;
     /// Returns all set property keys
     QStringList propertyKeys() const;
     /// Returns a map of all key->value pairs
