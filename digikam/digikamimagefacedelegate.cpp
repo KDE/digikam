@@ -59,11 +59,9 @@ void DigikamImageFaceDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel
 
 QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) const
 {
-    QVariant extraData = index.data(ImageModel::ExtraDataRole);
-    if (extraData.isNull() || extraData.type() != QVariant::String)
+    QRect rect = faceRect(index);
+    if(rect.isNull())
         return DigikamImageDelegate::thumbnailPixmap(index);
-
-    QRect rect = TagRegion(extraData.toString()).toRect();
 
     // set requested thumbnail detail
     if (rect.isValid())
@@ -71,6 +69,16 @@ QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) cons
 
     // parent implementation already resets the thumb size and rect set on model
     return DigikamImageDelegate::thumbnailPixmap(index);
+}
+
+QRect DigikamImageFaceDelegate::faceRect(const QModelIndex &index) const
+{
+    QVariant extraData = index.data(ImageModel::ExtraDataRole);
+    if (extraData.isNull() || extraData.type() != QVariant::String)
+        return QRect();
+
+    QRect rect = TagRegion(extraData.toString()).toRect();
+    return rect;
 }
 
 void DigikamImageFaceDelegate::updateRects()

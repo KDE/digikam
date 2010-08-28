@@ -1296,6 +1296,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnailbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnaildelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageselectionoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/facerejectionoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageviewutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdateedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatepickerpopup.cpp

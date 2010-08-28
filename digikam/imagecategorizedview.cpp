@@ -49,10 +49,13 @@
 #include "imagemodeldragdrophandler.h"
 #include "imagethumbnailmodel.h"
 #include "imageselectionoverlay.h"
+#include "facerejectionoverlay.h"
 #include "itemviewtooltip.h"
 #include "loadingcacheinterface.h"
 #include "thumbnailloadthread.h"
 #include "tooltipfiller.h"
+#include "digikamimagefacedelegate.h"
+#include "faceiface.h"
 
 namespace Digikam
 {
@@ -434,6 +437,15 @@ void ImageCategorizedView::addSelectionOverlay()
     addOverlay(new ImageSelectionOverlay(this));
 }
 
+void ImageCategorizedView::addRejectionOverlay()
+{
+    FaceRejectionOverlay* rejectionOverlay = new FaceRejectionOverlay(this);
+    connect(rejectionOverlay, SIGNAL(rejectFace(ImageInfo&, QModelIndex&)),
+            this, SLOT(slotUntagFace(ImageInfo&,QModelIndex&)));
+
+    addOverlay(rejectionOverlay);
+}
+
 void ImageCategorizedView::scrollToStoredItem()
 {
     if (d->scrollToItemId)
@@ -459,6 +471,14 @@ void ImageCategorizedView::slotFileChanged(const QString& filePath)
     QModelIndex index = d->filterModel->indexForPath(filePath);
     if (index.isValid())
         update(index);
+}
+
+void ImageCategorizedView::slotUntagFace(ImageInfo &info, QModelIndex &index)
+{
+    DigikamImageFaceDelegate *del = new DigikamImageFaceDelegate(this);
+    QRect rect = del->faceRect(index);
+    FaceIface* iface = new FaceIface;
+    iface->removeRect(info.id(), rect, iface->getNameForRect(info.id(), rect));
 }
 
 void ImageCategorizedView::indexActivated(const QModelIndex& index)

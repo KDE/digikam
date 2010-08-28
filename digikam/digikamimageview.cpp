@@ -165,6 +165,9 @@ void DigikamImageView::setFaceMode(bool on)
     if (on)
     {
         setItemDelegate(d->faceDelegate);
+        // selection overlay
+        addSelectionOverlay();
+        addRejectionOverlay();
     }
     else
     {

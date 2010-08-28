@@ -102,6 +102,7 @@ public:
     void removeOverlay(ImageDelegateOverlay *overlay);
 
     void addSelectionOverlay();
+    void addRejectionOverlay();
 
     QItemSelectionModel* getSelectionModel();
     
@@ -160,6 +161,7 @@ private Q_SLOTS:
 
     void slotFileChanged(const QString& filePath);
     void slotDelayedEnter();
+    void slotUntagFace(ImageInfo& info, QModelIndex& index);
 
 private:
 

@@ -72,7 +72,7 @@ public:
 
     FaceIfacePriv()
     {
-        QString dbDir        = KStandardDirs::locateLocal("data", "libkface/", true);
+        QString dbDir        = KStandardDirs::locateLocal("data", "libkface", true);
         libkface             = new KFaceIface::Database(KFaceIface::Database::InitAll, dbDir);
         tagsCache            = TagsCache::instance();
 
@@ -399,6 +399,29 @@ QList< QRect > FaceIface::getTagRects(qlonglong imageid)
     return rectList;
 }
 
+QString FaceIface::getNameForRect(qlonglong imageid, const QRect &faceRect) const
+{
+    QList<ImageTagPair> pairs = ImageTagPair::availablePairs(imageid);
+    QString regionRect = TagRegion(faceRect).toXml();
+    foreach(const ImageTagPair& pair, pairs)
+        {
+            QMap<QString, QString>  props = pair.properties();
+
+            QMapIterator<QString, QString> i(props);
+            while (i.hasNext())
+            {
+                i.next();
+                if(i.value() == regionRect)
+                    {
+                        QString ret = faceNameForTag(pair.tagId());
+                        return ret == "Unknown" ? QString() : ret;
+                    }
+            }
+        }
+
+    return QString();
+}
+
 int FaceIface::numberOfFaces(qlonglong imageid)
 {
     // Use case for this? Depending on a use case, we can think of an optimization
@@ -510,12 +533,17 @@ void FaceIface::removeRect ( qlonglong imageid, const QRect& rect , const QStrin
     QString region = TagRegion(rect).toXml();
     if(name.isEmpty())
     {
+        kDebug()<<"Removing the unknown property";
         ImageTagPair pairUnknown ( imageid, d->unknownPeopleTagId);
         pairUnknown.removeProperty(ImageTagPropertyName::tagRegion(), region);
+
+        if (!pairUnknown.hasProperty(ImageTagPropertyName::tagRegion()))
+            MetadataManager::instance()->removeTag(ImageInfo(imageid), pairUnknown.tagId());
     }
     else
     {
         int nameTagId = tagForPerson(name);
+        kDebug()<<"Removing person "<<name;
         if (!nameTagId)
         {
             kWarning() << "Request to remove" << name << rect << "from" << imageid << ": No tag for this name!";
@@ -549,7 +577,7 @@ int FaceIface::faceCountForPersonInImage ( qlonglong imageid, int tagId )
 
 int FaceIface::tagForFaceName(const QString& kfaceId)
 {
-    if (kfaceId.isNull())
+    if (kfaceId.isEmpty())
         return d->unknownPeopleTagId;
 
     // Find in "kfaceId" attribute
@@ -561,7 +589,7 @@ int FaceIface::tagForFaceName(const QString& kfaceId)
     return getOrCreateTagForPerson(kfaceId);
 }
 
-QString FaceIface::faceNameForTag(int tagId)
+QString FaceIface::faceNameForTag(int tagId) const
 {
     TAlbum *album = AlbumManager::instance()->findTAlbum(tagId);
     if (!album)

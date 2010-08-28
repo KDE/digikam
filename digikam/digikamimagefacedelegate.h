@@ -44,6 +44,7 @@ public:
     ~DigikamImageFaceDelegate();
 
     virtual void prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
+    virtual QRect faceRect(const QModelIndex& index) const;
 
 protected:
 

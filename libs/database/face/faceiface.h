@@ -100,6 +100,8 @@ public:
      */
     QList<QRect>        getTagRects(qlonglong imageid);
 
+    QString             getNameForRect(qlonglong imageid, const QRect& faceRect) const;
+
     /**
      * Returns a list of image ids of all images in the DB which have a specified person within.
      * @param tagId The person's id. Or tag id for the person tag. Same thing.
@@ -172,7 +174,7 @@ public:
      * Translate between the name set in a face, and the tag used by digikam
      */
     int tagForFaceName(const QString& kfaceId);
-    QString faceNameForTag(int tagId);
+    QString faceNameForTag(int tagId) const;
 
     /**
      * Updates libkface's face database with a list of Face objects
