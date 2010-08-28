@@ -383,7 +383,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
     if (   ( changes & DatabaseFields::LatitudeNumber )
         || ( changes & DatabaseFields::LongitudeNumber )
         || ( changes & DatabaseFields::Altitude ) )
-    {
+    { 
         kDebug() << "changes!";
 
         foreach (const qlonglong& id, changeset.ids())

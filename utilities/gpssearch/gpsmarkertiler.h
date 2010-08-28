@@ -42,6 +42,9 @@
 
 // local includes
 
+#include "digikam_export.h"
+#include "imageposition.h"
+#include "databasechangesets.h"
 #include "imagelister.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
@@ -49,6 +52,8 @@
 #include "thumbnailloadthread.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
+#include "databasewatch.h"
+#include "databasefields.h"
 
 
 namespace Digikam
@@ -71,12 +76,11 @@ public:
     {
     public:
         MyTile()
-        : Tile(),
-          imagesFromTileInfo()
+        : Tile()
         {
         }
 
-        class ImageFromTileInfo
+        /*class ImageFromTileInfo
         {
         public:
             ImageFromTileInfo()
@@ -99,7 +103,8 @@ public:
             QDateTime           creationDate;
         };
 
-        QList<ImageFromTileInfo>     imagesFromTileInfo;
+        QList<ImageFromTileInfo>     imagesFromTileInfo;*/
+        QList<int> imagesId;
     };
 
     GPSMarkerTiler(QObject* const parent = 0);
@@ -122,11 +127,31 @@ public:
 
     virtual void setActive(const bool state);
 
+    class GPSImageInfo
+    {
+        public:
+        
+        GPSImageInfo()
+        : id(-2),
+          coordinate(),
+          rating(),
+          creationDate()
+        {
+        }
+        ~GPSImageInfo();
+
+        qlonglong            id;
+        KMap::GeoCoordinates coordinate;
+        int                  rating;
+        QDateTime            creationDate;
+    };
+
 private Q_SLOTS:
 
     void slotMapImagesJobResult(KJob* job);
     void slotMapImagesJobData(KIO::Job* job, const QByteArray& data);
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+    void slotImageChange(const ImageChangeset& changeset);
 
 private:
 
