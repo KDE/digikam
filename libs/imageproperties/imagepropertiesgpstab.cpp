@@ -122,6 +122,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->map                    = new KMap::KMapWidget(mapPanel);
     d->map->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
     d->map->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
+    d->map->setEnabledExtraActions(KMap::ExtraActionSticky);
+    d->map->setVisibleExtraActions(KMap::ExtraActionSticky);
     vlay2->addWidget(d->map);
     vlay2->setMargin(0);
     vlay2->setSpacing(0);
@@ -361,7 +363,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     {
         setEnabled(false);
     }
-    else if (list.count() >= 1)
+    else if (list.count() == 1)
     {
         if (!list.first().hasAltitude)
             d->altitude->setText("Undefined");
@@ -386,6 +388,13 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     {
         ImageGPSItem* const currentImageGPSItem = new ImageGPSItem(d->gpsInfoList.at(i));
         d->itemModel->appendRow(currentImageGPSItem);
+    }
+
+    if (!d->map->getStickyModeState())
+    {
+        // TODO: adjust the zoom and map boundaries to show all images
+        const GPSInfo firstInfo = d->gpsInfoList.first();
+        d->map->setCenter(KMap::GeoCoordinates(firstInfo.latitude, firstInfo.longitude));
     }
 }
 
