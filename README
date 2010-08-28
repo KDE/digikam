@@ -94,7 +94,7 @@ libkexiv2       >= 1.2.0                      http://www.digikam.org/sharedlibs 
 libkdcraw       >= 1.2.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository.
 libkface        >= 0.1.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository.
 libkmap         >= 0.1.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository.
-liblcms         >= 1.17.x                     http://www.littlecms.com
+liblcms         >= 1.17.x                     http://www.littlecms.com				DO NOT USE liblcms >= 2.x digikam doesn't compile, not able to find the library
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng          >= 1.2.x                      http://www.libpng.org/pub/png/libpng.html
 libjpeg         >= 6b                         http://www.ijg.org
