@@ -3667,6 +3667,25 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
                             "FROM ImageCopyright WHERE imageid=?;"),
                     dstId, srcId );
 
+    d->db->execSql( QString("INSERT INTO ImageHistory "
+                            " (imageid, uuid, history) "
+                            "SELECT ?, uuid, history "
+                            "FROM ImageHistory WHERE imageid=?;"),
+                    dstId, srcId );
+    fields |= DatabaseFields::ImageHistoryInfoAll;
+
+    d->db->execSql( QString("INSERT INTO ImageRelations "
+                            " (subject, object, type) "
+                            "SELECT ?, object, type "
+                            "FROM ImageRelations WHERE subject=?;"),
+                    dstId, srcId );
+    d->db->execSql( QString("INSERT INTO ImageRelations "
+                            " (subject, object, type) "
+                            "SELECT subject, ?, type "
+                            "FROM ImageRelations WHERE object=?;"),
+                    dstId, srcId );
+    fields |= DatabaseFields::ImageRelations;
+
     d->db->recordChangeset(ImageChangeset(dstId, fields));
 
     copyImageTags(srcId, dstId);
