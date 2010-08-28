@@ -1994,13 +1994,13 @@ QList<QPair<qlonglong, qlonglong> > AlbumDB::getRelationCloud(qlonglong imageId,
     QString sql;
     if (type == DatabaseRelation::UndefinedType)
         sql = "SELECT subject, object FROM ImageRelations "
-              "INNER JOIN Images AS SubjectImages ON ImageRelations.subject=Images.id "
-              "INNER JOIN Images AS ObjectImages  ON ImageRelations.object=Images.id "
+              "INNER JOIN Images AS SubjectImages ON ImageRelations.subject=SubjectImages.id "
+              "INNER JOIN Images AS ObjectImages  ON ImageRelations.object=ObjectImages.id "
               "WHERE (subject=? OR object=?) AND SubjectImages.status!=3 AND ObjectImages.status!=3;";
     else
         sql = "SELECT subject, object FROM ImageRelations "
-              "INNER JOIN Images AS SubjectImages ON ImageRelations.subject=Images.id "
-              "INNER JOIN Images AS ObjectImages  ON ImageRelations.object=Images.id "
+              "INNER JOIN Images AS SubjectImages ON ImageRelations.subject=SubjectImages.id "
+              "INNER JOIN Images AS ObjectImages  ON ImageRelations.object=ObjectImages.id "
               "WHERE (subject=? OR object=?) AND type=?  AND SubjectImages.status!=3 AND ObjectImages.status!=3;";
 
     SqlQuery query = d->db->prepareQuery(sql);
