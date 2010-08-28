@@ -102,7 +102,7 @@ void PreviewLoadingTask::execute()
 
             // rotate if needed - images are unrotated in the cache,
             // except for RAW images, which are already rotated by dcraw.
-            if (m_loadingDescription.previewParameters.exifRotate)
+            if (m_loadingDescription.previewParameters.exifRotate())
             {
                 m_img = m_img.copy();
                 LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
@@ -173,7 +173,6 @@ void PreviewLoadingTask::execute()
 
     QImage qimage;
     bool fromEmbeddedPreview = false;
-    QSize originalSize;
 
     // -- Get the image preview --------------------------------
 
@@ -184,6 +183,14 @@ void PreviewLoadingTask::execute()
         // check embedded previews
         #if KEXIV2_VERSION >= 0x010000
         KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
+        int sizeLimit;
+        if (m_loadingDescription.previewParameters.fastButLarge())
+        {
+            QSize originalSize = previews.originalSize();
+            sizeLimit = qMin(size, qMax(originalSize.width(), originalSize.height()));
+        }
+        else
+            sizeLimit = size / 2;
         // Only check the first and largest preview
         if (!previews.isEmpty() && continueQuery())
         {
@@ -362,7 +369,7 @@ void PreviewLoadingTask::execute()
         }
 
         // Scale if hinted, Store previews rotated in the cache (?)
-        if (m_loadingDescription.previewParameters.exifRotate)
+        if (m_loadingDescription.previewParameters.exifRotate())
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
 
         // For previews, we put the image post processed in the cache
@@ -428,6 +435,8 @@ void PreviewLoadingTask::execute()
 bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
 {
     if (!previewSize)
+        return false;
+    if (!m_loadingDescription.previewParameters.fastButLarge())
         return false;
     int maxSize = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
     int acceptableUpperSize = lround(1.25 * (double)previewSize);

@@ -67,7 +67,7 @@ void ThumbnailLoadingTask::execute()
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
         return;
 
-    if (m_loadingDescription.previewParameters.onlyPregenerate)
+    if (m_loadingDescription.previewParameters.onlyPregenerate())
     {
         setupCreator();
         switch (m_loadingDescription.previewParameters.type)
@@ -204,7 +204,7 @@ void ThumbnailLoadingTask::execute()
 void ThumbnailLoadingTask::setupCreator()
 {
     m_creator->setThumbnailSize(m_loadingDescription.previewParameters.size);
-    m_creator->setExifRotate(m_loadingDescription.previewParameters.exifRotate);
+    m_creator->setExifRotate(m_loadingDescription.previewParameters.exifRotate());
     m_creator->setLoadingProperties(this, m_loadingDescription.rawDecodingSettings);
 }
 

@@ -272,6 +272,33 @@ private:
     ThumbnailLoadThreadPriv* const d;
 };
 
+class DIGIKAM_EXPORT ThumbnailImageCatcher : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    /**
+     *  Use this class to get a thumbnail synchronously.
+     *  1. Create the ThumbnailImageCatcher object with the thread passed to the constructor
+     *  2. Start the thumbnail loading
+     *  3. Call waitForThumbnail which returns the thumbnail QImage
+     */
+
+    ThumbnailImageCatcher(ThumbnailLoadThread *thread);
+
+    QImage waitForThumbnail(const QString& filePath);
+
+protected Q_SLOTS:
+
+    void slotThumbnailLoaded(const LoadingDescription&, const QImage&);
+
+protected:
+
+    LoadingDescription m_description;
+    QImage             m_image;
+};
+
 }   // namespace Digikam
 
 #endif // SHARED_LOAD_SAVE_THREAD_H

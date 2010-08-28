@@ -26,8 +26,9 @@
 
 // Qt includes
 
-#include <QPainter>
+#include <QEventLoop>
 #include <QHash>
+#include <QPainter>
 
 // KDE includes
 
@@ -531,7 +532,7 @@ void ThumbnailLoadThread::pregenerateGroup(const QStringList& filePaths, int siz
 
     QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
     for (int i=0; i<descriptions.size(); i++)
-        descriptions[i].previewParameters.onlyPregenerate = true;
+        descriptions[i].previewParameters.flags |= LoadingDescription::PreviewParameters::OnlyPregenerate;
     ManagedLoadSaveThread::preloadThumbnailGroup(descriptions);
 }
 
@@ -791,5 +792,30 @@ void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
         creator.setThumbnailInfoProvider(static_d->provider);
     creator.deleteThumbnailsFromDisk(filePath);
 }
+
+ThumbnailImageCatcher::ThumbnailImageCatcher(ThumbnailLoadThread *thread)
+{
+    connect(thread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QImage&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QImage&)));
+}
+
+void ThumbnailImageCatcher::slotThumbnailLoaded(const LoadingDescription& description, const QImage &image)
+{
+    if (m_description.filePath == description.filePath)
+    {
+        m_image = image;
+        QThread::currentThread()->quit();
+    }
+}
+
+QImage ThumbnailImageCatcher::waitForThumbnail(const QString& filePath)
+{
+    m_description.filePath == filePath;
+    m_image = QImage();
+    QEventLoop loop;
+    loop.exec();
+    return m_image;
+}
+
 
 }   // namespace Digikam

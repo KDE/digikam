@@ -24,6 +24,10 @@
 #ifndef LOADING_DESCRIPTION_H
 #define LOADING_DESCRIPTION_H
 
+// Qt includes
+
+#include <QFlags>
+
 // Local includes
 
 #include "dimg.h"
@@ -60,19 +64,34 @@ public:
             DetailThumbnail
         };
 
+        enum PreviewFlag
+        {
+            NoFlags           = 0,
+            ExifRotate        = 1 << 0,
+            OnlyPregenerate   = 1 << 1,
+            /// This prefers large images, but if loading a larger
+            /// image is very much slower, it will give a smaller image.
+            /// Size serves as a lower bound.
+            FastButLarge      = 1 << 2
+        };
+        Q_DECLARE_FLAGS(PreviewFlags, PreviewFlag)
+
         PreviewParameters()
         {
             type            = NoPreview;
             size            = 0;
-            exifRotate      = false;
-            onlyPregenerate = false;
+            flags           = NoFlags;
         }
+        
 
         PreviewType type;
         int  size;
-        bool exifRotate;
-        bool onlyPregenerate;
+        PreviewFlags flags;
         QVariant extraParameter;
+
+        bool exifRotate() const       { return flags & ExifRotate; }
+        bool onlyPregenerate() const  { return flags & OnlyPregenerate; }
+        bool fastButLarge() const     { return flags & FastButLarge; }
 
         bool operator==(const PreviewParameters& other) const;
     };
@@ -215,5 +234,7 @@ public:
 };
 
 }   // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::LoadingDescription::PreviewParameters::PreviewFlags)
 
 #endif // LOADING_DESCRIPTION_H

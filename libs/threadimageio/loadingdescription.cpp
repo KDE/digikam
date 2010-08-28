@@ -34,7 +34,7 @@ bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters& 
 {
     return type          == other.type
            && size       == other.size
-           && exifRotate == other.exifRotate;
+           && flags      == other.flags;
 }
 
 bool LoadingDescription::PostProcessingParameters::operator==(const PostProcessingParameters& other) const
@@ -101,7 +101,8 @@ LoadingDescription::LoadingDescription(const QString& filePath, int size, bool e
     rawDecodingHint              = RawDecodingDefaultSettings;
     previewParameters.type       = type;
     previewParameters.size       = size;
-    previewParameters.exifRotate = exifRotate;
+    if (exifRotate)
+        previewParameters.flags |= PreviewParameters::ExifRotate;
     postProcessingParameters.colorManagement = cm;
 }
 

@@ -46,6 +46,13 @@ public:
     void load(const QString& filePath, int size, bool exifRotate);
 
     /**
+     * Load a preview that is as large as possible without sacrificing speed
+     * for performance. Especially, raw previews are taken if larger than the given size.
+     * Raw decoding and color management settings will be adjusted.
+     */
+    void loadFastButLarge(const QString& filePath, int minimumSize, bool exifRotate);
+
+    /**
      * Load a preview with higher resolution, trading more quality
      * for less speed.
      * Raw decoding and color management settings will be adjusted.

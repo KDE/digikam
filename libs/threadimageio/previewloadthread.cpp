@@ -63,6 +63,13 @@ void PreviewLoadThread::load(const QString& filePath, int size, bool exifRotate)
     load(createLoadingDescription(filePath, size, exifRotate));
 }
 
+void PreviewLoadThread::loadFastButLarge(const QString& filePath, int size, bool exifRotate)
+{
+    LoadingDescription description = createLoadingDescription(filePath, size, exifRotate);
+    description.previewParameters.flags |= LoadingDescription::PreviewParameters::FastButLarge;
+    load(description);
+}
+
 void PreviewLoadThread::loadHighQuality(const QString& filePath, bool exifRotate)
 {
     load(filePath, 0, exifRotate);
