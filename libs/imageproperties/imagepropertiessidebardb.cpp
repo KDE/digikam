@@ -292,6 +292,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                 info.latitude  = pos.latitudeNumber();
                 info.longitude = pos.longitudeNumber();
                 info.altitude  = pos.altitude();
+                info.hasAltitude = pos.hasAltitude();
                 info.dateTime  = d->currentInfos.first().dateTime();
                 info.url       = d->currentInfos.first().fileUrl();
                 m_gpsTab->setGPSInfoList(GPSInfoList() << info);
