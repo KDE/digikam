@@ -578,7 +578,8 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
         QRect faceRect = face.toRect();
         if (!faceRect.isValid())
             continue;
-        QString region = TagRegion(faceRect).toXml();
+        QRect fullSizeRect = TagRegion::mapToOriginalSize(image, faceRect);
+        QString region = TagRegion(fullSizeRect).toXml();
 
         kDebug() << "Applying face tag" << tagId << face.name() << faceRect << region;
         pair.addProperty(ImageTagPropertyName::autodetectedFace(), region);

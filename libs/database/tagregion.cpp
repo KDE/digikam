@@ -30,6 +30,8 @@
 
 // Local includes
 
+#include "dimg.h"
+
 
 namespace Digikam
 {
@@ -115,6 +117,40 @@ QRect TagRegion::toCandyRect() const
 
     return r;
 }
+
+QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& reducedSizeDetail)
+{
+    if (fullImageSize == reducedImageSize)
+        return reducedSizeDetail;
+    double ratio =  double(fullImageSize.width()) / double(reducedImageSize.width());
+    return QRectF(reducedSizeDetail.x() * ratio,
+                  reducedSizeDetail.y() * ratio,
+                  reducedSizeDetail.width() * ratio,
+                  reducedSizeDetail.height() * ratio).toRect();
+}
+
+QRect TagRegion::mapFromOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& fullSizeDetail)
+{
+    if (fullImageSize == reducedImageSize)
+        return fullSizeDetail;
+
+    double ratio = double(reducedImageSize.width()) / double(fullImageSize.width());
+    return QRectF(fullSizeDetail.x() * ratio,
+                  fullSizeDetail.y() * ratio,
+                  fullSizeDetail.width() * ratio,
+                  fullSizeDetail.height() * ratio).toRect();
+}
+
+QRect TagRegion::mapToOriginalSize(const DImg& reducedSizeImage, const QRect& reducedSizeDetail)
+{
+    return mapToOriginalSize(reducedSizeImage.originalSize(), reducedSizeImage.size(), reducedSizeDetail);
+}
+
+QRect TagRegion::mapFromOriginalSize(const DImg& reducedSizeImage, const QRect& fullSizeDetail)
+{
+    return mapFromOriginalSize(reducedSizeImage.originalSize(), reducedSizeImage.size(), fullSizeDetail);
+}
+
 
 }
 

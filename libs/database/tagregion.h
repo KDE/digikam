@@ -37,6 +37,8 @@
 namespace Digikam
 {
 
+class DImg;
+
 class DIGIKAM_DATABASE_EXPORT TagRegion
 {
 public:
@@ -64,6 +66,16 @@ public:
     QString toXml() const;
     QRect toRect() const;
     QRect toCandyRect() const;
+
+    /**
+     * Converts detail rectangles taken from a reduced size image to the original size, and vice versa
+     */
+    static QRect mapToOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& reducedSizeDetail);
+    static QRect mapFromOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& fullSizeDetail);
+    /// Takes the original and reduced size from the DImg
+    static QRect mapToOriginalSize(const DImg& reducedSizeImage, const QRect& reducedSizeDetail);
+    static QRect mapFromOriginalSize(const DImg& reducedSizeImage, const QRect& fullSizeDetail);
+
 protected:
 
     QVariant m_value;
