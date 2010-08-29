@@ -77,8 +77,12 @@ QRect DigikamImageFaceDelegate::faceRect(const QModelIndex &index) const
     if (extraData.isNull() || extraData.type() != QVariant::String)
         return QRect();
 
-    QRect rect = TagRegion(extraData.toString()).toRect();
-    return rect;
+    QRect rect = TagRegion(extraData.toString()).toCandyRect();
+
+    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    QRect imageRect(0, 0, info.dimensions().width(), info.dimensions().height());
+
+    return rect.intersected(imageRect);
 }
 
 void DigikamImageFaceDelegate::updateRects()

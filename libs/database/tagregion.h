@@ -63,7 +63,7 @@ public:
 
     QString toXml() const;
     QRect toRect() const;
-
+    QRect toCandyRect() const;
 protected:
 
     QVariant m_value;
