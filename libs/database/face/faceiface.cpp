@@ -546,7 +546,7 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
     // -- Recognition --
 
     QList<double> distances;
-    if (peopleCount() && todo >= DetectAndRecognize)
+    if (d->database()->peopleCount() && todo >= DetectAndRecognize)
     {
         distances = d->database()->recognizeFaces(faceList);
         for (int i=0; i<faceList.size(); i++)
