@@ -115,8 +115,7 @@ void FaceRejectionOverlay::slotClicked()
     QModelIndex index = button()->index();
     if (index.isValid())
     {
-        ImageInfo info = ImageModel::retrieveImageInfo(index);
-        emit rejectFace(info, index);
+        emit rejectFace(index);
     }
 }
 

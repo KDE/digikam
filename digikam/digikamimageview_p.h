@@ -33,6 +33,8 @@
 // Local includes
 
 #include "digikamimageview.h"
+#include "digikamimagedelegate.h"
+#include "faceiface.h"
 #include "renamethread.h"
 #include "imagerotationoverlay.h"
 #include "albumsettings.h"
@@ -55,6 +57,7 @@ public:
 
     ImageViewUtilities* utilities;
     RenameThread*       renameThread;
+    FaceIface*          faceiface;
 
     DigikamImageDelegate     *normalDelegate;
     DigikamImageFaceDelegate *faceDelegate;

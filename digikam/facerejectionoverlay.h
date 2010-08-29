@@ -72,9 +72,9 @@ protected Q_SLOTS:
     void slotClicked();
     void slotSelectionChanged(const QItemSelection&, const QItemSelection&);
 
-public:
 Q_SIGNALS:
-    void rejectFace(ImageInfo &info, QModelIndex& index);
+
+    void rejectFace(const QModelIndex& index);
 
 };
 

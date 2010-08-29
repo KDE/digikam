@@ -62,6 +62,7 @@
 #include "digikamimagefacedelegate.h"
 #include "dio.h"
 #include "dpopupmenu.h"
+#include "facerejectionoverlay.h"
 #include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
@@ -78,6 +79,8 @@ DigikamImageView::DigikamImageView(QWidget *parent)
                 : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
 {
     installDefaultModels();
+
+    d->faceiface = new FaceIface;
 
     d->normalDelegate = new DigikamImageDelegate(this);
     d->faceDelegate   = new DigikamImageFaceDelegate(this);
@@ -103,7 +106,8 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageGroupMode());
 
     // selection overlay
-    addSelectionOverlay();
+    addSelectionOverlay(d->normalDelegate);
+    addSelectionOverlay(d->faceDelegate);
 
     // rotation overlays
     d->rotateLeftOverlay = new ImageRotateLeftOverlay(this);
@@ -113,6 +117,9 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     // rating overlay
     ImageRatingOverlay *ratingOverlay = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
+
+    // face overlays
+    addRejectionOverlay(d->faceDelegate);
 
     connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
             this, SLOT(assignRating(const QModelIndex&, int)));
@@ -136,6 +143,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
 DigikamImageView::~DigikamImageView()
 {
+    delete d->faceiface;
     delete d;
 }
 
@@ -173,6 +181,22 @@ void DigikamImageView::setFaceMode(bool on)
     {
         setItemDelegate(d->normalDelegate);
     }
+}
+
+void DigikamImageView::addRejectionOverlay(ImageDelegate *delegate)
+{
+    FaceRejectionOverlay* rejectionOverlay = new FaceRejectionOverlay(this);
+    connect(rejectionOverlay, SIGNAL(rejectFace(const QModelIndex&)),
+            this, SLOT(slotUntagFace(const QModelIndex&)));
+
+    addOverlay(rejectionOverlay, delegate);
+}
+
+void DigikamImageView::slotUntagFace(const QModelIndex& index)
+{
+    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    QRect rect = d->faceDelegate->faceRect(index);
+    d->faceiface->removeFace(info.id(), rect);
 }
 
 void DigikamImageView::activated(const ImageInfo& info)

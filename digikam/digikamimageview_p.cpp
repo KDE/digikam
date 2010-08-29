@@ -37,6 +37,7 @@ DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView *qq)
     rotateRightOverlay = 0;
     normalDelegate     = 0;
     faceDelegate       = 0;
+    faceiface          = 0;
 }
 
 DigikamImageViewPriv::~DigikamImageViewPriv()
@@ -45,6 +46,7 @@ DigikamImageViewPriv::~DigikamImageViewPriv()
 
 void DigikamImageViewPriv::updateOverlays()
 {
+    Q_Q(DigikamImageView);
     AlbumSettings *settings = AlbumSettings::instance();
 
     if (overlaysActive)
@@ -52,13 +54,13 @@ void DigikamImageViewPriv::updateOverlays()
         if (!settings->getIconShowOverlays())
         {
             disconnect(rotateLeftOverlay, SIGNAL(signalRotateLeft()),
-                       q_func(), SLOT(slotRotateLeft()));
+                       q, SLOT(slotRotateLeft()));
 
             disconnect(rotateRightOverlay, SIGNAL(signalRotateRight()),
-                       q_func(), SLOT(slotRotateRight()));
+                       q, SLOT(slotRotateRight()));
 
-            q_func()->removeOverlay(rotateLeftOverlay);
-            q_func()->removeOverlay(rotateRightOverlay);
+            q->removeOverlay(rotateLeftOverlay);
+            q->removeOverlay(rotateRightOverlay);
 
             overlaysActive = false;
         }
@@ -67,14 +69,14 @@ void DigikamImageViewPriv::updateOverlays()
     {
         if (settings->getIconShowOverlays())
         {
-            q_func()->addOverlay(rotateLeftOverlay);
-            q_func()->addOverlay(rotateRightOverlay);
+            q->addOverlay(rotateLeftOverlay, normalDelegate);
+            q->addOverlay(rotateRightOverlay, normalDelegate);
 
             connect(rotateLeftOverlay, SIGNAL(signalRotateLeft()),
-                    q_func(), SLOT(slotRotateLeft()));
+                    q, SLOT(slotRotateLeft()));
 
             connect(rotateRightOverlay, SIGNAL(signalRotateRight()),
-                    q_func(), SLOT(slotRotateRight()));
+                    q, SLOT(slotRotateRight()));
 
             overlaysActive = true;
         }

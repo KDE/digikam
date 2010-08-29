@@ -98,11 +98,11 @@ public:
     Album *albumAt(const QPoint& pos);
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
-    void addOverlay(ImageDelegateOverlay *overlay);
+    /// Unless you pass a different delegate, the current delegate will be used.
+    void addOverlay(ImageDelegateOverlay *overlay, ImageDelegate *delegate = 0);
     void removeOverlay(ImageDelegateOverlay *overlay);
 
-    void addSelectionOverlay();
-    void addRejectionOverlay();
+    void addSelectionOverlay(ImageDelegate *delegate = 0);
 
     QItemSelectionModel* getSelectionModel();
     
@@ -161,7 +161,6 @@ private Q_SLOTS:
 
     void slotFileChanged(const QString& filePath);
     void slotDelayedEnter();
-    void slotUntagFace(ImageInfo& info, QModelIndex& index);
 
 private:
 

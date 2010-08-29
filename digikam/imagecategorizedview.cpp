@@ -49,7 +49,6 @@
 #include "imagemodeldragdrophandler.h"
 #include "imagethumbnailmodel.h"
 #include "imageselectionoverlay.h"
-#include "facerejectionoverlay.h"
 #include "itemviewtooltip.h"
 #include "loadingcacheinterface.h"
 #include "thumbnailloadthread.h"
@@ -406,15 +405,19 @@ void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
     selectionModel()->select(mySelection, QItemSelectionModel::Select);
 }
 
-void ImageCategorizedView::addOverlay(ImageDelegateOverlay *overlay)
+void ImageCategorizedView::addOverlay(ImageDelegateOverlay *overlay, ImageDelegate *delegate)
 {
+    if (!delegate)
+        delegate = d->delegate;
     overlay->setView(this);
-    d->delegate->installOverlay(overlay);
+    delegate->installOverlay(overlay);
 }
 
 void ImageCategorizedView::removeOverlay(ImageDelegateOverlay *overlay)
 {
-    d->delegate->removeOverlay(overlay);
+    ImageDelegate *delegate = dynamic_cast<ImageDelegate*>(overlay->delegate());
+    if (delegate)
+        delegate->removeOverlay(overlay);
     overlay->setView(0);
 }
 
@@ -432,18 +435,9 @@ void ImageCategorizedView::slotDelayedEnter()
         emit KCategorizedView::entered(mouseIndex);
 }
 
-void ImageCategorizedView::addSelectionOverlay()
+void ImageCategorizedView::addSelectionOverlay(ImageDelegate *delegate)
 {
-    addOverlay(new ImageSelectionOverlay(this));
-}
-
-void ImageCategorizedView::addRejectionOverlay()
-{
-    FaceRejectionOverlay* rejectionOverlay = new FaceRejectionOverlay(this);
-    connect(rejectionOverlay, SIGNAL(rejectFace(ImageInfo&, QModelIndex&)),
-            this, SLOT(slotUntagFace(ImageInfo&,QModelIndex&)));
-
-    addOverlay(rejectionOverlay);
+    addOverlay(new ImageSelectionOverlay(this), delegate);
 }
 
 void ImageCategorizedView::scrollToStoredItem()
@@ -471,14 +465,6 @@ void ImageCategorizedView::slotFileChanged(const QString& filePath)
     QModelIndex index = d->filterModel->indexForPath(filePath);
     if (index.isValid())
         update(index);
-}
-
-void ImageCategorizedView::slotUntagFace(ImageInfo &info, QModelIndex &index)
-{
-    DigikamImageFaceDelegate *del = new DigikamImageFaceDelegate(this);
-    QRect rect = del->faceRect(index);
-    FaceIface* iface = new FaceIface;
-    iface->removeRect(info.id(), rect, iface->getNameForRect(info.id(), rect));
 }
 
 void ImageCategorizedView::indexActivated(const QModelIndex& index)

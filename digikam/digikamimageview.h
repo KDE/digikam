@@ -73,6 +73,7 @@ public Q_SLOTS:
     void assignRating(const QModelIndex &index, int rating);
 
     void setFaceMode(bool on);
+    void addRejectionOverlay(ImageDelegate *delegate = 0);
 
 Q_SIGNALS:
 
@@ -92,6 +93,7 @@ private Q_SLOTS:
 
     void slotRotateLeft();
     void slotRotateRight();
+    void slotUntagFace(const QModelIndex& index);
 
 private:
 
