@@ -74,9 +74,9 @@ static inline void showDigikamComponentsInfo()
 #endif /* HAVE_GPHOTO2 */
 
     list.insert(i18n("LibKipi"),    KIPI::Interface::version());
-    list.insert(i18n("LibOpenCV"),  KFaceIface::Face::LibOpenCVVersion());
-    list.insert(i18n("Libface"),    KFaceIface::Face::LibFaceVersion());
-    list.insert(i18n("LibKface"),   KFaceIface::Face::version());
+    list.insert(i18n("LibOpenCV"),  KFaceIface::LibOpenCVVersion());
+    list.insert(i18n("Libface"),    KFaceIface::LibFaceVersion());
+    list.insert(i18n("LibKface"),   KFaceIface::version());
 
     // Database Backend information
 

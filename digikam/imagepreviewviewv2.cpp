@@ -541,14 +541,15 @@ void ImagePreviewViewV2::findFaces()
             kDebug()<<d->currentFaces.at(i);
         }
         
-        KSharedConfig::Ptr config = KGlobal::config();
+        /*KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup group        = config->group("Face Tags Settings");
         if(group.readEntry("FaceSuggestion", false))
             this->trainFaces();
         return;
+        */
     }
     
-    d->currentFaces = d->faceIface->findAndTagFaces(d->cachedFullImg, d->item->imageInfo().id());
+    /*d->currentFaces = d->faceIface->findAndTagFaces(d->cachedFullImg, d->item->imageInfo().id());
     
     kDebug() << "Found : " << d->currentFaces.size() << " faces.";
     
@@ -556,6 +557,7 @@ void ImagePreviewViewV2::findFaces()
     {
         kDebug()<<d->currentFaces.at(i);
     }
+    */
 }
 
 void ImagePreviewViewV2::slotShowPeopleTags()
@@ -618,7 +620,7 @@ void ImagePreviewViewV2::slotForgetFaces()
     clearFaceItems();
     d->currentFaces.clear();
     
-    d->faceIface->forgetFaceTags(d->item->imageInfo().id());
+    d->faceIface->removeAllFaces(d->item->imageInfo().id());
 }
 
 void ImagePreviewViewV2::slotTagPerson ( const QString& name, const QRect& rect)
@@ -632,11 +634,12 @@ void ImagePreviewViewV2::slotTagPerson ( const QString& name, const QRect& rect)
         }
     }
     
-    d->faceIface->setName(getImageInfo().id(), rect, name);
+    d->faceIface->confirmName(getImageInfo().id(), rect, name);
 }
 
 void ImagePreviewViewV2::slotRemoveFaceTag ( const QString& name, const QRect& rect)
 {
+    Q_UNUSED(name);
     for(int i = 0; i < d->currentFaces.size(); ++i)
     {
         if(d->currentFaces[i].toRect() == rect)
@@ -647,7 +650,7 @@ void ImagePreviewViewV2::slotRemoveFaceTag ( const QString& name, const QRect& r
         }
     }
     
-    d->faceIface->removeRect(getImageInfo().id(), rect, name);
+    d->faceIface->removeFace(getImageInfo().id(), rect);
 }
 
 void ImagePreviewViewV2::makeFaceItemConnections()
@@ -662,6 +665,7 @@ void ImagePreviewViewV2::makeFaceItemConnections()
     }
 }
 
+/*
 void ImagePreviewViewV2::trainFaces()
 {
     QList<Face> trainList;
@@ -679,20 +683,22 @@ void ImagePreviewViewV2::trainFaces()
         d->faceIface->markFacesAsTrained(getImageInfo().id(), trainList);
     }
 }
+*/
 
 void ImagePreviewViewV2::suggestFaces()
 {
+    /*
     // Assign tentative names to the face list
     QList<Face> recogList;
     foreach(Face f, d->currentFaces)
     {
-        if(!d->faceIface->isFaceRecognized(getImageInfo().id(), f.toRect(), f.name()) && f.name() == "")
+        if(!d->faceIface->isFaceRecognized(getImageInfo().id(), f.toRect(), f.name()) && f.name().isEmpty())
         {
             f.setName(d->faceIface->recognizedName(f));
             d->faceIface->markFaceAsRecognized(getImageInfo().id(), f.toRect(), f.name());
             
             // If the face wasn't recognized (too distant) don't suggest anything
-            if(f.name() == "")
+            if(f.name().isEmpty())
                 continue;
             else
                 recogList += f;
@@ -714,6 +720,7 @@ void ImagePreviewViewV2::suggestFaces()
             }
         }
     }
+    */
     
 }
 
