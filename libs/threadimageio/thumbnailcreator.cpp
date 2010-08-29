@@ -58,6 +58,10 @@
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/rawfiles.h>
 
+// libkexiv2 includes
+
+#include <libkexiv2/kexiv2previews.h>
+
 // Local includes
 
 #include "databasebackend.h"
@@ -68,6 +72,7 @@
 #include "iccsettings.h"
 #include "jpegutils.h"
 #include "pgfutils.h"
+#include "tagregion.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
 
@@ -503,7 +508,25 @@ QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile) 
 
 QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const
 {
+    // Check the first and largest preview (Raw files)
+    KExiv2Iface::KExiv2Previews previews(path);
+    if (!previews.isEmpty())
+    {
+        // discard if smaller than half preview
+        int acceptableWidth = lround(previews.originalSize().width() * 0.5);
+        int acceptableHeight = lround(previews.originalSize().height() * 0.5);
+        if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
+        {
+            QImage qimage = previews.image();
+            QRect reducedSizeDetail = TagRegion::mapFromOriginalSize(previews.originalSize(), qimage.size(), detailRect);
+            kDebug() << "Creating detail" << detailRect << "for image original/preview" << previews.originalSize() << qimage.size() << "resulting in" << reducedSizeDetail;
+            return qimage.copy(reducedSizeDetail);
+        }
+    }
+
+    // load DImg
     DImg img;
+    //TODO: scaledLoading if detailRect is large
     img.load(path, false, profile ? true : false, false, false, d->observer, d->fastRawSettings);
     *profile = img.getIccProfile();
 
