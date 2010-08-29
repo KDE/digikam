@@ -208,7 +208,7 @@ void AbstractWidgetDelegateOverlay::slotLayoutChanged()
 
 bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
 {
-    if (obj == m_widget->parent()) { // events on view's viewport
+    if (m_widget && obj == m_widget->parent()) { // events on view's viewport
         switch (event->type()) {
             case QEvent::Leave:
                 hide();
