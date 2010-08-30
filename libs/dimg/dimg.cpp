@@ -1712,6 +1712,8 @@ void DImg::rotate(ANGLE angle)
     if (isNull())
         return;
 
+    bool switchDims = false;
+
     switch (angle)
     {
     case(ROT90):
@@ -1737,7 +1739,7 @@ void DImg::rotate(ANGLE angle)
                 }
             }
 
-            setImageDimension(w, h);
+            switchDims = true;
 
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;
@@ -1760,7 +1762,7 @@ void DImg::rotate(ANGLE angle)
                 }
             }
 
-            setImageDimension(w, h);
+            switchDims = true;
 
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;
@@ -1858,7 +1860,7 @@ void DImg::rotate(ANGLE angle)
                 }
             }
 
-            setImageDimension(w, h);
+            switchDims = true;
 
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;
@@ -1881,7 +1883,7 @@ void DImg::rotate(ANGLE angle)
                 }
             }
 
-            setImageDimension(w, h);
+            switchDims = true;
 
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;
@@ -1891,6 +1893,17 @@ void DImg::rotate(ANGLE angle)
     }
     default:
         break;
+    }
+
+    if (switchDims)
+    {
+        setImageDimension(height(), width());
+        QMap<QString, QVariant>::iterator it = m_priv->attributes.find("originalSize");
+        if (it != m_priv->attributes.end())
+        {
+            QSize size = it.value().toSize();
+            it.value() = QSize(size.height(), size.width());
+        }
     }
 }
 

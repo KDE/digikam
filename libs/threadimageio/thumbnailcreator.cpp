@@ -61,6 +61,7 @@
 // libkexiv2 includes
 
 #include <libkexiv2/kexiv2previews.h>
+#include <libkexiv2/rotationmatrix.h>
 
 // Local includes
 
@@ -519,8 +520,7 @@ QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& m
         {
             QImage qimage = previews.image();
             QRect reducedSizeDetail = TagRegion::mapFromOriginalSize(previews.originalSize(), qimage.size(), detailRect);
-            kDebug() << "Creating detail" << detailRect << "for image original/preview" << previews.originalSize() << qimage.size() << "resulting in" << reducedSizeDetail;
-            return qimage.copy(reducedSizeDetail);
+            return qimage.copy(reducedSizeDetail.intersected(qimage.rect()));
         }
     }
 
@@ -535,7 +535,7 @@ QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& m
     // If someone has the mathematics, have a go.
     img.rotateAndFlip(exifOrientation(path, metadata, false, false));
 
-    img.crop(detailRect);
+    img.crop(detailRect.intersected(QRect(0, 0, img.width(), img.height())));
     return img.copyQImage();
 }
 
@@ -599,45 +599,7 @@ QImage ThumbnailCreator::exifRotate(const QImage& thumb, int orientation) const
         orientation == DMetadata::ORIENTATION_UNSPECIFIED)
         return thumb;
 
-    QMatrix matrix;
-
-    switch (orientation)
-    {
-        case DMetadata::ORIENTATION_NORMAL:
-        case DMetadata::ORIENTATION_UNSPECIFIED:
-            break;
-
-        case DMetadata::ORIENTATION_HFLIP:
-            matrix.scale(-1, 1);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_180:
-            matrix.rotate(180);
-            break;
-
-        case DMetadata::ORIENTATION_VFLIP:
-            matrix.scale(1, -1);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90_HFLIP:
-            matrix.scale(-1, 1);
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90:
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90_VFLIP:
-            matrix.scale(1, -1);
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_270:
-            matrix.rotate(270);
-            break;
-    }
-
+    QMatrix matrix = KExiv2Iface::RotationMatrix::toMatrix((KExiv2::ImageOrientation)orientation);
     // transform accordingly
     return thumb.transformed(matrix);
 }
