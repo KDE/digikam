@@ -5984,7 +5984,7 @@ namespace cimg_library {
    -------------------------------------------------*/
   //
   // These functions are extern to any classes and can be used for a "functional-style" programming,
-  // such as writting :
+  // such as writing :
   //                     cos(img);
   // instead of          img.get_cos();
   //
