@@ -695,8 +695,8 @@
         <password></password>
         <port>1</port>
         <connectoptions>UNIX_SOCKET=$$DBMISCPATH$$/mysql.socket</connectoptions>
-        <dbservercmd>/usr/sbin/mysqld</dbservercmd>
-        <dbinitcmd>/usr/bin/mysql_install_db</dbinitcmd>
+        <dbservercmd>${SERVERCMD_MYSQL}</dbservercmd>
+        <dbinitcmd>${INITCMD_MYSQL}</dbinitcmd>
 
         <dbactions>
         	<dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
