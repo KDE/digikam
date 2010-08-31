@@ -203,9 +203,10 @@ void MetadataHub::load(const DMetadata& metadata)
     }
 }
 
-bool MetadataHub::load(const QString& filePath)
+bool MetadataHub::load(const QString& filePath, const MetadataSettingsContainer& settings)
 {
     DMetadata metadata;
+    metadata.setUseXMPSidecar4Reading(settings.useXMPSidecar4Reading);
     bool success = metadata.load(filePath);
     load(metadata); // increments count
     return success;
@@ -297,9 +298,9 @@ void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments, i
 }
 
 // template method to share code for dateTime and rating
-template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& data, 
-                                                                       T& storage, 
-                                                                       T& highestStorage, 
+template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& data,
+                                                                       T& storage,
+                                                                       T& highestStorage,
                                                                        MetadataHub::Status& status)
 {
     switch (status)
@@ -335,8 +336,8 @@ template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& 
 }
 
 // template method used by comment and template
-template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& data, 
-                                                                      T& storage, 
+template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& data,
+                                                                      T& storage,
                                                                       MetadataHub::Status& status)
 {
     switch (status)
@@ -453,7 +454,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool dirty = false;
 
     metadata.setWriteRawFiles(settings.writeRawFiles);
-    metadata.setUseXMPSidecar(settings.useXMPSidecar);
+    metadata.setMetadataWritingMode(settings.metadataWritingMode);
 
 #if KEXIV2_VERSION >= 0x000600
     metadata.setUpdateFileTimeStamp(settings.updateFileTimeStamp);

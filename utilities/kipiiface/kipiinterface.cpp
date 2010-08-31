@@ -303,9 +303,13 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
     {
         return (set.writeRawFiles);
     }
-    else if (settingName == QString("UseXMPSidecar"))
+    else if (settingName == QString("UseXMPSidecar4Reading"))
     {
-        return (set.useXMPSidecar);
+        return (set.useXMPSidecar4Reading);
+    }
+    else if (settingName == QString("MetadataWritingMode"))
+    {
+        return (set.metadataWritingMode);
     }
     else if (settingName == QString("FileExtensions"))
     {

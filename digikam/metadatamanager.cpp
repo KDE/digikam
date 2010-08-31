@@ -351,7 +351,7 @@ void MetadataManagerDatabaseWorker::removeTags(const QList<ImageInfo>& infos, co
     changeTags(infos, tagIDs, false);
 }
 
-void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos, 
+void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
                                                                 const QList<int>& tagIDs, bool addOrRemove)
 {
     MetadataHub      hub;
@@ -435,7 +435,7 @@ void MetadataManagerDatabaseWorker::setExifOrientation(const QList<ImageInfo>& i
     d->dbFinished(infos.size());
 }
 
-void MetadataManagerDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub)
+void MetadataManagerDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
 {
     d->setDBAction(i18n("Applying metadata. Please wait..."));
 
@@ -474,7 +474,8 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
         metadata.setImageOrientation(o);
         metadata.setWriteRawFiles(MetadataSettings::instance()->settings().writeRawFiles);
-        metadata.setUseXMPSidecar(MetadataSettings::instance()->settings().useXMPSidecar);
+        metadata.setUseXMPSidecar4Reading(MetadataSettings::instance()->settings().useXMPSidecar4Reading);
+        metadata.setMetadataWritingMode(MetadataSettings::instance()->settings().metadataWritingMode);
 
         if (!metadata.applyChanges())
         {

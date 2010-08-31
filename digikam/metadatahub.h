@@ -142,7 +142,7 @@ public:
         (Uses DMetadata, QFileInfo)
         @returns True if the metadata could be loaded
     */
-    bool load(const QString& filePath);
+    bool load(const QString& filePath, const MetadataSettingsContainer& settings = MetadataSettingsContainer());
 
     // --------------------------------------------------
 
@@ -197,7 +197,7 @@ public:
         returns if write(DMetadata), write(QString) or write(DImg) will actually
         apply any changes.
     */
-    bool willWriteMetadata(WriteMode writeMode, 
+    bool willWriteMetadata(WriteMode writeMode,
                            const MetadataSettingsContainer& settings = MetadataSettingsContainer()) const;
 
     // --------------------------------------------------

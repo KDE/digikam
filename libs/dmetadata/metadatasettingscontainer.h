@@ -66,8 +66,10 @@ public:
     bool saveTags;
 
     bool writeRawFiles;
-    bool useXMPSidecar;
     bool updateFileTimeStamp;
+    bool useXMPSidecar4Reading;
+
+    int  metadataWritingMode;
 };
 
 }  // namespace Digikam
