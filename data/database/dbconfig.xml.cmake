@@ -695,8 +695,8 @@
         <password></password>
         <port>1</port>
         <connectoptions>UNIX_SOCKET=$$DBMISCPATH$$/mysql.socket</connectoptions>
-        <dbservercmd>${SERVERCMD_MYSQL}</dbservercmd>
-        <dbinitcmd>${INITCMD_MYSQL}</dbinitcmd>
+        <dbservercmd>/usr/sbin/mysqld</dbservercmd>
+        <dbinitcmd>/usr/bin/mysql_install_db</dbinitcmd>
 
         <dbactions>
         	<dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
@@ -742,7 +742,7 @@
             type INTEGER NOT NULL,
             identifier LONGTEXT,
             specificPath LONGTEXT,
-            UNIQUE(identifier(167), specificPath(166)));</statement>
+            UNIQUE(identifier(127), specificPath(128)));</statement>
             <statement mode="plain">CREATE TABLE Albums
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             albumRoot INTEGER NOT NULL,
@@ -751,7 +751,7 @@
                             caption LONGTEXT CHARACTER SET utf8,
                             collection LONGTEXT CHARACTER SET utf8,
                             icon INTEGER,
-                            UNIQUE(albumRoot, relativePath(332)));</statement>
+                            UNIQUE(albumRoot, relativePath(255)));</statement>
             <statement mode="plain">CREATE TABLE Images
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             album INTEGER,
@@ -761,7 +761,7 @@
                             modificationDate DATETIME,
                             fileSize INTEGER,
                             uniqueHash VARCHAR(128),
-                            UNIQUE (album, name(332)));</statement>
+                            UNIQUE (album, name(255)));</statement>
             <statement mode="plain">CREATE TABLE ImageHaarMatrix
                             (imageid INTEGER PRIMARY KEY,
                             modificationDate DATETIME,
@@ -845,7 +845,7 @@
                             (imageid  INTEGER NOT NULL,
                             property LONGTEXT CHARACTER SET utf8    NOT NULL,
                             value    LONGTEXT CHARACTER SET utf8    NOT NULL,
-                            UNIQUE (imageid, property(332)));</statement>
+                            UNIQUE (imageid, property(255)));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Searches
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             type INTEGER,
@@ -861,7 +861,7 @@
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
                             (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
                             value LONGTEXT CHARACTER SET utf8,
-                            UNIQUE(keyword(333)));</statement>
+                            UNIQUE(keyword(255)));</statement>
             <statement mode="plain">CREATE TABLE ImageHistory
                             (imageid INTEGER PRIMARY KEY,
                              uuid VARCHAR(128),
@@ -1096,17 +1096,17 @@
                 <statement mode="plain">CREATE TABLE FilePaths
                             (path LONGTEXT CHARACTER SET utf8,
                             thumbId INTEGER,
-                            UNIQUE(path(333)))
+                            UNIQUE(path(255)))
                 </statement>
                 <statement mode="plain">CREATE TABLE CustomIdentifiers
                             (identifier LONGTEXT CHARACTER SET utf8,
                             thumbId INTEGER,
-                            UNIQUE(identifier(333)))
+                            UNIQUE(identifier(255)))
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
                             (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
                             value LONGTEXT CHARACTER SET utf8,
-                            UNIQUE(keyword(333)))
+                            UNIQUE(keyword(255)))
                 </statement>
             </dbaction>
             <!-- Thumbnails Indexes DB -->

@@ -78,11 +78,12 @@ bool PollThread::checkDigikamInstancesRunning()
    if (reply.isValid())
    {
        QStringList serviceNames = reply.value();
+       QLatin1String digikamStartupService("org.kde.digikam.startup-");
        QLatin1String digikamService("org.kde.digikam-");
        QLatin1String digikamKioService("org.kde.digikam.KIO-");
        foreach (const QString &service, serviceNames)
        {
-           if (service.startsWith(digikamService) || service.startsWith(digikamKioService))
+           if (service.startsWith(digikamStartupService) || service.startsWith(digikamService) || service.startsWith(digikamKioService))
            {
                kDebug() << "At least service ["<< service <<"] is using the database server";
                // At least one digikam/kio service was found

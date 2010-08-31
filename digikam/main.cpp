@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QFile>
 #include <QSqlDatabase>
+#include <QDBusConnection>
 
 // KDE includes
 
@@ -165,11 +166,26 @@ int main(int argc, char *argv[])
         params.writeToConfig(config);
     }
 
+    /*
+     * Register a dummy service on dbus.
+     * This is needed for the internal database server, which checks if at least one
+     * digikam instance is running on dbus.
+     * The first real dbus instance is registered within the DigikamApp() constructor,
+     * so we create a service on dbus which is unregistered after initialization the application.
+     */
+    QDBusConnection::sessionBus().registerService("org.kde.digikam.startup-"
+                            + QString::number(QCoreApplication::instance()->applicationPid()));
+
     // initialize database
     AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
 
     // create main window
     DigikamApp *digikam = new DigikamApp();
+
+    // Unregister the dummy service
+    QDBusConnection::sessionBus().unregisterService("org.kde.digikam.startup-"
+                            + QString::number(QCoreApplication::instance()->applicationPid()));
+
 
     app.setTopWidget(digikam);
     digikam->restoreSession();
