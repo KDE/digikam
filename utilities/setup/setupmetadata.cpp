@@ -192,7 +192,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->useXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
     KHBox* hbox = new KHBox(commonGroup);
-    QLabel* writingModeLabel = new QLabel(i18n("Metadata Writting Mode:"), hbox);
+    QLabel* writingModeLabel = new QLabel(i18n("Metadata Writing Mode:"), hbox);
     writingModeLabel->setEnabled(KExiv2::supportXmp());
     d->writingModeCombo      = new KComboBox(hbox);
     d->writingModeCombo->addItem(i18n("Write to image only"),                           KExiv2::WRITETOIMAGEONLY);
