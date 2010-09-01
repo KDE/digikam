@@ -66,11 +66,11 @@ protected:
 
     virtual ItemViewHoverButton *createButton();
     virtual void updateButton(const QModelIndex& index);
+    virtual bool checkIndex(const QModelIndex& index) const;
 
 protected Q_SLOTS:
 
     void slotClicked();
-    void slotSelectionChanged(const QItemSelection&, const QItemSelection&);
 
 Q_SIGNALS:
 

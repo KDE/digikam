@@ -79,19 +79,10 @@ void FaceRejectionOverlay::setActive(bool active)
     {
         connect(button(), SIGNAL(clicked(bool)),
                 this, SLOT(slotClicked()));
-
-        connect(m_view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
     }
     else
     {
         // button is deleted
-
-        if (m_view)
-        {
-            disconnect(m_view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                       this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
-        }
     }
 }
 
@@ -119,16 +110,9 @@ void FaceRejectionOverlay::slotClicked()
     }
 }
 
-void FaceRejectionOverlay::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+bool FaceRejectionOverlay::checkIndex(const QModelIndex& index) const
 {
-    QModelIndex index = button()->index();
-    if (index.isValid())
-    {
-        if (selected.contains(index))
-            button()->setChecked(true);
-        else if (deselected.contains(index))
-            button()->setChecked(false);
-    }
+    return !index.data(ImageModel::ExtraDataRole).isNull();
 }
 
 } // namespace Digikam
