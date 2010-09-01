@@ -45,6 +45,7 @@ public:
 
     virtual void prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
     virtual QRect faceRect(const QModelIndex& index) const;
+    virtual QRect largerFaceRect(const QModelIndex& index) const;
 
 protected:
 

@@ -59,7 +59,7 @@ void DigikamImageFaceDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel
 
 QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) const
 {
-    QRect rect = faceRect(index);
+    QRect rect = largerFaceRect(index);
     if(rect.isNull())
         return DigikamImageDelegate::thumbnailPixmap(index);
 
@@ -77,7 +77,13 @@ QRect DigikamImageFaceDelegate::faceRect(const QModelIndex &index) const
     if (extraData.isNull() || extraData.type() != QVariant::String)
         return QRect();
 
-    return TagRegion(extraData.toString()).toCandyRect();
+    return TagRegion(extraData.toString()).toRect();
+}
+
+QRect DigikamImageFaceDelegate::largerFaceRect(const QModelIndex &index) const
+{
+    const int margin = FaceIface::faceRectDisplayMargin();
+    return faceRect(index).adjusted(-margin, -margin, margin, margin);
 }
 
 void DigikamImageFaceDelegate::updateRects()

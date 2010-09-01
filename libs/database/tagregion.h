@@ -65,7 +65,6 @@ public:
 
     QString toXml() const;
     QRect toRect() const;
-    QRect toCandyRect() const;
 
     /**
      * Converts detail rectangles taken from a reduced size image to the original size, and vice versa

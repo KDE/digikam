@@ -230,6 +230,13 @@ public:
     void                markForTraining(qlonglong imageid, bool hasBeenScanned = true) const;
     void                markForTraining(const ImageInfo& info, bool hasBeenScanned = true) const;
 
+    /**
+     * For display, it may be desirable to display a slightly larger region than the strict
+     * face rectangle. This returns a pixel margin commonly used to increase the rectangle size
+     * in all four directions.
+     */
+    static int          faceRectDisplayMargin();
+
 
     /**
      * Utilities

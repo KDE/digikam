@@ -536,7 +536,7 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
     readConfigSettings(); //FIXME: do by signal
 
     QImage qimg = image.copyQImage(); // FIXME: memcpy necessary?
-    kDebug() << "Image dimensions : " << qimg.rect();
+    kDebug() << "Image" << image.attribute("originalFilePath") << "dimensions" << image.size() << "original size" << image.originalSize();
     KFaceIface::Image fimg(qimg);
 
     // -- Detection --
@@ -831,6 +831,11 @@ void FaceIface::readConfigSettings()
 
     if (d->databaseConst())
         d->database()->setDetectionAccuracy(d->detectionAccuracy);
+}
+
+int FaceIface::faceRectDisplayMargin()
+{
+    return 70;
 }
 
     /**

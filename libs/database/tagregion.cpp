@@ -106,18 +106,6 @@ QRect TagRegion::toRect() const
     return QRect();
 }
 
-QRect TagRegion::toCandyRect() const
-{
-    int gap = 70;
-    QRect r = toRect();
-    r.setTop(r.top() - gap);
-    r.setBottom(r.bottom() + gap);
-    r.setLeft(r.left() - gap);
-    r.setRight(r.right() + gap);
-
-    return r;
-}
-
 QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& reducedSizeDetail)
 {
     if (fullImageSize == reducedImageSize)
