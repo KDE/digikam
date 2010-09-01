@@ -42,9 +42,7 @@
 // libkexiv2 includes
 
 #include <libkexiv2/version.h>
-#if KEXIV2_VERSION >= 0x010000
 #include <libkexiv2/kexiv2previews.h>
-#endif
 
 // LibKDcraw includes
 
@@ -181,7 +179,6 @@ void PreviewLoadingTask::execute()
         // First the QImage-dependent loading methods
 
         // check embedded previews
-        #if KEXIV2_VERSION >= 0x010000
         KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
         int sizeLimit;
         if (m_loadingDescription.previewParameters.fastButLarge())
@@ -202,17 +199,6 @@ void PreviewLoadingTask::execute()
                     fromEmbeddedPreview = true;
             }
         }
-        #else
-        // Trying to load with dcraw: RAW files.
-        if (continueQuery() && KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
-        {
-            // Discard if too small
-            if (qMax(qimage.width(), qimage.height()) < size / 2)
-                qimage = QImage();
-            else
-                fromEmbeddedPreview = true;
-        }
-        #endif
 
         if (qimage.isNull() && continueQuery())
         {
@@ -236,9 +222,7 @@ void PreviewLoadingTask::execute()
             m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
 
             DMetadata metadata(m_loadingDescription.filePath);
-            #if KEXIV2_VERSION >= 0x010100
             m_img.setAttribute("originalSize", metadata.getPixelSize());
-            #endif
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
             {
@@ -270,7 +254,6 @@ void PreviewLoadingTask::execute()
         KDcrawIface::DcrawInfoContainer dcrawIdentify;
         if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, m_loadingDescription.filePath))
         {
-            #if KEXIV2_VERSION >= 0x010000
             // Check if full-size preview is available
             {
                 KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
@@ -288,18 +271,6 @@ void PreviewLoadingTask::execute()
                     }
                 }
             }
-            #else
-            // Trying to load with dcraw: RAW files.
-            if (qimage.isNull() && continueQuery() && dcrawIdentify.isDecodable &&
-                KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
-            {
-                // discard if smaller than half preview
-                if (qMax(qimage.width(), qimage.height()) < dcrawIdentify.imageSize.width() / 2)
-                    qimage = QImage();
-                else
-                    fromEmbeddedPreview = true;
-            }
-            #endif
 
             if (qimage.isNull() && continueQuery())
             {
@@ -317,9 +288,7 @@ void PreviewLoadingTask::execute()
             m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
 
             DMetadata metadata(m_loadingDescription.filePath);
-            #if KEXIV2_VERSION >= 0x010100
             m_img.setAttribute("originalSize", metadata.getPixelSize());
-            #endif
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
             {
