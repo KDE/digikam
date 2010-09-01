@@ -28,6 +28,10 @@
 #include <QEvent>
 #include <QMouseEvent>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "itemviewimagedelegate.h"
@@ -121,7 +125,10 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
     if (active)
     {
         if (m_widget)
+        {
             delete m_widget;
+            m_widget = 0;
+        }
         m_widget = createWidget();
 
         m_widget->setFocusPolicy(Qt::NoFocus);
