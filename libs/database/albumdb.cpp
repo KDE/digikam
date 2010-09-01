@@ -688,6 +688,33 @@ QList<TagProperty> AlbumDB::getTagProperties(int tagId)
     return properties;
 }
 
+QList<TagProperty> AlbumDB::getTagProperties()
+{
+    QList<QVariant> values;
+
+    d->db->execSql( "SELECT tagid, property, value FROM TagProperties ORDER BY tagid, property;", &values );
+
+    QList<TagProperty> properties;
+
+    if (values.isEmpty())
+        return properties;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        TagProperty property;
+
+        property.tagId    = (*it).toInt();
+        ++it;
+        property.property = (*it).toString();
+        ++it;
+        property.value    = (*it).toString();
+        ++it;
+
+        properties << property;
+    }
+    return properties;
+}
+
 QList< int > AlbumDB::getTagsWithProperty(const QString& property)
 {
     QList<QVariant> values;

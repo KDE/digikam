@@ -429,6 +429,11 @@ public:
     void setTagParentID(int tagID, int newParentTagID);
 
     /**
+     * Returns the list of all tag properties (ordered by tag id, then property).
+     */
+    QList<TagProperty> getTagProperties();
+
+    /**
      * Returns the list of tag properties of the given tag.
      */
     QList<TagProperty> getTagProperties(int tagID);
