@@ -40,20 +40,12 @@
 
 // Local includes
 
-#include "album.h"
-#include "albumdb.h"
-#include "albummanager.h"
-#include "imageinfocache.h"
 #include "databaseaccess.h"
 #include "databaseconstants.h"
-#include "databasetransaction.h"
-#include "databasebackend.h"
 #include "dimg.h"
 #include "imageinfo.h"
 #include "imagetagpair.h"
 #include "metadatamanager.h"
-#include "searchxml.h"
-#include "sqlquery.h"
 #include "tagproperties.h"
 #include "tagscache.h"
 #include "tagregion.h"
@@ -103,8 +95,7 @@ public:
     void checkThumbnailThread();
     QString faceTagPath(const QString& name) const;
     int  makeFaceTag(const QString& tagPath, const QString& fullName, const QString& kfaceId);
-    int  findFirstTagWithProperty(const QString& property);
-    int  findFirstTagWithProperty(const QString& property, const QString& value);
+    int  findFirstTagWithProperty(const QString& property, const QString& value = QString());
 
 private:
 
@@ -158,19 +149,11 @@ void FaceIface::FaceIfacePriv::checkThumbnailThread()
     }
 }
 
-int FaceIface::FaceIfacePriv::findFirstTagWithProperty(const QString& property)
-{
-    AlbumList candidates = AlbumManager::instance()->findTagsWithProperty(property);
-    if (!candidates.isEmpty())
-        unknownPeopleTagId = candidates.first()->id();
-    return 0;
-}
-
 int FaceIface::FaceIfacePriv::findFirstTagWithProperty(const QString& property, const QString& value)
 {
-    AlbumList candidates = AlbumManager::instance()->findTagsWithProperty(property, value);
+    QList<int> candidates = TagsCache::instance()->tagsWithProperty(property, value);
     if (!candidates.isEmpty())
-        unknownPeopleTagId = candidates.first()->id();
+        return candidates.first();
     return 0;
 }
 
@@ -268,27 +251,20 @@ int FaceIface::tagForFaceName(const QString& kfaceId) const
 
 QString FaceIface::faceNameForTag(int tagId) const
 {
-    TAlbum* album = AlbumManager::instance()->findTAlbum(tagId);
-    if (!album)
+    if (!TagsCache::instance()->hasTag(tagId))
         return QString();
 
-    QString id = album->property(TagPropertyName::kfaceId());
+    QString id = TagsCache::instance()->propertyValue(tagId, TagPropertyName::kfaceId());
     if (id.isNull())
-        id = album->property(TagPropertyName::person());
+        id = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
     if (id.isNull())
-        id = album->title();
+        id = TagsCache::instance()->tagName(tagId);
     return id;
 }
 
 QList< int > FaceIface::allPersonTags() const
 {
-    AlbumList candidates = AlbumManager::instance()->findTagsWithProperty(TagPropertyName::person());
-    QList <int> peopleTagIds;
-    foreach (Album* a, candidates)
-        peopleTagIds << a->id();
-    //peopleTagIds += d->peopleTagId;
-
-    return peopleTagIds;
+    return TagsCache::instance()->tagsWithProperty(TagPropertyName::person());
 }
 
 QList< QString > FaceIface::allPersonNames() const
@@ -337,8 +313,7 @@ int FaceIface::getOrCreateTagForPerson(const QString& name, const QString &given
 
 bool FaceIface::isPerson ( int tagId ) const
 {
-    TAlbum* talbum = AlbumManager::instance()->findTAlbum(tagId);
-    return talbum && talbum->hasProperty(TagPropertyName::person());
+    return TagsCache::instance()->hasProperty(tagId, TagPropertyName::person());
 }
 
 // --- Read from database ---
@@ -535,9 +510,8 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
 {
     readConfigSettings(); //FIXME: do by signal
 
-    QImage qimg = image.copyQImage(); // FIXME: memcpy necessary?
     kDebug() << "Image" << image.attribute("originalFilePath") << "dimensions" << image.size() << "original size" << image.originalSize();
-    KFaceIface::Image fimg(qimg);
+    KFaceIface::Image fimg(image.width(), image.height(), image.sixteenBit(), image.hasAlpha(), image.bits());
 
     // -- Detection --
 
