@@ -80,17 +80,19 @@ public:
         delete thumbnailLoadThread;
     }
 
-    bool                  suggestionsAllowed;
+    bool                 suggestionsAllowed;
 
-    double                recognitionThreshold;
-    int                   detectionAccuracy;
+    double               recognitionThreshold;
+    int                  detectionAccuracy;
 
-    int                   scannedForFacesTagId;
-    int                   needToTrainFacesTagId;
-    int                   peopleTagId;
-    int                   unknownPeopleTagId;
+    int                  scannedForFacesTagId;
+    int                  needToTrainFacesTagId;
+    int                  peopleTagId;
+    int                  unknownPeopleTagId;
 
-    ThumbnailLoadThread  *thumbnailLoadThread;
+    ThumbnailLoadThread* thumbnailLoadThread;
+
+public:
 
     /// Creates a new object if needed
     KFaceIface::Database* database();
@@ -266,7 +268,7 @@ int FaceIface::tagForFaceName(const QString& kfaceId) const
 
 QString FaceIface::faceNameForTag(int tagId) const
 {
-    TAlbum *album = AlbumManager::instance()->findTAlbum(tagId);
+    TAlbum* album = AlbumManager::instance()->findTAlbum(tagId);
     if (!album)
         return QString();
 
@@ -282,7 +284,7 @@ QList< int > FaceIface::allPersonTags() const
 {
     AlbumList candidates = AlbumManager::instance()->findTagsWithProperty(TagPropertyName::person());
     QList <int> peopleTagIds;
-    foreach (Album *a, candidates)
+    foreach (Album* a, candidates)
         peopleTagIds << a->id();
     //peopleTagIds += d->peopleTagId;
 
@@ -335,7 +337,7 @@ int FaceIface::getOrCreateTagForPerson(const QString& name, const QString &given
 
 bool FaceIface::isPerson ( int tagId ) const
 {
-    TAlbum *talbum = AlbumManager::instance()->findTAlbum(tagId);
+    TAlbum* talbum = AlbumManager::instance()->findTAlbum(tagId);
     return talbum && talbum->hasProperty(TagPropertyName::person());
 }
 
@@ -356,8 +358,8 @@ QList< Face > FaceIface::findFacesFromTags(const DImg& image, qlonglong imageid)
     }
 
     QList<Face> faceList = findFaces(imageid, QStringList()
-                                    << ImageTagPropertyName::tagRegion()
-                                    << ImageTagPropertyName::autodetectedFace());
+                                     << ImageTagPropertyName::tagRegion()
+                                     << ImageTagPropertyName::autodetectedFace());
 
     fillImageInFaces(image, faceList);
 
@@ -588,7 +590,6 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
     return faceList;
 }
 
-
 QString FaceIface::recognizeFace(const KFaceIface::Face& face)
 {
     if(d->database()->peopleCount() == 0)
@@ -619,13 +620,13 @@ QString FaceIface::recognizeFace(const KFaceIface::Face& face)
 
 // --- Confirmation ---
 
-int FaceIface::confirmName ( qlonglong imageid, const QRect& rect, const QString& name )
+int FaceIface::confirmName( qlonglong imageid, const QRect& rect, const QString& name )
 {
     // First look in all people tags. If the name is already there, then put it there. For ex, if the name of
     // your "dad" is a subtag of "Family" in the People tags, then assigning a tag "dad" to a person should assign the
     // tag under "Family", and not create a new tag just below "People".
 
-    int nameTagId = getOrCreateTagForPerson(name);
+    int nameTagId  = getOrCreateTagForPerson(name);
     QString region = TagRegion(rect).toXml();
 
     ImageTagPair pairUnknown ( imageid, d->unknownPeopleTagId);
@@ -657,7 +658,6 @@ int FaceIface::confirmName ( qlonglong imageid, const QRect& rect, const QString
 
 void FaceIface::trainImages(const QList<ImageInfo>& imageInfos)
 {
-
     d->checkThumbnailThread();
 
     ThumbnailImageCatcher catcher(d->thumbnailLoadThread);
@@ -820,7 +820,6 @@ int FaceIface::removeFace(qlonglong imageid, const QRect& rect)
     */
 }
 
-
 void FaceIface::readConfigSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -833,9 +832,6 @@ void FaceIface::readConfigSettings()
     if (d->databaseConst())
         d->database()->setDetectionAccuracy(d->detectionAccuracy);
 }
-
-
-
 
     /**
      * Returns a list of image ids of all images in the DB which have a specified person within.
@@ -1033,6 +1029,5 @@ bool FaceIface::isFaceRecognized ( qlonglong imageid, const QRect& rect, const Q
     return false;
 }
 */
-
 
 } // Namespace Digikam
