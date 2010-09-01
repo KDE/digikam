@@ -159,7 +159,7 @@ SetupFaceTags::~SetupFaceTags()
     delete d;
 }
 
-void SetupFaceTags::updateDetection(int value)
+void SetupFaceTags::updateDetection(int /*value*/)
 {
     if(!d->enableFaceDetection->isChecked())
     {
@@ -185,7 +185,7 @@ void SetupFaceTags::updateDetection(int value)
     }
 }
 
-void SetupFaceTags::updateSuggestion(int value)
+void SetupFaceTags::updateSuggestion(int /*value*/)
 {
     if(!d->enableFaceSuggestions->isChecked())
     {
