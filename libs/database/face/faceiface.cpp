@@ -598,7 +598,7 @@ QString FaceIface::recognizeFace(const KFaceIface::Face& face)
     QList<Face> f;
     f.append(face);
 
-    if( face.getImage().isNull() )
+    if( face.image().isNull() )
         return QString();
     else
     {
@@ -720,7 +720,7 @@ void FaceIface::trainFaces(const QList< Face >& givenFaceList )
     for (int i=0; i<faceList.size(); i++)
     {
         const Face& face = faceList[i];
-        if (face.name().isEmpty() || face.getImage().isNull())
+        if (face.name().isEmpty() || face.image().isNull())
             faceList.removeAt(i);
     }
 
