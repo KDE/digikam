@@ -499,22 +499,22 @@ QString TAlbum::icon() const
 
 bool TAlbum::isInternalTag() const
 {
-    return m_properties.contains(TagsCache::instance()->propertyNameDigikamInternalTag());
+    return TagsCache::instance()->isInternalTag(id());
 }
 
 bool TAlbum::hasProperty(const QString& key) const
 {
-    return m_properties.contains(key);
+    return TagsCache::instance()->hasProperty(id(), key);
 }
 
 QString TAlbum::property(const QString& key) const
 {
-    return m_properties.value(key);
+    return TagsCache::instance()->propertyValue(id(), key);
 }
 
 QMap<QString, QString> TAlbum::properties() const
 {
-    return m_properties;
+    return TagsCache::instance()->properties(id());
 }
 
 // --------------------------------------------------------------------------

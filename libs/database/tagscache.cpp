@@ -51,6 +51,13 @@ static bool lessThanForTagShortInfo(const TagShortInfo& first, const TagShortInf
     return first.id < second.id;
 }
 
+static bool lessThanForTagProperty(const TagProperty& first, const TagProperty& second)
+{
+    return first.tagId < second.tagId;
+}
+typedef QList<TagProperty>::const_iterator TagPropertiesConstIterator;
+typedef QPair<TagPropertiesConstIterator, TagPropertiesConstIterator> TagPropertiesRange;
+
 class TagsCachePriv
 {
 public:
@@ -72,6 +79,7 @@ public:
     QList<TagShortInfo>      infos;
     QMultiHash<QString, int> nameHash;
 
+    QList<TagProperty>       tagProperties;
     QSet<int>                internalTags;
     QSet<int>                doNotWriteTags;
 
@@ -105,13 +113,24 @@ public:
     {
         if (needUpdateProperties && initialized)
         {
+            QList<TagProperty> props = DatabaseAccess().db()->getTagProperties();
+
+            // Ensure not to lock both locks at the same time
             QWriteLocker locker(&lock);
-            internalTags = QSet<int>::fromList(
-                DatabaseAccess().db()->getTagsWithProperty(TagsCache::propertyNameDigikamInternalTag()));
-            // we could also employ a positive list, if needed
-            doNotWriteTags = QSet<int>::fromList(
-                DatabaseAccess().db()->getTagsWithProperty(TagsCache::propertyNameExcludedFromWriting()));
-            needUpdateHash = false;
+
+            needUpdateProperties = false;
+            tagProperties = props;
+
+            QLatin1String internalProp = TagsCache::propertyNameDigikamInternalTag();
+            QLatin1String doNotWriteProp = TagsCache::propertyNameExcludedFromWriting();
+            foreach (const TagProperty& property, tagProperties)
+            {
+                if (property.property == internalProp)
+                    internalTags << property.tagId;
+                else if (property.property == doNotWriteProp)
+                    doNotWriteTags << property.tagId;
+            }
+
         }
     }
 
@@ -123,6 +142,34 @@ public:
 
         // we use the fact that d->infos is sorted by id
         return qBinaryFind(infos.constBegin(), infos.constEnd(), info, lessThanForTagShortInfo);
+    }
+
+    TagPropertiesRange findProperties(int id) const
+    {
+        TagProperty prop;
+        prop.tagId = id;
+        TagPropertiesRange range;
+        range.first = qLowerBound(tagProperties.begin(), tagProperties.end(), prop, lessThanForTagProperty);
+        range.second = qUpperBound(range.first, tagProperties.end(), prop, lessThanForTagProperty);
+        return range;
+    }
+
+    inline TagPropertiesConstIterator toNextTag(TagPropertiesConstIterator it) const
+    {
+        // increment iterator until the next tagid is reached
+        int currentId = it->tagId;
+        for (++it; it != tagProperties.end(); ++it)
+            if (it->tagId != currentId)
+                break;
+        return it;
+    }
+
+    inline bool compareProperty(const TagPropertiesConstIterator& it,  const QString& property, const QString& value)
+    {
+        if (value.isNull())
+            return it->property == property;
+        else
+            return it->property == property && it->value == value;
     }
 };
 
@@ -172,24 +219,24 @@ void TagsCache::initialize()
     d->initialized = true;
 }
 
-QString TagsCache::tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy)
+QLatin1String TagsCache::tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy)
 {
     if (slashPolicy == IncludeLeadingSlash)
-        return "/_Digikam_Internal_Tags_";
+        return QLatin1String("/_Digikam_Internal_Tags_");
     else
-        return "_Digikam_Internal_Tags_";
+        return QLatin1String("_Digikam_Internal_Tags_");
 }
 
-QString TagsCache::propertyNameDigikamInternalTag()
+QLatin1String TagsCache::propertyNameDigikamInternalTag()
 {
     // Do not change, is written to users' databases
-    return "internalTag";
+    return QLatin1String("internalTag");
 }
 
-QString TagsCache::propertyNameExcludedFromWriting()
+QLatin1String TagsCache::propertyNameExcludedFromWriting()
 {
     // Do not change, is written to users' databases
-    return "noMetadataTag";
+    return QLatin1String("noMetadataTag");
 }
 
 QString TagsCache::tagName(int id)
@@ -481,6 +528,76 @@ int TagsCache::getOrCreateTagWithProperty(const QString& tagPath, const QString&
             props.setProperty(property, value);
     }
     return tagId;
+}
+
+bool TagsCache::hasProperty(int tagId, const QString& property, const QString& value) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    TagPropertiesRange range = d->findProperties(tagId);
+    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+        if (d->compareProperty(it, property, value))
+            return true;
+    return false;
+}
+
+QString TagsCache::propertyValue(int tagId, const QString& property) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    TagPropertiesRange range = d->findProperties(tagId);
+    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+        if (it->property == property)
+            return it->value;
+    return QString();
+}
+
+QStringList TagsCache::propertyValues(int tagId, const QString& property) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    TagPropertiesRange range = d->findProperties(tagId);
+    QStringList values;
+    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+    {
+        if (it->property == property)
+        {
+            // the list is ordered by property, after id
+            for (; it != range.second && it->property == property; ++it)
+                values << it->value;
+            return values;
+        }
+    }
+    return values;
+}
+
+QMap<QString, QString> TagsCache::properties(int tagId) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    QMap<QString, QString> map;
+    TagPropertiesRange range = d->findProperties(tagId);
+    QStringList values;
+    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+        map[it->property] = it->value;
+    return map;
+}
+
+QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& value) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    QList<int> ids;
+    TagPropertiesConstIterator it;
+    for (it = d->tagProperties.begin(); it != d->tagProperties.end(); ++it)
+    {
+        if (d->compareProperty(it, property, value))
+        {
+            ids << it->tagId;
+            it = d->toNextTag(it);
+        }
+    }
+    return ids;
 }
 
 bool TagsCache::isInternalTag(int tagId)

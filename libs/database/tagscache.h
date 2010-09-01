@@ -124,6 +124,35 @@ public:
     int getOrCreateTagWithProperty(const QString& tagPath, const QString& property, const QString& value = QString());
 
     /**
+     * Tests if the tag has the given property
+     *  a) just has the property
+     *  b) has the property with the given value (value not null)
+     */
+    bool hasProperty(int tagId, const QString& property, const QString& value = QString()) const;
+
+    /**
+     * Returns the value of the property.
+     * Returning a null string cannot distinguish between the property set
+     * with a null value, or the property not set.
+     * The first method returns any property, if multiple are set with the same key.
+     */
+    QString     propertyValue(int tagId, const QString& property) const;
+    QStringList propertyValues(int tagId, const QString& property) const;
+
+    /**
+     * Returns a list or a map of the properties of the tag.
+     * Note: The list and map may be constructed for each call. Prefer hasProperty() and property().
+     */
+    QMap<QString, QString> properties(int tagId) const;
+
+    /**
+     * Finds all tags with the given property. The tag
+     *  a)just has the property
+     *  b) has the property with the given value (value not null)
+     */
+    QList<int> tagsWithProperty(const QString& property, const QString& value = QString()) const;
+
+    /**
      * Returns if a tag is to be regarded program-internal, that is,
      * a technical implementation detail not visible to the user at any time.
      */
@@ -142,9 +171,9 @@ public:
      */
     int getOrCreateInternalTag(const QString& tagName);
 
-    static QString tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
-    static QString propertyNameDigikamInternalTag();
-    static QString propertyNameExcludedFromWriting();
+    static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
+    static QLatin1String propertyNameDigikamInternalTag();
+    static QLatin1String propertyNameExcludedFromWriting();
 
 signals:
 

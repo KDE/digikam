@@ -397,8 +397,6 @@ private:
 
     bool    m_person;
     
-    QMap<QString, QString> m_properties;
-
     friend class AlbumManager;
 };
 
