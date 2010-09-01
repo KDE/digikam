@@ -81,7 +81,7 @@ void ImageRatingOverlay::setActive(bool active)
         // widget is deleted
 
         if (view() && view()->model())
-            connect(view()->model(), 0, this, 0);
+            disconnect(view()->model(), 0, this, 0);
     }
 }
 
