@@ -81,6 +81,7 @@ Q_SIGNALS:
     void signalFileAdded(const KUrl& url);
     void signalFileModified(const KUrl& url);
     void signalURLChanged(const KUrl& url);
+    void signalSavingDialogProgress(float value);
 
 private:
 

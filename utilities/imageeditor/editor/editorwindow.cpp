@@ -172,11 +172,13 @@ EditorWindow::EditorWindow(const char *name)
     m_vSplitter              = 0;
     m_stackView              = 0;
     m_animLogo               = 0;
+    m_savingProgressDialog   = 0;
     m_fullScreen             = false;
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
     m_cancelSlideShow        = false;
     m_fullScreenHideThumbBar = true;
+    m_editingOriginalImage   = true;
 
     // Settings containers instance.
 
@@ -193,6 +195,8 @@ EditorWindow::~EditorWindow()
     delete m_canvas;
     delete m_IOFileSettings;
     delete m_savingContext;
+    if(m_savingProgressDialog != NULL)
+        delete m_savingProgressDialog;
     delete d->ICCSettings;
     delete d->exposureSettings;
     delete d;
@@ -338,6 +342,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_last", m_lastAction);
 
     m_saveAction = new KAction(KIcon("document-save"), i18n("&New version"), this);
+    m_saveAction->setToolTip(i18n("Save all current modifications into new version of the opened file"));
     connect(m_saveAction, SIGNAL(triggered()), this, SLOT(slotSaveSubversion()));
     actionCollection()->addAction("editorwindow_save", m_saveAction);
 
@@ -1011,6 +1016,16 @@ void EditorWindow::toggleStandardActions(bool val)
     d->selectNoneAction->setEnabled(val);
     d->slideShowAction->setEnabled(val);
 
+    if(m_editingOriginalImage) {
+        m_revertAction->setEnabled(false);
+        m_revertAction->setText(i18n("Revert"));
+    }
+    else
+    {
+        m_revertAction->setEnabled(true);
+        m_revertAction->setText(i18n("Revert to original"));
+    }
+
     // these actions are special: They are turned off if val is false,
     // but if val is true, they may be turned on or off.
     if (val)
@@ -1127,6 +1142,8 @@ void EditorWindow::slotLoadingProgress(const QString&, float progress)
 void EditorWindow::slotSavingProgress(const QString&, float progress)
 {
     m_nameLabel->setProgressValue((int)(progress*100.0));
+    if(m_savingProgressDialog != NULL)
+        m_savingProgressDialog->progressBar()->setValue((int)(progress*100.0));
 }
 
 bool EditorWindow::promptForOverWrite()
@@ -1158,7 +1175,18 @@ bool EditorWindow::promptForOverWrite()
 
 void EditorWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
 {
-    m_revertAction->setEnabled(canSave);
+    //if(m_editingOriginalImage)
+        //m_revertAction->setEnabled(canSave);
+
+    if(m_editingOriginalImage || (!m_editingOriginalImage && m_canvas->interface()->hasChangesToSave()) )
+    {
+        m_revertAction->setText(i18n("Revert"));
+    }
+    else if(!m_editingOriginalImage && !m_canvas->interface()->hasChangesToSave())
+    {
+        m_revertAction->setText(i18n("Revert to original"));
+    }
+
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
     m_saveAction->setEnabled(hasChangesToSave());
@@ -1190,7 +1218,11 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs, bo
 
         int result;
         QString boxMessage = i18n("The image '%1' has been modified.\n"
-                                  "Do you want to save it?", url.fileName());
+                                  "Do you want to save it?\n\n", url.fileName());
+
+        if(saveOrSaveAs == NewVersion)
+            boxMessage.append(i18n("This will create new subversion of the image"));
+        
         if (allowCancel)
         {
             result = KMessageBox::warningYesNoCancel(this,
@@ -1228,6 +1260,9 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs, bo
                     break;
                 case AlwaysSaveAs:
                     saving = saveAs();
+                    break;
+                case NewVersion:
+                    saving = saveNewVersion();
                     break;
             }
 
@@ -1525,6 +1560,8 @@ void EditorWindow::finishSaving(bool success)
     m_animLogo->stop();
 
     m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
+    if(m_savingProgressDialog != NULL)
+        m_savingProgressDialog->close();
 
     // On error, continue using current image
     if (!success)
@@ -1938,7 +1975,6 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url, bool subversion)
 
     if(m_canvas->currentImageFileFormat() == "RAW")
     {
-    // FIXME: Should these be applied when saving new version (to a new file)?
         applyStandardSettings();
         editingRAW = true;
         m_savingContext->format = m_formatForRAWVersioning.toLower(); //AlbumSettings::instance()->getFormatForStoringRAW().toLower();
@@ -2371,6 +2407,14 @@ void EditorWindow::setToolInfoMessage(const QString& txt)
 void EditorWindow::slotSetCurrentImageHistory()
 {
     m_canvas->interface()->setImageHistoryToCurrent();
+}
+
+void EditorWindow::setOriginalImageFlag()
+{
+    m_editingOriginalImage = false;
+
+    if(m_canvas->interface()->getImageHistory().isEmpty())
+        m_editingOriginalImage = true;
 }
 
 }  // namespace Digikam

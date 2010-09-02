@@ -243,6 +243,7 @@ public:
 
     EditorToolIface*           toolIface;
 
+
     void legacyUpdateSplitterState(KConfigGroup &group)
     {
 

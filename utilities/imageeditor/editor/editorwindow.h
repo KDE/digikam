@@ -36,6 +36,7 @@
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 #include <kjob.h>
+#include <kprogressdialog.h>
 
 // Local includes
 
@@ -99,6 +100,7 @@ protected:
     bool                     m_fullScreen;
     bool                     m_rotatedOrFlipped;
     bool                     m_setExifOrientationTag;
+    bool                     m_editingOriginalImage;
 
     QLabel                  *m_resLabel;
 
@@ -131,6 +133,7 @@ protected:
     Canvas                  *m_canvas;
     ImagePluginLoader       *m_imagePluginLoader;
     StatusProgressBar       *m_nameLabel;
+    KProgressDialog         *m_savingProgressDialog;
     IOFileSettingsContainer *m_IOFileSettings;
     SavingContextContainer  *m_savingContext;
 
@@ -161,7 +164,8 @@ protected:
     {
         AskIfNeeded,
         OverwriteWithoutAsking,
-        AlwaysSaveAs
+        AlwaysSaveAs,
+        NewVersion
     };
 
     bool promptUserSave(const KUrl& url, SaveOrSaveAs = AskIfNeeded, bool allowCancel = true);
@@ -172,6 +176,7 @@ protected:
     bool checkPermissions(const KUrl& url);
     void moveFile();
     void colorManage();
+    void setOriginalImageFlag();
 
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
@@ -181,7 +186,7 @@ protected:
 
     virtual void readSettings()               { readStandardSettings();     };
     virtual void saveSettings()               { saveStandardSettings();     };
-    virtual void toggleActions(bool val)      { toggleStandardActions(val); };
+    virtual void toggleActions(bool val)      { setOriginalImageFlag(); toggleStandardActions(val); };
 
     void toggleGUI2FullScreen();
 

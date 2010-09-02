@@ -87,6 +87,7 @@
 #include "deletedialog.h"
 #include "dimg.h"
 #include "dimginterface.h"
+#include "dimagehistory.h"
 #include "dio.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
@@ -98,6 +99,7 @@
 #include "imagepluginloader.h"
 #include "imagepreviewbar.h"
 #include "imagepropertiessidebardb.h"
+#include "imagescanner.h"
 #include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
@@ -108,6 +110,7 @@
 #include "slideshow.h"
 #include "statusprogressbar.h"
 #include "syncjob.h"
+#include "tagscache.h"
 #include "tagspopupmenu.h"
 #include "themeengine.h"
 #include "thumbbardock.h"
@@ -266,7 +269,15 @@ void ImageWindow::closeEvent(QCloseEvent* e)
 {
     if (hasChangesToSave())
     {
-        saveNewVersion();
+        if(saveNewVersion())
+        {
+            m_savingProgressDialog = new KProgressDialog(this, i18n("Saving image..."), i18n("Please wait for the image to be saved..."));
+            m_savingProgressDialog->setModal(true);
+            m_savingProgressDialog->setAutoClose(true);
+            m_savingProgressDialog->setMinimumDuration(1000);
+            m_savingProgressDialog->progressBar()->setMaximum(100);
+            m_savingProgressDialog->exec();
+        }
     }
     
     if (!queryClose())
@@ -316,7 +327,8 @@ bool ImageWindow::queryClose()
     if (!waitForSavingToComplete())
         return false;
 
-    return promptUserSave(d->urlCurrent);
+    return true;
+    //return promptUserSave(d->urlCurrent, NewVersion);
 }
 
 void ImageWindow::setupConnections()
@@ -366,6 +378,7 @@ void ImageWindow::setupConnections()
 
     connect(m_canvas->interface(), SIGNAL(signalModifiedWithFilterAction()),
             this, SLOT(slotUpdateFiltersHistorySidebar()));
+
 }
 
 void ImageWindow::setupUserArea()
@@ -617,7 +630,7 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
     d->allowSaving = allowSaving;
 
     m_saveAction->setEnabled(false);
-    m_revertAction->setEnabled(false);
+
     m_undoAction->setEnabled(false);
     m_redoAction->setEnabled(false);
 
@@ -972,6 +985,10 @@ void ImageWindow::saveAsIsComplete()
     if (d->imageInfoCurrent.isNull())
         return;
 
+    // Get tags id for subversion and current marking
+    int subversionTagId = TagsCache::instance()->getOrCreateInternalTag("subversion");
+    int currentVersionTagId = TagsCache::instance()->getOrCreateInternalTag("current-version");
+
     // Find the src and dest albums ------------------------------------------
 
     KUrl srcDirURL(QDir::cleanPath(m_savingContext->srcURL.directory()));
@@ -982,6 +999,9 @@ void ImageWindow::saveAsIsComplete()
 
     if (dstAlbum && srcAlbum)
     {
+        // Assign the versioning tag before we change the imageInfoCurrent into the new image
+        d->imageInfoCurrent.setTag(subversionTagId);
+        
         // Now copy the metadata of the original file to the new file ------------
 
         ScanController::instance()->scanFileDirectlyCopyAttributes(m_savingContext->destinationURL.toLocalFile(),
@@ -1049,6 +1069,10 @@ void ImageWindow::saveAsIsComplete()
 
         slotUpdateItemInfo();
 
+        d->imageInfoCurrent.removeTagCurrentFromVersionBranch(currentVersionTagId);
+        d->imageInfoCurrent.setTag(subversionTagId);
+        d->imageInfoCurrent.setTag(currentVersionTagId);
+
         // Pop-up a message to bring user when save is done.
         KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
                              this, windowTitle());
@@ -1093,11 +1117,13 @@ bool ImageWindow::saveAs()
     return startingSaveAs(d->urlCurrent);
 }
 
-bool ImageWindow::saveNewVersion() {
+bool ImageWindow::saveNewVersion()
+{
     return ( startingSaveNewVersion(d->urlCurrent, false) );
 }
 
-bool ImageWindow::saveNewSubversion() {
+bool ImageWindow::saveNewSubversion()
+{
     return ( startingSaveNewVersion(d->urlCurrent, true) );
 }
 
@@ -1509,10 +1535,29 @@ void ImageWindow::dropEvent(QDropEvent *e)
 
 void ImageWindow::slotRevert()
 {
-    if (!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent, NewVersion))
         return;
 
-    m_canvas->slotRestore();
+    if(m_editingOriginalImage || (!m_editingOriginalImage && m_canvas->interface()->hasChangesToSave()) )
+    {
+        m_canvas->slotRestore();
+    }
+    else if(!m_editingOriginalImage && !m_canvas->interface()->hasChangesToSave())
+    {
+        QList<qlonglong> originalsList = ImageScanner::resolveHistoryImageId(m_canvas->interface()->getImageHistory().originalReferredImage());
+        foreach (qlonglong imageId, originalsList)
+        {
+            ImageInfo info(imageId);
+            if(!info.isNull())
+            {
+                d->imageInfoCurrent = info;
+                d->urlCurrent = info.fileUrl();
+                slotLoadCurrent();
+                break;
+            }
+        }
+        kDebug() << "Current image id:" << d->imageInfoCurrent.id() << " | Resolved original id:" << d->imageInfoCurrent.id();
+    }
 }
 
 void ImageWindow::slotChangeTheme(const QString& theme)
