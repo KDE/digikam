@@ -55,15 +55,14 @@
 #include "databasewatch.h"
 #include "databasefields.h"
 
-
 namespace Digikam
 {
 
-enum SortOptions {
-    
+enum SortOptions
+{
     SortYoungestFirst = 0,
-    SortOldestFirst = 1,
-    SortRating = 2
+    SortOldestFirst   = 1,
+    SortRating        = 2
 };
 
 class GPSMarkerTiler : public KMap::AbstractMarkerTiler
@@ -80,7 +79,8 @@ public:
         {
         }
 
-        /*class ImageFromTileInfo
+        /*
+        class ImageFromTileInfo
         {
         public:
             ImageFromTileInfo()
@@ -103,7 +103,9 @@ public:
             QDateTime           creationDate;
         };
 
-        QList<ImageFromTileInfo>     imagesFromTileInfo;*/
+        QList<ImageFromTileInfo>     imagesFromTileInfo;
+        */
+
         QList<int> imagesId;
     };
 
@@ -130,9 +132,9 @@ public:
     class GPSImageInfo
     {
         public:
-        
+
         GPSImageInfo()
-        : id(-2),
+            : id(-2),
           coordinate(),
           rating(),
           creationDate()

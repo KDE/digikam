@@ -75,7 +75,7 @@
 namespace Digikam
 {
 
-class GPSSearchViewPriv
+class GPSSearchView::GPSSearchViewPriv
 {
 
 public:
@@ -100,15 +100,15 @@ public:
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
     QSplitter*                  splitter;
-    KMap::KMapWidget*      mapSearchWidget;
+    KMap::KMapWidget*           mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     MapViewModelHelper*         mapViewModelHelper;
-    KMap::ItemMarkerTiler* markerTilerModelBased;
+    KMap::ItemMarkerTiler*      markerTilerModelBased;
     bool                        existsSelection;
-    SearchModel*                searchModel;  
+    SearchModel*                searchModel;
     KAction*                    sortActionOldestFirst;
     KAction*                    sortActionYoungestFirst;
     KAction*                    sortActionRating; 
@@ -130,12 +130,12 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     setAttribute(Qt::WA_DeleteOnClose);
     setAcceptDrops(true);
 
-    d->imageAlbumModel    = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());      
-    d->selectionModel     = itemSelectionModel;
-    d->imageFilterModel   = imageFilterModel;
-    d->searchModel        = searchModel;
+    d->imageAlbumModel       = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());      
+    d->selectionModel        = itemSelectionModel;
+    d->imageFilterModel      = imageFilterModel;
+    d->searchModel           = searchModel;
 
-    d->mapViewModelHelper = new MapViewModelHelper(d->selectionModel, d->imageFilterModel, this);
+    d->mapViewModelHelper    = new MapViewModelHelper(d->selectionModel, d->imageFilterModel, this);
     d->markerTilerModelBased = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
 
     // ---------------------------------------------------------------
@@ -271,7 +271,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     // ---------------------------------------------------------------
 
-
     slotCheckNameEditGPSConditions();
 }
 
@@ -308,7 +307,6 @@ void GPSSearchView::doLoadState()
 
     d->searchTreeView->clearSelection();
     d->imageAlbumModel->clearImageInfos();
-    
 }
 
 void GPSSearchView::doSaveState()
@@ -333,7 +331,6 @@ void GPSSearchView::doSaveState()
  */
 void GPSSearchView::setActive(bool val)
 {
-
     if (!val)
     {
         // make sure we reset the custom filters set by the MarkerClusterer:
@@ -352,7 +349,6 @@ void GPSSearchView::setActive(bool val)
         d->mapSearchWidget->setActive(true);
         d->imageAlbumModel->clearImageInfos();
     }
-    
 }
 
 void GPSSearchView::changeAlbumFromHistory(SAlbum* album)
@@ -365,12 +361,11 @@ void GPSSearchView::changeAlbumFromHistory(SAlbum* album)
  */
 void GPSSearchView::slotSaveGPSSAlbum()
 {
- 
     QString name = d->nameEdit->text();
     if (!checkName(name))
         return;
 
-    createNewGPSSearchAlbum(name);    
+    createNewGPSSearchAlbum(name);
 }
 
 /**
@@ -390,7 +385,6 @@ void GPSSearchView::slotSelectionChanged()
  */
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
-
     AlbumManager::instance()->setCurrentAlbum(0);
 
     if (!d->mapSearchWidget->getSelectionStatus())
@@ -416,7 +410,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     AlbumManager::instance()->setCurrentAlbum(salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
     d->searchTreeView->slotSelectAlbum(salbum);
-    
+
     d->imageAlbumModel->openAlbum(salbum);
     if (d->existsSelection) 
     {
@@ -430,8 +424,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
  */
 void GPSSearchView::slotAlbumSelected(Album* a)
 {
-
-    SAlbum *salbum = dynamic_cast<SAlbum*> (a);
+    SAlbum* salbum = dynamic_cast<SAlbum*> (a);
 
     if (!salbum)
         return;
@@ -459,7 +452,6 @@ void GPSSearchView::slotAlbumSelected(Album* a)
  */
 bool GPSSearchView::checkName(QString& name)
 {
-  
     bool checked = checkAlbum(name);
 
     while (!checked)
@@ -502,7 +494,7 @@ void GPSSearchView::slotRemoveCurrentSelection()
     d->mapSearchWidget->setSelectionStatus(d->existsSelection);
     d->imageAlbumModel->clearImageInfos();
     d->searchTreeView->clearSelection();
-    
+
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 }
 
@@ -520,7 +512,6 @@ void GPSSearchView::slotRemoveCurrentFilter()
  */
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
-
     if (d->mapSearchWidget->getSelectionStatus())
     {
         d->nameEdit->setEnabled(true);
@@ -533,7 +524,6 @@ void GPSSearchView::slotCheckNameEditGPSConditions()
         d->nameEdit->setEnabled(false);
         d->saveBtn->setEnabled(false);
     }
-
 }
 
 /**

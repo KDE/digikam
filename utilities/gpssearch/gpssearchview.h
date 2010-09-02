@@ -56,7 +56,6 @@ class ImageInfo;
 class ImageInfoList;
 class SearchTextBar;
 class GPSSearchFolderView;
-class GPSSearchViewPriv;
 class SearchModel;
 class SearchModificationHelper;
 
@@ -114,6 +113,7 @@ Q_SIGNALS:
 
 private:
 
+    class GPSSearchViewPriv;
     GPSSearchViewPriv* const d;
 };
 
