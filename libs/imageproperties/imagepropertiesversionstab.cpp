@@ -239,9 +239,10 @@ void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
 
     setupFiltersData();
 
-    //emit updateMainViewSignal();
-    //emit setCurrentUrlSignal(url);
     emit setCurrentIdSignal(newOne);
+    //emit updateMainViewSignal();
+    emit setCurrentUrlSignal(url);
+    
 }
 
 void ImagePropertiesVersionsTab::slotUpdateImageInfo(const ImageInfo& info)
