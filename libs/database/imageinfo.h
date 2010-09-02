@@ -61,6 +61,7 @@ class ImagePosition;
 class ImageTagPair;
 class PhotoInfoContainer;
 class Template;
+class TreeBuilder;
 
 /**
  * The ImageInfo class contains provides access to the database for a single image.
@@ -306,6 +307,8 @@ public:
      * This image is derived from the ancestorImage.
      */
     void markDerivedFrom(const ImageInfo& ancestorImage);
+
+    void removeTagCurrentFromVersionBranch(int tagCurrentId);
 
     /**
      * Retrieve information about the image,

@@ -534,12 +534,6 @@ class TreeBuilder
 {
 public:
 
-    TreeBuilder(const QList<QPair<qlonglong, qlonglong> >& pairs);
-
-    QList<QPair<qlonglong, int> > toList() const;
-
-protected:
-
     class TreeNode
     {
     public:
@@ -550,6 +544,15 @@ protected:
         qlonglong parent;
         QList<qlonglong> children;
     };
+
+    TreeBuilder(const QList<QPair<qlonglong, qlonglong> >& pairs);
+
+    QList<QPair<qlonglong, int> > toList() const;
+    QList<qlonglong> getOrigins() const { return m_origins; }
+    QHash<qlonglong, TreeNode> getNodes() const { return m_nodes; }
+    QList<qlonglong> getBranchIdsByLeafId(qlonglong leafId) const;
+
+protected:
 
     QHash<qlonglong, TreeNode> m_nodes;
     QList<qlonglong> m_origins;
@@ -562,6 +565,22 @@ protected:
 TreeBuilder::TreeBuilder(const QList<QPair<qlonglong, qlonglong> >& pairs)
 {
     readPairs(pairs);
+}
+
+QList<qlonglong> TreeBuilder::getBranchIdsByLeafId(qlonglong leafId) const
+{
+    QList<qlonglong> list;
+    foreach(const TreeNode& node, m_nodes)
+    {
+        if(node.children.contains(leafId))
+        {
+            list.append(node.id);
+            list.append(node.ancestors);
+            break;
+        }
+    }
+
+    return list;
 }
 
 QList<QPair<qlonglong, int> > TreeBuilder::toList() const
@@ -691,6 +710,18 @@ QList<QPair<qlonglong, int> > ImageInfo::allAvailableVersions() const
     TreeBuilder treeBuilder(DatabaseAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom));
 
     return treeBuilder.toList();
+}
+
+void ImageInfo::removeTagCurrentFromVersionBranch(int tagCurrentId)
+{
+    if (!m_data)
+        return;
+
+    QList<int> tagList;
+    tagList.append(tagCurrentId);
+    
+    TreeBuilder treeBuilder(DatabaseAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom));
+    DatabaseAccess().db()->removeTagsFromItems(treeBuilder.getBranchIdsByLeafId(m_data->id), tagList);
 }
 
 void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
