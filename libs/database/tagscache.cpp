@@ -65,10 +65,11 @@ public:
 
     TagsCachePriv()
     {
-        initialized     = false;
-        needUpdateInfos = true;
-        needUpdateHash  = true;
-        changingDB      = false;
+        initialized          = false;
+        needUpdateInfos      = true;
+        needUpdateHash       = true;
+        needUpdateProperties = true;
+        changingDB           = false;
     }
 
     bool                     initialized;
@@ -605,16 +606,15 @@ QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& v
     d->checkProperties();
     QReadLocker locker(&d->lock);
     QList<int>  ids;
-    if (!d->tagProperties.isEmpty())
+    for (TagPropertiesConstIterator it = d->tagProperties.begin(); it != d->tagProperties.end(); )
     {
-        for (TagPropertiesConstIterator it = d->tagProperties.begin(); it != d->tagProperties.end(); ++it)
+        if (d->compareProperty(it, property, value))
         {
-            if (d->compareProperty(it, property, value))
-            {
-                ids << it->tagId;
-                it = d->toNextTag(it);
-            }
+            ids << it->tagId;
+            it = d->toNextTag(it);
         }
+        else
+            ++it;
     }
     return ids;
 }
