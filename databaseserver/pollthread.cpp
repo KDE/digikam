@@ -72,8 +72,8 @@ bool PollThread::checkDigikamInstancesRunning()
 {
    QSystemSemaphore sem("DigikamDBSrvAccess", 1, QSystemSemaphore::Open);
    sem.acquire();
-   QDBusConnectionInterface *interface = QDBusConnection::sessionBus().interface();
-   QDBusReply<QStringList> reply = interface->registeredServiceNames();
+   QDBusConnectionInterface* interface = QDBusConnection::sessionBus().interface();
+   QDBusReply<QStringList> reply       = interface->registeredServiceNames();
 
    if (reply.isValid())
    {
@@ -83,15 +83,19 @@ bool PollThread::checkDigikamInstancesRunning()
        QLatin1String digikamKioService("org.kde.digikam.KIO-");
        foreach (const QString &service, serviceNames)
        {
-           if (service.startsWith(digikamStartupService) || service.startsWith(digikamService) || service.startsWith(digikamKioService))
+           if (service.startsWith(digikamStartupService) ||
+               service.startsWith(digikamService) ||
+               service.startsWith(digikamKioService))
            {
                kDebug() << "At least service ["<< service <<"] is using the database server";
+
                // At least one digikam/kio service was found
                sem.release(1);
                return true;
            }
        }
    }
+
    sem.release(1);
    return false;
 }
