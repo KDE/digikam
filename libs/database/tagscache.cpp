@@ -604,14 +604,16 @@ QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& v
 {
     d->checkProperties();
     QReadLocker locker(&d->lock);
-    QList<int> ids;
-    TagPropertiesConstIterator it;
-    for (it = d->tagProperties.begin(); it != d->tagProperties.end(); ++it)
+    QList<int>  ids;
+    if (!d->tagProperties.isEmpty())
     {
-        if (d->compareProperty(it, property, value))
+        for (TagPropertiesConstIterator it = d->tagProperties.begin(); it != d->tagProperties.end(); ++it)
         {
-            ids << it->tagId;
-            it = d->toNextTag(it);
+            if (d->compareProperty(it, property, value))
+            {
+                ids << it->tagId;
+                it = d->toNextTag(it);
+            }
         }
     }
     return ids;
