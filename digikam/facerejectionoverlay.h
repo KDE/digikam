@@ -42,7 +42,7 @@ class FaceRejectionOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    FaceRejectionOverlayButton(QAbstractItemView *parentView);
+    FaceRejectionOverlayButton(QAbstractItemView* parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -59,12 +59,12 @@ class FaceRejectionOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    FaceRejectionOverlay(QObject *parent);
+    FaceRejectionOverlay(QObject* parent);
     virtual void setActive(bool active);
 
 protected:
 
-    virtual ItemViewHoverButton *createButton();
+    virtual ItemViewHoverButton* createButton();
     virtual void updateButton(const QModelIndex& index);
     virtual bool checkIndex(const QModelIndex& index) const;
 
@@ -75,7 +75,6 @@ protected Q_SLOTS:
 Q_SIGNALS:
 
     void rejectFace(const QModelIndex& index);
-
 };
 
 } // namespace Digikam

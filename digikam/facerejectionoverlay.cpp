@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "facerejectionoverlay.h"
+#include "facerejectionoverlay.moc"
 
 // KDE includes
 
@@ -41,8 +41,8 @@
 namespace Digikam
 {
 
-FaceRejectionOverlayButton::FaceRejectionOverlayButton(QAbstractItemView *parentView)
-                           : ItemViewHoverButton(parentView)
+FaceRejectionOverlayButton::FaceRejectionOverlayButton(QAbstractItemView* parentView)
+                          : ItemViewHoverButton(parentView)
 {
 }
 
@@ -66,8 +66,8 @@ void FaceRejectionOverlayButton::updateToolTip()
 
 // --------------------------------------------------------------------
 
-FaceRejectionOverlay::FaceRejectionOverlay(QObject *parent)
-                     : HoverButtonDelegateOverlay(parent)
+FaceRejectionOverlay::FaceRejectionOverlay(QObject* parent)
+                    : HoverButtonDelegateOverlay(parent)
 {
 }
 
@@ -86,7 +86,7 @@ void FaceRejectionOverlay::setActive(bool active)
     }
 }
 
-ItemViewHoverButton *FaceRejectionOverlay::createButton()
+ItemViewHoverButton* FaceRejectionOverlay::createButton()
 {
     return new FaceRejectionOverlayButton(view());
 }
@@ -94,10 +94,9 @@ ItemViewHoverButton *FaceRejectionOverlay::createButton()
 void FaceRejectionOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
-
-    const int gap = 5;
-    const int x   = rect.right() - button()->sizeHint().width() - gap;
-    const int y   = rect.top() + gap;
+    const int gap    = 5;
+    const int x      = rect.right() - button()->sizeHint().width() - gap;
+    const int y      = rect.top() + gap;
     button()->move(QPoint(x, y));
 }
 
