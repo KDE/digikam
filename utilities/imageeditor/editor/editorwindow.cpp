@@ -1173,7 +1173,7 @@ bool EditorWindow::promptForOverWrite()
 
 }
 
-void EditorWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
+void EditorWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool /*canSave*/)
 {
     //if(m_editingOriginalImage)
         //m_revertAction->setEnabled(canSave);

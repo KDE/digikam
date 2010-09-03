@@ -42,7 +42,6 @@
 #include "databasewatch.h"
 #include "tagproperties.h"
 
-
 namespace Digikam
 {
 
@@ -58,7 +57,9 @@ static bool lessThanForTagProperty(const TagProperty& first, const TagProperty& 
 typedef QList<TagProperty>::const_iterator TagPropertiesConstIterator;
 typedef QPair<TagPropertiesConstIterator, TagPropertiesConstIterator> TagPropertiesRange;
 
-class TagsCachePriv
+// ------------------------------------------------------------------------------------------
+
+class TagsCache::TagsCachePriv
 {
 public:
 
@@ -173,11 +174,13 @@ public:
     }
 };
 
+// ------------------------------------------------------------------------------------------
+
 class ChangingDB
 {
 public:
 
-    ChangingDB(TagsCachePriv* d)
+    ChangingDB(TagsCache::TagsCachePriv* d)
         : d(d)
     {
         d->changingDB = true;
@@ -186,11 +189,16 @@ public:
     {
         d->changingDB = false;
     }
-    TagsCachePriv* const d;
+
+    TagsCache::TagsCachePriv* const d;
 };
+
+// ------------------------------------------------------------------------------------------
 
 class TagsCacheCreator { public: TagsCache object; };
 K_GLOBAL_STATIC(TagsCacheCreator, creator)
+
+// ------------------------------------------------------------------------------------------
 
 TagsCache* TagsCache::instance()
 {
@@ -253,8 +261,11 @@ QString TagsCache::tagName(int id)
 QStringList TagsCache::tagNames(const QList<int>& ids)
 {
     QStringList names;
-    foreach (int id, ids)
-        names << tagName(id);
+    if (!ids.isEmpty())
+    {
+        foreach (int id, ids)
+            names << tagName(id);
+    }
     return names;
 }
 
@@ -282,8 +293,11 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy)
 QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy)
 {
     QStringList paths;
-    foreach (int id, ids)
-        paths << tagPath(id, slashPolicy);
+    if (!ids.isEmpty())
+    {
+        foreach (int id, ids)
+            paths << tagPath(id, slashPolicy);
+    }
     return paths;
 }
 
@@ -394,9 +408,10 @@ int TagsCache::tagForPath(const QString& tagPath)
 QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths)
 {
     QList<int> ids;
-    foreach (const QString& tagPath, tagPaths)
+    if (!tagPaths.isEmpty())
     {
-        ids << tagForPath(tagPath);
+        foreach (const QString& tagPath, tagPaths)
+            ids << tagForPath(tagPath);
     }
     return ids;
 }
@@ -488,9 +503,10 @@ int TagsCache::createTag(const QString& tagPathToCreate)
 QList<int> TagsCache::createTags(const QStringList& tagPaths)
 {
     QList<int> ids;
-    foreach (const QString& tagPath, tagPaths)
+    if (!tagPaths.isEmpty())
     {
-        ids << createTag(tagPath);
+        foreach (const QString& tagPath, tagPaths)
+            ids << createTag(tagPath);
     }
     return ids;
 }
@@ -498,9 +514,10 @@ QList<int> TagsCache::createTags(const QStringList& tagPaths)
 QList<int> TagsCache::getOrCreateTags(const QStringList& tagPaths)
 {
     QList<int> ids;
-    foreach (const QString& tagPath, tagPaths)
+    if (!tagPaths.isEmpty())
     {
-        ids << getOrCreateTag(tagPath);
+        foreach (const QString& tagPath, tagPaths)
+            ids << getOrCreateTag(tagPath);
     }
     return ids;
 }
@@ -637,6 +654,5 @@ void TagsCache::slotTagChanged(const TagChangeset& changeset)
     else if (changeset.operation() == TagChangeset::Deleted)
         emit tagDeleted(changeset.tagId());
 }
-
 
 } // namespace Digikam
