@@ -32,8 +32,6 @@
 namespace Digikam
 {
 
-class TagsCachePriv;
-
 class DIGIKAM_DATABASE_EXPORT TagsCache : public QObject
 {
     Q_OBJECT
@@ -116,7 +114,7 @@ public:
     int getOrCreateTag(const QString& tagPath);
     QList<int> getOrCreateTags(const QStringList& tagPaths);
 
-signals:
+Q_SIGNALS:
 
     /** These signals are provided for convenience; for finer grained information
         use DatabaseWatch. Use a queued connection if you carry out
@@ -133,11 +131,13 @@ private:
 
     friend class DatabaseAccess;
     friend class TagsCacheCreator;
+    friend class ChangingDB;
 
     TagsCache();
     ~TagsCache();
     void initialize();
 
+    class TagsCachePriv;
     TagsCachePriv* const d;
 };
 
