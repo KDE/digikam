@@ -29,6 +29,10 @@
 
 #include <QScrollArea>
 
+//local includes
+
+#include "scriptplugintype.h"
+
 namespace Digikam
 {
 
@@ -39,7 +43,6 @@ class SetupScriptManager : public QScrollArea
     Q_OBJECT
 
 public:
-
     SetupScriptManager ( QWidget* parent = 0 );
     ~SetupScriptManager();
 
@@ -48,8 +51,8 @@ public:
 private:
 
     void readSettings();
+    void addEntry(ScriptPluginType* plugin);
 
-private:
 
     SetupScriptManagerPriv* const d;
 };

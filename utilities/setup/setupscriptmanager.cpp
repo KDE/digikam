@@ -1,3 +1,5 @@
+#ifndef SETUPSCRIPTMANAGER_CPP
+#define SETUPSCRIPTMANAGER_CPP
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -32,6 +34,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QGroupBox>
+#include <QString>
 
 //KDE includes
 
@@ -41,6 +44,7 @@
 //local includes
 
 #include "setupscriptmanager.h"
+#include "scriptplugintype.h"
 
 namespace Digikam
 {
@@ -50,67 +54,41 @@ class SetupScriptManagerPriv
 public:
 
     SetupScriptManagerPriv() :
-        configGroupName("ScriptManager Settings")
+    configGroupName("ScriptManager Settings")
 
     {
-        scriptLoaded = 0;
-        scriptDebug  = 0;
-        scriptInfo   = 0;
         group        = 0;
+        pluginGroup  = 0;
+        mainLayout   = 0;
+        count        = 0;
     }
 
     const QString configGroupName;
 
-    QCheckBox*    scriptLoaded;
-    QPushButton*  scriptDebug;
-    QPushButton*  scriptInfo;
     QGroupBox*    group;
+    QGroupBox*    pluginGroup;
+    QVBoxLayout*  mainLayout;
+    int*          count;//count of the number of plugins loaded
 };
 
 SetupScriptManager::SetupScriptManager(QWidget* parent)
                   : QScrollArea(parent), d(new SetupScriptManagerPriv)
 {
-    //The Script Manager Window is arranged as follows
-    //initially there is a QGroupBox to which Vertical Layout is assigned
-    //every time a new Script needs to be added , another Group Box containing
-    //a horizontal group of widgets ( a checkbox and a debug button and an info button
-    //is added to the Vertical Group Box.
-
-    //I have looked at the code of setupmetadata.cpp for GUI arrangement
+    //first create a GroupBox
     d->group = new QGroupBox(viewport());
     setWidget(d->group);
     setWidgetResizable(true);
 
-    //QWidget* panel          = new QWidget(d->group);
-    //QVBoxLayout* mainLayout = new QVBoxLayout(panel);
-    QVBoxLayout* mainLayout = new QVBoxLayout(d->group);
+    //create a vbox layout and set the layout to the GroupBox
+    d->mainLayout = new QVBoxLayout;
+    d->group->setLayout(d->mainLayout);
+    d->count = new int;
 
-    //-----------------End of Main Layout-------------
-
-    //create a new function which takes in the plugin name etc
-    //and returns the widget which can be added to the GroupBox.
-    QGroupBox* individualPluginGroup     = new QGroupBox(d->group);//panel);
-    individualPluginGroup->setTitle(i18n("Single Plugin"));
-    QHBoxLayout* individualPluginHLayout = new QHBoxLayout(individualPluginGroup);
-
-    d->scriptLoaded = new QCheckBox(i18n("Name of the Script"));
-    d->scriptDebug  = new QPushButton(i18n("Debug"));
-    d->scriptInfo   = new QPushButton(i18n("Info"));
-
-    individualPluginHLayout->addWidget(d->scriptLoaded);
-    individualPluginHLayout->addWidget(d->scriptDebug);
-    individualPluginHLayout->addWidget(d->scriptInfo);
-    individualPluginHLayout->setSpacing(0);
-
-    //-----------end of widget set for a single Script---------
-
-    mainLayout->addWidget(individualPluginGroup);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(KDialog::spacingHint());
-    mainLayout->addStretch();
-
+    //read settings from a xml file
     readSettings();
+
 }
+
 
 SetupScriptManager::~SetupScriptManager()
 {
@@ -130,6 +108,47 @@ void SetupScriptManager::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     // TODO
+    // Every time we read a setting value it must call the addEntry method to
+    //add the entry for the individual script plugin
+
+    //The first entry into the scriptManager
+    ScriptPluginType *plugin=new ScriptPluginType();
+    //plugin->createPlugin(name,path,mod);
+    plugin->createPlugin("Name","",false);
+    addEntry(plugin);
+
+    //Second entry into the scriptManager
+    ScriptPluginType *plugin2=new ScriptPluginType();
+    plugin2->createPlugin("Plugin2","",false);
+    addEntry(plugin2);
+
+    ScriptPluginType *plugin3=new ScriptPluginType();
+    plugin3->createPlugin("Plugin3","",false);
+    addEntry(plugin3);
+
+    d->mainLayout->setMargin(0);
+    d->mainLayout->setSpacing(KDialog::spacingHint());
+    d->mainLayout->addStretch();
+}
+
+void SetupScriptManager::addEntry(ScriptPluginType *plugin)
+{
+    //create a set of widgets
+    QCheckBox   *box            = new QCheckBox(plugin->name());
+    QPushButton *btnDebug       = new QPushButton(i18n("Debug"));
+    QPushButton *btnInfo        = new QPushButton(i18n("Info"));
+    //add the widgets to a Horizontal layout whose parent is a GroupBox
+    QHBoxLayout* pluginHLayout  = new QHBoxLayout;
+    //add the individual plugins to the horizontal layout
+    pluginHLayout->addWidget(box,Qt::AlignLeft);//the second argument is stretch
+    pluginHLayout->addWidget(btnDebug,0,Qt::AlignRight);
+    pluginHLayout->addWidget(btnInfo,0,Qt::AlignRight);
+    pluginHLayout->setSpacing(0);
+
+    d->mainLayout->insertLayout(-1,pluginHLayout);
+    d->count++;
+    //the index is negative(-1) to add the layout at the end
 }
 
 } // namespace Digikam
+#endif // SETUPSCRIPTMANAGER_CPP
