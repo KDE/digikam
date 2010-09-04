@@ -71,6 +71,7 @@
 #include "imagewindow.h"
 #include "metadatamanager.h"
 #include "thumbnailloadthread.h"
+#include "tagregion.h"
 
 namespace Digikam
 {
@@ -196,7 +197,13 @@ void DigikamImageView::slotUntagFace(const QModelIndex& index)
 {
     ImageInfo info = ImageModel::retrieveImageInfo(index);
     QRect rect = d->faceDelegate->faceRect(index);
-    d->faceiface->removeFace(info.id(), rect);
+    kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << rect;
+
+    DImg img;
+    img.load(info.filePath());
+    kDebug()<<"Info => size = "<<info.dimensions();
+    kDebug()<<"DImg => size = "<<img.size();
+    d->faceiface->removeFace(info.id(), TagRegion::mapToOriginalSize(img, rect));
 }
 
 void DigikamImageView::activated(const ImageInfo& info)

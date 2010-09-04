@@ -559,6 +559,8 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
 
         kDebug() << "Applying face tag" << tagId << face.name() << faceRect << region;
         pair.addProperty(ImageTagPropertyName::autodetectedFace(), region);
+        // FIXME: We use ImageTagPair::assignTag() for now, because doing it with MetadataManager causes a db lockup
+        pair.assignTag();
     }
 
     return faceList;
@@ -607,7 +609,7 @@ int FaceIface::confirmName( qlonglong imageid, const QRect& rect, const QString&
 
     ImageTagPair pairNamed   ( imageid, nameTagId );
 
-    pairNamed.removeProperty(ImageTagPropertyName::autodetectedFace(), region);
+    pairUnknown.removeProperty(ImageTagPropertyName::autodetectedFace(), region);
     pairNamed.setProperty(ImageTagPropertyName::tagRegion(), region);
 
     markForTraining(imageid);
@@ -615,15 +617,13 @@ int FaceIface::confirmName( qlonglong imageid, const QRect& rect, const QString&
 
     MetadataManager::instance()->assignTag(ImageInfo(imageid), nameTagId);
 
-    /*
     if(faceCountForPersonInImage(imageid, d->unknownPeopleTagId) == 0)
     {
             ImageTagPair pair(imageid, d->unknownPeopleTagId);
             pair.removeProperties(ImageTagPropertyName::tagRegion());
             pair.removeProperties("face");
-            pair.unAssignTag();
+            MetadataManager::instance()->removeTag(ImageInfo(imageid), d->unknownPeopleTagId);
     }
-    */
 
     return nameTagId;
 }
@@ -723,7 +723,9 @@ void FaceIface::removeAllFaces(qlonglong imageid)
     {
         pair.clearProperties();
         if (pair.isAssigned())
+        {
             tagsToRemove << pair.tagId();
+        }
    }
 
     MetadataManager::instance()->removeTags(info, tagsToRemove);
@@ -741,12 +743,15 @@ int FaceIface::removeFace(qlonglong imageid, const QRect& rect)
     {
         foreach (const QString& rectString, pair.allValues(attributes))
         {
+            kDebug()<<"A Rect in this image is : "<<rectString;
             if (rectString == regionString)
             {
                 pair.clearProperties();
                 if (pair.isAssigned())
+                {
                     MetadataManager::instance()->removeTag(ImageInfo(imageid), pair.tagId());
-                return pair.tagId();
+                    return pair.tagId();
+                }
             }
         }
     }
