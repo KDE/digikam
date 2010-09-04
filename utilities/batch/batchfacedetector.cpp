@@ -55,10 +55,6 @@
 #include "databaseaccess.h"
 #include "imageinfo.h"
 #include "previewloadthread.h"
-#include "thumbnailloadthread.h"
-#include "thumbnailsize.h"
-#include "thumbnaildatabaseaccess.h"
-#include "thumbnaildb.h"
 #include "knotificationwrapper.h"
 #include "config-digikam.h"
 #include "searchxml.h"
@@ -82,7 +78,6 @@ public:
         cancel              = false;
         rebuildAll          = true;
         previewLoadThread   = 0;
-        thumbnailLoadThread = 0;
         faceIface           = new FaceIface();
 
         duration.start();
@@ -100,7 +95,6 @@ public:
 
     QStringList           allPicturesPath;
     PreviewLoadThread*    previewLoadThread;
-    ThumbnailLoadThread*  thumbnailLoadThread;
 
     FaceIface*            faceIface;
 };
@@ -110,8 +104,6 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
 {
     d->rebuildAll          = rebuildAll;
     d->previewLoadThread   = new PreviewLoadThread();
-    d->thumbnailLoadThread = ThumbnailLoadThread::defaultThread();
-    d->thumbnailLoadThread->setThumbnailSize(256, true);
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
             this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
@@ -216,8 +208,8 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
     {
         kDebug() << "Will detect faces in " << desc.filePath << " => " << "Height= " << img.height() << ", Width= " << img.width();
 
-        // Find all faces, and create and associate their face thumbnails with the image.
-        QList<KFaceIface::Face> faceList = d->faceIface->findAndTagFaces(dimg, ImageInfo(desc.filePath).id() );
+        // Find all faces and tag them
+        d->faceIface->findAndTagFaces(dimg, ImageInfo(desc.filePath).id() );
 
     }
 
