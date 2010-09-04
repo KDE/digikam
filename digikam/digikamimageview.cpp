@@ -199,11 +199,7 @@ void DigikamImageView::slotUntagFace(const QModelIndex& index)
     QRect rect = d->faceDelegate->faceRect(index);
     kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << rect;
 
-    DImg img;
-    img.load(info.filePath());
-    kDebug()<<"Info => size = "<<info.dimensions();
-    kDebug()<<"DImg => size = "<<img.size();
-    d->faceiface->removeFace(info.id(), TagRegion::mapToOriginalSize(img, rect));
+    d->faceiface->removeFace(info.id(), rect);
 }
 
 void DigikamImageView::activated(const ImageInfo& info)
