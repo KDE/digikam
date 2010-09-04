@@ -610,6 +610,11 @@ int FaceIface::confirmName( qlonglong imageid, const QRect& rect, const QString&
     ImageTagPair pairNamed   ( imageid, nameTagId );
 
     pairUnknown.removeProperty(ImageTagPropertyName::autodetectedFace(), region);
+
+    if(!pairUnknown.hasProperty(ImageTagPropertyName::tagRegion()))
+        {
+        kDebug()<<"No more face properties here";
+        }
     pairNamed.setProperty(ImageTagPropertyName::tagRegion(), region);
 
     markForTraining(imageid);
@@ -617,13 +622,13 @@ int FaceIface::confirmName( qlonglong imageid, const QRect& rect, const QString&
 
     MetadataManager::instance()->assignTag(ImageInfo(imageid), nameTagId);
 
-    if(faceCountForPersonInImage(imageid, d->unknownPeopleTagId) == 0)
-    {
-            ImageTagPair pair(imageid, d->unknownPeopleTagId);
-            pair.removeProperties(ImageTagPropertyName::tagRegion());
-            pair.removeProperties("face");
-            MetadataManager::instance()->removeTag(ImageInfo(imageid), d->unknownPeopleTagId);
-    }
+//    if(faceCountForPersonInImage(imageid, d->unknownPeopleTagId) == 0)
+//    {
+//            ImageTagPair pair(imageid, d->unknownPeopleTagId);
+//            pair.removeProperties(ImageTagPropertyName::tagRegion());
+//            pair.removeProperties("face");
+//            MetadataManager::instance()->removeTag(ImageInfo(imageid), d->unknownPeopleTagId);
+//    }
 
     return nameTagId;
 }
@@ -746,12 +751,14 @@ int FaceIface::removeFace(qlonglong imageid, const QRect& rect)
             kDebug()<<"A Rect in this image is : "<<rectString;
             if (rectString == regionString)
             {
-                pair.clearProperties();
-                if (pair.isAssigned())
-                {
-                    MetadataManager::instance()->removeTag(ImageInfo(imageid), pair.tagId());
-                    return pair.tagId();
-                }
+                pair.removeProperty(ImageTagPropertyName::autodetectedFace(), regionString);
+
+                ImageTagPair unknownPair(imageid, d->unknownPeopleTagId);
+                if(!unknownPair.hasProperty(ImageTagPropertyName::tagRegion()))
+                        MetadataManager::instance()->removeTag(ImageInfo(imageid), pair.tagId());
+
+                return pair.tagId();
+
             }
         }
     }
