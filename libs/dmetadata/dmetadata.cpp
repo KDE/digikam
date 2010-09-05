@@ -965,6 +965,7 @@ QString DMetadata::getLensDescription() const
     // In first, try to get Lens information from makernotes.
 
     lensExifTags.append("Exif.CanonCs.Lens");          // Canon Cameras Makernote.
+    lensExifTags.append("Exif.CanonCs.LensType");      // Canon Cameras Makernote.
     lensExifTags.append("Exif.Canon.0x0095");          // Alternative Canon Cameras Makernote.
     lensExifTags.append("Exif.NikonLd1.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.NikonLd2.LensIDNumber"); // Nikon Cameras Makernote.
