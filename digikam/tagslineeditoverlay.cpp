@@ -46,17 +46,16 @@ namespace Digikam
 {
 
 TagsLineEditOverlay::TagsLineEditOverlay(QObject *parent)
-                  : AbstractWidgetDelegateOverlay(parent)
+                   : AbstractWidgetDelegateOverlay(parent)
 {
-
 }
 
-AddTagsLineEdit *TagsLineEditOverlay::addTagsLineEdit() const
+AddTagsLineEdit* TagsLineEditOverlay::addTagsLineEdit() const
 {
     return static_cast<AddTagsLineEdit*>(m_widget);
 }
 
-QWidget *TagsLineEditOverlay::createWidget()
+QWidget* TagsLineEditOverlay::createWidget()
 {
     const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     AddTagsLineEdit* w = new AddTagsLineEdit(parentWidget());
@@ -70,8 +69,7 @@ void TagsLineEditOverlay::setActive(bool active)
     addTagsLineEdit()->setEnabled(true);
     addTagsLineEdit()->setClickMessage("Type the name of this person");
     addTagsLineEdit()->setReadOnly(false);
-    
-    
+
     if (active)
     {
         connect(addTagsLineEdit(), SIGNAL(taggingActionActivated(TaggingAction)),
@@ -108,9 +106,9 @@ void TagsLineEditOverlay::updatePosition()
         return;
 
     QRect thumbrect = delegate()->ratingRect();
-    kDebug()<<"Rect is : "<<thumbrect;
-    QRect rect = thumbrect;
-    
+    kDebug() << "Rect is : " << thumbrect;
+    QRect rect      = thumbrect;
+
     if (rect.width() > addTagsLineEdit()->width() )
     {
         int offset = (rect.width() - addTagsLineEdit()->width()) / 2;
@@ -155,7 +153,7 @@ void TagsLineEditOverlay::slotEntered(const QModelIndex& index)
 
     updatePosition();
     updateTag();
-    
+
     //delegate()->setRatingEdited(m_index);
     view()->update(m_index);
 }

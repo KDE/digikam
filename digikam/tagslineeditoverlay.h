@@ -7,7 +7,7 @@
  * Description : line edit for addition of tags on mouse hover
  *
  * Copyright (C) 2010 by Aditya Bhatt <caulier dot gilles at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -43,9 +43,9 @@ class TagsLineEditOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    TagsLineEditOverlay(QObject *parent);
+    TagsLineEditOverlay(QObject* parent);
 
-    AddTagsLineEdit *addTagsLineEdit() const;
+    AddTagsLineEdit* addTagsLineEdit() const;
 
 Q_SIGNALS:
 
@@ -58,7 +58,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual QWidget *createWidget();
+    virtual QWidget* createWidget();
     virtual void setActive(bool);
     virtual void visualChange();
     virtual void slotEntered(const QModelIndex& index);
@@ -67,10 +67,11 @@ protected:
     void updatePosition();
     void updateTag();
 
+protected:
+
     QPersistentModelIndex m_index;
 };
 
 } // namespace Digikam
 
 #endif /* IMAGERATINGOVERLAY_H */
- 
