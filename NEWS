@@ -13,7 +13,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 250003 : Kipi-plugin for xcf is needed.
 006 ==> 250081 : Lens-autocorrection does not recognize the lens automaticly for Canon EOS 450D.
 007 ==> 207710 : Crash while loading large file (Digikam::DImgScale::dimgScaleAARGB, Digikam::DImg::smoothScaleSection, Digikam::DImgInterface::paintOnDevice).
-008 ==> 
+008 ==> 218256 : digiKam rc1 crashes while generating fingerprints.
+009 ==> 
 
 
 
