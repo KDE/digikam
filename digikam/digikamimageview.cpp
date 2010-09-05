@@ -67,6 +67,7 @@
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
+#include "tagslineeditoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
 #include "metadatamanager.h"
@@ -124,7 +125,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
     connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
             this, SLOT(assignRating(const QModelIndex&, int)));
-
+    
     d->utilities = new ImageViewUtilities(this);
 
     connect(d->utilities, SIGNAL(editorCurrentUrlChanged(const KUrl&)),
@@ -177,6 +178,7 @@ void DigikamImageView::setFaceMode(bool on)
         // selection overlay
         addSelectionOverlay();
         addRejectionOverlay();
+        addTagEditOverlay();
     }
     else
     {
@@ -193,12 +195,24 @@ void DigikamImageView::addRejectionOverlay(ImageDelegate *delegate)
     addOverlay(rejectionOverlay, delegate);
 }
 
+
+void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
+{
+    TagsLineEditOverlay *tagOverlay = new TagsLineEditOverlay(this);
+    connect(tagOverlay, SIGNAL(tagEdited(const QModelIndex &,int)),
+            this, SLOT(assignTag(const QModelIndex&, int)));
+    
+    addOverlay(tagOverlay);
+}
+
+
 void DigikamImageView::slotUntagFace(const QModelIndex& index)
 {
     ImageInfo info = ImageModel::retrieveImageInfo(index);
     QRect rect = d->faceDelegate->faceRect(index);
     kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << rect;
-
+    info.setVisible(false);
+    info.setVisible(true);
     d->faceiface->removeFace(info.id(), rect);
 }
 
@@ -406,6 +420,11 @@ void DigikamImageView::assignRatingToSelected(int rating)
 void DigikamImageView::assignRating(const QModelIndex &index, int rating)
 {
     MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), rating);
+}
+
+void DigikamImageView::assignTag(const QModelIndex& index, int tagId)
+{
+    MetadataManager::instance()->assignTag(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), tagId);
 }
 
 void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)

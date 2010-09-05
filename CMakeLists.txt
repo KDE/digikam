@@ -1,3 +1,4 @@
+
 PROJECT(digikam)
 
 OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
@@ -1300,6 +1301,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewviewv2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageratingoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagslineeditoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagerotationoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnailbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnaildelegate.cpp
