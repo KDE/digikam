@@ -33,6 +33,7 @@
 
 #include <klocale.h>
 #include <kglobalsettings.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -47,6 +48,7 @@ namespace Digikam
 TagsLineEditOverlay::TagsLineEditOverlay(QObject *parent)
                   : AbstractWidgetDelegateOverlay(parent)
 {
+
 }
 
 AddTagsLineEdit *TagsLineEditOverlay::addTagsLineEdit() const
@@ -65,12 +67,15 @@ QWidget *TagsLineEditOverlay::createWidget()
 void TagsLineEditOverlay::setActive(bool active)
 {
     AbstractWidgetDelegateOverlay::setActive(active);
-
+    addTagsLineEdit()->setEnabled(true);
+    addTagsLineEdit()->setClickMessage("Type the name of this person");
+    addTagsLineEdit()->setReadOnly(false);
+    
+    
     if (active)
     {
         connect(addTagsLineEdit(), SIGNAL(taggingActionActivated(TaggingAction)),
                 this, SLOT(slotTagChanged()));
-        addTagsLineEdit()->setEnabled(true);
 
         if (view()->model())
             connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
@@ -102,7 +107,9 @@ void TagsLineEditOverlay::updatePosition()
     if (!m_index.isValid())
         return;
 
-    QRect rect = delegate()->ratingRect();
+    QRect thumbrect = delegate()->ratingRect();
+    kDebug()<<"Rect is : "<<thumbrect;
+    QRect rect = thumbrect;
     
     if (rect.width() > addTagsLineEdit()->width() )
     {
@@ -134,6 +141,23 @@ void TagsLineEditOverlay::slotDataChanged(const QModelIndex& topLeft, const QMod
 {
     if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
         updateTag();
+}
+
+void TagsLineEditOverlay::slotEntered(const QModelIndex& index)
+{
+    AbstractWidgetDelegateOverlay::slotEntered(index);
+
+    // see bug 228810, this is a small workaround
+    if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
+        addTagsLineEdit()->setVisible(true);
+
+    m_index = index;
+
+    updatePosition();
+    updateTag();
+    
+    //delegate()->setRatingEdited(m_index);
+    view()->update(m_index);
 }
 
 } // namespace Digikam

@@ -73,6 +73,7 @@
 #include "metadatamanager.h"
 #include "thumbnailloadthread.h"
 #include "tagregion.h"
+#include "addtagslineedit.h"
 
 namespace Digikam
 {
@@ -199,10 +200,11 @@ void DigikamImageView::addRejectionOverlay(ImageDelegate *delegate)
 void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
 {
     TagsLineEditOverlay *tagOverlay = new TagsLineEditOverlay(this);
+    
     connect(tagOverlay, SIGNAL(tagEdited(const QModelIndex &,int)),
             this, SLOT(assignTag(const QModelIndex&, int)));
-    
-    addOverlay(tagOverlay);
+
+    addOverlay(tagOverlay, delegate);
 }
 
 

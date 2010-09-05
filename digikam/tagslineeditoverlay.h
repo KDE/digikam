@@ -61,6 +61,7 @@ protected:
     virtual QWidget *createWidget();
     virtual void setActive(bool);
     virtual void visualChange();
+    virtual void slotEntered(const QModelIndex& index);
     virtual void hide();
 
     void updatePosition();
