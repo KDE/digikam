@@ -106,7 +106,6 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterMode
     d->mapWidget = new KMap::KMapWidget(this);
     d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
     d->mapWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
-    d->mapWidget->setEditModeAvailable(true);
     KMap::ItemMarkerTiler* const kmapMarkerModel = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
     d->mapWidget->setBackend("marble");
