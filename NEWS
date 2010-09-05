@@ -10,9 +10,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 249402 : Download window presents file in the opposite order than expected.
 003 ==> 249196 : Localization fails after upgrade !
 004 ==> 245069 : File name not added for import files.
-005 ==> 250003 : kipi-plugin for xcf is needed.
-006 ==> 250081 : lens-autocorrection does not recognize the lens automaticly for Canon EOS 450D.
-007 ==> 
+005 ==> 250003 : Kipi-plugin for xcf is needed.
+006 ==> 250081 : Lens-autocorrection does not recognize the lens automaticly for Canon EOS 450D.
+007 ==> 207710 : Crash while loading large file (Digikam::DImgScale::dimgScaleAARGB, Digikam::DImg::smoothScaleSection, Digikam::DImgInterface::paintOnDevice).
+008 ==> 
 
 
 
