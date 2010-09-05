@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "tagslineeditoverlay.h"
+#include "tagslineeditoverlay.moc"
 
 // Qt includes
 
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-TagsLineEditOverlay::TagsLineEditOverlay(QObject *parent)
+TagsLineEditOverlay::TagsLineEditOverlay(QObject* parent)
                    : AbstractWidgetDelegateOverlay(parent)
 {
 }
@@ -57,7 +57,7 @@ AddTagsLineEdit* TagsLineEditOverlay::addTagsLineEdit() const
 
 QWidget* TagsLineEditOverlay::createWidget()
 {
-    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+    //const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     AddTagsLineEdit* w = new AddTagsLineEdit(parentWidget());
 
     return w;
