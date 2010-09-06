@@ -50,7 +50,7 @@ class DImg;
 class ImageInfo;
 class ImageTagPair;
 
-class DIGIKAM_EXPORT FaceIface
+class FaceIface
 {
 
 public:
