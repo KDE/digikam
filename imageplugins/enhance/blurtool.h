@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class BlurToolPriv;
-
 class BlurTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -61,6 +59,7 @@ private:
 
 private:
 
+    class BlurToolPriv;
     BlurToolPriv* const d;
 };
 

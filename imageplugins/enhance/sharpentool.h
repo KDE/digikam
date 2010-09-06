@@ -33,8 +33,6 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class SharpenToolPriv;
-
 class SharpenTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -63,6 +61,7 @@ private:
 
 private:
 
+    class SharpenToolPriv;
     SharpenToolPriv* const d;
 };
 

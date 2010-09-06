@@ -73,7 +73,7 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class InPaintingToolPriv
+class InPaintingTool::InPaintingToolPriv
 {
 public:
 

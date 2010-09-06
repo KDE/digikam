@@ -58,7 +58,7 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class RestorationToolPriv
+class RestorationTool::RestorationToolPriv
 {
 public:
 

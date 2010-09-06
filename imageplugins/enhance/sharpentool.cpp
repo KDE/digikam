@@ -56,7 +56,7 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class SharpenToolPriv
+class SharpenTool::SharpenToolPriv
 {
 
 public:

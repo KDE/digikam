@@ -61,7 +61,7 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class LocalContrastToolPriv
+class LocalContrastTool::LocalContrastToolPriv
 {
 public:
 

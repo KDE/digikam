@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class LocalContrastToolPriv;
-
 class LocalContrastTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -63,6 +61,7 @@ private Q_SLOTS:
 
 private:
 
+    class LocalContrastToolPriv;
     LocalContrastToolPriv* const d;
 };
 

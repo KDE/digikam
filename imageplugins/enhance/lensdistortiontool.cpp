@@ -63,7 +63,7 @@ using namespace KDcrawIface;
 namespace DigikamEnhanceImagePlugin
 {
 
-class LensDistortionToolPriv
+class LensDistortionTool::LensDistortionToolPriv
 {
 public:
 

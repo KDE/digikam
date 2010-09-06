@@ -59,7 +59,7 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class LensAutoFixToolPriv
+class LensAutoFixTool::LensAutoFixToolPriv
 {
 public:
 
