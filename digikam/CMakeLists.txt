@@ -42,7 +42,7 @@ INCLUDE_DIRECTORIES(
                      # database libs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/face                    
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/face
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
 
                      # shared utilities
@@ -323,8 +323,8 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libtemplate_SRCS}
                  ${libadvancedrename_SRCS}
                  ${libdatabaseui_SRCS}
-                 ${libfacedetection_SRCS}
                  ${libscriptiface_SRCS}
+                 ${libfacedetection_SRCS}
                  main.cpp
     )
 
