@@ -336,9 +336,9 @@ void ThumbnailCreator::store(const QString& path, const QImage& i, const QRect& 
 
     // FIXME: qimage is kept a null image after this.
     QImage qimage = scaleForStorage(i, isFace);
-    
+
     ThumbnailInfo info = makeThumbnailInfo(path, rect);
-    
+
     ThumbnailImage image;
     image.qimage = qimage;
 
@@ -373,9 +373,7 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath) const
     }
 }
 
-
 // --------------- Thumbnail generation and image handling -----------------------
-
 
 ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, const QRect& detailRect, bool isFace) const
 {
@@ -514,11 +512,11 @@ QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& m
     if (!previews.isEmpty())
     {
         // discard if smaller than half preview
-        int acceptableWidth = lround(previews.originalSize().width() * 0.5);
+        int acceptableWidth  = lround(previews.originalSize().width() * 0.5);
         int acceptableHeight = lround(previews.originalSize().height() * 0.5);
         if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
         {
-            QImage qimage = previews.image();
+            QImage qimage           = previews.image();
             QRect reducedSizeDetail = TagRegion::mapFromOriginalSize(previews.originalSize(), qimage.size(), detailRect);
             return qimage.copy(reducedSizeDetail.intersected(qimage.rect()));
         }
@@ -545,7 +543,7 @@ QImage ThumbnailCreator::loadImagePreview(const DMetadata& metadata) const
     if (metadata.getImagePreview(image))
     {
         kDebug() << "Use Exif/IPTC preview extraction. Size of image: "
-                      << image.width() << "x" << image.height();
+                 << image.width() << "x" << image.height();
     }
 
     return image;
@@ -955,15 +953,15 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
             temp.close();
 
-            #if KDE_IS_VERSION(4,2,85)
+#if KDE_IS_VERSION(4,2,85)
             // KDE 4.3.0
             ret = KDE::rename(QFile::encodeName(tempFileName),
                               QFile::encodeName(thumbPath));
-            #else
+#else
             // KDE 4.2.x or 4.1.x
             ret = KDE_rename(QFile::encodeName(tempFileName),
                              QFile::encodeName(thumbPath));
-            #endif
+#endif
 
             if (ret != 0)
             {

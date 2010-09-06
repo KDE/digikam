@@ -48,7 +48,7 @@ class IccProfile;
 class DImgLoaderObserver;
 class DMetadata;
 class ThumbnailImage;
-class ThumbnailCreatorPriv;
+
 
 class DIGIKAM_EXPORT ThumbnailInfo
 {
@@ -245,6 +245,7 @@ private:
 
 private:
 
+    class ThumbnailCreatorPriv;
     ThumbnailCreatorPriv* const d;
 };
 

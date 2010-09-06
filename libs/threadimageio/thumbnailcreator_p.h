@@ -36,6 +36,7 @@ namespace Digikam
 class ThumbnailImage
 {
 public:
+
     ThumbnailImage()
     {
         exifOrientation = DMetadata::ORIENTATION_UNSPECIFIED;
@@ -47,7 +48,7 @@ public:
     int    exifOrientation;
 };
 
-class ThumbnailCreatorPriv
+class ThumbnailCreator::ThumbnailCreatorPriv
 {
 public:
 
