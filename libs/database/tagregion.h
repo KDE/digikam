@@ -39,7 +39,7 @@ namespace Digikam
 
 class DImg;
 
-class DIGIKAM_DATABASE_EXPORT TagRegion
+class DIGIKAM_EXPORT TagRegion
 {
 public:
 
