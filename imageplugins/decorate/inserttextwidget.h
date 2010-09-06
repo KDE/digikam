@@ -59,36 +59,36 @@ using namespace Digikam;
 namespace DigikamDecorateImagePlugin
 {
 
-enum Action
-{
-    ALIGN_LEFT = 0,
-    ALIGN_RIGHT,
-    ALIGN_CENTER,
-    ALIGN_BLOCK,
-    BORDER_TEXT,
-    TRANSPARENT_TEXT
-};
-
-enum TextRotation
-{
-    ROTATION_NONE = 0,
-    ROTATION_90,
-    ROTATION_180,
-    ROTATION_270
-};
-
-enum BorderMode
-{
-    BORDER_NONE = 0,
-    BORDER_SUPPORT,
-    BORDER_NORMAL
-};
-
-class InsertTextWidgetPriv;
-
 class InsertTextWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
+
+public:
+
+    enum Action
+    {
+        ALIGN_LEFT = 0,
+        ALIGN_RIGHT,
+        ALIGN_CENTER,
+        ALIGN_BLOCK,
+        BORDER_TEXT,
+        TRANSPARENT_TEXT
+    };
+
+    enum TextRotation
+    {
+        ROTATION_NONE = 0,
+        ROTATION_90,
+        ROTATION_180,
+        ROTATION_270
+    };
+
+    enum BorderMode
+    {
+        BORDER_NONE = 0,
+        BORDER_SUPPORT,
+        BORDER_NORMAL
+    };
 
 public:
 
@@ -123,6 +123,7 @@ protected:
 
 private:
 
+    class InsertTextWidgetPriv;
     InsertTextWidgetPriv* const d;
 };
 

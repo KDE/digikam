@@ -38,8 +38,6 @@ using namespace Digikam;
 namespace DigikamDecorateImagePlugin
 {
 
-class TextureToolPriv;
-
 class TextureTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -91,6 +89,7 @@ private:
 
 private:
 
+    class TextureToolPriv;
     TextureToolPriv* const d;
 };
 

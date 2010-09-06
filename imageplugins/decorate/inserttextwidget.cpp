@@ -52,7 +52,7 @@
 namespace DigikamDecorateImagePlugin
 {
 
-class InsertTextWidgetPriv
+class InsertTextWidget::InsertTextWidgetPriv
 {
 public:
 

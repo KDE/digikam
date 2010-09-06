@@ -36,8 +36,6 @@ using namespace Digikam;
 namespace DigikamDecorateImagePlugin
 {
 
-class InsertTextToolPriv;
-
 class InsertTextTool : public EditorTool
 {
     Q_OBJECT
@@ -66,6 +64,7 @@ private:
 
 private:
 
+    class InsertTextToolPriv;
     InsertTextToolPriv* const d;
 };
 
