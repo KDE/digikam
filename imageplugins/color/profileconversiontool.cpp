@@ -55,7 +55,7 @@
 namespace DigikamColorImagePlugin
 {
 
-class ProfileConversionToolPriv
+class ProfileConversionTool::ProfileConversionToolPriv
 {
 public:
 
@@ -88,7 +88,7 @@ public:
     static IccTransform getTransform(const IccProfile& in, const IccProfile& out);
 };
 
-IccTransform ProfileConversionToolPriv::getTransform(const IccProfile& in, const IccProfile& out)
+IccTransform ProfileConversionTool::ProfileConversionToolPriv::getTransform(const IccProfile& in, const IccProfile& out)
 {
     ICCSettingsContainer settings = IccSettings::instance()->settings();
 

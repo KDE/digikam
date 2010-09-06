@@ -38,8 +38,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class AdjustLevelsToolPriv;
-
 class AdjustLevelsTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -84,9 +82,10 @@ private:
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
     void adjustSlidersAndSpinboxes(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
     bool eventFilter(QObject*, QEvent*);
-    
+
 private:
 
+    class AdjustLevelsToolPriv;
     AdjustLevelsToolPriv* const d;
 };
 

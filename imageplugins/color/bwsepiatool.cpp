@@ -57,7 +57,7 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class BWSepiaToolPriv
+class BWSepiaTool::BWSepiaToolPriv
 {
 
 public:

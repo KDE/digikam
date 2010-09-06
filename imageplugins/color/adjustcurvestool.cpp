@@ -61,7 +61,7 @@
 namespace DigikamColorImagePlugin
 {
 
-class AdjustCurvesToolPriv
+class AdjustCurvesTool::AdjustCurvesToolPriv
 {
 public:
 

@@ -72,7 +72,7 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class ChannelMixerToolPriv
+class ChannelMixerTool::ChannelMixerToolPriv
 {
 public:
 

@@ -41,8 +41,6 @@ namespace Digikam
 
 using namespace Digikam;
 
-class ImagePlugin_ColorPriv;
-
 class ImagePlugin_Color : public ImagePlugin
 {
     Q_OBJECT
@@ -58,7 +56,7 @@ public:
     typedef Digikam::IccProfile IccProfile; // to make signal/slot work
 
 private Q_SLOTS:
-    
+
     void slotBCG();
     void slotCB();
     void slotHSL();
@@ -79,6 +77,7 @@ private Q_SLOTS:
 
 private:
 
+    class ImagePlugin_ColorPriv;
     ImagePlugin_ColorPriv* const d;
 };
 

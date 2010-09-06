@@ -35,8 +35,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class ProfileConversionToolPriv;
-
 class ProfileConversionTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -68,6 +66,7 @@ private:
 
 private:
 
+    class ProfileConversionToolPriv;
     ProfileConversionToolPriv* const d;
 };
 
