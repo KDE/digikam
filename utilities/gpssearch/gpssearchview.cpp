@@ -392,17 +392,21 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 
     // We query database here
 
+    const KMap::GeoCoordinates::Pair coordinates = d->mapSearchWidget->getSelectionRectangle();
+
     // NOTE: coordinates as lon1, lat1, lon2, lat2 (or West, North, East, South)
     // as left/top, right/bottom rectangle.
-    QList<double> coordinates = d->mapSearchWidget->selectionCoordinates();
+    const QList<qreal> coordinatesList = QList<qreal>() <<
+                                   coordinates.first.lon() << coordinates.first.lat() <<
+                                   coordinates.second.lon() << coordinates.second.lat();
 
-    kDebug() << "West, North, East, South: " << coordinates;
+    kDebug() << "West, North, East, South: " << coordinatesList;
 
     SearchXmlWriter writer;
     writer.writeGroup();
     writer.writeField("position", SearchXml::Inside);
     writer.writeAttribute("type", "rectangle");
-    writer.writeValue(coordinates);
+    writer.writeValue(coordinatesList);
     writer.finishField();
     writer.finishGroup();
 
@@ -435,11 +439,13 @@ void GPSSearchView::slotAlbumSelected(Album* a)
 
     if (type == "rectangle")
     {
-        QList<double> list;
-        list << reader.valueToDoubleList();
+        const QList<double> list = reader.valueToDoubleList();
+
+        const KMap::GeoCoordinates::Pair coordinates(KMap::GeoCoordinates(list.at(1), list.at(0)),
+                                                     KMap::GeoCoordinates(list.at(3), list.at(2)));
 
         d->mapSearchWidget->setSelectionStatus(true);
-        d->mapSearchWidget->setSelectionCoordinates(list);
+        d->mapSearchWidget->setSelectionCoordinates(coordinates);
         slotCheckNameEditGPSConditions();
     }
 
