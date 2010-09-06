@@ -43,7 +43,7 @@ namespace Digikam
 
 class ImageFiltersHistoryTreeItem;
 
-class DIGIKAM_EXPORT ImageFiltersHistoryModel : public QAbstractItemModel
+class ImageFiltersHistoryModel : public QAbstractItemModel
 {
     Q_OBJECT
 

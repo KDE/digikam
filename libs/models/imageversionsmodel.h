@@ -38,7 +38,7 @@ namespace Digikam
 
 class WorkingWidget;
 
-class DIGIKAM_EXPORT ImageVersionsModel : public QAbstractListModel
+class ImageVersionsModel : public QAbstractListModel
 {
     Q_OBJECT
 

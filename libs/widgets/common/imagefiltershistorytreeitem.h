@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImageFiltersHistoryTreeItem
+class ImageFiltersHistoryTreeItem
 {
 public:
 

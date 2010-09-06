@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImageFiltersHistoryView //: QTreeView
+class  ImageFiltersHistoryView //: QTreeView
 {
 //    Q_OBJECT
 public:

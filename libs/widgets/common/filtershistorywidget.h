@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT RemoveFilterAction : public QAction
+class RemoveFilterAction : public QAction
 {
     Q_OBJECT
 

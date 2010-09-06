@@ -43,7 +43,7 @@ namespace Digikam
 class ImageVersionsModel;
 class ImageInfoList;
 
-class DIGIKAM_EXPORT VersionsWidget : public QWidget
+class VersionsWidget : public QWidget
 {
     Q_OBJECT
 

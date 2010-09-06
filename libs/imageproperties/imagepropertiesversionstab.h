@@ -46,7 +46,7 @@ namespace Digikam
 class ImageInfoList;
 class ImageInfo;
 
-class DIGIKAM_EXPORT ImagePropertiesVersionsTab : public KTabWidget
+class ImagePropertiesVersionsTab : public KTabWidget
 {
     Q_OBJECT
 

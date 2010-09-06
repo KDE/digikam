@@ -37,7 +37,7 @@ namespace Digikam
 
 class WorkingWidget;
 
-class DIGIKAM_EXPORT ImagePropertiesVersionsDelegate : public QStyledItemDelegate
+class ImagePropertiesVersionsDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
