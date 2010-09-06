@@ -32,12 +32,11 @@
 
 #include "dimg.h"
 
-
 namespace Digikam
 {
 
 TagRegion::TagRegion(const QString& descriptor)
-    : m_value(descriptor), m_type(Invalid)
+         : m_value(descriptor), m_type(Invalid)
 {
     QString xmlStartDocument = "<?xml version=\"1.0\"?>";
     QXmlStreamReader reader(xmlStartDocument + descriptor);
@@ -60,7 +59,7 @@ TagRegion::TagRegion(const QString& descriptor)
 }
 
 TagRegion::TagRegion(const QRect& rect)
-    : m_value(rect), m_type(Rect)
+         : m_value(rect), m_type(Rect)
 {
 }
 
@@ -139,6 +138,4 @@ QRect TagRegion::mapFromOriginalSize(const DImg& reducedSizeImage, const QRect& 
     return mapFromOriginalSize(reducedSizeImage.originalSize(), reducedSizeImage.size(), fullSizeDetail);
 }
 
-
-}
-
+} // namespace Digikam

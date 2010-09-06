@@ -81,7 +81,6 @@ protected:
     Type     m_type;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // TAGREGION_H
