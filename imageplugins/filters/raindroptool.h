@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class RainDropToolPriv;
-
 class RainDropTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -62,6 +60,7 @@ private:
 
 private:
 
+    class RainDropToolPriv;
     RainDropToolPriv* const d;
 };
 

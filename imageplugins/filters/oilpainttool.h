@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class OilPaintToolPriv;
-
 class OilPaintTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -61,6 +59,7 @@ private:
 
 private:
 
+    class OilPaintToolPriv;
     OilPaintToolPriv* const d;
 };
 

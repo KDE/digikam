@@ -7,8 +7,8 @@
  * Description : a digiKam image editor plugin to emboss
  *               an image.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,8 +35,6 @@ using namespace Digikam;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class EmbossToolPriv;
-
 class EmbossTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -62,6 +60,7 @@ private:
 
 private:
 
+    class EmbossToolPriv;
     EmbossToolPriv* const d;
 };
 

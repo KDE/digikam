@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class CharcoalToolPriv;
-
 class CharcoalTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -61,6 +59,7 @@ private:
 
 private:
 
+    class CharcoalToolPriv;
     CharcoalToolPriv* const d;
 };
 

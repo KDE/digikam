@@ -57,7 +57,7 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class CharcoalToolPriv
+class CharcoalTool::CharcoalToolPriv
 {
 public:
 

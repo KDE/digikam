@@ -76,7 +76,7 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class ColorFxToolPriv
+class ColorFxTool::ColorFxToolPriv
 {
 
 public:

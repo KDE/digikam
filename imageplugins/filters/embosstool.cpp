@@ -56,7 +56,7 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class EmbossToolPriv
+class EmbossTool::EmbossToolPriv
 {
 public:
 

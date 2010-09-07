@@ -58,7 +58,7 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class RainDropToolPriv
+class RainDropTool::RainDropToolPriv
 {
 public:
 
