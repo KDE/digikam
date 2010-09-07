@@ -66,12 +66,13 @@ QWidget* TagsLineEditOverlay::createWidget()
 void TagsLineEditOverlay::setActive(bool active)
 {
     AbstractWidgetDelegateOverlay::setActive(active);
-    addTagsLineEdit()->setEnabled(true);
-    addTagsLineEdit()->setClickMessage("Type the name of this person");
-    addTagsLineEdit()->setReadOnly(false);
 
     if (active)
     {
+        
+        addTagsLineEdit()->setClickMessage("Type the name of this person");
+        addTagsLineEdit()->setReadOnly(false);
+
         connect(addTagsLineEdit(), SIGNAL(taggingActionActivated(TaggingAction)),
                 this, SLOT(slotTagChanged()));
 
