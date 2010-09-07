@@ -191,7 +191,11 @@ bool DynamicThreadPriv::transitionToRunning()
     switch (state)
     {
         case DynamicThread::Scheduled:
-        case DynamicThread::Running:
+            // ensure that a newly scheduled thread does not run
+            // while an old, deactivated one has not yet called transitionToInactive
+            while (assignedThread)
+                condVar.wait(&mutex);
+
             state = DynamicThread::Running;
             assignedThread = QThread::currentThread();
 
@@ -200,10 +204,14 @@ bool DynamicThreadPriv::transitionToRunning()
             {
                 assignedThread->setPriority(priority);
             }
-
             return true;
         case DynamicThread::Deactivating:
-        default:
+            return false;
+        case DynamicThread::Running:
+            kDebug() << "Transition to Running: Invalid Running state" << q;
+            return true;
+        case DynamicThread::Inactive:
+            kDebug() << "Transition to Running: Invalid Inactive state" << q;
             return false;
     }
 }
@@ -214,17 +222,20 @@ void DynamicThreadPriv::transitionToInactive()
     switch (state)
     {
         case DynamicThread::Scheduled:
-            return;
         case DynamicThread::Deactivating:
-        default:
+        case DynamicThread::Running:
             if (previousPriority != QThread::InheritPriority)
             {
                 assignedThread->setPriority(previousPriority);
                 previousPriority = QThread::InheritPriority;
             }
             assignedThread = 0;
-            state = DynamicThread::Inactive;
+            if (state != DynamicThread::Scheduled)
+                state = DynamicThread::Inactive;
             condVar.wakeAll();
+            break;
+        case DynamicThread::Inactive:
+            kDebug() << "Transition to Inactive: Invalid Inactive state" << q;
             break;
     }
 }
