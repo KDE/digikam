@@ -922,6 +922,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/digikamnepomukservice.cpp
        )
 
+    SET(libfacedetection_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/faceiface.cpp
+       )
+
     SET(libfirstrun_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlgpage.cpp
@@ -1212,10 +1216,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libtimeline_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
-       )
-
-    SET(libfacedetection_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/face/faceiface.cpp
        )
 
     SET(libadvancedrename_SRCS
