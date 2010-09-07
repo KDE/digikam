@@ -51,7 +51,7 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class TemplatePanelPriv
+class TemplatePanel::TemplatePanelPriv
 {
 
 public:

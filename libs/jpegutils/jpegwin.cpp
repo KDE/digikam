@@ -36,6 +36,8 @@ extern "C"
 #include <QFile>
 #include <QByteArray>
 
+// Local includes
+
 #include "jpegwin.h"
 
 namespace Digikam 
@@ -78,9 +80,9 @@ void term_source (j_decompress_ptr cinfo)
 {
 }
 
-void jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET * buffer, size_t bufsize)
+void jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET* buffer, size_t bufsize)
 {
-    digikam_source_mgr* src;
+    digikam_source_mgr* src=0;
 
     if (cinfo->src == NULL) 
     {
@@ -88,15 +90,14 @@ void jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET * buffer, size_t bufs
         sizeof(digikam_source_mgr));
     }
 
-    src = (digikam_source_mgr*) cinfo->src;
-    src->pub.init_source = init_source;
+    src                        = (digikam_source_mgr*) cinfo->src;
+    src->pub.init_source       = init_source;
     src->pub.fill_input_buffer = fill_input_buffer;
-    src->pub.skip_input_data = skip_input_data;
+    src->pub.skip_input_data   = skip_input_data;
     src->pub.resync_to_restart = jpeg_resync_to_restart;    // default
-    src->pub.term_source = term_source;
-
-    src->pub.next_input_byte = buffer;
-    src->pub.bytes_in_buffer = bufsize;
+    src->pub.term_source       = term_source;
+    src->pub.next_input_byte   = buffer;
+    src->pub.bytes_in_buffer   = bufsize;
 }
 
 } // namespace Digikam

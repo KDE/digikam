@@ -35,8 +35,6 @@
 namespace Digikam
 {
 
-class TemplatePanelPriv;
-
 class TemplatePanel : public KTabWidget
 {
 public:
@@ -61,6 +59,7 @@ public:
 
 private:
 
+    class TemplatePanelPriv;
     TemplatePanelPriv* const d;
 };
 
