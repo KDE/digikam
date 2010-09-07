@@ -326,12 +326,6 @@ int FaceIface::faceCountForPersonInImage ( qlonglong imageid, int tagId ) const
 
 QList< Face > FaceIface::findFacesFromTags(const DImg& image, qlonglong imageid) const
 {
-    if (!hasBeenScanned(imageid))
-    {
-        kDebug() << "Image has not been scanned yet.";
-        return QList<Face>();
-    }
-
     QList<Face> faceList = findFaces(imageid, QStringList()
                                      << ImageTagPropertyName::tagRegion()
                                      << ImageTagPropertyName::autodetectedFace());
@@ -341,6 +335,15 @@ QList< Face > FaceIface::findFacesFromTags(const DImg& image, qlonglong imageid)
     return faceList;
 }
 
+QList< Face > FaceIface::findUnconfirmedFacesFromTags(const DImg& image, qlonglong imageid) const
+{
+    QList<Face> faceList = findFaces(imageid, QStringList()
+                                     << ImageTagPropertyName::autodetectedFace());
+
+    fillImageInFaces(image, faceList);
+
+    return faceList;
+}
 
 QList< QRect > FaceIface::getTagRects(qlonglong imageid) const
 {
@@ -537,6 +540,13 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
 
     // -- Apply tags --
 
+    writeUnconfirmedResults(image, imageid, faceList);
+
+    return faceList;
+}
+
+void FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList)
+{
     QListIterator<KFaceIface::Face> it(faceList);
     while (it.hasNext())
     {
@@ -562,8 +572,6 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
         // FIXME: We use ImageTagPair::assignTag() for now, because doing it with MetadataManager causes a db lockup
         pair.assignTag();
     }
-
-    return faceList;
 }
 
 QString FaceIface::recognizeFace(const KFaceIface::Face& face)

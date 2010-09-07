@@ -117,8 +117,10 @@ public:
     /**
      * Reads rect tags in the specified image and returns a list of faces, read from these tags.
      * Very fast compared to findAndTagFaces. It is "read-only".
+     * findFacesFromTags returns all faces, findUnconfirmedFacesFromTags only unconfirmed ones.
      */
     QList<Face>         findFacesFromTags(const DImg& image, qlonglong imageid) const;
+    QList<Face>         findUnconfirmedFacesFromTags(const DImg& image, qlonglong imageid) const;
 
     /**
      * Returns a list of all tag rectangles for the image. Unlike findAndTagFaces, this does not take a DImg,
@@ -136,6 +138,12 @@ public:
 
     // --- Face detection and recognition ---
 
+
+    /**
+     * The given face list is a result of automatic detection and possibly recognition.
+     * The results are written to the database.
+     */
+    void writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList);
 
     enum FaceRecognitionSteps
     {
