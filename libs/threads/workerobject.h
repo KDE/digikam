@@ -72,10 +72,31 @@ public:
     bool disconnectAndSchedule(const QObject* sender, const char* signal,
                                const QObject* receiver, const char* method);
 
+    enum DeactivatingMode
+    {
+        FlushSignals,
+        KeepSignals,
+        PhaseOut
+    };
+
 public Q_SLOTS:
 
+    /**
+     * Starts execution of this worker object:
+     * The object is moved to a thread and an event loop started,
+     * so that queued signals will be received.
+     */
     void schedule();
-    void deactivate();
+
+    /**
+     * Quits execution of this worker object.
+     * If mode is FlushSignals, all already emitted signals will be cleared.
+     * If mode is KeepSignals, already emitted signals are not cleared and
+     * will be kept in the event queue until destruction or schedule() is called.
+     * If mode is PhaseOut, already emitted signals will be processed
+     * and the thread quit immediately afterwards.
+     */
+    void deactivate(DeactivatingMode mode = FlushSignals);
 
 Q_SIGNALS:
 
@@ -86,12 +107,12 @@ public:
     bool transitionToRunning();
     void transitionToInactive();
 
+    virtual bool event(QEvent *e);
+
 private:
 
     friend class WorkerObjectRunnable;
     friend class ThreadManager;
-
-    void run();
 
     WorkerObjectPriv* const d;
 };

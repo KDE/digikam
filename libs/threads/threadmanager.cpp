@@ -35,6 +35,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kglobal.h>
 
 // Local includes
@@ -91,6 +92,10 @@ public:
 
     virtual void run()
     {
+        /* The quirk here is that this thread never runs an event loop.
+         * That means events queud for parked object are only emitted when
+         * these object have been moved to their own thread.
+         */
         while (running)
         {
             QList<TodoPair> copyTodo;
@@ -150,21 +155,19 @@ void WorkerObjectRunnable::run()
     if (!object)
         return;
 
+    // if another thread should still be running, wait until the object is parked in ParkingThread
     parkingThread->moveToCurrentThread(object);
 
-    while (true)
-    {
-        QEventLoop loop;
-        QObject::connect(object, SIGNAL(deactivating()),
-                         &loop, SLOT(quit()));
+    QEventLoop loop;
+    QObject::connect(object, SIGNAL(deactivating()),
+                     &loop, SLOT(quit()));
 
-        if (object->transitionToRunning())
-            loop.exec();
-    }
-
-    parkingThread->parkObject(object);
-
+    if (object->transitionToRunning())
+        loop.exec();
     object->transitionToInactive();
+
+    // if this is rescheduled, it will wait in the other thread at moveToCurrentThread() above until we park
+    parkingThread->parkObject(object);
 }
 
 // -------------------------------------------------------------------------------------------------

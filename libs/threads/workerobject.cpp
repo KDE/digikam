@@ -25,10 +25,15 @@
 
 // Qt includes
 
+#include <QCoreApplication>
+#include <QEvent>
 #include <QMutex>
+#include <QThread>
 #include <QWaitCondition>
 
 // KDE includes
+
+#include <kdebug.h>
 
 // Local includes
 
@@ -46,19 +51,20 @@ public:
         state = WorkerObject::Inactive;
     }
 
-    WorkerObject::State state;
-    QMutex              mutex;
-    QWaitCondition      condVar;
+    volatile WorkerObject::State state;
+    QMutex                       mutex;
+    QWaitCondition               condVar;
 };
 
 WorkerObject::WorkerObject()
             : d(new WorkerObjectPriv)
 {
+    ThreadManager::instance()->initialize(this);
 }
 
 WorkerObject::~WorkerObject()
 {
-    deactivate();
+    deactivate(FlushSignals);
     wait();
     delete d;
 }
@@ -106,6 +112,16 @@ WorkerObject::State WorkerObject::state() const
     return d->state;
 }
 
+bool WorkerObject::event(QEvent *e)
+{
+    if (e->type() == QEvent::User)
+    {
+        QThread::currentThread()->quit();
+        return true;
+    }
+    return QObject::event(e);
+}
+
 void WorkerObject::schedule()
 {
     {
@@ -124,7 +140,7 @@ void WorkerObject::schedule()
     ThreadManager::instance()->schedule(this);
 }
 
-void WorkerObject::deactivate()
+void WorkerObject::deactivate(DeactivatingMode mode)
 {
     {
         QMutexLocker locker(&d->mutex);
@@ -139,7 +155,13 @@ void WorkerObject::deactivate()
                 return;
         }
     }
-    emit deactivating();
+    if (mode == FlushSignals)
+        QCoreApplication::removePostedEvents(this, QEvent::MetaCall);
+    // cannot say that this is thread-safe: thread()->quit();
+    if (mode == KeepSignals)
+        QCoreApplication::postEvent(this, new QEvent(QEvent::User), Qt::HighEventPriority);
+    else
+        QCoreApplication::postEvent(this, new QEvent(QEvent::User));
 }
 
 bool WorkerObject::transitionToRunning()
