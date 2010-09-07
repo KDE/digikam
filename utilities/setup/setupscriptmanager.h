@@ -36,14 +36,12 @@
 namespace Digikam
 {
 
-class SetupScriptManagerPriv;
-
 class SetupScriptManager : public QScrollArea
 {
     Q_OBJECT
 
 public:
-    SetupScriptManager ( QWidget* parent = 0 );
+    SetupScriptManager( QWidget* parent = 0 );
     ~SetupScriptManager();
 
     void applySettings();
@@ -53,7 +51,9 @@ private:
     void readSettings();
     void addEntry(ScriptPluginType* plugin);
 
+private:
 
+    class SetupScriptManagerPriv;
     SetupScriptManagerPriv* const d;
 };
 

@@ -1,5 +1,3 @@
-#ifndef SETUPSCRIPTMANAGER_CPP
-#define SETUPSCRIPTMANAGER_CPP
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -49,7 +47,7 @@
 namespace Digikam
 {
 
-class SetupScriptManagerPriv
+class SetupScriptManager::SetupScriptManagerPriv
 {
 public:
 
@@ -86,9 +84,7 @@ SetupScriptManager::SetupScriptManager(QWidget* parent)
 
     //read settings from a xml file
     readSettings();
-
 }
-
 
 SetupScriptManager::~SetupScriptManager()
 {
@@ -112,17 +108,17 @@ void SetupScriptManager::readSettings()
     //add the entry for the individual script plugin
 
     //The first entry into the scriptManager
-    ScriptPluginType *plugin=new ScriptPluginType();
+    ScriptPluginType* plugin = new ScriptPluginType();
     //plugin->createPlugin(name,path,mod);
     plugin->createPlugin("Name","",false);
     addEntry(plugin);
 
     //Second entry into the scriptManager
-    ScriptPluginType *plugin2=new ScriptPluginType();
+    ScriptPluginType* plugin2 = new ScriptPluginType();
     plugin2->createPlugin("Plugin2","",false);
     addEntry(plugin2);
 
-    ScriptPluginType *plugin3=new ScriptPluginType();
+    ScriptPluginType* plugin3 = new ScriptPluginType();
     plugin3->createPlugin("Plugin3","",false);
     addEntry(plugin3);
 
@@ -134,11 +130,11 @@ void SetupScriptManager::readSettings()
 void SetupScriptManager::addEntry(ScriptPluginType *plugin)
 {
     //create a set of widgets
-    QCheckBox   *box            = new QCheckBox(plugin->name());
-    QPushButton *btnDebug       = new QPushButton(i18n("Debug"));
-    QPushButton *btnInfo        = new QPushButton(i18n("Info"));
+    QCheckBox* box             = new QCheckBox(plugin->name());
+    QPushButton* btnDebug      = new QPushButton(i18n("Debug"));
+    QPushButton* btnInfo       = new QPushButton(i18n("Info"));
     //add the widgets to a Horizontal layout whose parent is a GroupBox
-    QHBoxLayout* pluginHLayout  = new QHBoxLayout;
+    QHBoxLayout* pluginHLayout = new QHBoxLayout;
     //add the individual plugins to the horizontal layout
     pluginHLayout->addWidget(box,Qt::AlignLeft);//the second argument is stretch
     pluginHLayout->addWidget(btnDebug,0,Qt::AlignRight);
@@ -151,4 +147,3 @@ void SetupScriptManager::addEntry(ScriptPluginType *plugin)
 }
 
 } // namespace Digikam
-#endif // SETUPSCRIPTMANAGER_CPP
