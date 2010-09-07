@@ -33,8 +33,6 @@
 #include "imageplugin.h"
 #include "digikam_export.h"
 
-class KAction;
-
 using namespace Digikam;
 
 class ImagePlugin_Decorate : public ImagePlugin
