@@ -35,6 +35,7 @@ namespace Digikam
 PreviewLoadThread::PreviewLoadThread()
             : m_displayingWidget(0)
 {
+    m_loadingPolicy = LoadingPolicyFirstRemovePrevious;
 }
 
 LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size, bool exifRotate)
@@ -78,12 +79,17 @@ void PreviewLoadThread::loadHighQuality(const QString& filePath, bool exifRotate
 void PreviewLoadThread::load(LoadingDescription description)
 {
     // creates a PreviewLoadingTask, which uses different mechanisms than a normal loading task
-    ManagedLoadSaveThread::loadPreview(description);
+    ManagedLoadSaveThread::loadPreview(description, m_loadingPolicy);
 }
 
 void PreviewLoadThread::setDisplayingWidget(QWidget *widget)
 {
     m_displayingWidget = widget;
+}
+
+void PreviewLoadThread::setLoadingPolicy(LoadingPolicy policy)
+{
+    m_loadingPolicy = policy;
 }
 
 }   // namespace Digikam
