@@ -75,7 +75,7 @@ namespace DImgScale
     int*     dimgCalcXPoints(int sw, int dw);
     int*     dimgCalcApoints(int s, int d, int up);
 
-    DImgScaleInfo* dimgFreeScaleInfo(DImgScaleInfo *isi);
+    DImgScaleInfo* dimgFreeScaleInfo(DImgScaleInfo* isi);
     DImgScaleInfo* dimgCalcScaleInfo(const DImg& img,
                                      int sw, int sh,
                                      int dw, int dh,
@@ -126,7 +126,7 @@ DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode)
         return copy();
     }
 
-    DImgScale::DImgScaleInfo* scaleinfo = dimgCalcScaleInfo(*this, w, h, dw, dh, sixteenBit(), true);
+    DImgScaleInfo* scaleinfo = dimgCalcScaleInfo(*this, w, h, dw, dh, sixteenBit(), true);
     if (!scaleinfo)
         return *this;
 
@@ -527,7 +527,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest,
                 {
                     int r, g, b, a;
                     int rr, gg, bb, aa;
-                    unsigned int *pix;
+                    unsigned int* pix=0;
 
                     if(XAP > 0)
                     {
@@ -594,7 +594,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest,
                 for(x = dxx; x < end; ++x)
                 {
                     int r, g, b, a;
-                    unsigned int *pix;
+                    unsigned int* pix=0;
 
                     if(XAP > 0)
                     {
