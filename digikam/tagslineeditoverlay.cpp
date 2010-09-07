@@ -58,9 +58,11 @@ AddTagsLineEdit* TagsLineEditOverlay::addTagsLineEdit() const
 QWidget* TagsLineEditOverlay::createWidget()
 {
     //const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
-    AddTagsLineEdit* w = new AddTagsLineEdit(parentWidget());
+    AddTagsLineEdit* lineEdit = new AddTagsLineEdit(parentWidget());
+    lineEdit->setClickMessage("Type the name of this person");
+    lineEdit->setReadOnly(false);
 
-    return w;
+    return lineEdit;
 }
 
 void TagsLineEditOverlay::setActive(bool active)
@@ -69,10 +71,6 @@ void TagsLineEditOverlay::setActive(bool active)
 
     if (active)
     {
-        
-        addTagsLineEdit()->setClickMessage("Type the name of this person");
-        addTagsLineEdit()->setReadOnly(false);
-
         connect(addTagsLineEdit(), SIGNAL(taggingActionActivated(TaggingAction)),
                 this, SLOT(slotTagChanged()));
 
