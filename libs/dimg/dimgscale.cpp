@@ -70,7 +70,7 @@ namespace DImgScale
         int      xup_yup;
     } DImgScaleInfo;
 
-    uint**   dimgCalcYPoints(unsigned int* src, int sw, int sh, int dh);
+    uint**   dimgCalcYPoints(uint* src, int sw, int sh, int dh);
     ullong** dimgCalcYPoints16(ullong* src, int sw, int sh, int dh);
     int*     dimgCalcXPoints(int sw, int dw);
     int*     dimgCalcApoints(int s, int d, int up);
@@ -82,12 +82,12 @@ namespace DImgScale
                                      bool sixteenBit,
                                      bool aa);
 
-    void dimgSampleRGBA(DImgScaleInfo* isi, unsigned int* dest, int dxx,
+    void dimgSampleRGBA(DImgScaleInfo* isi, uint* dest, int dxx,
                         int dyy, int dx, int dy, int dw, int dh, int dow);
-    void dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest, int dxx,
+    void dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest, int dxx,
                          int dyy, int dx, int dy, int dw, int dh, int dow,
                          int sow);
-    void dimgScaleAARGB(DImgScaleInfo* isi, unsigned int* dest, int dxx,
+    void dimgScaleAARGB(DImgScaleInfo* isi, uint* dest, int dxx,
                         int dyy, int dx, int dy, int dw, int dh, int dow, int
                         sow);
 
@@ -149,12 +149,12 @@ DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode)
     {
         if (hasAlpha())
         {
-            dimgScaleAARGBA(scaleinfo, (unsigned int*)buffer.bits(),
+            dimgScaleAARGBA(scaleinfo, (uint*)buffer.bits(),
                             0, 0, 0, 0, dw, dh, dw, w);
         }
         else
         {
-            dimgScaleAARGB(scaleinfo, (unsigned int*)buffer.bits(),
+            dimgScaleAARGB(scaleinfo, (uint*)buffer.bits(),
                            0, 0, 0, 0, dw, dh, dw, w);
         }
     }
@@ -244,7 +244,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
         if (hasAlpha())
         {
             dimgScaleAARGBA(scaleinfo,
-                            (uint *)buffer.bits(),
+                            (uint*)buffer.bits(),
                             ((sx * dw) / sw),
                             ((sy * dh) / sh),
                             0, 0,
@@ -254,7 +254,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
         else
         {
            dimgScaleAARGB(scaleinfo,
-                          (uint *)buffer.bits(),
+                          (uint*)buffer.bits(),
                           ((sx * dw) / sw),
                           ((sy * dh) / sh),
                           0, 0,
@@ -284,13 +284,13 @@ DImg DImg::smoothScaleSection(int sx, int sy,
 #define INV_YAP  (256 - yapoints[dyy + y])
 #define YAP      (yapoints[dyy + y])
 
-unsigned int** DImgScale::dimgCalcYPoints(unsigned int* src, int sw, int sh, int dh)
+uint** DImgScale::dimgCalcYPoints(uint* src, int sw, int sh, int dh)
 {
-    unsigned int** p=0;
+    uint** p=0;
     int i, j = 0;
     ullong val, inc;
 
-    p = new unsigned int* [dh+1];
+    p = new uint* [dh+1];
 
     val = 0;
     inc = (((ullong)sh) << 16) / dh;
@@ -458,14 +458,14 @@ DImgScaleInfo* DImgScale::dimgFreeScaleInfo(DImgScaleInfo* isi)
 }
 
 /** scale by pixel sampling only */
-void DImgScale::dimgSampleRGBA(DImgScaleInfo* isi, unsigned int* dest,
+void DImgScale::dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
                                int dxx, int dyy, int dx, int dy, int dw,
                                int dh, int dow)
 {
-    unsigned int* sptr=0;
-    unsigned int* dptr=0;
+    uint* sptr=0;
+    uint* dptr=0;
     int x, y, end;
-    unsigned int** ypoints = isi->ypoints;
+    uint** ypoints = isi->ypoints;
     int* xpoints           = isi->xpoints;
 
     /* what is the last pixel on the line so we stop there */
@@ -488,7 +488,7 @@ void DImgScale::dimgSampleRGBA(DImgScaleInfo* isi, unsigned int* dest,
 /** 
 dimgScaleAARGBA : scale by area sampling. Arguments:
   DImgScaleInfo* isi,              // scaleinfo
-  unsigned int*  dest,             // destination img data
+  uint*  dest,             // destination img data
   int            dxx,              // destination x location corresponding to start x of src section
   int            dyy,              // destination y location corresponding to start y of src section
   int            dx,               // destination x start location
@@ -499,14 +499,14 @@ dimgScaleAARGBA : scale by area sampling. Arguments:
   int            sow);             // src scanline width
 */
 
-void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest,
+void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                                 int dxx, int dyy, int dx, int dy, int dw,
                                 int dh, int dow, int sow)
 {
-    unsigned int* sptr=0;
-    unsigned int* dptr=0;
+    uint* sptr=0;
+    uint* dptr=0;
     int x, y, end;
-    unsigned int** ypoints = isi->ypoints;
+    uint** ypoints = isi->ypoints;
     int* xpoints           = isi->xpoints;
     int* xapoints          = isi->xapoints;
     int* yapoints          = isi->yapoints;
@@ -527,7 +527,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest,
                 {
                     int r, g, b, a;
                     int rr, gg, bb, aa;
-                    unsigned int* pix=0;
+                    uint* pix=0;
 
                     if(XAP > 0)
                     {
@@ -594,7 +594,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest,
                 for(x = dxx; x < end; ++x)
                 {
                     int r, g, b, a;
-                    unsigned int* pix=0;
+                    uint* pix=0;
 
                     if(XAP > 0)
                     {
@@ -633,7 +633,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cy, j;
-        unsigned int* pix=0;
+        uint* pix=0;
         int r, g, b, a, rr, gg, bb, aa;
         int yap;
 
@@ -721,7 +721,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, j;
-        unsigned int* pix=0;
+        uint* pix=0;
         int r, g, b, a, rr, gg, bb, aa;
         int xap;
 
@@ -812,7 +812,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest,
          |*|  psllw (16 - d), %mmb; pmulh %mmc, %mmb
          \*/
         int Cx, Cy, i, j;
-        unsigned int* pix=0;
+        uint* pix=0;
         int a, r, g, b, ax, rx, gx, bx;
         int xap, yap;
 
@@ -928,14 +928,14 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, unsigned int* dest,
 }
 
 /** scale by area sampling - IGNORE the ALPHA byte */
-void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, unsigned int* dest,
+void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
                                    int dxx, int dyy, int dx, int dy, int dw,
                                    int dh, int dow, int sow)
 {
-    unsigned int* sptr=0;
-    unsigned int* dptr=0;
+    uint* sptr=0;
+    uint* dptr=0;
     int x, y, end;
-    unsigned int** ypoints = isi->ypoints;
+    uint** ypoints = isi->ypoints;
     int* xpoints           = isi->xpoints;
     int* xapoints          = isi->xapoints;
     int* yapoints          = isi->yapoints;
@@ -956,7 +956,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, unsigned int* dest,
                 {
                     int r = 0, g = 0, b = 0;
                     int rr = 0, gg = 0, bb = 0;
-                    unsigned int* pix=0;
+                    uint* pix=0;
 
                     if(XAP > 0)
                     {
@@ -1015,7 +1015,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, unsigned int* dest,
                 for(x = dxx; x < end; ++x)
                 {
                     int r = 0, g = 0, b = 0;
-                    unsigned int* pix=0;
+                    uint* pix=0;
 
                     if(XAP > 0)
                     {
@@ -1051,7 +1051,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, unsigned int* dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cy, j;
-        unsigned int* pix=0;
+        uint* pix=0;
         int r, g, b, rr, gg, bb;
         int yap;
 
@@ -1130,7 +1130,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, unsigned int* dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, j;
-        unsigned int* pix=0;
+        uint* pix=0;
         int r, g, b, rr, gg, bb;
         int xap;
 
@@ -1209,7 +1209,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, unsigned int* dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, Cy, i, j;
-        unsigned int* pix=0;
+        uint* pix=0;
         int r, g, b, rx, gx, bx;
         int xap, yap;
 
