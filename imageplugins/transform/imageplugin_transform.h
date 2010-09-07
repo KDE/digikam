@@ -33,8 +33,6 @@
 #include "imageplugin.h"
 #include "digikam_export.h"
 
-class KAction;
-
 using namespace Digikam;
 
 class ImagePlugin_Transform : public ImagePlugin
@@ -53,7 +51,7 @@ Q_SIGNALS:
     void signalPoint1Action();
     void signalPoint2Action();
     void signalAutoAdjustAction();
-    
+
 private Q_SLOTS:
 
     void slotPerspective();
@@ -65,12 +63,8 @@ private Q_SLOTS:
 
 private:
 
-    KAction* m_aspectRatioCropAction;
-    KAction* m_resizeAction;
-    KAction* m_contentAwareResizingAction;
-    KAction* m_sheartoolAction;
-    KAction* m_freerotationAction;
-    KAction* m_perspectiveAction;
+    class ImagePlugin_TransformPriv;
+    ImagePlugin_TransformPriv* const d;
 };
 
 #endif /* IMAGEPLUGIN_TRANSFORM_H */

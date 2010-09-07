@@ -42,8 +42,6 @@ using namespace Digikam;
 namespace DigikamTransformImagePlugin
 {
 
-class ImageSelectionWidgetPriv;
-
 class ImageSelectionWidget : public QWidget
 {
 
@@ -134,7 +132,7 @@ public:
     void  resetSelection();
     void  maxAspectSelection();
 
-    ImageIface* imageIface();
+    ImageIface* imageIface() const;
 
 public Q_SLOTS:
 
@@ -146,7 +144,7 @@ Q_SIGNALS:
 
     void signalSelectionMoved(const QRect& rect);
     void signalSelectionChanged(const QRect& rect);
-    void signalSelectionOrientationChanged( int newOrientation );
+    void signalSelectionOrientationChanged(int newOrientation);
 
 protected:
 
@@ -162,7 +160,7 @@ private:
     void   regionSelectionMoved();
 
     void   regionSelectionChanged();
-    QPoint convertPoint(const QPoint pm, bool localToReal=true);
+    QPoint convertPoint(const QPoint& pm, bool localToReal=true);
     QPoint convertPoint(int x, int y, bool localToReal=true);
     void   normalizeRegion();
     void   reverseRatioValues();
@@ -189,6 +187,7 @@ private:
 
 private:
 
+    class ImageSelectionWidgetPriv;
     ImageSelectionWidgetPriv* const d;
 };
 

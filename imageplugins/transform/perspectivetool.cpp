@@ -59,7 +59,7 @@
 namespace DigikamTransformImagePlugin
 {
 
-class PerspectiveToolPriv
+class PerspectiveTool::PerspectiveToolPriv
 {
 public:
 

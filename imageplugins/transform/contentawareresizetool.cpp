@@ -67,7 +67,7 @@ using namespace KDcrawIface;
 namespace DigikamTransformImagePlugin
 {
 
-class ContentAwareResizeToolPriv
+class ContentAwareResizeTool::ContentAwareResizeToolPriv
 {
 public:
 

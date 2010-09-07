@@ -59,7 +59,7 @@ using namespace KDcrawIface;
 namespace DigikamTransformImagePlugin
 {
 
-class ShearToolPriv
+class ShearTool::ShearToolPriv
 {
 public:
 

@@ -66,7 +66,7 @@ using namespace KDcrawIface;
 namespace DigikamTransformImagePlugin
 {
 
-class FreeRotationToolPriv
+class FreeRotationTool::FreeRotationToolPriv
 {
 public:
 

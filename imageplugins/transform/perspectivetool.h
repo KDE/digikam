@@ -35,8 +35,6 @@ using namespace Digikam;
 namespace DigikamTransformImagePlugin
 {
 
-class PerspectiveToolPriv;
-
 class PerspectiveTool : public EditorTool
 {
     Q_OBJECT
@@ -62,6 +60,7 @@ private:
 
 private:
 
+    class PerspectiveToolPriv;
     PerspectiveToolPriv* const d;
 };
 

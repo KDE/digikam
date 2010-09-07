@@ -50,11 +50,9 @@ using namespace Digikam;
 namespace DigikamTransformImagePlugin
 {
 
-class PerspectiveWidgetPriv;
-
 class PerspectiveWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -115,6 +113,7 @@ private:  // Widget methods.
 
 private:
 
+    class PerspectiveWidgetPriv;
     PerspectiveWidgetPriv* const d;
 };
 

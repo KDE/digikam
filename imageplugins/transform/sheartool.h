@@ -33,8 +33,6 @@ using namespace Digikam;
 namespace DigikamTransformImagePlugin
 {
 
-class ShearToolPriv;
-
 class ShearTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -61,6 +59,7 @@ private:
 
 private:
 
+    class ShearToolPriv;
     ShearToolPriv* const d;
 };
 

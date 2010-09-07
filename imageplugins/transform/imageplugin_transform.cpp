@@ -45,56 +45,79 @@
 
 #ifdef HAVE_GLIB2
 #include "contentawareresizetool.h"
-#endif /* HAVE_GLIB2 */            
+#endif /* HAVE_GLIB2 */
 
 using namespace DigikamTransformImagePlugin;
 
 K_PLUGIN_FACTORY( TransformFactory, registerPlugin<ImagePlugin_Transform>(); )
 K_EXPORT_PLUGIN ( TransformFactory("digikamimageplugin_transform") )
 
-ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList&)
-                     : ImagePlugin(parent, "ImagePlugin_Transform")
+class ImagePlugin_Transform::ImagePlugin_TransformPriv
 {
-    m_perspectiveAction = new KAction(KIcon("perspective"), i18n("Perspective Adjustment..."), this);
-    actionCollection()->addAction("imageplugin_perspective", m_perspectiveAction);
-    connect(m_perspectiveAction, SIGNAL(triggered(bool)),
+public:
+
+    ImagePlugin_TransformPriv()
+    {
+        aspectRatioCropAction      = 0;
+        resizeAction               = 0;
+        contentAwareResizingAction = 0;
+        sheartoolAction            = 0;
+        freerotationAction         = 0;
+        perspectiveAction          = 0;
+    }
+
+    KAction* aspectRatioCropAction;
+    KAction* resizeAction;
+    KAction* contentAwareResizingAction;
+    KAction* sheartoolAction;
+    KAction* freerotationAction;
+    KAction* perspectiveAction;
+};
+
+ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList&)
+                     : ImagePlugin(parent, "ImagePlugin_Transform"),
+                       d(new ImagePlugin_TransformPriv)
+{
+    d->perspectiveAction = new KAction(KIcon("perspective"), i18n("Perspective Adjustment..."), this);
+    actionCollection()->addAction("imageplugin_perspective", d->perspectiveAction);
+    connect(d->perspectiveAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPerspective()));
 
-    m_sheartoolAction = new KAction(KIcon("shear"), i18n("Shear..."), this);
-    actionCollection()->addAction("imageplugin_sheartool", m_sheartoolAction);
-    connect(m_sheartoolAction, SIGNAL(triggered(bool)),
+    d->sheartoolAction = new KAction(KIcon("shear"), i18n("Shear..."), this);
+    actionCollection()->addAction("imageplugin_sheartool", d->sheartoolAction);
+    connect(d->sheartoolAction, SIGNAL(triggered(bool)),
             this, SLOT(slotShearTool()));
 
-    m_resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
-    actionCollection()->addAction("imageplugin_resize", m_resizeAction);
-    connect(m_resizeAction, SIGNAL(triggered()),
+    d->resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
+    actionCollection()->addAction("imageplugin_resize", d->resizeAction);
+    connect(d->resizeAction, SIGNAL(triggered()),
             this, SLOT(slotResize()));
-            
-    m_aspectRatioCropAction = new KAction(KIcon("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
-    actionCollection()->addAction("imageplugin_ratiocrop", m_aspectRatioCropAction);
-    connect(m_aspectRatioCropAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotRatioCrop()));            
-            
+
+    d->aspectRatioCropAction = new KAction(KIcon("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
+    actionCollection()->addAction("imageplugin_ratiocrop", d->aspectRatioCropAction);
+    connect(d->aspectRatioCropAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotRatioCrop()));
+
 #ifdef HAVE_GLIB2
 
-    m_contentAwareResizingAction = new KAction(KIcon("transform-scale"), i18n("Liquid Rescale..."), this);
-    // m_contentAwareResizingAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
-    actionCollection()->addAction("imageplugin_contentawareresizing", m_contentAwareResizingAction);
-    connect(m_contentAwareResizingAction, SIGNAL(triggered(bool)),
+    d->contentAwareResizingAction = new KAction(KIcon("transform-scale"), i18n("Liquid Rescale..."), this);
+    // d->contentAwareResizingAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
+    actionCollection()->addAction("imageplugin_contentawareresizing", d->contentAwareResizingAction);
+    connect(d->contentAwareResizingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotContentAwareResizing()));
 
-#endif /* HAVE_GLIB2 */            
+#endif /* HAVE_GLIB2 */
 
     //-----------------------------------------------------------------------------------
-    
+
     QString pluginName(i18n("Free Rotation"));
 
     // we want to have an actionCategory for this plugin (if possible), set a name for it
     setActionCategory(pluginName);
 
-    m_freerotationAction = new KAction(KIcon("freerotation"), QString("%1...").arg(pluginName), this);
-    actionCollection()->addAction("imageplugin_freerotation", m_freerotationAction );
-    connect(m_freerotationAction, SIGNAL(triggered(bool) ), 
+    d->freerotationAction = new KAction(KIcon("freerotation"), QString("%1...").arg(pluginName), this);
+    actionCollection()->addAction("imageplugin_freerotation", d->freerotationAction );
+    connect(d->freerotationAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotFreeRotation()));
 
     KAction* point1Action = new KAction(i18n("Set Point 1"), this);
@@ -122,19 +145,20 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
 
 ImagePlugin_Transform::~ImagePlugin_Transform()
 {
+    delete d;
 }
 
 void ImagePlugin_Transform::setEnabledActions(bool b)
 {
-    m_resizeAction->setEnabled(b);
-    m_perspectiveAction->setEnabled(b);
-    m_freerotationAction->setEnabled(b);
-    m_sheartoolAction->setEnabled(b);
-    m_aspectRatioCropAction->setEnabled(b);
-    
+    d->resizeAction->setEnabled(b);
+    d->perspectiveAction->setEnabled(b);
+    d->freerotationAction->setEnabled(b);
+    d->sheartoolAction->setEnabled(b);
+    d->aspectRatioCropAction->setEnabled(b);
+
 #ifdef HAVE_GLIB2
-    m_contentAwareResizingAction->setEnabled(b);
-#endif /* HAVE_GLIB2 */            
+    d->contentAwareResizingAction->setEnabled(b);
+#endif /* HAVE_GLIB2 */
 }
 
 void ImagePlugin_Transform::slotPerspective()
@@ -166,7 +190,7 @@ void ImagePlugin_Transform::slotContentAwareResizing()
 #ifdef HAVE_GLIB2
     ContentAwareResizeTool* tool = new ContentAwareResizeTool(this);
     loadTool(tool);
-#endif /* HAVE_GLIB2 */            
+#endif /* HAVE_GLIB2 */
 }
 
 void ImagePlugin_Transform::slotFreeRotation()
