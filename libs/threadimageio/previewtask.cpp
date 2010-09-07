@@ -180,19 +180,25 @@ void PreviewLoadingTask::execute()
 
         // check embedded previews
         KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
+
         int sizeLimit;
+        QSize originalSize = previews.originalSize();
+        // the alternative is the half preview, so best size is already originalSize / 2
+        int bestSize = qMax(originalSize.width(), originalSize.height()) / 2;
         if (m_loadingDescription.previewParameters.fastButLarge())
         {
-            QSize originalSize = previews.originalSize();
-            sizeLimit = qMin(size, qMax(originalSize.width(), originalSize.height()));
+            sizeLimit = qMin(size, bestSize);
         }
         else
-            sizeLimit = size / 2;
+        {
+            sizeLimit = qMin(size / 2, bestSize);
+        }
+
         // Only check the first and largest preview
         if (!previews.isEmpty() && continueQuery())
         {
             // require at least half preview size
-            if (qMax(previews.width(), previews.height()) >= size / 2)
+            if (qMax(previews.width(), previews.height()) >= sizeLimit)
             {
                 qimage = previews.image();
                 if (!qimage.isNull())
@@ -251,31 +257,29 @@ void PreviewLoadingTask::execute()
     }
     else
     {
-        KDcrawIface::DcrawInfoContainer dcrawIdentify;
-        if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, m_loadingDescription.filePath))
         {
-            // Check if full-size preview is available
+            // check embedded previews
+            KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
+
+            QSize originalSize = previews.originalSize();
+            // discard if smaller than half preview
+            int acceptableWidth  = lround(originalSize.width() * 0.48);
+            int acceptableHeight = lround(originalSize.height() * 0.48);
+
+            if (qimage.isNull() && !previews.isEmpty() && continueQuery())
             {
-                KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
-                // Only check the first and largest preview
-                if (!previews.isEmpty() && continueQuery())
+                if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
                 {
-                    // discard if smaller than half preview
-                    int acceptableWidth = lround(dcrawIdentify.imageSize.width() * 0.5);
-                    int acceptableHeight = lround(dcrawIdentify.imageSize.height() * 0.5);
-                    if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
-                    {
-                        qimage = previews.image();
-                        if (!qimage.isNull())
-                            fromEmbeddedPreview = true;
-                    }
+                    qimage = previews.image();
+                    if (!qimage.isNull())
+                        fromEmbeddedPreview = true;
                 }
             }
+        }
 
-            if (qimage.isNull() && continueQuery())
-            {
-                KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
-            }
+        if (qimage.isNull() && continueQuery())
+        {
+            KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
         }
 
         if (!qimage.isNull() && continueQuery())
@@ -405,7 +409,7 @@ bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
 {
     if (!previewSize)
         return false;
-    if (!m_loadingDescription.previewParameters.fastButLarge())
+    if (m_loadingDescription.previewParameters.fastButLarge())
         return false;
     int maxSize = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
     int acceptableUpperSize = lround(1.25 * (double)previewSize);
