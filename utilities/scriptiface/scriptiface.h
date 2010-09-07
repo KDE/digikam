@@ -51,8 +51,12 @@ private Q_SLOTS:
 
 private:
 
-    ScriptIfacePriv* const d;
     void ImportQtBindings();
+
+private:
+
+    class ScriptIfacePriv;
+    ScriptIfacePriv* const d;
 };
 
 } // namespace Digikam

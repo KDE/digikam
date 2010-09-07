@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class ScriptIfacePriv
+class ScriptIface::ScriptIfacePriv
 {
 
 public:
@@ -94,6 +94,7 @@ ScriptIface::ScriptIface(QWidget* parent)
     ImportQtBindings();
 
 }
+
 ScriptIface::~ScriptIface()
 {
     delete d;
@@ -110,6 +111,7 @@ void ScriptIface::slotEvaluate()
     }
     else d->label->clear();*/
 }
+
 void ScriptIface::ImportQtBindings()
 {
     //import the plugins
