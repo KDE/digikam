@@ -36,8 +36,6 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class RestorationToolPriv;
-
 class RestorationTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -77,6 +75,7 @@ private:
 
 private:
 
+    class RestorationToolPriv;
     RestorationToolPriv* const d;
 };
 

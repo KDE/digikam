@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class BlurFXToolPriv;
-
 class BlurFXTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -63,6 +61,7 @@ private:
 
 private:
 
+    class BlurFXToolPriv;
     BlurFXToolPriv* const d;
 };
 

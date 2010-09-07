@@ -49,47 +49,74 @@ using namespace DigikamFxFiltersImagePlugin;
 K_PLUGIN_FACTORY( FxFiltersFactory, registerPlugin<ImagePlugin_FxFilters>(); )
 K_EXPORT_PLUGIN ( FxFiltersFactory("digikamimageplugin_fxfilters") )
 
-ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList&)
-                     : ImagePlugin(parent, "ImagePlugin_FxFilters")
+class ImagePlugin_FxFilters::ImagePlugin_FxFiltersPriv
 {
-    m_colorEffectsAction = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);
-    actionCollection()->addAction("imageplugin_colorfx", m_colorEffectsAction);
-    connect(m_colorEffectsAction, SIGNAL(triggered(bool) ),
+public:
+
+    ImagePlugin_FxFiltersPriv()
+    {
+        filmgrainAction    = 0;
+        raindropAction     = 0;
+        distortionfxAction = 0;
+        blurfxAction       = 0;
+        oilpaintAction     = 0;
+        embossAction       = 0;
+        charcoalAction     = 0;
+        colorEffectsAction = 0;
+    }
+
+    KAction* filmgrainAction;
+    KAction* raindropAction;
+    KAction* distortionfxAction;
+    KAction* blurfxAction;
+    KAction* oilpaintAction;
+    KAction* embossAction;
+    KAction* charcoalAction;
+    KAction* colorEffectsAction;
+};
+
+ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList&)
+                     : ImagePlugin(parent, "ImagePlugin_FxFilters"),
+                       d(new ImagePlugin_FxFiltersPriv)
+{
+    d->colorEffectsAction = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);
+    actionCollection()->addAction("imageplugin_colorfx", d->colorEffectsAction);
+    connect(d->colorEffectsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotColorEffects()));
 
-    m_charcoalAction = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);
-    actionCollection()->addAction("imageplugin_charcoal", m_charcoalAction);
-    connect(m_charcoalAction, SIGNAL(triggered(bool)),
+    d->charcoalAction = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);
+    actionCollection()->addAction("imageplugin_charcoal", d->charcoalAction);
+    connect(d->charcoalAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCharcoal()));
 
-    m_embossAction = new KAction(KIcon("embosstool"), i18n("Emboss..."), this);
-    actionCollection()->addAction("imageplugin_emboss", m_embossAction);
-    connect(m_embossAction, SIGNAL(triggered(bool)),
+    d->embossAction = new KAction(KIcon("embosstool"), i18n("Emboss..."), this);
+    actionCollection()->addAction("imageplugin_emboss", d->embossAction);
+    connect(d->embossAction, SIGNAL(triggered(bool)),
             this, SLOT(slotEmboss()));
 
-    m_oilpaintAction = new KAction(KIcon("oilpaint"), i18n("Oil Paint..."), this);
-    actionCollection()->addAction("imageplugin_oilpaint", m_oilpaintAction);
-    connect(m_oilpaintAction, SIGNAL(triggered(bool) ),
+    d->oilpaintAction = new KAction(KIcon("oilpaint"), i18n("Oil Paint..."), this);
+    actionCollection()->addAction("imageplugin_oilpaint", d->oilpaintAction);
+    connect(d->oilpaintAction, SIGNAL(triggered(bool) ),
             this ,SLOT(slotOilPaint()));
 
-    m_blurfxAction = new KAction(KIcon("blurfx"), i18n("Blur Effects..."), this);
-    actionCollection()->addAction("imageplugin_blurfx", m_blurfxAction);
-    connect(m_blurfxAction, SIGNAL(triggered(bool)),
+    d->blurfxAction = new KAction(KIcon("blurfx"), i18n("Blur Effects..."), this);
+    actionCollection()->addAction("imageplugin_blurfx", d->blurfxAction);
+    connect(d->blurfxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlurFX()));
 
-    m_distortionfxAction = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);
-    actionCollection()->addAction("imageplugin_distortionfx", m_distortionfxAction );
-    connect(m_distortionfxAction, SIGNAL(triggered(bool) ),
+    d->distortionfxAction = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);
+    actionCollection()->addAction("imageplugin_distortionfx", d->distortionfxAction );
+    connect(d->distortionfxAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotDistortionFX()));
 
-    m_raindropAction = new KAction(KIcon("raindrop"), i18n("Raindrops..."), this);
-    actionCollection()->addAction("imageplugin_raindrop", m_raindropAction);
-    connect(m_raindropAction, SIGNAL(triggered(bool) ),
+    d->raindropAction = new KAction(KIcon("raindrop"), i18n("Raindrops..."), this);
+    actionCollection()->addAction("imageplugin_raindrop", d->raindropAction);
+    connect(d->raindropAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRainDrop()));
-            
-    m_filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
-    actionCollection()->addAction("imageplugin_filmgrain", m_filmgrainAction);
-    connect(m_filmgrainAction, SIGNAL(triggered(bool)),
+
+    d->filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
+    actionCollection()->addAction("imageplugin_filmgrain", d->filmgrainAction);
+    connect(d->filmgrainAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFilmGrain()));            
 
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
@@ -99,18 +126,19 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
 
 ImagePlugin_FxFilters::~ImagePlugin_FxFilters()
 {
+    delete d;
 }
 
 void ImagePlugin_FxFilters::setEnabledActions(bool b)
 {
-    m_charcoalAction->setEnabled(b);
-    m_colorEffectsAction->setEnabled(b);
-    m_embossAction->setEnabled(b);
-    m_oilpaintAction->setEnabled(b);
-    m_blurfxAction->setEnabled(b);
-    m_distortionfxAction->setEnabled(b);
-    m_raindropAction->setEnabled(b);
-    m_filmgrainAction->setEnabled(b);    
+    d->charcoalAction->setEnabled(b);
+    d->colorEffectsAction->setEnabled(b);
+    d->embossAction->setEnabled(b);
+    d->oilpaintAction->setEnabled(b);
+    d->blurfxAction->setEnabled(b);
+    d->distortionfxAction->setEnabled(b);
+    d->raindropAction->setEnabled(b);
+    d->filmgrainAction->setEnabled(b);
 }
 
 void ImagePlugin_FxFilters::slotColorEffects()

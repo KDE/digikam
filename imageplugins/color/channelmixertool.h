@@ -33,8 +33,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class ChannelMixerToolPriv;
-
 class ChannelMixerTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -67,6 +65,7 @@ private Q_SLOTS:
 
 private:
 
+    class ChannelMixerToolPriv;
     ChannelMixerToolPriv* const d;
 };
 

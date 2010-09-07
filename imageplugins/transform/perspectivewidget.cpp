@@ -61,7 +61,7 @@
 namespace DigikamTransformImagePlugin
 {
 
-class PerspectiveWidgetPriv
+class PerspectiveWidget::PerspectiveWidgetPriv
 {
 public:
 

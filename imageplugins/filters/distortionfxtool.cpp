@@ -66,7 +66,7 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class DistortionFXToolPriv
+class DistortionFXTool::DistortionFXToolPriv
 {
 public:
 

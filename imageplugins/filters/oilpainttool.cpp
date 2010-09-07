@@ -58,7 +58,7 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class OilPaintToolPriv
+class OilPaintTool::OilPaintToolPriv
 {
 public:
 

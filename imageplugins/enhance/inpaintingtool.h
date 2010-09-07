@@ -59,8 +59,6 @@ private:
 
 //-----------------------------------------------------------
 
-class InPaintingToolPriv;
-
 class InPaintingTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -100,6 +98,7 @@ private:
 
 private:
 
+    class InPaintingToolPriv;
     InPaintingToolPriv* const d;
 };
 

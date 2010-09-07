@@ -31,8 +31,6 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class LensAutoFixToolPriv;
-
 class LensAutoFixTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -59,6 +57,7 @@ private:
 
 private:
 
+    class LensAutoFixToolPriv;
     LensAutoFixToolPriv* const d;
 };
 

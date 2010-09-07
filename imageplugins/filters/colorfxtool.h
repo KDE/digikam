@@ -40,8 +40,6 @@ class DColor;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class ColorFxToolPriv;
-
 class ColorFxTool : public EditorTool
 {
     Q_OBJECT
@@ -75,6 +73,7 @@ private Q_SLOTS:
 
 private:
 
+    class ColorFxToolPriv;
     ColorFxToolPriv* const d;
 };
 

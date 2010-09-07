@@ -65,7 +65,7 @@
 namespace DigikamDecorateImagePlugin
 {
 
-class SuperImposeToolPriv
+class SuperImposeTool::SuperImposeToolPriv
 {
 public:
 

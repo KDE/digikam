@@ -72,7 +72,7 @@ using namespace KDcrawIface;
 namespace DigikamEnhanceImagePlugin
 {
 
-class RedEyeToolPriv
+class RedEyeTool::RedEyeToolPriv
 {
 public:
 

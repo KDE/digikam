@@ -37,8 +37,6 @@ using namespace Digikam;
 namespace DigikamDecorateImagePlugin
 {
 
-class SuperImposeToolPriv;
-
 class SuperImposeTool : public EditorTool
 {
     Q_OBJECT
@@ -63,6 +61,7 @@ private:
 
 private:
 
+    class SuperImposeToolPriv;
     SuperImposeToolPriv* const d;
 };
 

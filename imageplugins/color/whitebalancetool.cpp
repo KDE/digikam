@@ -60,7 +60,7 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class WhiteBalanceToolPriv
+class WhiteBalanceTool::WhiteBalanceToolPriv
 {
 public:
 
@@ -228,7 +228,6 @@ void WhiteBalanceTool::putPreviewData()
 
 void WhiteBalanceTool::prepareFinal()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 

@@ -37,8 +37,6 @@ using namespace Digikam;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class DistortionFXToolPriv;
-
 class DistortionFXTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -65,6 +63,7 @@ private:
 
 private:
 
+    class DistortionFXToolPriv;
     DistortionFXToolPriv* const d;
 };
 

@@ -26,18 +26,18 @@
 #ifndef RATIOCROPTOOL_H
 #define RATIOCROPTOOL_H
 
+// Qt includes
+
+#include <QRect>
+
 // Local includes
 
 #include "editortool.h"
-
-class QRect;
 
 using namespace Digikam;
 
 namespace DigikamTransformImagePlugin
 {
-
-class RatioCropToolPriv;
 
 class RatioCropTool : public EditorTool
 {
@@ -86,6 +86,7 @@ private:
 
 private:
 
+    class RatioCropToolPriv;
     RatioCropToolPriv* const d;
 };
 

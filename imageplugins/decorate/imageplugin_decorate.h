@@ -57,10 +57,8 @@ private Q_SLOTS:
 
 private:
 
-    KAction* m_superimposeAction;
-    KAction* m_textureAction;
-    KAction* m_borderAction;
-    KAction* m_insertTextAction;
+    class ImagePlugin_DecoratePriv;
+    ImagePlugin_DecoratePriv* const d;
 };
 
 #endif /* IMAGEPLUGIN_DECORATE_H */

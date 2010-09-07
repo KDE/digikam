@@ -38,8 +38,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class AdjustCurvesToolPriv;
-
 class AdjustCurvesTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -69,10 +67,11 @@ private:
     void prepareFinal();
     void putPreviewData();
     void putFinalData();
-    void renderingFinished();    
+    void renderingFinished();
 
 private:
 
+    class AdjustCurvesToolPriv;
     AdjustCurvesToolPriv* const d;
 };
 

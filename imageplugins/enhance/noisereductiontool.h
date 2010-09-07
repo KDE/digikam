@@ -33,8 +33,6 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class NoiseReductionToolPriv;
-
 class NoiseReductionTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -62,6 +60,7 @@ private Q_SLOTS:
 
 private:
 
+    class NoiseReductionToolPriv;
     NoiseReductionToolPriv* const d;
 };
 

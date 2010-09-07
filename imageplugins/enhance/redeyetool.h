@@ -67,8 +67,6 @@ private:
     QWidget* m_parent;
 };
 
-class RedEyeToolPriv;
-
 class RedEyeTool : public EditorTool
 {
     Q_OBJECT
@@ -102,6 +100,7 @@ private:
         Aggressive
     };
 
+    class RedEyeToolPriv;
     RedEyeToolPriv* const d;
 };
 

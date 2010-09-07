@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class BWSepiaToolPriv;
-
 class BWSepiaTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -65,6 +63,7 @@ private:
 
 private:
 
+    class BWSepiaToolPriv;
     BWSepiaToolPriv* const d;
 };
 

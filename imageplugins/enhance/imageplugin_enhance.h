@@ -33,8 +33,6 @@
 #include "imageplugin.h"
 #include "digikam_export.h"
 
-class KAction;
-
 using namespace Digikam;
 
 class ImagePlugin_Enhance : public ImagePlugin
@@ -64,17 +62,8 @@ private Q_SLOTS:
 
 private:
 
-    KAction* m_hotpixelsAction;
-    KAction* m_lensdistortionAction;
-    KAction* m_antivignettingAction;
-    KAction* m_lensAutoFixAction;
-    KAction* m_redeyeAction;
-    KAction* m_restorationAction;
-    KAction* m_blurAction;
-    KAction* m_sharpenAction;
-    KAction* m_noiseReductionAction;
-    KAction* m_localContrastAction;
-    KAction* m_inPaintingAction;
+    class ImagePlugin_EnhancePriv;
+    ImagePlugin_EnhancePriv* const d;
 };
 
 #endif /* IMAGEPLUGIN_ENHANCE_H */

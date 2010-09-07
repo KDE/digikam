@@ -46,28 +46,47 @@ using namespace DigikamDecorateImagePlugin;
 K_PLUGIN_FACTORY( DecorateFactory, registerPlugin<ImagePlugin_Decorate>(); )
 K_EXPORT_PLUGIN ( DecorateFactory("digikamimageplugin_decorate") )
 
-ImagePlugin_Decorate::ImagePlugin_Decorate(QObject *parent, const QVariantList &)
-                    : ImagePlugin(parent, "ImagePlugin_Decorate")
+class ImagePlugin_Decorate::ImagePlugin_DecoratePriv
 {
-    m_insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
-    m_insertTextAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
-    actionCollection()->addAction("imageplugin_inserttext", m_insertTextAction );
-    connect(m_insertTextAction, SIGNAL(triggered(bool) ),
+public:
+
+    ImagePlugin_DecoratePriv()
+    {
+        superimposeAction = 0;
+        textureAction     = 0;
+        borderAction      = 0;
+        insertTextAction  = 0;
+    }
+
+    KAction* superimposeAction;
+    KAction* textureAction;
+    KAction* borderAction;
+    KAction* insertTextAction;
+};
+
+ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* parent, const QVariantList&)
+                    : ImagePlugin(parent, "ImagePlugin_Decorate"), 
+                      d(new ImagePlugin_DecoratePriv)
+{
+    d->insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
+    d->insertTextAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
+    actionCollection()->addAction("imageplugin_inserttext", d->insertTextAction );
+    connect(d->insertTextAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInsertText()));
 
-    m_borderAction = new KAction(KIcon("bordertool"), i18n("Add Border..."), this);
-    actionCollection()->addAction("imageplugin_border", m_borderAction );
-    connect(m_borderAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotBorder()));            
+    d->borderAction = new KAction(KIcon("bordertool"), i18n("Add Border..."), this);
+    actionCollection()->addAction("imageplugin_border", d->borderAction );
+    connect(d->borderAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBorder()));
 
-    m_textureAction = new KAction(KIcon("texture"), i18n("Apply Texture..."), this);
-    actionCollection()->addAction("imageplugin_texture", m_textureAction );
-    connect(m_textureAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotTexture()));            
+    d->textureAction = new KAction(KIcon("texture"), i18n("Apply Texture..."), this);
+    actionCollection()->addAction("imageplugin_texture", d->textureAction );
+    connect(d->textureAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotTexture()));
 
-    m_superimposeAction = new KAction(KIcon("superimpose"), i18n("Template Superimpose..."), this);
-    actionCollection()->addAction("imageplugin_superimpose", m_superimposeAction );
-    connect(m_superimposeAction, SIGNAL(triggered(bool)),
+    d->superimposeAction = new KAction(KIcon("superimpose"), i18n("Template Superimpose..."), this);
+    actionCollection()->addAction("imageplugin_superimpose", d->superimposeAction );
+    connect(d->superimposeAction, SIGNAL(triggered(bool)),
             this, SLOT(slotSuperImpose()));
 
     setXMLFile("digikamimageplugin_decorate_ui.rc");
@@ -77,14 +96,15 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject *parent, const QVariantList &
 
 ImagePlugin_Decorate::~ImagePlugin_Decorate()
 {
+    delete d;
 }
 
 void ImagePlugin_Decorate::setEnabledActions(bool b)
 {
-    m_insertTextAction->setEnabled(b);
-    m_borderAction->setEnabled(b);
-    m_textureAction->setEnabled(b);
-    m_superimposeAction->setEnabled(b);
+    d->insertTextAction->setEnabled(b);
+    d->borderAction->setEnabled(b);
+    d->textureAction->setEnabled(b);
+    d->superimposeAction->setEnabled(b);
 }
 
 void ImagePlugin_Decorate::slotInsertText()

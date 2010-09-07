@@ -59,7 +59,7 @@ using namespace KDcrawIface;
 namespace DigikamDecorateImagePlugin
 {
 
-class TextureToolPriv
+class TextureTool::TextureToolPriv
 {
 public:
 

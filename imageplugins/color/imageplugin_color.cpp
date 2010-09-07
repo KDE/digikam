@@ -60,7 +60,7 @@ using namespace DigikamColorImagePlugin;
 K_PLUGIN_FACTORY( ColorPluginFactory, registerPlugin<ImagePlugin_Color>(); )
 K_EXPORT_PLUGIN ( ColorPluginFactory("digikamimageplugin_color") )
 
-class ImagePlugin_ColorPriv
+class ImagePlugin_Color::ImagePlugin_ColorPriv
 {
 
 public:
@@ -93,7 +93,7 @@ public:
     KAction*               channelMixerAction;
     KAction*               curvesAction;
     KAction*               levelsAction;
-    
+
     IccProfilesMenuAction* profileMenuAction;
 };
 
@@ -395,4 +395,3 @@ void ImagePlugin_Color::slotLevelsAdjust()
     AdjustLevelsTool* tool = new AdjustLevelsTool(this);
     loadTool(tool);
 }
-

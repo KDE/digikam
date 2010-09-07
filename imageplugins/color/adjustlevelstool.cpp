@@ -75,7 +75,7 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class AdjustLevelsToolPriv
+class AdjustLevelsTool::AdjustLevelsToolPriv
 {
 
 public:

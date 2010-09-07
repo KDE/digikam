@@ -42,8 +42,6 @@ class KUrl;
 namespace DigikamEnhanceImagePlugin
 {
 
-class HotPixelsToolPriv;
-
 class HotPixelsTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
@@ -73,6 +71,7 @@ private:
 
 private:
 
+    class HotPixelsToolPriv;
     HotPixelsToolPriv* const d;
 };
 

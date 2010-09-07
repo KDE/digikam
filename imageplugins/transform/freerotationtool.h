@@ -38,8 +38,6 @@ using namespace Digikam;
 namespace DigikamTransformImagePlugin
 {
 
-class FreeRotationToolPriv;
-
 class FreeRotationTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -84,6 +82,7 @@ private:
 
 private:
 
+    class FreeRotationToolPriv;
     FreeRotationToolPriv* const d;
 };
 

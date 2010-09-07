@@ -57,7 +57,7 @@
 namespace DigikamFxFiltersImagePlugin
 {
 
-class FilmGrainToolPriv
+class FilmGrainTool::FilmGrainToolPriv
 {
 public:
 
@@ -71,7 +71,7 @@ public:
     const QString       configGroupName;
 
     FilmGrainSettings*  settingsView;
-    
+
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };

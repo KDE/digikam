@@ -58,69 +58,102 @@ using namespace DigikamEnhanceImagePlugin;
 K_PLUGIN_FACTORY( EnhanceFactory, registerPlugin<ImagePlugin_Enhance>(); )
 K_EXPORT_PLUGIN ( EnhanceFactory("digikamimageplugin_enhance") )
 
-ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
-                   : ImagePlugin(parent, "ImagePlugin_Enhance")
+class ImagePlugin_Enhance::ImagePlugin_EnhancePriv
 {
-    m_restorationAction  = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
-    actionCollection()->addAction("imageplugin_restoration", m_restorationAction);
-    connect(m_restorationAction, SIGNAL(triggered(bool)),
+public:
+
+    ImagePlugin_EnhancePriv()
+    {
+        hotpixelsAction      = 0;
+        lensdistortionAction = 0;
+        antivignettingAction = 0;
+        lensAutoFixAction    = 0;
+        redeyeAction         = 0;
+        restorationAction    = 0;
+        blurAction           = 0;
+        sharpenAction        = 0;
+        noiseReductionAction = 0;
+        localContrastAction  = 0;
+        inPaintingAction     = 0;
+    }
+
+    KAction* hotpixelsAction;
+    KAction* lensdistortionAction;
+    KAction* antivignettingAction;
+    KAction* lensAutoFixAction;
+    KAction* redeyeAction;
+    KAction* restorationAction;
+    KAction* blurAction;
+    KAction* sharpenAction;
+    KAction* noiseReductionAction;
+    KAction* localContrastAction;
+    KAction* inPaintingAction;
+};
+
+ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
+                   : ImagePlugin(parent, "ImagePlugin_Enhance"),
+                     d(new ImagePlugin_EnhancePriv)
+{
+    d->restorationAction = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
+    actionCollection()->addAction("imageplugin_restoration", d->restorationAction);
+    connect(d->restorationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRestoration()));
 
-    m_sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
-    actionCollection()->addAction("imageplugin_sharpen", m_sharpenAction);
-    connect(m_sharpenAction, SIGNAL(triggered(bool) ),
+    d->sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
+    actionCollection()->addAction("imageplugin_sharpen", d->sharpenAction);
+    connect(d->sharpenAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotSharpen()));
 
-    m_blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
-    actionCollection()->addAction("imageplugin_blur", m_blurAction);
-    connect(m_blurAction, SIGNAL(triggered(bool) ),
+    d->blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
+    actionCollection()->addAction("imageplugin_blur", d->blurAction);
+    connect(d->blurAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBlur()));
 
-    m_noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
-    actionCollection()->addAction("imageplugin_noisereduction", m_noiseReductionAction);
-    connect(m_noiseReductionAction, SIGNAL(triggered(bool)),
+    d->noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
+    actionCollection()->addAction("imageplugin_noisereduction", d->noiseReductionAction);
+    connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotNoiseReduction()));
 
-    m_localContrastAction = new KAction(KIcon("contrast"), i18n("Local Contrast..."), this);
-    actionCollection()->addAction("imageplugin_localcontrast", m_localContrastAction);
-    connect(m_localContrastAction, SIGNAL(triggered(bool)),
+    d->localContrastAction = new KAction(KIcon("contrast"), i18n("Local Contrast..."), this);
+    actionCollection()->addAction("imageplugin_localcontrast", d->localContrastAction);
+    connect(d->localContrastAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLocalContrast()));
 
-    m_redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
-    m_redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
+    d->redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
+    d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
                                       "Select a region including the eyes to use this option."));
-    actionCollection()->addAction("imageplugin_redeye", m_redeyeAction);
-    connect(m_redeyeAction, SIGNAL(triggered(bool) ),
+    actionCollection()->addAction("imageplugin_redeye", d->redeyeAction);
+    connect(d->redeyeAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRedEye()));
 
-    m_inPaintingAction = new KAction(KIcon("inpainting"), i18n("In-painting..."), this);
-    actionCollection()->addAction("imageplugin_inpainting", m_inPaintingAction);
-    m_inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
-    m_inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
+    d->inPaintingAction = new KAction(KIcon("inpainting"), i18n("In-painting..."), this);
+    actionCollection()->addAction("imageplugin_inpainting", d->inPaintingAction);
+    d->inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
+    d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
                                             "To use this option, select a region to in-paint.") );
-    connect(m_inPaintingAction, SIGNAL(triggered(bool) ),
+    connect(d->inPaintingAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInPainting()));
 
-    m_antivignettingAction = new KAction(KIcon("antivignetting"), i18n("Vignetting Correction..."), this);
-    actionCollection()->addAction("imageplugin_antivignetting", m_antivignettingAction);
-    connect(m_antivignettingAction, SIGNAL(triggered(bool)),
+    d->antivignettingAction = new KAction(KIcon("antivignetting"), i18n("Vignetting Correction..."), this);
+    actionCollection()->addAction("imageplugin_antivignetting", d->antivignettingAction);
+    connect(d->antivignettingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotAntiVignetting()));
 
-    m_lensdistortionAction = new KAction(KIcon("lensdistortion"), i18n("Distortion..."), this);
-    actionCollection()->addAction("imageplugin_lensdistortion", m_lensdistortionAction);
-    connect(m_lensdistortionAction, SIGNAL(triggered(bool)),
+    d->lensdistortionAction = new KAction(KIcon("lensdistortion"), i18n("Distortion..."), this);
+    actionCollection()->addAction("imageplugin_lensdistortion", d->lensdistortionAction);
+    connect(d->lensdistortionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLensDistortion()));
 
-    m_hotpixelsAction  = new KAction(KIcon("hotpixels"), i18n("Hot Pixels..."), this);
-    actionCollection()->addAction("imageplugin_hotpixels", m_hotpixelsAction);
-    connect(m_hotpixelsAction, SIGNAL(triggered(bool) ),
+    d->hotpixelsAction  = new KAction(KIcon("hotpixels"), i18n("Hot Pixels..."), this);
+    actionCollection()->addAction("imageplugin_hotpixels", d->hotpixelsAction);
+    connect(d->hotpixelsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotHotPixels()));
 
 #ifdef HAVE_LENSFUN
 
-    m_lensAutoFixAction = new KAction(KIcon("lensautofix"), i18n("Auto-Correction..."), this);
-    actionCollection()->addAction("imageplugin_lensautofix", m_lensAutoFixAction );
-    connect(m_lensAutoFixAction, SIGNAL(triggered(bool)),
+    d->lensAutoFixAction = new KAction(KIcon("lensautofix"), i18n("Auto-Correction..."), this);
+    actionCollection()->addAction("imageplugin_lensautofix", d->lensAutoFixAction );
+    connect(d->lensAutoFixAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLensAutoFix()));
 
 #endif // HAVE_LENSFUN
@@ -132,23 +165,24 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
 
 ImagePlugin_Enhance::~ImagePlugin_Enhance()
 {
+    delete d;
 }
 
 void ImagePlugin_Enhance::setEnabledActions(bool b)
 {
-    m_restorationAction->setEnabled(b);
-    m_blurAction->setEnabled(b);
-    m_sharpenAction->setEnabled(b);
-    m_noiseReductionAction->setEnabled(b);
-    m_localContrastAction->setEnabled(b);
-    m_redeyeAction->setEnabled(b);
-    m_inPaintingAction->setEnabled(b);
-    m_antivignettingAction->setEnabled(b);
-    m_lensdistortionAction->setEnabled(b);
-    m_hotpixelsAction->setEnabled(b);
+    d->restorationAction->setEnabled(b);
+    d->blurAction->setEnabled(b);
+    d->sharpenAction->setEnabled(b);
+    d->noiseReductionAction->setEnabled(b);
+    d->localContrastAction->setEnabled(b);
+    d->redeyeAction->setEnabled(b);
+    d->inPaintingAction->setEnabled(b);
+    d->lensdistortionAction->setEnabled(b);
+    d->antivignettingAction->setEnabled(b);
+    d->hotpixelsAction->setEnabled(b);
 
 #ifdef HAVE_LENSFUN
-    m_lensAutoFixAction->setEnabled(b);
+    d->lensAutoFixAction->setEnabled(b);
 #endif // HAVE_LENSFUN
 }
 

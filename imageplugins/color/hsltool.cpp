@@ -55,7 +55,7 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class HSLToolPriv
+class HSLTool::HSLToolPriv
 {
 public:
 

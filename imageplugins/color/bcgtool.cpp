@@ -60,7 +60,7 @@
 namespace DigikamColorImagePlugin
 {
 
-class BCGToolPriv
+class BCGTool::BCGToolPriv
 {
 public:
 

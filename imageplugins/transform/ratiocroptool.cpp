@@ -69,7 +69,7 @@ using namespace KDcrawIface;
 namespace DigikamTransformImagePlugin
 {
 
-class RatioCropToolPriv
+class RatioCropTool::RatioCropToolPriv
 {
 public:
 

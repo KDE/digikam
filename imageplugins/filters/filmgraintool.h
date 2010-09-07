@@ -35,8 +35,6 @@ using namespace Digikam;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class FilmGrainToolPriv;
-
 class FilmGrainTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -62,6 +60,7 @@ private:
 
 private:
 
+    class FilmGrainToolPriv;
     FilmGrainToolPriv* const d;
 };
 

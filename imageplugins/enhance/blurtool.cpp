@@ -56,7 +56,7 @@ using namespace KDcrawIface;
 namespace DigikamEnhanceImagePlugin
 {
 
-class BlurToolPriv
+class BlurTool::BlurToolPriv
 {
 public:
 

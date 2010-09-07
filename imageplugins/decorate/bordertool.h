@@ -39,8 +39,6 @@ using namespace Digikam;
 namespace DigikamDecorateImagePlugin
 {
 
-class BorderToolPriv;
-
 class BorderTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -66,6 +64,7 @@ private:
 
 private:
 
+    class BorderToolPriv;
     BorderToolPriv* const d;
 };
 

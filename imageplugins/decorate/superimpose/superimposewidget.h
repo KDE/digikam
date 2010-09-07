@@ -61,7 +61,7 @@ enum Action
 
 class SuperImposeWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 

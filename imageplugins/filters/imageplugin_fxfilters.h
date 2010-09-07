@@ -33,8 +33,6 @@
 #include "imageplugin.h"
 #include "digikam_export.h"
 
-class KAction;
-
 using namespace Digikam;
 
 class ImagePlugin_FxFilters : public ImagePlugin
@@ -57,18 +55,12 @@ private Q_SLOTS:
     void slotBlurFX();
     void slotDistortionFX();
     void slotRainDrop();
-    void slotFilmGrain();    
+    void slotFilmGrain();
 
 private:
 
-    KAction* m_filmgrainAction;  
-    KAction* m_raindropAction;
-    KAction* m_distortionfxAction;
-    KAction* m_blurfxAction;
-    KAction* m_oilpaintAction;
-    KAction* m_embossAction;
-    KAction* m_charcoalAction;
-    KAction* m_colorEffectsAction;
+    class ImagePlugin_FxFiltersPriv;
+    ImagePlugin_FxFiltersPriv* const d;
 };
 
 #endif /* IMAGEPLUGIN_FXFILTERS_H */

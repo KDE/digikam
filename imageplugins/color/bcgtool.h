@@ -35,8 +35,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class BCGToolPriv;
-
 class BCGTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -62,6 +60,7 @@ private:
 
 private:
 
+    class BCGToolPriv;
     BCGToolPriv* const d;
 };
 

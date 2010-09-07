@@ -75,7 +75,7 @@
 namespace DigikamTransformImagePlugin
 {
 
-class ImageSelectionWidgetPriv
+class ImageSelectionWidget::ImageSelectionWidgetPriv
 {
 public:
 
@@ -206,19 +206,19 @@ void ImageSelectionWidget::setup(int w, int h,
     setGoldenGuideTypes(true, false, false, false, false, false);
 }
 
-ImageIface* ImageSelectionWidget::imageIface()
+ImageIface* ImageSelectionWidget::imageIface() const
 {
     return d->iface;
 }
 
-void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
+void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
 {
     delete d->pixmap;
 
     int w           = e->size().width();
     int h           = e->size().height();
 
-    uchar *data     = d->iface->setPreviewImageSize(w, h);
+    uchar* data     = d->iface->setPreviewImageSize(w, h);
     int width       = d->iface->previewWidth();
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
@@ -610,7 +610,7 @@ void ImageSelectionWidget::setSelectionHeight(int h)
     regionSelectionChanged();
 }
 
-QPoint ImageSelectionWidget::convertPoint(const QPoint pm, bool localToReal)
+QPoint ImageSelectionWidget::convertPoint(const QPoint& pm, bool localToReal)
 {
     return convertPoint(pm.x(), pm.y(), localToReal);
 }
@@ -797,7 +797,6 @@ void ImageSelectionWidget::drawDiagonalMethod(QPainter& p, const int& w, const i
         p.drawLine(0, h-w, w, h);
         p.drawLine(0, h, w, h-w);
     }
-
 }
 
 void ImageSelectionWidget::drawHarmoniousTriangles(QPainter& p, const int& dst)
@@ -812,95 +811,94 @@ void ImageSelectionWidget::drawHarmoniousTriangles(QPainter& p, const int& dst)
 
     p.drawLine( d->localRegionSelection.width()/2,       -d->localRegionSelection.height()/2,
                 d->localRegionSelection.width()/2 - dst,  d->localRegionSelection.height()/2);
-
 }
 
 void ImageSelectionWidget::drawGoldenMean(QPainter& p, const QRect& R1,
-                const QRect& R2, const QRect& R3, const QRect& R4,
-                const QRect& R5, const QRect& R6, const QRect& R7)
+                                          const QRect& R2, const QRect& R3, const QRect& R4,
+                                          const QRect& R5, const QRect& R6, const QRect& R7)
 {
     p.setRenderHint(QPainter::Antialiasing);
 
     // Drawing Golden sections.
     if (d->drawGoldenSection)
     {
-       // horizontal lines:
-       p.drawLine( R1.left(), R2.top(),
-                   R2.right(), R2.top());
+        // horizontal lines:
+        p.drawLine( R1.left(), R2.top(),
+                    R2.right(), R2.top());
 
-       p.drawLine( R1.left(), R1.top() + R2.height(),
-                   R2.right(), R1.top() + R2.height());
+        p.drawLine( R1.left(), R1.top() + R2.height(),
+                    R2.right(), R1.top() + R2.height());
 
-       // vertical lines:
-       p.drawLine( R1.right(), R1.top(),
-                   R1.right(), R1.bottom() );
+        // vertical lines:
+        p.drawLine( R1.right(), R1.top(),
+                    R1.right(), R1.bottom() );
 
-       p.drawLine( R1.left()+R2.width(), R1.top(),
-                   R1.left()+R2.width(), R1.bottom() );
+        p.drawLine( R1.left()+R2.width(), R1.top(),
+                    R1.left()+R2.width(), R1.bottom() );
     }
 
     // Drawing Golden triangle guides.
     if (d->drawGoldenTriangle)
     {
-       p.drawLine( R1.left(),  R1.bottom(),
-                   R2.right(), R1.top() );
+        p.drawLine( R1.left(),  R1.bottom(),
+                    R2.right(), R1.top() );
 
-       p.drawLine( R1.left(), R1.top(),
-                   R2.right() - R1.width(), R1.bottom());
+        p.drawLine( R1.left(), R1.top(),
+                    R2.right() - R1.width(), R1.bottom());
 
-       p.drawLine( R1.left() + R1.width(), R1.top(),
-                   R2.right(), R1.bottom() );
+        p.drawLine( R1.left() + R1.width(), R1.top(),
+                    R2.right(), R1.bottom() );
     }
 
     // Drawing Golden spiral sections.
     if (d->drawGoldenSpiralSection)
     {
-       p.drawLine( R1.topRight(),   R1.bottomRight() );
-       p.drawLine( R2.topLeft(),    R2.topRight() );
-       p.drawLine( R3.topLeft(),    R3.bottomLeft() );
-       p.drawLine( R4.bottomLeft(), R4.bottomRight() );
-       p.drawLine( R5.topRight(),   R5.bottomRight() );
-       p.drawLine( R6.topLeft(),    R6.topRight() );
-       p.drawLine( R7.topLeft(),    R7.bottomLeft() );
+        p.drawLine( R1.topRight(),   R1.bottomRight() );
+        p.drawLine( R2.topLeft(),    R2.topRight() );
+        p.drawLine( R3.topLeft(),    R3.bottomLeft() );
+        p.drawLine( R4.bottomLeft(), R4.bottomRight() );
+        p.drawLine( R5.topRight(),   R5.bottomRight() );
+        p.drawLine( R6.topLeft(),    R6.topRight() );
+        p.drawLine( R7.topLeft(),    R7.bottomLeft() );
     }
 
     // Drawing Golden Spiral.
     if (d->drawGoldenSpiral)
     {
-       p.drawArc ( R1.left(),
-                   R1.top() - R1.height(),
-                   2*R1.width(), 2*R1.height(),
-                   180*16, 90*16);
+        p.drawArc ( R1.left(),
+                    R1.top() - R1.height(),
+                    2*R1.width(), 2*R1.height(),
+                    180*16, 90*16);
 
-       p.drawArc ( R2.right() - 2*R2.width(),
-                   R1.bottom() - 2*R2.height(),
-                   2*R2.width(), 2*R2.height(),
-                   270*16, 90*16);
+        p.drawArc ( R2.right() - 2*R2.width(),
+                    R1.bottom() - 2*R2.height(),
+                    2*R2.width(), 2*R2.height(),
+                    270*16, 90*16);
 
-       p.drawArc ( R2.right() - 2*R3.width(),
-                   R3.top(),
-                   2*R3.width(), 2*R3.height(),
-                   0, 90*16);
+        p.drawArc ( R2.right() - 2*R3.width(),
+                    R3.top(),
+                    2*R3.width(), 2*R3.height(),
+                    0, 90*16);
 
-       p.drawArc ( R4.left(),
-                   R4.top(),
-                   2*R4.width(), 2*R4.height(),
-                   90*16, 90*16);
+        p.drawArc ( R4.left(),
+                    R4.top(),
+                    2*R4.width(), 2*R4.height(),
+                    90*16, 90*16);
 
-       p.drawArc ( R5.left(),
-                   R5.top()-R5.height(),
-                   2*R5.width(), 2*R5.height(),
-                   180*16, 90*16);
+        p.drawArc ( R5.left(),
+                    R5.top()-R5.height(),
+                    2*R5.width(), 2*R5.height(),
+                    180*16, 90*16);
 
-       p.drawArc ( R6.left()-R6.width(),
-                   R6.top()-R6.height(),
-                   2*R6.width(), 2*R6.height(),
-                   270*16, 90*16);
+        p.drawArc ( R6.left()-R6.width(),
+                    R6.top()-R6.height(),
+                    2*R6.width(), 2*R6.height(),
+                    270*16, 90*16);
 
-       p.drawArc ( R7.left()-R7.width(),
-                   R7.top(),
-                   2*R7.width(), 2*R7.height(),
-                   0, 90*16);
+        p.drawArc ( R7.left()-R7.width(),
+                    R7.top(),
+                    2*R7.width(), 2*R7.height(),
+                    0, 90*16);
     }
 }
 

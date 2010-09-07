@@ -60,7 +60,7 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class AntiVignettingToolPriv
+class AntiVignettingTool::AntiVignettingToolPriv
 {
 public:
 

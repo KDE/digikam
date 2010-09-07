@@ -67,7 +67,7 @@
 namespace DigikamDecorateImagePlugin
 {
 
-class InsertTextToolPriv
+class InsertTextTool::InsertTextToolPriv
 {
 public:
 
@@ -169,25 +169,25 @@ InsertTextTool::InsertTextTool(QObject* parent)
     d->alignButtonGroup->setExclusive(true);
 
     QToolButton *alignLeft = new QToolButton(alignBox);
-    d->alignButtonGroup->addButton(alignLeft, ALIGN_LEFT);
+    d->alignButtonGroup->addButton(alignLeft, InsertTextWidget::ALIGN_LEFT);
     alignLeft->setIcon(SmallIcon("format-justify-left"));
     alignLeft->setCheckable(true);
     alignLeft->setToolTip(i18n("Align text to the left"));
 
     QToolButton *alignRight = new QToolButton(alignBox);
-    d->alignButtonGroup->addButton(alignRight, ALIGN_RIGHT);
+    d->alignButtonGroup->addButton(alignRight, InsertTextWidget::ALIGN_RIGHT);
     alignRight->setIcon(SmallIcon("format-justify-right"));
     alignRight->setCheckable(true);
     alignRight->setToolTip(i18n("Align text to the right"));
 
     QToolButton *alignCenter = new QToolButton(alignBox);
-    d->alignButtonGroup->addButton(alignCenter, ALIGN_CENTER);
+    d->alignButtonGroup->addButton(alignCenter, InsertTextWidget::ALIGN_CENTER);
     alignCenter->setIcon(SmallIcon("format-justify-center"));
     alignCenter->setCheckable(true);
     alignCenter->setToolTip(i18n("Align text to center"));
 
     QToolButton *alignBlock = new QToolButton(alignBox);
-    d->alignButtonGroup->addButton(alignBlock, ALIGN_BLOCK);
+    d->alignButtonGroup->addButton(alignBlock, InsertTextWidget::ALIGN_BLOCK);
     alignBlock->setIcon(SmallIcon("format-justify-fill"));
     alignBlock->setCheckable(true);
     alignBlock->setToolTip(i18n("Align text to a block"));
@@ -302,7 +302,7 @@ void InsertTextTool::readSettings()
     d->textEdit->setText(group.readEntry(d->configTextStringEntry,                i18n("Enter your text here.")));
     d->textFont = group.readEntry(d->configFontPropertiesEntry,                   defaultFont);
     d->fontChooserWidget->setFont(d->textFont);
-    d->alignTextMode = group.readEntry(d->configTextAlignmentEntry,               (int) ALIGN_LEFT);
+    d->alignTextMode = group.readEntry(d->configTextAlignmentEntry,               (int) InsertTextWidget::ALIGN_LEFT);
     d->borderText->setChecked(group.readEntry(d->configBorderTextEntry,           false));
     d->transparentText->setChecked(group.readEntry(d->configTransparentTextEntry, false));
     d->previewWidget->setPositionHint(group.readEntry(d->configPositionHintEntry, QRect()));
@@ -343,12 +343,12 @@ void InsertTextTool::slotResetSettings()
     d->borderText->setChecked(false);
     d->transparentText->setChecked(false);
     d->previewWidget->resetEdit();
-    d->alignButtonGroup->button(ALIGN_LEFT)->setChecked(true);
+    d->alignButtonGroup->button(InsertTextWidget::ALIGN_LEFT)->setChecked(true);
 
     d->fontChooserWidget->blockSignals(false);
     d->fontColorButton->blockSignals(false);
     d->alignButtonGroup->blockSignals(false);
-    slotAlignModeChanged(ALIGN_LEFT);
+    slotAlignModeChanged(InsertTextWidget::ALIGN_LEFT);
 }
 
 void InsertTextTool::slotAlignModeChanged(int mode)
@@ -358,19 +358,19 @@ void InsertTextTool::slotAlignModeChanged(int mode)
 
     switch (d->alignTextMode)
     {
-        case ALIGN_LEFT:
+        case InsertTextWidget::ALIGN_LEFT:
             d->textEdit->setAlignment(Qt::AlignLeft);
             break;
 
-        case ALIGN_RIGHT:
+        case InsertTextWidget::ALIGN_RIGHT:
             d->textEdit->setAlignment(Qt::AlignRight);
             break;
 
-        case ALIGN_CENTER:
+        case InsertTextWidget::ALIGN_CENTER:
             d->textEdit->setAlignment(Qt::AlignHCenter);
             break;
 
-        case ALIGN_BLOCK:
+        case InsertTextWidget::ALIGN_BLOCK:
             d->textEdit->setAlignment(Qt::AlignJustify);
             break;
     }

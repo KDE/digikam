@@ -38,7 +38,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-
 class AutoCorrectionTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -67,7 +66,7 @@ private:
 private:
 
     void writeSettings();
-    void readSettings();    
+    void readSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();

@@ -74,17 +74,16 @@ void Matrix::scale(double x, double y)
 
 void Matrix::multiply(const Matrix& matrix)
 {
-    int      i, j;
-    Matrix   tmp;
-    double   t1, t2, t3;
+    Matrix tmp;
+    double t1, t2, t3;
 
-    for (i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; ++i)
     {
         t1 = matrix.coeff[i][0];
         t2 = matrix.coeff[i][1];
         t3 = matrix.coeff[i][2];
 
-        for (j = 0; j < 3; ++j)
+        for (int j = 0; j < 3; ++j)
         {
             tmp.coeff[i][j]  = t1 * coeff[0][j];
             tmp.coeff[i][j] += t2 * coeff[1][j];
@@ -95,11 +94,9 @@ void Matrix::multiply(const Matrix& matrix)
     *this = tmp;
 }
 
-void Matrix::transformPoint(double x, double y, double *newx, double *newy) const
+void Matrix::transformPoint(double x, double y, double* newx, double* newy) const
 {
-    double  w;
-
-    w = coeff[2][0] * x + coeff[2][1] * y + coeff[2][2];
+    double  w = coeff[2][0] * x + coeff[2][1] * y + coeff[2][2];
 
     if (w == 0.0)
        w = 1.0;
@@ -117,9 +114,7 @@ void Matrix::transformPoint(double x, double y, double *newx, double *newy) cons
 void Matrix::invert()
 {
     Matrix  inv;
-    double  det;
-
-    det = determinant();
+    double  det = determinant();
 
     if (det == 0.0)
        return;

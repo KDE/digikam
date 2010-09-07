@@ -67,7 +67,7 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class HotPixelsToolPriv
+class HotPixelsTool::HotPixelsToolPriv
 {
 public:
 

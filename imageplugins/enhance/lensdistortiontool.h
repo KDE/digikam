@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class LensDistortionToolPriv;
-
 class LensDistortionTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -63,6 +61,7 @@ private:
 
 private:
 
+    class LensDistortionToolPriv;
     LensDistortionToolPriv* const d;
 };
 

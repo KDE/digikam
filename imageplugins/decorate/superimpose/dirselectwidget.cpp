@@ -41,7 +41,7 @@
 namespace DigikamDecorateImagePlugin
 {
 
-class DirSelectWidgetPrivate
+class DirSelectWidget::DirSelectWidgetPrivate
 {
 public:
 

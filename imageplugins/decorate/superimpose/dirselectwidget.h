@@ -39,11 +39,9 @@
 namespace DigikamDecorateImagePlugin
 {
 
-class DirSelectWidgetPrivate;
-
 class DirSelectWidget : public K3FileTreeView
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -70,6 +68,7 @@ protected Q_SLOTS:
 
 private:
 
+    class DirSelectWidgetPrivate;
     DirSelectWidgetPrivate* const d;
 };
 

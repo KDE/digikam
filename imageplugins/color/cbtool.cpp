@@ -56,7 +56,7 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class CBToolPriv
+class CBTool::CBToolPriv
 {
 public:
 

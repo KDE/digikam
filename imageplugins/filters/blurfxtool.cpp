@@ -59,7 +59,7 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class BlurFXToolPriv
+class BlurFXTool::BlurFXToolPriv
 {
 public:
 

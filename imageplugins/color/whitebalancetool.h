@@ -40,8 +40,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class WhiteBalanceToolPriv;
-
 class WhiteBalanceTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -73,6 +71,7 @@ private:
 
 private:
 
+    class WhiteBalanceToolPriv;
     WhiteBalanceToolPriv* const d;
 };
 

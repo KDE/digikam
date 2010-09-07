@@ -46,7 +46,7 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class NoiseReductionToolPriv
+class NoiseReductionTool::NoiseReductionToolPriv
 {
 public:
 

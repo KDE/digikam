@@ -288,12 +288,12 @@ unsigned int** DImgScale::dimgCalcYPoints(unsigned int *src, int sw, int sh, int
 {
     unsigned int **p;
     int i, j = 0;
-    int val, inc;
+    ullong val, inc;
 
     p = new unsigned int* [dh+1];
 
     val = 0;
-    inc = (sh << 16) / dh;
+    inc = (((ullong)sh) << 16) / dh;
     for(i = 0; i < dh; ++i)
     {
         p[j++] = src + ((val >> 16) * sw);
@@ -307,12 +307,12 @@ ullong** DImgScale::dimgCalcYPoints16(ullong* src, int sw, int sh, int dh)
 {
     ullong** p;
     int i, j = 0;
-    int val, inc;
+    ullong val, inc;
 
     p = new ullong*[(dh+1)];
 
     val = 0;
-    inc = (sh << 16) / dh;
+    inc = (((ullong)sh) << 16) / dh;
     for(i = 0; i < dh; ++i)
     {
         p[j++] = src + ((val >> 16) * sw);
@@ -325,12 +325,12 @@ ullong** DImgScale::dimgCalcYPoints16(ullong* src, int sw, int sh, int dh)
 int* DImgScale::dimgCalcXPoints(int sw, int dw)
 {
     int *p, i, j = 0;
-    int val, inc;
+    ullong val, inc;
 
     p = new int[dw+1];
 
     val = 0;
-    inc = (sw << 16) / dw;
+    inc = (((ullong)sw) << 16) / dw;
     for(i = 0; i < dw; ++i)
     {
         p[j++] = (val >> 16);
@@ -349,14 +349,14 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
     /* scaling up */
     if(up)
     {
-        int val, inc;
+        ullong val, inc;
 
         val = 0;
-        inc = (s << 16) / d;
+        inc = (((ullong)s) << 16) / d;
         for(i = 0; i < d; ++i)
         {
             p[j++] = (val >> 8) - ((val >> 8) & 0xffffff00);
-            if((val >> 16) >= (s - 1))
+            if((int)(val >> 16) >= (s - 1))
                 p[j - 1] = 0;
             val += inc;
         }
@@ -364,9 +364,10 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
     /* scaling down */
     else
     {
-        int val, inc, ap, Cp;
+        ullong val, inc;
+        int ap, Cp;
         val = 0;
-        inc = (s << 16) / d;
+        inc = (((ullong)s) << 16) / d;
         Cp = ((d << 14) / s) + 1;
 
         for(i = 0; i < d; ++i)

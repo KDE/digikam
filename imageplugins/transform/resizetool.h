@@ -37,8 +37,6 @@ using namespace Digikam;
 namespace DigikamTransformImagePlugin
 {
 
-class ResizeToolPriv;
-
 class ResizeTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -70,6 +68,7 @@ private Q_SLOTS:
 
 private:
 
+    class ResizeToolPriv;
     ResizeToolPriv* const d;
 };
 

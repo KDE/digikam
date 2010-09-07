@@ -117,7 +117,7 @@ private:
 
 // -------------------------------------------------------------
 
-class ResizeToolPriv
+class ResizeTool::ResizeToolPriv
 {
 public:
 

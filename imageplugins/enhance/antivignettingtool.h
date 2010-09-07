@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class AntiVignettingToolPriv;
-
 class AntiVignettingTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -61,6 +59,7 @@ private:
 
 private:
 
+    class AntiVignettingToolPriv;
     AntiVignettingToolPriv* const d;
 };
 

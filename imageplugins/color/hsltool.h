@@ -34,8 +34,6 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class HSLToolPriv;
-
 class HSLTool : public EditorToolThreaded
 {
     Q_OBJECT
@@ -61,6 +59,7 @@ private:
 
 private:
 
+    class HSLToolPriv;
     HSLToolPriv* const d;
 };
 
