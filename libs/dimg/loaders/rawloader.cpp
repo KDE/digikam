@@ -114,6 +114,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         imageSetAttribute("format", "RAW");
         imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
         imageSetAttribute("originalBitDepth", 16);
+        imageSetAttribute("originalSize", dcrawIdentify.imageSize);
         return true;
     }
 }
@@ -278,6 +279,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     imageSetAttribute("rawDecodingSettings", QVariant::fromValue(m_customRawSettings));
     imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
     imageSetAttribute("originalBitDepth", 16);
+    imageSetAttribute("originalSize", QSize(width, height));
 
     return true;
 }

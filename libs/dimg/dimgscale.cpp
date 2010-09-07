@@ -101,7 +101,7 @@ namespace DImgScale
 
 using namespace DImgScale;
 
-DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode)
+DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode) const
 {
     if (dw <= 0 || dh <= 0 || isNull())
         return DImg();
@@ -172,7 +172,7 @@ if ((y + h) > ((yy) + (hh))) {h = (hh) - (y - yy);}
 
 DImg DImg::smoothScaleSection(int sx, int sy,
                               int sw, int sh,
-                              int dw, int dh)
+                              int dw, int dh) const
 {
     uint w = width();
     uint h = height();

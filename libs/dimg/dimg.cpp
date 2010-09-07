@@ -1516,7 +1516,7 @@ QImage DImg::copyQImage(int x, int y, int w, int h) const
     return img.copyQImage();
 }
 
-QPixmap DImg::convertToPixmap()
+QPixmap DImg::convertToPixmap() const
 {
     if (isNull())
         return QPixmap();
@@ -1557,7 +1557,7 @@ QPixmap DImg::convertToPixmap()
     }
 }
 
-QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans)
+QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans) const
 {
     if (isNull())
         return QPixmap();

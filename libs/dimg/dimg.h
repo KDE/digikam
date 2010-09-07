@@ -424,13 +424,13 @@ public:
     /** Return a version of this image scaled to the specified size with the specified mode.
         See QSize documentation for information on available modes
      */
-    DImg       smoothScale(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
+    DImg       smoothScale(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) const;
 
     /** Take the region specified by the rectangle sx|sy, width and height sw * sh,
         and scale it to an image with size dw * dh
      */
     DImg       smoothScaleSection(int sx, int sy, int sw, int sh,
-                                  int dw, int dh);
+                                  int dw, int dh) const;
 
     void       rotate(ANGLE angle);
     void       flip(FLIP direction);
@@ -442,8 +442,8 @@ public:
      */
     bool       rotateAndFlip(int orientation);
 
-    QPixmap    convertToPixmap();
-    QPixmap    convertToPixmap(IccTransform& monitorICCtrans);
+    QPixmap    convertToPixmap() const;
+    QPixmap    convertToPixmap(IccTransform& monitorICCtrans) const;
 
     /** Return a mask image where pure white and pure black pixels are over-colored.
         This way is used to identify over and under exposed pixels.
