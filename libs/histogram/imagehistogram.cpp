@@ -6,7 +6,7 @@
  * Date        : 2004-07-21
  * Description : image histogram manipulation methods.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class ImageHistogramPriv
+class ImageHistogram::ImageHistogramPriv
 {
 
 public:
@@ -81,7 +81,7 @@ public:
     bool                  valid;
 
     /** Image information.*/
-    const uchar*         imageData;
+    const uchar*          imageData;
     uint                  imageWidth;
     uint                  imageHeight;
 
@@ -89,19 +89,19 @@ public:
     int                   histoSegments;
 };
 
-ImageHistogram::ImageHistogram(const DImg& image, QObject *parent)
+ImageHistogram::ImageHistogram(const DImg& image, QObject* parent)
               : DynamicThread(parent), d(new ImageHistogramPriv)
 {
     setup(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
-ImageHistogram::ImageHistogram(const uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
+ImageHistogram::ImageHistogram(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject* parent)
               : DynamicThread(parent), d(new ImageHistogramPriv)
 {
     setup(i_data, i_w, i_h, i_sixteenBits);
 }
 
-void ImageHistogram::setup(const uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
+void ImageHistogram::setup(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits)
 {
     d->imageData     = i_data;
     d->imageWidth    = i_w;
@@ -124,12 +124,12 @@ bool ImageHistogram::isSixteenBit()
     return d->histoSegments == NUM_SEGMENTS_16BIT;
 }
 
-int ImageHistogram::getHistogramSegments(void)
+int ImageHistogram::getHistogramSegments()
 {
     return d->histoSegments;
 }
 
-int ImageHistogram::getMaxSegmentIndex(void)
+int ImageHistogram::getMaxSegmentIndex()
 {
     return d->histoSegments - 1;
 }
@@ -223,7 +223,7 @@ void ImageHistogram::calculate()
     else                                  // 8 bits images.
     {
         uchar blue, green, red, alpha;
-        const uchar *data = d->imageData;
+        const uchar* data = d->imageData;
 
         for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && runningFlag() ; i+=4)
         {

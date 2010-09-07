@@ -52,7 +52,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class TemplateSelectorPriv
+class TemplateSelector::TemplateSelectorPriv
 {
 public:
 

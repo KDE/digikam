@@ -35,7 +35,6 @@ namespace Digikam
 {
 
 class Template;
-class TemplateManagerPrivate;
 
 class TemplateManager : public QObject
 {
@@ -74,6 +73,8 @@ private:
 private:
 
     static TemplateManager* m_defaultManager;
+
+    class TemplateManagerPrivate;
     TemplateManagerPrivate* const d;
 };
 

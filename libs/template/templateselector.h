@@ -32,7 +32,6 @@ namespace Digikam
 {
 
 class Template;
-class TemplateSelectorPriv;
 
 class TemplateSelector : public KHBox
 {
@@ -72,6 +71,7 @@ private:
 
 private:
 
+    class TemplateSelectorPriv;
     TemplateSelectorPriv* const d;
 };
 

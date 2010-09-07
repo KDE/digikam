@@ -6,7 +6,7 @@
  * Date        : 2004-07-21
  * Description : image histogram manipulation methods.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@ class QObject;
 namespace Digikam
 {
 
-class ImageHistogramPriv;
 class DImg;
 
 class DIGIKAM_EXPORT ImageHistogram : public DynamicThread
@@ -48,8 +47,8 @@ class DIGIKAM_EXPORT ImageHistogram : public DynamicThread
 
 public:
 
-    ImageHistogram(const uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent = 0);
-    explicit ImageHistogram(const DImg& image, QObject *parent = 0);
+    ImageHistogram(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject* parent = 0);
+    explicit ImageHistogram(const DImg& image, QObject* parent = 0);
     ~ImageHistogram();
 
     /** Started computation: synchronous or threaded */
@@ -70,14 +69,14 @@ public:
     double getValue(int channel, int bin);
     double getMaximum(int channel, int start, int end);
 
-    int    getHistogramSegments(void);
-    int    getMaxSegmentIndex(void);
+    int    getHistogramSegments();
+    int    getMaxSegmentIndex();
     int    getMedian(int channel, int start, int end);
 
 Q_SIGNALS:
 
-    void calculationStarted(const ImageHistogram *histogram);
-    void calculationFinished(const ImageHistogram *histogram, bool success);
+    void calculationStarted(const ImageHistogram* histogram);
+    void calculationFinished(const ImageHistogram* histogram, bool success);
 
 protected:
 
@@ -85,11 +84,12 @@ protected:
 
 private:
 
-    void setup(const uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits);
+    void setup(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits);
     void postProgress(bool starting, bool success);
 
 private:
 
+    class ImageHistogramPriv;
     ImageHistogramPriv* const d;
 };
 

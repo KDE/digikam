@@ -38,7 +38,6 @@ namespace Digikam
 {
 
 class Template;
-class TemplateViewerPriv;
 
 class TemplateViewer : public RExpanderBox
 {
@@ -58,6 +57,7 @@ private Q_SLOTS:
 
 private:
 
+    class TemplateViewerPriv;
     TemplateViewerPriv* const d;
 };
 

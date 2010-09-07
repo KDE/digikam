@@ -52,7 +52,7 @@ TemplateManager* TemplateManager::defaultManager()
     return m_defaultManager;
 }
 
-class TemplateManagerPrivate
+class TemplateManager::TemplateManagerPrivate
 {
 public:
 
