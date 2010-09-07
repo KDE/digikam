@@ -26,45 +26,23 @@
 
 // Qt includes
 
-#include <QString>
-#include <QTimer>
-#include <QDir>
-#include <QFileInfo>
-#include <QDateTime>
 #include <QCloseEvent>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kcodecs.h>
 #include <klocale.h>
 #include <kstandardguiitem.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-// Libkface includes
-
-#include <libkface/kface.h>
-
 // Local includes
 
 #include "album.h"
-#include "albumdb.h"
-#include "albuminfo.h"
 #include "albummanager.h"
-#include "databaseaccess.h"
+#include "facepipeline.h"
 #include "imageinfo.h"
-#include "previewloadthread.h"
+#include "imageinfojob.h"
 #include "knotificationwrapper.h"
-#include "config-digikam.h"
-#include "searchxml.h"
-#include "tagproperties.h"
-#include "tagscache.h"
-#include "imagetagpair.h"
-#include "faceiface.h"
-#include "dimg.h"
-#include "loadingdescription.h"
-#include "metadatasettings.h"
 
 namespace Digikam
 {
@@ -77,15 +55,8 @@ public:
     {
         cancel              = false;
         rebuildAll          = true;
-        previewLoadThread   = 0;
-        faceIface           = new FaceIface();
 
         duration.start();
-    }
-
-    ~BatchFaceDetectorPriv()
-    {
-        delete faceIface;
     }
 
     bool                  cancel;
@@ -93,31 +64,43 @@ public:
 
     QTime                 duration;
 
-    QStringList           allPicturesPath;
-    PreviewLoadThread*    previewLoadThread;
-
-    FaceIface*            faceIface;
+    AlbumList             albumTodoList;
+    ImageInfoJob          albumListing;
+    FacePipeline          pipeline;
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
                  : DProgressDlg(0), d(new BatchFaceDetectorPriv)
 {
-    d->rebuildAll          = rebuildAll;
-    d->previewLoadThread   = new PreviewLoadThread();
-
-    connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)), Qt::DirectConnection);
-
-    connect(this, SIGNAL(signalOneDetected(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotShowOneDetected(const LoadingDescription&, const DImg&)));
-
     setModal(false);
     setValue(0);
     setCaption(d->rebuildAll ? i18n("Rebuild All Faces") : i18n("Build Missing Faces"));
     setLabel(i18n("<b>Updating faces database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
 
-    QTimer::singleShot(500, this, SLOT(slotDetectFaces()));
+    d->pipeline.plugDatabaseFilter(rebuildAll ? FacePipeline::RescanAll : FacePipeline::SkipAlreadyScanned);
+    d->pipeline.plugPreviewLoader();
+    d->pipeline.plugParallelFaceDetectors();
+    d->pipeline.plugFaceRecognizer();
+    d->pipeline.plugDatabaseWriter();
+    d->pipeline.construct();
+
+    connect(&d->albumListing, SIGNAL(signalItemsInfo(const ImageInfoList&)),
+            this, SLOT(slotItemsInfo(const ImageInfoList&)));
+
+    connect(&d->albumListing, SIGNAL(signalCompleted()),
+            this, SLOT(continueAlbumListing()));
+
+    connect(&d->pipeline, SIGNAL(finished()),
+            this, SLOT(continueAlbumListing()));
+
+    connect(&d->pipeline, SIGNAL(processed(const FacePipelinePackage&)),
+            this, SLOT(slotShowOneDetected(const FacePipelinePackage&)));
+
+    connect(&d->pipeline, SIGNAL(skipped(const QList<ImageInfo>&)),
+            this, SLOT(slotImagesSkipped(const QList<ImageInfo>&)));
+
+    startAlbumListing();
 }
 
 BatchFaceDetector::~BatchFaceDetector()
@@ -125,58 +108,39 @@ BatchFaceDetector::~BatchFaceDetector()
     delete d;
 }
 
-void BatchFaceDetector::slotDetectFaces()
+void BatchFaceDetector::startAlbumListing()
 {
-    setTitle(i18n("Processing..."));
-    const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
+    d->albumTodoList << AlbumManager::instance()->findPAlbum(225); //= AlbumManager::instance()->allPAlbums();
 
-    // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
+    // get total count, cached by AlbumManager
+    QMap<int, int> palbumCounts = AlbumManager::instance()->getPAlbumsCount();
+    int total = 0;
+    foreach (Album *album, d->albumTodoList)
+        total += palbumCounts.value(album->id());
+    kDebug() << "Total is" << total;
+    setMaximum(total);
 
-    QStringList pathList;
-
-    for (AlbumList::ConstIterator it = palbumList.constBegin();
-         !d->cancel && (it != palbumList.constEnd()); ++it)
-    {
-        pathList += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
-    }
-
-    if (d->rebuildAll)
-    {
-        d->allPicturesPath = pathList;
-    }
-    else
-    {
-        for (QStringList::ConstIterator i = pathList.constBegin();
-             !d->cancel && (i != pathList.constEnd()); ++i)
-        {
-            ImageInfo info(*i);
-
-            if(d->faceIface->hasBeenScanned(info.id()))
-            {
-                kDebug()<< "Image " << info.filePath() << "has already been scanned.";
-                continue;
-            }
-            d->allPicturesPath << (*i);
-        }
-    }
-
-     setMaximum(pathList.count());
-     setValue(pathList.count() - d->allPicturesPath.count());
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        slotCancel();
-        return;
-    }
-
-    processOne();
+    continueAlbumListing();
 }
 
-void BatchFaceDetector::processOne()
+void BatchFaceDetector::continueAlbumListing()
 {
-    if (d->cancel) return;
-    QString path = d->allPicturesPath.first();
-    d->previewLoadThread->loadHighQuality(path, MetadataSettings::instance()->settings().exifRotate);
+    kDebug() << d->albumListing.isRunning() << !d->pipeline.hasFinished();
+    // we get here by the finished signal from both, and want both to have finished to continue
+    if (d->albumListing.isRunning() || !d->pipeline.hasFinished())
+        return;
+
+    if (d->albumTodoList.isEmpty())
+        return complete();
+
+    Album *album = d->albumTodoList.takeFirst();
+    d->albumListing.allItemsFromAlbum(album);
+}
+
+void BatchFaceDetector::slotItemsInfo(const ImageInfoList& items)
+{
+    kDebug() << items.size();
+    d->pipeline.process(items);
 }
 
 void BatchFaceDetector::complete()
@@ -191,36 +155,6 @@ void BatchFaceDetector::complete()
     KNotificationWrapper("batchfacedetectioncompleted", i18n("The face detected database has been updated."),
                          this, windowTitle());
     emit signalDetectAllFacesDone();
-}
-
-void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
-{
-    if (d->allPicturesPath.isEmpty())
-        return;
-
-    if (d->allPicturesPath.first() != desc.filePath)
-        return;
-
-    DImg dimg(img);
-
-    // FIXME: Ignore xcf images for now, till the problem with xcf is solved.
-    if (!dimg.isNull())
-    {
-        kDebug() << "Will detect faces in " << desc.filePath << " => " << "Height= " << img.height() << ", Width= " << img.width();
-
-        // Find all faces and tag them
-        d->faceIface->findAndTagFaces(dimg, ImageInfo(desc.filePath).id() );
-
-    }
-
-    emit signalOneDetected(desc, dimg);
-
-    if (!d->allPicturesPath.isEmpty())
-        d->allPicturesPath.removeFirst();
-    if (d->allPicturesPath.isEmpty())
-        complete();
-    else
-        processOne();
 }
 
 void BatchFaceDetector::slotCancel()
@@ -241,10 +175,15 @@ void BatchFaceDetector::abort()
     emit signalDetectAllFacesDone();
 }
 
-void BatchFaceDetector::slotShowOneDetected(const Digikam::LoadingDescription& desc, const Digikam::DImg& dimg)
+void BatchFaceDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
 {
-    QPixmap pix = DImg(dimg).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
-    addedAction(pix, desc.filePath);
+    advance(infos.size());
+}
+
+void BatchFaceDetector::slotShowOneDetected(const FacePipelinePackage& package)
+{
+    QPixmap pix = package.image.smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
+    addedAction(pix, package.info.filePath());
     advance(1);
 }
 

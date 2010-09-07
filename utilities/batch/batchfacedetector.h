@@ -39,6 +39,9 @@ namespace Digikam
 {
 
 class DImg;
+class FacePipelinePackage;
+class ImageInfo;
+class ImageInfoList;
 class LoadingDescription;
 
 class BatchFaceDetector : public DProgressDlg
@@ -53,7 +56,6 @@ public:
 Q_SIGNALS:
 
     void signalDetectAllFacesDone();
-    void signalOneDetected(const LoadingDescription&, const DImg&);
 
 private:
 
@@ -65,15 +67,14 @@ protected:
 
     void closeEvent(QCloseEvent* e);
 
-protected Q_SLOTS:
-
-    void slotCancel();
-
 private Q_SLOTS:
 
-    void slotDetectFaces();
-    void slotGotImagePreview(const LoadingDescription&, const DImg&);
-    void slotShowOneDetected(const LoadingDescription& desc, const DImg& dimg);
+    void startAlbumListing();
+    void continueAlbumListing();
+    void slotItemsInfo(const ImageInfoList&);
+    void slotImagesSkipped(const QList<ImageInfo>&);
+    void slotShowOneDetected(const FacePipelinePackage& package);
+    void slotCancel();
 
 private:
 
