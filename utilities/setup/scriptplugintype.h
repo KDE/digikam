@@ -3,14 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * File Name : scriptplugintype.h
- * Creation Date : 21-08-2010
+ * Date        : 21-08-2010
  * Description : script interface for digiKam
- * Last Modified : Thu 02 Sep 2010 08:35:38 AM EDT
  *
- *
- * Copyright (C) 2010 Created By: Kunal Ghosh <kunal dot t2 at gmail dot com>
- * Copyright (C) 2010 Created By: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 Created By Kunal Ghosh <kunal dot t2 at gmail dot com>
+ * Copyright (C) 2010 Created By Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,7 +25,8 @@
 #ifndef SCRIPTPLUGINTYPE_H
 #define SCRIPTPLUGINTYPE_H
 
-//qt includes
+// Qt includes
+
 #include <QObject>
 #include <QString>
 #include <QPointer>
@@ -36,33 +34,32 @@
 namespace Digikam
 {
 
+class ScriptPluginType : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    ScriptPluginType();
+    ScriptPluginType(const QString& name, const QString& path, bool modified);
+    ~ScriptPluginType();
+
+    void setName(const QString& name);
+    void setPath(const QString& path);
+    void setModified(bool modified);
+
+    QString name() const;
+    QString path() const;
+    bool modified() const;
+
+    void createPlugin(const QString& name, const QString& path, bool modified);
+
+private:
+
     class ScriptPluginTypePriv;
+    ScriptPluginTypePriv* const d;
+};
 
-    class ScriptPluginType : public QObject
-    {
-        Q_OBJECT
-
-        public:
-
-            ScriptPluginType();
-            ScriptPluginType(QString& name,QString& path,bool modified);
-            ~ScriptPluginType();
-
-            void setName(QString& name);
-            void setPath(QString& path);
-            void setModified(bool modified);
-
-            QString name();
-            QString path();
-            bool    modified();
-
-            void createPlugin(QString name,QString path,bool modified);//use const reference
-
-        private:
-
-            ScriptPluginTypePriv* const d;
-    };
-
-}//namespace digikam
+} // namespace digikam
 
 #endif /* SCRIPTPLUGINTYPE_H */

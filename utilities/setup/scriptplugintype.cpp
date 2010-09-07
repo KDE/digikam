@@ -3,14 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * File Name        :scriptplugintype.cpp
- * Creation Date    :22-08-2010
- * Description      :Class definition for individual plugins in the script manager.
- * Last Modified    :Sun 22 Aug 2010 07:47:00 AM EDT
+ * Date        : 21-08-2010
+ * Description : script interface for digiKam
  *
- *
- * Copyright (C) 2010 Created By: Kunal Ghosh <kunal dot t2 at gmail dot com>
- * Copyright (C) 2010 Created By: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 Created By Kunal Ghosh <kunal dot t2 at gmail dot com>
+ * Copyright (C) 2010 Created By Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,90 +24,86 @@
 
 #include "scriptplugintype.moc"
 
-//local includes
-#include "scriptplugintype.h"
-
 namespace Digikam
 {
 
-    class ScriptPluginTypePriv
+class ScriptPluginType::ScriptPluginTypePriv
+{
+public:
+
+    ScriptPluginTypePriv()
     {
-        public:
-            ScriptPluginTypePriv()
-            {
-                name = "";
-                path = "";
-                modified = false;
-            }
-            ScriptPluginTypePriv(QString& pname,QString& ppath,bool pmod)
-            {
-                name        =   pname;
-                path        =   ppath;
-                modified    =   pmod;
-            }
-
-            QString name;
-            QString path;
-            bool    modified;
-
-    };
-
-    ScriptPluginType::ScriptPluginType()
-                    : d(new ScriptPluginTypePriv)
-    {}
-
-    ScriptPluginType::ScriptPluginType(QString& name,QString& path,bool modified)
-                    : d(new ScriptPluginTypePriv)
-    {
-        d->name     = name;
-        d->path     = path;
-        d->modified = modified;
+        name     = QString();
+        path     = QString();
+        modified = false;
     }
 
-
-    ScriptPluginType::~ScriptPluginType()
+    ScriptPluginTypePriv(QString& pname,QString& ppath,bool pmod)
     {
-        delete d;
+        name     = pname;
+        path     = ppath;
+        modified = pmod;
     }
 
-    void ScriptPluginType::createPlugin(QString name,QString path,bool modified)
-    {
+    bool    modified;
 
-        d->name = name;
-        d->path = path;
-        d->modified = modified;
+    QString name;
+    QString path;
+};
 
-    }
-
-    void ScriptPluginType::setName(QString& name)
-    {
-        d->name=name;
-    }
-
-    QString ScriptPluginType::name()
-    {
-        return d->name;
-    }
-
-    void ScriptPluginType::setPath(QString& path)
-    {
-        d->path=path;
-    }
-
-    QString ScriptPluginType::path()
-    {
-        return d->path;
-    }
-
-    void ScriptPluginType::setModified(bool modified)
-    {
-        d->modified=modified;
-    }
-
-    bool ScriptPluginType::modified()
-    {
-        return d->modified;
-    }
-
+ScriptPluginType::ScriptPluginType()
+                : d(new ScriptPluginTypePriv)
+{
 }
 
+ScriptPluginType::ScriptPluginType(const QString& name, const QString& path, bool modified)
+                : d(new ScriptPluginTypePriv)
+{
+    d->name     = name;
+    d->path     = path;
+    d->modified = modified;
+}
+
+ScriptPluginType::~ScriptPluginType()
+{
+    delete d;
+}
+
+void ScriptPluginType::createPlugin(const QString& name, const QString& path, bool modified)
+{
+    d->name     = name;
+    d->path     = path;
+    d->modified = modified;
+}
+
+void ScriptPluginType::setName(const QString& name)
+{
+    d->name = name;
+}
+
+QString ScriptPluginType::name() const
+{
+    return d->name;
+}
+
+void ScriptPluginType::setPath(const QString& path)
+{
+    d->path = path;
+}
+
+QString ScriptPluginType::path() const
+{
+    return d->path;
+}
+
+void ScriptPluginType::setModified(bool modified)
+{
+    d->modified = modified;
+}
+
+bool ScriptPluginType::modified() const
+{
+    return d->modified;
+}
+
+} // namespace Digikam
