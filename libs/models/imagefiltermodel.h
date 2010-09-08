@@ -46,7 +46,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelPrepareHook
 {
 public:
 
-    virtual ~ImageFilterModelPrepareHook();
+    virtual ~ImageFilterModelPrepareHook(){};
     virtual void prepare(const QVector<ImageInfo>& infos) = 0;
 };
 
