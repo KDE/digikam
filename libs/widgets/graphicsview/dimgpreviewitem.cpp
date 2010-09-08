@@ -160,12 +160,17 @@ static bool approximates(const QSizeF& s1, const QSizeF& s2)
 {
     if (s1 == s2)
         return true;
+
     double widthRatio = s1.width() / s2.width();
+
     if (widthRatio < 0.98 || widthRatio > 1.02)
         return false;
+
     double heightRatio = s1.height() / s2.height();
+
     if (heightRatio < 0.98 || heightRatio > 1.02)
         return false;
+
     return true;
 }
 
@@ -194,6 +199,8 @@ QString DImgPreviewItem::userLoadingHint() const
                 else
                     return i18n("Reduced Size Preview");
             }
+
+            return QString();   // To please compiler without warnings.
         }
         case ImageLoadingFailed:
             return i18n("Failed to load image");
