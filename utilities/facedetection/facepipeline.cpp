@@ -104,18 +104,18 @@ ScanStateFilter::ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::Fa
 
 bool ScanStateFilter::filter(const ImageInfo& info)
 {
-    switch (mode)
+    if (mode == FacePipeline::SkipAlreadyScanned)
     {
-        case FacePipeline::RescanAll:
-            //TODO: remove records from db (unconfirmed faces)
-            return true;
-        case FacePipeline::SkipAlreadyScanned:
-            // Is iface thread-safe? Officially, not, but this method is.
-            if (d->iface.hasBeenScanned(info))
-                return false;
-            //TODO: check if any records should be removed from db (unconfirmed faces)
-            return true;
+        // Is iface thread-safe? Officially, not, but this method is.
+        if (d->iface.hasBeenScanned(info))
+            return false;
+        //TODO: check if any records should be removed from db (unconfirmed faces)
+        return true;
     }
+
+    // FacePipeline::RescanAll
+    // TODO: remove records from db (unconfirmed faces)
+    return true;
 }
 
 void ScanStateFilter::process(const QList<ImageInfo>& infos)
