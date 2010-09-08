@@ -21,8 +21,6 @@
  *
  * ============================================================ */
 
-#include "imagepropertiesversionsdelegate.moc"
-
 // Qt includes
 
 #include <QPainter>
