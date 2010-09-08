@@ -87,14 +87,14 @@ private Q_SLOTS:
     void preloadNext();
     void slotFileChanged(const QString& path);
 
-protected:
-
-    DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* parent = 0);
-
 private:
 
     class DImgPreviewItemPrivate;
     Q_DECLARE_PRIVATE(DImgPreviewItem)
+
+protected:
+
+    DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* parent = 0);
 };
 
 } // namespace Digikam
