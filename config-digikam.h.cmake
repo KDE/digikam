@@ -31,4 +31,11 @@
 #define AREACODE_IMAGEPLUGINS   ${AREA_CODE_IMAGEPLUGINS}
 #define AREACODE_DATABASESERVER ${AREA_CODE_DATABASESERVER}
 
+/*
+  Disable indeep warnings from Visual Studio C++ 2008 (9.0)
+*/
+#if defined(_MSC_VER)
+# pragma warning(disable : 4661)
+#endif
+
 #endif /* CONFIG_DIGIKAM_H */
