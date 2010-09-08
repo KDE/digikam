@@ -214,7 +214,7 @@ void DynamicThreadPriv::transitionToInactive()
     switch (state)
     {
         case DynamicThread::Scheduled:
-            return;
+            break;
         case DynamicThread::Deactivating:
         default:
             if (previousPriority != QThread::InheritPriority)
