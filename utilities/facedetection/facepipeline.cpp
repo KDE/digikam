@@ -300,9 +300,8 @@ RecognitionWorker::RecognitionWorker(FacePipeline::FacePipelinePriv* d)
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    if (!package->processFlags &&
-        FacePipelinePackage::ProcessedByDetector &&
-        !package->info.isNull())
+    if ( (package->processFlags & FacePipelinePackage::ProcessedByDetector)
+         && !package->info.isNull())
     {
         package->faces = d->iface.findUnconfirmedFacesFromTags(package->image, package->info.id());
     }
