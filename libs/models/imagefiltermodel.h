@@ -45,6 +45,7 @@ class ImageFilterModelPrivate;
 class DIGIKAM_DATABASE_EXPORT ImageFilterModelPrepareHook
 {
 public:
+
     virtual ~ImageFilterModelPrepareHook();
     virtual void prepare(const QVector<ImageInfo>& infos) = 0;
 };
@@ -70,17 +71,17 @@ public:
         ImageFilterModelPointerRole  = ImageModel::FilterModelRoles + 50
     };
 
-    ImageFilterModel(QObject *parent = 0);
+    ImageFilterModel(QObject* parent = 0);
     ~ImageFilterModel();
 
     /** This filter model is for use with ImageModel source models only. */
     void setSourceImageModel(ImageModel* model);
 
-    ImageModel *sourceModel() const;
+    ImageModel* sourceModel() const;
 
     /** Add a hook to get added images for preparation tasks before they are added in the model */
-    void addPrepareHook(ImageFilterModelPrepareHook *hook);
-    void removePrepareHook(ImageFilterModelPrepareHook *hook);
+    void addPrepareHook(ImageFilterModelPrepareHook* hook);
+    void removePrepareHook(ImageFilterModelPrepareHook* hook);
 
     /// Convenience methods mapped to ImageModel
     QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
@@ -170,8 +171,8 @@ protected:
     /** Returns a unique identifier for the category if info. The string need not be for user display. */
     virtual QString categoryIdentifier(const ImageInfo& info) const;
 
-    ImageFilterModelPrivate *const d_ptr;
-    ImageFilterModel(ImageFilterModelPrivate& dd, QObject *parent);
+    ImageFilterModelPrivate* const d_ptr;
+    ImageFilterModel(ImageFilterModelPrivate& dd, QObject* parent);
 
 protected Q_SLOTS:
 

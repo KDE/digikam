@@ -6,7 +6,7 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,6 @@
 #include "imagefiltermodelthreads.moc"
 
 // KDE includes
-
 
 #include <kstringhandler.h>
 
@@ -70,7 +69,7 @@ ImageFilterModelPrivate::~ImageFilterModelPrivate()
     delete filterer;
 }
 
-ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModelPrivate *d)
+ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModelPrivate* d)
     : d(d) // do not install d as QObject parent, moveToThread wont work then
 {
     thread = new Thread(this);
@@ -79,23 +78,23 @@ ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModelPrivate *d)
 }
 
 const int PrepareChunkSize = 101;
-const int FilterChunkSize = 2001;
+const int FilterChunkSize  = 2001;
 
-ImageFilterModel::ImageFilterModel(QObject *parent)
+ImageFilterModel::ImageFilterModel(QObject* parent)
                 : KCategorizedSortFilterProxyModel(parent),
                   d_ptr(new ImageFilterModelPrivate)
 {
     d_ptr->init(this);
 }
 
-ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate& dd, QObject *parent)
+ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate& dd, QObject* parent)
                 : KCategorizedSortFilterProxyModel(parent),
                   d_ptr(&dd)
 {
     d_ptr->init(this);
 }
 
-void ImageFilterModelPrivate::init(ImageFilterModel *_q)
+void ImageFilterModelPrivate::init(ImageFilterModel* _q)
 {
     q = _q;
 
@@ -116,19 +115,19 @@ ImageFilterModel::~ImageFilterModel()
     delete d;
 }
 
-void ImageFilterModel::setSourceModel(QAbstractItemModel *sourceModel)
+void ImageFilterModel::setSourceModel(QAbstractItemModel* sourceModel)
 {
     // made it protected, only setSourceImageModel is public
     QSortFilterProxyModel::setSourceModel(sourceModel);
 }
 
-ImageModel *ImageFilterModel::sourceModel() const
+ImageModel* ImageFilterModel::sourceModel() const
 {
     Q_D(const ImageFilterModel);
     return d->imageModel;
 }
 
-void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
+void ImageFilterModel::setSourceImageModel(ImageModel* sourceModel)
 {
     Q_D(ImageFilterModel);
 
@@ -146,11 +145,11 @@ void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
     {
         d->imageModel->setPreprocessor(d);
 
-        connect(d->imageModel, SIGNAL(preprocess(const QList<ImageInfo> &, const QList<QVariant>&)),
-                d, SLOT(preprocessInfos(const QList<ImageInfo> &, const QList<QVariant>&)));
+        connect(d->imageModel, SIGNAL(preprocess(const QList<ImageInfo>&, const QList<QVariant>&)),
+                d, SLOT(preprocessInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
 
-        connect(d, SIGNAL(reAddImageInfos(const QList<ImageInfo> &, const QList<QVariant>&)),
-                d->imageModel, SLOT(reAddImageInfos(const QList<ImageInfo> &, const QList<QVariant>&)));
+        connect(d, SIGNAL(reAddImageInfos(const QList<ImageInfo>&, const QList<QVariant>&)),
+                d->imageModel, SLOT(reAddImageInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
 
         connect(d, SIGNAL(reAddingFinished()),
                 d->imageModel, SLOT(reAddingFinished()));
@@ -158,11 +157,11 @@ void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
         connect(d->imageModel, SIGNAL(modelReset()),
                 this, SLOT(slotModelReset()));
 
-        connect(d->imageModel, SIGNAL(imageChange(const ImageChangeset &, const QItemSelection &)),
-                this, SLOT(slotImageChange(const ImageChangeset &)));
+        connect(d->imageModel, SIGNAL(imageChange(const ImageChangeset&, const QItemSelection&)),
+                this, SLOT(slotImageChange(const ImageChangeset&)));
 
-        connect(d->imageModel, SIGNAL(imageTagChange(const ImageTagChangeset &, const QItemSelection &)),
-                this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
+        connect(d->imageModel, SIGNAL(imageTagChange(const ImageTagChangeset&, const QItemSelection&)),
+                this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
     }
 
     setSourceModel(d->imageModel);
@@ -198,9 +197,9 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
 DatabaseFields::Set ImageFilterModel::suggestedWatchFlags() const
 {
     DatabaseFields::Set watchFlags;
-    watchFlags |= DatabaseFields::Name | DatabaseFields::FileSize | DatabaseFields::ModificationDate;
+    watchFlags |= DatabaseFields::Name   | DatabaseFields::FileSize     | DatabaseFields::ModificationDate;
     watchFlags |= DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::Orientation |
-                  DatabaseFields::Width | DatabaseFields::Height;
+                  DatabaseFields::Width  | DatabaseFields::Height;
     watchFlags |= DatabaseFields::Comment;
     return watchFlags;
 }
@@ -342,8 +341,8 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
     {
         QMutexLocker lock(&d->mutex);
         d->version++;
-        d->filter = settings;
-        d->filterCopy = settings;
+        d->filter              = settings;
+        d->filterCopy          = settings;
 
         d->needPrepareComments = settings.isFilteringByText();
         d->needPrepareTags     = settings.isFilteringByTags();
@@ -386,12 +385,12 @@ void ImageFilterModel::slotModelReset()
         QMutexLocker lock(&d->mutex);
         // discard all packages on the way that are marked as send out for re-add
         d->lastDiscardVersion = d->version;
-        d->sentOutForReAdd = 0;
+        d->sentOutForReAdd    = 0;
         // discard all packages on the way
         d->version++;
-        d->sentOut = 0;
+        d->sentOut            = 0;
 
-        d->hasOneMatch = false;
+        d->hasOneMatch        = false;
         d->hasOneMatchForText = false;
     }
     d->filterResults.clear();
@@ -448,14 +447,14 @@ void ImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, i
 
 // -------------- Threaded preparation & filtering --------------
 
-void ImageFilterModel::addPrepareHook(ImageFilterModelPrepareHook *hook)
+void ImageFilterModel::addPrepareHook(ImageFilterModelPrepareHook* hook)
 {
     Q_D(ImageFilterModel);
     QMutexLocker lock(&d->mutex);
     d->prepareHooks << hook;
 }
 
-void ImageFilterModel::removePrepareHook(ImageFilterModelPrepareHook *hook)
+void ImageFilterModel::removePrepareHook(ImageFilterModelPrepareHook* hook)
 {
     Q_D(ImageFilterModel);
     QMutexLocker lock(&d->mutex);
@@ -504,11 +503,11 @@ void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos)
 void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd)
 {
     // prepare and filter in chunks
-    const int size = infos.size();
-    const int maxChunkSize = needPrepare ? PrepareChunkSize : FilterChunkSize;
+    const int size                      = infos.size();
+    const int maxChunkSize              = needPrepare ? PrepareChunkSize : FilterChunkSize;
     QList<ImageInfo>::const_iterator it = infos.constBegin();
     QList<QVariant>::const_iterator xit = extraValues.constBegin();
-    int index = 0;
+    int index                           = 0;
     QVector<QVariant> extraValueVector;
     while (it != infos.constEnd())
     {
@@ -518,13 +517,13 @@ void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, cons
 
         if (xit != extraValues.constEnd())
         {
-            extraValueVector = QVector<QVariant>(infoVector.size());
+            extraValueVector                     = QVector<QVariant>(infoVector.size());
             QList<QVariant>::const_iterator xend = xit + extraValueVector.size();
             qCopy(xit, xend, extraValueVector.begin());
             xit = xend;
         }
 
-        it = end;
+        it    = end;
         index += infoVector.size();
 
         ++sentOut;
@@ -603,9 +602,9 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     QList<ImageFilterModelPrepareHook*> prepareHooks;
     {
         QMutexLocker lock(&d->mutex);
-        needPrepareTags = d->needPrepareTags;
+        needPrepareTags     = d->needPrepareTags;
         needPrepareComments = d->needPrepareComments;
-        prepareHooks = d->prepareHooks;
+        prepareHooks        = d->prepareHooks;
     }
 
     //TODO: Make efficient!!
@@ -652,8 +651,8 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     bool hasOneMatchForText;
     {
         QMutexLocker lock(&d->mutex);
-        localFilter = d->filterCopy;
-        hasOneMatch = d->hasOneMatch;
+        localFilter        = d->filterCopy;
+        hasOneMatch        = d->hasOneMatch;
         hasOneMatchForText = d->hasOneMatchForText;
     }
 
@@ -680,7 +679,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         bool result, matchForText;
         foreach (const ImageInfo& info, package.infos)
         {
-            result = localFilter.matches(info, &matchForText);
+            result                           = localFilter.matches(info, &matchForText);
             package.filterResults[info.id()] = result;
             if (result)
                 hasOneMatch = true;
@@ -688,7 +687,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
                 hasOneMatchForText = true;
         }
     }
-    
+
     if (checkVersion(package))
     {
         QMutexLocker lock(&d->mutex);
@@ -747,7 +746,7 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
         return true;
     if (left == right)
         return false;
-    const ImageInfo &leftInfo = d->imageModel->imageInfoRef(left);
+    const ImageInfo &leftInfo  = d->imageModel->imageInfoRef(left);
     const ImageInfo &rightInfo = d->imageModel->imageInfoRef(right);
     if (leftInfo == rightInfo)
         return d->sorter.lessThan(left.data(ImageModel::ExtraDataRole), right.data(ImageModel::ExtraDataRole));
@@ -766,8 +765,8 @@ static inline QString fastNumberToString(int id)
 {
     const int size = sizeof(int) * 2;
     char c[size+1];
-    c[size] = '\0';
-    char *p = c;
+    c[size]    = '\0';
+    char* p    = c;
     int number = id;
     for (int i=0; i<size; i++)
     {
@@ -844,8 +843,8 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
 
     // is one of the values affected that we filter or sort by?
     DatabaseFields::Set set = changeset.changes();
-    bool sortAffected = (set & d->sorter.watchFlags());
-    bool filterAffected = (set & d->filter.watchFlags());
+    bool sortAffected       = (set & d->sorter.watchFlags());
+    bool filterAffected     = (set & d->filter.watchFlags());
 
     if (!sortAffected && !filterAffected)
         return;

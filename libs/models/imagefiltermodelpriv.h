@@ -6,7 +6,7 @@
  * Date        : 2009-03-11
  * Description : Qt item model for database entries - private shared header
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,6 +61,8 @@ public:
     QHash<qlonglong, bool>     filterResults;
 };
 
+// ------------------------------------------------------------------------------------------------
+
 class ImageFilterModelPreparer;
 class ImageFilterModelFilterer;
 
@@ -73,16 +75,16 @@ public:
     ImageFilterModelPrivate();
     ~ImageFilterModelPrivate();
 
-    void init(ImageFilterModel *q);
+    void init(ImageFilterModel* q);
     void setupWorkers();
     void infosToProcess(const QList<ImageInfo>& infos);
     void infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd = true);
 
 public:
 
-    ImageFilterModel          *q;
+    ImageFilterModel*          q;
 
-    ImageModel                *imageModel;
+    ImageModel*                imageModel;
 
     ImageFilterSettings        filter;
     ImageSortSettings          sorter;
@@ -93,7 +95,7 @@ public:
     int                        sentOut;
     int                        sentOutForReAdd;
 
-    QTimer                    *updateFilterTimer;
+    QTimer*                    updateFilterTimer;
 
     bool                       needPrepare;
     bool                       needPrepareComments;
@@ -101,8 +103,8 @@ public:
 
     QMutex                     mutex;
     ImageFilterSettings        filterCopy;
-    ImageFilterModelPreparer  *preparer;
-    ImageFilterModelFilterer  *filterer;
+    ImageFilterModelPreparer*  preparer;
+    ImageFilterModelFilterer*  filterer;
 
     QHash<qlonglong, bool>     filterResults;
     bool                       hasOneMatch;
@@ -110,15 +112,17 @@ public:
 
     QList<ImageFilterModelPrepareHook*> prepareHooks;
 
-    /*QHash<int, QSet<qlonglong> >
-                               categoryCountHashInt;
-    QHash<QString, QSet<qlonglong> >
-                               categoryCountHashString;
+/*
+    QHash<int, QSet<qlonglong> >        categoryCountHashInt;
+    QHash<QString, QSet<qlonglong> >    categoryCountHashString;
+
+public:
 
     void cacheCategoryCount(int id, qlonglong imageid) const
     { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
     void cacheCategoryCount(const QString& id, qlonglong imageid) const
-    { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }*/
+    { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }
+*/
 
 public Q_SLOTS:
 
