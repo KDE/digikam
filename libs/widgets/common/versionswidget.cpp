@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "versionswidget.moc"
+
 // Qt includes
 
 #include <QListView>
@@ -37,7 +39,6 @@
 
 // Local includes
 
-#include "versionswidget.h"
 #include "imageversionsmodel.h"
 #include "imagepropertiesversionsdelegate.h"
 #include "imageinfo.h"

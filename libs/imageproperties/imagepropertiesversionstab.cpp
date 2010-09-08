@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "imagepropertiesversionstab.moc"
+
 // Qt includes
 
 #include <QListView>

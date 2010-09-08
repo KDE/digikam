@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "imageversionsmodel.moc"
+
 // KDE includes
 
 #include <KLocale>
@@ -28,7 +30,6 @@
 
 // Local includes
 
-#include "imageversionsmodel.h"
 #include "workingwidget.h"
 
 namespace Digikam
