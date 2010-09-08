@@ -110,7 +110,7 @@ BatchFaceDetector::~BatchFaceDetector()
 
 void BatchFaceDetector::startAlbumListing()
 {
-    d->albumTodoList << AlbumManager::instance()->findPAlbum(225); //= AlbumManager::instance()->allPAlbums();
+    d->albumTodoList = AlbumManager::instance()->allPAlbums();
 
     // get total count, cached by AlbumManager
     QMap<int, int> palbumCounts = AlbumManager::instance()->getPAlbumsCount();
