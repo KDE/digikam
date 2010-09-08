@@ -116,8 +116,10 @@
 #pragma warning(disable:4800)
 #pragma warning(disable:4804)
 #pragma warning(disable:4996)
-#define _CRT_SECURE_NO_DEPRECATE 1
-#define _CRT_NONSTDC_NO_DEPRECATE 1
+#ifndef _CRT_SECURE_NO_DEPRECATE
+    #define _CRT_SECURE_NO_DEPRECATE 1
+#ifndef _CRT_NONSTDC_NO_DEPRECATE
+    #define _CRT_NONSTDC_NO_DEPRECATE 1
 #if _MSC_VER<1300
 #define cimg_use_visualcpp6
 #define cimg_std
