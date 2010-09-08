@@ -21,9 +21,8 @@
  *
  * ============================================================ */
 
-#include "facepipeline.h"
-#include "facepipeline_p.h"
-
+#include "facepipeline.moc"
+#include "facepipeline_p.moc"
 
 // Qt includes
 
@@ -43,35 +42,33 @@
 namespace Digikam
 {
 
-// --- ParallelPipes ---
-
 ParallelPipes::ParallelPipes()
-    : m_currentIndex(0)
+             : m_currentIndex(0)
 {
 }
 
 ParallelPipes::~ParallelPipes()
 {
-    foreach (WorkerObject *object, m_workers)
+    foreach (WorkerObject* object, m_workers)
         delete object;
 }
 
 void ParallelPipes::schedule()
 {
-    foreach (WorkerObject *object, m_workers)
+    foreach (WorkerObject* object, m_workers)
         object->schedule();
 }
 
 void ParallelPipes::deactivate(WorkerObject::DeactivatingMode mode)
 {
-    foreach (WorkerObject *object, m_workers)
+    foreach (WorkerObject* object, m_workers)
         object->deactivate(mode);
 }
 
 void ParallelPipes::add(WorkerObject *worker)
 {
     QByteArray normalizedSignature = QMetaObject::normalizedSignature("process(FacePipelineExtendedPackage::Ptr)");
-    int methodIndex = worker->metaObject()->indexOfMethod(normalizedSignature);
+    int methodIndex                = worker->metaObject()->indexOfMethod(normalizedSignature);
     if (methodIndex == -1)
     {
         kError() << "Object" << worker << "does not have a slot" << normalizedSignature << " - cannot use for processing.";
@@ -96,10 +93,10 @@ void ParallelPipes::process(FacePipelineExtendedPackage::Ptr package)
         m_currentIndex = 0;
 }
 
-// --- ScanStateFilter ---
+// ----------------------------------------------------------------------------------------
 
-ScanStateFilter::ScanStateFilter(FacePipeline::FilterMode mode, FacePipelinePriv *d)
-    : d(d), mode(mode)
+ScanStateFilter::ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::FacePipelinePriv* d)
+               : d(d), mode(mode)
 {
     connect(this, SIGNAL(infosToDispatch()),
             this, SLOT(dispatch()));
@@ -190,11 +187,10 @@ void ScanStateFilter::dispatch()
         d->sendFromFilter(send);
 }
 
+// ----------------------------------------------------------------------------------------
 
-// --- PreviewLoader ---
-
-PreviewLoader::PreviewLoader(FacePipelinePriv* d)
-    : d(d)
+PreviewLoader::PreviewLoader(FacePipeline::FacePipelinePriv* d)
+             : d(d)
 {
     // ideal thread count plus lubricant, but upper limit for memory cost
     maximumSentOutPackages = qMin(QThread::idealThreadCount() + 2, 5);
@@ -227,8 +223,9 @@ void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
 
 void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
 {
-    FacePipelineExtendedPackage::Ptr package;
+    FacePipelineExtendedPackage::Ptr                  package;
     QList<FacePipelineExtendedPackage::Ptr>::iterator it;
+
     for (it = scheduledPackages.begin(); it != scheduledPackages.end(); ++it)
     {
         if ( *(*it) == loadingDescription)
@@ -267,10 +264,10 @@ void PreviewLoader::checkRestart()
         start();
 }
 
-// --- DetectionWorker ---
+// ----------------------------------------------------------------------------------------
 
-DetectionWorker::DetectionWorker(FacePipelinePriv* d)
-    : d(d)
+DetectionWorker::DetectionWorker(FacePipeline::FacePipelinePriv* d)
+               : d(d)
 {
 }
 
@@ -280,7 +277,8 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
                             package->image.sixteenBit(), package->image.hasAlpha(),
                             package->image.bits());
     package->faces = detector.detectFaces(image);
-    kDebug() << "Found" << package->faces.size() << "faces in" << package->info.name() << package->image.size() << package->image.originalSize();
+    kDebug() << "Found" << package->faces.size() << "faces in" << package->info.name() 
+             << package->image.size() << package->image.originalSize();
 
     package->processFlags |= FacePipelinePackage::ProcessedByDetector;
     emit processed(package);
@@ -291,15 +289,14 @@ void DetectionWorker::setAccuracy(int accuracy)
     detector.setAccuracy(accuracy);
 }
 
-// --- RecognitionWorker ---
+// ----------------------------------------------------------------------------------------
 
-RecognitionWorker::RecognitionWorker(FacePipelinePriv* d)
+RecognitionWorker::RecognitionWorker(FacePipeline::FacePipelinePriv* d)
     : d(d)
 {
-    database = KFaceIface::RecognitionDatabase::addDatabase();
+    database             = KFaceIface::RecognitionDatabase::addDatabase();
     recognitionThreshold = 10000000;
 }
-
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
@@ -329,10 +326,10 @@ void RecognitionWorker::setThreshold(double threshold)
     recognitionThreshold = threshold;
 }
 
-// --- DatabaseWriter ---
+// ----------------------------------------------------------------------------------------
 
-DatabaseWriter::DatabaseWriter(FacePipelinePriv* d)
-    : d(d)
+DatabaseWriter::DatabaseWriter(FacePipeline::FacePipelinePriv* d)
+              : d(d)
 {
 }
 
@@ -347,10 +344,10 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
     emit processed(package);
 }
 
-// --- FacePipelinePriv ---
+// ----------------------------------------------------------------------------------------
 
-FacePipelinePriv::FacePipelinePriv(FacePipeline *q)
-    : q(q)
+FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline *q)
+                              : q(q)
 {
     alreadyScannedFilter = 0;
     previewThread        = 0;
@@ -364,7 +361,7 @@ FacePipelinePriv::FacePipelinePriv(FacePipeline *q)
     packagesOnTheRoad    = 0;
 }
 
-void FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
+void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
 {
     if (alreadyScannedFilter)
     {
@@ -379,7 +376,7 @@ void FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
 }
 
 // called by filter
-void FacePipelinePriv::sendFromFilter(const QList<ImageInfo>& infos)
+void FacePipeline::FacePipelinePriv::sendFromFilter(const QList<ImageInfo>& infos)
 {
     infosForFiltering -= infos.size();
     foreach (const ImageInfo& info, infos)
@@ -387,7 +384,7 @@ void FacePipelinePriv::sendFromFilter(const QList<ImageInfo>& infos)
 }
 
 // called by filter
-void FacePipelinePriv::skipFromFilter(const QList<ImageInfo>& infosForSkipping)
+void FacePipeline::FacePipelinePriv::skipFromFilter(const QList<ImageInfo>& infosForSkipping)
 {
     infosForFiltering -= infosForSkipping.size();
     emit q->skipped(infosForSkipping);
@@ -395,23 +392,23 @@ void FacePipelinePriv::skipFromFilter(const QList<ImageInfo>& infosForSkipping)
     checkFinished();
 }
 
-FacePipelineExtendedPackage::Ptr FacePipelinePriv::buildPackage(const ImageInfo& info)
+FacePipelineExtendedPackage::Ptr FacePipeline::FacePipelinePriv::buildPackage(const ImageInfo& info)
 {
     FacePipelineExtendedPackage::Ptr package(new FacePipelineExtendedPackage);
-    package->info = info;
+    package->info     = info;
     package->filePath = info.filePath();
 
     return package;
 }
 
-void FacePipelinePriv::send(FacePipelineExtendedPackage::Ptr package)
+void FacePipeline::FacePipelinePriv::send(FacePipelineExtendedPackage::Ptr package)
 {
     start();
     packagesOnTheRoad++;
     emit startProcess(package);
 }
 
-void FacePipelinePriv::finishProcess(FacePipelineExtendedPackage::Ptr package)
+void FacePipeline::FacePipelinePriv::finishProcess(FacePipelineExtendedPackage::Ptr package)
 {
     packagesOnTheRoad--;
     emit q->processed(*package);
@@ -423,12 +420,12 @@ void FacePipelinePriv::finishProcess(FacePipelineExtendedPackage::Ptr package)
     checkFinished();
 }
 
-bool FacePipelinePriv::hasFinished()
+bool FacePipeline::FacePipelinePriv::hasFinished()
 {
     return !packagesOnTheRoad && !infosForFiltering;
 }
 
-void FacePipelinePriv::checkFinished()
+void FacePipeline::FacePipelinePriv::checkFinished()
 {
     if (hasFinished())
     {
@@ -438,7 +435,7 @@ void FacePipelinePriv::checkFinished()
     }
 }
 
-void FacePipelinePriv::start()
+void FacePipeline::FacePipelinePriv::start()
 {
     if (started)
         return;
@@ -453,7 +450,7 @@ void FacePipelinePriv::start()
     started = true;
 }
 
-void FacePipelinePriv::stop()
+void FacePipeline::FacePipelinePriv::stop()
 {
     if (!started)
         return;
@@ -472,10 +469,10 @@ void FacePipelinePriv::stop()
     started = false;
 }
 
-// --- FacePipeline ---
+// ----------------------------------------------------------------------------------------
 
 FacePipeline::FacePipeline()
-    : d(new FacePipelinePriv(this))
+            : d(new FacePipelinePriv(this))
 {
     qRegisterMetaType<FacePipelineExtendedPackage::Ptr>("FacePipelineExtendedPackage::Ptr");
 }
@@ -520,8 +517,7 @@ void FacePipeline::plugParallelFaceDetectors()
         return plugFaceDetector();
 
     // limit number of parallel detectors to 3, because of memory cost (cascades)
-    const int n = qMin(3, QThread::idealThreadCount());
-
+    const int n          = qMin(3, QThread::idealThreadCount());
     d->parallelDetectors = new ParallelPipes;
 
     for (int i=0; i<n; i++)
@@ -625,5 +621,4 @@ void FacePipeline::process(const QList<ImageInfo>& infos)
     d->processBatch(infos);
 }
 
-}
-
+} // namespace Digikam

@@ -61,6 +61,8 @@ public:
     typedef QExplicitlySharedDataPointer<FacePipelineExtendedPackage> Ptr;
 };
 
+// ----------------------------------------------------------------------------------------
+
 class ParallelPipes : public QObject
 {
     Q_OBJECT
@@ -73,7 +75,7 @@ public:
     void schedule();
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals);
 
-    void add(WorkerObject *worker);
+    void add(WorkerObject* worker);
 
     QList<WorkerObject*> m_workers;
 
@@ -91,16 +93,15 @@ protected:
     int                m_currentIndex;
 };
 
+// ----------------------------------------------------------------------------------------
+
 class ScanStateFilter : public DynamicThread
 {
     Q_OBJECT
 
 public:
 
-    ScanStateFilter(FacePipeline::FilterMode mode, FacePipelinePriv *d);
-    FacePipelinePriv* const d;
-
-    FacePipeline::FilterMode mode;
+    ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::FacePipelinePriv* d);
 
     void process(const QList<ImageInfo>& infos);
     void process(const ImageInfo& info);
@@ -111,6 +112,11 @@ public:
      * Returns false if the info shall be skipped.
      */
     bool filter(const ImageInfo& info);
+
+public:
+
+    FacePipeline::FacePipelinePriv* const d;
+    FacePipeline::FilterMode              mode;
 
 protected Q_SLOTS:
 
@@ -127,8 +133,9 @@ protected:
     QList<ImageInfo> toFilter;
     QList<ImageInfo> toSend;
     QList<ImageInfo> toBeSkipped;
-
 };
+
+// ----------------------------------------------------------------------------------------
 
 class PreviewLoader : public PreviewLoadThread
 {
@@ -136,7 +143,7 @@ class PreviewLoader : public PreviewLoadThread
 
 public:
 
-    PreviewLoader(FacePipelinePriv* d);
+    PreviewLoader(FacePipeline::FacePipelinePriv* d);
 
     void cancel();
     bool sentOutLimitReached();
@@ -153,11 +160,13 @@ Q_SIGNALS:
 
 protected:
 
-    FacePipelinePriv* const d;
-
     QList<FacePipelineExtendedPackage::Ptr> scheduledPackages;
-    int maximumSentOutPackages;
+    int                                     maximumSentOutPackages;
+
+    FacePipeline::FacePipelinePriv* const   d;
 };
+
+// ----------------------------------------------------------------------------------------
 
 class DetectionWorker : public WorkerObject
 {
@@ -165,7 +174,7 @@ class DetectionWorker : public WorkerObject
 
 public:
 
-    DetectionWorker(FacePipelinePriv* d);
+    DetectionWorker(FacePipeline::FacePipelinePriv* d);
 
 public Q_SLOTS:
 
@@ -178,9 +187,11 @@ Q_SIGNALS:
 
 protected:
 
-    KFaceIface::FaceDetector detector;
-    FacePipelinePriv* const d;
+    KFaceIface::FaceDetector              detector;
+    FacePipeline::FacePipelinePriv* const d;
 };
+
+// ----------------------------------------------------------------------------------------
 
 class RecognitionWorker : public WorkerObject
 {
@@ -188,7 +199,7 @@ class RecognitionWorker : public WorkerObject
 
 public:
 
-    RecognitionWorker(FacePipelinePriv* d);
+    RecognitionWorker(FacePipeline::FacePipelinePriv* d);
 
 public Q_SLOTS:
 
@@ -201,10 +212,12 @@ Q_SIGNALS:
 
 protected:
 
-    KFaceIface::RecognitionDatabase database;
-    double recognitionThreshold;
-    FacePipelinePriv* const d;
+    KFaceIface::RecognitionDatabase       database;
+    double                                recognitionThreshold;
+    FacePipeline::FacePipelinePriv* const d;
 };
+
+// ----------------------------------------------------------------------------------------
 
 class DatabaseWriter : public QObject
 {
@@ -212,7 +225,7 @@ class DatabaseWriter : public QObject
 
 public:
 
-    DatabaseWriter(FacePipelinePriv* d);
+    DatabaseWriter(FacePipeline::FacePipelinePriv* d);
 
 public Q_SLOTS:
 
@@ -224,30 +237,18 @@ Q_SIGNALS:
 
 protected:
 
-    FacePipelinePriv* const d;
+    FacePipeline::FacePipelinePriv* const d;
 };
 
-// ---
+// ----------------------------------------------------------------------------------------
 
-class FacePipelinePriv : public QObject
+class FacePipeline::FacePipelinePriv : public QObject
 {
     Q_OBJECT
 
 public:
 
-    FacePipelinePriv(FacePipeline *q);
-
-    ScanStateFilter   *alreadyScannedFilter;
-    PreviewLoader     *previewThread;
-    DetectionWorker   *detectionWorker;
-    ParallelPipes     *parallelDetectors;
-    RecognitionWorker *recognitionWorker;
-    DatabaseWriter    *databaseWriter;
-
-    FaceIface iface;
-    bool started;
-    int  infosForFiltering;
-    int  packagesOnTheRoad;
+    FacePipelinePriv(FacePipeline* q);
 
     void processBatch(const QList<ImageInfo>& infos);
     void sendFromFilter(const QList<ImageInfo>& infos);
@@ -259,6 +260,20 @@ public:
     void checkFinished();
     void start();
     void stop();
+
+public:
+
+    ScanStateFilter*   alreadyScannedFilter;
+    PreviewLoader*     previewThread;
+    DetectionWorker*   detectionWorker;
+    ParallelPipes*     parallelDetectors;
+    RecognitionWorker* recognitionWorker;
+    DatabaseWriter*    databaseWriter;
+
+    FaceIface          iface;
+    bool               started;
+    int                infosForFiltering;
+    int                packagesOnTheRoad;
 
 public Q_SLOTS:
 
@@ -277,5 +292,4 @@ private:
     FacePipeline* const q;
 };
 
-}
-
+} // namespace Digikam

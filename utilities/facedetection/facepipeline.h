@@ -48,8 +48,6 @@ class FacePipelinePackage
 {
 public:
 
-    FacePipelinePackage() : processFlags(NotProcessed) {}
-
     enum ProcessFlag
     {
         NotProcessed            = 0,
@@ -60,13 +58,20 @@ public:
     };
     Q_DECLARE_FLAGS(ProcessFlags, ProcessFlag);
 
+public:
+
+    FacePipelinePackage() 
+        : processFlags(NotProcessed)
+    {
+    }
+
     ImageInfo               info;
     DImg                    image;
     QList<KFaceIface::Face> faces;
     ProcessFlags            processFlags;
 };
 
-class FacePipelinePriv;
+// ------------------------------------------------------------------------------------
 
 class FacePipeline : public QObject
 {
@@ -156,16 +161,19 @@ Q_SIGNALS:
     /// Emitted when one or several packages were skipped, usually because they have already been scanned.
     void skipped(const QList<ImageInfo>& skippedInfos);
 
+public:
+
+    class FacePipelinePriv;
+
 private:
 
-    friend class FacePipelinePriv;
     FacePipelinePriv* const d;
+    friend class FacePipelinePriv;
 };
 
-}
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::FacePipelinePackage)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelinePackage::ProcessFlags)
 
-#endif
-
+#endif // FACEDETECTOR_H
