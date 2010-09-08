@@ -160,8 +160,7 @@ void DynamicThread::start(QMutexLocker& locker)
     {
         case Inactive:
         case Deactivating:
-            d->state   = Scheduled;
-            d->running = true;
+            d->state = Scheduled;
             break;
         case Running:
         case Scheduled:
@@ -201,6 +200,7 @@ bool DynamicThread::DynamicThreadPriv::transitionToRunning()
                 condVar.wait(&mutex);
 
             state          = DynamicThread::Running;
+            running        = true;
             assignedThread = QThread::currentThread();
 
             previousPriority = assignedThread->priority();
