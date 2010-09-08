@@ -52,6 +52,7 @@ class FacePipelineExtendedPackage : public FacePipelinePackage, public QSharedDa
 public:
 
     QString filePath;
+    DImg    detectionImage; // image scaled to about 0.5 Mpx
 
     bool operator==(const LoadingDescription& description) const
     {

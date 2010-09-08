@@ -216,8 +216,8 @@ void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
         return;
     }
     scheduledPackages << package;
-    //loadFastButLarge(package->filePath, 1600, MetadataSettings::instance()->settings().exifRotate);
-    load(package->filePath, 1600, MetadataSettings::instance()->settings().exifRotate);
+    loadFastButLarge(package->filePath, 1600, MetadataSettings::instance()->settings().exifRotate);
+    //load(package->filePath, 800, MetadataSettings::instance()->settings().exifRotate);
     //loadHighQuality(package->filePath, MetadataSettings::instance()->settings().exifRotate);
 }
 
@@ -273,10 +273,20 @@ DetectionWorker::DetectionWorker(FacePipeline::FacePipelinePriv* d)
 
 void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    KFaceIface::Image image(package->image.width(), package->image.height(),
-                            package->image.sixteenBit(), package->image.hasAlpha(),
-                            package->image.bits());
+    package->detectionImage = package->image;
+    if (qMax(package->image.width(), package->image.height()) > (uint)KFaceIface::Image::recommendedSizeForDetection())
+    {
+        package->detectionImage = package->image.smoothScale(KFaceIface::Image::recommendedSizeForDetection(),
+                                                             KFaceIface::Image::recommendedSizeForDetection(),
+                                                             Qt::KeepAspectRatio);
+    }
+
+    KFaceIface::Image image(package->detectionImage.width(), package->detectionImage.height(),
+                            package->detectionImage.sixteenBit(), package->detectionImage.hasAlpha(),
+                            package->detectionImage.bits());
+
     package->faces = detector.detectFaces(image);
+
     kDebug() << "Found" << package->faces.size() << "faces in" << package->info.name() 
              << package->image.size() << package->image.originalSize();
 
@@ -300,8 +310,8 @@ RecognitionWorker::RecognitionWorker(FacePipeline::FacePipelinePriv* d)
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    if ( (package->processFlags & FacePipelinePackage::ProcessedByDetector)
-         && !package->info.isNull())
+    if ( !(package->processFlags & FacePipelinePackage::ProcessedByDetector)
+       && !package->info.isNull())
     {
         package->faces = d->iface.findUnconfirmedFacesFromTags(package->image, package->info.id());
     }
@@ -339,7 +349,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
     d->iface.markAsScanned(package->info);
     if (!package->info.isNull() && !package->faces.isEmpty())
     {
-        d->iface.writeUnconfirmedResults(package->image, package->info.id(), package->faces);
+        d->iface.writeUnconfirmedResults(package->detectionImage, package->info.id(), package->faces);
     }
     package->processFlags |= FacePipelinePackage::WrittenToDatabase;
     emit processed(package);
