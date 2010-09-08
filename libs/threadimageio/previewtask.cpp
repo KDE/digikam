@@ -246,7 +246,8 @@ void PreviewLoadingTask::execute()
         if (m_img.isNull() && continueQuery())
         {
             // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
-            m_img.setAttribute("scaledLoadingSize", size);
+            if (!m_loadingDescription.previewParameters.fastButLarge())
+                m_img.setAttribute("scaledLoadingSize", size);
             m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
         }
 
