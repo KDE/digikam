@@ -35,8 +35,6 @@
 namespace Digikam
 {
 
-class WorkerObjectPriv;
-
 class DIGIKAM_EXPORT WorkerObject : public QObject
 {
     Q_OBJECT
@@ -88,11 +86,14 @@ public:
 
 private:
 
+    void run();
+
+private:
+
     friend class WorkerObjectRunnable;
     friend class ThreadManager;
 
-    void run();
-
+    class WorkerObjectPriv;
     WorkerObjectPriv* const d;
 };
 
