@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class WorkerObjectPriv
+class WorkerObject::WorkerObjectPriv
 {
 public:
 
@@ -77,7 +77,7 @@ void WorkerObject::wait()
 }
 
 bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal, const char* method,
-                           Qt::ConnectionType type) const
+                                      Qt::ConnectionType type) const
 {
     connect(sender, signal,
             this, SLOT(schedule()));
@@ -86,8 +86,8 @@ bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal,
 }
 
 bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal,
-                           const QObject* receiver, const char* method,
-                           Qt::ConnectionType type)
+                                      const QObject* receiver, const char* method,
+                                      Qt::ConnectionType type)
 {
     if (receiver == this)
         connect(sender, signal, this, SLOT(schedule()));
@@ -96,7 +96,7 @@ bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal,
 }
 
 bool WorkerObject::disconnectAndSchedule(const QObject* sender, const char* signal,
-                              const QObject* receiver, const char* method)
+                                         const QObject* receiver, const char* method)
 {
     if (receiver == this)
     {
@@ -185,12 +185,12 @@ void WorkerObject::transitionToInactive()
     switch (d->state)
     {
         case Scheduled:
-            return;
+            break;
         case Deactivating:
         default:
             d->state = Inactive;
             d->condVar.wakeAll();
-            return;
+            break;
     }
 }
 

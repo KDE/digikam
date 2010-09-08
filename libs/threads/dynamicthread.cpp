@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class DynamicThreadPriv : public QRunnable
+class DynamicThread::DynamicThreadPriv : public QRunnable
 {
 public:
 
@@ -60,19 +60,21 @@ public:
     bool transitionToRunning();
     void transitionToInactive();
 
-    DynamicThread* const q;
-    QThread* assignedThread;
+public:
 
-    volatile bool running;
-    volatile bool emitSignals;
+    DynamicThread* const          q;
+    QThread*                      assignedThread;
+
+    volatile bool                 running;
+    volatile bool                 emitSignals;
 
     volatile DynamicThread::State state;
 
-    QThread::Priority priority;
-    QThread::Priority previousPriority;
+    QThread::Priority             priority;
+    QThread::Priority             previousPriority;
 
-    QMutex         mutex;
-    QWaitCondition condVar;
+    QMutex                        mutex;
+    QWaitCondition                condVar;
 };
 
 DynamicThread::DynamicThread(QObject* parent)
@@ -99,7 +101,7 @@ bool DynamicThread::isRunning() const
     return d->state == Scheduled || d->state == Running || d->state == Deactivating;
 }
 
-QMutex *DynamicThread::threadMutex() const
+QMutex* DynamicThread::threadMutex() const
 {
     return &d->mutex;
 }
@@ -118,7 +120,9 @@ void DynamicThread::setPriority(QThread::Priority priority)
 {
     if (d->priority == priority)
         return;
+
     d->priority = priority;
+
     if (d->priority != QThread::InheritPriority)
     {
         QMutexLocker locker(&d->mutex);
@@ -150,13 +154,13 @@ void DynamicThread::wait()
     wait(locker);
 }
 
-void DynamicThread::start(QMutexLocker &locker)
+void DynamicThread::start(QMutexLocker& locker)
 {
     switch (d->state)
     {
         case Inactive:
         case Deactivating:
-            d->state = Scheduled;
+            d->state   = Scheduled;
             d->running = true;
             break;
         case Running:
@@ -169,7 +173,7 @@ void DynamicThread::start(QMutexLocker &locker)
     locker.relock();
 }
 
-void DynamicThread::stop(QMutexLocker &locker)
+void DynamicThread::stop(QMutexLocker& locker)
 {
     Q_UNUSED(locker);
     switch (d->state)
@@ -177,7 +181,7 @@ void DynamicThread::stop(QMutexLocker &locker)
         case Scheduled:
         case Running:
             d->running = false;
-            d->state = Deactivating;
+            d->state   = Deactivating;
             break;
         case Inactive:
         case Deactivating:
@@ -185,7 +189,7 @@ void DynamicThread::stop(QMutexLocker &locker)
     }
 }
 
-bool DynamicThreadPriv::transitionToRunning()
+bool DynamicThread::DynamicThreadPriv::transitionToRunning()
 {
     QMutexLocker locker(&mutex);
     switch (state)
@@ -196,7 +200,7 @@ bool DynamicThreadPriv::transitionToRunning()
             while (assignedThread)
                 condVar.wait(&mutex);
 
-            state = DynamicThread::Running;
+            state          = DynamicThread::Running;
             assignedThread = QThread::currentThread();
 
             previousPriority = assignedThread->priority();
@@ -216,7 +220,7 @@ bool DynamicThreadPriv::transitionToRunning()
     }
 }
 
-void DynamicThreadPriv::transitionToInactive()
+void DynamicThread::DynamicThreadPriv::transitionToInactive()
 {
     QMutexLocker locker(&mutex);
     switch (state)
@@ -236,11 +240,11 @@ void DynamicThreadPriv::transitionToInactive()
             break;
         case DynamicThread::Inactive:
             kDebug() << "Transition to Inactive: Invalid Inactive state" << q;
-            break;
+            break; 
     }
 }
 
-void DynamicThreadPriv::run()
+void DynamicThread::DynamicThreadPriv::run()
 {
     if (emitSignals)
         emit q->started();
@@ -264,4 +268,3 @@ bool DynamicThread::runningFlag() const volatile
 }
 
 } // namespace Digikam
-

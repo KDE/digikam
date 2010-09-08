@@ -119,12 +119,16 @@ public:
         }
     }
 
-    volatile bool running;
+public:
+
+    volatile bool                     running;
     typedef QPair<QObject*, QThread*> TodoPair;
-    QMutex mutex;
-    QWaitCondition condVar;
-    QList<TodoPair> todo;
+    QMutex                            mutex;
+    QWaitCondition                    condVar;
+    QList<TodoPair>                   todo;
 };
+
+// --------------------------------------------------------------------------------------------------
 
 class WorkerObjectRunnable : public QRunnable
 {
@@ -172,13 +176,14 @@ void WorkerObjectRunnable::run()
 
 // -------------------------------------------------------------------------------------------------
 
-class ThreadManagerPriv
+class ThreadManager::ThreadManagerPriv
 {
 public:
 
     ThreadManagerPriv()
     {
         parkingThread = 0;
+        pool          = 0;
     }
 
     ParkingThread* parkingThread;

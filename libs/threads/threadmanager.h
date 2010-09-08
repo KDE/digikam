@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-class ThreadManagerPriv;
 class DynamicThread;
 class WorkerObject;
 
@@ -62,10 +61,14 @@ protected Q_SLOTS:
 
 protected:
 
-    friend class ThreadManagerCreator;
     ThreadManager();
     ~ThreadManager();
 
+private:
+
+    friend class ThreadManagerCreator;
+
+    class ThreadManagerPriv;
     ThreadManagerPriv* const d;
 };
 

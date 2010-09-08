@@ -40,8 +40,6 @@ class QMutexLocker;
 namespace Digikam
 {
 
-class DynamicThreadPriv;
-
 class DIGIKAM_EXPORT DynamicThread : public QObject, public QRunnable
 {
     Q_OBJECT
@@ -59,8 +57,7 @@ public:
     /** This class extends QRunnable, so you have to reimplement
      *  virtual void run(). In all aspects the class will act similar to a QThread.
      */
-
-    DynamicThread(QObject *parent = 0);
+    DynamicThread(QObject* parent = 0);
 
     /** The destructor calls stop() and wait(), but if you, in your destructor,
      *  delete any data that is accessed by your run() method,
@@ -109,20 +106,22 @@ protected:
      * then using the QMutexLocker variants below. Note that when you have locked this mutex,
      * you must use these variants, as the mutex is non-recursive.
      */
-    QMutex *threadMutex() const;
+    QMutex* threadMutex() const;
 
     /**
      * Doing the same as start(), stop() and wait above, provide it
      * with a locked QMutexLocker on mutex().
      * Note the start() will unlock and relock for scheduling once, after state change.
      */
-    void start(QMutexLocker &locker);
-    void stop(QMutexLocker &locker);
-    void wait(QMutexLocker &locker);
+    void start(QMutexLocker& locker);
+    void stop(QMutexLocker& locker);
+    void wait(QMutexLocker& locker);
 
 private:
 
     friend class DynamicThreadPriv;
+
+    class DynamicThreadPriv;
     DynamicThreadPriv* const d;
 };
 
