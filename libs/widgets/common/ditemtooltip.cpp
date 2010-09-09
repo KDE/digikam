@@ -25,17 +25,21 @@
 
 // Qt includes
 
-#include <QToolTip>
-#include <QLabel>
-#include <QPixmap>
-#include <QDateTime>
-#include <QPainter>
 #include <QApplication>
+#include <QDateTime>
+#include <QLabel>
+#include <QPainter>
+#include <QPixmap>
+#include <QStyle>
+#include <QStyleHintReturnMask>
+#include <QStyleOptionFrame>
+#include <QStylePainter>
+#include <QToolTip>
 #include <QVBoxLayout>
 
 // KDE includes
 
-
+#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kdeversion.h>
@@ -134,37 +138,34 @@ public:
         tipBorder(5)
     {
         corner = 0;
-        label  = 0;
     }
 
-    const uint  tipBorder;
+    const int  tipBorder;
 
     int         corner;
-
-    QLabel     *label;
 
     QPixmap     corners[4];
 };
 
 DItemToolTip::DItemToolTip(QWidget *parent)
-            : QFrame(parent), d(new DItemToolTipPriv)
+            : QLabel(parent, Qt::ToolTip), d(new DItemToolTipPriv)
 {
     hide();
 
+    setForegroundRole(QPalette::ToolTipText);
+    setBackgroundRole(QPalette::ToolTipBase);
+    setPalette(QToolTip::palette());
+    ensurePolished();
+    setMargin(qMax(d->tipBorder, 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this)));
+    setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this) / 255.0);
+    setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    setFrameStyle(QFrame::StyledPanel);
+    /*
+    Old-style box:
     setFrameStyle(QFrame::Plain | QFrame::Box);
     setLineWidth(1);
-    setWindowFlags(Qt::ToolTip);
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-
-    d->label = new QLabel(this);
-    d->label->setMargin(0);
-    d->label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    layout->addWidget(d->label);
-    layout->setSizeConstraint(QLayout::SetFixedSize);
-    layout->setMargin(d->tipBorder+1);
-    layout->setSpacing(0);
+    */
 
     renderArrows();
 }
@@ -177,12 +178,12 @@ DItemToolTip::~DItemToolTip()
 void DItemToolTip::updateToolTip()
 {
     renderArrows();
-    d->label->setText(tipContents());
+    setText(tipContents());
 }
 
 bool DItemToolTip::toolTipIsEmpty() const
 {
-    return(d->label->text().isEmpty());
+    return(text().isEmpty());
 }
 
 void DItemToolTip::reposition()
@@ -241,7 +242,7 @@ void DItemToolTip::renderArrows()
 
     QPixmap& pix0 = d->corners[0];
     pix0          = QPixmap(w, w);
-    pix0.fill(ThemeEngine::instance()->baseColor());
+    pix0.fill(Qt::transparent);
 
     QPainter p0(&pix0);
     p0.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
@@ -255,7 +256,7 @@ void DItemToolTip::renderArrows()
 
     QPixmap& pix1 = d->corners[1];
     pix1          = QPixmap(w, w);
-    pix1.fill(ThemeEngine::instance()->baseColor());
+    pix1.fill(Qt::transparent);
 
     QPainter p1(&pix1);
     p1.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
@@ -269,7 +270,7 @@ void DItemToolTip::renderArrows()
 
     QPixmap& pix2 = d->corners[2];
     pix2          = QPixmap(w, w);
-    pix2.fill(ThemeEngine::instance()->baseColor());
+    pix2.fill(Qt::transparent);
 
     QPainter p2(&pix2);
     p2.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
@@ -283,7 +284,7 @@ void DItemToolTip::renderArrows()
 
     QPixmap& pix3 = d->corners[3];
     pix3          = QPixmap(w, w);
-    pix3.fill(ThemeEngine::instance()->baseColor());
+    pix3.fill(Qt::transparent);
 
     QPainter p3(&pix3);
     p3.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
@@ -315,17 +316,31 @@ bool DItemToolTip::event(QEvent *e)
 void DItemToolTip::resizeEvent(QResizeEvent* e)
 {
     QFrame::resizeEvent(e);
+
+    QStyleHintReturnMask frameMask;
+    QStyleOption option;
+    option.init(this);
+    if (style()->styleHint(QStyle::SH_ToolTip_Mask, &option, this, &frameMask))
+        setMask(frameMask.region);
+
     reposition();
 }
 
 void DItemToolTip::paintEvent(QPaintEvent *e)
 {
-    QFrame::paintEvent(e);
+    {
+        QStylePainter p(this);
+        QStyleOptionFrame opt;
+        opt.init(this);
+        p.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
+    }
 
+    QLabel::paintEvent(e);
+
+    QPainter p(this);
     if (d->corner >= 4)
         return;
 
-    QPainter p(this);
     QPixmap &pix = d->corners[d->corner];
 
     switch (d->corner)

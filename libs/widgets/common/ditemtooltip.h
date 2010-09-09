@@ -27,7 +27,7 @@
 // Qt includes
 
 #include <QtGui/QFont>
-#include <QtGui/QFrame>
+#include <QtGui/QLabel>
 #include <QtCore/QString>
 #include <QtCore/QEvent>
 #include <QtGui/QResizeEvent>
@@ -72,7 +72,7 @@ public:
     QString   cellSpecEnd;
 };
 
-class DIGIKAM_EXPORT DItemToolTip : public QFrame
+class DIGIKAM_EXPORT DItemToolTip : public QLabel
 {
 
 public:
