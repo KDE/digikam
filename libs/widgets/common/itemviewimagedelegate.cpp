@@ -152,7 +152,7 @@ void ItemViewImageDelegate::installOverlay(ImageDelegateOverlay *overlay)
     Q_D(ItemViewImageDelegate);
     overlay->setDelegate(this);
     d->overlays << overlay;
-    overlay->setActive(true);
+    // let the view call setActive
 }
 
 void ItemViewImageDelegate::removeOverlay(ImageDelegateOverlay *overlay)

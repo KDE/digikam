@@ -409,8 +409,12 @@ void ImageCategorizedView::addOverlay(ImageDelegateOverlay *overlay, ImageDelega
 {
     if (!delegate)
         delegate = d->delegate;
-    overlay->setView(this);
     delegate->installOverlay(overlay);
+    if (delegate == d->delegate)
+    {
+        overlay->setView(this);
+        overlay->setActive(true);
+    }
 }
 
 void ImageCategorizedView::removeOverlay(ImageDelegateOverlay *overlay)
