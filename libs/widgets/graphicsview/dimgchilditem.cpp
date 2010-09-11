@@ -254,7 +254,7 @@ void DImgChildItem::updateSize()
     emit sizeChanged();
 }
 
-void DImgChildItem::imageSizeChanged(const QSizeF&s)
+void DImgChildItem::imageSizeChanged(const QSizeF&)
 {
     updateSize();
     updatePos();

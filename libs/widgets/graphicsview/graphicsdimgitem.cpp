@@ -118,18 +118,20 @@ ImageZoomSettings* GraphicsDImgItem::zoomSettings()
 QRectF GraphicsDImgItem::boundingRect() const
 {
     Q_D(const GraphicsDImgItem);
-    return QRectF(QPointF(0,0), d->zoomSettings.zoomedSize());
+    // always return full integer sizes, we can only scale to integer
+    return QRectF(QPointF(0,0), d->zoomSettings.zoomedSize()).toAlignedRect();
 }
 
 void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
     Q_D(GraphicsDImgItem);
-    QRect drawRect   = option->exposedRect.intersected(boundingRect()).toAlignedRect();
-    QRect sourceRect = d->zoomSettings.sourceRect(drawRect).toRect();
-    QSize destSize   = drawRect.size();
-    DImg scaledImage = d->image.smoothScaleSection(sourceRect.x(), sourceRect.y(),
-                                                   sourceRect.width(), sourceRect.height(),
-                                                   destSize.width(), destSize.height());
+    QRect drawRect = option->exposedRect.intersected(boundingRect()).toAlignedRect();
+    QSize completeSize = boundingRect().size().toSize();
+
+    // scale "as if" scaling to whole image, but clip output to our exposed region
+    DImg scaledImage = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
+        drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
+
     painter->drawPixmap(drawRect.topLeft(), scaledImage.convertToPixmap());
     /*
         QPixmap pix(visibleWidth(), visibleHeight());
