@@ -426,6 +426,18 @@ public:
      */
     DImg       smoothScale(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) const;
 
+    /** Executes the same scaling as smoothScale(width, height), but from the result of this call,
+     *  returns only the section specified by clipx, clipy, clipwidth, clipheight.
+     *  This is thus equivalent to calling
+     *  Dimg scaled = smoothScale(width, height); scaled.crop(clipx, clipy, clipwidth, clipheight);
+     *  but potentially much faster.
+     *  In smoothScaleSection, you specify the source region, here, the result region.
+     *  It will often not be possible to find _integer_ source coordinates for a result region!
+     */
+    DImg smoothScaleClipped(int width, int height,
+                            int clipx, int clipy, int clipwidth, int clipheight,
+                            Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) const;
+
     /** Take the region specified by the rectangle sx|sy, width and height sw * sh,
         and scale it to an image with size dw * dh
      */
