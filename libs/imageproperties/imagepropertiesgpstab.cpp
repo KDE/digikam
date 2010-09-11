@@ -97,8 +97,8 @@ public:
     KSqueezedTextLabel         *longitude;
     KSqueezedTextLabel         *date;
 
-    KMap::KMapWidget      *map;
-    KMap::ItemMarkerTiler *itemMarkerTiler;
+    KMap::KMapWidget           *map;
+    KMap::ItemMarkerTiler      *itemMarkerTiler;
     GPSInfoList                gpsInfoList;
 
     QStandardItemModel         *itemModel;
@@ -392,9 +392,9 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
 
     if (!d->map->getStickyModeState())
     {
-        // TODO: adjust the zoom and map boundaries to show all images
-        const GPSInfo firstInfo = d->gpsInfoList.first();
-        d->map->setCenter(KMap::GeoCoordinates(firstInfo.latitude, firstInfo.longitude));
+        // TODO: check whether the widget is currently active,
+        //       otherwise remember to call this function later!
+        d->map->adjustBoundariesToGroupedMarkers();
     }
 }
 
