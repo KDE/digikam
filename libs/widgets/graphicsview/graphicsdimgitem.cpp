@@ -38,7 +38,6 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgchilditem.h"
 #include "imagezoomsettings.h"
 
 namespace Digikam
@@ -90,16 +89,18 @@ DImg GraphicsDImgItem::image() const
 
 void GraphicsDImgItem::sizeHasChanged()
 {
+    Q_D(GraphicsDImgItem);
     QGraphicsItem::prepareGeometryChange();
+    emit imageSizeChanged(d->zoomSettings.zoomedSize());
 
-    foreach (QGraphicsItem* child, childItems())
+    /*foreach (QGraphicsItem* child, childItems())
     {
         AbstractDImgItemChild* item = dynamic_cast<AbstractDImgItemChild*>(child);
         if (item)
         {
-            item->sizeHasChanged();
+            item->imageSizeHasChanged();
         }
-    }
+    }*/
 }
 
 const ImageZoomSettings* GraphicsDImgItem::zoomSettings() const
@@ -123,13 +124,13 @@ QRectF GraphicsDImgItem::boundingRect() const
 void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
     Q_D(GraphicsDImgItem);
-    QRectF drawRect  = option->exposedRect.intersected(boundingRect());
+    QRect drawRect   = option->exposedRect.intersected(boundingRect()).toAlignedRect();
     QRect sourceRect = d->zoomSettings.sourceRect(drawRect).toRect();
-    QSize destSize   = drawRect.size().toSize();
+    QSize destSize   = drawRect.size();
     DImg scaledImage = d->image.smoothScaleSection(sourceRect.x(), sourceRect.y(),
                                                    sourceRect.width(), sourceRect.height(),
                                                    destSize.width(), destSize.height());
-    painter->drawPixmap(drawRect.topLeft().toPoint(), scaledImage.convertToPixmap());
+    painter->drawPixmap(drawRect.topLeft(), scaledImage.convertToPixmap());
     /*
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());
