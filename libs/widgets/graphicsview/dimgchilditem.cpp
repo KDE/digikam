@@ -155,7 +155,6 @@ void DImgChildItem::setOriginalPos(const QPointF& posInOriginal)
     QSizeF originalSize = parentDImgItem()->zoomSettings()->originalImageSize();
     setRelativePos( QPointF(posInOriginal.x() / originalSize.width(),
                             posInOriginal.y() / originalSize.height()) );
-    kDebug() << "Original pos:" << posInOriginal << "relative pos:" << d->relativePos << "parent item size:" << parentItem()->boundingRect().size();
 }
 
 void DImgChildItem::setOriginalSize(const QSizeF& sizeInOriginal)
@@ -245,8 +244,6 @@ void DImgChildItem::updatePos()
         return;
 
     QSizeF imageSize = parentItem()->boundingRect().size();
-    kDebug() << "parent image size:" << imageSize << "new pos"
-           << QPointF(imageSize.width() * d->relativePos.x(), imageSize.height() * d->relativePos.y());
     QGraphicsObject::setPos(imageSize.width() * d->relativePos.x(), imageSize.height() * d->relativePos.y());
     emit positionChanged();
 }
@@ -259,7 +256,6 @@ void DImgChildItem::updateSize()
 
 void DImgChildItem::imageSizeChanged(const QSizeF&s)
 {
-    kDebug() << s;
     updateSize();
     updatePos();
 }
