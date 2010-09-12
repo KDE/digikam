@@ -27,6 +27,8 @@
 
 // Qt includes
 
+#include <QFlags>
+
 // KDE includes
 
 // Local includes
@@ -42,15 +44,32 @@ class DIGIKAM_EXPORT RegionFrameItem : public DImgChildItem
 {
 
     Q_OBJECT
+    Q_PROPERTY(qreal hoverAnimationOpacity READ hoverAnimationOpacity WRITE setHoverAnimationOpacity)
 
 public:
+
+    enum Flag
+    {
+        NoFlags           = 0,
+        ShowResizeHandles = 1 << 0,
+        MoveByDrag        = 1 << 1,
+
+        GeometryEditable  = ShowResizeHandles | MoveByDrag
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
 
     RegionFrameItem(QGraphicsItem* parent);
     ~RegionFrameItem();
 
+    void setFlags(Flags flags);
+    Flags flags() const;
+
     void setFixedRatio(double ratio);
 
     virtual QRectF boundingRect() const;
+
+    qreal hoverAnimationOpacity() const;
+    void setHoverAnimationOpacity(qreal alpha);
 
 public Q_SLOTS:
 
@@ -70,7 +89,9 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
+    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
 
 private Q_SLOTS:
 
@@ -87,5 +108,7 @@ private:
 
 
 } // namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::RegionFrameItem::Flags)
 
 #endif /* REGIONFRAME_H */

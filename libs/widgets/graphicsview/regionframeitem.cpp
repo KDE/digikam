@@ -33,6 +33,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
+#include <QPropertyAnimation>
 #include <QRect>
 #include <QTimer>
 #include <QToolButton>
@@ -93,16 +94,20 @@ public:
 
     RegionFrameItem* const q;
 
-    HudSide           hudSide;
-    QRectF            viewportRect;
-    QList<CropHandle> cropHandleList;
-    CropHandle        movingHandle;
-    QPointF           lastMouseMovePos;
-    double            fixedRatio;
-    QGraphicsItem    *hudItem;
+    HudSide                hudSide;
+    QRectF                 viewportRect;
+    QList<CropHandle>      cropHandleList;
+    CropHandle             movingHandle;
+    QPointF                lastMouseMovePos;
+    double                 fixedRatio;
+    QGraphicsItem         *hudItem;
 
-    QTimer           *hudTimer;
-    QPointF           hudEndPos;
+    RegionFrameItem::Flags flags;
+
+    QPropertyAnimation    *resizeHandleAnimation;
+    qreal                  hoverAnimationOpacity;
+    QTimer                *hudTimer;
+    QPointF                hudEndPos;
 
     QRectF handleRect(CropHandle handle) const;
     CropHandle handleAt(const QPointF& pos) const;
@@ -115,12 +120,14 @@ public:
 RegionFrameItem::RegionFrameItemPriv::RegionFrameItemPriv(RegionFrameItem *q)
     : q(q)
 {
-    hudSide       = HS_None;
-    movingHandle  = CH_None;
-    fixedRatio    = 0;
-    hudItem       = 0;
-    hudTimer      = 0;
-
+    hudSide             = HS_None;
+    movingHandle        = CH_None;
+    fixedRatio          = 0;
+    hudItem             = 0;
+    hudTimer            = 0;
+    hoverAnimationOpacity = 0;
+    flags               = RegionFrameItem::NoFlags;
+    
     cropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom
                    << CH_TopLeft << CH_TopRight
                    << CH_BottomLeft << CH_BottomRight;
@@ -161,17 +168,23 @@ QRectF RegionFrameItem::RegionFrameItemPriv::handleRect(CropHandle handle) const
 
 CropHandle RegionFrameItem::RegionFrameItemPriv::handleAt(const QPointF& pos) const
 {
-    foreach (const CropHandle& handle, cropHandleList)
+    if (flags & RegionFrameItem::ShowResizeHandles)
     {
-        QRectF rect = handleRect(handle);
-        if (rect.contains(pos))
+        foreach (const CropHandle& handle, cropHandleList)
         {
-            return handle;
+            QRectF rect = handleRect(handle);
+            if (rect.contains(pos))
+            {
+                return handle;
+            }
         }
     }
-    if (q->boundingRect().contains(pos))
+    if (flags & RegionFrameItem::MoveByDrag)
     {
-        return CH_Content;
+        if (q->boundingRect().contains(pos))
+        {
+            return CH_Content;
+        }
     }
     return CH_None;
 }
@@ -337,7 +350,11 @@ void RegionFrameItem::RegionFrameItemPriv::updateHudWidgetPosition()
 RegionFrameItem::RegionFrameItem(QGraphicsItem *item)
     : DImgChildItem(item), d(new RegionFrameItemPriv(this))
 {
-    setAcceptHoverEvents(true);
+    setFlags(GeometryEditable);
+
+    d->resizeHandleAnimation = new QPropertyAnimation(this, "hoverAnimationOpacity");
+    d->resizeHandleAnimation->setDuration(200);
+    d->resizeHandleAnimation->setEasingCurve(QEasingCurve::OutCirc);
 
     d->hudTimer = new QTimer(this);
     d->hudTimer->setInterval(HUD_TIMER_ANIMATION_INTERVAL);
@@ -359,9 +376,36 @@ RegionFrameItem::~RegionFrameItem()
     delete d;
 }
 
+void RegionFrameItem::setFlags(Flags flags)
+{
+    if (d->flags == flags)
+        return;
+    d->flags = flags;
+    update();
+    setAcceptHoverEvents(d->flags & GeometryEditable);
+}
+
+RegionFrameItem::Flags RegionFrameItem::flags() const
+{
+    return d->flags;
+}
+
 void RegionFrameItem::setFixedRatio(double ratio)
 {
     d->fixedRatio = ratio;
+}
+
+qreal RegionFrameItem::hoverAnimationOpacity() const
+{
+    return d->hoverAnimationOpacity;
+}
+
+void RegionFrameItem::setHoverAnimationOpacity(qreal alpha)
+{
+    if (d->hoverAnimationOpacity == alpha)
+        return;
+    d->hoverAnimationOpacity = alpha;
+    update();
 }
 
 void RegionFrameItem::slotSizeChanged()
@@ -406,8 +450,7 @@ void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem *,
     }
     */
 
-    const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66);
-    //const QColor borderColor = QColor::fromHsvF(0, 0, 1.0);
+    const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66 + 0.33 * d->hoverAnimationOpacity);
     const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
 
     // will paint to the left and bottom of logical coordinates
@@ -416,23 +459,53 @@ void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem *,
     painter->setPen(borderColor);
     painter->drawRect(drawRect);
 
-    if (d->movingHandle == CH_None)
+    if (d->flags & ShowResizeHandles)
     {
         // Only draw handles when user is not resizing
-        painter->setBrush(fillColor);
-        foreach (const CropHandle& handle, d->cropHandleList)
+        if (d->movingHandle == CH_None)
         {
-            QRectF rect = d->handleRect(handle);
-            painter->drawRect(rect);
+            painter->setOpacity(d->hoverAnimationOpacity);
+            painter->setBrush(fillColor);
+            foreach (const CropHandle& handle, d->cropHandleList)
+            {
+                QRectF rect = d->handleRect(handle);
+                painter->drawRect(rect);
+            }
         }
     }
 }
 
 
+void RegionFrameItem::hoverEnterEvent(QGraphicsSceneHoverEvent*)
+{
+    d->resizeHandleAnimation->stop();
+    d->resizeHandleAnimation->setEndValue(1.0);
+    d->resizeHandleAnimation->start();
+}
+
+void RegionFrameItem::hoverLeaveEvent(QGraphicsSceneHoverEvent*)
+{
+    d->resizeHandleAnimation->stop();
+    d->resizeHandleAnimation->setEndValue(0);
+    d->resizeHandleAnimation->start();
+}
+
+void RegionFrameItem::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+{
+    if (d->flags & GeometryEditable)
+    {
+        CropHandle handle = d->handleAt(event->pos());
+        d->updateCursor(handle, false/* buttonDown*/);
+    }
+}
+
 void RegionFrameItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     // FIXME: Fade out?
     //d->hudItem->hide();
+    if (!d->flags & GeometryEditable)
+        return DImgChildItem::mousePressEvent(event);
+
     d->movingHandle = d->handleAt(event->pos());
     d->updateCursor(d->movingHandle, event->buttons() != Qt::NoButton);
 
@@ -443,12 +516,6 @@ void RegionFrameItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
     // Update to hide handles
     update();
-}
-
-void RegionFrameItem::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
-{
-    CropHandle handle = d->handleAt(event->pos());
-    d->updateCursor(handle, false/* buttonDown*/);
 }
 
 void RegionFrameItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
