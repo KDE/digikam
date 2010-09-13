@@ -712,11 +712,12 @@ void SlideShow::keyPressEvent(QKeyEvent* e)
     d->toolBar->keyPressEvent(e);
 }
 
-static void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
-                                 QRect* topLeft, QRect* topRight, QRect* bottomLeft, QRect* bottomRight,
-                                 QRect* topLeftLarger, QRect* topRightLarger, QRect* bottomLeftLarger, QRect* bottomRightLarger)
+void SlideShow::makeCornerRectangles(const QRect& desktopRect, const QSize& size,
+                                     QRect* topLeft, QRect* topRight, QRect* bottomLeft, QRect* bottomRight,
+                                     QRect* topLeftLarger, QRect* topRightLarger, QRect* bottomLeftLarger, 
+                                     QRect* bottomRightLarger)
 {
-    QRect sizeRect(QPoint(0,0), size);
+    QRect sizeRect(QPoint(0, 0), size);
     *topLeft     = sizeRect;
     *topRight    = sizeRect;
     *bottomLeft  = sizeRect;
@@ -727,7 +728,7 @@ static void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
     bottomLeft->moveTo(topLeft->x(), desktopRect.y() + desktopRect.height() - sizeRect.height() - 1);
     bottomRight->moveTo(topRight->x(), bottomLeft->y());
 
-    const int marginX = 25, marginY = 10;
+    const int marginX  = 25, marginY = 10;
     *topLeftLarger     = topLeft->adjusted(0, 0, marginX, marginY);
     *topRightLarger    = topRight->adjusted(-marginX, 0, 0, marginY);
     *bottomLeftLarger  = bottomLeft->adjusted(0, -marginY, marginX, 0);
