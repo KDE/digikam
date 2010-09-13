@@ -18,7 +18,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 250265 : Black background of short summary display.
 011 ==> 248889 : Notification name "save file complete" written in lowercase.
 012 ==> 249082 : digiKam crashes on startup leaving message of unknown symbol.
-013 ==> 
+013 ==> 249029 : Changing the parameters of a tool in the batch queue manager changes parameters of all instances of such tool.
+014 ==> 
+
 
 
 
