@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,6 @@ namespace Digikam
 {
 
 class DImg;
-class SlideShowPriv;
 
 class DIGIKAM_EXPORT SlideShow : public QWidget
 {
@@ -57,17 +56,17 @@ public:
 
 protected:
 
-    void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void keyPressEvent(QKeyEvent *);
-    void wheelEvent(QWheelEvent *);
+    void paintEvent(QPaintEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void keyPressEvent(QKeyEvent*);
+    void wheelEvent(QWheelEvent*);
 
 private Q_SLOTS:
 
     void slotTimeOut();
     void slotMouseMoveTimeOut();
-    void slotGotImagePreview(const LoadingDescription &, const DImg &);
+    void slotGotImagePreview(const LoadingDescription&, const DImg&);
 
     void slotPause();
     void slotPlay();
@@ -89,6 +88,7 @@ private:
 
 private:
 
+    class SlideShowPriv;
     SlideShowPriv* const d;
 };
 

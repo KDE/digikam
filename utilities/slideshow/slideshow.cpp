@@ -6,8 +6,8 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2004 by Enrico Ros <eros.kde@email.it>                  *
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004 by Enrico Ros <eros.kde@email.it>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,7 +65,7 @@
 namespace Digikam
 {
 
-class SlideShowPriv
+class SlideShow::SlideShowPriv
 {
 public:
 
@@ -183,8 +183,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     d->previewThread->setDisplayingWidget(this);
     d->previewPreloadThread->setDisplayingWidget(this);
-    connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
-            this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
+    connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
+            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -386,10 +386,10 @@ void SlideShow::updatePixmap()
 
             QString str;
             PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
-            int offset = 0;
+            int offset                   = 0;
 
             // Display Rating.
-            int rating = d->settings.pictInfoMap[d->currentImage].rating;
+            int rating                   = d->settings.pictInfoMap[d->currentImage].rating;
 
             if (d->settings.printRating && rating > 0)
             {
@@ -621,7 +621,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
     }
 }
 
-void SlideShow::paintEvent(QPaintEvent *)
+void SlideShow::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, d->pixmap,
@@ -644,9 +644,9 @@ void SlideShow::slotPause()
 
 void SlideShow::slotPlay()
 {
+    d->timer->start();
     d->toolBar->hide();
     d->pause = false;
-    slotTimeOut();
 }
 
 void SlideShow::slotPrev()
@@ -664,7 +664,7 @@ void SlideShow::slotClose()
     close();
 }
 
-void SlideShow::wheelEvent(QWheelEvent * e)
+void SlideShow::wheelEvent(QWheelEvent *e)
 {
     if (e->delta() < 0)
     {
@@ -683,7 +683,7 @@ void SlideShow::wheelEvent(QWheelEvent * e)
     }
 }
 
-void SlideShow::mousePressEvent(QMouseEvent *e)
+void SlideShow::mousePressEvent(QMouseEvent* e)
 {
     if (d->endOfShow)
         close();
@@ -704,20 +704,23 @@ void SlideShow::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void SlideShow::keyPressEvent(QKeyEvent *event)
+void SlideShow::keyPressEvent(QKeyEvent* e)
 {
-    if (!event)
+    if (!e)
         return;
 
-    d->toolBar->keyPressEvent(event);
+    d->toolBar->keyPressEvent(e);
 }
 
 static void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
-                                 QRect *topLeft, QRect *topRight, QRect *bottomLeft, QRect *bottomRight,
-                                 QRect *topLeftLarger, QRect *topRightLarger, QRect *bottomLeftLarger, QRect *bottomRightLarger)
+                                 QRect* topLeft, QRect* topRight, QRect* bottomLeft, QRect* bottomRight,
+                                 QRect* topLeftLarger, QRect* topRightLarger, QRect* bottomLeftLarger, QRect* bottomRightLarger)
 {
     QRect sizeRect(QPoint(0,0), size);
-    *topLeft = sizeRect; *topRight = sizeRect; *bottomLeft = sizeRect; *bottomRight = sizeRect;
+    *topLeft     = sizeRect;
+    *topRight    = sizeRect;
+    *bottomLeft  = sizeRect;
+    *bottomRight = sizeRect;
 
     topLeft->moveTo(desktopRect.x(), desktopRect.y());
     topRight->moveTo(desktopRect.x() + desktopRect.width() - sizeRect.width() - 1, topLeft->y());
@@ -731,7 +734,7 @@ static void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
     *bottomRightLarger = bottomRight->adjusted(-marginX, -marginY, 0, 0);
 }
 
-void SlideShow::mouseMoveEvent(QMouseEvent *e)
+void SlideShow::mouseMoveEvent(QMouseEvent* e)
 {
     setCursor(QCursor(Qt::ArrowCursor));
     d->mouseMoveTimer->setSingleShot(true);
