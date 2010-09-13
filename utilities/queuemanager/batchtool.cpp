@@ -360,7 +360,7 @@ DImg& BatchTool::image() const
     return d->image;
 }
 
-bool BatchTool::apply() const
+bool BatchTool::apply()
 {
     d->cancel = false;
 

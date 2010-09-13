@@ -180,7 +180,7 @@ public:
 
     /** Apply all change to perform by this tool. This method call customized toolOperations().
      */
-    bool apply() const;
+    bool apply();
 
     /** Re-implement this method is you want customize cancelization of tool, for ex. to call
         a dedicated method to kill sub-threads parented to this tool instance.
