@@ -105,7 +105,7 @@ Comment[zh_TW]=從相機或其他裝置下載已經結束。
 Action=Popup
 
 [Event/editorsavefilecompleted]
-Name=save file complete
+Name=Save file complete
 Name[da]=filen er blevet gemt
 Name[es]=Completado guardar archivo
 Name[et]=Fail on salvestatud
