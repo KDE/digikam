@@ -354,7 +354,7 @@ bool BatchTool::savefromDImg()
     return b;
 }
 
-DImg& BatchTool::image()
+DImg& BatchTool::image() const
 {
     return d->image;
 }

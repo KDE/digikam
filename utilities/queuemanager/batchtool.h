@@ -211,7 +211,7 @@ protected:
 
     /** Return a reference of internal DImg container used to modify image data.
      */
-    DImg& image();
+    DImg& image() const;
 
     /** Return true if cancel() have been called. Use this method to stop loop in your toolOperations() implementation.
      */
