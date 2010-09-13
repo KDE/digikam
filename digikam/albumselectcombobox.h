@@ -33,6 +33,7 @@ class QSortFilterProxyModel;
 namespace Digikam
 {
 
+class AlbumFilterModel;
 class AbstractCheckableAlbumModel;
 
 class AlbumSelectComboBox : public TreeViewLineEditComboBox
@@ -52,16 +53,29 @@ public:
     */
     void setDefaultAlbumModels();
     void setDefaultTagModels();
-    void setModels(AbstractCheckableAlbumModel *model, QSortFilterProxyModel *filterModel);
+    void setModel(AbstractCheckableAlbumModel *model, AlbumFilterModel *filterModel = 0);
+
+    /** Enable checkboxes next to the items. Default: true */
+    void setCheckable(bool checkable);
+    bool isCheckable() const;
+
+    /** Enable closing when an item was activated (clicked). Default: false. */
+    void setCloseOnActivate(bool close);
 
     /** Sets the text that is used to describe the state when no album is selected.
-        This may be something like "Any album" or "No tag selected" */
+        This may be something like "Any album" or "No tag selected".
+        Depends on the default line edit implementation of TreeViewLineEditComboBox.
+    */
     void setNoSelectionText(const QString& text);
 
     /** Returns the source model. Retrieve selection information from here. */
     AbstractCheckableAlbumModel *model() const;
     /** Return the filter model in use. */
     QSortFilterProxyModel *filterModel() const;
+
+public Q_SLOTS:
+
+    virtual void hidePopup();
 
 protected Q_SLOTS:
 
@@ -71,9 +85,8 @@ protected Q_SLOTS:
 
 protected:
 
-    AbstractCheckableAlbumModel *m_model;
-    QSortFilterProxyModel       *m_filterModel;
-    QString                      m_noSelectionText;
+    class AlbumSelectComboBoxPriv;
+    AlbumSelectComboBoxPriv* const d;
 };
 
 } // namespace Digikam

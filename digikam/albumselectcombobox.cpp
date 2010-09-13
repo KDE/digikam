@@ -35,80 +35,163 @@
 // Local includes
 
 #include "albummodel.h"
+#include "albumfiltermodel.h"
 
 namespace Digikam
 {
 
-AlbumSelectComboBox::AlbumSelectComboBox(QWidget *parent)
-            : TreeViewLineEditComboBox(parent)
+class AlbumSelectComboBox::AlbumSelectComboBoxPriv
 {
-    m_noSelectionText = i18n("No Album Selected");
-    m_model           = 0;
-    m_filterModel     = 0;
+public:
+
+    AlbumSelectComboBoxPriv(AlbumSelectComboBox *q) : q(q)
+    {
+        model       = 0;
+        filterModel = 0;
+        isCheckable = true;
+        closeOnActivate = false;
+    }
+
+    AbstractCheckableAlbumModel *model;
+    AlbumFilterModel            *filterModel;
+    QString                      noSelectionText;
+    bool                         isCheckable;
+    bool                         closeOnActivate;
+
+    void                         updateCheckable();
+    void                         updateCloseOnActivate();
+
+    AlbumSelectComboBox* const q;
+};
+
+AlbumSelectComboBox::AlbumSelectComboBox(QWidget *parent)
+            : TreeViewLineEditComboBox(parent), d(new AlbumSelectComboBoxPriv(this))
+{
+    d->noSelectionText = i18n("No Album Selected");
 }
 
 AlbumSelectComboBox::~AlbumSelectComboBox()
 {
+    delete d;
 }
 
 void AlbumSelectComboBox::setDefaultAlbumModels()
 {
-    m_noSelectionText = i18n("No Album Selected");
-    setModels(new AlbumModel(AlbumModel::IgnoreRootAlbum, this),
-              new QSortFilterProxyModel(this));
+    d->noSelectionText = i18n("No Album Selected");
+    setModel(new AlbumModel(AlbumModel::IgnoreRootAlbum, this));
     view()->expandToDepth(0);
 }
 
 void AlbumSelectComboBox::setDefaultTagModels()
 {
-    m_noSelectionText = i18n("No Tag Selected");
-    setModels(new TagModel(AlbumModel::IgnoreRootAlbum, this),
-              new QSortFilterProxyModel(this));
+    d->noSelectionText = i18n("No Tag Selected");
+    setModel(new TagModel(AlbumModel::IgnoreRootAlbum, this));
 }
 
-void AlbumSelectComboBox::setModels(AbstractCheckableAlbumModel *model, QSortFilterProxyModel *filterModel)
+void AlbumSelectComboBox::setModel(AbstractCheckableAlbumModel *model, AlbumFilterModel *filterModel)
 {
-    m_model = model;
-    m_filterModel = filterModel;
+    d->model = model;
+    d->filterModel = filterModel ? filterModel : new AlbumFilterModel(this);
 
-    m_model->setCheckable(true);
-    connect(m_model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
-            this, SLOT(updateText()));
+    d->filterModel->setDynamicSortFilter(true);
+    d->filterModel->setSourceAlbumModel(d->model);
 
-    m_filterModel->setDynamicSortFilter(true);
-    m_filterModel->setSourceModel(m_model);
+    d->updateCheckable();
 
-    setModel(m_filterModel);
+    QComboBox::setModel(d->filterModel);
     installView();
     view()->setSortingEnabled(true);
     view()->sortByColumn(0, Qt::AscendingOrder);
     view()->collapseAll();
+    d->updateCloseOnActivate();
 
     updateText();
 }
 
+void AlbumSelectComboBox::setCheckable(bool checkable)
+{
+    if (checkable == d->isCheckable)
+        return;
+
+    d->isCheckable = checkable;
+    d->updateCheckable();
+}
+
+bool AlbumSelectComboBox::isCheckable() const
+{
+    return d->isCheckable;
+}
+
+void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCheckable()
+{
+    if (!model)
+        return;
+    model->setCheckable(isCheckable);
+    if (isCheckable)
+    {
+        connect(model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+                q, SLOT(updateText()));
+    }
+    else
+    {
+        disconnect(model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+                   q, SLOT(updateText()));
+    }
+}
+
+void AlbumSelectComboBox::setCloseOnActivate(bool close)
+{
+    if (d->closeOnActivate == close)
+        return;
+
+    d->closeOnActivate = close;
+    d->updateCloseOnActivate();
+}
+
+void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCloseOnActivate()
+{
+    if (!q->view())
+        return;
+    if (closeOnActivate)
+    {
+        connect(q->view(), SIGNAL(activated(const QModelIndex&)),
+                q, SLOT(hidePopup()));
+    }
+    else
+    {
+        disconnect(q->view(), SIGNAL(activated(const QModelIndex&)),
+                   q, SLOT(hidePopup()));
+    }
+}
+
 void AlbumSelectComboBox::setNoSelectionText(const QString& text)
 {
-    m_noSelectionText = text;
+    d->noSelectionText = text;
     updateText();
 }
 
 AbstractCheckableAlbumModel *AlbumSelectComboBox::model() const
 {
-    return m_model;
+    return d->model;
 }
 
 QSortFilterProxyModel *AlbumSelectComboBox::filterModel() const
 {
-    return m_filterModel;
+    return d->filterModel;
+}
+
+void AlbumSelectComboBox::hidePopup()
+{
+    // just make this a slot
+    return TreeViewLineEditComboBox::hidePopup();
 }
 
 void AlbumSelectComboBox::updateText()
 {
-    QList<Album *> checkedAlbums = m_model->checkedAlbums();
+    QList<Album *> checkedAlbums = d->model->checkedAlbums();
     if (checkedAlbums.isEmpty())
     {
-        setLineEditText(m_noSelectionText);
+        setLineEditText(d->noSelectionText);
     }
     else if (checkedAlbums.count() == 1)
     {
@@ -116,7 +199,7 @@ void AlbumSelectComboBox::updateText()
     }
     else
     {
-        if (m_model->albumType() == Album::TAG)
+        if (d->model->albumType() == Album::TAG)
             setLineEditText(i18np("1 Tag selected", "%1 Tags selected", checkedAlbums.count()));
         else
             setLineEditText(i18np("1 Album selected", "%1 Albums selected", checkedAlbums.count()));
