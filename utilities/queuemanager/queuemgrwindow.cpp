@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QTimer>
@@ -66,6 +67,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "drawdecoding.h"
 #include "batchtoolsmanager.h"
 #include "actionthread.h"
@@ -91,6 +93,7 @@
 #include "sidebar.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
+#include "scancontroller.h"
 
 namespace Digikam
 {
@@ -1098,7 +1101,19 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 addHistoryMessage(i18n("Item processed successfully..."), DHistoryView::SuccessEntry);
             }
 
-            // TODO: assign attributes from original image.
+            // Now copy the metadata of the original file to the new file ------------
+
+            KUrl srcDirURL(QDir::cleanPath(url.directory()));
+            PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
+
+            KUrl dstDirURL(QDir::cleanPath(dest.directory()));
+            PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
+
+            if (dstAlbum && srcAlbum)
+            {
+                ImageInfo oldInfo(url.toLocalFile());
+                ScanController::instance()->scanFileDirectlyCopyAttributes(dest.toLocalFile(), oldInfo.id());
+            }
         }
     }
 
