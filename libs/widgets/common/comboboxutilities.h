@@ -254,13 +254,24 @@ public:
 
     TreeViewLineEditComboBox(QWidget *parent = 0);
 
+    
+
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model. */
     virtual void installView();
 
     /** Set the text of the line edit (the text that is visible
-        if the popup is not opened) */
+        if the popup is not opened).
+        Applicable only for default installLineEdit() implementation.
+    */
     void setLineEditText(const QString& text);
+
+protected:
+
+    /** Sets a line edit. Called by installView().
+     *  The default implementation is described above.
+     *  An empty implementation will keep the default QComboBox line edit. */
+    virtual void installLineEdit();
 
 protected:
 

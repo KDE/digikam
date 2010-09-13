@@ -211,6 +211,7 @@ void ModelIndexBasedComboBox::setCurrentIndex(const QModelIndex& index)
 StayPoppedUpComboBox::StayPoppedUpComboBox(QWidget *parent)
                     : ModelIndexBasedComboBox(parent)
 {
+    m_view = 0;
 }
 
 void StayPoppedUpComboBox::installView(QAbstractItemView *view)
@@ -383,6 +384,11 @@ void TreeViewLineEditComboBox::installView()
     // parent does the heavy work
     TreeViewComboBox::installView();
 
+    installLineEdit();
+}
+
+void TreeViewLineEditComboBox::installLineEdit()
+{
     // replace line edit
     m_comboLineEdit = new TreeViewComboBoxLineEdit(this);
     setLineEdit(m_comboLineEdit);
