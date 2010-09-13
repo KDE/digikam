@@ -42,6 +42,7 @@
 // Local includes
 
 #include "album.h"
+#include "albumfiltermodel.h"
 #include "albummanager.h"
 #include "albummodel.h"
 #include "albumthumbnailloader.h"
@@ -90,6 +91,8 @@ static TaggingAction makeDefaultTaggingAction(const QString& text, int parentTag
     }
 }
 
+// ---------------------------------------------------------------------------------------
+
 TagModelCompletion::TagModelCompletion()
 {
 }
@@ -99,10 +102,22 @@ void TagModelCompletion::setModel(TagModel* model)
     ModelCompletion::setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 }
 
+void TagModelCompletion::setModel(AlbumFilterModel* model)
+{
+    ModelCompletion::setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+}
+
 TagModel* TagModelCompletion::model() const
 {
-    return static_cast<TagModel*>(ModelCompletion::model());
+    QAbstractItemModel *model = ModelCompletion::model();
+    if (dynamic_cast<TagModel*>(model))
+        return static_cast<TagModel*>(model);
+    else if (dynamic_cast<AlbumFilterModel*>(model))
+        return static_cast<TagModel*>(static_cast<AlbumFilterModel*>(model)->sourceAlbumModel());
+    return 0;
 }
+
+// ---------------------------------------------------------------------------------------
 
 class AddTagsCompletionBoxItem : public QListWidgetItem
 {
@@ -465,6 +480,8 @@ int AddTagsCompletionBoxPriv::maximumAvailableScreenHeight(const QPoint &orig)
     return qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
 }
 
+// ---------------------------------------------------------------------------------------
+
 class AddTagsLineEditPriv
 {
 public:
@@ -713,5 +730,78 @@ TaggingAction AddTagsLineEditPriv::makeTaggingAction(const QString& text)
     int parentTagId = parentTag ? parentTag->id() : 0;
     return makeDefaultTaggingAction(text, parentTagId);
 }
+
+
+
+// ---------------------------------------------------------------------------------------
+
+class AddTagsComboBoxPriv
+{
+public:
+
+    AddTagsComboBoxPriv()
+    {
+        lineEdit   = 0;
+    }
+
+    AddTagsLineEdit *lineEdit;
+};
+
+// ---------------------------------------------------------------------------------------
+
+AddTagsComboBox::AddTagsComboBox(QWidget* parent)
+               : AlbumSelectComboBox(parent), d(new AddTagsComboBoxPriv)
+{
+    QComboBox::setAutoCompletion(false);
+    setEditable(true);
+    setCloseOnActivate(true);
+    setCheckable(false);
+}
+
+AddTagsComboBox::~AddTagsComboBox()
+{
+    delete d;
+}
+
+void AddTagsComboBox::installLineEdit()
+{
+    d->lineEdit = new AddTagsLineEdit(this);
+    connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
+            this, SIGNAL(taggingActionActivated(const TaggingAction&)));
+    d->lineEdit->setClearButtonShown(true);
+    setLineEdit(d->lineEdit);
+}
+
+void AddTagsComboBox::setEditable(bool)
+{
+    // just made private, ignored
+}
+
+void AddTagsComboBox::setModel(TagModel* model, AlbumFilterModel *filterModel)
+{
+    AlbumSelectComboBox::setModel(model, filterModel);
+    d->lineEdit->setTagModel(model);
+}
+
+void AddTagsComboBox::setTagTreeView(TagTreeView *view)
+{
+    d->lineEdit->setTagTreeView(view);
+}
+
+void AddTagsComboBox::setClickMessage(const QString& message)
+{
+    d->lineEdit->setClickMessage(message);
+}
+
+QString AddTagsComboBox::text() const
+{
+    return d->lineEdit->text();
+}
+
+void AddTagsComboBox::setText(const QString& text)
+{
+    return d->lineEdit->setText(text);
+}
+
 
 } // namespace Digikam

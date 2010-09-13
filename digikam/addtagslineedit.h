@@ -28,16 +28,19 @@
 
 // KDE includes
 
+#include <kcombobox.h>
 #include <kcompletionbox.h>
 #include <klineedit.h>
 
 // Local includes
 
+#include "albumselectcombobox.h"
 #include "modelcompletion.h"
 
 namespace Digikam
 {
 
+class AlbumFilterModel;
 class TAlbum;
 class TagModel;
 class TagTreeView;
@@ -51,6 +54,7 @@ public:
     TagModelCompletion();
 
     void setModel(TagModel *model);
+    void setModel(AlbumFilterModel *model);
     TagModel *model() const;
 };
 
@@ -229,6 +233,42 @@ protected:
 private:
 
     AddTagsLineEditPriv* const d;
+};
+
+class AddTagsComboBoxPriv;
+
+class AddTagsComboBox : public AlbumSelectComboBox
+{
+    Q_OBJECT
+
+public:
+
+    AddTagsComboBox(QWidget* parent = 0);
+    ~AddTagsComboBox();
+
+    /** Set the tag model to use for completion. */
+    void setModel(TagModel* model, AlbumFilterModel *filterModel = 0);
+    /** Reads a tag treeview and takes the currently selected tag into account
+     *  when suggesting a parent tag for a new tag, and a default action. */
+    void setTagTreeView(TagTreeView* treeView);
+
+    void setClickMessage(const QString& message);
+
+    QString text() const;
+    void setText(const QString& text);
+
+Q_SIGNALS:
+
+    /// Emitted when the user activates an action (typically, by pressing return)
+    void taggingActionActivated(const TaggingAction& action);
+
+private:
+
+    virtual void installLineEdit();
+    // make private
+    void setEditable(bool editable);
+
+    AddTagsComboBoxPriv* const d;
 };
 
 } // namespace Digikam
