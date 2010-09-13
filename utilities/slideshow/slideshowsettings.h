@@ -6,7 +6,7 @@
  * Date        : 2007-02-13
  * Description : slide show settings container.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,39 +95,39 @@ public:
     // Global Slide Show Settings
 
     /** Auto-rotate image accordingly with Exif Rotation tag */
-    bool exifRotate;
+    bool                         exifRotate;
 
     /** Print picture file name during slide */
-    bool printName;
+    bool                         printName;
 
     /** Print picture creation date during slide */
-    bool printDate;
+    bool                         printDate;
 
     /** Print camera Aperture and Focal during slide */
-    bool printApertureFocal;
+    bool                         printApertureFocal;
 
     /** Print camera Make and Model during slide */
-    bool printMakeModel;
+    bool                         printMakeModel;
 
     /** Print camera Exposure and Sensitivity during slide */
-    bool printExpoSensitivity;
+    bool                         printExpoSensitivity;
 
     /** Print picture comment during slide */
-    bool printComment;
+    bool                         printComment;
 
     /** Print rating during slide */
-    bool printRating;
+    bool                         printRating;
 
     /** Slide pictures in loop */
-    bool loop;
+    bool                         loop;
 
     /** Delay in seconds */
-    int delay;
+    int                          delay;
 
     /** List of pictures URL to slide */
     KUrl::List fileList;
 
-    QColor     ratingColor;
+    QColor                       ratingColor;
 
     /** Map of pictures information to slide */
     QMap<KUrl, SlidePictureInfo> pictInfoMap;
