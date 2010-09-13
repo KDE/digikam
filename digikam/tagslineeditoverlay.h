@@ -50,10 +50,12 @@ public:
 Q_SIGNALS:
 
     void tagEdited(const QModelIndex& index, int rating);
+    void tagEdited(const QModelIndex& index, const QString&);
 
 protected Q_SLOTS:
 
     void slotTagChanged(int);
+    void slotTagChanged(const QString&);
     void slotDataChanged(const QModelIndex&, const QModelIndex&);
 
 protected:

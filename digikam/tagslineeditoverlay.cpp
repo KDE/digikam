@@ -41,6 +41,9 @@
 #include "imagemodel.h"
 #include "imagecategorizedview.h"
 #include "addtagslineedit.h"
+#include "tagscache.h"
+#include "abstractalbummodel.h"
+#include "albummodel.h"
 
 namespace Digikam
 {
@@ -59,21 +62,26 @@ QWidget* TagsLineEditOverlay::createWidget()
 {
     //const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     AddTagsLineEdit* lineEdit = new AddTagsLineEdit(parentWidget());
-    lineEdit->setClickMessage("Type the name of this person");
+    lineEdit->setClickMessage("Name");
     lineEdit->setReadOnly(false);
-
+    
+    TagModel* model = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
+    model->setCheckable(true);
+    model->setRootCheckable(false);
+    lineEdit->setTagModel(model);
+    
     return lineEdit;
 }
 
 void TagsLineEditOverlay::setActive(bool active)
 {
     AbstractWidgetDelegateOverlay::setActive(active);
-
+    
     if (active)
     {
-        connect(addTagsLineEdit(), SIGNAL(taggingActionActivated(TaggingAction)),
-                this, SLOT(slotTagChanged()));
-
+        connect(addTagsLineEdit(), SIGNAL(returnPressed(QString)),
+                this, SLOT(slotTagChanged(QString)));
+                
         if (view()->model())
             connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
                     this, SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
@@ -84,19 +92,30 @@ void TagsLineEditOverlay::setActive(bool active)
 
         if (view() && view()->model())
             disconnect(view()->model(), 0, this, 0);
+        
     }
 }
 
 void TagsLineEditOverlay::visualChange()
 {
     if (m_widget && m_widget->isVisible())
+    {
         updatePosition();
+    }
 }
 
 void TagsLineEditOverlay::hide()
 {
     //delegate()->setRatingEdited(QModelIndex());
     AbstractWidgetDelegateOverlay::hide();
+    kDebug()<<"Hide called, probably mouse left";
+
+    if(!m_widget->hasFocus())
+    {
+        m_widget->releaseKeyboard();
+        m_widget->releaseMouse();
+        addTagsLineEdit()->clear();
+    }
 }
 
 void TagsLineEditOverlay::updatePosition()
@@ -105,9 +124,9 @@ void TagsLineEditOverlay::updatePosition()
         return;
 
     QRect thumbrect = delegate()->ratingRect();
-    kDebug() << "Rect is : " << thumbrect;
+    kDebug() << "updatePosition called, probably a mouseover : " << thumbrect;
     QRect rect      = thumbrect;
-
+    
     if (rect.width() > addTagsLineEdit()->width() )
     {
         int offset = (rect.width() - addTagsLineEdit()->width()) / 2;
@@ -116,8 +135,9 @@ void TagsLineEditOverlay::updatePosition()
     QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 
-    m_widget->setFixedSize(rect.width() + 1, rect.height() + 1);
+    m_widget->setFixedSize(rect.width() + 2, rect.height() + 5);
     m_widget->move(rect.topLeft());
+    m_widget->setFocus();
 }
 
 void TagsLineEditOverlay::updateTag()
@@ -125,19 +145,28 @@ void TagsLineEditOverlay::updateTag()
     if (!m_index.isValid())
         return;
     ImageInfo info = ImageModel::retrieveImageInfo(m_index);
+    kDebug()<<"called updateTag()";
     //TODO: ADD ratingWidget()->setRating(info.rating());
 }
 
 void TagsLineEditOverlay::slotTagChanged(int tagId)
 {
+    kDebug()<<"Tag changed";
     if (m_widget && m_widget->isVisible() && m_index.isValid())
         emit this->tagEdited(m_index, tagId);
 }
 
+void TagsLineEditOverlay::slotTagChanged(const QString& name)
+{
+    kDebug()<<"Tag changed";
+    if (m_widget && m_widget->isVisible() && m_index.isValid())
+        emit this->tagEdited(m_index, name);
+}
+
 void TagsLineEditOverlay::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
-    if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
-        updateTag();
+    //if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
+        //updateTag();
 }
 
 void TagsLineEditOverlay::slotEntered(const QModelIndex& index)
@@ -151,7 +180,7 @@ void TagsLineEditOverlay::slotEntered(const QModelIndex& index)
     m_index = index;
 
     updatePosition();
-    updateTag();
+    //updateTag();
 
     //delegate()->setRatingEdited(m_index);
     view()->update(m_index);

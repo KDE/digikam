@@ -71,7 +71,7 @@ public Q_SLOTS:
     void rename();
 
     void assignRating(const QModelIndex &index, int rating);
-    void assignTag(const QModelIndex& index, int tagId);
+    void assignTag(const QModelIndex& index, const QString& name);
     
     void setFaceMode(bool on);
     void addRejectionOverlay(ImageDelegate *delegate = 0);

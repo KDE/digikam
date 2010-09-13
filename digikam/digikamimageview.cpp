@@ -201,10 +201,12 @@ void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
 {
     TagsLineEditOverlay *tagOverlay = new TagsLineEditOverlay(this);
     
-    connect(tagOverlay, SIGNAL(tagEdited(const QModelIndex &,int)),
-            this, SLOT(assignTag(const QModelIndex&, int)));
+    connect(tagOverlay, SIGNAL(tagEdited(QModelIndex, QString)),
+            this, SLOT(assignTag(QModelIndex, QString)));
 
     addOverlay(tagOverlay, delegate);
+    
+    tagOverlay->addTagsLineEdit()->setFocus();
 }
 
 
@@ -424,9 +426,14 @@ void DigikamImageView::assignRating(const QModelIndex &index, int rating)
     MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), rating);
 }
 
-void DigikamImageView::assignTag(const QModelIndex& index, int tagId)
+void DigikamImageView::assignTag(const QModelIndex& index, const QString& name)
 {
-    MetadataManager::instance()->assignTag(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), tagId);
+    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    QRect rect = d->faceDelegate->faceRect(index);
+    kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << rect;
+    d->faceiface->confirmName(info.id(), rect, name);
+    info.setVisible(false);
+    info.setVisible(true);
 }
 
 void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)

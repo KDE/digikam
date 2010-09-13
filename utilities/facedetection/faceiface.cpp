@@ -610,6 +610,7 @@ int FaceIface::confirmName( qlonglong imageid, const QRect& rect, const QString&
     // your "dad" is a subtag of "Family" in the People tags, then assigning a tag "dad" to a person should assign the
     // tag under "Family", and not create a new tag just below "People".
 
+    removeFace(imageid, rect);
     int nameTagId  = getOrCreateTagForPerson(name);
     QString region = TagRegion(rect).toXml();
 
@@ -760,10 +761,11 @@ int FaceIface::removeFace(qlonglong imageid, const QRect& rect)
             if (rectString == regionString)
             {
                 pair.removeProperty(ImageTagPropertyName::autodetectedFace(), regionString);
-
+                MetadataManager::instance()->removeTag(ImageInfo(imageid), pair.tagId());
+                
                 ImageTagPair unknownPair(imageid, d->unknownPeopleTagId);
                 if(!unknownPair.hasProperty(ImageTagPropertyName::tagRegion()))
-                        MetadataManager::instance()->removeTag(ImageInfo(imageid), pair.tagId());
+                        MetadataManager::instance()->removeTag(ImageInfo(imageid), unknownPair.tagId());
 
                 return pair.tagId();
 
