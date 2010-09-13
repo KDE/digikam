@@ -120,7 +120,7 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* parent)
     // NOTE: see B.K.O #209225 : signal/slot connection used internally to prevent crash when settings
     // are assigned to settings widget by main thread to tool thread.
 
-    connect(this, SIGNAL(signalSettingsChanged(const BatchToolSettings&)),
+    connect(this, SIGNAL(signalAssignSettings2Widget()),
             this, SLOT(slotAssignSettings2Widget()));
 }
 
@@ -199,6 +199,7 @@ void BatchTool::slotSettingsChanged(const BatchToolSettings& settings)
 void BatchTool::setSettings(const BatchToolSettings& settings)
 {
     d->settings = settings;
+    emit signalAssignSettings2Widget();
 }
 
 void BatchTool::setInputUrl(const KUrl& inputUrl)
@@ -281,12 +282,12 @@ void BatchTool::cancel()
     d->cancel = true;
 }
 
-bool BatchTool::isCancelled()
+bool BatchTool::isCancelled() const
 {
     return d->cancel;
 }
 
-BatchToolSettings BatchTool::settings()
+BatchToolSettings BatchTool::settings() const
 {
     return d->settings;
 }
@@ -326,14 +327,14 @@ void BatchTool::setOutputUrlFromInputUrl()
     }
 }
 
-bool BatchTool::loadToDImg()
+bool BatchTool::loadToDImg() const
 {
     if (!d->image.isNull()) return true;
 
     return d->image.load(inputUrl().toLocalFile(), d->observer, getRawDecodingSettings());
 }
 
-bool BatchTool::savefromDImg()
+bool BatchTool::savefromDImg() const
 {
     if (!isLastChainedTool() && outputSuffix().isEmpty()) return true;
 
@@ -359,7 +360,7 @@ DImg& BatchTool::image() const
     return d->image;
 }
 
-bool BatchTool::apply()
+bool BatchTool::apply() const
 {
     d->cancel = false;
 

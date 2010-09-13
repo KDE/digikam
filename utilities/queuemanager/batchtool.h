@@ -109,7 +109,7 @@ public:
     /** Manage settings values to tool. See BatchToolSettings container for details.
      */
     void setSettings(const BatchToolSettings& settings);
-    BatchToolSettings settings();
+    BatchToolSettings settings() const;
 
     /** Manage current input url processed by this tool.
      */
@@ -145,14 +145,14 @@ public:
     /** Load image data using input Url set by setInputUrl() to instance of internal
         DImg container.
      */
-    bool loadToDImg();
+    bool loadToDImg() const;
 
     /** Save image data from instance of internal DImg container using :
         - output Url set by setOutputUrl() or setOutputUrlFromInputUrl()
         - output file format set by outputSuffix(). If this one is empty,
           format of original image is used instead.
      */
-    bool savefromDImg();
+    bool savefromDImg() const;
 
     /** Set that the Exif orientation flag is allowed be reset to NORMAL after tool operation
      */
@@ -180,7 +180,7 @@ public:
 
     /** Apply all change to perform by this tool. This method call customized toolOperations().
      */
-    bool apply();
+    bool apply() const;
 
     /** Re-implement this method is you want customize cancelization of tool, for ex. to call
         a dedicated method to kill sub-threads parented to this tool instance.
@@ -201,6 +201,7 @@ public:
 Q_SIGNALS:
 
     void signalSettingsChanged(const BatchToolSettings&);
+    void signalAssignSettings2Widget();
 
 public Q_SLOTS:
 
@@ -215,7 +216,7 @@ protected:
 
     /** Return true if cancel() have been called. Use this method to stop loop in your toolOperations() implementation.
      */
-    bool isCancelled();
+    bool isCancelled() const;
 
     /** Re-implement this method to customize all batch operations done by this tool.
         This method is called by apply().
