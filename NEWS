@@ -16,7 +16,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 218256 : digiKam rc1 crashes while generating fingerprints.
 009 ==> 237786 : whitebalance doesn't work properly.
 010 ==> 250265 : Black background of short summary display.
-011 ==> 
+011 ==> 248889 : Notification name "save file complete" written in lowercase.
+012 ==> 
+
 
 
 
