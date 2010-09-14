@@ -339,9 +339,9 @@ bool BatchTool::savefromDImg() const
     if (!isLastChainedTool() && outputSuffix().isEmpty()) return true;
 
     DImg::FORMAT detectedFormat = d->image.detectedFormat();
-    QString frm = outputSuffix().toUpper();
-    bool resetOrientation = getResetExifOrientationAllowed()
-                    && (getNeedResetExifOrientation() || detectedFormat == DImg::RAW);
+    QString frm                 = outputSuffix().toUpper();
+    bool resetOrientation       = getResetExifOrientationAllowed() &&
+                                  (getNeedResetExifOrientation() || detectedFormat == DImg::RAW);
     if (frm.isEmpty())
     {
         // In case of output support is not set for ex. with all tool which do not convert to new format.
