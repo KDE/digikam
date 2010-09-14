@@ -11,8 +11,8 @@
  *               http://www.cs.washington.edu/homes/salesin/abstracts.html
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,9 +91,12 @@ typedef double Unit;
 // Keep this definition constant at qint32 (guaranteed binary size!)
 typedef qint32 Idx;
 
+// ---------------------------------------------------------------------------------
+
 class ImageData
 {
 public:
+
     Unit data1[NumberOfPixelsSquared];
     Unit data2[NumberOfPixelsSquared];
     Unit data3[NumberOfPixelsSquared];
@@ -106,7 +109,6 @@ public:
 
 class SignatureData
 {
-
 public:
 
     /** Y/I/Q positions with largest magnitude
@@ -125,33 +127,30 @@ public:
  */
 class SignatureMap
 {
-
 public:
-
-    typedef bool MapIndexType;
 
     SignatureMap()
     {
-        indexList = new MapIndexType[2 * Haar::NumberOfPixelsSquared];
+        m_indexList = new MapIndexType[2 * Haar::NumberOfPixelsSquared];
     }
 
     ~SignatureMap()
     {
-        delete indexList;
+        delete m_indexList;
     }
 
     /// Load a set of coefficients
-    void fill(Haar::Idx *coefs)
+    void fill(Haar::Idx* coefs)
     {
         // For maximum performance, we use a flat array.
         // First 16k for negative values, second 16k for positive values.
         // All values or false, only 2*40 are true.
-        memset(indexList, 0, sizeof(MapIndexType[2 * Haar::NumberOfPixelsSquared]));
+        memset(m_indexList, 0, sizeof(MapIndexType[2 * Haar::NumberOfPixelsSquared]));
         int x;
-        for (int i=0; i<Haar::NumberOfCoefficients; ++i)
+        for (int i=0; i < Haar::NumberOfCoefficients; ++i)
         {
-            x = coefs[i] + Haar::NumberOfPixelsSquared;
-            indexList[x] = true;
+            x              = coefs[i] + Haar::NumberOfPixelsSquared;
+            m_indexList[x] = true;
         }
     }
 
@@ -159,17 +158,19 @@ public:
     /// Index must be in the range -16383..16383.
     bool operator[](Haar::Idx index)
     {
-        return indexList[index + Haar::NumberOfPixelsSquared];
+        return m_indexList[index + Haar::NumberOfPixelsSquared];
     }
 
-    MapIndexType *indexList;
+public:
+
+    typedef bool MapIndexType;
+    MapIndexType* m_indexList;
 };
 
 // ---------------------------------------------------------------------------------
 
 class WeightBin
 {
-
 public:
 
     WeightBin();
@@ -197,7 +198,7 @@ public:
     };
 
     Weights(SketchType type = ScannedSketch)
-    : m_type(type)
+        : m_type(type)
     {
     }
 
@@ -219,14 +220,14 @@ public:
     Calculator();
     ~Calculator();
 
-    int  calcHaar(ImageData *imageData, SignatureData *sigData);
+    int  calcHaar(ImageData* imageData, SignatureData* sigData);
 
-    void transform(ImageData *data);
+    void transform(ImageData* data);
 
 private:
 
     void        haar2D(Unit a[]);
-    inline void getmLargests(Unit *cdata, Idx *sig);
+    inline void getmLargests(Unit* cdata, Idx* sig);
 };
 
 }  // namespace Haar

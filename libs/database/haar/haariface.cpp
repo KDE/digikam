@@ -7,9 +7,9 @@
  * Description : Haar Database interface
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,9 +57,7 @@
 #include "searchxml.h"
 #include "haar.h"
 #include "sqlquery.h"
-/*#include "imagecomments_p.h"
-#include "imageposition_p.h"
-*/
+
 using namespace std;
 
 namespace Digikam
@@ -75,7 +73,6 @@ typedef QMap<qlonglong, Haar::SignatureData> SignatureCache;
  */
 class DatabaseBlob
 {
-
 public:
 
     enum { Version = 1 };
@@ -86,7 +83,7 @@ public:
 
     /** Read the QByteArray into the Haar::SignatureData.
      */
-    void read(const QByteArray& array, Haar::SignatureData *data)
+    void read(const QByteArray& array, Haar::SignatureData* data)
     {
         QDataStream stream(array);
 
@@ -111,7 +108,7 @@ public:
                 stream >> data->sig[i][j];
     }
 
-    QByteArray write(Haar::SignatureData *data)
+    QByteArray write(Haar::SignatureData* data)
     {
         QByteArray array;
         array.reserve(sizeof(qint32) + 3*sizeof(double) + 3*sizeof(qint32)*Haar::NumberOfCoefficients);
@@ -134,9 +131,10 @@ public:
     }
 };
 
-class HaarIfacePriv
-{
+// -----------------------------------------------------------------------------------------------------
 
+class HaarIface::HaarIfacePriv
+{
 public:
 
     HaarIfacePriv()
@@ -223,7 +221,7 @@ public:
         Haar::SignatureData targetSig;
 
         // reference for easier access
-        SignatureCache &signatureCache = *this->signatureCache;
+        SignatureCache& signatureCache = *this->signatureCache;
 
         SqlQuery query = access.backend()->prepareQuery(signatureQuery);
         if (!access.backend()->exec(query))
@@ -237,13 +235,13 @@ public:
         }
     }
 
-    bool              useSignatureCache;
-    Haar::ImageData*  data;
-    Haar::WeightBin*  bin;
-    SignatureCache*   signatureCache;
-    QString           signatureQuery;
-    QString           signatureByAlbumRootsQuery;
-    QSet<int>         albumRootsToSearch;
+    bool             useSignatureCache;
+    Haar::ImageData* data;
+    Haar::WeightBin* bin;
+    SignatureCache*  signatureCache;
+    QString          signatureQuery;
+    QString          signatureByAlbumRootsQuery;
+    QSet<int>        albumRootsToSearch;
 };
 
 HaarIface::HaarIface()
@@ -423,7 +421,7 @@ QList<qlonglong> HaarIface::bestMatchesForSignature(const QString& signature, in
     return bestMatches(&sig, numberOfResults, type);
 }
 
-QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numberOfResults, SketchType type)
+QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData* querySig, int numberOfResults, SketchType type)
 {
     QMap<qlonglong, double> scores = searchDatabase(querySig, type);
 
@@ -434,6 +432,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
     bool initialFill = false;
     double score, worstScore, bestScore;
     qlonglong id;
+
     for (QMap<qlonglong, double>::const_iterator it = scores.constBegin(); it != scores.constEnd(); ++it)
     {
         score = it.value();
@@ -474,7 +473,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
     return bestMatches.values();
 }
 
-QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *querySig, double requiredPercentage,
+QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData* querySig, double requiredPercentage,
                                                      SketchType type)
 {
     QMap<qlonglong, double> scores = searchDatabase(querySig, type);
@@ -487,6 +486,7 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
     QMultiMap<double, qlonglong> bestMatches;
     double score, percentage;
     qlonglong id;
+
     for (QMap<qlonglong, double>::const_iterator it = scores.constBegin(); it != scores.constEnd(); ++it)
     {
         score = it.value();
@@ -513,7 +513,7 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
 }
 
 /// This method is the core functionality: It assigns a score to every image in the db
-QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig, SketchType type)
+QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* querySig, SketchType type)
 {
     d->createWeightBin();
 
@@ -578,9 +578,9 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
             }
             else
             {
-                double              &score = scores[imageid];
-                Haar::SignatureData &qSig  = *querySig;
-                Haar::SignatureData &tSig  = targetSig;
+                double&              score = scores[imageid];
+                Haar::SignatureData& qSig  = *querySig;
+                Haar::SignatureData& tSig  = targetSig;
 
                 score = calculateScore(qSig, tSig, weights, queryMaps);
             }
@@ -589,16 +589,15 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     // read cached signature map if possible
     else
     {
-        foreach (const qlonglong &imageid, signatureCache.keys())
+        foreach (const qlonglong& imageid, signatureCache.keys())
         {
             double& score              = scores[imageid];
-            Haar::SignatureData &qSig  = *querySig;
-            Haar::SignatureData &tSig  = signatureCache[imageid];
+            Haar::SignatureData& qSig  = *querySig;
+            Haar::SignatureData& tSig  = signatureCache[imageid];
 
             score = calculateScore(qSig, tSig, weights, queryMaps);
         }
     }
-
 
     return scores;
 }
@@ -628,7 +627,7 @@ QImage HaarIface::loadQImage(const QString& filename)
     return image;
 }
 
-bool HaarIface::retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData *sig)
+bool HaarIface::retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData* sig)
 {
     QList<QVariant> values;
     DatabaseAccess().backend()->execSql(QString("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
@@ -643,8 +642,8 @@ bool HaarIface::retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData *
     return true;
 }
 
-void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchType type,
-                                             double *lowestAndBestScore, double *highestAndWorstScore)
+void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData* sig, SketchType type,
+                                             double* lowestAndBestScore, double* highestAndWorstScore)
 {
     Haar::Weights weights((Haar::Weights::SketchType)type);
     double score = 0;
@@ -676,7 +675,7 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
 }
 
 void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QList<int>& tags2Scan,
-                                        double requiredPercentage, HaarProgressObserver *observer)
+                                        double requiredPercentage, HaarProgressObserver* observer)
 {
     // Carry out search. This takes long.
     QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbumsAndTags(albums2Scan,
@@ -714,9 +713,8 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QLi
     }
 }
 
-
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int>& albums2Scan,
-                                               double requiredPercentage, HaarProgressObserver *observer)
+                                               double requiredPercentage, HaarProgressObserver* observer)
 {
     QSet<qlonglong> idList;
 
@@ -731,7 +729,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
                                                const QList<int>& tags2Scan,
-                                               double requiredPercentage, HaarProgressObserver *observer)
+                                               double requiredPercentage, HaarProgressObserver* observer)
 {
     QSet<qlonglong> idList;
 
@@ -751,7 +749,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbumsAndTags(con
 }
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglong>& images2Scan,
-                                               double requiredPercentage, HaarProgressObserver *observer)
+                                               double requiredPercentage, HaarProgressObserver* observer)
 {
     QMap< qlonglong, QList<qlonglong> >  resultsMap;
     QSet<qlonglong>::const_iterator      it;
@@ -829,8 +827,8 @@ double HaarIface::calculateScore(Haar::SignatureData& querySig, Haar::SignatureD
     }
 
     // Step 2: Decrease the score if query and target have significant coefficients in common
-    Haar::Idx *sig               = 0;
-    Haar::SignatureMap *queryMap = 0;
+    Haar::Idx* sig               = 0;
+    Haar::SignatureMap* queryMap = 0;
     int x                        = 0;
 
     for (int channel = 0; channel < 3; ++channel)

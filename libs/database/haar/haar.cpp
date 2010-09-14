@@ -11,8 +11,8 @@
  *               http://www.cs.washington.edu/homes/salesin/abstracts.html
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,14 +81,14 @@ void ImageData::fillPixelData(const QImage& im)
     for (int h = 0; h < Haar::NumberOfPixels; ++h)
     {
         // Get a scanline:
-        QRgb *line = (QRgb*)image.scanLine(h);
+        QRgb* line = (QRgb*)image.scanLine(h);
 
         for (int w = 0; w < Haar::NumberOfPixels; ++w)
         {
-            QRgb pixel      = line[w];
-            data1[cn] = qRed  (pixel);
-            data2[cn] = qGreen(pixel);
-            data3[cn] = qBlue (pixel);
+            QRgb pixel = line[w];
+            data1[cn]  = qRed  (pixel);
+            data2[cn]  = qGreen(pixel);
+            data3[cn]  = qBlue (pixel);
             ++cn;
         }
     }
@@ -113,7 +113,7 @@ void ImageData::fillPixelData(const DImg& im)
             data1[cn] = ptr[2];
             data2[cn] = ptr[1];
             data3[cn] = ptr[0];
-            ptr += 4;
+            ptr       += 4;
             ++cn;
         }
     }
@@ -231,7 +231,7 @@ void Calculator::haar2D(Unit a[])
             // Write back subtraction results:
             for (k = 0, j1 = i+h1*NumberOfPixels; k < h1; ++k, j1 += NumberOfPixels)
             {
-                a[j1]=t[k];
+                a[j1] = t[k];
             }
         }
         // Fix first element of each column:
@@ -279,7 +279,7 @@ void Calculator::transform(ImageData *data)
     and store their indices in sig[].
     Skips entry 0.
 */
-void Calculator::getmLargests(Unit *cdata, Idx *sig)
+void Calculator::getmLargests(Unit* cdata, Idx* sig)
 {
     int       cnt, i;
     valStruct val;

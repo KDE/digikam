@@ -7,9 +7,9 @@
  * Description : Haar Database interface
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,21 +45,18 @@ namespace Digikam
 
 class DImg;
 
-//namespace Haar
-//{
-//    class SignatureData;
-//}
-
 class HaarProgressObserver
 {
 public:
+
     virtual ~HaarProgressObserver() {};
 
     virtual void totalNumberToScan(int number) = 0;
     virtual void processedNumber(int numberThatHasBeenProcessed) = 0;
 };
 
-class HaarIfacePriv;
+// --------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT HaarIface
 {
 
@@ -109,8 +106,8 @@ public:
     /** For a given signature, find out the highest and lowest possible score
      *  that any other signature could reach, compared to the given signature.
      */
-    void getBestAndWorstPossibleScore(Haar::SignatureData *querySig, SketchType type,
-                                      double *lowestAndBestScore, double *highestAndWorstScore);
+    void getBestAndWorstPossibleScore(Haar::SignatureData* querySig, SketchType type,
+                                      double* lowestAndBestScore, double* highestAndWorstScore);
 
     /** Fill a map of duplicates images found over a list of image to scan.
      *  For each map item, the result values is list of candidate images which are duplicates of the key image.
@@ -118,28 +115,28 @@ public:
      *  The threshold is in the range 0..1, with 1 meaning identical signature.
      */
     QMap< qlonglong, QList<qlonglong> > findDuplicates(const QSet<qlonglong>& images2Scan, double requiredPercentage,
-                                                       HaarProgressObserver *observer = 0);
+                                                       HaarProgressObserver* observer = 0);
 
     /** Calls findDuplicates with all images in the given album ids */
     QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbums(const QList<int>& albums2Scan, double requiredPercentage,
-                                                               HaarProgressObserver *observer = 0);
+                                                               HaarProgressObserver* observer = 0);
 
     /** Calls findDuplicates with all images in the given album and tag ids */
     QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
                                                                       const QList<int>& tags2Scan,
                                                                       double requiredPercentage,
-                                                                      HaarProgressObserver *observer = 0);
+                                                                      HaarProgressObserver* observer = 0);
 
     /** Rebuilds the special search albums in the database that contain a list of possible candidates
      *  for duplicate images (one album per group of duplicates)
      */
     void rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QList<int>& tags2Scan,
-                                 double requiredPercentage, HaarProgressObserver *observer = 0);
+                                 double requiredPercentage, HaarProgressObserver* observer = 0);
 
     /** Retrieve the Haar signature from database using image id.
      *  Return true if item signature exist else false.
      */
-    bool retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData *sig);
+    bool retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData* sig);
 
     /** Give a list of albumRoots to which the search shall be limited.
      *  Calling with an empty list will disable filtering.
@@ -153,16 +150,17 @@ private:
 
     bool   indexImage(qlonglong imageid);
 
-    QList<qlonglong> bestMatches(Haar::SignatureData *data, int numberOfResults, SketchType type);
-    QList<qlonglong> bestMatchesWithThreshold(Haar::SignatureData *querySig,
+    QList<qlonglong> bestMatches(Haar::SignatureData* data, int numberOfResults, SketchType type);
+    QList<qlonglong> bestMatchesWithThreshold(Haar::SignatureData* querySig,
                                               double requiredPercentage, SketchType type);
 
-    QMap<qlonglong, double> searchDatabase(Haar::SignatureData *data, SketchType type);
+    QMap<qlonglong, double> searchDatabase(Haar::SignatureData* data, SketchType type);
     double calculateScore(Haar::SignatureData& querySig, Haar::SignatureData& targetSig,
                           Haar::Weights& weights, Haar::SignatureMap** queryMaps);
 
 private:
 
+    class HaarIfacePriv;
     HaarIfacePriv* const d;
 };
 
