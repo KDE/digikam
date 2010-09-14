@@ -3,6 +3,7 @@ digiKam 1.5.0 - Release date: 2010-10-??
 
 NEW FEATURES:
 
+Batch Queue Manager : add new tool to remove metadata from images.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
