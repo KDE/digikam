@@ -100,6 +100,7 @@ protected:
 
 private Q_SLOTS:
 
+    void slotFileChanged(const QString&);
     void slotQueueSelected(int);
     void slotCloseQueueRequest(QWidget*);
     void slotTestCanDecode(const QDragMoveEvent*, bool&);

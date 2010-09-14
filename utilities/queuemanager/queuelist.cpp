@@ -947,4 +947,9 @@ void QueueListView::slotCollectionImageChange(const CollectionImageChangeset& ch
     }
 }
 
+void QueueListView::reloadThumbs(const KUrl& url)
+{
+    d->thumbLoadThread->find(url.toLocalFile());
+}
+
 }  // namespace Digikam

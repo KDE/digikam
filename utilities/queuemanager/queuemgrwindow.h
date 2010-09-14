@@ -85,12 +85,10 @@ protected:
     void moveEvent(QMoveEvent* e);
     bool event(QEvent* e);
 
-
 public Q_SLOTS:
 
     void slotRun();
     void slotStop();
-    void slotFileChanged(const QString&);
 
 private:
 
@@ -149,7 +147,7 @@ private:
     class QueueMgrWindowPriv;
     QueueMgrWindowPriv* const d;
 
-    static QueueMgrWindow *m_instance;
+    static QueueMgrWindow* m_instance;
 };
 
 }  // namespace Digikam

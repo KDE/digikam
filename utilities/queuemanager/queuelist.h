@@ -115,6 +115,8 @@ public:
 
     void setEnableToolTips(bool val);
 
+    void reloadThumbs(const KUrl& url);
+
 Q_SIGNALS:
 
     void signalQueueContentsChanged();
