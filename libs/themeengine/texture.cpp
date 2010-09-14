@@ -7,7 +7,7 @@
  * Description : texture pixmap methods
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Adapted from fluxbox: Texture/TextureRender
  *
@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class TexturePriv
+class Texture::TexturePriv
 {
 public:
 
@@ -63,9 +63,9 @@ public:
 
     bool            border;
 
-    unsigned char  *red;
-    unsigned char  *green;
-    unsigned char  *blue;
+    unsigned char*  red;
+    unsigned char*  green;
+    unsigned char*  blue;
 
     int             width;
     int             height;

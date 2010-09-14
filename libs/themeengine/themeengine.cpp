@@ -7,7 +7,7 @@
  * Description : theme engine methods
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@
 namespace Digikam
 {
 
-class ThemeEnginePriv
+class ThemeEngine::ThemeEnginePriv
 {
 public:
 
@@ -67,17 +67,22 @@ public:
         themeInitiallySet = false;
     }
 
-    bool                    themeInitiallySet;
+    bool                   themeInitiallySet;
 
-    QPalette                defaultPalette;
+    QPalette               defaultPalette;
 
-    QHash<QString, Theme*>  themeHash;
+    QHash<QString, Theme*> themeHash;
 
-    Theme                  *currTheme;
-    Theme                  *defaultTheme;
+    Theme*                 currTheme;
+    Theme*                 defaultTheme;
 };
 
-class ThemeEngineCreator { public: ThemeEngine object; };
+class ThemeEngineCreator
+{
+public:
+
+    ThemeEngine object; 
+};
 
 K_GLOBAL_STATIC(ThemeEngineCreator, creator)
 ThemeEngine* ThemeEngine::instance()
@@ -92,7 +97,7 @@ ThemeEngine::ThemeEngine()
 
     d->defaultTheme = new Theme(i18n("Default"), QString());
     d->themeHash.insert(i18n("Default"), d->defaultTheme);
-    d->currTheme = d->defaultTheme;
+    d->currTheme    = d->defaultTheme;
 
     buildDefaultTheme();
 }
@@ -102,7 +107,7 @@ ThemeEngine::~ThemeEngine()
     // Delete all hash items
     while (!d->themeHash.isEmpty())
     {
-        Theme *value = *d->themeHash.begin();
+        Theme* value = *d->themeHash.begin();
         d->themeHash.erase(d->themeHash.begin());
         delete value;
     }
@@ -212,7 +217,7 @@ QStringList ThemeEngine::themeNames() const
 
     for (it = d->themeHash.begin(); it != d->themeHash.end(); ++it)
     {
-        Theme *t = it.value();
+        Theme* t = it.value();
         names << t->name;
     }
     names.sort();
@@ -258,7 +263,7 @@ void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool 
         d->themeHash.remove(name);
     }
 
-    Theme *t = new Theme(theme);
+    Theme* t = new Theme(theme);
     t->filePath = theme.filePath;
     d->themeHash.insert(name, t);
 
@@ -276,7 +281,9 @@ void ThemeEngine::changePalette()
     // Make palette for all widgets.
     QPalette plt;
     if (d->currTheme == d->defaultTheme)
+    {
         plt = d->defaultPalette;
+    }
     else
     {
         plt = kapp->palette();
@@ -284,11 +291,12 @@ void ThemeEngine::changePalette()
         const QColor fg(ThemeEngine::instance()->textRegColor());
         const QColor bg(ThemeEngine::instance()->baseColor());
 
-    /*    bg.hsv(&h, &s, &v);
+/*
+        bg.hsv(&h, &s, &v);
         v += (v < 128) ? +50 : -50;
         v &= 255; //ensures 0 <= v < 256
         d->currTheme->altBase = QColor(h, s, v, QColor::Hsv);
-    */
+*/
         fg.getHsv(&h, &s, &v);
         v += (v < 128) ? +150 : -150;
         v &= 255; //ensures 0 <= v < 256
@@ -330,12 +338,12 @@ void ThemeEngine::changePalette()
         plt.setColor(QPalette::Disabled, QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
         plt.setColor(QPalette::Disabled, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
 
-        /*
+/*
         cg.setColor(QColorGroup::Light,           ThemeEngine::instance()->textRegColor());
         cg.setColor(QColorGroup::Midlight,        ThemeEngine::instance()->textRegColor());
         cg.setColor(QColorGroup::Mid,             ThemeEngine::instance()->textRegColor());
         cg.setColor(QColorGroup::Shadow,          ThemeEngine::instance()->textRegColor());
-        */
+*/
     }
 
     kapp->setPalette(plt);
@@ -405,7 +413,7 @@ bool ThemeEngine::loadTheme()
     if (!d->currTheme || d->currTheme == d->defaultTheme)
         return false;
 
-    Theme *t = d->currTheme;
+    Theme* t = d->currTheme;
 
     // use the default theme as base template to build the themes
     *(t) = *(d->defaultTheme);
@@ -698,7 +706,7 @@ QString ThemeEngine::resourceValue(const QDomElement& rootElem, const QString& k
         }
     }
 
-    return QString("");
+    return QString();
 }
 
 bool ThemeEngine::saveTheme()
@@ -707,7 +715,7 @@ bool ThemeEngine::saveTheme()
     if (!d->currTheme)
         return false;
 
-    Theme *t = d->currTheme;
+    Theme* t = d->currTheme;
 
     QFileInfo fi(t->filePath);
 
