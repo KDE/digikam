@@ -179,14 +179,28 @@ static bool clipped(int &x, int &y, int &w, int &h, uint width, uint height)
     return inner.isValid();
 }
 
+DImg DImg::smoothScale(const QSize& destSize, Qt::AspectRatioMode aspectRatioMode) const
+{
+    QSize scaleSize = size();
+    scaleSize.scale(destSize, aspectRatioMode);
+    if (!scaleSize.isValid())
+        return DImg();
+    return smoothScaleClipped(scaleSize, QRect(QPoint(0,0), scaleSize));
+}
+
 DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode) const
 {
-    return smoothScaleClipped(dw, dh, 0, 0, dw, dh, aspectRatioMode);
+    return smoothScale(QSize(dw, dh), aspectRatioMode);
+}
+
+DImg DImg::smoothScaleClipped(const QSize& destSize, const QRect& clip) const
+{
+    return DImg::smoothScaleClipped(destSize.width(), destSize.height(),
+                                    clip.x(), clip.y(), clip.width(), clip.height());
 }
 
 DImg DImg::smoothScaleClipped(int dw, int dh,
-                              int clipx, int clipy, int clipw, int cliph,
-                              Qt::AspectRatioMode aspectRatioMode) const
+                              int clipx, int clipy, int clipw, int cliph) const
 {
     if (dw <= 0 || dh <= 0 || clipw <=0 || cliph <=0 || isNull())
         return DImg();
@@ -197,16 +211,9 @@ DImg DImg::smoothScaleClipped(int dw, int dh,
     if (w <= 0 || h <= 0)
         return DImg();
 
+    // ensure clip is valid
     if (!clipped(clipx, clipy, clipw, cliph, dw, dh))
         return DImg();
-
-    QSize newSize(w, h);
-    newSize.scale( QSize(dw, dh), aspectRatioMode );
-    if (!newSize.isValid())
-        return DImg();
-
-    dw = newSize.width();
-    dh = newSize.height();
 
     // do we actually need to scale?
     if ((w == (uint)dw) && (h == (uint)dh))
@@ -255,6 +262,12 @@ DImg DImg::smoothScaleClipped(int dw, int dh,
     delete scaleinfo;
 
     return buffer;
+}
+
+DImg DImg::smoothScaleSection(const QRect& sourceRect, const QSize& destSize) const
+{
+    return smoothScaleSection(sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
+                              destSize.width(), destSize.height());
 }
 
 DImg DImg::smoothScaleSection(int sx, int sy,
