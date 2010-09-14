@@ -79,9 +79,6 @@ enum HudSide
 
 typedef QPair<QPointF, HudSide> OptimalPosition;
 
-static const int HUD_TIMER_MAX_PIXELS_PER_UPDATE = 20;
-static const int HUD_TIMER_ANIMATION_INTERVAL = 20;
-
 Q_DECLARE_FLAGS(CropHandle, CropHandleFlag)
 
 } // namespace Digikam
@@ -124,10 +121,15 @@ public:
     qreal                  hoverAnimationOpacity;
     QTimer*                hudTimer;
     QPointF                hudEndPos;
+
+    const int              HUD_TIMER_MAX_PIXELS_PER_UPDATE;
+    const int              HUD_TIMER_ANIMATION_INTERVAL;
 };
 
 RegionFrameItem::RegionFrameItemPriv::RegionFrameItemPriv(RegionFrameItem* q)
-                                    : q(q)
+                                    : q(q),
+                                      HUD_TIMER_MAX_PIXELS_PER_UPDATE(20),
+                                      HUD_TIMER_ANIMATION_INTERVAL(20)
 {
     hudSide               = HS_None;
     movingHandle          = CH_None;
@@ -366,7 +368,7 @@ RegionFrameItem::RegionFrameItem(QGraphicsItem* item)
     d->resizeHandleAnimation->setEasingCurve(QEasingCurve::OutCirc);
 
     d->hudTimer = new QTimer(this);
-    d->hudTimer->setInterval(HUD_TIMER_ANIMATION_INTERVAL);
+    d->hudTimer->setInterval(d->HUD_TIMER_ANIMATION_INTERVAL);
 
     connect(d->hudTimer, SIGNAL(timeout()),
             this, SLOT(moveHudWidget()));
@@ -635,9 +637,9 @@ void RegionFrameItem::moveHudWidget()
     const double distance = sqrt(pow(delta.x(), 2) + pow(delta.y(), 2));
     QPointF pos;
 
-    if (distance > double(HUD_TIMER_MAX_PIXELS_PER_UPDATE))
+    if (distance > double(d->HUD_TIMER_MAX_PIXELS_PER_UPDATE))
     {
-        pos = d->hudItem->pos() + delta * double(HUD_TIMER_MAX_PIXELS_PER_UPDATE) / distance;
+        pos = d->hudItem->pos() + delta * double(d->HUD_TIMER_MAX_PIXELS_PER_UPDATE) / distance;
     }
     else
     {

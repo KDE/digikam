@@ -84,7 +84,7 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
