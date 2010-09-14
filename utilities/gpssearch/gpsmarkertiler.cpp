@@ -266,6 +266,10 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::AbstractMar
 
             //return 0;
         }
+
+        if(currentIndex >= tile->children.count())
+            return 0;        
+
         childTile = static_cast<MyTile*>(tile->children.at(currentIndex));
 
         if (childTile==0)
@@ -584,23 +588,41 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
                 const TileIndex markerTileIndex = TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
                 const int newTileIndex          = markerTileIndex.toIntList().last();
 
-                MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
-
-                if (newTile == 0)
+                if (newTileIndex >= currentTile->children.count())
                 {
-                    newTile = static_cast<MyTile*>(tileNew());
-
+                    /*MyTile* newTile = static_cast<MyTile*>(tileNew());
+                    
                     if (currentLevel == wantedLevel+1)
                     {
                         newTile->imagesId.append(currentImageInfo.id);
                     }
-
+                    
+                    kDebug()<<"Before.newTileIndex="<<newTileIndex;
                     currentTile->addChild(newTileIndex, newTile);
-                    currentTile = newTile;
+                    kDebug()<<"After.";
+                    currentTile = newTile;*/
+                    continue;
                 }
                 else
                 {
-                    currentTile = newTile;
+                    MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
+
+                    if (newTile == 0)
+                    {
+                        newTile = static_cast<MyTile*>(tileNew());
+
+                        if (currentLevel == wantedLevel+1)
+                        {
+                            newTile->imagesId.append(currentImageInfo.id);
+                        }
+
+                        currentTile->addChild(newTileIndex, newTile);
+                        currentTile = newTile;
+                    }
+                    else
+                    {
+                        currentTile = newTile;
+                    }
                 }
             }
         }
@@ -655,37 +677,42 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
     {
         foreach(const qlonglong& id, changeset.ids())
         {
-            Q_UNUSED(id);
-            /*
+            
+            ImageInfo newImageInfo(id);
+            if(!newImageInfo.hasCoordinates())
+                return;
+
+            KMap::GeoCoordinates newCoordinates(newImageInfo.latitudeNumber(), newImageInfo.longitudeNumber());
+            if(newImageInfo.hasAltitude())
+                newCoordinates.setAlt(newImageInfo.altitudeNumber());
+
             if(d->imagesHash.contains(id))
             {
-                GPSImageInfo oldInfo = d->imageHash.value(id);
+                GPSImageInfo oldInfo = d->imagesHash.value(id);
                 KMap::GeoCoordinates oldCoordinates = oldInfo.coordinate;
 
-                ImageInfo currentImageInfo(id);
-                if(!currentImageInfo->hasCoordinates())
-                //TODO: See if current image has coordinates.
-                    return;
+                KMap::GeoCoordinates newCoordinates(newImageInfo.latitudeNumber(), newImageInfo.longitudeNumber());
+                if(newImageInfo.hasAltitude())
+                    newCoordinates.setAlt(newImageInfo.altitudeNumber());
 
-                KMap::GeoCoordinates newCoordinates(currentImageInfo.latitude(), currentImageInfo.longitude());
-                if(currentImageInfo.hasAltitude())
-                    newCoordinates.setAlt(currentImageInfo.altitude());
-
-                d->imageHash->remove(id);
-                GPSInfo currentImageInfo;
-                currentImageInfo.id         = id;
-                currentImageInfo.coordinate = newCoordinates
+                d->imagesHash.remove(id);
+                GPSImageInfo currentImageInfo;
+                currentImageInfo.id           = id;
+                currentImageInfo.coordinate   = newCoordinates;
+                currentImageInfo.rating       = newImageInfo.rating();
+                currentImageInfo.creationDate = newImageInfo.dateTime();
+                d->imagesHash.insert(id, currentImageInfo);
 
                 TileIndex oldTileIndex = TileIndex::fromCoordinates(oldCoordinates, TileIndex::MaxLevel);
                 TileIndex newTileIndex = TileIndex::fromCoordinates(newCoordinates, TileIndex::MaxLevel);
 
-                QIntList oldTileIndexList = oldTileIndex.toIntList();
-                QIntList newTileIndexList = newTileIndex.toIntList();
+                QList<int> oldTileIndexList = oldTileIndex.toIntList();
+                QList<int> newTileIndexList = newTileIndex.toIntList();
 
                 int separatorLevel = -1;
-                for(int i=0; i<oldTileIndexList.count(); ++i)
+                for (int i=0; i<oldTileIndexList.count(); ++i)
                 {
-                    if(oldTileIndex.at(i) != newTileIndex.at(i))
+                    if (oldTileIndexList.at(i) != newTileIndexList.at(i))
                     {
                         separatorLevel = i; 
                         break;
@@ -694,16 +721,111 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
                 if(separatorLevel != -1)
                 {
-                    for(int level=0; level<newTileIndex.level(); ++level)
+                    MyTile* currentTileOld = static_cast<MyTile*>(rootTile());
+                    MyTile* currentTileNew = currentTileOld;
+                    for (int level=0; level<oldTileIndexList.count(); ++level)
                     {
-                    }
+                        const int tileIndex = oldTileIndexList.at(level);
+                        if(currentTileOld->children.count() == 0)
+                            return;
+
+                        MyTile* childTileOld = static_cast<MyTile*>(currentTileOld->children.at(tileIndex));
+                        if(childTileOld == 0)
+                            return;
+
+                        if(level<separatorLevel)
+                        {
+                            currentTileOld = childTileOld;
+                        }
+                        else
+                        {
+                            int idIndex = childTileOld->imagesId.indexOf(id);
+                            if(idIndex != -1)
+                                childTileOld->imagesId.removeAt(idIndex);
+
+                            if(childTileOld->imagesId.count() == 0)
+                            {
+                                int childTileListIndex = currentTileOld->children.indexOf(childTileOld);
+                                if (childTileListIndex != -1)
+                                    currentTileOld->children.remove(childTileListIndex);
+                            }
+
+                            if(currentTileNew == rootTile())
+                                currentTileNew = currentTileOld;
+                            
+                            currentTileOld = childTileOld;
+
+                            //adds the new child tile to currentTileNew
+
+                            bool found = currentTileNew->imagesId.contains(id);
+
+                            if (!found)
+                                currentTileNew->imagesId.append(currentImageInfo.id);
+
+                            if (currentTileNew->children.isEmpty())
+                                    currentTileNew->prepareForChildren(KMap::QIntPair(TileIndex::Tiling, 
+                                                                                      TileIndex::Tiling));
+
+                            const int newTileIndex = newTileIndexList.at(level);
+                            MyTile* childTileNew = static_cast<MyTile*>(currentTileNew->children.at(newTileIndex));
+
+                            if (childTileNew == 0)
+                            {
+                                childTileNew = static_cast<MyTile*>(tileNew());
+                                childTileNew->imagesId.append(currentImageInfo.id);
+                                currentTileNew->addChild(newTileIndex, childTileNew);
+                                currentTileNew = childTileNew;
+                            }
+                            else
+                            {
+                                currentTileNew = childTileNew;
+                            }
+                        } 
+                    }     
                 }
+
             }
             else
             {
                 //TODO: add here the code that adds the image
+                
+                GPSImageInfo currentImageInfo;
+                currentImageInfo.id           = id;
+                currentImageInfo.coordinate   = newCoordinates;
+                currentImageInfo.rating       = newImageInfo.rating();
+                currentImageInfo.creationDate = newImageInfo.dateTime();
+                d->imagesHash.insert(id, currentImageInfo);
+
+                MyTile* currentTile = static_cast<MyTile*>(rootTile());
+                
+                for (int currentLevel = 0; currentLevel <= TileIndex::MaxLevel; ++currentLevel)
+                {
+                    bool found = currentTile->imagesId.contains(currentImageInfo.id);
+                    if (!found)
+                        currentTile->imagesId.append(currentImageInfo.id);
+
+                    if (currentTile->children.isEmpty())
+                        currentTile->prepareForChildren(KMap::QIntPair(TileIndex::Tiling, 
+                                                                       TileIndex::Tiling));
+
+                    const TileIndex markerTileIndex = TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
+                    const int newTileIndex          = markerTileIndex.toIntList().last();
+
+                    MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
+
+                    if (newTile == 0)
+                    {
+                        newTile = static_cast<MyTile*>(tileNew());
+                        currentTile->addChild(newTileIndex, newTile);
+                        currentTile = newTile;
+                    }
+                    else
+                    {
+                        currentTile = newTile;
+                    }
+                }
             }
-            */
+            
         }
     }
 }

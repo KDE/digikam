@@ -79,33 +79,6 @@ public:
         {
         }
 
-        /*
-        class ImageFromTileInfo
-        {
-        public:
-            ImageFromTileInfo()
-            :id(-2),
-             url(),
-             coordinate(),
-             rating(),
-             creationDate()
-            {
-            }
-
-            ~ImageFromTileInfo()
-            {
-            }
-
-            int                 id;
-            KUrl                url;
-            KMap::GeoCoordinates    coordinate;
-            int                 rating;
-            QDateTime           creationDate;
-        };
-
-        QList<ImageFromTileInfo>     imagesFromTileInfo;
-        */
-
         QList<int> imagesId;
     };
 
