@@ -792,7 +792,7 @@ int QueueListView::pendingTasksCount()
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
         if (item && !item->isDone())
-            count += assignedTools().toolsMap.count();
+            count += assignedTools().m_toolsMap.count();
         ++it;
     }
     return count;
@@ -889,7 +889,7 @@ void QueueListView::updateDestFileNames()
 
             // Update suffix using assigned batch tool rules.
             bool extensionSet = false;
-            tools.itemUrl     = item->info().fileUrl();
+            tools.m_itemUrl   = item->info().fileUrl();
             QString newSuffix = tools.targetSuffix(&extensionSet);
             QString newName   = QString("%1.%2").arg(fi.completeBaseName()).arg(newSuffix);
 

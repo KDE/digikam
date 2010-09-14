@@ -191,13 +191,13 @@ AssignedBatchTools AssignedListView::assignedList()
     }
 
     AssignedBatchTools tools;
-    tools.toolsMap = map;
+    tools.m_toolsMap = map;
     return tools;
 }
 
 int AssignedListView::assignedCount()
 {
-    return assignedList().toolsMap.count();
+    return assignedList().m_toolsMap.count();
 }
 
 void AssignedListView::slotRemoveCurrentTool()
@@ -479,10 +479,10 @@ void AssignedListView::slotQueueSelected(int, const QueueSettings&, const Assign
     clear();
     emit signalToolSelected(BatchToolSet());
 
-    if (!tools.toolsMap.isEmpty())
+    if (!tools.m_toolsMap.isEmpty())
     {
         blockSignals(true);
-        for (BatchToolMap::const_iterator it = tools.toolsMap.constBegin() ; it != tools.toolsMap.constEnd() ; ++it)
+        for (BatchToolMap::const_iterator it = tools.m_toolsMap.constBegin() ; it != tools.m_toolsMap.constEnd() ; ++it)
             addTool(it.key(), it.value());
         blockSignals(false);
     }

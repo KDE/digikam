@@ -920,13 +920,13 @@ void QueueMgrWindow::processOne()
 
     QueueSettings settings        = d->queuePool->currentQueue()->settings();
     AssignedBatchTools tools4Item = d->queuePool->currentQueue()->assignedTools();
-    tools4Item.itemUrl            = set.info.fileUrl();
-    QueueListViewItem* item       = d->queuePool->currentQueue()->findItemByUrl(tools4Item.itemUrl);
+    tools4Item.m_itemUrl          = set.info.fileUrl();
+    QueueListViewItem* item       = d->queuePool->currentQueue()->findItemByUrl(tools4Item.m_itemUrl);
     if (item)
     {
         d->itemsList.removeFirst();
 
-        if (!tools4Item.toolsMap.isEmpty())
+        if (!tools4Item.m_toolsMap.isEmpty())
         {
             d->thread->setWorkingUrl(settings.targetUrl);
             d->thread->processFile(tools4Item);
@@ -1186,7 +1186,7 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
         return;
     }
 
-    switch (tools.toolsMap.count())
+    switch (tools.m_toolsMap.count())
     {
         case 0:
         {

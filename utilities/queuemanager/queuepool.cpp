@@ -317,7 +317,7 @@ bool QueuePool::assignedBatchToolsListsAreValid()
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         if (queue)
         {
-            if (queue->assignedTools().toolsMap.isEmpty())
+            if (queue->assignedTools().m_toolsMap.isEmpty())
             {
                 list.append(queueTitle(i));
             }
