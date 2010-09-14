@@ -7,8 +7,9 @@
  * Description : rating icon view item at mouse hover
  *
  * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Aditya Bhatt <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,24 +65,24 @@ QWidget* TagsLineEditOverlay::createWidget()
     AddTagsLineEdit* lineEdit = new AddTagsLineEdit(parentWidget());
     lineEdit->setClickMessage("Name");
     lineEdit->setReadOnly(false);
-    
+
     TagModel* model = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
     model->setCheckable(true);
     model->setRootCheckable(false);
     lineEdit->setTagModel(model);
-    
+
     return lineEdit;
 }
 
 void TagsLineEditOverlay::setActive(bool active)
 {
     AbstractWidgetDelegateOverlay::setActive(active);
-    
+
     if (active)
     {
         connect(addTagsLineEdit(), SIGNAL(returnPressed(QString)),
                 this, SLOT(slotTagChanged(QString)));
-                
+
         if (view()->model())
             connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
                     this, SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
@@ -92,7 +93,6 @@ void TagsLineEditOverlay::setActive(bool active)
 
         if (view() && view()->model())
             disconnect(view()->model(), 0, this, 0);
-        
     }
 }
 
@@ -108,7 +108,7 @@ void TagsLineEditOverlay::hide()
 {
     //delegate()->setRatingEdited(QModelIndex());
     AbstractWidgetDelegateOverlay::hide();
-    kDebug()<<"Hide called, probably mouse left";
+    kDebug() << "Hide called, probably mouse left";
 
     if(!m_widget->hasFocus())
     {
@@ -126,7 +126,7 @@ void TagsLineEditOverlay::updatePosition()
     QRect thumbrect = delegate()->ratingRect();
     kDebug() << "updatePosition called, probably a mouseover : " << thumbrect;
     QRect rect      = thumbrect;
-    
+
     if (rect.width() > addTagsLineEdit()->width() )
     {
         int offset = (rect.width() - addTagsLineEdit()->width()) / 2;
@@ -145,28 +145,30 @@ void TagsLineEditOverlay::updateTag()
     if (!m_index.isValid())
         return;
     ImageInfo info = ImageModel::retrieveImageInfo(m_index);
-    kDebug()<<"called updateTag()";
+    kDebug() << "called updateTag()";
     //TODO: ADD ratingWidget()->setRating(info.rating());
 }
 
 void TagsLineEditOverlay::slotTagChanged(int tagId)
 {
-    kDebug()<<"Tag changed";
+    kDebug() << "Tag changed";
     if (m_widget && m_widget->isVisible() && m_index.isValid())
         emit this->tagEdited(m_index, tagId);
 }
 
 void TagsLineEditOverlay::slotTagChanged(const QString& name)
 {
-    kDebug()<<"Tag changed";
+    kDebug() << "Tag changed";
     if (m_widget && m_widget->isVisible() && m_index.isValid())
         emit this->tagEdited(m_index, name);
 }
 
-void TagsLineEditOverlay::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void TagsLineEditOverlay::slotDataChanged(const QModelIndex& /*topLeft*/, const QModelIndex& /*bottomRight*/)
 {
-    //if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
-        //updateTag();
+/*
+    if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
+        updateTag();
+*/
 }
 
 void TagsLineEditOverlay::slotEntered(const QModelIndex& index)
