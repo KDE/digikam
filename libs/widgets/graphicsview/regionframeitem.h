@@ -6,7 +6,7 @@
 * Date        : 2010-09-09
 * Description : tag region frame
 *
-* Copyright (C) 2007 by Aurélien Gâteau <agateau@kde.org>
+* Copyright (C) 2007 by Aurelien Gateau <agateau@kde.org>
 * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
 *
 * This program is free software; you can redistribute it
@@ -22,8 +22,8 @@
 *
 * ============================================================ */
 
-#ifndef REGIONFRAME_H
-#define REGIONFRAME_H
+#ifndef REGION_FRAME_ITEM_H
+#define REGION_FRAME_ITEM_H
 
 // Qt includes
 
@@ -36,13 +36,11 @@
 #include "dimgchilditem.h"
 #include "digikam_export.h"
 
-
 namespace Digikam
 {
 
 class DIGIKAM_EXPORT RegionFrameItem : public DImgChildItem
 {
-
     Q_OBJECT
     Q_PROPERTY(qreal hoverAnimationOpacity READ hoverAnimationOpacity WRITE setHoverAnimationOpacity)
 
@@ -57,6 +55,8 @@ public:
         GeometryEditable  = ShowResizeHandles | MoveByDrag
     };
     Q_DECLARE_FLAGS(Flags, Flag)
+
+public:
 
     RegionFrameItem(QGraphicsItem* parent);
     ~RegionFrameItem();
@@ -84,8 +84,7 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
@@ -106,9 +105,8 @@ private:
     RegionFrameItemPriv* const d;
 };
 
-
 } // namespace
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::RegionFrameItem::Flags)
 
-#endif /* REGIONFRAME_H */
+#endif /* REGION_FRAME_ITEM_H */

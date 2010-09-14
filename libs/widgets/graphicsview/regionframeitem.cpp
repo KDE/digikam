@@ -6,7 +6,7 @@
 * Date        : 2010-09-09
 * Description : tag region frame
 *
-* Copyright (C) 2007 by Aurélien Gâteau <agateau@kde.org>
+* Copyright (C) 2007 by Aurelien Gateau <agateau@kde.org>
 * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
 *
 * This program is free software; you can redistribute it
@@ -24,7 +24,9 @@
 
 #include "regionframeitem.moc"
 
-#include <math.h>
+// C++ includes
+
+#include <cmath>
 
 // Qt includes
 
@@ -48,28 +50,30 @@
 
 static const int HANDLE_SIZE = 15;
 
-namespace Digikam {
+namespace Digikam
+{
 
-
-enum CropHandleFlag {
+enum CropHandleFlag
+{
     CH_None,
-    CH_Top = 1,
-    CH_Left = 2,
-    CH_Right = 4,
-    CH_Bottom = 8,
-    CH_TopLeft = CH_Top | CH_Left,
-    CH_BottomLeft = CH_Bottom | CH_Left,
-    CH_TopRight = CH_Top | CH_Right,
+    CH_Top         = 1,
+    CH_Left        = 2,
+    CH_Right       = 4,
+    CH_Bottom      = 8,
+    CH_TopLeft     = CH_Top    | CH_Left,
+    CH_BottomLeft  = CH_Bottom | CH_Left,
+    CH_TopRight    = CH_Top    | CH_Right,
     CH_BottomRight = CH_Bottom | CH_Right,
-    CH_Content = 16
+    CH_Content     = 16
 };
 
-enum HudSide {
-    HS_None = 0, // Special value used to avoid initial animation
-    HS_Top = 1,
-    HS_Bottom = 2,
-    HS_Inside = 4,
-    HS_TopInside = HS_Top | HS_Inside,
+enum HudSide
+{
+    HS_None         = 0, // Special value used to avoid initial animation
+    HS_Top          = 1,
+    HS_Bottom       = 2,
+    HS_Inside       = 4,
+    HS_TopInside    = HS_Top    | HS_Inside,
     HS_BottomInside = HS_Bottom | HS_Inside
 };
 
@@ -80,17 +84,29 @@ static const int HUD_TIMER_ANIMATION_INTERVAL = 20;
 
 Q_DECLARE_FLAGS(CropHandle, CropHandleFlag)
 
-} // namespace
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::CropHandle)
 
-namespace Digikam {
+// --------------------------------------------------------------------------------
 
-class RegionFrameItem::RegionFrameItemPriv {
+namespace Digikam
+{
 
+class RegionFrameItem::RegionFrameItemPriv
+{
 public:
 
-    RegionFrameItemPriv(RegionFrameItem *q);
+    RegionFrameItemPriv(RegionFrameItem* q);
+
+    QRectF handleRect(CropHandle handle) const;
+    CropHandle handleAt(const QPointF& pos) const;
+    void updateCursor(CropHandle handle, bool buttonDown);
+    QRectF keepRectInsideImage(const QRectF& rect) const;
+    OptimalPosition computeOptimalHudWidgetPosition() const;
+    void updateHudWidgetPosition();
+
+public:
 
     RegionFrameItem* const q;
 
@@ -100,34 +116,27 @@ public:
     CropHandle             movingHandle;
     QPointF                lastMouseMovePos;
     double                 fixedRatio;
-    QGraphicsItem         *hudItem;
+    QGraphicsItem*         hudItem;
 
     RegionFrameItem::Flags flags;
 
-    QPropertyAnimation    *resizeHandleAnimation;
+    QPropertyAnimation*    resizeHandleAnimation;
     qreal                  hoverAnimationOpacity;
-    QTimer                *hudTimer;
+    QTimer*                hudTimer;
     QPointF                hudEndPos;
-
-    QRectF handleRect(CropHandle handle) const;
-    CropHandle handleAt(const QPointF& pos) const;
-    void updateCursor(CropHandle handle, bool buttonDown);
-    QRectF keepRectInsideImage(const QRectF& rect) const;
-    OptimalPosition computeOptimalHudWidgetPosition() const;
-    void updateHudWidgetPosition();
 };
 
-RegionFrameItem::RegionFrameItemPriv::RegionFrameItemPriv(RegionFrameItem *q)
-    : q(q)
+RegionFrameItem::RegionFrameItemPriv::RegionFrameItemPriv(RegionFrameItem* q)
+                                    : q(q)
 {
-    hudSide             = HS_None;
-    movingHandle        = CH_None;
-    fixedRatio          = 0;
-    hudItem             = 0;
-    hudTimer            = 0;
+    hudSide               = HS_None;
+    movingHandle          = CH_None;
+    fixedRatio            = 0;
+    hudItem               = 0;
+    hudTimer              = 0;
     hoverAnimationOpacity = 0;
-    flags               = RegionFrameItem::NoFlags;
-    
+    flags                 = RegionFrameItem::NoFlags;
+
     cropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom
                    << CH_TopLeft << CH_TopRight
                    << CH_BottomLeft << CH_BottomRight;
@@ -194,33 +203,33 @@ void RegionFrameItem::RegionFrameItemPriv::updateCursor(CropHandle handle, bool 
     Qt::CursorShape shape;
     switch (handle)
     {
-    case CH_TopLeft:
-    case CH_BottomRight:
-        shape = Qt::SizeFDiagCursor;
-        break;
+        case CH_TopLeft:
+        case CH_BottomRight:
+            shape = Qt::SizeFDiagCursor;
+            break;
 
-    case CH_TopRight:
-    case CH_BottomLeft:
-        shape = Qt::SizeBDiagCursor;
-        break;
+        case CH_TopRight:
+        case CH_BottomLeft:
+            shape = Qt::SizeBDiagCursor;
+            break;
 
-    case CH_Left:
-    case CH_Right:
-        shape = Qt::SizeHorCursor;
-        break;
+        case CH_Left:
+        case CH_Right:
+            shape = Qt::SizeHorCursor;
+            break;
 
-    case CH_Top:
-    case CH_Bottom:
-        shape = Qt::SizeVerCursor;
-        break;
+        case CH_Top:
+        case CH_Bottom:
+            shape = Qt::SizeVerCursor;
+            break;
 
-    case CH_Content:
-        shape = buttonDown ? Qt::ClosedHandCursor : Qt::OpenHandCursor;
-        break;
+        case CH_Content:
+            shape = buttonDown ? Qt::ClosedHandCursor : Qt::OpenHandCursor;
+            break;
 
-    default:
-        shape = Qt::ArrowCursor;
-        break;
+        default:
+            shape = Qt::ArrowCursor;
+            break;
     }
     q->setCursor(shape);
 }
@@ -257,14 +266,13 @@ QRectF RegionFrameItem::RegionFrameItemPriv::keepRectInsideImage(const QRectF& r
     return r;
 }
 
-
 OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPosition() const
 {
     const QRectF visibleSceneRect = viewportRect.isValid() ? viewportRect : q->scene()->sceneRect();
-    const QRectF rect = q->sceneBoundingRect();
+    const QRectF rect             = q->sceneBoundingRect();
 
-    const int margin = HANDLE_SIZE;
-    const int hudHeight = hudItem->boundingRect().height();
+    const int margin        = HANDLE_SIZE;
+    const int hudHeight     = hudItem->boundingRect().height();
     const QRectF hudMaxRect = visibleSceneRect.adjusted(0, 0, 0, -hudHeight);
 
     OptimalPosition ret;
@@ -315,7 +323,6 @@ OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPos
     return ret;
 }
 
-
 void RegionFrameItem::RegionFrameItemPriv::updateHudWidgetPosition()
 {
     if (!hudItem || !q->scene())
@@ -347,8 +354,10 @@ void RegionFrameItem::RegionFrameItemPriv::updateHudWidgetPosition()
     }
 }
 
-RegionFrameItem::RegionFrameItem(QGraphicsItem *item)
-    : DImgChildItem(item), d(new RegionFrameItemPriv(this))
+// ---------------------------------------------------------------------------------------
+
+RegionFrameItem::RegionFrameItem(QGraphicsItem* item)
+               : DImgChildItem(item), d(new RegionFrameItemPriv(this))
 {
     setFlags(GeometryEditable);
 
@@ -434,9 +443,9 @@ QRectF RegionFrameItem::boundingRect() const
     return DImgChildItem::boundingRect();//.adjusted(-1, -1, 1, 1);
 }
 
-void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem *, QWidget *)
+void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    /*
+/*
     QRect rect = d->viewportCropRect();
 
     QRect imageRect = imageView()->rect();
@@ -448,7 +457,7 @@ void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem *,
     {
         painter->fillRect(outerRect, outerColor);
     }
-    */
+*/
 
     const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66 + 0.33 * d->hoverAnimationOpacity);
     const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
@@ -474,7 +483,6 @@ void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem *,
         }
     }
 }
-
 
 void RegionFrameItem::hoverEnterEvent(QGraphicsSceneHoverEvent*)
 {
@@ -522,10 +530,9 @@ void RegionFrameItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     const QSizeF maxSize = parentDImgItem()->boundingRect().size();
     const QPointF point  = mapToParent(event->pos());
-    int posX = qBound(0., point.x(), maxSize.width());
-    int posY = qBound(0., point.y(), maxSize.height());
-
-    QRectF r = rect();
+    int posX             = qBound(0., point.x(), maxSize.width());
+    int posY             = qBound(0., point.y(), maxSize.height());
+    QRectF r             = rect();
 
     // Adjust edge
     if (d->movingHandle & CH_Top)
@@ -622,14 +629,12 @@ void RegionFrameItem::toolDeactivated()
 }
 */
 
-
-
 void RegionFrameItem::moveHudWidget()
 {
-    const QPointF delta = d->hudEndPos - d->hudItem->pos();
-
+    const QPointF delta   = d->hudEndPos - d->hudItem->pos();
     const double distance = sqrt(pow(delta.x(), 2) + pow(delta.y(), 2));
     QPointF pos;
+
     if (distance > double(HUD_TIMER_MAX_PIXELS_PER_UPDATE))
     {
         pos = d->hudItem->pos() + delta * double(HUD_TIMER_MAX_PIXELS_PER_UPDATE) / distance;
@@ -642,6 +647,5 @@ void RegionFrameItem::moveHudWidget()
 
     d->hudItem->setPos(pos);
 }
-
 
 } // namespace
