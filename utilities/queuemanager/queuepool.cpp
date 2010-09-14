@@ -39,6 +39,7 @@
 
 #include "ddragobjects.h"
 #include "queuelist.h"
+#include "loadingcacheinterface.h"
 
 namespace Digikam
 {
@@ -62,6 +63,11 @@ QueuePool::QueuePool(QWidget* parent)
 
     connect(this, SIGNAL(testCanDecode(const QDragMoveEvent*, bool&)),
             this, SLOT(slotTestCanDecode(const QDragMoveEvent*, bool&)));
+
+    // -- FileWatch connections ------------------------------
+
+    LoadingCacheInterface::connectToSignalFileChanged(this,
+            SLOT(slotFileChanged(const QString&)));
 }
 
 QueuePool::~QueuePool()
@@ -70,7 +76,6 @@ QueuePool::~QueuePool()
 
 void QueuePool::keyPressEvent(QKeyEvent* event)
 {
-
     if (event->key() == Qt::Key_Delete)
     {
         slotRemoveSelectedItems();
@@ -79,7 +84,6 @@ void QueuePool::keyPressEvent(QKeyEvent* event)
     {
         KTabWidget::keyPressEvent(event);
     }
-
 }
 
 void QueuePool::setBusy(bool b)
@@ -317,7 +321,7 @@ bool QueuePool::assignedBatchToolsListsAreValid()
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         if (queue)
         {
-            if (queue->assignedTools().toolsMap.isEmpty())
+            if (queue->assignedTools().m_toolsMap.isEmpty())
             {
                 list.append(queueTitle(i));
             }
@@ -332,6 +336,16 @@ bool QueuePool::assignedBatchToolsListsAreValid()
         return false;
     }
     return true;
+}
+
+void QueuePool::slotFileChanged(const QString& filePath)
+{
+    for (int i = 0; i < count(); ++i)
+    {
+        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        if (queue)
+            queue->reloadThumbs(KUrl::fromPath(filePath));
+    }
 }
 
 }  // namespace Digikam

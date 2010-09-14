@@ -32,30 +32,46 @@
 namespace Digikam
 {
 
-ButtonIconDisabler::ButtonIconDisabler(QAbstractButton* button)
-                  : QObject(button), m_button(button)
+class ButtonIconDisabler::ButtonIconDisablerPriv
 {
-    m_icon = m_button->icon();
 
-    int minSize = qMin(m_button->size().width(), m_button->size().height());
+public:
+
+    ButtonIconDisablerPriv()
+    {
+        button = 0;
+    }
+
+    QAbstractButton* button;
+    QIcon            icon;
+    QIcon            iconDisabled;
+};
+
+ButtonIconDisabler::ButtonIconDisabler(QAbstractButton* button)
+                  : QObject(button), d(new ButtonIconDisablerPriv)
+{
+    d->button       = button;
+    d->icon         = d->button->icon();
+    int minSize     = qMin(d->button->size().width(), d->button->size().height());
     QSize size(minSize, minSize);
-    QPixmap pix     = m_icon.pixmap(size, QIcon::Disabled);
-    m_icon_disabled = QIcon(pix);
+    QPixmap pix     = d->icon.pixmap(size, QIcon::Disabled);
+    d->iconDisabled = QIcon(pix);
 
-    m_button->setEnabled(m_button->isEnabled());
-    showIcon(m_button->isChecked());
+    d->button->setEnabled(d->button->isEnabled());
+    showIcon(d->button->isChecked());
 
-    connect(m_button, SIGNAL(toggled(bool)),
+    connect(d->button, SIGNAL(toggled(bool)),
             this, SLOT(showIcon(bool)));
 }
 
 ButtonIconDisabler::~ButtonIconDisabler()
 {
+    delete d;
 }
 
 void ButtonIconDisabler::showIcon(bool show)
 {
-    m_button->setIcon(show ? m_icon : m_icon_disabled);
+    d->button->setIcon(show ? d->icon : d->iconDisabled);
 }
 
 } // namespace Digikam

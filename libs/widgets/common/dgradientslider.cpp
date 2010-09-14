@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class DGradientSliderPriv
+class DGradientSlider::DGradientSliderPriv
 {
 
 public:
@@ -117,7 +117,7 @@ int DGradientSlider::gradientOffset() const
 {
     return d->gradientOffset();
 }
-    
+
 void DGradientSlider::drawCursorAt(QPainter& painter, double pos, const QColor& brushColor, 
                                    int width, int height, int gradientWidth)
 {
@@ -167,7 +167,7 @@ void DGradientSlider::paintEvent(QPaintEvent*)
     drawCursorAt( painter, d->rightCursor, d->rightColor, cursorWidth, gradientHeight, gradientWidth );
 }
 
-inline bool isCursorClicked(const QPoint& pos, double cursorPos, 
+inline bool isCursorClicked(const QPoint& pos, double cursorPos,
                             int width, int height, int gradientWidth)
 {
     int pos2 = (int)(gradientWidth * cursorPos);

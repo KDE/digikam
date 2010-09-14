@@ -55,9 +55,8 @@ private Q_SLOTS:
 
 private:
 
-    QAbstractButton* m_button;
-    QIcon            m_icon;
-    QIcon            m_icon_disabled;
+    class ButtonIconDisablerPriv;
+    ButtonIconDisablerPriv* const d;
 };
 
 }  // namespace Digikam

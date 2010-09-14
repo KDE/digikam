@@ -37,8 +37,6 @@
 namespace Digikam
 {
 
-class DGradientSliderPriv;
-
 class DIGIKAM_EXPORT DGradientSlider : public QWidget
 {
     Q_OBJECT
@@ -48,7 +46,7 @@ public:
     DGradientSlider(QWidget* parent=0);
     virtual ~DGradientSlider();
 
-    void showMiddleCursor(bool b);
+    void   showMiddleCursor(bool b);
     double leftValue() const;
     double rightValue() const;
     double middleValue() const;
@@ -79,11 +77,12 @@ protected:
 private:
 
     void adjustMiddleValue(double newLeftValue, double newRightValue);
-    inline void drawCursorAt(QPainter& painter, double pos, const QColor& brushColor, 
+    inline void drawCursorAt(QPainter& painter, double pos, const QColor& brushColor,
                              int width, int height, int gradientWidth);
-                                          
+
 private:
 
+    class DGradientSliderPriv;
     DGradientSliderPriv* const d;
 };
 

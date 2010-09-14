@@ -7,7 +7,7 @@
  * Description : texture pixmap methods
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Adapted from fluxbox: Texture/TextureRender
  *
@@ -45,7 +45,6 @@
 namespace Digikam
 {
 
-class TexturePriv;
 
 class DIGIKAM_EXPORT Texture
 {
@@ -62,16 +61,15 @@ public:
 private:
 
     void doBevel();
-
     void doSolid();
     void doHgradient();
     void doVgradient();
     void doDgradient();
-
     void buildImage();
 
 private:
 
+    class TexturePriv;
     TexturePriv* const d;
 };
 

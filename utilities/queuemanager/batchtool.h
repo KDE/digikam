@@ -274,10 +274,10 @@ public:
 
     AssignedBatchTools(){};
 
-    QString targetSuffix(bool *extSet = 0)
+    QString targetSuffix(bool* extSet = 0) const
     {
         QString suffix;
-        foreach(BatchToolSet set, toolsMap)
+        foreach(BatchToolSet set, m_toolsMap)
         {
             QString s = set.tool->outputSuffix();
             if (!s.isEmpty())
@@ -296,14 +296,16 @@ public:
             {
                 *extSet = false;
             }
-            return (QFileInfo(itemUrl.fileName()).suffix());
+            return (QFileInfo(m_itemUrl.fileName()).suffix());
         }
 
         return suffix;
     }
 
-    KUrl         itemUrl;
-    BatchToolMap toolsMap;
+public:
+
+    KUrl         m_itemUrl;
+    BatchToolMap m_toolsMap;
 };
 
 }  // namespace Digikam

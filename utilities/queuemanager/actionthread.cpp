@@ -158,7 +158,7 @@ void ActionThread::run()
         if (t)
         {
             ActionData ad1;
-            ad1.fileUrl = t->item.itemUrl;
+            ad1.fileUrl = t->item.m_itemUrl;
             ad1.status  = ActionData::BatchStarted;
             emit starting(ad1);
 
@@ -167,13 +167,13 @@ void ActionThread::run()
             d->cancel    = false;
             int index    = 0;
             bool success = false;
-            KUrl outUrl  = t->item.itemUrl;
+            KUrl outUrl  = t->item.m_itemUrl;
             KUrl inUrl;
             KUrl::List tmp2del;
             DImg tmpImage;
 
-            for (BatchToolMap::const_iterator it = t->item.toolsMap.constBegin();
-                 !d->cancel && (it != t->item.toolsMap.constEnd()) ; ++it)
+            for (BatchToolMap::const_iterator it = t->item.m_toolsMap.constBegin();
+                 !d->cancel && (it != t->item.m_toolsMap.constEnd()) ; ++it)
             {
                 index                      = it.key();
                 BatchToolSet set           = it.value();
@@ -184,7 +184,7 @@ void ActionThread::run()
                 kDebug() << "Tool Index: " << index;
 
                 ActionData ad2;
-                ad2.fileUrl = t->item.itemUrl;
+                ad2.fileUrl = t->item.m_itemUrl;
                 ad2.status  = ActionData::TaskStarted;
                 ad2.index   = index;
                 emit finished(ad2);
@@ -193,7 +193,7 @@ void ActionThread::run()
                 d->tool->setWorkingUrl(d->workingUrl);
                 d->tool->setRawDecodingSettings(d->rawDecodingSettings);
                 d->tool->setResetExifOrientationAllowed(d->exifSetOrientation);
-                d->tool->setLastChainedTool(index == t->item.toolsMap.count());
+                d->tool->setLastChainedTool(index == t->item.m_toolsMap.count());
                 d->tool->setInputUrl(inUrl);
                 d->tool->setSettings(settings);
                 d->tool->setInputUrl(inUrl);
@@ -208,7 +208,7 @@ void ActionThread::run()
                 if (success && !d->cancel)
                 {
                     ActionData ad3;
-                    ad3.fileUrl = t->item.itemUrl;
+                    ad3.fileUrl = t->item.m_itemUrl;
                     ad3.status  = ActionData::TaskDone;
                     ad3.index   = index;
                     emit finished(ad3);
@@ -216,13 +216,13 @@ void ActionThread::run()
                 else if (d->cancel)
                 {
                     ActionData ad4;
-                    ad4.fileUrl = t->item.itemUrl;
+                    ad4.fileUrl = t->item.m_itemUrl;
                     ad4.status  = ActionData::TaskCanceled;
                     ad4.index   = index;
                     emit finished(ad4);
 
                     ActionData ad5;
-                    ad5.fileUrl = t->item.itemUrl;
+                    ad5.fileUrl = t->item.m_itemUrl;
                     ad5.status  = ActionData::BatchCanceled;
                     emit finished(ad5);
 
@@ -231,13 +231,13 @@ void ActionThread::run()
                 else
                 {
                     ActionData ad4;
-                    ad4.fileUrl = t->item.itemUrl;
+                    ad4.fileUrl = t->item.m_itemUrl;
                     ad4.status  = ActionData::TaskFailed;
                     ad4.index   = index;
                     emit finished(ad4);
 
                     ActionData ad5;
-                    ad5.fileUrl = t->item.itemUrl;
+                    ad5.fileUrl = t->item.m_itemUrl;
                     ad5.status  = ActionData::BatchFailed;
                     emit finished(ad5);
 
@@ -251,7 +251,7 @@ void ActionThread::run()
                 tmp2del.removeAll(outUrl);
 
                 ActionData ad6;
-                ad6.fileUrl = t->item.itemUrl;
+                ad6.fileUrl = t->item.m_itemUrl;
                 ad6.destUrl = outUrl;
                 ad6.status  = ActionData::BatchDone;
                 emit finished(ad6);

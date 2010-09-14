@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QTimer>
@@ -66,6 +67,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "drawdecoding.h"
 #include "batchtoolsmanager.h"
 #include "actionthread.h"
@@ -84,7 +86,6 @@
 #include "albumsettings.h"
 #include "metadatasettings.h"
 #include "albummanager.h"
-#include "loadingcacheinterface.h"
 #include "imagewindow.h"
 #include "imagedialog.h"
 #include "thumbnailsize.h"
@@ -92,6 +93,7 @@
 #include "sidebar.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
+#include "scancontroller.h"
 
 namespace Digikam
 {
@@ -338,11 +340,6 @@ void QueueMgrWindow::setupConnections()
 
     connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int, qlonglong)),
             this, SLOT(slotHistoryEntryClicked(int, qlonglong)));
-
-    // -- FileWatch connections ------------------------------
-
-    LoadingCacheInterface::connectToSignalFileChanged(this,
-            SLOT(slotFileChanged(const QString &)));
 }
 
 void QueueMgrWindow::setupActions()
@@ -467,11 +464,6 @@ void QueueMgrWindow::setupActions()
     createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
-}
-
-void QueueMgrWindow::slotFileChanged(const QString& /*filePath*/)
-{
-    // TODO
 }
 
 void QueueMgrWindow::refreshView()
@@ -918,13 +910,13 @@ void QueueMgrWindow::processOne()
 
     QueueSettings settings        = d->queuePool->currentQueue()->settings();
     AssignedBatchTools tools4Item = d->queuePool->currentQueue()->assignedTools();
-    tools4Item.itemUrl            = set.info.fileUrl();
-    QueueListViewItem* item       = d->queuePool->currentQueue()->findItemByUrl(tools4Item.itemUrl);
+    tools4Item.m_itemUrl          = set.info.fileUrl();
+    QueueListViewItem* item       = d->queuePool->currentQueue()->findItemByUrl(tools4Item.m_itemUrl);
     if (item)
     {
         d->itemsList.removeFirst();
 
-        if (!tools4Item.toolsMap.isEmpty())
+        if (!tools4Item.m_toolsMap.isEmpty())
         {
             d->thread->setWorkingUrl(settings.targetUrl);
             d->thread->processFile(tools4Item);
@@ -1099,7 +1091,19 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 addHistoryMessage(i18n("Item processed successfully..."), DHistoryView::SuccessEntry);
             }
 
-            // TODO: assign attributes from original image.
+            // Now copy the metadata of the original file to the new file ------------
+
+            KUrl srcDirURL(QDir::cleanPath(url.directory()));
+            PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
+
+            KUrl dstDirURL(QDir::cleanPath(dest.directory()));
+            PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
+
+            if (dstAlbum && srcAlbum)
+            {
+                ImageInfo oldInfo(url.toLocalFile());
+                ScanController::instance()->scanFileDirectlyCopyAttributes(dest.toLocalFile(), oldInfo.id());
+            }
         }
     }
 
@@ -1172,7 +1176,7 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
         return;
     }
 
-    switch (tools.toolsMap.count())
+    switch (tools.m_toolsMap.count())
     {
         case 0:
         {
