@@ -57,15 +57,15 @@ Blur::Blur(QObject* parent)
     m_radiusInput->setDefaultValue(0.0);
     m_radiusInput->setWhatsThis(i18n("A smoothness of 0 has no effect, "
                                      "1 and above determine the Gaussian blur matrix radius "
-                                     "that determines how much to blur the image."));    
-    
+                                     "that determines how much to blur the image."));
+
     QGridLayout* grid = new QGridLayout(box);
     grid->addWidget(label,         0, 0, 1, 2);
     grid->addWidget(m_radiusInput, 1, 0, 1, 2);
     grid->setRowStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
-    
+
     setSettingsWidget(box);
 
     connect(m_radiusInput, SIGNAL(valueChanged(double)),
@@ -95,7 +95,7 @@ void Blur::slotSettingsChanged()
     BatchToolSettings settings;
 
     settings.insert("Radius", (double)m_radiusInput->value());
-    
+
     BatchTool::slotSettingsChanged(settings);
 }
 
