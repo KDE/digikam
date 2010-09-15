@@ -31,6 +31,7 @@ extern "C"
 
 // local includes
 
+#include "dmetadata.h"
 #include "digikam_export.h"
 #include "lensfunfilter.h"
 
@@ -56,6 +57,8 @@ public:
     bool supportsVig();
     bool supportsGeometry(){ return supportsDistortion(); };
     bool supportsCCI()     { return supportsVig();        };
+
+    bool findFromMetadata(const DMetadata& meta);
 
 protected:
 
