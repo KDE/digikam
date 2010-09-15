@@ -109,6 +109,36 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     kDebug() << "makeLF:  " << makeLF;
     kDebug() << "modelLF: " << modelLF;
 
+    const lfCamera* const* it = m_lfCameras;
+    const lfCamera* dev       = 0;
+
+    while ( *it )
+    {
+       if ( ((*it)->Model == modelLF) && ((*it)->Maker == makeLF) )
+       {
+            dev = *it;
+            break;
+       }
+
+       ++it;
+    }
+
+    if (!dev) return false;
+
+    const lfLens** lenses = m_lfDb->FindLenses( dev, NULL, NULL );
+
+//    d->iface->m_cropFactor = dev->CropFactor;
+
+    while (lenses && *lenses)
+    {
+        if ((*lenses)->Model == lens)
+        {
+            kDebug() << "lensLF:  " << (*lenses)->Model;
+            break;
+        }
+        ++lenses;
+    }
+
     return true;
 /*
     slotUpdateCombos();
