@@ -926,6 +926,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libfacedetection_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/faceiface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facepipeline.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/assignnamewidget.cpp
        )
 
     SET(libfirstrun_SRCS
@@ -1263,6 +1264,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdigikamgui_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagscombobox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagscompletionbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagslineedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
@@ -1332,6 +1335,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tageditdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfiltersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/taggingaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp

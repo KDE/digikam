@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-06-12
- * Description : Special line edit for adding or creatingtags
+ * Date        : 2010-09-15
+ * Description : Special combo box for adding or creating tags
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,72 +21,66 @@
  *
  * ============================================================ */
 
-#ifndef ADDTAGSLINEEDIT_H
-#define ADDTAGSLINEEDIT_H
+#ifndef ADDTAGSCOMBOBOX_H
+#define ADDTAGSCOMBOBOX_H
 
 // Qt includes
 
 // KDE includes
 
-#include <klineedit.h>
-
 // Local includes
 
+#include "albumselectcombobox.h"
 #include "taggingaction.h"
 
 namespace Digikam
 {
 
-class AddTagsCompletionBox;
 class AlbumFilterModel;
-class TAlbum;
 class TagModel;
 class TagTreeView;
 
-class AddTagsLineEdit : public KLineEdit
+class AddTagsComboBox : public AlbumSelectComboBox
 {
     Q_OBJECT
 
 public:
 
-    AddTagsLineEdit(QWidget* parent = 0);
-    ~AddTagsLineEdit();
+    AddTagsComboBox(QWidget* parent = 0);
+    ~AddTagsComboBox();
+
+    /** Returns the currently set tagging action. */
+    TaggingAction currentTaggingAction();
 
     /** Set the tag model to use for completion. */
-    void setTagModel(TagModel* model);
+    void setModel(TagModel* model, AlbumFilterModel *filterModel = 0);
     /** Reads a tag treeview and takes the currently selected tag into account
      *  when suggesting a parent tag for a new tag, and a default action. */
     void setTagTreeView(TagTreeView* treeView);
 
-    /// The custom completion box in use
-    AddTagsCompletionBox* completionBox() const;
+    void setClickMessage(const QString& message);
+
+    QString text() const;
+    void setText(const QString& text);
 
 Q_SIGNALS:
 
     /// Emitted when the user activates an action (typically, by pressing return)
     void taggingActionActivated(const TaggingAction& action);
-
-protected Q_SLOTS:
-
-    virtual void makeCompletion(const QString&);
-    void setCompletedItems(const QStringList& items, bool autoSuggest=true);
-    void makeSubstringCompletion(const QString&);
-    void slotCompletionBoxTextChanged(const QString& text);
-    void slotCompletionBoxTaggingActionChanged(const TaggingAction& action);
-    void slotCompletionBoxCancelled();
-    void slotReturnPressed(const QString& text);
-
-protected:
-
-    void setCompletionObject(KCompletion* comp, bool dontuse=false);
+    /** Emitted when an action is selected, but not explicitly activated.
+     *  (typically by selecting an item in the tree view */
+    void taggingActionSelected(const TaggingAction& action);
 
 private:
 
-class AddTagsLineEditPriv;
-    AddTagsLineEditPriv* const d;
+    virtual void installLineEdit();
+    // make private
+    void setEditable(bool editable);
+
+    class AddTagsComboBoxPriv;
+    AddTagsComboBoxPriv* const d;
 };
 
 } // namespace Digikam
 
-
-#endif // ADDTAGSLINEEDIT_H
+#endif // ADDTAGSCOMBOBOX_H
