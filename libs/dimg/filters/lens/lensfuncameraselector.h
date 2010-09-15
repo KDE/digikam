@@ -33,16 +33,6 @@
 #include "lensfuniface.h"
 #include "digikam_export.h"
 
-class QCheckBox;
-
-namespace KDcrawIface
-{
-class RComboBox;
-class RDoubleNumInput;
-}
-
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 
@@ -88,19 +78,8 @@ private:
 
 private:
 
-    QCheckBox*       m_exifUsage;
-
-    RComboBox*       m_make;
-    RComboBox*       m_model;
-    RComboBox*       m_lens;
-
-    RDoubleNumInput* m_focal;
-    RDoubleNumInput* m_aperture;
-    RDoubleNumInput* m_distance;
-
-    DMetadata        m_metadata;
-
-    LensFunIface*    m_iface;
+    class LensFunCameraSelectorPriv;
+    LensFunCameraSelectorPriv* const d;
 };
 
 }  // namespace Digikam

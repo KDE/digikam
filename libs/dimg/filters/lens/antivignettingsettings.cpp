@@ -57,7 +57,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class AntiVignettingSettingsPriv
+class AntiVignettingSettings::AntiVignettingSettingsPriv
 {
 public:
 
@@ -71,7 +71,7 @@ public:
         configXOffsetEntry("XOffset"),
         configYOffsetEntry("YOffset"),
         addVignettingCheck(0),
-        maskPreviewLabel(0),        
+        maskPreviewLabel(0),
         densityInput(0),
         powerInput(0),
         innerRadiusInput(0),
@@ -92,7 +92,7 @@ public:
     QCheckBox*       addVignettingCheck;
 
     QLabel*          maskPreviewLabel;
-    
+
     RDoubleNumInput* densityInput;
     RDoubleNumInput* powerInput;
     RDoubleNumInput* innerRadiusInput;
@@ -228,7 +228,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
             this, SLOT(slotSettingsChanged()));
 
     // -------------------------------------------------------------
-    
+
     slotSettingsChanged();
 }
 
@@ -247,7 +247,7 @@ AntiVignettingContainer AntiVignettingSettings::settings() const
     prm.innerradius   = d->innerRadiusInput->value();
     prm.outerradius   = d->outerRadiusInput->value();
     prm.xshift        = d->xOffsetInput->value();
-    prm.yshift        = d->yOffsetInput->value();    
+    prm.yshift        = d->yOffsetInput->value();
 
     return prm;
 }
@@ -282,7 +282,7 @@ void AntiVignettingSettings::readSettings(KConfigGroup& group)
 {
     AntiVignettingContainer prm;
     AntiVignettingContainer defaultPrm = defaultSettings();
-  
+
     prm.addvignetting = group.readEntry(d->configAddVignettingEntry,         defaultPrm.addvignetting);
     prm.density       = group.readEntry(d->configDensityAdjustmentEntry,     defaultPrm.density);
     prm.power         = group.readEntry(d->configPowerAdjustmentEntry,       defaultPrm.power);
@@ -320,7 +320,7 @@ void AntiVignettingSettings::slotSettingsChanged()
     pt.drawRect(0, 0, pix.width(), pix.height());
     pt.end();
     d->maskPreviewLabel->setPixmap(pix);
-    
+
     emit signalSettingsChanged();
 }
 

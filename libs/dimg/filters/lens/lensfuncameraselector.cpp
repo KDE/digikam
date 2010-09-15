@@ -40,7 +40,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes
+using namespace KDcrawIface;
 
 Q_DECLARE_METATYPE( Digikam::LensFunCameraSelector::DevicePtr )
 Q_DECLARE_METATYPE( Digikam::LensFunCameraSelector::LensPtr )
@@ -48,85 +48,115 @@ Q_DECLARE_METATYPE( Digikam::LensFunCameraSelector::LensPtr )
 namespace Digikam
 {
 
-LensFunCameraSelector::LensFunCameraSelector(LensFunIface* iface, QWidget* parent)
-                     : QWidget(parent)
+class LensFunCameraSelector::LensFunCameraSelectorPriv
 {
-    m_iface            = iface;
+public:
+
+    LensFunCameraSelectorPriv()
+    {
+        exifUsage = 0;
+        make      = 0;
+        model     = 0;
+        focal     = 0;
+        aperture  = 0;
+        distance  = 0;
+        iface     = 0;
+    }
+
+    QCheckBox*       exifUsage;
+
+    RComboBox*       make;
+    RComboBox*       model;
+    RComboBox*       lens;
+
+    RDoubleNumInput* focal;
+    RDoubleNumInput* aperture;
+    RDoubleNumInput* distance;
+
+    DMetadata        metadata;
+
+    LensFunIface*    iface;
+};
+
+LensFunCameraSelector::LensFunCameraSelector(LensFunIface* iface, QWidget* parent)
+                     : QWidget(parent), d(new LensFunCameraSelectorPriv)
+{
+    d->iface           = iface;
     QGridLayout* grid  = new QGridLayout(this);
-    m_exifUsage        = new QCheckBox(i18n("Use Metadata"), this);
+    d->exifUsage       = new QCheckBox(i18n("Use Metadata"), this);
 
-    m_make             = new RComboBox(this);
-    m_make->setDefaultIndex(0);
+    d->make            = new RComboBox(this);
+    d->make->setDefaultIndex(0);
 
-    m_model            = new RComboBox(this);
-    m_model->setDefaultIndex(0);
+    d->model           = new RComboBox(this);
+    d->model->setDefaultIndex(0);
 
-    m_lens             = new RComboBox(this);
-    m_lens->setDefaultIndex(0);
+    d->lens            = new RComboBox(this);
+    d->lens->setDefaultIndex(0);
 
     QLabel* makeLabel  = new QLabel(i18nc("camera make", "Make:"), this);
     QLabel* modelLabel = new QLabel(i18nc("camera model", "Model:"), this);
     QLabel* lensLabel  = new QLabel(i18nc("camera lens", "Lens:"), this);
 
-    m_exifUsage->setEnabled(false);
-    m_exifUsage->setCheckState(Qt::Unchecked);
-    m_exifUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
+    d->exifUsage->setEnabled(false);
+    d->exifUsage->setCheckState(Qt::Unchecked);
+    d->exifUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
                                    "from the image metadata (as Exif or XMP)."));
 
     QLabel* focalLabel = new QLabel(i18n("Focal Length:"), this);
     QLabel* aperLabel  = new QLabel(i18n("Aperture:"), this);
     QLabel* distLabel  = new QLabel(i18n("Subject Distance:"), this);
 
-    m_focal = new RDoubleNumInput(this);
-    m_focal->setDecimals(1);
-    m_focal->input()->setRange(1.0, 1000.0, 0.01, true);
-    m_focal->setDefaultValue(1.0);
+    d->focal = new RDoubleNumInput(this);
+    d->focal->setDecimals(1);
+    d->focal->input()->setRange(1.0, 1000.0, 0.01, true);
+    d->focal->setDefaultValue(1.0);
 
-    m_aperture = new RDoubleNumInput(this);
-    m_aperture->setDecimals(1);
-    m_aperture->input()->setRange(1.1, 64.0, 0.1, true);
-    m_aperture->setDefaultValue(1.1);
+    d->aperture = new RDoubleNumInput(this);
+    d->aperture->setDecimals(1);
+    d->aperture->input()->setRange(1.1, 64.0, 0.1, true);
+    d->aperture->setDefaultValue(1.1);
 
-    m_distance = new RDoubleNumInput(this);
-    m_distance->setDecimals(1);
-    m_distance->input()->setRange(0.0, 100.0, 0.1, true);
-    m_distance->setDefaultValue(0.0);
+    d->distance = new RDoubleNumInput(this);
+    d->distance->setDecimals(1);
+    d->distance->input()->setRange(0.0, 100.0, 0.1, true);
+    d->distance->setDefaultValue(0.0);
 
-    grid->addWidget(m_exifUsage, 0, 0, 1, 3);
-    grid->addWidget(makeLabel,   1, 0, 1, 3);
-    grid->addWidget(m_make,      2, 0, 1, 3);
-    grid->addWidget(modelLabel,  3, 0, 1, 3);
-    grid->addWidget(m_model,     4, 0, 1, 3);
-    grid->addWidget(lensLabel,   5, 0, 1, 3);
-    grid->addWidget(m_lens,      6, 0, 1, 3);
-    grid->addWidget(focalLabel,  7, 0, 1, 1);
-    grid->addWidget(m_focal,     7, 1, 1, 2);
-    grid->addWidget(aperLabel,   8, 0, 1, 1);
-    grid->addWidget(m_aperture,  8, 1, 1, 2);
-    grid->addWidget(distLabel,   9, 0, 1, 1);
-    grid->addWidget(m_distance,  9, 1, 1, 2);
+    grid->addWidget(d->exifUsage, 0, 0, 1, 3);
+    grid->addWidget(makeLabel,    1, 0, 1, 3);
+    grid->addWidget(d->make,      2, 0, 1, 3);
+    grid->addWidget(modelLabel,   3, 0, 1, 3);
+    grid->addWidget(d->model,     4, 0, 1, 3);
+    grid->addWidget(lensLabel,    5, 0, 1, 3);
+    grid->addWidget(d->lens,      6, 0, 1, 3);
+    grid->addWidget(focalLabel,   7, 0, 1, 1);
+    grid->addWidget(d->focal,     7, 1, 1, 2);
+    grid->addWidget(aperLabel,    8, 0, 1, 1);
+    grid->addWidget(d->aperture,  8, 1, 1, 2);
+    grid->addWidget(distLabel,    9, 0, 1, 1);
+    grid->addWidget(d->distance,  9, 1, 1, 2);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
-    connect(m_exifUsage, SIGNAL(toggled(bool)),
+    connect(d->exifUsage, SIGNAL(toggled(bool)),
             this, SLOT(slotUseExif(bool)));
 
-    connect(m_make, SIGNAL(currentIndexChanged(int)),
+    connect(d->make, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotUpdateCombos()));
 
-    connect(m_model, SIGNAL(currentIndexChanged(int)),
+    connect(d->model, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotUpdateLensCombo()));
 
-    connect(m_lens, SIGNAL(currentIndexChanged(int)),
+    connect(d->lens, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotLensSelected()));
 
-    connect(m_focal, SIGNAL(valueChanged(double)),
+    connect(d->focal, SIGNAL(valueChanged(double)),
             this, SLOT(slotFocalChanged(double)));
 
-    connect(m_aperture, SIGNAL(valueChanged(double)),
+    connect(d->aperture, SIGNAL(valueChanged(double)),
             this, SLOT(slotApertureChanged(double)));
 
-    connect(m_distance, SIGNAL(valueChanged(double)),
+    connect(d->distance, SIGNAL(valueChanged(double)),
             this, SLOT(slotDistanceChanged(double)));
 
     LensFunCameraSelector::Device firstDevice; // empty strings
@@ -135,6 +165,7 @@ LensFunCameraSelector::LensFunCameraSelector(LensFunIface* iface, QWidget* paren
 
 LensFunCameraSelector::~LensFunCameraSelector()
 {
+    delete d;
 }
 
 #if 0
@@ -145,7 +176,7 @@ LensFunCameraSelector::Device LensFunCameraSelector::getDevice()
 
 void LensFunCameraSelector::findFromMetadata(const DMetadata& meta)
 {
-    m_metadata = meta;
+    d->metadata = meta;
     findFromMetadata();
 }
 
@@ -154,46 +185,49 @@ void LensFunCameraSelector::findFromMetadata()
 //    LensFunCameraSelector::Device firstDevice; // empty strings
 //    setDevice( firstDevice );
 
-    if (m_metadata.isEmpty())
+    if (d->metadata.isEmpty())
     {
-        m_exifUsage->setCheckState(Qt::Unchecked);
-        m_exifUsage->setEnabled(false);
+        d->exifUsage->setCheckState(Qt::Unchecked);
+        d->exifUsage->setEnabled(false);
     }
     else
     {
-        m_exifUsage->setCheckState(Qt::Checked);
-        m_exifUsage->setEnabled(true);
+        d->exifUsage->setCheckState(Qt::Checked);
+        d->exifUsage->setEnabled(true);
     }
 
-    PhotoInfoContainer photoInfo = m_metadata.getPhotographInformation();
+    PhotoInfoContainer photoInfo = d->metadata.getPhotographInformation();
     QString make                 = photoInfo.make;
     QString model                = photoInfo.model;
     QString lens                 = photoInfo.lens;
 
     // ------------------------------------------------------------------------------------------------
 
-    int makerIdx = m_make->combo()->findText(make);
+    int makerIdx = d->make->combo()->findText(make);
+
     if (makerIdx < 0)
     {
-        const lfCamera** makes = m_iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
+        const lfCamera** makes = d->iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
         QString makeLF = "";
         if (makes && *makes)
         {
             makeLF =(*makes)->Maker;
-            makerIdx = m_make->combo()->findText(makeLF);
+            makerIdx = d->make->combo()->findText(makeLF);
         }
     }
+
     if (makerIdx >= 0)
     {
-        m_make->setCurrentIndex(makerIdx);
-        m_make->setEnabled(false);
+        d->make->setCurrentIndex(makerIdx);
+        d->make->setEnabled(false);
     }
 
     slotUpdateCombos();
-    int modelIdx = m_model->combo()->findText(model);
+    int modelIdx = d->model->combo()->findText(model);
+
     if (modelIdx < 0)
     {
-        const lfCamera** makes = m_iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
+        const lfCamera** makes = d->iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
         QString modelLF = "";
         int count = 0;
         while (makes && *makes)
@@ -204,13 +238,14 @@ void LensFunCameraSelector::findFromMetadata()
         }
         if (count == 1)
         {
-            modelIdx = m_model->combo()->findText(modelLF);
+            modelIdx = d->model->combo()->findText(modelLF);
         }
     }
+
     if (modelIdx >= 0)
     {
-        m_model->setCurrentIndex(modelIdx);
-        m_model->setEnabled(false);
+        d->model->setCurrentIndex(modelIdx);
+        d->model->setEnabled(false);
         slotUpdateLensCombo();
     }
 
@@ -218,9 +253,11 @@ void LensFunCameraSelector::findFromMetadata()
     // We use here the Camera Maker, because the Lens Maker seems not to be
     // part of the Exif data. This is of course bad for 3rd party lenses, but
     // they seem anyway not to have Exif entries usually :/
-    int lensIdx = m_lens->combo()->findText(lens);
+    int lensIdx = d->lens->combo()->findText(lens);
+
     if (lensIdx < 0)
-       lensIdx = m_lens->combo()->findText(make + ' ' + lens);
+       lensIdx = d->lens->combo()->findText(make + ' ' + lens);
+
     if (lensIdx < 0)
     {
         QString lensCutted = lens;
@@ -231,11 +268,13 @@ void LensFunCameraSelector::findFromMetadata()
             lensCutted.replace("Zoom-", "");
             lensCutted.replace("IF-ID", "ED-IF");
         }
-        QVariant v    = m_model->combo()->itemData( m_model->currentIndex() );
-        DevicePtr dev = v.value<LensFunCameraSelector::DevicePtr>();
-        const lfLens** lenses = m_iface->m_lfDb->FindLenses( dev, NULL, lensCutted.toAscii().data() );
-        QString lensLF = "";
-        int count = 0;
+
+        QVariant v            = d->model->combo()->itemData( d->model->currentIndex() );
+        DevicePtr dev         = v.value<LensFunCameraSelector::DevicePtr>();
+        const lfLens** lenses = d->iface->m_lfDb->FindLenses( dev, NULL, lensCutted.toAscii().data() );
+        QString lensLF        = "";
+        int count             = 0;
+
         while (lenses && *lenses)
         {
             lensLF =(*lenses)->Model;
@@ -244,33 +283,33 @@ void LensFunCameraSelector::findFromMetadata()
         }
         if (count == 1)
         {
-            lensIdx = m_lens->combo()->findText(lensLF);
+            lensIdx = d->lens->combo()->findText(lensLF);
         }
     }
 
     if (lensIdx >= 0)
     {
         // found lens model directly, best case :)
-        m_lens->setCurrentIndex(lensIdx);
-        m_lens->setEnabled(false);
+        d->lens->setCurrentIndex(lensIdx);
+        d->lens->setEnabled(false);
     }
     else
     {
         // Lens not found, try to reduce the list according to the values we have
         // FIXME: Implement removal of not matching lenses ...
-        m_lens->setEnabled(true);
+        d->lens->setEnabled(true);
     }
 
     kDebug() << "Search for Lens: " << make << " :: " << lens
-             << "< and found: >" << m_lens->combo()->itemText(0) + " <";
+             << "< and found: >" << d->lens->combo()->itemText(0) + " <";
 
     QString temp = photoInfo.focalLength;
     if (!temp.isEmpty())
     {
         double focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
         kDebug() << "Focal Length: " << focal;
-        m_focal->setValue(focal);
-        m_focal->setEnabled(false);
+        d->focal->setValue(focal);
+        d->focal->setEnabled(false);
     }
 
     temp = photoInfo.aperture;
@@ -278,62 +317,62 @@ void LensFunCameraSelector::findFromMetadata()
     {
         double aperture = temp.mid(1).toDouble();
         kDebug() << "Aperture: " << aperture;
-        m_aperture->setValue(aperture);
-        m_aperture->setEnabled(false);
+        d->aperture->setValue(aperture);
+        d->aperture->setEnabled(false);
     }
 
     // ------------------------------------------------------------------------------------------------
     // Try to get subject distance value.
 
     // From standard Exif.
-    temp = m_metadata.getExifTagString("Exif.Photo.SubjectDistance");
+    temp = d->metadata.getExifTagString("Exif.Photo.SubjectDistance");
     if (temp.isEmpty())
     {
         // From standard XMP.
-        temp = m_metadata.getXmpTagString("Xmp.exif.SubjectDistance");
+        temp = d->metadata.getXmpTagString("Xmp.exif.SubjectDistance");
     }
     if (temp.isEmpty())
     {
         // From Canon Makernote.
-        temp = m_metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
+        temp = d->metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
     }
     if (temp.isEmpty())
     {
         // From Nikon Makernote.
-        temp = m_metadata.getExifTagString("Exif.NikonLd2.FocusDistance");
+        temp = d->metadata.getExifTagString("Exif.NikonLd2.FocusDistance");
     }
     if (temp.isEmpty())
     {
         // From Nikon Makernote.
-        temp = m_metadata.getExifTagString("Exif.NikonLd3.FocusDistance");
+        temp = d->metadata.getExifTagString("Exif.NikonLd3.FocusDistance");
     }
     // TODO: Add here others Makernotes tags.
 
     if (!temp.isEmpty())
     {
-        temp = temp.replace(" m", "");
+        temp            = temp.replace(" m", "");
         double distance = temp.toDouble();
         kDebug() << "Subject Distance: " << distance;
-        m_distance->setValue(distance);
-        m_distance->setEnabled(false);
+        d->distance->setValue(distance);
+        d->distance->setEnabled(false);
     }
 }
 
-void LensFunCameraSelector::slotFocalChanged(double f)
+void LensFunCameraSelector::slotFocalChanged(double focal)
 {
-    m_iface->m_focalLength = f;
+    d->iface->m_focalLength = focal;
     emit signalLensSettingsChanged();
 }
 
-void LensFunCameraSelector::slotApertureChanged(double a)
+void LensFunCameraSelector::slotApertureChanged(double aperture)
 {
-    m_iface->m_aperture = a;
+    d->iface->m_aperture = aperture;
     emit signalLensSettingsChanged();
 }
 
-void LensFunCameraSelector::slotDistanceChanged(double d)
+void LensFunCameraSelector::slotDistanceChanged(double distance)
 {
-    m_iface->m_subjectDistance = d;
+    d->iface->m_subjectDistance = distance;
     emit signalLensSettingsChanged();
 }
 
@@ -345,24 +384,24 @@ void LensFunCameraSelector::slotUseExif(bool b)
     }
     else
     {
-        m_make->setEnabled(true);
-        m_model->setEnabled(true);
-        m_lens->setEnabled(true);
-        m_focal->setEnabled(true);
-        m_aperture->setEnabled(true);
-        m_distance->setEnabled(true);
+        d->make->setEnabled(true);
+        d->model->setEnabled(true);
+        d->lens->setEnabled(true);
+        d->focal->setEnabled(true);
+        d->aperture->setEnabled(true);
+        d->distance->setEnabled(true);
     }
 }
 
 void LensFunCameraSelector::slotUpdateCombos()
 {
-    const lfCamera* const* it = m_iface->m_lfCameras;
+    const lfCamera* const* it = d->iface->m_lfCameras;
 
     // reset box
-    m_model->combo()->clear();
+    d->model->combo()->clear();
 
     bool firstRun = false;
-    if ( m_make->combo()->count() == 0 )
+    if ( d->make->combo()->count() == 0 )
        firstRun = true;
 
     while ( *it )
@@ -373,24 +412,24 @@ void LensFunCameraSelector::slotUpdateCombos()
            if ( (*it)->Maker )
            {
                 QString t( (*it)->Maker );
-                if ( m_make->combo()->findText( t, Qt::MatchExactly ) < 0 )
-                    m_make->addItem( t );
+                if ( d->make->combo()->findText( t, Qt::MatchExactly ) < 0 )
+                    d->make->addItem( t );
            }
        }
 
        // Fill models for current selected maker
-       if ( (*it)->Model && (*it)->Maker == m_make->combo()->currentText() )
+       if ( (*it)->Model && (*it)->Maker == d->make->combo()->currentText() )
        {
             LensFunCameraSelector::DevicePtr dev;
             dev        = *it;
             QVariant b = qVariantFromValue(dev);
-            m_model->combo()->addItem( (*it)->Model, b );
+            d->model->combo()->addItem( (*it)->Model, b );
        }
 
        ++it;
     }
-    m_make->combo()->model()->sort(0, Qt::AscendingOrder);
-    m_model->combo()->model()->sort(0, Qt::AscendingOrder);
+    d->make->combo()->model()->sort(0, Qt::AscendingOrder);
+    d->model->combo()->model()->sort(0, Qt::AscendingOrder);
 
     // Fill Lens list for current Maker & Model
     slotUpdateLensCombo();
@@ -398,9 +437,9 @@ void LensFunCameraSelector::slotUpdateCombos()
 
 void LensFunCameraSelector::slotUpdateLensCombo()
 {
-    m_lens->combo()->clear();
+    d->lens->combo()->clear();
 
-    QVariant v    = m_model->combo()->itemData( m_model->currentIndex() );
+    QVariant v    = d->model->combo()->itemData( d->model->currentIndex() );
     DevicePtr dev = v.value<LensFunCameraSelector::DevicePtr>();
     if (!dev)
     {
@@ -408,28 +447,28 @@ void LensFunCameraSelector::slotUpdateLensCombo()
         return;
     }
 
-    const lfLens** lenses = m_iface->m_lfDb->FindLenses( dev, NULL, NULL );
-    m_iface->m_cropFactor = dev->CropFactor;
+    const lfLens** lenses = d->iface->m_lfDb->FindLenses( dev, NULL, NULL );
+    d->iface->m_cropFactor = dev->CropFactor;
 
     while (lenses && *lenses)
     {
         LensFunCameraSelector::LensPtr lens = *lenses;
         QVariant b                          = qVariantFromValue(lens);
-        m_lens->combo()->addItem((*lenses)->Model, b);
+        d->lens->combo()->addItem((*lenses)->Model, b);
         ++lenses;
     }
-    m_lens->combo()->model()->sort(0, Qt::AscendingOrder);
+    d->lens->combo()->model()->sort(0, Qt::AscendingOrder);
 
     emit(signalLensSettingsChanged());
 }
 
 void LensFunCameraSelector::slotLensSelected()
 {
-    QVariant v          = m_lens->combo()->itemData( m_lens->currentIndex() );
-    m_iface->m_usedLens = v.value<LensFunCameraSelector::LensPtr>();
+    QVariant v           = d->lens->combo()->itemData( d->lens->currentIndex() );
+    d->iface->m_usedLens = v.value<LensFunCameraSelector::LensPtr>();
 
-    if ( m_iface->m_cropFactor <= 0.0 ) // this should not happen
-        m_iface->m_cropFactor = m_iface->m_usedLens->CropFactor;
+    if ( d->iface->m_cropFactor <= 0.0 ) // this should not happen
+        d->iface->m_cropFactor = d->iface->m_usedLens->CropFactor;
 
     emit(signalLensSettingsChanged());
 }
