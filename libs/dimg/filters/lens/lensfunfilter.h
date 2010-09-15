@@ -31,7 +31,6 @@ namespace Digikam
 {
 
 class LensFunIface;
-class LensFunFilterPriv;
 
 class DIGIKAM_EXPORT LensFunContainer
 {
@@ -73,6 +72,7 @@ private:
 
 private:
 
+    class LensFunFilterPriv;
     LensFunFilterPriv* const d;
 };
 

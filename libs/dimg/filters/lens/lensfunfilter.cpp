@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class LensFunFilterPriv
+class LensFunFilter::LensFunFilterPriv
 {
 public:
 
