@@ -1091,7 +1091,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 addHistoryMessage(i18n("Item processed successfully..."), DHistoryView::SuccessEntry);
             }
 
-            // Now copy the metadata of the original file to the new file ------------
+            // -- Now copy the digiKam attributes from original file to the new file ------------
 
             KUrl srcDirURL(QDir::cleanPath(url.directory()));
             PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);

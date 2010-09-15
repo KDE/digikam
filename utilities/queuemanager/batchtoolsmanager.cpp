@@ -55,6 +55,7 @@
 #include "convert8to16.h"
 #include "convert16to8.h"
 #include "border.h"
+#include "removemetadata.h"
 
 namespace Digikam
 {
@@ -90,6 +91,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
 
     // Metadata
     registerTool(new AssignTemplate(this));
+    registerTool(new RemoveMetadata(this));
 
     // Enhance
     registerTool(new Blur(this));
