@@ -208,10 +208,11 @@ void LensFunCameraSelector::findFromMetadata()
     if (makerIdx < 0)
     {
         const lfCamera** makes = d->iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
-        QString makeLF = "";
+        QString makeLF         = "";
+
         if (makes && *makes)
         {
-            makeLF =(*makes)->Maker;
+            makeLF   = (*makes)->Maker;
             makerIdx = d->make->combo()->findText(makeLF);
         }
     }
@@ -223,16 +224,18 @@ void LensFunCameraSelector::findFromMetadata()
     }
 
     slotUpdateCombos();
+
     int modelIdx = d->model->combo()->findText(model);
 
     if (modelIdx < 0)
     {
         const lfCamera** makes = d->iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
-        QString modelLF = "";
-        int count = 0;
+        QString modelLF        = "";
+        int count              = 0;
+
         while (makes && *makes)
         {
-            modelLF =(*makes)->Model;
+            modelLF = (*makes)->Model;
             ++makes;
             ++count;
         }
@@ -261,6 +264,7 @@ void LensFunCameraSelector::findFromMetadata()
     if (lensIdx < 0)
     {
         QString lensCutted = lens;
+
         if (lensCutted.contains("Nikon"))
         {
             // adapt exiv2 strings to lensfun strings
@@ -277,7 +281,7 @@ void LensFunCameraSelector::findFromMetadata()
 
         while (lenses && *lenses)
         {
-            lensLF =(*lenses)->Model;
+            lensLF = (*lenses)->Model;
             ++lenses;
             ++count;
         }
