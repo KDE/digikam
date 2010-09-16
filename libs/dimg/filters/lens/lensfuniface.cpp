@@ -90,6 +90,10 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     QString model                = photoInfo.model;
     QString lens                 = photoInfo.lens;
 
+    kDebug() << "make from metadata:  " << make;
+    kDebug() << "model from metadata: " << model;
+    kDebug() << "lens from metadata:  " << lens;
+
     // ------------------------------------------------------------------------------------------------
 
     const lfCamera** makes = m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
@@ -106,8 +110,8 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
         return false;
     }
 
-    kDebug() << "makeLF:  " << makeLF;
-    kDebug() << "modelLF: " << modelLF;
+    kDebug() << "make from LensFun:  " << makeLF;
+    kDebug() << "model from LensFun: " << modelLF;
 
     const lfCamera* const* it = m_lfCameras;
     const lfCamera* dev       = 0;
@@ -123,9 +127,14 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
        ++it;
     }
 
-    if (!dev) return false;
+    if (!dev)
+    {
+         kDebug() << "Device is null! ";
+	 return false;
+    }
 
     const lfLens** lenses = m_lfDb->FindLenses( dev, NULL, NULL );
+    bool foundLens        = false;
 
 //    d->iface->m_cropFactor = dev->CropFactor;
 
@@ -133,11 +142,15 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     {
         if ((*lenses)->Model == lens)
         {
-            kDebug() << "lensLF:  " << (*lenses)->Model;
+            kDebug() << "lens from LensFun:  " << (*lenses)->Model;
+            foundLens = true;
             break;
         }
         ++lenses;
     }
+
+    if (!foundLens)
+        return false;
 
     return true;
 /*
