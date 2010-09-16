@@ -47,8 +47,6 @@ class QPaintDevice;
 namespace Digikam
 {
 
-class ImageIfacePriv;
-
 class DIGIKAM_EXPORT ImageIface
 {
 public:
@@ -76,7 +74,7 @@ public:
     /** Return a DImg object representing the preview image.
     */
     DImg getPreviewImg();
-    
+
     /** Return image data for the current original image selection.
         The selectionWidth(), selectionHeight(), originalSixteenBit()
         and originalHasAlpha() methods provide the characteristics of the data.
@@ -186,6 +184,7 @@ public:
 
 private:
 
+    class ImageIfacePriv;
     ImageIfacePriv* const d;
 };
 
