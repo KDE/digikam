@@ -285,13 +285,6 @@ void ShearTool::slotResetSettings()
 
 void ShearTool::prepareEffect()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
-    d->mainHAngleInput->setEnabled(false);
-    d->mainVAngleInput->setEnabled(false);
-    d->fineHAngleInput->setEnabled(false);
-    d->fineVAngleInput->setEnabled(false);
-    d->antialiasInput->setEnabled(false);
-
     float hAngle      = d->mainHAngleInput->value() + d->fineHAngleInput->value();
     float vAngle      = d->mainVAngleInput->value() + d->fineVAngleInput->value();
     bool antialiasing = d->antialiasInput->isChecked();
@@ -306,12 +299,6 @@ void ShearTool::prepareEffect()
 
 void ShearTool::prepareFinal()
 {
-    d->mainHAngleInput->setEnabled(false);
-    d->mainVAngleInput->setEnabled(false);
-    d->fineHAngleInput->setEnabled(false);
-    d->fineVAngleInput->setEnabled(false);
-    d->antialiasInput->setEnabled(false);
-
     float hAngle      = d->mainHAngleInput->value() + d->fineHAngleInput->value();
     float vAngle      = d->mainVAngleInput->value() + d->fineVAngleInput->value();
     bool antialiasing = d->antialiasInput->isChecked();
@@ -351,16 +338,6 @@ void ShearTool::putFinalData()
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginalImage(i18n("Shear Tool"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
-}
-
-void ShearTool::renderingFinished()
-{
-    d->mainHAngleInput->setEnabled(true);
-    d->mainVAngleInput->setEnabled(true);
-    d->fineHAngleInput->setEnabled(true);
-    d->fineVAngleInput->setEnabled(true);
-    d->antialiasInput->setEnabled(true);
-    kapp->restoreOverrideCursor();
 }
 
 }  // namespace DigikamTransformImagePlugin

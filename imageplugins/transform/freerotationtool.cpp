@@ -297,9 +297,6 @@ void FreeRotationTool::slotResetSettings()
 
 void FreeRotationTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    d->expanderBox->setEnabled(false);
-
     FreeRotationContainer settings = d->settingsView->settings();
     ImageIface* iface              = d->previewWidget->imageIface();
     DImg preview                   = iface->getPreviewImg();
@@ -311,8 +308,6 @@ void FreeRotationTool::prepareEffect()
 
 void FreeRotationTool::prepareFinal()
 {
-    d->expanderBox->setEnabled(false);
-
     ImageIface iface(0, 0);
     FreeRotationContainer settings = d->settingsView->settings();
     DImg* orgImage                 = iface.getOriginalImg();
@@ -352,12 +347,6 @@ void FreeRotationTool::putFinalData()
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginalImage(i18n("Free Rotation"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
-}
-
-void FreeRotationTool::renderingFinished()
-{
-    d->expanderBox->setEnabled(true);
-    kapp->restoreOverrideCursor();
 }
 
 QString FreeRotationTool::generateButtonLabel(const QPoint& p)
@@ -422,8 +411,7 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength)
 void FreeRotationTool::updatePoints()
 {
     // set labels
-    QString tmp;
-    tmp = generateButtonLabel(d->autoAdjustPoint1);
+    QString tmp = generateButtonLabel(d->autoAdjustPoint1);
     d->autoAdjustPoint1Btn->setText(tmp);
 
     tmp = generateButtonLabel(d->autoAdjustPoint2);

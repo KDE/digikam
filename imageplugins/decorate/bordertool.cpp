@@ -126,9 +126,6 @@ void BorderTool::slotResetSettings()
 
 void BorderTool::prepareEffect()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     ImageIface* iface        = d->previewWidget->imageIface();
     DImg preview             = iface->getPreviewImg();
     int w                    = iface->previewWidth();
@@ -140,21 +137,18 @@ void BorderTool::prepareEffect()
     settings.borderWidth2    = (int)(20.0*ratio);
     settings.borderWidth3    = (int)(20.0*ratio);
     settings.borderWidth4    = 3;
-   
+
     setFilter(new BorderFilter(&preview, this, settings));
 }
 
 void BorderTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     ImageIface iface(0, 0);
     DImg* orgImage           = iface.getOriginalImg();
     BorderContainer settings = d->settingsView->settings();
     settings.orgWidth        = iface.originalWidth();
     settings.orgHeight       = iface.originalHeight();
-   
+
     setFilter(new BorderFilter(orgImage, this, settings));
 }
 
@@ -180,12 +174,6 @@ void BorderTool::putFinalData()
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginalImage(i18n("Add Border"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
-}
-
-void BorderTool::renderingFinished()
-{
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamDecorateImagePlugin

@@ -198,12 +198,8 @@ void LensAutoFixTool::prepareEffect()
 {
     // Settings information must be get before to disable settings view.
     LensFunContainer settings = d->settingsView->settings();
-
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg preview      = iface->getPreviewImg();
+    ImageIface* iface         = d->previewWidget->imageIface();
+    DImg preview              = iface->getPreviewImg();
 
     if (d->showGrid->isChecked())
     {
@@ -238,9 +234,6 @@ void LensAutoFixTool::prepareFinal()
     // Settings information must be get before to disable settings view.
     LensFunContainer settings = d->settingsView->settings();
 
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     ImageIface iface(0, 0);
     setFilter(new LensFunFilter(iface.getOriginalImg(), this, d->lfIface, settings));
 }
@@ -255,12 +248,6 @@ void LensAutoFixTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void LensAutoFixTool::renderingFinished()
-{
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamEnhanceImagePlugin

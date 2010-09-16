@@ -99,7 +99,7 @@ TextureTool::TextureTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Type:"));
+    QLabel* label1 = new QLabel(i18n("Type:"));
     d->textureType = new RComboBox;
     d->textureType->addItem(i18n("Paper"));
     d->textureType->addItem(i18n("Paper 2"));
@@ -122,7 +122,7 @@ TextureTool::TextureTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Relief:"));
+    QLabel* label2 = new QLabel(i18n("Relief:"));
     d->blendGain   = new RIntNumInput;
     d->blendGain->setRange(1, 255, 1);
     d->blendGain->setSliderEnabled(true);
@@ -203,9 +203,6 @@ void TextureTool::slotResetSettings()
 
 void TextureTool::prepareEffect()
 {
-    toolSettings()->setEnabled(false);    
-    toolView()->setEnabled(false);    
-
     DImg image      = d->previewWidget->getOriginalRegionImage();
     QString texture = getTexturePath( d->textureType->currentIndex() );
     int b           = 255 - d->blendGain->value();
@@ -215,9 +212,6 @@ void TextureTool::prepareEffect()
 
 void TextureTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);    
-    toolView()->setEnabled(false);    
-
     ImageIface iface(0, 0);
     QString texture = getTexturePath( d->textureType->currentIndex() );
     int b           = 255 - d->blendGain->value();
@@ -234,12 +228,6 @@ void TextureTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Texture"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void TextureTool::renderingFinished()
-{
-    toolSettings()->setEnabled(true);    
-    toolView()->setEnabled(true);
 }
 
 QString TextureTool::getTexturePath(int texture)

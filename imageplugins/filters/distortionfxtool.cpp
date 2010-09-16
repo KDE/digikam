@@ -346,7 +346,7 @@ void DistortionFXTool::prepareEffect()
     ImageIface* iface = d->previewWidget->imageIface();
     uchar* data       = iface->getPreviewImage();
     DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
-                        iface->previewHasAlpha(), data);
+               iface->previewHasAlpha(), data);
     delete [] data;
 
     setFilter(new DistortionFXFilter(&image, this, e, l, f));

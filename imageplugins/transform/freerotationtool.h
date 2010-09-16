@@ -66,7 +66,6 @@ private:
     void prepareFinal();
     void putPreviewData();
     void putFinalData();
-    void renderingFinished();
 
     double  calculateAutoAngle();
     QPixmap generateBtnPixmap(const QString& label, const QColor& color);

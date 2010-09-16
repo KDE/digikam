@@ -91,7 +91,7 @@ EmbossTool::EmbossTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Depth:"));
+    QLabel* label1 = new QLabel(i18n("Depth:"));
     d->depthInput  = new RIntNumInput;
     d->depthInput->setRange(10, 300, 1);
     d->depthInput->setSliderEnabled(true);
@@ -163,9 +163,6 @@ void EmbossTool::slotResetSettings()
 
 void EmbossTool::prepareEffect()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     DImg image = d->previewWidget->getOriginalRegionImage();
     int depth  = d->depthInput->value();
 
@@ -174,9 +171,6 @@ void EmbossTool::prepareEffect()
 
 void EmbossTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     int depth = d->depthInput->value();
 
     ImageIface iface(0, 0);
@@ -192,12 +186,6 @@ void EmbossTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void EmbossTool::renderingFinished()
-{
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

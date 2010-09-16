@@ -55,8 +55,8 @@ private Q_SLOTS:
     void slotLoadSettings();
     void slotResetSettings();
     void slotPickerColorButtonActived();
-    void slotColorSelectedFromOriginal(const Digikam::DColor&);
-    void slotColorSelectedFromTarget(const Digikam::DColor&);
+    void slotColorSelectedFromOriginal(const DColor&);
+    void slotColorSelectedFromTarget(const DColor&);
     void slotAutoAdjustExposure();
 
 private:
@@ -67,7 +67,6 @@ private:
     void prepareFinal();
     void putPreviewData();
     void putFinalData();
-    void renderingFinished();
 
 private:
 

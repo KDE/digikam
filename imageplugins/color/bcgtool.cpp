@@ -165,10 +165,6 @@ void BCGTool::slotResetSettings()
 
 void BCGTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     BCGContainer settings = d->settingsView->settings();
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -195,9 +191,6 @@ void BCGTool::putPreviewData()
 
 void BCGTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     BCGContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
@@ -209,13 +202,6 @@ void BCGTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void BCGTool::renderingFinished()
-{
-    kapp->restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamColorImagePlugin

@@ -284,11 +284,6 @@ void LensDistortionTool::slotResetSettings()
 
 void LensDistortionTool::prepareEffect()
 {
-    d->mainInput->setEnabled(false);
-    d->edgeInput->setEnabled(false);
-    d->rescaleInput->setEnabled(false);
-    d->brightenInput->setEnabled(false);
-
     double m = d->mainInput->value();
     double e = d->edgeInput->value();
     double r = d->rescaleInput->value();
@@ -305,11 +300,6 @@ void LensDistortionTool::prepareEffect()
 
 void LensDistortionTool::prepareFinal()
 {
-    d->mainInput->setEnabled(false);
-    d->edgeInput->setEnabled(false);
-    d->rescaleInput->setEnabled(false);
-    d->brightenInput->setEnabled(false);
-
     double m = d->mainInput->value();
     double e = d->edgeInput->value();
     double r = d->rescaleInput->value();
@@ -332,14 +322,6 @@ void LensDistortionTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Lens Distortion"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void LensDistortionTool::renderingFinished()
-{
-    d->mainInput->setEnabled(true);
-    d->edgeInput->setEnabled(true);
-    d->rescaleInput->setEnabled(true);
-    d->brightenInput->setEnabled(true);
 }
 
 void LensDistortionTool::blockWidgetSignals(bool b)

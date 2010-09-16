@@ -410,6 +410,9 @@ void EditorToolThreaded::slotAbort()
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  true);
     toolSettings()->enableButton(EditorToolSettings::Try,     true);
     toolSettings()->enableButton(EditorToolSettings::Default, true);
+    toolView()->setEnabled(true);
+
+    kapp->restoreOverrideCursor();
 
     renderingFinished();
 }
@@ -492,6 +495,7 @@ void EditorToolThreaded::slotOk()
     toolSettings()->enableButton(EditorToolSettings::Load,    false);
     toolSettings()->enableButton(EditorToolSettings::Default, false);
     toolSettings()->enableButton(EditorToolSettings::Try,     false);
+    toolView()->setEnabled(false);
 
     EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
     kapp->setOverrideCursor( Qt::WaitCursor );
@@ -519,8 +523,10 @@ void EditorToolThreaded::slotEffect()
     toolSettings()->enableButton(EditorToolSettings::Load,    false);
     toolSettings()->enableButton(EditorToolSettings::Default, false);
     toolSettings()->enableButton(EditorToolSettings::Try,     false);
+    toolView()->setEnabled(false);
 
     EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
+    kapp->setOverrideCursor(Qt::WaitCursor);
 
     if (d->delFilter && d->threadedFilter)
     {
@@ -535,7 +541,6 @@ void EditorToolThreaded::slotCancel()
 {
     writeSettings();
     slotAbort();
-    kapp->restoreOverrideCursor();
     emit cancelClicked();
 }
 

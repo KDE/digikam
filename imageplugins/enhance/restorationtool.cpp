@@ -135,13 +135,13 @@ RestorationTool::RestorationTool(QObject* parent)
     QGridLayout* grid  = new QGridLayout(firstPage);
     d->mainTab->addTab( firstPage, i18n("Preset") );
 
-    KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
+    KUrlLabel* cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
 
-    QLabel *typeLabel   = new QLabel(i18n("Filtering type:"), firstPage);
+    QLabel* typeLabel   = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     d->restorationTypeCB = new KComboBox(firstPage);
     d->restorationTypeCB->addItem( i18nc("no restoration preset", "None") );
@@ -198,12 +198,6 @@ RestorationTool::RestorationTool(QObject* parent)
 RestorationTool::~RestorationTool()
 {
     delete d;
-}
-
-void RestorationTool::renderingFinished()
-{
-    d->mainTab->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 void RestorationTool::readSettings()
@@ -313,9 +307,6 @@ void RestorationTool::processCImgUrl(const QString& url)
 
 void RestorationTool::prepareEffect()
 {
-    d->mainTab->setEnabled(false);
-    toolView()->setEnabled(false);
-
     DImg previewImage = d->previewWidget->getOriginalRegionImage();
 
     setFilter(new GreycstorationFilter(&previewImage,
@@ -325,9 +316,6 @@ void RestorationTool::prepareEffect()
 
 void RestorationTool::prepareFinal()
 {
-    d->mainTab->setEnabled(false);
-    toolView()->setEnabled(false);
-
     ImageIface iface(0, 0);
     uchar* data = iface.getOriginalImage();
     DImg originalImage(iface.originalWidth(), iface.originalHeight(),

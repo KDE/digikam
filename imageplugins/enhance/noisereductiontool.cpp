@@ -120,10 +120,6 @@ void NoiseReductionTool::slotResetSettings()
 
 void NoiseReductionTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     DImg image      = d->previewWidget->getOriginalRegionImage();
     NRContainer prm = d->nrSettings->settings();
 
@@ -132,9 +128,6 @@ void NoiseReductionTool::prepareEffect()
 
 void NoiseReductionTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     NRContainer prm = d->nrSettings->settings();
 
     ImageIface iface(0, 0);
@@ -150,13 +143,6 @@ void NoiseReductionTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Noise Reduction"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void NoiseReductionTool::renderingFinished()
-{
-    kapp->restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 void NoiseReductionTool::slotLoadSettings()

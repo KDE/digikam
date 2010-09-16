@@ -62,8 +62,8 @@ private Q_SLOTS:
     void slotAdjustMaxInputSpinBox(double val);
     void slotAdjustMinOutputSpinBox(double val);
     void slotAdjustMaxOutputSpinBox(double val);
-    void slotSpotColorChanged(const Digikam::DColor& color);
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
+    void slotSpotColorChanged(const DColor& color);
+    void slotColorSelectedFromTarget(const DColor& color);
     void slotPickerColorButtonActived(int);
     void slotShowInputHistogramGuide(double v);
     void slotShowOutputHistogramGuide(double v);
@@ -77,7 +77,6 @@ private:
     void abortPreview();
     void putPreviewData();
     void putFinalData();
-    void renderingFinished();
 
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
     void adjustSlidersAndSpinboxes(int minIn, double gamIn, int maxIn, int minOut, int maxOut);

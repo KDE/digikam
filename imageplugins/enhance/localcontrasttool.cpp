@@ -158,18 +158,12 @@ void LocalContrastTool::slotResetSettings()
 
 void LocalContrastTool::prepareEffect()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     DImg image = d->previewWidget->getOriginalRegionImage(true);
     setFilter(new LocalContrastFilter(&image, this, d->settingsView->settings()));
 }
 
 void LocalContrastTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     ImageIface iface(0, 0);
     setFilter(new LocalContrastFilter(iface.getOriginalImg(), this, d->settingsView->settings()));
 }
@@ -194,12 +188,6 @@ void LocalContrastTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Local Contrast"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void LocalContrastTool::renderingFinished()
-{
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 void LocalContrastTool::slotLoadSettings()

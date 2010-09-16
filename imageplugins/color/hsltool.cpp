@@ -101,7 +101,6 @@ HSLTool::HSLTool(QObject* parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-//                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
@@ -158,10 +157,6 @@ void HSLTool::slotResetSettings()
 
 void HSLTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     HSLContainer settings = d->hslSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -187,9 +182,6 @@ void HSLTool::putPreviewData()
 
 void HSLTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     HSLContainer settings = d->hslSettings->settings();
 
     ImageIface iface(0, 0);
@@ -200,13 +192,6 @@ void HSLTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("HSL Adjustments"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void HSLTool::renderingFinished()
-{
-    kapp->restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamColorImagePlugin

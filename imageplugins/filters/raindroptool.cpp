@@ -116,7 +116,7 @@ RainDropTool::RainDropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Drop size:"));
+    QLabel* label1 = new QLabel(i18n("Drop size:"));
     d->dropInput   = new RIntNumInput;
     d->dropInput->setRange(0, 200, 1);
     d->dropInput->setSliderEnabled(true);
@@ -125,7 +125,7 @@ RainDropTool::RainDropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Number:"));
+    QLabel* label2 = new QLabel(i18n("Number:"));
     d->amountInput = new RIntNumInput;
     d->amountInput->setRange(1, 500, 1);
     d->amountInput->setSliderEnabled(true);
@@ -134,7 +134,7 @@ RainDropTool::RainDropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Fish eyes:"));
+    QLabel* label3 = new QLabel(i18n("Fish eyes:"));
     d->coeffInput  = new RIntNumInput;
     d->coeffInput->setRange(1, 100, 1);
     d->coeffInput->setSliderEnabled(true);
@@ -207,10 +207,6 @@ void RainDropTool::slotResetSettings()
 
 void RainDropTool::prepareEffect()
 {
-    d->dropInput->setEnabled(false);
-    d->amountInput->setEnabled(false);
-    d->coeffInput->setEnabled(false);
-
     int drop   = d->dropInput->value();
     int amount = d->amountInput->value();
     int coeff  = d->coeffInput->value();
@@ -226,10 +222,6 @@ void RainDropTool::prepareEffect()
 
 void RainDropTool::prepareFinal()
 {
-    d->dropInput->setEnabled(false);
-    d->amountInput->setEnabled(false);
-    d->coeffInput->setEnabled(false);
-
     int drop   = d->dropInput->value();
     int amount = d->amountInput->value();
     int coeff  = d->coeffInput->value();
@@ -256,13 +248,6 @@ void RainDropTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("RainDrop"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void RainDropTool::renderingFinished()
-{
-    d->dropInput->setEnabled(true);
-    d->amountInput->setEnabled(true);
-    d->coeffInput->setEnabled(true);
 }
 
 void RainDropTool::blockWidgetSignals(bool b)

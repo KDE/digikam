@@ -55,7 +55,7 @@ private:
     void prepareFinal();
     void putPreviewData();
     void putFinalData();
-    void renderingFinished();
+
     void blockWidgetSignals(bool b);
 
 private:

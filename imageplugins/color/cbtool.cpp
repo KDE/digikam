@@ -100,7 +100,6 @@ CBTool::CBTool(QObject* parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-//                                EditorToolSettings::Try);
 
     d->cbSettings = new CBSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
@@ -156,10 +155,6 @@ void CBTool::slotResetSettings()
 
 void CBTool::prepareEffect()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     CBContainer settings = d->cbSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -185,9 +180,6 @@ void CBTool::putPreviewData()
 
 void CBTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     CBContainer settings = d->cbSettings->settings();
 
     ImageIface iface(0, 0);
@@ -198,13 +190,6 @@ void CBTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage().bits());
-}
-
-void CBTool::renderingFinished()
-{
-    QApplication::restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamColorImagePlugin

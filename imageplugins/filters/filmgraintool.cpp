@@ -89,13 +89,13 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);    
 
     // -------------------------------------------------------------
-    
+
     d->gboxSettings  = new EditorToolSettings;
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
-    
+
     d->settingsView = new FilmGrainSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
     init();
@@ -110,7 +110,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
             this, SLOT(slotEffect()));
 
     // -------------------------------------------------------------
-            
+
     slotTimer();
 }
 
@@ -123,7 +123,7 @@ void FilmGrainTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    
+
     d->settingsView->readSettings(group);
 }
 
@@ -144,22 +144,16 @@ void FilmGrainTool::slotResetSettings()
 
 void FilmGrainTool::prepareEffect()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-    
     FilmGrainContainer prm = d->settingsView->settings();
     DImg image             = d->previewWidget->getOriginalRegionImage();
-    
+
     setFilter(new FilmGrainFilter(&image, this, prm));
 }
 
 void FilmGrainTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);    
-
     FilmGrainContainer prm = d->settingsView->settings();
-    
+
     ImageIface iface(0, 0);
     setFilter(new FilmGrainFilter(iface.getOriginalImg(), this, prm));
 }
@@ -177,8 +171,6 @@ void FilmGrainTool::putFinalData()
 
 void FilmGrainTool::renderingFinished()
 {
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
     toolSettings()->enableButton(EditorToolSettings::Ok, d->settingsView->settings().isDirty());
 }
 
