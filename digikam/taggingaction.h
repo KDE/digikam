@@ -29,11 +29,6 @@
 #include <QString>
 #include <QMetaType>
 
-// KDE includes
-
-// Local includes
-
-
 namespace Digikam
 {
 
@@ -45,7 +40,6 @@ public:
      *  Assigning an existing tag, known by tag id,
      *  or creation of a new tag, with a given tag name and a parent tag.
      */
-
     enum Type
     {
         NoAction,
@@ -53,13 +47,18 @@ public:
         CreateNewTag
     };
 
-    /// Create a NoAction
+    /** Create a NoAction
+     */
     TaggingAction();
-    /// Assign the existing tag with given id
+
+    /** Assign the existing tag with given id
+     */
     TaggingAction(int tagId);
+
     /** Create a new tag with the given name.
      *  The parent shall be the tag with the given id,
-     *  or 0 for a toplevel tag.*/
+     *  or 0 for a toplevel tag.
+     */
     TaggingAction(const QString& name, int parentTagId);
 
     bool operator==(const TaggingAction& other) const;
@@ -74,7 +73,7 @@ public:
 
     /// If shallCreateNewTag(), returns the tag name and the parent tag id, 0 for toplevel tag
     QString newTagName() const;
-    int parentTagId() const;
+    int     parentTagId() const;
 
 protected:
 

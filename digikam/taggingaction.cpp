@@ -23,28 +23,21 @@
 
 #include "taggingaction.h"
 
-// Qt includes
-
-
-// KDE includes
-
-// Local includes
-
 namespace Digikam
 {
 
 TaggingAction::TaggingAction()
-    : m_type(NoAction), m_tagId(-1)
+             : m_type(NoAction), m_tagId(-1)
 {
 }
 
 TaggingAction::TaggingAction(int tagId)
-    : m_type(AssignTag), m_tagId(tagId)
+             : m_type(AssignTag), m_tagId(tagId)
 {
 }
 
 TaggingAction::TaggingAction(const QString& name, int parentTagId)
-    : m_type(CreateNewTag), m_tagId(parentTagId), m_tagName(name)
+             : m_type(CreateNewTag), m_tagId(parentTagId), m_tagName(name)
 {
 }
 
@@ -91,4 +84,3 @@ int TaggingAction::parentTagId() const
 }
 
 } // namespace Digikam
-

@@ -24,10 +24,6 @@
 #ifndef ADDTAGSCOMBOBOX_H
 #define ADDTAGSCOMBOBOX_H
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "albumselectcombobox.h"
@@ -53,7 +49,7 @@ public:
     /** You must call this after construction.
      *  If filterModel is 0, a default one is constructed
      */
-    void initialize(TagModel* model, CheckableAlbumFilterModel *filterModel = 0);
+    void initialize(TagModel* model, CheckableAlbumFilterModel* filterModel = 0);
 
     /** Returns the currently set tagging action.
      *  This is the last action emitted by either taggingActionActivated()
@@ -67,7 +63,8 @@ public:
     void setCurrentTag(int tagId);
 
     /** Reads a tag treeview and takes the currently selected tag into account
-     *  when suggesting a parent tag for a new tag, and a default action. */
+     *  when suggesting a parent tag for a new tag, and a default action.
+     */
     void setTagTreeView(TagTreeView* treeView);
 
     void setClickMessage(const QString& message);
@@ -77,10 +74,13 @@ public:
 
 Q_SIGNALS:
 
-    /// Emitted when the user activates an action (typically, by pressing return)
+    /** Emitted when the user activates an action (typically, by pressing return)
+     */
     void taggingActionActivated(const TaggingAction& action);
+
     /** Emitted when an action is selected, but not explicitly activated.
-     *  (typically by selecting an item in the tree view */
+     *  (typically by selecting an item in the tree view
+     */
     void taggingActionSelected(const TaggingAction& action);
 
 protected Q_SLOTS:
@@ -91,14 +91,16 @@ protected Q_SLOTS:
 protected:
 
     virtual void installView();
-    TagTreeView *view() const;
-    virtual void sendViewportEventToView(QEvent *e);
+    TagTreeView* view() const;
+    virtual void sendViewportEventToView(QEvent* e);
 
 private:
 
     virtual void installLineEdit();
     // make private
     void setEditable(bool editable);
+
+private:
 
     class AddTagsComboBoxPriv;
     AddTagsComboBoxPriv* const d;

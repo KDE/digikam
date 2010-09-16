@@ -28,8 +28,6 @@
 
 #include "addtagscombobox.moc"
 
-// Qt includes
-
 // KDE includes
 
 #include <kdebug.h>
@@ -54,8 +52,8 @@ public:
         lineEdit   = 0;
     }
 
-    TagTreeView     *treeView;
-    AddTagsLineEdit *lineEdit;
+    TagTreeView*     treeView;
+    AddTagsLineEdit* lineEdit;
     TaggingAction    currentTaggingAction;
 };
 
@@ -75,7 +73,7 @@ AddTagsComboBox::~AddTagsComboBox()
     delete d;
 }
 
-void AddTagsComboBox::initialize(TagModel* model, CheckableAlbumFilterModel *filterModel)
+void AddTagsComboBox::initialize(TagModel* model, CheckableAlbumFilterModel* filterModel)
 {
     d->treeView = new TagTreeView(model, filterModel);
 
@@ -91,8 +89,10 @@ void AddTagsComboBox::initialize(TagModel* model, CheckableAlbumFilterModel *fil
 void AddTagsComboBox::installLineEdit()
 {
     d->lineEdit = new AddTagsLineEdit(this);
+
     connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
             this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
+
     d->lineEdit->setClearButtonShown(true);
     setLineEdit(d->lineEdit);
 }
@@ -103,7 +103,7 @@ void AddTagsComboBox::installView()
     StayPoppedUpComboBox::installView(d->treeView);
 }
 
-TagTreeView *AddTagsComboBox::view() const
+TagTreeView* AddTagsComboBox::view() const
 {
     // the view in the combo box popup
     return d->treeView;
@@ -114,13 +114,13 @@ void AddTagsComboBox::setEditable(bool)
     // just made private, ignored
 }
 
-void AddTagsComboBox::sendViewportEventToView(QEvent *e)
+void AddTagsComboBox::sendViewportEventToView(QEvent* e)
 {
     // needed for StayPoppedUpComboBox
     view()->viewportEvent(e);
 }
 
-void AddTagsComboBox::setTagTreeView(TagTreeView *view)
+void AddTagsComboBox::setTagTreeView(TagTreeView* view)
 {
     // this is a completely different view! Remove this functionality?
     d->lineEdit->setTagTreeView(view);
@@ -166,5 +166,3 @@ void AddTagsComboBox::slotLineEditActionActivated(const TaggingAction& action)
 }
 
 } // namespace Digikam
-
-

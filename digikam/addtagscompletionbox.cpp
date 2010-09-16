@@ -68,7 +68,7 @@ void TagModelCompletion::setModel(AlbumFilterModel* model)
 
 TagModel* TagModelCompletion::model() const
 {
-    QAbstractItemModel *model = ModelCompletion::model();
+    QAbstractItemModel* model = ModelCompletion::model();
     if (dynamic_cast<TagModel*>(model))
         return static_cast<TagModel*>(model);
     else if (dynamic_cast<AlbumFilterModel*>(model))
@@ -113,14 +113,17 @@ public:
         model     = 0;
     }
 
-    bool upwardBox;
-
-    TagModel*             model;
-    AlbumPointer<TAlbum> parentTag;
-
     AddTagsCompletionBoxItem* createItemForExistingTag(TAlbum* talbum, bool uniqueName);
     AddTagsCompletionBoxItem* createItemForNewTag(const QString& newName, TAlbum* parent);
     int maximumAvailableScreenHeight(const QPoint& globalPos);
+
+public:
+
+    bool                 upwardBox;
+
+    TagModel*            model;
+    AlbumPointer<TAlbum> parentTag;
+
 };
 
 AddTagsCompletionBox::AddTagsCompletionBox(QWidget* parent)
@@ -143,14 +146,15 @@ void AddTagsCompletionBox::setTagModel(TagModel* model)
     d->model = model;
 }
 
-AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum, bool uniqueName)
+AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum, 
+                                                                                                   bool uniqueName)
 {
     if (!talbum || talbum->isRoot())
         return 0;
 
-    AddTagsCompletionBoxItem *item = new AddTagsCompletionBoxItem;
+    AddTagsCompletionBoxItem* item = new AddTagsCompletionBoxItem;
 
-    TAlbum *parent = static_cast<TAlbum*>(talbum->parent());
+    TAlbum* parent = static_cast<TAlbum*>(talbum->parent());
     if (parent->isRoot() || uniqueName)
     {
         item->setText(talbum->title());
@@ -172,7 +176,8 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::create
     return item;
 }
 
-AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForNewTag(const QString& newName, TAlbum* parent)
+AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForNewTag(const QString& newName, 
+                                                                                              TAlbum* parent)
 {
     int parentTagId = parent ? parent->id() : 0;
 
@@ -180,7 +185,7 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::create
     if (TagsCache::instance()->tagForName(newName, parentTagId))
         return 0;
 
-    AddTagsCompletionBoxItem *item = new AddTagsCompletionBoxItem;
+    AddTagsCompletionBoxItem* item = new AddTagsCompletionBoxItem;
 
     if (parent)
     {
@@ -214,7 +219,8 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
     foreach (const QString &tagName, completionEntries)
     {
         QList<int> tagIds = TagsCache::instance()->tagsForName(tagName);
-        bool uniqueName = tagIds.count() == 1;
+        bool uniqueName   = tagIds.count() == 1;
+
         foreach (int tagId, tagIds)
         {
             AddTagsCompletionBoxItem* item = d->createItemForExistingTag(AlbumManager::instance()->findTAlbum(tagId), uniqueName);
@@ -261,9 +267,9 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
 }
 
 /*
-    /// If an item matches the given completion text exactly, it is made the current item
-    void setCurrentCompletionText(const QString& completionText);
-    QString currentCompletionText() const;
+/// If an item matches the given completion text exactly, it is made the current item
+void setCurrentCompletionText(const QString& completionText);
+QString currentCompletionText() const;
 
 void AddTagsCompletionBox::setCurrentCompletionText(const QString &completionText)
 {
@@ -312,7 +318,8 @@ void AddTagsCompletionBox::slotCurrentItemChanged(QListWidgetItem* current, QLis
     if (current)
     {
         AddTagsCompletionBoxItem *boxItem = static_cast<AddTagsCompletionBoxItem*>(current);
-        emit currentCompletionTextChanged(current->data(AddTagsCompletionBox::AddTagsCompletionBoxPriv::CompletionTextRole).toString());
+        emit currentCompletionTextChanged(current->data(
+                                          AddTagsCompletionBox::AddTagsCompletionBoxPriv::CompletionTextRole).toString());
         emit currentTaggingActionChanged(boxItem->action());
     }
     else
@@ -330,9 +337,9 @@ void AddTagsCompletionBox::sizeAndPosition()
 void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
 {
     // Solution in kdelibs is suboptimal for our needs
-    int currentGeom = height();
+    int currentGeom   = height();
     QPoint currentPos = pos();
-    QRect geom = calculateGeometry();
+    QRect geom        = calculateGeometry();
     resize( geom.size() );
 
     int x = currentPos.x();
@@ -341,7 +348,7 @@ void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
     {
         if (!wasVisible)
         {
-            QPoint orig = globalPositionHint();
+            QPoint orig      = globalPositionHint();
             QRect screenSize = QApplication::desktop()->availableGeometry(orig);
 
             x = orig.x() + geom.x();
@@ -351,13 +358,16 @@ void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
 
             if ( x + width() > screenSize.right() )
                 x = screenSize.right() - width();
+
             if (y + height() > screenSize.bottom() )
             {
                 y = y - height() - parentWidget()->height();
                 d->upwardBox = true;
             }
             else
+            {
                 d->upwardBox = false;
+            }
         }
         else
         {
@@ -375,6 +385,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
     if (!count())
         return QRect();
     QSize itemSizeHint;
+
     for (int i=0; i<count(); i++)
     {
         if (item(i)->flags() & Qt::ItemIsSelectable)
@@ -383,6 +394,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
             break;
         }
     }
+
     if (!itemSizeHint.isValid() || itemSizeHint.isNull())
         return QRect();
 
@@ -391,10 +403,11 @@ QRect AddTagsCompletionBox::calculateGeometry() const
     int suggestedHeight   = qMin(15, count()) * itemSizeHint.height();
     //kDebug() << itemSizeHint << maxHeight << suggestedHeight;
     int h                 = qMin(maxHeight, suggestedHeight + frameHeight);
+    int w                 = KListWidget::minimumSizeHint().width();
 
-    int w = KListWidget::minimumSizeHint().width();
     if (parentWidget())
         w = qMax(parentWidget()->width(), KListWidget::minimumSizeHint().width());
+
     return QRect(0, 0, w, h);
 }
 
@@ -410,7 +423,9 @@ void AddTagsCompletionBox::setVisible( bool visible )
 void AddTagsCompletionBox::popup()
 {
     if ( count() == 0 )
+    {
         hide();
+    }
     else
     {
         /*bool block = signalsBlocked();
@@ -430,12 +445,14 @@ QSize AddTagsCompletionBox::sizeHint() const
     return calculateGeometry().size();
 }
 
-int AddTagsCompletionBox::AddTagsCompletionBoxPriv::maximumAvailableScreenHeight(const QPoint &orig)
+int AddTagsCompletionBox::AddTagsCompletionBoxPriv::maximumAvailableScreenHeight(const QPoint& orig)
 {
     QRect screenSize = QApplication::desktop()->availableGeometry(orig);
     //kDebug() << screenSize << orig << qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
+
     if (!screenSize.contains(orig))
         return screenSize.height(); // bail out
+
     return qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
 }
 
@@ -452,20 +469,26 @@ TaggingAction AddTagsCompletionBox::makeDefaultTaggingAction(const QString& text
     if (!tagIds.isEmpty())
     {
         if (tagIds.count() == 1)
+        {
             return TaggingAction(tagIds.first());
+        }
         else
         {
             int tagId = 0;
             if (parentTagId)
                 tagId = TagsCache::instance()->tagForName(text, parentTagId);
+
             if (!tagId)
                 tagId = TagsCache::instance()->tagForName(text); // toplevel tag
+
             if (!tagId)
             {
                 // sort lexically
                 QMap<QString, int> map;
+
                 foreach (int id, tagIds)
                     map[TagsCache::instance()->tagPath(id, TagsCache::NoLeadingSlash)] = id;
+
                 tagId = map.begin().value();
             }
             return TaggingAction(tagId);

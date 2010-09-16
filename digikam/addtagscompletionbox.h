@@ -24,8 +24,6 @@
 #ifndef ADDTAGSCOMPLETIONBOX_H
 #define ADDTAGSCOMPLETIONBOX_H
 
-// Qt includes
-
 // KDE includes
 
 #include <kcompletionbox.h>
@@ -46,14 +44,16 @@ class TagModelCompletion : public ModelCompletion
 {
 public:
 
-    /** A KCompletion object operating on a TagModel */
-
+    /** A KCompletion object operating on a TagModel
+    */
     TagModelCompletion();
 
-    void setModel(TagModel *model);
-    void setModel(AlbumFilterModel *model);
-    TagModel *model() const;
+    void setModel(TagModel* model);
+    void setModel(AlbumFilterModel* model);
+    TagModel* model() const;
 };
+
+// -------------------------------------------------------------------------------------------
 
 class AddTagsCompletionBox : public KCompletionBox
 {
@@ -67,12 +67,12 @@ public:
      *  Keeps a current TaggingAction, which is set when the user selects
      *  a tag in the drop down box.
      */
-
     AddTagsCompletionBox(QWidget* parent = 0);
     ~AddTagsCompletionBox();
 
     /** Updates the completion box. Gives the current text in the line edit
-     *  and the completion matches. */
+     *  and the completion matches.
+     */
     void setItems(const QString& currentText, const QStringList& completionEntries);
 
     /** Optional: Reads a tag model and takes the currently selected tag into account
@@ -95,7 +95,8 @@ public:
     virtual void popup();
     virtual QSize sizeHint() const;
 
-    /// Returns presumedly best action for typed text, without user input from any completion list
+    /** Returns presumedly best action for typed text, without user input from any completion list.
+     */
     static TaggingAction makeDefaultTaggingAction(const QString& text, int parentTagId);
 
 public Q_SLOTS:
@@ -109,9 +110,12 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    /// Emitted when the completion text changes, see above.
+    /** Emitted when the completion text changes, see above.
+     */
     void currentCompletionTextChanged(const QString& completionText);
-    /// Emitted when the current tagging action changes
+
+    /** Emitted when the current tagging action changes.
+     */
     void currentTaggingActionChanged(const TaggingAction& action);
 
     void completionActivated(const QString& completionText);
