@@ -926,7 +926,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libfacedetection_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/faceiface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facepipeline.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/assignnamewidget.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/assignnamewidget.cpp
        )
 
     SET(libfirstrun_SRCS
