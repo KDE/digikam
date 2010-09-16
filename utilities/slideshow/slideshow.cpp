@@ -46,6 +46,7 @@
 
 // KDE includes
 
+#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kdeversion.h>
 #include <kdialog.h>
@@ -525,8 +526,17 @@ void SlideShow::updatePixmap()
     {
         // End of Slide Show.
 
-        QPixmap logo = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                               .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QPixmap logo;
+        if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+        {
+            logo = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                           .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+        else
+        {
+            logo = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-showfoto.png"))
+                           .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
 
         QFont fn(font());
         fn.setPointSize(fn.pointSize()+10);
