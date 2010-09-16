@@ -65,31 +65,31 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class EditorToolSettingsPriv
+class EditorToolSettings::EditorToolSettingsPriv
 {
 
 public:
 
     EditorToolSettingsPriv()
     {
-        okBtn           = 0;
-        cancelBtn       = 0;
-        tryBtn          = 0;
-        defaultBtn      = 0;
-        settingsArea    = 0;
-        plainPage       = 0;
-        btnBox1         = 0;
-        btnBox2         = 0;
-        saveAsBtn       = 0;
-        loadBtn         = 0;
-        guideBox        = 0;
-        guideColorBt    = 0;
-        guideSize       = 0;
-        channelCB       = 0;
-        colorsCB        = 0;
-        scaleBG         = 0;
-        histogramBox    = 0;
-        hGradient       = 0;
+        okBtn        = 0;
+        cancelBtn    = 0;
+        tryBtn       = 0;
+        defaultBtn   = 0;
+        settingsArea = 0;
+        plainPage    = 0;
+        btnBox1      = 0;
+        btnBox2      = 0;
+        saveAsBtn    = 0;
+        loadBtn      = 0;
+        guideBox     = 0;
+        guideColorBt = 0;
+        guideSize    = 0;
+        channelCB    = 0;
+        colorsCB     = 0;
+        scaleBG      = 0;
+        histogramBox = 0;
+        hGradient    = 0;
     }
 
     QButtonGroup*        scaleBG;
@@ -123,7 +123,7 @@ public:
     RIntNumInput*        guideSize;
 };
 
-EditorToolSettings::EditorToolSettings(QWidget *parent)
+EditorToolSettings::EditorToolSettings(QWidget* parent)
                   : QScrollArea(parent), d(new EditorToolSettingsPriv)
 {
     setFrameStyle( QFrame::NoFrame );
@@ -144,7 +144,7 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
     // ---------------------------------------------------------------
 
     new QLabel(i18n("Guide:"), d->guideBox);
-    QLabel *space4  = new QLabel(d->guideBox);
+    QLabel* space4  = new QLabel(d->guideBox);
     d->guideColorBt = new KColorButton(QColor(Qt::red), d->guideBox);
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
     d->guideSize    = new RIntNumInput(d->guideBox);
@@ -165,7 +165,7 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
     d->defaultBtn->setIcon(KIcon(SmallIcon("document-revert")));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
 
-    QLabel *space2 = new QLabel(d->btnBox1);
+    QLabel* space2 = new QLabel(d->btnBox1);
 
     d->okBtn = new KPushButton(d->btnBox1);
     d->okBtn->setGuiItem(KStandardGuiItem::ok());
@@ -190,7 +190,7 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
     d->saveAsBtn->setToolTip(i18n("Save all parameters to settings text file."));
 
 
-    QLabel *space3 = new QLabel(d->btnBox2);
+    QLabel* space3 = new QLabel(d->btnBox2);
 
     d->tryBtn = new KPushButton(d->btnBox2);
     d->tryBtn->setGuiItem(KStandardGuiItem::apply());
@@ -268,9 +268,9 @@ QSize EditorToolSettings::minimumSizeHint() const
     // Set scroll area to a horizontal minimum size sufficient for the settings.
     // Do not touch vertical size hint.
     // Limit to 40% of the desktop width.
-    QSize hint = QScrollArea::minimumSizeHint();
+    QSize hint        = QScrollArea::minimumSizeHint();
     QRect desktopRect = KGlobalSettings::desktopGeometry(d->settingsArea);
-    int wSB = verticalScrollBar()->height();
+    int wSB           = verticalScrollBar()->height();
     hint.setWidth(qMin(d->settingsArea->minimumSizeHint().width() + wSB, desktopRect.width() * 2 / 5));
     return hint;
 }
@@ -285,7 +285,7 @@ int EditorToolSettings::spacingHint()
     return KDialog::spacingHint();
 }
 
-QWidget *EditorToolSettings::plainPage() const
+QWidget* EditorToolSettings::plainPage() const
 {
     return d->plainPage;
 }
@@ -320,7 +320,7 @@ KPushButton* EditorToolSettings::button(int buttonCode) const
 
 void EditorToolSettings::enableButton(int buttonCode, bool state)
 {
-    KPushButton *btn = button(buttonCode);
+    KPushButton* btn = button(buttonCode);
     if (btn) btn->setEnabled(state);
 }
 

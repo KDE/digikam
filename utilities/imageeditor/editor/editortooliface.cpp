@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class EditorToolIfacePriv
+class EditorToolIface::EditorToolIfacePriv
 {
 
 public:
@@ -182,19 +182,19 @@ void EditorToolIface::setToolStopProgress()
 
 void EditorToolIface::slotToolAborted()
 {
-    EditorToolThreaded *tool = dynamic_cast<EditorToolThreaded*>(d->tool);
+    EditorToolThreaded* tool = dynamic_cast<EditorToolThreaded*>(d->tool);
     if (tool) tool->slotAbort();
 }
 
 void EditorToolIface::slotCloseTool()
 {
-    EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
     if (tool) tool->slotCloseTool();
 }
 
 void EditorToolIface::slotApplyTool()
 {
-    EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
     if (tool) tool->slotApplyTool();
 }
 
@@ -207,7 +207,7 @@ void EditorToolIface::updateICCSettings()
 {
     ICCSettingsContainer* cmSettings = d->editor->cmSettings();
     d->editor->editorStackView()->canvas()->setICCSettings(cmSettings);
-    EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
     if (tool) tool->ICCSettingsChanged();
 }
 
@@ -215,7 +215,7 @@ void EditorToolIface::updateExposureSettings()
 {
     ExposureSettingsContainer* expoSettings = d->editor->exposureSettings();
     d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
-    EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
     if (tool) tool->exposureSettingsChanged();
 }
 

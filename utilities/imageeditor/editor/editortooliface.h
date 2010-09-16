@@ -39,7 +39,6 @@ class EditorTool;
 class EditorWindow;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
-class EditorToolIfacePriv;
 
 class DIGIKAM_EXPORT EditorToolIface : public QObject
 {
@@ -85,6 +84,7 @@ private:
 
     static EditorToolIface* m_iface;
 
+    class EditorToolIfacePriv;
     EditorToolIfacePriv* const d;
 };
 

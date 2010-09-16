@@ -43,7 +43,6 @@ class KPushButton;
 namespace Digikam
 {
 class HistogramBox;
-class EditorToolSettingsPriv;
 
 class DIGIKAM_EXPORT EditorToolSettings : public QScrollArea
 {
@@ -72,17 +71,17 @@ public:
 
 public:
 
-    EditorToolSettings(QWidget *parent = 0);
+    EditorToolSettings(QWidget* parent = 0);
     ~EditorToolSettings();
 
     void setButtons(Buttons buttonMask);
     void setTools(Tools toolMask);
     void setHistogramType(HistogramBoxType type);
 
-    virtual void setBusy(bool){};
-    virtual void writeSettings(){};
-    virtual void readSettings(){};
-    virtual void resetSettings(){};
+    virtual void setBusy(bool)   {};
+    virtual void writeSettings() {};
+    virtual void readSettings()  {};
+    virtual void resetSettings() {};
 
     int marginHint();
     int spacingHint();
@@ -115,6 +114,7 @@ Q_SIGNALS:
 
 private:
 
+    class EditorToolSettingsPriv;
     EditorToolSettingsPriv* const d;
 };
 
