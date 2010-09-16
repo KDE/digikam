@@ -40,8 +40,6 @@
 namespace Digikam
 {
 
-class MixerSettingsPriv;
-
 class DIGIKAM_EXPORT MixerSettings : public QWidget
 {
     Q_OBJECT
@@ -84,6 +82,7 @@ private Q_SLOTS:
 
 private:
 
+    class MixerSettingsPriv;
     MixerSettingsPriv* const d;
 };
 
