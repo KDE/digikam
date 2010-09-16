@@ -61,7 +61,7 @@ private:
     void prepareFinal();
     void putPreviewData();
     void putFinalData();
-    void renderingFinished();
+
     void updateTransform();
 
 private:

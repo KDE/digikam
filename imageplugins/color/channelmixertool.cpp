@@ -120,7 +120,6 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-//                                EditorToolSettings::Try);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(RGB);
@@ -176,10 +175,6 @@ void ChannelMixerTool::slotChannelChanged()
 
 void ChannelMixerTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     MixerContainer settings = d->settingsView->settings();
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -206,9 +201,6 @@ void ChannelMixerTool::putPreviewData()
 
 void ChannelMixerTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     MixerContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
@@ -219,13 +211,6 @@ void ChannelMixerTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Channel Mixer"), filter()->getTargetImage().bits());
-}
-
-void ChannelMixerTool::renderingFinished()
-{
-    kapp->restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 void ChannelMixerTool::readSettings()

@@ -316,7 +316,6 @@ void BlurFXTool::slotEffectTypeChanged(int type)
 
 void BlurFXTool::prepareEffect()
 {
-    toolView()->setEnabled(false);
     d->effectTypeLabel->setEnabled(false);
     d->effectType->setEnabled(false);
     d->distanceInput->setEnabled(false);
@@ -357,7 +356,6 @@ void BlurFXTool::prepareEffect()
 
 void BlurFXTool::prepareFinal()
 {
-    toolView()->setEnabled(false);
     d->effectTypeLabel->setEnabled(false);
     d->effectType->setEnabled(false);
     d->distanceInput->setEnabled(false);
@@ -406,7 +404,6 @@ void BlurFXTool::putFinalData()
 
 void BlurFXTool::renderingFinished()
 {
-    toolView()->setEnabled(true);
     d->effectTypeLabel->setEnabled(true);
     d->effectType->setEnabled(true);
     d->distanceInput->setEnabled(true);

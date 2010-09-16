@@ -102,7 +102,7 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1    = new QLabel(i18n("Brush size:"));
+    QLabel* label1    = new QLabel(i18n("Brush size:"));
     d->brushSizeInput = new RIntNumInput();
     d->brushSizeInput->setRange(1, 5, 1);
     d->brushSizeInput->setSliderEnabled(true);
@@ -111,7 +111,7 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2  = new QLabel(i18nc("value of smoothing effect", "Smooth:"));
+    QLabel* label2  = new QLabel(i18nc("value of smoothing effect", "Smooth:"));
     d->smoothInput  = new RIntNumInput();
     d->smoothInput->setRange(10, 255, 1);
     d->smoothInput->setSliderEnabled(true);
@@ -181,9 +181,6 @@ void OilPaintTool::slotResetSettings()
 
 void OilPaintTool::prepareEffect()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     DImg image = d->previewWidget->getOriginalRegionImage();
     int b      = d->brushSizeInput->value();
     int s      = d->smoothInput->value();
@@ -193,9 +190,6 @@ void OilPaintTool::prepareEffect()
 
 void OilPaintTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     int b = d->brushSizeInput->value();
     int s = d->smoothInput->value();
 
@@ -212,12 +206,6 @@ void OilPaintTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Oil Paint"), filter()->getTargetImage().bits());
-}
-
-void OilPaintTool::renderingFinished()
-{
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

@@ -155,8 +155,6 @@ void SharpenTool::slotResetSettings()
 
 void SharpenTool::prepareEffect()
 {
-    toolView()->setEnabled(false);
-    toolSettings()->setEnabled(false);
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)
@@ -209,8 +207,6 @@ void SharpenTool::putPreviewData()
 void SharpenTool::prepareFinal()
 {
     ImageIface iface(0, 0);
-    toolView()->setEnabled(false);
-    toolSettings()->setEnabled(false);
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)
@@ -280,9 +276,6 @@ void SharpenTool::putFinalData()
 
 void SharpenTool::renderingFinished()
 {
-    kapp->restoreOverrideCursor();
-    toolView()->setEnabled(true);
-    toolSettings()->setEnabled(true);
     slotSettingsChanged();
 }
 

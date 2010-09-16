@@ -111,7 +111,6 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-//                                EditorToolSettings::Try);
 
     // we don't need to use the Gradient widget in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
@@ -241,10 +240,6 @@ void AdjustCurvesTool::slotResetSettings()
 
 void AdjustCurvesTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     CurvesContainer settings = d->settingsView->settings();
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -271,9 +266,6 @@ void AdjustCurvesTool::putPreviewData()
 
 void AdjustCurvesTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     CurvesContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
@@ -284,13 +276,6 @@ void AdjustCurvesTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Adjust Curve"), filter()->getTargetImage().bits());
-}
-
-void AdjustCurvesTool::renderingFinished()
-{
-    kapp->restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 void AdjustCurvesTool::slotLoadSettings()

@@ -195,7 +195,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-//                                EditorToolSettings::Try);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(Digikam::LRGBA);
@@ -336,15 +335,15 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     QGridLayout* grid = new QGridLayout();
-    grid->addLayout(inputLevelsLayout,        0, 0, 1, 7);
-    grid->addWidget(d->inputLevels,           1, 0, 1, 7);
-    grid->addWidget(d->minInput,              2, 1, 1, 1);
-    grid->addWidget(d->maxInput,              2, 5, 1, 1);
-    grid->addWidget(d->gammaInput,            3, 0, 1, 7);
-    grid->addWidget(d->outputLevels,          4, 0, 1, 7);
-    grid->addWidget(d->minOutput,             5, 1, 1, 1);
-    grid->addWidget(d->maxOutput,             5, 5, 1, 1);
-    grid->addLayout(l3,                       6, 0, 1, 7);
+    grid->addLayout(inputLevelsLayout, 0, 0, 1, 7);
+    grid->addWidget(d->inputLevels,    1, 0, 1, 7);
+    grid->addWidget(d->minInput,       2, 1, 1, 1);
+    grid->addWidget(d->maxInput,       2, 5, 1, 1);
+    grid->addWidget(d->gammaInput,     3, 0, 1, 7);
+    grid->addWidget(d->outputLevels,   4, 0, 1, 7);
+    grid->addWidget(d->minOutput,      5, 1, 1, 1);
+    grid->addWidget(d->maxOutput,      5, 5, 1, 1);
+    grid->addLayout(l3,                6, 0, 1, 7);
     grid->setRowStretch(7, 10);
     grid->setColumnStretch(2, 10);
     grid->setColumnStretch(4, 10);
@@ -803,10 +802,6 @@ void AdjustLevelsTool::slotResetSettings()
 
 void AdjustLevelsTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     LevelsContainer settings;
     for (int i=0 ; i<5 ; ++i)
     {
@@ -841,9 +836,6 @@ void AdjustLevelsTool::putPreviewData()
 
 void AdjustLevelsTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     LevelsContainer settings;
     for (int i=0 ; i<5 ; ++i)
     {
@@ -862,13 +854,6 @@ void AdjustLevelsTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Adjust Levels"), filter()->getTargetImage().bits());
-}
-
-void AdjustLevelsTool::renderingFinished()
-{
-    kapp->restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 void AdjustLevelsTool::slotLoadSettings()

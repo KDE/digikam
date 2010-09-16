@@ -97,7 +97,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
-                                
+
     // -------------------------------------------------------------
 
     d->settingsView = new AntiVignettingSettings(d->gboxSettings->plainPage());
@@ -141,8 +141,6 @@ void AntiVignettingTool::slotResetSettings()
 
 void AntiVignettingTool::prepareEffect()
 {
-    toolSettings()->setEnabled(false);
-
     AntiVignettingContainer settings = d->settingsView->settings();
 
     ImageIface* iface = d->previewWidget->imageIface();
@@ -155,8 +153,6 @@ void AntiVignettingTool::prepareEffect()
 
 void AntiVignettingTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-
     AntiVignettingContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
@@ -173,17 +169,10 @@ void AntiVignettingTool::putPreviewData()
 
 void AntiVignettingTool::putFinalData()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = d->previewWidget->imageIface();
     DImg finalImage   = filter()->getTargetImage();
 
     iface->putOriginalImage(i18n("Vignetting Correction"), finalImage.bits());
-    kapp->restoreOverrideCursor();
-}
-
-void AntiVignettingTool::renderingFinished()
-{
-    toolSettings()->setEnabled(true);
 }
 
 }  // namespace DigikamEnhanceImagePlugin

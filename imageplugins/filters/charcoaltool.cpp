@@ -104,7 +104,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Pencil size:"));
+    QLabel* label1 = new QLabel(i18n("Pencil size:"));
     d->pencilInput = new RIntNumInput;
     d->pencilInput->setRange(1, 100, 1);
     d->pencilInput->setSliderEnabled(true);
@@ -113,7 +113,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18nc("smoothing value of the pencil", "Smooth:"));
+    QLabel* label2 = new QLabel(i18nc("smoothing value of the pencil", "Smooth:"));
     d->smoothInput = new RIntNumInput;
     d->smoothInput->setRange(1, 100, 1);
     d->smoothInput->setSliderEnabled(true);
@@ -179,9 +179,6 @@ void CharcoalTool::slotResetSettings()
 
 void CharcoalTool::prepareEffect()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     double pencil = (double)d->pencilInput->value()/10.0;
     double smooth = (double)d->smoothInput->value();
     DImg image    = d->previewWidget->getOriginalRegionImage();
@@ -191,9 +188,6 @@ void CharcoalTool::prepareEffect()
 
 void CharcoalTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     double pencil = (double)d->pencilInput->value()/10.0;
     double smooth = (double)d->smoothInput->value();
 
@@ -210,12 +204,6 @@ void CharcoalTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Charcoal"), filter()->getTargetImage().bits());
-}
-
-void CharcoalTool::renderingFinished()
-{
-    toolView()->setEnabled(true);
-    toolSettings()->setEnabled(true);
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

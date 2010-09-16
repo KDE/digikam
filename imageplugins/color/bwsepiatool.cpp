@@ -180,10 +180,6 @@ void BWSepiaTool::slotResetSettings()
 
 void BWSepiaTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     BWSepiaContainer settings = d->bwsepiaSettings->settings();
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -210,9 +206,6 @@ void BWSepiaTool::putPreviewData()
 
 void BWSepiaTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     BWSepiaContainer settings = d->bwsepiaSettings->settings();
 
     ImageIface iface(0, 0);
@@ -223,13 +216,6 @@ void BWSepiaTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Convert to Black and White"), filter()->getTargetImage().bits());
-}
-
-void BWSepiaTool::renderingFinished()
-{
-    kapp->restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 void BWSepiaTool::slotLoadSettings()

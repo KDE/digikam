@@ -230,10 +230,6 @@ void AutoCorrectionTool::slotResetSettings()
 
 void AutoCorrectionTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     ImageIface iface(0, 0);
@@ -256,14 +252,10 @@ void AutoCorrectionTool::putPreviewData()
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
                                                              preview.width(), preview.height(), preview.sixteenBit(),
                                                              0, 0, 0, false);
-    kapp->restoreOverrideCursor();
 }
 
 void AutoCorrectionTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     int type = d->correctionTools->currentId();
     ImageIface iface(0, 0);
     autoCorrection(iface.getOriginalImg(), iface.getOriginalImg(), type);
@@ -271,7 +263,6 @@ void AutoCorrectionTool::prepareFinal()
 
 void AutoCorrectionTool::putFinalData()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
     int type = d->correctionTools->currentId();
     QString name;
 
@@ -300,15 +291,6 @@ void AutoCorrectionTool::putFinalData()
 
     ImageIface iface(0, 0);
     iface.putOriginalImage(name, filter()->getTargetImage().bits());
-
-    kapp->restoreOverrideCursor();
-}
-
-void AutoCorrectionTool::renderingFinished()
-{
-    QApplication::restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)

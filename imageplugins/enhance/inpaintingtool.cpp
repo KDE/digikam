@@ -239,11 +239,6 @@ InPaintingTool::~InPaintingTool()
     delete d;
 }
 
-void InPaintingTool::renderingFinished()
-{
-    d->mainTab->setEnabled(true);
-}
-
 void InPaintingTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -346,8 +341,6 @@ void InPaintingTool::processCImgUrl(const QString& url)
 
 void InPaintingTool::prepareEffect()
 {
-    d->mainTab->setEnabled(false);
-
     ImageIface iface(0, 0);
     uchar* data      = iface.getOriginalImage();
     d->originalImage = DImg(iface.originalWidth(), iface.originalHeight(),

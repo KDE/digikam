@@ -268,29 +268,29 @@ void RedEyeTool::slotVChanged(int v)
     setColor(color);
 }
 
-void RedEyeTool::setColor(QColor c)
+void RedEyeTool::setColor(const QColor& color)
 {
-    if (c.isValid())
+    if (color.isValid())
     {
-        d->selColor = c;
+        d->selColor = color;
 
         // set values
-        d->HSSelector->setValues(c.hue(), c.saturation());
-        d->VSelector->setValue(c.value());
+        d->HSSelector->setValues(d->selColor.hue(), d->selColor.saturation());
+        d->VSelector->setValue(d->selColor.value());
 
         // set colors
         d->HSSelector->blockSignals(true);
-        d->HSSelector->setHue(c.hue());
-        d->HSSelector->setSaturation(c.saturation());
-        d->HSSelector->setColorValue(c.value());
+        d->HSSelector->setHue(d->selColor.hue());
+        d->HSSelector->setSaturation(d->selColor.saturation());
+        d->HSSelector->setColorValue(d->selColor.value());
         d->HSSelector->updateContents();
         d->HSSelector->blockSignals(false);
         d->HSSelector->repaint();
 
         d->VSelector->blockSignals(true);
-        d->VSelector->setHue(c.hue());
-        d->VSelector->setSaturation(c.saturation());
-        d->VSelector->setColorValue(c.value());
+        d->VSelector->setHue(d->selColor.hue());
+        d->VSelector->setSaturation(d->selColor.saturation());
+        d->VSelector->setColorValue(d->selColor.value());
         d->VSelector->updateContents();
         d->VSelector->blockSignals(false);
         d->VSelector->repaint();
@@ -380,7 +380,7 @@ void RedEyeTool::slotEffect()
     // Here, we need to use the real selection image data because we will apply
     // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
     // else the blur radius will not give the same result between preview and final rendering.
-    ImageIface* iface = d->previewWidget->imageIface();
+    ImageIface* iface          = d->previewWidget->imageIface();
     d->destinationPreviewData  = iface->getImageSelection();
     int w                      = iface->selectedWidth();
     int h                      = iface->selectedHeight();
@@ -457,7 +457,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
     blue_chan.blue_gain   = 1.0f;
 
     float red_norm, green_norm, blue_norm;
-    int   level = 201 - d->tintLevel->value();
+    int  level = 201 - d->tintLevel->value();
 
     red_norm   = 1.0f / (red_chan.red_gain   + red_chan.green_gain   + red_chan.blue_gain);
     green_norm = 1.0f / (green_chan.red_gain + green_chan.green_gain + green_chan.blue_gain);
@@ -592,7 +592,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
 
     // - Perform pixels blending using alpha channel between the mask and the selection.
 
-    DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffSrcOver);
+    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffSrcOver);
 
     // NOTE: 'mask' is the Source image, 'selection' is the Destination image.
 

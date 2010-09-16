@@ -109,7 +109,6 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-//                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
@@ -198,10 +197,6 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 
 void WhiteBalanceTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     WBContainer settings = d->settingsView->settings();
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -228,9 +223,6 @@ void WhiteBalanceTool::putPreviewData()
 
 void WhiteBalanceTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     WBContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
@@ -241,13 +233,6 @@ void WhiteBalanceTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("White Balance"), filter()->getTargetImage().bits());
-}
-
-void WhiteBalanceTool::renderingFinished()
-{
-    kapp->restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 void WhiteBalanceTool::slotResetSettings()

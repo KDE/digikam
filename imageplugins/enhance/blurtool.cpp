@@ -154,10 +154,6 @@ void BlurTool::slotResetSettings()
 
 void BlurTool::prepareEffect()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     DImg img = d->previewWidget->getOriginalRegionImage();
     setFilter(new BlurFilter(&img, this, d->radiusInput->value()));
 }
@@ -170,9 +166,6 @@ void BlurTool::putPreviewData()
 
 void BlurTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     ImageIface iface(0, 0);
     setFilter(new BlurFilter(iface.getOriginalImg(), this, d->radiusInput->value()));
 }
@@ -181,13 +174,6 @@ void BlurTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Gaussian Blur"), filter()->getTargetImage().bits());
-}
-
-void BlurTool::renderingFinished()
-{
-    kapp->restoreOverrideCursor();
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamEnhanceImagePlugin

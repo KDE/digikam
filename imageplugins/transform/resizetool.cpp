@@ -241,7 +241,7 @@ ResizeTool::ResizeTool(QObject* parent)
 
     d->mainTab->addTab(firstPage, i18n("New Size"));
 
-    QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
+    QLabel* label1 = new QLabel(i18n("Width:"), firstPage);
     d->wInput      = new RIntNumInput(firstPage);
     d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1);
     d->wInput->setDefaultValue(d->orgWidth);
@@ -249,7 +249,7 @@ ResizeTool::ResizeTool(QObject* parent)
     d->wInput->setObjectName("wInput");
     d->wInput->setWhatsThis( i18n("Set here the new image width in pixels."));
 
-    QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
+    QLabel* label2 = new QLabel(i18n("Height:"), firstPage);
     d->hInput      = new RIntNumInput(firstPage);
     d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1);
     d->hInput->setDefaultValue(d->orgHeight);
@@ -257,14 +257,14 @@ ResizeTool::ResizeTool(QObject* parent)
     d->hInput->setObjectName("hInput");
     d->hInput->setWhatsThis( i18n("New image height in pixels (px)."));
 
-    QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
+    QLabel* label3 = new QLabel(i18n("Width (%):"), firstPage);
     d->wpInput     = new RDoubleNumInput(firstPage);
     d->wpInput->input()->setRange(1.0, 999.0, 1.0, true);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName("wpInput");
     d->wpInput->setWhatsThis( i18n("New image width in percent (%)."));
 
-    QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
+    QLabel* label4 = new QLabel(i18n("Height (%):"), firstPage);
     d->hpInput     = new RDoubleNumInput(firstPage);
     d->hpInput->input()->setRange(1.0, 999.0, 1.0, true);
     d->hpInput->setDefaultValue(100.0);
@@ -501,14 +501,6 @@ void ResizeTool::prepareEffect()
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
         slotValuesChanged();
 
-    d->settingsWidget->setEnabled(false);
-    d->preserveRatioBox->setEnabled(false);
-    d->useGreycstorationBox->setEnabled(false);
-    d->wInput->setEnabled(false);
-    d->hInput->setEnabled(false);
-    d->wpInput->setEnabled(false);
-    d->hpInput->setEnabled(false);
-
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
@@ -540,13 +532,6 @@ void ResizeTool::prepareFinal()
         slotValuesChanged();
 
     d->mainTab->setCurrentIndex(0);
-    d->settingsWidget->setEnabled(false);
-    d->preserveRatioBox->setEnabled(false);
-    d->useGreycstorationBox->setEnabled(false);
-    d->wInput->setEnabled(false);
-    d->hInput->setEnabled(false);
-    d->wpInput->setEnabled(false);
-    d->hpInput->setEnabled(false);
 
     ImageIface iface(0, 0);
 
@@ -589,13 +574,7 @@ void ResizeTool::putPreviewData()
 
 void ResizeTool::renderingFinished()
 {
-    d->useGreycstorationBox->setEnabled(true);
     d->settingsWidget->setEnabled(d->useGreycstorationBox->isChecked());
-    d->preserveRatioBox->setEnabled(true);
-    d->wInput->setEnabled(true);
-    d->hInput->setEnabled(true);
-    d->wpInput->setEnabled(true);
-    d->hpInput->setEnabled(true);
 }
 
 void ResizeTool::putFinalData()

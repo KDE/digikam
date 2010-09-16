@@ -217,9 +217,6 @@ void ProfileConversionTool::slotResetSettings()
 
 void ProfileConversionTool::prepareEffect()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
     setFilter(new IccTransformFilter(&preview, this, d->transform));
 }
@@ -240,17 +237,8 @@ void ProfileConversionTool::putPreviewData()
                                                              0, 0, 0, false);
 }
 
-void ProfileConversionTool::renderingFinished()
-{
-    toolSettings()->setEnabled(true);
-    toolView()->setEnabled(true);
-}
-
 void ProfileConversionTool::prepareFinal()
 {
-    toolSettings()->setEnabled(false);
-    toolView()->setEnabled(false);
-
     ImageIface iface(0, 0);
     setFilter(new IccTransformFilter(iface.getOriginalImg(), this, d->transform));
 }

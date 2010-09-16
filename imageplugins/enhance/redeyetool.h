@@ -80,7 +80,7 @@ private Q_SLOTS:
 
     void slotEffect();
     void slotResetSettings();
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
+    void slotColorSelectedFromTarget(const DColor& color);
     void slotHSChanged(int h, int s);
     void slotVChanged(int v);
 
@@ -89,8 +89,8 @@ private:
     void readSettings();
     void writeSettings();
     void finalRendering();
-    void redEyeFilter(Digikam::DImg& selection);
-    void setColor(QColor color);
+    void redEyeFilter(DImg& selection);
+    void setColor(const QColor& color);
 
 private:
 
