@@ -130,29 +130,69 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     if (!dev)
     {
          kDebug() << "Device is null! ";
-	 return false;
+         return false;
     }
 
     const lfLens** lenses = m_lfDb->FindLenses( dev, NULL, NULL );
-    bool foundLens        = false;
-
+    QStringList lensList;
 //    d->iface->m_cropFactor = dev->CropFactor;
 
+    // Load all lens name fromLensFun to a list.
     while (lenses && *lenses)
     {
-        if ((*lenses)->Model == lens)
-        {
-            kDebug() << "lens from LensFun:  " << (*lenses)->Model;
-            foundLens = true;
-            break;
-        }
+        lensList << (*lenses)->Model;
         ++lenses;
     }
 
-    if (!foundLens)
-        return false;
+    // The LensFun DB has the Maker before the Lens model name.
+    // We use here the Camera Maker, because the Lens Maker seems not to be
+    // part of the Exif data. This is of course bad for 3rd party lenses, but
+    // they seem anyway not to have Exif entries usually :/
+    int lensIdx = lensList.indexOf(lens);
 
-    return true;
+    if (lensIdx < 0)
+       lensIdx = lensList.indexOf(make + ' ' + lens);
+
+    if (lensIdx < 0)
+    {
+        QString lensCutted = lens;
+
+        if (lensCutted.contains("Nikon"))
+        {
+            // adapt exiv2 strings to lensfun strings
+            lensCutted.replace("Nikon ", "");
+            lensCutted.replace("Zoom-", "");
+            lensCutted.replace("IF-ID", "ED-IF");
+        }
+
+        const lfLens** lenses = m_lfDb->FindLenses( dev, NULL, lensCutted.toAscii().data() );
+        int count             = 0;
+        QString lensLF;
+
+        while (lenses && *lenses)
+        {
+            lensLF = (*lenses)->Model;
+            ++lenses;
+            ++count;
+        }
+
+        if (count == 1)
+        {
+            lensIdx = lensList.indexOf(lensLF);
+        }
+    }
+
+    if (lensIdx >= 0)
+    {
+        // found lens model directly, best case :)
+        kDebug() << "lens from LensFun: " << lensList[lensIdx];
+    }
+    else
+    {
+        kDebug() << "lens from LensFun: NOT FOUND";
+    }
+
+
 /*
     slotUpdateCombos();
 
