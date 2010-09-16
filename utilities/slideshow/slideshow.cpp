@@ -534,7 +534,7 @@ void SlideShow::updatePixmap()
         }
         else
         {
-            logo = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-showfoto.png"))
+            logo = QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
                            .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
