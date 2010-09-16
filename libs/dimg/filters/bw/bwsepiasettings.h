@@ -41,7 +41,6 @@
 namespace Digikam
 {
 
-
 class DIGIKAM_EXPORT BWSepiaSettings : public QWidget
 {
     Q_OBJECT

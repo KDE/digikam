@@ -35,7 +35,6 @@ namespace Digikam
 {
 
 class DImg;
-class MixerFilterPriv;
 
 class DIGIKAM_EXPORT MixerContainer
 {

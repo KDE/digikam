@@ -56,7 +56,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class MixerSettingsPriv
+class MixerSettings::MixerSettingsPriv
 {
 public:
 
@@ -364,6 +364,7 @@ void MixerSettings::slotMonochromeActived(bool mono)
 {
     d->mixerSettings.bMonochrome = d->monochrome->isChecked();
     emit signalMonochromeActived(mono);
+    emit signalSettingsChanged();
 }
 
 void MixerSettings::slotLuminosityChanged(bool)

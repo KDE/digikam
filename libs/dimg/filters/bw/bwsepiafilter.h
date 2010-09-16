@@ -42,13 +42,12 @@ namespace Digikam
 {
 
 class DImg;
-class BWSepiaFilterPriv;
 
 class DIGIKAM_EXPORT BWSepiaContainer
 {
 
 public:
-  
+
     enum BlackWhiteConversionType
     {
         BWNoFilter=0,         // B&W filter to the front of lens.
@@ -160,6 +159,7 @@ private:
 
 private:
 
+    class BWSepiaFilterPriv;
     BWSepiaFilterPriv* const d;
 };
 

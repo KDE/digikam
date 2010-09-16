@@ -37,7 +37,6 @@ namespace Digikam
 {
 
 class DImg;
-class TonalityFilterPriv;
 
 class DIGIKAM_EXPORT TonalityContainer
 {
