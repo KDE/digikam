@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class EditorToolPriv
+class EditorTool::EditorToolPriv
 {
 
 public:
@@ -315,7 +315,7 @@ void EditorTool::slotUpdateSpotInfo(const DColor& col, const QPoint& point)
 
 // ----------------------------------------------------------------
 
-class EditorToolThreadedPriv
+class EditorToolThreaded::EditorToolThreadedPriv
 {
 
 public:
@@ -327,16 +327,16 @@ public:
         currentRenderingMode = EditorToolThreaded::NoneRendering;
     }
 
-    bool                               delFilter;
+    bool                              delFilter;
 
-    EditorToolThreaded::RenderingMode  currentRenderingMode;
+    EditorToolThreaded::RenderingMode currentRenderingMode;
 
-    QString                            progressMess;
+    QString                           progressMess;
 
-    DImgThreadedFilter                *threadedFilter;
+    DImgThreadedFilter*               threadedFilter;
 };
 
-EditorToolThreaded::EditorToolThreaded(QObject *parent)
+EditorToolThreaded::EditorToolThreaded(QObject* parent)
                   : EditorTool(parent), d(new EditorToolThreadedPriv)
 {
 }

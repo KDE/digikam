@@ -43,7 +43,6 @@ namespace Digikam
 
 class DImgThreadedFilter;
 class EditorToolSettings;
-class EditorToolPriv;
 
 class DIGIKAM_EXPORT EditorTool : public QObject
 {
@@ -51,7 +50,7 @@ class DIGIKAM_EXPORT EditorTool : public QObject
 
 public:
 
-    EditorTool(QObject *parent);
+    EditorTool(QObject* parent);
     virtual ~EditorTool();
 
     void init();
@@ -113,12 +112,11 @@ protected Q_SLOTS:
 
 private:
 
+    class EditorToolPriv;
     EditorToolPriv* const d;
 };
 
 // -----------------------------------------------------------------
-
-class EditorToolThreadedPriv;
 
 class DIGIKAM_EXPORT EditorToolThreaded : public EditorTool
 {
@@ -135,7 +133,7 @@ public:
 
 public:
 
-    EditorToolThreaded(QObject *parent);
+    EditorToolThreaded(QObject* parent);
     virtual ~EditorToolThreaded();
 
     /** Set the small text to show in editor status progress bar during
@@ -184,10 +182,10 @@ private Q_SLOTS:
 
 private:
 
+    class EditorToolThreadedPriv;
     EditorToolThreadedPriv* const d;
 };
 
-}  //namespace Digikam
+} // namespace Digikam
 
 #endif /* IMAGEPLUGIN_H */
-
