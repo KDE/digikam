@@ -7,6 +7,7 @@
  * Description : A wrapper around KNotification which uses
  *               KPassivePopup if KNotify is unavailable
  *
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -37,8 +38,18 @@ class QWidget;
 namespace Digikam
 {
 
+/**
+ * @brief Show a notification using KNotify, or KPassivePopup if KNotify is unavailable
+ * @param eventId     Event id for this notification, KNotification::Notification
+ *                    is used if this is empty. Events have to be configured in
+ *                    digikam.notifyrc
+ * @param message     Message to display
+ * @param parent      Widget which owns the notification
+ * @param windowTitle Title of the notification window (only used for KPassivePopup)
+ * @param pixmap      Pixmap to show in the notification, in addition to the digikam logo.
+ */
 void DIGIKAM_EXPORT KNotificationWrapper(const QString& eventId, const QString& message,
-                                         QWidget* const widget, const QString& windowTitle,
+                                         QWidget* const parent, const QString& windowTitle,
                                          const QPixmap& pixmap = QPixmap());
 
 } // namespace Digikam
