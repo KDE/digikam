@@ -39,6 +39,7 @@
 
 #include "addtagslineedit.h"
 #include "albummodel.h"
+#include "albumtreeview.h"
 
 namespace Digikam
 {
@@ -49,10 +50,13 @@ public:
 
     AddTagsComboBoxPriv()
     {
+        treeView   = 0;
         lineEdit   = 0;
     }
 
+    TagTreeView     *treeView;
     AddTagsLineEdit *lineEdit;
+    TaggingAction    currentTaggingAction;
 };
 
 // ---------------------------------------------------------------------------------------
@@ -71,13 +75,38 @@ AddTagsComboBox::~AddTagsComboBox()
     delete d;
 }
 
+void AddTagsComboBox::initialize(TagModel* model, CheckableAlbumFilterModel *filterModel)
+{
+    d->treeView = new TagTreeView(model, filterModel);
+
+    // calls virtual installView() and installLineEdit, below
+    setModel(model, filterModel);
+
+    connect(view(), SIGNAL(currentAlbumChanged(Album*)),
+            this, SLOT(slotViewCurrentAlbumChanged(Album*)));
+
+    d->lineEdit->setTagModel(model);
+}
+
 void AddTagsComboBox::installLineEdit()
 {
     d->lineEdit = new AddTagsLineEdit(this);
     connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
-            this, SIGNAL(taggingActionActivated(const TaggingAction&)));
+            this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
     d->lineEdit->setClearButtonShown(true);
     setLineEdit(d->lineEdit);
+}
+
+void AddTagsComboBox::installView()
+{
+    // called from initialize, tree view is constructed
+    StayPoppedUpComboBox::installView(d->treeView);
+}
+
+TagTreeView *AddTagsComboBox::view() const
+{
+    // the view in the combo box popup
+    return d->treeView;
 }
 
 void AddTagsComboBox::setEditable(bool)
@@ -85,15 +114,21 @@ void AddTagsComboBox::setEditable(bool)
     // just made private, ignored
 }
 
-void AddTagsComboBox::setModel(TagModel* model, AlbumFilterModel *filterModel)
+void AddTagsComboBox::sendViewportEventToView(QEvent *e)
 {
-    AlbumSelectComboBox::setModel(model, filterModel);
-    d->lineEdit->setTagModel(model);
+    // needed for StayPoppedUpComboBox
+    view()->viewportEvent(e);
 }
 
 void AddTagsComboBox::setTagTreeView(TagTreeView *view)
 {
+    // this is a completely different view! Remove this functionality?
     d->lineEdit->setTagTreeView(view);
+}
+
+void AddTagsComboBox::setCurrentTag(int tagId)
+{
+    view()->setCurrentAlbum(tagId);
 }
 
 void AddTagsComboBox::setClickMessage(const QString& message)
@@ -111,5 +146,25 @@ void AddTagsComboBox::setText(const QString& text)
     return d->lineEdit->setText(text);
 }
 
+TaggingAction AddTagsComboBox::currentTaggingAction()
+{
+    return d->currentTaggingAction;
+}
+
+void AddTagsComboBox::slotViewCurrentAlbumChanged(Album* album)
+{
+    d->lineEdit->selectAll();
+    d->lineEdit->setText(album->title());
+    d->currentTaggingAction = TaggingAction(album->id());
+    emit taggingActionSelected(d->currentTaggingAction);
+}
+
+void AddTagsComboBox::slotLineEditActionActivated(const TaggingAction& action)
+{
+    d->currentTaggingAction = action;
+    emit taggingActionActivated(d->currentTaggingAction);
+}
 
 } // namespace Digikam
+
+

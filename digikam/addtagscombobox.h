@@ -36,7 +36,8 @@
 namespace Digikam
 {
 
-class AlbumFilterModel;
+class Album;
+class CheckableAlbumFilterModel;
 class TagModel;
 class TagTreeView;
 
@@ -49,11 +50,22 @@ public:
     AddTagsComboBox(QWidget* parent = 0);
     ~AddTagsComboBox();
 
-    /** Returns the currently set tagging action. */
+    /** You must call this after construction.
+     *  If filterModel is 0, a default one is constructed
+     */
+    void initialize(TagModel* model, CheckableAlbumFilterModel *filterModel = 0);
+
+    /** Returns the currently set tagging action.
+     *  This is the last action emitted by either taggingActionActivated()
+     *  or taggingActionSelected()
+     */
     TaggingAction currentTaggingAction();
 
-    /** Set the tag model to use for completion. */
-    void setModel(TagModel* model, AlbumFilterModel *filterModel = 0);
+    /**
+     * Sets the currently selected tag
+     */
+    void setCurrentTag(int tagId);
+
     /** Reads a tag treeview and takes the currently selected tag into account
      *  when suggesting a parent tag for a new tag, and a default action. */
     void setTagTreeView(TagTreeView* treeView);
@@ -70,6 +82,17 @@ Q_SIGNALS:
     /** Emitted when an action is selected, but not explicitly activated.
      *  (typically by selecting an item in the tree view */
     void taggingActionSelected(const TaggingAction& action);
+
+protected Q_SLOTS:
+
+    void slotViewCurrentAlbumChanged(Album* album);
+    void slotLineEditActionActivated(const TaggingAction& action);
+
+protected:
+
+    virtual void installView();
+    TagTreeView *view() const;
+    virtual void sendViewportEventToView(QEvent *e);
 
 private:
 
