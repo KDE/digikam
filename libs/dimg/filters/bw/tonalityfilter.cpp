@@ -55,7 +55,7 @@ TonalityFilter::~TonalityFilter()
 void TonalityFilter::filterImage()
 {
     m_destImage.putImageData(m_orgImage.bits());
-    
+
     uchar* bits     = m_destImage.bits();
     uint width      = m_destImage.width();
     uint height     = m_destImage.height();

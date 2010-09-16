@@ -65,7 +65,7 @@ InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, const InfraredCo
 void InfraredFilter::filterImage()
 {
     m_destImage.putImageData(m_orgImage.bits());
-    
+
     int Width       = m_destImage.width();
     int Height      = m_destImage.height();
     int bytesDepth  = m_destImage.bytesDepth();

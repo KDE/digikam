@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class BWSepiaFilterPriv
+class BWSepiaFilter::BWSepiaFilterPriv
 {
 public:
 
@@ -115,7 +115,7 @@ void BWSepiaFilter::filterImage()
         postProgress(60);
         m_destImage.putImageData(curves.getTargetImage().bits());
         postProgress(70);
-        
+
         // Adjust contrast.
 
         BCGFilter bcg(&m_destImage, 0L, d->settings.bcgPrm);
@@ -137,7 +137,7 @@ DImg BWSepiaFilter::getThumbnailForEffect(DImg& img)
     if (d->settings.previewType < BWSepiaContainer::BWGeneric)
     {
         // In Filter view, we will render a preview of the B&W filter with the generic B&W film.
-        
+
         blackAndWhiteConversion(thumb, d->settings.previewType);
         postProgress(50);
 
@@ -147,13 +147,13 @@ DImg BWSepiaFilter::getThumbnailForEffect(DImg& img)
     else
     {
         // In Film and Tone view, we will render the preview without to use the B&W Filter.
-        
+
         postProgress(50);
 
         blackAndWhiteConversion(thumb, d->settings.previewType);
         postProgress(75);
     }
-    
+
     postProgress(90);
 
     return (thumb);
@@ -162,7 +162,7 @@ DImg BWSepiaFilter::getThumbnailForEffect(DImg& img)
 void BWSepiaFilter::blackAndWhiteConversion(DImg& img, int type)
 {
     TonalityContainer toneSettings;
-    
+
     switch (type)
     {
         case BWSepiaContainer::BWNoFilter:
