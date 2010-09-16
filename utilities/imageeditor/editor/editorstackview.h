@@ -37,7 +37,6 @@ namespace Digikam
 
 class PreviewWidget;
 class Canvas;
-class EditorStackViewPriv;
 
 class DIGIKAM_EXPORT EditorStackView : public QStackedWidget
 {
@@ -53,14 +52,14 @@ public:
 
 public:
 
-    EditorStackView(QWidget *parent=0);
+    EditorStackView(QWidget* parent=0);
     ~EditorStackView();
 
     void setCanvas(Canvas* canvas);
-    Canvas *canvas() const;
+    Canvas* canvas() const;
 
     void setToolView(QWidget* view);
-    QWidget *toolView() const;
+    QWidget* toolView() const;
 
     int  viewMode();
     void setViewMode(int mode);
@@ -73,7 +72,7 @@ public:
 
     double zoomMax();
     double zoomMin();
-    
+
     /** Two widgets are embedded in Editor Tool to perform preview with panning and zooming:
         a PreviewWidget derived class (ImageRegionWidget) or ImageGuideWidget.
         This method try to find the right PreviewWidget instance accordingly else return 0.
@@ -86,16 +85,17 @@ Q_SIGNALS:
     void signalToggleOffFitToWindow();
 
 public Q_SLOTS:
-    
+
     void setZoomFactor(double);
     void slotZoomSliderChanged(int);
-    
+
 private Q_SLOTS:
 
     void slotZoomChanged(double);
 
 private:
 
+    class EditorStackViewPriv;
     EditorStackViewPriv* const d;
 };
 

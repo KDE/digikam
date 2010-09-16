@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class EditorStackViewPriv
+class EditorStackView::EditorStackViewPriv
 {
 
 public:
@@ -48,7 +48,7 @@ public:
     Canvas*  canvas;
 };
 
-EditorStackView::EditorStackView(QWidget *parent)
+EditorStackView::EditorStackView(QWidget* parent)
                : QStackedWidget(parent), d(new EditorStackViewPriv)
 {
 }
@@ -237,9 +237,9 @@ void EditorStackView::slotZoomSliderChanged(int size)
         PreviewWidget* preview = previewWidget();
         if (preview)
             preview->setZoomFactorSnapped(z);
-    } 
+    }
 }
-    
+
 void EditorStackView::slotZoomChanged(double zoom)
 {
     bool max, min;
