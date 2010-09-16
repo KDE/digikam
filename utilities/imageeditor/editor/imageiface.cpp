@@ -59,6 +59,10 @@ public:
         previewHeight       = 0;
     }
 
+    QPixmap checkPixmap();
+
+public:
+
     bool    usePreviewSelection;
 
     int     originalWidth;
@@ -75,11 +79,9 @@ public:
 
     DImg    previewImage;
     DImg    targetPreviewImage;
-
-    QPixmap checkPixmap();
 };
 
-QPixmap ImageIfacePriv::checkPixmap()
+QPixmap ImageIface::ImageIfacePriv::checkPixmap()
 {
     if (qcheck.isNull())
     {
@@ -87,10 +89,10 @@ QPixmap ImageIfacePriv::checkPixmap()
 
         QPainter p;
         p.begin(&qcheck);
-        p.fillRect(0, 0, 4, 4, QColor(144,144,144));
-        p.fillRect(4, 4, 4, 4, QColor(144,144,144));
-        p.fillRect(0, 4, 4, 4, QColor(100,100,100));
-        p.fillRect(4, 0, 4, 4, QColor(100,100,100));
+        p.fillRect(0, 0, 4, 4, QColor(144, 144, 144));
+        p.fillRect(4, 4, 4, 4, QColor(144, 144, 144));
+        p.fillRect(0, 4, 4, 4, QColor(100, 100, 100));
+        p.fillRect(4, 0, 4, 4, QColor(100, 100, 100));
         p.end();
     }
     return qcheck;
