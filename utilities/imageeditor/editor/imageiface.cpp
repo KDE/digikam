@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class ImageIfacePriv
+class ImageIface::ImageIfacePriv
 {
 public:
 
@@ -169,7 +169,7 @@ uchar* ImageIface::getPreviewImage() const
 {
     if (d->previewImage.isNull())
     {
-        DImg *im = 0;
+        DImg* im = 0;
 
         if (!d->usePreviewSelection)
         {
@@ -182,9 +182,9 @@ uchar* ImageIface::getPreviewImage() const
             int    x, y, w, h;
             bool   s    = DImgInterface::defaultInterface()->sixteenBit();
             bool   a    = DImgInterface::defaultInterface()->hasAlpha();
-            uchar *data = DImgInterface::defaultInterface()->getImageSelection();
+            uchar* data = DImgInterface::defaultInterface()->getImageSelection();
             DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-            im = new DImg(w, h, s, a, data, true);
+            im          = new DImg(w, h, s, a, data, true);
             im->setIccProfile(DImgInterface::defaultInterface()->getEmbeddedICC());
             delete [] data;
 
@@ -221,10 +221,10 @@ DImg ImageIface::getPreviewImg()
     DImg preview(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), getPreviewImage());
     return preview;
 }
-    
+
 uchar* ImageIface::getOriginalImage() const
 {
-    DImg *im = DImgInterface::defaultInterface()->getImg();
+    DImg* im = DImgInterface::defaultInterface()->getImg();
 
     if (!im || im->isNull())
         return 0;
@@ -389,17 +389,19 @@ PhotoInfoContainer ImageIface::getPhotographInformation() const
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter)
 {
     QPainter localPainter;
-    QPainter *p;
+    QPainter* p=0;
 
     if (painter)
+    {
         p = painter;
+    }
     else
     {
         p = &localPainter;
         p->begin(device);
     }
 
-    int width  = w > 0 ? qMin(d->previewWidth, w) : d->previewWidth;
+    int width  = w > 0 ? qMin(d->previewWidth, w)  : d->previewWidth;
     int height = h > 0 ? qMin(d->previewHeight, h) : d->previewHeight;
 
     if ( !d->targetPreviewImage.isNull() )
@@ -410,7 +412,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
         }
 
         QPixmap pixImage;
-        ICCSettingsContainer *iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+        ICCSettingsContainer* iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
         if (iccSettings && iccSettings->enableCM && iccSettings->useManagedView)
         {
