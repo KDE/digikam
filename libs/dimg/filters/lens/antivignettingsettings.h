@@ -40,8 +40,6 @@
 namespace Digikam
 {
 
-class AntiVignettingSettingsPriv;
-
 class DIGIKAM_EXPORT AntiVignettingSettings : public QWidget
 {
     Q_OBJECT
@@ -59,7 +57,7 @@ public:
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
-    
+
     void setMaskPreviewPixmap(const QPixmap& pix);
 
 Q_SIGNALS:
@@ -67,11 +65,12 @@ Q_SIGNALS:
     void signalSettingsChanged();
 
 private Q_SLOTS:
-    
+
     void slotSettingsChanged();
-    
+
 private:
 
+    class AntiVignettingSettingsPriv;
     AntiVignettingSettingsPriv* const d;
 };
 

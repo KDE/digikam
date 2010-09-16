@@ -35,7 +35,6 @@ class QCheckBox;
 
 namespace Digikam
 {
-class LensFunSettingsPriv;
 
 class DIGIKAM_EXPORT LensFunSettings : public QWidget
 {
@@ -67,6 +66,7 @@ Q_SIGNALS:
 
 private:
 
+    class LensFunSettingsPriv;
     LensFunSettingsPriv* const d;
 };
 

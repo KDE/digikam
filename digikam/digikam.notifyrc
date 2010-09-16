@@ -106,6 +106,9 @@ Action=Popup
 
 [Event/editorsavefilecompleted]
 Name=Save file complete
+Name[pt]=Gravação de ficheiro completa
+Name[pt_BR]=Gravação de arquivo concluída
+Name[sv]=Spara fil klart
 Name[uk]=Зберігання файла завершено
 Name[x-test]=xxSave file completexx
 Comment=A file from image editor is saved.

@@ -15,3 +15,4 @@ INSTALL(FILES dimgthreadedfilter.h
               sharp/refocusfilter.h 
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
 
+SUBDIRS(lens)

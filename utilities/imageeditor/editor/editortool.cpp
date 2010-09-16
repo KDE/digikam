@@ -304,7 +304,7 @@ void EditorTool::setToolInfoMessage(const QString& txt)
     EditorToolIface::editorToolIface()->setToolInfoMessage(txt);
 }
 
-void EditorTool::slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point)
+void EditorTool::slotUpdateSpotInfo(const DColor& col, const QPoint& point)
 {
     DColor color = col;
     setToolInfoMessage(i18n("(%1,%2) RGBA:%3,%4,%5,%6",

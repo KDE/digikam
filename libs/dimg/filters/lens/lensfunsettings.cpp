@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class LensFunSettingsPriv
+class LensFunSettings::LensFunSettingsPriv
 {
 public:
 

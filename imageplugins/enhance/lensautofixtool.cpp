@@ -97,9 +97,9 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
     setToolName(i18n("Lens Auto-Correction"));
     setToolIcon(SmallIcon("lensautofix"));
 
-    d->lfIface       = new LensFunIface();
+    d->lfIface        = new LensFunIface();
 
-    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
+    d->previewWidget  = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
@@ -107,15 +107,20 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
 
     d->gboxSettings   = new EditorToolSettings;
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
+
+    d->showGrid       = new QCheckBox(i18n("Show grid"), d->gboxSettings->plainPage());
+    d->showGrid->setWhatsThis(i18n("Set this option to visualize the correction grid to be applied."));
+
+    // -------------------------------------------------------------
+
     d->cameraSelector = new LensFunCameraSelector(d->lfIface, d->gboxSettings->plainPage());
     KSeparator* line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    d->showGrid     = new QCheckBox(i18n("Show grid"), d->gboxSettings->plainPage());
-    d->showGrid->setWhatsThis(i18n("Set this option to visualize the correction grid to be applied."));
-
     d->settingsView = new LensFunSettings(d->gboxSettings->plainPage());
+
+    // -------------------------------------------------------------
 
     grid->addWidget(d->showGrid,       0, 0, 1, 2);
     grid->addWidget(d->cameraSelector, 1, 0, 1, 2);
