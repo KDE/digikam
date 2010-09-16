@@ -115,7 +115,7 @@ void AlbumSelectTreeView::slotNewAlbum()
         PAlbum *createdAlbum = d->albumModificationHelper->slotAlbumNew(palbum);
         if (createdAlbum)
         {
-            slotSelectAlbum(createdAlbum, false);
+            setCurrentAlbum(createdAlbum, false);
         }
     }
 }
@@ -192,7 +192,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
     {
         select = AlbumManager::instance()->currentPAlbum();
     }
-    d->albumTreeView->slotSelectAlbum(select, false);
+    d->albumTreeView->setCurrentAlbum(select, false);
 
     // ------------------------------------------------------------------------------------
 
@@ -224,7 +224,7 @@ PAlbum* AlbumSelectWidget::currentAlbum() const
 
 void AlbumSelectWidget::setCurrentAlbum(PAlbum *albumToSelect)
 {
-    d->albumTreeView->slotSelectAlbum(albumToSelect);
+    d->albumTreeView->setCurrentAlbum(albumToSelect);
 }
 
 KUrl AlbumSelectWidget::currentAlbumUrl() const
@@ -240,7 +240,7 @@ void AlbumSelectWidget::setCurrentAlbumUrl(const KUrl& albumUrl)
     PAlbum *urlAlbum = AlbumManager::instance()->findPAlbum(albumUrl);
     if (urlAlbum)
     {
-        d->albumTreeView->slotSelectAlbum(urlAlbum);
+        d->albumTreeView->setCurrentAlbum(urlAlbum);
     }
     else
     {

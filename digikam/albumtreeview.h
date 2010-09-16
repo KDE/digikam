@@ -146,6 +146,9 @@ public:
      */
     void setAlbumManagerCurrentAlbum(bool setCurrentAlbum);
 
+    // for internal use: public viewportEvent
+    virtual bool viewportEvent(QEvent *event);
+
 public Q_SLOTS:
 
     void setSearchTextSettings(const SearchTextSettings& settings);
@@ -157,7 +160,7 @@ public Q_SLOTS:
      * @param selectInAlbumManager the album will be set as current album, if both
      * this parameter is true and setAlbumManagerCurrentAlbum() was set to true.
      */
-    void slotSelectAlbum(Album* album, bool selectInAlbumManager = true);
+    void setCurrentAlbum(Album* album, bool selectInAlbumManager = true);
 
     /**
      * Adapt the column sizes to the contents of the tree view.
@@ -435,6 +438,11 @@ public:
     PAlbum* currentAlbum() const;
     PAlbum* albumForIndex(const QModelIndex &index) const;
 
+public Q_SLOTS:
+
+    void setCurrentAlbum(PAlbum *album, bool selectInAlbumManager = true);
+    void setCurrentAlbum(int albumId, bool selectInAlbumManager = true);
+
 private Q_SLOTS:
 
     void slotDIOResult(KJob* job);
@@ -449,13 +457,18 @@ class TagTreeView : public AbstractCheckableAlbumTreeView
 public:
 
     explicit TagTreeView(TagModel* model, QWidget* parent = 0);
+    explicit TagTreeView(TagModel* model, CheckableAlbumFilterModel* filteredModel, QWidget* parent = 0);
     TagModel* albumModel() const;
     /// Contains only the tags filtered by properties - prefer to albumModel()
     TagPropertiesFilterModel* filteredModel() const;
     TAlbum* currentAlbum() const;
     TAlbum* albumForIndex(const QModelIndex &index) const;
-
     TagModificationHelper* tagModificationHelper() const;
+
+public Q_SLOTS:
+
+    void setCurrentAlbum(TAlbum *tag, bool selectInAlbumManager = true);
+    void setCurrentAlbum(int tagId, bool selectInAlbumManager = true);
 
 Q_SIGNALS:
 
@@ -465,6 +478,10 @@ protected:
 
     TagPropertiesFilterModel *m_filteredModel;
     TagModificationHelper    *m_modificationHelper;
+
+private:
+
+    void init(TagModel*);
 };
 
 // -------------------------------------------------------------------------------------
@@ -484,7 +501,8 @@ public:
 
 public Q_SLOTS:
 
-    void slotSelectSAlbum(SAlbum* salbum);
+    void setCurrentAlbum(SAlbum *album, bool selectInAlbumManager = true);
+    void setCurrentAlbum(int searchId, bool selectInAlbumManager = true);
 
 protected:
 
@@ -495,12 +513,19 @@ protected:
 
 class DateAlbumTreeView : public AbstractCountingAlbumTreeView
 {
+    Q_OBJECT
+
 public:
 
     DateAlbumTreeView(QWidget* parent, DateAlbumModel* dateAlbumModel);
     DateAlbumModel* albumModel() const;
     DAlbum* currentAlbum() const;
     DAlbum* albumForIndex(const QModelIndex &index) const;
+
+public Q_SLOTS:
+
+    void setCurrentAlbum(DAlbum *album, bool selectInAlbumManager = true);
+    void setCurrentAlbum(int dateId, bool selectInAlbumManager = true);
 };
 
 } // namespace Digikam

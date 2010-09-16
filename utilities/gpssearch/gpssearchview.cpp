@@ -353,7 +353,7 @@ void GPSSearchView::setActive(bool val)
 
 void GPSSearchView::changeAlbumFromHistory(SAlbum* album)
 {
-    d->searchTreeView->slotSelectAlbum(album);
+    d->searchTreeView->setCurrentAlbum(album);
 }
 
 /**
@@ -413,7 +413,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
-    d->searchTreeView->slotSelectAlbum(salbum);
+    d->searchTreeView->setCurrentAlbum(salbum);
 
     d->imageAlbumModel->openAlbum(salbum);
     if (d->existsSelection) 

@@ -197,13 +197,13 @@ void DateFolderView::gotoDate(const QDate& dt)
 
     kDebug() << "Got date album " << dateAlbum;
 
-    d->dateTreeView->slotSelectAlbum(dateAlbum);
+    d->dateTreeView->setCurrentAlbum(dateAlbum);
 
 }
 
-void DateFolderView::changeAlbumFromHistory(SAlbum* album)
+void DateFolderView::changeAlbumFromHistory(DAlbum* album)
 {
-    d->dateTreeView->slotSelectAlbum(album);
+    d->dateTreeView->setCurrentAlbum(album);
 }
 
 AlbumPointer<DAlbum> DateFolderView::currentAlbum() const

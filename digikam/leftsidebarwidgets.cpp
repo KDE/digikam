@@ -139,7 +139,7 @@ void AlbumFolderViewSideBarWidget::applySettings()
 
 void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
 {
-    d->albumFolderView->slotSelectAlbum(album);
+    d->albumFolderView->setCurrentAlbum(dynamic_cast<PAlbum*>(album));
 }
 
 AlbumPointer<PAlbum> AlbumFolderViewSideBarWidget::currentAlbum() const
@@ -147,12 +147,12 @@ AlbumPointer<PAlbum> AlbumFolderViewSideBarWidget::currentAlbum() const
     return AlbumPointer<PAlbum> (d->albumFolderView->currentAlbum());
 }
 
-void AlbumFolderViewSideBarWidget::slotSelectAlbum(Album* album)
+void AlbumFolderViewSideBarWidget::setCurrentAlbum(PAlbum* album)
 {
     kDebug() << "received request to go to album and item";
 
     // Change the current album in list view.
-    d->albumFolderView->slotSelectAlbum(album);
+    d->albumFolderView->setCurrentAlbum(album);
 }
 
 QPixmap AlbumFolderViewSideBarWidget::getIcon()
@@ -237,7 +237,7 @@ void TagViewSideBarWidget::applySettings()
 
 void TagViewSideBarWidget::changeAlbumFromHistory(Album* album)
 {
-    d->tagFolderView->slotSelectAlbum(album);
+    d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
 }
 
 AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
@@ -255,9 +255,9 @@ QString TagViewSideBarWidget::getCaption()
     return i18n("Tags");
 }
 
-void TagViewSideBarWidget::slotSelectAlbum(Album *album)
+void TagViewSideBarWidget::setCurrentAlbum(TAlbum *album)
 {
-    d->tagFolderView->slotSelectAlbum(album);
+    d->tagFolderView->setCurrentAlbum(album);
 }
 
 // -----------------------------------------------------------------------------
@@ -315,7 +315,7 @@ void DateFolderViewSideBarWidget::applySettings()
 
 void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
 {
-    d->dateFolderView->changeAlbumFromHistory(dynamic_cast<SAlbum*>(album));
+    d->dateFolderView->changeAlbumFromHistory(dynamic_cast<DAlbum*>(album));
 }
 
 AlbumPointer<DAlbum> DateFolderViewSideBarWidget::currentAlbum() const
@@ -637,7 +637,7 @@ void TimelineSideBarWidget::applySettings()
 
 void TimelineSideBarWidget::changeAlbumFromHistory(Album* album)
 {
-    d->timeLineFolderView->slotSelectAlbum(album);
+    d->timeLineFolderView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
 }
 
 QPixmap TimelineSideBarWidget::getIcon()
@@ -869,7 +869,7 @@ void SearchSideBarWidget::applySettings()
 
 void SearchSideBarWidget::changeAlbumFromHistory(Album* album)
 {
-    d->searchTreeView->slotSelectAlbum(album);
+    d->searchTreeView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
 }
 
 QPixmap SearchSideBarWidget::getIcon()
@@ -1194,7 +1194,7 @@ void PeopleSideBarWidget::applySettings()
 
 void PeopleSideBarWidget::changeAlbumFromHistory(Album* album)
 {
-    d->tagFolderView->slotSelectAlbum(album);
+    d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
 }
 
 void PeopleSideBarWidget::slotAlbumSelected(Album* album)

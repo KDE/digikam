@@ -333,7 +333,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsChanged(bool wasSearching, boo
 
         if (d->lastSelectedAlbum)
         {
-            slotSelectAlbum(d->lastSelectedAlbum, false);
+            setCurrentAlbum(d->lastSelectedAlbum, false);
             // doing this twice somehow ensures that all parents are expanded
             // and we are at the right position. Maybe a hack... ;)
             scrollTo(m_albumFilterModel->indexForAlbum(d->lastSelectedAlbum));
@@ -386,7 +386,7 @@ void AbstractAlbumTreeView::setAlbumManagerCurrentAlbum(bool set)
     d->setInAlbumManager = set;
 }
 
-void AbstractAlbumTreeView::slotSelectAlbum(Album *album, bool selectInAlbumManager)
+void AbstractAlbumTreeView::setCurrentAlbum(Album *album, bool selectInAlbumManager)
 {
     setCurrentIndex(albumFilterModel()->indexForAlbum(album));
     // check local and global flag
@@ -530,6 +530,11 @@ void AbstractAlbumTreeView::dropEvent(QDropEvent *e)
         if (handler->dropEvent(this, e, m_albumFilterModel->mapToSourceAlbumModel(index)))
             e->accept();
     }
+}
+
+bool AbstractAlbumTreeView::viewportEvent(QEvent *event)
+{
+    return QTreeView::viewportEvent(event);
 }
 
 void AbstractAlbumTreeView::doLoadState()
@@ -837,7 +842,7 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent *event)
     // switch to the selected album if need
     if(d->selectOnContextMenu && album)
     {
-        slotSelectAlbum(album);
+        setCurrentAlbum(album);
     }
 
     // --------------------------------------------------------
@@ -1172,10 +1177,32 @@ void AlbumTreeView::slotDIOResult(KJob *kjob)
     }
 }
 
+void AlbumTreeView::setCurrentAlbum(PAlbum *album, bool selectInAlbumManager)
+{
+    AbstractCheckableAlbumTreeView::setCurrentAlbum(album, selectInAlbumManager);
+}
+
+void AlbumTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
+{
+    PAlbum *album = AlbumManager::instance()->findPAlbum(albumId);
+    setCurrentAlbum(album, selectInAlbumManager);
+}
+
 // --------------------------------------- //
 
 TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
+{
+    init(model);
+}
+
+TagTreeView::TagTreeView(TagModel *model, CheckableAlbumFilterModel* filterModel, QWidget *parent)
+    : AbstractCheckableAlbumTreeView(model, filterModel, parent)
+{
+    init(model);
+}
+
+void TagTreeView::init(TagModel *model)
 {
     m_filteredModel = new TagPropertiesFilterModel(this);
     m_filteredModel->setSourceTagModel(model);
@@ -1227,6 +1254,17 @@ TagModificationHelper *TagTreeView::tagModificationHelper() const
     return m_modificationHelper;
 }
 
+void TagTreeView::setCurrentAlbum(TAlbum *album, bool selectInAlbumManager)
+{
+    AbstractCheckableAlbumTreeView::setCurrentAlbum(album, selectInAlbumManager);
+}
+
+void TagTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
+{
+    TAlbum *album = AlbumManager::instance()->findTAlbum(albumId);
+    setCurrentAlbum(album, selectInAlbumManager);
+}
+
 // --------------------------------------- //
 
 SearchTreeView::SearchTreeView(QWidget *parent, SearchModel *searchModel)
@@ -1256,9 +1294,15 @@ SAlbum* SearchTreeView::currentAlbum() const
     return dynamic_cast<SAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
 }
 
-void SearchTreeView::slotSelectSAlbum(SAlbum *salbum)
+void SearchTreeView::setCurrentAlbum(SAlbum *album, bool selectInAlbumManager)
 {
-    slotSelectAlbum(salbum, true);
+    AbstractCheckableAlbumTreeView::setCurrentAlbum(album, selectInAlbumManager);
+}
+
+void SearchTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
+{
+    SAlbum *album = AlbumManager::instance()->findSAlbum(albumId);
+    setCurrentAlbum(album, selectInAlbumManager);
 }
 
 // --------------------------------------- //
@@ -1286,6 +1330,17 @@ DAlbum* DateAlbumTreeView::currentAlbum() const
 DAlbum *DateAlbumTreeView::albumForIndex(const QModelIndex &index) const
 {
     return dynamic_cast<DAlbum*> (m_albumFilterModel->albumForIndex(index));
+}
+
+void DateAlbumTreeView::setCurrentAlbum(DAlbum *album, bool selectInAlbumManager)
+{
+    AbstractCountingAlbumTreeView::setCurrentAlbum(album, selectInAlbumManager);
+}
+
+void DateAlbumTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
+{
+    DAlbum *album = AlbumManager::instance()->findDAlbum(albumId);
+    setCurrentAlbum(album, selectInAlbumManager);
 }
 
 } // namespace Digikam

@@ -85,6 +85,10 @@ protected Q_SLOTS:
 
 protected:
 
+    virtual void installView();
+
+private:
+
     class AlbumSelectComboBoxPriv;
     AlbumSelectComboBoxPriv* const d;
 };

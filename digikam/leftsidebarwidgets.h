@@ -72,7 +72,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotSelectAlbum(Album* album);
+    void setCurrentAlbum(PAlbum* album);
 
 Q_SIGNALS:
 
@@ -110,7 +110,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotSelectAlbum(Album* album);
+    void setCurrentAlbum(TAlbum* album);
 
 Q_SIGNALS:
 

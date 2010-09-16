@@ -877,9 +877,9 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 
     emit signalNoCurrentItem();
 
-    Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
+    PAlbum* album = AlbumManager::instance()->findPAlbum(imageInfo.albumId());
 
-    d->albumFolderSideBar->slotSelectAlbum(album);
+    d->albumFolderSideBar->setCurrentAlbum(album);
     slotLeftSideBarActivate(d->albumFolderSideBar);
 
     // Set the activate item url to find in the Album View after
@@ -930,7 +930,7 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     TAlbum *tag = AlbumManager::instance()->findTAlbum(tagID);
     if (tag)
     {
-        d->tagViewSideBar->slotSelectAlbum(tag);
+        d->tagViewSideBar->setCurrentAlbum(tag);
     }
     else
     {
@@ -955,7 +955,7 @@ void DigikamView::slotSelectAlbum(const KUrl &url)
     }
 
     slotLeftSideBarActivate(d->albumFolderSideBar);
-    d->albumFolderSideBar->slotSelectAlbum(album);
+    d->albumFolderSideBar->setCurrentAlbum(album);
 
 }
 

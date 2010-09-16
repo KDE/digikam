@@ -91,21 +91,31 @@ void AlbumSelectComboBox::setDefaultTagModels()
 void AlbumSelectComboBox::setModel(AbstractCheckableAlbumModel *model, AlbumFilterModel *filterModel)
 {
     d->model = model;
-    d->filterModel = filterModel ? filterModel : new AlbumFilterModel(this);
 
-    d->filterModel->setDynamicSortFilter(true);
-    d->filterModel->setSourceAlbumModel(d->model);
+    if (filterModel)
+        d->filterModel = filterModel;
+    else
+    {
+        d->filterModel = new AlbumFilterModel(this);
+        d->filterModel->setDynamicSortFilter(true);
+        d->filterModel->setSourceAlbumModel(d->model);
+    }
 
     d->updateCheckable();
 
     QComboBox::setModel(d->filterModel);
     installView();
+
+    d->updateCloseOnActivate();
+    updateText();
+}
+
+void AlbumSelectComboBox::installView()
+{
+    TreeViewLineEditComboBox::installView();
     view()->setSortingEnabled(true);
     view()->sortByColumn(0, Qt::AscendingOrder);
     view()->collapseAll();
-    d->updateCloseOnActivate();
-
-    updateText();
 }
 
 void AlbumSelectComboBox::setCheckable(bool checkable)

@@ -62,7 +62,7 @@ public:
 
     void gotoDate(const QDate& dt);
 
-    void changeAlbumFromHistory(SAlbum* album);
+    void changeAlbumFromHistory(DAlbum* album);
 
     AlbumPointer<DAlbum> currentAlbum() const;
 
