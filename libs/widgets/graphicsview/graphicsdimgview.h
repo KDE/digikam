@@ -99,19 +99,6 @@ private:
     GraphicsDImgViewPriv* const d;
 };
 
-/*
-class DIGIKAM_EXPORT ImagePreviewView : public GraphicsDImgView
-{
-    void setImageInfo(const ImageInfo& info = ImageInfo(),
-                      const ImageInfo& previous = ImageInfo(),
-                      const ImageInfo& next = ImageInfo());
-
-    void setImagePath(const QString& path,
-                      const QString& previous = QString(),
-                      const QString& next = QString());
-};
-*/
-
 } // namespace Digikam
 
 #endif // GRAPHICSDIMGVIEW_H

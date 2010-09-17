@@ -47,7 +47,7 @@
 #include "digikamview.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
-#include "imagepreviewviewv2.h"
+#include "imagepreviewview.h"
 #include "imagethumbnailbar.h"
 #include "loadingcacheinterface.h"
 #include "previewlayout.h"
@@ -87,7 +87,7 @@ public:
 
     DigikamImageView* imageIconView;
     ImageThumbnailBar*thumbBar;
-    ImagePreviewViewV2*imagePreviewView;
+    ImagePreviewView*imagePreviewView;
     MediaPlayerView*  mediaPlayerView;
     ThumbBarDock*     thumbBarDock;
     WelcomePageView*  welcomePageView;
@@ -98,7 +98,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
                 : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
 {
     d->imageIconView    = new DigikamImageView(this);
-    d->imagePreviewView = new ImagePreviewViewV2(this);
+    d->imagePreviewView = new ImagePreviewView(this);
     d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModels(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
@@ -238,7 +238,7 @@ DigikamImageView* AlbumWidgetStack::imageIconView()
     return d->imageIconView;
 }
 
-ImagePreviewViewV2* AlbumWidgetStack::imagePreviewView()
+ImagePreviewView* AlbumWidgetStack::imagePreviewView()
 {
     return d->imagePreviewView;
 }

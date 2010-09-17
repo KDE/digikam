@@ -8,8 +8,7 @@
  *
  * Copyright (C) 2006-2010 Gilles Caulier  <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -23,13 +22,20 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPREVIEWVIEWV2_H
-#define IMAGEPREVIEWVIEWV2_H
+#ifndef IMAGEPREVIEWVIEW_H
+#define IMAGEPREVIEWVIEW_H
+
+// Qt includes
+
+#include <QImage>
+#include <QResizeEvent>
+#include <QString>
 
 // Local includes
 
-#include "graphicsdimgview.h"
+#include "dimg.h"
 #include "imageinfo.h"
+#include "previewwidget.h"
 #include "digikam_export.h"
 
 class QPixmap;
@@ -40,14 +46,19 @@ namespace Digikam
 class AlbumWidgetStack;
 class LoadingDescription;
 
-class ImagePreviewViewV2 : public GraphicsDImgView
+class ImagePreviewView : public PreviewWidget
 {
     Q_OBJECT
 
 public:
 
-    ImagePreviewViewV2(AlbumWidgetStack* parent);
-    ~ImagePreviewViewV2();
+    ImagePreviewView(AlbumWidgetStack* parent);
+    ~ImagePreviewView();
+
+    void setLoadFullImageSize(bool b);
+
+    void setImage(const DImg& image);
+    DImg& getImage() const;
 
     void setImageInfo(const ImageInfo& info = ImageInfo(),
                       const ImageInfo& previous = ImageInfo(),
@@ -59,18 +70,6 @@ public:
     void setImagePath(const QString& path=QString());
     void setPreviousNextPaths(const QString& previous, const QString& next);
 
-    void showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event);
-
-    void updateScale();
-    void findFaces();
-    void trainFaces();
-    void suggestFaces();
-    void drawFaceItems();
-    void clearFaceItems();
-
-    bool hasBeenScanned();
-
-    void makeFaceItemConnections();
 Q_SIGNALS:
 
     void signalNextItem();
@@ -89,38 +88,39 @@ Q_SIGNALS:
     void signalGotoDateAndItem(const ImageInfo&);
     void signalGotoTagAndItem(int);
 
+protected:
+
+    void resizeEvent(QResizeEvent*);
+
 private Q_SLOTS:
 
-    void imageLoaded();
-    void imageLoadingFailed();
-    void imageLoadedWithSize(bool fullSize);
-
+    void slotGotImagePreview(const LoadingDescription& loadingDescription, const DImg& image);
+    void slotNextPreload();
+    void slotContextMenu();
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
-
     void slotThemeChanged();
-    void slotSetupChanged();
-
+    void slotDeleteItem();
+    void slotGotoTag(int tagID);
     void slotRotateLeft();
     void slotRotateRight();
 
-    void slotTogglePeople();
-    void slotHidePeopleTags();
-    void slotShowPeopleTags();
-    void slotRefreshPeopleTags();
-    void slotAddPersonTag();
-    void slotUpdatePersonTagScales();
+private:
 
-    void slotForgetFaces();
+    int    previewWidth();
+    int    previewHeight();
+    bool   previewIsNull();
+    void   resetPreview();
+    QImage previewToQImage() const;
 
-    void slotRemoveFaceTag(const QString&, const QRect&);
-    void slotTagPerson(const QString&, const QRect&);
+    void viewportPaintExtraData();
+    inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:
 
-    class ImagePreviewViewV2Priv;
-    ImagePreviewViewV2Priv* const d;
+    class ImagePreviewViewPriv;
+    ImagePreviewViewPriv* const d;
 };
 
 }  // namespace Digikam

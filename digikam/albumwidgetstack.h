@@ -47,7 +47,7 @@ namespace Digikam
 {
 
 class DigikamImageView;
-class ImagePreviewViewV2;
+class ImagePreviewView;
 class AlbumWidgetStackPriv;
 class MapWidgetView;
 
@@ -76,7 +76,7 @@ public:
 
     ThumbBarDock*     thumbBarDock();
     DigikamImageView* imageIconView();
-    ImagePreviewViewV2* imagePreviewView();
+    ImagePreviewView* imagePreviewView();
     MapWidgetView*      mapWidgetView();
 
     void setPreviewItem(const ImageInfo& info = ImageInfo(),

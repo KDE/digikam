@@ -49,7 +49,7 @@
 #include "dzoombar.h"
 #include "imagealbummodel.h"
 #include "imageinfoalbumsjob.h"
-#include "imagepreviewviewv2.h"
+#include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
 #include "imageviewutilities.h"
 #include "leftsidebarwidgets.h"
