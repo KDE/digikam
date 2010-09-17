@@ -15,4 +15,7 @@ INSTALL(FILES dimgthreadedfilter.h
               sharp/refocusfilter.h 
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
 
-SUBDIRS(lens)
+IF(LENSFUN_FOUND)
+    SUBDIRS(lens)
+ENDIF(LENSFUN_FOUND)
+
