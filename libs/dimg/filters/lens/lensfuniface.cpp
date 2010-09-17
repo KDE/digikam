@@ -80,9 +80,10 @@ bool LensFunIface::supportsVig()
     return m_usedLens->InterpolateVignetting(m_focalLength, m_aperture, m_subjectDistance, res);
 }
 
-QStringList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& lensDesc, const QString& lensMaker) const
+LensFunIface::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& lensDesc, 
+                                                const QString& lensMaker) const
 {
-    QStringList    lensList;
+    LensList       lensList;
     const lfLens** lfLens = 0;
 
     if (!lensMaker.isEmpty())
@@ -92,7 +93,7 @@ QStringList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& le
 
     while (lfLens && *lfLens)
     {
-        lensList << (*lfLens)->Model;
+        lensList << (*lfLens);
         ++lfLens;
     }
 
@@ -112,7 +113,6 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     // Data to field
     QString     makeLF;
     QString     modelLF;
-    QStringList lensList;
     double      focal, aperture, distance;
     bool        ret = false;
 
@@ -137,8 +137,9 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             // Performing lens searches.
 
             kDebug() << "Lens desc.   : " << lens;
-            QMap<int, QString> bestMatches;
+            QMap<int, LensPtr> bestMatches;
             QString            lensCutted;
+            LensList           lensList;
 
             // In first, search in DB as well.
             lensList = findLenses(*lfCamera, lens);
@@ -172,7 +173,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             }
             else
             {
-                kDebug() << "Lens found   : " << bestMatches[bestMatches.keys()[0]];
+                kDebug() << "Lens found   : " << bestMatches[bestMatches.keys()[0]]->Model;
             }
 
             // ------------------------------------------------------------------------------------------------
