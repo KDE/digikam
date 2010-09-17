@@ -52,8 +52,9 @@ int main (int argc, char** argv)
     DMetadata meta;
     meta.load(filePath);
 
-    LensFunIface iface;
-    iface.findFromMetadata(meta);
+    LensFunIface     iface;
+    LensFunContainer settings;
+    iface.findFromMetadata(meta, settings);
 
     return 0;
 }

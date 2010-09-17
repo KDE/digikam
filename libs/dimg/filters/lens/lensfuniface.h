@@ -22,13 +22,6 @@
 #ifndef LENSFUNIFACE_H
 #define LENSFUNIFACE_H
 
-// Lib LensFun includes
-
-extern "C"
-{
-#include <lensfun.h>
-}
-
 // local includes
 
 #include "dmetadata.h"
@@ -47,10 +40,6 @@ class DIGIKAM_EXPORT LensFunIface
     correctionData getCorrectionData();
 */
 
-    typedef const lfCamera* DevicePtr;
-    typedef const lfLens*   LensPtr;
-    typedef QList<LensPtr>  LensList;
-
 public:
 
     LensFunIface();
@@ -64,7 +53,7 @@ public:
     bool supportsGeometry(){ return supportsDistortion(); };
     bool supportsCCI()     { return supportsVig();        };
 
-    bool findFromMetadata(const DMetadata& meta);
+    bool findFromMetadata(const DMetadata& meta, LensFunContainer& settings) const;
 
 protected:
 
@@ -72,14 +61,13 @@ protected:
 
 private:
 
-    LensList findLenses(const lfCamera* camera, const QString& lensDesc, const QString& lensMaker=QString()) const;
+    LensFunContainer::LensList findLenses(const lfCamera* camera, const QString& lensDesc, 
+                                          const QString& lensMaker=QString()) const;
 
 private:
 
     // my configuration
     bool                   m_init;
-
-    LensFunContainer       m_settings;
 
     // Database items
     lfDatabase*            m_lfDb;
@@ -88,6 +76,8 @@ private:
     const lfMount*         m_lfMounts;
 
     // To be used for modification
+    LensFunContainer       m_settings;
+
     const lfLens*          m_usedLens;
     float                  m_cropFactor;
     float                  m_focalLength;
@@ -99,8 +89,5 @@ private:
 };
 
 }  // namespace Digikam
-
-Q_DECLARE_METATYPE( Digikam::LensFunIface::DevicePtr )
-Q_DECLARE_METATYPE( Digikam::LensFunIface::LensPtr )
 
 #endif /* LENSFUNIFACE_H */

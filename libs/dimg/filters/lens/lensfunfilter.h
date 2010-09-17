@@ -22,6 +22,13 @@
 #ifndef LENSFUNFILTER_H
 #define LENSFUNFILTER_H
 
+// Lib LensFun includes
+
+extern "C"
+{
+#include <lensfun.h>
+}
+
 // Local includes
 
 #include "dimgthreadedfilter.h"
@@ -34,6 +41,11 @@ class LensFunIface;
 
 class DIGIKAM_EXPORT LensFunContainer
 {
+public:
+
+    typedef const lfCamera* DevicePtr;
+    typedef const lfLens*   LensPtr;
+    typedef QList<LensPtr>  LensList;
 
 public:
 
@@ -44,17 +56,27 @@ public:
         filterCCI  = true;
         filterDist = true;
         filterGeom = true;
+        cameraPrt  = 0;
+        lensPtr    = 0;
     };
 
     ~LensFunContainer(){};
 
 public:
 
-    bool filterCCA;
-    bool filterVig;
-    bool filterCCI;
-    bool filterDist;
-    bool filterGeom;
+    bool      filterCCA;
+    bool      filterVig;
+    bool      filterCCI;
+    bool      filterDist;
+    bool      filterGeom;
+
+    double    cropFactor;
+    double    focal;
+    double    aperture;
+    double    distance;
+
+    DevicePtr cameraPrt;
+    LensPtr   lensPtr;
 };
 
 class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
@@ -77,5 +99,8 @@ private:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE( Digikam::LensFunContainer::DevicePtr )
+Q_DECLARE_METATYPE( Digikam::LensFunContainer::LensPtr )
 
 #endif /* LENSFUNFILTER_H */
