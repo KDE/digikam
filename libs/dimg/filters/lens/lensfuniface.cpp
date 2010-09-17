@@ -80,19 +80,6 @@ bool LensFunIface::supportsVig()
     return m_usedLens->InterpolateVignetting(m_focalLength, m_aperture, m_subjectDistance, res);
 }
 
-int LensFunIface::findTextFromList(const QStringList& list, const QString& text, Qt::CaseSensitivity cs) const
-{
-    int i = 0;
-    foreach(const QString s, list)
-    {
-        if (s.contains(text, cs))
-            return i;
-
-        i++;
-    }
-    return -1;
-}
-
 QStringList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& lensDesc, const QString& lensMaker) const
 {
     QStringList    lensList;
