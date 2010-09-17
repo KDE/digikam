@@ -40,16 +40,22 @@ namespace Digikam
 
 class DIGIKAM_EXPORT LensFunIface
 {
+    public:
+
+/*
+    typedef QMap<QString, QString> correctionData;
+    correctionData getCorrectionData();
+*/
+
+    typedef const lfCamera* DevicePtr;
+    typedef const lfLens*   LensPtr;
+    typedef QList<LensPtr>  LensList;
 
 public:
 
     LensFunIface();
     virtual ~LensFunIface();
 
-/*
-    typedef QMap<QString, QString> correctionData;
-    correctionData getCorrectionData();
-*/
     void setSettings(const LensFunContainer& settings);
 
     bool supportsDistortion();
@@ -63,6 +69,10 @@ public:
 protected:
 
     bool init();
+
+private:
+
+    LensList findLenses(const lfCamera* camera, const QString& lensDesc, const QString& lensMaker=QString()) const;
 
 private:
 
@@ -89,5 +99,8 @@ private:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE( Digikam::LensFunIface::DevicePtr )
+Q_DECLARE_METATYPE( Digikam::LensFunIface::LensPtr )
 
 #endif /* LENSFUNIFACE_H */

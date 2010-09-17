@@ -42,9 +42,6 @@
 
 using namespace KDcrawIface;
 
-Q_DECLARE_METATYPE( Digikam::LensFunCameraSelector::DevicePtr )
-Q_DECLARE_METATYPE( Digikam::LensFunCameraSelector::LensPtr )
-
 namespace Digikam
 {
 
@@ -273,11 +270,11 @@ void LensFunCameraSelector::findFromMetadata()
             lensCutted.replace("IF-ID", "ED-IF");
         }
 
-        QVariant v            = d->model->combo()->itemData( d->model->currentIndex() );
-        DevicePtr dev         = v.value<LensFunCameraSelector::DevicePtr>();
-        const lfLens** lenses = d->iface->m_lfDb->FindLenses( dev, NULL, lensCutted.toAscii().data() );
-        QString lensLF        = "";
-        int count             = 0;
+        QVariant v                  = d->model->combo()->itemData( d->model->currentIndex() );
+        LensFunIface::DevicePtr dev = v.value<LensFunIface::DevicePtr>();
+        const lfLens** lenses       = d->iface->m_lfDb->FindLenses( dev, NULL, lensCutted.toAscii().data() );
+        QString lensLF              = "";
+        int count                   = 0;
 
         while (lenses && *lenses)
         {
@@ -424,9 +421,8 @@ void LensFunCameraSelector::slotUpdateCombos()
        // Fill models for current selected maker
        if ( (*it)->Model && (*it)->Maker == d->make->combo()->currentText() )
        {
-            LensFunCameraSelector::DevicePtr dev;
-            dev        = *it;
-            QVariant b = qVariantFromValue(dev);
+            LensFunIface::DevicePtr dev = *it;
+            QVariant b                  = qVariantFromValue(dev);
             d->model->combo()->addItem( (*it)->Model, b );
        }
 
@@ -443,8 +439,8 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 {
     d->lens->combo()->clear();
 
-    QVariant v    = d->model->combo()->itemData( d->model->currentIndex() );
-    DevicePtr dev = v.value<LensFunCameraSelector::DevicePtr>();
+    QVariant v                  = d->model->combo()->itemData( d->model->currentIndex() );
+    LensFunIface::DevicePtr dev = v.value<LensFunIface::DevicePtr>();
     if (!dev)
     {
         kDebug() << "Device is null!";
@@ -456,8 +452,8 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 
     while (lenses && *lenses)
     {
-        LensFunCameraSelector::LensPtr lens = *lenses;
-        QVariant b                          = qVariantFromValue(lens);
+        LensFunIface::LensPtr lens = *lenses;
+        QVariant b                 = qVariantFromValue(lens);
         d->lens->combo()->addItem((*lenses)->Model, b);
         ++lenses;
     }
@@ -469,7 +465,7 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 void LensFunCameraSelector::slotLensSelected()
 {
     QVariant v           = d->lens->combo()->itemData( d->lens->currentIndex() );
-    d->iface->m_usedLens = v.value<LensFunCameraSelector::LensPtr>();
+    d->iface->m_usedLens = v.value<LensFunIface::LensPtr>();
 
     if ( d->iface->m_cropFactor <= 0.0 ) // this should not happen
         d->iface->m_cropFactor = d->iface->m_usedLens->CropFactor;

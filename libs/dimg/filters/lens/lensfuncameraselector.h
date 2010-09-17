@@ -43,8 +43,6 @@ class DIGIKAM_EXPORT LensFunCameraSelector : public QWidget
 public:
 
     typedef QMap<QString, QString> Device;
-    typedef const lfCamera*        DevicePtr;
-    typedef const lfLens*          LensPtr;
 
 public:
 

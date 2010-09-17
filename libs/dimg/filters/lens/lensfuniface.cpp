@@ -80,6 +80,26 @@ bool LensFunIface::supportsVig()
     return m_usedLens->InterpolateVignetting(m_focalLength, m_aperture, m_subjectDistance, res);
 }
 
+LensFunIface::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& lensDesc, 
+                                                const QString& lensMaker) const
+{
+    LensList       lensList;
+    const lfLens** lfLens = 0;
+
+    if (!lensMaker.isEmpty())
+        lfLens = m_lfDb->FindLenses(lfCamera, lensMaker.toAscii().constData(), lensDesc.toAscii().constData());
+    else
+        lfLens = m_lfDb->FindLenses(lfCamera, NULL, lensDesc.toAscii().constData());
+
+    while (lfLens && *lfLens)
+    {
+        lensList << (*lfLens);
+        ++lfLens;
+    }
+
+    return lensList;
+}
+
 bool LensFunIface::findFromMetadata(const DMetadata& meta)
 {
     if (meta.isEmpty())
@@ -90,195 +110,144 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     QString model                = photoInfo.model;
     QString lens                 = photoInfo.lens;
 
+    // Data to field
+    DevicePtr cameraPrt = 0;
+    LensPtr   lensPtr   = 0;
+    bool      ret       = false;
+    double    cropFactor, focal, aperture, distance;
+
     // ------------------------------------------------------------------------------------------------
 
-    const lfCamera** makes = m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
-    QString makeLF;
-    QString modelLF;
+    const lfCamera** lfCamera = m_lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
 
-    if (makes && *makes)
+    if (lfCamera && *lfCamera)
     {
-        makeLF  = (*makes)->Maker;
-        modelLF = (*makes)->Model;
-    }
-    else
-    {
-        return false;
-    }
+        cameraPrt = *lfCamera;
+        ret       = true;
 
-    kDebug() << "makeLF:  " << makeLF;
-    kDebug() << "modelLF: " << modelLF;
+        kDebug() << "Camera maker : " << cameraPrt->Maker;
+        kDebug() << "Camera model : " << cameraPrt->Model;
 
-    const lfCamera* const* it = m_lfCameras;
-    const lfCamera* dev       = 0;
+        // ------------------------------------------------------------------------------------------------
 
-    while ( *it )
-    {
-       if ( ((*it)->Model == modelLF) && ((*it)->Maker == makeLF) )
-       {
-            dev = *it;
-            break;
-       }
-
-       ++it;
-    }
-
-    if (!dev) return false;
-
-    const lfLens** lenses = m_lfDb->FindLenses( dev, NULL, NULL );
-
-//    d->iface->m_cropFactor = dev->CropFactor;
-
-    while (lenses && *lenses)
-    {
-        if ((*lenses)->Model == lens)
+        if (!lens.isEmpty())
         {
-            kDebug() << "lensLF:  " << (*lenses)->Model;
-            break;
-        }
-        ++lenses;
-    }
+            // Performing lens searches.
 
-    return true;
-/*
-    slotUpdateCombos();
+            kDebug() << "Lens desc.   : " << lens;
+            QMap<int, LensPtr> bestMatches;
+            QString            lensCutted;
+            LensList           lensList;
 
-    int modelIdx = d->model->combo()->findText(model);
+            // In first, search in DB as well.
+            lensList = findLenses(cameraPrt, lens);
+            if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
-    if (modelIdx < 0)
-    {
-        const lfCamera** makes = d->iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
-        QString modelLF        = "";
-        int count              = 0;
-
-        while (makes && *makes)
-        {
-            modelLF = (*makes)->Model;
-            ++makes;
-            ++count;
-        }
-        if (count == 1)
-        {
-            modelIdx = d->model->combo()->findText(modelLF);
-        }
-    }
-
-    if (modelIdx >= 0)
-    {
-        d->model->setCurrentIndex(modelIdx);
-        d->model->setEnabled(false);
-        slotUpdateLensCombo();
-    }
-
-    // The LensFun DB has the Maker before the Lens model name.
-    // We use here the Camera Maker, because the Lens Maker seems not to be
-    // part of the Exif data. This is of course bad for 3rd party lenses, but
-    // they seem anyway not to have Exif entries usually :/
-    int lensIdx = d->lens->combo()->findText(lens);
-
-    if (lensIdx < 0)
-       lensIdx = d->lens->combo()->findText(make + ' ' + lens);
-
-    if (lensIdx < 0)
-    {
-        QString lensCutted = lens;
-
-        if (lensCutted.contains("Nikon"))
-        {
-            // adapt exiv2 strings to lensfun strings
+            // Adapt exiv2 strings to lensfun strings for Nikon.
+            lensCutted = lens;
             lensCutted.replace("Nikon ", "");
             lensCutted.replace("Zoom-", "");
             lensCutted.replace("IF-ID", "ED-IF");
+            lensList = findLenses(cameraPrt, lensCutted);
+            kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
+            if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
+
+            // Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
+            // "10.0 - 20.0 mm". This must be adapted like this : "10-20mm"
+            lensCutted = lens;
+            lensCutted.replace(QRegExp("\\.[0-9]"), "");
+            lensCutted.replace(" - ", "-");
+            lensCutted.replace(" mm", "mn");
+            lensList = findLenses(cameraPrt, lensCutted);
+            kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
+            if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
+
+            // Display the results.
+
+            if (bestMatches.isEmpty())
+            {
+                kDebug() << "lens matches : NOT FOUND";
+                ret &= false;
+            }
+            else
+            {
+                lensPtr = bestMatches[bestMatches.keys()[0]];
+                kDebug() << "Lens found   : " << lensPtr->Model;
+            }
+
+            // ------------------------------------------------------------------------------------------------
+
+            cropFactor = lensPtr->CropFactor;
+            kDebug() << "Crop Factor  : " << cropFactor;
+
+            // ------------------------------------------------------------------------------------------------
+
+            QString temp = photoInfo.focalLength;
+            if (temp.isEmpty())
+            {
+                kDebug() << "Focal Length : NOT FOUND";
+                ret &= false;
+            }
+            focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
+            kDebug() << "Focal Length : " << focal;
+
+            // ------------------------------------------------------------------------------------------------
+
+            temp = photoInfo.aperture;
+            if (temp.isEmpty())
+            {
+                kDebug() << "Aperture     : NOT FOUND";
+                ret &= false;
+            }
+            aperture = temp.mid(1).toDouble();
+            kDebug() << "Aperture     : " << aperture;
+
+            // ------------------------------------------------------------------------------------------------
+            // Try to get subject distance value.
+
+            // From standard Exif.
+            temp = meta.getExifTagString("Exif.Photo.SubjectDistance");
+            if (temp.isEmpty())
+            {
+                // From standard XMP.
+                temp = meta.getXmpTagString("Xmp.exif.SubjectDistance");
+            }
+            if (temp.isEmpty())
+            {
+                // From Canon Makernote.
+                temp = meta.getExifTagString("Exif.CanonSi.SubjectDistance");
+            }
+            if (temp.isEmpty())
+            {
+                // From Nikon Makernote.
+                temp = meta.getExifTagString("Exif.NikonLd2.FocusDistance");
+            }
+            if (temp.isEmpty())
+            {
+                // From Nikon Makernote.
+                temp = meta.getExifTagString("Exif.NikonLd3.FocusDistance");
+            }
+            // TODO: Add here others Makernotes tags.
+
+            if (temp.isEmpty())
+            {
+                kDebug() << "Subject dist.: NOT FOUND";
+                ret &= false;
+            }
+
+            temp     = temp.replace(" m", "");
+            distance = temp.toDouble();
+            kDebug() << "Subject dist.: " << distance;
         }
-
-        QVariant v            = d->model->combo()->itemData( d->model->currentIndex() );
-        DevicePtr dev         = v.value<LensFunCameraSelector::DevicePtr>();
-        const lfLens** lenses = d->iface->m_lfDb->FindLenses( dev, NULL, lensCutted.toAscii().data() );
-        QString lensLF        = "";
-        int count             = 0;
-
-        while (lenses && *lenses)
+        else
         {
-            lensLF = (*lenses)->Model;
-            ++lenses;
-            ++count;
-        }
-        if (count == 1)
-        {
-            lensIdx = d->lens->combo()->findText(lensLF);
+            ret &= false;
         }
     }
 
-    if (lensIdx >= 0)
-    {
-        // found lens model directly, best case :)
-        d->lens->setCurrentIndex(lensIdx);
-        d->lens->setEnabled(false);
-    }
-    else
-    {
-        // Lens not found, try to reduce the list according to the values we have
-        // FIXME: Implement removal of not matching lenses ...
-        d->lens->setEnabled(true);
-    }
+    kDebug() << "Return val.  : " << ret;
 
-    kDebug() << "Search for Lens: " << make << " :: " << lens
-             << "< and found: >" << d->lens->combo()->itemText(0) + " <";
-
-    QString temp = photoInfo.focalLength;
-    if (!temp.isEmpty())
-    {
-        double focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
-        kDebug() << "Focal Length: " << focal;
-        d->focal->setValue(focal);
-        d->focal->setEnabled(false);
-    }
-
-    temp = photoInfo.aperture;
-    if (!temp.isEmpty())
-    {
-        double aperture = temp.mid(1).toDouble();
-        kDebug() << "Aperture: " << aperture;
-        d->aperture->setValue(aperture);
-        d->aperture->setEnabled(false);
-    }
-
-    // ------------------------------------------------------------------------------------------------
-    // Try to get subject distance value.
-
-    // From standard Exif.
-    temp = d->metadata.getExifTagString("Exif.Photo.SubjectDistance");
-    if (temp.isEmpty())
-    {
-        // From standard XMP.
-        temp = d->metadata.getXmpTagString("Xmp.exif.SubjectDistance");
-    }
-    if (temp.isEmpty())
-    {
-        // From Canon Makernote.
-        temp = d->metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
-    }
-    if (temp.isEmpty())
-    {
-        // From Nikon Makernote.
-        temp = d->metadata.getExifTagString("Exif.NikonLd2.FocusDistance");
-    }
-    if (temp.isEmpty())
-    {
-        // From Nikon Makernote.
-        temp = d->metadata.getExifTagString("Exif.NikonLd3.FocusDistance");
-    }
-    // TODO: Add here others Makernotes tags.
-
-    if (!temp.isEmpty())
-    {
-        temp            = temp.replace(" m", "");
-        double distance = temp.toDouble();
-        kDebug() << "Subject Distance: " << distance;
-        d->distance->setValue(distance);
-        d->distance->setEnabled(false);
-    }
-*/
+    return ret;
 }
 
 #if 0
