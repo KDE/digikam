@@ -114,7 +114,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     DevicePtr cameraPrt = 0;
     LensPtr   lensPtr   = 0;
     bool      ret       = false;
-    double    focal, aperture, distance;
+    double    cropFactor, focal, aperture, distance;
 
     // ------------------------------------------------------------------------------------------------
 
@@ -174,6 +174,11 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
                 lensPtr = bestMatches[bestMatches.keys()[0]];
                 kDebug() << "Lens found   : " << lensPtr->Model;
             }
+
+            // ------------------------------------------------------------------------------------------------
+
+            cropFactor = lensPtr->CropFactor;
+            kDebug() << "Crop Factor  : " << cropFactor;
 
             // ------------------------------------------------------------------------------------------------
 
