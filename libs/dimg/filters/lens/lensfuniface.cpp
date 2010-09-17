@@ -111,10 +111,10 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     QString lens                 = photoInfo.lens;
 
     // Data to field
-    QString     makeLF;
-    QString     modelLF;
-    double      focal, aperture, distance;
-    bool        ret = false;
+    DevicePtr cameraPrt = 0;
+    LensPtr   lensPtr   = 0;
+    bool      ret       = false;
+    double    focal, aperture, distance;
 
     // ------------------------------------------------------------------------------------------------
 
@@ -122,13 +122,11 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
 
     if (lfCamera && *lfCamera)
     {
-        makeLF  = (*lfCamera)->Maker;
-        modelLF = (*lfCamera)->Model;
+        cameraPrt = *lfCamera;
+        ret       = true;
 
-        kDebug() << "Camera maker : " << makeLF;
-        kDebug() << "Camera model : " << modelLF;
-
-        ret = true;
+        kDebug() << "Camera maker : " << cameraPrt->Maker;
+        kDebug() << "Camera model : " << cameraPrt->Model;
 
         // ------------------------------------------------------------------------------------------------
 
@@ -142,7 +140,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             LensList           lensList;
 
             // In first, search in DB as well.
-            lensList = findLenses(*lfCamera, lens);
+            lensList = findLenses(cameraPrt, lens);
             if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
             // Adapt exiv2 strings to lensfun strings for Nikon.
@@ -150,7 +148,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             lensCutted.replace("Nikon ", "");
             lensCutted.replace("Zoom-", "");
             lensCutted.replace("IF-ID", "ED-IF");
-            lensList = findLenses(*lfCamera, lensCutted);
+            lensList = findLenses(cameraPrt, lensCutted);
             kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
             if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
@@ -160,7 +158,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             lensCutted.replace(QRegExp("\\.[0-9]"), "");
             lensCutted.replace(" - ", "-");
             lensCutted.replace(" mm", "mn");
-            lensList = findLenses(*lfCamera, lensCutted);
+            lensList = findLenses(cameraPrt, lensCutted);
             kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
             if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
@@ -173,7 +171,8 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             }
             else
             {
-                kDebug() << "Lens found   : " << bestMatches[bestMatches.keys()[0]]->Model;
+                lensPtr = bestMatches[bestMatches.keys()[0]];
+                kDebug() << "Lens found   : " << lensPtr->Model;
             }
 
             // ------------------------------------------------------------------------------------------------
