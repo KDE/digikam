@@ -66,6 +66,10 @@ protected:
 
 private:
 
+    int findTextFromList(const QStringList& list, const QString& text, Qt::CaseSensitivity cs=Qt::CaseSensitive) const;
+
+private:
+
     // my configuration
     bool                   m_init;
 
