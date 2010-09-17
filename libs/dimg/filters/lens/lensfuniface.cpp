@@ -86,9 +86,9 @@ QStringList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& le
     const lfLens** lfLens = 0;
 
     if (!lensMaker.isEmpty())
-        lfLens = m_lfDb->FindLenses(lfCamera, lensMaker.toAscii(), lensDesc.toAscii());
+        lfLens = m_lfDb->FindLenses(lfCamera, lensMaker.toAscii().constData(), lensDesc.toAscii().constData());
     else
-        lfLens = m_lfDb->FindLenses(lfCamera, NULL, lensDesc.toAscii());
+        lfLens = m_lfDb->FindLenses(lfCamera, NULL, lensDesc.toAscii().constData());
 
     while (lfLens && *lfLens)
     {
@@ -118,7 +118,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
 
     // ------------------------------------------------------------------------------------------------
 
-    const lfCamera** lfCamera = m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
+    const lfCamera** lfCamera = m_lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
 
     if (lfCamera && *lfCamera)
     {
