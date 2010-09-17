@@ -145,7 +145,13 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             }
             else if (lensList.count() > 1)
             {
-                kDebug() << "Lens matches : " << lensList;
+                int i=0;
+                foreach(const QString s, lensList)
+                {
+                    if (i == 0) kDebug() << "Lens matches : " << s;
+                    else        kDebug() << "             : " << s;
+                    i++;
+                }
                 ret &= false;
             }
             else
