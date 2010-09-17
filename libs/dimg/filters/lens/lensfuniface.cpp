@@ -93,6 +93,25 @@ int LensFunIface::findTextFromList(const QStringList& list, const QString& text,
     return -1;
 }
 
+QStringList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& lensDesc, const QString& lensMaker) const
+{
+    QStringList    lensList;
+    const lfLens** lfLens = 0;
+
+    if (!lensMaker.isEmpty())
+        lfLens = m_lfDb->FindLenses(lfCamera, lensMaker.toAscii(), lensDesc.toAscii());
+    else
+        lfLens = m_lfDb->FindLenses(lfCamera, NULL, lensDesc.toAscii());
+
+    while (lfLens && *lfLens)
+    {
+        lensList << (*lfLens)->Model;
+        ++lfLens;
+    }
+
+    return lensList;
+}
+
 bool LensFunIface::findFromMetadata(const DMetadata& meta)
 {
     if (meta.isEmpty())
@@ -128,35 +147,45 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
 
         if (!lens.isEmpty())
         {
+            // Performing lens searches.
+
             kDebug() << "Lens desc.   : " << lens;
+            QMap<int, QString> bestMatches;
+            QString            lensCutted;
 
-            const lfLens** lfLens = m_lfDb->FindLenses(*lfCamera, NULL, lens.toAscii());
+            // In first, search in DB as well.
+            lensList = findLenses(*lfCamera, lens);
+            if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
-            while (lfLens && *lfLens)
-            {
-                lensList << (*lfLens)->Model;
-                ++lfLens;
-            }
+            // Adapt exiv2 strings to lensfun strings for Nikon.
+            lensCutted = lens;
+            lensCutted.replace("Nikon ", "");
+            lensCutted.replace("Zoom-", "");
+            lensCutted.replace("IF-ID", "ED-IF");
+            lensList = findLenses(*lfCamera, lensCutted);
+            kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
+            if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
-            if (lensList.isEmpty())
+            // Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
+            // "10.0 - 20.0 mm". This must be adapted like this : "10-20mm"
+            lensCutted = lens;
+            lensCutted.replace(QRegExp("\\.[0-9]"), "");
+            lensCutted.replace(" - ", "-");
+            lensCutted.replace(" mm", "mn");
+            lensList = findLenses(*lfCamera, lensCutted);
+            kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
+            if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
+
+            // Display the results.
+
+            if (bestMatches.isEmpty())
             {
                 kDebug() << "lens matches : NOT FOUND";
                 ret &= false;
             }
-            else if (lensList.count() > 1)
-            {
-                int i=0;
-                foreach(const QString s, lensList)
-                {
-                    if (i == 0) kDebug() << "Lens matches : " << s;
-                    else        kDebug() << "             : " << s;
-                    i++;
-                }
-                ret &= false;
-            }
             else
             {
-                kDebug() << "Lens found   : " << lensList[0];
+                kDebug() << "Lens found   : " << bestMatches[bestMatches.keys()[0]];
             }
 
             // ------------------------------------------------------------------------------------------------

@@ -67,6 +67,7 @@ protected:
 private:
 
     int findTextFromList(const QStringList& list, const QString& text, Qt::CaseSensitivity cs=Qt::CaseSensitive) const;
+    QStringList findLenses(const lfCamera* camera, const QString& lensDesc, const QString& lensMaker=QString()) const;
 
 private:
 
