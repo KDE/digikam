@@ -226,16 +226,17 @@ void LensAutoFixTool::prepareEffect()
         preview.bitBlendImage(composer, &grid, 0, 0, preview.width(), preview.height(), 0, 0, flags);
     }
 
-    setFilter(new LensFunFilter(&preview, this, d->lfIface, settings));
+    d->lfIface->setFilterSettings(settings);
+    setFilter(new LensFunFilter(&preview, this, d->lfIface));
 }
 
 void LensAutoFixTool::prepareFinal()
 {
-    // Settings information must be get before to disable settings view.
+    // Settings information must be handle before to disable settings view.
     LensFunContainer settings = d->settingsView->settings();
-
+    d->lfIface->setFilterSettings(settings);
     ImageIface iface(0, 0);
-    setFilter(new LensFunFilter(iface.getOriginalImg(), this, d->lfIface, settings));
+    setFilter(new LensFunFilter(iface.getOriginalImg(), this, d->lfIface));
 }
 
 void LensAutoFixTool::putPreviewData()

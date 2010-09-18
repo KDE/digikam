@@ -52,14 +52,11 @@ public:
     lfModifier*   modifier;
 };
 
-LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent, LensFunIface* iface,
-                             const LensFunContainer& m_settings)
+LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent, LensFunIface* iface)
              : DImgThreadedFilter(orgImage, parent, "LensCorrection"),
                d(new LensFunFilterPriv)
 {
     d->iface = iface;
-    d->iface->setSettings(m_settings);
-
     initFilter();
 }
 

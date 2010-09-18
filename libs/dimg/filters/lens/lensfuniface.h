@@ -45,7 +45,7 @@ public:
     LensFunIface();
     virtual ~LensFunIface();
 
-    void setSettings(const LensFunContainer& settings);
+    void setFilterSettings(const LensFunContainer& other);
 
     bool supportsDistortion();
     bool supportsCCA();

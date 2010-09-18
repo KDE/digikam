@@ -88,8 +88,7 @@ class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
 
 public:
 
-    LensFunFilter(DImg* origImage, QObject* parent, LensFunIface* iface,
-                  const LensFunContainer& settings=LensFunContainer());
+    LensFunFilter(DImg* origImage, QObject* parent, LensFunIface* iface);
     ~LensFunFilter();
 
 private:

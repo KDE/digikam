@@ -51,9 +51,13 @@ bool LensFunIface::init()
     return true;
 }
 
-void LensFunIface::setSettings(const LensFunContainer& settings)
+void LensFunIface::setFilterSettings(const LensFunContainer& other)
 {
-    m_settings = settings;
+    m_settings.filterCCA  = other.filterCCA;
+    m_settings.filterVig  = other.filterVig;
+    m_settings.filterCCI  = other.filterCCI;
+    m_settings.filterDist = other.filterDist;
+    m_settings.filterGeom = other.filterGeom;
 }
 
 bool LensFunIface::supportsDistortion()
