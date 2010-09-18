@@ -27,12 +27,11 @@
 
 #include <kdebug.h>
 
-// const variables
-
-const int INVALID = -1;
-
 namespace Digikam
 {
+// const variables
+
+const int INVALID_KEY_ID = -1;
 
 void ParseResults::addEntry(const ResultsKey& key, const ResultsValue& value)
 {
@@ -95,7 +94,7 @@ int ParseResults::offset(const ResultsKey& key)
         ResultsKey key = keyAtApproximatePosition(pos);
         return ((key.first + key.second) - pos);
     }
-    return INVALID;
+    return INVALID_KEY_ID;
 }
 
 ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
@@ -128,7 +127,6 @@ ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
             return key;
         }
     }
-
     return createInvalidKey();
 }
 
@@ -155,12 +153,12 @@ bool ParseResults::isEmpty()
 
 ParseResults::ResultsKey ParseResults::createInvalidKey()
 {
-    return ResultsKey(INVALID, INVALID);
+    return ResultsKey(INVALID_KEY_ID, INVALID_KEY_ID);
 }
 
 bool ParseResults::keyIsValid(const ResultsKey& key)
 {
-    return (key.first != INVALID && key.second != INVALID);
+    return (key.first != INVALID_KEY_ID && key.second != INVALID_KEY_ID);
 }
 
 QString ParseResults::replaceTokens(const QString& markedString)
@@ -193,7 +191,7 @@ void ParseResults::debug()
         QString _result = result(key);
 
         kDebug() << "(" << key.first << ":" << key.second << ") => "
-                                << "(" << _token    << ":" << _result    << ")";
+                 << "(" << _token    << ":" << _result    << ")";
     }
 }
 
