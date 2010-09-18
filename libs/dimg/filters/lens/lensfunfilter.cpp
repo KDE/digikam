@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automatically camera lens aberrations
+ * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -53,12 +53,12 @@ public:
 };
 
 LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent, LensFunIface* iface,
-                             const LensFunContainer& settings)
+                             const LensFunContainer& m_settings)
              : DImgThreadedFilter(orgImage, parent, "LensCorrection"),
                d(new LensFunFilterPriv)
 {
     d->iface = iface;
-    d->iface->setSettings(settings);
+    d->iface->setSettings(m_settings);
 
     initFilter();
 }
@@ -95,17 +95,17 @@ void LensFunFilter::filterImage()
 
     lfPixelFormat colorDepth = m_orgImage.bytesDepth() == 4 ? LF_PF_U8 : LF_PF_U16;
 
-    d->modifier = lfModifier::Create(d->iface->m_usedLens,
-                                     d->iface->m_cropFactor,
+    d->modifier = lfModifier::Create(d->iface->m_settings.usedLens,
+                                     d->iface->m_settings.cropFactor,
                                      m_orgImage.width(),
                                      m_orgImage.height());
 
-    int modflags = d->modifier->Initialize(d->iface->m_usedLens,
+    int modflags = d->modifier->Initialize(d->iface->m_settings.usedLens,
                                            colorDepth,
-                                           d->iface->m_focalLength,
-                                           d->iface->m_aperture,
-                                           d->iface->m_subjectDistance,
-                                           d->iface->m_cropFactor,
+                                           d->iface->m_settings.focalLength,
+                                           d->iface->m_settings.aperture,
+                                           d->iface->m_settings.subjectDistance,
+                                           d->iface->m_settings.cropFactor,
                                            LF_RECTILINEAR,
                                            modifyFlags,
                                            0/*no inverse*/);

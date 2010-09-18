@@ -1,7 +1,7 @@
 /* ==================-==========================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automatically camera lens aberrations
+ * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -201,9 +201,9 @@ void LensFunCameraSelector::findFromMetadata()
     QString makeLF;
     int     makerIdx = -1;
 
-    if (settings.cameraPrt)
+    if (settings.usedCamera)
     {
-        makeLF   = settings.cameraPrt->Maker;
+        makeLF   = settings.usedCamera->Maker;
         makerIdx = d->make->combo()->findText(makeLF);
     }
 
@@ -220,9 +220,9 @@ void LensFunCameraSelector::findFromMetadata()
     QString modelLF;
     int     modelIdx = -1;
 
-    if (settings.cameraPrt)
+    if (settings.usedCamera)
     {
-        modelLF  = settings.cameraPrt->Model;
+        modelLF  = settings.usedCamera->Model;
         modelIdx = d->model->combo()->findText(modelLF);
     }
 
@@ -238,9 +238,9 @@ void LensFunCameraSelector::findFromMetadata()
     QString lensLF;
     int     lensIdx = -1;
 
-    if (settings.lensPtr)
+    if (settings.usedLens)
     {
-        lensLF  = settings.lensPtr->Model;
+        lensLF  = settings.usedLens->Model;
         lensIdx = d->lens->combo()->findText(lensLF);
     }
 
@@ -259,9 +259,9 @@ void LensFunCameraSelector::findFromMetadata()
 
     // ------------------------------------------------------------------------------------------------
 
-    if (settings.focal != -1.0)
+    if (settings.focalLength != -1.0)
     {
-        d->focal->setValue(settings.focal);
+        d->focal->setValue(settings.focalLength);
         d->focal->setEnabled(false);
     }
 
@@ -271,28 +271,28 @@ void LensFunCameraSelector::findFromMetadata()
         d->aperture->setEnabled(false);
     }
 
-    if (settings.distance != -1.0)
+    if (settings.subjectDistance != -1.0)
     {
-        d->distance->setValue(settings.distance);
+        d->distance->setValue(settings.subjectDistance);
         d->distance->setEnabled(false);
     }
 }
 
 void LensFunCameraSelector::slotFocalChanged(double focal)
 {
-    d->iface->m_focalLength = focal;
+    d->iface->m_settings.focalLength = focal;
     emit signalLensSettingsChanged();
 }
 
 void LensFunCameraSelector::slotApertureChanged(double aperture)
 {
-    d->iface->m_aperture = aperture;
+    d->iface->m_settings.aperture = aperture;
     emit signalLensSettingsChanged();
 }
 
 void LensFunCameraSelector::slotDistanceChanged(double distance)
 {
-    d->iface->m_subjectDistance = distance;
+    d->iface->m_settings.subjectDistance = distance;
     emit signalLensSettingsChanged();
 }
 
@@ -367,7 +367,7 @@ void LensFunCameraSelector::slotUpdateLensCombo()
     }
 
     const lfLens** lenses = d->iface->m_lfDb->FindLenses( dev, NULL, NULL );
-    d->iface->m_cropFactor = dev->CropFactor;
+    d->iface->m_settings.cropFactor = dev->CropFactor;
 
     while (lenses && *lenses)
     {
@@ -383,11 +383,11 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 
 void LensFunCameraSelector::slotLensSelected()
 {
-    QVariant v           = d->lens->combo()->itemData( d->lens->currentIndex() );
-    d->iface->m_usedLens = v.value<LensFunContainer::LensPtr>();
+    QVariant v                    = d->lens->combo()->itemData( d->lens->currentIndex() );
+    d->iface->m_settings.usedLens = v.value<LensFunContainer::LensPtr>();
 
-    if ( d->iface->m_cropFactor <= 0.0 ) // this should not happen
-        d->iface->m_cropFactor = d->iface->m_usedLens->CropFactor;
+    if ( d->iface->m_settings.cropFactor <= 0.0 ) // this should not happen
+        d->iface->m_settings.cropFactor = d->iface->m_settings.usedLens->CropFactor;
 
     emit(signalLensSettingsChanged());
 }

@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automatically camera lens aberrations
+ * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -61,7 +61,7 @@ protected:
 
 private:
 
-    LensFunContainer::LensList findLenses(const lfCamera* camera, const QString& lensDesc, 
+    LensFunContainer::LensList findLenses(const lfCamera* camera, const QString& lensDesc,
                                           const QString& lensMaker=QString()) const;
 
 private:
@@ -71,18 +71,12 @@ private:
 
     // Database items
     lfDatabase*            m_lfDb;
+    const lfMount*         m_lfMounts;
     const lfCamera* const* m_lfCameras;
     const lfLens**         m_lfLenses;
-    const lfMount*         m_lfMounts;
 
     // To be used for modification
     LensFunContainer       m_settings;
-
-    const lfLens*          m_usedLens;
-    float                  m_cropFactor;
-    float                  m_focalLength;
-    float                  m_aperture;
-    float                  m_subjectDistance;
 
     friend class LensFunCameraSelector;
     friend class LensFunFilter;

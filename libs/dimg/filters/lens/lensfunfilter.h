@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automatically camera lens aberrations
+ * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -51,17 +51,17 @@ public:
 
     LensFunContainer()
     {
-        filterCCA  = true;
-        filterVig  = true;
-        filterCCI  = true;
-        filterDist = true;
-        filterGeom = true;
-        cameraPrt  = 0;
-        lensPtr    = 0;
-        focal      = -1.0;
-        aperture   = -1.0;
-        distance   = -1.0;
-        cropFactor = -1.0;
+        filterCCA       = true;
+        filterVig       = true;
+        filterCCI       = true;
+        filterDist      = true;
+        filterGeom      = true;
+        usedCamera      = 0;
+        usedLens        = 0;
+        focalLength     = -1.0;
+        aperture        = -1.0;
+        subjectDistance = -1.0;
+        cropFactor      = -1.0;
     };
 
     ~LensFunContainer(){};
@@ -75,12 +75,12 @@ public:
     bool      filterGeom;
 
     double    cropFactor;
-    double    focal;
+    double    focalLength;
     double    aperture;
-    double    distance;
+    double    subjectDistance;
 
-    DevicePtr cameraPrt;
-    LensPtr   lensPtr;
+    DevicePtr usedCamera;
+    LensPtr   usedLens;
 };
 
 class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
