@@ -193,29 +193,18 @@ void LensFunCameraSelector::findFromMetadata()
         d->exifUsage->setEnabled(true);
     }
 
-/* TODO
     LensFunContainer settings;
     d->iface->findFromMetadata(d->metadata, settings);
-*/
-    PhotoInfoContainer photoInfo = d->metadata.getPhotographInformation();
-    QString make                 = photoInfo.make;
-    QString model                = photoInfo.model;
-    QString lens                 = photoInfo.lens;
 
     // ------------------------------------------------------------------------------------------------
 
-    int makerIdx = d->make->combo()->findText(make);
+    QString makeLF;
+    int     makerIdx = -1;
 
-    if (makerIdx < 0)
+    if (settings.cameraPrt)
     {
-        const lfCamera** makes = d->iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
-        QString makeLF         = "";
-
-        if (makes && *makes)
-        {
-            makeLF   = (*makes)->Maker;
-            makerIdx = d->make->combo()->findText(makeLF);
-        }
+        makeLF   = settings.cameraPrt->Maker;
+        makerIdx = d->make->combo()->findText(makeLF);
     }
 
     if (makerIdx >= 0)
@@ -226,24 +215,15 @@ void LensFunCameraSelector::findFromMetadata()
 
     slotUpdateCombos();
 
-    int modelIdx = d->model->combo()->findText(model);
+    // ------------------------------------------------------------------------------------------------
 
-    if (modelIdx < 0)
+    QString modelLF;
+    int     modelIdx = -1;
+
+    if (settings.cameraPrt)
     {
-        const lfCamera** makes = d->iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
-        QString modelLF        = "";
-        int count              = 0;
-
-        while (makes && *makes)
-        {
-            modelLF = (*makes)->Model;
-            ++makes;
-            ++count;
-        }
-        if (count == 1)
-        {
-            modelIdx = d->model->combo()->findText(modelLF);
-        }
+        modelLF  = settings.cameraPrt->Model;
+        modelIdx = d->model->combo()->findText(modelLF);
     }
 
     if (modelIdx >= 0)
@@ -253,43 +233,15 @@ void LensFunCameraSelector::findFromMetadata()
         slotUpdateLensCombo();
     }
 
-    // The LensFun DB has the Maker before the Lens model name.
-    // We use here the Camera Maker, because the Lens Maker seems not to be
-    // part of the Exif data. This is of course bad for 3rd party lenses, but
-    // they seem anyway not to have Exif entries usually :/
-    int lensIdx = d->lens->combo()->findText(lens);
+    // ------------------------------------------------------------------------------------------------
 
-    if (lensIdx < 0)
-       lensIdx = d->lens->combo()->findText(make + ' ' + lens);
+    QString lensLF;
+    int     lensIdx = -1;
 
-    if (lensIdx < 0)
+    if (settings.lensPtr)
     {
-        QString lensCutted = lens;
-
-        if (lensCutted.contains("Nikon"))
-        {
-            // adapt exiv2 strings to lensfun strings
-            lensCutted.replace("Nikon ", "");
-            lensCutted.replace("Zoom-", "");
-            lensCutted.replace("IF-ID", "ED-IF");
-        }
-
-        QVariant v                      = d->model->combo()->itemData( d->model->currentIndex() );
-        LensFunContainer::DevicePtr dev = v.value<LensFunContainer::DevicePtr>();
-        const lfLens** lenses           = d->iface->m_lfDb->FindLenses( dev, NULL, lensCutted.toAscii().data() );
-        QString lensLF                  = "";
-        int count                       = 0;
-
-        while (lenses && *lenses)
-        {
-            lensLF = (*lenses)->Model;
-            ++lenses;
-            ++count;
-        }
-        if (count == 1)
-        {
-            lensIdx = d->lens->combo()->findText(lensLF);
-        }
+        lensLF  = settings.lensPtr->Model;
+        lensIdx = d->lens->combo()->findText(lensLF);
     }
 
     if (lensIdx >= 0)
@@ -305,60 +257,23 @@ void LensFunCameraSelector::findFromMetadata()
         d->lens->setEnabled(true);
     }
 
-    kDebug() << "Search for Lens: " << make << " :: " << lens
-             << "< and found: >" << d->lens->combo()->itemText(0) + " <";
+    // ------------------------------------------------------------------------------------------------
 
-    QString temp = photoInfo.focalLength;
-    if (!temp.isEmpty())
+    if (settings.focal != -1.0)
     {
-        double focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
-        kDebug() << "Focal Length: " << focal;
-        d->focal->setValue(focal);
+        d->focal->setValue(settings.focal);
         d->focal->setEnabled(false);
     }
 
-    temp = photoInfo.aperture;
-    if (!temp.isEmpty())
+    if (settings.aperture != -1.0)
     {
-        double aperture = temp.mid(1).toDouble();
-        kDebug() << "Aperture: " << aperture;
-        d->aperture->setValue(aperture);
+        d->aperture->setValue(settings.aperture);
         d->aperture->setEnabled(false);
     }
 
-    // ------------------------------------------------------------------------------------------------
-    // Try to get subject distance value.
-
-    // From standard Exif.
-    temp = d->metadata.getExifTagString("Exif.Photo.SubjectDistance");
-    if (temp.isEmpty())
+    if (settings.distance != -1.0)
     {
-        // From standard XMP.
-        temp = d->metadata.getXmpTagString("Xmp.exif.SubjectDistance");
-    }
-    if (temp.isEmpty())
-    {
-        // From Canon Makernote.
-        temp = d->metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
-    }
-    if (temp.isEmpty())
-    {
-        // From Nikon Makernote.
-        temp = d->metadata.getExifTagString("Exif.NikonLd2.FocusDistance");
-    }
-    if (temp.isEmpty())
-    {
-        // From Nikon Makernote.
-        temp = d->metadata.getExifTagString("Exif.NikonLd3.FocusDistance");
-    }
-    // TODO: Add here others Makernotes tags.
-
-    if (!temp.isEmpty())
-    {
-        temp            = temp.replace(" m", "");
-        double distance = temp.toDouble();
-        kDebug() << "Subject Distance: " << distance;
-        d->distance->setValue(distance);
+        d->distance->setValue(settings.distance);
         d->distance->setEnabled(false);
     }
 }

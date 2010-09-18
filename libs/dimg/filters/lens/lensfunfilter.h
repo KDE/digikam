@@ -58,6 +58,10 @@ public:
         filterGeom = true;
         cameraPrt  = 0;
         lensPtr    = 0;
+        focal      = -1.0;
+        aperture   = -1.0;
+        distance   = -1.0;
+        cropFactor = -1.0;
     };
 
     ~LensFunContainer(){};
