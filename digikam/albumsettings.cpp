@@ -132,7 +132,7 @@ public:
         configShowAllVersionsEntry("Show All Available Versions"),
         configSaveIntermediateVersionsEntry("Save Intermediate Versions"),
         configFormatForStoringRAWEntry("Format For Storing Versions Of RAW Images"),
-        configKeepOriginalsInPlace("Keep Original Images In Place")
+        configFormatForStoringSubversionsEntry("Format For Storing Other Versions Of Files")
         {}
 
     const QString                       configGroupDefault;
@@ -205,7 +205,7 @@ public:
     const QString                       configShowAllVersionsEntry;
     const QString                       configSaveIntermediateVersionsEntry;
     const QString                       configFormatForStoringRAWEntry;
-    const QString                       configKeepOriginalsInPlace;
+    const QString                       configFormatForStoringSubversionsEntry;
 
     // start up setting
     bool                                showSplash;
@@ -306,7 +306,7 @@ public:
     bool                                showAllVersions;
     bool                                saveIntermediateVersions;
     QString                             formatForStoringRAW;
-    bool                                keepOriginalsInPlace;
+    QString                             formatForStoringSubversions;
 
     //misc
     AlbumSettings::StringComparisonType stringComparisonType;
@@ -416,7 +416,7 @@ void AlbumSettings::init()
     d->showAllVersions              = true;
     d->saveIntermediateVersions     = false;
     d->formatForStoringRAW          = QString("JPG");
-    d->keepOriginalsInPlace         = true;
+    d->formatForStoringSubversions  = QString("JPG");
 
     d->stringComparisonType         = AlbumSettings::Natural;
 
@@ -534,10 +534,10 @@ void AlbumSettings::readSettings()
 
     group = config->group(d->configGroupVersioning);
 
-    d->showAllVersions          = group.readEntry(d->configShowAllVersionsEntry, true);
-    d->saveIntermediateVersions = group.readEntry(d->configSaveIntermediateVersionsEntry, false);
-    d->keepOriginalsInPlace     = group.readEntry(d->configKeepOriginalsInPlace, true);
-    d->formatForStoringRAW      = group.readEntry(d->configFormatForStoringRAWEntry, QString("JPG"));
+    d->showAllVersions             = group.readEntry(d->configShowAllVersionsEntry, true);
+    d->saveIntermediateVersions    = group.readEntry(d->configSaveIntermediateVersionsEntry, false);
+    d->formatForStoringRAW         = group.readEntry(d->configFormatForStoringRAWEntry, QString("JPG"));
+    d->formatForStoringSubversions = group.readEntry(d->configFormatForStoringSubversionsEntry, QString("JPG"));
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -640,8 +640,8 @@ void AlbumSettings::saveSettings()
     
     group.writeEntry(d->configShowAllVersionsEntry, d->showAllVersions);
     group.writeEntry(d->configSaveIntermediateVersionsEntry, d->saveIntermediateVersions);
-    group.writeEntry(d->configKeepOriginalsInPlace, d->keepOriginalsInPlace);
     group.writeEntry(d->configFormatForStoringRAWEntry, d->formatForStoringRAW);
+    group.writeEntry(d->configFormatForStoringSubversionsEntry, d->formatForStoringSubversions);
 
     config->sync();
 }
@@ -1524,15 +1524,16 @@ bool AlbumSettings::getSaveIntermediateVersions() const
     return d->saveIntermediateVersions;
 }
 
-void AlbumSettings::setKeepOriginalsInPlace(bool val)
+void AlbumSettings::setFormatForStoringSubversions(const QString& val)
 {
-    d->keepOriginalsInPlace = val;
+    d->formatForStoringSubversions = val;
 }
 
-bool AlbumSettings::getKeepOriginalsInPlace() const
+QString AlbumSettings::getFormatForStoringSubversions() const
 {
-    return d->keepOriginalsInPlace;
+    return d->formatForStoringSubversions;
 }
+
 
 void AlbumSettings::applyNepomukSettings() const
 {

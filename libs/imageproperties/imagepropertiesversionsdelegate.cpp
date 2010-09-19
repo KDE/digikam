@@ -33,6 +33,7 @@
 #include <KLocale>
 #include <KIconLoader>
 #include <KDebug>
+#include <KColorScheme>
 
 // Local includes
 
@@ -61,10 +62,14 @@ public:
 ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegate(QObject* parent)
                                : QStyledItemDelegate(parent), d(new ImagePropertiesVersionsDelegatePriv)
 {
+    KColorScheme sysColors(QPalette::Normal);
+    
     d->workingWidget = new WorkingWidget();
     d->thumbsPainted = 0;
     //TODO: get system color for views as a background
-    d->workingWidget->setStyleSheet("background-color: rgb(255, 255, 255);");
+    QColor viewBgColor = sysColors.background().color();
+    d->workingWidget->setStyleSheet(QString("background-color: rgb(%1, %2, %2);").arg(viewBgColor.red(),
+                                    viewBgColor.green(), viewBgColor.blue()));
 
     connect(d->workingWidget, SIGNAL(animationStep()),
             this, SLOT(slotAnimationStep()));

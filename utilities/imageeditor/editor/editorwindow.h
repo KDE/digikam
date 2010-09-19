@@ -138,6 +138,7 @@ protected:
     SavingContextContainer  *m_savingContext;
 
     QString                  m_formatForRAWVersioning;
+    QString                  m_formatForSubversions;
 
 protected:
 

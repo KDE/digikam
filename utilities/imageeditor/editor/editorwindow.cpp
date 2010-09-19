@@ -1983,7 +1983,8 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url, bool subversion)
     bool editingOriginal = m_canvas->interface()->getInitialImageHistory().isEmpty();
     QString fileName = VersionManager::instance()->getVersionedFilename(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash), 
                                                                         info.fileName(), info.size(), m_savingContext->format,
-                                                                        editingOriginal, subversion, editingRAW);
+                                                                        m_formatForSubversions, editingOriginal,
+                                                                        subversion, editingRAW);
 
     if(fileName.isEmpty())
     {
@@ -1995,15 +1996,14 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url, bool subversion)
     kDebug() << "Writing file to " << newURL;
 
     // select the format to save the image with
-    // TODO: Which format should be the default to save to? Same as original? Or use everytime JPEG for example..
-/*    bool validFormatSet = selectValidSavingFormat(imageFileSaveDialog->currentFilter(), newURL, autoFilter);
+    bool validFormatSet = selectValidSavingFormat(m_formatForSubversions, newURL, m_formatForSubversions);
 
     if (!validFormatSet)
     {
         KMessageBox::error(this, i18n("Unable to determine the format to save the target image with."));
         return false;
     }
-*/
+
     if (!newURL.isValid())
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",

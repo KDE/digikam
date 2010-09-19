@@ -529,6 +529,7 @@ void ImageWindow::applySettings()
     applyStandardSettings();
     AlbumSettings* settings                 = AlbumSettings::instance();
     m_formatForRAWVersioning                = settings->getFormatForStoringRAW();
+    m_formatForSubversions                  = settings->getFormatForStoringSubversions();
     MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
     m_setExifOrientationTag                 = writeSettings.exifSetOrientation;
     m_canvas->setExifOrient(writeSettings.exifRotate);

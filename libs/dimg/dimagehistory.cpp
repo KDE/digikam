@@ -97,9 +97,15 @@ bool DImageHistory::isNull() const
 
 bool DImageHistory::isEmpty() const
 {
-    if(d->entries.count() == 1 && d->entries.at(0).referredImages.at(0).isCurrentFile())
+    if(d->entries.isEmpty())
+    {
         return true;
-    else return d->entries.isEmpty();
+    }
+    else if(d->entries.count() == 1 && d->entries.at(0).referredImages.at(0).isCurrentFile())
+    {
+        return true;
+    }
+    else return false;
 }
 
 bool DImageHistory::hasFilters() const

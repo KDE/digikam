@@ -49,20 +49,22 @@ public:
 
     SetupVersioningPriv()
     {
-        formatForStoringRAWLabel = 0;
-        showAllVersions          = 0;
-        saveIntermediateVersions = 0;
-        formatForStoringRAW      = 0;
-        keepOriginalsInPlace     = 0;
+        formatForStoringRAWLabel  = 0;
+        formatForStoringSubversionsLabel = 0;
+        showAllVersions           = 0;
+        saveIntermediateVersions  = 0;
+        formatForStoringRAW       = 0;
+        formatForStoringSubversions      = 0;
     }
 
     QLabel*    formatForStoringRAWLabel;
+    QLabel*    formatForStoringSubversionsLabel;
 
     QCheckBox* showAllVersions;
     QCheckBox* saveIntermediateVersions;
-    QCheckBox* keepOriginalsInPlace;
 
     KComboBox* formatForStoringRAW;
+    KComboBox* formatForStoringSubversions;
 };
 
 SetupVersioning::SetupVersioning(QWidget* parent)
@@ -92,6 +94,15 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     d->formatForStoringRAW->addItem("PNG", 1);
     d->formatForStoringRAW->setToolTip(i18n("Set this option to configure in what format should be new versions of RAW images stored."));
 
+    KHBox* tabStyleHbox2 = new KHBox(panel);
+    d->formatForStoringSubversionsLabel = new QLabel(i18n("Format to store all other versions (not RAW):"), tabStyleHbox2);
+    d->formatForStoringSubversions      = new KComboBox(tabStyleHbox2);
+    d->formatForStoringSubversions->addItem("JPG",  0);
+    d->formatForStoringSubversions->addItem("PGF",  1);
+    d->formatForStoringSubversions->addItem("PNG",  2);
+    d->formatForStoringSubversions->addItem("TIFF", 3);
+    d->formatForStoringSubversions->setToolTip(i18n("This options sets in what format will your new created versions be saved."));
+
     d->saveIntermediateVersions = new QCheckBox(i18n("Create new file for every modification"),
                                             versioningOptionsGroup);
     d->saveIntermediateVersions->setWhatsThis(i18n("Set this option to automatically save each "
@@ -99,15 +110,10 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                                     "into new file. This will be viewed "
                                                     "as a subversion of the current image"));
 
-    d->keepOriginalsInPlace = new QCheckBox(i18n("Keep originals and other versions in place"), versioningOptionsGroup);
-    d->keepOriginalsInPlace->setWhatsThis(i18n("Set this to keep all files in their original position. "
-                                               "If unset, images will be moved into subfolder 'Originals'"));
-    d->keepOriginalsInPlace->setDisabled(true);
-
     gLayout->addWidget(tabStyleHbox);
+    gLayout->addWidget(tabStyleHbox2);
     gLayout->addWidget(d->showAllVersions);
     gLayout->addWidget(d->saveIntermediateVersions);
-    gLayout->addWidget(d->keepOriginalsInPlace);
     gLayout->setMargin(KDialog::spacingHint());
     gLayout->setSpacing(0);
 
@@ -141,8 +147,8 @@ void SetupVersioning::applySettings()
 
     settings->setShowAllVersions(d->showAllVersions->isChecked());
     settings->setSaveIntermediateVersions(d->saveIntermediateVersions->isChecked());
-    settings->setKeepOriginalsInPlace(d->keepOriginalsInPlace->isChecked());
     settings->setFormatForStoringRAW(d->formatForStoringRAW->currentText());
+    settings->setFormatForStoringSubversions(d->formatForStoringSubversions->currentText());
 
     settings->saveSettings();
 }
@@ -154,8 +160,9 @@ void SetupVersioning::readSettings()
 
     d->showAllVersions->setChecked(settings->getShowAllVersions());
     d->saveIntermediateVersions->setChecked(settings->getSaveIntermediateVersions());
-    d->keepOriginalsInPlace->setChecked(settings->getKeepOriginalsInPlace());
     d->formatForStoringRAW->setCurrentItem(settings->getFormatForStoringRAW());
+    d->formatForStoringSubversions->setCurrentItem(settings->getFormatForStoringSubversions());
+    
 }
 
 } // namespace Digikam

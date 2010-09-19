@@ -42,6 +42,7 @@ namespace Digikam
 
 QString VersionManager::getVersionedFilename(const QString& originalPath, const QString& originalName, 
                                              qint64 fileSize, const QString& formatForRAW,
+                                             QString& formatForSubversions,
                                              bool editingOriginal, bool fork, bool editingRAW)
 {
     kDebug() << "Original path: " << originalPath << " | Original name: " << originalName
@@ -68,6 +69,8 @@ QString VersionManager::getVersionedFilename(const QString& originalPath, const 
             QFileInfo fileInfo(originalPath + QString("/") + originalName);
             QDir dirInfo(originalPath);
 
+            formatForSubversions = formatForSubversions.toLower();
+
             // To find the right number for the new version, go through all the items in the given dir, 
             // the version number won't be bigger than count()
             for(uint i = 1; i < dirInfo.count(); i++)
@@ -85,7 +88,7 @@ QString VersionManager::getVersionedFilename(const QString& originalPath, const 
                 }
                 else
                 {
-                    newFileName.append(fileInfo.suffix());
+                    newFileName.append(formatForSubversions);
                 }
                 kDebug() << newFileName;
                 QFile newFile(originalPath + QString("/") + newFileName);

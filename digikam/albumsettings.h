@@ -357,8 +357,8 @@ public:
     void setFormatForStoringRAW(const QString &val);
     QString getFormatForStoringRAW() const;
 
-    void setKeepOriginalsInPlace(bool val);
-    bool getKeepOriginalsInPlace() const;
+    void setFormatForStoringSubversions(const QString &val);
+    QString getFormatForStoringSubversions() const;
 
 public Q_SLOTS:
 

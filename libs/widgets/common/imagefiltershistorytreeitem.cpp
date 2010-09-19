@@ -47,6 +47,7 @@ ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QList<QVariant>& 
 {
     d->parentItem = parent;
     d->itemData   = data;
+    d->disabled = false;
 }
 
 ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QString& data, 
@@ -55,6 +56,7 @@ ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QString& data,
 {
     d->parentItem = parent;
     d->itemData.append(data);
+    d->disabled = false;
 }
 
 ImageFiltersHistoryTreeItem::~ImageFiltersHistoryTreeItem()

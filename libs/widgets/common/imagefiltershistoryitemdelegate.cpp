@@ -34,6 +34,7 @@
 #include <KIcon>
 #include <KLocale>
 #include <KDebug>
+#include <KColorScheme>
 
 // Local includes
 
@@ -70,11 +71,22 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     painter->setRenderHint(QPainter::Antialiasing, true);
     QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
+    KColorScheme sysColors(QPalette::Normal);
+    
+    QPen thinLinePen;
+    thinLinePen.setWidth(0);
+    thinLinePen.setCosmetic(true);
+    thinLinePen.setBrush(sysColors.foreground());
+    
+
     bool entryDisabled = index.data(Qt::UserRole).toBool();
 
     if(!index.model()->parent(index).isValid())
     {
+        painter->setPen(thinLinePen);
+        painter->setRenderHint(QPainter::Antialiasing, false);
         painter->drawRect(option.rect);
+        painter->setRenderHint(QPainter::Antialiasing, true);
 
         QString iconName = DImgFilterManager::instance()->getFilterIcon(index.data(Qt::DecorationRole).toString());
         if(entryDisabled)
