@@ -46,11 +46,17 @@ public:
 
 public:
 
-    LensFunCameraSelector(LensFunIface* iface, QWidget* parent);
+    LensFunCameraSelector(LensFunIface* iface, QWidget* parent=0);
     virtual ~LensFunCameraSelector();
 
-//    Device getDevice();
+    void setUseMetadata(bool b);
+
+    /** Special mode used with BQM
+     */
+    void setPassiveMetadataUsage(bool b);
+
     void setDevice(Device&);
+//  Device getDevice();
 
 public Q_SLOTS:
 
@@ -64,7 +70,7 @@ protected Q_SLOTS:
 
     void slotUpdateCombos();
     void slotUpdateLensCombo();
-    void slotUseExif(bool);
+    void slotUseMetadata(bool);
     void slotLensSelected();
     void slotFocalChanged(double);
     void slotApertureChanged(double);

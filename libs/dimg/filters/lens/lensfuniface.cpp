@@ -51,6 +51,11 @@ bool LensFunIface::init()
     return true;
 }
 
+void LensFunIface::setSettings(const LensFunContainer& other)
+{
+    m_settings = other;
+}
+
 void LensFunIface::setFilterSettings(const LensFunContainer& other)
 {
     m_settings.filterCCA  = other.filterCCA;
@@ -85,7 +90,7 @@ bool LensFunIface::supportsVig()
 }
 
 LensFunContainer::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& lensDesc,
-                                                const QString& lensMaker) const
+                                                    const QString& lensMaker) const
 {
     LensFunContainer::LensList lensList;
     const lfLens**             lfLens = 0;
@@ -122,7 +127,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta, LensFunContainer& set
     if (lfCamera && *lfCamera)
     {
         settings.usedCamera = *lfCamera;
-        ret                = true;
+        ret                 = true;
 
         kDebug() << "Camera maker : " << settings.usedCamera->Maker;
         kDebug() << "Camera model : " << settings.usedCamera->Model;

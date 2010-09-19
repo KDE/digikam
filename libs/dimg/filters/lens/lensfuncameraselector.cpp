@@ -51,16 +51,19 @@ public:
 
     LensFunCameraSelectorPriv()
     {
-        exifUsage = 0;
-        make      = 0;
-        model     = 0;
-        focal     = 0;
-        aperture  = 0;
-        distance  = 0;
-        iface     = 0;
+        metadataUsage        = 0;
+        make                 = 0;
+        model                = 0;
+        focal                = 0;
+        aperture             = 0;
+        distance             = 0;
+        iface                = 0;
+        passiveMetadataUsage = false;
     }
 
-    QCheckBox*       exifUsage;
+    bool             passiveMetadataUsage;
+
+    QCheckBox*       metadataUsage;
 
     RComboBox*       make;
     RComboBox*       model;
@@ -80,7 +83,7 @@ LensFunCameraSelector::LensFunCameraSelector(LensFunIface* iface, QWidget* paren
 {
     d->iface           = iface;
     QGridLayout* grid  = new QGridLayout(this);
-    d->exifUsage       = new QCheckBox(i18n("Use Metadata"), this);
+    d->metadataUsage   = new QCheckBox(i18n("Use Metadata"), this);
 
     d->make            = new RComboBox(this);
     d->make->setDefaultIndex(0);
@@ -95,9 +98,9 @@ LensFunCameraSelector::LensFunCameraSelector(LensFunIface* iface, QWidget* paren
     QLabel* modelLabel = new QLabel(i18nc("camera model", "Model:"), this);
     QLabel* lensLabel  = new QLabel(i18nc("camera lens", "Lens:"), this);
 
-    d->exifUsage->setEnabled(false);
-    d->exifUsage->setCheckState(Qt::Unchecked);
-    d->exifUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
+    d->metadataUsage->setEnabled(false);
+    d->metadataUsage->setCheckState(Qt::Unchecked);
+    d->metadataUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
                                    "from the image metadata (as Exif or XMP)."));
 
     QLabel* focalLabel = new QLabel(i18n("Focal Length:"), this);
@@ -119,7 +122,7 @@ LensFunCameraSelector::LensFunCameraSelector(LensFunIface* iface, QWidget* paren
     d->distance->input()->setRange(0.0, 100.0, 0.1, true);
     d->distance->setDefaultValue(0.0);
 
-    grid->addWidget(d->exifUsage, 0, 0, 1, 3);
+    grid->addWidget(d->metadataUsage, 0, 0, 1, 3);
     grid->addWidget(makeLabel,    1, 0, 1, 3);
     grid->addWidget(d->make,      2, 0, 1, 3);
     grid->addWidget(modelLabel,   3, 0, 1, 3);
@@ -135,8 +138,8 @@ LensFunCameraSelector::LensFunCameraSelector(LensFunIface* iface, QWidget* paren
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
-    connect(d->exifUsage, SIGNAL(toggled(bool)),
-            this, SLOT(slotUseExif(bool)));
+    connect(d->metadataUsage, SIGNAL(toggled(bool)),
+            this, SLOT(slotUseMetadata(bool)));
 
     connect(d->make, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotUpdateCombos()));
@@ -165,16 +168,49 @@ LensFunCameraSelector::~LensFunCameraSelector()
     delete d;
 }
 
-#if 0
-LensFunCameraSelector::Device LensFunCameraSelector::getDevice()
-{
-}
-#endif
-
 void LensFunCameraSelector::findFromMetadata(const DMetadata& meta)
 {
     d->metadata = meta;
     findFromMetadata();
+}
+
+void LensFunCameraSelector::setUseMetadata(bool b)
+{
+    d->metadataUsage->setEnabled(b);
+}
+
+void LensFunCameraSelector::setPassiveMetadataUsage(bool b)
+{
+    d->passiveMetadataUsage = b;
+}
+
+void LensFunCameraSelector::slotUseMetadata(bool b)
+{
+    if (b)
+    {
+        if (d->passiveMetadataUsage)
+        {
+            d->make->setEnabled(false);
+            d->model->setEnabled(false);
+            d->lens->setEnabled(false);
+            d->focal->setEnabled(false);
+            d->aperture->setEnabled(false);
+            d->distance->setEnabled(false);
+        }
+        else
+        {
+            findFromMetadata();
+        }
+    }
+    else
+    {
+        d->make->setEnabled(true);
+        d->model->setEnabled(true);
+        d->lens->setEnabled(true);
+        d->focal->setEnabled(true);
+        d->aperture->setEnabled(true);
+        d->distance->setEnabled(true);
+    }
 }
 
 void LensFunCameraSelector::findFromMetadata()
@@ -184,13 +220,13 @@ void LensFunCameraSelector::findFromMetadata()
 
     if (d->metadata.isEmpty())
     {
-        d->exifUsage->setCheckState(Qt::Unchecked);
-        d->exifUsage->setEnabled(false);
+        d->metadataUsage->setCheckState(Qt::Unchecked);
+        setUseMetadata(false);
     }
     else
     {
-        d->exifUsage->setCheckState(Qt::Checked);
-        d->exifUsage->setEnabled(true);
+        d->metadataUsage->setCheckState(Qt::Checked);
+        setUseMetadata(true);
     }
 
     LensFunContainer settings;
@@ -296,23 +332,6 @@ void LensFunCameraSelector::slotDistanceChanged(double distance)
     emit signalLensSettingsChanged();
 }
 
-void LensFunCameraSelector::slotUseExif(bool b)
-{
-    if (b)
-    {
-        findFromMetadata();
-    }
-    else
-    {
-        d->make->setEnabled(true);
-        d->model->setEnabled(true);
-        d->lens->setEnabled(true);
-        d->focal->setEnabled(true);
-        d->aperture->setEnabled(true);
-        d->distance->setEnabled(true);
-    }
-}
-
 void LensFunCameraSelector::slotUpdateCombos()
 {
     const lfCamera* const* it = d->iface->m_lfCameras;
@@ -366,7 +385,7 @@ void LensFunCameraSelector::slotUpdateLensCombo()
         return;
     }
 
-    const lfLens** lenses = d->iface->m_lfDb->FindLenses( dev, NULL, NULL );
+    const lfLens** lenses           = d->iface->m_lfDb->FindLenses( dev, NULL, NULL );
     d->iface->m_settings.cropFactor = dev->CropFactor;
 
     while (lenses && *lenses)
@@ -396,5 +415,11 @@ void LensFunCameraSelector::setDevice(Device& /*d*/)
 {
     slotUpdateCombos();
 }
+
+#if 0
+LensFunCameraSelector::Device LensFunCameraSelector::getDevice()
+{
+}
+#endif
 
 }  // namespace Digikam
