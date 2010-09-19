@@ -106,6 +106,8 @@ Action=Popup
 
 [Event/editorsavefilecompleted]
 Name=Save file complete
+Name[en_GB]=Save file complete
+Name[es]=Completado guardar archivo
 Name[pt]=Gravação de ficheiro completa
 Name[pt_BR]=Gravação de arquivo concluída
 Name[sv]=Spara fil klart
