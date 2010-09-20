@@ -49,12 +49,19 @@ int main (int argc, char** argv)
 
     QString filePath(argv[1]);
 
-    DMetadata meta;
-    meta.load(filePath);
-
+    DImg             img(filePath);
+    DMetadata        meta(img.getMetadata());
     LensFunIface     iface;
     LensFunContainer settings;
-    iface.findFromMetadata(meta, settings);
+    bool ret = iface.findFromMetadata(meta, settings);
+    if (ret)
+    {
+        iface.setSettings(settings);
+        LensFunFilter filter(&img, 0L, &iface);
+        filter.startFilterDirectly();
+        img.putImageData(filter.getTargetImage().bits());
+        return img.save("lensfuniface-output.png", "PNG");
+    }
 
-    return 0;
+    return false;
 }
