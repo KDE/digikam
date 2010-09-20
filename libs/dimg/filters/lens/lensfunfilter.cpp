@@ -145,6 +145,8 @@ void LensFunFilter::filterImage()
     int lwidth = m_orgImage.width() * 2 * 3;
     float* pos = new float[lwidth];
 
+    kDebug() << "Image size to process: (" << m_orgImage.width() << ", " << m_orgImage.height() << ")";
+
     // Stage 1: TCA correction
 
     if ( d->iface->m_settings.filterCCA )
