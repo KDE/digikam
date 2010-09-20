@@ -166,7 +166,7 @@ public:
 
 AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, AlbumFilterModel *filterModel, QWidget *parent)
     : QTreeView(parent), StateSavingObject(this),
-      m_albumModel(0), m_albumFilterModel(0),
+      m_albumModel(0), m_albumFilterModel(0), m_dragDropHandler(0),
       d(new AbstractAlbumTreeViewPriv)
 {
     m_checkOnMiddleClick  = false;
@@ -181,27 +181,47 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
     connect(d->resizeColumnsTimer, SIGNAL(timeout()),
             this, SLOT(adaptColumnsToContent()));
 
-    m_albumModel       = model;
-
-    if (filterModel)
-        setAlbumFilterModel(filterModel);
-
-    if (!m_albumModel->rootAlbum())
-    {
-        connect(m_albumModel, SIGNAL(rootAlbumAvailable()),
-                 this, SLOT(slotRootAlbumAvailable()));
-    }
-
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
              this, SLOT(albumSettingsChanged()));
     connect(this, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(currentAlbumChangedForBackupSelection(Album*)));
+
+    if (model)
+        setAlbumModel(model);
+
+    if (filterModel)
+        setAlbumFilterModel(filterModel);
 
 }
 
 AbstractAlbumTreeView::~AbstractAlbumTreeView()
 {
     delete d;
+}
+
+void AbstractAlbumTreeView::setAlbumModel(AbstractSpecificAlbumModel *model)
+{
+    if (m_albumModel == model)
+        return;
+
+    if (m_albumModel)
+    {
+        disconnect(m_albumModel, 0, this, 0);
+    }
+
+    m_albumModel = model;
+    if (m_albumFilterModel)
+        m_albumFilterModel->setSourceAlbumModel(m_albumModel);
+
+    if (m_albumModel)
+    {
+        if (!m_albumModel->rootAlbum())
+        {
+            connect(m_albumModel, SIGNAL(rootAlbumAvailable()),
+                    this, SLOT(slotRootAlbumAvailable()));
+        }
+
+    }
 }
 
 void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filterModel)
@@ -886,22 +906,17 @@ AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(AbstractCountingAlb
                                                              AlbumFilterModel *filterModel, QWidget *parent)
     : AbstractAlbumTreeView(model, filterModel, parent)
 {
-    // install our own connections
-    if (filterModel)
-        setAlbumFilterModel(filterModel);
-    setupConnections();
+    init();
 }
 
 AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model, QWidget *parent)
     : AbstractAlbumTreeView(model, 0, parent)
 {
-    AlbumFilterModel *filterModel = new AlbumFilterModel(this);
-    setAlbumFilterModel(filterModel);
-    setupConnections();
+    setAlbumFilterModel(new AlbumFilterModel(this));
+    init();
 }
 
-
-void AbstractCountingAlbumTreeView::setupConnections()
+void AbstractCountingAlbumTreeView::init()
 {
     connect(this, SIGNAL(expanded(const QModelIndex &)),
              this, SLOT(slotExpanded(const QModelIndex &)));
@@ -912,6 +927,15 @@ void AbstractCountingAlbumTreeView::setupConnections()
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
              this, SLOT(slotSetShowCount()));
 
+    if (m_albumModel)
+        setAlbumModel(static_cast<AbstractCountingAlbumModel*>(m_albumModel));
+    if (m_albumFilterModel)
+        setAlbumFilterModel(m_albumFilterModel);
+}
+
+void AbstractCountingAlbumTreeView::setAlbumModel(AbstractCountingAlbumModel *model)
+{
+    AbstractAlbumTreeView::setAlbumModel(model);
     slotSetShowCount();
 }
 
@@ -1127,29 +1151,57 @@ void AbstractCheckableAlbumTreeView::doSaveState()
 
 // --------------------------------------- //
 
+AlbumTreeView::AlbumTreeView(AlbumModel *model, CheckableAlbumFilterModel *filterModel, QWidget *parent)
+    : AbstractCheckableAlbumTreeView(model, filterModel, parent)
+{
+    init();
+}
+
 AlbumTreeView::AlbumTreeView(AlbumModel *model, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
-    AlbumDragDropHandler *handler = new AlbumDragDropHandler(albumModel());
-    albumModel()->setDragDropHandler(handler);
-    connect(handler, SIGNAL(dioResult(KJob*)),
-            this, SLOT(slotDIOResult(KJob*)));
+    init();
+}
 
-    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
-            m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
-    albumModel()->setCountMap(AlbumManager::instance()->getPAlbumsCount());
-
-    expand(m_albumFilterModel->rootAlbumIndex());
+void AlbumTreeView::init()
+{
     setRootIsDecorated(false);
-
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
     setAutoExpandDelay(300);
+
+    if (m_albumModel)
+        setAlbumModel(albumModel());
+    if (m_albumFilterModel)
+        setAlbumFilterModel(static_cast<CheckableAlbumFilterModel*>(m_albumFilterModel));
 }
 
 AlbumTreeView::~AlbumTreeView()
 {
+    delete m_dragDropHandler;
+}
+
+void AlbumTreeView::setAlbumModel(AlbumModel *model)
+{
+    AbstractCheckableAlbumTreeView::setAlbumModel(model);
+
+    m_dragDropHandler = new AlbumDragDropHandler(albumModel());
+    connect(m_dragDropHandler, SIGNAL(dioResult(KJob*)),
+            this, SLOT(slotDIOResult(KJob*)));
+    albumModel()->setDragDropHandler(m_dragDropHandler);
+
+    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
+            m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
+
+    albumModel()->setCountMap(AlbumManager::instance()->getPAlbumsCount());
+}
+
+void AlbumTreeView::setAlbumFilterModel(CheckableAlbumFilterModel* filterModel)
+{
+    AbstractCheckableAlbumTreeView::setAlbumFilterModel(filterModel);
+
+    expand(m_albumFilterModel->rootAlbumIndex());
 }
 
 AlbumModel *AlbumTreeView::albumModel() const
@@ -1193,24 +1245,52 @@ void AlbumTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
 TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
-    init(model);
+    init();
 }
 
 TagTreeView::TagTreeView(TagModel *model, CheckableAlbumFilterModel* filterModel, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, filterModel, parent)
 {
-    init(model);
+    init();
 }
 
-void TagTreeView::init(TagModel *model)
+TagTreeView::~TagTreeView()
+{
+    delete m_dragDropHandler;
+}
+
+void TagTreeView::init()
 {
     m_filteredModel = new TagPropertiesFilterModel(this);
-    m_filteredModel->setSourceTagModel(model);
-    albumFilterModel()->setSourceAlbumModel(m_filteredModel);
-
     m_modificationHelper = new TagModificationHelper(this, this);
+    setRootIsDecorated(true);
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(false);
+    setAutoExpandDelay(300);
 
-    albumModel()->setDragDropHandler(new TagDragDropHandler(albumModel()));
+    if (m_albumModel)
+        setAlbumModel(albumModel());
+    if (m_albumFilterModel)
+        setAlbumFilterModel(static_cast<CheckableAlbumFilterModel*>(m_albumFilterModel));
+}
+
+void TagTreeView::setAlbumFilterModel(CheckableAlbumFilterModel* filterModel)
+{
+    AbstractCheckableAlbumTreeView::setAlbumFilterModel(filterModel);
+
+    albumFilterModel()->setSourceAlbumModel(m_filteredModel);
+    expand(m_albumFilterModel->rootAlbumIndex());
+}
+
+void TagTreeView::setAlbumModel(TagModel* model)
+{
+    AbstractCheckableAlbumTreeView::setAlbumModel(model);
+
+    m_filteredModel->setSourceTagModel(model);
+
+    m_dragDropHandler = new TagDragDropHandler(albumModel());
+    albumModel()->setDragDropHandler(m_dragDropHandler);
 
     connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(const QList<int>&, const QList<int>&)),
             MetadataManager::instance(), SLOT(assignTags(const QList<int>&, const QList<int>&)));
@@ -1219,14 +1299,8 @@ void TagTreeView::init(TagModel *model)
              m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
     albumModel()->setCountMap(AlbumManager::instance()->getTAlbumsCount());
 
-    expand(m_albumFilterModel->rootAlbumIndex());
     if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)
         setRootIsDecorated(false);
-
-    setDragEnabled(true);
-    setAcceptDrops(true);
-    setDropIndicatorShown(false);
-    setAutoExpandDelay(300);
 }
 
 TagModel *TagTreeView::albumModel() const

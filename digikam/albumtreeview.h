@@ -64,7 +64,11 @@ class AbstractAlbumTreeView : public QTreeView, public StateSavingObject
 
 public:
 
-    /// Constructs an album model. If you supply 0 for filterModel, call setAlbumFilterModel afterwards.
+    /**
+     * Constructs an album tree view.
+     * If you give 0 for model, call setAlbumModel afterwards.
+     * If you supply 0 for filterModel, call setAlbumFilterModel afterwards.
+     */
     explicit AbstractAlbumTreeView(AbstractSpecificAlbumModel* model,
                                    AlbumFilterModel* filterModel,
                                    QWidget* parent = 0);
@@ -265,9 +269,11 @@ protected:
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, QList<QModelIndex> indexes);
 
     void setAlbumFilterModel(AlbumFilterModel* filterModel);
+    void setAlbumModel(AbstractSpecificAlbumModel* model);
 
     AbstractSpecificAlbumModel* m_albumModel;
     AlbumFilterModel*           m_albumFilterModel;
+    AlbumModelDragDropHandler*  m_dragDropHandler;
 
     bool                        m_checkOnMiddleClick;
     bool                        m_restoreCheckState;
@@ -349,6 +355,7 @@ public:
 
 protected:
 
+    void setAlbumModel(AbstractCountingAlbumModel *model);
     void setAlbumFilterModel(AlbumFilterModel* filterModel);
     virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
@@ -361,7 +368,7 @@ private Q_SLOTS:
 
 private:
 
-    void setupConnections();
+    void init();
 };
 
 // -------------------------------------------------------------------------------------
@@ -433,10 +440,14 @@ class AlbumTreeView : public AbstractCheckableAlbumTreeView
 public:
 
     explicit AlbumTreeView(AlbumModel* model, QWidget* parent = 0);
+    explicit AlbumTreeView(AlbumModel* model, CheckableAlbumFilterModel* filteredModel, QWidget* parent = 0);
     virtual ~AlbumTreeView();
     AlbumModel* albumModel() const;
     PAlbum* currentAlbum() const;
     PAlbum* albumForIndex(const QModelIndex &index) const;
+
+    void setAlbumFilterModel(CheckableAlbumFilterModel* filterModel);
+    void setAlbumModel(AlbumModel* model);
 
 public Q_SLOTS:
 
@@ -446,6 +457,10 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotDIOResult(KJob* job);
+
+private:
+
+    void init();
 };
 
 // -------------------------------------------------------------------------------------
@@ -458,12 +473,16 @@ public:
 
     explicit TagTreeView(TagModel* model, QWidget* parent = 0);
     explicit TagTreeView(TagModel* model, CheckableAlbumFilterModel* filteredModel, QWidget* parent = 0);
+    ~TagTreeView();
     TagModel* albumModel() const;
     /// Contains only the tags filtered by properties - prefer to albumModel()
     TagPropertiesFilterModel* filteredModel() const;
     TAlbum* currentAlbum() const;
     TAlbum* albumForIndex(const QModelIndex &index) const;
     TagModificationHelper* tagModificationHelper() const;
+
+    void setAlbumFilterModel(CheckableAlbumFilterModel* filterModel);
+    void setAlbumModel(TagModel* model);
 
 public Q_SLOTS:
 
@@ -481,7 +500,7 @@ protected:
 
 private:
 
-    void init(TagModel*);
+    void init();
 };
 
 // -------------------------------------------------------------------------------------
