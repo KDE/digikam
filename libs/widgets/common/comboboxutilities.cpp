@@ -285,10 +285,10 @@ TreeViewComboBox::TreeViewComboBox(QWidget *parent)
 {
 }
 
-void TreeViewComboBox::installView()
+void TreeViewComboBox::installView(QAbstractItemView *view)
 {
     // parent does the heavy work
-    StayPoppedUpComboBox::installView(new TreeViewComboBoxTreeView);
+    StayPoppedUpComboBox::installView(view ? view : new TreeViewComboBoxTreeView);
 }
 
 void TreeViewComboBox::sendViewportEventToView(QEvent *e)
@@ -322,10 +322,10 @@ ListViewComboBox::ListViewComboBox(QWidget *parent)
 {
 }
 
-void ListViewComboBox::installView()
+void ListViewComboBox::installView(QAbstractItemView *view)
 {
     // parent does the heavy work
-    StayPoppedUpComboBox::installView(new ListViewComboBoxListView);
+    StayPoppedUpComboBox::installView(view ? view : new ListViewComboBoxListView);
 }
 
 void ListViewComboBox::sendViewportEventToView(QEvent *e)
@@ -379,10 +379,10 @@ void TreeViewLineEditComboBox::setLineEditText(const QString& text)
     m_comboLineEdit->setText(text);
 }
 
-void TreeViewLineEditComboBox::installView()
+void TreeViewLineEditComboBox::installView(QAbstractItemView *view)
 {
     // parent does the heavy work
-    TreeViewComboBox::installView();
+    TreeViewComboBox::installView(view);
 
     installLineEdit();
 }
