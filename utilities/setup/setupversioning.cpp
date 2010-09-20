@@ -87,16 +87,16 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                           "only the latest created/selected versio and you can "
                                           "switch to the other versions using the right sidebar."));
 
-    KHBox* tabStyleHbox = new KHBox(panel);
-    d->formatForStoringRAWLabel = new QLabel(i18n("Format to store versions from RAW images:"), tabStyleHbox);
-    d->formatForStoringRAW      = new KComboBox(tabStyleHbox);
+    KHBox* formatForRawHbox     = new KHBox(panel);
+    d->formatForStoringRAWLabel = new QLabel(i18n("Save RAW file versions in:"), formatForRawHbox);
+    d->formatForStoringRAW      = new KComboBox(formatForRawHbox);
     d->formatForStoringRAW->addItem("JPG", 0);
     d->formatForStoringRAW->addItem("PNG", 1);
     d->formatForStoringRAW->setToolTip(i18n("Set this option to configure in what format should be new versions of RAW images stored."));
 
-    KHBox* tabStyleHbox2 = new KHBox(panel);
-    d->formatForStoringSubversionsLabel = new QLabel(i18n("Format to store all other versions (not RAW):"), tabStyleHbox2);
-    d->formatForStoringSubversions      = new KComboBox(tabStyleHbox2);
+    KHBox* formatForOthersHbox          = new KHBox(panel);
+    d->formatForStoringSubversionsLabel = new QLabel(i18n("Save all other versions in:"), formatForOthersHbox);
+    d->formatForStoringSubversions      = new KComboBox(formatForOthersHbox);
     d->formatForStoringSubversions->addItem("JPG",  0);
     d->formatForStoringSubversions->addItem("PGF",  1);
     d->formatForStoringSubversions->addItem("PNG",  2);
@@ -110,8 +110,10 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                                     "into new file. This will be viewed "
                                                     "as a subversion of the current image"));
 
-    gLayout->addWidget(tabStyleHbox);
-    gLayout->addWidget(tabStyleHbox2);
+    gLayout->setMargin(KDialog::spacingHint());
+    gLayout->setSpacing(KDialog::spacingHint());
+    gLayout->addWidget(formatForRawHbox);
+    gLayout->addWidget(formatForOthersHbox);
     gLayout->addWidget(d->showAllVersions);
     gLayout->addWidget(d->saveIntermediateVersions);
     gLayout->setMargin(KDialog::spacingHint());
