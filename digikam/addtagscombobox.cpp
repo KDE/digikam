@@ -66,6 +66,7 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
     setEditable(true);
     setCloseOnActivate(true);
     setCheckable(false);
+
 }
 
 AddTagsComboBox::~AddTagsComboBox()
@@ -73,12 +74,12 @@ AddTagsComboBox::~AddTagsComboBox()
     delete d;
 }
 
-void AddTagsComboBox::initialize(TagModel* model, CheckableAlbumFilterModel* filterModel)
+void AddTagsComboBox::setModel(TagModel* model, CheckableAlbumFilterModel* filterModel)
 {
-    d->treeView = new TagTreeView(model, filterModel);
-
-    // calls virtual installView() and installLineEdit, below
-    setModel(model, filterModel);
+    // AlbumSelectComboBox calls virtual installView() and  installLineEdit(), below
+    AlbumSelectComboBox::setModel(model, filterModel);
+    d->treeView->setAlbumModel(model);
+    d->treeView->setAlbumFilterModel(filterModel);
 
     connect(view(), SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotViewCurrentAlbumChanged(Album*)));
@@ -88,19 +89,23 @@ void AddTagsComboBox::initialize(TagModel* model, CheckableAlbumFilterModel* fil
 
 void AddTagsComboBox::installLineEdit()
 {
+    delete d->lineEdit;
     d->lineEdit = new AddTagsLineEdit(this);
 
     connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
             this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
 
     d->lineEdit->setClearButtonShown(true);
+    m_comboLineEdit = d->lineEdit;
     setLineEdit(d->lineEdit);
 }
 
-void AddTagsComboBox::installView()
+void AddTagsComboBox::installView(QAbstractItemView *view)
 {
+    if (!view && !d->treeView)
+        d->treeView = new TagTreeView(0, 0, this);
     // called from initialize, tree view is constructed
-    StayPoppedUpComboBox::installView(d->treeView);
+    AlbumSelectComboBox::installView(view ? view : d->treeView);
 }
 
 TagTreeView* AddTagsComboBox::view() const
@@ -124,6 +129,11 @@ void AddTagsComboBox::setTagTreeView(TagTreeView* view)
 {
     // this is a completely different view! Remove this functionality?
     d->lineEdit->setTagTreeView(view);
+}
+
+void AddTagsComboBox::setParentTag(TAlbum* album)
+{
+    d->lineEdit->setParentTag(album);
 }
 
 void AddTagsComboBox::setCurrentTag(int tagId)
@@ -154,8 +164,16 @@ TaggingAction AddTagsComboBox::currentTaggingAction()
 void AddTagsComboBox::slotViewCurrentAlbumChanged(Album* album)
 {
     d->lineEdit->selectAll();
-    d->lineEdit->setText(album->title());
-    d->currentTaggingAction = TaggingAction(album->id());
+    if (album)
+    {
+        d->lineEdit->setText(album->title());
+        d->currentTaggingAction = TaggingAction(album->id());
+    }
+    else
+    {
+        d->lineEdit->setText(QString());
+        d->currentTaggingAction = TaggingAction();
+    }
     emit taggingActionSelected(d->currentTaggingAction);
 }
 

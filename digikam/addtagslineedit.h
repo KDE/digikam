@@ -61,6 +61,11 @@ public:
     /// The custom completion box in use
     AddTagsCompletionBox* completionBox() const;
 
+public Q_SLOTS:
+
+    /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */
+    void setParentTag(TAlbum* album);
+
 Q_SIGNALS:
 
     /// Emitted when the user activates an action (typically, by pressing return)

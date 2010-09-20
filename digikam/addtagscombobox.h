@@ -34,6 +34,7 @@ namespace Digikam
 
 class Album;
 class CheckableAlbumFilterModel;
+class TAlbum;
 class TagModel;
 class TagTreeView;
 
@@ -49,7 +50,7 @@ public:
     /** You must call this after construction.
      *  If filterModel is 0, a default one is constructed
      */
-    void initialize(TagModel* model, CheckableAlbumFilterModel* filterModel = 0);
+    void setModel(TagModel* model, CheckableAlbumFilterModel* filterModel = 0);
 
     /** Returns the currently set tagging action.
      *  This is the last action emitted by either taggingActionActivated()
@@ -72,6 +73,11 @@ public:
     QString text() const;
     void setText(const QString& text);
 
+public Q_SLOTS:
+
+    /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */
+    void setParentTag(TAlbum* album);
+
 Q_SIGNALS:
 
     /** Emitted when the user activates an action (typically, by pressing return)
@@ -90,7 +96,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void installView();
+    virtual void installView(QAbstractItemView *view = 0);
     TagTreeView* view() const;
     virtual void sendViewportEventToView(QEvent* e);
 

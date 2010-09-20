@@ -138,6 +138,11 @@ void AddTagsLineEdit::setTagTreeView(TagTreeView *view)
     }
 }
 
+void AddTagsLineEdit::setParentTag(TAlbum* album)
+{
+    d->completionBox->setCurrentParentTag(album);
+}
+
 void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
 {
     if (compObj())
