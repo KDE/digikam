@@ -43,6 +43,63 @@
 namespace Digikam
 {
 
+CachedPixmaps::CachedPixmaps(int maxCount)
+    : maxCount(maxCount)
+{
+}
+
+CachedPixmaps::~CachedPixmaps()
+{
+    clear();
+}
+
+void CachedPixmaps::setMaxCount(int count)
+{
+    maxCount = count;
+}
+
+void CachedPixmaps::clear()
+{
+    foreach (const CachedPixmapKey& key, keys)
+        QPixmapCache::remove(key.key);
+    keys.clear();
+}
+
+bool CachedPixmaps::find(const QRect& region, QPixmap *pix, QRect* source) const
+{
+    foreach (const CachedPixmapKey& key, keys)
+    {
+        if (key.region.contains(region) && QPixmapCache::find(key.key, pix))
+        {
+            if (key.region == region)
+                *source = QRect();
+            else
+            {
+                QPoint startPoint = region.topLeft() - key.region.topLeft();
+                *source = QRect(startPoint, region.size());
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+void CachedPixmaps::insert(const QRect& region, const QPixmap& pixmap)
+{
+    if (keys.size() >= maxCount)
+    {
+        CachedPixmapKey key = keys.dequeue();
+        QPixmapCache::remove(key.key);
+    }
+
+    CachedPixmapKey key;
+    key.region = region;
+    key.key = QPixmapCache::insert(pixmap);
+    keys.enqueue(key);
+}
+
+// ---
+
 GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem *parent)
                 : QGraphicsObject(parent),
                   d_ptr(new GraphicsDImgItemPrivate)
@@ -77,6 +134,7 @@ void GraphicsDImgItem::setImage(const DImg& img)
     Q_D(GraphicsDImgItem);
     d->image = img;
     d->zoomSettings.setImageSize(img.size(), img.originalSize());
+    d->cachedPixmaps.clear();
     sizeHasChanged();
     emit imageChanged();
 }
@@ -91,16 +149,8 @@ void GraphicsDImgItem::sizeHasChanged()
 {
     Q_D(GraphicsDImgItem);
     QGraphicsItem::prepareGeometryChange();
+    d->cachedPixmaps.clear();
     emit imageSizeChanged(d->zoomSettings.zoomedSize());
-
-    /*foreach (QGraphicsItem* child, childItems())
-    {
-        AbstractDImgItemChild* item = dynamic_cast<AbstractDImgItemChild*>(child);
-        if (item)
-        {
-            item->imageSizeHasChanged();
-        }
-    }*/
 }
 
 const ImageZoomSettings* GraphicsDImgItem::zoomSettings() const
@@ -126,13 +176,30 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 {
     Q_D(GraphicsDImgItem);
     QRect drawRect = option->exposedRect.intersected(boundingRect()).toAlignedRect();
-    QSize completeSize = boundingRect().size().toSize();
 
-    // scale "as if" scaling to whole image, but clip output to our exposed region
-    DImg scaledImage = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
-        drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
+    QPixmap pix;
+    QRect pixSourceRect;
 
-    painter->drawPixmap(drawRect.topLeft(), scaledImage.convertToPixmap());
+    if (d->cachedPixmaps.find(drawRect, &pix, &pixSourceRect))
+    {
+        if (pixSourceRect.isNull())
+            painter->drawPixmap(drawRect.topLeft(), pix);
+        else
+            painter->drawPixmap(drawRect.topLeft(), pix, pixSourceRect);
+    }
+    else
+    {
+        QSize completeSize = boundingRect().size().toSize();
+
+        // scale "as if" scaling to whole image, but clip output to our exposed region
+        DImg scaledImage = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
+                                                       drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
+
+        pix = scaledImage.convertToPixmap();
+        d->cachedPixmaps.insert(drawRect, pix);
+
+        painter->drawPixmap(drawRect.topLeft(), pix);
+    }
     /*
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());

@@ -26,6 +26,8 @@
 
 // Qt includes
 
+#include <QPixmapCache>
+#include <QQueue>
 #include <QString>
 
 // Local includes
@@ -37,6 +39,32 @@
 
 namespace Digikam
 {
+
+class CachedPixmapKey
+{
+public:
+    QRect             region;
+    QPixmapCache::Key key;
+};
+
+class CachedPixmaps
+{
+public:
+
+    CachedPixmaps(int maxCount = 2);
+    ~CachedPixmaps();
+
+    void setMaxCount(int);
+    void clear();
+    bool find(const QRect& region, QPixmap *pix, QRect *source) const;
+    void insert(const QRect& region, const QPixmap& pixmap);
+
+protected:
+
+    int                     maxCount;
+    QQueue<CachedPixmapKey> keys;
+
+};
 
 class DIGIKAM_EXPORT GraphicsDImgItem::GraphicsDImgItemPrivate
 {
@@ -50,6 +78,7 @@ public:
 
     DImg              image;
     ImageZoomSettings zoomSettings;
+    mutable CachedPixmaps cachedPixmaps;
 };
 
 // -------------------------------------------------------------------------------
