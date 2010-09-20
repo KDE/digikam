@@ -220,6 +220,7 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
         d->focal->setEnabled(true);
         d->aperture->setEnabled(true);
         d->distance->setEnabled(true);
+        slotUpdateCombos();
     }
 }
 
