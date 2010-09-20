@@ -763,6 +763,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/graphicsdimgview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/imagezoomsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/previewlayout.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/itemvisibilitycontroller.cpp
        )
 
     SET(libiccprofileswidgets_SRCS
@@ -925,6 +926,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libfacedetection_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/faceiface.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facegroup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facepipeline.cpp
 #        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/assignnamewidget.cpp
        )
