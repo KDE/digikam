@@ -36,13 +36,14 @@
 #include "dimgchilditem.h"
 #include "digikam_export.h"
 
+class QWidget;
+
 namespace Digikam
 {
 
 class DIGIKAM_EXPORT RegionFrameItem : public DImgChildItem
 {
     Q_OBJECT
-    Q_PROPERTY(qreal hoverAnimationOpacity READ hoverAnimationOpacity WRITE setHoverAnimationOpacity)
 
 public:
 
@@ -64,12 +65,18 @@ public:
     void setFlags(Flags flags);
     Flags flags() const;
 
+    /**
+     * Sets a widget item as HUD item. A HUD item will be positioned relative to this item,
+     * and repositioned on position changes or resizing.
+     * Ownership of the item is taken, and it is made a child item of this item.
+     * You can also add QWidget directly. It will be wrapped in a proxy item.
+     */
+    void setHudWidget(QGraphicsWidget *hudWidget);
+    void setHudWidget(QWidget *widget, Qt::WindowFlags wFlags = 0);
+
     void setFixedRatio(double ratio);
 
     virtual QRectF boundingRect() const;
-
-    qreal hoverAnimationOpacity() const;
-    void setHoverAnimationOpacity(qreal alpha);
 
 public Q_SLOTS:
 
@@ -92,8 +99,11 @@ protected:
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
 
+    virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event);
+
 private Q_SLOTS:
 
+    void slotUpdate();
     void slotSizeChanged();
     void slotPosChanged();
     void hudSizeChanged();
