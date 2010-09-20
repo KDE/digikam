@@ -49,7 +49,9 @@ public:
     LensFunCameraSelector(LensFunIface* iface, QWidget* parent=0);
     virtual ~LensFunCameraSelector();
 
-    void setUseMetadata(bool b);
+    void enableUseMetadata(bool b);
+
+    bool useMetadata() const;
 
     /** Special mode used with BQM
      */

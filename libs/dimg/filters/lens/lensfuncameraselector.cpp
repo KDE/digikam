@@ -174,9 +174,14 @@ void LensFunCameraSelector::findFromMetadata(const DMetadata& meta)
     findFromMetadata();
 }
 
-void LensFunCameraSelector::setUseMetadata(bool b)
+void LensFunCameraSelector::enableUseMetadata(bool b)
 {
     d->metadataUsage->setEnabled(b);
+}
+
+bool LensFunCameraSelector::useMetadata() const
+{
+      return (d->metadataUsage->isChecked());
 }
 
 void LensFunCameraSelector::setPassiveMetadataUsage(bool b)
@@ -221,12 +226,12 @@ void LensFunCameraSelector::findFromMetadata()
     if (d->metadata.isEmpty())
     {
         d->metadataUsage->setCheckState(Qt::Unchecked);
-        setUseMetadata(false);
+        enableUseMetadata(false);
     }
     else
     {
         d->metadataUsage->setCheckState(Qt::Checked);
-        setUseMetadata(true);
+        enableUseMetadata(true);
     }
 
     LensFunContainer settings;
