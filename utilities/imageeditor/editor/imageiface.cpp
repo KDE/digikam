@@ -358,6 +358,11 @@ KExiv2Data ImageIface::getOriginalMetadata()
     return DImgInterface::defaultInterface()->getImg()->getMetadata();
 }
 
+void ImageIface::setOriginalMetadata(const KExiv2Data& meta)
+{
+    DImgInterface::defaultInterface()->getImg()->setMetadata(meta);
+}
+
 PhotoInfoContainer ImageIface::getPhotographInformation() const
 {
     DMetadata meta(DImgInterface::defaultInterface()->getImg()->getMetadata());
