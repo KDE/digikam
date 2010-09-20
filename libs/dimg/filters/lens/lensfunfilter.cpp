@@ -180,6 +180,10 @@ void LensFunFilter::filterImage()
         }
 
         kDebug() << "Applying TCA correction... (loop: " << loop << ")";
+
+        // In case of filterCCA correction is enabled and nothing have been processed (Common option validate in BQM for ex.)
+        if (loop == 0)
+            m_destImage.bitBltImage(&m_orgImage, 0, 0);
     }
     else
     {
@@ -188,10 +192,9 @@ void LensFunFilter::filterImage()
 
     // Stage 2: Color Correction: Vignetting and CCI
 
-    uchar* data = m_destImage.bits();
-
     if ( d->iface->m_settings.filterVig || d->iface->m_settings.filterCCI )
     {
+        uchar* data  = m_destImage.bits();
         loop         = 0;
         float offset = 0.0;
 
