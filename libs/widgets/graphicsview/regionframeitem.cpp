@@ -252,17 +252,17 @@ QRectF RegionFrameItem::RegionFrameItemPriv::keepRectInsideImage(const QRectF& r
         r.setSize(rectSize);
     }
 
-    if (r.right() >= imageSize.width())
+    if (r.right() > imageSize.width())
     {
-        r.moveRight(imageSize.width() - 1);
+        r.moveRight(imageSize.width());
     }
     else if (r.left() < 0)
     {
         r.moveLeft(0);
     }
-    if (r.bottom() >= imageSize.height())
+    if (r.bottom() > imageSize.height())
     {
-        r.moveBottom(imageSize.height() - 1);
+        r.moveBottom(imageSize.height());
     }
     else if (r.top() < 0)
     {
@@ -576,8 +576,8 @@ void RegionFrameItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     const QSizeF maxSize = parentDImgItem()->boundingRect().size();
     const QPointF point  = mapToParent(event->pos());
-    int posX             = qBound(0., point.x(), maxSize.width());
-    int posY             = qBound(0., point.y(), maxSize.height());
+    qreal posX           = qBound(0., point.x(), maxSize.width());
+    qreal posY           = qBound(0., point.y(), maxSize.height());
     QRectF r             = rect();
 
     // Adjust edge
