@@ -56,6 +56,11 @@ void LensFunIface::setSettings(const LensFunContainer& other)
     m_settings = other;
 }
 
+LensFunContainer LensFunIface::settings() const
+{
+    return m_settings;
+}
+
 void LensFunIface::setFilterSettings(const LensFunContainer& other)
 {
     m_settings.filterCCA  = other.filterCCA;

@@ -267,4 +267,16 @@ void LensFunFilter::filterImage()
     d->modifier->Destroy();
 }
 
+bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data, const LensFunContainer settings) const
+{
+    // Register in digiKam Xmp namespace all information about Lens corrections.
+
+    DMetadata meta(data);
+    bool ret = meta.setXmpTagString("Xmp.digiKam.LensCorrectionSettings", 
+                                    settings.asCommentString().replace("\n", " ; "), false);
+    data = meta.data();
+
+    return ret;
+}
+
 }  // namespace Digikam

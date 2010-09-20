@@ -144,6 +144,9 @@ bool LensAutoFix::toolOperations()
     LensFunFilter filter(&image(), 0L, d->lfIface);
     filter.startFilterDirectly();
     image().putImageData(filter.getTargetImage().bits());
+    KExiv2Data data = image().getMetadata();
+    filter.registerSettingsToXmp(data, d->lfIface->settings());
+    image().setMetadata(data);
     return savefromDImg();
 }
 

@@ -249,6 +249,9 @@ void LensAutoFixTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Lens Auto-Correction"), filter()->getTargetImage().bits());
+    Digikam::KExiv2Data data = iface.getOriginalMetadata();
+    dynamic_cast<LensFunFilter*>(filter())->registerSettingsToXmp(data, d->lfIface->settings());
+    iface.setOriginalMetadata(data);
 }
 
 }  // namespace DigikamEnhanceImagePlugin

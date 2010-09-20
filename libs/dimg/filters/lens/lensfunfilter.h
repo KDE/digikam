@@ -29,8 +29,13 @@ extern "C"
 #include <lensfun.h>
 }
 
+// KDE includes
+
+#include <klocale.h>
+
 // Local includes
 
+#include "dmetadata.h"
 #include "dimgthreadedfilter.h"
 #include "digikam_export.h"
 
@@ -66,6 +71,38 @@ public:
 
     ~LensFunContainer(){};
 
+    QString asCommentString() const
+    {
+        QString ret;
+
+        if (usedCamera && usedLens)
+        {
+            ret.append(i18n("Camera: %1-%2",        usedCamera->Maker, usedCamera->Model));
+            ret.append("\n");
+            ret.append(i18n("Lens: %1",             usedLens->Model));
+            ret.append("\n");
+            ret.append(i18n("Subject Distance: %1", QString::number(subjectDistance)));
+            ret.append("\n");
+            ret.append(i18n("Aperture: %1",         QString::number(aperture)));
+            ret.append("\n");
+            ret.append(i18n("Focal Length: %1",     QString::number(focalLength)));
+            ret.append("\n");
+            ret.append(i18n("Crop Factor: %1",      QString::number(cropFactor)));
+            ret.append("\n");
+            ret.append(i18n("CCA Correction: %1",   filterCCA  ? i18n("enabled") : i18n("disabled")));
+            ret.append("\n");
+            ret.append(i18n("VIG Correction: %1",   filterVig  ? i18n("enabled") : i18n("disabled")));
+            ret.append("\n");
+            ret.append(i18n("CCI Correction: %1",   filterCCI  ? i18n("enabled") : i18n("disabled")));
+            ret.append("\n");
+            ret.append(i18n("DST Correction: %1",   filterDist ? i18n("enabled") : i18n("disabled")));
+            ret.append("\n");
+            ret.append(i18n("GEO Correction: %1",   filterGeom ? i18n("enabled") : i18n("disabled")));
+        }
+
+        return ret;
+    };
+
 public:
 
     bool      filterCCA;
@@ -90,6 +127,8 @@ public:
 
     LensFunFilter(DImg* origImage, QObject* parent, LensFunIface* iface);
     ~LensFunFilter();
+
+    bool registerSettingsToXmp(KExiv2Data& data, const LensFunContainer settings) const;
 
 private:
 
