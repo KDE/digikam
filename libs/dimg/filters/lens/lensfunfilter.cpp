@@ -76,17 +76,28 @@ void LensFunFilter::filterImage()
         opts.Aperture = lens->MinAperture;
 #endif
 
+    if (!d->iface)
+    {
+        kError() << "ERROR: LensFun Interface is null.";
+        return;
+    }
+    if (!d->iface->m_settings.usedLens)
+    {
+        kError() << "ERROR: LensFun Interface Lens device is null.";
+        return;
+    }
+
     int modifyFlags = 0;
     if ( d->iface->m_settings.filterDist )
-       modifyFlags |= LF_MODIFY_DISTORTION;
+        modifyFlags |= LF_MODIFY_DISTORTION;
     if ( d->iface->m_settings.filterGeom )
-       modifyFlags |= LF_MODIFY_GEOMETRY;
+        modifyFlags |= LF_MODIFY_GEOMETRY;
     if ( d->iface->m_settings.filterCCA )
-       modifyFlags |= LF_MODIFY_TCA;
+        modifyFlags |= LF_MODIFY_TCA;
     if ( d->iface->m_settings.filterVig )
-       modifyFlags |= LF_MODIFY_VIGNETTING;
+        modifyFlags |= LF_MODIFY_VIGNETTING;
     if ( d->iface->m_settings.filterCCI )
-       modifyFlags |= LF_MODIFY_CCI;
+        modifyFlags |= LF_MODIFY_CCI;
 
     // Init lensfun lib, we are working on the full image.
 
