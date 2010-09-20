@@ -232,8 +232,10 @@ void LensFunFilter::filterImage()
                 postProgress(progress/steps + 33.3*(steps-1));
         }
 
-        /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(),
-                                      tempImage.height(), tempImage.width());*/
+/*
+        kDebug << " for " << tempImage.height() << " " << tempImage.width() << " "
+                          << tempImage.height() << " " << tempImage.width());
+*/
         kDebug() << "Applying Distortion and Geometry Correction. (loop: " << loop << ")";
 
         m_destImage = tempImage;
