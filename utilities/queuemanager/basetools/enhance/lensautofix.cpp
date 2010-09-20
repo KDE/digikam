@@ -136,23 +136,15 @@ bool LensAutoFix::toolOperations()
         DMetadata        meta(image().getMetadata());
         bool             ret = d->lfIface->findFromMetadata(meta, settings);
         if (ret)
-        {
             d->lfIface->setSettings(settings);
-            LensFunFilter filter(&image(), 0L, d->lfIface);
-            filter.startFilterDirectly();
-            image().putImageData(filter.getTargetImage().bits());
-            return savefromDImg();
-        }
-    }
-    else
-    {
-        LensFunFilter filter(&image(), 0L, d->lfIface);
-        filter.startFilterDirectly();
-        image().putImageData(filter.getTargetImage().bits());
-        return savefromDImg();
+        else
+            return false;
     }
 
-    return false;
+    LensFunFilter filter(&image(), 0L, d->lfIface);
+    filter.startFilterDirectly();
+    image().putImageData(filter.getTargetImage().bits());
+    return savefromDImg();
 }
 
 } // namespace Digikam
