@@ -176,26 +176,31 @@ void PreviewLoadingTask::execute()
 
     if (size)
     {
+        DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
         // First the QImage-dependent loading methods
 
         // check embedded previews
         KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
 
-        int sizeLimit;
+        int sizeLimit = -1;
         QSize originalSize = previews.originalSize();
-        // the alternative is the half preview, so best size is already originalSize / 2
-        int bestSize = qMax(originalSize.width(), originalSize.height()) / 2;
+        int bestSize = qMax(originalSize.width(), originalSize.height());
+        // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
+        if (format == DImg::RAW)
+            bestSize /= 2;
         if (m_loadingDescription.previewParameters.fastButLarge())
         {
-            sizeLimit = qMin(size, bestSize);
+            if (format == DImg::RAW)
+                sizeLimit = qMin(size, bestSize);
         }
         else
         {
-            sizeLimit = qMin(size / 2, bestSize);
+            int aBitSmallerThanSize = (int)lround(double(size) * 0.8);
+            sizeLimit = qMin(aBitSmallerThanSize, bestSize);
         }
 
         // Only check the first and largest preview
-        if (!previews.isEmpty() && continueQuery())
+        if (sizeLimit != -1 && !previews.isEmpty() && continueQuery())
         {
             // require at least half preview size
             if (qMax(previews.width(), previews.height()) >= sizeLimit)
