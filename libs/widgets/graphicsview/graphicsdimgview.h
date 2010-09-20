@@ -68,6 +68,8 @@ Q_SIGNALS:
     void resized();
     //void contentTakeFocus();
 
+    void viewportRectChanged(const QRectF& viewportRect);
+
 protected:
 
     void drawForeground(QPainter* painter, const QRectF &rect);
@@ -86,6 +88,10 @@ protected:
     void startPanning(const QPoint& pos);
     void continuePanning(const QPoint& pos);
     void finishPanning();
+
+    virtual bool isClickOnPreviewItem(QMouseEvent *e);
+
+    virtual void scrollContentsBy(int dx, int dy);
 
 protected Q_SLOTS:
 

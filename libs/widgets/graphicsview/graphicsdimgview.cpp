@@ -194,7 +194,7 @@ void GraphicsDImgView::mousePressEvent(QMouseEvent* e)
     d->mousePressPos    = QPoint();
     d->movingInProgress = false;
 
-    if (e->isAccepted())
+    if (isClickOnPreviewItem(e))
         return;
 
     if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
@@ -230,9 +230,10 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseReleaseEvent(e);
 
+    bool isOnPreviewItem = isClickOnPreviewItem(e);
     if ((e->button() == Qt::LeftButton || e->button() == Qt::MidButton) && !d->mousePressPos.isNull())
     {
-        if (!d->movingInProgress && e->button() == Qt::LeftButton)
+        if (!d->movingInProgress && e->button() == Qt::LeftButton && isOnPreviewItem)
         {
             emit leftButtonClicked();
             if (KGlobalSettings::singleClick())
@@ -244,7 +245,7 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
         }
     }
 
-    if (e->button() == Qt::RightButton)
+    if (e->button() == Qt::RightButton && isOnPreviewItem)
     {
         emit rightButtonClicked();
     }
@@ -253,11 +254,26 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
     d->mousePressPos    = QPoint();
 }
 
+bool GraphicsDImgView::isClickOnPreviewItem(QMouseEvent *e)
+{
+    // the basic condition is that now item ate the event
+    if (e->isAccepted())
+        return false;
+    return true;
+}
+
 void GraphicsDImgView::resizeEvent(QResizeEvent* e)
 {
     QGraphicsView::resizeEvent(e);
     d->layout->updateZoomAndSize();
     emit resized();
+    emit viewportRectChanged(mapToScene(viewport()->rect()).boundingRect());
+}
+
+void GraphicsDImgView::scrollContentsBy(int dx, int dy)
+{
+    QGraphicsView::scrollContentsBy(dx, dy);
+    emit viewportRectChanged(mapToScene(viewport()->rect()).boundingRect());
 }
 
 void GraphicsDImgView::startPanning(const QPoint& pos)
