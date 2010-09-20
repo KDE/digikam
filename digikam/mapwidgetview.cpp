@@ -36,6 +36,7 @@
 
 #include <KHBox>
 #include <KVBox>
+#include <kconfig.h>
 
 // libkmap includes
 

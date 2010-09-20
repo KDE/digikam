@@ -267,9 +267,6 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::AbstractMar
             //return 0;
         }
 
-        if(currentIndex >= tile->children.count())
-            return 0;        
-
         childTile = static_cast<MyTile*>(tile->children.at(currentIndex));
 
         if (childTile==0)
@@ -321,7 +318,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
 
     if (tile != NULL)
     {
-          if (tile->imagesId.count() == 0)
+          if (tile->imagesId.isEmpty())
             return QVariant();
 
         GPSImageInfo bestMarkerInfo = d->imagesHash.value(tile->imagesId.first());
@@ -379,7 +376,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
     QVariant              v;
     QPair<TileIndex, int> bestRep;
 
-    if(indices.count() == 0)
+    if (indices.count() == 0)
         return QVariant();
 
     QPair<TileIndex, int> currentIndex = indices.first().value<QPair<TileIndex, int> >();
@@ -417,7 +414,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
                 bestRep        = currentIndex;
                 bestMarkerInfo = currentMarkerInfo;
             }
-            else if(currentMarkerInfo.rating == bestMarkerInfo.rating)
+            else if (currentMarkerInfo.rating == bestMarkerInfo.rating)
             {
                 if (currentMarkerInfo.creationDate < bestMarkerInfo.creationDate)
                 {
@@ -545,7 +542,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
             foreach (const EntryFromDatabase& entry, d->jobs.at(i).dataFromDatabase)
             {
                 //TODO: What if image coordinates have changed?
-                if(d->imagesHash.contains(entry.id))
+                if (d->imagesHash.contains(entry.id))
                     continue;
 
                 GPSImageInfo info;
@@ -575,7 +572,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
             {
                 bool found = false;
                 for (int counter = 0; counter < currentTile->imagesId.count(); ++counter)
-                    if(currentImageInfo.id == currentTile->imagesId.at(counter))
+                    if (currentImageInfo.id == currentTile->imagesId.at(counter))
                         found = true;
 
                 if (!found)
@@ -588,41 +585,23 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
                 const TileIndex markerTileIndex = TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
                 const int newTileIndex          = markerTileIndex.toIntList().last();
 
-                if (newTileIndex >= currentTile->children.count())
+                MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
+
+                if (newTile == 0)
                 {
-                    /*MyTile* newTile = static_cast<MyTile*>(tileNew());
-                    
+                    newTile = static_cast<MyTile*>(tileNew());
+
                     if (currentLevel == wantedLevel+1)
                     {
                         newTile->imagesId.append(currentImageInfo.id);
                     }
-                    
-                    kDebug()<<"Before.newTileIndex="<<newTileIndex;
+
                     currentTile->addChild(newTileIndex, newTile);
-                    kDebug()<<"After.";
-                    currentTile = newTile;*/
-                    continue;
+                    currentTile = newTile;
                 }
                 else
                 {
-                    MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
-
-                    if (newTile == 0)
-                    {
-                        newTile = static_cast<MyTile*>(tileNew());
-
-                        if (currentLevel == wantedLevel+1)
-                        {
-                            newTile->imagesId.append(currentImageInfo.id);
-                        }
-
-                        currentTile->addChild(newTileIndex, newTile);
-                        currentTile = newTile;
-                    }
-                    else
-                    {
-                        currentTile = newTile;
-                    }
+                   currentTile = newTile;
                 }
             }
         }
@@ -671,36 +650,28 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
     const DatabaseFields::Set changes = changeset.changes();
     const DatabaseFields::ImagePositions imagePositionChanges = changes;
 
-    if(    (changes & DatabaseFields::LatitudeNumber )
+    if (   (changes & DatabaseFields::LatitudeNumber )
         || (changes & DatabaseFields::LongitudeNumber )
         || (changes & DatabaseFields::Altitude ) )
     {
-        foreach(const qlonglong& id, changeset.ids())
+        foreach (const qlonglong& id, changeset.ids())
         {
             
             ImageInfo newImageInfo(id);
-            if(!newImageInfo.hasCoordinates())
-                return;
+            if (!newImageInfo.hasCoordinates())
+            //TODO: Case when the image had coordinates before and now it doesn't have coordinates anymore
+                continue;
 
             KMap::GeoCoordinates newCoordinates(newImageInfo.latitudeNumber(), newImageInfo.longitudeNumber());
-            if(newImageInfo.hasAltitude())
+            if (newImageInfo.hasAltitude())
                 newCoordinates.setAlt(newImageInfo.altitudeNumber());
 
-            if(d->imagesHash.contains(id))
+            if (d->imagesHash.contains(id))
             {
                 GPSImageInfo oldInfo = d->imagesHash.value(id);
                 KMap::GeoCoordinates oldCoordinates = oldInfo.coordinate;
 
-                KMap::GeoCoordinates newCoordinates(newImageInfo.latitudeNumber(), newImageInfo.longitudeNumber());
-                if(newImageInfo.hasAltitude())
-                    newCoordinates.setAlt(newImageInfo.altitudeNumber());
-
-                d->imagesHash.remove(id);
-                GPSImageInfo currentImageInfo;
-                currentImageInfo.id           = id;
-                currentImageInfo.coordinate   = newCoordinates;
-                currentImageInfo.rating       = newImageInfo.rating();
-                currentImageInfo.creationDate = newImageInfo.dateTime();
+                GPSImageInfo currentImageInfo = gpsData(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
                 d->imagesHash.insert(id, currentImageInfo);
 
                 TileIndex oldTileIndex = TileIndex::fromCoordinates(oldCoordinates, TileIndex::MaxLevel);
@@ -710,7 +681,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                 QList<int> newTileIndexList = newTileIndex.toIntList();
 
                 int separatorLevel = -1;
-                for (int i=0; i<oldTileIndexList.count(); ++i)
+                for (int i=0; i<TileIndex::MaxLevel; ++i)
                 {
                     if (oldTileIndexList.at(i) != newTileIndexList.at(i))
                     {
@@ -719,39 +690,37 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                     }
                 }
 
-                if(separatorLevel != -1)
+                if (separatorLevel != -1)
                 {
                     MyTile* currentTileOld = static_cast<MyTile*>(rootTile());
                     MyTile* currentTileNew = currentTileOld;
                     for (int level=0; level<oldTileIndexList.count(); ++level)
                     {
                         const int tileIndex = oldTileIndexList.at(level);
-                        if(currentTileOld->children.count() == 0)
-                            return;
+                        if (currentTileOld->children.isEmpty())
+                            break;
 
                         MyTile* childTileOld = static_cast<MyTile*>(currentTileOld->children.at(tileIndex));
-                        if(childTileOld == 0)
-                            return;
+                        if (childTileOld == 0)
+                            break;
 
-                        if(level<separatorLevel)
+                        if (level<separatorLevel)
                         {
                             currentTileOld = childTileOld;
+                            currentTileNew = currentTileOld;
                         }
                         else
                         {
                             int idIndex = childTileOld->imagesId.indexOf(id);
-                            if(idIndex != -1)
+                            if (idIndex != -1)
                                 childTileOld->imagesId.removeAt(idIndex);
 
-                            if(childTileOld->imagesId.count() == 0)
+                            if (childTileOld->imagesId.isEmpty())
                             {
-                                int childTileListIndex = currentTileOld->children.indexOf(childTileOld);
+                                int childTileListIndex = oldTileIndexList.at(level);
                                 if (childTileListIndex != -1)
-                                    currentTileOld->children.remove(childTileListIndex);
+                                    currentTileOld->children[childTileListIndex] = 0;
                             }
-
-                            if(currentTileNew == rootTile())
-                                currentTileNew = currentTileOld;
                             
                             currentTileOld = childTileOld;
 
@@ -789,11 +758,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             {
                 //TODO: add here the code that adds the image
                 
-                GPSImageInfo currentImageInfo;
-                currentImageInfo.id           = id;
-                currentImageInfo.coordinate   = newCoordinates;
-                currentImageInfo.rating       = newImageInfo.rating();
-                currentImageInfo.creationDate = newImageInfo.dateTime();
+                GPSImageInfo currentImageInfo = gpsData(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
                 d->imagesHash.insert(id, currentImageInfo);
 
                 MyTile* currentTile = static_cast<MyTile*>(rootTile());
@@ -828,6 +793,16 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             
         }
     }
+}
+
+GPSMarkerTiler::GPSImageInfo GPSMarkerTiler::gpsData(qlonglong id, KMap::GeoCoordinates coordinates, int rating, QDateTime creationDate)
+{
+    GPSImageInfo currentImageInfo;
+    currentImageInfo.id           = id;
+    currentImageInfo.coordinate   = coordinates;
+    currentImageInfo.rating       = rating;
+    currentImageInfo.creationDate = creationDate;
+    return currentImageInfo;
 }
 
 } // namespace Digikam

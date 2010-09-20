@@ -134,7 +134,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->gpsModelHelper   = new ImageGPSModelHelper(d->itemModel, this);
     d->itemMarkerTiler  = new KMap::ItemMarkerTiler(d->gpsModelHelper, this);
     d->map->setGroupedModel(d->itemMarkerTiler);
-    
+    d->map->setActive(true);
+
     d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);
     d->latLabel         = new QLabel(i18n("<b>Latitude</b>:"),  this);
     d->lonLabel         = new QLabel(i18n("<b>Longitude</b>:"), this);

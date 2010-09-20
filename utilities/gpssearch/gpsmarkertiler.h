@@ -82,6 +82,25 @@ public:
         QList<int> imagesId;
     };
 
+    class GPSImageInfo
+    {
+        public:
+
+        GPSImageInfo()
+            : id(-2),
+          coordinate(),
+          rating(),
+          creationDate()
+        {
+        }
+        ~GPSImageInfo();
+
+        qlonglong            id;
+        KMap::GeoCoordinates coordinate;
+        int                  rating;
+        QDateTime            creationDate;
+    };
+
     GPSMarkerTiler(QObject* const parent = 0);
     ~GPSMarkerTiler();
 
@@ -101,25 +120,7 @@ public:
     virtual KMap::WMWSelectionState getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
 
     virtual void setActive(const bool state);
-
-    class GPSImageInfo
-    {
-        public:
-
-        GPSImageInfo()
-            : id(-2),
-          coordinate(),
-          rating(),
-          creationDate()
-        {
-        }
-        ~GPSImageInfo();
-
-        qlonglong            id;
-        KMap::GeoCoordinates coordinate;
-        int                  rating;
-        QDateTime            creationDate;
-    };
+    GPSImageInfo gpsData(qlonglong id, KMap::GeoCoordinates coordinate, int rating, QDateTime creationDate); 
 
 private Q_SLOTS:
 
