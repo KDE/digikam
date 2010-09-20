@@ -90,8 +90,10 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     KHBox* formatForRawHbox     = new KHBox(panel);
     d->formatForStoringRAWLabel = new QLabel(i18n("Save RAW file versions in:"), formatForRawHbox);
     d->formatForStoringRAW      = new KComboBox(formatForRawHbox);
-    d->formatForStoringRAW->addItem("JPG", 0);
-    d->formatForStoringRAW->addItem("PNG", 1);
+    d->formatForStoringRAW->addItem("JPG",  0);
+    d->formatForStoringRAW->addItem("PGF",  1);
+    d->formatForStoringRAW->addItem("PNG",  2);
+    d->formatForStoringRAW->addItem("TIFF", 3);
     d->formatForStoringRAW->setToolTip(i18n("Set this option to configure in what format should be new versions of RAW images stored."));
 
     KHBox* formatForOthersHbox          = new KHBox(panel);
