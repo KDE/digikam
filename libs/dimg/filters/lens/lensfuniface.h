@@ -50,6 +50,9 @@ public:
     void setSettings(const LensFunContainer& other);
     LensFunContainer settings() const;
 
+    LensFunContainer::DevicePtr findCamera(const QString& make, const QString& model) const;
+    LensFunContainer::LensPtr   findLens(const QString& model) const;
+
     bool supportsDistortion();
     bool supportsCCA();
     bool supportsVig();

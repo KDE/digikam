@@ -94,6 +94,34 @@ bool LensFunIface::supportsVig()
     return m_settings.usedLens->InterpolateVignetting(m_settings.focalLength, m_settings.aperture, m_settings.subjectDistance, res);
 }
 
+LensFunContainer::DevicePtr LensFunIface::findCamera(const QString& make, const QString& model) const
+{
+    const lfCamera** lfCamera = m_lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
+
+    if (lfCamera && *lfCamera)
+    {
+        LensFunContainer::DevicePtr cam = *lfCamera;
+        if (QString(cam->Maker) == make &&
+            QString(cam->Model) == model)
+          return cam;
+    }
+    return 0;
+}
+
+LensFunContainer::LensPtr LensFunIface::findLens(const QString& model) const
+{
+    const lfLens* const* lfLens = m_lfDb->GetLenses();
+    while (lfLens && *lfLens)
+    {
+        LensFunContainer::LensPtr lens = (*lfLens);
+        if (QString(lens->Model) == model)
+            return lens;
+
+        ++lfLens;
+    }
+    return 0;
+}
+
 LensFunContainer::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& lensDesc,
                                                     const QString& lensMaker) const
 {
