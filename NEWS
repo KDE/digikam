@@ -4,6 +4,7 @@ digiKam 1.5.0 - Release date: 2010-10-??
 NEW FEATURES:
 
 Batch Queue Manager : add new tool to remove metadata from images.
+Batch Queue Manager : add new tool to apply Lens corrections using LensFun library.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -24,7 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 148721 : Remove serial numbers automatically.
 016 ==> 229092 : digiKam Scan for New images closes at 90%.
 017 ==> 248943 : Annoying and dangerous number input fields in editor.
-018 ==> 
+018 ==> 216353 : Make it possible to apply lens correction in batch.
+019 ==> 
 
 
 
