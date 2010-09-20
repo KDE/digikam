@@ -136,9 +136,9 @@ bool LensAutoFix::toolOperations()
     if (ret)
     {
         d->lfIface->setSettings(settings);
-        LensFunFilter lfFilter(&image(), 0L, d->lfIface);
-        lfFilter.startFilterDirectly();
-        image().putImageData(lfFilter.getTargetImage().bits());
+        LensFunFilter filter(&image(), 0L, d->lfIface);
+        filter.startFilterDirectly();
+        image().putImageData(filter.getTargetImage().bits());
         return savefromDImg();
     }
     return false;
