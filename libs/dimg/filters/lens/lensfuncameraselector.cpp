@@ -179,6 +179,11 @@ void LensFunCameraSelector::enableUseMetadata(bool b)
     d->metadataUsage->setEnabled(b);
 }
 
+void LensFunCameraSelector::setUseMetadata(bool b)
+{
+    d->metadataUsage->setChecked(b);
+}
+
 bool LensFunCameraSelector::useMetadata() const
 {
       return (d->metadataUsage->isChecked());

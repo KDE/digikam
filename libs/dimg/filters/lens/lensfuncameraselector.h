@@ -51,6 +51,7 @@ public:
 
     void enableUseMetadata(bool b);
 
+    void setUseMetadata(bool b);
     bool useMetadata() const;
 
     /** Special mode used with BQM
