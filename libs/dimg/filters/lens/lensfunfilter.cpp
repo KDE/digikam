@@ -133,7 +133,11 @@ void LensFunFilter::filterImage()
     kDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
 
     if ( steps < 1 )
-       return;
+    {
+        kDebug() << "No LensFun Modifier steps. There is nothing to process...";
+        d->modifier->Destroy();
+        return;
+    }
 
     // The real correction to do
 
