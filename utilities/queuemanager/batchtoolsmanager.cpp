@@ -101,7 +101,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Restoration(this));
     registerTool(new LocalContrast(this));
     registerTool(new AntiVignetting(this));
-//    registerTool(new LensAutoFix(this));
+    registerTool(new LensAutoFix(this));
 
     // Color
     registerTool(new BCGCorrection(this));
