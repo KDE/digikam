@@ -104,21 +104,21 @@ BatchToolSettings LensAutoFix::defaultSettings()
 {
     BatchToolSettings settings;
 
-    //settings.insert("Radius", (double)m_radiusInput->defaultValue());
+    settings.insert("UseMetadata", true);
 
     return settings;
 }
 
 void LensAutoFix::slotAssignSettings2Widget()
 {
-    //m_radiusInput->setValue(settings()["Radius"].toDouble());
+    d->cameraSelector->setUseMetadata(settings()["UseMetadata"].toBool());
 }
 
 void LensAutoFix::slotSettingsChanged()
 {
     BatchToolSettings settings;
 
-    //settings.insert("Radius", (double)m_radiusInput->value());
+    settings.insert("UseMetadata", (bool)d->cameraSelector->useMetadata());
 
     BatchTool::slotSettingsChanged(settings);
 }
@@ -128,19 +128,30 @@ bool LensAutoFix::toolOperations()
     if (!loadToDImg())
         return false;
 
-//    double radius = settings()["Radius"].toDouble();
+    bool useMeta = settings()["UseMetadata"].toBool();
 
-    LensFunContainer settings;
-    DMetadata        meta(image().getMetadata());
-    bool             ret = d->lfIface->findFromMetadata(meta, settings);
-    if (ret)
+    if (useMeta)
     {
-        d->lfIface->setSettings(settings);
+        LensFunContainer settings;
+        DMetadata        meta(image().getMetadata());
+        bool             ret = d->lfIface->findFromMetadata(meta, settings);
+        if (ret)
+        {
+            d->lfIface->setSettings(settings);
+            LensFunFilter filter(&image(), 0L, d->lfIface);
+            filter.startFilterDirectly();
+            image().putImageData(filter.getTargetImage().bits());
+            return savefromDImg();
+        }
+    }
+    else
+    {
         LensFunFilter filter(&image(), 0L, d->lfIface);
         filter.startFilterDirectly();
         image().putImageData(filter.getTargetImage().bits());
         return savefromDImg();
     }
+
     return false;
 }
 
