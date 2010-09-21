@@ -52,27 +52,23 @@ public:
 
     LensAutoFixPriv()
         : settingsView(0),
-          cameraSelector(0),
-          lfIface(0)
+          cameraSelector(0)
     {}
 
     LensFunSettings*       settingsView;
     LensFunCameraSelector* cameraSelector;
-    LensFunIface*          lfIface;
 };
 
 LensAutoFix::LensAutoFix(QObject* parent)
            : BatchTool("LensAutoFix", EnhanceTool, parent),
              d(new LensAutoFixPriv)
 {
-    setToolTitle(i18n("Lens Auto-fix Image"));
+    setToolTitle(i18n("Lens Auto-fix"));
     setToolDescription(i18n("A tool to fix automatically lens distorsions"));
     setToolIcon(KIcon(SmallIcon("lensautofix")));
 
-    d->lfIface        = new LensFunIface();
-
     QWidget* box      = new QWidget;
-    d->cameraSelector = new LensFunCameraSelector(d->lfIface);
+    d->cameraSelector = new LensFunCameraSelector();
     KSeparator* line  = new KSeparator(Qt::Horizontal);
     d->settingsView   = new LensFunSettings();
     d->cameraSelector->setPassiveMetadataUsage(true);
@@ -102,25 +98,82 @@ LensAutoFix::~LensAutoFix()
 
 BatchToolSettings LensAutoFix::defaultSettings()
 {
-    BatchToolSettings settings;
+    BatchToolSettings prm;
 
-    settings.insert("UseMetadata", true);
+    prm.insert("UseMetadata",     true);
+    prm.insert("filterCCA",       true);
+    prm.insert("filterVig",       true);
+    prm.insert("filterCCI",       true);
+    prm.insert("filterDist",      true);
+    prm.insert("filterGeom",      true);
 
-    return settings;
+    prm.insert("cropFactor",      -1.0);
+    prm.insert("focalLength",     -1.0);
+    prm.insert("aperture",        -1.0);
+    prm.insert("subjectDistance", -1.0);
+
+    prm.insert("cameraMake",      QString());
+    prm.insert("cameraModel",     QString());
+    prm.insert("lensModel",       QString());
+
+    return prm;
 }
 
 void LensAutoFix::slotAssignSettings2Widget()
 {
     d->cameraSelector->setUseMetadata(settings()["UseMetadata"].toBool());
+    LensFunContainer lfPrm;
+    lfPrm.filterCCA       = settings()["filterCCA"].toBool();
+    lfPrm.filterVig       = settings()["filterVig"].toBool();
+    lfPrm.filterCCI       = settings()["filterCCI"].toBool();
+    lfPrm.filterDist      = settings()["filterDist"].toBool();
+    lfPrm.filterGeom      = settings()["filterGeom"].toBool();
+
+    lfPrm.cropFactor      = settings()["cropFactor"].toDouble();
+    lfPrm.focalLength     = settings()["focalLength"].toDouble();
+    lfPrm.aperture        = settings()["aperture"].toDouble();
+    lfPrm.subjectDistance = settings()["subjectDistance"].toDouble();
+
+    QString cameraMake    = settings()["cameraMake"].toString();
+    QString cameraModel   = settings()["cameraModel"].toString();
+    QString lensModel     = settings()["lensModel"].toString();
+
+    lfPrm.usedCamera      = d->cameraSelector->iface()->findCamera(cameraMake, cameraModel);
+    lfPrm.usedLens        = d->cameraSelector->iface()->findLens(lensModel);
+
+    d->cameraSelector->setSettings(lfPrm);
 }
 
 void LensAutoFix::slotSettingsChanged()
 {
-    BatchToolSettings settings;
+    // Update checkbox options about Lens corrections available.
+    d->settingsView->setEnabledCCA(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->settings().supportsCCA());
+    d->settingsView->setEnabledVig(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->settings().supportsVig());
+    d->settingsView->setEnabledCCI(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->settings().supportsVig());
+    d->settingsView->setEnabledDist(d->cameraSelector->useMetadata() ? true : d->cameraSelector->settings().supportsDistortion());
+    d->settingsView->setEnabledGeom(d->cameraSelector->useMetadata() ? true : d->cameraSelector->settings().supportsDistortion());
 
-    settings.insert("UseMetadata", (bool)d->cameraSelector->useMetadata());
+    BatchToolSettings prm;
+    LensFunContainer  settings = d->cameraSelector->settings();
 
-    BatchTool::slotSettingsChanged(settings);
+    prm.insert("UseMetadata",     (bool)d->cameraSelector->useMetadata());
+
+    prm.insert("filterCCA",       (bool)settings.filterCCA);
+    prm.insert("filterVig",       (bool)settings.filterVig);
+    prm.insert("filterCCI",       (bool)settings.filterCCI);
+    prm.insert("filterDist",      (bool)settings.filterDist);
+    prm.insert("filterGeom",      (bool)settings.filterGeom);
+
+    prm.insert("cropFactor",      (double)settings.cropFactor);
+    prm.insert("focalLength",     (double)settings.focalLength);
+    prm.insert("aperture",        (double)settings.aperture);
+    prm.insert("subjectDistance", (double)settings.subjectDistance);
+
+    prm.insert("cameraMake",      settings.usedCamera ? settings.usedCamera->Maker : QString());
+    prm.insert("cameraModel",     settings.usedCamera ? settings.usedCamera->Model : QString());
+    prm.insert("lensModel",       settings.usedLens ?   settings.usedLens->Model   : QString());
+
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool LensAutoFix::toolOperations()
@@ -128,24 +181,43 @@ bool LensAutoFix::toolOperations()
     if (!loadToDImg())
         return false;
 
-    bool useMeta = settings()["UseMetadata"].toBool();
+    LensFunIface     iface;
+    LensFunContainer prm;
 
+    bool useMeta = settings()["UseMetadata"].toBool();
     if (useMeta)
     {
-        LensFunContainer settings;
-        DMetadata        meta(image().getMetadata());
-        bool             ret = d->lfIface->findFromMetadata(meta, settings);
-        if (ret)
-            d->lfIface->setSettings(settings);
-        else
-            return false;
+        DMetadata meta(image().getMetadata());
+        bool      ret = iface.findFromMetadata(meta, prm);
+        if (!ret) return false;
+    }
+    else
+    {
+        prm.filterCCA       = settings()["filterCCA"].toBool();
+        prm.filterVig       = settings()["filterVig"].toBool();
+        prm.filterCCI       = settings()["filterCCI"].toBool();
+        prm.filterDist      = settings()["filterDist"].toBool();
+        prm.filterGeom      = settings()["filterGeom"].toBool();
+
+        prm.cropFactor      = settings()["cropFactor"].toDouble();
+        prm.focalLength     = settings()["focalLength"].toDouble();
+        prm.aperture        = settings()["aperture"].toDouble();
+        prm.subjectDistance = settings()["subjectDistance"].toDouble();
+
+        QString cameraMake  = settings()["cameraMake"].toString();
+        QString cameraModel = settings()["cameraModel"].toString();
+        QString lensModel   = settings()["lensModel"].toString();
+
+        prm.usedCamera      = iface.findCamera(cameraMake, cameraModel);
+        prm.usedLens        = iface.findLens(lensModel);
     }
 
-    LensFunFilter filter(&image(), 0L, d->lfIface);
+    iface.setSettings(prm);
+    LensFunFilter filter(&image(), 0L, &iface);
     filter.startFilterDirectly();
     image().putImageData(filter.getTargetImage().bits());
     KExiv2Data data = image().getMetadata();
-    filter.registerSettingsToXmp(data, d->lfIface->settings());
+    filter.registerSettingsToXmp(data, iface.settings());
     image().setMetadata(data);
     return savefromDImg();
 }

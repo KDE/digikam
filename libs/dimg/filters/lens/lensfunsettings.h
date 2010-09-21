@@ -54,8 +54,8 @@ public:
     LensFunContainer defaultSettings() const;
     void resetToDefault();
 
-    LensFunContainer settings() const;
-    void setSettings(const LensFunContainer& settings);
+    void assignFilterSettings(LensFunContainer& prm);
+    void setFilterSettings(const LensFunContainer& settings);
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);

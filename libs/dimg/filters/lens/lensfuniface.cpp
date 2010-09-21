@@ -70,41 +70,21 @@ void LensFunIface::setFilterSettings(const LensFunContainer& other)
     m_settings.filterGeom = other.filterGeom;
 }
 
-bool LensFunIface::supportsDistortion()
-{
-    if (!m_settings.usedLens) return false;
-
-    lfLensCalibDistortion res;
-    return m_settings.usedLens->InterpolateDistortion(m_settings.focalLength, res);
-}
-
-bool LensFunIface::supportsCCA()
-{
-    if (!m_settings.usedLens) return false;
-
-    lfLensCalibTCA res;
-    return m_settings.usedLens->InterpolateTCA(m_settings.focalLength, res);
-}
-
-bool LensFunIface::supportsVig()
-{
-    if (!m_settings.usedLens) return false;
-
-    lfLensCalibVignetting res;
-    return m_settings.usedLens->InterpolateVignetting(m_settings.focalLength, m_settings.aperture, m_settings.subjectDistance, res);
-}
-
 LensFunContainer::DevicePtr LensFunIface::findCamera(const QString& make, const QString& model) const
 {
-    const lfCamera** lfCamera = m_lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
-
+    const lfCamera* const* lfCamera = m_lfDb->GetCameras();
     if (lfCamera && *lfCamera)
     {
         LensFunContainer::DevicePtr cam = *lfCamera;
         if (QString(cam->Maker) == make &&
             QString(cam->Model) == model)
-          return cam;
+        {
+            kDebug() << "Search for camera " << make << "-" << model << " ==> true";
+            return cam;
+        }
+        ++lfCamera;
     }
+    kDebug() << "Search for camera " << make << "-" << model << " ==> false";
     return 0;
 }
 
@@ -113,12 +93,15 @@ LensFunContainer::LensPtr LensFunIface::findLens(const QString& model) const
     const lfLens* const* lfLens = m_lfDb->GetLenses();
     while (lfLens && *lfLens)
     {
-        LensFunContainer::LensPtr lens = (*lfLens);
+        LensFunContainer::LensPtr lens = *lfLens;
         if (QString(lens->Model) == model)
+        {
+            kDebug() << "Search for lens " << model << " ==> true";
             return lens;
-
+        }
         ++lfLens;
     }
+    kDebug() << "Search for lens " << model << " ==> false";
     return 0;
 }
 
@@ -128,17 +111,19 @@ LensFunContainer::LensList LensFunIface::findLenses(const lfCamera* lfCamera, co
     LensFunContainer::LensList lensList;
     const lfLens**             lfLens = 0;
 
-    if (!lensMaker.isEmpty())
-        lfLens = m_lfDb->FindLenses(lfCamera, lensMaker.toAscii().constData(), lensDesc.toAscii().constData());
-    else
-        lfLens = m_lfDb->FindLenses(lfCamera, NULL, lensDesc.toAscii().constData());
-
-    while (lfLens && *lfLens)
+    if (lfCamera)
     {
-        lensList << (*lfLens);
-        ++lfLens;
-    }
+        if (!lensMaker.isEmpty())
+            lfLens = m_lfDb->FindLenses(lfCamera, lensMaker.toAscii().constData(), lensDesc.toAscii().constData());
+        else
+            lfLens = m_lfDb->FindLenses(lfCamera, NULL, lensDesc.toAscii().constData());
 
+        while (lfLens && *lfLens)
+        {
+            lensList << (*lfLens);
+            ++lfLens;
+        }
+    }
     return lensList;
 }
 

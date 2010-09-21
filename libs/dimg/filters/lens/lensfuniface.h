@@ -53,12 +53,6 @@ public:
     LensFunContainer::DevicePtr findCamera(const QString& make, const QString& model) const;
     LensFunContainer::LensPtr   findLens(const QString& model) const;
 
-    bool supportsDistortion();
-    bool supportsCCA();
-    bool supportsVig();
-    bool supportsGeometry(){ return supportsDistortion(); };
-    bool supportsCCI()     { return supportsVig();        };
-
     bool findFromMetadata(const DMetadata& meta, LensFunContainer& settings) const;
 
 protected:

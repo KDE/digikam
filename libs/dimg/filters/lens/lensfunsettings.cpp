@@ -35,8 +35,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-// Local includes
-
 namespace Digikam
 {
 
@@ -77,6 +75,7 @@ LensFunSettings::LensFunSettings(QWidget* parent)
 {
     QGridLayout* grid = new QGridLayout(this);
 
+    QLabel* title = new QLabel(i18n("Lens Corrections to apply:"));
     d->filterCCA  = new QCheckBox(i18n("Chromatic Aberration"));
     d->filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognized as color fringes "
                                     "towards the image corners. CA is due to a varying lens focus "
@@ -85,7 +84,7 @@ LensFunSettings::LensFunSettings(QWidget* parent)
     d->filterVig->setWhatsThis(i18n("Vignetting refers to an image darkening, mostly in the corners. "
                                     "Optical and natural vignetting can be canceled out with this option, "
                                     "whereas mechanical vignetting will not be cured."));
-    d->filterCCI  = new QCheckBox(i18n("Color Correction"));
+    d->filterCCI  = new QCheckBox(i18n("Color"));
     d->filterCCI->setWhatsThis(i18n("All lenses have a slight color tinge to them, "
                                     "mostly due to the anti-reflective coating. "
                                     "The tinge can be canceled when the respective data is known for the lens."));
@@ -96,13 +95,21 @@ LensFunSettings::LensFunSettings(QWidget* parent)
     d->filterGeom = new QCheckBox(i18n("Geometry"));
     d->filterGeom->setWhatsThis(i18n("Four geometries are handled here: Rectilinear (99 percent of all lenses), "
                                      "Fisheye, Cylindrical, Equirectangular."));
+    QLabel* note  = new QLabel(i18n("<b>Note: lens correction options depand of filters available in LensFun library. "
+                                    "See <a href='http://lensfun.berlios.de'>LensFun project web site</a> "
+                                    "for more information.</b>"), this);
+    note->setOpenExternalLinks(true);
+    note->setWordWrap(true);
+    note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    grid->addWidget(d->filterCCA,  0, 0, 1, 2);
-    grid->addWidget(d->filterVig,  1, 0, 1, 2);
-    grid->addWidget(d->filterCCI,  2, 0, 1, 2);
-    grid->addWidget(d->filterDist, 3, 0, 1, 2);
-    grid->addWidget(d->filterGeom, 4, 0, 1, 2);
-    grid->setRowStretch(5, 10);
+    grid->addWidget(title,         0, 0, 1, 2);
+    grid->addWidget(d->filterCCA,  1, 0, 1, 2);
+    grid->addWidget(d->filterVig,  2, 0, 1, 2);
+    grid->addWidget(d->filterCCI,  3, 0, 1, 2);
+    grid->addWidget(d->filterDist, 4, 0, 1, 2);
+    grid->addWidget(d->filterGeom, 5, 0, 1, 2);
+    grid->addWidget(note,          6, 0, 1, 2);
+    grid->setRowStretch(7, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -152,20 +159,16 @@ void LensFunSettings::setEnabledGeom(bool b)
     d->filterGeom->setEnabled(b);
 }
 
-LensFunContainer LensFunSettings::settings() const
+void LensFunSettings::assignFilterSettings(LensFunContainer& prm)
 {
-    LensFunContainer prm;
-
     prm.filterCCA  = (d->filterCCA->isChecked()  && d->filterCCA->isEnabled());
     prm.filterVig  = (d->filterVig->isChecked()  && d->filterVig->isEnabled());
     prm.filterCCI  = (d->filterCCI->isChecked()  && d->filterCCI->isEnabled());
     prm.filterDist = (d->filterDist->isChecked() && d->filterDist->isEnabled());
     prm.filterGeom = (d->filterGeom->isChecked() && d->filterGeom->isEnabled());
-
-    return prm;
 }
 
-void LensFunSettings::setSettings(const LensFunContainer& settings)
+void LensFunSettings::setFilterSettings(const LensFunContainer& settings)
 {
     blockSignals(true);
     d->filterCCA->setChecked(settings.filterCCA);
@@ -178,7 +181,7 @@ void LensFunSettings::setSettings(const LensFunContainer& settings)
 
 void LensFunSettings::resetToDefault()
 {
-    setSettings(LensFunContainer());
+    setFilterSettings(LensFunContainer());
 }
 
 LensFunContainer LensFunSettings::defaultSettings() const
@@ -191,22 +194,23 @@ void LensFunSettings::readSettings(KConfigGroup& group)
 {
     LensFunContainer prm;
     LensFunContainer defaultPrm = defaultSettings();
-    d->filterCCA->setChecked(group.readEntry(d->configCCAEntry,         true));
-    d->filterVig->setChecked(group.readEntry(d->configVignettingEntry,  true));
-    d->filterCCI->setChecked(group.readEntry(d->configCCIEntry,         true));
-    d->filterDist->setChecked(group.readEntry(d->configDistortionEntry, true));
-    d->filterGeom->setChecked(group.readEntry(d->configGeometryEntry,   true));
-    setSettings(prm);
+    prm.filterCCA  = group.readEntry(d->configCCAEntry,        defaultPrm.filterCCA);
+    prm.filterVig  = group.readEntry(d->configVignettingEntry, defaultPrm.filterVig);
+    prm.filterCCI  = group.readEntry(d->configCCIEntry,        defaultPrm.filterCCI);
+    prm.filterDist = group.readEntry(d->configDistortionEntry, defaultPrm.filterDist);
+    prm.filterGeom = group.readEntry(d->configGeometryEntry,   defaultPrm.filterGeom);
+    setFilterSettings(prm);
 }
 
 void LensFunSettings::writeSettings(KConfigGroup& group)
 {
-    LensFunContainer prm = settings();
-    if ( d->filterCCA->isEnabled() )  group.writeEntry(d->configCCAEntry,        (d->filterCCA->isChecked()));
-    if ( d->filterVig->isEnabled() )  group.writeEntry(d->configVignettingEntry, (d->filterVig->isChecked()));
-    if ( d->filterCCI->isEnabled() )  group.writeEntry(d->configCCIEntry,        (d->filterCCI->isChecked()));
-    if ( d->filterDist->isEnabled() ) group.writeEntry(d->configDistortionEntry, (d->filterDist->isChecked()));
-    if ( d->filterGeom->isEnabled() ) group.writeEntry(d->configGeometryEntry,   (d->filterGeom->isChecked()));
+    LensFunContainer prm;
+    assignFilterSettings(prm);
+    if ( d->filterCCA->isEnabled() )  group.writeEntry(d->configCCAEntry,        (prm.filterCCA));
+    if ( d->filterVig->isEnabled() )  group.writeEntry(d->configVignettingEntry, (prm.filterVig));
+    if ( d->filterCCI->isEnabled() )  group.writeEntry(d->configCCIEntry,        (prm.filterCCI));
+    if ( d->filterDist->isEnabled() ) group.writeEntry(d->configDistortionEntry, (prm.filterDist));
+    if ( d->filterGeom->isEnabled() ) group.writeEntry(d->configGeometryEntry,   (prm.filterGeom));
 }
 
 }  // namespace Digikam

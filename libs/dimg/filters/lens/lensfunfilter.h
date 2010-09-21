@@ -89,19 +89,46 @@ public:
             ret.append("\n");
             ret.append(i18n("Crop Factor: %1",      QString::number(cropFactor)));
             ret.append("\n");
-            ret.append(i18n("CCA Correction: %1",   filterCCA  ? i18n("enabled") : i18n("disabled")));
+            ret.append(i18n("CCA Correction: %1",   filterCCA && supportsCCA() ? i18n("enabled") : i18n("disabled")));
             ret.append("\n");
-            ret.append(i18n("VIG Correction: %1",   filterVig  ? i18n("enabled") : i18n("disabled")));
+            ret.append(i18n("VIG Correction: %1",   filterVig && supportsVig() ? i18n("enabled") : i18n("disabled")));
             ret.append("\n");
-            ret.append(i18n("CCI Correction: %1",   filterCCI  ? i18n("enabled") : i18n("disabled")));
+            ret.append(i18n("CCI Correction: %1",   filterCCI && supportsCCI() ? i18n("enabled") : i18n("disabled")));
             ret.append("\n");
-            ret.append(i18n("DST Correction: %1",   filterDist ? i18n("enabled") : i18n("disabled")));
+            ret.append(i18n("DST Correction: %1",   filterDist && supportsDistortion() ? i18n("enabled") : i18n("disabled")));
             ret.append("\n");
-            ret.append(i18n("GEO Correction: %1",   filterGeom ? i18n("enabled") : i18n("disabled")));
+            ret.append(i18n("GEO Correction: %1",   filterGeom && supportsGeometry() ? i18n("enabled") : i18n("disabled")));
         }
 
         return ret;
     };
+
+    bool supportsDistortion() const
+    {
+        if (!usedLens) return false;
+
+        lfLensCalibDistortion res;
+        return usedLens->InterpolateDistortion(focalLength, res);
+    };
+
+    bool supportsCCA() const
+    {
+        if (!usedLens) return false;
+
+        lfLensCalibTCA res;
+        return usedLens->InterpolateTCA(focalLength, res);
+    };
+
+    bool supportsVig() const
+    {
+        if (!usedLens) return false;
+
+        lfLensCalibVignetting res;
+        return usedLens->InterpolateVignetting(focalLength, aperture, subjectDistance, res);
+    };
+
+    bool supportsGeometry() const { return supportsDistortion(); };
+    bool supportsCCI()      const { return supportsVig();        };
 
 public:
 

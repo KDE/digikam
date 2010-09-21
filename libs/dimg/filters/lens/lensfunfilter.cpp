@@ -135,7 +135,7 @@ void LensFunFilter::filterImage()
     if ( steps < 1 )
     {
         kDebug() << "No LensFun Modifier steps. There is nothing to process...";
-        d->modifier->Destroy();
+        if (d->modifier) d->modifier->Destroy();
         return;
     }
 
@@ -264,7 +264,7 @@ void LensFunFilter::filterImage()
     // clean up
 
     delete [] pos;
-    d->modifier->Destroy();
+    if (d->modifier) d->modifier->Destroy();
 }
 
 bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data, const LensFunContainer settings) const

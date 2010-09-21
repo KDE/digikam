@@ -30,11 +30,12 @@
 
 #include "dmetadata.h"
 #include "lensfunfilter.h"
-#include "lensfuniface.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
+
+class LensFunIface;
 
 class DIGIKAM_EXPORT LensFunCameraSelector : public QWidget
 {
@@ -46,7 +47,7 @@ public:
 
 public:
 
-    LensFunCameraSelector(LensFunIface* iface, QWidget* parent=0);
+    LensFunCameraSelector(QWidget* parent=0);
     virtual ~LensFunCameraSelector();
 
     void enableUseMetadata(bool b);
@@ -54,9 +55,17 @@ public:
     void setUseMetadata(bool b);
     bool useMetadata() const;
 
+    LensFunContainer settings();
+    void             setSettings(const LensFunContainer& settings);
+
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
     /** Special mode used with BQM
      */
     void setPassiveMetadataUsage(bool b);
+
+    LensFunIface* iface() const;
 
     void setDevice(Device&);
 //  Device getDevice();
@@ -74,14 +83,16 @@ protected Q_SLOTS:
     void slotUpdateCombos();
     void slotUpdateLensCombo();
     void slotUseMetadata(bool);
+    void slotCameraSelected();
     void slotLensSelected();
-    void slotFocalChanged(double);
-    void slotApertureChanged(double);
-    void slotDistanceChanged(double);
+    void slotFocalChanged();
+    void slotApertureChanged();
+    void slotDistanceChanged();
 
 private:
 
     void findFromMetadata();
+    void refreshSettingsView(const LensFunContainer& settings);
 
 private:
 
