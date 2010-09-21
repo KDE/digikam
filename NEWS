@@ -26,7 +26,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 229092 : digiKam Scan for New images closes at 90%.
 017 ==> 248943 : Annoying and dangerous number input fields in editor.
 018 ==> 216353 : Make it possible to apply lens correction in batch.
-019 ==> 
+019 ==> 251920 : digiKam should match lenses on Exif.CanonCs.LensType, not ExifCanonCs.Lens.
+020 ==> 
+
 
 
 
