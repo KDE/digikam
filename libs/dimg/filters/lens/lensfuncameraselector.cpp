@@ -251,10 +251,12 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
             d->focal->setEnabled(false);
             d->aperture->setEnabled(false);
             d->distance->setEnabled(false);
+            emit signalLensSettingsChanged();
         }
         else
         {
             findFromMetadata();
+            emit signalLensSettingsChanged();
         }
     }
     else
@@ -448,36 +450,43 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 void LensFunCameraSelector::slotCameraSelected()
 {
     QVariant v                      = d->model->combo()->itemData( d->model->currentIndex() );
-    d->iface->m_settings.usedCamera = v.value<LensFunContainer::DevicePtr>();
+    d->iface->m_settings.usedCamera = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
+                                      v.value<LensFunContainer::DevicePtr>();
 }
 
 void LensFunCameraSelector::slotLensSelected()
 {
     QVariant v                    = d->lens->combo()->itemData( d->lens->currentIndex() );
-    d->iface->m_settings.usedLens = v.value<LensFunContainer::LensPtr>();
+    d->iface->m_settings.usedLens = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
+                                    v.value<LensFunContainer::LensPtr>();
 
     if (d->iface->m_settings.usedLens &&
         d->iface->m_settings.cropFactor <= 0.0) // this should not happen
         d->iface->m_settings.cropFactor = d->iface->m_settings.usedLens->CropFactor;
+    else 
+        d->iface->m_settings.cropFactor = -1.0;
 
     emit signalLensSettingsChanged();
 }
 
 void LensFunCameraSelector::slotFocalChanged()
 {
-    d->iface->m_settings.focalLength = d->metadataUsage->isChecked() ? -1.0 : d->focal->value();
+    d->iface->m_settings.focalLength = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? -1.0 :
+                                       d->focal->value();
     emit signalLensSettingsChanged();
 }
 
 void LensFunCameraSelector::slotApertureChanged()
 {
-    d->iface->m_settings.aperture = d->metadataUsage->isChecked() ? -1.0 : d->aperture->value();
+    d->iface->m_settings.aperture = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? -1.0 :
+                                    d->aperture->value();
     emit signalLensSettingsChanged();
 }
 
 void LensFunCameraSelector::slotDistanceChanged()
 {
-    d->iface->m_settings.subjectDistance = d->metadataUsage->isChecked() ? -1.0 : d->distance->value();
+    d->iface->m_settings.subjectDistance = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? -1.0 :
+                                           d->distance->value();
     emit signalLensSettingsChanged();
 }
 

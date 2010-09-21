@@ -75,7 +75,7 @@ LensFunSettings::LensFunSettings(QWidget* parent)
 {
     QGridLayout* grid = new QGridLayout(this);
 
-    QLabel* title = new QLabel(i18n("Lens Corrections to apply:"));
+    QLabel* title = new QLabel(i18n("Lens Corrections to Apply:"));
     d->filterCCA  = new QCheckBox(i18n("Chromatic Aberration"));
     d->filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognized as color fringes "
                                     "towards the image corners. CA is due to a varying lens focus "

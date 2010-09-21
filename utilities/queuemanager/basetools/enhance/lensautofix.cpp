@@ -68,6 +68,11 @@ LensAutoFix::LensAutoFix(QObject* parent)
     setToolIcon(KIcon(SmallIcon("lensautofix")));
 
     QWidget* box      = new QWidget;
+    QLabel* note      = new QLabel(i18n("<b>Use Metadata</b> option will parse images information at "
+                                        "queue run-time to find relevant lens features."));
+    note->setWordWrap(true);
+    note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+
     d->cameraSelector = new LensFunCameraSelector();
     KSeparator* line  = new KSeparator(Qt::Horizontal);
     d->settingsView   = new LensFunSettings();
@@ -75,10 +80,11 @@ LensAutoFix::LensAutoFix(QObject* parent)
     d->cameraSelector->enableUseMetadata(true);
 
     QGridLayout* grid = new QGridLayout(box);
-    grid->addWidget(d->cameraSelector, 0, 0, 1, 2);
-    grid->addWidget(line,              1, 0, 1, 2);
-    grid->addWidget(d->settingsView,   2, 0, 1, 2);
-    grid->setRowStretch(3, 10);
+    grid->addWidget(note,              0, 0, 1, 2);
+    grid->addWidget(d->cameraSelector, 1, 0, 1, 2);
+    grid->addWidget(line,              2, 0, 1, 2);
+    grid->addWidget(d->settingsView,   3, 0, 1, 2);
+    grid->setRowStretch(4, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
