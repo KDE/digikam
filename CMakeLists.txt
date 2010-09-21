@@ -1137,7 +1137,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/restoration.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/localcontrast.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/blur.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/lensautofix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/sharpen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/noisereduction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/antivignetting.cpp
@@ -1150,6 +1149,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata/removemetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters/filmgrain.cpp
        )
+
+    IF(LENSFUN_LIBRARY)
+        SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/lensautofix.cpp
+           )
+    ENDIF(LENSFUN_LIBRARY)
 
     SET(libcameragui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp

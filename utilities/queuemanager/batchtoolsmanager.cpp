@@ -25,6 +25,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "assigntemplate.h"
 #include "autocorrection.h"
 #include "convert2jp2.h"
@@ -56,7 +57,10 @@
 #include "convert16to8.h"
 #include "border.h"
 #include "removemetadata.h"
+
+#ifdef HAVE_LENSFUN
 #include "lensautofix.h"
+#endif // HAVE_LENSFUN
 
 namespace Digikam
 {
@@ -101,7 +105,9 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Restoration(this));
     registerTool(new LocalContrast(this));
     registerTool(new AntiVignetting(this));
+#ifdef HAVE_LENSFUN
     registerTool(new LensAutoFix(this));
+#endif // HAVE_LENSFUN
 
     // Color
     registerTool(new BCGCorrection(this));
