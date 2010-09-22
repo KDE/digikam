@@ -92,7 +92,7 @@ protected Q_SLOTS:
 private:
 
     void findFromMetadata();
-    void refreshSettingsView(const LensFunContainer& settings);
+    void refreshSettingsView();
 
 private:
 

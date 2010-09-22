@@ -150,11 +150,11 @@ LensAutoFixTool::~LensAutoFixTool()
 
 void LensAutoFixTool::slotLensChanged()
 {
-    d->settingsView->setEnabledCCA(d->cameraSelector->settings().supportsCCA());
-    d->settingsView->setEnabledVig(d->cameraSelector->settings().supportsVig());
-    d->settingsView->setEnabledCCI(d->cameraSelector->settings().supportsVig());
-    d->settingsView->setEnabledDist(d->cameraSelector->settings().supportsDistortion());
-    d->settingsView->setEnabledGeom(d->cameraSelector->settings().supportsDistortion());
+    d->settingsView->setEnabledCCA(d->cameraSelector->iface()->supportsCCA());
+    d->settingsView->setEnabledVig(d->cameraSelector->iface()->supportsVig());
+    d->settingsView->setEnabledCCI(d->cameraSelector->iface()->supportsVig());
+    d->settingsView->setEnabledDist(d->cameraSelector->iface()->supportsDistortion());
+    d->settingsView->setEnabledGeom(d->cameraSelector->iface()->supportsDistortion());
     slotTimer();
 }
 
@@ -194,10 +194,10 @@ void LensAutoFixTool::slotResetSettings()
 void LensAutoFixTool::prepareEffect()
 {
     // Settings information must be get before to disable settings view.
-    LensFunContainer settings;
+    LensFunContainer settings = d->cameraSelector->settings();
     d->settingsView->assignFilterSettings(settings);
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg preview      = iface->getPreviewImg();
+    ImageIface* iface         = d->previewWidget->imageIface();
+    DImg preview              = iface->getPreviewImg();
 
     if (d->showGrid->isChecked())
     {
@@ -224,18 +224,16 @@ void LensAutoFixTool::prepareEffect()
         preview.bitBlendImage(composer, &grid, 0, 0, preview.width(), preview.height(), 0, 0, flags);
     }
 
-    d->cameraSelector->iface()->setFilterSettings(settings);
-    setFilter(new LensFunFilter(&preview, this, d->cameraSelector->iface()));
+    setFilter(new LensFunFilter(&preview, this, settings));
 }
 
 void LensAutoFixTool::prepareFinal()
 {
     // Settings information must be handle before to disable settings view.
-    LensFunContainer settings;
+    LensFunContainer settings = d->cameraSelector->settings();
     d->settingsView->assignFilterSettings(settings);
-    d->cameraSelector->iface()->setFilterSettings(settings);
     ImageIface iface(0, 0);
-    setFilter(new LensFunFilter(iface.getOriginalImg(), this, d->cameraSelector->iface()));
+    setFilter(new LensFunFilter(iface.getOriginalImg(), this, settings));
 }
 
 void LensAutoFixTool::putPreviewData()
@@ -249,7 +247,7 @@ void LensAutoFixTool::putFinalData()
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Lens Auto-Correction"), filter()->getTargetImage().bits());
     Digikam::KExiv2Data data = iface.getOriginalMetadata();
-    dynamic_cast<LensFunFilter*>(filter())->registerSettingsToXmp(data, d->cameraSelector->iface()->settings());
+    dynamic_cast<LensFunFilter*>(filter())->registerSettingsToXmp(data);
     iface.setOriginalMetadata(data);
 }
 

@@ -22,35 +22,20 @@
 #ifndef LENSFUNFILTER_H
 #define LENSFUNFILTER_H
 
-// Lib LensFun includes
-
-extern "C"
-{
-#include <lensfun.h>
-}
-
 // KDE includes
 
 #include <klocale.h>
 
 // Local includes
 
-#include "dmetadata.h"
 #include "dimgthreadedfilter.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class LensFunIface;
-
 class DIGIKAM_EXPORT LensFunContainer
 {
-public:
-
-    typedef const lfCamera* DevicePtr;
-    typedef const lfLens*   LensPtr;
-    typedef QList<LensPtr>  LensList;
 
 public:
 
@@ -61,74 +46,16 @@ public:
         filterCCI       = true;
         filterDist      = true;
         filterGeom      = true;
-        usedCamera      = 0;
-        usedLens        = 0;
         focalLength     = -1.0;
         aperture        = -1.0;
         subjectDistance = -1.0;
         cropFactor      = -1.0;
+        cameraMake      = QString();
+        cameraModel     = QString();
+        lensModel       = QString();
     };
 
     ~LensFunContainer(){};
-
-    QString asCommentString() const
-    {
-        QString ret;
-
-        if (usedCamera && usedLens)
-        {
-            ret.append(i18n("Camera: %1-%2",        usedCamera->Maker, usedCamera->Model));
-            ret.append("\n");
-            ret.append(i18n("Lens: %1",             usedLens->Model));
-            ret.append("\n");
-            ret.append(i18n("Subject Distance: %1", QString::number(subjectDistance)));
-            ret.append("\n");
-            ret.append(i18n("Aperture: %1",         QString::number(aperture)));
-            ret.append("\n");
-            ret.append(i18n("Focal Length: %1",     QString::number(focalLength)));
-            ret.append("\n");
-            ret.append(i18n("Crop Factor: %1",      QString::number(cropFactor)));
-            ret.append("\n");
-            ret.append(i18n("CCA Correction: %1",   filterCCA && supportsCCA() ? i18n("enabled") : i18n("disabled")));
-            ret.append("\n");
-            ret.append(i18n("VIG Correction: %1",   filterVig && supportsVig() ? i18n("enabled") : i18n("disabled")));
-            ret.append("\n");
-            ret.append(i18n("CCI Correction: %1",   filterCCI && supportsCCI() ? i18n("enabled") : i18n("disabled")));
-            ret.append("\n");
-            ret.append(i18n("DST Correction: %1",   filterDist && supportsDistortion() ? i18n("enabled") : i18n("disabled")));
-            ret.append("\n");
-            ret.append(i18n("GEO Correction: %1",   filterGeom && supportsGeometry() ? i18n("enabled") : i18n("disabled")));
-        }
-
-        return ret;
-    };
-
-    bool supportsDistortion() const
-    {
-        if (!usedLens) return false;
-
-        lfLensCalibDistortion res;
-        return usedLens->InterpolateDistortion(focalLength, res);
-    };
-
-    bool supportsCCA() const
-    {
-        if (!usedLens) return false;
-
-        lfLensCalibTCA res;
-        return usedLens->InterpolateTCA(focalLength, res);
-    };
-
-    bool supportsVig() const
-    {
-        if (!usedLens) return false;
-
-        lfLensCalibVignetting res;
-        return usedLens->InterpolateVignetting(focalLength, aperture, subjectDistance, res);
-    };
-
-    bool supportsGeometry() const { return supportsDistortion(); };
-    bool supportsCCI()      const { return supportsVig();        };
 
 public:
 
@@ -143,8 +70,9 @@ public:
     double    aperture;
     double    subjectDistance;
 
-    DevicePtr usedCamera;
-    LensPtr   usedLens;
+    QString   cameraMake;
+    QString   cameraModel;
+    QString   lensModel;
 };
 
 class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
@@ -152,10 +80,10 @@ class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
 
 public:
 
-    LensFunFilter(DImg* origImage, QObject* parent, LensFunIface* iface);
+    LensFunFilter(DImg* origImage, QObject* parent, const LensFunContainer& settings);
     ~LensFunFilter();
 
-    bool registerSettingsToXmp(KExiv2Data& data, const LensFunContainer settings) const;
+    bool registerSettingsToXmp(KExiv2Data& data) const;
 
 private:
 
@@ -168,8 +96,5 @@ private:
 };
 
 }  // namespace Digikam
-
-Q_DECLARE_METATYPE( Digikam::LensFunContainer::DevicePtr )
-Q_DECLARE_METATYPE( Digikam::LensFunContainer::LensPtr )
 
 #endif /* LENSFUNFILTER_H */

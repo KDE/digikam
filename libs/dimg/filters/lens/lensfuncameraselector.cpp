@@ -199,7 +199,7 @@ void LensFunCameraSelector::setSettings(const LensFunContainer& settings)
 {
     blockSignals(true);
     d->iface->setSettings(settings);
-    refreshSettingsView(d->iface->m_settings);
+    refreshSettingsView();
     blockSignals(false);
 }
 
@@ -287,20 +287,17 @@ void LensFunCameraSelector::findFromMetadata()
         enableUseMetadata(true);
     }
 
-    LensFunContainer settings;
-    d->iface->findFromMetadata(d->metadata, settings);
-    refreshSettingsView(settings);
+    d->iface->findFromMetadata(d->metadata);
+    refreshSettingsView();
 }
 
-void LensFunCameraSelector::refreshSettingsView(const LensFunContainer& settings)
+void LensFunCameraSelector::refreshSettingsView()
 {
-    QString makeLF;
-    int     makerIdx = -1;
+    int makerIdx = -1;
 
-    if (settings.usedCamera)
+    if (d->iface->m_usedCamera)
     {
-        makeLF   = settings.usedCamera->Maker;
-        makerIdx = d->make->combo()->findText(makeLF);
+        makerIdx = d->make->combo()->findText(d->iface->m_settings.cameraMake);
     }
 
     if (makerIdx >= 0)
@@ -312,13 +309,11 @@ void LensFunCameraSelector::refreshSettingsView(const LensFunContainer& settings
 
     // ------------------------------------------------------------------------------------------------
 
-    QString modelLF;
-    int     modelIdx = -1;
+    int modelIdx = -1;
 
-    if (settings.usedCamera)
+    if (d->iface->m_usedCamera)
     {
-        modelLF  = settings.usedCamera->Model;
-        modelIdx = d->model->combo()->findText(modelLF);
+        modelIdx = d->model->combo()->findText(d->iface->m_settings.cameraModel);
     }
 
     if (modelIdx >= 0)
@@ -330,13 +325,11 @@ void LensFunCameraSelector::refreshSettingsView(const LensFunContainer& settings
 
     // ------------------------------------------------------------------------------------------------
 
-    QString lensLF;
-    int     lensIdx = -1;
+    int lensIdx = -1;
 
-    if (settings.usedLens)
+    if (d->iface->m_usedLens)
     {
-        lensLF  = settings.usedLens->Model;
-        lensIdx = d->lens->combo()->findText(lensLF);
+        lensIdx = d->lens->combo()->findText(d->iface->m_settings.lensModel);
     }
 
     if (lensIdx >= 0)
@@ -348,21 +341,21 @@ void LensFunCameraSelector::refreshSettingsView(const LensFunContainer& settings
 
     // ------------------------------------------------------------------------------------------------
 
-    if (settings.focalLength != -1.0)
+    if (d->iface->m_settings.focalLength != -1.0)
     {
-        d->focal->setValue(settings.focalLength);
+        d->focal->setValue(d->iface->m_settings.focalLength);
         d->focal->setEnabled(d->passiveMetadataUsage);
     }
 
-    if (settings.aperture != -1.0)
+    if (d->iface->m_settings.aperture != -1.0)
     {
-        d->aperture->setValue(settings.aperture);
+        d->aperture->setValue(d->iface->m_settings.aperture);
         d->aperture->setEnabled(d->passiveMetadataUsage);
     }
 
-    if (settings.subjectDistance != -1.0)
+    if (d->iface->m_settings.subjectDistance != -1.0)
     {
-        d->distance->setValue(settings.subjectDistance);
+        d->distance->setValue(d->iface->m_settings.subjectDistance);
         d->distance->setEnabled(d->passiveMetadataUsage);
     }
 }
@@ -394,8 +387,8 @@ void LensFunCameraSelector::slotUpdateCombos()
        // Fill models for current selected maker
        if ( (*it)->Model && (*it)->Maker == d->make->combo()->currentText() )
        {
-            LensFunContainer::DevicePtr dev = *it;
-            QVariant b                      = qVariantFromValue(dev);
+            LensFunIface::DevicePtr dev = *it;
+            QVariant b                  = qVariantFromValue(dev);
             d->model->combo()->addItem( dev->Model, b );
        }
 
@@ -422,7 +415,7 @@ void LensFunCameraSelector::slotUpdateLensCombo()
     }
     kDebug() << "variant: " << v;
 
-    LensFunContainer::DevicePtr dev = v.value<LensFunContainer::DevicePtr>();
+    LensFunIface::DevicePtr dev = v.value<LensFunIface::DevicePtr>();
     if (!dev)
     {
         kDebug() << "Device is null!";
@@ -436,8 +429,8 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 
     while (lenses && *lenses)
     {
-        LensFunContainer::LensPtr lens = *lenses;
-        QVariant b                     = qVariantFromValue(lens);
+        LensFunIface::LensPtr lens = *lenses;
+        QVariant b                 = qVariantFromValue(lens);
         d->lens->combo()->addItem(lens->Model, b);
         ++lenses;
     }
@@ -449,20 +442,20 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 
 void LensFunCameraSelector::slotCameraSelected()
 {
-    QVariant v                      = d->model->combo()->itemData( d->model->currentIndex() );
-    d->iface->m_settings.usedCamera = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
-                                      v.value<LensFunContainer::DevicePtr>();
+    QVariant v             = d->model->combo()->itemData( d->model->currentIndex() );
+    d->iface->m_usedCamera = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
+                             v.value<LensFunIface::DevicePtr>();
 }
 
 void LensFunCameraSelector::slotLensSelected()
 {
-    QVariant v                    = d->lens->combo()->itemData( d->lens->currentIndex() );
-    d->iface->m_settings.usedLens = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
-                                    v.value<LensFunContainer::LensPtr>();
+    QVariant v           = d->lens->combo()->itemData( d->lens->currentIndex() );
+    d->iface->m_usedLens = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
+                           v.value<LensFunIface::LensPtr>();
 
-    if (d->iface->m_settings.usedLens &&
+    if (d->iface->m_usedLens &&
         d->iface->m_settings.cropFactor <= 0.0) // this should not happen
-        d->iface->m_settings.cropFactor = d->iface->m_settings.usedLens->CropFactor;
+        d->iface->m_settings.cropFactor = d->iface->m_usedLens->CropFactor;
     else 
         d->iface->m_settings.cropFactor = -1.0;
 

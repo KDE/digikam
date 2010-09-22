@@ -51,17 +51,15 @@ int main (int argc, char** argv)
     DImg             img(filePath);
     DMetadata        meta(img.getMetadata());
     LensFunIface     iface;
-    LensFunContainer settings;
-    bool ret = iface.findFromMetadata(meta, settings);
+    bool ret = iface.findFromMetadata(meta);
     if (ret)
     {
-        iface.setSettings(settings);
-        LensFunFilter filter(&img, 0L, &iface);
+        LensFunFilter filter(&img, 0L, iface.settings());
         filter.startFilterDirectly();
         img.putImageData(filter.getTargetImage().bits());
 
         Digikam::KExiv2Data data = img.getMetadata();
-        filter.registerSettingsToXmp(data, settings);
+        filter.registerSettingsToXmp(data);
         img.setMetadata(data);
         return img.save("lensfuniface-output.png", "PNG");
     }

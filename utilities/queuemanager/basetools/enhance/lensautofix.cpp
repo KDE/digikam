@@ -140,12 +140,9 @@ void LensAutoFix::slotAssignSettings2Widget()
     lfPrm.aperture        = settings()["aperture"].toDouble();
     lfPrm.subjectDistance = settings()["subjectDistance"].toDouble();
 
-    QString cameraMake    = settings()["cameraMake"].toString();
-    QString cameraModel   = settings()["cameraModel"].toString();
-    QString lensModel     = settings()["lensModel"].toString();
-
-    lfPrm.usedCamera      = d->cameraSelector->iface()->findCamera(cameraMake, cameraModel);
-    lfPrm.usedLens        = d->cameraSelector->iface()->findLens(lensModel);
+    lfPrm.cameraMake      = settings()["cameraMake"].toString();
+    lfPrm.cameraModel     = settings()["cameraModel"].toString();
+    lfPrm.lensModel       = settings()["lensModel"].toString();
 
     d->cameraSelector->setSettings(lfPrm);
 }
@@ -153,11 +150,11 @@ void LensAutoFix::slotAssignSettings2Widget()
 void LensAutoFix::slotSettingsChanged()
 {
     // Update checkbox options about Lens corrections available.
-    d->settingsView->setEnabledCCA(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->settings().supportsCCA());
-    d->settingsView->setEnabledVig(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->settings().supportsVig());
-    d->settingsView->setEnabledCCI(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->settings().supportsVig());
-    d->settingsView->setEnabledDist(d->cameraSelector->useMetadata() ? true : d->cameraSelector->settings().supportsDistortion());
-    d->settingsView->setEnabledGeom(d->cameraSelector->useMetadata() ? true : d->cameraSelector->settings().supportsDistortion());
+    d->settingsView->setEnabledCCA(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->iface()->supportsCCA());
+    d->settingsView->setEnabledVig(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->iface()->supportsVig());
+    d->settingsView->setEnabledCCI(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->iface()->supportsVig());
+    d->settingsView->setEnabledDist(d->cameraSelector->useMetadata() ? true : d->cameraSelector->iface()->supportsDistortion());
+    d->settingsView->setEnabledGeom(d->cameraSelector->useMetadata() ? true : d->cameraSelector->iface()->supportsDistortion());
 
     BatchToolSettings prm;
     LensFunContainer  settings = d->cameraSelector->settings();
@@ -175,9 +172,9 @@ void LensAutoFix::slotSettingsChanged()
     prm.insert("aperture",        (double)settings.aperture);
     prm.insert("subjectDistance", (double)settings.subjectDistance);
 
-    prm.insert("cameraMake",      settings.usedCamera ? settings.usedCamera->Maker : QString());
-    prm.insert("cameraModel",     settings.usedCamera ? settings.usedCamera->Model : QString());
-    prm.insert("lensModel",       settings.usedLens ?   settings.usedLens->Model   : QString());
+    prm.insert("cameraMake",      settings.cameraMake);
+    prm.insert("cameraModel",     settings.cameraModel);
+    prm.insert("lensModel",       settings.lensModel);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -187,14 +184,15 @@ bool LensAutoFix::toolOperations()
     if (!loadToDImg())
         return false;
 
-    LensFunIface     iface;
     LensFunContainer prm;
 
     bool useMeta = settings()["UseMetadata"].toBool();
     if (useMeta)
     {
-        DMetadata meta(image().getMetadata());
-        bool      ret = iface.findFromMetadata(meta, prm);
+        LensFunIface iface;
+        DMetadata    meta(image().getMetadata());
+        bool         ret = iface.findFromMetadata(meta);
+        prm = iface.settings();
         if (!ret) return false;
     }
     else
@@ -213,17 +211,13 @@ bool LensAutoFix::toolOperations()
         QString cameraMake  = settings()["cameraMake"].toString();
         QString cameraModel = settings()["cameraModel"].toString();
         QString lensModel   = settings()["lensModel"].toString();
-
-        prm.usedCamera      = iface.findCamera(cameraMake, cameraModel);
-        prm.usedLens        = iface.findLens(lensModel);
     }
 
-    iface.setSettings(prm);
-    LensFunFilter filter(&image(), 0L, &iface);
+    LensFunFilter filter(&image(), 0L, prm);
     filter.startFilterDirectly();
     image().putImageData(filter.getTargetImage().bits());
     KExiv2Data data = image().getMetadata();
-    filter.registerSettingsToXmp(data, iface.settings());
+    filter.registerSettingsToXmp(data);
     image().setMetadata(data);
     return savefromDImg();
 }

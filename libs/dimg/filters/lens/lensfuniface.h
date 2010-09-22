@@ -22,6 +22,13 @@
 #ifndef LENSFUNIFACE_H
 #define LENSFUNIFACE_H
 
+// Lib LensFun includes
+
+extern "C"
+{
+#include <lensfun.h>
+}
+
 // local includes
 
 #include "dmetadata.h"
@@ -40,6 +47,10 @@ class DIGIKAM_EXPORT LensFunIface
     correctionData getCorrectionData();
 */
 
+    typedef const lfCamera* DevicePtr;
+    typedef const lfLens*   LensPtr;
+    typedef QList<LensPtr>  LensList;
+
 public:
 
     LensFunIface();
@@ -50,10 +61,16 @@ public:
     void setSettings(const LensFunContainer& other);
     LensFunContainer settings() const;
 
-    LensFunContainer::DevicePtr findCamera(const QString& make, const QString& model) const;
-    LensFunContainer::LensPtr   findLens(const QString& model) const;
+    DevicePtr findCamera(const QString& make, const QString& model) const;
+    LensPtr   findLens(const QString& model) const;
 
-    bool findFromMetadata(const DMetadata& meta, LensFunContainer& settings) const;
+    bool findFromMetadata(const DMetadata& meta);
+
+    bool supportsDistortion() const;
+    bool supportsCCA()        const;
+    bool supportsVig()        const;
+    bool supportsGeometry()   const;
+    bool supportsCCI()        const;
 
 protected:
 
@@ -61,8 +78,8 @@ protected:
 
 private:
 
-    LensFunContainer::LensList findLenses(const lfCamera* camera, const QString& lensDesc,
-                                          const QString& lensMaker=QString()) const;
+    LensList findLenses(const lfCamera* camera, const QString& lensDesc,
+                        const QString& lensMaker=QString()) const;
 
 private:
 
@@ -75,6 +92,9 @@ private:
     const lfCamera* const* m_lfCameras;
     const lfLens**         m_lfLenses;
 
+    DevicePtr              m_usedCamera;
+    LensPtr                m_usedLens;
+
     // To be used for modification
     LensFunContainer       m_settings;
 
@@ -83,5 +103,8 @@ private:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE( Digikam::LensFunIface::DevicePtr )
+Q_DECLARE_METATYPE( Digikam::LensFunIface::LensPtr )
 
 #endif /* LENSFUNIFACE_H */
