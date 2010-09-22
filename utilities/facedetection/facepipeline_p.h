@@ -271,7 +271,7 @@ public:
     RecognitionWorker* recognitionWorker;
     DatabaseWriter*    databaseWriter;
 
-    FaceIface          iface;
+    FaceIface         *iface;
     bool               started;
     int                infosForFiltering;
     int                packagesOnTheRoad;

@@ -44,6 +44,8 @@
 namespace Digikam
 {
 
+class FaceIface;
+
 class FacePipelinePackage
 {
 public:
@@ -151,6 +153,8 @@ public Q_SLOTS:
      * Some of the signals below will be emitted in any case.
      */
     void process(const QList<ImageInfo>& infos);
+
+    void setDetectionAccuracy(int accuracy);
 
 Q_SIGNALS:
 

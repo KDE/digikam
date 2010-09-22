@@ -107,7 +107,7 @@ bool ScanStateFilter::filter(const ImageInfo& info)
     if (mode == FacePipeline::SkipAlreadyScanned)
     {
         // Is iface thread-safe? Officially, not, but this method is.
-        if (d->iface.hasBeenScanned(info))
+        if (d->iface->hasBeenScanned(info))
             return false;
         //TODO: check if any records should be removed from db (unconfirmed faces)
         return true;
@@ -273,17 +273,8 @@ DetectionWorker::DetectionWorker(FacePipeline::FacePipelinePriv* d)
 
 void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    package->detectionImage = package->image;
-    if (qMax(package->image.width(), package->image.height()) > (uint)KFaceIface::Image::recommendedSizeForDetection())
-    {
-        package->detectionImage = package->image.smoothScale(KFaceIface::Image::recommendedSizeForDetection(),
-                                                             KFaceIface::Image::recommendedSizeForDetection(),
-                                                             Qt::KeepAspectRatio);
-    }
-
-    KFaceIface::Image image(package->detectionImage.width(), package->detectionImage.height(),
-                            package->detectionImage.sixteenBit(), package->detectionImage.hasAlpha(),
-                            package->detectionImage.bits());
+    //package->detectionImage = FaceIface::scaleForDetection(package->image);
+    KFaceIface::Image image = FaceIface::toImage(package->image);//detectionImage);
 
     package->faces = detector.detectFaces(image);
 
@@ -313,7 +304,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
     if ( !(package->processFlags & FacePipelinePackage::ProcessedByDetector)
        && !package->info.isNull())
     {
-        package->faces = d->iface.findUnconfirmedFacesFromTags(package->image, package->info.id());
+        package->faces = d->iface->unconfirmedFacesFromTags(package->info.id());
     }
 
     QList<double> distances = database.recognizeFaces(package->faces);
@@ -346,10 +337,10 @@ DatabaseWriter::DatabaseWriter(FacePipeline::FacePipelinePriv* d)
 
 void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 {
-    d->iface.markAsScanned(package->info);
+    d->iface->markAsScanned(package->info);
     if (!package->info.isNull() && !package->faces.isEmpty())
     {
-        d->iface.writeUnconfirmedResults(package->detectionImage, package->info.id(), package->faces);
+        d->iface->writeUnconfirmedResults(package->detectionImage, package->info.id(), package->faces);
     }
     package->processFlags |= FacePipelinePackage::WrittenToDatabase;
     emit processed(package);
@@ -366,6 +357,7 @@ FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline *q)
     parallelDetectors    = 0;
     recognitionWorker    = 0;
     databaseWriter       = 0;
+    iface                = 0;
 
     started              = false;
     infosForFiltering    = 0;
@@ -485,6 +477,8 @@ void FacePipeline::FacePipelinePriv::stop()
 FacePipeline::FacePipeline()
             : d(new FacePipelinePriv(this))
 {
+    d->iface = new FaceIface;
+
     qRegisterMetaType<FacePipelineExtendedPackage::Ptr>("FacePipelineExtendedPackage::Ptr");
 }
 
@@ -496,6 +490,7 @@ FacePipeline::~FacePipeline()
     delete d->parallelDetectors;
     delete d->recognitionWorker;
     delete d->databaseWriter;
+    delete d->iface;
     delete d;
 }
 
@@ -630,6 +625,11 @@ bool FacePipeline::process(const ImageInfo& info, const DImg& image)
 void FacePipeline::process(const QList<ImageInfo>& infos)
 {
     d->processBatch(infos);
+}
+
+void FacePipeline::setDetectionAccuracy(int accuracy)
+{
+    emit d->accuracyChanged(accuracy);
 }
 
 } // namespace Digikam
