@@ -163,6 +163,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
     {
         layout->addWidget(comboBox,  0, 0);
         layout->addWidget(buttonBox, 0, 1);
+        layout->setColumnStretch(0, 1);
     }
     else
     {

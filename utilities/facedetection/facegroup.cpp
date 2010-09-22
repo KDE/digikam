@@ -59,6 +59,44 @@ enum FaceGroupState
     FacesLoaded
 };
 
+class FaceItem : public RegionFrameItem
+{
+public:
+
+    FaceItem(QGraphicsItem *parent = 0)
+        : RegionFrameItem(parent),
+          m_widget(0)
+    {
+    }
+
+
+    void setFace(const DatabaseFace& face)
+    {
+        m_face = face;
+    }
+
+    DatabaseFace face() const
+    {
+        return m_face;
+    }
+
+    void setHudWidget(AssignNameWidget *widget)
+    {
+        m_widget = widget;
+        RegionFrameItem::setHudWidget(widget);
+    }
+
+    AssignNameWidget *widget() const
+    {
+        return m_widget;
+    }
+
+protected:
+
+    AssignNameWidget *m_widget;
+    DatabaseFace      m_face;
+};
+
 class FaceGroup::FaceGroupPriv
 {
 public:
@@ -77,8 +115,7 @@ public:
     ImageInfo                info;
     bool                     autoSuggest;
 
-    QList<RegionFrameItem*>  items;
-    QList<DatabaseFace>      faces;
+    QList<FaceItem*>         items;
 
     FaceGroupState           state;
     ItemVisibilityController*visibilityController;
@@ -92,8 +129,9 @@ public:
     FaceGroup* const         q;
 
     void                     transitionToVisible(bool visible);
-    RegionFrameItem         *createItem(const DatabaseFace &face);
+    FaceItem                *createItem(const DatabaseFace &face);
     AssignNameWidget        *createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier);
+    AssignNameWidget::Mode   assignWidgetMode(DatabaseFace::Type type);
     void                     checkModels();
 };
 
@@ -140,7 +178,10 @@ ImageInfo FaceGroup::info() const
 
 QList<RegionFrameItem*> FaceGroup::items() const
 {
-    return d->items;
+    QList<RegionFrameItem*> items;
+    foreach (FaceItem *item, d->items)
+        items << item;
+    return items;
 }
 
 void FaceGroup::setAutoSuggest(bool doAutoSuggest)
@@ -236,9 +277,10 @@ RegionFrameItem *FaceGroup::closestItem(const QPointF& p, qreal *manhattanLength
     return closestItem;
 }
 
-RegionFrameItem *FaceGroup::FaceGroupPriv::createItem(const DatabaseFace &face)
+FaceItem *FaceGroup::FaceGroupPriv::createItem(const DatabaseFace &face)
 {
-    RegionFrameItem* item = new RegionFrameItem(view->previewItem());
+    FaceItem* item = new FaceItem(view->previewItem());
+    item->setFace(face);
     item->setOriginalRect(face.region().toRect());
     item->setVisible(false);
 
@@ -260,23 +302,25 @@ void FaceGroup::FaceGroupPriv::checkModels()
     }
 }
 
+AssignNameWidget::Mode FaceGroup::FaceGroupPriv::assignWidgetMode(DatabaseFace::Type type)
+{
+    switch (type)
+    {
+        case DatabaseFace::UnknownName:
+            return AssignNameWidget::UnknownName;
+        case DatabaseFace::UnconfirmedName:
+            return AssignNameWidget::UnconfirmedName;
+        case DatabaseFace::ConfirmedName:
+            return AssignNameWidget::ConfirmedName;
+        default:
+            return AssignNameWidget::InvalidMode;
+    }
+}
+
 AssignNameWidget *FaceGroup::FaceGroupPriv::createAssignNameWidget(const DatabaseFace &face, const QVariant& identifier)
 {
     AssignNameWidget *assignWidget = new AssignNameWidget;
-    switch (face.type())
-    {
-        case DatabaseFace::UnknownName:
-            assignWidget->setMode(AssignNameWidget::UnknownName);
-            break;
-        case DatabaseFace::UnconfirmedName:
-            assignWidget->setMode(AssignNameWidget::UnconfirmedName);
-            break;
-        case DatabaseFace::ConfirmedName:
-            assignWidget->setMode(AssignNameWidget::ConfirmedName);
-            break;
-        default:
-            return 0;
-    }
+    assignWidget->setMode(assignWidgetMode(face.type()));
     assignWidget->setBackgroundStyle(AssignNameWidget::TransparentRound);
     assignWidget->setLayoutMode(AssignNameWidget::FullLine);
     assignWidget->setFace(info, identifier);
@@ -305,16 +349,16 @@ void FaceGroup::load()
         return;
     }
 
-    d->faces = d->faceIface.databaseFaces(d->info.id());
+    QList<DatabaseFace> faces = d->faceIface.databaseFaces(d->info.id());
 
-    foreach (const DatabaseFace &face, d->faces)
+    foreach (const DatabaseFace &face, faces)
     {
-        RegionFrameItem *item = d->createItem(face);
+        FaceItem *item = d->createItem(face);
 
         // for identification, use index in our list
         AssignNameWidget *assignWidget = d->createAssignNameWidget(face, d->items.size());
         item->setHudWidget(assignWidget);
-        new StyleSheetDebugger(assignWidget);
+        //new StyleSheetDebugger(assignWidget);
 
         d->visibilityController->addItem(item);
 
@@ -355,36 +399,22 @@ void FaceGroup::rejectAll()
 void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
 {
     kDebug() << action.tagId() << info.id() << faceIdentifier;
-
-    /*    for(int i = 0; i < d->currentFaces.size(); ++i)
-    {
-        if(d->currentFaces[i].toRect() == rect)
-        {
-            d->currentFaces[i].setName(name);
-            break;
-        }
-    }
-
-    d->faceIface->confirmName(getImageInfo().id(), rect, name);
-    */
+    int tagId = action.tagId();
+    FaceItem *item = d->items[faceIdentifier.toInt()];
+    DatabaseFace face = item->face();
+    QRect currentRect = item->originalRect();
+    face = d->faceIface.confirmName(d->info.id(), tagId, currentRect, face.region().toRect());
+    item->widget()->setMode(d->assignWidgetMode(face.type()));
+    //item->widget()->setCurrentTag(face.tagId())
+    item->setFace(face);
 }
 
 void FaceGroup::slotRejected(const ImageInfo& info, const QVariant& faceIdentifier)
 {
     kDebug() << info.id() << faceIdentifier;
-    /*
-    for(int i = 0; i < d->currentFaces.size(); ++i)
-    {
-        if(d->currentFaces[i].toRect() == rect)
-        {
-            d->currentFaces.removeAt(i);
-            d->faceitems.removeAt(i);
-            break;
-        }
-    }
-
-    d->faceIface->removeFace(getImageInfo().id(), rect);
-    */
+    FaceItem *item = d->items.takeAt(faceIdentifier.toInt());
+    d->faceIface.removeFace(item->face());
+    delete item;
 }
 
 void FaceGroup::startAutoSuggest()

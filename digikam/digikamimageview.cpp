@@ -431,7 +431,7 @@ void DigikamImageView::assignTag(const QModelIndex& index, const QString& name)
     ImageInfo info = ImageModel::retrieveImageInfo(index);
     QRect rect = d->faceDelegate->faceRect(index);
     kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << rect;
-    d->faceiface->confirmName(info.id(), rect, name);
+    d->faceiface->confirmName(info.id(), name, rect);
     info.setVisible(false);
     info.setVisible(true);
 }
