@@ -134,6 +134,14 @@ void ItemVisibilityController::setItem(QObject *object)
         return;
     }
 
+    if (!object && !d->items.isEmpty())
+    {
+        disconnect(d->items.first(), SIGNAL(destroyed(QObject*)),
+                   this, SLOT(objectDestroyed(QObject*)));
+        clear();
+        return;
+    }
+
     if (!d->propertyAnimation())
     {
         d->animation = d->createAnimation();
@@ -141,8 +149,11 @@ void ItemVisibilityController::setItem(QObject *object)
 
     d->propertyAnimation()->setTargetObject(object);
 
-    d->syncProperties(object);
+    connect(object, SIGNAL(destroyed(QObject*)),
+            this, SLOT(objectDestroyed(QObject*)));
     d->items << object;
+
+    d->syncProperties(object);
 }
 
 void ItemVisibilityController::addItem(QObject *object)
@@ -152,6 +163,9 @@ void ItemVisibilityController::addItem(QObject *object)
         setItem(object);
         return;
     }
+
+    if (!object)
+        return;
 
     if (!d->animationGroup())
     {
@@ -163,10 +177,33 @@ void ItemVisibilityController::addItem(QObject *object)
 
     QPropertyAnimation* anim = d->createAnimation();
     anim->setTargetObject(object);
+
+    connect(object, SIGNAL(destroyed(QObject*)),
+            this, SLOT(objectDestroyed(QObject*)));
+    d->items << object;
     d->animationGroup()->addAnimation(anim);
 
     d->syncProperties(object);
-    d->items << object;
+}
+
+void ItemVisibilityController::removeItem(QObject *object)
+{
+    if (d->type == SingleItem && !d->items.isEmpty() && d->items.first() == object)
+    {
+        return;
+        setItem(0);
+    }
+
+    if (!object)
+        return;
+
+    int index = d->items.indexOf(object);
+    if (index == -1)
+        return;
+    d->items.removeAt(index);
+    delete d->animationGroup()->takeAnimation(index);
+    disconnect(object, SIGNAL(destroyed(QObject*)),
+               this, SLOT(objectDestroyed(QObject*)));
 }
 
 void ItemVisibilityController::clear()
@@ -181,6 +218,7 @@ void ItemVisibilityController::clear()
         delete d->animation;
         d->animation = 0;
     }
+    d->items.clear();
     d->state   = Hidden;
     d->visible = false;
 }
@@ -295,6 +333,11 @@ void ItemVisibilityController::animationFinished()
     {
         d->state = Visible;
     }
+}
+
+void ItemVisibilityController::objectDestroyed(QObject* item)
+{
+    removeItem(item);
 }
 
 

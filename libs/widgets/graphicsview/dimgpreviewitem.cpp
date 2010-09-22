@@ -132,6 +132,7 @@ void DImgPreviewItem::setPath(const QString& path)
     if (d->path.isNull())
     {
         d->state = NoImage;
+        emit stateChanged(d->state);
     }
     else
     {
@@ -139,13 +140,12 @@ void DImgPreviewItem::setPath(const QString& path)
         if (d->loadFullImageSize)
         {
             d->previewThread->loadHighQuality(d->path, d->exifRotate);
-            emit this->loadedWithSize(true);
         }
         else
         {
             d->previewThread->load(d->path, d->previewSize, d->exifRotate);
-            emit this->loadedWithSize(false);
         }
+        emit stateChanged(d->state);
     }
 }
 
@@ -238,11 +238,13 @@ void DImgPreviewItem::slotGotImagePreview(const LoadingDescription& description,
     if (image.isNull())
     {
         d->state = ImageLoadingFailed;
+        emit stateChanged(d->state);
         emit loadingFailed();
     }
     else
     {
         d->state = ImageLoaded;
+        emit stateChanged(d->state);
         emit loaded();
     }
 }

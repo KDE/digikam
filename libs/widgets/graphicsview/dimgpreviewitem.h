@@ -77,9 +77,9 @@ public:
 
 Q_SIGNALS:
 
+    void stateChanged(int state);
     void loaded();
     void loadingFailed();
-    void loadedWithSize(bool fullSize);
 
 private Q_SLOTS:
 

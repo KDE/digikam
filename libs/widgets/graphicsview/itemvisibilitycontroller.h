@@ -95,6 +95,7 @@ public:
     void setItem(QObject *object);
     /// Call this for ItemGroup animations
     void addItem(QObject *object);
+    void removeItem(QObject *object);
 
     bool  shallBeShown() const;
     bool  isVisible() const;
@@ -121,6 +122,7 @@ public Q_SLOTS:
 protected Q_SLOTS:
 
     void animationFinished();
+    void objectDestroyed(QObject *);
 
 public: // internal
 

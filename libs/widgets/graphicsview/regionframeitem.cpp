@@ -408,8 +408,10 @@ void RegionFrameItem::setHudWidget(QWidget *widget, Qt::WindowFlags wFlags)
     QWidget *container = new QWidget;
     container->setAttribute(Qt::WA_TranslucentBackground);
     QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(QMargins());
     layout->addWidget(widget);
     container->setLayout(layout);
+    container->resize(container->sizeHint());
     proxy->setWidget(container);
     setHudWidget(proxy);
 }
