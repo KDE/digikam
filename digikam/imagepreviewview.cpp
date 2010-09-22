@@ -44,6 +44,7 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
+#include <ktoggleaction.h>
 
 // LibKIPI includes
 
@@ -59,6 +60,7 @@
 #include "dimg.h"
 #include "dimgpreviewitem.h"
 #include "dpopupmenu.h"
+#include "facegroup.h"
 #include "imageinfo.h"
 #include "metadatamanager.h"
 #include "metadatasettings.h"
@@ -138,7 +140,7 @@ public:
         peopleToggleAction   = 0;
         addPersonAction      = 0;
 
-        faceIface            = new FaceIface;
+        faceGroup            = 0;
     }
 
     bool                  peopleTagsShown;
@@ -152,7 +154,7 @@ public:
     QAction*              nextAction;
     QAction*              rotLeftAction;
     QAction*              rotRightAction;
-    QAction*              peopleToggleAction;
+    KToggleAction*        peopleToggleAction;
     QAction*              addPersonAction;
     QAction*              forgetFacesAction;
 
@@ -163,7 +165,7 @@ public:
     QList<FaceItem* >     faceitems;
     QList<Face>           currentFaces;
 
-    FaceIface*            faceIface;
+    FaceGroup*            faceGroup;
 
     DImg                  cachedFullImg;
 };
@@ -179,18 +181,15 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
 
     connect(d->item, SIGNAL(loadingFailed()),
             this, SLOT(imageLoadingFailed()));
-    
-    connect(d->item, SIGNAL(loadedWithSize(bool)),
-            this, SLOT(imageLoadedWithSize(bool)) );
-
-    installPanIcon();
 
     // ------------------------------------------------------------
+
+    installPanIcon();
 
     d->stack = parent;
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    clearFaceItems();
+    d->faceGroup = new FaceGroup(this);
 
     // ------------------------------------------------------------
 
@@ -199,10 +198,11 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
     d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),     this);
     d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),    this);
     d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"),   this);
-    d->peopleToggleAction = new QAction(SmallIcon("user-identity"),       i18n("Show Face Tags"), this);
+    d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"), this);
+    d->peopleToggleAction->setIcon(SmallIcon("user-identity"));
     d->addPersonAction    = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"), this);
-    d->forgetFacesAction  = new QAction(SmallIcon("list-remove-user"),    i18n("Forget all faces from this image"), this);
-    
+    d->forgetFacesAction  = new QAction(SmallIcon("list-remove-user"),    i18n("Clear all faces on this image"), this);
+
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
@@ -227,17 +227,14 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
     connect(d->rotRightAction, SIGNAL(triggered()),
             this, SLOT(slotRotateRight()));
 
-    connect(d->peopleToggleAction, SIGNAL(triggered()),
-            this, SLOT(slotTogglePeople()));
+    connect(d->peopleToggleAction, SIGNAL(toggled(bool)),
+            d->faceGroup, SLOT(setVisible(bool)));
 
     connect(d->addPersonAction, SIGNAL(triggered()),
-            this, SLOT(slotAddPersonTag()));
-    
-    connect(d->forgetFacesAction, SIGNAL(triggered()),
-            this, SLOT(slotForgetFaces()));
+            d->faceGroup, SLOT(addFace()));
 
-    connect(this->layout(), SIGNAL( zoomFactorChanged(double)),
-            this, SLOT(slotUpdatePersonTagScales()));
+    connect(d->forgetFacesAction, SIGNAL(triggered()),
+            d->faceGroup, SLOT(rejectAll()));
 
     // ------------------------------------------------------------
 
@@ -247,10 +244,8 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
     connect(this, SIGNAL(toPreviousImage()),
             this, SIGNAL(signalPrevItem()));
 
-    /* I don't think that clicking on the view to get back to the album is a good idea anymore. When people play with
-     * the face tags, it is extremely difficult to avoid clicking the background sometimes.
     connect(this, SIGNAL(activated()),
-            this, SIGNAL(signalBack2Album()));*/
+            this, SIGNAL(signalBack2Album()));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -263,14 +258,13 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
 
 ImagePreviewView::~ImagePreviewView()
 {
+    delete d->item;
     delete d;
 }
 
 void ImagePreviewView::reload()
 {
     previewItem()->reload();
-
-    slotRefreshPeopleTags();
 }
 
 void ImagePreviewView::imageLoaded()
@@ -281,17 +275,7 @@ void ImagePreviewView::imageLoaded()
     d->rotLeftAction->setEnabled(true);
     d->rotRightAction->setEnabled(true);
 
-    if(d->peopleTagsShown)
-    {
-        slotHidePeopleTags();
-        if(hasBeenScanned())
-            slotShowPeopleTags();
-        d->peopleTagsShown = true;
-    }
-    else
-    {
-        slotHidePeopleTags();
-    }
+    d->faceGroup->setInfo(d->item->imageInfo());
 }
 
 void ImagePreviewView::imageLoadingFailed()
@@ -301,6 +285,7 @@ void ImagePreviewView::imageLoadingFailed()
     emit signalPreviewLoaded(false);
     d->rotLeftAction->setEnabled(false);
     d->rotRightAction->setEnabled(false);
+    d->faceGroup->setInfo(ImageInfo());
 }
 
 void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
@@ -316,6 +301,16 @@ void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& prev
 ImageInfo ImagePreviewView::getImageInfo() const
 {
     return d->item->imageInfo();
+}
+
+bool ImagePreviewView::isClickOnPreviewItem(QMouseEvent *e)
+{
+    qreal distance;
+    d->faceGroup->closestItem(mapToScene(e->pos()), &distance);
+    kDebug() << distance;
+    if (distance < 15)
+        return true;
+    return GraphicsDImgView::isClickOnPreviewItem(e);
 }
 
 void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event)
@@ -430,7 +425,7 @@ void ImagePreviewView::slotSetupChanged()
     previewItem()->setLoadFullImageSize(AlbumSettings::instance()->getPreviewLoadFullImageSize());
     previewItem()->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
 
-    slotRefreshPeopleTags();
+    // pass auto-suggest?
 }
 
 void ImagePreviewView::slotRotateLeft()
@@ -445,8 +440,6 @@ void ImagePreviewView::slotRotateLeft()
                 ac->trigger();
         }
     }
-
-    slotRefreshPeopleTags();
 }
 
 void ImagePreviewView::slotRotateRight()
@@ -461,280 +454,6 @@ void ImagePreviewView::slotRotateRight()
                 ac->trigger();
         }
     }
-
-    slotRefreshPeopleTags();
-}
-
-void ImagePreviewView::slotTogglePeople()
-{
-    if(d->peopleTagsShown)
-        slotHidePeopleTags();
-    else
-        slotShowPeopleTags();
-}
-
-void ImagePreviewView::updateScale()
-{
-    int sceneWidth    = this->scene()->width();
-    int sceneHeight   = this->scene()->height();
-    int previewWidth  = d->cachedFullImg.width();
-    int previewHeight = d->cachedFullImg.height();
-
-    if (1.*sceneWidth/previewWidth < 1.*sceneHeight/previewHeight)
-    {
-        d->scale = 1.*sceneWidth/previewWidth;
-    }
-    else
-    {
-        d->scale = 1.*sceneHeight/previewHeight;
-    }
-}
-
-void ImagePreviewView::slotUpdatePersonTagScales()
-{
-    updateScale();
-
-    FaceItem* item = 0;
-    foreach(item, d->faceitems)
-    {
-        item->setVisible(false);
-        d->faceitems.removeAt(d->faceitems.indexOf(item));
-        d->faceitems.append(new FaceItem(0, this->scene(), item->originalRect(), d->scale, item->text(), item->originalScale()));
-        delete item;
-    }
-    
-    makeFaceItemConnections();
-}
-
-void ImagePreviewView::clearFaceItems()
-{
-    FaceItem* item = 0;
-
-    foreach(item, d->faceitems)
-        item->setVisible(false);
-
-    d->faceitems.clear();
-}
-
-void ImagePreviewView::drawFaceItems()
-{
-    Face face;
-    
-    for (int i = 0; i < d->currentFaces.size(); ++i)
-    {
-        face = d->currentFaces[i];
-        //d->faceitems.append(new FaceItem(0, this->scene(), face.toRect(), d->scale, face.name(), d->scale));
-        RegionFrameItem* item = new RegionFrameItem(previewItem());
-        item->setOriginalRect(face.toRect());
-    }
-    makeFaceItemConnections();
-}
-
-void ImagePreviewView::findFaces()
-{
-    int i;
-    
-    if(hasBeenScanned())
-    {
-        kDebug()<<"Image already has been scanned.";
-        d->currentFaces = d->faceIface->findFacesFromTags(d->cachedFullImg, d->item->imageInfo().id());
-        
-        for(i = 0; i < d->currentFaces.size(); ++i)
-        {
-            kDebug()<<d->currentFaces.at(i);
-        }
-        
-        /*KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group        = config->group("Face Tags Settings");
-        if(group.readEntry("FaceSuggestion", false))
-            this->trainFaces();
-        return;
-        */
-    }
-    
-    /*d->currentFaces = d->faceIface->findAndTagFaces(d->cachedFullImg, d->item->imageInfo().id());
-    
-    kDebug() << "Found : " << d->currentFaces.size() << " faces.";
-    
-    for(i = 0; i < d->currentFaces.size(); ++i)
-    {
-        kDebug()<<d->currentFaces.at(i);
-    }
-    */
-}
-
-void ImagePreviewView::slotShowPeopleTags()
-{
-    updateScale();
-    clearFaceItems();
-    findFaces();
-    drawFaceItems();
-    
-        KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group        = config->group("Face Tags Settings");
-        if(group.readEntry("FaceSuggestion", false))
-            this->suggestFaces();
-    
-    d->peopleToggleAction->setText(i18n("Hide face tags"));
-    d->addPersonAction->setVisible(true);
-    d->peopleTagsShown = true;
-}
-
-void ImagePreviewView::slotHidePeopleTags()
-{
-    updateScale();
-    clearFaceItems();
-    
-    d->currentFaces.clear();
-    d->peopleToggleAction->setText(i18n("Show face tags"));
-    d->addPersonAction->setVisible(false);
-    d->peopleTagsShown = false;
-}
-
-void ImagePreviewView::slotRefreshPeopleTags()
-{
-    if(d->peopleTagsShown)
-    {
-        slotHidePeopleTags();
-        slotShowPeopleTags();
-    }
-}
-
-
-void ImagePreviewView::slotAddPersonTag()
-{
-    int w = this->scene()->width()/2;
-    int h = w;
-    int x = this->scene()->width()/2 - w/2;
-    int y = this->scene()->height()/2 - w/2;
-
-    d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale , "", d->scale));
-    
-    makeFaceItemConnections();
-}
-
-bool ImagePreviewView::hasBeenScanned()
-{
-    return d->faceIface->hasBeenScanned(d->item->imageInfo().id());
-}
-
-void ImagePreviewView::slotForgetFaces()
-{
-    clearFaceItems();
-    d->currentFaces.clear();
-    
-    d->faceIface->removeAllFaces(d->item->imageInfo().id());
-}
-
-void ImagePreviewView::slotTagPerson ( const QString& name, const QRect& rect)
-{
-    for(int i = 0; i < d->currentFaces.size(); ++i)
-    {
-        if(d->currentFaces[i].toRect() == rect)
-        {
-            d->currentFaces[i].setName(name);
-            break;
-        }
-    }
-    
-    d->faceIface->confirmName(getImageInfo().id(), rect, name);
-}
-
-void ImagePreviewView::slotRemoveFaceTag ( const QString& name, const QRect& rect)
-{
-    Q_UNUSED(name);
-    for(int i = 0; i < d->currentFaces.size(); ++i)
-    {
-        if(d->currentFaces[i].toRect() == rect)
-        {
-            d->currentFaces.removeAt(i);
-            d->faceitems.removeAt(i);
-            break;
-        }
-    }
-    
-    d->faceIface->removeFace(getImageInfo().id(), rect);
-}
-
-void ImagePreviewView::makeFaceItemConnections()
-{
-    for(int i = 0; i < d->faceitems.size(); ++i)
-    {
-        connect( d->faceitems[i], SIGNAL(acceptButtonClicked(QString, QRect)), 
-                 this, SLOT(slotTagPerson(QString, QRect)) );
-        
-        connect( d->faceitems[i], SIGNAL(rejectButtonClicked(QString, QRect)),
-                this, SLOT(slotRemoveFaceTag(QString, QRect)) );
-    }
-}
-
-/*
-void ImagePreviewView::trainFaces()
-{
-    QList<Face> trainList;
-    foreach(Face f, d->currentFaces)
-    {
-        if(f.name() != "" && !d->faceIface->isFaceTrained(getImageInfo().id(), f.toRect(), f.name()))
-            trainList += f;
-    }
-    
-    kDebug()<<"Number of training faces"<<trainList.size();
-    
-    if(trainList.size()!=0)
-    {
-        d->faceIface->trainWithFaces(trainList);
-        d->faceIface->markFacesAsTrained(getImageInfo().id(), trainList);
-    }
-}
-*/
-
-void ImagePreviewView::suggestFaces()
-{
-    /*
-    // Assign tentative names to the face list
-    QList<Face> recogList;
-    foreach(Face f, d->currentFaces)
-    {
-        if(!d->faceIface->isFaceRecognized(getImageInfo().id(), f.toRect(), f.name()) && f.name().isEmpty())
-        {
-            f.setName(d->faceIface->recognizedName(f));
-            d->faceIface->markFaceAsRecognized(getImageInfo().id(), f.toRect(), f.name());
-            
-            // If the face wasn't recognized (too distant) don't suggest anything
-            if(f.name().isEmpty())
-                continue;
-            else
-                recogList += f;
-        }
-    }
-    
-    kDebug()<<"Number of suggestions = "<<recogList.size();
-    kDebug()<<"Number of faceitems = "<<d->faceitems.size();
-    // Now find the relevant face items and suggest faces
-    for(int i = 0; i < recogList.size(); ++i)
-    {
-        for(int j = 0; j < d->faceitems.size(); ++j)
-        {
-            if(recogList[i].toRect() == d->faceitems[j]->originalRect())
-            {
-                kDebug()<<"Suggesting a name "<<recogList[i].name();
-                d->faceitems[j]->suggest(recogList[i].name());
-                break;
-            }
-        }
-    }
-    */
-    
-}
-
-void ImagePreviewView::imageLoadedWithSize(bool fullSize)
-{
-    d->fullSize = fullSize;
-    d->cachedFullImg.reset();
-    if(fullSize)
-        d->cachedFullImg = d->item->image();
-    else
-        d->cachedFullImg.load(getImageInfo().filePath());
 }
 
 

@@ -61,16 +61,6 @@ public:
 
     void showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event);
 
-    void updateScale();
-    void findFaces();
-    void trainFaces();
-    void suggestFaces();
-    void drawFaceItems();
-    void clearFaceItems();
-
-    bool hasBeenScanned();
-
-    void makeFaceItemConnections();
 Q_SIGNALS:
 
     void signalNextItem();
@@ -89,11 +79,14 @@ Q_SIGNALS:
     void signalGotoDateAndItem(const ImageInfo&);
     void signalGotoTagAndItem(int);
 
+protected:
+
+    bool isClickOnPreviewItem(QMouseEvent *e);
+
 private Q_SLOTS:
 
     void imageLoaded();
     void imageLoadingFailed();
-    void imageLoadedWithSize(bool fullSize);
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
@@ -104,18 +97,6 @@ private Q_SLOTS:
 
     void slotRotateLeft();
     void slotRotateRight();
-
-    void slotTogglePeople();
-    void slotHidePeopleTags();
-    void slotShowPeopleTags();
-    void slotRefreshPeopleTags();
-    void slotAddPersonTag();
-    void slotUpdatePersonTagScales();
-
-    void slotForgetFaces();
-
-    void slotRemoveFaceTag(const QString&, const QRect&);
-    void slotTagPerson(const QString&, const QRect&);
 
 private:
 
