@@ -26,9 +26,11 @@
 
 // Qt includes
 
-#include <QString>
+#include <QFlags>
 #include <QMap>
 #include <QList>
+#include <QString>
+#include <QVariant>
 
 // Libkface includes
 
@@ -49,6 +51,51 @@ namespace Digikam
 class DImg;
 class ImageInfo;
 class ImageTagPair;
+
+class DatabaseFace
+{
+public:
+
+    enum Type
+    {
+        InvalidFace      = 0,
+        UnknownName      = 1 << 0,
+        UnconfirmedName  = 1 << 1,
+        ConfirmedName    = 1 << 2,
+        FaceForTraining  = 1 << 3,
+
+        UnconfirmedTypes = UnknownName | UnconfirmedName,
+        NormalFaces      = UnknownName | UnconfirmedName | ConfirmedName,
+        AllTypes         = UnknownName | UnconfirmedName | ConfirmedName | FaceForTraining,
+        TypeFirst        = UnknownName,
+        TypeLast         = FaceForTraining
+    };
+    Q_DECLARE_FLAGS(TypeFlags, Type);
+
+    DatabaseFace();
+    DatabaseFace(Type type, qlonglong imageId, int tagId, const QVariant& region);
+
+    bool      isNull() const;
+
+    Type      type() const;
+    qlonglong imageId() const;
+    int       tagId() const;
+    QVariant  region() const;
+
+    bool      isUnknownName() const     { return type() == UnknownName; }
+    bool      isUnconfirmedName() const { return type() == UnconfirmedName; }
+    bool      isConfirmedName() const   { return type() == ConfirmedName; }
+    bool      isForTraining() const     { return type() == FaceForTraining; }
+
+    bool operator==(const DatabaseFace& other) const;
+
+protected:
+
+    Type      m_type;
+    qlonglong m_imageId;
+    int       m_tagId;
+    QVariant  m_region;
+};
 
 class FaceIface
 {
@@ -118,9 +165,22 @@ public:
      * Reads rect tags in the specified image and returns a list of faces, read from these tags.
      * Very fast compared to findAndTagFaces. It is "read-only".
      * findFacesFromTags returns all faces, findUnconfirmedFacesFromTags only unconfirmed ones.
+     * Call fillImageInFaces() to set the face image.
      */
-    QList<Face>         findFacesFromTags(const DImg& image, qlonglong imageid) const;
-    QList<Face>         findUnconfirmedFacesFromTags(const DImg& image, qlonglong imageid) const;
+    QList<Face>         facesFromTags(qlonglong imageid) const;
+    QList<Face>         unconfirmedFacesFromTags(qlonglong imageid) const;
+
+    /**
+     * Reads the DatabaseFaces for the given image id from the database
+     */
+    QList<DatabaseFace> databaseFaces(qlonglong imageid) const;
+    QList<DatabaseFace> unconfirmedDatabaseFaces(qlonglong imageid) const;
+
+    /**
+     * Edits the given face(s): From the given DImg, the face regions are copied.
+     */
+    void                fillImageInFace(const DImg& image, Face &face) const;
+    void                fillImageInFaces(const DImg& image, QList<Face> &faceList) const;
 
     /**
      * Returns a list of all tag rectangles for the image. Unlike findAndTagFaces, this does not take a DImg,
@@ -128,16 +188,7 @@ public:
      */
     QList<QRect>        getTagRects(qlonglong imageid) const;
 
-    /**
-     * Returns a face object with a preloaded face image, and a name too, if the face has been named
-     * @param imageid ID of the image in the DB
-     * @param rect Face rectangle, the face image will be cropped from this
-     */
-    Face                faceForRectInImage(qlonglong imageid, const QRect& rect, const QString& name = QString()) const;
-
-
     // --- Face detection and recognition ---
-
 
     /**
      * The given face list is a result of automatic detection and possibly recognition.
@@ -169,9 +220,12 @@ public:
     // --- Confirmation ---
 
     /**
-     * Assign the name tag for given name and rect
+     * Assign the name tag for given name / tagId and rect.
+     * Optionally, you can pass the rectangle for which this region was previously stored,
+     * if the rectangle was adjusted.
      */
-    int                 confirmName(qlonglong imageid, const QRect& rect, const QString& name);
+    DatabaseFace        confirmName(qlonglong imageid, const QString& name, const QRect& rect, const QRect& previousRect = QRect());
+    DatabaseFace        confirmName(qlonglong imageid, int tagId, const QRect& rect, const QRect& previousRect = QRect());
 
     // --- Training ---
 
@@ -200,10 +254,10 @@ public:
     void                removeAllFaces(qlonglong imageid);
 
     /**
-     * Remove a certain rect from an image.
-     * For your convenience, returns the corresponding tag id, and -1 if nothing was removed.
+     * Remove a face or the face for a certain rect from an image.
      */
-    int                 removeFace(qlonglong imageid, const QRect& rect);
+    void                removeFace(qlonglong imageid, const QRect& rect);
+    void                removeFace(const DatabaseFace &face);
 
     /**
      * Reads configuration settings for detection accuracy and recognition suggestion threshold
@@ -227,33 +281,31 @@ public:
     void                markAsScanned(const ImageInfo& info, bool hasBeenScanned = true) const;
 
     /**
-     * Tells if the image needs training or not
-     */
-    bool                needsTraining(qlonglong imageid) const;
-    bool                needsTraining(const ImageInfo& info) const;
-
-    /**
-     * Marks the image for training.
-     */
-    void                markForTraining(qlonglong imageid, bool hasBeenScanned = true) const;
-    void                markForTraining(const ImageInfo& info, bool hasBeenScanned = true) const;
-
-    /**
      * For display, it may be desirable to display a slightly larger region than the strict
      * face rectangle. This returns a pixel margin commonly used to increase the rectangle size
      * in all four directions.
      */
     static int          faceRectDisplayMargin();
 
+    /**
+     * Returns the DImg, if appropriate, scaled to the recommended size for face detection
+     */
+    static DImg         scaleForDetection(const DImg& image);
+
+    /**
+     * Converts the DImg to a KFaceIface::Image
+     */
+    static KFaceIface::Image toImage(const DImg& image);
 
     /**
      * Utilities
      */
-    QList< Face > findFaces(qlonglong imageid, const QList<QString>& attributes) const;
-    QList< Face > findFaces(const QList<QPair<int, QVariant> >& faceRegions) const;
-    QList<QPair<int, QVariant> > findFaceRegions(qlonglong imageId, const QList<QString>& attributes) const;
-    QList<ImageTagPair> findFaceImageTagPairs(qlonglong imageid, const QList<QString>& attributes) const;
-    void fillImageInFaces(const DImg& image, QList<Face> &faceList) const;
+    QStringList         attributesForFlags(DatabaseFace::TypeFlags flags) const;
+    QString             attributeForType(DatabaseFace::Type type) const;
+    DatabaseFace::Type  databaseFaceType(int tagId, const QString& attribute) const;
+    QList<Face>         toFaces(const QList<DatabaseFace>& databaseFaces) const;
+    QList<DatabaseFace> databaseFaces(qlonglong imageId, DatabaseFace::TypeFlags flags) const;
+    QList<ImageTagPair> faceImageTagPairs(qlonglong imageid, DatabaseFace::TypeFlags flags) const;
 
 private:
 
@@ -262,5 +314,7 @@ private:
 } ;
 
 }  // Namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFace::TypeFlags);
 
 #endif // FACEIFACE_H
