@@ -54,58 +54,59 @@ class AssignNameWidget::AssignNameWidgetPriv
 {
 public:
 
-    AssignNameWidgetPriv(AssignNameWidget *q) : q(q)
+    AssignNameWidgetPriv(AssignNameWidget* q) : q(q)
     {
-        mode       = AssignNameWidget::InvalidMode;
-        layoutMode = AssignNameWidget::InvalidLayout;
-        bgStyle    = AssignNameWidget::InvalidBackgroundStyle;
-
-        comboBox      = 0;
-        confirmButton = 0;
-        rejectButton  = 0;
-        layout        = 0;
-        buttonBox     = 0;
-        tagModel      = 0;
-        tagFilterModel= 0;
+        mode           = AssignNameWidget::InvalidMode;
+        layoutMode     = AssignNameWidget::InvalidLayout;
+        bgStyle        = AssignNameWidget::InvalidBackgroundStyle;
+        comboBox       = 0;
+        confirmButton  = 0;
+        rejectButton   = 0;
+        layout         = 0;
+        buttonBox      = 0;
+        tagModel       = 0;
+        tagFilterModel = 0;
     }
 
-    ImageInfo               info;
-    QVariant                faceIdentifier;
+    void         checkWidgets();
+    void         clearWidgets();
+    void         updateLayout();
+    QToolButton* createToolButton(const KGuiItem& item);
+
+public:
+
+    ImageInfo                         info;
+    QVariant                          faceIdentifier;
 
     AssignNameWidget::Mode            mode;
     AssignNameWidget::LayoutMode      layoutMode;
     AssignNameWidget::BackgroundStyle bgStyle;
 
-    AddTagsComboBox        *comboBox;
-    QToolButton            *confirmButton;
-    QToolButton            *rejectButton;
+    AddTagsComboBox*                  comboBox;
+    QToolButton*                      confirmButton;
+    QToolButton*                      rejectButton;
 
-    TagModel*                  tagModel;
-    CheckableAlbumFilterModel* tagFilterModel;
-    AlbumPointer<TAlbum>       parentTag;
+    TagModel*                         tagModel;
+    CheckableAlbumFilterModel*        tagFilterModel;
+    AlbumPointer<TAlbum>              parentTag;
 
-    QGridLayout            *layout;
-    QDialogButtonBox       *buttonBox;
+    QGridLayout*                      layout;
+    QDialogButtonBox*                 buttonBox;
 
-    void                    checkWidgets();
-    void                    clearWidgets();
-    void                    updateLayout();
-    QToolButton            *createToolButton(const KGuiItem& item);
-
-    AssignNameWidget* const q;
+    AssignNameWidget* const           q;
 };
 
 void AssignNameWidget::AssignNameWidgetPriv::clearWidgets()
 {
     delete comboBox;
-    comboBox = 0;
+    comboBox  = 0;
     delete buttonBox;
     buttonBox = 0;
 }
 
-QToolButton *AssignNameWidget::AssignNameWidgetPriv::createToolButton(const KGuiItem& gui)
+QToolButton* AssignNameWidget::AssignNameWidgetPriv::createToolButton(const KGuiItem& gui)
 {
-    QToolButton *b = new QToolButton;
+    QToolButton* b = new QToolButton;
     b->setIcon(gui.icon());
     b->setText(gui.text());
     b->setToolTip(gui.toolTip());
@@ -137,7 +138,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
 
     if (!buttonBox)
     {
-        buttonBox = new QDialogButtonBox(Qt::Horizontal);
+        buttonBox     = new QDialogButtonBox(Qt::Horizontal);
         confirmButton = createToolButton(KStandardGuiItem::ok());
         rejectButton  = createToolButton(KStandardGuiItem::del());
         buttonBox->addButton(confirmButton, QDialogButtonBox::AcceptRole);
@@ -172,8 +173,8 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
     }
 }
 
-AssignNameWidget::AssignNameWidget(QWidget *parent)
-    : QFrame(parent), d(new AssignNameWidgetPriv(this))
+AssignNameWidget::AssignNameWidget(QWidget* parent)
+                : QFrame(parent), d(new AssignNameWidgetPriv(this))
 {
     d->layout = new QGridLayout;
     setLayout(d->layout);
@@ -295,7 +296,7 @@ AssignNameWidget::BackgroundStyle AssignNameWidget::backgroundStyle() const
 
 void AssignNameWidget::setFace(const ImageInfo& info, const QVariant& faceIdentifier)
 {
-    d->info = info;
+    d->info           = info;
     d->faceIdentifier = faceIdentifier;
 }
 
@@ -342,5 +343,3 @@ void AssignNameWidget::keyPressEvent(QKeyEvent *e)
 }
 
 } // namespace Digikam
-
-

@@ -29,10 +29,6 @@
 #include <QFrame>
 #include <QVariant>
 
-// KDE includes
-
-// Local includes
-
 namespace Digikam
 {
 
@@ -75,7 +71,7 @@ public:
         TransparentRound
     };
 
-    AssignNameWidget(QWidget *parent = 0);
+    AssignNameWidget(QWidget* parent = 0);
     ~AssignNameWidget();
 
     /** Set the tag model to use for completion.
@@ -120,7 +116,7 @@ Q_SIGNALS:
 
 protected:
 
-    void keyPressEvent(QKeyEvent *e);
+    void keyPressEvent(QKeyEvent* e);
 
 protected Q_SLOTS:
 
@@ -137,4 +133,3 @@ private:
 } // namespace Digikam
 
 #endif // ASSIGNNAMEWIDGET_H
-
