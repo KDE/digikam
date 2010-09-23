@@ -89,7 +89,7 @@ protected:
     void continuePanning(const QPoint& pos);
     void finishPanning();
 
-    virtual bool isClickOnPreviewItem(QMouseEvent *e);
+    virtual bool acceptsMouseClick(QMouseEvent *e);
 
     virtual void scrollContentsBy(int dx, int dy);
 

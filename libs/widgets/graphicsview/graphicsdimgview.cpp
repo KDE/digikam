@@ -176,7 +176,7 @@ void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseDoubleClickEvent(e);
 
-    if (e->isAccepted())
+    if (!acceptsMouseClick(e))
         return;
 
     if (e->button() == Qt::LeftButton)
@@ -194,7 +194,7 @@ void GraphicsDImgView::mousePressEvent(QMouseEvent* e)
     d->mousePressPos    = QPoint();
     d->movingInProgress = false;
 
-    if (isClickOnPreviewItem(e))
+    if (!acceptsMouseClick(e))
         return;
 
     if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
@@ -230,10 +230,11 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseReleaseEvent(e);
 
-    bool isOnPreviewItem = isClickOnPreviewItem(e);
+    // Dont call acceptsMouseClick() here, only on press. Seems that release event are accepted per default.
+
     if ((e->button() == Qt::LeftButton || e->button() == Qt::MidButton) && !d->mousePressPos.isNull())
     {
-        if (!d->movingInProgress && e->button() == Qt::LeftButton && isOnPreviewItem)
+        if (!d->movingInProgress && e->button() == Qt::LeftButton)
         {
             emit leftButtonClicked();
             if (KGlobalSettings::singleClick())
@@ -245,7 +246,7 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
         }
     }
 
-    if (e->button() == Qt::RightButton && isOnPreviewItem)
+    if (e->button() == Qt::RightButton)
     {
         emit rightButtonClicked();
     }
@@ -254,7 +255,7 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
     d->mousePressPos    = QPoint();
 }
 
-bool GraphicsDImgView::isClickOnPreviewItem(QMouseEvent *e)
+bool GraphicsDImgView::acceptsMouseClick(QMouseEvent *e)
 {
     // the basic condition is that now item ate the event
     if (e->isAccepted())
