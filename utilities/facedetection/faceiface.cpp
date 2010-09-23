@@ -372,7 +372,11 @@ QStringList FaceIface::attributesForFlags(DatabaseFace::TypeFlags flags) const
     for (int i=DatabaseFace::TypeFirst; i <= DatabaseFace::TypeLast; i <<= 1)
     {
         if (flags & DatabaseFace::Type(i))
-            attributes << attributeForType(DatabaseFace::Type(i));
+        {
+            QString attribute = attributeForType(DatabaseFace::Type(i));
+            if (!attributes.contains(attribute))
+                attributes << attribute;
+        }
     }
     return attributes;
 }
@@ -437,7 +441,7 @@ QList<DatabaseFace> FaceIface::databaseFaces(qlonglong imageid, DatabaseFace::Ty
             foreach (const QString& regionString, pair.values(attribute))
             {
                 QRect rect = TagRegion(regionString).toRect();
-                kDebug() << "rect found as "<< rect;
+                kDebug() << "rect found as "<< rect << "for attribute" << attribute << "tag" << pair.tagId();
 
                 if (!rect.isValid())
                     continue;
