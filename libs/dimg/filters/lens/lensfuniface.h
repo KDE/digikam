@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automatically camera lens aberrations
+ * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -56,15 +56,21 @@ public:
     LensFunIface();
     virtual ~LensFunIface();
 
-    void setSettings(const LensFunContainer& settings);
+    void setFilterSettings(const LensFunContainer& other);
 
-    bool supportsDistortion();
-    bool supportsCCA();
-    bool supportsVig();
-    bool supportsGeometry(){ return supportsDistortion(); };
-    bool supportsCCI()     { return supportsVig();        };
+    void setSettings(const LensFunContainer& other);
+    LensFunContainer settings() const;
+
+    DevicePtr findCamera(const QString& make, const QString& model) const;
+    LensPtr   findLens(const QString& model) const;
 
     bool findFromMetadata(const DMetadata& meta);
+
+    bool supportsDistortion() const;
+    bool supportsCCA()        const;
+    bool supportsVig()        const;
+    bool supportsGeometry()   const;
+    bool supportsCCI()        const;
 
 protected:
 
@@ -72,27 +78,25 @@ protected:
 
 private:
 
-    LensList findLenses(const lfCamera* camera, const QString& lensDesc, const QString& lensMaker=QString()) const;
+    LensList findLenses(const lfCamera* camera, const QString& lensDesc,
+                        const QString& lensMaker=QString()) const;
 
 private:
 
     // my configuration
     bool                   m_init;
 
-    LensFunContainer       m_settings;
-
     // Database items
     lfDatabase*            m_lfDb;
+    const lfMount*         m_lfMounts;
     const lfCamera* const* m_lfCameras;
     const lfLens**         m_lfLenses;
-    const lfMount*         m_lfMounts;
+
+    DevicePtr              m_usedCamera;
+    LensPtr                m_usedLens;
 
     // To be used for modification
-    const lfLens*          m_usedLens;
-    float                  m_cropFactor;
-    float                  m_focalLength;
-    float                  m_aperture;
-    float                  m_subjectDistance;
+    LensFunContainer       m_settings;
 
     friend class LensFunCameraSelector;
     friend class LensFunFilter;

@@ -59,8 +59,8 @@ public:
     ParserPriv()
     {}
 
-    OptionsList            options;
-    ModifierList           modifiers;
+    OptionsList  options;
+    ModifierList modifiers;
 };
 
 // --------------------------------------------------------

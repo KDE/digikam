@@ -1160,6 +1160,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters/filmgrain.cpp
        )
 
+    IF(LENSFUN_LIBRARY)
+        SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/lensautofix.cpp
+           )
+    ENDIF(LENSFUN_LIBRARY)
+
     SET(libcameragui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerahistoryupdater.cpp

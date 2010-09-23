@@ -1,11 +1,10 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automatically camera lens aberrations
+ * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +33,7 @@
 // Local includes
 
 #include "lensfuniface.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -53,19 +53,18 @@ public:
     lfModifier*   modifier;
 };
 
-LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent, LensFunIface* iface,
-                             const LensFunContainer& settings)
+LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent,  const LensFunContainer& settings)
              : DImgThreadedFilter(orgImage, parent, "LensCorrection"),
                d(new LensFunFilterPriv)
 {
-    d->iface = iface;
+    d->iface = new LensFunIface;
     d->iface->setSettings(settings);
-
     initFilter();
 }
 
 LensFunFilter::~LensFunFilter()
 {
+    delete d->iface;
     delete d;
 }
 
@@ -80,33 +79,53 @@ void LensFunFilter::filterImage()
         opts.Aperture = lens->MinAperture;
 #endif
 
+    m_destImage.bitBltImage(&m_orgImage, 0, 0);
+
+    if (!d->iface)
+    {
+        kError() << "ERROR: LensFun Interface is null.";
+        return;
+    }
+    if (!d->iface->m_usedLens)
+    {
+        kError() << "ERROR: LensFun Interface Lens device is null.";
+        return;
+    }
+
+    // Lensfun Modifier flags to process
+
     int modifyFlags = 0;
-    if ( d->iface->m_settings.filterDist )
-       modifyFlags |= LF_MODIFY_DISTORTION;
-    if ( d->iface->m_settings.filterGeom )
-       modifyFlags |= LF_MODIFY_GEOMETRY;
-    if ( d->iface->m_settings.filterCCA )
-       modifyFlags |= LF_MODIFY_TCA;
-    if ( d->iface->m_settings.filterVig )
-       modifyFlags |= LF_MODIFY_VIGNETTING;
-    if ( d->iface->m_settings.filterCCI )
-       modifyFlags |= LF_MODIFY_CCI;
+
+    if ( d->iface->settings().filterDST )
+        modifyFlags |= LF_MODIFY_DISTORTION;
+
+    if ( d->iface->settings().filterGEO )
+        modifyFlags |= LF_MODIFY_GEOMETRY;
+
+    if ( d->iface->settings().filterCCA )
+        modifyFlags |= LF_MODIFY_TCA;
+
+    if ( d->iface->settings().filterVIG )
+        modifyFlags |= LF_MODIFY_VIGNETTING;
+
+    if ( d->iface->settings().filterCCI )
+        modifyFlags |= LF_MODIFY_CCI;
 
     // Init lensfun lib, we are working on the full image.
 
     lfPixelFormat colorDepth = m_orgImage.bytesDepth() == 4 ? LF_PF_U8 : LF_PF_U16;
 
     d->modifier = lfModifier::Create(d->iface->m_usedLens,
-                                     d->iface->m_cropFactor,
+                                     d->iface->settings().cropFactor,
                                      m_orgImage.width(),
                                      m_orgImage.height());
 
     int modflags = d->modifier->Initialize(d->iface->m_usedLens,
                                            colorDepth,
-                                           d->iface->m_focalLength,
-                                           d->iface->m_aperture,
-                                           d->iface->m_subjectDistance,
-                                           d->iface->m_cropFactor,
+                                           d->iface->settings().focalLength,
+                                           d->iface->settings().aperture,
+                                           d->iface->settings().subjectDistance,
+                                           d->iface->settings().cropFactor,
                                            LF_RECTILINEAR,
                                            modifyFlags,
                                            0/*no inverse*/);
@@ -119,14 +138,18 @@ void LensFunFilter::filterImage()
 
     // Calc necessary steps for progress bar
 
-    int steps = d->iface->m_settings.filterCCA                                         ? 1 : 0 +
-                ( d->iface->m_settings.filterVig  || d->iface->m_settings.filterCCI )  ? 1 : 0 +
-                ( d->iface->m_settings.filterDist || d->iface->m_settings.filterGeom ) ? 1 : 0;
+    int steps = ( d->iface->settings().filterCCA                                   ) ? 1 : 0 +
+                ( d->iface->settings().filterVIG || d->iface->settings().filterCCI ) ? 1 : 0 +
+                ( d->iface->settings().filterDST || d->iface->settings().filterGEO ) ? 1 : 0;
 
     kDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
 
     if ( steps < 1 )
-       return;
+    {
+        kDebug() << "No LensFun Modifier steps. There is nothing to process...";
+        if (d->modifier) d->modifier->Destroy();
+        return;
+    }
 
     // The real correction to do
 
@@ -134,9 +157,11 @@ void LensFunFilter::filterImage()
     int lwidth = m_orgImage.width() * 2 * 3;
     float* pos = new float[lwidth];
 
-    // Stage 1: TCA correction
+    kDebug() << "Image size to process: (" << m_orgImage.width() << ", " << m_orgImage.height() << ")";
 
-    if ( d->iface->m_settings.filterCCA )
+    // Stage 1: Chromatic Aberation Corrections
+
+    if ( d->iface->settings().filterCCA )
     {
         m_orgImage.prepareSubPixelAccess(); // init lanczos kernel
 
@@ -166,25 +191,20 @@ void LensFunFilter::filterImage()
                 postProgress(progress/steps);
         }
 
-        kDebug() << "Applying TCA correction... (loop: " << loop << ")";
-    }
-    else
-    {
-        m_destImage.bitBltImage(&m_orgImage, 0, 0);
+        kDebug() << "Chromatic Aberation Corrections applied. (loop: " << loop << ")";
     }
 
-    // Stage 2: Color Correction: Vignetting and CCI
+    // Stage 2: Color Corrections: Vignetting and Color Contribution Index 
 
-    uchar* data = m_destImage.bits();
-
-    if ( d->iface->m_settings.filterVig || d->iface->m_settings.filterCCI )
+    if ( d->iface->settings().filterVIG || d->iface->settings().filterCCI )
     {
+        uchar* data  = m_destImage.bits();
         loop         = 0;
         float offset = 0.0;
 
         if ( steps == 3 )
             offset = 33.3;
-        else if (steps == 2 && d->iface->m_settings.filterCCA)
+        else if (steps == 2 && d->iface->settings().filterCCA)
             offset = 50.0;
 
         for (unsigned int y=0; runningFlag() && (y < m_destImage.height()); ++y)
@@ -202,12 +222,12 @@ void LensFunFilter::filterImage()
                 postProgress(progress/steps + offset);
         }
 
-        kDebug() << "Applying Color Correction: Vignetting and CCI. (loop: " << loop << ")";
+        kDebug() << "Vignetting and Color Corrections applied. (loop: " << loop << ")";
     }
 
-    // Stage 3: Distortion and Geometry
+    // Stage 3: Distortion and Geometry Corrections
 
-    if ( d->iface->m_settings.filterDist || d->iface->m_settings.filterGeom )
+    if ( d->iface->settings().filterDST || d->iface->settings().filterGEO )
     {
         loop = 0;
 
@@ -223,7 +243,7 @@ void LensFunFilter::filterImage()
 
                 for (unsigned long x = 0; runningFlag() && (x < tempImage.width()); ++x, ++loop)
                 {
-                    //qDebug (" ZZ %f %f %i %i", src[0], src[1], (int)src[0], (int)src[1]);
+                    //kDebug() << " ZZ " << src[0] << " " << src[1] << " " << (int)src[0] << " " << (int)src[1];
 
                     tempImage.setPixelColor(x, y, m_destImage.getSubPixelColor(src[0], src[1]));
                     src += 2;
@@ -236,41 +256,53 @@ void LensFunFilter::filterImage()
                 postProgress(progress/steps + 33.3*(steps-1));
         }
 
-        /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(),
-                                      tempImage.height(), tempImage.width());*/
-        kDebug() << "Applying Distortion and Geometry Correction. (loop: " << loop << ")";
+        kDebug() << "Distortion and Geometry Corrections applied. (loop: " << loop << ")";
 
-        m_destImage = tempImage;
+        if (loop != 0)
+            m_destImage = tempImage;
     }
 
     // clean up
 
     delete [] pos;
-    d->modifier->Destroy();
+    if (d->modifier) d->modifier->Destroy();
 }
 
-FilterAction LensFunFilter::filterAction()
+bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
+    // Register in digiKam Xmp namespace all information about Lens corrections.
 
-    action.addParameter("filterCCA", d->iface->m_settings.filterCCA);
-    action.addParameter("filterCCI", d->iface->m_settings.filterCCI);
-    action.addParameter("filterDist", d->iface->m_settings.filterDist);
-    action.addParameter("filterGeom", d->iface->m_settings.filterGeom);
-    action.addParameter("filterVig", d->iface->m_settings.filterVig);
+    QString str;
+    LensFunContainer prm = d->iface->settings();
 
-    return action;
+    str.append(i18n("Camera: %1-%2",        prm.cameraMake, prm.cameraModel));
+    str.append("\n");
+    str.append(i18n("Lens: %1",             prm.lensModel));
+    str.append("\n");
+    str.append(i18n("Subject Distance: %1", QString::number(prm.subjectDistance)));
+    str.append("\n");
+    str.append(i18n("Aperture: %1",         QString::number(prm.aperture)));
+    str.append("\n");
+    str.append(i18n("Focal Length: %1",     QString::number(prm.focalLength)));
+    str.append("\n");
+    str.append(i18n("Crop Factor: %1",      QString::number(prm.cropFactor)));
+    str.append("\n");
+    str.append(i18n("CCA Correction: %1",   prm.filterCCA  && d->iface->supportsCCA()        ? i18n("enabled") : i18n("disabled")));
+    str.append("\n");
+    str.append(i18n("VIG Correction: %1",   prm.filterVIG  && d->iface->supportsVig()        ? i18n("enabled") : i18n("disabled")));
+    str.append("\n");
+    str.append(i18n("CCI Correction: %1",   prm.filterCCI  && d->iface->supportsCCI()        ? i18n("enabled") : i18n("disabled")));
+    str.append("\n");
+    str.append(i18n("DST Correction: %1",   prm.filterDST && d->iface->supportsDistortion() ? i18n("enabled") : i18n("disabled")));
+    str.append("\n");
+    str.append(i18n("GEO Correction: %1",   prm.filterGEO && d->iface->supportsGeometry()   ? i18n("enabled") : i18n("disabled")));
+
+    DMetadata meta(data);
+    bool ret = meta.setXmpTagString("Xmp.digiKam.LensCorrectionSettings", 
+                                    str.replace("\n", " ; "), false);
+    data = meta.data();
+
+    return ret;
 }
-
-void LensFunFilter::readParameters(const Digikam::FilterAction& action)
-{
-    d->iface->m_settings.filterCCA = action.parameter("filterCCA").toBool();
-    d->iface->m_settings.filterCCI = action.parameter("filterCCI").toBool();
-    d->iface->m_settings.filterDist = action.parameter("filterDist").toBool();
-    d->iface->m_settings.filterGeom = action.parameter("filterGeom").toBool();
-    d->iface->m_settings.filterVig = action.parameter("filterVig").toBool();
-}
-
 
 }  // namespace Digikam

@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-08
- * Description : a token class
+ * Date        : 2010-09-18
+ * Description : lens auto-fix batch tool.
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,35 +21,40 @@
  *
  * ============================================================ */
 
-#include "token.moc"
+#ifndef LENS_AUTO_FIX_H_
+#define LENS_AUTO_FIX_H_
 
-// Qt includes
-
-#include <QAction>
+#include "batchtool.h"
 
 namespace Digikam
 {
 
-Token::Token(const QString& id, const QString& description)
-     : QObject(0),
-       m_id(id),
-       m_description(description)
+class LensAutoFix : public BatchTool
 {
-    m_action = new QAction(this);
-    m_action->setText(id);
-    m_action->setToolTip(description);
+    Q_OBJECT
 
-    connect(m_action, SIGNAL(triggered()), this, SLOT(slotTriggered()));
-}
+public:
 
-Token::~Token()
-{
-    delete m_action;
-}
+    LensAutoFix(QObject* parent=0);
+    ~LensAutoFix();
 
-void Token::slotTriggered()
-{
-    emit signalTokenTriggered(m_id);
-}
+    BatchToolSettings defaultSettings();
+
+private:
+
+    bool toolOperations();
+
+private Q_SLOTS:
+
+    void slotAssignSettings2Widget();
+    void slotSettingsChanged();
+
+private:
+
+    class LensAutoFixPriv;
+    LensAutoFixPriv* const d;
+};
 
 } // namespace Digikam
+
+#endif /* LENS_AUTO_FIX_H_ */

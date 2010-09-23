@@ -33,7 +33,6 @@
 
 // Local includes.
 
-#include "dmetadata.h"
 #include "lensfuniface.h"
 
 using namespace Digikam;
@@ -49,11 +48,21 @@ int main (int argc, char** argv)
 
     QString filePath(argv[1]);
 
-    DMetadata meta;
-    meta.load(filePath);
+    DImg             img(filePath);
+    DMetadata        meta(img.getMetadata());
+    LensFunIface     iface;
+    bool ret = iface.findFromMetadata(meta);
+    if (ret)
+    {
+        LensFunFilter filter(&img, 0L, iface.settings());
+        filter.startFilterDirectly();
+        img.putImageData(filter.getTargetImage().bits());
 
-    LensFunIface iface;
-    iface.findFromMetadata(meta);
+        Digikam::KExiv2Data data = img.getMetadata();
+        filter.registerSettingsToXmp(data);
+        img.setMetadata(data);
+        return img.save("lensfuniface-output.png", "PNG");
+    }
 
-    return 0;
+    return false;
 }

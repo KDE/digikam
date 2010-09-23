@@ -149,6 +149,7 @@ public:
     /** Original image metadata.*/
     IccProfile getOriginalIccProfile();
     KExiv2Data getOriginalMetadata();
+    void setOriginalMetadata(const KExiv2Data& meta);
 
     /** Get photograph information from original image.*/
     PhotoInfoContainer getPhotographInformation() const;

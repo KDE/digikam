@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automatically camera lens aberrations
+ * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -54,8 +54,8 @@ public:
     LensFunContainer defaultSettings() const;
     void resetToDefault();
 
-    LensFunContainer settings() const;
-    void setSettings(const LensFunContainer& settings);
+    void assignFilterSettings(LensFunContainer& prm);
+    void setFilterSettings(const LensFunContainer& settings);
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);

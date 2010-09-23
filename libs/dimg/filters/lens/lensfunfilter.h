@@ -1,11 +1,10 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automatically camera lens aberrations
+ * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,6 +22,10 @@
 #ifndef LENSFUNFILTER_H
 #define LENSFUNFILTER_H
 
+// KDE includes
+
+#include <klocale.h>
+
 // Local includes
 
 #include "dimgthreadedfilter.h"
@@ -31,8 +34,6 @@
 namespace Digikam
 {
 
-class LensFunIface;
-
 class DIGIKAM_EXPORT LensFunContainer
 {
 
@@ -40,22 +41,38 @@ public:
 
     LensFunContainer()
     {
-        filterCCA  = true;
-        filterVig  = true;
-        filterCCI  = true;
-        filterDist = true;
-        filterGeom = true;
+        filterCCA       = true;
+        filterVIG       = true;
+        filterCCI       = true;
+        filterDST       = true;
+        filterGEO       = true;
+        focalLength     = -1.0;
+        aperture        = -1.0;
+        subjectDistance = -1.0;
+        cropFactor      = -1.0;
+        cameraMake      = QString();
+        cameraModel     = QString();
+        lensModel       = QString();
     };
 
     ~LensFunContainer(){};
 
 public:
 
-    bool filterCCA;
-    bool filterVig;
-    bool filterCCI;
-    bool filterDist;
-    bool filterGeom;
+    bool      filterCCA;       /// Chromatic Aberation Corrections
+    bool      filterVIG;       /// Vigneting Corrections
+    bool      filterCCI;       /// Color Contribution Index Corrections
+    bool      filterDST;       /// Distortion Corrections
+    bool      filterGEO;       /// Geometry Corrections
+
+    double    cropFactor;
+    double    focalLength;
+    double    aperture;
+    double    subjectDistance;
+
+    QString   cameraMake;
+    QString   cameraModel;
+    QString   lensModel;
 };
 
 class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
@@ -63,18 +80,10 @@ class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
 
 public:
 
-    LensFunFilter(DImg* origImage, QObject* parent, LensFunIface* iface,
-                  const LensFunContainer& settings=LensFunContainer());
+    LensFunFilter(DImg* origImage, QObject* parent, const LensFunContainer& settings);
     ~LensFunFilter();
 
-    static QString          FilterIdentifier() { return "digikam:LensFunFilter"; }
-    static QString          DisplayableName() { return "Lenfs Fun Filter"; }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
-    virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+    bool registerSettingsToXmp(KExiv2Data& data) const;
 
 private:
 

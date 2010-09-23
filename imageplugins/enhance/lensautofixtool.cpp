@@ -70,7 +70,6 @@ public:
         showGrid(0),
         settingsView(0),
         cameraSelector(0),
-        lfIface(0),
         previewWidget(0),
         gboxSettings(0)
         {}
@@ -83,7 +82,6 @@ public:
 
     LensFunSettings*       settingsView;
     LensFunCameraSelector* cameraSelector;
-    LensFunIface*          lfIface;
 
     ImageGuideWidget*      previewWidget;
     EditorToolSettings*    gboxSettings;
@@ -96,8 +94,6 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
     setObjectName("lensautocorrection");
     setToolName(i18n("Lens Auto-Correction"));
     setToolIcon(SmallIcon("lensautofix"));
-
-    d->lfIface        = new LensFunIface();
 
     d->previewWidget  = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
@@ -113,7 +109,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->cameraSelector = new LensFunCameraSelector(d->lfIface, d->gboxSettings->plainPage());
+    d->cameraSelector = new LensFunCameraSelector(d->gboxSettings->plainPage());
     KSeparator* line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
@@ -149,17 +145,16 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
 
 LensAutoFixTool::~LensAutoFixTool()
 {
-    delete d->lfIface;
     delete d;
 }
 
 void LensAutoFixTool::slotLensChanged()
 {
-    d->settingsView->setEnabledCCA(d->lfIface->supportsCCA());
-    d->settingsView->setEnabledVig(d->lfIface->supportsVig());
-    d->settingsView->setEnabledCCI(d->lfIface->supportsVig());
-    d->settingsView->setEnabledDist(d->lfIface->supportsDistortion());
-    d->settingsView->setEnabledGeom(d->lfIface->supportsDistortion());
+    d->settingsView->setEnabledCCA(d->cameraSelector->iface()->supportsCCA());
+    d->settingsView->setEnabledVig(d->cameraSelector->iface()->supportsVig());
+    d->settingsView->setEnabledCCI(d->cameraSelector->iface()->supportsVig());
+    d->settingsView->setEnabledDist(d->cameraSelector->iface()->supportsDistortion());
+    d->settingsView->setEnabledGeom(d->cameraSelector->iface()->supportsDistortion());
     slotTimer();
 }
 
@@ -169,6 +164,7 @@ void LensAutoFixTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
+    d->cameraSelector->readSettings(group);
     d->settingsView->readSettings(group);
     d->gboxSettings->blockSignals(false);
     slotTimer();
@@ -178,6 +174,7 @@ void LensAutoFixTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
+    d->cameraSelector->writeSettings(group);
     d->settingsView->writeSettings(group);
     group.sync();
 }
@@ -197,7 +194,8 @@ void LensAutoFixTool::slotResetSettings()
 void LensAutoFixTool::prepareEffect()
 {
     // Settings information must be get before to disable settings view.
-    LensFunContainer settings = d->settingsView->settings();
+    LensFunContainer settings = d->cameraSelector->settings();
+    d->settingsView->assignFilterSettings(settings);
     ImageIface* iface         = d->previewWidget->imageIface();
     DImg preview              = iface->getPreviewImg();
 
@@ -226,16 +224,16 @@ void LensAutoFixTool::prepareEffect()
         preview.bitBlendImage(composer, &grid, 0, 0, preview.width(), preview.height(), 0, 0, flags);
     }
 
-    setFilter(new LensFunFilter(&preview, this, d->lfIface, settings));
+    setFilter(new LensFunFilter(&preview, this, settings));
 }
 
 void LensAutoFixTool::prepareFinal()
 {
-    // Settings information must be get before to disable settings view.
-    LensFunContainer settings = d->settingsView->settings();
-
+    // Settings information must be handle before to disable settings view.
+    LensFunContainer settings = d->cameraSelector->settings();
+    d->settingsView->assignFilterSettings(settings);
     ImageIface iface(0, 0);
-    setFilter(new LensFunFilter(iface.getOriginalImg(), this, d->lfIface, settings));
+    setFilter(new LensFunFilter(iface.getOriginalImg(), this, settings));
 }
 
 void LensAutoFixTool::putPreviewData()
@@ -248,6 +246,9 @@ void LensAutoFixTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage().bits());
+    Digikam::KExiv2Data data = iface.getOriginalMetadata();
+    dynamic_cast<LensFunFilter*>(filter())->registerSettingsToXmp(data);
+    iface.setOriginalMetadata(data);
 }
 
 }  // namespace DigikamEnhanceImagePlugin

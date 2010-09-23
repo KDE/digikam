@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automatically camera lens aberrations
+ * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -30,11 +30,12 @@
 
 #include "dmetadata.h"
 #include "lensfunfilter.h"
-#include "lensfuniface.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
+
+class LensFunIface;
 
 class DIGIKAM_EXPORT LensFunCameraSelector : public QWidget
 {
@@ -46,11 +47,28 @@ public:
 
 public:
 
-    LensFunCameraSelector(LensFunIface* iface, QWidget* parent);
+    LensFunCameraSelector(QWidget* parent=0);
     virtual ~LensFunCameraSelector();
 
-//    Device getDevice();
+    void enableUseMetadata(bool b);
+
+    void setUseMetadata(bool b);
+    bool useMetadata() const;
+
+    LensFunContainer settings();
+    void             setSettings(const LensFunContainer& settings);
+
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
+    /** Special mode used with BQM
+     */
+    void setPassiveMetadataUsage(bool b);
+
+    LensFunIface* iface() const;
+
     void setDevice(Device&);
+//  Device getDevice();
 
 public Q_SLOTS:
 
@@ -64,15 +82,17 @@ protected Q_SLOTS:
 
     void slotUpdateCombos();
     void slotUpdateLensCombo();
-    void slotUseExif(bool);
+    void slotUseMetadata(bool);
+    void slotCameraSelected();
     void slotLensSelected();
-    void slotFocalChanged(double);
-    void slotApertureChanged(double);
-    void slotDistanceChanged(double);
+    void slotFocalChanged();
+    void slotApertureChanged();
+    void slotDistanceChanged();
 
 private:
 
     void findFromMetadata();
+    void refreshSettingsView();
 
 private:
 
