@@ -66,11 +66,11 @@ LensFunContainer LensFunIface::settings() const
 
 void LensFunIface::setFilterSettings(const LensFunContainer& other)
 {
-    m_settings.filterCCA  = other.filterCCA;
-    m_settings.filterVig  = other.filterVig;
-    m_settings.filterCCI  = other.filterCCI;
-    m_settings.filterDist = other.filterDist;
-    m_settings.filterGeom = other.filterGeom;
+    m_settings.filterCCA = other.filterCCA;
+    m_settings.filterVIG = other.filterVIG;
+    m_settings.filterCCI = other.filterCCI;
+    m_settings.filterDST = other.filterDST;
+    m_settings.filterGEO = other.filterGEO;
 }
 
 LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QString& model) const

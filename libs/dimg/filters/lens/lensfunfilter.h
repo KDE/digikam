@@ -42,10 +42,10 @@ public:
     LensFunContainer()
     {
         filterCCA       = true;
-        filterVig       = true;
+        filterVIG       = true;
         filterCCI       = true;
-        filterDist      = true;
-        filterGeom      = true;
+        filterDST       = true;
+        filterGEO       = true;
         focalLength     = -1.0;
         aperture        = -1.0;
         subjectDistance = -1.0;
@@ -59,11 +59,11 @@ public:
 
 public:
 
-    bool      filterCCA;
-    bool      filterVig;
-    bool      filterCCI;
-    bool      filterDist;
-    bool      filterGeom;
+    bool      filterCCA;       /// Chromatic Aberation Corrections
+    bool      filterVIG;       /// Vigneting Corrections
+    bool      filterCCI;       /// Color Contribution Index Corrections
+    bool      filterDST;       /// Distortion Corrections
+    bool      filterGEO;       /// Geometry Corrections
 
     double    cropFactor;
     double    focalLength;

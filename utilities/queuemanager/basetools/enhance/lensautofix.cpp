@@ -108,10 +108,10 @@ BatchToolSettings LensAutoFix::defaultSettings()
 
     prm.insert("UseMetadata",     true);
     prm.insert("filterCCA",       true);
-    prm.insert("filterVig",       true);
+    prm.insert("filterVIG",       true);
     prm.insert("filterCCI",       true);
-    prm.insert("filterDist",      true);
-    prm.insert("filterGeom",      true);
+    prm.insert("filterDST",      true);
+    prm.insert("filterGEO",      true);
 
     prm.insert("cropFactor",      -1.0);
     prm.insert("focalLength",     -1.0);
@@ -130,10 +130,10 @@ void LensAutoFix::slotAssignSettings2Widget()
     d->cameraSelector->setUseMetadata(settings()["UseMetadata"].toBool());
     LensFunContainer lfPrm;
     lfPrm.filterCCA       = settings()["filterCCA"].toBool();
-    lfPrm.filterVig       = settings()["filterVig"].toBool();
+    lfPrm.filterVIG       = settings()["filterVIG"].toBool();
     lfPrm.filterCCI       = settings()["filterCCI"].toBool();
-    lfPrm.filterDist      = settings()["filterDist"].toBool();
-    lfPrm.filterGeom      = settings()["filterGeom"].toBool();
+    lfPrm.filterDST       = settings()["filterDST"].toBool();
+    lfPrm.filterGEO       = settings()["filterGEO"].toBool();
 
     lfPrm.cropFactor      = settings()["cropFactor"].toDouble();
     lfPrm.focalLength     = settings()["focalLength"].toDouble();
@@ -162,10 +162,10 @@ void LensAutoFix::slotSettingsChanged()
     prm.insert("UseMetadata",     (bool)d->cameraSelector->useMetadata());
 
     prm.insert("filterCCA",       (bool)settings.filterCCA);
-    prm.insert("filterVig",       (bool)settings.filterVig);
+    prm.insert("filterVIG",       (bool)settings.filterVIG);
     prm.insert("filterCCI",       (bool)settings.filterCCI);
-    prm.insert("filterDist",      (bool)settings.filterDist);
-    prm.insert("filterGeom",      (bool)settings.filterGeom);
+    prm.insert("filterDST",      (bool)settings.filterDST);
+    prm.insert("filterGEO",      (bool)settings.filterGEO);
 
     prm.insert("cropFactor",      (double)settings.cropFactor);
     prm.insert("focalLength",     (double)settings.focalLength);
@@ -198,10 +198,10 @@ bool LensAutoFix::toolOperations()
     else
     {
         prm.filterCCA       = settings()["filterCCA"].toBool();
-        prm.filterVig       = settings()["filterVig"].toBool();
+        prm.filterVIG       = settings()["filterVIG"].toBool();
         prm.filterCCI       = settings()["filterCCI"].toBool();
-        prm.filterDist      = settings()["filterDist"].toBool();
-        prm.filterGeom      = settings()["filterGeom"].toBool();
+        prm.filterDST      = settings()["filterDST"].toBool();
+        prm.filterGEO      = settings()["filterGEO"].toBool();
 
         prm.cropFactor      = settings()["cropFactor"].toDouble();
         prm.focalLength     = settings()["focalLength"].toDouble();

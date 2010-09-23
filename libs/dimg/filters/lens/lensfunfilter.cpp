@@ -79,6 +79,8 @@ void LensFunFilter::filterImage()
         opts.Aperture = lens->MinAperture;
 #endif
 
+    m_destImage.bitBltImage(&m_orgImage, 0, 0);
+
     if (!d->iface)
     {
         kError() << "ERROR: LensFun Interface is null.";
@@ -90,15 +92,22 @@ void LensFunFilter::filterImage()
         return;
     }
 
+    // Lensfun Modifier flags to process
+
     int modifyFlags = 0;
-    if ( d->iface->settings().filterDist )
+
+    if ( d->iface->settings().filterDST )
         modifyFlags |= LF_MODIFY_DISTORTION;
-    if ( d->iface->settings().filterGeom )
+
+    if ( d->iface->settings().filterGEO )
         modifyFlags |= LF_MODIFY_GEOMETRY;
+
     if ( d->iface->settings().filterCCA )
         modifyFlags |= LF_MODIFY_TCA;
-    if ( d->iface->settings().filterVig )
+
+    if ( d->iface->settings().filterVIG )
         modifyFlags |= LF_MODIFY_VIGNETTING;
+
     if ( d->iface->settings().filterCCI )
         modifyFlags |= LF_MODIFY_CCI;
 
@@ -129,9 +138,9 @@ void LensFunFilter::filterImage()
 
     // Calc necessary steps for progress bar
 
-    int steps = d->iface->settings().filterCCA                                         ? 1 : 0 +
-                ( d->iface->settings().filterVig  || d->iface->settings().filterCCI )  ? 1 : 0 +
-                ( d->iface->settings().filterDist || d->iface->settings().filterGeom ) ? 1 : 0;
+    int steps = ( d->iface->settings().filterCCA                                   ) ? 1 : 0 +
+                ( d->iface->settings().filterVIG || d->iface->settings().filterCCI ) ? 1 : 0 +
+                ( d->iface->settings().filterDST || d->iface->settings().filterGEO ) ? 1 : 0;
 
     kDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
 
@@ -150,7 +159,7 @@ void LensFunFilter::filterImage()
 
     kDebug() << "Image size to process: (" << m_orgImage.width() << ", " << m_orgImage.height() << ")";
 
-    // Stage 1: TCA correction
+    // Stage 1: Chromatic Aberation Corrections
 
     if ( d->iface->settings().filterCCA )
     {
@@ -182,20 +191,12 @@ void LensFunFilter::filterImage()
                 postProgress(progress/steps);
         }
 
-        kDebug() << "Applying TCA correction... (loop: " << loop << ")";
-
-        // In case of filterCCA correction is enabled and nothing have been processed (Common option validate in BQM for ex.)
-        if (loop == 0)
-            m_destImage.bitBltImage(&m_orgImage, 0, 0);
-    }
-    else
-    {
-        m_destImage.bitBltImage(&m_orgImage, 0, 0);
+        kDebug() << "Chromatic Aberation Corrections applied. (loop: " << loop << ")";
     }
 
-    // Stage 2: Color Correction: Vignetting and CCI
+    // Stage 2: Color Corrections: Vignetting and Color Contribution Index 
 
-    if ( d->iface->settings().filterVig || d->iface->settings().filterCCI )
+    if ( d->iface->settings().filterVIG || d->iface->settings().filterCCI )
     {
         uchar* data  = m_destImage.bits();
         loop         = 0;
@@ -221,12 +222,12 @@ void LensFunFilter::filterImage()
                 postProgress(progress/steps + offset);
         }
 
-        kDebug() << "Applying Color Correction: Vignetting and CCI. (loop: " << loop << ")";
+        kDebug() << "Vignetting and Color Corrections applied. (loop: " << loop << ")";
     }
 
-    // Stage 3: Distortion and Geometry
+    // Stage 3: Distortion and Geometry Corrections
 
-    if ( d->iface->settings().filterDist || d->iface->settings().filterGeom )
+    if ( d->iface->settings().filterDST || d->iface->settings().filterGEO )
     {
         loop = 0;
 
@@ -242,7 +243,7 @@ void LensFunFilter::filterImage()
 
                 for (unsigned long x = 0; runningFlag() && (x < tempImage.width()); ++x, ++loop)
                 {
-                    //qDebug (" ZZ %f %f %i %i", src[0], src[1], (int)src[0], (int)src[1]);
+                    //kDebug() << " ZZ " << src[0] << " " << src[1] << " " << (int)src[0] << " " << (int)src[1];
 
                     tempImage.setPixelColor(x, y, m_destImage.getSubPixelColor(src[0], src[1]));
                     src += 2;
@@ -255,13 +256,10 @@ void LensFunFilter::filterImage()
                 postProgress(progress/steps + 33.3*(steps-1));
         }
 
-/*
-        kDebug << " for " << tempImage.height() << " " << tempImage.width() << " "
-                          << tempImage.height() << " " << tempImage.width());
-*/
-        kDebug() << "Applying Distortion and Geometry Correction. (loop: " << loop << ")";
+        kDebug() << "Distortion and Geometry Corrections applied. (loop: " << loop << ")";
 
-        m_destImage = tempImage;
+        if (loop != 0)
+            m_destImage = tempImage;
     }
 
     // clean up
@@ -291,13 +289,13 @@ bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
     str.append("\n");
     str.append(i18n("CCA Correction: %1",   prm.filterCCA  && d->iface->supportsCCA()        ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
-    str.append(i18n("VIG Correction: %1",   prm.filterVig  && d->iface->supportsVig()        ? i18n("enabled") : i18n("disabled")));
+    str.append(i18n("VIG Correction: %1",   prm.filterVIG  && d->iface->supportsVig()        ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
     str.append(i18n("CCI Correction: %1",   prm.filterCCI  && d->iface->supportsCCI()        ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
-    str.append(i18n("DST Correction: %1",   prm.filterDist && d->iface->supportsDistortion() ? i18n("enabled") : i18n("disabled")));
+    str.append(i18n("DST Correction: %1",   prm.filterDST && d->iface->supportsDistortion() ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
-    str.append(i18n("GEO Correction: %1",   prm.filterGeom && d->iface->supportsGeometry()   ? i18n("enabled") : i18n("disabled")));
+    str.append(i18n("GEO Correction: %1",   prm.filterGEO && d->iface->supportsGeometry()   ? i18n("enabled") : i18n("disabled")));
 
     DMetadata meta(data);
     bool ret = meta.setXmpTagString("Xmp.digiKam.LensCorrectionSettings", 
