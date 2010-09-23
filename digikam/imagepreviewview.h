@@ -81,7 +81,7 @@ Q_SIGNALS:
 
 protected:
 
-    bool isClickOnPreviewItem(QMouseEvent *e);
+    bool acceptsMouseClick(QMouseEvent *e);
 
 private Q_SLOTS:
 
