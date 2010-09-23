@@ -83,6 +83,20 @@ public:
     ItemVisibilityController(ItemType type = SingleItem, QObject *parent = 0);
     ~ItemVisibilityController();
 
+    bool  shallBeShown() const;
+    bool  isVisible() const;
+    State state() const;
+
+    /**
+     *  This returns the "result" of isVisible and shallBeShown:
+     *  Something is indeed visible on the scene.
+     *  Also returns false if no items are available.
+     */
+    bool  hasVisibleItems() const;
+
+    /// Remove all animations
+    void clear();
+
     /**
      * Set or add objects. The given objects shall provide
      * an "opacity" and a "visible" property.
@@ -95,14 +109,25 @@ public:
     void setItem(QObject *object);
     /// Call this for ItemGroup animations
     void addItem(QObject *object);
+    /// Item is removed directly.
     void removeItem(QObject *object);
+    /// Item is hidden, then the itemRemoved() signal is sent
+    void hideAndRemoveItem(QObject *object);
 
-    bool  shallBeShown() const;
-    bool  isVisible() const;
-    State state() const;
+    /**
+     * Removes the given items from this controller and moves them to the given controller.
+     * The items are immediately (without transition) set to the state of the given controller.
+     * Only supported if type of both controllers is ItemGroup.
+     */
+    void moveTo(QObject* item, ItemVisibilityController* other);
 
-    /// Remove all animations
-    void clear();
+    /**
+     * Moves the given item(s) to a newly created controller, sync'ed to the same
+     * state as this.
+     * Only supported if type is ItemGroup.
+     */
+    ItemVisibilityController *splitOff(QObject *item);
+    ItemVisibilityController *splitOff(const QList<QObject *>& items);
 
     /**
      * Returns the property used for the animation.
@@ -111,6 +136,13 @@ public:
      * If animations are switched off globally, this can be 0.
      */
     QAbstractAnimation *animation() const;
+
+Q_SIGNALS:
+
+    /// Emitted when the transition has finished
+    void propertiesAssigned(bool visible);
+    /// The item was hidden and removed from this controller, finishing hideAndRemoveItem().
+    void itemHiddenAndRemoved(QObject *item);
 
 public Q_SLOTS:
 
@@ -123,6 +155,7 @@ protected Q_SLOTS:
 
     void animationFinished();
     void objectDestroyed(QObject *);
+    void childPropertiesAssigned();
 
 public: // internal
 

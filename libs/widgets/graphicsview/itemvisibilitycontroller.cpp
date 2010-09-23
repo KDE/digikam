@@ -100,11 +100,15 @@ public:
     bool                               visible;
     bool                               shallBeShown;
     QList<QObject*>                    items;
+    QList<ItemVisibilityController*>   children;
 
     void                       transitionToVisible(bool show);
     void                       setVisibleProperty(bool value);
     void                       syncProperties(QObject *o);
     QPropertyAnimation        *createAnimation();
+    void                       addItemToGroup(QObject *object, QAbstractAnimation *anim);
+    QAbstractAnimation        *removeItemFromGroup(QObject *object);
+    void                       checkAnimationGroup();
 
     QPropertyAnimation        *propertyAnimation() const { return static_cast<QPropertyAnimation*>(animation); }
     QParallelAnimationGroup   *animationGroup() const { return static_cast<QParallelAnimationGroup*>(animation); }
@@ -136,8 +140,6 @@ void ItemVisibilityController::setItem(QObject *object)
 
     if (!object && !d->items.isEmpty())
     {
-        disconnect(d->items.first(), SIGNAL(destroyed(QObject*)),
-                   this, SLOT(objectDestroyed(QObject*)));
         clear();
         return;
     }
@@ -156,6 +158,40 @@ void ItemVisibilityController::setItem(QObject *object)
     d->syncProperties(object);
 }
 
+void ItemVisibilityController::ItemVisibilityControllerPriv::addItemToGroup(QObject *object, QAbstractAnimation *anim)
+{
+    // common code to remove item for ItemGroup
+    q->connect(object, SIGNAL(destroyed(QObject*)),
+               q, SLOT(objectDestroyed(QObject*)));
+    items << object;
+    animationGroup()->addAnimation(anim);
+
+    syncProperties(object);
+}
+
+QAbstractAnimation* ItemVisibilityController::ItemVisibilityControllerPriv::removeItemFromGroup(QObject *object)
+{
+    // common code to remove item for ItemGroup
+    int index = items.indexOf(object);
+    if (index == -1)
+        return 0;
+    items.removeAt(index);
+    q->disconnect(object, SIGNAL(destroyed(QObject*)),
+                  q, SLOT(objectDestroyed(QObject*)));
+    return animationGroup()->takeAnimation(index);
+}
+
+void ItemVisibilityController::ItemVisibilityControllerPriv::checkAnimationGroup()
+{
+    if (!animationGroup())
+    {
+        animation = new  QParallelAnimationGroup(q);
+
+        q->connect(animationGroup(), SIGNAL(finished()),
+                   q, SLOT(animationFinished()));
+    }
+}
+
 void ItemVisibilityController::addItem(QObject *object)
 {
     if (d->type == SingleItem)
@@ -167,23 +203,10 @@ void ItemVisibilityController::addItem(QObject *object)
     if (!object)
         return;
 
-    if (!d->animationGroup())
-    {
-        d->animation = new  QParallelAnimationGroup(this);
-
-        connect(d->animationGroup(), SIGNAL(finished()),
-                this, SLOT(animationFinished()));
-    }
-
+    d->checkAnimationGroup();
     QPropertyAnimation* anim = d->createAnimation();
     anim->setTargetObject(object);
-
-    connect(object, SIGNAL(destroyed(QObject*)),
-            this, SLOT(objectDestroyed(QObject*)));
-    d->items << object;
-    d->animationGroup()->addAnimation(anim);
-
-    d->syncProperties(object);
+    d->addItemToGroup(object, anim);
 }
 
 void ItemVisibilityController::removeItem(QObject *object)
@@ -197,13 +220,55 @@ void ItemVisibilityController::removeItem(QObject *object)
     if (!object)
         return;
 
-    int index = d->items.indexOf(object);
-    if (index == -1)
+    delete d->removeItemFromGroup(object);
+}
+
+void ItemVisibilityController::hideAndRemoveItem(QObject *object)
+{
+    ItemVisibilityController *c = splitOff(object);
+    if (c)
+    {
+        connect(c, SIGNAL(propertiesAssigned(bool)),
+                this, SLOT(childPropertiesAssigned()));
+        d->children << c;
+        c->hide();
+    }
+}
+
+void ItemVisibilityController::moveTo(QObject* item, ItemVisibilityController* other)
+{
+    if (d->type != ItemGroup || other->d->type != ItemGroup)
         return;
-    d->items.removeAt(index);
-    delete d->animationGroup()->takeAnimation(index);
-    disconnect(object, SIGNAL(destroyed(QObject*)),
-               this, SLOT(objectDestroyed(QObject*)));
+
+    QAbstractAnimation *anim = d->removeItemFromGroup(item);
+    if (!anim)
+        return;
+
+    other->d->addItemToGroup(item, anim);
+}
+
+ItemVisibilityController *ItemVisibilityController::splitOff(QObject *item)
+{
+    return splitOff(QList<QObject*>() << item);
+}
+
+ItemVisibilityController *ItemVisibilityController::splitOff(const QList<QObject *>& items)
+{
+    if (d->type != ItemGroup)
+        return 0;
+
+    // Create new controller and copy state
+    ItemVisibilityController *c = new ItemVisibilityController(ItemGroup, parent());
+    c->d->state        = d->state;
+    c->d->visible      = d->visible;
+    c->d->shallBeShown = d->shallBeShown;
+    c->d->checkAnimationGroup();
+
+    foreach (QObject *item, items)
+        moveTo(item, c);
+    kDebug() << "moved item" << items.first() << c->d->items << c->d->animationGroup()->animationCount();
+
+    return c;
 }
 
 void ItemVisibilityController::clear()
@@ -218,7 +283,20 @@ void ItemVisibilityController::clear()
         delete d->animation;
         d->animation = 0;
     }
+
+    foreach (QObject *item, d->items)
+    {
+        disconnect(item, SIGNAL(destroyed(QObject*)),
+                   this, SLOT(objectDestroyed(QObject*)));
+    }
     d->items.clear();
+
+    foreach (ItemVisibilityController *child, d->children)
+    {
+        delete child;
+    }
+    d->children.clear();
+
     d->state   = Hidden;
     d->visible = false;
 }
@@ -236,6 +314,21 @@ bool ItemVisibilityController::isVisible() const
 ItemVisibilityController::State ItemVisibilityController::state() const
 {
     return d->state;
+}
+
+bool ItemVisibilityController::hasVisibleItems() const
+{
+    if (d->state != Hidden)
+    {
+        if (!d->items.isEmpty())
+            return true;
+    }
+    foreach (ItemVisibilityController *child, d->children)
+    {
+        if (child->hasVisibleItems())
+            return true;
+    }
+    return false;
 }
 
 QAbstractAnimation *ItemVisibilityController::animation() const
@@ -328,16 +421,31 @@ void ItemVisibilityController::animationFinished()
     {
         d->setVisibleProperty(false);
         d->state = Hidden;
+        emit propertiesAssigned(false);
     }
     else
     {
         d->state = Visible;
+        emit propertiesAssigned(true);
     }
 }
 
 void ItemVisibilityController::objectDestroyed(QObject* item)
 {
     removeItem(item);
+}
+
+void ItemVisibilityController::childPropertiesAssigned()
+{
+    // a child controller for removal finished
+    ItemVisibilityController *child = dynamic_cast<ItemVisibilityController*>(sender());
+    if (child)
+    {
+        kDebug() << "finished hiding" << child->d->items.first();
+        emit itemHiddenAndRemoved(child->d->items.first());
+        d->children.removeOne(child);
+        child->deleteLater();
+    }
 }
 
 
