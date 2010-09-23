@@ -102,10 +102,18 @@ class FaceIface
 
 public:
 
+    enum FaceRecognitionSteps
+    {
+        DetectFaceRegions,
+        DetectAndRecognize
+    };
+
+public:
+
     FaceIface();
     ~FaceIface();
 
-    // --- Person tags ---
+    // --- Person tags -----------------------------------------------------------------------------------
 
     /**
      * Returns a boolean value indicating whether the given tagId represents a person
@@ -149,7 +157,7 @@ public:
 
     QString             faceNameForTag(int tagId) const;
 
-    // --- Read from database ---
+    // --- Read from database -----------------------------------------------------------------------------------------
 
     /**
      * Returns the number of faces present in an image.
@@ -179,8 +187,8 @@ public:
     /**
      * Edits the given face(s): From the given DImg, the face regions are copied.
      */
-    void                fillImageInFace(const DImg& image, Face &face) const;
-    void                fillImageInFaces(const DImg& image, QList<Face> &faceList) const;
+    void                fillImageInFace(const DImg& image, Face& face) const;
+    void                fillImageInFaces(const DImg& image, QList<Face>& faceList) const;
 
     /**
      * Returns a list of all tag rectangles for the image. Unlike findAndTagFaces, this does not take a DImg,
@@ -195,12 +203,6 @@ public:
      * The results are written to the database.
      */
     void writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList);
-
-    enum FaceRecognitionSteps
-    {
-        DetectFaceRegions,
-        DetectAndRecognize
-    };
 
     /**
      * Detects faces from the image and returns a list of faces
@@ -238,7 +240,7 @@ public:
      * Updates libkface's face database with a list of Face objects
      * Any faces that have a null name or image will be dropped.
      */
-    void                trainFaces(const QList< Face >& faceList);
+    void                trainFaces(const QList<Face>& faceList);
 
     /**
      * Updates libkface's face database with a list of Face objects
