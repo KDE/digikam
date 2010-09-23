@@ -27,7 +27,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 248943 : Annoying and dangerous number input fields in editor.
 018 ==> 216353 : Make it possible to apply lens correction in batch.
 019 ==> 251920 : digiKam should match lenses on Exif.CanonCs.LensType, not ExifCanonCs.Lens.
-020 ==> 
+020 ==> 251118 : Sorting order is not remembered.
+021 ==>
 
 
 

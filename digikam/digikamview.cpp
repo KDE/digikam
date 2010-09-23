@@ -520,7 +520,7 @@ void DigikamView::setupConnections()
 
     connect(d->albumHistory, SIGNAL(signalSetSelectedUrls(KUrl::List)),
             d->iconView, SLOT(setSelectedUrls(KUrl::List)));
-            
+
     connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
             d->albumHistory, SLOT(slotAlbumDeleted(Album*)));
 }
@@ -1053,7 +1053,7 @@ double DigikamView::zoomMax()
 
 void DigikamView::setZoomFactor(double zoom)
 {
-    d->albumWidgetStack->setZoomFactorSnapped(zoom);    
+    d->albumWidgetStack->setZoomFactorSnapped(zoom);
 }
 
 void DigikamView::slotZoomFactorChanged(double zoom)
@@ -1433,6 +1433,10 @@ void DigikamView::slotSortImages(int sortRole)
 
 void DigikamView::slotSortImagesOrder(int order)
 {
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (!settings)
+        return;
+    settings->setImageSorting(order);
     d->iconView->imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder) order);
 }
 
