@@ -171,6 +171,11 @@ bool FaceGroup::isVisible() const
     return d->visibilityController->shallBeShown();
 }
 
+bool FaceGroup::itemsVisible() const
+{
+    return d->visibilityController->itemsVisible();
+}
+
 ImageInfo FaceGroup::info() const
 {
     return d->info;
@@ -259,7 +264,7 @@ RegionFrameItem *FaceGroup::closestItem(const QPointF& p, qreal *manhattanLength
     qreal minCenterDistance = 0;
     foreach (RegionFrameItem *item, d->items)
     {
-        QRectF r = item->boundingRect();
+        QRectF r = item->boundingRect().translated(item->pos());
         qreal distance = (p - closestPointOfRect(p, r)).manhattanLength();
         if (!closestItem
             || distance < minDistance
@@ -414,7 +419,9 @@ void FaceGroup::slotRejected(const ImageInfo& info, const QVariant& faceIdentifi
     kDebug() << info.id() << faceIdentifier;
     FaceItem *item = d->items.takeAt(faceIdentifier.toInt());
     d->faceIface.removeFace(item->face());
-    delete item;
+
+    item->setFace(DatabaseFace());
+    d->visibilityController->hideAndRemoveItem(item);
 }
 
 void FaceGroup::startAutoSuggest()

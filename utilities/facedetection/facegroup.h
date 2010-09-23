@@ -57,6 +57,7 @@ public:
 
     bool isVisible() const;
     ImageInfo info() const;
+    bool itemsVisible() const;
 
     QList<RegionFrameItem*> items() const;
 
