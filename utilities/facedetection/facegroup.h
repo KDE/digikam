@@ -52,7 +52,7 @@ public:
      * Constructs a new face group, managing RegionFrameItems for faces
      * of a particular image, displayed on a GraphicsDImgView.
      */
-    FaceGroup(GraphicsDImgView *view);
+    FaceGroup(GraphicsDImgView* view);
     ~FaceGroup();
 
     bool isVisible() const;
@@ -75,7 +75,7 @@ public:
      * p and the closest point of the returned item's bounding rectangle.
      * In particular, if p is inside the item's rectangle, manhattanLength is 0.
      */
-    RegionFrameItem *closestItem(const QPointF& p, qreal *manhattanLength = 0) const;
+    RegionFrameItem* closestItem(const QPointF& p, qreal* manhattanLength = 0) const;
 
 public Q_SLOTS:
 
@@ -116,4 +116,3 @@ private:
 } // namespace Digikam
 
 #endif // FACEGROUP_H
-

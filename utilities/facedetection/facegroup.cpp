@@ -63,11 +63,12 @@ class FaceItem : public RegionFrameItem
 {
 public:
 
-    FaceItem(QGraphicsItem *parent = 0)
+    FaceItem(QGraphicsItem* parent = 0)
         : RegionFrameItem(parent),
           m_widget(0)
     {
     }
+
 
 
     void setFace(const DatabaseFace& face)
@@ -80,20 +81,20 @@ public:
         return m_face;
     }
 
-    void setHudWidget(AssignNameWidget *widget)
+    void setHudWidget(AssignNameWidget* widget)
     {
         m_widget = widget;
         RegionFrameItem::setHudWidget(widget);
     }
 
-    AssignNameWidget *widget() const
+    AssignNameWidget* widget() const
     {
         return m_widget;
     }
 
 protected:
 
-    AssignNameWidget *m_widget;
+    AssignNameWidget* m_widget;
     DatabaseFace      m_face;
 };
 
@@ -101,7 +102,7 @@ class FaceGroup::FaceGroupPriv
 {
 public:
 
-    FaceGroupPriv(FaceGroup *q) : q(q)
+    FaceGroupPriv(FaceGroup* q) : q(q)
     {
         view                 = 0;
         autoSuggest          = false;
@@ -111,34 +112,36 @@ public:
         filterModel          = 0;
     }
 
-    GraphicsDImgView        *view;
-    ImageInfo                info;
-    bool                     autoSuggest;
+    void                       transitionToVisible(bool visible);
+    FaceItem*                  createItem(const DatabaseFace& face);
+    AssignNameWidget*          createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier);
+    AssignNameWidget::Mode     assignWidgetMode(DatabaseFace::Type type);
+    void                       checkModels();
 
-    QList<FaceItem*>         items;
+public:
 
-    FaceGroupState           state;
-    ItemVisibilityController*visibilityController;
+    GraphicsDImgView*          view;
+    ImageInfo                  info;
+    bool                       autoSuggest;
 
-    TagModel                *tagModel;
-    CheckableAlbumFilterModel*filterModel;
+    QList<FaceItem*>           items;
 
-    FaceIface                faceIface;
-    FacePipeline             confirmPipeline;
+    FaceGroupState             state;
+    ItemVisibilityController*  visibilityController;
 
-    FaceGroup* const         q;
+    TagModel*                  tagModel;
+    CheckableAlbumFilterModel* filterModel;
 
-    void                     transitionToVisible(bool visible);
-    FaceItem                *createItem(const DatabaseFace &face);
-    AssignNameWidget        *createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier);
-    AssignNameWidget::Mode   assignWidgetMode(DatabaseFace::Type type);
-    void                     checkModels();
+    FaceIface                  faceIface;
+    FacePipeline               confirmPipeline;
+
+    FaceGroup* const           q;
 };
 
-FaceGroup::FaceGroup(GraphicsDImgView *view)
-    : QObject(view), d(new FaceGroupPriv(this))
+FaceGroup::FaceGroup(GraphicsDImgView* view)
+         : QObject(view), d(new FaceGroupPriv(this))
 {
-    d->view = view;
+    d->view                 = view;
     d->visibilityController = new ItemVisibilityController(ItemVisibilityController::ItemGroup, this);
     d->visibilityController->setShallBeShown(false);
 
@@ -160,9 +163,11 @@ void FaceGroup::itemStateChanged(int itemState)
         case DImgPreviewItem::Loading:
         case DImgPreviewItem::ImageLoadingFailed:
             d->visibilityController->hide();
+            break;
         case DImgPreviewItem::ImageLoaded:
             if (d->state == FacesLoaded)
                 d->visibilityController->show();
+            break;
     }
 }
 
@@ -184,7 +189,7 @@ ImageInfo FaceGroup::info() const
 QList<RegionFrameItem*> FaceGroup::items() const
 {
     QList<RegionFrameItem*> items;
-    foreach (FaceItem *item, d->items)
+    foreach (FaceItem* item, d->items)
         items << item;
     return items;
 }
@@ -257,15 +262,17 @@ static QPointF closestPointOfRect(const QPointF& p, const QRectF& r)
     return cp;
 }
 
-RegionFrameItem *FaceGroup::closestItem(const QPointF& p, qreal *manhattanLength) const
+RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* manhattanLength) const
 {
-    RegionFrameItem *closestItem = 0;
-    qreal minDistance = 0;
-    qreal minCenterDistance = 0;
-    foreach (RegionFrameItem *item, d->items)
+    RegionFrameItem* closestItem = 0;
+    qreal minDistance            = 0;
+    qreal minCenterDistance      = 0;
+
+    foreach (RegionFrameItem* item, d->items)
     {
-        QRectF r = item->boundingRect().translated(item->pos());
+        QRectF r        = item->boundingRect().translated(item->pos());
         qreal distance = (p - closestPointOfRect(p, r)).manhattanLength();
+
         if (!closestItem
             || distance < minDistance
             || (distance == 0 && (p - r.center()).manhattanLength() < minCenterDistance)
@@ -277,12 +284,14 @@ RegionFrameItem *FaceGroup::closestItem(const QPointF& p, qreal *manhattanLength
                 minCenterDistance = (p - r.center()).manhattanLength();
         }
     }
+
     if (manhattanLength)
         *manhattanLength = minDistance;
+
     return closestItem;
 }
 
-FaceItem *FaceGroup::FaceGroupPriv::createItem(const DatabaseFace &face)
+FaceItem* FaceGroup::FaceGroupPriv::createItem(const DatabaseFace& face)
 {
     FaceItem* item = new FaceItem(view->previewItem());
     item->setFace(face);
@@ -322,9 +331,9 @@ AssignNameWidget::Mode FaceGroup::FaceGroupPriv::assignWidgetMode(DatabaseFace::
     }
 }
 
-AssignNameWidget *FaceGroup::FaceGroupPriv::createAssignNameWidget(const DatabaseFace &face, const QVariant& identifier)
+AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier)
 {
-    AssignNameWidget *assignWidget = new AssignNameWidget;
+    AssignNameWidget* assignWidget = new AssignNameWidget;
     assignWidget->setMode(assignWidgetMode(face.type()));
     assignWidget->setBackgroundStyle(AssignNameWidget::TransparentRound);
     assignWidget->setLayoutMode(AssignNameWidget::FullLine);
@@ -358,10 +367,10 @@ void FaceGroup::load()
 
     foreach (const DatabaseFace &face, faces)
     {
-        FaceItem *item = d->createItem(face);
+        FaceItem* item = d->createItem(face);
 
         // for identification, use index in our list
-        AssignNameWidget *assignWidget = d->createAssignNameWidget(face, d->items.size());
+        AssignNameWidget* assignWidget = d->createAssignNameWidget(face, d->items.size());
         item->setHudWidget(assignWidget);
         //new StyleSheetDebugger(assignWidget);
 
@@ -379,7 +388,7 @@ void FaceGroup::load()
 void FaceGroup::clear()
 {
     d->visibilityController->clear();
-    foreach (RegionFrameItem *item, d->items)
+    foreach (RegionFrameItem* item, d->items)
         delete item;
     d->items.clear();
     d->state = NoFaces;
@@ -387,14 +396,14 @@ void FaceGroup::clear()
 
 void FaceGroup::addFace()
 {
-    /*
+/*
     int w = this->scene()->width()/2;
     int h = w;
     int x = this->scene()->width()/2 - w/2;
     int y = this->scene()->height()/2 - w/2;
 
     d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale , "", d->scale));
-    */
+*/
 }
 
 void FaceGroup::rejectAll()
@@ -404,11 +413,11 @@ void FaceGroup::rejectAll()
 void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
 {
     kDebug() << action.tagId() << info.id() << faceIdentifier;
-    int tagId = action.tagId();
-    FaceItem *item = d->items[faceIdentifier.toInt()];
+    int tagId         = action.tagId();
+    FaceItem* item    = d->items[faceIdentifier.toInt()];
     DatabaseFace face = item->face();
     QRect currentRect = item->originalRect();
-    face = d->faceIface.confirmName(d->info.id(), tagId, currentRect, face.region().toRect());
+    face              = d->faceIface.confirmName(d->info.id(), tagId, currentRect, face.region().toRect());
     item->widget()->setMode(d->assignWidgetMode(face.type()));
     //item->widget()->setCurrentTag(face.tagId())
     item->setFace(face);
@@ -417,7 +426,7 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo& info,
 void FaceGroup::slotRejected(const ImageInfo& info, const QVariant& faceIdentifier)
 {
     kDebug() << info.id() << faceIdentifier;
-    FaceItem *item = d->items.takeAt(faceIdentifier.toInt());
+    FaceItem* item = d->items.takeAt(faceIdentifier.toInt());
     d->faceIface.removeFace(item->face());
 
     item->setFace(DatabaseFace());
@@ -430,7 +439,6 @@ void FaceGroup::startAutoSuggest()
         return;
 }
 
-
 /*
 void ImagePreviewView::trainFaces()
 {
@@ -441,7 +449,7 @@ void ImagePreviewView::trainFaces()
             trainList += f;
     }
 
-    kDebug()<<"Number of training faces"<<trainList.size();
+    kDebug() << "Number of training faces" << trainList.size();
 
     if(trainList.size()!=0)
     {
@@ -471,8 +479,8 @@ void ImagePreviewView::suggestFaces()
         }
     }
 
-    kDebug()<<"Number of suggestions = "<<recogList.size();
-    kDebug()<<"Number of faceitems = "<<d->faceitems.size();
+    kDebug() << "Number of suggestions = " << recogList.size();
+    kDebug() << "Number of faceitems = " << d->faceitems.size();
     // Now find the relevant face items and suggest faces
     for(int i = 0; i < recogList.size(); ++i)
     {
@@ -480,17 +488,14 @@ void ImagePreviewView::suggestFaces()
         {
             if(recogList[i].toRect() == d->faceitems[j]->originalRect())
             {
-                kDebug()<<"Suggesting a name "<<recogList[i].name();
+                kDebug() << "Suggesting a name " << recogList[i].name();
                 d->faceitems[j]->suggest(recogList[i].name());
                 break;
             }
         }
     }
     * /
-
 }
 */
 
 } // namespace Digikam
-
-
