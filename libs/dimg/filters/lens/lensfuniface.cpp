@@ -291,7 +291,7 @@ bool LensFunIface::supportsDistortion() const
 
     lfLensCalibDistortion res;
     return m_usedLens->InterpolateDistortion(m_settings.focalLength, res);
-};
+}
 
 bool LensFunIface::supportsCCA() const
 {
@@ -299,7 +299,7 @@ bool LensFunIface::supportsCCA() const
 
     lfLensCalibTCA res;
     return m_usedLens->InterpolateTCA(m_settings.focalLength, res);
-};
+}
 
 bool LensFunIface::supportsVig() const
 {
@@ -309,17 +309,17 @@ bool LensFunIface::supportsVig() const
     return m_usedLens->InterpolateVignetting(m_settings.focalLength,
                                              m_settings.aperture,
                                              m_settings.subjectDistance, res);
-};
+}
 
 bool LensFunIface::supportsGeometry() const
 {
     return supportsDistortion();
-};
+}
 
 bool LensFunIface::supportsCCI() const
 {
     return supportsVig();
-};
+}
 
 #if 0
 LensFunIface::correctionData LensFunIface::getCorrectionData()
