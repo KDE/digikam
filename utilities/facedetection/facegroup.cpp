@@ -176,9 +176,9 @@ bool FaceGroup::isVisible() const
     return d->visibilityController->shallBeShown();
 }
 
-bool FaceGroup::itemsVisible() const
+bool FaceGroup::hasVisibleItems() const
 {
-    return d->visibilityController->itemsVisible();
+    return d->visibilityController->hasVisibleItems();
 }
 
 ImageInfo FaceGroup::info() const
