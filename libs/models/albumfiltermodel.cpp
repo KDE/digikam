@@ -76,6 +76,8 @@ void AlbumFilterModel::setFilterBehavior(FilterBehavior behavior)
 
 void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
 {
+    if (!sourceModel())
+        return;
 
     // don't use isFiltering here because it may be reimplemented
     bool wasSearching = settingsFilter(m_settings);
@@ -129,12 +131,17 @@ SearchTextSettings AlbumFilterModel::searchTextSettings() const
 
 void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
 {
-    m_chainedModel = 0;
-    setSourceModel(source);
+    if (m_chainedModel)
+        m_chainedModel->setSourceAlbumModel(source);
+    else
+        setSourceModel(source);
 }
 
-void AlbumFilterModel::setSourceAlbumModel(AlbumFilterModel *source)
+void AlbumFilterModel::setSourceFilterModel(AlbumFilterModel *source)
 {
+    AbstractAlbumModel *model = sourceAlbumModel();
+    if (model)
+        source->setSourceAlbumModel(model);
     m_chainedModel = source;
     setSourceModel(source);
 }
@@ -150,6 +157,11 @@ AbstractAlbumModel *AlbumFilterModel::sourceAlbumModel() const
     if (m_chainedModel)
         return m_chainedModel->sourceAlbumModel();
     return static_cast<AbstractAlbumModel*>(sourceModel());
+}
+
+AlbumFilterModel *AlbumFilterModel::sourceFilterModel() const
+{
+    return m_chainedModel;
 }
 
 QModelIndex AlbumFilterModel::mapToSourceAlbumModel(const QModelIndex& index) const
@@ -173,12 +185,18 @@ Album *AlbumFilterModel::albumForIndex(const QModelIndex& index) const
 
 QModelIndex AlbumFilterModel::indexForAlbum(Album *album) const
 {
-    return mapFromSourceAlbumModel(sourceAlbumModel()->indexForAlbum(album));
+    AbstractAlbumModel *model = sourceAlbumModel();
+    if (!model)
+        return QModelIndex();
+    return mapFromSourceAlbumModel(model->indexForAlbum(album));
 }
 
 QModelIndex AlbumFilterModel::rootAlbumIndex() const
 {
-    return mapFromSourceAlbumModel(sourceAlbumModel()->rootAlbumIndex());
+    AbstractAlbumModel *model = sourceAlbumModel();
+    if (!model)
+        return QModelIndex();
+    return mapFromSourceAlbumModel(model->rootAlbumIndex());
 }
 
 bool AlbumFilterModel::matches(Album *album) const
@@ -296,19 +314,19 @@ CheckableAlbumFilterModel::CheckableAlbumFilterModel(QObject *parent) :
 {
 }
 
-void CheckableAlbumFilterModel::setSourceCheckableAlbumModel(AbstractCheckableAlbumModel *source)
+void CheckableAlbumFilterModel::setSourceAlbumModel(AbstractCheckableAlbumModel *source)
 {
-    setSourceModel(source);
+    AlbumFilterModel::setSourceAlbumModel(source);
+}
+
+void CheckableAlbumFilterModel::setSourceFilterModel(CheckableAlbumFilterModel *source)
+{
+    AlbumFilterModel::setSourceFilterModel(source);
 }
 
 AbstractCheckableAlbumModel *CheckableAlbumFilterModel::sourceAlbumModel() const
 {
     return dynamic_cast<AbstractCheckableAlbumModel*> (sourceModel());
-}
-
-void CheckableAlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
-{
-    AlbumFilterModel::setSourceAlbumModel(source);
 }
 
 void CheckableAlbumFilterModel::setFilterChecked(bool filter)
@@ -367,7 +385,7 @@ SearchFilterModel::SearchFilterModel(QObject *parent)
 
 void SearchFilterModel::setSourceSearchModel(SearchModel *source)
 {
-    setSourceModel(source);
+    setSourceAlbumModel(source);
 }
 
 SearchModel *SearchFilterModel::sourceSearchModel() const
@@ -472,7 +490,7 @@ TagPropertiesFilterModel::TagPropertiesFilterModel(QObject *parent)
 
 void TagPropertiesFilterModel::setSourceTagModel(TagModel *source)
 {
-    setSourceModel(source);
+    setSourceAlbumModel(source);
 }
 
 TagModel *TagPropertiesFilterModel::sourceTagModel() const

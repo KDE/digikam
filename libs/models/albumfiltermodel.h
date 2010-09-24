@@ -45,10 +45,22 @@ public:
 
     AlbumFilterModel(QObject *parent = 0);
 
+    /**
+     * Sets the source model.
+     * Note: If a chained filter model is set, it will not be reset, but
+     * the source album model will be made source of the chained filter model.
+     */
     void setSourceAlbumModel(AbstractAlbumModel *source);
-    void setSourceAlbumModel(AlbumFilterModel *source);
+
+    /**
+     * Sets a chained filter model. 
+     * Note: If a direct source album model is set as current source, it will be set as
+     * sourceAlbumModel of the new source filter model.
+     */
+    void setSourceFilterModel(AlbumFilterModel *source);
 
     AbstractAlbumModel *sourceAlbumModel() const;
+    AlbumFilterModel   *sourceFilterModel() const;
     QModelIndex mapToSourceAlbumModel(const QModelIndex& index) const;
     QModelIndex mapFromSourceAlbumModel(const QModelIndex& index) const;
 
@@ -220,7 +232,8 @@ class CheckableAlbumFilterModel : public AlbumFilterModel
 public:
     CheckableAlbumFilterModel(QObject *parent = 0);
 
-    void setSourceCheckableAlbumModel(AbstractCheckableAlbumModel *source);
+    void setSourceAlbumModel(AbstractCheckableAlbumModel *source);
+    void setSourceFilterModel(CheckableAlbumFilterModel *source);
     AbstractCheckableAlbumModel *sourceAlbumModel() const;
 
     void setFilterChecked(bool filter);
@@ -232,11 +245,8 @@ protected:
 
     virtual bool matches(Album *album) const;
 
-    void setSourceAlbumModel(AbstractAlbumModel *source);
-
     bool m_filterChecked;
     bool m_filterPartiallyChecked;
-
 };
 
 /**
