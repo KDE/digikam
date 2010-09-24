@@ -72,10 +72,11 @@ public:
 AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel *model,
                                          AlbumModificationHelper *albumModificationHelper,
                                          QWidget *parent) :
-                                         AlbumTreeView(model, parent),
+                                         AlbumTreeView(parent),
                                          d(new AlbumSelectTreeViewPriv)
 {
 
+    setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
 
     d->newAlbumAction = new KAction(KIcon("albumfolder-new"), i18n("Create New Album"), this);

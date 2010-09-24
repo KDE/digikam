@@ -103,7 +103,7 @@ void AddTagsComboBox::installLineEdit()
 void AddTagsComboBox::installView(QAbstractItemView *view)
 {
     if (!view && !d->treeView)
-        d->treeView = new TagTreeView(0, 0, this);
+        d->treeView = new TagTreeView(this);
     // called from initialize, tree view is constructed
     AlbumSelectComboBox::installView(view ? view : d->treeView);
 }

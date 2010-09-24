@@ -130,7 +130,8 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     KVBox* albumBox  = new KVBox(d->tab);
     d->albumModel    = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
-    d->albumTreeView = new AlbumTreeView(d->albumModel, albumBox);
+    d->albumTreeView = new AlbumTreeView(albumBox);
+    d->albumTreeView->setAlbumModel(d->albumModel);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
     d->albumTreeView->setConfigGroup(configGroup);
     d->prepareTreeView(d->albumTreeView);
@@ -150,7 +151,8 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     KVBox* tagBox  = new KVBox(d->tab);
     d->tagModel    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, tagBox);
-    d->tagTreeView = new TagTreeView(d->tagModel, tagBox);
+    d->tagTreeView = new TagTreeView(tagBox);
+    d->tagTreeView->setAlbumModel(d->tagModel);
     d->tagTreeView->setEntryPrefix("TagTreeView");
     d->tagTreeView->setConfigGroup(configGroup);
     d->prepareTreeView(d->tagTreeView);
@@ -171,7 +173,8 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     KVBox* searchBox  = new KVBox(d->tab);
     d->searchModel    = new SearchModel(searchBox);
-    d->searchTreeView = new SearchTreeView(searchBox, d->searchModel);
+    d->searchTreeView = new SearchTreeView(searchBox);
+    d->searchTreeView->setAlbumModel(d->searchModel);
     d->searchTreeView->setEntryPrefix("SearchTreeView");
     d->searchTreeView->setConfigGroup(configGroup);
     d->searchTreeView->filteredModel()->listAllSearches();

@@ -82,7 +82,8 @@ DateFolderView::DateFolderView(QWidget* parent, DateAlbumModel* dateAlbumModel)
 {
     setObjectName("DateFolderView");
 
-    d->dateTreeView  = new DateAlbumTreeView(this, dateAlbumModel);
+    d->dateTreeView  = new DateAlbumTreeView(this);
+    d->dateTreeView->setAlbumModel(dateAlbumModel);
     d->dateTreeView->setSelectAlbumOnClick(true);
     d->dateTreeView->setAlbumManagerCurrentAlbum(true);
     d->monthview = new MonthWidget(this);

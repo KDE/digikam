@@ -49,7 +49,6 @@ class TagFolderViewPriv
 public:
     TagFolderViewPriv() :
         showFindDuplicateAction(true),
-        model(0),
         resetIconAction(0),
         findDuplAction(0)
     {
@@ -57,18 +56,15 @@ public:
 
     bool showFindDuplicateAction;
 
-    TagModel *model;
-
     QAction *resetIconAction;
     QAction *findDuplAction;
 
 };
 
 TagFolderView::TagFolderView(QWidget *parent, TagModel *model) :
-    TagTreeView(model, parent), d(new TagFolderViewPriv)
+    TagTreeView(parent), d(new TagFolderViewPriv)
 {
-
-    d->model = model;
+    setAlbumModel(model);
 
     d->resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Tag Icon"), this);
     d->findDuplAction = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);

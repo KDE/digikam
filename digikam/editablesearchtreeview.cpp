@@ -59,8 +59,9 @@ public:
 EditableSearchTreeView::EditableSearchTreeView(QWidget* parent,
                                              SearchModel* searchModel,
                                              SearchModificationHelper* searchModificationHelper)
-                      : SearchTreeView(parent, searchModel), d(new EditableSearchTreeViewPriv)
+                      : SearchTreeView(parent), d(new EditableSearchTreeViewPriv)
 {
+    setAlbumModel(searchModel);
     d->searchModificationHelper = searchModificationHelper;
 
     d->renameSearchAction = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);

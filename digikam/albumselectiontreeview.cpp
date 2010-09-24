@@ -96,9 +96,10 @@ public:
 
 AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget *parent, AlbumModel *model,
                 AlbumModificationHelper *albumModificationHelper) :
-    AlbumTreeView(model, parent), d(new AlbumSelectionTreeViewPriv)
+    AlbumTreeView(parent), d(new AlbumSelectionTreeViewPriv)
 {
 
+    setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
 
     d->toolTip = new AlbumViewToolTip(this);
