@@ -37,7 +37,6 @@ namespace Digikam
 {
 
 class CurvesWidget;
-class RawSettingsBoxPriv;
 
 class DIGIKAM_EXPORT RawSettingsBox : public EditorToolSettings
 {
@@ -51,7 +50,7 @@ public:
     void setBusy(bool b);
 
     CurvesWidget* curvesWidget() const;
-    DRawDecoding  settings();
+    DRawDecoding  settings() const;
 
     void writeSettings();
     void readSettings();
@@ -76,6 +75,7 @@ private Q_SLOTS:
 
 private:
 
+    class RawSettingsBoxPriv;
     RawSettingsBoxPriv* const d;
 };
 

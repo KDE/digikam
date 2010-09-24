@@ -68,7 +68,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class RawSettingsBoxPriv
+class RawSettingsBox::RawSettingsBoxPriv
 {
 public:
 
@@ -160,7 +160,6 @@ public:
     RDoubleNumInput*     fineExposureInput;
 
     DcrawSettingsWidget* decodingSettingsBox;
-
 };
 
 RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
@@ -476,7 +475,7 @@ void RawSettingsBox::writeSettings()
     group.sync();
 }
 
-DRawDecoding RawSettingsBox::settings()
+DRawDecoding RawSettingsBox::settings() const
 {
     DRawDecoding settings(d->decodingSettingsBox->settings());
 

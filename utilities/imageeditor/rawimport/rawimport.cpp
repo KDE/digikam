@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class RawImportPriv
+class RawImport::RawImportPriv
 {
 public:
 
@@ -65,7 +65,7 @@ public:
     RawPreview*     previewWidget;
 };
 
-RawImport::RawImport(const KUrl& url, QObject *parent)
+RawImport::RawImport(const KUrl& url, QObject* parent)
          : EditorToolThreaded(parent), d(new RawImportPriv)
 {
     d->previewWidget = new RawPreview(url, 0);
@@ -127,7 +127,7 @@ void RawImport::setBusy(bool val)
     d->settingsBox->setBusy(val);
 }
 
-DRawDecoding RawImport::rawDecodingSettings()
+DRawDecoding RawImport::rawDecodingSettings() const
 {
     return d->settingsBox->settings();
 }
