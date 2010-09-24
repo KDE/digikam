@@ -61,6 +61,15 @@ public:
     void setSettings(const LensFunContainer& other);
     LensFunContainer settings() const;
 
+    LensPtr                usedLens() const;
+    void setUsedLens(LensPtr lens);
+
+    DevicePtr              usedCamera() const;
+    void setUsedCamera(DevicePtr cam);
+
+    lfDatabase*            lensFunDataBase() const;
+    const lfCamera* const* lensFunCameras() const;
+
     DevicePtr findCamera(const QString& make, const QString& model) const;
     LensPtr   findLens(const QString& model) const;
 
@@ -83,23 +92,8 @@ private:
 
 private:
 
-    // my configuration
-    bool                   m_init;
-
-    // Database items
-    lfDatabase*            m_lfDb;
-    const lfMount*         m_lfMounts;
-    const lfCamera* const* m_lfCameras;
-    const lfLens**         m_lfLenses;
-
-    DevicePtr              m_usedCamera;
-    LensPtr                m_usedLens;
-
-    // To be used for modification
-    LensFunContainer       m_settings;
-
-    friend class LensFunCameraSelector;
-    friend class LensFunFilter;
+    class LensFunIfacePriv;
+    LensFunIfacePriv* const d;
 };
 
 }  // namespace Digikam

@@ -46,16 +46,14 @@ namespace Digikam
 {
 
 class LoadingDescription;
-class RawPreviewPriv;
 
 class DIGIKAM_EXPORT RawPreview : public PreviewWidget
 {
-
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    RawPreview(const KUrl& url, QWidget *parent);
+    RawPreview(const KUrl& url, QWidget* parent);
     ~RawPreview();
 
     DImg& demosaicedImage() const;
@@ -98,10 +96,11 @@ private:
     void   updateZoomAndSize(bool alwaysFitToWindow);
     QImage previewToQImage() const;
 
-    inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
+    inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:
 
+    class RawPreviewPriv;
     RawPreviewPriv* const d;
 };
 

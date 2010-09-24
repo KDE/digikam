@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class RawPreviewPriv
+class RawPreview::RawPreviewPriv
 {
 public:
 
@@ -74,7 +74,7 @@ public:
     LoadingDescription     loadingDesc;
 };
 
-RawPreview::RawPreview(const KUrl& url, QWidget *parent)
+RawPreview::RawPreview(const KUrl& url, QWidget* parent)
           : PreviewWidget(parent), d(new RawPreviewPriv)
 {
     d->thread = new ManagedLoadSaveThread;
@@ -250,13 +250,13 @@ void RawPreview::resetPreview()
     updateZoomAndSize(false);
 }
 
-void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
+void RawPreview::paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)
 {
     DImg img = d->postProcessedImg.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
 
     QPixmap pixImage;
 
-    ICCSettingsContainer *iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+    ICCSettingsContainer* iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
     if (iccSettings && iccSettings->enableCM && iccSettings->useManagedView)
     {

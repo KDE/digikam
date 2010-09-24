@@ -41,18 +41,16 @@ class RawDecodingSettings;
 namespace Digikam
 {
 
-class RawImportPriv;
-
 class DIGIKAM_EXPORT RawImport : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    RawImport(const KUrl& url, QObject *parent);
+    RawImport(const KUrl& url, QObject* parent);
     ~RawImport();
 
-    DRawDecoding rawDecodingSettings();
+    DRawDecoding rawDecodingSettings() const;
 
 private:
 
@@ -82,6 +80,7 @@ private Q_SLOTS:
 
 private:
 
+    class RawImportPriv;
     RawImportPriv* const d;
 };
 

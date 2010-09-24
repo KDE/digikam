@@ -293,7 +293,7 @@ void DetectionWorker::setAccuracy(int accuracy)
 // ----------------------------------------------------------------------------------------
 
 RecognitionWorker::RecognitionWorker(FacePipeline::FacePipelinePriv* d)
-    : d(d)
+                 : d(d)
 {
     database             = KFaceIface::RecognitionDatabase::addDatabase();
     recognitionThreshold = 10000000;
@@ -301,8 +301,8 @@ RecognitionWorker::RecognitionWorker(FacePipeline::FacePipelinePriv* d)
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    if ( !(package->processFlags & FacePipelinePackage::ProcessedByDetector)
-       && !package->info.isNull())
+    if ( !(package->processFlags & FacePipelinePackage::ProcessedByDetector) &&
+         !package->info.isNull())
     {
         package->faces = d->iface->unconfirmedFacesFromTags(package->info.id());
     }
@@ -310,9 +310,9 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
     QList<double> distances = database.recognizeFaces(package->faces);
     for (int i=0; i<distances.size(); i++)
     {
-        kDebug() << "Recognition:" << package->info.id() << package->faces[i].toRect()
+        kDebug() << "Recognition:"  << package->info.id()     << package->faces[i].toRect()
                  << "recognized as" << package->faces[i].id() << package->faces[i].name()
-                 << "at distance" << distances[i]
+                 << "at distance"   << distances[i]
                  << ((distances[i] > recognitionThreshold) ? "(discarded)" : "(accepted)");
         if (distances[i] > recognitionThreshold)
         {
@@ -348,7 +348,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 
 // ----------------------------------------------------------------------------------------
 
-FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline *q)
+FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline* q)
                               : q(q)
 {
     alreadyScannedFilter = 0;
@@ -553,14 +553,18 @@ void FacePipeline::plugDatabaseWriter()
 void FacePipeline::construct()
 {
     QList<QObject*> pipeline;
+
     if (d->previewThread)
         pipeline << d->previewThread;
+
     if (d->parallelDetectors)
         pipeline << d->parallelDetectors;
     else if (d->detectionWorker)
         pipeline << d->detectionWorker;
+
     if (d->recognitionWorker)
         pipeline << d->recognitionWorker;
+
     if (d->databaseWriter)
         pipeline << d->databaseWriter;
 
@@ -573,7 +577,7 @@ void FacePipeline::construct()
     connect(d, SIGNAL(startProcess(FacePipelineExtendedPackage::Ptr)),
             pipeline.first(), SLOT(process(FacePipelineExtendedPackage::Ptr)));
 
-    for (int i=0; i<pipeline.size()-1; i++)
+    for (int i = 0; i < pipeline.size()-1; i++)
     {
         connect(pipeline[i], SIGNAL(processed(FacePipelineExtendedPackage::Ptr)),
                 pipeline[i+1], SLOT(process(FacePipelineExtendedPackage::Ptr)));
@@ -616,7 +620,7 @@ bool FacePipeline::process(const ImageInfo& info, const DImg& image)
     }
 
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
-    package->image = image;
+    package->image                           = image;
     d->send(package);
 
     return true;

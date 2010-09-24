@@ -295,9 +295,9 @@ void LensFunCameraSelector::refreshSettingsView()
 {
     int makerIdx = -1;
 
-    if (d->iface->m_usedCamera)
+    if (d->iface->usedCamera())
     {
-        makerIdx = d->make->combo()->findText(d->iface->m_settings.cameraMake);
+        makerIdx = d->make->combo()->findText(d->iface->settings().cameraMake);
     }
 
     if (makerIdx >= 0)
@@ -311,9 +311,9 @@ void LensFunCameraSelector::refreshSettingsView()
 
     int modelIdx = -1;
 
-    if (d->iface->m_usedCamera)
+    if (d->iface->usedCamera())
     {
-        modelIdx = d->model->combo()->findText(d->iface->m_settings.cameraModel);
+        modelIdx = d->model->combo()->findText(d->iface->settings().cameraModel);
     }
 
     if (modelIdx >= 0)
@@ -327,9 +327,9 @@ void LensFunCameraSelector::refreshSettingsView()
 
     int lensIdx = -1;
 
-    if (d->iface->m_usedLens)
+    if (d->iface->usedLens())
     {
-        lensIdx = d->lens->combo()->findText(d->iface->m_settings.lensModel);
+        lensIdx = d->lens->combo()->findText(d->iface->settings().lensModel);
     }
 
     if (lensIdx >= 0)
@@ -341,28 +341,28 @@ void LensFunCameraSelector::refreshSettingsView()
 
     // ------------------------------------------------------------------------------------------------
 
-    if (d->iface->m_settings.focalLength != -1.0)
+    if (d->iface->settings().focalLength != -1.0)
     {
-        d->focal->setValue(d->iface->m_settings.focalLength);
+        d->focal->setValue(d->iface->settings().focalLength);
         d->focal->setEnabled(d->passiveMetadataUsage);
     }
 
-    if (d->iface->m_settings.aperture != -1.0)
+    if (d->iface->settings().aperture != -1.0)
     {
-        d->aperture->setValue(d->iface->m_settings.aperture);
+        d->aperture->setValue(d->iface->settings().aperture);
         d->aperture->setEnabled(d->passiveMetadataUsage);
     }
 
-    if (d->iface->m_settings.subjectDistance != -1.0)
+    if (d->iface->settings().subjectDistance != -1.0)
     {
-        d->distance->setValue(d->iface->m_settings.subjectDistance);
+        d->distance->setValue(d->iface->settings().subjectDistance);
         d->distance->setEnabled(d->passiveMetadataUsage);
     }
 }
 
 void LensFunCameraSelector::slotUpdateCombos()
 {
-    const lfCamera* const* it = d->iface->m_lfCameras;
+    const lfCamera* const* it = d->iface->lensFunCameras();
 
     // reset box
     d->model->combo()->clear();
@@ -424,8 +424,8 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 
     kDebug() << "dev: " << dev->Maker << " :: " << dev->Model;
 
-    const lfLens** lenses           = d->iface->m_lfDb->FindLenses( dev, NULL, NULL );
-    d->iface->m_settings.cropFactor = dev ? dev->CropFactor : -1;
+    const lfLens** lenses           = d->iface->lensFunDataBase()->FindLenses( dev, NULL, NULL );
+    d->iface->settings().cropFactor = dev ? dev->CropFactor : -1;
 
     while (lenses && *lenses)
     {
@@ -442,43 +442,43 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 
 void LensFunCameraSelector::slotCameraSelected()
 {
-    QVariant v             = d->model->combo()->itemData( d->model->currentIndex() );
-    d->iface->m_usedCamera = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
-                             v.value<LensFunIface::DevicePtr>();
+    QVariant v = d->model->combo()->itemData( d->model->currentIndex() );
+    d->iface->setUsedCamera(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
+                            v.value<LensFunIface::DevicePtr>());
 }
 
 void LensFunCameraSelector::slotLensSelected()
 {
-    QVariant v           = d->lens->combo()->itemData( d->lens->currentIndex() );
-    d->iface->m_usedLens = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
-                           v.value<LensFunIface::LensPtr>();
+    QVariant v = d->lens->combo()->itemData( d->lens->currentIndex() );
+    d->iface->setUsedLens(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
+                          v.value<LensFunIface::LensPtr>());
 
-    if (d->iface->m_usedLens &&
-        d->iface->m_settings.cropFactor <= 0.0) // this should not happen
-        d->iface->m_settings.cropFactor = d->iface->m_usedLens->CropFactor;
+    if (d->iface->usedLens() &&
+        d->iface->settings().cropFactor <= 0.0) // this should not happen
+        d->iface->settings().cropFactor = d->iface->usedLens()->CropFactor;
     else 
-        d->iface->m_settings.cropFactor = -1.0;
+        d->iface->settings().cropFactor = -1.0;
 
     emit signalLensSettingsChanged();
 }
 
 void LensFunCameraSelector::slotFocalChanged()
 {
-    d->iface->m_settings.focalLength = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? -1.0 :
+    d->iface->settings().focalLength = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? -1.0 :
                                        d->focal->value();
     emit signalLensSettingsChanged();
 }
 
 void LensFunCameraSelector::slotApertureChanged()
 {
-    d->iface->m_settings.aperture = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? -1.0 :
+    d->iface->settings().aperture = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? -1.0 :
                                     d->aperture->value();
     emit signalLensSettingsChanged();
 }
 
 void LensFunCameraSelector::slotDistanceChanged()
 {
-    d->iface->m_settings.subjectDistance = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? -1.0 :
+    d->iface->settings().subjectDistance = d->metadataUsage->isChecked() && d->passiveMetadataUsage ? -1.0 :
                                            d->distance->value();
     emit signalLensSettingsChanged();
 }

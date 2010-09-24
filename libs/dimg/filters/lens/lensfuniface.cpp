@@ -27,55 +27,115 @@
 namespace Digikam
 {
 
-LensFunIface::LensFunIface()
+class LensFunIface::LensFunIfacePriv
 {
-    m_init = false;
+public:
+
+    LensFunIfacePriv()
+    {
+        init       = false;
+        usedLens   = 0;
+        usedCamera = 0;
+        lfDb       = 0;
+        lfMounts   = 0;
+        lfCameras  = 0;
+        lfLenses   = 0;
+    }
+
+    // my configuration
+    bool                   init;
+
+    // To be used for modification
+    LensFunContainer       settings;
+
+    // Database items
+    lfDatabase*            lfDb;
+    const lfMount*         lfMounts;
+    const lfCamera* const* lfCameras;
+    const lfLens**         lfLenses;
+
+    LensPtr                usedLens;
+    DevicePtr              usedCamera;
+};
+
+LensFunIface::LensFunIface()
+            : d(new LensFunIfacePriv)
+{
     init();
 }
 
 LensFunIface::~LensFunIface()
 {
-    if (m_init)
+    if (d->init)
     {
     }
+    delete d;
 }
 
 bool LensFunIface::init()
 {
-    m_lfDb          = lf_db_new();
-    m_lfDb->Load();
-    m_lfCameras     = m_lfDb->GetCameras();
-    m_init          = true;
-    m_usedLens      = 0;
-    m_usedCamera    = 0;
+    d->lfDb      = lf_db_new();
+    d->lfDb->Load();
+    d->lfCameras = d->lfDb->GetCameras();
+    d->init      = true;
 
     return true;
 }
 
 void LensFunIface::setSettings(const LensFunContainer& other)
 {
-    m_settings   = other;
-    m_usedCamera = findCamera(m_settings.cameraMake, m_settings.cameraModel);
-    m_usedLens   = findLens(m_settings.lensModel);
+    d->settings   = other;
+    d->usedCamera = findCamera(d->settings.cameraMake, d->settings.cameraModel);
+    d->usedLens   = findLens(d->settings.lensModel);
 }
 
 LensFunContainer LensFunIface::settings() const
 {
-    return m_settings;
+    return d->settings;
+}
+
+LensFunIface::DevicePtr LensFunIface::usedCamera() const
+{
+    return d->usedCamera;
+}
+
+void LensFunIface::setUsedCamera(DevicePtr cam)
+{
+    d->usedCamera = cam;
+}
+
+LensFunIface::LensPtr LensFunIface::usedLens() const
+{
+    return d->usedLens;
+}
+
+void LensFunIface::setUsedLens(LensPtr lens)
+{
+    d->usedLens = lens;
+}
+
+lfDatabase* LensFunIface::lensFunDataBase() const
+{
+    return d->lfDb;
+}
+
+const lfCamera* const* LensFunIface::lensFunCameras() const
+{
+    return d->lfCameras;
 }
 
 void LensFunIface::setFilterSettings(const LensFunContainer& other)
 {
-    m_settings.filterCCA = other.filterCCA;
-    m_settings.filterVIG = other.filterVIG;
-    m_settings.filterCCI = other.filterCCI;
-    m_settings.filterDST = other.filterDST;
-    m_settings.filterGEO = other.filterGEO;
+    d->settings.filterCCA = other.filterCCA;
+    d->settings.filterVIG = other.filterVIG;
+    d->settings.filterCCI = other.filterCCI;
+    d->settings.filterDST = other.filterDST;
+    d->settings.filterGEO = other.filterGEO;
 }
 
 LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QString& model) const
 {
-    const lfCamera* const* lfCamera = m_lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
+    const lfCamera* const* lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
     if (lfCamera && *lfCamera)
     {
         DevicePtr cam = *lfCamera;
@@ -94,7 +154,7 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
 
 LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
 {
-    const lfLens* const* lfLens = m_lfDb->GetLenses();
+    const lfLens* const* lfLens = d->lfDb->GetLenses();
     while (lfLens && *lfLens)
     {
         LensPtr lens = *lfLens;
@@ -118,9 +178,9 @@ LensFunIface::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const 
     if (lfCamera)
     {
         if (!lensMaker.isEmpty())
-            lfLens = m_lfDb->FindLenses(lfCamera, lensMaker.toAscii().constData(), lensDesc.toAscii().constData());
+            lfLens = d->lfDb->FindLenses(lfCamera, lensMaker.toAscii().constData(), lensDesc.toAscii().constData());
         else
-            lfLens = m_lfDb->FindLenses(lfCamera, NULL, lensDesc.toAscii().constData());
+            lfLens = d->lfDb->FindLenses(lfCamera, NULL, lensDesc.toAscii().constData());
 
         while (lfLens && *lfLens)
         {
@@ -141,21 +201,21 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     QString model                = photoInfo.model;
     QString lens                 = photoInfo.lens;
     bool ret                     = false;
-    m_settings                   = LensFunContainer();
+    d->settings                   = LensFunContainer();
 
     // ------------------------------------------------------------------------------------------------
 
-    const lfCamera** lfCamera = m_lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
+    const lfCamera** lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
 
     if (lfCamera && *lfCamera)
     {
-        m_usedCamera           = *lfCamera;
-        ret                    = true;
-        m_settings.cameraMake  = m_usedCamera->Maker;
-        m_settings.cameraModel = m_usedCamera->Model;
+        d->usedCamera           = *lfCamera;
+        ret                     = true;
+        d->settings.cameraMake  = d->usedCamera->Maker;
+        d->settings.cameraModel = d->usedCamera->Model;
 
-        kDebug() << "Camera maker : " << m_settings.cameraMake;
-        kDebug() << "Camera model : " << m_settings.cameraModel;
+        kDebug() << "Camera maker : " << d->settings.cameraMake;
+        kDebug() << "Camera model : " << d->settings.cameraModel;
 
         // ------------------------------------------------------------------------------------------------
 
@@ -169,7 +229,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             LensList           lensList;
 
             // STAGE 1, search in DB as well.
-            lensList = findLenses(m_usedCamera, lens);
+            lensList = findLenses(d->usedCamera, lens);
             if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
             // STAGE 1, Adapt exiv2 strings to lensfun strings for Nikon.
@@ -179,7 +239,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
                 lensCutted.replace("Nikon ", "");
                 lensCutted.replace("Zoom-", "");
                 lensCutted.replace("IF-ID", "ED-IF");
-                lensList = findLenses(m_usedCamera, lensCutted);
+                lensList = findLenses(d->usedCamera, lensCutted);
                 kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
                 if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
             }
@@ -192,7 +252,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             lensCutted.replace(QRegExp("\\.[0-9]"), "");
             lensCutted.replace(" - ", "-");
             lensCutted.replace(" mm", "mn");
-            lensList = findLenses(m_usedCamera, lensCutted);
+            lensList = findLenses(d->usedCamera, lensCutted);
             kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
             if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
@@ -205,15 +265,15 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             }
             else
             {
-                m_usedLens           = bestMatches[bestMatches.keys()[0]];
-                m_settings.lensModel = m_usedLens->Model;
-                kDebug() << "Lens found   : " << m_settings.lensModel;
+                d->usedLens           = bestMatches[bestMatches.keys()[0]];
+                d->settings.lensModel = d->usedLens->Model;
+                kDebug() << "Lens found   : " << d->settings.lensModel;
             }
 
             // ------------------------------------------------------------------------------------------------
 
-            m_settings.cropFactor = m_usedLens->CropFactor;
-            kDebug() << "Crop Factor  : " << m_settings.cropFactor;
+            d->settings.cropFactor = d->usedLens->CropFactor;
+            kDebug() << "Crop Factor  : " << d->settings.cropFactor;
 
             // ------------------------------------------------------------------------------------------------
 
@@ -223,8 +283,8 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
                 kDebug() << "Focal Length : NOT FOUND";
                 ret &= false;
             }
-            m_settings.focalLength = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
-            kDebug() << "Focal Length : " << m_settings.focalLength;
+            d->settings.focalLength = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
+            kDebug() << "Focal Length : " << d->settings.focalLength;
 
             // ------------------------------------------------------------------------------------------------
 
@@ -234,8 +294,8 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
                 kDebug() << "Aperture     : NOT FOUND";
                 ret &= false;
             }
-            m_settings.aperture = temp.mid(1).toDouble();
-            kDebug() << "Aperture     : " << m_settings.aperture;
+            d->settings.aperture = temp.mid(1).toDouble();
+            kDebug() << "Aperture     : " << d->settings.aperture;
 
             // ------------------------------------------------------------------------------------------------
             // Try to get subject distance value.
@@ -271,8 +331,8 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             }
 
             temp                       = temp.replace(" m", "");
-            m_settings.subjectDistance = temp.toDouble();
-            kDebug() << "Subject dist.: " << m_settings.subjectDistance;
+            d->settings.subjectDistance = temp.toDouble();
+            kDebug() << "Subject dist.: " << d->settings.subjectDistance;
         }
         else
         {
@@ -287,39 +347,39 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
 
 bool LensFunIface::supportsDistortion() const
 {
-    if (!m_usedLens) return false;
+    if (!d->usedLens) return false;
 
     lfLensCalibDistortion res;
-    return m_usedLens->InterpolateDistortion(m_settings.focalLength, res);
-};
+    return d->usedLens->InterpolateDistortion(d->settings.focalLength, res);
+}
 
 bool LensFunIface::supportsCCA() const
 {
-    if (!m_usedLens) return false;
+    if (!d->usedLens) return false;
 
     lfLensCalibTCA res;
-    return m_usedLens->InterpolateTCA(m_settings.focalLength, res);
-};
+    return d->usedLens->InterpolateTCA(d->settings.focalLength, res);
+}
 
 bool LensFunIface::supportsVig() const
 {
-    if (!m_usedLens) return false;
+    if (!d->usedLens) return false;
 
     lfLensCalibVignetting res;
-    return m_usedLens->InterpolateVignetting(m_settings.focalLength,
-                                             m_settings.aperture,
-                                             m_settings.subjectDistance, res);
-};
+    return d->usedLens->InterpolateVignetting(d->settings.focalLength,
+                                             d->settings.aperture,
+                                             d->settings.subjectDistance, res);
+}
 
 bool LensFunIface::supportsGeometry() const
 {
     return supportsDistortion();
-};
+}
 
 bool LensFunIface::supportsCCI() const
 {
     return supportsVig();
-};
+}
 
 #if 0
 LensFunIface::correctionData LensFunIface::getCorrectionData()
