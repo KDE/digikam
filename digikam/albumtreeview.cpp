@@ -164,16 +164,18 @@ public:
 
 };
 
-AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, AlbumFilterModel *filterModel, QWidget *parent)
+AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* parent, AlbumTreeViewFlags flags)
     : QTreeView(parent), StateSavingObject(this),
       m_albumModel(0), m_albumFilterModel(0), m_dragDropHandler(0),
+      m_checkOnMiddleClick(false), m_restoreCheckState(false), m_flags(flags),
       d(new AbstractAlbumTreeViewPriv)
 {
-    m_checkOnMiddleClick  = false;
-
-    d->delegate = new AlbumTreeViewDelegate(this);
-    setItemDelegate(d->delegate);
-    setUniformRowHeights(true);
+    if (flags & CreateDefaultDelegate)
+    {
+        d->delegate = new AlbumTreeViewDelegate(this);
+        setItemDelegate(d->delegate);
+        setUniformRowHeights(true);
+    }
 
     d->resizeColumnsTimer = new QTimer(this);
     d->resizeColumnsTimer->setInterval(200);
@@ -186,12 +188,10 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
     connect(this, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(currentAlbumChangedForBackupSelection(Album*)));
 
-    if (model)
-        setAlbumModel(model);
-
-    if (filterModel)
-        setAlbumFilterModel(filterModel);
-
+    if (flags & CreateDefaultFilterModel)
+    {
+        setAlbumFilterModel(new AlbumFilterModel(this));
+    }
 }
 
 AbstractAlbumTreeView::~AbstractAlbumTreeView()
@@ -221,6 +221,8 @@ void AbstractAlbumTreeView::setAlbumModel(AbstractSpecificAlbumModel *model)
                     this, SLOT(slotRootAlbumAvailable()));
         }
 
+        if (m_albumFilterModel)
+            expand(m_albumFilterModel->rootAlbumIndex());
     }
 }
 
@@ -240,31 +242,37 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filterModel)
     }
 
     m_albumFilterModel = filterModel;
-    m_albumFilterModel->setSourceAlbumModel(m_albumModel);
-
-    connect(m_albumFilterModel, SIGNAL(searchTextSettingsAboutToChange(bool, bool)),
-             this, SLOT(slotSearchTextSettingsAboutToChange(bool, bool)));
-    connect(m_albumFilterModel, SIGNAL(searchTextSettingsChanged(bool, bool)),
-             this, SLOT(slotSearchTextSettingsChanged(bool, bool)));
-
     setModel(m_albumFilterModel);
 
-    connect(selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex &)),
-             this, SLOT(slotCurrentChanged()));
+    if (m_albumFilterModel)
+    {
+        m_albumFilterModel->setSourceAlbumModel(m_albumModel);
 
-    connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection &)),
-             this, SLOT(slotCurrentChanged()));
+        connect(m_albumFilterModel, SIGNAL(searchTextSettingsAboutToChange(bool, bool)),
+                this, SLOT(slotSearchTextSettingsAboutToChange(bool, bool)));
+        connect(m_albumFilterModel, SIGNAL(searchTextSettingsChanged(bool, bool)),
+                this, SLOT(slotSearchTextSettingsChanged(bool, bool)));
 
-    connect(m_albumFilterModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(adaptColumnsOnDataChange(const QModelIndex&, const QModelIndex&)));
-    connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-            this, SLOT(adaptColumnsOnRowChange(const QModelIndex&, int, int)));
-    connect(m_albumFilterModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-            this, SLOT(adaptColumnsOnRowChange(const QModelIndex&, int, int)));
-    connect(m_albumFilterModel, SIGNAL(layoutChanged()),
-            this, SLOT(adaptColumnsOnLayoutChange()));
-    adaptColumnsToContent();
 
+        connect(selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex &)),
+                this, SLOT(slotCurrentChanged()));
+
+        connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection &)),
+                this, SLOT(slotCurrentChanged()));
+
+        connect(m_albumFilterModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+                this, SLOT(adaptColumnsOnDataChange(const QModelIndex&, const QModelIndex&)));
+        connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+                this, SLOT(adaptColumnsOnRowChange(const QModelIndex&, int, int)));
+        connect(m_albumFilterModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+                this, SLOT(adaptColumnsOnRowChange(const QModelIndex&, int, int)));
+        connect(m_albumFilterModel, SIGNAL(layoutChanged()),
+                this, SLOT(adaptColumnsOnLayoutChange()));
+        adaptColumnsToContent();
+
+        if (m_albumModel)
+            expand(m_albumFilterModel->rootAlbumIndex());
+    }
 }
 
 AbstractSpecificAlbumModel *AbstractAlbumTreeView::albumModel() const
@@ -902,41 +910,30 @@ void AbstractAlbumTreeView::albumSettingsChanged()
 
 // --------------------------------------- //
 
-AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model,
-                                                             AlbumFilterModel *filterModel, QWidget *parent)
-    : AbstractAlbumTreeView(model, filterModel, parent)
+AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(QWidget* parent, AlbumTreeViewFlags flags)
+    : AbstractAlbumTreeView(parent, flags & ~CreateDefaultFilterModel)
 {
-    init();
-}
+    if (flags & CreateDefaultFilterModel)
+        setAlbumFilterModel(new AlbumFilterModel(this));
 
-AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model, QWidget *parent)
-    : AbstractAlbumTreeView(model, 0, parent)
-{
-    setAlbumFilterModel(new AlbumFilterModel(this));
-    init();
-}
-
-void AbstractCountingAlbumTreeView::init()
-{
     connect(this, SIGNAL(expanded(const QModelIndex &)),
              this, SLOT(slotExpanded(const QModelIndex &)));
 
     connect(this, SIGNAL(collapsed(const QModelIndex &)),
              this, SLOT(slotCollapsed(const QModelIndex &)));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-             this, SLOT(slotSetShowCount()));
-
-    if (m_albumModel)
-        setAlbumModel(static_cast<AbstractCountingAlbumModel*>(m_albumModel));
-    if (m_albumFilterModel)
-        setAlbumFilterModel(m_albumFilterModel);
+    if (flags & ShowCountAccordingToSettings)
+    {
+        connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+                this, SLOT(setShowCountFromSettings()));
+    }
 }
 
 void AbstractCountingAlbumTreeView::setAlbumModel(AbstractCountingAlbumModel *model)
 {
     AbstractAlbumTreeView::setAlbumModel(model);
-    slotSetShowCount();
+    if (m_flags & ShowCountAccordingToSettings)
+        setShowCountFromSettings();
 }
 
 void AbstractCountingAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filterModel)
@@ -972,7 +969,7 @@ void AbstractCountingAlbumTreeView::slotExpanded(const QModelIndex& index)
     static_cast<AbstractCountingAlbumModel*>(m_albumModel)->excludeChildrenCount(m_albumFilterModel->mapToSourceAlbumModel(index));
 }
 
-void AbstractCountingAlbumTreeView::slotSetShowCount()
+void AbstractCountingAlbumTreeView::setShowCountFromSettings()
 {
     static_cast<AbstractCountingAlbumModel*>(m_albumModel)->setShowCount(AlbumSettings::instance()->getShowFolderTreeViewItemsCount());
 }
@@ -1004,24 +1001,15 @@ public:
 
 };
 
-AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model,
-                                                               CheckableAlbumFilterModel *filterModel, QWidget *parent)
-    : AbstractCountingAlbumTreeView(model, filterModel, parent),
-      d(new AbstractCheckableAlbumTreeViewPriv)
-{
-    m_checkOnMiddleClick = true;
-    m_restoreCheckState  = false;
-}
-
-AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent)
-    : AbstractCountingAlbumTreeView(model, 0, parent),
+AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(QWidget* parent, AlbumTreeViewFlags flags)
+    : AbstractCountingAlbumTreeView(parent, flags & ~CreateDefaultFilterModel),
       d(new AbstractCheckableAlbumTreeViewPriv)
 {
     m_checkOnMiddleClick = true;
     m_restoreCheckState  = false;
 
-    CheckableAlbumFilterModel *filterModel = new CheckableAlbumFilterModel(this);
-    setAlbumFilterModel(filterModel);
+    if (flags & CreateDefaultFilterModel)
+        setAlbumFilterModel(new CheckableAlbumFilterModel(this));
 }
 
 AbstractCheckableAlbumTreeView::~AbstractCheckableAlbumTreeView()
@@ -1029,12 +1017,12 @@ AbstractCheckableAlbumTreeView::~AbstractCheckableAlbumTreeView()
     delete d;
 }
 
-AbstractCheckableAlbumModel *AbstractCheckableAlbumTreeView::checkableModel() const
+AbstractCheckableAlbumModel *AbstractCheckableAlbumTreeView::albumModel() const
 {
     return dynamic_cast<AbstractCheckableAlbumModel*>(m_albumModel);
 }
 
-CheckableAlbumFilterModel *AbstractCheckableAlbumTreeView::checkableAlbumFilterModel() const
+CheckableAlbumFilterModel *AbstractCheckableAlbumTreeView::albumFilterModel() const
 {
     return dynamic_cast<CheckableAlbumFilterModel*> (m_albumFilterModel);
 }
@@ -1151,19 +1139,8 @@ void AbstractCheckableAlbumTreeView::doSaveState()
 
 // --------------------------------------- //
 
-AlbumTreeView::AlbumTreeView(AlbumModel *model, CheckableAlbumFilterModel *filterModel, QWidget *parent)
-    : AbstractCheckableAlbumTreeView(model, filterModel, parent)
-{
-    init();
-}
-
-AlbumTreeView::AlbumTreeView(AlbumModel *model, QWidget *parent)
-    : AbstractCheckableAlbumTreeView(model, parent)
-{
-    init();
-}
-
-void AlbumTreeView::init()
+AlbumTreeView::AlbumTreeView(QWidget* parent, AlbumTreeViewFlags flags)
+    : AbstractCheckableAlbumTreeView(parent, flags)
 {
     setRootIsDecorated(false);
     setDragEnabled(true);
@@ -1171,10 +1148,8 @@ void AlbumTreeView::init()
     setDropIndicatorShown(false);
     setAutoExpandDelay(300);
 
-    if (m_albumModel)
-        setAlbumModel(albumModel());
-    if (m_albumFilterModel)
-        setAlbumFilterModel(static_cast<CheckableAlbumFilterModel*>(m_albumFilterModel));
+    if (flags & CreateDefaultModel)
+        setAlbumModel(new AlbumModel(AlbumModel::IncludeRootAlbum, this));
 }
 
 AlbumTreeView::~AlbumTreeView()
@@ -1184,6 +1159,10 @@ AlbumTreeView::~AlbumTreeView()
 
 void AlbumTreeView::setAlbumModel(AlbumModel *model)
 {
+    // changing model is not implemented
+    if (m_albumModel)
+        return;
+
     AbstractCheckableAlbumTreeView::setAlbumModel(model);
 
     m_dragDropHandler = new AlbumDragDropHandler(albumModel());
@@ -1200,8 +1179,6 @@ void AlbumTreeView::setAlbumModel(AlbumModel *model)
 void AlbumTreeView::setAlbumFilterModel(CheckableAlbumFilterModel* filterModel)
 {
     AbstractCheckableAlbumTreeView::setAlbumFilterModel(filterModel);
-
-    expand(m_albumFilterModel->rootAlbumIndex());
 }
 
 AlbumModel *AlbumTreeView::albumModel() const
@@ -1242,24 +1219,8 @@ void AlbumTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
 
 // --------------------------------------- //
 
-TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
-    : AbstractCheckableAlbumTreeView(model, parent)
-{
-    init();
-}
-
-TagTreeView::TagTreeView(TagModel *model, CheckableAlbumFilterModel* filterModel, QWidget *parent)
-    : AbstractCheckableAlbumTreeView(model, filterModel, parent)
-{
-    init();
-}
-
-TagTreeView::~TagTreeView()
-{
-    delete m_dragDropHandler;
-}
-
-void TagTreeView::init()
+TagTreeView::TagTreeView(QWidget* parent, AlbumTreeViewFlags flags)
+    : AbstractCheckableAlbumTreeView(parent, flags)
 {
     m_filteredModel = new TagPropertiesFilterModel(this);
     m_modificationHelper = new TagModificationHelper(this, this);
@@ -1269,22 +1230,30 @@ void TagTreeView::init()
     setDropIndicatorShown(false);
     setAutoExpandDelay(300);
 
-    if (m_albumModel)
-        setAlbumModel(albumModel());
-    if (m_albumFilterModel)
-        setAlbumFilterModel(static_cast<CheckableAlbumFilterModel*>(m_albumFilterModel));
+    if (flags & CreateDefaultModel)
+        setAlbumModel(new TagModel(TagModel::IncludeRootAlbum, this));
+    if (flags & CreateDefaultFilterModel) // must set again!
+        setAlbumFilterModel(albumFilterModel());
+}
+
+TagTreeView::~TagTreeView()
+{
+    delete m_dragDropHandler;
 }
 
 void TagTreeView::setAlbumFilterModel(CheckableAlbumFilterModel* filterModel)
 {
     AbstractCheckableAlbumTreeView::setAlbumFilterModel(filterModel);
-
-    albumFilterModel()->setSourceAlbumModel(m_filteredModel);
-    expand(m_albumFilterModel->rootAlbumIndex());
+    // hook in: source album model -> filtered model -> album filter model
+    albumFilterModel()->setSourceFilterModel(m_filteredModel);
 }
 
 void TagTreeView::setAlbumModel(TagModel* model)
 {
+    // changing model is not implemented
+    if (m_albumModel)
+        return;
+
     AbstractCheckableAlbumTreeView::setAlbumModel(model);
 
     m_filteredModel->setSourceTagModel(model);
@@ -1301,6 +1270,8 @@ void TagTreeView::setAlbumModel(TagModel* model)
 
     if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)
         setRootIsDecorated(false);
+    if (albumModel())
+        expand(m_albumFilterModel->rootAlbumIndex());
 }
 
 TagModel *TagTreeView::albumModel() const
@@ -1341,21 +1312,35 @@ void TagTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
 
 // --------------------------------------- //
 
-SearchTreeView::SearchTreeView(QWidget *parent, SearchModel *searchModel)
-    : AbstractCheckableAlbumTreeView(searchModel, parent)
+SearchTreeView::SearchTreeView(QWidget* parent, AlbumTreeViewFlags flags)
+    : AbstractCheckableAlbumTreeView(parent, flags)
 {
     m_filteredModel = new SearchFilterModel(this);
-    m_filteredModel->setSourceSearchModel(searchModel);
 
-    albumFilterModel()->setSourceAlbumModel(m_filteredModel);
-
-    expand(m_albumFilterModel->rootAlbumIndex());
     setRootIsDecorated(false);
+
+    if (flags & CreateDefaultModel)
+        setAlbumModel(new SearchModel(this));
+    if (flags & CreateDefaultFilterModel) // must set again!
+        setAlbumFilterModel(albumFilterModel());
+}
+
+void SearchTreeView::setAlbumModel(SearchModel* model)
+{
+    AbstractCheckableAlbumTreeView::setAlbumModel(model);
+    m_filteredModel->setSourceSearchModel(model);
 }
 
 SearchModel *SearchTreeView::albumModel() const
 {
     return static_cast<SearchModel*>(m_albumModel);
+}
+
+void SearchTreeView::setAlbumFilterModel(CheckableAlbumFilterModel* filterModel)
+{
+    AbstractCheckableAlbumTreeView::setAlbumFilterModel(filterModel);
+    // hook in: source album model -> filtered model -> album filter model
+    albumFilterModel()->setSourceFilterModel(m_filteredModel);
 }
 
 SearchFilterModel *SearchTreeView::filteredModel() const
@@ -1381,19 +1366,32 @@ void SearchTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
 
 // --------------------------------------- //
 
-DateAlbumTreeView::DateAlbumTreeView(QWidget *parent, DateAlbumModel *dateAlbumModel)
-    : AbstractCountingAlbumTreeView(dateAlbumModel, parent)
+DateAlbumTreeView::DateAlbumTreeView(QWidget* parent, AlbumTreeViewFlags flags)
+    : AbstractCountingAlbumTreeView(parent, flags)
 {
     // this view should always show the inclusive counts
     disconnect(this, SIGNAL(expanded(const QModelIndex &)),
                this, SLOT(slotExpanded(const QModelIndex &)));
     disconnect(this, SIGNAL(collapsed(const QModelIndex &)),
                this, SLOT(slotCollapsed(const QModelIndex &)));
+
+    if (flags & CreateDefaultModel)
+        setAlbumModel(new DateAlbumModel(this));
+}
+
+void DateAlbumTreeView::setAlbumModel(DateAlbumModel* model)
+{
+    AbstractCountingAlbumTreeView::setAlbumModel(model);
 }
 
 DateAlbumModel *DateAlbumTreeView::albumModel() const
 {
     return static_cast<DateAlbumModel*>(m_albumModel);
+}
+
+void DateAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* filterModel)
+{
+    AbstractCountingAlbumTreeView::setAlbumFilterModel(filterModel);
 }
 
 DAlbum* DateAlbumTreeView::currentAlbum() const

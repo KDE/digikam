@@ -64,14 +64,29 @@ class AbstractAlbumTreeView : public QTreeView, public StateSavingObject
 
 public:
 
+    enum AlbumTreeViewFlag
+    {
+        /** Create a default model. Not supported by abstract classes. Not part of default flags! */
+        CreateDefaultModel,
+        /** Create a default filter model. */
+        CreateDefaultFilterModel,
+        /** Create a delegate which paints according to settings.
+         *  If not set, the Qt default delegate of the view is used. */
+        CreateDefaultDelegate,
+        /** Show the count according to the settings. If not set, call
+         *  setShowCount() on the model yourself. */
+        ShowCountAccordingToSettings,
+
+        DefaultFlags = CreateDefaultFilterModel | CreateDefaultDelegate | ShowCountAccordingToSettings
+    };
+    Q_DECLARE_FLAGS(AlbumTreeViewFlags, AlbumTreeViewFlag)
+
     /**
      * Constructs an album tree view.
      * If you give 0 for model, call setAlbumModel afterwards.
      * If you supply 0 for filterModel, call setAlbumFilterModel afterwards.
      */
-    explicit AbstractAlbumTreeView(AbstractSpecificAlbumModel* model,
-                                   AlbumFilterModel* filterModel,
-                                   QWidget* parent = 0);
+    explicit AbstractAlbumTreeView(QWidget* parent, AlbumTreeViewFlags flags);
     ~AbstractAlbumTreeView();
 
     AbstractSpecificAlbumModel* albumModel() const;
@@ -277,6 +292,7 @@ protected:
 
     bool                        m_checkOnMiddleClick;
     bool                        m_restoreCheckState;
+    AlbumTreeViewFlags          m_flags;
 
 private:
 
@@ -348,10 +364,7 @@ class AbstractCountingAlbumTreeView : public AbstractAlbumTreeView
 
 public:
 
-    explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel* model,
-                                           AlbumFilterModel* filterModel,
-                                           QWidget* parent = 0);
-    explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel* model, QWidget* parent = 0);
+    explicit AbstractCountingAlbumTreeView(QWidget* parent, AlbumTreeViewFlags flags);
 
 protected:
 
@@ -363,7 +376,7 @@ private Q_SLOTS:
 
     void slotCollapsed(const QModelIndex& index);
     void slotExpanded(const QModelIndex& index);
-    void slotSetShowCount();
+    void setShowCountFromSettings();
     void updateShowCountState(const QModelIndex& index, bool recurse);
 
 private:
@@ -383,16 +396,16 @@ public:
 
     /// Models of these view _can_ be checkable, they need _not_. You need to enable it on the model.
 
-    explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel* model,
-                                            CheckableAlbumFilterModel* filterModel,
-                                            QWidget* parent = 0);
-    explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel* model, QWidget* parent = 0);
+    explicit AbstractCheckableAlbumTreeView(QWidget* parent, AlbumTreeViewFlags flags);
 
     virtual ~AbstractCheckableAlbumTreeView();
 
     /// Manage check state through the model directly
-    AbstractCheckableAlbumModel* checkableModel() const;
-    CheckableAlbumFilterModel* checkableAlbumFilterModel() const;
+    AbstractCheckableAlbumModel* albumModel() const;
+    CheckableAlbumFilterModel* albumFilterModel() const;
+
+    AbstractCheckableAlbumModel* checkableModel() const { return albumModel(); }
+    CheckableAlbumFilterModel* checkableAlbumFilterModel() const { return albumFilterModel(); }
 
     /// Enable checking on middle mouse button click (default: on)
     void setCheckOnMiddleClick(bool doThat);
@@ -439,8 +452,7 @@ class AlbumTreeView : public AbstractCheckableAlbumTreeView
 
 public:
 
-    explicit AlbumTreeView(AlbumModel* model, QWidget* parent = 0);
-    explicit AlbumTreeView(AlbumModel* model, CheckableAlbumFilterModel* filteredModel, QWidget* parent = 0);
+    explicit AlbumTreeView(QWidget* parent = 0, AlbumTreeViewFlags flags = DefaultFlags);
     virtual ~AlbumTreeView();
     AlbumModel* albumModel() const;
     PAlbum* currentAlbum() const;
@@ -457,10 +469,6 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotDIOResult(KJob* job);
-
-private:
-
-    void init();
 };
 
 // -------------------------------------------------------------------------------------
@@ -471,8 +479,7 @@ class TagTreeView : public AbstractCheckableAlbumTreeView
 
 public:
 
-    explicit TagTreeView(TagModel* model, QWidget* parent = 0);
-    explicit TagTreeView(TagModel* model, CheckableAlbumFilterModel* filteredModel, QWidget* parent = 0);
+    explicit TagTreeView(QWidget* parent = 0, AlbumTreeViewFlags flags = DefaultFlags);
     ~TagTreeView();
     TagModel* albumModel() const;
     /// Contains only the tags filtered by properties - prefer to albumModel()
@@ -497,10 +504,6 @@ protected:
 
     TagPropertiesFilterModel *m_filteredModel;
     TagModificationHelper    *m_modificationHelper;
-
-private:
-
-    void init();
 };
 
 // -------------------------------------------------------------------------------------
@@ -511,12 +514,15 @@ class SearchTreeView : public AbstractCheckableAlbumTreeView
 
 public:
 
-    SearchTreeView(QWidget* parent, SearchModel* searchModel);
+    SearchTreeView(QWidget* parent = 0, AlbumTreeViewFlags flags = DefaultFlags);
     /// Note: not filtered by search type
     SearchModel* albumModel() const;
     /// Contains only the searches with appropriate type - prefer to albumModel()
     SearchFilterModel* filteredModel() const;
     SAlbum* currentAlbum() const;
+
+    void setAlbumModel(SearchModel* model);
+    void setAlbumFilterModel(CheckableAlbumFilterModel* model);
 
 public Q_SLOTS:
 
@@ -536,10 +542,13 @@ class DateAlbumTreeView : public AbstractCountingAlbumTreeView
 
 public:
 
-    DateAlbumTreeView(QWidget* parent, DateAlbumModel* dateAlbumModel);
+    DateAlbumTreeView(QWidget* parent = 0, AlbumTreeViewFlags flags = DefaultFlags);
     DateAlbumModel* albumModel() const;
     DAlbum* currentAlbum() const;
     DAlbum* albumForIndex(const QModelIndex &index) const;
+
+    void setAlbumModel(DateAlbumModel* model);
+    void setAlbumFilterModel(AlbumFilterModel* filterModel);
 
 public Q_SLOTS:
 
@@ -548,5 +557,7 @@ public Q_SLOTS:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::AbstractAlbumTreeView::AlbumTreeViewFlags)
 
 #endif // ALBUMTREEVIEW_H
