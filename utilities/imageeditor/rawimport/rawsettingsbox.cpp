@@ -170,8 +170,10 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     setHistogramType(LRGBC);
 
     QGridLayout* gridSettings = new QGridLayout(plainPage());
+    d->tabView                = new KTabWidget(plainPage());
 
-    d->tabView             = new KTabWidget(plainPage());
+    // - RAW Decoding view --------------------------------------------------------------
+
     d->rawdecodingBox      = new QWidget(d->tabView);
     QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox);
     d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox,
@@ -203,15 +205,10 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     rawGrid->setSpacing(spacingHint());
     rawGrid->setMargin(spacingHint());
 
-    // ---------------------------------------------------------------
+    // - Post-processing view --------------------------------------------------------------
 
     d->postProcessSettingsBox = new RExpanderBox(d->tabView);
     d->postProcessSettingsBox->setObjectName("PostProcessingSettingsBox Expander");
-
-    d->infoBox                = new ImageDialogPreview(d->postProcessSettingsBox);
-    d->infoBox->showPreview(url);
-
-    // ---------------------------------------------------------------
 
     d->advExposureBox              = new QWidget(d->postProcessSettingsBox);
     QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox);
@@ -290,7 +287,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     QLabel* spaceh = new QLabel(d->curveBox);
     spaceh->setFixedHeight(1);
 
-    ColorGradientWidget *hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
+    ColorGradientWidget* hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
     curveLayout->addWidget(vGradient,        0, 0, 1, 1);
@@ -310,6 +307,13 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     d->postProcessSettingsBox->setItemIcon(0, SmallIcon("contrast"));
     d->postProcessSettingsBox->setItemIcon(1, SmallIcon("adjustcurves"));
     d->postProcessSettingsBox->addStretch();
+
+    // - Image info view --------------------------------------------------------------
+
+    d->infoBox = new ImageDialogPreview(d->postProcessSettingsBox);
+    d->infoBox->showPreview(url);
+
+    // ---------------------------------------------------------------
 
     d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     SmallIcon("kdcraw"));
     d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::WHITEBALANCE,    SmallIcon("whitebalance"));
@@ -458,14 +462,14 @@ void RawSettingsBox::writeSettings()
     KConfigGroup group        = config->group(d->optionGroupName);
 
     group.writeEntry(d->optionHistogramChannelEntry, (int)histogramBox()->channel());
-    group.writeEntry(d->optionHistogramScaleEntry, (int)histogramBox()->scale());
+    group.writeEntry(d->optionHistogramScaleEntry,   (int)histogramBox()->scale());
 
     d->decodingSettingsBox->writeSettings(group);
 
-    group.writeEntry(d->optionBrightnessEntry, d->brightnessInput->value());
-    group.writeEntry(d->optionContrastEntry, d->contrastInput->value());
-    group.writeEntry(d->optionGammaEntry, d->gammaInput->value());
-    group.writeEntry(d->optionSaturationEntry, d->saturationInput->value());
+    group.writeEntry(d->optionBrightnessEntry,   d->brightnessInput->value());
+    group.writeEntry(d->optionContrastEntry,     d->contrastInput->value());
+    group.writeEntry(d->optionGammaEntry,        d->gammaInput->value());
+    group.writeEntry(d->optionSaturationEntry,   d->saturationInput->value());
     group.writeEntry(d->optionFineExposureEntry, d->fineExposureInput->value());
 
     d->curveWidget->saveCurve(group, d->optionCurvePrefix);
