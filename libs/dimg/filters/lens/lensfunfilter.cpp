@@ -86,7 +86,7 @@ void LensFunFilter::filterImage()
         kError() << "ERROR: LensFun Interface is null.";
         return;
     }
-    if (!d->iface->m_usedLens)
+    if (!d->iface->usedLens())
     {
         kError() << "ERROR: LensFun Interface Lens device is null.";
         return;
@@ -115,12 +115,12 @@ void LensFunFilter::filterImage()
 
     lfPixelFormat colorDepth = m_orgImage.bytesDepth() == 4 ? LF_PF_U8 : LF_PF_U16;
 
-    d->modifier = lfModifier::Create(d->iface->m_usedLens,
+    d->modifier = lfModifier::Create(d->iface->usedLens(),
                                      d->iface->settings().cropFactor,
                                      m_orgImage.width(),
                                      m_orgImage.height());
 
-    int modflags = d->modifier->Initialize(d->iface->m_usedLens,
+    int modflags = d->modifier->Initialize(d->iface->usedLens(),
                                            colorDepth,
                                            d->iface->settings().focalLength,
                                            d->iface->settings().aperture,
