@@ -88,7 +88,7 @@ public:
 
 public:
 
-    BWSepiaContainer()
+    BWSepiaContainer(bool init=true) : curvesPrm(init)
     {
         previewType = BWGeneric;
         preview     = false;
@@ -98,7 +98,7 @@ public:
         strength    = 1.0;
     };
 
-    BWSepiaContainer(int ptype)
+    BWSepiaContainer(int ptype, bool init=true) : curvesPrm(init)
     {
         previewType = ptype;
         preview     = true;
@@ -106,6 +106,17 @@ public:
         filmType    = BWGeneric;
         filterType  = BWNoFilter;
         toneType    = BWNoTone;
+    };
+
+    BWSepiaContainer(int ptype, const CurvesContainer& container) : curvesPrm(false)
+    {
+        previewType = ptype;
+        preview     = true;
+        strength    = 1.0;
+        filmType    = BWGeneric;
+        filterType  = BWNoFilter;
+        toneType    = BWNoTone;
+        curvesPrm   = container;
     };
 
     ~BWSepiaContainer(){};
