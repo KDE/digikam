@@ -60,12 +60,10 @@ public:
 public:
 
     AdvancedRenameManager();
-    AdvancedRenameManager(const QStringList& files, SortType sort = SortCustom);
-    AdvancedRenameManager(const KUrl::List& files, SortType sort = SortCustom);
+    AdvancedRenameManager(const QList<ParseSettings>& files, SortType sort = SortCustom);
     virtual ~AdvancedRenameManager();
 
-    void addFiles(const QStringList& files, SortType sort = SortCustom);
-    void addFiles(const KUrl::List& files, SortType sort = SortCustom);
+    void addFiles(const QList<ParseSettings>& files, SortType sort = SortCustom);
     void reset();
 
     void parseFiles();
@@ -92,6 +90,7 @@ public:
 private:
 
     void addFile(const QString& filename);
+    void addFile(const QString& filename, const QDateTime& datetime);
     bool initialize();
 
     QString fileGroupKey(const QString& filename);

@@ -254,20 +254,28 @@ QString DateOption::parseOperation(ParseSettings& settings)
         token.chop(1);
     }
 
+    // check if the datetime was already set in the parseSettings objects (most likely during the camera import)
     QDateTime dateTime;
 
-    // lets try to re-read the file information
-    ImageInfo info(settings.fileUrl);
-    if (!info.isNull())
+    if ( !(settings.creationTime.isNull()) && (settings.creationTime.isValid()) )
     {
-        dateTime = info.dateTime();
+        dateTime = settings.creationTime;
     }
-
-    if (dateTime.isNull() || !dateTime.isValid())
+    else
     {
-        // still no date info, use Qt file information
-        QFileInfo fileInfo(settings.fileUrl.toLocalFile());
-        dateTime = fileInfo.created();
+        // lets try to re-read the file information
+        ImageInfo info(settings.fileUrl);
+        if (!info.isNull())
+        {
+            dateTime = info.dateTime();
+        }
+
+        if (dateTime.isNull() || !dateTime.isValid())
+        {
+            // still no date info, use Qt file information
+            QFileInfo fileInfo(settings.fileUrl.toLocalFile());
+            dateTime = fileInfo.created();
+        }
     }
 
     // do we have a valid date?

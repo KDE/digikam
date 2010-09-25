@@ -853,8 +853,7 @@ void QueueListView::updateDestFileNames()
         ParseSettings psettings;
         psettings.parseString = settings().renamingParser;
 
-        QStringList tmpFiles;
-
+        QList<ParseSettings> files;
         QTreeWidgetItemIterator it(this);
         while (*it)
         {
@@ -865,12 +864,14 @@ void QueueListView::updateDestFileNames()
                 ImageInfo info = item->info();
                 QFileInfo fi(info.filePath());
 
-                tmpFiles << fi.absoluteFilePath();
+                ParseSettings ps;
+                ps.fileUrl = KUrl(fi.absoluteFilePath());
+                files << ps;
             }
             ++it;
         }
 
-        manager.addFiles(tmpFiles);
+        manager.addFiles(files);
         manager.parseFiles(psettings);
         renamingResults = manager.newFileList();
     }

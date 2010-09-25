@@ -271,7 +271,14 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
 {
     d->listView->clear();
     d->advancedRenameManager->reset();
-    d->advancedRenameManager->addFiles(urls, AdvancedRenameManager::SortAscending);
+    QList<ParseSettings> files;
+    foreach (const KUrl& url, urls)
+    {
+        ParseSettings ps;
+        ps.fileUrl = url;
+        files << ps;
+    }
+    d->advancedRenameManager->addFiles(files, AdvancedRenameManager::SortAscending);
 
     AdvancedRenameListItem* item = 0;
 

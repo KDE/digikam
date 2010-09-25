@@ -58,7 +58,7 @@ public:
     QStringList                       files;
     QMap<QString, int>                fileIndexMap;
     QMap<QString, int>                fileGroupIndexMap;
-//    QMap<QString, int>                directoryIndexMap;
+    QMap<QString, QDateTime>          fileDatesMap;
     QMap<QString, QString>            renamedFiles;
 
     Parser*                           parser;
@@ -76,15 +76,7 @@ AdvancedRenameManager::AdvancedRenameManager()
     setSortType(SortAscending);
 }
 
-AdvancedRenameManager::AdvancedRenameManager(const QStringList& files, SortType type)
-                     : d(new ParseManagerPriv)
-{
-    setParserType(DefaultParser);
-    setSortType(type);
-    addFiles(files);
-}
-
-AdvancedRenameManager::AdvancedRenameManager(const KUrl::List& files, SortType type)
+AdvancedRenameManager::AdvancedRenameManager(const QList<ParseSettings>& files, SortType type)
                      : d(new ParseManagerPriv)
 {
     setParserType(DefaultParser);
@@ -211,10 +203,11 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
     {
         KUrl url(file);
         ParseSettings settings;
-        settings.fileUrl     = url;
-        settings.parseString = parseString;
-        settings.startIndex  = d->startIndex;
-        settings.manager     = this;
+        settings.fileUrl      = url;
+        settings.parseString  = parseString;
+        settings.startIndex   = d->startIndex;
+        settings.creationTime = d->fileDatesMap[file];
+        settings.manager      = this;
 
         d->renamedFiles[file] = d->parser->parse(settings);
     }
@@ -238,18 +231,11 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings
     }
 }
 
-void AdvancedRenameManager::addFiles(const QStringList& files, SortType type)
+void AdvancedRenameManager::addFiles(const QList<ParseSettings>& files, SortType type)
 {
-    d->files = files;
-    setSortType(type);
-    initialize();
-}
-
-void AdvancedRenameManager::addFiles(const KUrl::List& files, SortType type)
-{
-    foreach (const KUrl& file, files)
+    foreach (const ParseSettings& ps, files)
     {
-        addFile(file.toLocalFile());
+        addFile(ps.fileUrl.toLocalFile(), ps.creationTime);
     }
     setSortType(type);
     initialize();
@@ -259,8 +245,8 @@ void AdvancedRenameManager::clearMappings()
 {
     d->fileIndexMap.clear();
     d->fileGroupIndexMap.clear();
-//    d->directoryIndexMap.clear();
     d->renamedFiles.clear();
+    d->fileGroupIndexMap.clear();
 }
 
 void AdvancedRenameManager::clearAll()
@@ -382,6 +368,12 @@ QString AdvancedRenameManager::newName(const QString& filename)
 void AdvancedRenameManager::addFile(const QString& filename)
 {
     d->files << filename;
+}
+
+void AdvancedRenameManager::addFile(const QString& filename, const QDateTime& datetime)
+{
+    d->files << filename;
+    d->fileDatesMap[filename] = datetime;
 }
 
 } // namespace Digikam
