@@ -380,11 +380,12 @@ void PreviewWidget::toggleFitToWindow()
     }
     else
     {
-        d->zoom = 1.0;
-        zoomFactorChanged(d->zoom);
+        d->zoom       = 1.0;
+        d->zoomWidth  = (int)(previewWidth());
+        d->zoomHeight = (int)(previewHeight());
     }
-
     updateContentsSize();
+    zoomFactorChanged(d->zoom);
     viewport()->update();
 }
 
