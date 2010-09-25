@@ -246,67 +246,73 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // -- Location Template information panel -------------------------------------------------------------
 
-    QWidget* page2             = new QWidget(this);
-    QGridLayout* grid2         = new QGridLayout(page2);
-
-    QLabel* label9             = new QLabel(i18n("Country:"), page2);
-    d->locationCountryCodeEdit = new CountrySelector(page2);
-    label9->setBuddy(d->locationCountryCodeEdit);
-    d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country "
-                                                  "where the photograph was taken.</p>"));
+    QWidget* page2 = new QWidget(this);
 
     // --------------------------------------------------------
 
-    QLabel* label10              = new QLabel(i18n("Province/State:"), page2);
-    d->locationProvinceStateEdit = new KLineEdit(page2);
-    d->locationProvinceStateEdit->setClearButtonShown(true);
-    d->locationProvinceStateEdit->setClickMessage(i18n("Enter the province or state of contents here."));
-    label10->setBuddy(d->locationProvinceStateEdit);
-    d->locationProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain the province or state "
-                                                    "where the photograph was taken.</p>"));
-
-    // --------------------------------------------------------
-
-    QLabel* label11     = new QLabel(i18n("City:"), page2);
-    d->locationCityEdit = new KLineEdit(page2);
+    QLabel* label9      = new QLabel(i18n("City:"));
+    d->locationCityEdit = new KLineEdit;
     d->locationCityEdit->setClearButtonShown(true);
     d->locationCityEdit->setClickMessage(i18n("Enter the city of contents here."));
-    label11->setBuddy(d->locationCityEdit);
+    label9->setBuddy(d->locationCityEdit);
     d->locationCityEdit->setWhatsThis(i18n("<p>This field should contain the name of the city "
                                            "where the photograph was taken.</p>"));
 
     // --------------------------------------------------------
 
-    QLabel* label12            = new QLabel(i18n("Sublocation:"), page2);
-    d->locationSublocationEdit = new KLineEdit(page2);
+    QLabel* label10            = new QLabel(i18n("Supplication:"));
+    d->locationSublocationEdit = new KLineEdit;
     d->locationSublocationEdit->setClearButtonShown(true);
     d->locationSublocationEdit->setClickMessage(i18n("Enter the city sublocation of contents here."));
-    label12->setBuddy(d->locationSublocationEdit);
+    label10->setBuddy(d->locationSublocationEdit);
     d->locationSublocationEdit->setWhatsThis(i18n("<p>This field should contain the sublocation of the city "
                                                   "where the photograph was taken.</p>"));
 
     // --------------------------------------------------------
 
+    QLabel* label11              = new QLabel(i18n("Province/State:"));
+    d->locationProvinceStateEdit = new KLineEdit;
+    d->locationProvinceStateEdit->setClearButtonShown(true);
+    d->locationProvinceStateEdit->setClickMessage(i18n("Enter the province or state of contents here."));
+    label11->setBuddy(d->locationProvinceStateEdit);
+    d->locationProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain the province or state "
+                                                    "where the photograph was taken.</p>"));
+
+    // --------------------------------------------------------
+
+    QLabel* label12            = new QLabel(i18n("Country:"));
+    d->locationCountryCodeEdit = new CountrySelector(page2);
+    label12->setBuddy(d->locationCountryCodeEdit);
+    d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country "
+                                                  "where the photograph was taken.</p>"));
+
+    // --------------------------------------------------------
+
+    QGridLayout* grid2 = new QGridLayout;
+    grid2->addWidget(label9,                       0, 0, 1, 1);
+    grid2->addWidget(d->locationCityEdit,          0, 1, 1, 2);
+    grid2->addWidget(label10,                      1, 0, 1, 1);
+    grid2->addWidget(d->locationSublocationEdit,   1, 1, 1, 2);
+    grid2->addWidget(label11,                      2, 0, 1, 1);
+    grid2->addWidget(d->locationProvinceStateEdit, 2, 1, 1, 2);
+    grid2->addWidget(label12,                      3, 0, 1, 1);
+    grid2->addWidget(d->locationCountryCodeEdit,   3, 1, 1, 2);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
     grid2->setAlignment(Qt::AlignTop);
     grid2->setColumnStretch(1, 10);
     grid2->setRowStretch(4, 10);
-    grid2->addWidget(label11,                      0, 0, 1, 1);
-    grid2->addWidget(d->locationCityEdit,          0, 1, 1, 2);
-    grid2->addWidget(label12,                      1, 0, 1, 1);
-    grid2->addWidget(d->locationSublocationEdit,   1, 1, 1, 2);
-    grid2->addWidget(label10,                      2, 0, 1, 1);
-    grid2->addWidget(d->locationProvinceStateEdit, 2, 1, 1, 2);
-    grid2->addWidget(label9,                       3, 0, 1, 1);
-    grid2->addWidget(d->locationCountryCodeEdit,   3, 1, 1, 2);
+    page2->setLayout(grid2);
+
+    page2->setTabOrder(d->locationCityEdit, d->locationSublocationEdit);
+    page2->setTabOrder(d->locationSublocationEdit, d->locationProvinceStateEdit);
+    page2->setTabOrder(d->locationProvinceStateEdit, d->locationCountryCodeEdit);
 
     insertTab(LOCATION, page2, KIcon("applications-internet"), i18n("Location"));
 
     // -- Contact Template information panel -------------------------------------------------------------
 
     QWidget* page3     = new QWidget(this);
-    QGridLayout* grid3 = new QGridLayout(page3);
 
     QLabel* label13    = new QLabel(i18n("City:"), page3);
     d->contactCityEdit = new KLineEdit(page3);
@@ -388,11 +394,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    grid3->setMargin(KDialog::spacingHint());
-    grid3->setSpacing(KDialog::spacingHint());
-    grid3->setAlignment(Qt::AlignTop);
-    grid3->setColumnStretch(1, 10);
-    grid3->setRowStretch(8, 10);
+    QGridLayout* grid3 = new QGridLayout;
     grid3->addWidget(label15,                     0, 0, 1, 1);
     grid3->addWidget(d->contactAddressEdit,       0, 1, 1, 2);
     grid3->addWidget(label16,                     1, 0, 1, 1);
@@ -409,6 +411,20 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid3->addWidget(d->contactEmailEdit,         6, 1, 1, 2);
     grid3->addWidget(label20,                     7, 0, 1, 1);
     grid3->addWidget(d->contactWebUrlEdit,        7, 1, 1, 2);
+    grid3->setMargin(KDialog::spacingHint());
+    grid3->setSpacing(KDialog::spacingHint());
+    grid3->setAlignment(Qt::AlignTop);
+    grid3->setColumnStretch(1, 10);
+    grid3->setRowStretch(8, 10);
+    page3->setLayout(grid3);
+
+    page3->setTabOrder(d->contactAddressEdit, d->contactPostalCodeEdit);
+    page3->setTabOrder(d->contactPostalCodeEdit, d->contactCityEdit);
+    page3->setTabOrder(d->contactCityEdit, d->contactProvinceStateEdit);
+    page3->setTabOrder(d->contactProvinceStateEdit, d->contactCountryEdit);
+    page3->setTabOrder(d->contactCountryEdit, d->contactPhoneEdit);
+    page3->setTabOrder(d->contactPhoneEdit, d->contactEmailEdit);
+    page3->setTabOrder(d->contactEmailEdit, d->contactWebUrlEdit);
 
     insertTab(CONTACT, page3, KIcon("view-pim-contacts"), i18n("Contact"));
 

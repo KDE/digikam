@@ -32,7 +32,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 251118 : Sorting order is not remembered.
 021 ==> 170170 : High quality 8 to 16-bit conversion (histogram repair).
 022 ==> 252295 : "Fit to Window" button while using any tool does not permit panning.
-023 ==>
+023 ==> 243179 : Wrong Taborder in Settings->Templates->Location|Contact.
+024 ==>
 
 
 

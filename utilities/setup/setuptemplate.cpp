@@ -85,7 +85,6 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     setWidget(panel);
     setWidgetResizable(true);
 
-    QGridLayout* grid = new QGridLayout(panel);
     d->listView       = new TemplateList(panel);
     d->listView->setFixedHeight(100);
 
@@ -134,6 +133,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // -------------------------------------------------------------
 
+    QGridLayout* grid = new QGridLayout;
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
     grid->setAlignment(Qt::AlignTop);
@@ -147,6 +147,13 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     grid->addWidget(d->titleEdit, 4, 1, 1, 1);
     grid->addWidget(d->tview,     5, 0, 1, 3);
     grid->addWidget(note,         6, 0, 1, 3);
+    panel->setLayout(grid);
+
+    panel->setTabOrder(d->listView, d->addButton);
+    panel->setTabOrder(d->addButton, d->delButton);
+    panel->setTabOrder(d->delButton, d->repButton);
+    panel->setTabOrder(d->repButton, d->titleEdit);
+    panel->setTabOrder(d->titleEdit, d->tview);
 
     // --------------------------------------------------------
 
