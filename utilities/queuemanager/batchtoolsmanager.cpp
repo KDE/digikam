@@ -139,6 +139,9 @@ BatchToolsList BatchToolsManager::toolsList() const
 
 void BatchToolsManager::registerTool(BatchTool* tool)
 {
+    if (!tool)
+        return;
+
     d->toolsList.append(tool);
 }
 
