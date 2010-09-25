@@ -517,8 +517,19 @@ void ContextMenuHelper::addExportMenu()
     KMenu* menuExport = new KMenu(i18n("Export"), d->parent);
     const QList<QAction*> exportActions = DigikamApp::instance()->menuExportActions();
 
+    QAction* selectAllAction = 0;
+    selectAllAction = d->stdActionCollection->action("selectAll");
+    QAction* selectNoneAction = 0;
+    selectNoneAction = d->stdActionCollection->action("selectNone");
+
     if(!exportActions.isEmpty())
+    {
         menuExport->addActions(exportActions);
+        connect (menuExport, SIGNAL(hovered(QAction*)),
+                 selectAllAction, SIGNAL(triggered()));
+        connect (menuExport, SIGNAL(triggered(QAction*)),
+                 selectNoneAction, SIGNAL(triggered()));
+    }
 
     d->parent->addMenu(menuExport);
 }
