@@ -34,4 +34,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 252295 : "Fit to Window" button while using any tool does not permit panning.
 023 ==> 243179 : Wrong Taborder in Settings->Templates->Location|Contact.
 024 ==> 210198 : Copyright and Right Usage information in Settings are not saved in template file.
-025 ==>
+025 ==> 228547 . Videos cannot return to thumbnail view.
+026 ==>

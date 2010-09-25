@@ -38,12 +38,32 @@
 #include "digikam_export.h"
 #include "imageinfo.h"
 
+class QEvent;
+
 namespace Digikam
 {
-
 class AlbumWidgetStack;
-class MediaPlayerViewPriv;
 
+class MediaPlayerMouseClickFilter : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    MediaPlayerMouseClickFilter(QObject* parent);
+
+protected:
+
+    bool eventFilter(QObject *obj, QEvent *event);
+
+private:
+
+    QObject* m_parent;
+};
+
+// --------------------------------------------------------
+
+class MediaPlayerViewPriv;
 class MediaPlayerView : public QStackedWidget
 {
 Q_OBJECT
@@ -63,11 +83,15 @@ Q_SIGNALS:
     void signalNextItem();
     void signalPrevItem();
     void signalBack2Album();
-    
+
+public Q_SLOTS:
+
+    void slotEscapePressed();
+
 private Q_SLOTS:
 
-    void slotThemeChanged();
     void slotPlayerFinished();
+    void slotThemeChanged();
     void slotPlayerstateChanged(Phonon::State newState, Phonon::State oldState);
 
 private:
