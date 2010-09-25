@@ -147,6 +147,9 @@ void EditorTool::setToolSettings(EditorToolSettings* settings)
 {
     d->settings = settings;
 
+    d->settings->setToolIcon(toolIcon());
+    d->settings->setToolName(toolName());
+
     connect(d->settings, SIGNAL(signalOkClicked()),
             this, SLOT(slotOk()));
 
