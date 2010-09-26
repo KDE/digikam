@@ -102,19 +102,9 @@ public:
 
     NewNamesList newNames();
 
-Q_SIGNALS:
-
-    void signalWindowHasMoved();
-    void signalWindowLostFocus();
-
 public Q_SLOTS:
 
     void slotAddImages(const KUrl::List& urls);
-
-protected:
-
-    void moveEvent(QMoveEvent* e);
-    bool event(QEvent* e);
 
 private Q_SLOTS:
 

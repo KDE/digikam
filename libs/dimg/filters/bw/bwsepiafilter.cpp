@@ -46,7 +46,7 @@ class BWSepiaFilter::BWSepiaFilterPriv
 {
 public:
 
-    BWSepiaFilterPriv()
+    BWSepiaFilterPriv() : settings(false)
     {
         redAttn   = 0.0;
         greenAttn = 0.0;

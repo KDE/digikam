@@ -2139,7 +2139,7 @@ void DImg::convertDepth(int depth)
         uint dim = width() * height() * 4;
         for (uint i = 0; i < dim; ++i)
         {
-            *dptr++ = (*sptr++ * 255UL) / 65535UL;
+            *dptr++ = (*sptr++ * 256UL) / 65536UL;
         }
 
         delete [] m_priv->data;
@@ -2154,10 +2154,31 @@ void DImg::convertDepth(int depth)
         ushort* dptr = (ushort*)data;
         uchar*  sptr = bits();
 
+        QDateTime dt = QDateTime::currentDateTime();
+        QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
+        uint seed = dt.secsTo(Y2000);
+#ifdef WIN32
+        srand(seed);
+#endif
+        ushort noise = 0;
+
         uint dim = width() * height() * 4;
         for (uint i = 0; i < dim; ++i)
         {
-            *dptr++ = (*sptr++ * 65535ULL) / 255ULL;
+            if (i % 4 < 3)
+            {
+#ifndef _WIN32
+                noise = (ushort)(256.0 * (rand_r(&seed) / (RAND_MAX + 1.0)));
+#else
+                noise = (ushort)(256.0 * (rand() / (RAND_MAX + 1.0)));
+#endif
+            }
+            else
+            {
+                noise = 0;
+            }
+
+            *dptr++ = (*sptr++ * 65536ULL) / 256ULL + noise;
         }
 
         delete [] m_priv->data;

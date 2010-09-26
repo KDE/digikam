@@ -39,6 +39,8 @@
 #include "globals.h"
 
 class KPushButton;
+class QPixmap;
+class QString;
 
 namespace Digikam
 {
@@ -77,6 +79,8 @@ public:
     void setButtons(Buttons buttonMask);
     void setTools(Tools toolMask);
     void setHistogramType(HistogramBoxType type);
+    void setToolIcon(const QPixmap& pixmap);
+    void setToolName(const QString& name);
 
     virtual void setBusy(bool)   {};
     virtual void writeSettings() {};

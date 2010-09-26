@@ -53,6 +53,7 @@
 // Local includes
 
 #include "advancedrenamemanager.h"
+#include "parsesettings.h"
 #include "cameraiconitem.h"
 #include "cameraiconviewtooltip.h"
 #include "cameraui.h"
@@ -356,8 +357,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     d->renamer->reset();
     d->renamer->setStartIndex(startIndex);
 
-    QStringList tmpFiles;
-
+    QList<ParseSettings> cameraFiles;
     for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
     {
         CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
@@ -365,11 +365,14 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         {
             QFileInfo fi;
             fi.setFile(QDir(viewItem->itemInfo()->folder), viewItem->itemInfo()->name);
-            tmpFiles << fi.absoluteFilePath();
+            ParseSettings ps;
+            ps.fileUrl      = KUrl(fi.absoluteFilePath());
+            ps.creationTime = viewItem->itemInfo()->mtime;
+            cameraFiles << ps;
         }
     }
 
-    d->renamer->renameManager()->addFiles(tmpFiles);
+    d->renamer->renameManager()->addFiles(cameraFiles);
     d->renamer->renameManager()->parseFiles();
 
     for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
@@ -383,7 +386,6 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             {
                 QFileInfo fi;
                 fi.setFile(QDir(viewItem->itemInfo()->folder), viewItem->itemInfo()->name);
-                tmpFiles << fi.absoluteFilePath();
                 downloadName = d->renamer->renameManager()->newName(fi.absoluteFilePath());
             }
             else

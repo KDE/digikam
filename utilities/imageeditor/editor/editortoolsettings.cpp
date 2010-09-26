@@ -27,6 +27,7 @@
 
 #include <QButtonGroup>
 #include <QLabel>
+#include <QPixmap>
 #include <QLayout>
 #include <QMap>
 #include <QPair>
@@ -59,6 +60,7 @@
 #include "histogramwidget.h"
 #include "histogrambox.h"
 #include "globals.h"
+#include "themeengine.h"
 
 using namespace KDcrawIface;
 
@@ -70,26 +72,30 @@ class EditorToolSettings::EditorToolSettingsPriv
 
 public:
 
-    EditorToolSettingsPriv()
+    EditorToolSettingsPriv() :
+        scaleBG(0),
+        linHistoButton(0),
+        logHistoButton(0),
+        settingsArea(0),
+        plainPage(0),
+        toolName(0),
+        toolIcon(0),
+        btnBox1(0),
+        btnBox2(0),
+        guideBox(0),
+        channelCB(0),
+        colorsCB(0),
+        okBtn(0),
+        cancelBtn(0),
+        tryBtn(0),
+        defaultBtn(0),
+        saveAsBtn(0),
+        loadBtn(0),
+        guideColorBt(0),
+        hGradient(0),
+        histogramBox(0),
+        guideSize(0)
     {
-        okBtn        = 0;
-        cancelBtn    = 0;
-        tryBtn       = 0;
-        defaultBtn   = 0;
-        settingsArea = 0;
-        plainPage    = 0;
-        btnBox1      = 0;
-        btnBox2      = 0;
-        saveAsBtn    = 0;
-        loadBtn      = 0;
-        guideBox     = 0;
-        guideColorBt = 0;
-        guideSize    = 0;
-        channelCB    = 0;
-        colorsCB     = 0;
-        scaleBG      = 0;
-        histogramBox = 0;
-        hGradient    = 0;
     }
 
     QButtonGroup*        scaleBG;
@@ -99,6 +105,9 @@ public:
 
     QWidget*             settingsArea;
     QWidget*             plainPage;
+
+    QLabel*              toolName;
+    QLabel*              toolIcon;
 
     KHBox*               btnBox1;
     KHBox*               btnBox2;
@@ -135,11 +144,46 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
 
     QGridLayout* gridSettings = new QGridLayout(d->settingsArea);
 
-    d->plainPage    = new QWidget(d->settingsArea);
-    d->guideBox     = new KHBox(d->settingsArea);
-    d->btnBox1      = new KHBox(d->settingsArea);
-    d->btnBox2      = new KHBox(d->settingsArea);
-    d->histogramBox = new HistogramBox(d->settingsArea);
+    d->plainPage      = new QWidget(d->settingsArea);
+    d->guideBox       = new KHBox(d->settingsArea);
+    d->btnBox1        = new KHBox(d->settingsArea);
+    d->btnBox2        = new KHBox(d->settingsArea);
+    d->histogramBox   = new HistogramBox(d->settingsArea);
+
+    // ---------------------------------------------------------------
+
+    QFrame* toolDescriptor = new QFrame(d->settingsArea);
+
+    d->toolName = new QLabel();
+    d->toolIcon = new QLabel();
+
+    QFont font = d->toolName->font();
+    font.setBold(true);
+    d->toolName->setFont(font);
+
+    QString frameStyle = QString("QFrame {"
+            "color: %1;"
+            "border: 1px solid %2;"
+            "border-radius: 5px;"
+            "background-color: %3;"
+            "}")
+            .arg(ThemeEngine::instance()->textSelColor().name())
+            .arg(ThemeEngine::instance()->textSelColor().name())
+            .arg(ThemeEngine::instance()->thumbSelColor().name());
+
+    QString noFrameStyle("QFrame {"
+            "border: none;"
+            "}");
+
+    toolDescriptor->setStyleSheet(frameStyle);
+    d->toolName->setStyleSheet(noFrameStyle);
+    d->toolIcon->setStyleSheet(noFrameStyle);
+
+    QGridLayout* descrLayout = new QGridLayout();
+    descrLayout->addWidget(d->toolIcon, 0, 0, 1, 1);
+    descrLayout->addWidget(d->toolName, 0, 1, 1, 1);
+    descrLayout->setColumnStretch(1, 10);
+    toolDescriptor->setLayout(descrLayout);
 
     // ---------------------------------------------------------------
 
@@ -203,11 +247,12 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
 
     // ---------------------------------------------------------------
 
-    gridSettings->addWidget(d->histogramBox,   0, 0, 2, 2);
-    gridSettings->addWidget(d->plainPage,      3, 0, 1, 2);
-    gridSettings->addWidget(d->guideBox,       4, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox2,        5, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox1,        6, 0, 1, 2);
+    gridSettings->addWidget(toolDescriptor,    0, 0, 1,-1);
+    gridSettings->addWidget(d->histogramBox,   1, 0, 2, 2);
+    gridSettings->addWidget(d->plainPage,      4, 0, 1, 2);
+    gridSettings->addWidget(d->guideBox,       5, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox2,        6, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox1,        7, 0, 1, 2);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(spacingHint());
 
@@ -366,6 +411,16 @@ void EditorToolSettings::setTools(Tools toolMask)
 void EditorToolSettings::setHistogramType(HistogramBoxType type)
 {
     d->histogramBox->setHistogramType(type);
+}
+
+void EditorToolSettings::setToolIcon(const QPixmap& pixmap)
+{
+    d->toolIcon->setPixmap(pixmap);
+}
+
+void EditorToolSettings::setToolName(const QString& name)
+{
+    d->toolName->setText(name);
 }
 
 } // namespace Digikam

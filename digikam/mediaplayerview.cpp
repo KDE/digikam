@@ -31,6 +31,8 @@
 #include <QFrame>
 #include <QGridLayout>
 #include <QToolBar>
+#include <QEvent>
+#include <QMouseEvent>
 
 // KDE includes
 
@@ -49,6 +51,41 @@
 namespace Digikam
 {
 
+MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* parent)
+               : QObject(parent), m_parent(parent)
+{
+}
+
+bool MediaPlayerMouseClickFilter::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress)
+    {
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+        if (mouseEvent && mouseEvent->button() == Qt::LeftButton)
+        {
+            if (m_parent)
+            {
+                MediaPlayerView* mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
+                if (mplayer)
+                {
+                    mplayer->slotEscapePressed();
+                }
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return QObject::eventFilter(obj, event);
+    }
+}
+
+// --------------------------------------------------------
+
 class MediaPlayerViewPriv
 {
 
@@ -62,17 +99,17 @@ public:
 
 public:
 
-    MediaPlayerViewPriv()
+    MediaPlayerViewPriv() :
+        errorView(0),
+        mediaPlayerView(0),
+        back2AlbumAction(0),
+        prevAction(0),
+        nextAction(0),
+        toolBar(0),
+        grid(0),
+        player(0),
+        slider(0)
     {
-        player           = 0;
-        grid             = 0;
-        errorView        = 0;
-        mediaPlayerView  = 0;
-        slider           = 0;
-        toolBar          = 0;
-        back2AlbumAction = 0;
-        prevAction       = 0;
-        nextAction       = 0;        
     }
 
     QFrame*              errorView;
@@ -83,7 +120,7 @@ public:
     QAction*             nextAction;
 
     QToolBar*            toolBar;
-        
+
     QGridLayout*         grid;
 
     Phonon::VideoPlayer* player;
@@ -97,16 +134,16 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
 
     d->back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
     d->prevAction       = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
-    d->nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);    
+    d->nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 
     d->errorView        = new QFrame(this);
-    QLabel *errorMsg    = new QLabel(i18n("An error has occurred with the media player...."), d->errorView);
-    QGridLayout *grid   = new QGridLayout(d->errorView);
+    QLabel *errorMsg    = new QLabel(i18n("An error has occurred with the media player...."), this);
 
     errorMsg->setAlignment(Qt::AlignCenter);
     d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->errorView->setLineWidth(1);
 
+    QGridLayout *grid = new QGridLayout;
     grid->addWidget(errorMsg, 1, 0, 1, 3 );
     grid->setColumnStretch(0, 10),
     grid->setColumnStretch(2, 10),
@@ -114,15 +151,15 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
     grid->setRowStretch(2, 10),
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
+    d->errorView->setLayout(grid);
 
     insertWidget(MediaPlayerViewPriv::ErrorView, d->errorView);
 
     // --------------------------------------------------------------------------
 
     d->mediaPlayerView = new QFrame(this);
-    d->grid            = new QGridLayout(d->mediaPlayerView);
-    d->player          = new Phonon::VideoPlayer(Phonon::VideoCategory, d->mediaPlayerView);
-    d->slider          = new Phonon::SeekSlider(d->mediaPlayerView);
+    d->player          = new Phonon::VideoPlayer(Phonon::VideoCategory, this);
+    d->slider          = new Phonon::SeekSlider(this);
     d->slider->setMediaObject(d->player->mediaObject());
     d->player->mediaObject()->setTickInterval(100);
     d->player->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -130,6 +167,7 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
     d->mediaPlayerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->mediaPlayerView->setLineWidth(1);
 
+    d->grid = new QGridLayout;
     d->grid->addWidget(d->player->videoWidget(), 0, 0, 1, 3);
     d->grid->addWidget(d->slider,                1, 0, 1, 3);
     d->grid->setColumnStretch(0, 10),
@@ -137,15 +175,19 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
     d->grid->setRowStretch(0, 10),
     d->grid->setMargin(KDialog::spacingHint());
     d->grid->setSpacing(KDialog::spacingHint());
+    d->mediaPlayerView->setLayout(d->grid);
 
     insertWidget(MediaPlayerViewPriv::PlayerView, d->mediaPlayerView);
-    
+
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
-    d->toolBar->addAction(d->back2AlbumAction);    
+    d->toolBar->addAction(d->back2AlbumAction);
 
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
+
+    d->errorView->installEventFilter(new MediaPlayerMouseClickFilter(this));
+    d->player->videoWidget()->installEventFilter(new MediaPlayerMouseClickFilter(this));
 
     // --------------------------------------------------------------------------
 
@@ -157,15 +199,15 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
-            
+
     connect(d->prevAction, SIGNAL(triggered()),
             this, SIGNAL(signalPrevItem()));
-            
+
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
-            
+
     connect(d->back2AlbumAction, SIGNAL(triggered()),
-            parent, SIGNAL(signalBack2Album()));          
+            parent, SIGNAL(signalBack2Album()));
 }
 
 MediaPlayerView::~MediaPlayerView()
@@ -217,6 +259,12 @@ void MediaPlayerView::slotThemeChanged()
     QPalette palette2;
     palette2.setColor(d->mediaPlayerView->backgroundRole(), ThemeEngine::instance()->baseColor());
     d->mediaPlayerView->setPalette(palette2);
+}
+
+void MediaPlayerView::slotEscapePressed()
+{
+    escapePreview();
+    emit signalBack2Album();
 }
 
 int MediaPlayerView::previewMode()

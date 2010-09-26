@@ -140,7 +140,7 @@ ImageCurves::~ImageCurves()
     delete d;
 }
 
-void ImageCurves::fillFromOtherCurvers(ImageCurves* otherCurves)
+void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
 {
 
     kDebug() << "Filling this curve from other curve " << otherCurves;
@@ -746,7 +746,7 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
                     curve8.setCurvePoint(channel, i, QPoint(index, vals.point(index).y()));
                 }
                 curve8.curvesCalculateCurve(channel);
-                curve16.fillFromOtherCurvers(&curve8);
+                curve16.fillFromOtherCurves(&curve8);
 
                 for (int j = 0 ; j <= d->segmentMax ; ++j)
                     setCurveValue(channel, j, curve16.getCurveValue(channel, j));
@@ -762,7 +762,7 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
                     curve16.setCurvePoint(channel, i, QPoint(index, vals.point(index).y()));
                 }
                 curve16.curvesCalculateCurve(channel);
-                curve8.fillFromOtherCurvers(&curve16);
+                curve8.fillFromOtherCurves(&curve16);
 
                 for (int j = 0 ; j <= d->segmentMax ; ++j)
                     setCurveValue(channel, j, curve8.getCurveValue(channel, j));

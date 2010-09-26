@@ -68,7 +68,7 @@ class CameraUI : public KXmlGuiWindow
 
 public:
 
-    CameraUI(QWidget* parent, const QString& cameraTitle,
+    CameraUI(const QString& cameraTitle,
              const QString& model, const QString& port,
              const QString& path, int startIndex);
     ~CameraUI();
@@ -93,7 +93,6 @@ Q_SIGNALS:
 
     void signalLastDestination(const KUrl&);
     void signalWindowHasMoved();
-    void signalWindowLostFocus();
 
 public Q_SLOTS:
 
@@ -103,7 +102,6 @@ protected:
 
     void closeEvent(QCloseEvent* e);
     void moveEvent(QMoveEvent *e);
-    bool event(QEvent *e);
 
 private:
 

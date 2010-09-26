@@ -104,7 +104,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
             d(new BlurFXToolPriv)
 {
     setObjectName("blurfx");
-    setToolName(i18n("Blur FX"));
+    setToolName(i18n("Blur Effects"));
     setToolIcon(SmallIcon("blurfx"));
 
     // -------------------------------------------------------------

@@ -271,7 +271,14 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
 {
     d->listView->clear();
     d->advancedRenameManager->reset();
-    d->advancedRenameManager->addFiles(urls, AdvancedRenameManager::SortAscending);
+    QList<ParseSettings> files;
+    foreach (const KUrl& url, urls)
+    {
+        ParseSettings ps;
+        ps.fileUrl = url;
+        files << ps;
+    }
+    d->advancedRenameManager->addFiles(files, AdvancedRenameManager::SortAscending);
 
     AdvancedRenameListItem* item = 0;
 
@@ -310,25 +317,6 @@ void AdvancedRenameDialog::initDialog(int count)
 NewNamesList AdvancedRenameDialog::newNames()
 {
     return d->newNamesList;
-}
-
-void AdvancedRenameDialog::moveEvent(QMoveEvent* e)
-{
-    Q_UNUSED(e)
-    emit signalWindowHasMoved();
-}
-
-bool AdvancedRenameDialog::event(QEvent* e)
-{
-    switch (e->type())
-    {
-        case QEvent::WindowDeactivate:
-            emit signalWindowLostFocus();
-            break;
-        default:
-            break;
-    }
-    return KDialog::event(e);
 }
 
 void AdvancedRenameDialog::readSettings()

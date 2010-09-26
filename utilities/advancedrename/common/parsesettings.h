@@ -78,6 +78,7 @@ public:
     KUrl                     fileUrl;
     QString                  parseString;
     QString                  str2Modify;
+    QDateTime                creationTime;
     ParseResults             results;
     ParseResults             invalidModifiers;
     ParseResults::ResultsKey currentResultsKey;

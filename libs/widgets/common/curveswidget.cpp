@@ -461,7 +461,7 @@ void CurvesWidget::updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenB
     newCurves->setCurveType(ImageCurves::CURVE_SMOOTH);
     if (d->curves)
     {
-        newCurves->fillFromOtherCurvers(d->curves);
+        newCurves->fillFromOtherCurves(d->curves);
         delete d->curves;
     }
     d->curves = newCurves;

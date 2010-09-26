@@ -139,12 +139,30 @@ BatchToolsList BatchToolsManager::toolsList() const
 
 void BatchToolsManager::registerTool(BatchTool* tool)
 {
+    if (!tool)
+        return;
+
     d->toolsList.append(tool);
 }
 
 void BatchToolsManager::unregisterTool(BatchTool* tool)
 {
-    d->toolsList.removeAll(tool);
+    if (!tool)
+        return;
+
+    for (BatchToolsList::iterator it = d->toolsList.begin();
+            it != d->toolsList.end(); )
+    {
+        if (*it == tool)
+        {
+            delete *it;
+            it = d->toolsList.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchToolGroup group) const

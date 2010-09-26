@@ -132,10 +132,10 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
+CameraUI::CameraUI(const QString& cameraTitle,
                    const QString& model, const QString& port,
                    const QString& path, int startIndex)
-        : KXmlGuiWindow(parent), d(new CameraUIPriv)
+        : KXmlGuiWindow(0), d(new CameraUIPriv)
 
 {
     setXMLFile("cameraui.rc");
@@ -635,12 +635,6 @@ void CameraUI::setupConnections()
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->zoomBar, SLOT(slotUpdateTrackerPos()));
 
-    connect(this, SIGNAL(signalWindowHasMoved()),
-            d->renameCustomizer, SLOT(slotUpdateTrackerPos()));
-
-    connect(this, SIGNAL(signalWindowLostFocus()),
-            d->renameCustomizer, SLOT(slotHideToolTipTracker()));
-
     // -------------------------------------------------------------------------
 
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
@@ -866,19 +860,6 @@ void CameraUI::moveEvent(QMoveEvent *e)
 {
     Q_UNUSED(e)
     emit signalWindowHasMoved();
-}
-
-bool CameraUI::event(QEvent *e)
-{
-    switch (e->type())
-    {
-        case QEvent::WindowDeactivate:
-            emit signalWindowLostFocus();
-            break;
-        default:
-            break;
-    }
-    return KXmlGuiWindow::event(e);
 }
 
 void CameraUI::slotClose()

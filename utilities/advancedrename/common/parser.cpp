@@ -160,9 +160,14 @@ void Parser::unregisterOption(Option* option)
          it != d->options.end(); )
     {
         if (*it == option)
+        {
+            delete *it;
             it = d->options.erase(it);
+        }
         else
+        {
             ++it;
+        }
     }
 }
 
@@ -184,9 +189,14 @@ void Parser::unregisterModifier(Modifier* modifier)
          it != d->modifiers.end(); )
     {
         if (*it == modifier)
+        {
+            delete *it;
             it = d->modifiers.erase(it);
+        }
         else
+        {
             ++it;
+        }
     }
 }
 
