@@ -118,9 +118,8 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->backgroundColor->setWhatsThis( i18n("Customize the background color to use "
                                            "in the image editor area.") );
 
+    d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
-    d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
-                                    interfaceOptionsGroup);
 
     d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw images"), interfaceOptionsGroup);
     d->useRawImportTool->setWhatsThis(i18n("Set this option to use the Raw Import "
