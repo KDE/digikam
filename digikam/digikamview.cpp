@@ -1568,6 +1568,10 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
          !d->cancelSlideShow && (it != infoList.constEnd()) ; ++it)
     {
         ImageInfo info = *it;
+        if (info.isNull() || info.category() != DatabaseItem::Image)
+        {
+            continue;
+        }
         settings.fileList.append(info.fileUrl());
         SlidePictureInfo pictInfo;
         pictInfo.comment   = info.comment();

@@ -724,7 +724,7 @@ void SlideShow::keyPressEvent(QKeyEvent* e)
 
 void SlideShow::makeCornerRectangles(const QRect& desktopRect, const QSize& size,
                                      QRect* topLeft, QRect* topRight, QRect* bottomLeft, QRect* bottomRight,
-                                     QRect* topLeftLarger, QRect* topRightLarger, QRect* bottomLeftLarger, 
+                                     QRect* topLeftLarger, QRect* topRightLarger, QRect* bottomLeftLarger,
                                      QRect* bottomRightLarger)
 {
     QRect sizeRect(QPoint(0, 0), size);
