@@ -36,4 +36,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 210198 : Copyright and Right Usage information in Settings are not saved in template file.
 025 ==> 228547 . Videos cannot return to thumbnail view.
 026 ==> 251899 : Can't rename files during import from camera.
-027 ==>
+027 ==> 169264 : Color Management: Rendering Intents are mixed up.
+028 ==> 
+
