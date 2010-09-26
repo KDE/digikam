@@ -1598,8 +1598,7 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
         return;
 
     // the CameraUI will delete itself when it has finished
-    CameraUI* cgui = new CameraUI(this,
-                                  i18n("Images found in %1", path),
+    CameraUI* cgui = new CameraUI(i18n("Images found in %1", path),
                                   "directory browse", "Fixed", path, 1);
     cgui->show();
 
@@ -1624,7 +1623,7 @@ void DigikamApp::slotOpenManualCamera(QAction *action)
         else
         {
             // the CameraUI will delete itself when it has finished
-            CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
+            CameraUI* cgui = new CameraUI(ctype->title(), ctype->model(),
                                           ctype->port(), ctype->path(), ctype->startingNumber());
 
             ctype->setCurrentCameraUI(cgui);
@@ -1706,10 +1705,10 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
         {
             kDebug() << "Found camera from ids " << vendorId << " " << productId
-                          << " camera is: " << model << " at " << port;
+                     << " camera is: " << model << " at " << port;
 
             // the CameraUI will delete itself when it has finished
-            CameraUI* cgui      = new CameraUI(this, cameraLabel, model, port, "/", 1);
+            CameraUI* cgui      = new CameraUI(cameraLabel, model, port, "/", 1);
             d->cameraUIMap[udi] = cgui;
 
             cgui->show();
@@ -1788,7 +1787,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
             mediaLabel = path;
 
         // the CameraUI will delete itself when it has finished
-        CameraUI* cgui      = new CameraUI(this, i18n("Images on %1", mediaLabel),
+        CameraUI* cgui      = new CameraUI(i18n("Images on %1", mediaLabel),
                                            "directory browse", "Fixed", path, 1);
         d->cameraUIMap[udi] = cgui;
 

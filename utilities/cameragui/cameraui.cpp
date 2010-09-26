@@ -132,10 +132,10 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
+CameraUI::CameraUI(const QString& cameraTitle,
                    const QString& model, const QString& port,
                    const QString& path, int startIndex)
-        : KXmlGuiWindow(parent), d(new CameraUIPriv)
+        : KXmlGuiWindow(0), d(new CameraUIPriv)
 
 {
     setXMLFile("cameraui.rc");

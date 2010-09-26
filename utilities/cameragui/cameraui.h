@@ -68,7 +68,7 @@ class CameraUI : public KXmlGuiWindow
 
 public:
 
-    CameraUI(QWidget* parent, const QString& cameraTitle,
+    CameraUI(const QString& cameraTitle,
              const QString& model, const QString& port,
              const QString& path, int startIndex);
     ~CameraUI();
