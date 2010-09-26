@@ -1246,19 +1246,6 @@ void QueueMgrWindow::moveEvent(QMoveEvent* e)
     emit signalWindowHasMoved();
 }
 
-bool QueueMgrWindow::event(QEvent* e)
-{
-    switch (e->type())
-    {
-        case QEvent::WindowDeactivate:
-            emit signalWindowLostFocus();
-            break;
-        default:
-            break;
-    }
-    return KXmlGuiWindow::event(e);
-}
-
 void QueueMgrWindow::addHistoryMessage(const QString& msg, DHistoryView::EntryType type)
 {
     if (d->currentProcessItem)

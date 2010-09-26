@@ -319,25 +319,6 @@ NewNamesList AdvancedRenameDialog::newNames()
     return d->newNamesList;
 }
 
-void AdvancedRenameDialog::moveEvent(QMoveEvent* e)
-{
-    Q_UNUSED(e)
-    emit signalWindowHasMoved();
-}
-
-bool AdvancedRenameDialog::event(QEvent* e)
-{
-    switch (e->type())
-    {
-        case QEvent::WindowDeactivate:
-            emit signalWindowLostFocus();
-            break;
-        default:
-            break;
-    }
-    return KDialog::event(e);
-}
-
 void AdvancedRenameDialog::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();

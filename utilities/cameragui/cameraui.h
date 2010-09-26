@@ -93,7 +93,6 @@ Q_SIGNALS:
 
     void signalLastDestination(const KUrl&);
     void signalWindowHasMoved();
-    void signalWindowLostFocus();
 
 public Q_SLOTS:
 
@@ -103,7 +102,6 @@ protected:
 
     void closeEvent(QCloseEvent* e);
     void moveEvent(QMoveEvent *e);
-    bool event(QEvent *e);
 
 private:
 
