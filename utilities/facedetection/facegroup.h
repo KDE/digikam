@@ -33,6 +33,8 @@
 
 // Local includes
 
+class QGraphicsSceneHoverEvent;
+
 namespace Digikam
 {
 
@@ -70,6 +72,12 @@ public:
     bool autoSuggest() const;
 
     /**
+     * Even if visible() is false, show the item under the mouse cursor
+     */
+    void setShowOnHover(bool show);
+    bool showOnHover() const;
+
+    /**
      * Returns the item in this group closest to scene position p.
      * If given, manhattanLength is set to the manhattan length between
      * p and the closest point of the returned item's bounding rectangle.
@@ -77,12 +85,15 @@ public:
      */
     RegionFrameItem* closestItem(const QPointF& p, qreal* manhattanLength = 0) const;
 
+    void itemHoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void itemHoverMoveEvent(QGraphicsSceneHoverEvent *event);
+    void itemHoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
 public Q_SLOTS:
 
     /** Shows or hides the frames */
-    void show();
-    void hide();
     void setVisible(bool visible);
+    void setVisibleItem(RegionFrameItem *item);
 
     /** Sets the current ImageInfo */
     void setInfo(const ImageInfo& info);

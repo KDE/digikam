@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QGraphicsSceneHoverEvent>
 #include <QObject>
 
 // KDE includes
@@ -36,6 +37,7 @@
 
 // Local includes
 
+#include "addtagscombobox.h"
 #include "albummodel.h"
 #include "albumfiltermodel.h"
 #include "assignnamewidget.h"
@@ -106,13 +108,15 @@ public:
     {
         view                 = 0;
         autoSuggest          = false;
+        showOnHover          = false;
         visibilityController = 0;
         state                = NoFaces;
         tagModel             = 0;
         filterModel          = 0;
+        filteredModel        = 0;
     }
 
-    void                       transitionToVisible(bool visible);
+    void                       applyVisible();
     FaceItem*                  createItem(const DatabaseFace& face);
     AssignNameWidget*          createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier);
     AssignNameWidget::Mode     assignWidgetMode(DatabaseFace::Type type);
@@ -123,6 +127,7 @@ public:
     GraphicsDImgView*          view;
     ImageInfo                  info;
     bool                       autoSuggest;
+    bool                       showOnHover;
 
     QList<FaceItem*>           items;
 
@@ -131,6 +136,7 @@ public:
 
     TagModel*                  tagModel;
     CheckableAlbumFilterModel* filterModel;
+    TagPropertiesFilterModel*  filteredModel;
 
     FaceIface                  faceIface;
     FacePipeline               confirmPipeline;
@@ -142,7 +148,7 @@ FaceGroup::FaceGroup(GraphicsDImgView* view)
          : QObject(view), d(new FaceGroupPriv(this))
 {
     d->view                 = view;
-    d->visibilityController = new ItemVisibilityController(ItemVisibilityController::ItemGroup, this);
+    d->visibilityController = new ItemVisibilityController(this);
     d->visibilityController->setShallBeShown(false);
 
     connect(view->previewItem(), SIGNAL(stateChanged(int)),
@@ -156,7 +162,6 @@ FaceGroup::~FaceGroup()
 
 void FaceGroup::itemStateChanged(int itemState)
 {
-    kDebug() << "itemState" << itemState << "state" << d->state;
     switch (itemState)
     {
         case DImgPreviewItem::NoImage:
@@ -206,31 +211,41 @@ bool FaceGroup::autoSuggest() const
     return d->autoSuggest;
 }
 
-void FaceGroup::show()
+void FaceGroup::setShowOnHover(bool show)
 {
-    setVisible(true);
+    d->showOnHover = show;
 }
 
-void FaceGroup::hide()
+bool FaceGroup::showOnHover() const
 {
-    setVisible(false);
+    return d->showOnHover;
+}
+
+void FaceGroup::FaceGroupPriv::applyVisible()
+{
+    if (state == NoFaces)
+    {
+        // If not yet loaded, load. load() will transitionToVisible after loading.
+        q->load();
+    }
+    else if (state == FacesLoaded)
+    {
+        // show existing faces, if we have an image
+        if (view->previewItem()->isLoaded())
+            visibilityController->show();
+    }
 }
 
 void FaceGroup::setVisible(bool visible)
 {
     d->visibilityController->setShallBeShown(visible);
+    d->applyVisible();
+}
 
-    if (d->state == NoFaces)
-    {
-        // If not yet loaded, load. load() will transitionToVisible after loading.
-        load();
-    }
-    else if (d->state == FacesLoaded)
-    {
-        // show existing faces, if we have an image
-        if (d->view->previewItem()->isLoaded())
-            d->visibilityController->show();
-    }
+void FaceGroup::setVisibleItem(RegionFrameItem *item)
+{
+    d->visibilityController->setItemThatShallBeShown(item);
+    d->applyVisible();
 }
 
 void FaceGroup::setInfo(const ImageInfo& info)
@@ -291,6 +306,31 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* manhattanLength
     return closestItem;
 }
 
+void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent *e)
+{
+    if (d->showOnHover && !isVisible())
+    {
+        qreal distance;
+        RegionFrameItem *item = closestItem(e->scenePos(), &distance);
+        // There's a possible nuisance when the direct mouse way from hovering pos to HUD widget
+        // is not part of the condition. Maybe, we should add a exemption for this case.
+        if (distance < 25)
+            setVisibleItem(item);
+        else
+            setVisibleItem(0);
+    }
+}
+
+void FaceGroup::itemHoverLeaveEvent(QGraphicsSceneHoverEvent *)
+{
+    if (d->showOnHover && !isVisible())
+        setVisibleItem(0);
+}
+
+void FaceGroup::itemHoverEnterEvent(QGraphicsSceneHoverEvent *)
+{
+}
+
 FaceItem* FaceGroup::FaceGroupPriv::createItem(const DatabaseFace& face)
 {
     FaceItem* item = new FaceItem(view->previewItem());
@@ -313,6 +353,10 @@ void FaceGroup::FaceGroupPriv::checkModels()
     if (!filterModel)
     {
         filterModel = new CheckableAlbumFilterModel(q);
+    }
+    if (!filteredModel)
+    {
+        filteredModel = new TagPropertiesFilterModel(q);
     }
 }
 
@@ -339,7 +383,7 @@ AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const Databas
     assignWidget->setLayoutMode(AssignNameWidget::FullLine);
     assignWidget->setFace(info, identifier);
     checkModels();
-    assignWidget->setTagModel(tagModel, filterModel);
+    assignWidget->setTagModel(tagModel, filteredModel, filterModel);
 
     q->connect(assignWidget, SIGNAL(assigned(const TaggingAction&, const ImageInfo&, const QVariant&)),
                q, SLOT(slotAssigned(const TaggingAction&, const ImageInfo&, const QVariant&)));
@@ -412,7 +456,6 @@ void FaceGroup::rejectAll()
 
 void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
 {
-    kDebug() << action.tagId() << info.id() << faceIdentifier;
     int tagId         = action.tagId();
     FaceItem* item    = d->items[faceIdentifier.toInt()];
     DatabaseFace face = item->face();
@@ -425,7 +468,6 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo& info,
 
 void FaceGroup::slotRejected(const ImageInfo& info, const QVariant& faceIdentifier)
 {
-    kDebug() << info.id() << faceIdentifier;
     FaceItem* item = d->items.takeAt(faceIdentifier.toInt());
     d->faceIface.removeFace(item->face());
 

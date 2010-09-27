@@ -93,8 +93,10 @@ class ImagePreviewViewItem : public DImgPreviewItem
 {
 public:
 
-    ImagePreviewViewItem(ImagePreviewView* view) : m_view(view)
+    ImagePreviewViewItem(ImagePreviewView* view, FaceGroup *group)
+        : m_view(view), m_group(group)
     {
+        setAcceptHoverEvents(true);
     }
 
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
@@ -108,6 +110,21 @@ public:
         setPath(info.filePath());
     }
 
+    void hoverEnterEvent (QGraphicsSceneHoverEvent* e)
+    {
+        m_group->itemHoverEnterEvent(e);
+    }
+
+    void hoverLeaveEvent (QGraphicsSceneHoverEvent* e)
+    {
+        m_group->itemHoverLeaveEvent(e);
+    }
+
+    void hoverMoveEvent (QGraphicsSceneHoverEvent* e)
+    {
+        m_group->itemHoverMoveEvent(e);
+    }
+
     ImageInfo imageInfo() const
     {
         return m_info;
@@ -116,6 +133,7 @@ public:
 protected:
 
     ImagePreviewView*   m_view;
+    FaceGroup*          m_group;
     ImageInfo           m_info;
 };
 
@@ -173,7 +191,10 @@ public:
 ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
                   : GraphicsDImgView(parent), d(new ImagePreviewViewPriv)
 {
-    d->item = new ImagePreviewViewItem(this);
+    d->faceGroup = new FaceGroup(this);
+    d->faceGroup->setShowOnHover(true);
+
+    d->item = new ImagePreviewViewItem(this, d->faceGroup);
     setItem(d->item);
 
     connect(d->item, SIGNAL(loaded()),
@@ -188,8 +209,6 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
 
     d->stack = parent;
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    d->faceGroup = new FaceGroup(this);
 
     // ------------------------------------------------------------
 
