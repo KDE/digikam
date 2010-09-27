@@ -76,6 +76,12 @@ extern "C"
 #include "greycstorationfilter.h"
 #include "pgfutils.h"
 
+#ifndef USE_EXT_LIBLENSFUN
+#   ifdef HAVE_GLIB2
+#       include "lensfun.h"
+#   endif // HAVE_GLIB2
+#endif // USE_EXT_LIBLENSFUN
+
 namespace Digikam
 {
 
@@ -111,6 +117,12 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("Exiv2 can write to Pgf"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/pgf") ?
                                                      i18n("Yes") : i18n("No"));
 
+#ifndef USE_EXT_LIBLENSFUN
+#   ifdef HAVE_GLIB2
+    list.insert(i18n("LibLensFun"),                  QString(LF_VERSION));
+#   endif // HAVE_GLIB2
+#endif // USE_EXT_LIBLENSFUN
+
     list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
     list.insert(i18n("LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
     list.insert(i18n("LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
@@ -121,7 +133,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
 
 #ifdef HAVE_MARBLEWIDGET
     list.insert(i18n("Marble widget"),               QString(MARBLE_VERSION_STRING));
-#endif //HAVE_MARBLEWIDGET
+#endif // HAVE_MARBLEWIDGET
 
     listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     setInfoMap(list);
