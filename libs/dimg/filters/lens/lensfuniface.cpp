@@ -201,7 +201,9 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     QString model                = photoInfo.model;
     QString lens                 = photoInfo.lens;
     bool ret                     = false;
-    d->settings                   = LensFunContainer();
+    d->settings                  = LensFunContainer();
+    d->usedCamera                = 0;
+    d->usedLens                  = 0;
 
     // ------------------------------------------------------------------------------------------------
 
