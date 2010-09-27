@@ -1995,9 +1995,9 @@ void DigikamApp::fillSolidMenus()
                 {
                     isHarddisk = true;
                     if (drive->bus() == Solid::StorageDrive::Usb)
-                        driveType = "USB Disk ";
+                        driveType = i18n("USB Disk");
                     else
-                        driveType = "Disk ";
+                        driveType = i18nc("non-USB removable storage device", "Disk");
                     break;
                 }
                 else
@@ -2033,39 +2033,37 @@ void DigikamApp::fillSolidMenus()
         }
         else
         {
-            label += driveType;
+            QString labelOrProduct;
+            if (!volume->label().isEmpty())
+                labelOrProduct = volume->label();
+            else if (volumeDevice.product().isEmpty())
+                labelOrProduct = volumeDevice.product();
+            else if (volumeDevice.vendor().isEmpty())
+                labelOrProduct = volumeDevice.vendor();
+            else if (!driveDevice.product().isEmpty())
+                labelOrProduct = driveDevice.product();
 
-            if (!driveDevice.product().isEmpty())
-                label += "\"" + driveDevice.product() + "\" ";
-            else if (!volume->label().isEmpty())
-                label += "\"" + volume->label() + "\" ";
-
-            if (!access->filePath().isEmpty())
-                label += "at " + access->filePath() + ' ';
+            if (!labelOrProduct.isNull())
+            {
+                if (!access->filePath().isEmpty())
+                    label += i18nc("<drive type> \"<device name or label>\" at <mount path>",
+                                   "%1 \"%2\" at %3", driveType, labelOrProduct, access->filePath());
+                else
+                    label += i18nc("<drive type> \"<device name or label>\"",
+                                   "%1 \"%2\"", driveType, labelOrProduct);
+            }
+            else
+            {
+                if (!access->filePath().isEmpty())
+                    label += i18nc("<drive type> at <mount path>",
+                                   "%1 at %2", driveType, access->filePath());
+                else
+                    label += driveType;
+            }
 
             if (volume->size())
-            {
-                double size = (double)volume->size();
-                if (size > 1024)
-                {
-                    size /= 1024;
-                    if (size > 1024)
-                    {
-                        size /= 1024;
-                        if (size > 1024)
-                        {
-                            size /= 1024;
-                            label += '(' + QString::number(size, 'g', 1) + " GB)";
-                        }
-                        else
-                            label += '(' + QString::number(lround(size)) + " MB)";
-                    }
-                    else
-                        label += '(' + QString::number(lround(size)) + " KB)";
-                }
-                else
-                    label += '(' + QString::number(lround(size)) + " bytes)";
-            }
+                label += i18nc("device label etc... (<formatted byte size>)",
+                               " (%1)", KGlobal::locale()->formatByteSize(volume->size()));
         }
 
         QString iconName;
