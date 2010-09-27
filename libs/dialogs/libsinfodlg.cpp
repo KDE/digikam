@@ -119,7 +119,10 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
 
 #ifndef USE_EXT_LIBLENSFUN
 #   ifdef HAVE_GLIB2
-    list.insert(i18n("LibLensFun"),                  QString(LF_VERSION));
+    list.insert(i18n("LibLensFun"),                  QString("%1.%2.%3-%4").arg(LF_VERSION_MAJOR)
+                                                                           .arg(LF_VERSION_MINOR)
+                                                                           .arg(LF_VERSION_MICRO)
+                                                                           .arg(LF_VERSION_BUGFIX));
 #   endif // HAVE_GLIB2
 #endif // USE_EXT_LIBLENSFUN
 
