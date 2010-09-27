@@ -74,13 +74,7 @@ public:
         FadingOut
     };
 
-    enum ItemType
-    {
-        SingleItem,
-        ItemGroup
-    };
-
-    ItemVisibilityController(ItemType type = SingleItem, QObject *parent = 0);
+    ItemVisibilityController(QObject *parent = 0);
     ~ItemVisibilityController();
 
     bool  shallBeShown() const;
@@ -98,67 +92,67 @@ public:
     void clear();
 
     /**
-     * Set or add objects. The given objects shall provide
+     * Add and remove objects. The given objects shall provide
      * an "opacity" and a "visible" property.
      * You can, for convenience, use a ItemVisibilityControllerPropertyObject
      * as a value container, if your items do not provide these properties directly.
      * No ownership is taken, so the objects should live as long as this object
      * is used.
      */
-    /// Call this for SingleItem animations
-    void setItem(QObject *object);
-    /// Call this for ItemGroup animations
     void addItem(QObject *object);
-    /// Item is removed directly.
     void removeItem(QObject *object);
-    /// Item is hidden, then the itemRemoved() signal is sent
-    void hideAndRemoveItem(QObject *object);
-
-    /**
-     * Removes the given items from this controller and moves them to the given controller.
-     * The items are immediately (without transition) set to the state of the given controller.
-     * Only supported if type of both controllers is ItemGroup.
-     */
-    void moveTo(QObject* item, ItemVisibilityController* other);
-
-    /**
-     * Moves the given item(s) to a newly created controller, sync'ed to the same
-     * state as this.
-     * Only supported if type is ItemGroup.
-     */
-    ItemVisibilityController *splitOff(QObject *item);
-    ItemVisibilityController *splitOff(const QList<QObject *>& items);
-
-    /**
-     * Returns the property used for the animation.
-     * If the item is a SingleItem, it will be a QPropertyAnimation.
-     * If it's an ItemGroup, it will be a QParallelAnimationGroup.
-     * If animations are switched off globally, this can be 0.
-     */
-    QAbstractAnimation *animation() const;
 
 Q_SIGNALS:
 
-    /// Emitted when the transition has finished
+    /// Emitted when the (main) transition has finished
     void propertiesAssigned(bool visible);
-    /// The item was hidden and removed from this controller, finishing hideAndRemoveItem().
-    void itemHiddenAndRemoved(QObject *item);
+    /**
+     * Emitted when a transition for a single item finished
+     * (see setItemVisible())
+     */
+    void propertiesAssigned(QObject *item, bool visible);
+    /// Emitted when hideAndRemoveItem has finished
+    void hiddenAndRemoved(QObject *item);
 
 public Q_SLOTS:
 
+    /// Adjusts the first condition - the items are shown if shallBeShown is true and isVisible is true
     void setShallBeShown(bool shallBeShown);
+    /**
+     * Sets a single item to be shown. Calling setVisible() will effectively
+     * effect only this single item, as if calling setItemVisible().
+     * Reset by calling with 0 or setShallBeShown().
+     */
+    void setItemThatShallBeShown(QObject *item);
+
+    /**
+     * Adjusts the main condition.
+     * All items are affected.
+     * If any items were shown or hidden separately, they will be resynchronized.
+     */
     void show();
     void hide();
     void setVisible(bool visible);
+
+    /**
+     * Shows or hides a single item.
+     * The item's status is changed individually.
+     * The next call to the "global" method will take precedence again.
+     */
+    void showItem(QObject *item);
+    void hideItem(QObject *item);
+    void setItemVisible(QObject *item, bool visible);
+
+    /**
+     * Hide the item, and then remove it.
+     * When finished, hiddenAndRemoved() is emitted.
+     */
+    void hideAndRemoveItem(QObject *item);
 
 protected Q_SLOTS:
 
     void animationFinished();
     void objectDestroyed(QObject *);
-    void childPropertiesAssigned();
-
-public: // internal
-
 
 private:
 
