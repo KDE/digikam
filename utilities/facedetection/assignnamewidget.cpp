@@ -66,6 +66,7 @@ public:
         buttonBox      = 0;
         tagModel       = 0;
         tagFilterModel = 0;
+        tagFilteredModel = 0;
     }
 
     void         checkWidgets();
@@ -88,6 +89,7 @@ public:
 
     TagModel*                         tagModel;
     CheckableAlbumFilterModel*        tagFilterModel;
+    TagPropertiesFilterModel*         tagFilteredModel;
     AlbumPointer<TAlbum>              parentTag;
 
     QGridLayout*                      layout;
@@ -127,7 +129,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
     {
         comboBox = new AddTagsComboBox(q);
         if (tagModel)
-            comboBox->setModel(tagModel, tagFilterModel);
+            comboBox->setModel(tagModel, tagFilteredModel, tagFilterModel);
 
         q->connect(comboBox, SIGNAL(taggingActionActivated(const TaggingAction&)),
                    q, SLOT(actionActivated(const TaggingAction&)));
@@ -188,12 +190,13 @@ AssignNameWidget::~AssignNameWidget()
     delete d;
 }
 
-void AssignNameWidget::setTagModel(TagModel* model, CheckableAlbumFilterModel* filterModel)
+void AssignNameWidget::setTagModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
 {
     d->tagModel = model;
     d->tagFilterModel = filterModel;
+    d->tagFilteredModel  = filteredModel;
     if (d->comboBox)
-        d->comboBox->setModel(d->tagModel, d->tagFilterModel);
+        d->comboBox->setModel(d->tagModel, d->tagFilteredModel, d->tagFilterModel);
 }
 
 void AssignNameWidget::setParentTag(TAlbum* album)

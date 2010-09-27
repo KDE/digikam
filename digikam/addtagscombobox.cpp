@@ -74,12 +74,12 @@ AddTagsComboBox::~AddTagsComboBox()
     delete d;
 }
 
-void AddTagsComboBox::setModel(TagModel* model, CheckableAlbumFilterModel* filterModel)
+void AddTagsComboBox::setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
 {
     // AlbumSelectComboBox calls virtual installView() and  installLineEdit(), below
     AlbumSelectComboBox::setModel(model, filterModel);
     d->treeView->setAlbumModel(model);
-    d->treeView->setAlbumFilterModel(filterModel);
+    d->treeView->setAlbumFilterModel(filteredModel, filterModel);
 
     connect(view(), SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotViewCurrentAlbumChanged(Album*)));
@@ -103,7 +103,10 @@ void AddTagsComboBox::installLineEdit()
 void AddTagsComboBox::installView(QAbstractItemView *view)
 {
     if (!view && !d->treeView)
-        d->treeView = new TagTreeView(this);
+    {
+        TagTreeView::Flags flags;
+        d->treeView = new TagTreeView(this, flags);
+    }
     // called from initialize, tree view is constructed
     AlbumSelectComboBox::installView(view ? view : d->treeView);
 }

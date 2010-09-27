@@ -38,6 +38,7 @@ class ImageInfo;
 class TAlbum;
 class TaggingAction;
 class TagModel;
+class TagPropertiesFilterModel;
 
 class AssignNameWidget : public QFrame
 {
@@ -76,7 +77,7 @@ public:
 
     /** Set the tag model to use for completion.
      *  You must call this before use if you want a combo box. */
-    void setTagModel(TagModel* model, CheckableAlbumFilterModel* filterModel);
+    void setTagModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel);
 
     void setMode(Mode mode);
     Mode mode() const;

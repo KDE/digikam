@@ -36,6 +36,7 @@ class Album;
 class CheckableAlbumFilterModel;
 class TAlbum;
 class TagModel;
+class TagPropertiesFilterModel;
 class TagTreeView;
 
 class AddTagsComboBox : public AlbumSelectComboBox
@@ -48,9 +49,9 @@ public:
     ~AddTagsComboBox();
 
     /** You must call this after construction.
-     *  If filterModel is 0, a default one is constructed
+     *  If filtered/filterModel is 0, a default one is constructed
      */
-    void setModel(TagModel* model, CheckableAlbumFilterModel* filterModel = 0);
+    void setModel(TagModel* model, TagPropertiesFilterModel *filteredModel = 0, CheckableAlbumFilterModel* filterModel = 0);
 
     /** Returns the currently set tagging action.
      *  This is the last action emitted by either taggingActionActivated()
