@@ -209,14 +209,15 @@ IF (MARBLEWIDGET_FOUND)
     INCLUDE(libs/imageproperties/markerclusterholderplugin/CheckPluginBuildable.cmake)
 ENDIF (MARBLEWIDGET_FOUND)
 
-# Check LensFun library for lens correction tool.
-MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
-MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
-
-# Check GLib2 library for liquid rescale tool.
+# Check GLib2 library for lrqr-1 and lensfun libraries.
 MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)
 MACRO_BOOL_TO_01(GLIB2_FOUND HAVE_GLIB2)
 
+# Check LensFun library for Lens auto-correction tool.
+MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
+MACRO_BOOL_TO_01(LENSFUN_FOUND USE_EXT_LIBLENSFUN)
+
+# Check Lqr-1 library for Contents Aware Resizer tool.
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
@@ -245,9 +246,10 @@ ENDIF (NOT WIN32)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
-# Set config file depending of optional dependencies
+# Set config files accordingly with optional dependencies
 
 CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include/config-lensfun.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include/config-lensfun.h)
 
 # ==================================================================================================
 # Log messages
@@ -331,15 +333,6 @@ ELSE(NEPOMUK_FOUND)
     MESSAGE(STATUS "")
 ENDIF(NEPOMUK_FOUND)
 
-IF(LENSFUN_FOUND)
-    MESSAGE(STATUS " liblensfun library found................. YES (optional)")
-ELSE(LENSFUN_FOUND)
-    MESSAGE(STATUS " liblensfun library found................. NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without lens auto-correction image editor tool.")
-    MESSAGE(STATUS "")
-ENDIF(LENSFUN_FOUND)
-
 IF(GLIB2_FOUND)
     MESSAGE(STATUS " libglib2 library found................... YES (optional)")
     IF(LQR-1_FOUND)
@@ -347,10 +340,17 @@ IF(GLIB2_FOUND)
     ELSE(LQR-1_FOUND)
         MESSAGE(STATUS " liblqr-1 library found................... NO  (optional - internal version used instead)")
     ENDIF(LQR-1_FOUND)
+
+    IF(LENSFUN_FOUND)
+        MESSAGE(STATUS " liblensfun library found................. YES (optional)")
+    ELSE(LENSFUN_FOUND)
+        MESSAGE(STATUS " liblensfun library found................. NO  (optional - internal version used instead)")
+    ENDIF(LENSFUN_FOUND)
+
 ELSE(GLIB2_FOUND)
     MESSAGE(STATUS " libglib2 library found................... NO  (optional)")
     MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without liquid rescale image editor tool.")
+    MESSAGE(STATUS " digiKam will be compiled without liquid rescale and lens auto-correction tools.")
     MESSAGE(STATUS "")
 ENDIF(GLIB2_FOUND)
 
@@ -471,9 +471,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ENDIF(MARBLEWIDGET_FOUND)
 
     # ==================================================================================================
-    # LibLqr-1 library rules
+    # Lensfun and LibLqr-1 library rules
+    # NOTE: both libraries needs GLIB2.
 
     IF(GLIB2_FOUND)
+
         INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
 
         IF(LQR-1_FOUND)
@@ -505,6 +507,56 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ENDIF(WIN32)
 
         ENDIF(LQR-1_FOUND)
+
+        IF(LENSFUN_FOUND)
+
+            INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIR})
+            SET(liblensfun_LIBS ${LENSFUN_LIBRARY})
+
+        ELSE(LENSFUN_FOUND)
+
+            ADD_DEFINITIONS(-DTRE_REGEX_T_FIELD=value -DTRE_VERSION="0")
+
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/auxfun)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/lensfun)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/regex)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun)
+
+            SET(liblensfun_SRCS
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/regcomp.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/regerror.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/regexec.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-ast.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-compile.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-match-approx.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-match-backtrack.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-match-parallel.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-mem.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-parse.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-stack.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/xmalloc.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/auxfun/image.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/auxfun.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/camera.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/cpuid.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/database.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/lens.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mod-color.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mod-coord.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mod-subpix.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/modifier.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mount.cpp
+            )
+
+            IF(WIN32)
+                SET(liblensfun_SRCS ${liblensfun_SRCS}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/windows/auxfun.cpp
+                   )
+            ENDIF(WIN32)
+
+        ENDIF(LENSFUN_FOUND)
 
     ENDIF(GLIB2_FOUND)
 
@@ -641,23 +693,21 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(GLIB2_FOUND)
+
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
             ${liblqr_SRCS}
            )
-    ENDIF(GLIB2_FOUND)
 
-    IF(LENSFUN_LIBRARY)
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunfilter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuncameraselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
+            ${liblensfun_SRCS}
            )
-    ENDIF(LENSFUN_LIBRARY)
 
-    # For CImg.h
-    SET_SOURCE_FILES_PROPERTIES(${libdimgfilters_SRCS} PROPERTIES COMPILE_FLAGS ${KDE4_ENABLE_EXCEPTIONS})
+    ENDIF(GLIB2_FOUND)
 
     SET(libdmetadata_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatainfo.cpp
@@ -1150,11 +1200,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters/filmgrain.cpp
        )
 
-    IF(LENSFUN_LIBRARY)
+    IF(GLIB2_FOUND)
         SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/lensautofix.cpp
            )
-    ENDIF(LENSFUN_LIBRARY)
+    ENDIF(GLIB2_FOUND)
 
     SET(libcameragui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp

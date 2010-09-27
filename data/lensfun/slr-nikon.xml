@@ -1,0 +1,989 @@
+<lensdatabase>
+
+    <mount>
+        <name>Nikon F</name>
+        <compat>M42</compat>
+        <compat>Nikon F AI</compat>
+        <compat>Nikon F AI-S</compat>
+        <compat>Nikon F AF</compat>
+        <compat>Generic</compat>
+    </mount>
+
+    <mount>
+        <name>Nikon F AI</name>
+        <compat>M42</compat>
+        <compat>Nikon F</compat>
+        <compat>Nikon F AI-S</compat>
+        <compat>Nikon F AF</compat>
+        <compat>Generic</compat>
+    </mount>
+
+    <mount>
+        <name>Nikon F AI-S</name>
+        <compat>M42</compat>
+        <compat>Nikon F</compat>
+        <compat>Nikon F AI</compat>
+        <compat>Nikon F AF</compat>
+        <compat>Generic</compat>
+    </mount>
+
+    <mount>
+        <name>Nikon F AF</name>
+        <compat>M42</compat>
+        <compat>Nikon F</compat>
+        <compat>Nikon F AI</compat>
+        <compat>Nikon F AI-S</compat>
+        <compat>Generic</compat>
+    </mount>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D40</model>
+        <model lang="en">D40</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D40X</model>
+        <model lang="en">D40X</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D50</model>
+        <model lang="en">D50</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D60</model>
+        <model lang="en">D60</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D70</model>
+        <model lang="en">D70</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D70s</model>
+        <model lang="en">D70s</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D80</model>
+        <model lang="en">D80</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D90</model>
+        <model lang="en">D90</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D100</model>
+        <model lang="en">D100</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D200</model>
+        <model lang="en">D200</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D300</model>
+        <model lang="en">D300</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D300S</model>
+        <model lang="en">D300S</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D700</model>
+        <model lang="en">D700</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D3000</model>
+        <model lang="en">D3000</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D5000</model>
+        <model lang="en">D5000</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D1</model>
+        <model lang="en">D1</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D1H</model>
+        <model lang="en">D1H</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D1X</model>
+        <model lang="en">D1X</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D2H</model>
+        <model lang="en">D2H</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D2Hs</model>
+        <model lang="en">D2Hs</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D2X</model>
+        <model lang="en">D2X</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D2Xs</model>
+        <model lang="en">D2Xs</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D3</model>
+        <model lang="en">D3</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D3X</model>
+        <model lang="en">D3X</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>NIKON CORPORATION</maker>
+        <maker lang="en">Nikon</maker>
+        <model>NIKON D3S</model>
+        <model lang="en">D3S</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>FUJIFILM</maker>
+        <maker lang="en">Fujifilm</maker>
+        <model>FinePix S5Pro</model>
+        <model lang="en">FinePix S5 Pro</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>FUJIFILM</maker>
+        <maker lang="en">Fujifilm</maker>
+        <model>FinePix S3Pro</model>
+        <model lang="en">FinePix S3 Pro</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>FUJIFILM</maker>
+        <maker lang="en">Fujifilm</maker>
+        <model>FinePixS2Pro</model>
+        <model lang="en">FinePix S2 Pro</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>FUJIFILM</maker>
+        <maker lang="en">Fujifilm</maker>
+        <model>FinePixS1Pro</model>
+        <model lang="en">FinePix S1 Pro</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>Kodak</maker>
+        <model>DCS Pro 14N</model>
+        <variant>DCS-14n</variant>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>Kodak</maker>
+        <model>DCS Pro SLR/n</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>Kodak</maker>
+        <model>DCS Pro 14nx</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>Nikon</maker>
+        <model>35mm film: full frame</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 12-24mm f/4G ED-IF AF-S DX</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="12" a="-0.016006" b="0.024041" c="0" />
+            <distortion model="ptlens" focal="13" a="-0.017096" b="0.030498" c="0" />
+            <distortion model="ptlens" focal="14" a="-0.01773" b="0.031719" c="0" />
+            <distortion model="ptlens" focal="15" a="-0.013174" b="0.027255" c="0" />
+            <distortion model="ptlens" focal="16" a="-0.009629" b="0.021705" c="0" />
+            <distortion model="ptlens" focal="17" a="-0.006736" b="0.016621" c="0" />
+            <distortion model="ptlens" focal="18" a="-0.007763" b="0.019343" c="0" />
+            <distortion model="ptlens" focal="19" a="-0.005218" b="0.014696" c="0" />
+            <distortion model="ptlens" focal="20" a="-0.005775" b="0.015956" c="0" />
+            <distortion model="ptlens" focal="22" a="-0.005197" b="0.015329" c="0" />
+            <distortion model="ptlens" focal="24" a="-0.007101" b="0.018378" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 17-35mm f/2.8 ED-AFS</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="17" a="0.005" b="-0.02" c="0" />
+            <distortion model="ptlens" focal="20" a="0" b="-0.0055" c="0" />
+            <distortion model="ptlens" focal="24" a="0" b="-0.001" c="0" />
+            <distortion model="ptlens" focal="28" a="0" b="0.0005" c="0" />
+            <distortion model="ptlens" focal="35" a="0" b="0.0025" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 17-55mm f/2.8G ED-IF AF-S DX</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="17" a="0" b="-0.010424" c="0" />
+            <distortion model="ptlens" focal="19" a="0" b="-0.00567" c="0" />
+            <distortion model="ptlens" focal="22" a="0" b="-0.000148" c="0" />
+            <distortion model="ptlens" focal="26" a="0" b="0.004472" c="0" />
+            <distortion model="ptlens" focal="30" a="0" b="0.005657" c="0" />
+            <distortion model="ptlens" focal="38" a="0" b="0.007283" c="0" />
+            <distortion model="ptlens" focal="55" a="0" b="0.005143" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 18-35mm f/3.5-4.5D ED-IF AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="18" a="0.005981" b="-0.024888" c="0" />
+            <distortion model="ptlens" focal="21" a="0.005045" b="-0.019527" c="0" />
+            <distortion model="ptlens" focal="23" a="0.001429" b="-0.00989" c="0" />
+            <distortion model="ptlens" focal="26" a="0" b="-0.00509" c="0" />
+            <distortion model="ptlens" focal="30" a="0" b="-0.003797" c="0" />
+            <distortion model="ptlens" focal="35" a="0" b="-0.002437" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 18-55mm f/3.5-5.6G ED AF-S DX</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="18" a="0.003409" b="-0.019128" c="0" />
+            <distortion model="ptlens" focal="20" a="0.0042" b="-0.018625" c="0" />
+            <distortion model="ptlens" focal="24" a="0.001149" b="-0.008657" c="0" />
+            <distortion model="ptlens" focal="28" a="0" b="-0.003041" c="0" />
+            <distortion model="ptlens" focal="31" a="0" b="-0.003664" c="0" />
+            <distortion model="ptlens" focal="35" a="0" b="-0.002371" c="0" />
+            <distortion model="ptlens" focal="45" a="0" b="-0.001655" c="0" />
+            <distortion model="ptlens" focal="55" a="0" b="-0.001004" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 18-55mm f/3.5-5.6G AF-S DX VR</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="18" a="0.000658776" b="-0.0150048" c="-0.00123339" />
+            <distortion model="ptlens" focal="20" a="0.0154927" b="-0.0685976" c="0.0638405" />
+            <distortion model="ptlens" focal="22" a="0.00163489" b="-0.0157578" c="0.0044202" />
+            <distortion model="ptlens" focal="24" a="0.0238367" b="-0.102409" c="0.124563" />
+            <distortion model="ptlens" focal="29" a="-5.82382e-05" b="0.0021913" c="-0.0142704" />
+            <distortion model="ptlens" focal="35" a="0.00346406" b="-0.0126111" c="0.013148" />
+            <distortion model="ptlens" focal="45" a="-0.000340008" b="-0.000412014" c="0.00561741" />
+            <distortion model="ptlens" focal="55" a="-0.000340008" b="-0.000412014" c="0.00561741" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 18-70mm f/3.5-4.5G ED-IF AF-S DX</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="18" a="0.023969" b="-0.060001" c="0" />
+            <distortion model="ptlens" focal="22" a="0.016845" b="-0.038289" c="0" />
+            <distortion model="ptlens" focal="24" a="0.010564" b="-0.022097" c="0" />
+            <distortion model="ptlens" focal="27" a="0.006823" b="-0.012539" c="0" />
+            <distortion model="ptlens" focal="31" a="0.006238" b="-0.009315" c="0" />
+            <distortion model="ptlens" focal="34" a="0.003441" b="-0.003404" c="0" />
+            <distortion model="ptlens" focal="38" a="0.000969" b="0.001935" c="0" />
+            <distortion model="ptlens" focal="44" a="-0.000246" b="0.004105" c="0" />
+            <distortion model="ptlens" focal="50" a="0.000958" b="0.002277" c="0" />
+            <distortion model="ptlens" focal="55" a="-0.000474" b="0.005767" c="0" />
+            <distortion model="ptlens" focal="62" a="-0.000546" b="0.005724" c="0" />
+            <distortion model="ptlens" focal="70" a="4.2e-05" b="0.006308" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 18-200mm f/3.5-5.6 G ED-IF AF-S VR DX</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="18" a="0.017598" b="-0.049569" c="0" />
+            <distortion model="ptlens" focal="20" a="0.013846" b="-0.036284" c="0" />
+            <distortion model="ptlens" focal="26" a="0.014876" b="-0.023039" c="0" />
+            <distortion model="ptlens" focal="34" a="0.008669" b="-0.007258" c="0" />
+            <distortion model="ptlens" focal="38" a="0" b="0.012308" c="0" />
+            <distortion model="ptlens" focal="44" a="0" b="0.012651" c="0" />
+            <distortion model="ptlens" focal="56" a="0" b="0.010344" c="0" />
+            <distortion model="ptlens" focal="65" a="0" b="0.011336" c="0" />
+            <distortion model="ptlens" focal="82" a="0" b="0.009171" c="0" />
+            <distortion model="ptlens" focal="105" a="0" b="0.010009" c="0" />
+            <distortion model="ptlens" focal="130" a="0" b="0.007883" c="0" />
+            <distortion model="ptlens" focal="170" a="0" b="0.00648" c="0" />
+            <distortion model="ptlens" focal="200" a="0" b="0.005237" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 24-50mm f/3.3-4.5D Ai AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="24" a="0" b="-0.010413" c="0" />
+            <distortion model="ptlens" focal="29" a="0" b="-0.006777" c="0" />
+            <distortion model="ptlens" focal="38" a="0" b="-0.003447" c="0" />
+            <distortion model="ptlens" focal="50" a="0" b="-0.003329" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 24-85mm f/2.8-4.0D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="24" a="0.005" b="-0.022" c="0" />
+            <distortion model="ptlens" focal="28" a="0.004" b="-0.015" c="0" />
+            <distortion model="ptlens" focal="35" a="0.0008" b="-0.0025" c="0" />
+            <distortion model="ptlens" focal="50" a="0" b="0.0025" c="0" />
+            <distortion model="ptlens" focal="70" a="0" b="0.004" c="0" />
+            <distortion model="ptlens" focal="85" a="0" b="0.004" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 24-85mm f/3.5-4.5G ED-IF AF-S</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="24" a="0.023939" b="-0.061462" c="0" />
+            <distortion model="ptlens" focal="35" a="0.013898" b="-0.018385" c="0" />
+            <distortion model="ptlens" focal="52" a="0.00715" b="-0.000592" c="0" />
+            <distortion model="ptlens" focal="70" a="0.003769" b="0.007774" c="0" />
+            <distortion model="ptlens" focal="85" a="0.003412" b="0.0089" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 24-120mm f/3.5-5.6G ED-IF AF-S VR</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="24" a="0.004393" b="-0.01801" c="0" />
+            <distortion model="ptlens" focal="29" a="0" b="-0.003796" c="0" />
+            <distortion model="ptlens" focal="35" a="0" b="0.002203" c="0" />
+            <distortion model="ptlens" focal="52" a="0" b="0.005193" c="0" />
+            <distortion model="ptlens" focal="62" a="0" b="0.005274" c="0" />
+            <distortion model="ptlens" focal="75" a="0" b="0.00512" c="0" />
+            <distortion model="ptlens" focal="85" a="0" b="0.005317" c="0" />
+            <distortion model="ptlens" focal="100" a="0" b="0.00562" c="0" />
+            <distortion model="ptlens" focal="120" a="0" b="0.005123" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 28-200mm f/3.5-5.6G ED-IF AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="28" a="0" b="-0.005311" c="0" />
+            <distortion model="ptlens" focal="35" a="0" b="0" c="0" />
+            <distortion model="ptlens" focal="50" a="0" b="0.004112" c="0" />
+            <distortion model="ptlens" focal="70" a="0" b="0.006691" c="0" />
+            <distortion model="ptlens" focal="90" a="0" b="0.007929" c="0" />
+            <distortion model="ptlens" focal="125" a="0" b="0.007482" c="0" />
+            <distortion model="ptlens" focal="150" a="0" b="0.007459" c="0" />
+            <distortion model="ptlens" focal="200" a="0" b="0.007103" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 35-70mm f/2.8D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="35" a="0" b="-0.005179" c="0" />
+            <distortion model="ptlens" focal="39" a="0" b="-0.003271" c="0" />
+            <distortion model="ptlens" focal="44" a="0" b="-0.001363" c="0" />
+            <distortion model="ptlens" focal="52" a="0" b="0.002606" c="0" />
+            <distortion model="ptlens" focal="62" a="0" b="0.002756" c="0" />
+            <distortion model="ptlens" focal="70" a="0" b="0.003679" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 50-135mm f/3.5 AI-S</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="50" a="0" b="-0.0045" c="0" />
+            <distortion model="ptlens" focal="85" a="0" b="0.002" c="0" />
+            <distortion model="ptlens" focal="135" a="0" b="0.004" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 55-200mm f/4-5.6 G ED AF-S DX</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="55" a="0" b="-0.000404" c="0" />
+            <distortion model="ptlens" focal="70" a="0" b="0.004874" c="0" />
+            <distortion model="ptlens" focal="85" a="0" b="0.00919" c="0" />
+            <distortion model="ptlens" focal="105" a="0" b="0.010207" c="0" />
+            <distortion model="ptlens" focal="135" a="0" b="0.010639" c="0" />
+            <distortion model="ptlens" focal="200" a="0" b="0.008208" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 70-180mm f/4.5-5.6 ED-AF-D Micro</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="70" a="0" b="0" c="0" />
+            <distortion model="ptlens" focal="85" a="0" b="0.0012" c="0" />
+            <distortion model="ptlens" focal="105" a="0" b="0.002" c="0" />
+            <distortion model="ptlens" focal="135" a="0" b="0.0025" c="0" />
+            <distortion model="ptlens" focal="180" a="0" b="0.0025" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 70-200mm f/2.8G ED-IF AF-S VR</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="70" a="0" b="-0.004652" c="0" />
+            <distortion model="ptlens" focal="80" a="0" b="-0.003298" c="0" />
+            <distortion model="ptlens" focal="90" a="0" b="-0.001805" c="0" />
+            <distortion model="ptlens" focal="120" a="0" b="0.001192" c="0" />
+            <distortion model="ptlens" focal="175" a="0" b="0.003465" c="0" />
+            <distortion model="ptlens" focal="200" a="0" b="0.003092" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 70-210mm f/4.5-5.6</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="70" a="0" b="-0.007958" c="0" />
+            <distortion model="ptlens" focal="82" a="0" b="-0.001119" c="0" />
+            <distortion model="ptlens" focal="110" a="0" b="0.00521" c="0" />
+            <distortion model="ptlens" focal="125" a="0" b="0.006972" c="0" />
+            <distortion model="ptlens" focal="200" a="0" b="0.006988" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 70-210mm f/4 AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="70" a="-0.002443" b="0.001936" c="0" />
+            <distortion model="ptlens" focal="78" a="0.000804" b="-0.004536" c="0" />
+            <distortion model="ptlens" focal="82" a="0.002886" b="-0.009226" c="0" />
+            <distortion model="ptlens" focal="90" a="9.9e-05" b="-0.002281" c="0" />
+            <distortion model="ptlens" focal="95" a="0.002007" b="-0.005764" c="0" />
+            <distortion model="ptlens" focal="102" a="0.001088" b="-0.003316" c="0" />
+            <distortion model="ptlens" focal="110" a="0.003534" b="-0.00822" c="0" />
+            <distortion model="ptlens" focal="116" a="0.003553" b="-0.008697" c="0" />
+            <distortion model="ptlens" focal="125" a="-0.001714" b="-0.00535" c="0" />
+            <distortion model="ptlens" focal="135" a="0.002342" b="0" c="0" />
+            <distortion model="ptlens" focal="155" a="0.002777" b="-0.005752" c="0" />
+            <distortion model="ptlens" focal="165" a="0.004853" b="-0.00977" c="0" />
+            <distortion model="ptlens" focal="210" a="0.003682" b="-0.006324" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 70-300mm f/4-5.6D ED AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="70" a="0" b="-0.001254" c="0" />
+            <distortion model="ptlens" focal="100" a="0" b="0.004173" c="0" />
+            <distortion model="ptlens" focal="135" a="0" b="0.006434" c="0" />
+            <distortion model="ptlens" focal="200" a="0" b="0.005485" c="0" />
+            <distortion model="ptlens" focal="300" a="0" b="0.004364" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 70-300mm f/4-5.6G AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="70" a="0" b="-0.001254" c="0" />
+            <distortion model="ptlens" focal="100" a="0" b="0.004173" c="0" />
+            <distortion model="ptlens" focal="135" a="0" b="0.006434" c="0" />
+            <distortion model="ptlens" focal="200" a="0" b="0.005485" c="0" />
+            <distortion model="ptlens" focal="300" a="0" b="0.004364" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 80-200mm f/2.8D ED AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="80" a="0" b="-0.00511" c="0" />
+            <distortion model="ptlens" focal="105" a="0" b="0.000515" c="0" />
+            <distortion model="ptlens" focal="135" a="0" b="0.004233" c="0" />
+            <distortion model="ptlens" focal="180" a="0" b="0.010432" c="0" />
+            <distortion model="ptlens" focal="200" a="0" b="0.010603" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 80-400mm f/4.5-5.6 ED-AF-D-VR</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="80" a="0" b="-0.0043" c="0" />
+            <distortion model="ptlens" focal="105" a="0" b="-0.0015" c="0" />
+            <distortion model="ptlens" focal="135" a="0" b="0.001" c="0" />
+            <distortion model="ptlens" focal="210" a="0" b="0.0025" c="0" />
+            <distortion model="ptlens" focal="310" a="0" b="0.0035" c="0" />
+            <distortion model="ptlens" focal="400" a="0" b="0.0045" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 14mm f/2.8D ED AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="14" a="0.013209" b="-0.036529" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 15mm f/3.5 AI</model>
+        <mount>Nikon F AI</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="15" a="0.007" b="-0.021" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 20mm f/2.8D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="20" a="0.0063" b="-0.021" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 24mm f/2.8D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="24" a="0.00112" b="-0.00753" c="-0.00379" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 24mm f/2.0 AI-S</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="24" a="0" b="-0.008" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 28mm f/2.8D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="28" a="0" b="0.025773" c="-0.085777" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 28mm f/2.0 AI-S</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="28" a="0" b="-0.0044" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 28mm f/3.5 AI-S PC (unshifted)</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.0</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="28" a="0.007377" b="-0.021769" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 35mm f/1.4 AI-S</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="35" a="0" b="-0.005" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 35mm f/2.0D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="35" a="0.001968" b="-0.009475" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 45mm f/2.8 AI GN</model>
+        <mount>Nikon F AI</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="45" a="0" b="-0.0005" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 50mm f/1.4D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="50" a="0" b="-0.004672" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 50mm f/1.4 AI-S</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="50" a="0" b="-0.0025" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 50mm f/1.8 AI-S</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="50" a="0" b="-0.0005" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 50mm f/2.0</model>
+        <mount>Nikon F</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="50" a="0" b="-0.002" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 55mm f/1.2 AI</model>
+        <mount>Nikon F AI</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="55" a="0" b="-0.003" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 55mm f/2.8 AI-S Micro</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="55" a="0" b="-0.0002" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 58mm f/1.2 Noct</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="58" a="0" b="-0.003" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 85mm f/1.8D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="85" a="0" b="-0.000852" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 105mm f/2.8D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="105" a="0" b="0.00142" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 135mm f/2.0 AI-S</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="135" a="0" b="0.0015" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 180mm f/2.8 ED AI-S</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="180" a="0" b="0.001" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 500mm f/8.0 Reflex</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="500" a="0" b="0.001" c="0" />
+        </calibration>
+    </lens>
+
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 16-85mm f/3.5-5.6G AF-S ED VR DX</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="16" a="0.0199837" b="-0.0681903" c="0.0388181" />
+            <distortion model="ptlens" focal="18" a="0.0101226" b="-0.0323001" c="0.00392398" />
+            <distortion model="ptlens" focal="20" a="0.00337762" b="-0.0059244" c="-0.0160513" />
+            <distortion model="ptlens" focal="22" a="-0.00565925" b="0.0323698" c="-0.0738213" />
+            <distortion model="ptlens" focal="24" a="0.00498966" b="-0.0163608" c="0.011626" />
+            <distortion model="ptlens" focal="35" a="0.00452151" b="-0.0101545" c="0.00874731" />
+            <distortion model="ptlens" focal="50" a="0.00822439" b="-0.0246265" c="0.0257984" />
+            <distortion model="ptlens" focal="85" a="-0.00473509" b="0.0253574" c="-0.0342333" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 18-135mm f/3.5-5.6G IF-ED AF-S DX</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="18" a="0.010516" b="-0.033415" c="0.000000" />
+            <distortion model="ptlens" focal="20" a="0.013430" b="-0.028560" c="0.000000" />
+            <distortion model="ptlens" focal="28" a="0.010740" b="-0.007090" c="0.000000" />
+            <distortion model="ptlens" focal="32" a="0.000000" b="0.013840" c="0.002600" />
+            <distortion model="ptlens" focal="40" a="0.000000" b="0.022370" c="-0.026420" />
+            <distortion model="ptlens" focal="48" a="0.000000" b="-0.006420" c="0.019040" />
+            <distortion model="ptlens" focal="58" a="0.000000" b="0.023710" c="-0.031210" />
+            <distortion model="ptlens" focal="85" a="0.000000" b="0.010900" c="-0.007660" />
+            <distortion model="ptlens" focal="105" a="0.000000" b="-0.000450" c="0.013550" />
+            <distortion model="ptlens" focal="135" a="0.000000" b="0.027500" c="-0.043800" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikon Nikkor 35mm f/1.8G AF-S DX</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="35" a="-0.00899" b="0.02507" c="-0.04009" />
+        </calibration>
+    </lens>
+
+</lensdatabase>
