@@ -20,12 +20,11 @@ SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          hotpixels/hotpixelstool.cpp
    )
 
-IF(LENSFUN_LIBRARY)
-    INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIR})
+IF(GLIB2_FOUND)
     SET(digikamimageplugin_enhance_PART_SRCS ${digikamimageplugin_enhance_PART_SRCS}
         lensautofixtool.cpp
        )
-ENDIF(LENSFUN_LIBRARY)
+ENDIF(GLIB2_FOUND)
 
 KDE4_ADD_PLUGIN(digikamimageplugin_enhance ${digikamimageplugin_enhance_PART_SRCS})
 

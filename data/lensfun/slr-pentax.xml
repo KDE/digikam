@@ -1,0 +1,275 @@
+<lensdatabase>
+
+    <mount>
+        <name>Pentax K</name>
+        <name lang="ru">Байонет K</name>
+        <compat>M42</compat>
+        <compat>Pentax KA</compat>
+        <compat>Pentax KAF</compat>
+        <compat>Pentax KAF2</compat>
+        <compat>Generic</compat>
+    </mount>
+
+    <mount>
+        <name>Pentax KA</name>
+        <compat>M42</compat>
+        <compat>Pentax K</compat>
+        <compat>Pentax KAF</compat>
+        <compat>Pentax KAF2</compat>
+        <compat>Generic</compat>
+    </mount>
+
+    <mount>
+        <name>Pentax KAF</name>
+        <compat>M42</compat>
+        <compat>Pentax K</compat>
+        <compat>Pentax KA</compat>
+        <compat>Pentax KAF2</compat>
+        <compat>Generic</compat>
+    </mount>
+
+    <mount>
+        <name>Pentax KAF2</name>
+        <compat>M42</compat>
+        <compat>Pentax K</compat>
+        <compat>Pentax KA</compat>
+        <compat>Pentax KAF</compat>
+        <compat>Generic</compat>
+    </mount>
+
+    <mount>
+        <name>Pentax KAF3</name>
+        <compat>M42</compat>
+        <compat>Pentax K</compat>
+        <compat>Pentax KA</compat>
+        <compat>Pentax KAF</compat>
+        <compat>Pentax KAF2</compat>
+        <compat>Generic</compat>
+    </mount>
+
+    <camera>
+        <maker>Pentax</maker>
+        <maker lang="en">Pentax</maker>
+        <model>35mm film: full frame</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX *ist DL2</model>
+        <model lang="en">*ist DL2</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX *ist DL</model>
+        <model lang="en">*ist DL</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX *ist DS2</model>
+        <model lang="en">*ist DS2</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX *ist DS</model>
+        <model lang="en">*ist DS</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX *ist D</model>
+        <model lang="en">*ist D</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K-m</model>
+        <model lang="en">K-m</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K100</model>
+        <model lang="en">K100</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K100D Super</model>
+        <model lang="en">K100D Super</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K110</model>
+        <model lang="en">K110</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K200D</model>
+        <model lang="en">K200D</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K10D</model>
+        <model lang="en">K10D</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX Corporation</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K20D</model>
+        <model lang="en">K20D</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K-7</model>
+        <model lang="en">K-7</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K2000</model>
+        <model lang="en">K2000</model>
+        <mount>Pentax KAF3</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K200D</model>
+        <model lang="en">K200D</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <camera>
+        <maker>PENTAX</maker>
+        <maker lang="en">Pentax</maker>
+        <model>PENTAX K-x</model>
+        <model lang="en">K-x</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+    </camera>
+
+    <lens>
+        <maker>Pentax</maker>
+        <model>SMC Pentax DA 16-45mm f/4.0 ED AL</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="16" a="0.012341" b="-0.035947" c="0" />
+            <distortion model="ptlens" focal="18" a="0.009928" b="-0.02993" c="0" />
+            <distortion model="ptlens" focal="20" a="0.005774" b="-0.01641" c="0" />
+            <distortion model="ptlens" focal="23" a="0.006045" b="-0.015109" c="0" />
+            <distortion model="ptlens" focal="26" a="0" b="0.000197" c="0" />
+            <distortion model="ptlens" focal="29" a="0" b="0.002637" c="0" />
+            <distortion model="ptlens" focal="34" a="0" b="0.003505" c="0" />
+            <distortion model="ptlens" focal="40" a="0" b="0.003288" c="0" />
+            <distortion model="ptlens" focal="45" a="0" b="0.003622" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Pentax</maker>
+        <model>SMC Pentax DA 18-55mm f/3.5-5.6</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="18" a="0.004593" b="-0.021008" c="0" />
+            <distortion model="ptlens" focal="21" a="0.00371" b="-0.014625" c="0" />
+            <distortion model="ptlens" focal="24" a="0" b="-0.004166" c="0" />
+            <distortion model="ptlens" focal="33" a="0" b="0.000528" c="0" />
+            <distortion model="ptlens" focal="55" a="0" b="0.003215" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Pentax</maker>
+        <model>SMC Pentax DA 50-200mm f/4-5.6 DA ED</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="50" a="0" b="-0.004038" c="0" />
+            <distortion model="ptlens" focal="63" a="0" b="0.001607" c="0" />
+            <distortion model="ptlens" focal="95" a="0" b="0.007697" c="0" />
+            <distortion model="ptlens" focal="125" a="0" b="0.007991" c="0" />
+            <distortion model="ptlens" focal="138" a="0" b="0.008036" c="0" />
+            <distortion model="ptlens" focal="160" a="0" b="0.007909" c="0" />
+            <distortion model="ptlens" focal="180" a="0" b="0.009293" c="0" />
+            <distortion model="ptlens" focal="200" a="0" b="0.007685" c="0" />
+        </calibration>
+    </lens>
+
+    <lens>
+        <maker>Pentax</maker>
+        <model>SMC PENTAX DA 12-24mm F/4 ED AL IF</model>
+        <mount>Pentax KAF2</mount>
+        <cropfactor>1.5</cropfactor>
+        <calibration>
+            <distortion model="poly3" focal="12" k1="-0.01919" />
+            <distortion model="poly3" focal="15" k1="-0.00774" />
+            <distortion model="poly3" focal="18" k1="-0.00345" />
+            <distortion model="poly3" focal="21" k1="-0.00199" />
+            <distortion model="poly3" focal="24" k1="0.00061" />
+            <tca model="poly3" focal="12" br="0.0000916" vr="0.9999904" bb="-0.0002397" vb="1.0006490" />
+            <tca model="poly3" focal="15" br="0.0001253" vr="0.9999184" bb="-0.0002858" vb="1.0008241" />
+            <tca model="poly3" focal="18" br="0.0001204" vr="0.9999075" bb="-0.0001990" vb="1.0006258" />
+            <tca model="poly3" focal="21" br="0.0001063" vr="0.9999562" bb="-0.0001477" vb="1.0005692" />
+            <tca model="poly3" focal="24" br="0.0000982" vr="1.0000005" bb="-0.0001137" vb="1.0004136" />
+            <vignetting model="pa" focal="12" aperture="4.5" distance="100" k1="-0.19267" k2="0.09379" k3="-0.38938" />
+            <vignetting model="pa" focal="15" aperture="4.5" distance="100" k1="-0.08756" k2="-0.28192" k3="0.06908" />
+            <vignetting model="pa" focal="18" aperture="4.5" distance="100" k1="-0.05982" k2="-0.45748" k3="0.25039" />
+            <vignetting model="pa" focal="21" aperture="4.5" distance="100" k1="-0.28874" k2="-0.06687" k3="0.09488" />
+            <vignetting model="pa" focal="24" aperture="4.5" distance="100" k1="-0.44227" k2="0.2599" k3="-0.09436" />
+        </calibration>
+    </lens>
+
+</lensdatabase>

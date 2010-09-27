@@ -58,14 +58,14 @@ public:
 
     void setFilterSettings(const LensFunContainer& other);
 
-    void setSettings(const LensFunContainer& other);
+    void             setSettings(const LensFunContainer& other);
     LensFunContainer settings() const;
 
-    LensPtr                usedLens() const;
-    void setUsedLens(LensPtr lens);
+    LensPtr usedLens() const;
+    void    setUsedLens(LensPtr lens);
 
-    DevicePtr              usedCamera() const;
-    void setUsedCamera(DevicePtr cam);
+    DevicePtr usedCamera() const;
+    void      setUsedCamera(DevicePtr cam);
 
     lfDatabase*            lensFunDataBase() const;
     const lfCamera* const* lensFunCameras() const;

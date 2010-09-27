@@ -49,9 +49,9 @@
 #include "hotpixelstool.h"
 #include "config-digikam.h"
 
-#ifdef HAVE_LENSFUN
+#ifdef HAVE_GLIB2
 #include "lensautofixtool.h"
-#endif // HAVE_LENSFUN
+#endif // HAVE_GLIB2
 
 using namespace DigikamEnhanceImagePlugin;
 
@@ -149,14 +149,14 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     connect(d->hotpixelsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotHotPixels()));
 
-#ifdef HAVE_LENSFUN
+#ifdef HAVE_GLIB2
 
     d->lensAutoFixAction = new KAction(KIcon("lensautofix"), i18n("Auto-Correction..."), this);
     actionCollection()->addAction("imageplugin_lensautofix", d->lensAutoFixAction );
     connect(d->lensAutoFixAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLensAutoFix()));
 
-#endif // HAVE_LENSFUN
+#endif // HAVE_GLIB2
 
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
@@ -181,9 +181,9 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
     d->antivignettingAction->setEnabled(b);
     d->hotpixelsAction->setEnabled(b);
 
-#ifdef HAVE_LENSFUN
+#ifdef HAVE_GLIB2
     d->lensAutoFixAction->setEnabled(b);
-#endif // HAVE_LENSFUN
+#endif // HAVE_GLIB2
 }
 
 void ImagePlugin_Enhance::slotHotPixels()
@@ -273,10 +273,10 @@ void ImagePlugin_Enhance::slotInPainting()
 
 void ImagePlugin_Enhance::slotLensAutoFix()
 {
-#ifdef HAVE_LENSFUN
+#ifdef HAVE_GLIB2
     LensAutoFixTool* tool = new LensAutoFixTool(this);
     loadTool(tool);
-#endif // HAVE_LENSFUN
+#endif // HAVE_GLIB2
 }
 
 void ImagePlugin_Enhance::slotAntiVignetting()

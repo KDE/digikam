@@ -98,10 +98,6 @@ INCLUDE_DIRECTORIES(
                      ${TIFF_INCLUDE_DIR}
                    )
 
-IF(LENSFUN_LIBRARY)
-   INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIR})
-ENDIF(LENSFUN_LIBRARY)
-
 # Shared libdigikamcore ################################################################
 
 # Disable Clapack C code warnings.
@@ -112,6 +108,9 @@ SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 # Disable liblqr C code warnings.
 SET_SOURCE_FILES_PROPERTIES(${liblqr_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+
+# Disable liblqr C code warnings.
+SET_SOURCE_FILES_PROPERTIES(${liblensfun_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(digikamcore_LIB_SRCS
                         # basic libs
@@ -202,14 +201,10 @@ IF(Q_WS_X11)
     TARGET_LINK_LIBRARIES(digikamcore ${X11_LIBRARIES})
 ENDIF(Q_WS_X11)
 
-# For Contents Aware Resizer filter.
+# For Contents Aware Resizer and Lens auto-correction tools.
 IF(GLIB2_FOUND)
-    TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS})
+    TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS} ${liblensfun_LIBS})
 ENDIF(GLIB2_FOUND)
-
-IF(LENSFUN_LIBRARY)
-    TARGET_LINK_LIBRARIES(digikamcore ${LENSFUN_LIBRARY})
-ENDIF(LENSFUN_LIBRARY)
 
 SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 2.0.0 SOVERSION 2)
 IF(WIN32)
