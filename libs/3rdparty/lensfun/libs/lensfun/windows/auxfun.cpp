@@ -3,7 +3,7 @@
     Copyright (C) 2008 by Andrew Zabolotny
 */
 
-#include "config.h"
+#include "config-lensfun.h"
 #include <windows.h>
 #include <glib/gstdio.h>
 
