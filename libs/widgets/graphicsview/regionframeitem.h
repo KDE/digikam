@@ -74,6 +74,8 @@ public:
     void setHudWidget(QGraphicsWidget *hudWidget);
     void setHudWidget(QWidget *widget, Qt::WindowFlags wFlags = 0);
 
+    void setHudWidgetVisible(bool visible);
+
     void setFixedRatio(double ratio);
 
     virtual QRectF boundingRect() const;

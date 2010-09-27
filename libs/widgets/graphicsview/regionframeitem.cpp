@@ -448,6 +448,12 @@ void RegionFrameItem::setFlags(Flags flags)
     d->resizeHandleVisibility->controller()->setShallBeShown(d->flags & ShowResizeHandles);
 }
 
+void RegionFrameItem::setHudWidgetVisible(bool visible)
+{
+    if (d->hudWidget)
+        d->hudWidget->setVisible(visible);
+}
+
 RegionFrameItem::Flags RegionFrameItem::flags() const
 {
     return d->flags;
