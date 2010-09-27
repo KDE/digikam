@@ -139,9 +139,12 @@ void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
 
 void AlbumFilterModel::setSourceFilterModel(AlbumFilterModel *source)
 {
-    AbstractAlbumModel *model = sourceAlbumModel();
-    if (model)
-        source->setSourceAlbumModel(model);
+    if (source)
+    {
+        AbstractAlbumModel *model = sourceAlbumModel();
+        if (model)
+            source->setSourceAlbumModel(model);
+    }
     m_chainedModel = source;
     setSourceModel(source);
 }

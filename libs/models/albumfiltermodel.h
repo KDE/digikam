@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QPointer>
 #include <QSortFilterProxyModel>
 
 // Local includes
@@ -208,7 +209,7 @@ protected:
 
     FilterBehavior     m_filterBehavior;
     SearchTextSettings m_settings;
-    AlbumFilterModel  *m_chainedModel;
+    QPointer<AlbumFilterModel> m_chainedModel;
 
 private:
 
