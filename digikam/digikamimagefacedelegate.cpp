@@ -34,6 +34,7 @@
 // Local includes
 
 #include "albumsettings.h"
+#include "databaseface.h"
 #include "faceiface.h"
 #include "imagemodel.h"
 #include "tagregion.h"
@@ -73,17 +74,25 @@ QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) cons
 
 QRect DigikamImageFaceDelegate::faceRect(const QModelIndex &index) const
 {
-    QVariant extraData = index.data(ImageModel::ExtraDataRole);
-    if (extraData.isNull() || extraData.type() != QVariant::String)
-        return QRect();
-
-    return TagRegion(extraData.toString()).toRect();
+    return face(index).region().toRect();
 }
 
 QRect DigikamImageFaceDelegate::largerFaceRect(const QModelIndex &index) const
 {
+    QRect rect = faceRect(index);
+    if (rect.isNull())
+        return rect;
     const int margin = FaceIface::faceRectDisplayMargin();
-    return faceRect(index).adjusted(-margin, -margin, margin, margin);
+    return rect.adjusted(-margin, -margin, margin, margin);
+}
+
+DatabaseFace DigikamImageFaceDelegate::face(const QModelIndex& index) const
+{
+    QVariant extraData = index.data(ImageModel::ExtraDataRole);
+    if (extraData.isNull())
+        return DatabaseFace();
+    DatabaseFace face = DatabaseFace::fromVariant(extraData);
+    return face;
 }
 
 void DigikamImageFaceDelegate::updateRects()

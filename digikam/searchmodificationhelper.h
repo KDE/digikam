@@ -104,15 +104,6 @@ public:
                                        float threshold,
                                        bool overwriteIfExisting = false);
 
-    /**
-     * @see slotCreateFaceSearch()
-     * @return the newly created album
-     */
-    SAlbum *createFaceSearch(const QString &proposedName,
-                             int tagId,
-                             FaceSearchContentFlags flags = AllFaces,
-                             bool overwriteIfExisting = false);
-
 public Q_SLOTS:
 
     /**
@@ -177,12 +168,6 @@ public Q_SLOTS:
                                         float threshold,
                                         bool overwriteIfExisting = false);
 
-    /**
-     * Creates a new face search for listing images by the tag region property
-     * and selects it in the album manager after creation.
-     */
-    void slotCreateCurrentFaceSearch(int tagId,
-                                     FaceSearchContentFlags flags = AllFaces);
 private:
 
     bool checkAlbum(const QString& name) const;

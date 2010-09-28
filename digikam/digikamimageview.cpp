@@ -123,6 +123,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
     // face overlays
     addRejectionOverlay(d->faceDelegate);
+    addTagEditOverlay(d->faceDelegate);
 
     connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
             this, SLOT(assignRating(const QModelIndex&, int)));
@@ -175,14 +176,13 @@ void DigikamImageView::setFaceMode(bool on)
 {
     if (on)
     {
+        // See ImageLister, which creates a search the implements listing tag in the ioslave
+        imageAlbumModel()->setSpecialTagListing("faces");
         setItemDelegate(d->faceDelegate);
-        // selection overlay
-        addSelectionOverlay();
-        addRejectionOverlay();
-        addTagEditOverlay();
     }
     else
     {
+        imageAlbumModel()->setSpecialTagListing(QString());
         setItemDelegate(d->normalDelegate);
     }
 }
@@ -200,13 +200,11 @@ void DigikamImageView::addRejectionOverlay(ImageDelegate *delegate)
 void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
 {
     TagsLineEditOverlay *tagOverlay = new TagsLineEditOverlay(this);
-    
+
     connect(tagOverlay, SIGNAL(tagEdited(QModelIndex, QString)),
             this, SLOT(assignTag(QModelIndex, QString)));
 
     addOverlay(tagOverlay, delegate);
-    
-    tagOverlay->addTagsLineEdit()->setFocus();
 }
 
 

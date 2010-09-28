@@ -1114,7 +1114,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
-    d->tagFolderView->setAlbumManagerCurrentAlbum(false);
+    d->tagFolderView->setAlbumManagerCurrentAlbum(true);
 
     connect(d->tagFolderView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
@@ -1174,8 +1174,6 @@ void PeopleSideBarWidget::slotInit()
 void PeopleSideBarWidget::setActive(bool active)
 {
     emit requestFaceMode(active);
-    if (active)
-        slotAlbumSelected(d->tagFolderView->currentAlbum());
 }
 
 void PeopleSideBarWidget::doLoadState()
@@ -1195,12 +1193,6 @@ void PeopleSideBarWidget::applySettings()
 void PeopleSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
-}
-
-void PeopleSideBarWidget::slotAlbumSelected(Album* album)
-{
-    d->searchModificationHelper->slotCreateCurrentFaceSearch(album ? album->id() : 0,
-                                                             SearchModificationHelper::AllFaces);
 }
 
 PeopleSideBarWidget::~PeopleSideBarWidget()
