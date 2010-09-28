@@ -234,7 +234,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             lensList = findLenses(d->usedCamera, lens);
             if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
-            // STAGE 1, Adapt exiv2 strings to lensfun strings for Nikon.
+            // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
             lensCutted = lens;
             if (lensCutted.contains("Nikon"))
             {
@@ -274,8 +274,11 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
 
             // ------------------------------------------------------------------------------------------------
 
-            d->settings.cropFactor = d->usedLens->CropFactor;
-            kDebug() << "Crop Factor  : " << d->settings.cropFactor;
+            if (d->usedLens)
+            {
+                d->settings.cropFactor = d->usedLens->CropFactor;
+                kDebug() << "Crop Factor  : " << d->settings.cropFactor;
+            }
 
             // ------------------------------------------------------------------------------------------------
 
