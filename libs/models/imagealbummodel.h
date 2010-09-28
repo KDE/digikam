@@ -70,6 +70,8 @@ public Q_SLOTS:
     void setRecurseAlbums(bool recursiveListing);
     void setRecurseTags(bool recursiveListing);
 
+    void setSpecialTagListing(const QString& specialListing);
+
 Q_SIGNALS:
 
     void listedAlbumChanged(Album *album);

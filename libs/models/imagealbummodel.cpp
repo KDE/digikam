@@ -37,7 +37,9 @@
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "databasechangesets.h"
+#include "databaseface.h"
 #include "databasewatch.h"
+#include "faceiface.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imagelister.h"
@@ -67,8 +69,11 @@ public:
 
     bool                     recurseAlbums;
     bool                     recurseTags;
+    QString                  specialListing;
 
     bool                     extraValueJob;
+
+    FaceIface                faceIface; // TODO: move functionality to TagsCache
 };
 
 ImageAlbumModel::ImageAlbumModel(QObject *parent)
@@ -152,6 +157,15 @@ bool ImageAlbumModel::isRecursingAlbums() const
 bool ImageAlbumModel::isRecursingTags() const
 {
     return d->recurseTags;
+}
+
+void ImageAlbumModel::setSpecialTagListing(const QString& specialListing)
+{
+    if (d->specialListing != specialListing)
+    {
+        d->specialListing = specialListing;
+        refresh();
+    }
 }
 
 void ImageAlbumModel::openAlbum(Album *album)
@@ -252,14 +266,10 @@ void ImageAlbumModel::startListJob(Album *album)
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
     d->job->addMetaData("listTagsRecursively", d->recurseTags ? "true" : "false");
 
-    if (album->type() == Album::SEARCH)
+    if (album->type() == Album::TAG && !d->specialListing.isNull())
     {
-        SAlbum *salbum = static_cast<SAlbum*>(album);
-        if (salbum->isFaceSearch())
-        {
-            d->job->addMetaData("listByImageTagProperties", "true");
-            d->extraValueJob = true;
-        }
+        d->job->addMetaData("specialTagListing", d->specialListing);
+        d->extraValueJob = true;
     }
 
     connect(d->job, SIGNAL(result(KJob*)),
@@ -306,12 +316,22 @@ void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
 
             ImageInfo info(record);
             newItemsList << info;
-            if (record.extraValues.isEmpty())
-                extraValues  << QVariant();
-            else if (record.extraValues.size() == 1)
-                extraValues  << record.extraValues.first();
+
+            if (d->specialListing == "faces")
+            {
+                DatabaseFace face = d->faceIface.databaseFaceFromListing(info.id(), record.extraValues);
+                extraValues << face.toVariant();
+            }
             else
-                extraValues  << QVariant(record.extraValues); // uh-uh. List in List.
+            {
+                // default handling: just pass extraValue
+                if (record.extraValues.isEmpty())
+                    extraValues  << QVariant();
+                else if (record.extraValues.size() == 1)
+                    extraValues  << record.extraValues.first();
+                else
+                    extraValues  << QVariant(record.extraValues); // uh-uh. List in List.
+            }
         }
 
         addImageInfos(newItemsList, extraValues);
