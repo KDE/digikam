@@ -425,7 +425,7 @@ void LensFunCameraSelector::slotUpdateLensCombo()
     kDebug() << "dev: " << dev->Maker << " :: " << dev->Model;
 
     const lfLens** lenses           = d->iface->lensFunDataBase()->FindLenses( dev, NULL, NULL );
-    d->iface->settings().cropFactor = dev ? dev->CropFactor : -1;
+    d->iface->settings().cropFactor = dev ? dev->CropFactor : -1.0;
 
     while (lenses && *lenses)
     {
