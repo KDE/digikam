@@ -70,4 +70,8 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/widgets/common
 
 SET(testlensfuniface_SRCS testlensfuniface.cpp)
 KDE4_ADD_EXECUTABLE(testlensfuniface NOGUI ${testlensfuniface_SRCS})
-TARGET_LINK_LIBRARIES(testlensfuniface digikamcore ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBS})
+TARGET_LINK_LIBRARIES(testlensfuniface
+                      digikamcore
+                      ${QT_QTCORE_LIBRARY}
+                      ${KDE4_KDECORE_LIBS}
+                     )
