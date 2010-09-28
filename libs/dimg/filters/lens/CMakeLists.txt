@@ -74,4 +74,5 @@ TARGET_LINK_LIBRARIES(testlensfuniface
                       digikamcore
                       ${QT_QTCORE_LIBRARY}
                       ${KDE4_KDECORE_LIBS}
+                      ${KEXIV2_LIBRARIES}
                      )
