@@ -604,8 +604,8 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver *receiver, cons
                "       ImageInformation.rating, Images.category, "
                "       ImageInformation.format, ImageInformation.creationDate, "
                "       Images.modificationDate, Images.fileSize, "
-               "       ImageInformation.width, ImageInformation.height, "
-               "       ImageTagProperties.value "
+               "       ImageInformation.width,  ImageInformation.height, "
+               "       ImageTagProperties.value, ImageTagProperties.property, ImageTagProperties.tagid "
                " FROM Images "
                "       INNER JOIN ImageTagProperties ON ImageTagProperties.imageid=Images.id "
                "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
@@ -669,7 +669,12 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver *receiver, cons
         ++it;
         height                   = (*it).toInt();
         ++it;
-        record.extraValues      << (*it);
+        // sync the following order with the places where it's read, e.g., DatabaseFace
+        record.extraValues      << (*it); // value
+        ++it;
+        record.extraValues      << (*it); // property
+        ++it;
+        record.extraValues      << (*it); // tag id
         ++it;
 
         if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
@@ -842,6 +847,47 @@ QSet<int> ImageLister::albumRootsToList()
     foreach (const CollectionLocation& location, locations)
         ids << location.id();
     return ids;
+}
+
+QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type)
+{
+    int tagId = url.tagId();
+    if (type == "faces")
+    {
+        SearchXmlWriter writer;
+
+        writer.writeGroup();
+        writer.setDefaultFieldOperator(SearchXml::Or);
+
+        QStringList properties;
+        properties << "autodetectedFace";
+        properties << "tagRegion";
+
+        foreach (const QString& property, properties)
+        {
+            writer.writeField("imagetagproperty", SearchXml::Equal);
+            if (tagId != -1)
+                writer.writeAttribute("tagid", QString::number(tagId));
+            writer.writeValue(property);
+            writer.finishField();
+        }
+
+
+        /*
+        if (flags & TagAssigned && tagId)
+        {
+            writer.writeField("tagid", SearchXml::Equal);
+            writer.writeValue(tagId);
+            writer.finishField();
+        }
+        */
+
+        writer.finishGroup();
+
+        return writer.xml();
+    }
+    else
+        return QString();
 }
 
 }  // namespace Digikam

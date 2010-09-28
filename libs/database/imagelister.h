@@ -140,6 +140,8 @@ public:
     void listHaarSearch(ImageListerReceiver *receiver,
                         const QString& xml);
 
+    QString tagSearchXml(const DatabaseUrl&, const QString& type);
+
 private:
 
     void listFromIdList(ImageListerReceiver *receiver, QList<qlonglong> imageIds);
