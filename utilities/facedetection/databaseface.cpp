@@ -106,6 +106,7 @@ QString DatabaseFace::attributeForType(Type type)
         return ImageTagPropertyName::tagRegion();
     if (type == DatabaseFace::FaceForTraining)
         return ImageTagPropertyName::faceToTrain();
+
     return QString();
 }
 
@@ -122,6 +123,7 @@ DatabaseFace::Type DatabaseFace::databaseFaceType(const QString& attribute, int 
         return DatabaseFace::ConfirmedName;
     else if (attribute == ImageTagPropertyName::faceToTrain())
         return DatabaseFace::FaceForTraining;
+
     return DatabaseFace::InvalidFace;
 }
 
@@ -170,4 +172,3 @@ DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>&
 }
 
 }  // Namespace Digikam
-

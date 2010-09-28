@@ -58,19 +58,21 @@ public:
     };
     Q_DECLARE_FLAGS(TypeFlags, Type);
 
+public:
+
     DatabaseFace();
     DatabaseFace(Type type, qlonglong imageId, int tagId, const QVariant& region);
 
     bool      isNull() const;
 
-    Type      type() const;
+    Type      type()    const;
     qlonglong imageId() const;
-    int       tagId() const;
-    QVariant  region() const;
+    int       tagId()   const;
+    QVariant  region()  const;
 
-    bool      isUnknownName() const     { return type() == UnknownName; }
+    bool      isUnknownName() const     { return type() == UnknownName;     }
     bool      isUnconfirmedName() const { return type() == UnconfirmedName; }
-    bool      isConfirmedName() const   { return type() == ConfirmedName; }
+    bool      isConfirmedName() const   { return type() == ConfirmedName;   }
     bool      isForTraining() const     { return type() == FaceForTraining; }
 
     bool operator==(const DatabaseFace& other) const;
