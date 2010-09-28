@@ -166,9 +166,6 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
 
     connect(d->distance, SIGNAL(valueChanged(double)),
             this, SLOT(slotDistanceChanged()));
-
-    LensFunCameraSelector::Device firstDevice; // empty strings
-//    setDevice( firstDevice );
 }
 
 LensFunCameraSelector::~LensFunCameraSelector()
@@ -273,9 +270,6 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
 
 void LensFunCameraSelector::findFromMetadata()
 {
-//    LensFunCameraSelector::Device firstDevice; // empty strings
-//    setDevice( firstDevice );
-
     if (d->metadata.isEmpty())
     {
         d->metadataUsage->setCheckState(Qt::Unchecked);
@@ -493,16 +487,5 @@ void LensFunCameraSelector::slotDistanceChanged()
     d->iface->setSettings(settings);
     emit signalLensSettingsChanged();
 }
-
-void LensFunCameraSelector::setDevice(Device& /*d*/)
-{
-    slotUpdateCombos();
-}
-
-#if 0
-LensFunCameraSelector::Device LensFunCameraSelector::getDevice()
-{
-}
-#endif
 
 }  // namespace Digikam

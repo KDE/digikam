@@ -67,9 +67,6 @@ public:
 
     LensFunIface* iface() const;
 
-    void setDevice(Device&);
-//  Device getDevice();
-
 public Q_SLOTS:
 
     void findFromMetadata(const DMetadata&);

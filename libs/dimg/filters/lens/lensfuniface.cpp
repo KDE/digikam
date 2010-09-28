@@ -205,6 +205,9 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     d->usedCamera                = 0;
     d->usedLens                  = 0;
 
+    if (photoInfo.make.isEmpty())
+        return false;
+
     // ------------------------------------------------------------------------------------------------
 
     const lfCamera** lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
@@ -385,11 +388,5 @@ bool LensFunIface::supportsCCI() const
 {
     return supportsVig();
 }
-
-#if 0
-LensFunIface::correctionData LensFunIface::getCorrectionData()
-{
-}
-#endif
 
 }  // namespace Digikam

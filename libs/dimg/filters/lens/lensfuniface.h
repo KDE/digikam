@@ -42,11 +42,6 @@ class DIGIKAM_EXPORT LensFunIface
 {
     public:
 
-/*
-    typedef QMap<QString, QString> correctionData;
-    correctionData getCorrectionData();
-*/
-
     typedef const lfCamera* DevicePtr;
     typedef const lfLens*   LensPtr;
     typedef QList<LensPtr>  LensList;

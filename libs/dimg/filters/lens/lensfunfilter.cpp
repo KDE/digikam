@@ -70,15 +70,6 @@ LensFunFilter::~LensFunFilter()
 
 void LensFunFilter::filterImage()
 {
-#if 0
-    if (!opts.Crop)
-        opts.Crop = lens->CropFactor;
-    if (!opts.Focal)
-        opts.Focal = lens->MinFocal;
-    if (!opts.Aperture)
-        opts.Aperture = lens->MinAperture;
-#endif
-
     m_destImage.bitBltImage(&m_orgImage, 0, 0);
 
     if (!d->iface)
