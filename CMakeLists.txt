@@ -550,12 +550,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mount.cpp
             )
 
-            IF(WIN32)
-                SET(liblensfun_SRCS ${liblensfun_SRCS}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/windows/auxfun.cpp
-                   )
-            ENDIF(WIN32)
-
         ENDIF(LENSFUN_FOUND)
 
     ENDIF(GLIB2_FOUND)
