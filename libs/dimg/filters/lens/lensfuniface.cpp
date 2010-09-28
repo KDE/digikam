@@ -191,22 +191,23 @@ LensFunIface::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const 
     return lensList;
 }
 
-bool LensFunIface::findFromMetadata(const DMetadata& meta)
+LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta)
 {
+    MetadataMatch ret = MetadataNoMatch;
+    d->settings       = LensFunContainer();
+    d->usedCamera     = 0;
+    d->usedLens       = 0;
+
     if (meta.isEmpty())
-        return false;
+        return ret;
 
     PhotoInfoContainer photoInfo = meta.getPhotographInformation();
     QString make                 = photoInfo.make;
     QString model                = photoInfo.model;
     QString lens                 = photoInfo.lens;
-    bool ret                     = false;
-    d->settings                  = LensFunContainer();
-    d->usedCamera                = 0;
-    d->usedLens                  = 0;
 
     if (photoInfo.make.isEmpty())
-        return false;
+        return ret;
 
     // ------------------------------------------------------------------------------------------------
 
@@ -215,7 +216,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
     if (lfCamera && *lfCamera)
     {
         d->usedCamera           = *lfCamera;
-        ret                     = true;
+        bool exactMatch         = true;
         d->settings.cameraMake  = d->usedCamera->Maker;
         d->settings.cameraModel = d->usedCamera->Model;
 
@@ -266,7 +267,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             if (bestMatches.isEmpty())
             {
                 kDebug() << "lens matches : NOT FOUND";
-                ret &= false;
+                exactMatch &= false;
             }
             else
             {
@@ -289,7 +290,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             if (temp.isEmpty())
             {
                 kDebug() << "Focal Length : NOT FOUND";
-                ret &= false;
+                exactMatch &= false;
             }
             d->settings.focalLength = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
             kDebug() << "Focal Length : " << d->settings.focalLength;
@@ -300,7 +301,7 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             if (temp.isEmpty())
             {
                 kDebug() << "Aperture     : NOT FOUND";
-                ret &= false;
+                exactMatch &= false;
             }
             d->settings.aperture = temp.mid(1).toDouble();
             kDebug() << "Aperture     : " << d->settings.aperture;
@@ -335,20 +336,22 @@ bool LensFunIface::findFromMetadata(const DMetadata& meta)
             if (temp.isEmpty())
             {
                 kDebug() << "Subject dist.: NOT FOUND";
-                ret &= false;
+                exactMatch &= false;
             }
 
             temp                       = temp.replace(" m", "");
             d->settings.subjectDistance = temp.toDouble();
-            kDebug() << "Subject dist.: " << d->settings.subjectDistance;
+            kDebug() << "Subject dist.  : " << d->settings.subjectDistance;
         }
         else
         {
-            ret &= false;
+            exactMatch &= false;
         }
+
+        ret = exactMatch ? MetadataExactMatch : MetadataPartialMatch;
     }
 
-    kDebug() << "Return val.  : " << ret;
+    kDebug() << "Metadata match : " << ret;
 
     return ret;
 }

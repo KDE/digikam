@@ -29,13 +29,12 @@
 // Local includes
 
 #include "dmetadata.h"
-#include "lensfunfilter.h"
 #include "digikam_export.h"
+#include "lensfunfilter.h"
+#include "lensfuniface.h"
 
 namespace Digikam
 {
-
-class LensFunIface;
 
 class DIGIKAM_EXPORT LensFunCameraSelector : public QWidget
 {
@@ -88,7 +87,7 @@ protected Q_SLOTS:
 
 private:
 
-    void findFromMetadata();
+    LensFunIface::MetadataMatch findFromMetadata();
     void refreshSettingsView();
 
 private:
