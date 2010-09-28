@@ -202,6 +202,7 @@ void LensFunCameraSelector::setSettings(const LensFunContainer& settings)
 void LensFunCameraSelector::readSettings(KConfigGroup& group)
 {
     setUseMetadata(group.readEntry(d->configUseMetadata, true));
+    slotUseMetadata(useMetadata());
 }
 
 void LensFunCameraSelector::writeSettings(KConfigGroup& group)

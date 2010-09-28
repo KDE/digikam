@@ -101,7 +101,9 @@ LensFunIface::DevicePtr LensFunIface::usedCamera() const
 
 void LensFunIface::setUsedCamera(DevicePtr cam)
 {
-    d->usedCamera = cam;
+    d->usedCamera           = cam;
+    d->settings.cameraMake  = d->usedCamera ? d->usedCamera->Maker : QString();
+    d->settings.cameraModel = d->usedCamera ? d->usedCamera->Model : QString();
 }
 
 LensFunIface::LensPtr LensFunIface::usedLens() const
@@ -111,7 +113,9 @@ LensFunIface::LensPtr LensFunIface::usedLens() const
 
 void LensFunIface::setUsedLens(LensPtr lens)
 {
-    d->usedLens = lens;
+    d->usedLens            = lens;
+    d->settings.lensModel  = d->usedLens ? d->usedLens->Model : QString();
+    d->settings.cropFactor = d->usedLens ? d->usedLens->CropFactor : -1.0;
 }
 
 lfDatabase* LensFunIface::lensFunDataBase() const
@@ -215,10 +219,8 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     if (lfCamera && *lfCamera)
     {
-        d->usedCamera           = *lfCamera;
-        bool exactMatch         = true;
-        d->settings.cameraMake  = d->usedCamera->Maker;
-        d->settings.cameraModel = d->usedCamera->Model;
+        setUsedCamera(*lfCamera);
+        bool exactMatch = true;
 
         kDebug() << "Camera maker : " << d->settings.cameraMake;
         kDebug() << "Camera model : " << d->settings.cameraModel;
@@ -264,23 +266,15 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
             // Display the results.
 
-            if (bestMatches.isEmpty())
+            if (bestMatches.isEmpty() || bestMatches.count() > 1)
             {
                 kDebug() << "lens matches : NOT FOUND";
                 exactMatch &= false;
             }
             else
             {
-                d->usedLens           = bestMatches[bestMatches.keys()[0]];
-                d->settings.lensModel = d->usedLens->Model;
+                setUsedLens(bestMatches[bestMatches.keys()[0]]);
                 kDebug() << "Lens found   : " << d->settings.lensModel;
-            }
-
-            // ------------------------------------------------------------------------------------------------
-
-            if (d->usedLens)
-            {
-                d->settings.cropFactor = d->usedLens->CropFactor;
                 kDebug() << "Crop Factor  : " << d->settings.cropFactor;
             }
 
@@ -339,7 +333,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 exactMatch &= false;
             }
 
-            temp                       = temp.replace(" m", "");
+            temp                        = temp.replace(" m", "");
             d->settings.subjectDistance = temp.toDouble();
             kDebug() << "Subject dist.  : " << d->settings.subjectDistance;
         }
