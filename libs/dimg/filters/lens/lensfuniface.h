@@ -40,16 +40,18 @@ namespace Digikam
 
 class DIGIKAM_EXPORT LensFunIface
 {
-    public:
-
-/*
-    typedef QMap<QString, QString> correctionData;
-    correctionData getCorrectionData();
-*/
+public:
 
     typedef const lfCamera* DevicePtr;
     typedef const lfLens*   LensPtr;
     typedef QList<LensPtr>  LensList;
+
+    enum MetadataMatch
+    {
+        MetadataNoMatch      = -1,
+        MetadataPartialMatch = 0,
+        MetadataExactMatch   = 1
+    };
 
 public:
 
@@ -73,7 +75,7 @@ public:
     DevicePtr findCamera(const QString& make, const QString& model) const;
     LensPtr   findLens(const QString& model) const;
 
-    bool findFromMetadata(const DMetadata& meta);
+    MetadataMatch findFromMetadata(const DMetadata& meta);
 
     bool supportsDistortion() const;
     bool supportsCCA()        const;

@@ -48,11 +48,11 @@ int main (int argc, char** argv)
 
     QString filePath(argv[1]);
 
-    DImg             img(filePath);
-    DMetadata        meta(img.getMetadata());
-    LensFunIface     iface;
-    bool ret = iface.findFromMetadata(meta);
-    if (ret)
+    DImg         img(filePath);
+    DMetadata    meta(img.getMetadata());
+    LensFunIface iface;
+    LensFunIface::MetadataMatch ret = iface.findFromMetadata(meta);
+    if (ret == LensFunIface::MetadataExactMatch)
     {
         LensFunFilter filter(&img, 0L, iface.settings());
         filter.startFilterDirectly();

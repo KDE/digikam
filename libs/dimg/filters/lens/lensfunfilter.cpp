@@ -70,15 +70,6 @@ LensFunFilter::~LensFunFilter()
 
 void LensFunFilter::filterImage()
 {
-#if 0
-    if (!opts.Crop)
-        opts.Crop = lens->CropFactor;
-    if (!opts.Focal)
-        opts.Focal = lens->MinFocal;
-    if (!opts.Aperture)
-        opts.Aperture = lens->MinAperture;
-#endif
-
     m_destImage.bitBltImage(&m_orgImage, 0, 0);
 
     if (!d->iface)
@@ -198,9 +189,9 @@ void LensFunFilter::filterImage()
 
     if ( d->iface->settings().filterVIG || d->iface->settings().filterCCI )
     {
-        uchar* data  = m_destImage.bits();
-        loop         = 0;
-        float offset = 0.0;
+        uchar* data   = m_destImage.bits();
+        loop          = 0;
+        double offset = 0.0;
 
         if ( steps == 3 )
             offset = 33.3;
