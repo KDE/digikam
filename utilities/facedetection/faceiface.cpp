@@ -7,6 +7,7 @@
  * Description : database interface, also allowing easy manipulation of face tags
  *
  * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,53 +52,10 @@
 #include "tagregion.h"
 #include "thumbnailloadthread.h"
 
+using namespace KFaceIface;
+
 namespace Digikam
 {
-
-// --- DatabaseFace ----------------------------------------------------------------------------
-
-DatabaseFace::DatabaseFace()
-            : m_type(InvalidFace), m_imageId(-1), m_tagId(-1)
-{
-}
-
-DatabaseFace::DatabaseFace(Type type, qlonglong imageId, int tagId, const QVariant& region)
-            : m_type(type), m_imageId(imageId), m_tagId(tagId), m_region(region)
-{
-}
-
-bool DatabaseFace::isNull() const
-{
-    return m_type != InvalidFace;
-}
-
-DatabaseFace::Type DatabaseFace::type() const
-{
-    return m_type;
-}
-
-qlonglong DatabaseFace::imageId() const
-{
-    return m_imageId;
-}
-
-int DatabaseFace::tagId() const
-{
-    return m_tagId;
-}
-
-QVariant DatabaseFace::region() const
-{
-    return m_region;
-}
-
-bool DatabaseFace::operator==(const DatabaseFace& other) const
-{
-    return m_tagId   == other.m_tagId   &&
-           m_imageId == other.m_imageId &&
-           m_type    == other.m_type    &&
-           m_region  == other.m_region;
-}
 
 // --- FaceIfacePriv ----------------------------------------------------------------------------------------
 
@@ -366,48 +324,6 @@ QList<DatabaseFace> FaceIface::unconfirmedDatabaseFaces(qlonglong imageId) const
     return databaseFaces(imageId, DatabaseFace::UnconfirmedTypes);
 }
 
-QStringList FaceIface::attributesForFlags(DatabaseFace::TypeFlags flags) const
-{
-    QStringList attributes;
-    for (int i = DatabaseFace::TypeFirst; i <= DatabaseFace::TypeLast; i <<= 1)
-    {
-        if (flags & DatabaseFace::Type(i))
-        {
-            QString attribute = attributeForType(DatabaseFace::Type(i));
-            if (!attributes.contains(attribute))
-                attributes << attribute;
-        }
-    }
-    return attributes;
-}
-
-QString FaceIface::attributeForType(DatabaseFace::Type type) const
-{
-    if (type == DatabaseFace::UnknownName || type == DatabaseFace::UnconfirmedName)
-        return ImageTagPropertyName::autodetectedFace();
-    if (type == DatabaseFace::ConfirmedName)
-        return ImageTagPropertyName::tagRegion();
-    if (type == DatabaseFace::FaceForTraining)
-        return ImageTagPropertyName::faceToTrain();
-    return QString();
-}
-
-DatabaseFace::Type FaceIface::databaseFaceType(int tagId, const QString& attribute) const
-{
-    if (attribute == ImageTagPropertyName::autodetectedFace())
-    {
-        if (tagId == d->unknownPeopleTagId)
-            return DatabaseFace::UnknownName;
-        else
-            return DatabaseFace::UnconfirmedName;
-    }
-    else if (attribute == ImageTagPropertyName::tagRegion())
-        return DatabaseFace::ConfirmedName;
-    else if (attribute == ImageTagPropertyName::faceToTrain())
-        return DatabaseFace::FaceForTraining;
-    return DatabaseFace::InvalidFace;
-}
-
 QList<Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
 {
     QList<Face> faceList;
@@ -433,7 +349,7 @@ QList<Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
 QList<DatabaseFace> FaceIface::databaseFaces(qlonglong imageid, DatabaseFace::TypeFlags flags) const
 {
     QList<DatabaseFace> faces;
-    QStringList attributes = attributesForFlags(flags);
+    QStringList attributes = DatabaseFace::attributesForFlags(flags);
     foreach (const ImageTagPair& pair, faceImageTagPairs(imageid, flags))
     {
         foreach (const QString& attribute, attributes)
@@ -446,7 +362,7 @@ QList<DatabaseFace> FaceIface::databaseFaces(qlonglong imageid, DatabaseFace::Ty
                 if (!rect.isValid())
                     continue;
 
-                DatabaseFace::Type type = databaseFaceType(pair.tagId(), attribute);
+                DatabaseFace::Type type = DatabaseFace::databaseFaceType(attribute, pair.tagId(), d->unknownPeopleTagId);
                 faces << DatabaseFace(type, imageid, pair.tagId(), rect);
             }
         }
@@ -459,7 +375,7 @@ QList<ImageTagPair> FaceIface::faceImageTagPairs(qlonglong imageid, DatabaseFace
 {
     QList<ImageTagPair> pairs;
 
-    QStringList attributes = attributesForFlags(flags);
+    QStringList attributes = DatabaseFace::attributesForFlags(flags);
     foreach (const ImageTagPair& pair, ImageTagPair::availablePairs(imageid))
     {
         //kDebug() << pair.tagId() << pair.properties();
@@ -547,6 +463,11 @@ KFaceIface::Image FaceIface::toImage(const DImg& image)
     return KFaceIface::Image(image.width(), image.height(),
                              image.sixteenBit(), image.hasAlpha(),
                              image.bits());
+}
+
+DatabaseFace FaceIface::databaseFaceFromListing(qlonglong imageid, const QList<QVariant>& extraValues)
+{
+    return DatabaseFace::fromListing(imageid, extraValues, d->unknownPeopleTagId);
 }
 
 // --- Face detection and recognition ------------------------------------------------------------------------------------
@@ -757,7 +678,7 @@ void FaceIface::removeAllFaces(qlonglong imageid)
     //markAsScanned(info, false);
 
     QList<int> tagsToRemove;
-    QStringList attributes = attributesForFlags(DatabaseFace::AllTypes);
+    QStringList attributes = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
     foreach (ImageTagPair pair, faceImageTagPairs(imageid, DatabaseFace::AllTypes))
     {
         foreach (const QString& attribute, attributes)
@@ -775,7 +696,7 @@ void FaceIface::removeFace(qlonglong imageid, const QRect& rect)
     ImageInfo info(imageid);
 
     QList<int> tagsToRemove;
-    QStringList attributes    = attributesForFlags(DatabaseFace::AllTypes);
+    QStringList attributes    = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
     QList<ImageTagPair> pairs = faceImageTagPairs(imageid, DatabaseFace::AllTypes);
 
     for (int i=0; i<pairs.size(); i++)
@@ -801,10 +722,10 @@ void FaceIface::removeFace(const DatabaseFace& face)
 {
     ImageTagPair pair(face.imageId(), face.tagId());
     QString regionString = TagRegion(face.region().toRect()).toXml();
-    pair.removeProperty(attributeForType(face.type()), regionString);
+    pair.removeProperty(DatabaseFace::attributeForType(face.type()), regionString);
 
     if (face.type() == DatabaseFace::ConfirmedName)
-        pair.removeProperty(attributeForType(DatabaseFace::FaceForTraining), regionString);
+        pair.removeProperty(DatabaseFace::attributeForType(DatabaseFace::FaceForTraining), regionString);
 
     MetadataManager::instance()->removeTag(ImageInfo(face.imageId()), pair.tagId());
 }

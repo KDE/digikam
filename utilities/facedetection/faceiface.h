@@ -7,6 +7,7 @@
  * Description : libkface interface, also allowing easy manipulation of face tags
  *
  * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,19 +30,20 @@
 #include <QFlags>
 #include <QMap>
 #include <QList>
+#include <QRect>
 #include <QString>
 #include <QVariant>
 
-// Libkface includes
-
-#include <libkface/database.h>
-#include <libkface/kface.h>
-
 // Local includes
 
+#include "databaseface.h"
 #include "digikam_export.h"
 
-using namespace KFaceIface;
+namespace KFaceIface
+{
+    class Face;
+    class Image;
+}
 
 class QImage;
 
@@ -51,51 +53,6 @@ namespace Digikam
 class DImg;
 class ImageInfo;
 class ImageTagPair;
-
-class DatabaseFace
-{
-public:
-
-    enum Type
-    {
-        InvalidFace      = 0,
-        UnknownName      = 1 << 0,
-        UnconfirmedName  = 1 << 1,
-        ConfirmedName    = 1 << 2,
-        FaceForTraining  = 1 << 3,
-
-        UnconfirmedTypes = UnknownName | UnconfirmedName,
-        NormalFaces      = UnknownName | UnconfirmedName | ConfirmedName,
-        AllTypes         = UnknownName | UnconfirmedName | ConfirmedName | FaceForTraining,
-        TypeFirst        = UnknownName,
-        TypeLast         = FaceForTraining
-    };
-    Q_DECLARE_FLAGS(TypeFlags, Type);
-
-    DatabaseFace();
-    DatabaseFace(Type type, qlonglong imageId, int tagId, const QVariant& region);
-
-    bool      isNull() const;
-
-    Type      type() const;
-    qlonglong imageId() const;
-    int       tagId() const;
-    QVariant  region() const;
-
-    bool      isUnknownName() const     { return type() == UnknownName; }
-    bool      isUnconfirmedName() const { return type() == UnconfirmedName; }
-    bool      isConfirmedName() const   { return type() == ConfirmedName; }
-    bool      isForTraining() const     { return type() == FaceForTraining; }
-
-    bool operator==(const DatabaseFace& other) const;
-
-protected:
-
-    Type      m_type;
-    qlonglong m_imageId;
-    int       m_tagId;
-    QVariant  m_region;
-};
 
 class FaceIface
 {
@@ -175,8 +132,8 @@ public:
      * findFacesFromTags returns all faces, findUnconfirmedFacesFromTags only unconfirmed ones.
      * Call fillImageInFaces() to set the face image.
      */
-    QList<Face>         facesFromTags(qlonglong imageid) const;
-    QList<Face>         unconfirmedFacesFromTags(qlonglong imageid) const;
+    QList<KFaceIface::Face> facesFromTags(qlonglong imageid) const;
+    QList<KFaceIface::Face> unconfirmedFacesFromTags(qlonglong imageid) const;
 
     /**
      * Reads the DatabaseFaces for the given image id from the database
@@ -187,14 +144,19 @@ public:
     /**
      * Edits the given face(s): From the given DImg, the face regions are copied.
      */
-    void                fillImageInFace(const DImg& image, Face& face) const;
-    void                fillImageInFaces(const DImg& image, QList<Face>& faceList) const;
+    void                fillImageInFace(const DImg& image, KFaceIface::Face& face) const;
+    void                fillImageInFaces(const DImg& image, QList<KFaceIface::Face>& faceList) const;
 
     /**
      * Returns a list of all tag rectangles for the image. Unlike findAndTagFaces, this does not take a DImg,
      * because it returns only a QRect, not a Face, so no need of cropping a face rectangle.
      */
     QList<QRect>        getTagRects(qlonglong imageid) const;
+
+    /**
+     * Convert image-lister extra value from ioslave to a DatabaseFace
+     */
+    DatabaseFace        databaseFaceFromListing(qlonglong imageid, const QList<QVariant>& extraValues);
 
     // --- Face detection and recognition ---
 
@@ -210,13 +172,13 @@ public:
      * @param imageid The image id from the database
      * @return A list of faces found in the given image. With cropped face images.
      */
-    QList<Face>         findAndTagFaces(const DImg& image, qlonglong imageid, FaceRecognitionSteps steps = DetectAndRecognize);
+    QList<KFaceIface::Face> findAndTagFaces(const DImg& image, qlonglong imageid, FaceRecognitionSteps steps = DetectAndRecognize);
 
     /**
      * Tries to recognize a Face, returns a string containing the name for the face.
      * Respects the match threshold.
      */
-    QString             recognizeFace(const Face& face);
+    QString             recognizeFace(const KFaceIface::Face& face);
 
 
     // --- Confirmation ---
@@ -240,13 +202,13 @@ public:
      * Updates libkface's face database with a list of Face objects
      * Any faces that have a null name or image will be dropped.
      */
-    void                trainFaces(const QList<Face>& faceList);
+    void                trainFaces(const QList<KFaceIface::Face>& faceList);
 
     /**
      * Updates libkface's face database with a list of Face objects
      * Any faces that have a null name or image will be dropped.
      */
-    void                trainFace(const Face& face);
+    void                trainFace(const KFaceIface::Face& face);
 
     // --- Remove entries ---
 
@@ -302,10 +264,7 @@ public:
     /**
      * Utilities
      */
-    QStringList         attributesForFlags(DatabaseFace::TypeFlags flags) const;
-    QString             attributeForType(DatabaseFace::Type type) const;
-    DatabaseFace::Type  databaseFaceType(int tagId, const QString& attribute) const;
-    QList<Face>         toFaces(const QList<DatabaseFace>& databaseFaces) const;
+    QList<KFaceIface::Face> toFaces(const QList<DatabaseFace>& databaseFaces) const;
     QList<DatabaseFace> databaseFaces(qlonglong imageId, DatabaseFace::TypeFlags flags) const;
     QList<ImageTagPair> faceImageTagPairs(qlonglong imageid, DatabaseFace::TypeFlags flags) const;
 
@@ -316,7 +275,5 @@ private:
 } ;
 
 }  // Namespace Digikam
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFace::TypeFlags);
 
 #endif // FACEIFACE_H
