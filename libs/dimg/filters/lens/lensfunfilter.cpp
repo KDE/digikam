@@ -198,9 +198,9 @@ void LensFunFilter::filterImage()
 
     if ( d->iface->settings().filterVIG || d->iface->settings().filterCCI )
     {
-        uchar* data  = m_destImage.bits();
-        loop         = 0;
-        float offset = 0.0;
+        uchar* data   = m_destImage.bits();
+        loop          = 0;
+        double offset = 0.0;
 
         if ( steps == 3 )
             offset = 33.3;
