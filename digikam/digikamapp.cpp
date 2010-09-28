@@ -1598,7 +1598,7 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
         return;
 
     // the CameraUI will delete itself when it has finished
-    CameraUI* cgui = new CameraUI(i18n("Images found in %1", path),
+    CameraUI* cgui = new CameraUI(this, i18n("Images found in %1", path),
                                   "directory browse", "Fixed", path, 1);
     cgui->show();
 
@@ -1623,7 +1623,7 @@ void DigikamApp::slotOpenManualCamera(QAction *action)
         else
         {
             // the CameraUI will delete itself when it has finished
-            CameraUI* cgui = new CameraUI(ctype->title(), ctype->model(),
+            CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
                                           ctype->port(), ctype->path(), ctype->startingNumber());
 
             ctype->setCurrentCameraUI(cgui);
@@ -1674,7 +1674,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
     // if there is already an open CameraUI for the device, show and raise it, and be done
     if (d->cameraUIMap.contains(udi))
     {
-        CameraUI *ui = d->cameraUIMap.value(udi);
+        CameraUI* ui = d->cameraUIMap.value(udi);
         if (ui && !ui->isClosed())
         {
             if (ui->isMinimized())
