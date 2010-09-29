@@ -222,8 +222,8 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
         setUsedCamera(*lfCamera);
         bool exactMatch = true;
 
-        kDebug() << "Camera maker : " << d->settings.cameraMake;
-        kDebug() << "Camera model : " << d->settings.cameraModel;
+        kDebug() << "Camera maker   : " << d->settings.cameraMake;
+        kDebug() << "Camera model   : " << d->settings.cameraModel;
 
         // ------------------------------------------------------------------------------------------------
 
@@ -231,7 +231,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
         {
             // Performing lens searches.
 
-            kDebug() << "Lens desc.   : " << lens;
+            kDebug() << "Lens desc.     : " << lens;
             QMap<int, LensPtr> bestMatches;
             QString            lensCutted;
             LensList           lensList;
@@ -268,14 +268,14 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
             if (bestMatches.isEmpty() || bestMatches.count() > 1)
             {
-                kDebug() << "lens matches : NOT FOUND";
+                kDebug() << "lens matches   : NOT FOUND";
                 exactMatch &= false;
             }
             else
             {
                 setUsedLens(bestMatches[bestMatches.keys()[0]]);
-                kDebug() << "Lens found   : " << d->settings.lensModel;
-                kDebug() << "Crop Factor  : " << d->settings.cropFactor;
+                kDebug() << "Lens found     : " << d->settings.lensModel;
+                kDebug() << "Crop Factor    : " << d->settings.cropFactor;
             }
 
             // ------------------------------------------------------------------------------------------------
@@ -283,22 +283,22 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
             QString temp = photoInfo.focalLength;
             if (temp.isEmpty())
             {
-                kDebug() << "Focal Length : NOT FOUND";
+                kDebug() << "Focal Length   : NOT FOUND";
                 exactMatch &= false;
             }
             d->settings.focalLength = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
-            kDebug() << "Focal Length : " << d->settings.focalLength;
+            kDebug() << "Focal Length   : " << d->settings.focalLength;
 
             // ------------------------------------------------------------------------------------------------
 
             temp = photoInfo.aperture;
             if (temp.isEmpty())
             {
-                kDebug() << "Aperture     : NOT FOUND";
+                kDebug() << "Aperture       : NOT FOUND";
                 exactMatch &= false;
             }
             d->settings.aperture = temp.mid(1).toDouble();
-            kDebug() << "Aperture     : " << d->settings.aperture;
+            kDebug() << "Aperture       : " << d->settings.aperture;
 
             // ------------------------------------------------------------------------------------------------
             // Try to get subject distance value.
@@ -329,7 +329,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
             if (temp.isEmpty())
             {
-                kDebug() << "Subject dist.: NOT FOUND";
+                kDebug() << "Subject dist.  : NOT FOUND";
                 exactMatch &= false;
             }
 
@@ -345,8 +345,26 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
         ret = exactMatch ? MetadataExactMatch : MetadataPartialMatch;
     }
 
-    kDebug() << "Metadata match : " << ret;
+    kDebug() << "Metadata match : " << metadataMatchDebugStr(ret);
 
+    return ret;
+}
+
+QString LensFunIface::metadataMatchDebugStr(MetadataMatch val) const
+{
+    QString ret;
+    switch(val)
+    {
+        case MetadataNoMatch:
+            ret = QString("No Match");
+            break;
+        case MetadataPartialMatch:
+            ret = QString("Partial Match");
+            break;
+        default:
+            ret = QString("Exact Match");
+            break;
+    }
     return ret;
 }
 

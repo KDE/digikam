@@ -89,6 +89,7 @@ protected:
 
 private:
 
+    QString  metadataMatchDebugStr(MetadataMatch val) const;
     LensList findLenses(const lfCamera* camera, const QString& lensDesc,
                         const QString& lensMaker=QString()) const;
 
