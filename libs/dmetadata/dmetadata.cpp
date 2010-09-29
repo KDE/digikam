@@ -991,7 +991,8 @@ QString DMetadata::getLensDescription() const
     for (QStringList::Iterator it = lensExifTags.begin(); it != lensExifTags.end(); ++it)
     {
         lens = getExifTagString((*it).toAscii());
-        if (!lens.isEmpty())
+        if ( !lens.isEmpty() &&
+             !lens.startsWith('(') && !lens.endsWith(')') )   // To prevent undecoded tag values from Exiv2 as "(65535)".
             return lens;
     }
 
