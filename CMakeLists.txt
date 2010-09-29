@@ -250,7 +250,9 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
 CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
 
-MACRO_BOOL_TO_01(PLATFORM_WINDOWS (WIN32 AND MSVC))
+IF (WIN32 AND MSVC)
+    SET(PLATFORM_WINDOWS TRUE)
+ENDIF (WIN32 AND MSVC)
 CONFIGURE_FILE(libs/3rdparty/lensfun/include/config-lensfun.h.cmake
                ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include/config-lensfun.h)
 
