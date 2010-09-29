@@ -26,8 +26,8 @@
 
 #define CONF_PACKAGE "lensfun"
 
-/* We don't need to export Lensfun library symbol */
-#define CONF_LENSFUN_STATIC 1
+/* Defined if you run cmake under Windows with MSVC compiler */
+#cmakedefine PLATFORM_WINDOWS
 
 /* Define path where are installed lens database XML files */
 #define CONF_DATADIR "${KDE4_DATA_INSTALL_DIR}/digikam/lensfun"
