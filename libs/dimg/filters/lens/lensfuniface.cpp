@@ -258,17 +258,6 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
             }
 
-            // STAGE 3, Adapt exiv2 strings to lensfun strings for Canon.
-            if (lensCutted.contains("Canon"))
-            {
-                lensCutted.replace("Nikon ", "");
-                lensCutted.replace("Zoom-", "");
-                lensCutted.replace("IF-ID", "ED-IF");
-                lensList = findLenses(d->usedCamera, lensCutted);
-                kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
-                if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
-            }
-
             // TODO : Add here more specific lens maker rules.
 
             // LAST STAGE, Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
