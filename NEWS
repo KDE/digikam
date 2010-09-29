@@ -3,6 +3,9 @@ digiKam 1.5.0 - Release date: 2010-10-??
 
 NEW FEATURES:
 
+General             : Fix compilation uner windows with TDM-GCC and MSVC compilers.
+General             : Including LensFun library source code as 3rd-party component, especially for windows target where
+                      this library is not available.
 Image Editor        : Improvement of algorithm to convert 8 bits image to 16 and limit histogram holes during conversion.
 
 Batch Queue Manager : Add new tool to remove metadata from images.
@@ -41,7 +44,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 252488 : digiKam incorrectly renders SD Card size.
 030 ==> 252489 : digiKam incorrectly detects SD Card name.
 031 ==> 252521 : README incorrectly claims kdegraphics-4.4 is sufficient.
-032 ==> 
+032 ==> 249248 : Updating fingerprints metadata.
+033 ==> 
 
 
 
