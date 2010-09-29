@@ -460,7 +460,6 @@ void LensFunCameraSelector::updateLensCombo()
 
 void LensFunCameraSelector::slotMakeSelected()
 {
-    kDebug() << "enter there 1";
     updateDeviceCombos();
     slotModelSelected();
 
@@ -471,15 +470,14 @@ void LensFunCameraSelector::slotMakeSelected()
 
 void LensFunCameraSelector::slotModelSelected()
 {
-    kDebug() << "enter there 2";
     QVariant v = d->model->combo()->itemData( d->model->currentIndex() );
     d->iface->setUsedCamera(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
                             v.value<LensFunIface::DevicePtr>());
+    emit signalLensSettingsChanged();
 }
 
 void LensFunCameraSelector::slotLensSelected()
 {
-    kDebug() << "enter there 3";
     QVariant v = d->lens->combo()->itemData( d->lens->currentIndex() );
     d->iface->setUsedLens(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
                           v.value<LensFunIface::LensPtr>());
