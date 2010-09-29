@@ -203,7 +203,10 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     d->usedLens       = 0;
 
     if (meta.isEmpty())
+    {
+        kDebug() << "No metadata available";
         return ret;
+    }
 
     PhotoInfoContainer photoInfo = meta.getPhotographInformation();
     QString make                 = photoInfo.make;
@@ -211,7 +214,10 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     QString lens                 = photoInfo.lens;
 
     if (photoInfo.make.isEmpty())
+    {
+        kDebug() << "No camera maker info available";
         return ret;
+    }
 
     // ------------------------------------------------------------------------------------------------
 
@@ -266,16 +272,26 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
             // Display the results.
 
-            if (bestMatches.isEmpty() || bestMatches.count() > 1)
+            if (bestMatches.isEmpty())
             {
                 kDebug() << "lens matches   : NOT FOUND";
                 exactMatch &= false;
             }
             else
             {
-                setUsedLens(bestMatches[bestMatches.keys()[0]]);
-                kDebug() << "Lens found     : " << d->settings.lensModel;
-                kDebug() << "Crop Factor    : " << d->settings.cropFactor;
+                // Best case for an exact match is to have only one item returned by Lensfun searches.
+                QMap<int, LensPtr>::const_iterator it = bestMatches.find(1);
+                if (it != bestMatches.end())
+                {
+                    setUsedLens(bestMatches[it.key()]);
+                    kDebug() << "Lens found     : " << d->settings.lensModel;
+                    kDebug() << "Crop Factor    : " << d->settings.cropFactor;
+                }
+                else
+                {
+                    kDebug() << "lens matches   : more than one...";
+                    exactMatch &= false;
+                }
             }
 
             // ------------------------------------------------------------------------------------------------
