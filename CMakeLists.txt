@@ -252,7 +252,10 @@ CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam
 
 IF (WIN32 AND MSVC)
     SET(PLATFORM_WINDOWS TRUE)
+ELSE (WIN32 AND MSVC)
+    SET(CONF_COMPILER_GCC TRUE)
 ENDIF (WIN32 AND MSVC)
+
 CONFIGURE_FILE(libs/3rdparty/lensfun/include/config-lensfun.h.cmake
                ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include/config-lensfun.h)
 
