@@ -149,10 +149,10 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
             this, SLOT(slotUseMetadata(bool)));
 
     connect(d->make, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotUpdateCombos()));
+            this, SLOT(slotMakeSelected()));
 
     connect(d->model, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotUpdateLensCombo()));
+            this, SLOT(slotModelSelected()));
 
     connect(d->lens, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotLensSelected()));
@@ -182,7 +182,7 @@ LensFunContainer LensFunCameraSelector::settings()
 {
     // Update settings in LensFun interface
     blockSignals(true);
-    slotCameraSelected();
+    slotModelSelected();
     slotLensSelected();
     slotFocalChanged();
     slotApertureChanged();
@@ -281,7 +281,7 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
         d->focal->setEnabled(true);
         d->aperture->setEnabled(true);
         d->distance->setEnabled(true);
-        slotUpdateCombos();
+        slotMakeSelected();
     }
 }
 
@@ -310,13 +310,14 @@ void LensFunCameraSelector::refreshSettingsView()
     if (d->iface->usedCamera())
     {
         makerIdx = d->make->combo()->findText(d->iface->settings().cameraMake);
+        kDebug() << "makerIdx: " << makerIdx << " (" << d->iface->settings().cameraMake << ")";
     }
 
     if (makerIdx >= 0)
     {
         d->make->setCurrentIndex(makerIdx);
         d->make->setEnabled(d->passiveMetadataUsage);
-        slotUpdateCombos();
+        updateDeviceCombos();
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -326,13 +327,14 @@ void LensFunCameraSelector::refreshSettingsView()
     if (d->iface->usedCamera())
     {
         modelIdx = d->model->combo()->findText(d->iface->settings().cameraModel);
+        kDebug() << "modelIdx: " << modelIdx << " (" << d->iface->settings().cameraModel << ")";
     }
 
     if (modelIdx >= 0)
     {
         d->model->setCurrentIndex(modelIdx);
         d->model->setEnabled(d->passiveMetadataUsage);
-        slotUpdateLensCombo();
+        updateLensCombo();
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -342,6 +344,7 @@ void LensFunCameraSelector::refreshSettingsView()
     if (d->iface->usedLens())
     {
         lensIdx = d->lens->combo()->findText(d->iface->settings().lensModel);
+        kDebug() << "lensIdx: " << lensIdx << " (" << d->iface->settings().lensModel << ")";
     }
 
     if (lensIdx >= 0)
@@ -372,8 +375,11 @@ void LensFunCameraSelector::refreshSettingsView()
     }
 }
 
-void LensFunCameraSelector::slotUpdateCombos()
+void LensFunCameraSelector::updateDeviceCombos()
 {
+    d->make->blockSignals(true);
+    d->model->blockSignals(true);
+
     const lfCamera* const* it = d->iface->lensFunCameras();
 
     // reset box
@@ -409,14 +415,13 @@ void LensFunCameraSelector::slotUpdateCombos()
     d->make->combo()->model()->sort(0, Qt::AscendingOrder);
     d->model->combo()->model()->sort(0, Qt::AscendingOrder);
 
-    slotCameraSelected();
-
-    // Fill Lens list for current Maker & Model and fire signalLensSettingsChanged()
-    slotUpdateLensCombo();
+    d->make->blockSignals(false);
+    d->model->blockSignals(false);
 }
 
-void LensFunCameraSelector::slotUpdateLensCombo()
+void LensFunCameraSelector::updateLensCombo()
 {
+    d->lens->blockSignals(true);
     d->lens->combo()->clear();
 
     QVariant v = d->model->combo()->itemData( d->model->currentIndex() );
@@ -436,6 +441,7 @@ void LensFunCameraSelector::slotUpdateLensCombo()
 
     kDebug() << "dev: " << dev->Maker << " :: " << dev->Model;
 
+    d->lens->blockSignals(true);
     const lfLens** lenses     = d->iface->lensFunDataBase()->FindLenses( dev, NULL, NULL );
     LensFunContainer settings = d->iface->settings();
     settings.cropFactor       = dev ? dev->CropFactor : -1.0;
@@ -449,13 +455,23 @@ void LensFunCameraSelector::slotUpdateLensCombo()
         ++lenses;
     }
     d->lens->combo()->model()->sort(0, Qt::AscendingOrder);
+    d->lens->blockSignals(false);
+}
 
-    // NOTE: signalLensSettingsChanged() is fired by this slot.
+void LensFunCameraSelector::slotMakeSelected()
+{
+    kDebug() << "enter there 1";
+    updateDeviceCombos();
+    slotModelSelected();
+
+    // Fill Lens list for current Maker & Model and fire signalLensSettingsChanged()
+    updateLensCombo();
     slotLensSelected();
 }
 
-void LensFunCameraSelector::slotCameraSelected()
+void LensFunCameraSelector::slotModelSelected()
 {
+    kDebug() << "enter there 2";
     QVariant v = d->model->combo()->itemData( d->model->currentIndex() );
     d->iface->setUsedCamera(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
                             v.value<LensFunIface::DevicePtr>());
@@ -463,6 +479,7 @@ void LensFunCameraSelector::slotCameraSelected()
 
 void LensFunCameraSelector::slotLensSelected()
 {
+    kDebug() << "enter there 3";
     QVariant v = d->lens->combo()->itemData( d->lens->currentIndex() );
     d->iface->setUsedLens(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
                           v.value<LensFunIface::LensPtr>());

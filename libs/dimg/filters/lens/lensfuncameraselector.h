@@ -74,12 +74,11 @@ Q_SIGNALS:
 
     void signalLensSettingsChanged();
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
-    void slotUpdateCombos();
-    void slotUpdateLensCombo();
     void slotUseMetadata(bool);
-    void slotCameraSelected();
+    void slotMakeSelected();
+    void slotModelSelected();
     void slotLensSelected();
     void slotFocalChanged();
     void slotApertureChanged();
@@ -89,6 +88,8 @@ private:
 
     LensFunIface::MetadataMatch findFromMetadata();
     void refreshSettingsView();
+    void updateDeviceCombos();
+    void updateLensCombo();
 
 private:
 
