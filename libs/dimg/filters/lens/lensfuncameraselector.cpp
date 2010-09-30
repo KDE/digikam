@@ -60,6 +60,12 @@ public:
         distance             = 0;
         iface                = 0;
         metadataResult       = 0;
+        makeLabel            = 0;
+        modelLabel           = 0;
+        lensLabel            = 0;
+        focalLabel           = 0;
+        aperLabel            = 0;
+        distLabel            = 0;
         passiveMetadataUsage = false;
     }
 
@@ -67,6 +73,12 @@ public:
 
     QCheckBox*       metadataUsage;
     QLabel*          metadataResult;
+    QLabel*          makeLabel;
+    QLabel*          modelLabel;
+    QLabel*          lensLabel;
+    QLabel*          focalLabel;
+    QLabel*          aperLabel;
+    QLabel*          distLabel;
 
     const QString    configUseMetadata;
 
@@ -92,15 +104,15 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
     d->metadataUsage   = new QCheckBox(i18n("Use Metadata"), this);
     d->metadataResult  = new QLabel(this);
 
-    QLabel* makeLabel  = new QLabel(i18nc("camera make",  "Make:"),  this);
+    d->makeLabel       = new QLabel(i18nc("camera make",  "Make:"),  this);
     d->make            = new RComboBox(this);
     d->make->setDefaultIndex(0);
 
-    QLabel* modelLabel = new QLabel(i18nc("camera model", "Model:"), this);
+    d->modelLabel      = new QLabel(i18nc("camera model", "Model:"), this);
     d->model           = new RComboBox(this);
     d->model->setDefaultIndex(0);
 
-    QLabel* lensLabel  = new QLabel(i18nc("camera lens",  "Lens:"),  this);
+    d->lensLabel       = new QLabel(i18nc("camera lens",  "Lens:"),  this);
     d->lens            = new RComboBox(this);
     d->lens->setDefaultIndex(0);
 
@@ -109,9 +121,9 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
     d->metadataUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
                                    "from the image metadata (as Exif or XMP)."));
 
-    QLabel* focalLabel = new QLabel(i18n("Focal Length:"), this);
-    QLabel* aperLabel  = new QLabel(i18n("Aperture:"), this);
-    QLabel* distLabel  = new QLabel(i18n("Subject Distance:"), this);
+    d->focalLabel = new QLabel(i18n("Focal Length:"), this);
+    d->aperLabel  = new QLabel(i18n("Aperture:"), this);
+    d->distLabel  = new QLabel(i18n("Subject Distance:"), this);
 
     d->focal = new RDoubleNumInput(this);
     d->focal->setDecimals(1);
@@ -130,17 +142,17 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
 
     grid->addWidget(d->metadataUsage,  0,  0, 1, 3);
     grid->addWidget(d->metadataResult, 1,  0, 1, 3);
-    grid->addWidget(makeLabel,         2,  0, 1, 3);
+    grid->addWidget(d->makeLabel,      2,  0, 1, 3);
     grid->addWidget(d->make,           3,  0, 1, 3);
-    grid->addWidget(modelLabel,        4,  0, 1, 3);
+    grid->addWidget(d->modelLabel,     4,  0, 1, 3);
     grid->addWidget(d->model,          5,  0, 1, 3);
-    grid->addWidget(lensLabel,         6,  0, 1, 3);
+    grid->addWidget(d->lensLabel,      6,  0, 1, 3);
     grid->addWidget(d->lens,           7,  0, 1, 3);
-    grid->addWidget(focalLabel,        8,  0, 1, 1);
+    grid->addWidget(d->focalLabel,     8,  0, 1, 1);
     grid->addWidget(d->focal,          8,  1, 1, 2);
-    grid->addWidget(aperLabel,         9,  0, 1, 1);
+    grid->addWidget(d->aperLabel,      9,  0, 1, 1);
     grid->addWidget(d->aperture,       9,  1, 1, 2);
-    grid->addWidget(distLabel,         10, 0, 1, 1);
+    grid->addWidget(d->distLabel,      10, 0, 1, 1);
     grid->addWidget(d->distance,       10, 1, 1, 2);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
@@ -281,6 +293,12 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
         d->focal->setEnabled(true);
         d->aperture->setEnabled(true);
         d->distance->setEnabled(true);
+        d->makeLabel->setStyleSheet(kapp->styleSheet());
+        d->modelLabel->setStyleSheet(kapp->styleSheet());
+        d->lensLabel->setStyleSheet(kapp->styleSheet());
+        d->focalLabel->setStyleSheet(kapp->styleSheet());
+        d->aperLabel->setStyleSheet(kapp->styleSheet());
+        d->distLabel->setStyleSheet(kapp->styleSheet());
         slotMakeSelected();
     }
 }
@@ -305,6 +323,13 @@ LensFunIface::MetadataMatch LensFunCameraSelector::findFromMetadata()
 
 void LensFunCameraSelector::refreshSettingsView()
 {
+    d->makeLabel->setStyleSheet(kapp->styleSheet());
+    d->modelLabel->setStyleSheet(kapp->styleSheet());
+    d->lensLabel->setStyleSheet(kapp->styleSheet());
+    d->focalLabel->setStyleSheet(kapp->styleSheet());
+    d->aperLabel->setStyleSheet(kapp->styleSheet());
+    d->distLabel->setStyleSheet(kapp->styleSheet());
+
     int makerIdx = -1;
 
     if (d->iface->usedCamera())
@@ -317,6 +342,7 @@ void LensFunCameraSelector::refreshSettingsView()
     {
         d->make->setCurrentIndex(makerIdx);
         d->make->setEnabled(d->passiveMetadataUsage);
+        d->makeLabel->setStyleSheet(QString("QLabel {color: green;}"));
         updateDeviceCombos();
     }
 
@@ -334,6 +360,7 @@ void LensFunCameraSelector::refreshSettingsView()
     {
         d->model->setCurrentIndex(modelIdx);
         d->model->setEnabled(d->passiveMetadataUsage);
+        d->modelLabel->setStyleSheet(QString("QLabel {color: green;}"));
         updateLensCombo();
     }
 
@@ -352,6 +379,7 @@ void LensFunCameraSelector::refreshSettingsView()
         // found lens model directly, best case :)
         d->lens->setCurrentIndex(lensIdx);
         d->lens->setEnabled(d->passiveMetadataUsage);
+        d->lensLabel->setStyleSheet(QString("QLabel {color: green;}"));
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -360,18 +388,21 @@ void LensFunCameraSelector::refreshSettingsView()
     {
         d->focal->setValue(d->iface->settings().focalLength);
         d->focal->setEnabled(d->passiveMetadataUsage);
+        d->focalLabel->setStyleSheet(QString("QLabel {color: green;}"));
     }
 
     if (d->iface->settings().aperture != -1.0)
     {
         d->aperture->setValue(d->iface->settings().aperture);
         d->aperture->setEnabled(d->passiveMetadataUsage);
+        d->aperLabel->setStyleSheet(QString("QLabel {color: green;}"));
     }
 
     if (d->iface->settings().subjectDistance != -1.0)
     {
         d->distance->setValue(d->iface->settings().subjectDistance);
         d->distance->setEnabled(d->passiveMetadataUsage);
+        d->distLabel->setStyleSheet(QString("QLabel {color: green;}"));
     }
 }
 
