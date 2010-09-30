@@ -257,6 +257,12 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
     d->focalLabel->setStyleSheet(kapp->styleSheet());
     d->aperLabel->setStyleSheet(kapp->styleSheet());
     d->distLabel->setStyleSheet(kapp->styleSheet());
+    d->make->setEnabled(true);
+    d->model->setEnabled(true);
+    d->lens->setEnabled(true);
+    d->focal->setEnabled(true);
+    d->aperture->setEnabled(true);
+    d->distance->setEnabled(true);
 
     if (b)
     {
@@ -292,12 +298,6 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
     }
     else
     {
-        d->make->setEnabled(true);
-        d->model->setEnabled(true);
-        d->lens->setEnabled(true);
-        d->focal->setEnabled(true);
-        d->aperture->setEnabled(true);
-        d->distance->setEnabled(true);
         slotMakeSelected();
     }
 }
