@@ -54,6 +54,8 @@ public:
     const lfCamera* const* lfCameras;
     const lfLens**         lfLenses;
 
+    QString                makeDescription;
+    QString                modelDescription;
     QString                lensDescription;
 
     LensPtr                usedLens;
@@ -123,6 +125,16 @@ void LensFunIface::setUsedLens(LensPtr lens)
 lfDatabase* LensFunIface::lensFunDataBase() const
 {
     return d->lfDb;
+}
+
+QString LensFunIface::makeDescription() const
+{
+    return d->makeDescription;
+}
+
+QString LensFunIface::modelDescription() const
+{
+    return d->modelDescription;
 }
 
 QString LensFunIface::lensDescription() const
@@ -217,11 +229,11 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     }
 
     PhotoInfoContainer photoInfo = meta.getPhotographInformation();
-    QString make                 = photoInfo.make;
-    QString model                = photoInfo.model;
+    d->makeDescription           = photoInfo.make;
+    d->modelDescription          = photoInfo.model;
     d->lensDescription           = photoInfo.lens;
 
-    if (photoInfo.make.isEmpty())
+    if (d->makeDescription.isEmpty())
     {
         kDebug() << "No camera maker info available";
         return ret;
@@ -230,7 +242,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     // ------------------------------------------------------------------------------------------------
 
     bool exactMatch           = true;
-    const lfCamera** lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
+    const lfCamera** lfCamera = d->lfDb->FindCameras( d->makeDescription.toAscii().constData(), d->modelDescription.toAscii().constData() );
 
     if (lfCamera && *lfCamera)
     {
@@ -310,7 +322,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     }
     else
     {
-        kDebug() << "Cannot find Lensfun camera device for (" << make << " - " << model << ")";
+        kDebug() << "Cannot find Lensfun camera device for (" << d->makeDescription << " - " << d->modelDescription << ")";
         exactMatch &= false;
     }
 

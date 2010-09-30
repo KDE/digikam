@@ -83,6 +83,14 @@ public:
     bool supportsGeometry()   const;
     bool supportsCCI()        const;
 
+    /** Return Camera maker string description found in metadata
+    */
+    QString makeDescription() const;
+
+    /** Return Camera model string description found in metadata
+    */
+    QString modelDescription() const;
+
     /** Return Lens string description found in metadata
      */
     QString lensDescription() const;
