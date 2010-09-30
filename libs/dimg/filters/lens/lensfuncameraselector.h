@@ -66,8 +66,6 @@ public:
 
     LensFunIface* iface() const;
 
-public Q_SLOTS:
-
     void findFromMetadata(const DMetadata&);
 
 Q_SIGNALS:

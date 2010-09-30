@@ -251,6 +251,12 @@ void LensFunCameraSelector::setPassiveMetadataUsage(bool b)
 void LensFunCameraSelector::slotUseMetadata(bool b)
 {
     d->metadataResult->clear();
+    d->makeLabel->setStyleSheet(kapp->styleSheet());
+    d->modelLabel->setStyleSheet(kapp->styleSheet());
+    d->lensLabel->setStyleSheet(kapp->styleSheet());
+    d->focalLabel->setStyleSheet(kapp->styleSheet());
+    d->aperLabel->setStyleSheet(kapp->styleSheet());
+    d->distLabel->setStyleSheet(kapp->styleSheet());
 
     if (b)
     {
@@ -282,7 +288,6 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
                     d->metadataResult->setStyleSheet(QString("QLabel {color: green;}"));
                     break;
             }
-            emit signalLensSettingsChanged();
         }
     }
     else
@@ -293,12 +298,6 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
         d->focal->setEnabled(true);
         d->aperture->setEnabled(true);
         d->distance->setEnabled(true);
-        d->makeLabel->setStyleSheet(kapp->styleSheet());
-        d->modelLabel->setStyleSheet(kapp->styleSheet());
-        d->lensLabel->setStyleSheet(kapp->styleSheet());
-        d->focalLabel->setStyleSheet(kapp->styleSheet());
-        d->aperLabel->setStyleSheet(kapp->styleSheet());
-        d->distLabel->setStyleSheet(kapp->styleSheet());
         slotMakeSelected();
     }
 }
@@ -318,6 +317,8 @@ LensFunIface::MetadataMatch LensFunCameraSelector::findFromMetadata()
 
     LensFunIface::MetadataMatch ret = d->iface->findFromMetadata(d->metadata);
     refreshSettingsView();
+    slotModelSelected();
+    slotLensSelected();
     return ret;
 }
 
