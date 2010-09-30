@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QDialogButtonBox>
 #include <QGridLayout>
 #include <QKeyEvent>
 #include <QToolButton>
@@ -42,8 +41,11 @@
 // Local includes
 
 #include "addtagscombobox.h"
+#include "addtagscompletionbox.h"
+#include "addtagslineedit.h"
 #include "album.h"
 #include "albummanager.h"
+#include "albumtreeview.h"
 #include "dimg.h"
 #include "imageinfo.h"
 
@@ -63,7 +65,6 @@ public:
         confirmButton  = 0;
         rejectButton   = 0;
         layout         = 0;
-        buttonBox      = 0;
         tagModel       = 0;
         tagFilterModel = 0;
         tagFilteredModel = 0;
@@ -93,7 +94,6 @@ public:
     AlbumPointer<TAlbum>              parentTag;
 
     QGridLayout*                      layout;
-    QDialogButtonBox*                 buttonBox;
 
     AssignNameWidget* const           q;
 };
@@ -102,8 +102,10 @@ void AssignNameWidget::AssignNameWidgetPriv::clearWidgets()
 {
     delete comboBox;
     comboBox  = 0;
-    delete buttonBox;
-    buttonBox = 0;
+    delete confirmButton;
+    confirmButton = 0;
+    delete rejectButton;
+    rejectButton = 0;
 }
 
 QToolButton* AssignNameWidget::AssignNameWidgetPriv::createToolButton(const KGuiItem& gui)
@@ -115,7 +117,6 @@ QToolButton* AssignNameWidget::AssignNameWidgetPriv::createToolButton(const KGui
     b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     return b;
 }
-
 
 void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
 {
@@ -136,20 +137,26 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
 
         if (parentTag)
             comboBox->setParentTag(parentTag);
+
+        comboBox->setMinimumContentsLength(15);
+        /*comboBox->lineEdit()->completionBox()->setObjectName("addTagsComboBox-completionBox");
+        comboBox->lineEdit()->completionBox()->setFrameStyle(QFrame::StyledPanel);
+        comboBox->view()->parentWidget()->setObjectName("addTagsComboBox-viewContainer");*/
+   }
+
+    if (!confirmButton)
+    {
+        confirmButton = createToolButton(KStandardGuiItem::ok());
+        confirmButton->setText(i18n("Confirm"));
+        //confirmButton->setToolTip(i18n("Confirm that the selected person is shown here"));
+        q->connect(confirmButton, SIGNAL(clicked()),
+                   q, SLOT(slotConfirm()));
     }
 
-    if (!buttonBox)
+    if (!rejectButton)
     {
-        buttonBox     = new QDialogButtonBox(Qt::Horizontal);
-        confirmButton = createToolButton(KStandardGuiItem::ok());
-        rejectButton  = createToolButton(KStandardGuiItem::del());
-        buttonBox->addButton(confirmButton, QDialogButtonBox::AcceptRole);
-        buttonBox->addButton(rejectButton,  QDialogButtonBox::RejectRole);
-
-        q->connect(buttonBox, SIGNAL(accepted()),
-                   q, SLOT(slotConfirm()));
-
-        q->connect(buttonBox, SIGNAL(rejected()),
+        rejectButton  = createToolButton(KStandardGuiItem::remove());
+        q->connect(rejectButton, SIGNAL(clicked()),
                    q, SLOT(slotReject()));
     }
 }
@@ -160,18 +167,21 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
         return;
 
     layout->removeWidget(comboBox);
-    layout->removeWidget(buttonBox);
+    layout->removeWidget(confirmButton);
+    layout->removeWidget(rejectButton);
 
     if (layoutMode == AssignNameWidget::FullLine)
     {
         layout->addWidget(comboBox,  0, 0);
-        layout->addWidget(buttonBox, 0, 1);
+        layout->addWidget(confirmButton, 0, 1);
+        layout->addWidget(rejectButton, 0, 2);
         layout->setColumnStretch(0, 1);
     }
-    else
+    else if (layoutMode == AssignNameWidget::TwoLines || layoutMode == AssignNameWidget::Compact)
     {
-        layout->addWidget(comboBox,  0, 0);
-        layout->addWidget(buttonBox, 1, 0);
+        layout->addWidget(comboBox,  0, 0, 1, 2);
+        layout->addWidget(confirmButton, 1, 0);
+        layout->addWidget(rejectButton, 1, 1);
     }
 }
 
@@ -249,9 +259,7 @@ void AssignNameWidget::setBackgroundStyle(BackgroundStyle style)
     {
         setStyleSheet(
             "QFrame {"
-            "  background-color: "
-            "  qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(4, 4, 4, 66%), "
-            "                  stop: 0.6 rgba(0, 0, 0, 66%), stop:1 rgba(0, 0, 0, 66%)); "
+            "  background-color: rgba(0, 0, 0, 66%); "
             "  border: 1px solid rgba(100, 100, 100, 66%); "
             "  border-radius: 8px; "
             "} "
@@ -278,10 +286,19 @@ void AssignNameWidget::setBackgroundStyle(BackgroundStyle style)
             "} "
 
             "QComboBox { "
-            "  background-color: "
-            "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,100), "
-            "      stop:1 rgba(255,255,255,0)); "
+            "  color: white; "
+            "  background-color: transparent; "
             "} "
+
+            "QComboBox QAbstractItemView, KCompletionBox::item:!selected { "
+            "  color: white; "
+            "  background-color: rgba(0,0,0,80%); "
+            "} "
+            /*"KCompletionBox::item:hover, KCompletionBox::item:selected { "
+            "  background-color: "
+            "     qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(150,150,150,80%), "
+            "                     stop:0.5 rgba(25,25,25,100%), stop:1 rgba(150,150,150,80%)); "
+            " } "*/
         );
     }
     else if (style == StyledFrame)

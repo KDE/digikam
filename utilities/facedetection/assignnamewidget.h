@@ -62,6 +62,7 @@ public:
     {
         InvalidLayout,
         FullLine,
+        TwoLines,
         Compact
     };
 

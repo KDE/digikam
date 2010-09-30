@@ -380,7 +380,7 @@ AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const Databas
     AssignNameWidget* assignWidget = new AssignNameWidget;
     assignWidget->setMode(assignWidgetMode(face.type()));
     assignWidget->setBackgroundStyle(AssignNameWidget::TransparentRound);
-    assignWidget->setLayoutMode(AssignNameWidget::FullLine);
+    assignWidget->setLayoutMode(AssignNameWidget::TwoLines);
     assignWidget->setFace(info, identifier);
     checkModels();
     assignWidget->setTagModel(tagModel, filteredModel, filterModel);
@@ -421,6 +421,9 @@ void FaceGroup::load()
         d->visibilityController->addItem(item);
 
         d->items << item;
+        /*kDebug() << assignWidget->size() << assignWidget->sizeHint() << assignWidget->minimumSizeHint()
+                 << ((QComboBox*)assignWidget->comboBox())->view()->sizeHint() << ((QComboBox*)assignWidget->comboBox())->view()->minimumSizeHint()
+                 << assignWidget->sizePolicy() << assignWidget->comboBox()->sizeHint();*/
     }
 
     d->state = FacesLoaded;
@@ -456,11 +459,15 @@ void FaceGroup::rejectAll()
 
 void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
 {
-    int tagId         = action.tagId();
+    if (info != d->info)
+        return;
     FaceItem* item    = d->items[faceIdentifier.toInt()];
+
     DatabaseFace face = item->face();
     QRect currentRect = item->originalRect();
-    face              = d->faceIface.confirmName(d->info.id(), tagId, currentRect, face.region().toRect());
+
+    face              = d->faceIface.confirmName(d->info.id(), action.tagId(), currentRect, face.region().toRect());
+
     item->widget()->setMode(d->assignWidgetMode(face.type()));
     //item->widget()->setCurrentTag(face.tagId())
     item->setFace(face);
@@ -468,6 +475,8 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo& info,
 
 void FaceGroup::slotRejected(const ImageInfo& info, const QVariant& faceIdentifier)
 {
+    if (info != d->info)
+        return;
     FaceItem* item = d->items.takeAt(faceIdentifier.toInt());
     d->faceIface.removeFace(item->face());
 
