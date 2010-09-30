@@ -32,10 +32,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-// LibKIPI includes
-
-#include <libkipi/version.h>
-
 // Local includes
 
 #include "album.h"
@@ -51,7 +47,7 @@
 namespace Digikam
 {
 
-KipiImageInfo::KipiImageInfo(KIPI::Interface* interface, const KUrl& url)
+KipiImageInfo::KipiImageInfo(KIPI::Interface* const interface, const KUrl& url)
              : KIPI::ImageInfoShared(interface, url)
 {
     m_info = ImageInfo(url);
@@ -115,7 +111,11 @@ void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
     //AlbumManager::instance()->refreshItemHandler( _url );
 }
 
+#if KIPI_VERSION >= 0x010200
+void KipiImageInfo::cloneData( ImageInfoShared* const other )
+#else
 void KipiImageInfo::cloneData( ImageInfoShared* other )
+#endif
 {
     setDescription( other->description() );
     setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );

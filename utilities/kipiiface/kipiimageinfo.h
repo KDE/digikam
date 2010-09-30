@@ -41,6 +41,7 @@
 
 // LibKIPI includes
 
+#include <libkipi/version.h>
 #include <libkipi/interface.h>
 #include <libkipi/imageinfo.h>
 #include <libkipi/imageinfoshared.h>
@@ -58,7 +59,7 @@ class KipiImageInfo : public KIPI::ImageInfoShared
 {
 public:
 
-    KipiImageInfo(KIPI::Interface* interface, const KUrl& url);
+    KipiImageInfo(KIPI::Interface* const interface, const KUrl& url);
     ~KipiImageInfo();
 
     virtual QString title();
@@ -67,7 +68,11 @@ public:
     virtual QString description();
     virtual void setDescription(const QString&);
 
+#if KIPI_VERSION >= 0x010200
+    virtual void cloneData(ImageInfoShared* const other);
+#else
     virtual void cloneData(ImageInfoShared* other);
+#endif
 
     virtual QDateTime time(KIPI::TimeSpec spec);
     virtual void setTime(const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
