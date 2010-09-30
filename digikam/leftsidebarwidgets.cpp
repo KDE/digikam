@@ -1174,6 +1174,8 @@ void PeopleSideBarWidget::slotInit()
 void PeopleSideBarWidget::setActive(bool active)
 {
     emit requestFaceMode(active);
+    if (active)
+        d->tagFolderView->setCurrentAlbum(d->tagFolderView->currentAlbum());
 }
 
 void PeopleSideBarWidget::doLoadState()
