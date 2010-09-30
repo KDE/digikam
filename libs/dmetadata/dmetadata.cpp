@@ -971,6 +971,7 @@ QString DMetadata::getLensDescription() const
     lensExifTags.append("Exif.NikonLd2.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.NikonLd3.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.Minolta.LensID");        // Minolta Cameras Makernote.
+    lensExifTags.append("Exif.Sony1.LensID");          // Sony Cameras Makernote.
     lensExifTags.append("Exif.Sony2.LensID");          // Sony Cameras Makernote.
     lensExifTags.append("Exif.Pentax.LensType");       // Pentax Cameras Makernote.
     lensExifTags.append("Exif.Panasonic.0x0051");      // Panasonic Cameras Makernote.
@@ -992,7 +993,7 @@ QString DMetadata::getLensDescription() const
     {
         lens = getExifTagString((*it).toAscii());
         if ( !lens.isEmpty() &&
-             !lens.startsWith('(') && !lens.endsWith(')') )   // To prevent undecoded tag values from Exiv2 as "(65535)".
+             !(lens.startsWith('(') && lens.endsWith(')')) )   // To prevent undecoded tag values from Exiv2 as "(65535)".
             return lens;
     }
 
