@@ -267,6 +267,8 @@ public:
     */
     void setLineEditText(const QString& text);
 
+    void setLineEdit(QLineEdit *edit);
+
 protected:
 
     /** Sets a line edit. Called by installView().

@@ -112,6 +112,9 @@ void AlbumSelectComboBox::setModel(AbstractCheckableAlbumModel *model, AlbumFilt
 
 void AlbumSelectComboBox::installView(QAbstractItemView *v)
 {
+    if (view())
+        return;
+
     TreeViewLineEditComboBox::installView(v);
     view()->setSortingEnabled(true);
     view()->sortByColumn(0, Qt::AscendingOrder);

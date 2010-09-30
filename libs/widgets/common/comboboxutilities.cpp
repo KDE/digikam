@@ -216,6 +216,9 @@ StayPoppedUpComboBox::StayPoppedUpComboBox(QWidget *parent)
 
 void StayPoppedUpComboBox::installView(QAbstractItemView *view)
 {
+    if (m_view)
+        return;
+
     // Create view
     m_view = view;
 
@@ -389,9 +392,14 @@ void TreeViewLineEditComboBox::installView(QAbstractItemView *view)
 
 void TreeViewLineEditComboBox::installLineEdit()
 {
-    // replace line edit
-    m_comboLineEdit = new TreeViewComboBoxLineEdit(this);
-    setLineEdit(m_comboLineEdit);
+    if (!m_comboLineEdit)
+        setLineEdit(new TreeViewComboBoxLineEdit(this));
+}
+
+void TreeViewLineEditComboBox::setLineEdit(QLineEdit *edit)
+{
+    m_comboLineEdit = edit;
+    TreeViewComboBox::setLineEdit(edit);
 }
 
 } // namespace Digikam
