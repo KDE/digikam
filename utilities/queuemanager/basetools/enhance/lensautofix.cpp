@@ -63,7 +63,7 @@ LensAutoFix::LensAutoFix(QObject* parent)
            : BatchTool("LensAutoFix", EnhanceTool, parent),
              d(new LensAutoFixPriv)
 {
-    setToolTitle(i18n("Lens Auto-fix"));
+    setToolTitle(i18n("Lens Auto-Correction"));
     setToolDescription(i18n("A tool to fix automatically lens distorsions"));
     setToolIcon(KIcon(SmallIcon("lensautofix")));
 
