@@ -32,6 +32,7 @@
 namespace Digikam
 {
 
+class AddTagsLineEdit;
 class Album;
 class CheckableAlbumFilterModel;
 class TAlbum;
@@ -74,6 +75,9 @@ public:
     QString text() const;
     void setText(const QString& text);
 
+    AddTagsLineEdit *lineEdit() const;
+    TagTreeView     *view() const;
+
 public Q_SLOTS:
 
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */
@@ -92,13 +96,13 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotViewCurrentAlbumChanged(Album* album);
+    void slotViewIndexActivated(const QModelIndex&);
     void slotLineEditActionActivated(const TaggingAction& action);
 
 protected:
 
+    /// Note: Requires a tag tree view
     virtual void installView(QAbstractItemView *view = 0);
-    TagTreeView* view() const;
     virtual void sendViewportEventToView(QEvent* e);
 
 private:

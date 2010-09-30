@@ -63,10 +63,21 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
                : AlbumSelectComboBox(parent), d(new AddTagsComboBoxPriv)
 {
     QComboBox::setAutoCompletion(false);
-    setEditable(true);
     setCloseOnActivate(true);
     setCheckable(false);
 
+    d->lineEdit = new AddTagsLineEdit(this);
+ 
+    connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
+            this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
+
+    d->lineEdit->setClearButtonShown(true);
+
+    TagTreeView::Flags flags;
+    d->treeView = new TagTreeView(this, flags);
+
+    connect(d->treeView, SIGNAL(activated(const QModelIndex&)),
+            this, SLOT(slotViewIndexActivated(const QModelIndex&)));
 }
 
 AddTagsComboBox::~AddTagsComboBox()
@@ -76,39 +87,27 @@ AddTagsComboBox::~AddTagsComboBox()
 
 void AddTagsComboBox::setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
 {
-    // AlbumSelectComboBox calls virtual installView() and  installLineEdit(), below
     AlbumSelectComboBox::setModel(model, filterModel);
+
     d->treeView->setAlbumModel(model);
     d->treeView->setAlbumFilterModel(filteredModel, filterModel);
-
-    connect(view(), SIGNAL(currentAlbumChanged(Album*)),
-            this, SLOT(slotViewCurrentAlbumChanged(Album*)));
 
     d->lineEdit->setTagModel(model);
 }
 
 void AddTagsComboBox::installLineEdit()
 {
-    delete d->lineEdit;
-    d->lineEdit = new AddTagsLineEdit(this);
-
-    connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
-            this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
-
-    d->lineEdit->setClearButtonShown(true);
-    m_comboLineEdit = d->lineEdit;
-    setLineEdit(d->lineEdit);
+   setLineEdit(d->lineEdit);
 }
 
-void AddTagsComboBox::installView(QAbstractItemView *view)
+void AddTagsComboBox::installView(QAbstractItemView *v)
 {
-    if (!view && !d->treeView)
-    {
-        TagTreeView::Flags flags;
-        d->treeView = new TagTreeView(this, flags);
-    }
-    // called from initialize, tree view is constructed
-    AlbumSelectComboBox::installView(view ? view : d->treeView);
+    AlbumSelectComboBox::installView(v ? v : d->treeView);
+}
+
+AddTagsLineEdit *AddTagsComboBox::lineEdit() const
+{
+    return d->lineEdit;
 }
 
 TagTreeView* AddTagsComboBox::view() const
@@ -164,9 +163,10 @@ TaggingAction AddTagsComboBox::currentTaggingAction()
     return d->currentTaggingAction;
 }
 
-void AddTagsComboBox::slotViewCurrentAlbumChanged(Album* album)
+void AddTagsComboBox::slotViewIndexActivated(const QModelIndex& index)
 {
-    d->lineEdit->selectAll();
+    TAlbum *album = view()->albumForIndex(index);
+    //d->lineEdit->selectAll();
     if (album)
     {
         d->lineEdit->setText(album->title());
