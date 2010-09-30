@@ -101,8 +101,11 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
     d->iface           = new LensFunIface();
 
     QGridLayout* grid  = new QGridLayout(this);
-    d->metadataUsage   = new QCheckBox(i18n("Use Metadata"), this);
-    d->metadataResult  = new QLabel(this);
+    KHBox* hbox        = new KHBox(this);
+    d->metadataUsage   = new QCheckBox(i18n("Use Metadata"), hbox);
+    QLabel* space      = new QLabel(hbox);
+    d->metadataResult  = new QLabel(hbox);
+    hbox->setStretchFactor(space, 10);
 
     d->makeLabel       = new QLabel(i18nc("camera make",  "Make:"),  this);
     d->make            = new RComboBox(this);
@@ -140,20 +143,19 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
     d->distance->input()->setRange(0.0, 10000.0, 0.1, true);
     d->distance->setDefaultValue(0.0);
 
-    grid->addWidget(d->metadataUsage,  0,  0, 1, 3);
-    grid->addWidget(d->metadataResult, 1,  0, 1, 3);
-    grid->addWidget(d->makeLabel,      2,  0, 1, 3);
-    grid->addWidget(d->make,           3,  0, 1, 3);
-    grid->addWidget(d->modelLabel,     4,  0, 1, 3);
-    grid->addWidget(d->model,          5,  0, 1, 3);
-    grid->addWidget(d->lensLabel,      6,  0, 1, 3);
-    grid->addWidget(d->lens,           7,  0, 1, 3);
-    grid->addWidget(d->focalLabel,     8,  0, 1, 1);
-    grid->addWidget(d->focal,          8,  1, 1, 2);
-    grid->addWidget(d->aperLabel,      9,  0, 1, 1);
-    grid->addWidget(d->aperture,       9,  1, 1, 2);
-    grid->addWidget(d->distLabel,      10, 0, 1, 1);
-    grid->addWidget(d->distance,       10, 1, 1, 2);
+    grid->addWidget(hbox,          0, 0, 1, 3);
+    grid->addWidget(d->makeLabel,  1, 0, 1, 3);
+    grid->addWidget(d->make,       2, 0, 1, 3);
+    grid->addWidget(d->modelLabel, 3, 0, 1, 3);
+    grid->addWidget(d->model,      4, 0, 1, 3);
+    grid->addWidget(d->lensLabel,  5, 0, 1, 3);
+    grid->addWidget(d->lens,       6, 0, 1, 3);
+    grid->addWidget(d->focalLabel, 7, 0, 1, 1);
+    grid->addWidget(d->focal,      7, 1, 1, 2);
+    grid->addWidget(d->aperLabel,  8, 0, 1, 1);
+    grid->addWidget(d->aperture,   8, 1, 1, 2);
+    grid->addWidget(d->distLabel,  9, 0, 1, 1);
+    grid->addWidget(d->distance,   9, 1, 1, 2);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
@@ -282,15 +284,15 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
             switch (ret)
             {
                 case LensFunIface::MetadataNoMatch:
-                    d->metadataResult->setText(i18n("No match found"));
+                    d->metadataResult->setText(i18n("(no match found)"));
                     d->metadataResult->setStyleSheet(QString("QLabel {color: red;}"));
                     break;
                 case LensFunIface::MetadataPartialMatch:
-                    d->metadataResult->setText(i18n("Partial match found"));
+                    d->metadataResult->setText(i18n("(partial match found)"));
                     d->metadataResult->setStyleSheet(QString("QLabel {color: orange;}"));
                     break;
                 default:
-                    d->metadataResult->setText(i18n("Exact match found"));
+                    d->metadataResult->setText(i18n("(exact match found)"));
                     d->metadataResult->setStyleSheet(QString("QLabel {color: green;}"));
                     break;
             }
