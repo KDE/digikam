@@ -49,7 +49,7 @@ public:
     LensFunCameraSelector(QWidget* parent=0);
     virtual ~LensFunCameraSelector();
 
-    void enableUseMetadata(bool b);
+    void setEnabledUseMetadata(bool b);
 
     void setUseMetadata(bool b);
     bool useMetadata() const;
@@ -60,13 +60,15 @@ public:
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    /** Special mode used with BQM
+    void resetToDefault();
+
+    /** Special mode used with BQM which work wich process multiple items at the same time.
      */
     void setPassiveMetadataUsage(bool b);
 
     LensFunIface* iface() const;
 
-    void findFromMetadata(const DMetadata&);
+    void setMetadata(const DMetadata&);
 
 Q_SIGNALS:
 
@@ -86,8 +88,8 @@ private:
 
     LensFunIface::MetadataMatch findFromMetadata();
     void refreshSettingsView();
-    void updateDeviceCombos();
-    void updateLensCombo();
+    void populateDeviceCombos();
+    void populateLensCombo();
 
 private:
 

@@ -54,6 +54,8 @@ public:
     const lfCamera* const* lfCameras;
     const lfLens**         lfLenses;
 
+    QString                lensDescription;
+
     LensPtr                usedLens;
     DevicePtr              usedCamera;
 };
@@ -121,6 +123,11 @@ void LensFunIface::setUsedLens(LensPtr lens)
 lfDatabase* LensFunIface::lensFunDataBase() const
 {
     return d->lfDb;
+}
+
+QString LensFunIface::lensDescription() const
+{
+    return d->lensDescription;
 }
 
 const lfCamera* const* LensFunIface::lensFunCameras() const
@@ -197,10 +204,11 @@ LensFunIface::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const 
 
 LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta)
 {
-    MetadataMatch ret = MetadataNoMatch;
-    d->settings       = LensFunContainer();
-    d->usedCamera     = 0;
-    d->usedLens       = 0;
+    MetadataMatch ret  = MetadataNoMatch;
+    d->settings        = LensFunContainer();
+    d->usedCamera      = 0;
+    d->usedLens        = 0;
+    d->lensDescription = QString();
 
     if (meta.isEmpty())
     {
@@ -211,7 +219,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     PhotoInfoContainer photoInfo = meta.getPhotographInformation();
     QString make                 = photoInfo.make;
     QString model                = photoInfo.model;
-    QString lens                 = photoInfo.lens;
+    d->lensDescription           = photoInfo.lens;
 
     if (photoInfo.make.isEmpty())
     {
@@ -233,21 +241,21 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
         // ------------------------------------------------------------------------------------------------
 
-        if (!lens.isEmpty())
+        if (!d->lensDescription.isEmpty())
         {
             // Performing lens searches.
 
-            kDebug() << "Lens desc.     : " << lens;
+            kDebug() << "Lens desc.     : " << d->lensDescription;
             QMap<int, LensPtr> bestMatches;
             QString            lensCutted;
             LensList           lensList;
 
             // STAGE 1, search in DB as well.
-            lensList = findLenses(d->usedCamera, lens);
+            lensList = findLenses(d->usedCamera, d->lensDescription);
             if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
             // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
-            lensCutted = lens;
+            lensCutted = d->lensDescription;
             if (lensCutted.contains("Nikon"))
             {
                 lensCutted.replace("Nikon ", "");
@@ -262,7 +270,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
             // LAST STAGE, Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
             // "10.0 - 20.0 mm". This must be adapted like this : "10-20mm"
-            lensCutted = lens;
+            lensCutted = d->lensDescription;
             lensCutted.replace(QRegExp("\\.[0-9]"), "");
             lensCutted.replace(" - ", "-");
             lensCutted.replace(" mm", "mn");

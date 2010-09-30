@@ -77,7 +77,7 @@ LensAutoFix::LensAutoFix(QObject* parent)
     KSeparator* line  = new KSeparator(Qt::Horizontal);
     d->settingsView   = new LensFunSettings();
     d->cameraSelector->setPassiveMetadataUsage(true);
-    d->cameraSelector->enableUseMetadata(true);
+    d->cameraSelector->setEnabledUseMetadata(true);
 
     QGridLayout* grid = new QGridLayout(box);
     grid->addWidget(note,              0, 0, 1, 2);

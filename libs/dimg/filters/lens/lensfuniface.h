@@ -83,6 +83,10 @@ public:
     bool supportsGeometry()   const;
     bool supportsCCI()        const;
 
+    /** Return Lens string description found in metadata
+     */
+    QString lensDescription() const;
+
 protected:
 
     bool init();
