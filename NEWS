@@ -45,7 +45,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 252489 : digiKam incorrectly detects SD Card name.
 031 ==> 252521 : README incorrectly claims kdegraphics-4.4 is sufficient.
 032 ==> 249248 : Updating fingerprints metadata.
-033 ==> 
+033 ==> 125042 : Batch Rename Image from Album do not select all album images.
+034 ==>
 
 
 

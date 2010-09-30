@@ -360,6 +360,7 @@ private Q_SLOTS:
     void slotOpenWith(QAction* action);
     void slotABCContextMenu();
     void slotABCMenuTriggered(QAction*);
+    void slotDeselectAllAlbumItems();
 
 private:
 

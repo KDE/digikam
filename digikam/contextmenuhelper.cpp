@@ -32,6 +32,7 @@
 #include <QMimeData>
 #include <QPointer>
 #include <QString>
+#include <QTimer>
 
 // KDE includes
 
@@ -484,6 +485,14 @@ void ContextMenuHelper::slotABCMenuTriggered(QAction* action)
     emit signalAddNewTagFromABCMenu(name);
 }
 
+void ContextMenuHelper::slotDeselectAllAlbumItems()
+{
+    QAction* selectNoneAction = 0;
+    selectNoneAction = d->stdActionCollection->action("selectNone");
+
+    QTimer::singleShot(75, selectNoneAction, SIGNAL(triggered()));
+}
+
 void ContextMenuHelper::addSelectTagsMenu(Q3ListViewItem *item)
 {
     KMenu *selectTagsMenu         = new KMenu(i18nc("select tags menu", "Select"), d->parent);
@@ -519,16 +528,14 @@ void ContextMenuHelper::addExportMenu()
 
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
-    QAction* selectNoneAction = 0;
-    selectNoneAction = d->stdActionCollection->action("selectNone");
 
     if(!exportActions.isEmpty())
     {
         menuExport->addActions(exportActions);
         connect (menuExport, SIGNAL(hovered(QAction*)),
                  selectAllAction, SIGNAL(triggered()));
-        connect (menuExport, SIGNAL(triggered(QAction*)),
-                 selectNoneAction, SIGNAL(triggered()));
+        connect (menuExport, SIGNAL(aboutToHide()),
+                 this, SLOT(slotDeselectAllAlbumItems()));
     }
 
     d->parent->addMenu(menuExport);
