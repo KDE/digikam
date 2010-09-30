@@ -25,13 +25,7 @@
 #define CONFIG_LENSFUN_H
 
 #define CONF_PACKAGE "lensfun"
-#define CONF_SYMBOL_VISIBILITY 1
-
-/* Defined if your compiler is MSVC */
-#cmakedefine PLATFORM_WINDOWS
-
-/* Defined if your compiler is GNU-GCC */
-#cmakedefine CONF_COMPILER_GCC
+#define CONF_LENSFUN_STATIC 1
 
 /* Define path where are installed lens database XML files */
 #define CONF_DATADIR "${KDE4_DATA_INSTALL_DIR}/digikam/lensfun"
