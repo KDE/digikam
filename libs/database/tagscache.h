@@ -147,8 +147,17 @@ public:
      * Finds all tags with the given property. The tag
      *  a)just has the property
      *  b) has the property with the given value (value not null)
+     * Note: The returned list is sorted.
      */
     QList<int> tagsWithProperty(const QString& property, const QString& value = QString()) const;
+
+    /**
+     * This method is equivalent to calling tagsWithProperty(property), but the immediate result
+     * will be cached for subsequent calls.
+     * Use it for queries for which you know that they will be issued very often,
+     * so that it's worth caching the result of the already pretty fast tagsWithProperty().
+     */
+    QList<int> tagsWithPropertyCached(const QString& property) const;
 
     /**
      * Returns if a tag is to be regarded program-internal, that is,

@@ -82,8 +82,8 @@ public:
     QMultiHash<QString, int> nameHash;
 
     QList<TagProperty>       tagProperties;
+    QHash<QString, QList<int> > tagsWithProperty;
     QSet<int>                internalTags;
-    QSet<int>                doNotWriteTags;
 
     void checkInfos()
     {
@@ -124,13 +124,10 @@ public:
             tagProperties = props;
 
             QLatin1String internalProp = TagsCache::propertyNameDigikamInternalTag();
-            QLatin1String doNotWriteProp = TagsCache::propertyNameExcludedFromWriting();
             foreach (const TagProperty& property, tagProperties)
             {
                 if (property.property == internalProp)
                     internalTags << property.tagId;
-                else if (property.property == doNotWriteProp)
-                    doNotWriteTags << property.tagId;
             }
 
         }
@@ -172,6 +169,12 @@ public:
             return it->property == property;
         else
             return it->property == property && it->value == value;
+    }
+
+    template <typename T>
+    inline bool sortedListContains(const QList<T>& list, const T& value)
+    {
+        return qBinaryFind(list, value) != list.end();
     }
 };
 
@@ -619,6 +622,26 @@ QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& v
     return ids;
 }
 
+QList<int> TagsCache::tagsWithPropertyCached(const QString& property) const
+{
+    {
+        QReadLocker locker(&d->lock);
+        QHash<QString, QList<int> >::iterator it;
+        it = d->tagsWithProperty.find(property);
+        if (it != d->tagsWithProperty.end())
+            return it.value();
+    }
+
+    QList<int> tags = tagsWithProperty(property);
+
+    {
+        QWriteLocker locker(&d->lock);
+        d->tagsWithProperty[property] = tags;
+    }
+
+    return tags;
+}
+
 bool TagsCache::isInternalTag(int tagId)
 {
     d->checkProperties();
@@ -628,9 +651,13 @@ bool TagsCache::isInternalTag(int tagId)
 
 bool TagsCache::canBeWrittenToMetadata(int tagId)
 {
-    d->checkProperties();
-    QReadLocker locker(&d->lock);
-    return !d->internalTags.contains(tagId) && !d->doNotWriteTags.contains(tagId);
+    if (isInternalTag(tagId))
+        return false;
+
+    if (d->sortedListContains(tagsWithPropertyCached(propertyNameExcludedFromWriting()), tagId))
+        return false;
+
+    return true;
 }
 
 int TagsCache::getOrCreateInternalTag(const QString& tagName)
