@@ -48,7 +48,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 125042 : Batch Rename Image from Album do not select all album images.
 034 ==> 237516 : Open in Terminal command doesn't take KDE systemsettings into account.
 035 ==> 225552 : digiKam can't remember setting.
-036 ==>
+036 ==> 248087 : Preview not toggling from video mode to image mode.
+037 ==>
 
 
 

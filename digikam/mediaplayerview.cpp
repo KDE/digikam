@@ -223,7 +223,8 @@ void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previ
     d->nextAction->setEnabled(!next.isNull());
 
     KUrl url = info.fileUrl();
-    if (url.isEmpty())
+
+    if (info.isNull() || url.isEmpty())
     {
         d->player->stop();
         return;

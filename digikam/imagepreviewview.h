@@ -77,7 +77,6 @@ Q_SIGNALS:
     void signalPrevItem();
     void signalDeleteItem();
     void signalEditItem();
-    void signalPreviewLoaded(bool success);
     void signalBack2Album();
     void signalSlideShow();
     void signalInsert2LightTable();

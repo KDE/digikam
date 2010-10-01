@@ -88,6 +88,7 @@ public:
         loadFullImageSize    = false;
         previewSize          = 1024;
         isLoaded             = false;
+        isValid              = false;
         toolBar              = 0;
         back2AlbumAction     = 0;
         prevAction           = 0;
@@ -98,6 +99,7 @@ public:
 
     bool               loadFullImageSize;
     bool               isLoaded;
+    bool               isValid;
 
     int                previewSize;
 
@@ -231,15 +233,18 @@ void ImagePreviewView::setImagePath(const QString& path)
 {
     setCursor( Qt::WaitCursor );
 
-    d->path         = path;
+    d->path     = path;
+    d->isLoaded = false;
+    d->isValid  = false;
     d->nextPath.clear();
     d->previousPath.clear();
+    d->rotLeftAction->setEnabled(false);
+    d->rotRightAction->setEnabled(false);
 
     if (d->path.isEmpty())
     {
         slotReset();
         unsetCursor();
-        d->isLoaded = false;
         return;
     }
 
@@ -270,9 +275,10 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
     if (description.filePath != d->path || description.isThumbnail())
         return;
 
+    d->isLoaded = true;
+
     if (preview.isNull())
     {
-        d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
@@ -285,24 +291,20 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         p.end();
         // three copies - but the image is small
         setImage(DImg(pix.toImage()));
-        d->stack->previewLoaded();
-        d->isLoaded = false;
-        emit signalPreviewLoaded(false);
+        d->isValid = false;
     }
     else
     {
         DImg img(preview);
         if (AlbumSettings::instance()->getExifRotate())
             d->previewThread->exifRotate(img, description.filePath);
-        d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(img);
-        d->stack->previewLoaded();
-        d->isLoaded = true;
-        emit signalPreviewLoaded(true);
+        d->isValid = true;
     }
-
-    d->rotLeftAction->setEnabled(d->isLoaded);
-    d->rotRightAction->setEnabled(d->isLoaded);
+    d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
+    d->stack->previewLoaded();
+    d->rotLeftAction->setEnabled(d->isValid);
+    d->rotRightAction->setEnabled(d->isValid);
 
     unsetCursor();
     slotNextPreload();
@@ -341,6 +343,11 @@ void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& prev
             setImagePath(info.filePath());
         else
             setImagePath();
+    }
+    else if (d->isLoaded)
+    {
+        d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
+        d->stack->previewLoaded();
     }
 
     d->prevAction->setEnabled(!previous.isNull());
@@ -498,9 +505,10 @@ void ImagePreviewView::resetPreview()
     d->preview   = DImg();
     d->path.clear();
     d->imageInfo = ImageInfo();
+    d->isLoaded = false;
+    d->isValid = false;
 
     updateZoomAndSize(true);
-    emit signalPreviewLoaded(false);
 }
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
@@ -514,7 +522,7 @@ void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh
 
 void ImagePreviewView::viewportPaintExtraData()
 {
-    if (!m_movingInProgress && d->isLoaded)
+    if (!m_movingInProgress && d->isValid)
     {
         QPainter p(viewport());
         p.setRenderHint(QPainter::Antialiasing, true);
