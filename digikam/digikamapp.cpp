@@ -2220,7 +2220,7 @@ void DigikamApp::slotToggleFullScreen()
     {
         setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
 
-        menuBar()->show();
+        slotShowMenuBar();
         statusBar()->show();
 
         QList<KToolBar *> toolbars = toolBars();
@@ -2720,8 +2720,7 @@ void DigikamApp::slotToggleShowBar()
 
 void DigikamApp::slotShowMenuBar()
 {
-    const bool visible = menuBar()->isVisible();
-    menuBar()->setVisible(!visible);
+    menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
 void DigikamApp::moveEvent(QMoveEvent*)
