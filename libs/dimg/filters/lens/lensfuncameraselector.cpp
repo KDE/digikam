@@ -382,6 +382,17 @@ void LensFunCameraSelector::refreshSettingsView()
         makerIdx = d->make->combo()->findText(d->iface->settings().cameraMake);
         kDebug() << "makerIdx: " << makerIdx << " (" << d->iface->settings().cameraMake << ")";
     }
+    else
+    {
+        int i = d->make->combo()->findText(d->iface->makeDescription());
+        if (i == -1) i = d->make->combo()->findText("Generic");
+        if (i >= 0)
+        {
+            d->make->setCurrentIndex(i);
+            d->make->setEnabled(d->passiveMetadataUsage);
+            populateDeviceCombos();
+        }
+    }
 
     if (makerIdx >= 0)
     {
