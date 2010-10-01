@@ -78,6 +78,10 @@ public:
     BatchTool(const QString& name, BatchToolGroup group, QObject* parent=0);
     ~BatchTool();
 
+    /** Get description of an error which appear during apply() method.
+     */
+    QString errorDescription() const;
+
     /** Return group of tool. See BatchToolGroup enum for details.
      */
     BatchToolGroup toolGroup() const;
@@ -209,6 +213,10 @@ public Q_SLOTS:
     void slotSettingsChanged(const BatchToolSettings& settings);
 
 protected:
+
+    /** Set string to describe an error which appear during apply() method.
+     */
+    void setErrorDescription(const QString& errmsg);
 
     /** Return a reference of internal DImg container used to modify image data.
      */

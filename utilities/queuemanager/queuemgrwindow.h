@@ -109,7 +109,7 @@ private:
     void processOne();
     void processing(const KUrl& url);
     void processed(const KUrl& url, const KUrl& tmp);
-    void processingFailed(const KUrl& url);
+    void processingFailed(const KUrl& url, const QString& errMsg);
     void processingCanceled(const KUrl& url);
     void processingAborted();
 

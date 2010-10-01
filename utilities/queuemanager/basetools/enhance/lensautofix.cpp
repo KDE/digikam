@@ -193,7 +193,11 @@ bool LensAutoFix::toolOperations()
         DMetadata    meta(image().getMetadata());
         LensFunIface::MetadataMatch ret = iface.findFromMetadata(meta);
         prm                             = iface.settings();
-        if (ret != LensFunIface::MetadataExactMatch) return false;
+        if (ret != LensFunIface::MetadataExactMatch)
+        {
+            setErrorDescription(i18n("Cannot find all lens information to process lens auto-corrections"));
+            return false;
+        }
     }
     else
     {
