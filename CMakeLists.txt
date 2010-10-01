@@ -518,6 +518,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
             ADD_DEFINITIONS(-DTRE_REGEX_T_FIELD=value -DTRE_VERSION="0")
 
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include)
             INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include)
             INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/auxfun)
             INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/lensfun)
