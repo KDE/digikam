@@ -939,12 +939,11 @@ DColor DImg::getPixelColor(uint x, uint y) const
 {
     if (m_priv->null || x >= m_priv->width || y >= m_priv->height)
     {
-        kDebug() << "DImg::getPixelColor() : wrong pixel position!";
         return DColor();
     }
 
     int depth   = bytesDepth();
-    uchar *data = m_priv->data + x*depth + (m_priv->width*y*depth);
+    uchar* data = m_priv->data + x*depth + (m_priv->width*y*depth);
 
     return( DColor(data, m_priv->sixteenBit) );
 }
@@ -1010,11 +1009,10 @@ DColor DImg::getSubPixelColor(float x, float y) const
 {
     if (isNull() || x >= width() || y >= height())
     {
-        kDebug() << "DImg::getPixelColor() : wrong pixel position!";
         return DColor();
     }
 
-    const LANCZOS_DATA_TYPE *lanczos_func = m_priv->lanczos_func;
+    const LANCZOS_DATA_TYPE* lanczos_func = m_priv->lanczos_func;
     if (lanczos_func == 0)
         return DColor();
 
@@ -1169,18 +1167,16 @@ void DImg::setPixelColor(uint x, uint y, const DColor& color)
 {
     if (m_priv->null || x > m_priv->width || y > m_priv->height)
     {
-        kDebug() << "DImg::setPixelColor() : wrong pixel position!";
         return;
     }
 
     if (color.sixteenBit() != m_priv->sixteenBit)
     {
-        kDebug() << "DImg::setPixelColor() : wrong color depth!";
         return;
     }
 
     int depth   = bytesDepth();
-    uchar *data = m_priv->data + x*depth + (m_priv->width*y*depth);
+    uchar* data = m_priv->data + x*depth + (m_priv->width*y*depth);
     color.setPixel(data);
 }
 
