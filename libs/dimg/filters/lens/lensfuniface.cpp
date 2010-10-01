@@ -225,7 +225,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     if (meta.isEmpty())
     {
         kDebug() << "No metadata available";
-        return ret;
+        return LensFunIface::MetadataUnavailable;
     }
 
     PhotoInfoContainer photoInfo = meta.getPhotographInformation();

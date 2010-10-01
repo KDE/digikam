@@ -48,6 +48,7 @@ public:
 
     enum MetadataMatch
     {
+        MetadataUnavailable  = -2,
         MetadataNoMatch      = -1,
         MetadataPartialMatch = 0,
         MetadataExactMatch   = 1

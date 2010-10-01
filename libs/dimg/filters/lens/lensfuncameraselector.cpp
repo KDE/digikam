@@ -335,6 +335,10 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
             LensFunIface::MetadataMatch ret = findFromMetadata();
             switch (ret)
             {
+                case LensFunIface::MetadataUnavailable:
+                    d->metadataResult->setText(i18n("(no metadata available)"));
+                    d->metadataResult->setStyleSheet(QString("QLabel {color: red;}"));
+                    break;
                 case LensFunIface::MetadataNoMatch:
                     d->metadataResult->setText(i18n("(no match found)"));
                     d->metadataResult->setStyleSheet(QString("QLabel {color: red;}"));
