@@ -389,7 +389,6 @@ void LensFunCameraSelector::refreshSettingsView()
         if (i >= 0)
         {
             d->make->setCurrentIndex(i);
-            d->make->setEnabled(d->passiveMetadataUsage);
             populateDeviceCombos();
         }
     }
