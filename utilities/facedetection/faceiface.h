@@ -153,11 +153,6 @@ public:
      */
     QList<QRect>        getTagRects(qlonglong imageid) const;
 
-    /**
-     * Convert image-lister extra value from ioslave to a DatabaseFace
-     */
-    DatabaseFace        databaseFaceFromListing(qlonglong imageid, const QList<QVariant>& extraValues);
-
     // --- Face detection and recognition ---
 
     /**

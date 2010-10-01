@@ -36,6 +36,7 @@
 
 #include "databaseconstants.h"
 #include "tagregion.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -48,6 +49,12 @@ DatabaseFace::DatabaseFace()
 DatabaseFace::DatabaseFace(Type type, qlonglong imageId, int tagId, const QVariant& region)
             : m_type(type), m_imageId(imageId), m_tagId(tagId), m_region(region)
 {
+}
+
+DatabaseFace::DatabaseFace(const QString& attribute, qlonglong imageId, int tagId, const QVariant& region)
+            : m_imageId(imageId), m_tagId(tagId), m_region(region)
+{
+    m_type = typeForAttribute(attribute, tagId);
 }
 
 bool DatabaseFace::isNull() const
@@ -110,11 +117,11 @@ QString DatabaseFace::attributeForType(Type type)
     return QString();
 }
 
-DatabaseFace::Type DatabaseFace::databaseFaceType(const QString& attribute, int tagId, int unknownPeopleTagId)
+DatabaseFace::Type DatabaseFace::typeForAttribute(const QString& attribute, int tagId)
 {
     if (attribute == ImageTagPropertyName::autodetectedFace())
     {
-        if (tagId != -1 && tagId == unknownPeopleTagId)
+        if (tagId != -1 && TagsCache::instance()->hasProperty(tagId, TagPropertyName::unknownPerson()))
             return DatabaseFace::UnknownName;
         else
             return DatabaseFace::UnconfirmedName;
@@ -155,7 +162,7 @@ QVariant DatabaseFace::toVariant() const
     return list;
 }
 
-DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>& extraValues, int unknownPeopleTagId)
+DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>& extraValues)
 {
     if (extraValues.size() < 3)
         return DatabaseFace();
@@ -166,7 +173,7 @@ DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>&
     QString value = extraValues[0].toString();
     kDebug() << tagId << attribute << value;
 
-    return DatabaseFace(databaseFaceType(attribute, tagId, unknownPeopleTagId),
+    return DatabaseFace(attribute,
                         imageId, tagId,
                         TagRegion(value).toRect());
 }

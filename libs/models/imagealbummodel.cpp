@@ -39,7 +39,6 @@
 #include "databasechangesets.h"
 #include "databaseface.h"
 #include "databasewatch.h"
-#include "faceiface.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imagelister.h"
@@ -72,8 +71,6 @@ public:
     QString                  specialListing;
 
     bool                     extraValueJob;
-
-    FaceIface                faceIface; // TODO: move functionality to TagsCache
 };
 
 ImageAlbumModel::ImageAlbumModel(QObject *parent)
@@ -319,7 +316,7 @@ void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
 
             if (d->specialListing == "faces")
             {
-                DatabaseFace face = d->faceIface.databaseFaceFromListing(info.id(), record.extraValues);
+                DatabaseFace face = DatabaseFace::fromListing(info.id(), record.extraValues);
                 extraValues << face.toVariant();
             }
             else

@@ -62,6 +62,7 @@ public:
 
     DatabaseFace();
     DatabaseFace(Type type, qlonglong imageId, int tagId, const QVariant& region);
+    DatabaseFace(const QString& attribute, qlonglong imageId, int tagId, const QVariant& region);
 
     bool      isNull() const;
 
@@ -83,10 +84,9 @@ public:
     static QString     attributeForType(Type type);
     /**
      * Return the Type for the given attribute. To distinguish between UnknownName
-     * and UnconfirmedName, the tagId and the tag id used for the unknown name must be given
-     * (default is to return UnconfirmedName).
+     * and UnconfirmedName, the tagId must be given.
      */
-    static Type        databaseFaceType(const QString& attribute, int tagId = -1, int unknownPeopleTagId = -1);
+    static Type        typeForAttribute(const QString& attribute, int tagId = -1);
 
     /**
      * Writes the contents of this face - in a compact way - in the QVariant.
@@ -99,7 +99,7 @@ public:
     /**
      * Create a DatabaseFace from the extraValues returned from ImageLister.
      */
-    static DatabaseFace fromListing(qlonglong imageid, const QList<QVariant>&, int unknownPeopleTagId = -1);
+    static DatabaseFace fromListing(qlonglong imageid, const QList<QVariant>& values);
 
 protected:
 

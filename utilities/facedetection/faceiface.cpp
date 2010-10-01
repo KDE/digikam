@@ -82,10 +82,6 @@ public:
     double               recognitionThreshold;
     int                  detectionAccuracy;
 
-    int                  scannedForFacesTagId;
-    int                  peopleTagId;
-    int                  unknownPeopleTagId;
-
     ThumbnailLoadThread* thumbnailLoadThread;
 
 public:
@@ -94,6 +90,10 @@ public:
     KFaceIface::Database* database();
     /// Gives current pointer, never creates new object
     const KFaceIface::Database* databaseConst() const;
+
+    int                  scannedForFacesTagId() const;
+    int                  peopleTagId() const;
+    int                  unknownPeopleTagId() const;
 
     void    setupTags();
     void    checkThumbnailThread();
@@ -123,19 +123,37 @@ const KFaceIface::Database* FaceIface::FaceIfacePriv::databaseConst() const
     return kfaceDatabase;
 }
 
+
+int FaceIface::FaceIfacePriv::scannedForFacesTagId() const
+{
+    return TagsCache::instance()->getOrCreateInternalTag("Scanned for Faces"); // no i18n
+}
+
+int FaceIface::FaceIfacePriv::peopleTagId() const
+{
+    return TagsCache::instance()->getOrCreateTag(i18nc("People on your photos", "People"));
+}
+
+int FaceIface::FaceIfacePriv::unknownPeopleTagId() const
+{
+    QList<int> ids = TagsCache::instance()->tagsWithPropertyCached(TagPropertyName::unknownPerson());
+    if (!ids.isEmpty())
+        return ids.first();
+    return -1;
+}
+
 void FaceIface::FaceIfacePriv::setupTags()
 {
     // Internal tag
-    scannedForFacesTagId = TagsCache::instance()->getOrCreateInternalTag("Scanned for Faces"); // no i18n
+    unknownPeopleTagId();
 
     // Faces parent tag
-    peopleTagId          = TagsCache::instance()->getOrCreateTag(i18nc("People on your photos", "People"));
+    peopleTagId();
 
     // Unknown people tag
-    unknownPeopleTagId   = findFirstTagWithProperty(TagPropertyName::unknownPerson());
-    if (!unknownPeopleTagId)
+    if (unknownPeopleTagId() == -1)
     {
-        unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(faceTagPath(i18n("Unknown")));
+        int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(faceTagPath(i18n("Unknown")));
         TagProperties props(unknownPeopleTagId);
         props.setProperty(TagPropertyName::person(), QString()); // no name associated
         props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property
@@ -162,7 +180,7 @@ int FaceIface::FaceIfacePriv::findFirstTagWithProperty(const QString& property, 
 
 QString FaceIface::FaceIfacePriv::faceTagPath(const QString& name) const
 {
-    QString faceParentTagName = TagsCache::instance()->tagName(peopleTagId);
+    QString faceParentTagName = TagsCache::instance()->tagName(peopleTagId());
     return faceParentTagName + '/' + name;
 }
 
@@ -197,7 +215,7 @@ bool FaceIface::hasBeenScanned(qlonglong imageid) const
 
 bool FaceIface::hasBeenScanned(const ImageInfo& info) const
 {
-    return info.tagIds().contains(d->scannedForFacesTagId);
+    return info.tagIds().contains(d->scannedForFacesTagId());
 }
 
 void FaceIface::markAsScanned(qlonglong imageid, bool hasBeenScanned) const
@@ -208,9 +226,9 @@ void FaceIface::markAsScanned(qlonglong imageid, bool hasBeenScanned) const
 void FaceIface::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
 {
     if (hasBeenScanned)
-        ImageInfo(info).setTag(d->scannedForFacesTagId);
+        ImageInfo(info).setTag(d->scannedForFacesTagId());
     else
-        ImageInfo(info).removeTag(d->scannedForFacesTagId);
+        ImageInfo(info).removeTag(d->scannedForFacesTagId());
 }
 
 // --- Face tags ---------------------------------------------------------------------------------------------------
@@ -218,7 +236,7 @@ void FaceIface::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
 int FaceIface::tagForFaceName(const QString& kfaceId) const
 {
     if (kfaceId.isNull())
-        return d->unknownPeopleTagId;
+        return d->unknownPeopleTagId();
 
     // Find in "kfaceId" attribute
     int tagId = d->findFirstTagWithProperty(TagPropertyName::kfaceId(), kfaceId);
@@ -260,7 +278,7 @@ QList<QString> FaceIface::allPersonPaths() const
 int FaceIface::tagForPerson(const QString& name, const QString& fullName) const
 {
     if (name.isNull() && fullName.isNull())
-        return d->unknownPeopleTagId;
+        return d->unknownPeopleTagId();
 
     // First attempt: Find by full name in "person" attribute
     int tagId = d->findFirstTagWithProperty(TagPropertyName::person(), fullName.isNull() ? name : fullName);
@@ -337,7 +355,7 @@ QList<Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
         Face f;
         f.setRect(rect);
 
-        if (databaseFace.tagId() != d->unknownPeopleTagId)
+        if (databaseFace.tagId() != d->unknownPeopleTagId())
             f.setName(faceNameForTag(databaseFace.tagId()));
 
         faceList += f;
@@ -362,8 +380,7 @@ QList<DatabaseFace> FaceIface::databaseFaces(qlonglong imageid, DatabaseFace::Ty
                 if (!rect.isValid())
                     continue;
 
-                DatabaseFace::Type type = DatabaseFace::databaseFaceType(attribute, pair.tagId(), d->unknownPeopleTagId);
-                faces << DatabaseFace(type, imageid, pair.tagId(), rect);
+                faces << DatabaseFace(attribute, imageid, pair.tagId(), rect);
             }
         }
     }
@@ -383,7 +400,7 @@ QList<ImageTagPair> FaceIface::faceImageTagPairs(qlonglong imageid, DatabaseFace
             continue;
 
         // UnknownName and UnconfirmedName have the same attribute
-        if (!(flags & DatabaseFace::UnknownName) && pair.tagId() == d->unknownPeopleTagId)
+        if (!(flags & DatabaseFace::UnknownName) && pair.tagId() == d->unknownPeopleTagId())
             continue;
 
         if (!pair.hasAnyProperty(attributes))
@@ -463,11 +480,6 @@ KFaceIface::Image FaceIface::toImage(const DImg& image)
     return KFaceIface::Image(image.width(), image.height(),
                              image.sixteenBit(), image.hasAlpha(),
                              image.bits());
-}
-
-DatabaseFace FaceIface::databaseFaceFromListing(qlonglong imageid, const QList<QVariant>& extraValues)
-{
-    return DatabaseFace::fromListing(imageid, extraValues, d->unknownPeopleTagId);
 }
 
 // --- Face detection and recognition ------------------------------------------------------------------------------------
@@ -583,7 +595,7 @@ DatabaseFace FaceIface::confirmName(qlonglong imageid, int tagId, const QRect& r
     QString region         = TagRegion(rect).toXml();
     QString regionToRemove = previousRect.isNull() ? region : TagRegion(previousRect).toXml();
 
-    ImageTagPair pairUnknown ( imageid, d->unknownPeopleTagId);
+    ImageTagPair pairUnknown ( imageid, d->unknownPeopleTagId());
     ImageTagPair pairNamed   ( imageid, tagId );
 
     pairUnknown.removeProperty(ImageTagPropertyName::autodetectedFace(), regionToRemove);
