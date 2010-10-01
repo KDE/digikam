@@ -99,4 +99,16 @@ void WorkingWidget::changeImage()
     emit animationStep();
 }
 
+void WorkingWidget::toggleTimer(bool turnOn)
+{
+    if(turnOn && !d->timer.isActive())
+    {
+        d->timer.start();
+    }
+    else if(!turnOn && d->timer.isActive())
+    {
+        d->timer.stop();
+    }
+}
+
 } // namespace Digikam

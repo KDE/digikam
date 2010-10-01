@@ -50,6 +50,7 @@ public:
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     WorkingWidget* getWidget() const;
     void           resetThumbsCounter();
+    void           delayedAnimationTimerStop() const;
 
 public Q_SLOTS:
 

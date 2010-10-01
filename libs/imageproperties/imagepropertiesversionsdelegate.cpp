@@ -27,6 +27,7 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QTimer>
 
 // KDE includes
 
@@ -62,14 +63,12 @@ public:
 ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegate(QObject* parent)
                                : QStyledItemDelegate(parent), d(new ImagePropertiesVersionsDelegatePriv)
 {
-    KColorScheme sysColors(QPalette::Normal);
-    
     d->workingWidget = new WorkingWidget();
     d->thumbsPainted = 0;
-    //TODO: get system color for views as a background
-    QColor viewBgColor = sysColors.background().color();
-    d->workingWidget->setStyleSheet(QString("background-color: rgb(%1, %2, %2);").arg(viewBgColor.red(),
-                                    viewBgColor.green(), viewBgColor.blue()));
+
+    //FIXME: this doesn't work, it needs some better way how to paint it transparentely, ie. get the view color
+    // make the workingWidget's background transparent
+    //d->workingWidget->setStyleSheet(QString("background-color: rgba(255, 255, 255, 0%);"));
 
     connect(d->workingWidget, SIGNAL(animationStep()),
             this, SLOT(slotAnimationStep()));
@@ -118,14 +117,18 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
         }
         if(d->thumbsPainted == index.model()->rowCount())
         {
-            //the animation gets disconnected after the last thumbnail is drawn
-            //this way it won't uselessly emit signals that model has updated data (which has not)
-            disconnect(d->workingWidget, SIGNAL(animationStep()), 0, 0);
+            // the timer can be stopped after last thumbnail is drawn,
+            // but it needs to be delayed a little, so that all thumbs
+            // have enough time to get painted correctly
+            delayedAnimationTimerStop();
+            
         }
     }
     else
     {
         //when the thumbnail is not loaded yet, start the animation
+        d->workingWidget->toggleTimer(true);
+
         connect(d->workingWidget, SIGNAL(animationStep()),
                 dynamic_cast<const ImageVersionsModel*>(index.model()), SLOT(slotAnimationStep()));
 
@@ -166,6 +169,11 @@ void ImagePropertiesVersionsDelegate::slotAnimationStep()
 void ImagePropertiesVersionsDelegate::resetThumbsCounter()
 {
     d->thumbsPainted = 0;
+}
+
+void ImagePropertiesVersionsDelegate::delayedAnimationTimerStop() const
+{
+    QTimer::singleShot(1500, d->workingWidget, SLOT(toggleTimer()));
 }
 
 } // namespace Digikam

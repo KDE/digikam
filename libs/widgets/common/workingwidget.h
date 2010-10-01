@@ -49,6 +49,9 @@ Q_SIGNALS:
 
     void animationStep();
 
+public Q_SLOTS:
+    void toggleTimer(bool turnOn = false);
+
 private Q_SLOTS:
 
     void changeImage();
