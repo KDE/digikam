@@ -46,7 +46,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 252521 : README incorrectly claims kdegraphics-4.4 is sufficient.
 032 ==> 249248 : Updating fingerprints metadata.
 033 ==> 125042 : Batch Rename Image from Album do not select all album images.
-034 ==>
+034 ==> 237516 : Open in Terminal command doesn't take KDE systemsettings into account.
+035 ==>
 
 
 

@@ -25,16 +25,13 @@
 
 #include "digikamview.moc"
 
-// Qt includes
-
-#include <QProcess>
-
 // KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
+#include <ktoolinvocation.h>
 #include <krun.h>
 
 // Local includes
@@ -972,18 +969,24 @@ void DigikamView::slotAlbumOpenInTerminal()
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
 
-    const QString terminalApp("konsole");
-    QStringList args;
-    args << "--workdir" << palbum->folderPath();
-    const bool success = QProcess::startDetached(terminalApp, args);
-
-    if (!success)
+    if (!palbum)
     {
-        KMessageBox::error(this,
-            i18n("Cannot start the \"konsole\" application.\n"
-                 "Please make sure that it is installed and in your path."),
-            windowTitle()/*i18n("Open Album in Terminal")*/);
+        return;
     }
+
+    QString dir(palbum->folderPath());
+
+    // If the given directory is not local, it can still be the URL of an
+    // ioslave using UDS_LOCAL_PATH which to be converted first.
+    KUrl url = KIO::NetAccess::mostLocalUrl(dir, this);
+
+    //If the URL is local after the above conversion, set the directory.
+    if (url.isLocalFile())
+    {
+        dir = url.toLocalFile();
+    }
+
+    KToolInvocation::invokeTerminal(QString(), dir);
 }
 
 void DigikamView::slotAlbumRefresh()
