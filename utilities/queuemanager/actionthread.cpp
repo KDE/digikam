@@ -164,13 +164,14 @@ void ActionThread::run()
 
             // Loop with all batch tools operations to apply on item.
 
-            d->cancel    = false;
-            int index    = 0;
-            bool success = false;
-            KUrl outUrl  = t->item.m_itemUrl;
-            KUrl inUrl;
+            d->cancel          = false;
+            int        index   = 0;
+            bool       success = false;
+            KUrl       outUrl  = t->item.m_itemUrl;
+            KUrl       inUrl;
             KUrl::List tmp2del;
-            DImg tmpImage;
+            DImg       tmpImage;
+            QString    errMsg;
 
             for (BatchToolMap::const_iterator it = t->item.m_toolsMap.constBegin();
                  !d->cancel && (it != t->item.m_toolsMap.constEnd()) ; ++it)
@@ -202,6 +203,7 @@ void ActionThread::run()
                 outUrl   = d->tool->outputUrl();
                 success  = d->tool->apply();
                 tmpImage = d->tool->imageData();
+                errMsg   = d->tool->errorDescription();
                 tmp2del.append(outUrl);
                 d->tool  = 0;
 
@@ -239,6 +241,7 @@ void ActionThread::run()
                     ActionData ad5;
                     ad5.fileUrl = t->item.m_itemUrl;
                     ad5.status  = ActionData::BatchFailed;
+                    if (!errMsg.isEmpty()) ad5.message = errMsg;
                     emit finished(ad5);
 
                     break;

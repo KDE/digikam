@@ -225,7 +225,8 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 # Set config files accordingly with optional dependencies
 
 CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
-CONFIGURE_FILE(libs/3rdparty/lensfun/include/config-lensfun.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include/config-lensfun.h)
+CONFIGURE_FILE(libs/3rdparty/lensfun/include/config-lensfun.h.cmake
+               ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include/config-lensfun.h)
 
 # ==================================================================================================
 # Log messages
@@ -398,7 +399,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # To prevent warnings from M$ compiler
 
     IF(WIN32 AND MSVC)
-	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+        ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
     ENDIF(WIN32 AND MSVC)
 
     # ==================================================================================================

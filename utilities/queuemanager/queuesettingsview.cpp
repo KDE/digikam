@@ -105,7 +105,7 @@ QueueSettingsView::QueueSettingsView(QWidget* parent)
     // --------------------------------------------------------
 
     QScrollArea* sv = new QScrollArea(this);
-    QWidget *panel  = new QWidget(sv->viewport());
+    QWidget* panel  = new QWidget(sv->viewport());
     sv->setWidget(panel);
     sv->setWidgetResizable(true);
 

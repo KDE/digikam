@@ -63,7 +63,7 @@ LensAutoFix::LensAutoFix(QObject* parent)
            : BatchTool("LensAutoFix", EnhanceTool, parent),
              d(new LensAutoFixPriv)
 {
-    setToolTitle(i18n("Lens Auto-fix"));
+    setToolTitle(i18n("Lens Auto-Correction"));
     setToolDescription(i18n("A tool to fix automatically lens distorsions"));
     setToolIcon(KIcon(SmallIcon("lensautofix")));
 
@@ -77,7 +77,7 @@ LensAutoFix::LensAutoFix(QObject* parent)
     KSeparator* line  = new KSeparator(Qt::Horizontal);
     d->settingsView   = new LensFunSettings();
     d->cameraSelector->setPassiveMetadataUsage(true);
-    d->cameraSelector->enableUseMetadata(true);
+    d->cameraSelector->setEnabledUseMetadata(true);
 
     QGridLayout* grid = new QGridLayout(box);
     grid->addWidget(note,              0, 0, 1, 2);
@@ -110,8 +110,8 @@ BatchToolSettings LensAutoFix::defaultSettings()
     prm.insert("filterCCA",       true);
     prm.insert("filterVIG",       true);
     prm.insert("filterCCI",       true);
-    prm.insert("filterDST",      true);
-    prm.insert("filterGEO",      true);
+    prm.insert("filterDST",       true);
+    prm.insert("filterGEO",       true);
 
     prm.insert("cropFactor",      -1.0);
     prm.insert("focalLength",     -1.0);
@@ -164,8 +164,8 @@ void LensAutoFix::slotSettingsChanged()
     prm.insert("filterCCA",       (bool)settings.filterCCA);
     prm.insert("filterVIG",       (bool)settings.filterVIG);
     prm.insert("filterCCI",       (bool)settings.filterCCI);
-    prm.insert("filterDST",      (bool)settings.filterDST);
-    prm.insert("filterGEO",      (bool)settings.filterGEO);
+    prm.insert("filterDST",       (bool)settings.filterDST);
+    prm.insert("filterGEO",       (bool)settings.filterGEO);
 
     prm.insert("cropFactor",      (double)settings.cropFactor);
     prm.insert("focalLength",     (double)settings.focalLength);
@@ -191,17 +191,21 @@ bool LensAutoFix::toolOperations()
     {
         LensFunIface iface;
         DMetadata    meta(image().getMetadata());
-        bool         ret = iface.findFromMetadata(meta);
-        prm = iface.settings();
-        if (!ret) return false;
+        LensFunIface::MetadataMatch ret = iface.findFromMetadata(meta);
+        prm                             = iface.settings();
+        if (ret != LensFunIface::MetadataExactMatch)
+        {
+            setErrorDescription(i18n("Cannot find all lens information to process lens auto-corrections"));
+            return false;
+        }
     }
     else
     {
         prm.filterCCA       = settings()["filterCCA"].toBool();
         prm.filterVIG       = settings()["filterVIG"].toBool();
         prm.filterCCI       = settings()["filterCCI"].toBool();
-        prm.filterDST      = settings()["filterDST"].toBool();
-        prm.filterGEO      = settings()["filterGEO"].toBool();
+        prm.filterDST       = settings()["filterDST"].toBool();
+        prm.filterGEO       = settings()["filterGEO"].toBool();
 
         prm.cropFactor      = settings()["cropFactor"].toDouble();
         prm.focalLength     = settings()["focalLength"].toDouble();

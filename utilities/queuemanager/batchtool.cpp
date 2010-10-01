@@ -66,6 +66,7 @@ public:
     bool                      cancel;
     bool                      last;
 
+    QString                   errorMessage;
     QString                   toolTitle;          // User friendly tool title.
     QString                   toolDescription;    // User friendly tool description.
 
@@ -129,6 +130,16 @@ BatchTool::~BatchTool()
     delete d->settingsWidget;
     delete d->observer;
     delete d;
+}
+
+QString BatchTool::errorDescription() const
+{
+    return d->errorMessage;
+}
+
+void BatchTool::setErrorDescription(const QString& errmsg)
+{
+    d->errorMessage = errmsg;
 }
 
 BatchTool::BatchToolGroup BatchTool::toolGroup() const

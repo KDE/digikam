@@ -25,8 +25,6 @@
 #define CONFIG_LENSFUN_H
 
 #define CONF_PACKAGE "lensfun"
-
-/* We don't need to export Lensfun library symbol */
 #define CONF_LENSFUN_STATIC 1
 
 /* Define path where are installed lens database XML files */

@@ -48,6 +48,7 @@ public:
 
     enum MetadataMatch
     {
+        MetadataUnavailable  = -2,
         MetadataNoMatch      = -1,
         MetadataPartialMatch = 0,
         MetadataExactMatch   = 1
@@ -83,12 +84,25 @@ public:
     bool supportsGeometry()   const;
     bool supportsCCI()        const;
 
+    /** Return Camera maker string description found in metadata
+    */
+    QString makeDescription() const;
+
+    /** Return Camera model string description found in metadata
+    */
+    QString modelDescription() const;
+
+    /** Return Lens string description found in metadata
+     */
+    QString lensDescription() const;
+
 protected:
 
     bool init();
 
 private:
 
+    QString  metadataMatchDebugStr(MetadataMatch val) const;
     LensList findLenses(const lfCamera* camera, const QString& lensDesc,
                         const QString& lensMaker=QString()) const;
 

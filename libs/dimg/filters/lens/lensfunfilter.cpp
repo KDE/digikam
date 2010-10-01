@@ -64,6 +64,7 @@ LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent,  const LensFunCont
 
 LensFunFilter::~LensFunFilter()
 {
+    if (d->modifier) d->modifier->Destroy();
     delete d->iface;
     delete d;
 }
@@ -77,6 +78,7 @@ void LensFunFilter::filterImage()
         kError() << "ERROR: LensFun Interface is null.";
         return;
     }
+
     if (!d->iface->usedLens())
     {
         kError() << "ERROR: LensFun Interface Lens device is null.";
@@ -138,7 +140,6 @@ void LensFunFilter::filterImage()
     if ( steps < 1 )
     {
         kDebug() << "No LensFun Modifier steps. There is nothing to process...";
-        if (d->modifier) d->modifier->Destroy();
         return;
     }
 
@@ -256,7 +257,6 @@ void LensFunFilter::filterImage()
     // clean up
 
     delete [] pos;
-    if (d->modifier) d->modifier->Destroy();
 }
 
 bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const

@@ -65,7 +65,7 @@ public:
 
     LensAutoFixToolPriv() :
         configGroupName("Lens Auto-Correction Tool"),
-
+        configShowGrid("Show Grid"),
         maskPreviewLabel(0),
         showGrid(0),
         settingsView(0),
@@ -75,6 +75,7 @@ public:
         {}
 
     const QString          configGroupName;
+    const QString          configShowGrid;
 
     QLabel*                maskPreviewLabel;
 
@@ -110,11 +111,14 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->cameraSelector = new LensFunCameraSelector(d->gboxSettings->plainPage());
+    DImg* img = d->previewWidget->imageIface()->getOriginalImg();
+    DMetadata meta(img->getMetadata());
+    d->cameraSelector->setMetadata(meta);
     KSeparator* line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    d->settingsView = new LensFunSettings(d->gboxSettings->plainPage());
+    d->settingsView   = new LensFunSettings(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
@@ -127,7 +131,6 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
     grid->setSpacing(d->gboxSettings->spacingHint());
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 
@@ -140,7 +143,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
     connect(d->showGrid, SIGNAL(toggled(bool)),
             this, SLOT(slotTimer()));
 
-    QTimer::singleShot(0, this, SLOT(slotResetSettings()));
+    init();
 }
 
 LensAutoFixTool::~LensAutoFixTool()
@@ -164,6 +167,7 @@ void LensAutoFixTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
+    d->showGrid->setChecked(group.readEntry(d->configShowGrid, false));
     d->cameraSelector->readSettings(group);
     d->settingsView->readSettings(group);
     d->gboxSettings->blockSignals(false);
@@ -174,6 +178,8 @@ void LensAutoFixTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configShowGrid, d->showGrid->isChecked());
     d->cameraSelector->writeSettings(group);
     d->settingsView->writeSettings(group);
     group.sync();
@@ -182,12 +188,8 @@ void LensAutoFixTool::writeSettings()
 void LensAutoFixTool::slotResetSettings()
 {
     d->gboxSettings->blockSignals(true);
-
-    // Read Exif information ...
-    DImg* img = d->previewWidget->imageIface()->getOriginalImg();
-    DMetadata meta(img->getMetadata());
-    d->cameraSelector->findFromMetadata(meta);
-
+    d->showGrid->setChecked(false);
+    d->cameraSelector->resetToDefault();
     d->gboxSettings->blockSignals(false);
 }
 

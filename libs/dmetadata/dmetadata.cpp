@@ -1044,11 +1044,14 @@ QString DMetadata::getLensDescription() const
     lensExifTags.append("Exif.NikonLd2.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.NikonLd3.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.Minolta.LensID");        // Minolta Cameras Makernote.
+    lensExifTags.append("Exif.Sony1.LensID");          // Sony Cameras Makernote.
     lensExifTags.append("Exif.Sony2.LensID");          // Sony Cameras Makernote.
+    lensExifTags.append("Exif.SonyMinolta.LensID");    // Sony Cameras Makernote.
     lensExifTags.append("Exif.Pentax.LensType");       // Pentax Cameras Makernote.
     lensExifTags.append("Exif.Panasonic.0x0051");      // Panasonic Cameras Makernote.
     lensExifTags.append("Exif.Panasonic.0x0310");      // Panasonic Cameras Makernote.
     lensExifTags.append("Exif.Sigma.LensRange");       // Sigma Cameras Makernote.
+    lensExifTags.append("Exif.Samsung2.LensType");     // Samsung Cameras Makernote.
     lensExifTags.append("Exif.Photo.0xFDEA");          // Non-standard Exif tag set by Camera Raw.
 
     // TODO : add Fuji and Olympus, camera Makernotes.
@@ -1064,7 +1067,8 @@ QString DMetadata::getLensDescription() const
     for (QStringList::Iterator it = lensExifTags.begin(); it != lensExifTags.end(); ++it)
     {
         lens = getExifTagString((*it).toAscii());
-        if (!lens.isEmpty())
+        if ( !lens.isEmpty() &&
+             !(lens.startsWith('(') && lens.endsWith(')')) )   // To prevent undecoded tag values from Exiv2 as "(65535)".
             return lens;
     }
 

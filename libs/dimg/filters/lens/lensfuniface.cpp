@@ -54,6 +54,10 @@ public:
     const lfCamera* const* lfCameras;
     const lfLens**         lfLenses;
 
+    QString                makeDescription;
+    QString                modelDescription;
+    QString                lensDescription;
+
     LensPtr                usedLens;
     DevicePtr              usedCamera;
 };
@@ -121,6 +125,21 @@ void LensFunIface::setUsedLens(LensPtr lens)
 lfDatabase* LensFunIface::lensFunDataBase() const
 {
     return d->lfDb;
+}
+
+QString LensFunIface::makeDescription() const
+{
+    return d->makeDescription;
+}
+
+QString LensFunIface::modelDescription() const
+{
+    return d->modelDescription;
+}
+
+QString LensFunIface::lensDescription() const
+{
+    return d->lensDescription;
 }
 
 const lfCamera* const* LensFunIface::lensFunCameras() const
@@ -197,51 +216,58 @@ LensFunIface::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const 
 
 LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta)
 {
-    MetadataMatch ret = MetadataNoMatch;
-    d->settings       = LensFunContainer();
-    d->usedCamera     = 0;
-    d->usedLens       = 0;
+    MetadataMatch ret  = MetadataNoMatch;
+    d->settings        = LensFunContainer();
+    d->usedCamera      = 0;
+    d->usedLens        = 0;
+    d->lensDescription = QString();
 
     if (meta.isEmpty())
-        return ret;
+    {
+        kDebug() << "No metadata available";
+        return LensFunIface::MetadataUnavailable;
+    }
 
     PhotoInfoContainer photoInfo = meta.getPhotographInformation();
-    QString make                 = photoInfo.make;
-    QString model                = photoInfo.model;
-    QString lens                 = photoInfo.lens;
+    d->makeDescription           = photoInfo.make;
+    d->modelDescription          = photoInfo.model;
+    d->lensDescription           = photoInfo.lens;
 
-    if (photoInfo.make.isEmpty())
+    if (d->makeDescription.isEmpty())
+    {
+        kDebug() << "No camera maker info available";
         return ret;
+    }
 
     // ------------------------------------------------------------------------------------------------
 
-    const lfCamera** lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
+    bool exactMatch           = true;
+    const lfCamera** lfCamera = d->lfDb->FindCameras( d->makeDescription.toAscii().constData(), d->modelDescription.toAscii().constData() );
 
     if (lfCamera && *lfCamera)
     {
         setUsedCamera(*lfCamera);
-        bool exactMatch = true;
 
-        kDebug() << "Camera maker : " << d->settings.cameraMake;
-        kDebug() << "Camera model : " << d->settings.cameraModel;
+        kDebug() << "Camera maker   : " << d->settings.cameraMake;
+        kDebug() << "Camera model   : " << d->settings.cameraModel;
 
         // ------------------------------------------------------------------------------------------------
+        // -- Performing lens description searches.
 
-        if (!lens.isEmpty())
+        if (!d->lensDescription.isEmpty())
         {
-            // Performing lens searches.
 
-            kDebug() << "Lens desc.   : " << lens;
+            kDebug() << "Lens desc.     : " << d->lensDescription;
             QMap<int, LensPtr> bestMatches;
             QString            lensCutted;
             LensList           lensList;
 
             // STAGE 1, search in DB as well.
-            lensList = findLenses(d->usedCamera, lens);
+            lensList = findLenses(d->usedCamera, d->lensDescription);
             if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
             // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
-            lensCutted = lens;
+            lensCutted = d->lensDescription;
             if (lensCutted.contains("Nikon"))
             {
                 lensCutted.replace("Nikon ", "");
@@ -256,7 +282,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
             // LAST STAGE, Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
             // "10.0 - 20.0 mm". This must be adapted like this : "10-20mm"
-            lensCutted = lens;
+            lensCutted = d->lensDescription;
             lensCutted.replace(QRegExp("\\.[0-9]"), "");
             lensCutted.replace(" - ", "-");
             lensCutted.replace(" mm", "mn");
@@ -266,87 +292,126 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
             // Display the results.
 
-            if (bestMatches.isEmpty() || bestMatches.count() > 1)
+            if (bestMatches.isEmpty())
             {
-                kDebug() << "lens matches : NOT FOUND";
+                kDebug() << "lens matches   : NOT FOUND";
                 exactMatch &= false;
             }
             else
             {
-                setUsedLens(bestMatches[bestMatches.keys()[0]]);
-                kDebug() << "Lens found   : " << d->settings.lensModel;
-                kDebug() << "Crop Factor  : " << d->settings.cropFactor;
+                // Best case for an exact match is to have only one item returned by Lensfun searches.
+                QMap<int, LensPtr>::const_iterator it = bestMatches.find(1);
+                if (it != bestMatches.end())
+                {
+                    setUsedLens(bestMatches[it.key()]);
+                    kDebug() << "Lens found     : " << d->settings.lensModel;
+                    kDebug() << "Crop Factor    : " << d->settings.cropFactor;
+                }
+                else
+                {
+                    kDebug() << "lens matches   : more than one...";
+                    exactMatch &= false;
+                }
             }
-
-            // ------------------------------------------------------------------------------------------------
-
-            QString temp = photoInfo.focalLength;
-            if (temp.isEmpty())
-            {
-                kDebug() << "Focal Length : NOT FOUND";
-                exactMatch &= false;
-            }
-            d->settings.focalLength = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
-            kDebug() << "Focal Length : " << d->settings.focalLength;
-
-            // ------------------------------------------------------------------------------------------------
-
-            temp = photoInfo.aperture;
-            if (temp.isEmpty())
-            {
-                kDebug() << "Aperture     : NOT FOUND";
-                exactMatch &= false;
-            }
-            d->settings.aperture = temp.mid(1).toDouble();
-            kDebug() << "Aperture     : " << d->settings.aperture;
-
-            // ------------------------------------------------------------------------------------------------
-            // Try to get subject distance value.
-
-            // From standard Exif.
-            temp = meta.getExifTagString("Exif.Photo.SubjectDistance");
-            if (temp.isEmpty())
-            {
-                // From standard XMP.
-                temp = meta.getXmpTagString("Xmp.exif.SubjectDistance");
-            }
-            if (temp.isEmpty())
-            {
-                // From Canon Makernote.
-                temp = meta.getExifTagString("Exif.CanonSi.SubjectDistance");
-            }
-            if (temp.isEmpty())
-            {
-                // From Nikon Makernote.
-                temp = meta.getExifTagString("Exif.NikonLd2.FocusDistance");
-            }
-            if (temp.isEmpty())
-            {
-                // From Nikon Makernote.
-                temp = meta.getExifTagString("Exif.NikonLd3.FocusDistance");
-            }
-            // TODO: Add here others Makernotes tags.
-
-            if (temp.isEmpty())
-            {
-                kDebug() << "Subject dist.: NOT FOUND";
-                exactMatch &= false;
-            }
-
-            temp                        = temp.replace(" m", "");
-            d->settings.subjectDistance = temp.toDouble();
-            kDebug() << "Subject dist.  : " << d->settings.subjectDistance;
         }
         else
         {
+            kDebug() << "Lens description string is empty";
             exactMatch &= false;
         }
-
-        ret = exactMatch ? MetadataExactMatch : MetadataPartialMatch;
+    }
+    else
+    {
+        kDebug() << "Cannot find Lensfun camera device for (" << d->makeDescription << " - " << d->modelDescription << ")";
+        exactMatch &= false;
     }
 
-    kDebug() << "Metadata match : " << ret;
+    // ------------------------------------------------------------------------------------------------
+    // Performing Lens settings searches.
 
+    QString temp = photoInfo.focalLength;
+    if (temp.isEmpty())
+    {
+        kDebug() << "Focal Length   : NOT FOUND";
+        exactMatch &= false;
+    }
+    d->settings.focalLength = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
+    kDebug() << "Focal Length   : " << d->settings.focalLength;
+
+    // ------------------------------------------------------------------------------------------------
+
+    temp = photoInfo.aperture;
+    if (temp.isEmpty())
+    {
+        kDebug() << "Aperture       : NOT FOUND";
+        exactMatch &= false;
+    }
+    d->settings.aperture = temp.mid(1).toDouble();
+    kDebug() << "Aperture       : " << d->settings.aperture;
+
+    // ------------------------------------------------------------------------------------------------
+    // Try to get subject distance value.
+
+    // From standard Exif.
+    temp = meta.getExifTagString("Exif.Photo.SubjectDistance");
+    if (temp.isEmpty())
+    {
+        // From standard XMP.
+        temp = meta.getXmpTagString("Xmp.exif.SubjectDistance");
+    }
+    if (temp.isEmpty())
+    {
+        // From Canon Makernote.
+        temp = meta.getExifTagString("Exif.CanonSi.SubjectDistance");
+    }
+    if (temp.isEmpty())
+    {
+        // From Nikon Makernote.
+        temp = meta.getExifTagString("Exif.NikonLd2.FocusDistance");
+    }
+    if (temp.isEmpty())
+    {
+        // From Nikon Makernote.
+        temp = meta.getExifTagString("Exif.NikonLd3.FocusDistance");
+    }
+    // TODO: Add here others Makernotes tags.
+
+    if (temp.isEmpty())
+    {
+        kDebug() << "Subject dist.  : NOT FOUND";
+        exactMatch &= false;
+    }
+    else
+    {
+        temp                        = temp.replace(" m", "");
+        d->settings.subjectDistance = temp.toDouble();
+        kDebug() << "Subject dist.  : " << d->settings.subjectDistance;
+    }
+
+    // ------------------------------------------------------------------------------------------------
+
+    ret = exactMatch ? MetadataExactMatch : MetadataPartialMatch;
+
+    kDebug() << "Metadata match : " << metadataMatchDebugStr(ret);
+
+    return ret;
+}
+
+QString LensFunIface::metadataMatchDebugStr(MetadataMatch val) const
+{
+    QString ret;
+    switch(val)
+    {
+        case MetadataNoMatch:
+            ret = QString("No Match");
+            break;
+        case MetadataPartialMatch:
+            ret = QString("Partial Match");
+            break;
+        default:
+            ret = QString("Exact Match");
+            break;
+    }
     return ret;
 }
 

@@ -26,6 +26,8 @@
 // Qt includes
 
 #include <QLabel>
+#include <QGridLayout>
+#include <QFont>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QString>
@@ -33,7 +35,6 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <khbox.h>
 #include <klocale.h>
 #include <kvbox.h>
 
@@ -92,22 +93,51 @@ ToolSettingsView::ToolSettingsView(QWidget* parent)
 
     // --------------------------------------------------------------------------
 
-    KVBox* vbox          = new KVBox(this);
-    KHBox* hbox          = new KHBox(vbox);
-    d->settingsViewIcon  = new QLabel(hbox);
-    d->settingsViewTitle = new QLabel(hbox);
-    d->settingsViewReset = new QPushButton(hbox);
+    KVBox* vbox            = new KVBox(this);
+    QFrame* toolDescriptor = new QFrame(vbox);
+    d->settingsViewIcon    = new QLabel();
+    d->settingsViewTitle   = new QLabel();
+    QFont font             = d->settingsViewTitle->font();
+    font.setBold(true);
+    d->settingsViewTitle->setFont(font);
+
+    d->settingsViewReset = new QPushButton();
     d->settingsViewReset->setIcon(SmallIcon("document-revert"));
     d->settingsViewReset->setToolTip(i18n("Reset current tool settings to default values."));
 
-    d->settingsView      = new QScrollArea(vbox);
-    d->settingsView->setWidgetResizable(true);
-    d->settingsViewIcon->setAlignment(Qt::AlignRight);
+    QString frameStyle = QString("QFrame {"
+            "color: %1;"
+            "border: 1px solid %2;"
+            "border-radius: 5px;"
+            "background-color: %3;"
+            "}")
+            .arg(ThemeEngine::instance()->textSelColor().name())
+            .arg(ThemeEngine::instance()->textSelColor().name())
+            .arg(ThemeEngine::instance()->thumbSelColor().name());
+
+    QString noFrameStyle("QFrame {"
+            "border: none;"
+            "}");
+
+    d->settingsViewIcon->setStyleSheet(noFrameStyle);
+    d->settingsViewTitle->setStyleSheet(noFrameStyle);
+    d->settingsViewReset->setStyleSheet(noFrameStyle);
+    toolDescriptor->setStyleSheet(frameStyle);
+
+    d->settingsViewIcon->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->settingsViewTitle->setAlignment(Qt::AlignCenter);
 
-    hbox->setMargin(0);
-    hbox->setSpacing(KDialog::spacingHint());
-    hbox->setStretchFactor(d->settingsViewTitle, 10);
+    QGridLayout* descrLayout = new QGridLayout();
+    descrLayout->addWidget(d->settingsViewIcon,  0, 0, 1, 1);
+    descrLayout->addWidget(d->settingsViewTitle, 0, 1, 1, 1);
+    descrLayout->addWidget(d->settingsViewReset, 0, 2, 1, 1);
+    descrLayout->setColumnStretch(1, 10);
+    toolDescriptor->setLayout(descrLayout);
+
+    // --------------------------------------------------------------------------
+
+    d->settingsView = new QScrollArea(vbox);
+    d->settingsView->setWidgetResizable(true);
 
     vbox->setMargin(0);
     vbox->setSpacing(0);

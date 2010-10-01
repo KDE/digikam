@@ -947,7 +947,7 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         }
         case ActionData::BatchFailed:
         {
-            processingFailed(ad.fileUrl);
+            processingFailed(ad.fileUrl, ad.message);
             processOne();
             break;
         }
@@ -1110,12 +1110,13 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
     d->currentProcessItem = 0;
 }
 
-void QueueMgrWindow::processingFailed(const KUrl&)
+void QueueMgrWindow::processingFailed(const KUrl&, const QString& errMsg)
 {
     if (d->currentProcessItem)
     {
         d->currentProcessItem->setCanceled();
         addHistoryMessage(i18n("Failed to process item..."), DHistoryView::ErrorEntry);
+        addHistoryMessage(errMsg, DHistoryView::ErrorEntry);
     }
 
     if (d->currentTaskItem)

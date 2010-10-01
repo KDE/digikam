@@ -102,7 +102,9 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Restoration(this));
     registerTool(new LocalContrast(this));
     registerTool(new AntiVignetting(this));
+#ifdef HAVE_GLIB2
     registerTool(new LensAutoFix(this));
+#endif // HAVE_GLIB2
 
     // Color
     registerTool(new BCGCorrection(this));
