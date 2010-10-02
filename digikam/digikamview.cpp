@@ -950,7 +950,7 @@ void DigikamView::slotAlbumSelected(Album* album)
         d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
 }
 
-void DigikamView::slotAlbumOpenInKonqui()
+void DigikamView::slotAlbumOpenInFileManager()
 {
     Album *album = d->albumManager->currentAlbum();
     if (!album || album->type() != Album::PHYSICAL)

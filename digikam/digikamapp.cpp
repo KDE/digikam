@@ -728,9 +728,9 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->openInKonquiAction = new KAction(KIcon("folder-open"), i18n("Open in File Manager"), this);
-    connect(d->openInKonquiAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumOpenInKonqui()));
-    actionCollection()->addAction("album_openinkonqui", d->openInKonquiAction);
+    d->openInFileManagerAction = new KAction(KIcon("folder-open"), i18n("Open in File Manager"), this);
+    connect(d->openInFileManagerAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumOpenInFileManager()));
+    actionCollection()->addAction("album_openinfilemanager", d->openInFileManagerAction);
 
     // -----------------------------------------------------------
 
@@ -1241,7 +1241,7 @@ void DigikamApp::initGui()
     d->deleteAction->setEnabled(false);
     d->addImagesAction->setEnabled(false);
     d->propsEditAction->setEnabled(false);
-    d->openInKonquiAction->setEnabled(false);
+    d->openInFileManagerAction->setEnabled(false);
     d->openInTerminalAction->setEnabled(false);
 
     d->imageViewAction->setEnabled(false);
@@ -1326,7 +1326,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->deleteAction->setEnabled(false);
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
-        d->openInKonquiAction->setEnabled(false);
+        d->openInFileManagerAction->setEnabled(false);
         d->openInTerminalAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
@@ -1339,7 +1339,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->deleteAction->setEnabled(false);
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
-        d->openInKonquiAction->setEnabled(false);
+        d->openInFileManagerAction->setEnabled(false);
         d->openInTerminalAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
@@ -1358,7 +1358,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->deleteAction->setEnabled(isNormalAlbum);
         d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
         d->propsEditAction->setEnabled(isNormalAlbum);
-        d->openInKonquiAction->setEnabled(true);
+        d->openInFileManagerAction->setEnabled(true);
         d->openInTerminalAction->setEnabled(true);
         d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
         d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
