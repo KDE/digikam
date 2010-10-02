@@ -44,6 +44,7 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
+#include "metadatasettings.h"
 #include "tagscache.h"
 
 namespace Digikam
@@ -697,6 +698,14 @@ void ImageScanner::copyProperties(qlonglong source, qlonglong dest)
 
 void ImageScanner::loadFromDisk()
 {
+    MetadataSettings* const mSettings = MetadataSettings::instance();
+    if (mSettings)
+    {
+        MetadataSettingsContainer set = mSettings->settings();
+
+        m_metadata.setUseXMPSidecar4Reading(set.useXMPSidecar4Reading);
+    }
+
     m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
     if (m_scanInfo.category == DatabaseItem::Image)
         m_hasImage = m_img.loadImageInfo(m_fileInfo.filePath(), false, false, false, false);
