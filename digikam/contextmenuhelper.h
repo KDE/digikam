@@ -149,7 +149,7 @@ public:
      * @param recv the receiver of the triggered action
      * @param slot the slot to connect the triggered action to
      */
-    void addActionCut(QObject* recv, const char* slot);
+    void addStandardActionCut(QObject* recv, const char* slot);
 
     /**
      * Add the standard copy action and connect it to the appropriate slot
@@ -157,7 +157,7 @@ public:
      * @param recv the receiver of the triggered action
      * @param slot the slot to connect the triggered action to
      */
-    void addActionCopy(QObject* recv, const char* slot);
+    void addStandardActionCopy(QObject* recv, const char* slot);
 
     /**
      * Add the standard paste action and connect it to the appropriate slot
@@ -165,7 +165,7 @@ public:
      * @param recv the receiver of the triggered action
      * @param slot the slot to connect the triggered action to
      */
-    void addActionPaste(QObject* recv, const char* slot);
+    void addStandardActionPaste(QObject* recv, const char* slot);
 
     /**
      * Add the standard delete action and connect it to the appropriate slot
@@ -175,7 +175,7 @@ public:
      * @param quantity the number of the files that should be deleted. This parameter is used for
      * the action name and is normally used when deleting more then one item.
      */
-    void addActionItemDelete(QObject* recv, const char* slot, int quantity = 1);
+    void addStandardActionItemDelete(QObject* recv, const char* slot, int quantity = 1);
 
     /**
      * Add the lighttable action to the menu.
@@ -184,7 +184,7 @@ public:
      * to handle special cases here. Depending on whether the lighttable window
      * has already been created and filled with items, we set different actions.
      */
-    void addActionLightTable();
+    void addStandardActionLightTable();
 
     /**
      * Add the thumbnail action to the menu.
@@ -196,7 +196,7 @@ public:
      * @param ids the selected items in the current view
      * @param album the current album the AlbumIconView is displaying
      */
-    void addActionThumbnail(imageIds& ids, Album* album);
+    void addStandardActionThumbnail(imageIds& ids, Album* album);
 
     /**
      * Add the services menu to the menu.

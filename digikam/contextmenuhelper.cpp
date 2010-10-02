@@ -155,7 +155,7 @@ void ContextMenuHelper::addAction(QAction* action, QObject* recv, const char* sl
     addAction(action, addDisabled);
 }
 
-void ContextMenuHelper::addActionLightTable()
+void ContextMenuHelper::addStandardActionLightTable()
 {
     QAction* action = 0;
     QStringList ltActionNames;
@@ -170,7 +170,7 @@ void ContextMenuHelper::addActionLightTable()
     addAction(action);
 }
 
-void ContextMenuHelper::addActionThumbnail(imageIds& ids, Album* album)
+void ContextMenuHelper::addStandardActionThumbnail(imageIds& ids, Album* album)
 {
     if (d->setThumbnailAction)
         return;
@@ -662,19 +662,19 @@ void ContextMenuHelper::addQueueManagerMenu()
     d->parent->addMenu(bqmMenu);
 }
 
-void ContextMenuHelper::addActionCut(QObject* recv, const char* slot)
+void ContextMenuHelper::addStandardActionCut(QObject* recv, const char* slot)
 {
     KAction* cut = KStandardAction::cut(recv, slot, d->parent);
     addAction(cut);
 }
 
-void ContextMenuHelper::addActionCopy(QObject* recv, const char* slot)
+void ContextMenuHelper::addStandardActionCopy(QObject* recv, const char* slot)
 {
     KAction* copy = KStandardAction::copy(recv, slot, d->parent);
     addAction(copy);
 }
 
-void ContextMenuHelper::addActionPaste(QObject* recv, const char* slot)
+void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 {
     KAction* paste = KStandardAction::paste(recv, slot, d->parent);
 
@@ -684,7 +684,7 @@ void ContextMenuHelper::addActionPaste(QObject* recv, const char* slot)
     addAction(paste);
 }
 
-void ContextMenuHelper::addActionItemDelete(QObject* recv, const char* slot, int quantity)
+void ContextMenuHelper::addStandardActionItemDelete(QObject* recv, const char* slot, int quantity)
 {
     QAction *trashAction = new QAction(SmallIcon("user-trash"), i18ncp("@action:inmenu Pluralized",
                                        "Move to Trash", "Move %1 Files to Trash", quantity), d->parent);

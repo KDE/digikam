@@ -388,11 +388,11 @@ void ImagePreviewView::slotContextMenu()
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
-    cmhelper.addActionLightTable();
+    cmhelper.addStandardActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addActionItemDelete(this, SLOT(slotDeleteItem()));
+    cmhelper.addStandardActionItemDelete(this, SLOT(slotDeleteItem()));
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAssignTagsMenu(idList);
