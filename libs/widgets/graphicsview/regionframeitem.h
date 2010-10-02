@@ -73,6 +73,7 @@ public:
      */
     void setHudWidget(QGraphicsWidget *hudWidget);
     void setHudWidget(QWidget *widget, Qt::WindowFlags wFlags = 0);
+    QGraphicsWidget *hudWidget() const;
 
     void setHudWidgetVisible(bool visible);
 

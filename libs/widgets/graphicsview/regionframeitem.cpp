@@ -438,6 +438,11 @@ void RegionFrameItem::setHudWidget(QGraphicsWidget *hudWidget)
     }
 }
 
+QGraphicsWidget *RegionFrameItem::hudWidget() const
+{
+    return d->hudWidget;
+}
+
 void RegionFrameItem::setFlags(Flags flags)
 {
     if (d->flags == flags)
