@@ -86,7 +86,7 @@ public:
      * Return the Type for the given attribute. To distinguish between UnknownName
      * and UnconfirmedName, the tagId must be given.
      */
-    static Type        typeForAttribute(const QString& attribute, int tagId = -1);
+    static Type        typeForAttribute(const QString& attribute, int tagId = 0);
 
     /**
      * Writes the contents of this face - in a compact way - in the QVariant.

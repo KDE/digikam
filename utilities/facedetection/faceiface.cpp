@@ -63,7 +63,7 @@ class FaceIface::FaceIfacePriv
 {
 public:
 
-    FaceIfacePriv()
+    FaceIfacePriv(FaceIface *q) : q(q)
     {
         kfaceDatabase        = 0; // created on demand
         thumbnailLoadThread  = 0;
@@ -97,13 +97,16 @@ public:
 
     void    setupTags();
     void    checkThumbnailThread();
-    QString faceTagPath(const QString& name) const;
-    int     makeFaceTag(const QString& tagPath, const QString& fullName, const QString& kfaceId);
-    int     findFirstTagWithProperty(const QString& property, const QString& value = QString());
+    QString tagPath(const QString& name, int parentId) const;
+    void    makeFaceTag(int tagId, const QString& fullName) const;
+    int     findFirstTagWithProperty(const QString& property, const QString& value = QString()) const;
+    int     tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName, bool convert, bool create) const;
 
 private:
 
     KFaceIface::Database* kfaceDatabase;
+
+    FaceIface * const     q;
 };
 
 // --- Private methods, face tag utility methods --------------------------------------------------------
@@ -139,7 +142,7 @@ int FaceIface::FaceIfacePriv::unknownPeopleTagId() const
     QList<int> ids = TagsCache::instance()->tagsWithPropertyCached(TagPropertyName::unknownPerson());
     if (!ids.isEmpty())
         return ids.first();
-    return -1;
+    return 0;
 }
 
 void FaceIface::FaceIfacePriv::setupTags()
@@ -151,9 +154,9 @@ void FaceIface::FaceIfacePriv::setupTags()
     peopleTagId();
 
     // Unknown people tag
-    if (unknownPeopleTagId() == -1)
+    if (!unknownPeopleTagId())
     {
-        int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(faceTagPath(i18n("Unknown")));
+        int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(tagPath(i18n("Unknown"), peopleTagId()));
         TagProperties props(unknownPeopleTagId);
         props.setProperty(TagPropertyName::person(), QString()); // no name associated
         props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property
@@ -170,7 +173,7 @@ void FaceIface::FaceIfacePriv::checkThumbnailThread()
     }
 }
 
-int FaceIface::FaceIfacePriv::findFirstTagWithProperty(const QString& property, const QString& value)
+int FaceIface::FaceIfacePriv::findFirstTagWithProperty(const QString& property, const QString& value) const
 {
     QList<int> candidates = TagsCache::instance()->tagsWithProperty(property, value);
     if (!candidates.isEmpty())
@@ -178,25 +181,106 @@ int FaceIface::FaceIfacePriv::findFirstTagWithProperty(const QString& property, 
     return 0;
 }
 
-QString FaceIface::FaceIfacePriv::faceTagPath(const QString& name) const
+QString FaceIface::FaceIfacePriv::tagPath(const QString& name, int parentId) const
 {
-    QString faceParentTagName = TagsCache::instance()->tagName(peopleTagId());
+    QString faceParentTagName = TagsCache::instance()->tagName(parentId);
     return faceParentTagName + '/' + name;
 }
 
-int FaceIface::FaceIfacePriv::makeFaceTag(const QString& tagPath, const QString& fullName, const QString& kfaceId)
+void FaceIface::FaceIfacePriv::makeFaceTag(int tagId, const QString& fullName) const
 {
-    int tagId = TagsCache::instance()->getOrCreateTag(tagPath);
+    QString kfaceId  = fullName;
+    /*
+     *    // find a unique kfaceId
+     *    for (int i=0; d->findFirstTagWithProperty(TagPropertyName::kfaceId(), kfaceId); ++i)
+     *        kfaceId = fullName + QString(" (%1)").arg(i);
+     */
     TagProperties props(tagId);
     props.setProperty(TagPropertyName::person(), fullName);
     props.setProperty(TagPropertyName::kfaceId(), kfaceId);
-    return tagId;
+}
+
+int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName,
+                                         bool convert, bool create) const
+{
+    if (name.isNull() && givenFullName.isNull() && !tagId)
+        return unknownPeopleTagId();
+
+    QString fullName = givenFullName.isNull() ? name : givenFullName;
+
+    if (tagId)
+    {
+        if (q->isPerson(tagId))
+        {
+            kDebug() << "Proposed tag is already a person";
+            return tagId;
+        }
+        else if (convert)
+        {
+            if (fullName.isNull())
+                fullName = TagsCache::instance()->tagName(tagId);
+            kDebug() << "Converting proposed tag to person, full name" << fullName;
+            makeFaceTag(tagId, fullName);
+            return tagId;
+        }
+        return 0;
+    }
+
+    // First attempt: Find by full name in "person" attribute
+    QList<int> candidates = TagsCache::instance()->tagsWithProperty(TagPropertyName::person(), fullName);
+    foreach (int id, candidates)
+    {
+        kDebug() << "Candidate with set full name:" << id << fullName;
+        if (parentId == -1)
+            return id;
+        else if (TagsCache::instance()->parentTag(id) == parentId)
+            return id;
+    }
+
+    // Second attempt: Find by tag name
+    if (parentId == -1)
+        candidates = TagsCache::instance()->tagsForName(name);
+    else
+    {
+        int tagId = TagsCache::instance()->tagForName(name, parentId);
+        candidates.clear();
+        if (tagId)
+            candidates << tagId;
+    }
+    foreach (int id, candidates)
+    {
+        // Is this tag already a person tag?
+        if (q->isPerson(id))
+        {
+            kDebug() << "Found tag with name" << name << "is already a person." << id;
+            return id;
+        }
+        else if (convert)
+        {
+            kDebug() << "Converting tag with name" << name << "to a person." << id;
+            makeFaceTag(id, fullName);
+            return id;
+        }
+    }
+
+    // Third: If desired, create a new tag
+    if (create)
+    {
+        kDebug() << "Creating new tag for name" << name << "fullName" << fullName;
+        if (parentId == -1)
+            parentId = peopleTagId();
+        int id = TagsCache::instance()->getOrCreateTag(tagPath(name, parentId));
+        makeFaceTag(id, fullName);
+        return tagId;
+    }
+
+    return 0;
 }
 
 // --- Constructor / Destructor -------------------------------------------------------------------------------------
 
 FaceIface::FaceIface()
-         : d( new FaceIfacePriv() )
+         : d( new FaceIfacePriv(this) )
 {
     readConfigSettings();
 }
@@ -275,38 +359,19 @@ QList<QString> FaceIface::allPersonPaths() const
     return TagsCache::instance()->tagPaths(allPersonTags());
 }
 
-int FaceIface::tagForPerson(const QString& name, const QString& fullName) const
+int FaceIface::tagForPerson(const QString& name, int parentId, const QString& fullName) const
 {
-    if (name.isNull() && fullName.isNull())
-        return d->unknownPeopleTagId();
-
-    // First attempt: Find by full name in "person" attribute
-    int tagId = d->findFirstTagWithProperty(TagPropertyName::person(), fullName.isNull() ? name : fullName);
-    if (!tagId)
-        return tagId;
-
-    // Second attempt: Find by tag name
-    QList<int> tagList = TagsCache::instance()->tagsForName(name);
-    foreach(int id, tagList)
-    {
-        if (isPerson(id))
-           return id;
-    }
-
-    return 0;
+    return d->tagForName(name, 0, parentId, fullName, false, false);
 }
 
-int FaceIface::getOrCreateTagForPerson(const QString& name, const QString& givenFullName) const
+int FaceIface::getOrCreateTagForPerson(const QString& name, int parentId, const QString& fullName) const
 {
-    int tagId = tagForPerson(name, givenFullName);
-    if (tagId)
-        return tagId;
+    return d->tagForName(name, 0, parentId, fullName, true, true);
+}
 
-    QString fullName = givenFullName.isNull() ? name : givenFullName;
-    QString kfaceId  = fullName;
-    for (int i=0; d->findFirstTagWithProperty(TagPropertyName::kfaceId(), kfaceId); ++i)
-        kfaceId = fullName + QString(" (%1)").arg(i);
-    return d->makeFaceTag(d->faceTagPath(name), fullName, kfaceId);
+void FaceIface::ensureIsPerson(int tagId, const QString& fullName) const
+{
+    d->tagForName(QString(), tagId, 0, fullName, true, false);
 }
 
 bool FaceIface::isPerson(int tagId) const
@@ -592,6 +657,8 @@ DatabaseFace FaceIface::confirmName( qlonglong imageid, const QString& name, con
 
 DatabaseFace FaceIface::confirmName(qlonglong imageid, int tagId, const QRect& rect, const QRect& previousRect)
 {
+    ensureIsPerson(tagId);
+
     QString region         = TagRegion(rect).toXml();
     QString regionToRemove = previousRect.isNull() ? region : TagRegion(previousRect).toXml();
 

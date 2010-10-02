@@ -95,15 +95,23 @@ public:
     /**
      * Looks for the given person name under the People tags tree, and returns an ID. Returns 0 if no name found.
      * Per default, fullName is the same as name.
+     * As parentId of -1 signals to look for any tag, a valid parentId will limit the search to direct children
+     * of this tag. parentId of 0 means top-level tag.
      */
-    int                 tagForPerson(const QString& name, const QString& fullName = QString()) const;
+    int                 tagForPerson(const QString& name, int parentId = -1, const QString& fullName = QString()) const;
 
     /**
      * First, looks for the given person name in person tags, and returns an ID.
      * If not, creates a new tag.
      * Per default, fullName is the same as name.
      */
-    int                 getOrCreateTagForPerson(const QString& name, const QString& fullName = QString()) const;
+    int                 getOrCreateTagForPerson(const QString& name, int parentId = -1, const QString& fullName = QString()) const;
+
+    /**
+     * Ensure that the given tag is a person tag. If not, it will be converted.
+     * Optionally, pass the full name. (tag name is not changed)
+     */
+    void                ensureIsPerson(int tagId, const QString& fullName = QString()) const;
 
     QString             getNameForRect(qlonglong imageid, const QRect& faceRect) const;
 

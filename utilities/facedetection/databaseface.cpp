@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 DatabaseFace::DatabaseFace()
-            : m_type(InvalidFace), m_imageId(-1), m_tagId(-1)
+            : m_type(InvalidFace), m_imageId(0), m_tagId(0)
 {
 }
 
@@ -121,7 +121,7 @@ DatabaseFace::Type DatabaseFace::typeForAttribute(const QString& attribute, int 
 {
     if (attribute == ImageTagPropertyName::autodetectedFace())
     {
-        if (tagId != -1 && TagsCache::instance()->hasProperty(tagId, TagPropertyName::unknownPerson()))
+        if (tagId && TagsCache::instance()->hasProperty(tagId, TagPropertyName::unknownPerson()))
             return DatabaseFace::UnknownName;
         else
             return DatabaseFace::UnconfirmedName;
