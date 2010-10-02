@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QGraphicsSceneHoverEvent>
+#include <QGraphicsWidget>
 #include <QObject>
 
 // KDE includes
@@ -40,6 +41,7 @@
 #include "addtagscombobox.h"
 #include "albummodel.h"
 #include "albumfiltermodel.h"
+#include "albummanager.h"
 #include "assignnamewidget.h"
 #include "dimgpreviewitem.h"
 #include "faceiface.h"
@@ -67,15 +69,14 @@ public:
 
     FaceItem(QGraphicsItem* parent = 0)
         : RegionFrameItem(parent),
-          m_widget(0)
+          m_widget(0), m_changer(0)
     {
     }
-
-
 
     void setFace(const DatabaseFace& face)
     {
         m_face = face;
+        updateCurrentTag();
     }
 
     DatabaseFace face() const
@@ -86,6 +87,7 @@ public:
     void setHudWidget(AssignNameWidget* widget)
     {
         m_widget = widget;
+        updateCurrentTag();
         RegionFrameItem::setHudWidget(widget);
     }
 
@@ -94,10 +96,37 @@ public:
         return m_widget;
     }
 
+    void switchMode(AssignNameWidget::Mode mode)
+    {
+        if (!m_widget || m_widget->mode() == mode)
+            return;
+
+        if (!m_changer)
+        {
+            m_changer = new HidingStateChanger(m_widget, "mode", this);
+            m_changer->addItem(hudWidget());
+        }
+
+        m_changer->changeValue(mode);
+    }
+
+    void updateCurrentTag()
+    {
+        if (m_widget)
+        {
+            TAlbum *album = 0;
+            if (!m_face.isNull() && !m_face.isUnknownName())
+                album = AlbumManager::instance()->findTAlbum(m_face.tagId());
+            kDebug() << m_face.type() << album;
+            m_widget->setCurrentTag(album);
+        }
+    }
+
 protected:
 
-    AssignNameWidget* m_widget;
-    DatabaseFace      m_face;
+    AssignNameWidget*   m_widget;
+    DatabaseFace        m_face;
+    HidingStateChanger *m_changer;
 };
 
 class FaceGroup::FaceGroupPriv
@@ -365,11 +394,10 @@ AssignNameWidget::Mode FaceGroup::FaceGroupPriv::assignWidgetMode(DatabaseFace::
     switch (type)
     {
         case DatabaseFace::UnknownName:
-            return AssignNameWidget::UnknownName;
         case DatabaseFace::UnconfirmedName:
-            return AssignNameWidget::UnconfirmedName;
+            return AssignNameWidget::UnconfirmedEditMode;
         case DatabaseFace::ConfirmedName:
-            return AssignNameWidget::ConfirmedName;
+            return AssignNameWidget::ConfirmedMode;
         default:
             return AssignNameWidget::InvalidMode;
     }
@@ -416,7 +444,7 @@ void FaceGroup::load()
         // for identification, use index in our list
         AssignNameWidget* assignWidget = d->createAssignNameWidget(face, d->items.size());
         item->setHudWidget(assignWidget);
-        //new StyleSheetDebugger(assignWidget);
+        new StyleSheetDebugger(assignWidget);
 
         d->visibilityController->addItem(item);
 
@@ -457,31 +485,41 @@ void FaceGroup::rejectAll()
 {
 }
 
-void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
+void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, const QVariant& faceIdentifier)
 {
-    if (info != d->info)
-        return;
     FaceItem* item    = d->items[faceIdentifier.toInt()];
 
     DatabaseFace face = item->face();
     QRect currentRect = item->originalRect();
 
-    face              = d->faceIface.confirmName(d->info.id(), action.tagId(), currentRect, face.region().toRect());
+    if (action.shallAssignTag())
+    {
+        d->faceIface.ensureIsPerson(action.tagId());
+        face = d->faceIface.confirmName(d->info.id(), action.tagId(), currentRect, face.region().toRect());
+    }
+    else if (action.shallCreateNewTag())
+    {
+        int tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
+        face = d->faceIface.confirmName(d->info.id(), tagId, currentRect, face.region().toRect());
+    }
 
-    item->widget()->setMode(d->assignWidgetMode(face.type()));
-    //item->widget()->setCurrentTag(face.tagId())
     item->setFace(face);
+    item->switchMode(AssignNameWidget::ConfirmedMode);
 }
 
-void FaceGroup::slotRejected(const ImageInfo& info, const QVariant& faceIdentifier)
+void FaceGroup::slotRejected(const ImageInfo&, const QVariant& faceIdentifier)
 {
-    if (info != d->info)
-        return;
-    FaceItem* item = d->items.takeAt(faceIdentifier.toInt());
+    FaceItem* item = d->items[faceIdentifier.toInt()];
     d->faceIface.removeFace(item->face());
 
     item->setFace(DatabaseFace());
     d->visibilityController->hideAndRemoveItem(item);
+}
+
+void FaceGroup::slotLabelClicked(const ImageInfo&, const QVariant& faceIdentifier)
+{
+    FaceItem* item = d->items[faceIdentifier.toInt()];
+    item->switchMode(AssignNameWidget::ConfirmedEditMode);
 }
 
 void FaceGroup::startAutoSuggest()

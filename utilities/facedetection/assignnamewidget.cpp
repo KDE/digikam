@@ -32,7 +32,12 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <kglobalsettings.h>
 #include <kstandardguiitem.h>
+
+// kdcraw includes
+
+#include <libkdcraw/rexpanderbox.h>
 
 // libkface includes
 
@@ -64,6 +69,7 @@ public:
         comboBox       = 0;
         confirmButton  = 0;
         rejectButton   = 0;
+        clickLabel     = 0;
         layout         = 0;
         tagModel       = 0;
         tagFilterModel = 0;
@@ -74,11 +80,13 @@ public:
     void         clearWidgets();
     void         updateLayout();
     QToolButton* createToolButton(const KGuiItem& item);
+    void         updateContents();
 
 public:
 
     ImageInfo                         info;
     QVariant                          faceIdentifier;
+    AlbumPointer<TAlbum>              currentTag;
 
     AssignNameWidget::Mode            mode;
     AssignNameWidget::LayoutMode      layoutMode;
@@ -87,6 +95,7 @@ public:
     AddTagsComboBox*                  comboBox;
     QToolButton*                      confirmButton;
     QToolButton*                      rejectButton;
+    RClickLabel*                      clickLabel;
 
     TagModel*                         tagModel;
     CheckableAlbumFilterModel*        tagFilterModel;
@@ -106,6 +115,8 @@ void AssignNameWidget::AssignNameWidgetPriv::clearWidgets()
     confirmButton = 0;
     delete rejectButton;
     rejectButton = 0;
+    delete clickLabel;
+    clickLabel = 0;
 }
 
 QToolButton* AssignNameWidget::AssignNameWidgetPriv::createToolButton(const KGuiItem& gui)
@@ -125,39 +136,52 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
         clearWidgets();
         return;
     }
-
-    if (!comboBox)
+    else if (mode == UnconfirmedEditMode || mode == ConfirmedEditMode)
     {
-        comboBox = new AddTagsComboBox(q);
-        if (tagModel)
-            comboBox->setModel(tagModel, tagFilteredModel, tagFilterModel);
 
-        q->connect(comboBox, SIGNAL(taggingActionActivated(const TaggingAction&)),
-                   q, SLOT(actionActivated(const TaggingAction&)));
+        if (!comboBox)
+        {
+            comboBox = new AddTagsComboBox(q);
+            if (tagModel)
+                comboBox->setModel(tagModel, tagFilteredModel, tagFilterModel);
+            if (parentTag)
+                comboBox->setParentTag(parentTag);
 
-        if (parentTag)
-            comboBox->setParentTag(parentTag);
+            q->connect(comboBox, SIGNAL(taggingActionActivated(const TaggingAction&)),
+                       q, SLOT(slotActionActivated(const TaggingAction&)));
 
-        comboBox->setMinimumContentsLength(15);
-        /*comboBox->lineEdit()->completionBox()->setObjectName("addTagsComboBox-completionBox");
-        comboBox->lineEdit()->completionBox()->setFrameStyle(QFrame::StyledPanel);
-        comboBox->view()->parentWidget()->setObjectName("addTagsComboBox-viewContainer");*/
-   }
+            q->connect(comboBox, SIGNAL(taggingActionSelected(const TaggingAction&)),
+                       q, SLOT(slotActionSelected(const TaggingAction&)));
 
-    if (!confirmButton)
-    {
-        confirmButton = createToolButton(KStandardGuiItem::ok());
-        confirmButton->setText(i18n("Confirm"));
-        //confirmButton->setToolTip(i18n("Confirm that the selected person is shown here"));
-        q->connect(confirmButton, SIGNAL(clicked()),
-                   q, SLOT(slotConfirm()));
+            comboBox->setMinimumContentsLength(20);
+            /*comboBox->lineEdit()->completionBox()->setObjectName("addTagsComboBox-completionBox");
+             *        comboBox->lineEdit()->completionBox()->setFrameStyle(QFrame::StyledPanel);
+             *        comboBox->view()->parentWidget()->setObjectName("addTagsComboBox-viewContainer");*/
+        }
+
+        if (!confirmButton)
+        {
+            confirmButton = createToolButton(KStandardGuiItem::ok());
+            if (mode == UnconfirmedEditMode)
+                confirmButton->setText(i18n("Confirm"));
+            //confirmButton->setToolTip(i18n("Confirm that the selected person is shown here"));
+            q->connect(confirmButton, SIGNAL(clicked()),
+                       q, SLOT(slotConfirm()));
+        }
+
+        if (!rejectButton)
+        {
+            rejectButton  = createToolButton(KStandardGuiItem::remove());
+            q->connect(rejectButton, SIGNAL(clicked()),
+                       q, SLOT(slotReject()));
+        }
     }
-
-    if (!rejectButton)
+    else if (mode == ConfirmedMode)
     {
-        rejectButton  = createToolButton(KStandardGuiItem::remove());
-        q->connect(rejectButton, SIGNAL(clicked()),
-                   q, SLOT(slotReject()));
+        clickLabel = new RClickLabel;
+
+        connect(clickLabel, SIGNAL(activated()),
+                q, SLOT(slotLabelClicked()));
     }
 }
 
@@ -166,32 +190,57 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
     if (mode == InvalidMode)
         return;
 
-    layout->removeWidget(comboBox);
-    layout->removeWidget(confirmButton);
-    layout->removeWidget(rejectButton);
+    delete layout;
+    layout = new QGridLayout;
+    q->setLayout(layout);
 
-    if (layoutMode == AssignNameWidget::FullLine)
+    if (mode == UnconfirmedEditMode || mode == ConfirmedEditMode)
     {
-        layout->addWidget(comboBox,  0, 0);
-        layout->addWidget(confirmButton, 0, 1);
-        layout->addWidget(rejectButton, 0, 2);
-        layout->setColumnStretch(0, 1);
+        if (layoutMode == AssignNameWidget::FullLine)
+        {
+            layout->addWidget(comboBox,  0, 0);
+            layout->addWidget(confirmButton, 0, 1);
+            layout->addWidget(rejectButton, 0, 2);
+            layout->setColumnStretch(0, 1);
+        }
+        else if (layoutMode == AssignNameWidget::TwoLines || layoutMode == AssignNameWidget::Compact)
+        {
+            layout->addWidget(comboBox,  0, 0, 1, 2);
+            layout->addWidget(confirmButton, 1, 0);
+            layout->addWidget(rejectButton, 1, 1);
+        }
     }
-    else if (layoutMode == AssignNameWidget::TwoLines || layoutMode == AssignNameWidget::Compact)
+    else if (mode == ConfirmedMode)
     {
-        layout->addWidget(comboBox,  0, 0, 1, 2);
-        layout->addWidget(confirmButton, 1, 0);
-        layout->addWidget(rejectButton, 1, 1);
+        layout->addWidget(clickLabel, 0, 0);
     }
 }
+
+void AssignNameWidget::AssignNameWidgetPriv::updateContents()
+{
+    if (comboBox)
+    {
+        comboBox->setCurrentTag(currentTag);
+        if (mode == UnconfirmedEditMode)
+            comboBox->setClickMessage(i18n("Who is this?"));
+        else
+            comboBox->setClickMessage(QString());
+    }
+
+    if (confirmButton)
+        confirmButton->setEnabled(currentTag);
+
+    kDebug() << clickLabel << currentTag << (currentTag ? currentTag->title() : QString());
+    if (clickLabel)
+        clickLabel->setText(currentTag ? currentTag->title() : QString());
+}
+
+// ---
 
 AssignNameWidget::AssignNameWidget(QWidget* parent)
                 : QFrame(parent), d(new AssignNameWidgetPriv(this))
 {
-    d->layout = new QGridLayout;
-    setLayout(d->layout);
-
-    setLayoutMode(FullLine);
+    setObjectName("assignNameWidget");
     setBackgroundStyle(StyledFrame);
 }
 
@@ -227,8 +276,10 @@ void AssignNameWidget::setMode(Mode mode)
         return;
 
     d->mode = mode;
+    d->clearWidgets();
     d->checkWidgets();
     d->updateLayout();
+    d->updateContents();
 }
 
 AssignNameWidget::Mode AssignNameWidget::mode() const
@@ -250,6 +301,83 @@ AssignNameWidget::LayoutMode AssignNameWidget::layoutMode() const
     return d->layoutMode;
 }
 
+AssignNameWidget::BackgroundStyle AssignNameWidget::backgroundStyle() const
+{
+    return d->bgStyle;
+}
+
+void AssignNameWidget::setFace(const ImageInfo& info, const QVariant& faceIdentifier)
+{
+    d->info           = info;
+    d->faceIdentifier = faceIdentifier;
+}
+
+ImageInfo AssignNameWidget::info() const
+{
+    return d->info;
+}
+
+QVariant AssignNameWidget::faceIdentifier() const
+{
+    return d->faceIdentifier;
+}
+
+void AssignNameWidget::setCurrentTag(int tagId)
+{
+    setCurrentTag(AlbumManager::instance()->findTAlbum(tagId));
+}
+
+void AssignNameWidget::setCurrentTag(TAlbum *album)
+{
+    if (d->currentTag == album)
+        return;
+    d->currentTag = album;
+    d->updateContents();
+}
+
+void AssignNameWidget::slotConfirm()
+{
+    if (d->comboBox)
+        emit assigned(d->comboBox->currentTaggingAction(), d->info, d->faceIdentifier);
+}
+
+void AssignNameWidget::slotReject()
+{
+    emit rejected(d->info, d->faceIdentifier);
+}
+
+void AssignNameWidget::slotActionActivated(const TaggingAction& action)
+{
+    emit assigned(action, d->info, d->faceIdentifier);
+}
+
+void AssignNameWidget::slotActionSelected(const TaggingAction& action)
+{
+    if (d->confirmButton)
+        d->confirmButton->setEnabled(action.isValid());
+}
+
+void AssignNameWidget::slotLabelClicked()
+{
+    emit labelClicked(d->info, d->faceIdentifier);
+}
+
+void AssignNameWidget::keyPressEvent(QKeyEvent *e)
+{
+    switch (e->key())
+    {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            slotConfirm();
+            return;
+        case Qt::Key_Escape:
+            slotReject();
+            return;
+    }
+
+    QWidget::keyPressEvent(e);
+}
+
 void AssignNameWidget::setBackgroundStyle(BackgroundStyle style)
 {
     if (d->bgStyle == style)
@@ -257,6 +385,7 @@ void AssignNameWidget::setBackgroundStyle(BackgroundStyle style)
 
     if (style == TransparentRound)
     {
+        setFont(KGlobalSettings::smallestReadableFont());
         setStyleSheet(
             "QFrame {"
             "  background-color: rgba(0, 0, 0, 66%); "
@@ -285,6 +414,13 @@ void AssignNameWidget::setBackgroundStyle(BackgroundStyle style)
             "  border-color: white; "
             "} "
 
+            "QToolButton:disabled { "
+            "  color: rgba(255,255,255,120); "
+            "  background-color: "
+            "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,50), "
+            "                    stop:1 rgba(255,255,255,0)); "
+            "} "
+
             "QComboBox { "
             "  color: white; "
             "  background-color: transparent; "
@@ -294,6 +430,10 @@ void AssignNameWidget::setBackgroundStyle(BackgroundStyle style)
             "  color: white; "
             "  background-color: rgba(0,0,0,80%); "
             "} "
+
+            "QLabel { "
+            "  color: white; background-color: transparent; border: none; "
+            " }"
             /*"KCompletionBox::item:hover, KCompletionBox::item:selected { "
             "  background-color: "
             "     qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(150,150,150,80%), "
@@ -307,59 +447,6 @@ void AssignNameWidget::setBackgroundStyle(BackgroundStyle style)
         setFrameStyle(Raised | StyledPanel);
     }
     d->bgStyle = style;
-}
-
-AssignNameWidget::BackgroundStyle AssignNameWidget::backgroundStyle() const
-{
-    return d->bgStyle;
-}
-
-void AssignNameWidget::setFace(const ImageInfo& info, const QVariant& faceIdentifier)
-{
-    d->info           = info;
-    d->faceIdentifier = faceIdentifier;
-}
-
-ImageInfo AssignNameWidget::info() const
-{
-    return d->info;
-}
-
-QVariant AssignNameWidget::faceIdentifier() const
-{
-    return d->faceIdentifier;
-}
-
-void AssignNameWidget::slotConfirm()
-{
-    if (d->comboBox)
-        emit assigned(d->comboBox->currentTaggingAction(), d->info, d->faceIdentifier);
-}
-
-void AssignNameWidget::slotReject()
-{
-    emit rejected(d->info, d->faceIdentifier);
-}
-
-void AssignNameWidget::actionActivated(const TaggingAction& action)
-{
-    emit assigned(action, d->info, d->faceIdentifier);
-}
-
-void AssignNameWidget::keyPressEvent(QKeyEvent *e)
-{
-    switch (e->key())
-    {
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-            slotConfirm();
-            return;
-        case Qt::Key_Escape:
-            slotReject();
-            return;
-    }
-
-    QWidget::keyPressEvent(e);
 }
 
 } // namespace Digikam

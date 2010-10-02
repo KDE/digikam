@@ -53,9 +53,9 @@ public:
     enum Mode
     {
         InvalidMode,
-        UnknownName,
-        UnconfirmedName,
-        ConfirmedName
+        UnconfirmedEditMode,
+        ConfirmedMode,
+        ConfirmedEditMode
     };
 
     enum LayoutMode
@@ -89,7 +89,6 @@ public:
     void setBackgroundStyle(BackgroundStyle style);
     BackgroundStyle backgroundStyle() const;
 
-    void setFace(const ImageInfo& info, const QVariant& faceIdentifier = QVariant());
     ImageInfo info() const;
     QVariant  faceIdentifier() const;
 
@@ -97,6 +96,13 @@ public:
     AddTagsComboBox* comboBox() const;
 
 public Q_SLOTS:
+
+    /** The identifying information emitted with the signals */
+    void setFace(const ImageInfo& info, const QVariant& faceIdentifier = QVariant());
+
+    /** Sets the suggested (UnconfirmedEditMode) or assigned (ConfirmedMode) tag to be displayed. */
+    void setCurrentTag(int tagId);
+    void setCurrentTag(TAlbum *album);
 
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */
     void setParentTag(TAlbum* album);
@@ -116,6 +122,11 @@ Q_SIGNALS:
      */
     void rejected(const ImageInfo& info, const QVariant& faceIdentifier);
 
+    /**
+     * In ConfirmedMode, this signal is emitted when the user clicked on the label
+     */
+    void labelClicked(const ImageInfo& info, const QVariant& faceIdentifier);
+
 protected:
 
     void keyPressEvent(QKeyEvent* e);
@@ -124,7 +135,9 @@ protected Q_SLOTS:
 
     void slotConfirm();
     void slotReject();
-    void actionActivated(const TaggingAction& action);
+    void slotActionActivated(const TaggingAction& action);
+    void slotActionSelected(const TaggingAction& action);
+    void slotLabelClicked();
 
 private:
 

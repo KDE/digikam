@@ -117,6 +117,7 @@ protected Q_SLOTS:
     void startAutoSuggest();
     void slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier);
     void slotRejected(const ImageInfo& info, const QVariant& faceIdentifier);
+    void slotLabelClicked(const ImageInfo& info, const QVariant& faceIdentifier);
 
 private:
 
