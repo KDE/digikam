@@ -103,8 +103,6 @@ private Q_SLOTS:
     void slotThemeChanged();
     void slotDeleteItem();
     void slotGotoTag(int tagID);
-    void slotRotateLeft();
-    void slotRotateRight();
 
 private:
 

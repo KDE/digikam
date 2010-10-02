@@ -108,10 +108,12 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a
     cmh.addActionNewTag(tagModificationHelper());
     cmh.addCreateTagFromAddressbookMenu();
     cmh.addAction(d->resetIconAction);
+    cmh.addSeparator();
     if (d->showFindDuplicateAction)
     {
         cmh.addAction(d->findDuplAction);
     }
+    cmh.addExportMenu();
     cmh.addSeparator();
     cmh.addActionDeleteTag(tagModificationHelper());
     cmh.addSeparator();

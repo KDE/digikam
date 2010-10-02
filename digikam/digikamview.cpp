@@ -136,7 +136,6 @@ public:
     QList<SidebarWidget*> leftSideBarWidgets;
 
     DigikamModelCollection *modelCollection;
-
 };
 
 DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollection)
@@ -416,13 +415,66 @@ void DigikamView::setupConnections()
             d->iconView->imageFilterModel(),
             SLOT(setTagFilter(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)));
 
-    // -- Preview image widget Connections ------------------------
+    // -- Navigation & actions bar Connections ------------------------
+
+    connect(d->albumWidgetStack, SIGNAL(signalFirstItem()),
+            this, SLOT(slotFirstItem()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalPrevItem()),
+             this, SLOT(slotPrevItem()));
 
     connect(d->albumWidgetStack, SIGNAL(signalNextItem()),
             this, SLOT(slotNextItem()));
 
-    connect(d->albumWidgetStack, SIGNAL(signalPrevItem()),
-            this, SLOT(slotPrevItem()));
+    connect(d->albumWidgetStack, SIGNAL(signalLastItem()),
+            this, SLOT(slotLastItem()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalPreviewRequestedCurrent()),
+            this, SLOT(slotImagePreview()));
+
+    connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
+            d->albumWidgetStack, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
+
+    connect(this, SIGNAL(signalSelectionChanged(int)),
+            d->albumWidgetStack, SIGNAL(signalSelectionChanged(int)));
+
+    connect(d->albumWidgetStack, SIGNAL(signalSlideShowAll()),
+            this, SLOT(slotSlideShowAll()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalSlideShowSelection()),
+            this, SLOT(slotSlideShowSelection()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalSlideShowRecursive()),
+            this, SLOT(slotSlideShowRecursive()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalZoomIn()),
+            this, SLOT(slotZoomIn()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalZoomOut()),
+            this, SLOT(slotZoomOut()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalZoomTo100Percents()),
+            this, SLOT(slotZoomTo100Percents()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalFitToWindow()),
+            this, SLOT(slotFitToWindow()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalZoomSliderChanged(int)),
+            this, SIGNAL(signalZoomSliderChanged(int)));
+
+    connect(d->albumWidgetStack, SIGNAL(signalZoomValueEdited(double)),
+            this, SLOT(setZoomFactor(double)));
+
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->albumWidgetStack, SIGNAL(signalWindowHasMoved()));
+
+    connect(this, SIGNAL(signalThumbSizeChanged(int)),
+            d->albumWidgetStack, SIGNAL(signalThumbSizeChanged(int)));
+
+    connect(this, SIGNAL(signalZoomChanged(double)),
+            d->albumWidgetStack, SLOT(slotZoomChanged(double)));
+
+    // -- Preview image widget Connections ------------------------
 
     connect(d->albumWidgetStack, SIGNAL(signalEditItem()),
             this, SLOT(slotImageEdit()));
@@ -1254,6 +1306,7 @@ void DigikamView::slotTogglePreviewMode(const ImageInfo &info)
     {
         // We go back to AlbumView Mode.
         d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
+        emit signalThumbSizeChanged(d->thumbSize);
     }
 }
 

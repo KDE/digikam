@@ -102,7 +102,6 @@
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumiconviewfilter.h"
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "batchalbumssyncmetadata.h"
@@ -291,7 +290,6 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
-    d->albumIconViewFilter->saveSettings();
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
     AlbumSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
     AlbumSettings::instance()->setShowThumbbar(d->showBarAction->isChecked());
@@ -325,11 +323,6 @@ DigikamApp* DigikamApp::instance()
 DigikamView *DigikamApp::view() const
 {
     return d->view;
-}
-
-AlbumIconViewFilter *DigikamApp::iconViewFilter() const
-{
-    return d->albumIconViewFilter;
 }
 
 void DigikamApp::show()
@@ -372,9 +365,7 @@ void DigikamApp::show()
     }
 
     // Init album icon view zoom factor.
-    slotThumbSizeChanged(AlbumSettings::instance()->getDefaultIconSize());
-    slotZoomSliderChanged(AlbumSettings::instance()->getDefaultIconSize());
-    d->autoShowZoomToolTip = true;
+    d->view->setThumbSize(AlbumSettings::instance()->getDefaultIconSize());
 }
 
 void DigikamApp::restoreSession()
@@ -495,6 +486,12 @@ void DigikamApp::setupView()
 
     connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
             this, SLOT(slotImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
+
+    connect(d->view, SIGNAL(signalZoomSliderChanged(int)),
+            this, SLOT(slotZoomSliderChanged(int)));
+
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->view, SIGNAL(signalWindowHasMoved()));
 }
 
 void DigikamApp::setupStatusBar()
@@ -505,56 +502,8 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    d->albumIconViewFilter = new AlbumIconViewFilter(statusBar());
-    statusBar()->addWidget(d->albumIconViewFilter, 100);
-    d->view->connectIconViewFilter(d->albumIconViewFilter);
-
-    //------------------------------------------------------------------------------
-
-    d->zoomBar = new DZoomBar(statusBar());
-    d->zoomBar->setZoomToFitAction(d->zoomFitToWindowAction);
-    d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
-    d->zoomBar->setZoomPlusAction(d->zoomPlusAction);
-    d->zoomBar->setZoomMinusAction(d->zoomMinusAction);
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    statusBar()->addPermanentWidget(d->zoomBar);
-
-    //------------------------------------------------------------------------------
-
-    d->statusNavigateBar = new StatusNavigateBar(statusBar());
-    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
-
-    //------------------------------------------------------------------------------
-
-    connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
-            this, SLOT(slotZoomSliderChanged(int)));
-
-    connect(this, SIGNAL(signalWindowHasMoved()),
-            d->zoomBar, SLOT(slotUpdateTrackerPos()));
-
-    connect(d->zoomBar, SIGNAL(signalZoomValueEdited(double)),
-            d->view, SLOT(setZoomFactor(double)));
-
-    connect(d->view, SIGNAL(signalZoomChanged(double)),
-            this, SLOT(slotZoomChanged(double)));
-
-    connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
-            this, SLOT(slotThumbSizeChanged(int)));
-
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
             this, SLOT(slotTogglePreview(bool)));
-
-    connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
-            d->view, SLOT(slotFirstItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalNextItem()),
-            d->view, SLOT(slotNextItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalPrevItem()),
-            d->view, SLOT(slotPrevItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
-            d->view, SLOT(slotLastItem()));
 
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
             this, SIGNAL(signalCancelButtonPressed()));
@@ -1262,10 +1211,6 @@ void DigikamApp::initGui()
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
     d->showBarAction->setChecked(AlbumSettings::instance()->getShowThumbbar());
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
-
-    // Setting the filter condition also updates the tooltip.
-    // (So `setRating` is called first, as otherwise the filter value is not respected).
-    d->albumIconViewFilter->readSettings();
 }
 
 void DigikamApp::enableZoomPlusAction(bool val)
@@ -1392,6 +1337,9 @@ void DigikamApp::slotTagSelected(bool val)
 void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev, bool hasNext,
                                    const ImageInfoList& listAll)
 {
+    Q_UNUSED(hasPrev);
+    Q_UNUSED(hasNext);
+
     int num_images = listAll.count();
     QString text;
 
@@ -1428,7 +1376,6 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
     }
 
     d->statusProgressBar->setText(d->statusBarSelectionText);
-    d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
 
 void DigikamApp::slotSelectionChanged(int selectionCount)
@@ -2163,7 +2110,6 @@ void DigikamApp::slotSetupChanged()
         AlbumManager::instance()->prepareItemCounts();
 
     d->view->applySettings();
-    d->albumIconViewFilter->readSettings();
 
     AlbumThumbnailLoader::instance()->setThumbnailSize(AlbumSettings::instance()->getTreeViewIconSize());
 
@@ -2608,23 +2554,6 @@ void DigikamApp::slotZoomSliderChanged(int size)
     d->view->setThumbSize(size);
 }
 
-void DigikamApp::slotThumbSizeChanged(int size)
-{
-    d->zoomBar->setThumbsSize(size);
-    if (!d->fullScreen && d->autoShowZoomToolTip)
-        d->zoomBar->triggerZoomTrackerToolTip();
-}
-
-void DigikamApp::slotZoomChanged(double zoom)
-{
-    double zmin = d->view->zoomMin();
-    double zmax = d->view->zoomMax();
-    d->zoomBar->setZoom(zoom, zmin, zmax);
-
-    if (!d->fullScreen && d->autoShowZoomToolTip)
-        d->zoomBar->triggerZoomTrackerToolTip();
-}
-
 void DigikamApp::slotTogglePreview(bool t)
 {
     // NOTE: if 't' is true, we are in Preview Mode, else we are in AlbumView Mode
@@ -2644,9 +2573,6 @@ void DigikamApp::slotTogglePreview(bool t)
     d->albumSortAction->setEnabled(!t);
     d->imageSortAction->setEnabled(!t);
     d->showBarAction->setEnabled(t);
-
-    if (t) d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
-    else   d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
 }
 
 void DigikamApp::slotImportAddImages()
