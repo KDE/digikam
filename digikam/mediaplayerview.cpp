@@ -102,6 +102,10 @@ public:
     MediaPlayerViewPriv() :
         errorView(0),
         mediaPlayerView(0),
+        back2AlbumAction(0),
+        prevAction(0),
+        nextAction(0),
+        toolBar(0),
         grid(0),
         player(0),
         slider(0)
@@ -111,19 +115,26 @@ public:
     QFrame*              errorView;
     QFrame*              mediaPlayerView;
 
+    QAction*             back2AlbumAction;
+    QAction*             prevAction;
+    QAction*             nextAction;
+
+    QToolBar*            toolBar;
+
     QGridLayout*         grid;
 
     Phonon::VideoPlayer* player;
     Phonon::SeekSlider*  slider;
-
-    AlbumWidgetStack*    stack;
 };
 
 MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
                : QStackedWidget(parent), d(new MediaPlayerViewPriv)
 {
-    d->stack            = parent;
     setAttribute(Qt::WA_DeleteOnClose);
+
+    d->back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
+    d->prevAction       = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
+    d->nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 
     d->errorView        = new QFrame(this);
     QLabel *errorMsg    = new QLabel(i18n("An error has occurred with the media player...."), this);
@@ -168,6 +179,11 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
 
     insertWidget(MediaPlayerViewPriv::PlayerView, d->mediaPlayerView);
 
+    d->toolBar = new QToolBar(this);
+    d->toolBar->addAction(d->prevAction);
+    d->toolBar->addAction(d->nextAction);
+    d->toolBar->addAction(d->back2AlbumAction);
+
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
 
     d->errorView->installEventFilter(new MediaPlayerMouseClickFilter(this));
@@ -183,6 +199,15 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    connect(d->prevAction, SIGNAL(triggered()),
+            this, SIGNAL(signalPrevItem()));
+
+    connect(d->nextAction, SIGNAL(triggered()),
+            this, SIGNAL(signalNextItem()));
+
+    connect(d->back2AlbumAction, SIGNAL(triggered()),
+            parent, SIGNAL(signalBack2Album()));
 }
 
 MediaPlayerView::~MediaPlayerView()
@@ -194,8 +219,8 @@ MediaPlayerView::~MediaPlayerView()
 
 void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
-    Q_UNUSED(previous);
-    Q_UNUSED(next);
+    d->prevAction->setEnabled(!previous.isNull());
+    d->nextAction->setEnabled(!next.isNull());
 
     KUrl url = info.fileUrl();
 
@@ -207,7 +232,6 @@ void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previ
 
     d->player->play(url);
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
-    d->stack->previewLoaded();
 }
 
 void MediaPlayerView::slotPlayerFinished()
@@ -255,6 +279,7 @@ void MediaPlayerView::setPreviewMode(int mode)
         return;
 
     setCurrentIndex(mode);
+    d->toolBar->raise();
 }
 
 }  // namespace Digikam

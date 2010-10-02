@@ -1366,7 +1366,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/navigationbar.cpp
        )
 
     SET(libdigikamhelpers_SRCS

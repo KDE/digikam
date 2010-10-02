@@ -52,6 +52,7 @@ namespace Solid { class Device; }
 namespace Digikam
 {
 
+class AlbumIconViewFilter;
 class DigikamView;
 class ImageInfo;
 class ImageInfoList;
@@ -92,6 +93,7 @@ public:
     void stopInternalDatabase();
 
     DigikamView *view() const;
+    AlbumIconViewFilter *iconViewFilter() const;
 
 Q_SIGNALS:
 
@@ -201,6 +203,8 @@ private Q_SLOTS:
     void slotProgressValue(int);
 
     void slotZoomSliderChanged(int);
+    void slotThumbSizeChanged(int);
+    void slotZoomChanged(double);
     void slotTogglePreview(bool);
 
     void slotImportAddImages();

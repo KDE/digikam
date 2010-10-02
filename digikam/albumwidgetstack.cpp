@@ -53,7 +53,6 @@
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
 #include "thumbbardock.h"
-#include "navigationbar.h"
 
 namespace Digikam
 {
@@ -75,8 +74,6 @@ public:
         mediaPlayerView    = 0;
         thumbbarTimer      = 0;
         needUpdateBar      = false;
-        navigationBar      = 0;
-        navigationBarDock  = 0;
     }
 
     bool              needUpdateBar;
@@ -91,141 +88,21 @@ public:
     MediaPlayerView*  mediaPlayerView;
     ThumbBarDock*     thumbBarDock;
     WelcomePageView*  welcomePageView;
-    NavigationBar*    navigationBar;
-    QDockWidget*      navigationBarDock;
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
                 : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
 {
-    /**
-     * Views modes
-     */
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
-    d->welcomePageView  = new WelcomePageView(this);
-    d->mediaPlayerView  = new MediaPlayerView(this);
-
-    /**
-     * Thumbnails dock bar
-     */
     d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModels(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("mainwindow_thumbbar");
 
-    /**
-     * Navigation & Actions dock bar
-     */
-    d->navigationBar    = new NavigationBar(this);
-    d->navigationBarDock = new QDockWidget();
-    d->navigationBarDock->setFeatures(QDockWidget::DockWidgetVerticalTitleBar | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    d->navigationBarDock->setWidget(d->navigationBar);
-
-    // Connect navigation & actions signals
-    connect(d->navigationBar, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(d->navigationBar, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(d->navigationBar, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
-
-    connect(d->navigationBar, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(d->navigationBar, SIGNAL(signalPreviewRequestedCurrent()),
-            this, SIGNAL(signalPreviewRequestedCurrent()));
-
-    connect(d->navigationBar, SIGNAL(signalBack2Album()),
-            this, SIGNAL(signalBack2Album()));
-
-    connect(d->navigationBar, SIGNAL(signalDeleteItem()),
-            this, SIGNAL(signalDeleteItem()));
-
-    connect(d->navigationBar, SIGNAL(signalImageSelected(const ImageInfo&)),
-            this, SIGNAL(signalImageSelected(const ImageInfo&)));
-
-    connect(d->navigationBar, SIGNAL(signalRotateLeft()),
-            d->imageIconView, SLOT(slotRotateLeft()));
-
-    connect(d->navigationBar, SIGNAL(signalRotateRight()),
-            d->imageIconView, SLOT(slotRotateRight()));
-
-    connect(d->navigationBar, SIGNAL(signalEditItem()),
-            this, SIGNAL(signalEditItem()));
-
-    connect(d->navigationBar, SIGNAL(signalSlideShowAll()),
-            this, SIGNAL(signalSlideShowAll()));
-
-    connect(d->navigationBar, SIGNAL(signalSlideShowSelection()),
-            this, SIGNAL(signalSlideShowSelection()));
-
-    connect(d->navigationBar, SIGNAL(signalSlideShowRecursive()),
-            this, SIGNAL(signalSlideShowRecursive()));
-
-    connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
-            d->navigationBar, SLOT(slotImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
-
-    connect(this, SIGNAL(signalSelectionChanged(int)),
-            d->navigationBar, SLOT(slotSelectionChanged(int)));
-
-    // Connect filter signals
-    ImageAlbumFilterModel *model = d->imageIconView->imageAlbumFilterModel();
-
-    connect(d->navigationBar, SIGNAL(signalRatingFilter(int, ImageFilterSettings::RatingCondition)),
-            model, SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
-
-    connect(d->navigationBar, SIGNAL(signalMimeTypeFilter(int)),
-            model, SLOT(setMimeTypeFilter(int)));
-
-    connect(d->navigationBar, SIGNAL(signalTextFilter(const SearchTextSettings&)),
-            model, SLOT(setTextFilter(const SearchTextSettings&)));
-
-    connect(model, SIGNAL(filterMatches(bool)),
-            d->navigationBar, SIGNAL(signalFilterMatches(bool)));
-
-    connect(model, SIGNAL(filterMatchesForText(bool)),
-            d->navigationBar, SIGNAL(signalFilterMatchesForText(bool)));
-
-    connect(model, SIGNAL(filterSettingsChanged(const ImageFilterSettings&)),
-            d->navigationBar, SIGNAL(signaltFilterSettingsChanged(const ImageFilterSettings&)));
-
-    // Connect zoom signals
-    connect(d->navigationBar, SIGNAL(signalZoomSliderChanged(int)),
-            this, SIGNAL(signalZoomSliderChanged(int)));
-
-    connect(d->navigationBar, SIGNAL(signalZoomValueEdited(double)),
-            this, SIGNAL(signalZoomValueEdited(double)));
-
-    connect(d->navigationBar, SIGNAL(signalZoomIn()),
-            this, SIGNAL(signalZoomIn()));
-
-    connect(d->navigationBar, SIGNAL(signalZoomOut()),
-            this, SIGNAL(signalZoomOut()));
-
-    connect(d->navigationBar, SIGNAL(signalZoomTo100Percents()),
-            this, SIGNAL(signalZoomTo100Percents()));
-
-    connect(d->navigationBar, SIGNAL(signalFitToWindow()),
-            this, SIGNAL(signalFitToWindow()));
-
-    connect(this, SIGNAL(signalWindowHasMoved()),
-            d->navigationBar, SIGNAL(signalWindowHasMoved()));
-
-    connect(this, SIGNAL(signalThumbSizeChanged(int)),
-            d->navigationBar, SLOT(slotThumbSizeChanged(int)));
-
-    connect(this, SIGNAL(signalZoomChanged(double, double, double)),
-            d->navigationBar, SLOT(slotZoomChanged(double, double, double)));
-
-    // Conect views modes signals
-    connect(this, SIGNAL(signalToggledToPreviewMode(bool)),
-            d->navigationBar, SLOT(slotToggledToPreviewMode(bool)));
-
-    // -----------------------------------------------------------------
+    d->welcomePageView = new WelcomePageView(this);
+    d->mediaPlayerView = new MediaPlayerView(this);
 
     insertWidget(PreviewAlbumMode, d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
@@ -334,17 +211,11 @@ void AlbumWidgetStack::readSettings()
 
 void AlbumWidgetStack::setDockArea(QMainWindow* dockArea)
 {
-    d->dockArea = dockArea;
-
     // Attach the thumbbar dock to the given dock area and place it initially on top.
+    d->dockArea = dockArea;
     d->thumbBarDock->setParent(d->dockArea);
     d->dockArea->addDockWidget(Qt::TopDockWidgetArea, d->thumbBarDock);
     d->thumbBarDock->setFloating(false);
-
-    // Attach the NavigationBar dock to the given dock area and place it initially on bottom.
-    d->navigationBarDock->setParent(d->dockArea);
-    d->dockArea->addDockWidget(Qt::BottomDockWidgetArea, d->navigationBarDock);
-    d->navigationBarDock->setFloating(false);
 }
 
 ThumbBarDock* AlbumWidgetStack::thumbBarDock()
@@ -420,7 +291,6 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
         }
 
         d->thumbBar->setCurrentInfo(info);
-        emit signalPreviewChanged(info);
     }
 }
 
@@ -580,11 +450,6 @@ double AlbumWidgetStack::zoomMin()
 double AlbumWidgetStack::zoomMax()
 {
     return d->imagePreviewView->zoomMax();
-}
-
-void AlbumWidgetStack::slotZoomChanged(double zoom)
-{
-    emit signalZoomChanged(zoom, zoomMin(), zoomMax());
 }
 
 void AlbumWidgetStack::applySettings()

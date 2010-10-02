@@ -82,6 +82,7 @@ public:
     DigikamAppPriv()
     {
         fullScreen                           = false;
+        autoShowZoomToolTip                  = false;
         validIccPath                         = true;
         cameraMenu                           = 0;
         usbMediaMenu                         = 0;
@@ -161,6 +162,8 @@ public:
         cameraList                           = 0;
         templateManager                      = 0;
         statusProgressBar                    = 0;
+        statusNavigateBar                    = 0;
+        zoomBar                              = 0;
         kipiPluginLoader                     = 0;
         view                                 = 0;
         splashScreen                         = 0;
@@ -173,6 +176,7 @@ public:
         solidUsmActionGroup                  = 0;
         exifOrientationActionGroup           = 0;
         eventLoop                            = 0;
+        albumIconViewFilter                  = 0;
         contributeAction                     = 0;
         showBarAction                        = 0;
         showMenuBarAction                    = 0;
@@ -304,6 +308,7 @@ public:
     QEventLoop*                         eventLoop;
     QString                             solidErrorMessage;
 
+    AlbumIconViewFilter*                albumIconViewFilter;
     SplashScreen*                       splashScreen;
     DCOPIface*                          dcopIface;
     ImagePluginLoader*                  imagePluginsLoader;
@@ -311,7 +316,9 @@ public:
     DigikamView*                        view;
     CameraList*                         cameraList;
     TemplateManager*                    templateManager;
+    DZoomBar*                           zoomBar;
     StatusProgressBar*                  statusProgressBar;
+    StatusNavigateBar*                  statusNavigateBar;
     QString                             statusBarSelectionText;
 
     KIPI::PluginLoader*                 kipiPluginLoader;

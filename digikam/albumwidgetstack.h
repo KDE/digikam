@@ -41,14 +41,12 @@
 #include "digikam_export.h"
 #include "imageinfo.h"
 #include "thumbbardock.h"
-#include "albumiconviewfilter.h"
 
 namespace Digikam
 {
 
 class DigikamImageView;
 class ImagePreviewView;
-class ImageInfoList;
 class AlbumWidgetStackPriv;
 
 class AlbumWidgetStack : public QStackedWidget
@@ -101,28 +99,8 @@ public:
 
 Q_SIGNALS:
 
-    void signalFirstItem();
-    void signalLastItem();
     void signalNextItem();
     void signalPrevItem();
-    void signalPreviewRequestedCurrent();
-    void signalSelectionChanged(int);
-    void signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&);
-    void signalPreviewChanged(const ImageInfo&);
-
-    void signalZoomSliderChanged(int);
-    void signalZoomValueEdited(double);
-    void signalWindowHasMoved();
-    void signalZoomIn();
-    void signalZoomOut();
-    void signalZoomTo100Percents();
-    void signalFitToWindow();
-    void signalThumbSizeChanged(int);
-    void signalZoomChanged(double zoom, double zmin, double zmax);
-
-    void signalSlideShowAll();
-    void signalSlideShowSelection();
-    void signalSlideShowRecursive();
     void signalEditItem();
     void signalDeleteItem();
     void signalToggledToPreviewMode(bool);
@@ -142,8 +120,6 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotEscapePreview();
-
-    void slotZoomChanged(double zoom);
 
 private Q_SLOTS:
 

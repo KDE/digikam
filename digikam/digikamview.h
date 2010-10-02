@@ -80,7 +80,7 @@ public:
 
     double zoomMin();
     double zoomMax();
-
+    
 Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
@@ -98,9 +98,6 @@ Q_SIGNALS:
     void signalGotoDateAndItem(AlbumIconItem*);
     void signalGotoTagAndItem(int tagID);
     void signalChangedTab(QWidget*);
-
-    void signalZoomSliderChanged(int);
-    void signalWindowHasMoved();
 
 public Q_SLOTS:
 
