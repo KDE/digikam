@@ -577,11 +577,18 @@ void ContextMenuHelper::addExportMenu()
 void ContextMenuHelper::addBatchMenu()
 {
     KMenu* menuKIPIBatch = new KMenu(i18n("Batch Process"), d->parent);
-    const QList<QAction*>& batchActions = DigikamApp::instance()->menuBatchActions();
+    const QList<QAction*> batchActions = DigikamApp::instance()->menuBatchActions();
+
+    QAction* selectAllAction = 0;
+    selectAllAction = d->stdActionCollection->action("selectAll");
 
     if(!batchActions.isEmpty())
     {
         menuKIPIBatch->addActions(batchActions);
+        connect (menuKIPIBatch, SIGNAL(hovered(QAction*)),
+                 selectAllAction, SIGNAL(triggered()));
+        connect (menuKIPIBatch, SIGNAL(aboutToHide()),
+                 this, SLOT(slotDeselectAllAlbumItems()));
     }
 
     d->parent->addMenu(menuKIPIBatch);
