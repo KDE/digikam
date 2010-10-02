@@ -82,6 +82,54 @@ ItemVisibilityController *AnimatedVisibility::controller() const
 
 // ---
 
+HidingStateChanger::HidingStateChanger(QObject *parent)
+    : ItemVisibilityController(parent)
+{
+    connect(this, SIGNAL(propertiesAssigned(bool)),
+            this, SLOT(slotPropertiesAssigned(bool)));
+}
+
+HidingStateChanger::HidingStateChanger(QObject *target, const QByteArray property, QObject *parent)
+    : ItemVisibilityController(parent)
+{
+    connect(this, SIGNAL(propertiesAssigned(bool)),
+            this, SLOT(slotPropertiesAssigned(bool)));
+
+    setTargetObject(target);
+    setPropertyName(property);
+}
+
+void HidingStateChanger::setTargetObject(QObject *object)
+{
+    m_object = object;
+}
+
+void HidingStateChanger::setPropertyName(const QByteArray& propertyName)
+{
+    m_property = propertyName;
+}
+
+void HidingStateChanger::changeValue(const QVariant& value)
+{
+    m_value = value;
+    if (!hasVisibleItems())
+        slotPropertiesAssigned(true);
+    else
+        hide();
+}
+
+void HidingStateChanger::slotPropertiesAssigned(bool visible)
+{
+    if (!visible)
+    {
+        if (m_object)
+            m_object->setProperty(m_property, m_value);
+        show();
+    }
+}
+
+// ---
+
 class AnimationControl
 {
 public:
@@ -464,6 +512,16 @@ void ItemVisibilityController::clear()
     d->childControls.clear();
 
     d->visible = false;
+}
+
+QList<QObject*> ItemVisibilityController::items() const
+{
+    QList<QObject*> items;
+    if (d->control)
+        items = d->control->items;
+    foreach (AnimationControl *child, d->childControls)
+        items += child->items;
+    return items;
 }
 
 bool ItemVisibilityController::shallBeShown() const

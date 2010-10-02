@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QAbstractAnimation>
+#include <QVariant>
 
 // KDE includes
 
@@ -101,6 +102,11 @@ public:
      */
     void addItem(QObject *object);
     void removeItem(QObject *object);
+
+    /**
+     * Returns all items under control
+     */
+    QList<QObject*> items() const;
 
 Q_SIGNALS:
 
@@ -213,6 +219,43 @@ public:
 protected:
 
     ItemVisibilityController *m_controller;
+};
+
+class DIGIKAM_EXPORT HidingStateChanger : public ItemVisibilityController
+{
+    Q_OBJECT
+
+public:
+
+    /**
+     * This class provides a state change while fading in and out:
+     * When changeValue is called, first the items are hidden,
+     * when this is finished, the property is assigned to the object.
+     * Afterwards, the items are shown again.
+     * Note that the targetObject is not necessarily a controlled item!
+     */
+
+    HidingStateChanger(QObject *parent = 0);
+
+    /// Convenience constructor: Sets target and property name
+    HidingStateChanger(QObject *target, const QByteArray property, QObject *parent = 0);
+
+    void setTargetObject(QObject *object);
+    void setPropertyName(const QByteArray& propertyName);
+
+public Q_SLOTS:
+
+    void changeValue(const QVariant& value);
+
+protected Q_SLOTS:
+
+    void slotPropertiesAssigned(bool);
+
+protected:
+
+    QObject*   m_object;
+    QByteArray m_property;
+    QVariant   m_value;
 };
 
 } // namespace Digikam
