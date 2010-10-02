@@ -63,7 +63,7 @@ public:
     /**
      * Sets the currently selected tag
      */
-    void setCurrentTag(int tagId);
+    void setCurrentTag(TAlbum *album);
 
     /** Reads a tag treeview and takes the currently selected tag into account
      *  when suggesting a parent tag for a new tag, and a default action.

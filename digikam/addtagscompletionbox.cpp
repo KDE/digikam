@@ -212,7 +212,9 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
     // We use this action to find the right entry to select
     TaggingAction defaultAction                     = makeDefaultTaggingAction(currentText, parentTagId);
 
-    AddTagsCompletionBoxItem* createItemUnderParent = d->createItemForNewTag(currentText, d->parentTag);
+    AddTagsCompletionBoxItem* createItemUnderParent = 0;
+    if (d->parentTag)
+        d->createItemForNewTag(currentText, d->parentTag);
     AddTagsCompletionBoxItem* createItemTopLevel    = d->createItemForNewTag(currentText, 0);
 
     QList<AddTagsCompletionBoxItem*> assignItems;

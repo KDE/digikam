@@ -71,6 +71,9 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
     connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
             this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
 
+    connect(d->lineEdit, SIGNAL(taggingActionSelected(const TaggingAction&)),
+            this, SIGNAL(taggingActionSelected(const TaggingAction&)));
+
     d->lineEdit->setClearButtonShown(true);
 
     TagTreeView::Flags flags;
@@ -138,9 +141,10 @@ void AddTagsComboBox::setParentTag(TAlbum* album)
     d->lineEdit->setParentTag(album);
 }
 
-void AddTagsComboBox::setCurrentTag(int tagId)
+void AddTagsComboBox::setCurrentTag(TAlbum* album)
 {
-    view()->setCurrentAlbum(tagId);
+    view()->setCurrentAlbum(album);
+    slotViewIndexActivated(view()->currentIndex());
 }
 
 void AddTagsComboBox::setClickMessage(const QString& message)

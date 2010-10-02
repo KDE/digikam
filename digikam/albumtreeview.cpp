@@ -416,6 +416,9 @@ void AbstractAlbumTreeView::setAlbumManagerCurrentAlbum(bool set)
 
 void AbstractAlbumTreeView::setCurrentAlbum(Album *album, bool selectInAlbumManager)
 {
+    if (!model())
+        return;
+
     setCurrentIndex(albumFilterModel()->indexForAlbum(album));
     // check local and global flag
     if (selectInAlbumManager && d->setInAlbumManager)

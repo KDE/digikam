@@ -226,7 +226,8 @@ void AddTagsLineEdit::setCompletedItems(const QStringList &items, bool doAutoSug
         txt = text();
     }
 
-    if (txt.isEmpty() || (items.count() == 1 && txt == items.first()))
+    // The part commented out hides the popup when there is exactly one, full, hit
+    if (txt.isEmpty() /*|| (items.count() == 1 && txt == items.first())*/)
     {
         if (d->completionBox->isVisible())
             d->completionBox->hide();
@@ -275,11 +276,13 @@ void AddTagsLineEdit::slotCompletionBoxTextChanged(const QString& t)
 void AddTagsLineEdit::slotCompletionBoxTaggingActionChanged(const TaggingAction& action)
 {
     d->completionBoxAction = action;
+    emit taggingActionSelected(d->completionBoxAction);
 }
 
 void AddTagsLineEdit::slotCompletionBoxCancelled()
 {
     d->completionBoxAction = TaggingAction();
+    emit taggingActionSelected(d->completionBoxAction);
 }
 
 void AddTagsLineEdit::slotReturnPressed(const QString& text)
