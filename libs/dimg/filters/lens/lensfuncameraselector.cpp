@@ -401,6 +401,7 @@ void LensFunCameraSelector::refreshSettingsView()
             d->make->setCurrentIndex(i);
             populateDeviceCombos();
         }
+        if (!d->passiveMetadataUsage) d->makeLabel->setStyleSheet(d->orangeStyle);
     }
 
     if (makerIdx >= 0)
@@ -429,6 +430,10 @@ void LensFunCameraSelector::refreshSettingsView()
         if (!d->passiveMetadataUsage) d->modelLabel->setStyleSheet(d->greenStyle);
         populateLensCombo();
     }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->modelLabel->setStyleSheet(d->orangeStyle);
+    }
 
     // ------------------------------------------------------------------------------------------------
 
@@ -448,6 +453,10 @@ void LensFunCameraSelector::refreshSettingsView()
         d->lens->setEnabled(d->passiveMetadataUsage);
         if (!d->passiveMetadataUsage) d->lensLabel->setStyleSheet(d->greenStyle);
     }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->lensLabel->setStyleSheet(d->orangeStyle);
+    }
 
     // ------------------------------------------------------------------------------------------------
 
@@ -457,6 +466,10 @@ void LensFunCameraSelector::refreshSettingsView()
         d->focal->setEnabled(d->passiveMetadataUsage);
         if (!d->passiveMetadataUsage) d->focalLabel->setStyleSheet(d->greenStyle);
     }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->focalLabel->setStyleSheet(d->orangeStyle);
+    }
 
     if (d->iface->settings().aperture != -1.0)
     {
@@ -464,12 +477,20 @@ void LensFunCameraSelector::refreshSettingsView()
         d->aperture->setEnabled(d->passiveMetadataUsage);
         if (!d->passiveMetadataUsage) d->aperLabel->setStyleSheet(d->greenStyle);
     }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->aperLabel->setStyleSheet(d->orangeStyle);
+    }
 
     if (d->iface->settings().subjectDistance != -1.0)
     {
         d->distance->setValue(d->iface->settings().subjectDistance);
         d->distance->setEnabled(d->passiveMetadataUsage);
         if (!d->passiveMetadataUsage) d->distLabel->setStyleSheet(d->greenStyle);
+    }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->distLabel->setStyleSheet(d->orangeStyle);
     }
 }
 
