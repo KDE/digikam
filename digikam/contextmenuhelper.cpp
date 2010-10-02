@@ -109,9 +109,13 @@ ContextMenuHelper::ContextMenuHelper(QMenu* parent, KActionCollection* actionCol
     d->parent = parent;
 
     if (!actionCollection)
+    {
         d->stdActionCollection = DigikamApp::instance()->actionCollection();
+    }
     else
+    {
         d->stdActionCollection = actionCollection;
+    }
 }
 
 ContextMenuHelper::~ContextMenuHelper()
@@ -129,10 +133,14 @@ void ContextMenuHelper::addAction(const char* name, bool addDisabled)
 void ContextMenuHelper::addAction(QAction* action, bool addDisabled)
 {
     if (!action)
+    {
         return;
+    }
 
     if (action->isEnabled() || addDisabled)
+    {
         d->parent->addAction(action);
+    }
 }
 
 void ContextMenuHelper::addSubMenu(KMenu *subMenu)
@@ -149,7 +157,9 @@ void ContextMenuHelper::addAction(QAction* action, QObject* recv, const char* sl
                                   bool addDisabled)
 {
     if (!action)
+    {
         return;
+    }
 
     connect(action, SIGNAL(triggered()), recv, slot);
     addAction(action, addDisabled);
@@ -163,9 +173,13 @@ void ContextMenuHelper::addStandardActionLightTable()
                   << QString("image_lighttable");
 
     if (LightTableWindow::lightTableWindowCreated() && !LightTableWindow::lightTableWindow()->isEmpty())
+    {
         action = d->stdActionCollection->action(ltActionNames.at(0));
+    }
     else
+    {
         action = d->stdActionCollection->action(ltActionNames.at(1));
+    }
 
     addAction(action);
 }
@@ -173,15 +187,21 @@ void ContextMenuHelper::addStandardActionLightTable()
 void ContextMenuHelper::addStandardActionThumbnail(imageIds& ids, Album* album)
 {
     if (d->setThumbnailAction)
+    {
         return;
+    }
     setSelectedIds(ids);
 
     if (album && ids.count() == 1)
     {
         if (album->type() == Album::PHYSICAL )
+        {
             d->setThumbnailAction = new QAction(i18n("Set as Album Thumbnail"), this);
+        }
         else if (album->type() == Album::TAG )
+        {
             d->setThumbnailAction = new QAction(i18n("Set as Tag Thumbnail"), this);
+        }
 
         addAction(d->setThumbnailAction);
         d->parent->addSeparator();
@@ -202,7 +222,9 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
         if (!mimeTypes.contains(mimeType))
+        {
             mimeTypes << mimeType;
+        }
     }
 
     if (!mimeTypes.isEmpty())
@@ -319,7 +341,9 @@ void ContextMenuHelper::addKipiActions(imageIds& ids)
     {
         KAction* action = kipiRotateAction();
         if (action)
+        {
             d->parent->addAction(action);
+        }
     }
 }
 
@@ -338,7 +362,9 @@ KAction* ContextMenuHelper::kipiRotateAction()
             foreach (KAction* action, actionList)
             {
                 if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
+                {
                     return(action);
+                }
             }
         }
     }
@@ -411,9 +437,10 @@ void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
 
     // Performance: Only check for tags if there are <250 images selected
     // Also disable the remove Tag popup menu, if there are no tags at all.
-    if (ids.count() > 250 ||
-            !DatabaseAccess().db()->hasTags(ids))
+    if (ids.count() > 250 || !DatabaseAccess().db()->hasTags(ids))
+    {
         removeTagsPopup->menuAction()->setEnabled(false);
+    }
 
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SIGNAL(signalRemoveTag(int)));
@@ -433,7 +460,9 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 {
 #ifdef HAVE_KDEPIMLIBS
     if (d->ABCmenu)
+    {
         delete d->ABCmenu;
+    }
 
     d->ABCmenu = new QMenu(d->parent);
 
@@ -468,7 +497,9 @@ void ContextMenuHelper::slotABCContextMenu()
     {
         QString name = *it;
         if (!name.isNull() )
+        {
             d->ABCmenu->addAction(name);
+        }
     }
 
     if (d->ABCmenu->isEmpty())
@@ -516,7 +547,9 @@ void ContextMenuHelper::addImportMenu()
     const QList<QAction*> importActions = DigikamApp::instance()->menuImportActions();
 
     if(!importActions.isEmpty())
+    {
         menuImport->addActions(importActions);
+    }
 
     d->parent->addMenu(menuImport);
 }
@@ -547,7 +580,9 @@ void ContextMenuHelper::addBatchMenu()
     const QList<QAction*>& batchActions = DigikamApp::instance()->menuBatchActions();
 
     if(!batchActions.isEmpty())
+    {
         menuKIPIBatch->addActions(batchActions);
+    }
 
     d->parent->addMenu(menuKIPIBatch);
 }
@@ -556,7 +591,9 @@ void ContextMenuHelper::addAlbumActions()
 {
     const QList<QAction*>& albumActions = DigikamApp::instance()->menuAlbumActions();
     if(!albumActions.isEmpty())
+    {
         d->parent->addActions(albumActions);
+    }
 }
 
 void ContextMenuHelper::addGotoMenu(imageIds& ids)
@@ -580,7 +617,10 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
     }
 
     // when more then one item is selected, don't add the menu
-    if (d->selectedIds.count() > 1) return;
+    if (d->selectedIds.count() > 1)
+    {
+        return;
+    }
 
     d->gotoAlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Album"), this);
     d->gotoDateAction  = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  this);
@@ -596,7 +636,9 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
 
     // Disable the goto Tag popup menu, if there are no tags at all.
     if (!DatabaseAccess().db()->hasTags(d->selectedIds))
+    {
         gotoTag->setEnabled(false);
+    }
 
     Album* currentAlbum = AlbumManager::instance()->currentAlbum();
 
@@ -606,7 +648,9 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
         // which the image belongs, then disable the "Go To" Album.
         // (Note that in recursive album view these can be different).
         if (item.albumId() == currentAlbum->id())
+        {
             d->gotoAlbumAction->setEnabled(false);
+        }
     }
     else if (currentAlbum->type() == Album::DATE)
     {
@@ -643,7 +687,9 @@ void ContextMenuHelper::addQueueManagerMenu()
         // queueActions is used by the exec() method to emit an appropriate signal.
         // Reset the map before filling in the actions.
         if (!d->queueActions.isEmpty())
+        {
             d->queueActions.clear();
+        }
 
         QList<QAction*> queueList;
 
@@ -680,7 +726,9 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 
     const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
     if(!data || !KUrl::List::canDecode(data))
+    {
         paste->setEnabled(false);
+    }
     addAction(paste);
 }
 
@@ -702,9 +750,18 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
         {
             ImageInfo selectedItem(d->selectedIds.first());
 
-            if (choice == d->gotoAlbumAction)           emit signalGotoAlbum(selectedItem);
-            else if (choice == d->gotoDateAction)       emit signalGotoDate(selectedItem);
-            else if (choice == d->setThumbnailAction)   emit signalSetThumbnail(selectedItem);
+            if (choice == d->gotoAlbumAction)
+            {
+                emit signalGotoAlbum(selectedItem);
+            }
+            else if (choice == d->gotoDateAction)
+            {
+                emit signalGotoDate(selectedItem);
+            }
+            else if (choice == d->setThumbnailAction)
+            {
+                emit signalSetThumbnail(selectedItem);
+            }
         }
 
         // check if a BQM action has been triggered
@@ -724,13 +781,17 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
 void ContextMenuHelper::setSelectedIds(imageIds& ids)
 {
     if (d->selectedIds.isEmpty())
+    {
         d->selectedIds = ids;
+    }
 }
 
 void ContextMenuHelper::setSelectedItems(KUrl::List urls)
 {
     if (d->selectedItems.isEmpty())
+    {
         d->selectedItems = urls;
+    }
 }
 
 } // namespace Digikam
