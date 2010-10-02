@@ -145,6 +145,7 @@ void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh,
     cmh.addAction(d->renameAction);
     cmh.addAction(d->resetIconAction);
     cmh.addAction("album_openinfilemanager");
+    cmh.addAction("album_openinterminal");
     cmh.addSeparator();
     // --------------------------------------------------------
     cmh.addAction(d->findDuplAction);
