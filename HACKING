@@ -375,7 +375,7 @@ To implement new feature it usual to use a dedicated developement branche from s
 trunk code as stable for production. To synchronize branche with trunk, use this command into your
 local branch checkout:
 
-merge -r_COMMIT_ID_:HEAD svn+ssh://_YOUR_ACCOUNT_@svn.kde.org/home/kde/trunk/extragear/graphics/digikam
+svn merge -r_COMMIT_ID_:HEAD svn+ssh://_YOUR_ACCOUNT_@svn.kde.org/home/kde/trunk/extragear/graphics/digikam
 
 _COMMIT_ID_    is the last revision from trunk which have been synchronized to your development branche.
 _YOUR_ACCOUNT_ is your subversion login name.
