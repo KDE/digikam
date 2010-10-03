@@ -444,7 +444,7 @@ void FaceGroup::load()
         // for identification, use index in our list
         AssignNameWidget* assignWidget = d->createAssignNameWidget(face, d->items.size());
         item->setHudWidget(assignWidget);
-        new StyleSheetDebugger(assignWidget);
+        //new StyleSheetDebugger(assignWidget);
 
         d->visibilityController->addItem(item);
 
