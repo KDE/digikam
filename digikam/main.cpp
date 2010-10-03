@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     // Check if SQLite Qt4 plugin is available.
 
     if (!QSqlDatabase::isDriverAvailable(DatabaseParameters::SQLiteDatabaseType())
-      || !QSqlDatabase::isDriverAvailable(DatabaseParameters::MySQLDatabaseType()))
+        && !QSqlDatabase::isDriverAvailable(DatabaseParameters::MySQLDatabaseType()))
     {
         if (QSqlDatabase::drivers().isEmpty())
         {
