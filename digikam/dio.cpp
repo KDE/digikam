@@ -28,6 +28,7 @@
 
 #include <kio/deletejob.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -45,7 +46,7 @@ namespace Digikam
 namespace DIO
 {
 
-KIO::Job* copy(const PAlbum *src, const PAlbum *dest)
+KIO::Job* copy(const PAlbum* src, const PAlbum* dest)
 {
     KUrl srcUrl(src->databaseUrl());
     KUrl destUrl(dest->databaseUrl());
@@ -54,7 +55,7 @@ KIO::Job* copy(const PAlbum *src, const PAlbum *dest)
     return KIO::copy(srcUrl, destUrl);
 }
 
-KIO::Job* move(const PAlbum *src, const PAlbum *dest)
+KIO::Job* move(const PAlbum* src, const PAlbum* dest)
 {
     KUrl srcUrl(src->databaseUrl());
     KUrl destUrl(dest->databaseUrl());
@@ -63,7 +64,7 @@ KIO::Job* move(const PAlbum *src, const PAlbum *dest)
     return KIO::move(srcUrl, destUrl);
 }
 
-KIO::Job *copy(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum *dest)
+KIO::Job* copy(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum* dest)
 {
     KUrl destUrl(dest->databaseUrl());
 
@@ -75,7 +76,7 @@ KIO::Job *copy(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlb
     return KIO::copy(srcList, destUrl);
 }
 
-KIO::Job *move(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum *dest)
+KIO::Job* move(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum* dest)
 {
     KUrl destUrl(dest->databaseUrl());
 
@@ -87,41 +88,45 @@ KIO::Job *move(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlb
     return KIO::move(srcList, destUrl);
 }
 
-KIO::Job* copy(const KUrl& src, const PAlbum *dest)
+KIO::Job* copy(const KUrl& src, const PAlbum* dest)
 {
     KUrl destUrl(dest->databaseUrl());
 
     return KIO::copy(src, destUrl);
 }
 
-KIO::Job* copy(const KUrl::List& srcList, const PAlbum *dest)
+KIO::Job* copy(const KUrl::List& srcList, const PAlbum* dest)
 {
     KUrl destUrl(dest->databaseUrl());
 
     return KIO::copy(srcList, destUrl);
 }
 
-KIO::Job* move(const KUrl& src, const PAlbum *dest)
+KIO::Job* move(const KUrl& src, const PAlbum* dest)
 {
     KUrl destUrl(dest->databaseUrl());
+
+    kDebug() << "File to move : " << src;
 
     return KIO::move(src, destUrl);
 }
 
-KIO::Job* move(const KUrl::List& srcList, const PAlbum *dest)
+KIO::Job* move(const KUrl::List& srcList, const PAlbum* dest)
 {
     KUrl destUrl(dest->databaseUrl());
+
+    kDebug() << "Files to move : " << srcList;
 
     return KIO::move(srcList, destUrl);
 }
 
-KIO::CopyJob *rename(const ImageInfo& info, const QString newName)
+KIO::CopyJob* rename(const ImageInfo& info, const QString newName)
 {
     KUrl oldUrl = info.databaseUrl();
     KUrl newUrl = oldUrl;
     newUrl.setFileName(newName);
 
-    PAlbum *album = AlbumManager::instance()->findPAlbum(info.albumId());
+    PAlbum* album = AlbumManager::instance()->findPAlbum(info.albumId());
     if (album)
         ScanController::instance()->hintAtMoveOrCopyOfItem(info.id(), album, newName);
 
@@ -131,6 +136,8 @@ KIO::CopyJob *rename(const ImageInfo& info, const QString newName)
 KIO::Job* del(const KUrl& src, bool useTrash)
 {
     KIO::Job* job = 0;
+
+    kDebug() << "File to delete : " << src;
 
     if (useTrash)
     {
@@ -148,6 +155,8 @@ KIO::Job* del(const KUrl::List& srcList, bool useTrash)
 {
     KIO::Job* job = 0;
 
+    kDebug() << "Files to delete : " << srcList;
+
     if (useTrash)
     {
         job = KIO::trash( srcList);
@@ -160,6 +169,6 @@ KIO::Job* del(const KUrl::List& srcList, bool useTrash)
     return job;
 }
 
-}  // namespace DIO
+} // namespace DIO
 
 } // namespace Digikam
