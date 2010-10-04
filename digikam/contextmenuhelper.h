@@ -6,7 +6,7 @@
  * Date        : 2009-02-15
  * Description : contextmenu helper class
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,6 @@ namespace Digikam
 
 class Album;
 class AlbumIconItem;
-class ContextMenuHelperPriv;
 class ImageInfo;
 class TagModificationHelper;
 
@@ -236,9 +235,9 @@ public:
      * The tag modification helper is used to execute the action.
      * You must set the parent tag to use on modification helper.
      */
-    void addActionNewTag(TagModificationHelper *helper);
-    void addActionDeleteTag(TagModificationHelper *helper);
-    void addActionEditTag(TagModificationHelper *helper);
+    void addActionNewTag(TagModificationHelper* helper);
+    void addActionDeleteTag(TagModificationHelper* helper);
+    void addActionEditTag(TagModificationHelper* helper);
 
     /**
      * Add "Assign Tags" menu.
@@ -287,7 +286,7 @@ public:
      *
      * @param item the highlighted item
      */
-    void addSelectTagsMenu(Q3ListViewItem *item);
+    void addSelectTagsMenu(Q3ListViewItem* item);
 
     /**
      * Add "Rating" menu.
@@ -333,7 +332,7 @@ public:
      *
      * @param subMenu   the submenu to be added
      */
-    void addSubMenu(KMenu *subMenu);
+    void addSubMenu(KMenu* subMenu);
 
     /**
      * Add a separator to the context menu
@@ -370,6 +369,7 @@ private:
 
 private:
 
+    class ContextMenuHelperPriv;
     ContextMenuHelperPriv* const d;
 };
 

@@ -6,7 +6,7 @@
  * Date        : 2009-02-15
  * Description : contextmenu helper class
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,7 +74,7 @@
 namespace Digikam
 {
 
-class ContextMenuHelperPriv
+class ContextMenuHelper::ContextMenuHelperPriv
 {
 public:
 
@@ -143,7 +143,7 @@ void ContextMenuHelper::addAction(QAction* action, bool addDisabled)
     }
 }
 
-void ContextMenuHelper::addSubMenu(KMenu *subMenu)
+void ContextMenuHelper::addSubMenu(KMenu* subMenu)
 {
     d->parent->addMenu(subMenu);
 }
@@ -389,7 +389,7 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
     return sameCategory;
 }
 
-void ContextMenuHelper::addActionNewTag(TagModificationHelper *helper)
+void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper)
 {
     QAction *newTagAction = new QAction(SmallIcon("tag-new"), i18n("New Tag..."), this);
     addAction(newTagAction);
@@ -397,7 +397,7 @@ void ContextMenuHelper::addActionNewTag(TagModificationHelper *helper)
             helper, SLOT(slotTagNew()));
 }
 
-void ContextMenuHelper::addActionDeleteTag(TagModificationHelper *helper)
+void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper)
 {
     QAction *deleteTagAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tag"), this);
     addAction(deleteTagAction);
@@ -405,9 +405,9 @@ void ContextMenuHelper::addActionDeleteTag(TagModificationHelper *helper)
             helper, SLOT(slotTagDelete()));
 }
 
-void ContextMenuHelper::addActionEditTag(TagModificationHelper *helper)
+void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper)
 {
-    QAction *editTagAction = new QAction(SmallIcon("tag-properties"), i18nc("Edit Tag Properties", "Properties..."), this);
+    QAction* editTagAction = new QAction(SmallIcon("tag-properties"), i18nc("Edit Tag Properties", "Properties..."), this);
     addAction(editTagAction);
     connect(editTagAction, SIGNAL(triggered()),
             helper, SLOT(slotTagEdit()));
@@ -469,7 +469,7 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
     connect(d->ABCmenu, SIGNAL(aboutToShow()),
             this, SLOT(slotABCContextMenu()));
 
-    QAction *abcAction = d->ABCmenu->menuAction();
+    QAction* abcAction = d->ABCmenu->menuAction();
     abcAction->setIcon(SmallIcon("tag-addressbook"));
     abcAction->setText(i18n("Create Tag From Address Book"));
     d->parent->addMenu(d->ABCmenu);
@@ -504,7 +504,7 @@ void ContextMenuHelper::slotABCContextMenu()
 
     if (d->ABCmenu->isEmpty())
     {
-        QAction *nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
+        QAction* nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
         nothingFound->setEnabled(false);
     }
 #endif // HAVE_KDEPIMLIBS
@@ -526,10 +526,10 @@ void ContextMenuHelper::slotDeselectAllAlbumItems()
 
 void ContextMenuHelper::addSelectTagsMenu(Q3ListViewItem *item)
 {
-    KMenu *selectTagsMenu         = new KMenu(i18nc("select tags menu", "Select"), d->parent);
-    QAction *selectChildrenAction = 0;
-    QAction *selectParentsAction  = 0;
-    QAction *selectAllTagsAction  = 0;
+    KMenu* selectTagsMenu         = new KMenu(i18nc("select tags menu", "Select"), d->parent);
+    QAction* selectChildrenAction = 0;
+    QAction* selectParentsAction  = 0;
+    QAction* selectAllTagsAction  = 0;
     selectAllTagsAction           = selectTagsMenu->addAction(i18n("All Tags"));
     if (item)
     {
@@ -631,13 +631,12 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
 
     d->gotoAlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Album"), this);
     d->gotoDateAction  = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  this);
-
-    KMenu *gotoMenu  = new KMenu(d->parent);
+    KMenu* gotoMenu    = new KMenu(d->parent);
     gotoMenu->addAction(d->gotoAlbumAction);
     gotoMenu->addAction(d->gotoDateAction);
 
-    TagsPopupMenu *gotoTagsPopup = new TagsPopupMenu(d->selectedIds, TagsPopupMenu::DISPLAY, gotoMenu);
-    QAction *gotoTag = gotoMenu->addMenu(gotoTagsPopup);
+    TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(d->selectedIds, TagsPopupMenu::DISPLAY, gotoMenu);
+    QAction* gotoTag = gotoMenu->addMenu(gotoTagsPopup);
     gotoTag->setIcon(SmallIcon("tag"));
     gotoTag->setText(i18n("Tag"));
 
@@ -663,7 +662,7 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
     {
         d->gotoDateAction->setEnabled(false);
     }
-    QAction *gotoMenuAction = gotoMenu->menuAction();
+    QAction* gotoMenuAction = gotoMenu->menuAction();
     gotoMenuAction->setIcon(SmallIcon("go-jump"));
     gotoMenuAction->setText(i18n("Go To"));
 
@@ -713,6 +712,9 @@ void ContextMenuHelper::addQueueManagerMenu()
         bqmMenu->addMenu(queueMenu);
     }
     d->parent->addMenu(bqmMenu);
+
+    // NOTE: see B.K.O #252130 : we need to disable new items to add on BQM is this one is running.
+    bqmMenu->setDisabled(QueueMgrWindow::queueManagerWindow()->isBusy());
 }
 
 void ContextMenuHelper::addStandardActionCut(QObject* recv, const char* slot)
@@ -731,7 +733,7 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 {
     KAction* paste = KStandardAction::paste(recv, slot, d->parent);
 
-    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
+    const QMimeData* data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
     if(!data || !KUrl::List::canDecode(data))
     {
         paste->setEnabled(false);
@@ -741,7 +743,7 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 
 void ContextMenuHelper::addStandardActionItemDelete(QObject* recv, const char* slot, int quantity)
 {
-    QAction *trashAction = new QAction(SmallIcon("user-trash"), i18ncp("@action:inmenu Pluralized",
+    QAction* trashAction = new QAction(SmallIcon("user-trash"), i18ncp("@action:inmenu Pluralized",
                                        "Move to Trash", "Move %1 Files to Trash", quantity), d->parent);
     connect(trashAction, SIGNAL(triggered()),
             recv, slot);
