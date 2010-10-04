@@ -467,12 +467,19 @@ QString DigikamApp::currentDatabaseParameters()
 
 bool DigikamApp::queryClose()
 {
+    bool ret = true;
+
     if (ImageWindow::imagewindowCreated())
     {
-        return ImageWindow::imagewindow()->queryClose();
+        ret &= ImageWindow::imagewindow()->queryClose();
     }
-    else
-        return true;
+
+    if (QueueMgrWindow::queueManagerWindowCreated())
+    {
+        ret &= QueueMgrWindow::queueManagerWindow()->queryClose();
+    }
+
+    return ret;
 }
 
 void DigikamApp::setupView()

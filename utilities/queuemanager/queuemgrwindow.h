@@ -75,6 +75,8 @@ public:
 
     int currentQueueId();
 
+    bool queryClose();
+
 Q_SIGNALS:
 
     void signalWindowHasMoved();
