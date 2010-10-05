@@ -52,7 +52,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 209382 : Caption not being updated in image file.
 038 ==> 253043 : digiKam requires both SQlite and MySql.
 039 ==> 252130 : Crash on adding things to batch queue.
-040 ==> 
+040 ==> 237961 : ICC Convert faulty in BQM.
+041 ==> 
+
 
 
 
