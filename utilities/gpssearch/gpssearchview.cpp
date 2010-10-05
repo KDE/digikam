@@ -220,8 +220,8 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
-    d->mapSearchWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
-    d->mapSearchWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
+    d->mapSearchWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeFilterDatabase|KMap::MouseModeFilterModel|KMap::MouseModeSelectThumbnail);
+    d->mapSearchWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeFilterDatabase|KMap::MouseModeFilterModel|KMap::MouseModeSelectThumbnail);
 
     d->existsSelection              = false; 
 
@@ -305,6 +305,7 @@ void GPSSearchView::doLoadState()
     d->mapSearchWidget->readSettingsFromGroup(&groupMapWidget);
     d->searchTreeView->loadState();
 
+    AlbumManager::instance()->setCurrentAlbum(0);
     d->searchTreeView->clearSelection();
     d->imageAlbumModel->clearImageInfos();
 }
@@ -341,8 +342,9 @@ void GPSSearchView::setActive(bool val)
     if (val && d->searchTreeView->currentAlbum())
     {
         d->mapSearchWidget->setActive(true);
-        AlbumManager::instance()->setCurrentAlbum(
-                        d->searchTreeView->currentAlbum());
+    //    AlbumManager::instance()->setCurrentAlbum(
+    //                    d->searchTreeView->currentAlbum());
+        d->imageAlbumModel->clearImageInfos();
     }
     else if (val)
     {
