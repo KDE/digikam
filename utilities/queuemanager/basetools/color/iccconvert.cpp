@@ -25,13 +25,14 @@
 
 // Qt includes
 
-#include <QWidget>
+#include <QLabel>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kvbox.h>
 
 // Local includes
 
@@ -53,9 +54,11 @@ IccConvert::IccConvert(QObject* parent)
     setToolDescription(i18n("A tool to convert image to a color space."));
     setToolIcon(KIcon(SmallIcon("colormanagement")));
 
-    QWidget* box   = new QWidget;
-    m_settingsView = new IccProfilesSettings(box);
-    setSettingsWidget(box);
+    KVBox* vbox    = new KVBox;
+    m_settingsView = new IccProfilesSettings(vbox);
+    QLabel* space  = new QLabel(vbox);
+    vbox->setStretchFactor(space, 10);
+    setSettingsWidget(vbox);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
