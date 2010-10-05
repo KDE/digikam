@@ -107,6 +107,9 @@ public:
      */
     IccProfile getIccProfile() const;
 
+    /** Remove the Exif color space identification from the image */
+    bool removeExifColorSpace() const;
+
     PhotoInfoContainer getPhotographInformation() const;
 
     /** Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
