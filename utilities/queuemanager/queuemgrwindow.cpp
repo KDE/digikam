@@ -910,6 +910,8 @@ void QueueMgrWindow::processingAborted()
 
 void QueueMgrWindow::processOne()
 {
+    d->assignedList->reset();
+
     if (d->itemsList.empty())
     {
         // Pop-up a message to bring user when all is done.
@@ -1027,7 +1029,6 @@ void QueueMgrWindow::slotProgressTimerDone()
 
 void QueueMgrWindow::processing(const KUrl& url)
 {
-    d->assignedList->reset();
     d->currentProcessItem = d->queuePool->currentQueue()->findItemByUrl(url);
     if (d->currentProcessItem)
     {
