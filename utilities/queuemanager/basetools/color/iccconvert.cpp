@@ -37,6 +37,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dmetadata.h"
 #include "icctransform.h"
 #include "icctransformfilter.h"
 #include "iccprofilesettings.h"
@@ -99,7 +100,7 @@ bool IccConvert::toolOperations()
     if (!loadToDImg()) return false;
 
     QString              profPath = settings()["ProfilePath"].toString();
-    IccProfile           in = image().getIccProfile();
+    IccProfile           in       = image().getIccProfile();
     IccProfile           out(profPath);
     ICCSettingsContainer settings = IccSettings::instance()->settings();
     IccTransform         transform;
@@ -111,8 +112,12 @@ bool IccConvert::toolOperations()
 
     IccTransformFilter icc(&image(), 0L, transform);
     icc.startFilterDirectly();
-    image().putImageData(icc.getTargetImage().bits());
-
+    DImg imDest     = icc.getTargetImage();
+    image().putImageData(imDest.bits());
+    image().setIccProfile(imDest.getIccProfile());
+    DMetadata meta(image().getMetadata());
+    meta.removeExifColorSpace();
+    image().setMetadata(meta.data());
     return (savefromDImg());
 }
 

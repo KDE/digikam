@@ -51,6 +51,7 @@
 #include "histogramwidget.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
+#include "dmetadata.h"
 
 namespace DigikamColorImagePlugin
 {
@@ -250,6 +251,10 @@ void ProfileConversionTool::putFinalData()
 
     iface.putOriginalImage(i18n("Color Profile Conversion"), imDest.bits());
     iface.putOriginalIccProfile(imDest.getIccProfile());
+
+    DMetadata meta(iface.getOriginalMetadata());
+    meta.removeExifColorSpace();
+    iface.setOriginalMetadata(meta.data());
 }
 
 // Static Methods.
@@ -265,13 +270,19 @@ QStringList ProfileConversionTool::favoriteProfiles()
 void ProfileConversionTool::fastConversion(const IccProfile& profile)
 {
     ImageIface iface(0, 0);
+
     IccProfile currentProfile = iface.getOriginalIccProfile();
     IccTransform transform    = ProfileConversionToolPriv::getTransform(currentProfile, profile);
     IccTransformFilter filter(iface.getOriginalImg(), 0, transform);
     filter.startFilterDirectly();
+
     DImg imDest               = filter.getTargetImage();
     iface.putOriginalImage(i18n("Color Profile Conversion"), imDest.bits());
     iface.putOriginalIccProfile(imDest.getIccProfile());
+
+    DMetadata meta(iface.getOriginalMetadata());
+    meta.removeExifColorSpace();
+    iface.setOriginalMetadata(meta.data());
 }
 
 }  // namespace DigikamColorImagePlugin
