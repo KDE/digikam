@@ -59,7 +59,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 241770 : digiKam crashes.
 045 ==> 238045 : Random crashes of digiKam.
 046 ==> 188263 : Crash after tinkering with star rating widget in thumbbar.
-047 ==> 
+047 ==> 233549 : Database stuck at saving new image.
+048 ==> 
+
 
 
 
