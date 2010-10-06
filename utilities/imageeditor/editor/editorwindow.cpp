@@ -1061,7 +1061,7 @@ void EditorWindow::slotToggleFullScreen()
 
         m_canvas->setBackgroundColor(m_bgColor);
 
-        menuBar()->show();
+        slotShowMenuBar();
         statusBar()->show();
         showToolBars();
 
@@ -2373,8 +2373,7 @@ void EditorWindow::setToolStopProgress()
 
 void EditorWindow::slotShowMenuBar()
 {
-    const bool visible = menuBar()->isVisible();
-    menuBar()->setVisible(!visible);
+    menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
 void EditorWindow::slotCloseTool()

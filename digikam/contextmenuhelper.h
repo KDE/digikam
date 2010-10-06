@@ -6,7 +6,7 @@
  * Date        : 2009-02-15
  * Description : contextmenu helper class
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,6 @@ namespace Digikam
 
 class Album;
 class AlbumIconItem;
-class ContextMenuHelperPriv;
 class ImageInfo;
 class TagModificationHelper;
 
@@ -149,7 +148,7 @@ public:
      * @param recv the receiver of the triggered action
      * @param slot the slot to connect the triggered action to
      */
-    void addActionCut(QObject* recv, const char* slot);
+    void addStandardActionCut(QObject* recv, const char* slot);
 
     /**
      * Add the standard copy action and connect it to the appropriate slot
@@ -157,7 +156,7 @@ public:
      * @param recv the receiver of the triggered action
      * @param slot the slot to connect the triggered action to
      */
-    void addActionCopy(QObject* recv, const char* slot);
+    void addStandardActionCopy(QObject* recv, const char* slot);
 
     /**
      * Add the standard paste action and connect it to the appropriate slot
@@ -165,7 +164,7 @@ public:
      * @param recv the receiver of the triggered action
      * @param slot the slot to connect the triggered action to
      */
-    void addActionPaste(QObject* recv, const char* slot);
+    void addStandardActionPaste(QObject* recv, const char* slot);
 
     /**
      * Add the standard delete action and connect it to the appropriate slot
@@ -175,7 +174,7 @@ public:
      * @param quantity the number of the files that should be deleted. This parameter is used for
      * the action name and is normally used when deleting more then one item.
      */
-    void addActionItemDelete(QObject* recv, const char* slot, int quantity = 1);
+    void addStandardActionItemDelete(QObject* recv, const char* slot, int quantity = 1);
 
     /**
      * Add the lighttable action to the menu.
@@ -184,7 +183,7 @@ public:
      * to handle special cases here. Depending on whether the lighttable window
      * has already been created and filled with items, we set different actions.
      */
-    void addActionLightTable();
+    void addStandardActionLightTable();
 
     /**
      * Add the thumbnail action to the menu.
@@ -196,7 +195,7 @@ public:
      * @param ids the selected items in the current view
      * @param album the current album the AlbumIconView is displaying
      */
-    void addActionThumbnail(imageIds& ids, Album* album);
+    void addStandardActionThumbnail(imageIds& ids, Album* album);
 
     /**
      * Add the services menu to the menu.
@@ -236,9 +235,9 @@ public:
      * The tag modification helper is used to execute the action.
      * You must set the parent tag to use on modification helper.
      */
-    void addActionNewTag(TagModificationHelper *helper);
-    void addActionDeleteTag(TagModificationHelper *helper);
-    void addActionEditTag(TagModificationHelper *helper);
+    void addActionNewTag(TagModificationHelper* helper);
+    void addActionDeleteTag(TagModificationHelper* helper);
+    void addActionEditTag(TagModificationHelper* helper);
 
     /**
      * Add "Assign Tags" menu.
@@ -287,7 +286,7 @@ public:
      *
      * @param item the highlighted item
      */
-    void addSelectTagsMenu(Q3ListViewItem *item);
+    void addSelectTagsMenu(Q3ListViewItem* item);
 
     /**
      * Add "Rating" menu.
@@ -333,7 +332,7 @@ public:
      *
      * @param subMenu   the submenu to be added
      */
-    void addSubMenu(KMenu *subMenu);
+    void addSubMenu(KMenu* subMenu);
 
     /**
      * Add a separator to the context menu
@@ -370,6 +369,7 @@ private:
 
 private:
 
+    class ContextMenuHelperPriv;
     ContextMenuHelperPriv* const d;
 };
 

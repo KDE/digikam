@@ -2183,7 +2183,7 @@ void CameraUI::slotToggleFullScreen()
     {
         setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
 
-        menuBar()->show();
+        slotShowMenuBar();
         statusBar()->show();
         showToolBars();
 
@@ -2346,8 +2346,7 @@ void CameraUI::slotCollectionLocationStatusChanged(const CollectionLocation &, i
 
 void CameraUI::slotShowMenuBar()
 {
-    const bool visible = menuBar()->isVisible();
-    menuBar()->setVisible(!visible);
+    menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
 void CameraUI::slotSidebarTabTitleStyleChanged()

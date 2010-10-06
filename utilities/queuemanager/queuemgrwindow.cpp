@@ -614,7 +614,7 @@ void QueueMgrWindow::slotToggleFullScreen()
     {
         setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
 
-        menuBar()->show();
+        slotShowMenuBar();
         statusBar()->show();
         showToolBars();
 
@@ -785,6 +785,27 @@ void QueueMgrWindow::slotDBStat()
     showDigikamDatabaseStat();
 }
 
+bool QueueMgrWindow::queryClose()
+{
+    if (isBusy())
+    {
+        int result = KMessageBox::warningYesNo(this, 
+                        i18n("Batch Queue Manager is running. Do you want to cancel current job?"),
+                        i18n("Processing under progress"));
+
+        if (result == KMessageBox::Yes)
+        {
+            slotStop();
+        }
+        else if (result == KMessageBox::No)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void QueueMgrWindow::addNewQueue()
 {
     d->queuePool->slotAddQueue();
@@ -826,8 +847,7 @@ void QueueMgrWindow::populateToolsList()
 
 void QueueMgrWindow::slotShowMenuBar()
 {
-    const bool visible = menuBar()->isVisible();
-    menuBar()->setVisible(!visible);
+    menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
 void QueueMgrWindow::slotRun()
@@ -891,6 +911,8 @@ void QueueMgrWindow::processingAborted()
 
 void QueueMgrWindow::processOne()
 {
+    d->assignedList->reset();
+
     if (d->itemsList.empty())
     {
         // Pop-up a message to bring user when all is done.
@@ -1008,7 +1030,6 @@ void QueueMgrWindow::slotProgressTimerDone()
 
 void QueueMgrWindow::processing(const KUrl& url)
 {
-    d->assignedList->reset();
     d->currentProcessItem = d->queuePool->currentQueue()->findItemByUrl(url);
     if (d->currentProcessItem)
     {

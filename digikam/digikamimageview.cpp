@@ -269,7 +269,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
-    cmhelper.addActionLightTable();
+    cmhelper.addStandardActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addSeparator();
     // --------------------------------------------------------
@@ -277,10 +277,10 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addAction("cut_album_selection");
     cmhelper.addAction("copy_album_selection");
     cmhelper.addAction("paste_album_selection");
-    cmhelper.addActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
+    cmhelper.addStandardActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addActionThumbnail(selectedImageIDs, currentAlbum());
+    cmhelper.addStandardActionThumbnail(selectedImageIDs, currentAlbum());
     // --------------------------------------------------------
     cmhelper.addAssignTagsMenu(selectedImageIDs);
     cmhelper.addRemoveTagsMenu(selectedImageIDs);

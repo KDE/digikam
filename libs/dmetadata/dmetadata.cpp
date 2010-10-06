@@ -1964,5 +1964,13 @@ void DMetadata::setData(const KExiv2Data& data)
 // End: Compatibility for < KDE 4.4
 //------------------------------------------------------------------------------------------------
 
+// NOTE: this method can be moved to libkexiv2 later...
+bool DMetadata::removeExifColorSpace() const
+{
+    bool ret = true;
+    ret      &= removeExifTag("Exif.Photo.ColorSpace", true);
+    ret      &= removeXmpTag("Xmp.exif.ColorSpace", true);
+    return ret;
+}
 
 }  // namespace Digikam

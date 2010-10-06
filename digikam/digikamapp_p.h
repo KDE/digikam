@@ -102,7 +102,7 @@ public:
         addImagesAction                      = 0;
         propsEditAction                      = 0;
         addFoldersAction                     = 0;
-        openInKonquiAction                   = 0;
+        openInFileManagerAction              = 0;
         openInTerminalAction                 = 0;
         refreshAlbumAction                   = 0;
         writeAlbumMetadataAction             = 0;
@@ -224,7 +224,7 @@ public:
     KAction*                            addImagesAction;
     KAction*                            propsEditAction;
     KAction*                            addFoldersAction;
-    KAction*                            openInKonquiAction;
+    KAction*                            openInFileManagerAction;
     KAction*                            openInTerminalAction;
     KAction*                            refreshAlbumAction;
     KAction*                            writeAlbumMetadataAction;

@@ -279,7 +279,7 @@ void LightTableWindow::setupStatusBar()
     d->leftZoomBar->setZoomTo100Action(d->leftZoomTo100percents);
     d->leftZoomBar->setZoomPlusAction(d->leftZoomPlusAction);
     d->leftZoomBar->setZoomMinusAction(d->leftZoomMinusAction);
-    d->leftZoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);    
+    d->leftZoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
     d->leftZoomBar->setEnabled(false);
     statusBar()->addWidget(d->leftZoomBar, 1);
 
@@ -300,7 +300,7 @@ void LightTableWindow::setupStatusBar()
     d->rightZoomBar->setZoomTo100Action(d->rightZoomTo100percents);
     d->rightZoomBar->setZoomPlusAction(d->rightZoomPlusAction);
     d->rightZoomBar->setZoomMinusAction(d->rightZoomMinusAction);
-    d->rightZoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);    
+    d->rightZoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
     d->rightZoomBar->setEnabled(false);
     statusBar()->addWidget(d->rightZoomBar, 1);
 }
@@ -1412,7 +1412,7 @@ void LightTableWindow::slotToggleFullScreen()
     {
         setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
 
-        menuBar()->show();
+        slotShowMenuBar();
         statusBar()->show();
         showToolBars();
 
@@ -1669,8 +1669,7 @@ void LightTableWindow::slotDBStat()
 
 void LightTableWindow::slotShowMenuBar()
 {
-    const bool visible = menuBar()->isVisible();
-    menuBar()->setVisible(!visible);
+    menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
 void LightTableWindow::slotSidebarTabTitleStyleChanged()

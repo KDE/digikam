@@ -25,17 +25,19 @@
 
 // Qt includes
 
-#include <QWidget>
+#include <QLabel>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kvbox.h>
 
 // Local includes
 
 #include "dimg.h"
+#include "dmetadata.h"
 #include "icctransform.h"
 #include "icctransformfilter.h"
 #include "iccprofilesettings.h"
@@ -53,9 +55,11 @@ IccConvert::IccConvert(QObject* parent)
     setToolDescription(i18n("A tool to convert image to a color space."));
     setToolIcon(KIcon(SmallIcon("colormanagement")));
 
-    QWidget* box   = new QWidget;
-    m_settingsView = new IccProfilesSettings(box);
-    setSettingsWidget(box);
+    KVBox* vbox    = new KVBox;
+    m_settingsView = new IccProfilesSettings(vbox);
+    QLabel* space  = new QLabel(vbox);
+    vbox->setStretchFactor(space, 10);
+    setSettingsWidget(vbox);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
@@ -96,7 +100,7 @@ bool IccConvert::toolOperations()
     if (!loadToDImg()) return false;
 
     QString              profPath = settings()["ProfilePath"].toString();
-    IccProfile           in = image().getIccProfile();
+    IccProfile           in       = image().getIccProfile();
     IccProfile           out(profPath);
     ICCSettingsContainer settings = IccSettings::instance()->settings();
     IccTransform         transform;
@@ -108,8 +112,12 @@ bool IccConvert::toolOperations()
 
     IccTransformFilter icc(&image(), 0L, transform);
     icc.startFilterDirectly();
-    image().putImageData(icc.getTargetImage().bits());
-
+    DImg imDest     = icc.getTargetImage();
+    image().putImageData(imDest.bits());
+    image().setIccProfile(imDest.getIccProfile());
+    DMetadata meta(image().getMetadata());
+    meta.removeExifColorSpace();
+    image().setMetadata(meta.data());
     return (savefromDImg());
 }
 

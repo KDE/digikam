@@ -51,7 +51,10 @@ class LensFunCameraSelector::LensFunCameraSelectorPriv
 public:
 
     LensFunCameraSelectorPriv()
-        : configUseMetadata("UseMetadata")
+        : configUseMetadata("UseMetadata"),
+          redStyle("QLabel {color: red;}"),
+          orangeStyle("QLabel {color: orange;}"),
+          greenStyle("QLabel {color: green;}")
     {
         metadataUsage        = 0;
         make                 = 0;
@@ -85,6 +88,9 @@ public:
     QLabel*             distLabel;
 
     const QString       configUseMetadata;
+    const QString       redStyle;
+    const QString       orangeStyle;
+    const QString       greenStyle;
 
     KSqueezedTextLabel* lensDescription;
     KSqueezedTextLabel* makeDescription;
@@ -337,19 +343,19 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
             {
                 case LensFunIface::MetadataUnavailable:
                     d->metadataResult->setText(i18n("(no metadata available)"));
-                    d->metadataResult->setStyleSheet(QString("QLabel {color: red;}"));
+                    d->metadataResult->setStyleSheet(d->redStyle);
                     break;
                 case LensFunIface::MetadataNoMatch:
                     d->metadataResult->setText(i18n("(no match found)"));
-                    d->metadataResult->setStyleSheet(QString("QLabel {color: red;}"));
+                    d->metadataResult->setStyleSheet(d->redStyle);
                     break;
                 case LensFunIface::MetadataPartialMatch:
                     d->metadataResult->setText(i18n("(partial match found)"));
-                    d->metadataResult->setStyleSheet(QString("QLabel {color: orange;}"));
+                    d->metadataResult->setStyleSheet(d->orangeStyle);
                     break;
                 default:
                     d->metadataResult->setText(i18n("(exact match found)"));
-                    d->metadataResult->setStyleSheet(QString("QLabel {color: green;}"));
+                    d->metadataResult->setStyleSheet(d->greenStyle);
                     break;
             }
         }
@@ -395,13 +401,14 @@ void LensFunCameraSelector::refreshSettingsView()
             d->make->setCurrentIndex(i);
             populateDeviceCombos();
         }
+        if (!d->passiveMetadataUsage) d->makeLabel->setStyleSheet(d->orangeStyle);
     }
 
     if (makerIdx >= 0)
     {
         d->make->setCurrentIndex(makerIdx);
         d->make->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->makeLabel->setStyleSheet(QString("QLabel {color: green;}"));
+        if (!d->passiveMetadataUsage) d->makeLabel->setStyleSheet(d->greenStyle);
         populateDeviceCombos();
     }
 
@@ -420,8 +427,12 @@ void LensFunCameraSelector::refreshSettingsView()
     {
         d->model->setCurrentIndex(modelIdx);
         d->model->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->modelLabel->setStyleSheet(QString("QLabel {color: green;}"));
+        if (!d->passiveMetadataUsage) d->modelLabel->setStyleSheet(d->greenStyle);
         populateLensCombo();
+    }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->modelLabel->setStyleSheet(d->orangeStyle);
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -440,7 +451,11 @@ void LensFunCameraSelector::refreshSettingsView()
         // found lens model directly, best case :)
         d->lens->setCurrentIndex(lensIdx);
         d->lens->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->lensLabel->setStyleSheet(QString("QLabel {color: green;}"));
+        if (!d->passiveMetadataUsage) d->lensLabel->setStyleSheet(d->greenStyle);
+    }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->lensLabel->setStyleSheet(d->orangeStyle);
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -449,21 +464,33 @@ void LensFunCameraSelector::refreshSettingsView()
     {
         d->focal->setValue(d->iface->settings().focalLength);
         d->focal->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->focalLabel->setStyleSheet(QString("QLabel {color: green;}"));
+        if (!d->passiveMetadataUsage) d->focalLabel->setStyleSheet(d->greenStyle);
+    }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->focalLabel->setStyleSheet(d->orangeStyle);
     }
 
     if (d->iface->settings().aperture != -1.0)
     {
         d->aperture->setValue(d->iface->settings().aperture);
         d->aperture->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->aperLabel->setStyleSheet(QString("QLabel {color: green;}"));
+        if (!d->passiveMetadataUsage) d->aperLabel->setStyleSheet(d->greenStyle);
+    }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->aperLabel->setStyleSheet(d->orangeStyle);
     }
 
     if (d->iface->settings().subjectDistance != -1.0)
     {
         d->distance->setValue(d->iface->settings().subjectDistance);
         d->distance->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->distLabel->setStyleSheet(QString("QLabel {color: green;}"));
+        if (!d->passiveMetadataUsage) d->distLabel->setStyleSheet(d->greenStyle);
+    }
+    else
+    {
+        if (!d->passiveMetadataUsage) d->distLabel->setStyleSheet(d->orangeStyle);
     }
 }
 
@@ -534,7 +561,7 @@ void LensFunCameraSelector::populateLensCombo()
     kDebug() << "dev: " << dev->Maker << " :: " << dev->Model;
 
     d->lens->blockSignals(true);
-    const lfLens** lenses     = d->iface->lensFunDataBase()->FindLenses( dev, NULL, NULL );
+    const lfLens** lenses     = d->iface->lensFunDataBase()->FindLenses(dev, 0, 0);
     LensFunContainer settings = d->iface->settings();
     settings.cropFactor       = dev ? dev->CropFactor : -1.0;
     d->iface->setSettings(settings);

@@ -132,9 +132,9 @@ public:
 
 protected:
 
-    ImagePreviewView*   m_view;
-    FaceGroup*          m_group;
-    ImageInfo           m_info;
+    ImagePreviewView* m_view;
+    FaceGroup*        m_group;
+    ImageInfo         m_info;
 };
 
 class ImagePreviewView::ImagePreviewViewPriv
@@ -146,9 +146,9 @@ public:
         peopleTagsShown      = false;
         fullSize             = 0;
         scale                = 1.0;
-
         item                 = 0;
         stack                = 0;
+        isValid              = false;
         toolBar              = 0;
         back2AlbumAction     = 0;
         prevAction           = 0;
@@ -157,13 +157,13 @@ public:
         rotRightAction       = 0;
         peopleToggleAction   = 0;
         addPersonAction      = 0;
-
         faceGroup            = 0;
     }
 
     bool                  peopleTagsShown;
     bool                  fullSize;
     double                scale;
+    bool                  isValid;
 
     ImagePreviewViewItem* item;
 
@@ -217,10 +217,10 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
     d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),     this);
     d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),    this);
     d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"),   this);
-    d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"), this);
-    d->peopleToggleAction->setIcon(SmallIcon("user-identity"));
     d->addPersonAction    = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"), this);
     d->forgetFacesAction  = new QAction(SmallIcon("list-remove-user"),    i18n("Clear all faces on this image"), this);
+    d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"), this);
+    d->peopleToggleAction->setIcon(SmallIcon("user-identity"));
 
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
@@ -374,13 +374,13 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     // --------------------------------------------------------
 
     cmhelper.addAction("image_find_similar");
-    cmhelper.addActionLightTable();
+    cmhelper.addStandardActionLightTable();
     cmhelper.addQueueManagerMenu();
     popmenu.addSeparator();
 
     // --------------------------------------------------------
 
-    cmhelper.addActionItemDelete(this, SIGNAL(signalDeleteItem()));
+    cmhelper.addStandardActionItemDelete(this, SLOT(slotDeleteItem()));
     popmenu.addSeparator();
 
     // --------------------------------------------------------
@@ -476,6 +476,5 @@ void ImagePreviewView::slotRotateRight()
         }
     }
 }
-
 
 }  // namespace Digikam

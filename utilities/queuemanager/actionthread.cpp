@@ -96,10 +96,7 @@ ActionThread::ActionThread(QObject* parent)
 
 ActionThread::~ActionThread()
 {
-    // cancel the thread
     cancel();
-    // wait for the thread to finish
-    wait();
 
     delete d;
 }
@@ -138,6 +135,9 @@ void ActionThread::cancel()
     d->todo.clear();
     d->running = false;
     d->condVar.wakeAll();
+
+    // wait for the thread to finish
+    wait();
 }
 
 void ActionThread::run()

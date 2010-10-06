@@ -6,7 +6,7 @@
  * Date        : 2002-16-10
  * Description : implementation of album view interface.
  *
- * Copyright (C) 2002-2005 by Renchi Raju  <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (c) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
@@ -25,16 +25,13 @@
 
 #include "digikamview.moc"
 
-// Qt includes
-
-#include <QProcess>
-
 // KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
+#include <ktoolinvocation.h>
 #include <krun.h>
 
 // Local includes
@@ -415,10 +412,10 @@ void DigikamView::setupConnections()
 
     connect(d->peopleSideBar, SIGNAL(signalDetectFaces()),
             d->parent, SLOT(slotScanForFaces()));
-    
-    /*connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
-            d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));*/
-    
+/*
+    connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
+            d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));
+*/
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->gpsSearchSideBar, SLOT(slotDigikamViewNoCurrentItem()));
 
@@ -427,12 +424,12 @@ void DigikamView::setupConnections()
 
     connect(d->gpsSearchSideBar, SIGNAL(signalMapSelectedItems(const KUrl::List)),
             d->iconView, SLOT(setSelectedUrls(const KUrl::List&)));
-
-//    connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
-//            d->iconView->imageFilterModel(), SLOT(setUrlWhitelist(const KUrl::List, const QString&)));
-
-     connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)),
-             d->iconView->imageFilterModel(), SLOT(setIdWhitelist(const QList<qlonglong>&, const QString&))); 
+/*
+    connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
+            d->iconView->imageFilterModel(), SLOT(setUrlWhitelist(const KUrl::List, const QString&)));
+*/
+    connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)),
+            d->iconView->imageFilterModel(), SLOT(setIdWhitelist(const QList<qlonglong>&, const QString&))); 
 
     // -- Filter Bars Connections ---------------------------------
 
@@ -558,7 +555,7 @@ void DigikamView::setupConnections()
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(updateMainViewSignal()),
             d->iconView->imageAlbumModel(), SLOT(refresh()));
-    
+
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(setCurrentIdSignal(qlonglong)),
             d->iconView, SLOT(setCurrentWhenAvailable(qlonglong)));
 }
@@ -591,7 +588,6 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)
 
 void DigikamView::loadViewState()
 {
-
     foreach(SidebarWidget *widget, d->leftSideBarWidgets)
     {
         widget->loadState();
@@ -945,8 +941,7 @@ void DigikamView::slotGotoTagAndItem(int tagID)
 
 void DigikamView::slotSelectAlbum(const KUrl &url)
 {
-
-    PAlbum *album = d->albumManager->findPAlbum(url);
+    PAlbum* album = d->albumManager->findPAlbum(url);
 
     if (!album)
     {
@@ -956,7 +951,6 @@ void DigikamView::slotSelectAlbum(const KUrl &url)
 
     slotLeftSideBarActivate(d->albumFolderSideBar);
     d->albumFolderSideBar->setCurrentAlbum(album);
-
 }
 
 void DigikamView::slotAlbumSelected(Album* album)
@@ -980,29 +974,27 @@ void DigikamView::slotAlbumSelected(Album* album)
     else if (album->type() == Album::TAG)
     {
         emit signalAlbumSelected(false);
-        /*
-        
+/*
         kDebug()<<"Album "<<album->title()<<" selected." ;
-        
+
         // Now loop through children of the people album and check if this album is a child.
         Album* peopleAlbum = AlbumManager::instance()->findTAlbum(TagsCache::instance()->tagForPath("/People"));
         int thisAlbumId = album->id();
-        
+
         QList<int> children =  peopleAlbum->childAlbumIds(true);
-        
+
         foreach(int id, children)
         {
             if(id == thisAlbumId)
             {
                 kDebug()<<"Is a people tag";
-                
+
                 showFaceAlbum(thisAlbumId);
                 emit signalTagSelected(true);
                 return;
             }
         }
-
-        */
+*/
         emit signalTagSelected(true);
     }
 
@@ -1016,40 +1008,38 @@ void DigikamView::slotAlbumSelected(Album* album)
     d->iconView->openAlbum(album);
     d->mapView->openAlbum(album);
 
-        if (album->isRoot())
-            d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::WelcomePageMode);
-        else
-        {
-            if(d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
-                d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
-        }
+    if (album->isRoot())
+        d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::WelcomePageMode);
+    else
+    {
+        if(d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
+            d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
+    }
 }
 
 /*
-void DigikamView::showFaceAlbum ( int tagID )
+void DigikamView::showFaceAlbum( int tagID )
 {
     QString personname = TagsCache::instance()->tagName(tagID);
-    
+
     SearchXmlWriter writer;
     writer.writeGroup();
     writer.writeField ( "imagetagproperty", SearchXml::Equal );
     writer.writeValue ( QStringList() << "face" << personname );
     writer.finishField();
     writer.finishGroup();
-        
+
     SAlbum* salbum = AlbumManager::instance()->createSAlbum ( personname,
                      DatabaseSearch::UnknownFaceSearch, writer.xml() );
-    
+
     // search types defined in albuminfo.h. Can be a better name.
     AlbumManager::instance()->setCurrentAlbum ( salbum );
-
 }
-
 */
 
-void DigikamView::slotAlbumOpenInKonqui()
+void DigikamView::slotAlbumOpenInFileManager()
 {
-    Album *album = d->albumManager->currentAlbum();
+    Album* album = d->albumManager->currentAlbum();
     if (!album || album->type() != Album::PHYSICAL)
         return;
 
@@ -1060,24 +1050,30 @@ void DigikamView::slotAlbumOpenInKonqui()
 
 void DigikamView::slotAlbumOpenInTerminal()
 {
-    Album *album = d->albumManager->currentAlbum();
+    Album* album = d->albumManager->currentAlbum();
     if (!album || album->type() != Album::PHYSICAL)
         return;
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
 
-    const QString terminalApp("konsole");
-    QStringList args;
-    args << "--workdir" << palbum->folderPath();
-    const bool success = QProcess::startDetached(terminalApp, args);
-
-    if (!success)
+    if (!palbum)
     {
-        KMessageBox::error(this,
-            i18n("Cannot start the \"konsole\" application.\n"
-                 "Please make sure that it is installed and in your path."),
-            windowTitle()/*i18n("Open Album in Terminal")*/);
+        return;
     }
+
+    QString dir(palbum->folderPath());
+
+    // If the given directory is not local, it can still be the URL of an
+    // ioslave using UDS_LOCAL_PATH which to be converted first.
+    KUrl url = KIO::NetAccess::mostLocalUrl(dir, this);
+
+    //If the URL is local after the above conversion, set the directory.
+    if (url.isLocalFile())
+    {
+        dir = url.toLocalFile();
+    }
+
+    KToolInvocation::invokeTerminal(QString(), dir);
 }
 
 void DigikamView::slotAlbumRefresh()
@@ -1164,7 +1160,7 @@ void DigikamView::setThumbSize(int size)
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
-        double z    = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
+        double z = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
         setZoomFactor(z);
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
