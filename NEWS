@@ -55,7 +55,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 237961 : ICC Convert faulty in BQM.
 041 ==> 228833 : Rotate image in batch processing doesn't edit EXIF properly.
 042 ==> 213896 : After editing color, etc, i saved the jpg and it just crashed.
-043 ==> 
+043 ==> 232854 : Crashed while adding new tag.
+044 ==> 
+
 
 
 
