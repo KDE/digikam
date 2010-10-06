@@ -1387,6 +1387,7 @@ void EditorWindow::slotPrepareToLoad()
 void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
 {
     setCursor(Qt::WaitCursor);
+    toggleActions(false);
     m_animLogo->start();
     m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading: "));
 }
