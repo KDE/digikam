@@ -241,6 +241,8 @@ void DImgInterface::slotLoadRaw()
 
 void DImgInterface::load(const LoadingDescription& description)
 {
+    EditorToolIface::editorToolIface()->unLoadTool();
+
     if (description != d->currentDescription)
     {
         resetValues();
@@ -254,8 +256,6 @@ void DImgInterface::load(const LoadingDescription& description)
         emit signalLoadingStarted(d->filename);
         emit signalImageLoaded(d->filename, true);
     }
-
-    EditorToolIface::editorToolIface()->unLoadTool();
 }
 
 void DImgInterface::applyTransform(const IccTransform& transform)
