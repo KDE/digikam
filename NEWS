@@ -58,7 +58,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 232854 : Crashed while adding new tag.
 044 ==> 241770 : digiKam crashes.
 045 ==> 238045 : Random crashes of digiKam.
-046 ==> 
+046 ==> 188263 : Crash after tinkering with star rating widget in thumbbar.
+047 ==> 
+
 
 
 
