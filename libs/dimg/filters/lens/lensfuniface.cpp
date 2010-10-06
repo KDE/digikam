@@ -300,8 +300,8 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
             else
             {
                 // Best case for an exact match is to have only one item returned by Lensfun searches.
-                QMap<int, LensPtr>::const_iterator it = bestMatches.find(1);
-                if (it != bestMatches.end())
+                QMap<int, LensPtr>::const_iterator it = bestMatches.constFind(1);
+                if (it != bestMatches.constEnd())
                 {
                     setUsedLens(bestMatches[it.key()]);
                     kDebug() << "Lens found     : " << d->settings.lensModel;
