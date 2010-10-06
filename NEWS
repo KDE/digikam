@@ -61,7 +61,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 046 ==> 188263 : Crash after tinkering with star rating widget in thumbbar.
 047 ==> 233549 : Database stuck at saving new image.
 048 ==> 221191 : Menu not disabled when decoding raw.
-049 ==> 
+049 ==> 237722 : Crash while applying Vivid color effect.
+050 ==> 
 
 
 
