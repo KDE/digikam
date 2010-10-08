@@ -63,6 +63,7 @@ public:
     ~RegionFrameItem();
 
     void setFlags(Flags flags);
+    void changeFlags(Flags flags, bool addOrRemove);
     Flags flags() const;
 
     /**
@@ -102,7 +103,7 @@ protected:
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
 
-    virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event);
+    virtual bool eventFilter(QObject* watched, QEvent* event);
 
 private Q_SLOTS:
 

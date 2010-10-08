@@ -139,6 +139,7 @@ RegionFrameItem::RegionFrameItemPriv::RegionFrameItemPriv(RegionFrameItem* q)
     fixedRatio            = 0;
     resizeHandleVisibility= 0;
     hudWidget             = 0;
+    hoverAnimationOpacity = 1.0;
     hudTimer              = 0;
     flags                 = RegionFrameItem::NoFlags;
 
@@ -408,11 +409,16 @@ void RegionFrameItem::setHudWidget(QWidget *widget, Qt::WindowFlags wFlags)
     QWidget *container = new QWidget;
     container->setAttribute(Qt::WA_TranslucentBackground);
     QHBoxLayout *layout = new QHBoxLayout;
+    layout->setSizeConstraint(QLayout::SetFixedSize);
     layout->setContentsMargins(QMargins());
+    layout->setSpacing(0);
     layout->addWidget(widget);
     container->setLayout(layout);
-    container->resize(container->sizeHint());
     proxy->setWidget(container);
+    // Reset fixed sizes wrongly copied by setWidget onto the QGraphicsWidget
+    proxy->setMinimumSize(QSizeF());
+    proxy->setMaximumSize(QSizeF());
+
     setHudWidget(proxy);
 }
 
@@ -430,10 +436,8 @@ void RegionFrameItem::setHudWidget(QGraphicsWidget *hudWidget)
 
     if (d->hudWidget)
     {
-        if (!scene())
-            kError() << "Need to have a scene when calling setHudWidget!" << this << hudWidget;
         d->hudWidget->setParentItem(this);
-        d->hudWidget->installSceneEventFilter(this);
+        d->hudWidget->installEventFilter(this);
         d->updateHudWidgetPosition();
     }
 }
@@ -451,6 +455,14 @@ void RegionFrameItem::setFlags(Flags flags)
     update();
     setAcceptHoverEvents(d->flags & GeometryEditable);
     d->resizeHandleVisibility->controller()->setShallBeShown(d->flags & ShowResizeHandles);
+}
+
+void RegionFrameItem::changeFlags(Flags flags, bool addOrRemove)
+{
+    if (addOrRemove)
+        setFlags(d->flags | flags);
+    else
+        setFlags(d->flags & ~flags);
 }
 
 void RegionFrameItem::setHudWidgetVisible(bool visible)
@@ -511,7 +523,7 @@ void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, 
     }
 */
 
-    const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66 + 0.33 * d->hoverAnimationOpacity);
+    const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66 + 0.34 * d->hoverAnimationOpacity);
     const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
 
     // will paint to the left and bottom of logical coordinates
@@ -675,13 +687,13 @@ void RegionFrameItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     update();
 }
 
-bool RegionFrameItem::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
+bool RegionFrameItem::eventFilter(QObject* watched, QEvent* event)
 {
-    if (event->type() == QEvent::GraphicsSceneResize && watched == d->hudWidget)
+    if (watched == d->hudWidget && event->type() == QEvent::GraphicsSceneResize)
     {
         d->updateHudWidgetPosition();
     }
-    return DImgChildItem::sceneEventFilter(watched, event);
+    return DImgChildItem::eventFilter(watched, event);
 }
 
 void RegionFrameItem::moveHudWidget()
