@@ -324,14 +324,20 @@ ImageInfo ImagePreviewView::getImageInfo() const
 
 bool ImagePreviewView::acceptsMouseClick(QMouseEvent *e)
 {
-    if (d->faceGroup->hasVisibleItems())
-    {
-        qreal distance;
-        d->faceGroup->closestItem(mapToScene(e->pos()), &distance);
-        if (distance < 15)
-            return false;
-    }
-    return GraphicsDImgView::acceptsMouseClick(e);
+    if (!GraphicsDImgView::acceptsMouseClick(e))
+        return false;
+
+    return d->faceGroup->acceptsMouseClick(mapToScene(e->pos()));
+}
+
+void ImagePreviewView::enterEvent(QEvent *e)
+{
+    d->faceGroup->enterEvent(e);
+}
+
+void ImagePreviewView::leaveEvent(QEvent *e)
+{
+    d->faceGroup->leaveEvent(e);
 }
 
 void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event)

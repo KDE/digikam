@@ -82,6 +82,8 @@ Q_SIGNALS:
 protected:
 
     bool acceptsMouseClick(QMouseEvent *e);
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
 
 private Q_SLOTS:
 

@@ -87,9 +87,12 @@ public:
      */
     RegionFrameItem* closestItem(const QPointF& p, qreal* manhattanLength = 0) const;
 
+    bool acceptsMouseClick(const QPointF& scenePos);
     void itemHoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void itemHoverMoveEvent(QGraphicsSceneHoverEvent *event);
     void itemHoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    void leaveEvent(QEvent *);
+    void enterEvent(QEvent *);
 
 public Q_SLOTS:
 

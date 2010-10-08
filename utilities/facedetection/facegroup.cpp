@@ -185,6 +185,7 @@ public:
     AssignNameWidget*          createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier);
     AssignNameWidget::Mode     assignWidgetMode(DatabaseFace::Type type);
     void                       checkModels();
+    QList<QGraphicsItem*>      hotItems(const QPointF& scenePos);
 
 public:
 
@@ -370,6 +371,28 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* manhattanLength
     return closestItem;
 }
 
+QList<QGraphicsItem*> FaceGroup::FaceGroupPriv::hotItems(const QPointF& scenePos)
+{
+    if (!q->hasVisibleItems())
+        return QList<QGraphicsItem*>();
+    const int distance = 15;
+    QRectF hotSceneRect = QRectF(scenePos, QSize(0,0)).adjusted(-distance, -distance, distance, distance);
+    QList<QGraphicsItem*> closeItems = view->scene()->items(hotSceneRect, Qt::IntersectsItemBoundingRect);
+    closeItems.removeOne(view->previewItem());
+    return closeItems;
+    /*
+    qreal distance;
+    d->faceGroup->closestItem(mapToScene(e->pos()), &distance);
+    if (distance < 15)
+        return false;
+    */
+}
+
+bool FaceGroup::acceptsMouseClick(const QPointF& scenePos)
+{
+    return d->hotItems(scenePos).isEmpty();
+}
+
 void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent *e)
 {
     if (d->showOnHover && !isVisible())
@@ -381,17 +404,39 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent *e)
         if (distance < 25)
             setVisibleItem(item);
         else
+        {
+            // get all items close to pos
+            QList<QGraphicsItem*> hotItems = d->hotItems(e->scenePos());
+            // this will be the one item shown by mouse over
+            QList<QObject*> visible = d->visibilityController->visibleItems(ItemVisibilityController::ExcludeFadingOut);
+            foreach (QGraphicsItem *item, hotItems)
+            {
+                foreach (QObject *parent, visible)
+                {
+                    if (static_cast<QGraphicsObject*>(parent)->isAncestorOf(item))
+                        return;
+                }
+            }
             setVisibleItem(0);
+        }
     }
 }
 
 void FaceGroup::itemHoverLeaveEvent(QGraphicsSceneHoverEvent *)
 {
+}
+
+void FaceGroup::itemHoverEnterEvent(QGraphicsSceneHoverEvent *)
+{
+}
+
+void FaceGroup::leaveEvent(QEvent *)
+{
     if (d->showOnHover && !isVisible())
         setVisibleItem(0);
 }
 
-void FaceGroup::itemHoverEnterEvent(QGraphicsSceneHoverEvent *)
+void FaceGroup::enterEvent(QEvent *)
 {
 }
 
