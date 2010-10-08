@@ -184,15 +184,27 @@ public:
     QString             recognizeFace(const KFaceIface::Face& face);
 
 
-    // --- Confirmation ---
+    // --- Add / Confirm ---
 
     /**
-     * Assign the name tag for given name / tagId and rect.
-     * Optionally, you can pass the rectangle for which this region was previously stored,
-     * if the rectangle was adjusted.
+     * Adds a new entry to the database.
+     * The convenience wrapper will return the newly created entry.
+     * If trainFace is true, the face will also be listed in the db as needing training.
+     * The tag of the face will, if necessary, be converted to a person tag.
      */
-    DatabaseFace        confirmName(qlonglong imageid, const QString& name, const QRect& rect, const QRect& previousRect = QRect());
-    DatabaseFace        confirmName(qlonglong imageid, int tagId, const QRect& rect, const QRect& previousRect = QRect());
+    void add(const DatabaseFace& face, bool trainFace = true);
+    DatabaseFace add(qlonglong imageid, int tagId, const TagRegion& region, bool trainFace = true);
+
+    /**
+     * Assign the name tag for given face entry.
+     * Pass the tagId if it changed or was newly assigned (UnknownName).
+     * Pass the new, corrected region if it changed.
+     * If the default values are passed, tag id or region are taken from the given face.
+     * The given face should be an unchanged entry read from the database.
+     * The confirmed tag will, if necessary, be converted to a person tag.
+     * Returns the newly inserted entry.
+     */
+    DatabaseFace        confirmName(const DatabaseFace& face, int tagId = -1, const TagRegion& confirmedRegion = TagRegion());
 
     // --- Training ---
 

@@ -101,6 +101,8 @@ public:
     void    makeFaceTag(int tagId, const QString& fullName) const;
     int     findFirstTagWithProperty(const QString& property, const QString& value = QString()) const;
     int     tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName, bool convert, bool create) const;
+    void    add(ImageTagPair& pair, const DatabaseFace& face, bool trainFace);
+    void    remove(ImageTagPair& pair, const DatabaseFace& face, bool touchTags);
 
 private:
 
@@ -439,13 +441,13 @@ QList<DatabaseFace> FaceIface::databaseFaces(qlonglong imageid, DatabaseFace::Ty
         {
             foreach (const QString& regionString, pair.values(attribute))
             {
-                QRect rect = TagRegion(regionString).toRect();
-                kDebug() << "rect found as "<< rect << "for attribute" << attribute << "tag" << pair.tagId();
+                TagRegion region(regionString);
+                kDebug() << "rect found as "<< region << "for attribute" << attribute << "tag" << pair.tagId();
 
-                if (!rect.isValid())
+                if (!region.isValid())
                     continue;
 
-                faces << DatabaseFace(attribute, imageid, pair.tagId(), rect);
+                faces << DatabaseFace(attribute, imageid, pair.tagId(), region);
             }
         }
     }
@@ -647,8 +649,9 @@ QString FaceIface::recognizeFace(const KFaceIface::Face& face)
     }
 }
 
-// --- Confirmation ---
+// --- Confirm, Add, Remove ---
 
+/*
 DatabaseFace FaceIface::confirmName( qlonglong imageid, const QString& name, const QRect& rect, const QRect& previousRect)
 {
     int nameTagId = getOrCreateTagForPerson(name);
@@ -673,6 +676,129 @@ DatabaseFace FaceIface::confirmName(qlonglong imageid, int tagId, const QRect& r
     MetadataManager::instance()->assignTag(ImageInfo(imageid), tagId);
 
     return DatabaseFace(DatabaseFace::ConfirmedName, imageid, tagId, rect);
+}
+*/
+
+DatabaseFace FaceIface::confirmName(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
+{
+    DatabaseFace newEntry = DatabaseFace(DatabaseFace::ConfirmedName, face.imageId(),
+                                         tagId == -1 ? face.tagId() : tagId,
+                                         confirmedRegion.isValid() ? confirmedRegion : face.region());
+
+    if (newEntry.tagId() == d->unknownPeopleTagId())
+    {
+        kDebug() << "Refusing to confirm unknownPerson tag on face";
+        return face;
+    }
+
+    ImageTagPair pair(newEntry.imageId(), newEntry.tagId());
+
+    // Remove entry from autodetection
+    if (newEntry.tagId() == face.tagId())
+    {
+        d->remove(pair, face, false);
+    }
+    else
+    {
+        ImageTagPair pairOldEntry(face.imageId(), face.tagId());
+        d->remove(pairOldEntry, face, true);
+    }
+
+    // Add new full entry
+    d->add(pair, newEntry, true);
+
+    return newEntry;
+}
+
+DatabaseFace FaceIface::add(qlonglong imageId, int tagId, const TagRegion& region, bool trainFace)
+{
+    DatabaseFace newEntry(DatabaseFace::ConfirmedName, imageId, tagId, region);
+    add(newEntry, trainFace);
+    return newEntry;
+}
+
+void FaceIface::add(const DatabaseFace& face, bool trainFace)
+{
+    ImageTagPair pair(face.imageId(), face.tagId());
+    d->add(pair, face, trainFace);
+}
+
+void FaceIface::FaceIfacePriv::add(ImageTagPair& pair, const DatabaseFace& face, bool trainFace)
+{
+    q->ensureIsPerson(face.tagId());
+
+    QString region = face.region().toXml();
+    pair.addProperty(ImageTagPropertyName::tagRegion(), region);
+    if (trainFace)
+        pair.addProperty(ImageTagPropertyName::faceToTrain(), region);
+
+    MetadataManager::instance()->assignTag(ImageInfo(face.imageId()), face.tagId());
+}
+
+void FaceIface::removeAllFaces(qlonglong imageid)
+{
+    ImageInfo info(imageid);
+
+    //markAsScanned(info, false);
+
+    QList<int> tagsToRemove;
+    QStringList attributes = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
+    foreach (ImageTagPair pair, faceImageTagPairs(imageid, DatabaseFace::AllTypes))
+    {
+        foreach (const QString& attribute, attributes)
+            pair.removeProperties(attribute);
+
+        if (pair.isAssigned())
+            tagsToRemove << pair.tagId();
+    }
+
+    MetadataManager::instance()->removeTags(info, tagsToRemove);
+}
+
+void FaceIface::removeFace(qlonglong imageid, const QRect& rect)
+{
+    ImageInfo info(imageid);
+
+    QList<int> tagsToRemove;
+    QStringList attributes    = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
+    QList<ImageTagPair> pairs = faceImageTagPairs(imageid, DatabaseFace::AllTypes);
+
+    for (int i=0; i<pairs.size(); i++)
+    {
+        ImageTagPair &pair = pairs[i];
+        foreach (const QString& attribute, attributes)
+        {
+            foreach (const QString& regionString, pair.values(attribute))
+            {
+                if (rect == TagRegion(regionString).toRect())
+                {
+                    pair.removeProperty(attribute, regionString);
+                    if (pair.isAssigned())
+                        tagsToRemove << pair.tagId();
+                }
+            }
+        }
+    }
+    MetadataManager::instance()->removeTags(ImageInfo(imageid), tagsToRemove);
+}
+
+void FaceIface::removeFace(const DatabaseFace& face)
+{
+    ImageTagPair pair(face.imageId(), face.tagId());
+    d->remove(pair, face, true);
+}
+
+void FaceIface::FaceIfacePriv::remove(ImageTagPair& pair, const DatabaseFace& face, bool touchTags)
+{
+    QString regionString = TagRegion(face.region().toRect()).toXml();
+    pair.removeProperty(DatabaseFace::attributeForType(face.type()), regionString);
+
+    if (face.type() == DatabaseFace::ConfirmedName)
+        pair.removeProperty(DatabaseFace::attributeForType(DatabaseFace::FaceForTraining), regionString);
+
+    // No other entry left?
+    if (touchTags && !pair.hasProperty(DatabaseFace::attributeForType(DatabaseFace::ConfirmedName)))
+        MetadataManager::instance()->removeTag(ImageInfo(face.imageId()), pair.tagId());
 }
 
 // --- Training ---------------------------------------------------------------------------------------------------
@@ -746,67 +872,6 @@ void FaceIface::trainFaces(const QList<Face>& givenFaceList )
     d->database()->updateFaces(faceList);
     kDebug() << "DB file is : " << d->database()->configPath();
     d->database()->saveConfig();
-}
-
-// --- Clear face entries -----------------------------------------------------------------------------------------------------
-
-void FaceIface::removeAllFaces(qlonglong imageid)
-{
-    ImageInfo info(imageid);
-
-    //markAsScanned(info, false);
-
-    QList<int> tagsToRemove;
-    QStringList attributes = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
-    foreach (ImageTagPair pair, faceImageTagPairs(imageid, DatabaseFace::AllTypes))
-    {
-        foreach (const QString& attribute, attributes)
-            pair.removeProperties(attribute);
-
-        if (pair.isAssigned())
-            tagsToRemove << pair.tagId();
-    }
-
-    MetadataManager::instance()->removeTags(info, tagsToRemove);
-}
-
-void FaceIface::removeFace(qlonglong imageid, const QRect& rect)
-{
-    ImageInfo info(imageid);
-
-    QList<int> tagsToRemove;
-    QStringList attributes    = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
-    QList<ImageTagPair> pairs = faceImageTagPairs(imageid, DatabaseFace::AllTypes);
-
-    for (int i=0; i<pairs.size(); i++)
-    {
-        ImageTagPair &pair = pairs[i];
-        foreach (const QString& attribute, attributes)
-        {
-            foreach (const QString& regionString, pair.values(attribute))
-            {
-                if (rect == TagRegion(regionString).toRect())
-                {
-                    pair.removeProperty(attribute, regionString);
-                    if (pair.isAssigned())
-                        tagsToRemove << pair.tagId();
-                }
-            }
-        }
-    }
-    MetadataManager::instance()->removeTags(ImageInfo(imageid), tagsToRemove);
-}
-
-void FaceIface::removeFace(const DatabaseFace& face)
-{
-    ImageTagPair pair(face.imageId(), face.tagId());
-    QString regionString = TagRegion(face.region().toRect()).toXml();
-    pair.removeProperty(DatabaseFace::attributeForType(face.type()), regionString);
-
-    if (face.type() == DatabaseFace::ConfirmedName)
-        pair.removeProperty(DatabaseFace::attributeForType(DatabaseFace::FaceForTraining), regionString);
-
-    MetadataManager::instance()->removeTag(ImageInfo(face.imageId()), pair.tagId());
 }
 
 void FaceIface::readConfigSettings()
