@@ -56,7 +56,7 @@ public:
     bool isAssigned;
 
     bool propertiesLoaded;
-    QMap<QString, QString> properties;
+    QMultiMap<QString, QString> properties;
 };
 
 class ImageTagPairPrivSharedNull : public QSharedDataPointer<ImageTagPairPriv>
@@ -79,7 +79,7 @@ void ImageTagPairPriv::checkProperties()
     {
         QList<ImageTagProperty> props = DatabaseAccess().db()->getImageTagProperties(info.id(), tagId);
         foreach (const ImageTagProperty &p, props)
-            properties.insertMulti(p.property, p.value);
+            properties.insert(p.property, p.value);
         propertiesLoaded = true;
     }
 }
@@ -187,6 +187,12 @@ bool ImageTagPair::hasAnyProperty(const QStringList& keys) const
     return false;
 }
 
+bool ImageTagPair::hasValue(const QString& key, const QString& value) const
+{
+    d->checkProperties();
+    return d->properties.contains(key, value);
+}
+
 QString ImageTagPair::value(const QString& key) const
 {
     d->checkProperties();
@@ -229,7 +235,7 @@ void ImageTagPair::setProperty(const QString& key, const QString& value)
 
     // for single entries in db, this can of course be optimized using a single UPDATE WHERE
     removeProperties(key);
-    d->properties.insert(key, value);
+    d->properties.replace(key, value);
     DatabaseAccess().db()->addImageTagProperty(d->info.id(), d->tagId, key, value);
 }
 
@@ -239,8 +245,11 @@ void ImageTagPair::addProperty(const QString& key, const QString& value)
         return;
     d->checkProperties();
 
-    d->properties.insertMulti(key, value);
-    DatabaseAccess().db()->addImageTagProperty(d->info.id(), d->tagId, key, value);
+    if (!d->properties.contains(key, value))
+    {
+        d->properties.insert(key, value);
+        DatabaseAccess().db()->addImageTagProperty(d->info.id(), d->tagId, key, value);
+    }
 }
 
 void ImageTagPair::removeProperty(const QString& key, const QString& value)
@@ -249,17 +258,10 @@ void ImageTagPair::removeProperty(const QString& key, const QString& value)
         return;
     d->checkProperties();
 
-    QMap<QString, QString>::iterator it;
-    for (it = d->properties.find(key); it != d->properties.end() && it.key() == key;)
+    if (d->properties.contains(key, value))
     {
-        if (it.value() == value)
-        {
-            DatabaseAccess().db()->removeImageTagProperties(d->info.id(), d->tagId, key, value);
-            it = d->properties.erase(it);
-            break;
-        }
-        else
-            ++it;
+        DatabaseAccess().db()->removeImageTagProperties(d->info.id(), d->tagId, key, value);
+        d->properties.remove(key, value);
     }
 }
 

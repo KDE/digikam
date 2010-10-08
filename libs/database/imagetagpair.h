@@ -86,6 +86,8 @@ public:
     bool hasProperty(const QString& key) const;
     /// Returns true if any of the properties is set
     bool hasAnyProperty(const QStringList& keys) const;
+    /// Returns true of the given property and value is set
+    bool hasValue(const QString& key, const QString& value) const;
     /// Returns the value of the given property, or a null string if not set
     QString value(const QString& key) const;
     /// Returns value() concatenated for all given keys
@@ -100,7 +102,8 @@ public:
     /// Set the given property. Replaces all previous occurrences of this property.
     void setProperty(const QString& key, const QString& value);
     /** Adds the given property. Does not change any previous occurrences of this property,
-     *  allowing multiple properties with the same key. */
+     *  allowing multiple properties with the same key.
+     *  (duplicates of same key _and_ value are not added, though) */
     void addProperty(const QString& key, const QString& value);
     /// Remove all occurrences of the property
     void removeProperty(const QString& key, const QString& value);
