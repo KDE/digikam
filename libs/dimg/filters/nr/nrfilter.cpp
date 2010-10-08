@@ -186,13 +186,12 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
                               float threshold, double softness)
 {
     float*       temp=0, thold;
-    unsigned int i, lev, lpass, hpass, size, col, row;
+    unsigned int i, lev, lpass=0, hpass=0, size, col, row;
     double       stdev[5];
     unsigned int samples[5];
 
     size  = width * height;
     temp  = new float[qMax(width, height)];
-    hpass = 0;
 
     for (lev = 0; runningFlag() && (lev < 5); ++lev)
     {
