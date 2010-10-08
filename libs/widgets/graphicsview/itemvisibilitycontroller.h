@@ -84,12 +84,20 @@ public:
     bool  isVisible() const;
     State state() const;
 
+    enum IncludeFadingOutMode
+    {
+        /// In addition to items visible or fading in, return those fading out
+        IncludeFadingOut,
+        /// Dont return those items currently fading out (soon to be hidden)
+        ExcludeFadingOut
+    };
+
     /**
      *  This returns the "result" of isVisible and shallBeShown:
      *  Something is indeed visible on the scene.
      *  Also returns false if no items are available.
      */
-    bool  hasVisibleItems() const;
+    bool  hasVisibleItems(IncludeFadingOutMode mode = IncludeFadingOut) const;
 
     /// Remove all animations
     void clear();
@@ -109,6 +117,11 @@ public:
      * Returns all items under control
      */
     QList<QObject*> items() const;
+
+    /**
+     * Returns all currently visible items.
+     */
+    QList<QObject*> visibleItems(IncludeFadingOutMode mode = IncludeFadingOut) const;
 
 Q_SIGNALS:
 

@@ -167,7 +167,7 @@ public:
     void moveAllTo(AnimationControl *other);
 
     bool hasItem(QObject *o) const;
-    bool hasVisibleItems() const;
+    bool hasVisibleItems(ItemVisibilityController::IncludeFadingOutMode mode) const;
 
     void transitionToVisible(bool show);
     void animationFinished();
@@ -313,9 +313,14 @@ bool AnimationControl::hasItem(QObject *o) const
     return items.contains(o);
 }
 
-bool AnimationControl::hasVisibleItems() const
+bool AnimationControl::hasVisibleItems(ItemVisibilityController::IncludeFadingOutMode mode) const
 {
-    return !items.isEmpty() && state != ItemVisibilityController::Hidden;
+    if (items.isEmpty())
+        return false;
+    if (mode == ItemVisibilityController::IncludeFadingOut)
+        return state != ItemVisibilityController::Hidden;
+    else
+        return state != ItemVisibilityController::Hidden && state != ItemVisibilityController::FadingOut;
 }
 
 void AnimationControl::setVisibleProperty(bool value)
@@ -543,6 +548,17 @@ QList<QObject*> ItemVisibilityController::items() const
     return items;
 }
 
+QList<QObject*> ItemVisibilityController::visibleItems(IncludeFadingOutMode mode) const
+{
+    QList<QObject*> items;
+    if (d->control && d->control->hasVisibleItems(mode))
+        items = d->control->items;
+    foreach (AnimationControl *child, d->childControls)
+        if (child->hasVisibleItems(mode))
+            items += child->items;
+    return items;
+}
+
 bool ItemVisibilityController::shallBeShown() const
 {
     return d->shallBeShown;
@@ -558,12 +574,12 @@ ItemVisibilityController::State ItemVisibilityController::state() const
     return d->control ? d->control->state : Hidden;
 }
 
-bool ItemVisibilityController::hasVisibleItems() const
+bool ItemVisibilityController::hasVisibleItems(IncludeFadingOutMode mode) const
 {
-    if (d->control && d->control->hasVisibleItems())
+    if (d->control && d->control->hasVisibleItems(mode))
         return true;
     foreach (AnimationControl* child, d->childControls)
-        if (child->hasVisibleItems())
+        if (child->hasVisibleItems(mode))
             return true;
     return false;
 }
