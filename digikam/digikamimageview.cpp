@@ -211,11 +211,9 @@ void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
 void DigikamImageView::slotUntagFace(const QModelIndex& index)
 {
     ImageInfo info = ImageModel::retrieveImageInfo(index);
-    QRect rect = d->faceDelegate->faceRect(index);
-    kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << rect;
-    info.setVisible(false);
-    info.setVisible(true);
-    d->faceiface->removeFace(info.id(), rect);
+    DatabaseFace face = d->faceDelegate->face(index);
+    kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << face.region().toRect();
+    d->faceiface->removeFace(face);
 }
 
 void DigikamImageView::activated(const ImageInfo& info)
@@ -427,11 +425,10 @@ void DigikamImageView::assignRating(const QModelIndex &index, int rating)
 void DigikamImageView::assignTag(const QModelIndex& index, const QString& name)
 {
     ImageInfo info = ImageModel::retrieveImageInfo(index);
-    QRect rect = d->faceDelegate->faceRect(index);
-    kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << rect;
-    d->faceiface->confirmName(info.id(), name, rect);
-    info.setVisible(false);
-    info.setVisible(true);
+    DatabaseFace face = d->faceDelegate->face(index);
+    int tagId = d->faceiface->tagForPerson(name);
+    kDebug()<<"Untagging face in image " << info.filePath() << "name" << name << "tag" << tagId << "region" << face.region().toRect();
+    d->faceiface->confirmName(face, tagId);
 }
 
 void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)
