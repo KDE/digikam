@@ -46,12 +46,12 @@ DatabaseFace::DatabaseFace()
 {
 }
 
-DatabaseFace::DatabaseFace(Type type, qlonglong imageId, int tagId, const QVariant& region)
+DatabaseFace::DatabaseFace(Type type, qlonglong imageId, int tagId, const TagRegion& region)
             : m_type(type), m_imageId(imageId), m_tagId(tagId), m_region(region)
 {
 }
 
-DatabaseFace::DatabaseFace(const QString& attribute, qlonglong imageId, int tagId, const QVariant& region)
+DatabaseFace::DatabaseFace(const QString& attribute, qlonglong imageId, int tagId, const TagRegion& region)
             : m_imageId(imageId), m_tagId(tagId), m_region(region)
 {
     m_type = typeForAttribute(attribute, tagId);
@@ -77,9 +77,24 @@ int DatabaseFace::tagId() const
     return m_tagId;
 }
 
-QVariant DatabaseFace::region() const
+TagRegion DatabaseFace::region() const
 {
     return m_region;
+}
+
+void DatabaseFace::setType(Type type)
+{
+    m_type = type;
+}
+
+void DatabaseFace::setTagId(int tagId)
+{
+    m_tagId = tagId;
+}
+
+void DatabaseFace::setRegion(const TagRegion& region)
+{
+    m_region = region;
 }
 
 bool DatabaseFace::operator==(const DatabaseFace& other) const
@@ -144,7 +159,7 @@ DatabaseFace DatabaseFace::fromVariant(const QVariant& var)
             return DatabaseFace((Type)list[0].toInt(),
                                 list[1].toLongLong(),
                                 list[2].toInt(),
-                                list[3]);
+                                TagRegion::fromVariant(list[3]));
         }
     }
     return DatabaseFace();
@@ -158,7 +173,7 @@ QVariant DatabaseFace::toVariant() const
     list << (int)m_type;
     list << m_imageId;
     list << m_tagId;
-    list << m_region;
+    list << m_region.toVariant();
     return list;
 }
 
@@ -175,7 +190,16 @@ DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>&
 
     return DatabaseFace(attribute,
                         imageId, tagId,
-                        TagRegion(value).toRect());
+                        TagRegion(value));
+}
+
+QDebug operator<<(QDebug dbg, const DatabaseFace& f)
+{
+    dbg.nospace() << "DatabaseFace(" << f.type()
+                  << ", image " << f.imageId()
+                  << ", tag " << f.tagId()
+                  << ", region" << f.region();
+    return dbg;
 }
 
 }  // Namespace Digikam

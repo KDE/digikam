@@ -32,8 +32,10 @@
 
 // Local includes
 
+#include "tagregion.h"
 #include "digikam_export.h"
 
+class QDebug;
 
 namespace Digikam
 {
@@ -61,20 +63,24 @@ public:
 public:
 
     DatabaseFace();
-    DatabaseFace(Type type, qlonglong imageId, int tagId, const QVariant& region);
-    DatabaseFace(const QString& attribute, qlonglong imageId, int tagId, const QVariant& region);
+    DatabaseFace(Type type, qlonglong imageId, int tagId, const TagRegion& region);
+    DatabaseFace(const QString& attribute, qlonglong imageId, int tagId, const TagRegion& region);
 
     bool      isNull() const;
 
     Type      type()    const;
     qlonglong imageId() const;
     int       tagId()   const;
-    QVariant  region()  const;
+    TagRegion region()  const;
 
     bool      isUnknownName() const     { return type() == UnknownName;     }
     bool      isUnconfirmedName() const { return type() == UnconfirmedName; }
     bool      isConfirmedName() const   { return type() == ConfirmedName;   }
     bool      isForTraining() const     { return type() == FaceForTraining; }
+
+    void setType(Type type);
+    void setTagId(int tagId);
+    void setRegion(const TagRegion& region);
 
     bool operator==(const DatabaseFace& other) const;
 
@@ -106,8 +112,10 @@ protected:
     Type      m_type;
     qlonglong m_imageId;
     int       m_tagId;
-    QVariant  m_region;
+    TagRegion m_region;
 };
+
+QDebug operator<<(QDebug dbg, const DatabaseFace& f);
 
 }  // Namespace Digikam
 
