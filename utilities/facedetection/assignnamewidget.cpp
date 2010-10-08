@@ -179,6 +179,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
     else if (mode == ConfirmedMode)
     {
         clickLabel = new RClickLabel;
+        clickLabel->setAlignment(Qt::AlignCenter);
 
         connect(clickLabel, SIGNAL(activated()),
                 q, SLOT(slotLabelClicked()));
@@ -192,7 +193,6 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
 
     delete layout;
     layout = new QGridLayout;
-    q->setLayout(layout);
 
     if (mode == UnconfirmedEditMode || mode == ConfirmedEditMode)
     {
@@ -214,6 +214,8 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
     {
         layout->addWidget(clickLabel, 0, 0);
     }
+
+    q->setLayout(layout);
 }
 
 void AssignNameWidget::AssignNameWidgetPriv::updateContents()
@@ -230,7 +232,6 @@ void AssignNameWidget::AssignNameWidgetPriv::updateContents()
     if (confirmButton)
         confirmButton->setEnabled(currentTag);
 
-    kDebug() << clickLabel << currentTag << (currentTag ? currentTag->title() : QString());
     if (clickLabel)
         clickLabel->setText(currentTag ? currentTag->title() : QString());
 }

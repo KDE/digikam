@@ -33,6 +33,8 @@
 
 // Local includes
 
+#include "itemvisibilitycontroller.h"
+
 class QGraphicsSceneHoverEvent;
 
 namespace Digikam
@@ -123,6 +125,21 @@ private:
 
     class FaceGroupPriv;
     FaceGroupPriv* const d;
+};
+
+class FaceItem;
+
+class AssignNameWidgetHidingStateChanger : public HidingStateChanger
+{
+    Q_OBJECT
+
+public:
+
+    AssignNameWidgetHidingStateChanger(FaceItem *item);
+
+protected Q_SLOTS:
+
+    void slotStateChanged();
 };
 
 } // namespace Digikam

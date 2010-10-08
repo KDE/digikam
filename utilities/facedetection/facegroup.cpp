@@ -67,60 +67,15 @@ class FaceItem : public RegionFrameItem
 {
 public:
 
-    FaceItem(QGraphicsItem* parent = 0)
-        : RegionFrameItem(parent),
-          m_widget(0), m_changer(0)
-    {
-    }
+    FaceItem(QGraphicsItem* parent = 0);
 
-    void setFace(const DatabaseFace& face)
-    {
-        m_face = face;
-        updateCurrentTag();
-    }
-
-    DatabaseFace face() const
-    {
-        return m_face;
-    }
-
-    void setHudWidget(AssignNameWidget* widget)
-    {
-        m_widget = widget;
-        updateCurrentTag();
-        RegionFrameItem::setHudWidget(widget);
-    }
-
-    AssignNameWidget* widget() const
-    {
-        return m_widget;
-    }
-
-    void switchMode(AssignNameWidget::Mode mode)
-    {
-        if (!m_widget || m_widget->mode() == mode)
-            return;
-
-        if (!m_changer)
-        {
-            m_changer = new HidingStateChanger(m_widget, "mode", this);
-            m_changer->addItem(hudWidget());
-        }
-
-        m_changer->changeValue(mode);
-    }
-
-    void updateCurrentTag()
-    {
-        if (m_widget)
-        {
-            TAlbum *album = 0;
-            if (!m_face.isNull() && !m_face.isUnknownName())
-                album = AlbumManager::instance()->findTAlbum(m_face.tagId());
-            kDebug() << m_face.type() << album;
-            m_widget->setCurrentTag(album);
-        }
-    }
+    void setFace(const DatabaseFace& face);
+    DatabaseFace face() const;
+    void setHudWidget(AssignNameWidget* widget);
+    AssignNameWidget* widget() const;
+    void switchMode(AssignNameWidget::Mode mode);
+    void setEditable(bool allowEdit);
+    void updateCurrentTag();
 
 protected:
 
@@ -128,6 +83,86 @@ protected:
     DatabaseFace        m_face;
     HidingStateChanger *m_changer;
 };
+
+// ---
+
+FaceItem::FaceItem(QGraphicsItem* parent)
+    : RegionFrameItem(parent),
+        m_widget(0), m_changer(0)
+{
+}
+
+void FaceItem::setFace(const DatabaseFace& face)
+{
+    m_face = face;
+    updateCurrentTag();
+    setEditable(!m_face.isConfirmedName());
+}
+
+DatabaseFace FaceItem::face() const
+{
+    return m_face;
+}
+
+void FaceItem::setHudWidget(AssignNameWidget* widget)
+{
+    m_widget = widget;
+    updateCurrentTag();
+    RegionFrameItem::setHudWidget(widget);
+}
+
+AssignNameWidget* FaceItem::widget() const
+{
+    return m_widget;
+}
+
+void FaceItem::switchMode(AssignNameWidget::Mode mode)
+{
+    if (!m_widget || m_widget->mode() == mode)
+        return;
+
+    if (!m_changer)
+        m_changer = new AssignNameWidgetHidingStateChanger(this);
+
+    m_changer->changeValue(mode);
+}
+
+void FaceItem::setEditable(bool allowEdit)
+{
+    changeFlags(ShowResizeHandles | MoveByDrag, allowEdit);
+}
+
+void FaceItem::updateCurrentTag()
+{
+    if (m_widget)
+    {
+        TAlbum *album = 0;
+        if (!m_face.isNull() && !m_face.isUnknownName())
+            album = AlbumManager::instance()->findTAlbum(m_face.tagId());
+        m_widget->setCurrentTag(album);
+    }
+}
+
+// ---
+
+AssignNameWidgetHidingStateChanger::AssignNameWidgetHidingStateChanger(FaceItem *item)
+    : HidingStateChanger(item->widget(), "mode", item)
+{
+    // The WidgetProxyItem
+    addItem(item->hudWidget());
+
+    connect(this, SIGNAL(stateChanged()),
+            this, SLOT(slotStateChanged()));
+}
+
+void AssignNameWidgetHidingStateChanger::slotStateChanged()
+{
+    FaceItem *item = static_cast<FaceItem*>(parent());
+    // Show resize handles etc. only in edit modes
+    item->setEditable(item->widget()->mode() != AssignNameWidget::ConfirmedMode);
+}
+
+// ---
 
 class FaceGroup::FaceGroupPriv
 {
@@ -419,6 +454,9 @@ AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const Databas
     q->connect(assignWidget, SIGNAL(rejected(const ImageInfo&, const QVariant&)),
                q, SLOT(slotRejected(const ImageInfo&, const QVariant&)));
 
+    q->connect(assignWidget, SIGNAL(labelClicked(const ImageInfo&, const QVariant&)),
+               q, SLOT(slotLabelClicked(const ImageInfo&, const QVariant&)));
+
     return assignWidget;
 }
 
@@ -449,9 +487,6 @@ void FaceGroup::load()
         d->visibilityController->addItem(item);
 
         d->items << item;
-        /*kDebug() << assignWidget->size() << assignWidget->sizeHint() << assignWidget->minimumSizeHint()
-                 << ((QComboBox*)assignWidget->comboBox())->view()->sizeHint() << ((QComboBox*)assignWidget->comboBox())->view()->minimumSizeHint()
-                 << assignWidget->sizePolicy() << assignWidget->comboBox()->sizeHint();*/
     }
 
     d->state = FacesLoaded;
@@ -489,18 +524,21 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
 {
     FaceItem* item    = d->items[faceIdentifier.toInt()];
 
-    DatabaseFace face = item->face();
-    QRect currentRect = item->originalRect();
+    DatabaseFace face       = item->face();
+    TagRegion currentRegion = TagRegion(item->originalRect());
 
-    if (action.shallAssignTag())
+    if (!face.isConfirmedName() || face.region() != currentRegion
+        || action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()) )
     {
-        d->faceIface.ensureIsPerson(action.tagId());
-        face = d->faceIface.confirmName(d->info.id(), action.tagId(), currentRect, face.region().toRect());
-    }
-    else if (action.shallCreateNewTag())
-    {
-        int tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
-        face = d->faceIface.confirmName(d->info.id(), tagId, currentRect, face.region().toRect());
+        if (action.shallAssignTag())
+        {
+            face = d->faceIface.confirmName(face, action.tagId(), currentRegion);
+        }
+        else if (action.shallCreateNewTag())
+        {
+            int tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
+            face = d->faceIface.confirmName(face, tagId, currentRegion);
+        }
     }
 
     item->setFace(face);
