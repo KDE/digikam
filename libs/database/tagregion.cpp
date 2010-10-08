@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QDebug>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
@@ -34,6 +35,11 @@
 
 namespace Digikam
 {
+
+TagRegion::TagRegion()
+         : m_type(Invalid)
+{
+}
 
 TagRegion::TagRegion(const QString& descriptor)
          : m_value(descriptor), m_type(Invalid)
@@ -73,6 +79,12 @@ bool TagRegion::isValid() const
     return m_type != Invalid;
 }
 
+bool TagRegion::operator==(const TagRegion& other) const
+{
+    return m_type == other.m_type
+        && m_value == other.m_value;
+}
+
 QString TagRegion::toXml() const
 {
     if (m_type == Invalid)
@@ -103,6 +115,24 @@ QRect TagRegion::toRect() const
     if (m_type == Rect)
         return m_value.toRect();
     return QRect();
+}
+
+QVariant TagRegion::toVariant() const
+{
+    return m_value;
+}
+
+TagRegion TagRegion::fromVariant(const QVariant& var)
+{
+    switch (var.type())
+    {
+        case QVariant::Rect:
+            return TagRegion(var.toRect());
+        case QVariant::String:
+            return TagRegion(var.toString());
+        default:
+            return TagRegion();
+    }
 }
 
 QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& reducedSizeDetail)
@@ -136,6 +166,21 @@ QRect TagRegion::mapToOriginalSize(const DImg& reducedSizeImage, const QRect& re
 QRect TagRegion::mapFromOriginalSize(const DImg& reducedSizeImage, const QRect& fullSizeDetail)
 {
     return mapFromOriginalSize(reducedSizeImage.originalSize(), reducedSizeImage.size(), fullSizeDetail);
+}
+
+QDebug operator<<(QDebug dbg, const TagRegion &r)
+{
+    QVariant var = r.toVariant();
+    switch (var.type())
+    {
+        case QVariant::Rect:
+            dbg.nospace() << var.toRect();
+        case QVariant::String:
+            dbg.nospace() << var.toString();
+        default:
+            dbg.nospace() << var;
+    }
+    return dbg;
 }
 
 } // namespace Digikam

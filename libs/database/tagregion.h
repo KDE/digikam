@@ -34,6 +34,8 @@
 
 #include "digikam_export.h"
 
+class QDebug;
+
 namespace Digikam
 {
 
@@ -49,6 +51,8 @@ public:
      * and the corresponding object.
      */
 
+    /// Invalid region
+    TagRegion();
     /// Construct with the textual descriptor
     explicit TagRegion(const QString& descriptor);
     /// Construct with the region
@@ -63,8 +67,14 @@ public:
     Type type() const;
     bool isValid() const;
 
+    bool operator==(const TagRegion& other) const;
+    bool operator!=(const TagRegion& other) const { return !operator==(other); }
+
     QString toXml() const;
     QRect toRect() const;
+
+    QVariant toVariant() const;
+    static TagRegion fromVariant(const QVariant& var);
 
     /**
      * Converts detail rectangles taken from a reduced size image to the original size, and vice versa
@@ -80,6 +90,8 @@ protected:
     QVariant m_value;
     Type     m_type;
 };
+
+QDebug DIGIKAM_EXPORT operator<<(QDebug dbg, const TagRegion &r);
 
 } // namespace Digikam
 
