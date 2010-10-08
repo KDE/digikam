@@ -35,6 +35,8 @@
 
 #include "digikam_export.h"
 
+class QPropertyAnimation;
+
 namespace Digikam
 {
 
@@ -155,6 +157,16 @@ public Q_SLOTS:
      */
     void hideAndRemoveItem(QObject *item);
 
+protected:
+
+    /**
+     * Creates the animation for showing and hiding the given item.
+     * The item is given for information only, you do not need to use it.
+     * The default implementation creates and animation for "opacity"
+     * from 0.0 to 1.0.
+     */
+    virtual QPropertyAnimation *createAnimation(QObject *item);
+
 protected Q_SLOTS:
 
     void animationFinished();
@@ -246,6 +258,13 @@ public:
 public Q_SLOTS:
 
     void changeValue(const QVariant& value);
+
+Q_SIGNALS:
+
+    /// Emitted when the items were hidden and the target object's property changed
+    void stateChanged();
+    /// Emitted when the items were hidden, the target object's property changed, and the items shown again
+    void finished();
 
 protected Q_SLOTS:
 

@@ -97,6 +97,9 @@ HidingStateChanger::HidingStateChanger(QObject *target, const QByteArray propert
 
     setTargetObject(target);
     setPropertyName(property);
+
+    // here, we assume to start with a visible item
+    setVisible(true);
 }
 
 void HidingStateChanger::setTargetObject(QObject *object)
@@ -113,9 +116,15 @@ void HidingStateChanger::changeValue(const QVariant& value)
 {
     m_value = value;
     if (!hasVisibleItems())
+    {
+        // shortcut
+        slotPropertiesAssigned(false);
         slotPropertiesAssigned(true);
+    }
     else
+    {
         hide();
+    }
 }
 
 void HidingStateChanger::slotPropertiesAssigned(bool visible)
@@ -124,7 +133,12 @@ void HidingStateChanger::slotPropertiesAssigned(bool visible)
     {
         if (m_object)
             m_object->setProperty(m_property, m_value);
+        emit stateChanged();
         show();
+    }
+    else
+    {
+        emit finished();
     }
 }
 
@@ -345,9 +359,12 @@ void AnimationControl::transitionToVisible(bool show)
         state = ItemVisibilityController::FadingOut;
     }
 
-    QAbstractAnimation::Direction direction = show ? QAbstractAnimation::Forward : QAbstractAnimation::Backward;
-    animation->setDirection(direction);
-    animation->start();
+    if (animation)
+    {
+        QAbstractAnimation::Direction direction = show ? QAbstractAnimation::Forward : QAbstractAnimation::Backward;
+        animation->setDirection(direction);
+        animation->start();
+    }
 }
 
 void AnimationControl::animationFinished()
@@ -357,7 +374,7 @@ void AnimationControl::animationFinished()
         setVisibleProperty(false);
         state = ItemVisibilityController::Hidden;
     }
-    else
+    else if (state == ItemVisibilityController::FadingIn)
     {
         state = ItemVisibilityController::Visible;
     }
@@ -385,25 +402,12 @@ public:
     AnimationControl                  *control;
     QList<AnimationControl*>           childControls;
 
-    QPropertyAnimation        *createAnimation() const;
-
     AnimationControl          *findInChildren(QObject *item) const;
     AnimationControl          *getChild(QObject *item);
     void                       cleanupChildren(QAbstractAnimation *finishedAnimation);
 
     ItemVisibilityController* const q;
 };
-
-QPropertyAnimation *ItemVisibilityController::ItemVisibilityControllerPriv::createAnimation() const
-{
-    QPropertyAnimation *anim = new QPropertyAnimation(q);
-    anim->setPropertyName("opacity");
-    anim->setStartValue(0);
-    anim->setEndValue(1.0);
-    anim->setDuration(75);
-    anim->setEasingCurve(QEasingCurve::InOutQuad);
-    return anim;
-}
 
 AnimationControl *ItemVisibilityController::ItemVisibilityControllerPriv::findInChildren(QObject *item) const
 {
@@ -464,15 +468,30 @@ ItemVisibilityController::~ItemVisibilityController()
     delete d;
 }
 
+QPropertyAnimation *ItemVisibilityController::createAnimation(QObject *)
+{
+    QPropertyAnimation *anim = new QPropertyAnimation(this);
+    anim->setPropertyName("opacity");
+    anim->setStartValue(0);
+    anim->setEndValue(1.0);
+    anim->setDuration(75);
+    anim->setEasingCurve(QEasingCurve::InOutQuad);
+    return anim;
+}
+
 void ItemVisibilityController::addItem(QObject *item)
 {
     if (!item)
         return;
 
     if (!d->control)
+    {
+        // initialize main control
         d->control = new AnimationControl(this);
+        d->control->transitionToVisible(d->shallBeShown && d->visible);
+    }
 
-    QPropertyAnimation* anim = d->createAnimation();
+    QPropertyAnimation* anim = createAnimation(item);
     anim->setTargetObject(item);
     d->control->connect(item);
     d->control->syncProperties(item);
