@@ -380,9 +380,11 @@ MixerContainer MixerSettings::settings() const
 
 void MixerSettings::setSettings(const MixerContainer& settings)
 {
+    blockSignals(true);
     d->mixerSettings = settings;
     updateSettingsWidgets();
     slotMonochromeActived(d->mixerSettings.bMonochrome);
+    blockSignals(false);
 }
 
 void MixerSettings::resetToDefault()
