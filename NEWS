@@ -64,7 +64,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 237722 : Crash while applying Vivid color effect.
 050 ==> 207893 : Crash after undoing change in Image Editor.
 051 ==> 199801 : digiKam geolocation tool crash [exiv2].
-052 ==> 
+052 ==> 223774 : digiKam crashed at liquid rescale preview generation.
+053 ==> 
+
 
 
 
