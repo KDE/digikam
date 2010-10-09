@@ -241,12 +241,12 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     // ------------------------------------------------------------------------------------------------
 
-    bool exactMatch           = true;
-    const lfCamera** lfCamera = d->lfDb->FindCameras( d->makeDescription.toAscii().constData(), d->modelDescription.toAscii().constData() );
+    bool exactMatch    = true;
+    DevicePtr lfCamera = findCamera( d->makeDescription.toAscii().constData(), d->modelDescription.toAscii().constData() );
 
-    if (lfCamera && *lfCamera)
+    if (lfCamera)
     {
-        setUsedCamera(*lfCamera);
+        setUsedCamera(lfCamera);
 
         kDebug() << "Camera maker   : " << d->settings.cameraMake;
         kDebug() << "Camera model   : " << d->settings.cameraModel;
