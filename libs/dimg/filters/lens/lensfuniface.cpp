@@ -158,20 +158,30 @@ void LensFunIface::setFilterSettings(const LensFunContainer& other)
 
 LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QString& model) const
 {
-    const lfCamera* const* lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
+    // NOTE: see B.K.O #184156:
+    // Some rules to wrap unkown camera device from Lensfun database, which have equivalent in fact.
+    QString lfModel = model;
+    if (make == QString("Canon"))
+    {
+        if (model == QString("Canon EOS Kiss Digital X"))
+            lfModel = QString("Canon EOS 400D DIGITAL");
+    }
+
+    const lfCamera* const* lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), lfModel.toAscii().constData() );
     while (lfCamera && *lfCamera)
     {
         DevicePtr cam = *lfCamera;
+//        kDebug() << "Query camera:" << cam->Maker << "-" << cam->Model;
 
         if (QString(cam->Maker) == make &&
-            QString(cam->Model) == model)
+            QString(cam->Model) == lfModel)
         {
-            kDebug() << "Search for camera " << make << "-" << model << " ==> true";
+            kDebug() << "Search for camera " << make << "-" << lfModel << " ==> true";
             return cam;
         }
         ++lfCamera;
     }
-    kDebug() << "Search for camera " << make << "-" << model << " ==> false";
+    kDebug() << "Search for camera " << make << "-" << lfModel << " ==> false";
     return 0;
 }
 
