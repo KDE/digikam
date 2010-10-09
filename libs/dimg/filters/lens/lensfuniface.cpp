@@ -159,7 +159,7 @@ void LensFunIface::setFilterSettings(const LensFunContainer& other)
 LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QString& model) const
 {
     const lfCamera* const* lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
-    if (lfCamera && *lfCamera)
+    while (lfCamera && *lfCamera)
     {
         DevicePtr cam = *lfCamera;
 
