@@ -158,30 +158,21 @@ void LensFunIface::setFilterSettings(const LensFunContainer& other)
 
 LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QString& model) const
 {
-    // NOTE: see B.K.O #184156:
-    // Some rules to wrap unkown camera device from Lensfun database, which have equivalent in fact.
-    QString lfModel = model;
-    if (make == QString("Canon"))
-    {
-        if (model == QString("Canon EOS Kiss Digital X"))
-            lfModel = QString("Canon EOS 400D DIGITAL");
-    }
-
-    const lfCamera* const* lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), lfModel.toAscii().constData() );
+    const lfCamera* const* lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
     while (lfCamera && *lfCamera)
     {
         DevicePtr cam = *lfCamera;
 //        kDebug() << "Query camera:" << cam->Maker << "-" << cam->Model;
 
         if (QString(cam->Maker) == make &&
-            QString(cam->Model) == lfModel)
+            QString(cam->Model) == model)
         {
-            kDebug() << "Search for camera " << make << "-" << lfModel << " ==> true";
+            kDebug() << "Search for camera " << make << "-" << model << " ==> true";
             return cam;
         }
         ++lfCamera;
     }
-    kDebug() << "Search for camera " << make << "-" << lfModel << " ==> false";
+    kDebug() << "Search for camera " << make << "-" << model << " ==> false";
     return 0;
 }
 
@@ -240,14 +231,24 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     PhotoInfoContainer photoInfo = meta.getPhotographInformation();
     d->makeDescription           = photoInfo.make;
-    d->modelDescription          = photoInfo.model;
-    d->lensDescription           = photoInfo.lens;
 
     if (d->makeDescription.isEmpty())
     {
         kDebug() << "No camera maker info available";
         return ret;
     }
+
+    d->modelDescription          = photoInfo.model;
+
+    // NOTE: see B.K.O #184156:
+    // Some rules to wrap unkown camera device from Lensfun database, which have equivalent in fact.
+    if (d->makeDescription == QString("Canon"))
+    {
+        if (d->modelDescription == QString("Canon EOS Kiss Digital X"))
+            d->modelDescription = QString("Canon EOS 400D DIGITAL");
+    }
+
+    d->lensDescription           = photoInfo.lens;
 
     // ------------------------------------------------------------------------------------------------
 
