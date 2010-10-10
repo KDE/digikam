@@ -267,13 +267,13 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
         if (!d->lensDescription.isEmpty())
         {
 
-            kDebug() << "Lens desc.     : " << d->lensDescription;
             QMap<int, LensPtr> bestMatches;
             QString            lensCutted;
             LensList           lensList;
 
-            // STAGE 1, search in DB as well.
+            // STAGE 1, search in LensFun database as well.
             lensList = findLenses(d->usedCamera, d->lensDescription);
+            kDebug() << "* Check for lens by direct query (" << d->lensDescription << " : " << lensList.count() << ")";
             if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
 
             // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
