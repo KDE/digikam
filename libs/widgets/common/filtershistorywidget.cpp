@@ -91,6 +91,7 @@ FiltersHistoryWidget::FiltersHistoryWidget(QWidget* parent)
     d->view->setModel(d->model);
     d->view->setRootIsDecorated(false);
     d->view->setContextMenuPolicy(Qt::CustomContextMenu);
+    d->view->setHeaderHidden(true);
 
     connect(d->view, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(showCustomContextMenu(QPoint)));
