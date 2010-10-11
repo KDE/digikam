@@ -270,7 +270,7 @@ void FindDuplicatesView::updateAlbumsBox()
     if (d->albumModel)
         disconnect(d->albumModel, 0, this, 0);
 
-    d->albumSelectCB->setDefaultAlbumModels();
+    d->albumSelectCB->setDefaultAlbumModel();
     d->albumModel = d->albumSelectCB->model();
     d->albumSelectCB->view()->expandToDepth(0);
     d->albumSelectCB->setNoSelectionText(i18n("No albums selected"));
@@ -285,7 +285,7 @@ void FindDuplicatesView::updateTagsBox()
         disconnect(d->tagModel, 0, this, 0);
 
 
-    d->tagSelectCB->setDefaultTagModels();
+    d->tagSelectCB->setDefaultTagModel();
     d->tagModel = d->tagSelectCB->model();
     d->tagSelectCB->view()->expandToDepth(0);
     d->tagSelectCB->setNoSelectionText(i18n("No tags selected"));

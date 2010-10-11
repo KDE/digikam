@@ -40,7 +40,7 @@ class TagModel;
 class TagPropertiesFilterModel;
 class TagTreeView;
 
-class AddTagsComboBox : public AlbumSelectComboBox
+class AddTagsComboBox : public TagTreeViewSelectComboBox
 {
     Q_OBJECT
 
@@ -76,7 +76,6 @@ public:
     void setText(const QString& text);
 
     AddTagsLineEdit *lineEdit() const;
-    TagTreeView     *view() const;
 
 public Q_SLOTS:
 
@@ -98,12 +97,6 @@ protected Q_SLOTS:
 
     void slotViewIndexActivated(const QModelIndex&);
     void slotLineEditActionActivated(const TaggingAction& action);
-
-protected:
-
-    /// Note: Requires a tag tree view
-    virtual void installView(QAbstractItemView *view = 0);
-    virtual void sendViewportEventToView(QEvent* e);
 
 private:
 

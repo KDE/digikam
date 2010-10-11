@@ -36,6 +36,7 @@
 
 #include "albummodel.h"
 #include "albumfiltermodel.h"
+#include "albumtreeview.h"
 
 namespace Digikam
 {
@@ -75,14 +76,14 @@ AlbumSelectComboBox::~AlbumSelectComboBox()
     delete d;
 }
 
-void AlbumSelectComboBox::setDefaultAlbumModels()
+void AlbumSelectComboBox::setDefaultAlbumModel()
 {
     d->noSelectionText = i18n("No Album Selected");
     setModel(new AlbumModel(AlbumModel::IgnoreRootAlbum, this));
     view()->expandToDepth(0);
 }
 
-void AlbumSelectComboBox::setDefaultTagModels()
+void AlbumSelectComboBox::setDefaultTagModel()
 {
     d->noSelectionText = i18n("No Tag Selected");
     setModel(new TagModel(AlbumModel::IgnoreRootAlbum, this));
@@ -217,6 +218,103 @@ void AlbumSelectComboBox::updateText()
         else
             setLineEditText(i18np("1 Album selected", "%1 Albums selected", checkedAlbums.count()));
     }
+}
+
+// ---
+
+AbstractAlbumTreeViewSelectComboBox::AbstractAlbumTreeViewSelectComboBox(QWidget *parent)
+    : AlbumSelectComboBox(parent), m_treeView(0)
+{
+}
+
+void AbstractAlbumTreeViewSelectComboBox::installView(QAbstractItemView *view)
+{
+    if (!view)
+        view = m_treeView;
+    AlbumSelectComboBox::installView(view);
+}
+
+void AbstractAlbumTreeViewSelectComboBox::sendViewportEventToView(QEvent* e)
+{
+    // needed for StayPoppedUpComboBox
+    m_treeView->viewportEvent(e);
+}
+
+// ---
+
+AlbumTreeViewSelectComboBox::AlbumTreeViewSelectComboBox(QWidget *parent)
+    : AbstractAlbumTreeViewSelectComboBox(parent)
+{
+}
+
+AlbumTreeView *AlbumTreeViewSelectComboBox::view() const
+{
+    return static_cast<AlbumTreeView*>(m_treeView);
+}
+
+void AlbumTreeViewSelectComboBox::setDefaultModel()
+{
+    setModel(0,0);
+}
+
+void AlbumTreeViewSelectComboBox::setModel(AlbumModel *model, CheckableAlbumFilterModel *filterModel)
+{
+    if (!m_treeView)
+    {
+        AlbumTreeView::Flags flags;
+        m_treeView = new AlbumTreeView(this, flags);
+    }
+
+    if (!model)
+        model = new AlbumModel(AlbumModel::IgnoreRootAlbum, this);
+    if (!filterModel)
+        filterModel = new CheckableAlbumFilterModel(this);
+
+    view()->setAlbumModel(model);
+    view()->setAlbumFilterModel(filterModel);
+
+    AlbumSelectComboBox::setModel(view()->albumModel(), view()->albumFilterModel());
+
+    view()->expandToDepth(0);
+}
+
+// ---
+
+TagTreeViewSelectComboBox::TagTreeViewSelectComboBox(QWidget *parent)
+    : AbstractAlbumTreeViewSelectComboBox(parent)
+{
+}
+
+TagTreeView *TagTreeViewSelectComboBox::view() const
+{
+    return static_cast<TagTreeView*>(m_treeView);
+}
+
+void TagTreeViewSelectComboBox::setDefaultModel()
+{
+    setModel(0,0);
+}
+
+void TagTreeViewSelectComboBox::setModel(TagModel *model,
+                                         TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
+{
+    if (!m_treeView)
+    {
+        TagTreeView::Flags flags;
+        m_treeView = new TagTreeView(this, flags);
+    }
+
+    if (!model)
+        model = new TagModel(AlbumModel::IgnoreRootAlbum, this);
+    if (!filteredModel)
+        filteredModel = new TagPropertiesFilterModel(this);
+    if (!filterModel)
+        filterModel = new CheckableAlbumFilterModel(this);
+
+    view()->setAlbumModel(model);
+    view()->setAlbumFilterModel(filteredModel, filterModel);
+
+    AlbumSelectComboBox::setModel(view()->albumModel(), view()->albumFilterModel());
 }
 
 } // namespace Digikam

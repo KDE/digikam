@@ -51,8 +51,8 @@ public:
         custom source and filter models.
         The first two also set a default noSelectionText. Customize afterwards if required.
     */
-    void setDefaultAlbumModels();
-    void setDefaultTagModels();
+    void setDefaultAlbumModel();
+    void setDefaultTagModel();
     void setModel(AbstractCheckableAlbumModel *model, AlbumFilterModel *filterModel = 0);
 
     /** Enable checkboxes next to the items. Default: true */
@@ -92,6 +92,65 @@ private:
     class AlbumSelectComboBoxPriv;
     AlbumSelectComboBoxPriv* const d;
 };
+
+class AbstractAlbumTreeView;
+class AlbumModel;
+class AlbumTreeView;
+class CheckableAlbumFilterModel;
+class TagPropertiesFilterModel;
+class TagModel;
+class TagTreeView;
+
+class AbstractAlbumTreeViewSelectComboBox : public AlbumSelectComboBox
+{
+    Q_OBJECT
+
+public:
+
+    /**
+     * Abstract class.
+     * This is an AlbumSelectComboBox which installs an AlbumTreeView,
+     * not a plain QTreeView, as view.
+     */
+
+    AbstractAlbumTreeViewSelectComboBox(QWidget *parent = 0);
+
+protected:
+
+    virtual void installView(QAbstractItemView *view = 0);
+    virtual void sendViewportEventToView(QEvent* e);
+
+    AbstractAlbumTreeView *m_treeView;
+};
+
+class AlbumTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
+{
+    Q_OBJECT
+
+public:
+
+    AlbumTreeViewSelectComboBox(QWidget *parent = 0);
+
+    void setDefaultModel();
+    void setModel(AlbumModel *model, CheckableAlbumFilterModel *filterModel = 0);
+    AlbumTreeView *view() const;
+};
+
+class TagTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
+{
+    Q_OBJECT
+
+public:
+
+    TagTreeViewSelectComboBox(QWidget *parent = 0);
+
+    void setDefaultModel();
+    void setModel(TagModel *model,
+                  TagPropertiesFilterModel *filteredModel = 0, CheckableAlbumFilterModel* filterModel = 0);
+    TagTreeView *view() const;
+
+};
+
 
 } // namespace Digikam
 

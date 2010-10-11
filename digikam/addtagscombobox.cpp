@@ -60,7 +60,7 @@ public:
 // ---------------------------------------------------------------------------------------
 
 AddTagsComboBox::AddTagsComboBox(QWidget* parent)
-               : AlbumSelectComboBox(parent), d(new AddTagsComboBoxPriv)
+               : TagTreeViewSelectComboBox(parent), d(new AddTagsComboBoxPriv)
 {
     QComboBox::setAutoCompletion(false);
     setCloseOnActivate(true);
@@ -77,7 +77,7 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
     d->lineEdit->setClearButtonShown(true);
 
     TagTreeView::Flags flags;
-    d->treeView = new TagTreeView(this, flags);
+    m_treeView = new TagTreeView(this, flags);
 
     connect(d->treeView, SIGNAL(activated(const QModelIndex&)),
             this, SLOT(slotViewIndexActivated(const QModelIndex&)));
@@ -90,10 +90,7 @@ AddTagsComboBox::~AddTagsComboBox()
 
 void AddTagsComboBox::setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
 {
-    AlbumSelectComboBox::setModel(model, filterModel);
-
-    d->treeView->setAlbumModel(model);
-    d->treeView->setAlbumFilterModel(filteredModel, filterModel);
+    TagTreeViewSelectComboBox::setModel(model, filteredModel, filterModel);
 
     d->lineEdit->setTagModel(model);
 }
@@ -103,31 +100,9 @@ void AddTagsComboBox::installLineEdit()
    setLineEdit(d->lineEdit);
 }
 
-void AddTagsComboBox::installView(QAbstractItemView *v)
-{
-    AlbumSelectComboBox::installView(v ? v : d->treeView);
-}
-
 AddTagsLineEdit *AddTagsComboBox::lineEdit() const
 {
     return d->lineEdit;
-}
-
-TagTreeView* AddTagsComboBox::view() const
-{
-    // the view in the combo box popup
-    return d->treeView;
-}
-
-void AddTagsComboBox::setEditable(bool)
-{
-    // just made private, ignored
-}
-
-void AddTagsComboBox::sendViewportEventToView(QEvent* e)
-{
-    // needed for StayPoppedUpComboBox
-    view()->viewportEvent(e);
 }
 
 void AddTagsComboBox::setTagTreeView(TagTreeView* view)

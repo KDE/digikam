@@ -1888,12 +1888,12 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout *layout, int row, int colum
 
     if (m_type == TypeAlbum)
     {
-        m_comboBox->setDefaultAlbumModels();
+        m_comboBox->setDefaultAlbumModel();
         m_comboBox->setNoSelectionText(i18n("Any Album"));
     }
     else if (m_type == TypeTag)
     {
-        m_comboBox->setDefaultTagModels();
+        m_comboBox->setDefaultTagModel();
         m_comboBox->setNoSelectionText(i18n("Any Tag"));
     }
 
