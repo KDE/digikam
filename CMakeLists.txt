@@ -183,6 +183,7 @@ FIND_PROGRAM( SERVERCMD_MYSQL mysqld
                     ENV MYSQLD_PATH )
 MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
 
+# TODO : under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
 IF (NOT WIN32)
 FIND_PROGRAM( INITCMD_MYSQL mysql_install_db
               PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
