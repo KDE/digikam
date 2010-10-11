@@ -44,7 +44,7 @@ public:
     ~OilPaintFilter(){};
 
     static QString          FilterIdentifier() { return "digikam:OilPaintFilter"; }
-    static QString          DisplayableName() { return "Oil Painter Filter"; }
+    static QString          DisplayableName() { return "Oil Painter Effect"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
     

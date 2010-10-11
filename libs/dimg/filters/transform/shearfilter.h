@@ -51,7 +51,7 @@ public:
     QSize getNewSize(void){ return m_newSize; };
 
     static QString          FilterIdentifier() { return "digikam:ShearFilter"; }
-    static QString          DisplayableName() { return "Shear Filter"; }
+    static QString          DisplayableName() { return "Shear"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
     

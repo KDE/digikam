@@ -99,7 +99,7 @@ public:
     virtual ~CurvesFilter();
 
     static QString          FilterIdentifier() { return "digikam:CurvesFilter"; }
-    static QString          DisplayableName() { return "Curves Filter"; }
+    static QString          DisplayableName() { return "Adjust Curves"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
     

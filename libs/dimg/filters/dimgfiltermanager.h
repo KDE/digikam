@@ -7,6 +7,7 @@
  * Description : manager for filters (registering, creating etc)
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +46,7 @@ public:
     QString displayableName(const QString& filterIdentifier);
 
     QString getFilterIcon(const QString& filterIdentifier);
+    QString getI18nFilterName(const QString& filterIdentifier);
 
     bool isSupported(const QString& filterIdentifier);
     bool isSupported(const QString& filterIdentifier, int version);

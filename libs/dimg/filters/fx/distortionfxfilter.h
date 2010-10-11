@@ -53,7 +53,7 @@ public:
     ~DistortionFXFilter(){};
 
     static QString          FilterIdentifier() { return "digikam:DistortionFXFilter"; }
-    static QString          DisplayableName() { return "Distortion FX Filter"; }
+    static QString          DisplayableName() { return "Distortion Effect"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
     

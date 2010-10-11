@@ -97,7 +97,7 @@ public:
     static double calculateAngle(const QPoint& p1, const QPoint& p2);
 
     static QString          FilterIdentifier() { return "digikam:FreeRotationFilter"; }
-    static QString          DisplayableName() { return "Free Rotation Filter"; }
+    static QString          DisplayableName() { return "Free Rotation"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
     

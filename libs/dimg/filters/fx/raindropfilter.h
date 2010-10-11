@@ -47,7 +47,7 @@ public:
     ~RainDropFilter(){};
 
     static QString          FilterIdentifier() { return "digikam:RainDropFilter"; }
-    static QString          DisplayableName() { return "Rain Drops Filter"; }
+    static QString          DisplayableName() { return "Rain Drops Effect"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
     

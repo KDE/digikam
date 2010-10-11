@@ -254,7 +254,14 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         }
         else
         {
-            itemData.append(entries.at(i).action.displayableName());
+            QString i18nDispName = DImgFilterManager::instance()->getI18nFilterName(entries.at(i).action.identifier());
+            QString metadataDispName = entries.at(i).action.displayableName();
+            if(!i18nDispName.isEmpty())
+                itemData.append(i18nDispName);
+            else if(!metadataDispName.isEmpty())
+                itemData.append(metadataDispName);
+            else itemData.append(entries.at(i).action.identifier());
+
             itemData.append(entries.at(i).action.identifier());
         }
         kDebug() << "Adding an entry: " << itemData;

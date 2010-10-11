@@ -113,7 +113,7 @@ public:
     ~FilmGrainFilter();
 
     static QString          FilterIdentifier() { return "digikam:FilmGrainFilter"; }
-    static QString          DisplayableName() { return "Film Grain Filter"; }
+    static QString          DisplayableName() { return "Film Grain Effect"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
     

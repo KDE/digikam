@@ -49,7 +49,7 @@ public:
     static QString          FilterIdentifier() { return "digikam:autoExpoFilter"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
-    static QString          DisplayableName() { return "Auto Expo Filter"; }
+    static QString          DisplayableName() { return "Auto Exposure Filter"; }
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);

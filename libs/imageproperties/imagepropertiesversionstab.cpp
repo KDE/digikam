@@ -199,8 +199,16 @@ void ImagePropertiesVersionsTab::setupVersionsData() const
 
 void ImagePropertiesVersionsTab::setupFiltersData() const
 {
-    if(!d->versionsList->isEmpty() && d->currentSelectedImageListPosition > -1 && d->currentSelectedImageListPosition < d->versionsList->size())
+    if(!d->versionsList->isEmpty()
+        && d->currentSelectedImageListPosition > -1
+        && d->currentSelectedImageListPosition < d->versionsList->size())
+    {
         d->filtersHistoryWidget->setModelData(ImageInfo(d->versionsList->at(d->currentSelectedImageListPosition).first).imageHistory().entries());
+    }
+    else
+    {
+        d->filtersHistoryWidget->setModelData(QList<DImageHistory::Entry>());
+    }
 }
 
 void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
@@ -251,6 +259,7 @@ void ImagePropertiesVersionsTab::slotUpdateImageInfo(const ImageInfo& info)
 
     kDebug() << "Getting data for versions model";
     d->versionsList->clear();
+    d->filtersHistoryWidget->clearData();
 
     d->currentSelectedImagePath = info.fileUrl().path();
     d->currentSelectedImageId = info.id();

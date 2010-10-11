@@ -76,7 +76,7 @@ public:
     ~AntiVignettingFilter(){};
 
     static QString          FilterIdentifier() { return "digikam:AntiVignettingFilter"; }
-    static QString          DisplayableName() { return "Anti Vignetting Filter"; }
+    static QString          DisplayableName() { return "Anti-Vignetting Filter"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
 

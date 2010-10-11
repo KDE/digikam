@@ -47,7 +47,7 @@ public:
     ~EmbossFilter(){};
 
     static QString          FilterIdentifier() { return "digikam:EmbossFilter"; }
-    static QString          DisplayableName() { return "Emboss Filter"; }
+    static QString          DisplayableName() { return "Emboss Effect"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
     
