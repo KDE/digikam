@@ -68,13 +68,11 @@
 #include "dmetadata.h"
 #include "rawimport.h"
 #include "editortooliface.h"
-#include <../dimg/dimg.h>
-
-
+#include "dimg.h"
 #include "dimgfiltergenerator.h"
 #include "bcgfilter.h"
 #include "equalizefilter.h"
-#include <dimgfiltermanager.h>
+#include "dimgfiltermanager.h"
 
 namespace Digikam
 {
@@ -581,10 +579,17 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
         return;
 
     if (!success)
+    {
         kWarning() << "error saving image '" << QFile::encodeName(filePath).data();
+    }
+    else
+    {
+        LoadingDescription description(d->savingFilename, LoadingDescription::ConvertForEditor);
+        d->currentDescription = description;
+    }
 
     emit signalImageSaved(filePath, success);
-    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+    //emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
 void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
