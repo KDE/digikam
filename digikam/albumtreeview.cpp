@@ -1057,7 +1057,8 @@ void AbstractCheckableAlbumTreeView::doLoadState()
 
     KConfigGroup group = getConfigGroup();
 
-    m_restoreCheckState = group.readEntry(entryName(d->configRestoreCheckedEntry), false);
+    if (!m_restoreCheckState)
+        m_restoreCheckState = group.readEntry(entryName(d->configRestoreCheckedEntry), false);
 
     if (!m_restoreCheckState || !checkableModel()->isCheckable())
     {
@@ -1157,7 +1158,6 @@ AlbumTreeView::AlbumTreeView(QWidget* parent, Flags flags)
 
 AlbumTreeView::~AlbumTreeView()
 {
-    delete m_dragDropHandler;
 }
 
 void AlbumTreeView::setAlbumModel(AlbumModel *model)
@@ -1168,15 +1168,15 @@ void AlbumTreeView::setAlbumModel(AlbumModel *model)
 
     AbstractCheckableAlbumTreeView::setAlbumModel(model);
 
-    m_dragDropHandler = new AlbumDragDropHandler(albumModel());
-    connect(m_dragDropHandler, SIGNAL(dioResult(KJob*)),
-            this, SLOT(slotDIOResult(KJob*)));
-    albumModel()->setDragDropHandler(m_dragDropHandler);
+    m_dragDropHandler = albumModel()->dragDropHandler();
+    if (!m_dragDropHandler)
+    {
+        m_dragDropHandler = new AlbumDragDropHandler(albumModel());
+        connect(m_dragDropHandler, SIGNAL(dioResult(KJob*)),
+                this, SLOT(slotDIOResult(KJob*)));
+        model->setDragDropHandler(m_dragDropHandler);
+    }
 
-    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
-            m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
-
-    albumModel()->setCountMap(AlbumManager::instance()->getPAlbumsCount());
 }
 
 void AlbumTreeView::setAlbumFilterModel(CheckableAlbumFilterModel* filterModel)
@@ -1240,7 +1240,6 @@ TagTreeView::TagTreeView(QWidget* parent, Flags flags)
 
 TagTreeView::~TagTreeView()
 {
-    delete m_dragDropHandler;
 }
 
 void TagTreeView::setAlbumFilterModel(TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
@@ -1262,15 +1261,15 @@ void TagTreeView::setAlbumModel(TagModel* model)
     if (m_filteredModel)
         m_filteredModel->setSourceTagModel(model);
 
-    m_dragDropHandler = new TagDragDropHandler(albumModel());
-    albumModel()->setDragDropHandler(m_dragDropHandler);
+    m_dragDropHandler = albumModel()->dragDropHandler();
+    if (!m_dragDropHandler)
+    {
+        m_dragDropHandler = new TagDragDropHandler(albumModel());
+        albumModel()->setDragDropHandler(m_dragDropHandler);
 
-    connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(const QList<int>&, const QList<int>&)),
-            MetadataManager::instance(), SLOT(assignTags(const QList<int>&, const QList<int>&)));
-
-    connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
-             m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
-    albumModel()->setCountMap(AlbumManager::instance()->getTAlbumsCount());
+        connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(const QList<int>&, const QList<int>&)),
+                MetadataManager::instance(), SLOT(assignTags(const QList<int>&, const QList<int>&)));
+    }
 
     if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)
         setRootIsDecorated(false);
