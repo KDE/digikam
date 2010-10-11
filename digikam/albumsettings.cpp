@@ -69,6 +69,8 @@ public:
         configGroupNepomuk("Nepomuk Settings"),
         configGroupGeneral("General Settings"),
         configGroupVersioning("Versioning Settings"),
+        configGroupFaceDetection("Face Detection Settings"),
+
         configAlbumCollectionsEntry("Album Collections"),
         configAlbumSortOrderEntry("Album Sort Order"),
         configImageSortOrderEntry("Image Sort Order"),
@@ -132,7 +134,9 @@ public:
         configShowAllVersionsEntry("Show All Available Versions"),
         configSaveIntermediateVersionsEntry("Save Intermediate Versions"),
         configFormatForStoringRAWEntry("Format For Storing Versions Of RAW Images"),
-        configFormatForStoringSubversionsEntry("Format For Storing Other Versions Of Files")
+        configFormatForStoringSubversionsEntry("Format For Storing Other Versions Of Files"),
+        configFaceDetectionAccuracy("Detection Accuracy"),
+        configFaceDetectionSpecificity("Detection Specificity")
         {}
 
     const QString                       configGroupDefault;
@@ -141,6 +145,7 @@ public:
     const QString                       configGroupNepomuk;
     const QString                       configGroupGeneral;
     const QString                       configGroupVersioning;
+    const QString                       configGroupFaceDetection;
 
     const QString                       configAlbumCollectionsEntry;
     const QString                       configAlbumSortOrderEntry;
@@ -206,6 +211,8 @@ public:
     const QString                       configSaveIntermediateVersionsEntry;
     const QString                       configFormatForStoringRAWEntry;
     const QString                       configFormatForStoringSubversionsEntry;
+    const QString                       configFaceDetectionAccuracy;
+    const QString                       configFaceDetectionSpecificity;
 
     // start up setting
     bool                                showSplash;
@@ -307,6 +314,10 @@ public:
     bool                                saveIntermediateVersions;
     QString                             formatForStoringRAW;
     QString                             formatForStoringSubversions;
+
+    // face detection settings
+    double                              faceDetectionAccuracy;
+    double                              faceDetectionSpecificity;
 
     //misc
     AlbumSettings::StringComparisonType stringComparisonType;
@@ -417,6 +428,9 @@ void AlbumSettings::init()
     d->saveIntermediateVersions     = false;
     d->formatForStoringRAW          = QString("JPG");
     d->formatForStoringSubversions  = QString("JPG");
+
+    d->faceDetectionAccuracy        = 0.8;
+    d->faceDetectionSpecificity     = 0.8;
 
     d->stringComparisonType         = AlbumSettings::Natural;
 
@@ -539,6 +553,13 @@ void AlbumSettings::readSettings()
     d->formatForStoringRAW         = group.readEntry(d->configFormatForStoringRAWEntry, QString("JPG"));
     d->formatForStoringSubversions = group.readEntry(d->configFormatForStoringSubversionsEntry, QString("JPG"));
 
+    // ---------------------------------------------------------------------
+
+    group = config->group(d->configGroupFaceDetection);
+
+    d->faceDetectionAccuracy       = group.readEntry(d->configFaceDetectionAccuracy, double(0.8));
+    d->faceDetectionSpecificity    = group.readEntry(d->configFaceDetectionSpecificity, double(0.8));
+
     emit setupChanged();
     emit recurseSettingsChanged();
     emit nepomukSettingsChanged();
@@ -642,6 +663,13 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configSaveIntermediateVersionsEntry, d->saveIntermediateVersions);
     group.writeEntry(d->configFormatForStoringRAWEntry, d->formatForStoringRAW);
     group.writeEntry(d->configFormatForStoringSubversionsEntry, d->formatForStoringSubversions);
+
+    // ---------------------------------------------------------------------
+
+    group = config->group(d->configGroupFaceDetection);
+
+    group.writeEntry(d->configFaceDetectionAccuracy, d->faceDetectionAccuracy);
+    group.writeEntry(d->configFaceDetectionSpecificity, d->faceDetectionSpecificity);
 
     config->sync();
 }
@@ -1532,6 +1560,26 @@ void AlbumSettings::setFormatForStoringSubversions(const QString& val)
 QString AlbumSettings::getFormatForStoringSubversions() const
 {
     return d->formatForStoringSubversions;
+}
+
+double AlbumSettings::getFaceDetectionAccuracy() const
+{
+    return d->faceDetectionAccuracy;
+}
+
+void AlbumSettings::setFaceDetectionAccuracy(double value)
+{
+    d->faceDetectionAccuracy = value;
+}
+
+double AlbumSettings::getFaceDetectionSpecificity() const
+{
+    return d->faceDetectionSpecificity;
+}
+
+void AlbumSettings::setFaceDetectionSpecificity(double value)
+{
+    d->faceDetectionSpecificity = value;
 }
 
 
