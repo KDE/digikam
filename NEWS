@@ -3,12 +3,14 @@ digiKam 1.6.0 - Release date: 2010-12-19
 
 NEW FEATURES:
 
-Slideshow : user can change item rating during a slide.
+Slideshow      : User can change item rating during a slide.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 148434: Cannot change rating in slideshow.
-002 ==> 
+001 ==> 148434 : Cannot change rating in slideshow.
+002 ==> 253911 : libkdcraw access beyond array bounds (cameraXYZMatrix).
+003 ==> 
+
 
 
 
