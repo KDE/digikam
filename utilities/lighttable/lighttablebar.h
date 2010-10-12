@@ -63,6 +63,10 @@ Q_SIGNALS:
     void signalClearAll();
     void signalDroppedItems(const ImageInfoList&);
 
+public Q_SLOTS:
+
+    void slotRatingChanged(const KUrl&, int);
+
 private:
 
     void drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile);
@@ -71,6 +75,7 @@ private:
     void startDrag();
     void contentsDragEnterEvent(QDragEnterEvent*);
     void contentsDropEvent(QDropEvent*);
+    void assignRating(const ImageInfo& info, int rating);
 
 private Q_SLOTS:
 

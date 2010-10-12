@@ -51,6 +51,8 @@
 #include "imageviewutilities.h"
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
+#include "globals.h"
+#include "metadatahub.h"
 #include "metadatamanager.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
@@ -1590,11 +1592,14 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
 
     if (!d->cancelSlideShow)
     {
-        SlideShow *slide = new SlideShow(settings);
+        SlideShow* slide = new SlideShow(settings);
         if (startWithCurrent)
         {
             slide->setCurrent(d->iconView->currentUrl());
         }
+
+        connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
+                this, SLOT(slotRatingChanged(const KUrl&, int)));
 
         slide->show();
     }
@@ -1662,6 +1667,20 @@ void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames
 void DigikamView::slotLeftSideBarActivate(SidebarWidget *widget)
 {
     d->leftSideBar->setActiveTab(widget);
+}
+
+void DigikamView::slotRatingChanged(const KUrl& url, int rating)
+{
+    rating = qMin(RatingMax, qMax(RatingMin, rating));
+    ImageInfo info(url);
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setRating(rating);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
 }
 
 }  // namespace Digikam

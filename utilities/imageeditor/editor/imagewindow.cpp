@@ -835,15 +835,25 @@ void ImageWindow::slotAssignRatingFiveStar()
 
 void ImageWindow::slotAssignRating(int rating)
 {
+    assignRating(d->imageInfoCurrent, rating);
+}
+
+void ImageWindow::assignRating(const ImageInfo& info, int rating)
+{
     rating = qMin(RatingMax, qMax(RatingMin, rating));
-    if (!d->imageInfoCurrent.isNull())
+    if (!info.isNull())
     {
         MetadataHub hub;
-        hub.load(d->imageInfoCurrent);
+        hub.load(info);
         hub.setRating(rating);
-        hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
-        hub.write(d->imageInfoCurrent.filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
     }
+}
+
+void ImageWindow::slotRatingChanged(const KUrl& url, int rating)
+{
+    assignRating(ImageInfo(url), rating);
 }
 
 void ImageWindow::slotUpdateItemInfo()
@@ -1344,9 +1354,12 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         settings.exifRotate = AlbumSettings::instance()->getExifRotate();
         settings.fileList   = d->urlList;
 
-        SlideShow *slide = new SlideShow(settings);
+        SlideShow* slide = new SlideShow(settings);
         if (startWithCurrent)
             slide->setCurrent(d->urlCurrent);
+
+        connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
+                this, SLOT(slotRatingChanged(const KUrl&, int)));
 
         slide->show();
     }

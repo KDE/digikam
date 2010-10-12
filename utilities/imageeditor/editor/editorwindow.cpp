@@ -2126,8 +2126,8 @@ void EditorWindow::slotContribute()
 void EditorWindow::slotToggleSlideShow()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(CONFIG_GROUP_NAME);
-    bool startWithCurrent = group.readEntry(d->configSlideShowStartCurrentEntry, false);
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
+    bool startWithCurrent     = group.readEntry(d->configSlideShowStartCurrentEntry, false);
 
     SlideShowSettings settings;
     settings.delay                = group.readEntry(d->configSlideShowDelayEntry, 5) * 1000;

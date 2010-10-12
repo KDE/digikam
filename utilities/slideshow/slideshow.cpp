@@ -22,8 +22,6 @@
  *
  * ============================================================ */
 
-#define MAXSTRINGLEN 80
-
 #include "slideshow.moc"
 
 // Qt includes
@@ -62,6 +60,7 @@
 #include "globals.h"
 #include "previewloadthread.h"
 #include "toolbar.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
@@ -71,7 +70,9 @@ class SlideShow::SlideShowPriv
 public:
 
     SlideShowPriv()
+        : maxStringLen(80)
     {
+        ratingWidget      = 0;
         previewThread     = 0;
         mouseMoveTimer    = 0;
         timer             = 0;
@@ -80,22 +81,12 @@ public:
         endOfShow         = false;
         pause             = false;
         screenSaverCookie = -1;
-
-        // Pre-computed star polygon for a 15x15 pixmap.
-        starPolygon << QPoint(0,  6);
-        starPolygon << QPoint(5,  5);
-        starPolygon << QPoint(7,  0);
-        starPolygon << QPoint(9,  5);
-        starPolygon << QPoint(14, 6);
-        starPolygon << QPoint(10, 9);
-        starPolygon << QPoint(11, 14);
-        starPolygon << QPoint(7,  11);
-        starPolygon << QPoint(3,  14);
-        starPolygon << QPoint(4,  9);
     }
 
     bool               endOfShow;
     bool               pause;
+
+    const int          maxStringLen;
 
     int                deskX;
     int                deskY;
@@ -108,10 +99,6 @@ public:
     QTimer*            timer;
 
     QPixmap            pixmap;
-    QPixmap            selPixmap;      // Selected rating star.
-    QPixmap            regPixmap;      // Regular rating star.
-
-    QPolygon           starPolygon;
 
     DImg               preview;
 
@@ -121,6 +108,8 @@ public:
     PreviewLoadThread* previewPreloadThread;
 
     ToolBar*           toolBar;
+
+    RatingWidget*      ratingWidget;
 
     SlideShowSettings  settings;
 };
@@ -151,7 +140,6 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     QPalette palette;
     palette.setColor(backgroundRole(), Qt::black);
     setPalette(palette);
-    setupRatingPixmap(d->settings.ratingColor);
 
     // ---------------------------------------------------------------
 
@@ -174,6 +162,16 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     connect(d->toolBar, SIGNAL(signalClose()),
             this, SLOT(slotClose()));
+
+    // ---------------------------------------------------------------
+
+    d->ratingWidget = new RatingWidget(this);
+    d->ratingWidget->setTracking(false);
+    d->ratingWidget->setFading(false);
+    d->ratingWidget->setVisible(false);
+
+    connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
+            this, SLOT(slotRatingChanged(int)));
 
     // ---------------------------------------------------------------
 
@@ -202,6 +200,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     setMouseTracking(true);
     slotMouseMoveTimeOut();
+    d->ratingWidget->installEventFilter(this);
 }
 
 SlideShow::~SlideShow()
@@ -226,32 +225,6 @@ void SlideShow::setCurrent(const KUrl& url)
         d->currentImage = url;
         d->fileIndex    = index-1;
     }
-}
-
-void SlideShow::setupRatingPixmap(const QColor& ratingColor)
-{
-    QColor color = ratingColor;
-    if (!color.isValid())
-        color = palette().color(QPalette::Active, QPalette::HighlightedText);
-
-    d->regPixmap = QPixmap(15, 15);
-    d->regPixmap.fill(Qt::transparent);
-    d->selPixmap = QPixmap(15, 15);
-    d->selPixmap.fill(Qt::transparent);
-
-    QPainter p1(&d->regPixmap);
-    p1.setRenderHint(QPainter::Antialiasing, true);
-    p1.setBrush(palette().color(QPalette::Active, QPalette::Background));
-    p1.setPen(palette().color(QPalette::Active, QPalette::Foreground));
-    p1.drawPolygon(d->starPolygon, Qt::WindingFill);
-    p1.end();
-
-    QPainter p2(&d->selPixmap);
-    p2.setRenderHint(QPainter::Antialiasing, true);
-    p2.setBrush(color);
-    p2.setPen(palette().color(QPalette::Active, QPalette::Foreground));
-    p2.drawPolygon(d->starPolygon, Qt::WindingFill);
-    p2.end();
 }
 
 void SlideShow::slotTimeOut()
@@ -387,25 +360,18 @@ void SlideShow::updatePixmap()
 
             QString str;
             PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
-            int offset                   = 0;
+            int offset                   = d->toolBar->height()+10;
 
             // Display Rating.
             int rating                   = d->settings.pictInfoMap[d->currentImage].rating;
+            d->ratingWidget->setVisible(false);
 
-            if (d->settings.printRating && rating > 0)
+            if (d->settings.printRating)
             {
-                int x = 0;
-                for (int i = 0; i < rating; ++i)
-                {
-                    p.drawPixmap(10+x, height()-offset-d->selPixmap.height(), d->selPixmap);
-                    x += d->selPixmap.width();
-                }
-
-                for (int i = rating; i < RatingMax; ++i)
-                {
-                    p.drawPixmap(10+x, height()-offset-d->regPixmap.height(), d->regPixmap);
-                    x += d->regPixmap.width();
-                }
+                d->ratingWidget->setVisible(true);
+                d->ratingWidget->setRating(rating);
+                d->ratingWidget->move(10, height() - offset - d->ratingWidget->minimumHeight());
+                offset += d->ratingWidget->minimumHeight();
             }
 
             // Display Comments.
@@ -561,12 +527,12 @@ void SlideShow::printInfoText(QPainter& p, int& offset, const QString& str)
     {
         offset += 20;
         p.setPen(Qt::black);
-        for (int x=9; x<=11; ++x)
+        for (int x=19; x<=21; ++x)
             for (int y=offset+1; y>=offset-1; --y)
                 p.drawText(x, height()-y, str);
 
         p.setPen(Qt::white);
-        p.drawText(10, height()-offset, str);
+        p.drawText(20, height()-offset, str);
     }
 }
 
@@ -584,7 +550,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
 
         // Check minimal lines dimension
 
-        uint commentsLinesLengthLocal = MAXSTRINGLEN;
+        uint commentsLinesLengthLocal = d->maxStringLen;
 
         for (currIndex = commentsIndex ;
              currIndex < (uint)comments.length() && !breakLine ; ++currIndex )
@@ -832,5 +798,32 @@ void SlideShow::allowScreenSaver()
     }
 }
 
+void SlideShow::slotRatingChanged(int rating)
+{
+    emit signalRatingChanged(d->currentImage, rating);
+}
+
+bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
+{
+    if ( obj == d->ratingWidget )
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            d->pause = true;
+            d->toolBar->setPaused(true);
+            return false;
+        }
+
+        if ( ev->type() == QEvent::Leave)
+        {
+            d->pause = false;
+            d->toolBar->setPaused(false);
+            return false;
+        }
+    }
+
+    // pass the event on to the parent class
+    return QWidget::eventFilter(obj, ev);
+}
 
 }  // namespace Digikam

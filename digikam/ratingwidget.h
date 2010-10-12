@@ -31,10 +31,14 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class RatingWidget : public QWidget
+class DIGIKAM_EXPORT RatingWidget : public QWidget
 {
     Q_OBJECT
 
