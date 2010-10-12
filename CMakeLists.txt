@@ -8,11 +8,11 @@ OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "1")
-SET(DIGIKAM_MINOR_VERSION "5")
+SET(DIGIKAM_MINOR_VERSION "6")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2010-10-xx")
+SET(DIGIKAM_RELEASE_DATE "2010-12-xx")
 
 # Suffix to add at end of version string. Usual values are:
 # "-svn"   : alpha code unstable from svn. Do not use in production
@@ -826,7 +826,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbartooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/rexpanderboxexclusive.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ratingwidget.cpp
        )
 
     SET(libiccprofileswidgets_SRCS
