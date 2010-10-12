@@ -231,110 +231,111 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     PhotoInfoContainer photoInfo = meta.getPhotographInformation();
     d->makeDescription           = photoInfo.make;
+    d->modelDescription          = photoInfo.model;
+    bool exactMatch              = true;
 
     if (d->makeDescription.isEmpty())
     {
         kDebug() << "No camera maker info available";
-        return ret;
+        exactMatch = false;
     }
-
-    d->modelDescription          = photoInfo.model;
-
-    // NOTE: see B.K.O #184156:
-    // Some rules to wrap unkown camera device from Lensfun database, which have equivalent in fact.
-    if (d->makeDescription == QString("Canon"))
+    else
     {
-        if (d->modelDescription == QString("Canon EOS Kiss Digital X"))
-            d->modelDescription = QString("Canon EOS 400D DIGITAL");
-    }
+        // NOTE: see B.K.O #184156:
+        // Some rules to wrap unkown camera device from Lensfun database, which have equivalent in fact.
+        if (d->makeDescription == QString("Canon"))
+        {
+            if (d->modelDescription == QString("Canon EOS Kiss Digital X"))
+                d->modelDescription = QString("Canon EOS 400D DIGITAL");
+        }
 
-    d->lensDescription           = photoInfo.lens;
-
-    // ------------------------------------------------------------------------------------------------
-
-    bool exactMatch    = true;
-    DevicePtr lfCamera = findCamera( d->makeDescription.toAscii().constData(), d->modelDescription.toAscii().constData() );
-
-    if (lfCamera)
-    {
-        setUsedCamera(lfCamera);
-
-        kDebug() << "Camera maker   : " << d->settings.cameraMake;
-        kDebug() << "Camera model   : " << d->settings.cameraModel;
+        d->lensDescription = photoInfo.lens;
 
         // ------------------------------------------------------------------------------------------------
-        // -- Performing lens description searches.
 
-        if (!d->lensDescription.isEmpty())
+        DevicePtr lfCamera = findCamera( d->makeDescription.toAscii().constData(), d->modelDescription.toAscii().constData() );
+
+        if (lfCamera)
         {
+            setUsedCamera(lfCamera);
 
-            QMap<int, LensPtr> bestMatches;
-            QString            lensCutted;
-            LensList           lensList;
+            kDebug() << "Camera maker   : " << d->settings.cameraMake;
+            kDebug() << "Camera model   : " << d->settings.cameraModel;
 
-            // STAGE 1, search in LensFun database as well.
-            lensList = findLenses(d->usedCamera, d->lensDescription);
-            kDebug() << "* Check for lens by direct query (" << d->lensDescription << " : " << lensList.count() << ")";
-            if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
+            // ------------------------------------------------------------------------------------------------
+            // -- Performing lens description searches.
 
-            // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
-            lensCutted = d->lensDescription;
-            if (lensCutted.contains("Nikon"))
+            if (!d->lensDescription.isEmpty())
             {
-                lensCutted.replace("Nikon ", "");
-                lensCutted.replace("Zoom-", "");
-                lensCutted.replace("IF-ID", "ED-IF");
-                lensList = findLenses(d->usedCamera, lensCutted);
-                kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
+
+                QMap<int, LensPtr> bestMatches;
+                QString            lensCutted;
+                LensList           lensList;
+
+                // STAGE 1, search in LensFun database as well.
+                lensList = findLenses(d->usedCamera, d->lensDescription);
+                kDebug() << "* Check for lens by direct query (" << d->lensDescription << " : " << lensList.count() << ")";
                 if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
-            }
 
-            // TODO : Add here more specific lens maker rules.
-
-            // LAST STAGE, Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
-            // "10.0 - 20.0 mm". This must be adapted like this : "10-20mm"
-            lensCutted = d->lensDescription;
-            lensCutted.replace(QRegExp("\\.[0-9]"), "");
-            lensCutted.replace(" - ", "-");
-            lensCutted.replace(" mm", "mn");
-            lensList = findLenses(d->usedCamera, lensCutted);
-            kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
-            if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
-
-            // Display the results.
-
-            if (bestMatches.isEmpty())
-            {
-                kDebug() << "lens matches   : NOT FOUND";
-                exactMatch &= false;
-            }
-            else
-            {
-                // Best case for an exact match is to have only one item returned by Lensfun searches.
-                QMap<int, LensPtr>::const_iterator it = bestMatches.constFind(1);
-                if (it != bestMatches.constEnd())
+                // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
+                lensCutted = d->lensDescription;
+                if (lensCutted.contains("Nikon"))
                 {
-                    setUsedLens(bestMatches[it.key()]);
-                    kDebug() << "Lens found     : " << d->settings.lensModel;
-                    kDebug() << "Crop Factor    : " << d->settings.cropFactor;
+                    lensCutted.replace("Nikon ", "");
+                    lensCutted.replace("Zoom-", "");
+                    lensCutted.replace("IF-ID", "ED-IF");
+                    lensList = findLenses(d->usedCamera, lensCutted);
+                    kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
+                    if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
+                }
+
+                // TODO : Add here more specific lens maker rules.
+
+                // LAST STAGE, Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
+                // "10.0 - 20.0 mm". This must be adapted like this : "10-20mm"
+                lensCutted = d->lensDescription;
+                lensCutted.replace(QRegExp("\\.[0-9]"), "");
+                lensCutted.replace(" - ", "-");
+                lensCutted.replace(" mm", "mn");
+                lensList = findLenses(d->usedCamera, lensCutted);
+                kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
+                if (!lensList.isEmpty()) bestMatches.insert(lensList.count(), lensList[0]);
+
+                // Display the results.
+
+                if (bestMatches.isEmpty())
+                {
+                    kDebug() << "lens matches   : NOT FOUND";
+                    exactMatch &= false;
                 }
                 else
                 {
-                    kDebug() << "lens matches   : more than one...";
-                    exactMatch &= false;
+                    // Best case for an exact match is to have only one item returned by Lensfun searches.
+                    QMap<int, LensPtr>::const_iterator it = bestMatches.constFind(1);
+                    if (it != bestMatches.constEnd())
+                    {
+                        setUsedLens(bestMatches[it.key()]);
+                        kDebug() << "Lens found     : " << d->settings.lensModel;
+                        kDebug() << "Crop Factor    : " << d->settings.cropFactor;
+                    }
+                    else
+                    {
+                        kDebug() << "lens matches   : more than one...";
+                        exactMatch &= false;
+                    }
                 }
+            }
+            else
+            {
+                kDebug() << "Lens description string is empty";
+                exactMatch &= false;
             }
         }
         else
         {
-            kDebug() << "Lens description string is empty";
+            kDebug() << "Cannot find Lensfun camera device for (" << d->makeDescription << " - " << d->modelDescription << ")";
             exactMatch &= false;
         }
-    }
-    else
-    {
-        kDebug() << "Cannot find Lensfun camera device for (" << d->makeDescription << " - " << d->modelDescription << ")";
-        exactMatch &= false;
     }
 
     // ------------------------------------------------------------------------------------------------
