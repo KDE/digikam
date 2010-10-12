@@ -73,9 +73,9 @@ ToolBar::ToolBar(QWidget* parent)
 
     KIconLoader* loader = KIconLoader::global();
     d->playBtn->setIcon(loader->loadIcon("media-playback-pause", KIconLoader::NoGroup, 22));
-    d->prevBtn->setIcon(loader->loadIcon("media-skip-backward", KIconLoader::NoGroup, 22));
-    d->nextBtn->setIcon(loader->loadIcon("media-skip-forward", KIconLoader::NoGroup, 22));
-    d->stopBtn->setIcon(loader->loadIcon("media-playback-stop", KIconLoader::NoGroup, 22));
+    d->prevBtn->setIcon(loader->loadIcon("media-skip-backward",  KIconLoader::NoGroup, 22));
+    d->nextBtn->setIcon(loader->loadIcon("media-skip-forward",   KIconLoader::NoGroup, 22));
+    d->stopBtn->setIcon(loader->loadIcon("media-playback-stop",  KIconLoader::NoGroup, 22));
 
     lay->addWidget(d->playBtn);
     lay->addWidget(d->prevBtn);

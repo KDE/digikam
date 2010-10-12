@@ -1,3 +1,1934 @@
+1.5.0 2010-10-10
+
+2010-10-10 05:04  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: factoring
+
+2010-10-10 04:49  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: polish
+
+2010-10-09 13:15  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: wrap around Canon 400D
+	  camera to query lensfun DB properly.
+	  CCBUGS: 184156
+
+2010-10-09 12:51  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: factoring
+
+2010-10-09 12:46  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: damned : if <> while
+	  there
+
+2010-10-09 07:45  aclemens
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfunsettings.cpp: fix typos
+
+2010-10-08 12:57  cgilles
+
+	* libs/dimg/filters/bw/mixersettings.cpp: fix recurssive crash into
+	  BQM
+
+2010-10-08 11:38  cgilles
+
+	* libs/dimg/filters/nr/nrfilter.cpp: fix warnings
+
+2010-10-08 07:23  cgilles
+
+	* NEWS: update
+
+2010-10-08 07:17  cgilles
+
+	* NEWS: update
+
+2010-10-08 07:16  cgilles
+
+	* NEWS: update
+
+2010-10-07 06:49  cgilles
+
+	* NEWS: update
+
+2010-10-06 19:38  cgilles
+
+	* NEWS: update
+
+2010-10-06 19:36  cgilles
+
+	* NEWS: update
+
+2010-10-06 14:04  cgilles
+
+	* NEWS, utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp: disable menu
+	  entries in editor when raw image is loaded after raw import tool
+	  instance
+	  BUGS: 221191
+
+2010-10-06 14:02  cgilles
+
+	* NEWS: update
+
+2010-10-06 13:03  cgilles
+
+	* NEWS: update
+
+2010-10-06 11:52  cgilles
+
+	* NEWS: update
+
+2010-10-06 09:18  cgilles
+
+	* NEWS: update
+
+2010-10-06 09:01  cgilles
+
+	* NEWS: update
+
+2010-10-06 07:54  cgilles
+
+	* NEWS: update
+
+2010-10-06 07:23  cgilles
+
+	* NEWS: typo
+
+2010-10-06 07:22  cgilles
+
+	* libs/3rdparty/lensfun/include/regex/regex.h: compile
+
+2010-10-06 00:29  dfaure
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: strict iterators ftw
+
+2010-10-05 17:12  cgilles
+
+	* imageplugins/color/CMakeLists.txt: fix link
+
+2010-10-05 12:10  cgilles
+
+	* utilities/queuemanager/queuemgrwindow.cpp: reset asssigned tools
+	  at the right place
+
+2010-10-05 11:25  cgilles
+
+	* NEWS: update
+
+2010-10-05 10:16  cgilles
+
+	* NEWS: update
+
+2010-10-05 10:15  cgilles
+
+	* imageplugins/color/profileconversiontool.cpp,
+	  utilities/queuemanager/basetools/color/iccconvert.cpp: With ICC
+	  convert tools, assign right ICC profile to target image and
+	  remove Exif color space tags.
+	  BUGS: 237961
+
+2010-10-05 10:13  cgilles
+
+	* libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: new
+	  method to remove Exif color space tags from image. This method
+	  can be moved into libkexiv2 later
+
+2010-10-05 08:35  cgilles
+
+	* utilities/queuemanager/basetools/color/iccconvert.cpp: fix layout
+
+2010-10-04 14:16  cgilles
+
+	* digikam/digikamapp.cpp, utilities/queuemanager/actionthread.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuemgrwindow.h: Fix crash on BQM if it
+	  running and user close album gui. Now digiKam ask to user if he
+	  want to stop processing before to close application
+
+2010-10-04 13:26  cgilles
+
+	* NEWS: update
+
+2010-10-04 13:25  cgilles
+
+	* digikam/contextmenuhelper.cpp, digikam/contextmenuhelper.h: if
+	  BQM is busy, disable action menu to add new items to current or
+	  new queue.
+	  This is a temprally fix, until the queue manager will use open mp
+	  and run queue to process in parallele.
+	  BUGS: 252130
+
+2010-10-04 11:12  cgilles
+
+	* digikam/dio.cpp: add debug messages
+
+2010-10-03 19:55  cgilles
+
+	* NEWS: update
+
+2010-10-03 14:43  mwiesweg
+
+	* NEWS, digikam/main.cpp: Apply patch by pochini@shiny.it: require
+	  only one db driver
+	  (not tested the implications when only MySQL is available
+	  and not SQLite3)
+	  
+	  BUG: 253043
+
+2010-10-03 12:54  cgilles
+
+	* HACKING: update
+
+2010-10-03 10:07  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-10-02 21:18  aclemens
+
+	* digikam/tagfolderview.cpp: Add "Batch" actions to the
+	  tagfolderview context menu
+
+2010-10-02 21:18  aclemens
+
+	* digikam/contextmenuhelper.cpp: Select all images when using
+	  "Batch" menu entry in the albumfolderview context
+	  menu
+
+2010-10-02 21:09  aclemens
+
+	* digikam/tagfolderview.cpp: Add export menu to the contextmenu of
+	  the tagfolderview
+
+2010-10-02 21:07  aclemens
+
+	* CMakeLists.txt, digikam/albumwidgetstack.cpp,
+	  digikam/albumwidgetstack.h, digikam/digikamapp.cpp,
+	  digikam/digikamapp.h, digikam/digikamapp_p.h,
+	  digikam/digikamview.cpp, digikam/digikamview.h,
+	  digikam/imagepreviewview.cpp, digikam/imagepreviewview.h,
+	  digikam/mediaplayerview.cpp, digikam/tagfolderview.cpp: Oops, I
+	  accidentally committed the dockbar patch...
+	  
+	  Revert "Add export menu to contextmenu in the tagfolderview"
+	  
+	  This reverts commit a9268c350ffdb02e8c16e876d217dd872fed70a3.
+
+2010-10-02 21:06  aclemens
+
+	* CMakeLists.txt, digikam/albumwidgetstack.cpp,
+	  digikam/albumwidgetstack.h, digikam/digikamapp.cpp,
+	  digikam/digikamapp.h, digikam/digikamapp_p.h,
+	  digikam/digikamview.cpp, digikam/digikamview.h,
+	  digikam/imagepreviewview.cpp, digikam/imagepreviewview.h,
+	  digikam/mediaplayerview.cpp, digikam/tagfolderview.cpp: Add
+	  export menu to contextmenu in the tagfolderview
+
+2010-10-02 17:27  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: colorize more
+	  labels if query don't match
+
+2010-10-02 16:53  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: factoring
+
+2010-10-02 11:36  aclemens
+
+	* digikam/contextmenuhelper.cpp: code polish
+
+2010-10-02 11:36  aclemens
+
+	* digikam/contextmenuhelper.cpp, digikam/contextmenuhelper.h,
+	  digikam/digikamimageview.cpp, digikam/imagepreviewview.cpp: API
+	  polish
+
+2010-10-02 11:36  aclemens
+
+	* digikam/albumselectiontreeview.cpp: Add "Open in Terminal" to the
+	  context menu in AlbumFolderView
+
+2010-10-02 11:36  aclemens
+
+	* digikam/albumselectiontreeview.cpp, digikam/digikamapp.cpp,
+	  digikam/digikamapp_p.h, digikam/digikamui.rc,
+	  digikam/digikamview.cpp, digikam/digikamview.h: Rename the "Open
+	  in File Manager" action
+
+2010-10-01 21:22  aclemens
+
+	* NEWS: update
+	  
+	  BUG: 209382
+
+2010-10-01 21:19  aclemens
+
+	* NEWS, digikam/imagepreviewview.cpp, digikam/imagepreviewview.h,
+	  digikam/mediaplayerview.cpp: Apply patch by Berthier Lemieux
+	  
+	  BUG: 248087
+
+2010-10-01 21:15  woebbe
+
+	* libs/3rdparty/lensfun/README: typos
+
+2010-10-01 21:14  woebbe
+
+	* CMakeLists.txt: compile (out of source)
+
+2010-10-01 19:23  aclemens
+
+	* NEWS, digikam/digikamapp.cpp, utilities/cameragui/cameraui.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp: Set menubar according
+	  to the actual settings...
+	  
+	  BUG: 225552
+
+2010-10-01 18:54  aclemens
+
+	* NEWS, digikam/digikamview.cpp: Use KDE system settings for the
+	  "Open in Terminal" action.
+	  
+	  BUG: 237516
+
+2010-10-01 11:04  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: if no metadata are
+	  available, report this on GUI
+
+2010-10-01 10:32  cgilles
+
+	* utilities/queuemanager/actionthread.cpp,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp,
+	  utilities/queuemanager/batchtool.cpp,
+	  utilities/queuemanager/batchtool.h,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuemgrwindow.h: add the capability to
+	  BQM tool to send a error string description to manager and
+	  display it to history
+
+2010-10-01 08:27  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: compile
+
+2010-10-01 08:26  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: more lens tags to check there
+
+2010-10-01 08:09  cgilles
+
+	* libs/dimg/filters/lens/lensfunfilter.cpp: delete modifier in
+	  destructor
+
+2010-10-01 08:07  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: do not disable
+	  in this case
+
+2010-10-01 08:06  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: at least,
+	  select maker name in combo if model is not found.
+	  Select Generic maker if nothing is found
+
+2010-10-01 06:47  cgilles
+
+	* libs/dimg/dimg.cpp: These messages freeze digiKam in debug mode
+	  if a lots of pixels are handle in loop
+
+2010-09-30 20:59  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: show camera make and model
+	  from image metadata on right side of settings view (as lens
+	  description)
+
+2010-09-30 20:35  cgilles
+
+	* utilities/queuemanager/batchtoolsmanager.cpp: fix broken
+	  compilation if GLib2 is not available
+
+2010-09-30 18:39  aclemens
+
+	* NEWS, digikam/contextmenuhelper.cpp, digikam/contextmenuhelper.h:
+	  Use a timer to deselect the images when export menu loses focus.
+	  
+	  BUG: 125042
+
+2010-09-30 14:24  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: polish
+
+2010-09-30 14:12  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: improve lens detection
+
+2010-09-30 14:03  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: improve lens detection. add Sony id
+	  tag.
+
+2010-09-30 12:12  cgilles
+
+	* utilities/queuemanager/basetools/enhance/lensautofix.cpp: typo
+
+2010-09-30 11:55  cgilles
+
+	* imageplugins/enhance/lensautofixtool.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp: polish
+
+2010-09-30 10:06  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: polish layout
+
+2010-09-30 09:13  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: polish
+
+2010-09-30 09:06  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h: polish
+
+2010-09-30 08:34  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: switch label
+	  color in green if settings is found in image metadata, to
+	  indicate to user which Lens parameter are fine for Lensfun
+
+2010-09-30 08:32  cgilles
+
+	* utilities/kipiiface/kipiimageinfo.cpp,
+	  utilities/kipiiface/kipiimageinfo.h: MSVC report that virtual
+	  ImageInfoShare::clone() parameter is different than the
+	  re-implementation i digiKam core.
+	  This is true, the pointer passed as argument is constified now.
+	  GCC do not find this problem.
+
+2010-09-30 07:30  cgilles
+
+	* CMakeLists.txt,
+	  libs/3rdparty/lensfun/include/config-lensfun.h.cmake:
+	  definitively, we don't need to export symbols with lensfun under
+	  Win32
+
+2010-09-29 15:12  cgilles
+
+	* utilities/queuemanager/queuesettingsview.cpp,
+	  utilities/queuemanager/toolsettingsview.cpp: polish
+
+2010-09-29 14:45  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: fire signal
+	  there
+
+2010-09-29 14:40  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h: polish and hack
+
+2010-09-29 13:53  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: revert
+
+2010-09-29 13:44  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuniface.cpp: fix ranges
+
+2010-09-29 13:33  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: deal with Canon Lens and LensType
+	  tags when Lensfun search lens description from metadata
+	  If Exiv2 cannot decrypt lens data, it will return a number, not a
+	  string.
+	  CCBUGS: 184156
+
+2010-09-29 12:52  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: better search for exact
+	  query
+
+2010-09-29 12:49  cgilles
+
+	* libs/dimg/filters/CMakeLists.txt: wrong test
+
+2010-09-29 12:15  cgilles
+
+	* utilities/queuemanager/basetools/enhance/lensautofix.cpp: handle
+	  lensiface metadata match
+
+2010-09-29 12:09  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: polish
+
+2010-09-29 11:25  cgilles
+
+	* CMakeLists.txt,
+	  libs/3rdparty/lensfun/include/config-lensfun.h.cmake: polish
+
+2010-09-29 10:28  cgilles
+
+	* CMakeLists.txt: polish
+
+2010-09-29 09:43  cgilles
+
+	* CMakeLists.txt,
+	  libs/3rdparty/lensfun/include/config-lensfun.h.cmake: try to fix
+	  export symbol from lensfun lib with MSVC
+
+2010-09-29 07:16  cgilles
+
+	* NEWS: update
+
+2010-09-28 14:11  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuniface.cpp: if no metadata are
+	  found, the manual mode will update lens settings accordingly with
+	  selection done by user in GUI
+
+2010-09-28 13:17  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h,
+	  libs/dimg/filters/lens/testlensfuniface.cpp: add visual indicator
+	  to show metadata match status
+
+2010-09-28 12:02  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: fix behavor if camera
+	  maker is unavailable
+
+2010-09-28 11:20  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: fix crash
+
+2010-09-28 10:40  cgilles
+
+	* libs/3rdparty/lensfun/include/config-lensfun.h.cmake: polish
+
+2010-09-28 10:33  cgilles
+
+	* libs/3rdparty/lensfun/include/config-lensfun.h.cmake: try static
+
+2010-09-28 10:27  cgilles
+
+	* libs/3rdparty/lensfun/include/config-lensfun.h.cmake: fix compile
+	  with MSVC
+
+2010-09-28 10:22  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-28 09:57  cgilles
+
+	* libs/3rdparty/lensfun/libs/regex/tre-match-utils.h: compile with
+	  MSVC
+
+2010-09-28 09:46  cgilles
+
+	* libs/3rdparty/lensfun/libs/regex/tre-match-utils.h: MSVC don't
+	  know inline for C ansi source code. It use __inline
+
+2010-09-28 09:27  cgilles
+
+	* libs/dimg/filters/lens/lensfunfilter.cpp: fix MSVC warning
+
+2010-09-28 09:24  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: MSVC is right
+	  there. I cannot modify lensfun iface settings directly by the
+	  access method
+
+2010-09-28 09:14  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: polish
+
+2010-09-28 08:37  cgilles
+
+	* digikam/digikamapp.cpp: compile
+
+2010-09-28 08:34  cgilles
+
+	* digikam/digikamapp.cpp, utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/cameraui.h: revert commit #1179712. cameraui
+	  windows is not closed if main digiKam windows is closed
+
+2010-09-28 06:57  cgilles
+
+	* libs/3rdparty/lensfun/README: update
+
+2010-09-28 06:56  cgilles
+
+	* CMakeLists.txt, libs/3rdparty/lensfun/libs/lensfun/windows: under
+	  windows, this file is not used
+
+2010-09-28 06:50  cgilles
+
+	* libs/dimg/filters/lens/CMakeLists.txt: link with kexiv2 library
+
+2010-09-28 06:48  cgilles
+
+	* libs/dimg/filters/lens/CMakeLists.txt: polish
+
+2010-09-27 19:16  cgilles
+
+	* libs/3rdparty/lensfun/include/config-lensfun.h.cmake,
+	  libs/3rdparty/lensfun/libs/lensfun/windows/auxfun.cpp: fix
+	  implementation under windows
+
+2010-09-27 17:20  mwiesweg
+
+	* CMakeLists.txt: fix build (backport)
+
+2010-09-27 14:23  cgilles
+
+	* libs/3rdparty/lensfun/libs/regex/regex.mak: not used
+
+2010-09-27 14:07  cgilles
+
+	* libs/dialogs/libsinfodlg.cpp: polish
+
+2010-09-27 13:16  cgilles
+
+	* libs/dialogs/libsinfodlg.cpp: register Lensfun version to info
+	  dialog
+
+2010-09-27 13:16  cgilles
+
+	* libs/3rdparty/lensfun/include/config-lensfun.h: no need this file
+
+2010-09-27 12:11  cgilles
+
+	* libs/3rdparty/lensfun/include/lensfun/lensfun.h.in: no need this
+	  file
+
+2010-09-27 11:56  cgilles
+
+	* CMakeLists.txt, README, config-digikam.h.cmake,
+	  data/CMakeLists.txt, data/lensfun, data/lensfun/6x6.xml,
+	  data/lensfun/CMakeLists.txt, data/lensfun/compact-canon.xml,
+	  data/lensfun/compact-casio.xml,
+	  data/lensfun/compact-fujifilm.xml,
+	  data/lensfun/compact-kodak.xml,
+	  data/lensfun/compact-konica-minolta.xml,
+	  data/lensfun/compact-leica.xml, data/lensfun/compact-nikon.xml,
+	  data/lensfun/compact-olympus.xml,
+	  data/lensfun/compact-panasonic.xml,
+	  data/lensfun/compact-pentax.xml, data/lensfun/compact-ricoh.xml,
+	  data/lensfun/compact-sigma.xml, data/lensfun/compact-sony.xml,
+	  data/lensfun/generic.xml, data/lensfun/rf-leica.xml,
+	  data/lensfun/slr-canon.xml, data/lensfun/slr-contax.xml,
+	  data/lensfun/slr-hasselblad.xml,
+	  data/lensfun/slr-konica-minolta.xml, data/lensfun/slr-nikon.xml,
+	  data/lensfun/slr-olympus.xml, data/lensfun/slr-panasonic.xml,
+	  data/lensfun/slr-pentax.xml, data/lensfun/slr-samsung.xml,
+	  data/lensfun/slr-schneider.xml, data/lensfun/slr-sigma.xml,
+	  data/lensfun/slr-sony.xml, data/lensfun/slr-tamron.xml,
+	  data/lensfun/slr-tokina.xml, data/lensfun/slr-ussr.xml,
+	  digikam/CMakeLists.txt, imageplugins/enhance/CMakeLists.txt,
+	  imageplugins/enhance/imageplugin_enhance.cpp,
+	  libs/3rdparty/lensfun, libs/3rdparty/lensfun/README,
+	  libs/3rdparty/lensfun/include,
+	  libs/3rdparty/lensfun/include/auxfun,
+	  libs/3rdparty/lensfun/include/auxfun/image.h,
+	  libs/3rdparty/lensfun/include/auxfun/rgbpixel.h,
+	  libs/3rdparty/lensfun/include/config-lensfun.h,
+	  libs/3rdparty/lensfun/include/config-lensfun.h.cmake,
+	  libs/3rdparty/lensfun/include/lensfun,
+	  libs/3rdparty/lensfun/include/lensfun/lensfun.h,
+	  libs/3rdparty/lensfun/include/lensfun/lensfun.h.in,
+	  libs/3rdparty/lensfun/include/regex,
+	  libs/3rdparty/lensfun/include/regex/regex.h,
+	  libs/3rdparty/lensfun/libs, libs/3rdparty/lensfun/libs/auxfun,
+	  libs/3rdparty/lensfun/libs/auxfun/image.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun,
+	  libs/3rdparty/lensfun/libs/lensfun/auxfun.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/camera.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/cpuid.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/database.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/lens.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/lensfunprv.h,
+	  libs/3rdparty/lensfun/libs/lensfun/mod-color.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/mod-coord.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/mod-subpix.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/modifier.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/mount.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/windows,
+	  libs/3rdparty/lensfun/libs/lensfun/windows/auxfun.cpp,
+	  libs/3rdparty/lensfun/libs/regex,
+	  libs/3rdparty/lensfun/libs/regex/README,
+	  libs/3rdparty/lensfun/libs/regex/regcomp.c,
+	  libs/3rdparty/lensfun/libs/regex/regerror.c,
+	  libs/3rdparty/lensfun/libs/regex/regex.mak,
+	  libs/3rdparty/lensfun/libs/regex/regexec.c,
+	  libs/3rdparty/lensfun/libs/regex/tre-ast.c,
+	  libs/3rdparty/lensfun/libs/regex/tre-ast.h,
+	  libs/3rdparty/lensfun/libs/regex/tre-compile.c,
+	  libs/3rdparty/lensfun/libs/regex/tre-compile.h,
+	  libs/3rdparty/lensfun/libs/regex/tre-internal.h,
+	  libs/3rdparty/lensfun/libs/regex/tre-match-approx.c,
+	  libs/3rdparty/lensfun/libs/regex/tre-match-backtrack.c,
+	  libs/3rdparty/lensfun/libs/regex/tre-match-parallel.c,
+	  libs/3rdparty/lensfun/libs/regex/tre-match-utils.h,
+	  libs/3rdparty/lensfun/libs/regex/tre-mem.c,
+	  libs/3rdparty/lensfun/libs/regex/tre-mem.h,
+	  libs/3rdparty/lensfun/libs/regex/tre-parse.c,
+	  libs/3rdparty/lensfun/libs/regex/tre-parse.h,
+	  libs/3rdparty/lensfun/libs/regex/tre-stack.c,
+	  libs/3rdparty/lensfun/libs/regex/tre-stack.h,
+	  libs/3rdparty/lensfun/libs/regex/xmalloc.c,
+	  libs/3rdparty/lensfun/libs/regex/xmalloc.h,
+	  utilities/queuemanager/batchtoolsmanager.cpp: include Lensfun
+	  library in digiKam as 3rd party.
+	  The current lensfun code come from trunk repository (0.2.5.1)
+	  If lensfun is found on your computer, this one will be used
+	  intead.
+	  This lensfun inclusion in digiKam core is mandatory to provide
+	  lens auto
+	  correction under Windows and MacOS-X where LensFun package do not
+	  exist
+
+2010-09-27 11:11  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: missing to reset
+	  pointers
+
+2010-09-27 10:23  cgilles
+
+	* NEWS: update
+
+2010-09-27 10:22  cgilles
+
+	* README: fix kdegraphics info
+	  BUGS: 252521
+
+2010-09-27 07:54  mwiesweg
+
+	* NEWS, digikam/digikamapp.cpp: - use KLocale to format storage
+	  size (*)
+	  - use volume label, then volume device product or vendor, only
+	  then
+	  drive device product - the latter is usually unspecific
+	  - use i18n where applicable
+	  
+	  (*) I am tempted to use MetricBinaryDialect because on USB disks
+	  the size
+	  is usually written in this format ("4GB" instead of "3.7GB"). On
+	  the other hand,
+	  there is a global KDE setting for this, which is IEC ("3.7GiB")
+	  per default. Opinions?
+	  
+	  BUG: 252488
+	  BUG: 252489
+
+2010-09-27 06:50  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.h: polish
+
+2010-09-27 06:49  cgilles
+
+	* libs/dimg/filters/lens/CMakeLists.txt: link with KDE core
+
+2010-09-26 09:15  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-26 07:42  aclemens
+
+	* NEWS, digikam/digikamview.cpp, utilities/slideshow/slideshow.cpp:
+	  Do not load items if they are other types than
+	  DatabaseItem::Image.
+	  Right now the slideshow is not capable to display non-image types
+	  like movies,
+	  so we should skip them completely, to avoid an annoying error
+	  message for every
+	  single item.
+	  
+	  In the future, we should consider to add these type of items,
+	  too.
+	  
+	  CCBUG: 188335
+
+2010-09-26 07:42  aclemens
+
+	* utilities/setup/setupeditor.cpp: Fix tab order in the ImageEditor
+	  setup page
+
+2010-09-26 06:57  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamedialog.h,
+	  utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuemgrwindow.h: Most of the
+	  signalWindowHasMoved and signalWindowLostFocus events are not
+	  needed anymore.
+	  In some windows (LightTable and CameraUI) the
+	  signalWindowHasMoved is still
+	  used to update the label position of the tooltip tracker for the
+	  thumbnail
+	  size.
+	  
+	  signalWindowLostFocus is not used anymore, it was introduced to
+	  hide the
+	  tooltip for the AdvancedRename utility, but since it uses a
+	  KDialog for
+	  displaying the tooltip now, there is no need to handle this event
+	  anymore.
+
+2010-09-26 05:01  cgilles
+
+	* digikam/digikamapp.cpp, utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/cameraui.h: This is a very nice side effect
+	  of camera gui under windows.
+	  CameraGUI windows cannot be iconized to taskbar, as under Linux.
+	  In fact, CameraGUI windows is not created as LT, IE, BQM windows.
+	  The problem is to pass parent widget in constructor. Set it null
+	  solve the problem.
+
+2010-09-26 04:35  cgilles
+
+	* NEWS: update
+
+2010-09-25 20:40  aclemens
+
+	* NEWS, tests/advancedrenametest.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamemanager.cpp,
+	  utilities/advancedrename/advancedrenamemanager.h,
+	  utilities/advancedrename/common/parsesettings.h,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/queuemanager/queuelist.cpp: Due to the refactoring of
+	  the AdvancedRename utility by introducing the
+	  AdvancedRenameManager, we forgot to set the DateTime object when
+	  reading images
+	  from a camera device. Because of this, date based renaming
+	  options returned wrong values.
+	  The problem should be fixed now.
+	  
+	  BUG: 251899
+
+2010-09-25 18:59  aclemens
+
+	* NEWS, digikam/mediaplayerview.cpp, digikam/mediaplayerview.h: Use
+	  an eventFilter for the MediaPlayerView, to allow quitting a
+	  moview by
+	  pressing the left mouse button.
+	  
+	  BUG: 228547
+
+2010-09-25 16:56  aclemens
+
+	* imageplugins/filters/blurfxtool.cpp: Be consistent: Do not call
+	  the blurFX filter "Blur FX" as its descriptive name.
+	  Use the same naming scheme as in DistortionFX, namely "Blur
+	  Effects".
+
+2010-09-25 16:53  aclemens
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: Show a
+	  tooldescriptor in the right sidebar to see what editor tool is
+	  currently
+	  used.
+	  
+	  Right now the ThemeEngine colors are used, to avoid problems with
+	  different
+	  themes.
+	  
+	  This patch was discussed in March 2010 on the ML, hope it is
+	  still ok to
+	  commit
+	  it :-)
+	  
+	  CCMAIL:digikam-devel@kde.org
+
+2010-09-25 15:34  aclemens
+
+	* digikam/contextmenuhelper.cpp: Auto-select all images in an album
+	  when an action in the export menu is
+	  hovered.
+	  
+	  CCBUG: 125042
+
+2010-09-25 13:45  aclemens
+
+	* NEWS: update
+
+2010-09-25 13:42  aclemens
+
+	* NEWS, libs/template/templatepanel.cpp,
+	  utilities/setup/setuptemplate.cpp: Fix taborder in
+	  Settings->Template
+	  
+	  BUG: 243179
+
+2010-09-25 13:03  aclemens
+
+	* libs/dimg/filters/curves/imagecurves.cpp,
+	  libs/dimg/filters/curves/imagecurves.h,
+	  libs/widgets/common/curveswidget.cpp: Fix method name
+
+2010-09-25 12:44  aclemens
+
+	* libs/dimg/filters/bw/bwsepiafilter.cpp,
+	  libs/dimg/filters/bw/bwsepiafilter.h,
+	  libs/dimg/filters/bw/bwsepiasettings.cpp,
+	  libs/dimg/filters/curves/curvesfilter.h: Do not initialize the
+	  CurvesContainer class every time a BWSepia Filter is
+	  created. This is a very expensive operation. Instead, create a
+	  container once
+	  and just copy it.
+	  This will speed up starting the BWSepia Filter as well as BQM
+	  when adding
+	  images for the first time (BQM window init).
+	  According to callgrind, startup is 80% faster now.
+
+2010-09-25 12:44  aclemens
+
+	* utilities/queuemanager/batchtoolsmanager.cpp: Although not used
+	  at the moment, this method needs to be fixed. We will have a
+	  memory leak if we just use QList::removeAll() here, we need to
+	  make sure that
+	  the tool gets actually deleted from the heap.
+
+2010-09-25 12:44  aclemens
+
+	* utilities/queuemanager/batchtoolsmanager.cpp: check if a tool is
+	  actually set
+
+2010-09-25 12:44  aclemens
+
+	* utilities/advancedrename/common/parser.cpp: Do not just remove
+	  the pointer from the list, delete the object the pointer is
+	  attached to.
+
+2010-09-25 08:05  aclemens
+
+	* NEWS, libs/widgets/common/previewwidget.cpp: Set the zoomWidth
+	  and zoomHeight accordingly to the current zoom factor
+	  
+	  BUG: 252295
+
+2010-09-24 13:52  cgilles
+
+	* NEWS: update
+
+2010-09-24 13:50  cgilles
+
+	* libs/dimg/dimg.cpp: New histogram repair algorithm written by
+	  Jens Muller to convert 8 bits image to 16 bits, to limit
+	  histogram holes during conversion.
+	  BUGS: 170170
+
+2010-09-24 12:40  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: use d private internal
+	  container
+
+2010-09-24 11:14  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: polish
+
+2010-09-24 10:19  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: constify
+	  more private internal container
+
+2010-09-24 09:00  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  showfoto/showfoto.desktop: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-23 21:14  aclemens
+
+	* NEWS, digikam/digikamview.cpp: Save image sorting settings
+	  
+	  BUG:251118
+
+2010-09-23 20:32  aclemens
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: Fix warnings: remove
+	  exta ';'
+
+2010-09-23 09:58  cgilles
+
+	* libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfunsettings.cpp,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp: polish
+
+2010-09-22 15:58  cgilles
+
+	* imageplugins/TODO: update
+
+2010-09-22 13:51  cgilles
+
+	* imageplugins/enhance/lensautofixtool.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h,
+	  libs/dimg/filters/lens/testlensfuniface.cpp,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp: polish
+	  api there .lensfun filter do not use lensfun iface directly, but
+	  only lensfuncontainer.
+	  lensfuncontainer no not store lensfun data anymore, only Qt4
+	  data.
+
+2010-09-22 11:44  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: Canon lenstype mkn tags in first
+
+2010-09-22 08:50  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-21 15:44  cgilles
+
+	* CMakeLists.txt, utilities/queuemanager/batchtoolsmanager.cpp: if
+	  LensFun is not available, set this code optional
+
+2010-09-21 14:12  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfunsettings.cpp,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp: polish
+
+2010-09-21 13:29  cgilles
+
+	* imageplugins/enhance/lensautofixtool.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h,
+	  libs/dimg/filters/lens/lensfunsettings.cpp,
+	  libs/dimg/filters/lens/lensfunsettings.h,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp: big
+	  change there. Now lensfun filter used in BQM and IE can use an
+	  undependant LensFun iface not instanced to GUI
+	  This point is important to be able to apply lens correction in
+	  more than one queue from BQM at the same time
+	  CCBUGS: 216353
+
+2010-09-21 11:31  cgilles
+
+	* NEWS: update
+
+2010-09-21 07:09  cgilles
+
+	* utilities/queuemanager/batchtool.cpp: polish
+
+2010-09-20 12:57  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: 2 new method to find lens
+	  or camera from LensFun DB using string description as arguments
+
+2010-09-20 11:09  cgilles
+
+	* imageplugins/enhance/lensautofixtool.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h,
+	  libs/dimg/filters/lens/testlensfuniface.cpp,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp:
+	  register digiKam XMP namespace with Lens Fun tools settings (BQM
+	  and Editor)
+
+2010-09-20 10:32  cgilles
+
+	* utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/editor/imageiface.h: new method to patch
+	  metadata from original image
+
+2010-09-20 08:58  cgilles
+
+	* NEWS: update
+
+2010-09-20 08:57  cgilles
+
+	* utilities/queuemanager/batchtoolsmanager.cpp: enabled new LEnsFun
+	  Batch Queue Manager tool for digiKAm 1.5.0 release...
+	  BUG: 216353
+
+2010-09-20 08:47  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: in manual mode,
+	  update lens list
+
+2010-09-20 08:40  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-20 08:38  cgilles
+
+	* utilities/queuemanager/basetools/enhance/lensautofix.cpp:
+	  factoring
+
+2010-09-20 08:30  cgilles
+
+	* utilities/queuemanager/basetools/enhance/lensautofix.cpp:
+	  implement metadata parsing switch (Auto/Manual Mode)
+
+2010-09-20 08:25  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h: polish API
+
+2010-09-20 08:22  cgilles
+
+	* utilities/queuemanager/basetools/enhance/lensautofix.cpp: compile
+
+2010-09-20 08:21  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h: polish API
+
+2010-09-20 08:11  cgilles
+
+	* libs/dimg/filters/lens/lensfunfilter.cpp: bug fix for BQM : if no
+	  TCA correction are processed, output image is a black hole,
+	  because destination image do not exist
+
+2010-09-20 07:59  cgilles
+
+	* libs/dimg/filters/lens/lensfunfilter.cpp: more debug
+
+2010-09-20 07:55  cgilles
+
+	* libs/dimg/filters/lens/testlensfuniface.cpp: implement lens
+	  correction there
+
+2010-09-20 07:49  cgilles
+
+	* libs/dimg/filters/lens/lensfunfilter.cpp: fix memory leak in this
+	  case
+
+2010-09-20 07:45  cgilles
+
+	* libs/dimg/filters/lens/lensfunfilter.cpp: more debug
+
+2010-09-20 07:41  cgilles
+
+	* utilities/queuemanager/basetools/enhance/lensautofix.cpp: polish
+
+2010-09-20 07:37  cgilles
+
+	* libs/dimg/filters/lens/lensfunfilter.cpp: use kdebug
+
+2010-09-19 18:48  cgilles
+
+	* CMakeLists.txt, libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp,
+	  utilities/queuemanager/basetools/enhance/lensautofix.h,
+	  utilities/queuemanager/batchtoolsmanager.cpp: introduce new Batch
+	  Queue Manager to perform lens correction through LensFun library.
+	  The tool do not work well in some cases, to auto process images,
+	  using metadata.
+	  The manual mode to select lens features is not yet suitable.
+	  CCBUGS: 216353
+
+2010-09-19 08:51  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-18 19:03  cgilles
+
+	* imageplugins/enhance/lensautofixtool.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: lensfun filter do not use
+	  settings container directly, but lensfun interface
+
+2010-09-18 15:44  aclemens
+
+	* utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parseresults.cpp,
+	  utilities/advancedrename/common/token.cpp: code polish
+
+2010-09-18 15:12  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h,
+	  libs/dimg/filters/lens/lensfunsettings.cpp,
+	  libs/dimg/filters/lens/lensfunsettings.h: use lensfun interface
+	  settings as ref settings for widget
+
+2010-09-18 08:46  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h: now, lensfun settings
+	  widget use partially digiKam lensfun iface to handle
+	  camera/lens/shot information from metadata.
+	  It still some work to do to set this widget fully undependant of
+	  lensfun library. The goal of course is to port this tool to BQM
+	  easily.
+	  CCBUGS: 216353
+
+2010-09-17 14:01  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h,
+	  libs/dimg/filters/lens/testlensfuniface.cpp: polish
+
+2010-09-17 13:02  orzel
+
+	* libs/dimg/filters/CMakeLists.txt: compilation fix : honor
+	  LENSFUN_FOUND
+
+2010-09-17 12:49  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: polish
+
+2010-09-17 12:43  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: polish
+
+2010-09-17 12:25  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: use new containers to deal
+	  with Lensfun DB
+
+2010-09-17 12:02  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: use consData
+
+2010-09-17 11:54  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: this method is not
+	  necessary
+
+2010-09-17 11:52  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: better DB parsing
+
+2010-09-17 08:48  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: polish output
+
+2010-09-17 08:43  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: improved again lens query
+	  from LF db
+
+2010-09-17 08:26  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-16 16:01  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: more progress in lensfun
+	  DB search
+
+2010-09-16 14:35  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: more debug info and
+	  rules
+
+2010-09-16 12:31  cgilles
+
+	* utilities/slideshow/slideshow.cpp: fix path
+
+2010-09-16 12:26  cgilles
+
+	* utilities/slideshow/slideshow.cpp: wrap logo depending of app
+	  name
+
+2010-09-16 12:22  cgilles
+
+	* libs/widgets/common/knotificationwrapper.cpp: wrap icon depending
+	  app name
+
+2010-09-16 12:21  cgilles
+
+	* libs/widgets/common/dlogoaction.cpp,
+	  libs/widgets/common/dlogoaction.h: use more private internal
+	  container
+
+2010-09-16 12:00  cgilles
+
+	* libs/widgets/common/knotificationwrapper.cpp,
+	  libs/widgets/common/knotificationwrapper.h: if Kde notifier is
+	  not available use pop-up displayed on the bottom/right corer of
+	  parent windows.
+	  Pass application icon to pop-up windows
+
+2010-09-16 10:10  cgilles
+
+	* NEWS: update
+
+2010-09-16 09:25  cgilles
+
+	* imageplugins/color/adjustcurvestool.cpp,
+	  imageplugins/color/adjustcurvestool.h,
+	  imageplugins/color/adjustlevelstool.cpp,
+	  imageplugins/color/adjustlevelstool.h,
+	  imageplugins/color/autocorrectiontool.cpp,
+	  imageplugins/color/autocorrectiontool.h,
+	  imageplugins/color/bcgtool.cpp, imageplugins/color/bcgtool.h,
+	  imageplugins/color/bwsepiatool.cpp,
+	  imageplugins/color/bwsepiatool.h, imageplugins/color/cbtool.cpp,
+	  imageplugins/color/cbtool.h,
+	  imageplugins/color/channelmixertool.cpp,
+	  imageplugins/color/channelmixertool.h,
+	  imageplugins/color/hsltool.cpp, imageplugins/color/hsltool.h,
+	  imageplugins/color/profileconversiontool.cpp,
+	  imageplugins/color/profileconversiontool.h,
+	  imageplugins/color/whitebalancetool.cpp,
+	  imageplugins/color/whitebalancetool.h,
+	  imageplugins/decorate/bordertool.cpp,
+	  imageplugins/decorate/bordertool.h,
+	  imageplugins/decorate/texturetool.cpp,
+	  imageplugins/decorate/texturetool.h,
+	  imageplugins/enhance/antivignettingtool.cpp,
+	  imageplugins/enhance/antivignettingtool.h,
+	  imageplugins/enhance/blurtool.cpp,
+	  imageplugins/enhance/blurtool.h,
+	  imageplugins/enhance/hotpixels/hotpixelstool.cpp,
+	  imageplugins/enhance/hotpixels/hotpixelstool.h,
+	  imageplugins/enhance/inpaintingtool.cpp,
+	  imageplugins/enhance/inpaintingtool.h,
+	  imageplugins/enhance/lensautofixtool.cpp,
+	  imageplugins/enhance/lensautofixtool.h,
+	  imageplugins/enhance/lensdistortiontool.cpp,
+	  imageplugins/enhance/lensdistortiontool.h,
+	  imageplugins/enhance/localcontrasttool.cpp,
+	  imageplugins/enhance/localcontrasttool.h,
+	  imageplugins/enhance/noisereductiontool.cpp,
+	  imageplugins/enhance/noisereductiontool.h,
+	  imageplugins/enhance/redeyetool.cpp,
+	  imageplugins/enhance/redeyetool.h,
+	  imageplugins/enhance/restorationtool.cpp,
+	  imageplugins/enhance/restorationtool.h,
+	  imageplugins/enhance/sharpentool.cpp,
+	  imageplugins/filters/blurfxtool.cpp,
+	  imageplugins/filters/charcoaltool.cpp,
+	  imageplugins/filters/charcoaltool.h,
+	  imageplugins/filters/distortionfxtool.cpp,
+	  imageplugins/filters/embosstool.cpp,
+	  imageplugins/filters/embosstool.h,
+	  imageplugins/filters/filmgraintool.cpp,
+	  imageplugins/filters/oilpainttool.cpp,
+	  imageplugins/filters/oilpainttool.h,
+	  imageplugins/filters/raindroptool.cpp,
+	  imageplugins/filters/raindroptool.h,
+	  imageplugins/transform/freerotationtool.cpp,
+	  imageplugins/transform/freerotationtool.h,
+	  imageplugins/transform/resizetool.cpp,
+	  imageplugins/transform/sheartool.cpp,
+	  imageplugins/transform/sheartool.h,
+	  utilities/imageeditor/editor/editortool.cpp: Do not disable
+	  settings view from EditorToolthreaded filters during computation,
+	  else, keyboard focus is lost into settings view
+	  BUGS: 248943
+
+2010-09-16 08:36  cgilles
+
+	* libs/dimg/filters/bw/bwsepiafilter.cpp,
+	  libs/dimg/filters/bw/bwsepiafilter.h,
+	  libs/dimg/filters/bw/bwsepiasettings.h,
+	  libs/dimg/filters/bw/infraredfilter.cpp,
+	  libs/dimg/filters/bw/mixerfilter.cpp,
+	  libs/dimg/filters/bw/mixerfilter.h,
+	  libs/dimg/filters/bw/tonalityfilter.cpp,
+	  libs/dimg/filters/bw/tonalityfilter.h: more private internal
+	  container
+
+2010-09-16 08:32  cgilles
+
+	* libs/dimg/filters/bw/mixersettings.cpp,
+	  libs/dimg/filters/bw/mixersettings.h: more private internal
+	  container
+	  missing to fire signal when monochrome settings is changed
+
+2010-09-16 07:42  cgilles
+
+	* HACKING: polish
+
+2010-09-16 07:39  cgilles
+
+	* utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/editor/imageiface.h: more private internal
+	  container
+
+2010-09-16 07:33  cgilles
+
+	* utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editorstackview.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: more private
+	  internal constainer
+
+2010-09-16 07:24  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: more private internal
+	  container
+
+2010-09-16 07:14  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: remove extra namespace
+	  qualification
+
+2010-09-15 14:04  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: more test info
+
+2010-09-15 13:40  cgilles
+
+	* libs/dimg/filters/CMakeLists.txt,
+	  libs/dimg/filters/lens/CMakeLists.txt,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h,
+	  libs/dimg/filters/lens/testlensfuniface.cpp: add lensfuniface
+	  test program
+
+2010-09-15 11:48  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: polish
+
+2010-09-15 11:39  cgilles
+
+	* utilities/queuemanager/basetools/enhance/blur.cpp: polish
+
+2010-09-15 11:37  cgilles
+
+	* imageplugins/enhance/lensautofixtool.cpp: polish
+
+2010-09-15 11:15  cgilles
+
+	* libs/dimg/filters/lens/antivignettingsettings.cpp,
+	  libs/dimg/filters/lens/antivignettingsettings.h,
+	  libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.h: use d private
+	  internal container
+
+2010-09-15 10:48  cgilles
+
+	* libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfunsettings.cpp,
+	  libs/dimg/filters/lens/lensfunsettings.h: use more private
+	  internal container
+
+2010-09-15 08:39  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-15 08:01  cgilles
+
+	* HACKING: add instruction to sync an ustable branche with trunk
+
+2010-09-15 06:47  cgilles
+
+	* NEWS: update
+
+2010-09-14 13:51  cgilles
+
+	* NEWS: update
+
+2010-09-14 13:50  cgilles
+
+	* CMakeLists.txt, NEWS,
+	  utilities/queuemanager/basetools/metadata/removemetadata.cpp,
+	  utilities/queuemanager/basetools/metadata/removemetadata.h,
+	  utilities/queuemanager/batchtoolsmanager.cpp: New batch queue
+	  manager tool to remove Exif or/and Iptc or/and Xmp metadata from
+	  images
+	  BUGS: 148721
+
+2010-09-14 13:17  cgilles
+
+	* utilities/queuemanager/queuemgrwindow.cpp: polish
+
+2010-09-14 11:44  cgilles
+
+	* libs/widgets/common/buttonicondisabler.cpp,
+	  libs/widgets/common/buttonicondisabler.h,
+	  libs/widgets/common/dgradientslider.cpp,
+	  libs/widgets/common/dgradientslider.h: use d private internal
+	  containers
+
+2010-09-14 09:31  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-14 09:05  cgilles
+
+	* utilities/queuemanager/queuelist.cpp,
+	  utilities/queuemanager/queuelist.h,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuemgrwindow.h,
+	  utilities/queuemanager/queuepool.cpp,
+	  utilities/queuemanager/queuepool.h: update thumbnails in Queue
+	  list view if images are changed on disk
+
+2010-09-14 08:22  cgilles
+
+	* utilities/queuemanager/actionthread.cpp,
+	  utilities/queuemanager/assignedlist.cpp,
+	  utilities/queuemanager/batchtool.h,
+	  utilities/queuemanager/queuelist.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuepool.cpp: polish
+
+2010-09-14 07:35  cgilles
+
+	* libs/database/haar/haar.cpp, libs/database/haar/haar.h,
+	  libs/database/haar/haariface.cpp, libs/database/haar/haariface.h:
+	  use more private internal container
+	  polish
+
+2010-09-14 07:19  cgilles
+
+	* libs/themeengine/texture.cpp, libs/themeengine/texture.h,
+	  libs/themeengine/theme.cpp, libs/themeengine/theme.h,
+	  libs/themeengine/themeengine.cpp, libs/themeengine/themeengine.h:
+	  more private internal container
+
+2010-09-14 06:52  cgilles
+
+	* NEWS: update
+
+2010-09-13 16:19  cgilles
+
+	* utilities/queuemanager/queuemgrwindow.cpp: when an item is
+	  processed to BQM, restore digiKam attributes to target file
+	  CCBUGS: 245958
+
+2010-09-13 13:48  cgilles
+
+	* utilities/slideshow/slideshow.cpp,
+	  utilities/slideshow/slideshow.h: use private method
+
+2010-09-13 13:39  cgilles
+
+	* utilities/slideshow/slideshow.cpp,
+	  utilities/slideshow/slideshow.h,
+	  utilities/slideshow/slideshowsettings.h,
+	  utilities/slideshow/toolbar.cpp, utilities/slideshow/toolbar.h:
+	  reset slide timer when it's paused.
+	  Use more provate internal container
+
+2010-09-13 13:23  cgilles
+
+	* utilities/queuemanager/batchtool.cpp,
+	  utilities/queuemanager/batchtool.h: compile
+
+2010-09-13 13:21  cgilles
+
+	* NEWS: update
+
+2010-09-13 13:20  cgilles
+
+	* utilities/queuemanager/batchtool.cpp,
+	  utilities/queuemanager/batchtool.h: use an internal signal/slot
+	  connection to assign bat tool settings when it updated using
+	  setSettings()
+	  BUGS: 249029
+
+2010-09-13 12:54  cgilles
+
+	* utilities/queuemanager/batchtool.cpp,
+	  utilities/queuemanager/batchtool.h: constify
+
+2010-09-13 09:50  cgilles
+
+	* NEWS: update
+
+2010-09-13 09:49  cgilles
+
+	* NEWS: update
+
+2010-09-13 09:49  cgilles
+
+	* digikam/digikam.notifyrc: fix typo
+	  BUG: 248889
+
+2010-09-10 07:06  cgilles
+
+	* NEWS: update
+
+2010-09-09 20:23  mwiesweg
+
+	* libs/widgets/common/ditemtooltip.cpp,
+	  libs/widgets/common/ditemtooltip.h: Backport changes in thumbnail
+	  drawing
+	  
+	  BUG: 250265
+
+2010-09-08 12:45  cgilles
+
+	* kioslave/CMakeLists.txt: backport from GoSC2010 branche
+
+2010-09-08 12:35  cgilles
+
+	* libs/3rdparty/cimg/CImg.h: compile
+
+2010-09-08 12:27  cgilles
+
+	* libs/3rdparty/cimg/CImg.h: backport from GoSC2010 branche
+
+2010-09-08 11:37  cgilles
+
+	* libs/threads/dynamicthread.cpp, libs/threads/dynamicthread.h,
+	  libs/threads/threadmanager.cpp, libs/threads/threadmanager.h,
+	  libs/threads/workerobject.cpp, libs/threads/workerobject.h:
+	  polish
+
+2010-09-08 11:16  cgilles
+
+	* libs/threads/dynamicthread.cpp: thanks to M$ compiler. break is
+	  missing there. Nothing fondatental of course, but it's always
+	  better like this
+
+2010-09-08 09:16  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-07 12:22  cgilles
+
+	* libs/histogram/imagehistogram.cpp,
+	  libs/histogram/imagehistogram.h, libs/jpegutils/jpegutils.h,
+	  libs/jpegutils/jpegwin.cpp, libs/jpegutils/jpegwin.h,
+	  libs/template/templatemanager.cpp,
+	  libs/template/templatemanager.h, libs/template/templatepanel.cpp,
+	  libs/template/templatepanel.h,
+	  libs/template/templateselector.cpp,
+	  libs/template/templateselector.h,
+	  libs/template/templateviewer.cpp, libs/template/templateviewer.h:
+	  use more private internal container
+
+2010-09-07 11:56  cgilles
+
+	* imageplugins/decorate/imageplugin_decorate.h: polish
+
+2010-09-07 11:55  cgilles
+
+	* libs/dimg/dimgscale.cpp: unsigned int => uint
+
+2010-09-07 11:48  cgilles
+
+	* libs/dimg/dimgscale.cpp: remove extra namaespace qualification
+
+2010-09-07 11:21  cgilles
+
+	* libs/dimg/dimgscale.cpp: polish
+
+2010-09-07 09:28  cgilles
+
+	* imageplugins/transform/contentawareresizetool.cpp,
+	  imageplugins/transform/contentawareresizetool.h,
+	  imageplugins/transform/freerotationtool.cpp,
+	  imageplugins/transform/freerotationtool.h,
+	  imageplugins/transform/imageplugin_transform.cpp,
+	  imageplugins/transform/imageplugin_transform.h,
+	  imageplugins/transform/imageselectionwidget.cpp,
+	  imageplugins/transform/imageselectionwidget.h,
+	  imageplugins/transform/matrix.cpp,
+	  imageplugins/transform/perspectivetool.cpp,
+	  imageplugins/transform/perspectivetool.h,
+	  imageplugins/transform/perspectivewidget.cpp,
+	  imageplugins/transform/perspectivewidget.h,
+	  imageplugins/transform/ratiocroptool.cpp,
+	  imageplugins/transform/ratiocroptool.h,
+	  imageplugins/transform/resizetool.cpp,
+	  imageplugins/transform/resizetool.h,
+	  imageplugins/transform/sheartool.cpp,
+	  imageplugins/transform/sheartool.h: more private internal
+	  containers
+
+2010-09-07 09:10  cgilles
+
+	* imageplugins/filters/blurfxtool.cpp,
+	  imageplugins/filters/blurfxtool.h,
+	  imageplugins/filters/charcoaltool.cpp,
+	  imageplugins/filters/charcoaltool.h,
+	  imageplugins/filters/colorfxtool.cpp,
+	  imageplugins/filters/colorfxtool.h,
+	  imageplugins/filters/distortionfxtool.cpp,
+	  imageplugins/filters/distortionfxtool.h,
+	  imageplugins/filters/embosstool.cpp,
+	  imageplugins/filters/embosstool.h,
+	  imageplugins/filters/filmgraintool.cpp,
+	  imageplugins/filters/filmgraintool.h,
+	  imageplugins/filters/imageplugin_fxfilters.cpp,
+	  imageplugins/filters/imageplugin_fxfilters.h,
+	  imageplugins/filters/oilpainttool.cpp,
+	  imageplugins/filters/oilpainttool.h,
+	  imageplugins/filters/raindroptool.cpp,
+	  imageplugins/filters/raindroptool.h: more private internal
+	  containers
+
+2010-09-07 06:26  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-09-06 14:34  cgilles
+
+	* imageplugins/enhance/hotpixels/hotpixelstool.cpp,
+	  imageplugins/enhance/hotpixels/hotpixelstool.h: more private d
+	  container
+
+2010-09-06 14:31  cgilles
+
+	* imageplugins/enhance/antivignettingtool.cpp,
+	  imageplugins/enhance/antivignettingtool.h,
+	  imageplugins/enhance/blurtool.cpp,
+	  imageplugins/enhance/blurtool.h,
+	  imageplugins/enhance/imageplugin_enhance.cpp,
+	  imageplugins/enhance/imageplugin_enhance.h,
+	  imageplugins/enhance/inpaintingtool.cpp,
+	  imageplugins/enhance/inpaintingtool.h,
+	  imageplugins/enhance/lensautofixtool.cpp,
+	  imageplugins/enhance/lensautofixtool.h,
+	  imageplugins/enhance/lensdistortiontool.cpp,
+	  imageplugins/enhance/lensdistortiontool.h,
+	  imageplugins/enhance/localcontrasttool.cpp,
+	  imageplugins/enhance/localcontrasttool.h,
+	  imageplugins/enhance/noisereductiontool.cpp,
+	  imageplugins/enhance/noisereductiontool.h,
+	  imageplugins/enhance/redeyetool.cpp,
+	  imageplugins/enhance/redeyetool.h,
+	  imageplugins/enhance/restorationtool.cpp,
+	  imageplugins/enhance/restorationtool.h,
+	  imageplugins/enhance/sharpentool.cpp,
+	  imageplugins/enhance/sharpentool.h: more private internal
+	  containers
+
+2010-09-06 11:21  cgilles
+
+	* imageplugins/decorate/bordertool.cpp,
+	  imageplugins/decorate/bordertool.h,
+	  imageplugins/decorate/imageplugin_decorate.cpp,
+	  imageplugins/decorate/imageplugin_decorate.h,
+	  imageplugins/decorate/inserttexttool.cpp,
+	  imageplugins/decorate/inserttexttool.h,
+	  imageplugins/decorate/inserttextwidget.cpp,
+	  imageplugins/decorate/inserttextwidget.h,
+	  imageplugins/decorate/superimpose/dirselectwidget.cpp,
+	  imageplugins/decorate/superimpose/dirselectwidget.h,
+	  imageplugins/decorate/superimpose/superimposetool.cpp,
+	  imageplugins/decorate/superimpose/superimposetool.h,
+	  imageplugins/decorate/superimpose/superimposewidget.h,
+	  imageplugins/decorate/texturetool.cpp,
+	  imageplugins/decorate/texturetool.h: more private internal
+	  constainer
+
+2010-09-06 09:42  cgilles
+
+	* imageplugins/color/adjustcurvestool.cpp,
+	  imageplugins/color/adjustcurvestool.h,
+	  imageplugins/color/adjustlevelstool.cpp,
+	  imageplugins/color/adjustlevelstool.h,
+	  imageplugins/color/autocorrectiontool.h,
+	  imageplugins/color/bcgtool.cpp, imageplugins/color/bcgtool.h,
+	  imageplugins/color/bwsepiatool.cpp,
+	  imageplugins/color/bwsepiatool.h, imageplugins/color/cbtool.cpp,
+	  imageplugins/color/cbtool.h,
+	  imageplugins/color/channelmixertool.cpp,
+	  imageplugins/color/channelmixertool.h,
+	  imageplugins/color/hsltool.cpp, imageplugins/color/hsltool.h,
+	  imageplugins/color/imageplugin_color.cpp,
+	  imageplugins/color/imageplugin_color.h,
+	  imageplugins/color/profileconversiontool.cpp,
+	  imageplugins/color/profileconversiontool.h: more private internal
+	  container
+
+2010-09-06 09:33  cgilles
+
+	* NEWS: update
+
+2010-09-06 09:33  cgilles
+
+	* imageplugins/color/whitebalancetool.cpp,
+	  imageplugins/color/whitebalancetool.h: fix busy cursor behavors
+	  in WB tool
+	  BUGS: 237786
+
+2010-09-05 17:57  cgilles
+
+	* NEWS: update
+
+2010-09-05 17:53  cgilles
+
+	* NEWS: update
+
+2010-09-05 17:52  cgilles
+
+	* libs/dimg/dimgscale.cpp: apply patch #51288 from Daniel Scharrer
+	  to avoid crash in DImg scale with panorama images
+	  BUGS: 207710
+
+2010-09-05 16:17  cgilles
+
+	* NEWS: update
+
+2010-09-05 16:15  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: add more Canon makernotes to
+	  extract Lens data
+	  BUGS: 250081
+
+2010-09-03 12:29  cgilles
+
+	* NEWS: update
+
+2010-09-03 10:33  cgilles
+
+	* CMakeLists.txt: to prevent warnings with MSVC
+
+2010-09-03 09:19  cgilles
+
+	* libs/database/tagscache.cpp, libs/database/tagscache.h: use a
+	  more private d container
+	  use Qt macro for signals
+	  test if QList is empty before to use it in loop
+
+2010-09-02 10:48  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  showfoto/showfoto.desktop,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-09-02 06:56  cgilles
+
+	* NEWS: update
+
+2010-09-01 14:31  cgilles
+
+	* NEWS: update
+
+2010-09-01 13:23  cgilles
+
+	* cmake/modules/FindMarbleWidget.cmake: marble widget detection
+	  script is now included to KDE core.
+	  Remove it to prevent detection failure under windows
+
+2010-08-31 12:48  cgilles
+
+	* NEWS: update
+
+2010-08-26 09:39  cgilles
+
+	* NEWS: update
+
+2010-08-25 07:30  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-08-24 09:00  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-08-23 07:35  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-08-23 05:14  cgilles
+
+	* CMakeLists.txt: update
+
+2010-08-23 05:13  cgilles
+
+	* NEWS: update
+
+2010-08-22 09:25  nlecureuil
+
+	* NEWS: Open for 1.5.0
+
+2010-08-22 08:54  nlecureuil
+
+	* ChangeLog, project/NEWS.1.4.0: Update Changelog and create 1.4.0
+	  NEWS file
+
 1.4.0 2010-08-22
 
 2010-08-21 08:32  cgilles
@@ -108802,7 +110733,9 @@
 
 	* utilities/imageeditor/canvas/iccsettingscontainer.h: As Gilles
 	  suggested me, all class memebers are initialized in constructor
-	  now.  CCMAIL:digikam-devel@kde.org
+	  now.
+
+CCMAIL:digikam-devel@kde.org
 
 2006-03-27 13:21  cgilles
 
@@ -108947,7 +110880,9 @@
 
 	* utilities/imageeditor/editor/editorwindow.cpp: Default values for
 	  setup parameters have been
-	  provided.  CCMAIL:digikam-devel@kde.org
+	  provided.
+
+CCMAIL:digikam-devel@kde.org
 
 2006-03-24 13:12  cgilles
 
@@ -109045,8 +110980,12 @@
 
 	* libs/dimg/dimg.cpp: New DImg::convertToPixmap(QString , QString )
 	  method. It's intended for a first attempt to get a color managed
-	  display in I.E.  Work in progress --
-	  useless.  CCMAIL:digikam-devel@kde.org
+	  display in I.E.
+
+Work in progress --
+	  useless.
+
+CCMAIL:digikam-devel@kde.org
 
 2006-03-22 19:27  cgilles
 

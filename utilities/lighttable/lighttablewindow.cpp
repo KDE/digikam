@@ -1397,6 +1397,9 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
         if (startWithCurrent)
             slide->setCurrent(d->barView->currentItemImageInfo().fileUrl());
 
+        connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
+                d->barView, SLOT(slotRatingChanged(const KUrl&, int)));
+
         slide->show();
     }
 }

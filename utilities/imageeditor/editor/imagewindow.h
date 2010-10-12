@@ -113,6 +113,8 @@ private:
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
+    void assignRating(const ImageInfo& info, int rating);
+
     ThumbBarDock *thumbBar() const;
     Sidebar *rightSideBar() const;
 
@@ -149,6 +151,7 @@ private Q_SLOTS:
     void slotAssignRatingFourStar();
     void slotAssignRatingFiveStar();
     void slotAssignRating(int rating);
+    void slotRatingChanged(const KUrl& url, int rating);
 
     void slotFileMetadataChanged(const KUrl&);
     void slotCollectionImageChange(const CollectionImageChangeset&);

@@ -147,7 +147,6 @@ public:
         exposureSettings(0),
 
         toolIface(0)
-
     {
     }
 

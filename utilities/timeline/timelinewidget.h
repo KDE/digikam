@@ -6,7 +6,7 @@
  * Date        : 2007-12-08
  * Description : a widget to display date and time statistics of pictures
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,8 +42,6 @@
 namespace Digikam
 {
 
-class TimeLineWidgetPriv;
-
 class TimeLineWidget : public QWidget
 {
 Q_OBJECT
@@ -73,7 +71,7 @@ public:
 
 public:
 
-    TimeLineWidget(QWidget *parent=0);
+    TimeLineWidget(QWidget* parent=0);
     ~TimeLineWidget();
 
     void      setTimeUnit(TimeUnit timeUnit);
@@ -126,7 +124,7 @@ private:
 
     int           maxCount();
     int           indexForDateTime(const QDateTime& date);
-    int           statForDateTime(const QDateTime& dt, SelectionMode *selected);
+    int           statForDateTime(const QDateTime& dt, SelectionMode* selected);
     void          setRefDateTime(const QDateTime& dateTime);
 
     void          paintEvent(QPaintEvent*);
@@ -136,26 +134,27 @@ private:
     void          mouseMoveEvent(QMouseEvent*);
     void          mouseReleaseEvent(QMouseEvent*);
 
-    QDateTime     dateTimeForPoint(const QPoint& pt, bool *isOnSelectionArea);
+    QDateTime     dateTimeForPoint(const QPoint& pt, bool* isOnSelectionArea);
     QDateTime     firstDayOfWeek(int year, int weekNumber);
 
     void          resetSelection();
     void          setDateTimeSelected(const QDateTime& dt, SelectionMode selected);
-    void          setDaysRangeSelection(const QDateTime dts, const QDateTime dte, SelectionMode selected);
-    SelectionMode checkSelectionForDaysRange(const QDateTime dts, const QDateTime dte);
-    void          updateWeekSelection(const QDateTime dts, const QDateTime dte);
-    void          updateMonthSelection(const QDateTime dts, const QDateTime dte);
-    void          updateYearSelection(const QDateTime dts, const QDateTime dte);
+    void          setDaysRangeSelection(const QDateTime& dts, const QDateTime& dte, SelectionMode selected);
+    SelectionMode checkSelectionForDaysRange(const QDateTime& dts, const QDateTime& dte);
+    void          updateWeekSelection(const QDateTime& dts, const QDateTime& dte);
+    void          updateMonthSelection(const QDateTime& dts, const QDateTime& dte);
+    void          updateYearSelection(const QDateTime& dts, const QDateTime& dte);
     void          updateAllSelection();
 
     // helper methods for painting
-    int           calculateTop(int &val);
-    void          paintItem(QPainter &p, const QRect &barRect,
-                            const QDateTime &ref, const int &separatorPosition,
-                            const QColor &dateColor, const QColor &subDateColor);
+    int           calculateTop(int& val);
+    void          paintItem(QPainter& p, const QRect& barRect,
+                            const QDateTime& ref, const int& separatorPosition,
+                            const QColor& dateColor, const QColor& subDateColor);
 
 private:
 
+    class TimeLineWidgetPriv;
     TimeLineWidgetPriv* const d;
 };
 

@@ -54,6 +54,10 @@ public:
 
     void setCurrent(const KUrl& url);
 
+Q_SIGNALS:
+
+    void signalRatingChanged(const KUrl&, int);
+
 protected:
 
     void paintEvent(QPaintEvent*);
@@ -61,12 +65,14 @@ protected:
     void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
     void wheelEvent(QWheelEvent*);
+    bool eventFilter(QObject* obj, QEvent* ev);
 
 private Q_SLOTS:
 
     void slotTimeOut();
     void slotMouseMoveTimeOut();
     void slotGotImagePreview(const LoadingDescription&, const DImg&);
+    void slotRatingChanged(int);
 
     void slotPause();
     void slotPlay();
@@ -82,7 +88,6 @@ private:
     void updatePixmap();
     void printInfoText(QPainter& p, int& offset, const QString& str);
     void printComments(QPainter& p, int& offset, const QString& comments);
-    void setupRatingPixmap(const QColor& ratingColor);
     void inhibitScreenSaver();
     void allowScreenSaver();
     void makeCornerRectangles(const QRect& desktopRect, const QSize& size,

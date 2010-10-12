@@ -164,10 +164,19 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
     }
 }
 
+void LightTableBar::slotRatingChanged(const KUrl& url, int rating)
+{
+    assignRating(ImageInfo(url), rating);
+}
+
 void LightTableBar::slotAssignRating(int rating)
 {
+    assignRating(currentItemImageInfo(), rating);
+}
+
+void LightTableBar::assignRating(const ImageInfo& info, int rating)
+{
     rating = qMin(5, qMax(0, rating));
-    ImageInfo info = currentItemImageInfo();
     if (!info.isNull())
     {
         MetadataHub hub;

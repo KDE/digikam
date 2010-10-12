@@ -166,6 +166,7 @@ FIND_PROGRAM( SERVERCMD_MYSQL mysqld
                     ENV MYSQLD_PATH )
 MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
 
+# TODO : under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
 IF (NOT WIN32)
 FIND_PROGRAM( INITCMD_MYSQL mysql_install_db
               PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
@@ -799,6 +800,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbartooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingwidget.cpp
        )
 
     SET(libgraphicsviewwidgets_SRCS
@@ -1380,7 +1382,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingpopupmenu.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/scancontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp

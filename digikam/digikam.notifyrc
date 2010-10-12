@@ -109,6 +109,7 @@ Action=Popup
 Name=Save file complete
 Name[ca]=S'ha completat el desat del fitxer
 Name[cs]=Uložení souboru dokončeno
+Name[da]=Filen er blevet gemt
 Name[en_GB]=Save file complete
 Name[es]=Completado guardar archivo
 Name[et]=Fail on salvestatud

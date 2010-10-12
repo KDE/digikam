@@ -128,7 +128,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
     hbox1->setStretchFactor(space1, 10);
     d->makeDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->makeDescription->setWhatsThis(i18n("This is the camera maker description string found in image meta-data. "
-                                          "This one is used to query and found relevant camera device information from Lensfun database."));
+                                          "This one is used to query and find relevant camera device information from Lensfun database."));
 
     d->make             = new RComboBox(this);
     d->make->setDefaultIndex(0);

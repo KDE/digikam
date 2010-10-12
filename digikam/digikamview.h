@@ -228,6 +228,7 @@ private Q_SLOTS:
     void slotProgressValueChanged(float percent);
     void slotProgressFinished();
     void slotOrientationChangeFailed(const QStringList& failedFileNames);
+    void slotRatingChanged(const KUrl&, int);
 
 private:
 
