@@ -102,20 +102,34 @@ ScanStateFilter::ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::Fa
             this, SLOT(dispatch()));
 }
 
-bool ScanStateFilter::filter(const ImageInfo& info)
+FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
 {
-    if (mode == FacePipeline::SkipAlreadyScanned)
+    switch (mode)
     {
-        // Is iface thread-safe? Officially, not, but this method is.
-        if (d->iface->hasBeenScanned(info))
-            return false;
-        //TODO: check if any records should be removed from db (unconfirmed faces)
-        return true;
+        case FacePipeline::ScanAll:
+        {
+            return d->buildPackage(info);
+        }
+        case FacePipeline::SkipAlreadyScanned:
+        {
+            if (!d->iface->hasBeenScanned(info))
+                return d->buildPackage(info);
+            break;
+        }
+        case FacePipeline::ReadUnconfirmedFaces:
+        {
+            QList<KFaceIface::Face> faces = d->iface->unconfirmedFacesFromTags(info.id());
+            if (!faces.isEmpty())
+            {
+                FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
+                package->faces = faces;
+                return package;
+            }
+            break;
+        }
     }
 
-    // FacePipeline::RescanAll
-    // TODO: remove records from db (unconfirmed faces)
-    return true;
+    return FacePipelineExtendedPackage::Ptr();
 }
 
 void ScanStateFilter::process(const QList<ImageInfo>& infos)
@@ -136,6 +150,7 @@ void ScanStateFilter::run()
 {
     while (runningFlag())
     {
+        // get todo list
         QList<ImageInfo> todo;
         {
             QMutexLocker lock(threadMutex());
@@ -148,17 +163,19 @@ void ScanStateFilter::run()
                 stop(lock);
         }
 
+        // process list
         if (!todo.isEmpty())
         {
-            QList<ImageInfo> send, skip;
+            QList<FacePipelineExtendedPackage::Ptr> send;
+            QList<ImageInfo> skip;
             foreach (const ImageInfo& info, todo)
             {
-                if (filter(info))
-                    send << info;
+                FacePipelineExtendedPackage::Ptr package = filter(info);
+                if (package)
+                    send << package;
                 else
                     skip << info;
             }
-            //kDebug() << "Filtered images: process" << send.size() << "and skip" << skip.size();
 
             {
                 QMutexLocker lock(threadMutex());
@@ -173,7 +190,8 @@ void ScanStateFilter::run()
 
 void ScanStateFilter::dispatch()
 {
-    QList<ImageInfo> send, skip;
+    QList<FacePipelineExtendedPackage::Ptr> send;
+    QList<ImageInfo> skip;
     {
         QMutexLocker lock(threadMutex());
         send = toSend;
@@ -192,8 +210,8 @@ void ScanStateFilter::dispatch()
 PreviewLoader::PreviewLoader(FacePipeline::FacePipelinePriv* d)
              : d(d)
 {
-    // ideal thread count plus lubricant, but upper limit for memory cost
-    maximumSentOutPackages = qMin(QThread::idealThreadCount() + 2, 5);
+    // upper limit for memory cost
+    maximumSentOutPackages = qMin(QThread::idealThreadCount(), 5);
 
     // this is crucial! Per default, only the last added image will be loaded
     setLoadingPolicy(PreviewLoadThread::LoadingPolicySimpleAppend);
@@ -273,8 +291,9 @@ DetectionWorker::DetectionWorker(FacePipeline::FacePipelinePriv* d)
 
 void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    //package->detectionImage = FaceIface::scaleForDetection(package->image);
-    KFaceIface::Image image = FaceIface::toImage(package->image);//detectionImage);
+    package->detectionImage = FaceIface::scaleForDetection(package->image);
+    KFaceIface::Image image = FaceIface::toImage(package->detectionImage);
+    image.setOriginalSize(package->image.originalSize());
 
     package->faces = detector.detectFaces(image);
 
@@ -285,9 +304,14 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
     emit processed(package);
 }
 
-void DetectionWorker::setAccuracy(int accuracy)
+void DetectionWorker::setAccuracy(double accuracy)
 {
     detector.setAccuracy(accuracy);
+}
+
+void DetectionWorker::setSpecificity(double specificity)
+{
+    detector.setSpecificity(specificity);
 }
 
 // ----------------------------------------------------------------------------------------
@@ -301,12 +325,6 @@ RecognitionWorker::RecognitionWorker(FacePipeline::FacePipelinePriv* d)
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    if ( !(package->processFlags & FacePipelinePackage::ProcessedByDetector) &&
-         !package->info.isNull())
-    {
-        package->faces = d->iface->unconfirmedFacesFromTags(package->info.id());
-    }
-
     QList<double> distances = database.recognizeFaces(package->faces);
     for (int i=0; i<distances.size(); i++)
     {
@@ -330,18 +348,28 @@ void RecognitionWorker::setThreshold(double threshold)
 
 // ----------------------------------------------------------------------------------------
 
-DatabaseWriter::DatabaseWriter(FacePipeline::FacePipelinePriv* d)
-              : d(d)
+DatabaseWriter::DatabaseWriter(FacePipeline::WriteMode mode, FacePipeline::FacePipelinePriv* d)
+              : mode(mode), d(d)
 {
 }
 
 void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 {
+    if (mode == FacePipeline::OverwriteUnconfirmed
+        && package->processFlags & FacePipelinePackage::ProcessedByDetector)
+    {
+        QList<DatabaseFace> oldEntries = d->iface->unconfirmedDatabaseFaces(package->info.id());
+        kDebug() << "Removing old entries" << oldEntries;
+        d->iface->removeFaces(oldEntries);
+    }
+
     d->iface->markAsScanned(package->info);
+
     if (!package->info.isNull() && !package->faces.isEmpty())
     {
         d->iface->writeUnconfirmedResults(package->detectionImage, package->info.id(), package->faces);
     }
+
     package->processFlags |= FacePipelinePackage::WrittenToDatabase;
     emit processed(package);
 }
@@ -351,7 +379,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline* q)
                               : q(q)
 {
-    alreadyScannedFilter = 0;
+    databaseFilter = 0;
     previewThread        = 0;
     detectionWorker      = 0;
     parallelDetectors    = 0;
@@ -366,10 +394,10 @@ FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline* q)
 
 void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
 {
-    if (alreadyScannedFilter)
+    if (databaseFilter)
     {
         infosForFiltering += infos.size();
-        alreadyScannedFilter->process(infos);
+        databaseFilter->process(infos);
     }
     else
     {
@@ -379,11 +407,11 @@ void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
 }
 
 // called by filter
-void FacePipeline::FacePipelinePriv::sendFromFilter(const QList<ImageInfo>& infos)
+void FacePipeline::FacePipelinePriv::sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages)
 {
-    infosForFiltering -= infos.size();
-    foreach (const ImageInfo& info, infos)
-        send(buildPackage(info));
+    infosForFiltering -= packages.size();
+    foreach (const FacePipelineExtendedPackage::Ptr& package, packages)
+        send(package);
 }
 
 // called by filter
@@ -458,8 +486,8 @@ void FacePipeline::FacePipelinePriv::stop()
     if (!started)
         return;
 
-    if (alreadyScannedFilter)
-        alreadyScannedFilter->stop();
+    if (databaseFilter)
+        databaseFilter->stop();
     if (previewThread)
         previewThread->cancel();
     if (parallelDetectors)
@@ -484,7 +512,7 @@ FacePipeline::FacePipeline()
 
 FacePipeline::~FacePipeline()
 {
-    delete d->alreadyScannedFilter;
+    delete d->databaseFilter;
     delete d->previewThread;
     delete d->detectionWorker;
     delete d->parallelDetectors;
@@ -501,7 +529,7 @@ bool FacePipeline::hasFinished() const
 
 void FacePipeline::plugDatabaseFilter(FilterMode mode)
 {
-    d->alreadyScannedFilter = new ScanStateFilter(mode, d);
+    d->databaseFilter = new ScanStateFilter(mode, d);
 }
 
 void FacePipeline::plugPreviewLoader()
@@ -513,8 +541,11 @@ void FacePipeline::plugFaceDetector()
 {
     d->detectionWorker = new DetectionWorker(d);
 
-    connect(d, SIGNAL(accuracyChanged(int)),
-            d->detectionWorker, SLOT(setAccuracy(int)));
+    connect(d, SIGNAL(accuracyChanged(double)),
+            d->detectionWorker, SLOT(setAccuracy(double)));
+
+    connect(d, SIGNAL(specificityChanged(double)),
+            d->detectionWorker, SLOT(setSpecificity(double)));
 }
 
 void FacePipeline::plugParallelFaceDetectors()
@@ -530,8 +561,11 @@ void FacePipeline::plugParallelFaceDetectors()
     {
         DetectionWorker *worker = new DetectionWorker(d);
 
-        connect(d, SIGNAL(accuracyChanged(int)),
-                worker, SLOT(setAccuracy(int)));
+        connect(d, SIGNAL(accuracyChanged(double)),
+                worker, SLOT(setAccuracy(double)));
+
+        connect(d, SIGNAL(specificityChanged(double)),
+                worker, SLOT(setSpecificity(double)));
 
         d->parallelDetectors->add(worker);
     }
@@ -545,9 +579,9 @@ void FacePipeline::plugFaceRecognizer()
             d->recognitionWorker, SLOT(setThreshold(double)));
 }
 
-void FacePipeline::plugDatabaseWriter()
+void FacePipeline::plugDatabaseWriter(WriteMode mode)
 {
-    d->databaseWriter = new DatabaseWriter(d);
+    d->databaseWriter = new DatabaseWriter(mode, d);
 }
 
 void FacePipeline::construct()
@@ -601,26 +635,33 @@ bool FacePipeline::process(const ImageInfo& info)
         return false;
     }
 
-    if (d->alreadyScannedFilter)
+    FacePipelineExtendedPackage::Ptr package;
+    if (d->databaseFilter)
     {
-        if (!d->alreadyScannedFilter->filter(info))
+        package = d->databaseFilter->filter(info);
+        if (!package)
             return false;
     }
+    else
+        package = d->buildPackage(info);
 
-    d->send(d->buildPackage(info));
+    d->send(package);
     return true;
 }
 
 bool FacePipeline::process(const ImageInfo& info, const DImg& image)
 {
-    if (d->alreadyScannedFilter)
+    FacePipelineExtendedPackage::Ptr package;
+    if (d->databaseFilter)
     {
-        if (!d->alreadyScannedFilter->filter(info))
+        package = d->databaseFilter->filter(info);
+        if (!package)
             return false;
     }
+    else
+        package = d->buildPackage(info);
 
-    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
-    package->image                           = image;
+    package->image = image;
     d->send(package);
 
     return true;
@@ -631,9 +672,14 @@ void FacePipeline::process(const QList<ImageInfo>& infos)
     d->processBatch(infos);
 }
 
-void FacePipeline::setDetectionAccuracy(int accuracy)
+void FacePipeline::setDetectionAccuracy(double value)
 {
-    emit d->accuracyChanged(accuracy);
+    emit d->accuracyChanged(value);
+}
+
+void FacePipeline::setDetectionSpecificity(double value)
+{
+    emit d->specificityChanged(value);
 }
 
 } // namespace Digikam

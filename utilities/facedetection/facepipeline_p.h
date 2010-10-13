@@ -107,12 +107,7 @@ public:
     void process(const QList<ImageInfo>& infos);
     void process(const ImageInfo& info);
 
-    /**
-     * Returns true if the info is accepted for further processing.
-     * In this case, database records may be changed.
-     * Returns false if the info shall be skipped.
-     */
-    bool filter(const ImageInfo& info);
+    FacePipelineExtendedPackage::Ptr filter(const ImageInfo& info);
 
 public:
 
@@ -132,7 +127,8 @@ protected:
     virtual void run();
 
     QList<ImageInfo> toFilter;
-    QList<ImageInfo> toSend;
+
+    QList<FacePipelineExtendedPackage::Ptr> toSend;
     QList<ImageInfo> toBeSkipped;
 };
 
@@ -180,7 +176,8 @@ public:
 public Q_SLOTS:
 
     void process(FacePipelineExtendedPackage::Ptr package);
-    void setAccuracy(int accuracy);
+    void setAccuracy(double value);
+    void setSpecificity(double value);
 
 Q_SIGNALS:
 
@@ -226,7 +223,7 @@ class DatabaseWriter : public QObject
 
 public:
 
-    DatabaseWriter(FacePipeline::FacePipelinePriv* d);
+    DatabaseWriter(FacePipeline::WriteMode mode, FacePipeline::FacePipelinePriv* d);
 
 public Q_SLOTS:
 
@@ -238,6 +235,7 @@ Q_SIGNALS:
 
 protected:
 
+    FacePipeline::WriteMode               mode;
     FacePipeline::FacePipelinePriv* const d;
 };
 
@@ -252,7 +250,7 @@ public:
     FacePipelinePriv(FacePipeline* q);
 
     void processBatch(const QList<ImageInfo>& infos);
-    void sendFromFilter(const QList<ImageInfo>& infos);
+    void sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages);
     void skipFromFilter(const QList<ImageInfo>& infosForSkipping);
     void send(FacePipelineExtendedPackage::Ptr package);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info);
@@ -264,7 +262,7 @@ public:
 
 public:
 
-    ScanStateFilter*   alreadyScannedFilter;
+    ScanStateFilter*   databaseFilter;
     PreviewLoader*     previewThread;
     DetectionWorker*   detectionWorker;
     ParallelPipes*     parallelDetectors;
@@ -285,7 +283,8 @@ Q_SIGNALS:
     friend class FacePipeline;
     void startProcess(FacePipelineExtendedPackage::Ptr package);
 
-    void accuracyChanged(int accuracy);
+    void accuracyChanged(double accuracy);
+    void specificityChanged(double accuracy);
     void thresholdChanged(double threshold);
 
 private:

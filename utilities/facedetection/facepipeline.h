@@ -86,10 +86,20 @@ public:
 
     enum FilterMode
     {
-        /// Will rescan any given image, removing existing unconfirmed face entries
-        RescanAll,
+        /// Will read any given image
+        ScanAll,
         /// Will skip any image that is already marked as scanned
-        SkipAlreadyScanned
+        SkipAlreadyScanned,
+        /// Will read unconfirmed faces for recognition
+        ReadUnconfirmedFaces
+    };
+
+    enum WriteMode
+    {
+        /// Write results. Merge with existing entries.
+        NormalWrite,
+        /// Add new results. Previous unconfirmed results will be cleared.
+        OverwriteUnconfirmed
     };
 
     /**
@@ -128,7 +138,7 @@ public:
     void plugFaceDetector();
     void plugParallelFaceDetectors();
     void plugFaceRecognizer();
-    void plugDatabaseWriter();
+    void plugDatabaseWriter(WriteMode mode);
     void construct();
 
     /** Cancels all processing */
@@ -154,7 +164,8 @@ public Q_SLOTS:
      */
     void process(const QList<ImageInfo>& infos);
 
-    void setDetectionAccuracy(int accuracy);
+    void setDetectionAccuracy(double accuracy);
+    void setDetectionSpecificity(double specificity);
 
 Q_SIGNALS:
 
