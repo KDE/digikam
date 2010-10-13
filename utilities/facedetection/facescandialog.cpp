@@ -27,6 +27,7 @@
 
 #include <QApplication>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
@@ -92,14 +93,15 @@ public:
 
     FaceScanDialogPriv()
         : configName("Face Detection Dialog"),
-          configDetectAndRecognize("Detect and Recognize Faces"),
-          configRecognizedMarkedFaces("Recognize Marked Faces"),
-          configSkipAlreadyScanned("Skip Already Scanned"),
+          configMainTask("Face Scan Main Task"),
+          configValueDetectAndRecognize("Detect and Recognize Faces"),
+          configValueRecognizedMarkedFaces("Recognize Marked Faces"),
+          configAlreadyScannedHandling("Already Scanned Handling"),
           configUseFullCpu("Use Full CPU"),
           configSettingsVisible("Settings Widget Visible")
     {
         detectAndRecognizeButton = 0;
-        skipAlreadyScannedBox    = 0;
+        alreadyScannedBox        = 0;
         reRecognizeButton        = 0;
         tabWidget                = 0;
         albumSelectCB            = 0;
@@ -111,7 +113,7 @@ public:
     }
 
     QRadioButton*                detectAndRecognizeButton;
-    QCheckBox*                   skipAlreadyScannedBox;
+    QComboBox*                   alreadyScannedBox;
     QRadioButton*                reRecognizeButton;
 
     QTabWidget*                  tabWidget;
@@ -126,9 +128,10 @@ public:
     QCheckBox*                   useFullCpuButton;
 
     const QString configName;
-    const QString configDetectAndRecognize;
-    const QString configRecognizedMarkedFaces;
-    const QString configSkipAlreadyScanned;
+    const QString configMainTask;
+    const QString configValueDetectAndRecognize;
+    const QString configValueRecognizedMarkedFaces;
+    const QString configAlreadyScannedHandling;
     const QString configUseFullCpu;
     const QString configSettingsVisible;
 };
@@ -180,12 +183,21 @@ void FaceScanDialog::doLoadState()
     kDebug() << getConfigGroup().name();
     KConfigGroup group = getConfigGroup();
 
-    if (group.readEntry(entryName(d->configRecognizedMarkedFaces), false))
+    QString mainTask = group.readEntry(entryName(d->configMainTask), d->configValueDetectAndRecognize);
+    if (mainTask == d->configValueRecognizedMarkedFaces)
         d->reRecognizeButton->setChecked(true);
-    else
+    else // if (mainTask == d->configValueDetectAndRecognize)
         d->detectAndRecognizeButton->setChecked(true);
 
-    d->skipAlreadyScannedBox->setChecked(group.readEntry(entryName(d->configSkipAlreadyScanned), true));
+    FaceScanSettings::AlreadyScannedHandling handling;
+    QString skipHandling = group.readEntry(entryName(d->configAlreadyScannedHandling), "Skip");
+    if (skipHandling == "Rescan")
+        handling = FaceScanSettings::Rescan;
+    else if (skipHandling == "Merge")
+        handling = FaceScanSettings::Merge;
+    else //if (skipHandling == "Skip")
+        handling = FaceScanSettings::Skip;
+    d->alreadyScannedBox->setCurrentIndex(d->alreadyScannedBox->findData(handling));
 
     d->accuracyInput->setValue(AlbumSettings::instance()->getFaceDetectionAccuracy() * 100);
     d->specificityInput->setValue(AlbumSettings::instance()->getFaceDetectionSpecificity() * 100);
@@ -203,9 +215,22 @@ void FaceScanDialog::doSaveState()
     kDebug() << getConfigGroup().name();
     KConfigGroup group = getConfigGroup();
 
-    group.writeEntry(entryName(d->configDetectAndRecognize), d->detectAndRecognizeButton->isChecked());
-    group.writeEntry(entryName(d->configRecognizedMarkedFaces), d->reRecognizeButton->isChecked());
-    group.writeEntry(entryName(d->configSkipAlreadyScanned), d->skipAlreadyScannedBox->isChecked());
+    QString mainTask;
+    if (d->detectAndRecognizeButton->isChecked())
+        mainTask = d->configValueDetectAndRecognize;
+    else // if (d->reRecognizeButton->isChecked())
+        mainTask = d->configValueRecognizedMarkedFaces;
+    group.writeEntry(entryName(d->configMainTask), mainTask);
+
+    QString handling;
+    switch ((FaceScanSettings::AlreadyScannedHandling)
+            d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt())
+    {
+        case FaceScanSettings::Skip:   handling = "Skip"; break;
+        case FaceScanSettings::Rescan: handling = "Rescan"; break;
+        case FaceScanSettings::Merge:  handling = "Merge"; break;
+    }
+    group.writeEntry(entryName(d->configAlreadyScannedHandling), handling);
 
     AlbumSettings::instance()->setFaceDetectionAccuracy(double(d->accuracyInput->value()) / 100);
     AlbumSettings::instance()->setFaceDetectionSpecificity(double(d->specificityInput->value()) / 100);
@@ -253,12 +278,15 @@ void FaceScanDialog::setupUi()
     detectAndRecognizeIcon->setPixmap(SmallIcon("user-group-new", KIconLoader::SizeLarge));
     detectAndRecognizeIcon->setButton(d->detectAndRecognizeButton);
     detectAndRecognizeIcon->setAlignment(Qt::AlignCenter);
-    d->skipAlreadyScannedBox = new QCheckBox;
-    d->skipAlreadyScannedBox->setText(i18nc("@option:check", "Skip images already scanned"));
+    d->alreadyScannedBox = new QComboBox;
+    d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Skip images already scanned"), FaceScanSettings::Skip);
+    d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Scan again and merge results"), FaceScanSettings::Merge);
+    d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Clear results and rescan"), FaceScanSettings::Rescan);
+    d->alreadyScannedBox->setCurrentIndex(0);
     QGridLayout* detectAndRecognizeLabelLayout = new QGridLayout;
     detectAndRecognizeLabelLayout->addWidget(detectAndRecognizeLabel, 0, 0, 1, -1);
     detectAndRecognizeLabelLayout->setColumnMinimumWidth(0, 10);
-    detectAndRecognizeLabelLayout->addWidget(d->skipAlreadyScannedBox, 1, 1);
+    detectAndRecognizeLabelLayout->addWidget(d->alreadyScannedBox, 1, 1);
 
     d->reRecognizeButton                  = new QRadioButton(i18nc("@option:radio", "Recognize faces"));
     ButtonExtendedLabel* reRecognizeLabel = new ButtonExtendedLabel;
@@ -397,7 +425,7 @@ void FaceScanDialog::setupUi()
 void FaceScanDialog::setupConnections()
 {
     connect(d->detectAndRecognizeButton, SIGNAL(toggled(bool)),
-            d->skipAlreadyScannedBox, SLOT(setEnabled(bool)));
+            d->alreadyScannedBox, SLOT(setEnabled(bool)));
 
     connect(d->parametersResetButton, SIGNAL(clicked()),
             this, SLOT(setDetectionDefaultParameters()));
@@ -412,7 +440,8 @@ FaceScanSettings FaceScanDialog::settings() const
     else
         settings.task = FaceScanSettings::RecognizeMarkedFaces;
 
-    settings.skipAlreadyScanned = d->skipAlreadyScannedBox->isChecked();
+    settings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)
+            d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt();
 
     settings.accuracy    = double(d->accuracyInput->value()) / 100;
     settings.specificity = double(d->specificityInput->value()) / 100;

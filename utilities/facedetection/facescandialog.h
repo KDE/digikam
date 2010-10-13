@@ -54,7 +54,13 @@ public:
     ScanTask      task;
 
     // for detect and recognize
-    bool          skipAlreadyScanned;
+    enum AlreadyScannedHandling
+    {
+        Skip,
+        Merge,
+        Rescan
+    };
+    AlreadyScannedHandling alreadyScannedHandling;
 
     // detection
     double        accuracy;
