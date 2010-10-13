@@ -94,7 +94,8 @@ void ImageDelegate::setView(ImageCategorizedView *view)
 
     if (d->currentView)
     {
-        disconnect(d->currentView, 0, this, 0);
+        disconnect(d->currentView, SIGNAL(modelChanged()),
+                   this, SLOT(modelChanged()));
     }
 
     d->currentView = view;

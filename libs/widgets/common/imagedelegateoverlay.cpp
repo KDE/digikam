@@ -69,10 +69,10 @@ void ImageDelegateOverlay::paint(QPainter *, const QStyleOptionViewItem&, const 
 
 void ImageDelegateOverlay::setView(QAbstractItemView *view)
 {
-    if (!view && m_view)
+    if (m_view)
     {
-        disconnect(m_view, 0, this, 0);
-        disconnect(this, 0, m_view, 0);
+        disconnect(this, SIGNAL(update(const QModelIndex &)),
+                   m_view, SLOT(update(const QModelIndex &)));
     }
 
     m_view = view;
@@ -91,10 +91,10 @@ QAbstractItemView *ImageDelegateOverlay::view() const
 
 void ImageDelegateOverlay::setDelegate(ItemViewImageDelegate *delegate)
 {
-    if (!delegate && m_delegate)
+    if (m_delegate)
     {
-        disconnect(m_delegate, 0, this, 0);
-        disconnect(this, 0, m_delegate, 0);
+        disconnect(m_delegate, SIGNAL(visualChange()),
+                   this, SLOT(visualChange()));
     }
 
     m_delegate = delegate;
@@ -164,7 +164,12 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
             m_view->viewport()->removeEventFilter(this);
             if (view()->model())
                 disconnect(m_view->model(), 0, this, 0);
-            disconnect(m_view, 0, this, 0);
+
+            disconnect(m_view, SIGNAL(entered(const QModelIndex &)),
+                       this, SLOT(slotEntered(const QModelIndex &)));
+
+            disconnect(m_view, SIGNAL(viewportEntered()),
+                       this, SLOT(slotViewportEntered()));
         }
     }
 }
