@@ -497,6 +497,9 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu *menu, TAlbum *album)
     {
         TAlbum *a = (TAlbum*)*it;
 
+        if (a->isInternalTag())
+            continue;
+
         if (d->mode == REMOVE || d->mode == DISPLAY)
         {
             if (!d->assignedTags.contains(a->id()))
