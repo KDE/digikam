@@ -109,6 +109,8 @@ public:
 
     void transactionFinished()
     {
+        DatabaseCoreBackendPrivate::transactionFinished();
+
         imageChangesetContainer.sendOut();
         imageTagChangesetContainer.sendOut();
         collectionImageChangesetContainer.sendOut();

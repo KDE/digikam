@@ -36,16 +36,16 @@
 
 #include <QApplication>
 #include <QCoreApplication>
+#include <QFileInfo>
 #include <QHash>
 #include <QMap>
+#include <QRegExp>
 #include <QSqlDatabase>
-#include <QSqlError>
-#include <QThread>
-#include <QSqlRecord>
 #include <QSqlDriver>
-#include <QtCore/QRegExp>
-
-#include <QFileInfo>
+#include <QSqlError>
+#include <QSqlRecord>
+#include <QThread>
+#include <QTime>
 
 // KDE includes
 
@@ -177,8 +177,22 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
 
     db = QSqlDatabase::addDatabase(parameters.databaseType, connectionName(thread));
 
+    QString connectOptions = parameters.connectOptions;
+    if (parameters.isSQLite())
+    {
+        QStringList toAdd;
+        // enable shared cache, especially useful with SQLite >= 3.5.0
+        toAdd << "QSQLITE_ENABLE_SHARED_CACHE";
+        // We do our own waiting.
+        toAdd << "QSQLITE_BUSY_TIMEOUT=0";
+
+        if (!connectOptions.isEmpty())
+            connectOptions += ';';
+        connectOptions += toAdd.join(";");
+    }
+
     db.setDatabaseName(parameters.databaseName);
-    db.setConnectOptions(parameters.connectOptions);
+    db.setConnectOptions(connectOptions);
     db.setHostName(parameters.hostName);
     db.setPort(parameters.port);
     db.setUserName(parameters.userName);
@@ -240,7 +254,16 @@ bool DatabaseCoreBackendPrivate::reconnectOnError() const
 
 bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery& query) const
 {
-    return parameters.isSQLite() && query.lastError().number() == 5;
+    return parameters.isSQLite()
+        && (query.lastError().number() == 5 /*SQLITE_BUSY*/ || query.lastError().number() == 6/*SQLITE_LOCKED*/);
+}
+
+bool DatabaseCoreBackendPrivate::isSQLiteLockTransactionError(const QSqlError& lastError) const
+{
+    return parameters.isSQLite()
+        && lastError.type() == QSqlError::TransactionError
+        && lastError.databaseText() == QLatin1String("database is locked");
+        // wouldnt it be great if they gave us the database error number...
 }
 
 bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery& query) const
@@ -262,33 +285,43 @@ bool DatabaseCoreBackendPrivate::needToHandleWithErrorHandler(const SqlQuery& qu
     return isConnectionError(query) || needToConsultUserForError(query);
 }
 
-bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries) const
+bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
 {
-    if (!isInUIThread())
+    kDebug() << "Database is locked. Waited" << retries*10;
+    const int uiMaxRetries = 50;
+    const int maxRetries = 1000;
+    if (retries > qMax(uiMaxRetries, maxRetries))
     {
-        if (retries == 1)
-            kDebug() << "Detected locked database file. Waiting at most 10s trying again.";
-
-        sotoSleep::sleep(1);
-        return true;
+        if (retries > isInUIThread() ? uiMaxRetries : maxRetries)
+        {
+            kWarning() << "Detected locked database file. There is an active transaction. Waited but giving up now.";
+            return false;
+        }
     }
 
-    kWarning() << "Detected locked database file. There is an active transaction.";
-    return false;
+    BusyWaiter waiter(this);
+    waiter.wait(10);
+    return true;
 }
 
 void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery& query) const
 {
     kDebug() << "Failure executing query:\n"
              << query.executedQuery()
-             << "\nError messages:" << query.lastError().text() << query.lastError().number()
-                  << query.lastError().type() << query.lastError().databaseText()
-                  << query.lastError().driverText() << query.driver()->lastError()
+             << "\nError messages:" << query.lastError().driverText() << query.lastError().databaseText()
+             << query.lastError().number() << query.lastError().type() << query.driver()->lastError()
              << "\nBound values: " << query.boundValues().values();
 }
 
+void DatabaseCoreBackendPrivate::debugOutputFailedTransaction(const QSqlError& error) const
+{
+    kDebug() << "Failure executing transaction. Error messages:\n"
+             << error.driverText() << error.databaseText()
+             << error.number() << error.type();
+}
 
-DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate* d)
+
+DatabaseCoreBackendPrivate::AbstractUnlocker::AbstractUnlocker(DatabaseCoreBackendPrivate* d)
                           : count(0), d(d)
 {
     // Why two mutexes? The main mutex is recursive and won't work with a condvar.
@@ -302,13 +335,63 @@ DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate*
     // unlock
     for (int i=0; i<count; ++i)
         d->lock->mutex.unlock();
+}
 
-    // lock condvar mutex (lock only if main mutex is locked)
-    d->errorLockMutex.lock();
+void DatabaseCoreBackendPrivate::AbstractUnlocker::finishAcquire()
+{
     // drop lock acquired in first line. Main mutex is now free.
     // We maintain lock order (first main mutex, second error lock mutex)
     // but we drop main mutex lock for waiting on the cond var.
     d->lock->mutex.unlock();
+}
+
+DatabaseCoreBackendPrivate::AbstractUnlocker::~AbstractUnlocker()
+{
+    // lock main mutex as often as it was locked before
+    for (int i=0; i<count; ++i)
+        d->lock->mutex.lock();
+    // update lock count
+    d->lock->lockCount = count;
+}
+
+DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* d,
+                                                                             QMutex* mutex, QWaitCondition *condVar)
+    : AbstractUnlocker(d), mutex(mutex), condVar(condVar)
+{
+    // Why two mutexes? The main mutex is recursive and won't work with a condvar.
+    // lock condvar mutex (lock only if main mutex is locked)
+    mutex->lock();
+
+    finishAcquire();
+}
+
+DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::~AbstractWaitingUnlocker()
+{
+    // unlock condvar mutex. Both mutexes are now free.
+    mutex->unlock();
+}
+
+bool DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::wait(unsigned long time)
+{
+    return condVar->wait(mutex, time);
+}
+
+
+DatabaseCoreBackendPrivate::BusyWaiter::BusyWaiter(DatabaseCoreBackendPrivate* d)
+                          : AbstractWaitingUnlocker(d, &d->busyWaitMutex, &d->busyWaitCondVar)
+{
+}
+
+void DatabaseCoreBackendPrivate::transactionFinished()
+{
+    // wakes up any BusyWaiter waiting on the busyWaitCondVar.
+    // Possibly called under d->lock->mutex lock, so we dont lock the busyWaitMutex
+    busyWaitCondVar.wakeOne();
+}
+
+DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate* d)
+                          : AbstractWaitingUnlocker(d, &d->errorLockMutex, &d->errorLockCondVar)
+{
 }
 
     /** This suspends the current thread if the query status as
@@ -319,19 +402,7 @@ void DatabaseCoreBackendPrivate::ErrorLocker::wait()
 {
     // we use a copy of the flag under lock of the errorLockMutex to be able to check it here
     while (d->errorLockOperationStatus == DatabaseCoreBackend::Wait)
-        d->errorLockCondVar.wait(&d->errorLockMutex);
-}
-
-DatabaseCoreBackendPrivate::ErrorLocker::~ErrorLocker()
-{
-    // unlock condvar mutex. Both mutexes are now free.
-    d->errorLockMutex.unlock();
-
-    // lock main mutex as often as it was locked before
-    for (int i=0; i<count; ++i)
-        d->lock->mutex.lock();
-    // update lock count
-    d->lock->lockCount = count;
+        wait();
 }
 
     /** Set the wait flag to queryStatus. Typically, call this with Wait. */
@@ -1132,6 +1203,12 @@ bool DatabaseCoreBackend::queryErrorHandling(SqlQuery& query, int retries)
 {
     Q_D(DatabaseCoreBackend);
 
+    if (d->isSQLiteLockError(query))
+    {
+        if (d->checkRetrySQLiteLockError(retries))
+            return true;
+    }
+
     d->debugOutputFailedQuery(query);
 
     /*
@@ -1142,29 +1219,44 @@ bool DatabaseCoreBackend::queryErrorHandling(SqlQuery& query, int retries)
     if (query.lastError().isValid())
     {
         d->setDatabaseErrorForThread(query.lastError());
-    }else
+    }
+    else
     {
         d->setDatabaseErrorForThread(d->databaseForThread().lastError());
     }
 
     if (d->isConnectionError(query) && d->reconnectOnError())
     {
+        // after connection errors, it can be required
+        // to start with a new connection and a fresh, copied query
         d->closeDatabaseForThread();
         query = copyQuery(query);
     }
 
-    if (d->isSQLiteLockError(query))
-    {
-        if (d->checkRetrySQLiteLockError(retries))
-            return true;
-    }
-    else if (d->needToHandleWithErrorHandler(query))
+    if (d->needToHandleWithErrorHandler(query))
     {
         if (d->handleWithErrorHandler(&query))
             return true;
         else
             return false;
     }
+    return false;
+}
+
+bool DatabaseCoreBackend::transactionErrorHandling(const QSqlError& lastError, int retries)
+{
+    Q_D(DatabaseCoreBackend);
+
+    if (d->isSQLiteLockTransactionError(lastError))
+    {
+        if (d->checkRetrySQLiteLockError(retries))
+            return true;
+    }
+
+    d->debugOutputFailedTransaction(lastError);
+
+    // no experience with other forms of failure
+
     return false;
 }
 
@@ -1266,14 +1358,18 @@ SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
 SqlQuery DatabaseCoreBackend::copyQuery(const SqlQuery& old)
 {
     SqlQuery query = getQuery();
+    #ifdef DATABASCOREBACKEND_DEBUG
     kDebug() << "Last query was ["<<old.lastQuery()<<"]";
+    #endif
     query.prepare(old.lastQuery());
     query.setForwardOnly(old.isForwardOnly());
     // only for positional binding
     QList<QVariant> boundValues = old.boundValues().values();
     foreach (const QVariant &value, boundValues)
     {
+        #ifdef DATABASCOREBACKEND_DEBUG
         kDebug() << "Bind value to query ["<<value<<"]";
+        #endif
         query.addBindValue(value);
     }
     return query;
@@ -1292,16 +1388,29 @@ SqlQuery DatabaseCoreBackend::getQuery()
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::beginTransaction()
 {
     Q_D(DatabaseCoreBackend);
-    // Call databaseForThread before touching transaction count - open() will reset the count
+
+    // Call databaseForThread before touching transaction count - open() will reset the count!
     QSqlDatabase db = d->databaseForThread();
+
     if (d->incrementTransactionCount())
     {
-        if (!db.transaction())
+        int retries = 0;
+        forever
         {
-            d->decrementTransactionCount();
-            if (db.lastError().type() == QSqlError::ConnectionError)
+            if (db.transaction())
+                break;
+            else
             {
-                return DatabaseCoreBackend::ConnectionError;
+                if (transactionErrorHandling(db.lastError(), retries++))
+                    continue;
+                else
+                {
+                    d->decrementTransactionCount();
+                    if (db.lastError().type() == QSqlError::ConnectionError)
+                        return DatabaseCoreBackend::ConnectionError;
+                    else
+                        return DatabaseCoreBackend::SQLError;
+                }
             }
         }
         d->isInTransaction = true;
@@ -1315,12 +1424,25 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::commitTransaction()
     if (d->decrementTransactionCount())
     {
         QSqlDatabase db = d->databaseForThread();
-        if (!db.commit())
+        int retries = 0;
+        forever
         {
-            d->incrementTransactionCount();
-            if (db.lastError().type() == QSqlError::ConnectionError)
+            if (db.commit())
+                break;
+            else
             {
-                return DatabaseCoreBackend::ConnectionError;
+                QSqlError lastError = db.lastError();
+                if (transactionErrorHandling(lastError, retries++))
+                    continue;
+                else
+                {
+                    kDebug() << "Failed to commit transaction. Starting rollback.";
+                    db.rollback();
+                    if (lastError.type() == QSqlError::ConnectionError)
+                        return DatabaseCoreBackend::ConnectionError;
+                    else
+                        return DatabaseCoreBackend::SQLError;
+                }
             }
         }
         d->isInTransaction = false;

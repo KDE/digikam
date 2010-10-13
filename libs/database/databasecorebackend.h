@@ -353,6 +353,7 @@ public:
      * Pass the number of retries already done for this query to help with some decisions.
      */
     bool queryErrorHandling(SqlQuery& query, int retries);
+    bool transactionErrorHandling(const QSqlError& lastError, int retries);
 
     /**
      * Called when an attempted connection to the database failed.
