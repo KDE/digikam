@@ -40,6 +40,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "facepipeline.h"
+#include "facescandialog.h"
 #include "imageinfo.h"
 #include "imageinfojob.h"
 #include "knotificationwrapper.h"
@@ -53,13 +54,11 @@ public:
 
     BatchFaceDetectorPriv()
     {
-        cancel              = false;
         rebuildAll          = true;
 
         duration.start();
     }
 
-    bool                  cancel;
     bool                  rebuildAll;
 
     QTime                 duration;
@@ -69,21 +68,60 @@ public:
     FacePipeline          pipeline;
 };
 
-BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
-                 : DProgressDlg(0), d(new BatchFaceDetectorPriv)
+BatchFaceDetector::BatchFaceDetector(QWidget* parent, const FaceScanSettings& settings)
+                 : DProgressDlg(parent), d(new BatchFaceDetectorPriv)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     setModal(false);
     setValue(0);
-    setCaption(d->rebuildAll ? i18n("Rebuild All Faces") : i18n("Build Missing Faces"));
+    setCaption(i18nc("@title:window", "Scanning Faces"));
     setLabel(i18n("<b>Updating faces database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
 
-    d->pipeline.plugDatabaseFilter(rebuildAll ? FacePipeline::RescanAll : FacePipeline::SkipAlreadyScanned);
-    d->pipeline.plugPreviewLoader();
-    d->pipeline.plugParallelFaceDetectors();
+    FacePipeline::FilterMode filterMode;
+    FacePipeline::WriteMode  writeMode;
+    if (settings.task == FaceScanSettings::DetectAndRecognize)
+    {
+        if (settings.alreadyScannedHandling == FaceScanSettings::Skip)
+        {
+            filterMode = FacePipeline::SkipAlreadyScanned;
+            writeMode  = FacePipeline::NormalWrite;
+        }
+        else if (settings.alreadyScannedHandling == FaceScanSettings::Rescan)
+        {
+            filterMode = FacePipeline::ScanAll;
+            writeMode  = FacePipeline::OverwriteUnconfirmed;
+        }
+        else // if (settings.alreadyScannedHandling == FaceScanSettings::Merge)
+        {
+            filterMode = FacePipeline::ScanAll;
+            writeMode  = FacePipeline::NormalWrite;
+        }
+    }
+    else // if (settings.task == FaceScanSettings::RecognizeMarkedFaces
+    {
+        filterMode = FacePipeline::ReadUnconfirmedFaces;
+        writeMode  = FacePipeline::NormalWrite;
+    }
+
+    d->pipeline.plugDatabaseFilter(filterMode);
+
+    if (settings.task == FaceScanSettings::DetectAndRecognize)
+    {
+        d->pipeline.plugPreviewLoader();
+
+        if (settings.useFullCpu)
+            d->pipeline.plugParallelFaceDetectors();
+        else
+            d->pipeline.plugFaceDetector();
+    }
+
     d->pipeline.plugFaceRecognizer();
-    d->pipeline.plugDatabaseWriter();
+    d->pipeline.plugDatabaseWriter(writeMode);
     d->pipeline.construct();
+
+    d->pipeline.setDetectionAccuracy(settings.accuracy);
+    d->pipeline.setDetectionSpecificity(settings.specificity);
 
     connect(&d->albumListing, SIGNAL(signalItemsInfo(const ImageInfoList&)),
             this, SLOT(slotItemsInfo(const ImageInfoList&)));
@@ -100,6 +138,11 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
     connect(&d->pipeline, SIGNAL(skipped(const QList<ImageInfo>&)),
             this, SLOT(slotImagesSkipped(const QList<ImageInfo>&)));
 
+    if (settings.albums.isEmpty())
+        d->albumTodoList = AlbumManager::instance()->allPAlbums();
+    else
+        d->albumTodoList = settings.albums;
+
     startAlbumListing();
 }
 
@@ -110,13 +153,19 @@ BatchFaceDetector::~BatchFaceDetector()
 
 void BatchFaceDetector::startAlbumListing()
 {
-    d->albumTodoList = AlbumManager::instance()->allPAlbums();
-
     // get total count, cached by AlbumManager
     QMap<int, int> palbumCounts = AlbumManager::instance()->getPAlbumsCount();
+    QMap<int, int> talbumCounts = AlbumManager::instance()->getTAlbumsCount();
     int total = 0;
     foreach (Album *album, d->albumTodoList)
-        total += palbumCounts.value(album->id());
+    {
+        if (album->type() == Album::PHYSICAL)
+            total += palbumCounts.value(album->id());
+        else
+            // this is possibly broken of course because we dont know if images have multiple tags,
+            // but there's no better solution without expensive operation
+            total += talbumCounts.value(album->id());
+    }
     kDebug() << "Total is" << total;
     setMaximum(total);
 
@@ -171,8 +220,7 @@ void BatchFaceDetector::closeEvent(QCloseEvent* e)
 
 void BatchFaceDetector::abort()
 {
-    d->cancel = true;
-    emit signalDetectAllFacesDone();
+    d->pipeline.cancel();
 }
 
 void BatchFaceDetector::slotImagesSkipped(const QList<ImageInfo>& infos)

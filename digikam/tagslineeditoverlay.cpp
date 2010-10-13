@@ -108,7 +108,7 @@ void TagsLineEditOverlay::hide()
 {
     //delegate()->setRatingEdited(QModelIndex());
     AbstractWidgetDelegateOverlay::hide();
-    kDebug() << "Hide called, probably mouse left";
+    //kDebug() << "Hide called, probably mouse left";
 
     if(!m_widget->hasFocus())
     {
@@ -124,7 +124,7 @@ void TagsLineEditOverlay::updatePosition()
         return;
 
     QRect thumbrect = delegate()->ratingRect();
-    kDebug() << "updatePosition called, probably a mouseover : " << thumbrect;
+    //kDebug() << "updatePosition called, probably a mouseover : " << thumbrect;
     QRect rect      = thumbrect;
 
     if (rect.width() > addTagsLineEdit()->width() )

@@ -114,6 +114,7 @@
 #include "digikamadaptor.h"
 #include "dio.h"
 #include "dlogoaction.h"
+#include "facescandialog.h"
 #include "fingerprintsgenerator.h"
 #include "iccsettings.h"
 #include "imageattributeswatch.h"
@@ -2584,11 +2585,6 @@ void DigikamApp::slotGenerateFingerPrintsFirstTime()
     runFingerPrintsGenerator(true);
 }
 
-void DigikamApp::slotDetectFacesFirstTime()
-{
-    runFaceScanner(true);
-}
-
 void DigikamApp::slotRebuildFingerPrints()
 {
     QString msg = i18n("Image fingerprinting can take some time.\n"
@@ -2608,7 +2604,7 @@ void DigikamApp::slotRebuildFingerPrints()
 
 void DigikamApp::slotScanForFaces()
 {
-    QString msg = i18n("Scanning for people in photographs can take a lot of time.\n"
+    /*QString msg = i18n("Scanning for people in photographs can take a lot of time.\n"
                        "Which would you prefer?\n"
                        "- Resume scanning photographs from where the scanning was stopped last time\n"
                        "- Rescan all photographs (takes a long time)");
@@ -2621,6 +2617,11 @@ void DigikamApp::slotScanForFaces()
         return;
 
     runFaceScanner(result == KMessageBox::Yes ? false : true);
+    */
+    FaceScanDialog dialog;
+
+    if (dialog.exec() == QDialog::Accepted)
+        runFaceScanner(dialog.settings());
 }
 
 void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
@@ -2633,9 +2634,9 @@ void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
     fingerprintsGenerator->show();
 }
 
-void DigikamApp::runFaceScanner(bool rebuildAll)
+void DigikamApp::runFaceScanner(const FaceScanSettings& settings)
 {
-    BatchFaceDetector* batchFaceDetector = new BatchFaceDetector(this, rebuildAll);
+    BatchFaceDetector* batchFaceDetector = new BatchFaceDetector(this, settings);
 
     connect(batchFaceDetector, SIGNAL(signalDetectAllFacesDone()),
             this, SLOT(slotScanForFacesDone()));
@@ -2650,7 +2651,6 @@ void DigikamApp::slotRebuildFingerPrintsDone()
 void DigikamApp::slotScanForFacesDone()
 {
     // Pop-up a message to bring user when all is done.
-    kDebug()<<"Done, in diigkamapp";
     KNotificationWrapper("facescanningcompleted", i18n("Update of people database completed."),
                          this, windowTitle());
     d->config->group("General Settings").writeEntry("Face Scanner First Run", true);

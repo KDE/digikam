@@ -40,6 +40,7 @@ namespace Digikam
 
 class DImg;
 class FacePipelinePackage;
+class FaceScanSettings;
 class ImageInfo;
 class ImageInfoList;
 class LoadingDescription;
@@ -50,7 +51,7 @@ class BatchFaceDetector : public DProgressDlg
 
 public:
 
-    explicit BatchFaceDetector(QWidget* parent, bool rebuildAll);
+    explicit BatchFaceDetector(QWidget* parent, const FaceScanSettings& settings);
     ~BatchFaceDetector();
 
 Q_SIGNALS:
