@@ -329,7 +329,7 @@ void CheckableAlbumFilterModel::setSourceFilterModel(CheckableAlbumFilterModel *
 
 AbstractCheckableAlbumModel *CheckableAlbumFilterModel::sourceAlbumModel() const
 {
-    return dynamic_cast<AbstractCheckableAlbumModel*> (sourceModel());
+    return static_cast<AbstractCheckableAlbumModel*>(AlbumFilterModel::sourceAlbumModel());
 }
 
 void CheckableAlbumFilterModel::setFilterChecked(bool filter)
