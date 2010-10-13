@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QSharedData>
+#include <QMultiMap>
 
 // Local includes
 
@@ -46,7 +47,7 @@ public:
     }
 
     int tagId;
-    QMap<QString, QString> properties;
+    QMultiMap<QString, QString> properties;
 };
 
 class TagPropertiesPrivSharedNull : public QSharedDataPointer<TagPropertiesPriv>
@@ -67,7 +68,7 @@ TagProperties::TagProperties(int tagId)
     d->tagId = tagId;
     QList<TagProperty> properties = DatabaseAccess().db()->getTagProperties(tagId);
     foreach (const TagProperty &p, properties)
-        d->properties.insertMulti(p.property, p.value);
+        d->properties.insert(p.property, p.value);
 }
 
 TagProperties::~TagProperties()
@@ -108,11 +109,7 @@ bool TagProperties::hasProperty(const QString& key) const
 
 bool TagProperties::hasProperty(const QString& key, const QString& value) const
 {
-    QMap<QString, QString>::const_iterator it;
-    for (it = d->properties.find(key); it != d->properties.end() && it.key() == key; ++it)
-        if (it.value() == value)
-            return true;
-    return false;
+    return d->properties.contains(key, value);
 }
 
 QString TagProperties::value(const QString& key) const
@@ -132,6 +129,8 @@ QMap<QString, QString> TagProperties::properties() const
 
 void TagProperties::setProperty(const QString& key, const QString& value)
 {
+    if (d->properties.contains(key, value) && d->properties.count(key) == 1)
+        return;
     // for single entries in db, this can of course be optimized using a single UPDATE WHERE
     removeProperties(key);
     d->properties.insert(key, value);
@@ -140,8 +139,19 @@ void TagProperties::setProperty(const QString& key, const QString& value)
 
 void TagProperties::addProperty(const QString& key, const QString& value)
 {
-    d->properties.insertMulti(key, value);
+    if (d->properties.contains(key, value))
+        return;
+    d->properties.insert(key, value);
     DatabaseAccess().db()->addTagProperty(d->tagId, key, value);
+}
+
+void TagProperties::removeProperty(const QString& key, const QString& value)
+{
+    if (d->properties.contains(key, value))
+    {
+        DatabaseAccess().db()->removeTagProperties(d->tagId, key, value);
+        d->properties.remove(key, value);
+    }
 }
 
 void TagProperties::removeProperties(const QString& key)

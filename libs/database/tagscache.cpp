@@ -537,16 +537,10 @@ int TagsCache::getOrCreateTag(const QString& tagPath)
 int TagsCache::getOrCreateTagWithProperty(const QString& tagPath, const QString& property, const QString& value)
 {
     int tagId = getOrCreateTag(tagPath);
-    TagProperties props(tagId);
-    if (value.isNull())
+    if (!hasProperty(tagId, property, value))
     {
-        if (!props.hasProperty(property))
-            props.setProperty(property, value);
-    }
-    else
-    {
-        if (!props.hasProperty(property, value))
-            props.setProperty(property, value);
+        TagProperties props(tagId);
+        props.setProperty(property, value);
     }
     return tagId;
 }
@@ -663,8 +657,7 @@ bool TagsCache::canBeWrittenToMetadata(int tagId)
 int TagsCache::getOrCreateInternalTag(const QString& tagName)
 {
     // ensure the parent tag exists, including the internal property
-    if (!tagForPath(tagPathOfDigikamInternalTags(IncludeLeadingSlash)))
-        getOrCreateTagWithProperty(tagPathOfDigikamInternalTags(IncludeLeadingSlash), propertyNameDigikamInternalTag());
+    getOrCreateTagWithProperty(tagPathOfDigikamInternalTags(IncludeLeadingSlash), propertyNameDigikamInternalTag());
 
     QString tagPath = tagPathOfDigikamInternalTags(IncludeLeadingSlash) + '/' + tagName;
     return getOrCreateTagWithProperty(tagPath, propertyNameDigikamInternalTag());

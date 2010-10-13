@@ -88,6 +88,8 @@ public:
     /** Adds the given property. Does not change any previous occurrences of this property,
      *  allowing multiple properties with the same key. */
     void addProperty(const QString& key, const QString& value);
+    /// Remove the given property/value
+    void removeProperty(const QString& key, const QString& value);
     /// Remove all occurrences of the property
     void removeProperties(const QString& key);
 
