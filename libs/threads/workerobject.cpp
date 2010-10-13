@@ -48,12 +48,16 @@ public:
 
     WorkerObjectPriv()
     {
-        state = WorkerObject::Inactive;
+        state     = WorkerObject::Inactive;
+        eventLoop = 0;
+        runnable  = 0;
     }
 
     volatile WorkerObject::State state;
     QMutex                       mutex;
     QWaitCondition               condVar;
+    QEventLoop                  *eventLoop;
+    WorkerObjectRunnable        *runnable;
 };
 
 WorkerObject::WorkerObject()
@@ -72,38 +76,29 @@ WorkerObject::~WorkerObject()
 void WorkerObject::wait()
 {
     QMutexLocker locker(&d->mutex);
-    while (d->state != Inactive)
+    while (d->state != Inactive || d->runnable)
         d->condVar.wait(&d->mutex);
 }
 
 bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal, const char* method,
                                       Qt::ConnectionType type) const
 {
-    connect(sender, signal,
-            this, SLOT(schedule()));
-
+    connect(sender, signal, this, SLOT(schedule()), Qt::DirectConnection);
     return QObject::connect(sender, signal, method, type);
 }
 
 bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal,
-                                      const QObject* receiver, const char* method,
+                                      const WorkerObject* receiver, const char* method,
                                       Qt::ConnectionType type)
 {
-    if (receiver == this)
-        connect(sender, signal, this, SLOT(schedule()));
-
+    connect(sender, signal, receiver, SLOT(schedule()), Qt::DirectConnection);
     return QObject::connect(sender, signal, receiver, method, type);
 }
 
 bool WorkerObject::disconnectAndSchedule(const QObject* sender, const char* signal,
-                                         const QObject* receiver, const char* method)
+                                         const WorkerObject* receiver, const char* method)
 {
-    if (receiver == this)
-    {
-        connect(sender, signal,
-                this, SLOT(schedule()));
-    }
-
+    disconnect(sender, signal, receiver, SLOT(schedule()));
     return QObject::disconnect(sender, signal, receiver, method);
 }
 
@@ -116,10 +111,30 @@ bool WorkerObject::event(QEvent *e)
 {
     if (e->type() == QEvent::User)
     {
-        QThread::currentThread()->quit();
+        d->eventLoop->quit();
         return true;
     }
     return QObject::event(e);
+}
+
+void WorkerObject::setEventLoop(QEventLoop *loop)
+{
+    d->eventLoop = loop;
+}
+
+void WorkerObject::addRunnable(WorkerObjectRunnable *runnable)
+{
+    QMutexLocker locker(&d->mutex);
+    d->runnable = runnable;
+}
+
+void WorkerObject::removeRunnable(WorkerObjectRunnable *runnable)
+{
+    QMutexLocker locker(&d->mutex);
+    // there could be a second runnable in the meantime, waiting for the other, leaving runnable to park
+    if (d->runnable == runnable)
+        d->runnable = 0;
+    d->condVar.wakeAll();
 }
 
 void WorkerObject::schedule()

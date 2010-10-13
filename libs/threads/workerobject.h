@@ -32,8 +32,12 @@
 
 #include "digikam_export.h"
 
+class QEventLoop;
+
 namespace Digikam
 {
+
+class WorkerObjectRunnable;
 
 class DIGIKAM_EXPORT WorkerObject : public QObject
 {
@@ -64,16 +68,19 @@ public:
     bool connectAndSchedule(const QObject* sender, const char* signal, const char* method,
                              Qt::ConnectionType type = Qt::AutoConnection) const;
 
-    bool connectAndSchedule(const QObject* sender, const char* signal,
-                            const QObject* receiver, const char* method,
-                            Qt::ConnectionType type = Qt::AutoConnection);
-    bool disconnectAndSchedule(const QObject* sender, const char* signal,
-                               const QObject* receiver, const char* method);
+    static bool connectAndSchedule(const QObject* sender, const char* signal,
+                                   const WorkerObject* receiver, const char* method,
+                                   Qt::ConnectionType type = Qt::AutoConnection);
+    static bool disconnectAndSchedule(const QObject* sender, const char* signal,
+                                      const WorkerObject* receiver, const char* method);
 
     enum DeactivatingMode
     {
+        /// Already sent signals are cleared
         FlushSignals,
+        /// The thread is stopped, but already sent signals remain in the queue
         KeepSignals,
+        /// The thread is stopped when all signals emitted until now have been processed
         PhaseOut
     };
 
@@ -96,20 +103,17 @@ public Q_SLOTS:
      */
     void deactivate(DeactivatingMode mode = FlushSignals);
 
-Q_SIGNALS:
-
-    void deactivating();
-
-public:
+protected:
 
     bool transitionToRunning();
     void transitionToInactive();
 
     virtual bool event(QEvent *e);
 
-private:
-
     void run();
+    void setEventLoop(QEventLoop *loop);
+    void addRunnable(WorkerObjectRunnable *loop);
+    void removeRunnable(WorkerObjectRunnable *loop);
 
 private:
 

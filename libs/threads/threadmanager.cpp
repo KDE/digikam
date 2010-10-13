@@ -85,15 +85,20 @@ public:
         while (parkedObject->thread() != this)
             condVar.wait(&mutex);
 
+        QThread *targetThread = QThread::currentThread();
         // then, now that it's parked in ParkingThread, make ParkingThread move it to the current thread.
-        todo << qMakePair(parkedObject, QThread::currentThread());
+        todo << qMakePair(parkedObject, targetThread);
         condVar.wakeAll();
+
+        // wait until ParkingThread has pushed the object to current thread
+        while (parkedObject->thread() != targetThread)
+            condVar.wait(&mutex);
     }
 
     virtual void run()
     {
         /* The quirk here is that this thread never runs an event loop.
-         * That means events queud for parked object are only emitted when
+         * That means events queued for parked object are only emitted when
          * these object have been moved to their own thread.
          */
         while (running)
@@ -101,6 +106,7 @@ public:
             QList<TodoPair> copyTodo;
             {
                 QMutexLocker locker(&mutex);
+                condVar.wakeAll();
                 if (todo.isEmpty())
                 {
                     condVar.wait(&mutex);
@@ -162,16 +168,27 @@ void WorkerObjectRunnable::run()
     // if another thread should still be running, wait until the object is parked in ParkingThread
     parkingThread->moveToCurrentThread(object);
 
+    // The object is in state Scheduled or Deactivating now.
+    // It won't be deleted until Inactive, and as long a runnable is set.
+    object->addRunnable(this);
+
     QEventLoop loop;
-    QObject::connect(object, SIGNAL(deactivating()),
+    QObject::connect(object, SIGNAL(requestQuitLoop()),
                      &loop, SLOT(quit()));
 
     if (object->transitionToRunning())
+    {
+        object->setEventLoop(&loop);
         loop.exec();
+        object->setEventLoop(0);
+    }
     object->transitionToInactive();
 
     // if this is rescheduled, it will wait in the other thread at moveToCurrentThread() above until we park
     parkingThread->parkObject(object);
+
+    // now, free the object - if it want to get deleted
+    object->removeRunnable(this);
 }
 
 // -------------------------------------------------------------------------------------------------
