@@ -28,11 +28,12 @@
 
 #include <QMutex>
 #include <QSet>
-#include <QThread>
+#include <QTimer>
 
 // Local includes
 
 #include "imageinfo.h"
+#include "workerobject.h"
 
 namespace Digikam
 {
@@ -64,6 +65,8 @@ public:
 
     MetadataManagerDatabaseWorker* dbWorker;
     MetadataManagerFileWorker*     fileWorker;
+
+    QTimer*                        sleepTimer;
 
 public:
 
@@ -111,6 +114,7 @@ public:
 public Q_SLOTS:
 
     void slotImageDataChanged(const QString &path, bool removeThumbnails, bool notifyCache);
+    void slotSleepTimer();
 
 Q_SIGNALS:
 
@@ -127,52 +131,14 @@ Q_SIGNALS:
     void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
 };
 
-class MetadataManagerWorker : public QObject
-{
-    Q_OBJECT
-
-public:
-
-    MetadataManagerWorker(MetadataManager::MetadataManagerPriv* d)
-        : d(d) // do not install d as QObject parent, moveToThread wont work then
-    {
-        thread = new Thread(this);
-        moveToThread(thread);
-        thread->start();
-    }
-
-    void shutDown()
-    {
-        thread->quit(); 
-        thread->wait();
-    }
-
-protected:
-
-    class Thread : public QThread
-    {
-        public:
-            Thread(QObject* parent = 0)
-                : QThread(parent)
-                {
-                }
-
-            virtual void run() { exec(); }
-    };
-
-    Thread*                               thread;
-
-    MetadataManager::MetadataManagerPriv* d;
-};
-
-class MetadataManagerDatabaseWorker : public MetadataManagerWorker
+class MetadataManagerDatabaseWorker : public WorkerObject
 {
     Q_OBJECT
 
 public:
 
     MetadataManagerDatabaseWorker(MetadataManager::MetadataManagerPriv* d)
-        : MetadataManagerWorker(d) {}
+        : d(d) {}
 
 public Q_SLOTS:
 
@@ -188,19 +154,21 @@ Q_SIGNALS:
     void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
     void writeMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
 
-protected:
+private:
 
     void changeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs, bool addOrRemove);
+
+    MetadataManager::MetadataManagerPriv* const d;
 };
 
-class MetadataManagerFileWorker : public MetadataManagerWorker
+class MetadataManagerFileWorker : public WorkerObject
 {
     Q_OBJECT
 
 public:
 
     MetadataManagerFileWorker(MetadataManager::MetadataManagerPriv* d)
-        : MetadataManagerWorker(d) {}
+        : d(d) {}
 
 public Q_SLOTS:
 
@@ -212,6 +180,10 @@ Q_SIGNALS:
 
     void imageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
     void orientationChangeFailed(const QStringList& failedFileNames);
+
+private:
+
+    MetadataManager::MetadataManagerPriv* const d;
 };
 
 } // namespace Digikam
