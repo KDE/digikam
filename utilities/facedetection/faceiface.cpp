@@ -101,7 +101,7 @@ public:
     void    makeFaceTag(int tagId, const QString& fullName) const;
     int     findFirstTagWithProperty(const QString& property, const QString& value = QString()) const;
     int     tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName, bool convert, bool create) const;
-    void    add(ImageTagPair& pair, const DatabaseFace& face, bool trainFace);
+    void    add(ImageTagPair& pair, const DatabaseFace& face, const QStringList& properties, bool addTag);
     void    remove(ImageTagPair& pair, const DatabaseFace& face, bool touchTags);
 
 private:
@@ -589,33 +589,48 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
 
 void FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList)
 {
-    QListIterator<KFaceIface::Face> it(faceList);
-    while (it.hasNext())
+    QList<DatabaseFace> newFaces;
+    foreach (const KFaceIface::Face& face, faceList)
     {
-        const KFaceIface::Face& face = it.next();
-
-        // Assign the "/People/Unknown" tag. The property for this tag is "faceRegion", which has an SVG rect associated with it.
-        // When we assign a name for a person in the image, we assign a new tag "/People/<Person Name>" to this image, and move the
-        // "faceRegion" property to this tag, and delete it from the unknown tag."
-        // See README.FACE for a nicer explanation.
-
         // We'll get the unknownPeopleTagId if face.name() is null
-        int tagId      = tagForFaceName(face.name());
+        int tagId          = tagForFaceName(face.name());
+        QRect fullSizeRect = TagRegion::mapToOriginalSize(image, face.toRect());
 
-        ImageTagPair pair(imageid, tagId);
-        QRect faceRect = face.toRect();
-
-        if (!faceRect.isValid())
+        if (!tagId || !fullSizeRect.isValid())
             continue;
 
-        QRect fullSizeRect = TagRegion::mapToOriginalSize(image, faceRect);
-        QString region     = TagRegion(fullSizeRect).toXml();
+        kDebug() << "New Entry" << fullSizeRect << tagId;
+        newFaces << DatabaseFace(DatabaseFace::UnconfirmedName, imageid, tagId, TagRegion(fullSizeRect));
+    }
 
-        kDebug() << "Applying face tag" << tagId << face.name() << faceRect << region;
-        if (!pair.values(ImageTagPropertyName::autodetectedFace()).contains(region))
-            pair.addProperty(ImageTagPropertyName::autodetectedFace(), region);
-        // FIXME: We use ImageTagPair::assignTag() for now, because doing it with MetadataManager causes a db lockup
-        pair.assignTag();
+    if (newFaces.isEmpty())
+        return;
+
+    // merge with existing entries
+    QList<DatabaseFace> currentFaces = databaseFaces(imageid);
+
+    ImageTagPair pair;
+    foreach (const DatabaseFace& newFace, newFaces)
+    {
+        bool hasOldEntry = false;
+        foreach (const DatabaseFace& oldFace, currentFaces)
+        {
+            double minOverlap = oldFace.isConfirmedName() ? 0.25 : 0.5;
+            if (oldFace.region().intersects(newFace.region(), minOverlap))
+            {
+                hasOldEntry = true;
+                kDebug() << "Entry" << oldFace.region() << oldFace.tagId()
+                         << "overlaps" << newFace.region() << newFace.tagId() << ", skipping";
+                break;
+            }
+        }
+
+        if (!hasOldEntry)
+        {
+            ImageTagPair pair(imageid, newFace.tagId());
+            // UnconfirmedName and UnknownName have the same attribute
+            d->add(pair, newFace, DatabaseFace::attributesForFlags(DatabaseFace::UnconfirmedName), false);
+        }
     }
 }
 
@@ -705,7 +720,9 @@ DatabaseFace FaceIface::confirmName(const DatabaseFace& face, int tagId, const T
     }
 
     // Add new full entry
-    d->add(pair, newEntry, true);
+    d->add(pair, newEntry,
+           DatabaseFace::attributesForFlags(DatabaseFace::ConfirmedName | DatabaseFace::FaceForTraining),
+           true);
 
     return newEntry;
 }
@@ -720,19 +737,23 @@ DatabaseFace FaceIface::add(qlonglong imageId, int tagId, const TagRegion& regio
 void FaceIface::add(const DatabaseFace& face, bool trainFace)
 {
     ImageTagPair pair(face.imageId(), face.tagId());
-    d->add(pair, face, trainFace);
+    DatabaseFace::TypeFlags flags = DatabaseFace::ConfirmedName;
+    if (trainFace)
+        flags |= DatabaseFace::FaceForTraining;
+    d->add(pair, face, DatabaseFace::attributesForFlags(flags), true);
 }
 
-void FaceIface::FaceIfacePriv::add(ImageTagPair& pair, const DatabaseFace& face, bool trainFace)
+void FaceIface::FaceIfacePriv::add(ImageTagPair& pair, const DatabaseFace& face,
+                                   const QStringList& properties, bool addTag)
 {
     q->ensureIsPerson(face.tagId());
 
     QString region = face.region().toXml();
-    pair.addProperty(ImageTagPropertyName::tagRegion(), region);
-    if (trainFace)
-        pair.addProperty(ImageTagPropertyName::faceToTrain(), region);
+    foreach (const QString& property, properties)
+        pair.addProperty(property, region);
 
-    MetadataManager::instance()->assignTag(ImageInfo(face.imageId()), face.tagId());
+    if (addTag)
+        MetadataManager::instance()->assignTag(ImageInfo(face.imageId()), face.tagId());
 }
 
 void FaceIface::removeAllFaces(qlonglong imageid)
@@ -788,6 +809,15 @@ void FaceIface::removeFace(const DatabaseFace& face)
     d->remove(pair, face, true);
 }
 
+void FaceIface::removeFaces(const QList<DatabaseFace>& faces)
+{
+    foreach (const DatabaseFace& face, faces)
+    {
+        ImageTagPair pair(face.imageId(), face.tagId());
+        d->remove(pair, face, true);
+    }
+}
+
 void FaceIface::FaceIfacePriv::remove(ImageTagPair& pair, const DatabaseFace& face, bool touchTags)
 {
     QString regionString = TagRegion(face.region().toRect()).toXml();
@@ -796,8 +826,10 @@ void FaceIface::FaceIfacePriv::remove(ImageTagPair& pair, const DatabaseFace& fa
     if (face.type() == DatabaseFace::ConfirmedName)
         pair.removeProperty(DatabaseFace::attributeForType(DatabaseFace::FaceForTraining), regionString);
 
-    // No other entry left?
-    if (touchTags && !pair.hasProperty(DatabaseFace::attributeForType(DatabaseFace::ConfirmedName)))
+    // Tag assigned and no other entry left?
+    if (touchTags
+        && pair.isAssigned()
+        && !pair.hasProperty(DatabaseFace::attributeForType(DatabaseFace::ConfirmedName)))
         MetadataManager::instance()->removeTag(ImageInfo(face.imageId()), pair.tagId());
 }
 
@@ -883,8 +915,9 @@ void FaceIface::readConfigSettings()
     d->detectionAccuracy      = group.readEntry("DetectionAccuracy", 3);
     d->recognitionThreshold   = 1 - group.readEntry("SuggestionThreshold", 0.2);
 
-    if (d->databaseConst())
+    /*if (d->databaseConst())
         d->database()->setDetectionAccuracy(d->detectionAccuracy);
+        */
 }
 
 int FaceIface::faceRectDisplayMargin()

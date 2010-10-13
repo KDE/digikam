@@ -228,6 +228,13 @@ public:
     // --- Remove entries ---
 
     /**
+     * Remove the given face.
+     * If appropriate, the tag is also removed.
+     */
+    void                removeFace(const DatabaseFace &face);
+    void                removeFaces(const QList<DatabaseFace> &faces);
+
+    /**
      * Unassigns all face tags from the image and sets it's scanned property to false.
      */
     void                removeAllFaces(qlonglong imageid);
@@ -236,7 +243,6 @@ public:
      * Remove a face or the face for a certain rect from an image.
      */
     void                removeFace(qlonglong imageid, const QRect& rect);
-    void                removeFace(const DatabaseFace &face);
 
     /**
      * Reads configuration settings for detection accuracy and recognition suggestion threshold

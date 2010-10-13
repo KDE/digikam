@@ -135,6 +135,32 @@ TagRegion TagRegion::fromVariant(const QVariant& var)
     }
 }
 
+bool TagRegion::intersects(const TagRegion& other, double fraction)
+{
+    if (m_type == Invalid || other.m_type == Invalid)
+        return false;
+
+    if (m_type == Rect)
+    {
+        QRect r = toRect();
+        if (other.m_type == Rect)
+        {
+            QRect r2 = other.toRect();
+            if (fraction == 0)
+                return r.intersects(r2);
+            else if (fraction == 1)
+                return r.contains(r2);
+            else
+            {
+                QRect i = r.intersected(r2);
+                return (double(i.width() * i.height()) / double(r.width() * r.height())) > fraction;
+            }
+        }
+    }
+
+    return false;
+}
+
 QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& reducedSizeDetail)
 {
     if (fullImageSize == reducedImageSize)

@@ -186,7 +186,7 @@ DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>&
     int tagId = extraValues[2].toInt();
     QString attribute = extraValues[1].toString();
     QString value = extraValues[0].toString();
-    kDebug() << tagId << attribute << value;
+    //kDebug() << tagId << attribute << value;
 
     return DatabaseFace(attribute,
                         imageId, tagId,

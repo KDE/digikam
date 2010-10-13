@@ -70,11 +70,25 @@ public:
     bool operator==(const TagRegion& other) const;
     bool operator!=(const TagRegion& other) const { return !operator==(other); }
 
+    /// Returns an XML textual representation of this region
     QString toXml() const;
+    /// If type is Rect, returns the contained rectangle
     QRect toRect() const;
 
+    /// Stores in / loads from a variant. Will only use native QVariant types.
     QVariant toVariant() const;
     static TagRegion fromVariant(const QVariant& var);
+
+    /**
+     * Returns true if this and the other region intersect.
+     * fraction describes the relative overlap area needed to return true:
+     * If fraction is 0, returns true if the regions intersect at all.
+     * If fraction is 1, returns true only if other is completely contained in this region.
+     * If fraction is x, 0 < x < 1, returns true if the area of this region
+     * covered by the other is greater than x.
+     * Invalid areas never intersect.
+     */
+    bool intersects(const TagRegion& other, double fraction = 0);
 
     /**
      * Converts detail rectangles taken from a reduced size image to the original size, and vice versa
