@@ -1168,8 +1168,7 @@ void AlbumDB::addImageTagProperty(qlonglong imageId, int tagId, const QString& p
     d->db->execSql("INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES(?, ?, ?, ?);",
                    imageId, tagId, property, value);
 
-    // Add changeset if needed. When using ImageTagChangeset, update existing slots to check for type.
-    //d->db->recordChangeset(ImageTagPropertyChangeset(id.toInt(), SearchChangeset::Added));
+    d->db->recordChangeset(ImageTagChangeset(imageId, tagId, ImageTagChangeset::PropertiesChanged));
 }
 
 void AlbumDB::addImageTagProperty(const ImageTagProperty& property)
@@ -1200,6 +1199,8 @@ void AlbumDB::removeImageTagProperties(qlonglong imageId, int tagId, const QStri
         d->db->execSql("DELETE FROM ImageTagProperties WHERE imageid=? AND tagid=? AND property=? AND value=?;",
                        imageId, tagId, property, value);
     }
+
+    d->db->recordChangeset(ImageTagChangeset(imageId, tagId, ImageTagChangeset::PropertiesChanged));
 }
 
 ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)

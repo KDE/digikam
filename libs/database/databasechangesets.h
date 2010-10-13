@@ -82,7 +82,8 @@ public:
         Unknown,
         Added,
         Removed,
-        RemovedAll
+        RemovedAll,
+        PropertiesChanged
     };
 
     ImageTagChangeset();
@@ -111,6 +112,8 @@ public:
     { return operation() == Added; }
     bool tagsWereRemoved() const
     { return operation() == Removed || operation() == RemovedAll; }
+    bool propertiesWereChanged() const
+    { return operation() == PropertiesChanged; }
 
 private:
 
