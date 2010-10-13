@@ -55,6 +55,7 @@
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "databasetransaction.h"
+#include "databaseoperationgroup.h"
 #include "imageinfo.h"
 #include "imagescanner.h"
 #include "collectionscannerhints.h"
@@ -303,6 +304,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
         return;
     }
 
+    /*
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
@@ -310,6 +312,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
                          "Please report this error.";
         return;
     }
+    */
 
     loadNameFilters();
     d->resetRemovedItemsTime();
@@ -371,6 +374,7 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
         return -1;
     }
 
+    /*
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
@@ -378,6 +382,7 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
                          "Please report this error.";
         return -1;
     }
+    */
 
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
 
@@ -439,6 +444,7 @@ void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
     if (info.isNull())
         return;
 
+    /*
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
@@ -446,6 +452,7 @@ void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
                          "Please report this error.";
         return;
     }
+    */
 
     loadNameFilters();
 
@@ -746,6 +753,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
 
 qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
 {
+    DatabaseOperationGroup group;
     ImageScanner scanner(info);
     scanner.setCategory(category(info));
 
@@ -773,6 +781,7 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
 
 qlonglong CollectionScanner::scanNewFileFullScan(const QFileInfo& info, int albumId)
 {
+    DatabaseOperationGroup group;
     ImageScanner scanner(info);
     scanner.setCategory(category(info));
     scanner.newFileFullScan(albumId);
@@ -781,6 +790,7 @@ qlonglong CollectionScanner::scanNewFileFullScan(const QFileInfo& info, int albu
 
 void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo)
 {
+    DatabaseOperationGroup group;
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.fileModified();
@@ -788,6 +798,7 @@ void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanIn
 
 void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo)
 {
+    DatabaseOperationGroup group;
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.rescan();
@@ -798,6 +809,7 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     if (source.isNull() || dest.isNull())
         return;
 
+    DatabaseOperationGroup group;
     ImageScanner::copyProperties(source.id(), dest.id());
 }
 

@@ -136,6 +136,9 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 
 void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
 {
+    if (changeset.propertiesWereChanged())
+        return;
+
     DatabaseAccess access;
 
     foreach (const qlonglong& imageId, changeset.ids())
