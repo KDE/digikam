@@ -214,7 +214,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
 
     AddTagsCompletionBoxItem* createItemUnderParent = 0;
     if (d->parentTag)
-        d->createItemForNewTag(currentText, d->parentTag);
+        createItemUnderParent = d->createItemForNewTag(currentText, d->parentTag);
     AddTagsCompletionBoxItem* createItemTopLevel    = d->createItemForNewTag(currentText, 0);
 
     QList<AddTagsCompletionBoxItem*> assignItems;
@@ -243,7 +243,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
                 addItem(item);
             addItem(createItemTopLevel);
         }
-        else if (createItemTopLevel && createItemTopLevel->action() == defaultAction)
+        else // if (createItemTopLevel && createItemTopLevel->action() == defaultAction)
         {
             addItem(createItemTopLevel);
             setCurrentItem(createItemTopLevel);
