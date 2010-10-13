@@ -48,24 +48,26 @@ public:
     enum ScanTask
     {
         DetectAndRecognize,
-        RecognizeMarkedFaces,
+        RecognizeMarkedFaces
     };
 
-    ScanTask task;
+    ScanTask      task;
 
     // for detect and recognize
-    bool skipAlreadyScanned;
+    bool          skipAlreadyScanned;
 
     // detection
-    double accuracy;
-    double specificity;
+    double        accuracy;
+    double        specificity;
 
     // albums to scan
     QList<Album*> albums;
 
     // processing power
-    bool useFullCpu;
+    bool          useFullCpu;
 };
+
+// -------------------------------------------------------------------------------
 
 class FaceScanDialog : public KDialog, public StateSavingObject
 {
@@ -73,7 +75,8 @@ class FaceScanDialog : public KDialog, public StateSavingObject
 
 public:
 
-    FaceScanDialog(QWidget *parent = 0);
+    FaceScanDialog(QWidget* parent = 0);
+    ~FaceScanDialog();
 
     FaceScanSettings settings() const;
 
@@ -92,11 +95,12 @@ private:
     void setupUi();
     void setupConnections();
 
+private:
+
     class FaceScanDialogPriv;
     FaceScanDialogPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif // FACESCANDIALOG_H
-
