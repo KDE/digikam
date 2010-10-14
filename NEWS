@@ -9,7 +9,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 148434 : Cannot change rating in slideshow.
 002 ==> 253911 : libkdcraw access beyond array bounds (cameraXYZMatrix).
-003 ==> 
+003 ==> 254135 : Pipette-tool des not work in image editor/showfoto.
+004 ==> 
+
 
 
 
