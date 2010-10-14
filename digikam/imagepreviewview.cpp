@@ -93,10 +93,15 @@ class ImagePreviewViewItem : public DImgPreviewItem
 {
 public:
 
-    ImagePreviewViewItem(ImagePreviewView* view, FaceGroup *group)
-        : m_view(view), m_group(group)
+    ImagePreviewViewItem(ImagePreviewView* view)
+        : m_view(view), m_group(0)
     {
         setAcceptHoverEvents(true);
+    }
+
+    void setFaceGroup(FaceGroup *group)
+    {
+        m_group = group;
     }
 
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
@@ -191,11 +196,13 @@ public:
 ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
                   : GraphicsDImgView(parent), d(new ImagePreviewViewPriv)
 {
+    d->item = new ImagePreviewViewItem(this);
+    setItem(d->item);
+
     d->faceGroup = new FaceGroup(this);
     d->faceGroup->setShowOnHover(true);
 
-    d->item = new ImagePreviewViewItem(this, d->faceGroup);
-    setItem(d->item);
+    d->item->setFaceGroup(d->faceGroup);
 
     connect(d->item, SIGNAL(loaded()),
             this, SLOT(imageLoaded()));
