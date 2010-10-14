@@ -107,7 +107,7 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
         d->curvesBox->enableResetButton(true);
         d->curvesBox->enableCurveTypes(true);
     }
-  
+
     d->curvesBox->enableGradients(true);
 
     grid->addWidget(d->curvesBox, 0, 0, 1, 1);
@@ -124,7 +124,7 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
             this, SIGNAL(signalChannelReset(int)));
 
     connect(d->curvesBox, SIGNAL(signalPickerChanged(int)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SIGNAL(signalPickerChanged(int)));
 }
 
 CurvesSettings::~CurvesSettings()

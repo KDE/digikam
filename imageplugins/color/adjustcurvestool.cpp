@@ -152,6 +152,9 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     connect(d->settingsView, SIGNAL(signalChannelReset(int)),
             this, SLOT(slotResetCurrentChannel()));
 
+    connect(d->settingsView, SIGNAL(signalPickerChanged(int)),
+            this, SLOT(slotPickerColorButtonActived(int)));
+
 /*
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
