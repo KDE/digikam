@@ -1336,6 +1336,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/assignnameoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dbstatdlg.cpp
@@ -1360,7 +1361,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageratingoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagslineeditoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagerotationoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnailbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnaildelegate.cpp
@@ -1389,6 +1389,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/taggingaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagmodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagslineeditoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
