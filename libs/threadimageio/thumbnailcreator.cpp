@@ -278,8 +278,8 @@ QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool prege
 
 QImage ThumbnailCreator::scaleForStorage(const QImage& qimage, bool isFace) const
 {
-    // If it is a face, it is likely to be smaller than the cached size. In that case, just go ahead and scale it.
-    if (qimage.width() > d->cachedSize || qimage.height() > d->cachedSize || isFace)
+    Q_UNUSED(isFace)
+    if (qimage.width() > d->cachedSize || qimage.height() > d->cachedSize)
     {
         /*
         Cheat scaling is disabled because of quality problems - see bug #224999
