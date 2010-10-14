@@ -204,7 +204,7 @@ public:
     TagPropertiesFilterModel*  filteredModel;
 
     FaceIface                  faceIface;
-    FacePipeline               confirmPipeline;
+    FacePipeline               trainPipeline;
 
     FaceGroup* const           q;
 };
@@ -218,6 +218,9 @@ FaceGroup::FaceGroup(GraphicsDImgView* view)
 
     connect(view->previewItem(), SIGNAL(stateChanged(int)),
             this, SLOT(itemStateChanged(int)));
+
+    d->trainPipeline.plugTrainer();
+    d->trainPipeline.construct();
 }
 
 FaceGroup::~FaceGroup()
@@ -487,11 +490,11 @@ AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const Databas
 {
     AssignNameWidget* assignWidget = new AssignNameWidget;
     assignWidget->setMode(assignWidgetMode(face.type()));
-    assignWidget->setBackgroundStyle(AssignNameWidget::TransparentRound);
+    assignWidget->setVisualStyle(AssignNameWidget::TranslucentDarkRound);
     assignWidget->setLayoutMode(AssignNameWidget::TwoLines);
     assignWidget->setFace(info, identifier);
     checkModels();
-    assignWidget->setTagModel(tagModel, filteredModel, filterModel);
+    assignWidget->setModel(tagModel, filteredModel, filterModel);
 
     q->connect(assignWidget, SIGNAL(assigned(const TaggingAction&, const ImageInfo&, const QVariant&)),
                q, SLOT(slotAssigned(const TaggingAction&, const ImageInfo&, const QVariant&)));
@@ -584,6 +587,7 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
             int tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
             face = d->faceIface.confirmName(face, tagId, currentRegion);
         }
+        d->trainPipeline.train(QList<DatabaseFace>() << face, d->info, d->view->previewItem()->image());
     }
 
     item->setFace(face);

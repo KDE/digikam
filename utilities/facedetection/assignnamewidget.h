@@ -43,10 +43,10 @@ class TagPropertiesFilterModel;
 class AssignNameWidget : public QFrame
 {
     Q_OBJECT
-    Q_ENUMS(Mode LayoutMode BackgroundStyle)
+    Q_ENUMS(Mode LayoutMode VisualStyle)
     Q_PROPERTY(Mode mode READ mode WRITE setMode)
     Q_PROPERTY(LayoutMode layoutMode READ layoutMode WRITE setLayoutMode)
-    Q_PROPERTY(BackgroundStyle backgroundStyle READ backgroundStyle WRITE setBackgroundStyle)
+    Q_PROPERTY(VisualStyle visualStyle READ visualStyle WRITE setVisualStyle)
 
 public:
 
@@ -66,19 +66,20 @@ public:
         Compact
     };
 
-    enum BackgroundStyle
+    enum VisualStyle
     {
-        InvalidBackgroundStyle,
+        InvalidVisualStyle,
         StyledFrame,
-        TransparentRound
+        TranslucentDarkRound,
+        TranslucentThemedFrameless
     };
 
     AssignNameWidget(QWidget* parent = 0);
     ~AssignNameWidget();
 
-    /** Set the tag model to use for completion.
-     *  You must call this before use if you want a combo box. */
-    void setTagModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel);
+    /** Set the tag model to use for completion. */
+    void setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel);
+    void setDefaultModel();
 
     void setMode(Mode mode);
     Mode mode() const;
@@ -86,8 +87,8 @@ public:
     void setLayoutMode(LayoutMode mode);
     LayoutMode layoutMode() const;
 
-    void setBackgroundStyle(BackgroundStyle style);
-    BackgroundStyle backgroundStyle() const;
+    void setVisualStyle(VisualStyle style);
+    VisualStyle visualStyle() const;
 
     ImageInfo info() const;
     QVariant  faceIdentifier() const;

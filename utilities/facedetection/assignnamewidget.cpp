@@ -53,6 +53,7 @@
 #include "albumtreeview.h"
 #include "dimg.h"
 #include "imageinfo.h"
+#include "themeengine.h"
 
 namespace Digikam
 {
@@ -65,12 +66,13 @@ public:
     {
         mode           = AssignNameWidget::InvalidMode;
         layoutMode     = AssignNameWidget::InvalidLayout;
-        bgStyle        = AssignNameWidget::InvalidBackgroundStyle;
+        bgStyle        = AssignNameWidget::InvalidVisualStyle;
         comboBox       = 0;
         confirmButton  = 0;
         rejectButton   = 0;
         clickLabel     = 0;
         layout         = 0;
+        modelsGiven    = 0;
         tagModel       = 0;
         tagFilterModel = 0;
         tagFilteredModel = 0;
@@ -90,13 +92,14 @@ public:
 
     AssignNameWidget::Mode            mode;
     AssignNameWidget::LayoutMode      layoutMode;
-    AssignNameWidget::BackgroundStyle bgStyle;
+    AssignNameWidget::VisualStyle bgStyle;
 
     AddTagsComboBox*                  comboBox;
     QToolButton*                      confirmButton;
     QToolButton*                      rejectButton;
     RClickLabel*                      clickLabel;
 
+    bool                              modelsGiven;
     TagModel*                         tagModel;
     CheckableAlbumFilterModel*        tagFilterModel;
     TagPropertiesFilterModel*         tagFilteredModel;
@@ -142,7 +145,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
         if (!comboBox)
         {
             comboBox = new AddTagsComboBox(q);
-            if (tagModel)
+            if (modelsGiven)
                 comboBox->setModel(tagModel, tagFilteredModel, tagFilterModel);
             if (parentTag)
                 comboBox->setParentTag(parentTag);
@@ -152,11 +155,6 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
 
             q->connect(comboBox, SIGNAL(taggingActionSelected(const TaggingAction&)),
                        q, SLOT(slotActionSelected(const TaggingAction&)));
-
-            comboBox->setMinimumContentsLength(20);
-            /*comboBox->lineEdit()->completionBox()->setObjectName("addTagsComboBox-completionBox");
-             *        comboBox->lineEdit()->completionBox()->setFrameStyle(QFrame::StyledPanel);
-             *        comboBox->view()->parentWidget()->setObjectName("addTagsComboBox-viewContainer");*/
         }
 
         if (!confirmButton)
@@ -202,12 +200,33 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
             layout->addWidget(confirmButton, 0, 1);
             layout->addWidget(rejectButton, 0, 2);
             layout->setColumnStretch(0, 1);
+
+            comboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            confirmButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            rejectButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            comboBox->setMinimumContentsLength(15);
+            comboBox->completionBox()->setAllowExceedBounds(false);
         }
         else if (layoutMode == AssignNameWidget::TwoLines || layoutMode == AssignNameWidget::Compact)
         {
             layout->addWidget(comboBox,  0, 0, 1, 2);
             layout->addWidget(confirmButton, 1, 0);
             layout->addWidget(rejectButton, 1, 1);
+
+            comboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+            confirmButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+            rejectButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+            if (layoutMode == AssignNameWidget::TwoLines)
+            {
+                comboBox->setMinimumContentsLength(10);
+                comboBox->completionBox()->setAllowExceedBounds(true);
+            }
+            else
+            {
+                comboBox->setMinimumContentsLength(0);
+                comboBox->completionBox()->setAllowExceedBounds(true);
+            }
         }
     }
     else if (mode == ConfirmedMode)
@@ -242,7 +261,7 @@ AssignNameWidget::AssignNameWidget(QWidget* parent)
                 : QFrame(parent), d(new AssignNameWidgetPriv(this))
 {
     setObjectName("assignNameWidget");
-    setBackgroundStyle(StyledFrame);
+    setVisualStyle(StyledFrame);
 }
 
 AssignNameWidget::~AssignNameWidget()
@@ -250,13 +269,26 @@ AssignNameWidget::~AssignNameWidget()
     delete d;
 }
 
-void AssignNameWidget::setTagModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
+void AssignNameWidget::setDefaultModel()
 {
-    d->tagModel = model;
-    d->tagFilterModel = filterModel;
-    d->tagFilteredModel  = filteredModel;
+    setModel(0,0,0);
+}
+
+void AssignNameWidget::setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
+{
     if (d->comboBox)
-        d->comboBox->setModel(d->tagModel, d->tagFilteredModel, d->tagFilterModel);
+    {
+        d->comboBox->setModel(model, filteredModel, filterModel);
+    }
+
+    if (model || filteredModel || filterModel)
+    {
+        // possibly set later on box
+        d->modelsGiven = true;
+        d->tagModel          = model;
+        d->tagFilterModel    = filterModel;
+        d->tagFilteredModel  = filteredModel;
+    }
 }
 
 void AssignNameWidget::setParentTag(TAlbum* album)
@@ -302,7 +334,7 @@ AssignNameWidget::LayoutMode AssignNameWidget::layoutMode() const
     return d->layoutMode;
 }
 
-AssignNameWidget::BackgroundStyle AssignNameWidget::backgroundStyle() const
+AssignNameWidget::VisualStyle AssignNameWidget::visualStyle() const
 {
     return d->bgStyle;
 }
@@ -379,12 +411,12 @@ void AssignNameWidget::keyPressEvent(QKeyEvent *e)
     QWidget::keyPressEvent(e);
 }
 
-void AssignNameWidget::setBackgroundStyle(BackgroundStyle style)
+void AssignNameWidget::setVisualStyle(VisualStyle style)
 {
     if (d->bgStyle == style)
         return;
 
-    if (style == TransparentRound)
+    if (style == TranslucentDarkRound)
     {
         setFont(KGlobalSettings::smallestReadableFont());
         setStyleSheet(
@@ -440,6 +472,21 @@ void AssignNameWidget::setBackgroundStyle(BackgroundStyle style)
             "     qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(150,150,150,80%), "
             "                     stop:0.5 rgba(25,25,25,100%), stop:1 rgba(150,150,150,80%)); "
             " } "*/
+        );
+    }
+    if (style == TranslucentThemedFrameless)
+    {
+        setFont(KGlobalSettings::smallestReadableFont());
+        QColor bg = ThemeEngine::instance()->baseColor();
+        setStyleSheet(
+            QString(
+            "QFrame {"
+            "  background-color: "
+            "    qradialgradient(cx:0, cy:0, radius: 1, stop:0 rgba(%1,%2,%3,220), "
+            "                    stop:1 green(%1,%2,%3,0)); "
+            "  border: none "
+            "} "
+            ).arg(bg.red()).arg(bg.green()).arg(bg.blue())
         );
     }
     else if (style == StyledFrame)
