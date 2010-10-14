@@ -51,6 +51,7 @@ public:
         filterModel = 0;
         isCheckable = true;
         closeOnActivate = false;
+        showCheckStateSummary = true;
     }
 
     AbstractCheckableAlbumModel *model;
@@ -58,6 +59,7 @@ public:
     QString                      noSelectionText;
     bool                         isCheckable;
     bool                         closeOnActivate;
+    bool                         showCheckStateSummary;
 
     void                         updateCheckable();
     void                         updateCloseOnActivate();
@@ -184,6 +186,12 @@ void AlbumSelectComboBox::setNoSelectionText(const QString& text)
     updateText();
 }
 
+void AlbumSelectComboBox::setShowCheckStateSummary(bool show)
+{
+    d->showCheckStateSummary = show;
+    updateText();
+}
+
 AbstractCheckableAlbumModel *AlbumSelectComboBox::model() const
 {
     return d->model;
@@ -202,6 +210,9 @@ void AlbumSelectComboBox::hidePopup()
 
 void AlbumSelectComboBox::updateText()
 {
+    if (!d->isCheckable || !d->showCheckStateSummary)
+        return;
+
     QList<Album *> checkedAlbums = d->model->checkedAlbums();
     if (checkedAlbums.isEmpty())
     {

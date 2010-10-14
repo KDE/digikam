@@ -68,6 +68,7 @@ public:
     QRect                 resolutionRect;
     QRect                 sizeRect;
     QRect                 tagRect;
+    QRect                 imageInformationRect;
     bool                  drawFocusFrame;
     bool                  drawMouseOverFrame;
     bool                  ratingOverThumbnail;

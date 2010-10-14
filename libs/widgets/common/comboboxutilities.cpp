@@ -379,7 +379,8 @@ TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget *parent)
 
 void TreeViewLineEditComboBox::setLineEditText(const QString& text)
 {
-    m_comboLineEdit->setText(text);
+    if (m_comboLineEdit)
+        m_comboLineEdit->setText(text);
 }
 
 void TreeViewLineEditComboBox::installView(QAbstractItemView *view)

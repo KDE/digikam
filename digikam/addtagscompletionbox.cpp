@@ -111,11 +111,12 @@ public:
     {
         upwardBox = false;
         model     = 0;
+        allowExceedBounds = false;
     }
 
     AddTagsCompletionBoxItem* createItemForExistingTag(TAlbum* talbum, bool uniqueName);
     AddTagsCompletionBoxItem* createItemForNewTag(const QString& newName, TAlbum* parent);
-    int maximumAvailableScreenHeight(const QPoint& globalPos);
+    QSize maximumAvailableScreenSize(const QPoint& globalPos);
 
 public:
 
@@ -123,6 +124,7 @@ public:
 
     TagModel*            model;
     AlbumPointer<TAlbum> parentTag;
+    bool                 allowExceedBounds;
 
 };
 
@@ -309,6 +311,11 @@ void AddTagsCompletionBox::setCurrentParentTag(TAlbum* album)
     d->parentTag = album;
 }
 
+void AddTagsCompletionBox::setAllowExceedBounds(bool allow)
+{
+    d->allowExceedBounds = allow;
+}
+
 void AddTagsCompletionBox::slotItemActivated(QListWidgetItem* item)
 {
     if (item)
@@ -387,13 +394,27 @@ QRect AddTagsCompletionBox::calculateGeometry() const
     if (!count())
         return QRect();
     QSize itemSizeHint;
+    const int suggestedShownItems = 15;
 
-    for (int i=0; i<count(); i++)
+    if (d->allowExceedBounds)
     {
-        if (item(i)->flags() & Qt::ItemIsSelectable)
+        for (int i=0; i<count() && i<suggestedShownItems; i++)
         {
-            itemSizeHint = sizeHintForIndex(indexFromItem(item(i)));
-            break;
+            if (item(i)->flags() & Qt::ItemIsSelectable)
+            {
+                itemSizeHint = itemSizeHint.expandedTo(sizeHintForIndex(indexFromItem(item(i))));
+            }
+        }
+    }
+    else
+    {
+        for (int i=0; i<count(); i++)
+        {
+            if (item(i)->flags() & Qt::ItemIsSelectable)
+            {
+                itemSizeHint = sizeHintForIndex(indexFromItem(item(i)));
+                break;
+            }
         }
     }
 
@@ -401,14 +422,21 @@ QRect AddTagsCompletionBox::calculateGeometry() const
         return QRect();
 
     const int frameHeight = 2*frameWidth();
-    int maxHeight         = d->maximumAvailableScreenHeight(globalPositionHint());
+    const QSize maxSize   = d->maximumAvailableScreenSize(globalPositionHint());
     int suggestedHeight   = qMin(15, count()) * itemSizeHint.height();
     //kDebug() << itemSizeHint << maxHeight << suggestedHeight;
-    int h                 = qMin(maxHeight, suggestedHeight + frameHeight);
+    int h                 = qMin(maxSize.height(), suggestedHeight + frameHeight);
     int w                 = KListWidget::minimumSizeHint().width();
 
-    if (parentWidget())
-        w = qMax(parentWidget()->width(), KListWidget::minimumSizeHint().width());
+    if (d->allowExceedBounds)
+    {
+        w = qMin(itemSizeHint.width(), maxSize.width());
+    }
+    else
+    {
+        if (parentWidget())
+            w = qMax(w, parentWidget()->width());
+    }
 
     return QRect(0, 0, w, h);
 }
@@ -447,15 +475,18 @@ QSize AddTagsCompletionBox::sizeHint() const
     return calculateGeometry().size();
 }
 
-int AddTagsCompletionBox::AddTagsCompletionBoxPriv::maximumAvailableScreenHeight(const QPoint& orig)
+QSize AddTagsCompletionBox::AddTagsCompletionBoxPriv::maximumAvailableScreenSize(const QPoint& orig)
 {
-    QRect screenSize = QApplication::desktop()->availableGeometry(orig);
+    QRect screenGeom = QApplication::desktop()->availableGeometry(orig);
     //kDebug() << screenSize << orig << qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
 
-    if (!screenSize.contains(orig))
-        return screenSize.height(); // bail out
+    if (!screenGeom.contains(orig))
+        return screenGeom.size(); // bail out
 
-    return qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
+    QSize size;
+    size.setWidth(screenGeom.width());
+    size.setHeight(qMax(orig.y() - screenGeom.top(), screenGeom.bottom() - orig.y()));
+    return size;
 }
 
 TaggingAction AddTagsCompletionBox::makeDefaultTaggingAction(const QString& text, int parentTagId)

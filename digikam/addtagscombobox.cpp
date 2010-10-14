@@ -67,6 +67,7 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
     setCheckable(false);
 
     d->lineEdit = new AddTagsLineEdit(this);
+    setLineEdit(d->lineEdit);
  
     connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
             this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
@@ -97,12 +98,16 @@ void AddTagsComboBox::setModel(TagModel* model, TagPropertiesFilterModel *filter
 
 void AddTagsComboBox::installLineEdit()
 {
-   setLineEdit(d->lineEdit);
 }
 
 AddTagsLineEdit *AddTagsComboBox::lineEdit() const
 {
     return d->lineEdit;
+}
+
+AddTagsCompletionBox *AddTagsComboBox::completionBox() const
+{
+    return d->lineEdit->completionBox();
 }
 
 void AddTagsComboBox::setTagTreeView(TagTreeView* view)

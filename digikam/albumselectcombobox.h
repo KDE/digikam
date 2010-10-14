@@ -62,6 +62,10 @@ public:
     /** Enable closing when an item was activated (clicked). Default: false. */
     void setCloseOnActivate(bool close);
 
+    /** If the box is checkable, enable showing a resume a la "3 Albums checked"
+     *  in the combo box text. Default: True */
+    void setShowCheckStateSummary(bool show);
+
     /** Sets the text that is used to describe the state when no album is selected.
         This may be something like "Any album" or "No tag selected".
         Depends on the default line edit implementation of TreeViewLineEditComboBox.

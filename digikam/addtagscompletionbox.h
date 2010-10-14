@@ -80,6 +80,14 @@ public:
      */
     void setTagModel(TagModel* model);
 
+    /**
+     * Allow the box to expand horizontally over the bounds of the parent widget.
+     * Set this flag if the parent widget is relatively small horizontally,
+     * but there is space available.
+     * Default is false.
+     */
+    void setAllowExceedBounds(bool allow);
+
     /** Returns the current TaggingAction. When setItems was called, this is
      *  the default action. Changes when the user selected a different selection.
      */

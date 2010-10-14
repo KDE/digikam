@@ -32,6 +32,7 @@
 namespace Digikam
 {
 
+class AddTagsCompletionBox;
 class AddTagsLineEdit;
 class Album;
 class CheckableAlbumFilterModel;
@@ -76,6 +77,7 @@ public:
     void setText(const QString& text);
 
     AddTagsLineEdit *lineEdit() const;
+    AddTagsCompletionBox *completionBox() const;
 
 public Q_SLOTS:
 
