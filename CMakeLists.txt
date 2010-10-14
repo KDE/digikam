@@ -673,6 +673,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagelevels.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/levelsfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagehistogram.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvessettings.cpp
@@ -714,10 +715,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/geodetictools.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/template.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/captionvalues.cpp
-       )
-
-    SET(libhistogram_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/histogram/imagehistogram.cpp
        )
 
     SET(libimageproperties_SRCS

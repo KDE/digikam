@@ -3,7 +3,6 @@ SET_DEBUG_AREA_CODE(${AREA_CODE_IMAGEPLUGINS})
 INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../utilities/imageeditor/canvas
                     ../utilities/imageeditor/widgets
-                    ../libs/histogram
                     ../libs/widgets/common
                     ../libs/widgets/iccprofiles
                     ../libs/dialogs
@@ -33,7 +32,9 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/threads
                     ../digikam
                     ../
+
                     ${KDCRAW_INCLUDE_DIR}
+                    ${KEXIV2_INCLUDE_DIR}
                    )
 
 ADD_SUBDIRECTORY( color )
@@ -41,4 +42,3 @@ ADD_SUBDIRECTORY( decorate )
 ADD_SUBDIRECTORY( enhance )
 ADD_SUBDIRECTORY( filters )
 ADD_SUBDIRECTORY( transform )
-

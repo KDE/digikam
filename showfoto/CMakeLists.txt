@@ -32,7 +32,6 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/dimg/filters/lens
                      ../libs/dmetadata
                      ../libs/themeengine
-                     ../libs/histogram
                      ../libs/threadimageio
                      ../libs/threads
                      ../libs/dialogs

@@ -23,7 +23,6 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/lens
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/histogram
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
@@ -115,7 +114,6 @@ SET(digikamcore_LIB_SRCS
                         ${libdimgfilters_SRCS}
                         ${libdmetadata_SRCS}
                         ${libdatabasecore_SRCS}
-                        ${libhistogram_SRCS}
                         ${libwhitebalance_SRCS}
                         ${libcurves_SRCS}
                         ${liblevels_SRCS}
