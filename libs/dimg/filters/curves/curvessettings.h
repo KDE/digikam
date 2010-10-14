@@ -43,7 +43,6 @@ namespace Digikam
 {
 
 class DImg;
-class CurvesSettingsPriv;
 
 class DIGIKAM_EXPORT CurvesSettings : public QWidget
 {
@@ -78,11 +77,12 @@ Q_SIGNALS:
     void signalChannelReset(int);
 
 public Q_SLOTS:
-    
-    void slotSpotColorChanged(const Digikam::DColor& color);
+
+    void slotSpotColorChanged(const DColor& color);
 
 private:
 
+    class CurvesSettingsPriv;
     CurvesSettingsPriv* const d;
 };
 

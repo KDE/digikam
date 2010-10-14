@@ -69,7 +69,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class CurvesSettingsPriv
+class CurvesSettings::CurvesSettingsPriv
 {
 
 public:
@@ -83,7 +83,7 @@ public:
     int           histoSegments;
 
     const QString configCurveEntry;
-    
+
     CurvesBox*    curvesBox;
 };
 
@@ -93,7 +93,7 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
 {
     d->histoSegments  = img->sixteenBit() ? 65535 : 255;
     QGridLayout* grid = new QGridLayout(this);
-    
+
     // NOTE: add a method to be able to use curves widget without image data as simple curve editor.
     if (!img->isNull())
     {
@@ -194,7 +194,7 @@ void CurvesSettings::slotSpotColorChanged(const DColor& color)
        d->curvesBox->curves()->curvesCalculateCurve(i);
 
     d->curvesBox->repaint();
-    
+
     emit signalSpotColorChanged();
 }
 

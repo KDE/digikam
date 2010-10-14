@@ -41,8 +41,6 @@ namespace Digikam
 {
 
 class DImg;
-class CurvesFilterPriv;
-
 
 class DIGIKAM_EXPORT CurvesContainer
 {
