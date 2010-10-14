@@ -56,7 +56,7 @@ public:
     /**
      * Use an existing DatabaseAccess object, which must live as long as this object exists.
      */
-    DatabaseOperationGroup(DatabaseAccess *access);
+    DatabaseOperationGroup(DatabaseAccess* access);
     ~DatabaseOperationGroup();
 
     /**
@@ -66,6 +66,7 @@ public:
     void lift();
 
     void setMaximumTime(int msecs);
+
     /** Resets to 0 the time used by allowLift() */
     void resetTime();
     /**

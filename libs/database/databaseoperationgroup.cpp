@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-03-23
- * Description : Convenience object for database transactions
+ * Date        : 2010-10-12
+ * Description : Convenience object for grouping database operations
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,15 +46,19 @@ public:
 
     DatabaseOperationGroupPriv()
     {
-        access         = 0;
-        acquired       = false;
-        maxTime        = 0;
+        access   = 0;
+        acquired = false;
+        maxTime  = 0;
     }
 
-    DatabaseAccess *access;
+public:
+
+    DatabaseAccess* access;
     bool            acquired;
     QTime           timeAcquired;
     int             maxTime;
+
+public:
 
     bool needsTransaction() const
     {
@@ -91,14 +95,14 @@ public:
 };
 
 DatabaseOperationGroup::DatabaseOperationGroup()
-                   : d(new DatabaseOperationGroupPriv)
+                      : d(new DatabaseOperationGroupPriv)
 {
     if (d->needsTransaction())
         d->acquire();
 }
 
-DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess *access)
-                   : d(new DatabaseOperationGroupPriv)
+DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess* access)
+                      : d(new DatabaseOperationGroupPriv)
 {
     d->access = access;
     if (d->needsTransaction())
