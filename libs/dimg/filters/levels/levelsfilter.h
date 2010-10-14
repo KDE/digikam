@@ -36,8 +36,6 @@ namespace Digikam
 {
 
 class DImg;
-class LevelsFilterPriv;
-
 
 class DIGIKAM_EXPORT LevelsContainer
 {
