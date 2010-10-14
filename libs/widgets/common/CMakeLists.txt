@@ -1,7 +1,4 @@
-INSTALL(FILES histogramwidget.h
-              histogrambox.h
-              histogrampainter.h
-              colorgradientwidget.h 
+INSTALL(FILES colorgradientwidget.h 
               sidebar.h
               dpopupmenu.h
               dlogoaction.h
