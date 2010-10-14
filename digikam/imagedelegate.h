@@ -65,8 +65,8 @@ public:
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
                                    const QModelIndex& index, QRect *activationRect = 0) const;
 
-    QRect rect() const;
-    QRect ratingRect() const;
+    virtual QRect pixmapRect() const;
+    virtual QRect imageInformationRect() const;
     QRect commentsRect() const;
     QRect tagsRect() const;
     QRect actualPixmapRect(const QModelIndex& index) const;

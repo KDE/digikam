@@ -69,6 +69,17 @@ public:
 
     QRect rect() const;
 
+    /** Returns the area where the pixmap is drawn,
+     *  or null if not supported */
+    virtual QRect pixmapRect() const;
+    /** Returns the area where the image information is drawn,
+     *  or null if empty / not supported.
+     *  The image information is textual or graphical information,
+     *  but not the pixmap. The ratingRect() will e.g. typically
+     *  be contained in this area.
+     */
+    virtual QRect imageInformationRect() const;
+
     /** Can be used to temporarily disable drawing of the rating.
      *  Call with QModelIndex() afterwards. */
     void setRatingEdited(const QModelIndex &index);

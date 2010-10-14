@@ -199,6 +199,16 @@ QRect ItemViewImageDelegate::rect() const
     return d->rect;
 }
 
+QRect ItemViewImageDelegate::pixmapRect() const
+{
+    return QRect();
+}
+
+QRect ItemViewImageDelegate::imageInformationRect() const
+{
+    return QRect();
+}
+
 QRect ItemViewImageDelegate::ratingRect() const
 {
     Q_D(const ItemViewImageDelegate);

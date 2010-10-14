@@ -67,6 +67,7 @@ void ImageDelegatePrivate::clearRects()
     resolutionRect = QRect(0, 0, 0, 0);
     sizeRect       = QRect(0, 0, 0, 0);
     tagRect        = QRect(0, 0, 0, 0);
+    imageInformationRect = QRect(0, 0, 0, 0);
 }
 
 ImageDelegate::ImageDelegate(QObject *parent)
@@ -159,12 +160,6 @@ ImageCategoryDrawer *ImageDelegate::categoryDrawer() const
     return d->categoryDrawer;
 }
 
-QRect ImageDelegate::ratingRect() const
-{
-    Q_D(const ImageDelegate);
-    return d->ratingRect;
-}
-
 QRect ImageDelegate::commentsRect() const
 {
     Q_D(const ImageDelegate);
@@ -175,6 +170,18 @@ QRect ImageDelegate::tagsRect() const
 {
     Q_D(const ImageDelegate);
     return d->tagRect;
+}
+
+QRect ImageDelegate::pixmapRect() const
+{
+    Q_D(const ImageDelegate);
+    return d->pixmapRect;
+}
+
+QRect ImageDelegate::imageInformationRect() const
+{
+    Q_D(const ImageDelegate);
+    return d->imageInformationRect;
 }
 
 void ImageDelegate::prepareThumbnails(ImageThumbnailModel *thumbModel, const QList<QModelIndex>& indexes)

@@ -81,6 +81,8 @@ void DigikamImageDelegate::updateRects()
     d->pixmapRect = QRect(d->margin, y, d->contentWidth, d->contentWidth);
     y = d->pixmapRect.bottom();
 
+    d->imageInformationRect = QRect(d->margin, y, d->contentWidth, 0);
+
     const AlbumSettings *albumSettings = AlbumSettings::instance();
     if (albumSettings->getIconShowRating())
     {
@@ -129,6 +131,7 @@ void DigikamImageDelegate::updateRects()
         d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
         y = d->tagRect.bottom();
     }
+    d->imageInformationRect.setBottom(y);
 
     d->rect = QRect(0, 0, d->contentWidth + 2*d->margin, y+d->margin+d->radius);
 
