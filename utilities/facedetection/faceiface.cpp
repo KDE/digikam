@@ -65,16 +65,11 @@ public:
 
     FaceIfacePriv(FaceIface *q) : q(q)
     {
-        kfaceDatabase        = 0; // created on demand
-        thumbnailLoadThread  = 0;
-
         setupTags();
     }
 
     ~FaceIfacePriv()
     {
-        delete kfaceDatabase;
-        delete thumbnailLoadThread;
     }
 
     bool                 suggestionsAllowed;
@@ -82,21 +77,13 @@ public:
     double               recognitionThreshold;
     int                  detectionAccuracy;
 
-    ThumbnailLoadThread* thumbnailLoadThread;
-
 public:
-
-    /// Creates a new object if needed
-    KFaceIface::Database* database();
-    /// Gives current pointer, never creates new object
-    const KFaceIface::Database* databaseConst() const;
 
     int                  scannedForFacesTagId() const;
     int                  peopleTagId() const;
     int                  unknownPeopleTagId() const;
 
     void    setupTags();
-    void    checkThumbnailThread();
     QString tagPath(const QString& name, int parentId) const;
     void    makeFaceTag(int tagId, const QString& fullName) const;
     int     findFirstTagWithProperty(const QString& property, const QString& value = QString()) const;
@@ -106,28 +93,10 @@ public:
 
 private:
 
-    KFaceIface::Database* kfaceDatabase;
-
     FaceIface * const     q;
 };
 
 // --- Private methods, face tag utility methods --------------------------------------------------------
-
-KFaceIface::Database* FaceIface::FaceIfacePriv::database()
-{
-    if (!kfaceDatabase)
-    {
-        QString dbDir = KStandardDirs::locateLocal("data", "database/", true);
-        kfaceDatabase = new KFaceIface::Database(KFaceIface::Database::InitAll, dbDir);
-    }
-    return kfaceDatabase;
-}
-
-const KFaceIface::Database* FaceIface::FaceIfacePriv::databaseConst() const
-{
-    return kfaceDatabase;
-}
-
 
 int FaceIface::FaceIfacePriv::scannedForFacesTagId() const
 {
@@ -162,16 +131,6 @@ void FaceIface::FaceIfacePriv::setupTags()
         TagProperties props(unknownPeopleTagId);
         props.setProperty(TagPropertyName::person(), QString()); // no name associated
         props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property
-    }
-}
-
-void FaceIface::FaceIfacePriv::checkThumbnailThread()
-{
-    if (!thumbnailLoadThread)
-    {
-        thumbnailLoadThread = new ThumbnailLoadThread;
-        thumbnailLoadThread->setPixmapRequested(false);
-        //TODO d->thumbnailLoadThread->setExifRotate(d->exifRotate);
     }
 }
 
@@ -409,6 +368,11 @@ QList<DatabaseFace> FaceIface::unconfirmedDatabaseFaces(qlonglong imageId) const
     return databaseFaces(imageId, DatabaseFace::UnconfirmedTypes);
 }
 
+QList<DatabaseFace> FaceIface::databaseFacesForTraining(qlonglong imageId) const
+{
+    return databaseFaces(imageId, DatabaseFace::FaceForTraining);
+}
+
 QList<Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
 {
     QList<Face> faceList;
@@ -513,33 +477,44 @@ int FaceIface::numberOfFaces(qlonglong imageid) const
     return count;
 }
 
-void FaceIface::fillImageInFaces(const DImg& image, QList<Face>& faceList) const
+void FaceIface::fillImageInFaces(const DImg& image, QList<KFaceIface::Face>& faceList, const QSize& scaleSize) const
 {
     for (int i = 0; i < faceList.size(); i++)
     {
-        fillImageInFace(image, faceList[i]);
+        fillImageInFace(image, faceList[i], scaleSize);
     }
 }
 
-void FaceIface::fillImageInFace(const DImg& image, Face& face) const
+void FaceIface::fillImageInFace(const DImg& image, KFaceIface::Face& face, const QSize& scaleSize) const
 {
     QRect rect = TagRegion::mapFromOriginalSize(image, face.toRect());
     if (rect.isValid())
     {
-        DImg img = image.copy(rect);
-        face.setImage(toImage(img));
+        DImg detail = image.copy(rect);
+        if (scaleSize.isValid())
+            detail = detail.smoothScale(scaleSize, Qt::IgnoreAspectRatio);
+        face.setImage(toImage(detail));
     }
 }
 
-DImg FaceIface::scaleForDetection(const DImg& image)
+void FaceIface::fillImageInFaces(ThumbnailLoadThread* thread, const QString& filePath,
+                                 QList<KFaceIface::Face>& faceList, const QSize& scaleSize) const
 {
-    if (qMax(image.width(), image.height()) > (uint)KFaceIface::Image::recommendedSizeForDetection())
+    ThumbnailImageCatcher catcher(thread);
+    for (int i=0; i<faceList.size(); i++)
     {
-        return image.smoothScale(KFaceIface::Image::recommendedSizeForDetection(),
-                                 KFaceIface::Image::recommendedSizeForDetection(),
-                                 Qt::KeepAspectRatio);
+        KFaceIface::Face& face = faceList[i];
+
+        QRect rect = face.toRect();
+        if (!rect.isValid())
+            continue;
+
+        thread->find(filePath, rect);
+        QImage detail = catcher.waitForThumbnail(filePath);
+        if (scaleSize.isValid())
+            detail = detail.scaled(scaleSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        face.setImage(detail);
     }
-    return image;
 }
 
 KFaceIface::Image FaceIface::toImage(const DImg& image)
@@ -549,8 +524,28 @@ KFaceIface::Image FaceIface::toImage(const DImg& image)
                              image.bits());
 }
 
+void FaceIface::storeThumbnails(ThumbnailLoadThread* thread, const QString& filePath,
+                                const QList<DatabaseFace>& databaseFaces, const DImg& image)
+{
+    foreach (const DatabaseFace& face, databaseFaces)
+    {
+        QList<QRect> rects;
+        rects << face.region().toRect();
+        const int margin = faceRectDisplayMargin();
+        rects << face.region().toRect().adjusted(-margin, -margin, margin, margin);
+
+        foreach (const QRect& rect, rects)
+        {
+            QRect mapped = TagRegion::mapFromOriginalSize(image, rect);
+            QImage detail = image.copyQImage(mapped);
+            thread->storeDetailThumbnail(filePath, rect, detail, true);
+        }
+    }
+}
+
 // --- Face detection and recognition ------------------------------------------------------------------------------------
 
+/*
 QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, FaceRecognitionSteps todo)
 {
     readConfigSettings(); //FIXME: do by signal
@@ -586,10 +581,13 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
 
     return faceList;
 }
+*/
 
-void FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList)
+QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList)
 {
     QList<DatabaseFace> newFaces;
+
+    // Build list of new entries
     foreach (const KFaceIface::Face& face, faceList)
     {
         // We'll get the unknownPeopleTagId if face.name() is null
@@ -597,43 +595,113 @@ void FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid, co
         QRect fullSizeRect = TagRegion::mapToOriginalSize(image, face.toRect());
 
         if (!tagId || !fullSizeRect.isValid())
+        {
+            newFaces << DatabaseFace();
             continue;
+        }
 
         kDebug() << "New Entry" << fullSizeRect << tagId;
         newFaces << DatabaseFace(DatabaseFace::UnconfirmedName, imageid, tagId, TagRegion(fullSizeRect));
     }
 
     if (newFaces.isEmpty())
-        return;
+        return newFaces;
 
-    // merge with existing entries
+    // list of existing entries
     QList<DatabaseFace> currentFaces = databaseFaces(imageid);
 
-    ImageTagPair pair;
-    foreach (const DatabaseFace& newFace, newFaces)
+    // merge new with existing entries
+    for (int i=0; i<newFaces.size(); i++)
     {
-        bool hasOldEntry = false;
+        DatabaseFace& newFace = newFaces[i];
+
+        QList<DatabaseFace> overlappingEntries;
         foreach (const DatabaseFace& oldFace, currentFaces)
         {
             double minOverlap = oldFace.isConfirmedName() ? 0.25 : 0.5;
             if (oldFace.region().intersects(newFace.region(), minOverlap))
             {
-                hasOldEntry = true;
+                overlappingEntries << oldFace;
                 kDebug() << "Entry" << oldFace.region() << oldFace.tagId()
                          << "overlaps" << newFace.region() << newFace.tagId() << ", skipping";
-                break;
             }
         }
 
-        if (!hasOldEntry)
+        // The purpose if the next scope is to merge entries:
+        // A confirmed face will never be overwritten.
+        // If a name is set to an old face, it will only be replaced by a new face with a name.
+        if (!overlappingEntries.isEmpty())
         {
+            if (newFace.isUnknownName())
+            {
+                // we have no name in the new face. Do we have one in the old faces?
+                for (int i=0; i<overlappingEntries.size(); i++)
+                {
+                    DatabaseFace& oldFace = overlappingEntries[i];
+                    if (oldFace.isUnknownName())
+                    {
+                        // remove old face
+                    }
+                    else
+                    {
+                        // skip new entry if any overlapping face has a name, and we dont
+                        newFace = DatabaseFace();
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // we have a name in the new face. Do we have names in overlapping faces?
+                for (int i=0; i<overlappingEntries.size(); i++)
+                {
+                    DatabaseFace& oldFace = overlappingEntries[i];
+                    if (oldFace.isUnknownName())
+                    {
+                        // remove old face
+                    }
+                    else if (oldFace.isUnconfirmedName())
+                    {
+                        if (oldFace.tagId() == newFace.tagId())
+                        {
+                            // remove smaller face
+                            if (oldFace.region().intersects(newFace.region(), 1))
+                            {
+                                newFace = DatabaseFace();
+                                break;
+                            }
+                            // else remove old face
+                        }
+                        else
+                        {
+                            // assume new recognition is more trained, remove older face
+                        }
+                    }
+                    else if (oldFace.isConfirmedName())
+                    {
+                        // skip new entry, confirmed has of course priority
+                        newFace = DatabaseFace();
+                    }
+                }
+            }
+        }
+
+        // if we did not decide to skip this face, add is to the db now
+        if (!newFace.isNull())
+        {
+            // list will contain all old entries that should still be removed
+            removeFaces(overlappingEntries);
+
             ImageTagPair pair(imageid, newFace.tagId());
             // UnconfirmedName and UnknownName have the same attribute
             d->add(pair, newFace, DatabaseFace::attributesForFlags(DatabaseFace::UnconfirmedName), false);
         }
     }
+
+    return newFaces;
 }
 
+/*
 QString FaceIface::recognizeFace(const KFaceIface::Face& face)
 {
     if(d->database()->peopleCount() == 0)
@@ -663,6 +731,7 @@ QString FaceIface::recognizeFace(const KFaceIface::Face& face)
         }
     }
 }
+*/
 
 // --- Confirm, Add, Remove ---
 
@@ -805,6 +874,8 @@ void FaceIface::removeFace(qlonglong imageid, const QRect& rect)
 
 void FaceIface::removeFace(const DatabaseFace& face)
 {
+    if (face.isNull())
+        return;
     ImageTagPair pair(face.imageId(), face.tagId());
     d->remove(pair, face, true);
 }
@@ -813,6 +884,8 @@ void FaceIface::removeFaces(const QList<DatabaseFace>& faces)
 {
     foreach (const DatabaseFace& face, faces)
     {
+        if (face.isNull())
+            continue;
         ImageTagPair pair(face.imageId(), face.tagId());
         d->remove(pair, face, true);
     }
@@ -835,10 +908,9 @@ void FaceIface::FaceIfacePriv::remove(ImageTagPair& pair, const DatabaseFace& fa
 
 // --- Training ---------------------------------------------------------------------------------------------------
 
+/*
 void FaceIface::trainImages(const QList<ImageInfo>& imageInfos)
 {
-    d->checkThumbnailThread();
-
     ThumbnailImageCatcher catcher(d->thumbnailLoadThread);
 
     typedef QHash<ImageInfo, QList<DatabaseFace> > ImageInfoToDatabaseFaceHash;
@@ -904,7 +976,7 @@ void FaceIface::trainFaces(const QList<Face>& givenFaceList )
     d->database()->updateFaces(faceList);
     kDebug() << "DB file is : " << d->database()->configPath();
     d->database()->saveConfig();
-}
+}*/
 
 void FaceIface::readConfigSettings()
 {

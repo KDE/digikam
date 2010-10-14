@@ -53,6 +53,7 @@ namespace Digikam
 class DImg;
 class ImageInfo;
 class ImageTagPair;
+class ThumbnailLoadThread;
 
 class FaceIface
 {
@@ -148,12 +149,28 @@ public:
      */
     QList<DatabaseFace> databaseFaces(qlonglong imageid) const;
     QList<DatabaseFace> unconfirmedDatabaseFaces(qlonglong imageid) const;
+    QList<DatabaseFace> databaseFacesForTraining(qlonglong imageid) const;
 
     /**
      * Edits the given face(s): From the given DImg, the face regions are copied.
+     * If requested, the faces will be scaled to the given (fixed) size.
      */
-    void                fillImageInFace(const DImg& image, KFaceIface::Face& face) const;
-    void                fillImageInFaces(const DImg& image, QList<KFaceIface::Face>& faceList) const;
+    void                fillImageInFace(const DImg& image, KFaceIface::Face& face, const QSize& scaleSize = QSize()) const;
+    void                fillImageInFaces(const DImg& image, QList<KFaceIface::Face>& faceList,
+                                         const QSize& scaleSize = QSize()) const;
+    /**
+     * This uses a thumbnail load thread to load the image detail.
+     * If requested, the faces will be scaled to the given (fixed) size.
+     */
+    void                fillImageInFaces(ThumbnailLoadThread* thread, const QString& filePath,
+                                         QList<KFaceIface::Face>& faceList, const QSize& scaleSize = QSize()) const;
+
+    /**
+     * Store the needed thumbnails for the given faces. This can be a huge optimization
+     * when the has already been loaded anyway.
+     */
+    void                storeThumbnails(ThumbnailLoadThread* thread, const QString& filePath,
+                                        const QList<DatabaseFace>& databaseFaces, const DImg& image);
 
     /**
      * Returns a list of all tag rectangles for the image. Unlike findAndTagFaces, this does not take a DImg,
@@ -165,9 +182,11 @@ public:
 
     /**
      * The given face list is a result of automatic detection and possibly recognition.
-     * The results are written to the database.
+     * The results are written to the database and merged with existing entries.
+     * The returned list contains the faces written to the database and has the same size as the given list.
+     * If a face was skipped (because of an existing entry), a null DatabaseFace will be at this place.
      */
-    void writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList);
+    QList<DatabaseFace> writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList);
 
     /**
      * Detects faces from the image and returns a list of faces
@@ -271,11 +290,6 @@ public:
      * in all four directions.
      */
     static int          faceRectDisplayMargin();
-
-    /**
-     * Returns the DImg, if appropriate, scaled to the recommended size for face detection
-     */
-    static DImg         scaleForDetection(const DImg& image);
 
     /**
      * Converts the DImg to a KFaceIface::Image
