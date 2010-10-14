@@ -27,11 +27,7 @@
 // Local includes
 
 #include "editortool.h"
-
-namespace Digikam
-{
-class DColor;
-}
+#include "dcolor.h"
 
 using namespace Digikam;
 
@@ -54,7 +50,7 @@ private Q_SLOTS:
     void slotResetSettings();
     void slotPickerColorButtonActived(int);
     void slotSpotColorChanged();
-    void slotColorSelectedFromTarget(const DColor& color);
+    void slotColorSelectedFromTarget(const Digikam::DColor&);
     void slotResetCurrentChannel();
     void slotChannelChanged();
     void slotScaleChanged();

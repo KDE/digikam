@@ -44,7 +44,6 @@
 // Local includes
 
 #include "colorgradientwidget.h"
-#include "dcolor.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
@@ -56,6 +55,7 @@
 #include "wbsettings.h"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamColorImagePlugin
 {
