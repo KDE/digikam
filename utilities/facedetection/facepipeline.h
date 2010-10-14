@@ -38,6 +38,7 @@
 
 // Local includes
 
+#include "databaseface.h"
 #include "dimg.h"
 #include "imageinfo.h"
 
@@ -56,7 +57,8 @@ public:
         PreviewImageLoaded      = 1 << 0,
         ProcessedByDetector     = 1 << 1,
         ProcessedByRecognizer   = 1 << 2,
-        WrittenToDatabase       = 1 << 3
+        WrittenToDatabase       = 1 << 3,
+        ProcessedByTrainer      = 1 << 4
     };
     Q_DECLARE_FLAGS(ProcessFlags, ProcessFlag);
 
@@ -70,6 +72,7 @@ public:
     ImageInfo               info;
     DImg                    image;
     QList<KFaceIface::Face> faces;
+    QList<DatabaseFace>     databaseFaces;
     ProcessFlags            processFlags;
 };
 
@@ -91,7 +94,9 @@ public:
         /// Will skip any image that is already marked as scanned
         SkipAlreadyScanned,
         /// Will read unconfirmed faces for recognition
-        ReadUnconfirmedFaces
+        ReadUnconfirmedFaces,
+        /// Will read faces marked for training
+        ReadFacesForTraining
     };
 
     enum WriteMode
@@ -126,11 +131,13 @@ public:
      *  (Database Filter ->) Preview Loader -> Detector -> Recognizer (-> DatabaseWriter)
      *  (Database Filter ->) Preview Loader -> Detector (-> DatabaseWriter)
      *  (Database Filter ->) Preview Loader -> Recognizer (-> DatabaseWriter)
+     *   Database Filter -> Trainer
      *
      * Supported combinations providing a loaded DImg:
      *  (Database Filter ->) Detector -> Recognizer (-> DatabaseWriter)
      *  (Database Filter ->) Detector (-> DatabaseWriter)
      *  (Database Filter ->) Recognizer (-> DatabaseWriter)
+     *  Trainer
      */
 
     void plugDatabaseFilter(FilterMode mode);
@@ -139,6 +146,7 @@ public:
     void plugParallelFaceDetectors();
     void plugFaceRecognizer();
     void plugDatabaseWriter(WriteMode mode);
+    void plugTrainer();
     void construct();
 
     /** Cancels all processing */
@@ -156,6 +164,15 @@ public Q_SLOTS:
      */
     bool process(const ImageInfo& info);
     bool process(const ImageInfo& info, const DImg& image);
+
+    /**
+     * For use when a trainer is plugged. Processes the given faces.
+     * Bypasses any installed filter.
+     * You can pass faces of type ConfirmedName or FaceForTraining,
+     * in either case faces of type FaceForTraining will be processed. Other types will be skipped.
+     */
+    void train(const QList<DatabaseFace> &faces, const ImageInfo& info);
+    void train(const QList<DatabaseFace> &faces, const ImageInfo& info, const DImg& image);
 
     /**
      * Batch processing. If a filter is installed, the skipped() signal

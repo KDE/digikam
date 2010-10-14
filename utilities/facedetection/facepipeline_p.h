@@ -42,6 +42,7 @@
 
 #include "faceiface.h"
 #include "previewloadthread.h"
+#include "thumbnailloadthread.h"
 #include "workerobject.h"
 
 namespace Digikam
@@ -60,6 +61,16 @@ public:
     }
 
     typedef QExplicitlySharedDataPointer<FacePipelineExtendedPackage> Ptr;
+};
+
+// ----------------------------------------------------------------------------------------
+
+class PackageLoadingDescriptionList : public QList<FacePipelineExtendedPackage::Ptr>
+{
+public:
+
+    PackageLoadingDescriptionList() {}
+    FacePipelineExtendedPackage::Ptr take(const LoadingDescription& description);
 };
 
 // ----------------------------------------------------------------------------------------
@@ -157,8 +168,8 @@ Q_SIGNALS:
 
 protected:
 
-    QList<FacePipelineExtendedPackage::Ptr> scheduledPackages;
-    int                                     maximumSentOutPackages;
+    PackageLoadingDescriptionList scheduledPackages;
+    int                           maximumSentOutPackages;
 
     FacePipeline::FacePipelinePriv* const   d;
 };
@@ -172,6 +183,7 @@ class DetectionWorker : public WorkerObject
 public:
 
     DetectionWorker(FacePipeline::FacePipelinePriv* d);
+    DImg scaleForDetection(const DImg& image) const;
 
 public Q_SLOTS:
 
@@ -217,7 +229,7 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class DatabaseWriter : public QObject
+class DatabaseWriter : public WorkerObject
 {
     Q_OBJECT
 
@@ -241,6 +253,30 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
+class Trainer : public WorkerObject
+{
+    Q_OBJECT
+
+public:
+
+    Trainer(FacePipeline::FacePipelinePriv* d);
+
+public Q_SLOTS:
+
+    void process(FacePipelineExtendedPackage::Ptr package);
+
+Q_SIGNALS:
+
+    void processed(FacePipelineExtendedPackage::Ptr package);
+
+protected:
+
+    KFaceIface::RecognitionDatabase       database;
+    FacePipeline::FacePipelinePriv* const d;
+};
+
+// ----------------------------------------------------------------------------------------
+
 class FacePipeline::FacePipelinePriv : public QObject
 {
     Q_OBJECT
@@ -254,11 +290,14 @@ public:
     void skipFromFilter(const QList<ImageInfo>& infosForSkipping);
     void send(FacePipelineExtendedPackage::Ptr package);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info);
+    FacePipelineExtendedPackage::Ptr filterOrBuildPackage(const ImageInfo& info);
 
     bool hasFinished();
     void checkFinished();
     void start();
     void stop();
+
+    void createThumbnailLoadThread();
 
 public:
 
@@ -268,8 +307,12 @@ public:
     ParallelPipes*     parallelDetectors;
     RecognitionWorker* recognitionWorker;
     DatabaseWriter*    databaseWriter;
+    Trainer*           trainer;
 
-    FaceIface         *iface;
+    QList<QObject*>    pipeline;
+
+    FaceIface*         iface;
+    ThumbnailLoadThread*thumbnailLoadThread;
     bool               started;
     int                infosForFiltering;
     int                packagesOnTheRoad;
