@@ -6,7 +6,7 @@
  * Date        : 2004-07-29
  * Description : image levels manipulation methods.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * app/base/levels.c, gimplut.c, and app/base/gimpleveltool.c
@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class ImageLevelsPriv
+class ImageLevels::ImageLevelsPriv
 {
 
 public:
@@ -621,7 +621,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
 {
     // TODO : support KUrl !
 
-    FILE*   file;
+    FILE*   file=0;
     int     low_input[5];
     int     high_input[5];
     int     low_output[5];
@@ -629,7 +629,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
     double  gamma[5];
     int     i, fields;
     char    buf[50];
-    char*   nptr;
+    char*   nptr=0;
 
     file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "r");
 
@@ -697,7 +697,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const KUrl& fileUrl)
 {
     // TODO : support KUrl !
 
-    FILE* file;
+    FILE* file=0;
     int   i;
 
     file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "w");

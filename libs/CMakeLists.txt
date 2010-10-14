@@ -2,10 +2,7 @@ INCLUDE_DIRECTORIES( dimg
                      dimg/filters
                      dimg/loaders
                      dmetadata
-                     histogram
-                     lprof
                      jpegutils
-                     greycstoration
                      threadimageio
                      versionmanager
                      widgets/common
@@ -16,13 +13,14 @@ INCLUDE_DIRECTORIES( dimg
                      dialogs
                      3rdparty/cimg
                      3rdparty/clapack
+                     3rdparty/lprof
+                     3rdparty/greycstoration
                      ${JPEG_INCLUDE_DIR}
                      ${TIFF_INCLUDE_DIR}
                      ${PNG_INCLUDE_DIR}
                      ${JASPER_INCLUDE_DIR}
                    )
 
-ADD_SUBDIRECTORY( histogram )
 ADD_SUBDIRECTORY( dmetadata )
 ADD_SUBDIRECTORY( dimg )
 ADD_SUBDIRECTORY( dialogs )

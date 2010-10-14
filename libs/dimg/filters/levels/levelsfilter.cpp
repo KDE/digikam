@@ -60,19 +60,19 @@ void LevelsFilter::filterImage()
         levels.setLevelHighOutputValue(i, m_settings.hOutput[i]);
         levels.setLevelGammaValue(i,      m_settings.gamma[i]);
     }
-    
+
     postProgress(50);
-    
+
     m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     postProgress(60);
-    
+
     levels.levelsCalculateTransfers();
     postProgress(70);
-    
+
     // Process all channels Levels
     levels.levelsLutSetup(AlphaChannel);
     postProgress(80);
-    
+
     levels.levelsLutProcess(m_orgImage.bits(), m_destImage.bits(), m_orgImage.width(), m_orgImage.height());
     postProgress(90);
 }

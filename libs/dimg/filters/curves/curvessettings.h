@@ -38,12 +38,10 @@
 #include "curvesfilter.h"
 #include "curveswidget.h"
 #include "curvesbox.h"
+#include "dimg.h"
 
 namespace Digikam
 {
-
-class DImg;
-class CurvesSettingsPriv;
 
 class DIGIKAM_EXPORT CurvesSettings : public QWidget
 {
@@ -76,13 +74,15 @@ Q_SIGNALS:
     void signalSettingsChanged();
     void signalSpotColorChanged();
     void signalChannelReset(int);
+    void signalPickerChanged(int);
 
 public Q_SLOTS:
-    
+
     void slotSpotColorChanged(const Digikam::DColor& color);
 
 private:
 
+    class CurvesSettingsPriv;
     CurvesSettingsPriv* const d;
 };
 

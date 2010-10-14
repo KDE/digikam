@@ -115,11 +115,14 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
 
 #ifndef USE_EXT_LIBLENSFUN
 #   ifdef HAVE_GLIB2
-    list.insert(i18n("LibLensFun"),                  QString("%1.%2.%3-%4").arg(LF_VERSION_MAJOR)
-                                                                           .arg(LF_VERSION_MINOR)
-                                                                           .arg(LF_VERSION_MICRO)
-                                                                           .arg(LF_VERSION_BUGFIX));
+    list.insert(i18n("LibLensFun"),                  i18n("%1.%2.%3-%4 - internal library",
+                                                          LF_VERSION_MAJOR,
+                                                          LF_VERSION_MINOR,
+                                                          LF_VERSION_MICRO,
+                                                          LF_VERSION_BUGFIX));
 #   endif // HAVE_GLIB2
+#else
+    list.insert(i18n("LibLensFun"),                  i18n("external shared library"));
 #endif // USE_EXT_LIBLENSFUN
 
     list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));

@@ -126,6 +126,6 @@ private:
     CurvesBoxPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* CURVESBOX_H */

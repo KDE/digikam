@@ -22,7 +22,6 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg/filters/wb
                      ../libs/dimg/loaders
                      ../libs/dmetadata
-                     ../libs/histogram
                      ../libs/jpegutils
                      ../libs/models
                      ../libs/template

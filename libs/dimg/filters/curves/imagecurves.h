@@ -40,8 +40,6 @@
 namespace Digikam
 {
 
-class ImageCurvesPriv;
-
 class DIGIKAM_EXPORT ImageCurves
 {
 
@@ -92,7 +90,7 @@ public:
     void   curvesCalculateCurve(int channel);
     float  curvesLutFunc(int n_channels, int channel, float value);
     void   curvesLutSetup(int nchannels);
-    void   curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h);
+    void   curvesLutProcess(uchar* srcPR, uchar* destPR, int w, int h);
 
     // Methods for to set manually the curves values.
 
@@ -131,6 +129,7 @@ private:
 
 private:
 
+    class ImageCurvesPriv;
     ImageCurvesPriv* const d;
 };
 
