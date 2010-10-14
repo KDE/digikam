@@ -27,11 +27,7 @@
 // Local includes
 
 #include "editortool.h"
-
-namespace Digikam
-{
-class DColor;
-}
+#include "dcolor.h"
 
 using namespace Digikam;
 
@@ -62,8 +58,8 @@ private Q_SLOTS:
     void slotAdjustMaxInputSpinBox(double val);
     void slotAdjustMinOutputSpinBox(double val);
     void slotAdjustMaxOutputSpinBox(double val);
-    void slotSpotColorChanged(const DColor& color);
-    void slotColorSelectedFromTarget(const DColor& color);
+    void slotSpotColorChanged(const Digikam::DColor& color);
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotPickerColorButtonActived(int);
     void slotShowInputHistogramGuide(double v);
     void slotShowOutputHistogramGuide(double v);
