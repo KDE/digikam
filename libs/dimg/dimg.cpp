@@ -1547,7 +1547,7 @@ QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans)
     return (img.convertToPixmap());
 }
 
-QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
+QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
 {
     if (isNull() || (!expoSettings->underExposureIndicator && !expoSettings->overExposureIndicator))
         return QImage();
@@ -1558,9 +1558,11 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
     // alpha channel is auto-detected during QImage->QPixmap conversion
 
-    uchar *bits = img.bits();
+    uchar* bits = img.bits();
+
     // Using DImgScale before to compute Mask clamp to 65534 | 254. Why ?
-    int    max  = sixteenBit() ? 65534 : 254;
+    int    max  = sixteenBit() ? 64880 : 252;     // max histogram segment -1%
+    int    min  = sixteenBit() ? 655   : 3;       // min histogram segment +1%
 
     // --------------------------------------------------------
 
@@ -1580,6 +1582,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
 
     uint dim    = m_priv->width * m_priv->height;
     uchar* dptr = bits;
+    int s_blue, s_green, s_red;
 
     if (sixteenBit())
     {
@@ -1587,25 +1590,45 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
 
         for (uint i = 0; i < dim; ++i)
         {
-            int s_blue  = *sptr++;
-            int s_green = *sptr++;
-            int s_red   = *sptr++;
+            s_blue  = *sptr++;
+            s_green = *sptr++;
+            s_red   = *sptr++;
             sptr++;
 
-            if ((under) && (s_red == 0) && (s_green == 0) && (s_blue == 0))
+            if ((under) && (s_red <= min) && (s_green <= min) && (s_blue <= min))
             {
-                dptr[0] = u_blue;
-                dptr[1] = u_green;
-                dptr[2] = u_red;
-                dptr[3] = 0xFF;
+                if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+                {
+                    dptr[0] = 0xFF;
+                    dptr[1] = u_red;
+                    dptr[2] = u_green;
+                    dptr[3] = u_blue;
+                }
+                else
+                {
+                    dptr[0] = u_blue;
+                    dptr[1] = u_green;
+                    dptr[2] = u_red;
+                    dptr[3] = 0xFF;
+                }
             }
 
             if ((over) && (s_red >= max) && (s_green >= max) && (s_blue >= max))
             {
-                dptr[0] = o_blue;
-                dptr[1] = o_green;
-                dptr[2] = o_red;
-                dptr[3] = 0xFF;
+                if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+                {
+                    dptr[0] = 0xFF;
+                    dptr[1] = o_red;
+                    dptr[2] = o_green;
+                    dptr[3] = o_blue;
+                }
+                else
+                {
+                    dptr[0] = o_blue;
+                    dptr[1] = o_green;
+                    dptr[2] = o_red;
+                    dptr[3] = 0xFF;
+                }
             }
 
             dptr += 4;
@@ -1617,25 +1640,45 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
 
        for (uint i = 0; i < dim; ++i)
         {
-            int s_blue  = *sptr++;
-            int s_green = *sptr++;
-            int s_red   = *sptr++;
+            s_blue  = *sptr++;
+            s_green = *sptr++;
+            s_red   = *sptr++;
             sptr++;
 
-            if ((under) && (s_red == 0) && (s_green == 0) && (s_blue == 0))
+            if ((under) && (s_red <= min) && (s_green <= min) && (s_blue <= min))
             {
-                dptr[0] = u_blue;
-                dptr[1] = u_green;
-                dptr[2] = u_red;
-                dptr[3] = 0xFF;
+                if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+                {
+                    dptr[0] = 0xFF;
+                    dptr[1] = u_red;
+                    dptr[2] = u_green;
+                    dptr[3] = u_blue;
+                }
+                else
+                {
+                    dptr[0] = u_blue;
+                    dptr[1] = u_green;
+                    dptr[2] = u_red;
+                    dptr[3] = 0xFF;
+                }
             }
 
             if ((over) && (s_red >= max) && (s_green >= max) && (s_blue >= max))
             {
-                dptr[0] = o_blue;
-                dptr[1] = o_green;
-                dptr[2] = o_red;
-                dptr[3] = 0xFF;
+                if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+                {
+                    dptr[0] = 0xFF;
+                    dptr[1] = o_red;
+                    dptr[2] = o_green;
+                    dptr[3] = o_blue;
+                }
+                else
+                {
+                    dptr[0] = o_blue;
+                    dptr[1] = o_green;
+                    dptr[2] = o_red;
+                    dptr[3] = 0xFF;
+                }
             }
 
             dptr += 4;
