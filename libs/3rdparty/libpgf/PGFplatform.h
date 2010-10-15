@@ -29,6 +29,33 @@
 #include <cstdlib> 
 
 //-------------------------------------------------------------------------------
+// Taken from lcms2 header.
+// Try to detect big endian platforms. This list can be endless, so only some checks are performed over here.
+//-------------------------------------------------------------------------------
+
+#if defined(_HOST_BIG_ENDIAN) || defined(__BIG_ENDIAN__) || defined(WORDS_BIGENDIAN)
+# define PGF_USE_BIG_ENDIAN 1
+#endif
+
+#if defined(__sgi__) || defined(__sgi) || defined(__powerpc__) || defined(sparc)
+# define PGF_USE_BIG_ENDIAN 1
+#endif
+
+#if defined(__ppc__) || defined(__s390__) || defined(__s390x__)
+# define PGF_USE_BIG_ENDIAN 1
+#endif
+
+#ifdef TARGET_CPU_PPC
+# define PGF_USE_BIG_ENDIAN 1
+#endif
+
+#ifdef macintosh
+# ifdef __BIG_ENDIAN__
+# define PGF_USE_BIG_ENDIAN 1
+# endif
+#endif
+
+//-------------------------------------------------------------------------------
 // ROI support
 //-------------------------------------------------------------------------------
 #ifndef NPGFROI
@@ -537,7 +564,7 @@ __inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 //-------------------------------------------------------------------------------
 //	Big Endian
 //-------------------------------------------------------------------------------
-#ifdef __BIG_ENDIAN__ 
+#ifdef PGF_USE_BIG_ENDIAN 
 
 #ifndef _lrotl
 	#define _lrotl(x,n)	(((x) << ((UINT32)(n))) | ((x) >> (32 - (UINT32)(n))))
@@ -566,11 +593,11 @@ __inline UINT64 ByteSwap(UINT64 ui64) {
 
 #define __VAL(x) ByteSwap(x)
 
-#else //__BIG_ENDIAN__ 
+#else //PGF_USE_BIG_ENDIAN 
 
 	#define __VAL(x) (x)
 
-#endif //__BIG_ENDIAN__ 
+#endif //PGF_USE_BIG_ENDIAN 
  
 
 #endif //PGF_PGFPLATFORM_H
