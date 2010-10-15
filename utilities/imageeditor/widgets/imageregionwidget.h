@@ -43,8 +43,6 @@
 namespace Digikam
 {
 
-class ImageRegionWidgetPriv;
-
 class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
 {
     Q_OBJECT
@@ -54,21 +52,23 @@ public:
     ImageRegionWidget(QWidget* parent=0);
     ~ImageRegionWidget();
 
-    /** To get target image region area to render. */
+    /** To get target image region area to render.
+     */
     QRect  getOriginalImageRegionToRender();
 
     /** To get target image region image to use for render operations 
         If the bool parameter is true a downscaled version of the image
         region at screen resolution will be sent. 
         Should be use to increase preview speed for the effects whose 
-        behaviour is a function of each pixel. */
-    DImg   getOriginalRegionImage(bool use_downscaled_image = false);
+        behaviour is a function of each pixel.
+     */
+    DImg   getOriginalRegionImage(bool useDownscaledImage = false);
 
     void   setPreviewImage(const DImg& img);
 
     void   setCapturePointMode(bool b);
     bool   capturePointMode();
-    
+
     void   setHighLightPoints(const QPolygon& pointsList);
     void   setCenterImageRegionPosition();
 
@@ -97,7 +97,8 @@ private:
     void   setContentsPosition(int x, int y, bool targetDone);
 
     /** To get image region including original or/and target area depending of separate view mode.
-        The region is given using not scaled image unit.*/
+        The region is given using not scaled image unit.
+     */
     QRect  getOriginalImageRegion();
 
     QRect  getLocalImageRegionToRender();
@@ -109,7 +110,7 @@ private:
     void   leaveEvent(QEvent*);
     void   contentsMousePressEvent(QMouseEvent*);
     void   contentsMouseReleaseEvent(QMouseEvent*);
-        
+
     int    previewWidth();
     int    previewHeight();
     bool   previewIsNull();
@@ -118,11 +119,12 @@ private:
 
     void   viewportPaintExtraData();
     inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
-    
+
     void   emitCapturedPointFromOriginal(const QPoint& pt);
 
 private:
 
+    class ImageRegionWidgetPriv;
     ImageRegionWidgetPriv* const d;
 };
 

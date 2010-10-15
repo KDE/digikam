@@ -46,7 +46,6 @@ namespace Digikam
 
 class DColor;
 class ImageIface;
-class ImageGuideWidgetPriv;
 
 class DIGIKAM_EXPORT ImageGuideWidget : public QWidget
 {
@@ -75,7 +74,7 @@ public:
                      bool blink=false, bool useImageSelection=false);
     ~ImageGuideWidget();
 
-    ImageIface* imageIface();
+    ImageIface* imageIface() const;
 
     QPoint getSpotPosition();
     DColor getSpotColor(int getColorFrom);
@@ -127,6 +126,7 @@ private:
 
 private:
 
+    class ImageGuideWidgetPriv;
     ImageGuideWidgetPriv* const d;
 };
 
