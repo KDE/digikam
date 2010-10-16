@@ -12,7 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 254135 : Pipette-tool des not work in image editor/showfoto.
 004 ==> 254182 : Can't create mysql-entries for new tags.
 005 ==> 253702 : Under/overexposure indicator doesn't work on big-endian processors.
-006 ==> 
+006 ==> 254397 : Full stop at the end of checkbox label.
+007 ==> 
 
 
 
