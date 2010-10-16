@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class SetupMiscPriv
+class SetupMisc::SetupMiscPriv
 {
 public:
 
@@ -83,11 +83,11 @@ SetupMisc::SetupMisc(QWidget* parent)
     setWidgetResizable(true);
 
     QVBoxLayout* layout               = new QVBoxLayout(panel);
-    d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash."), panel);
-    d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items."), panel);
-    d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar."), panel);
-    d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup."), panel);
-    d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower.)"), panel);
+    d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
+    d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items"), panel);
+    d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar"), panel);
+    d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), panel);
+    d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
 
     KHBox* tabStyleHbox = new KHBox(panel);
     d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
