@@ -13,7 +13,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 254182 : Can't create mysql-entries for new tags.
 005 ==> 253702 : Under/overexposure indicator doesn't work on big-endian processors.
 006 ==> 254397 : Full stop at the end of checkbox label.
-007 ==> 
+007 ==> 254381 : Copy any pic to some place - only _move_ is available.
+008 ==> 
 
 
 
