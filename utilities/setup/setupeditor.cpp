@@ -6,7 +6,7 @@
  * Date        : 2004-08-03
  * Description : setup Image Editor tab.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +45,8 @@
 
 namespace Digikam
 {
-class SetupEditorPriv
+
+class SetupEditor::SetupEditorPriv
 {
 public:
 
@@ -92,34 +93,32 @@ public:
 SetupEditor::SetupEditor(QWidget* parent)
            : QScrollArea(parent), d(new SetupEditorPriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    QVBoxLayout* layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
-    QVBoxLayout *gLayout1            = new QVBoxLayout(interfaceOptionsGroup);
+    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
+    QVBoxLayout* gLayout1            = new QVBoxLayout(interfaceOptionsGroup);
 
-    d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
-                                            interfaceOptionsGroup);
+    d->themebackgroundColor          = new QCheckBox(i18n("&Use theme background color"),
+                                                     interfaceOptionsGroup);
 
     d->themebackgroundColor->setWhatsThis( i18n("Enable this option to use the background theme "
                                                 "color in the image editor area.") );
 
-    d->colorBox = new KHBox(interfaceOptionsGroup);
-
-    QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox );
-
-    d->backgroundColor = new KColorButton(d->colorBox);
+    d->colorBox                  = new KHBox(interfaceOptionsGroup);
+    QLabel* backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox );
+    d->backgroundColor           = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     d->backgroundColor->setWhatsThis( i18n("Customize the background color to use "
                                            "in the image editor area.") );
 
-    d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
-    d->hideThumbBar = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
+    d->hideToolBar      = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
+    d->hideThumbBar     = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
 
     d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw images"), interfaceOptionsGroup);
     d->useRawImportTool->setWhatsThis(i18n("Set this option to use the Raw Import "
@@ -136,18 +135,18 @@ SetupEditor::SetupEditor(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
-    QVBoxLayout *gLayout2           = new QVBoxLayout(exposureOptionsGroup);
+    QGroupBox* exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
+    QVBoxLayout* gLayout2           = new QVBoxLayout(exposureOptionsGroup);
 
-    KHBox *underExpoBox         = new KHBox(exposureOptionsGroup);
-    QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
+    KHBox* underExpoBox         = new KHBox(exposureOptionsGroup);
+    QLabel* underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
                                               "under-exposed pixels.") );
 
-    KHBox *overExpoBox         = new KHBox(exposureOptionsGroup);
-    QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
+    KHBox* overExpoBox         = new KHBox(exposureOptionsGroup);
+    QLabel* overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
