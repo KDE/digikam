@@ -1577,12 +1577,14 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
 
     bool under  = expoSettings->underExposureIndicator;
     bool over   = expoSettings->overExposureIndicator;
+    bool pure   = expoSettings->exposureIndicatorMode;
 
     // --------------------------------------------------------
 
-    uint dim    = m_priv->width * m_priv->height;
+    uint   dim  = m_priv->width * m_priv->height;
     uchar* dptr = bits;
-    int s_blue, s_green, s_red;
+    int    s_blue, s_green, s_red;
+    bool   match;
 
     if (sixteenBit())
     {
@@ -1594,8 +1596,10 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
             s_green = *sptr++;
             s_red   = *sptr++;
             sptr++;
+            match = pure ? (s_red <= min) && (s_green <= min) && (s_blue <= min)
+                         : (s_red <= min) || (s_green <= min) || (s_blue <= min);
 
-            if ((under) && (s_red <= min) && (s_green <= min) && (s_blue <= min))
+            if (under && match)
             {
                 if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
                 {
@@ -1613,7 +1617,10 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
                 }
             }
 
-            if ((over) && (s_red >= max) && (s_green >= max) && (s_blue >= max))
+            match = pure ? (s_red >= max) && (s_green >= max) && (s_blue >= max)
+                         : (s_red >= max) || (s_green >= max) || (s_blue >= max);
+
+            if (over && match)
             {
                 if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
                 {
@@ -1644,8 +1651,10 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
             s_green = *sptr++;
             s_red   = *sptr++;
             sptr++;
+            match = pure ? (s_red <= min) && (s_green <= min) && (s_blue <= min)
+                         : (s_red <= min) || (s_green <= min) || (s_blue <= min);
 
-            if ((under) && (s_red <= min) && (s_green <= min) && (s_blue <= min))
+            if (under && match)
             {
                 if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
                 {
@@ -1663,7 +1672,10 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
                 }
             }
 
-            if ((over) && (s_red >= max) && (s_green >= max) && (s_blue >= max))
+            match = pure ? (s_red >= max) && (s_green >= max) && (s_blue >= max)
+                         : (s_red >= max) || (s_green >= max) || (s_blue >= max);
+
+            if (over && match)
             {
                 if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
                 {

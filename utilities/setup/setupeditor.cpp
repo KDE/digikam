@@ -59,11 +59,13 @@ public:
         configUnderExposureColorEntry("UnderExposureColor"),
         configOverExposureColorEntry("OverExposureColor"),
         configUseRawImportToolEntry("UseRawImportTool"),
+        configExpoIndicatorModeEntry("ExpoIndicatorMode"),
 
         hideToolBar(0),
         themebackgroundColor(0),
         hideThumbBar(0),
         useRawImportTool(0),
+        expoIndicatorMode(0),
         colorBox(0),
         backgroundColor(0),
         underExposureColor(0),
@@ -78,11 +80,13 @@ public:
     const QString configUnderExposureColorEntry;
     const QString configOverExposureColorEntry;
     const QString configUseRawImportToolEntry;
+    const QString configExpoIndicatorModeEntry;
 
     QCheckBox*    hideToolBar;
     QCheckBox*    themebackgroundColor;
     QCheckBox*    hideThumbBar;
     QCheckBox*    useRawImportTool;
+    QCheckBox*    expoIndicatorMode;
 
     KHBox*        colorBox;
     KColorButton* backgroundColor;
@@ -152,8 +156,15 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->overExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
                                              "over-exposed pixels.") );
 
+    d->expoIndicatorMode       = new QCheckBox(i18n("Indicate exposure for pure color"), exposureOptionsGroup);
+    d->overExposureColor->setWhatsThis( i18n("If this option is enabled, over and under exposure indicators will be displayed "
+                                             "only when pure white and pure black color matches, as all color components match "
+                                             "the condition in the same time. "
+                                             "Else indicators are turn on when one of color components match the condition.") );
+
     gLayout2->addWidget(underExpoBox);
     gLayout2->addWidget(overExpoBox);
+    gLayout2->addWidget(d->expoIndicatorMode);
     gLayout2->setMargin(KDialog::spacingHint());
     gLayout2->setSpacing(KDialog::spacingHint());
 
@@ -202,6 +213,7 @@ void SetupEditor::readSettings()
     d->underExposureColor->setColor(group.readEntry(d->configUnderExposureColorEntry,          White));
     d->overExposureColor->setColor(group.readEntry(d->configOverExposureColorEntry,            Black));
     d->useRawImportTool->setChecked(group.readEntry(d->configUseRawImportToolEntry,            false));
+    d->expoIndicatorMode->setChecked(group.readEntry(d->configExpoIndicatorModeEntry,          true));
 }
 
 void SetupEditor::applySettings()
@@ -215,6 +227,7 @@ void SetupEditor::applySettings()
     group.writeEntry(d->configUnderExposureColorEntry,      d->underExposureColor->color());
     group.writeEntry(d->configOverExposureColorEntry,       d->overExposureColor->color());
     group.writeEntry(d->configUseRawImportToolEntry,        d->useRawImportTool->isChecked());
+    group.writeEntry(d->configExpoIndicatorModeEntry,       d->expoIndicatorMode->isChecked());
     group.sync();
 }
 

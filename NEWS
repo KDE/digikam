@@ -4,6 +4,8 @@ digiKam 1.6.0 - Release date: 2010-12-19
 NEW FEATURES:
 
 Slideshow      : User can change item rating during a slide.
+ImageEditor    : New option to display over/under exposure indicators if pure colors is detected
+                 or if only one color component match the condition.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -14,7 +16,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 253702 : Under/overexposure indicator doesn't work on big-endian processors.
 006 ==> 254397 : Full stop at the end of checkbox label.
 007 ==> 254381 : Copy any pic to some place - only _move_ is available.
-008 ==> 
+008 ==> 148382 : Overexposure indication already when fully "saturated".
+009 ==> 
 
 
 

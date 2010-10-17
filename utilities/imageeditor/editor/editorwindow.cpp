@@ -951,13 +951,13 @@ void EditorWindow::applyStandardSettings()
 
     // -- Exposure Indicators Settings ---------------------------------------
 
-    d->exposureSettings->underExposureColor = group.readEntry(d->configUnderExposureColorEntry, QColor(Qt::white));
-    d->exposureSettings->overExposureColor  = group.readEntry(d->configOverExposureColorEntry, QColor(Qt::black));
+    d->exposureSettings->underExposureColor    = group.readEntry(d->configUnderExposureColorEntry, QColor(Qt::white));
+    d->exposureSettings->overExposureColor     = group.readEntry(d->configOverExposureColorEntry,  QColor(Qt::black));
+    d->exposureSettings->exposureIndicatorMode = group.readEntry(d->configExpoIndicatorModeEntry,  true);
 }
 
 void EditorWindow::saveStandardSettings()
 {
-
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
@@ -973,7 +973,6 @@ void EditorWindow::saveStandardSettings()
     d->previewToolBar->writeSettings(group);
 
     config->sync();
-
 }
 
 /** Method used by Editor Tools. Only tools based on imageregionwidget support zoomming.
