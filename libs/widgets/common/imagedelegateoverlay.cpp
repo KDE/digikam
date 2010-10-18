@@ -218,12 +218,17 @@ void AbstractWidgetDelegateOverlay::slotLayoutChanged()
     hide();
 }
 
+void AbstractWidgetDelegateOverlay::viewportLeaveEvent(QObject*, QEvent*)
+{
+    hide();
+}
+
 bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
 {
     if (m_widget && obj == m_widget->parent()) { // events on view's viewport
         switch (event->type()) {
             case QEvent::Leave:
-                hide();
+                viewportLeaveEvent(obj, event);
                 break;
 
             case QEvent::MouseMove:

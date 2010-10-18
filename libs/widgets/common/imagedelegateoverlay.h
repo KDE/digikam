@@ -117,6 +117,10 @@ protected:
      *  The default implementation returns true. */
     virtual bool checkIndex(const QModelIndex& index) const;
 
+    /** Called when a QEvent::Leave of the viewport is received.
+     *  The default implementation hide()s. */
+    virtual void viewportLeaveEvent(QObject* obj, QEvent* event);
+
 protected Q_SLOTS:
 
     /** Default implementation shows the widget iff the index is valid and checkIndex returns true. */
