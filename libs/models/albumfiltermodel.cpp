@@ -491,9 +491,9 @@ TagPropertiesFilterModel::TagPropertiesFilterModel(QObject *parent)
             this, SLOT(tagPropertiesChanged(TAlbum*)));
 }
 
-void TagPropertiesFilterModel::setSourceTagModel(TagModel *source)
+void TagPropertiesFilterModel::setSourceAlbumModel(TagModel *source)
 {
-    setSourceAlbumModel(source);
+    CheckableAlbumFilterModel::setSourceAlbumModel(source);
 }
 
 TagModel *TagPropertiesFilterModel::sourceTagModel() const
@@ -565,11 +565,6 @@ bool TagPropertiesFilterModel::matches(Album *album) const
             return false;
 
     return true;
-}
-
-void TagPropertiesFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
-{
-    AlbumFilterModel::setSourceAlbumModel(source);
 }
 
 } // namespace Digikam

@@ -299,7 +299,7 @@ class TagPropertiesFilterModel : public CheckableAlbumFilterModel
 public:
 
     TagPropertiesFilterModel(QObject *parent = 0);
-    void setSourceTagModel(TagModel *source);
+    void setSourceAlbumModel(TagModel *source);
     TagModel *sourceTagModel() const;
 
     void listOnlyTagsWithProperty(const QString& property);
@@ -316,8 +316,6 @@ protected slots:
 protected:
 
     virtual bool matches(Album *album) const;
-    // make protected
-    void setSourceAlbumModel(AbstractAlbumModel *source);
 
     QStringList        m_propertiesBlackList;
     QStringList        m_propertiesWhiteList;
