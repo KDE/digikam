@@ -52,6 +52,11 @@ public:
     MetadataSettingsContainer settings();
 
     /**
+     * Shortcut to fields in settings()
+     */
+    bool exifRotate() const;
+
+    /**
      * Sets the current ICC settings and writes them to config.
      */
     void setSettings(const MetadataSettingsContainer& settings);

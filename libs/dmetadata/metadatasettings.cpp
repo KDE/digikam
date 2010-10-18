@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QFileInfo>
+#include <QMutex>
 
 // KDE includes
 
@@ -45,11 +46,47 @@ class MetadataSettings::MetadataSettingsPriv
 public:
 
     MetadataSettingsPriv()
+        : mutex(QMutex::Recursive),
+          configGroup("Metadata Settings")
     {
     }
 
     MetadataSettingsContainer settings;
+    QMutex                    mutex;
+
+    const QString             configGroup;
+
+public:
+
+    MetadataSettingsContainer readFromConfig() const;
+    void                      writeToConfig() const;
+    MetadataSettingsContainer setSettings(const MetadataSettingsContainer& s);
 };
+
+MetadataSettingsContainer MetadataSettings::MetadataSettingsPriv::readFromConfig() const
+{
+    MetadataSettingsContainer s;
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(configGroup);
+    s.readFromConfig(group);
+    return s;
+}
+
+void MetadataSettings::MetadataSettingsPriv::writeToConfig() const
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(configGroup);
+    settings.writeToConfig(group);
+}
+
+MetadataSettingsContainer MetadataSettings::MetadataSettingsPriv::setSettings(const MetadataSettingsContainer& s)
+{
+    QMutexLocker lock(&mutex);
+    MetadataSettingsContainer old;
+    old      = settings;
+    settings = s;
+    return old;
+}
 
 // -----------------------------------------------------------------------------------------------
 
@@ -83,34 +120,28 @@ MetadataSettings::~MetadataSettings()
 
 MetadataSettingsContainer MetadataSettings::settings()
 {
+    QMutexLocker lock(&d->mutex);
     MetadataSettingsContainer s(d->settings);
     return s;
 }
 
+bool MetadataSettings::exifRotate() const
+{
+    return d->settings.exifRotate;
+}
+
 void MetadataSettings::setSettings(const MetadataSettingsContainer& settings)
 {
-    MetadataSettingsContainer old;
-    {
-        old         = d->settings;
-        d->settings = settings;
-    }
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Metadata Settings"));
-    settings.writeToConfig(group);
+    MetadataSettingsContainer old = d->setSettings(settings);
     emit settingsChanged();
     emit settingsChanged(settings, old);
+    d->writeToConfig();
 }
 
 void MetadataSettings::readFromConfig()
 {
-    MetadataSettingsContainer old, s;
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Metadata Settings"));
-    s.readFromConfig(group);
-    {
-        old         = d->settings;
-        d->settings = s;
-    }
+    MetadataSettingsContainer s   = d->readFromConfig();
+    MetadataSettingsContainer old = d->setSettings(s);
     emit settingsChanged();
     emit settingsChanged(s, old);
 }
