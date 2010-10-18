@@ -33,7 +33,9 @@ namespace Digikam
 {
 
 class AddTagsComboBox;
+class AddTagsLineEdit;
 class CheckableAlbumFilterModel;
+class DatabaseFace;
 class ImageInfo;
 class TAlbum;
 class TaggingAction;
@@ -43,8 +45,9 @@ class TagPropertiesFilterModel;
 class AssignNameWidget : public QFrame
 {
     Q_OBJECT
-    Q_ENUMS(Mode LayoutMode VisualStyle)
+    Q_ENUMS(Mode TagEntryWidgetMode LayoutMode VisualStyle)
     Q_PROPERTY(Mode mode READ mode WRITE setMode)
+    Q_PROPERTY(TagEntryWidgetMode tagEntryWidgetMode READ tagEntryWidgetMode WRITE setTagEntryWidgetMode)
     Q_PROPERTY(LayoutMode layoutMode READ layoutMode WRITE setLayoutMode)
     Q_PROPERTY(VisualStyle visualStyle READ visualStyle WRITE setVisualStyle)
 
@@ -56,6 +59,13 @@ public:
         UnconfirmedEditMode,
         ConfirmedMode,
         ConfirmedEditMode
+    };
+
+    enum TagEntryWidgetMode
+    {
+        InvalidTagEntryWidgetMode,
+        AddTagsComboBoxMode,
+        AddTagsLineEditMode
     };
 
     enum LayoutMode
@@ -74,6 +84,8 @@ public:
         TranslucentThemedFrameless
     };
 
+    /** Please take care: you must set all four modes before usage! */
+
     AssignNameWidget(QWidget* parent = 0);
     ~AssignNameWidget();
 
@@ -84,6 +96,9 @@ public:
     void setMode(Mode mode);
     Mode mode() const;
 
+    void setTagEntryWidgetMode(TagEntryWidgetMode mode);
+    TagEntryWidgetMode tagEntryWidgetMode() const;
+
     void setLayoutMode(LayoutMode mode);
     LayoutMode layoutMode() const;
 
@@ -93,17 +108,19 @@ public:
     ImageInfo info() const;
     QVariant  faceIdentifier() const;
 
-    /// The custom completion box in use, if any
+    /// The combo box or line edit in use, if any
     AddTagsComboBox* comboBox() const;
+    AddTagsLineEdit* lineEdit() const;
 
 public Q_SLOTS:
 
     /** The identifying information emitted with the signals */
-    void setFace(const ImageInfo& info, const QVariant& faceIdentifier = QVariant());
+    void setUserData(const ImageInfo& info, const QVariant& faceIdentifier = QVariant());
 
     /** Sets the suggested (UnconfirmedEditMode) or assigned (ConfirmedMode) tag to be displayed. */
     void setCurrentTag(int tagId);
     void setCurrentTag(TAlbum *album);
+    void setCurrentFace(const DatabaseFace& face);
 
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */
     void setParentTag(TAlbum* album);
