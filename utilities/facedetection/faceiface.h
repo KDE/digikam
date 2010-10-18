@@ -54,6 +54,7 @@ class DImg;
 class ImageInfo;
 class ImageTagPair;
 class ThumbnailLoadThread;
+class ThumbnailImageCatcher;
 
 class FaceIface
 {
@@ -162,7 +163,7 @@ public:
      * This uses a thumbnail load thread to load the image detail.
      * If requested, the faces will be scaled to the given (fixed) size.
      */
-    void                fillImageInFaces(ThumbnailLoadThread* thread, const QString& filePath,
+    void                fillImageInFaces(ThumbnailImageCatcher* catcher, const QString& filePath,
                                          QList<KFaceIface::Face>& faceList, const QSize& scaleSize = QSize()) const;
 
     /**
@@ -224,6 +225,11 @@ public:
      * Returns the newly inserted entry.
      */
     DatabaseFace        confirmName(const DatabaseFace& face, int tagId = -1, const TagRegion& confirmedRegion = TagRegion());
+
+    /**
+     * Returns the entry that would be added if the given face is confirmed.
+     */
+    static DatabaseFace confirmedEntry(const DatabaseFace& face, int tagId = -1, const TagRegion& confirmedRegion = TagRegion());
 
     // --- Training ---
 

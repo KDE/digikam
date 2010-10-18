@@ -497,20 +497,27 @@ void FaceIface::fillImageInFace(const DImg& image, KFaceIface::Face& face, const
     }
 }
 
-void FaceIface::fillImageInFaces(ThumbnailLoadThread* thread, const QString& filePath,
-                                 QList<KFaceIface::Face>& faceList, const QSize& scaleSize) const
+void FaceIface::fillImageInFaces(ThumbnailImageCatcher* catcher, const QString& filePath,
+                                 QList<KFaceIface::Face>& faces, const QSize& scaleSize) const
 {
-    ThumbnailImageCatcher catcher(thread);
-    for (int i=0; i<faceList.size(); i++)
+    foreach (const KFaceIface::Face& face, faces)
     {
-        KFaceIface::Face& face = faceList[i];
-
         QRect rect = face.toRect();
         if (!rect.isValid())
             continue;
 
-        thread->find(filePath, rect);
-        QImage detail = catcher.waitForThumbnail(filePath);
+        catcher->thread()->find(filePath, rect);
+        catcher->enqueue();
+    }
+
+    QList<QImage> details = catcher->waitForThumbnails();
+    kDebug() << details.size();
+
+    for (int i=0; i<faces.size(); i++)
+    {
+        KFaceIface::Face& face = faces[i];
+        QImage detail          = details[i];
+        kDebug() << "Loaded detail" << detail.size();
         if (scaleSize.isValid())
             detail = detail.scaled(scaleSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         face.setImage(detail);
@@ -763,11 +770,16 @@ DatabaseFace FaceIface::confirmName(qlonglong imageid, int tagId, const QRect& r
 }
 */
 
+DatabaseFace FaceIface::confirmedEntry(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
+{
+    return DatabaseFace(DatabaseFace::ConfirmedName, face.imageId(),
+                        tagId == -1 ? face.tagId() : tagId,
+                        confirmedRegion.isValid() ? confirmedRegion : face.region());
+}
+
 DatabaseFace FaceIface::confirmName(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
 {
-    DatabaseFace newEntry = DatabaseFace(DatabaseFace::ConfirmedName, face.imageId(),
-                                         tagId == -1 ? face.tagId() : tagId,
-                                         confirmedRegion.isValid() ? confirmedRegion : face.region());
+    DatabaseFace newEntry = confirmedEntry(face, tagId, confirmedRegion);
 
     if (newEntry.tagId() == d->unknownPeopleTagId())
     {
