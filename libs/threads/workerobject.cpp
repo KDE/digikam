@@ -68,7 +68,7 @@ WorkerObject::WorkerObject()
 
 WorkerObject::~WorkerObject()
 {
-    deactivate(FlushSignals);
+    deactivate(PhaseOut);
     wait();
     delete d;
 }
@@ -111,10 +111,15 @@ bool WorkerObject::event(QEvent *e)
 {
     if (e->type() == QEvent::User)
     {
+        aboutToQuitLoop();
         d->eventLoop->quit();
         return true;
     }
     return QObject::event(e);
+}
+
+void WorkerObject::aboutToQuitLoop()
+{
 }
 
 void WorkerObject::setEventLoop(QEventLoop *loop)
@@ -170,6 +175,9 @@ void WorkerObject::deactivate(DeactivatingMode mode)
                 return;
         }
     }
+
+    aboutToDeactivate();
+
     if (mode == FlushSignals)
         QCoreApplication::removePostedEvents(this, QEvent::MetaCall);
     // cannot say that this is thread-safe: thread()->quit();
@@ -177,6 +185,10 @@ void WorkerObject::deactivate(DeactivatingMode mode)
         QCoreApplication::postEvent(this, new QEvent(QEvent::User), Qt::HighEventPriority);
     else
         QCoreApplication::postEvent(this, new QEvent(QEvent::User));
+}
+
+void WorkerObject::aboutToDeactivate()
+{
 }
 
 bool WorkerObject::transitionToRunning()

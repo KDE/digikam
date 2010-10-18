@@ -103,6 +103,11 @@ public Q_SLOTS:
      */
     void deactivate(DeactivatingMode mode = FlushSignals);
 
+Q_SIGNALS:
+
+    void started();
+    void finished();
+
 protected:
 
     bool transitionToRunning();
@@ -114,6 +119,22 @@ protected:
     void setEventLoop(QEventLoop *loop);
     void addRunnable(WorkerObjectRunnable *loop);
     void removeRunnable(WorkerObjectRunnable *loop);
+
+    /**
+     * Called from within thread's event loop to quit processing.
+     * Quit any blocking operation.
+     * Immediately afterwards, the event loop will be quit.
+     */
+    virtual void aboutToQuitLoop();
+
+    /**
+     * Called from deactivate(), typically from a different
+     * thread than the worker thread, possibly the UI thread.
+     * You can stop any extra controlled threads here.
+     * Immediately afterwards, an event will be sent to the working
+     * thread which will cause the event loop to quit. (aboutToQuitLoop())
+     */
+    virtual void aboutToDeactivate();
 
 private:
 

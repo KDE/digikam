@@ -172,17 +172,16 @@ void WorkerObjectRunnable::run()
     // It won't be deleted until Inactive, and as long a runnable is set.
     object->addRunnable(this);
 
-    QEventLoop loop;
-    QObject::connect(object, SIGNAL(requestQuitLoop()),
-                     &loop, SLOT(quit()));
-
+    emit object->started();
     if (object->transitionToRunning())
     {
+        QEventLoop loop;
         object->setEventLoop(&loop);
         loop.exec();
         object->setEventLoop(0);
     }
     object->transitionToInactive();
+    emit object->finished();
 
     // if this is rescheduled, it will wait in the other thread at moveToCurrentThread() above until we park
     parkingThread->parkObject(object);
