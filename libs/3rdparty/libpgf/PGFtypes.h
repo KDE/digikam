@@ -147,13 +147,13 @@ union ROIBlockHeader {
 
 	UINT16 val;
 	struct {
-#ifdef __BIG_ENDIAN__
+#ifdef PGF_USE_BIG_ENDIAN
 		UINT16 tileEnd   :				1;	// 1: last part of a tile
 		UINT16 bufferSize: RLblockSizeLen;	// number of uncoded UINT32 values in a block
 #else
 		UINT16 bufferSize: RLblockSizeLen;	// number of uncoded UINT32 values in a block
 		UINT16 tileEnd   :				1;	// 1: last part of a tile
-#endif // __BIG_ENDIAN__
+#endif // PGF_USE_BIG_ENDIAN
 	};
 	// total: 2 Bytes
 };

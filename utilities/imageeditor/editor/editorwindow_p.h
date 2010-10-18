@@ -90,6 +90,7 @@ public:
         configTiffCompressionEntry("TIFFCompression"),
         configUnderExposureColorEntry("UnderExposureColor"),
         configUnderExposureIndicatorEntry("UnderExposureIndicator"),
+        configExpoIndicatorModeEntry("ExpoIndicatorMode"),
         configUseRawImportToolEntry("UseRawImportTool"),
         configUseThemeBackgroundColorEntry("UseThemeBackgroundColor"),
         configVerticalSplitterSizesEntry("Vertical Splitter Sizes"),
@@ -182,6 +183,7 @@ public:
     QString                    configTiffCompressionEntry;
     QString                    configUnderExposureColorEntry;
     QString                    configUnderExposureIndicatorEntry;
+    QString                    configExpoIndicatorModeEntry;
     QString                    configUseRawImportToolEntry;
     QString                    configUseThemeBackgroundColorEntry;
     QString                    configVerticalSplitterSizesEntry;

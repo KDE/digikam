@@ -39,8 +39,6 @@
 namespace Digikam
 {
 
-class PreviewToolBarPriv;
-
 class DIGIKAM_EXPORT PreviewToolBar : public QWidget
 {
     Q_OBJECT
@@ -85,6 +83,7 @@ Q_SIGNALS:
 
 private:
 
+    class PreviewToolBarPriv;
     PreviewToolBarPriv* const d;
 };
 

@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class ImageGuideWidgetPriv
+class ImageGuideWidget::ImageGuideWidgetPriv
 {
 public:
 
@@ -175,7 +175,7 @@ ImageGuideWidget::~ImageGuideWidget()
     delete d;
 }
 
-ImageIface* ImageGuideWidget::imageIface()
+ImageIface* ImageGuideWidget::imageIface() const
 {
     return d->iface;
 }

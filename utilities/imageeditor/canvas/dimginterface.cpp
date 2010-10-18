@@ -1171,6 +1171,8 @@ QString DImgInterface::getImageFormat()
 
 QPixmap DImgInterface::convertToPixmap(DImg& img)
 {
+    QPixmap pix;
+
     if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
     {
         // dont use d->monitorICCtrans here, because img may have a different embedded profile
@@ -1182,10 +1184,24 @@ QPixmap DImgInterface::convertToPixmap(DImg& img)
         else
             transform = manager.displayTransform(d->displayingWidget);
 
-        return img.convertToPixmap(transform);
+        pix = img.convertToPixmap(transform);
+    }
+    else
+    {
+        pix = img.convertToPixmap();
     }
 
-    return img.convertToPixmap();
+    // Show the Over/Under exposure pixels indicators
+
+    if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
+    {
+        QPainter painter(&pix);
+        QImage pureColorMask = img.pureColorMask(d->expoSettings);
+        QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
+        painter.drawPixmap(0, 0, pixMask, 0, 0, pixMask.width(), pixMask.height());
+    }
+
+    return pix;
 }
 
 }  // namespace Digikam

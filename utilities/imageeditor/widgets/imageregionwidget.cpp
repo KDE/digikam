@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class ImageRegionWidgetPriv
+class ImageRegionWidget::ImageRegionWidgetPriv
 {
 
 public:
@@ -428,14 +428,14 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     repaintContents(false);
 }
 
-DImg ImageRegionWidget::getOriginalRegionImage(bool use_downscaled_image)
+DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage)
 {
     DImg image = d->image.copy(getOriginalImageRegionToRender());
-    if (use_downscaled_image)
-     {
-      QRect r = getLocalImageRegionToRender();
-      image.resize(r.width(), r.height());
-     }
+    if (useDownscaledImage)
+    {
+        QRect r = getLocalImageRegionToRender();
+        image.resize(r.width(), r.height());
+    }
     return (image);
 }
 

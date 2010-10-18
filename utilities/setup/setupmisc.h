@@ -32,8 +32,6 @@
 namespace Digikam
 {
 
-class SetupMiscPriv;
-
 class SetupMisc : public QScrollArea
 {
 public:
@@ -49,6 +47,7 @@ private:
 
 private:
 
+    class SetupMiscPriv;
     SetupMiscPriv* const d;
 };
 
