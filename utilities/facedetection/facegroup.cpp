@@ -135,12 +135,7 @@ void FaceItem::setEditable(bool allowEdit)
 void FaceItem::updateCurrentTag()
 {
     if (m_widget)
-    {
-        TAlbum *album = 0;
-        if (!m_face.isNull() && !m_face.isUnknownName())
-            album = AlbumManager::instance()->findTAlbum(m_face.tagId());
-        m_widget->setCurrentTag(album);
-    }
+        m_widget->setCurrentFace(m_face);
 }
 
 // ---
@@ -204,7 +199,7 @@ public:
     TagPropertiesFilterModel*  filteredModel;
 
     FaceIface                  faceIface;
-    FacePipeline               trainPipeline;
+    FacePipeline               editPipeline;
 
     FaceGroup* const           q;
 };
@@ -219,8 +214,9 @@ FaceGroup::FaceGroup(GraphicsDImgView* view)
     connect(view->previewItem(), SIGNAL(stateChanged(int)),
             this, SLOT(itemStateChanged(int)));
 
-    d->trainPipeline.plugTrainer();
-    d->trainPipeline.construct();
+    d->editPipeline.plugDatabaseEditor();
+    d->editPipeline.plugTrainer();
+    d->editPipeline.construct();
 }
 
 FaceGroup::~FaceGroup()
@@ -490,9 +486,10 @@ AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const Databas
 {
     AssignNameWidget* assignWidget = new AssignNameWidget;
     assignWidget->setMode(assignWidgetMode(face.type()));
+    assignWidget->setTagEntryWidgetMode(AssignNameWidget::AddTagsComboBoxMode);
     assignWidget->setVisualStyle(AssignNameWidget::TranslucentDarkRound);
     assignWidget->setLayoutMode(AssignNameWidget::TwoLines);
-    assignWidget->setFace(info, identifier);
+    assignWidget->setUserData(info, identifier);
     checkModels();
     assignWidget->setModel(tagModel, filteredModel, filterModel);
 
@@ -578,16 +575,14 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
     if (!face.isConfirmedName() || face.region() != currentRegion
         || action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()) )
     {
+        int tagId = 0;
         if (action.shallAssignTag())
-        {
-            face = d->faceIface.confirmName(face, action.tagId(), currentRegion);
-        }
+            tagId = action.tagId();
         else if (action.shallCreateNewTag())
-        {
-            int tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
-            face = d->faceIface.confirmName(face, tagId, currentRegion);
-        }
-        d->trainPipeline.train(QList<DatabaseFace>() << face, d->info, d->view->previewItem()->image());
+            tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
+
+        if (tagId)
+            face = d->editPipeline.confirm(d->info, face, d->view->previewItem()->image(), tagId, currentRegion);
     }
 
     item->setFace(face);
@@ -597,7 +592,7 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
 void FaceGroup::slotRejected(const ImageInfo&, const QVariant& faceIdentifier)
 {
     FaceItem* item = d->items[faceIdentifier.toInt()];
-    d->faceIface.removeFace(item->face());
+    d->editPipeline.remove(d->info, item->face());
 
     item->setFace(DatabaseFace());
     d->visibilityController->hideAndRemoveItem(item);

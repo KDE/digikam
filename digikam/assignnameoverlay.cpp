@@ -28,6 +28,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -38,6 +39,8 @@
 
 // Local includes
 
+#include "addtagscompletionbox.h"
+#include "addtagslineedit.h"
 #include "albummodel.h"
 #include "albumfiltermodel.h"
 #include "assignnamewidget.h"
@@ -49,6 +52,7 @@
 #include "imagecategorizedview.h"
 #include "taggingaction.h"
 #include "tagscache.h"
+#include "searchutilities.h"
 
 namespace Digikam
 {
@@ -60,6 +64,7 @@ public:
     AssignNameOverlayPriv()
         : tagModel(AbstractAlbumModel::IgnoreRootAlbum)
     {
+        assignNameWidget = 0;
     }
 
     TagModel                  tagModel;
@@ -67,35 +72,21 @@ public:
     TagPropertiesFilterModel  filteredModel;
 
     FaceIface                 faceIface;
-    FacePipeline              trainPipeline;
+    FacePipeline              editPipeline;
 
+    AssignNameWidget         *assignNameWidget;
     QPersistentModelIndex     index;
-};
-
-class AssignNameWidgetContainer : public QWidget
-{
-public:
-
-    AssignNameWidgetContainer(AssignNameWidget* widget)
-        : m_widget(widget)
-    {
-        QVBoxLayout* layout = new QVBoxLayout;
-        layout->addWidget(m_widget);
-        setLayout(layout);
-    };
-
-    AssignNameWidget* widget() const { return m_widget; }
-
-protected:
-
-    AssignNameWidget* m_widget;
 };
 
 AssignNameOverlay::AssignNameOverlay(QObject* parent)
                  : AbstractWidgetDelegateOverlay(parent), d(new AssignNameOverlayPriv)
 {
-    d->trainPipeline.plugTrainer();
-    d->trainPipeline.construct();
+    d->editPipeline.plugDatabaseEditor();
+    d->editPipeline.plugTrainer();
+    d->editPipeline.construct();
+
+    d->filteredModel.setSourceAlbumModel(&d->tagModel);
+    d->filterModel.setSourceFilterModel(&d->filteredModel);
 }
 
 AssignNameOverlay::~AssignNameOverlay()
@@ -105,22 +96,26 @@ AssignNameOverlay::~AssignNameOverlay()
 
 AssignNameWidget* AssignNameOverlay::assignNameWidget() const
 {
-    AssignNameWidgetContainer* container = static_cast<AssignNameWidgetContainer*>(m_widget);
-    if (container)
-        return container->widget();
-
-    return 0;
+    return d->assignNameWidget;
 }
 
 QWidget* AssignNameOverlay::createWidget()
 {
-    AssignNameWidget* assignWidget = new AssignNameWidget;
-    assignWidget->setMode(AssignNameWidget::UnconfirmedEditMode);
-    assignWidget->setVisualStyle(AssignNameWidget::TranslucentDarkRound);
-    assignWidget->setLayoutMode(AssignNameWidget::Compact);
-    assignWidget->setModel(&d->tagModel, &d->filteredModel, &d->filterModel);
+    d->assignNameWidget = new AssignNameWidget;
+    d->assignNameWidget->setMode(AssignNameWidget::UnconfirmedEditMode);
+    d->assignNameWidget->setVisualStyle(AssignNameWidget::TranslucentThemedFrameless);
+    d->assignNameWidget->setTagEntryWidgetMode(AssignNameWidget::AddTagsLineEditMode);
+    d->assignNameWidget->setLayoutMode(AssignNameWidget::Compact);
+    d->assignNameWidget->setModel(&d->tagModel, &d->filteredModel, &d->filterModel);
 
-    return new AssignNameWidgetContainer(assignWidget);
+    //new StyleSheetDebugger(d->assignNameWidget);
+
+    QWidget *container = new QWidget(parentWidget());
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(d->assignNameWidget);
+    container->setLayout(layout);
+
+    return container;
 }
 
 void AssignNameOverlay::setActive(bool active)
@@ -188,8 +183,9 @@ void AssignNameOverlay::updateFace()
     if (!d->index.isValid() || !assignNameWidget())
         return;
 
-    assignNameWidget()->setFace(ImageModel::retrieveImageInfo(d->index),
-                                d->index.data(ImageModel::ExtraDataRole));
+    QVariant extraData = d->index.data(ImageModel::ExtraDataRole);
+    assignNameWidget()->setCurrentFace(DatabaseFace::fromVariant(extraData));
+    assignNameWidget()->setUserData(ImageModel::retrieveImageInfo(d->index), extraData);
 }
 
 /*
@@ -225,32 +221,47 @@ void AssignNameOverlay::slotEntered(const QModelIndex& index)
     updateFace();
 }
 
+void AssignNameOverlay::viewportLeaveEvent(QObject*, QEvent*)
+{
+    // Dont hide when hovering the pop-up of the line edit.
+    // isAncestorOf does not work: different window
+    QWidget *widget = qApp->widgetAt(QCursor::pos());
+    QWidget *parent = assignNameWidget();
+    while (widget)
+    {
+        if (widget == parent)
+            return;
+        widget = widget->parentWidget();
+    }
+
+    hide();
+}
+
 void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
 {
     DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
+    //kDebug() << "Confirming" << face << action.shallAssignTag() << action.tagId();
 
     if (face.isConfirmedName() || !action.isValid())
         return;
 
+    int tagId = 0;
     if (action.shallAssignTag())
-    {
-        face = d->faceIface.confirmName(face, action.tagId());
-    }
+        tagId = action.tagId();
     else if (action.shallCreateNewTag())
-    {
-        int tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
-        face = d->faceIface.confirmName(face, tagId);
-    }
-    d->trainPipeline.train(QList<DatabaseFace>() << face, info);
+        tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
+
+    if (tagId)
+        d->editPipeline.confirm(info, face, tagId);
 
     //TODO fast-remove if filtered by unconfirmed face etc.
     hide();
 }
 
-void AssignNameOverlay::slotRejected(const ImageInfo&, const QVariant& faceIdentifier)
+void AssignNameOverlay::slotRejected(const ImageInfo& info, const QVariant& faceIdentifier)
 {
     DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
-    d->faceIface.removeFace(face);
+    d->editPipeline.remove(info, face);
     hide();
 }
 

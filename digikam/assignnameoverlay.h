@@ -70,6 +70,7 @@ protected:
     virtual void slotEntered(const QModelIndex& index);
     virtual void hide();
     virtual bool checkIndex(const QModelIndex& index) const;
+    virtual void viewportLeaveEvent(QObject* obj, QEvent* event);
 
     void updatePosition();
     void updateFace();
