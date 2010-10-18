@@ -53,15 +53,13 @@ public:
     {
         completion    = 0;
         completionBox = 0;
-        tagModel      = 0;
         tagView       = 0;
     }
 
     TagModelCompletion*   completion;
     AddTagsCompletionBox* completionBox;
-    TagModel*             tagModel;
     TagTreeView*          tagView;
-    TaggingAction         completionBoxAction;
+    TaggingAction         currentTaggingAction;
 
 public:
 
@@ -108,6 +106,9 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* parent)
 
     connect(this, SIGNAL(returnPressed(const QString&)),
             this, SLOT(slotReturnPressed(const QString&)));
+
+    connect(this, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotTextChanged(const QString&)));
 }
 
 AddTagsLineEdit::~AddTagsLineEdit()
@@ -115,11 +116,26 @@ AddTagsLineEdit::~AddTagsLineEdit()
     delete d;
 }
 
-void AddTagsLineEdit::setTagModel(TagModel* model)
+void AddTagsLineEdit::setModel(TagModel* model)
 {
-    d->tagModel = model;
     d->completion->setModel(model);
     d->completionBox->setTagModel(model);
+}
+
+void AddTagsLineEdit::setModel(AlbumFilterModel* model)
+{
+    d->completion->setModel(model);
+    d->completionBox->setTagModel(model);
+}
+
+void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, AlbumFilterModel* filterModel)
+{
+    if (filterModel)
+        setModel(filterModel);
+    else if (filteredModel)
+        setModel(filteredModel);
+    else
+        setModel(model);
 }
 
 void AddTagsLineEdit::setTagTreeView(TagTreeView *view)
@@ -141,6 +157,26 @@ void AddTagsLineEdit::setTagTreeView(TagTreeView *view)
 void AddTagsLineEdit::setParentTag(TAlbum* album)
 {
     d->completionBox->setCurrentParentTag(album);
+}
+
+void AddTagsLineEdit::setCurrentTag(TAlbum *album)
+{
+    setCurrentTaggingAction(album ? TaggingAction(album->id()) : TaggingAction());
+    setText(album ? album->title() : QString());
+}
+
+void AddTagsLineEdit::setCurrentTaggingAction(const TaggingAction& action)
+{
+    if (d->currentTaggingAction == action)
+        return;
+
+    d->currentTaggingAction = action;
+    emit taggingActionSelected(action);
+}
+
+TaggingAction AddTagsLineEdit::currentTaggingAction() const
+{
+    return d->currentTaggingAction;
 }
 
 void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
@@ -172,7 +208,10 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
     KCompletion* comp = compObj();
     KGlobalSettings::Completion mode = completionMode();
 
-    d->completionBoxAction = TaggingAction();
+    d->currentTaggingAction = TaggingAction();
+
+    if (text.isEmpty())
+        emit taggingActionSelected(TaggingAction());
 
     if ( !comp || mode == KGlobalSettings::CompletionNone )
         return;  // No completion object...
@@ -275,22 +314,28 @@ void AddTagsLineEdit::slotCompletionBoxTextChanged(const QString& t)
 
 void AddTagsLineEdit::slotCompletionBoxTaggingActionChanged(const TaggingAction& action)
 {
-    d->completionBoxAction = action;
-    emit taggingActionSelected(d->completionBoxAction);
+    d->currentTaggingAction = action;
+    emit taggingActionSelected(d->currentTaggingAction);
 }
 
 void AddTagsLineEdit::slotCompletionBoxCancelled()
 {
-    d->completionBoxAction = TaggingAction();
-    emit taggingActionSelected(d->completionBoxAction);
+    d->currentTaggingAction = TaggingAction();
+    emit taggingActionSelected(d->currentTaggingAction);
 }
 
 void AddTagsLineEdit::slotReturnPressed(const QString& text)
 {
-    if (d->completionBoxAction.isValid())
-        emit taggingActionActivated(d->completionBoxAction);
+    if (d->currentTaggingAction.isValid())
+        emit taggingActionActivated(d->currentTaggingAction);
     else
         emit taggingActionActivated(d->makeTaggingAction(text));
+}
+
+void AddTagsLineEdit::slotTextChanged(const QString& text)
+{
+    if (text.isEmpty())
+        setCurrentTaggingAction(TaggingAction());
 }
 
 TaggingAction AddTagsLineEdit::AddTagsLineEditPriv::makeTaggingAction(const QString& text)

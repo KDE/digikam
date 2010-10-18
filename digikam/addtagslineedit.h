@@ -41,6 +41,7 @@ class AddTagsCompletionBox;
 class AlbumFilterModel;
 class TAlbum;
 class TagModel;
+class TagPropertiesFilterModel;
 class TagTreeView;
 
 class AddTagsLineEdit : public KLineEdit
@@ -52,11 +53,25 @@ public:
     AddTagsLineEdit(QWidget* parent = 0);
     ~AddTagsLineEdit();
 
-    /** Set the tag model to use for completion. */
-    void setTagModel(TagModel* model);
+    /** Set the tag model to use for completion.
+     *  The line edit only needs one model and used the model last set.
+     *  From the method giving three models, it will use a non-null model,
+     *  filter models having precedence.
+     */
+    void setModel(TagModel* model);
+    void setModel(AlbumFilterModel* model);
+    void setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, AlbumFilterModel* filterModel);
     /** Reads a tag treeview and takes the currently selected tag into account
      *  when suggesting a parent tag for a new tag, and a default action. */
     void setTagTreeView(TagTreeView* treeView);
+
+    /**
+     * Sets the currently selected tagging action to the given tag
+     */
+    void setCurrentTag(TAlbum *album);
+
+    void setCurrentTaggingAction(const TaggingAction& action);
+    TaggingAction currentTaggingAction() const;
 
     /// The custom completion box in use
     AddTagsCompletionBox* completionBox() const;
@@ -82,6 +97,7 @@ protected Q_SLOTS:
     void slotCompletionBoxTaggingActionChanged(const TaggingAction& action);
     void slotCompletionBoxCancelled();
     void slotReturnPressed(const QString& text);
+    void slotTextChanged(const QString& text);
 
 protected:
 

@@ -75,10 +75,12 @@ public:
      */
     void setItems(const QString& currentText, const QStringList& completionEntries);
 
-    /** Optional: Reads a tag model and takes the currently selected tag into account
-     *  when suggesting a parent tag for a new tag, and a default action.
+    /**
+     * Optional: Reads a tag model for information and data.
+     * You can set either, the last set model takes precedence.
      */
     void setTagModel(TagModel* model);
+    void setTagModel(AlbumFilterModel* model);
 
     /**
      * Allow the box to expand horizontally over the bounds of the parent widget.

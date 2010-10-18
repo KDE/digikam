@@ -109,8 +109,9 @@ public:
 
     AddTagsCompletionBoxPriv()
     {
-        upwardBox = false;
-        model     = 0;
+        upwardBox         = false;
+        model             = 0;
+        filterModel       = 0;
         allowExceedBounds = false;
     }
 
@@ -123,6 +124,8 @@ public:
     bool                 upwardBox;
 
     TagModel*            model;
+    AlbumFilterModel*    filterModel;
+
     AlbumPointer<TAlbum> parentTag;
     bool                 allowExceedBounds;
 
@@ -146,6 +149,13 @@ AddTagsCompletionBox::~AddTagsCompletionBox()
 void AddTagsCompletionBox::setTagModel(TagModel* model)
 {
     d->model = model;
+    d->filterModel = 0;
+}
+
+void AddTagsCompletionBox::setTagModel(AlbumFilterModel* model)
+{
+    d->filterModel = model;
+    d->model = 0;
 }
 
 AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum, 
@@ -166,9 +176,14 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::create
         item->setText(i18nc("<tag name> in <tag path>", "%1\n  in %2",
                             talbum->title(), parent->tagPath(false)));
     }
-    if (model)
+
+    if (model || filterModel)
     {
-        QModelIndex index = model->indexForAlbum(talbum);
+        QModelIndex index;
+        if (filterModel)
+            index = filterModel->indexForAlbum(talbum);
+        else if (model)
+            index = model->indexForAlbum(talbum);
         item->setData(Qt::DecorationRole, index.data(Qt::DecorationRole));
     }
 
