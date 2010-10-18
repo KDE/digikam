@@ -62,37 +62,37 @@ public:
     {
     }
 
-    TagModel                   tagModel;
-    CheckableAlbumFilterModel  filterModel;
-    TagPropertiesFilterModel   filteredModel;
+    TagModel                  tagModel;
+    CheckableAlbumFilterModel filterModel;
+    TagPropertiesFilterModel  filteredModel;
 
-    FaceIface                  faceIface;
-    FacePipeline               trainPipeline;
+    FaceIface                 faceIface;
+    FacePipeline              trainPipeline;
 
-    QPersistentModelIndex      index;
+    QPersistentModelIndex     index;
 };
 
 class AssignNameWidgetContainer : public QWidget
 {
 public:
 
-    AssignNameWidgetContainer(AssignNameWidget *widget)
+    AssignNameWidgetContainer(AssignNameWidget* widget)
         : m_widget(widget)
     {
-        QVBoxLayout *layout = new QVBoxLayout;
+        QVBoxLayout* layout = new QVBoxLayout;
         layout->addWidget(m_widget);
         setLayout(layout);
     };
 
-    AssignNameWidget *widget() const { return m_widget; }
+    AssignNameWidget* widget() const { return m_widget; }
 
 protected:
 
-    AssignNameWidget *m_widget;
+    AssignNameWidget* m_widget;
 };
 
 AssignNameOverlay::AssignNameOverlay(QObject* parent)
-                   : AbstractWidgetDelegateOverlay(parent), d(new AssignNameOverlayPriv)
+                 : AbstractWidgetDelegateOverlay(parent), d(new AssignNameOverlayPriv)
 {
     d->trainPipeline.plugTrainer();
     d->trainPipeline.construct();
@@ -105,9 +105,10 @@ AssignNameOverlay::~AssignNameOverlay()
 
 AssignNameWidget* AssignNameOverlay::assignNameWidget() const
 {
-    AssignNameWidgetContainer *container = static_cast<AssignNameWidgetContainer*>(m_widget);
+    AssignNameWidgetContainer* container = static_cast<AssignNameWidgetContainer*>(m_widget);
     if (container)
         return container->widget();
+
     return 0;
 }
 
@@ -134,18 +135,20 @@ void AssignNameOverlay::setActive(bool active)
         connect(assignNameWidget(), SIGNAL(rejected(const ImageInfo&, const QVariant&)),
                 this, SLOT(slotRejected(const ImageInfo&, const QVariant&)));
 
-        /*if (view()->model())
-            connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-                    this, SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
-        */
+/*
+        if (view()->model())
+            connect(view()->model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+                    this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
+*/
     }
     else
     {
         // widget is deleted
 
-        /*if (view() && view()->model())
+/*
+        if (view() && view()->model())
             disconnect(view()->model(), 0, this, 0);
-        */
+*/
     }
 }
 
@@ -165,7 +168,7 @@ void AssignNameOverlay::updatePosition()
     if (!d->index.isValid())
         return;
 
-    QRect rect      = delegate()->imageInformationRect();
+    QRect rect = delegate()->imageInformationRect();
 
     if (rect.width() < m_widget->minimumSizeHint().width())
     {
@@ -202,6 +205,7 @@ bool AssignNameOverlay::checkIndex(const QModelIndex& index) const
     QVariant extraData = index.data(ImageModel::ExtraDataRole);
     if (extraData.isNull())
         return false;
+
     return DatabaseFace::fromVariant(extraData).isUnconfirmedType();
 }
 
@@ -209,12 +213,12 @@ void AssignNameOverlay::slotEntered(const QModelIndex& index)
 {
     AbstractWidgetDelegateOverlay::slotEntered(index);
 
-    /*
-     * add again when fading in
+/*
+    // TODO: add again when fading in
     // see bug 228810, this is a small workaround
     if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
         addTagsLineEdit()->setVisibleImmediately;
-    */
+*/
 
     d->index = index;
     updatePosition();
@@ -250,6 +254,4 @@ void AssignNameOverlay::slotRejected(const ImageInfo&, const QVariant& faceIdent
     hide();
 }
 
-
 } // namespace Digikam
-

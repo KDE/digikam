@@ -50,7 +50,7 @@ public:
     AssignNameOverlay(QObject* parent);
     ~AssignNameOverlay();
 
-    AssignNameWidget *assignNameWidget() const;
+    AssignNameWidget* assignNameWidget() const;
 
 Q_SIGNALS:
 
