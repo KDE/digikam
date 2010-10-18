@@ -148,7 +148,6 @@ void ThumbnailLoadingTask::execute()
 
     // Load or create thumbnail
     setupCreator();
-    m_qimage = m_creator->load(m_loadingDescription.filePath);
     switch (m_loadingDescription.previewParameters.type)
     {
         case LoadingDescription::PreviewParameters::Thumbnail:
@@ -156,7 +155,7 @@ void ThumbnailLoadingTask::execute()
             break;
         case LoadingDescription::PreviewParameters::DetailThumbnail:
             m_qimage = m_creator->loadDetail(m_loadingDescription.filePath,
-                                           m_loadingDescription.previewParameters.extraParameter.toRect());
+                                             m_loadingDescription.previewParameters.extraParameter.toRect());
             break;
         default:
             break;
