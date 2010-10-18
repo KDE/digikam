@@ -145,6 +145,16 @@ public:
      */
     void load(const LoadingDescription& description);
 
+    /**
+     * Returns the descriptions used by the last call to any of the above methods.
+     * After calling single-thumbnail methods (find, preload) the list will have size 1,
+     * after the group methods (findGroup, preloadGroup, pregenerateGroup) the list can
+     * be larger than 1.
+     * There is no information if the description was ever scheduled in the thread,
+     * already processed, skipped or cancelled.
+     */
+    QList<LoadingDescription> lastDescriptions() const;
+
     /// If the thread is currently loading thumbnails, there is no guarantee as to when
     /// the property change by one of the following methods takes effect.
 
@@ -167,9 +177,9 @@ public:
      * Note: This only applies to newly created thumbnails. The rotation state of thumbnails
      * found in the disk cache is unknown, so they are not rotated.
      * (The only, unsatisfactory solution is the forced recreation of all thumbnails)
-     * Default value: true
+     * Per default, the setting is taken from MetadataSettings
      */
-    void setExifRotate(int exifRotate);
+    void setExifRotate(bool exifRotate);
 
     /**
      * Return true is thumbnails shall be rotated by Exif.
@@ -280,23 +290,57 @@ public:
 
     /**
      *  Use this class to get a thumbnail synchronously.
-     *  1. Create the ThumbnailImageCatcher object with the thread passed to the constructor
-     *  2. Start the thumbnail loading
-     *  3. Call waitForThumbnail which returns the thumbnail QImage
+     *  1. Create the ThumbnailImageCatcher object with your ThumbnailLoadThread
+     *  2. a) Request a thumbnail
+     *     b) Call enqueue()
+     *  3. Call waitForThumbnails which returns the thumbnail QImage(s).
+     *
+     *  Note: Not meant for loading QPixmap thumbnails.
      */
 
-    ThumbnailImageCatcher(ThumbnailLoadThread *thread);
+    ThumbnailImageCatcher(QObject* parent = 0);
+    ThumbnailImageCatcher(ThumbnailLoadThread *thread, QObject* parent = 0);
+    ~ThumbnailImageCatcher();
 
-    QImage waitForThumbnail(const QString& filePath);
+    ThumbnailLoadThread* thread() const;
+    void setThumbnailLoadThread(ThumbnailLoadThread *thread);
+
+    /**
+     * After requesting a thumbnail from the thread, call enqueue()
+     * each time. Enqueue records the requested loading operation in an internal list.
+     * A loading operation can result in the return of more than one thumbnail,
+     * so enqueue() returns the number of expected results.
+     * Then call waitForThumbnails. The returned list is the sum of previous calls
+     * to enqueue, one entry per expected result, in order.
+     * If stopped prematurely or loading failed, the respective entries will be null.
+     */
+    int enqueue();
+    QList<QImage> waitForThumbnails();
+
+public Q_SLOTS:
+
+    /**
+     * The catcher is active per default after construction.
+     * Deactivate it if you use the catcher as a longer-lived
+     * object and do not use it for some time,
+     * then activate it before you request a thumbnail from the thread again.
+     */
+    void setActive(bool active);
+
+    /**
+     * If the catcher is waiting in waitForThumbnails() in a different thread,
+     * cancels the waiting. The results will be returned as received so far.
+     */
+    void cancel();
 
 protected Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QImage&);
 
-protected:
+private:
 
-    LoadingDescription m_description;
-    QImage             m_image;
+    class ThumbnailImageCatcherPriv;
+    ThumbnailImageCatcherPriv* const d;
 };
 
 }   // namespace Digikam
