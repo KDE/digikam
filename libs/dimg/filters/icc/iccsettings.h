@@ -39,7 +39,6 @@ namespace Digikam
 {
 
 class IccProfile;
-class IccSettingsPriv;
 
 class DIGIKAM_EXPORT IccSettings : public QObject
 {
@@ -113,8 +112,10 @@ private:
 
 private:
 
+    class IccSettingsPriv;
     IccSettingsPriv* const d;
 
+    friend class IccSettingsPriv;
     friend class IccSettingsCreator;
 };
 
