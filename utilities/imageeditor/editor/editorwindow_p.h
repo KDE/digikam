@@ -35,6 +35,10 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
+// Local includes
+
+#include "editorwindow.h"
+
 class QDialog;
 class QEventLoop;
 class QLabel;
@@ -56,7 +60,7 @@ class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class PreviewToolBar;
 
-class EditorWindowPriv
+class EditorWindow::EditorWindowPriv
 {
 
 public:

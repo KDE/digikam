@@ -58,7 +58,6 @@ class Canvas;
 class DPopupMenu;
 class DLogoAction;
 class EditorStackView;
-class EditorWindowPriv;
 class ExposureSettingsContainer;
 class IOFileSettingsContainer;
 class ImagePluginLoader;
@@ -351,6 +350,7 @@ private:
 
 private:
 
+    class EditorWindowPriv;
     EditorWindowPriv* const d;
 
     friend class EditorToolIface;
