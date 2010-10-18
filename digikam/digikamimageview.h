@@ -72,11 +72,12 @@ public Q_SLOTS:
 
     void assignRating(const QModelIndex &index, int rating);
     void assignTag(const QModelIndex& index, const QString& name);
-    
+
     void setFaceMode(bool on);
     void addRejectionOverlay(ImageDelegate *delegate = 0);
     void addTagEditOverlay(ImageDelegate* delegate = 0);
-    
+    void addAssignNameOverlay(ImageDelegate* delegate = 0);
+
 Q_SIGNALS:
 
     void previewRequested(const ImageInfo& info);

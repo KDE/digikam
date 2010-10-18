@@ -69,7 +69,7 @@ QWidget* TagsLineEditOverlay::createWidget()
     TagModel* model = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
     model->setCheckable(true);
     model->setRootCheckable(false);
-    lineEdit->setTagModel(model);
+    lineEdit->setModel(model);
 
     return lineEdit;
 }

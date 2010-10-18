@@ -190,7 +190,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->tagCheckView->setCheckNewTags(true);
 
     d->newTagEdit = new AddTagsLineEdit(captionTagsArea);
-    d->newTagEdit->setTagModel(d->tagModel);
+    d->newTagEdit->setModel(d->tagModel);
     d->newTagEdit->setTagTreeView(d->tagCheckView);
     //, "ImageDescEditTabNewTagEdit",
     //d->newTagEdit->setCaseSensitive(false);

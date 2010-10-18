@@ -54,6 +54,7 @@
 #include "albumdb.h"
 #include "advancedrenamedialog.h"
 #include "albumsettings.h"
+#include "assignnameoverlay.h"
 #include "contextmenuhelper.h"
 #include "databaseaccess.h"
 #include "ddragobjects.h"
@@ -123,7 +124,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
     // face overlays
     addRejectionOverlay(d->faceDelegate);
-    addTagEditOverlay(d->faceDelegate);
+    addAssignNameOverlay(d->faceDelegate);
 
     connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
             this, SLOT(assignRating(const QModelIndex&, int)));
@@ -207,6 +208,11 @@ void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
     addOverlay(tagOverlay, delegate);
 }
 
+void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
+{
+    AssignNameOverlay *nameOverlay = new AssignNameOverlay(this);
+    addOverlay(nameOverlay, delegate);
+}
 
 void DigikamImageView::slotUntagFace(const QModelIndex& index)
 {

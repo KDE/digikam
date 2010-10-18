@@ -1259,7 +1259,7 @@ void TagTreeView::setAlbumModel(TagModel* model)
     AbstractCheckableAlbumTreeView::setAlbumModel(model);
 
     if (m_filteredModel)
-        m_filteredModel->setSourceTagModel(model);
+        m_filteredModel->setSourceAlbumModel(model);
 
     m_dragDropHandler = albumModel()->dragDropHandler();
     if (!m_dragDropHandler)

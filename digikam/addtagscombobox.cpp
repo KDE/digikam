@@ -93,7 +93,8 @@ void AddTagsComboBox::setModel(TagModel* model, TagPropertiesFilterModel *filter
 {
     TagTreeViewSelectComboBox::setModel(model, filteredModel, filterModel);
 
-    d->lineEdit->setTagModel(model);
+    // the line edit will pick one
+    d->lineEdit->setModel(model, filteredModel, filterModel);
 }
 
 void AddTagsComboBox::installLineEdit()
