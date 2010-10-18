@@ -18,7 +18,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 254381 : Copy any pic to some place - only _move_ is available.
 008 ==> 148382 : Overexposure indication already when fully "saturated".
 009 ==> 233438 : digiKam crash when editing raw images on OS X.
-010 ==> 
+010 ==> 248302 : Crash while jumping back and forth in preview.
+011 ==> 
+
 
 
 
