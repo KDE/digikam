@@ -261,6 +261,10 @@ public:
 
     Trainer(FacePipeline::FacePipelinePriv* d);
 
+protected:
+
+    virtual void aboutToDeactivate();
+
 public Q_SLOTS:
 
     void process(FacePipelineExtendedPackage::Ptr package);
@@ -271,6 +275,7 @@ Q_SIGNALS:
 
 protected:
 
+    ThumbnailImageCatcher                *catcher;
     KFaceIface::RecognitionDatabase       database;
     FacePipeline::FacePipelinePriv* const d;
 };
@@ -290,6 +295,10 @@ public:
     void skipFromFilter(const QList<ImageInfo>& infosForSkipping);
     void send(FacePipelineExtendedPackage::Ptr package);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info);
+    FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
+                                                  const FacePipelineDatabaseFace&, const DImg& image);
+    FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
+                                                  const FacePipelineDatabaseFaceList& faces, const DImg& image);
     FacePipelineExtendedPackage::Ptr filterOrBuildPackage(const ImageInfo& info);
 
     bool hasFinished();

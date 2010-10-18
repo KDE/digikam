@@ -47,6 +47,57 @@ namespace Digikam
 
 class FaceIface;
 
+class FacePipelineDatabaseFace : public DatabaseFace
+{
+public:
+
+    enum Role
+    {
+        NoRole             = 0,
+
+        /// Source
+        GivenAsArgument    = 1 << 0,
+        ReadFromDatabase   = 1 << 1,
+        DetectedFromImage  = 1 << 2,
+
+        /// Task
+        ForConfirmation    = 1 << 10,
+        ForTraining        = 1 << 11,
+        ForRemoval         = 1 << 12,
+
+        /// Executed action (task is cleared)
+        Confirmed          = 1 << 20,
+        Trained            = 1 << 21,
+        Removed            = 1 << 22
+    };
+    Q_DECLARE_FLAGS(Roles, Role);
+
+    FacePipelineDatabaseFace();
+    FacePipelineDatabaseFace(const DatabaseFace& face);
+
+    Roles                 roles;
+    int                   assignedTagId;
+    TagRegion             assignedRegion;
+};
+
+class FacePipelineDatabaseFaceList : public QList<FacePipelineDatabaseFace>
+{
+public:
+
+    FacePipelineDatabaseFaceList();
+    FacePipelineDatabaseFaceList(const QList<DatabaseFace>& faces);
+
+    FacePipelineDatabaseFaceList& operator=(const QList<DatabaseFace>& faces);
+
+    void setRole(FacePipelineDatabaseFace::Roles role);
+    void clearRole(FacePipelineDatabaseFace::Roles role);
+    void replaceRole(FacePipelineDatabaseFace::Roles remove, FacePipelineDatabaseFace::Roles add);
+
+    QList<DatabaseFace> toDatabaseFaceList() const;
+
+    FacePipelineDatabaseFaceList facesForRole(FacePipelineDatabaseFace::Roles role) const;
+};
+
 class FacePipelinePackage
 {
 public:
@@ -69,11 +120,12 @@ public:
     {
     }
 
-    ImageInfo               info;
-    DImg                    image;
-    QList<KFaceIface::Face> faces;
-    QList<DatabaseFace>     databaseFaces;
-    ProcessFlags            processFlags;
+    ImageInfo                    info;
+    DImg                         image;
+    QList<KFaceIface::Face>      faces;
+    FacePipelineDatabaseFaceList databaseFaces;
+
+    ProcessFlags                 processFlags;
 };
 
 // ------------------------------------------------------------------------------------
@@ -122,22 +174,19 @@ public:
      *   marked as unknown will be processed. They are implicitly read from the database.
      * - DatabaseWriter: Writes the detection and recognition results to the database.
      *   The trainer works on a completely different storage and is not affected by the database writer.
+     * - DatabaseEditor: Can confirm or reject faces
      *
      * PlugParallel: You can call this instead of the simple plugging method.
      * Depending on the number of processor cores of the machine and the memory cost,
      * more than one element may be plugged and process parallelly for this part of the pipeline.
      *
-     * Supported combinations without providing a DImg:
-     *  (Database Filter ->) Preview Loader -> Detector -> Recognizer (-> DatabaseWriter)
-     *  (Database Filter ->) Preview Loader -> Detector (-> DatabaseWriter)
-     *  (Database Filter ->) Preview Loader -> Recognizer (-> DatabaseWriter)
-     *   Database Filter -> Trainer
-     *
-     * Supported combinations providing a loaded DImg:
-     *  (Database Filter ->) Detector -> Recognizer (-> DatabaseWriter)
-     *  (Database Filter ->) Detector (-> DatabaseWriter)
-     *  (Database Filter ->) Recognizer (-> DatabaseWriter)
+     * Supported combinations:
+     *  (Database Filter ->) (Preview Loader ->) Detector -> Recognizer (-> DatabaseWriter)
+     *  (Database Filter ->) (Preview Loader ->) Detector (-> DatabaseWriter)
+     *  (Database Filter ->) (Preview Loader ->) Recognizer (-> DatabaseWriter)
+     *  DatabaseEditor
      *  Trainer
+     *  DatabaseEditor -> Trainer
      */
 
     void plugDatabaseFilter(FilterMode mode);
@@ -146,6 +195,7 @@ public:
     void plugParallelFaceDetectors();
     void plugFaceRecognizer();
     void plugDatabaseWriter(WriteMode mode);
+    void plugDatabaseEditor();
     void plugTrainer();
     void construct();
 
@@ -166,13 +216,24 @@ public Q_SLOTS:
     bool process(const ImageInfo& info, const DImg& image);
 
     /**
-     * For use when a trainer is plugged. Processes the given faces.
-     * Bypasses any installed filter.
-     * You can pass faces of type ConfirmedName or FaceForTraining,
-     * in either case faces of type FaceForTraining will be processed. Other types will be skipped.
+     * Confirm the face. Pass the original face, and additionally tag id or region
+     * if they changed. Returns the confirmed face entry immediately purely for convenience,
+     * it is not yet in the database (connect to signal processed() to react when the processing finished).
+     * If a trainer is plugged, the face will be trained.
      */
-    void train(const QList<DatabaseFace> &faces, const ImageInfo& info);
-    void train(const QList<DatabaseFace> &faces, const ImageInfo& info, const DImg& image);
+    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace &face, 
+                         int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());
+    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace &face, const DImg& image,
+                         int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());
+    /**
+     * Train the given faces.
+     */
+    void train(const ImageInfo& info, const QList<DatabaseFace> &faces);
+    void train(const ImageInfo& info, const QList<DatabaseFace> &faces, const DImg& image);
+    /**
+     * Remove the given face.
+     */
+    void remove(const ImageInfo& info, const DatabaseFace &face);
 
     /**
      * Batch processing. If a filter is installed, the skipped() signal
@@ -206,6 +267,7 @@ private:
 } // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::FacePipelinePackage)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelineDatabaseFace::Roles)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelinePackage::ProcessFlags)
 
 #endif // FACEDETECTOR_H

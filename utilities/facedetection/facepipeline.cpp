@@ -42,6 +42,75 @@
 namespace Digikam
 {
 
+FacePipelineDatabaseFace::FacePipelineDatabaseFace()
+    : roles(NoRole), assignedTagId(0)
+{
+}
+
+FacePipelineDatabaseFace::FacePipelineDatabaseFace(const DatabaseFace& face)
+    : DatabaseFace(face), roles(NoRole), assignedTagId(0)
+{
+}
+
+FacePipelineDatabaseFaceList::FacePipelineDatabaseFaceList()
+{
+}
+
+FacePipelineDatabaseFaceList::FacePipelineDatabaseFaceList(const QList<DatabaseFace>& faces)
+{
+    operator=(faces);
+}
+
+FacePipelineDatabaseFaceList& FacePipelineDatabaseFaceList::operator=(const QList<DatabaseFace>& faces)
+{
+    foreach (const DatabaseFace& face, faces)
+        operator<<(face);
+    return *this;
+}
+
+void FacePipelineDatabaseFaceList::setRole(FacePipelineDatabaseFace::Roles role)
+{
+    for (iterator it = begin(); it != end(); ++it)
+        it->roles |= role;
+}
+
+void FacePipelineDatabaseFaceList::clearRole(FacePipelineDatabaseFace::Roles role)
+{
+    for (iterator it = begin(); it != end(); ++it)
+        it->roles &= ~role;
+}
+
+void FacePipelineDatabaseFaceList::replaceRole(FacePipelineDatabaseFace::Roles remove, FacePipelineDatabaseFace::Roles add)
+{
+    for (iterator it = begin(); it != end(); ++it)
+    {
+        if (it->roles & remove)
+        {
+            it->roles &= ~remove;
+            it->roles |= add;
+        }
+    }
+}
+
+QList<DatabaseFace> FacePipelineDatabaseFaceList::toDatabaseFaceList() const
+{
+    QList<DatabaseFace> faces;
+    for (const_iterator it = constBegin(); it != constEnd(); ++it)
+        faces << *it;
+    return faces;
+}
+
+FacePipelineDatabaseFaceList FacePipelineDatabaseFaceList::facesForRole(FacePipelineDatabaseFace::Roles role) const
+{
+    FacePipelineDatabaseFaceList faces;
+    for (const_iterator it = constBegin(); it != constEnd(); ++it)
+        if (it->roles & role)
+            faces << *it;
+    return faces;
+}
+
+// ----------------------------------------------------------------------------------------
+
 FacePipelineExtendedPackage::Ptr PackageLoadingDescriptionList::take(const LoadingDescription& description)
 {
     FacePipelineExtendedPackage::Ptr package;
@@ -147,6 +216,7 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
             {
                 FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
                 package->databaseFaces = databaseFaces;
+                package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
                 package->faces         = d->iface->toFaces(databaseFaces);
                 return package;
             }
@@ -382,23 +452,56 @@ DatabaseWriter::DatabaseWriter(FacePipeline::WriteMode mode, FacePipeline::FaceP
 
 void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 {
-    if (mode == FacePipeline::OverwriteUnconfirmed
-        && package->processFlags & FacePipelinePackage::ProcessedByDetector)
+    if (package->databaseFaces.isEmpty())
     {
-        QList<DatabaseFace> oldEntries = d->iface->unconfirmedDatabaseFaces(package->info.id());
-        kDebug() << "Removing old entries" << oldEntries;
-        d->iface->removeFaces(oldEntries);
+        // Detection / Recognition
+
+        if (mode == FacePipeline::OverwriteUnconfirmed
+            && package->processFlags & FacePipelinePackage::ProcessedByDetector)
+        {
+            QList<DatabaseFace> oldEntries = d->iface->unconfirmedDatabaseFaces(package->info.id());
+            kDebug() << "Removing old entries" << oldEntries;
+            d->iface->removeFaces(oldEntries);
+        }
+
+        d->iface->markAsScanned(package->info);
+
+        if (!package->info.isNull() && !package->faces.isEmpty())
+        {
+            package->databaseFaces =
+                d->iface->writeUnconfirmedResults(package->detectionImage, package->info.id(), package->faces);
+            package->databaseFaces.setRole(FacePipelineDatabaseFace::DetectedFromImage);
+
+            if (!package->image.isNull())
+                d->iface->storeThumbnails(d->thumbnailLoadThread, package->filePath,
+                                          package->databaseFaces.toDatabaseFaceList(), package->image);
+        }
     }
-
-    d->iface->markAsScanned(package->info);
-
-    if (!package->info.isNull() && !package->faces.isEmpty())
+    else
     {
-        package->databaseFaces =
-            d->iface->writeUnconfirmedResults(package->detectionImage, package->info.id(), package->faces);
+        // Editing database entries
 
-        if (!package->image.isNull())
-            d->iface->storeThumbnails(d->thumbnailLoadThread, package->filePath, package->databaseFaces, package->image);
+        FacePipelineDatabaseFaceList add;
+
+        FacePipelineDatabaseFaceList::iterator it;
+        for (it = package->databaseFaces.begin(); it != package->databaseFaces.end(); ++it)
+        {
+            if (it->roles & FacePipelineDatabaseFace::ForConfirmation)
+            {
+                FacePipelineDatabaseFace confirmed = d->iface->confirmName(*it, it->assignedTagId, it->assignedRegion);
+                confirmed.roles |= FacePipelineDatabaseFace::Confirmed | FacePipelineDatabaseFace::ForTraining;
+                add << confirmed;
+            }
+            else if (it->roles & FacePipelineDatabaseFace::ForRemoval)
+            {
+                d->iface->removeFace(*it);
+                it->roles &= ~FacePipelineDatabaseFace::ForRemoval;
+                it->roles |= FacePipelineDatabaseFace::Removed;
+            }
+            // Training is done by trainer
+        }
+
+        package->databaseFaces << add;
     }
 
     package->processFlags |= FacePipelinePackage::WrittenToDatabase;
@@ -410,24 +513,62 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 Trainer::Trainer(FacePipeline::FacePipelinePriv* d)
     : d(d)
 {
-    database            = KFaceIface::RecognitionDatabase::addDatabase();
+    database = KFaceIface::RecognitionDatabase::addDatabase();
+    catcher  = 0;
 }
 
 void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 {
-    QSize size = database.recommendedImageSize(package->image.size());
-    if (package->image.isNull())
-        d->iface->fillImageInFaces(d->thumbnailLoadThread, package->filePath, package->faces, size);
-    else
-        d->iface->fillImageInFaces(package->image, package->faces, size);
+    // Get a list of faces with type FaceForTraining (probably type is ConfirmedFace)
+    QList<DatabaseFace> toTrain;
+    foreach (const FacePipelineDatabaseFace& face, package->databaseFaces)
+    {
+        if (face.roles & FacePipelineDatabaseFace::ForTraining)
+        {
+            DatabaseFace dbFace = face;
+            dbFace.setType(DatabaseFace::FaceForTraining);
+            toTrain << dbFace;
+        }
+    }
 
-    database.updateFaces(package->faces);
+    if (!toTrain.isEmpty())
+    {
+        // Get KFaceIface faces
+        package->faces = d->iface->toFaces(toTrain);
 
-    // These are faces for training
-    d->iface->removeFaces(package->databaseFaces);
+        // Fill images in faces - either from given DImg, or from thumbnails
+        QSize size = database.recommendedImageSize(package->image.size());
+        if (package->image.isNull())
+        {
+            if (!catcher)
+            {
+                catcher = new ThumbnailImageCatcher(d->thumbnailLoadThread, this);
+            }
+            catcher->setActive(true);
+            d->iface->fillImageInFaces(catcher, package->filePath, package->faces, size);
+            catcher->setActive(false);
+        }
+        else
+        {
+            d->iface->fillImageInFaces(package->image, package->faces, size);
+        }
+
+        // Train
+        database.updateFaces(package->faces);
+
+        // Remove the "FaceForTraining" entry in database (tagRegion entry remains, of course, untouched)
+        d->iface->removeFaces(toTrain);
+        package->databaseFaces.replaceRole(FacePipelineDatabaseFace::ForTraining, FacePipelineDatabaseFace::Trained);
+    }
 
     package->processFlags |= FacePipelinePackage::ProcessedByTrainer;
     emit processed(package);
+}
+
+void Trainer::aboutToDeactivate()
+{
+    if (catcher)
+        catcher->cancel();
 }
 
 // ----------------------------------------------------------------------------------------
@@ -489,12 +630,30 @@ FacePipelineExtendedPackage::Ptr FacePipeline::FacePipelinePriv::filterOrBuildPa
         return buildPackage(info);
 }
 
-FacePipelineExtendedPackage::Ptr FacePipeline::FacePipelinePriv::buildPackage(const ImageInfo& info)
+FacePipelineExtendedPackage::Ptr
+FacePipeline::FacePipelinePriv::buildPackage(const ImageInfo& info)
 {
     FacePipelineExtendedPackage::Ptr package(new FacePipelineExtendedPackage);
     package->info     = info;
     package->filePath = info.filePath();
 
+    return package;
+}
+
+FacePipelineExtendedPackage::Ptr
+FacePipeline::FacePipelinePriv::buildPackage(const ImageInfo& info, const FacePipelineDatabaseFace& face, const DImg& image)
+{
+    FacePipelineDatabaseFaceList faces;
+    faces << face;
+    return buildPackage(info, faces, image);
+}
+
+FacePipelineExtendedPackage::Ptr
+FacePipeline::FacePipelinePriv::buildPackage(const ImageInfo& info, const FacePipelineDatabaseFaceList& faces, const DImg& image)
+{
+    FacePipelineExtendedPackage::Ptr package = buildPackage(info);
+    package->databaseFaces = faces;
+    package->image = image;
     return package;
 }
 
@@ -680,6 +839,11 @@ void FacePipeline::plugTrainer()
     d->createThumbnailLoadThread();
 }
 
+void FacePipeline::plugDatabaseEditor()
+{
+    plugDatabaseWriter(NormalWrite);
+}
+
 void FacePipeline::construct()
 {
     if (d->previewThread)
@@ -695,6 +859,9 @@ void FacePipeline::construct()
 
     if (d->databaseWriter)
         d->pipeline << d->databaseWriter;
+
+    if (d->trainer)
+        d->pipeline << d->trainer;
 
     if (d->pipeline.isEmpty())
     {
@@ -747,30 +914,42 @@ bool FacePipeline::process(const ImageInfo& info, const DImg& image)
     return true;
 }
 
-void FacePipeline::train(const QList<DatabaseFace> &databaseFaces, const ImageInfo& info)
+void FacePipeline::train(const ImageInfo& info, const QList<DatabaseFace> &databaseFaces)
 {
-    train(databaseFaces, info, DImg());
+    train(info, databaseFaces, DImg());
 }
 
-void FacePipeline::train(const QList<DatabaseFace> &databaseFaces, const ImageInfo& info, const DImg& image)
+void FacePipeline::train(const ImageInfo& info, const QList<DatabaseFace> &databaseFaces, const DImg& image)
 {
-    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
-    package->image = image;
-    package->databaseFaces = databaseFaces;
-    package->faces = d->iface->toFaces(databaseFaces);
+    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, databaseFaces, image);
+    package->databaseFaces.setRole(FacePipelineDatabaseFace::ForTraining);
+    d->send(package);
+}
 
-    // Only need to set the right type
-    for (int i=0; i<package->databaseFaces.size(); i++)
-    {
-        DatabaseFace &face = package->databaseFaces[i];
-        if (face.isForTraining())
-            continue;
-        else if (face.isConfirmedName())
-            face.setType(DatabaseFace::FaceForTraining);
-        else
-            face = DatabaseFace();
-    }
+DatabaseFace FacePipeline::confirm(const ImageInfo& info, const DatabaseFace &databaseFace,
+                                   int assignedTagId, const TagRegion& assignedRegion)
+{
+    return confirm(info, databaseFace, DImg(), assignedTagId, assignedRegion);
+}
 
+DatabaseFace FacePipeline::confirm(const ImageInfo& info, const DatabaseFace &databaseFace,
+                           const DImg& image, int assignedTagId, const TagRegion& assignedRegion)
+{
+    FacePipelineDatabaseFace face = databaseFace;
+    face.assignedTagId  = assignedTagId;
+    face.assignedRegion = assignedRegion;
+    face.roles |= FacePipelineDatabaseFace::ForConfirmation;
+
+    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, face, image);
+    d->send(package);
+
+    return d->iface->confirmedEntry(face, assignedTagId, assignedRegion);
+}
+
+void FacePipeline::remove(const ImageInfo& info, const DatabaseFace &databaseFace)
+{
+    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, databaseFace, DImg());
+    package->databaseFaces.setRole(FacePipelineDatabaseFace::ForRemoval);
     d->send(package);
 }
 
