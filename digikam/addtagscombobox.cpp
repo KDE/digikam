@@ -80,7 +80,7 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
     TagTreeView::Flags flags;
     m_treeView = new TagTreeView(this, flags);
 
-    connect(d->treeView, SIGNAL(activated(const QModelIndex&)),
+    connect(m_treeView, SIGNAL(activated(const QModelIndex&)),
             this, SLOT(slotViewIndexActivated(const QModelIndex&)));
 }
 

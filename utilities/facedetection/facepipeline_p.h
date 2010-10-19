@@ -183,6 +183,7 @@ class DetectionWorker : public WorkerObject
 public:
 
     DetectionWorker(FacePipeline::FacePipelinePriv* d);
+    ~DetectionWorker() { wait(); } // protect detector
     DImg scaleForDetection(const DImg& image) const;
 
 public Q_SLOTS:
@@ -210,6 +211,7 @@ class RecognitionWorker : public WorkerObject
 public:
 
     RecognitionWorker(FacePipeline::FacePipelinePriv* d);
+    ~RecognitionWorker() { wait(); } // protect database
 
 public Q_SLOTS:
 
@@ -260,6 +262,7 @@ class Trainer : public WorkerObject
 public:
 
     Trainer(FacePipeline::FacePipelinePriv* d);
+    ~Trainer() { wait(); } // protect detector
 
 protected:
 
