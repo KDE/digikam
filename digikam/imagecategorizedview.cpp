@@ -97,7 +97,7 @@ public:
     }
 
     ImageModel              *model;
-    ImageFilterModel        *filterModel;
+    ImageSortFilterModel    *filterModel;
 
     ImageDelegate           *delegate;
     bool                     showToolTip;
@@ -150,7 +150,7 @@ void ImageCategorizedView::installDefaultModels()
     setModels(model, filterModel);
 }
 
-void ImageCategorizedView::setModels(ImageModel *model, ImageFilterModel *filterModel)
+void ImageCategorizedView::setModels(ImageModel *model, ImageSortFilterModel *filterModel)
 {
     if (d->delegate)
         d->delegate->setAllOverlaysActive(false);
@@ -195,9 +195,14 @@ ImageModel *ImageCategorizedView::imageModel() const
     return d->model;
 }
 
-ImageFilterModel *ImageCategorizedView::imageFilterModel() const
+ImageSortFilterModel *ImageCategorizedView::imageSortFilterModel() const
 {
     return d->filterModel;
+}
+
+ImageFilterModel *ImageCategorizedView::imageFilterModel() const
+{
+    return d->filterModel->imageFilterModel();
 }
 
 ImageThumbnailModel *ImageCategorizedView::imageThumbnailModel() const
@@ -212,7 +217,7 @@ ImageAlbumModel *ImageCategorizedView::imageAlbumModel() const
 
 ImageAlbumFilterModel *ImageCategorizedView::imageAlbumFilterModel() const
 {
-    return qobject_cast<ImageAlbumFilterModel*>(d->filterModel);
+    return qobject_cast<ImageAlbumFilterModel*>(d->filterModel->imageFilterModel());
 }
 
 QSortFilterProxyModel *ImageCategorizedView::filterModel() const
@@ -311,8 +316,7 @@ KUrl::List ImageCategorizedView::selectedUrls() const
 
 void ImageCategorizedView::toIndex(const KUrl& url)
 {
-    QModelIndex index = d->model->indexForPath(url.toLocalFile());
-    DCategorizedView::toIndex(d->filterModel->mapFromSource(index));
+    DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
 
 ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo &startingPoint, int nth)
@@ -497,7 +501,7 @@ void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems,
 
 Album *ImageCategorizedView::albumAt(const QPoint& pos)
 {
-    if (d->filterModel->imageSortSettings().categorizationMode == ImageSortSettings::CategoryByAlbum)
+    if (imageFilterModel()->imageSortSettings().categorizationMode == ImageSortSettings::CategoryByAlbum)
     {
         QModelIndex categoryIndex = indexForCategoryAt(pos);
         if (categoryIndex.isValid())

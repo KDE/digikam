@@ -38,6 +38,7 @@ class ImageAlbumModel;
 class ImageAlbumFilterModel;
 class ImageModel;
 class ImageFilterModel;
+class ImageSortFilterModel;
 class ImageDelegate;
 class ImageDelegateOverlay;
 class ImageThumbnailModel;
@@ -52,9 +53,12 @@ public:
     ImageCategorizedView(QWidget *parent = 0);
     ~ImageCategorizedView();
 
-    void setModels(ImageModel *model, ImageFilterModel *filterModel);
+    void setModels(ImageModel *model, ImageSortFilterModel *filterModel);
 
     ImageModel *imageModel() const;
+    ImageSortFilterModel *imageSortFilterModel() const;
+
+    /// Returns any ImageFilterMode in chain. May not be sourceModel()
     ImageFilterModel *imageFilterModel() const;
 
     /// Returns 0 if the ImageModel is not an ImageThumbnailModel
