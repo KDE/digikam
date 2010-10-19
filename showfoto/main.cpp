@@ -8,7 +8,7 @@
  *               editor with no support of digiKam database.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@
 
 using namespace Digikam;
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     KAboutData aboutData("showfoto", "digikam",
                          ki18n("showFoto"),
@@ -70,14 +70,14 @@ int main(int argc, char *argv[])
     KApplication app;
 
     KUrl::List urlList;
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     for(int i = 0; i < args->count(); ++i)
     {
         urlList.append(args->url(i));
     }
     args->clear();
 
-    ShowFoto::ShowFoto *w = new ShowFoto::ShowFoto(urlList);
+    ShowFoto::ShowFoto* w = new ShowFoto::ShowFoto(urlList);
     app.setTopWidget(w);
     w->show();
 

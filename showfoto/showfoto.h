@@ -46,8 +46,6 @@ class ThumbBarView;
 namespace ShowFoto
 {
 
-class ShowFotoPriv;
-
 class ShowFoto : public Digikam::EditorWindow
 {
     Q_OBJECT
@@ -92,8 +90,8 @@ private:
 
     void openFolder(const KUrl& url);
 
-    Digikam::ThumbBarDock *thumbBar() const;
-    Digikam::Sidebar      *rightSideBar() const;
+    Digikam::ThumbBarDock* thumbBar() const;
+    Digikam::Sidebar*      rightSideBar() const;
 
 private Q_SLOTS:
 
@@ -124,6 +122,7 @@ private Q_SLOTS:
 
 private:
 
+    class ShowFotoPriv;
     ShowFotoPriv* const d;
 };
 

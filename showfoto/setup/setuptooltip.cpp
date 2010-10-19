@@ -6,7 +6,7 @@
  * Date        : 2006-07-09
  * Description : item tool tip configuration setup tab
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@ using namespace Digikam;
 namespace ShowFoto
 {
 
-class SetupToolTipPriv
+class SetupToolTip::SetupToolTipPriv
 {
 public:
 
@@ -126,11 +126,11 @@ public:
 SetupToolTip::SetupToolTip(QWidget* parent)
             : QScrollArea(parent), d(new SetupToolTipPriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    QVBoxLayout* layout = new QVBoxLayout(panel);
     d->showToolTipsBox  = new QCheckBox(i18n("Show Thumbbar items' toolti&ps"), panel);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display the image information when "
                                           "the mouse hovers over a thumbbar item."));
@@ -141,7 +141,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     // --------------------------------------------------------
 
     d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), panel);
-    QVBoxLayout *gLayout1 = new QVBoxLayout(d->fileSettingBox);
+    QVBoxLayout* gLayout1 = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis( i18n("Set this option to display the image file name."));
@@ -169,7 +169,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     // --------------------------------------------------------
 
     d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), panel);
-    QVBoxLayout *gLayout2 = new QVBoxLayout(d->photoSettingBox);
+    QVBoxLayout* gLayout2 = new QVBoxLayout(d->photoSettingBox);
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis( i18n("Set this option to display the make and model of the "
