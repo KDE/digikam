@@ -50,6 +50,8 @@ public:
     void setScrollBarPolicy(Qt::ScrollBarPolicy policy);
     void setFlow(QListView::Flow newFlow);
 
+    void setModels(ImageModel *model, ImageSortFilterModel *filterModel);
+
 public Q_SLOTS:
 
     void assignRating(const QModelIndex &index, int rating);

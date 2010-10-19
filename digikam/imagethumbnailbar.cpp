@@ -66,10 +66,12 @@ public:
 
     ImageThumbnailBarPriv()
     {
-        scrollPolicy = Qt::ScrollBarAlwaysOn;
+        scrollPolicy     = Qt::ScrollBarAlwaysOn;
+        duplicatesFilter = 0;
     }
 
-    Qt::ScrollBarPolicy     scrollPolicy;
+    Qt::ScrollBarPolicy           scrollPolicy;
+    NoDuplicatesImageFilterModel *duplicatesFilter;
 };
 
 ImageThumbnailBar::ImageThumbnailBar(QWidget *parent)
@@ -81,13 +83,13 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget *parent)
     setScrollStepGranularity(5);
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    AlbumSettings *settings = AlbumSettings::instance();
-
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
-    setToolTipEnabled(settings->showToolTipsIsValid());
+    setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
+
+    d->duplicatesFilter = new NoDuplicatesImageFilterModel(this);
 
     // rating overlay
     ImageRatingOverlay *ratingOverlay = new ImageRatingOverlay(this);
@@ -96,7 +98,7 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget *parent)
     connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
             this, SLOT(assignRating(const QModelIndex&, int)));
 
-    connect(settings, SIGNAL(setupChanged()),
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
     slotSetupChanged();
@@ -105,6 +107,12 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget *parent)
 ImageThumbnailBar::~ImageThumbnailBar()
 {
     delete d;
+}
+
+void ImageThumbnailBar::setModels(ImageModel *model, ImageSortFilterModel *filterModel)
+{
+    d->duplicatesFilter->setSourceFilterModel(filterModel);
+    ImageCategorizedView::setModels(model, d->duplicatesFilter);
 }
 
 void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
