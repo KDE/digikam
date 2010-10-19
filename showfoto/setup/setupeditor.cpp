@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : setup showFoto tab.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -48,7 +48,7 @@
 namespace ShowFoto
 {
 
-class SetupEditorPriv
+class SetupEditor::SetupEditorPriv
 {
 public:
 
@@ -66,6 +66,7 @@ public:
         configSortOrderEntry("SortOrder"),
         configReverseSortEntry("ReverseSort"),
         configUseRawImportToolEntry("UseRawImportTool"),
+        configExpoIndicatorModeEntry("ExpoIndicatorMode"),
 
         sidebarTypeLabel(0),
         hideThumbBar(0),
@@ -75,6 +76,7 @@ public:
         themebackgroundColor(0),
         useRawImportTool(0),
         useTrash(0),
+        expoIndicatorMode(0),
         colorBox(0),
         sidebarType(0),
         sortOrderComboBox(0),
@@ -96,6 +98,7 @@ public:
     const QString configSortOrderEntry;
     const QString configReverseSortEntry;
     const QString configUseRawImportToolEntry;
+    const QString configExpoIndicatorModeEntry;
 
     QLabel*       sidebarTypeLabel;
 
@@ -106,6 +109,7 @@ public:
     QCheckBox*    themebackgroundColor;
     QCheckBox*    useRawImportTool;
     QCheckBox*    useTrash;
+    QCheckBox*    expoIndicatorMode;
 
     KHBox*        colorBox;
 
@@ -120,43 +124,43 @@ public:
 SetupEditor::SetupEditor(QWidget* parent)
            : QScrollArea(parent), d(new SetupEditorPriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    QVBoxLayout* layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
-    QVBoxLayout *gLayout1            = new QVBoxLayout();
+    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
+    QVBoxLayout* gLayout1            = new QVBoxLayout();
 
-    d->themebackgroundColor = new QCheckBox(i18n("&Use current theme background color"),
-                                            interfaceOptionsGroup);
+    d->themebackgroundColor          = new QCheckBox(i18n("&Use current theme background color"),
+                                                     interfaceOptionsGroup);
 
     d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use the current background theme "
                                                "color in the image editor area"));
 
     d->colorBox                  = new KHBox(interfaceOptionsGroup);
-    QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox);
+    QLabel* backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox);
     d->backgroundColor           = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     d->backgroundColor->setWhatsThis(i18n("Select background color to use "
                                           "for image editor area."));
 
-    d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
-    d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
-    d->useTrash   = new QCheckBox(i18n("&Deleted items should go to the trash"), interfaceOptionsGroup);
-    d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
+    d->hideToolBar      = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
+    d->hideThumbBar     = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
+    d->useTrash         = new QCheckBox(i18n("&Deleted items should go to the trash"), interfaceOptionsGroup);
+    d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
 
     d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw images"), interfaceOptionsGroup);
     d->useRawImportTool->setWhatsThis(i18n("Set this option to use Raw Import "
                                            "tool to load a RAW image. "
                                            "With this tool you are able to customize advanced settings."));
 
-    KHBox *hbox = new KHBox(interfaceOptionsGroup);
-    d->sidebarTypeLabel  = new QLabel(i18n("Sidebar tab title:"), hbox);
-    d->sidebarType       = new KComboBox(hbox);
+    KHBox* hbox         = new KHBox(interfaceOptionsGroup);
+    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), hbox);
+    d->sidebarType      = new KComboBox(hbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
@@ -174,31 +178,38 @@ SetupEditor::SetupEditor(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
-    QVBoxLayout *gLayout2           = new QVBoxLayout();
+    QGroupBox* exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
+    QVBoxLayout* gLayout2           = new QVBoxLayout();
 
-    KHBox *underExpoBox         = new KHBox(exposureOptionsGroup);
-    QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
+    KHBox* underExpoBox         = new KHBox(exposureOptionsGroup);
+    QLabel* underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis( i18n("Customize the color used in the image editor to identify "
                                               "under-exposed pixels.") );
 
-    KHBox *overExpoBox         = new KHBox(exposureOptionsGroup);
-    QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
+    KHBox* overExpoBox         = new KHBox(exposureOptionsGroup);
+    QLabel* overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis( i18n("Customize the color used in the image editor to identify "
                                              "over-exposed pixels.") );
 
+    d->expoIndicatorMode       = new QCheckBox(i18n("Indicate exposure as pure color"), exposureOptionsGroup);
+    d->overExposureColor->setWhatsThis( i18n("If this option is enabled, over and under exposure indicators will be displayed "
+                                             "only when pure white and pure black color matches, as all color components match "
+                                             "the condition in the same time. "
+                                             "Else indicators are turn on when one of color components match the condition.") );
+
     gLayout2->addWidget(underExpoBox);
     gLayout2->addWidget(overExpoBox);
+    gLayout2->addWidget(d->expoIndicatorMode);
     exposureOptionsGroup->setLayout(gLayout2);
 
     // --------------------------------------------------------
 
-    QGroupBox *sortOptionsGroup = new QGroupBox(i18n("Sort order for images"), panel);
-    QVBoxLayout *gLayout4       = new QVBoxLayout();
+    QGroupBox* sortOptionsGroup = new QGroupBox(i18n("Sort order for images"), panel);
+    QVBoxLayout* gLayout4       = new QVBoxLayout();
 
     KHBox* sortBox       = new KHBox(sortOptionsGroup);
     new QLabel(i18n("Sort images by:"), sortBox);
@@ -268,6 +279,7 @@ void SetupEditor::readSettings()
     d->sortOrderComboBox->setCurrentIndex(group.readEntry(d->configSortOrderEntry,             (int)SortByDate));
     d->sortReverse->setChecked(group.readEntry(d->configReverseSortEntry,                      false));
     d->useRawImportTool->setChecked(group.readEntry(d->configUseRawImportToolEntry,            false));
+    d->expoIndicatorMode->setChecked(group.readEntry(d->configExpoIndicatorModeEntry,          true));
 }
 
 void SetupEditor::applySettings()
@@ -286,6 +298,7 @@ void SetupEditor::applySettings()
     group.writeEntry(d->configSortOrderEntry,               d->sortOrderComboBox->currentIndex());
     group.writeEntry(d->configReverseSortEntry,             d->sortReverse->isChecked());
     group.writeEntry(d->configUseRawImportToolEntry,        d->useRawImportTool->isChecked());
+    group.writeEntry(d->configExpoIndicatorModeEntry,       d->expoIndicatorMode->isChecked());
     config->sync();
 }
 

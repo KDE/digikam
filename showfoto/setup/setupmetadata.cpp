@@ -6,7 +6,7 @@
  * Date        : 2009-07-18
  * Description : setup Metadata tab.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,7 +61,7 @@ using namespace Digikam;
 namespace ShowFoto
 {
 
-class SetupMetadataPriv
+class SetupMetadata::SetupMetadataPriv
 {
 public:
 
@@ -95,15 +95,15 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget *panel          = new QWidget(d->tab);
-    QVBoxLayout *mainLayout = new QVBoxLayout(panel);
+    QWidget* panel          = new QWidget(d->tab);
+    QVBoxLayout* mainLayout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), panel);
-    QVBoxLayout *gLayout1 = new QVBoxLayout(ExifGroup);
+    QGroupBox* ExifGroup     = new QGroupBox(i18n("EXIF Actions"), panel);
+    QVBoxLayout* gLayout1    = new QVBoxLayout(ExifGroup);
 
-    d->exifRotateBox      = new QCheckBox(ExifGroup);
+    d->exifRotateBox         = new QCheckBox(ExifGroup);
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
 
     d->exifSetOrientationBox = new QCheckBox(ExifGroup);
@@ -116,11 +116,11 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QFrame      *box  = new QFrame(panel);
-    QGridLayout *grid = new QGridLayout(box);
+    QFrame*      box  = new QFrame(panel);
+    QGridLayout* grid = new QGridLayout(box);
     box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    KUrlLabel *exiv2LogoLabel = new KUrlLabel(box);
+    KUrlLabel* exiv2LogoLabel = new KUrlLabel(box);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setUrl("http://www.exiv2.org");
     exiv2LogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-exiv2.png")));

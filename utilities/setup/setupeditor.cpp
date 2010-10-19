@@ -156,7 +156,7 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->overExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
                                              "over-exposed pixels.") );
 
-    d->expoIndicatorMode       = new QCheckBox(i18n("Indicate exposure for pure color"), exposureOptionsGroup);
+    d->expoIndicatorMode       = new QCheckBox(i18n("Indicate exposure as pure color"), exposureOptionsGroup);
     d->overExposureColor->setWhatsThis( i18n("If this option is enabled, over and under exposure indicators will be displayed "
                                              "only when pure white and pure black color matches, as all color components match "
                                              "the condition in the same time. "

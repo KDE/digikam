@@ -56,11 +56,6 @@
     </mount>
 
     <mount>
-        <name>olympusEP1</name>
-        <compat>Generic</compat>
-    </mount>
-
-    <mount>
         <name>olympusSP350</name>
         <compat>Generic</compat>
     </mount>
@@ -224,14 +219,6 @@
         <model>Stylus Epic</model>
         <mount>olympusEpic</mount>
         <cropfactor>1.0</cropfactor>
-    </camera>
-
-    <camera>
-        <maker>OLYMPUS IMAGING CORP.</maker>
-        <maker lang="en">Olympus</maker>
-        <model>EP-1</model>
-        <mount>olympusEP1</mount>
-        <cropfactor>2.0</cropfactor>
     </camera>
 
     <camera>

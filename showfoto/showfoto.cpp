@@ -121,7 +121,7 @@ extern "C"
 namespace ShowFoto
 {
 
-class ShowFotoPriv
+class ShowFoto::ShowFotoPriv
 {
 public:
 
@@ -361,7 +361,6 @@ void ShowFoto::show()
             config->sync();
         }
     }
-
 }
 
 void ShowFoto::setupConnections()
@@ -486,16 +485,15 @@ void ShowFoto::readSettings()
     QString defaultDir =group.readEntry("Last Opened Directory", QString());
     if (defaultDir.isNull())
     {
-        #if KDE_IS_VERSION(4,1,61)
+#if KDE_IS_VERSION(4,1,61)
         defaultDir = KGlobalSettings::picturesPath();
-        #else
+#else
         defaultDir = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
-        #endif
+#endif
     }
     d->lastOpenedDirectory.setPath(defaultDir);
 
-    Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18nc("default theme name",
-                                                                                     "Default")));
+    Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18nc("default theme name", "Default")));
 }
 
 void ShowFoto::saveSettings()
