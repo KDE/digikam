@@ -195,7 +195,7 @@ void lfLens::GuessParameters ()
 
     if (!MinAperture || !MinFocal)
     {
-        // Try to find out the range of focal distance using calibration data
+        // Try to find out the range of focal lengths using calibration data
         if (CalibDistortion)
             for (int i = 0; CalibDistortion [i]; i++)
             {
@@ -416,7 +416,7 @@ const char *lfLens::GetVignettingModelDesc (
             if (details)
                 *details = "Pablo D'Angelo vignetting model\n"
                     "(which is a more general variant of the cos^4 law):\n"
-                    "c = 1 + k1 * R^2 + k2 * R^4 + k3 * R^6\n"
+                    "Cd = Cs * (1 + k1 * R^2 + k2 * R^4 + k3 * R^6)\n"
                     "Ref: http://hugin.sourceforge.net/tech/";
             if (params)
                 *params = param_pa;
