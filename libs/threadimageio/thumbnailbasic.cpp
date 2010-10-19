@@ -108,7 +108,7 @@ void ThumbnailCreator::initThumbnailDirs()
 
 QString ThumbnailCreator::thumbnailPath(const QString& filePath) const
 {
-    QString basePath = (d->cachedSize == 128) ? d->smallThumbPath : d->bigThumbPath;
+    QString basePath = (d->storageSize() == 128) ? d->smallThumbPath : d->bigThumbPath;
     return thumbnailPath(filePath, basePath);
 }
 

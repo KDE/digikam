@@ -113,14 +113,19 @@ void ThumbnailCreator::initialize()
         initThumbnailDirs();
 }
 
+int ThumbnailCreator::ThumbnailCreatorPriv::storageSize() const
+{
+    // on-disk thumbnail sizes according to freedesktop spec
+    // always 256 for thumbnail db
+    if (onlyLargeThumbnails)
+        return 256;
+    else
+        return (thumbnailSize <= 128) ? 128 : 256;
+}
+
 void ThumbnailCreator::setThumbnailSize(int thumbnailSize)
 {
     d->thumbnailSize = thumbnailSize;
-    // on-disk thumbnail sizes according to spec
-    if (d->onlyLargeThumbnails)
-        d->cachedSize = 256;
-    else
-        d->cachedSize = (thumbnailSize <= 128) ? 128 : 256;
 }
 
 void ThumbnailCreator::setExifRotate(bool rotate)
@@ -156,7 +161,7 @@ int ThumbnailCreator::thumbnailSize() const
 
 int ThumbnailCreator::storedSize() const
 {
-    return d->cachedSize;
+    return d->storageSize();
 }
 
 QString ThumbnailCreator::errorString() const
@@ -196,7 +201,7 @@ QImage ThumbnailCreator::loadDetail(const QString& path, const QRect& rect) cons
 
 QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool pregenerate) const
 {
-    if (d->cachedSize <= 0)
+    if (d->storageSize() <= 0)
     {
         d->error = i18n("No or invalid size specified");
         kWarning() << "No or invalid size specified";
@@ -279,15 +284,15 @@ QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool prege
 QImage ThumbnailCreator::scaleForStorage(const QImage& qimage, bool isFace) const
 {
     Q_UNUSED(isFace)
-    if (qimage.width() > d->cachedSize || qimage.height() > d->cachedSize)
+    if (qimage.width() > d->storageSize() || qimage.height() > d->storageSize())
     {
         /*
         Cheat scaling is disabled because of quality problems - see bug #224999
         // Perform cheat scaling (http://labs.trolltech.com/blogs/2009/01/26/creating-thumbnail-preview)
-        int cheatSize = maxSize - (3*(maxSize - d->cachedSize) / 4);
+        int cheatSize = maxSize - (3*(maxSize - d->storageSize()) / 4);
         qimage        = qimage.scaled(cheatSize, cheatSize, Qt::KeepAspectRatio, Qt::FastTransformation);
         */
-        QImage scaledThumb = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QImage scaledThumb = qimage.scaled(d->storageSize(), d->storageSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         return scaledThumb;
     }
@@ -334,7 +339,6 @@ void ThumbnailCreator::store(const QString& path, const QImage& i, const QRect& 
     if (i.isNull())
         return;
 
-    // FIXME: qimage is kept a null image after this.
     QImage qimage = scaleForStorage(i, isFace);
 
     ThumbnailInfo info = makeThumbnailInfo(path, rect);
@@ -345,7 +349,9 @@ void ThumbnailCreator::store(const QString& path, const QImage& i, const QRect& 
     switch (d->thumbnailStorage)
     {
         case ThumbnailDatabase:
-            storeInDatabase(info, image);
+            // we must call isInDatabase or loadFromDatabase before storeInDatabase for d->dbIdForReplacement!
+            if (!isInDatabase(info))
+                storeInDatabase(info, image);
             break;
         case FreeDesktopStandard:
             storeFreedesktop(info, image);
@@ -422,7 +428,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
                 qimage = loadWithDImg(path, &profile);
             else
             // use jpegutils
-                loadJPEGScaled(qimage, path, d->cachedSize);
+                loadJPEGScaled(qimage, path, d->storageSize());
             failedAtJPEGScaled = qimage.isNull();
         }
         else if (ext == QString("PNG")  ||
@@ -435,7 +441,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         else if (ext == QString("PGF"))
         {
             // use pgf library to extract reduced version
-            loadPGFScaled(qimage, path, d->cachedSize);
+            loadPGFScaled(qimage, path, d->storageSize());
             failedAtPGFScaled = qimage.isNull();
         }
     }
@@ -466,14 +472,14 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     if (qimage.isNull() && !failedAtJPEGScaled)
     {
         // use jpegutils
-        loadJPEGScaled(qimage, path, d->cachedSize);
+        loadJPEGScaled(qimage, path, d->storageSize());
     }
 
     // Try PGF anyway
     if (qimage.isNull() && !failedAtPGFScaled)
     {
         // use jpegutils
-        loadPGFScaled(qimage, path, d->cachedSize);
+        loadPGFScaled(qimage, path, d->storageSize());
     }
 
     if (qimage.isNull())
@@ -499,7 +505,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
 QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile) const
 {
     DImg img;
-    img.setAttribute("scaledLoadingSize", d->cachedSize);
+    img.setAttribute("scaledLoadingSize", d->storageSize());
     img.load(path, false, profile ? true : false, false, false, d->observer, d->rawSettings);
     *profile = img.getIccProfile();
     return img.copyQImage();

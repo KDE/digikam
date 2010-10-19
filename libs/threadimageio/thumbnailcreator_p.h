@@ -55,7 +55,6 @@ public:
     ThumbnailCreatorPriv()
     {
         thumbnailSize       = 0;
-        cachedSize          = 0;
         observer            = 0;
 
         thumbnailStorage    = ThumbnailCreator::FreeDesktopStandard;
@@ -83,7 +82,6 @@ public:
     int                             dbIdForReplacement;
 
     int                             thumbnailSize;
-    int                             cachedSize;
 
     QString                         error;
     QString                         bigThumbPath;
@@ -93,6 +91,8 @@ public:
     DImgLoaderObserver*             observer;
     DRawDecoding                    rawSettings;
     DRawDecoding                    fastRawSettings;
+
+    int                             storageSize() const;
 };
 
 }  // namespace Digikam
