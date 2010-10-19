@@ -39,6 +39,7 @@ namespace Digikam
 {
 
 class ImageChangeset;
+class ImageFilterModel;
 class ImageTagChangeset;
 class ImageFilterModelPrivate;
 
@@ -50,7 +51,53 @@ public:
     virtual void prepare(const QVector<ImageInfo>& infos) = 0;
 };
 
-class DIGIKAM_DATABASE_EXPORT ImageFilterModel : public KCategorizedSortFilterProxyModel
+class DIGIKAM_DATABASE_EXPORT ImageSortFilterModel : public KCategorizedSortFilterProxyModel
+{
+    Q_OBJECT
+
+public:
+
+    ImageSortFilterModel(QObject *parent = 0);
+
+    void setSourceImageModel(ImageModel* model);
+    void setSourceFilterModel(ImageSortFilterModel* model);
+
+    ImageModel* sourceImageModel() const;
+    ImageSortFilterModel *sourceFilterModel() const;
+
+    /// Returns this, any chained ImageFilterModel, or 0.
+    virtual ImageFilterModel *imageFilterModel() const;
+
+    QModelIndex mapToSourceImageModel(const QModelIndex& index) const;
+    QModelIndex mapFromSourceImageModel(const QModelIndex& imagemodel_index) const;
+
+    /// Convenience methods mapped to ImageModel.
+    /// Mentioned indexes returned come from the source image model.
+    QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
+    QList<QModelIndex> mapListFromSource(const QList<QModelIndex>& sourceIndexes) const;
+    ImageInfo imageInfo(const QModelIndex& index) const;
+    qlonglong imageId(const QModelIndex& index) const;
+    QList<ImageInfo> imageInfos(const QList<QModelIndex>& indexes) const;
+    QList<qlonglong> imageIds(const QList<QModelIndex>& indexes) const;
+    QModelIndex indexForPath(const QString& filePath) const;
+    QModelIndex indexForImageInfo(const ImageInfo& info) const;
+    QModelIndex indexForImageId(qlonglong id) const;
+    /** Returns a list of all image infos, sorted according to this model.
+     *  If you do not need a sorted list, use ImageModel's imageInfos() method. */
+    QList<ImageInfo> imageInfosSorted() const;
+
+protected:
+
+    /// Reimplement if needed. Called only when model shall be set as (direct) sourceModel.
+    virtual void setDirectSourceImageModel(ImageModel* model);
+
+    // made protected
+    virtual void setSourceModel(QAbstractItemModel* model);
+
+    ImageSortFilterModel *m_chainedModel;
+};
+
+class DIGIKAM_DATABASE_EXPORT ImageFilterModel : public ImageSortFilterModel
 {
     Q_OBJECT
 
@@ -74,28 +121,10 @@ public:
     ImageFilterModel(QObject* parent = 0);
     ~ImageFilterModel();
 
-    /** This filter model is for use with ImageModel source models only. */
-    void setSourceImageModel(ImageModel* model);
-
-    ImageModel* sourceModel() const;
-
     /** Add a hook to get added images for preparation tasks before they are added in the model */
     void addPrepareHook(ImageFilterModelPrepareHook* hook);
     void removePrepareHook(ImageFilterModelPrepareHook* hook);
 
-    /// Convenience methods mapped to ImageModel
-    QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
-    QList<QModelIndex> mapListFromSource(const QList<QModelIndex>& sourceIndexes) const;
-    ImageInfo imageInfo(const QModelIndex& index) const;
-    qlonglong imageId(const QModelIndex& index) const;
-    QList<ImageInfo> imageInfos(const QList<QModelIndex>& indexes) const;
-    QList<qlonglong> imageIds(const QList<QModelIndex>& indexes) const;
-    QModelIndex indexForPath(const QString& filePath) const;
-    QModelIndex indexForImageInfo(const ImageInfo& info) const;
-    QModelIndex indexForImageId(qlonglong id) const;
-    /** Returns a list of all image infos, sorted according to this model.
-     *  If you do not need a sorted list, use ImageModel's imageInfos() method. */
-    QList<ImageInfo> imageInfosSorted() const;
     /** Returns a set of DatabaseFields suggested to set as watch flags on the source ImageModel.
      *  The contained flags will be those that this model can sort or filter by. */
     DatabaseFields::Set suggestedWatchFlags() const;
@@ -104,6 +133,7 @@ public:
     ImageSortSettings   imageSortSettings() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual ImageFilterModel *imageFilterModel() const;
 
     /// Enables sending imageInfosAdded and imageInfosAboutToBeRemoved
     void setSendImageInfoSignals(bool sendSignals);
@@ -154,7 +184,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void setSourceModel(QAbstractItemModel* model);
+    virtual void setDirectSourceImageModel(ImageModel* model);
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 
@@ -188,6 +218,19 @@ protected Q_SLOTS:
 private:
 
     Q_DECLARE_PRIVATE(ImageFilterModel)
+};
+
+class DIGIKAM_DATABASE_EXPORT NoDuplicatesImageFilterModel : public ImageSortFilterModel
+{
+    Q_OBJECT
+
+public:
+
+    NoDuplicatesImageFilterModel(QObject *parent = 0);
+
+protected:
+
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 };
 
 } // namespace Digikam

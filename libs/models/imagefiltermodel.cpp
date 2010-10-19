@@ -27,6 +27,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kstringhandler.h>
 
 // Local includes
@@ -39,6 +40,151 @@
 
 namespace Digikam
 {
+
+ImageSortFilterModel::ImageSortFilterModel(QObject *parent)
+    : KCategorizedSortFilterProxyModel(parent), m_chainedModel(0)
+{
+}
+
+void ImageSortFilterModel::setSourceImageModel(ImageModel *source)
+{
+    if (m_chainedModel)
+        m_chainedModel->setSourceImageModel(source);
+    else
+        setDirectSourceImageModel(source);
+}
+
+void ImageSortFilterModel::setSourceFilterModel(ImageSortFilterModel *source)
+{
+    if (source)
+    {
+        ImageModel *model = sourceImageModel();
+        if (model)
+            source->setSourceImageModel(model);
+    }
+    m_chainedModel = source;
+    setSourceModel(source);
+}
+
+void ImageSortFilterModel::setDirectSourceImageModel(ImageModel* model)
+{
+    setSourceModel(model);
+}
+
+void ImageSortFilterModel::setSourceModel(QAbstractItemModel* model)
+{
+    // made it protected, only setSourceImageModel is public
+    KCategorizedSortFilterProxyModel::setSourceModel(model);
+}
+
+ImageModel *ImageSortFilterModel::sourceImageModel() const
+{
+    if (m_chainedModel)
+        return m_chainedModel->sourceImageModel();
+    return static_cast<ImageModel*>(sourceModel());
+}
+
+ImageSortFilterModel *ImageSortFilterModel::sourceFilterModel() const
+{
+    return m_chainedModel;
+}
+
+ImageFilterModel *ImageSortFilterModel::imageFilterModel() const
+{
+    // reimplemented in ImageFilterModel
+    if (m_chainedModel)
+        return m_chainedModel->imageFilterModel();
+    return 0;
+}
+
+QModelIndex ImageSortFilterModel::mapToSourceImageModel(const QModelIndex& index) const
+{
+    if (m_chainedModel)
+        return m_chainedModel->mapToSourceImageModel(mapToSource(index));
+    return mapToSource(index);
+}
+
+QModelIndex ImageSortFilterModel::mapFromSourceImageModel(const QModelIndex& albummodel_index) const
+{
+    if (m_chainedModel)
+        return mapFromSource(m_chainedModel->mapFromSourceImageModel(albummodel_index));
+    return mapFromSource(albummodel_index);
+}
+
+// -------------- Convenience mappers --------------
+
+QList<QModelIndex> ImageSortFilterModel::mapListToSource(const QList<QModelIndex>& indexes) const
+{
+    QList<QModelIndex> sourceIndexes;
+    foreach (const QModelIndex& index, indexes)
+        sourceIndexes << mapToSourceImageModel(index);
+    return sourceIndexes;
+}
+
+QList<QModelIndex> ImageSortFilterModel::mapListFromSource(const QList<QModelIndex>& sourceIndexes) const
+{
+    QList<QModelIndex> indexes;
+    foreach (const QModelIndex& index, sourceIndexes)
+        indexes << mapFromSourceImageModel(index);
+    return indexes;
+}
+
+ImageInfo ImageSortFilterModel::imageInfo(const QModelIndex& index) const
+{
+    return sourceImageModel()->imageInfo(mapToSource(index));
+}
+
+qlonglong ImageSortFilterModel::imageId(const QModelIndex& index) const
+{
+    return sourceImageModel()->imageId(mapToSource(index));
+}
+
+QList<ImageInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& indexes) const
+{
+    QList<ImageInfo> infos;
+    ImageModel *model = sourceImageModel();
+    foreach (const QModelIndex& index, indexes)
+        infos << model->imageInfo(mapToSourceImageModel(index));
+    return infos;
+}
+
+QList<qlonglong> ImageSortFilterModel::imageIds(const QList<QModelIndex>& indexes) const
+{
+    QList<qlonglong> ids;
+    ImageModel *model = sourceImageModel();
+    foreach (const QModelIndex& index, indexes)
+        ids << model->imageId(mapToSourceImageModel(index));
+    return ids;
+}
+
+QModelIndex ImageSortFilterModel::indexForPath(const QString& filePath) const
+{
+    return mapFromSourceImageModel(sourceImageModel()->indexForPath(filePath));
+}
+
+QModelIndex ImageSortFilterModel::indexForImageInfo(const ImageInfo& info) const
+{
+    return mapFromSourceImageModel(sourceImageModel()->indexForImageInfo(info));
+}
+
+QModelIndex ImageSortFilterModel::indexForImageId(qlonglong id) const
+{
+    return mapFromSourceImageModel(sourceImageModel()->indexForImageId(id));
+}
+
+QList<ImageInfo> ImageSortFilterModel::imageInfosSorted() const
+{
+    QList<ImageInfo> infos;
+    const int size = rowCount();
+    ImageModel *model = sourceImageModel();
+    for (int i=0; i<size; ++i)
+    {
+        infos << model->imageInfo(mapToSourceImageModel(index(i, 0)));
+    }
+    return infos;
+}
+
+// -------------- ImageFilterModelPrivate --------------
 
 ImageFilterModelPrivate::ImageFilterModelPrivate()
 {
@@ -81,14 +227,14 @@ const int PrepareChunkSize = 101;
 const int FilterChunkSize  = 2001;
 
 ImageFilterModel::ImageFilterModel(QObject* parent)
-                : KCategorizedSortFilterProxyModel(parent),
+                : ImageSortFilterModel(parent),
                   d_ptr(new ImageFilterModelPrivate)
 {
     d_ptr->init(this);
 }
 
 ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate& dd, QObject* parent)
-                : KCategorizedSortFilterProxyModel(parent),
+                : ImageSortFilterModel(parent),
                   d_ptr(&dd)
 {
     d_ptr->init(this);
@@ -115,19 +261,7 @@ ImageFilterModel::~ImageFilterModel()
     delete d;
 }
 
-void ImageFilterModel::setSourceModel(QAbstractItemModel* sourceModel)
-{
-    // made it protected, only setSourceImageModel is public
-    QSortFilterProxyModel::setSourceModel(sourceModel);
-}
-
-ImageModel* ImageFilterModel::sourceModel() const
-{
-    Q_D(const ImageFilterModel);
-    return d->imageModel;
-}
-
-void ImageFilterModel::setSourceImageModel(ImageModel* sourceModel)
+void ImageFilterModel::setDirectSourceImageModel(ImageModel* sourceModel)
 {
     Q_D(ImageFilterModel);
 
@@ -194,6 +328,11 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
     return KCategorizedSortFilterProxyModel::data(index, role);
 }
 
+ImageFilterModel *ImageFilterModel::imageFilterModel() const
+{
+    return const_cast<ImageFilterModel*>(this);
+}
+
 DatabaseFields::Set ImageFilterModel::suggestedWatchFlags() const
 {
     DatabaseFields::Set watchFlags;
@@ -202,84 +341,6 @@ DatabaseFields::Set ImageFilterModel::suggestedWatchFlags() const
                   DatabaseFields::Width  | DatabaseFields::Height;
     watchFlags |= DatabaseFields::Comment;
     return watchFlags;
-}
-
-// -------------- Convenience mappers --------------
-
-QList<QModelIndex> ImageFilterModel::mapListToSource(const QList<QModelIndex>& indexes) const
-{
-    QList<QModelIndex> sourceIndexes;
-    foreach (const QModelIndex& index, indexes)
-        sourceIndexes << mapToSource(index);
-    return sourceIndexes;
-}
-
-QList<QModelIndex> ImageFilterModel::mapListFromSource(const QList<QModelIndex>& sourceIndexes) const
-{
-    QList<QModelIndex> indexes;
-    foreach (const QModelIndex& index, sourceIndexes)
-        indexes << mapFromSource(index);
-    return indexes;
-}
-
-ImageInfo ImageFilterModel::imageInfo(const QModelIndex& index) const
-{
-    Q_D(const ImageFilterModel);
-    return d->imageModel->imageInfo(mapToSource(index));
-}
-
-qlonglong ImageFilterModel::imageId(const QModelIndex& index) const
-{
-    Q_D(const ImageFilterModel);
-    return d->imageModel->imageId(mapToSource(index));
-}
-
-QList<ImageInfo> ImageFilterModel::imageInfos(const QList<QModelIndex>& indexes) const
-{
-    Q_D(const ImageFilterModel);
-    QList<ImageInfo> infos;
-    foreach (const QModelIndex& index, indexes)
-        infos << d->imageModel->imageInfo(mapToSource(index));
-    return infos;
-}
-
-QList<qlonglong> ImageFilterModel::imageIds(const QList<QModelIndex>& indexes) const
-{
-    Q_D(const ImageFilterModel);
-    QList<qlonglong> ids;
-    foreach (const QModelIndex& index, indexes)
-        ids << d->imageModel->imageId(mapToSource(index));
-    return ids;
-}
-
-QModelIndex ImageFilterModel::indexForPath(const QString& filePath) const
-{
-    Q_D(const ImageFilterModel);
-    return mapFromSource(d->imageModel->indexForPath(filePath));
-}
-
-QModelIndex ImageFilterModel::indexForImageInfo(const ImageInfo& info) const
-{
-    Q_D(const ImageFilterModel);
-    return mapFromSource(d->imageModel->indexForImageInfo(info));
-}
-
-QModelIndex ImageFilterModel::indexForImageId(qlonglong id) const
-{
-    Q_D(const ImageFilterModel);
-    return mapFromSource(d->imageModel->indexForImageId(id));
-}
-
-QList<ImageInfo> ImageFilterModel::imageInfosSorted() const
-{
-    Q_D(const ImageFilterModel);
-    QList<ImageInfo> infos;
-    const int size = rowCount();
-    for (int i=0; i<size; ++i)
-    {
-        infos << d->imageModel->imageInfo(mapToSource(index(i, 0)));
-    }
-    return infos;
 }
 
 // -------------- Filter settings --------------
@@ -755,7 +816,7 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
 
 int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const
 {
-    // Note: reimplemented in ImageAlbumFilterModel
+    // Note: reimplemented in ImageImageSortFilterModel
     Q_D(const ImageFilterModel);
     return d->sorter.compareCategories(left, right);
 }
@@ -868,5 +929,19 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
     else
         invalidate(); // just resort, reuse filter results
 }
+
+// ----------------
+
+NoDuplicatesImageFilterModel::NoDuplicatesImageFilterModel(QObject *parent)
+    : ImageSortFilterModel(parent)
+{
+}
+
+bool NoDuplicatesImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+    return index.data(ImageModel::ExtraDataDuplicateCount).toInt() == 0;
+}
+
 
 } // namespace Digikam

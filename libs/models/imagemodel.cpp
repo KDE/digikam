@@ -683,6 +683,21 @@ QVariant ImageModel::data(const QModelIndex& index, int role) const
                 return d->extraValues[index.row()];
             else
                 return QVariant();
+        case ExtraDataDuplicateCount:
+        {
+            if (d->extraValues.isEmpty())
+                return 0;
+            int count = 0;
+            qlonglong id = d->infos[index.row()].id();
+            QHash<qlonglong,int>::iterator it;
+            for (it = d->idHash.find(id); it != d->idHash.end() && it.key() == id; ++it)
+            {
+                if (it.value() == index.row())
+                    return count;
+                ++count;
+            }
+            return 0; // never reached, or data structures are broken
+        }
     }
     return QVariant();
 }
