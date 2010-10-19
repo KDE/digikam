@@ -52,6 +52,7 @@ public:
         running          = true;
         assignedThread   = 0;
         emitSignals      = false;
+        inDestruction    = false;
         priority         = QThread::InheritPriority;
         previousPriority = QThread::InheritPriority;
     };
@@ -67,6 +68,7 @@ public:
 
     volatile bool                 running;
     volatile bool                 emitSignals;
+    bool                          inDestruction;
 
     volatile DynamicThread::State state;
 
@@ -86,8 +88,12 @@ DynamicThread::DynamicThread(QObject* parent)
 
 DynamicThread::~DynamicThread()
 {
-    stop();
-    wait();
+    {
+        QMutexLocker locker(&d->mutex);
+        d->inDestruction = true;
+        stop(locker);
+        wait(locker);
+    }
     delete d;
 }
 
@@ -156,6 +162,9 @@ void DynamicThread::wait()
 
 void DynamicThread::start(QMutexLocker& locker)
 {
+    if (d->inDestruction)
+        return;
+
     switch (d->state)
     {
         case Inactive:
