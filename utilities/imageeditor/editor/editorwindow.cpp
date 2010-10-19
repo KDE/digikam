@@ -919,6 +919,8 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->useRAWImport = group.readEntry(d->configUseRawImportToolEntry, false);
     m_IOFileSettings->rawDecodingSettings.readSettings(group);
 
+    // -- Color Management settings ---------------------------------------------------------
+
     // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
     // else, sRGB color workspace will be used.
 
@@ -939,6 +941,8 @@ void EditorWindow::applyStandardSettings()
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
     }
 
+    d->toolIface->updateICCSettings();
+
     // -- GUI Settings -------------------------------------------------------
 
     d->legacyUpdateSplitterState(group);
@@ -954,6 +958,7 @@ void EditorWindow::applyStandardSettings()
     d->exposureSettings->underExposureColor    = group.readEntry(d->configUnderExposureColorEntry, QColor(Qt::white));
     d->exposureSettings->overExposureColor     = group.readEntry(d->configOverExposureColorEntry,  QColor(Qt::black));
     d->exposureSettings->exposureIndicatorMode = group.readEntry(d->configExpoIndicatorModeEntry,  true);
+    d->toolIface->updateExposureSettings();
 }
 
 void EditorWindow::saveStandardSettings()
