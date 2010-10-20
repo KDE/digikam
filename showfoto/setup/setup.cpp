@@ -31,11 +31,13 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "setupdcraw.h"
 #include "setupeditor.h"
+#include "setupmisc.h"
 #include "setupicc.h"
 #include "setupiofiles.h"
 #include "setupmetadata.h"
@@ -58,6 +60,7 @@ public:
         iofilesPage    = 0;
         slideshowPage  = 0;
         iccPage        = 0;
+        miscPage       = 0;
         page_editor    = 0;
         page_metadata  = 0;
         page_tooltip   = 0;
@@ -65,6 +68,7 @@ public:
         page_iofiles   = 0;
         page_slideshow = 0;
         page_icc       = 0;
+        page_misc      = 0;
     }
 
     KPageWidgetItem*         page_editor;
@@ -74,15 +78,21 @@ public:
     KPageWidgetItem*         page_iofiles;
     KPageWidgetItem*         page_slideshow;
     KPageWidgetItem*         page_icc;
+    KPageWidgetItem*         page_misc;
 
-    SetupEditor*             editorPage;
     SetupMetadata*           metadataPage;
     SetupToolTip*            toolTipPage;
+    SetupMisc*               miscPage;
 
+    Digikam::SetupEditor*    editorPage;
     Digikam::SetupDcraw*     dcrawPage;
     Digikam::SetupIOFiles*   iofilesPage;
     Digikam::SetupSlideShow* slideshowPage;
     Digikam::SetupICC*       iccPage;
+
+public:
+
+    KPageWidgetItem* pageItem(Setup::Page page) const;
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
@@ -96,7 +106,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setFaceType(KPageDialog::List);
     setModal(true);
 
-    d->editorPage  = new SetupEditor();
+    d->editorPage  = new Digikam::SetupEditor();
     d->page_editor = addPage(d->editorPage, i18nc("general settings tab", "General"));
     d->page_editor->setHeader(i18n("<qt>General Settings<br/>"
                               "<i>Customize general behavior</i></qt>"));
@@ -138,22 +148,34 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                                  "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
 
-    d->editorPage->setFrameShape(QFrame::NoFrame);
-    d->metadataPage->setFrameShape(QFrame::NoFrame);
-    d->toolTipPage->setFrameShape(QFrame::NoFrame);
-    d->dcrawPage->setFrameShape(QFrame::NoFrame);
-    d->iofilesPage->setFrameShape(QFrame::NoFrame);
-    d->slideshowPage->setFrameShape(QFrame::NoFrame);
-    d->iccPage->setFrameShape(QFrame::NoFrame);
+    d->miscPage  = new SetupMisc();
+    d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
+    d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
+                                 "<i>Customize behavior of the other parts of Showfoto</i></qt>"));
+    d->page_misc->setIcon(KIcon("preferences-other"));
+
+    for (int i = 0; i != SetupPageEnumLast; ++i)
+    {
+        kDebug() << i;
+        KPageWidgetItem* item = d->pageItem((Page)i);
+        if (!item)
+            continue;
+        QWidget* wgt            = item->widget();
+        QScrollArea* scrollArea = qobject_cast<QScrollArea*>(wgt);
+        if (scrollArea)
+            scrollArea->setFrameShape(QFrame::NoFrame);
+    }
 
     connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOkClicked()) );
+            this, SLOT(slotOkClicked()));
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
 
     if (page != LastPageUsed)
+    {
         showPage(page);
+    }
     else
     {
         showPage((Page)group.readEntry("Setup Page", (int)EditorPage));
@@ -183,6 +205,7 @@ void Setup::slotOkClicked()
     d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
+    d->miscPage->applySettings();
     close();
 }
 
@@ -208,6 +231,9 @@ void Setup::showPage(Setup::Page page)
         case MetadataPage:
             setCurrentPage(d->page_metadata);
             break;
+        case MiscellaneousPage:
+            setCurrentPage(d->page_misc);
+            break;
         default:
             setCurrentPage(d->page_editor);
             break;
@@ -223,8 +249,34 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_slideshow) return SlideshowPage;
     if (cur == d->page_icc)       return ICCPage;
     if (cur == d->page_metadata)  return MetadataPage;
+    if (cur == d->page_misc)      return MiscellaneousPage;
 
     return EditorPage;
+}
+
+KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
+{
+    switch(page)
+    {
+        case Setup::EditorPage:
+            return page_editor;
+        case Setup::MetadataPage:
+            return page_metadata;
+        case Setup::ToolTipPage:
+            return page_tooltip;
+        case Setup::DcrawPage:
+            return page_dcraw;
+        case Setup::IOFilesPage:
+            return page_iofiles;
+        case Setup::SlideshowPage:
+            return page_slideshow;
+        case Setup::ICCPage:
+            return page_icc;
+        case Setup::MiscellaneousPage:
+            return page_misc;
+        default:
+            return 0;
+    }
 }
 
 }   // namespace ShowFoto

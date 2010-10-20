@@ -40,13 +40,17 @@ public:
     enum Page
     {
         LastPageUsed = -1,
+
         EditorPage = 0,
         MetadataPage,
         ToolTipPage,
         DcrawPage,
         IOFilesPage,
         SlideshowPage,
-        ICCPage
+        ICCPage,
+        MiscellaneousPage,
+
+        SetupPageEnumLast
     };
 
     explicit Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);

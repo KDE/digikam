@@ -62,7 +62,7 @@
 namespace Digikam
 {
 
-class SetupPrivate
+class Setup::SetupPrivate
 {
 public:
 
@@ -258,9 +258,9 @@ Setup::Setup(QWidget* parent)
                                  "<i>Customize behavior of the other parts of digiKam</i></qt>"));
     d->page_misc->setIcon(KIcon("preferences-other"));
 
-    for (int page = 0; page != SetupPageEnumLast; ++page)
+    for (int i = 0; i != SetupPageEnumLast; ++i)
     {
-        KPageWidgetItem* item = d->pageItem((Page)page);
+        KPageWidgetItem* item = d->pageItem((Page)i);
         if (!item)
             continue;
         QWidget* wgt            = item->widget();
@@ -467,7 +467,7 @@ Setup::Page Setup::activePageIndex()
     return DatabasePage;
 }
 
-KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page) const
+KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
 {
     switch(page)
     {

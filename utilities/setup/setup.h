@@ -38,7 +38,6 @@ namespace Digikam
 {
 
 class SetupPlugins;
-class SetupPrivate;
 
 class Setup : public KPageDialog
 {
@@ -49,6 +48,7 @@ public:
     enum Page
     {
         LastPageUsed = -1,
+
         CollectionsPage = 0,
         DatabasePage,
         AlbumViewPage,
@@ -97,6 +97,7 @@ private:
 
 private:
 
+    class SetupPrivate;
     SetupPrivate* const d;
 };
 
