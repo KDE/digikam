@@ -95,7 +95,7 @@ SetupMisc::SetupMisc(QWidget* parent)
 
     // -- Misc Options --------------------------------------------------------
 
-    QGroupBox* miscOptionsGroup = new QGroupBox(i18n("Misc"), panel);
+    QGroupBox* miscOptionsGroup = new QGroupBox(i18n("Behavior"), panel);
     QVBoxLayout* gLayout5       = new QVBoxLayout();
 
     d->useTrash         = new QCheckBox(i18n("&Deleted items should go to the trash"), miscOptionsGroup);

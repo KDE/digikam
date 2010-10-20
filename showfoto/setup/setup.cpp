@@ -107,10 +107,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setModal(true);
 
     d->editorPage  = new Digikam::SetupEditor();
-    d->page_editor = addPage(d->editorPage, i18nc("general settings tab", "General"));
-    d->page_editor->setHeader(i18n("<qt>General Settings<br/>"
-                              "<i>Customize general behavior</i></qt>"));
-    d->page_editor->setIcon(KIcon("showfoto"));
+    d->page_editor = addPage(d->editorPage, i18n("Image Editor"));
+    d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
+                              "<i>Customize image editor behavior</i></qt>"));
+    d->page_editor->setIcon(KIcon("editimage"));
 
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
