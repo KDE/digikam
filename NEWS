@@ -6,6 +6,8 @@ NEW FEATURES:
 Slideshow      : User can change item rating during a slide.
 ImageEditor    : New option to display over/under exposure indicators if pure colors is detected
                  or if only one color component match the condition.
+ImageEditor    : New options to adjust the levels of over/under exposured pixels from histogram, 
+                 displayed by over/under exposure indicators.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
