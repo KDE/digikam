@@ -955,9 +955,11 @@ void EditorWindow::applyStandardSettings()
 
     // -- Exposure Indicators Settings ---------------------------------------
 
-    d->exposureSettings->underExposureColor    = group.readEntry(d->configUnderExposureColorEntry, QColor(Qt::white));
-    d->exposureSettings->overExposureColor     = group.readEntry(d->configOverExposureColorEntry,  QColor(Qt::black));
-    d->exposureSettings->exposureIndicatorMode = group.readEntry(d->configExpoIndicatorModeEntry,  true);
+    d->exposureSettings->underExposureColor    = group.readEntry(d->configUnderExposureColorEntry,    QColor(Qt::white));
+    d->exposureSettings->underExposurePercent  = group.readEntry(d->configUnderExposurePercentsEntry, 1.0);
+    d->exposureSettings->overExposureColor     = group.readEntry(d->configOverExposureColorEntry,     QColor(Qt::black));
+    d->exposureSettings->overExposurePercent   = group.readEntry(d->configOverExposurePercentsEntry,  1.0);
+    d->exposureSettings->exposureIndicatorMode = group.readEntry(d->configExpoIndicatorModeEntry,     true);
     d->toolIface->updateExposureSettings();
 }
 

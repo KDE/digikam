@@ -43,6 +43,12 @@
 #include <knuminput.h>
 #include <kvbox.h>
 
+// LibKDcraw includes
+
+#include <libkdcraw/rnuminput.h>
+
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
@@ -59,6 +65,8 @@ public:
         configUseRawImportToolEntry("UseRawImportTool"),
         configUnderExposureColorEntry("UnderExposureColor"),
         configOverExposureColorEntry("OverExposureColor"),
+        configUnderExposurePercentsEntry("UnderExposurePercentsEntry"),
+        configOverExposurePercentsEntry("OverExposurePercentsEntry"),
         configExpoIndicatorModeEntry("ExpoIndicatorMode"),
 
         themebackgroundColor(0),
@@ -69,29 +77,36 @@ public:
         colorBox(0),
         backgroundColor(0),
         underExposureColor(0),
-        overExposureColor(0)
+        overExposureColor(0),
+        underExposurePcents(0),
+        overExposurePcents(0)
     {}
 
-    const QString configGroupName;
-    const QString configUseThemeBackgroundColorEntry;
-    const QString configBackgroundColorEntry;
-    const QString configFullScreenHideToolBarEntry;
-    const QString configFullScreenHideThumbBarEntry;
-    const QString configUseRawImportToolEntry;
-    const QString configUnderExposureColorEntry;
-    const QString configOverExposureColorEntry;
-    const QString configExpoIndicatorModeEntry;
+    const QString    configGroupName;
+    const QString    configUseThemeBackgroundColorEntry;
+    const QString    configBackgroundColorEntry;
+    const QString    configFullScreenHideToolBarEntry;
+    const QString    configFullScreenHideThumbBarEntry;
+    const QString    configUseRawImportToolEntry;
+    const QString    configUnderExposureColorEntry;
+    const QString    configOverExposureColorEntry;
+    const QString    configUnderExposurePercentsEntry;
+    const QString    configOverExposurePercentsEntry;
+    const QString    configExpoIndicatorModeEntry;
 
-    QCheckBox*    themebackgroundColor;
-    QCheckBox*    hideToolBar;
-    QCheckBox*    hideThumbBar;
-    QCheckBox*    useRawImportTool;
-    QCheckBox*    expoIndicatorMode;
+    QCheckBox*       themebackgroundColor;
+    QCheckBox*       hideToolBar;
+    QCheckBox*       hideThumbBar;
+    QCheckBox*       useRawImportTool;
+    QCheckBox*       expoIndicatorMode;
 
-    KHBox*        colorBox;
-    KColorButton* backgroundColor;
-    KColorButton* underExposureColor;
-    KColorButton* overExposureColor;
+    KHBox*           colorBox;
+    KColorButton*    backgroundColor;
+    KColorButton*    underExposureColor;
+    KColorButton*    overExposureColor;
+
+    RDoubleNumInput* underExposurePcents;
+    RDoubleNumInput* overExposurePcents;
 };
 
 SetupEditor::SetupEditor(QWidget* parent)
@@ -149,12 +164,32 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->underExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
                                               "under-exposed pixels.") );
 
+    KHBox* underPcentBox        = new KHBox(exposureOptionsGroup);
+    QLabel* underExpoPcentlabel = new QLabel( i18n("Under-exposure percents:"), underPcentBox);
+    d->underExposurePcents      = new RDoubleNumInput(underPcentBox);
+    d->underExposurePcents->setDecimals(1);
+    d->underExposurePcents->input()->setRange(0.1, 5.0, 0.1, true);
+    d->underExposurePcents->setDefaultValue(1.0);
+    underExpoPcentlabel->setBuddy(d->underExposurePcents);
+    d->underExposurePcents->setWhatsThis( i18n("Adjust the percents of the bottom of image histogram "
+                                               "which will be used to check under exposed pixels.") );
+
     KHBox* overExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel* overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
                                              "over-exposed pixels.") );
+
+    KHBox* overPcentBox        = new KHBox(exposureOptionsGroup);
+    QLabel* overExpoPcentlabel = new QLabel( i18n("Over-exposure percents:"), overPcentBox);
+    d->overExposurePcents      = new RDoubleNumInput(overPcentBox);
+    d->overExposurePcents->setDecimals(1);
+    d->overExposurePcents->input()->setRange(0.1, 5.0, 0.1, true);
+    d->overExposurePcents->setDefaultValue(1.0);
+    overExpoPcentlabel->setBuddy(d->underExposurePcents);
+    d->overExposurePcents->setWhatsThis( i18n("Adjust the percents of the top of image histogram "
+                                              "which will be used to check ovder exposed pixels.") );
 
     d->expoIndicatorMode       = new QCheckBox(i18n("Indicate exposure as pure color"), exposureOptionsGroup);
     d->overExposureColor->setWhatsThis( i18n("If this option is enabled, over and under exposure indicators will be displayed "
@@ -163,7 +198,9 @@ SetupEditor::SetupEditor(QWidget* parent)
                                              "Else indicators are turn on when one of color components match the condition.") );
 
     gLayout2->addWidget(underExpoBox);
+    gLayout2->addWidget(underPcentBox);
     gLayout2->addWidget(overExpoBox);
+    gLayout2->addWidget(overPcentBox);
     gLayout2->addWidget(d->expoIndicatorMode);
     gLayout2->setMargin(KDialog::spacingHint());
     gLayout2->setSpacing(KDialog::spacingHint());
@@ -214,6 +251,8 @@ void SetupEditor::readSettings()
     d->overExposureColor->setColor(group.readEntry(d->configOverExposureColorEntry,            Black));
     d->useRawImportTool->setChecked(group.readEntry(d->configUseRawImportToolEntry,            false));
     d->expoIndicatorMode->setChecked(group.readEntry(d->configExpoIndicatorModeEntry,          true));
+    d->underExposurePcents->setValue(group.readEntry(d->configUnderExposurePercentsEntry,      1.0));
+    d->overExposurePcents->setValue(group.readEntry(d->configOverExposurePercentsEntry,        1.0));
 }
 
 void SetupEditor::applySettings()
@@ -228,6 +267,8 @@ void SetupEditor::applySettings()
     group.writeEntry(d->configOverExposureColorEntry,       d->overExposureColor->color());
     group.writeEntry(d->configUseRawImportToolEntry,        d->useRawImportTool->isChecked());
     group.writeEntry(d->configExpoIndicatorModeEntry,       d->expoIndicatorMode->isChecked());
+    group.writeEntry(d->configUnderExposurePercentsEntry,   d->underExposurePcents->value());
+    group.writeEntry(d->configOverExposurePercentsEntry,    d->overExposurePcents->value());
     group.sync();
 }
 
