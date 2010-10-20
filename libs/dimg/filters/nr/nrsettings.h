@@ -40,8 +40,6 @@
 namespace Digikam
 {
 
-class NRSettingsPriv;
-
 class DIGIKAM_EXPORT NRSettings : public QWidget
 {
     Q_OBJECT
@@ -69,6 +67,7 @@ Q_SIGNALS:
 
 private:
 
+    class NRSettingsPriv;
     NRSettingsPriv* const d;
 };
 
