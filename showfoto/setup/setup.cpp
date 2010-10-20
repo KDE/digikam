@@ -31,7 +31,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -156,7 +155,6 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     for (int i = 0; i != SetupPageEnumLast; ++i)
     {
-        kDebug() << i;
         KPageWidgetItem* item = d->pageItem((Page)i);
         if (!item)
             continue;
