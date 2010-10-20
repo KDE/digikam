@@ -58,6 +58,7 @@ public:
         configBackgroundColorEntry("BackgroundColor"),
         configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
         configFullScreenHideThumbBarEntry("FullScreenHideThumbBar"),
+        configUseRawImportToolEntry("UseRawImportTool"),
         configDeleteItem2TrashEntry("DeleteItem2Trash"),
         configShowSplashEntry("ShowSplash"),
         configSidebarTitleStyleEntry("Sidebar Title Style"),
@@ -65,16 +66,15 @@ public:
         configOverExposureColorEntry("OverExposureColor"),
         configSortOrderEntry("SortOrder"),
         configReverseSortEntry("ReverseSort"),
-        configUseRawImportToolEntry("UseRawImportTool"),
         configExpoIndicatorModeEntry("ExpoIndicatorMode"),
 
         sidebarTypeLabel(0),
+        themebackgroundColor(0),
         hideThumbBar(0),
         hideToolBar(0),
+        useRawImportTool(0),
         showSplash(0),
         sortReverse(0),
-        themebackgroundColor(0),
-        useRawImportTool(0),
         useTrash(0),
         expoIndicatorMode(0),
         colorBox(0),
@@ -90,6 +90,7 @@ public:
     const QString configBackgroundColorEntry;
     const QString configFullScreenHideToolBarEntry;
     const QString configFullScreenHideThumbBarEntry;
+    const QString configUseRawImportToolEntry;
     const QString configDeleteItem2TrashEntry;
     const QString configShowSplashEntry;
     const QString configSidebarTitleStyleEntry;
@@ -97,17 +98,16 @@ public:
     const QString configOverExposureColorEntry;
     const QString configSortOrderEntry;
     const QString configReverseSortEntry;
-    const QString configUseRawImportToolEntry;
     const QString configExpoIndicatorModeEntry;
 
     QLabel*       sidebarTypeLabel;
 
+    QCheckBox*    themebackgroundColor;
     QCheckBox*    hideThumbBar;
     QCheckBox*    hideToolBar;
+    QCheckBox*    useRawImportTool;
     QCheckBox*    showSplash;
     QCheckBox*    sortReverse;
-    QCheckBox*    themebackgroundColor;
-    QCheckBox*    useRawImportTool;
     QCheckBox*    useTrash;
     QCheckBox*    expoIndicatorMode;
 
@@ -150,13 +150,14 @@ SetupEditor::SetupEditor(QWidget* parent)
 
     d->hideToolBar      = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar     = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
-    d->useTrash         = new QCheckBox(i18n("&Deleted items should go to the trash"), interfaceOptionsGroup);
-    d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
 
     d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw images"), interfaceOptionsGroup);
     d->useRawImportTool->setWhatsThis(i18n("Set this option to use Raw Import "
                                            "tool to load a RAW image. "
                                            "With this tool you are able to customize advanced settings."));
+
+    d->useTrash         = new QCheckBox(i18n("&Deleted items should go to the trash"), interfaceOptionsGroup);
+    d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
 
     KHBox* hbox         = new KHBox(interfaceOptionsGroup);
     d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), hbox);

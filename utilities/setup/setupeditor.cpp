@@ -56,13 +56,13 @@ public:
         configBackgroundColorEntry("BackgroundColor"),
         configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
         configFullScreenHideThumbBarEntry("FullScreenHideThumbBar"),
+        configUseRawImportToolEntry("UseRawImportTool"),
         configUnderExposureColorEntry("UnderExposureColor"),
         configOverExposureColorEntry("OverExposureColor"),
-        configUseRawImportToolEntry("UseRawImportTool"),
         configExpoIndicatorModeEntry("ExpoIndicatorMode"),
 
-        hideToolBar(0),
         themebackgroundColor(0),
+        hideToolBar(0),
         hideThumbBar(0),
         useRawImportTool(0),
         expoIndicatorMode(0),
@@ -77,13 +77,13 @@ public:
     const QString configBackgroundColorEntry;
     const QString configFullScreenHideToolBarEntry;
     const QString configFullScreenHideThumbBarEntry;
+    const QString configUseRawImportToolEntry;
     const QString configUnderExposureColorEntry;
     const QString configOverExposureColorEntry;
-    const QString configUseRawImportToolEntry;
     const QString configExpoIndicatorModeEntry;
 
-    QCheckBox*    hideToolBar;
     QCheckBox*    themebackgroundColor;
+    QCheckBox*    hideToolBar;
     QCheckBox*    hideThumbBar;
     QCheckBox*    useRawImportTool;
     QCheckBox*    expoIndicatorMode;
