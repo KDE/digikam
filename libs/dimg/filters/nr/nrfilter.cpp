@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class NRFilterPriv
+class NRFilter::NRFilterPriv
 {
 public:
 

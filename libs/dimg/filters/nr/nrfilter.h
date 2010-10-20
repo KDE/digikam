@@ -33,8 +33,6 @@
 namespace Digikam
 {
 
-class NRFilterPriv;
-
 class DIGIKAM_EXPORT NRContainer
 {
 
@@ -89,6 +87,7 @@ private:
 
 private:
 
+    class NRFilterPriv;
     NRFilterPriv* const d;
 };
 
