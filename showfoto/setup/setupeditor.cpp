@@ -130,7 +130,7 @@ SetupEditor::SetupEditor(QWidget* parent)
 
     QVBoxLayout* layout = new QVBoxLayout(panel);
 
-    // --------------------------------------------------------
+    // -- Interface Options --------------------------------------------------------
 
     QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
     QVBoxLayout* gLayout1            = new QVBoxLayout();
@@ -156,28 +156,15 @@ SetupEditor::SetupEditor(QWidget* parent)
                                            "tool to load a RAW image. "
                                            "With this tool you are able to customize advanced settings."));
 
-    d->useTrash         = new QCheckBox(i18n("&Deleted items should go to the trash"), interfaceOptionsGroup);
-    d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
-
-    KHBox* hbox         = new KHBox(interfaceOptionsGroup);
-    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), hbox);
-    d->sidebarType      = new KComboBox(hbox);
-    d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
-    d->sidebarType->addItem(i18n("For All Tabs"),        1);
-    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
-
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
     gLayout1->addWidget(d->hideToolBar);
     gLayout1->addWidget(d->hideThumbBar);
-    gLayout1->addWidget(d->useTrash);
-    gLayout1->addWidget(d->showSplash);
     gLayout1->addWidget(d->useRawImportTool);
-    gLayout1->addWidget(hbox);
 
     interfaceOptionsGroup->setLayout(gLayout1);
 
-    // --------------------------------------------------------
+    // -- Exposure Indicators Options --------------------------------------------------------
 
     QGroupBox* exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
     QVBoxLayout* gLayout2           = new QVBoxLayout();
@@ -207,7 +194,7 @@ SetupEditor::SetupEditor(QWidget* parent)
     gLayout2->addWidget(d->expoIndicatorMode);
     exposureOptionsGroup->setLayout(gLayout2);
 
-    // --------------------------------------------------------
+    // -- Sort Order Options --------------------------------------------------------
 
     QGroupBox* sortOptionsGroup = new QGroupBox(i18n("Sort order for images"), panel);
     QVBoxLayout* gLayout4       = new QVBoxLayout();
@@ -229,11 +216,32 @@ SetupEditor::SetupEditor(QWidget* parent)
     gLayout4->addWidget(d->sortReverse);
     sortOptionsGroup->setLayout(gLayout4);
 
+    // -- Misc Options --------------------------------------------------------
+
+    QGroupBox* miscOptionsGroup = new QGroupBox(i18n("Misc"), panel);
+    QVBoxLayout* gLayout5       = new QVBoxLayout();
+
+    d->useTrash         = new QCheckBox(i18n("&Deleted items should go to the trash"), miscOptionsGroup);
+    d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"), miscOptionsGroup);
+
+    KHBox* hbox         = new KHBox(miscOptionsGroup);
+    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), hbox);
+    d->sidebarType      = new KComboBox(hbox);
+    d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
+    d->sidebarType->addItem(i18n("For All Tabs"),        1);
+    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
+
+    gLayout5->addWidget(d->useTrash);
+    gLayout5->addWidget(d->showSplash);
+    gLayout5->addWidget(hbox);
+    miscOptionsGroup->setLayout(gLayout5);
+
     // --------------------------------------------------------
 
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(exposureOptionsGroup);
     layout->addWidget(sortOptionsGroup);
+    layout->addWidget(miscOptionsGroup);
     layout->addStretch();
     layout->setSpacing(KDialog::spacingHint());
     layout->setMargin(KDialog::spacingHint());
