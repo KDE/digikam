@@ -491,6 +491,10 @@ void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
           d->currentWidthRatioValue  = PHI;
           d->currentHeightRatioValue = 1.0;
           break;
+
+       case RATIOCURRENT:
+           d->currentWidthRatioValue  = d->image.width();
+           d->currentHeightRatioValue = d->image.height();
     }
 
     reverseRatioValues();

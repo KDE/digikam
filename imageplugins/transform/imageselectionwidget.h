@@ -60,7 +60,8 @@ public:
         RATIO07x10,                // 7:10
         RATIO08x05,                // 8:5
         RATIOGOLDEN,               // Golden ratio : 1:1.618
-        RATIONONE                  // No aspect ratio.
+        RATIOCURRENT,               // Current loaded image aspect ratio
+        RATIONONE                 // No aspect ratio.
     };
 
     enum Orient
