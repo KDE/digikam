@@ -280,7 +280,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
                                    "<p><b>8:5</b>: common widescreen monitor (as 1680x1050)</p>"
                                    "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
                                    "is considered visually harmonious but can be unadapted to print on "
-                                   "standard photographic paper.</p>
+                                   "standard photographic paper.</p>"
                                    "<p>The <b>Current Aspect Ratio</b> takes aspect ratio from the currently "
                                    "opened image.</p>"));
 
