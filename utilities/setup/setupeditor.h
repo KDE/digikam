@@ -49,6 +49,9 @@ public:
 private Q_SLOTS:
 
     void slotThemeBackgroundColor(bool);
+    void slotExpoSettingsChanged();
+    void slotShowOverExpoHistogramGuide(double);
+    void slotShowUnderExpoHistogramGuide(double);
 
 private:
 
