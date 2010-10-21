@@ -189,7 +189,7 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->overExposurePcents->setDefaultValue(1.0);
     overExpoPcentlabel->setBuddy(d->underExposurePcents);
     d->overExposurePcents->setWhatsThis( i18n("Adjust the percents of the top of image histogram "
-                                              "which will be used to check ovder exposed pixels.") );
+                                              "which will be used to check over exposed pixels.") );
 
     d->expoIndicatorMode       = new QCheckBox(i18n("Indicate exposure as pure color"), exposureOptionsGroup);
     d->overExposureColor->setWhatsThis( i18n("If this option is enabled, over and under exposure indicators will be displayed "

@@ -495,7 +495,7 @@ void ContentAwareResizeTool::readSettings()
 
     blockWidgetSignals(true);
 
-    // NOTE: size settings are not restored here because they depands of image size.
+    // NOTE: size settings are not restored here because they depends of image size.
     d->stepInput->setValue(group.readEntry(d->configStepEntry,                      d->stepInput->defaultValue()));
     d->stepInput->setValue(group.readEntry(d->configSideSwitchEntry,                d->sideSwitchInput->defaultValue()));
     d->rigidityInput->setValue(group.readEntry(d->configRigidityEntry,              d->rigidityInput->defaultValue()));
@@ -516,7 +516,7 @@ void ContentAwareResizeTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    // NOTE: size settings are not saved here because they depands of image size.
+    // NOTE: size settings are not saved here because they depends of image size.
     group.writeEntry(d->configStepEntry,              d->stepInput->value());
     group.writeEntry(d->configSideSwitchEntry,        d->sideSwitchInput->value());
     group.writeEntry(d->configRigidityEntry,          d->rigidityInput->value());
