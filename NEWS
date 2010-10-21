@@ -8,6 +8,8 @@ ImageEditor    : New option to display over/under exposure indicators if pure co
                  or if only one color component match the condition.
 ImageEditor    : New options to adjust the levels of over/under exposured pixels from histogram, 
                  displayed by over/under exposure indicators.
+ImageEditor    : Aspect ratio crop tool is not able to deal with the aspect ratio of the current loaded image in editor.
+                 You can keep the original proportions of the image after cropping.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
