@@ -70,24 +70,20 @@ public:
     {
     }
 
-    bool                 suggestionsAllowed;
-
-    double               recognitionThreshold;
-    int                  detectionAccuracy;
-
 public:
 
-    int                  scannedForFacesTagId() const;
-    int                  peopleTagId() const;
-    int                  unknownPeopleTagId() const;
+    int      scannedForFacesTagId() const;
+    int      peopleTagId() const;
+    int      unknownPeopleTagId() const;
 
-    void    setupTags();
-    QString tagPath(const QString& name, int parentId) const;
-    void    makeFaceTag(int tagId, const QString& fullName) const;
-    int     findFirstTagWithProperty(const QString& property, const QString& value = QString()) const;
-    int     tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName, bool convert, bool create) const;
-    void    add(ImageTagPair& pair, const DatabaseFace& face, const QStringList& properties, bool addTag);
-    void    remove(ImageTagPair& pair, const DatabaseFace& face, bool touchTags);
+    void     setupTags();
+    QString  tagPath(const QString& name, int parentId) const;
+    void     makeFaceTag(int tagId, const QString& fullName) const;
+    int      findFirstTagWithProperty(const QString& property, const QString& value = QString()) const;
+    int      tagForName(const QString& name, int tagId, int parentId,
+                        const QString& givenFullName, bool convert, bool create) const;
+    void     add(ImageTagPair& pair, const DatabaseFace& face, const QStringList& properties, bool addTag);
+    void     remove(ImageTagPair& pair, const DatabaseFace& face, bool touchTags);
 
 private:
 
@@ -171,7 +167,7 @@ int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int par
     {
         if (q->isPerson(tagId))
         {
-            kDebug() << "Proposed tag is already a person";
+            //kDebug() << "Proposed tag is already a person";
             return tagId;
         }
         else if (convert)
@@ -241,7 +237,6 @@ int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int par
 FaceIface::FaceIface()
          : d( new FaceIfacePriv(this) )
 {
-    readConfigSettings();
 }
 
 FaceIface::~FaceIface()
@@ -475,6 +470,8 @@ int FaceIface::numberOfFaces(qlonglong imageid) const
     return count;
 }
 
+// --- Images in faces and thumbnails ---
+
 void FaceIface::fillImageInFaces(const DImg& image, QList<KFaceIface::Face>& faceList, const QSize& scaleSize) const
 {
     for (int i = 0; i < faceList.size(); i++)
@@ -548,45 +545,7 @@ void FaceIface::storeThumbnails(ThumbnailLoadThread* thread, const QString& file
     }
 }
 
-// --- Face detection and recognition ------------------------------------------------------------------------------------
-
-/*
-QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, FaceRecognitionSteps todo)
-{
-    readConfigSettings(); //FIXME: do by signal
-
-    kDebug() << "Image" << image.attribute("originalFilePath") << "dimensions" << image.size() << "original size" << image.originalSize();
-    KFaceIface::Image fimg(image.width(), image.height(), image.sixteenBit(), image.hasAlpha(), image.bits());
-
-    // -- Detection --
-
-    QList<KFaceIface::Face> faceList = d->database()->detectFaces(fimg);
-    // Mark the image as scanned.
-    markAsScanned(imageid);
-
-    // -- Recognition --
-
-    QList<double> distances;
-    if (d->database()->peopleCount() && todo >= DetectAndRecognize)
-    {
-        distances = d->database()->recognizeFaces(faceList);
-        for (int i=0; i<faceList.size(); i++)
-        {
-            if (distances[i] > 100)
-            {
-                // Dismissing
-                faceList[i].clearRecognition();
-            }
-        }
-    }
-
-    // -- Apply tags --
-
-    writeUnconfirmedResults(image, imageid, faceList);
-
-    return faceList;
-}
-*/
+// --- Face detection: merging results ------------------------------------------------------------------------------------
 
 QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList)
 {
@@ -706,67 +665,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
     return newFaces;
 }
 
-/*
-QString FaceIface::recognizeFace(const KFaceIface::Face& face)
-{
-    if(d->database()->peopleCount() == 0)
-        return QString();
-
-    QList<Face> f;
-    f.append(face);
-
-    if( face.image().isNull() )
-    {
-        return QString();
-    }
-    else
-    {
-        double distance = d->database()->recognizeFaces(f).at(0)/100000;
-        kDebug() << "Possible : " << f[0].name();
-        kDebug() << "Distance is " << distance;
-
-        if(distance > 100)
-        {
-            kDebug() << "Dismissing ";
-            return QString();
-        }
-        else
-        {
-            return f[0].name();
-        }
-    }
-}
-*/
-
-// --- Confirm, Add, Remove ---
-
-/*
-DatabaseFace FaceIface::confirmName( qlonglong imageid, const QString& name, const QRect& rect, const QRect& previousRect)
-{
-    int nameTagId = getOrCreateTagForPerson(name);
-    return confirmName(imageid, nameTagId, rect, previousRect);
-}
-
-DatabaseFace FaceIface::confirmName(qlonglong imageid, int tagId, const QRect& rect, const QRect& previousRect)
-{
-    ensureIsPerson(tagId);
-
-    QString region         = TagRegion(rect).toXml();
-    QString regionToRemove = previousRect.isNull() ? region : TagRegion(previousRect).toXml();
-
-    ImageTagPair pairUnknown ( imageid, d->unknownPeopleTagId());
-    ImageTagPair pairNamed   ( imageid, tagId );
-
-    pairUnknown.removeProperty(ImageTagPropertyName::autodetectedFace(), regionToRemove);
-
-    pairNamed.setProperty(ImageTagPropertyName::tagRegion(), region);
-    pairNamed.setProperty(ImageTagPropertyName::faceToTrain(), region);
-
-    MetadataManager::instance()->assignTag(ImageInfo(imageid), tagId);
-
-    return DatabaseFace(DatabaseFace::ConfirmedName, imageid, tagId, rect);
-}
-*/
+// --- Confirming and adding ---
 
 DatabaseFace FaceIface::confirmedEntry(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
 {
@@ -834,6 +733,8 @@ void FaceIface::FaceIfacePriv::add(ImageTagPair& pair, const DatabaseFace& face,
     if (addTag)
         MetadataManager::instance()->assignTag(ImageInfo(face.imageId()), face.tagId());
 }
+
+// --- Removing faces ---
 
 void FaceIface::removeAllFaces(qlonglong imageid)
 {
@@ -916,6 +817,114 @@ void FaceIface::FaceIfacePriv::remove(ImageTagPair& pair, const DatabaseFace& fa
         MetadataManager::instance()->removeTag(ImageInfo(face.imageId()), pair.tagId());
 }
 
+// --- Utilities ---
+
+int FaceIface::faceRectDisplayMargin()
+{
+    /*
+     * Dont change that value unless you know what you do.
+     * There are a lot of pregenerated thumbnails in user's databases,
+     * expensive to regenerate, depending on this very value.
+     */
+    return 70;
+}
+
+
+/*
+QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, FaceRecognitionSteps todo)
+{
+    readConfigSettings(); //FIXME: do by signal
+
+    kDebug() << "Image" << image.attribute("originalFilePath") << "dimensions" << image.size() << "original size" << image.originalSize();
+    KFaceIface::Image fimg(image.width(), image.height(), image.sixteenBit(), image.hasAlpha(), image.bits());
+
+    // -- Detection --
+
+    QList<KFaceIface::Face> faceList = d->database()->detectFaces(fimg);
+    // Mark the image as scanned.
+    markAsScanned(imageid);
+
+    // -- Recognition --
+
+    QList<double> distances;
+    if (d->database()->peopleCount() && todo >= DetectAndRecognize)
+    {
+        distances = d->database()->recognizeFaces(faceList);
+        for (int i=0; i<faceList.size(); i++)
+        {
+            if (distances[i] > 100)
+            {
+                // Dismissing
+                faceList[i].clearRecognition();
+            }
+        }
+    }
+
+    // -- Apply tags --
+
+    writeUnconfirmedResults(image, imageid, faceList);
+
+    return faceList;
+}
+*/
+/*
+QString FaceIface::recognizeFace(const KFaceIface::Face& face)
+{
+    if(d->database()->peopleCount() == 0)
+        return QString();
+
+    QList<Face> f;
+    f.append(face);
+
+    if( face.image().isNull() )
+    {
+        return QString();
+    }
+    else
+    {
+        double distance = d->database()->recognizeFaces(f).at(0)/100000;
+        kDebug() << "Possible : " << f[0].name();
+        kDebug() << "Distance is " << distance;
+
+        if(distance > 100)
+        {
+            kDebug() << "Dismissing ";
+            return QString();
+        }
+        else
+        {
+            return f[0].name();
+        }
+    }
+}
+*/
+/*
+DatabaseFace FaceIface::confirmName( qlonglong imageid, const QString& name, const QRect& rect, const QRect& previousRect)
+{
+    int nameTagId = getOrCreateTagForPerson(name);
+    return confirmName(imageid, nameTagId, rect, previousRect);
+}
+
+DatabaseFace FaceIface::confirmName(qlonglong imageid, int tagId, const QRect& rect, const QRect& previousRect)
+{
+    ensureIsPerson(tagId);
+
+    QString region         = TagRegion(rect).toXml();
+    QString regionToRemove = previousRect.isNull() ? region : TagRegion(previousRect).toXml();
+
+    ImageTagPair pairUnknown ( imageid, d->unknownPeopleTagId());
+    ImageTagPair pairNamed   ( imageid, tagId );
+
+    pairUnknown.removeProperty(ImageTagPropertyName::autodetectedFace(), regionToRemove);
+
+    pairNamed.setProperty(ImageTagPropertyName::tagRegion(), region);
+    pairNamed.setProperty(ImageTagPropertyName::faceToTrain(), region);
+
+    MetadataManager::instance()->assignTag(ImageInfo(imageid), tagId);
+
+    return DatabaseFace(DatabaseFace::ConfirmedName, imageid, tagId, rect);
+}
+*/
 // --- Training ---------------------------------------------------------------------------------------------------
 
 /*
@@ -986,7 +995,7 @@ void FaceIface::trainFaces(const QList<Face>& givenFaceList )
     d->database()->updateFaces(faceList);
     kDebug() << "DB file is : " << d->database()->configPath();
     d->database()->saveConfig();
-}*/
+}
 
 void FaceIface::readConfigSettings()
 {
@@ -997,17 +1006,13 @@ void FaceIface::readConfigSettings()
     d->detectionAccuracy      = group.readEntry("DetectionAccuracy", 3);
     d->recognitionThreshold   = 1 - group.readEntry("SuggestionThreshold", 0.2);
 
-    /*if (d->databaseConst())
+    / *if (d->databaseConst())
         d->database()->setDetectionAccuracy(d->detectionAccuracy);
-        */
+        * /
 }
+*/
 
-int FaceIface::faceRectDisplayMargin()
-{
-    return 70;
-}
-
-   /**
+   /* *
     * Returns a list of image ids of all images in the DB which have a specified person within.
     * @param tagId The person's id. Or tag id for the person tag. Same thing.
     * @param repeat If repeat is specified as true, then if person with id tagId is found n times in an image,

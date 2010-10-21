@@ -269,13 +269,6 @@ public:
      */
     void                removeFace(qlonglong imageid, const QRect& rect);
 
-    /**
-     * Reads configuration settings for detection accuracy and recognition suggestion threshold
-     * which were set in the settings page. Default values are assumed if the settings are not found.
-     * If any batch job is going on, it will immediately reflect the changes if they are made in the settings page.
-     */
-    void                readConfigSettings();
-
     // --- Status flags ---
 
     /**
