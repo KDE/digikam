@@ -103,6 +103,14 @@ public:
     QMap<QString, QString>  embeddedText;
     IccProfile              iccProfile;
     DImageHistory           imageHistory;
+
+    /**
+     * x,y, w x h is a section of the image. The image size is width x height.
+     * Clips the section to the bounds of the image.
+     * Returns if the (clipped) section is a valid rectangle.
+     */
+    // implementation in dimgscale.cpp
+    static bool clipped(int &x, int &y, int &w, int &h, uint width, uint height);
 };
 
 }  // namespace Digikam

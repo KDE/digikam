@@ -1243,6 +1243,9 @@ DImg DImg::copy(int x, int y, int w, int h) const
         return DImg();
     }
 
+    if (!DImgPrivate::clipped(x, y, w, h, m_priv->width, m_priv->height))
+        return DImg();
+
     DImg image(*this, w, h);
     image.bitBltImage(this, x, y, w, h, 0, 0);
 

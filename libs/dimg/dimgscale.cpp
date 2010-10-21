@@ -163,7 +163,7 @@ if ((x + w) > ((xx) + (ww))) {w = (ww) - (x - xx);} \
 if ((y + h) > ((yy) + (hh))) {h = (hh) - (y - yy);}
 */
 
-static bool clipped(int &x, int &y, int &w, int &h, uint width, uint height)
+bool DImgPrivate::clipped(int &x, int &y, int &w, int &h, uint width, uint height)
 {
     QRect inner(x, y, w, h);
     QRect outer(0, 0, width, height);
@@ -212,7 +212,7 @@ DImg DImg::smoothScaleClipped(int dw, int dh,
         return DImg();
 
     // ensure clip is valid
-    if (!clipped(clipx, clipy, clipw, cliph, dw, dh))
+    if (!DImgPrivate::clipped(clipx, clipy, clipw, cliph, dw, dh))
         return DImg();
 
     // do we actually need to scale?
@@ -290,7 +290,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
     psy = sy;
     psw = sw;
     psh = sh;
-    if (!clipped(sx, sy, sw, sh, w, h))
+    if (!DImgPrivate::clipped(sx, sy, sw, sh, w, h))
         return DImg();
 
     // clip output coords to clipped input coords
