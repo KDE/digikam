@@ -2443,7 +2443,7 @@ AlbumList AlbumManager::getRecentlyAssignedTags() const
     return resultList;
 }
 
-QStringList AlbumManager::tagPaths(const QList<int>& tagIDs, bool leadingSlash) const
+QStringList AlbumManager::tagPaths(const QList<int>& tagIDs, bool leadingSlash, bool includeInternal) const
 {
     QStringList tagPaths;
 
@@ -2452,6 +2452,8 @@ QStringList AlbumManager::tagPaths(const QList<int>& tagIDs, bool leadingSlash) 
         TAlbum *album = findTAlbum(*it);
         if (album)
         {
+            if (!includeInternal && album->isInternalTag())
+                continue;
             tagPaths.append(album->tagPath(leadingSlash));
         }
     }
@@ -2459,7 +2461,7 @@ QStringList AlbumManager::tagPaths(const QList<int>& tagIDs, bool leadingSlash) 
     return tagPaths;
 }
 
-QStringList AlbumManager::tagNames(const QList<int>& tagIDs) const
+QStringList AlbumManager::tagNames(const QList<int>& tagIDs, bool includeInternal) const
 {
     QStringList tagNames;
 
@@ -2468,6 +2470,8 @@ QStringList AlbumManager::tagNames(const QList<int>& tagIDs) const
         TAlbum *album = findTAlbum(id);
         if (album)
         {
+            if (!includeInternal && album->isInternalTag())
+                continue;
             tagNames << album->title();
         }
     }
@@ -2475,27 +2479,29 @@ QStringList AlbumManager::tagNames(const QList<int>& tagIDs) const
     return tagNames;
 }
 
-QHash<int, QString> AlbumManager::tagPaths(bool leadingSlash) const
+QHash<int, QString> AlbumManager::tagPaths(bool leadingSlash, bool includeInternal) const
 {
     QHash<int, QString> hash;
     AlbumIterator it(d->rootTAlbum);
     while (it.current())
     {
         TAlbum* t = (TAlbum*)(*it);
-        hash.insert(t->id(), t->tagPath(leadingSlash));
+        if (includeInternal || !t->isInternalTag())
+            hash.insert(t->id(), t->tagPath(leadingSlash));
         ++it;
     }
     return hash;
 }
 
-QHash<int, QString> AlbumManager::tagNames() const
+QHash<int, QString> AlbumManager::tagNames(bool includeInternal) const
 {
     QHash<int, QString> hash;
     AlbumIterator it(d->rootTAlbum);
     while (it.current())
     {
         TAlbum* t = (TAlbum*)(*it);
-        hash.insert(t->id(), t->title());
+        if (includeInternal || !t->isInternalTag())
+            hash.insert(t->id(), t->title());
         ++it;
     }
     return hash;

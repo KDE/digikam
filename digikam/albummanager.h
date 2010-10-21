@@ -431,24 +431,25 @@ public:
      * @return A list with the tag paths for a list of tag IDs.
      * @param tagIDs list of tag album IDs
      * @param leadingSlash if <code>true</code> return tags with a leading slash
+     * @param includeInternal include internal tags in the returned list, or skip them
      */
-    QStringList tagPaths(const QList<int>& tagIDs, bool leadingSlash=true) const;
+    QStringList tagPaths(const QList<int>& tagIDs, bool leadingSlash=true, bool includeInternal = false) const;
 
     /**
      * @return A list with the tag names for a list of tag IDs.
      * @param tagIDs list of tag album IDs
      */
-    QStringList tagNames(const QList<int>& tagIDs) const;
+    QStringList tagNames(const QList<int>& tagIDs, bool includeInternal = false) const;
 
     /**
      * @return A hash with the tag paths for all tag IDs.
      */
-    QHash<int, QString> tagPaths(bool leadingSlash=true) const;
+    QHash<int, QString> tagPaths(bool leadingSlash=true, bool includeInternal = false) const;
 
     /**
      * @return A hash with the tag names for all tag IDs.
      */
-    QHash<int, QString> tagNames() const;
+    QHash<int, QString> tagNames(bool includeInternal = false) const;
 
     /**
      * Returns a list of TAlbums which have the given property,

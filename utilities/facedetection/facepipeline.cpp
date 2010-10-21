@@ -319,6 +319,7 @@ void PreviewLoader::cancel()
 {
     stopAllTasks();
     scheduledPackages.clear();
+    shutDown();
 }
 
 void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
@@ -758,6 +759,7 @@ FacePipeline::FacePipeline()
 
 FacePipeline::~FacePipeline()
 {
+    cancel();
     delete d->databaseFilter;
     delete d->previewThread;
     delete d->detectionWorker;
