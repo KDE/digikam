@@ -88,13 +88,16 @@ DynamicThread::DynamicThread(QObject* parent)
 
 DynamicThread::~DynamicThread()
 {
-    {
-        QMutexLocker locker(&d->mutex);
-        d->inDestruction = true;
-        stop(locker);
-        wait(locker);
-    }
+    shutDown();
     delete d;
+}
+
+void DynamicThread::shutDown()
+{
+    QMutexLocker locker(&d->mutex);
+    d->inDestruction = true;
+    stop(locker);
+    wait(locker);
 }
 
 DynamicThread::State DynamicThread::state() const

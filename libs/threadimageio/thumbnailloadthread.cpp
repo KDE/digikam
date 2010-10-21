@@ -168,8 +168,7 @@ ThumbnailLoadThread::ThumbnailLoadThread()
 
 ThumbnailLoadThread::~ThumbnailLoadThread()
 {
-    shutdownThread();
-    wait();
+    shutDown();
     delete d->creator;
     delete d;
 }

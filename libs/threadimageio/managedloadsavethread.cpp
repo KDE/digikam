@@ -44,11 +44,10 @@ ManagedLoadSaveThread::ManagedLoadSaveThread()
 
 ManagedLoadSaveThread::~ManagedLoadSaveThread()
 {
-    shutdownThread();
-    // LoadSaveThread wait()s
+    shutDown();
 }
 
-void ManagedLoadSaveThread::shutdownThread()
+void ManagedLoadSaveThread::shutDown()
 {
     switch (m_terminationPolicy)
     {
@@ -78,6 +77,8 @@ void ManagedLoadSaveThread::shutdownThread()
             break;
         }
     }
+
+    LoadSaveThread::shutDown();
 }
 
 LoadingTask *ManagedLoadSaveThread::checkLoadingTask(LoadSaveTask *task, LoadingTaskFilter filter)

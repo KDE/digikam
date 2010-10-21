@@ -126,7 +126,7 @@ public:
 
 protected:
 
-    void shutdownThread();
+    void shutDown();
 
     void load(const LoadingDescription& description, LoadingMode loadingMode,
               LoadingPolicy policy = LoadingPolicyAppend, AccessMode mode = AccessModeReadWrite);
