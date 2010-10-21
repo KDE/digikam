@@ -131,12 +131,12 @@ QList<QModelIndex> ImageSortFilterModel::mapListFromSource(const QList<QModelInd
 
 ImageInfo ImageSortFilterModel::imageInfo(const QModelIndex& index) const
 {
-    return sourceImageModel()->imageInfo(mapToSource(index));
+    return sourceImageModel()->imageInfo(mapToSourceImageModel(index));
 }
 
 qlonglong ImageSortFilterModel::imageId(const QModelIndex& index) const
 {
-    return sourceImageModel()->imageId(mapToSource(index));
+    return sourceImageModel()->imageId(mapToSourceImageModel(index));
 }
 
 QList<ImageInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& indexes) const
@@ -309,6 +309,8 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
 
     switch (role)
     {
+        // Attention: This breaks should there ever be another filter model between this and the ImageModel
+
         case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
             return categoryIdentifier(d->imageModel->imageInfoRef(mapToSource(index)));
         case CategorizationModeRole:
