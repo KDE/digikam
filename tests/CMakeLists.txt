@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/fx
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/icc
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/levels
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
