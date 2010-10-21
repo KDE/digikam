@@ -260,6 +260,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     d->ratioCB->addItem("7:10");
     d->ratioCB->addItem("8:5");
     d->ratioCB->addItem(i18n("Golden Ratio"));
+    d->ratioCB->addItem(i18n("Current Image Aspect Ratio"));
     d->ratioCB->addItem(i18nc("no crop mode", "None"));
     d->ratioCB->setDefaultIndex(ImageSelectionWidget::RATIO03X04);
     setRatioCBText(ImageSelectionWidget::Landscape);
@@ -279,7 +280,9 @@ RatioCropTool::RatioCropTool(QObject* parent)
                                    "<p><b>8:5</b>: common widescreen monitor (as 1680x1050)</p>"
                                    "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
                                    "is considered visually harmonious but can be unadapted to print on "
-                                   "standard photographic paper.</p>"));
+                                   "standard photographic paper.</p>"
+                                   "<p>The <b>Current Aspect Ratio</b> takes aspect ratio from the currently "
+                                   "opened image.</p>"));
 
     d->preciseCrop = new QCheckBox(cropSelection);
     d->preciseCrop->setToolTip(i18n("Exact aspect"));
@@ -742,6 +745,7 @@ void RatioCropTool::setRatioCBText(int orientation)
         d->ratioCB->addItem("8:5");
     }
     d->ratioCB->addItem(i18n("Golden Ratio"));
+    d->ratioCB->addItem(i18n("Current aspect ratio"));
     d->ratioCB->addItem(i18nc("no aspect ratio", "None"));
     d->ratioCB->setCurrentIndex(item);
     d->ratioCB->blockSignals(false);
