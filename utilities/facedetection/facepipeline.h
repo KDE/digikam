@@ -34,7 +34,7 @@
 
 // libkface includes
 
-#include <libkface/kface.h>
+#include <libkface/face.h>
 
 // Local includes
 

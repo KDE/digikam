@@ -74,17 +74,10 @@
 #include "albummanager.h"
 #include "faceiface.h"
 
-// libkface includes
-
-#include <libkface/kface.h>
-#include <libkface/faceitem.h>
-
 // KDE includes
 
 #include "kglobalsettings.h"
 #include <kstandarddirs.h>
-
-using namespace KFaceIface;
 
 namespace Digikam
 {
@@ -185,12 +178,7 @@ public:
 
     AlbumWidgetStack*     stack;
 
-    QList<FaceItem* >     faceitems;
-    QList<Face>           currentFaces;
-
     FaceGroup*            faceGroup;
-
-    DImg                  cachedFullImg;
 };
 
 ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)

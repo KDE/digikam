@@ -37,7 +37,7 @@
 // Libkface Includes
 
 #include <libkface/database.h>
-#include <libkface/kface.h>
+#include <libkface/face.h>
 
 // Local includes
 
@@ -51,8 +51,6 @@
 #include "tagscache.h"
 #include "tagregion.h"
 #include "thumbnailloadthread.h"
-
-using namespace KFaceIface;
 
 namespace Digikam
 {
@@ -348,12 +346,12 @@ int FaceIface::faceCountForPersonInImage(qlonglong imageid, int tagId ) const
     return pair.values(ImageTagPropertyName::tagRegion()).size();
 }
 
-QList<Face> FaceIface::facesFromTags(qlonglong imageId) const
+QList<KFaceIface::Face> FaceIface::facesFromTags(qlonglong imageId) const
 {
     return toFaces(databaseFaces(imageId));
 }
 
-QList<Face> FaceIface::unconfirmedFacesFromTags(qlonglong imageId) const
+QList<KFaceIface::Face> FaceIface::unconfirmedFacesFromTags(qlonglong imageId) const
 {
     return toFaces(unconfirmedDatabaseFaces(imageId));
 }
@@ -373,9 +371,9 @@ QList<DatabaseFace> FaceIface::databaseFacesForTraining(qlonglong imageId) const
     return databaseFaces(imageId, DatabaseFace::FaceForTraining);
 }
 
-QList<Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
+QList<KFaceIface::Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
 {
-    QList<Face> faceList;
+    QList<KFaceIface::Face> faceList;
     foreach (const DatabaseFace& databaseFace, databaseFaces)
     {
         QRect rect = databaseFace.region().toRect();
@@ -383,7 +381,7 @@ QList<Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
         if (!rect.isValid())
             continue;
 
-        Face f;
+        KFaceIface::Face f;
         f.setRect(rect);
 
         if (databaseFace.tagId() != d->unknownPeopleTagId())

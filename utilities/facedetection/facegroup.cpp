@@ -32,10 +32,6 @@
 
 // KDE includes
 
-// KFace includes
-
-#include <libkface/kface.h>
-
 // Local includes
 
 #include "addtagscombobox.h"

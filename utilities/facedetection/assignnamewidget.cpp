@@ -39,10 +39,6 @@
 
 #include <libkdcraw/rexpanderbox.h>
 
-// libkface includes
-
-#include <libkface/kface.h>
-
 // Local includes
 
 #include "addtagscombobox.h"
