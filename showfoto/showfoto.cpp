@@ -106,7 +106,7 @@ extern "C"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
 #include "setup.h"
-#include "setupeditor.h"
+#include "setupmisc.h"
 #include "setupicc.h"
 #include "slideshow.h"
 #include "splashscreen.h"
@@ -782,9 +782,9 @@ void ShowFoto::openFolder(const KUrl& url)
     QDir::SortFlags flag;
     bool reverse = group.readEntry("ReverseSort", false);
 
-    switch(group.readEntry("SortOrder", (int)SetupEditor::SortByDate))
+    switch(group.readEntry("SortOrder", (int)SetupMisc::SortByDate))
     {
-        case SetupEditor::SortByName:
+        case SetupMisc::SortByName:
         {
             flag = QDir::Name;  // Ordering by file name.
             if (reverse)
@@ -793,7 +793,7 @@ void ShowFoto::openFolder(const KUrl& url)
             }
             break;
         }
-        case SetupEditor::SortByFileSize:
+        case SetupMisc::SortByFileSize:
         {
             flag = QDir::Size;  // Ordering by file size.
 

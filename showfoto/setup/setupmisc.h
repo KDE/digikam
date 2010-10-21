@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-02
- * Description : setup showFoto tab.
+ * Description : setup Misc tab.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPEDITOR_H
-#define SETUPEDITOR_H
+#ifndef SETUPMISC_H
+#define SETUPMISC_H
 
 // Qt includes
 
@@ -31,7 +31,7 @@
 namespace ShowFoto
 {
 
-class SetupEditor : public QScrollArea
+class SetupMisc : public QScrollArea
 {
     Q_OBJECT
 
@@ -46,14 +46,10 @@ public:
 
 public:
 
-    SetupEditor(QWidget* parent = 0);
-    ~SetupEditor();
+    SetupMisc(QWidget* parent = 0);
+    ~SetupMisc();
 
     void applySettings();
-
-private Q_SLOTS:
-
-    void slotThemeBackgroundColor(bool);
 
 private:
 
@@ -61,10 +57,10 @@ private:
 
 private:
 
-    class SetupEditorPriv;
-    SetupEditorPriv* const d;
+    class SetupMiscPriv;
+    SetupMiscPriv* const d;
 };
 
 }   // namespace ShowFoto
 
-#endif /* SETUPEDITOR_H */
+#endif /* SETUPMISC_H */

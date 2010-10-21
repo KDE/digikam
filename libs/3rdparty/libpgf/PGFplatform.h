@@ -49,12 +49,6 @@
 # define PGF_USE_BIG_ENDIAN 1
 #endif
 
-#ifdef macintosh
-# ifdef __BIG_ENDIAN__
-# define PGF_USE_BIG_ENDIAN 1
-# endif
-#endif
-
 //-------------------------------------------------------------------------------
 // ROI support
 //-------------------------------------------------------------------------------

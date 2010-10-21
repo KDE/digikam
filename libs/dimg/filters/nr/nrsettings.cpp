@@ -55,7 +55,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class NRSettingsPriv
+class NRSettings::NRSettingsPriv
 {
 public:
 

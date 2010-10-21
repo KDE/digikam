@@ -223,7 +223,7 @@ UINT32 CEncoder::Flush() THROW_ {
 
 		// set file pos to levelLength
 		m_stream->SetPos(FSFromStart, m_levelLengthPos);
-#ifdef __BIG_ENDIAN__ 
+#ifdef PGF_USE_BIG_ENDIAN 
 		UINT32 levelLength;
 		int count = WordBytes;
 		
@@ -235,7 +235,7 @@ UINT32 CEncoder::Flush() THROW_ {
 		int count = m_currLevelIndex*WordBytes;
 		
 		m_stream->Write(&count, m_levelLength);
-#endif //__BIG_ENDIAN__ 
+#endif //PGF_USE_BIG_ENDIAN 
 
 		// restore file position
 		m_stream->SetPos(FSFromStart, curPos);
@@ -277,7 +277,7 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 	
 	int count = sizeof(UINT16);
 
-#ifdef __BIG_ENDIAN__ 
+#ifdef PGF_USE_BIG_ENDIAN 
 	// write wordLen
 	UINT16 wordLen2 = __VAL(wordLen);
 	m_stream->Write(&count, &wordLen2);
@@ -304,7 +304,7 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 			m_stream->Write(&count, &h.val); ASSERT(count == sizeof(UINT16));
 		}
 	#endif // __PGFROISUPPORT__
-#endif // __BIG_ENDIAN__ 
+#endif // PGF_USE_BIG_ENDIAN 
 
 	// write data
 	count = wordLen*WordBytes;

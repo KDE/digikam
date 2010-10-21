@@ -839,6 +839,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libsetupshowfoto_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupeditor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp
@@ -894,7 +895,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libshowfotosetup_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupeditor.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupmisc.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp
        )

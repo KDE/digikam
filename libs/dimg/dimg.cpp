@@ -1580,9 +1580,12 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
 
     uchar* bits = img.bits();
 
-    // Using DImgScale before to compute Mask clamp to 65534 | 254. Why ?
-    int    max  = sixteenBit() ? 64880 : 252;     // max histogram segment -1%
-    int    min  = sixteenBit() ? 655   : 3;       // min histogram segment +1%
+    // NOTE: Using DImgScale before to compute Mask clamp to 65534 | 254. Why ?
+
+    int    max  = lround(sixteenBit() ? 65535.0 - (65535.0 * expoSettings->overExposurePercent  / 100.0)
+                                      : 255.0   - (255.0   * expoSettings->overExposurePercent  / 100.0));
+    int    min  = lround(sixteenBit() ? 0.0     + (65535.0 * expoSettings->underExposurePercent / 100.0)
+                                      : 0.0     + (255.0   * expoSettings->underExposurePercent / 100.0));
 
     // --------------------------------------------------------
 

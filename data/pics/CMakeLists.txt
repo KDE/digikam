@@ -15,7 +15,7 @@ INSTALL(FILES tag.png
               tag-addressbook.png
               tag-recents.png
               tag-assigned.png
-              albumfolder-importimages.png 
+              albumfolder-importimages.png
               albumfolder-properties.png
               albumfolder-new.png
               albumfolder-importdir.png
@@ -59,14 +59,15 @@ INSTALL(FILES splash-digikam.png
               colors-luma.png
               colors-chromablue.png
               colors-chromared.png
-         DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
+              sample-aix.png
+         DESTINATION ${DATA_INSTALL_DIR}/digikam/data
        )
 
 # Showfoto files ######################################################
 
-INSTALL(FILES logo-showfoto.png 
+INSTALL(FILES logo-showfoto.png
               banner-showfoto.png
-              splash-showfoto.png 
+              splash-showfoto.png
         DESTINATION ${DATA_INSTALL_DIR}/showfoto/data
        )
 

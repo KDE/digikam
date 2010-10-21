@@ -28,6 +28,10 @@
 
 #include <QScrollArea>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
@@ -45,6 +49,9 @@ public:
 private Q_SLOTS:
 
     void slotThemeBackgroundColor(bool);
+    void slotExpoSettingsChanged();
+    void slotShowOverExpoHistogramGuide(double);
+    void slotShowUnderExpoHistogramGuide(double);
 
 private:
 

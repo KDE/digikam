@@ -46,6 +46,9 @@ public:
         overExposureIndicator  = false;
         exposureIndicatorMode  = true;
 
+        underExposurePercent   = 1.0;
+        overExposurePercent    = 1.0;
+
         underExposureColor     = Qt::white;
         overExposureColor      = Qt::black;
     };
@@ -63,6 +66,9 @@ public:
         Else indicators are turn on when one of color components match the condition.
      */
     bool   exposureIndicatorMode;
+
+    float  underExposurePercent;
+    float  overExposurePercent;
 
     QColor underExposureColor;
     QColor overExposureColor;

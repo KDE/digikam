@@ -75,8 +75,6 @@ public:
         configJpeg2000LossLessEntry("JPEG2000LossLess"),
         configJpegCompressionEntry("JPEGCompression"),
         configJpegSubSamplingEntry("JPEGSubSampling"),
-        configOverExposureColorEntry("OverExposureColor"),
-        configOverExposureIndicatorEntry("OverExposureIndicator"),
         configPgfCompressionEntry("PGFCompression"),
         configPgfLossLessEntry("PGFLossLess"),
         configPngCompressionEntry("PNGCompression"),
@@ -94,6 +92,9 @@ public:
         configTiffCompressionEntry("TIFFCompression"),
         configUnderExposureColorEntry("UnderExposureColor"),
         configUnderExposureIndicatorEntry("UnderExposureIndicator"),
+        configUnderExposurePercentsEntry("UnderExposurePercentsEntry"),
+        configOverExposureColorEntry("OverExposureColor"),
+        configOverExposureIndicatorEntry("OverExposureIndicator"),        configOverExposurePercentsEntry("OverExposurePercentsEntry"),
         configExpoIndicatorModeEntry("ExpoIndicatorMode"),
         configUseRawImportToolEntry("UseRawImportTool"),
         configUseThemeBackgroundColorEntry("UseThemeBackgroundColor"),
@@ -168,8 +169,6 @@ public:
     const QString              configJpeg2000LossLessEntry;
     const QString              configJpegCompressionEntry;
     const QString              configJpegSubSamplingEntry;
-    const QString              configOverExposureColorEntry;
-    const QString              configOverExposureIndicatorEntry;
     const QString              configPgfCompressionEntry;
     const QString              configPgfLossLessEntry;
     const QString              configPngCompressionEntry;
@@ -187,6 +186,10 @@ public:
     const QString              configTiffCompressionEntry;
     const QString              configUnderExposureColorEntry;
     const QString              configUnderExposureIndicatorEntry;
+    const QString              configUnderExposurePercentsEntry;
+    const QString              configOverExposureColorEntry;
+    const QString              configOverExposureIndicatorEntry;
+    const QString              configOverExposurePercentsEntry;
     const QString              configExpoIndicatorModeEntry;
     const QString              configUseRawImportToolEntry;
     const QString              configUseThemeBackgroundColorEntry;

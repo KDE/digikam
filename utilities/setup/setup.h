@@ -48,6 +48,7 @@ public:
     enum Page
     {
         LastPageUsed    = -1,
+
         CollectionsPage = 0,
         DatabasePage,
         AlbumViewPage,

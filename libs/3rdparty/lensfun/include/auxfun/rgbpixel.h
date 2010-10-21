@@ -19,8 +19,29 @@
 #ifndef __RGBPIXEL_H__
 #define __RGBPIXEL_H__
 
+//-------------------------------------------------------------------------------
+// Taken from lcms2 header.
+// Try to detect big endian platforms. This list can be endless, so only some checks are performed over here.
+//-------------------------------------------------------------------------------
+
+#if defined(_HOST_BIG_ENDIAN) || defined(__BIG_ENDIAN__) || defined(WORDS_BIGENDIAN)
+# define LF_USE_BIG_ENDIAN 1
+#endif
+
+#if defined(__sgi__) || defined(__sgi) || defined(__powerpc__) || defined(sparc)
+# define LF_USE_BIG_ENDIAN 1
+#endif
+
+#if defined(__ppc__) || defined(__s390__) || defined(__s390x__)
+# define LF_USE_BIG_ENDIAN 1
+#endif
+
+#ifdef TARGET_CPU_PPC
+# define LF_USE_BIG_ENDIAN 1
+#endif
+
 // For optimized performance, we sometimes handle all R/G/B values simultaneously
-#ifdef __BIG_ENDIAN__
+#ifdef LF_USE_BIG_ENDIAN
 #  define RGB_MASK 0xffffff00
 #else
 #  define RGB_MASK 0x00ffffff
