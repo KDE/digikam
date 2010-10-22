@@ -34,6 +34,9 @@ SET(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
    )
 
+# Path to find FindPGF.cmake script.
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+
 # ==================================================================================================
 # Debug area codes
 # These codes will be set for every project specific path automatically, so
@@ -133,10 +136,12 @@ FIND_PACKAGE(LCMS)
 FIND_PACKAGE(JPEG)
 FIND_PACKAGE(PNG)
 FIND_PACKAGE(TIFF)
+FIND_PACKAGE(PGF)
 FIND_PACKAGE(Jasper)
 FIND_PACKAGE(Kdcraw)
 FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
+FIND_PACKAGE(CLAPACK)
 
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313, #228483
@@ -274,6 +279,19 @@ PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >=
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KEXIV2_FOR_DIGIKAM)
 PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KDCRAW_FOR_DIGIKAM)
 
+IF(PGF_FOUND)
+    MESSAGE(STATUS " libpgf library found..................... YES (optional)")
+ELSE(PGF_FOUND)
+    MESSAGE(STATUS " libpgf library found..................... NO  (optional - internal version used instead)")
+ENDIF(PGF_FOUND)
+
+IF(CLAPACK_FOUND)
+    MESSAGE(STATUS " libclapack library found................. YES (optional)")
+ELSE(CLAPACK_FOUND)
+    MESSAGE(STATUS " libclapack library found................. NO  (optional - internal version used instead)")
+ENDIF(CLAPACK_FOUND)
+
+
 # ================================================================
 
 IF(GPHOTO2_FOUND)
@@ -368,12 +386,18 @@ ELSE(DOXYGEN_FOUND)
 ENDIF(DOXYGEN_FOUND)
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND)
-    MESSAGE(STATUS " digiKam will be compiled................. YES")
+    MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
 ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
 ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND)
+
+IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
+    MESSAGE(STATUS "")
+    MESSAGE(FATAL_ERROR " BUNDLED LIBRARIES HAVE BEEN FORCE-DISABLED IN THIS BUILD. Aborting.")
+    SET(DIGIKAM_CAN_BE_COMPILED false)
+ENDIF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
@@ -586,7 +610,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfsettings.cpp
        )
 
-    SET(libclapack_SRCS
+    if(NOT CLAPACK_FOUND)
+      SET(libclapack_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/abort_.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgesv.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dlaswp.c
@@ -619,6 +644,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/util.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/xerbla.c
        )
+    endif(NOT CLAPACK_FOUND)
 
     SET(libdimgfilters_SRCS
         ${libclapack_SRCS}
@@ -1074,14 +1100,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/pgfutils.cpp
        )
 
-    SET(libpgf_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Stream.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
+    IF(PGF_FOUND)
+       INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
+    ELSE(PGF_FOUND)
+       SET(libpgf_SRCS
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Stream.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
        )
+    ENDIF(PGF_FOUND)
 
     SET(libsqlite2_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/attach.c

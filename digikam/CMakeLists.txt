@@ -52,8 +52,6 @@ INCLUDE_DIRECTORIES(
                      # specific libs and utilities
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/lprof
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/sqlite2
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/clapack
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/cimg
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/themeengine
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/kipiiface
@@ -93,13 +91,29 @@ INCLUDE_DIRECTORIES(
                      ${TIFF_INCLUDE_DIR}
                    )
 
+IF(PGF_FOUND)
+   INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
+ELSE(PGF_FOUND)
+   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf)
+ENDIF(PGF_FOUND)
+
+IF(CLAPACK_FOUND)
+   INCLUDE_DIRECTORIES(${CLAPACK_INCLUDE_DIR})
+ELSE(CLAPACK_FOUND)
+   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/clapack)
+ENDIF(CLAPACK_FOUND)
+
 # Shared libdigikamcore ################################################################
 
-# Disable Clapack C code warnings.
-SET_SOURCE_FILES_PROPERTIES(${libclapack_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+IF(NOT CLAPACK_FOUND)
+   # Disable Clapack C code warnings.
+   SET_SOURCE_FILES_PROPERTIES(${libclapack_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+ENDIF(NOT CLAPACK_FOUND)
 
-# Disable libpgf warnings.
-SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+IF(NOT PGF_FOUND)
+   # Disable libpgf warnings.
+   SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+ENDIF(NOT PGF_FOUND)
 
 # Disable liblqr C code warnings.
 SET_SOURCE_FILES_PROPERTIES(${liblqr_SRCS} PROPERTIES COMPILE_FLAGS "-w")
@@ -185,9 +199,17 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KIPI_LIBRARIES}
               )
 
+IF(PGF_FOUND)
+   TARGET_LINK_LIBRARIES(digikamcore ${PGF_LIBRARIES})
+ENDIF(PGF_FOUND)
+
 IF(MARBLEWIDGET_FOUND)
     TARGET_LINK_LIBRARIES(digikamcore ${LIBMARBLEWIDGET_LIBRARY})
 ENDIF(MARBLEWIDGET_FOUND)
+
+IF(CLAPACK_FOUND)
+   TARGET_LINK_LIBRARIES(digikamcore ${CLAPACK_LIBRARY})
+ENDIF(CLAPACK_FOUND)
 
 IF(Q_WS_X11)
     TARGET_LINK_LIBRARIES(digikamcore ${X11_LIBRARIES})
@@ -238,6 +260,10 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTSQL_LIBRARY}
                      )
+
+IF(PGF_FOUND)
+   TARGET_LINK_LIBRARIES(digikamdatabase ${PGF_LIBRARIES})
+ENDIF(PGF_FOUND)
 
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
@@ -336,6 +362,10 @@ ENDIF(KDEPIMLIBS_FOUND)
 IF(MARBLEWIDGET_FOUND)
   TARGET_LINK_LIBRARIES(digikam ${LIBMARBLEWIDGET_LIBRARY})
 ENDIF(MARBLEWIDGET_FOUND)
+
+IF(CLAPACK_FOUND)
+   TARGET_LINK_LIBRARIES(digikam ${CLAPACK_LIBRARY})
+ENDIF(CLAPACK_FOUND)
 
 INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
