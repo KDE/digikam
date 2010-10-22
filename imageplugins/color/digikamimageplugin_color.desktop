@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Color
+Name[ast]=ImagePlugin_Color
 Name[bg]=Приставка за снимки - Цветове
 Name[ca]=ImagePlugin_Color
 Name[ca@valencia]=ImagePlugin_Color
@@ -32,6 +33,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=A tool to correct colors of image
+Comment[ast]=Una ferramienta pa iguar colores de la imaxe
 Comment[bg]=Инструмент за поправяне на цветове в снимките
 Comment[ca]=Una eina per corregir els colors de les imatges
 Comment[ca@valencia]=Una eina per corregir els colors de les imatges

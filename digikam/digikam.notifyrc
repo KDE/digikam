@@ -1,6 +1,7 @@
 [Global]
 IconName=digikam
 Comment=digiKam
+Comment[ast]=digiKam
 Comment[bg]=digiKam
 Comment[ca]=digiKam
 Comment[ca@valencia]=digiKam
@@ -39,6 +40,7 @@ Comment[zh_TW]=digiKam
 
 [Event/cameradownloaded]
 Name=Download complete
+Name[ast]=Descarga completada
 Name[bg]=Изтеглянето приключи
 Name[ca]=Descàrrega completa
 Name[ca@valencia]=Descàrrega completa
@@ -72,6 +74,7 @@ Name[x-test]=xxDownload completexx
 Name[zh_CN]=下载完成
 Name[zh_TW]=下載完成
 Comment=A download from a camera or other device has finished.
+Comment[ast]=Finó una descarga dende una cámara u otru preséu
 Comment[bg]=Изтеглянето от фотоапарат или друго подобно устройство приключи.
 Comment[ca]=Ha finalitzat la descàrrega des d'una càmera o un altre dispositiu.
 Comment[ca@valencia]=Ha finalitzat la descàrrega des d'una càmera o un altre dispositiu.
@@ -107,6 +110,7 @@ Action=Popup
 
 [Event/editorsavefilecompleted]
 Name=Save file complete
+Name[ast]=Guardóse'l ficheru
 Name[ca]=S'ha completat el desat del fitxer
 Name[cs]=Uložení souboru dokončeno
 Name[da]=Filen er blevet gemt
@@ -125,6 +129,7 @@ Name[uk]=Зберігання файла завершено
 Name[x-test]=xxSave file completexx
 Name[zh_TW]=儲存檔案已完成
 Comment=A file from image editor is saved.
+Comment[ast]=Guardóse un ficheru del editor d'imáxenes
 Comment[ca]=S'ha desat un fitxer des de l'editor d'imatges
 Comment[cs]=Soubor z editoru obrázků je uložen.
 Comment[da]=En fil fra billededitoren er blevet gemt.
@@ -147,6 +152,7 @@ Action=Popup
 
 [Event/batchqueuecompleted]
 Name=Batch queue completed
+Name[ast]=Cola de trabayos completa
 Name[ca]=La cua del lot s'ha completat
 Name[ca@valencia]=La cua del lot s'ha completat
 Name[cs]=Zpracování dávky dokončeno
@@ -177,6 +183,7 @@ Name[x-test]=xxBatch queue completedxx
 Name[zh_CN]=批处理队列完成
 Name[zh_TW]=批次佇列已完成
 Comment=A queue in the batch queue manager has been completed.
+Comment[ast]=Completóse una cola del xestor de coles de trabayos.
 Comment[ca]=Ha finalitzat la cua en el gestor de cues de lots.
 Comment[ca@valencia]=Ha finalitzat la cua en el gestor de cues de lots.
 Comment[cs]=Zpracování fronty ve Správci pro dávkové zpracování bylo dokončeno.
@@ -208,6 +215,7 @@ Action=Popup
 
 [Event/fingerprintscompleted]
 Name=Update of fingerprint database complete
+Name[ast]=Anovamientu de la base de datos d'imprentaciones dixitales completáu
 Name[ca]=Actualització completada de la base de dades d'empremtes digitals
 Name[ca@valencia]=Actualització completada de la base de dades d'empremtes digitals
 Name[cs]=Aktualizace databáze otisků dokončena
@@ -238,6 +246,7 @@ Name[x-test]=xxUpdate of fingerprint database completexx
 Name[zh_CN]=更新指纹数据库完成
 Name[zh_TW]=指紋資料庫更新完成
 Comment=The update of the fingerprint database has been completed.
+Comment[ast]=L'anovamientu de la base de datos d'imprentaciones dixitales completóse
 Comment[ca]=L'actualització de la base de dades d'empremtes digitals ha finalitzat.
 Comment[ca@valencia]=L'actualització de la base de dades d'empremtes digitals ha finalitzat.
 Comment[cs]=Aktualizace databáze otisků byla dokončena.
@@ -270,6 +279,7 @@ Action=Popup
 
 [Event/batchthumbscompleted]
 Name=Update of thumbnails database complete
+Name[ast]=Anovamientu de la base de datos de miniatures completa
 Name[ca]=Actualització completada de la base de dades de miniatures
 Name[ca@valencia]=Actualització completada de la base de dades de miniatures
 Name[cs]=Aktualizace databáze náhledů dokončena
@@ -300,6 +310,7 @@ Name[x-test]=xxUpdate of thumbnails database completexx
 Name[zh_CN]=更新缩略图数据库完成
 Name[zh_TW]=縮圖資料庫更新完成
 Comment=The update of the thumbnails database has been completed.
+Comment[ast]=Completóse l'anovamientu de la base de datos de miniatures.
 Comment[ca]=L'actualització de la base de dades de miniatures ha finalitzat.
 Comment[ca@valencia]=L'actualització de la base de dades de miniatures ha finalitzat.
 Comment[cs]=Aktualizace databáze náhledů byla dokončena.
@@ -333,6 +344,7 @@ Action=Popup
 
 [Event/batchalbumssyncmetadatacompleted]
 Name=Synchronization of images' metadata with database completed
+Name[ast]=Sincronización de metadatos d'imáxenes cola base de datos completa
 Name[ca]=Sincronització completada de les metadades de les imatges amb la base de dades
 Name[ca@valencia]=Sincronització completada de les metadades de les imatges amb la base de dades
 Name[cs]=Synchronizace metadat obrázků s databází dokončena
@@ -361,6 +373,7 @@ Name[x-test]=xxSynchronization of images' metadata with database completedxx
 Name[zh_CN]=与数据库同步图像元数据完成
 Name[zh_TW]=用資料庫同步影像的中繼資料已完成
 Comment=The synchronization of the images' metadata with the database has been completed.
+Comment[ast]=Completóse la sincronización de metadatos d'imáxenes cola base de datos.
 Comment[ca]=La sincronització de les metadades de les imatges amb la base de dades ha finalitzat.
 Comment[ca@valencia]=La sincronització de les metadades de les imatges amb la base de dades ha finalitzat.
 Comment[cs]=Synchronizace metadat obrázků s databází byla dokončena.

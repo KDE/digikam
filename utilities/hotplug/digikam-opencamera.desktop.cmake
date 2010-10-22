@@ -8,6 +8,7 @@ Actions=open;
 Exec=@digikamhelperdir@/digikam-camera downloadFromUdi %i
 Icon=digikam
 Name=Download Photos with digiKam
+Name[ast]=Descargar semeyes con digiKam
 Name[bg]=Изтегляне на снимки с digiKam
 Name[ca]=Descarrega les fotos amb el digiKam
 Name[ca@valencia]=Descarrega les fotos amb el digiKam
