@@ -254,21 +254,21 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     if ( dataDir.isEmpty() )
     {
-        QString  str = i18n("Digikam server was not able not create database data directory");
+        QString  str = i18n("Digikam server was not able to create database data directory");
         kDebug() << str;
         return DatabaseServerError(DatabaseServerError::StartError, str);
     }
 
     if ( akDir.isEmpty() )
     {
-    	QString  str = i18n("Digikam server was not able not create database log directory");
+    	QString  str = i18n("Digikam server was not able to create database log directory");
     	kDebug() << str;
     	return DatabaseServerError(DatabaseServerError::StartError, str);
     }
 
     if ( miscDir.isEmpty() )
     {
-    	QString  str = i18n("Digikam server was not able not create database misc directory");
+    	QString  str = i18n("Digikam server was not able to create database misc directory");
     	kDebug() << str;
     	return DatabaseServerError(DatabaseServerError::StartError, str);
     }
