@@ -564,7 +564,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-parse.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-stack.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/xmalloc.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/auxfun/image.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/auxfun.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/camera.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/cpuid.cpp
