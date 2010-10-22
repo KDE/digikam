@@ -26,25 +26,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 233438 : digiKam crash when editing raw images on OS X.
 010 ==> 248302 : Crash while jumping back and forth in preview.
 011 ==> 254315 : Please consider attached patch for build system.
-012 ==> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+012 ==> 224245 : Each image editor plugin should remember the zoom ratio.
+013 ==> 
