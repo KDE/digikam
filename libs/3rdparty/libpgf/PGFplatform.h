@@ -37,7 +37,7 @@
 # define PGF_USE_BIG_ENDIAN 1
 #endif
 
-#if defined(__sgi__) || defined(__sgi) || defined(__powerpc__) || defined(sparc)
+#if defined(__sgi__) || defined(__sgi) || defined(__powerpc__) || defined(__sparc__)
 # define PGF_USE_BIG_ENDIAN 1
 #endif
 
