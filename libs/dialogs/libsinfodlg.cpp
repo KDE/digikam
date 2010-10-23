@@ -131,11 +131,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
 
 #ifndef USE_EXT_LIBLQR
 #   ifdef HAVE_GLIB2
-    list.insert(i18n("LibLqr"),                      i18n("internal library",
-                                                          LF_VERSION_MAJOR,
-                                                          LF_VERSION_MINOR,
-                                                          LF_VERSION_MICRO,
-                                                          LF_VERSION_BUGFIX));
+    list.insert(i18n("LibLqr"),                      i18n("internal library"));
 #   endif // HAVE_GLIB2
 #else
     list.insert(i18n("LibLqr"),                      i18n("external shared library"));
