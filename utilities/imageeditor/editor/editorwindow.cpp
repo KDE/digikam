@@ -1493,7 +1493,9 @@ void EditorWindow::movingSaveFileFinished(bool successful)
         return;
     }
 
-    m_canvas->setUndoHistoryOrigin();
+    //Disable resetting UndoHistoryOrigin so that you can use undo even after save
+    //m_canvas->setUndoHistoryOrigin();
+
     // now that we know the real destination file name, pass it to be recorded in image history
     m_canvas->addLastSavedToHistory(m_savingContext->destinationURL.toLocalFile());
 

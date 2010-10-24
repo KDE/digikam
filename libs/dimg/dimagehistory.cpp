@@ -101,7 +101,7 @@ bool DImageHistory::isEmpty() const
     {
         return true;
     }
-    else if(d->entries.count() == 1 && d->entries.at(0).referredImages.at(0).isCurrentFile())
+    else if(d->entries.count() == 1 && !d->entries.at(0).referredImages.isEmpty())
     {
         return true;
     }
