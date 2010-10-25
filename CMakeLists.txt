@@ -35,7 +35,7 @@ SET(DIGIKAM_VERSION_STRING
    )
 
 # Path to find FindPGF.cmake script.
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 # ==================================================================================================
 # Debug area codes
