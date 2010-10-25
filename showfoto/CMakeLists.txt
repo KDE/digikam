@@ -30,6 +30,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/dimg/filters/wb
                      ../libs/dimg/filters/transform
                      ../libs/dimg/filters/lens
+                     ../libs/dimg/imagehistory
                      ../libs/dmetadata
                      ../libs/themeengine
                      ../libs/threadimageio

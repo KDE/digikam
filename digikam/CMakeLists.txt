@@ -22,6 +22,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/wb
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/lens
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/imagehistory
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
@@ -41,6 +42,7 @@ INCLUDE_DIRECTORIES(
                      # database libs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/imagehistory
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
 
                      # shared utilities

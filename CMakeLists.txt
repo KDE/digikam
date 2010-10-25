@@ -141,6 +141,10 @@ FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(Kmap)
+FIND_PACKAGE(Boost)# 1.36.0 )
+  if(Boost_FOUND)
+      include_directories(${Boost_INCLUDE_DIRS})
+  endif(Boost_FOUND)
 
 #---------------following code is to add the QtScript libraries-----------------------
 
@@ -248,6 +252,7 @@ PRINT_LIBRARY_STATUS("libtiff" "http://www.remotesensing.org/libtiff" "" TIFF_FO
 PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (version >= 1.2.7)" PNG_FOUND)
 PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JASPER_FOUND)
 PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
+PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)" Boost_FOUND)
 PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KIPI_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KEXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KDCRAW_FOUND)
@@ -333,13 +338,13 @@ ELSE(DOXYGEN_FOUND)
 
 ENDIF(DOXYGEN_FOUND)
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
     MESSAGE(STATUS " digiKam will be compiled................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
@@ -534,9 +539,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimgscale.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolorcomposer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimagehistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filteraction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/historyimageid.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/dimagehistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/filteraction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/historyimageid.cpp
        )
 
     SET(libdimgloaders_SRCS
@@ -1076,6 +1081,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagscache.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseservererror.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraph.cpp
        )
 
     SET(libdatabaseui_SRCS

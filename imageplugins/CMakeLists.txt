@@ -26,6 +26,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/dimg/filters/wb
                     ../libs/dimg/filters/transform
                     ../libs/dimg/filters/lens
+                    ../libs/dimg/imagehistory
                     ../libs/threadimageio
                     ../libs/dmetadata
                     ../libs/themeengine
