@@ -124,6 +124,7 @@ GreycstorationFilter::GreycstorationFilter(DImg* orgImage,
 
 GreycstorationFilter::~GreycstorationFilter()
 {
+    cancelFilter();
     delete d;
 }
 
