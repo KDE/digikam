@@ -48,7 +48,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class GreycstorationSettingsPriv
+class GreycstorationSettings::GreycstorationSettingsPriv
 {
 
 public:

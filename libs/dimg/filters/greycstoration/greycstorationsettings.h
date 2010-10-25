@@ -39,8 +39,6 @@ class KTabWidget;
 namespace Digikam
 {
 
-class GreycstorationSettingsPriv;
-
 class DIGIKAM_EXPORT GreycstorationSettings : public QObject
 {
     Q_OBJECT
@@ -54,7 +52,7 @@ public:
     GreycstorationContainer settings() const;
 
     void setDefaultSettings(const GreycstorationContainer& settings);
-    
+
     bool loadSettings(QFile& file, const QString& header);
     void saveSettings(QFile& file, const QString& header);
 
@@ -62,6 +60,7 @@ public:
 
 private:
 
+    class GreycstorationSettingsPriv;
     GreycstorationSettingsPriv* const d;
 };
 
