@@ -139,6 +139,11 @@ QPointF ImageZoomSettings::mapImageToZoom(const QPointF& imagePoint) const
     return imagePoint * m_zoom;
 }
 
+inline static bool lessThanLimitedPrecision(double a, double b)
+{
+    return lround(a * 100000) < lround(b * 100000);
+}
+
 double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSize) const
 {
     // If the zoom value gets changed from d->zoom to zoom
@@ -157,7 +162,7 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
     {
         foreach (double z, snapValues)
         {
-            if ((currentZoom < z) && (nextZoom > z))
+            if (lessThanLimitedPrecision(currentZoom, z) && lessThanLimitedPrecision(z, nextZoom))
                 return z;
         }
     }
@@ -165,7 +170,7 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
     {
         foreach (double z, snapValues)
         {
-            if ((currentZoom > z) && (nextZoom < z))
+            if (lessThanLimitedPrecision(z, currentZoom) && lessThanLimitedPrecision(nextZoom, z))
                 return z;
         }
     }
