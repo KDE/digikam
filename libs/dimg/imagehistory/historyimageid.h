@@ -49,6 +49,12 @@ public:
         Original,
         /// A file created in the history from the original file to the current file
         Intermediate,
+        /**
+         * When a file is created from multiple files, there can be no direct
+         * original (panorama) or one direct original and some other source files.
+         * To record source files out of the direct history, this type is used.
+         */
+        Source,
         /** The "current" file. This is a special entry: It refers to the file from
          *  which this history was read. It need not be written to the file,
          *  because it describes the file itself. There is typically
@@ -70,6 +76,7 @@ public:
     bool isValid() const;
 
     bool isOriginalFile() const { return m_type == Original; }
+    bool isSourceFile() const { return m_type == Source; }
     bool isIntermediateFile() const { return m_type == Intermediate; }
     bool isCurrentFile() const  { return m_type == Current; }
 

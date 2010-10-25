@@ -70,6 +70,7 @@ public:
     bool hasFilters() const;
 
     int size() const;
+
     bool operator==(const DImageHistory& other) const;
 
     /**

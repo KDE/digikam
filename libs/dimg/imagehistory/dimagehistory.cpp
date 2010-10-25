@@ -101,7 +101,9 @@ bool DImageHistory::isEmpty() const
     {
         return true;
     }
-    else if(d->entries.count() == 1 && !d->entries.at(0).referredImages.isEmpty())
+    else if (d->entries.count() == 1
+             && d->entries.first().referredImages.count() == 1
+             && d->entries.first().referredImages.first().isCurrentFile())
     {
         return true;
     }
@@ -346,6 +348,8 @@ QString DImageHistory::toXml() const
 
                 if (imageId.isOriginalFile())
                     stream.writeAttribute("type", "original");
+                else if (imageId.isSourceFile())
+                    stream.writeAttribute("type", "source");
 
                 stream.writeStartElement("fileParams");
 
@@ -404,8 +408,12 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             //kDebug() << "Parsing file tag";
             HistoryImageId imageId(stream.attributes().value("uuid").toString());
 
-            bool isOriginal = stream.attributes().value("type") == "original";
-            imageId.m_type = isOriginal ? HistoryImageId::Original : HistoryImageId::Intermediate;
+            if (stream.attributes().value("type") == "original")
+                imageId.m_type = HistoryImageId::Original;
+            else if (stream.attributes().value("type") == "source")
+                imageId.m_type = HistoryImageId::Source;
+            else
+                imageId.m_type = HistoryImageId::Intermediate;
 
 
             while (stream.readNextStartElement())

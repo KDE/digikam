@@ -46,6 +46,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/widgets/common
                      ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dimg/filters/wb
                      ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dimg/filters/transform
                      ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dimg/filters/lens
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dimg/imagehistory
                      ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dmetadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/themeengine
                      ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/histogram
