@@ -70,7 +70,7 @@ using namespace cimg_library;
 namespace Digikam
 {
 
-class GreycstorationFilterPriv
+class GreycstorationFilter::GreycstorationFilterPriv
 {
 
 public:
@@ -220,12 +220,12 @@ void GreycstorationFilter::filterImage()
     // convert DImg (interleaved RGBA) to CImg (planar RGBA)
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
-        d->img = CImg<>(data, 4, width, height, 1, false).
+        d->img = CImg<unsigned char>(data, 4, width, height, 1, false).
                  get_permute_axes("yzvx");
     }
     else                                    // 16 bits image.
     {
-        d->img = CImg<>((unsigned short*)data, 4, width, height, 1, false).
+        d->img = CImg<unsigned short>((unsigned short*)data, 4, width, height, 1, false).
                  get_permute_axes("yzvx");
     }
 
@@ -346,7 +346,7 @@ void GreycstorationFilter::inpainting()
         register int x, y;
 
         d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
-        uchar *ptr = d->inPaintingMask.bits();
+        uchar* ptr = d->inPaintingMask.bits();
 
         for (y = 0; y < d->inPaintingMask.height(); ++y)
         {

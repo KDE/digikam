@@ -39,8 +39,6 @@ class QObject;
 namespace Digikam
 {
 
-class GreycstorationFilterPriv;
-
 class DIGIKAM_EXPORT GreycstorationContainer
 {
 
@@ -200,6 +198,8 @@ private:
 
 private:
 
+
+    class GreycstorationFilterPriv;
     GreycstorationFilterPriv* const d;
 };
 
