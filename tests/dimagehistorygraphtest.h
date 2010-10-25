@@ -28,13 +28,13 @@
 
 #include <QtTest/QtTest>
 #include <QEventLoop>
+#include <QDir>
 
 // Local includes
 
-#include "dimginterface.h"
 #include "abstractdimagehistorytest.h"
 
-class DImageHistoryTest : public AbstractDImageHistoryTest
+class DImageHistoryGraphTest : public AbstractDImageHistoryTest
 {
 Q_OBJECT
 
@@ -45,11 +45,18 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void testXml();
-    void testDImg();
-
     void initTestCase();
     void cleanupTestCase();
+
+    void testGraph();
+
+private:
+
+    void rescan();
+
+    QDir        collectionDir;
+    QString     dbFile;
+    QStringList readOnlyImages;
 };
 
 #endif

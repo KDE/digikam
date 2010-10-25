@@ -10,6 +10,8 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/levels
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/imagehistory
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/imagehistory
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
@@ -223,6 +225,7 @@ TARGET_LINK_LIBRARIES(albummodeltest
 #------------------------------------------------------------------------
 
 SET(dimagehistorytest_SRCS
+    abstractdimagehistorytest.cpp
     dimagehistorytest.cpp
 )
 KDE4_ADD_UNIT_TEST(dimagehistorytest ${dimagehistorytest_SRCS})
@@ -230,6 +233,22 @@ TARGET_LINK_LIBRARIES(dimagehistorytest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      )
+
+
+#------------------------------------------------------------------------
+
+SET(dimagehistorygraphtest_SRCS
+    abstractdimagehistorytest.cpp
+    dimagehistorygraphtest.cpp
+)
+KDE4_ADD_UNIT_TEST(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
+TARGET_LINK_LIBRARIES(dimagehistorygraphtest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamdatabase
                       digikamcore
                       )
 
