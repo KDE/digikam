@@ -47,7 +47,7 @@ OilPaintFilter::OilPaintFilter(DImg* orgImage, QObject* parent, int brushSize, i
     initFilter();
 }
 
-OilPaintFilter::~OilPaintFilter();
+OilPaintFilter::~OilPaintFilter()
 {
     cancelFilter();
 }
