@@ -40,8 +40,6 @@ class QObject;
 namespace Digikam
 {
 
-class GreycstorationFilterPriv;
-
 class DIGIKAM_EXPORT GreycstorationContainer
 {
 
@@ -164,16 +162,16 @@ public:
         you need to call in order: setSettings(), setMode(), optionally setInPaintingMask(), 
         setOriginalImage(), and necessary setup() at end.
      */
-    GreycstorationFilter(QObject *parent=0);
+    GreycstorationFilter(QObject* parent=0);
 
     /** Contructor with all arguments. Ready to use.
      */
-    GreycstorationFilter(DImg *orgImage,
+    GreycstorationFilter(DImg* orgImage,
                         const GreycstorationContainer& settings,
                         int mode=Restore,
                         int newWidth=0, int newHeight=0,
                         const QImage& inPaintingMask=QImage(),
-                        QObject *parent=0);
+                        QObject* parent=0);
 
     ~GreycstorationFilter();
 
@@ -210,6 +208,8 @@ private:
 
 private:
 
+
+    class GreycstorationFilterPriv;
     GreycstorationFilterPriv* const d;
 };
 

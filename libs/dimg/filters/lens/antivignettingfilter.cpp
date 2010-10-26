@@ -54,8 +54,10 @@ AntiVignettingFilter::AntiVignettingFilter(DImg* orgImage, QObject* parent,
     initFilter();
 }
 
-    bool   addvignetting;
-
+AntiVignettingFilter::~AntiVignettingFilter()
+{
+    cancelFilter();
+}
 
 // This method is inspired from John Walker 'pnmctrfilt' algorithm code.
 

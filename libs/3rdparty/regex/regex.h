@@ -22,8 +22,6 @@
 #ifndef TRE_REGEX_H
 #define TRE_REGEX_H 1
 
-#include "config-lensfun.h"
-
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif /* HAVE_SYS_TYPES_H */

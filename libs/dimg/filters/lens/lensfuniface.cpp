@@ -230,8 +230,8 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     }
 
     PhotoInfoContainer photoInfo = meta.getPhotographInformation();
-    d->makeDescription           = photoInfo.make;
-    d->modelDescription          = photoInfo.model;
+    d->makeDescription           = photoInfo.make.trimmed();
+    d->modelDescription          = photoInfo.model.trimmed();
     bool exactMatch              = true;
 
     if (d->makeDescription.isEmpty())
@@ -249,7 +249,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 d->modelDescription = QString("Canon EOS 400D DIGITAL");
         }
 
-        d->lensDescription = photoInfo.lens;
+        d->lensDescription = photoInfo.lens.trimmed();
 
         // ------------------------------------------------------------------------------------------------
 

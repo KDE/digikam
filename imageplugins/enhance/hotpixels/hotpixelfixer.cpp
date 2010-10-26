@@ -69,6 +69,7 @@ HotPixelFixer::HotPixelFixer(Digikam::DImg* orgImage, QObject* parent, const QLi
 
 HotPixelFixer::~HotPixelFixer()
 {
+    cancelFilter();
 }
 
 void HotPixelFixer::filterImage()

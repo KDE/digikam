@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT EmbossFilter : public DImgThreadedFilter
 public:
 
     explicit EmbossFilter(DImg* orgImage, QObject* parent=0, int depth=30);
-    ~EmbossFilter(){};
+    ~EmbossFilter();
 
     static QString          FilterIdentifier() { return "digikam:EmbossFilter"; }
     static QString          DisplayableName() { return "Emboss Effect"; }

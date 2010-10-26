@@ -79,6 +79,7 @@ BWSepiaFilter::BWSepiaFilter(DImg* orgImage, QObject* parent, const BWSepiaConta
 
 BWSepiaFilter::~BWSepiaFilter()
 {
+    cancelFilter();
     delete d;
 }
 

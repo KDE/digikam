@@ -68,9 +68,7 @@ NRFilter::NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings)
 
 NRFilter::~NRFilter()
 {
-    // NOTE: see B.K.O #254679. We need to call this method in destructor before to delete internal container.
     cancelFilter();
-
     delete d;
 }
 

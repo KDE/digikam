@@ -65,7 +65,7 @@ extern "C"
 
 #ifndef Q_CC_MSVC
 }
-#endif
+#endif // Q_CC_MSVC
 
 // Local includes
 
@@ -125,15 +125,34 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibLensFun"),                  i18n("external shared library"));
 #endif // USE_EXT_LIBLENSFUN
 
+#ifndef USE_EXT_LIBLQR
+#   ifdef HAVE_GLIB2
+    list.insert(i18n("LibLqr"),                      i18n("internal library"));
+#   endif // HAVE_GLIB2
+#else
+    list.insert(i18n("LibLqr"),                      i18n("external shared library"));
+#endif // USE_EXT_LIBLQR
+
     list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
     list.insert(i18n("LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
     list.insert(i18n("LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
     list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
     list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
-    list.insert(i18n("LibPGF"),                      libPGFVersion());
     list.insert(i18n("LibKMap"),                     KMap::KMapWidget::version());
     list.insert(i18n("Marble Widget"),               KMap::KMapWidget::MarbleWidgetVersion());
+
+#ifdef USE_EXT_LIBPGF
+    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("external shared library"));
+#else
+    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("internal library")));
+#endif // USE_EXT_LIBPGF
+
+#ifdef USE_EXT_LIBCLAPACK
+    list.insert(i18n("LibClapack"),                  i18n("external shared library"));
+#else
+    list.insert(i18n("LibClapack"),                  i18n("internal library"));
+#endif // USE_EXT_LIBCLAPACK
 
     listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     setInfoMap(list);

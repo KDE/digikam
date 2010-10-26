@@ -90,6 +90,7 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
 
 FilmGrainFilter::~FilmGrainFilter()
 {
+    cancelFilter();
     delete d;
 }
 

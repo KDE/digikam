@@ -55,6 +55,11 @@ CharcoalFilter::CharcoalFilter(DImg* orgImage, QObject* parent, double pencil, d
     initFilter();
 }
 
+CharcoalFilter::~CharcoalFilter()
+{
+    cancelFilter();
+}
+
 void CharcoalFilter::filterImage()
 {
     if (m_orgImage.isNull())

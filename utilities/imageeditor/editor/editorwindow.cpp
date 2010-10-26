@@ -600,7 +600,7 @@ void EditorWindow::setupStandardActions()
 
 void EditorWindow::setupStatusBar()
 {
-    m_nameLabel = new StatusProgressBar(statusBar());
+    m_nameLabel  = new StatusProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel, 100);
 
@@ -635,21 +635,24 @@ void EditorWindow::setupStatusBar()
             this, SIGNAL(signalPreviewModeChanged(int)));
 
     QWidget* buttonsBox      = new QWidget(statusBar());
-    QHBoxLayout *hlay        = new QHBoxLayout(buttonsBox);
-    QButtonGroup *buttonsGrp = new QButtonGroup(buttonsBox);
+    QHBoxLayout* hlay        = new QHBoxLayout(buttonsBox);
+    QButtonGroup* buttonsGrp = new QButtonGroup(buttonsBox);
     buttonsGrp->setExclusive(false);
 
     d->underExposureIndicator = new QToolButton(buttonsBox);
     d->underExposureIndicator->setDefaultAction(d->viewUnderExpoAction);
+    d->underExposureIndicator->setFocusPolicy(Qt::NoFocus);
 //    new ButtonIconDisabler(d->underExposureIndicator);
 
     d->overExposureIndicator  = new QToolButton(buttonsBox);
     d->overExposureIndicator->setDefaultAction(d->viewOverExpoAction);
+    d->overExposureIndicator->setFocusPolicy(Qt::NoFocus);
 //    new ButtonIconDisabler(d->overExposureIndicator);
 
     d->cmViewIndicator        = new QToolButton(buttonsBox);
     d->cmViewIndicator->setDefaultAction(d->viewCMViewAction);
-//    new ButtonIconDisabler(d->cmViewIndicator);
+    d->cmViewIndicator->setFocusPolicy(Qt::NoFocus);
+    //    new ButtonIconDisabler(d->cmViewIndicator);
 
     buttonsGrp->addButton(d->underExposureIndicator);
     buttonsGrp->addButton(d->overExposureIndicator);

@@ -63,7 +63,7 @@
 
 extern "C"
 {
-    #include <unistd.h>
+#include <unistd.h>
 }
 
 using namespace cimg_library;
@@ -71,7 +71,7 @@ using namespace cimg_library;
 namespace Digikam
 {
 
-class GreycstorationFilterPriv
+class GreycstorationFilter::GreycstorationFilterPriv
 {
 
 public:
@@ -125,6 +125,7 @@ GreycstorationFilter::GreycstorationFilter(DImg* orgImage,
 
 GreycstorationFilter::~GreycstorationFilter()
 {
+    cancelFilter();
     delete d;
 }
 
@@ -156,7 +157,9 @@ void GreycstorationFilter::computeChildrenThreads()
 
 void GreycstorationFilter::setup()
 {
-    computeChildrenThreads();
+    // NOTE: Sound like using more than 2 threads at the same time create dysfunctions to stop Cimg children threads 
+    //       calling cancelFilter(). We limit children threads to 2.
+    //computeChildrenThreads();
 
     if (m_orgImage.sixteenBit())   // 16 bits image.
         d->gfact = 1.0/256.0;
@@ -165,8 +168,9 @@ void GreycstorationFilter::setup()
     {
         m_destImage = DImg(d->newSize.width(), d->newSize.height(),
                            m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+
         kDebug() << "GreycstorationFilter::Resize: new size: ("
-                      << d->newSize.width() << ", " << d->newSize.height() << ")";
+                 << d->newSize.width() << ", " << d->newSize.height() << ")";
     }
     else
     {
@@ -221,12 +225,12 @@ void GreycstorationFilter::filterImage()
     // convert DImg (interleaved RGBA) to CImg (planar RGBA)
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
-        d->img = CImg<>(data, 4, width, height, 1, false).
+        d->img = CImg<unsigned char>(data, 4, width, height, 1, false).
                  get_permute_axes("yzvx");
     }
     else                                    // 16 bits image.
     {
-        d->img = CImg<>((unsigned short*)data, 4, width, height, 1, false).
+        d->img = CImg<unsigned short>((unsigned short*)data, 4, width, height, 1, false).
                  get_permute_axes("yzvx");
     }
 
@@ -347,7 +351,7 @@ void GreycstorationFilter::inpainting()
         register int x, y;
 
         d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
-        uchar *ptr = d->inPaintingMask.bits();
+        uchar* ptr = d->inPaintingMask.bits();
 
         for (y = 0; y < d->inPaintingMask.height(); ++y)
         {

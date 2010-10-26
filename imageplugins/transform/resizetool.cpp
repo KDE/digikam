@@ -96,7 +96,10 @@ public:
         initFilter();
     };
 
-    ~ResizeImage(){};
+    ~ResizeImage()
+    {
+        cancelFilter();
+    };
 
 private:
 

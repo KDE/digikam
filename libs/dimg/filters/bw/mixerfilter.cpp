@@ -50,6 +50,7 @@ MixerFilter::MixerFilter(DImg* orgImage, QObject* parent, const MixerContainer& 
 
 MixerFilter::~MixerFilter()
 {
+    cancelFilter();
 }
 
 void MixerFilter::filterImage()

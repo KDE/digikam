@@ -55,6 +55,11 @@ InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, const InfraredCo
     initFilter();
 }
 
+InfraredFilter::~InfraredFilter()
+{
+    cancelFilter();
+}
+
 /** This method is based on the Simulate Infrared Film tutorial from GimpGuru.org web site
     available at this url : http://www.gimpguru.org/Tutorials/SimulatedInfrared/
 

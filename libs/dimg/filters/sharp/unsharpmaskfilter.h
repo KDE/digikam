@@ -47,7 +47,7 @@ public:
     // UnsharpMaskFilter(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,
     //            int progressBegin=0, int progressEnd=100, double radius=0.0, double sigma=1.0);
 
-    ~UnsharpMaskFilter(){};
+    ~UnsharpMaskFilter();
 
     static QString          FilterIdentifier() { return "digikam:UnsharpMaskFilter"; }
     static QString          DisplayableName() { return "Unsharp Mask Filter"; }

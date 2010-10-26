@@ -33,13 +33,19 @@
 /* Define to 1 if an external liblqr-1 shared library have been found */
 #cmakedefine USE_EXT_LIBLQR-1 1
 
+/* Define to 1 if an external libpgf shared library have been found */
+#cmakedefine USE_EXT_LIBPGF 1
+
+/* Define to 1 if an external libclapack shared library have been found */
+#cmakedefine USE_EXT_LIBCLAPACK 1
+
 /* Define to 1 if an external lensfun shared library have been found */
 #cmakedefine USE_EXT_LIBLENSFUN 1
 
 /* Define to 1 if GPhoto2 shared library is installed */
 #cmakedefine HAVE_GPHOTO2 1
 
-/* Define to 1 if you want to use the experimental thumbnails database */
+/* Define to 1 if thumbnails database is used */
 #cmakedefine USE_THUMBS_DB 1
 
 /* Define to 1 if you have Nepomuk shared libraries installed */

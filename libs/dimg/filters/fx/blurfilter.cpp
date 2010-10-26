@@ -60,6 +60,11 @@ BlurFilter::BlurFilter(DImgThreadedFilter* parentFilter,
     filterImage();
 }
 
+BlurFilter::~BlurFilter()
+{
+    cancelFilter();
+}
+
 void BlurFilter::filterImage()
 {
     gaussianBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),

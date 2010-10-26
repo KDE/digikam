@@ -6,7 +6,7 @@
  * Date        : 2009-09-19
  * Description : ICC Transform threaded image filter.
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,11 +38,12 @@ class DIGIKAM_EXPORT IccTransformFilter : public DImgThreadedFilter, public DImg
 
 public:
 
-    IccTransformFilter(DImg *orgImage, QObject *parent, const IccTransform& transform);
+    IccTransformFilter(DImg* orgImage, QObject* parent, const IccTransform& transform);
+    ~IccTransformFilter();
 
 protected:
 
-    virtual void progressInfo(const DImg *, float progress);
+    virtual void progressInfo(const DImg*, float progress);
     virtual void filterImage();
 
 private:

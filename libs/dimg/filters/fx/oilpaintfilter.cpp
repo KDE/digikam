@@ -48,6 +48,11 @@ OilPaintFilter::OilPaintFilter(DImg* orgImage, QObject* parent, int brushSize, i
     initFilter();
 }
 
+OilPaintFilter::~OilPaintFilter()
+{
+    cancelFilter();
+}
+
 /** Function to apply the OilPaintFilter effect.
  *  This method have been ported from Pieter Z. Voloshyn algorithm code.
  *

@@ -12,6 +12,7 @@ deleting=false
 moving=false
 maxInstances=1
 Description=digikam tags kioslave
+Description[ast]=kioslave de Digikam pa etiquetes
 Description[bg]=digiKam kioslave за етикети
 Description[ca]=«Kioslave» d'etiquetes del digiKam
 Description[ca@valencia]=«Kioslave» d'etiquetes del digiKam

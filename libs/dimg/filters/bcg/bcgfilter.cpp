@@ -72,6 +72,7 @@ BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settin
 
 BCGFilter::~BCGFilter()
 {
+    cancelFilter();
     delete d;
 }
 

@@ -59,6 +59,7 @@ LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const Loc
 
 LocalContrastFilter::~LocalContrastFilter()
 {
+    cancelFilter();
     delete d;
 }
 

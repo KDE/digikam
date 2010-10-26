@@ -67,7 +67,7 @@ class DIGIKAM_EXPORT InfraredFilter : public DImgThreadedFilter
 public:
 
     explicit InfraredFilter(DImg* orgImage, QObject* parent=0, const InfraredContainer& settings=InfraredContainer());
-    ~InfraredFilter(){};
+    ~InfraredFilter();
     
     static QString          FilterIdentifier() { return "digikam:InfraredFilter"; }
     static QString          DisplayableName() { return "Infrared Filter"; }

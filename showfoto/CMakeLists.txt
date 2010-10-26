@@ -66,6 +66,10 @@ KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/apps/hi*-app-showfoto.png")
 
 KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
 
+IF(CLAPACK_FOUND)
+   TARGET_LINK_LIBRARIES(showfoto ${CLAPACK_LIBRARY})
+ENDIF(CLAPACK_FOUND)
+
 TARGET_LINK_LIBRARIES(showfoto
                       digikamcore
                       ${KEXIV2_LIBRARIES}
@@ -78,5 +82,5 @@ TARGET_LINK_LIBRARIES(showfoto
 
 INSTALL(TARGETS showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-INSTALL(FILES showfoto.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+INSTALL(PROGRAMS showfoto.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 INSTALL(FILES showfotoui.rc DESTINATION ${DATA_INSTALL_DIR}/showfoto )

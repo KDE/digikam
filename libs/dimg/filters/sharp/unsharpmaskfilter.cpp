@@ -56,6 +56,11 @@ UnsharpMaskFilter::UnsharpMaskFilter(DImg* orgImage, QObject* parent, int radius
     initFilter();
 }
 
+UnsharpMaskFilter::~UnsharpMaskFilter()
+{
+    cancelFilter();
+}
+
 void UnsharpMaskFilter::filterImage()
 {
     int      progress;

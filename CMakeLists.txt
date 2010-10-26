@@ -35,6 +35,9 @@ SET(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
    )
 
+# Path to find FindPGF.cmake script.
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+
 # ==================================================================================================
 # Debug area codes
 # These codes will be set for every project specific path automatically, so
@@ -141,16 +144,23 @@ FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(Kmap)
-FIND_PACKAGE(Boost COMPONENTS graph)# 1.36.0 )
-  if(Boost_FOUND)
-      include_directories(${Boost_INCLUDE_DIRS})
-  endif(Boost_FOUND)
+FIND_PACKAGE(PGF)
+FIND_PACKAGE(CLAPACK)
+FIND_PACKAGE(Boost COMPONENTS graph) # 1.36.0)
+
+IF(Boost_FOUND)
+    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+ENDIF(Boost_FOUND)
 
 #---------------following code is to add the QtScript libraries-----------------------
 
 TARGET_LINK_LIBRARIES(${QT_QTSCRIPT_LIBRARY})
 
 #-------------------------------------------------------------------------------------
+
+MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
+MACRO_BOOL_TO_01(CLAPACK_FOUND USE_EXT_LIBCLAPACK)
+
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313, #228483
 FILE(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
@@ -230,8 +240,8 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 # Set config files accordingly with optional dependencies
 
 CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
-CONFIGURE_FILE(libs/3rdparty/lensfun/include/config-lensfun.h.cmake
-               ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include/config-lensfun.h)
+CONFIGURE_FILE(libs/3rdparty/lensfun/config-lensfun.h.cmake
+               ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/config-lensfun.h)
 
 # ==================================================================================================
 # Log messages
@@ -258,6 +268,19 @@ PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version 
 PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KDCRAW_FOUND)
 PRINT_LIBRARY_STATUS("libkface" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KFACE_FOUND)
 PRINT_LIBRARY_STATUS("libkmap" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KMAP_FOUND)
+
+IF(PGF_FOUND)
+    MESSAGE(STATUS " libpgf library found..................... YES (optional)")
+ELSE(PGF_FOUND)
+    MESSAGE(STATUS " libpgf library found..................... NO  (optional - internal version used instead)")
+ENDIF(PGF_FOUND)
+
+IF(CLAPACK_FOUND)
+    MESSAGE(STATUS " libclapack library found................. YES (optional)")
+ELSE(CLAPACK_FOUND)
+    MESSAGE(STATUS " libclapack library found................. NO  (optional - internal version used instead)")
+ENDIF(CLAPACK_FOUND)
+
 
 # ================================================================
 
@@ -339,12 +362,18 @@ ELSE(DOXYGEN_FOUND)
 ENDIF(DOXYGEN_FOUND)
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
-    MESSAGE(STATUS " digiKam will be compiled................. YES")
+    MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
 ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
 ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+
+IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
+    MESSAGE(STATUS "")
+    MESSAGE(FATAL_ERROR " BUNDLED LIBRARIES HAVE BEEN FORCE-DISABLED IN THIS BUILD. Aborting.")
+    SET(DIGIKAM_CAN_BE_COMPILED false)
+ENDIF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
@@ -491,38 +520,33 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
             ADD_DEFINITIONS(-DTRE_REGEX_T_FIELD=value -DTRE_VERSION="0")
 
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/auxfun)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/lensfun)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/regex)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex)
 
             SET(liblensfun_SRCS
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/regcomp.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/regerror.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/regexec.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-ast.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-compile.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-match-approx.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-match-backtrack.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-match-parallel.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-mem.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-parse.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-stack.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/xmalloc.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/auxfun/image.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/auxfun.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/camera.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/cpuid.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/database.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/lens.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mod-color.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mod-coord.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mod-subpix.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/modifier.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mount.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regcomp.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regerror.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regexec.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-ast.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-compile.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-approx.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-backtrack.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-parallel.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-mem.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-parse.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-stack.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/xmalloc.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/auxfun.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/camera.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/cpuid.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/database.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/lens.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-color.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-coord.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-subpix.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/modifier.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mount.cpp
             )
 
         ENDIF(LENSFUN_FOUND)
@@ -562,7 +586,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfsettings.cpp
        )
 
-    SET(libclapack_SRCS
+    if(NOT CLAPACK_FOUND)
+      SET(libclapack_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/abort_.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgesv.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dlaswp.c
@@ -595,6 +620,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/util.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/xerbla.c
        )
+    endif(NOT CLAPACK_FOUND)
 
     SET(libdimgfilters_SRCS
         ${libclapack_SRCS}
@@ -1093,14 +1119,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/pgfutils.cpp
        )
 
-    SET(libpgf_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Stream.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
+    IF(PGF_FOUND)
+       INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
+    ELSE(PGF_FOUND)
+       SET(libpgf_SRCS
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Stream.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
        )
+    ENDIF(PGF_FOUND)
 
     SET(libsqlite2_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/attach.c

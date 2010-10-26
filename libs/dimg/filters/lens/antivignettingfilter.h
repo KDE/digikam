@@ -73,7 +73,7 @@ public:
     explicit AntiVignettingFilter(DImg* orgImage, QObject* parent=0,
                                   const AntiVignettingContainer& settings=AntiVignettingContainer());
 
-    ~AntiVignettingFilter(){};
+    ~AntiVignettingFilter();
 
     static QString          FilterIdentifier() { return "digikam:AntiVignettingFilter"; }
     static QString          DisplayableName() { return "Anti-Vignetting Filter"; }

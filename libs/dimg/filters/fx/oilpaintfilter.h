@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT OilPaintFilter : public DImgThreadedFilter
 public:
 
     explicit OilPaintFilter(DImg* orgImage, QObject* parent=0, int brushSize=1, int smoothness=30);
-    ~OilPaintFilter(){};
+    ~OilPaintFilter();
 
     static QString          FilterIdentifier() { return "digikam:OilPaintFilter"; }
     static QString          DisplayableName() { return "Oil Painter Effect"; }

@@ -44,7 +44,7 @@ public:
     explicit InvertFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
                           int progressBegin=0, int progressEnd=100);
 
-    ~InvertFilter(){};
+    ~InvertFilter();
 
     static QString          FilterIdentifier() { return "digikam:InvertFilter"; }
     static QString          DisplayableName() { return "Invert Effect"; }

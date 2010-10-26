@@ -6,7 +6,7 @@
  * Date        : 2009-09-19
  * Description : ICC Transform threaded image filter.
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,12 +34,17 @@
 namespace Digikam
 {
 
-IccTransformFilter::IccTransformFilter(DImg *orgImage, QObject *parent, const IccTransform& transform)
+IccTransformFilter::IccTransformFilter(DImg* orgImage, QObject* parent, const IccTransform& transform)
                   : DImgThreadedFilter(orgImage, parent, "ICC Transform")
 {
     m_transform = transform;
     // initialize filter
     initFilter();
+}
+
+IccTransformFilter::~IccTransformFilter()
+{
+    cancelFilter();
 }
 
 void IccTransformFilter::filterImage()

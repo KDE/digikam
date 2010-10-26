@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Decorate
+Name[ast]=ImagePlugin_Decorate
 Name[bg]=Приставка за снимки - Украсяване
 Name[ca]=ImagePlugin_Decorate
 Name[ca@valencia]=ImagePlugin_Decorate
@@ -33,6 +34,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=A tool to decorate image
+Comment[ast]=Una ferramienta pa decorar la imaxe
 Comment[bg]=Инструмент за украсяване на снимки
 Comment[ca]=Una eina per decorar imatges
 Comment[ca@valencia]=Una eina per decorar imatges
