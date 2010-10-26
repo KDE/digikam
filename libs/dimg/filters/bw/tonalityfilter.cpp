@@ -49,6 +49,7 @@ TonalityFilter::TonalityFilter(DImg* orgImage, QObject* parent, const TonalityCo
 
 TonalityFilter::~TonalityFilter()
 {
+    cancelFilter();
 }
 
 /** Change color tonality of an image for applying a RGB color mask.*/

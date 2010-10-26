@@ -86,6 +86,7 @@ WBFilter::WBFilter(DImg* orgImage, QObject* parent, const WBContainer& settings)
 
 WBFilter::~WBFilter()
 {
+    cancelFilter();
     delete d;
 }
 

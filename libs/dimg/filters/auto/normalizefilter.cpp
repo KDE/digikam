@@ -48,6 +48,7 @@ NormalizeFilter::NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* 
 
 NormalizeFilter::~NormalizeFilter()
 {
+    cancelFilter();
 }
 
 void NormalizeFilter::filterImage()

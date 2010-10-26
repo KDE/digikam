@@ -69,6 +69,7 @@ CBFilter::CBFilter(DImg* orgImage, QObject* parent, const CBContainer& settings)
 
 CBFilter::~CBFilter()
 {
+    cancelFilter();
     delete d;
 }
 

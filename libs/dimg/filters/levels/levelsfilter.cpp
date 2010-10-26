@@ -44,6 +44,7 @@ LevelsFilter::LevelsFilter(DImg* orgImage, QObject* parent, const LevelsContaine
 
 LevelsFilter::~LevelsFilter()
 {
+    cancelFilter();
 }
 
 void LevelsFilter::filterImage()

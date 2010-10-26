@@ -49,7 +49,7 @@ public:
     explicit DistortionFXFilter(DImg* orgImage, QObject* parent=0, int effectType=0,
                                 int level=0, int iteration=0, bool antialiasing=true);
 
-    ~DistortionFXFilter(){};
+    ~DistortionFXFilter();
 
 public:
 

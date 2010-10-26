@@ -42,7 +42,7 @@ public:
                                   double edge=0.0, double rescale=0.0, double brighten=0.0,
                                   int center_x=0, int center_y=0);
 
-    ~LensDistortionFilter(){};
+    ~LensDistortionFilter();
 
 private:
 

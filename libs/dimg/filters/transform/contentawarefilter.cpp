@@ -126,6 +126,8 @@ ContentAwareFilter::ContentAwareFilter(DImg* orgImage, QObject* parent, const Co
 
 ContentAwareFilter::~ContentAwareFilter()
 {
+    cancelFilter();
+
     if (d->carver)
         lqr_carver_destroy(d->carver);
 
@@ -139,11 +141,10 @@ void ContentAwareFilter::getEnergyImage()
     int w        = lqr_carver_get_width(d->carver);
     int h        = lqr_carver_get_height(d->carver);
     guchar* buff = (guchar*) malloc(w*h*3*sizeof(guchar));
-    
+
     lqr_carver_get_energy_image(d->carver, buff, 1, LQR_COLDEPTH_8I, LQR_RGBA_IMAGE);
-    
 }
-    
+
 void ContentAwareFilter::filterImage()
 {
     if (!d->carver) return;
@@ -158,7 +159,7 @@ void ContentAwareFilter::filterImage()
 
     // Liquid rescale
     lqr_carver_resize(d->carver, d->settings.width, d->settings.height);
-    
+
     if (!runningFlag()) return;
 
     // Create a new image

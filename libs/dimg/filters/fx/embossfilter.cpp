@@ -47,6 +47,11 @@ EmbossFilter::EmbossFilter(DImg* orgImage, QObject* parent, int depth)
     initFilter();
 }
 
+EmbossFilter::~EmbossFilter()
+{
+    cancelFilter();
+}
+
 /** Function to apply the EmbossFilter effect
  *  This method have been ported from Pieter Z. Voloshyn algorithm code.
  *

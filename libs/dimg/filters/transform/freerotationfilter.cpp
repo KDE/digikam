@@ -62,6 +62,7 @@ FreeRotationFilter::FreeRotationFilter(DImg* orgImage, QObject* parent, const Fr
 
 FreeRotationFilter::~FreeRotationFilter()
 {
+    cancelFilter();
     delete d;
 }
 

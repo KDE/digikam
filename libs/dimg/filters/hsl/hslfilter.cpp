@@ -68,6 +68,7 @@ HSLFilter::HSLFilter(DImg* orgImage, QObject* parent, const HSLContainer& settin
 
 HSLFilter::~HSLFilter()
 {
+    cancelFilter();
     delete d;
 }
 

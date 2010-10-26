@@ -64,6 +64,7 @@ LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent,  const LensFunCont
 
 LensFunFilter::~LensFunFilter()
 {
+    cancelFilter();
     if (d->modifier) d->modifier->Destroy();
     delete d->iface;
     delete d;

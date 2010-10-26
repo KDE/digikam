@@ -56,6 +56,11 @@ ShearFilter::ShearFilter(DImg* orgImage, QObject* parent, float hAngle, float vA
     initFilter();
 }
 
+ShearFilter::~ShearFilter()
+{
+    cancelFilter();
+}
+
 void ShearFilter::filterImage()
 {
     int          progress;

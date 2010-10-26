@@ -52,13 +52,18 @@ LensDistortionFilter::LensDistortionFilter(DImg* orgImage, QObject* parent, doub
     initFilter();
 }
 
+LensDistortionFilter::~LensDistortionFilter()
+{
+    cancelFilter();
+}
+
 void LensDistortionFilter::filterImage()
 {
     int    Width      = m_orgImage.width();
     int    Height     = m_orgImage.height();
     int    bytesDepth = m_orgImage.bytesDepth();
 
-    uchar *data       = m_destImage.bits();
+    uchar* data       = m_destImage.bits();
 
     // initial copy
 

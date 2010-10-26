@@ -72,7 +72,7 @@ public:
     explicit AntiVignettingFilter(DImg* orgImage, QObject* parent=0,
                                   const AntiVignettingContainer& settings=AntiVignettingContainer());
 
-    ~AntiVignettingFilter(){};
+    ~AntiVignettingFilter();
 
 private:
 

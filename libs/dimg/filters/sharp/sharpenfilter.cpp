@@ -66,6 +66,11 @@ SharpenFilter::SharpenFilter(DImgThreadedFilter* parentFilter,
         memcpy(destImage.bits(), m_destImage.bits(), m_destImage.numBytes());
 }
 
+SharpenFilter::~SharpenFilter()
+{
+    cancelFilter();
+}
+
 void SharpenFilter::filterImage()
 {
     sharpenImage(m_radius, m_sigma);

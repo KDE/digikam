@@ -43,7 +43,7 @@ public:
     explicit InvertFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
                           int progressBegin=0, int progressEnd=100);
 
-    ~InvertFilter(){};
+    ~InvertFilter();
 
 private:
 

@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT EmbossFilter : public DImgThreadedFilter
 public:
 
     explicit EmbossFilter(DImg* orgImage, QObject* parent=0, int depth=30);
-    ~EmbossFilter(){};
+    ~EmbossFilter();
 
 private:
 

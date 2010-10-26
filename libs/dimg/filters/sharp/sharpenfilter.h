@@ -44,7 +44,7 @@ public:
     SharpenFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
                   int progressBegin=0, int progressEnd=100, double radius=0.0, double sigma=1.0);
 
-    ~SharpenFilter(){};
+    ~SharpenFilter();
 
 private:
 

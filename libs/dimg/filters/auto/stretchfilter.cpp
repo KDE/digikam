@@ -49,6 +49,7 @@ StretchFilter::StretchFilter(DImg* orgImage, const DImg* refImage, QObject* pare
 
 StretchFilter::~StretchFilter()
 {
+    cancelFilter();
 }
 
 void StretchFilter::filterImage()

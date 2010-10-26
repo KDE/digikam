@@ -45,7 +45,7 @@ public:
     explicit BlurFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
                         int progressBegin=0, int progressEnd=100, double radius=3.0);
 
-    ~BlurFilter(){};
+    ~BlurFilter();
 
 private:
 

@@ -45,7 +45,7 @@ public:
 
     explicit ShearFilter(DImg* orgImage, QObject* parent=0, float hAngle=0.0, float vAngle=0.0,
               bool antialiasing=true, const QColor& backgroundColor=Qt::black, int orgW=0, int orgH=0);
-    ~ShearFilter(){};
+    ~ShearFilter();
 
     QSize getNewSize(void){ return m_newSize; };
 

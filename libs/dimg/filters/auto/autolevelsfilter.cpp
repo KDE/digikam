@@ -50,6 +50,7 @@ AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject
 
 AutoLevelsFilter::~AutoLevelsFilter()
 {
+    cancelFilter();
 }
 
 void AutoLevelsFilter::filterImage()

@@ -45,6 +45,11 @@ InvertFilter::InvertFilter(DImgThreadedFilter* parentFilter,
     filterImage();
 }
 
+InvertFilter::~InvertFilter()
+{
+    cancelFilter();
+}
+
 /** Performs image colors inversion. This tool is used for negate image
     resulting of a positive film scanned.
  */

@@ -43,6 +43,7 @@ CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const CurvesContaine
 
 CurvesFilter::~CurvesFilter()
 {
+    cancelFilter();
 }
 
 void CurvesFilter::filterImage()

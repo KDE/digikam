@@ -36,6 +36,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -49,8 +50,14 @@ TextureFilter::TextureFilter(DImg* orgImage, QObject* parent, int blendGain, con
     initFilter();
 }
 
-// This method is based on the Simulate Texture Film tutorial from GimpGuru.org web site
-// available at this url : http://www.gimpguru.org/Tutorials/SimulatedTexture/
+TextureFilter::~TextureFilter()
+{
+    cancelFilter();
+}
+
+/** This method is based on the Simulate Texture Film tutorial from GimpGuru.org web site
+  * available at this url : http://www.gimpguru.org/Tutorials/SimulatedTexture/
+  */
 
 //#define INT_MULT(a,b,t)  ((t) = (a) * (b) + 0x80, ( ( (t >> 8) + t ) >> 8))
 
@@ -66,7 +73,7 @@ inline static int intMult16(uint a, uint b)
     return ((t >> 16) + t) >> 16;
 }
 
-void TextureFilter::filterImage(void)
+void TextureFilter::filterImage()
 {
     // Texture tile.
 

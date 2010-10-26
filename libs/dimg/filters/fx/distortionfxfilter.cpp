@@ -58,6 +58,11 @@ DistortionFXFilter::DistortionFXFilter(DImg* orgImage, QObject* parent, int effe
     initFilter();
 }
 
+DistortionFXFilter::~DistortionFXFilter()
+{
+    cancelFilter();
+}
+
 void DistortionFXFilter::filterImage()
 {
     int w = m_orgImage.width();

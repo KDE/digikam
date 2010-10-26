@@ -65,6 +65,11 @@ RainDropFilter::RainDropFilter(DImg* orgImage, QObject* parent, int drop,
     initFilter();
 }
 
+RainDropFilter::~RainDropFilter()
+{
+    cancelFilter();
+}
+
 void RainDropFilter::filterImage()
 {
     int w = m_orgImage.width();

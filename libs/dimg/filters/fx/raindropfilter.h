@@ -43,7 +43,7 @@ public:
 
     explicit RainDropFilter(DImg* orgImage, QObject* parent=0, int drop=80,
                             int amount=150, int coeff=30, QRect* selection=0L);
-    ~RainDropFilter(){};
+    ~RainDropFilter();
 
 private:
 

@@ -103,6 +103,7 @@ BorderFilter::BorderFilter(DImg* image, QObject* parent, const BorderContainer& 
 
 BorderFilter::~BorderFilter()
 {
+    cancelFilter();
     delete d;
 }
 
