@@ -28,4 +28,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 254315 : Please consider attached patch for build system.
 012 ==> 224245 : Each image editor plugin should remember the zoom ratio.
 013 ==> 220425 : Esc doesn't work for editor tools when lose focus.
-014 ==> 
+014 ==> 255271 : digiKam crashes on lens auto-correction function.
+015 ==> 
