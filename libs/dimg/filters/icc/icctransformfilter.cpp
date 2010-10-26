@@ -42,7 +42,7 @@ IccTransformFilter::IccTransformFilter(DImg* orgImage, QObject* parent, const Ic
     initFilter();
 }
 
-IccTransformFilter::~IccTransformFilter();
+IccTransformFilter::~IccTransformFilter()
 {
     cancelFilter();
 }
