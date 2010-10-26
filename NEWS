@@ -30,4 +30,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 220425 : Esc doesn't work for editor tools when lose focus.
 014 ==> 255271 : digiKam crashes on lens auto-correction function.
 015 ==> 254679 : Crash when closign digikam while filter active.
-016 ==> 
+016 ==> 254357 : digiKam crashes after selecting a month in calendarview.
+017 ==>
