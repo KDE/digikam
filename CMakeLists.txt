@@ -258,8 +258,8 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 # Set config files accordingly with optional dependencies
 
 CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
-CONFIGURE_FILE(libs/3rdparty/lensfun/include/config-lensfun.h.cmake
-               ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include/config-lensfun.h)
+CONFIGURE_FILE(libs/3rdparty/lensfun/config-lensfun.h.cmake
+               ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/config-lensfun.h)
 
 # ==================================================================================================
 # Log messages
@@ -546,36 +546,33 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
             ADD_DEFINITIONS(-DTRE_REGEX_T_FIELD=value -DTRE_VERSION="0")
 
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/include)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/lensfun)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/include/regex)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex)
 
             SET(liblensfun_SRCS
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/regcomp.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/regerror.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/regexec.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-ast.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-compile.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-match-approx.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-match-backtrack.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-match-parallel.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-mem.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-parse.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/tre-stack.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/regex/xmalloc.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/auxfun.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/camera.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/cpuid.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/database.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/lens.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mod-color.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mod-coord.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mod-subpix.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/modifier.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/libs/lensfun/mount.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regcomp.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regerror.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regexec.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-ast.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-compile.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-approx.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-backtrack.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-parallel.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-mem.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-parse.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-stack.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/xmalloc.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/auxfun.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/camera.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/cpuid.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/database.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/lens.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-color.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-coord.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-subpix.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/modifier.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mount.cpp
             )
 
         ENDIF(LENSFUN_FOUND)

@@ -3,12 +3,14 @@ This is typically the case of Windows, where no Lensfun package exist.
 
 To update lensfun dir, copy all .c, .h, .cpp files, excepted:
 - lensfun/include/config.h
-- lensfun/include/auxfun/image.h
-- lensfun/include/auxfun/rgbpixel.h
+- lensfun/include/auxfun/*
+- lensfin/include/regex/*
 - lensfun/libs/lensfun/mod-color-sse2.cpp
 - lensfun/libs/lensfun/mod-coord-sse.cpp
 - lensfun/libs/lensfun/windows/auxfun.cpp
-- lensfun/libs/lensfun/auxfun/image.cpp
+- lensfun/libs/auxfun/*
+- lensfin/libs/regex/*
+
 
 Lensfun config.h file is replaced in digiKam by digikam/libs/3rdparty/lensfun/include/config-lensfun.h
 which is managed and configured by CMake.
