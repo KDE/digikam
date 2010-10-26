@@ -62,7 +62,7 @@
 
 extern "C"
 {
-    #include <unistd.h>
+#include <unistd.h>
 }
 
 using namespace cimg_library;
@@ -165,8 +165,9 @@ void GreycstorationFilter::setup()
     {
         m_destImage = DImg(d->newSize.width(), d->newSize.height(),
                            m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+
         kDebug() << "GreycstorationFilter::Resize: new size: ("
-                      << d->newSize.width() << ", " << d->newSize.height() << ")";
+                 << d->newSize.width() << ", " << d->newSize.height() << ")";
     }
     else
     {
