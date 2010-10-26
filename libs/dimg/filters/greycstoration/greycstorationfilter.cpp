@@ -156,7 +156,9 @@ void GreycstorationFilter::computeChildrenThreads()
 
 void GreycstorationFilter::setup()
 {
-    computeChildrenThreads();
+    // NOTE: Sound like using more than 2 threads at the same time create dysfunctions to stop Cimg children threads 
+    //       calling cancelFilter(). We limit children threads to 2.
+    //computeChildrenThreads();
 
     if (m_orgImage.sixteenBit())   // 16 bits image.
         d->gfact = 1.0/256.0;
