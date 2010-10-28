@@ -149,7 +149,12 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool delete
     bool useTrash = !dialog.shouldDelete();
 
     // trash does not like non-local URLs, put is not implemented
+
+#ifdef WIN32
+    KIO::Job* job = DIO::del(kioUrlList, useTrash);
+#else
     KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList, useTrash);
+#endif
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
@@ -175,7 +180,12 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, boo
         return;
 
     // trash does not like non-local URLs, put is not implemented
+
+#ifdef WIN32
+    KIO::Job* job = DIO::del(kioUrlList , useTrash);
+#else
     KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList , useTrash);
+#endif
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
