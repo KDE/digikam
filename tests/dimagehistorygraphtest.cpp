@@ -263,9 +263,9 @@ void DImageHistoryGraphTest::testGraph()
     }
     */
 
-    QMap<qlonglong,ImageHistoryGraphData::Vertex> idToVertex;
-    QMap<ImageHistoryGraphData::Vertex, qlonglong> vertexToId;
-    foreach (ImageHistoryGraphData::Vertex v, graph.data().vertices())
+    QMap<qlonglong,HistoryGraph::Vertex> idToVertex;
+    QMap<HistoryGraph::Vertex, qlonglong> vertexToId;
+    foreach (HistoryGraph::Vertex v, graph.data().vertices())
     {
         HistoryVertexProperties props = graph.data().properties(v);
         idToVertex[props.infos.first().id()] = v;
@@ -287,7 +287,7 @@ void DImageHistoryGraphTest::testGraph()
 
     // depth-first
     QList<qlonglong> subgraphTwo = mapList(graph.data().verticesDominatedBy(idToVertex.value(2), idToVertex.value(1),
-                                                                            ImageHistoryGraphData::DepthFirstOrder), vertexToId);
+                                                                            HistoryGraph::DepthFirstOrder), vertexToId);
     qSort(subgraphTwo);
     QVERIFY(subgraphTwo == controlSubgraphTwo);
 

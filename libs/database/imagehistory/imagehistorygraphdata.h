@@ -92,25 +92,25 @@ public:
     HistoryEdgeProperties &operator+=(const FilterAction& action);
 };
 
+typedef Graph<HistoryVertexProperties, HistoryEdgeProperties> HistoryGraph;
+
 class ImageHistoryGraphData
-    : public Graph<HistoryVertexProperties, HistoryEdgeProperties>,
+    : public HistoryGraph,
       public QSharedData
 {
 public:
 
-    typedef Graph<HistoryVertexProperties, HistoryEdgeProperties> Graph;
-
-    ImageHistoryGraphData() : Graph(ChildToParent)
+    ImageHistoryGraphData() : HistoryGraph(ChildToParent)
     {
     }
 
-    ImageHistoryGraphData(const Graph& g) : Graph(g)
+    ImageHistoryGraphData(const HistoryGraph& g) : HistoryGraph(g)
     {
     }
 
-    ImageHistoryGraphData &operator=(const Graph& g)
+    ImageHistoryGraphData &operator=(const HistoryGraph& g)
     {
-        Graph::operator=(g);
+        HistoryGraph::operator=(g);
         return *this;
     }
 

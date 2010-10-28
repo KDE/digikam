@@ -147,7 +147,7 @@ HistoryEdgeProperties &HistoryEdgeProperties::operator+=(const FilterAction& act
 
 // -----------------------------------------------------------------------------------------------
 
-ImageHistoryGraphData::Vertex
+HistoryGraph::Vertex
 ImageHistoryGraphData::addVertex(const QList<HistoryImageId>& imageIds, ImageHistoryIdResolver *resolver)
 {
     if (imageIds.isEmpty())
@@ -161,7 +161,7 @@ ImageHistoryGraphData::addVertex(const QList<HistoryImageId>& imageIds, ImageHis
     return v;
 }
 
-ImageHistoryGraphData::Vertex
+HistoryGraph::Vertex
 ImageHistoryGraphData::addVertex(const HistoryImageId& imageId, ImageHistoryIdResolver *resolver)
 {
     if (!imageId.isValid())
@@ -189,12 +189,12 @@ ImageHistoryGraphData::addVertex(const HistoryImageId& imageId, ImageHistoryIdRe
     return v;
 }
 
-ImageHistoryGraphData::Vertex ImageHistoryGraphData::addVertex(qlonglong id)
+HistoryGraph::Vertex ImageHistoryGraphData::addVertex(qlonglong id)
 {
     return addVertex(ImageInfo(id));
 }
 
-ImageHistoryGraphData::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
+HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
 {
     Vertex v;
     QString uuid;
@@ -295,7 +295,7 @@ void ImageHistoryGraph::addHistory(const ImageInfo& historySubject, const DImage
     DImageHistory historyWithCurrent = history;
     historyWithCurrent << historySubject.historyImageId();
 
-    ImageHistoryGraphData::Vertex v, last;
+    HistoryGraph::Vertex v, last;
     HistoryEdgeProperties edgeProps;
 
     foreach (const DImageHistory::Entry& entry, history.entries())
@@ -314,7 +314,7 @@ void ImageHistoryGraph::addHistory(const ImageInfo& historySubject, const DImage
         {
             if (!last.isNull())
             {
-                ImageHistoryGraphData::Edge e = d->addEdge(v, last);
+                HistoryGraph::Edge e = d->addEdge(v, last);
                 d->setProperties(e, edgeProps);
                 edgeProps = HistoryEdgeProperties();
             }
@@ -325,7 +325,7 @@ void ImageHistoryGraph::addHistory(const ImageInfo& historySubject, const DImage
 
 void ImageHistoryGraph::addRelations(const QList<QPair<qlonglong, qlonglong> >& pairs)
 {
-    ImageHistoryGraphData::Vertex v1, v2;
+    HistoryGraph::Vertex v1, v2;
     typedef QPair<qlonglong, qlonglong> IdPair;
     foreach (const IdPair& pair, pairs)
     {
@@ -338,10 +338,10 @@ void ImageHistoryGraph::addRelations(const QList<QPair<qlonglong, qlonglong> >& 
 
 void ImageHistoryGraph::finish()
 {
-    QList<ImageHistoryGraphData::Edge> removedEgdes;
-    ImageHistoryGraphData::Graph reduction = d->transitiveReduction(&removedEgdes);
+    QList<HistoryGraph::Edge> removedEgdes;
+    HistoryGraph reduction = d->transitiveReduction(&removedEgdes);
 
-    foreach (const ImageHistoryGraphData::Edge& e, removedEgdes)
+    foreach (const HistoryGraph::Edge& e, removedEgdes)
     {
         if (!d->properties(e).actions.isEmpty())
         {
@@ -357,8 +357,8 @@ QList<QPair<qlonglong, qlonglong> > ImageHistoryGraph::relationCloud() const
 {
     QList<QPair<qlonglong, qlonglong> > pairs;
     ImageHistoryGraphData closure = d->transitiveClosure();
-    QList<ImageHistoryGraphData::VertexPair> edges = closure.edgePairs();
-    foreach (const ImageHistoryGraphData::VertexPair& edge, edges)
+    QList<HistoryGraph::VertexPair> edges = closure.edgePairs();
+    foreach (const HistoryGraph::VertexPair& edge, edges)
     {
         foreach (const ImageInfo& source, closure.properties(edge.first).infos)
         {
@@ -395,16 +395,16 @@ bool ImageHistoryGraph::sameReferredImage(const HistoryImageId& id1, const Histo
 
 QDebug operator<<(QDebug dbg, const ImageHistoryGraph& g)
 {
-    QList<ImageHistoryGraphData::Vertex> vertices = g.data().topologicalSort();
+    QList<HistoryGraph::Vertex> vertices = g.data().topologicalSort();
 
     dbg << endl;
-    foreach (const ImageHistoryGraphData::Vertex& target, vertices)
+    foreach (const HistoryGraph::Vertex& target, vertices)
     {
         QList<qlonglong> sourceIds, targetIds;
         foreach (const ImageInfo& info, g.data().properties(target).infos)
             targetIds << info.id();
-        foreach (const ImageHistoryGraphData::Vertex& source,
-                 g.data().adjacentVertices(target, ImageHistoryGraphData::InboundEdges))
+        foreach (const HistoryGraph::Vertex& source,
+                 g.data().adjacentVertices(target, HistoryGraph::InboundEdges))
         {
             foreach (const ImageInfo& info, g.data().properties(source).infos)
                 sourceIds << info.id();
