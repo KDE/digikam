@@ -69,21 +69,6 @@ bool HistoryVertexProperties::operator==(qlonglong id) const
     return false;
 }
 
-QDebug operator<<(QDebug dbg, const HistoryImageId& id)
-{
-    dbg.nospace() << " { ";
-    dbg.nospace() << id.m_uuid;
-    dbg.space() << id.m_type;
-    dbg.space() << id.m_fileName;
-    dbg.space() << id.m_filePath;
-    dbg.space() << id.m_creationDate;
-    dbg.space() << id.m_uniqueHash;
-    dbg.space() << id.m_fileSize;
-    dbg.space() << id.m_originalUUID;
-    dbg.nospace() << " } ";
-    return dbg;
-}
-
 bool HistoryVertexProperties::operator==(const HistoryImageId& other) const
 {
     if (!uuid.isNull() && uuid == other.m_uuid)
@@ -128,6 +113,28 @@ HistoryVertexProperties &HistoryVertexProperties::operator+=(const HistoryImageI
             uuid = id.m_uuid;
     }
     return *this;
+}
+
+QDebug operator<<(QDebug dbg, const HistoryVertexProperties& props)
+{
+    foreach (const ImageInfo& info, props.infos)
+        dbg.space() << info.id();
+    return dbg;
+}
+
+QDebug operator<<(QDebug dbg, const HistoryImageId& id)
+{
+    dbg.nospace() << " { ";
+    dbg.nospace() << id.m_uuid;
+    dbg.space() << id.m_type;
+    dbg.space() << id.m_fileName;
+    dbg.space() << id.m_filePath;
+    dbg.space() << id.m_creationDate;
+    dbg.space() << id.m_uniqueHash;
+    dbg.space() << id.m_fileSize;
+    dbg.space() << id.m_originalUUID;
+    dbg.nospace() << " } ";
+    return dbg;
 }
 
 // -----------------------------------------------------------------------------------------------
@@ -350,7 +357,7 @@ QList<QPair<qlonglong, qlonglong> > ImageHistoryGraph::relationCloud() const
 {
     QList<QPair<qlonglong, qlonglong> > pairs;
     ImageHistoryGraphData closure = d->transitiveClosure();
-    QList<ImageHistoryGraphData::VertexPair> edges = closure.edges();
+    QList<ImageHistoryGraphData::VertexPair> edges = closure.edgePairs();
     foreach (const ImageHistoryGraphData::VertexPair& edge, edges)
     {
         foreach (const ImageInfo& source, closure.properties(edge.first).infos)

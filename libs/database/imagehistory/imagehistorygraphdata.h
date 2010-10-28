@@ -71,6 +71,10 @@ public:
     HistoryVertexProperties &operator+=(const HistoryImageId& info);
 };
 
+QDebug operator<<(QDebug dbg, const HistoryVertexProperties& props);
+QDebug operator<<(QDebug dbg, const HistoryImageId& id);
+
+
 class HistoryEdgeProperties
 {
 public:
@@ -94,7 +98,9 @@ class ImageHistoryGraphData
 {
 public:
 
-    ImageHistoryGraphData()
+    typedef Graph<HistoryVertexProperties, HistoryEdgeProperties> Graph;
+
+    ImageHistoryGraphData() : Graph(ChildToParent)
     {
     }
 
