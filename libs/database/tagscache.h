@@ -46,45 +46,51 @@ public:
         IncludeLeadingSlash  ///  "/Places/Cities/Paris"
     };
 
+    enum HiddenTagsPolicy
+    {
+        NoHiddenTags,
+        IncludeHiddenTags
+    };
+
     /**
      * Returns the name of the tag with the given id.
      * For the tag Places/Cities/Paris, this is Paris.
      * If there is no tag for the given id a null string is returned.
      */
-    QString     tagName(int id);
-    QStringList tagNames(const QList<int>& ids);
+    QString     tagName(int id) const;
+    QStringList tagNames(const QList<int>& ids) const;
 
     /**
      * Returns the path of the tag with the given id.
      * For the tag Places/Cities/Paris, this is Places/Cities/Paris.
      * If there is no tag for the given id a null string is returned.
      */
-    QString     tagPath(int id, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
-    QStringList tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
+    QString     tagPath(int id, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash) const;
+    QStringList tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash) const;
 
     /**
      * Returns true if the tag for the given id exists.
      */
-    bool hasTag(int id);
+    bool hasTag(int id) const;
 
     /**
      * Returns the parent tag id, or 0 if a toplevel tag or tag does not exist.
      */
-    int parentTag(int id);
+    int parentTag(int id) const;
 
     /**
      * Finds all tags with the given name.
      * For "Paris", this may give "Places/Cities/Paris" and "Places/USA/Texas/Paris".
      * If there is no tag with the given name at all, returns an empty list.
      */
-    QList<int> tagsForName(const QString& tagName);
+    QList<int> tagsForName(const QString& tagName, HiddenTagsPolicy hiddenTagsPolicy = NoHiddenTags) const;
 
     /**
      * Returns the id of the tag with the given name and parent tag.
      * If parentId is 0, the tag is a toplevel tag.
      * Returns 0 if there is no such tag.
      */
-    int tagForName(const QString& tagName, int parentId = 0);
+    int tagForName(const QString& tagName, int parentId = 0) const;
 
     /**
      * Returns the tag matched exactly by the given path.
@@ -93,8 +99,8 @@ public:
      * If you want to create the tag if it does not yet exist,
      * use getOrCreateTag.
      */
-    int tagForPath(const QString& tagPath);
-    QList<int> tagsForPaths(const QStringList& tagPaths);
+    int tagForPath(const QString& tagPath) const;
+    QList<int> tagsForPaths(const QStringList& tagPaths) const;
 
     /**
      * Add the tag described by the given tag path,
@@ -163,13 +169,13 @@ public:
      * Returns if a tag is to be regarded program-internal, that is,
      * a technical implementation detail not visible to the user at any time.
      */
-    bool isInternalTag(int tagId);
+    bool isInternalTag(int tagId) const;
 
     /**
      * Returns if a tag shall be written to the metadata of a file.
      * Always returns false if the tag is a program-internal tag.
      */
-    bool canBeWrittenToMetadata(int tagId);
+    bool canBeWrittenToMetadata(int tagId) const;
 
     /**
      * For the given tag name (not path!), find the existing tag or

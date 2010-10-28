@@ -251,7 +251,7 @@ QLatin1String TagsCache::propertyNameExcludedFromWriting()
     return QLatin1String("noMetadataTag");
 }
 
-QString TagsCache::tagName(int id)
+QString TagsCache::tagName(int id) const
 {
     d->checkInfos();
 
@@ -262,7 +262,7 @@ QString TagsCache::tagName(int id)
     return QString();
 }
 
-QStringList TagsCache::tagNames(const QList<int>& ids)
+QStringList TagsCache::tagNames(const QList<int>& ids) const
 {
     QStringList names;
     if (!ids.isEmpty())
@@ -273,7 +273,7 @@ QStringList TagsCache::tagNames(const QList<int>& ids)
     return names;
 }
 
-QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy)
+QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy) const
 {
     d->checkInfos();
 
@@ -294,7 +294,7 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy)
     return path;
 }
 
-QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy)
+QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy) const
 {
     QStringList paths;
     if (!ids.isEmpty())
@@ -305,13 +305,26 @@ QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashP
     return paths;
 }
 
-QList<int> TagsCache::tagsForName(const QString& tagName)
+QList<int> TagsCache::tagsForName(const QString& tagName, HiddenTagsPolicy hiddenTagsPolicy) const
 {
     d->checkNameHash();
-    return d->nameHash.values(tagName);
+    if (hiddenTagsPolicy == NoHiddenTags)
+    {
+        d->checkProperties();
+        QList<int> ids;
+        QMultiHash<QString, int>::const_iterator it;
+        for (it = d->nameHash.find(tagName); it != d->nameHash.end() && it.key() == tagName; ++it)
+        {
+            if (!d->internalTags.contains(it.value()))
+                ids << it.value();
+        }
+        return ids;
+    }
+    else
+        return d->nameHash.values(tagName);
 }
 
-int TagsCache::tagForName(const QString& tagName, int parentId)
+int TagsCache::tagForName(const QString& tagName, int parentId) const
 {
     d->checkNameHash();
     QReadLocker locker(&d->lock);
@@ -329,14 +342,14 @@ int TagsCache::tagForName(const QString& tagName, int parentId)
     return 0;
 }
 
-bool TagsCache::hasTag(int id)
+bool TagsCache::hasTag(int id) const
 {
     d->checkInfos();
     QReadLocker locker(&d->lock);
     return d->find(id) != d->infos.constEnd();
 }
 
-int TagsCache::parentTag(int id)
+int TagsCache::parentTag(int id) const
 {
     d->checkInfos();
     QReadLocker locker(&d->lock);
@@ -346,7 +359,7 @@ int TagsCache::parentTag(int id)
     return 0;
 }
 
-int TagsCache::tagForPath(const QString& tagPath)
+int TagsCache::tagForPath(const QString& tagPath) const
 {
     // split full tag "url" into list of single tag names
     QStringList tagHierarchy = tagPath.split('/', QString::SkipEmptyParts);
@@ -409,7 +422,7 @@ int TagsCache::tagForPath(const QString& tagPath)
     return tagID;
 }
 
-QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths)
+QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths) const
 {
     QList<int> ids;
     if (!tagPaths.isEmpty())
@@ -636,14 +649,14 @@ QList<int> TagsCache::tagsWithPropertyCached(const QString& property) const
     return tags;
 }
 
-bool TagsCache::isInternalTag(int tagId)
+bool TagsCache::isInternalTag(int tagId) const
 {
     d->checkProperties();
     QReadLocker locker(&d->lock);
     return d->internalTags.contains(tagId);
 }
 
-bool TagsCache::canBeWrittenToMetadata(int tagId)
+bool TagsCache::canBeWrittenToMetadata(int tagId) const
 {
     if (isInternalTag(tagId))
         return false;
