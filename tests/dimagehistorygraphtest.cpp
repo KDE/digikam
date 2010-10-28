@@ -46,6 +46,8 @@
 #include "dimginterface.h"
 #include "imageinfo.h"
 #include "imagehistorygraph.h"
+#include "imagehistorygraphdata.h"
+#include "imagehistorygraphmodel.h"
 
 using namespace Digikam;
 
@@ -104,6 +106,15 @@ void DImageHistoryGraphTest::rescan()
     CollectionScanner().completeScan();
 }
 
+template <typename from, typename to>
+QList<to> mapList(const QList<from>& l, const QMap<from,to> map)
+{
+    QList<to> r;
+    foreach (const from& f, l)
+        r << map.value(f);
+    return r;
+}
+
 void DImageHistoryGraphTest::testGraph()
 {
     QList<qlonglong> ids;
@@ -142,6 +153,24 @@ void DImageHistoryGraphTest::testGraph()
 
     */
 
+    QList<qlonglong> controlLeaves;
+    controlLeaves << 8 << 19 << 20 << 21 << 10 << 3 << 11 << 22 << 24 << 14 << 15 << 16 << 17 << 18;
+    qSort(controlLeaves);
+
+    QList<qlonglong> controlRoots;
+    controlRoots << 1;
+
+    QList<qlonglong> controlLongestPathEighteen;
+    controlLongestPathEighteen << 1 << 7 << 18;
+    QList<qlonglong> controlLongestPathTwentyFour;
+    controlLongestPathTwentyFour << 1 << 4 << 12 << 23 << 24;
+
+    QList<qlonglong> controlSubgraphTwo;
+    controlSubgraphTwo << 2 << 8 << 9 << 10 << 19 << 20 << 21;
+
+    QList<qlonglong> controlSubgraphFour;
+    controlSubgraphFour << 4 << 11 << 12 << 13 << 22 << 23 << 24;
+
     typedef QPair<qlonglong, qlonglong> IdPair;
     QList<IdPair> pairs;
 
@@ -169,6 +198,13 @@ void DImageHistoryGraphTest::testGraph()
     pairs << IdPair(16,1);
     pairs << IdPair(17,1);
     pairs << IdPair(18,1);
+
+    pairs << IdPair(22,4);
+    pairs << IdPair(23,4);
+    pairs << IdPair(24,4);
+    pairs << IdPair(14,5); //X
+    pairs << IdPair(15,6); //X
+
     //pairs << IdPair(19,1);
     //pairs << IdPair(20,1);
     //pairs << IdPair(21,1);
@@ -184,11 +220,7 @@ void DImageHistoryGraphTest::testGraph()
     pairs << IdPair(11,4); //X
     pairs << IdPair(12,4); //X
     pairs << IdPair(13,4); //X
-    pairs << IdPair(22,4);
-    pairs << IdPair(23,4);
-    pairs << IdPair(24,4);
-    pairs << IdPair(14,5); //X
-    pairs << IdPair(15,6); //X
+
     pairs << IdPair(16,7); //X
     pairs << IdPair(17,7); //X
     pairs << IdPair(18,7); //X
@@ -221,6 +253,7 @@ void DImageHistoryGraphTest::testGraph()
     QVERIFY(cloud.contains(IdPair(8,1)));
     QVERIFY(cloud.contains(IdPair(9,1)));
 
+    /*
     QBENCHMARK
     {
         ImageHistoryGraph benchGraph;
@@ -228,7 +261,44 @@ void DImageHistoryGraphTest::testGraph()
         graph.finish();
         graph.relationCloud();
     }
+    */
 
+    QMap<qlonglong,ImageHistoryGraphData::Vertex> idToVertex;
+    QMap<ImageHistoryGraphData::Vertex, qlonglong> vertexToId;
+    foreach (ImageHistoryGraphData::Vertex v, graph.data().vertices())
+    {
+        HistoryVertexProperties props = graph.data().properties(v);
+        idToVertex[props.infos.first().id()] = v;
+        vertexToId[v] = props.infos.first().id();
+    }
+
+    QList<qlonglong> leaves = mapList(graph.data().leaves(), vertexToId);
+    qSort(leaves);
+    QVERIFY(leaves == controlLeaves);
+
+    QList<qlonglong> roots = mapList(graph.data().roots(), vertexToId);
+    qSort(roots);
+    QVERIFY(roots == controlRoots);
+
+    QList<qlonglong> longestPath1 = mapList(graph.data().longestPathTouching(idToVertex.value(18)), vertexToId);
+    QVERIFY(longestPath1 == controlLongestPathEighteen);
+    QList<qlonglong> longestPath2 = mapList(graph.data().longestPathTouching(idToVertex.value(24)), vertexToId);
+    QVERIFY(longestPath2 == controlLongestPathTwentyFour);
+
+    // depth-first
+    QList<qlonglong> subgraphTwo = mapList(graph.data().verticesDominatedBy(idToVertex.value(2), idToVertex.value(1),
+                                                                            ImageHistoryGraphData::DepthFirstOrder), vertexToId);
+    qSort(subgraphTwo);
+    QVERIFY(subgraphTwo == controlSubgraphTwo);
+
+    // breadth-first
+    QList<qlonglong> subgraphFour = mapList(graph.data().verticesDominatedBy(idToVertex.value(4), idToVertex.value(1)), vertexToId);
+    QVERIFY(subgraphFour.indexOf(22) > subgraphFour.indexOf(13));
+    qSort(subgraphFour);
+    QVERIFY(subgraphFour == controlSubgraphFour);
+
+    ImageHistoryGraphModel model;
+    model.setHistory(ImageInfo(16), graph);
 }
 
 void DImageHistoryGraphTest::slotImageLoaded(const QString&, bool success)
