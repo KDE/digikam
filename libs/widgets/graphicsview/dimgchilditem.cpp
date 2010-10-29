@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dimgchilditem.h"
+#include "dimgchilditem.moc"
 
 // KDE includes
 
@@ -65,7 +65,7 @@ class DImgChildItem::DImgChildItemPriv
 {
 public:
 
-    DImgChildItemPriv(DImgChildItem *q) : q(q)
+    DImgChildItemPriv(DImgChildItem* q) : q(q)
     {
     }
 
@@ -79,7 +79,7 @@ public:
 
 void DImgChildItem::DImgChildItemPriv::connectParent(bool active)
 {
-    GraphicsDImgItem *parent = q->parentDImgItem();
+    GraphicsDImgItem* parent = q->parentDImgItem();
     if (parent)
     {
         if (active)

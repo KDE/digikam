@@ -124,8 +124,8 @@ public:
      * This is the same result as QRectF(pos(), boundingRect()), boundingRect is virtual and may be
      * overridden by base classes.
      */
-    QRectF  rect() const;
-    QSizeF  size() const;
+    QRectF rect() const;
+    QSizeF size() const;
 
     // Override
     void moveBy(qreal dx, qreal dy) { setPos(pos().x() + dx, pos().y() + dy); }
@@ -172,6 +172,8 @@ private:
 
     void updatePos();
     void updateSize();
+
+private:
 
     class DImgChildItemPriv;
     DImgChildItemPriv* const d;
