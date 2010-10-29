@@ -36,6 +36,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kpixmapsequence.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
@@ -203,14 +204,14 @@ public:
         wrapper       = 0;
         progressCount = 0;
         progressTimer = 0;
-        progressPix   = SmallIcon("process-working", 22);
+        progressPix   = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
     int                   progressCount;
 
     QTimer*               progressTimer;
 
-    QPixmap               progressPix;
+    KPixmapSequence       progressPix;
 
     PreviewThreadWrapper* wrapper;
 };
@@ -323,7 +324,7 @@ int PreviewList::currentId() const
 
 void PreviewList::slotProgressTimerDone()
 {
-    QPixmap ppix(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+    QPixmap ppix(d->progressPix.frameAt(d->progressCount));
     QPixmap pixmap(128, 128);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
@@ -346,7 +347,8 @@ void PreviewList::slotProgressTimerDone()
         ++it;
     }
     d->progressCount++;
-    if (d->progressCount == 8) d->progressCount = 0;
+    if (d->progressCount >= d->progressPix.frameCount())
+        d->progressCount = 0;
 
     if (!busy)
     {

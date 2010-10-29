@@ -1016,14 +1016,15 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
 
 void QueueMgrWindow::slotProgressTimerDone()
 {
-    QPixmap ico(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+    QPixmap ico(d->progressPix.frameAt(d->progressCount));
+    d->progressCount++;
+    if (d->progressCount >= d->progressPix.frameCount())
+        d->progressCount = 0;
+
     if (d->currentProcessItem)
         d->currentProcessItem->setProgressIcon(ico);
     if (d->currentTaskItem)
         d->currentTaskItem->setProgressIcon(ico);
-
-    d->progressCount++;
-    if (d->progressCount == 8) d->progressCount = 0;
 
     d->progressTimer->start(300);
 }

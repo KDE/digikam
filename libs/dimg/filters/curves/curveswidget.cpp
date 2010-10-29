@@ -50,6 +50,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kpixmapsequence.h>
 
 // Local includes
 
@@ -86,7 +87,7 @@ public:
         clearFlag     = HistogramNone;
         progressCount = 0;
         progressTimer = 0;
-        progressPix   = SmallIcon("process-working", 22);
+        progressPix   = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
     bool              readOnlyMode;
@@ -106,7 +107,7 @@ public:
 
     QTimer*           progressTimer;
 
-    QPixmap           progressPix;
+    KPixmapSequence   progressPix;
 
     DColor            colorGuide;
 
@@ -160,12 +161,10 @@ public:
     void renderLoadingAnimation()
     {
 
-        QPixmap anim(progressPix.copy(0, progressCount*22, 22, 22));
+        QPixmap anim(progressPix.frameAt(progressCount));
         progressCount++;
-        if (progressCount == 8)
-        {
+        if (progressCount >= progressPix.frameCount())
             progressCount = 0;
-        }
 
         // ... and we render busy text.
 

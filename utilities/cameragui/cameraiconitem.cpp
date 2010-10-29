@@ -30,6 +30,10 @@
 #include <QPixmap>
 #include <QTimer>
 
+// KDE includes
+
+#include <KPixmapSequence>
+
 // Local includes
 
 #include "iconview.h"
@@ -287,9 +291,10 @@ void CameraIconItem::paintItem(QPainter *p)
             mask.fill(QColor(128, 128, 128, 192));
             p->drawPixmap(pixmapDrawRect.topLeft(), mask);
 
-            QPixmap anim(view->progressPixmap().copy(0, d->progressCount*22, 22, 22));
+            QPixmap anim(view->progressPixmap().frameAt(d->progressCount));
             d->progressCount++;
-            if (d->progressCount == 8) d->progressCount = 0;
+            if (d->progressCount >= view->progressPixmap().frameCount())
+                d->progressCount = 0;
 
             p->save();
             int x = pixmapDrawRect.x() + pixmapDrawRect.width()/2  - anim.width()/2;
