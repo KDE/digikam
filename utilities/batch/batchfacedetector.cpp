@@ -69,7 +69,7 @@ public:
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* parent, const FaceScanSettings& settings)
-                 : DProgressDlg(parent), d(new BatchFaceDetectorPriv)
+                 : DProgressDlg(0), d(new BatchFaceDetectorPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setModal(false);
