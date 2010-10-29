@@ -34,6 +34,7 @@
 // KDE includes
 
 #include <KIconLoader>
+#include <KPixmapSequence>
 
 // Local includes
 
@@ -52,28 +53,17 @@ public:
         currentPixmap = 0;
     }
 
-    QList<QPixmap> pixmaps;
-    int            currentPixmap;
-    QTimer         timer;
+    KPixmapSequence pixmaps;
+    int             currentPixmap;
+    QTimer          timer;
 };
 
 WorkingWidget::WorkingWidget(QWidget* parent)
              : QLabel(parent), d(new WorkingWidgetPriv)
 {
-    KIconLoader iconLoader;
-    QString iconName("process-working.png");
-    QImage img;
-    img.load(iconLoader.iconPath(iconName, KIconLoader::Dialog));
+    QPixmap pix(KIconLoader::global()->iconPath("process-working.png", KIconLoader::Dialog));
 
-    // frames in the image, the "process-working.png" has 8
-    int imageCount     = 8;
-    int subImageHeight = img.height() / imageCount;
-
-    for (int i = 0; i < imageCount; i++)
-    {
-        QImage subImage = img.copy(0, i * subImageHeight, img.width(), subImageHeight);
-        d->pixmaps.push_back(QPixmap::fromImage(subImage));
-    }
+    d->pixmaps = KPixmapSequence(pix);
 
     connect(&d->timer, SIGNAL(timeout()), 
             this, SLOT(changeImage()));
@@ -89,10 +79,10 @@ WorkingWidget::~WorkingWidget()
 
 void WorkingWidget::changeImage()
 {
-    if (d->currentPixmap >= d->pixmaps.length())
+    if (d->currentPixmap >= d->pixmaps.frameCount())
         d->currentPixmap = 0;
 
-    setPixmap(d->pixmaps.at(d->currentPixmap));
+    setPixmap(d->pixmaps.frameAt(d->currentPixmap));
 
     d->currentPixmap++;
 
