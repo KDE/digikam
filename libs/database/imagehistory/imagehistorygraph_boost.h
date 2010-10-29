@@ -175,6 +175,9 @@ public:
         operator const edge_t&() const { return e; }
         operator edge_t&() { return e; }
 
+        const edge_t& toEdge() const { return e; }
+        edge_t& toEdge() { return e; }
+
         bool operator==(const edge_t& other) const { return e == other; }
 
         bool isNull() const { return null; }
@@ -315,10 +318,8 @@ public:
             return EdgeProperties();
         return properties(e);
     }
-    EdgeProperties properties(const Edge& e) const
+    const EdgeProperties &properties(const Edge& e) const
     {
-        if (e.isNull())
-            return EdgeProperties();
         return boost::get(edge_properties, graph, e);
     }
 
@@ -372,6 +373,31 @@ public:
     int inDegree(const Vertex& v) const
     {
         return boost::in_degree(v, graph);
+    }
+
+    Vertex source(const Edge& e) const
+    {
+        return boost::source(e.toEdge(), graph);
+    }
+
+    Vertex target(const Edge& e) const
+    {
+        return boost::target(e.toEdge(), graph);
+    }
+
+    QList<Edge> edges(const Vertex& v, AdjacencyFlags flags = AllEdges) const
+    {
+        if (flags & EdgesToLeave)
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
+        if (flags & EdgesToRoot)
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
+
+        QList<Edge> es;
+        if (flags & OutboundEdges)
+            es << toEdgeList(boost::out_edges(v, graph));
+        if (flags & InboundEdges)
+            es << toEdgeList(boost::in_edges(v, graph));
+        return es;
     }
 
     QList<Edge> edges() const
