@@ -253,7 +253,11 @@ public:
     QList<ImageTagPair> availableImageTagPairs() const;
 
     /**
-     * Retrieves and sets the image history from the database
+     * Retrieves and sets the image history from the database.
+     * Note: The image history retrieved here does typically include all
+     * steps from the original to this image, but does not reference this image
+     * itself.
+     * 
      */
     DImageHistory imageHistory() const;
     void setImageHistory(const DImageHistory& history);

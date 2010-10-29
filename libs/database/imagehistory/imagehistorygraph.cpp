@@ -34,6 +34,7 @@
 
 #include "dimagehistory.h"
 #include "imagehistorygraphdata.h"
+#include "imagescanner.h"
 
 namespace Digikam
 {
@@ -148,12 +149,12 @@ HistoryEdgeProperties &HistoryEdgeProperties::operator+=(const FilterAction& act
 // -----------------------------------------------------------------------------------------------
 
 HistoryGraph::Vertex
-ImageHistoryGraphData::addVertex(const QList<HistoryImageId>& imageIds, ImageHistoryIdResolver *resolver)
+ImageHistoryGraphData::addVertex(const QList<HistoryImageId>& imageIds)
 {
     if (imageIds.isEmpty())
         return Vertex();
 
-    Vertex v = addVertex(imageIds.first(), resolver);
+    Vertex v = addVertex(imageIds.first());
 
     if (imageIds.size() > 1)
         applyProperties(v, QList<ImageInfo>(), imageIds);
@@ -162,7 +163,7 @@ ImageHistoryGraphData::addVertex(const QList<HistoryImageId>& imageIds, ImageHis
 }
 
 HistoryGraph::Vertex
-ImageHistoryGraphData::addVertex(const HistoryImageId& imageId, ImageHistoryIdResolver *resolver)
+ImageHistoryGraphData::addVertex(const HistoryImageId& imageId)
 {
     if (!imageId.isValid())
         return Vertex();
@@ -176,7 +177,7 @@ ImageHistoryGraphData::addVertex(const HistoryImageId& imageId, ImageHistoryIdRe
     if (v.isNull())
     {
         // second: Resolve HistoryImageId, find by ImageInfo
-        foreach (qlonglong id, resolver->resolveHistoryImageId(imageId))
+        foreach (qlonglong id, ImageScanner::resolveHistoryImageId(imageId))
         {
             ImageInfo info(id);
             infos << info;
@@ -226,7 +227,7 @@ void ImageHistoryGraphData::applyProperties(Vertex& v, const QList<ImageInfo>& i
     // if needed, add a new vertex; or retrieve properties to add possibly new entries
     HistoryVertexProperties props;
     if (v.isNull())
-        v = Graph::addVertex();
+        v = HistoryGraph::addVertex();
     else
         props = properties(v);
 
@@ -280,13 +281,13 @@ const ImageHistoryGraphData &ImageHistoryGraph::data() const
     return *d;
 }
 
-void ImageHistoryGraph::addHistory(const ImageInfo& historySubject, ImageHistoryIdResolver *resolver)
+void ImageHistoryGraph::addHistory(const ImageInfo& historySubject)
 {
-    addHistory(historySubject, historySubject.imageHistory(), resolver);
+    addHistory(historySubject, historySubject.imageHistory());
 }
 
 
-void ImageHistoryGraph::addHistory(const ImageInfo& historySubject, const DImageHistory& history, ImageHistoryIdResolver *resolver)
+void ImageHistoryGraph::addHistory(const ImageInfo& historySubject, const DImageHistory& history)
 {
     if (history.isEmpty())
         return;
@@ -307,7 +308,7 @@ void ImageHistoryGraph::addHistory(const ImageInfo& historySubject, const DImage
 
         if (!entry.referredImages.isEmpty())
         {
-            v = d->addVertex(entry.referredImages, resolver);
+            v = d->addVertex(entry.referredImages);
         }
 
         if (!v.isNull())
@@ -336,7 +337,44 @@ void ImageHistoryGraph::addRelations(const QList<QPair<qlonglong, qlonglong> >& 
     }
 }
 
-void ImageHistoryGraph::finish()
+class lessThanByProximityToSubject
+{
+public:
+    lessThanByProximityToSubject(const ImageInfo& subject) : subject(subject) {}
+    bool operator()(const ImageInfo&a, const ImageInfo& b)
+    {
+        if (a == b)
+            return false;
+        // same collection
+        if (a.albumId() != b.albumId())
+        {
+            // same album
+            if (a.albumId() == subject.albumId())
+                return true;
+            if (b.albumId() == subject.albumId())
+                return false;
+
+            if (a.albumRootId() != b.albumRootId())
+            {
+                // different collection
+                if (a.albumRootId() == subject.albumRootId())
+                    return true;
+                if (b.albumRootId() == subject.albumRootId())
+                    return false;
+            }
+        }
+
+        if (a.modDateTime() != b.modDateTime())
+            return a.modDateTime() < b.modDateTime();
+        if (a.name() != b.name())
+            return qAbs(a.name().compare(subject.name())) < qAbs(b.name().compare(subject.name()));
+        // last resort
+        return a.id() < b.id();
+    }
+    ImageInfo subject;
+};
+
+void ImageHistoryGraph::reduceEdges()
 {
     QList<HistoryGraph::Edge> removedEgdes;
     HistoryGraph reduction = d->transitiveReduction(&removedEgdes);
@@ -351,6 +389,53 @@ void ImageHistoryGraph::finish()
     }
 
     *d = reduction;
+}
+
+void ImageHistoryGraph::dropOrphans()
+{
+    // Remove nodes which could not be resolved into image infos
+    QList<HistoryGraph::Vertex> toRemove;
+    foreach (const HistoryGraph::Vertex& v, d->vertices())
+    {
+        HistoryVertexProperties props = d->properties(v);
+        if (props.infos.isEmpty())
+        {
+            foreach (const HistoryGraph::Edge& upperEdge, d->edges(v, HistoryGraph::EdgesToRoot))
+            {
+                foreach (const HistoryGraph::Edge& lowerEdge, d->edges(v, HistoryGraph::EdgesToLeave))
+                {
+                    HistoryEdgeProperties combinedProps;
+                    combinedProps.actions += d->properties(upperEdge).actions;
+                    combinedProps.actions += d->properties(lowerEdge).actions;
+                    HistoryGraph::Edge connection = d->addEdge(d->source(lowerEdge), d->target(upperEdge));
+                    d->setProperties(connection, combinedProps);
+                }
+            }
+            toRemove << v;
+        }
+    }
+}
+
+void ImageHistoryGraph::sortForInfo(const ImageInfo& subject)
+{
+    // Remove nodes which could not be resolved into image infos
+    QList<HistoryGraph::Vertex> toRemove;
+    foreach (const HistoryGraph::Vertex& v, d->vertices())
+    {
+        HistoryVertexProperties props = d->properties(v);
+        if (props.infos.isEmpty())
+        {
+            std::sort(props.infos.begin(), props.infos.end(), lessThanByProximityToSubject(subject));
+            d->setProperties(v, props);
+        }
+    }
+}
+
+void ImageHistoryGraph::prepareForDisplay(const ImageInfo& subject)
+{
+    reduceEdges();
+    dropOrphans();
+    sortForInfo(subject);
 }
 
 QList<QPair<qlonglong, qlonglong> > ImageHistoryGraph::relationCloud() const

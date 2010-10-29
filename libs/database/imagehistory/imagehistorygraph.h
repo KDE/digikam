@@ -44,14 +44,6 @@ class DImageHistory;
 class ImageHistoryGraphData;
 class ImageInfo;
 
-class DIGIKAM_DATABASE_EXPORT ImageHistoryIdResolver
-{
-public:
-    virtual ~ImageHistoryIdResolver() {}
-    virtual QList<qlonglong> resolveHistoryImageId(const HistoryImageId& historyId) const = 0;
-    virtual bool sameReferredImage(const HistoryImageId& id1, const HistoryImageId& id2) const = 0;
-};
-
 class DIGIKAM_DATABASE_EXPORT ImageHistoryGraph
 {
 public:
@@ -71,11 +63,9 @@ public:
     /**
      * Add the history of the given ImageInfo.
      * Per default, the history is read from the ImageInfo object.
-     * If you want to match DImageHistory entries with relations added by image id,
-     * you must set a helper set resolves HistoryImageIds to image ids.
      */
-    void addHistory(const ImageInfo& historySubject, ImageHistoryIdResolver *resolver = 0);
-    void addHistory(const ImageInfo& historySubject, const DImageHistory& history, ImageHistoryIdResolver *resolver = 0);
+    void addHistory(const ImageInfo& historySubject);
+    void addHistory(const ImageInfo& historySubject, const DImageHistory& history);
 
     /**
      * Add images and their relations from the given pairs.
@@ -84,10 +74,27 @@ public:
     void addRelations(const QList<QPair<qlonglong, qlonglong> >& pairs);
 
     /**
-     * Call this each time when all available data has been added.
-     * It will prepare the graph for read access.
+     * Remove edges which provide only duplicate information
+     * (performs a transitive reduction).
+     * Especially call this when addRelations() was used.
      */
-    void finish();
+    void reduceEdges();
+
+    /**
+     * Remove all vertices from the graph for which no existing ImageInfo
+     * could be found in the database
+     */
+    void dropOrphans();
+
+    /**
+     * Sort vertex information priorizing for the given vertex
+     */
+    void sortForInfo(const ImageInfo& subject);
+
+    /**
+     * Combines reduceEdges(), dropOrphans() and sortForInfo()
+     */
+    void prepareForDisplay(const ImageInfo& subject);
 
     /**
      * Returns all possible relations between images in this graph,

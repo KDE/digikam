@@ -114,8 +114,8 @@ public:
         return *this;
     }
 
-    Vertex addVertex(const HistoryImageId& id, ImageHistoryIdResolver *resolver);
-    ImageHistoryGraphData::Vertex addVertex(const QList<HistoryImageId>& imageIds, ImageHistoryIdResolver *resolver);
+    Vertex addVertex(const HistoryImageId& id);
+    ImageHistoryGraphData::Vertex addVertex(const QList<HistoryImageId>& imageIds);
     Vertex addVertex(qlonglong id);
     Vertex addVertex(const ImageInfo& info);
 
