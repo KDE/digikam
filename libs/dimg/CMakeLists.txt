@@ -6,8 +6,8 @@ INSTALL( FILES dimg.h
                dcolorpixelaccess.h 
                dcolorcomposer.h 
                dcolorblend.h 
-               imagehistory.h/dimagehistory.h
-               imagehistory.h/historyimageid.h
-               imagehistory.h/filteraction.h
+               imagehistory/dimagehistory.h
+               imagehistory/historyimageid.h
+               imagehistory/filteraction.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel 
        )
