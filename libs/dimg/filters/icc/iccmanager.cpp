@@ -27,15 +27,12 @@
 
 // Qt includes
 
-#include <QPointer>
-
 // KDE includes
 
 #include <kdebug.h>
 
 // Local includes
 
-#include "colorcorrectiondlg.h"
 #include "iccprofile.h"
 #include "icctransform.h"
 
@@ -53,7 +50,6 @@ public:
     }
 
     DImg                 image;
-    QString              filePath;
     IccProfile           embeddedProfile;
     IccProfile           workspaceProfile;
     bool                 profileMismatch;
@@ -61,11 +57,10 @@ public:
     DImgLoaderObserver  *observer;
 };
 
-IccManager::IccManager(DImg& image, const QString& filePath, const ICCSettingsContainer& settings)
+IccManager::IccManager(DImg& image, const ICCSettingsContainer& settings)
             : d(new IccManagerPriv)
 {
     d->image = image;
-    d->filePath = filePath;
     d->settings = settings;
 
     if (d->image.isNull())
@@ -87,7 +82,7 @@ IccManager::IccManager(DImg& image, const QString& filePath, const ICCSettingsCo
     {
         // Treat as missing profile
         d->embeddedProfile = IccProfile();
-        kWarning() << "Encountered invalid embbeded color profile in file" << d->filePath;
+        kWarning() << "Encountered invalid embbeded color profile in file" << d->image.attribute("originalFilePath").toString();
     }
 
     if (!d->embeddedProfile.isNull())
@@ -97,6 +92,21 @@ IccManager::IccManager(DImg& image, const QString& filePath, const ICCSettingsCo
 IccManager::~IccManager()
 {
     delete d;
+}
+
+DImg IccManager::image() const
+{
+    return d->image;
+}
+
+ICCSettingsContainer IccManager::settings() const
+{
+    return d->settings;
+}
+
+DImgLoaderObserver *IccManager::observer() const
+{
+    return d->observer;
 }
 
 void IccManager::setObserver(DImgLoaderObserver *observer)
@@ -201,9 +211,6 @@ void IccManager::transform(ICCSettingsContainer::Behavior behavior, IccProfile s
 }
 
 
-// --- "Ask user" dialog ---
-
-
 bool IccManager::needsPostLoadingManagement(const DImg& img)
 {
     return (img.hasAttribute("missingProfileAskUser") ||
@@ -211,51 +218,9 @@ bool IccManager::needsPostLoadingManagement(const DImg& img)
             img.hasAttribute("uncalibratedColorAskUser"));
 }
 
-IccTransform IccManager::postLoadingManage(QWidget *parent)
-{
-    if (d->image.hasAttribute("missingProfileAskUser"))
-    {
-        d->image.removeAttribute("missingProfileAskUser");
-        DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
-        QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::MissingProfile, preview,
-                                                                  d->filePath, parent);
-        dlg->exec();
-
-        IccTransform trans;
-        getTransform(trans, dlg->behavior(), dlg->specifiedProfile());
-        delete dlg;
-        return trans;
-    }
-    else if (d->image.hasAttribute("profileMismatchAskUser"))
-    {
-        d->image.removeAttribute("profileMismatchAskUser");
-        DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
-        QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::ProfileMismatch, preview,
-                                                                  d->filePath, parent);
-        dlg->exec();
-
-        IccTransform trans;
-        getTransform(trans, dlg->behavior(), dlg->specifiedProfile());
-        delete dlg;
-        return trans;
-    }
-    else if (d->image.hasAttribute("uncalibratedColorAskUser"))
-    {
-        d->image.removeAttribute("uncalibratedColorAskUser");
-        DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
-        QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::UncalibratedColor, preview,
-                                                                  d->filePath, parent);
-        dlg->exec();
-
-        IccTransform trans;
-        getTransform(trans, dlg->behavior(), dlg->specifiedProfile());
-        delete dlg;
-        return trans;
-    }
-
-    return IccTransform();
-}
-
+/*
+ * "postLoadingManagement" is implemented in the class IccPostLoadingManager
+ */
 
 // --- Behavior implementation ---
 
@@ -437,6 +402,18 @@ IccTransform IccManager::displaySoftProofingTransform(const IccProfile &devicePr
 
 // --- sRGB and Output ---
 
+bool IccManager::isSRGB(const DImg& image)
+{
+    if (image.isNull() || !IccSettings::instance()->isEnabled())
+        return true; // then, everything is sRGB
+
+    IccProfile embeddedProfile = image.getIccProfile();
+    IccProfile outputProfile = IccProfile::sRGB();
+    if (embeddedProfile.isNull()) // assume sRGB
+        return true;
+    else
+        return embeddedProfile.isSameProfileAs(outputProfile);
+}
 
 void IccManager::transformToSRGB()
 {

@@ -117,7 +117,7 @@
 #include "exposurecontainer.h"
 #include "filesaveoptionsbox.h"
 #include "filesaveoptionsdlg.h"
-#include "iccmanager.h"
+#include "iccpostloadingmanager.h"
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
@@ -1429,7 +1429,7 @@ void EditorWindow::colorManage()
     if (!IccManager::needsPostLoadingManagement(image))
         return;
 
-    IccManager manager(image, m_canvas->currentImageFilePath());
+    IccPostLoadingManager manager(image, m_canvas->currentImageFilePath());
     if (!manager.hasValidWorkspace())
     {
         QString message = i18n("Cannot open the specified working space profile (\"%1\"). "

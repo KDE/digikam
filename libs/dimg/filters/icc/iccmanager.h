@@ -49,11 +49,14 @@ public:
      * Constructs an IccManager object.
      * The DImg will be edited. The filePath is for display only.
      */
-    explicit IccManager(DImg& image, const QString& filePath = QString(),
-                        const ICCSettingsContainer& settings = IccSettings::instance()->settings());
+    explicit IccManager(DImg& image, const ICCSettingsContainer& settings = IccSettings::instance()->settings());
     ~IccManager();
 
     void setObserver(DImgLoaderObserver *observer);
+
+    DImg image() const;
+    ICCSettingsContainer settings() const;
+    DImgLoaderObserver *observer() const;
 
     bool hasValidWorkspace() const;
 
@@ -64,7 +67,7 @@ public:
     /**
      * Transforms the image for full editing, using default settings.
      * If the default settings require showing a dialog, the image is marked as such
-     * but no action is taken. See postLoadingManage.
+     * but no action is taken. See IccPostLoadingManager.
      */
     void transformDefault();
     /**
@@ -76,6 +79,12 @@ public:
      * Transforms the image to sRGB
      */
     void transformToSRGB();
+
+    /**
+     * Returns true if a call to transformToSRGB() would have an effect.
+     */
+    static bool isSRGB(const DImg& img);
+
     /**
      * Transforms the image for output to the specified output profile
      */
@@ -105,14 +114,9 @@ public:
     /**
      * Returns true if the given image is marked as needing user interaction
      * for further color management decision after loading.
-     * If this returns true, use postLoadingManage() to do this.
+     * If this returns true, use IccPostLoadingManager to do this.
      */
     static bool needsPostLoadingManagement(const DImg& img);
-    /**
-     * Carries out color management asking the user for his decision.
-     * Afterwards, needsPostLoadingManagement will return false.
-     */
-    IccTransform postLoadingManage(QWidget *parent = 0);
 
     /** Returns the profile that will be used to interpret the image,
      *  using the given behavior

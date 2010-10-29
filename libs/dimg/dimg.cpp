@@ -71,6 +71,7 @@ extern "C"
 #include "pgfloader.h"
 #include "qimageloader.h"
 #include "jpegloader.h"
+#include "iccmanager.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
 #include "dmetadata.h"
@@ -2342,11 +2343,28 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     QSize previewSize = size();
     previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
     QImage preview;
-    // Ensure that preview is not upscaled
-    if (previewSize.width() >= (int)width())
-        preview = copyQImage();
-    else
-        preview = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
+    {
+        if (!IccManager::isSRGB(*this))
+        {
+            DImg previewDImg;
+            if (previewSize.width() >= (int)width())
+                previewDImg = copy();
+            else
+                previewDImg = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio);
+
+            IccManager manager(previewDImg);
+            manager.transformToSRGB();
+            preview = previewDImg.copyQImage();
+        }
+        else
+        {
+            // Ensure that preview is not upscaled
+            if (previewSize.width() >= (int)width())
+                preview = copyQImage();
+            else
+                preview = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
+        }
+    }
 
     // With JPEG file, we don't store IPTC preview.
     // NOTE: only store preview if pixel number is at least two times bigger
