@@ -144,7 +144,12 @@ FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
 
 MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
-MACRO_BOOL_TO_01(CLAPACK_FOUND USE_EXT_LIBCLAPACK)
+IF(NOT APPLE)
+    MACRO_BOOL_TO_01(CLAPACK_FOUND USE_EXT_LIBCLAPACK)
+ELSE(NOT APPLE)
+    # Under MACOS-X Clapack exist in standard, but it's not suitable as well. Need investiguation here.
+    SET(CLAPACK_FOUND FALSE)
+ENDIF(NOT APPLE)
 
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313, #228483
