@@ -30,6 +30,7 @@
 
 #include <QByteArray>
 #include <QMetaType>
+#include <QItemSelectionModel>
 
 // KDE includes
 
@@ -39,6 +40,7 @@
 // libkmap includes
 
 #include <libkmap/abstractmarkertiler.h>
+#include <libkmap/kmap_widget.h>
 
 // local includes
 
@@ -54,6 +56,8 @@
 #include "thumbnaildb.h"
 #include "databasewatch.h"
 #include "databasefields.h"
+#include "imagealbummodel.h"
+#include "imagefiltermodel.h"
 
 namespace Digikam
 {
@@ -79,7 +83,7 @@ public:
         {
         }
 
-        QList<int> imagesId;
+        QList<qlonglong> imagesId;
     };
 
     class GPSImageInfo
@@ -101,7 +105,7 @@ public:
         QDateTime            creationDate;
     };
 
-    GPSMarkerTiler(QObject* const parent = 0);
+    GPSMarkerTiler(QObject* const parent = 0, ImageFilterModel* imageFilterModel = 0, QItemSelectionModel* selectionModel = 0);
     ~GPSMarkerTiler();
 
     virtual Tile* tileNew();
@@ -119,8 +123,24 @@ public:
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
     virtual KMap::WMWSelectionState getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
 
+    virtual void onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::WMWSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode);
+
     virtual void setActive(const bool state);
     GPSImageInfo gpsData(qlonglong id, KMap::GeoCoordinates coordinate, int rating, QDateTime creationDate); 
+    void mouseModeChanged(KMap::MouseMode currentMouseMode);
+    void newSelectionFromMap(const KMap::GeoCoordinates::Pair& sel);
+    void removeCurrentSelection();
+    void newMapFilter(const KMap::FilterMode& newFilter);
+    void removeCurrentMapFilter(const KMap::FilterMode& removedFilter);
+
+Q_SIGNALS:
+    void signalModelFilteredImages(const QList<qlonglong>& imagesId);
+    void signalRefreshMap();
+    void signalClearImages();
+    void signalRemoveCurrentSelection();
+
+public Q_SLOTS:
+    void slotNewModelData(const QList<ImageInfo>& infos);
 
 private Q_SLOTS:
 
@@ -130,6 +150,8 @@ private Q_SLOTS:
     void slotImageChange(const ImageChangeset& changeset);
 
 private:
+
+    QList<qlonglong> getTileMarkerIds(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
 
     class GPSMarkerTilerPrivate;
     GPSMarkerTilerPrivate* const d;

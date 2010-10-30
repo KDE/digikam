@@ -56,7 +56,7 @@
 
 // libkmap includes
 
-#include <libkmap/kmap_widget.h>
+//#include <libkmap/kmap_widget.h>
 #include <libkmap/itemmarkertiler.h>
 
 // Local includes
@@ -90,7 +90,10 @@ public:
         splitter(0),
         sortActionOldestFirst(),
         sortActionYoungestFirst(),
-        sortActionRating()
+        sortActionRating(),
+        currentMouseMode(),
+        existsFilterDatabaseBased(false),
+        existsFilterModelBased(false)
     {}
 
     const QString               configSplitterStateEntry;
@@ -111,7 +114,10 @@ public:
     SearchModel*                searchModel;
     KAction*                    sortActionOldestFirst;
     KAction*                    sortActionYoungestFirst;
-    KAction*                    sortActionRating; 
+    KAction*                    sortActionRating;
+    KMap::MouseMode             currentMouseMode;
+    bool                        existsFilterDatabaseBased;
+    bool                        existsFilterModelBased; 
 };
 
 /**
@@ -149,7 +155,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->mapSearchWidget = new KMap::KMapWidget(mapPanel);
     d->mapSearchWidget->setBackend("marble");
 
-    d->gpsMarkerTiler = new GPSMarkerTiler(this);
+    d->gpsMarkerTiler = new GPSMarkerTiler(this, d->imageFilterModel, d->selectionModel);
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
@@ -175,7 +181,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     sortMenu->addAction(d->sortActionRating);
 
     d->mapSearchWidget->setSortOptionsMenu(sortMenu);
- 
 
     vlay2->addWidget(d->mapSearchWidget);
     vlay2->setMargin(0);
@@ -260,14 +265,29 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     connect(d->mapSearchWidget, SIGNAL(signalNewSelectionFromMap()),
             this, SLOT(slotSelectionChanged()));
 
+    connect(d->mapSearchWidget, SIGNAL(signalNewMapFilter(const KMap::FilterMode&)),
+            this, SLOT(slotNewMapFilter(const KMap::FilterMode&)));
+
     connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentSelection()),
             this, SLOT(slotRemoveCurrentSelection()));
 
-    connect(d->mapViewModelHelper, SIGNAL(signalFilteredImages(const QList<qlonglong>&)),
+    connect(d->gpsMarkerTiler, SIGNAL(signalModelFilteredImages(const QList<qlonglong>&)),
             this, SLOT(slotMapSoloItems(const QList<qlonglong>&)));
+
+    connect(d->gpsMarkerTiler, SIGNAL(signalRefreshMap()),
+            this, SLOT(slotRefreshMap()));
+
+    connect(d->gpsMarkerTiler, SIGNAL(signalClearImages()),
+            this, SLOT(slotClearImages()));
+
+    /*connect(d->gpsMarkerTiler, SIGNAL(signalRemoveCurrentSelection()),
+            this, SLOT(slotRemoveCurrentSelection()));*/
 
     connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentFilter()),
             this, SLOT(slotRemoveCurrentFilter()));
+
+    connect(d->mapSearchWidget, SIGNAL(signalMouseModeChanged(const KMap::MouseMode&)),
+            this, SLOT(slotMouseModeChanged(const KMap::MouseMode&)));
 
     // ---------------------------------------------------------------
 
@@ -307,7 +327,6 @@ void GPSSearchView::doLoadState()
 
     AlbumManager::instance()->setCurrentAlbum(0);
     d->searchTreeView->clearSelection();
-    d->imageAlbumModel->clearImageInfos();
 }
 
 void GPSSearchView::doSaveState()
@@ -332,6 +351,8 @@ void GPSSearchView::doSaveState()
  */
 void GPSSearchView::setActive(bool val)
 {
+
+    //TODO: when val == false, and a selection exists, remove the current selection
     if (!val)
     {
         // make sure we reset the custom filters set by the MarkerClusterer:
@@ -344,12 +365,12 @@ void GPSSearchView::setActive(bool val)
         d->mapSearchWidget->setActive(true);
     //    AlbumManager::instance()->setCurrentAlbum(
     //                    d->searchTreeView->currentAlbum());
-        d->imageAlbumModel->clearImageInfos();
+        slotClearImages();
     }
     else if (val)
     {
         d->mapSearchWidget->setActive(true);
-        d->imageAlbumModel->clearImageInfos();
+        slotClearImages();
     }
 }
 
@@ -379,6 +400,7 @@ void GPSSearchView::slotSelectionChanged()
     d->mapSearchWidget->setSelectionStatus(d->existsSelection);
     slotCheckNameEditGPSConditions();
     createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
+    slotRefreshMap();
 }
 
 /**
@@ -387,7 +409,7 @@ void GPSSearchView::slotSelectionChanged()
  */
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
-    AlbumManager::instance()->setCurrentAlbum(0);
+    //AlbumManager::instance()->setCurrentAlbum(0);
 
     if (!d->mapSearchWidget->getSelectionStatus())
         return;
@@ -395,6 +417,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     // We query database here
 
     const KMap::GeoCoordinates::Pair coordinates = d->mapSearchWidget->getSelectionRectangle();
+    d->gpsMarkerTiler->newSelectionFromMap(coordinates);
 
     // NOTE: coordinates as lon1, lat1, lon2, lat2 (or West, North, East, South)
     // as left/top, right/bottom rectangle.
@@ -416,12 +439,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     AlbumManager::instance()->setCurrentAlbum(salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
     d->searchTreeView->setCurrentAlbum(salbum);
-
     d->imageAlbumModel->openAlbum(salbum);
-    if (d->existsSelection) 
-    {
-        d->mapSearchWidget->setGroupedModel(d->markerTilerModelBased);
-    }
 }
 
 /**
@@ -500,10 +518,14 @@ void GPSSearchView::slotRemoveCurrentSelection()
 {
     d->existsSelection = false;
     d->mapSearchWidget->setSelectionStatus(d->existsSelection);
-    d->imageAlbumModel->clearImageInfos();
+    d->gpsMarkerTiler->removeCurrentSelection();
     d->searchTreeView->clearSelection();
+    slotClearImages();
 
-    d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
+    if (d->existsFilterDatabaseBased)
+        d->existsFilterDatabaseBased = false;
+
+    slotRefreshMap();
 }
 
 /**
@@ -513,6 +535,8 @@ void GPSSearchView::slotRemoveCurrentFilter()
 {
     QList<qlonglong> emptyIdList;
     emit signalMapSoloItems(emptyIdList, "gpssearch"); 
+    d->existsFilterModelBased = false;
+    slotRefreshMap();
 }
 
 /**
@@ -583,6 +607,39 @@ void GPSSearchView::slotSortOptionTriggered(QAction* /*action*/)
         newSortKey = SortRating;
 
     d->mapSearchWidget->setSortKey(newSortKey);
+}
+
+void GPSSearchView::slotMouseModeChanged(const KMap::MouseMode& currentMouseMode)
+{
+    d->currentMouseMode = currentMouseMode;
+    d->gpsMarkerTiler->mouseModeChanged(currentMouseMode);
+}
+
+void GPSSearchView::slotNewMapFilter(const KMap::FilterMode& newFilter)
+{
+    if (newFilter == KMap::DatabaseFilter)
+    {
+        d->existsFilterDatabaseBased = true;
+        d->gpsMarkerTiler->newMapFilter(newFilter);
+    }
+    else
+    {
+        d->existsFilterModelBased    = true;
+        d->gpsMarkerTiler->newMapFilter(newFilter);
+    }
+ 
+    slotRefreshMap();
+}
+
+void GPSSearchView::slotRefreshMap()
+{
+    d->mapSearchWidget->refreshMap();
+}
+
+void GPSSearchView::slotClearImages()
+{
+    if(d->mapSearchWidget->getActiveState())    
+        d->imageAlbumModel->clearImageInfos();
 }
 
 }  // namespace Digikam

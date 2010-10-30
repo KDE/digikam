@@ -32,6 +32,8 @@
 // libkmap includes
 
 #include <libkmap/kmap_modelhelper.h>
+#include <libkmap/kmap_widget.h>
+#include <libkmap/kmap_primitives.h>
 
 // local includes
 
@@ -86,6 +88,10 @@ public Q_SLOTS:
     void slotRemoveCurrentSelection();
     void slotRemoveCurrentFilter();
     void slotSortOptionTriggered(QAction* );
+    void slotMouseModeChanged(const KMap::MouseMode& currentMouseMode);
+    void slotNewMapFilter(const KMap::FilterMode& newFilter);
+    void slotRefreshMap();
+    void slotClearImages();
 
 private:
 

@@ -74,40 +74,64 @@ public:
           jobsList(),
           dataFromDatabaseList(),
           activeState(true),
-          imagesHash()
+          imagesHash(),
+          imageFilterModel(),
+          imageAlbumModel(),
+          currentMouseMode(KMap::MouseModePan),
+          currentSelection(),
+          selectionExists(false),
+          existsFilterDatabaseBased(false),
+          existsFilterModelBased(false),
+          selectedImagesCoordinates(),
+          modelDataProgStart(false)
     {
         mapImagesJob = 0;
     }
 
-    KIO::TransferJob*        mapImagesJob;
-    QList<int>               levelList;
-    QList<KIO::Job*>         jobsList;
-    QList<QList<QVariant> >  dataFromDatabaseList;
-    QList<InternalJobs>      jobs;
-    ThumbnailLoadThread*     thumbnailLoadThread;
-    QMap<QString, QVariant>  thumbnailMap;
-    QList<QRectF>            rectList;
-    QList<int>               rectLevel;
-    bool                     activeState;
-    QHash<int, GPSImageInfo> imagesHash; 
+    KIO::TransferJob*                      mapImagesJob;
+    QList<int>                             levelList;
+    QList<KIO::Job*>                       jobsList;
+    QList<QList<QVariant> >                dataFromDatabaseList;
+    QList<InternalJobs>                    jobs;
+    ThumbnailLoadThread*                   thumbnailLoadThread;
+    QHash<QString, QVariant>               thumbnailMap;
+    QList<QRectF>                          rectList;
+    QList<int>                             rectLevel;
+    bool                                   activeState;
+    QHash<qlonglong, GPSImageInfo>         imagesHash;
+    ImageFilterModel*                      imageFilterModel;
+    ImageAlbumModel*                       imageAlbumModel;
+    QItemSelectionModel*                   selectionModel;
+    KMap::MouseMode                        currentMouseMode;
+    KMap::GeoCoordinates::Pair             currentSelection;
+    bool                                   selectionExists;
+    bool                                   existsFilterDatabaseBased;
+    bool                                   existsFilterModelBased;
+    QHash<qlonglong, KMap::GeoCoordinates> selectedImagesCoordinates;
+    bool                                   modelDataProgStart;
 };
 
 /**
  * @brief Constructor
  * @param parent Parent object
  */
-GPSMarkerTiler::GPSMarkerTiler(QObject* const parent)
+GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* imageFilterModel, QItemSelectionModel* selectionModel)
               : KMap::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
 {
     resetRootTile();
 
     d->thumbnailLoadThread = new ThumbnailLoadThread();
+    d->imageFilterModel    = imageFilterModel;
+    d->imageAlbumModel     = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+    d->selectionModel      = selectionModel;
 
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
             this, SLOT(slotImageChange(const ImageChangeset&)), Qt::QueuedConnection);
+    connect(d->imageAlbumModel, SIGNAL(imageInfosAdded(const QList<ImageInfo>& )),
+            this, SLOT(slotNewModelData(const QList<ImageInfo>& )));
 }
 
 /**
@@ -318,24 +342,59 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
 
     if (tile != NULL)
     {
-          if (tile->imagesId.isEmpty())
+        if (tile->imagesId.isEmpty())
             return QVariant();
 
         GPSImageInfo bestMarkerInfo = d->imagesHash.value(tile->imagesId.first());
+        GPSImageInfo bestFilteredMarkerInfo, bestUnFilteredMarkerInfo;
 
         for (int i=0; i<tile->imagesId.count(); ++i)
         {
             GPSImageInfo currentMarkerInfo = d->imagesHash.value(tile->imagesId.at(i));
             if (sortKey == SortYoungestFirst)
             {
-                if (currentMarkerInfo.creationDate < bestMarkerInfo.creationDate)
+                if (d->existsFilterDatabaseBased || d->existsFilterModelBased || d->selectionExists)
+                {
+                    if (d->selectedImagesCoordinates.contains(currentMarkerInfo.id))
+                    {
+                        if (bestFilteredMarkerInfo.id == -2)
+                            bestFilteredMarkerInfo = currentMarkerInfo;
+                        else if (currentMarkerInfo.creationDate < bestFilteredMarkerInfo.creationDate)
+                            bestFilteredMarkerInfo = currentMarkerInfo;
+                    }  
+                    else
+                    {
+                        if( bestUnFilteredMarkerInfo.id == -2)
+                            bestUnFilteredMarkerInfo = currentMarkerInfo;
+                        else if (currentMarkerInfo.creationDate < bestUnFilteredMarkerInfo.creationDate)
+                            bestUnFilteredMarkerInfo = currentMarkerInfo;
+                    }
+                }
+                else if (currentMarkerInfo.creationDate < bestMarkerInfo.creationDate)
                 {
                     bestMarkerInfo = currentMarkerInfo;
                 }
             }
             else if (sortKey == SortOldestFirst)
             {
-                if (currentMarkerInfo.creationDate > bestMarkerInfo.creationDate)
+                if (d->existsFilterDatabaseBased || d->existsFilterModelBased)
+                {
+                    if (d->selectedImagesCoordinates.contains(currentMarkerInfo.id))
+                    {
+                        if (bestFilteredMarkerInfo.id == -2)
+                            bestFilteredMarkerInfo = currentMarkerInfo;
+                        else if (currentMarkerInfo.creationDate > bestFilteredMarkerInfo.creationDate)
+                            bestFilteredMarkerInfo = currentMarkerInfo;
+                    }  
+                    else
+                    {
+                        if(bestUnFilteredMarkerInfo.id == -2)
+                            bestUnFilteredMarkerInfo = currentMarkerInfo;
+                        else if (currentMarkerInfo.creationDate > bestUnFilteredMarkerInfo.creationDate)
+                            bestUnFilteredMarkerInfo = currentMarkerInfo;
+                    }
+                }
+                else if (currentMarkerInfo.creationDate > bestMarkerInfo.creationDate)
                 {
                    bestMarkerInfo = currentMarkerInfo;
                 }
@@ -357,7 +416,17 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
         }
 
         bestRep.first                              = tileIndex;
-        bestRep.second                             = bestMarkerInfo.id;
+        if(d->existsFilterModelBased || d->existsFilterDatabaseBased || d->selectionExists)
+        {
+            if (bestFilteredMarkerInfo.id != -2)
+                bestRep.second = bestFilteredMarkerInfo.id;
+            else if (bestUnFilteredMarkerInfo.id != -2)
+                bestRep.second = bestUnFilteredMarkerInfo.id;
+            else
+                return QVariant();
+        }
+        else
+            bestRep.second                             = bestMarkerInfo.id;
         const QPair<TileIndex, int> returnedMarker = bestRep;
         v.setValue(bestRep);
         return v;
@@ -446,6 +515,13 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
     {
+        if((d->existsFilterDatabaseBased || d->selectionExists) && !d->selectedImagesCoordinates.contains(info.id()))
+        {
+            QPixmap alphaPixmap(thumbnail.size());
+            alphaPixmap.fill(QColor::fromRgb(0x80, 0x80, 0x80));
+            thumbnail.setAlphaChannel(alphaPixmap);
+        }
+       
         return thumbnail;
     }
     else
@@ -756,7 +832,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             }
             else
             {
-                //TODO: add here the code that adds the image
+                //code that adds the image
                 
                 GPSImageInfo currentImageInfo = gpsData(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
                 d->imagesHash.insert(id, currentImageInfo);
@@ -803,6 +879,105 @@ GPSMarkerTiler::GPSImageInfo GPSMarkerTiler::gpsData(qlonglong id, KMap::GeoCoor
     currentImageInfo.rating       = rating;
     currentImageInfo.creationDate = creationDate;
     return currentImageInfo;
+}
+
+void GPSMarkerTiler::mouseModeChanged(KMap::MouseMode currentMouseMode)
+{
+    d->currentMouseMode = currentMouseMode;
+}
+
+void GPSMarkerTiler::slotNewModelData(const QList<ImageInfo>& infos)
+{
+    if(!d->modelDataProgStart)
+    {
+        d->modelDataProgStart = true;
+        //slotRemoveCurrentSelection();
+        //emit signalRemoveCurrentSelection();
+        emit signalClearImages();
+        return;
+    }
+
+    if(d->activeState)
+    {
+        for (int i=0; i<infos.length(); ++i)
+        {
+            qlonglong currentImageId = infos.at(i).id();
+            d->selectedImagesCoordinates.insert(currentImageId, d->imagesHash.value(currentImageId).coordinate);
+        }
+    }
+
+    emit signalRefreshMap();
+}
+
+void GPSMarkerTiler::newSelectionFromMap(const KMap::GeoCoordinates::Pair& sel)
+{
+    d->currentSelection = sel;
+    d->selectionExists  = true;
+}
+
+void GPSMarkerTiler::removeCurrentSelection()
+{
+    d->selectedImagesCoordinates.clear();
+    if(d->selectionExists)
+        d->selectionExists           = false;
+    if(d->existsFilterDatabaseBased)
+        d->existsFilterDatabaseBased = false;
+}
+
+void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::WMWSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode)
+{
+    QList<qlonglong> clickedImagesId;
+    for (int i=0; i<tileIndicesList.count(); ++i)
+    {
+        const KMap::AbstractMarkerTiler::TileIndex tileIndex = tileIndicesList.at(i);
+        clickedImagesId << getTileMarkerIds(tileIndex); 
+    }
+    if(currentMouseMode == KMap::MouseModeSelectThumbnail)
+    {
+        const bool doSelect = groupSelectionState != KMap::WMWSelectedAll;
+        if(d->selectionModel)
+        {
+            for(int i=0; i<clickedImagesId.count(); ++i)
+            {
+                QModelIndex currentIndex = d->imageAlbumModel->indexForImageId(clickedImagesId.at(i));
+                if(d->selectionModel->isSelected(currentIndex) != doSelect)
+                    d->selectionModel->select(currentIndex, (doSelect ? QItemSelectionModel::Select : QItemSelectionModel::Deselect) | QItemSelectionModel::Rows);
+            }
+        }
+    }
+    else if (currentMouseMode == KMap::MouseModeFilterModel)
+        emit signalModelFilteredImages(clickedImagesId);    
+}
+
+void GPSMarkerTiler::newMapFilter(const KMap::FilterMode& newFilter)
+{
+    if(newFilter == KMap::DatabaseFilter)
+        d->existsFilterDatabaseBased = true;
+    else
+        d->existsFilterModelBased    = true;
+}
+
+void GPSMarkerTiler::removeCurrentMapFilter(const KMap::FilterMode& removedFilter)
+{
+    if(removedFilter == KMap::DatabaseFilter)
+    {
+        d->existsFilterDatabaseBased = false;
+    }
+    else
+        d->existsFilterModelBased    = false;
+}
+
+QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
+{
+
+    KMAP_ASSERT(tileIndex.level() <= KMap::AbstractMarkerTiler::TileIndex::MaxLevel);
+    MyTile* const myTile = static_cast<MyTile*>(getTile(tileIndex, true));
+
+    if(!myTile)
+        return QList<qlonglong>();
+
+    return myTile->imagesId;
+
 }
 
 } // namespace Digikam
