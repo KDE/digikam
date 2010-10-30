@@ -186,7 +186,7 @@ ENDIF(NOT WIN32)
 
 # Check MySQL executables
 FIND_PROGRAM( SERVERCMD_MYSQL mysqld
-              PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
+              PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec /opt/local/libexec
                     /opt/mysql/libexec /usr/mysql/bin /opt/mysql/sbin ${MYSQLD_PATH}
                     ENV MYSQLD_PATH )
 MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
