@@ -62,18 +62,18 @@
 namespace Digikam
 {
 
-enum SortOptions
-{
-    SortYoungestFirst = 0,
-    SortOldestFirst   = 1,
-    SortRating        = 2
-};
-
 class GPSMarkerTiler : public KMap::AbstractMarkerTiler
 {
     Q_OBJECT
 
 public:
+
+    enum SortOptions
+    {
+        SortYoungestFirst = 0,
+        SortOldestFirst   = 1,
+        SortRating        = 2
+    };
 
     class MyTile : public Tile
     {

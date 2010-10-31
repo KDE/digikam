@@ -598,13 +598,14 @@ void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
 
 void GPSSearchView::slotSortOptionTriggered(QAction* /*action*/)
 {
-    int newSortKey = SortYoungestFirst;
+    /// @todo This should rather be youngest/oldest | rating
+    int newSortKey = GPSMarkerTiler::SortYoungestFirst;
     if (d->sortActionYoungestFirst->isChecked())
-        newSortKey = SortYoungestFirst;
+        newSortKey = GPSMarkerTiler::SortYoungestFirst;
     else if (d->sortActionOldestFirst->isChecked())
-        newSortKey = SortOldestFirst;
+        newSortKey = GPSMarkerTiler::SortOldestFirst;
     else
-        newSortKey = SortRating;
+        newSortKey = GPSMarkerTiler::SortRating;
 
     d->mapSearchWidget->setSortKey(newSortKey);
 }
