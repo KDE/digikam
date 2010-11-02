@@ -143,14 +143,14 @@ ImageCurves::~ImageCurves()
 void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
 {
 
-    kDebug() << "Filling this curve from other curve " << otherCurves;
+    //kDebug() << "Filling this curve from other curve " << otherCurves;
 
     curvesReset();
 
     // if the other curves have the same bit depth, simply copy their data
     if (isSixteenBits() == otherCurves->isSixteenBits())
     {
-        kDebug() << "Both curves have same type: isSixteenBits = " << isSixteenBits();
+        //kDebug() << "Both curves have same type: isSixteenBits = " << isSixteenBits();
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
             for (int point = 0; point < NUM_POINTS; ++point)
@@ -166,7 +166,7 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
     // other curve is 8 bit and this curve is 16 bit
     else if (isSixteenBits() && !otherCurves->isSixteenBits())
     {
-        kDebug() << "This curve is 16 bit and the other is 8 bit";
+        //kDebug() << "This curve is 16 bit and the other is 8 bit";
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
             for (int point = 0; point < NUM_POINTS; ++point)
@@ -184,24 +184,24 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
     // other curve is 16 bit and this is 8 bit
     else if (!isSixteenBits() && otherCurves->isSixteenBits())
     {
-        kDebug() << "This curve is 8 bit and the other is 16 bit";
+        //kDebug() << "This curve is 8 bit and the other is 16 bit";
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
-            kDebug() << "Adopting points of channel " << channel;
+            //kDebug() << "Adopting points of channel " << channel;
             for (int point = 0; point < NUM_POINTS; ++point)
             {
                 QPoint p = otherCurves->getCurvePoint(channel, point);
-                kDebug() << "Point " << point << " in original is " << p;
+                //kDebug() << "Point " << point << " in original is " << p;
                 if (d->isPointEnabled(p))
                 {
                     p.setX(p.x() / MULTIPLIER_16BIT);
                     p.setY(p.y() / MULTIPLIER_16BIT);
-                    kDebug() << "Setting curve point " << point << " to " << p;
+                    //kDebug() << "Setting curve point " << point << " to " << p;
                     setCurvePoint(channel, point, p);
                 }
                 else
                 {
-                    kDebug() << "ignoring this point";
+                    //kDebug() << "ignoring this point";
                 }
             }
         }
@@ -211,13 +211,13 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
         kError() << "Bad logic error, could not fill one curve into another";
     }
 
-    kDebug() << "Updating curve types";
+    //kDebug() << "Updating curve types";
 
     // adopt channel types
     for (int channel = 0; channel < NUM_CHANNELS; ++channel)
     {
-        kDebug() << "Curve type for channel " << channel
-                 << " is " << (int) otherCurves->getCurveType(channel);
+        //kDebug() << "Curve type for channel " << channel
+          //       << " is " << (int) otherCurves->getCurveType(channel);
         setCurveType(channel, otherCurves->getCurveType(channel));
     }
 
