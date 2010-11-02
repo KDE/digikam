@@ -141,7 +141,7 @@ DImageHistory& DImageHistory::operator<<(const FilterAction& action)
     Entry entry;
     entry.action = action;
     d->entries << entry;
-    kDebug() << "Entry added, total count " << d->entries.count();
+    //kDebug() << "Entry added, total count " << d->entries.count();
     return *this;
 }
 
@@ -384,7 +384,7 @@ QString DImageHistory::toXml() const
 
 DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 {
-    kDebug() << "Parsing image history XML";
+    //kDebug() << "Parsing image history XML";
     DImageHistory h;
     if (xml.isEmpty())
     {
