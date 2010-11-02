@@ -158,8 +158,10 @@ void PreviewLoadingTask::execute()
     {
         // following the golden rule to avoid deadlocks, do this when CacheLock is not held
 
-        // The image from the cache may or may not be post processed.
-        // postProcess() will detect if work is needed.
+        // The image from the cache may or may not be rotated and post processed.
+        // exifRotate() and postProcess() will detect if work is needed.
+        if (m_loadingDescription.previewParameters.exifRotate())
+            LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
         postProcess();
         m_thread->taskHasFinished();
         m_thread->imageLoaded(m_resultLoadingDescription, m_img);
