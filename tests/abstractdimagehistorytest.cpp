@@ -35,6 +35,9 @@
 #include "config-digikam.h"
 #include "libs/dimg/filters/bcg/bcgfilter.h"
 #include "libs/dimg/filters/curves/curvesfilter.h"
+#include "libs/dimg/filters/auto/autolevelsfilter.h"
+#include "libs/dimg/filters/bw/infraredfilter.h"
+#include "libs/dimg/filters/fx/blurfilter.h"
 #include "dimagehistory.h"
 #include "dimginterface.h"
 #include "editortooliface.h"
@@ -148,7 +151,34 @@ void AbstractDImageHistoryTest::applyFilters1()
 
     CurvesFilter filter2(iface.getOriginalImg(), this);
     filter2.startFilterDirectly();
-    iface.putOriginalImage("Should be ignored in this test", filter2.filterAction(), filter2.getTargetImage().bits());
+    iface.putOriginalImage("Curves", filter2.filterAction(), filter2.getTargetImage().bits());
+}
+
+void AbstractDImageHistoryTest::applyFilters2()
+{
+    ImageIface iface(0, 0);
+
+    AutoLevelsFilter filter(iface.getOriginalImg(), iface.getOriginalImg(), this);
+    filter.startFilterDirectly();
+    iface.putOriginalImage("", filter.filterAction(), filter.getTargetImage().bits());
+}
+
+void AbstractDImageHistoryTest::applyFilters3()
+{
+    ImageIface iface(0, 0);
+
+    InfraredFilter filter(iface.getOriginalImg(), this);
+    filter.startFilterDirectly();
+    iface.putOriginalImage("", filter.filterAction(), filter.getTargetImage().bits());
+}
+
+void AbstractDImageHistoryTest::applyFilters4()
+{
+    ImageIface iface(0, 0);
+
+    BlurFilter filter(iface.getOriginalImg(), this);
+    filter.startFilterDirectly();
+    iface.putOriginalImage("", filter.filterAction(), filter.getTargetImage().bits());
 }
 
 QString AbstractDImageHistoryTest::tempFileName(const QString& purpose) const

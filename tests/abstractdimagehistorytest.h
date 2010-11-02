@@ -50,6 +50,9 @@ public:
     DImageHistory history1() const;
 
     void applyFilters1();
+    void applyFilters2();
+    void applyFilters3();
+    void applyFilters4();
 
     QString tempFileName(const QString& purpose) const;
     QString tempFilePath(const QString& purpose) const;

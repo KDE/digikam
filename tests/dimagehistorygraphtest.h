@@ -49,6 +49,8 @@ private Q_SLOTS:
     void cleanupTestCase();
 
     void testGraph();
+    void testEditing();
+    void testHistory();
 
 private:
 
@@ -57,6 +59,7 @@ private:
     QDir        collectionDir;
     QString     dbFile;
     QStringList readOnlyImages;
+    QList<qlonglong> ids;
 };
 
 #endif

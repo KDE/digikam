@@ -1109,6 +1109,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagscache.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseservererror.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraph.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraphmodel.cpp
        )
 
     SET(libdatabaseui_SRCS

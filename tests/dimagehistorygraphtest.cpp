@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTime>
+#include <QTreeView>
 
 // KDE includes
 
@@ -48,10 +49,12 @@
 #include "imagehistorygraph.h"
 #include "imagehistorygraphdata.h"
 #include "imagehistorygraphmodel.h"
+#include "iofilesettingscontainer.h"
+#include "modeltest.h"
 
 using namespace Digikam;
 
-QTEST_KDEMAIN_CORE(DImageHistoryGraphTest)
+QTEST_KDEMAIN(DImageHistoryGraphTest, GUI)
 
 void DImageHistoryGraphTest::initTestCase()
 {
@@ -88,6 +91,11 @@ void DImageHistoryGraphTest::initTestCase()
         //qDebug() << DatabaseAccess().db()->getItemURLsInAlbum(album.id);
         readOnlyImages << DatabaseAccess().db()->getItemURLsInAlbum(album.id);
     }
+
+    foreach (const QString& file, readOnlyImages)
+        ids << ImageInfo(file).id();
+    QVERIFY(!ids.contains(-1));
+    QVERIFY(ids.size() >= 24);
 }
 
 void DImageHistoryGraphTest::cleanupTestCase()
@@ -115,15 +123,73 @@ QList<to> mapList(const QList<from>& l, const QMap<from,to> map)
     return r;
 }
 
+void DImageHistoryGraphTest::testEditing()
+{
+    QDir imageDir(imagePath());
+
+    /*
+    1
+        2
+            4
+        3
+    */
+
+    IOFileSettingsContainer container;
+    m_im->load(readOnlyImages.first(), &container);
+    m_loop.exec();
+
+    applyFilters1();
+    m_im->saveAs(collectionDir.filePath("1.jpg"), &container, true);
+    m_loop.exec();
+
+    applyFilters2();
+    m_im->saveAs(collectionDir.filePath("2.jpg"), &container, true);
+    m_loop.exec();
+
+    applyFilters3();
+    m_im->saveAs(collectionDir.filePath("3.jpg"), &container, true);
+    m_loop.exec();
+
+    m_im->load(collectionDir.filePath("2.jpg"), &container);
+    m_loop.exec();
+
+    applyFilters4();
+    m_im->saveAs(collectionDir.filePath("4.jpg"), &container, true);
+    m_loop.exec();
+
+    CollectionScanner().completeScan();
+
+    ImageInfo one(collectionDir.filePath("1.jpg")),
+    two(collectionDir.filePath("2.jpg")),
+    three(collectionDir.filePath("3.jpg")),
+    four(collectionDir.filePath("4.jpg"));
+
+    ImageHistoryGraph graph1 = ImageHistoryGraph::fromInfo(three);
+    qDebug() << graph1;
+    ImageHistoryGraph graph2 = ImageHistoryGraph::fromInfo(four);
+    qDebug() << graph2;
+    ImageHistoryGraph graph3 = ImageHistoryGraph::fromInfo(one);
+    qDebug() << graph3;
+
+    // all three must have the full cloud
+    QVERIFY(graph1.data().vertexCount() == 5);
+    QVERIFY(graph2.data().vertexCount() == 5);
+    QVERIFY(graph3.data().vertexCount() == 5);
+}
+
+void DImageHistoryGraphTest::testHistory()
+{
+    ImageHistoryGraph graph;
+    ImageInfo subject(ids.first());
+    graph.addHistory(history1(), subject);
+    graph.reduceEdges();
+
+    QCOMPARE(graph.data().vertexCount(), 3);
+    QCOMPARE(graph.data().edges().size(), 2);
+}
+
 void DImageHistoryGraphTest::testGraph()
 {
-    QList<qlonglong> ids;
-    foreach (const QString& file, readOnlyImages)
-        ids << ImageInfo(file).id();
-    QVERIFY(!ids.contains(-1));
-    QVERIFY(ids.size() >= 24);
-
-
     /*
     1
         2
@@ -242,7 +308,7 @@ void DImageHistoryGraphTest::testGraph()
 
     qDebug() << "Initial graph:" << graph;
 
-    graph.finish();
+    graph.reduceEdges();
 
     qDebug() << "Transitive reduction:" << graph;
 
@@ -298,15 +364,32 @@ void DImageHistoryGraphTest::testGraph()
     QVERIFY(subgraphFour == controlSubgraphFour);
 
     ImageHistoryGraphModel model;
+    ModelTest test(&model);
     model.setHistory(ImageInfo(16), graph);
+
+    // main path 1 - 7 - 16
+    QCOMPARE(model.rowCount(), 3);
+
+    /*QTreeView view;
+    view.setModel(&model);
+    view.show();
+    QTest::qWaitForWindowShown(&view);
+    QTest::qWait(10000);*/
 }
 
-void DImageHistoryGraphTest::slotImageLoaded(const QString&, bool success)
+void DImageHistoryGraphTest::slotImageLoaded(const QString&fileName, bool success)
 {
+    QVERIFY(success);
+    qDebug() << "Loaded" << fileName;
+    m_loop.quit();
 }
 
 void DImageHistoryGraphTest::slotImageSaved(const QString& fileName, bool success)
 {
+    QVERIFY(success);
+    m_im->addLastSavedToHistory(fileName);
+    qDebug() << "Saved to" << fileName;
+    m_loop.quit();
 }
 
 

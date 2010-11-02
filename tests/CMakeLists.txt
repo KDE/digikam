@@ -242,6 +242,7 @@ TARGET_LINK_LIBRARIES(dimagehistorytest
 SET(dimagehistorygraphtest_SRCS
     abstractdimagehistorytest.cpp
     dimagehistorygraphtest.cpp
+    modeltest/modeltest.cpp
 )
 KDE4_ADD_UNIT_TEST(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
 TARGET_LINK_LIBRARIES(dimagehistorygraphtest
