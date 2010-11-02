@@ -1926,7 +1926,10 @@ QString AlbumDB::getImageUuid(qlonglong imageId)
     if (values.isEmpty())
         return QString();
 
-    return values.first().toString();
+    QString uuid = values.first().toString();
+    if (uuid.isEmpty())
+        return QString();
+    return uuid;
 }
 
 void AlbumDB::setImageHistory(qlonglong imageId, const QString& history)

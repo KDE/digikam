@@ -702,6 +702,14 @@ void TreeBuilder::readPairs(const QList<QPair<qlonglong, qlonglong> >& pairs)
     }
 }
 
+QList<QPair<qlonglong, qlonglong> > ImageInfo::relationCloud() const
+{
+    if (!m_data)
+        return QList<QPair<qlonglong, qlonglong> >();
+
+    return DatabaseAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom);
+}
+
 QList<QPair<qlonglong, int> > ImageInfo::allAvailableVersions() const
 {
     if (!m_data)

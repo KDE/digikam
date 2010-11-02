@@ -286,6 +286,12 @@ public:
     QList<ImageInfo> ancestorImages() const;
 
     /**
+     * Returns the cloud of all directly or indirectly related images,
+     * derived images or ancestors, in from of "a derived from b" pairs.
+     */
+    QList<QPair<qlonglong, qlonglong> > relationCloud() const;
+
+    /**
      *  Returns the ancestors and derived images of this image.
      *  The returned list gives an image id and the level of this image in a tree.
      *  Starting from level 0 (original image), the list of children is iterated
