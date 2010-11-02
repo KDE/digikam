@@ -61,6 +61,8 @@ public:
     QList<HistoryImageId> referredImages;
     QList<ImageInfo>      infos;
 
+    ImageInfo firstImageInfo() const;
+
     bool operator==(const QString& uuid) const;
     bool operator==(const ImageInfo& info) const;
     bool operator==(qlonglong id) const;

@@ -34,6 +34,7 @@
 
 #include "dimagehistory.h"
 #include "digikam_export.h"
+#include "imageinfo.h"
 
 class QDebug;
 
@@ -56,22 +57,42 @@ public:
 
     bool isNull() const;
     bool isEmpty() const;
+    bool isSingleVertex() const;
 
     ImageHistoryGraphData &data();
     const ImageHistoryGraphData &data() const;
 
+    enum ProcessingMode
+    {
+        NoProcessing,
+        PrepareForDisplay
+    };
+
     /**
-     * Add the history of the given ImageInfo.
-     * Per default, the history is read from the ImageInfo object.
+     * Convenience: Reads all available history for the given info from the database
+     * and returns the created graph.
+     * Depending on mode, the graph will be preparedForDisplay().
+     * If no history is recorded and no relations found, a single-vertex graph is returned.
      */
-    void addHistory(const ImageInfo& historySubject);
-    void addHistory(const ImageInfo& historySubject, const DImageHistory& history);
+    static ImageHistoryGraph fromInfo(const ImageInfo& info, ProcessingMode mode = PrepareForDisplay);
+
+    /**
+     * Add the given history.
+     * The optionally given info or id is used as the "current" image of the history.
+     * If you read a history from a file's metadata or the database, you shall give the
+     * relevant subject.
+     */
+    void addHistory(const DImageHistory& history, const ImageInfo& historySubject = ImageInfo());
+    void addHistory(const DImageHistory& history, const HistoryImageId& historySubject = HistoryImageId());
 
     /**
      * Add images and their relations from the given pairs.
      * Each pair (a,b) means "a is derived from b".
      */
     void addRelations(const QList<QPair<qlonglong, qlonglong> >& pairs);
+
+    /** Clears this graph. */
+    void clear();
 
     /**
      * Remove edges which provide only duplicate information
@@ -101,6 +122,11 @@ public:
      * the edges of the transitive closure.
      */
     QList<QPair<qlonglong, qlonglong> > relationCloud() const;
+
+    /**
+     * Returns all image infos from all vertices in this graph
+     */
+    QList<ImageInfo> allImageInfos() const;
 
     /**
      * Determines if the two ids refer to the same image.

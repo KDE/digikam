@@ -241,13 +241,19 @@ public:
         return v;
     }
 
-    void removeVertex(const Vertex& v)
+    void remove(const Vertex& v)
     {
         if (v.isNull())
             return;
 
         boost::clear_vertex(v, graph);
         boost::remove_vertex(v, graph);
+    }
+
+    void remove(const QList<Vertex>& vertices)
+    {
+        foreach (const Vertex& v, vertices)
+            remove(v);
     }
 
     Edge addEdge(const Vertex& v1, const Vertex& v2)
@@ -289,6 +295,10 @@ public:
     {
         return boost::get(vertex_properties, graph, v);
     }
+    VertexProperties& properties(const Vertex& v)
+    {
+        return boost::get(vertex_properties, graph, v);
+    }
 
     void setProperties(const Edge& e, const EdgeProperties& props)
     {
@@ -319,6 +329,10 @@ public:
         return properties(e);
     }
     const EdgeProperties &properties(const Edge& e) const
+    {
+        return boost::get(edge_properties, graph, e);
+    }
+    EdgeProperties &properties(const Edge& e)
     {
         return boost::get(edge_properties, graph, e);
     }
@@ -362,6 +376,11 @@ public:
     int vertexCount() const
     {
         return boost::num_vertices(graph);
+    }
+
+    bool isEmpty() const
+    {
+        return !vertexCount();
     }
 
     int outDegree(const Vertex& v) const
@@ -424,7 +443,7 @@ public:
         std::list<Vertex> vertices;
         try {
         boost::topological_sort(graph, std::back_inserter(vertices));
-        } catch (boost::bad_graph& e) { kDebug() << e.what(); }
+        } catch (boost::bad_graph& e) { kDebug() << e.what(); return QList<Vertex>(); }
         typedef typename std::list<Vertex>::iterator vertex_list_iter;
         return toVertexList(std::pair<vertex_list_iter, vertex_list_iter>(vertices.begin(), vertices.end()));
     }
@@ -452,7 +471,7 @@ public:
         boost::transitive_closure(graph, closure.graph,
                                   orig_to_copy(make_iterator_property_map(copiedVertices.begin(), get(boost::vertex_index, graph)))
                                  );
-        } catch (boost::bad_graph& e) { kDebug() << e.what(); }
+        } catch (boost::bad_graph& e) { kDebug() << e.what(); return Graph(); }
 
         copyProperties(closure, flags, copiedVertices);
 
@@ -473,7 +492,7 @@ public:
         boost::transitive_reduction(graph, reduction.graph,
                                     make_iterator_property_map(copiedVertices.begin(), get(boost::vertex_index, graph)),
                                     get(boost::vertex_index, graph));
-        } catch (boost::bad_graph& e) { kDebug() << e.what(); }
+        } catch (boost::bad_graph& e) { kDebug() << e.what(); return Graph(); }
 
         copyProperties(reduction, flags, copiedVertices);
 
@@ -706,7 +725,7 @@ protected:
             if (copiedS.isNull() || copiedT.isNull())
                 continue;
             Edge copiedEdge = other.edge(copiedS, copiedT);
-            if (!copiedEdge.isNull())
+            if (copiedEdge.isNull())
                 removed << *it;
         }
         return removed;
