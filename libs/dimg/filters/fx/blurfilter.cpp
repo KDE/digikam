@@ -149,7 +149,7 @@ FilterAction BlurFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("raduis", m_radius);
+    action.addParameter("radius", m_radius);
 
     return action;
 }
