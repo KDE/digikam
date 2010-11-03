@@ -175,6 +175,15 @@ void DImageHistoryGraphTest::testEditing()
     QVERIFY(graph1.data().vertexCount() == 5);
     QVERIFY(graph2.data().vertexCount() == 5);
     QVERIFY(graph3.data().vertexCount() == 5);
+
+    QFile fileTwo(two.filePath());
+    fileTwo.remove();
+    QVERIFY(!fileTwo.exists());
+    CollectionScanner().completeScan();
+    graph2 = ImageHistoryGraph::fromInfo(four);
+    // graph is prepared for display, vertex of removed file cleared
+    QVERIFY(graph2.data().vertexCount() == 4);
+    qDebug() << graph2;
 }
 
 void DImageHistoryGraphTest::testHistory()
