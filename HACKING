@@ -187,7 +187,7 @@ digiKam project : http://techbase.kde.org/Contribute
 Use the same .cpp/.h header than the rest of digiKam project.
 
 Use a decent editor which does auto-indentation/syntax-highlighting for you.
-I personally use Emacs (Renchi) or Kdevelop (Gilles).
+I personally use Kate (Gilles).
 There are excellent initializer scripts in the kdesdk
 package for xemacs and vim which can substantially increase your productivity.
 
