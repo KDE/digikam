@@ -76,6 +76,7 @@ extern "C"
 #include "exposurecontainer.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
+#include "randomnumbergenerator.h"
 
 typedef uint64_t ullong;
 typedef int64_t  llong;
@@ -2317,8 +2318,8 @@ QByteArray DImg::getUniqueHash(const QString& filePath)
 
 QByteArray DImg::createImageUniqueId() const
 {
-    QUuid randomUuid = QUuid::createUuid();
-    QByteArray imageUUID = randomUuid.toString().remove('{').remove('}').remove('-').toLatin1();
+    NonDeterministicRandomData randomData(16);
+    QByteArray imageUUID = randomData.toHex();
     imageUUID += getUniqueHash();
     return imageUUID;
 }
