@@ -1856,7 +1856,7 @@ QList<qlonglong> AlbumDB::findByNameAndCreationDate(const QString& fileName, con
 
     d->db->execSql( "SELECT id FROM Images "
                     " INNER JOIN ImageInformation ON id=imageid "
-                    "WHERE name=? AND creationDate=?;",
+                    "WHERE name=? AND creationDate=? AND status!=3;",
                     fileName, creationDate.toString(Qt::ISODate), &values);
 
     QList<qlonglong> ids;
@@ -1902,7 +1902,9 @@ QList<qlonglong> AlbumDB::getItemsForUuid(const QString& uuid)
 {
     QList<QVariant> values;
 
-    d->db->execSql( "SELECT imageid FROM ImageHistory WHERE uuid=?;",
+    d->db->execSql( "SELECT imageid FROM ImageHistory "
+                    "INNER JOIN Images ON imageid=id "
+                    "WHERE uuid=? AND status!=3;",
                     uuid, &values);
 
     QList<qlonglong> imageIds;
