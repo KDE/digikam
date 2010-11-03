@@ -119,7 +119,10 @@ public:
     Vertex addVertex(const HistoryImageId& id);
     ImageHistoryGraphData::Vertex addVertex(const QList<HistoryImageId>& imageIds);
     Vertex addVertex(qlonglong id);
+    Vertex addVertexScanned(qlonglong id);
     Vertex addVertex(const ImageInfo& info);
+
+    void addHistory(const DImageHistory& givenHistory, qlonglong extraCurrent = 0);
 
 protected:
 

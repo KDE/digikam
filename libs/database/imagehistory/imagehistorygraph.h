@@ -86,6 +86,13 @@ public:
     void addHistory(const DImageHistory& history, const HistoryImageId& historySubject = HistoryImageId());
 
     /**
+     * This is very similar to addHistory. The only difference is that
+     * no attempt is made to retrieve an ImageInfo for the historySubjectId.
+     * Can be useful in the context of scanning
+     */
+    void addScannedHistory(const DImageHistory& history, qlonglong historySubjectId);
+
+    /**
      * Add images and their relations from the given pairs.
      * Each pair (a,b) means "a is derived from b".
      */
@@ -102,10 +109,15 @@ public:
     void reduceEdges();
 
     /**
+     * Returns true if for any entry no ImageInfo could be located.
+     */
+    bool hasUnresolvedEntries() const;
+
+    /**
      * Remove all vertices from the graph for which no existing ImageInfo
      * could be found in the database
      */
-    void dropOrphans();
+    void dropUnresolvedEntries();
 
     /**
      * Sort vertex information priorizing for the given vertex
@@ -127,12 +139,6 @@ public:
      * Returns all image infos from all vertices in this graph
      */
     QList<ImageInfo> allImageInfos() const;
-
-    /**
-     * Determines if the two ids refer to the same image.
-     * Does not check if such a referred image does exist.
-     */
-    static bool sameReferredImage(const HistoryImageId& id1, const HistoryImageId& id2);
 
 private:
 

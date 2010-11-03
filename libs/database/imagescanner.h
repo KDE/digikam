@@ -138,6 +138,12 @@ public:
     static bool resolveImageHistory(qlonglong imageId, const QString& historyXml);
 
     /**
+     * Determines if the two ids refer to the same image.
+     * Does not check if such a referred image really exists.
+     */
+    static bool sameReferredImage(const HistoryImageId& id1, const HistoryImageId& id2);
+
+    /**
      * Returns all image ids fulfilling the given image id.
      */
     static QList<qlonglong> resolveHistoryImageId(const HistoryImageId& historyId);

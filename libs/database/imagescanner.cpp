@@ -44,6 +44,7 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
+#include "imagehistorygraph.h"
 #include "metadatasettings.h"
 #include "tagscache.h"
 
@@ -517,20 +518,46 @@ bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& history
         return true; // "true" means nothing is left to resolve
 
     DImageHistory history = DImageHistory::fromXml(historyXml);
-    bool completelyResolved = true;
-    QList<HistoryImageId> historyIds = history.allReferredImages();
-    foreach (const HistoryImageId& historyId, historyIds)
-    {
-        QList<qlonglong> ids = resolveHistoryImageId(historyId);
-        //kDebug() << ids << historyId.m_uuid << historyId.m_fileName;
-        completelyResolved = completelyResolved && !ids.isEmpty();
-        foreach (qlonglong id, ids)
-        {
-            if (id != imageId)
-                DatabaseAccess().db()->addImageRelation(imageId, id, DatabaseRelation::DerivedFrom);
-        }
-    }
-    return completelyResolved;
+
+    ImageHistoryGraph graph;
+    graph.addScannedHistory(history, imageId);
+
+    typedef QPair<qlonglong, qlonglong> IdPair;
+    foreach (const IdPair& pair, graph.relationCloud())
+        DatabaseAccess().db()->addImageRelation(pair.first, pair.second, DatabaseRelation::DerivedFrom);
+
+    return !graph.hasUnresolvedEntries();
+}
+
+bool ImageScanner::sameReferredImage(const HistoryImageId& id1, const HistoryImageId& id2)
+{
+    if (!id1.isValid() || !id2.isValid())
+        return false;
+
+    /*
+     * We give the UUID the power of equivalence that none of the other criteria has:
+     * For two images a,b with uuids x,y, where x and y not null,
+     *  a (same image as) b   <=>   x == y
+     */
+    if (!id1.m_uuid.isNull() && !id2.m_uuid.isNull())
+        return id1.m_uuid == id2.m_uuid;
+
+    if (!id1.m_uniqueHash.isNull() && id1.m_fileSize
+        && id1.m_uniqueHash == id2.m_uniqueHash
+        && id1.m_fileSize == id2.m_fileSize)
+        return true;
+
+    if (!id1.m_fileName.isNull() && !id1.m_creationDate.isNull()
+        && id1.m_fileName == id2.m_fileName
+        && id1.m_creationDate == id2.m_creationDate)
+        return true;
+
+    if (!id1.m_filePath.isNull() && !id1.m_fileName.isNull()
+        && id1.m_filePath == id2.m_filePath
+        && id1.m_fileName == id2.m_fileName)
+        return true;
+
+    return false;
 }
 
 QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& historyId)
@@ -551,7 +578,8 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
         {
             QList<qlonglong> ids;
             foreach (const ItemScanInfo& info, infos)
-                ids << info.id;
+                if (info.status != DatabaseItem::Removed)
+                    ids << info.id;
             return ids;
         }
     }
