@@ -63,6 +63,8 @@ RainDropFilter::RainDropFilter(DImg* orgImage, QObject* parent, int drop,
         m_selectedH = selection->height();
     }
 
+    m_generator.seedByTime();
+
     initFilter();
 }
 
@@ -169,28 +171,16 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
 
     // Randomize.
 
-    QDateTime dt = QDateTime::currentDateTime();
-    QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    uint seed = dt.secsTo(Y2000);
-#ifdef _WIN32
-    srand(seed);
-#endif
-
     for (i = 0; runningFlag() && (i < Amount); ++i)
     {
         nCounter = 0;
 
         do
         {
-#ifndef _WIN32
-            nRandX = (int)(rand_r(&seed) * ((double)( nWidth - 1) / RAND_MAX));
-            nRandY = (int)(rand_r(&seed) * ((double)(nHeight - 1) / RAND_MAX));
-#else
-            nRandX = (int)(rand() * ((double)( nWidth - 1) / RAND_MAX));
-            nRandY = (int)(rand() * ((double)(nHeight - 1) / RAND_MAX));
-#endif
+            nRandX = m_generator.number(0, nWidth - 1);
+            nRandY = m_generator.number(0, nHeight - 1);
 
-            nRandSize = (rand() % (MaxDropSize - MinDropSize)) + MinDropSize;
+            nRandSize = m_generator.number(MinDropSize, MaxDropSize);
 
             bResp = CreateRainDrop (data, nWidth, nHeight, sixteenBit, bytesDepth,
                                     pResBits, pStatusBits,
@@ -480,6 +470,7 @@ FilterAction RainDropFilter::filterAction()
     action.addParameter("selectedW", m_selectedW);
     action.addParameter("selectedX", m_selectedX);
     action.addParameter("selectedY", m_selectedY);
+    action.addParameter("randomSeed", m_generator.currentSeed());
 
     return action;
 }
@@ -493,7 +484,7 @@ void RainDropFilter::readParameters(const Digikam::FilterAction& action)
     m_selectedW = action.parameter("selectedW").toInt();
     m_selectedX = action.parameter("selectedX").toInt();
     m_selectedY = action.parameter("selectedY").toInt();
+    m_generator.seed(action.parameter("randomSeed").toInt());
 }
-
 
 }  // namespace Digikam

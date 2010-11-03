@@ -31,6 +31,7 @@
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "globals.h"
+#include "randomnumbergenerator.h"
 
 class QRect;
 
@@ -109,6 +110,8 @@ private:
     int m_selectedY;
     int m_selectedW;
     int m_selectedH;
+
+    RandomNumberGenerator m_generator;
 };
 
 }  // namespace Digikam
