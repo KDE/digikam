@@ -174,6 +174,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 RenameCustomizer::~RenameCustomizer()
 {
     saveSettings();
+    delete d->advancedRenameManager;
     delete d;
 }
 
