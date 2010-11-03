@@ -559,7 +559,7 @@ bool DMetadata::setImageUniqueId(const QString& uuid) const
 {
     if (supportXmp())
     {
-        return setExifTagString("Xmp.digiKam.ImageUniqueID", uuid);
+        return setXmpTagString("Xmp.digiKam.ImageUniqueID", uuid);
     }
     return false;
 }
