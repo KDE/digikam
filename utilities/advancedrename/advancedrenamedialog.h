@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a rename dialog for the AdvancedRename utility
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,8 +49,6 @@ namespace Digikam
 
 class Parser;
 
-class AdvancedRenameListItemPriv;
-
 class AdvancedRenameListItem : public QTreeWidgetItem
 {
 public:
@@ -81,6 +79,7 @@ public:
 
 private:
 
+    class AdvancedRenameListItemPriv;
     AdvancedRenameListItemPriv* const d;
 };
 
@@ -88,8 +87,6 @@ private:
 
 typedef QPair<KUrl, QString> NewNameInfo;
 typedef QList<NewNameInfo>   NewNamesList;
-
-class AdvancedRenameDialogPriv;
 
 class AdvancedRenameDialog : public KDialog
 {
@@ -120,6 +117,7 @@ private:
 
 private:
 
+    class AdvancedRenameDialogPriv;
     AdvancedRenameDialogPriv* const d;
 };
 

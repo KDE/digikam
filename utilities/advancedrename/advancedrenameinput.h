@@ -6,7 +6,7 @@
  * Date        : 2009-09-03
  * Description : an input widget for the AdvancedRename utility
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,7 +53,7 @@ class AdvancedRenameLineEditProxy : public ProxyLineEdit
 public:
 
     AdvancedRenameLineEditProxy(QWidget* parent);
-    virtual void setWidget(QWidget *widget);
+    virtual void setWidget(QWidget* widget);
 
 protected:
 
@@ -62,8 +62,6 @@ protected:
 };
 
 // --------------------------------------------------------
-
-class AdvancedRenameLineEditPriv;
 
 class AdvancedRenameLineEdit : public KTextEdit
 {
@@ -75,7 +73,7 @@ public:
     ~AdvancedRenameLineEdit();
 
     void    setParser(Parser* parser);
-    Parser* parser();
+    Parser* parser() const;
 
     void setAllowDirectoryCreation(bool allow);
 
@@ -103,12 +101,11 @@ private Q_SLOTS:
 
 private:
 
+    class AdvancedRenameLineEditPriv;
     AdvancedRenameLineEditPriv* const d;
 };
 
 // --------------------------------------------------------
-
-class AdvancedRenameInputPriv;
 
 class AdvancedRenameInput : public KComboBox
 {
@@ -157,6 +154,7 @@ private:
 
 private:
 
+    class AdvancedRenameInputPriv;
     AdvancedRenameInputPriv* const d;
 };
 

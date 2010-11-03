@@ -34,7 +34,6 @@ class QMenu;
 namespace Digikam
 {
 
-class AdvancedRenameWidgetPriv;
 class ParseSettings;
 class Parser;
 
@@ -92,7 +91,7 @@ public:
     /**
      * returns a pointer to the currently assigned parser
      */
-    Parser* parser();
+    Parser* parser() const;
 
     /**
      * evaluates the parse string and executes the parser
@@ -157,6 +156,7 @@ private:
 
 private:
 
+    class AdvancedRenameWidgetPriv;
     AdvancedRenameWidgetPriv* const d;
 };
 

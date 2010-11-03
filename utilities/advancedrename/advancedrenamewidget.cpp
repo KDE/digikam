@@ -57,7 +57,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class AdvancedRenameWidgetPriv
+class AdvancedRenameWidget::AdvancedRenameWidgetPriv
 {
     typedef AdvancedRenameWidget::ControlWidgets CWMask;
     typedef AdvancedRenameWidget::LayoutStyle    LStyle;
@@ -278,7 +278,7 @@ void AdvancedRenameWidget::registerParserControls()
    }
 }
 
-Parser* AdvancedRenameWidget::parser()
+Parser* AdvancedRenameWidget::parser() const
 {
     return d->parser;
 }
