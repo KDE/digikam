@@ -77,14 +77,27 @@ public:
      * Seeds the generator from a non-deterministic
      * random number generator. This is the most secure
      * seeding method.
+     * Returns the new currentSeed().
      */
-    void seedNonDeterministic();
+    quint32 seedNonDeterministic();
 
     /**
      * Seeds the generator by current time. This is common practice
      * and good enough for most purposes.
+     * Returns the new currentSeed().
      */
-    void seedByTime();
+    quint32 seedByTime();
+
+    /**
+     * Produces a non-deterministic seed, as used by seedNonDeterministic()
+     */
+    static quint32 nonDeterministicSeed();
+
+    /**
+     * Produces a seed that includes at least the time as source
+     * of random data
+     */
+    static quint32 timeSeed();
 
     /**
      * Seeds the generator with the given value.
@@ -94,6 +107,14 @@ public:
      * generated for the same seed.
      */
     void seed(quint32 seed);
+
+    /**
+     * Seeds the generator again with the currentSeed().
+     * This is not a no-op, rather, the sequence of random numbers
+     * starts again from its beginning after each re-seed.
+     * Equivalent to seed(currentSeed())
+     */
+    void reseed();
 
     /**
      * Retrieves the current seed. Can be used for seed(quint32)

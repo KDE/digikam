@@ -118,23 +118,42 @@ RandomNumberGenerator::~RandomNumberGenerator()
     delete d;
 }
 
-void RandomNumberGenerator::seedNonDeterministic()
+quint32 RandomNumberGenerator::nonDeterministicSeed()
 {
     NonDeterministicRandomData seed(sizeof(quint32));
-    d->seed = *reinterpret_cast<quint32*>(seed.data());
-    d->engine.seed(d->seed);
+    return *reinterpret_cast<quint32*>(seed.data());
 }
 
-void RandomNumberGenerator::seedByTime()
+quint32 RandomNumberGenerator::timeSeed()
 {
-    d->seed = quintptr(&d->seed) + QDateTime::currentDateTime().toTime_t();
+    uint seed;
+    seed = quintptr(&seed) + QDateTime::currentDateTime().toTime_t();
+    return seed;
+}
+
+quint32 RandomNumberGenerator::seedNonDeterministic()
+{
+    d->seed = nonDeterministicSeed();
     d->engine.seed(d->seed);
+    return d->seed;
+}
+
+quint32 RandomNumberGenerator::seedByTime()
+{
+    d->seed = timeSeed();
+    d->engine.seed(d->seed);
+    return d->seed;
 }
 
 void RandomNumberGenerator::seed(quint32 seed)
 {
     d->seed = seed;
     d->engine.seed(seed);
+}
+
+void RandomNumberGenerator::reseed()
+{
+    seed(d->seed);
 }
 
 quint32 RandomNumberGenerator::currentSeed() const
