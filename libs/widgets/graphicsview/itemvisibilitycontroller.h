@@ -35,6 +35,7 @@
 
 #include "digikam_export.h"
 
+class QEasingCurve;
 class QPropertyAnimation;
 
 namespace Digikam
@@ -123,6 +124,12 @@ public:
      */
     QList<QObject*> visibleItems(IncludeFadingOutMode mode = IncludeFadingOut) const;
 
+    /**
+     * Allows to change the default parameters of all animations.
+     */
+    void setEasingCurve(const QEasingCurve &easing);
+    void setAnimationDuration(int msecs);
+
 Q_SIGNALS:
 
     /// Emitted when the (main) transition has finished
@@ -139,6 +146,7 @@ public Q_SLOTS:
 
     /// Adjusts the first condition - the items are shown if shallBeShown is true and isVisible is true
     void setShallBeShown(bool shallBeShown);
+    void setShallBeShownDirectly(bool shallBeShown);
     /**
      * Sets a single item to be shown. Calling setVisible() will effectively
      * effect only this single item, as if calling setItemVisible().
@@ -150,19 +158,23 @@ public Q_SLOTS:
      * Adjusts the main condition.
      * All items are affected.
      * If any items were shown or hidden separately, they will be resynchronized.
+     * "Directly" means no animation is employed.
      */
     void show();
     void hide();
     void setVisible(bool visible);
+    void setDirectlyVisible(bool visible);
 
     /**
      * Shows or hides a single item.
      * The item's status is changed individually.
      * The next call to the "global" method will take precedence again.
+     * "Directly" means no animation is employed.
      */
     void showItem(QObject *item);
     void hideItem(QObject *item);
     void setItemVisible(QObject *item, bool visible);
+    void setItemDirectlyVisible(QObject *item, bool visible);
 
     /**
      * Hide the item, and then remove it.
@@ -176,7 +188,8 @@ protected:
      * Creates the animation for showing and hiding the given item.
      * The item is given for information only, you do not need to use it.
      * The default implementation creates and animation for "opacity"
-     * from 0.0 to 1.0.
+     * from 0.0 to 1.0, using default easing curve and duration,
+     * which can and will be changed by setEasingCurve and setAnimationDuration.
      */
     virtual QPropertyAnimation *createAnimation(QObject *item);
 
