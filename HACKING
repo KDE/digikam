@@ -272,7 +272,7 @@ It is also worth to follow most of these rules while writing unit tests:
 http://geosoft.no/development/unittesting.html
 
 The digiKam test suite is located under tests and will be compiled if
-KDE4_BUILD_TESTS is set to ON in the CMake call. After compiling the soruce code
+KDE4_BUILD_TESTS is set to ON in the CMake call. After compiling the source code
 the tests can be executed via
 
 make test
