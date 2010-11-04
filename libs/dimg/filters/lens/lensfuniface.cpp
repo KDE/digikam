@@ -33,26 +33,18 @@ public:
 
     LensFunIfacePriv()
     {
-        init       = false;
         usedLens   = 0;
         usedCamera = 0;
         lfDb       = 0;
-        lfMounts   = 0;
         lfCameras  = 0;
-        lfLenses   = 0;
     }
-
-    // my configuration
-    bool                   init;
 
     // To be used for modification
     LensFunContainer       settings;
 
     // Database items
     lfDatabase*            lfDb;
-    const lfMount*         lfMounts;
     const lfCamera* const* lfCameras;
-    const lfLens**         lfLenses;
 
     QString                makeDescription;
     QString                modelDescription;
@@ -65,25 +57,15 @@ public:
 LensFunIface::LensFunIface()
             : d(new LensFunIfacePriv)
 {
-    init();
+    d->lfDb      = lf_db_new();
+    d->lfDb->Load();
+    d->lfCameras = d->lfDb->GetCameras();
 }
 
 LensFunIface::~LensFunIface()
 {
-    if (d->init)
-    {
-    }
+    lf_db_destroy(d->lfDb);
     delete d;
-}
-
-bool LensFunIface::init()
-{
-    d->lfDb      = lf_db_new();
-    d->lfDb->Load();
-    d->lfCameras = d->lfDb->GetCameras();
-    d->init      = true;
-
-    return true;
 }
 
 void LensFunIface::setSettings(const LensFunContainer& other)
