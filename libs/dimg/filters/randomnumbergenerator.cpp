@@ -38,8 +38,6 @@
 #include <QFile>
 #include <QUuid>
 
-// KDE includes
-
 // Local includes
 
 #include "digikam_export.h"
@@ -49,7 +47,7 @@ namespace Digikam
 
 NonDeterministicRandomData::NonDeterministicRandomData(int s)
 {
-    #ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN32
     {
         // Try urandom for UNIX platforms.
         QFile urandom("/dev/urandom");
@@ -60,7 +58,7 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
                 return;
         }
     }
-    #endif
+#endif
 
     /* Fallback, mostly for Windows, where UUID generation is supposed to be very good. */
     if (isEmpty())
@@ -79,13 +77,14 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
  * we have a easy code snippet already.
  */
     const int stepSize = sizeof(boost::random_device::result_type);
-    int steps = s / stepSize;
+    int steps          = s / stepSize;
     if (s % stepSize)
         steps++;
+
     resize(steps * stepSize);
 
     boost::random_device device;
-    boost::random_device::result_type *ptr = reinterpret_cast<boost::random_device::result_type*>(data());
+    boost::random_device::result_type* ptr = reinterpret_cast<boost::random_device::result_type*>(data());
     for (int i=0; i<stepSize; i++)
         *ptr++ = device();
 
@@ -110,7 +109,7 @@ public:
 };
 
 RandomNumberGenerator::RandomNumberGenerator()
-    : d(new RandomNumberGeneratorPriv)
+                     : d(new RandomNumberGeneratorPriv)
 {
 }
 
@@ -164,6 +163,4 @@ bool RandomNumberGenerator::yesOrNo(double p)
     return generator();
 }
 
-} // namespace
-
-
+} // namespace Digikam

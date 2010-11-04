@@ -20,14 +20,13 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef RANDOMNUMBERGENERATOR_H
 #define RANDOMNUMBERGENERATOR_H
 
 // Qt includes
 
 #include <QByteArray>
-
-// KDE includes
 
 // Local includes
 
@@ -49,6 +48,8 @@ public:
      */
     NonDeterministicRandomData(int size);
 };
+
+// --------------------------------------------------------------------
 
 class DIGIKAM_EXPORT RandomNumberGenerator
 {
@@ -124,7 +125,6 @@ private:
     RandomNumberGeneratorPriv* const d;
 };
 
-} // namespace
+} // namespace Digikam
 
 #endif // RANDOMNUMBERGENERATOR_H
-
