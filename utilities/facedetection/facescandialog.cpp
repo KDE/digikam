@@ -53,6 +53,7 @@
 #include "albumselectcombobox.h"
 #include "albumsettings.h"
 #include "albumtreeview.h"
+#include "searchutilities.h"
 
 namespace Digikam
 {
@@ -85,6 +86,22 @@ protected:
     QAbstractButton* m_button;
 };
 
+class ModelClearButton : public AnimatedClearButton
+{
+public:
+
+    ModelClearButton(AbstractCheckableAlbumModel *model)
+    {
+        setPixmap(SmallIcon(qApp->isLeftToRight() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr",
+                            0, KIconLoader::DefaultState));
+        stayVisibleWhenAnimatedOut(true);
+
+        connect(this, SIGNAL(clicked()),
+                model, SLOT(resetAllCheckedAlbums()));
+    }
+};
+
+
 // ------------------------------------------------------------------------------------------
 
 class FaceScanDialog::FaceScanDialogPriv
@@ -106,6 +123,8 @@ public:
         tabWidget                = 0;
         albumSelectCB            = 0;
         tagSelectCB              = 0;
+        albumClearButton         = 0;
+        tagClearButton           = 0;
         parametersResetButton    = 0;
         accuracyInput            = 0;
         specificityInput         = 0;
@@ -120,6 +139,8 @@ public:
 
     AlbumTreeViewSelectComboBox* albumSelectCB;
     TagTreeViewSelectComboBox*   tagSelectCB;
+    ModelClearButton*            albumClearButton;
+    ModelClearButton*            tagClearButton;
 
     QToolButton*                 parametersResetButton;
     KIntNumInput*                accuracyInput;
@@ -159,6 +180,8 @@ FaceScanDialog::FaceScanDialog(QWidget *parent)
     d->tagSelectCB->view()->setEntryPrefix("TagComboBox-");
     d->tagSelectCB->view()->setRestoreCheckState(true);
     loadState();
+
+    updateClearButtons();
 }
 
 FaceScanDialog::~FaceScanDialog()
@@ -330,7 +353,7 @@ void FaceScanDialog::setupUi()
     // ---- Album tab ----
 
     QWidget* selectAlbumsTab        = new QWidget;
-    QVBoxLayout* selectAlbumsLayout = new QVBoxLayout;
+    QGridLayout* selectAlbumsLayout = new QGridLayout;
 
     QLabel* includeAlbumsLabel      = new QLabel(i18nc("@label", "Search in:"));
 
@@ -340,16 +363,24 @@ void FaceScanDialog::setupUi()
     d->albumSelectCB->setDefaultModel();
     d->albumSelectCB->setNoSelectionText(i18nc("@info:status", "Any albums"));
 
+    d->albumClearButton = new ModelClearButton(d->albumSelectCB->view()->albumModel());
+    d->albumClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected albums"));
+
     d->tagSelectCB = new TagTreeViewSelectComboBox();
     //d->tagSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     d->tagSelectCB->setToolTip(i18nc("@info:tooltip", "Select all tags that should be included in the face scan."));
     d->tagSelectCB->setDefaultModel();
     d->tagSelectCB->setNoSelectionText(i18nc("@info:status", "Any tags"));
 
-    selectAlbumsLayout->addWidget(includeAlbumsLabel);
-    selectAlbumsLayout->addWidget(d->albumSelectCB);
-    selectAlbumsLayout->addWidget(d->tagSelectCB);
-    selectAlbumsLayout->addStretch(1);
+    d->tagClearButton = new ModelClearButton(d->tagSelectCB->view()->albumModel());
+    d->tagClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected tags"));
+
+    selectAlbumsLayout->addWidget(includeAlbumsLabel, 0, 0, 1, 2);
+    selectAlbumsLayout->addWidget(d->albumSelectCB,   1, 0);
+    selectAlbumsLayout->addWidget(d->albumClearButton,1, 1);
+    selectAlbumsLayout->addWidget(d->tagSelectCB,     2, 0);
+    selectAlbumsLayout->addWidget(d->tagClearButton,  2, 1);
+    selectAlbumsLayout->setRowStretch(3, 1);
 
     selectAlbumsTab->setLayout(selectAlbumsLayout);
     d->tabWidget->addTab(selectAlbumsTab, i18nc("@title:tab", "Albums"));
@@ -429,6 +460,18 @@ void FaceScanDialog::setupConnections()
 
     connect(d->parametersResetButton, SIGNAL(clicked()),
             this, SLOT(setDetectionDefaultParameters()));
+
+    connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(updateClearButtons()));
+
+    connect(d->tagSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(updateClearButtons()));
+}
+
+void FaceScanDialog::updateClearButtons()
+{
+    d->albumClearButton->animateVisible(!d->albumSelectCB->model()->checkedAlbums().isEmpty());
+    d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
 }
 
 FaceScanSettings FaceScanDialog::settings() const

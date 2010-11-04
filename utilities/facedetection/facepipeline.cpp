@@ -684,6 +684,8 @@ bool FacePipeline::FacePipelinePriv::hasFinished()
 
 void FacePipeline::FacePipelinePriv::checkFinished()
 {
+    kDebug() << "Check for finish: " << packagesOnTheRoad << "packages,"
+             << infosForFiltering << "infos to filter, hasFinished()" << hasFinished();
     if (hasFinished())
     {
         emit q->finished();
