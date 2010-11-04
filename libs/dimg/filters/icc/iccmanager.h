@@ -7,8 +7,8 @@
  * Description : methods that implement color management tasks
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,8 +38,8 @@ namespace Digikam
 
 class DImg;
 class DImgLoaderObserver;
-class IccManagerPriv;
 class IccTransform;
+class IccManagerPriv;
 
 class DIGIKAM_EXPORT IccManager
 {
@@ -56,7 +56,7 @@ public:
 
     DImg image() const;
     ICCSettingsContainer settings() const;
-    DImgLoaderObserver *observer() const;
+    DImgLoaderObserver* observer() const;
 
     bool hasValidWorkspace() const;
 
@@ -98,17 +98,17 @@ public:
      * later (in a thread), or you can get a transform from displayTransform and apply it yourself.
      */
     void transformForDisplay();
-    void transformForDisplay(QWidget *widget);
+    void transformForDisplay(QWidget* widget);
     void transformForDisplay(const IccProfile& displayProfile);
 
-    static IccProfile displayProfile(QWidget *displayingWidget = 0);
-    IccTransform displayTransform(QWidget *displayingWidget = 0);
+    static IccProfile displayProfile(QWidget* displayingWidget = 0);
+    IccTransform displayTransform(QWidget* displayingWidget = 0);
     IccTransform displayTransform(const IccProfile& displayProfile);
 
     /**
      * Returns a display transform, with soft-proofing enabled for the given device profile.
      */
-    IccTransform displaySoftProofingTransform(const IccProfile &deviceProfile, QWidget *displayingWidget = 0);
+    IccTransform displaySoftProofingTransform(const IccProfile &deviceProfile, QWidget* displayingWidget = 0);
     IccTransform displaySoftProofingTransform(const IccProfile &deviceProfile, const IccProfile& displayProfile);
 
     /**
@@ -135,7 +135,7 @@ protected:
     void setIccProfile(const IccProfile& profile);
     ICCSettingsContainer::Behavior safestBestBehavior() const;
 
-    IccManagerPriv * const d;
+    IccManagerPriv* const d;
 };
 
 }  // namespace Digikam

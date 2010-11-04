@@ -7,8 +7,8 @@
  * Description : methods that implement color management tasks
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,8 +24,6 @@
  * ============================================================ */
 
 #include "iccmanager.h"
-
-// Qt includes
 
 // KDE includes
 
@@ -54,13 +52,13 @@ public:
     IccProfile           workspaceProfile;
     bool                 profileMismatch;
     ICCSettingsContainer settings;
-    DImgLoaderObserver  *observer;
+    DImgLoaderObserver* observer;
 };
 
 IccManager::IccManager(DImg& image, const ICCSettingsContainer& settings)
-            : d(new IccManagerPriv)
+          : d(new IccManagerPriv)
 {
-    d->image = image;
+    d->image    = image;
     d->settings = settings;
 
     if (d->image.isNull())
@@ -324,7 +322,7 @@ void IccManager::transformForDisplay(const IccProfile& profile)
     }
 }
 
-IccProfile IccManager::displayProfile(QWidget *displayingWidget)
+IccProfile IccManager::displayProfile(QWidget* displayingWidget)
 {
     if (!IccSettings::instance()->isEnabled())
         return IccProfile::sRGB();
@@ -336,7 +334,7 @@ IccProfile IccManager::displayProfile(QWidget *displayingWidget)
     return IccProfile::sRGB();
 }
 
-IccTransform IccManager::displayTransform(QWidget *displayingWidget)
+IccTransform IccManager::displayTransform(QWidget* displayingWidget)
 {
     return displayTransform(displayProfile(displayingWidget));
 }
@@ -362,11 +360,14 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     else if (isMissingProfile())
     {
         ICCSettingsContainer::Behavior missingProfileBehavior = d->settings.defaultMissingProfileBehavior;
+
         if (missingProfileBehavior == ICCSettingsContainer::AskUser ||
             missingProfileBehavior == ICCSettingsContainer::SafestBestAction)
             missingProfileBehavior = safestBestBehavior();
+
         IccProfile assumedImageProfile = imageProfile(missingProfileBehavior, IccProfile());
         IccProfile outputProfile(displayProfile);
+
         if (!assumedImageProfile.isSameProfileAs(outputProfile))
         {
             trans.setInputProfile(d->embeddedProfile);
@@ -376,6 +377,7 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     else
     {
         IccProfile outputProfile(displayProfile);
+
         if (!d->embeddedProfile.isSameProfileAs(outputProfile))
         {
             trans.setInputProfile(d->embeddedProfile);
@@ -386,12 +388,12 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     return trans;
 }
 
-IccTransform IccManager::displaySoftProofingTransform(const IccProfile &deviceProfile, QWidget *displayingWidget)
+IccTransform IccManager::displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* displayingWidget)
 {
     return displaySoftProofingTransform(deviceProfile, displayProfile(displayingWidget));
 }
 
-IccTransform IccManager::displaySoftProofingTransform(const IccProfile &deviceProfile, const IccProfile& displayProfile)
+IccTransform IccManager::displaySoftProofingTransform(const IccProfile& deviceProfile, const IccProfile& displayProfile)
 {
     IccTransform transform = displayTransform(displayProfile);
     transform.setProofProfile(deviceProfile);
@@ -451,7 +453,7 @@ void IccManager::transformToSRGB()
     }
 }
 
-void IccManager::transformToSRGB(QImage &qimage, const IccProfile& input)
+void IccManager::transformToSRGB(QImage& qimage, const IccProfile& input)
 {
     if (qimage.isNull())
         return;
@@ -472,7 +474,7 @@ void IccManager::transformToSRGB(QImage &qimage, const IccProfile& input)
     }
 }
 
-void IccManager::transformForDisplay(QImage &qimage, const IccProfile& displayProfile)
+void IccManager::transformForDisplay(QImage& qimage, const IccProfile& displayProfile)
 {
     if (qimage.isNull())
         return;
@@ -534,4 +536,3 @@ void IccManager::transformForOutput(const IccProfile& prof)
 }
 
 }  // namespace Digikam
-
