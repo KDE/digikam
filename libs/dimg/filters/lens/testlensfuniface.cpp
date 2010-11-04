@@ -46,7 +46,10 @@ int main (int argc, char** argv)
         return -1;
     }
 
+    KExiv2Iface::KExiv2::initializeExiv2();
+
     QString filePath(argv[1]);
+    bool valRet = false;
 
     DImg         img(filePath);
     DMetadata    meta(img.getMetadata());
@@ -61,8 +64,11 @@ int main (int argc, char** argv)
         Digikam::KExiv2Data data = img.getMetadata();
         filter.registerSettingsToXmp(data);
         img.setMetadata(data);
-        return img.save("lensfuniface-output.png", "PNG");
+        img.save("lensfuniface-output.png", "PNG");
+
+        valRet = true;
     }
 
-    return false;
+    KExiv2Iface::KExiv2::cleanupExiv2();
+    return valRet;
 }
