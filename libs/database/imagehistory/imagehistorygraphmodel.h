@@ -28,13 +28,10 @@
 
 #include <QAbstractItemModel>
 
-// KDE includes
-
 // Local includes
 
 #include "imagehistorygraph.h"
 #include "digikam_export.h"
-
 
 namespace Digikam
 {
@@ -53,7 +50,7 @@ public:
         PathMode
     };
 
-    ImageHistoryGraphModel(QObject *parent = 0);
+    ImageHistoryGraphModel(QObject* parent = 0);
     ~ImageHistoryGraphModel();
 
     /**
@@ -78,7 +75,6 @@ private:
     ImageHistoryGraphModelPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif // IMAGEHISTORYGRAPHMODEL_H
-
