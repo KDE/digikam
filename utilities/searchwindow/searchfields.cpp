@@ -601,9 +601,7 @@ void SearchField::setVisible(bool visible)
 {
     m_label->setVisible(visible && m_categoryLabelVisible);
     m_detailLabel->setVisible(visible);
-    // Note: setVisible visibility is independent from animateVisible visibility!
-    m_clearButton->setVisible(visible);
-    m_clearButton->setDirectlyVisible(m_valueIsValid);
+    m_clearButton->setShallBeShown(visible);
     setValueWidgetsVisible(visible);
 }
 
