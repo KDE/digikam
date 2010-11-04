@@ -38,6 +38,7 @@
 
 #include "dimg.h"
 #include "globals.h"
+#include "randomnumbergenerator.h"
 
 namespace Digikam
 {
@@ -66,6 +67,8 @@ public:
     double leadChromaRedNoise;
 
     FilmGrainContainer settings;
+
+    RandomNumberGenerator generator;
 };
 
 FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
@@ -139,7 +142,7 @@ void FilmGrainFilter::filterImage()
     d->leadChromaBlueNoise = d->settings.chromaBlueIntensity * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
     d->leadChromaRedNoise  = d->settings.chromaRedIntensity  * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
 
-    qsrand(1); // noise will always be the same
+    d->generator.seed(1); // noise will always be the same
 
     for (int x = 0; runningFlag() && x < width; x += d->settings.grainSize)
     {
@@ -271,7 +274,7 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
  */
 double FilmGrainFilter::randomizeUniform(double range)
 {
-    return ((double)(qrand() % (int)range) - range/2.0) ;
+    return d->generator.number(- range/2, range/2);
 }
 
 /** This method compute Guaussian noise value used to randomize all matrix points.
@@ -279,15 +282,8 @@ double FilmGrainFilter::randomizeUniform(double range)
  */
 double FilmGrainFilter::randomizeGauss(double sigma)
 {
-    double u;
-
-    do
-    {
-        u = qrand() / (double)RAND_MAX;
-    }
-    while (runningFlag() && u == 0.0);
-
-    double v = qrand () / (double) RAND_MAX;
+    double u = - d->generator.number(-1.0, 0.0); // exclude 0
+    double v = d->generator.number(0.0, 1.0);
     return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) ;
 }
 

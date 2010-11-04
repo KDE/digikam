@@ -78,6 +78,8 @@ void RainDropFilter::filterImage()
     int w = m_orgImage.width();
     int h = m_orgImage.height();
 
+    m_generator.reseed();
+
     // If we have a region selection in image, use it to apply the filter modification around,
     // else, applied the filter on the full image.
 
