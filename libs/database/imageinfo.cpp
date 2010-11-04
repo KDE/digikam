@@ -1042,6 +1042,7 @@ void ImageInfo::removeTag(int tagID)
 
     DatabaseAccess access;
     access.db()->removeItemTag(m_data->id, tagID);
+    access.db()->removeImageTagProperties(m_data->id, tagID);
 }
 
 void ImageInfo::removeAllTags()
