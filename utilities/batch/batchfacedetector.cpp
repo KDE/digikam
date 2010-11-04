@@ -59,16 +59,16 @@ public:
         duration.start();
     }
 
-    bool                  rebuildAll;
+    bool         rebuildAll;
 
-    QTime                 duration;
+    QTime        duration;
 
-    AlbumList             albumTodoList;
-    ImageInfoJob          albumListing;
-    FacePipeline          pipeline;
+    AlbumList    albumTodoList;
+    ImageInfoJob albumListing;
+    FacePipeline pipeline;
 };
 
-BatchFaceDetector::BatchFaceDetector(QWidget* parent, const FaceScanSettings& settings)
+BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings& settings)
                  : DProgressDlg(0), d(new BatchFaceDetectorPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
