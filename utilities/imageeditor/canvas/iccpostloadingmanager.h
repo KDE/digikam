@@ -7,8 +7,8 @@
  * Description : extension to IccManager providing UI
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,9 +34,9 @@
 namespace Digikam
 {
 
-
 class DIGIKAM_EXPORT IccPostLoadingManager : public IccManager
 {
+
 public:
 
     /**
@@ -50,7 +50,7 @@ public:
      * Carries out color management asking the user for his decision.
      * Afterwards, needsPostLoadingManagement will return false.
      */
-    IccTransform postLoadingManage(QWidget *parent = 0);
+    IccTransform postLoadingManage(QWidget* parent = 0);
 
 protected:
 
