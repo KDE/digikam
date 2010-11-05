@@ -267,15 +267,17 @@ void AnimationControl::moveToGroup()
 
 void AnimationControl::addItem(QAbstractAnimation *anim, QObject *item)
 {
-    if (items.isEmpty())
-    {
-        connect(anim);
-        animation = anim;
-    }
-    else
+    // Either there is no group but now for the first time two items,
+    // or the control got empty intermittently, but still has the group installed
+    if (!items.isEmpty() || animationGroup)
     {
         moveToGroup();
         animationGroup->addAnimation(anim);
+    }
+    else
+    {
+        connect(anim);
+        animation = anim;
     }
 
     items << item;
