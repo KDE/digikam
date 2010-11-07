@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/imageproperties
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/imagehistory
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/auto
