@@ -6,7 +6,7 @@
  * Date        : 2009-04-20
  * Description : Qt item view for images - category drawer
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,6 @@ namespace Digikam
 {
 
 class ImageCategorizedView;
-class ImageCategoryDrawerPriv;
 class Album;
 class PAlbum;
 class TAlbum;
@@ -47,11 +46,11 @@ class ImageCategoryDrawer : public KCategoryDrawer
 {
 public:
 
-    ImageCategoryDrawer(ImageCategorizedView *parent);
+    ImageCategoryDrawer(ImageCategorizedView* parent);
     ~ImageCategoryDrawer();
 
     virtual int categoryHeight(const QModelIndex& index, const QStyleOption& option) const;
-    virtual void drawCategory(const QModelIndex& index, int sortRole, const QStyleOption& option, QPainter *painter) const;
+    virtual void drawCategory(const QModelIndex& index, int sortRole, const QStyleOption& option, QPainter* painter) const;
     virtual int maximumHeight() const;
 
     void setLowerSpacing(int spacing);
@@ -61,16 +60,17 @@ public:
 private:
 
     void updateRectsAndPixmaps(int width);
-    void viewHeaderText(const QModelIndex& index, QString *header, QString *subLine) const;
-    void textForAlbum(const QModelIndex& index, QString *header, QString *subLine) const;
-    void textForPAlbum(PAlbum *a, bool recursive, int count, QString *header, QString *subLine) const;
-    void textForTAlbum(TAlbum *a, bool recursive, int count, QString *header, QString *subLine) const;
-    void textForSAlbum(SAlbum *a, int count, QString *header, QString *subLine) const;
-    void textForDAlbum(DAlbum *a, int count, QString *header, QString *subLine) const;
-    void textForFormat(const QModelIndex& index, QString *header, QString *subLine) const;
+    void viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const;
+    void textForAlbum(const QModelIndex& index, QString* header, QString* subLine) const;
+    void textForPAlbum(PAlbum* a, bool recursive, int count, QString* header, QString* subLine) const;
+    void textForTAlbum(TAlbum* a, bool recursive, int count, QString* header, QString* subLine) const;
+    void textForSAlbum(SAlbum* a, int count, QString* header, QString* subLine) const;
+    void textForDAlbum(DAlbum* a, int count, QString* header, QString* subLine) const;
+    void textForFormat(const QModelIndex& index, QString* header, QString* subLine) const;
 
 private:
 
+    class ImageCategoryDrawerPriv;
     ImageCategoryDrawerPriv* const d;
 };
 

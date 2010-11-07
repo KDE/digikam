@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a rename dialog for the AdvancedRename utility
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class AdvancedRenameListItemPriv
+class AdvancedRenameListItem::AdvancedRenameListItemPriv
 {
 public:
 
@@ -137,7 +137,7 @@ bool AdvancedRenameListItem::isInvalid()
 
 // --------------------------------------------------------
 
-class AdvancedRenameDialogPriv
+class AdvancedRenameDialog::AdvancedRenameDialogPriv
 {
 public:
 

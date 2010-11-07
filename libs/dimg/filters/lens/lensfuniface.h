@@ -96,10 +96,6 @@ public:
      */
     QString lensDescription() const;
 
-protected:
-
-    bool init();
-
 private:
 
     QString  metadataMatchDebugStr(MetadataMatch val) const;

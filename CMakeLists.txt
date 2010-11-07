@@ -159,7 +159,12 @@ TARGET_LINK_LIBRARIES(${QT_QTSCRIPT_LIBRARY})
 #-------------------------------------------------------------------------------------
 
 MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
-MACRO_BOOL_TO_01(CLAPACK_FOUND USE_EXT_LIBCLAPACK)
+IF(NOT APPLE)
+    MACRO_BOOL_TO_01(CLAPACK_FOUND USE_EXT_LIBCLAPACK)
+ELSE(NOT APPLE)
+    # Under MACOS-X Clapack exist in standard, but it's not suitable as well. Need investiguation here.
+    SET(CLAPACK_FOUND FALSE)
+ENDIF(NOT APPLE)
 
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313, #228483
@@ -175,19 +180,18 @@ ENDIF ("${jpeglib_version}" LESS 80)
 
 # Check MySQL executables
 FIND_PROGRAM( SERVERCMD_MYSQL mysqld
-              PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
+              PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec /opt/local/libexec
                     /opt/mysql/libexec /usr/mysql/bin /opt/mysql/sbin ${MYSQLD_PATH}
                     ENV MYSQLD_PATH )
 MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
 
-# TODO : under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
-IF (NOT WIN32)
-FIND_PROGRAM( INITCMD_MYSQL mysql_install_db
+# NOTE: under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
+#       under MACOS-X, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
+FIND_PROGRAM( INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.pl
               PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
                     /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin ${MYSQL_TOOLS_PATH}
                     ENV MYSQL_TOOLS_PATH )
 MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
-ENDIF (NOT WIN32)
 
 # ==================================================================================================
 # Optional dependencies

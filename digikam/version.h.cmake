@@ -40,8 +40,8 @@
 namespace Digikam
 {
 
-static const char digikam_version_short[] = "${DIGIKAM_VERSION_SHORT}";
-static const char digikam_version[]       = "${DIGIKAM_VERSION_STRING}";
+static const char digikam_version_short[] = "@DIGIKAM_VERSION_SHORT@";
+static const char digikam_version[]       = "@DIGIKAM_VERSION_STRING@";
 
 static inline const QString digiKamVersion()
 {
@@ -61,7 +61,7 @@ static inline KLocalizedString additionalInformation()
                  "irc.freenode.net - #digikam\n\n"
                  "Feedback:\n"
                  "digikam-devel@kde.org\n\n"
-                 "Build date: %1").subs(__DATE__);
+                 "Build date: %1 (target: %2)").subs(__DATE__).subs("@CMAKE_BUILD_TYPE@");
 }
 
 }  // namespace Digikam

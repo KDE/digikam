@@ -92,30 +92,17 @@ Parser::Parser()
 
 Parser::~Parser()
 {
-    foreach (Option* option, d->options)
-    {
-        delete option;
-    }
+    qDeleteAll(d->options);
     d->options.clear();
 
-    foreach (Modifier* modifier, d->modifiers)
-    {
-        delete modifier;
-    }
+    qDeleteAll(d->modifiers);
     d->modifiers.clear();
 
     delete d;
 }
 
-//void Parser::init(const ParseSettings& settings)
-//{
-//    d->globalSettings = settings;
-////    d->counter  = 1;
-//}
-
 void Parser::reset()
 {
-//    init(ParseSettings());
     foreach (Option* option, d->options)
     {
         option->reset();
@@ -222,9 +209,6 @@ QString Parser::parse(ParseSettings& settings)
     }
 
     ParseResults results;
-
-//    settings.startIndex   = d->globalSettings.startIndex;
-//    settings.currentIndex = d->counter++;
 
     foreach (Option* option, d->options)
     {

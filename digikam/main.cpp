@@ -181,6 +181,7 @@ int main(int argc, char *argv[])
 
     // create main window
     DigikamApp *digikam = new DigikamApp();
+    QObject::connect(digikam, SIGNAL(destroyed(QObject*)), &app, SLOT(quit()));
 
     // Unregister the dummy service
     QDBusConnection::sessionBus().unregisterService("org.kde.digikam.startup-"

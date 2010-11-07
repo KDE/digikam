@@ -146,13 +146,13 @@ QueueSettingsView::QueueSettingsView(QWidget* parent)
     d->renameOriginal->setWhatsThis(i18n("Turn on this option to use original "
                                          "filenames without modifications."));
 
-    d->renameManual         = new QRadioButton(i18n("Customize filenames:"), vbox2);
+    d->renameManual          = new QRadioButton(i18n("Customize filenames:"), vbox2);
 
     d->advancedRenameWidget  = new AdvancedRenameWidget(vbox2);
     d->advancedRenameManager = new AdvancedRenameManager();
     d->advancedRenameManager->setWidget(d->advancedRenameWidget);
 
-    QWidget* space          = new QWidget(vbox2);
+    QWidget* space           = new QWidget(vbox2);
 
     d->renamingButtonGroup->setExclusive(true);
     d->renamingButtonGroup->addButton(d->renameOriginal, QueueSettings::USEORIGINAL);
@@ -197,6 +197,7 @@ QueueSettingsView::QueueSettingsView(QWidget* parent)
 
 QueueSettingsView::~QueueSettingsView()
 {
+    delete d->advancedRenameManager;
     delete d;
 }
 

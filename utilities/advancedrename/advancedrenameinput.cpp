@@ -6,7 +6,7 @@
  * Date        : 2009-09-03
  * Description : an input widget for the AdvancedRename utility
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -96,7 +96,7 @@ void AdvancedRenameLineEditProxy::mouseReleaseEvent(QMouseEvent* event)
 
 // --------------------------------------------------------
 
-class AdvancedRenameLineEditPriv
+class AdvancedRenameLineEdit::AdvancedRenameLineEditPriv
 {
 public:
 
@@ -175,7 +175,7 @@ void AdvancedRenameLineEdit::setParser(Parser* parser)
     }
 }
 
-Parser* AdvancedRenameLineEdit::parser()
+Parser* AdvancedRenameLineEdit::parser() const
 {
     return d->parser;
 }
@@ -268,7 +268,7 @@ void AdvancedRenameLineEdit::slotSetText(const QString& text)
 
 // --------------------------------------------------------
 
-class AdvancedRenameInputPriv
+class AdvancedRenameInput::AdvancedRenameInputPriv
 {
 public:
 

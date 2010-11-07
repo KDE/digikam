@@ -2,6 +2,7 @@ SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/imagehistory
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dialogs
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
@@ -11,7 +12,6 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/levels
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/imagehistory
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/imagehistory
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
