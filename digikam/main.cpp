@@ -170,6 +170,7 @@ int main(int argc, char *argv[])
 
     // create main window
     DigikamApp *digikam = new DigikamApp();
+    QObject::connect(digikam, SIGNAL(destroyed(QObject*)), &app, SLOT(quit()));
 
     app.setTopWidget(digikam);
     digikam->restoreSession();
