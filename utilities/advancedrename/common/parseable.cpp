@@ -71,10 +71,7 @@ Parseable::Parseable(const QString& name, const QPixmap& icon)
 
 Parseable::~Parseable()
 {
-    foreach (Token* token, d->tokens)
-    {
-        delete token;
-    }
+    qDeleteAll(d->tokens);
     d->tokens.clear();
 
     delete d;
