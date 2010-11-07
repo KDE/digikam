@@ -92,16 +92,10 @@ Parser::Parser()
 
 Parser::~Parser()
 {
-    foreach (Option* option, d->options)
-    {
-        delete option;
-    }
+    qDeleteAll(d->options);
     d->options.clear();
 
-    foreach (Modifier* modifier, d->modifiers)
-    {
-        delete modifier;
-    }
+    qDeleteAll(d->modifiers);
     d->modifiers.clear();
 
     delete d;
