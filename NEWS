@@ -33,5 +33,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 254357 : digiKam crashes after selecting a month in calendarview.
 017 ==> 254203 : Libpgf relevant : digiKam crashes while displaying thumbnails on Ultra-SPARC platform.
 018 ==> 233005 : Sorting in thumb panel differs from tree.
-019 ==> 
+019 ==> 229282 : digiKam shutdown as I was sellecting crop to crop an image.
+020 ==> 
 
