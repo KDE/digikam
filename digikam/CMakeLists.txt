@@ -157,11 +157,6 @@ SET(digikamcore_LIB_SRCS
    )
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
-                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/fillmodifierdialogwidget.ui
-                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/replacemodifierdialogwidget.ui
-                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/rangemodifierdialogwidget.ui
-                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/dateoptiondialogwidget.ui
-                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/sequencenumberoptiondialogwidget.ui
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
                  )
 
@@ -324,7 +319,6 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libdigikamgui_SRCS}
                  ${libfirstrun_SRCS}
                  ${libtemplate_SRCS}
-                 ${libadvancedrename_SRCS}
                  ${libdatabaseui_SRCS}
 
                  main.cpp
@@ -353,6 +347,7 @@ TARGET_LINK_LIBRARIES(digikam
                       ${GPHOTO2_LIBRARIES}
                       digikamcore
                       digikamdatabase
+                      advancedrename
                      )
 
 IF(KDEPIMLIBS_FOUND)
