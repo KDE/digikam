@@ -45,18 +45,17 @@
 namespace Digikam
 {
 
-class DigikamImageDelegatePrivate : public ImageDelegatePrivate
+class DigikamImageDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
 {
 public:
 
     DigikamImageDelegatePrivate()
     {
     }
-
 };
 
-DigikamImageDelegate::DigikamImageDelegate(ImageCategorizedView *parent)
-             : ImageDelegate(*new DigikamImageDelegatePrivate, parent)
+DigikamImageDelegate::DigikamImageDelegate(ImageCategorizedView* parent)
+                    : ImageDelegate(*new DigikamImageDelegatePrivate, parent)
 {
     Q_D(DigikamImageDelegate);
 
@@ -79,7 +78,7 @@ void DigikamImageDelegate::updateRects()
     d->pixmapRect = QRect(d->margin, y, d->contentWidth, d->contentWidth);
     y = d->pixmapRect.bottom();
 
-    const AlbumSettings *albumSettings = AlbumSettings::instance();
+    const AlbumSettings* albumSettings = AlbumSettings::instance();
     if (albumSettings->getIconShowRating())
     {
         d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());

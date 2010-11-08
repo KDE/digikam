@@ -77,7 +77,7 @@ ImageCategoryDrawer::~ImageCategoryDrawer()
     delete d;
 }
 
-int ImageCategoryDrawer::categoryHeight(const QModelIndex &/*index*/, const QStyleOption &/*option*/) const
+int ImageCategoryDrawer::categoryHeight(const QModelIndex& /*index*/, const QStyleOption& /*option*/) const
 {
     return d->rect.height() + d->lowerSpacing;
 }
@@ -258,7 +258,8 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
     *header = album->prettyUrl().left(-1);
 }
 
-void ImageCategoryDrawer::textForTAlbum(TAlbum* talbum, bool recursive, int count, QString* header, QString* subLine) const
+void ImageCategoryDrawer::textForTAlbum(TAlbum* talbum, bool recursive, int count, QString* header,
+                                        QString* subLine) const
 {
     *header = talbum->title();
 

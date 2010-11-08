@@ -7,9 +7,9 @@
  * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-void ImageDelegatePrivate::clearRects()
+void ImageDelegate::ImageDelegatePrivate::clearRects()
 {
     ItemViewImageDelegatePrivate::clearRects();
     dateRect       = QRect(0, 0, 0, 0);
@@ -67,12 +67,12 @@ void ImageDelegatePrivate::clearRects()
     tagRect        = QRect(0, 0, 0, 0);
 }
 
-ImageDelegate::ImageDelegate(ImageCategorizedView *parent)
+ImageDelegate::ImageDelegate(ImageCategorizedView* parent)
              : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
 {
 }
 
-ImageDelegate::ImageDelegate(ImageDelegatePrivate &dd, ImageCategorizedView *parent)
+ImageDelegate::ImageDelegate(ImageDelegate::ImageDelegatePrivate &dd, ImageCategorizedView* parent)
              : ItemViewImageDelegate(dd, parent)
 {
 }
@@ -92,7 +92,7 @@ void ImageDelegate::setSpacing(int spacing)
     ItemViewImageDelegate::setSpacing(spacing);
 }
 
-ImageCategoryDrawer *ImageDelegate::categoryDrawer() const
+ImageCategoryDrawer* ImageDelegate::categoryDrawer() const
 {
     Q_D(const ImageDelegate);
     return d->categoryDrawer;
@@ -116,7 +116,7 @@ QRect ImageDelegate::tagsRect() const
     return d->tagRect;
 }
 
-void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ImageDelegate);
     ImageInfo info = ImageModel::retrieveImageInfo(index);
@@ -129,8 +129,7 @@ void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const
     p->translate(option.rect.topLeft());
 
     QRect r;
-    ThemeEngine* te               = ThemeEngine::instance();
-
+    ThemeEngine* te = ThemeEngine::instance();
     bool isSelected = (option.state & QStyle::State_Selected);
 
     QPixmap pix;
@@ -142,9 +141,9 @@ void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const
     p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
 
     // Thumbnail
-    QAbstractItemModel *model = const_cast<QAbstractItemModel*>(index.model());
+    QAbstractItemModel* model = const_cast<QAbstractItemModel*>(index.model());
     model->setData(index, d->thumbSize.size(), ImageModel::ThumbnailRole);
-    QVariant thumbData = index.data(ImageModel::ThumbnailRole);
+    QVariant thumbData        = index.data(ImageModel::ThumbnailRole);
     model->setData(index, QVariant(), ImageModel::ThumbnailRole);
 
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbData.value<QPixmap>());
@@ -216,17 +215,20 @@ QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const Q
     return makeDragPixmap(option, indexes, icon);
 }
 
-bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *toolTipRect) const
+bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
+                                   QRect* toolTipRect) const
 {
     return onActualPixmapRect(pos, visualRect, index, toolTipRect);
 }
 
-bool ImageDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *activationRect) const
+bool ImageDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
+                                      QRect* activationRect) const
 {
     return onActualPixmapRect(pos, visualRect, index, activationRect);
 }
 
-bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *returnRect) const
+bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
+                                       QRect* returnRect) const
 {
     qlonglong id = ImageModel::retrieveImageId(index);
 
@@ -310,7 +312,7 @@ QRect ImageDelegate::actualPixmapRect(qlonglong imageid) const
 {
     Q_D(const ImageDelegate);
     // We do not recompute if not found. Assumption is cache is always properly updated.
-    QRect *rect = d->actualPixmapRectCache.object(imageid);
+    QRect* rect = d->actualPixmapRectCache.object(imageid);
     if (rect)
         return *rect;
     else
@@ -320,7 +322,7 @@ QRect ImageDelegate::actualPixmapRect(qlonglong imageid) const
 void ImageDelegate::updateActualPixmapRect(qlonglong imageid, const QRect& rect)
 {
     Q_D(ImageDelegate);
-    QRect *old = d->actualPixmapRectCache.object(imageid);
+    QRect* old = d->actualPixmapRectCache.object(imageid);
     if (!old || *old != rect)
         d->actualPixmapRectCache.insert(imageid, new QRect(rect));
 }
