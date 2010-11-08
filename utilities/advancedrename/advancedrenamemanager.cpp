@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QList>
 #include <QMap>
 #include <QFileInfo>
 
@@ -57,6 +58,7 @@ public:
 
     QStringList                       files;
     QMap<QString, int>                fileIndexMap;
+    QMap<QString, int>                folderIndexMap;
     QMap<QString, int>                fileGroupIndexMap;
     QMap<QString, QDateTime>          fileDatesMap;
     QMap<QString, QString>            renamedFiles;
@@ -244,6 +246,7 @@ void AdvancedRenameManager::addFiles(const QList<ParseSettings>& files, SortType
 void AdvancedRenameManager::clearMappings()
 {
     d->fileIndexMap.clear();
+    d->folderIndexMap.clear();
     d->fileGroupIndexMap.clear();
     d->renamedFiles.clear();
     d->fileGroupIndexMap.clear();
@@ -322,6 +325,37 @@ bool AdvancedRenameManager::initialize()
         }
     }
 
+    // fill folder group index map
+    {
+        counter = 1;
+        QMap<QString, QList<QString> > dirMap;
+        foreach (const QString& file, fileList())
+        {
+            QFileInfo fi(file);
+            QString path = fi.absolutePath();
+            if (!path.isEmpty())
+            {
+                if (!dirMap.contains(path))
+                {
+                    dirMap[path] = QList<QString>();
+                }
+                dirMap[path].push_back(file);
+            }
+        }
+
+        foreach (const QString& dir, dirMap.keys())
+        {
+            int index = 0;
+            foreach (const QString& f, dirMap[dir])
+            {
+                if (!d->folderIndexMap.contains(f))
+                {
+                    d->folderIndexMap[f] = ++index;
+                }
+            }
+        }
+    }
+
     return true;
 }
 
@@ -339,6 +373,18 @@ int AdvancedRenameManager::indexOfFile(const QString& filename)
     if (d->fileIndexMap.contains(filename))
     {
         index = d->fileIndexMap.value(filename);
+    }
+
+    return index;
+}
+
+int AdvancedRenameManager::indexOfFolder(const QString& filename)
+{
+    int index = -1;
+
+    if (d->folderIndexMap.contains(filename))
+    {
+        index = d->folderIndexMap.value(filename);
     }
 
     return index;
