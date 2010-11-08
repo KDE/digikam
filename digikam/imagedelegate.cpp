@@ -72,7 +72,7 @@ ImageDelegate::ImageDelegate(ImageCategorizedView* parent)
 {
 }
 
-ImageDelegate::ImageDelegate(ImageDelegate::ImageDelegatePrivate &dd, ImageCategorizedView* parent)
+ImageDelegate::ImageDelegate(ImageDelegate::ImageDelegatePrivate& dd, ImageCategorizedView* parent)
              : ItemViewImageDelegate(dd, parent)
 {
 }
@@ -82,6 +82,7 @@ ImageDelegate::~ImageDelegate()
     Q_D(ImageDelegate);
     // crashes for a lot of people, see bug 230515. Cause unknown.
     //delete d->categoryDrawer;
+    Q_UNUSED(d)
 }
 
 void ImageDelegate::setSpacing(int spacing)
