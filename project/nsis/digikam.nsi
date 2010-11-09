@@ -4,13 +4,16 @@
  ; http://www.digikam.org
  ;
  ; Date        : 2010-11-08
- ; Description : NSIS Modern User Interface for digiKam
+ ; Description : Null Soft windows installer based for digiKam
  ;
  ; Copyright (C) 2010 by Julien Narboux <joern.ahrens@kdemail.net>
  ; Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  ;
- ; The digiKam VERSION should be passed as an argument at compile time using:
- ; makensis -DVERSION=1.6 digikam.nsi
+ ; Script arguments:
+ ; VERSION  : the digiKam version string.
+ ; KDE4PATH : the path where whole KDE4 + digiKam & co is installed.
+ ;
+ ; Example: makensis.exe -DVERSION=1.6.0 -DKDE4PATH=D:/kde4 digikam.nsi
  ;
  ; This program is free software; you can redistribute it
  ; and/or modify it under the terms of the GNU General
@@ -69,7 +72,7 @@ Var StartMenuFolder
 ;Pages
 
   !insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_LICENSE "COPYING.txt"
+  !insertmacro MUI_PAGE_LICENSE "COPYING"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
 
@@ -98,9 +101,8 @@ Section "digiKam" SecDigiKam
 
   SetOutPath "$INSTDIR"
 
-  ;TODO put only files needed here
-  ;I put the whole kde4 directory of Gilles 7zip
-  ;File /r kde4
+  ;Whole kde4 directory including digiKam & co
+  File /r ${KDE4PATH}
 
   ;Store installation folder
   WriteRegStr HKCU "Software\${MY_PRODUCT}" "" $INSTDIR
