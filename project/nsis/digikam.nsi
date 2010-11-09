@@ -93,6 +93,9 @@ Var StartMenuFolder
 
   !insertmacro MUI_LANGUAGE "English"
   !insertmacro MUI_LANGUAGE "French"
+  !insertmacro MUI_LANGUAGE "German"
+  !insertmacro MUI_LANGUAGE "Spanish"
+  !insertmacro MUI_LANGUAGE "Italian"
 
 ;-------------------------------------------------------------------------------
 ;Installer Sections
@@ -143,6 +146,9 @@ SectionEnd
   ;Language strings
   LangString DESC_SecDigiKam ${LANG_ENGLISH} "This is the digiKam for Windows including kipi-plugins and KDE 4.4."
   LangString DESC_SecDigiKam ${LANG_FRENCH} "digiKam pour Windows incluant les greffons kipi et KDE 4.4."
+  LangString DESC_SecDigiKam ${LANG_GERMAN} "Dies ist die digiKam für Windows einschließlich kipi-Plugins und KDE 4.4."
+  LangString DESC_SecDigiKam ${LANG_SPANISH} "Este es el digiKam para Windows, incluyendo kipi-plugins y KDE 4.4."
+  LangString DESC_SecDigiKam ${LANG_ITALIAN} "Questo è il digiKam per Windows, inclusi Kipi-plugins e KDE 4.4."
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
