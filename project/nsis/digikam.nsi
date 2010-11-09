@@ -13,7 +13,7 @@
  ; VERSION  : the digiKam version string.
  ; KDE4PATH : the path where whole KDE4 + digiKam & co is installed.
  ;
- ; Example: makensis.exe -DVERSION=1.6.0 -DKDE4PATH=D:/kde4 digikam.nsi
+ ; Example: makensis.exe -DVERSION=1.6.0 -DKDE4PATH=D:\kde4 digikam.nsi
  ;
  ; This program is free software; you can redistribute it
  ; and/or modify it under the terms of the GNU General
@@ -102,7 +102,7 @@ Section "digiKam" SecDigiKam
   SetOutPath "$INSTDIR"
 
   ;Whole kde4 directory including digiKam & co
-  File /r ${KDE4PATH}
+  File /r "${KDE4PATH}"
 
   ;Store installation folder
   WriteRegStr HKCU "Software\${MY_PRODUCT}" "" $INSTDIR
