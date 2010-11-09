@@ -1,7 +1,9 @@
 
-- register DigiKam so that it can be run when one plug a usb mass
+- register digiKam so that it can be run when one plug a usb mass
    storage or a camera.
-- install only the needed files not the whole kde4
-- add DigiKam's icon modified with an arrow to the installer
-- add DigiKam's icon modifier with an arrow in the opposite direction to the uninstaller
-- add DigiKam's logo in the uninstaller welcome page
+- install only the needed files not the whole kde4.
+  * => I think it's a difficult task todo. KDE4 dir is created by KDEwindows installer.
+
+- add digiKam's icon modified with an arrow to the installer.
+- add digiKam's icon modifier with an arrow in the opposite direction to the uninstaller.
+- add digiKam's logo in the uninstaller welcome page.
