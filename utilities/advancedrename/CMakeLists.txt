@@ -64,3 +64,9 @@ KDE4_ADD_UI_FILES(libadvancedrename_SRCS
 )
 
 KDE4_ADD_LIBRARY(advancedrename STATIC ${libadvancedrename_SRCS})
+
+
+TARGET_LINK_LIBRARIES(advancedrename ${KEXIV2_LIBRARIES}
+                                     ${KDCRAW_LIBRARIES}
+                                     digikamdatabase
+                     )
