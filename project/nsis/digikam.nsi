@@ -15,6 +15,9 @@
  ;
  ; Example: makensis.exe -DVERSION=1.6.0 -DKDE4PATH=D:\kde4 digikam.nsi
  ;
+ ; NSIS script reference can be found at this url:
+ ; http://nsis.sourceforge.net/Docs/Chapter4.html
+ ;
  ; This program is free software; you can redistribute it
  ; and/or modify it under the terms of the GNU General
  ; Public License as published by the Free Software Foundation;
@@ -29,9 +32,13 @@
  ; ============================================================ ;;
 
 ;-------------------------------------------------------------------------------
-; Use compress off for debugging and uncomment after debuging.
-; SetCompress off
-SetCompressor lzma
+; Compression rules optimizations
+; We will use LZMA compression as 7Zip, with a dictionary size of 64Mb (like 7Zip Ultra compression mode)
+
+SetCompress force
+SetCompressor /SOLID lzma
+SetDatablockOptimize on
+SetCompressorDictSize 64
 
 ;-------------------------------------------------------------------------------
 ;Include Modern UI
