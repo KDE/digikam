@@ -32,8 +32,12 @@
 
 #include "digikam_export.h"
 
+class QEventLoop;
+
 namespace Digikam
 {
+
+class WorkerObjectRunnable;
 
 class DIGIKAM_EXPORT WorkerObject : public QObject
 {
@@ -64,29 +68,73 @@ public:
     bool connectAndSchedule(const QObject* sender, const char* signal, const char* method,
                              Qt::ConnectionType type = Qt::AutoConnection) const;
 
-    bool connectAndSchedule(const QObject* sender, const char* signal,
-                            const QObject* receiver, const char* method,
-                            Qt::ConnectionType type = Qt::AutoConnection);
-    bool disconnectAndSchedule(const QObject* sender, const char* signal,
-                               const QObject* receiver, const char* method);
+    static bool connectAndSchedule(const QObject* sender, const char* signal,
+                                   const WorkerObject* receiver, const char* method,
+                                   Qt::ConnectionType type = Qt::AutoConnection);
+    static bool disconnectAndSchedule(const QObject* sender, const char* signal,
+                                      const WorkerObject* receiver, const char* method);
+
+    enum DeactivatingMode
+    {
+        /// Already sent signals are cleared
+        FlushSignals,
+        /// The thread is stopped, but already sent signals remain in the queue
+        KeepSignals,
+        /// The thread is stopped when all signals emitted until now have been processed
+        PhaseOut
+    };
 
 public Q_SLOTS:
 
+    /**
+     * Starts execution of this worker object:
+     * The object is moved to a thread and an event loop started,
+     * so that queued signals will be received.
+     */
     void schedule();
-    void deactivate();
+
+    /**
+     * Quits execution of this worker object.
+     * If mode is FlushSignals, all already emitted signals will be cleared.
+     * If mode is KeepSignals, already emitted signals are not cleared and
+     * will be kept in the event queue until destruction or schedule() is called.
+     * If mode is PhaseOut, already emitted signals will be processed
+     * and the thread quit immediately afterwards.
+     */
+    void deactivate(DeactivatingMode mode = FlushSignals);
 
 Q_SIGNALS:
 
-    void deactivating();
+    void started();
+    void finished();
 
-public:
+protected:
 
     bool transitionToRunning();
     void transitionToInactive();
 
-private:
+    virtual bool event(QEvent *e);
 
     void run();
+    void setEventLoop(QEventLoop *loop);
+    void addRunnable(WorkerObjectRunnable *loop);
+    void removeRunnable(WorkerObjectRunnable *loop);
+
+    /**
+     * Called from within thread's event loop to quit processing.
+     * Quit any blocking operation.
+     * Immediately afterwards, the event loop will be quit.
+     */
+    virtual void aboutToQuitLoop();
+
+    /**
+     * Called from deactivate(), typically from a different
+     * thread than the worker thread, possibly the UI thread.
+     * You can stop any extra controlled threads here.
+     * Immediately afterwards, an event will be sent to the working
+     * thread which will cause the event loop to quit. (aboutToQuitLoop())
+     */
+    virtual void aboutToDeactivate();
 
 private:
 

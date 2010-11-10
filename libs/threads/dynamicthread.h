@@ -95,6 +95,20 @@ Q_SIGNALS:
 
 protected:
 
+    /**
+     * You must do one of the following:
+     * 1) Call this method from a derived class's destructor
+     * 2) Call stop() and wait(), knowing that nothing will
+     *    call start() anymore after this
+     * 3) You know the thread will never be running at destruction.
+     * Note: It is not sufficient that your parent class does this.
+     * Calling this method, or providing one of the above mentioned
+     * equivalent guarantees, must be done by every
+     * single last class in the hierarchy with an implemented destructor.
+     * (the base class destructor is always called after the derived class)
+     */
+    void shutDown();
+
     /** In you run() method, you shall regularly check for runningFlag()
      *  and cleanup and return if false. */
     bool runningFlag() const volatile;

@@ -25,10 +25,15 @@
 
 // Qt includes
 
+#include <QCoreApplication>
+#include <QEvent>
 #include <QMutex>
+#include <QThread>
 #include <QWaitCondition>
 
 // KDE includes
+
+#include <kdebug.h>
 
 // Local includes
 
@@ -43,22 +48,27 @@ public:
 
     WorkerObjectPriv()
     {
-        state = WorkerObject::Inactive;
+        state     = WorkerObject::Inactive;
+        eventLoop = 0;
+        runnable  = 0;
     }
 
-    WorkerObject::State state;
-    QMutex              mutex;
-    QWaitCondition      condVar;
+    volatile WorkerObject::State state;
+    QMutex                       mutex;
+    QWaitCondition               condVar;
+    QEventLoop                  *eventLoop;
+    WorkerObjectRunnable        *runnable;
 };
 
 WorkerObject::WorkerObject()
             : d(new WorkerObjectPriv)
 {
+    ThreadManager::instance()->initialize(this);
 }
 
 WorkerObject::~WorkerObject()
 {
-    deactivate();
+    deactivate(PhaseOut);
     wait();
     delete d;
 }
@@ -66,44 +76,70 @@ WorkerObject::~WorkerObject()
 void WorkerObject::wait()
 {
     QMutexLocker locker(&d->mutex);
-    while (d->state != Inactive)
+    while (d->state != Inactive || d->runnable)
         d->condVar.wait(&d->mutex);
 }
 
 bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal, const char* method,
                                       Qt::ConnectionType type) const
 {
-    connect(sender, signal,
-            this, SLOT(schedule()));
-
+    connect(sender, signal, this, SLOT(schedule()), Qt::DirectConnection);
     return QObject::connect(sender, signal, method, type);
 }
 
 bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal,
-                                      const QObject* receiver, const char* method,
+                                      const WorkerObject* receiver, const char* method,
                                       Qt::ConnectionType type)
 {
-    if (receiver == this)
-        connect(sender, signal, this, SLOT(schedule()));
-
+    connect(sender, signal, receiver, SLOT(schedule()), Qt::DirectConnection);
     return QObject::connect(sender, signal, receiver, method, type);
 }
 
 bool WorkerObject::disconnectAndSchedule(const QObject* sender, const char* signal,
-                                         const QObject* receiver, const char* method)
+                                         const WorkerObject* receiver, const char* method)
 {
-    if (receiver == this)
-    {
-        connect(sender, signal,
-                this, SLOT(schedule()));
-    }
-
+    disconnect(sender, signal, receiver, SLOT(schedule()));
     return QObject::disconnect(sender, signal, receiver, method);
 }
 
 WorkerObject::State WorkerObject::state() const
 {
     return d->state;
+}
+
+bool WorkerObject::event(QEvent *e)
+{
+    if (e->type() == QEvent::User)
+    {
+        aboutToQuitLoop();
+        d->eventLoop->quit();
+        return true;
+    }
+    return QObject::event(e);
+}
+
+void WorkerObject::aboutToQuitLoop()
+{
+}
+
+void WorkerObject::setEventLoop(QEventLoop *loop)
+{
+    d->eventLoop = loop;
+}
+
+void WorkerObject::addRunnable(WorkerObjectRunnable *runnable)
+{
+    QMutexLocker locker(&d->mutex);
+    d->runnable = runnable;
+}
+
+void WorkerObject::removeRunnable(WorkerObjectRunnable *runnable)
+{
+    QMutexLocker locker(&d->mutex);
+    // there could be a second runnable in the meantime, waiting for the other, leaving runnable to park
+    if (d->runnable == runnable)
+        d->runnable = 0;
+    d->condVar.wakeAll();
 }
 
 void WorkerObject::schedule()
@@ -124,7 +160,7 @@ void WorkerObject::schedule()
     ThreadManager::instance()->schedule(this);
 }
 
-void WorkerObject::deactivate()
+void WorkerObject::deactivate(DeactivatingMode mode)
 {
     {
         QMutexLocker locker(&d->mutex);
@@ -139,7 +175,20 @@ void WorkerObject::deactivate()
                 return;
         }
     }
-    emit deactivating();
+
+    aboutToDeactivate();
+
+    if (mode == FlushSignals)
+        QCoreApplication::removePostedEvents(this, QEvent::MetaCall);
+    // cannot say that this is thread-safe: thread()->quit();
+    if (mode == KeepSignals)
+        QCoreApplication::postEvent(this, new QEvent(QEvent::User), Qt::HighEventPriority);
+    else
+        QCoreApplication::postEvent(this, new QEvent(QEvent::User));
+}
+
+void WorkerObject::aboutToDeactivate()
+{
 }
 
 bool WorkerObject::transitionToRunning()
