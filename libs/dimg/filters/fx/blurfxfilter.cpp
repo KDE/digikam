@@ -43,6 +43,7 @@
 
 #include "dimg.h"
 #include "blurfilter.h"
+#include "randomnumbergenerator.h"
 
 namespace Digikam
 {
@@ -53,6 +54,7 @@ BlurFXFilter::BlurFXFilter(DImg* orgImage, QObject* parent, int blurFXType, int 
     m_blurFXType = blurFXType;
     m_distance   = distance;
     m_level      = level;
+    m_randomSeed = RandomNumberGenerator::timeSeed();
 
     initFilter();
 }
@@ -1049,10 +1051,8 @@ void BlurFXFilter::frostGlass(DImg *orgImage, DImg *destImage, int Frost)
     int offset;
 
     // Randomize.
-
-    QDateTime dt = QDateTime::currentDateTime();
-    QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    uint seed = dt.secsTo(Y2000);
+    RandomNumberGenerator generator;
+    generator.seed(m_randomSeed);
 
     int range = sixteenBit ? 65535 : 255;
 
@@ -1072,7 +1072,7 @@ void BlurFXFilter::frostGlass(DImg *orgImage, DImg *destImage, int Frost)
 
             // get random color from surrounding of w|h
             color = RandomColor (data, Width, Height, sixteenBit, bytesDepth,
-                                 w, h, Frost, color.alpha(), &seed, range, IntensityCount,
+                                 w, h, Frost, color.alpha(), generator, range, IntensityCount,
                                  AverageColorR, AverageColorG, AverageColorB);
 
             // write color to destination
@@ -1175,7 +1175,7 @@ void BlurFXFilter::mosaic(DImg *orgImage, DImg *destImage, int SizeW, int SizeH)
  */
 DColor BlurFXFilter::RandomColor(uchar *Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                                     int X, int Y, int Radius,
-                                    int alpha, uint *randomSeed, int range, uchar *IntensityCount,
+                                    int alpha, RandomNumberGenerator& generator, int range, uchar *IntensityCount,
                                     uint *AverageColorR, uint *AverageColorG, uint *AverageColorB)
 {
     DColor color;
@@ -1227,16 +1227,9 @@ DColor BlurFXFilter::RandomColor(uchar *Bits, int Width, int Height, bool sixtee
     int RandNumber, count, Index, ErrorCount = 0;
     int J;
 
-#ifdef _WIN32
-    srand(*randomSeed);
-#endif
     do
     {
-#ifndef _WIN32
-        RandNumber = abs( (int)((rand_r(randomSeed) + 1) * ((double)counter / (1 + (double) RAND_MAX))) );
-#else
-        RandNumber = abs( (int)((rand() + 1) * ((double)counter / (1 + (double) RAND_MAX))) );
-#endif
+        RandNumber = generator.number(0, counter);
 
         count = 0;
         Index = 0;
@@ -1459,6 +1452,9 @@ FilterAction BlurFXFilter::filterAction()
     action.addParameter("distance", m_distance);
     action.addParameter("level", m_level);
 
+    if (m_blurFXType == FrostGlass)
+        action.addParameter("randomSeed", m_randomSeed);
+
     return action;
 }
 
@@ -1467,6 +1463,9 @@ void BlurFXFilter::readParameters(const Digikam::FilterAction& action)
     m_blurFXType = action.parameter("blurFXType").toInt();
     m_distance = action.parameter("distance").toInt();
     m_level = action.parameter("level").toInt();
+
+    if (m_blurFXType == FrostGlass)
+        m_randomSeed = action.parameter("randomSeed").toUInt();
 }
 
 

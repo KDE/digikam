@@ -486,7 +486,7 @@ void RainDropFilter::readParameters(const Digikam::FilterAction& action)
     m_selectedW = action.parameter("selectedW").toInt();
     m_selectedX = action.parameter("selectedX").toInt();
     m_selectedY = action.parameter("selectedY").toInt();
-    m_generator.seed(action.parameter("randomSeed").toInt());
+    m_generator.seed(action.parameter("randomSeed").toUInt());
 }
 
 }  // namespace Digikam

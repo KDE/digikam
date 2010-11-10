@@ -31,6 +31,10 @@
 
 #include <kdebug.h>
 
+// Local includes
+
+#include "randomnumbergenerator.h"
+
 namespace Digikam
 {
 
@@ -47,6 +51,8 @@ public:
     float                  current_process_power_value;
 
     LocalContrastContainer par;
+
+    RandomNumberGenerator  generator;
 };
 
 LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const LocalContrastContainer& par)
@@ -54,6 +60,7 @@ LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const Loc
                      d(new LocalContrastFilterPriv)
 {
     d->par = par;
+    d->generator.seedByTime();
     initFilter();
 }
 
@@ -69,6 +76,8 @@ void LocalContrastFilter::filterImage()
     {
         int size = m_orgImage.width()*m_orgImage.height()*3;
         int i, j;
+
+        d->generator.reseed();
 
         if(m_orgImage.sixteenBit())
         {
@@ -138,7 +147,6 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
 {
     int size            = sizex*sizey;
     float* tmpimage     = new float[size*3];
-    const float inv_256 = 1.0/256.0;
 
     for (int i=0 ; runningFlag() && (i < size*3) ; i++)
     {
@@ -153,7 +161,7 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
 
     for (int i=0 ; runningFlag() && (i < size) ; i++)
     {
-        float dither = ((rand()/256)%256)*inv_256;
+        float dither = d->generator.number(0.0, 1.0);
         img[pos]     = (int)(tmpimage[pos]  *255.0+dither);
         img[pos+1]   = (int)(tmpimage[pos+1]*255.0+dither);
         img[pos+2]   = (int)(tmpimage[pos+2]*255.0+dither);
@@ -168,7 +176,6 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
 {
     int size              = sizex*sizey;
     float* tmpimage       = new float[size*3];
-    const float inv_65536 = 1.0/65536.0;
 
     for (int i=0 ; runningFlag() && (i < size*3) ; i++)
     {
@@ -178,12 +185,12 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
 
     process_rgb_image(tmpimage, sizex, sizey);
 
-    // convert back to 8 bits (with dithering)
+    // convert back to 16 bits (with dithering)
     int pos = 0;
 
     for (int i=0 ; runningFlag() && (i < size) ; i++)
     {
-        float dither = ((rand()/65536)%65536)*inv_65536;
+        float dither = d->generator.number(0.0, 1.0);
         img[pos]     = (int)(tmpimage[pos]  *65535.0+dither);
         img[pos+1]   = (int)(tmpimage[pos+1]*65535.0+dither);
         img[pos+2]   = (int)(tmpimage[pos+2]*65535.0+dither);
@@ -623,12 +630,28 @@ FilterAction LocalContrastFilter::filterAction()
     action.addParameter("function_id", d->par.function_id);
     action.addParameter("high_saturation", d->par.high_saturation);
     action.addParameter("low_saturation", d->par.low_saturation);
-    //TODO: Is this whole array needed? action.addParameter("stage", d->par.stage);
     action.addParameter("stretch_contrast", d->par.stretch_contrast);
-    action.addParameter("unsharp_mask:blur", d->par.unsharp_mask.blur);
+
+    for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; nstage++)
+    {
+        QString stage = QString("stage_%1:").arg(nstage);
+        action.addParameter(stage + "enabled", d->par.stage[nstage].enabled);
+        if (d->par.stage[nstage].enabled)
+        {
+            action.addParameter(stage + "power", d->par.stage[nstage].power);
+            action.addParameter(stage + "blur", d->par.stage[nstage].blur);
+        }
+    }
+
     action.addParameter("unsharp_mask:enabled", d->par.unsharp_mask.enabled);
-    action.addParameter("unsharp_mask:power", d->par.unsharp_mask.power);
-    action.addParameter("unsharp_mask:threshold", d->par.unsharp_mask.threshold);
+    if (d->par.unsharp_mask.enabled)
+    {
+        action.addParameter("unsharp_mask:blur", d->par.unsharp_mask.blur);
+        action.addParameter("unsharp_mask:power", d->par.unsharp_mask.power);
+        action.addParameter("unsharp_mask:threshold", d->par.unsharp_mask.threshold);
+    }
+
+    action.addParameter("randomSeed", d->generator.currentSeed());
 
     return action;
 }
@@ -638,12 +661,28 @@ void LocalContrastFilter::readParameters(const Digikam::FilterAction& action)
     d->par.function_id = action.parameter("function_id").toInt();
     d->par.high_saturation = action.parameter("high_saturation").toInt();
     d->par.low_saturation = action.parameter("low_saturation").toInt();
-    //d->par.stage = action.parameter("stage").toInt();
     d->par.stretch_contrast = action.parameter("stretch_contrast").toBool();
-    d->par.unsharp_mask.blur = action.parameter("unsharp_mask:blur").toFloat();
+
+    for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; nstage++)
+    {
+        QString stage = QString("stage_%1:").arg(nstage);
+        d->par.stage[nstage].enabled = action.parameter(stage + "enabled").toBool();
+        if (d->par.stage[nstage].enabled)
+        {
+            d->par.stage[nstage].power = action.parameter(stage + "power").toFloat();
+            d->par.stage[nstage].blur  = action.parameter(stage + "blur").toFloat();
+        }
+    }
+
     d->par.unsharp_mask.enabled = action.parameter("unsharp_mask:enabled").toBool();
-    d->par.unsharp_mask.power = action.parameter("unsharp_mask:power").toFloat();
-    d->par.unsharp_mask.threshold = action.parameter("unsharp_mask:threshold").toInt();
+    if (d->par.unsharp_mask.enabled)
+    {
+        d->par.unsharp_mask.blur = action.parameter("unsharp_mask:blur").toFloat();
+        d->par.unsharp_mask.power = action.parameter("unsharp_mask:power").toFloat();
+        d->par.unsharp_mask.threshold = action.parameter("unsharp_mask:threshold").toInt();
+    }
+
+    d->generator.seed(action.parameter("randomSeed").toUInt());
 }
 
 

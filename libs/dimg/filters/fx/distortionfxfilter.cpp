@@ -43,6 +43,7 @@
 
 #include "dimg.h"
 #include "pixelsaliasfilter.h"
+#include "randomnumbergenerator.h"
 
 namespace Digikam
 {
@@ -55,6 +56,7 @@ DistortionFXFilter::DistortionFXFilter(DImg* orgImage, QObject* parent, int effe
     m_level      = level;
     m_iteration  = iteration;
     m_antiAlias  = antialiasing;
+    m_randomSeed = RandomNumberGenerator::timeSeed();
 
     initFilter();
 }
@@ -821,12 +823,8 @@ void DistortionFXFilter::tile(DImg *orgImage, DImg *destImage,
     int Width       = orgImage->width();
     int Height      = orgImage->height();
 
-    QDateTime dt = QDateTime::currentDateTime();
-    QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    uint seed = dt.secsTo(Y2000);
-#ifdef WIN32
-    srand(seed);
-#endif
+    RandomNumberGenerator generator;
+    generator.seed(m_randomSeed);
 
     int tx, ty, h, w, progress;
 
@@ -834,13 +832,8 @@ void DistortionFXFilter::tile(DImg *orgImage, DImg *destImage,
     {
         for (w = 0; runningFlag() && (w < Width); w += WSize)
         {
-#ifndef _WIN32
-            tx = (int)(rand_r(&seed) % Random) - (Random / 2);
-            ty = (int)(rand_r(&seed) % Random) - (Random / 2);
-#else
-            tx = (int)(rand() % Random) - (Random / 2);
-            ty = (int)(rand() % Random) - (Random / 2);
-#endif
+            tx = generator.number(- Random / 2, Random / 2);
+            ty = generator.number(- Random / 2, Random / 2);
             destImage->bitBltImage(orgImage, w, h,   WSize, HSize,   w + tx, h + ty);
         }
 
@@ -856,12 +849,16 @@ FilterAction DistortionFXFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
-    
+
     action.addParameter("antiAlias", m_antiAlias);
     action.addParameter("effectType", m_effectType);
     action.addParameter("iteration", m_iteration);
     action.addParameter("level", m_level);
-    
+
+    if (m_effectType == Tile)
+        action.addParameter("randomSeed", m_randomSeed);
+
+
     return action;
 }
 
@@ -871,6 +868,9 @@ void DistortionFXFilter::readParameters(const Digikam::FilterAction& action)
     m_effectType = action.parameter("effectType").toInt();
     m_iteration = action.parameter("iteration").toInt();
     m_level = action.parameter("level").toInt();
+
+    if (m_effectType == Tile)
+        m_randomSeed = action.parameter("randomSeed").toUInt();
 }
 
 // UNUSED

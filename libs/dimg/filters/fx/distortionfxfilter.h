@@ -154,6 +154,7 @@ private:
     int  m_level;
     int  m_iteration;
     int  m_effectType;
+    quint32 m_randomSeed;
 };
 
 }  // namespace Digikam

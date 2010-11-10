@@ -2213,12 +2213,8 @@ void DImg::convertDepth(int depth)
         ushort* dptr = (ushort*)data;
         uchar*  sptr = bits();
 
-        QDateTime dt = QDateTime::currentDateTime();
-        QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-        uint seed = dt.secsTo(Y2000);
-#ifdef WIN32
-        srand(seed);
-#endif
+        // use default seed of the generator
+        RandomNumberGenerator generator;
         ushort noise = 0;
 
         uint dim = width() * height() * 4;
@@ -2226,11 +2222,7 @@ void DImg::convertDepth(int depth)
         {
             if (i % 4 < 3)
             {
-#ifndef _WIN32
-                noise = (ushort)(256.0 * (rand_r(&seed) / (RAND_MAX + 1.0)));
-#else
-                noise = (ushort)(256.0 * (rand() / (RAND_MAX + 1.0)));
-#endif
+                noise = generator.number(0, 255);
             }
             else
             {

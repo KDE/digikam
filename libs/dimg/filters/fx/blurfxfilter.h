@@ -38,6 +38,8 @@
 namespace Digikam
 {
 
+class RandomNumberGenerator;
+
 class DIGIKAM_EXPORT BlurFXFilter : public DImgThreadedFilter
 {
 
@@ -100,7 +102,7 @@ private:
 
     DColor RandomColor(uchar *Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                        int X, int Y, int Radius,
-                       int alpha, uint *randomSeed, int range, uchar *IntensityCount,
+                       int alpha, RandomNumberGenerator& generator, int range, uchar *IntensityCount,
                        uint *AverageColorR, uint *AverageColorG, uint *AverageColorB);
 
     // Return the limit defined the max and min values.
@@ -194,6 +196,7 @@ private:
     int m_blurFXType;
     int m_distance;
     int m_level;
+    quint32 m_randomSeed;
 };
 
 }  // namespace Digikam
