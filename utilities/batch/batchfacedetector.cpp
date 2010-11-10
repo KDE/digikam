@@ -35,6 +35,10 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+// KFace includes
+
+#include <libkface/recognitiondatabase.h>
+
 // Local includes
 
 #include "album.h"
@@ -78,50 +82,60 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
     setLabel(i18n("<b>Updating faces database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
 
-    FacePipeline::FilterMode filterMode;
-    FacePipeline::WriteMode  writeMode;
-    if (settings.task == FaceScanSettings::DetectAndRecognize)
+    if (settings.task == FaceScanSettings::RetrainAll)
     {
-        if (settings.alreadyScannedHandling == FaceScanSettings::Skip)
+        KFaceIface::RecognitionDatabase::addDatabase();
+        d->pipeline.plugRetrainingDatabaseFilter();
+        d->pipeline.plugTrainer();
+        d->pipeline.construct();
+    }
+    else
+    {
+        FacePipeline::FilterMode filterMode;
+        FacePipeline::WriteMode  writeMode;
+        if (settings.task == FaceScanSettings::DetectAndRecognize)
         {
-            filterMode = FacePipeline::SkipAlreadyScanned;
+            if (settings.alreadyScannedHandling == FaceScanSettings::Skip)
+            {
+                filterMode = FacePipeline::SkipAlreadyScanned;
+                writeMode  = FacePipeline::NormalWrite;
+            }
+            else if (settings.alreadyScannedHandling == FaceScanSettings::Rescan)
+            {
+                filterMode = FacePipeline::ScanAll;
+                writeMode  = FacePipeline::OverwriteUnconfirmed;
+            }
+            else // if (settings.alreadyScannedHandling == FaceScanSettings::Merge)
+            {
+                filterMode = FacePipeline::ScanAll;
+                writeMode  = FacePipeline::NormalWrite;
+            }
+        }
+        else // if (settings.task == FaceScanSettings::RecognizeMarkedFaces)
+        {
+            filterMode = FacePipeline::ReadUnconfirmedFaces;
             writeMode  = FacePipeline::NormalWrite;
         }
-        else if (settings.alreadyScannedHandling == FaceScanSettings::Rescan)
+
+        d->pipeline.plugDatabaseFilter(filterMode);
+
+        if (settings.task == FaceScanSettings::DetectAndRecognize)
         {
-            filterMode = FacePipeline::ScanAll;
-            writeMode  = FacePipeline::OverwriteUnconfirmed;
+            d->pipeline.plugPreviewLoader();
+
+            if (settings.useFullCpu)
+                d->pipeline.plugParallelFaceDetectors();
+            else
+                d->pipeline.plugFaceDetector();
         }
-        else // if (settings.alreadyScannedHandling == FaceScanSettings::Merge)
-        {
-            filterMode = FacePipeline::ScanAll;
-            writeMode  = FacePipeline::NormalWrite;
-        }
+
+        d->pipeline.plugFaceRecognizer();
+        d->pipeline.plugDatabaseWriter(writeMode);
+        d->pipeline.construct();
+
+        d->pipeline.setDetectionAccuracy(settings.accuracy);
+        d->pipeline.setDetectionSpecificity(settings.specificity);
     }
-    else // if (settings.task == FaceScanSettings::RecognizeMarkedFaces
-    {
-        filterMode = FacePipeline::ReadUnconfirmedFaces;
-        writeMode  = FacePipeline::NormalWrite;
-    }
-
-    d->pipeline.plugDatabaseFilter(filterMode);
-
-    if (settings.task == FaceScanSettings::DetectAndRecognize)
-    {
-        d->pipeline.plugPreviewLoader();
-
-        if (settings.useFullCpu)
-            d->pipeline.plugParallelFaceDetectors();
-        else
-            d->pipeline.plugFaceDetector();
-    }
-
-    d->pipeline.plugFaceRecognizer();
-    d->pipeline.plugDatabaseWriter(writeMode);
-    d->pipeline.construct();
-
-    d->pipeline.setDetectionAccuracy(settings.accuracy);
-    d->pipeline.setDetectionSpecificity(settings.specificity);
 
     connect(&d->albumListing, SIGNAL(signalItemsInfo(const ImageInfoList&)),
             this, SLOT(slotItemsInfo(const ImageInfoList&)));
@@ -138,7 +152,7 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
     connect(&d->pipeline, SIGNAL(skipped(const QList<ImageInfo>&)),
             this, SLOT(slotImagesSkipped(const QList<ImageInfo>&)));
 
-    if (settings.albums.isEmpty())
+    if (settings.albums.isEmpty() || settings.task == FaceScanSettings::RetrainAll)
         d->albumTodoList = AlbumManager::instance()->allPAlbums();
     else
         d->albumTodoList = settings.albums;
@@ -183,12 +197,12 @@ void BatchFaceDetector::continueAlbumListing()
         return complete();
 
     Album *album = d->albumTodoList.takeFirst();
+    kDebug() << "Album" << album->title();
     d->albumListing.allItemsFromAlbum(album);
 }
 
 void BatchFaceDetector::slotItemsInfo(const ImageInfoList& items)
 {
-    kDebug() << items.size();
     d->pipeline.process(items);
 }
 
@@ -230,7 +244,11 @@ void BatchFaceDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
 
 void BatchFaceDetector::slotShowOneDetected(const FacePipelinePackage& package)
 {
-    QPixmap pix = package.image.smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
+    QPixmap pix;
+    if (!package.image.isNull())
+        pix = package.image.smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
+    else if (!package.faces.isEmpty())
+        pix = QPixmap::fromImage(package.faces.first().image().toQImage().scaled(128, 128, Qt::KeepAspectRatio));
     addedAction(pix, package.info.filePath());
     advance(1);
 }

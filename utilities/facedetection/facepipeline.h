@@ -148,7 +148,9 @@ public:
         /// Will read unconfirmed faces for recognition
         ReadUnconfirmedFaces,
         /// Will read faces marked for training
-        ReadFacesForTraining
+        ReadFacesForTraining,
+        /// Will read faces which are confirmed
+        ReadConfirmedFaces
     };
 
     enum WriteMode
@@ -190,6 +192,7 @@ public:
      */
 
     void plugDatabaseFilter(FilterMode mode);
+    void plugRetrainingDatabaseFilter();
     void plugPreviewLoader();
     void plugFaceDetector();
     void plugParallelFaceDetectors();
@@ -209,7 +212,7 @@ public Q_SLOTS:
     /**
      * Processes the given image info. If a filter is installed,
      * returns false if the info is skipped, or true if it is processed.
-     * If no preview loader is plugged, you must provide a DImg.
+     * If no preview loader is plugged, you must provide a DImg for detection or recognition.
      * Any of the signals below will only be emitted if true is returned.
      */
     bool process(const ImageInfo& info);

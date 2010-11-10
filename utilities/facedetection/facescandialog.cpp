@@ -45,6 +45,7 @@
 #include <KIconLoader>
 #include <KLocale>
 #include <KIntNumInput>
+#include <KSeparator>
 #include <KStandardGuiItem>
 
 // Local includes
@@ -117,6 +118,7 @@ public:
           configUseFullCpu("Use Full CPU"),
           configSettingsVisible("Settings Widget Visible")
     {
+        optionGroupBox           = 0;
         detectAndRecognizeButton = 0;
         alreadyScannedBox        = 0;
         reRecognizeButton        = 0;
@@ -129,8 +131,10 @@ public:
         accuracyInput            = 0;
         specificityInput         = 0;
         useFullCpuButton         = 0;
+        retrainAllButton         = 0;
     }
 
+    QGroupBox*                   optionGroupBox;
     QRadioButton*                detectAndRecognizeButton;
     QComboBox*                   alreadyScannedBox;
     QRadioButton*                reRecognizeButton;
@@ -147,6 +151,7 @@ public:
     KIntNumInput*                specificityInput;
 
     QCheckBox*                   useFullCpuButton;
+    QCheckBox*                   retrainAllButton;
 
     const QString configName;
     const QString configMainTask;
@@ -230,6 +235,8 @@ void FaceScanDialog::doLoadState()
 
     d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), true));
 
+    // dont load retrainAllButton state from config, dangerous
+
     setDetailsWidgetVisible(group.readEntry(entryName(d->configSettingsVisible), false));
 }
 
@@ -287,7 +294,7 @@ void FaceScanDialog::setupUi()
 
     // ---- Main option box ----
 
-    QGroupBox* optionWidget   = new QGroupBox;
+    d->optionGroupBox   = new QGroupBox;
     QGridLayout* optionLayout = new QGridLayout;
 
     d->detectAndRecognizeButton                  = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces"));
@@ -334,14 +341,14 @@ void FaceScanDialog::setupUi()
     int indent = style()->subElementRect(QStyle::SE_RadioButtonIndicator, &buttonOption, d->detectAndRecognizeButton).width();
     optionLayout->setColumnMinimumWidth(0, indent);
 
-    optionWidget->setLayout(optionLayout);
+    d->optionGroupBox->setLayout(optionLayout);
 
     // ---
 
     mainLayout->addWidget(personIcon,   0, 0);
     mainLayout->addWidget(introduction, 0, 1);
     mainLayout->setColumnStretch(1, 1);
-    mainLayout->addWidget(optionWidget, 1, 0, 1, -1);
+    mainLayout->addWidget(d->optionGroupBox, 1, 0, 1, -1);
     mainWidget->setLayout(mainLayout);
 
     setMainWidget(mainWidget);
@@ -426,10 +433,10 @@ void FaceScanDialog::setupUi()
     parametersTab->setLayout(parametersLayout);
     d->tabWidget->addTab(parametersTab, i18nc("@title:tab", "Parameters"));
 
-    // ---- Performance tab ----
+    // ---- Advanced tab ----
 
-    QWidget* performanceTab        = new QWidget;
-    QVBoxLayout* performanceLayout = new QVBoxLayout;
+    QWidget* advancedTab        = new QWidget;
+    QVBoxLayout* advancedLayout = new QVBoxLayout;
 
     QLabel* cpuExplanation = new QLabel;
     cpuExplanation->setText(i18nc("@info",
@@ -441,12 +448,21 @@ void FaceScanDialog::setupUi()
     d->useFullCpuButton = new QCheckBox;
     d->useFullCpuButton->setText(i18nc("@option:check", "Work on all processor cores"));
 
-    performanceLayout->addWidget(cpuExplanation);
-    performanceLayout->addWidget(d->useFullCpuButton);
-    performanceLayout->addStretch(1);
+    d->retrainAllButton = new QCheckBox;
+    d->retrainAllButton->setText(i18nc("@option:check", "Clear and rebuild all training data"));
+    d->retrainAllButton->setToolTip(i18nc("@info:tooltip",
+                                          "This will clear all training data for recognition "
+                                          "and rebuild it from all available faces. "
+                                          "Be careful if any other application helped in building your training database. "));
 
-    performanceTab->setLayout(performanceLayout);
-    d->tabWidget->addTab(performanceTab, i18nc("@title:tab", "Resources"));
+    advancedLayout->addWidget(cpuExplanation);
+    advancedLayout->addWidget(d->useFullCpuButton);
+    advancedLayout->addWidget(new KSeparator(Qt::Horizontal));
+    advancedLayout->addWidget(d->retrainAllButton);
+    advancedLayout->addStretch(1);
+
+    advancedTab->setLayout(advancedLayout);
+    d->tabWidget->addTab(advancedTab, i18nc("@title:tab", "Advanced"));
 
     // ---
 
@@ -466,6 +482,9 @@ void FaceScanDialog::setupConnections()
 
     connect(d->tagSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SLOT(updateClearButtons()));
+
+    connect(d->retrainAllButton, SIGNAL(toggled(bool)),
+            this, SLOT(retrainAllButtonToggled(bool)));
 }
 
 void FaceScanDialog::updateClearButtons()
@@ -474,14 +493,26 @@ void FaceScanDialog::updateClearButtons()
     d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
 }
 
+void FaceScanDialog::retrainAllButtonToggled(bool on)
+{
+    d->optionGroupBox->setEnabled(!on);
+    d->albumSelectCB->setEnabled(!on);
+    d->tagSelectCB->setEnabled(!on);
+}
+
 FaceScanSettings FaceScanDialog::settings() const
 {
     FaceScanSettings settings;
 
-    if (d->detectAndRecognizeButton->isChecked())
-        settings.task = FaceScanSettings::DetectAndRecognize;
+    if (d->retrainAllButton->isChecked())
+        settings.task = FaceScanSettings::RetrainAll;
     else
-        settings.task = FaceScanSettings::RecognizeMarkedFaces;
+    {
+        if (d->detectAndRecognizeButton->isChecked())
+            settings.task = FaceScanSettings::DetectAndRecognize;
+        else
+            settings.task = FaceScanSettings::RecognizeMarkedFaces;
+    }
 
     settings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)
             d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt();

@@ -48,7 +48,8 @@ public:
     enum ScanTask
     {
         DetectAndRecognize,
-        RecognizeMarkedFaces
+        RecognizeMarkedFaces,
+        RetrainAll
     };
 
     ScanTask      task;
@@ -96,6 +97,7 @@ protected Q_SLOTS:
 
     void setDetectionDefaultParameters();
     void updateClearButtons();
+    void retrainAllButtonToggled(bool on);
 
 private:
 

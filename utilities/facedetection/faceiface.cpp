@@ -366,6 +366,11 @@ QList<DatabaseFace> FaceIface::databaseFacesForTraining(qlonglong imageId) const
     return databaseFaces(imageId, DatabaseFace::FaceForTraining);
 }
 
+QList<DatabaseFace> FaceIface::confirmedDatabaseFaces(qlonglong imageId) const
+{
+    return databaseFaces(imageId, DatabaseFace::ConfirmedName);
+}
+
 QList<KFaceIface::Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
 {
     QList<KFaceIface::Face> faceList;

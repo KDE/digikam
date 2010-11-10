@@ -151,6 +151,7 @@ public:
     QList<DatabaseFace> databaseFaces(qlonglong imageid) const;
     QList<DatabaseFace> unconfirmedDatabaseFaces(qlonglong imageid) const;
     QList<DatabaseFace> databaseFacesForTraining(qlonglong imageid) const;
+    QList<DatabaseFace> confirmedDatabaseFaces(qlonglong imageid) const;
 
     /**
      * Edits the given face(s): From the given DImg, the face regions are copied.

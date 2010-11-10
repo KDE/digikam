@@ -124,6 +124,7 @@ public:
 
     FacePipeline::FacePipelinePriv* const d;
     FacePipeline::FilterMode              mode;
+    FacePipelineDatabaseFace::Roles       tasks;
 
 protected Q_SLOTS:
 

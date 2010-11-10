@@ -205,18 +205,24 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
         }
         case FacePipeline::ReadUnconfirmedFaces:
         case FacePipeline::ReadFacesForTraining:
+        case FacePipeline::ReadConfirmedFaces:
         {
             QList<DatabaseFace> databaseFaces;
             if (mode == FacePipeline::ReadUnconfirmedFaces)
                 databaseFaces = d->iface->unconfirmedDatabaseFaces(info.id());
-            else
+            else if (mode == FacePipeline::ReadFacesForTraining)
                 databaseFaces = d->iface->databaseFacesForTraining(info.id());
+            else
+                databaseFaces = d->iface->confirmedDatabaseFaces(info.id());
 
             if (!databaseFaces.isEmpty())
             {
                 FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
                 package->databaseFaces = databaseFaces;
+                kDebug() << "Prepared package with" << databaseFaces.size();
                 package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
+                if (tasks)
+                    package->databaseFaces.setRole(tasks);
                 package->faces         = d->iface->toFaces(databaseFaces);
                 return package;
             }
@@ -520,6 +526,7 @@ Trainer::Trainer(FacePipeline::FacePipelinePriv* d)
 
 void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 {
+    kDebug() << "Trainer: processing one package";
     // Get a list of faces with type FaceForTraining (probably type is ConfirmedFace)
     QList<DatabaseFace> toTrain;
     foreach (const FacePipelineDatabaseFace& face, package->databaseFaces)
@@ -555,6 +562,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
         }
 
         // Train
+        kDebug() << "Training" << package->faces.size() << "faces";
         database.updateFaces(package->faces);
 
         // Remove the "FaceForTraining" entry in database (tagRegion entry remains, of course, untouched)
@@ -782,6 +790,12 @@ bool FacePipeline::hasFinished() const
 void FacePipeline::plugDatabaseFilter(FilterMode mode)
 {
     d->databaseFilter = new ScanStateFilter(mode, d);
+}
+
+void FacePipeline::plugRetrainingDatabaseFilter()
+{
+    plugDatabaseFilter(ReadConfirmedFaces);
+    d->databaseFilter->tasks = FacePipelineDatabaseFace::ForTraining;
 }
 
 void FacePipeline::plugPreviewLoader()
