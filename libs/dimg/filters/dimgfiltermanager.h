@@ -41,16 +41,40 @@ public:
 
     static DImgFilterManager* instance();
 
+    /// Returns a list of the supported filter identifiers
     QStringList supportedFilters();
+    /// Returns a list of supported versions of the given filter
     QList<int> supportedVersions(const QString& filterIdentifier);
+    /**
+     * Returns the (untranslated) displayable name for the given identifier.
+     * This is only possible for supported filters. If you have a FilterAction,
+     * it may already contain a displayable name.
+     */
     QString displayableName(const QString& filterIdentifier);
+    /**
+     * Returns the translated displayable name
+     */
+    QString i18nDisplayableName(const QString& filterIdentifier);
 
-    QString getFilterIcon(const QString& filterIdentifier);
-    QString getI18nFilterName(const QString& filterIdentifier);
+    /**
+     * Returns an icon for the given filter.
+     * If no icon is known, returns a null string.
+     */
+    QString filterIcon(const QString& filterIdentifier);
 
+    /**
+     * Returns true if the given filter, or, more specifically,
+     * the given filter in the given version is supported.
+     */
     bool isSupported(const QString& filterIdentifier);
     bool isSupported(const QString& filterIdentifier, int version);
 
+    /**
+     * Create a filter from an installed manager.
+     * Returns 0 if no filter could be created. This is true
+     * if identifier/version is not supported, or the filter is builtin.
+     * Note: You probably want to use FilterActionFilter.
+     */
     DImgThreadedFilter* createFilter(const QString& filterIdentifier, int version);
 
     /**
