@@ -6,11 +6,11 @@ NEW FEATURES:
 Slideshow      : User can change item rating during a slide.
 ImageEditor    : New option to display over/under exposure indicators if pure colors is detected
                  or if only one color component match the condition.
-ImageEditor    : New options to adjust the levels of over/under exposured pixels from histogram, 
+ImageEditor    : New options to adjust the levels of over/under exposured pixels from histogram,
                  displayed by over/under exposure indicators.
 ImageEditor    : Aspect ratio crop tool is now able to deal with the aspect ratio of the current loaded image in editor.
                  You can keep the original proportions of the image after cropping.
-General        : External depencies to libPGF and Clapack can use used now instead internal implementation 
+General        : External depencies to libPGF and Clapack can use used now instead internal implementation
                  if available in host sytem dedicated to compile.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -34,6 +34,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 254203 : Libpgf relevant : digiKam crashes while displaying thumbnails on Ultra-SPARC platform.
 018 ==> 233005 : Sorting in thumb panel differs from tree.
 019 ==> 229282 : digiKam shutdown as I was sellecting crop to crop an image.
-020 ==> 241575 - digiKam crashes after saving several (>2) pictures.
-021 ==> 
+020 ==> 241575 : digiKam crashes after saving several (>2) pictures.
+021 ==> 227901 : Can't search for Ratings in Advanced Search.
+022 ==>
 
