@@ -379,7 +379,7 @@ QWidget* FuzzySearchView::setupSketchPanel()
 
     QLabel* brushLabel = new QLabel(i18n("Pen:"));
     d->penSize         = new QSpinBox();
-    d->penSize->setRange(1, 40);
+    d->penSize->setRange(1, 64);
     d->penSize->setSingleStep(1);
     d->penSize->setValue(10);
     d->penSize->setWhatsThis(i18n("Set here the brush size in pixels used to draw sketch."));
@@ -470,6 +470,12 @@ void FuzzySearchView::setupConnections()
 
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotClearSketch()));
+
+    connect(d->sketchWidget, SIGNAL(signalPenSizeChanged(int)),
+            d->penSize, SLOT(setValue(int)));
+
+    connect(d->sketchWidget, SIGNAL(signalPenColorChanged(const QColor&)),
+            this, SLOT(slotPenColorChanged(const QColor&)));
 
     connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
             this, SLOT(slotDirtySketch()));
@@ -702,6 +708,12 @@ void FuzzySearchView::slotVChanged(int v)
 
     color.setHsv(hue, sat, v);
     setColor(color);
+}
+
+void FuzzySearchView::slotPenColorChanged(const QColor& color)
+{
+    slotHSChanged(color.hue(), color.saturation());
+    slotVChanged(color.value());
 }
 
 void FuzzySearchView::setColor(QColor c)
