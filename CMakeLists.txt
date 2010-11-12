@@ -628,15 +628,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libdimgfilters_SRCS
         ${libclapack_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgbuiltinfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltermanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltergenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/filteractionfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/randomnumbergenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/borderfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/bordersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/texturefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfxfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/colorfxfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/distortionfxfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/charcoalfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/embossfilter.cpp
