@@ -66,13 +66,14 @@ class DIGIKAM_EXPORT NRFilter : public DImgThreadedFilter
 
 public:
 
+    explicit NRFilter(QObject* parent = 0);
     NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings);
     ~NRFilter();
 
-    static QString          FilterIdentifier() { return "digikam:NRFilter"; }
-    static QString          DisplayableName() { return "Noise Reduction Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:NoiseReductionFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Noise Reduction Filter"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

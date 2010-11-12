@@ -43,14 +43,15 @@ class DIGIKAM_EXPORT RainDropFilter : public DImgThreadedFilter
 
 public:
 
+    explicit RainDropFilter(QObject* parent = 0);
     explicit RainDropFilter(DImg* orgImage, QObject* parent=0, int drop=80,
                             int amount=150, int coeff=30, QRect* selection=0L);
     ~RainDropFilter();
 
-    static QString          FilterIdentifier() { return "digikam:RainDropFilter"; }
-    static QString          DisplayableName() { return "Rain Drops Effect"; }
+    static QString          FilterIdentifier()  { return "digikam:RainDropFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Rain Drops Effect"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

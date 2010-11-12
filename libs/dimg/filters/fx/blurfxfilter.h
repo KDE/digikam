@@ -45,14 +45,15 @@ class DIGIKAM_EXPORT BlurFXFilter : public DImgThreadedFilter
 
 public:
 
+    explicit BlurFXFilter(QObject* parent = 0);
     explicit BlurFXFilter(DImg* orgImage, QObject* parent=0, int blurFXType=ZoomBlur,
                     int distance=100, int level=45);
     ~BlurFXFilter(){};
 
-    static QString          FilterIdentifier() { return "digikam:BlurFXFilter"; }
-    static QString          DisplayableName() { return "Blur FX Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:BlurFXFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Blur FX Filter"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

@@ -185,10 +185,10 @@ public:
 
     static QString cimgVersionString();
 
-    static QString          FilterIdentifier() { return "digikam:GreycstorationFilter"; }
-    static QString          DisplayableName() { return "Greycstoration Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:GreycstorationFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Greycstoration Filter"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

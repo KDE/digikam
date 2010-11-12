@@ -105,6 +105,7 @@ class DIGIKAM_EXPORT FilmGrainFilter : public DImgThreadedFilter
 
 public:
 
+    explicit FilmGrainFilter(QObject* parent = 0);
     explicit FilmGrainFilter(DImg* orgImage, QObject* parent=0, const FilmGrainContainer& settings=FilmGrainContainer());
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit FilmGrainFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
@@ -112,10 +113,10 @@ public:
                              const FilmGrainContainer& settings=FilmGrainContainer());
     ~FilmGrainFilter();
 
-    static QString          FilterIdentifier() { return "digikam:FilmGrainFilter"; }
-    static QString          DisplayableName() { return "Film Grain Effect"; }
+    static QString          FilterIdentifier()  { return "digikam:FilmGrainFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Film Grain Effect"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

@@ -41,13 +41,14 @@ class DIGIKAM_EXPORT NormalizeFilter : public DImgThreadedFilter
 {
 
 public:
+    NormalizeFilter(QObject* parent = 0);
     NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~NormalizeFilter();
 
-    static QString          FilterIdentifier() { return "digikam:normalizeFilter"; }
+    static QString          FilterIdentifier() { return "digikam:NormalizeFilter"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
-    static QString          DisplayableName() { return "Auto Normalize"; }
+    static QString          DisplayableName() { return I18N_NOOP("Auto Normalize"); }
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
@@ -66,7 +67,7 @@ private:
         double          max;
     };
 
-    const DImg m_refImage;
+    DImg m_refImage;
 };
 
 }  // namespace Digikam

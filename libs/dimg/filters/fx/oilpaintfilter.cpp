@@ -40,6 +40,12 @@
 namespace Digikam
 {
 
+OilPaintFilter::OilPaintFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 OilPaintFilter::OilPaintFilter(DImg* orgImage, QObject* parent, int brushSize, int smoothness)
               : DImgThreadedFilter(orgImage, parent, "OilPaintFilter")
 {

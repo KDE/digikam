@@ -90,14 +90,15 @@ class DIGIKAM_EXPORT MixerFilter : public DImgThreadedFilter
 
 public:
 
+    explicit MixerFilter(QObject* parent = 0);
     explicit MixerFilter(DImg* orgImage, QObject* parent=0, const MixerContainer& settings=MixerContainer());
     virtual ~MixerFilter();
-    
-    static QString          FilterIdentifier() { return "digikam:MixerFilter"; }
-    static QString          DisplayableName() { return "Channel Mixer Filter"; }
+
+    static QString          FilterIdentifier()  { return "digikam:MixerFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Channel Mixer Tool"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
-    
+    static int              CurrentVersion()    { return 1; }
+
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);

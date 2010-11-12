@@ -45,6 +45,12 @@
 namespace Digikam
 {
 
+RainDropFilter::RainDropFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 RainDropFilter::RainDropFilter(DImg* orgImage, QObject* parent, int drop,
                                int amount, int coeff, QRect* selection)
               : DImgThreadedFilter(orgImage, parent, "RainDrop")

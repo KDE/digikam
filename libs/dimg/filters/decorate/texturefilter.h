@@ -43,13 +43,14 @@ class DIGIKAM_EXPORT TextureFilter : public DImgThreadedFilter
 
 public:
 
+    explicit TextureFilter(QObject* parent = 0);
     explicit TextureFilter(DImg* orgImage, QObject* parent=0, int blendGain=200,
                            const QString& texturePath=QString());
 
     ~TextureFilter();
 
     static QString          FilterIdentifier()  { return "digikam:TextureFilter"; }
-    static QString          DisplayableName()   { return "Texture Filter";        }
+    static QString          DisplayableName()   { return I18N_NOOP("Texture Filter");}
     static QList<int>       SupportedVersions() { return QList<int>() << 1;       }
     static int              CurrentVersion()    { return 1;                       }
 

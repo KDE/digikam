@@ -42,6 +42,12 @@
 namespace Digikam
 {
 
+TextureFilter::TextureFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 TextureFilter::TextureFilter(DImg* orgImage, QObject* parent, int blendGain, const QString& texturePath)
              : DImgThreadedFilter(orgImage, parent, "Texture")
 {

@@ -48,6 +48,12 @@
 namespace Digikam
 {
 
+BlurFXFilter::BlurFXFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 BlurFXFilter::BlurFXFilter(DImg* orgImage, QObject* parent, int blurFXType, int distance, int level)
             : DImgThreadedFilter(orgImage, parent, "BlurFX")
 {
@@ -1448,7 +1454,7 @@ FilterAction BlurFXFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("blurFXType", m_blurFXType);
+    action.addParameter("type", m_blurFXType);
     action.addParameter("distance", m_distance);
     action.addParameter("level", m_level);
 
@@ -1460,7 +1466,7 @@ FilterAction BlurFXFilter::filterAction()
 
 void BlurFXFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_blurFXType = action.parameter("blurFXType").toInt();
+    m_blurFXType = action.parameter("type").toInt();
     m_distance = action.parameter("distance").toInt();
     m_level = action.parameter("level").toInt();
 

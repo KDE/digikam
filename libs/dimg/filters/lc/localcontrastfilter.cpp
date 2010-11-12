@@ -55,6 +55,13 @@ public:
     RandomNumberGenerator  generator;
 };
 
+LocalContrastFilter::LocalContrastFilter(QObject* parent)
+                   : DImgThreadedFilter(parent),
+                     d(new LocalContrastFilterPriv)
+{
+    initFilter();
+}
+
 LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const LocalContrastContainer& par)
                    : DImgThreadedFilter(image, parent, "LocalContrast"),
                      d(new LocalContrastFilterPriv)
@@ -634,7 +641,7 @@ FilterAction LocalContrastFilter::filterAction()
 
     for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; nstage++)
     {
-        QString stage = QString("stage_%1:").arg(nstage);
+        QString stage = QString("stage[%1]:").arg(nstage);
         action.addParameter(stage + "enabled", d->par.stage[nstage].enabled);
         if (d->par.stage[nstage].enabled)
         {
@@ -665,7 +672,7 @@ void LocalContrastFilter::readParameters(const Digikam::FilterAction& action)
 
     for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; nstage++)
     {
-        QString stage = QString("stage_%1:").arg(nstage);
+        QString stage = QString("stage[%1]:").arg(nstage);
         d->par.stage[nstage].enabled = action.parameter(stage + "enabled").toBool();
         if (d->par.stage[nstage].enabled)
         {

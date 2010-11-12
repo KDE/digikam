@@ -45,10 +45,10 @@ public:
     EqualizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~EqualizeFilter();
 
-    static QString          FilterIdentifier() { return "digikam:equalizeFilter"; }
+    static QString          FilterIdentifier()  { return "digikam:EqualizeFilter"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
-    static QString          DisplayableName() { return "Auto Equalize"; }
+    static int              CurrentVersion()    { return 1; }
+    static QString          DisplayableName()   { return I18N_NOOP("Auto Equalize"); }
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
@@ -76,7 +76,7 @@ private:
         unsigned int alpha;
     };
 
-    const DImg m_refImage;
+    DImg m_refImage;
 };
 
 }  // namespace Digikam

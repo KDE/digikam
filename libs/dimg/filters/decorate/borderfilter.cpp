@@ -73,32 +73,44 @@ public:
     DColor  decorativeSecondColor;
 
     BorderContainer settings;
+
+    void setup(const DImg& m_orgImage);
 };
+
+void BorderFilterPriv::setup(const DImg& m_orgImage)
+{
+    solidColor            = DColor(settings.solidColor,            m_orgImage.sixteenBit());
+    niepceBorderColor     = DColor(settings.niepceBorderColor,     m_orgImage.sixteenBit());
+    niepceLineColor       = DColor(settings.niepceLineColor,       m_orgImage.sixteenBit());
+    bevelUpperLeftColor   = DColor(settings.bevelUpperLeftColor,   m_orgImage.sixteenBit());
+    bevelLowerRightColor  = DColor(settings.bevelLowerRightColor,  m_orgImage.sixteenBit());
+    decorativeFirstColor  = DColor(settings.decorativeFirstColor,  m_orgImage.sixteenBit());
+    decorativeSecondColor = DColor(settings.decorativeSecondColor, m_orgImage.sixteenBit());
+
+    if (settings.preserveAspectRatio)
+    {
+        orgRatio        = (float)settings.orgWidth / (float)settings.orgHeight;
+        int size        = qMin(m_orgImage.height(), m_orgImage.width());
+        borderMainWidth = (int)(size * settings.borderPercent);
+        border2ndWidth  = (int)(size * 0.005);
+
+        // Clamp internal border with to 1 pixel to be visible with small image.
+        if (border2ndWidth < 1) border2ndWidth = 1;
+    }
+}
+
+BorderFilter::BorderFilter(QObject* parent)
+                 : DImgThreadedFilter(parent),
+                   d(new BorderFilterPriv)
+{
+    initFilter();
+}
 
 BorderFilter::BorderFilter(DImg* image, QObject* parent, const BorderContainer& settings)
             : DImgThreadedFilter(image, parent, "Border"),
-             d(new BorderFilterPriv)
+              d(new BorderFilterPriv)
 {
     d->settings = settings;
-    d->solidColor            = DColor(d->settings.solidColor,            m_orgImage.sixteenBit());
-    d->niepceBorderColor     = DColor(d->settings.niepceBorderColor,     m_orgImage.sixteenBit());
-    d->niepceLineColor       = DColor(d->settings.niepceLineColor,       m_orgImage.sixteenBit());
-    d->bevelUpperLeftColor   = DColor(d->settings.bevelUpperLeftColor,   m_orgImage.sixteenBit());
-    d->bevelLowerRightColor  = DColor(d->settings.bevelLowerRightColor,  m_orgImage.sixteenBit());
-    d->decorativeFirstColor  = DColor(d->settings.decorativeFirstColor,  m_orgImage.sixteenBit());
-    d->decorativeSecondColor = DColor(d->settings.decorativeSecondColor, m_orgImage.sixteenBit());
-
-    if (d->settings.preserveAspectRatio)
-    {
-        d->orgRatio        = (float)d->settings.orgWidth / (float)d->settings.orgHeight;
-        int size           = (image->width() > image->height()) ? image->height() : image->width();
-        d->borderMainWidth = (int)(size * d->settings.borderPercent);
-        d->border2ndWidth  = (int)(size * 0.005);
-
-        // Clamp internal border with to 1 pixel to be visible with small image.
-        if (d->border2ndWidth < 1) d->border2ndWidth = 1;
-    }
-
     initFilter();
 }
 
@@ -110,6 +122,8 @@ BorderFilter::~BorderFilter()
 
 void BorderFilter::filterImage()
 {
+    d->setup(m_orgImage);
+
     switch (d->settings.borderType)
     {
       case BorderContainer::SolidBorder:
@@ -425,6 +439,31 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
     dest.bitBltImage(&tmp, borderWidth, borderWidth);
 }
 
+static QString colorToString(const QColor& c)
+{
+    if (c.alpha() != 255)
+        return QString("rgb(%1,%2,%3)").arg(c.red()).arg(c.green()).arg(c.blue());
+    else
+        return QString("rgba(%1,%2,%3,%4)").arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
+}
+
+static QColor stringToColor(const QString& s)
+{
+    QRegExp regexp("(rgb|rgba)\\s*\\((.+)\\)\\s*");
+    if (regexp.exactMatch(s))
+    {
+        QStringList colors = regexp.cap(1).split(",", QString::SkipEmptyParts);
+        if (colors.size() >= 3)
+        {
+            QColor c(colors[0].toInt(), colors[1].toInt(), colors[2].toInt());
+            if (regexp.cap(0) == "rgba" && colors.size() == 4)
+                c.setAlpha(colors[4].toInt());
+            return c;
+        }
+    }
+    return QColor();
+}
+
 FilterAction BorderFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
@@ -441,7 +480,13 @@ FilterAction BorderFilter::filterAction()
     action.setParameter("orgHeight", d->settings.orgHeight);
     action.setParameter("orgWidth", d->settings.orgWidth);
 
-    //TODO: Add colors (QColor)
+    action.setParameter("solidColor", colorToString(d->settings.solidColor));
+    action.setParameter("niepceBorderColor", colorToString(d->settings.niepceBorderColor));
+    action.setParameter("niepceLineColor", colorToString(d->settings.niepceLineColor));
+    action.setParameter("bevelUpperLeftColor", colorToString(d->settings.bevelUpperLeftColor));
+    action.setParameter("bevelLowerRightColor", colorToString(d->settings.bevelLowerRightColor));
+    action.setParameter("decorativeFirstColor", colorToString(d->settings.decorativeFirstColor));
+    action.setParameter("decorativeSecondColor", colorToString(d->settings.decorativeSecondColor));
 
     return action;
 }
@@ -459,7 +504,13 @@ void BorderFilter::readParameters(const FilterAction& action)
     d->settings.orgHeight = action.parameter("orgHeight").toInt();
     d->settings.orgWidth = action.parameter("orgWidth").toInt();
 
-    //TODO: Add colors (QColor)
+    d->settings.solidColor = stringToColor(action.parameter("solidColor").toString());
+    d->settings.niepceBorderColor = stringToColor(action.parameter("niepceBorderColor").toString());
+    d->settings.niepceLineColor = stringToColor(action.parameter("niepceLineColor").toString());
+    d->settings.bevelUpperLeftColor = stringToColor(action.parameter("bevelUpperLeftColor").toString());
+    d->settings.bevelLowerRightColor = stringToColor(action.parameter("bevelLowerRightColor").toString());
+    d->settings.decorativeFirstColor = stringToColor(action.parameter("decorativeFirstColor").toString());
+    d->settings.decorativeSecondColor = stringToColor(action.parameter("decorativeSecondColor").toString());
 }
 
 

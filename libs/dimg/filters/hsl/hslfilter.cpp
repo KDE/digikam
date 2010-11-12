@@ -58,6 +58,14 @@ public:
     HSLContainer settings;
 };
 
+HSLFilter::HSLFilter(QObject* parent)
+         : DImgThreadedFilter(parent),
+           d(new HSLFilterPriv)
+{
+    reset();
+    initFilter();
+}
+
 HSLFilter::HSLFilter(DImg* orgImage, QObject* parent, const HSLContainer& settings)
          : DImgThreadedFilter(orgImage, parent, "HSLFilter"),
            d(new HSLFilterPriv)

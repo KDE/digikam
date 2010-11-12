@@ -43,13 +43,14 @@ class DIGIKAM_EXPORT EmbossFilter : public DImgThreadedFilter
 
 public:
 
+    explicit EmbossFilter(QObject* parent = 0);
     explicit EmbossFilter(DImg* orgImage, QObject* parent=0, int depth=30);
     ~EmbossFilter();
 
-    static QString          FilterIdentifier() { return "digikam:EmbossFilter"; }
-    static QString          DisplayableName() { return "Emboss Effect"; }
+    static QString          FilterIdentifier()  { return "digikam:EmbossFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Emboss Effect"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

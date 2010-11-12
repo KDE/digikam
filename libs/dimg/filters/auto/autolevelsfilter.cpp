@@ -40,13 +40,13 @@
 
 namespace Digikam
 {
+
 AutoLevelsFilter::AutoLevelsFilter(QObject* parent)
                  : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-    
 AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
                 : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter"),
                   m_refImage(*refImage)
@@ -61,6 +61,8 @@ AutoLevelsFilter::~AutoLevelsFilter()
 
 void AutoLevelsFilter::filterImage()
 {
+    if (m_refImage.isNull())
+        m_refImage = m_orgImage;
     autoLevelsCorrectionImage();
     m_destImage = m_orgImage;
 }
@@ -158,6 +160,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
 FilterAction AutoLevelsFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
     return action;
 }
 

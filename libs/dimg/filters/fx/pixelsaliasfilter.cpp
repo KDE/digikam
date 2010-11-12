@@ -144,19 +144,4 @@ inline int PixelsAliasFilter::setPositionAdjusted (int Width, int Height, int X,
     return (Y*Width*4 + 4*X);
 }
 
-FilterAction PixelsAliasFilter::filterAction()
-{
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
-
-    return action;
-}
-
-void PixelsAliasFilter::readParameters(const Digikam::FilterAction& action)
-{
-    Q_UNUSED(action)
-}
-
-
-
 }  // namespace Digikam

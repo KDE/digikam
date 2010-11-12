@@ -46,10 +46,10 @@ public:
     AutoExpoFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~AutoExpoFilter();
 
-    static QString          FilterIdentifier() { return "digikam:autoExpoFilter"; }
+    static QString          FilterIdentifier()  { return "digikam:AutoExpoFilter"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
-    static QString          DisplayableName() { return "Auto Exposure Filter"; }
+    static int              CurrentVersion()    { return 1; }
+    static QString          DisplayableName()   { return I18N_NOOP("Auto Exposure"); }
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
@@ -60,7 +60,7 @@ private:
 
 private:
 
-    const DImg m_refImage;
+    DImg m_refImage;
 };
 
 }  // namespace Digikam

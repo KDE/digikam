@@ -48,6 +48,12 @@
 namespace Digikam
 {
 
+InfraredFilter::InfraredFilter(QObject* parent)
+              : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, const InfraredContainer& settings)
               : DImgThreadedFilter(orgImage, parent, "Infrared")
 {

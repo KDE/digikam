@@ -40,6 +40,7 @@ class DIGIKAM_EXPORT RefocusFilter : public DImgThreadedFilter
 
 public:
 
+    explicit RefocusFilter(QObject* parent = 0);
     explicit RefocusFilter(DImg* orgImage, QObject* parent=0, int matrixSize=5, double radius=0.9,
                            double gauss=0.0, double correlation=0.5, double noise=0.01);
 
@@ -47,10 +48,10 @@ public:
 
     static int maxMatrixSize();
 
-    static QString          FilterIdentifier() { return "digikam:RefocusFilter"; }
-    static QString          DisplayableName() { return "Refocus Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:RefocusFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Refocus"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

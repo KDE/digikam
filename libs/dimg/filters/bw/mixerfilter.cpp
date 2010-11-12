@@ -41,6 +41,12 @@
 namespace Digikam
 {
 
+MixerFilter::MixerFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 MixerFilter::MixerFilter(DImg* orgImage, QObject* parent, const MixerContainer& settings)
            : DImgThreadedFilter(orgImage, parent, "MixerFilter")
 {
@@ -174,7 +180,7 @@ FilterAction MixerFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
-    
+
     action.addParameter("blackBlueGain", m_settings.blackBlueGain);
     action.addParameter("blackGreenGain", m_settings.blackGreenGain);
     action.addParameter("blackRedGain", m_settings.blackRedGain);

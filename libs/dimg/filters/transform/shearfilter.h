@@ -44,16 +44,17 @@ class DIGIKAM_EXPORT ShearFilter : public DImgThreadedFilter
 
 public:
 
+    explicit ShearFilter(QObject* parent = 0);
     explicit ShearFilter(DImg* orgImage, QObject* parent=0, float hAngle=0.0, float vAngle=0.0,
               bool antialiasing=true, const QColor& backgroundColor=Qt::black, int orgW=0, int orgH=0);
     ~ShearFilter();
 
     QSize getNewSize(void){ return m_newSize; };
 
-    static QString          FilterIdentifier() { return "digikam:ShearFilter"; }
-    static QString          DisplayableName() { return "Shear"; }
+    static QString          FilterIdentifier()  { return "digikam:ShearFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Shear Tool"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

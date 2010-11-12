@@ -46,6 +46,12 @@
 namespace Digikam
 {
 
+CharcoalFilter::CharcoalFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 CharcoalFilter::CharcoalFilter(DImg* orgImage, QObject* parent, double pencil, double smooth)
               : DImgThreadedFilter(orgImage, parent, "Charcoal")
 {

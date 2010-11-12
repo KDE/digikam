@@ -40,6 +40,7 @@ class DIGIKAM_EXPORT UnsharpMaskFilter : public DImgThreadedFilter
 
 public:
 
+    explicit UnsharpMaskFilter(QObject* parent = 0);
     explicit UnsharpMaskFilter(DImg* orgImage, QObject* parent=0, int radius=1,
                              double amount=1.0, double threshold=0.05);
 
@@ -49,10 +50,10 @@ public:
 
     ~UnsharpMaskFilter();
 
-    static QString          FilterIdentifier() { return "digikam:UnsharpMaskFilter"; }
-    static QString          DisplayableName() { return "Unsharp Mask Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:UnsharpMaskFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Unsharp Mask Tool"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

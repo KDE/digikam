@@ -48,6 +48,12 @@
 namespace Digikam
 {
 
+DistortionFXFilter::DistortionFXFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 DistortionFXFilter::DistortionFXFilter(DImg* orgImage, QObject* parent, int effectType,
                            int level, int iteration, bool antialiasing)
                   : DImgThreadedFilter(orgImage, parent, "DistortionFX")
@@ -851,7 +857,7 @@ FilterAction DistortionFXFilter::filterAction()
     action.setDisplayableName(DisplayableName());
 
     action.addParameter("antiAlias", m_antiAlias);
-    action.addParameter("effectType", m_effectType);
+    action.addParameter("type", m_effectType);
     action.addParameter("iteration", m_iteration);
     action.addParameter("level", m_level);
 
@@ -865,7 +871,7 @@ FilterAction DistortionFXFilter::filterAction()
 void DistortionFXFilter::readParameters(const Digikam::FilterAction& action)
 {
     m_antiAlias = action.parameter("antiAlias").toBool();
-    m_effectType = action.parameter("effectType").toInt();
+    m_effectType = action.parameter("type").toInt();
     m_iteration = action.parameter("iteration").toInt();
     m_level = action.parameter("level").toInt();
 

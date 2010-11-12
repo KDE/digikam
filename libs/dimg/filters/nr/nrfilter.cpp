@@ -57,6 +57,13 @@ public:
     NRContainer settings;
 };
 
+NRFilter::NRFilter(QObject* parent)
+        : DImgThreadedFilter(parent),
+          d(new NRFilterPriv)
+{
+    initFilter();
+}
+
 NRFilter::NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings)
         : DImgThreadedFilter(orgImage, parent, "NRFilter"),
           d(new NRFilterPriv)

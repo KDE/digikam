@@ -89,7 +89,7 @@ public:
 
 public:
 
-    BWSepiaContainer(bool init=true) : curvesPrm(init)
+    BWSepiaContainer()
     {
         previewType = BWGeneric;
         preview     = false;
@@ -99,7 +99,7 @@ public:
         strength    = 1.0;
     };
 
-    BWSepiaContainer(int ptype, bool init=true) : curvesPrm(init)
+    BWSepiaContainer(int ptype)
     {
         previewType = ptype;
         preview     = true;
@@ -109,7 +109,7 @@ public:
         toneType    = BWNoTone;
     };
 
-    BWSepiaContainer(int ptype, const CurvesContainer& container) : curvesPrm(false)
+    BWSepiaContainer(int ptype, const CurvesContainer& container)
     {
         previewType = ptype;
         preview     = true;
@@ -145,13 +145,14 @@ class DIGIKAM_EXPORT BWSepiaFilter : public DImgThreadedFilter
 
 public:
 
+    explicit BWSepiaFilter(QObject* parent = 0);
     explicit BWSepiaFilter(DImg* orgImage, QObject* parent=0, const BWSepiaContainer& settings=BWSepiaContainer());
     virtual ~BWSepiaFilter();
-    
-    static QString          FilterIdentifier() { return "digikam:BWSepiaFilter"; }
-    static QString          DisplayableName() { return "Black & White / Sepia Filter"; }
+
+    static QString          FilterIdentifier()  { return "digikam:BWSepiaFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Black & White / Sepia Filter"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

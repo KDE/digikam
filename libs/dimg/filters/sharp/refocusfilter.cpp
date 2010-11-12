@@ -49,6 +49,12 @@ int RefocusFilter::maxMatrixSize()
     return MAX_MATRIX_SIZE;
 }
 
+RefocusFilter::RefocusFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 RefocusFilter::RefocusFilter(DImg* orgImage, QObject* parent, int matrixSize, double radius,
                              double gauss, double correlation, double noise)
              : DImgThreadedFilter(orgImage, parent, "Refocus")

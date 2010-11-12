@@ -39,6 +39,7 @@ class DIGIKAM_EXPORT SharpenFilter : public DImgThreadedFilter
 
 public:
 
+    explicit SharpenFilter(QObject* parent = 0);
     explicit SharpenFilter(DImg* orgImage, QObject* parent=0, double radius=0.0, double sigma=1.0);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
@@ -47,10 +48,10 @@ public:
 
     ~SharpenFilter();
 
-    static QString          FilterIdentifier() { return "digikam:SharpenFilter"; }
-    static QString          DisplayableName() { return "Sharpen Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:SharpenFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Sharpen"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
 
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

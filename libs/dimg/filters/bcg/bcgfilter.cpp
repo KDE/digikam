@@ -76,25 +76,37 @@ BCGFilter::~BCGFilter()
     delete d;
 }
 
+void BCGFilter::addBCGParameters(FilterAction& action, const BCGContainer& settings)
+{
+    action.addParameter("channel", settings.channel);
+    action.addParameter("brightness", settings.brightness);
+    action.addParameter("contrast", settings.contrast);
+    action.addParameter("gamma", settings.gamma);
+}
+
+BCGContainer BCGFilter::readBCGParameters(const FilterAction& action)
+{
+    BCGContainer settings;
+    settings.channel = action.parameter("channel").toInt();
+    settings.brightness = action.parameter("brightness").toDouble();
+    settings.contrast = action.parameter("contrast").toDouble();
+    settings.gamma = action.parameter("gamma").toDouble();
+    return settings;
+}
+
 FilterAction BCGFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("channel", d->settings.channel);
-    action.addParameter("brightness", d->settings.brightness);
-    action.addParameter("contrast", d->settings.contrast);
-    action.addParameter("gamma", d->settings.gamma);
+    addBCGParameters(action, d->settings);
 
     return action;
 }
 
 void BCGFilter::readParameters(const FilterAction& action)
 {
-    d->settings.channel = action.parameter("channel").toInt();
-    d->settings.brightness = action.parameter("brightness").toDouble();
-    d->settings.contrast = action.parameter("contrast").toDouble();
-    d->settings.gamma = action.parameter("gamma").toDouble();
+    d->settings = readBCGParameters(action);
 }
 
 void BCGFilter::filterImage()

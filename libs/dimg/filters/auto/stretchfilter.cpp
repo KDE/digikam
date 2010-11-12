@@ -59,6 +59,8 @@ StretchFilter::~StretchFilter()
 
 void StretchFilter::filterImage()
 {
+    if (m_refImage.isNull())
+        m_refImage = m_orgImage;
     stretchContrastImage();
     m_destImage = m_orgImage;
 }
@@ -375,7 +377,9 @@ void StretchFilter::stretchContrastImage()
 
 FilterAction StretchFilter::filterAction()
 {
-    return FilterAction(FilterIdentifier(), CurrentVersion());
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+    return action;
 }
 
 void StretchFilter::readParameters(const Digikam::FilterAction& /*action*/)

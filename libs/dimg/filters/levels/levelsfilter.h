@@ -74,13 +74,14 @@ class DIGIKAM_EXPORT LevelsFilter : public DImgThreadedFilter
 
 public:
 
+    explicit LevelsFilter(QObject* parent = 0);
     explicit LevelsFilter(DImg* orgImage, QObject* parent=0, const LevelsContainer& settings=LevelsContainer());
     virtual ~LevelsFilter();
 
-    static QString          FilterIdentifier() { return "digikam:LevelsFilter"; }
-    static QString          DisplayableName() { return "Levels Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:LevelsFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Levels Adjust Tool"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

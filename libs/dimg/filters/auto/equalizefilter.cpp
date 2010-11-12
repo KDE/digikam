@@ -60,6 +60,8 @@ EqualizeFilter::~EqualizeFilter()
 
 void EqualizeFilter::filterImage()
 {
+    if (m_refImage.isNull())
+        m_refImage = m_orgImage;
     equalizeImage();
     m_destImage = m_orgImage;
 }
@@ -240,6 +242,7 @@ void EqualizeFilter::equalizeImage()
 FilterAction EqualizeFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
     return action;
 }
 

@@ -261,9 +261,6 @@ void GreycstorationFilter::filterImage()
     {
        kDebug() << "Error during Greycstoration filter computation!";
 
-       if (m_parent)
-           emit finished(false);
-
        return;
     }
 
@@ -467,7 +464,7 @@ void GreycstorationFilter::iterationLoop(uint iter)
     {
         usleep(100000);
 
-        if (m_parent && runningFlag())
+        if (runningFlag())
         {
             // Update the progress bar in dialog. We simply computes the global
             // progression index (including all iterations).

@@ -36,6 +36,12 @@
 namespace Digikam
 {
 
+LevelsFilter::LevelsFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 LevelsFilter::LevelsFilter(DImg* orgImage, QObject* parent, const LevelsContainer& settings)
             : DImgThreadedFilter(orgImage, parent, "LevelsFilter")
 {

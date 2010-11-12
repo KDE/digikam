@@ -41,6 +41,12 @@
 namespace Digikam
 {
 
+TonalityFilter::TonalityFilter(QObject* parent)
+              : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 TonalityFilter::TonalityFilter(DImg* orgImage, QObject* parent, const TonalityContainer& settings)
               : DImgThreadedFilter(orgImage, parent, "TonalityFilter")
 {

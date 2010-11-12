@@ -40,6 +40,7 @@ class DIGIKAM_EXPORT BlurFilter : public DImgThreadedFilter
 
 public:
 
+    explicit BlurFilter(QObject* parent = 0);
     explicit BlurFilter(DImg* orgImage, QObject* parent=0, double radius=3.0);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
@@ -48,10 +49,10 @@ public:
 
     ~BlurFilter();
 
-    static QString          FilterIdentifier() { return "digikam:BlurFilter"; }
-    static QString          DisplayableName() { return "Blur Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:BlurFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Blur Filter"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

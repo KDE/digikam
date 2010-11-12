@@ -44,15 +44,6 @@ public:
     PixelsAliasFilter(){};
     ~PixelsAliasFilter(){};
 
-    static QString          FilterIdentifier() { return "digikam:PixlesAliasFilter"; }
-    static QString          DisplayableName() { return "Pixels Alias Filter"; }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
-    
-    QString                 filterIdentifier() const { return FilterIdentifier(); }
-    FilterAction            filterAction();
-    void                    readParameters(const FilterAction& action);
-
 public:   // Public methods.
 
     void pixelAntiAliasing(uchar* data, int Width, int Height, double X, double Y,

@@ -73,14 +73,18 @@ public:
     explicit BCGFilter(DImg* orgImage, QObject* parent=0, const BCGContainer& settings=BCGContainer());
     virtual ~BCGFilter();
 
-    static QString          FilterIdentifier() { return "digikam:BCGFilter"; }
-    static QString          DisplayableName() { return "Brightness / Contrast / Gamma Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:BCGFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Brightness / Contrast / Gamma Filter"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
 
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
+
+    /// Useful code to store a BCGContainer in a FilterAction
+    static void addBCGParameters(FilterAction& action, const BCGContainer& settings);
+    static BCGContainer readBCGParameters(const FilterAction& action);
 
 private:
 

@@ -53,6 +53,13 @@ public:
     FreeRotationContainer settings;
 };
 
+FreeRotationFilter::FreeRotationFilter(QObject* parent)
+                 : DImgThreadedFilter(parent),
+                   d(new FreeRotationFilterPriv)
+{
+    initFilter();
+}
+
 FreeRotationFilter::FreeRotationFilter(DImg* orgImage, QObject* parent, const FreeRotationContainer& settings)
                   : DImgThreadedFilter(orgImage, parent, "FreeRotation"),
                     d(new FreeRotationFilterPriv)

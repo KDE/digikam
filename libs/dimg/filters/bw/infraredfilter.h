@@ -66,13 +66,14 @@ class DIGIKAM_EXPORT InfraredFilter : public DImgThreadedFilter
 
 public:
 
+    explicit InfraredFilter(QObject* parent = 0);
     explicit InfraredFilter(DImg* orgImage, QObject* parent=0, const InfraredContainer& settings=InfraredContainer());
     ~InfraredFilter();
     
-    static QString          FilterIdentifier() { return "digikam:InfraredFilter"; }
-    static QString          DisplayableName() { return "Infrared Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:InfraredFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Infrared Filter"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

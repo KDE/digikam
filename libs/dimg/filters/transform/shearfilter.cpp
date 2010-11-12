@@ -43,6 +43,12 @@
 namespace Digikam
 {
 
+ShearFilter::ShearFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 ShearFilter::ShearFilter(DImg* orgImage, QObject* parent, float hAngle, float vAngle,
                          bool antialiasing, const QColor& backgroundColor, int orgW, int orgH)
      : DImgThreadedFilter(orgImage, parent, "sheartool")

@@ -55,6 +55,38 @@ bool s_hResize                 = false;
 
 ContentAwareFilter* s_resiser = 0;
 
+static LqrEnergyFuncBuiltinType toLqrEnergy(ContentAwareContainer::EnergyFunction func)
+{
+    switch (func)
+    {
+        case ContentAwareContainer::GradientNorm:
+        default:
+            return LQR_EF_GRAD_NORM;
+        case ContentAwareContainer::SumOfAbsoluteValues:
+            return LQR_EF_GRAD_SUMABS;
+        case ContentAwareContainer::XAbsoluteValue:
+            return LQR_EF_GRAD_XABS;
+        case ContentAwareContainer::LumaGradientNorm:
+            return LQR_EF_LUMA_GRAD_NORM;
+        case ContentAwareContainer::LumaSumOfAbsoluteValues:
+            return LQR_EF_LUMA_GRAD_SUMABS;
+        case ContentAwareContainer::LumaXAbsoluteValue:
+            return LQR_EF_LUMA_GRAD_XABS;
+    }
+}
+
+static LqrResizeOrder toLqrOrder(Qt::Orientation direction)
+{
+    switch (direction)
+    {
+        case Qt::Horizontal:
+        default:
+            return LQR_RES_ORDER_HOR;
+        case Qt::Vertical:
+            return LQR_RES_ORDER_VERT;
+    }
+}
+
 class ContentAwareFilterPriv
 {
 public:
@@ -71,6 +103,13 @@ public:
     LqrProgress*          progress;
 
 };
+
+ContentAwareFilter::ContentAwareFilter(QObject* parent)
+                   : DImgThreadedFilter(parent),
+                     d(new ContentAwareFilterPriv)
+{
+    initFilter();
+}
 
 ContentAwareFilter::ContentAwareFilter(DImg* orgImage, QObject* parent, const ContentAwareContainer& settings)
                    : DImgThreadedFilter(orgImage, parent, "ContentAwareFilter"),
@@ -107,13 +146,10 @@ ContentAwareFilter::ContentAwareFilter(DImg* orgImage, QObject* parent, const Co
         lqr_carver_set_enl_step(d->carver, 1.5);
 
         // Choose a gradient function
-        lqr_carver_set_energy_function_builtin(d->carver, d->settings.func);
+        lqr_carver_set_energy_function_builtin(d->carver, toLqrEnergy(d->settings.func));
 
         // Choose the resize order
-        if (d->settings.resize_order == 0)
-            lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_HOR);
-        else
-            lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_VERT);
+        lqr_carver_set_resize_order(d->carver, toLqrOrder(d->settings.resize_order));
 
         // Set a bias if any mask
         if (!d->settings.mask.isNull())
@@ -272,9 +308,8 @@ FilterAction ContentAwareFilter::filterAction()
     action.addParameter("side_switch_freq", d->settings.side_switch_freq);
     action.addParameter("step", d->settings.step);
     action.addParameter("width", d->settings.width);
-    //TODO:
-//    action.addParameter("func", d->settings.func);
-//    action.addParameter("resize_order", d->settings.resize_order);
+    action.addParameter("func", d->settings.func);
+    action.addParameter("resize_order", d->settings.resize_order);
 
     return action;
 }
@@ -287,6 +322,8 @@ void ContentAwareFilter::readParameters(const FilterAction& action)
     d->settings.side_switch_freq = action.parameter("side_switch_freq").toInt();
     d->settings.step = action.parameter("step").toInt();
     d->settings.width = action.parameter("width").toUInt();
+    d->settings.func = (ContentAwareContainer::EnergyFunction)action.parameter("func").toInt();
+    d->settings.resize_order = (Qt::Orientation)action.parameter("resize_order").toInt();
 }
 
 // ------------------------------------------------------------------------------------

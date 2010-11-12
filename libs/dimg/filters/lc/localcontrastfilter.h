@@ -50,13 +50,14 @@ class DIGIKAM_EXPORT LocalContrastFilter : public DImgThreadedFilter
 
 public:
 
+    explicit LocalContrastFilter(QObject* parent = 0);
     explicit LocalContrastFilter(DImg* image, QObject* parent=0, const LocalContrastContainer& par=LocalContrastContainer());
     ~LocalContrastFilter();
 
-    static QString          FilterIdentifier() { return "digikam:LocalContrastFilter"; }
-    static QString          DisplayableName() { return "Local Contrast Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:LocalContrastFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Local Contrast Filter"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

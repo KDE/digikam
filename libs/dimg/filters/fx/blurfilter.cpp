@@ -43,6 +43,12 @@ using namespace cimg_library;
 namespace Digikam
 {
 
+BlurFilter::BlurFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 BlurFilter::BlurFilter(DImg* orgImage, QObject* parent, double radius)
           : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
 {

@@ -59,6 +59,14 @@ public:
     CBContainer settings;
 };
 
+CBFilter::CBFilter(QObject* parent)
+        : DImgThreadedFilter(parent),
+          d(new CBFilterPriv)
+{
+    reset();
+    initFilter();
+}
+
 CBFilter::CBFilter(DImg* orgImage, QObject* parent, const CBContainer& settings)
         : DImgThreadedFilter(orgImage, parent, "CBFilter"),
           d(new CBFilterPriv)

@@ -71,6 +71,13 @@ public:
     RandomNumberGenerator generator;
 };
 
+FilmGrainFilter::FilmGrainFilter(QObject* parent)
+                 : DImgThreadedFilter(parent),
+                   d(new FilmGrainFilterPriv)
+{
+    initFilter();
+}
+
 FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
                : DImgThreadedFilter(orgImage, parent, "FilmGrain"),
                  d(new FilmGrainFilterPriv)

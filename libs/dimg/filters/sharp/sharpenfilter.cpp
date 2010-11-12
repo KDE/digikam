@@ -42,6 +42,12 @@
 namespace Digikam
 {
 
+SharpenFilter::SharpenFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 SharpenFilter::SharpenFilter(DImg* orgImage, QObject* parent, double radius, double sigma)
              : DImgThreadedFilter(orgImage, parent, "Sharpen")
 {
