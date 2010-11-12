@@ -51,6 +51,9 @@
 namespace Digikam
 {
 
+static const QString beforeLabel = i18nc("Preview image (before filter has been applied)", "Before");
+static const QString afterLabel  = i18nc("Preview image (after filter has been applied)", "After");
+
 class ImageGuideWidget::ImageGuideWidgetPriv
 {
 public:
@@ -276,7 +279,7 @@ void ImageGuideWidget::updatePixmap()
         (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
     {
         p.drawPixmap(d->rect, *d->previewPixmap);
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), beforeLabel);
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
              d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
@@ -287,7 +290,7 @@ void ImageGuideWidget::updatePixmap()
         if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
             d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
         {
-            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("After"));
+            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), afterLabel);
         }
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
@@ -320,8 +323,8 @@ void ImageGuideWidget::updatePixmap()
         p.drawLine(d->rect.x()+d->rect.width()/2-1, d->rect.y(),
                    d->rect.x()+d->rect.width()/2-1, d->rect.y()+d->rect.height());
 
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
-        drawText(&p, QPoint(d->rect.x() + d->rect.width()/2 + 20, d->rect.y() + 20), i18n("After"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), beforeLabel);
+        drawText(&p, QPoint(d->rect.x() + d->rect.width()/2 + 20, d->rect.y() + 20), afterLabel);
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
              d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
@@ -357,8 +360,8 @@ void ImageGuideWidget::updatePixmap()
                    d->rect.x()+d->rect.width(),
                    d->rect.y()+d->rect.height()/2-1);
 
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + d->rect.height()/2 + 20), i18n("After"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), beforeLabel);
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + d->rect.height()/2 + 20), afterLabel);
     }
 
     if (d->spotVisible)
@@ -489,13 +492,13 @@ void ImageGuideWidget::paintEvent(QPaintEvent*)
         if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
                 (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
         {
-            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
+            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), beforeLabel);
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                 d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
                 (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
         {
-            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("After"));
+            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), afterLabel);
         }
     }
 
