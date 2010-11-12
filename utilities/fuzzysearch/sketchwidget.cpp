@@ -457,7 +457,7 @@ void SketchWidget::mouseMoveEvent(QMouseEvent* e)
     {
         setFocus();
 
-        if (d->drawing || e->modifiers() & Qt::CTRL)
+        if (d->drawing || !(e->modifiers() & Qt::CTRL))
         {
             setCursor(d->drawCursor);
         }
@@ -482,7 +482,7 @@ void SketchWidget::mouseMoveEvent(QMouseEvent* e)
 
 void SketchWidget::wheelEvent (QWheelEvent* e)
 {
-    if (rect().contains(e->x(), e->y()) && e->modifiers() & Qt::CTRL)
+    if (rect().contains(e->x(), e->y()))
     {
         int size = d->penWidth;
         int decr = (e->modifiers() & Qt::SHIFT) ? 1 : 10;
@@ -507,7 +507,6 @@ void SketchWidget::mouseReleaseEvent(QMouseEvent* e)
         QPoint currentPos = e->pos();
         d->currentDrawEvent().lineTo(currentPos);
         d->drawing = false;
-        setCursor(Qt::CrossCursor);
         emit signalSketchChanged(sketchImage());
         emit signalUndoRedoStateChanged(true, false);
     }
@@ -519,7 +518,7 @@ void SketchWidget::keyPressEvent(QKeyEvent* e)
 
     if (e->modifiers() == Qt::CTRL)
     {
-        setCursor(d->drawCursor);
+        setCursor(Qt::CrossCursor);
     }
 }
 
@@ -529,7 +528,7 @@ void SketchWidget::keyReleaseEvent(QKeyEvent* e)
 
     if (e->key() == Qt::Key_Control)
     {
-        setCursor(Qt::CrossCursor);
+        setCursor(d->drawCursor);
     }
 }
 
