@@ -470,6 +470,19 @@ QList<IccProfile> IccSettings::outputProfiles()
     return profiles;
 }
 
+QList<IccProfile> IccSettings::profilesForDescription(const QString& description)
+{
+    QList<IccProfile> profiles;
+    if (description.isEmpty())
+        return profiles;
+    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
+    {
+        if (profile.description() == description)
+            profiles << profile;
+    }
+    return profiles;
+}
+
 void IccSettings::loadAllProfilesProperties()
 {
     allProfiles();
