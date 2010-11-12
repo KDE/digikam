@@ -57,6 +57,7 @@
 // Local includes
 
 #include "colorcorrectiondlg.h"
+#include "dimgbuiltinfilter.h"
 #include "undomanager.h"
 #include "undoaction.h"
 #include "iccmanager.h"
@@ -639,7 +640,7 @@ void DImgInterface::setModified()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
-void DImgInterface::setModified(FilterAction& action)
+void DImgInterface::setModified(const FilterAction& action)
 {
     d->image.setFilterAction(action);
     emit signalModified();
@@ -848,54 +849,47 @@ void DImgInterface::zoom(double val)
 
 void DImgInterface::rotate90(bool saveUndo)
 {
-    d->image.rotate(DImg::ROT90);
+    DImgBuiltinFilter filter(DImgBuiltinFilter::Rotate90);
+    filter.apply(d->image);
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
     if (saveUndo)
     {
         d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R90));
-
-        FilterAction action("digikam:rotate90", 1);
-        action.setDisplayableName(i18n("Rotate right"));
-
-        setModified(action);
+        setModified(filter.filterAction());
     }
-    else setModified();
+    else
+        setModified();
 }
 
 void DImgInterface::rotate180(bool saveUndo)
 {
-    d->image.rotate(DImg::ROT180);
+    DImgBuiltinFilter filter(DImgBuiltinFilter::Rotate180);
+    filter.apply(d->image);
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
     if (saveUndo)
     {
         d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R180));
-
-        FilterAction action("digikam:rotate180", 1);
-        action.setDisplayableName(i18n("Rotate right"));
-
-        setModified(action);
+        setModified(filter.filterAction());
     }
-    else setModified();
+    else
+        setModified();
 }
 
 void DImgInterface::rotate270(bool saveUndo)
 {
-    d->image.rotate(DImg::ROT270);
+    DImgBuiltinFilter filter(DImgBuiltinFilter::Rotate270);
+    filter.apply(d->image);
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
     if (saveUndo)
     {
         d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R270));
-
-        FilterAction action("digikam:rotate270", 1);
-        action.setDisplayableName(i18n("Rotate left"));
-
-        setModified(action);
+        setModified(filter.filterAction());
     }
     else setModified();
 }
@@ -907,12 +901,9 @@ void DImgInterface::flipHoriz(bool saveUndo)
         d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Horizontal));
     }
 
-    d->image.flip(DImg::HORIZONTAL);
-
-    FilterAction action("digikam:flipHorizontal", 1);
-    action.setDisplayableName(i18n("Flip horizontally"));
-
-    setModified(action);
+    DImgBuiltinFilter filter(DImgBuiltinFilter::FlipHorizontally);
+    filter.apply(d->image);
+    setModified(filter.filterAction());
 }
 
 void DImgInterface::flipVert(bool saveUndo)
@@ -922,56 +913,44 @@ void DImgInterface::flipVert(bool saveUndo)
         d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Vertical));
     }
 
-    d->image.flip(DImg::VERTICAL);
-
-    FilterAction action("digikam:flipVertical", 1);
-    action.setDisplayableName(i18n("Flip vertically"));
-
-    setModified(action);
+    DImgBuiltinFilter filter(DImgBuiltinFilter::FlipVertically);
+    filter.apply(d->image);
+    setModified(filter.filterAction());
 }
 
 void DImgInterface::crop(int x, int y, int w, int h)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, "Crop"));
 
-    d->image.crop(x, y, w, h);
+    DImgBuiltinFilter filter(DImgBuiltinFilter::Crop, QRect(x, y, w, h));
+    filter.apply(d->image);
 
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    FilterAction action("digikam:crop", 1);
-    action.setDisplayableName(i18n("Crop"));
-    action.addParameter("x", x);
-    action.addParameter("y", y);
-    action.addParameter("w", w);
-    action.addParameter("h", h);
-
-    setModified(action);
+    setModified(filter.filterAction());
 }
 
 void DImgInterface::resize(int w, int h)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, "Resize"));
 
-    d->image.resize(w, h);
+    DImgBuiltinFilter filter(DImgBuiltinFilter::Resize, QSize(w, h));
+    filter.apply(d->image);
 
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    FilterAction action("digikam:resize", 1);
-    action.setDisplayableName(i18n("Resize to %1x%2").arg(w).arg(h));
-    action.addParameter("w", w);
-    action.addParameter("h", h);
-    
-    setModified(action);
+    setModified(filter.filterAction());
 }
 
 void DImgInterface::convertDepth(int depth)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, "Convert Color Depth"));
-    d->image.convertDepth(depth);
 
-    setModified();
+    DImgBuiltinFilter filter(depth == 32 ? DImgBuiltinFilter::ConvertTo8Bit : DImgBuiltinFilter::ConvertTo16Bit);
+    filter.apply(d->image);
+    setModified(filter.filterAction());
 }
 
 DImg* DImgInterface::getImg()

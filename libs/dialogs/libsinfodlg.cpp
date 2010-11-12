@@ -31,6 +31,7 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <klocale.h>
 
 // Libkexiv2 includes

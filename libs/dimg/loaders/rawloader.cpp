@@ -330,14 +330,13 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         bcg.startFilterDirectly();
         m_image->putImageData(bcg.getTargetImage().bits());        
     }
-    
+
     if (observer) observer->progressInfo(m_image, 0.94F);
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
     {
-        CurvesContainer settings;
-        settings.curvesType   = ImageCurves::CURVE_SMOOTH;
-        settings.lumCurveVals = m_customRawSettings.curveAdjust;
+        CurvesContainer settings(ImageCurves::CURVE_SMOOTH, m_image->sixteenBit());
+        settings.values[LuminosityChannel] = m_customRawSettings.curveAdjust;
         CurvesFilter curves(m_image, 0L, settings);
         curves.startFilterDirectly();
         m_image->putImageData(curves.getTargetImage().bits());

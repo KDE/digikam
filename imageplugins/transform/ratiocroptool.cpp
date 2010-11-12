@@ -973,7 +973,7 @@ void RatioCropTool::finalRendering()
     delete [] data;
     imOrg.crop(normalizedRegion);
 
-    FilterAction action("digikam:ratioCrop", 1);
+    FilterAction action("digikam:RatioCrop", 1);
     action.setDisplayableName(i18n("Aspect Ratio Crop"));
 
     action.addParameter("x", currentRegion.x());

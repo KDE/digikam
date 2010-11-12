@@ -86,7 +86,7 @@ public:
     void   switchToLastSaved(const QString& newFilename);
     void   abortSaving();
     void   setModified();
-    void   setModified(FilterAction& action);
+    void   setModified(const FilterAction& action);
     void   readMetadataFromFile(const QString& file);
     void   clearUndoManager();
     void   setUndoManagerOrigin();

@@ -88,7 +88,9 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
         painter->drawRect(option.rect);
         painter->setRenderHint(QPainter::Antialiasing, true);
 
-        QString iconName = DImgFilterManager::instance()->getFilterIcon(index.data(Qt::DecorationRole).toString());
+        QString iconName = DImgFilterManager::instance()->filterIcon(index.data(Qt::DecorationRole).toString());
+        if (iconName.isNull())
+            iconName = "document-edit";
         if(entryDisabled)
         {
             painter->drawPixmap(option.rect.left()+4, option.rect.top()+5, KIcon(iconName).pixmap(QSize(22,22), QIcon::Disabled));
