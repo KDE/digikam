@@ -46,6 +46,12 @@
 namespace Digikam
 {
 
+AntiVignettingFilter::AntiVignettingFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 AntiVignettingFilter::AntiVignettingFilter(DImg* orgImage, QObject* parent,
                                            const AntiVignettingContainer& settings)
                     : DImgThreadedFilter(orgImage, parent, "AntiVignettingFilter")

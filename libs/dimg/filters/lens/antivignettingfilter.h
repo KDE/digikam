@@ -70,15 +70,16 @@ class DIGIKAM_EXPORT AntiVignettingFilter : public DImgThreadedFilter
 
 public:
 
+    explicit AntiVignettingFilter(QObject* parent = 0);
     explicit AntiVignettingFilter(DImg* orgImage, QObject* parent=0,
                                   const AntiVignettingContainer& settings=AntiVignettingContainer());
 
     ~AntiVignettingFilter();
 
-    static QString          FilterIdentifier() { return "digikam:AntiVignettingFilter"; }
-    static QString          DisplayableName() { return "Anti-Vignetting Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:AntiVignettingFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("Anti-Vignetting Tool"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
 
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();

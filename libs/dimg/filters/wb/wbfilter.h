@@ -87,10 +87,10 @@ public:
     static void autoExposureAdjustement(const DImg* img, double& black, double& expo);
     static void autoWBAdjustementFromColor(const QColor& tc, double& temperature, double& green);
 
-    static QString          FilterIdentifier() { return "digikam:whiteBalance"; }
-    static QString          DisplayableName() { return "White Balance Filter"; }
+    static QString          FilterIdentifier()  { return "digikam:WhiteBalanceFilter"; }
+    static QString          DisplayableName()   { return I18N_NOOP("White Balance Tool"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion() { return 1; }
+    static int              CurrentVersion()    { return 1; }
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);

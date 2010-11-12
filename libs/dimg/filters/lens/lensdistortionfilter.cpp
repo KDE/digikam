@@ -38,6 +38,12 @@
 namespace Digikam
 {
 
+LensDistortionFilter::LensDistortionFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 LensDistortionFilter::LensDistortionFilter(DImg* orgImage, QObject* parent, double main,
                                            double edge, double rescale, double brighten,
                                            int center_x, int center_y)
@@ -131,7 +137,7 @@ void LensDistortionFilter::filterImage()
        // Update progress bar in dialog.
 
         progress = (int) (((double)dstJ * 100.0) / jLimit);
-        if (m_parent && progress%5 == 0)
+        if (progress%5 == 0)
             postProgress(progress);
     }
 
