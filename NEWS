@@ -34,5 +34,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 254203 : Libpgf relevant : digiKam crashes while displaying thumbnails on Ultra-SPARC platform.
 018 ==> 233005 : Sorting in thumb panel differs from tree.
 019 ==> 229282 : digiKam shutdown as I was sellecting crop to crop an image.
-020 ==> 
+020 ==> 241575 - digiKam crashes after saving several (>2) pictures.
+021 ==> 
 
