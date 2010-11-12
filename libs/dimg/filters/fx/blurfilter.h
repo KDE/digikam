@@ -49,12 +49,12 @@ public:
 
 private:
 
-    double m_radius;
+    void filterImage();
+    void gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, double radius);
 
 private:
 
-    void filterImage();
-    void gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, double radius);
+    double m_radius;
 };
 
 }  // namespace Digikam

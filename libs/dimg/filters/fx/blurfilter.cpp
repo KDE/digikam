@@ -92,7 +92,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
     if (!sixteenBit)           // 8 bits image.
     {
         // convert DImg (interleaved RGBA) to CImg (planar RGBA)
-        CImg<uchar> img = CImg<uchar>(data, 4, width, height, 1, false).
+        CImg<uchar> img = CImg<uchar>(data, 4, width, height, 1, true).
                           get_permute_axes("yzvx");
 
         // blur the image
@@ -101,7 +101,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
         // Copy CImg onto destination.
         kDebug() << "BlurFilter::Finalization...";
 
-        uchar *ptr = m_destImage.bits();
+        uchar* ptr = m_destImage.bits();
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
@@ -118,7 +118,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
     else                                // 16 bits image.
     {
         // convert DImg (interleaved RGBA) to CImg (planar RGBA)
-        CImg<unsigned short> img = CImg<unsigned short>((unsigned short*)data, 4, width, height, 1, false).
+        CImg<unsigned short> img = CImg<unsigned short>((unsigned short*)data, 4, width, height, 1, true).
                                    get_permute_axes("yzvx");
 
         // blur the image
@@ -127,7 +127,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
         // Copy CImg onto destination.
         kDebug() << "BlurFilter::Finalization...";
 
-        unsigned short *ptr = (unsigned short *)m_destImage.bits();
+        unsigned short* ptr = (unsigned short*)m_destImage.bits();
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
