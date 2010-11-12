@@ -35,6 +35,12 @@
 namespace Digikam
 {
 
+CurvesFilter::CurvesFilter(QObject* parent)
+                 : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const CurvesContainer& settings)
             : DImgThreadedFilter(orgImage, parent, "CurvesFilter")
 {
@@ -49,68 +55,75 @@ CurvesFilter::~CurvesFilter()
 
 void CurvesFilter::filterImage()
 {
-    postProgress(10);
-    ImageCurves curves(m_orgImage.sixteenBit());
-    curves.setCurveType(m_settings.curvesType);
+    postProgress(0);
 
-    if (m_settings.curvesType == ImageCurves::CURVE_FREE)
+    ImageCurves curves(m_settings);
+
+    if (m_orgImage.sixteenBit() != m_settings.sixteenBit)
     {
-        curves.setCurveValues(LuminosityChannel, m_settings.lumCurveVals);
-        postProgress(20);
-
-        curves.setCurveValues(RedChannel, m_settings.redCurveVals);
-        postProgress(30);
-
-        curves.setCurveValues(GreenChannel, m_settings.greenCurveVals);
-        postProgress(40);
-
-        curves.setCurveValues(BlueChannel, m_settings.blueCurveVals);
-        postProgress(50);
-
-        curves.setCurveValues(AlphaChannel, m_settings.alphaCurveVals);
-        postProgress(60);
-    }
-    else
-    {
-        curves.setCurvePoints(LuminosityChannel, m_settings.lumCurveVals);
-        postProgress(20);
-
-        curves.setCurvePoints(RedChannel, m_settings.redCurveVals);
-        postProgress(30);
-
-        curves.setCurvePoints(GreenChannel, m_settings.greenCurveVals);
-        postProgress(40);
-
-        curves.setCurvePoints(BlueChannel, m_settings.blueCurveVals);
-        postProgress(50);
-
-        curves.setCurvePoints(AlphaChannel, m_settings.alphaCurveVals);
-        postProgress(60);
+        ImageCurves depthCurve(m_orgImage.sixteenBit());
+        depthCurve.fillFromOtherCurves(&curves);
+        curves = depthCurve;
     }
 
-    m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-    postProgress(70);
+    postProgress(50);
 
     // Process all channels curves
     curves.curvesLutSetup(AlphaChannel);
-    postProgress(80);
+    postProgress(75);
 
     curves.curvesLutProcess(m_orgImage.bits(), m_destImage.bits(), m_orgImage.width(), m_orgImage.height());
-    postProgress(90);
+    postProgress(100);
+}
+
+bool CurvesFilter::isStoredLosslessly(const CurvesContainer& settings)
+{
+    return !settings.sixteenBit || !settings.curvesType == ImageCurves::CURVE_FREE;
+}
+
+void CurvesFilter::addCurvesParameters(FilterAction& action, const CurvesContainer& settings)
+{
+    ImageCurves curves(settings);
+    // Convert to 8bit: 16 bits curves takes 85kb, 8 bits only 400 bytes.
+    if (curves.isSixteenBits())
+    {
+        ImageCurves depthCurve(false);
+        depthCurve.fillFromOtherCurves(&curves);
+        curves = depthCurve;
+    }
+
+    action.addParameter("curveBitDepth", 8);
+
+    for (int i=0; i<ColorChannels; i++)
+        action.addParameter(QString("curveData[%1]").arg(i), curves.channelToBase64(i));
+}
+
+CurvesContainer CurvesFilter::readCurvesParameters(const FilterAction& action)
+{
+    ImageCurves curves(action.parameter("curveBitDepth").toInt() == 16);
+    for (int i=0; i<ColorChannels; i++)
+    {
+        QByteArray base64 = action.parameter(QString("curveData[%1]").arg(i)).toByteArray();
+        // check return value and set readParametersError?
+        curves.setChannelFromBase64(i, base64);
+    }
+    return curves.getContainer();
 }
 
 FilterAction CurvesFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
+    FilterAction action(FilterIdentifier(), CurrentVersion(),
+                        isStoredLosslessly(m_settings) ? FilterAction::ComplexFilter : FilterAction::ReproducibleFilter);
     action.setDisplayableName(DisplayableName());
 
-    //TODO: figure out how to store the QPolygon
+    addCurvesParameters(action, m_settings);
 
     return action;
 }
 
-void CurvesFilter::readParameters(const Digikam::FilterAction& /*action*/)
+void CurvesFilter::readParameters(const FilterAction& action)
 {
+    m_settings = readCurvesParameters(action);
 }
 
 }  // namespace Digikam
