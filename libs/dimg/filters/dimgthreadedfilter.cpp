@@ -36,34 +36,34 @@ namespace Digikam
 {
 
 DImgThreadedFilter::DImgThreadedFilter(QObject* parent, const QString& name)
-                  : DynamicThread()
+                  : DynamicThread(parent)
 {
     setOriginalImage(DImg());
     setFilterName(name);
-    setParent(parent);
 
     m_master          = 0;
     m_slave           = 0;
     m_progressBegin   = 0;
     m_progressSpan    = 100;
     m_progressCurrent = 0;
+
     m_version         = 1;
 }
 
 DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
                                        const QString& name)
-                  : DynamicThread()
+                  : DynamicThread(parent)
 {
     // remove meta data
     setOriginalImage(orgImage->copyImageData());
     setFilterName(name);
-    setParent(parent);
 
     m_master          = 0;
     m_slave           = 0;
     m_progressBegin   = 0;
     m_progressSpan    = 100;
     m_progressCurrent = 0;
+
     m_version         = 1;
 }
 
@@ -71,19 +71,12 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter* master, const DImg& o
                                        const DImg& destImage, int progressBegin, int progressEnd,
                                        const QString& name)
 {
-    setOriginalImage(orgImage);
     setFilterName(name);
-    setParent(0);
+    setOriginalImage(orgImage);
+    m_destImage  = destImage;
+    m_version    = 1;
 
-    m_destImage       = destImage;
-    m_master          = master;
-    m_slave           = 0;
-    m_progressBegin   = progressBegin;
-    m_progressSpan    = progressEnd - progressBegin;
-    m_progressCurrent = 0;
-    m_version         = 1;
-
-    m_master->setSlave(this);
+    initSlave(master, progressBegin, progressEnd);
 }
 
 DImgThreadedFilter::~DImgThreadedFilter()
@@ -91,6 +84,17 @@ DImgThreadedFilter::~DImgThreadedFilter()
     cancelFilter();
     if (m_master)
         m_master->setSlave(0);
+}
+
+void DImgThreadedFilter::initSlave(DImgThreadedFilter* master, int progressBegin, int progressEnd)
+{
+    m_master          = master;
+    m_slave           = 0;
+    m_progressBegin   = progressBegin;
+    m_progressSpan    = progressEnd - progressBegin;
+    m_progressCurrent = 0;
+
+    m_master->setSlave(this);
 }
 
 void DImgThreadedFilter::setupFilter(const DImg& orgImage)
@@ -107,11 +111,6 @@ void DImgThreadedFilter::setOriginalImage(const DImg& orgImage)
 void DImgThreadedFilter::setFilterName(const QString& name)
 {
     m_name = QString(name);
-}
-
-void DImgThreadedFilter::setParent(QObject* parent)
-{
-    m_parent = parent;
 }
 
 QList<int> DImgThreadedFilter::supportedVersions() const
@@ -133,8 +132,11 @@ int DImgThreadedFilter::filterVersion() const
 void DImgThreadedFilter::initFilter()
 {
     m_destImage.reset();
-    m_destImage = DImg(m_orgImage.width(), m_orgImage.height(),
-                       m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+    if (!m_orgImage.isNull())
+    {
+        m_destImage = DImg(m_orgImage.width(), m_orgImage.height(),
+                           m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+    }
 
     if (m_master)
         startFilterDirectly();
@@ -223,6 +225,16 @@ void DImgThreadedFilter::setSlave(DImgThreadedFilter* slave)
 int DImgThreadedFilter::modulateProgress(int progress)
 {
     return m_progressBegin + (int)((double)progress * (double)m_progressSpan / 100.0);
+}
+
+bool DImgThreadedFilter::parametersSuccessfullyRead() const
+{
+    return true;
+}
+
+QString DImgThreadedFilter::readParametersError(const FilterAction&) const
+{
+    return QString();
 }
 
 }  // namespace Digikam

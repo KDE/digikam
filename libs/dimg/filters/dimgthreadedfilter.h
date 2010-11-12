@@ -27,19 +27,15 @@
 
 // Qt includes
 
-#include <QtCore/QEvent>
-#include <QtCore/QThread>
-#include <QtCore/QString>
-
 // KDE includes
 
-#include <kapplication.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimg.h"
 #include "dynamicthread.h"
-#include "digikam_export.h"
 #include "filteraction.h"
 
 class QObject;
@@ -71,14 +67,18 @@ public:
     ~DImgThreadedFilter();
 
     /** You need to call this and then start filter of you used
-     *  the constructor not settings and original image.
+     *  the constructor not setting an original image.
      *  The original image's data will not be copied.
      */
     void setupFilter(const DImg& orgImage);
 
+    /** Initialize the filter for use as a slave - reroutes progress info to master.
+     *  Note: Computation will be started from setupFilter().
+     */
+    void initSlave(DImgThreadedFilter* master, int progressBegin = 0, int progressEnd = 100);
+
     void setOriginalImage(const DImg& orgImage);
     void setFilterName(const QString& name);
-    void setParent(QObject* parent);
 
     DImg getTargetImage()       { return m_destImage; };
     const QString& filterName() { return m_name; };
@@ -105,6 +105,20 @@ public:
      */
     void setFilterVersion(int version);
     int filterVersion() const;
+
+    /**
+     * Optional: error handling for readParameters.
+     * When readParameters() has been called, this method will return true
+     * if the call was successful, and false if not.
+     * If returning false, readParametersError() will give an error message.
+     * The default implementation always returns success. You only need to reimplement
+     * when a filter is likely to fail in a different environment, e.g.
+     * depending on availability of installed files.
+     * These methods have an undefined return value if readParameters() was not called
+     * previously.
+     */
+    virtual bool parametersSuccessfullyRead() const;
+    virtual QString readParametersError(const FilterAction& actionThatFailed) const;
 
 Q_SIGNALS:
 
@@ -150,6 +164,7 @@ protected:
       Constructs a new slave filter with the specified master.
       The filter will be executed in the current thread.
       orgImage and destImage will not be copied.
+      Note that the slave is still free to reallocate his destImage.
       progressBegin and progressEnd can indicate the progress span
       that the slave filter uses in the parent filter's progress.
       Any derived filter class that is publicly available to other filters
@@ -175,9 +190,6 @@ protected:
     int                 m_progressBegin;
     int                 m_progressSpan;
     int                 m_progressCurrent;  // To prevent signals bombarding with progress indicator value in postProgress().
-
-    /** To post event from thread to parent. */
-    QObject*            m_parent;
 
     /** Filter name.*/
     QString             m_name;
