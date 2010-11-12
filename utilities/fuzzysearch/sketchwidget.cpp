@@ -578,12 +578,15 @@ void SketchWidget::updateDrawCursor()
     int size = d->penWidth;
     if (size > 64)
         size = 64;
+    if (size < 3)
+        size = 3;
 
     QPixmap pix(size, size);
     pix.fill(Qt::transparent);
 
     QPainter p(&pix);
-    p.drawEllipse( 0, 0, size-1, size-1);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    p.drawEllipse( 1, 1, size-2, size-2);
 
     d->drawCursor = QCursor(pix);
 }
