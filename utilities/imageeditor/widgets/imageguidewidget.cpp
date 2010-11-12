@@ -58,22 +58,28 @@ class ImageGuideWidget::ImageGuideWidgetPriv
 {
 public:
 
-    ImageGuideWidgetPriv()
+    ImageGuideWidgetPriv() :
+        sixteenBit(false),
+        focus(false),
+        spotVisible(false),
+        onMouseMovePreviewToggled(true),
+        drawLineBetweenPoints(false),
+        drawingMask(false),
+        enableDrawMask(false),
+        eraseMask(false),
+        width(0),
+        height(0),
+        timerID(0),
+        guideMode(0),
+        guideSize(0),
+        flicker(0),
+        renderingPreviewMode(PreviewToolBar::NoPreviewMode),
+        penWidth(10),
+        pixmap(0),
+        maskPixmap(0),
+        previewPixmap(0),
+        iface(0)
     {
-        pixmap                    = 0;
-        maskPixmap                = 0;
-        previewPixmap             = 0;
-        iface                     = 0;
-        flicker                   = 0;
-        timerID                   = 0;
-        focus                     = false;
-        onMouseMovePreviewToggled = true;
-        renderingPreviewMode      = PreviewToolBar::NoPreviewMode;
-        drawLineBetweenPoints     = false;
-        drawingMask               = false;
-        enableDrawMask            = false;
-        penWidth                  = 10;
-        eraseMask                 = false;
     }
 
     bool        sixteenBit;
