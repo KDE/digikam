@@ -485,6 +485,18 @@ void ImageGuideWidget::paintEvent(QPaintEvent*)
     {
         p.setOpacity(0.7);
         p.drawPixmap(d->rect.x(), d->rect.y(), *d->maskPixmap);
+
+        if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
+                (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
+        {
+            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
+        }
+        else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
+                d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
+                (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
+        {
+            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("After"));
+        }
     }
 
     p.end();
