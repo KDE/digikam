@@ -583,12 +583,6 @@ void SketchWidget::updateDrawCursor()
     pix.fill(Qt::transparent);
 
     QPainter p(&pix);
-    if (size > 4)
-    {
-        int middle = size / 2;
-        p.drawLine(middle - 2, middle, middle + 2, middle);
-        p.drawLine(middle, middle - 2, middle, middle + 2);
-    }
     p.drawEllipse( 0, 0, size-1, size-1);
 
     d->drawCursor = QCursor(pix);
