@@ -118,7 +118,7 @@ public:
 
     typedef QList<TagInfo> List;
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int     id;
     int     pid;
@@ -167,7 +167,7 @@ public:
 
     typedef QList<SearchInfo> List;
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int                  id;
     QString              name;
@@ -202,7 +202,7 @@ public:
 
     TagShortInfo() : id(0), pid(0) {};
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int     id;
     int     pid;
@@ -237,7 +237,7 @@ public:
 
     ItemShortInfo() : id(0), albumID(0) {};
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     qlonglong id;
     QString   itemName;
@@ -255,7 +255,7 @@ public:
           category(DatabaseItem::UndefinedCategory)
     {};
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     qlonglong              id;
     int                    albumID;
@@ -296,7 +296,7 @@ public:
 
     CommentInfo() : id(-1), imageId(-1), type(DatabaseComment::UndefinedType) {};
 
-    bool isNull() { return id == -1; }
+    bool isNull() const { return id == -1; }
 
     int                   id;
     qlonglong             imageId;
@@ -313,7 +313,7 @@ public:
 
     CopyrightInfo() : id(-1) {};
 
-    bool isNull() { return id == -1; }
+    bool isNull() const { return id == -1; }
 
     qlonglong id;
     QString   property;

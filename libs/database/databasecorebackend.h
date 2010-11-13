@@ -122,8 +122,8 @@ public:
         QueryState() : value(DatabaseCoreBackend::NoErrors) {}
         QueryState(QueryStateEnum value) : value(value) {}
 
-        operator QueryStateEnum() { return value; }
-        operator bool() { return value == DatabaseCoreBackend::NoErrors; }
+        operator QueryStateEnum() const { return value; }
+        operator bool() const { return value == DatabaseCoreBackend::NoErrors; }
 
     private:
 

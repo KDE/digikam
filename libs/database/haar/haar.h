@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2003-01-17
- * Description : Haar 2d transform 
+ * Description : Haar 2d transform
  *               Wavelet algorithms, metric and query ideas based on the paper
  *               "Fast Multiresolution Image Querying"
  *               by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
@@ -156,7 +156,7 @@ public:
 
     /// Query if the given index is set.
     /// Index must be in the range -16383..16383.
-    bool operator[](Haar::Idx index)
+    bool operator[](Haar::Idx index) const
     {
         return m_indexList[index + Haar::NumberOfPixelsSquared];
     }
@@ -181,8 +181,8 @@ public:
     */
     unsigned char m_bin[16384];
 
-    unsigned char bin(int index)    { return m_bin[index];                               }
-    unsigned char binAbs(int index) { return (index > 0) ? m_bin[index] : m_bin[-index]; }
+    unsigned char bin(int index)    const { return m_bin[index];                               }
+    unsigned char binAbs(int index) const { return (index > 0) ? m_bin[index] : m_bin[-index]; }
 };
 
 // ---------------------------------------------------------------------------------
@@ -202,8 +202,8 @@ public:
     {
     }
 
-    float weight(int weight, int channel) { return s_haar_weights[(int)m_type][weight][channel]; }
-    float weightForAverage(int channel)   { return s_haar_weights[(int)m_type][0][channel];      }
+    float weight(int weight, int channel) const { return s_haar_weights[(int)m_type][weight][channel]; }
+    float weightForAverage(int channel)   const { return s_haar_weights[(int)m_type][0][channel];      }
 
 private:
 

@@ -193,11 +193,16 @@ public:
     ImageQueryPostHooks    *hooks;
     SearchXml::Relation     relation;
 
-    inline QString prepareForLike(const QString &str)
+    inline QString prepareForLike(const QString &str) const
     {
         if (relation == SearchXml::Like || relation == SearchXml::NotLike)
+        {
             return '%' + str + '%';
-        else return str;
+        }
+        else
+        {
+            return str;
+        }
     }
 
     void addIntField(const QString& name)
@@ -631,7 +636,7 @@ public:
         }
     }
 
-    void addRectanglePositionSearch(double lon1, double lat1, double lon2, double lat2)
+    void addRectanglePositionSearch(double lon1, double lat1, double lon2, double lat2) const
     {
         // lon1 is always West of lon2. If the rectangle crosses 180 longitude, we have to treat a special case.
         if (lon1 <= lon2)
