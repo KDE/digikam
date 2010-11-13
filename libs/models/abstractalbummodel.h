@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-23
- * Description : Qt Model for Albums - abstract base classes
+ * Description : Qt Model for Albums
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -307,6 +308,8 @@ public:
     void setRootCheckable(bool rootIsCheckable);
     bool rootIsCheckable() const;
     /** Triggers if the albums in this model are tristate.
+     *  Used to allow the user to set a third state,
+     *  don't use if you only want to display a third state.
      *  Note that you want to set setCheckable(true) before. */
     void setTristate(bool isTristate);
     bool isTristate() const;
@@ -325,6 +328,8 @@ public:
 
     /// Returns a list of album with check state Checked
     QList<Album *> checkedAlbums() const;
+    /// Returns a list of album with partially check state Checked
+    QList<Album *> partiallyCheckedAlbums() const;
 
     /// Resets the checked state of all albums to Qt::Unchecked
     void resetAllCheckedAlbums();

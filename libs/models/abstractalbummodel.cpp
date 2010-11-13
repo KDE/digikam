@@ -6,7 +6,8 @@
  * Date        : 2009-03-23
  * Description : Qt Model for Albums
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,17 +25,22 @@
 #include "abstractalbummodel.moc"
 #include "abstractalbummodelpriv.h"
 
+// Qt includes
+
+#include <qpainter.h>
+
 // KDE includes
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kglobal.h>
+#include <kicon.h>
+#include <klocale.h>
 
 // Local includes
 
 #include "albummanager.h"
-#include "albumthumbnailloader.h"
 #include "albummodeldragdrophandler.h"
+#include "albumthumbnailloader.h"
 
 namespace Digikam
 {
@@ -783,13 +789,20 @@ void AbstractCheckableAlbumModel::setCheckState(Album *album, Qt::CheckState sta
 
 void AbstractCheckableAlbumModel::toggleChecked(Album *album)
 {
-    setChecked(album, !isChecked(album));
+    if (checkState(album) != Qt::PartiallyChecked)
+        setChecked(album, !isChecked(album));
 }
 
 QList<Album *> AbstractCheckableAlbumModel::checkedAlbums() const
 {
     // return a list with all keys with value Qt::Checked
     return m_checkedAlbums.keys(Qt::Checked);
+}
+
+QList<Album *> AbstractCheckableAlbumModel::partiallyCheckedAlbums() const
+{
+    // return a list with all keys with value Qt::PartiallyChecked
+    return m_checkedAlbums.keys(Qt::PartiallyChecked);
 }
 
 void AbstractCheckableAlbumModel::resetAllCheckedAlbums()
@@ -884,9 +897,29 @@ QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const
         {
             // with Qt::Unchecked as default, albums not in the hash (initially all)
             // are simply regarded as unchecked
-            return m_checkedAlbums.value(a, Qt::Unchecked);
+            // Use Qt::PartiallyChecked only internally, dont't expose it to the TreeView
+            return (m_checkedAlbums.value(a, Qt::Unchecked) == Qt::Unchecked) ? Qt::Unchecked : Qt::Checked;
         }
     }
+    if (role == Qt::DecorationRole)
+    {
+        Qt::CheckState state = m_checkedAlbums.value(a, Qt::Unchecked);
+        if (isTristate() && state != Qt::Unchecked)
+        {
+            QPixmap icon = decorationRoleData(a).value<QPixmap>();
+            int overlay_size = qMax(16, qRound(qMax(icon.width(), icon.height()) / 3.0 * 2.0));
+            QPixmap pm(qMax(overlay_size, icon.width()),
+                       qMax(overlay_size, icon.height()));
+            pm.fill(Qt::transparent);
+            QPainter p(&pm);
+            p.drawPixmap(0, 0, icon);
+            p.drawPixmap(pm.width() - overlay_size,
+                         pm.height() - overlay_size,
+                         KIcon(state == Qt::PartiallyChecked ? "list-remove" : "list-add").pixmap(overlay_size, overlay_size));
+            return pm;
+        }
+    }
+
 
     return AbstractCountingAlbumModel::albumData(a, role);
 }

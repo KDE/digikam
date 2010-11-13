@@ -6,7 +6,8 @@
  * Date        : 2000-12-05
  * Description : tag filter view for the right sidebar
  *
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -105,12 +106,13 @@ Q_SIGNALS:
     /**
      * Emitted if the selected filter has changed.
      *
-     * @param tags a list of selected tag ids
+     * @param includedTags a list of included tag ids
+     * @param excludedTags a list of excluded tag ids
      * @param matchingCond condition to join the selected tags
      * @param showUnTagged if this is true, only photos without a tag shall be
      *                     shown
      */
-    void tagFilterChanged(const QList<int>& tags,
+    void tagFilterChanged(const QList<int>& includedTags, const QList<int>& excludedTags,
                           ImageFilterSettings::MatchingCondition matchingCond,
                           bool showUnTagged);
 
@@ -124,7 +126,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotMatchingConditionChanged(int index);
-    void slotCheckedTagsChanged(const QList<TAlbum*> &tags);
+    void slotCheckedTagsChanged(const QList<TAlbum*> &includedTags, const QList<TAlbum*> &excludedTags);
     void slotWithoutTagChanged(int newState);
 
 private:

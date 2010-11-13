@@ -6,7 +6,8 @@
  * Date        : 2009-05-09
  * Description : A combo box for selecting albums
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -106,20 +107,52 @@ QSortFilterProxyModel *AlbumSelectComboBox::filterModel() const
 void AlbumSelectComboBox::updateText()
 {
     QList<Album *> checkedAlbums = m_model->checkedAlbums();
-    if (checkedAlbums.isEmpty())
+    QList<Album *> partiallyCheckedAlbums = m_model->partiallyCheckedAlbums();
+    QString newIncludeText;
+    QString newExcludeText;
+
+    if (!checkedAlbums.isEmpty())
+    {
+        if (checkedAlbums.count() == 1)
+        {
+            newIncludeText = checkedAlbums.first()->title();
+        }
+        else
+        {
+            if (m_model->albumType() == Album::TAG)
+            {
+                newIncludeText = i18np("1 Tag selected", "%1 Tags selected", checkedAlbums.count());
+            }
+            else
+            {
+                newIncludeText = i18np("1 Album selected", "%1 Albums selected", checkedAlbums.count());
+            }
+        }
+    }
+
+    if (!partiallyCheckedAlbums.isEmpty())
+    {
+        if (m_model->albumType() == Album::TAG)
+        {
+            newExcludeText = i18np("1 Tag excluded", "%1 Tags excluded", partiallyCheckedAlbums.count());
+        }
+        else
+        {
+            newExcludeText = i18np("1 Album excluded", "%1 Albums excluded", partiallyCheckedAlbums.count());
+        }
+    }
+
+    if (newIncludeText.isEmpty() && newExcludeText.isEmpty())
     {
         setLineEditText(m_noSelectionText);
     }
-    else if (checkedAlbums.count() == 1)
+    else if (newIncludeText.isEmpty() || newExcludeText.isEmpty())
     {
-        setLineEditText(checkedAlbums.first()->title());
+        setLineEditText(newIncludeText + newExcludeText);
     }
     else
     {
-        if (m_model->albumType() == Album::TAG)
-            setLineEditText(i18np("1 Tag selected", "%1 Tags selected", checkedAlbums.count()));
-        else
-            setLineEditText(i18np("1 Album selected", "%1 Albums selected", checkedAlbums.count()));
+        setLineEditText(newIncludeText + ", " + newExcludeText);
     }
 }
 

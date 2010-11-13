@@ -6,7 +6,8 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -292,11 +293,11 @@ void ImageFilterModel::setDayFilter(const QList<QDateTime>& days)
     setImageFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setTagFilter(const QList<int>& tags, ImageFilterSettings::MatchingCondition matchingCond,
+void ImageFilterModel::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, ImageFilterSettings::MatchingCondition matchingCond,
                                bool showUnTagged)
 {
     Q_D(ImageFilterModel);
-    d->filter.setTagFilter(tags, matchingCond, showUnTagged);
+    d->filter.setTagFilter(includedTags, excludedTags, matchingCond, showUnTagged);
     setImageFilterSettings(d->filter);
 }
 
@@ -612,7 +613,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
                 hasOneMatchForText = true;
         }
     }
-    
+
     if (checkVersion(package))
     {
         QMutexLocker lock(&d->mutex);
