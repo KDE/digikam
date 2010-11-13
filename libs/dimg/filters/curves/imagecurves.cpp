@@ -866,12 +866,14 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
 
     file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "r");
     if (!file)
-       return false;
+    {
+        return false;
+    }
 
     if (! fgets (buf, sizeof (buf), file))
     {
-       fclose(file);
-       return false;
+        fclose(file);
+        return false;
     }
 
     if (strcmp (buf, "# GIMP Curves File\n") != 0)
