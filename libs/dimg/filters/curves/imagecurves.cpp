@@ -515,7 +515,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
 
     for (i = 0 ; i < NUM_CHANNELS ; ++i)
        curvesCalculateCurve(i);
-    
+
     freeLutData();
 
     d->lut->nchannels = nchannels;
@@ -875,7 +875,10 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
     }
 
     if (strcmp (buf, "# GIMP Curves File\n") != 0)
-       return false;
+    {
+        fclose(file);
+        return false;
+    }
 
     for (i = 0 ; i < NUM_CHANNELS ; ++i)
     {
