@@ -125,17 +125,17 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
     QFont fontNormal(d->font);
     fontBold.setBold(true);
     int fnSize = fontBold.pointSize();
-    bool usePointSize;
+//    bool usePointSize;
     if (fnSize > 0)
     {
         fontBold.setPointSize(fnSize+2);
-        usePointSize = true;
+//        usePointSize = true;
     }
     else
     {
         fnSize = fontBold.pixelSize();
         fontBold.setPixelSize(fnSize+2);
-        usePointSize = false;
+//        usePointSize = false;
     }
 
     QString header;
