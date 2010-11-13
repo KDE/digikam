@@ -84,7 +84,7 @@ public:
 
     typedef QList<AlbumInfo> List;
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int     id;
     int     albumRootId;
@@ -189,7 +189,7 @@ public:
 
     AlbumShortInfo() : id(0) {};
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int         id;
     QString     relativePath;

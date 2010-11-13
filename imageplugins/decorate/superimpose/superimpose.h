@@ -48,7 +48,7 @@ public:
                 DColorComposer::CompositingOperation
                 compositeRule = DColorComposer::PorterDuffNone);
 
-    DImg getTargetImage() { return m_destImage; }
+    DImg getTargetImage() const { return m_destImage; }
 
 private:
 
