@@ -120,7 +120,7 @@ KIO::Job* move(const KUrl::List& srcList, const PAlbum* dest)
     return KIO::move(srcList, destUrl);
 }
 
-KIO::CopyJob* rename(const ImageInfo& info, const QString newName)
+KIO::CopyJob* rename(const ImageInfo& info, const QString& newName)
 {
     KUrl oldUrl = info.databaseUrl();
     KUrl newUrl = oldUrl;
