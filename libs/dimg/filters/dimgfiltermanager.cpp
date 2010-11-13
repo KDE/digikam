@@ -321,9 +321,9 @@ QString DImgFilterManager::i18nDisplayableName(const QString& filterIdentifier)
     name = displayableName(filterIdentifier);
     if (!name.isEmpty())
     {
-        const char *latin1 = name.toLatin1();
-        QString translated = i18nc("Image filter name, wrapped in I18N_NOOP", latin1);
-        if (translated != latin1)
+        QByteArray latin1 = name.toLatin1();
+        QString translated = i18n(latin1.constData());
+        if (translated != name)
             return translated;
         return name;
     }
