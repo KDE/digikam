@@ -37,7 +37,7 @@ class Weights
 {
 public:
 
-    Weights(){}
+    Weights();
     Weights(const Weights& w);
     void operator=(const Weights& w);
 
@@ -79,7 +79,8 @@ private:
 
 private:
 
-    unsigned int   mHeight,mWidth;
+    unsigned int   mHeight;
+    unsigned int   mWidth;
     unsigned int   mCoefficientNumber;
     bool           mTwoDim;
     unsigned int   mPolynomeOrder;
