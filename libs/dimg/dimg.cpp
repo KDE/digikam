@@ -695,12 +695,12 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         {
             if (rgbmax > 255)
             {
-                pclose (file);
+                fclose (file);
                 return PPM;
             }
         }
 
-        pclose (file);
+        fclose (file);
     }
     else if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath)
               && dcrawIdentify.isDecodable)
