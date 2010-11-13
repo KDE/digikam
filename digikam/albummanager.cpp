@@ -1477,11 +1477,14 @@ void AlbumManager::scanTAlbums()
         while (it.current())
         {
             TagInfo info;
-            TAlbum* album = (TAlbum*)it.current();
-            info.id       = album->m_id;
-            info.pid      = album->m_pid;
-            info.name     = album->m_title;
-            info.icon     = album->m_icon;
+            TAlbum* album = dynamic_cast<TAlbum*>(it.current());
+            if (album)
+            {
+                info.id       = album->m_id;
+                info.pid      = album->m_pid;
+                info.name     = album->m_title;
+                info.icon     = album->m_icon;
+            }
             tList.append(info);
             ++it;
         }
@@ -1805,7 +1808,10 @@ SAlbum* AlbumManager::findSAlbum(const QString& name) const
     for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
     {
         if (album->title() == name)
-            return (SAlbum*)album;
+        {
+
+            return dynamic_cast<SAlbum*>(album);
+        }
     }
     return 0;
 }
@@ -1910,7 +1916,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     int albumRootId   = parent->albumRootId();
 
     // first check if we have a sibling album with the same name
-    PAlbum *child = (PAlbum *)parent->m_firstChild;
+    PAlbum *child = dynamic_cast<PAlbum *>(parent->m_firstChild);
     while (child)
     {
         if (child->albumRootId() == albumRootId && child->albumPath() == albumPath)
@@ -1918,7 +1924,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
             errMsg = i18n("An existing album has the same name.");
             return 0;
         }
-        child = (PAlbum *)child->m_next;
+        child = dynamic_cast<PAlbum *>(child->m_next);
     }
 
     DatabaseUrl url = parent->databaseUrl();
@@ -2041,7 +2047,7 @@ void AlbumManager::updateAlbumPathHash()
         d->albumPathHash.clear();
         AlbumIterator it(d->rootPAlbum);
         PAlbum* subAlbum = 0;
-        while ((subAlbum = (PAlbum*)it.current()) != 0)
+        while ((subAlbum = dynamic_cast<PAlbum*>(it.current())) != 0)
         {
             d->albumPathHash[subAlbum] = subAlbum;
             ++it;
@@ -2516,11 +2522,17 @@ void AlbumManager::removePAlbum(PAlbum *album)
         return;
 
     // remove all children of this album
-    Album* child = album->m_firstChild;
+    Album* child        = album->m_firstChild;
+    PAlbum* toBeRemoved = 0;
     while (child)
     {
         Album *next = child->m_next;
-        removePAlbum((PAlbum*)child);
+        toBeRemoved = dynamic_cast<PAlbum*>(child);
+        if (toBeRemoved)
+        {
+            removePAlbum(toBeRemoved);
+            toBeRemoved = 0;
+        }
         child = next;
     }
 
@@ -2562,11 +2574,17 @@ void AlbumManager::removeTAlbum(TAlbum *album)
         return;
 
     // remove all children of this album
-    Album* child = album->m_firstChild;
+    Album* child        = album->m_firstChild;
+    TAlbum* toBeRemoved = 0;
     while (child)
     {
         Album *next = child->m_next;
-        removeTAlbum((TAlbum*)child);
+        toBeRemoved = dynamic_cast<TAlbum*>(child);
+        if (toBeRemoved)
+        {
+            removeTAlbum(toBeRemoved);
+            toBeRemoved = 0;
+        }
         child = next;
     }
 
