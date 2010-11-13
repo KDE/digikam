@@ -1480,10 +1480,10 @@ void AlbumManager::scanTAlbums()
             TAlbum* album = dynamic_cast<TAlbum*>(it.current());
             if (album)
             {
-                info.id       = album->m_id;
-                info.pid      = album->m_pid;
-                info.name     = album->m_title;
-                info.icon     = album->m_icon;
+                info.id   = album->m_id;
+                info.pid  = album->m_pid;
+                info.name = album->m_title;
+                info.icon = album->m_icon;
             }
             tList.append(info);
             ++it;
