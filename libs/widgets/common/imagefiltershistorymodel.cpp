@@ -48,14 +48,11 @@ public:
     ImageFiltersHistoryModelPriv()
     {
         rootItem      = 0;
-        filterStack   = 0;
-        filterManager = 0;
         lastUrl       = 0;
     }
 
     ImageFiltersHistoryTreeItem* rootItem;
-    QList<FilterAction>*         filterStack;
-    DImgFilterManager*           filterManager;
+    QList<FilterAction>          filterStack;
     KUrl                         lastUrl;
 
     int                          disabledEntries;
@@ -64,9 +61,6 @@ public:
 ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& url)
                         : QAbstractItemModel(parent), d(new ImageFiltersHistoryModelPriv)
 {
-    d->filterStack = new QList<FilterAction>();
-//    d->filterManager = new DImgFilterManager();
-
     d->disabledEntries = 0;
 
     if(!url.isEmpty())
@@ -140,12 +134,7 @@ QVariant ImageFiltersHistoryModel::data(const QModelIndex& index, int role) cons
     else if (role == Qt::DisplayRole)
     {
         item = static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer());
-        return item->data(index.column());
-    }
-    else if (role == Qt::UserRole)
-    {
-        item = static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer());
-        return item->isDisabled();
+        return item->data(0);
     }
 
     return QVariant();
@@ -156,7 +145,10 @@ Qt::ItemFlags ImageFiltersHistoryModel::flags(const QModelIndex& index) const
     if (!index.isValid())
         return 0;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    Qt::ItemFlags flags = Qt::ItemIsSelectable;
+    if (!static_cast<ImageFiltersHistoryTreeItem*>(index.internalPointer())->isDisabled())
+        flags |= Qt::ItemIsEnabled;
+    return flags;
 }
 
 QVariant ImageFiltersHistoryModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -238,7 +230,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
     parents << parent;
 
     QList<QVariant> itemData;
-    d->filterStack->clear();
+    d->filterStack.clear();
 
     for(int i = 0; i < entries.count(); i++)
     {
@@ -246,7 +238,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         if (entries.at(i).action.isNull())
             continue;
 
-        d->filterStack->append(entries.at(i).action);
+        d->filterStack.append(entries.at(i).action);
 
         if (entries.at(i).action.displayableName().isEmpty() && entries.at(i).action.identifier().isEmpty())
         {
@@ -262,7 +254,10 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
                 itemData.append(metadataDispName);
             else itemData.append(entries.at(i).action.identifier());
 
-            itemData.append(entries.at(i).action.identifier());
+            QString iconName = DImgFilterManager::instance()->filterIcon(entries.at(i).action.identifier());
+            if (iconName.isNull())
+                iconName = "document-edit";
+            itemData.append(iconName);
         }
         kDebug() << "Adding an entry: " << itemData;
         parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
@@ -298,7 +293,7 @@ bool ImageFiltersHistoryModel::removeRows(int row, int /*count*/, const QModelIn
     {
         beginResetModel();
         d->rootItem->removeChild(row);
-        d->filterStack->removeAt(row);
+        d->filterStack.removeAt(row);
         endResetModel();
         //TODO: emit signal starting FilterManager
         return true;
