@@ -68,7 +68,7 @@ void BlurFilter::filterImage()
 {
 #if defined(__MACOSX__) || defined(__APPLE__)
     gaussianBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                      m_orgImage.sixteenBit(), (int)(m_radius*10.0));
+                      m_orgImage.sixteenBit(), lround(m_radius*10.0));
 #else
     cimgBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
                   m_orgImage.sixteenBit(), m_radius);
@@ -160,6 +160,8 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
         m_destImage = m_orgImage;
         return;
     }
+
+    kDebug() << "Radius: " << radius;
 
     // Gaussian kernel computation using the Radius parameter.
 
