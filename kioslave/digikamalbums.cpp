@@ -250,7 +250,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
     QFileInfo info(dbUrlSrc.fileUrl().toLocalFile());
     bool renamingAlbum = info.isDir();
 
-    int srcAlbumID, dstAlbumID = -1;
+    int srcAlbumID = -1;
 
     if (renamingAlbum)
     {
@@ -270,7 +270,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
             return;
         }
 
-        dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
+        int dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
         if (dstAlbumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database.", dst.directory()));
