@@ -1947,7 +1947,19 @@ void EditorWindow::moveFile()
     {
         kDebug() << "moving a local file";
 
-        QByteArray dstFileName = QFile::encodeName(m_savingContext->destinationURL.toLocalFile());
+        QString fileName = m_savingContext->destinationURL.toLocalFile();
+
+        // check that we're not replacing a symlink
+        QFileInfo info(fileName);
+        if (info.isSymLink())
+        {
+            fileName = info.symLinkTarget();
+            kDebug() << "Target filePath" << m_savingContext->destinationURL.toLocalFile()
+                     << "is a symlink pointing to"
+                     << fileName << ". Storing image there.";
+        }
+
+        QByteArray dstFileName = QFile::encodeName(fileName);
 #ifndef _WIN32
         // Store old permissions:
         // Just get the current umask.
@@ -1974,7 +1986,7 @@ void EditorWindow::moveFile()
         // KDE 4.3.0
         // KDE::rename() takes care of QString -> bytestring encoding
         ret = KDE::rename(m_savingContext->saveTempFileName,
-                           m_savingContext->destinationURL.toLocalFile());
+                          fileName);
 #else
         // KDE 4.2.x or 4.1.x
         ret = KDE_rename(QFile::encodeName(m_savingContext->saveTempFileName),
