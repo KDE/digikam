@@ -42,7 +42,7 @@ using namespace cimg_library;
 namespace Digikam
 {
 
-BlurFilter::BlurFilter(DImg* orgImage, QObject* parent, double radius)
+BlurFilter::BlurFilter(DImg* orgImage, QObject* parent, int radius)
           : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
 {
     m_radius = radius;
@@ -51,7 +51,7 @@ BlurFilter::BlurFilter(DImg* orgImage, QObject* parent, double radius)
 
 BlurFilter::BlurFilter(DImgThreadedFilter* parentFilter,
                        const DImg& orgImage, const DImg& destImage,
-                       int progressBegin, int progressEnd, double radius)
+                       int progressBegin, int progressEnd, int radius)
           : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
                                parentFilter->filterName() + ": GaussianBlur")
 {
@@ -68,10 +68,10 @@ void BlurFilter::filterImage()
 {
 #if defined(__MACOSX__) || defined(__APPLE__)
     gaussianBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                      m_orgImage.sixteenBit(), lround(m_radius*10.0));
+                      m_orgImage.sixteenBit(), m_radius);
 #else
     cimgBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                  m_orgImage.sixteenBit(), m_radius);
+                  m_orgImage.sixteenBit(), m_radius/10;0);
 #endif
 }
 
@@ -87,8 +87,11 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
     if (radius <= 0.0)
     {
        m_destImage = m_orgImage;
+       postProgress(100);
        return;
     }
+
+    kDebug() << "Radius: " << radius;
 
     kDebug() << "BlurFilter::Process Computation...";
 
@@ -97,9 +100,11 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
         // convert DImg (interleaved RGBA) to CImg (planar RGBA)
         CImg<uchar> img = CImg<uchar>(data, 4, width, height, 1, true).
                           get_permute_axes("yzvx");
+        postProgress(25);
 
         // blur the image
         img.blur(radius);
+        postProgress(50);
 
         // Copy CImg onto destination.
         kDebug() << "BlurFilter::Finalization...";
@@ -117,15 +122,18 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
                 ptr    += 4;
             }
         }
+        postProgress(75);
     }
     else                                // 16 bits image.
     {
         // convert DImg (interleaved RGBA) to CImg (planar RGBA)
         CImg<unsigned short> img = CImg<unsigned short>((unsigned short*)data, 4, width, height, 1, true).
                                    get_permute_axes("yzvx");
+        postProgress(25);
 
         // blur the image
         img.blur(radius);
+        postProgress(50);
 
         // Copy CImg onto destination.
         kDebug() << "BlurFilter::Finalization...";
@@ -143,7 +151,10 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
                 ptr    += 4;
             }
         }
+        postProgress(75);
     }
+
+    postProgress(100);
 }
 
 void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, int radius)
@@ -171,14 +182,14 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 
     nKSize      = 2 * radius + 1;
     nCenter     = nKSize / 2;
-    int *Kernel = new int[nKSize];
+    int* Kernel = new int[nKSize];
 
     lnfactor = (4.2485 - 2.7081) / 10 * nKSize + 2.7081;
     lnsd     = (0.5878 + 0.5447) / 10 * nKSize - 0.5447;
     factor   = exp (lnfactor);
     sd       = exp (lnsd);
 
-    for (i = 0; !runningFlag() && (i < nKSize); ++i)
+    for (i = 0; runningFlag() && (i < nKSize); ++i)
     {
         x = sqrt ((i - nCenter) * (i - nCenter));
         Kernel[i] = (int)(factor * exp (-0.5 * pow ((x / sd), 2)) / (sd * sqrt (2.0 * M_PI)));
@@ -197,8 +208,8 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 
     int** arrMult = Alloc2DArray (nKernelWidth, sixteenBit ? 65536 : 256);
 
-    for (i = 0; !runningFlag() && (i < nKernelWidth); ++i)
-        for (j = 0; !runningFlag() && (j < (sixteenBit ? 65536 : 256)); ++j)
+    for (i = 0; runningFlag() && (i < nKernelWidth); ++i)
+        for (j = 0; runningFlag() && (j < (sixteenBit ? 65536 : 256)); ++j)
             arrMult[i][j] = j * Kernel[i];
 
         // We need to copy our bits to blur bits
@@ -217,9 +228,9 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 
     // Now, we enter in the main loop
 
-    for (h = 0; !runningFlag() && (h < height); ++h)
+    for (h = 0; runningFlag() && (h < height); ++h)
     {
-        for (w = 0; !runningFlag() && (w < width); ++w, i+=4)
+        for (w = 0; runningFlag() && (w < width); ++w, i+=4)
         {
             if (!sixteenBit)        // 8 bits image.
             {
@@ -227,7 +238,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 
                 // first of all, we need to blur the horizontal lines
 
-                for (n = -radius; !runningFlag() && (n <= radius); ++n)
+                for (n = -radius; runningFlag() && (n <= radius); ++n)
                 {
                     // if is inside...
                     if (IsInside (width, height, w + n, h))
@@ -266,7 +277,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 
                 // first of all, we need to blur the horizontal lines
 
-                for (n = -radius; !runningFlag() && (n <= radius); ++n)
+                for (n = -radius; runningFlag() && (n <= radius); ++n)
                 {
                     // if is inside...
                     if (IsInside (width, height, w + n, h))
@@ -310,16 +321,16 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
     i = j = 0;
 
     // We enter in the second main loop
-    for (w = 0; !runningFlag() && (w < width); ++w, i = w*4)
+    for (w = 0; runningFlag() && (w < width); ++w, i = w*4)
     {
-        for (h = 0; !runningFlag() && (h < height); ++h, i += width*4)
+        for (h = 0; runningFlag() && (h < height); ++h, i += width*4)
         {
             if (!sixteenBit)        // 8 bits image.
             {
                 uchar *org, *dst;
 
                 // first of all, we need to blur the vertical lines
-                for (n = -radius; !runningFlag() && (n <= radius); ++n)
+                for (n = -radius; runningFlag() && (n <= radius); ++n)
                 {
                     // if is inside...
                     if (IsInside(width, height, w, h + n))
@@ -359,7 +370,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
                 unsigned short *org, *dst;
 
                 // first of all, we need to blur the vertical lines
-                for (n = -radius; !runningFlag() && (n <= radius); ++n)
+                for (n = -radius; runningFlag() && (n <= radius); ++n)
                 {
                     // if is inside...
                     if (IsInside(width, height, w, h + n))

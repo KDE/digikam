@@ -39,11 +39,11 @@ class DIGIKAM_EXPORT BlurFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BlurFilter(DImg* orgImage, QObject* parent=0, double radius=3.0);
+    explicit BlurFilter(DImg* orgImage, QObject* parent=0, int radius=3);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit BlurFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
-                        int progressBegin=0, int progressEnd=100, double radius=3.0);
+                        int progressBegin=0, int progressEnd=100, int radius=3);
 
     ~BlurFilter();
 
@@ -88,7 +88,7 @@ private:
 
 private:
 
-    double m_radius;
+    int m_radius;
 };
 
 }  // namespace Digikam
