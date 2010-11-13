@@ -1466,9 +1466,9 @@ void AlbumManager::scanTAlbums()
             else
             {
                 kWarning() << "Failed to find parent tag for tag "
-                                << album->m_title
-                                << " with pid "
-                                << album->m_pid;
+                           << album->m_title
+                           << " with pid "
+                           << album->m_pid;
             }
         }
 
