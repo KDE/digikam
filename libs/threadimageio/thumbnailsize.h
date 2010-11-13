@@ -32,7 +32,7 @@ class ThumbnailSize
 
 public:
 
-    enum Size 
+    enum Size
     {
         Step      = 8,
         Tiny      = 32,
@@ -43,12 +43,12 @@ public:
         Huge      = 256
     };
 
-    ThumbnailSize() 
+    ThumbnailSize()
     {
         m_Size = Medium;
     }
 
-    ThumbnailSize(int size) 
+    ThumbnailSize(int size)
     {
         m_Size = size;
     }
@@ -57,30 +57,30 @@ public:
     {
     }
 
-    ThumbnailSize(const ThumbnailSize& thumbsize) 
+    ThumbnailSize(const ThumbnailSize& thumbsize)
     {
         if (this != &thumbsize)
             m_Size = thumbsize.m_Size;
     }
 
-    ThumbnailSize& operator=(const ThumbnailSize& thumbsize) 
+    ThumbnailSize& operator=(const ThumbnailSize& thumbsize)
     {
         if (this != &thumbsize)
             m_Size = thumbsize.m_Size;
         return *this;
     }
 
-    bool operator==(const ThumbnailSize& thumbsize)
+    bool operator==(const ThumbnailSize& thumbsize) const
     {
         return m_Size == thumbsize.m_Size;
     }
 
-    bool operator!=(const ThumbnailSize& thumbsize) 
+    bool operator!=(const ThumbnailSize& thumbsize) const
     {
         return m_Size != thumbsize.m_Size;
     }
 
-    int size() const 
+    int size() const
     {
         return m_Size;
     }
