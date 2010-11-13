@@ -145,7 +145,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
 
 #ifdef USE_EXT_LIBPGF
-    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("external shared library"));
+    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("external shared library")));
 #else
     list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("internal library")));
 #endif // USE_EXT_LIBPGF
