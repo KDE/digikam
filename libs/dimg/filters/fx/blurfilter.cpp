@@ -71,7 +71,7 @@ void BlurFilter::filterImage()
                       m_orgImage.sixteenBit(), m_radius);
 #else
     cimgBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                  m_orgImage.sixteenBit(), m_radius/10;0);
+                  m_orgImage.sixteenBit(), m_radius/10.0);
 #endif
 }
 
