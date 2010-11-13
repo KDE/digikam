@@ -52,7 +52,7 @@ class DatabaseConnectionChecker : public QThread
 
 public:
 
-    DatabaseConnectionChecker(const DatabaseParameters parameters);
+    DatabaseConnectionChecker(const DatabaseParameters& parameters);
     ~DatabaseConnectionChecker();
 
     bool checkSuccessful() const;
