@@ -45,6 +45,7 @@
 #include "parser.h"
 #include "parsesettings.h"
 #include "advancedrenamemanager.h"
+#include "advancedrenameprocessdialog.h"
 
 namespace Digikam
 {
@@ -145,7 +146,6 @@ public:
         configGroupName("AdvancedRename Dialog"),
         configLastUsedRenamePatternEntry("Last Used Rename Pattern"),
         configDialogSizeEntry("Dialog Size"),
-
         singleFileMode(false),
         minSizeDialog(450),
         listView(0),

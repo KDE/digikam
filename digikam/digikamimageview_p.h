@@ -33,7 +33,6 @@
 // Local includes
 
 #include "digikamimageview.h"
-#include "renamethread.h"
 #include "imagerotationoverlay.h"
 #include "albumsettings.h"
 
@@ -51,7 +50,6 @@ public:
     virtual ~DigikamImageViewPriv();
 
     ImageViewUtilities* utilities;
-    RenameThread*       renameThread;
 
     bool overlaysActive;
 

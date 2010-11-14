@@ -1,9 +1,12 @@
  INCLUDE_DIRECTORIES(
         ${CMAKE_CURRENT_SOURCE_DIR}/common
         ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dimg
         ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dimg/filters/icc
         ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dmetadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/threadimageio
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/threads
         ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/themeengine
         ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/widgets/common
         ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/widgets/metadata
@@ -12,12 +15,14 @@
         ${CMAKE_CURRENT_SOURCE_DIR}/parser/options
         ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database
         ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/keys
+        ${CMAKE_CURRENT_BINARY_DIR}/../..
 )
 
  SET(libadvancedrename_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenamedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenameinput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenamemanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenameprocessdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenamewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/common/dynamiclayout.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/common/highlighter.cpp
@@ -27,7 +32,6 @@
         ${CMAKE_CURRENT_SOURCE_DIR}/common/parseabledialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/common/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/common/parseresults.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/common/renamethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/common/token.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/common/tooltipcreator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/common/tooltipdialog.cpp
