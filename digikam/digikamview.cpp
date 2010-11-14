@@ -70,75 +70,89 @@ class DigikamViewPriv
 {
 public:
 
-    DigikamViewPriv()
+    DigikamViewPriv() :
+        needDispatchSelection(false),
+        cancelSlideShow(false),
+        useAlbumHistory(false),
+        initialAlbumID(0),
+        thumbSize(ThumbnailSize::Medium),
+        dockArea(0),
+        splitter(0),
+        selectionTimer(0),
+        thumbSizeTimer(0),
+        albumFolderSideBar(0),
+        tagViewSideBar(0),
+        dateViewSideBar(0),
+        timelineSideBar(0),
+        searchSideBar(0),
+        fuzzySearchSideBar(0),
+#ifdef HAVE_MARBLEWIDGET
+        gpsSearchSideBar(0),
+#endif
+        parent(0),
+        iconView(0),
+        albumManager(0),
+        albumHistory(0),
+        albumWidgetStack(0),
+        albumModificationHelper(0),
+        tagModificationHelper(0),
+        searchModificationHelper(0),
+        leftSideBar(0),
+        rightSideBar(0),
+        tagFilterWidget(0),
+        optionAlbumViewPrefix("AlbumView"),
+        modelCollection(0)
     {
-        dockArea              = 0;
-        splitter              = 0;
-        parent                = 0;
-        iconView              = 0;
-        albumManager          = 0;
-        albumHistory          = 0;
-        leftSideBar           = 0;
-        rightSideBar          = 0;
-        albumWidgetStack      = 0;
-        selectionTimer        = 0;
-        thumbSizeTimer        = 0;
-        needDispatchSelection = false;
-        cancelSlideShow       = false;
-        useAlbumHistory       = false;
-        thumbSize             = ThumbnailSize::Medium;
-        optionAlbumViewPrefix = "AlbumView";
-        modelCollection       = 0;
     }
 
     QString userPresentableAlbumTitle(const QString& album);
 
-    bool                      needDispatchSelection;
-    bool                      cancelSlideShow;
-    bool                      useAlbumHistory;
+    bool                          needDispatchSelection;
+    bool                          cancelSlideShow;
+    bool                          useAlbumHistory;
 
-    int                       initialAlbumID;
-    int                       thumbSize;
+    int                           initialAlbumID;
+    int                           thumbSize;
 
-    QMainWindow*              dockArea;
+    QMainWindow*                  dockArea;
 
-    SidebarSplitter*          splitter;
+    SidebarSplitter*              splitter;
 
-    QTimer*                   selectionTimer;
-    QTimer*                   thumbSizeTimer;
+    QTimer*                       selectionTimer;
+    QTimer*                       thumbSizeTimer;
 
     // left side bar
-    AlbumFolderViewSideBarWidget *albumFolderSideBar;
-    TagViewSideBarWidget         *tagViewSideBar;
-    DateFolderViewSideBarWidget  *dateViewSideBar;
-    TimelineSideBarWidget        *timelineSideBar;
-    SearchSideBarWidget          *searchSideBar;
-    FuzzySearchSideBarWidget     *fuzzySearchSideBar;
+    AlbumFolderViewSideBarWidget* albumFolderSideBar;
+    TagViewSideBarWidget*         tagViewSideBar;
+    DateFolderViewSideBarWidget*  dateViewSideBar;
+    TimelineSideBarWidget*        timelineSideBar;
+    SearchSideBarWidget*          searchSideBar;
+    FuzzySearchSideBarWidget*     fuzzySearchSideBar;
 #ifdef HAVE_MARBLEWIDGET
-    GPSSearchSideBarWidget       *gpsSearchSideBar;
+    GPSSearchSideBarWidget*       gpsSearchSideBar;
 #endif
 
-    DigikamApp*               parent;
+    DigikamApp*                   parent;
 
-    DigikamImageView*         iconView;
-    AlbumManager*             albumManager;
-    AlbumHistory*             albumHistory;
-    AlbumWidgetStack*         albumWidgetStack;
+    DigikamImageView*             iconView;
+    AlbumManager*                 albumManager;
+    AlbumHistory*                 albumHistory;
+    AlbumWidgetStack*             albumWidgetStack;
 
-    AlbumModificationHelper*  albumModificationHelper;
-    TagModificationHelper*    tagModificationHelper;
-    SearchModificationHelper* searchModificationHelper;
+    AlbumModificationHelper*      albumModificationHelper;
+    TagModificationHelper*        tagModificationHelper;
+    SearchModificationHelper*     searchModificationHelper;
 
-    Sidebar*                  leftSideBar;
-    ImagePropertiesSideBarDB* rightSideBar;
+    Sidebar*                      leftSideBar;
+    ImagePropertiesSideBarDB*     rightSideBar;
 
-    TagFilterSideBarWidget *tagFilterWidget;
+    TagFilterSideBarWidget*       tagFilterWidget;
 
-    QString optionAlbumViewPrefix;
+    QString                       optionAlbumViewPrefix;
 
-    QList<SidebarWidget*> leftSideBarWidgets;
+    QList<SidebarWidget*>         leftSideBarWidgets;
 
-    DigikamModelCollection *modelCollection;
+    DigikamModelCollection*       modelCollection;
 
 };
 

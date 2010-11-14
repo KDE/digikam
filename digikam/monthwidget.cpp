@@ -64,26 +64,32 @@ public:
         int  numImages;
     };
 
-    MonthWidgetPriv()
+    MonthWidgetPriv() :
+        active(true),
+        model(0),
+        timer(0),
+        year(0),
+        month(0),
+        width(0),
+        height(0),
+        currw(0),
+        currh(0)
     {
-        active = true;
-        model  = 0;
-        timer  = 0;
     }
 
-    bool         active;
+    bool              active;
 
-    ImageFilterModel *model;
-    QTimer           *timer;
+    ImageFilterModel* model;
+    QTimer*           timer;
 
-    int          year;
-    int          month;
-    int          width;
-    int          height;
-    int          currw;
-    int          currh;
+    int               year;
+    int               month;
+    int               width;
+    int               height;
+    int               currw;
+    int               currh;
 
-    struct Month days[42];
+    struct Month      days[42];
 };
 
 MonthWidget::MonthWidget(QWidget* parent)

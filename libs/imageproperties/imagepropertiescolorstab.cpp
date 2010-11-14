@@ -80,24 +80,24 @@ public:
         ICCPROFILE
     };
 
-    ImagePropertiesColorsTabPriv()
+    ImagePropertiesColorsTabPriv() :
+        blinkFlag(false),
+        regionBox(0),
+        regionBG(0),
+        minInterv(0),
+        maxInterv(0),
+        labelMeanValue(0),
+        labelPixelsValue(0),
+        labelStdDevValue(0),
+        labelCountValue(0),
+        labelMedianValue(0),
+        labelPercentileValue(0),
+        labelColorDepth(0),
+        labelAlphaChannel(0),
+        iccProfileWidget(0),
+        imageLoaderThread(0),
+        histogramBox(0)
     {
-        regionBox            = 0;
-        imageLoaderThread    = 0;
-        regionBG             = 0;
-        minInterv            = 0;
-        maxInterv            = 0;
-        labelMeanValue       = 0;
-        labelPixelsValue     = 0;
-        labelStdDevValue     = 0;
-        labelCountValue      = 0;
-        labelMedianValue     = 0;
-        labelPercentileValue = 0;
-        labelColorDepth      = 0;
-        labelAlphaChannel    = 0;
-        iccProfileWidget     = 0;
-        imageLoaderThread    = 0;
-        histogramBox         = 0;
     }
 
     bool                   blinkFlag;

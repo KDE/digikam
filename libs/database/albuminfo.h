@@ -61,7 +61,7 @@ class AlbumRootInfo
 {
 public:
 
-    AlbumRootInfo() : id(0), type(AlbumRoot::UndefinedType) {};
+    AlbumRootInfo() : id(0), type(AlbumRoot::UndefinedType), status(0) {};
 
     int             id;
     QString         label;
@@ -80,7 +80,7 @@ class AlbumInfo
 {
 public:
 
-    AlbumInfo() : id(0), iconAlbumRootId(0) {};
+    AlbumInfo() : id(0), albumRootId(0), iconAlbumRootId(0) {};
 
     typedef QList<AlbumInfo> List;
 
@@ -187,13 +187,13 @@ class AlbumShortInfo
 {
 public:
 
-    AlbumShortInfo() : id(0) {};
+    AlbumShortInfo() : id(0), albumRootId(0) {};
 
     bool isNull() const { return id == 0; }
 
-    int         id;
-    QString     relativePath;
-    int         albumRootId;
+    int     id;
+    QString relativePath;
+    int     albumRootId;
 };
 
 class TagShortInfo
@@ -235,7 +235,7 @@ class ItemShortInfo
 {
 public:
 
-    ItemShortInfo() : id(0), albumID(0) {};
+    ItemShortInfo() : id(0), albumID(0), albumRootID(0) {};
 
     bool isNull() const { return id == 0; }
 
@@ -252,7 +252,7 @@ public:
 
     ItemScanInfo()
         : id(0), albumID(0), status(DatabaseItem::UndefinedStatus),
-          category(DatabaseItem::UndefinedCategory)
+          category(DatabaseItem::UndefinedCategory), fileSize(0)
     {};
 
     bool isNull() const { return id == 0; }

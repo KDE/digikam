@@ -162,20 +162,23 @@ public:
         configLastShowUntaggedEntry("Show Untagged"),
         configMatchingConditionEntry("Matching Condition"),
         tagFilterView(0),
-        tagFilterSearchBar(0)
+        tagFilterSearchBar(0),
+        tagFilterModel(0),
+        withoutTagCheckBox(0),
+        matchingConditionComboBox(0)
     {
     }
 
-    QString configLastShowUntaggedEntry;
-    QString configMatchingConditionEntry;
+    QString        configLastShowUntaggedEntry;
+    QString        configMatchingConditionEntry;
 
-    TagFilterView    *tagFilterView;
-    SearchTextBar    *tagFilterSearchBar;
+    TagFilterView* tagFilterView;
+    SearchTextBar* tagFilterSearchBar;
 
-    TagModel *tagFilterModel;
+    TagModel*      tagFilterModel;
 
-    QCheckBox *withoutTagCheckBox;
-    KComboBox *matchingConditionComboBox;
+    QCheckBox*     withoutTagCheckBox;
+    KComboBox*     matchingConditionComboBox;
 
 };
 

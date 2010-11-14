@@ -79,26 +79,30 @@ class DImgInterfacePrivate
 
 public:
 
-    DImgInterfacePrivate()
+    DImgInterfacePrivate() :
+        valid(false),
+        rotatedOrFlipped(false),
+        exifOrient(false),
+        doSoftProofing(false),
+        width(0),
+        height(0),
+        origWidth(0),
+        origHeight(0),
+        selX(0),
+        selY(0),
+        selW(0),
+        selH(0),
+        gamma(0.0),
+        brightness(0.0),
+        contrast(0.0),
+        zoom(1.0),
+        displayingWidget(0),
+        undoMan(0),
+        cmSettings(0),
+        expoSettings(0),
+        thread(0)
+
     {
-        undoMan          = 0;
-        cmSettings       = 0;
-        expoSettings     = 0;
-        thread           = 0;
-        width            = 0;
-        height           = 0;
-        origWidth        = 0;
-        origHeight       = 0;
-        selX             = 0;
-        selY             = 0;
-        selW             = 0;
-        selH             = 0;
-        zoom             = 1.0;
-        displayingWidget = 0;
-        exifOrient       = false;
-        valid            = false;
-        rotatedOrFlipped = false;
-        doSoftProofing   = false;
     }
 
     bool                       valid;

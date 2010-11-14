@@ -294,18 +294,19 @@ QRect TagToggleMenuWidget::checkIndicatorSize(QStyleOption *option) const
 // ------------------------------------------------------------------------
 
 TagToggleAction::TagToggleAction(const QString& text, QObject *parent)
-               : QWidgetAction(parent)
+               : QWidgetAction(parent),
+                 m_checked(false),
+                 m_checkBoxHidden(false)
 {
-    m_checked = false;
-    m_checkBoxHidden = false;
     setText(text);
     setCheckable(true);
 }
 
 TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject *parent)
-               : QWidgetAction(parent)
+               : QWidgetAction(parent),
+                 m_checked(false),
+                 m_checkBoxHidden(false)
 {
-    m_checked = false;
     setIcon(icon);
     setText(text);
     setCheckable(true);

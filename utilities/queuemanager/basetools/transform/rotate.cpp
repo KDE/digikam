@@ -61,6 +61,7 @@ public:
         CUSTOM_ANGLE(DImg::ROT270+1),
         label(0),
         useExif(0),
+        comboBox(0),
         frSettings(0)
         {}
 

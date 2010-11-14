@@ -63,23 +63,23 @@ class SyncJobPriv
 {
 public:
 
-    SyncJobPriv()
+    SyncJobPriv() :
+        thumbnailSize(0),
+        thumbnail(0),
+        waitingLoop(0),
+        album(0)
     {
         result.success = false;
-        album          = 0;
-        thumbnail      = 0;
-        waitingLoop    = 0;
     }
 
-    SyncJobResult    result;
+    SyncJobResult result;
 
-    int              thumbnailSize;
+    int           thumbnailSize;
 
-    QPixmap         *thumbnail;
+    QPixmap*      thumbnail;
+    QEventLoop*   waitingLoop;
 
-    QEventLoop      *waitingLoop;
-
-    Album           *album;
+    Album*        album;
 };
 
 SyncJob::SyncJob()

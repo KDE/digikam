@@ -82,44 +82,47 @@ class SetupICCPriv
 {
 public:
 
-     SetupICCPriv()
+     SetupICCPriv() :
+        iccFolderLabel(0),
+        enableColorManagement(0),
+        defaultSRGBConvert(0),
+        bpcAlgorithm(0),
+        managedView(0),
+        managedPreviews(0),
+        defaultAskMismatch(0),
+        defaultConvertMismatch(0),
+        defaultAskMissing(0),
+        defaultSRGBMissing(0),
+        defaultWSMissing(0),
+        defaultInputMissing(0),
+        defaultAskRaw(0),
+        defaultInputRaw(0),
+        defaultGuessRaw(0),
+        infoWorkProfiles(0),
+        infoMonitorProfiles(0),
+        infoInProfiles(0),
+        infoProofProfiles(0),
+        workspaceGB(0),
+        mismatchGB(0),
+        missingGB(0),
+        rawGB(0),
+        inputGB(0),
+        viewGB(0),
+        proofGB(0),
+        iccFolderGB(0),
+        advancedSettingsGB(0),
+        defaultPathKU(0),
+        renderingIntentKC(0),
+        behaviorPanel(0),
+        profilesPanel(0),
+        advancedPanel(0),
+        tab(0),
+        mainDialog(0),
+        inProfilesKC(0),
+        workProfilesKC(0),
+        proofProfilesKC(0),
+        monitorProfilesKC(0)
      {
-        enableColorManagement  = 0;
-        defaultSRGBConvert     = 0;
-        bpcAlgorithm           = 0;
-        managedView            = 0;
-        managedPreviews        = 0;
-        defaultAskMismatch     = 0;
-        defaultConvertMismatch = 0;
-        defaultAskMissing      = 0;
-        defaultSRGBMissing     = 0;
-        defaultWSMissing       = 0;
-        defaultInputMissing    = 0;
-        defaultAskRaw          = 0;
-        defaultInputRaw        = 0;
-        defaultGuessRaw        = 0;
-        infoWorkProfiles       = 0;
-        infoMonitorProfiles    = 0;
-        infoInProfiles         = 0;
-        infoProofProfiles      = 0;
-        workspaceGB            = 0;
-        mismatchGB             = 0;
-        missingGB              = 0;
-        rawGB                  = 0;
-        inputGB                = 0;
-        viewGB                 = 0;
-        proofGB                = 0;
-        advancedSettingsGB     = 0;
-        defaultPathKU          = 0;
-        renderingIntentKC      = 0;
-        inProfilesKC           = 0;
-        workProfilesKC         = 0;
-        proofProfilesKC        = 0;
-        monitorProfilesKC      = 0;
-        iccFolderLabel         = 0;
-        behaviorPanel          = 0;
-        profilesPanel          = 0;
-        advancedPanel          = 0;
      }
 
     QLabel*                     iccFolderLabel;

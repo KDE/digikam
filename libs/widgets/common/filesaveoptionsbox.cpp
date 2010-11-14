@@ -61,15 +61,17 @@ class FileSaveOptionsBoxPriv
 
 public:
 
-    FileSaveOptionsBoxPriv()
+    FileSaveOptionsBoxPriv() :
+        noneOptions(0),
+        noneGrid(0),
+        labelNone(0),
+        JPEGOptions(0),
+        PNGOptions(0),
+        TIFFOptions(0),
+        JPEG2000Options(0),
+        PGFOptions(0),
+        dialog(0)
     {
-        noneOptions     = 0;
-        JPEGOptions     = 0;
-        PNGOptions      = 0;
-        TIFFOptions     = 0;
-        JPEG2000Options = 0;
-        PGFOptions      = 0;
-        dialog          = 0;
     }
 
     QWidget      *noneOptions;
@@ -79,13 +81,9 @@ public:
     QLabel       *labelNone;
 
     JPEGSettings *JPEGOptions;
-
     PNGSettings  *PNGOptions;
-
     TIFFSettings *TIFFOptions;
-
     JP2KSettings *JPEG2000Options;
-
     PGFSettings  *PGFOptions;
 
     KFileDialog  *dialog;
@@ -238,12 +236,12 @@ DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString &filename,
     if (splitParts.size() < 2)
     {
         kDebug() << "filename '" << filename
-    			 << "' does not contain an extension separated by a point.";
-    	ext = filename;
+                 << "' does not contain an extension separated by a point.";
+        ext = filename;
     }
     else
     {
-    	ext = splitParts.at(splitParts.size() - 1);
+        ext = splitParts.at(splitParts.size() - 1);
     }
 
     ext = ext.toUpper();

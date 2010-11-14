@@ -36,10 +36,10 @@ extern "C"
 
 // C++ includes
 
-#include <clocale>
-#include <cstdlib>
-#include <cstdio>
 #include <cerrno>
+#include <clocale>
+#include <cstdio>
+#include <cstdlib>
 
 // Qt includes
 
@@ -52,8 +52,8 @@ extern "C"
 #include <QFile>
 #include <QGroupBox>
 #include <QHash>
-#include <QList>
 #include <QLabel>
+#include <QList>
 #include <QMultiHash>
 #include <QRadioButton>
 #include <QTextCodec>
@@ -62,43 +62,43 @@ extern "C"
 // KDE includes
 
 #include <kcombobox.h>
+#include <kconfiggroup.h>
 #include <kconfig.h>
-#include <klocale.h>
+#include <kdebug.h>
 #include <kdeversion.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kio/netaccess.h>
+#include <kdirwatch.h>
 #include <kio/global.h>
 #include <kio/job.h>
-#include <kdirwatch.h>
-#include <kconfiggroup.h>
+#include <kio/netaccess.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
 #include <kwindowsystem.h>
-#include <kdebug.h>
 
 // Local includes
 
-#include "album.h"
 #include "albumdb.h"
+#include "album.h"
 #include "albumsettings.h"
-#include "collectionmanager.h"
 #include "collectionlocation.h"
+#include "collectionmanager.h"
+#include "config-digikam.h"
 #include "databaseaccess.h"
-#include "thumbnaildatabaseaccess.h"
-#include "databaseurl.h"
 #include "databaseguierrorhandler.h"
 #include "databaseparameters.h"
 #include "databaseserverstarter.h"
 #include "databasethumbnailinfoprovider.h"
+#include "databaseurl.h"
 #include "databasewatch.h"
 #include "dio.h"
 #include "imagelister.h"
 #include "scancontroller.h"
+#include "setupcollections.h"
 #include "setup.h"
+#include "tagscache.h"
+#include "thumbnaildatabaseaccess.h"
 #include "thumbnailloadthread.h"
 #include "upgradedb_sqlite2tosqlite3.h"
-#include "config-digikam.h"
-#include "setupcollections.h"
-#include "tagscache.h"
 
 namespace Digikam
 {
@@ -149,28 +149,30 @@ class AlbumManagerPriv
 
 public:
 
-    AlbumManagerPriv()
+    AlbumManagerPriv() :
+        changed(false),
+        hasPriorizedDbPath(false),
+        dbPort(0),
+        dbInternalServer(false),
+        albumListJob(0),
+        dateListJob(0),
+        tagListJob(0),
+        dirWatch(0),
+        rootPAlbum(0),
+        rootTAlbum(0),
+        rootDAlbum(0),
+        rootSAlbum(0),
+        currentlyMovingAlbum(0),
+        currentAlbum(0),
+        changingDB(false),
+        scanPAlbumsTimer(0),
+        scanTAlbumsTimer(0),
+        scanSAlbumsTimer(0),
+        scanDAlbumsTimer(0),
+        updatePAlbumsTimer(0),
+        albumItemCountTimer(0),
+        tagItemCountTimer(0)
     {
-        changed            = false;
-        hasPriorizedDbPath = false;
-        dateListJob        = 0;
-        albumListJob       = 0;
-        tagListJob         = 0;
-        dirWatch           = 0;
-        rootPAlbum         = 0;
-        rootTAlbum         = 0;
-        rootDAlbum         = 0;
-        rootSAlbum         = 0;
-        currentAlbum       = 0;
-        currentlyMovingAlbum = 0;
-        changingDB         = false;
-        scanPAlbumsTimer   = 0;
-        scanTAlbumsTimer   = 0;
-        scanSAlbumsTimer   = 0;
-        scanDAlbumsTimer   = 0;
-        updatePAlbumsTimer = 0;
-        albumItemCountTimer= 0;
-        tagItemCountTimer  = 0;
     }
 
     bool                        changed;

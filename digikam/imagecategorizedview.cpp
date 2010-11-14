@@ -84,27 +84,28 @@ class ImageCategorizedViewPriv
 {
 public:
 
-    ImageCategorizedViewPriv()
+    ImageCategorizedViewPriv() :
+        model(0),
+        filterModel(0),
+        delegate(0),
+        showToolTip(false),
+        scrollToItemId(0),
+        delayedEnterTimer(0),
+        currentMouseEvent(0)
     {
-        model              = 0;
-        filterModel        = 0;
-        delegate           = 0;
-        scrollToItemId     = 0;
-        currentMouseEvent  = 0;
-        showToolTip        = false;
     }
 
-    ImageModel              *model;
-    ImageFilterModel        *filterModel;
+    ImageModel*       model;
+    ImageFilterModel* filterModel;
 
-    ImageDelegate           *delegate;
-    bool                     showToolTip;
+    ImageDelegate*    delegate;
+    bool              showToolTip;
 
-    qlonglong                scrollToItemId;
+    qlonglong         scrollToItemId;
 
-    QTimer                  *delayedEnterTimer;
+    QTimer*           delayedEnterTimer;
 
-    QMouseEvent             *currentMouseEvent;
+    QMouseEvent*      currentMouseEvent;
 };
 
 // -------------------------------------------------------------------------------

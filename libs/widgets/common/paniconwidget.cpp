@@ -57,6 +57,12 @@ public:
     PanIconWidgetPriv() :
         moveSelection(false),
         flicker(false),
+        width(0),
+        height(0),
+        zoomedOrgWidth(0),
+        zoomedOrgHeight(0),
+        orgWidth(0),
+        orgHeight(0),
         xpos(0),
         ypos(0),
         zoomFactor(1.0),

@@ -62,7 +62,9 @@ class AlbumRootLocation : public CollectionLocation
 
 public:
 
-    AlbumRootLocation()
+    AlbumRootLocation() :
+        available(false),
+        hidden(false)
     {
     }
 
@@ -140,8 +142,8 @@ public:
 
     QString identifier;
     QString specificPath;
-    bool available;
-    bool hidden;
+    bool    available;
+    bool    hidden;
 };
 
 class SolidVolumeInfo

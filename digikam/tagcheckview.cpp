@@ -49,37 +49,50 @@ class TagCheckViewPriv
 public:
     TagCheckViewPriv() :
         configToggleAutoTagsEntry("Toggle Auto Tags"),
-        toggleAutoTags(TagCheckView::NoToggleAuto)
+        toggleAutoTags(TagCheckView::NoToggleAuto),
+        checkNewTags(false),
+        selectTagsMenu(0),
+        selectAllTagsAction(0),
+        selectChildrenAction(0),
+        selectParentsAction(0),
+        deselectTagsMenu(0),
+        deselectAllTagsAction(0),
+        deselectChildrenAction(0),
+        deselectParentsAction(0),
+        invertAction(0),
+        toggleAutoAction(0),
+        toggleNoneAction(0),
+        toggleChildrenAction(0),
+        toggleParentsAction(0),
+        toggleBothAction(0)
     {
-        checkNewTags = false;
     }
 
-    const QString configToggleAutoTagsEntry;
+    const QString                configToggleAutoTagsEntry;
 
-    TagCheckView::ToggleAutoTags       toggleAutoTags;
-    bool                               checkNewTags;
+    TagCheckView::ToggleAutoTags toggleAutoTags;
+    bool                         checkNewTags;
 
-    KMenu *selectTagsMenu;
-    QAction *selectAllTagsAction;
-    QAction *selectChildrenAction;
-    QAction *selectParentsAction;
-    KMenu *deselectTagsMenu;
-    QAction *deselectAllTagsAction;
-    QAction *deselectChildrenAction;
-    QAction *deselectParentsAction;
-    QAction *invertAction;
-    KSelectAction *toggleAutoAction;
-    QAction *toggleNoneAction;
-    QAction *toggleChildrenAction;
-    QAction *toggleParentsAction;
-    QAction *toggleBothAction;
+    KMenu*                       selectTagsMenu;
+    QAction*                     selectAllTagsAction;
+    QAction*                     selectChildrenAction;
+    QAction*                     selectParentsAction;
+    KMenu*                       deselectTagsMenu;
+    QAction*                     deselectAllTagsAction;
+    QAction*                     deselectChildrenAction;
+    QAction*                     deselectParentsAction;
+    QAction*                     invertAction;
+    KSelectAction*               toggleAutoAction;
+    QAction*                     toggleNoneAction;
+    QAction*                     toggleChildrenAction;
+    QAction*                     toggleParentsAction;
+    QAction*                     toggleBothAction;
 };
 
 TagCheckView::TagCheckView(QWidget *parent, TagModel *tagModel) :
                 TagFolderView(parent, tagModel),
                 d(new TagCheckViewPriv)
 {
-
     setSelectAlbumOnClick(false);
     setExpandOnSingleClick(false);
     setSelectOnContextMenu(false);
@@ -125,7 +138,6 @@ void TagCheckView::slotResetCheckState()
 
 void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
 {
-
     Q_UNUSED(album);
     Q_UNUSED(state);
 
@@ -152,7 +164,6 @@ void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
             this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 
     emit checkedTagsChanged(getCheckedTags(), getPartiallyCheckedTags());
-
 }
 
 void TagCheckView::doLoadState()
@@ -171,7 +182,6 @@ void TagCheckView::doSaveState()
     KConfigGroup group = getConfigGroup();
     group.writeEntry(entryName(d->configToggleAutoTagsEntry), (int)(d->toggleAutoTags));
     group.sync();
-
 }
 
 QList<TAlbum*> TagCheckView::getCheckedTags() const
@@ -215,7 +225,9 @@ void TagCheckView::setToggleAutoTags(TagCheckView::ToggleAutoTags toggle)
 void TagCheckView::setCheckNewTags(bool checkNewTags)
 {
     if (d->checkNewTags == checkNewTags)
+    {
         return;
+    }
 
     d->checkNewTags = checkNewTags;
     if (d->checkNewTags)
@@ -273,15 +285,14 @@ void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *al
     d->toggleChildrenAction->setChecked(d->toggleAutoTags == TagCheckView::Children);
     d->toggleParentsAction->setChecked(d->toggleAutoTags == TagCheckView::Parents);
     d->toggleBothAction->setChecked(d->toggleAutoTags == TagCheckView::ChildrenAndParents);
-
 }
 
 void TagCheckView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
     TagFolderView::handleCustomContextMenuAction(action, album);
 
-    Album *a = album;
-    TAlbum *tag = dynamic_cast<TAlbum*> (a);
+    Album*  a   = album;
+    TAlbum* tag = dynamic_cast<TAlbum*> (a);
 
     if (!action || !tag)
     {
@@ -336,7 +347,5 @@ void TagCheckView::handleCustomContextMenuAction(QAction *action, AlbumPointer<A
         toggleRestore = ChildrenAndParents;
     }
     d->toggleAutoTags = toggleRestore;
-
 }
-
-}
+} // namespace Digikam

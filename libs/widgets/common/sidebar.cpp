@@ -74,6 +74,7 @@ public:
         dragSwitchId(-1),
         restoreSize(0),
         stack(0),
+        splitter(0),
         dragSwitchTimer(0),
         optionActiveTabEntry("ActiveTab"),
         optionMinimizedEntry("Minimized"),

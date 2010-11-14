@@ -62,14 +62,15 @@ class AlbumFolderViewSideBarWidgetPriv
 {
 public:
     AlbumFolderViewSideBarWidgetPriv() :
+        albumModificationHelper(0),
         albumFolderView(0),
         searchTextBar(0)
     {
     }
 
-    AlbumModificationHelper *albumModificationHelper;
-    AlbumSelectionTreeView *albumFolderView;
-    SearchTextBar *searchTextBar;
+    AlbumModificationHelper* albumModificationHelper;
+    AlbumSelectionTreeView*  albumFolderView;
+    SearchTextBar*           searchTextBar;
 };
 
 AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
@@ -169,13 +170,15 @@ class TagViewSideBarWidgetPriv
 {
 public:
     TagViewSideBarWidgetPriv() :
-        tagModel(0)
+        tagModel(0),
+        tagSearchBar(0),
+        tagFolderView(0)
     {
     }
 
-    TagModel *tagModel;
-    SearchTextBar *tagSearchBar;
-    TagFolderView *tagFolderView;
+    TagModel*       tagModel;
+    SearchTextBar*  tagSearchBar;
+    TagFolderView*  tagFolderView;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent, TagModel *model) :
@@ -799,14 +802,15 @@ public:
     SearchSideBarWidgetPriv() :
         searchSearchBar(0),
         searchTreeView(0),
-        searchTabHeader(0)
+        searchTabHeader(0),
+        searchModel(0)
     {
     }
 
-    SearchTextBar*            searchSearchBar;
-    NormalSearchTreeView*     searchTreeView;
-    SearchTabHeader*          searchTabHeader;
-    SearchModel *searchModel;
+    SearchTextBar*        searchSearchBar;
+    NormalSearchTreeView* searchTreeView;
+    SearchTabHeader*      searchTabHeader;
+    SearchModel*          searchModel;
 };
 
 SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
@@ -911,13 +915,15 @@ class FuzzySearchSideBarWidgetPriv
 {
 public:
     FuzzySearchSideBarWidgetPriv() :
-        fuzzySearchView(0)
+        fuzzySearchView(0),
+        searchModel(0),
+        searchModificationHelper(0)
     {
     }
 
     FuzzySearchView*          fuzzySearchView;
-    SearchModel *searchModel;
-    SearchModificationHelper *searchModificationHelper;
+    SearchModel*              searchModel;
+    SearchModificationHelper* searchModificationHelper;
 };
 
 FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent,
@@ -1015,12 +1021,13 @@ class GPSSearchSideBarWidgetPriv
 {
 public:
     GPSSearchSideBarWidgetPriv() :
-        gpsSearchView(0)
+        gpsSearchView(0),
+        searchModel(0)
     {
     }
 
-    GPSSearchView*            gpsSearchView;
-    SearchModel *searchModel;
+    GPSSearchView* gpsSearchView;
+    SearchModel*   searchModel;
 };
 
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent, SearchModel *searchModel, SearchModificationHelper *searchModificationHelper) :

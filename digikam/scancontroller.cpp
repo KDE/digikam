@@ -88,20 +88,24 @@ class ScanControllerPriv
 {
 public:
 
-    ScanControllerPriv()
+    ScanControllerPriv() :
+        running(false),
+        needsInitialization(false),
+        needsCompleteScan(false),
+        idle(false),
+        scanSuspended(0),
+        continueInitialization(false),
+        continueScan(false),
+        continuePartialScan(false),
+        fileWatchInstalled(false),
+        eventLoop(0),
+        showTimer(0),
+        relaxedTimer(0),
+        progressDialog(0),
+        splash(0),
+        advice(ScanController::Success),
+        needTotalFiles(false)
     {
-        splash              = 0;
-        progressDialog      = 0;
-        scanSuspended       = 0;
-        eventLoop           = 0;
-        showTimer           = 0;
-        idle                = false;
-        running             = false;
-        needsInitialization = false;
-        needsCompleteScan   = false;
-        fileWatchInstalled  = false;
-        advice              = ScanController::Success;
-        needTotalFiles      = false;
     }
 
     bool                      running;

@@ -31,13 +31,13 @@ class CameraFolderItemPriv
 {
 public:
 
-    CameraFolderItemPriv()
+    CameraFolderItemPriv() :
+        virtualFolder(true),
+        count(0)
     {
-        count = 0;
     }
 
     bool    virtualFolder;
-
     int     count;
 
     QString folderName;
@@ -48,8 +48,7 @@ public:
 CameraFolderItem::CameraFolderItem(QTreeWidget* parent, const QString& name, const QPixmap& pixmap)
                 : QTreeWidgetItem(parent), d(new CameraFolderItemPriv)
 {
-    d->virtualFolder = true;
-    d->name          = name;
+    d->name = name;
     setIcon(0, pixmap);
     setText(0, d->name);
 }

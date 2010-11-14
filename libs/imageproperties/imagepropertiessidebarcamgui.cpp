@@ -56,18 +56,17 @@ class ImagePropertiesSideBarCamGuiPriv
 {
 public:
 
-    ImagePropertiesSideBarCamGuiPriv()
+    ImagePropertiesSideBarCamGuiPriv() :
+        dirtyMetadataTab(false),
+        dirtyCameraItemTab(false),
+        dirtyGpsTab(false),
+        itemInfo(0),
+        metadataTab(0),
+        gpsTab(0),
+        cameraView(0),
+        cameraItem(0),
+        cameraItemTab(0)
     {
-        dirtyMetadataTab   = false;
-        dirtyCameraItemTab = false;
-        dirtyGpsTab        = false;
-        metadataTab        = 0;
-        cameraItemTab      = 0;
-        itemInfo           = 0;
-        cameraView         = 0;
-        cameraItem         = 0;
-        metaData           = DMetadata();
-        currentURL         = KUrl();
     }
 
     bool                        dirtyMetadataTab;

@@ -67,23 +67,24 @@ class SetupMetadataPriv
 {
 public:
 
-    SetupMetadataPriv()
+    SetupMetadataPriv() :
+        exifAutoRotateAsChanged(false),
+        exifAutoRotateOrg(false),
+        saveCommentsBox(0),
+        exifRotateBox(0),
+        exifSetOrientationBox(0),
+        saveRatingBox(0),
+        saveTagsBox(0),
+        saveDateTimeBox(0),
+        saveTemplateBox(0),
+        writeRawFilesBox(0),
+        updateFileTimeStampBox(0),
+        saveToNepomukBox(0),
+        readFromNepomukBox(0),
+        resyncButton(0),
+        tab(0),
+        tagsCfgPanel(0)
     {
-        exifAutoRotateAsChanged = false;
-        saveCommentsBox         = 0;
-        exifRotateBox           = 0;
-        exifSetOrientationBox   = 0;
-        saveRatingBox           = 0;
-        saveTagsBox             = 0;
-        saveDateTimeBox         = 0;
-        saveTemplateBox         = 0;
-        writeRawFilesBox        = 0;
-        updateFileTimeStampBox  = 0;
-        saveToNepomukBox        = 0;
-        readFromNepomukBox      = 0;
-        resyncButton            = 0;
-        tagsCfgPanel            = 0;
-        tab                     = 0;
     }
 
     bool           exifAutoRotateAsChanged;
