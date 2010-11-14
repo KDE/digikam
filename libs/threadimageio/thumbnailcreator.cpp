@@ -532,7 +532,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     if (dbInfo.type == DatabaseThumbnail::PGF)
     {
         // NOTE: see B.K.O #233094: using PGF compression level 4 there. Do not use a value > 4,
-        // else image is blured due to donw-sampling.
+        // else image is blurred due to down-sampling.
         if (!writePGFImageData(image.qimage, dbInfo.data, 4))
         {
             kWarning() << "Cannot save PGF thumb in DB";
@@ -578,7 +578,6 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     DatabaseCoreBackend::QueryState lastQueryState = DatabaseCoreBackend::ConnectionError;
     while(lastQueryState == DatabaseCoreBackend::ConnectionError)
     {
-
         lastQueryState = access.backend()->beginTransaction();
         if (DatabaseCoreBackend::NoErrors != lastQueryState)
         {

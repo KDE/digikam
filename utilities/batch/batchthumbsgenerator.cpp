@@ -127,9 +127,13 @@ void BatchThumbsGenerator::slotRebuildThumbs()
         while (it != d->allPicturesPath.end())
         {
             if (filePaths.contains(*it))
+            {
                 it = d->allPicturesPath.erase(it);
+            }
             else
+            {
                 ++it;
+            }
         }
     }
 
@@ -141,9 +145,13 @@ void BatchThumbsGenerator::slotRebuildThumbs()
     {
         ImageInfo info((*it));
         if (info.category() != DatabaseItem::Image)
+        {
             it = d->allPicturesPath.erase(it);
+        }
         else
+        {
             ++it;
+        }
     }
 
     setMaximum(d->allPicturesPath.count());
@@ -159,13 +167,13 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
 void BatchThumbsGenerator::processOne()
 {
-    if (d->cancel || d->allPicturesPath.isEmpty()) return;
+    if (d->cancel || d->allPicturesPath.isEmpty())
+    {
+        return;
+    }
 
     QString path = d->allPicturesPath.first();
-
-    if (d->rebuildAll)
-        d->thumbLoadThread->deleteThumbnail(path);
-
+    d->thumbLoadThread->deleteThumbnail(path);
     d->thumbLoadThread->find(path);
 }
 

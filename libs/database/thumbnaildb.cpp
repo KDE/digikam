@@ -138,7 +138,9 @@ QHash<QString, int> ThumbnailDB::getFilePathsWithThumbnail()
                                          .arg(DatabaseThumbnail::PNG));
 
     if (!d->db->exec(query))
+    {
         return QHash<QString, int>();
+    }
 
     QHash <QString, int> filePaths;
 
