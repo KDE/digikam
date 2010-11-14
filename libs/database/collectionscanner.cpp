@@ -91,11 +91,11 @@ class CollectionScannerPriv
 
 public:
 
-    CollectionScannerPriv()
+    CollectionScannerPriv() :
+        wantSignals(false),
+        needTotalFiles(false),
+        observer(0)
     {
-        wantSignals    = false;
-        needTotalFiles = false;
-        observer       = 0;
     }
 
     QSet<QString>     nameFilters;
@@ -116,7 +116,7 @@ public:
     QSet<int>         modifiedItemHints;
     QSet<int>         rescanItemHints;
 
-    CollectionScannerObserver *observer;
+    CollectionScannerObserver* observer;
 
     void resetRemovedItemsTime() { removedItemsTime = QDateTime(); }
     void removedItems() { removedItemsTime = QDateTime::currentDateTime(); }
@@ -124,7 +124,9 @@ public:
     inline bool checkObserver()
     {
         if (observer)
+        {
             return observer->continueQuery();
+        }
         return true;
     }
 };
@@ -152,8 +154,10 @@ void CollectionScanner::setNeedFileCount(bool on)
 void CollectionScanner::recordHints(const QList<AlbumCopyMoveHint>& hints)
 {
     foreach(const AlbumCopyMoveHint& hint, hints)
+    {
         // automagic casting to src and dst
         d->albumHints[hint] = hint;
+    }
 }
 
 void CollectionScanner::recordHints(const QList<ItemCopyMoveHint>& hints)
@@ -163,7 +167,9 @@ void CollectionScanner::recordHints(const QList<ItemCopyMoveHint>& hints)
         QList<qlonglong> ids = hint.srcIds();
         QStringList dstNames = hint.dstNames();
         for(int i=0;i<ids.size();++i)
+        {
             d->itemHints[NewlyAppearedFile(hint.albumIdDst(), dstNames[i])] = ids[i];
+        }
     }
 }
 
@@ -175,9 +181,13 @@ void CollectionScanner::recordHints(const QList<ItemChangeHint>& hints)
         for(int i=0;i<ids.size();++i)
         {
             if (hint.isModified())
+            {
                 d->modifiedItemHints << ids[i];
+            }
             else
+            {
                 d->rescanItemHints << ids[i];
+            }
         }
     }
 }
@@ -185,7 +195,9 @@ void CollectionScanner::recordHints(const QList<ItemChangeHint>& hints)
 void CollectionScanner::loadNameFilters()
 {
     if (!d->nameFilters.isEmpty())
+    {
         return;
+    }
 
     QStringList imageFilter, audioFilter, videoFilter;
     DatabaseAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
@@ -224,7 +236,9 @@ void CollectionScanner::completeScan()
         // count for progress info
         int count = 0;
         foreach (const CollectionLocation& location, allLocations)
+        {
             count += countItemsInFolder(location.albumRootPath());
+        }
 
         emit totalFilesToScan(count);
     }
@@ -237,7 +251,9 @@ void CollectionScanner::completeScan()
 
     // if we have no hints to follow, clean up all stale albums
     if (d->albumHints.isEmpty())
+    {
         DatabaseAccess().db()->deleteStaleAlbums();
+    }
 
     scanForStaleAlbums(allLocations);
 
@@ -248,10 +264,14 @@ void CollectionScanner::completeScan()
     }
 
     if (d->wantSignals)
+    {
         emit startScanningAlbumRoots();
+    }
 
     foreach (const CollectionLocation& location, allLocations)
+    {
         scanAlbumRoot(location);
+    }
 
     // do not continue to clean up without a complete scan!
     if (!d->checkObserver())
@@ -288,7 +308,9 @@ void CollectionScanner::partialScan(const QString& filePath)
     QString albumRoot = CollectionManager::instance()->albumRootPath(filePath);
 
     if (albumRoot.isNull())
+    {
         return;
+    }
 
     QString album = CollectionManager::instance()->album(filePath);
     partialScan(albumRoot, album);
@@ -325,7 +347,9 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     // if we have no hints to follow, clean up all stale albums
     // Hint: Rethink with next major db update
     if (d->albumHints.isEmpty())
+    {
         DatabaseAccess().db()->deleteStaleAlbums();
+    }
 
     //TODO: This can be optimized, no need to always scan the whole location
     scanForStaleAlbums(QList<CollectionLocation>() << location);
@@ -337,9 +361,13 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     }
 
     if (album == "/")
+    {
         scanAlbumRoot(location);
+    }
     else
+    {
         scanAlbum(location, album);
+    }
 
     if (!d->checkObserver())
     {
@@ -357,7 +385,9 @@ qlonglong CollectionScanner::scanFile(const QString& filePath, FileScanMode mode
     QString albumRoot = CollectionManager::instance()->albumRootPath(dirPath);
 
     if (albumRoot.isNull())
+    {
         return -1;
+    }
 
     QString album = CollectionManager::instance()->album(dirPath);
     return scanFile(albumRoot, album, info.fileName(), mode);
@@ -437,7 +467,9 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
 void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
 {
     if (info.isNull())
+    {
         return;
+    }
 
     if (DatabaseAccess().backend()->isInTransaction())
     {
@@ -469,7 +501,9 @@ void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
 void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
 {
     if (d->wantSignals)
+    {
         emit startScanningAlbumRoot(location.albumRootPath());
+    }
 
     /*
     QDir dir(location.albumRootPath());
@@ -485,14 +519,18 @@ void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
     scanAlbum(location, "/");
 
     if (d->wantSignals)
+    {
         emit finishedScanningAlbumRoot(location.albumRootPath());
+    }
 }
 
 void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
 {
     Q_UNUSED(locations);
     if (d->wantSignals)
+    {
         emit startScanningForStaleAlbums();
+    }
 
     QList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
     QList<int> toBeDeleted;
@@ -553,22 +591,22 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
     safelyRemoveAlbums(toBeDeleted);
 
     if (d->wantSignals)
+    {
         emit finishedScanningForStaleAlbums();
+    }
 }
 
 void CollectionScanner::safelyRemoveAlbums(const QList<int>& albumIds)
 {
     // Remove the items (orphan items, detach them from the album, but keep entries for a certain time)
     // Make album orphan (no album root, keep entries until next application start)
+    DatabaseAccess access;
+    DatabaseTransaction transaction(&access);
+    foreach (int albumId, albumIds)
     {
-        DatabaseAccess access;
-        DatabaseTransaction transaction(&access);
-        foreach (int albumId, albumIds)
-        {
-            access.db()->removeItemsFromAlbum(albumId);
-            access.db()->makeStaleAlbum(albumId);
-            d->removedItems();
-        }
+        access.db()->removeItemsFromAlbum(albumId);
+        access.db()->makeStaleAlbum(albumId);
+        d->removedItems();
     }
 }
 
@@ -615,7 +653,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     }
 
     if (d->wantSignals)
+    {
         emit startScanningAlbum(location.albumRootPath(), album);
+    }
 
     int albumID = checkAlbum(location, album);
 
@@ -637,7 +677,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
         if (!d->checkObserver())
+        {
             return; // return directly, do not go to cleanup code after loop!
+        }
 
         counter++;
         if (d->wantSignals && counter && (counter % 100 == 0))
@@ -646,12 +688,14 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             counter = 0;
         }
 
-        if ( fi->isFile())
+        if (fi->isFile())
         {
             // filter with name filter
             QString suffix = fi->suffix().toLower();
             if (!d->nameFilters.contains(suffix))
+            {
                 continue;
+            }
 
             int index = fileNameIndexHash.value(fi->fileName(), -1);
             if (index != -1)
@@ -684,16 +728,22 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         {
             QString subalbum;
             if (album == "/")
+            {
                 subalbum = '/' + fi->fileName();
+            }
             else
+            {
                 subalbum = album + '/' + fi->fileName();
+            }
 
             scanAlbum( location, subalbum );
         }
     }
 
     if (d->wantSignals && counter)
+    {
         emit scannedFiles(counter);
+    }
 
     // Mark items in the db which we did not see on disk.
     if (!itemIdSet.isEmpty())
@@ -706,7 +756,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     d->scannedAlbums << albumID;
 
     if (d->wantSignals)
+    {
         emit finishedScanningAlbum(location.albumRootPath(), album, list.count());
+    }
 }
 
 void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& scanInfo)
@@ -752,20 +804,28 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
     // Check copy/move hints for single items
     qlonglong srcId = d->itemHints.value(NewlyAppearedFile(albumId, info.fileName()));
     if (srcId != 0)
+    {
         scanner.copiedFrom(albumId, srcId);
+    }
     else
     {
         // Check copy/move hints for whole albums
         int srcAlbum = d->establishedSourceAlbums.value(albumId);
         if (srcAlbum)
+        {
             // if we have one source album, find out if there is a file with the same name
             srcId = DatabaseAccess().db()->getImageId(srcAlbum, info.fileName());
+        }
 
         if (srcId != 0)
+        {
             scanner.copiedFrom(albumId, srcId);
+        }
         else
+        {
             // Establishing identity with the unique hsah
             scanner.newFile(albumId);
+        }
     }
 
     return scanner.id();
@@ -796,8 +856,9 @@ void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& sc
 void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageInfo& dest)
 {
     if (source.isNull() || dest.isNull())
+    {
         return;
-
+    }
     ImageScanner::copyProperties(source.id(), dest.id());
 }
 
@@ -807,7 +868,9 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
 
     QDir dir( directory );
     if ( !dir.exists() || !dir.isReadable() )
+    {
         return 0;
+    }
 
     QFileInfoList list = dir.entryInfoList();
 
@@ -832,13 +895,21 @@ DatabaseItem::Category CollectionScanner::category(const QFileInfo& info)
     QString suffix = info.suffix().toLower();
 
     if (d->imageFilterSet.contains(suffix))
+    {
         return DatabaseItem::Image;
+    }
     else if (d->audioFilterSet.contains(suffix))
+    {
         return DatabaseItem::Audio;
+    }
     else if (d->videoFilterSet.contains(suffix))
+    {
         return DatabaseItem::Video;
+    }
     else
+    {
         return DatabaseItem::Other;
+    }
 }
 
 void CollectionScanner::markDatabaseAsScanned()
@@ -887,15 +958,21 @@ bool CollectionScanner::checkDeleteRemoved()
     QString removedItemsTimeString = access.db()->getSetting("RemovedItemsTime");
 
     if (removedItemsTimeString.isNull())
+    {
         return false;
+    }
 
     // retrieve last time removed items were (definitely) deleted from db
     QString deleteRemovedTimeString = access.db()->getSetting("DeleteRemovedTime");
     QDateTime removedItemsTime, deleteRemovedTime;
     if (!removedItemsTimeString.isNull())
+    {
         removedItemsTime = QDateTime::fromString(removedItemsTimeString, Qt::ISODate);
+    }
     if (!deleteRemovedTimeString.isNull())
+    {
         deleteRemovedTime = QDateTime::fromString(deleteRemovedTimeString, Qt::ISODate);
+    }
     QDateTime now = QDateTime::currentDateTime();
 
     // retrieve number of complete collection scans since the last time that removed items were deleted
@@ -903,13 +980,17 @@ bool CollectionScanner::checkDeleteRemoved()
 
     // No removed items? No need to delete any
     if (!removedItemsTime.isValid())
+    {
         return false;
+    }
 
     // give at least a week between removed item deletions
     if (deleteRemovedTime.isValid())
     {
         if (deleteRemovedTime.daysTo(now) <= 7)
+        {
             return false;
+        }
     }
 
     // Now look at time since items were removed, and the number of complete scans
@@ -929,7 +1010,9 @@ void CollectionScanner::scanForStaleAlbums()
 {
     QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
     for (QStringList::const_iterator it = albumRootPaths.constBegin(); it != albumRootPaths.constEnd(); ++it)
+    {
         scanForStaleAlbums(*it);
+    }
 }
 
 void CollectionScanner::scanForStaleAlbums(const QString& albumRoot)
@@ -943,7 +1026,9 @@ void CollectionScanner::scanForStaleAlbums(const QString& albumRoot)
     {
         QFileInfo fileInfo((*it).albumRoot + (*it).url);
         if (!fileInfo.exists() || !fileInfo.isDir())
+        {
             m_foldersToBeDeleted << (*it);
+        }
     }
 }
 
@@ -994,7 +1079,7 @@ void CollectionScanner::removeStaleFiles()
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
         kDebug() << "Removing: " << (*it).first << " in "
-                << (*it).second;
+                 << (*it).second;
         access.db()->deleteItem( (*it).second, (*it).first );
     }
 }
@@ -1004,7 +1089,9 @@ void CollectionScanner::scanAlbums()
     QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
     int count = 0;
     for (QStringList::const_iterator it = albumRootPaths.constBegin(); it != albumRootPaths.constEnd(); ++it)
+    {
         count += countItemsInFolder(*it);
+    }
 
     emit totalFilesToScan(count);
 
@@ -1205,7 +1292,9 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
 
     QDir dir( directory );
     if ( !dir.exists() || !dir.isReadable() )
+    {
         return 0;
+    }
 
     QFileInfoList list = dir.entryInfoList();
 
