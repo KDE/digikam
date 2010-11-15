@@ -287,7 +287,7 @@ void CollectionScanner::completeScan()
     {
         // Definitely delete items which are marked as removed.
         // Only do this in a complete scan!
-        DatabaseAccess().db()->deleteRemovedItems(d->scannedAlbums);
+        DatabaseAccess().db()->deleteRemovedItems();
         resetDeleteRemovedSettings();
     }
     else

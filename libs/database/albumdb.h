@@ -515,12 +515,6 @@ public:
      */
     void deleteRemovedItems();
 
-    /**
-     * Delete from the database all items
-     * in the specified albums that are marked as removed.
-     */
-    void deleteRemovedItems(QList<int> albumIDs);
-
     // ----------- Finding items -----------
 
     /**
