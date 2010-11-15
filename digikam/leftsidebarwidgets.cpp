@@ -1163,7 +1163,7 @@ QPixmap PeopleSideBarWidget::getIcon()
 
 QString PeopleSideBarWidget::getCaption()
 {
-    return i18n("People");
+    return i18nc("People on your photos", "People");
 }
 
 void PeopleSideBarWidget::slotInit()
