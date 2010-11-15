@@ -192,6 +192,7 @@ public:
     KIO::TransferJob*           tagListJob;
 
     KDirWatch*                  dirWatch;
+    QStringList                 dirWatchAddedDirs;
 
     PAlbum*                     rootPAlbum;
     TAlbum*                     rootTAlbum;
@@ -280,6 +281,10 @@ AlbumManager::AlbumManager()
 {
     internalInstance = this;
 
+    d->dirWatch = new KDirWatch(this);
+    connect(d->dirWatch, SIGNAL(dirty(const QString&)),
+            this, SLOT(slotDirWatchDirty(const QString&)));
+
     // these operations are pretty fast, no need for long queuing
     d->scanPAlbumsTimer = new QTimer(this);
     d->scanPAlbumsTimer->setInterval(50);
@@ -352,9 +357,6 @@ void AlbumManager::cleanUp()
         d->tagListJob->kill();
         d->tagListJob = 0;
     }
-
-    delete d->dirWatch;
-    d->dirWatch = 0;
 }
 
 bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName,
@@ -620,8 +622,9 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         d->tagListJob = 0;
     }
 
-    delete d->dirWatch;
-    d->dirWatch = 0;
+    foreach (const QString& addedDirectory, d->dirWatchAddedDirs)
+        d->dirWatch->removeDir(addedDirectory);
+    d->dirWatchAddedDirs.clear();
 
     QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FileMoved", 0, 0);
     QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded", 0, 0);
@@ -1021,11 +1024,6 @@ void AlbumManager::startScan()
         return;
     d->changed = false;
 
-    // create dir watch
-    d->dirWatch = new KDirWatch(this);
-    connect(d->dirWatch, SIGNAL(dirty(const QString&)),
-            this, SLOT(slotDirWatchDirty(const QString&)));
-
     KDirWatch::Method m = d->dirWatch->internalMethod();
     QString mName("FAM");
     if (m == KDirWatch::DNotify)
@@ -1131,7 +1129,10 @@ void AlbumManager::slotCollectionLocationPropertiesChanged(const CollectionLocat
 void AlbumManager::addAlbumRoot(const CollectionLocation& location)
 {
     if (!d->dirWatch->contains(location.albumRootPath()))
+    {
+        d->dirWatchAddedDirs << location.albumRootPath();
         d->dirWatch->addDir(location.albumRootPath(), KDirWatch::WatchSubDirs);
+    }
 
     PAlbum *album = d->albumRootAlbumHash.value(location.id());
     if (!album)
