@@ -219,7 +219,7 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
             {
                 FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
                 package->databaseFaces = databaseFaces;
-                kDebug() << "Prepared package with" << databaseFaces.size();
+                //kDebug() << "Prepared package with" << databaseFaces.size();
                 package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
                 if (tasks)
                     package->databaseFaces.setRole(tasks);
@@ -237,7 +237,7 @@ void ScanStateFilter::process(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(threadMutex());
     toFilter << infos;
-    kDebug() << "Received" << infos.size() << "images for filtering";
+    //kDebug() << "Received" << infos.size() << "images for filtering";
     start(lock);
 }
 
@@ -278,7 +278,7 @@ void ScanStateFilter::run()
                 else
                     skip << info;
             }
-            kDebug() << "Filtered" << todo.size() << "images, send" << send.size() << "skip" << skip.size();
+            //kDebug() << "Filtered" << todo.size() << "images, send" << send.size() << "skip" << skip.size();
 
             {
                 QMutexLocker lock(threadMutex());
@@ -302,7 +302,7 @@ void ScanStateFilter::dispatch()
         skip = toBeSkipped;
         toBeSkipped.clear();
     }
-    kDebug() << "Dispatching, sending" << send.size() << "skipping" << skip.size();
+    //kDebug() << "Dispatching, sending" << send.size() << "skipping" << skip.size();
     if (!skip.isEmpty())
         d->skipFromFilter(skip);
     if (!send.isEmpty())
@@ -328,12 +328,10 @@ void PreviewLoader::cancel()
 {
     stopAllTasks();
     scheduledPackages.clear();
-    shutDown();
 }
 
 void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
 {
-    kDebug() << "Loading preview for" << package->filePath;
     if (!package->image.isNull())
     {
         emit processed(package);
@@ -343,6 +341,8 @@ void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
     loadFastButLarge(package->filePath, 1600, MetadataSettings::instance()->settings().exifRotate);
     //load(package->filePath, 800, MetadataSettings::instance()->settings().exifRotate);
     //loadHighQuality(package->filePath, MetadataSettings::instance()->settings().exifRotate);
+
+    checkRestart();
 }
 
 void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
@@ -367,7 +367,8 @@ void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription
 
 bool PreviewLoader::sentOutLimitReached()
 {
-    return d->packagesOnTheRoad - scheduledPackages.size() > maximumSentOutPackages;
+    int packagesInTheFollowingPipeline = d->packagesOnTheRoad - scheduledPackages.size();
+    return packagesInTheFollowingPipeline > maximumSentOutPackages;
 }
 
 void PreviewLoader::checkRestart()
@@ -530,7 +531,7 @@ Trainer::Trainer(FacePipeline::FacePipelinePriv* d)
 
 void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 {
-    kDebug() << "Trainer: processing one package";
+    //kDebug() << "Trainer: processing one package";
     // Get a list of faces with type FaceForTraining (probably type is ConfirmedFace)
     QList<DatabaseFace> toTrain;
     foreach (const FacePipelineDatabaseFace& face, package->databaseFaces)
@@ -622,7 +623,6 @@ void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
 void FacePipeline::FacePipelinePriv::sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages)
 {
     infosForFiltering -= packages.size();
-    kDebug() << "sending" << packages.size() << "already started" << started;
     foreach (const FacePipelineExtendedPackage::Ptr& package, packages)
         send(package);
 }
