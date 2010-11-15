@@ -72,10 +72,10 @@ public:
      */
     void setupFilter(const DImg& orgImage);
 
-    /** Initialize the filter for use as a slave - reroutes progress info to master.
-     *  Note: Computation will be started from setupFilter().
+    /** Initializes the filter for use as a slave and directly starts computation (in-thread)
      */
-    void initSlave(DImgThreadedFilter* master, int progressBegin = 0, int progressEnd = 100);
+    void setupAndStartDirectly(const DImg& orgImage, DImgThreadedFilter* master,
+                               int progressBegin = 0, int progressEnd = 100);
 
     void setOriginalImage(const DImg& orgImage);
     void setFilterName(const QString& name);
@@ -173,12 +173,42 @@ protected:
     DImgThreadedFilter(DImgThreadedFilter* master, const DImg& orgImage, const DImg& destImage,
                        int progressBegin=0, int progressEnd=100, const QString& name=QString());
 
+    /** Initialize the filter for use as a slave - reroutes progress info to master.
+     *  Note: Computation will be started from setupFilter().
+     */
+    void initSlave(DImgThreadedFilter* master, int progressBegin = 0, int progressEnd = 100);
+
     /** Inform the master that there is currently a slave. At destruction of the slave, call with slave=0. */
     void setSlave(DImgThreadedFilter* slave);
 
     /** This method modulates the progress value from the 0..100 span to the span of this slave.
         Called by postProgress if master is not null. */
     virtual int modulateProgress(int progress);
+
+    void initMaster();
+    void prepareDestImage();
+
+    /**
+     * Convenience class to spare the few repeating lines of code
+     */
+    template <class Filter>
+    class DefaultFilterAction : public FilterAction
+    {
+    public:
+        DefaultFilterAction(FilterAction::Category category = FilterAction::ReproducibleFilter)
+            : FilterAction(Filter::FilterIdentifier(), Filter::CurrentVersion(), category)
+        {
+            setDisplayableName(Filter::DisplayableName());
+        }
+
+        DefaultFilterAction(bool isReproducible)
+            : FilterAction(Filter::FilterIdentifier(), Filter::CurrentVersion(),
+                           isReproducible ? FilterAction::ReproducibleFilter : FilterAction::ComplexFilter)
+        {
+            setDisplayableName(Filter::DisplayableName());
+        }
+
+    };
 
 protected:
 

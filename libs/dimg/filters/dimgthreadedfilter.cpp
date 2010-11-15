@@ -40,14 +40,8 @@ DImgThreadedFilter::DImgThreadedFilter(QObject* parent, const QString& name)
 {
     setOriginalImage(DImg());
     setFilterName(name);
-
-    m_master          = 0;
-    m_slave           = 0;
-    m_progressBegin   = 0;
-    m_progressSpan    = 100;
-    m_progressCurrent = 0;
-
     m_version         = 1;
+    initMaster();
 }
 
 DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
@@ -57,14 +51,8 @@ DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
     // remove meta data
     setOriginalImage(orgImage->copyImageData());
     setFilterName(name);
-
-    m_master          = 0;
-    m_slave           = 0;
-    m_progressBegin   = 0;
-    m_progressSpan    = 100;
-    m_progressCurrent = 0;
-
-    m_version         = 1;
+    m_version = 1;
+    initMaster();
 }
 
 DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter* master, const DImg& orgImage,
@@ -97,10 +85,27 @@ void DImgThreadedFilter::initSlave(DImgThreadedFilter* master, int progressBegin
     m_master->setSlave(this);
 }
 
+void DImgThreadedFilter::initMaster()
+{
+    m_master          = 0;
+    m_slave           = 0;
+    m_progressBegin   = 0;
+    m_progressSpan    = 100;
+    m_progressCurrent = 0;
+}
+
 void DImgThreadedFilter::setupFilter(const DImg& orgImage)
 {
     setOriginalImage(orgImage);
+    // some filters may require that initFilter is called
     initFilter();
+}
+
+void DImgThreadedFilter::setupAndStartDirectly(const DImg& orgImage, DImgThreadedFilter* master,
+                                               int progressBegin, int progressEnd)
+{
+    initSlave(master, progressBegin, progressEnd);
+    setupFilter(orgImage);
 }
 
 void DImgThreadedFilter::setOriginalImage(const DImg& orgImage)
@@ -131,15 +136,19 @@ int DImgThreadedFilter::filterVersion() const
 
 void DImgThreadedFilter::initFilter()
 {
+    prepareDestImage();
+    if (m_master)
+        startFilterDirectly();
+}
+
+void DImgThreadedFilter::prepareDestImage()
+{
     m_destImage.reset();
     if (!m_orgImage.isNull())
     {
         m_destImage = DImg(m_orgImage.width(), m_orgImage.height(),
                            m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     }
-
-    if (m_master)
-        startFilterDirectly();
 }
 
 void DImgThreadedFilter::startFilter()
