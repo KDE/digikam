@@ -135,8 +135,9 @@ QStringList DbKeySelector::checkedKeysList()
     {
         DbKeySelectorItem *item = dynamic_cast<DbKeySelectorItem*>(*it);
         if (item)
+        {
             list.append(item->key());
-
+        }
         ++it;
     }
     return list;
@@ -247,10 +248,14 @@ void DbKeySelectorView::removeChildlessHeaders()
             {
                 QTreeWidgetItem* citem = (*it)->child(i);
                 if (!citem->isHidden())
+                {
                     ++visibles;
+                }
             }
             if (!children || !visibles)
+            {
                 item->setHidden(true);
+            }
         }
         ++it;
     }

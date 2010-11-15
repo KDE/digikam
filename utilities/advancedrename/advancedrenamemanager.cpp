@@ -168,16 +168,18 @@ void AdvancedRenameManager::setParserType(ParserType type)
 Parser* AdvancedRenameManager::getParser()
 {
     if (!d->parser)
+    {
         return 0;
-
+    }
     return d->parser;
 }
 
 void AdvancedRenameManager::parseFiles()
 {
     if (!d->widget)
+    {
         return;
-
+    }
     parseFiles(d->widget->parseString());
 }
 
@@ -199,7 +201,9 @@ void AdvancedRenameManager::parseFiles(ParseSettings& _settings)
 void AdvancedRenameManager::parseFiles(const QString& parseString)
 {
     if (!d->parser)
+    {
         return;
+    }
 
     foreach (const QString& file, fileList())
     {
@@ -218,7 +222,9 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
 void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings& _settings)
 {
     if (!d->parser)
+    {
         return;
+    }
 
     foreach (const QString& file, fileList())
     {

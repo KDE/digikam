@@ -275,7 +275,6 @@ public:
     AdvancedRenameInputPriv() :
         configGroupName("AdvancedRename Input"),
         configPatternHistoryListEntry("Pattern History List"),
-
         maxVisibleItems(10),
         maxHistoryItems(30),
         lineEdit(0),
@@ -397,9 +396,8 @@ void AdvancedRenameInput::enableHighlighter(bool enable)
         delete d->highlighter;
     }
 
-    d->highlighter = enable ?
-            new Highlighter(d->lineEdit, d->lineEdit->parser()) :
-            0;
+    d->highlighter = enable ? new Highlighter(d->lineEdit, d->lineEdit->parser())
+                            : 0;
 }
 
 void AdvancedRenameInput::changeEvent(QEvent* e)

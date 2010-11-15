@@ -168,7 +168,10 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
 
 void DatabaseOption::addDbKeysCollection(DbKeysCollection* key)
 {
-    if (!key) return;
+    if (!key)
+    {
+        return;
+    }
 
     DbKeyIdsMap map = key->ids();
     for (DbKeyIdsMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
