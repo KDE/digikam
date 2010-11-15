@@ -122,6 +122,7 @@ public:
 
             needUpdateProperties = false;
             tagProperties = props;
+            tagsWithProperty.clear();
 
             QLatin1String internalProp = TagsCache::propertyNameDigikamInternalTag();
             foreach (const TagProperty& property, tagProperties)
@@ -631,6 +632,7 @@ QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& v
 
 QList<int> TagsCache::tagsWithPropertyCached(const QString& property) const
 {
+    d->checkProperties();
     {
         QReadLocker locker(&d->lock);
         QHash<QString, QList<int> >::iterator it;
@@ -658,6 +660,8 @@ bool TagsCache::isInternalTag(int tagId) const
 
 bool TagsCache::canBeWrittenToMetadata(int tagId) const
 {
+    // as long as we always call isInternalTag first, no need to call checkProperties() again
+    //d->checkProperties();
     if (isInternalTag(tagId))
         return false;
 
