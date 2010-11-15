@@ -256,6 +256,20 @@ TARGET_LINK_LIBRARIES(dimagehistorygraphtest
 
 #------------------------------------------------------------------------
 
+SET(dimagefilteractiontest_SRCS
+    dimagefilteractiontest.cpp
+)
+KDE4_ADD_UNIT_TEST(dimagefilteractiontest ${dimagefilteractiontest_SRCS})
+TARGET_LINK_LIBRARIES(dimagefilteractiontest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      )
+
+
+#------------------------------------------------------------------------
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf
                    )
