@@ -237,6 +237,7 @@ void ScanStateFilter::process(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(threadMutex());
     toFilter << infos;
+    kDebug() << "Received" << infos.size() << "images for filtering";
     start(lock);
 }
 
@@ -277,6 +278,7 @@ void ScanStateFilter::run()
                 else
                     skip << info;
             }
+            kDebug() << "Filtered" << todo.size() << "images, send" << send.size() << "skip" << skip.size();
 
             {
                 QMutexLocker lock(threadMutex());
@@ -300,6 +302,7 @@ void ScanStateFilter::dispatch()
         skip = toBeSkipped;
         toBeSkipped.clear();
     }
+    kDebug() << "Dispatching, sending" << send.size() << "skipping" << skip.size();
     if (!skip.isEmpty())
         d->skipFromFilter(skip);
     if (!send.isEmpty())
@@ -330,6 +333,7 @@ void PreviewLoader::cancel()
 
 void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
 {
+    kDebug() << "Loading preview for" << package->filePath;
     if (!package->image.isNull())
     {
         emit processed(package);
@@ -618,6 +622,7 @@ void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
 void FacePipeline::FacePipelinePriv::sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages)
 {
     infosForFiltering -= packages.size();
+    kDebug() << "sending" << packages.size() << "already started" << started;
     foreach (const FacePipelineExtendedPackage::Ptr& package, packages)
         send(package);
 }
