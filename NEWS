@@ -39,5 +39,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 227901 : Can't search for Ratings in Advanced Search.
 022 ==> 141753 : Ability to exclude tags in tag filter.
 023 ==> 206866 : Moving / renaming files creates duplicates in the ThumbsDB.
-024 ==>
+024 ==> 255478 : digiKam database tables only grow in size and get never cleaned.
+025 ==>
 
