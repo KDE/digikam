@@ -87,8 +87,6 @@ WBFilter::WBFilter(DImg* orgImage, QObject* parent, const WBContainer& settings)
           d(new WBFilterPriv)
 {
     m_settings = settings;
-    d->WP      = m_orgImage.sixteenBit() ? 65536 : 256;
-    d->rgbMax  = m_orgImage.sixteenBit() ? 65536 : 256;
     initFilter();
 }
 
@@ -100,6 +98,9 @@ WBFilter::~WBFilter()
 
 void WBFilter::filterImage()
 {
+    d->WP      = m_orgImage.sixteenBit() ? 65536 : 256;
+    d->rgbMax  = m_orgImage.sixteenBit() ? 65536 : 256;
+
     // Set final lut.
     setRGBmult();
     d->mr = d->mb = 1.0;
