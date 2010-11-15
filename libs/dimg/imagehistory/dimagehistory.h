@@ -90,6 +90,7 @@ public:
     QList<DImageHistory::Entry>& entries();
     const QList<DImageHistory::Entry>& entries() const;
 
+    QList<FilterAction> allActions() const;
     const FilterAction& action(int i) const;
     QList<HistoryImageId>& referredImages(int i);
     const QList<HistoryImageId>& referredImages(int i) const;

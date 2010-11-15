@@ -281,6 +281,15 @@ const QList<HistoryImageId> &DImageHistory::referredImages(int i) const
     return d->entries[i].referredImages;
 }
 
+QList<FilterAction> DImageHistory::allActions() const
+{
+    QList<FilterAction> actions;
+    foreach (const Entry& entry, d->entries)
+        if (!entry.action.isNull())
+            actions << entry.action;
+    return actions;
+}
+
 QList<HistoryImageId> DImageHistory::allReferredImages() const
 {
     QList<HistoryImageId> ids;
