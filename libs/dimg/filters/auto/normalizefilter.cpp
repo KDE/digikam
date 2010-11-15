@@ -218,9 +218,7 @@ void NormalizeFilter::normalizeImage()
 
 FilterAction NormalizeFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
-    return action;
+    return DefaultFilterAction<NormalizeFilter>();
 }
 
 void NormalizeFilter::readParameters(const Digikam::FilterAction& /*action*/)

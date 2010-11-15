@@ -53,9 +53,12 @@ AutoExpoFilter::~AutoExpoFilter()
 
 void AutoExpoFilter::filterImage()
 {
+    if (m_refImage.isNull())
+        m_refImage = m_orgImage;
+
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        kDebug() << "Ref. image and Org. has different bits depth"; 
+        kDebug() << "Ref. image and Org. have different bits depth";
         return;
     }
 
@@ -65,18 +68,12 @@ void AutoExpoFilter::filterImage()
 
 FilterAction AutoExpoFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-
-    action.addParameter("black", m_settings.black);
-    action.addParameter("exposition", m_settings.exposition);
-
-    return action;
+    return DefaultFilterAction<AutoExpoFilter>();
 }
 
 void AutoExpoFilter::readParameters(const FilterAction& action)
 {
-    m_settings.black = action.parameter("black").toDouble();
-    m_settings.exposition = action.parameter("exposition").toDouble();
+    Q_UNUSED(action);
 }
 
 }  // namespace Digikam

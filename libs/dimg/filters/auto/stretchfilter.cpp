@@ -377,9 +377,7 @@ void StretchFilter::stretchContrastImage()
 
 FilterAction StretchFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
-    return action;
+    return DefaultFilterAction<StretchFilter>();
 }
 
 void StretchFilter::readParameters(const Digikam::FilterAction& /*action*/)

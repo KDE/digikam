@@ -96,11 +96,8 @@ BCGContainer BCGFilter::readBCGParameters(const FilterAction& action)
 
 FilterAction BCGFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
-
+    DefaultFilterAction<BCGFilter> action;
     addBCGParameters(action, d->settings);
-
     return action;
 }
 

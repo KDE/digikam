@@ -159,9 +159,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
 
 FilterAction AutoLevelsFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
-    return action;
+    return DefaultFilterAction<AutoLevelsFilter>();
 }
 
 void AutoLevelsFilter::readParameters(const FilterAction& /*action*/)

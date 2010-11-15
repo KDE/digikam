@@ -241,9 +241,7 @@ void EqualizeFilter::equalizeImage()
 
 FilterAction EqualizeFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
-    return action;
+    return DefaultFilterAction<EqualizeFilter>();
 }
 
 void EqualizeFilter::readParameters(const Digikam::FilterAction& /*action*/)
