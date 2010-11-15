@@ -28,6 +28,10 @@
 
 #include <QScopedPointer>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -44,12 +48,14 @@ public:
 
     FilterActionFilterPriv()
     {
-        appliedActions = 0;
+        continueOnError = false;
     }
 
-    QList<FilterAction> actions;
+    bool continueOnError;
 
-    int     appliedActions;
+    QList<FilterAction> actions;
+    QList<FilterAction> appliedActions;
+
     QString errorMessage;
 };
 
@@ -64,6 +70,11 @@ FilterActionFilter::FilterActionFilter(QObject *parent)
 FilterActionFilter::~FilterActionFilter()
 {
     delete d;
+}
+
+void FilterActionFilter::setContinueOnError(bool cont)
+{
+    d->continueOnError = cont;
 }
 
 void FilterActionFilter::setFilterActions(const QList<FilterAction>& actions)
@@ -95,7 +106,7 @@ QList<FilterAction> FilterActionFilter::filterActions() const
 bool FilterActionFilter::isReproducible() const
 {
     foreach (const FilterAction& action, d->actions)
-        if (action.category() != FilterAction::ReproducibleFilter)
+        if (!action.isNull() && action.category() != FilterAction::ReproducibleFilter)
             return false;
     return true;
 }
@@ -103,7 +114,7 @@ bool FilterActionFilter::isReproducible() const
 bool FilterActionFilter::isComplexAction() const
 {
     foreach (const FilterAction& action, d->actions)
-        if (action.category() != FilterAction::ReproducibleFilter
+        if (!action.isNull() && action.category() != FilterAction::ReproducibleFilter
             && action.category() != FilterAction::ComplexFilter)
             return false;
     return true;
@@ -112,34 +123,31 @@ bool FilterActionFilter::isComplexAction() const
 bool FilterActionFilter::isSupported() const
 {
     foreach (const FilterAction& action, d->actions)
-        if (!DImgFilterManager::instance()->isSupported(action.identifier(), action.version()))
+        if (!action.isNull() && !DImgFilterManager::instance()->isSupported(action.identifier(), action.version()))
             return false;
     return true;
 }
 
 bool FilterActionFilter::completelyApplied() const
 {
-    return d->appliedActions == d->actions.size();
+    return d->appliedActions.size() == d->actions.size();
 }
 
-QList<FilterAction> FilterActionFilter::appliedActions()
+QList<FilterAction> FilterActionFilter::appliedFilterActions() const
 {
-    if (completelyApplied())
-        return filterActions();
-
-    return d->actions.mid(0, d->appliedActions);
+    return d->appliedActions;
 }
 
 FilterAction FilterActionFilter::failedAction() const
 {
-    if (completelyApplied() || d->appliedActions >= d->actions.size())
+    if (d->appliedActions.size() >= d->actions.size())
         return FilterAction();
-    return d->actions[d->appliedActions];
+    return d->actions[d->appliedActions.size()];
 }
 
 int FilterActionFilter::failedActionIndex() const
 {
-    return d->appliedActions;
+    return d->appliedActions.size();
 }
 
 QString FilterActionFilter::failedActionMessage() const
@@ -149,26 +157,30 @@ QString FilterActionFilter::failedActionMessage() const
 
 void FilterActionFilter::filterImage()
 {
-    d->appliedActions = 0;
+    d->appliedActions.clear();
     d->errorMessage   = QString();
     const float progressIncrement = 1.0 / qMax(1,d->actions.size());
     float progress = 0;
 
     postProgress(0);
 
-    m_destImage = m_orgImage;
+    DImg img = m_orgImage;
 
     foreach (const FilterAction& action, d->actions)
     {
+        kDebug() << "Replaying action" << action.identifier();
+        if (action.isNull())
+            continue;
         if (DImgBuiltinFilter::isSupported(action.identifier()))
         {
             DImgBuiltinFilter filter(action);
             if (!filter.isValid())
             {
                 d->errorMessage = i18n("Built-in transformation not supported");
-                break;
+                if (d->continueOnError) continue; else break;
             }
-            filter.apply(m_destImage);
+            filter.apply(img);
+            d->appliedActions << filter.filterAction();
         }
         else
         {
@@ -178,26 +190,26 @@ void FilterActionFilter::filterImage()
             if (!filter)
             {
                 d->errorMessage = i18n("Filter identifier or version is not supported");
-                break;
+                if (d->continueOnError) continue; else break;
             }
-            filter->initSlave(this, (int)progress, (int)(progress+progressIncrement));
             filter->readParameters(action);
             if (!filter->parametersSuccessfullyRead())
             {
                 d->errorMessage = filter->readParametersError(action);
-                break;
+                if (d->continueOnError) continue; else break;
             }
 
             // compute
-            filter->setupFilter(m_destImage);
-
-            m_destImage = filter->getTargetImage();
+            filter->setupAndStartDirectly(img, this, (int)progress, (int)(progress+progressIncrement));
+            img = filter->getTargetImage();
+            d->appliedActions << filter->filterAction();
         }
 
-        d->appliedActions++;
         progress += progressIncrement;
         postProgress((int)progress);
     }
+
+    m_destImage = img;
 }
 
 } // namespace Digikam
