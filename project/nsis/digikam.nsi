@@ -188,7 +188,7 @@ Section "Uninstall"
 
   Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\${MY_PRODUCT}.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\$Showfoto.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\Showfoto.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
