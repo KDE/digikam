@@ -67,14 +67,18 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     readMetadata(filePath, DImg::RAW);
 
-    // NOTE: Here, we don't check a possible embedded work-space color profile using
-    // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders,
-    // because RAW file are always in linear mode.
+    KDcrawIface::DcrawInfoContainer dcrawIdentify;
+    if (!KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath))
+        return false;
 
     if (m_loadFlags & LoadImageData)
     {
         int        width, height, rgbmax;
         QByteArray data;
+
+        // NOTE: Here, we don't check a possible embedded work-space color profile using
+        // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders,
+        // because RAW file are always in linear mode.
 
         if (m_rawDecodingSettings.outputColorSpace == DRawDecoding::CUSTOMOUTPUTCS)
         {
@@ -102,21 +106,21 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
              data, width, height, rgbmax))
             return false;
 
-        return (loadedFromDcraw(data, width, height, rgbmax, observer));
+        if (!loadedFromDcraw(data, width, height, rgbmax, observer))
+            return false;
     }
     else
     {
-        KDcrawIface::DcrawInfoContainer dcrawIdentify;
-        if (!KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath))
-            return false;
         imageWidth()  = dcrawIdentify.imageSize.width();
         imageHeight() = dcrawIdentify.imageSize.height();
-        imageSetAttribute("format", "RAW");
-        imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
-        imageSetAttribute("originalBitDepth", 16);
-        imageSetAttribute("originalSize", dcrawIdentify.imageSize);
-        return true;
     }
+
+    imageSetAttribute("format", "RAW");
+    imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
+    imageSetAttribute("originalBitDepth", 16);
+    imageSetAttribute("originalSize", dcrawIdentify.imageSize);
+
+    return true;
 }
 
 bool RAWLoader::checkToCancelWaitingData()
@@ -275,11 +279,8 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     imageWidth()  = width;
     imageHeight() = height;
-    imageSetAttribute("format", "RAW");
     imageSetAttribute("rawDecodingSettings", QVariant::fromValue(m_customRawSettings));
-    imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
-    imageSetAttribute("originalBitDepth", 16);
-    imageSetAttribute("originalSize", QSize(width, height));
+    // other attributes are set above
 
     return true;
 }

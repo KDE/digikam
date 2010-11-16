@@ -531,6 +531,7 @@ QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& m
     // load DImg
     DImg img;
     //TODO: scaledLoading if detailRect is large
+    //TODO: use code from PreviewTask, including cache storage
     img.load(path, false, profile ? true : false, false, false, d->observer, d->fastRawSettings);
     *profile = img.getIccProfile();
 
@@ -539,7 +540,8 @@ QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& m
     // If someone has the mathematics, have a go.
     img.rotateAndFlip(exifOrientation(path, metadata, false, false));
 
-    img.crop(detailRect.intersected(QRect(0, 0, img.width(), img.height())));
+    QRect mappedDetail = TagRegion::mapFromOriginalSize(img, detailRect);
+    img.crop(mappedDetail.intersected(QRect(0, 0, img.width(), img.height())));
     return img.copyQImage();
 }
 
