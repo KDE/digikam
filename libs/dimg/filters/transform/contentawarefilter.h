@@ -32,9 +32,13 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dcolor.h"
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+
+// The filter is only compiled if GLib is available
+#ifdef HAVE_GLIB2
 
 namespace Digikam
 {
@@ -124,5 +128,7 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // HAVE_GLIB2
 
 #endif /*CONTENT_AWARE_FILTER_H*/

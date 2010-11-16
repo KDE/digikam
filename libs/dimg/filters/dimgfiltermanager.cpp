@@ -38,6 +38,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimgfiltergenerator.h"
 #include "dimgbuiltinfilter.h"
 
@@ -130,7 +131,9 @@ void DImgFilterManager::DImgFilterManagerPriv::setupCoreGenerators()
         << new BasicDImgFilterGenerator<CBFilter>()
         << new BasicDImgFilterGenerator<CharcoalFilter>()
         << new BasicDImgFilterGenerator<ColorFXFilter>()
+        #ifdef HAVE_GLIB2
         << new BasicDImgFilterGenerator<ContentAwareFilter>()
+        #endif
         << new BasicDImgFilterGenerator<CurvesFilter>()
         << new BasicDImgFilterGenerator<DistortionFXFilter>()
         << new BasicDImgFilterGenerator<EmbossFilter>()
@@ -143,7 +146,9 @@ void DImgFilterManager::DImgFilterManagerPriv::setupCoreGenerators()
         << new BasicDImgFilterGenerator<InfraredFilter>()
         << new BasicDImgFilterGenerator<InvertFilter>()
         << new BasicDImgFilterGenerator<LensDistortionFilter>()
+        #ifdef HAVE_GLIB2
         << new BasicDImgFilterGenerator<LensFunFilter>()
+        #endif
         << new BasicDImgFilterGenerator<LevelsFilter>()
         << new BasicDImgFilterGenerator<LocalContrastFilter>()
         << new BasicDImgFilterGenerator<MixerFilter>()

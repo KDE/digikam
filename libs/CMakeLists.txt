@@ -15,6 +15,10 @@ INCLUDE_DIRECTORIES( dimg
                      3rdparty/clapack
                      3rdparty/lprof
                      3rdparty/greycstoration
+
+                     # config-digikam.h
+                     ${CMAKE_CURRENT_BINARY_DIR}/../
+
                      ${JPEG_INCLUDE_DIR}
                      ${TIFF_INCLUDE_DIR}
                      ${PNG_INCLUDE_DIR}
