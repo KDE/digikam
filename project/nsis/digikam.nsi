@@ -33,12 +33,12 @@
 
 ;-------------------------------------------------------------------------------
 ; Compression rules optimizations
-; We will use LZMA compression as 7Zip, with a dictionary size of 64Mb (like 7Zip Ultra compression mode)
+; We will use LZMA compression as 7Zip, with a dictionary size of 96Mb (to reproduce 7Zip Ultra compression mode)
 
 SetCompress force
 SetCompressor /SOLID lzma
 SetDatablockOptimize on
-SetCompressorDictSize 64
+SetCompressorDictSize 96
 
 ;-------------------------------------------------------------------------------
 ;Include Modern UI
@@ -114,8 +114,15 @@ Section "digiKam" SecDigiKam
   ;Whole kde4 directory including digiKam & co
   File /r "${KDE4PATH}"
 
+  ; Extract the KDE4 path dir name. It must be the same in target install dir.
+  ${Explode} $Size "\" ${KDE4PATH}
+  ${For} $1 1 $Size
+      Pop $2
+  ${Next}
+  DirName $2
+
   ;Store installation folder
-  WriteRegStr HKCU "Software\${MY_PRODUCT}" "" $INSTDIR
+  WriteRegStr HKCU "Software\${DirName}" "" $INSTDIR
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -136,12 +143,13 @@ Section "digiKam" SecDigiKam
 
  ;Add start menu
  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+
     ;Create shortcuts
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"  
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${MY_PRODUCT}.lnk" "$INSTDIR\kde4\bin\digikam.exe"  
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${MY_PRODUCT}.lnk" "$INSTDIR\kde4\bin\digikam.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Showfoto.lnk" "$INSTDIR\kde4\bin\showfoto.exe"
     WriteINIStr "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url" "InternetShortcut" "URL" "${PRODUCT_HOMEPAGE}"
-
 
  !insertmacro MUI_STARTMENU_WRITE_END
 
@@ -180,6 +188,7 @@ Section "Uninstall"
 
   Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\${MY_PRODUCT}.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\$Showfoto.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
