@@ -488,6 +488,7 @@ AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const Databas
     assignWidget->setUserData(info, identifier);
     checkModels();
     assignWidget->setModel(tagModel, filteredModel, filterModel);
+    assignWidget->setParentTag(AlbumManager::instance()->findTAlbum(faceIface.personParentTag()));
 
     q->connect(assignWidget, SIGNAL(assigned(const TaggingAction&, const ImageInfo&, const QVariant&)),
                q, SLOT(slotAssigned(const TaggingAction&, const ImageInfo&, const QVariant&)));
@@ -576,6 +577,17 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
             tagId = action.tagId();
         else if (action.shallCreateNewTag())
             tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
+
+        if (d->faceIface.isTheUnknownPerson(tagId))
+        {
+            kDebug() << "Refusing to assign the unknown person to an image";
+            return;
+        }
+        if (!tagId)
+        {
+            kDebug() << "Failed to get person tag";
+            return;
+        }
 
         if (tagId)
             face = d->editPipeline.confirm(d->info, face, d->view->previewItem()->image(), tagId, currentRegion);

@@ -158,7 +158,7 @@ void FaceIface::FaceIfacePriv::makeFaceTag(int tagId, const QString& fullName) c
 int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName,
                                          bool convert, bool create) const
 {
-    if (name.isNull() && givenFullName.isNull() && !tagId)
+    if (name.isEmpty() && givenFullName.isEmpty() && !tagId)
         return unknownPeopleTagId();
 
     QString fullName = givenFullName.isNull() ? name : givenFullName;
@@ -197,7 +197,7 @@ int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int par
         candidates = TagsCache::instance()->tagsForName(name);
     else
     {
-        int tagId = TagsCache::instance()->tagForName(name, parentId);
+        tagId = TagsCache::instance()->tagForName(name, parentId);
         candidates.clear();
         if (tagId)
             candidates << tagId;
@@ -224,8 +224,8 @@ int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int par
         kDebug() << "Creating new tag for name" << name << "fullName" << fullName;
         if (parentId == -1)
             parentId = peopleTagId();
-        int id = TagsCache::instance()->getOrCreateTag(tagPath(name, parentId));
-        makeFaceTag(id, fullName);
+        tagId = TagsCache::instance()->getOrCreateTag(tagPath(name, parentId));
+        makeFaceTag(tagId, fullName);
         return tagId;
     }
 
@@ -298,6 +298,11 @@ QString FaceIface::faceNameForTag(int tagId) const
     return id;
 }
 
+int FaceIface::personParentTag() const
+{
+    return d->peopleTagId();
+}
+
 QList<int> FaceIface::allPersonTags() const
 {
     return TagsCache::instance()->tagsWithProperty(TagPropertyName::person());
@@ -331,6 +336,11 @@ void FaceIface::ensureIsPerson(int tagId, const QString& fullName) const
 bool FaceIface::isPerson(int tagId) const
 {
     return TagsCache::instance()->hasProperty(tagId, TagPropertyName::person());
+}
+
+bool FaceIface::isTheUnknownPerson(int tagId) const
+{
+    return d->unknownPeopleTagId() == tagId;
 }
 
 // --- Read from database -----------------------------------------------------------------------------------

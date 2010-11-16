@@ -79,6 +79,8 @@ public:
      */
     bool         isPerson(int tagId) const;
 
+    bool         isTheUnknownPerson(int tagId) const;
+
     /**
      * A method to return a list of all person tags in the DB
      */
@@ -93,6 +95,11 @@ public:
      * A method to return a list of all person tag paths in the DB
      */
     QList<QString>      allPersonPaths() const;
+
+    /**
+     * The suggested parent tag for persons
+     */
+    int                 personParentTag() const;
 
     /**
      * Looks for the given person name under the People tags tree, and returns an ID. Returns 0 if no name found.
