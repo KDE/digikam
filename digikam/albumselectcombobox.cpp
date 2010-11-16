@@ -6,7 +6,8 @@
  * Date        : 2009-05-09
  * Description : A combo box for selecting albums
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,17 +46,18 @@ class AlbumSelectComboBox::AlbumSelectComboBoxPriv
 {
 public:
 
-    AlbumSelectComboBoxPriv(AlbumSelectComboBox *q) : q(q)
+    AlbumSelectComboBoxPriv(AlbumSelectComboBox* q)
+        : q(q)
     {
-        model       = 0;
-        filterModel = 0;
-        isCheckable = true;
-        closeOnActivate = false;
+        model                 = 0;
+        filterModel           = 0;
+        isCheckable           = true;
+        closeOnActivate       = false;
         showCheckStateSummary = true;
     }
 
-    AbstractCheckableAlbumModel *model;
-    AlbumFilterModel            *filterModel;
+    AbstractCheckableAlbumModel* model;
+    AlbumFilterModel           * filterModel;
     QString                      noSelectionText;
     bool                         isCheckable;
     bool                         closeOnActivate;
@@ -64,10 +66,10 @@ public:
     void                         updateCheckable();
     void                         updateCloseOnActivate();
 
-    AlbumSelectComboBox* const q;
+    AlbumSelectComboBox* const   q;
 };
 
-AlbumSelectComboBox::AlbumSelectComboBox(QWidget *parent)
+AlbumSelectComboBox::AlbumSelectComboBox(QWidget* parent)
             : TreeViewLineEditComboBox(parent), d(new AlbumSelectComboBoxPriv(this))
 {
     d->noSelectionText = i18n("No Album Selected");
@@ -113,7 +115,7 @@ void AlbumSelectComboBox::setModel(AbstractCheckableAlbumModel *model, AlbumFilt
     updateText();
 }
 
-void AlbumSelectComboBox::installView(QAbstractItemView *v)
+void AlbumSelectComboBox::installView(QAbstractItemView* v)
 {
     if (view())
         return;
@@ -192,12 +194,12 @@ void AlbumSelectComboBox::setShowCheckStateSummary(bool show)
     updateText();
 }
 
-AbstractCheckableAlbumModel *AlbumSelectComboBox::model() const
+AbstractCheckableAlbumModel* AlbumSelectComboBox::model() const
 {
     return d->model;
 }
 
-QSortFilterProxyModel *AlbumSelectComboBox::filterModel() const
+QSortFilterProxyModel* AlbumSelectComboBox::filterModel() const
 {
     return d->filterModel;
 }
@@ -213,32 +215,64 @@ void AlbumSelectComboBox::updateText()
     if (!d->isCheckable || !d->showCheckStateSummary)
         return;
 
-    QList<Album *> checkedAlbums = d->model->checkedAlbums();
-    if (checkedAlbums.isEmpty())
+    QList<Album*> checkedAlbums          = d->model->checkedAlbums();
+    QList<Album*> partiallyCheckedAlbums = d->model->partiallyCheckedAlbums();
+    QString newIncludeText;
+    QString newExcludeText;
+
+    if (!checkedAlbums.isEmpty())
+    {
+        if (checkedAlbums.count() == 1)
+        {
+            newIncludeText = checkedAlbums.first()->title();
+        }
+        else
+        {
+            if (d->model->albumType() == Album::TAG)
+            {
+                newIncludeText = i18np("1 Tag selected", "%1 Tags selected", checkedAlbums.count());
+            }
+            else
+            {
+                newIncludeText = i18np("1 Album selected", "%1 Albums selected", checkedAlbums.count());
+            }
+        }
+    }
+
+    if (!partiallyCheckedAlbums.isEmpty())
+    {
+        if (d->model->albumType() == Album::TAG)
+        {
+            newExcludeText = i18np("1 Tag excluded", "%1 Tags excluded", partiallyCheckedAlbums.count());
+        }
+        else
+        {
+            newExcludeText = i18np("1 Album excluded", "%1 Albums excluded", partiallyCheckedAlbums.count());
+        }
+    }
+
+    if (newIncludeText.isEmpty() && newExcludeText.isEmpty())
     {
         setLineEditText(d->noSelectionText);
     }
-    else if (checkedAlbums.count() == 1)
+    else if (newIncludeText.isEmpty() || newExcludeText.isEmpty())
     {
-        setLineEditText(checkedAlbums.first()->title());
+        setLineEditText(newIncludeText + newExcludeText);
     }
     else
     {
-        if (d->model->albumType() == Album::TAG)
-            setLineEditText(i18np("1 Tag selected", "%1 Tags selected", checkedAlbums.count()));
-        else
-            setLineEditText(i18np("1 Album selected", "%1 Albums selected", checkedAlbums.count()));
+        setLineEditText(newIncludeText + ", " + newExcludeText);
     }
 }
 
-// ---
+// ---------------------------------------------------------------------------------------------------
 
-AbstractAlbumTreeViewSelectComboBox::AbstractAlbumTreeViewSelectComboBox(QWidget *parent)
-    : AlbumSelectComboBox(parent), m_treeView(0)
+AbstractAlbumTreeViewSelectComboBox::AbstractAlbumTreeViewSelectComboBox(QWidget* parent)
+                                   : AlbumSelectComboBox(parent), m_treeView(0)
 {
 }
 
-void AbstractAlbumTreeViewSelectComboBox::installView(QAbstractItemView *view)
+void AbstractAlbumTreeViewSelectComboBox::installView(QAbstractItemView* view)
 {
     if (!view)
         view = m_treeView;
@@ -251,14 +285,14 @@ void AbstractAlbumTreeViewSelectComboBox::sendViewportEventToView(QEvent* e)
     m_treeView->viewportEvent(e);
 }
 
-// ---
+// ---------------------------------------------------------------------------------
 
-AlbumTreeViewSelectComboBox::AlbumTreeViewSelectComboBox(QWidget *parent)
-    : AbstractAlbumTreeViewSelectComboBox(parent)
+AlbumTreeViewSelectComboBox::AlbumTreeViewSelectComboBox(QWidget* parent)
+                           : AbstractAlbumTreeViewSelectComboBox(parent)
 {
 }
 
-AlbumTreeView *AlbumTreeViewSelectComboBox::view() const
+AlbumTreeView* AlbumTreeViewSelectComboBox::view() const
 {
     return static_cast<AlbumTreeView*>(m_treeView);
 }
@@ -268,7 +302,7 @@ void AlbumTreeViewSelectComboBox::setDefaultModel()
     setModel(0,0);
 }
 
-void AlbumTreeViewSelectComboBox::setModel(AlbumModel *model, CheckableAlbumFilterModel *filterModel)
+void AlbumTreeViewSelectComboBox::setModel(AlbumModel* model, CheckableAlbumFilterModel* filterModel)
 {
     if (!m_treeView)
     {
@@ -289,14 +323,14 @@ void AlbumTreeViewSelectComboBox::setModel(AlbumModel *model, CheckableAlbumFilt
     view()->expandToDepth(0);
 }
 
-// ---
+// ---------------------------------------------------------------------------------------------------
 
-TagTreeViewSelectComboBox::TagTreeViewSelectComboBox(QWidget *parent)
-    : AbstractAlbumTreeViewSelectComboBox(parent)
+TagTreeViewSelectComboBox::TagTreeViewSelectComboBox(QWidget* parent)
+                         : AbstractAlbumTreeViewSelectComboBox(parent)
 {
 }
 
-TagTreeView *TagTreeViewSelectComboBox::view() const
+TagTreeView* TagTreeViewSelectComboBox::view() const
 {
     return static_cast<TagTreeView*>(m_treeView);
 }
@@ -306,8 +340,8 @@ void TagTreeViewSelectComboBox::setDefaultModel()
     setModel(0,0);
 }
 
-void TagTreeViewSelectComboBox::setModel(TagModel *model,
-                                         TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
+void TagTreeViewSelectComboBox::setModel(TagModel* model,
+                                         TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
 {
     if (!m_treeView)
     {
@@ -329,4 +363,3 @@ void TagTreeViewSelectComboBox::setModel(TagModel *model,
 }
 
 } // namespace Digikam
-

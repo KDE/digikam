@@ -88,6 +88,7 @@ private Q_SLOTS:
 
     void slotHSChanged(int h, int s);
     void slotVChanged(int v);
+    void slotPenColorChanged(const QColor&);
     void slotClearSketch();
     void slotSaveSketchSAlbum();
     void slotCheckNameEditSketchConditions();

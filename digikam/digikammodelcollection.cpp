@@ -6,7 +6,8 @@
  * Date        : 2009-12-05
  * Description : collection of basic models used for views in digikam
  *
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,6 +57,7 @@ DigikamModelCollection::DigikamModelCollection() :
 
     d->tagFilterModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
     d->tagFilterModel->setCheckable(true);
+    d->tagFilterModel->setTristate(true);
 
     d->searchModel = new SearchModel();
 

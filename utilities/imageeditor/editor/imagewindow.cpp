@@ -129,23 +129,24 @@ class ImageWindowPriv
 
 public:
 
-    ImageWindowPriv()
+    ImageWindowPriv() :
+        configShowThumbbarEntry("Show Thumbbar"),
+        configHorizontalThumbbarEntry("HorizontalThumbbar"),
+        allowSaving(true),
+        star0(0),
+        star1(0),
+        star2(0),
+        star3(0),
+        star4(0),
+        star5(0),
+        fileDeletePermanentlyAction(0),
+        fileDeletePermanentlyDirectlyAction(0),
+        fileTrashDirectlyAction(0),
+        dbStatAction(0),
+        thumbBar(0),
+        thumbBarDock(0),
+        rightSideBar(0)
     {
-        configShowThumbbarEntry             = "Show Thumbbar";
-        configHorizontalThumbbarEntry       = "HorizontalThumbbar";
-        allowSaving                         = true;
-        star0                               = 0;
-        star1                               = 0;
-        star2                               = 0;
-        star3                               = 0;
-        star4                               = 0;
-        star5                               = 0;
-        fileDeletePermanentlyAction         = 0;
-        fileDeletePermanentlyDirectlyAction = 0;
-        fileTrashDirectlyAction             = 0;
-        rightSideBar                        = 0;
-        thumbBar                            = 0;
-        thumbBarDock                        = 0;
     }
 
     QString                   configShowThumbbarEntry;

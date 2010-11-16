@@ -57,7 +57,7 @@ private Q_SLOTS:
 
 private:
 
-    RDoubleNumInput* m_radiusInput;
+    RIntNumInput* m_radiusInput;
 };
 
 } // namespace Digikam

@@ -9,6 +9,7 @@
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (c) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,25 +76,37 @@ class DigikamView::DigikamViewPriv
 {
 public:
 
-    DigikamViewPriv()
+    DigikamViewPriv() :
+        needDispatchSelection(false),
+        cancelSlideShow(false),
+        useAlbumHistory(false),
+        initialAlbumID(0),
+        thumbSize(ThumbnailSize::Medium),
+        dockArea(0),
+        splitter(0),
+        selectionTimer(0),
+        thumbSizeTimer(0),
+        albumFolderSideBar(0),
+        tagViewSideBar(0),
+        dateViewSideBar(0),
+        timelineSideBar(0),
+        searchSideBar(0),
+        fuzzySearchSideBar(0),
+        gpsSearchSideBar(0),
+        parent(0),
+        iconView(0),
+        albumManager(0),
+        albumHistory(0),
+        albumWidgetStack(0),
+        albumModificationHelper(0),
+        tagModificationHelper(0),
+        searchModificationHelper(0),
+        leftSideBar(0),
+        rightSideBar(0),
+        tagFilterWidget(0),
+        optionAlbumViewPrefix("AlbumView"),
+        modelCollection(0)
     {
-        dockArea              = 0;
-        splitter              = 0;
-        parent                = 0;
-        iconView              = 0;
-        albumManager          = 0;
-        albumHistory          = 0;
-        leftSideBar           = 0;
-        rightSideBar          = 0;
-        albumWidgetStack      = 0;
-        selectionTimer        = 0;
-        thumbSizeTimer        = 0;
-        needDispatchSelection = false;
-        cancelSlideShow       = false;
-        useAlbumHistory       = false;
-        thumbSize             = ThumbnailSize::Medium;
-        optionAlbumViewPrefix = "AlbumView";
-        modelCollection       = 0;
     }
 
     QString                       userPresentableAlbumTitle(const QString& album);
@@ -436,9 +449,9 @@ void DigikamView::setupConnections()
     // -- Filter Bars Connections ---------------------------------
 
     connect(d->tagFilterWidget,
-            SIGNAL(tagFilterChanged(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)),
+            SIGNAL(tagFilterChanged(const QList<int>&, const QList<int>&, ImageFilterSettings::MatchingCondition, bool)),
             d->iconView->imageFilterModel(),
-            SLOT(setTagFilter(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)));
+            SLOT(setTagFilter(const QList<int>&, const QList<int>&, ImageFilterSettings::MatchingCondition, bool)));
 
     // -- Preview image widget Connections ------------------------
 

@@ -64,11 +64,11 @@ SequenceNumberOption::SequenceNumberOption()
                              SmallIcon("accessories-calculator"))
 {
     addToken("#",                                   i18n("Sequence number"));
-    addToken("#[||options||]",                      i18n("Sequence number (||options||: ||e|| = extension aware)"));
+    addToken("#[||options||]",                      i18n("Sequence number (||options||: ||e|| = extension aware, ||f|| = folder aware)"));
     addToken("#[||options||,||start||]",            i18n("Sequence number (custom start)"));
     addToken("#[||options||,||start||,||step||]",   i18n("Sequence number (custom start + step)"));
 
-    QRegExp reg("(#+)(\\[(e,?)?((\\d+)(,(\\d+))?)?\\])?");
+    QRegExp reg("(#+)(\\[(e?f?,?)?((\\d+)(,(\\d+))?)?\\])?");
     setRegExp(reg);
 }
 
@@ -85,6 +85,7 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
         int start           = dlg->ui->start->value();
         int step            = dlg->ui->step->value();
         bool extensionAware = dlg->ui->extensionAware->isChecked();
+        bool folderAware    = dlg->ui->folderAware->isChecked();
 
         result = QString("%1").arg("#", digits, QChar('#'));
 
@@ -95,6 +96,11 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
             if (extensionAware)
             {
                 result.append(QChar('e'));
+            }
+
+            if (folderAware)
+            {
+                result.append(QChar('f'));
             }
 
             if (start > 1 || step > 1)
@@ -125,33 +131,40 @@ QString SequenceNumberOption::parseOperation(ParseSettings& settings)
     QString result;
     const QRegExp& reg = regExp();
 
-    int slength = 0;
-    int start   = 0;
-    int step    = 0;
-    int number  = 0;
-    int index   = 0;
-//    settings.currentIndex;
+    int slength      = 0;
+    int start        = 0;
+    int step         = 0;
+    int number       = 0;
+    int index        = 0;
+    bool extAware    = false;
+    bool folderAware = false;
 
     if (settings.manager)
     {
-        if (reg.cap(3).isEmpty())
-        {
-            index = settings.manager->indexOfFile(settings.fileUrl.toLocalFile());
-        }
-        else
+        extAware    = !reg.cap(3).isEmpty() && reg.cap(3).contains(QChar('e'));
+        folderAware = !reg.cap(3).isEmpty() && reg.cap(3).contains(QChar('f'));
+
+        index = settings.manager->indexOfFile(settings.fileUrl.toLocalFile());
+
+        if (extAware)
         {
             index = settings.manager->indexOfFileGroup(settings.fileUrl.toLocalFile());
+        }
+
+        if (folderAware)
+        {
+            index = settings.manager->indexOfFolder(settings.fileUrl.toLocalFile());
         }
     }
 
     // --------------------------------------------------------
 
-    slength            = reg.cap(1).length();
-    start              = reg.cap(5).isEmpty() ? settings.startIndex : reg.cap(5).toInt();
-    step               = reg.cap(7).isEmpty() ? 1 : reg.cap(7).toInt();
+    slength = reg.cap(1).length();
+    start   = reg.cap(5).isEmpty() ? settings.startIndex : reg.cap(5).toInt();
+    step    = reg.cap(7).isEmpty() ? 1 : reg.cap(7).toInt();
 
-    number             = start + ((index - 1) * step);
-    result             = QString("%1").arg(number, slength, 10, QChar('0'));
+    number  = start + ((index - 1) * step);
+    result  = QString("%1").arg(number, slength, 10, QChar('0'));
 
     return result;
 }

@@ -44,7 +44,7 @@ public:
     int width()const  {return rect.width(); };
     int height()const {return rect.height();};
 
-    bool operator==(const HotPixel p) const
+    bool operator==(const HotPixel& p) const
     {
         //we can say they're same hotpixel spot if they
         //touch(next to) each other horizontally or vertically, not diagonal corners

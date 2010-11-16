@@ -66,6 +66,8 @@ public:
 Q_SIGNALS:
 
     void signalSketchChanged(const QImage&);
+    void signalPenSizeChanged(int);
+    void signalPenColorChanged(const QColor&);
     void signalUndoRedoStateChanged(bool hasUndo, bool hasRedo);
 
 public Q_SLOTS:
@@ -80,11 +82,15 @@ protected:
 
     void mousePressEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
+    void wheelEvent (QWheelEvent*);
     void mouseReleaseEvent(QMouseEvent*);
+    void keyPressEvent (QKeyEvent*);
+    void keyReleaseEvent(QKeyEvent*);
     void paintEvent(QPaintEvent*);
 
 private:
 
+    void updateDrawCursor();
     void replayEvents(int index);
     void drawLineTo(const QPoint& endPoint);
     void drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end);

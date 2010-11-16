@@ -7,6 +7,7 @@
  * Description : Tree View for album models
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -993,14 +994,17 @@ public:
 
     AbstractCheckableAlbumTreeViewPriv() :
         configCheckedAlbumsEntry("Checked"),
+        configPartiallyCheckedAlbumsEntry("PartiallyChecked"),
         configRestoreCheckedEntry("RestoreChecked")
     {
     }
 
     const QString configCheckedAlbumsEntry;
+    const QString configPartiallyCheckedAlbumsEntry;
     const QString configRestoreCheckedEntry;
 
     QList<int> checkedAlbumIds;
+    QList<int> partiallyCheckedAlbumIds;
 
 };
 
@@ -1037,8 +1041,34 @@ void AbstractCheckableAlbumTreeView::setCheckOnMiddleClick(bool doThat)
 
 void AbstractCheckableAlbumTreeView::middleButtonPressed(Album *a)
 {
-    if (static_cast<AbstractCheckableAlbumModel*>(m_albumModel)->isCheckable())
-        static_cast<AbstractCheckableAlbumModel*>(m_albumModel)->toggleChecked(a);
+    AbstractCheckableAlbumModel* model = static_cast<AbstractCheckableAlbumModel*>(m_albumModel);
+    if (!model)
+    {
+        return;
+    }
+
+    if (model->isCheckable())
+    {
+        if (model->isTristate())
+        {
+            switch (model->checkState(a))
+            {
+                case Qt::Unchecked:
+                    model->setCheckState(a, Qt::PartiallyChecked);
+                    break;
+                case Qt::PartiallyChecked:
+                    model->setCheckState(a, Qt::Checked);
+                    break;
+                case Qt::Checked:
+                    model->setCheckState(a, Qt::Unchecked);
+                    break;
+            }
+        }
+        else
+        {
+            model->toggleChecked(a);
+        }
+    }
 }
 
 bool AbstractCheckableAlbumTreeView::isRestoreCheckState() const
@@ -1069,13 +1099,27 @@ void AbstractCheckableAlbumTreeView::doLoadState()
                     d->configCheckedAlbumsEntry), QStringList());
 
     d->checkedAlbumIds.clear();
-    foreach(const QString &albumId, checkedAlbums)
+    foreach(const QString& albumId, checkedAlbums)
     {
         bool ok;
         int id = albumId.toInt(&ok);
         if (ok)
         {
             d->checkedAlbumIds << id;
+        }
+    }
+
+    QStringList partiallyCheckedAlbums = group.readEntry(entryName(
+                    d->configPartiallyCheckedAlbumsEntry), QStringList());
+
+    d->partiallyCheckedAlbumIds.clear();
+    foreach(const QString& albumId, partiallyCheckedAlbums)
+    {
+        bool ok;
+        int id = albumId.toInt(&ok);
+        if (ok)
+        {
+            d->partiallyCheckedAlbumIds << id;
         }
     }
 
@@ -1110,10 +1154,20 @@ void AbstractCheckableAlbumTreeView::restoreCheckStateForHierarchy(const QModelI
 void AbstractCheckableAlbumTreeView::restoreCheckState(const QModelIndex &index)
 {
     Album *album = checkableModel()->albumForIndex(index);
-    if (album && d->checkedAlbumIds.contains(album->id()))
+    if (!album)
+    {
+        return;
+    }
+
+    if (d->checkedAlbumIds.contains(album->id()))
     {
         checkableModel()->setCheckState(album, Qt::Checked);
         d->checkedAlbumIds.removeOne(album->id());
+    }
+    if (d->partiallyCheckedAlbumIds.contains(album->id()))
+    {
+        checkableModel()->setCheckState(album, Qt::PartiallyChecked);
+        d->partiallyCheckedAlbumIds.removeOne(album->id());
     }
 }
 
@@ -1138,6 +1192,20 @@ void AbstractCheckableAlbumTreeView::doSaveState()
     }
 
     group.writeEntry(entryName(d->configCheckedAlbumsEntry), checkedIds);
+
+    if (!checkableModel()->isTristate())
+    {
+        return;
+    }
+
+    QList<Album*> partiallyCheckedAlbums = checkableModel()->partiallyCheckedAlbums();
+    QStringList partiallyCheckedIds;
+    foreach(Album* album, partiallyCheckedAlbums)
+    {
+        partiallyCheckedIds << QString::number(album->id());
+    }
+
+    group.writeEntry(entryName(d->configPartiallyCheckedAlbumsEntry), partiallyCheckedIds);
 
 }
 

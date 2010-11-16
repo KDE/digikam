@@ -993,16 +993,21 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
 
     file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "r");
     if (!file)
-       return false;
+    {
+        return false;
+    }
 
     if (! fgets (buf, sizeof (buf), file))
     {
-       fclose(file);
-       return false;
+        fclose(file);
+        return false;
     }
 
     if (strcmp (buf, "# GIMP Curves File\n") != 0)
-       return false;
+    {
+        fclose(file);
+        return false;
+    }
 
     for (i = 0 ; i < NUM_CHANNELS ; ++i)
     {
@@ -1220,14 +1225,17 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
 {
     if ( !d->curves || channel < 0 || channel >= NUM_CHANNELS || array.isEmpty())
         return false;
+
     QByteArray decoded = QByteArray::fromBase64(array);
     if (decoded.isEmpty())
         return false;
+
     QDataStream s(decoded);
 
     quint32 nothing, count;
     quint16 version;
-    quint8 type, depth;
+    quint8  type, depth;
+
     s >> version;
     if (version != 1)
         return false;
@@ -1235,6 +1243,7 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
     s >> type;
     if (type > 2)
         return false;
+
     s >> depth;
     if ( (depth == 1 && isSixteenBits()) || (depth == 2 && !isSixteenBits()) || depth <=0 || depth > 2)
         return false;
@@ -1291,7 +1300,9 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
 
     }
     else
+    {
         return false;
+    }
 
     return true;
 }

@@ -6,7 +6,8 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,22 +52,24 @@ public:
     virtual void prepare(const QVector<ImageInfo>& infos) = 0;
 };
 
+// -----------------------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT ImageSortFilterModel : public KCategorizedSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
 
-    ImageSortFilterModel(QObject *parent = 0);
+    ImageSortFilterModel(QObject* parent = 0);
 
     void setSourceImageModel(ImageModel* model);
     void setSourceFilterModel(ImageSortFilterModel* model);
 
     ImageModel* sourceImageModel() const;
-    ImageSortFilterModel *sourceFilterModel() const;
+    ImageSortFilterModel* sourceFilterModel() const;
 
     /// Returns this, any chained ImageFilterModel, or 0.
-    virtual ImageFilterModel *imageFilterModel() const;
+    virtual ImageFilterModel* imageFilterModel() const;
 
     QModelIndex mapToSourceImageModel(const QModelIndex& index) const;
     QModelIndex mapFromSourceImageModel(const QModelIndex& imagemodel_index) const;
@@ -83,7 +86,8 @@ public:
     QModelIndex indexForImageInfo(const ImageInfo& info) const;
     QModelIndex indexForImageId(qlonglong id) const;
     /** Returns a list of all image infos, sorted according to this model.
-     *  If you do not need a sorted list, use ImageModel's imageInfos() method. */
+     *  If you do not need a sorted list, use ImageModel's imageInfos() method.
+     */
     QList<ImageInfo> imageInfosSorted() const;
 
 protected:
@@ -94,8 +98,10 @@ protected:
     // made protected
     virtual void setSourceModel(QAbstractItemModel* model);
 
-    ImageSortFilterModel *m_chainedModel;
+    ImageSortFilterModel* m_chainedModel;
 };
+
+// -----------------------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT ImageFilterModel : public ImageSortFilterModel
 {
@@ -133,7 +139,7 @@ public:
     ImageSortSettings   imageSortSettings() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual ImageFilterModel *imageFilterModel() const;
+    virtual ImageFilterModel* imageFilterModel() const;
 
     /// Enables sending imageInfosAdded and imageInfosAboutToBeRemoved
     void setSendImageInfoSignals(bool sendSignals);
@@ -153,8 +159,7 @@ public Q_SLOTS:
      *  parameter at a time.
      */
     void setDayFilter(const QList<QDateTime>& days);
-    void setTagFilter(const QList<int>& tags, ImageFilterSettings::MatchingCondition matchingCond,
-                      bool showUnTagged=false);
+    void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, ImageFilterSettings::MatchingCondition matchingCond, bool showUnTagged=false);
     void setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond);
     void setMimeTypeFilter(int mimeTypeFilter);
     void setTextFilter(const SearchTextSettings& settings);
@@ -171,14 +176,17 @@ Q_SIGNALS:
     void filterMatches(bool matches);
     /** Signals that the set text filter matches at least one entry.
         If no text filter is set, this signal is emitted
-        with 'false' when filterMatches() is emitted. */
+        with 'false' when filterMatches() is emitted.
+     */
     void filterMatchesForText(bool matchesByText);
 
     /** Emitted when the filter settings have been changed
-        (the model may not yet have been updated) */
+        (the model may not yet have been updated)
+     */
     void filterSettingsChanged(const ImageFilterSettings &settings);
 
-    /** These signals need to be explicitly enabled with setSendImageInfoSignals() */
+    /** These signals need to be explicitly enabled with setSendImageInfoSignals()
+     */
     void imageInfosAdded(const QList<ImageInfo>& infos);
     void imageInfosAboutToBeRemoved(const QList<ImageInfo>& infos);
 
@@ -194,11 +202,14 @@ protected:
 
     /** Reimplement to customize category sorting,
      *  Return negative if category of left < category right,
-     *  Return 0 if left and right are in the same category, else return positive. */
+     *  Return 0 if left and right are in the same category, else return positive.
+     */
     virtual int compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const;
-    /** Reimplement to customize sorting. Do not take categories into account here. */
+    /** Reimplement to customize sorting. Do not take categories into account here.
+     */
     virtual bool infosLessThan(const ImageInfo& left, const ImageInfo& right) const;
-    /** Returns a unique identifier for the category if info. The string need not be for user display. */
+    /** Returns a unique identifier for the category if info. The string need not be for user display.
+     */
     virtual QString categoryIdentifier(const ImageInfo& info) const;
 
     ImageFilterModelPrivate* const d_ptr;
@@ -220,13 +231,15 @@ private:
     Q_DECLARE_PRIVATE(ImageFilterModel)
 };
 
+// -----------------------------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT NoDuplicatesImageFilterModel : public ImageSortFilterModel
 {
     Q_OBJECT
 
 public:
 
-    NoDuplicatesImageFilterModel(QObject *parent = 0);
+    NoDuplicatesImageFilterModel(QObject* parent = 0);
 
 protected:
 

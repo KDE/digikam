@@ -7,6 +7,7 @@
  * Description : Tree View for album models
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -412,8 +413,6 @@ public:
 
     /**
      * Tells if the check state is restored while loading / saving state.
-     *
-     * TODO tristate not supported right now
      *
      * @return true if restoring check state is active
      */

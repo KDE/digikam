@@ -59,7 +59,8 @@ class AlbumSelectTreeViewPriv
 {
 public:
     AlbumSelectTreeViewPriv() :
-        albumModificationHelper(0)
+        albumModificationHelper(0),
+        newAlbumAction(0)
     {
     }
 

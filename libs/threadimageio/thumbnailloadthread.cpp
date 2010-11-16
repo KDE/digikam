@@ -379,7 +379,8 @@ bool ThumbnailLoadThread::ThumbnailLoadThreadPriv::checkDescription(const Loadin
     return true;
 }
 
-QList<LoadingDescription> ThumbnailLoadThread::ThumbnailLoadThreadPriv::makeDescriptions(const QStringList& filePaths, int size)
+QList<LoadingDescription> ThumbnailLoadThread::ThumbnailLoadThreadPriv::makeDescriptions(const QStringList& filePaths,
+                                                                                         int size)
 {
     QList<LoadingDescription> descriptions;
     {
@@ -482,7 +483,9 @@ void ThumbnailLoadThread::findGroup(const QStringList& filePaths)
 void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
 {
     if (!checkSize(size))
+    {
         return;
+    }
 
     QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
     ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
@@ -789,11 +792,15 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
     */
 
     if (pix.isNull())
+    {
         pix = DesktopIcon("image-missing", KIconLoader::SizeEnormous);
+    }
 
     if (pix.isNull())
+    {
         // give up
         return QPixmap();
+    }
 
     // Resize icon to the right size depending of current settings.
 
@@ -829,12 +836,16 @@ void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
 
         QStringList possibleKeys = LoadingDescription::possibleThumbnailCacheKeys(filePath);
         foreach(const QString& cacheKey, possibleKeys)
+        {
             cache->removeThumbnail(cacheKey);
+        }
     }
 
     ThumbnailCreator creator(static_d->storageMethod);
     if (static_d->provider)
+    {
         creator.setThumbnailInfoProvider(static_d->provider);
+    }
     creator.deleteThumbnailsFromDisk(filePath);
 }
 

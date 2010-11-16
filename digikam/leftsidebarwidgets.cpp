@@ -790,7 +790,8 @@ public:
     SearchSideBarWidgetPriv() :
         searchSearchBar(0),
         searchTreeView(0),
-        searchTabHeader(0)
+        searchTabHeader(0),
+        searchModel(0)
     {
     }
 

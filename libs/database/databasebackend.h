@@ -60,13 +60,13 @@ public:
     /**
      * Notify all listeners of the changeset
      */
-    void recordChangeset(const ImageChangeset changeset);
-    void recordChangeset(const ImageTagChangeset changeset);
-    void recordChangeset(const CollectionImageChangeset changeset);
-    void recordChangeset(const AlbumChangeset changeset);
-    void recordChangeset(const TagChangeset changeset);
-    void recordChangeset(const AlbumRootChangeset changeset);
-    void recordChangeset(const SearchChangeset changeset);
+    void recordChangeset(const ImageChangeset& changeset);
+    void recordChangeset(const ImageTagChangeset& changeset);
+    void recordChangeset(const CollectionImageChangeset& changeset);
+    void recordChangeset(const AlbumChangeset& changeset);
+    void recordChangeset(const TagChangeset& changeset);
+    void recordChangeset(const AlbumRootChangeset& changeset);
+    void recordChangeset(const SearchChangeset& changeset);
 
 private:
 

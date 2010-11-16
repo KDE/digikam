@@ -6,7 +6,8 @@
  * Date        : 2009-03-05
  * Description : Filter values for use with ImageFilterModel
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,37 +50,42 @@ void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
     dayFilter.clear();
 
     for (QList<QDateTime>::const_iterator it = days.constBegin(); it != days.constEnd(); ++it)
+    {
         dayFilter.insert(*it, true);
+    }
 }
 
 bool ImageFilterSettings::isFilteringByTags() const
 {
-    if (!tagFilter.isEmpty() || untaggedFilter)
+    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() || untaggedFilter)
+    {
         return true;
-
+    }
     return false;
 }
 
 bool ImageFilterSettings::isFilteringByText() const
 {
     if (!textFilterSettings.text.isEmpty())
+    {
         return true;
-
+    }
     return false;
 }
 
 bool ImageFilterSettings::isFiltering() const
 {
-    return !dayFilter.isEmpty() || !tagFilter.isEmpty() || !textFilterSettings.text.isEmpty()
+    return !dayFilter.isEmpty() || !includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() || !textFilterSettings.text.isEmpty()
             || untaggedFilter || ratingFilter >= 0 || mimeTypeFilter != MimeFilter::AllFiles;
 }
 
-void ImageFilterSettings::setTagFilter(const QList<int>& tags, MatchingCondition matchingCondition,
+void ImageFilterSettings::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, MatchingCondition matchingCondition,
                                        bool showUnTagged)
 {
-    tagFilter      = tags;
-    matchingCond   = matchingCondition;
-    untaggedFilter = showUnTagged;
+    includeTagFilter = includedTags;
+    excludeTagFilter = excludedTags;
+    matchingCond     = matchingCondition;
+    untaggedFilter   = showUnTagged;
 }
 
 void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCondition)
@@ -135,21 +141,27 @@ void ImageFilterSettings::setIdWhitelist(const QList<qlonglong> idList, const QS
 bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
 {
     if (foundText)
+    {
         *foundText = false;
+    }
 
     if (!isFiltering())
+    {
         return true;
+    }
 
     bool match = false;
 
-    if (!tagFilter.isEmpty())
+    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty())
     {
         QList<int> tagIds = info.tagIds();
         QList<int>::const_iterator it;
 
+        match = includeTagFilter.isEmpty();
+
         if (matchingCond == OrCondition)
         {
-            for (it = tagFilter.begin(); it != tagFilter.end(); ++it)
+            for (it = includeTagFilter.begin(); it != includeTagFilter.end(); ++it)
             {
                 if (tagIds.contains(*it))
                 {
@@ -166,14 +178,28 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
             // untaggedFilter and non-empty tag filter, combined with AND, is logically no match
             if (!untaggedFilter)
             {
-                for (it = tagFilter.begin(); it != tagFilter.end(); ++it)
+                for (it = includeTagFilter.begin(); it != includeTagFilter.end(); ++it)
                 {
                     if (!tagIds.contains(*it))
+                    {
                         break;
+                    }
                 }
 
-                if (it == tagFilter.end())
+                if (it == includeTagFilter.end())
+                {
                     match = true;
+                }
+            }
+        }
+
+
+        for (it = excludeTagFilter.begin(); it != excludeTagFilter.end(); ++it)
+        {
+            if (tagIds.contains(*it))
+            {
+                match = false;
+                break;
             }
         }
 
@@ -199,7 +225,9 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
         // for now we treat -1 (no rating) just like a rating of 0.
         int rating = info.rating();
         if (rating == -1)
+        {
             rating = 0;
+        }
 
         if (ratingCond == GreaterEqualCondition)
         {
@@ -235,55 +263,73 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
         case MimeFilter::ImageFiles:
         {
             if (info.category() != DatabaseItem::Image)
+            {
                 match = false;
+            }
             break;
         }
         case MimeFilter::JPGFiles:
         {
             if (info.format() != "JPG")
+            {
                 match = false;
+            }
             break;
         }
         case MimeFilter::PNGFiles:
         {
             if (info.format() != "PNG")
+            {
                 match = false;
+            }
             break;
         }
         case MimeFilter::TIFFiles:
         {
             if (info.format() != "TIFF")
+            {
                 match = false;
+            }
             break;
         }
         case MimeFilter::DNGFiles:
         {
             if (info.format() != "RAW-DNG")
+            {
                 match = false;
+            }
             break;
         }
         case MimeFilter::NoRAWFiles:
         {
             if (info.format().startsWith(QLatin1String("RAW")))
+            {
                 match = false;
+            }
             break;
         }
         case MimeFilter::RAWFiles:
         {
             if (!info.format().startsWith(QLatin1String("RAW")))
+            {
                 match = false;
+            }
             break;
         }
         case MimeFilter::MoviesFiles:
         {
             if (info.category() != DatabaseItem::Video)
+            {
                 match = false;
+            }
             break;
         }
         case MimeFilter::AudioFiles:
         {
             if (info.category() != DatabaseItem::Audio)
+            {
                 match = false;
+            }
             break;
         }
         default:        // All Files: do nothing...
@@ -304,24 +350,32 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
 
         // Image comment
         if (info.comment().contains(textFilterSettings.text, textFilterSettings.caseSensitive))
+        {
             textMatch = true;
+        }
 
         // Tag names
         foreach (int id, info.tagIds())
         {
             if (tagNameHash.value(id).contains(textFilterSettings.text, textFilterSettings.caseSensitive))
+            {
                 textMatch = true;
+            }
         }
 
         // Album names
         if (albumNameHash.value(info.albumId()).contains(textFilterSettings.text, textFilterSettings.caseSensitive))
+        {
             textMatch = true;
+        }
 
         match &= textMatch;
         if (foundText)
+        {
             *foundText = textMatch;
+        }
     }
-    
+
     // filter by URL-whitelists:
     // whitelists are always AND for now:
     if (match)
@@ -331,7 +385,9 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
         {
             match = it->contains(url);
             if (!match)
+            {
                 break;
+            }
         }
     }
 
@@ -368,7 +424,7 @@ DatabaseFields::Set ImageFilterSettings::watchFlags() const
     {
         set |= DatabaseFields::Rating;
     }
-    
+
     if (mimeTypeFilter != MimeFilter::AllFiles)
     {
         set |= DatabaseFields::Category;

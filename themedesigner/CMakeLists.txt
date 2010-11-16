@@ -102,7 +102,6 @@ SET(digikamthemedesigner_SRCS
     ${libdigikamgui_SRCS}
     ${libqueuemanager_SRCS}
     ${libalbummodels_SRCS}
-    ${libadvancedrename_SRCS}
     ${libtemplate_SRCS}
     ${libdatabaseui_SRCS}
 
@@ -121,6 +120,7 @@ KDE4_ADD_EXECUTABLE(digikamthemedesigner ${digikamthemedesigner_SRCS})
 TARGET_LINK_LIBRARIES(digikamthemedesigner
                       digikamcore
                       digikamdatabase
+                      advancedrename
                       ${KDE4_KPARTS_LIBS}
                       ${KDE4_PHONON_LIBS}
                       ${KDE4_KHTML_LIBS}

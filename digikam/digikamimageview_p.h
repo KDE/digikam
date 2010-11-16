@@ -6,9 +6,9 @@
  * Date        : 2009-10-03
  * Description : Private Qt item view for images
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol do de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol do de>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,6 @@
 #include "digikamimageview.h"
 #include "digikamimagedelegate.h"
 #include "faceiface.h"
-#include "renamethread.h"
 #include "imagerotationoverlay.h"
 #include "albumsettings.h"
 
@@ -52,22 +51,23 @@ class DigikamImageViewPriv : public QObject
 
 public:
 
-    DigikamImageViewPriv(DigikamImageView *qq);
+    DigikamImageViewPriv(DigikamImageView* qq);
     virtual ~DigikamImageViewPriv();
 
-    ImageViewUtilities* utilities;
-    RenameThread*       renameThread;
-    FaceIface*          faceiface;
-
-    DigikamImageDelegate     *normalDelegate;
-    DigikamImageFaceDelegate *faceDelegate;
-
-    bool overlaysActive;
-
-    ImageRotateLeftOverlay*  rotateLeftOverlay;
-    ImageRotateRightOverlay* rotateRightOverlay;
-
     void updateOverlays();
+
+public:
+
+    ImageViewUtilities*       utilities;
+    FaceIface*                faceiface;
+
+    DigikamImageDelegate*     normalDelegate;
+    DigikamImageFaceDelegate* faceDelegate;
+
+    bool                      overlaysActive;
+
+    ImageRotateLeftOverlay*   rotateLeftOverlay;
+    ImageRotateRightOverlay*  rotateRightOverlay;
 
 private:
 

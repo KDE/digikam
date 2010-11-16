@@ -51,26 +51,35 @@
 namespace Digikam
 {
 
+static const QString beforeLabel = i18nc("Preview image (before filter has been applied)", "Before");
+static const QString afterLabel  = i18nc("Preview image (after filter has been applied)", "After");
+
 class ImageGuideWidget::ImageGuideWidgetPriv
 {
 public:
 
-    ImageGuideWidgetPriv()
+    ImageGuideWidgetPriv() :
+        sixteenBit(false),
+        focus(false),
+        spotVisible(false),
+        onMouseMovePreviewToggled(true),
+        drawLineBetweenPoints(false),
+        drawingMask(false),
+        enableDrawMask(false),
+        eraseMask(false),
+        width(0),
+        height(0),
+        timerID(0),
+        guideMode(0),
+        guideSize(0),
+        flicker(0),
+        renderingPreviewMode(PreviewToolBar::NoPreviewMode),
+        penWidth(10),
+        pixmap(0),
+        maskPixmap(0),
+        previewPixmap(0),
+        iface(0)
     {
-        pixmap                    = 0;
-        maskPixmap                = 0;
-        previewPixmap             = 0;
-        iface                     = 0;
-        flicker                   = 0;
-        timerID                   = 0;
-        focus                     = false;
-        onMouseMovePreviewToggled = true;
-        renderingPreviewMode      = PreviewToolBar::NoPreviewMode;
-        drawLineBetweenPoints     = false;
-        drawingMask               = false;
-        enableDrawMask            = false;
-        penWidth                  = 10;
-        eraseMask                 = false;
     }
 
     bool        sixteenBit;
@@ -276,7 +285,7 @@ void ImageGuideWidget::updatePixmap()
         (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
     {
         p.drawPixmap(d->rect, *d->previewPixmap);
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), beforeLabel);
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
              d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
@@ -287,7 +296,7 @@ void ImageGuideWidget::updatePixmap()
         if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
             d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
         {
-            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("After"));
+            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), afterLabel);
         }
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
@@ -320,8 +329,8 @@ void ImageGuideWidget::updatePixmap()
         p.drawLine(d->rect.x()+d->rect.width()/2-1, d->rect.y(),
                    d->rect.x()+d->rect.width()/2-1, d->rect.y()+d->rect.height());
 
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
-        drawText(&p, QPoint(d->rect.x() + d->rect.width()/2 + 20, d->rect.y() + 20), i18n("After"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), beforeLabel);
+        drawText(&p, QPoint(d->rect.x() + d->rect.width()/2 + 20, d->rect.y() + 20), afterLabel);
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
              d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
@@ -357,8 +366,8 @@ void ImageGuideWidget::updatePixmap()
                    d->rect.x()+d->rect.width(),
                    d->rect.y()+d->rect.height()/2-1);
 
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), i18n("Before"));
-        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + d->rect.height()/2 + 20), i18n("After"));
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), beforeLabel);
+        drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + d->rect.height()/2 + 20), afterLabel);
     }
 
     if (d->spotVisible)
@@ -485,6 +494,18 @@ void ImageGuideWidget::paintEvent(QPaintEvent*)
     {
         p.setOpacity(0.7);
         p.drawPixmap(d->rect.x(), d->rect.y(), *d->maskPixmap);
+
+        if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
+                (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
+        {
+            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), beforeLabel);
+        }
+        else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
+                d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
+                (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
+        {
+            drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), afterLabel);
+        }
     }
 
     p.end();
@@ -794,12 +815,16 @@ void ImageGuideWidget::updateMaskCursor()
     int size = d->penWidth;
     if (size > 64)
         size = 64;
+    if (size < 3)
+        size = 3;
 
     QPixmap pix(size, size);
     pix.fill(Qt::transparent);
 
     QPainter p(&pix);
-    p.drawEllipse( 0, 0, size-1, size-1);
+    p.setRenderHint(QPainter::Antialiasing, true);
+
+    p.drawEllipse(1, 1, size-2, size-2);
 
     d->maskCursor = QCursor(pix);
 }

@@ -118,7 +118,6 @@ void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl &, const KUrl&new
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
 
-    // no need to check the property here, this slot is only used by the RenameThread
     KUrl url(job->property(renameFileProperty.toAscii()).toString());
     emit imageRenameSucceeded(url);
 }

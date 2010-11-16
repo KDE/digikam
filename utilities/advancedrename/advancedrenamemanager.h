@@ -81,6 +81,7 @@ public:
     void setWidget(AdvancedRenameWidget* widget);
 
     int indexOfFile(const QString& filename);
+    int indexOfFolder(const QString& filename);
     int indexOfFileGroup(const QString& filename);
     QString newName(const QString& filename);
 

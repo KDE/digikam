@@ -36,7 +36,6 @@ namespace Digikam
 {
 
 class ImageCategoryDrawer;
-class ImageThumbnailDelegatePrivate;
 
 class ImageThumbnailDelegate : public ImageDelegate
 {
@@ -44,7 +43,7 @@ class ImageThumbnailDelegate : public ImageDelegate
 
 public:
 
-    ImageThumbnailDelegate(ImageCategorizedView *parent);
+    ImageThumbnailDelegate(ImageCategorizedView* parent);
     ~ImageThumbnailDelegate();
 
     void setFlow(QListView::Flow flow);
@@ -55,7 +54,8 @@ public:
     int minimumSize() const;
 
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
-    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *activationRect) const;
+    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, 
+                                   QRect* activationRect) const;
 
 protected:
 
@@ -64,6 +64,7 @@ protected:
 
 private:
 
+    class ImageThumbnailDelegatePrivate;
     Q_DECLARE_PRIVATE(ImageThumbnailDelegate)
 };
 

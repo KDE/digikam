@@ -51,7 +51,6 @@ INCLUDE_DIRECTORIES(
 
 SET(advancedrenametest_SRCS
     advancedrenametest.cpp
-    ${libadvancedrename_SRCS}
 )
 KDE4_ADD_UNIT_TEST(advancedrenametest ${advancedrenametest_SRCS})
 TARGET_LINK_LIBRARIES(advancedrenametest
@@ -62,6 +61,7 @@ TARGET_LINK_LIBRARIES(advancedrenametest
                       ${QT_QTTEST_LIBRARY}
                       digikamdatabase
                       digikamcore
+                      advancedrename
                       )
 
 #------------------------------------------------------------------------

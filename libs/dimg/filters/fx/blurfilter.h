@@ -41,11 +41,11 @@ class DIGIKAM_EXPORT BlurFilter : public DImgThreadedFilter
 public:
 
     explicit BlurFilter(QObject* parent = 0);
-    explicit BlurFilter(DImg* orgImage, QObject* parent=0, double radius=3.0);
+    explicit BlurFilter(DImg* orgImage, QObject* parent=0, int radius=3);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit BlurFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
-                        int progressBegin=0, int progressEnd=100, double radius=3.0);
+                        int progressBegin=0, int progressEnd=100, int radius=3);
 
     ~BlurFilter();
 
@@ -53,19 +53,53 @@ public:
     static QString          DisplayableName()   { return I18N_NOOP("Blur Filter"); }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion()    { return 1; }
-    
+
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
 private:
 
-    double m_radius;
+    void filterImage();
+    void cimgBlurImage(uchar* data, int width, int height, bool sixteenBit, double radius);
+    void gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, int radius);
+
+    // function to allocate a 2d array
+    int** Alloc2DArray (int Columns, int Rows)
+    {
+        // First, we declare our future 2d array to be returned
+        int** lpcArray = 0L;
+
+        // Now, we alloc the main pointer with Columns
+        lpcArray = new int*[Columns];
+
+        for (int i = 0; i < Columns; ++i)
+            lpcArray[i] = new int[Rows];
+
+        return (lpcArray);
+    };
+
+    // Function to deallocates the 2d array previously created
+    void Free2DArray (int** lpcArray, int Columns)
+    {
+        // loop to deallocate the columns
+        for (int i = 0; i < Columns; ++i)
+            delete [] lpcArray[i];
+
+        // now, we delete the main pointer
+        delete [] lpcArray;
+    };
+
+    inline bool IsInside (int Width, int Height, int X, int Y)
+    {
+        bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
+        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+        return (bIsWOk && bIsHOk);
+    };
 
 private:
 
-    void filterImage();
-    void gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, double radius);
+    int m_radius;
 };
 
 }  // namespace Digikam

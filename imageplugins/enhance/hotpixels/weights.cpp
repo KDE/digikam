@@ -33,6 +33,16 @@
 namespace DigikamEnhanceImagePlugin
 {
 
+Weights::Weights() :
+     mHeight(0),
+     mWidth(0),
+     mCoefficientNumber(0),
+     mTwoDim(false),
+     mPolynomeOrder(0),
+     mWeightMatrices(0)
+{
+}
+
 Weights::Weights(const Weights& w)
 {
     (*this) = w;

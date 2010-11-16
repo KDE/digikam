@@ -41,7 +41,7 @@ class ItemInfoSet
 {
 public:
 
-    ItemInfoSet(){};
+    ItemInfoSet() : queueId(0) {};
     ItemInfoSet(int id, const ImageInfo& inf)
     {
         queueId = id;

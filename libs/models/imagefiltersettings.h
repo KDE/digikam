@@ -6,7 +6,8 @@
  * Date        : 2009-03-05
  * Description : Filter values for use with ImageFilterModel
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,10 +70,11 @@ public:
     };
 
     bool                            untaggedFilter;
-    QList<int>                      tagFilter;
+    QList<int>                      includeTagFilter;
+    QList<int>                      excludeTagFilter;
     MatchingCondition               matchingCond;
 
-    void setTagFilter(const QList<int>& tags, MatchingCondition matchingCond,
+    void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, MatchingCondition matchingCond,
                       bool showUnTagged = false);
 
     /// --- Rating filter ---
@@ -121,19 +123,18 @@ public:
     /// --- URL whitelist filter
     QHash<QString,KUrl::List> urlWhitelists;
     void setUrlWhitelist(const KUrl::List& urlList, const QString id);
-   
+
     /// --- ID whitelist filter
     QHash<QString,QList<qlonglong> > idWhitelists;
     void setIdWhitelist(const QList<qlonglong> idList, const QString id);
- 
+
     /// --- Change notification ---
 
     /** Returns database fields a change in which would affect the current filtering.
      *  To find out if an image tag change affects filtering, test isFilteringByTags().
-     *  The text filter will also be affected by changes in tags and album names.*/
+     *  The text filter will also be affected by changes in tags and album names.
+     */
     DatabaseFields::Set watchFlags() const;
-    
-
 };
 
 } // namespace Digikam

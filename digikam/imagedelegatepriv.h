@@ -41,7 +41,7 @@ namespace Digikam
 
 class ImageCategoryDrawer;
 
-class ImageDelegatePrivate : public ItemViewImageDelegatePrivate
+class ImageDelegate::ImageDelegatePrivate : public ItemViewImageDelegatePrivate
 {
 public:
 
@@ -69,6 +69,7 @@ public:
     QRect                 sizeRect;
     QRect                 tagRect;
     QRect                 imageInformationRect;
+
     bool                  drawFocusFrame;
     bool                  drawMouseOverFrame;
     bool                  ratingOverThumbnail;

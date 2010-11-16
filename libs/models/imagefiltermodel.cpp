@@ -7,6 +7,7 @@
  * Description : Qt item model for database entries
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,12 +42,12 @@
 namespace Digikam
 {
 
-ImageSortFilterModel::ImageSortFilterModel(QObject *parent)
-    : KCategorizedSortFilterProxyModel(parent), m_chainedModel(0)
+ImageSortFilterModel::ImageSortFilterModel(QObject* parent)
+                    : KCategorizedSortFilterProxyModel(parent), m_chainedModel(0)
 {
 }
 
-void ImageSortFilterModel::setSourceImageModel(ImageModel *source)
+void ImageSortFilterModel::setSourceImageModel(ImageModel* source)
 {
     if (m_chainedModel)
         m_chainedModel->setSourceImageModel(source);
@@ -54,11 +55,11 @@ void ImageSortFilterModel::setSourceImageModel(ImageModel *source)
         setDirectSourceImageModel(source);
 }
 
-void ImageSortFilterModel::setSourceFilterModel(ImageSortFilterModel *source)
+void ImageSortFilterModel::setSourceFilterModel(ImageSortFilterModel* source)
 {
     if (source)
     {
-        ImageModel *model = sourceImageModel();
+        ImageModel* model = sourceImageModel();
         if (model)
             source->setSourceImageModel(model);
     }
@@ -77,7 +78,7 @@ void ImageSortFilterModel::setSourceModel(QAbstractItemModel* model)
     KCategorizedSortFilterProxyModel::setSourceModel(model);
 }
 
-ImageModel *ImageSortFilterModel::sourceImageModel() const
+ImageModel* ImageSortFilterModel::sourceImageModel() const
 {
     if (m_chainedModel)
         return m_chainedModel->sourceImageModel();
@@ -111,7 +112,7 @@ QModelIndex ImageSortFilterModel::mapFromSourceImageModel(const QModelIndex& alb
     return mapFromSource(albummodel_index);
 }
 
-// -------------- Convenience mappers --------------
+// -------------- Convenience mappers -------------------------------------------------------------------
 
 QList<QModelIndex> ImageSortFilterModel::mapListToSource(const QList<QModelIndex>& indexes) const
 {
@@ -142,7 +143,7 @@ qlonglong ImageSortFilterModel::imageId(const QModelIndex& index) const
 QList<ImageInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& indexes) const
 {
     QList<ImageInfo> infos;
-    ImageModel *model = sourceImageModel();
+    ImageModel* model = sourceImageModel();
     foreach (const QModelIndex& index, indexes)
         infos << model->imageInfo(mapToSourceImageModel(index));
     return infos;
@@ -151,7 +152,7 @@ QList<ImageInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& inde
 QList<qlonglong> ImageSortFilterModel::imageIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
-    ImageModel *model = sourceImageModel();
+    ImageModel* model = sourceImageModel();
     foreach (const QModelIndex& index, indexes)
         ids << model->imageId(mapToSourceImageModel(index));
     return ids;
@@ -176,7 +177,7 @@ QList<ImageInfo> ImageSortFilterModel::imageInfosSorted() const
 {
     QList<ImageInfo> infos;
     const int size = rowCount();
-    ImageModel *model = sourceImageModel();
+    ImageModel* model = sourceImageModel();
     for (int i=0; i<size; ++i)
     {
         infos << model->imageInfo(mapToSourceImageModel(index(i, 0)));
@@ -216,7 +217,7 @@ ImageFilterModelPrivate::~ImageFilterModelPrivate()
 }
 
 ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModelPrivate* d)
-    : d(d) // do not install d as QObject parent, moveToThread wont work then
+                      : d(d) // do not install d as QObject parent, moveToThread wont work then
 {
     thread = new Thread(this);
     moveToThread(thread);
@@ -330,7 +331,7 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
     return KCategorizedSortFilterProxyModel::data(index, role);
 }
 
-ImageFilterModel *ImageFilterModel::imageFilterModel() const
+ImageFilterModel* ImageFilterModel::imageFilterModel() const
 {
     return const_cast<ImageFilterModel*>(this);
 }
@@ -354,11 +355,11 @@ void ImageFilterModel::setDayFilter(const QList<QDateTime>& days)
     setImageFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setTagFilter(const QList<int>& tags, ImageFilterSettings::MatchingCondition matchingCond,
+void ImageFilterModel::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, ImageFilterSettings::MatchingCondition matchingCond,
                                bool showUnTagged)
 {
     Q_D(ImageFilterModel);
-    d->filter.setTagFilter(tags, matchingCond, showUnTagged);
+    d->filter.setTagFilter(includedTags, excludedTags, matchingCond, showUnTagged);
     setImageFilterSettings(d->filter);
 }
 
@@ -539,23 +540,23 @@ void ImageFilterModelPrivate::setupWorkers()
     // If no preparation is needed, the first step is skipped.
     // If filter version changes, both will discard old package and send them to packageDiscarded.
 
-    connect(this, SIGNAL(packageToPrepare(const ImageFilterModelTodoPackage &)),
+    connect(this, SIGNAL(packageToPrepare(const ImageFilterModelTodoPackage&)),
             preparer, SLOT(process(ImageFilterModelTodoPackage)));
 
-    connect(this, SIGNAL(packageToFilter(const ImageFilterModelTodoPackage &)),
+    connect(this, SIGNAL(packageToFilter(const ImageFilterModelTodoPackage&)),
             filterer, SLOT(process(ImageFilterModelTodoPackage)));
 
-    connect(preparer, SIGNAL(processed(const ImageFilterModelTodoPackage &)),
+    connect(preparer, SIGNAL(processed(const ImageFilterModelTodoPackage&)),
             filterer, SLOT(process(ImageFilterModelTodoPackage)));
 
-    connect(filterer, SIGNAL(processed(const ImageFilterModelTodoPackage &)),
-            this, SLOT(packageFinished(const ImageFilterModelTodoPackage &)));
+    connect(filterer, SIGNAL(processed(const ImageFilterModelTodoPackage&)),
+            this, SLOT(packageFinished(const ImageFilterModelTodoPackage&)));
 
-    connect(preparer, SIGNAL(discarded(const ImageFilterModelTodoPackage &)),
-            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage &)));
+    connect(preparer, SIGNAL(discarded(const ImageFilterModelTodoPackage&)),
+            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage&)));
 
-    connect(filterer, SIGNAL(discarded(const ImageFilterModelTodoPackage &)),
-            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage &)));
+    connect(filterer, SIGNAL(discarded(const ImageFilterModelTodoPackage&)),
+            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage&)));
 }
 
 void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos)
@@ -694,7 +695,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
         }
     }
 
-    foreach (ImageFilterModelPrepareHook *hook, prepareHooks)
+    foreach (ImageFilterModelPrepareHook* hook, prepareHooks)
         hook->prepare(package.infos);
 
     emit processed(package);
@@ -761,9 +762,9 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     emit processed(package);
 }
 
-// -------------- Sorting and Categorization --------------
+// -------------- Sorting and Categorization -------------------------------------------------------
 
-void ImageFilterModel::setImageSortSettings(const ImageSortSettings &sorter)
+void ImageFilterModel::setImageSortSettings(const ImageSortSettings& sorter)
 {
     Q_D(ImageFilterModel);
     d->sorter = sorter;
@@ -864,7 +865,7 @@ bool ImageFilterModel::infosLessThan(const ImageInfo& left, const ImageInfo& rig
     return d->sorter.lessThan(left, right);
 }
 
-// -------------- Watching changes --------------
+// -------------- Watching changes -----------------------------------------------------------------
 
 void ImageFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
 {
@@ -932,10 +933,10 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
         invalidate(); // just resort, reuse filter results
 }
 
-// ----------------
+// --------------------------------------------------------------------------------------------------------------
 
-NoDuplicatesImageFilterModel::NoDuplicatesImageFilterModel(QObject *parent)
-    : ImageSortFilterModel(parent)
+NoDuplicatesImageFilterModel::NoDuplicatesImageFilterModel(QObject* parent)
+                            : ImageSortFilterModel(parent)
 {
 }
 
@@ -944,6 +945,5 @@ bool NoDuplicatesImageFilterModel::filterAcceptsRow(int source_row, const QModel
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
     return index.data(ImageModel::ExtraDataDuplicateCount).toInt() == 0;
 }
-
 
 } // namespace Digikam

@@ -52,9 +52,9 @@ Blur::Blur(QObject* parent)
 
     QWidget* box  = new QWidget;
     QLabel* label = new QLabel(i18n("Smoothness:"));
-    m_radiusInput = new RDoubleNumInput();
-    m_radiusInput->setRange(0.0, 120.0, 0.1);
-    m_radiusInput->setDefaultValue(0.0);
+    m_radiusInput = new RIntNumInput();
+    m_radiusInput->setRange(0, 100, 1);
+    m_radiusInput->setDefaultValue(0);
     m_radiusInput->setWhatsThis(i18n("A smoothness of 0 has no effect, "
                                      "1 and above determine the Gaussian blur matrix radius "
                                      "that determines how much to blur the image."));
@@ -68,7 +68,7 @@ Blur::Blur(QObject* parent)
 
     setSettingsWidget(box);
 
-    connect(m_radiusInput, SIGNAL(valueChanged(double)),
+    connect(m_radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
 }
 
@@ -80,21 +80,21 @@ BatchToolSettings Blur::defaultSettings()
 {
     BatchToolSettings settings;
 
-    settings.insert("Radius", (double)m_radiusInput->defaultValue());
+    settings.insert("Radius", (int)m_radiusInput->defaultValue());
 
     return settings;
 }
 
 void Blur::slotAssignSettings2Widget()
 {
-    m_radiusInput->setValue(settings()["Radius"].toDouble());
+    m_radiusInput->setValue(settings()["Radius"].toInt());
 }
 
 void Blur::slotSettingsChanged()
 {
     BatchToolSettings settings;
 
-    settings.insert("Radius", (double)m_radiusInput->value());
+    settings.insert("Radius", (int)m_radiusInput->value());
 
     BatchTool::slotSettingsChanged(settings);
 }
@@ -104,7 +104,7 @@ bool Blur::toolOperations()
     if (!loadToDImg())
         return false;
 
-    double radius = settings()["Radius"].toDouble();
+    double radius = settings()["Radius"].toInt();
 
     BlurFilter blur(&image(), 0L, radius);
     blur.startFilterDirectly();

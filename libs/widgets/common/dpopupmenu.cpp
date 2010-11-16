@@ -60,7 +60,7 @@ class DPopupMenuPriv
 {
 public:
 
-    DPopupMenuPriv(){};
+    DPopupMenuPriv() : gradientWidth(0) {};
 
     int     gradientWidth;
 

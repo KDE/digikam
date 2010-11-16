@@ -3515,7 +3515,9 @@ void AlbumDB::deleteRemovedItems()
     d->db->recordChangeset(CollectionImageChangeset(QList<qlonglong>(), QList<int>(), CollectionImageChangeset::RemovedDeleted));
 }
 
-void AlbumDB::deleteRemovedItems(const QList<int>& albumIds)
+/*
+// This method is probably nonsense because a remove image no longer has an associated album
+void AlbumDB::deleteRemovedItems(QList<int> albumIds)
 {
     SqlQuery query = d->db->prepareQuery( QString("DELETE FROM Images WHERE status=? AND album=?;") );
 
@@ -3533,6 +3535,7 @@ void AlbumDB::deleteRemovedItems(const QList<int>& albumIds)
 
     d->db->recordChangeset(CollectionImageChangeset(QList<qlonglong>(), albumIds, CollectionImageChangeset::RemovedDeleted));
 }
+*/
 
 void AlbumDB::renameAlbum(int albumID, int newAlbumRoot, const QString& newRelativePath)
 {

@@ -6,7 +6,7 @@
  * Date        : 2009-04-19
  * Description : Qt item view for images - the delegate
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,8 +24,6 @@
 #ifndef IMAGEDELEGATE_H
 #define IMAGEDELEGATE_H
 
-// Qt includes
-
 // Local includes
 
 #include "itemviewimagedelegate.h"
@@ -40,7 +38,6 @@ class ImageDelegateOverlay;
 class ImageFilterModel;
 class ImageModel;
 class ImageThumbnailModel;
-class ImageDelegatePrivate;
 
 class ImageDelegate : public ItemViewImageDelegate
 {
@@ -48,22 +45,22 @@ class ImageDelegate : public ItemViewImageDelegate
 
 public:
 
-    ImageDelegate(QObject *parent = 0);
+    ImageDelegate(QObject* parent = 0);
     ~ImageDelegate();
 
-    virtual void paint(QPainter * painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
 
-    void setView(ImageCategorizedView *view);
+    void setView(ImageCategorizedView* view);
 
-    ImageCategoryDrawer *categoryDrawer() const;
+    ImageCategoryDrawer* categoryDrawer() const;
 
     virtual void setSpacing(int spacing);
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
     virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
-                                const QModelIndex& index, QRect *tooltipRect = 0) const;
+                                const QModelIndex& index, QRect* tooltipRect = 0) const;
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
-                                   const QModelIndex& index, QRect *activationRect = 0) const;
+                                   const QModelIndex& index, QRect* activationRect = 0) const;
 
     virtual QRect pixmapRect() const;
     virtual QRect imageInformationRect() const;
@@ -73,7 +70,12 @@ public:
 
     /** Call this from a paint event, with all indexes expected to be painted immediately,
      *  so that thumbnails become available in order. */
-    virtual void prepareThumbnails(ImageThumbnailModel *thumbModel, const QList<QModelIndex>& indexes);
+    virtual void prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
+
+public:
+
+    // Declared as public because of use in DigikamImageDelegate class.
+    class ImageDelegatePrivate;
 
 protected:
 
@@ -92,15 +94,16 @@ protected:
     virtual QPixmap thumbnailPixmap(const QModelIndex& index) const;
 
     bool onActualPixmapRect(const QPoint& pos, const QRect& visualRect,
-                            const QModelIndex& index, QRect *actualRect) const;
+                            const QModelIndex& index, QRect* actualRect) const;
     void updateActualPixmapRect(const QModelIndex& index, const QRect& rect);
 
     virtual void invalidatePaintingCache();
     virtual void updateSizeRectsAndPixmaps();
 
-    void setModel(QAbstractItemModel *model);
 
-    ImageDelegate(ImageDelegatePrivate &dd, QObject *parent);
+    void setModel(QAbstractItemModel* model);
+
+    ImageDelegate(ImageDelegate::ImageDelegatePrivate& dd, QObject* parent);
 
 protected Q_SLOTS:
 

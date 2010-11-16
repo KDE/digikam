@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QCursor>
 #include <QMap>
 #include <QPainter>
 #include <QPainterPath>
@@ -47,17 +48,16 @@ class DrawEvent
 {
 public:
 
-    DrawEvent()
-    {
-        penWidth = 10;
-        penColor = Qt::black;
-    };
+    DrawEvent() :
+        penWidth(10),
+        penColor(Qt::black)
+    {};
 
-    DrawEvent(int width, const QColor& color)
-    {
-        penWidth = width;
-        penColor = color;
-    };
+    DrawEvent(int width, const QColor& color) :
+        penWidth(width),
+        penColor(color)
+
+    {};
 
     void lineTo(const QPoint &pos)
     {
@@ -77,14 +77,14 @@ class SketchWidget::SketchWidgetPriv
 {
 public:
 
-    SketchWidgetPriv()
+    SketchWidgetPriv() :
+        isClear(true),
+        drawing(false),
+        penWidth(10),
+        eventIndex(-1),
+        penColor(Qt::black)
     {
-        isClear    = true;
-        drawing    = false;
-        penWidth   = 10;
-        penColor   = Qt::black;
         pixmap     = QPixmap(256, 256);
-        eventIndex = -1;
     }
 
     bool                 isClear;
@@ -99,6 +99,8 @@ public:
 
     QPoint               lastPoint;
     QTime                drawEventCreationTime;
+
+    QCursor              drawCursor;
 
     QList<DrawEvent>     drawEventList;
 
@@ -149,6 +151,7 @@ SketchWidget::SketchWidget(QWidget* parent)
     setAttribute(Qt::WA_StaticContents);
     setMouseTracking(true);
     setFixedSize(256, 256);
+    setFocusPolicy(Qt::StrongFocus);
     slotClear();
 }
 
@@ -186,6 +189,7 @@ QColor SketchWidget::penColor() const
 void SketchWidget::setPenWidth(int newWidth)
 {
     d->penWidth = newWidth;
+    updateDrawCursor();
     d->ensureNewDrawEvent();
 }
 
@@ -431,8 +435,17 @@ void SketchWidget::mousePressEvent(QMouseEvent* e)
             update();
         }
 
+        // sample color
+        if (e->modifiers() & Qt::CTRL)
+        {
+            QImage img = d->pixmap.toImage();
+            emit signalPenColorChanged((img.pixel(e->pos())));
+            return;
+        }
+
         d->lastPoint = e->pos();
         d->drawing   = true;
+        setCursor(d->drawCursor);
 
         d->startDrawEvent(e->pos());
     }
@@ -442,9 +455,18 @@ void SketchWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if (rect().contains(e->x(), e->y()))
     {
-        setCursor(Qt::CrossCursor);
+        setFocus();
 
-        if ((e->buttons() & Qt::LeftButton) && d->drawing)
+        if (d->drawing || !(e->modifiers() & Qt::CTRL))
+        {
+            setCursor(d->drawCursor);
+        }
+        else
+        {
+            setCursor(Qt::CrossCursor);
+        }
+
+        if ((e->buttons() & Qt::LeftButton))
         {
             QPoint currentPos = e->pos();
             d->currentDrawEvent().lineTo(currentPos);
@@ -454,6 +476,27 @@ void SketchWidget::mouseMoveEvent(QMouseEvent* e)
     else
     {
         unsetCursor();
+        clearFocus();
+    }
+}
+
+void SketchWidget::wheelEvent (QWheelEvent* e)
+{
+    if (rect().contains(e->x(), e->y()))
+    {
+        int size = d->penWidth;
+        int decr = (e->modifiers() & Qt::SHIFT) ? 1 : 10;
+
+        if (e->delta() > 0)
+        {
+            size += decr;
+        }
+        else
+        {
+            size -= decr;
+        }
+        emit signalPenSizeChanged(size);
+        setCursor(d->drawCursor);
     }
 }
 
@@ -466,6 +509,26 @@ void SketchWidget::mouseReleaseEvent(QMouseEvent* e)
         d->drawing = false;
         emit signalSketchChanged(sketchImage());
         emit signalUndoRedoStateChanged(true, false);
+    }
+}
+
+void SketchWidget::keyPressEvent(QKeyEvent* e)
+{
+    QWidget::keyPressEvent(e);
+
+    if (e->modifiers() == Qt::CTRL)
+    {
+        setCursor(Qt::CrossCursor);
+    }
+}
+
+void SketchWidget::keyReleaseEvent(QKeyEvent* e)
+{
+    QWidget::keyReleaseEvent(e);
+
+    if (e->key() == Qt::Key_Control)
+    {
+        setCursor(d->drawCursor);
     }
 }
 
@@ -508,6 +571,24 @@ void SketchWidget::drawPath(int width, const QColor& color, const QPainterPath& 
 
     update(path.boundingRect().toRect());
     d->lastPoint = path.currentPosition().toPoint();
+}
+
+void SketchWidget::updateDrawCursor()
+{
+    int size = d->penWidth;
+    if (size > 64)
+        size = 64;
+    if (size < 3)
+        size = 3;
+
+    QPixmap pix(size, size);
+    pix.fill(Qt::transparent);
+
+    QPainter p(&pix);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    p.drawEllipse( 1, 1, size-2, size-2);
+
+    d->drawCursor = QCursor(pix);
 }
 
 }  // namespace Digikam

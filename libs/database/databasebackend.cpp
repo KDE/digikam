@@ -77,44 +77,44 @@ bool DatabaseBackend::initSchema(SchemaUpdater *updater)
     return false;
 }
 
-void DatabaseBackend::recordChangeset(const ImageChangeset changeset)
+void DatabaseBackend::recordChangeset(const ImageChangeset& changeset)
 {
     Q_D(DatabaseBackend);
     // if we want to do compression of changesets, think about doing this here
     d->imageChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const ImageTagChangeset changeset)
+void DatabaseBackend::recordChangeset(const ImageTagChangeset& changeset)
 {
     Q_D(DatabaseBackend);
     d->imageTagChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const CollectionImageChangeset changeset)
+void DatabaseBackend::recordChangeset(const CollectionImageChangeset& changeset)
 {
     Q_D(DatabaseBackend);
     d->collectionImageChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const AlbumChangeset changeset)
+void DatabaseBackend::recordChangeset(const AlbumChangeset& changeset)
 {
     Q_D(DatabaseBackend);
     d->albumChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const TagChangeset changeset)
+void DatabaseBackend::recordChangeset(const TagChangeset& changeset)
 {
     Q_D(DatabaseBackend);
     d->tagChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const AlbumRootChangeset changeset)
+void DatabaseBackend::recordChangeset(const AlbumRootChangeset& changeset)
 {
     Q_D(DatabaseBackend);
     d->albumRootChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const SearchChangeset changeset)
+void DatabaseBackend::recordChangeset(const SearchChangeset& changeset)
 {
     Q_D(DatabaseBackend);
     d->searchChangesetContainer.recordChangeset(changeset);

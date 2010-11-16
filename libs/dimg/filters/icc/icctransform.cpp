@@ -66,7 +66,7 @@ public:
         transformFlags = 0;
     }
 
-    bool operator==(const TransformDescription& other)
+    bool operator==(const TransformDescription& other) const
     {
         return inputProfile   == other.inputProfile &&
                inputFormat    == other.inputFormat &&

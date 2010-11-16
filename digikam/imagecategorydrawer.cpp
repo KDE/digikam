@@ -77,7 +77,7 @@ ImageCategoryDrawer::~ImageCategoryDrawer()
     delete d;
 }
 
-int ImageCategoryDrawer::categoryHeight(const QModelIndex &/*index*/, const QStyleOption &/*option*/) const
+int ImageCategoryDrawer::categoryHeight(const QModelIndex& /*index*/, const QStyleOption& /*option*/) const
 {
     return d->rect.height() + d->lowerSpacing;
 }
@@ -125,17 +125,17 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
     QFont fontNormal(d->font);
     fontBold.setBold(true);
     int fnSize = fontBold.pointSize();
-    bool usePointSize;
+//    bool usePointSize;
     if (fnSize > 0)
     {
         fontBold.setPointSize(fnSize+2);
-        usePointSize = true;
+//        usePointSize = true;
     }
     else
     {
         fnSize = fontBold.pixelSize();
         fontBold.setPixelSize(fnSize+2);
-        usePointSize = false;
+//        usePointSize = false;
     }
 
     QString header;
@@ -261,7 +261,8 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
     *header = album->prettyUrl().left(-1);
 }
 
-void ImageCategoryDrawer::textForTAlbum(TAlbum* talbum, bool recursive, int count, QString* header, QString* subLine) const
+void ImageCategoryDrawer::textForTAlbum(TAlbum* talbum, bool recursive, int count, QString* header,
+                                        QString* subLine) const
 {
     *header = talbum->title();
 

@@ -72,7 +72,7 @@ public:
     const QString       configGroupName;
     const QString       configRadiusAdjustmentEntry;
 
-    RDoubleNumInput*    radiusInput;
+    RIntNumInput*       radiusInput;
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
@@ -92,9 +92,9 @@ BlurTool::BlurTool(QObject* parent)
     // --------------------------------------------------------
 
     QLabel* label  = new QLabel(i18n("Smoothness:"));
-    d->radiusInput = new RDoubleNumInput();
-    d->radiusInput->setRange(0.0, 120.0, 0.1);
-    d->radiusInput->setDefaultValue(0.0);
+    d->radiusInput = new RIntNumInput();
+    d->radiusInput->setRange(0, 100, 1);
+    d->radiusInput->setDefaultValue(0);
     d->radiusInput->setWhatsThis(i18n("A smoothness of 0 has no effect, "
                                       "1 and above determine the Gaussian blur matrix radius "
                                       "that determines how much to blur the image."));
@@ -118,7 +118,7 @@ BlurTool::BlurTool(QObject* parent)
 
     // --------------------------------------------------------
 
-    connect(d->radiusInput, SIGNAL(valueChanged(double)),
+    connect(d->radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),

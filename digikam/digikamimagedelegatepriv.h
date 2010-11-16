@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class DigikamImageDelegatePrivate : public ImageDelegatePrivate
+class DigikamImageDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
 {
 public:
 
@@ -47,8 +47,10 @@ public:
     {
     }
 
-    void init(DigikamImageDelegate* q, ImageCategorizedView *parent);
+    void init(DigikamImageDelegate* q, ImageCategorizedView* parent);
 };
+
+// -----------------------------------------------------------------------------------------
 
 class DigikamImageFaceDelegatePrivate : public DigikamImageDelegatePrivate
 {
@@ -57,11 +59,9 @@ public:
     DigikamImageFaceDelegatePrivate()
     {
     }
-
 };
-
 
 } // namespace Digikam
 
-#endif
+#endif // DIGIKAMIMAGEDELEGATEPRIV_H
 

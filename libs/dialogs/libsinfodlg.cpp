@@ -144,7 +144,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("Marble Widget"),               KMap::KMapWidget::MarbleWidgetVersion());
 
 #ifdef USE_EXT_LIBPGF
-    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("external shared library"));
+    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("external shared library")));
 #else
     list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("internal library")));
 #endif // USE_EXT_LIBPGF

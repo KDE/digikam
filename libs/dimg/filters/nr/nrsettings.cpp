@@ -215,7 +215,7 @@ NRSettings::NRSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     grid->addWidget(d->advExpanderBox, 0, 0, 1, 2);
-    grid->setRowStretch(1, 10);
+    grid->setRowStretch(0, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 

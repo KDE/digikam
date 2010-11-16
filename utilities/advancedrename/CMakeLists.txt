@@ -1,0 +1,77 @@
+ INCLUDE_DIRECTORIES(
+        ${CMAKE_CURRENT_SOURCE_DIR}/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dialogs
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dimg
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dimg/filters/icc
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dimg/imagehistory
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dmetadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/threadimageio
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/threads
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/themeengine
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/widgets/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/widgets/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/keys
+        ${CMAKE_CURRENT_BINARY_DIR}/../..
+)
+
+ SET(libadvancedrename_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenamedialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenameinput.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenamemanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenameprocessdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenamewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/dynamiclayout.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/highlighter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/modifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/option.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/parseable.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/parseabledialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/parseresults.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/token.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/tooltipcreator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/tooltipdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/defaultrenameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/importrenameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/casemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/defaultvaluemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/rangemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/removedoublesmodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/replacemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/trimmedmodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/uniquemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/cameranameoption.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/databaseoption.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/dbheaderlistitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/dbkeyscollection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/dbkeyselector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/keys/commonkeys.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/keys/metadatakeys.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/keys/positionkeys.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/dateoption.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/directorynameoption.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/filepropertiesoption.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/metadataoption.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/sequencenumberoption.cpp
+)
+
+KDE4_ADD_UI_FILES(libadvancedrename_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/fillmodifierdialogwidget.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/replacemodifierdialogwidget.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/rangemodifierdialogwidget.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/dateoptiondialogwidget.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/sequencenumberoptiondialogwidget.ui
+)
+
+KDE4_ADD_LIBRARY(advancedrename STATIC ${libadvancedrename_SRCS})
+
+
+TARGET_LINK_LIBRARIES(advancedrename ${KEXIV2_LIBRARIES}
+                                     ${KDCRAW_LIBRARIES}
+                                     digikamdatabase
+                     )

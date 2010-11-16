@@ -1323,47 +1323,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
        )
 
-    SET(libadvancedrename_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamedialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenameinput.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamemanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/dynamiclayout.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/highlighter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/modifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/option.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseable.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseabledialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/renamethread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/tooltipcreator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/tooltipdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/defaultrenameparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/importrenameparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/casemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/rangemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/removedoublesmodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/replacemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/uniquemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/cameranameoption.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/databaseoption.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/dbheaderlistitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/dbkeyscollection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/dbkeyselector.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/commonkeys.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/metadatakeys.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/positionkeys.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/dateoption.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/directorynameoption.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/filepropertiesoption.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/metadataoption.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/sequencenumberoption.cpp
-       )
-
     SET(libdigikamgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagscombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagscompletionbox.cpp

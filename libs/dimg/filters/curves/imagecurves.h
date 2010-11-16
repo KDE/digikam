@@ -185,7 +185,7 @@ public:
     ImageCurves::CurveType  curvesType;
     QPolygon                values[ColorChannels];
 
-    bool sixteenBit;
+    bool                    sixteenBit;
 };
 
 
