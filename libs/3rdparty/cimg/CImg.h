@@ -32733,7 +32733,7 @@ namespace cimg_library {
     // Get a 40x38 color logo of a 'danger' item (internal).
     static CImg<T> logo40x38() {
       static bool first_time = true;
-      static CImg<T> res(40,38,1,3);
+      CImg<T> res(40,38,1,3);
       if (first_time) {
         const unsigned char *ptrs = cimg::logo40x38;
         T *ptr1 = res.ptr(0,0,0,0), *ptr2 = res.ptr(0,0,0,1), *ptr3 = res.ptr(0,0,0,2);
