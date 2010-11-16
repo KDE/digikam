@@ -99,6 +99,7 @@ protected Q_SLOTS:
 
     void slotViewIndexActivated(const QModelIndex&);
     void slotLineEditActionActivated(const TaggingAction& action);
+    void slotLineEditActionSelected(const TaggingAction& action);
 
 private:
 

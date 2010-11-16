@@ -83,6 +83,12 @@ public:
     void setTagModel(AlbumFilterModel* model);
 
     /**
+     * A "parent tag" taken into account when suggesting a
+     * parent tag for a new tag, and a default action.
+     */
+    TAlbum *parentTag() const;
+
+    /**
      * Allow the box to expand horizontally over the bounds of the parent widget.
      * Set this flag if the parent widget is relatively small horizontally,
      * but there is space available.
@@ -113,10 +119,9 @@ public Q_SLOTS:
 
     /** Set a "parent tag" taken into account when suggesting a
      *  parent tag for a new tag, and a default action.
-     *  If you set a tag model (setTagModel()), this is taken care for automatically.
      */
-    void setCurrentParentTag(const QModelIndex& index);
-    void setCurrentParentTag(TAlbum* album);
+    void setParentTag(const QModelIndex& index);
+    void setParentTag(TAlbum* album);
 
 Q_SIGNALS:
 

@@ -78,7 +78,9 @@ public:
 
 public Q_SLOTS:
 
-    /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */
+    /** Set a parent tag for suggesting a parent tag for a new tag, and a default action.
+     *  If you set a tag tree view, this is taken care for automatically.
+     */
     void setParentTag(TAlbum* album);
 
 Q_SIGNALS:

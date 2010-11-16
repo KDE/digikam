@@ -316,14 +316,19 @@ TaggingAction AddTagsCompletionBox::currentTaggingAction()
     return TaggingAction();
 }
 
-void AddTagsCompletionBox::setCurrentParentTag(const QModelIndex& index)
+void AddTagsCompletionBox::setParentTag(const QModelIndex& index)
 {
     d->parentTag = static_cast<TAlbum*>(AbstractAlbumModel::retrieveAlbum(index));
 }
 
-void AddTagsCompletionBox::setCurrentParentTag(TAlbum* album)
+void AddTagsCompletionBox::setParentTag(TAlbum* album)
 {
     d->parentTag = album;
+}
+
+TAlbum *AddTagsCompletionBox::parentTag() const
+{
+    return d->parentTag;
 }
 
 void AddTagsCompletionBox::setAllowExceedBounds(bool allow)

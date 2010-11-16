@@ -54,7 +54,7 @@ public:
 
     TagTreeView*     treeView;
     AddTagsLineEdit* lineEdit;
-    TaggingAction    currentTaggingAction;
+    TaggingAction    viewTaggingAction;
 };
 
 // ---------------------------------------------------------------------------------------
@@ -63,6 +63,7 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
                : TagTreeViewSelectComboBox(parent), d(new AddTagsComboBoxPriv)
 {
     QComboBox::setAutoCompletion(false);
+    setInsertPolicy(QComboBox::NoInsert); // dont let Qt interfere when Enter is pressed
     setCloseOnActivate(true);
     setCheckable(false);
 
@@ -73,7 +74,7 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
             this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
 
     connect(d->lineEdit, SIGNAL(taggingActionSelected(const TaggingAction&)),
-            this, SIGNAL(taggingActionSelected(const TaggingAction&)));
+            this, SLOT(slotLineEditActionSelected(const TaggingAction&)));
 
     d->lineEdit->setClearButtonShown(true);
 
@@ -145,7 +146,9 @@ void AddTagsComboBox::setText(const QString& text)
 
 TaggingAction AddTagsComboBox::currentTaggingAction()
 {
-    return d->currentTaggingAction;
+    if (d->viewTaggingAction.isValid())
+        return d->viewTaggingAction;
+    return d->lineEdit->currentTaggingAction();
 }
 
 void AddTagsComboBox::slotViewIndexActivated(const QModelIndex& index)
@@ -155,20 +158,26 @@ void AddTagsComboBox::slotViewIndexActivated(const QModelIndex& index)
     if (album)
     {
         d->lineEdit->setText(album->title());
-        d->currentTaggingAction = TaggingAction(album->id());
+        d->viewTaggingAction = TaggingAction(album->id());
     }
     else
     {
         d->lineEdit->setText(QString());
-        d->currentTaggingAction = TaggingAction();
+        d->viewTaggingAction = TaggingAction();
     }
-    emit taggingActionSelected(d->currentTaggingAction);
+    emit taggingActionSelected(currentTaggingAction());
 }
 
 void AddTagsComboBox::slotLineEditActionActivated(const TaggingAction& action)
 {
-    d->currentTaggingAction = action;
-    emit taggingActionActivated(d->currentTaggingAction);
+    d->viewTaggingAction = TaggingAction();
+    emit taggingActionActivated(action);
+}
+
+void AddTagsComboBox::slotLineEditActionSelected(const TaggingAction& action)
+{
+    d->viewTaggingAction = TaggingAction();
+    emit taggingActionSelected(action);
 }
 
 } // namespace Digikam
