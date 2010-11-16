@@ -413,6 +413,8 @@ bool SchemaUpdater::createDatabase()
         setLegacySettingEntries();
 
         m_currentVersion = schemaVersion();
+        // Digikam for database version 5 can work with version 6, though not using the new features
+        m_currentRequiredVersion = 5;
         return true;
     }
     else
