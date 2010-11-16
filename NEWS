@@ -13,6 +13,7 @@ ImageEditor    : Aspect ratio crop tool is now able to deal with the aspect rati
                  You can keep the original proportions of the image after cropping.
 General        : External depencies to libPGF and Clapack can use used now instead internal implementation
                  if available in host sytem dedicated to compile.
+General        : Fix compilation under Mac OS-X through MAcPorts project.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
