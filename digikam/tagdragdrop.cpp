@@ -38,6 +38,7 @@
 
 #include "albummanager.h"
 #include "ddragobjects.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -106,8 +107,6 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *e,
     }
     else if (DItemDrag::canDecode(e->mimeData()))
     {
-        TAlbum *srcAlbum;
-
         KUrl::List urls;
         KUrl::List kioURLs;
         QList<int> albumIDs;
@@ -119,16 +118,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *e,
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
             return false;
 
-        // all the albumids will be the same
-        int albumID = albumIDs.first();
-        srcAlbum = AlbumManager::instance()->findTAlbum(albumID);
-        if (!srcAlbum)
-        {
-            kWarning() << "Could not find source album of drag";
-            return false;
-        }
-
-        if(srcAlbum == destAlbum)
+        if (imageIDs.size() == 1 && ImageInfo(imageIDs.first()).tagIds().contains(destAlbum->id()))
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
