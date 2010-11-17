@@ -59,6 +59,7 @@ public:
     BatchFaceDetectorPriv()
     {
         rebuildAll          = true;
+        total               = 0;
 
         duration.start();
     }
@@ -66,6 +67,7 @@ public:
     bool         rebuildAll;
 
     QTime        duration;
+    int          total;
 
     AlbumList    albumTodoList;
     ImageInfoJob albumListing;
@@ -170,18 +172,18 @@ void BatchFaceDetector::startAlbumListing()
     // get total count, cached by AlbumManager
     QMap<int, int> palbumCounts = AlbumManager::instance()->getPAlbumsCount();
     QMap<int, int> talbumCounts = AlbumManager::instance()->getTAlbumsCount();
-    int total = 0;
+    d->total = 0;
     foreach (Album *album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
-            total += palbumCounts.value(album->id());
+            d->total += palbumCounts.value(album->id());
         else
             // this is possibly broken of course because we dont know if images have multiple tags,
             // but there's no better solution without expensive operation
-            total += talbumCounts.value(album->id());
+            d->total += talbumCounts.value(album->id());
     }
-    kDebug() << "Total is" << total;
-    setMaximum(total);
+    kDebug() << "Total is" << d->total;
+    setMaximum(d->total);
 
     continueAlbumListing();
 }
@@ -212,6 +214,8 @@ void BatchFaceDetector::complete()
     t = t.addMSecs(d->duration.elapsed());
     setLabel(i18n("<b>Scanning for people completed.</b>"));
     setTitle(i18n("Duration: %1", t.toString()));
+    // set value to be sure in case of scanning for tags and total was too large
+    setValue(d->total);
     setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
     // Pop-up a message to bring user when all is done.
