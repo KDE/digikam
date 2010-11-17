@@ -69,10 +69,8 @@ Tags D&D operations from source to target :
 
 Special actions:
 
-* yes, you can D&D between this view to let's mouse over sidebar button :
-
-1) => 2) : Doesn't work  : Expected result: Tag must be applied to whole album items
-2) => 1) : Doesn't work  : Expected result: Tag must be applied to whole album items
+1) => 2) : Doesn't work  : Expected result: Tag must be applied to whole album items (*)
+2) => 1) : Doesn't work  : Expected result: Tag must be applied to whole album items (*)
 
 6) => 7) : Works fine (tag move)
 7) => 6) : Works fine (tag move)
@@ -86,6 +84,8 @@ Special actions:
 2) => 10) : Doesn't work : Expected result: Items must be add to list
 6) => 10) : Doesn't work : Expected result: Items must be add to list
 7) => 10) : Doesn't work : Expected result: Items must be add to list
+
+(*) You can D&D between these views by dragging the item(s) over the sidebar button, the menu will expand automatically after a while
 
 Unrelevant actions :
 
