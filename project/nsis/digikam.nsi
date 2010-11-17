@@ -85,7 +85,7 @@ Var StartMenuFolder
 
   ;Start Menu Folder Page Configuration
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
-  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${MY_PRODUCT}" 
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${MY_PRODUCT}"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
   !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
@@ -114,15 +114,8 @@ Section "digiKam" SecDigiKam
   ;Whole kde4 directory including digiKam & co
   File /r "${KDE4PATH}"
 
-  ; Extract the KDE4 path dir name. It must be the same in target install dir.
-  ${Explode} $Size "\" ${KDE4PATH}
-  ${For} $1 1 $Size
-      Pop $2
-  ${Next}
-  DirName $2
-
   ;Store installation folder
-  WriteRegStr HKCU "Software\${DirName}" "" $INSTDIR
+  WriteRegStr HKCU "Software\${MY_PRODUCT}" "" $INSTDIR
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -149,6 +142,9 @@ Section "digiKam" SecDigiKam
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${MY_PRODUCT}.lnk" "$INSTDIR\kde4\bin\digikam.exe"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Showfoto.lnk" "$INSTDIR\kde4\bin\showfoto.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\DNGConverter.lnk" "$INSTDIR\kde4\bin\dngconverter.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\ExpoBlending.lnk" "$INSTDIR\kde4\bin\expoblending.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\ScanGui.lnk" "$INSTDIR\kde4\bin\scangui.exe"
     WriteINIStr "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url" "InternetShortcut" "URL" "${PRODUCT_HOMEPAGE}"
 
  !insertmacro MUI_STARTMENU_WRITE_END
@@ -179,7 +175,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\Uninstall.exe"
 
-  RMDir /r "$INSTDIR\kde4"
+  RMDir /r "$INSTDIR\${MY_PRODUCT}"
 
   RMDir "$INSTDIR"
 
