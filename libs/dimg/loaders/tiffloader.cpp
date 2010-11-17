@@ -127,6 +127,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (!tif)
     {
         kDebug() << "Cannot open image file.";
+        loadingFailed();
         return false;
     }
 
@@ -159,6 +160,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file "
                          << filePath;
         TIFFClose(tif);
+        loadingFailed();
         return false;
     }
 
@@ -173,6 +175,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                         << " rows_per_strip " << rows_per_strip
                         << " Loading file " << filePath;
         TIFFClose(tif);
+        loadingFailed();
         return false;
     }
 
@@ -190,6 +193,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kWarning() << "Can not handle image without RGB color-space: "
                         << photometric;
         TIFFClose(tif);
+        loadingFailed();
         return false;
     }
 
@@ -281,6 +285,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 delete[] data;
                 delete[] strip;
                 TIFFClose(tif);
+                loadingFailed();
                 return false;
             }
             long offset    = 0;
@@ -298,6 +303,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                         delete [] data;
                         delete [] strip;
                         TIFFClose(tif);
+                        loadingFailed();
                         return false;
                     }
                     observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)st)/((float)num_of_strips) )));
@@ -310,6 +316,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     kDebug() << "Failed to read strip";
                     delete [] data;
                     TIFFClose(tif);
+                    loadingFailed();
                     return false;
                 }
 
@@ -513,6 +520,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 delete[] data;
                 delete[] strip;
                 TIFFClose(tif);
+                loadingFailed();
                 return false;
             }
             long offset     = 0;
@@ -534,6 +542,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 delete [] data;
                 delete [] strip;
                 TIFFClose(tif);
+                loadingFailed();
                 return false;
             }
 
@@ -550,6 +559,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                         delete [] data;
                         delete [] strip;
                         TIFFClose(tif);
+                        loadingFailed();
                         return false;
                     }
                     observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)row)/((float)h) )));
@@ -571,6 +581,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     delete [] data;
                     delete [] strip;
                     TIFFClose(tif);
+                    loadingFailed();
                     return false;
                 }
 

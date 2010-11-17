@@ -100,9 +100,16 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings,
              data, width, height, rgbmax))
+        {
+            loadingFailed();
             return false;
+        }
 
-        return (loadedFromDcraw(data, width, height, rgbmax, observer));
+        if (!loadedFromDcraw(data, width, height, rgbmax, observer))
+        {
+            loadingFailed();
+            return false;
+        }
     }
     else
     {
@@ -116,6 +123,8 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         imageSetAttribute("originalBitDepth", 16);
         return true;
     }
+
+    return true;
 }
 
 bool RAWLoader::checkToCancelWaitingData()

@@ -69,13 +69,17 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
+    {
+        loadingFailed();
         return false;
+    }
 
     unsigned char header[9];
 
     if (fread(&header, 9, 1, file) != 1)
     {
         fclose(file);
+        loadingFailed();
         return false;
     }
 
@@ -87,6 +91,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         // not a jpeg2000 file
         fclose(file);
+        loadingFailed();
         return false;
     }
 
@@ -124,6 +129,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (init != 0)
     {
         kDebug() << "Unable to init JPEG2000 decoder";
+        loadingFailed();
         return false;
     }
 
@@ -131,6 +137,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (jp2_stream == 0)
     {
         kDebug() << "Unable to open JPEG2000 stream";
+        loadingFailed();
         return false;
     }
 
@@ -139,6 +146,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         jas_stream_close(jp2_stream);
         kDebug() << "Unable to decode JPEG2000 image";
+        loadingFailed();
         return false;
     }
 
@@ -163,6 +171,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             {
                 jas_image_destroy(jp2_image);
                 kDebug() << "Error parsing JPEG2000 image : Missing Image Channel";
+                loadingFailed();
                 return false;
             }
 
@@ -183,6 +192,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             {
                 jas_image_destroy(jp2_image);
                 kDebug() << "Error parsing JP2000 image : Missing Image Channel";
+                loadingFailed();
                 return false;
             }
             number_components = 1;
@@ -198,6 +208,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             {
                 jas_image_destroy(jp2_image);
                 kDebug() << "Error parsing JP2000 image : Missing Image Channel";
+                loadingFailed();
                 return false;
             }
             number_components = 3;
@@ -215,6 +226,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jas_image_destroy(jp2_image);
             kDebug() << "Error parsing JP2000 image : Colorspace Model Is Not Supported";
+            loadingFailed();
             return false;
         }
     }
@@ -237,6 +249,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jas_image_destroy(jp2_image);
             kDebug() << "Error parsing JPEG2000 image : Irregular Channel Geometry Not Supported";
+            loadingFailed();
             return false;
         }
 
@@ -259,6 +272,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jas_image_destroy(jp2_image);
             kDebug() << "Error decoding JPEG2000 image data : Memory Allocation Failed";
+            loadingFailed();
             return false;
         }
     }
@@ -294,6 +308,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 jas_matrix_destroy(pixels[i]);
 
             jas_cleanup();
+            loadingFailed();
             return false;
         }
 
@@ -318,6 +333,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                         jas_matrix_destroy(pixels[i]);
 
                     jas_cleanup();
+                    loadingFailed();
                     return false;
                 }
             }
@@ -426,6 +442,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                     jas_cleanup();
 
+                    loadingFailed();
                     return false;
                 }
                 observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)y)/((float)imageHeight()) )));

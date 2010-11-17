@@ -75,6 +75,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (!file)
     {
         kDebug() << "Cannot open image file.";
+        loadingFailed();
         return false;
     }
 
@@ -84,6 +85,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         kDebug() << "Cannot read header of file.";
         fclose(file);
+        loadingFailed();
         return false;
     }
 
@@ -92,6 +94,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         kDebug() << "Not a PPM file.";
         fclose(file);
+        loadingFailed();
         return false;
     }
 
@@ -100,6 +103,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         kDebug() << "Not a PPM file.";
         fclose(file);
+        loadingFailed();
         return false;
     }
 
@@ -108,14 +112,16 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4)
     {
         kDebug() << "Corrupted PPM file.";
-        pclose (file);
+        fclose (file);
+        loadingFailed();
         return false;
     }
 
     if (rgbmax <= 255)
     {
         kDebug() << "Not a 16 bits per color per pixel PPM file.";
-        pclose (file);
+        fclose (file);
+        loadingFailed();
         return false;
     }
 
@@ -131,6 +137,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             kDebug() << "Failed to allocate memory for loading" << filePath;
             fclose(file);
+            loadingFailed();
             return false;
         }
 
@@ -152,7 +159,8 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 if (!observer->continueQuery(m_image))
                 {
                     delete [] data;
-                    pclose( file );
+                    fclose( file );
+                    loadingFailed();
                     return false;
                 }
                 observer->progressInfo(m_image, 0.1 + (0.9 * ( ((float)h)/((float)height) )));
