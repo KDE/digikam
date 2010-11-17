@@ -53,6 +53,19 @@ public:
         Deactivating
     };
 
+    /**
+     * Deriving from a worker object allows you to execute your slots in a thread.
+     * Implement any slots and connect signals just as usual.
+     * Call schedule() before or when signals are emitted. The object
+     * will have moved to a thread when the signals are received by the slots.
+     * Call deactivate() to stop computation.
+     * Note that without calling schedule(), no signal will ever be processed.
+     * You can use the connectAndSchedule convenience connection to avoid
+     * having to call schedule() directly.
+     * Note that you cannot make this QObject the child of another QObject.
+     * Please check if you need to call shutDown from your destructor (see below).
+     */
+
     WorkerObject();
     ~WorkerObject();
 
@@ -135,6 +148,22 @@ protected:
      * thread which will cause the event loop to quit. (aboutToQuitLoop())
      */
     virtual void aboutToDeactivate();
+
+    /**
+     * If you are deleting data in your destructor which is accessed from the thread,
+     * do one of the following from your destructor to guarantee a safe shutdown:
+     * 1) Call this method
+     * 2) Call stop() and wait(), knowing that nothing will
+     *    call start() anymore after this
+     * 3) Be sure the thread will never be running at destruction.
+     * Note: This irrevocably stops this object.
+     * Note: It is not sufficient that your parent class does this.
+     * Calling this method, or providing one of the above mentioned
+     * equivalent guarantees, must be done by every
+     * single last class in the hierarchy with an implemented destructor deleting data.
+     * (the base class destructor is always called after the derived class)
+     */
+    void shutDown();
 
 private:
 
