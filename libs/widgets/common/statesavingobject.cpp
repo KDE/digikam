@@ -115,7 +115,7 @@ public:
 
         if (depth == StateSavingObject::DIRECT_CHILDREN)
         {
-            kDebug() << "Also restoring " << action << " of direct children";
+            //kDebug() << "Also restoring " << action << " of direct children";
             for (QObjectList::const_iterator childIt = host->children().begin(); childIt
                             != host->children().end(); ++childIt)
             {
@@ -136,8 +136,7 @@ public:
         }
         else if (depth == StateSavingObject::RECURSIVE)
         {
-            kDebug() << "Also " << action
-                            << " state of all children (recursive)";
+            //kDebug() << "Also " << action << " state of all children (recursive)";
             recurse(host->children(), save);
         }
 
@@ -171,7 +170,7 @@ void StateSavingObject::setStateSavingDepth(StateSavingObject::StateSavingDepth 
 
 void StateSavingObject::setConfigGroup(KConfigGroup group)
 {
-    kDebug() << "received new config group: " << group.name();
+    //kDebug() << "received new config group: " << group.name();
     d->group = group;
     d->groupSet = true;
 }

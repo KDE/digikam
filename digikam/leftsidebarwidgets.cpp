@@ -132,7 +132,6 @@ void AlbumFolderViewSideBarWidget::doSaveState()
 
 void AlbumFolderViewSideBarWidget::applySettings()
 {
-    kDebug() << "applying settings";
     AlbumSettings *settings = AlbumSettings::instance();
     d->albumFolderView->setEnableToolTips(settings->getShowAlbumToolTips());
 }
@@ -149,8 +148,6 @@ AlbumPointer<PAlbum> AlbumFolderViewSideBarWidget::currentAlbum() const
 
 void AlbumFolderViewSideBarWidget::setCurrentAlbum(PAlbum* album)
 {
-    kDebug() << "received request to go to album and item";
-
     // Change the current album in list view.
     d->albumFolderView->setCurrentAlbum(album);
 }
@@ -838,7 +835,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* parent, SearchModel* searchMod
             d->searchTabHeader, SLOT(selectedSearchChanged(Album*)));
 
     connect(d->searchTabHeader, SIGNAL(searchShallBeSelected(SAlbum*)),
-            d->searchTreeView, SLOT(slotSelectSAlbum(SAlbum*)));
+            d->searchTreeView, SLOT(setCurrentAlbum(SAlbum*)));
 }
 
 SearchSideBarWidget::~SearchSideBarWidget()
@@ -939,7 +936,6 @@ FuzzySearchSideBarWidget::~FuzzySearchSideBarWidget()
 
 void FuzzySearchSideBarWidget::setActive(bool active)
 {
-    kDebug() << "active = " << active;
     d->fuzzySearchView->setActive(active);
     if (active)
     {
@@ -1116,9 +1112,6 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
-
-    connect(d->tagFolderView, SIGNAL(currentAlbumChanged(Album*)),
-            this, SLOT(slotAlbumSelected(Album*)));
 
     d->tagFolderView->filteredModel()->listOnlyTagsWithProperty("person");
     d->tagFolderView->filteredModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);

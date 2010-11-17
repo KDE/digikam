@@ -464,11 +464,16 @@ void ItemViewImageDelegate::prepareMetrics(int maxWidth)
 void ItemViewImageDelegate::prepareBackground()
 {
     Q_D(ItemViewImageDelegate);
-    d->regPixmap = ThemeEngine::instance()->thumbRegPixmap(d->rect.width(),
-                                                           d->rect.height());
-
-    d->selPixmap = ThemeEngine::instance()->thumbSelPixmap(d->rect.width(),
-                                                           d->rect.height());
+    if (!d->rect.isValid())
+    {
+        d->regPixmap = QPixmap();
+        d->selPixmap = QPixmap();
+    }
+    else
+    {
+        d->regPixmap = ThemeEngine::instance()->thumbRegPixmap(d->rect.width(), d->rect.height());
+        d->selPixmap = ThemeEngine::instance()->thumbSelPixmap(d->rect.width(), d->rect.height());
+    }
 }
 
 void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
@@ -476,6 +481,10 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
     /// Please call this method after prepareBackground() and when d->ratingPixmap is set
 
     Q_D(ItemViewImageDelegate);
+
+    if (!d->ratingRect.isValid())
+        return;
+
     // We use antialiasing and want to pre-render the pixmaps.
     // So we need the background at the time of painting,
     // and the background may be a gradient, and will be different for selected items.

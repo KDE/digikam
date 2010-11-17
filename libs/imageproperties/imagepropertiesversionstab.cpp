@@ -107,7 +107,7 @@ void ImagePropertiesVersionsTab::slotDigikamViewImageSelected(const ImageInfoLis
 
     QString path;
 
-    kDebug() << "Getting data for versions model";
+    //kDebug() << "Getting data for versions model";
     d->versionsList->clear();
 
     foreach(ImageInfo inf, selectedImage)
@@ -214,8 +214,8 @@ void ImagePropertiesVersionsTab::setupFiltersData() const
 void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
 {
     qlonglong selectedImage = ImageInfo(url).id();
-    qlonglong current;
-    qlonglong newOne;
+    qlonglong current = 0;
+    qlonglong newOne = 0;
 
     for(int i = 0; i < d->versionsList->size(); i++)
     {
@@ -257,7 +257,7 @@ void ImagePropertiesVersionsTab::slotUpdateImageInfo(const ImageInfo& info)
 {
     QString path;
 
-    kDebug() << "Getting data for versions model";
+    //kDebug() << "Getting data for versions model";
     d->versionsList->clear();
     d->filtersHistoryWidget->clearData();
 
