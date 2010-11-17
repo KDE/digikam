@@ -43,29 +43,31 @@ class ImageThumbnailModelPriv
 {
 public:
 
-    ImageThumbnailModelPriv()
+    ImageThumbnailModelPriv() :
+        thread(0),
+        preloadThread(0),
+        thumbSize(0),
+        lastGlobalThumbSize(0),
+        preloadThumbSize(0),
+        emitDataChanged(true),
+        exifRotate(true)
     {
-        thread              = 0;
-        preloadThread       = 0;
-        thumbSize           = 0;
-        lastGlobalThumbSize = 0;
-        preloadThumbSize    = 0;
-        emitDataChanged     = true;
-        exifRotate          = true;
     }
 
-    ThumbnailLoadThread       *thread;
-    ThumbnailLoadThread       *preloadThread;
-    ThumbnailSize              thumbSize;
-    ThumbnailSize              lastGlobalThumbSize;
-    ThumbnailSize              preloadThumbSize;
-    bool                       emitDataChanged;
-    bool                       exifRotate;
+    ThumbnailLoadThread* thread;
+    ThumbnailLoadThread* preloadThread;
+    ThumbnailSize        thumbSize;
+    ThumbnailSize        lastGlobalThumbSize;
+    ThumbnailSize        preloadThumbSize;
+    bool                 emitDataChanged;
+    bool                 exifRotate;
 
     int preloadThumbnailSize() const
     {
         if (preloadThumbSize.size())
+        {
             return preloadThumbSize.size();
+        }
         return thumbSize.size();
     }
 };
@@ -143,9 +145,13 @@ void ImageThumbnailModel::setExifRotate(bool rotate)
 {
     d->exifRotate = rotate;
     if (d->thread)
+    {
         d->thread->setExifRotate(rotate);
+    }
     if (d->preloadThread)
+    {
         d->preloadThread->setExifRotate(rotate);
+    }
 }
 
 void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
@@ -156,7 +162,9 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
 void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize)
 {
     if (!d->thread)
+    {
         return;
+    }
 
     QStringList filePaths;
     foreach(const QModelIndex& index, indexesToPrepare)
@@ -169,7 +177,9 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
 void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
 {
     if (!d->preloadThread)
+    {
         return;
+    }
 
     QStringList filePaths;
     foreach(const ImageInfo& info, infos)
@@ -183,7 +193,9 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
 void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
 {
     if (!d->preloadThread)
+    {
         return;
+    }
 
     QStringList filePaths;
     foreach(const QModelIndex& index, infos)
@@ -202,7 +214,9 @@ void ImageThumbnailModel::preloadAllThumbnails()
 void ImageThumbnailModel::imageInfosCleared()
 {
     if (d->preloadThread)
+    {
         d->preloadThread->stopAllTasks();
+    }
 }
 
 QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
@@ -213,7 +227,9 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         ImageInfo info = imageInfoRef(index);
         QString path = info.filePath();
         if (d->thread->find(path, thumbnail, d->thumbSize.size()))
+        {
             return thumbnail;
+        }
         else
         {
             return QVariant(QVariant::Pixmap);
@@ -242,13 +258,17 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
 void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
     if (thumb.isNull())
+    {
         return;
+    }
     QModelIndex changed = indexForPath(loadingDescription.filePath);
     if (changed.isValid())
     {
         emit thumbnailAvailable(changed, loadingDescription.previewParameters.size);
         if (d->emitDataChanged)
+        {
             emit dataChanged(changed, changed);
+        }
     }
 }
 
