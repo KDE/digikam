@@ -188,6 +188,7 @@ bool ThumbnailSchemaUpdater::createDatabase()
          && createTriggers())
     {
         m_currentVersion = schemaVersion();
+        m_currentRequiredVersion = 1;
         return true;
     }
     else
