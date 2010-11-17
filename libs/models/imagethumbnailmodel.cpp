@@ -227,9 +227,14 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
     if (role == ThumbnailRole && d->thread)
     {
         if (value.isNull())
+        {
             d->thumbSize = d->lastGlobalThumbSize;
+        }
         else
-            d->thumbSize = value.toInt();
+        {
+            d->thumbSize           = value.toInt();
+            d->lastGlobalThumbSize = d->thumbSize;
+        }
     }
     return ImageModel::setData(index, value, role);
 }
