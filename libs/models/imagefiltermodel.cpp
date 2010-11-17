@@ -210,18 +210,15 @@ ImageFilterModelPrivate::~ImageFilterModelPrivate()
 {
     // facilitate thread stopping
     ++version;
-    preparer->shutDown();
-    filterer->shutDown();
+    preparer->deactivate();
+    filterer->deactivate();
     delete preparer;
     delete filterer;
 }
 
 ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModelPrivate* d)
-                      : d(d) // do not install d as QObject parent, moveToThread wont work then
+                      : d(d)
 {
-    thread = new Thread(this);
-    moveToThread(thread);
-    thread->start();
 }
 
 const int PrepareChunkSize = 101;
@@ -566,6 +563,13 @@ void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos)
 
 void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd)
 {
+    if (infos.isEmpty())
+        return;
+
+    filterer->schedule();
+    if (needPrepare)
+        preparer->schedule();
+
     // prepare and filter in chunks
     const int size                      = infos.size();
     const int maxChunkSize              = needPrepare ? PrepareChunkSize : FilterChunkSize;
@@ -635,6 +639,8 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage&
         q->invalidate(); // use invalidate, not invalidateFilter only. Sorting may have changed as well.
         emit q->filterMatches(hasOneMatch);
         emit q->filterMatchesForText(hasOneMatchForText);
+        filterer->deactivate();
+        preparer->deactivate();
     }
 }
 
@@ -644,6 +650,7 @@ void ImageFilterModelPrivate::packageDiscarded(const ImageFilterModelTodoPackage
     // In the former case throw all away, in the latter case, recycle
     if (package.version > lastDiscardVersion)
     {
+        // Recycle packages: Send again with current version
         // Do not increment sentOut or sentOutForReAdd here: it was not decremented!
 
         if (needPrepare)
