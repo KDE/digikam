@@ -111,9 +111,9 @@ void ImageVersionsModel::setupModelData(QList<QPair<QString, int> >& data)
     {
         d->data->append(data);
     }
-    else 
+    else
     {
-        d->data->append(qMakePair(QString(i18n("This is original image")), 0));
+        d->data->append(qMakePair(QString(i18n("This is the original image")), 0));
     }
 
     endResetModel();

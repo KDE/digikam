@@ -121,7 +121,7 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
             // but it needs to be delayed a little, so that all thumbs
             // have enough time to get painted correctly
             delayedAnimationTimerStop();
-            
+
         }
     }
     else
@@ -147,7 +147,7 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     }
     else if(index.row() == 0 && index.model()->rowCount() == 1)
     {
-        painter->drawText(textRect, Qt::AlignVCenter, i18n("This is original image"));
+        painter->drawText(textRect, Qt::AlignVCenter, i18n("This is the original image"));
     }
     else
     {
