@@ -44,5 +44,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 189454 : Preview images react strange to mouse movement.
 026 ==> 257134 : digiKam crashes when entering its settings.
 027 ==> 257103 : Can't save images modified with Image editor.
-028 ==>
-
+028 ==> 247175 : digiKam doesn't exit after closing main window.
+029 ==>
