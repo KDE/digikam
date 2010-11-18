@@ -1421,6 +1421,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface
         ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
         ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
         ${CMAKE_CURRENT_SOURCE_DIR}/themedesigner
