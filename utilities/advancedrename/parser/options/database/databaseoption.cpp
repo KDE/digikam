@@ -161,7 +161,10 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
 
     DbKeysCollection* dbkey = 0;
     dbkey = m_map.value(keyword);
-    if (!dbkey) return QString();
+    if (!dbkey)
+    {
+        return QString();
+    }
 
     return dbkey->getValue(keyword, settings);
 }
