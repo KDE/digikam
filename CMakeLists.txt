@@ -1357,6 +1357,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters
