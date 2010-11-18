@@ -46,25 +46,25 @@ class JPEGSettingsPriv
 
 public:
 
-    JPEGSettingsPriv()
+    JPEGSettingsPriv() :
+        JPEGGrid(0),
+        labelJPEGcompression(0),
+        labelWarning(0),
+        labelSubSampling(0),
+        subSamplingCB(0),
+        JPEGcompression(0)
     {
-        JPEGGrid             = 0;
-        labelJPEGcompression = 0;
-        JPEGcompression      = 0;
-        labelWarning         = 0;
-        labelSubSampling     = 0;
-        subSamplingCB        = 0;
     }
 
-    QGridLayout  *JPEGGrid;
+    QGridLayout*  JPEGGrid;
 
-    QLabel       *labelJPEGcompression;
-    QLabel       *labelWarning;
-    QLabel       *labelSubSampling;
+    QLabel*       labelJPEGcompression;
+    QLabel*       labelWarning;
+    QLabel*       labelSubSampling;
 
-    KComboBox    *subSamplingCB;
+    KComboBox*    subSamplingCB;
 
-    KIntNumInput *JPEGcompression;
+    KIntNumInput* JPEGcompression;
 };
 
 JPEGSettings::JPEGSettings(QWidget *parent)

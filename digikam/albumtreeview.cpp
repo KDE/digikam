@@ -66,7 +66,9 @@ static QList<A*> selectedAlbums(QItemSelectionModel *selModel, AlbumFilterModel 
     QList<QModelIndex> indexes = selModel->selectedIndexes();
     QList<A*> albums;
     foreach (const QModelIndex& index, indexes)
+    {
         albums << static_cast<A*>(filterModel->albumForIndex(index));
+    }
     return albums;
 }
 

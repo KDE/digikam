@@ -75,7 +75,7 @@ DynamicLayout::DynamicLayout(int margin, int hSpacing, int vSpacing)
 
 DynamicLayout::~DynamicLayout()
 {
-    QLayoutItem *item;
+    QLayoutItem* item;
     while ((item = takeAt(0)))
     {
         delete item;

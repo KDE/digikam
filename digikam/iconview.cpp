@@ -263,7 +263,9 @@ IconItem* IconView::findItem(const QPoint& pos)
             foreach(IconItem *item, c->items)
             {
                 if (item->rect().contains(pos))
+                {
                     return item;
+                }
             }
         }
     }
@@ -385,12 +387,16 @@ void IconView::clearSelection()
 
     QSet<IconItem*> selItems = d->selectedItems;
     foreach(IconItem *item, selItems)
+    {
         item->setSelected(false, false);
+    }
 
     d->selectedItems.clear();
 
     if (!wasBlocked)
+    {
         blockSignals(false);
+    }
 
     emit signalSelectionChanged();
 }
@@ -400,7 +406,9 @@ void IconView::selectAll()
     bool wasBlocked = signalsBlocked();
 
     if (!wasBlocked)
+    {
         blockSignals(true);
+    }
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
@@ -411,7 +419,9 @@ void IconView::selectAll()
     }
 
     if (!wasBlocked)
+    {
         blockSignals(false);
+    }
 
     emit signalSelectionChanged();
 }
@@ -421,7 +431,9 @@ void IconView::invertSelection()
     bool wasBlocked = signalsBlocked();
 
     if (!wasBlocked)
+    {
         blockSignals(true);
+    }
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
@@ -436,7 +448,9 @@ void IconView::invertSelection()
     }
 
     if (!wasBlocked)
+    {
         blockSignals(false);
+    }
 
     emit signalSelectionChanged();
 }
@@ -444,7 +458,9 @@ void IconView::invertSelection()
 void IconView::selectItem(IconItem* item, bool select)
 {
     if (!item)
+    {
         return;
+    }
 
     if (select)
     {
@@ -466,7 +482,9 @@ void IconView::setStoredVisibleItem(IconItem *item)
 void IconView::insertGroup(IconGroupItem* group)
 {
     if (!group)
+    {
         return;
+    }
 
     if (!d->firstGroup)
     {
@@ -490,7 +508,9 @@ void IconView::insertGroup(IconGroupItem* group)
 void IconView::takeGroup(IconGroupItem* group)
 {
     if (!group)
+    {
         return;
+    }
 
     // this is only to find an alternative visible item if all visible items
     // are removed
@@ -501,18 +521,26 @@ void IconView::takeGroup(IconGroupItem* group)
     {
         d->firstGroup = d->firstGroup->m_next;
         if (d->firstGroup)
+        {
             d->firstGroup->m_prev = 0;
+        }
         else
+        {
             d->firstGroup = d->lastGroup = 0;
+        }
         alternativeVisibleGroup = d->firstGroup;
     }
     else if (group == d->lastGroup)
     {
         d->lastGroup = d->lastGroup->m_prev;
-        if ( d->lastGroup )
+        if (d->lastGroup)
+        {
             d->lastGroup->m_next = 0;
+        }
         else
+        {
             d->firstGroup = d->lastGroup = 0;
+        }
         alternativeVisibleGroup = d->lastGroup->m_prev;
     }
     else
@@ -520,15 +548,23 @@ void IconView::takeGroup(IconGroupItem* group)
         IconGroupItem *i = group;
         if (i)
         {
-            if (i->m_prev )
+            if (i->m_prev)
+            {
                 i->m_prev->m_next = i->m_next;
-            if ( i->m_next )
+            }
+            if (i->m_next)
+            {
                 i->m_next->m_prev = i->m_prev;
+            }
 
             if (i->m_prev)
+            {
                 alternativeVisibleGroup = i->m_prev;
+            }
             else
+            {
                 alternativeVisibleGroup = i->m_next;
+            }
         }
     }
 
@@ -547,7 +583,9 @@ void IconView::takeGroup(IconGroupItem* group)
 void IconView::insertItem(IconItem* item)
 {
     if (!item)
+    {
         return;
+    }
 
     d->storedVisibleItem = findFirstVisibleItem();
     startRearrangeTimer();
@@ -556,7 +594,9 @@ void IconView::insertItem(IconItem* item)
 void IconView::takeItem(IconItem* item)
 {
     if (!item)
+    {
         return;
+    }
 
     // First remove item from any containers holding it
     IconViewPriv::ItemContainer *tmp = d->firstContainer;
@@ -580,7 +620,9 @@ void IconView::takeItem(IconItem* item)
     }
 
     if (d->highlightedItem == item)
+    {
         d->highlightedItem = 0;
+    }
 
     if (d->ratingItem == item)
     {
@@ -595,8 +637,10 @@ void IconView::takeItem(IconItem* item)
     {
         d->currItem = item->nextItem();
         if (!d->currItem)
+        {
             d->currItem = item->prevItem();
         // defer calling d->currItem->setSelected (and emitting the signals) to slotRearrange
+        }
     }
 
     d->anchorItem = d->currItem;
@@ -605,7 +649,9 @@ void IconView::takeItem(IconItem* item)
     {
         d->storedVisibleItem = findFirstVisibleItem();
         if (d->storedVisibleItem == item)
+        {
             d->storedVisibleItem = d->currItem;
+        }
         startRearrangeTimer();
     }
 }
@@ -622,9 +668,13 @@ void IconView::setDelayedRearrangement(bool delayed)
     // but not from the same event queue thread stack location, it may be desirable to delay
     // the rearrangeTimer a bit
     if (delayed)
+    {
         d->rearrangeTimerInterval = 50;
+    }
     else
+    {
         d->rearrangeTimerInterval = 0;
+    }
 }
 
 void IconView::startRearrangeTimer()
@@ -654,32 +704,40 @@ void IconView::sort()
     IconGroupItem *group = d->firstGroup;
     int i = 0;
 
-    for ( ; group; group = group->m_next )
-        groups[ i++ ].group = group;
+    for (; group; group = group->m_next)
+    {
+        groups[i++].group = group;
+    }
 
     qsort( groups, gcount, sizeof( IconViewPriv::SortableItem ), cmpItems );
 
     IconGroupItem *prev = 0;
     group = 0;
 
-    for ( i = 0; i < (int)gcount; ++i )
+    for (i = 0; i < (int) gcount; ++i)
     {
-        group = groups[ i ].group;
-        if ( group )
+        group = groups[i].group;
+        if (group)
         {
             group->m_prev = prev;
 
-            if ( group->m_prev )
+            if (group->m_prev)
+            {
                 group->m_prev->m_next = group;
+            }
 
             group->m_next = 0;
         }
 
-        if ( i == 0 )
+        if (i == 0)
+        {
             d->firstGroup = group;
+        }
 
-        if ( i == (int)gcount - 1 )
+        if (i == (int) gcount - 1)
+        {
             d->lastGroup = group;
+        }
         prev = group;
     }
 
@@ -715,7 +773,9 @@ void IconView::slotRearrange()
     {
         // set the currItem to first item
         if (d->firstGroup)
+        {
             d->currItem = d->firstGroup->firstItem();
+        }
     }
     d->anchorItem = d->currItem;
 
@@ -1411,7 +1471,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->currItem = firstItem();
                 if (tmp)
                     tmp->repaint();
-                
+
                 // select items: anchor until before firstItem
                 // block signals while selecting all except the firstItem
                 blockSignals(true);
@@ -1420,7 +1480,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                     i->setSelected(true, false);
                 }
                 blockSignals(false);
-                
+
                 // select the firstItem with signals enabled to ensure updates
                 firstItem()->setSelected(true, false);
             }
@@ -1431,11 +1491,11 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->anchorItem = d->currItem;
                 if (tmp)
                     tmp->repaint();
-                
+
                 // select only the first item
                 firstItem()->setSelected(true, true);
             }
-            
+
             ensureItemVisible(firstItem());
             handled = true;
             break;
@@ -1449,7 +1509,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->currItem = lastItem();
                 if (tmp)
                     tmp->repaint();
-                
+
                 // select items: current until lastItem
                 // block signals while selecting all except the lastItem
                 blockSignals(true);
@@ -1458,7 +1518,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                     i->setSelected(true, false);
                 }
                 blockSignals(false);
-                
+
                 // select the lastItem with signals enabled to ensure updates
                 lastItem()->setSelected(true, false);
             }
@@ -1469,7 +1529,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->anchorItem = d->currItem;
                 if (tmp)
                     tmp->repaint();
-                
+
                 lastItem()->setSelected(true, true);
             }
             ensureItemVisible(lastItem());

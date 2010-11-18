@@ -97,7 +97,9 @@ void MetadataManager::assignTags(const QList<int>& ids, const QList<int>& tagIDs
     {
         ImageInfo info(id);
         if (!info.isNull())
+        {
             infos << info;
+        }
     }
     assignTags(infos, tagIDs);
 }
@@ -350,7 +352,7 @@ void MetadataManagerDatabaseWorker::removeTags(const QList<ImageInfo>& infos, co
     changeTags(infos, tagIDs, false);
 }
 
-void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos, 
+void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
                                                                 const QList<int>& tagIDs, bool addOrRemove)
 {
     MetadataHub      hub;

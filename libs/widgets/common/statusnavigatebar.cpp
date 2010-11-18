@@ -42,21 +42,21 @@ class StatusNavigateBarPriv
 {
 public:
 
-    StatusNavigateBarPriv()
+    StatusNavigateBarPriv() :
+        itemType(StatusNavigateBar::ItemCurrent),
+        firstButton(0),
+        prevButton(0),
+        nextButton(0),
+        lastButton(0)
     {
-        firstButton = 0;
-        prevButton  = 0;
-        nextButton  = 0;
-        lastButton  = 0;
-        itemType    = StatusNavigateBar::ItemCurrent;
     }
 
     int          itemType;
 
-    QToolButton *firstButton;
-    QToolButton *prevButton;
-    QToolButton *nextButton;
-    QToolButton *lastButton;
+    QToolButton* firstButton;
+    QToolButton* prevButton;
+    QToolButton* nextButton;
+    QToolButton* lastButton;
 };
 
 StatusNavigateBar::StatusNavigateBar(QWidget *parent)

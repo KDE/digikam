@@ -85,15 +85,15 @@ private:
 
     int                     m_currentVersion;
 
-    DatabaseBackend         *m_Backend;
-    AlbumDB                 *m_AlbumDB;
+    DatabaseBackend*        m_Backend;
+    AlbumDB*                m_AlbumDB;
     DatabaseParameters      m_Parameters;
 
     // legacy
-    DatabaseAccess          *m_access;
+    DatabaseAccess*         m_access;
 
     QString                 m_LastErrorMessage;
-    InitializationObserver *m_observer;
+    InitializationObserver* m_observer;
 };
 
 }  // namespace Digikam

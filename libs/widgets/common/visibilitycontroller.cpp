@@ -30,15 +30,15 @@ class VisibilityControllerPriv
 {
 public:
 
-    VisibilityControllerPriv()
+    VisibilityControllerPriv() :
+        status(VisibilityController::Unknown),
+        containerWidget(0)
     {
-        status          = VisibilityController::Unknown;
-        containerWidget = 0;
     }
 
     VisibilityController::Status  status;
     QList<VisibilityObject *>     objects;
-    QWidget                      *containerWidget;
+    QWidget*                      containerWidget;
 };
 
 class VisibilityWidgetWrapper : public QObject, public VisibilityObject
@@ -60,7 +60,7 @@ public:
         return m_widget->isVisible();
     }
 
-    QWidget *m_widget;
+    QWidget* m_widget;
 };
 
 VisibilityController::VisibilityController(QObject *parent)

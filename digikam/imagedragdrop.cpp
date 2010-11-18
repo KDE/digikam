@@ -420,7 +420,9 @@ QMimeData *ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexe
     }
 
     if (urls.isEmpty())
+    {
         return 0;
+    }
 
     return new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
 }

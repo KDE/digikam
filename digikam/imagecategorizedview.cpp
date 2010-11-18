@@ -279,7 +279,9 @@ KUrl::List ImageCategorizedView::urls() const
     QList<ImageInfo> infos = imageInfos();
     KUrl::List urls;
     foreach (const ImageInfo& info, infos)
+    {
         urls << info.fileUrl();
+    }
     return urls;
 }
 
@@ -288,7 +290,9 @@ KUrl::List ImageCategorizedView::selectedUrls() const
     QList<ImageInfo> infos = selectedImageInfos();
     KUrl::List urls;
     foreach (const ImageInfo& info, infos)
+    {
         urls << info.fileUrl();
+    }
     return urls;
 }
 
@@ -302,7 +306,9 @@ ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo &startingPoint, int 
 {
     QModelIndex index = d->filterModel->indexForImageInfo(startingPoint);
     if (!index.isValid())
+    {
         return ImageInfo();
+    }
     return d->filterModel->imageInfo(d->filterModel->index(index.row() + nth, 0, QModelIndex()));
 }
 

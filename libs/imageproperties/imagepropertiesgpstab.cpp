@@ -57,54 +57,57 @@ class ImagePropertiesGPSTabPriv
 
 public:
 
-    ImagePropertiesGPSTabPriv()
-    {
-        detailsBtn   = 0;
-        detailsCombo = 0;
-        map          = 0;
-        altLabel     = 0;
-        latLabel     = 0;
-        lonLabel     = 0;
-        dateLabel    = 0;
-        altitude     = 0;
-        latitude     = 0;
-        longitude    = 0;
-        date         = 0;
-        zoomInBtn    = 0;
-        zoomOutBtn   = 0;
-        mapThemeBtn  = 0;
+    ImagePropertiesGPSTabPriv() :
+        altLabel(0),
+        latLabel(0),
+        lonLabel(0),
+        dateLabel(0),
+        detailsBtn(0),
+        zoomInBtn(0),
+        zoomOutBtn(0),
+
 #ifdef HAVE_MARBLEWIDGET
 #if MARBLE_VERSION >= 0x000800
-        panBtn       = 0;
-        clusterZoomBtn = 0;
+        panBtn(0),
+        clusterZoomBtn(0),
 #endif // MARBLE_VERSION >= 0x000800
 #endif // HAVE_MARBLEWIDGET
+
+        detailsCombo(0),
+        altitude(0),
+        latitude(0),
+        longitude(0),
+        date(0),
+        map(0),
+        mapThemeBtn(0)
+    {
     }
 
-    QLabel             *altLabel;
-    QLabel             *latLabel;
-    QLabel             *lonLabel;
-    QLabel             *dateLabel;
+    QLabel*             altLabel;
+    QLabel*             latLabel;
+    QLabel*             lonLabel;
+    QLabel*             dateLabel;
 
-    QToolButton        *detailsBtn;
-    QToolButton        *zoomInBtn;
-    QToolButton        *zoomOutBtn;
+    QToolButton*        detailsBtn;
+    QToolButton*        zoomInBtn;
+    QToolButton*        zoomOutBtn;
+
 #ifdef HAVE_MARBLEWIDGET
 #if MARBLE_VERSION >= 0x000800
-    QToolButton        *panBtn;
-    QToolButton        *clusterZoomBtn;
+    QToolButton*        panBtn;
+    QToolButton*        clusterZoomBtn;
 #endif // MARBLE_VERSION >= 0x000800
 #endif // HAVE_MARBLEWIDGET
 
-    KComboBox          *detailsCombo;
+    KComboBox*          detailsCombo;
 
-    KSqueezedTextLabel *altitude;
-    KSqueezedTextLabel *latitude;
-    KSqueezedTextLabel *longitude;
-    KSqueezedTextLabel *date;
+    KSqueezedTextLabel* altitude;
+    KSqueezedTextLabel* latitude;
+    KSqueezedTextLabel* longitude;
+    KSqueezedTextLabel* date;
 
-    WorldMapWidget     *map;
-    WorldMapThemeBtn   *mapThemeBtn;
+    WorldMapWidget*     map;
+    WorldMapThemeBtn*   mapThemeBtn;
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)

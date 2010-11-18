@@ -57,7 +57,7 @@ AlbumDragDropHandler::AlbumDragDropHandler(AlbumModel *model)
 
 bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex& droppedOn)
 {
-    if(accepts(e, droppedOn) == Qt::IgnoreAction)
+    if (accepts(e, droppedOn) == Qt::IgnoreAction)
         return false;
 
     PAlbum *destAlbum = model()->albumForIndex(droppedOn);
@@ -85,7 +85,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
         popMenu.setMouseTracking(true);
         QAction *choice = popMenu.exec(QCursor::pos());
 
-        if(choice == moveAction)
+        if (choice == moveAction)
         {
             KIO::Job* job = DIO::move(droppedAlbum, destAlbum);
             connect(job, SIGNAL(result(KJob*)),
@@ -124,7 +124,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
             }
         }
 
-        if(extUrls.isEmpty())
+        if (extUrls.isEmpty())
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
@@ -148,7 +148,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
                 set = (setAction == choice);
             }
 
-            if(set)
+            if (set)
             {
                 QString errMsg;
                 AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
@@ -262,10 +262,10 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
         {
             KMenu popMenu(view);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
-            QAction *copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
+            QAction *moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
+            QAction *copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
             popMenu.addSeparator();
-            popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+            popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
             QAction *choice = popMenu.exec(QCursor::pos());
             if (choice == copyAction)
@@ -316,11 +316,11 @@ Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent *e, const QModelIn
             return Qt::IgnoreAction;
 
         // Dragging an item on itself makes no sense
-        if(droppedAlbum == destAlbum)
+        if (droppedAlbum == destAlbum)
             return Qt::IgnoreAction;
 
         // Dragging a parent on its child makes no sense
-        if(droppedAlbum->isAncestorOf(destAlbum))
+        if (droppedAlbum->isAncestorOf(destAlbum))
             return Qt::IgnoreAction;
 
         return Qt::MoveAction;

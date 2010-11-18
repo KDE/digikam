@@ -48,19 +48,19 @@
 #include <kdatepicker.h>
 #include <kdeversion.h>
 #include <khbox.h>
+#include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
 #include <ktextedit.h>
 #include <kurl.h>
-#include <kstandarddirs.h>
-#include <kiconloader.h>
 
 // Local includes
 
-#include "album.h"
 #include "albumdb.h"
+#include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
@@ -73,26 +73,23 @@ class AlbumPropsEditPriv
 
 public:
 
-    AlbumPropsEditPriv()
+    AlbumPropsEditPriv() :
+        categoryCombo(0),
+        titleEdit(0),
+        commentsEdit(0),
+        datePicker(0),
+        album(0)
     {
-        titleEdit     = 0;
-        categoryCombo = 0;
-        commentsEdit  = 0;
-        datePicker    = 0;
-        album         = 0;
     }
 
     QStringList  albumCollections;
 
-    KComboBox   *categoryCombo;
+    KComboBox*   categoryCombo;
+    KLineEdit*   titleEdit;
+    KTextEdit*   commentsEdit;
+    KDatePicker* datePicker;
 
-    KLineEdit   *titleEdit;
-
-    KTextEdit   *commentsEdit;
-
-    KDatePicker *datePicker;
-
-    PAlbum      *album;
+    PAlbum*      album;
 };
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
@@ -106,16 +103,12 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     d->album = album;
 
-    QWidget *page = new QWidget(this);
-    setMainWidget(page);
-
-    QGridLayout *grid = new QGridLayout(page);
-
-    QLabel *logo      = new QLabel(page);
+    QWidget* page = new QWidget(this);
+    QLabel* logo  = new QLabel(page);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                             .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    QLabel *topLabel  = new QLabel( page );
+    QLabel* topLabel = new QLabel(page);
     if (create)
     {
         topLabel->setText(i18n("<qt><b>Create new Album in<br/>\"<i>%1</i>\"</b></qt>", album->title()));
@@ -129,13 +122,13 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new QFrame(page);
+    QFrame* topLine = new QFrame(page);
     topLine->setFrameShape(QFrame::HLine);
     topLine->setFrameShadow(QFrame::Sunken);
 
     // --------------------------------------------------------
 
-    QLabel *titleLabel = new QLabel(page);
+    QLabel* titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
     d->titleEdit = new KLineEdit(page);
@@ -143,17 +136,17 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     titleLabel->setBuddy(d->titleEdit);
 
     QRegExp titleRx("[^/]+");
-    QValidator *titleValidator = new QRegExpValidator(titleRx, this);
+    QValidator* titleValidator = new QRegExpValidator(titleRx, this);
     d->titleEdit->setValidator(titleValidator);
 
-    QLabel *categoryLabel = new QLabel(page);
+    QLabel* categoryLabel = new QLabel(page);
     categoryLabel->setText(i18n("Ca&tegory:"));
 
     d->categoryCombo = new KComboBox(page);
     d->categoryCombo->setEditable(true);
     categoryLabel->setBuddy(d->categoryCombo);
 
-    QLabel *commentsLabel = new QLabel(page);
+    QLabel* commentsLabel = new QLabel(page);
     commentsLabel->setText(i18n("Ca&ption:"));
 
     d->commentsEdit = new KTextEdit(page);
@@ -161,18 +154,18 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     d->commentsEdit->setCheckSpellingEnabled(true);
     d->commentsEdit->setWordWrapMode(QTextOption::WordWrap);
 
-    QLabel *dateLabel = new QLabel(page);
+    QLabel* dateLabel = new QLabel(page);
     dateLabel->setText(i18n("Album &date:"));
 
     d->datePicker = new KDatePicker(page);
     dateLabel->setBuddy(d->datePicker);
 
-    KHBox *buttonRow            = new KHBox(page);
-    QPushButton *dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image",
+    KHBox* buttonRow            = new KHBox(page);
+    QPushButton* dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image",
                                                   "&Oldest"), buttonRow);
-    QPushButton *dateAvgButton  = new QPushButton(i18nc("Calculates the average date",
+    QPushButton* dateAvgButton  = new QPushButton(i18nc("Calculates the average date",
                                                   "&Average"), buttonRow);
-    QPushButton *dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
+    QPushButton* dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
                                                   "Newest"), buttonRow);
 
     setTabOrder(d->titleEdit, d->categoryCombo);
@@ -184,6 +177,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // --------------------------------------------------------
 
+    QGridLayout* grid = new QGridLayout();
     grid->addWidget(logo,             0, 0, 1, 1);
     grid->addWidget(topLabel,         0, 1, 1, 1);
     grid->addWidget(topLine,          1, 0, 1, 2);
@@ -198,18 +192,19 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     grid->addWidget(buttonRow,        6, 1, 1, 1);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
+    page->setLayout(grid);
 
     // Initialize ---------------------------------------------
 
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (settings)
     {
         d->categoryCombo->addItem(QString());
         QStringList Categories = settings->getAlbumCategoryNames();
         d->categoryCombo->addItems(Categories);
-        int categoryIndex    = Categories.indexOf( album->category() );
+        int categoryIndex = Categories.indexOf(album->category());
 
-        if ( categoryIndex != -1 )
+        if (categoryIndex != -1)
         {
             // + 1 because of the empty item
             d->categoryCombo->setCurrentIndex(categoryIndex + 1);
@@ -218,14 +213,14 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     if (create)
     {
-        d->titleEdit->setText( i18n("New Album") );
-        d->datePicker->setDate( QDate::currentDate() );
+        d->titleEdit->setText(i18n("New Album"));
+        d->datePicker->setDate(QDate::currentDate());
     }
     else
     {
-        d->titleEdit->setText( album->title() );
-        d->commentsEdit->setText( album->caption() );
-        d->datePicker->setDate( album->date() );
+        d->titleEdit->setText(album->title());
+        d->commentsEdit->setText(album->caption());
+        d->datePicker->setDate(album->date());
     }
 
     // -- slots connections -------------------------------------------
@@ -233,16 +228,18 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
 
-    connect(dateLowButton, SIGNAL( clicked() ),
+    connect(dateLowButton, SIGNAL(clicked()),
             this, SLOT( slotDateLowButtonClicked()));
 
-    connect(dateAvgButton, SIGNAL( clicked() ),
+    connect(dateAvgButton, SIGNAL(clicked()),
             this, SLOT( slotDateAverageButtonClicked()));
 
-    connect(dateHighButton, SIGNAL( clicked() ),
+    connect(dateHighButton, SIGNAL(clicked()),
             this, SLOT( slotDateHighButtonClicked()));
 
-    adjustSize();
+    // --------------------------------------------------------
+
+    setMainWidget(page);
 }
 
 AlbumPropsEdit::~AlbumPropsEdit()
@@ -271,7 +268,7 @@ QString AlbumPropsEdit::category() const
 
     if (name.isEmpty())
     {
-        name = i18n( "Uncategorized Album" );
+        name = i18n("Uncategorized Album");
     }
 
     return name;
@@ -280,14 +277,14 @@ QString AlbumPropsEdit::category() const
 QStringList AlbumPropsEdit::albumCategories() const
 {
     QStringList Categories;
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (settings)
     {
         Categories = settings->getAlbumCategoryNames();
     }
 
     QString currentCategory = d->categoryCombo->currentText();
-    if ( Categories.indexOf( currentCategory ) == -1 )
+    if (Categories.indexOf(currentCategory) == -1)
     {
         Categories.append(currentCategory);
     }
@@ -296,7 +293,7 @@ QStringList AlbumPropsEdit::albumCategories() const
     return Categories;
 }
 
-bool AlbumPropsEdit::editProps(PAlbum *album, QString& title,
+bool AlbumPropsEdit::editProps(PAlbum* album, QString& title,
                                QString& comments, QDate& date, QString& category,
                                QStringList& albumCategories)
 {
@@ -314,7 +311,7 @@ bool AlbumPropsEdit::editProps(PAlbum *album, QString& title,
     return ok;
 }
 
-bool AlbumPropsEdit::createNew(PAlbum *parent, QString& title, QString& comments,
+bool AlbumPropsEdit::createNew(PAlbum* parent, QString& title, QString& comments,
                                QDate& date, QString& category, QStringList& albumCategories)
 {
     QPointer<AlbumPropsEdit> dlg = new AlbumPropsEdit(parent, true);
@@ -340,42 +337,50 @@ void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
 
 void AlbumPropsEdit::slotDateLowButtonClicked()
 {
-    setCursor( Qt::WaitCursor );
+    setCursor(Qt::WaitCursor);
 
-    QDate lowDate = DatabaseAccess().db()->getAlbumLowestDate( d->album->id() );
+    QDate lowDate = DatabaseAccess().db()->getAlbumLowestDate(d->album->id());
 
-    setCursor( Qt::ArrowCursor );
+    setCursor(Qt::ArrowCursor);
 
-    if ( lowDate.isValid() )
-        d->datePicker->setDate( lowDate );
+    if (lowDate.isValid())
+    {
+        d->datePicker->setDate(lowDate);
+    }
 }
 
 void AlbumPropsEdit::slotDateHighButtonClicked()
 {
-    setCursor( Qt::WaitCursor );
+    setCursor(Qt::WaitCursor);
 
-    QDate highDate = DatabaseAccess().db()->getAlbumHighestDate( d->album->id() );
+    QDate highDate = DatabaseAccess().db()->getAlbumHighestDate(d->album->id());
 
-    setCursor( Qt::ArrowCursor );
+    setCursor(Qt::ArrowCursor);
 
-    if ( highDate.isValid() )
-        d->datePicker->setDate( highDate );
+    if (highDate.isValid())
+    {
+        d->datePicker->setDate(highDate);
+    }
 }
 
 void AlbumPropsEdit::slotDateAverageButtonClicked()
 {
-    setCursor( Qt::WaitCursor );
+    setCursor(Qt::WaitCursor);
 
-    QDate avDate = DatabaseAccess().db()->getAlbumAverageDate( d->album->id() );
+    QDate avDate = DatabaseAccess().db()->getAlbumAverageDate(d->album->id());
 
-    setCursor( Qt::ArrowCursor );
+    setCursor(Qt::ArrowCursor);
 
-    if ( avDate.isValid() )
-        d->datePicker->setDate( avDate );
+    if (avDate.isValid())
+    {
+        d->datePicker->setDate(avDate);
+    }
     else
+    {
         KMessageBox::error(this,
                            i18n("Could not calculate an average."),
                            i18n("Could Not Calculate Average"));
+    }
 }
 
 }  // namespace Digikam

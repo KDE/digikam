@@ -134,7 +134,9 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool delete
     }
 
     if (urlList.count() <= 0)
+    {
         return false;
+    }
 
     DeleteDialog dialog(m_widget);
 
@@ -143,7 +145,9 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool delete
                                   deletePermanently ?
                                   DeleteDialogMode::NoChoiceDeletePermanently :
                                   DeleteDialogMode::NoChoiceTrash))
+    {
         return false;
+    }
 
     bool useTrash = !dialog.shouldDelete();
 
@@ -176,7 +180,9 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, boo
     }
 
     if (kioUrlList.count() <= 0)
+    {
         return;
+    }
 
     // trash does not like non-local URLs, put is not implemented
 

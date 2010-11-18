@@ -53,39 +53,39 @@ class DCategorizedViewPriv
 {
 public:
 
-    DCategorizedViewPriv()
-        : mimeTypeCutSelection("application/x-kde-cutselection")
+    DCategorizedViewPriv() :
+        delegate(0),
+        toolTip(0),
+        showToolTip(false),
+        usePointingHand(true),
+        scrollStepFactor(10),
+        currentMouseEvent(0),
+        ensureOneSelectedItem(false),
+        ensureInitialSelectedItem(false),
+        hintAtSelectionRow(-1),
+        mimeTypeCutSelection("application/x-kde-cutselection")
     {
-        delegate           = 0;
-        toolTip            = 0;
-        currentMouseEvent  = 0;
-        showToolTip        = false;
-        usePointingHand    = true;
-        scrollStepFactor   = 10;
-        ensureOneSelectedItem     = false;
-        ensureInitialSelectedItem = false;
-        hintAtSelectionRow = -1;
     }
 
-    DItemDelegate           *delegate;
-    ItemViewToolTip         *toolTip;
-    bool                     showToolTip;
-    bool                     usePointingHand;
-    int                      scrollStepFactor;
+    DItemDelegate*        delegate;
+    ItemViewToolTip*      toolTip;
+    bool                  showToolTip;
+    bool                  usePointingHand;
+    int                   scrollStepFactor;
 
-    QMouseEvent             *currentMouseEvent;
-    bool                     ensureOneSelectedItem;
-    bool                     ensureInitialSelectedItem;
-    QPersistentModelIndex    hintAtSelectionIndex;
-    int                      hintAtSelectionRow;
+    QMouseEvent*          currentMouseEvent;
+    bool                  ensureOneSelectedItem;
+    bool                  ensureInitialSelectedItem;
+    QPersistentModelIndex hintAtSelectionIndex;
+    int                   hintAtSelectionRow;
 
-    const QString            mimeTypeCutSelection;
+    const QString         mimeTypeCutSelection;
 };
 
 // -------------------------------------------------------------------------------
 
 DCategorizedView::DCategorizedView(QWidget *parent)
-                    : KCategorizedView(parent), d(new DCategorizedViewPriv)
+                : KCategorizedView(parent), d(new DCategorizedViewPriv)
 {
     setViewMode(QListView::IconMode);
     setLayoutDirection(Qt::LeftToRight);
@@ -311,7 +311,7 @@ void DCategorizedView::slotActivated(const QModelIndex& index)
         const bool rightClick = d->currentMouseEvent->button() & Qt::RightButton;
         if(rightClick)
             return;
-        
+
         // if the activation is caused by mouse click (not keyboard)
         // we need to check the hot area
         if (!d->delegate->acceptsActivation(d->currentMouseEvent->pos(), visualRect(index), index))
@@ -653,7 +653,8 @@ void DCategorizedView::keyPressEvent(QKeyEvent *event)
                          && (selModel->selectedIndexes().count() > 0);
     if (trigger) {
         const QModelIndexList indexList = selModel->selectedIndexes();
-        foreach (const QModelIndex& index, indexList) {
+        foreach (const QModelIndex& index, indexList)
+        {
             emit itemTriggered(itemForIndex(index));
         }
     }

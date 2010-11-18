@@ -64,21 +64,18 @@ public:
         XMP
     };
 
-    ImagePropertiesMetadataTabPriv()
+    ImagePropertiesMetadataTabPriv() :
+        exifWidget(0),
+        makernoteWidget(0),
+        iptcWidget(0),
+        xmpWidget(0)
     {
-        exifWidget      = 0;
-        makernoteWidget = 0;
-        iptcWidget      = 0;
-        xmpWidget       = 0;
     }
 
-    ExifWidget      *exifWidget;
-
-    MakerNoteWidget *makernoteWidget;
-
-    IptcWidget      *iptcWidget;
-
-    XmpWidget       *xmpWidget;
+    ExifWidget*      exifWidget;
+    MakerNoteWidget* makernoteWidget;
+    IptcWidget*      iptcWidget;
+    XmpWidget*       xmpWidget;
 };
 
 ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent)

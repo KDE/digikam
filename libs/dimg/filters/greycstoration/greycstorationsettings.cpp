@@ -53,72 +53,72 @@ class GreycstorationSettings::GreycstorationSettingsPriv
 
 public:
 
-    GreycstorationSettingsPriv()
+    GreycstorationSettingsPriv() :
+        alphaLabel(0),
+        amplitudeLabel(0),
+        anisotropyLabel(0),
+        btileLabel(0),
+        daLabel(0),
+        dlLabel(0),
+        gaussianPrecLabel(0),
+        interpolationLabel(0),
+        iterationLabel(0),
+        sharpnessLabel(0),
+        sigmaLabel(0),
+        tileLabel(0),
+        advancedPage(0),
+        generalPage(0),
+        fastApproxCBox(0),
+        parent(0),
+        interpolationBox(0),
+        alphaInput(0),
+        amplitudeInput(0),
+        anisotropyInput(0),
+        daInput(0),
+        dlInput(0),
+        gaussianPrecInput(0),
+        sharpnessInput(0),
+        sigmaInput(0),
+        btileInput(0),
+        iterationInput(0),
+        tileInput(0)
     {
-        parent             = 0;
-        advancedPage       = 0;
-        alphaInput         = 0;
-        alphaLabel         = 0;
-        amplitudeInput     = 0;
-        amplitudeLabel     = 0;
-        anisotropyInput    = 0;
-        anisotropyLabel    = 0;
-        btileInput         = 0;
-        btileLabel         = 0;
-        daInput            = 0;
-        daLabel            = 0;
-        dlInput            = 0;
-        dlLabel            = 0;
-        fastApproxCBox     = 0;
-        gaussianPrecInput  = 0;
-        gaussianPrecLabel  = 0;
-        generalPage        = 0;
-        interpolationBox   = 0;
-        interpolationLabel = 0;
-        iterationInput     = 0;
-        iterationLabel     = 0;
-        sharpnessInput     = 0;
-        sharpnessLabel     = 0;
-        sigmaInput         = 0;
-        sigmaLabel         = 0;
-        tileInput          = 0;
-        tileLabel          = 0;
     }
 
-    QLabel          *alphaLabel;
-    QLabel          *amplitudeLabel;
-    QLabel          *anisotropyLabel;
-    QLabel          *btileLabel;
-    QLabel          *daLabel;
-    QLabel          *dlLabel;
-    QLabel          *gaussianPrecLabel;
-    QLabel          *interpolationLabel;
-    QLabel          *iterationLabel;
-    QLabel          *sharpnessLabel;
-    QLabel          *sigmaLabel;
-    QLabel          *tileLabel;
+    QLabel*          alphaLabel;
+    QLabel*          amplitudeLabel;
+    QLabel*          anisotropyLabel;
+    QLabel*          btileLabel;
+    QLabel*          daLabel;
+    QLabel*          dlLabel;
+    QLabel*          gaussianPrecLabel;
+    QLabel*          interpolationLabel;
+    QLabel*          iterationLabel;
+    QLabel*          sharpnessLabel;
+    QLabel*          sigmaLabel;
+    QLabel*          tileLabel;
 
-    QWidget         *advancedPage;
-    QWidget         *generalPage;
+    QWidget*         advancedPage;
+    QWidget*         generalPage;
 
-    QCheckBox       *fastApproxCBox;
+    QCheckBox*       fastApproxCBox;
 
-    KTabWidget      *parent;
+    KTabWidget*      parent;
 
-    RComboBox       *interpolationBox;
+    RComboBox*       interpolationBox;
 
-    RDoubleNumInput *alphaInput;
-    RDoubleNumInput *amplitudeInput;
-    RDoubleNumInput *anisotropyInput;
-    RDoubleNumInput *daInput;
-    RDoubleNumInput *dlInput;
-    RDoubleNumInput *gaussianPrecInput;
-    RDoubleNumInput *sharpnessInput;
-    RDoubleNumInput *sigmaInput;
+    RDoubleNumInput* alphaInput;
+    RDoubleNumInput* amplitudeInput;
+    RDoubleNumInput* anisotropyInput;
+    RDoubleNumInput* daInput;
+    RDoubleNumInput* dlInput;
+    RDoubleNumInput* gaussianPrecInput;
+    RDoubleNumInput* sharpnessInput;
+    RDoubleNumInput* sigmaInput;
 
-    RIntNumInput    *btileInput;
-    RIntNumInput    *iterationInput;
-    RIntNumInput    *tileInput;
+    RIntNumInput*    btileInput;
+    RIntNumInput*    iterationInput;
+    RIntNumInput*    tileInput;
 };
 
 GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)

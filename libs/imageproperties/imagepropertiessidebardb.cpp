@@ -61,25 +61,23 @@ class ImagePropertiesSideBarDBPriv
 {
 public:
 
-    ImagePropertiesSideBarDBPriv()
+    ImagePropertiesSideBarDBPriv() :
+        dirtyDesceditTab(false),
+        hasPrevious(false),
+        hasNext(false),
+        hasImageInfoOwnership(false),
+        desceditTab(0)
     {
-        desceditTab           = 0;
-        dirtyDesceditTab      = false;
-        hasPrevious           = false;
-        hasNext               = false;
-        hasImageInfoOwnership = false;
     }
 
     bool                  dirtyDesceditTab;
+    bool                  hasPrevious;
+    bool                  hasNext;
+    bool                  hasImageInfoOwnership;
 
     ImageInfoList         currentInfos;
 
-    ImageDescEditTab     *desceditTab;
-
-    bool                  hasPrevious;
-    bool                  hasNext;
-
-    bool                  hasImageInfoOwnership;
+    ImageDescEditTab*     desceditTab;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplitter *splitter,
@@ -317,7 +315,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             GPSInfoList list;
-            for (ImageInfoList::const_iterator it = d->currentInfos.constBegin(); 
+            for (ImageInfoList::const_iterator it = d->currentInfos.constBegin();
                  it != d->currentInfos.constEnd(); ++it)
             {
                 ImagePosition pos = (*it).imagePosition();

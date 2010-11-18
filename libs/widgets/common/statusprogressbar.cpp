@@ -52,21 +52,19 @@ public:
         ProgressBar
     };
 
-    StatusProgressBarPriv()
+    StatusProgressBarPriv() :
+        progressWidget(0),
+        cancelButton(0),
+        progressBar(0),
+        textLabel(0)
     {
-        textLabel      = 0;
-        progressBar    = 0;
-        progressWidget = 0;
-        cancelButton   = 0;
     }
 
-    QWidget            *progressWidget;
+    QWidget*            progressWidget;
+    QPushButton*        cancelButton;
+    QProgressBar*       progressBar;
 
-    QPushButton        *cancelButton;
-
-    QProgressBar       *progressBar;
-
-    KSqueezedTextLabel *textLabel;
+    KSqueezedTextLabel* textLabel;
 };
 
 StatusProgressBar::StatusProgressBar(QWidget *parent)
@@ -77,7 +75,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
 
     d->textLabel      = new KSqueezedTextLabel(this);
     d->progressWidget = new QWidget(this);
-    QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
+    QHBoxLayout* hBox = new QHBoxLayout(d->progressWidget);
     d->progressBar    = new QProgressBar(d->progressWidget);
     d->cancelButton   = new QPushButton(d->progressWidget);
     d->cancelButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));

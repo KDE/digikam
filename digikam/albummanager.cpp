@@ -623,7 +623,9 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     }
 
     foreach (const QString& addedDirectory, d->dirWatchAddedDirs)
+    {
         d->dirWatch->removeDir(addedDirectory);
+    }
     d->dirWatchAddedDirs.clear();
 
     QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FileMoved", 0, 0);
@@ -1063,7 +1065,9 @@ void AlbumManager::startScan()
     // create albums for album roots
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
     foreach(const CollectionLocation& location, locations)
+    {
         addAlbumRoot(location);
+    }
 
     // listen to location status changes
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),

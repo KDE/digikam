@@ -67,9 +67,9 @@ public:
     QString                       databaseId;
     QString                       applicationId;
 
-    Digikam_DatabaseWatchAdaptor *adaptor;
+    Digikam_DatabaseWatchAdaptor* adaptor;
 
-    DBusSignalListenerThread     *slaveThread;
+    DBusSignalListenerThread*     slaveThread;
 
     void connectWithDBus(const char *dbusSignal, QObject *obj, const char *slot,
                          QDBusConnection connection = QDBusConnection::sessionBus())
@@ -125,8 +125,8 @@ public:
 
 private:
 
-    DatabaseWatch *q;
-    DatabaseWatchPriv *d;
+    DatabaseWatch*     q;
+    DatabaseWatchPriv* d;
 };
 
 #include "databasewatch.moc"

@@ -93,7 +93,9 @@ void ImageAttributesWatch::slotImageChange(const ImageChangeset& changeset)
 void ImageAttributesWatch::slotImageTagChange(const ImageTagChangeset& changeset)
 {
     foreach (const qlonglong& imageId, changeset.ids())
+    {
         emit signalImageTagsChanged(imageId);
+    }
 }
 
 /*

@@ -102,21 +102,21 @@ public:
 
     bool                   blinkFlag;
 
-    QWidget               *regionBox;
+    QWidget*               regionBox;
 
-    QButtonGroup          *regionBG;
+    QButtonGroup*          regionBG;
 
-    QSpinBox              *minInterv;
-    QSpinBox              *maxInterv;
+    QSpinBox*              minInterv;
+    QSpinBox*              maxInterv;
 
-    DTextLabelValue       *labelMeanValue;
-    DTextLabelValue       *labelPixelsValue;
-    DTextLabelValue       *labelStdDevValue;
-    DTextLabelValue       *labelCountValue;
-    DTextLabelValue       *labelMedianValue;
-    DTextLabelValue       *labelPercentileValue;
-    DTextLabelValue       *labelColorDepth;
-    DTextLabelValue       *labelAlphaChannel;
+    DTextLabelValue*       labelMeanValue;
+    DTextLabelValue*       labelPixelsValue;
+    DTextLabelValue*       labelStdDevValue;
+    DTextLabelValue*       labelCountValue;
+    DTextLabelValue*       labelMedianValue;
+    DTextLabelValue*       labelPercentileValue;
+    DTextLabelValue*       labelColorDepth;
+    DTextLabelValue*       labelAlphaChannel;
 
     QString                currentFilePath;
     LoadingDescription     currentLoadingDescription;
@@ -128,10 +128,10 @@ public:
     DImg                   image;
     DImg                   imageSelection;
 
-    ICCProfileWidget      *iccProfileWidget;
-    SharedLoadSaveThread  *imageLoaderThread;
+    ICCProfileWidget*      iccProfileWidget;
+    SharedLoadSaveThread*  imageLoaderThread;
 
-    HistogramBox          *histogramBox;
+    HistogramBox*          histogramBox;
 };
 
 ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)

@@ -65,20 +65,28 @@ static TaggingAction makeDefaultTaggingAction(const QString& text, int parentTag
     if (!tagIds.isEmpty())
     {
         if (tagIds.count() == 1)
+        {
             return TaggingAction(tagIds.first());
+        }
         else
         {
             int tagId = 0;
             if (parentTagId)
+            {
                 tagId = TagsCache::instance()->tagForName(text, parentTagId);
+            }
             if (!tagId)
+            {
                 tagId = TagsCache::instance()->tagForName(text); // toplevel tag
+            }
             if (!tagId)
             {
                 // sort lexically
                 QMap<QString, int> map;
                 foreach (int id, tagIds)
+                {
                     map[TagsCache::instance()->tagPath(id, TagsCache::NoLeadingSlash)] = id;
+                }
                 tagId = map.begin().value();
             }
             return TaggingAction(tagId);
@@ -133,10 +141,10 @@ public:
         TaggingActionRole  = Qt::UserRole + 1
     };
 
-    AddTagsCompletionBoxPriv()
+    AddTagsCompletionBoxPriv() :
+        upwardBox(false),
+        model(0)
     {
-        upwardBox = false;
-        model     = 0;
     }
 
     bool upwardBox;
@@ -172,7 +180,9 @@ void AddTagsCompletionBox::setTagModel(TagModel* model)
 AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum, bool uniqueName)
 {
     if (!talbum || talbum->isRoot())
+    {
         return 0;
+    }
 
     AddTagsCompletionBoxItem *item = new AddTagsCompletionBoxItem;
 
@@ -204,7 +214,9 @@ AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForNewTag(const QS
 
     // If tag exists, do not add an entry to create it
     if (TagsCache::instance()->tagForName(newName, parentTagId))
+    {
         return 0;
+    }
 
     AddTagsCompletionBoxItem *item = new AddTagsCompletionBoxItem;
 
@@ -245,7 +257,9 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
         {
             AddTagsCompletionBoxItem* item = d->createItemForExistingTag(AlbumManager::instance()->findTAlbum(tagId), uniqueName);
             if (!item)
+            {
                 continue;
+            }
             assignItems << item;
         }
     }
@@ -258,7 +272,9 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
             addItem(createItemUnderParent);
             setCurrentItem(createItemUnderParent);
             foreach (AddTagsCompletionBoxItem* item, assignItems)
+            {
                 addItem(item);
+            }
             addItem(createItemTopLevel);
         }
         else if (createItemTopLevel && createItemTopLevel->action() == defaultAction)
@@ -266,7 +282,9 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
             addItem(createItemTopLevel);
             setCurrentItem(createItemTopLevel);
             foreach (AddTagsCompletionBoxItem* item, assignItems)
+            {
                 addItem(item);
+            }
             addItem(createItemUnderParent);
         }
     }
@@ -276,14 +294,18 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
         {
             addItem(item);
             if (defaultAction == item->action())
+            {
                 setCurrentItem(item);
+            }
         }
         addItem(createItemUnderParent);
         addItem(createItemTopLevel);
     }
 
     if (isVisible() && size().height() != sizeHint().height())
+    {
         sizeAndPosition();
+    }
 }
 
 /*
@@ -305,7 +327,9 @@ QString AddTagsCompletionBox::currentCompletionText() const
 {
     QListWidgetItem* current = currentItem();
     if (current)
+    {
         return current->data(AddTagsCompletionBoxPriv::CompletionTextRole).toString();
+    }
     return QString();
 }
 
@@ -313,7 +337,9 @@ TaggingAction AddTagsCompletionBox::currentTaggingAction()
 {
     AddTagsCompletionBoxItem* current = static_cast<AddTagsCompletionBoxItem*>(currentItem());
     if (current)
+    {
         return current->action();
+    }
     return TaggingAction();
 }
 
@@ -330,7 +356,9 @@ void AddTagsCompletionBox::setCurrentParentTag(TAlbum* album)
 void AddTagsCompletionBox::slotItemActivated(QListWidgetItem* item)
 {
     if (item)
+    {
         emit completionActivated(item->data(Qt::UserRole).toString());
+    }
 }
 
 void AddTagsCompletionBox::slotCurrentItemChanged(QListWidgetItem* current, QListWidgetItem*)
@@ -375,23 +403,30 @@ void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
 
             //kDebug() << orig << screenSize << y << height() << screenSize.bottom() << (y + height() > screenSize.bottom());
 
-            if ( x + width() > screenSize.right() )
+            if (x + width() > screenSize.right())
+            {
                 x = screenSize.right() - width();
-            if (y + height() > screenSize.bottom() )
+            }
+
+            if (y + height() > screenSize.bottom())
             {
                 y = y - height() - parentWidget()->height();
                 d->upwardBox = true;
             }
             else
+            {
                 d->upwardBox = false;
+            }
         }
         else
         {
             // Are we above our parent? If so we must keep bottom edge anchored.
             if (d->upwardBox)
+            {
                 y += (currentGeom - height());
+            }
         }
-        move( x, y);
+        move(x, y);
     }
 }
 
@@ -399,9 +434,11 @@ QRect AddTagsCompletionBox::calculateGeometry() const
 {
     // Solution in kdelibs is suboptimal for our needs
     if (!count())
+    {
         return QRect();
+    }
     QSize itemSizeHint;
-    for (int i=0; i<count(); i++)
+    for (int i = 0; i < count(); i++)
     {
         if (item(i)->flags() & Qt::ItemIsSelectable)
         {
@@ -410,7 +447,9 @@ QRect AddTagsCompletionBox::calculateGeometry() const
         }
     }
     if (!itemSizeHint.isValid() || itemSizeHint.isNull())
+    {
         return QRect();
+    }
 
     const int frameHeight = 2*frameWidth();
     int maxHeight         = d->maximumAvailableScreenHeight(globalPositionHint());
@@ -420,7 +459,10 @@ QRect AddTagsCompletionBox::calculateGeometry() const
 
     int w = KListWidget::minimumSizeHint().width();
     if (parentWidget())
+    {
         w = qMax(parentWidget()->width(), KListWidget::minimumSizeHint().width());
+    }
+
     return QRect(0, 0, w, h);
 }
 
@@ -435,8 +477,10 @@ void AddTagsCompletionBox::setVisible( bool visible )
 
 void AddTagsCompletionBox::popup()
 {
-    if ( count() == 0 )
+    if (count() == 0)
+    {
         hide();
+    }
     else
     {
         /*bool block = signalsBlocked();
@@ -444,10 +488,14 @@ void AddTagsCompletionBox::popup()
         setCurrentRow( -1 );
         blockSignals( block );
         clearSelection();*/
-        if ( !isVisible() )
+        if (!isVisible())
+        {
             show();
-        else if ( size().height() != sizeHint().height() )
+        }
+        else if (size().height() != sizeHint().height())
+        {
             sizeAndPosition(isVisible());
+        }
     }
 }
 
@@ -461,7 +509,9 @@ int AddTagsCompletionBoxPriv::maximumAvailableScreenHeight(const QPoint &orig)
     QRect screenSize = QApplication::desktop()->availableGeometry(orig);
     //kDebug() << screenSize << orig << qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
     if (!screenSize.contains(orig))
+    {
         return screenSize.height(); // bail out
+    }
     return qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
 }
 
@@ -469,12 +519,12 @@ class AddTagsLineEditPriv
 {
 public:
 
-    AddTagsLineEditPriv()
+    AddTagsLineEditPriv() :
+        completion(0),
+        completionBox(0),
+        tagModel(0),
+        tagView(0)
     {
-        completion    = 0;
-        completionBox = 0;
-        tagModel      = 0;
-        tagView       = 0;
     }
 
     TagModelCompletion*   completion;
@@ -545,8 +595,11 @@ void AddTagsLineEdit::setTagModel(TagModel* model)
 void AddTagsLineEdit::setTagTreeView(TagTreeView *view)
 {
     if (d->tagView)
+    {
         disconnect(d->tagView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
                    d->completionBox, SLOT(setCurrentParentTag(const QModelIndex&)));
+    }
+
 
     d->tagView = view;
 
@@ -561,12 +614,16 @@ void AddTagsLineEdit::setTagTreeView(TagTreeView *view)
 void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
 {
     if (compObj())
+    {
         disconnect(compObj(), SIGNAL( matches( const QStringList& )),
                    this, SLOT( setCompletedItems( const QStringList& )));
+    }
 
     if (comp)
+    {
         connect(comp, SIGNAL( matches( const QStringList& )),
                 this, SLOT( setCompletedItems( const QStringList& )));
+    }
 
     KCompletionBase::setCompletionObject(comp, false);
 }
@@ -589,17 +646,19 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
 
     d->completionBoxAction = TaggingAction();
 
-    if ( !comp || mode == KGlobalSettings::CompletionNone )
-        return;  // No completion object...
+    if (!comp || mode == KGlobalSettings::CompletionNone)
+    {
+        return; // No completion object...
+    }
 
     const QString match = comp->makeCompletion( text );
 
-    if ( mode == KGlobalSettings::CompletionPopup ||
-         mode == KGlobalSettings::CompletionPopupAuto )
+    if (mode == KGlobalSettings::CompletionPopup ||
+        mode == KGlobalSettings::CompletionPopupAuto)
     {
-        if ( text.isEmpty() )
+        if (text.isEmpty())
         {
-            if ( d->completionBox )
+            if (d->completionBox)
             {
                 d->completionBox->hide();
                 d->completionBox->clear();
@@ -614,14 +673,20 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
     {
         // all other completion modes
         // If no match or the same match, simply return without completing.
-        if ( match.isEmpty() || match == text )
+        if (match.isEmpty() || match == text)
+        {
             return;
+        }
 
-        if ( mode != KGlobalSettings::CompletionShell )
+        if (mode != KGlobalSettings::CompletionShell)
+        {
             setUserSelection(false);
+        }
 
-        if ( autoSuggest() )
-            setCompletedText( match );
+        if (autoSuggest())
+        {
+            setCompletedText(match);
+        }
     }
 }
 
@@ -644,11 +709,13 @@ void AddTagsLineEdit::setCompletedItems(const QStringList &items, bool doAutoSug
     if (txt.isEmpty() || (items.count() == 1 && txt == items.first()))
     {
         if (d->completionBox->isVisible())
+        {
             d->completionBox->hide();
+        }
     }
     else
     {
-        if ( d->completionBox->isVisible() )
+        if (d->completionBox->isVisible())
         {
             //QString currentSelection = d->completionBox->currentCompletionText();
 
@@ -660,18 +727,20 @@ void AddTagsLineEdit::setCompletedItems(const QStringList &items, bool doAutoSug
         }
         else // completion box not visible yet -> show it
         {
-            if ( !txt.isEmpty() )
-                d->completionBox->setCancelledText( txt );
+            if (!txt.isEmpty())
+            {
+                d->completionBox->setCancelledText(txt);
+            }
             d->completionBox->setItems(txt, items);
             d->completionBox->popup();
         }
 
-        if ( autoSuggest() && doAutoSuggest )
+        if (autoSuggest() && doAutoSuggest)
         {
-            const int index = items.first().indexOf( txt );
-            const QString newText = items.first().mid( index );
+            const int index = items.first().indexOf(txt);
+            const QString newText = items.first().mid(index);
             setUserSelection(false); // can be removed? setCompletedText sets it anyway
-            setCompletedText(newText,true);
+            setCompletedText(newText, true);
         }
     }
 }
@@ -700,16 +769,22 @@ void AddTagsLineEdit::slotCompletionBoxCancelled()
 void AddTagsLineEdit::slotReturnPressed(const QString& text)
 {
     if (d->completionBoxAction.isValid())
+    {
         emit taggingActionActivated(d->completionBoxAction);
+    }
     else
+    {
         emit taggingActionActivated(d->makeTaggingAction(text));
+    }
 }
 
 TaggingAction AddTagsLineEditPriv::makeTaggingAction(const QString& text)
 {
     TAlbum* parentTag = 0;
     if (tagView)
+    {
         parentTag = tagView->currentAlbum();
+    }
     int parentTagId = parentTag ? parentTag->id() : 0;
     return makeDefaultTaggingAction(text, parentTagId);
 }

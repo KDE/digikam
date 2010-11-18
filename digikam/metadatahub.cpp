@@ -320,9 +320,9 @@ void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments, i
 }
 
 // template method to share code for dateTime and rating
-template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& data, 
-                                                                       T& storage, 
-                                                                       T& highestStorage, 
+template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& data,
+                                                                       T& storage,
+                                                                       T& highestStorage,
                                                                        MetadataHub::Status& status)
 {
     switch (status)
@@ -358,8 +358,8 @@ template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& 
 }
 
 // template method used by comment and template
-template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& data, 
-                                                                      T& storage, 
+template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& data,
+                                                                      T& storage,
                                                                       MetadataHub::Status& status)
 {
     switch (status)
@@ -942,7 +942,9 @@ void MetadataHubOnTheRoad::applyChangeNotifications()
     }
 
     foreach (int tagId, tagIds)
+    {
         notifyTagDeleted(tagId);
+    }
 }
 
 void MetadataHubOnTheRoad::slotTagDeleted(int tagId)
