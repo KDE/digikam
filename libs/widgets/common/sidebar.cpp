@@ -188,7 +188,9 @@ void Sidebar::backup(const QList<QWidget*> thirdWidgetsToBackup, QList<int> *siz
 {
     sizes->clear();
     foreach (QWidget *widget, thirdWidgetsToBackup)
+    {
         *sizes << d->splitter->size(widget);
+    }
 
     backup();
 }
@@ -448,7 +450,9 @@ SidebarSplitter::~SidebarSplitter()
 {
     // retreat cautiously from sidebars that live longer
     foreach(Sidebar *sidebar, d->sidebars)
+    {
         sidebar->d->splitter = 0;
+    }
 
     delete d;
 }

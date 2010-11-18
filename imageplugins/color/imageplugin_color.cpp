@@ -337,7 +337,9 @@ void ImagePlugin_Color::slotUpdateColorSpaceMenu()
     favoriteProfilePaths = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
     favoriteProfilePaths -= standardProfilePaths;
     foreach (const QString &path, favoriteProfilePaths)
+    {
         favoriteProfiles << path;
+    }
 
     d->profileMenuAction->addProfiles(favoriteProfiles);
     d->profileMenuAction->addSeparator();

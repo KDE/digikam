@@ -1938,8 +1938,10 @@ void SearchFieldAlbum::write(SearchXmlWriter& writer)
         return;
 
     QList<int> albumIds;
-    foreach(Album *album, checkedAlbums)
+    foreach (Album *album, checkedAlbums)
+    {
         albumIds << album->id();
+    }
 
     writer.writeField(m_name, SearchXml::InTree);
     if (albumIds.size() > 1)

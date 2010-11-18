@@ -212,7 +212,9 @@ QList<QModelIndex> ImageFilterModel::mapListToSource(const QList<QModelIndex>& i
 {
     QList<QModelIndex> sourceIndexes;
     foreach (const QModelIndex& index, indexes)
+    {
         sourceIndexes << mapToSource(index);
+    }
     return sourceIndexes;
 }
 
@@ -220,7 +222,9 @@ QList<QModelIndex> ImageFilterModel::mapListFromSource(const QList<QModelIndex>&
 {
     QList<QModelIndex> indexes;
     foreach (const QModelIndex& index, sourceIndexes)
+    {
         indexes << mapFromSource(index);
+    }
     return indexes;
 }
 
@@ -241,7 +245,9 @@ QList<ImageInfo> ImageFilterModel::imageInfos(const QList<QModelIndex>& indexes)
     Q_D(const ImageFilterModel);
     QList<ImageInfo> infos;
     foreach (const QModelIndex& index, indexes)
+    {
         infos << d->imageModel->imageInfo(mapToSource(index));
+    }
     return infos;
 }
 
@@ -250,7 +256,9 @@ QList<qlonglong> ImageFilterModel::imageIds(const QList<QModelIndex>& indexes) c
     Q_D(const ImageFilterModel);
     QList<qlonglong> ids;
     foreach (const QModelIndex& index, indexes)
+    {
         ids << d->imageModel->imageId(mapToSource(index));
+    }
     return ids;
 }
 

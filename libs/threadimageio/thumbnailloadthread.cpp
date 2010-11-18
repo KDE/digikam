@@ -527,7 +527,9 @@ void ThumbnailLoadThread::slotThumbnailsAvailable()
     }
 
     foreach(const ThumbnailResult& result, results)
+    {
         slotThumbnailLoaded(result.loadingDescription, result.image);
+    }
 }
 
 void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& description, const QImage& thumb)

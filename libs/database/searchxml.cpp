@@ -939,7 +939,9 @@ QList<int> SearchXmlCachingReader::valueToIntList()
     QStringList list = valueToStringList();
     QList<int> intList;
     foreach (const QString& s, list)
+    {
         intList << s.toInt();
+    }
     return intList;
 }
 
@@ -950,7 +952,9 @@ QList<qlonglong> SearchXmlCachingReader::valueToLongLongList()
     QStringList list = valueToStringList();
     QList<qlonglong> qlonglongList;
     foreach (const QString& s, list)
+    {
         qlonglongList << s.toLongLong();
+    }
     return qlonglongList;
 }
 
@@ -961,7 +965,9 @@ QList<double> SearchXmlCachingReader::valueToDoubleList()
     QStringList list = valueToStringList();
     QList<double> doubleList;
     foreach (const QString& s, list)
+    {
         doubleList << s.toDouble();
+    }
     return doubleList;
 }
 
@@ -972,7 +978,9 @@ QList<QDateTime> SearchXmlCachingReader::valueToDateTimeList()
     QStringList list = valueToStringList();
     QList<QDateTime> doubleList;
     foreach (const QString& s, list)
+    {
         doubleList << QDateTime::fromString(s, Qt::ISODate);
+    }
     return doubleList;
 }
 
@@ -993,7 +1001,9 @@ QList<int> SearchXmlCachingReader::valueToIntOrIntList()
         QList<int> intList = SearchXmlReader::valueToIntOrIntList();
         QList<QVariant> varList;
         foreach(int v, intList)
+        {
             varList << v;
+        }
         m_value = varList;
         m_readValue = true;
         return intList;
@@ -1001,7 +1011,9 @@ QList<int> SearchXmlCachingReader::valueToIntOrIntList()
     QList<int> intList;
     QList<QVariant> varList = m_value.toList();
     foreach (const QVariant& var, varList)
+    {
         intList << var.toInt();
+    }
     return intList;
 }
 
@@ -1012,7 +1024,9 @@ QList<double> SearchXmlCachingReader::valueToDoubleOrDoubleList()
         QList<double> doubleList = SearchXmlReader::valueToDoubleOrDoubleList();
         QList<QVariant> varList;
         foreach(double v, doubleList)
+        {
             varList << v;
+        }
         m_value = varList;
         m_readValue = true;
         return doubleList;
@@ -1020,7 +1034,9 @@ QList<double> SearchXmlCachingReader::valueToDoubleOrDoubleList()
     QList<double> doubleList;
     QList<QVariant> varList = m_value.toList();
     foreach (const QVariant& var, varList)
+    {
         doubleList << var.toDouble();
+    }
     return doubleList;
 }
 

@@ -421,7 +421,9 @@ void QueueListView::dropEvent(QDropEvent* e)
             if (vitem && vitem != this)
             {
                 foreach(ImageInfo info, imageInfoList)
+                {
                     vitem->removeItemByInfo(info);
+                }
             }
         }
     }

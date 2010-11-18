@@ -177,7 +177,9 @@ QStringList TagsCache::tagNames(const QList<int>& ids)
     if (!ids.isEmpty())
     {
         foreach (int id, ids)
-        names << tagName(id);
+        {
+            names << tagName(id);
+        }
     }
     return names;
 }
@@ -209,7 +211,9 @@ QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashP
     if (!ids.isEmpty())
     {
         foreach (int id, ids)
+        {
             paths << tagPath(id, slashPolicy);
+        }
     }
     return paths;
 }
@@ -325,7 +329,9 @@ QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths)
     if (!tagPaths.isEmpty())
     {
         foreach (const QString& tagPath, tagPaths)
+        {
             ids << tagForPath(tagPath);
+        }
     }
 
     return ids;
@@ -421,7 +427,9 @@ QList<int> TagsCache::createTags(const QStringList& tagPaths)
     if (!tagPaths.isEmpty())
     {
         foreach (const QString& tagPath, tagPaths)
+        {
             ids << createTag(tagPath);
+        }
     }
     return ids;
 }
@@ -432,7 +440,9 @@ QList<int> TagsCache::getOrCreateTags(const QStringList& tagPaths)
     if (!tagPaths.isEmpty())
     {
     foreach (const QString& tagPath, tagPaths)
-            ids << getOrCreateTag(tagPath);
+    {
+        ids << getOrCreateTag(tagPath);
+    }
     }
     return ids;
 }

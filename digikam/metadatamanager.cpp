@@ -282,7 +282,9 @@ void MetadataManager::MetadataManagerPriv::startingToWrite(const QList<ImageInfo
 {
     QMutexLocker lock(&mutex);
     foreach (const ImageInfo& info, infos)
+    {
         scheduledToWrite.remove(info.id());
+    }
 }
 
 void MetadataManager::MetadataManagerPriv::writtenToOne()

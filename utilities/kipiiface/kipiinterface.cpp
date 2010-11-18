@@ -169,7 +169,9 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
     }
     ScanController::instance()->hintAtModificationOfItems(ids);
     foreach (const QString& dir, dirs)
+    {
         ScanController::instance()->scheduleCollectionScan(dir);
+    }
 
 }
 

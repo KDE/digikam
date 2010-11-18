@@ -203,7 +203,7 @@ QString ImageComments::defaultComment(int *index) const
         return d->infos[chosen].comment;
 }
 
-QString ImageComments::commentForLanguage(const QString& languageCode, int *index, 
+QString ImageComments::commentForLanguage(const QString& languageCode, int *index,
                                           LanguageChoiceBehavior behavior) const
 {
     if (!d)
@@ -389,7 +389,9 @@ void ImageComments::replaceFrom(const ImageComments& source)
     }
 
     foreach (const CommentInfo& info, source.d->infos)
+    {
         addComment(info.comment, info.language, info.author, info.date, info.type);
+    }
 
     // remove all that have not been touched above
     for (int i=0; i<d->infos.size() /* changing! */; )
@@ -450,7 +452,9 @@ void ImageComments::removeAll()
         return;
 
     foreach (const CommentInfo &info, d->infos)
+    {
         d->idsToRemove << info.id;
+    }
     d->infos.clear();
     d->dirtyIndices.clear();
     d->newIndices.clear();

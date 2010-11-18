@@ -67,8 +67,10 @@ public:
 
 ImageQueryPostHooks::~ImageQueryPostHooks()
 {
-    foreach(ImageQueryPostHook *hook, m_postHooks)
+    foreach (ImageQueryPostHook *hook, m_postHooks)
+    {
         delete hook;
+    }
 }
 
 void ImageQueryPostHooks::addHook(ImageQueryPostHook* hook)
@@ -78,9 +80,13 @@ void ImageQueryPostHooks::addHook(ImageQueryPostHook* hook)
 
 bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeNumber)
 {
-    foreach(ImageQueryPostHook *hook, m_postHooks)
+    foreach (ImageQueryPostHook *hook, m_postHooks)
+    {
         if (!hook->checkPosition(latitudeNumber, longitudeNumber))
+        {
             return false;
+        }
+    }
     return true;
 }
 
@@ -361,7 +367,9 @@ public:
             else
                 sql += ") ";
             foreach (int v, values)
+            {
                 *boundValues << v;
+            }
             sql += " ) ";
         }
         else
@@ -379,7 +387,9 @@ public:
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
             sql += ") ";
             foreach (const qlonglong &v, values)
+            {
                 *boundValues << v;
+            }
             sql += " ) ";
         }
         else
@@ -407,7 +417,9 @@ public:
                 sql += "OR " + name + " IS NULL ";
 
             foreach (int v, values)
+            {
                 *boundValues << v;
+            }
             sql += " ) ";
         }
         else
@@ -447,7 +459,9 @@ public:
                 sql += name + " IN (";
                 AlbumDB::addBoundValuePlaceholders(sql, simpleValues.size());
                 foreach(const QString& value, simpleValues)
+                {
                     *boundValues << value;
+                }
                 sql += " ) ";
             }
             if (!wildcards.isEmpty())

@@ -153,7 +153,9 @@ QList<ImageInfo> ImageModel::imageInfos(const QList<QModelIndex>& indexes) const
 {
     QList<ImageInfo> infos;
     foreach (const QModelIndex& index, indexes)
+    {
         infos << imageInfo(index);
+    }
     return infos;
 }
 
@@ -161,7 +163,9 @@ QList<qlonglong> ImageModel::imageIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
     foreach (const QModelIndex& index, indexes)
+    {
         ids << imageId(index);
+    }
     return ids;
 }
 
@@ -250,8 +254,12 @@ ImageInfo ImageModel::imageInfo(const QString& filePath) const
     else
     {
         foreach (const ImageInfo& info, d->infos)
+        {
             if (info.filePath() == filePath)
+            {
                 return info;
+            }
+        }
     }
     return ImageInfo();
 }
@@ -315,7 +323,9 @@ void ImageModel::emitDataChangedForSelection(const QItemSelection& selection)
     if (!selection.isEmpty())
     {
         foreach (const QItemSelectionRange& range, selection)
+        {
             emit dataChanged(range.topLeft(), range.bottomRight());
+        }
     }
 }
 

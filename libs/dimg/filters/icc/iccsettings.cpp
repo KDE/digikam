@@ -134,15 +134,23 @@ bool IccSettings::monitorProfileFromSystem()
     {
         QMutexLocker lock(&d->mutex);
         foreach (const IccProfile &profile, d->screenProfiles)
+        {
             if (!profile.isNull())
+            {
                 return true;
+            }
+        }
     }
 
     // Second, check all toplevel widgets
     QList<QWidget*> topLevels = qApp->topLevelWidgets();
     foreach (QWidget *widget, topLevels)
+    {
         if (!d->profileFromWindowSystem(widget).isNull())
+        {
             return true;
+        }
+    }
 
     return false;
 }

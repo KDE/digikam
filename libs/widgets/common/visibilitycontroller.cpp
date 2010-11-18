@@ -178,20 +178,32 @@ void VisibilityController::allSteps()
     if (d->status == Showing)
     {
         if (d->containerWidget)
+        {
             d->containerWidget->setUpdatesEnabled(false);
+        }
         foreach(VisibilityObject *o, d->objects)
+        {
             o->setVisible(true);
+        }
         if (d->containerWidget)
+        {
             d->containerWidget->setUpdatesEnabled(true);
+        }
     }
     else if (d->status == Hiding)
     {
         if (d->containerWidget)
+        {
             d->containerWidget->setUpdatesEnabled(false);
+        }
         foreach(VisibilityObject *o, d->objects)
+        {
             o->setVisible(false);
+        }
         if (d->containerWidget)
+        {
             d->containerWidget->setUpdatesEnabled(true);
+        }
     }
 }
 

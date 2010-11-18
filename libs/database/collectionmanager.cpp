@@ -1054,7 +1054,9 @@ QList<CollectionLocation> CollectionManager::allLocations()
     DatabaseAccess access;
     QList<CollectionLocation> list;
     foreach (AlbumRootLocation *location, d->locations)
+    {
         list << *location;
+    }
     return list;
 }
 
