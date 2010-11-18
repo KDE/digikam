@@ -325,7 +325,7 @@ QString DImageHistory::toXml() const
             if(!step.action.parameters().isEmpty())
             {
                 QHashIterator<QString, QVariant> iter(step.action.parameters());
-                while (iter.hasNext()) 
+                while (iter.hasNext())
                 {
                   iter.next();
 
@@ -513,7 +513,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
     if (stream.hasError())
     {
         //TODO: error handling
-        kDebug() << "An error ocurred during parsing: " << stream.errorString();
+        kDebug() << "An error occurred during parsing: " << stream.errorString();
     }
 
     //kDebug() << "Parsing done";
