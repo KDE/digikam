@@ -64,9 +64,8 @@ public:
     {
     }
 
-    AlbumModificationHelper *albumModificationHelper;
-
-    KAction *newAlbumAction;
+    AlbumModificationHelper* albumModificationHelper;
+    KAction*                 newAlbumAction;
 
 };
 
@@ -135,14 +134,14 @@ public:
     {
     }
 
-    AlbumModel          *albumModel;
-    AlbumSelectTreeView *albumTreeView;
+    AlbumModel*              albumModel;
+    AlbumSelectTreeView*     albumTreeView;
 
-    AlbumModificationHelper *albumModificationHelper;
+    AlbumModificationHelper* albumModificationHelper;
 
-    SearchTextBar *searchBar;
+    SearchTextBar*           searchBar;
 
-    KPushButton   *newAlbumBtn;
+    KPushButton*             newAlbumBtn;
 };
 
 AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)

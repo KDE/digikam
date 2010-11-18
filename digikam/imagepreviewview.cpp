@@ -459,7 +459,9 @@ void ImagePreviewView::slotRotateLeft()
         foreach(QAction* ac, list)
         {
             if (ac->objectName() == QString("rotate_ccw"))
+            {
                 ac->trigger();
+            }
         }
     }
 }
@@ -473,7 +475,9 @@ void ImagePreviewView::slotRotateRight()
         foreach(QAction* ac, list)
         {
             if (ac->objectName() == QString("rotate_cw"))
+            {
                 ac->trigger();
+            }
         }
     }
 }

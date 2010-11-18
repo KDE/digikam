@@ -393,7 +393,9 @@ void ManagedLoadSaveThread::stopAllTasks()
             static_cast<LoadingTask*>(m_currentTask)->setStatus(LoadingTask::LoadingTaskStatusStopping);
     }
     foreach (LoadSaveTask *task, m_todo)
+    {
         delete task;
+    }
     m_todo.clear();
 }
 

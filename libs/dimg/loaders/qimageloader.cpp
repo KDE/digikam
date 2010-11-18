@@ -59,6 +59,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (image.isNull())
     {
         kDebug() << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
+        loadingFailed();
         return false;
     }
 
@@ -100,6 +101,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (!data)
     {
         kDebug() << "Failed to allocate memory for loading" << filePath;
+        loadingFailed();
         return false;
     }
     uint*  sptr = (uint*)target.bits();

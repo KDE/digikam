@@ -105,24 +105,24 @@ public:
     int                         orientation;
     int                         maxTileSize;
 
-    QTimer                     *timer;
-    QTimer                     *toolTipTimer;
-    QTimer                     *preloadTimer;
+    QTimer*                     timer;
+    QTimer*                     toolTipTimer;
+    QTimer*                     preloadTimer;
 
     QPoint                      dragStartPos;
 
-    ThumbBarItem               *firstItem;
-    ThumbBarItem               *lastItem;
-    ThumbBarItem               *currItem;
-    ThumbBarItem               *highlightedItem;
-    ThumbBarItem               *toolTipItem;
+    ThumbBarItem*               firstItem;
+    ThumbBarItem*               lastItem;
+    ThumbBarItem*               currItem;
+    ThumbBarItem*               highlightedItem;
+    ThumbBarItem*               toolTipItem;
 
     QHash<KUrl, ThumbBarItem*>  itemHash;
-    ThumbnailLoadThread        *thumbLoadThread;
+    ThumbnailLoadThread*        thumbLoadThread;
 
     ThumbBarToolTipSettings     toolTipSettings;
 
-    ThumbBarToolTip            *toolTip;
+    ThumbBarToolTip*            toolTip;
 };
 
 // -------------------------------------------------------------------------
@@ -131,12 +131,12 @@ class ThumbBarItemPriv
 {
 public:
 
-    ThumbBarItemPriv()
+    ThumbBarItemPriv() :
+        pos(0),
+        next(0),
+        prev(0),
+        view(0)
     {
-        pos    = 0;
-        next   = 0;
-        prev   = 0;
-        view   = 0;
     }
 
     int           pos;
@@ -145,10 +145,10 @@ public:
 
     KUrl          url;
 
-    ThumbBarItem *next;
-    ThumbBarItem *prev;
+    ThumbBarItem* next;
+    ThumbBarItem* prev;
 
-    ThumbBarView *view;
+    ThumbBarView* view;
 };
 
 // -------------------------------------------------------------------------

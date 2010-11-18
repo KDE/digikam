@@ -1,114 +1,5 @@
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
-INCLUDE_DIRECTORIES(
-                     # basic libs
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/auto
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/bcg
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/bw
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/hsl
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/decorate
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/fx
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/greycstoration
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/icc
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/lc
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/nr
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/sharp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/cb
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/levels
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/curves
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/wb
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/lens
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/imagehistory
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threads
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/versionmanager
-
-                     # widgets and dialogs
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/graphicsview
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/imageproperties
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dialogs
-
-                     # database libs
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/imagehistory
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
-
-                     # shared utilities
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/slideshow
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/widgets
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/rawimport
-
-                     # specific libs and utilities
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/lprof
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/sqlite2
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/cimg
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/themeengine
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/kipiiface
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/scriptiface
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/slideshow
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/lighttable
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/color
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/convert
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/enhance
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/filters
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/transform
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/metadata
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/decorate
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/searchwindow
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/fuzzysearch
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/gpssearch
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/timeline
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/firstrun
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/facedetection
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
-
-                     # config-digikam.h
-                     ${CMAKE_CURRENT_BINARY_DIR}/../
-
-                     # external library paths
-                     ${JPEG_INCLUDE_DIR}
-                     ${PNG_PNG_INCLUDE_DIR}
-                     ${TIFF_INCLUDE_DIR}
-                   )
-
-IF(PGF_FOUND)
-   INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
-ELSE(PGF_FOUND)
-   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf)
-ENDIF(PGF_FOUND)
-
-IF(CLAPACK_FOUND)
-   INCLUDE_DIRECTORIES(${CLAPACK_INCLUDE_DIR})
-ELSE(CLAPACK_FOUND)
-   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/clapack)
-ENDIF(CLAPACK_FOUND)
-
 # Shared libdigikamcore ################################################################
 
 IF(NOT CLAPACK_FOUND)
@@ -128,38 +19,38 @@ SET_SOURCE_FILES_PROPERTIES(${liblqr_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 SET_SOURCE_FILES_PROPERTIES(${liblensfun_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(digikamcore_LIB_SRCS
-                        # basic libs
-                        ${libdimg_SRCS}
-                        ${libdimgloaders_SRCS}
-                        ${libdimgfilters_SRCS}
-                        ${libdmetadata_SRCS}
-                        ${libdatabasecore_SRCS}
-                        ${liblprof_SRCS}
-                        ${libjpegutils_SRCS}
-                        ${libthreadimageio_SRCS}
-                        ${libthemeengine_SRCS}
-                        ${libpgf_SRCS}
-                        ${pgfutils_SRCS}
-                        ${libdigikamhelpers_SRCS}
-                        ${libtthread_SRCS}
+        # basic libs
+        ${libdimg_SRCS}
+        ${libdimgloaders_SRCS}
+        ${libdimgfilters_SRCS}
+        ${libdmetadata_SRCS}
+        ${libdatabasecore_SRCS}
+        ${liblprof_SRCS}
+        ${libjpegutils_SRCS}
+        ${libthreadimageio_SRCS}
+        ${libthemeengine_SRCS}
+        ${libpgf_SRCS}
+        ${pgfutils_SRCS}
+        ${libdigikamhelpers_SRCS}
+        ${libtthread_SRCS}
                         ${libversionmanager_SRCS}
 
-                        # widgets and dialogs
-                        ${libcommonwidgets_SRCS}
-                        ${libeditorwidgets_SRCS}
-                        ${libiccprofileswidgets_SRCS}
-                        ${libmetadatawidgets_SRCS}
-                        ${libdialogs_SRCS}
-                        ${libimageproperties_SRCS}
+        # widgets and dialogs
+        ${libcommonwidgets_SRCS}
+        ${libeditorwidgets_SRCS}
+        ${libiccprofileswidgets_SRCS}
+        ${libmetadatawidgets_SRCS}
+        ${libdialogs_SRCS}
+        ${libimageproperties_SRCS}
                         ${libgraphicsviewwidgets_SRCS}
 
-                        # utilities
-                        ${libslideshow_SRCS}
-                        ${libdimgcanvas_SRCS}
-                        ${libdimgeditorprintiface_SRCS}
-                        ${libdimgeditor_SRCS}
-                        ${librawimport_SRCS}
-   )
+        # utilities
+        ${libslideshow_SRCS}
+        ${libdimgcanvas_SRCS}
+        ${libdimgeditorprintiface_SRCS}
+        ${libdimgeditor_SRCS}
+        ${librawimport_SRCS}
+)
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
@@ -174,34 +65,34 @@ KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 ADD_DEPENDENCIES(digikamcore digikam-svnversion)
 
 TARGET_LINK_LIBRARIES(digikamcore
-                      ${QT_QT3SUPPORT_LIBRARY}
-                      ${QT_QTSQL_LIBRARY}
-                      ${QT_QTSCRIPT_LIBRARY}
+        ${QT_QT3SUPPORT_LIBRARY}
+        ${QT_QTSQL_LIBRARY}
+        ${QT_QTSCRIPT_LIBRARY}
 
-                      ${KDE4_KDECORE_LIBS}
-                      ${KDE4_KIO_LIBS}
-                      ${KDE4_KFILE_LIBS}
-                      ${KDE4_KHTML_LIBS}
-                      ${KDE4_KNOTIFYCONFIG_LIBRARY}
-                      ${KDE4_KDEUI_LIBS}
-                      ${KDE4_KUTILS_LIBS}
-                      ${KDE4_SOLID_LIBS}
+        ${KDE4_KDECORE_LIBS}
+        ${KDE4_KIO_LIBS}
+        ${KDE4_KFILE_LIBS}
+        ${KDE4_KHTML_LIBS}
+        ${KDE4_KNOTIFYCONFIG_LIBRARY}
+        ${KDE4_KDEUI_LIBS}
+        ${KDE4_KUTILS_LIBS}
+        ${KDE4_SOLID_LIBS}
 
-                      ${JPEG_LIBRARIES}
-                      ${TIFF_LIBRARIES}
-                      ${PNG_LIBRARIES}
-                      ${LCMS_LIBRARIES}
-                      ${JASPER_LIBRARIES}
+        ${JPEG_LIBRARIES}
+        ${TIFF_LIBRARIES}
+        ${PNG_LIBRARIES}
+        ${LCMS_LIBRARIES}
+        ${JASPER_LIBRARIES}
 
-                      # Require by CImg library which use pthread internally.
-                      ${CMAKE_THREAD_LIBS_INIT}
+        # Required by CImg library which is using pthread internally.
+        ${CMAKE_THREAD_LIBS_INIT}
 
-                      ${KDCRAW_LIBRARIES}
-                      ${KEXIV2_LIBRARIES}
-                      ${KIPI_LIBRARIES}
-                      ${KFACE_LIBRARIES}
-                      ${KMAP_LIBRARIES}
-              )
+        ${KDCRAW_LIBRARIES}
+        ${KEXIV2_LIBRARIES}
+        ${KIPI_LIBRARIES}
+        ${KFACE_LIBRARIES}
+        ${KMAP_LIBRARIES}
+)
 
 IF(PGF_FOUND)
    TARGET_LINK_LIBRARIES(digikamcore ${PGF_LIBRARIES})
@@ -240,13 +131,14 @@ ENDIF(WIN32)
 ## Disable libpgf warnings.
 #SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
-SET(digikamdatabase_LIB_SRCS ${libdatabase_SRCS}
-                             ${libhaar_SRCS}
-                             ${libdatabasemodels_SRCS}
-                             ${libsqlite2_SRCS}
-                             ${libpgf_SRCS}
-                             ${pgfutils_SRCS}
-   )
+SET(digikamdatabase_LIB_SRCS
+        ${libdatabase_SRCS}
+        ${libhaar_SRCS}
+        ${libdatabasemodels_SRCS}
+        ${libsqlite2_SRCS}
+        ${libpgf_SRCS}
+        ${pgfutils_SRCS}
+)
 
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 
@@ -338,7 +230,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libscriptiface_SRCS}
                  ${libfacedetection_SRCS}
                  main.cpp
-    )
+)
 
 QT4_ADD_DBUS_ADAPTOR(digikam_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
@@ -371,6 +263,8 @@ TARGET_LINK_LIBRARIES(digikam
                       digikamcore
                       digikamdatabase
                       advancedrename
+                      queuemanager
+                      cameragui
                      )
 
 IF(KDEPIMLIBS_FOUND)

@@ -1,52 +1,5 @@
 SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-INCLUDE_DIRECTORIES(
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/imagehistory
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dialogs
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/fx
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/icc
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/levels
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/imagehistory
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threads
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/themeengine
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/widgets
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/kipiiface
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/lighttable
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../showfoto
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../showfoto/setup
-                    ${CMAKE_CURRENT_SOURCE_DIR}/..
-                    ${CMAKE_CURRENT_SOURCE_DIR}/modeltest
-                    ${CMAKE_CURRENT_BINARY_DIR}/..
-                    ${GPHOTO2_INCLUDE_DIRS}
-)
-
 #------------------------------------------------------------------------
 
 SET(advancedrenametest_SRCS
@@ -59,8 +12,8 @@ TARGET_LINK_LIBRARIES(advancedrenametest
                       ${KDCRAW_LIBRARIES}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
-                      digikamdatabase
                       digikamcore
+                      digikamdatabase
                       advancedrename
                       )
 

@@ -74,21 +74,21 @@ public:
     {
     }
 
-    QWidget      *noneOptions;
+    QWidget*      noneOptions;
 
-    QGridLayout  *noneGrid;
+    QGridLayout*  noneGrid;
 
-    QLabel       *labelNone;
+    QLabel*       labelNone;
 
-    JPEGSettings *JPEGOptions;
-    PNGSettings  *PNGOptions;
-    TIFFSettings *TIFFOptions;
-    JP2KSettings *JPEG2000Options;
-    PGFSettings  *PGFOptions;
+    JPEGSettings* JPEGOptions;
+    PNGSettings*  PNGOptions;
+    TIFFSettings* TIFFOptions;
+    JP2KSettings* JPEG2000Options;
+    PGFSettings*  PGFOptions;
 
-    KFileDialog  *dialog;
+    KFileDialog*  dialog;
 
-    QString      autoFilter;
+    QString       autoFilter;
 };
 
 FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)

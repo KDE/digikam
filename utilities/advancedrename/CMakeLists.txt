@@ -1,24 +1,3 @@
- INCLUDE_DIRECTORIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}/common
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/database
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dialogs
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dimg
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dimg/filters/icc
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dimg/imagehistory
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dmetadata
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/threadimageio
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/threads
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/themeengine
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/widgets/common
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/widgets/metadata
-        ${CMAKE_CURRENT_SOURCE_DIR}/parser
-        ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers
-        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options
-        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database
-        ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/keys
-        ${CMAKE_CURRENT_BINARY_DIR}/../..
-)
-
  SET(libadvancedrename_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenamedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/advancedrenameinput.cpp
@@ -70,8 +49,8 @@ KDE4_ADD_UI_FILES(libadvancedrename_SRCS
 
 KDE4_ADD_LIBRARY(advancedrename STATIC ${libadvancedrename_SRCS})
 
-
-TARGET_LINK_LIBRARIES(advancedrename ${KEXIV2_LIBRARIES}
-                                     ${KDCRAW_LIBRARIES}
-                                     digikamdatabase
-                     )
+TARGET_LINK_LIBRARIES(advancedrename
+        ${KEXIV2_LIBRARIES}
+        ${KDCRAW_LIBRARIES}
+        digikamdatabase
+)

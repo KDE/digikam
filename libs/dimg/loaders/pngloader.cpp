@@ -99,6 +99,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if ( !f )
     {
         kDebug() << "Cannot open image file.";
+        loadingFailed();
         return false;
     }
 
@@ -113,6 +114,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         kDebug() << "Not a PNG image file.";
         fclose(f);
+        loadingFailed();
         return false;
     }
     rewind(f);
@@ -125,6 +127,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         kDebug() << "Invalid PNG image file structure.";
         fclose(f);
+        loadingFailed();
         return false;
     }
 
@@ -134,6 +137,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kDebug() << "Cannot reading PNG image file structure.";
         png_destroy_read_struct(&png_ptr, NULL, NULL);
         fclose(f);
+        loadingFailed();
         return false;
     }
 
@@ -178,6 +182,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kDebug() << "Internal libPNG error during reading file. Process aborted!";
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
         delete cleanupData;
+        loadingFailed();
         return false;
     }
 
@@ -297,6 +302,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     kDebug() << "PNG color type unknown.";
 #endif
                     delete cleanupData;
+                    loadingFailed();
                     return false;
             }
         }
@@ -370,6 +376,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     kDebug() << "PNG color type unknown.";
 #endif
                     delete cleanupData;
+                    loadingFailed();
                     return false;
             }
         }
@@ -411,6 +418,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             png_read_end(png_ptr, info_ptr);
             png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
             delete cleanupData;
+            loadingFailed();
             return false;
         }
 
@@ -440,6 +448,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     {
                         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
                         delete cleanupData;
+                        loadingFailed();
                         return false;
                     }
                     // use 10% - 80% for progress while reading rows

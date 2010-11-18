@@ -83,19 +83,25 @@ public:
         void recordChangeset(const T& changeset)
         {
             if (d->isInTransaction)
+            {
                 changesets << changeset;
+            }
             else
+            {
                 d->sendToWatch(changeset);
+            }
         }
 
         void sendOut()
         {
             foreach(const T& changeset, changesets)
+            {
                 d->sendToWatch(changeset);
+            }
             changesets.clear();
         }
 
-        QList<T>                   changesets;
+        QList<T>                      changesets;
         DatabaseBackendPrivate* const d;
     };
 

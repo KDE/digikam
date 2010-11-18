@@ -47,103 +47,103 @@ class ImagePropertiesTabPriv
 {
 public:
 
-    ImagePropertiesTabPriv()
+    ImagePropertiesTabPriv() :
+        file(0),
+        folder(0),
+        modifiedDate(0),
+        size(0),
+        owner(0),
+        permissions(0),
+        mime(0),
+        dimensions(0),
+        compression(0),
+        bitDepth(0),
+        colorMode(0),
+        make(0),
+        model(0),
+        photoDate(0),
+        lens(0),
+        aperture(0),
+        focalLength(0),
+        exposureTime(0),
+        sensitivity(0),
+        exposureMode(0),
+        flash(0),
+        whiteBalance(0),
+        labelFile(0),
+        labelFolder(0),
+        labelFileModifiedDate(0),
+        labelFileSize(0),
+        labelFileOwner(0),
+        labelFilePermissions(0),
+        labelImageMime(0),
+        labelImageDimensions(0),
+        labelImageCompression(0),
+        labelImageBitDepth(0),
+        labelImageColorMode(0),
+        labelPhotoMake(0),
+        labelPhotoModel(0),
+        labelPhotoDateTime(0),
+        labelPhotoLens(0),
+        labelPhotoAperture(0),
+        labelPhotoFocalLength(0),
+        labelPhotoExposureTime(0),
+        labelPhotoSensitivity(0),
+        labelPhotoExposureMode(0),
+        labelPhotoFlash(0),
+        labelPhotoWhiteBalance(0)
     {
-        file                   = 0;
-        folder                 = 0;
-        modifiedDate           = 0;
-        size                   = 0;
-        owner                  = 0;
-        permissions            = 0;
-        mime                   = 0;
-        dimensions             = 0;
-        compression            = 0;
-        bitDepth               = 0;
-        colorMode              = 0;
-        make                   = 0;
-        model                  = 0;
-        photoDate              = 0;
-        lens                   = 0;
-        aperture               = 0;
-        focalLength            = 0;
-        exposureTime           = 0;
-        sensitivity            = 0;
-        exposureMode           = 0;
-        flash                  = 0;
-        whiteBalance           = 0;
-        labelFile              = 0;
-        labelFolder            = 0;
-        labelFileModifiedDate  = 0;
-        labelFileSize          = 0;
-        labelFileOwner         = 0;
-        labelFilePermissions   = 0;
-        labelImageMime         = 0;
-        labelImageDimensions   = 0;
-        labelImageCompression  = 0;
-        labelImageBitDepth     = 0;
-        labelImageColorMode    = 0;
-        labelPhotoMake         = 0;
-        labelPhotoModel        = 0;
-        labelPhotoDateTime     = 0;
-        labelPhotoLens         = 0;
-        labelPhotoAperture     = 0;
-        labelPhotoFocalLength  = 0;
-        labelPhotoExposureTime = 0;
-        labelPhotoSensitivity  = 0;
-        labelPhotoExposureMode = 0;
-        labelPhotoFlash        = 0;
-        labelPhotoWhiteBalance = 0;
     }
 
-    DTextLabelName  *file;
-    DTextLabelName  *folder;
-    DTextLabelName  *modifiedDate;
-    DTextLabelName  *size;
-    DTextLabelName  *owner;
-    DTextLabelName  *permissions;
+    DTextLabelName*  file;
+    DTextLabelName*  folder;
+    DTextLabelName*  modifiedDate;
+    DTextLabelName*  size;
+    DTextLabelName*  owner;
+    DTextLabelName*  permissions;
 
-    DTextLabelName  *mime;
-    DTextLabelName  *dimensions;
-    DTextLabelName  *compression;
-    DTextLabelName  *bitDepth;
-    DTextLabelName  *colorMode;
+    DTextLabelName*  mime;
+    DTextLabelName*  dimensions;
+    DTextLabelName*  compression;
+    DTextLabelName*  bitDepth;
+    DTextLabelName*  colorMode;
 
-    DTextLabelName  *make;
-    DTextLabelName  *model;
-    DTextLabelName  *photoDate;
-    DTextLabelName  *lens;
-    DTextLabelName  *aperture;
-    DTextLabelName  *focalLength;
-    DTextLabelName  *exposureTime;
-    DTextLabelName  *sensitivity;
-    DTextLabelName  *exposureMode;
-    DTextLabelName  *flash;
-    DTextLabelName  *whiteBalance;
+    DTextLabelName*  make;
+    DTextLabelName*  model;
+    DTextLabelName*  photoDate;
+    DTextLabelName*  lens;
+    DTextLabelName*  aperture;
+    DTextLabelName*  focalLength;
+    DTextLabelName*  exposureTime;
+    DTextLabelName*  sensitivity;
+    DTextLabelName*  exposureMode;
+    DTextLabelName*  flash;
+    DTextLabelName*  whiteBalance;
 
-    DTextLabelValue *labelFile;
-    DTextLabelValue *labelFolder;
-    DTextLabelValue *labelFileModifiedDate;
-    DTextLabelValue *labelFileSize;
-    DTextLabelValue *labelFileOwner;
-    DTextLabelValue *labelFilePermissions;
+    DTextLabelValue* labelFile;
+    DTextLabelValue* labelFolder;
+    DTextLabelValue* labelFileModifiedDate;
+    DTextLabelValue* labelFileSize;
+    DTextLabelValue* labelFileOwner;
+    DTextLabelValue* labelFilePermissions;
 
-    DTextLabelValue *labelImageMime;
-    DTextLabelValue *labelImageDimensions;
-    DTextLabelValue *labelImageCompression;
-    DTextLabelValue *labelImageBitDepth;
-    DTextLabelValue *labelImageColorMode;
+    DTextLabelValue* labelImageMime;
+    DTextLabelValue* labelImageDimensions;
+    DTextLabelValue* labelImageCompression;
+    DTextLabelValue* labelImageBitDepth;
+    DTextLabelValue* labelImageColorMode;
 
-    DTextLabelValue *labelPhotoMake;
-    DTextLabelValue *labelPhotoModel;
-    DTextLabelValue *labelPhotoDateTime;
-    DTextLabelValue *labelPhotoLens;
-    DTextLabelValue *labelPhotoAperture;
-    DTextLabelValue *labelPhotoFocalLength;
-    DTextLabelValue *labelPhotoExposureTime;
-    DTextLabelValue *labelPhotoSensitivity;
-    DTextLabelValue *labelPhotoExposureMode;
-    DTextLabelValue *labelPhotoFlash;
-    DTextLabelValue *labelPhotoWhiteBalance;
+    DTextLabelValue* labelPhotoMake;
+    DTextLabelValue* labelPhotoModel;
+    DTextLabelValue* labelPhotoDateTime;
+    DTextLabelValue* labelPhotoLens;
+    DTextLabelValue* labelPhotoAperture;
+    DTextLabelValue* labelPhotoFocalLength;
+    DTextLabelValue* labelPhotoExposureTime;
+    DTextLabelValue* labelPhotoSensitivity;
+    DTextLabelValue* labelPhotoExposureMode;
+    DTextLabelValue* labelPhotoFlash;
+    DTextLabelValue* labelPhotoWhiteBalance;
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)

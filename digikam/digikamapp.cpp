@@ -2424,7 +2424,9 @@ void DigikamApp::slotKipiPluginPlug()
             {
                 QString actionName(action->objectName());
                 if (!pluginActionsDisabled.contains(actionName))
+                {
                     category->addAction(actionName, action);
+                }
             }
         }
         else
@@ -2434,7 +2436,9 @@ void DigikamApp::slotKipiPluginPlug()
             {
                 QString actionName(action->objectName());
                 if (!pluginActionsDisabled.contains(actionName))
+                {
                     d->kipipluginsActionCollection->addAction(actionName, action);
+                }
             }
 #if KDE_IS_VERSION(4,1,68)
         }

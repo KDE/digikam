@@ -98,10 +98,10 @@ public:
 
     QList<int>                      tagFilter;
 
-    QTimer                         *filterTimer;
-    QTimer                         *refreshTimer;
+    QTimer*                         filterTimer;
+    QTimer*                         refreshTimer;
 
-    KIO::TransferJob               *job;
+    KIO::TransferJob*               job;
 
     SearchTextSettings              textFilterSettings;
 
@@ -109,7 +109,7 @@ public:
 
     QSet<qlonglong>                 itemListSet;
 
-    Album                          *currAlbum;
+    Album*                          currAlbum;
 
     MimeFilter::TypeMimeFilter      mimeTypeFilter;
 
@@ -556,7 +556,9 @@ void AlbumLister::slotFilterItems()
     {
         /*
         foreach(const ImageInfo& info, deleteFilteredItemsList)
+        {
             emit signalDeleteFilteredItem(info);
+        }
         */
         emit signalClear();
     }

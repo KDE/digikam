@@ -244,10 +244,12 @@ void DatabaseConfigElementLoader::readConfig()
 
         kDebug() << "Statements:";
 
-        foreach (const QString actionKey, configElement.sqlStatements.keys()){
+        foreach (const QString actionKey, configElement.sqlStatements.keys())
+        {
             QList<databaseActionElement> l_DBActionElement = configElement.sqlStatements[actionKey].dBActionElements;
             kDebug() << "DBAction [" << actionKey << "] has [" << l_DBActionElement.size() << "] actions";
-            foreach (const databaseActionElement statement, l_DBActionElement){
+            foreach (const databaseActionElement statement, l_DBActionElement)
+            {
                 kDebug() << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
             }
         }

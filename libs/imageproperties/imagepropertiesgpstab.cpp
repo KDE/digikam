@@ -69,40 +69,43 @@ class ImagePropertiesGPSTabPriv
 
 public:
 
-    ImagePropertiesGPSTabPriv()
+    ImagePropertiesGPSTabPriv() :
+        altLabel(0),
+        latLabel(0),
+        lonLabel(0),
+        dateLabel(0),
+        detailsBtn(0),
+        detailsCombo(0),
+        altitude(0),
+        latitude(0),
+        longitude(0),
+        date(0),
+        map(0),
+        itemMarkerTiler(0),
+        itemModel(0),
+        gpsModelHelper(0)
     {
-        detailsBtn   = 0;
-        detailsCombo = 0;
-        map          = 0;
-        altLabel     = 0;
-        latLabel     = 0;
-        lonLabel     = 0;
-        dateLabel    = 0;
-        altitude     = 0;
-        latitude     = 0;
-        longitude    = 0;
-        date         = 0;
     }
 
-    QLabel                     *altLabel;
-    QLabel                     *latLabel;
-    QLabel                     *lonLabel;
-    QLabel                     *dateLabel;
+    QLabel*                altLabel;
+    QLabel*                latLabel;
+    QLabel*                lonLabel;
+    QLabel*                dateLabel;
 
-    QToolButton                *detailsBtn;
-    KComboBox                  *detailsCombo;
+    QToolButton*           detailsBtn;
+    KComboBox*             detailsCombo;
 
-    KSqueezedTextLabel         *altitude;
-    KSqueezedTextLabel         *latitude;
-    KSqueezedTextLabel         *longitude;
-    KSqueezedTextLabel         *date;
+    KSqueezedTextLabel*    altitude;
+    KSqueezedTextLabel*    latitude;
+    KSqueezedTextLabel*    longitude;
+    KSqueezedTextLabel*    date;
 
-    KMap::KMapWidget           *map;
-    KMap::ItemMarkerTiler      *itemMarkerTiler;
-    GPSInfoList                gpsInfoList;
+    KMap::KMapWidget*      map;
+    KMap::ItemMarkerTiler* itemMarkerTiler;
+    GPSInfoList            gpsInfoList;
 
-    QStandardItemModel         *itemModel;
-    ImageGPSModelHelper        *gpsModelHelper;
+    QStandardItemModel*    itemModel;
+    ImageGPSModelHelper*   gpsModelHelper;
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
@@ -151,15 +154,15 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QWidget* const box = new KHBox(this);
+    QWidget* const box            = new KHBox(this);
     QHBoxLayout* const hBoxLayout = reinterpret_cast<QHBoxLayout*>(box->layout());
     if (hBoxLayout)
     {
         hBoxLayout->addStretch();
     }
 
-    d->detailsCombo    = new KComboBox(box);
-    d->detailsBtn      = new QToolButton(box);
+    d->detailsCombo = new KComboBox(box);
+    d->detailsBtn   = new QToolButton(box);
     d->detailsBtn->setIcon(SmallIcon("internet-web-browser"));
     d->detailsBtn->setToolTip(i18n("See more info on the Internet"));
     d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
@@ -303,7 +306,6 @@ void ImagePropertiesGPSTab::slotGPSDetails()
 
     kDebug() << url;
     KToolInvocation::self()->invokeBrowser(url);
-    
 }
 
 void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
@@ -320,7 +322,7 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
 
 void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
 {
-    const QDateTime dt = meta.getImageDateTime();
+    const QDateTime dt         = meta.getImageDateTime();
     double lat, lng;
     const bool haveCoordinates = meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
 
@@ -330,12 +332,12 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
         const bool haveAlt = meta.getGPSAltitude(&alt);
 
         GPSInfo gpsInfo;
-        gpsInfo.longitude = lng;
-        gpsInfo.latitude  = lat;
-        gpsInfo.altitude  = alt;
+        gpsInfo.longitude   = lng;
+        gpsInfo.latitude    = lat;
+        gpsInfo.altitude    = alt;
         gpsInfo.hasAltitude = haveAlt;
-        gpsInfo.dateTime  = dt;
-        gpsInfo.url       = url;
+        gpsInfo.dateTime    = dt;
+        gpsInfo.url         = url;
         setGPSInfoList(GPSInfoList() << gpsInfo);
     }
     else
@@ -380,7 +382,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     {
         setEnabled(true);
     }
-    
+
     d->gpsInfoList.clear();
     d->itemModel->clear();
 

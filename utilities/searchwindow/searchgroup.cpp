@@ -327,10 +327,14 @@ QList<QRect> SearchGroup::startupAnimationArea() const
     rects += startupAnimationAreaOfGroups();
     // field groups
     foreach (SearchFieldGroup *fieldGroup, m_fieldGroups)
+    {
         rects += fieldGroup->areaOfMarkedFields();
+    }
     // adjust position relative to parent
     for (QList<QRect>::iterator it = rects.begin(); it != rects.end(); ++it)
+    {
         (*it).translate(pos());
+    }
     return rects;
 }
 

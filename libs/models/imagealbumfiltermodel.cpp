@@ -65,9 +65,13 @@ ImageAlbumFilterModel::ImageAlbumFilterModel(QObject *parent)
             this, SLOT(slotAlbumRenamed(Album*)));
 
     foreach (Album *a, AlbumManager::instance()->allPAlbums())
+    {
         albumChange(a);
+    }
     foreach (Album *a, AlbumManager::instance()->allTAlbums())
+    {
         albumChange(a);
+    }
 }
 
 ImageAlbumFilterModel::~ImageAlbumFilterModel()

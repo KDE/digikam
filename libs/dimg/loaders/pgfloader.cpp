@@ -106,6 +106,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (!file)
     {
         kDebug() << "Error: Could not open source file.";
+        loadingFailed();
         return false;
     }
 
@@ -114,6 +115,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (fread(&header, 3, 1, file) != 1)
     {
         fclose(file);
+        loadingFailed();
         return false;
     }
 
@@ -123,6 +125,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         // not a PGF file
         fclose(file);
+        loadingFailed();
         return false;
     }
 
@@ -138,11 +141,17 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #endif
     if (fd == INVALID_HANDLE_VALUE)
+    {
+        loadingFailed();
         return false;
+    }
 #else
     int fd = open(QFile::encodeName(filePath), O_RDONLY);
     if (fd == -1)
+    {
+        loadingFailed();
         return false;
+    }
 #endif
 
     CPGFFileStream stream(fd);
@@ -167,6 +176,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 break;
             default:
                 kDebug() << "Cannot load PGF image: color mode not supported (" << pgf.Mode() << ")";
+                loadingFailed();
                 return false;
                 break;
         }
@@ -178,6 +188,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 break;
             default:
                 kDebug() << "Cannot load PGF image: color channels number not supported (" << pgf.Channels() << ")";
+                loadingFailed();
                 return false;
                 break;
         }
@@ -196,6 +207,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 break;
             default:
                 kDebug() << "Cannot load PGF image: color bits depth not supported (" << bitDepth << ")";
+                loadingFailed();
                 return false;
                 break;
         }
@@ -295,6 +307,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         close(fd);
 #endif
 
+        loadingFailed();
         return false;
     }
     catch(std::bad_alloc& e)
@@ -307,6 +320,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         close(fd);
 #endif
 
+        loadingFailed();
         return false;
     }
 }

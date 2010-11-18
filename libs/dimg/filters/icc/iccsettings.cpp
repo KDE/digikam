@@ -147,26 +147,34 @@ bool IccSettings::monitorProfileFromSystem()
     {
         QMutexLocker lock(&d->mutex);
         foreach (const IccProfile &profile, d->screenProfiles)
+        {
             if (!profile.isNull())
+            {
                 return true;
+            }
+        }
     }
 
     // Second, check all toplevel widgets
     QList<QWidget*> topLevels = qApp->topLevelWidgets();
     foreach (QWidget* widget, topLevels)
+    {
         if (!d->profileFromWindowSystem(widget).isNull())
+        {
             return true;
+        }
+    }
 
     return false;
 }
 
 /*
  * From koffice/libs/pigment/colorprofiles/KoLcmsColorProfileContainer.cpp
- * Copyright (c) 2000 Matthias Elter <elter@kde.org>
+ * Copyright (C) 2000 Matthias Elter <elter@kde.org>
  *                2001 John Califf
  *                2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>IccProfile IccSettingsPriv::profileForScreen(QWidget *widget)
+ *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *  Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>IccProfile IccSettingsPriv::profileForScreen(QWidget *widget)
 */
 IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget)
 {

@@ -59,10 +59,10 @@ void PollThread::run()
 {
     do
     {
-        kDebug() << "Waiting "<< waitTime <<" seconds...stop: ["<< stop <<"]";
+        kDebug() << "Waiting " << waitTime << " seconds...stop: [" << stop << "]";
         sleep(waitTime);
     }
-    while( !stop && checkDigikamInstancesRunning() );
+    while (!stop && checkDigikamInstancesRunning());
 
     kDebug() << "Shutting down database server";
     emit done();

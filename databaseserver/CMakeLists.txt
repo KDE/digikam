@@ -6,15 +6,6 @@ SET(digikamdatabaseserver_SRCS ${lib..._SRCS}
                                main.cpp
    )
 
-INCLUDE_DIRECTORIES(
-                     # database libs
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
-
-                     # config-digikam.h
-                     ${CMAKE_CURRENT_BINARY_DIR}/../
-                   )
-
 QT4_ADD_DBUS_ADAPTOR(digikamdatabaseserver_SRCS org.kde.digikam.DatabaseServer.xml
                      databaseserver.h Digikam::DatabaseServer)
 

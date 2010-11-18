@@ -157,51 +157,56 @@ class CIETongueWidget::CIETongueWidgetPriv
 {
 public:
 
-    CIETongueWidgetPriv()
+    CIETongueWidgetPriv() :
+        profileDataAvailable(true),
+        loadingImageMode(false),
+        loadingImageSucess(false),
+        needUpdatePixmap(false),
+        uncalibratedColor(false),
+        xBias(0),
+        yBias(0),
+        pxcols(0),
+        pxrows(0),
+        progressCount(0),
+        gridside(0),
+        progressTimer(0),
+        hMonitorProfile(0),
+        hXYZProfile(0),
+        hXFORM(0)
     {
-        profileDataAvailable = true;
-        loadingImageMode     = false;
-        loadingImageSucess   = false;
-        needUpdatePixmap     = false;
-        uncalibratedColor    = false;
-        hMonitorProfile      = 0;
-        hXYZProfile          = 0;
-        hXFORM               = 0;
-        Measurement.Patches  = 0;
-        Measurement.Allowed  = 0;
-        progressCount        = 0;
-        progressTimer        = 0;
-        progressPix          = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
+        progressPix         = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
+        Measurement.Patches = 0;
+        Measurement.Allowed = 0;
     }
 
-    bool             profileDataAvailable;
-    bool             loadingImageMode;
-    bool             loadingImageSucess;
-    bool             needUpdatePixmap;
-    bool             uncalibratedColor;
+    bool            profileDataAvailable;
+    bool            loadingImageMode;
+    bool            loadingImageSucess;
+    bool            needUpdatePixmap;
+    bool            uncalibratedColor;
 
-    int              xBias;
-    int              yBias;
-    int              pxcols;
-    int              pxrows;
-    int              progressCount;           // Position of animation during loading/calculation.
+    int             xBias;
+    int             yBias;
+    int             pxcols;
+    int             pxrows;
+    int             progressCount;           // Position of animation during loading/calculation.
 
-    double           gridside;
+    double          gridside;
 
-    QPainter         painter;
+    QPainter        painter;
 
-    QTimer          *progressTimer;
+    QTimer*         progressTimer;
 
-    QPixmap          pixmap;
-    KPixmapSequence  progressPix;
+    QPixmap         pixmap;
+    KPixmapSequence progressPix;
 
-    cmsHPROFILE      hMonitorProfile;
-    cmsHPROFILE      hXYZProfile;
-    cmsHTRANSFORM    hXFORM;
-    cmsCIExyYTRIPLE  Primaries;
-    cmsCIEXYZ        MediaWhite;
+    cmsHPROFILE     hMonitorProfile;
+    cmsHPROFILE     hXYZProfile;
+    cmsHTRANSFORM   hXFORM;
+    cmsCIExyYTRIPLE Primaries;
+    cmsCIEXYZ       MediaWhite;
 
-    MEASUREMENT      Measurement;
+    MEASUREMENT     Measurement;
 };
 
 CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMonitor)
@@ -213,9 +218,13 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMon
     cmsErrorAction(LCMS_ERROR_SHOW);
 
     if (hMonitor)
+    {
         d->hMonitorProfile = hMonitor;
+    }
     else
+    {
         d->hMonitorProfile = cmsCreate_sRGBProfile();
+    }
 
     d->hXYZProfile = cmsCreateXYZProfile();
     d->hXFORM      = cmsCreateTransform(d->hXYZProfile, TYPE_XYZ_16,
@@ -229,10 +238,14 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMon
 CIETongueWidget::~CIETongueWidget()
 {
     if (d->Measurement.Patches)
+    {
         free(d->Measurement.Patches);
+    }
 
     if (d->Measurement.Allowed)
+    {
         free(d->Measurement.Allowed);
+    }
 
     cmsDeleteTransform(d->hXFORM);
     cmsCloseProfile(d->hXYZProfile);
@@ -607,10 +620,14 @@ void CIETongueWidget::drawPatches()
             if (p->dwFlags & PATCH_HAS_XYZ_PROOF)
             {
                 if (p->XYZ.Y < 0.03)
+                {
                    continue;
+                }
 
                 if (p->XYZProof.Y < 0.03)
+                {
                    continue;
+                }
 
                 cmsCIExyY Pt;
                 cmsXYZ2xyY(&Pt, &p->XYZProof);
@@ -620,7 +637,9 @@ void CIETongueWidget::drawPatches()
                 mapPoint(icx2, icy2, &Pt);
 
                 if (icx2 < 5 || icy2 < 5 || icx1 < 5 || icy1 < 5)
+                {
                     continue;
+                }
 
                 d->painter.setPen(qRgb(255, 255, 0));
                 biasedLine(icx1, icy1, icx2, icy2);
@@ -755,13 +774,19 @@ void CIETongueWidget::updatePixmap()
     drawTongueGrid();
 
     if (d->MediaWhite.Y > 0.0)
+    {
         drawWhitePoint();
+    }
 
     if (d->Primaries.Red.Y != 0.0)
+    {
         drawColorantTriangle();
+    }
 
     if (d->Measurement.Patches && d->Measurement.Allowed)
+    {
         drawPatches();
+    }
 
     d->painter.end();
 }
@@ -843,7 +868,9 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     // Create CIE tongue if needed
     if (d->needUpdatePixmap)
+    {
         updatePixmap();
+    }
 
     // draw prerendered tongue
     p.drawPixmap(0, 0, d->pixmap);

@@ -545,7 +545,10 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
     /* see #231598
     QHash<int, CollectionLocation> albumRoots;
     foreach (const CollectionLocation& location, locations)
-        albumRoots[location.id()] = location;*/
+    {
+        albumRoots[location.id()] = location;
+    }
+    */
 
     QList<AlbumShortInfo>::const_iterator it;
     for (it = albumList.constBegin(); it != albumList.constEnd(); ++it)

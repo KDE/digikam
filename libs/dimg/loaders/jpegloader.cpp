@@ -110,13 +110,17 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
+    {
+        loadingFailed();
         return false;
+    }
 
     unsigned char header[2];
 
     if (fread(&header, 2, 1, file) != 1)
     {
         fclose(file);
+        loadingFailed();
         return false;
     }
 
@@ -126,6 +130,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         // not a jpeg file
         fclose(file);
+        loadingFailed();
         return false;
     }
 
@@ -176,6 +181,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         jpeg_destroy_decompress(&cinfo);
         delete cleanupData;
+        loadingFailed();
         return false;
     }
 
@@ -301,6 +307,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             jpeg_destroy_decompress(&cinfo);
             kDebug() << "Height of JPEG scanline buffer out of range!";
             delete cleanupData;
+            loadingFailed();
             return false;
         }
 
@@ -318,6 +325,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     << cinfo.output_components
                     << ") unsupported!";
             delete cleanupData;
+            loadingFailed();
             return false;
         }
 
@@ -329,6 +337,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             jpeg_destroy_decompress(&cinfo);
             kDebug() << "Cannot allocate memory!";
             delete cleanupData;
+            loadingFailed();
             return false;
         }
 
@@ -340,6 +349,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             jpeg_destroy_decompress(&cinfo);
             kDebug() << "Cannot allocate memory!";
             delete cleanupData;
+            loadingFailed();
             return false;
         }
 
@@ -363,6 +373,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     {
                         jpeg_destroy_decompress(&cinfo);
                         delete cleanupData;
+                        loadingFailed();
                         return false;
                     }
                     observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
@@ -406,6 +417,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     {
                         jpeg_destroy_decompress(&cinfo);
                         delete cleanupData;
+                        loadingFailed();
                         return false;
                     }
                     observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
@@ -450,6 +462,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     {
                         jpeg_destroy_decompress(&cinfo);
                         delete cleanupData;
+                        loadingFailed();
                         return false;
                     }
                     observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));

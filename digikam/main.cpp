@@ -24,27 +24,27 @@
 
 // Qt includes
 
-#include <QString>
-#include <QStringList>
 #include <QDir>
-#include <QFileInfo>
 #include <QFile>
+#include <QFileInfo>
 #include <QSqlDatabase>
 #include <QDBusConnection>
+#include <QString>
+#include <QStringList>
 
 // KDE includes
 
-#include <kcmdlineargs.h>
-#include <kapplication.h>
 #include <kaboutdata.h>
-#include <klocale.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
 #include <kconfig.h>
+#include <kdebug.h>
+#include <kdeversion.h>
 #include <kglobal.h>
 #include <kimageio.h>
-#include <ktip.h>
-#include <kdeversion.h>
+#include <klocale.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
+#include <ktip.h>
 
 // Libkexiv2 includes
 
@@ -53,16 +53,16 @@
 
 // Local includes
 
-#include "version.h"
-#include "daboutdata.h"
 #include "albummanager.h"
+#include "assistantdlg.h"
+#include "collectionlocation.h"
+#include "collectionmanager.h"
+#include "daboutdata.h"
 #include "databaseaccess.h"
 #include "databaseparameters.h"
-#include "scancontroller.h"
-#include "collectionmanager.h"
-#include "collectionlocation.h"
 #include "digikamapp.h"
-#include "assistantdlg.h"
+#include "scancontroller.h"
+#include "version.h"
 
 using namespace Digikam;
 
@@ -146,7 +146,9 @@ int main(int argc, char *argv[])
         AssistantDlg firstRun;
         app.setTopWidget(&firstRun);
         if (firstRun.exec() == QDialog::Rejected)
+        {
             return 1;
+        }
 
         // parameters are written to config
         firstAlbumPath = firstRun.firstAlbumPath();
@@ -181,6 +183,13 @@ int main(int argc, char *argv[])
 
     // create main window
     DigikamApp *digikam = new DigikamApp();
+
+    // Bug #247175:
+    // Add a connection to the destroyed() signal when the digiKam mainwindow has been
+    // closed. This should prevent digiKam from staying open in the background.
+    //
+    // Right now this is the easiest and cleanest fix for the described problem, but me might re-think the
+    // solution later on, just in case there are better ways to do it.
     QObject::connect(digikam, SIGNAL(destroyed(QObject*)), &app, SLOT(quit()));
 
     // Unregister the dummy service
@@ -193,11 +202,17 @@ int main(int argc, char *argv[])
     digikam->show();
 
     if (args && args->isSet("download-from"))
+    {
         digikam->downloadFrom(args->getOption("download-from"));
+    }
     else if (args && args->isSet("download-from-udi"))
+    {
         digikam->downloadFromUdi(args->getOption("download-from-udi"));
+    }
     else if (args && args->isSet("detect-camera"))
+    {
         digikam->autoDetect();
+    }
 
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
@@ -207,7 +222,9 @@ int main(int argc, char *argv[])
     KGlobal::locale()->insertCatalog("libkdcraw");
 
     if (!app.isSessionRestored())
+    {
         KTipDialog::showMultiTip(0, tipsFiles, false);
+    }
 
     int ret = app.exec();
 

@@ -57,7 +57,7 @@ void DImgLoader::setLoadFlags(LoadFlags flags)
 
 bool DImgLoader::hasLoadedData() const
 {
-    return m_loadFlags & LoadImageData;
+    return (m_loadFlags & LoadImageData) && m_image->m_priv->data;
 }
 
 int DImgLoader::granularity(DImgLoaderObserver* observer, int total, float progressSlice)
@@ -138,6 +138,15 @@ QMap<QString, QString>& DImgLoader::imageEmbeddedText()
 void DImgLoader::imageSetEmbbededText(const QString& key, const QString& text)
 {
     m_image->setEmbeddedText(key, text);
+}
+
+void DImgLoader::loadingFailed()
+{
+    if (m_image->m_priv->data)
+        delete [] m_image->m_priv->data;
+    m_image->m_priv->data   = 0;
+    m_image->m_priv->width  = 0;
+    m_image->m_priv->height = 0;
 }
 
 unsigned char* DImgLoader::new_failureTolerant(size_t size)

@@ -914,7 +914,9 @@ void MetadataHubOnTheRoad::applyChangeNotifications()
     }
 
     foreach (int tagId, tagIds)
+    {
         notifyTagDeleted(tagId);
+    }
 }
 
 void MetadataHubOnTheRoad::slotTagDeleted(int tagId)

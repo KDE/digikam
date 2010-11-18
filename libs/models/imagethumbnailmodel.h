@@ -6,7 +6,7 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries with support for thumbnail loading
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,6 @@ namespace Digikam
 
 class LoadingDescription;
 class ThumbnailLoadThread;
-class ImageThumbnailModelPriv;
 
 class DIGIKAM_DATABASE_EXPORT ImageThumbnailModel : public ImageModel
 {
@@ -50,13 +49,13 @@ public:
      *  Note that setKeepsFilePathCache is enabled per default.
      */
 
-    ImageThumbnailModel(QObject *parent);
+    ImageThumbnailModel(QObject* parent);
     ~ImageThumbnailModel();
 
     /** Enable thumbnail loading and set the thread that shall be used.
      *  The thumbnail size of this thread will be adjusted. */
-    void setThumbnailLoadThread(ThumbnailLoadThread *thread);
-    ThumbnailLoadThread *thumbnailLoadThread() const;
+    void setThumbnailLoadThread(ThumbnailLoadThread* thread);
+    ThumbnailLoadThread* thumbnailLoadThread() const;
     /// Set the thumbnail size to use
     void setThumbnailSize(const ThumbnailSize& thumbSize);
     /// If you want to fix a size for preloading, do it here.
@@ -94,7 +93,8 @@ public:
 
 public Q_SLOTS:
 
-    /** Prepare the thumbnail loading for the given indexes */
+    /** Prepare the thumbnail loading for the given indexes
+     */
     void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
     void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize);
 
@@ -124,6 +124,7 @@ protected Q_SLOTS:
 
 private:
 
+    class ImageThumbnailModelPriv;
     ImageThumbnailModelPriv* const d;
 };
 

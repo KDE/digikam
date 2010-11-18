@@ -104,10 +104,16 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings,
              data, width, height, rgbmax))
+        {
+            loadingFailed();
             return false;
+        }
 
         if (!loadedFromDcraw(data, width, height, rgbmax, observer))
+        {
+            loadingFailed();
             return false;
+        }
     }
     else
     {

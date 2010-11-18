@@ -443,7 +443,9 @@ QStringList IccProfile::defaultSearchPaths()
             dataDirs << "/usr/local/share";
 
         foreach (const QString& dataDir, dataDirs)
+        {
             candidates << dataDir + "/color/icc";
+        }
 
         // XDG_DATA_HOME
         QString dataHomeDir = QString::fromLocal8Bit(getenv("XDG_DATA_HOME"));

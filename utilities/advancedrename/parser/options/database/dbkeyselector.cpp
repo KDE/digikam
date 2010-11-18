@@ -204,7 +204,9 @@ void DbKeySelectorView::slotSearchTextChanged(const SearchTextSettings& settings
     {
         DbHeaderListItem *item = dynamic_cast<DbHeaderListItem*>(*it2);
         if (item)
+        {
             item->setHidden(false);
+        }
         ++it2;
     }
 

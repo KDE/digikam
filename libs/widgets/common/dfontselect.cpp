@@ -43,23 +43,23 @@ class DFontSelectPriv
 {
 public:
 
-    DFontSelectPriv()
+    DFontSelectPriv() :
+        space(0),
+        label(0),
+        chooseFontButton(0),
+        modeCombo(0),
+        mode(DFontSelect::SystemFont)
     {
-        space            = 0;
-        label            = 0;
-        chooseFontButton = 0;
-        modeCombo        = 0;
-        mode             = DFontSelect::SystemFont;
     }
 
-    QLabel                *space;
-    QLabel                *label;
+    QLabel*                space;
+    QLabel*                label;
 
     QFont                  font;
 
-    QPushButton           *chooseFontButton;
+    QPushButton*           chooseFontButton;
 
-    KComboBox             *modeCombo;
+    KComboBox*             modeCombo;
 
     DFontSelect::FontMode  mode;
 };

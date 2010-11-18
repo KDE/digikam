@@ -176,7 +176,9 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
         // get the largest size hint for the icon/text of all category entries
         int maxStyledWidth = 0;
         foreach(const QModelIndex& catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
+        {
             maxStyledWidth = qMax(maxStyledWidth, m_styledDelegate->sizeHint(option, catIndex).width());
+        }
         const_cast<SetupCollectionDelegate*>(this)->m_categoryMaxStyledWidth = maxStyledWidth;
 
         // set real text on sample button to compute correct size hint
@@ -461,7 +463,9 @@ void SetupCollectionModel::apply()
     {
         QStringList failedPaths;
         foreach(const Item& item, failedItems)
+        {
             failedPaths << item.path;
+        }
         KMessageBox::errorList(m_dialogParentWidget,
                                i18n("It was not possible to add a collection for the following paths:"),
                                failedPaths);
@@ -469,7 +473,9 @@ void SetupCollectionModel::apply()
 
     // Trigger collection scan
     if (!newItems.isEmpty() || !deletedItems.isEmpty())
+    {
         ScanController::instance()->completeCollectionScan();
+    }
 }
 
 void SetupCollectionModel::setParentWidgetForDialogs(QWidget *widget)

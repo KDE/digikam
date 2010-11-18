@@ -70,7 +70,9 @@ KIO::Job* copy(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlb
 
     QStringList filenames;
     foreach(const KUrl& url, srcList)
+    {
         filenames << url.fileName();
+    }
     ScanController::instance()->hintAtMoveOrCopyOfItems(ids, dest, filenames);
 
     return KIO::copy(srcList, destUrl);
@@ -82,7 +84,9 @@ KIO::Job* move(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlb
 
     QStringList filenames;
     foreach(const KUrl& url, srcList)
+    {
         filenames << url.fileName();
+    }
     ScanController::instance()->hintAtMoveOrCopyOfItems(ids, dest, filenames);
 
     return KIO::move(srcList, destUrl);

@@ -343,8 +343,12 @@ CopyrightInfo ImageCopyright::copyrightInfo(const QString& property)
     if (m_cache)
     {
         foreach (const CopyrightInfo &info, m_cache->infos)
+        {
             if (info.property == property)
+            {
                 return info;
+            }
+        }
     }
     else
     {
@@ -361,8 +365,12 @@ QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property)
     {
         QList<CopyrightInfo> infos;
         foreach (const CopyrightInfo &info, m_cache->infos)
+        {
             if (info.property == property)
+            {
                 infos << info;
+            }
+        }
         return infos;
     }
     else
@@ -396,11 +404,13 @@ KExiv2Iface::KExiv2::AltLangMap ImageCopyright::readLanguageProperties(const QSt
     KExiv2Iface::KExiv2::AltLangMap map;
     QList<CopyrightInfo> infos = copyrightInfos(property);
     foreach (const CopyrightInfo &info, infos)
+    {
         map[info.extraValue] = info.value;
+    }
     return map;
 }
 
-void ImageCopyright::setLanguageProperty(const QString& property, const QString& value, 
+void ImageCopyright::setLanguageProperty(const QString& property, const QString& value,
                                          const QString& languageCode, ReplaceMode mode)
 {
     AlbumDB::CopyrightPropertyUnique uniqueness;

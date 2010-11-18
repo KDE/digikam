@@ -843,7 +843,9 @@ QString AlbumSettings::getImageFileFilter() const
     DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
     QStringList wildcards;
     foreach (const QString& suffix, imageSettings)
+    {
         wildcards << "*." + suffix;
+    }
     return wildcards.join(" ");
 }
 
@@ -853,7 +855,9 @@ QString AlbumSettings::getMovieFileFilter() const
     DatabaseAccess().db()->getFilterSettings(0, &movieSettings, 0);
     QStringList wildcards;
     foreach (const QString& suffix, movieSettings)
+    {
         wildcards << "*." + suffix;
+    }
     return wildcards.join(" ");
 }
 
@@ -863,7 +867,9 @@ QString AlbumSettings::getAudioFileFilter() const
     DatabaseAccess().db()->getFilterSettings(0, 0, &audioSettings);
     QStringList wildcards;
     foreach (const QString& suffix, audioSettings)
+    {
         wildcards << "*." + suffix;
+    }
     return wildcards.join(" ");
 }
 
@@ -884,7 +890,9 @@ QString AlbumSettings::getRawFileFilter() const
 
     QStringList wildcards;
     foreach (const QString& suffix, supportedRaws)
+    {
         wildcards << "*." + suffix;
+    }
     return wildcards.join(" ");
 }
 
@@ -894,11 +902,17 @@ QString AlbumSettings::getAllFileFilter() const
     DatabaseAccess().db()->getFilterSettings(&imageFilter, &audioFilter, &videoFilter);
     QStringList wildcards;
     foreach (const QString& suffix, imageFilter)
+    {
         wildcards << "*." + suffix;
+    }
     foreach (const QString& suffix, audioFilter)
+    {
         wildcards << "*." + suffix;
+    }
     foreach (const QString& suffix, videoFilter)
+    {
         wildcards << "*." + suffix;
+    }
     return wildcards.join(" ");
 }
 

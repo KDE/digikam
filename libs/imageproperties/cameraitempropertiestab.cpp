@@ -52,97 +52,97 @@ class CameraItemPropertiesTabPriv
 {
 public:
 
-    CameraItemPropertiesTabPriv()
+    CameraItemPropertiesTabPriv() :
+        file(0),
+        folder(0),
+        date(0),
+        size(0),
+        isReadable(0),
+        isWritable(0),
+        mime(0),
+        dimensions(0),
+        newFileName(0),
+        downloaded(0),
+        make(0),
+        model(0),
+        photoDate(0),
+        lens(0),
+        aperture(0),
+        focalLength(0),
+        exposureTime(0),
+        sensitivity(0),
+        exposureMode(0),
+        flash(0),
+        whiteBalance(0),
+        labelFile(0),
+        labelFolder(0),
+        labelFileIsReadable(0),
+        labelFileIsWritable(0),
+        labelFileDate(0),
+        labelFileSize(0),
+        labelImageMime(0),
+        labelImageDimensions(0),
+        labelNewFileName(0),
+        labelAlreadyDownloaded(0),
+        labelPhotoMake(0),
+        labelPhotoModel(0),
+        labelPhotoDateTime(0),
+        labelPhotoLens(0),
+        labelPhotoAperture(0),
+        labelPhotoFocalLength(0),
+        labelPhotoExposureTime(0),
+        labelPhotoSensitivity(0),
+        labelPhotoExposureMode(0),
+        labelPhotoFlash(0),
+        labelPhotoWhiteBalance(0)
     {
-        file                   = 0;
-        folder                 = 0;
-        date                   = 0;
-        size                   = 0;
-        isReadable             = 0;
-        isWritable             = 0;
-        mime                   = 0;
-        dimensions             = 0;
-        newFileName            = 0;
-        downloaded             = 0;
-        make                   = 0;
-        model                  = 0;
-        photoDate              = 0;
-        lens                   = 0;
-        aperture               = 0;
-        focalLength            = 0;
-        exposureTime           = 0;
-        sensitivity            = 0;
-        exposureMode           = 0;
-        flash                  = 0;
-        whiteBalance           = 0;
-        labelFile              = 0;
-        labelFolder            = 0;
-        labelFileIsReadable    = 0;
-        labelFileIsWritable    = 0;
-        labelFileDate          = 0;
-        labelFileSize          = 0;
-        labelImageMime         = 0;
-        labelImageDimensions   = 0;
-        labelNewFileName       = 0;
-        labelAlreadyDownloaded = 0;
-        labelPhotoMake         = 0;
-        labelPhotoModel        = 0;
-        labelPhotoDateTime     = 0;
-        labelPhotoLens         = 0;
-        labelPhotoAperture     = 0;
-        labelPhotoFocalLength  = 0;
-        labelPhotoExposureTime = 0;
-        labelPhotoSensitivity  = 0;
-        labelPhotoExposureMode = 0;
-        labelPhotoFlash        = 0;
-        labelPhotoWhiteBalance = 0;
     }
 
-    DTextLabelName  *file;
-    DTextLabelName  *folder;
-    DTextLabelName  *date;
-    DTextLabelName  *size;
-    DTextLabelName  *isReadable;
-    DTextLabelName  *isWritable;
-    DTextLabelName  *mime;
-    DTextLabelName  *dimensions;
-    DTextLabelName  *newFileName;
-    DTextLabelName  *downloaded;
+    DTextLabelName*  file;
+    DTextLabelName*  folder;
+    DTextLabelName*  date;
+    DTextLabelName*  size;
+    DTextLabelName*  isReadable;
+    DTextLabelName*  isWritable;
+    DTextLabelName*  mime;
+    DTextLabelName*  dimensions;
+    DTextLabelName*  newFileName;
+    DTextLabelName*  downloaded;
 
-    DTextLabelName  *make;
-    DTextLabelName  *model;
-    DTextLabelName  *photoDate;
-    DTextLabelName  *lens;
-    DTextLabelName  *aperture;
-    DTextLabelName  *focalLength;
-    DTextLabelName  *exposureTime;
-    DTextLabelName  *sensitivity;
-    DTextLabelName  *exposureMode;
-    DTextLabelName  *flash;
-    DTextLabelName  *whiteBalance;
+    DTextLabelName*  make;
+    DTextLabelName*  model;
+    DTextLabelName*  photoDate;
+    DTextLabelName*  lens;
+    DTextLabelName*  aperture;
+    DTextLabelName*  focalLength;
+    DTextLabelName*  exposureTime;
+    DTextLabelName*  sensitivity;
+    DTextLabelName*  exposureMode;
+    DTextLabelName*  flash;
+    DTextLabelName*  whiteBalance;
 
-    DTextLabelValue *labelFile;
-    DTextLabelValue *labelFolder;
-    DTextLabelValue *labelFileIsReadable;
-    DTextLabelValue *labelFileIsWritable;
-    DTextLabelValue *labelFileDate;
-    DTextLabelValue *labelFileSize;
-    DTextLabelValue *labelImageMime;
-    DTextLabelValue *labelImageDimensions;
-    DTextLabelValue *labelNewFileName;
-    DTextLabelValue *labelAlreadyDownloaded;
+    DTextLabelValue* labelFile;
+    DTextLabelValue* labelFolder;
+    DTextLabelValue* labelFileIsReadable;
+    DTextLabelValue* labelFileIsWritable;
+    DTextLabelValue* labelFileDate;
+    DTextLabelValue* labelFileSize;
+    DTextLabelValue* labelImageMime;
+    DTextLabelValue* labelImageDimensions;
+    DTextLabelValue* labelNewFileName;
+    DTextLabelValue* labelAlreadyDownloaded;
 
-    DTextLabelValue *labelPhotoMake;
-    DTextLabelValue *labelPhotoModel;
-    DTextLabelValue *labelPhotoDateTime;
-    DTextLabelValue *labelPhotoLens;
-    DTextLabelValue *labelPhotoAperture;
-    DTextLabelValue *labelPhotoFocalLength;
-    DTextLabelValue *labelPhotoExposureTime;
-    DTextLabelValue *labelPhotoSensitivity;
-    DTextLabelValue *labelPhotoExposureMode;
-    DTextLabelValue *labelPhotoFlash;
-    DTextLabelValue *labelPhotoWhiteBalance;
+    DTextLabelValue* labelPhotoMake;
+    DTextLabelValue* labelPhotoModel;
+    DTextLabelValue* labelPhotoDateTime;
+    DTextLabelValue* labelPhotoLens;
+    DTextLabelValue* labelPhotoAperture;
+    DTextLabelValue* labelPhotoFocalLength;
+    DTextLabelValue* labelPhotoExposureTime;
+    DTextLabelValue* labelPhotoSensitivity;
+    DTextLabelValue* labelPhotoExposureMode;
+    DTextLabelValue* labelPhotoFlash;
+    DTextLabelValue* labelPhotoWhiteBalance;
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)

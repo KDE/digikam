@@ -77,17 +77,14 @@ public:
 
     DMetadata                   metaData;
 
-    GPItemInfo                 *itemInfo;
+    GPItemInfo*                 itemInfo;
 
-    ImagePropertiesMetaDataTab *metadataTab;
+    ImagePropertiesMetaDataTab* metadataTab;
+    ImagePropertiesGPSTab*      gpsTab;
 
-    ImagePropertiesGPSTab      *gpsTab;
-
-    CameraIconView             *cameraView;
-
-    CameraIconItem             *cameraItem;
-
-    CameraItemPropertiesTab    *cameraItemTab;
+    CameraIconView*             cameraView;
+    CameraIconItem*             cameraItem;
+    CameraItemPropertiesTab*    cameraItemTab;
 };
 
 ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,

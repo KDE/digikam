@@ -12,7 +12,7 @@
  *
  * The forwarding code is copied from kdelibs' ForwardingSlavebase.
  * Copyright for the KDE file forwardingslavebase follows:
- * Copyright (c) 2004 Kevin Ottens <ervin@ipsquad.net>
+ * Copyright (C) 2004 Kevin Ottens <ervin@ipsquad.net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

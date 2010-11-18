@@ -30,15 +30,15 @@ class VisibilityControllerPriv
 {
 public:
 
-    VisibilityControllerPriv()
+    VisibilityControllerPriv() :
+        status(VisibilityController::Unknown),
+        containerWidget(0)
     {
-        status          = VisibilityController::Unknown;
-        containerWidget = 0;
     }
 
     VisibilityController::Status  status;
     QList<VisibilityObject *>     objects;
-    QWidget                      *containerWidget;
+    QWidget*                      containerWidget;
 };
 
 class VisibilityWidgetWrapper : public QObject, public VisibilityObject
@@ -60,7 +60,7 @@ public:
         return m_widget->isVisible();
     }
 
-    QWidget *m_widget;
+    QWidget* m_widget;
 };
 
 VisibilityController::VisibilityController(QObject *parent)
@@ -178,20 +178,32 @@ void VisibilityController::allSteps()
     if (d->status == Showing)
     {
         if (d->containerWidget)
+        {
             d->containerWidget->setUpdatesEnabled(false);
+        }
         foreach(VisibilityObject *o, d->objects)
+        {
             o->setVisible(true);
+        }
         if (d->containerWidget)
+        {
             d->containerWidget->setUpdatesEnabled(true);
+        }
     }
     else if (d->status == Hiding)
     {
         if (d->containerWidget)
+        {
             d->containerWidget->setUpdatesEnabled(false);
+        }
         foreach(VisibilityObject *o, d->objects)
+        {
             o->setVisible(false);
+        }
         if (d->containerWidget)
+        {
             d->containerWidget->setUpdatesEnabled(true);
+        }
     }
 }
 

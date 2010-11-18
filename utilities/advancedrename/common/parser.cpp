@@ -141,7 +141,10 @@ void Parser::registerOption(Option* option)
 
 void Parser::unregisterOption(Option* option)
 {
-    if (!option) return;
+    if (!option)
+    {
+        return;
+    }
 
     for (OptionsList::iterator it = d->options.begin();
          it != d->options.end(); )
@@ -170,7 +173,10 @@ void Parser::registerModifier(Modifier* modifier)
 
 void Parser::unregisterModifier(Modifier* modifier)
 {
-    if (!modifier) return;
+    if (!modifier)
+    {
+        return;
+    }
 
     for (ModifierList::iterator it = d->modifiers.begin();
          it != d->modifiers.end(); )

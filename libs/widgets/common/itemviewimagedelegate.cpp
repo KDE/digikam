@@ -225,7 +225,9 @@ void ItemViewImageDelegate::mouseMoved(QMouseEvent *e, const QRect& visualRect, 
 {
     Q_D(ItemViewImageDelegate);
     foreach (ImageDelegateOverlay *overlay, d->overlays)
+    {
         overlay->mouseMoved(e, visualRect, index);
+    }
 }
 
 QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
@@ -417,7 +419,9 @@ void ItemViewImageDelegate::drawDelegates(QPainter *p, const QStyleOptionViewIte
 {
     Q_D(const ItemViewImageDelegate);
     foreach (ImageDelegateOverlay *overlay, d->overlays)
+    {
         overlay->paint(p, option, index);
+    }
 }
 
 void ItemViewImageDelegate::prepareFonts()

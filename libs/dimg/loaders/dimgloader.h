@@ -99,6 +99,7 @@ protected:
 
     virtual bool            readMetadata(const QString& filePath, DImg::FORMAT ff);
     virtual bool            saveMetadata(const QString& filePath);
+    void                    loadingFailed();
     virtual int             granularity(DImgLoaderObserver* observer, int total, float progressSlice = 1.0);
 
     bool                    checkExifWorkingColorSpace();

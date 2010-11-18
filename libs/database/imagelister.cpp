@@ -182,7 +182,9 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
         if (intAlbumIds.isEmpty())
             return;
         foreach (int id, intAlbumIds)
+        {
             albumIds << id;
+        }
     }
     else
     {
@@ -263,7 +265,7 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
     parameters.insert(":tagID",  tagId);
 
     DatabaseAccess access;
-    
+
     if (m_recursive)
     {
       access.backend()->execDBAction(access.backend()->getDBAction(QString("listTagRecursive")), parameters, &values);
@@ -749,7 +751,9 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
         // Unfortunately, we need to convert to QVariant
         QList<QVariant> variantIdList;
         foreach (const qlonglong& id, imageIds)
+        {
             variantIdList << id;
+        }
 
         DatabaseAccess access;
         QSqlQuery query = access.backend()->prepareQuery(QString(
@@ -845,7 +849,9 @@ QSet<int> ImageLister::albumRootsToList()
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
     QSet<int> ids;
     foreach (const CollectionLocation& location, locations)
+    {
         ids << location.id();
+    }
     return ids;
 }
 

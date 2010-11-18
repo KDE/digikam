@@ -177,7 +177,7 @@ void AdvancedRenameProcessDialog::slotRenameFailed(const KUrl&)
     abort();
 }
 
-void AdvancedRenameProcessDialog::closeEvent(QCloseEvent *e)
+void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)
 {
     abort();
     e->accept();

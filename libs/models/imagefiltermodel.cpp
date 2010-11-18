@@ -940,7 +940,7 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
         invalidate(); // just resort, reuse filter results
 }
 
-// --------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 NoDuplicatesImageFilterModel::NoDuplicatesImageFilterModel(QObject* parent)
                             : ImageSortFilterModel(parent)

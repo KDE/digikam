@@ -6,7 +6,7 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries with support for thumbnail loading
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,40 +39,42 @@
 namespace Digikam
 {
 
-class ImageThumbnailModelPriv
+class ImageThumbnailModel::ImageThumbnailModelPriv
 {
 public:
 
-    ImageThumbnailModelPriv()
+    ImageThumbnailModelPriv() :
+        thread(0),
+        preloadThread(0),
+        thumbSize(0),
+        lastGlobalThumbSize(0),
+        preloadThumbSize(0),
+        emitDataChanged(true),
+        exifRotate(true)
     {
-        thread              = 0;
-        preloadThread       = 0;
-        thumbSize           = 0;
-        lastGlobalThumbSize = 0;
-        preloadThumbSize    = 0;
-        emitDataChanged     = true;
-        exifRotate          = true;
     }
 
-    ThumbnailLoadThread       *thread;
-    ThumbnailLoadThread       *preloadThread;
-    ThumbnailSize              thumbSize;
-    ThumbnailSize              lastGlobalThumbSize;
-    ThumbnailSize              preloadThumbSize;
-    QRect                      detailRect;
-    bool                       emitDataChanged;
-    bool                       exifRotate;
+    ThumbnailLoadThread* thread;
+    ThumbnailLoadThread* preloadThread;
+    ThumbnailSize        thumbSize;
+    ThumbnailSize        lastGlobalThumbSize;
+    ThumbnailSize        preloadThumbSize;
+    QRect                detailRect;
+    bool                 emitDataChanged;
+    bool                 exifRotate;
 
     int preloadThumbnailSize() const
     {
         if (preloadThumbSize.size())
+        {
             return preloadThumbSize.size();
+        }
         return thumbSize.size();
     }
 };
 
-ImageThumbnailModel::ImageThumbnailModel(QObject *parent)
-    : ImageModel(parent), d(new ImageThumbnailModelPriv)
+ImageThumbnailModel::ImageThumbnailModel(QObject* parent)
+                   : ImageModel(parent), d(new ImageThumbnailModelPriv)
 {
     setKeepsFilePathCache(true);
 }
@@ -83,15 +85,15 @@ ImageThumbnailModel::~ImageThumbnailModel()
     delete d;
 }
 
-void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread *thread)
+void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* thread)
 {
     d->thread = thread;
 
-    connect(d->thread, SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QPixmap&)));
+    connect(d->thread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 }
 
-ThumbnailLoadThread *ImageThumbnailModel::thumbnailLoadThread() const
+ThumbnailLoadThread* ImageThumbnailModel::thumbnailLoadThread() const
 {
     return d->thread;
 }
@@ -144,9 +146,13 @@ void ImageThumbnailModel::setExifRotate(bool rotate)
 {
     d->exifRotate = rotate;
     if (d->thread)
+    {
         d->thread->setExifRotate(rotate);
+    }
     if (d->preloadThread)
+    {
         d->preloadThread->setExifRotate(rotate);
+    }
 }
 
 void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
@@ -157,7 +163,9 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
 void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize)
 {
     if (!d->thread)
+    {
         return;
+    }
 
     QStringList filePaths;
     foreach(const QModelIndex& index, indexesToPrepare)
@@ -170,7 +178,9 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
 void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
 {
     if (!d->preloadThread)
+    {
         return;
+    }
 
     QStringList filePaths;
     foreach(const ImageInfo& info, infos)
@@ -184,7 +194,9 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
 void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
 {
     if (!d->preloadThread)
+    {
         return;
+    }
 
     QStringList filePaths;
     foreach(const QModelIndex& index, infos)
@@ -203,7 +215,9 @@ void ImageThumbnailModel::preloadAllThumbnails()
 void ImageThumbnailModel::imageInfosCleared()
 {
     if (d->preloadThread)
+    {
         d->preloadThread->stopAllTasks();
+    }
 }
 
 QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
@@ -233,18 +247,18 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         ImageInfo info = imageInfoRef(index);
         QString path = info.filePath();
         QString originalPath = info.imageHistory().originalFilePath() + "/" + info.imageHistory().originalFileName();
-        
+
         if (d->thread->find(path, thumbnail, d->thumbSize.size()))
             thumbnailSet.append(thumbnail);
         if (d->thread->find(originalPath, thumbnail, d->thumbSize.size()))
             thumbnailSet.append(thumbnail);
         return QVariant(thumbnailSet);
-        /*else
+/*
+        else
         {
             return QVariant(QVariant::Pixmap);
-            
-            
-        }*/
+        }
+*/
     }
     return ImageModel::data(index, role);
 }
@@ -290,5 +304,4 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
     }
 }
 
-}
-
+} // namespace Digikam

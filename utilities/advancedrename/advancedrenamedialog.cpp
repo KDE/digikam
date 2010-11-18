@@ -238,7 +238,9 @@ void AdvancedRenameDialog::slotReturnPressed()
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
     if (!d->advancedRenameManager)
+    {
         return;
+    }
 
     d->newNamesList.clear();
 

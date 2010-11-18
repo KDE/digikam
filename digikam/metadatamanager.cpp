@@ -98,7 +98,9 @@ void MetadataManager::assignTags(const QList<int>& ids, const QList<int>& tagIDs
     {
         ImageInfo info(id);
         if (!info.isNull())
+        {
             infos << info;
+        }
     }
     assignTags(infos, tagIDs);
 }
@@ -291,7 +293,9 @@ void MetadataManager::MetadataManagerPriv::startingToWrite(const QList<ImageInfo
 {
     QMutexLocker lock(&mutex);
     foreach (const ImageInfo& info, infos)
+    {
         scheduledToWrite.remove(info.id());
+    }
 }
 
 void MetadataManager::MetadataManagerPriv::writtenToOne()

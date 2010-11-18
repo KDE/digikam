@@ -269,7 +269,9 @@ QStringList TagsCache::tagNames(const QList<int>& ids) const
     if (!ids.isEmpty())
     {
         foreach (int id, ids)
+        {
             names << tagName(id);
+        }
     }
     return names;
 }
@@ -301,7 +303,9 @@ QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashP
     if (!ids.isEmpty())
     {
         foreach (int id, ids)
+        {
             paths << tagPath(id, slashPolicy);
+        }
     }
     return paths;
 }
@@ -429,7 +433,9 @@ QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths) const
     if (!tagPaths.isEmpty())
     {
         foreach (const QString& tagPath, tagPaths)
+        {
             ids << tagForPath(tagPath);
+        }
     }
     return ids;
 }
@@ -524,7 +530,9 @@ QList<int> TagsCache::createTags(const QStringList& tagPaths)
     if (!tagPaths.isEmpty())
     {
         foreach (const QString& tagPath, tagPaths)
+        {
             ids << createTag(tagPath);
+        }
     }
     return ids;
 }
@@ -535,7 +543,9 @@ QList<int> TagsCache::getOrCreateTags(const QStringList& tagPaths)
     if (!tagPaths.isEmpty())
     {
         foreach (const QString& tagPath, tagPaths)
-            ids << getOrCreateTag(tagPath);
+    {
+        ids << getOrCreateTag(tagPath);
+    }
     }
     return ids;
 }
@@ -684,8 +694,8 @@ void TagsCache::slotTagChanged(const TagChangeset& changeset)
 {
     if (!d->changingDB && changeset.operation() != TagChangeset::IconChanged)
     {
-        d->needUpdateInfos = true;
-        d->needUpdateHash  = true;
+        d->needUpdateInfos      = true;
+        d->needUpdateHash       = true;
         d->needUpdateProperties = true;
     }
     if (changeset.operation() == TagChangeset::Added)

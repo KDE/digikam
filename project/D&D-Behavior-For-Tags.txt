@@ -1,0 +1,95 @@
+Components
+----------
+
+From the left side bar:
+
+1) -> Album tree-view
+2) -> Tags tree-view
+
+From central view:
+
+3) -> Album icon-view
+4) -> Image Preview canvas
+5) -> Preview Mode Thumbbar
+
+From the right side bar:
+
+6) -> Tags tree-view from Caption & Tags
+7) -> Tags tree-view from Tags Filters
+
+From other windows:
+
+8) -> Thumbbar from IE
+9) -> Thumbbar from LT
+10) -> Items list view from BQM
+11) -> IE canvas
+12) -> LT canvas
+
+Tags D&D operations from source to target :
+-------------------------------------------
+
+1) => 6)  : Doesn't work : Expected result: Tag must be applied to whole album items
+6) => 1)  : Doesn't work : Expected result: Tag must be applied to whole album items
+
+1) => 7)  : Doesn't work : Expected result: Tag must be applied to whole album items
+7) => 1)  : Doesn't work : Expected result: Tag must be applied to whole album items
+
+3) => 6)  : Works fine
+6) => 3)  : Works fine
+
+3) => 7)  : Works fine
+7) => 3)  : Works fine
+
+5) => 6)  : Works fine
+5) => 7)  : Works fine
+
+6) => 5)  : Works fine
+7) => 5)  : Works fine
+
+6) => 4)  : Doesn't work : Expected result: Tag must be applied to item
+7) => 4)  : Doesn't work : Expected result: Tag must be applied to item
+
+6) => 11)  :Doesn't work : Expected result: Tag must be applied to item
+7) => 11)  :Doesn't work : Expected result: Tag must be applied to item
+
+6) => 12)  :Doesn't work : Expected result: Tag must be applied to item (crash!)
+7) => 12)  :Doesn't work : Expected result: Tag must be applied to item (crash!)
+
+8) => 2)  : Doesn't work : Expected result: Tag must be applied to item
+8) => 6)  : Doesn't work : Expected result: Tag must be applied to item
+8) => 7)  : Doesn't work : Expected result: Tag must be applied to item
+
+9) => 2)  : Doesn't work : Expected result: Tag must be applied to item
+9) => 6)  : Doesn't work : Expected result: Tag must be applied to item
+9) => 7)  : Doesn't work : Expected result: Tag must be applied to item
+
+10) => 2) : Doesn't work : Expected result: Tag must be applied to item
+10) => 6) : Doesn't work : Expected result: Tag must be applied to item
+10) => 7) : Doesn't work : Expected result: Tag must be applied to item
+
+Special actions:
+
+1) => 2) : Doesn't work  : Expected result: Tag must be applied to whole album items (*)
+2) => 1) : Doesn't work  : Expected result: Tag must be applied to whole album items (*)
+
+6) => 7) : Works fine (tag move)
+7) => 6) : Works fine (tag move)
+
+1) => 9) : Works fine (add items to LT)
+2) => 9) : Works fine (add items to LT)
+6) => 9) : Works fine (add items to LT)
+7) => 9) : Works fine (add items to LT)
+
+1) => 10) : Doesn't work : Expected result: Items must be add to list
+2) => 10) : Doesn't work : Expected result: Items must be add to list
+6) => 10) : Doesn't work : Expected result: Items must be add to list
+7) => 10) : Doesn't work : Expected result: Items must be add to list
+
+(*) You can D&D between these views by dragging the item(s) over the sidebar button, the menu will expand automatically after a while
+
+Unrelevant actions :
+
+3) => 1) : move/copy file operations.
+2) => 3) : just impossible to do.
+2) => 4) : just impossible to do.
+2) => 5) : just impossible to do.
