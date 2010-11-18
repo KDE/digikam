@@ -7,9 +7,9 @@
  * Description : a combo box to list date.
  *               this widget come from libkdepim.
  *
- *  Copyright (c) 2002 Cornelius Schumacher <schumacher@kde.org>
- *  Copyright (c) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- *  Copyright (c) 2004 Tobias Koenig <tokoe@kde.org>
+ *  Copyright (C) 2002 Cornelius Schumacher <schumacher@kde.org>
+ *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
+ *  Copyright (C) 2004 Tobias Koenig <tokoe@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

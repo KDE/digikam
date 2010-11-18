@@ -8,10 +8,10 @@
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 1997 Sven Radej (sven.radej@iname.com)
- * Copyright (c) 1999 Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
- * Copyright (c) 1999 Preston Brown <pbrown@kde.org>
- * Copyright (c) 2000, 2001 Dawit Alemayehu <adawit@kde.org>
- * Copyright (c) 2000, 2001 Carsten Pfeiffer <pfeiffer@kde.org>
+ * Copyright (C) 1999 Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
+ * Copyright (C) 1999 Preston Brown <pbrown@kde.org>
+ * Copyright (C) 2000, 2001 Dawit Alemayehu <adawit@kde.org>
+ * Copyright (C) 2000, 2001 Carsten Pfeiffer <pfeiffer@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
