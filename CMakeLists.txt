@@ -1337,105 +1337,107 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     INCLUDE_DIRECTORIES(
+        ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate/superimpose
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance/hotpixels
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/filters
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/transform
+        ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
         ${CMAKE_CURRENT_SOURCE_DIR}/libs
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholderplugin
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholderplugin
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest
+        ${CMAKE_CURRENT_SOURCE_DIR}/themedesigner
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/cleanup_digikamdb
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/digitaglinktree
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/hotplug
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/hotplug
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface
-        ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
-        ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
-        ${CMAKE_CURRENT_SOURCE_DIR}/themedesigner
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/transform
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate/superimpose
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/filters
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance/hotpixels
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/cleanup_digikamdb
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/digitaglinktree
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline
 
         # config-digikam.h
         ${CMAKE_CURRENT_BINARY_DIR}

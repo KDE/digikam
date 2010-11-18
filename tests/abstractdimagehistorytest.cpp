@@ -33,11 +33,11 @@
 // Local includes
 
 #include "config-digikam.h"
-#include "libs/dimg/filters/bcg/bcgfilter.h"
-#include "libs/dimg/filters/curves/curvesfilter.h"
-#include "libs/dimg/filters/auto/autolevelsfilter.h"
-#include "libs/dimg/filters/bw/infraredfilter.h"
-#include "libs/dimg/filters/fx/blurfilter.h"
+#include "bcgfilter.h"
+#include "curvesfilter.h"
+#include "autolevelsfilter.h"
+#include "infraredfilter.h"
+#include "blurfilter.h"
 #include "dimagehistory.h"
 #include "dimginterface.h"
 #include "editortooliface.h"
