@@ -1,18 +1,5 @@
 SET_DEBUG_AREA_CODE(${AREA_CODE_KIOSLAVES})
 
-INCLUDE_DIRECTORIES(
-                     # database libs
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/sqlite2
-
-                     # config-digikam.h
-                     ${CMAKE_CURRENT_BINARY_DIR}/../
-                   )
-
 # # digiKam Tags kio slave ###########################################################
 
 SET(kio_digikamtags_PART_SRCS digikamtags.cpp )

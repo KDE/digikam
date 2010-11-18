@@ -493,7 +493,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${GPHOTO2_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
-                       )
+    )
 
     IF(NEPOMUK_FOUND)
         INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDE_DIR})
@@ -502,6 +502,59 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(MARBLEWIDGET_FOUND)
         INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
     ENDIF(MARBLEWIDGET_FOUND)
+
+    IF(PGF_FOUND)
+       INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
+    ELSE(PGF_FOUND)
+       INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf)
+       SET(libpgf_SRCS
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Stream.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
+       )
+    ENDIF(PGF_FOUND)
+
+    IF(CLAPACK_FOUND)
+        INCLUDE_DIRECTORIES(${CLAPACK_INCLUDE_DIR})
+    ELSE(CLAPACK_FOUND)
+        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack)
+        SET(libclapack_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/abort_.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgesv.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dlaswp.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/endfile.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/idamax.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/open.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/sig_die.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wref.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/close.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetf2.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dscal.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/err.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/ieeeck.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_cmp.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_stop.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wrtfmt.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgemm.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetrf.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dswap.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/fmt.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/ilaenv.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_copy.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wsfe.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dger.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetrs.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dtrsm.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/fmtlib.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/lsame.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/sfe.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/util.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/xerbla.c
+        )
+    ENDIF(CLAPACK_FOUND)
 
     # ==================================================================================================
     # Lensfun and LibLqr-1 library rules
@@ -611,42 +664,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2ksettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfsettings.cpp
        )
-
-    if(NOT CLAPACK_FOUND)
-      SET(libclapack_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/abort_.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgesv.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dlaswp.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/endfile.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/idamax.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/open.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/sig_die.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wref.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/close.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetf2.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dscal.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/err.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/ieeeck.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_cmp.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_stop.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wrtfmt.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgemm.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetrf.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dswap.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/fmt.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/ilaenv.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_copy.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wsfe.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dger.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetrs.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dtrsm.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/fmtlib.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/lsame.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/sfe.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/util.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/xerbla.c
-       )
-    endif(NOT CLAPACK_FOUND)
 
     SET(libdimgfilters_SRCS
         ${libclapack_SRCS}
@@ -1102,19 +1119,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/pgfutils.cpp
        )
 
-    IF(PGF_FOUND)
-       INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
-    ELSE(PGF_FOUND)
-       SET(libpgf_SRCS
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Stream.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
-       )
-    ENDIF(PGF_FOUND)
-
     SET(libsqlite2_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/attach.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/auth.c
@@ -1178,81 +1182,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp
-       )
-
-    SET(libqueuemanager_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/actionthread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/assignedlist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolsview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolslistview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolsettingsview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuemgrwindow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuepool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuelist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuetooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuesettingsview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtoolsmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/autocorrection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/bcgcorrection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/convert8to16.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/convert16to8.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/hslcorrection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/colorbalance.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/iccconvert.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/channelmixer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/bwconvert.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/whitebalance.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/curvesadjust.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/invert.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jpeg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2png.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2tiff.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jp2.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2pgf.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/restoration.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/localcontrast.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/blur.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/sharpen.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/noisereduction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/antivignetting.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/rotate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/flip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/resize.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate/border.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate/watermark.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata/assigntemplate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata/removemetadata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters/filmgrain.cpp
-       )
-
-    IF(GLIB2_FOUND)
-        SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/lensautofix.cpp
-           )
-    ENDIF(GLIB2_FOUND)
-
-    SET(libcameragui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerahistoryupdater.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconviewtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameranamehelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturedlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacetooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp
        )
 
     SET(libsearchwindow_SRCS
@@ -1360,6 +1289,112 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/uifilevalidator.cpp
        )
 
+
+    INCLUDE_DIRECTORIES(
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholderplugin
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs
+        ${CMAKE_CURRENT_SOURCE_DIR}/showfoto
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/cleanup_digikamdb
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/digitaglinktree
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/hotplug
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
+        ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
+        ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
+        ${CMAKE_CURRENT_SOURCE_DIR}/themedesigner
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/transform
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate/superimpose
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/filters
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance/hotpixels
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam
+
+        # config-digikam.h
+        ${CMAKE_CURRENT_BINARY_DIR}
+
+        # external library paths
+        ${JPEG_INCLUDE_DIR}
+        ${PNG_PNG_INCLUDE_DIR}
+        ${TIFF_INCLUDE_DIR}
+        ${LCMS_INCLUDE_DIR}
+    )
+
     ADD_SUBDIRECTORY(data)
     ADD_SUBDIRECTORY(libs)
     ADD_SUBDIRECTORY(utilities)
@@ -1399,5 +1434,4 @@ IF(DOXYGEN_FOUND)
 
     ADD_CUSTOM_TARGET(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-
 ENDIF(DOXYGEN_FOUND)

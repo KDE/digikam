@@ -16,11 +16,6 @@ IF(MARBLEWIDGET_SUPPORTS_PLUGINS)
 
     PROJECT(externaldraw)
 
-    INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholderplugin/
-                         ${CMAKE_BINARY_DIR}/libs/imageproperties/markerclusterholderplugin/
-                         ${QT_INCLUDE_DIR}
-                       )
-
     INCLUDE(${QT_USE_FILE})
 
     SET( externaldraw_sources externaldraw.cpp )

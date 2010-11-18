@@ -1,7 +1,3 @@
-
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../../
-                   )
-
 SET(digikamimageplugin_transform_PART_SRCS imageplugin_transform.cpp
                                            freerotationtool.cpp
                                            sheartool.cpp
