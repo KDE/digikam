@@ -58,7 +58,7 @@ public:
         TypeFirst        = UnknownName,
         TypeLast         = FaceForTraining
     };
-    Q_DECLARE_FLAGS(TypeFlags, Type);
+    Q_DECLARE_FLAGS(TypeFlags, Type)
 
 public:
 
@@ -120,6 +120,6 @@ QDebug operator<<(QDebug dbg, const DatabaseFace& f);
 
 }  // Namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFace::TypeFlags);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFace::TypeFlags)
 
 #endif // FACEIFACE_H

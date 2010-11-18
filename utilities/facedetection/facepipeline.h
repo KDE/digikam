@@ -70,7 +70,7 @@ public:
         Trained            = 1 << 21,
         Removed            = 1 << 22
     };
-    Q_DECLARE_FLAGS(Roles, Role);
+    Q_DECLARE_FLAGS(Roles, Role)
 
     FacePipelineDatabaseFace();
     FacePipelineDatabaseFace(const DatabaseFace& face);
@@ -111,11 +111,11 @@ public:
         WrittenToDatabase       = 1 << 3,
         ProcessedByTrainer      = 1 << 4
     };
-    Q_DECLARE_FLAGS(ProcessFlags, ProcessFlag);
+    Q_DECLARE_FLAGS(ProcessFlags, ProcessFlag)
 
 public:
 
-    FacePipelinePackage() 
+    FacePipelinePackage()
         : processFlags(NotProcessed)
     {
     }
@@ -224,7 +224,7 @@ public Q_SLOTS:
      * it is not yet in the database (connect to signal processed() to react when the processing finished).
      * If a trainer is plugged, the face will be trained.
      */
-    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace &face, 
+    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace &face,
                          int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());
     DatabaseFace confirm(const ImageInfo& info, const DatabaseFace &face, const DImg& image,
                          int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());

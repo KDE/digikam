@@ -126,7 +126,7 @@ public:
     virtual void onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::WMWSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode);
 
     virtual void setActive(const bool state);
-    GPSImageInfo gpsData(qlonglong id, KMap::GeoCoordinates coordinate, int rating, QDateTime creationDate); 
+    GPSImageInfo gpsData(qlonglong id, KMap::GeoCoordinates coordinate, int rating, QDateTime creationDate);
     void mouseModeChanged(KMap::MouseMode currentMouseMode);
     void newSelectionFromMap(const KMap::GeoCoordinates::Pair& sel);
     void removeCurrentSelection();
@@ -160,6 +160,6 @@ private:
 } // namespace Digikam
 
 typedef QPair<KMap::AbstractMarkerTiler::TileIndex,int> MapPair;
-Q_DECLARE_METATYPE(MapPair);
+Q_DECLARE_METATYPE(MapPair)
 
 #endif //GPSMARKERTILER_H
