@@ -71,15 +71,15 @@ public:
     ImageFilterModelPrivate();
     ~ImageFilterModelPrivate();
 
-    void init(ImageFilterModel *q);
+    void init(ImageFilterModel* q);
     void setupWorkers();
     void infosToProcess(const QList<ImageInfo>& infos, bool forReAdd);
 
 public:
 
-    ImageFilterModel          *q;
+    ImageFilterModel*          q;
 
-    ImageModel                *imageModel;
+    ImageModel*                imageModel;
 
     ImageFilterSettings        filter;
     ImageSortSettings          sorter;
@@ -90,7 +90,7 @@ public:
     int                        sentOut;
     int                        sentOutForReAdd;
 
-    QTimer                    *updateFilterTimer;
+    QTimer*                    updateFilterTimer;
 
     bool                       needPrepare;
     bool                       needPrepareComments;
@@ -98,8 +98,8 @@ public:
 
     QMutex                     mutex;
     ImageFilterSettings        filterCopy;
-    ImageFilterModelPreparer  *preparer;
-    ImageFilterModelFilterer  *filterer;
+    ImageFilterModelPreparer*  preparer;
+    ImageFilterModelFilterer*  filterer;
 
     QHash<qlonglong, bool>     filterResults;
     bool                       hasOneMatch;

@@ -61,14 +61,14 @@ public:
 
     bool                          dirty;
 
-    DTipTracker                  *ratingTracker;
+    DTipTracker*                  ratingTracker;
 
     ImageFilterSettings::
-        RatingCondition           filterCond;
+    RatingCondition           filterCond;
 };
 
 RatingFilter::RatingFilter(QWidget* parent)
-            : RatingWidget(parent), d(new RatingFilterPriv)
+    : RatingWidget(parent), d(new RatingFilterPriv)
 {
     d->ratingTracker = new DTipTracker("", this);
     updateRatingTooltip();
@@ -114,7 +114,9 @@ void RatingFilter::mouseMoveEvent(QMouseEvent* e)
         int pos = e->x() / regPixmapWidth() +1;
 
         if (rating() != pos)
+        {
             setRating(pos);
+        }
 
         updateRatingTooltip();
     }
@@ -134,9 +136,14 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
         int pos = e->x() / regPixmapWidth() +1;
 
         if (rating() == pos)
+        {
             setRating(rating()-1);
+        }
         else
+        {
             setRating(pos);
+        }
+
         updateRatingTooltip();
     }
     else if (e->button() == Qt::RightButton)
@@ -145,14 +152,14 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
 
         KMenu popmenu(this);
         popmenu.addTitle(SmallIcon("digikam"), i18n("Rating Filter"));
-        QAction *geCondAction = popmenu.addAction(i18n("Greater Than or Equals Condition"));
+        QAction* geCondAction = popmenu.addAction(i18n("Greater Than or Equals Condition"));
         geCondAction->setCheckable(true);
-        QAction *eqCondAction = popmenu.addAction(i18n("Equals Condition"));
+        QAction* eqCondAction = popmenu.addAction(i18n("Equals Condition"));
         eqCondAction->setCheckable(true);
-        QAction *leCondAction = popmenu.addAction(i18n("Less Than or Equals Condition"));
+        QAction* leCondAction = popmenu.addAction(i18n("Less Than or Equals Condition"));
         leCondAction->setCheckable(true);
 
-        switch(d->filterCond)
+        switch (d->filterCond)
         {
             case ImageFilterSettings::GreaterEqualCondition:
                 geCondAction->setChecked(true);
@@ -165,7 +172,8 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
                 break;
         }
 
-        QAction *choice = popmenu.exec(QCursor::pos());
+        QAction* choice = popmenu.exec(QCursor::pos());
+
         if (choice)
         {
             if (choice == geCondAction)
@@ -193,7 +201,7 @@ void RatingFilter::updateRatingTooltip()
 {
     // Adapt tip message with rating filter condition settings.
 
-    switch(d->filterCond)
+    switch (d->filterCond)
     {
         case ImageFilterSettings::GreaterEqualCondition:
         {

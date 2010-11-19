@@ -73,7 +73,7 @@ public:
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configHistogramChannelEntry;
@@ -88,8 +88,8 @@ public:
 };
 
 AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
-                : EditorToolThreaded(parent),
-                  d(new AdjustCurvesToolPriv)
+    : EditorToolThreaded(parent),
+      d(new AdjustCurvesToolPriv)
 {
     setObjectName("adjustcurves");
     setToolName(i18n("Adjust Curves"));
@@ -155,23 +155,28 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     connect(d->settingsView, SIGNAL(signalPickerChanged(int)),
             this, SLOT(slotPickerColorButtonActived(int)));
 
-/*
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
-*/
+    /*
+        connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+                this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+    */
 }
 
 AdjustCurvesTool::~AdjustCurvesTool()
 {
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     delete d;
 }
 
 void AdjustCurvesTool::slotPickerColorButtonActived(int type)
 {
-    if (type == CurvesBox::NoPicker) return;
+    if (type == CurvesBox::NoPicker)
+    {
+        return;
+    }
 
     d->previewWidget->setCapturePointMode(true);
 }
@@ -210,9 +215,9 @@ void AdjustCurvesTool::readSettings()
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                    (int)LuminosityChannel));
+            (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                    (int)LogScaleHistogram));
+            (int)LogScaleHistogram));
 
     d->settingsView->readSettings(group);
 
@@ -259,12 +264,14 @@ void AdjustCurvesTool::putPreviewData()
     // Update histogram.
 
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-                                                             preview.width(), preview.height(), preview.sixteenBit(),
-                                                             0, 0, 0, false);
+            preview.width(), preview.height(), preview.sixteenBit(),
+            0, 0, 0, false);
 }
 
 void AdjustCurvesTool::prepareFinal()

@@ -57,14 +57,14 @@ public:
 
     bool showFindDuplicateAction;
 
-    TagModel *model;
+    TagModel* model;
 
-    QAction *resetIconAction;
-    QAction *findDuplAction;
+    QAction* resetIconAction;
+    QAction* findDuplAction;
 
 };
 
-TagFolderView::TagFolderView(QWidget *parent, TagModel *model) :
+TagFolderView::TagFolderView(QWidget* parent, TagModel* model) :
     TagTreeView(model, parent), d(new TagFolderViewPriv)
 {
 
@@ -94,10 +94,11 @@ QString TagFolderView::contextMenuTitle() const
     return i18n("My Tags");
 }
 
-void TagFolderView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
+void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)
 {
 
-    TAlbum *tag = dynamic_cast<TAlbum*> (album);
+    TAlbum* tag = dynamic_cast<TAlbum*> (album);
+
     if (!tag)
     {
         return;
@@ -109,10 +110,12 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a
     cmh.addCreateTagFromAddressbookMenu();
     cmh.addAction(d->resetIconAction);
     cmh.addSeparator();
+
     if (d->showFindDuplicateAction)
     {
         cmh.addAction(d->findDuplAction);
     }
+
     cmh.addExportMenu();
     cmh.addBatchMenu();
     cmh.addSeparator();
@@ -127,10 +130,11 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a
 
 }
 
-void TagFolderView::slotTagNewFromABCMenu(const QString &personName)
+void TagFolderView::slotTagNewFromABCMenu(const QString& personName)
 {
 
-    TAlbum *parent = currentAlbum();
+    TAlbum* parent = currentAlbum();
+
     if (!parent)
     {
         return;
@@ -140,11 +144,12 @@ void TagFolderView::slotTagNewFromABCMenu(const QString &personName)
 
 }
 
-void TagFolderView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
+void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
 {
 
-    Album *a = album;
-    TAlbum *tag = dynamic_cast<TAlbum*> (a);
+    Album* a = album;
+    TAlbum* tag = dynamic_cast<TAlbum*> (a);
+
     if (!tag)
     {
         return;

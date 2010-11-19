@@ -46,17 +46,17 @@ class CaptureDlgPriv;
 
 class CaptureDlg : public KDialog
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    CaptureDlg(QWidget *parent, CameraController* controller,
+    CaptureDlg(QWidget* parent, CameraController* controller,
                const QString& cameraTitle);
     ~CaptureDlg();
 
 protected:
 
-    void closeEvent(QCloseEvent *e);
+    void closeEvent(QCloseEvent* e);
 
 private Q_SLOTS:
 

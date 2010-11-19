@@ -63,7 +63,9 @@ private:
         lpcArray = new int*[Columns];
 
         for (int i = 0; i < Columns; ++i)
+        {
             lpcArray[i] = new int[Rows];
+        }
 
         return (lpcArray);
     };
@@ -73,7 +75,9 @@ private:
     {
         // loop to deallocate the columns
         for (int i = 0; i < Columns; ++i)
+        {
             delete [] lpcArray[i];
+        }
 
         // now, we delete the main pointer
         delete [] lpcArray;

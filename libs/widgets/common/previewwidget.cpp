@@ -107,7 +107,7 @@ public:
 };
 
 PreviewWidget::PreviewWidget(QWidget* parent)
-             : Q3ScrollView(parent), d(new PreviewWidgetPriv)
+    : Q3ScrollView(parent), d(new PreviewWidgetPriv)
 {
     m_movingInProgress = false;
     setAttribute(Qt::WA_DeleteOnClose);
@@ -225,13 +225,18 @@ double PreviewWidget::snapZoom(double zoom)
     snapValues.append(fit);
 
     if (d->zoom < zoom)
+    {
         qStableSort(snapValues);
+    }
     else
+    {
         qStableSort(snapValues.begin(), snapValues.end(), qGreater<double>());
+    }
 
-    for(QList<double>::const_iterator it = snapValues.constBegin(); it != snapValues.constEnd(); ++it)
+    for (QList<double>::const_iterator it = snapValues.constBegin(); it != snapValues.constEnd(); ++it)
     {
         double z = *it;
+
         if ((d->zoom < z) && (zoom > z))
         {
             zoom = z;
@@ -259,14 +264,17 @@ void PreviewWidget::slotDecreaseZoom()
 void PreviewWidget::setZoomFactorSnapped(double zoom)
 {
     double fit = calcAutoZoomFactor(ZoomInOrOut);
+
     if (fabs(zoom-1.0) < 0.05)
     {
         zoom = 1.0;
     }
+
     if (fabs(zoom-0.5) < 0.05)
     {
         zoom = 0.5;
     }
+
     if (fabs(zoom-fit) < 0.05)
     {
         zoom = fit;
@@ -326,6 +334,7 @@ void PreviewWidget::setZoomFactor(double zoom, bool centerView)
     verticalScrollBar()->setPageStep( step * 10 );
 
     viewport()->setUpdatesEnabled(false);
+
     if (d->centerZoomPoint.isNull())
     {
         cpx = ( cpx * d->tileSize ) / floor(d->tileSize / d->zoom);
@@ -346,6 +355,7 @@ void PreviewWidget::setZoomFactor(double zoom, bool centerView)
 
         setContentsPos((int)cpx, (int)(cpy));
     }
+
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
 
@@ -384,6 +394,7 @@ void PreviewWidget::toggleFitToWindow()
         d->zoomWidth  = (int)(previewWidth());
         d->zoomHeight = (int)(previewHeight());
     }
+
     updateContentsSize();
     zoomFactorChanged(d->zoom);
     viewport()->update();
@@ -433,7 +444,10 @@ void PreviewWidget::updateAutoZoom(AutoZoomMode mode)
 
 double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
 {
-    if (previewIsNull()) return d->zoom;
+    if (previewIsNull())
+    {
+        return d->zoom;
+    }
 
     double srcWidth  = previewWidth();
     double srcHeight = previewHeight();
@@ -443,12 +457,17 @@ double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
     double zoom = qMin(dstWidth/srcWidth, dstHeight/srcHeight);
     // limit precision as above
     zoom = round(zoom * 10000.0) / 10000.0;
+
     if (mode == ZoomInOrOut)
         // fit to available space, scale up or down
+    {
         return zoom;
+    }
     else
         // ZoomInOnly: accept that an image is smaller than available space, don't scale up
+    {
         return qMin(1.0, zoom);
+    }
 }
 
 void PreviewWidget::updateContentsSize()
@@ -484,12 +503,17 @@ void PreviewWidget::setContentsSize()
 
 void PreviewWidget::resizeEvent(QResizeEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     Q3ScrollView::resizeEvent(e);
 
     if (d->autoZoom)
+    {
         updateAutoZoom();
+    }
 
     updateContentsSize();
 
@@ -543,7 +567,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent* e)
             for (int i = x1 ; i < x2 ; i += d->tileSize)
             {
                 QString key  = QString("%1,%2").arg(i).arg(j);
-                QPixmap *pix = d->tileCache.object(key);
+                QPixmap* pix = d->tileCache.object(key);
 
                 if (!pix)
                 {
@@ -617,13 +641,18 @@ void PreviewWidget::drawText(QPainter* p, const QPoint& corner, const QString& t
 void PreviewWidget::contentsMouseDoubleClickEvent(QMouseEvent* e)
 {
     if (!e || e->button() == Qt::RightButton)
+    {
         return;
+    }
 
     if (e->button() == Qt::LeftButton)
     {
         emit signalLeftButtonDoubleClicked();
+
         if (!KGlobalSettings::singleClick())
+        {
             emit signalActivated();
+        }
     }
 }
 
@@ -654,15 +683,20 @@ void PreviewWidget::finishPanning()
 void PreviewWidget::contentsMousePressEvent(QMouseEvent* e)
 {
     if (!e || e->button() == Qt::RightButton)
+    {
         return;
+    }
 
     m_movingInProgress = false;
 
     if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
     {
         d->mousePressPos = e->pos();
+
         if (!KGlobalSettings::singleClick() || e->button() == Qt::MidButton)
+        {
             startPanning(e->pos());
+        }
 
         return;
     }
@@ -672,14 +706,19 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent* e)
 
 void PreviewWidget::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     if ((e->buttons() & Qt::LeftButton || e->buttons() & Qt::MidButton) && !d->mousePressPos.isNull())
     {
         if (!m_movingInProgress && e->buttons() & Qt::LeftButton)
         {
             if ((d->mousePressPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
+            {
                 startPanning(d->mousePressPos);
+            }
         }
 
         if (m_movingInProgress)
@@ -691,15 +730,21 @@ void PreviewWidget::contentsMouseMoveEvent(QMouseEvent* e)
 
 void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     if ((e->button() == Qt::LeftButton || e->button() == Qt::MidButton) && !d->mousePressPos.isNull())
     {
         if (!m_movingInProgress && e->button() == Qt::LeftButton)
         {
             emit signalLeftButtonClicked();
+
             if (KGlobalSettings::singleClick())
+            {
                 emit signalActivated();
+            }
         }
         else
         {
@@ -723,19 +768,30 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent* e)
     if (e->modifiers() & Qt::ShiftModifier)
     {
         if (e->delta() < 0)
+        {
             emit signalShowNextImage();
+        }
         else if (e->delta() > 0)
+        {
             emit signalShowPrevImage();
+        }
+
         return;
     }
     else if (e->modifiers() & Qt::ControlModifier)
     {
         // When zooming with the mouse-wheel, the image center is kept fixed.
         d->centerZoomPoint = e->pos();
+
         if (e->delta() < 0 && !minZoom())
+        {
             slotDecreaseZoom();
+        }
         else if (e->delta() > 0 && !maxZoom())
+        {
             slotIncreaseZoom();
+        }
+
         d->centerZoomPoint = QPoint();
         return;
     }
@@ -758,7 +814,7 @@ void PreviewWidget::slotCornerButtonPressed()
     }
 
     d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
+    PanIconWidget* pan = new PanIconWidget(d->panIconPopup);
 
     connect(pan, SIGNAL(signalSelectionTakeFocus()),
             this, SIGNAL(signalContentTakeFocus()));
@@ -821,11 +877,17 @@ void PreviewWidget::slotContentLeaveFocus()
 
 void PreviewWidget::keyPressEvent(QKeyEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     int mult = 1;
+
     if ( (e->modifiers() & Qt::ControlModifier))
+    {
         mult = 10;
+    }
 
     switch ( e->key() )
     {
@@ -867,7 +929,10 @@ void PreviewWidget::keyPressEvent(QKeyEvent* e)
 
 void PreviewWidget::keyReleaseEvent(QKeyEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     switch ( e->key() )
     {

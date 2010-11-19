@@ -108,9 +108,13 @@ public:
     Operation operation() const;
 
     bool tagsWereAdded() const
-    { return operation() == Added; }
+    {
+        return operation() == Added;
+    }
     bool tagsWereRemoved() const
-    { return operation() == Removed || operation() == RemovedAll; }
+    {
+        return operation() == Removed || operation() == RemovedAll;
+    }
 
 private:
 

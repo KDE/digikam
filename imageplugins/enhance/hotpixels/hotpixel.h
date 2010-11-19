@@ -39,10 +39,22 @@ public:
 
     QRect rect;
     int luminosity;
-    int y() const     {return rect.y();     };
-    int x() const     {return rect.x();     };
-    int width()const  {return rect.width(); };
-    int height()const {return rect.height();};
+    int y() const
+    {
+        return rect.y();
+    };
+    int x() const
+    {
+        return rect.x();
+    };
+    int width()const
+    {
+        return rect.width();
+    };
+    int height()const
+    {
+        return rect.height();
+    };
 
     bool operator==(const HotPixel& p) const
     {
@@ -50,8 +62,8 @@ public:
         //touch(next to) each other horizontally or vertically, not diagonal corners
         //return (rect.intersects(p.rect));
         return (rect != p.rect) && (x() + width() >= p.x() && x() <= p.x() + p.width()
-                && y() + height() >= p.y() && y() <= p.y() + p.height())
-                && !diagonal(rect, p.rect);
+                                    && y() + height() >= p.y() && y() <= p.y() + p.height())
+               && !diagonal(rect, p.rect);
     }
 
 private:

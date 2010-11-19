@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 Invert::Invert(QObject* parent)
-      : BatchTool("Invert", ColorTool, parent)
+    : BatchTool("Invert", ColorTool, parent)
 {
     setToolTitle(i18n("Invert Colors"));
     setToolDescription(i18n("A tool to invert image colors."));
@@ -56,7 +56,10 @@ Invert::~Invert()
 
 bool Invert::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     InvertFilter inv(&image(), 0L);
     inv.startFilterDirectly();

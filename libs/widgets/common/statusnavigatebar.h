@@ -41,7 +41,7 @@ class StatusNavigateBarPriv;
 
 class DIGIKAM_EXPORT StatusNavigateBar : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -55,7 +55,7 @@ public:
 
 public:
 
-    StatusNavigateBar(QWidget *parent=0);
+    StatusNavigateBar(QWidget* parent=0);
     ~StatusNavigateBar();
 
     void setNavigateBarState(bool hasPrev, bool hasNext);

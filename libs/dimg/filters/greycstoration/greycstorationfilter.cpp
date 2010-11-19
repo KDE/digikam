@@ -97,8 +97,8 @@ public:
 };
 
 GreycstorationFilter::GreycstorationFilter(QObject* parent)
-                    : DImgThreadedFilter(parent),
-                      d(new GreycstorationFilterPriv)
+    : DImgThreadedFilter(parent),
+      d(new GreycstorationFilterPriv)
 {
     setOriginalImage(DImg());
     setSettings(GreycstorationContainer());
@@ -107,13 +107,13 @@ GreycstorationFilter::GreycstorationFilter(QObject* parent)
 }
 
 GreycstorationFilter::GreycstorationFilter(DImg* orgImage,
-                                           const GreycstorationContainer& settings,
-                                           int mode,
-                                           int newWidth, int newHeight,
-                                           const QImage& inPaintingMask,
-                                           QObject* parent)
-                   : DImgThreadedFilter(parent),
-                     d(new GreycstorationFilterPriv)
+        const GreycstorationContainer& settings,
+        int mode,
+        int newWidth, int newHeight,
+        const QImage& inPaintingMask,
+        QObject* parent)
+    : DImgThreadedFilter(parent),
+      d(new GreycstorationFilterPriv)
 {
     setOriginalImage(orgImage->copyImageData());
     setSettings(settings);
@@ -156,12 +156,14 @@ void GreycstorationFilter::computeChildrenThreads()
 
 void GreycstorationFilter::setup()
 {
-    // NOTE: Sound like using more than 2 threads at the same time create dysfunctions to stop Cimg children threads 
+    // NOTE: Sound like using more than 2 threads at the same time create dysfunctions to stop Cimg children threads
     //       calling cancelFilter(). We limit children threads to 2.
     //computeChildrenThreads();
 
     if (m_orgImage.sixteenBit())   // 16 bits image.
+    {
         d->gfact = 1.0/256.0;
+    }
 
     if (d->mode == Resize || d->mode == SimpleResize)
     {
@@ -193,7 +195,9 @@ void GreycstorationFilter::initFilter()
     // (left out here: creation of m_destImage)
 
     if (m_master)
+    {
         startFilterDirectly();
+    }
 }
 
 void GreycstorationFilter::cancelFilter()
@@ -256,18 +260,22 @@ void GreycstorationFilter::filterImage()
                 break;
         }
     }
-    catch(...)         // Everything went wrong.
+    catch (...)        // Everything went wrong.
     {
-       kDebug() << "Error during Greycstoration filter computation!";
+        kDebug() << "Error during Greycstoration filter computation!";
 
-       if (m_parent)
-           emit finished(false);
+        if (m_parent)
+        {
+            emit finished(false);
+        }
 
-       return;
+        return;
     }
 
     if (!runningFlag())
+    {
         return;
+    }
 
     // Copy CImg onto destination.
 
@@ -408,9 +416,13 @@ void GreycstorationFilter::resize()
     d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
 
     if (!anchor)
+    {
         d->mask.resize(w, h, 1, 1, 1);
+    }
     else
+    {
         d->mask = !d->mask.resize(w, h, 1, 1, 4);
+    }
 
     d->img.resize(w, h, 1, -100, init);
 

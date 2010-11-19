@@ -54,8 +54,8 @@ public:
 };
 
 LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent,  const LensFunContainer& settings)
-             : DImgThreadedFilter(orgImage, parent, "LensCorrection"),
-               d(new LensFunFilterPriv)
+    : DImgThreadedFilter(orgImage, parent, "LensCorrection"),
+      d(new LensFunFilterPriv)
 {
     d->iface = new LensFunIface;
     d->iface->setSettings(settings);
@@ -65,7 +65,12 @@ LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent,  const LensFunCont
 LensFunFilter::~LensFunFilter()
 {
     cancelFilter();
-    if (d->modifier) d->modifier->Destroy();
+
+    if (d->modifier)
+    {
+        d->modifier->Destroy();
+    }
+
     delete d->iface;
     delete d;
 }
@@ -91,19 +96,29 @@ void LensFunFilter::filterImage()
     int modifyFlags = 0;
 
     if ( d->iface->settings().filterDST )
+    {
         modifyFlags |= LF_MODIFY_DISTORTION;
+    }
 
     if ( d->iface->settings().filterGEO )
+    {
         modifyFlags |= LF_MODIFY_GEOMETRY;
+    }
 
     if ( d->iface->settings().filterCCA )
+    {
         modifyFlags |= LF_MODIFY_TCA;
+    }
 
     if ( d->iface->settings().filterVIG )
+    {
         modifyFlags |= LF_MODIFY_VIGNETTING;
+    }
 
     if ( d->iface->settings().filterCCI )
+    {
         modifyFlags |= LF_MODIFY_CCI;
+    }
 
     // Init lensfun lib, we are working on the full image.
 
@@ -175,19 +190,23 @@ void LensFunFilter::filterImage()
                     m_destImage.setPixelColor(x, y, destPixel);
                     src += 2 * 3;
                 }
+
                 ++loop;
             }
 
             // Update progress bar in dialog.
             int progress = (int)(((double)y * 100.0) / m_orgImage.height());
+
             if (m_parent && progress%5 == 0)
+            {
                 postProgress(progress/steps);
+            }
         }
 
         kDebug() << "Chromatic Aberation Corrections applied. (loop: " << loop << ")";
     }
 
-    // Stage 2: Color Corrections: Vignetting and Color Contribution Index 
+    // Stage 2: Color Corrections: Vignetting and Color Contribution Index
 
     if ( d->iface->settings().filterVIG || d->iface->settings().filterCCI )
     {
@@ -196,9 +215,13 @@ void LensFunFilter::filterImage()
         double offset = 0.0;
 
         if ( steps == 3 )
+        {
             offset = 33.3;
+        }
         else if (steps == 2 && d->iface->settings().filterCCA)
+        {
             offset = 50.0;
+        }
 
         for (unsigned int y=0; runningFlag() && (y < m_destImage.height()); ++y)
         {
@@ -211,8 +234,11 @@ void LensFunFilter::filterImage()
 
             // Update progress bar in dialog.
             int progress = (int)(((double)y * 100.0) / m_destImage.height());
+
             if (m_parent && progress%5 == 0)
+            {
                 postProgress(progress/steps + offset);
+            }
         }
 
         kDebug() << "Vignetting and Color Corrections applied. (loop: " << loop << ")";
@@ -245,14 +271,19 @@ void LensFunFilter::filterImage()
 
             // Update progress bar in dialog.
             int progress = (int)(((double)y * 100.0) / tempImage.height());
+
             if (m_parent && progress%5 == 0)
+            {
                 postProgress(progress/steps + 33.3*(steps-1));
+            }
         }
 
         kDebug() << "Distortion and Geometry Corrections applied. (loop: " << loop << ")";
 
         if (loop != 0)
+        {
             m_destImage = tempImage;
+        }
     }
 
     // clean up
@@ -290,7 +321,7 @@ bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
     str.append(i18n("GEO Correction: %1",   prm.filterGEO && d->iface->supportsGeometry()   ? i18n("enabled") : i18n("disabled")));
 
     DMetadata meta(data);
-    bool ret = meta.setXmpTagString("Xmp.digiKam.LensCorrectionSettings", 
+    bool ret = meta.setXmpTagString("Xmp.digiKam.LensCorrectionSettings",
                                     str.replace("\n", " ; "), false);
     data = meta.data();
 

@@ -55,12 +55,12 @@ class DIGIKAM_EXPORT DImgInterface : public QObject
 public:
 
     static DImgInterface* defaultInterface();
-    static void setDefaultInterface(DImgInterface *defaultInterface);
+    static void setDefaultInterface(DImgInterface* defaultInterface);
 
     DImgInterface();
     ~DImgInterface();
 
-    void   load(const QString& filename, IOFileSettingsContainer *iofileSettings);
+    void   load(const QString& filename, IOFileSettingsContainer* iofileSettings);
     void   applyTransform(const IccTransform& transform);
     void   updateColorManagement();
     void   setSoftProofingEnabled(bool enabled);
@@ -72,13 +72,13 @@ public:
     ExposureSettingsContainer* getExposureSettings();
 
     void   setExifOrient(bool exifOrient);
-    void   setDisplayingWidget(QWidget *widget);
+    void   setDisplayingWidget(QWidget* widget);
 
     void   undo();
     void   redo();
     void   restore();
 
-    void   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
+    void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
                   bool setExifOrientationTag, const QString& mimeType=QString());
 
     void   switchToLastSaved(const QString& newFilename);
@@ -189,7 +189,7 @@ private:
 
 private:
 
-    static DImgInterface *m_defaultInterface;
+    static DImgInterface* m_defaultInterface;
 
     DImgInterfacePrivate* const d;
 };

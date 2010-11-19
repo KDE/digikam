@@ -73,8 +73,8 @@ public:
     IccRenderingIntentComboBox* proofingIntentBox;
 };
 
-SoftProofDialog::SoftProofDialog(QWidget *parent)
-               : KDialog(parent), d(new SoftProofDialogPriv)
+SoftProofDialog::SoftProofDialog(QWidget* parent)
+    : KDialog(parent), d(new SoftProofDialogPriv)
 {
     setCaption(i18n("Soft Proofing Options"));
 
@@ -88,32 +88,32 @@ SoftProofDialog::SoftProofDialog(QWidget *parent)
     setButtonText(Cancel,    i18n("Soft Proofing Off"));
     setButtonToolTip(Cancel, i18n("Disable soft-proofing color managed view"));
 
-    QWidget *page           = new QWidget(this);
+    QWidget* page           = new QWidget(this);
     QVBoxLayout* mainLayout = new QVBoxLayout(page);
     setMainWidget(page);
 
     // ---
 
-    QLabel *headerLabel   = new QLabel(i18n("<b>Configure the Soft Proofing View</b>"));
-    KSeparator *separator = new KSeparator(Qt::Horizontal);
+    QLabel* headerLabel   = new QLabel(i18n("<b>Configure the Soft Proofing View</b>"));
+    KSeparator* separator = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
-    QGridLayout *profileGrid = new QGridLayout;
+    QGridLayout* profileGrid = new QGridLayout;
 
-    QLabel *proofIcon   = new QLabel;
+    QLabel* proofIcon   = new QLabel;
     proofIcon->setPixmap(SmallIcon("printer", KIconLoader::SizeMedium));
-    QLabel *proofLabel  = new QLabel(i18n("Profile of the output device to simulate:"));
+    QLabel* proofLabel  = new QLabel(i18n("Profile of the output device to simulate:"));
     d->deviceProfileBox = new IccProfilesComboBox;
     proofLabel->setBuddy(d->deviceProfileBox);
     d->deviceProfileBox->setWhatsThis( i18n("<p>Select the profile for your output device "
-                     "(usually, your printer). This profile will be used to do a soft proof, so you will "
-                     "be able to preview how an image will be rendered via an output device.</p>"));
+                                            "(usually, your printer). This profile will be used to do a soft proof, so you will "
+                                            "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles = new QPushButton;
     d->infoProofProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoProofProfiles->setWhatsThis( i18n("Press this button to get detailed "
-                     "information about the selected proofing profile.</p>"));
+                                        "information about the selected proofing profile.</p>"));
 
     d->deviceProfileBox->replaceProfilesSqueezed(IccSettings::instance()->outputProfiles());
 
@@ -125,10 +125,10 @@ SoftProofDialog::SoftProofDialog(QWidget *parent)
 
     // --------------------------------------------------------------
 
-    QGroupBox *optionsBox    = new QGroupBox;
-    QGridLayout *optionsGrid = new QGridLayout;
+    QGroupBox* optionsBox    = new QGroupBox;
+    QGridLayout* optionsGrid = new QGridLayout;
 
-    QLabel *intentLabel  = new QLabel(i18n("Rendering intent:"));
+    QLabel* intentLabel  = new QLabel(i18n("Rendering intent:"));
     d->proofingIntentBox = new IccRenderingIntentComboBox;
     //TODO d->proofingIntentBox->setWhatsThis(i18n(""));
     intentLabel->setBuddy(d->proofingIntentBox);

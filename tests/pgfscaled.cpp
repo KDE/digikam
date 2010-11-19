@@ -38,7 +38,7 @@ using namespace Digikam;
 
 int main(int argc, char** argv)
 {
-    if(argc != 2)
+    if (argc != 2)
     {
         kDebug() << "pgfscaled - Load scaled version of PGF image and save to PNG";
         kDebug() << "Usage: <pgffile>";
@@ -51,6 +51,7 @@ int main(int argc, char** argv)
 
     QString fname(argv[1]);
     QFile file(fname);
+
     if ( !file.open(QIODevice::ReadOnly) )
     {
         kDebug() << "Cannot open PGF file to read...";
@@ -64,6 +65,7 @@ int main(int argc, char** argv)
         kDebug() << "loadPGFScaled failed...";
         return -1;
     }
+
     img.save(file.fileName()+QString("-scaled.png"), "PNG");
 
     return 0;

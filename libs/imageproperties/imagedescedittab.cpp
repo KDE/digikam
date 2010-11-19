@@ -147,7 +147,7 @@ public:
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget* parent)
-                : KVBox(parent), d(new ImageDescEditTabPriv)
+    : KVBox(parent), d(new ImageDescEditTabPriv)
 {
     setMargin(0);
     setSpacing(KDialog::spacingHint());
@@ -390,10 +390,14 @@ bool ImageDescEditTab::singleSelection() const
 void ImageDescEditTab::slotChangingItems()
 {
     if (!d->modified)
+    {
         return;
+    }
 
     if (d->currInfos.isEmpty())
+    {
         return;
+    }
 
     if (!AlbumSettings::instance()->getApplySidebarChangesDirectly())
     {
@@ -408,16 +412,29 @@ void ImageDescEditTab::slotChangingItems()
         dialog->setModal(true);
 
         int changedFields = 0;
+
         if (d->hub.commentsChanged())
+        {
             ++changedFields;
+        }
+
         if (d->hub.dateTimeChanged())
+        {
             ++changedFields;
+        }
+
         if (d->hub.ratingChanged())
+        {
             ++changedFields;
+        }
+
         if (d->hub.tagsChanged())
+        {
             ++changedFields;
+        }
 
         QString text;
+
         if (changedFields == 1)
         {
             if (d->hub.commentsChanged())
@@ -446,13 +463,24 @@ void ImageDescEditTab::slotChangingItems()
                          d->currInfos.count());
 
             if (d->hub.commentsChanged())
+            {
                 text += i18n("<li>caption</li>");
+            }
+
             if (d->hub.dateTimeChanged())
+            {
                 text += i18n("<li>date</li>");
+            }
+
             if (d->hub.ratingChanged())
+            {
                 text += i18n("<li>rating</li>");
+            }
+
             if (d->hub.tagsChanged())
+            {
                 text += i18n("<li>tags</li>");
+            }
 
             text += "</ul></p>";
 
@@ -461,16 +489,21 @@ void ImageDescEditTab::slotChangingItems()
 
         bool alwaysApply = false;
         int returnCode   = KMessageBox::createKMessageBox(dialog,
-                                        QMessageBox::Information,
-                                        text, QStringList(),
-                                        i18n("Always apply changes without confirmation"),
-                                        &alwaysApply, KMessageBox::Notify);
+                           QMessageBox::Information,
+                           text, QStringList(),
+                           i18n("Always apply changes without confirmation"),
+                           &alwaysApply, KMessageBox::Notify);
 
         if (alwaysApply)
+        {
             AlbumSettings::instance()->setApplySidebarChangesDirectly(true);
+        }
 
         if (returnCode == KDialog::No)
+        {
             return;
+        }
+
         // otherwise apply
     }
 
@@ -480,10 +513,14 @@ void ImageDescEditTab::slotChangingItems()
 void ImageDescEditTab::slotApplyAllChanges()
 {
     if (!d->modified)
+    {
         return;
+    }
 
     if (d->currInfos.isEmpty())
+    {
         return;
+    }
 
     MetadataManager::instance()->applyMetadata(d->currInfos, d->hub);
 
@@ -496,10 +533,14 @@ void ImageDescEditTab::slotApplyAllChanges()
 void ImageDescEditTab::slotRevertAllChanges()
 {
     if (!d->modified)
+    {
         return;
+    }
 
     if (d->currInfos.isEmpty())
+    {
         return;
+    }
 
     setInfos(d->currInfos);
 }
@@ -508,8 +549,12 @@ void ImageDescEditTab::setItem(const ImageInfo& info)
 {
     slotChangingItems();
     ImageInfoList list;
+
     if (!info.isNull())
+    {
         list << info;
+    }
+
     setInfos(list);
 }
 
@@ -636,6 +681,7 @@ bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
             }
         }
     }
+
     return KVBox::eventFilter(o, e);
 }
 
@@ -649,21 +695,24 @@ void ImageDescEditTab::populateTags()
 void ImageDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkState)
 {
     TAlbum* tag = dynamic_cast<TAlbum*> (album);
+
     if (!tag || d->ignoreTagChanges)
     {
         return;
     }
 
     bool isChecked = false;
+
     switch (checkState)
     {
-    case Qt::Checked:
-        isChecked = true;
-        break;
-    default:
-        isChecked = false;
-        break;
+        case Qt::Checked:
+            isChecked = true;
+            break;
+        default:
+            isChecked = false;
+            break;
     }
+
     d->hub.setTag(tag->id(), isChecked);
 
     slotModified();
@@ -712,8 +761,10 @@ void ImageDescEditTab::slotCreateNewTag()
     {
         return;
     }
+
     TAlbum* created = d->tagCheckView->tagModificationHelper()->
-                            slotTagNew(d->tagCheckView->currentAlbum(), d->newTagEdit->text());
+                      slotTagNew(d->tagCheckView->currentAlbum(), d->newTagEdit->text());
+
     if (created)
     {
         //d->tagCheckView->slotSelectAlbum(created);
@@ -724,11 +775,15 @@ void ImageDescEditTab::slotCreateNewTag()
 void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
 {
     TAlbum* assigned = 0;
+
     if (action.shallAssignTag())
     {
         assigned = AlbumManager::instance()->findTAlbum(action.tagId());
+
         if (assigned)
+        {
             d->tagModel->setChecked(assigned, true);
+        }
     }
     else if (action.shallCreateNewTag())
     {
@@ -756,7 +811,7 @@ void ImageDescEditTab::setTagState(TAlbum* tag, MetadataHub::TagStatus status)
         return;
     }
 
-    switch(status.status)
+    switch (status.status)
     {
         case MetadataHub::MetadataDisjoint:
             d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
@@ -774,6 +829,7 @@ void ImageDescEditTab::setTagState(TAlbum* tag, MetadataHub::TagStatus status)
 void ImageDescEditTab::initializeTags(QModelIndex& parent)
 {
     TAlbum* tag = d->tagModel->albumForIndex(parent);
+
     if (!tag)
     {
         return;
@@ -800,7 +856,7 @@ void ImageDescEditTab::updateTagsView()
     d->tagModel->resetAllCheckedAlbums();
 
     // then update checked state for all tags of the currently selected images
-    for(int row = 0; row < d->tagModel->rowCount(); ++row)
+    for (int row = 0; row < d->tagModel->rowCount(); ++row)
     {
         QModelIndex index = d->tagModel->index(row, 0);
         initializeTags(index);
@@ -812,7 +868,9 @@ void ImageDescEditTab::updateTagsView()
     // The condition is a temporary fix not to destroy name filtering on image change.
     // See comments in these methods.
     if (d->assignedTagsBtn->isChecked())
+    {
         slotAssignedTagsToggled(d->assignedTagsBtn->isChecked());
+    }
 }
 
 void ImageDescEditTab::updateComments()
@@ -826,10 +884,16 @@ void ImageDescEditTab::updateComments()
 void ImageDescEditTab::updateRating()
 {
     d->ratingWidget->blockSignals(true);
+
     if (d->hub.ratingStatus() == MetadataHub::MetadataDisjoint)
+    {
         d->ratingWidget->setRating(0);
+    }
     else
+    {
         d->ratingWidget->setRating(d->hub.rating());
+    }
+
     d->ratingWidget->blockSignals(false);
 }
 
@@ -872,8 +936,8 @@ void ImageDescEditTab::slotMoreMenu()
     if (singleSelection())
     {
         d->moreMenu->addAction(i18n("Read metadata from file to database"), this, SLOT(slotReadFromFileMetadataToDatabase()));
-        QAction *writeAction =
-                d->moreMenu->addAction(i18n("Write metadata to each file"), this, SLOT(slotWriteToFileMetadataFromDatabase()));
+        QAction* writeAction =
+            d->moreMenu->addAction(i18n("Write metadata to each file"), this, SLOT(slotWriteToFileMetadataFromDatabase()));
         // we do not need a "Write to file" action here because the apply button will do just that
         // if selection is a single file.
         // Adding the option will confuse users: Does the apply button not write to file?
@@ -894,7 +958,9 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
 {
     // don't lose modifications
     if (d->ignoreImageAttributesWatch || d->modified)
+    {
         return;
+    }
 
     metadataChange(imageId);
 }
@@ -902,11 +968,16 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
+    {
         return;
+    }
 
     Album* a = AlbumManager::instance()->findAlbum(albumId);
+
     if (d->currInfos.isEmpty() || !a || a->isRoot() || a->type() != Album::TAG)
+    {
         return;
+    }
 
     setInfos(d->currInfos);
 }
@@ -914,7 +985,9 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
 void ImageDescEditTab::slotImageRatingChanged(qlonglong imageId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
+    {
         return;
+    }
 
     metadataChange(imageId);
 }
@@ -922,7 +995,9 @@ void ImageDescEditTab::slotImageRatingChanged(qlonglong imageId)
 void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
+    {
         return;
+    }
 
     metadataChange(imageId);
 }
@@ -930,7 +1005,9 @@ void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
 void ImageDescEditTab::slotImageDateChanged(qlonglong imageId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
+    {
         return;
+    }
 
     metadataChange(imageId);
 }
@@ -961,7 +1038,9 @@ void ImageDescEditTab::slotReloadForMetadataChange()
     if (singleSelection())
     {
         if (d->metadataChangeIds.contains(d->currInfos.first().id()))
+        {
             setInfos(d->currInfos);
+        }
     }
     else
     {
@@ -979,8 +1058,12 @@ void ImageDescEditTab::slotReloadForMetadataChange()
 
 void ImageDescEditTab::updateRecentTags()
 {
-    KMenu* menu = dynamic_cast<KMenu *>(d->recentTagsBtn->menu());
-    if (!menu) return;
+    KMenu* menu = dynamic_cast<KMenu*>(d->recentTagsBtn->menu());
+
+    if (!menu)
+    {
+        return;
+    }
 
     menu->clear();
 
@@ -997,10 +1080,12 @@ void ImageDescEditTab::updateRecentTags()
              it != recentTags.constEnd(); ++it)
         {
             TAlbum* album = static_cast<TAlbum*>(*it);
+
             if (album)
             {
                 AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
                 QPixmap               icon;
+
                 if (!loader->getTagThumbnail(album, icon))
                 {
                     if (icon.isNull())
@@ -1008,11 +1093,13 @@ void ImageDescEditTab::updateRecentTags()
                         icon = loader->getStandardTagIcon(album, AlbumThumbnailLoader::SmallerSize);
                     }
                 }
-                TAlbum *parent = dynamic_cast<TAlbum*> (album->parent());
+
+                TAlbum* parent = dynamic_cast<TAlbum*> (album->parent());
+
                 if (parent)
                 {
                     QString text = album->title() + " (" + parent->prettyUrl() + ')';
-                    QAction *action = menu->addAction(icon, text, d->recentTagsMapper, SLOT(map()));
+                    QAction* action = menu->addAction(icon, text, d->recentTagsMapper, SLOT(map()));
                     d->recentTagsMapper->setMapping(action, album->id());
                 }
                 else
@@ -1031,6 +1118,7 @@ void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
     if (id > 0)
     {
         TAlbum* album = albumMan->findTAlbum(id);
+
         if (album)
         {
             d->tagModel->setChecked(album, true);
@@ -1051,6 +1139,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 {
     d->tagCheckView->checkableAlbumFilterModel()->setFilterChecked(t);
     d->tagCheckView->checkableAlbumFilterModel()->setFilterPartiallyChecked(t);
+
     if (t)
     {
         d->tagCheckView->expandMatches(d->tagCheckView->rootIndex());
@@ -1060,7 +1149,9 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 void ImageDescEditTab::focusLastSelectedWidget()
 {
     if (d->lastSelectedWidget)
+    {
         d->lastSelectedWidget->setFocus();
+    }
 
     d->lastSelectedWidget = 0;
 }

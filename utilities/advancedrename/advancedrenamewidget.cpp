@@ -103,7 +103,7 @@ public:
 };
 
 AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
-                    : QWidget(parent), d(new AdvancedRenameWidgetPriv)
+    : QWidget(parent), d(new AdvancedRenameWidgetPriv)
 {
     setupWidgets();
 }
@@ -162,10 +162,12 @@ void AdvancedRenameWidget::createToolTip()
 void AdvancedRenameWidget::slotToolTipButtonToggled(bool checked)
 {
     Q_UNUSED(checked)
+
     if (!d->tooltipDialog->isVisible())
     {
         d->tooltipDialog->show();
     }
+
     d->tooltipDialog->raise();
 }
 
@@ -205,6 +207,7 @@ QMenu* AdvancedRenameWidget::createControlsMenu(QList<T*>& list)
     foreach (T* ctrl, list)
     {
         action = ctrl->registerMenu(menu);
+
         if (!action)
         {
             continue;
@@ -219,62 +222,63 @@ QMenu* AdvancedRenameWidget::createControlsMenu(QList<T*>& list)
 
 void AdvancedRenameWidget::registerParserControls()
 {
-   if (d->parser)
-   {
-       setupWidgets();
+    if (d->parser)
+    {
+        setupWidgets();
 
-       QList<Option*> optionsList     = d->parser->options();
-       QList<Modifier*> modifiersList = d->parser->modifiers();
+        QList<Option*> optionsList     = d->parser->options();
+        QList<Modifier*> modifiersList = d->parser->modifiers();
 
-       switch (d->layoutStyle)
-       {
-           case LayoutCompact:
-           {
-               // register options
-               QMenu* optionsMenu   = createControlsMenu(optionsList);
-               d->optionsButton->setMenu(optionsMenu);
+        switch (d->layoutStyle)
+        {
+            case LayoutCompact:
+            {
+                // register options
+                QMenu* optionsMenu   = createControlsMenu(optionsList);
+                d->optionsButton->setMenu(optionsMenu);
 
-               // register modifiers
-               QMenu* modifiersMenu = createControlsMenu(modifiersList);
-               d->modifiersButton->setMenu(modifiersMenu);
-               break;
-           }
-           default:
-           {
-               // register options
-               QPushButton* btn      = 0;
-               DynamicLayout* layout = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
-               foreach (Option* option, d->parser->options())
-               {
-                   btn = option->registerButton(this);
+                // register modifiers
+                QMenu* modifiersMenu = createControlsMenu(modifiersList);
+                d->modifiersButton->setMenu(modifiersMenu);
+                break;
+            }
+            default:
+            {
+                // register options
+                QPushButton* btn      = 0;
+                DynamicLayout* layout = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
+                foreach (Option* option, d->parser->options())
+                {
+                    btn = option->registerButton(this);
 
-                   if (!btn)
-                   {
-                       continue;
-                   }
-                   // set button tooltip
-                   btn->setToolTip(option->description());
+                    if (!btn)
+                    {
+                        continue;
+                    }
 
-                   layout->addWidget(btn);
+                    // set button tooltip
+                    btn->setToolTip(option->description());
 
-                   connect(option, SIGNAL(signalTokenTriggered(const QString&)),
-                           d->renameInput, SLOT(slotAddToken(const QString&)));
-               }
-               d->btnContainer->setLayout(layout);
-               setMinimumWidth(d->btnContainer->layout()->sizeHint().width());
+                    layout->addWidget(btn);
 
-               // register modifiers
-               QMenu* modifiersMenu = createControlsMenu(modifiersList);
-               d->modifiersToolButton->setMenu(modifiersMenu);
-               break;
-           }
-       }
+                    connect(option, SIGNAL(signalTokenTriggered(const QString&)),
+                            d->renameInput, SLOT(slotAddToken(const QString&)));
+                }
+                d->btnContainer->setLayout(layout);
+                setMinimumWidth(d->btnContainer->layout()->sizeHint().width());
 
-       // --------------------------------------------------------
+                // register modifiers
+                QMenu* modifiersMenu = createControlsMenu(modifiersList);
+                d->modifiersToolButton->setMenu(modifiersMenu);
+                break;
+            }
+        }
 
-       d->renameInput->setParser(d->parser);
-       createToolTip();
-   }
+        // --------------------------------------------------------
+
+        d->renameInput->setParser(d->parser);
+        createToolTip();
+    }
 }
 
 Parser* AdvancedRenameWidget::parser() const
@@ -386,6 +390,7 @@ void AdvancedRenameWidget::setupWidgets()
             mainLayout->setColumnStretch(0, 10);
             break;
     }
+
     mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::marginHint());
     setLayout(mainLayout);
@@ -446,8 +451,8 @@ void AdvancedRenameWidget::writeSettings()
     // remove duplicate entries and save pattern history, omit empty strings
     QString pattern = d->renameInput->text();
     group.writeEntry(d->configExpandedStateEntry, d->optionsLabel
-                                                  ? d->optionsLabel->isExpanded()
-                                                  : d->configExpandedStateDefault);
+                     ? d->optionsLabel->isExpanded()
+                     : d->configExpandedStateDefault);
 }
 
 }  // namespace Digikam

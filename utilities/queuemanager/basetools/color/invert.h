@@ -40,7 +40,10 @@ public:
     Invert(QObject* parent=0);
     ~Invert();
 
-    BatchToolSettings defaultSettings(){ return BatchToolSettings(); };
+    BatchToolSettings defaultSettings()
+    {
+        return BatchToolSettings();
+    };
 
 private:
 
@@ -48,8 +51,8 @@ private:
 
 private Q_SLOTS:
 
-    void slotAssignSettings2Widget(){};
-    void slotSettingsChanged(){};
+    void slotAssignSettings2Widget() {};
+    void slotSettingsChanged() {};
 };
 
 }  // namespace Digikam

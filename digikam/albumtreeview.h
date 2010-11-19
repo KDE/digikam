@@ -175,7 +175,7 @@ public Q_SLOTS:
      *
      * @param index index to start expanding everything
      */
-    void expandEverything(const QModelIndex &index);
+    void expandEverything(const QModelIndex& index);
 
 Q_SIGNALS:
 
@@ -432,7 +432,7 @@ public:
     virtual ~AlbumTreeView();
     AlbumModel* albumModel() const;
     PAlbum* currentAlbum() const;
-    PAlbum* albumForIndex(const QModelIndex &index) const;
+    PAlbum* albumForIndex(const QModelIndex& index) const;
 
 private Q_SLOTS:
 
@@ -450,7 +450,7 @@ public:
     explicit TagTreeView(TagModel* model, QWidget* parent = 0);
     TagModel* albumModel() const;
     TAlbum* currentAlbum() const;
-    TAlbum* albumForIndex(const QModelIndex &index) const;
+    TAlbum* albumForIndex(const QModelIndex& index) const;
 
     TagModificationHelper* tagModificationHelper() const;
 
@@ -496,7 +496,7 @@ public:
     DateAlbumTreeView(QWidget* parent, DateAlbumModel* dateAlbumModel);
     DateAlbumModel* albumModel() const;
     DAlbum* currentAlbum() const;
-    DAlbum* albumForIndex(const QModelIndex &index) const;
+    DAlbum* albumForIndex(const QModelIndex& index) const;
 };
 
 } // namespace Digikam

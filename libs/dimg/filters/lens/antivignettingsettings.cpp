@@ -78,7 +78,7 @@ public:
         outerRadiusInput(0),
         xOffsetInput(0),
         yOffsetInput(0)
-        {}
+    {}
 
     const QString    configAddVignettingAdjustmentEntry;
     const QString    configDensityAdjustmentEntry;
@@ -102,14 +102,14 @@ public:
 };
 
 AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
-                      : QWidget(parent),
-                        d(new AntiVignettingSettingsPriv)
+    : QWidget(parent),
+      d(new AntiVignettingSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
     d->addVignettingCheck = new QCheckBox(i18n("Add vignetting"));
     d->addVignettingCheck->setWhatsThis(i18n("This option adds vignetting to the image instead of removing it. "
-                                             "Use it for creative effects."));
+                                        "Use it for creative effects."));
     d->addVignettingCheck->setChecked(false);
 
     // -------------------------------------------------------------
@@ -262,7 +262,7 @@ void AntiVignettingSettings::setSettings(const AntiVignettingContainer& settings
     d->innerRadiusInput->setValue(settings.innerradius);
     d->outerRadiusInput->setValue(settings.outerradius);
     d->xOffsetInput->setValue(settings.xshift);
-    d->yOffsetInput->setValue(settings.yshift);    
+    d->yOffsetInput->setValue(settings.yshift);
 
     blockSignals(false);
 }

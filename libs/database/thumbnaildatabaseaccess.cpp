@@ -52,8 +52,8 @@ public:
     {}
     ~ThumbnailDatabaseAccessStaticPriv() {};
 
-    DatabaseCoreBackend*backend;
-    ThumbnailDB        *db;
+    DatabaseCoreBackend* backend;
+    ThumbnailDB*        db;
     DatabaseParameters  parameters;
     DatabaseLocking     lock;
     QString             lastError;
@@ -65,7 +65,7 @@ class ThumbnailDatabaseAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    ThumbnailDatabaseAccessMutexLocker(ThumbnailDatabaseAccessStaticPriv *d)
+    ThumbnailDatabaseAccessMutexLocker(ThumbnailDatabaseAccessStaticPriv* d)
         : QMutexLocker(&d->lock.mutex), d(d)
     {
         d->lock.lockCount++;
@@ -79,13 +79,14 @@ public:
     ThumbnailDatabaseAccessStaticPriv* const d;
 };
 
-ThumbnailDatabaseAccessStaticPriv *ThumbnailDatabaseAccess::d = 0;
+ThumbnailDatabaseAccessStaticPriv* ThumbnailDatabaseAccess::d = 0;
 
 ThumbnailDatabaseAccess::ThumbnailDatabaseAccess()
 {
     Q_ASSERT(d/*You will want to call setParameters before constructing ThumbnailDatabaseAccess*/);
     d->lock.mutex.lock();
     d->lock.lockCount++;
+
     if (!d->backend->isOpen() && !d->initializing)
     {
         // avoid endless loops
@@ -111,12 +112,12 @@ ThumbnailDatabaseAccess::ThumbnailDatabaseAccess(bool)
     d->lock.lockCount++;
 }
 
-ThumbnailDB *ThumbnailDatabaseAccess::db() const
+ThumbnailDB* ThumbnailDatabaseAccess::db() const
 {
     return d->db;
 }
 
-DatabaseCoreBackend *ThumbnailDatabaseAccess::backend() const
+DatabaseCoreBackend* ThumbnailDatabaseAccess::backend() const
 {
     return d->backend;
 }
@@ -124,16 +125,20 @@ DatabaseCoreBackend *ThumbnailDatabaseAccess::backend() const
 DatabaseParameters ThumbnailDatabaseAccess::parameters()
 {
     if (d)
+    {
         return d->parameters;
+    }
+
     return DatabaseParameters();
 }
 
-void ThumbnailDatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler *errorhandler)
+void ThumbnailDatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
 {
     if (!d)
-        {
-            d = new ThumbnailDatabaseAccessStaticPriv();
-        }
+    {
+        d = new ThumbnailDatabaseAccessStaticPriv();
+    }
+
     //DatabaseErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
@@ -148,14 +153,20 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
     ThumbnailDatabaseAccessMutexLocker lock(d);
 
     if (d->parameters == parameters)
+    {
         return;
+    }
 
     if (d->backend && d->backend->isOpen())
+    {
         d->backend->close();
+    }
 
     // Kill the old database error handler
     if (d->backend)
+    {
         d->backend->setDatabaseErrorHandler(0);
+    }
 
     d->parameters = parameters;
 
@@ -168,9 +179,10 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
     }
 }
 
-bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver *observer)
+bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
+
     if (!drivers.contains("QSQLITE"))
     {
         kError() << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
@@ -185,11 +197,15 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver *observer)
     if (!d->backend)
     {
         kWarning() << "No database backend available in checkReadyForUse. "
-                           "Did you call setParameters before?";
+                   "Did you call setParameters before?";
         return false;
     }
+
     if (d->backend->isReady())
+    {
         return true;
+    }
+
     if (!d->backend->isOpen())
     {
         if (!d->backend->open(d->parameters))
@@ -206,6 +222,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver *observer)
     // update schema
     ThumbnailSchemaUpdater updater(&access);
     updater.setObserver(observer);
+
     if (!d->backend->initSchema(&updater))
     {
         d->initializing = false;
@@ -236,6 +253,7 @@ void ThumbnailDatabaseAccess::cleanUpDatabase()
         delete d->db;
         delete d->backend;
     }
+
     delete d;
     d = 0;
 }

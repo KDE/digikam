@@ -36,10 +36,12 @@ namespace Digikam
 {
 
 QString CameraNameHelper::createCameraName(const QString& vendor, const QString& product,
-                                           const QString& mode,   bool autoDetected)
+        const QString& mode,   bool autoDetected)
 {
     if (vendor.isEmpty())
+    {
         return QString();
+    }
 
     QString tmp;
     QString _vendor  = vendor.simplified();
@@ -47,15 +49,15 @@ QString CameraNameHelper::createCameraName(const QString& vendor, const QString&
     QString _mode    = mode.simplified().remove('(').remove(')');
 
     tmp = QString("%1 %2").arg(_vendor)
-                          .arg(_product)
-                          .simplified();
+          .arg(_product)
+          .simplified();
 
     if (!mode.isEmpty())
     {
         tmp.append(" (");
         tmp.append(_mode);
         tmp.append(autoDetected ? QString(", %1)").arg(autoDetectedString())
-                                : QString(')'));
+                   : QString(')'));
     }
     else if (autoDetected)
     {
@@ -76,7 +78,7 @@ QString CameraNameHelper::formattedFullCameraName(const QString& name, bool auto
 }
 
 QString CameraNameHelper::parseAndFormatCameraName(const QString& cameraName,
-                                                   bool parseMode, bool autoDetected)
+        bool parseMode, bool autoDetected)
 {
     QString tmp;
 
@@ -84,7 +86,9 @@ QString CameraNameHelper::parseAndFormatCameraName(const QString& cameraName,
     QString mode             = parseMode ? extractCameraNameToken(cameraName, Mode) : QString();
 
     if (vendorAndProduct.isEmpty())
+    {
         return QString();
+    }
 
     // we split vendorAndProduct once, it doesn't really matter if the variables are correctly filled,
     // it is only important that both are not empty.
@@ -133,9 +137,13 @@ QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, int 
         }
 
         if (tokenID == VendorAndProduct)
+        {
             tmp = vendorAndProduct;
+        }
         else if (tokenID == Mode)
+        {
             tmp = mode;
+        }
 
     }
 
@@ -155,10 +163,14 @@ QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, int 
 bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& deviceB)
 {
     if (deviceA.isEmpty() || deviceB.isEmpty())
+    {
         return false;
+    }
 
     if (deviceA == deviceB)
+    {
         return true;
+    }
 
     // We need to parse the names a little bit. First check if the vendor and name match
     QString vendorAndProductA = extractCameraNameToken(deviceA, VendorAndProduct);
@@ -173,7 +185,9 @@ bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& device
         QString tmpB = prepareStringForDeviceComparison(cameraNameB, VendorAndProduct);
 
         if (tmpA != tmpB)
+        {
             return false;
+        }
     }
 
     // now check if the mode is the same
@@ -185,7 +199,9 @@ bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& device
     QString strippedModeB     = prepareStringForDeviceComparison(modeB, Mode);
 
     if (strippedModeA == strippedModeB)
+    {
         return true;
+    }
 
     return false;
 }
@@ -195,7 +211,9 @@ QString CameraNameHelper::prepareStringForDeviceComparison(const QString& string
     QString tmp = string.toLower().remove('(').remove(')').remove(autoDetectedString()).simplified();
 
     if (tokenID == Mode)
+    {
         tmp = tmp.remove("mode").remove(',');
+    }
 
     return tmp.simplified();
 }

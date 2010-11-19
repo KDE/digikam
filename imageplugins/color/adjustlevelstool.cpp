@@ -121,7 +121,7 @@ public:
         levels(0),
         originalImage(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configGammaChannelEntry;
@@ -168,8 +168,8 @@ public:
 };
 
 AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
-                : EditorToolThreaded(parent),
-                  d(new AdjustLevelsToolPriv)
+    : EditorToolThreaded(parent),
+      d(new AdjustLevelsToolPriv)
 {
     setObjectName("adjustlevels");
     setToolName(i18n("Adjust Levels"));
@@ -205,12 +205,12 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->levelsHistogramWidget = new HistogramWidget(256, 140, d->originalImage->bits(),
-                                                             d->originalImage->width(),
-                                                             d->originalImage->height(),
-                                                             d->originalImage->sixteenBit(),
-                                                             d->gboxSettings->plainPage(), false);
+            d->originalImage->width(),
+            d->originalImage->height(),
+            d->originalImage->sixteenBit(),
+            d->gboxSettings->plainPage(), false);
     d->levelsHistogramWidget->setWhatsThis(i18n("This is the histogram drawing of the selected channel "
-                                                "from the original image."));
+                                           "from the original image."));
     QHBoxLayout* inputLevelsLayout = new QHBoxLayout;
     inputLevelsLayout->addWidget(d->levelsHistogramWidget);
 
@@ -364,10 +364,10 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
-/*
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
-*/
+    /*
+        connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+                this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+    */
 
     // -------------------------------------------------------------
     // Color sliders and spinbox slots.
@@ -417,7 +417,9 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 AdjustLevelsTool::~AdjustLevelsTool()
 {
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     delete d->levels;
     delete d;
@@ -425,7 +427,7 @@ AdjustLevelsTool::~AdjustLevelsTool()
 
 // See B.K.O #146636: use event filter with all level slider to display a
 // guide over level histogram.
-bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
+bool AdjustLevelsTool::eventFilter(QObject* obj, QEvent* ev)
 {
     if ( obj == d->inputLevels )
     {
@@ -439,6 +441,7 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
 
             return false;
         }
+
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
             disconnect(d->inputLevels, SIGNAL(leftValueChanged(double)),
@@ -455,6 +458,7 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
             return false;
         }
     }
+
     if ( obj == d->outputLevels )
     {
         if ( ev->type() == QEvent::MouseButtonPress)
@@ -467,6 +471,7 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
 
             return false;
         }
+
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
             disconnect(d->outputLevels, SIGNAL(leftValueChanged(double)),
@@ -506,7 +511,10 @@ void AdjustLevelsTool::slotShowOutputHistogramGuide(double v)
 
 void AdjustLevelsTool::slotPickerColorButtonActived(int type)
 {
-    if (type == AdjustLevelsToolPriv::NoPicker) return;
+    if (type == AdjustLevelsToolPriv::NoPicker)
+    {
+        return;
+    }
 
     d->previewWidget->setCapturePointMode(true);
 }
@@ -515,26 +523,26 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
 {
     if ( d->pickBlack->isChecked() )
     {
-       // Black tonal levels point.
-       d->levels->levelsBlackToneAdjustByColors(d->gboxSettings->histogramBox()->channel(), color);
-       d->pickBlack->setChecked(false);
+        // Black tonal levels point.
+        d->levels->levelsBlackToneAdjustByColors(d->gboxSettings->histogramBox()->channel(), color);
+        d->pickBlack->setChecked(false);
     }
     else if ( d->pickGray->isChecked() )
     {
-       // Gray tonal levels point.
-       d->levels->levelsGrayToneAdjustByColors(d->gboxSettings->histogramBox()->channel(), color);
-       d->pickGray->setChecked(false);
+        // Gray tonal levels point.
+        d->levels->levelsGrayToneAdjustByColors(d->gboxSettings->histogramBox()->channel(), color);
+        d->pickGray->setChecked(false);
     }
     else if ( d->pickWhite->isChecked() )
     {
-       // White tonal levels point.
-       d->levels->levelsWhiteToneAdjustByColors(d->gboxSettings->histogramBox()->channel(), color);
-       d->pickWhite->setChecked(false);
+        // White tonal levels point.
+        d->levels->levelsWhiteToneAdjustByColors(d->gboxSettings->histogramBox()->channel(), color);
+        d->pickWhite->setChecked(false);
     }
     else
     {
-       d->levelsHistogramWidget->setHistogramGuideByColor(color);
-       return;
+        d->levelsHistogramWidget->setHistogramGuideByColor(color);
+        return;
     }
 
     // Refresh the current levels config.
@@ -670,6 +678,7 @@ void AdjustLevelsTool::slotChannelChanged()
 {
     ChannelType channel = d->gboxSettings->histogramBox()->channel();
     d->levelsHistogramWidget->setChannelType(channel);
+
     switch (channel)
     {
         case RedChannel:
@@ -740,9 +749,9 @@ void AdjustLevelsTool::readSettings()
     d->gboxSettings->histogramBox()->histogram()->reset();
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                    (int)LuminosityChannel));
+            (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                    (int)LogScaleHistogram));
+            (int)LogScaleHistogram));
 
     // This is mandatory here to set spinbox values because slot connections
     // can be not set completely at plugin startup.
@@ -791,7 +800,9 @@ void AdjustLevelsTool::writeSettings()
 void AdjustLevelsTool::slotResetSettings()
 {
     for (int channel = 0 ; channel < 5 ; ++channel)
+    {
         d->levels->levelsChannelReset(channel);
+    }
 
     // Refresh the current levels config.
     slotChannelChanged();
@@ -803,6 +814,7 @@ void AdjustLevelsTool::slotResetSettings()
 void AdjustLevelsTool::prepareEffect()
 {
     LevelsContainer settings;
+
     for (int i=0 ; i<5 ; ++i)
     {
         settings.lInput[i]  = d->levels->getLevelLowInputValue(i);
@@ -826,17 +838,20 @@ void AdjustLevelsTool::putPreviewData()
     // Update histogram.
 
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-                                                             preview.width(), preview.height(), preview.sixteenBit(),
-                                                             0, 0, 0, false);
+            preview.width(), preview.height(), preview.sixteenBit(),
+            0, 0, 0, false);
 }
 
 void AdjustLevelsTool::prepareFinal()
 {
     LevelsContainer settings;
+
     for (int i=0 ; i<5 ; ++i)
     {
         settings.lInput[i]  = d->levels->getLevelLowInputValue(i);
@@ -861,16 +876,19 @@ void AdjustLevelsTool::slotLoadSettings()
     KUrl loadLevelsFile;
 
     loadLevelsFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), kapp->activeWindow(),
-                                             QString( i18n("Select Gimp Levels File to Load")) );
+                     QString( "*" ), kapp->activeWindow(),
+                     QString( i18n("Select Gimp Levels File to Load")) );
+
     if ( loadLevelsFile.isEmpty() )
-       return;
+    {
+        return;
+    }
 
     if ( d->levels->loadLevelsFromGimpLevelsFile( loadLevelsFile ) == false )
     {
-       KMessageBox::error(kapp->activeWindow(),
-                          i18n("Cannot load from the Gimp levels text file."));
-       return;
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot load from the Gimp levels text file."));
+        return;
     }
 
     // Refresh the current levels config.
@@ -884,16 +902,19 @@ void AdjustLevelsTool::slotSaveAsSettings()
     KUrl saveLevelsFile;
 
     saveLevelsFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), kapp->activeWindow(),
-                                             QString( i18n("Gimp Levels File to Save")) );
+                     QString( "*" ), kapp->activeWindow(),
+                     QString( i18n("Gimp Levels File to Save")) );
+
     if ( saveLevelsFile.isEmpty() )
-       return;
+    {
+        return;
+    }
 
     if ( d->levels->saveLevelsToGimpLevelsFile( saveLevelsFile ) == false )
     {
-       KMessageBox::error(kapp->activeWindow(),
-                          i18n("Cannot save to the Gimp levels text file."));
-       return;
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot save to the Gimp levels text file."));
+        return;
     }
 
     // Refresh the current levels config.

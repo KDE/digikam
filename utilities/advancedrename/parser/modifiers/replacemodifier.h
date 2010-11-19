@@ -34,7 +34,7 @@ class QCheckBox;
 
 namespace Ui
 {
-    class ReplaceModifierDialogWidget;
+class ReplaceModifierDialogWidget;
 }
 
 namespace Digikam

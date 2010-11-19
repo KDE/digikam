@@ -68,7 +68,7 @@ public:
 };
 
 DatabaseConnectionChecker::DatabaseConnectionChecker(const DatabaseParameters& parameters)
-                         : d(new DatabaseConnectionCheckerPriv)
+    : d(new DatabaseConnectionCheckerPriv)
 {
     d->parameters = parameters;
 }
@@ -93,6 +93,7 @@ void DatabaseConnectionChecker::run()
     databaseHandler.setConnectOptions(d->parameters.connectOptions);
 
     int iteration = 1;
+
     while (!d->stop)
     {
         if (databaseHandler.open())
@@ -153,7 +154,7 @@ public:
 };
 
 DatabaseGUIErrorHandler::DatabaseGUIErrorHandler(const DatabaseParameters& parameters)
-                       : d(new DatabaseGUIErrorHandlerPriv)
+    : d(new DatabaseGUIErrorHandlerPriv)
 {
     d->parameters = parameters;
 }
@@ -179,7 +180,9 @@ bool DatabaseGUIErrorHandler::checkDatabaseConnection()
     loop.exec();
 
     if (d->dialog)
+    {
         delete d->dialog;
+    }
 
     // ensure that the connection thread is closed
     d->checker->wait();
@@ -192,7 +195,9 @@ bool DatabaseGUIErrorHandler::checkDatabaseConnection()
 void DatabaseGUIErrorHandler::showProgressDialog()
 {
     if (d->dialog || !d->checker)
+    {
         return;
+    }
 
     d->dialog = new KProgressDialog;
     d->dialog->setModal(true);
@@ -201,7 +206,7 @@ void DatabaseGUIErrorHandler::showProgressDialog()
     d->dialog->progressBar()->setMinimum(0);
     d->dialog->progressBar()->setMaximum(0);
     d->dialog->setLabelText(i18n("Error while opening the database.\n"
-                                "digiKam will try to automatically reconnect to the database."));
+                                 "digiKam will try to automatically reconnect to the database."));
 
     connect(d->dialog, SIGNAL(rejected()),
             d->checker, SLOT(stopChecking()));

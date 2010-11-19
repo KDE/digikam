@@ -74,17 +74,17 @@ typedef QList<Album*> AlbumList;
 /**
  * \class AlbumManager
  *
- * There are two primary managers which manage the listing and 
+ * There are two primary managers which manage the listing and
  * lifetime of Album and ImageInfo: AlbumManager and AlbumLister
  *
- * AlbumManager manages albums: does listing of albums and controls the lifetime of it. 
+ * AlbumManager manages albums: does listing of albums and controls the lifetime of it.
  * For PAlbums and TAlbums, the listing is done by reading the db directly and
  * building the hierarchy of the albums. For DAlbums, since the listing takes
  * time, the work is delegated to a kioslave. Interested frontend entities can
  * connect to the albummanager to receive notifications of new Albums, when
  * Albums are deleted and when the current album is changed.
  *
- * Additional operations are provided for: creating/deleting/rename Albums, 
+ * Additional operations are provided for: creating/deleting/rename Albums,
  * updating icons and moving Albums.
  *
  */
@@ -181,8 +181,8 @@ public:
     * listing of albums. This also causes it to fire the signal
     * signalAlbumCurrentChanged()
     */
-    void      setCurrentAlbum(Album *album);
- 
+    void      setCurrentAlbum(Album* album);
+
     /**
     * @returns the current album
     */
@@ -307,7 +307,7 @@ public:
      * @param newName the new name for the album
      * @param errMsg this will contain the error message describing why the
      * operation failed
-     */ 
+     */
     bool renamePAlbum(PAlbum* album, const QString& newName,
                       QString& errMsg);
 
@@ -320,7 +320,7 @@ public:
      * @param errMsg if the operation fails, this will contain the error message
      * describing why the operation failed
      */
-    bool updatePAlbumIcon(PAlbum *album, qlonglong iconID, QString& errMsg);
+    bool updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& errMsg);
     //@}
 
     /**
@@ -344,7 +344,7 @@ public:
      * @param errMsg  this will contain the error message describing why the
      * operation failed
      */
-    TAlbum* createTAlbum(TAlbum* parent, const QString& name, 
+    TAlbum* createTAlbum(TAlbum* parent, const QString& name,
                          const QString& iconkde, QString& errMsg);
 
     /**
@@ -387,10 +387,10 @@ public:
      * @param errMsg this will contain the error message describing why the
      * operation failed
      */
-    bool moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg);
+    bool moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg);
 
     /**
-     * Update the icon for a TAlbum. 
+     * Update the icon for a TAlbum.
      * @return true if the operation succeeds, false otherwise
      * @param album the album for which icon should be changed
      * @param iconKDE  a simple filename which can be loaded by KIconLoader
@@ -516,23 +516,23 @@ Q_SIGNALS:
 
     /// An album is about to be added to the given parent (0 if album is root)
     /// after the item given by prev (prev is 0 if parent has no children yet)
-    void signalAlbumAboutToBeAdded(Album *album, Album *parent, Album *prev);
+    void signalAlbumAboutToBeAdded(Album* album, Album* parent, Album* prev);
     /// The album has been added.
     void signalAlbumAdded(Album* album);
     /// The album is about to be deleted, but is still fully valid.
-    void signalAlbumAboutToBeDeleted(Album *album);
+    void signalAlbumAboutToBeDeleted(Album* album);
     /// The album is deleted, but the object can still be accessed.
     void signalAlbumDeleted(Album* album);
     /// The album is deleted, the object can no longer be accessed.
     /// For identification purposes, the former album pointer is passed.
-    void signalAlbumHasBeenDeleted(void *);
+    void signalAlbumHasBeenDeleted(void*);
     void signalAlbumsCleared();
     void signalAlbumCurrentChanged(Album* album);
     void signalAllAlbumsLoaded();
     void signalAllDAlbumsLoaded();
     void signalAlbumIconChanged(Album* album);
     void signalAlbumRenamed(Album* album);
-    void signalSearchUpdated(SAlbum *album);
+    void signalSearchUpdated(SAlbum* album);
     /// Indicates that an album is about to be moved. Signals for deleting and adding will be
     /// sent afterwards, but the album object is guaranteed not to be deleted until after signalAlbumMoved.
     void signalAlbumAboutToBeMoved(Album* album);
@@ -557,7 +557,7 @@ private Q_SLOTS:
     void slotKioFilesDeleted(const QStringList& urls);
     void slotKioFilesAdded(const QString& directory);
     void slotNotifyFileChange(const QString& directory);
-    void slotCollectionLocationStatusChanged(const CollectionLocation &, int);
+    void slotCollectionLocationStatusChanged(const CollectionLocation&, int);
     void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);
     void slotAlbumChange(const AlbumChangeset& changeset);
     void slotTagChange(const TagChangeset& changeset);
@@ -607,15 +607,15 @@ private:
      * @return <code>true</code> if there is a child with name, else
      *         <code>false</code>
      */
-    bool hasDirectChildAlbumWithTitle(Album *parent, const QString &title);
+    bool hasDirectChildAlbumWithTitle(Album* parent, const QString& title);
 
-    void insertPAlbum(PAlbum *album, PAlbum *parent);
-    void removePAlbum(PAlbum *album);
-    void insertTAlbum(TAlbum *album, TAlbum *parent);
-    void removeTAlbum(TAlbum *album);
+    void insertPAlbum(PAlbum* album, PAlbum* parent);
+    void removePAlbum(PAlbum* album);
+    void insertTAlbum(TAlbum* album, TAlbum* parent);
+    void removeTAlbum(TAlbum* album);
     void updateAlbumPathHash();
 
-    void notifyAlbumDeletion(Album *album);
+    void notifyAlbumDeletion(Album* album);
 
     void addAlbumRoot(const CollectionLocation& location);
     void removeAlbumRoot(const CollectionLocation& location);
@@ -624,11 +624,11 @@ private:
 
     template <class T> friend class AlbumPointer;
     friend class Album;
-    static AlbumManager *internalInstance;
-    void addGuardedPointer(Album *a, Album **pointer);
-    void removeGuardedPointer(Album *a, Album **pointer);
-    void changeGuardedPointer(Album *oldAlbum, Album *a, Album **pointer);
-    void invalidateGuardedPointers(Album *album);
+    static AlbumManager* internalInstance;
+    void addGuardedPointer(Album* a, Album** pointer);
+    void removeGuardedPointer(Album* a, Album** pointer);
+    void changeGuardedPointer(Album* oldAlbum, Album* a, Album** pointer);
+    void invalidateGuardedPointers(Album* album);
 
     bool checkNepomukService();
 
@@ -649,37 +649,52 @@ class AlbumPointer
 public:
 
     AlbumPointer() : album(0) {}
-    AlbumPointer(T *a) : album(a)
-    { AlbumManager::instance()->addGuardedPointer(album, &album); }
+    AlbumPointer(T* a) : album(a)
+    {
+        AlbumManager::instance()->addGuardedPointer(album, &album);
+    }
     AlbumPointer(const AlbumPointer<T>& p) : album(p.album)
-    { AlbumManager::instance()->addGuardedPointer(album, &album); }
+    {
+        AlbumManager::instance()->addGuardedPointer(album, &album);
+    }
 
     ~AlbumPointer()
-    { AlbumManager::instance()->removeGuardedPointer(album, &album); }
+    {
+        AlbumManager::instance()->removeGuardedPointer(album, &album);
+    }
 
     AlbumPointer<T> operator=(T* a)
     {
-        Album *oldAlbum = album;
+        Album* oldAlbum = album;
         album = a;
         AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
         return *this;
     }
     AlbumPointer<T> operator=(const AlbumPointer<T>& p)
     {
-        Album *oldAlbum = album;
+        Album* oldAlbum = album;
         album = p.album;
         AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
         return *this;
     }
 
-    T* operator->() const { return static_cast<T*>(const_cast<Album*>(album)); }
-    T& operator*() const { return *static_cast<T*>(const_cast<Album*>(album)); }
-    operator T*() const { return static_cast<T*>(const_cast<Album*>(album)); }
+    T* operator->() const
+    {
+        return static_cast<T*>(const_cast<Album*>(album));
+    }
+    T& operator*() const
+    {
+        return *static_cast<T*>(const_cast<Album*>(album));
+    }
+    operator T*() const
+    {
+        return static_cast<T*>(const_cast<Album*>(album));
+    }
 
 private:
 
     friend class AlbumManager;
-    Album *album;
+    Album* album;
 };
 
 }  // namespace Digikam

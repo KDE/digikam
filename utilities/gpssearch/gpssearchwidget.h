@@ -43,7 +43,7 @@ class GPSSearchWidget : public WorldMapWidget
 
 public:
 
-    GPSSearchWidget(QWidget *parent=0);
+    GPSSearchWidget(QWidget* parent=0);
     ~GPSSearchWidget();
 
     bool hasSelection() const;

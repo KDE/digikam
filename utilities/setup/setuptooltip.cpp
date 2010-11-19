@@ -125,13 +125,13 @@ public:
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
-            : QScrollArea(parent), d(new SetupToolTipPriv)
+    : QScrollArea(parent), d(new SetupToolTipPriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout *vlay     = new QVBoxLayout(panel);
+    QVBoxLayout* vlay     = new QVBoxLayout(panel);
 
     d->fontSelect         = new DFontSelect(i18n("Tool-Tips Font:"), panel);
     d->fontSelect->setToolTip(i18n("Select here the font used to display text in tool-tips."));
@@ -140,14 +140,14 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     // --------------------------------------------------------
 
-    KVBox *vbox           = new KVBox(panel);
+    KVBox* vbox           = new KVBox(panel);
 
     d->showToolTipsBox    = new QCheckBox(i18n("Show icon-view and thumb-bar items' tool-tips"), vbox);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
                                           "the mouse hovers over an icon-view or thumb-bar item."));
 
     d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), vbox);
-    QVBoxLayout *vlay2    = new QVBoxLayout(d->fileSettingBox);
+    QVBoxLayout* vlay2    = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox    = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis(i18n("Set this option to display the image file name."));
@@ -175,7 +175,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     // --------------------------------------------------------
 
     d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), vbox);
-    QVBoxLayout *vlay3    = new QVBoxLayout(d->photoSettingBox);
+    QVBoxLayout* vlay3    = new QVBoxLayout(d->photoSettingBox);
 
     d->showPhotoMakeBox   = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
@@ -217,7 +217,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     // --------------------------------------------------------
 
     d->digikamSettingBox = new QGroupBox(i18n("digiKam Information"), vbox);
-    QVBoxLayout *vlay4   = new QVBoxLayout(d->digikamSettingBox);
+    QVBoxLayout* vlay4   = new QVBoxLayout(d->digikamSettingBox);
 
     d->showAlbumNameBox  = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
     d->showAlbumNameBox->setWhatsThis(i18n("Set this option to display the album name."));
@@ -238,19 +238,19 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     vlay4->setMargin(KDialog::spacingHint());
     vlay4->setSpacing(0);
 
-    QWidget *space = new QWidget(vbox);
+    QWidget* space = new QWidget(vbox);
     vbox->setStretchFactor(space, 10);
     vbox->setMargin(KDialog::spacingHint());
     vbox->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
-    KVBox *vbox2              = new KVBox(panel);
+    KVBox* vbox2              = new KVBox(panel);
     d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items' tool-tips"), vbox2);
     d->albumSettingBox        = new QGroupBox(i18n("Album Information"), vbox2);
 
     d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
-                                               "the mouse hovers over a folder-view item."));
+                                          "the mouse hovers over a folder-view item."));
 
     d->showAlbumTitleBox      = new QCheckBox(i18n("Show album name"));
     d->showAlbumTitleBox->setWhatsThis(i18n("Set this option to display the album name."));
@@ -275,7 +275,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     albumSettingBoxLayout->addWidget(d->showAlbumCaptionBox);
     d->albumSettingBox->setLayout(albumSettingBoxLayout);
 
-    QWidget *space2 = new QWidget(vbox2);
+    QWidget* space2 = new QWidget(vbox2);
     vbox2->setStretchFactor(space2, 10);
     vbox2->setMargin(KDialog::spacingHint());
     vbox2->setSpacing(KDialog::spacingHint());
@@ -325,7 +325,11 @@ SetupToolTip::~SetupToolTip()
 void SetupToolTip::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+
+    if (!settings)
+    {
+        return;
+    }
 
     settings->setToolTipsFont(d->fontSelect->font());
 
@@ -363,7 +367,10 @@ void SetupToolTip::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
-    if (!settings) return;
+    if (!settings)
+    {
+        return;
+    }
 
     d->fontSelect->setFont(settings->getToolTipsFont());
 

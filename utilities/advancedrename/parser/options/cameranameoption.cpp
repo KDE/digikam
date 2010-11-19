@@ -37,7 +37,7 @@ namespace Digikam
 {
 
 CameraNameOption::CameraNameOption()
-                : Option(i18n("Camera"), i18n("Add the camera name"), SmallIcon("camera-photo"))
+    : Option(i18n("Camera"), i18n("Add the camera name"), SmallIcon("camera-photo"))
 {
     QString token = "[cam]";
     addToken(token, i18n("Camera name"));
@@ -52,6 +52,7 @@ QString CameraNameOption::parseOperation(ParseSettings& settings)
     QString result;
 
     ImageInfo info(settings.fileUrl);
+
     if (!info.isNull())
     {
         result = info.photoInfoContainer().make + " " + info.photoInfoContainer().model;
@@ -63,6 +64,7 @@ QString CameraNameOption::parseOperation(ParseSettings& settings)
         QString model;
 
         DMetadata meta(settings.fileUrl.toLocalFile());
+
         if (!meta.isEmpty())
         {
             KExiv2::MetaDataMap dataMap;

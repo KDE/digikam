@@ -78,7 +78,7 @@ public:
         gboxSettings(0),
         previewWidget(0),
         dirSelect(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configTemplatesRootURLEntry;
@@ -94,8 +94,8 @@ public:
 };
 
 SuperImposeTool::SuperImposeTool(QObject* parent)
-               : EditorTool(parent),
-                 d(new SuperImposeToolPriv)
+    : EditorTool(parent),
+      d(new SuperImposeToolPriv)
 {
     setObjectName("superimpose");
     setToolName(i18n("Template Superimpose"));
@@ -103,7 +103,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QFrame *frame = new QFrame(0);
+    QFrame* frame = new QFrame(0);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QGridLayout* gridFrame = new QGridLayout(frame);
@@ -112,23 +112,23 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *toolBox     = new QWidget(frame);
-    QHBoxLayout *hlay    = new QHBoxLayout(toolBox);
-    QButtonGroup *bGroup = new QButtonGroup(frame);
+    QWidget* toolBox     = new QWidget(frame);
+    QHBoxLayout* hlay    = new QHBoxLayout(toolBox);
+    QButtonGroup* bGroup = new QButtonGroup(frame);
 
-    QToolButton *zoomInButton = new QToolButton(toolBox);
+    QToolButton* zoomInButton = new QToolButton(toolBox);
     bGroup->addButton(zoomInButton, ZOOMIN);
     zoomInButton->setIcon(KIcon("zoom-in"));
     zoomInButton->setCheckable(true);
     zoomInButton->setToolTip(i18n("Zoom in"));
 
-    QToolButton *zoomOutButton = new QToolButton(toolBox);
+    QToolButton* zoomOutButton = new QToolButton(toolBox);
     bGroup->addButton(zoomOutButton, ZOOMOUT);
     zoomOutButton->setIcon(KIcon("zoom-out"));
     zoomOutButton->setCheckable(true);
     zoomOutButton->setToolTip(i18n("Zoom out"));
 
-    QToolButton *moveButton = new QToolButton(toolBox);
+    QToolButton* moveButton = new QToolButton(toolBox);
     bGroup->addButton(moveButton, MOVE);
     moveButton->setIcon(KIcon("transform-move"));
     moveButton->setCheckable(true);
@@ -169,7 +169,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
     d->thumbnailsBar->setToolTip(new ThumbBarToolTip(d->thumbnailsBar));
 
     d->dirSelect = new DirSelectWidget(d->gboxSettings->plainPage());
-    QPushButton *templateDirButton = new QPushButton(i18n("Root Directory..."), d->gboxSettings->plainPage());
+    QPushButton* templateDirButton = new QPushButton(i18n("Root Directory..."), d->gboxSettings->plainPage());
     templateDirButton->setWhatsThis(i18n("Set here the current templates' root directory."));
 
     // -------------------------------------------------------------
@@ -192,8 +192,8 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
     connect(d->thumbnailsBar, SIGNAL(signalUrlSelected(const KUrl&)),
             d->previewWidget, SLOT(slotSetCurrentTemplate(const KUrl&)));
 
-    connect(d->dirSelect, SIGNAL(folderItemSelected(const KUrl &)),
-            this, SLOT(slotTemplateDirChanged(const KUrl &)));
+    connect(d->dirSelect, SIGNAL(folderItemSelected(const KUrl&)),
+            this, SLOT(slotTemplateDirChanged(const KUrl&)));
 
     connect(templateDirButton, SIGNAL(clicked()),
             this, SLOT(slotRootTemplateDirChanged()));
@@ -213,18 +213,25 @@ void SuperImposeTool::populateTemplates(void)
     d->thumbnailsBar->clear(true);
 
     if (!d->templatesUrl.isValid() || !d->templatesUrl.isLocalFile())
-       return;
+    {
+        return;
+    }
 
     QDir dir(d->templatesUrl.toLocalFile(), "*.png *.PNG");
 
     if (!dir.exists())
-       return;
+    {
+        return;
+    }
 
     dir.setFilter ( QDir::Files | QDir::NoSymLinks );
 
     QFileInfoList fileinfolist = dir.entryInfoList();
+
     if (fileinfolist.isEmpty())
-       return;
+    {
+        return;
+    }
 
     QFileInfoList::const_iterator fi;
 
@@ -263,7 +270,7 @@ void SuperImposeTool::slotResetSettings()
 void SuperImposeTool::slotRootTemplateDirChanged(void)
 {
     KUrl url = KFileDialog::getExistingDirectory(d->templatesRootUrl.toLocalFile(), kapp->activeWindow(),
-                                                 i18n("Select Template Root Directory to Use"));
+               i18n("Select Template Root Directory to Use"));
 
     if ( url.isValid() )
     {

@@ -108,15 +108,21 @@ public:
 };
 
 LightTablePreview::LightTablePreview(QWidget* parent)
-                 : PreviewWidget(parent), d(new LightTablePreviewPriv)
+    : PreviewWidget(parent), d(new LightTablePreviewPriv)
 {
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
                           KApplication::desktop()->width());
+
     if (d->previewSize < 640)
+    {
         d->previewSize = 640;
+    }
+
     if (d->previewSize > 2560)
+    {
         d->previewSize = 2560;
+    }
 
     viewport()->setAcceptDrops(true);
     setAcceptDrops(true);
@@ -239,15 +245,21 @@ void LightTablePreview::setImagePath(const QString& path)
     }
 
     if (d->loadFullImageSize)
+    {
         d->previewThread->loadHighQuality(path, AlbumSettings::instance()->getExifRotate());
+    }
     else
+    {
         d->previewThread->load(path, d->previewSize, AlbumSettings::instance()->getExifRotate());
+    }
 }
 
 void LightTablePreview::slotGotImagePreview(const LoadingDescription& description, const DImg& preview)
 {
     if (description.filePath != d->path)
+    {
         return;
+    }
 
     if (preview.isNull())
     {
@@ -259,7 +271,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Unable to display preview for\n\"%1\"",
-                   info.fileName()));
+                        info.fileName()));
         p.end();
         setImage(DImg(pix.toImage()));
         d->isLoaded = false;
@@ -268,8 +280,12 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
     else
     {
         DImg img(preview);
+
         if (AlbumSettings::instance()->getExifRotate())
+        {
             d->previewThread->exifRotate(img, description.filePath);
+        }
+
         setImage(img);
         d->isLoaded = true;
         emit signalPreviewLoaded(true);
@@ -282,6 +298,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
 void LightTablePreview::slotNextPreload()
 {
     QString loadPath;
+
     if (!d->nextPath.isNull())
     {
         loadPath = d->nextPath;
@@ -298,9 +315,13 @@ void LightTablePreview::slotNextPreload()
     }
 
     if (d->loadFullImageSize)
+    {
         d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
+    }
     else
+    {
         d->previewThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
+    }
 }
 
 void LightTablePreview::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
@@ -331,7 +352,9 @@ ImageInfo LightTablePreview::getImageInfo() const
 void LightTablePreview::slotContextMenu()
 {
     if (d->imageInfo.isNull())
+    {
         return;
+    }
 
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
@@ -383,14 +406,33 @@ void LightTablePreview::slotContextMenu()
             this, SLOT(slotAssignRating(int)));
 
     QAction* choice = cmhelper.exec(QCursor::pos());
+
     if (choice)
     {
-        if (choice == editAction)           emit signalEditItem(d->imageInfo);
-        else if (choice == trashAction)     emit signalDeleteItem(d->imageInfo);
-        else if (choice == slideshowAction) emit signalSlideShow();
-        else if (choice == zoomInAction)    slotIncreaseZoom();
-        else if (choice == zoomOutAction)   slotDecreaseZoom();
-        else if (choice == fitWindowAction) fitToWindow();
+        if (choice == editAction)
+        {
+            emit signalEditItem(d->imageInfo);
+        }
+        else if (choice == trashAction)
+        {
+            emit signalDeleteItem(d->imageInfo);
+        }
+        else if (choice == slideshowAction)
+        {
+            emit signalSlideShow();
+        }
+        else if (choice == zoomInAction)
+        {
+            slotIncreaseZoom();
+        }
+        else if (choice == zoomOutAction)
+        {
+            slotDecreaseZoom();
+        }
+        else if (choice == fitWindowAction)
+        {
+            fitToWindow();
+        }
     }
 }
 
@@ -421,6 +463,7 @@ void LightTablePreview::slotRemoveTag(int tagID)
 void LightTablePreview::slotAssignRating(int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
+
     if (!d->imageInfo.isNull())
     {
         MetadataHub hub;
@@ -442,7 +485,10 @@ void LightTablePreview::slotThemeChanged()
 
 void LightTablePreview::resizeEvent(QResizeEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     Q3ScrollView::resizeEvent(e);
 
@@ -508,16 +554,24 @@ void LightTablePreview::viewportPaintExtraData()
         if (!d->loadFullImageSize)
         {
             if (d->imageInfo.format().startsWith(QLatin1String("RAW")))
+            {
                 text = i18n("Embedded JPEG Preview");
+            }
             else
+            {
                 text = i18n("Reduced Size Preview");
+            }
         }
         else
         {
             if (d->imageInfo.format().startsWith(QLatin1String("RAW")))
+            {
                 text = i18n("Half Size Raw Preview");
+            }
             else
+            {
                 text = i18n("Full Size Preview");
+            }
         }
 
         fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
@@ -579,7 +633,7 @@ void LightTablePreview::contentsDropEvent(QDropEvent* e)
             QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
 
             for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-                it != itemIDs.constEnd(); ++it)
+                 it != itemIDs.constEnd(); ++it)
             {
                 list << ImageInfo(*it);
             }
@@ -591,14 +645,17 @@ void LightTablePreview::contentsDropEvent(QDropEvent* e)
         else if (DTagDrag::canDecode(e->mimeData()))
         {
             int tagID;
+
             if (!DTagDrag::decode(e->mimeData(), tagID))
+            {
                 return;
+            }
 
             QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
             ImageInfoList imageInfoList;
 
             for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-                it != itemIDs.constEnd(); ++it)
+                 it != itemIDs.constEnd(); ++it)
             {
                 list << ImageInfo(*it);
             }

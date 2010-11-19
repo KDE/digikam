@@ -57,8 +57,8 @@ public:
 };
 
 NRFilter::NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings)
-        : DImgThreadedFilter(orgImage, parent, "NRFilter"),
-          d(new NRFilterPriv)
+    : DImgThreadedFilter(orgImage, parent, "NRFilter"),
+      d(new NRFilterPriv)
 {
     d->settings = settings;
 
@@ -83,7 +83,9 @@ void NRFilter::filterImage()
     // Allocate buffers.
 
     for (int c = 0; c < 3; c++)
+    {
         d->fimg[c] = new float[width * height];
+    }
 
     d->buffer[1] = new float[width * height];
     d->buffer[2] = new float[width * height];
@@ -126,8 +128,11 @@ void NRFilter::filterImage()
             waveletDenoise(d->buffer, width, height, d->settings.thresholds[c], d->settings.softness[c]);
 
             progress = (int) (30.0 + ((double)c * 60.0) / 4);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
 
@@ -175,7 +180,9 @@ void NRFilter::filterImage()
     // Free buffers.
 
     for (int c = 0; c < 3; c++)
+    {
         delete [] d->fimg[c];
+    }
 
     delete [] d->buffer[1];
     delete [] d->buffer[2];
@@ -197,21 +204,24 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
     for (lev = 0; runningFlag() && (lev < 5); ++lev)
     {
         lpass = ((lev & 1) + 1);
+
         for (row = 0; runningFlag() && (row < height); ++row)
         {
             hatTransform(temp, fimg[hpass] + row * width, 1, width, 1 << lev);
+
             for (col = 0; col < width; ++col)
             {
-                fimg[lpass][row * width + col] = temp[col] * 0.25;
+                fimg[lpass][row* width + col] = temp[col] * 0.25;
             }
         }
 
         for (col = 0; runningFlag() && (col < width); ++col)
         {
             hatTransform(temp, fimg[lpass] + col, width, height, 1 << lev);
+
             for (row = 0; row < height; ++row)
             {
-                fimg[lpass][row * width + col] = temp[row] * 0.25;
+                fimg[lpass][row* width + col] = temp[row] * 0.25;
             }
         }
 
@@ -290,21 +300,31 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
             }
 
             if (fimg[hpass][i] < -thold)
+            {
                 fimg[hpass][i] += thold - thold * softness;
+            }
             else if (fimg[hpass][i] > thold)
+            {
                 fimg[hpass][i] -= thold - thold * softness;
+            }
             else
+            {
                 fimg[hpass][i] *= softness;
+            }
 
             if (hpass)
+            {
                 fimg[0][i] += fimg[hpass][i];
+            }
         }
 
         hpass = lpass;
     }
 
     for (i = 0; runningFlag() && (i < size); ++i)
+    {
         fimg[0][i] = fimg[0][i] + fimg[lpass][i];
+    }
 
     delete [] temp;
 }
@@ -314,13 +334,19 @@ void NRFilter::hatTransform (float* temp, float* base, int st, int size, int sc)
     int i;
 
     for (i = 0; i < sc; i++)
-      temp[i] = 2 * base[st * i] + base[st * (sc - i)] + base[st * (i + sc)];
+    {
+        temp[i] = 2 * base[st * i] + base[st * (sc - i)] + base[st * (i + sc)];
+    }
 
     for (; i + sc < size; i++)
-      temp[i] = 2 * base[st * i] + base[st * (i - sc)] + base[st * (i + sc)];
+    {
+        temp[i] = 2 * base[st * i] + base[st * (i - sc)] + base[st * (i + sc)];
+    }
 
     for (; i < size; i++)
-      temp[i] = 2 * base[st * i] + base[st * (i - sc)] + base[st * (2 * size - 2 - (i + sc))];
+    {
+        temp[i] = 2 * base[st * i] + base[st * (i - sc)] + base[st * (2 * size - 2 - (i + sc))];
+    }
 }
 
 // -- Color Space conversion methods --------------------------------------------------
@@ -433,18 +459,32 @@ void NRFilter::lab2srgb(float** fimg, int size)
 
         /* scale */
         if (x * x * x > 216 / 24389.0)
+        {
             x = x * x * x;
+        }
         else
+        {
             x = (116 * x - 16) * 27 / 24389.0;
+        }
+
         if (fimg[0][i] > 216 / 27.0)
+        {
             y = y * y * y;
+        }
         else
             /*y = fimg[0][i] * 27 / 24389.0;*/
+        {
             y = (116 * y - 16) * 27 / 24389.0;
+        }
+
         if (z * z * z > 216 / 24389.0)
+        {
             z = z * z * z;
+        }
         else
+        {
             z = (116 * z - 16) * 27 / 24389.0;
+        }
 
         /* white reference */
         fimg[0][i] = x * 0.95047;
@@ -505,7 +545,9 @@ void NRFilter::srgb2lab(float** fimg, int size)
         fimg[2][i] = b / 200.0 / 2.2 + 0.5;
 
         if (fimg[0][i] < 0)
+        {
             fimg[0][i] = 0;
+        }
     }
 }
 

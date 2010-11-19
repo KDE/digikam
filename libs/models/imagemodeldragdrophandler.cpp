@@ -33,22 +33,22 @@
 namespace Digikam
 {
 
-ImageModelDragDropHandler::ImageModelDragDropHandler(QAbstractItemModel *model)
+ImageModelDragDropHandler::ImageModelDragDropHandler(QAbstractItemModel* model)
     : QObject(model), m_model(model)
 {
 }
 
-QAbstractItemModel *ImageModelDragDropHandler::model() const
+QAbstractItemModel* ImageModelDragDropHandler::model() const
 {
     return m_model;
 }
 
-bool ImageModelDragDropHandler::dropEvent(QAbstractItemView *, const QDropEvent *, const QModelIndex &)
+bool ImageModelDragDropHandler::dropEvent(QAbstractItemView*, const QDropEvent*, const QModelIndex&)
 {
     return false;
 }
 
-Qt::DropAction ImageModelDragDropHandler::accepts(const QDropEvent *, const QModelIndex &)
+Qt::DropAction ImageModelDragDropHandler::accepts(const QDropEvent*, const QModelIndex&)
 {
     return Qt::IgnoreAction;
 }
@@ -58,19 +58,23 @@ QStringList ImageModelDragDropHandler::mimeTypes() const
     return QStringList();
 }
 
-QMimeData *ImageModelDragDropHandler::createMimeData(const QList<QModelIndex> &)
+QMimeData* ImageModelDragDropHandler::createMimeData(const QList<QModelIndex> &)
 {
     return 0;
 }
 
-bool ImageModelDragDropHandler::acceptsMimeData(const QMimeData *mime)
+bool ImageModelDragDropHandler::acceptsMimeData(const QMimeData* mime)
 {
     QStringList modelTypes = mimeTypes();
+
     for (int i = 0; i < modelTypes.count(); ++i)
     {
         if (mime->hasFormat(modelTypes.at(i))) //&& (e->dropAction() & model->supportedDropActions()))
+        {
             return true;
+        }
     }
+
     return false;
 }
 

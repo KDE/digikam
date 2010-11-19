@@ -38,14 +38,15 @@ namespace Digikam
 {
 
 MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem* parent, const QString& key,
-                                           const QString& title, const QString& value)
-                    : QTreeWidgetItem(parent), m_key(key)
+        const QString& title, const QString& value)
+    : QTreeWidgetItem(parent), m_key(key)
 {
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     setText(0, title);
     setToolTip(0, title);
     setDisabled(false);
     QString tagVal = value.simplified();
+
     if (tagVal.length() > 512)
     {
         tagVal.truncate(512);
@@ -59,8 +60,8 @@ MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem* parent, const QStrin
 }
 
 MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem* parent, const QString& key,
-                                           const QString& title)
-                    : QTreeWidgetItem(parent), m_key(key)
+        const QString& title)
+    : QTreeWidgetItem(parent), m_key(key)
 {
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     setText(0, title);

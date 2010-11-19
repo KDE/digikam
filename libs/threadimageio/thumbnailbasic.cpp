@@ -86,7 +86,7 @@ QString ThumbnailCreator::thumbnailPath(const QString& filePath, const QString& 
 
 QString ThumbnailCreator::thumbnailUri(const QString& filePath)
 {
-     return KUrl(filePath).url();
+    return KUrl(filePath).url();
 }
 
 QString ThumbnailCreator::thumbnailPathFromUri(const QString& uri, const QString& basePath)
@@ -120,7 +120,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     int          w, h;
     bool         has_alpha;
     bool         has_grey;
-    FILE        *f;
+    FILE*        f;
     png_structp  png_ptr = NULL;
     png_infop    info_ptr = NULL;
     int          bit_depth, color_type, interlace_type;
@@ -131,13 +131,17 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     QImage qimage;
 
     f = fopen(path.toLatin1(), "rb");
+
     if (!f)
+    {
         return qimage;
+    }
 
     unsigned char buf[PNG_BYTES_TO_CHECK];
 
     size_t itemsRead = fread(buf, 1, PNG_BYTES_TO_CHECK, f);
 #if PNG_LIBPNG_VER >= 10400
+
     if (itemsRead != 1 || png_sig_cmp(buf, 0, PNG_BYTES_TO_CHECK))
 #else
     if (itemsRead != 1 || !png_check_sig(buf, PNG_BYTES_TO_CHECK))
@@ -146,9 +150,11 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
         fclose(f);
         return qimage;
     }
+
     rewind(f);
 
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
     if (!png_ptr)
     {
         fclose(f);
@@ -156,6 +162,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     }
 
     info_ptr = png_create_info_struct(png_ptr);
+
     if (!info_ptr)
     {
         png_destroy_read_struct(&png_ptr, NULL, NULL);
@@ -164,6 +171,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     }
 
 #if PNG_LIBPNG_VER >= 10400
+
     if (setjmp(png_jmpbuf(png_ptr)))
 #else
     if (setjmp(png_ptr->jmpbuf))
@@ -176,8 +184,8 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
 
     png_init_io(png_ptr, f);
     png_read_info(png_ptr, info_ptr);
-    png_get_IHDR(png_ptr, info_ptr, (png_uint_32 *) (&w32),
-                 (png_uint_32 *) (&h32), &bit_depth, &color_type,
+    png_get_IHDR(png_ptr, info_ptr, (png_uint_32*) (&w32),
+                 (png_uint_32*) (&h32), &bit_depth, &color_type,
                  &interlace_type, NULL, NULL);
 
     w = w32;
@@ -186,7 +194,9 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     qimage = QImage(w, h, QImage::Format_ARGB32);
 
     if (color_type == PNG_COLOR_TYPE_PALETTE)
+    {
         png_set_expand(png_ptr);
+    }
 
 
 #if PNG_LIBPNG_VER >= 10400
@@ -196,7 +206,9 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
 #endif
 
     if (info_color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+    {
         has_alpha = 1;
+    }
 
     if (info_color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
     {
@@ -205,13 +217,17 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     }
 
     if (info_color_type == PNG_COLOR_TYPE_GRAY)
+    {
         has_grey = 1;
+    }
 
-    unsigned char **lines;
+    unsigned char** lines;
     int             i;
 
     if (has_alpha)
+    {
         png_set_expand(png_ptr);
+    }
 
     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
     {
@@ -226,15 +242,21 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
 
     /* 16bit color -> 8bit color */
     if ( bit_depth == 16 )
+    {
         png_set_strip_16(png_ptr);
+    }
 
     /* pack all pixels to byte boundaries */
 
     png_set_packing(png_ptr);
-    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-        png_set_expand(png_ptr);
 
-    lines = (unsigned char **)malloc(h * sizeof(unsigned char *));
+    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+    {
+        png_set_expand(png_ptr);
+    }
+
+    lines = (unsigned char**)malloc(h * sizeof(unsigned char*));
+
     if (!lines)
     {
         png_read_end(png_ptr, info_ptr);
@@ -246,17 +268,22 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     if (has_grey)
     {
         png_set_gray_to_rgb(png_ptr);
+
         if (png_get_bit_depth(png_ptr, info_ptr) < 8)
 #if PNG_LIBPNG_VER >= 10400
             png_set_expand_gray_1_2_4_to_8(png_ptr);
+
 #else
             png_set_gray_1_2_4_to_8(png_ptr);
 #endif
     }
 
     int sizeOfUint = sizeof(unsigned int);
+
     for (i = 0 ; i < h ; ++i)
-        lines[i] = ((unsigned char *)(qimage.bits())) + (i * w * sizeOfUint);
+    {
+        lines[i] = ((unsigned char*)(qimage.bits())) + (i * w * sizeOfUint);
+    }
 
     png_read_image(png_ptr, lines);
     free(lines);
@@ -264,6 +291,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     png_textp text_ptr;
     int num_text=0;
     png_get_text(png_ptr,info_ptr,&text_ptr,&num_text);
+
     while (num_text--)
     {
         qimage.setText(text_ptr->key,0,text_ptr->text);

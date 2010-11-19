@@ -47,6 +47,7 @@ bool UiFileValidatorTest::isReadable(QFile& file) const
     {
         return false;
     }
+
     return true;
 }
 
@@ -56,16 +57,19 @@ bool UiFileValidatorTest::isWritable(QFile& file) const
     {
         return false;
     }
+
     return true;
 }
 
 QByteArray UiFileValidatorTest::readContent(const QString& filename)
 {
     QFile fi(filename);
+
     if (!isReadable(fi))
     {
         return QByteArray();
     }
+
     QByteArray content = fi.readAll();
     fi.close();
     return content;
@@ -74,10 +78,12 @@ QByteArray UiFileValidatorTest::readContent(const QString& filename)
 bool UiFileValidatorTest::removeFile(const QString& filename)
 {
     QFile fi(filename);
+
     if (fi.exists())
     {
         return fi.remove();
     }
+
     return false;
 }
 

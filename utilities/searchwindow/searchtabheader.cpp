@@ -60,7 +60,7 @@ class KeywordLineEdit : public KLineEdit
 {
 public:
 
-    KeywordLineEdit(QWidget *parent = 0) : KLineEdit(parent)
+    KeywordLineEdit(QWidget* parent = 0) : KLineEdit(parent)
     {
         m_hasAdvanced = false;
     }
@@ -68,23 +68,32 @@ public:
     void showAdvancedSearch(bool hasAdvanced)
     {
         if (m_hasAdvanced == hasAdvanced)
+        {
             return;
+        }
+
         m_hasAdvanced = hasAdvanced;
         adjustStatus(m_hasAdvanced);
     }
 
-    void focusInEvent(QFocusEvent *e)
+    void focusInEvent(QFocusEvent* e)
     {
         if (m_hasAdvanced)
+        {
             adjustStatus(false);
+        }
+
         KLineEdit::focusInEvent(e);
     }
 
-    void focusOutEvent(QFocusEvent *e)
+    void focusOutEvent(QFocusEvent* e)
     {
         KLineEdit::focusOutEvent(e);
+
         if (m_hasAdvanced)
+        {
             adjustStatus(true);
+        }
     }
 
     void adjustStatus(bool adv)
@@ -100,8 +109,11 @@ public:
         else
         {
             setPalette(QPalette());
+
             if (text() == i18n("(Advanced Search)"))
+            {
                 setText(QString());
+            }
         }
     }
 
@@ -166,10 +178,10 @@ public:
     QString             oldStoredKeywordContent;
 };
 
-SearchTabHeader::SearchTabHeader(QWidget *parent)
-               : QWidget(parent), d(new SearchTabHeaderPriv)
+SearchTabHeader::SearchTabHeader(QWidget* parent)
+    : QWidget(parent), d(new SearchTabHeaderPriv)
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
     // upper part
@@ -192,8 +204,8 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // upper part
 
     d->newSearchWidget->setTitle(i18n("New Search"));
-    QGridLayout *grid1   = new QGridLayout;
-    QLabel *searchLabel  = new QLabel(i18n("Search:"), this);
+    QGridLayout* grid1   = new QGridLayout;
+    QLabel* searchLabel  = new QLabel(i18n("Search:"), this);
     d->keywordEdit       = new KeywordLineEdit(this);
     d->keywordEdit->setClearButtonShown(true);
     d->keywordEdit->setClickMessage(i18n("Enter keywords here..."));
@@ -214,7 +226,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
 
     d->saveAsWidget->setTitle(i18n("Save Current Search"));
 
-    QHBoxLayout *hbox1 = new QHBoxLayout;
+    QHBoxLayout* hbox1 = new QHBoxLayout;
     d->saveNameEdit    = new KLineEdit(this);
     d->saveNameEdit->setWhatsThis(i18n("Enter a name for the current search to save it in the "
                                        "\"Searches\" view"));
@@ -238,7 +250,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // lower part, variant 2
     d->editSimpleWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout *vbox1       = new QVBoxLayout;
+    QVBoxLayout* vbox1       = new QVBoxLayout;
     d->storedKeywordEditName = new KSqueezedTextLabel(this);
     d->storedKeywordEditName->setTextElideMode(Qt::ElideRight);
     d->storedKeywordEdit     = new KLineEdit(this);
@@ -255,7 +267,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // lower part, variant 3
     d->editAdvancedWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout *vbox2 = new QVBoxLayout;
+    QVBoxLayout* vbox2 = new QVBoxLayout;
 
     d->storedAdvancedEditName = new KSqueezedTextLabel(this);
     d->storedAdvancedEditName->setTextElideMode(Qt::ElideRight);
@@ -278,7 +290,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
 
     // ------------------- //
 
-    connect(d->keywordEdit, SIGNAL(textEdited(const QString &)),
+    connect(d->keywordEdit, SIGNAL(textEdited(const QString&)),
             d->keywordEditTimer, SLOT(start()));
 
     connect(d->keywordEditTimer, SIGNAL(timeout()),
@@ -312,7 +324,7 @@ SearchTabHeader::~SearchTabHeader()
     delete d;
 }
 
-SearchWindow *SearchTabHeader::searchWindow()
+SearchWindow* SearchTabHeader::searchWindow()
 {
     if (!d->searchWindow)
     {
@@ -320,17 +332,18 @@ SearchWindow *SearchTabHeader::searchWindow()
         // Create the advanced search edit window, deferred from constructor
         d->searchWindow = new SearchWindow;
 
-        connect(d->searchWindow, SIGNAL(searchEdited(int, const QString &)),
-                this, SLOT(advancedSearchEdited(int, const QString &)),
+        connect(d->searchWindow, SIGNAL(searchEdited(int, const QString&)),
+                this, SLOT(advancedSearchEdited(int, const QString&)),
                 Qt::QueuedConnection);
     }
+
     return d->searchWindow;
 }
 
-void SearchTabHeader::selectedSearchChanged(Album *a)
+void SearchTabHeader::selectedSearchChanged(Album* a)
 {
 
-    SAlbum *album = dynamic_cast<SAlbum*> (a);
+    SAlbum* album = dynamic_cast<SAlbum*> (a);
 
     // Signal from SearchFolderView that a search has been selected.
 
@@ -352,6 +365,7 @@ void SearchTabHeader::selectedSearchChanged(Album *a)
         if (album->title() == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch))
         {
             d->lowerArea->setCurrentWidget(d->saveAsWidget);
+
             if (album->isKeywordSearch())
             {
                 d->keywordEdit->setText(keywordsFromQuery(album->query()));
@@ -378,14 +392,16 @@ void SearchTabHeader::selectedSearchChanged(Album *a)
     }
 }
 
-void SearchTabHeader::editSearch(SAlbum *album)
+void SearchTabHeader::editSearch(SAlbum* album)
 {
     if (!album)
+    {
         return;
+    }
 
     if (album->isAdvancedSearch())
     {
-        SearchWindow *window = searchWindow();
+        SearchWindow* window = searchWindow();
         window->readSearch(album->id(), album->query());
         window->show();
         window->raise();
@@ -406,7 +422,7 @@ void SearchTabHeader::newKeywordSearch()
 
 void SearchTabHeader::newAdvancedSearch()
 {
-    SearchWindow *window = searchWindow();
+    SearchWindow* window = searchWindow();
     window->reset();
     window->show();
     window->raise();
@@ -416,6 +432,7 @@ void SearchTabHeader::keywordChanged()
 {
     QString keywords = d->keywordEdit->text();
     kDebug() << "keywords changed to '" << keywords << "'";
+
     if (d->oldKeywordContent == keywords || keywords.trimmed().isEmpty())
     {
         kDebug() << "same keywords as before, ignoring...";
@@ -432,12 +449,18 @@ void SearchTabHeader::keywordChanged()
 
 void SearchTabHeader::editCurrentAdvancedSearch()
 {
-    SAlbum *album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
-    SearchWindow *window = searchWindow();
+    SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
+    SearchWindow* window = searchWindow();
+
     if (album)
+    {
         window->readSearch(album->id(), album->query());
+    }
     else
+    {
         window->reset();
+    }
+
     window->show();
     window->raise();
 }
@@ -459,33 +482,42 @@ void SearchTabHeader::saveSearch()
         return;
     }
 
-    SAlbum *oldAlbum = AlbumManager::instance()->findSAlbum(name);
+    SAlbum* oldAlbum = AlbumManager::instance()->findSAlbum(name);
+
     while (oldAlbum)
     {
         QString label = i18n( "Search name already exists."
                               "\nPlease enter a new name:" );
         bool ok;
         QString newTitle = KInputDialog::getText( i18n("Name exists"), label,
-                                                  name, &ok, this );
+                           name, &ok, this );
+
         if (!ok)
+        {
             return;
+        }
 
         name     = newTitle;
         oldAlbum = AlbumManager::instance()->findSAlbum(name);
     }
 
-    SAlbum *newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->searchType(),
-                                                              d->currentAlbum->query());
+    SAlbum* newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->searchType(),
+                       d->currentAlbum->query());
     emit searchShallBeSelected(newAlbum);
 }
 
 void SearchTabHeader::storedKeywordChanged()
 {
     QString keywords = d->storedKeywordEdit->text();
+
     if (d->oldStoredKeywordContent == keywords)
+    {
         return;
+    }
     else
+    {
         d->oldStoredKeywordContent = keywords;
+    }
 
     if (d->currentAlbum)
     {
@@ -498,7 +530,7 @@ void SearchTabHeader::editStoredAdvancedSearch()
 {
     if (d->currentAlbum)
     {
-        SearchWindow *window = searchWindow();
+        SearchWindow* window = searchWindow();
         window->readSearch(d->currentAlbum->id(), d->currentAlbum->query());
         window->show();
         window->raise();
@@ -512,7 +544,7 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString& query)
     // We go the hard way and check this case.
     KeywordSearchReader check(query);
     DatabaseSearch::Type type = check.isSimpleKeywordSearch() ? DatabaseSearch::KeywordSearch
-                                                              : DatabaseSearch::AdvancedSearch;
+                                : DatabaseSearch::AdvancedSearch;
 
     if (id == -1)
     {
@@ -520,7 +552,8 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString& query)
     }
     else
     {
-        SAlbum *album = AlbumManager::instance()->findSAlbum(id);
+        SAlbum* album = AlbumManager::instance()->findSAlbum(id);
+
         if (album)
         {
             AlbumManager::instance()->updateSAlbum(album, query, album->title(), type);
@@ -531,7 +564,8 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString& query)
 
 void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString& query, bool selectCurrentAlbum)
 {
-    SAlbum *album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch));
+    SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch));
+
     if (album)
     {
         AlbumManager::instance()->updateSAlbum(album, query,
@@ -541,7 +575,7 @@ void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString&
     else
     {
         album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
-                                                       type, query);
+                type, query);
     }
 
     if (selectCurrentAlbum)

@@ -50,7 +50,7 @@ public:
         lightness  = 0.0;
     };
 
-    ~HSLContainer(){};
+    ~HSLContainer() {};
 
 public:
 

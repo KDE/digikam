@@ -62,7 +62,7 @@ public:
         gboxSettings(0),
         previewWidget(0),
         settingsView(0)
-        {}
+    {}
 
     const QString       configGroupName;
 
@@ -72,8 +72,8 @@ public:
 };
 
 BorderTool::BorderTool(QObject* parent)
-          : EditorToolThreaded(parent),
-            d(new BorderToolPriv)
+    : EditorToolThreaded(parent),
+      d(new BorderToolPriv)
 {
     setObjectName("border");
     setToolName(i18n("Add Border"));
@@ -161,7 +161,7 @@ void BorderTool::putPreviewData()
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
     imDest.fill(DColor(d->previewWidget->palette().color(QPalette::Background).rgb(),
-                filter()->getTargetImage().sixteenBit()) );
+                       filter()->getTargetImage().sixteenBit()) );
 
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
@@ -173,7 +173,7 @@ void BorderTool::putFinalData()
 {
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Add Border"), targetImage.bits(), targetImage.width(), targetImage.height()); 
+    iface.putOriginalImage(i18n("Add Border"), targetImage.bits(), targetImage.width(), targetImage.height());
 }
 
 }  // namespace DigikamDecorateImagePlugin

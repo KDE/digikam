@@ -44,7 +44,7 @@ public:
     {
     }
 
-    QObject *host;
+    QObject* host;
     KConfigGroup group;
     QString prefix;
     bool groupSet;
@@ -53,11 +53,13 @@ public:
     inline KConfigGroup getGroupFromObjectName()
     {
         KSharedConfig::Ptr config = KGlobal::config();
+
         if (host->objectName().isEmpty())
         {
             kWarning() << "Object name for " << host
                        << " is empty. Returning the default config group";
         }
+
         return config->group(host->objectName());
     }
 
@@ -65,11 +67,11 @@ public:
     {
 
         for (QObjectList::const_iterator childIt = children.constBegin(); childIt
-                        != children.constEnd(); ++childIt)
+             != children.constEnd(); ++childIt)
         {
 
-            StateSavingObject *statefulChild =
-                            dynamic_cast<StateSavingObject*> (*childIt);
+            StateSavingObject* statefulChild =
+                dynamic_cast<StateSavingObject*> (*childIt);
 
             if (statefulChild)
             {
@@ -108,6 +110,7 @@ public:
     {
 
         QString action("loading");
+
         if (save)
         {
             action = "saving";
@@ -116,11 +119,13 @@ public:
         if (depth == StateSavingObject::DIRECT_CHILDREN)
         {
             kDebug() << "Also restoring " << action << " of direct children";
+
             for (QObjectList::const_iterator childIt = host->children().begin(); childIt
-                            != host->children().end(); ++childIt)
+                 != host->children().end(); ++childIt)
             {
-                StateSavingObject *statefulChild =
-                                dynamic_cast<StateSavingObject*> (*childIt);
+                StateSavingObject* statefulChild =
+                    dynamic_cast<StateSavingObject*> (*childIt);
+
                 if (statefulChild)
                 {
                     if (save)
@@ -137,7 +142,7 @@ public:
         else if (depth == StateSavingObject::RECURSIVE)
         {
             kDebug() << "Also " << action
-                            << " state of all children (recursive)";
+                     << " state of all children (recursive)";
             recurse(host->children(), save);
         }
 
@@ -145,8 +150,8 @@ public:
 
 };
 
-StateSavingObject::StateSavingObject(QObject *host) :
-                d(new StateSavingObjectPriv)
+StateSavingObject::StateSavingObject(QObject* host) :
+    d(new StateSavingObjectPriv)
 {
     d->host = host;
     // we cannot safely create the default config group here, because the host
@@ -176,7 +181,7 @@ void StateSavingObject::setConfigGroup(KConfigGroup group)
     d->groupSet = true;
 }
 
-void StateSavingObject::setEntryPrefix(const QString &prefix)
+void StateSavingObject::setEntryPrefix(const QString& prefix)
 {
     d->prefix = prefix;
 }
@@ -222,7 +227,7 @@ KConfigGroup StateSavingObject::getConfigGroup()
     return d->group;
 }
 
-QString StateSavingObject::entryName(const QString &base)
+QString StateSavingObject::entryName(const QString& base)
 {
     return d->prefix + base;
 }

@@ -58,21 +58,25 @@ public:
     IccProfile           workspaceProfile;
     bool                 profileMismatch;
     ICCSettingsContainer settings;
-    DImgLoaderObserver  *observer;
+    DImgLoaderObserver*  observer;
 };
 
 IccManager::IccManager(DImg& image, const QString& filePath, const ICCSettingsContainer& settings)
-            : d(new IccManagerPriv)
+    : d(new IccManagerPriv)
 {
     d->image = image;
     d->filePath = filePath;
     d->settings = settings;
 
     if (d->image.isNull())
+    {
         return;
+    }
 
     if (!d->settings.enableCM)
+    {
         return;
+    }
 
     d->embeddedProfile  = d->image.getIccProfile();
     d->workspaceProfile = d->settings.workspaceProfile;
@@ -91,7 +95,9 @@ IccManager::IccManager(DImg& image, const QString& filePath, const ICCSettingsCo
     }
 
     if (!d->embeddedProfile.isNull())
+    {
         d->profileMismatch = !d->embeddedProfile.isSameProfileAs(d->workspaceProfile);
+    }
 }
 
 IccManager::~IccManager()
@@ -99,7 +105,7 @@ IccManager::~IccManager()
     delete d;
 }
 
-void IccManager::setObserver(DImgLoaderObserver *observer)
+void IccManager::setObserver(DImgLoaderObserver* observer)
 {
     d->observer = observer;
 }
@@ -112,17 +118,27 @@ bool IccManager::hasValidWorkspace() const
 void IccManager::transformDefault()
 {
     if (d->image.isNull())
+    {
         return;
+    }
 
     if (!d->settings.enableCM)
+    {
         return;
+    }
 
     if (isUncalibratedColor())
+    {
         transform(d->settings.defaultUncalibratedBehavior);
+    }
     else if (isMissingProfile())
+    {
         transform(d->settings.defaultMissingProfileBehavior);
+    }
     else if (isProfileMismatch())
+    {
         transform(d->settings.defaultMismatchBehavior);
+    }
 }
 
 bool IccManager::isUncalibratedColor() const
@@ -164,10 +180,14 @@ ICCSettingsContainer::Behavior IccManager::safestBestBehavior() const
 void IccManager::transform(ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile)
 {
     if (d->image.isNull())
+    {
         return;
+    }
 
     if (!d->settings.enableCM)
+    {
         return;
+    }
 
     if (behavior == ICCSettingsContainer::AskUser)
     {
@@ -193,6 +213,7 @@ void IccManager::transform(ICCSettingsContainer::Behavior behavior, IccProfile s
 
     IccTransform trans;
     getTransform(trans, behavior, specifiedProfile);
+
     if (trans.willHaveEffect())
     {
         trans.apply(d->image, d->observer);
@@ -211,14 +232,14 @@ bool IccManager::needsPostLoadingManagement(const DImg& img)
             img.hasAttribute("uncalibratedColorAskUser"));
 }
 
-IccTransform IccManager::postLoadingManage(QWidget *parent)
+IccTransform IccManager::postLoadingManage(QWidget* parent)
 {
     if (d->image.hasAttribute("missingProfileAskUser"))
     {
         d->image.removeAttribute("missingProfileAskUser");
         DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
         QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::MissingProfile, preview,
-                                                                  d->filePath, parent);
+                d->filePath, parent);
         dlg->exec();
 
         IccTransform trans;
@@ -231,7 +252,7 @@ IccTransform IccManager::postLoadingManage(QWidget *parent)
         d->image.removeAttribute("profileMismatchAskUser");
         DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
         QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::ProfileMismatch, preview,
-                                                                  d->filePath, parent);
+                d->filePath, parent);
         dlg->exec();
 
         IccTransform trans;
@@ -244,7 +265,7 @@ IccTransform IccManager::postLoadingManage(QWidget *parent)
         d->image.removeAttribute("uncalibratedColorAskUser");
         DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
         QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::UncalibratedColor, preview,
-                                                                  d->filePath, parent);
+                d->filePath, parent);
         dlg->exec();
 
         IccTransform trans;
@@ -263,22 +284,34 @@ IccTransform IccManager::postLoadingManage(QWidget *parent)
 IccProfile IccManager::imageProfile(ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile)
 {
     if (behavior & ICCSettingsContainer::UseEmbeddedProfile)
+    {
         return d->embeddedProfile;
+    }
     else if (behavior & ICCSettingsContainer::UseWorkspace)
+    {
         return d->workspaceProfile;
+    }
     else if (behavior & ICCSettingsContainer::UseSRGB)
+    {
         return IccProfile::sRGB();
+    }
     else if (behavior & ICCSettingsContainer::UseDefaultInputProfile)
+    {
         return d->settings.defaultInputProfile;
+    }
     else if (behavior & ICCSettingsContainer::UseSpecifiedProfile)
+    {
         return specifiedProfile;
+    }
     else if (behavior & ICCSettingsContainer::AutomaticColors)
     {
         kError() << "Let the RAW loader do automatic color conversion";
         return IccProfile();
     }
     else if (behavior & ICCSettingsContainer::DoNotInterpret)
+    {
         return IccProfile();
+    }
 
     kError() << "No input profile: invalid Behavior flags" << (int)behavior;
     return IccProfile();
@@ -294,14 +327,20 @@ void IccManager::getTransform(IccTransform& trans, ICCSettingsContainer::Behavio
 
     // Output
     if (behavior & ICCSettingsContainer::ConvertToWorkspace)
+    {
         outputProfile = d->workspaceProfile;
+    }
 
     if (inputProfile.isNull())
+    {
         return;
+    }
 
     // Assigning the _input_ profile, if necessary. If output profile is not null, it needs to be assigned later.
     if (inputProfile != d->embeddedProfile && !(behavior & ICCSettingsContainer::LeaveFileUntagged))
+    {
         setIccProfile(inputProfile);
+    }
 
     if (!outputProfile.isNull())
     {
@@ -314,8 +353,11 @@ void IccManager::setIccProfile(const IccProfile& profile)
 {
     d->image.setIccProfile(profile);
     d->embeddedProfile = profile;
+
     if (!d->embeddedProfile.isNull())
+    {
         d->profileMismatch = !d->embeddedProfile.isSameProfileAs(d->workspaceProfile);
+    }
 }
 
 
@@ -327,7 +369,7 @@ void IccManager::transformForDisplay()
     transformForDisplay(displayProfile());
 }
 
-void IccManager::transformForDisplay(QWidget *widget)
+void IccManager::transformForDisplay(QWidget* widget)
 {
     transformForDisplay(displayProfile(widget));
 }
@@ -335,23 +377,31 @@ void IccManager::transformForDisplay(QWidget *widget)
 void IccManager::transformForDisplay(const IccProfile& profile)
 {
     if (d->image.isNull())
+    {
         return;
+    }
 
     if (!d->settings.enableCM)
+    {
         return;
+    }
 
     IccProfile outputProfile = profile;
+
     if (outputProfile.isNull())
+    {
         outputProfile = displayProfile();
+    }
 
     if (isUncalibratedColor())
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForDisplay for uncalibrated data "
-                         "but let the RAW loader do the conversion to sRGB";
+                 "but let the RAW loader do the conversion to sRGB";
     }
 
     IccTransform trans = displayTransform(outputProfile);
+
     if (trans.willHaveEffect())
     {
         trans.apply(d->image, d->observer);
@@ -359,16 +409,19 @@ void IccManager::transformForDisplay(const IccProfile& profile)
     }
 }
 
-IccProfile IccManager::displayProfile(QWidget *displayingWidget)
+IccProfile IccManager::displayProfile(QWidget* displayingWidget)
 {
     IccProfile profile = IccSettings::instance()->monitorProfile(displayingWidget);
+
     if (profile.open())
+    {
         return profile;
+    }
 
     return IccProfile::sRGB();
 }
 
-IccTransform IccManager::displayTransform(QWidget *displayingWidget)
+IccTransform IccManager::displayTransform(QWidget* displayingWidget)
 {
     return displayTransform(displayProfile(displayingWidget));
 }
@@ -376,10 +429,14 @@ IccTransform IccManager::displayTransform(QWidget *displayingWidget)
 IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
 {
     if (d->image.isNull())
+    {
         return IccTransform();
+    }
 
     if (!d->settings.enableCM)
+    {
         return IccTransform();
+    }
 
     IccTransform trans;
     trans.setIntent(d->settings.renderingIntent);
@@ -389,16 +446,21 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForDisplay for uncalibrated data "
-                         "but let the RAW loader do the conversion to sRGB";
+                 "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
     {
         ICCSettingsContainer::Behavior missingProfileBehavior = d->settings.defaultMissingProfileBehavior;
+
         if (missingProfileBehavior == ICCSettingsContainer::AskUser ||
             missingProfileBehavior == ICCSettingsContainer::SafestBestAction)
+        {
             missingProfileBehavior = safestBestBehavior();
+        }
+
         IccProfile assumedImageProfile = imageProfile(missingProfileBehavior, IccProfile());
         IccProfile outputProfile(displayProfile);
+
         if (!assumedImageProfile.isSameProfileAs(outputProfile))
         {
             trans.setInputProfile(d->embeddedProfile);
@@ -408,6 +470,7 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     else
     {
         IccProfile outputProfile(displayProfile);
+
         if (!d->embeddedProfile.isSameProfileAs(outputProfile))
         {
             trans.setInputProfile(d->embeddedProfile);
@@ -418,12 +481,12 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     return trans;
 }
 
-IccTransform IccManager::displaySoftProofingTransform(const IccProfile &deviceProfile, QWidget *displayingWidget)
+IccTransform IccManager::displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* displayingWidget)
 {
     return displaySoftProofingTransform(deviceProfile, displayProfile(displayingWidget));
 }
 
-IccTransform IccManager::displaySoftProofingTransform(const IccProfile &deviceProfile, const IccProfile& displayProfile)
+IccTransform IccManager::displaySoftProofingTransform(const IccProfile& deviceProfile, const IccProfile& displayProfile)
 {
     IccTransform transform = displayTransform(displayProfile);
     transform.setProofProfile(deviceProfile);
@@ -438,16 +501,20 @@ IccTransform IccManager::displaySoftProofingTransform(const IccProfile &devicePr
 void IccManager::transformToSRGB()
 {
     if (d->image.isNull())
+    {
         return;
+    }
 
     if (!d->settings.enableCM)
+    {
         return;
+    }
 
     if (isUncalibratedColor())
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForDisplay for uncalibrated data "
-                         "but let the RAW loader do the conversion to sRGB";
+                 "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
     {
@@ -471,13 +538,17 @@ void IccManager::transformToSRGB()
     }
 }
 
-void IccManager::transformToSRGB(QImage &qimage, const IccProfile& input)
+void IccManager::transformToSRGB(QImage& qimage, const IccProfile& input)
 {
     if (qimage.isNull())
+    {
         return;
+    }
 
     if (input.isNull())
+    {
         return;
+    }
 
     IccProfile inputProfile(input);
     IccProfile outputProfile = IccProfile::sRGB();
@@ -492,13 +563,17 @@ void IccManager::transformToSRGB(QImage &qimage, const IccProfile& input)
     }
 }
 
-void IccManager::transformForDisplay(QImage &qimage, const IccProfile& displayProfile)
+void IccManager::transformForDisplay(QImage& qimage, const IccProfile& displayProfile)
 {
     if (qimage.isNull())
+    {
         return;
+    }
 
     if (displayProfile.isNull())
+    {
         return;
+    }
 
     IccProfile inputProfile = IccProfile::sRGB();
     IccProfile outputProfile(displayProfile);
@@ -516,10 +591,14 @@ void IccManager::transformForDisplay(QImage &qimage, const IccProfile& displayPr
 void IccManager::transformForOutput(const IccProfile& prof)
 {
     if (d->image.isNull())
+    {
         return;
+    }
 
     if (!d->settings.enableCM)
+    {
         return;
+    }
 
     IccProfile inputProfile;
     IccProfile outputProfile = prof;
@@ -528,7 +607,7 @@ void IccManager::transformForOutput(const IccProfile& prof)
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForOutput for uncalibrated data "
-                         "but let the RAW loader do the conversion to sRGB";
+                 "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
     {
@@ -538,7 +617,9 @@ void IccManager::transformForOutput(const IccProfile& prof)
     else
     {
         if (!d->embeddedProfile.isSameProfileAs(outputProfile))
+        {
             inputProfile = d->embeddedProfile;
+        }
     }
 
     if (!inputProfile.isNull())

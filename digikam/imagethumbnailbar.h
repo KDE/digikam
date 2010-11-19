@@ -43,7 +43,7 @@ class ImageThumbnailBar : public ImageCategorizedView
 
 public:
 
-    ImageThumbnailBar(QWidget *parent = 0);
+    ImageThumbnailBar(QWidget* parent = 0);
     ~ImageThumbnailBar();
 
     /// Sets the policy always for the one scroll bar which is relevant, depending on orientation
@@ -52,7 +52,7 @@ public:
 
 public Q_SLOTS:
 
-    void assignRating(const QModelIndex &index, int rating);
+    void assignRating(const QModelIndex& index, int rating);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
 
 Q_SIGNALS:
@@ -63,7 +63,7 @@ protected:
 
     virtual void activated(const ImageInfo& info);
     virtual void slotSetupChanged();
-    virtual bool event(QEvent *);
+    virtual bool event(QEvent*);
 
 private:
 

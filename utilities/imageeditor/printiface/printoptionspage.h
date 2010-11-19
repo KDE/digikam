@@ -56,7 +56,7 @@ public:
         Inches
     };
 
-    PrintOptionsPage(QWidget *parent, const QSize& imageSize );
+    PrintOptionsPage(QWidget* parent, const QSize& imageSize );
     ~PrintOptionsPage();
 
     Qt::Alignment alignment() const;

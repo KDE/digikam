@@ -89,9 +89,9 @@ public:
     QAction*                     toggleBothAction;
 };
 
-TagCheckView::TagCheckView(QWidget *parent, TagModel *tagModel) :
-                TagFolderView(parent, tagModel),
-                d(new TagCheckViewPriv)
+TagCheckView::TagCheckView(QWidget* parent, TagModel* tagModel) :
+    TagFolderView(parent, tagModel),
+    d(new TagCheckViewPriv)
 {
     setSelectAlbumOnClick(false);
     setExpandOnSingleClick(false);
@@ -136,7 +136,7 @@ void TagCheckView::slotResetCheckState()
     albumModel()->resetAllCheckedAlbums();
 }
 
-void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
+void TagCheckView::slotCheckStateChange(Album* album, Qt::CheckState state)
 {
     Q_UNUSED(album);
     Q_UNUSED(state);
@@ -144,22 +144,24 @@ void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
     // handle custom toggle modes
     disconnect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
                this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
+
     // avoid signal recursion here
-    switch(d->toggleAutoTags)
+    switch (d->toggleAutoTags)
     {
-    case Children:
-        albumModel()->setCheckStateForChildren(album, state);
-        break;
-    case Parents:
-        albumModel()->setCheckStateForParents(album, state);
-        break;
-    case ChildrenAndParents:
-        albumModel()->setCheckStateForChildren(album, state);
-        albumModel()->setCheckStateForParents(album, state);
-        break;
-    default:
-        break;
+        case Children:
+            albumModel()->setCheckStateForChildren(album, state);
+            break;
+        case Parents:
+            albumModel()->setCheckStateForParents(album, state);
+            break;
+        case ChildrenAndParents:
+            albumModel()->setCheckStateForChildren(album, state);
+            albumModel()->setCheckStateForParents(album, state);
+            break;
+        default:
+            break;
     }
+
     connect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 
@@ -189,7 +191,8 @@ QList<TAlbum*> TagCheckView::getCheckedTags() const
     QList<TAlbum*> tags;
     foreach(Album *album, albumModel()->checkedAlbums())
     {
-        TAlbum *tag = dynamic_cast<TAlbum*> (album);
+        TAlbum* tag = dynamic_cast<TAlbum*> (album);
+
         if (tag)
         {
             tags << tag;
@@ -203,7 +206,8 @@ QList<TAlbum*> TagCheckView::getPartiallyCheckedTags() const
     QList<TAlbum*> tags;
     foreach(Album *album, albumModel()->partiallyCheckedAlbums())
     {
-        TAlbum *tag = dynamic_cast<TAlbum*> (album);
+        TAlbum* tag = dynamic_cast<TAlbum*> (album);
+
         if (tag)
         {
             tags << tag;
@@ -230,6 +234,7 @@ void TagCheckView::setCheckNewTags(bool checkNewTags)
     }
 
     d->checkNewTags = checkNewTags;
+
     if (d->checkNewTags)
     {
         connect(tagModificationHelper(), SIGNAL(tagCreated(TAlbum*)),
@@ -252,11 +257,12 @@ void TagCheckView::slotCreatedNewTagByContextMenu(TAlbum* tag)
     albumModel()->setChecked(tag, true);
 }
 
-void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
+void TagCheckView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)
 {
     TagFolderView::addCustomContextMenuActions(cmh, album);
 
-    TAlbum *tag = dynamic_cast<TAlbum*> (album);
+    TAlbum* tag = dynamic_cast<TAlbum*> (album);
+
     if (!tag)
     {
         return;
@@ -287,7 +293,7 @@ void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *al
     d->toggleBothAction->setChecked(d->toggleAutoTags == TagCheckView::ChildrenAndParents);
 }
 
-void TagCheckView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
+void TagCheckView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
 {
     TagFolderView::handleCustomContextMenuAction(action, album);
 
@@ -302,6 +308,7 @@ void TagCheckView::handleCustomContextMenuAction(QAction *action, AlbumPointer<A
     QModelIndex tagIndex = albumModel()->indexForAlbum(tag);
     ToggleAutoTags toggleRestore = d->toggleAutoTags;
     d->toggleAutoTags = NoToggleAuto;
+
     if (action == d->selectAllTagsAction)     // Select All Tags.
     {
         albumModel()->checkAllAlbums();
@@ -346,6 +353,7 @@ void TagCheckView::handleCustomContextMenuAction(QAction *action, AlbumPointer<A
     {
         toggleRestore = ChildrenAndParents;
     }
+
     d->toggleAutoTags = toggleRestore;
 }
 } // namespace Digikam

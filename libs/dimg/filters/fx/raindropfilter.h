@@ -53,7 +53,7 @@ private:
                         int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax);
 
     bool CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
-                        uchar* pResBits, uchar *pStatusBits,
+                        uchar* pResBits, uchar* pStatusBits,
                         int X, int Y, int DropSize, double Coeff, bool bLimitRange);
 
     bool CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
@@ -65,15 +65,31 @@ private:
     // the value and limits to this range.
     inline int LimitValues8(int ColorValue)
     {
-        if (ColorValue > 255) ColorValue = 255;
-        if (ColorValue < 0) ColorValue = 0;
+        if (ColorValue > 255)
+        {
+            ColorValue = 255;
+        }
+
+        if (ColorValue < 0)
+        {
+            ColorValue = 0;
+        }
+
         return ColorValue;
     };
 
     inline int LimitValues16(int ColorValue)
     {
-        if (ColorValue > 65535) ColorValue = 65535;
-        if (ColorValue < 0) ColorValue = 0;
+        if (ColorValue > 65535)
+        {
+            ColorValue = 65535;
+        }
+
+        if (ColorValue < 0)
+        {
+            ColorValue = 0;
+        }
+
         return ColorValue;
     };
 

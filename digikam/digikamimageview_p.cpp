@@ -28,8 +28,8 @@
 namespace Digikam
 {
 
-DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView *qq)
-                    : overlaysActive(false), q_ptr(qq)
+DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView* qq)
+    : overlaysActive(false), q_ptr(qq)
 {
     utilities          = 0;
     rotateLeftOverlay  = 0;
@@ -42,7 +42,7 @@ DigikamImageViewPriv::~DigikamImageViewPriv()
 
 void DigikamImageViewPriv::updateOverlays()
 {
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::instance();
 
     if (overlaysActive)
     {

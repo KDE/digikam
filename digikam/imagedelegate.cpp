@@ -68,12 +68,12 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
 }
 
 ImageDelegate::ImageDelegate(ImageCategorizedView* parent)
-             : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
+    : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
 {
 }
 
 ImageDelegate::ImageDelegate(ImageDelegate::ImageDelegatePrivate& dd, ImageCategorizedView* parent)
-             : ItemViewImageDelegate(dd, parent)
+    : ItemViewImageDelegate(dd, parent)
 {
 }
 
@@ -88,8 +88,12 @@ ImageDelegate::~ImageDelegate()
 void ImageDelegate::setSpacing(int spacing)
 {
     Q_D(ImageDelegate);
+
     if (d->categoryDrawer)
+    {
         d->categoryDrawer->setLowerSpacing(spacing);
+    }
+
     ItemViewImageDelegate::setSpacing(spacing);
 }
 
@@ -123,7 +127,9 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     ImageInfo info = ImageModel::retrieveImageInfo(index);
 
     if (info.isNull())
+    {
         return;
+    }
 
     // state of painter must not be changed
     p->save();
@@ -134,10 +140,15 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     bool isSelected = (option.state & QStyle::State_Selected);
 
     QPixmap pix;
+
     if (isSelected)
+    {
         pix = d->selPixmap;
+    }
     else
+    {
         pix = d->regPixmap;
+    }
 
     p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
 
@@ -148,8 +159,11 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     model->setData(index, QVariant(), ImageModel::ThumbnailRole);
 
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbData.value<QPixmap>());
+
     if (!actualPixmapRect.isNull())
+    {
         const_cast<ImageDelegate*>(this)->updateActualPixmapRect(info.id(), actualPixmapRect);
+    }
 
     if (!d->ratingRect.isNull())
     {
@@ -193,9 +207,14 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     }
 
     if (d->drawFocusFrame)
+    {
         drawFocusRect(p, option, isSelected);
+    }
+
     if (d->drawMouseOverFrame)
+    {
         drawMouseOverRect(p, option);
+    }
 
     p->restore();
 
@@ -209,8 +228,11 @@ QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const Q
     if (indexes.count() == 1)
     {
         QVariant thumbData = indexes.first().data(ImageModel::ThumbnailRole);
+
         if (!thumbData.isNull())
+        {
             icon = thumbData.value<QPixmap>();
+        }
     }
 
     return makeDragPixmap(option, indexes, icon);
@@ -234,31 +256,48 @@ bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRec
     qlonglong id = ImageModel::retrieveImageId(index);
 
     if (!id)
+    {
         return false;
+    }
 
     QRect actualRect = actualPixmapRect(id);
+
     if (actualRect.isNull())
+    {
         return false;
+    }
 
     actualRect.translate(visualRect.topLeft());
+
     if (returnRect)
+    {
         *returnRect = actualRect;
+    }
+
     return actualRect.contains(pos);
 }
 
 void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     Q_D(ImageDelegate);
+
     if (d->categoryDrawer)
+    {
         d->categoryDrawer->setDefaultViewOptions(option);
+    }
+
     ItemViewImageDelegate::setDefaultViewOptions(option);
 }
 
 void ImageDelegate::invalidatePaintingCache()
 {
     Q_D(ImageDelegate);
+
     if (d->categoryDrawer)
+    {
         d->categoryDrawer->invalidatePaintingCache();
+    }
+
     ItemViewImageDelegate::invalidatePaintingCache();
 }
 
@@ -314,18 +353,26 @@ QRect ImageDelegate::actualPixmapRect(qlonglong imageid) const
     Q_D(const ImageDelegate);
     // We do not recompute if not found. Assumption is cache is always properly updated.
     QRect* rect = d->actualPixmapRectCache.object(imageid);
+
     if (rect)
+    {
         return *rect;
+    }
     else
+    {
         return d->pixmapRect;
+    }
 }
 
 void ImageDelegate::updateActualPixmapRect(qlonglong imageid, const QRect& rect)
 {
     Q_D(ImageDelegate);
     QRect* old = d->actualPixmapRectCache.object(imageid);
+
     if (!old || *old != rect)
+    {
         d->actualPixmapRectCache.insert(imageid, new QRect(rect));
+    }
 }
 
 } // namespace Digikam

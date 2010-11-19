@@ -95,18 +95,18 @@ public:
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* parent)
-              : QScrollArea(parent), d(new SetupAlbumViewPriv)
+    : QScrollArea(parent), d(new SetupAlbumViewPriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    QVBoxLayout* layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel);
-    QGridLayout *grid        = new QGridLayout(iconViewGroup);
+    QGroupBox* iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel);
+    QGridLayout* grid        = new QGridLayout(iconViewGroup);
 
     d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iconViewGroup);
     d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the filename below the image thumbnail."));
@@ -120,15 +120,15 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iconViewGroup);
     d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
-                                             "below the image thumbnail."));
+                                        "below the image thumbnail."));
 
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
     d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
-                                                "below the image thumbnail."));
+                                           "below the image thumbnail."));
 
     d->iconShowCommentsBox   = new QCheckBox(i18n("Show digiKam &captions"), iconViewGroup);
     d->iconShowCommentsBox->setWhatsThis(i18n("Set this option to show the digiKam captions "
-                                              "below the image thumbnail."));
+                                         "below the image thumbnail."));
 
     d->iconShowTagsBox       = new QCheckBox(i18n("Show digiKam &tags"), iconViewGroup);
     d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
@@ -140,9 +140,9 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
     d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
-                                              "the image thumbnail for image rotation."));
+                                         "the image thumbnail for image rotation."));
 
-    QLabel *leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
+    QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
     d->leftClickActionComboBox = new KComboBox(iconViewGroup);
     d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->leftClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
@@ -168,7 +168,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *folderViewGroup = new QGroupBox(i18n("Folder View Options"), panel);
+    QGroupBox* folderViewGroup = new QGroupBox(i18n("Folder View Options"), panel);
     QGridLayout* grid2         = new QGridLayout(folderViewGroup);
 
     d->iconTreeThumbLabel      = new QLabel(i18n("Tree View thumbnail size:"), folderViewGroup);
@@ -194,16 +194,16 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Misc Options"), panel);
+    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Misc Options"), panel);
     QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
 
     d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images."), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
-                                                   "for preview, rather than at a reduced size. As this option "
-                                                   "will make it take longer to load images, only use it if you have "
-                                                   "a fast computer.</p>"
-                                                   "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
-                                                   "is used instead of the embedded JPEG preview.</p>"));
+            "for preview, rather than at a reduced size. As this option "
+            "will make it take longer to load images, only use it if you have "
+            "a fast computer.</p>"
+            "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
+            "is used instead of the embedded JPEG preview.</p>"));
 
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
@@ -238,7 +238,11 @@ SetupAlbumView::~SetupAlbumView()
 void SetupAlbumView::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+
+    if (!settings)
+    {
+        return;
+    }
 
     settings->setTreeViewIconSize(d->iconTreeThumbSize->currentText().toInt());
     settings->setTreeViewFont(d->treeViewFontSelect->font());
@@ -264,16 +268,28 @@ void SetupAlbumView::applySettings()
 void SetupAlbumView::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+
+    if (!settings)
+    {
+        return;
+    }
 
     if (settings->getTreeViewIconSize() == 16)
+    {
         d->iconTreeThumbSize->setCurrentIndex(0);
+    }
     else if (settings->getTreeViewIconSize() == 22)
+    {
         d->iconTreeThumbSize->setCurrentIndex(1);
+    }
     else if (settings->getTreeViewIconSize() == 32)
+    {
         d->iconTreeThumbSize->setCurrentIndex(2);
+    }
     else
+    {
         d->iconTreeThumbSize->setCurrentIndex(3);
+    }
 
     d->treeViewFontSelect->setFont(settings->getTreeViewFont());
     d->iconShowNameBox->setChecked(settings->getIconShowName());

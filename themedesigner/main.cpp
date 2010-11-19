@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     KGlobal::locale()->setMainCatalog( "digikam" );
 
     KApplication app;
-    Digikam::MainWindow *im = new Digikam::MainWindow();
+    Digikam::MainWindow* im = new Digikam::MainWindow();
     app.setTopWidget(im);
     im->resize(800, 600);
     im->show();

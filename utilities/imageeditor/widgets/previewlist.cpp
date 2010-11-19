@@ -53,13 +53,13 @@ class PreviewThreadWrapper::PreviewThreadWrapperPriv
 
 public:
 
-    PreviewThreadWrapperPriv(){}
+    PreviewThreadWrapperPriv() {}
 
     QMap<int, DImgThreadedFilter*> map;
 };
 
 PreviewThreadWrapper::PreviewThreadWrapper(QObject* parent)
-                    : QObject(parent), d(new PreviewThreadWrapperPriv)
+    : QObject(parent), d(new PreviewThreadWrapperPriv)
 {
 }
 
@@ -86,7 +86,11 @@ void PreviewThreadWrapper::registerFilter(int id, DImgThreadedFilter* filter)
 void PreviewThreadWrapper::slotFilterStarted()
 {
     DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
-    if (!filter) return;
+
+    if (!filter)
+    {
+        return;
+    }
 
     emit signalFilterStarted(d->map.key(filter));
 }
@@ -94,7 +98,11 @@ void PreviewThreadWrapper::slotFilterStarted()
 void PreviewThreadWrapper::slotFilterFinished(bool success)
 {
     DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
-    if (!filter) return;
+
+    if (!filter)
+    {
+        return;
+    }
 
     if (success)
     {
@@ -107,7 +115,11 @@ void PreviewThreadWrapper::slotFilterFinished(bool success)
 void PreviewThreadWrapper::slotFilterProgress(int /*progress*/)
 {
     DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
-    if (!filter) return;
+
+    if (!filter)
+    {
+        return;
+    }
 
     //kDebug() << filter->filterName() << " : " << progress << " %";
 }
@@ -149,7 +161,7 @@ public:
 };
 
 PreviewListItem::PreviewListItem(QListWidget* parent)
-               : QListWidgetItem(parent), d(new PreviewListItemPriv)
+    : QListWidgetItem(parent), d(new PreviewListItemPriv)
 {
 }
 
@@ -216,7 +228,7 @@ public:
 };
 
 PreviewList::PreviewList(QObject* /*parent*/)
-           : QListWidget(), d(new PreviewListPriv)
+    : QListWidget(), d(new PreviewListPriv)
 {
     d->wrapper = new PreviewThreadWrapper(this);
 
@@ -270,7 +282,10 @@ void PreviewList::stopFilters()
 
 PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString& txt, int id)
 {
-    if (!filter) return 0;
+    if (!filter)
+    {
+        return 0;
+    }
 
     d->wrapper->registerFilter(id, filter);
 
@@ -285,30 +300,38 @@ PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString&
 PreviewListItem* PreviewList::findItem(int id) const
 {
     int it = 0;
+
     while (it <= this->count())
     {
         PreviewListItem* item = dynamic_cast<PreviewListItem*>(this->item(it));
+
         if (item && item->id() == id)
+        {
             return item;
+        }
 
         ++it;
     }
+
     return 0;
 }
 
 void PreviewList::setCurrentId(int id)
 {
     int it = 0;
+
     while (it <= this->count())
     {
 
         PreviewListItem* item = dynamic_cast<PreviewListItem*>(this->item(it));
+
         if (item && item->id() == id)
         {
             setCurrentItem(item);
             item->setSelected(true);
             return;
         }
+
         ++it;
     }
 }
@@ -316,7 +339,11 @@ void PreviewList::setCurrentId(int id)
 int PreviewList::currentId() const
 {
     PreviewListItem* item = dynamic_cast<PreviewListItem*>(currentItem());
-    if (item ) return item->id();
+
+    if (item )
+    {
+        return item->id();
+    }
 
     return 0;
 }
@@ -336,7 +363,12 @@ void PreviewList::slotProgressTimerDone()
     while (it <= this->count())
     {
         PreviewListItem* item = dynamic_cast<PreviewListItem*>(this->item(it));
-        if (item && item->isSelected()) selectedItem = item;
+
+        if (item && item->isSelected())
+        {
+            selectedItem = item;
+        }
+
         if (item && item->isBusy())
         {
             item->setPixmap(pixmap);
@@ -345,8 +377,13 @@ void PreviewList::slotProgressTimerDone()
 
         ++it;
     }
+
     d->progressCount++;
-    if (d->progressCount == 8) d->progressCount = 0;
+
+    if (d->progressCount == 8)
+    {
+        d->progressCount = 0;
+    }
 
     if (!busy)
     {
@@ -354,8 +391,11 @@ void PreviewList::slotProgressTimerDone()
         // Qt 4.5 doesn't display icons correctly centred over i18n(text),
         // Qt 4.6 doesn't even reset the previous selection correctly.
         this->reset();
+
         if (selectedItem)
+        {
             setCurrentItem(selectedItem);
+        }
     }
 }
 
@@ -368,6 +408,7 @@ void PreviewList::slotFilterStarted(int id)
 void PreviewList::slotFilterFinished(int id, const QPixmap& pix)
 {
     PreviewListItem* item = findItem(id);
+
     if (item)
     {
         item->setBusy(false);

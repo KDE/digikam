@@ -50,7 +50,7 @@
 
 kio_digikamsearch::kio_digikamsearch(const QByteArray& pool_socket,
                                      const QByteArray& app_socket)
-                 : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
+    : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
 {
 }
 
@@ -67,8 +67,11 @@ void kio_digikamsearch::special(const QByteArray& data)
 
     QDataStream ds(data);
     ds >> kurl;
+
     if (!ds.atEnd())
+    {
         ds >> listingType;
+    }
 
     kDebug() << "kio_digikamsearch::special " << kurl;
 
@@ -87,20 +90,31 @@ void kio_digikamsearch::special(const QByteArray& data)
         {
             // send data every 200 images to be more responsive
             Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
+
             if (info.type == Digikam::DatabaseSearch::HaarSearch)
+            {
                 lister.listHaarSearch(&receiver, info.query);
+            }
             else
+            {
                 lister.listSearch(&receiver, info.query);
+            }
+
             if (!receiver.hasError)
+            {
                 receiver.sendData();
+            }
         }
         else
         {
             Digikam::ImageListerSlaveBaseReceiver receiver(this);
             // fast mode: limit results to 500
             lister.listSearch(&receiver, info.query, 500);
+
             if (!receiver.hasError)
+            {
                 receiver.sendData();
+            }
         }
     }
     else
@@ -122,15 +136,21 @@ void kio_digikamsearch::special(const QByteArray& data)
             foreach(const QString& idString, albumIdsStringList)
             {
                 id = idString.toInt(&ok);
+
                 if (ok)
+                {
                     albumIds << id;
+                }
             }
 
             foreach(const QString& idString, tagIdsStringList)
             {
                 id = idString.toInt(&ok);
+
                 if (ok)
+                {
                     tagIds << id;
+                }
             }
         }
 
@@ -146,26 +166,29 @@ void kio_digikamsearch::special(const QByteArray& data)
         // 40% sound like the minimum value to use to have suitable results.
         bool ok;
         double threshold = thresholdString.toDouble(&ok);
+
         if (!ok)
+        {
             threshold = 0.4;
+        }
 
         // route progress info to KIOSlave facilities
         class DuplicatesProgressObserver : public Digikam::HaarProgressObserver
         {
-            public:
-                DuplicatesProgressObserver(KIO::SlaveBase *slave) : m_slave(slave) {}
+        public:
+            DuplicatesProgressObserver(KIO::SlaveBase* slave) : m_slave(slave) {}
 
-                virtual void totalNumberToScan(int number)
-                {
-                    m_slave->totalSize(number);
-                }
-                virtual void processedNumber(int number)
-                {
-                    m_slave->processedSize(number);
-                }
+            virtual void totalNumberToScan(int number)
+            {
+                m_slave->totalSize(number);
+            }
+            virtual void processedNumber(int number)
+            {
+                m_slave->processedSize(number);
+            }
 
-            private:
-                KIO::SlaveBase *m_slave;
+        private:
+            KIO::SlaveBase* m_slave;
         };
         DuplicatesProgressObserver observer(this);
 
@@ -173,6 +196,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         Digikam::HaarIface iface;
         iface.rebuildDuplicatesAlbums(albumIds, tagIds, threshold, &observer);
     }
+
     finished();
 }
 
@@ -180,7 +204,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
 extern "C"
 {
-    KDE_EXPORT int kdemain(int argc, char **argv)
+    KDE_EXPORT int kdemain(int argc, char** argv)
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);

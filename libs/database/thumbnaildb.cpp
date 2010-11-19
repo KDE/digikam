@@ -54,11 +54,11 @@ public:
         db = 0;
     }
 
-    DatabaseCoreBackend *db;
+    DatabaseCoreBackend* db;
 };
 
-ThumbnailDB::ThumbnailDB(DatabaseCoreBackend *backend)
-           : d(new ThumbnailDBPriv)
+ThumbnailDB::ThumbnailDB(DatabaseCoreBackend* backend)
+    : d(new ThumbnailDBPriv)
 {
     d->db = backend;
 }
@@ -69,10 +69,10 @@ ThumbnailDB::~ThumbnailDB()
 }
 
 bool ThumbnailDB::setSetting(const QString& keyword,
-                         const QString& value )
+                             const QString& value )
 {
-   return  d->db->execSql( "REPLACE INTO Settings VALUES (?,?);",
-                    keyword, value );
+    return  d->db->execSql( "REPLACE INTO Settings VALUES (?,?);",
+                            keyword, value );
 }
 
 QString ThumbnailDB::getSetting(const QString& keyword)
@@ -82,15 +82,22 @@ QString ThumbnailDB::getSetting(const QString& keyword)
                     keyword, &values );
 
     if (values.isEmpty())
+    {
         return QString();
+    }
     else
+    {
         return values.first().toString();
+    }
 }
 
-static void fillThumbnailInfo(const QList<QVariant> &values, DatabaseThumbnailInfo &info)
+static void fillThumbnailInfo(const QList<QVariant> &values, DatabaseThumbnailInfo& info)
 {
     if (values.isEmpty())
+    {
         return;
+    }
+
     info.id               = values[0].toInt();
     info.type             = (DatabaseThumbnail::Type)values[1].toInt();
     info.modificationDate = values[2].isNull() ? QDateTime() : QDateTime::fromString(values[2].toString(), Qt::ISODate);
@@ -98,7 +105,7 @@ static void fillThumbnailInfo(const QList<QVariant> &values, DatabaseThumbnailIn
     info.data             = values[4].toByteArray();
 }
 
-DatabaseThumbnailInfo ThumbnailDB::findByHash(const QString &uniqueHash, int fileSize)
+DatabaseThumbnailInfo ThumbnailDB::findByHash(const QString& uniqueHash, int fileSize)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id, type, modificationDate, orientationHint, data "
@@ -113,7 +120,7 @@ DatabaseThumbnailInfo ThumbnailDB::findByHash(const QString &uniqueHash, int fil
     return info;
 }
 
-DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString &path)
+DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString& path)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id, type, modificationDate, orientationHint, data "
@@ -131,9 +138,9 @@ DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString &path)
 QHash<QString, int> ThumbnailDB::getFilePathsWithThumbnail()
 {
     SqlQuery query = d->db->prepareQuery(QString("SELECT path, id "
-                                                 "FROM FilePaths "
-                                                 "   INNER JOIN Thumbnails ON FilePaths.thumbId=Thumbnails.id "
-                                                 "WHERE type BETWEEN %1 AND %2;")
+                                         "FROM FilePaths "
+                                         "   INNER JOIN Thumbnails ON FilePaths.thumbId=Thumbnails.id "
+                                         "WHERE type BETWEEN %1 AND %2;")
                                          .arg(DatabaseThumbnail::PGF)
                                          .arg(DatabaseThumbnail::PNG));
 
@@ -148,22 +155,23 @@ QHash<QString, int> ThumbnailDB::getFilePathsWithThumbnail()
     {
         filePaths[query.value(0).toString()] = query.value(1).toInt();
     }
+
     return filePaths;
 }
 
-DatabaseCoreBackend::QueryState ThumbnailDB::insertUniqueHash(const QString &uniqueHash, int fileSize, int thumbId)
+DatabaseCoreBackend::QueryState ThumbnailDB::insertUniqueHash(const QString& uniqueHash, int fileSize, int thumbId)
 {
     return d->db->execSql("REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId) VALUES (?,?,?)",
-                   uniqueHash, fileSize, thumbId);
+                          uniqueHash, fileSize, thumbId);
 }
 
-DatabaseCoreBackend::QueryState ThumbnailDB::insertFilePath(const QString &path, int thumbId)
+DatabaseCoreBackend::QueryState ThumbnailDB::insertFilePath(const QString& path, int thumbId)
 {
     return d->db->execSql("REPLACE INTO FilePaths (path, thumbId) VALUES (?,?)",
-                   path, thumbId);
+                          path, thumbId);
 }
 
-DatabaseCoreBackend::QueryState ThumbnailDB::removeByUniqueHash(const QString &uniqueHash, int fileSize)
+DatabaseCoreBackend::QueryState ThumbnailDB::removeByUniqueHash(const QString& uniqueHash, int fileSize)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
     QMap<QString, QVariant> parameters;
@@ -172,7 +180,7 @@ DatabaseCoreBackend::QueryState ThumbnailDB::removeByUniqueHash(const QString &u
     return d->db->execDBAction(d->db->getDBAction(QString("Delete_Thumbnail_ByUniqueHashId")), parameters);
 }
 
-DatabaseCoreBackend::QueryState ThumbnailDB::removeByFilePath(const QString &path)
+DatabaseCoreBackend::QueryState ThumbnailDB::removeByFilePath(const QString& path)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
     QMap<QString, QVariant> parameters;
@@ -180,27 +188,30 @@ DatabaseCoreBackend::QueryState ThumbnailDB::removeByFilePath(const QString &pat
     return d->db->execDBAction(d->db->getDBAction(QString("Delete_Thumbnail_ByPath")), parameters);
 }
 
-DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo &info, QVariant *lastInsertId)
+DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* lastInsertId)
 {
     QVariant id;
     DatabaseCoreBackend::QueryState lastQueryState;
     lastQueryState= d->db->execSql("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);",
-                        info.type, info.modificationDate, info.orientationHint, info.data,
-                        0, &id);
+                                   info.type, info.modificationDate, info.orientationHint, info.data,
+                                   0, &id);
+
     if (DatabaseCoreBackend::NoErrors==lastQueryState)
     {
         *lastInsertId=id.toInt();
-    }else
+    }
+    else
     {
         *lastInsertId=-1;
     }
+
     return lastQueryState;
 }
 
-DatabaseCoreBackend::QueryState ThumbnailDB::replaceThumbnail(const DatabaseThumbnailInfo &info)
+DatabaseCoreBackend::QueryState ThumbnailDB::replaceThumbnail(const DatabaseThumbnailInfo& info)
 {
     return d->db->execSql("REPLACE INTO Thumbnails (id, type, modificationDate, orientationHint, data) VALUES(?, ?, ?, ?, ?);",
-                    QList<QVariant>() << info.id << info.type << info.modificationDate << info.orientationHint << info.data);
+                          QList<QVariant>() << info.id << info.type << info.modificationDate << info.orientationHint << info.data);
 }
 
 }  // namespace Digikam

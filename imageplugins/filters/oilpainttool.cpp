@@ -71,7 +71,7 @@ public:
         smoothInput(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configBrushSizeEntry;
@@ -85,8 +85,8 @@ public:
 };
 
 OilPaintTool::OilPaintTool(QObject* parent)
-            : EditorToolThreaded(parent),
-              d(new OilPaintToolPriv)
+    : EditorToolThreaded(parent),
+      d(new OilPaintToolPriv)
 {
     setObjectName("oilpaint");
     setToolName(i18n("Oil Paint"));

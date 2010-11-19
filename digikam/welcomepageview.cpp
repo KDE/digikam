@@ -59,7 +59,7 @@ namespace Digikam
 {
 
 WelcomePageView::WelcomePageView(QWidget* parent)
-               : KHTMLPart(parent)
+    : KHTMLPart(parent)
 {
     widget()->setFocusPolicy(Qt::WheelFocus);
     // Let's better be paranoid and disable plugins (it defaults to enabled):
@@ -91,7 +91,7 @@ WelcomePageView::~WelcomePageView()
 
 void WelcomePageView::slotUrlOpen(const KUrl& url)
 {
-   KToolInvocation::invokeBrowser(url.url());
+    KToolInvocation::invokeBrowser(url.url());
 }
 
 QString WelcomePageView::infoPage() const
@@ -121,75 +121,78 @@ QString WelcomePageView::infoPage() const
 
 
     QString featureItems;
+
     for (int i = 0 ; i < newFeatures.count() ; ++i)
+    {
         featureItems += i18n("<li>%1</li>\n", newFeatures[i] );
+    }
 
     QString info =
         i18nc(
-        "%1: current digiKam version; "
-        "%2: digiKam help:// Url; "
-        "%3: digiKam homepage Url; "
-        "%4: prior digiKam version; "
-        "%5: prior KDE version; "
-        "%6: generated list of new features; "
-        "%7: generated list of important changes; "
-        "--- end of comment ---",
+            "%1: current digiKam version; "
+            "%2: digiKam help:// Url; "
+            "%3: digiKam homepage Url; "
+            "%4: prior digiKam version; "
+            "%5: prior KDE version; "
+            "%6: generated list of new features; "
+            "%7: generated list of important changes; "
+            "--- end of comment ---",
 
-        "<h2 style='margin-top: 0px;'>"
+            "<h2 style='margin-top: 0px;'>"
             "Welcome to digiKam %1"
-        "</h2>"
+            "</h2>"
 
-        "<p>"
+            "<p>"
             "digiKam is an open source photo management program "
             "designed to import, organize, enhance, search and export your "
             "digital images to and from your computer."
-        "</p>"
+            "</p>"
 
-        "<p>"
+            "<p>"
             "Currently, you are in the Album view mode of digiKam. Albums are the places "
             "where your files are stored, and are identical to the folders "
             "on your hard disk."
-        "</p>"
+            "</p>"
 
-        "<p>"
+            "<p>"
             "<ul>"
-                "<li>"
-                    "digiKam has many powerful features which are described in the "
-                    "<a href=\"%2\">documentation</a>"
-                "</li>"
-                "<li>"
-                    "The <a href=\"%3\">digiKam homepage</a> provides information about "
-                    "new versions of digiKam."
-                "</li>"
+            "<li>"
+            "digiKam has many powerful features which are described in the "
+            "<a href=\"%2\">documentation</a>"
+            "</li>"
+            "<li>"
+            "The <a href=\"%3\">digiKam homepage</a> provides information about "
+            "new versions of digiKam."
+            "</li>"
             "</ul>"
-        "</p>"
+            "</p>"
 
-        "<p>%7</p>"
+            "<p>%7</p>"
 
-        "<p>"
+            "<p>"
             "Some of the new features in this release of digiKam include "
             "(compared to digiKam %4):"
-        "</p>"
+            "</p>"
 
-        "<p>"
+            "<p>"
             "<ul>%5</ul>"
-        "</p>"
+            "</p>"
 
-        "<p>%6</p>"
+            "<p>%6</p>"
 
-        "<p>We hope that you will enjoy digiKam.</p>"
+            "<p>We hope that you will enjoy digiKam.</p>"
 
-        "<p>Thank you,</p>"
+            "<p>Thank you,</p>"
 
-        "<p style='margin-bottom: 0px; margin-left:20px;'>The digiKam team</p>",
+            "<p style='margin-bottom: 0px; margin-left:20px;'>The digiKam team</p>",
 
-    QString(digikam_version),            // %1 : current digiKam version
-    "help:/digikam/index.html",          // %2 : digiKam help:// Url
-    webProjectUrl().url(),               // %3 : digiKam homepage Url
-    "0.9.6",                             // %4 : prior digiKam version
-    featureItems,                        // %5 : prior KDE version
-    QString(),                           // %6 : generated list of new features
-    QString());                          // %7 : previous digiKam release.
+            QString(digikam_version),            // %1 : current digiKam version
+            "help:/digikam/index.html",          // %2 : digiKam help:// Url
+            webProjectUrl().url(),               // %3 : digiKam homepage Url
+            "0.9.6",                             // %4 : prior digiKam version
+            featureItems,                        // %5 : prior KDE version
+            QString(),                           // %6 : generated list of new features
+            QString());                          // %7 : previous digiKam release.
 
     return info;
 }
@@ -211,15 +214,19 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName) const
 
     result.resize(len + 2);
     readLen = file.read(result.data(), len);
+
     if (1 && result[len-1]!='\n')
     {
         result[len++] = '\n';
         ++readLen;
     }
+
     result[len] = '\0';
 
     if (readLen < len)
+    {
         return QByteArray();
+    }
 
     return result;
 }
@@ -234,20 +241,20 @@ void WelcomePageView::slotThemeChanged()
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
     QString locationRtl      = KStandardDirs::locate("data", "kdeui/about/kde_infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
-                                                     : QString();
+                               : QString();
 
     begin(KUrl(locationHtml).toLocalFile());
 
     QString content = fileToString(locationHtml);
     content         = content.arg(infoPageCss)        // %1
-                             .arg(rtl)                // %2
-                             .arg(fontSize)           // %3
-                             .arg(appTitle)           // %4
-                             .arg(slogan)             // %5
-                             .arg(infoPage())         // %6
-                             .arg(digikamCss);        // %7
+                      .arg(rtl)                // %2
+                      .arg(fontSize)           // %3
+                      .arg(appTitle)           // %4
+                      .arg(slogan)             // %5
+                      .arg(infoPage())         // %6
+                      .arg(digikamCss);        // %7
 
-//    kDebug() << content;
+    //    kDebug() << content;
 
     write(content);
     end();
@@ -257,28 +264,48 @@ void WelcomePageView::slotThemeChanged()
 void WelcomePageView::disablePredefinedActions()
 {
     KAction* findAction = qobject_cast<KAction*>(actionCollection()->action("find"));
+
     if (findAction)
+    {
         findAction->setShortcut(KShortcut());
+    }
     else
+    {
         kDebug() << "failed to remove the shortcut of khtml's find action";
+    }
 
     KAction* findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
+
     if (findNextAction)
+    {
         findNextAction->setShortcut(KShortcut());
+    }
     else
+    {
         kDebug() << "failed to remove the shortcut of khtml's findNext action";
+    }
 
     KAction* findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
+
     if (findPreviousAction)
+    {
         findPreviousAction->setShortcut(KShortcut());
+    }
     else
+    {
         kDebug() << "failed to remove the shortcut of khtml's findPrevious action";
+    }
 
     KAction* selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
+
     if (selectAllAction)
+    {
         selectAllAction->setShortcut(KShortcut());
+    }
     else
+    {
         kDebug() << "failed to remove the shortcut of khtml's selectAll action";
+    }
 }
 
 }  // namespace Digikam

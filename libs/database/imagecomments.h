@@ -119,14 +119,14 @@ public:
      * as the default value, when you just want to have one string.
      * Optionally also returns the index with which you can access further information about the comment.
      */
-    QString defaultComment(int *index = 0) const;
+    QString defaultComment(int* index = 0) const;
 
     /**
      * Returns a comment for the specified language.
      * Matching behavior can be specified.
      * Optionally also returns the index with which you can access further information about the comment.
      */
-    QString commentForLanguage(const QString& languageCode, int *index = 0,
+    QString commentForLanguage(const QString& languageCode, int* index = 0,
                                LanguageChoiceBehavior behavior = ReturnMatchingDefaultOrFirstLanguage) const;
 
     /** Returns the number of comments available. */

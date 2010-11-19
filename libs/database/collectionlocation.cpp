@@ -27,8 +27,8 @@ namespace Digikam
 {
 
 CollectionLocation::CollectionLocation()
-                  : m_id(-1), m_status(LocationNull),
-                    m_type(TypeVolumeHardWired)
+    : m_id(-1), m_status(LocationNull),
+      m_type(TypeVolumeHardWired)
 {
 }
 

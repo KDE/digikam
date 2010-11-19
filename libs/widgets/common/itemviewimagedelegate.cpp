@@ -65,7 +65,7 @@ ItemViewImageDelegatePrivate::ItemViewImageDelegatePrivate()
     ratingPixmaps   = QVector<QPixmap>(10);
 }
 
-void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate *_q)
+void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate* _q)
 {
     q = _q;
 
@@ -97,14 +97,14 @@ void ItemViewImageDelegatePrivate::makeStarPolygon()
     starPolygonSize = QSize(15, 15);
 }
 
-ItemViewImageDelegate::ItemViewImageDelegate(DCategorizedView *parent)
-             : DItemDelegate(parent), d_ptr(new ItemViewImageDelegatePrivate)
+ItemViewImageDelegate::ItemViewImageDelegate(DCategorizedView* parent)
+    : DItemDelegate(parent), d_ptr(new ItemViewImageDelegatePrivate)
 {
     d_ptr->init(this);
 }
 
-ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate &dd, DCategorizedView *parent)
-             : DItemDelegate(parent), d_ptr(&dd)
+ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, DCategorizedView* parent)
+    : DItemDelegate(parent), d_ptr(&dd)
 {
     d_ptr->init(this);
 }
@@ -124,6 +124,7 @@ ThumbnailSize ItemViewImageDelegate::thumbnailSize() const
 void ItemViewImageDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     Q_D(ItemViewImageDelegate);
+
     if ( d->thumbSize != thumbSize)
     {
         d->thumbSize = thumbSize;
@@ -134,13 +135,17 @@ void ItemViewImageDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
 void ItemViewImageDelegate::setSpacing(int spacing)
 {
     Q_D(ItemViewImageDelegate);
+
     if (d->spacing == spacing)
+    {
         return;
+    }
+
     d->spacing = spacing;
     invalidatePaintingCache();
 }
 
-void ItemViewImageDelegate::installOverlay(ImageDelegateOverlay *overlay)
+void ItemViewImageDelegate::installOverlay(ImageDelegateOverlay* overlay)
 {
     Q_D(ItemViewImageDelegate);
     overlay->setDelegate(this);
@@ -148,7 +153,7 @@ void ItemViewImageDelegate::installOverlay(ImageDelegateOverlay *overlay)
     overlay->setActive(true);
 }
 
-void ItemViewImageDelegate::removeOverlay(ImageDelegateOverlay *overlay)
+void ItemViewImageDelegate::removeOverlay(ImageDelegateOverlay* overlay)
 {
     Q_D(ItemViewImageDelegate);
     overlay->setActive(false);
@@ -189,13 +194,13 @@ QRect ItemViewImageDelegate::ratingRect() const
     return d->ratingRect;
 }
 
-void ItemViewImageDelegate::setRatingEdited(const QModelIndex &index)
+void ItemViewImageDelegate::setRatingEdited(const QModelIndex& index)
 {
     Q_D(ItemViewImageDelegate);
     d->editingRating = index;
 }
 
-void ItemViewImageDelegate::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index)
+void ItemViewImageDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
 {
     Q_D(ItemViewImageDelegate);
     foreach (ImageDelegateOverlay *overlay, d->overlays)
@@ -216,17 +221,23 @@ QSize ItemViewImageDelegate::gridSize() const
     return d->gridSize;
 }
 
-bool ItemViewImageDelegate::acceptsToolTip(const QPoint&, const QRect& visualRect, const QModelIndex&, QRect *retRect) const
+bool ItemViewImageDelegate::acceptsToolTip(const QPoint&, const QRect& visualRect, const QModelIndex&, QRect* retRect) const
 {
     if (retRect)
+    {
         *retRect = visualRect;
+    }
+
     return true;
 }
 
-bool ItemViewImageDelegate::acceptsActivation(const QPoint& , const QRect& visualRect, const QModelIndex&, QRect *retRect) const
+bool ItemViewImageDelegate::acceptsActivation(const QPoint& , const QRect& visualRect, const QModelIndex&, QRect* retRect) const
 {
     if (retRect)
+    {
         *retRect = visualRect;
+    }
+
     return true;
 }
 
@@ -252,6 +263,7 @@ void ItemViewImageDelegate::invalidatePaintingCache()
     Q_D(ItemViewImageDelegate);
     QSize oldGridSize = d->gridSize;
     updateSizeRectsAndPixmaps();
+
     if (oldGridSize != d->gridSize)
     {
         emit gridSizeChanged(d->gridSize);
@@ -261,12 +273,14 @@ void ItemViewImageDelegate::invalidatePaintingCache()
     emit visualChange();
 }
 
-QRect ItemViewImageDelegate::drawThumbnail(QPainter *p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const
+QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const
 {
     p->drawPixmap(0, 0, background);
 
     if (thumbnail.isNull())
+    {
         return QRect();
+    }
 
     QRect r = thumbRect;
     /*p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
@@ -292,30 +306,34 @@ QRect ItemViewImageDelegate::drawThumbnail(QPainter *p, const QRect& thumbRect, 
     return actualPixmapRect;
 }
 
-void ItemViewImageDelegate::drawRating(QPainter *p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const
+void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const
 {
     Q_D(const ItemViewImageDelegate);
+
     if (d->editingRating != index)
+    {
         p->drawPixmap(ratingRect, ratingPixmap(rating, isSelected));
+    }
+
     /*else
         p->drawPixmap(r, ratingPixmap(-1, isSelected));*/
 }
 
-void ItemViewImageDelegate::drawName(QPainter *p,const QRect& nameRect, const QString& name) const
+void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontReg);
     p->drawText(nameRect, Qt::AlignCenter, squeezedTextCached(p, nameRect.width(), name));
 }
 
-void ItemViewImageDelegate::drawComments(QPainter *p, const QRect& commentsRect, const QString& comments) const
+void ItemViewImageDelegate::drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontCom);
     p->drawText(commentsRect, Qt::AlignCenter, squeezedTextCached(p, commentsRect.width(), comments));
 }
 
-void ItemViewImageDelegate::drawCreationDate(QPainter *p, const QRect& dateRect, const QDateTime& date) const
+void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);
@@ -324,7 +342,7 @@ void ItemViewImageDelegate::drawCreationDate(QPainter *p, const QRect& dateRect,
     p->drawText(dateRect, Qt::AlignCenter, squeezedTextCached(p, dateRect.width(), str));
 }
 
-void ItemViewImageDelegate::drawModificationDate(QPainter *p, const QRect& dateRect, const QDateTime& date) const
+void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);
@@ -333,55 +351,62 @@ void ItemViewImageDelegate::drawModificationDate(QPainter *p, const QRect& dateR
     p->drawText(dateRect, Qt::AlignCenter, squeezedTextCached(p, dateRect.width(), str));
 }
 
-void ItemViewImageDelegate::drawImageSize(QPainter *p, const QRect& dimsRect, const QSize& dims) const
+void ItemViewImageDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const
 {
     Q_D(const ItemViewImageDelegate);
+
     if (dims.isValid())
     {
         p->setFont(d->fontXtra);
         QString mpixels, resolution;
         mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
+
         if (dims.isValid())
             resolution = i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
                                dims.width(), dims.height(), mpixels);
         else
+        {
             resolution = i18nc("unknown image resolution", "Unknown");
+        }
+
         p->drawText(dimsRect, Qt::AlignCenter, squeezedTextCached(p, dimsRect.width(), resolution));
     }
 }
 
-void ItemViewImageDelegate::drawFileSize(QPainter *p, const QRect& r, int bytes) const
+void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, int bytes) const
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);
     p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
 }
 
-void ItemViewImageDelegate::drawTags(QPainter *p, const QRect& r, const QString& tagsString, bool isSelected) const
+void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontCom);
     p->setPen(isSelected ? ThemeEngine::instance()->textSpecialSelColor()
-                         : ThemeEngine::instance()->textSpecialRegColor());
+              : ThemeEngine::instance()->textSpecialRegColor());
 
     p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tagsString));
 }
 
-void ItemViewImageDelegate::drawFocusRect(QPainter *p, const QStyleOptionViewItem& option, bool isSelected) const
+void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const
 {
     Q_D(const ItemViewImageDelegate);
+
     if (option.state & QStyle::State_HasFocus) //?? is current item
     {
         p->setPen(QPen(isSelected ? ThemeEngine::instance()->textSelColor()
-                                  : ThemeEngine::instance()->textRegColor(),
+                       : ThemeEngine::instance()->textRegColor(),
                        1, Qt::DotLine));
         p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);
     }
 }
 
-void ItemViewImageDelegate::drawMouseOverRect(QPainter *p, const QStyleOptionViewItem& option) const
+void ItemViewImageDelegate::drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const
 {
     Q_D(const ItemViewImageDelegate);
+
     if (option.state & QStyle::State_MouseOver)
     {
         p->setPen(QPen(option.palette.color(QPalette::Highlight), 3, Qt::SolidLine));
@@ -389,7 +414,7 @@ void ItemViewImageDelegate::drawMouseOverRect(QPainter *p, const QStyleOptionVie
     }
 }
 
-void ItemViewImageDelegate::drawDelegates(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ItemViewImageDelegate::drawDelegates(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ItemViewImageDelegate);
     foreach (ImageDelegateOverlay *overlay, d->overlays)
@@ -408,6 +433,7 @@ void ItemViewImageDelegate::prepareFonts()
     d->fontCom.setItalic(true);
 
     int fnSz = d->fontReg.pointSize();
+
     if (fnSz > 0)
     {
         d->fontCom.setPointSize(fnSz-1);
@@ -443,10 +469,10 @@ void ItemViewImageDelegate::prepareBackground()
 {
     Q_D(ItemViewImageDelegate);
     d->regPixmap = ThemeEngine::instance()->thumbRegPixmap(d->rect.width(),
-                                                           d->rect.height());
+                   d->rect.height());
 
     d->selPixmap = ThemeEngine::instance()->thumbSelPixmap(d->rect.width(),
-                                                           d->rect.height());
+                   d->rect.height());
 }
 
 void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
@@ -454,6 +480,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
     /// Please call this method after prepareBackground() and when d->ratingPixmap is set
 
     Q_D(ItemViewImageDelegate);
+
     // We use antialiasing and want to pre-render the pixmaps.
     // So we need the background at the time of painting,
     // and the background may be a gradient, and will be different for selected items.
@@ -466,9 +493,13 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
         {
             // do this once for regular, once for selected backgrounds
             if (sel)
+            {
                 basePix = d->selPixmap.copy(d->ratingRect);
+            }
             else
+            {
                 basePix = d->regPixmap.copy(d->ratingRect);
+            }
         }
         else
         {
@@ -496,6 +527,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
 
             // move painter while drawing polygons
             painter.translate( lround((d->ratingRect.width() - d->margin - rating*(d->starPolygonSize.width()+1))/2.0) + 2, 1 );
+
             for (int s=0; s<rating; ++s)
             {
                 painter.drawPolygon(d->starPolygon, Qt::WindingFill);
@@ -508,6 +540,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
 QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
 {
     Q_D(const ItemViewImageDelegate);
+
     if (rating < 1 || rating > 5)
     {
         /*
@@ -523,10 +556,15 @@ QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
     }
 
     --rating;
+
     if (selected)
+    {
         return d->ratingPixmaps[5 + rating];
+    }
     else
+    {
         return d->ratingPixmaps[rating];
+    }
 }
 
 } // namespace Digikam

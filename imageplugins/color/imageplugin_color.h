@@ -36,7 +36,7 @@
 
 namespace Digikam
 {
-    class IccProfile;
+class IccProfile;
 }
 
 using namespace Digikam;

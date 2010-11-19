@@ -68,7 +68,7 @@ public:
         cbSettings(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configHistogramChannelEntry;
@@ -82,8 +82,8 @@ public:
 };
 
 CBTool::CBTool(QObject* parent)
-      : EditorToolThreaded(parent),
-        d(new CBToolPriv)
+    : EditorToolThreaded(parent),
+      d(new CBToolPriv)
 {
     setObjectName("colorbalance");
     setToolName(i18n("Color Balance"));
@@ -119,7 +119,9 @@ CBTool::CBTool(QObject* parent)
 CBTool::~CBTool()
 {
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     delete d;
 }
@@ -170,12 +172,14 @@ void CBTool::putPreviewData()
     // Update histogram.
 
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-                                                             preview.width(), preview.height(), preview.sixteenBit(),
-                                                             0, 0, 0, false);
+            preview.width(), preview.height(), preview.sixteenBit(),
+            0, 0, 0, false);
 }
 
 void CBTool::prepareFinal()

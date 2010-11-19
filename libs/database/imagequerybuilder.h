@@ -57,7 +57,7 @@ public:
 
 protected:
 
-    QList<ImageQueryPostHook *> m_postHooks;
+    QList<ImageQueryPostHook*> m_postHooks;
 };
 
 class DIGIKAM_DATABASE_EXPORT ImageQueryBuilder
@@ -66,17 +66,17 @@ public:
 
     ImageQueryBuilder();
 
-    QString buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
+    QString buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const;
     QString buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const;
-    QString buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
+    QString buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const;
     QString convertFromUrlToXml(const KUrl& url) const;
 
 protected:
 
     void buildGroup(QString& sql, SearchXmlCachingReader& reader,
-                    QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
+                    QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const;
     bool buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
-                    QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
+                    QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const;
 
     QString possibleDate(const QString& str, bool& exact) const;
 

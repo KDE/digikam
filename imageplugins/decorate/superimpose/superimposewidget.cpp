@@ -51,7 +51,7 @@ namespace DigikamDecorateImagePlugin
 {
 
 SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget* parent)
-                 : QWidget(parent)
+    : QWidget(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     m_pixmap   = new QPixmap(w, h);
@@ -188,13 +188,24 @@ void SuperImposeWidget::moveSelection(int dx, int dy)
     selection.translate( -(int)(wf*(float)dx), -(int)(hf*(float)dy) );
 
     if (selection.left() < 0)
+    {
         selection.moveLeft(0);
+    }
+
     if (selection.top() < 0)
+    {
         selection.moveTop(0);
+    }
+
     if (selection.bottom() > m_h)
+    {
         selection.moveBottom(m_h);
+    }
+
     if (selection.right() > m_w)
+    {
         selection.moveRight(m_w);
+    }
 
     m_currentSelection = selection;
 }
@@ -204,7 +215,9 @@ bool SuperImposeWidget::zoomSelection(float deltaZoomFactor)
     float newZoom = m_zoomFactor + deltaZoomFactor;
 
     if (newZoom < 0.0)
+    {
         return false;
+    }
 
     QRect selection = m_currentSelection;
     int wf = (int)((float)m_rect.width()  / newZoom);
@@ -219,21 +232,35 @@ bool SuperImposeWidget::zoomSelection(float deltaZoomFactor)
 
     // check that selection is still inside original image
     QRect orgImageRect(0, 0, m_w, m_h);
+
     if (!orgImageRect.contains(selection))
     {
         // try to adjust
         if (selection.left() < 0)
+        {
             selection.moveLeft(0);
+        }
+
         if (selection.top() < 0)
+        {
             selection.moveTop(0);
+        }
+
         if (selection.bottom() > m_h)
+        {
             selection.moveBottom(m_h);
+        }
+
         if (selection.right() > m_w)
+        {
             selection.moveRight(m_w);
+        }
 
         // was it successful?
         if (selection.contains(orgImageRect))
+        {
             return false;
+        }
 
     }
 
@@ -254,13 +281,21 @@ void SuperImposeWidget::mousePressEvent(QMouseEvent* e)
         switch (m_editMode)
         {
             case ZOOMIN:
+
                 if (zoomSelection(+0.05F))
+                {
                     moveSelection(width()/2 - e->x(), height()/2 - e->y());
+                }
+
                 break;
 
             case ZOOMOUT:
+
                 if (zoomSelection(-0.05F))
+                {
                     moveSelection(width()/2 - e->x(), height()/2 - e->y());
+                }
+
                 break;
 
             case MOVE:
@@ -292,13 +327,24 @@ void SuperImposeWidget::mouseMoveEvent(QMouseEvent* e)
                     int newypos = e->y();
 
                     if (newxpos < m_rect.left())
+                    {
                         newxpos = m_rect.left();
+                    }
+
                     if (newxpos > m_rect.right())
+                    {
                         newxpos = m_rect.right();
+                    }
+
                     if (newxpos < m_rect.top())
+                    {
                         newxpos = m_rect.top();
+                    }
+
                     if (newxpos > m_rect.bottom())
+                    {
                         newxpos = m_rect.bottom();
+                    }
 
                     moveSelection(newxpos - m_xpos, newypos - m_ypos);
                     makePixmap();

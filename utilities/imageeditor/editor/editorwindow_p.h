@@ -251,7 +251,7 @@ public:
 
     EditorToolIface*           toolIface;
 
-    void legacyUpdateSplitterState(KConfigGroup &group)
+    void legacyUpdateSplitterState(KConfigGroup& group)
     {
 
         // Check if the thumbnail size in the config file is splitter based (the
@@ -277,9 +277,11 @@ public:
 
                 stream >> marker;
                 stream >> version;
+
                 if (version == 0)
                 {
                     stream >> sizesList;
+
                     if (sizesList.count() == 3)
                     {
                         kDebug() << "Found splitter based config, converting to dockbar";

@@ -50,13 +50,13 @@ public:
      *  Note that setKeepsFilePathCache is enabled per default.
      */
 
-    ImageThumbnailModel(QObject *parent);
+    ImageThumbnailModel(QObject* parent);
     ~ImageThumbnailModel();
 
     /** Enable thumbnail loading and set the thread that shall be used.
      *  The thumbnail size of this thread will be adjusted. */
-    void setThumbnailLoadThread(ThumbnailLoadThread *thread);
-    ThumbnailLoadThread *thumbnailLoadThread() const;
+    void setThumbnailLoadThread(ThumbnailLoadThread* thread);
+    ThumbnailLoadThread* thumbnailLoadThread() const;
     /// Set the thumbnail size to use
     void setThumbnailSize(const ThumbnailSize& thumbSize);
     /// If you want to fix a size for preloading, do it here.

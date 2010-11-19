@@ -61,17 +61,18 @@ namespace Digikam
 {
 
 PPMLoader::PPMLoader(DImg* image)
-         : DImgLoader(image)
+    : DImgLoader(image)
 {
 }
 
-bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
+bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 {
     //TODO: progress information
     int  width, height, rgbmax;
     char nl;
 
-    FILE *file = fopen(QFile::encodeName(filePath), "rb");
+    FILE* file = fopen(QFile::encodeName(filePath), "rb");
+
     if (!file)
     {
         kDebug() << "Cannot open image file.";
@@ -90,6 +91,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     uchar* c = (uchar*) &header;
+
     if (*c != 'P')
     {
         kDebug() << "Not a PPM file.";
@@ -99,6 +101,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     ++c;
+
     if (*c != '6')
     {
         kDebug() << "Not a PPM file.";
@@ -126,13 +129,16 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     if (observer)
+    {
         observer->progressInfo(m_image, 0.1F);
+    }
 
-    unsigned short *data = 0;
+    unsigned short* data = 0;
 
     if (m_loadFlags & LoadImageData)
     {
         data = new_short_failureTolerant(width*height*4);
+
         if (!data)
         {
             kDebug() << "Failed to allocate memory for loading" << filePath;
@@ -141,14 +147,14 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             return false;
         }
 
-        unsigned short *dst  = data;
+        unsigned short* dst  = data;
         uchar src[6];
         float fac = 65535.0 / rgbmax;
         int checkpoint = 0;
 
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
         kDebug() << "rgbmax=" << rgbmax << "  fac=" << fac;
-    #endif
+#endif
 
         for (int h = 0; h < height; ++h)
         {
@@ -156,6 +162,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             if (observer && h == checkpoint)
             {
                 checkpoint += granularity(observer, height, 0.9F);
+
                 if (!observer->continueQuery(m_image))
                 {
                     delete [] data;
@@ -163,6 +170,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     loadingFailed();
                     return false;
                 }
+
                 observer->progressInfo(m_image, 0.1 + (0.9 * ( ((float)h)/((float)height) )));
             }
 

@@ -49,7 +49,7 @@ class AlbumPointer;
 
 class DateFolderView: public KVBox, public StateSavingObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 

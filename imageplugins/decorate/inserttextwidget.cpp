@@ -104,8 +104,8 @@ public:
 };
 
 InsertTextWidget::InsertTextWidget(int w, int h, QWidget* parent)
-                : QWidget(parent),
-                  d(new InsertTextWidgetPriv)
+    : QWidget(parent),
+      d(new InsertTextWidgetPriv)
 {
     d->currentMoving = false;
 
@@ -198,6 +198,7 @@ void InsertTextWidget::setPositionHint(QRect hint)
 {
     // interpreted by composeImage
     d->positionHint = hint;
+
     if (d->textRect.isValid())
     {
         // invalidate current position so that hint is certainly interpreted
@@ -210,6 +211,7 @@ void InsertTextWidget::setPositionHint(QRect hint)
 QRect InsertTextWidget::getPositionHint()
 {
     QRect hint;
+
     if (d->textRect.isValid())
     {
         // We normalize on the size of the image, but we store as int. Precision loss is no problem.
@@ -218,6 +220,7 @@ QRect InsertTextWidget::getPositionHint()
         hint.setWidth(  (int) ((float)d->textRect.width()  / (float)d->rect.width()  * 10000.0) );
         hint.setHeight( (int) ((float)d->textRect.height() / (float)d->rect.height() * 10000.0) );
     }
+
     return hint;
 }
 
@@ -229,6 +232,7 @@ DImg InsertTextWidget::makeInsertText()
     float ratioH = (float)orgH/(float)d->h;
 
     int x, y;
+
     if (d->textRect.isValid())
     {
         // convert from widget to image coordinates, then to original size
@@ -263,6 +267,7 @@ void InsertTextWidget::makePixmap()
     float ratioH = (float)d->h / (float)orgH;
 
     int x, y;
+
     if (d->textRect.isValid())
     {
         // convert from widget to image coordinates
@@ -278,7 +283,7 @@ void InsertTextWidget::makePixmap()
     // get preview image data
     uchar* data = d->iface->getPreviewImage();
     DImg image(d->iface->previewWidth(), d->iface->previewHeight(), d->iface->previewSixteenBit(),
-                        d->iface->previewHasAlpha(), data);
+               d->iface->previewHasAlpha(), data);
     image.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     delete [] data;
 
@@ -334,6 +339,7 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
     DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
 
     int maxWidth, maxHeight;
+
     if (x == -1 && y == -1)
     {
         maxWidth = image->width();
@@ -352,7 +358,7 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
 
     int fontWidth, fontHeight;
 
-    switch(textRotation)
+    switch (textRotation)
     {
         case ROTATION_NONE:
         case ROTATION_180:
@@ -393,31 +399,42 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
                 // so if now the larger distance is actually too small,
                 // fall back to standard placement, nothing to lose.
                 if (x + fontWidth > maxWidth)
+                {
                     x = qMax( (maxWidth - fontWidth) / 2, 0);
+                }
             }
             else
             {
                 x = maxWidth - (int)(fromRight * maxWidth) - fontWidth;
+
                 if ( x < 0 )
+                {
                     x = qMax( (maxWidth - fontWidth) / 2, 0);
+                }
             }
 
             // calculate vertical position
             if (fromTop < fromBottom)
             {
                 y = (int)(fromTop * maxHeight);
+
                 if (y + fontHeight > maxHeight)
+                {
                     y = qMax( (maxHeight - fontHeight) / 2, 0);
+                }
             }
             else
             {
                 y = maxHeight - (int)(fromBottom * maxHeight) - fontHeight;
+
                 if ( y < 0 )
+                {
                     y = qMax( (maxHeight - fontHeight) / 2, 0);
+                }
             }
 
             if (! QRect(x, y, fontWidth, fontHeight).
-                   intersects(QRect(0, 0, maxWidth, maxHeight)) )
+                intersects(QRect(0, 0, maxWidth, maxHeight)) )
             {
                 // emergency fallback - nothing is visible
                 x = qMax( (maxWidth - fontWidth) / 2, 0);
@@ -453,7 +470,9 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
     DImg textArea = image->copy(drawRect);
 
     if (textArea.isNull())
+    {
         return QRect();
+    }
 
     // compose semi-transparent background over textArea
     if (transparentBackground)
@@ -461,14 +480,19 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
         DImg transparentLayer(textAreaBackgroundRect.width(), textAreaBackgroundRect.height(), textArea.sixteenBit(), true);
         DColor transparent(backgroundColor);
         transparent.setAlpha(d->transparency);
+
         if (image->sixteenBit())
+        {
             transparent.convertToSixteenBit();
+        }
+
         transparentLayer.fill(transparent);
         textArea.bitBlendImage(composer, &transparentLayer, 0, 0, transparentLayer.width(), transparentLayer.height(),
                                textAreaBackgroundRect.x(), textAreaBackgroundRect.y());
     }
 
     DImg textNotDrawn;
+
     if (textArea.sixteenBit())
     {
         textNotDrawn = textArea.copy();
@@ -504,7 +528,7 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
     // translate to origin of text, leaving space for the border
     p.translate(textAreaTextRect.x(), textAreaTextRect.y());
 
-    switch(textRotation)
+    switch (textRotation)
     {
         case ROTATION_NONE:
             p.drawText( 0, 0, textAreaTextRect.width(),
@@ -537,7 +561,7 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
     if (borderMode == BORDER_NORMAL)      // Decorative border using text color.
     {
         p.setPen( QPen(textColor, borderWidth, Qt::SolidLine,
-                  Qt::SquareCap, Qt::RoundJoin) ) ;
+                       Qt::SquareCap, Qt::RoundJoin) ) ;
         p.drawRect(textAreaDrawRect);
     }
     else if (borderMode == BORDER_SUPPORT)  // Make simple dot line border to help user.
@@ -547,6 +571,7 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
         p.setPen(QPen(Qt::red, 1, Qt::DotLine));
         p.drawRect(textAreaDrawRect);
     }
+
     p.end();
 
     if (!destPainter)

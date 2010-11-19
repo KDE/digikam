@@ -31,7 +31,7 @@
 
 namespace Ui
 {
-    class RangeModifierDialogWidget;
+class RangeModifierDialogWidget;
 }
 
 namespace Digikam

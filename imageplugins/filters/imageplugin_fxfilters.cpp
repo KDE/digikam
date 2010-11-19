@@ -76,8 +76,8 @@ public:
 };
 
 ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList&)
-                     : ImagePlugin(parent, "ImagePlugin_FxFilters"),
-                       d(new ImagePlugin_FxFiltersPriv)
+    : ImagePlugin(parent, "ImagePlugin_FxFilters"),
+      d(new ImagePlugin_FxFiltersPriv)
 {
     d->colorEffectsAction = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);
     actionCollection()->addAction("imageplugin_colorfx", d->colorEffectsAction);
@@ -117,7 +117,7 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
     d->filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
     actionCollection()->addAction("imageplugin_filmgrain", d->filmgrainAction);
     connect(d->filmgrainAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotFilmGrain()));            
+            this, SLOT(slotFilmGrain()));
 
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 

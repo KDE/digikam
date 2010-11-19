@@ -81,7 +81,7 @@ class ThemeEngineCreator
 {
 public:
 
-    ThemeEngine object; 
+    ThemeEngine object;
 };
 
 K_GLOBAL_STATIC(ThemeEngineCreator, creator)
@@ -91,7 +91,7 @@ ThemeEngine* ThemeEngine::instance()
 }
 
 ThemeEngine::ThemeEngine()
-           : d(new ThemeEnginePriv)
+    : d(new ThemeEnginePriv)
 {
     KGlobal::dirs()->addResourceDir("themes", KStandardDirs::installPath("data") + QString("digikam/themes"));
 
@@ -197,7 +197,7 @@ void ThemeEngine::scanThemes()
     d->currTheme = 0;
 
     QStringList themes = KGlobal::dirs()->findAllResources("themes", QString(),
-                                          KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+                         KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
     for (QStringList::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it)
     {
@@ -220,6 +220,7 @@ QStringList ThemeEngine::themeNames() const
         Theme* t = it.value();
         names << t->name;
     }
+
     names.sort();
     return names;
 }
@@ -232,6 +233,7 @@ void ThemeEngine::slotChangeTheme(const QString& name)
 void ThemeEngine::setCurrentTheme(const QString& name)
 {
     QHash<QString, Theme*>::iterator it = d->themeHash.find(name);
+
     if (it == d->themeHash.end())
     {
         d->currTheme = d->defaultTheme;
@@ -239,8 +241,11 @@ void ThemeEngine::setCurrentTheme(const QString& name)
     }
 
     Theme* theme = it.value();
+
     if (d->currTheme == theme && d->themeInitiallySet)
+    {
         return;
+    }
 
     d->currTheme = theme;
     loadTheme();
@@ -258,6 +263,7 @@ void ThemeEngine::setCurrentTheme(const QString& name)
 void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool loadFromDisk)
 {
     QHash<QString, Theme*>::iterator it = d->themeHash.find(name);
+
     if (it != d->themeHash.end())
     {
         d->themeHash.remove(name);
@@ -268,8 +274,11 @@ void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool 
     d->themeHash.insert(name, t);
 
     d->currTheme = t;
+
     if (loadFromDisk)
+    {
         loadTheme();
+    }
 
     changePalette();
 
@@ -280,6 +289,7 @@ void ThemeEngine::changePalette()
 {
     // Make palette for all widgets.
     QPalette plt;
+
     if (d->currTheme == d->defaultTheme)
     {
         plt = d->defaultPalette;
@@ -291,12 +301,12 @@ void ThemeEngine::changePalette()
         const QColor fg(ThemeEngine::instance()->textRegColor());
         const QColor bg(ThemeEngine::instance()->baseColor());
 
-/*
-        bg.hsv(&h, &s, &v);
-        v += (v < 128) ? +50 : -50;
-        v &= 255; //ensures 0 <= v < 256
-        d->currTheme->altBase = QColor(h, s, v, QColor::Hsv);
-*/
+        /*
+                bg.hsv(&h, &s, &v);
+                v += (v < 128) ? +50 : -50;
+                v &= 255; //ensures 0 <= v < 256
+                d->currTheme->altBase = QColor(h, s, v, QColor::Hsv);
+        */
         fg.getHsv(&h, &s, &v);
         v += (v < 128) ? +150 : -150;
         v &= 255; //ensures 0 <= v < 256
@@ -338,12 +348,12 @@ void ThemeEngine::changePalette()
         plt.setColor(QPalette::Disabled, QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
         plt.setColor(QPalette::Disabled, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
 
-/*
-        cg.setColor(QColorGroup::Light,           ThemeEngine::instance()->textRegColor());
-        cg.setColor(QColorGroup::Midlight,        ThemeEngine::instance()->textRegColor());
-        cg.setColor(QColorGroup::Mid,             ThemeEngine::instance()->textRegColor());
-        cg.setColor(QColorGroup::Shadow,          ThemeEngine::instance()->textRegColor());
-*/
+        /*
+                cg.setColor(QColorGroup::Light,           ThemeEngine::instance()->textRegColor());
+                cg.setColor(QColorGroup::Midlight,        ThemeEngine::instance()->textRegColor());
+                cg.setColor(QColorGroup::Mid,             ThemeEngine::instance()->textRegColor());
+                cg.setColor(QColorGroup::Shadow,          ThemeEngine::instance()->textRegColor());
+        */
     }
 
     kapp->setPalette(plt);
@@ -410,8 +420,11 @@ void ThemeEngine::buildDefaultTheme()
 bool ThemeEngine::loadTheme()
 {
     Q_ASSERT( d->currTheme );
+
     if (!d->currTheme || d->currTheme == d->defaultTheme)
+    {
         return false;
+    }
 
     Theme* t = d->currTheme;
 
@@ -421,11 +434,14 @@ bool ThemeEngine::loadTheme()
     QFile themeFile(t->filePath);
 
     if (!themeFile.open(QIODevice::ReadOnly))
+    {
         return false;
+    }
 
     QDomDocument xmlDoc;
     QString error;
     int row, col;
+
     if (!xmlDoc.setContent(&themeFile, true, &error, &row, &col))
     {
         kDebug() << "Theme file: " << t->filePath;
@@ -434,74 +450,116 @@ bool ThemeEngine::loadTheme()
     }
 
     QDomElement rootElem = xmlDoc.documentElement();
+
     if (rootElem.tagName() != QString::fromLatin1("digikamtheme"))
+    {
         return false;
+    }
 
     QString resource;
 
     // -- base ------------------------------------------------------------------------
 
     resource = resourceValue(rootElem, "BaseColor");
+
     if (!resource.isEmpty())
+    {
         t->baseColor = resource;
+    }
 
     resource = resourceValue(rootElem, "TextRegularColor");
+
     if (!resource.isEmpty())
+    {
         t->textRegColor = resource;
+    }
 
     resource = resourceValue(rootElem, "TextSelectedColor");
+
     if (!resource.isEmpty())
+    {
         t->textSelColor = resource;
+    }
 
     resource = resourceValue(rootElem, "TextSpecialRegularColor");
+
     if (!resource.isEmpty())
+    {
         t->textSpecialRegColor = resource;
+    }
 
     resource = resourceValue(rootElem, "TextSpecialSelectedColor");
+
     if (!resource.isEmpty())
+    {
         t->textSpecialSelColor = resource;
+    }
 
     // -- banner ------------------------------------------------------------------------
 
     resource = resourceValue(rootElem, "BannerColor");
+
     if (!resource.isEmpty())
+    {
         t->bannerColor = resource;
+    }
 
     resource = resourceValue(rootElem, "BannerColorTo");
+
     if (!resource.isEmpty())
+    {
         t->bannerColorTo = resource;
+    }
 
     resource = resourceValue(rootElem, "BannerBevel");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
+        {
             t->bannerBevel = Theme::FLAT;
+        }
         else if (resource.contains("sunken", Qt::CaseInsensitive))
+        {
             t->bannerBevel = Theme::SUNKEN;
+        }
         else if (resource.contains("raised", Qt::CaseInsensitive))
+        {
             t->bannerBevel = Theme::RAISED;
+        }
     }
 
     resource = resourceValue(rootElem, "BannerGradient");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
+        {
             t->bannerGrad = Theme::SOLID;
+        }
         else if (resource.contains("horizontal", Qt::CaseInsensitive))
+        {
             t->bannerGrad = Theme::HORIZONTAL;
+        }
         else if (resource.contains("vertical", Qt::CaseInsensitive))
+        {
             t->bannerGrad = Theme::VERTICAL;
+        }
         else if (resource.contains("diagonal", Qt::CaseInsensitive))
+        {
             t->bannerGrad = Theme::DIAGONAL;
+        }
     }
 
     resource = resourceValue(rootElem, "BannerBorder");
+
     if (!resource.isEmpty())
     {
         t->bannerBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue(rootElem, "BannerBorderColor");
+
     if (!resource.isEmpty())
     {
         t->bannerBorderColor = resource;
@@ -510,88 +568,136 @@ bool ThemeEngine::loadTheme()
     // -- thumbnail view ----------------------------------------------------------------
 
     resource = resourceValue(rootElem, "ThumbnailRegularColor");
+
     if (!resource.isEmpty())
+    {
         t->thumbRegColor = resource;
+    }
 
     resource = resourceValue(rootElem, "ThumbnailRegularColorTo");
+
     if (!resource.isEmpty())
+    {
         t->thumbRegColorTo = resource;
+    }
 
     resource = resourceValue(rootElem, "ThumbnailRegularBevel");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
+        {
             t->thumbRegBevel = Theme::FLAT;
+        }
         else if (resource.contains("sunken", Qt::CaseInsensitive))
+        {
             t->thumbRegBevel = Theme::SUNKEN;
+        }
         else if (resource.contains("raised", Qt::CaseInsensitive))
+        {
             t->thumbRegBevel = Theme::RAISED;
+        }
     }
 
     resource = resourceValue(rootElem, "ThumbnailRegularGradient");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
+        {
             t->thumbRegGrad = Theme::SOLID;
+        }
         else if (resource.contains("horizontal", Qt::CaseInsensitive))
+        {
             t->thumbRegGrad = Theme::HORIZONTAL;
+        }
         else if (resource.contains("vertical", Qt::CaseInsensitive))
+        {
             t->thumbRegGrad = Theme::VERTICAL;
+        }
         else if (resource.contains("diagonal", Qt::CaseInsensitive))
+        {
             t->thumbRegGrad = Theme::DIAGONAL;
+        }
     }
 
     resource = resourceValue(rootElem, "ThumbnailRegularBorder");
+
     if (!resource.isEmpty())
     {
         t->thumbRegBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue(rootElem, "ThumbnailRegularBorderColor");
+
     if (!resource.isEmpty())
     {
         t->thumbRegBorderColor = resource;
     }
 
     resource = resourceValue(rootElem, "ThumbnailSelectedColor");
+
     if (!resource.isEmpty())
+    {
         t->thumbSelColor = resource;
+    }
 
     resource = resourceValue(rootElem, "ThumbnailSelectedColorTo");
+
     if (!resource.isEmpty())
+    {
         t->thumbSelColorTo = resource;
+    }
 
     resource = resourceValue(rootElem, "ThumbnailSelectedBevel");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
+        {
             t->thumbSelBevel = Theme::FLAT;
+        }
         else if (resource.contains("sunken", Qt::CaseInsensitive))
+        {
             t->thumbSelBevel = Theme::SUNKEN;
+        }
         else if (resource.contains("raised", Qt::CaseInsensitive))
+        {
             t->thumbSelBevel = Theme::RAISED;
+        }
     }
 
     resource = resourceValue(rootElem, "ThumbnailSelectedGradient");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
+        {
             t->thumbSelGrad = Theme::SOLID;
+        }
         else if (resource.contains("horizontal", Qt::CaseInsensitive))
+        {
             t->thumbSelGrad = Theme::HORIZONTAL;
+        }
         else if (resource.contains("vertical", Qt::CaseInsensitive))
+        {
             t->thumbSelGrad = Theme::VERTICAL;
+        }
         else if (resource.contains("diagonal", Qt::CaseInsensitive))
+        {
             t->thumbSelGrad = Theme::DIAGONAL;
+        }
     }
 
     resource = resourceValue(rootElem, "ThumbnailSelectedBorder");
+
     if (!resource.isEmpty())
     {
         t->thumbSelBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue(rootElem, "ThumbnailSelectedBorderColor");
+
     if (!resource.isEmpty())
     {
         t->thumbSelBorderColor = resource;
@@ -600,88 +706,136 @@ bool ThemeEngine::loadTheme()
     // -- listview view ----------------------------------------------------------------
 
     resource = resourceValue(rootElem, "ListviewRegularColor");
+
     if (!resource.isEmpty())
+    {
         t->listRegColor = resource;
+    }
 
     resource = resourceValue(rootElem, "ListviewRegularColorTo");
+
     if (!resource.isEmpty())
+    {
         t->listRegColorTo = resource;
+    }
 
     resource = resourceValue(rootElem, "ListviewRegularBevel");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
+        {
             t->listRegBevel = Theme::FLAT;
+        }
         else if (resource.contains("sunken", Qt::CaseInsensitive))
+        {
             t->listRegBevel = Theme::SUNKEN;
+        }
         else if (resource.contains("raised", Qt::CaseInsensitive))
+        {
             t->listRegBevel = Theme::RAISED;
+        }
     }
 
     resource = resourceValue(rootElem, "ListviewRegularGradient");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
+        {
             t->listRegGrad = Theme::SOLID;
+        }
         else if (resource.contains("horizontal", Qt::CaseInsensitive))
+        {
             t->listRegGrad = Theme::HORIZONTAL;
+        }
         else if (resource.contains("vertical", Qt::CaseInsensitive))
+        {
             t->listRegGrad = Theme::VERTICAL;
+        }
         else if (resource.contains("diagonal", Qt::CaseInsensitive))
+        {
             t->listRegGrad = Theme::DIAGONAL;
+        }
     }
 
     resource = resourceValue(rootElem, "ListviewRegularBorder");
+
     if (!resource.isEmpty())
     {
         t->listRegBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue(rootElem, "ListviewRegularBorderColor");
+
     if (!resource.isEmpty())
     {
         t->listRegBorderColor = resource;
     }
 
     resource = resourceValue(rootElem, "ListviewSelectedColor");
+
     if (!resource.isEmpty())
+    {
         t->listSelColor = resource;
+    }
 
     resource = resourceValue(rootElem, "ListviewSelectedColorTo");
+
     if (!resource.isEmpty())
+    {
         t->listSelColorTo = resource;
+    }
 
     resource = resourceValue(rootElem, "ListviewSelectedBevel");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
+        {
             t->listSelBevel = Theme::FLAT;
+        }
         else if (resource.contains("sunken", Qt::CaseInsensitive))
+        {
             t->listSelBevel = Theme::SUNKEN;
+        }
         else if (resource.contains("raised", Qt::CaseInsensitive))
+        {
             t->listSelBevel = Theme::RAISED;
+        }
     }
 
     resource = resourceValue(rootElem, "ListviewSelectedGradient");
+
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
+        {
             t->listSelGrad = Theme::SOLID;
+        }
         else if (resource.contains("horizontal", Qt::CaseInsensitive))
+        {
             t->listSelGrad = Theme::HORIZONTAL;
+        }
         else if (resource.contains("vertical", Qt::CaseInsensitive))
+        {
             t->listSelGrad = Theme::VERTICAL;
+        }
         else if (resource.contains("diagonal", Qt::CaseInsensitive))
+        {
             t->listSelGrad = Theme::DIAGONAL;
+        }
     }
 
     resource = resourceValue(rootElem, "ListviewSelectedBorder");
+
     if (!resource.isEmpty())
     {
         t->listSelBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue(rootElem, "ListviewSelectedBorderColor");
+
     if (!resource.isEmpty())
     {
         t->listSelBorderColor = resource;
@@ -712,8 +866,11 @@ QString ThemeEngine::resourceValue(const QDomElement& rootElem, const QString& k
 bool ThemeEngine::saveTheme()
 {
     Q_ASSERT( d->currTheme );
+
     if (!d->currTheme)
+    {
         return false;
+    }
 
     Theme* t = d->currTheme;
 
@@ -722,7 +879,9 @@ bool ThemeEngine::saveTheme()
     QFile themeFile(fi.filePath());
 
     if (!themeFile.open(QIODevice::WriteOnly))
+    {
         return false;
+    }
 
     KUser        user;
     QDomDocument xmlDoc;
@@ -756,12 +915,12 @@ bool ThemeEngine::saveTheme()
                              "\n * GNU General Public License for more details."
                              "\n *"
                              "\n * ============================================================ */\n")
-                    .arg(QDate::currentDate().year())
-                    .arg(QDate::currentDate().month())
-                    .arg(QDate::currentDate().day())
-                    .arg(fi.fileName())
-                    .arg(QDate::currentDate().year())
-                    .arg(user.property(KUser::FullName).toString());
+                     .arg(QDate::currentDate().year())
+                     .arg(QDate::currentDate().month())
+                     .arg(QDate::currentDate().day())
+                     .arg(fi.fileName())
+                     .arg(QDate::currentDate().year())
+                     .arg(user.property(KUser::FullName).toString());
 
     xmlDoc.appendChild(xmlDoc.createComment(banner));
 
@@ -804,7 +963,7 @@ bool ThemeEngine::saveTheme()
     e.setAttribute(QString::fromLatin1("value"), t->bannerColorTo.name().toUpper());
     themeElem.appendChild(e);
 
-    switch(t->bannerBevel)
+    switch (t->bannerBevel)
     {
         case(Theme::FLAT):
         {
@@ -824,10 +983,12 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("BannerBevel"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
-    switch(t->bannerGrad)
+    switch (t->bannerGrad)
     {
         case(Theme::SOLID):
         {
@@ -852,28 +1013,38 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("BannerGradient"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("BannerBorder"));
+
     e.setAttribute(QString::fromLatin1("value"), (t->bannerBorder ? "TRUE" : "FALSE"));
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("BannerBorderColor"));
+
     e.setAttribute(QString::fromLatin1("value"), t->bannerBorderColor.name().toUpper());
+
     themeElem.appendChild(e);
 
     // thumbnail.regular props -------------------------------------------------
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularColor"));
+
     e.setAttribute(QString::fromLatin1("value"), t->thumbRegColor.name().toUpper());
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularColorTo"));
+
     e.setAttribute(QString::fromLatin1("value"), t->thumbRegColorTo.name().toUpper());
+
     themeElem.appendChild(e);
 
-    switch(t->thumbRegBevel)
+    switch (t->thumbRegBevel)
     {
         case(Theme::FLAT):
         {
@@ -893,10 +1064,12 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularBevel"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
-    switch(t->thumbRegGrad)
+    switch (t->thumbRegGrad)
     {
         case(Theme::SOLID):
         {
@@ -921,28 +1094,38 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularGradient"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularBorder"));
+
     e.setAttribute(QString::fromLatin1("value"), (t->thumbRegBorder ? "TRUE" : "FALSE"));
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularBorderColor"));
+
     e.setAttribute(QString::fromLatin1("value"), t->thumbRegBorderColor.name().toUpper());
+
     themeElem.appendChild(e);
 
     // thumbnail.selected props -------------------------------------------------
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedColor"));
+
     e.setAttribute(QString::fromLatin1("value"), t->thumbSelColor.name().toUpper());
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedColorTo"));
+
     e.setAttribute(QString::fromLatin1("value"), t->thumbSelColorTo.name().toUpper());
+
     themeElem.appendChild(e);
 
-    switch(t->thumbSelBevel)
+    switch (t->thumbSelBevel)
     {
         case(Theme::FLAT):
         {
@@ -962,10 +1145,12 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedBevel"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
-    switch(t->thumbSelGrad)
+    switch (t->thumbSelGrad)
     {
         case(Theme::SOLID):
         {
@@ -990,28 +1175,38 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedGradient"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedBorder"));
+
     e.setAttribute(QString::fromLatin1("value"), (t->thumbSelBorder ? "TRUE" : "FALSE"));
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedBorderColor"));
+
     e.setAttribute(QString::fromLatin1("value"), t->thumbSelBorderColor.name().toUpper());
+
     themeElem.appendChild(e);
 
     // listview.regular props -------------------------------------------------
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularColor"));
+
     e.setAttribute(QString::fromLatin1("value"), t->listRegColor.name().toUpper());
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularColorTo"));
+
     e.setAttribute(QString::fromLatin1("value"), t->listRegColorTo.name().toUpper());
+
     themeElem.appendChild(e);
 
-    switch(t->listRegBevel)
+    switch (t->listRegBevel)
     {
         case(Theme::FLAT):
         {
@@ -1031,10 +1226,12 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularBevel"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
-    switch(t->listRegGrad)
+    switch (t->listRegGrad)
     {
         case(Theme::SOLID):
         {
@@ -1059,28 +1256,38 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularGradient"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularBorder"));
+
     e.setAttribute(QString::fromLatin1("value"), (t->listRegBorder ? "TRUE" : "FALSE"));
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularBorderColor"));
+
     e.setAttribute(QString::fromLatin1("value"), t->listRegBorderColor.name().toUpper());
+
     themeElem.appendChild(e);
 
     // listview.selected props -------------------------------------------------
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedColor"));
+
     e.setAttribute(QString::fromLatin1("value"), t->listSelColor.name().toUpper());
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedColorTo"));
+
     e.setAttribute(QString::fromLatin1("value"), t->listSelColorTo.name().toUpper());
+
     themeElem.appendChild(e);
 
-    switch(t->listSelBevel)
+    switch (t->listSelBevel)
     {
         case(Theme::FLAT):
         {
@@ -1100,10 +1307,12 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedBevel"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
-    switch(t->listSelGrad)
+    switch (t->listSelGrad)
     {
         case(Theme::SOLID):
         {
@@ -1128,23 +1337,33 @@ bool ThemeEngine::saveTheme()
     };
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedGradient"));
+
     e.setAttribute(QString::fromLatin1("value"), val);
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedBorder"));
+
     e.setAttribute(QString::fromLatin1("value"), (t->listSelBorder ? "TRUE" : "FALSE"));
+
     themeElem.appendChild(e);
 
     e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedBorderColor"));
+
     e.setAttribute(QString::fromLatin1("value"), t->listSelBorderColor.name().toUpper());
+
     themeElem.appendChild(e);
 
     // -------------------------------------------------------------------------
 
     QTextStream stream(&themeFile);
+
     stream.setCodec(QTextCodec::codecForName("UTF-8"));
+
     stream.setAutoDetectUnicode(true);
+
     stream << xmlDoc.toString();
+
     themeFile.close();
 
     return true;

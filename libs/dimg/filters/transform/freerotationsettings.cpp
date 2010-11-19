@@ -67,7 +67,7 @@ public:
         angleInput(0),
         fineAngleInput(0),
         autoCropCB(0)
-        {}
+    {}
 
     const QString    configAutoCropTypeEntry;
     const QString    configAntiAliasingEntry;
@@ -80,8 +80,8 @@ public:
 };
 
 FreeRotationSettings::FreeRotationSettings(QWidget* parent)
-                    : QWidget(parent),
-                      d(new FreeRotationSettingsPriv)
+    : QWidget(parent),
+      d(new FreeRotationSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(this);
 

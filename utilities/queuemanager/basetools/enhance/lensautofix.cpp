@@ -60,8 +60,8 @@ public:
 };
 
 LensAutoFix::LensAutoFix(QObject* parent)
-           : BatchTool("LensAutoFix", EnhanceTool, parent),
-             d(new LensAutoFixPriv)
+    : BatchTool("LensAutoFix", EnhanceTool, parent),
+      d(new LensAutoFixPriv)
 {
     setToolTitle(i18n("Lens Auto-Correction"));
     setToolDescription(i18n("A tool to fix automatically lens distorsions"));
@@ -182,17 +182,21 @@ void LensAutoFix::slotSettingsChanged()
 bool LensAutoFix::toolOperations()
 {
     if (!loadToDImg())
+    {
         return false;
+    }
 
     LensFunContainer prm;
 
     bool useMeta = settings()["UseMetadata"].toBool();
+
     if (useMeta)
     {
         LensFunIface iface;
         DMetadata    meta(image().getMetadata());
         LensFunIface::MetadataMatch ret = iface.findFromMetadata(meta);
         prm                             = iface.settings();
+
         if (ret != LensFunIface::MetadataExactMatch)
         {
             setErrorDescription(i18n("Cannot find all lens information to process lens auto-corrections"));

@@ -89,7 +89,7 @@ public:
         noise(0),
         gauss(0),
         matrixSize(0)
-        {}
+    {}
 
     const QString       configSharpenMethodEntry;
     const QString       configSimpleSharpRadiusAdjustmentEntry;
@@ -123,12 +123,12 @@ public:
 };
 
 SharpSettings::SharpSettings(QWidget* parent)
-             : QWidget(parent),
-               d(new SharpSettingsPriv)
+    : QWidget(parent),
+      d(new SharpSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
-    QLabel *label1 = new QLabel(i18n("Method:"), parent);
+    QLabel* label1 = new QLabel(i18n("Method:"), parent);
     d->sharpMethod = new RComboBox(parent);
     d->sharpMethod->addItem(i18n("Simple sharp"));
     d->sharpMethod->addItem(i18n("Unsharp mask"));
@@ -148,10 +148,10 @@ SharpSettings::SharpSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *simpleSharpSettings = new QWidget(d->stack);
+    QWidget* simpleSharpSettings = new QWidget(d->stack);
     QGridLayout* grid1           = new QGridLayout(simpleSharpSettings);
 
-    QLabel *label  = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
+    QLabel* label  = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
     d->radiusInput = new RIntNumInput(simpleSharpSettings);
     d->radiusInput->setRange(0, 100, 1);
     d->radiusInput->setSliderEnabled(true);
@@ -170,17 +170,17 @@ SharpSettings::SharpSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *unsharpMaskSettings = new QWidget(d->stack);
+    QWidget* unsharpMaskSettings = new QWidget(d->stack);
     QGridLayout* grid2           = new QGridLayout(unsharpMaskSettings);
 
-    QLabel *label2  = new QLabel(i18n("Radius:"), unsharpMaskSettings);
+    QLabel* label2  = new QLabel(i18n("Radius:"), unsharpMaskSettings);
     d->radiusInput2 = new RDoubleNumInput(unsharpMaskSettings);
     d->radiusInput2->setRange(0.0, 120.0, 0.1, true);
     d->radiusInput2->setDefaultValue(1.0);
     d->radiusInput2->setWhatsThis( i18n("Radius value is the Gaussian blur matrix radius value "
                                         "used to determines how much to blur the image.") );
 
-    QLabel *label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
+    QLabel* label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
     d->amountInput = new RDoubleNumInput(unsharpMaskSettings);
     d->amountInput->setDecimals(1);
     d->amountInput->input()->setRange(0.0, 5.0, 0.1, true);
@@ -188,7 +188,7 @@ SharpSettings::SharpSettings(QWidget* parent)
     d->amountInput->setWhatsThis( i18n("The value of the difference between the "
                                        "original and the blur image that is added back into the original.") );
 
-    QLabel *label4    = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
+    QLabel* label4    = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
     d->thresholdInput = new RDoubleNumInput(unsharpMaskSettings);
     d->thresholdInput->setDecimals(2);
     d->thresholdInput->input()->setRange(0.0, 1.0, 0.01, true);
@@ -210,10 +210,10 @@ SharpSettings::SharpSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *refocusSettings = new QWidget(d->stack);
+    QWidget* refocusSettings = new QWidget(d->stack);
     QGridLayout* grid3       = new QGridLayout(refocusSettings);
 
-    QLabel *label5 = new QLabel(i18n("Circular sharpness:"), refocusSettings);
+    QLabel* label5 = new QLabel(i18n("Circular sharpness:"), refocusSettings);
     d->radius      = new RDoubleNumInput(refocusSettings);
     d->radius->setDecimals(2);
     d->radius->input()->setRange(0.0, 5.0, 0.01, true);
@@ -222,7 +222,7 @@ SharpSettings::SharpSettings(QWidget* parent)
                                   "parameter for using this plugin. For most images the default value of 1.0 "
                                   "should give good results. Select a higher value when your image is very blurred."));
 
-    QLabel *label6 = new QLabel(i18n("Correlation:"), refocusSettings);
+    QLabel* label6 = new QLabel(i18n("Correlation:"), refocusSettings);
     d->correlation = new RDoubleNumInput(refocusSettings);
     d->correlation->setDecimals(2);
     d->correlation->input()->setRange(0.0, 1.0, 0.01, true);
@@ -232,7 +232,7 @@ SharpSettings::SharpSettings(QWidget* parent)
                                        "Using a high value for the correlation will reduce the sharpening effect of the "
                                        "plugin."));
 
-    QLabel *label7 = new QLabel(i18n("Noise filter:"), refocusSettings);
+    QLabel* label7 = new QLabel(i18n("Noise filter:"), refocusSettings);
     d->noise       = new RDoubleNumInput(refocusSettings);
     d->noise->setDecimals(3);
     d->noise->input()->setRange(0.0, 1.0, 0.001, true);
@@ -243,7 +243,7 @@ SharpSettings::SharpSettings(QWidget* parent)
                                  "Using a high value for the noise filter will reduce the sharpening "
                                  "effect of the plugin."));
 
-    QLabel *label8 = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
+    QLabel* label8 = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
     d->gauss       = new RDoubleNumInput(refocusSettings);
     d->gauss->setDecimals(2);
     d->gauss->input()->setRange(0.0, 1.0, 0.01, true);
@@ -253,7 +253,7 @@ SharpSettings::SharpSettings(QWidget* parent)
                                  "it causes nasty artifacts. When you use non-zero values, you will probably also have to "
                                  "increase the correlation and/or noise filter parameters."));
 
-    QLabel *label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
+    QLabel* label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
     d->matrixSize  = new RIntNumInput(refocusSettings);
     d->matrixSize->setRange(0, RefocusFilter::maxMatrixSize(), 1);
     d->matrixSize->setSliderEnabled(true);
@@ -454,14 +454,18 @@ void SharpSettings::loadSettings()
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                QString( "*" ), kapp->activeWindow(),
                                QString( i18n("Photograph Refocus Settings File to Load")) );
+
     if ( loadRestorationFile.isEmpty() )
+    {
         return;
+    }
 
     QFile file(loadRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
         QTextStream stream( &file );
+
         if ( stream.readLine() != "# Photograph Refocus Configuration File" )
         {
             KMessageBox::error(kapp->activeWindow(),
@@ -492,8 +496,11 @@ void SharpSettings::saveAsSettings()
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                QString( "*" ), kapp->activeWindow(),
                                QString( i18n("Photograph Refocus Settings File to Save")) );
+
     if ( saveRestorationFile.isEmpty() )
+    {
         return;
+    }
 
     QFile file(saveRestorationFile.toLocalFile());
 

@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT ICCPreviewWidget : public KPreviewWidgetBase
 
 public:
 
-    ICCPreviewWidget(QWidget *parent = 0);
+    ICCPreviewWidget(QWidget* parent = 0);
     ~ICCPreviewWidget();
 
 public Q_SLOTS:
@@ -57,7 +57,7 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void virtual_hook(int, void*){};
+    virtual void virtual_hook(int, void*) {};
 
 private :
 

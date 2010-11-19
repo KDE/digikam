@@ -80,7 +80,7 @@ public:
         fineVAngleInput(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configAntiAliasingEntry;
@@ -105,8 +105,8 @@ public:
 };
 
 ShearTool::ShearTool(QObject* parent)
-         : EditorToolThreaded(parent),
-           d(new ShearToolPriv)
+    : EditorToolThreaded(parent),
+      d(new ShearToolPriv)
 {
     setObjectName("sheartool");
     setToolName(i18n("Shear Tool"));
@@ -239,10 +239,10 @@ void ShearTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-//    d->mainHAngleInput->setValue(group.readEntry(d->configMainHAngleEntry, d->mainHAngleInput->defaultValue()));
-//    d->mainVAngleInput->setValue(group.readEntry(d->configMainVAngleEntry, d->mainVAngleInput->defaultValue()));
-//    d->fineHAngleInput->setValue(group.readEntry(d->configFineHAngleEntry, d->fineHAngleInput->defaultValue()));
-//    d->fineVAngleInput->setValue(group.readEntry(d->configFineVAngleEntry, d->fineVAngleInput->defaultValue()));
+    //    d->mainHAngleInput->setValue(group.readEntry(d->configMainHAngleEntry, d->mainHAngleInput->defaultValue()));
+    //    d->mainVAngleInput->setValue(group.readEntry(d->configMainVAngleEntry, d->mainVAngleInput->defaultValue()));
+    //    d->fineHAngleInput->setValue(group.readEntry(d->configFineHAngleEntry, d->fineHAngleInput->defaultValue()));
+    //    d->fineVAngleInput->setValue(group.readEntry(d->configFineVAngleEntry, d->fineVAngleInput->defaultValue()));
     d->antialiasInput->setChecked(group.readEntry(d->configAntiAliasingEntry, true));
     slotEffect();
 }
@@ -251,10 +251,10 @@ void ShearTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-//    group.writeEntry(d->configMainHAngleEntry, d->mainHAngleInput->value());
-//    group.writeEntry(d->configMainVAngleEntry, d->mainVAngleInput->value());
-//    group.writeEntry(d->configFineHAngleEntry, d->fineHAngleInput->value());
-//    group.writeEntry(d->configFineVAngleEntry, d->fineVAngleInput->value());
+    //    group.writeEntry(d->configMainHAngleEntry, d->mainHAngleInput->value());
+    //    group.writeEntry(d->configMainVAngleEntry, d->mainVAngleInput->value());
+    //    group.writeEntry(d->configFineHAngleEntry, d->fineHAngleInput->value());
+    //    group.writeEntry(d->configFineVAngleEntry, d->fineVAngleInput->value());
     group.writeEntry(d->configAntiAliasingEntry, d->antialiasInput->isChecked());
 
     config->sync();

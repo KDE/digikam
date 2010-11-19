@@ -58,7 +58,7 @@ namespace DigikamEnhanceImagePlugin
 
 HotPixelFixer::HotPixelFixer(Digikam::DImg* orgImage, QObject* parent, const QList<HotPixel>& hpList,
                              int interpolationMethod)
-             : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
+    : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
 {
     m_hpList              = hpList;
     m_interpolationMethod = interpolationMethod;
@@ -76,6 +76,7 @@ void HotPixelFixer::filterImage()
 {
     QList <HotPixel>::ConstIterator it;
     QList <HotPixel>::ConstIterator end(m_hpList.constEnd());
+
     for (it = m_hpList.constBegin() ; it != end ; ++it)
     {
         HotPixel hp = *it;
@@ -117,6 +118,7 @@ void HotPixelFixer::interpolate (Digikam::DImg& img, HotPixel& hp, int method)
                     vb += col.blue();
                     ++sum_weight;
                 }
+
                 if (validPoint(img,QPoint(x,yPos+hp.height())))
                 {
                     col=img.getPixelColor(x,yPos+hp.height());
@@ -137,6 +139,7 @@ void HotPixelFixer::interpolate (Digikam::DImg& img, HotPixel& hp, int method)
                     vb += col.blue();
                     ++sum_weight;
                 }
+
                 if (validPoint(img,QPoint(xPos+hp.width(),y)))
                 {
                     col=img.getPixelColor(xPos+hp.width(),y);
@@ -154,14 +157,15 @@ void HotPixelFixer::interpolate (Digikam::DImg& img, HotPixel& hp, int method)
                 vb /= (double)sum_weight;
 
                 for (x = 0; x < hp.width(); ++x)
-                for (y = 0; y < hp.height(); ++y)
-                if (validPoint(img,QPoint(xPos+x,yPos+y)))
-                {
-                    int alpha = sixtBits ? 65535 : 255;
-                    int ir = (int )round(vr), ig = (int) round(vg), ib = (int) round(vb);
-                    img.setPixelColor(xPos+x,yPos+y,Digikam::DColor(ir,ig,ib,alpha,sixtBits));
-                }
+                    for (y = 0; y < hp.height(); ++y)
+                        if (validPoint(img,QPoint(xPos+x,yPos+y)))
+                        {
+                            int alpha = sixtBits ? 65535 : 255;
+                            int ir = (int )round(vr), ig = (int) round(vg), ib = (int) round(vb);
+                            img.setPixelColor(xPos+x,yPos+y,Digikam::DColor(ir,ig,ib,alpha,sixtBits));
+                        }
             }
+
             break;
         }
 
@@ -204,7 +208,11 @@ void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, 
                 polynomeOrder=3;
                 break;
         }
-        if (polynomeOrder<0) return;
+
+        if (polynomeOrder<0)
+        {
+            return;
+        }
 
         // In the one-dimensional case, the width must be 1,
         // and the size must be stored in height
@@ -220,7 +228,7 @@ void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, 
 
         //if (mWeightList.find(w)==mWeightList.end())
         //{
-            w.calculateWeights();
+        w.calculateWeights();
 
         //    mWeightList.append(w);
 
@@ -240,14 +248,15 @@ void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, 
                     {
                         // In the one-dimensional case, only the y coordinate is used.
                         const int xx = px.x()+(dir == VERTICAL_DIRECTION ? x :
-                                  dir== HORIZONTAL_DIRECTION ? w.positions()[i].y() : w.positions()[i].x());
+                                               dir== HORIZONTAL_DIRECTION ? w.positions()[i].y() : w.positions()[i].x());
                         const int yy = px.y()+(dir == HORIZONTAL_DIRECTION ? y :
-                                  w.positions()[i].y());
+                                               w.positions()[i].y());
 
                         if (validPoint (img,QPoint(xx, yy)))
                         {
                             //TODO: check this. I think it is broken
                             double weight;
+
                             if (dir==VERTICAL_DIRECTION)
                             {
                                 weight = w[i][y][0];
@@ -261,9 +270,18 @@ void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, 
                                 weight=w[i][y][x];
                             }
 
-                            if (iComp==0) v += weight * img.getPixelColor(xx, yy).red();
-                            else if (iComp==1) v += weight * img.getPixelColor(xx, yy).green();
-                            else v += weight * img.getPixelColor(xx, yy).blue();
+                            if (iComp==0)
+                            {
+                                v += weight * img.getPixelColor(xx, yy).red();
+                            }
+                            else if (iComp==1)
+                            {
+                                v += weight * img.getPixelColor(xx, yy).green();
+                            }
+                            else
+                            {
+                                v += weight * img.getPixelColor(xx, yy).blue();
+                            }
 
                             sum_weight += weight;
                         }
@@ -271,23 +289,47 @@ void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, 
 
                     Digikam::DColor color=img.getPixelColor(px.x()+x,px.y()+y);
                     int component;
+
                     if (fabs (v) <= DBL_MIN)
+                    {
                         component=0;
+                    }
                     else if (sum_weight >= DBL_MIN)
                     {
                         component=(int) (v/sum_weight);
+
                         //Clamp value
-                        if (component<0) component=0;
-                        if (component>maxComponent) component=maxComponent;
+                        if (component<0)
+                        {
+                            component=0;
+                        }
+
+                        if (component>maxComponent)
+                        {
+                            component=maxComponent;
+                        }
                     }
                     else if (v >= 0.0)
+                    {
                         component=maxComponent;
+                    }
                     else
+                    {
                         component=0;
+                    }
 
-                    if (iComp==0) color.setRed(component);
-                    else if (iComp==1) color.setGreen(component);
-                    else color.setBlue(component);
+                    if (iComp==0)
+                    {
+                        color.setRed(component);
+                    }
+                    else if (iComp==1)
+                    {
+                        color.setGreen(component);
+                    }
+                    else
+                    {
+                        color.setBlue(component);
+                    }
 
                     img.setPixelColor(px.x()+x,px.y()+y,color);
                 }

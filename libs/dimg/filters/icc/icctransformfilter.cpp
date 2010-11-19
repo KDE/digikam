@@ -35,7 +35,7 @@ namespace Digikam
 {
 
 IccTransformFilter::IccTransformFilter(DImg* orgImage, QObject* parent, const IccTransform& transform)
-                  : DImgThreadedFilter(orgImage, parent, "ICC Transform")
+    : DImgThreadedFilter(orgImage, parent, "ICC Transform")
 {
     m_transform = transform;
     // initialize filter

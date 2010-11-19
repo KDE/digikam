@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-21
- * Description : a generic list view item widget to 
+ * Description : a generic list view item widget to
  *               display metadata key like a title
  *
  * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>

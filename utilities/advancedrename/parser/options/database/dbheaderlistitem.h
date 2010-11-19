@@ -40,7 +40,7 @@ class DbHeaderListItem : public QObject, public QTreeWidgetItem
 
 public:
 
-    DbHeaderListItem(QTreeWidget *parent, const QString& key);
+    DbHeaderListItem(QTreeWidget* parent, const QString& key);
     ~DbHeaderListItem();
 
 private Q_SLOTS:

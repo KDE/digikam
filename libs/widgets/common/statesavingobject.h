@@ -113,7 +113,7 @@ public:
      * @param host self-reference to access the object name, simply pass "this"
      *             as argument
      */
-    StateSavingObject(QObject *host);
+    StateSavingObject(QObject* host);
 
     /**
      * Destructor.
@@ -156,7 +156,7 @@ public:
      *
      * @param prefix prefix to use for the config entries
      */
-    virtual void setEntryPrefix(const QString &prefix);
+    virtual void setEntryPrefix(const QString& prefix);
 
     /**
      * Invokes loading the class' state.
@@ -196,10 +196,10 @@ protected:
      * @param base original name planned for the config group entry
      * @return entry name after manipulating it with externally set parameters
      */
-    QString entryName(const QString &base);
+    QString entryName(const QString& base);
 
 private:
-    StateSavingObjectPriv *d;
+    StateSavingObjectPriv* d;
 
 };
 

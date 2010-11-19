@@ -48,7 +48,7 @@ public:
 };
 
 ButtonIconDisabler::ButtonIconDisabler(QAbstractButton* button)
-                  : QObject(button), d(new ButtonIconDisablerPriv)
+    : QObject(button), d(new ButtonIconDisablerPriv)
 {
     d->button       = button;
     d->icon         = d->button->icon();

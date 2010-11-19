@@ -55,7 +55,7 @@ public:
 };
 
 CameraFolderView::CameraFolderView(QWidget* parent)
-                : QTreeWidget(parent), d(new CameraFolderViewPriv)
+    : QTreeWidget(parent), d(new CameraFolderViewPriv)
 {
     setColumnCount(1);
     setRootIsDecorated(false);
@@ -98,9 +98,9 @@ void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const Q
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,
-                                              int nbItems, const QPixmap& pixmap)
+        int nbItems, const QPixmap& pixmap)
 {
-    CameraFolderItem *parentItem = findFolder(folder);
+    CameraFolderItem* parentItem = findFolder(folder);
 
     kDebug() << "CameraFolderView: Adding Subfolder " << subFolder
              << " of folder " << folder;
@@ -110,7 +110,9 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         QString path(folder);
 
         if (!folder.endsWith('/'))
+        {
             path += '/';
+        }
 
         path += subFolder;
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
@@ -125,7 +127,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     else
     {
         kWarning() << "CameraFolderView: Could not find parent for subFolder "
-                        << subFolder << " of folder " << folder;
+                   << subFolder << " of folder " << folder;
         return 0;
     }
 }
@@ -133,16 +135,22 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
 {
     int i                 = 0;
-    QTreeWidgetItem *item = 0;
+    QTreeWidgetItem* item = 0;
+
     do
     {
         item = topLevelItem(i);
+
         if (item)
         {
             CameraFolderItem* lvItem = dynamic_cast<CameraFolderItem*>(item);
+
             if (lvItem && lvItem->folderPath() == folderPath)
+            {
                 return lvItem;
+            }
         }
+
         ++i;
     }
     while (item);
@@ -153,9 +161,13 @@ CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
 void CameraFolderView::slotCurrentChanged(QTreeWidgetItem* item, int)
 {
     if (!item)
+    {
         emit signalFolderChanged(0);
+    }
     else
-        emit signalFolderChanged(dynamic_cast<CameraFolderItem *>(item));
+    {
+        emit signalFolderChanged(dynamic_cast<CameraFolderItem*>(item));
+    }
 }
 
 CameraFolderItem* CameraFolderView::virtualFolder()

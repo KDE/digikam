@@ -147,15 +147,15 @@ public:
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
-                  : RExpanderBox(parent), d(new ImagePropertiesTabPriv)
+    : RExpanderBox(parent), d(new ImagePropertiesTabPriv)
 {
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
 
     // --------------------------------------------------
 
-    QWidget *w1               = new QWidget(this);
-    QGridLayout *glay1        = new QGridLayout(w1);
+    QWidget* w1               = new QWidget(this);
+    QGridLayout* glay1        = new QGridLayout(w1);
 
     d->file                   = new DTextLabelName(i18n("File: "),        w1);
     d->folder                 = new DTextLabelName(i18n("Folder: "),      w1);
@@ -192,8 +192,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget *w2               = new QWidget(this);
-    QGridLayout *glay2        = new QGridLayout(w2);
+    QWidget* w2               = new QWidget(this);
+    QGridLayout* glay2        = new QGridLayout(w2);
 
     d->mime                   = new DTextLabelName(i18n("Type: "),        w2);
     d->dimensions             = new DTextLabelName(i18n("Dimensions: "),  w2);
@@ -226,8 +226,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget *w3               = new QWidget(this);
-    QGridLayout *glay3        = new QGridLayout(w3);
+    QWidget* w3               = new QWidget(this);
+    QGridLayout* glay3        = new QGridLayout(w3);
 
     d->make                   = new DTextLabelName(i18n("Make: "),          w3);
     d->model                  = new DTextLabelName(i18n("Model: "),         w3);
@@ -332,9 +332,13 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 void ImagePropertiesTab::setPhotoInfoDisable(bool b)
 {
     if (b)
+    {
         widget(2)->hide();
+    }
     else
+    {
         widget(2)->show();
+    }
 }
 
 void ImagePropertiesTab::setFileModifiedDate(const QString& str)

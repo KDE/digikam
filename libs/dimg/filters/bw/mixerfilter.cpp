@@ -41,7 +41,7 @@ namespace Digikam
 {
 
 MixerFilter::MixerFilter(DImg* orgImage, QObject* parent, const MixerContainer& settings)
-           : DImgThreadedFilter(orgImage, parent, "MixerFilter")
+    : DImgThreadedFilter(orgImage, parent, "MixerFilter")
 {
     m_settings = settings;
     initFilter();
@@ -66,11 +66,11 @@ void MixerFilter::filterImage()
 
     register uint i;
 
-    double rnorm = CalculateNorm (m_settings.redRedGain, m_settings.redGreenGain, 
+    double rnorm = CalculateNorm (m_settings.redRedGain, m_settings.redGreenGain,
                                   m_settings.redBlueGain, m_settings.bPreserveLum);
-    double gnorm = CalculateNorm (m_settings.greenRedGain, m_settings.greenGreenGain, 
+    double gnorm = CalculateNorm (m_settings.greenRedGain, m_settings.greenGreenGain,
                                   m_settings.greenBlueGain, m_settings.bPreserveLum);
-    double bnorm = CalculateNorm (m_settings.blueRedGain, m_settings.blueGreenGain, 
+    double bnorm = CalculateNorm (m_settings.blueRedGain, m_settings.blueGreenGain,
                                   m_settings.blueBlueGain, m_settings.bPreserveLum);
 
     if (!sixteenBit)        // 8 bits image.
@@ -107,14 +107,17 @@ void MixerFilter::filterImage()
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
     else               // 16 bits image.
     {
         unsigned short  nGray, red, green, blue;
-        unsigned short* ptr = (unsigned short *)bits;
+        unsigned short* ptr = (unsigned short*)bits;
 
         for (i = 0 ; i < size ; ++i)
         {
@@ -130,19 +133,22 @@ void MixerFilter::filterImage()
             }
             else
             {
-                ptr[0] = MixPixel (m_settings.blueRedGain, m_settings.blueGreenGain, m_settings.blueBlueGain, 
+                ptr[0] = MixPixel (m_settings.blueRedGain, m_settings.blueGreenGain, m_settings.blueBlueGain,
                                    red, green, blue, sixteenBit, bnorm);
-                ptr[1] = MixPixel (m_settings.greenRedGain, m_settings.greenGreenGain, m_settings.greenBlueGain, 
+                ptr[1] = MixPixel (m_settings.greenRedGain, m_settings.greenGreenGain, m_settings.greenBlueGain,
                                    red, green, blue, sixteenBit, gnorm);
-                ptr[2] = MixPixel (m_settings.redRedGain, m_settings.redGreenGain, m_settings.redBlueGain, 
+                ptr[2] = MixPixel (m_settings.redRedGain, m_settings.redGreenGain, m_settings.redBlueGain,
                                    red, green, blue, sixteenBit, rnorm);
             }
 
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
 }
@@ -153,7 +159,9 @@ double MixerFilter::CalculateNorm(double RedGain, double GreenGain, double BlueG
     double lfSum = RedGain + GreenGain + BlueGain;
 
     if ((lfSum == 0.0) || (bPreserveLum == false))
+    {
         return (1.0);
+    }
 
     return( fabs (1.0 / lfSum) );
 }

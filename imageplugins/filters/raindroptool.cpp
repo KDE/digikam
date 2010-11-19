@@ -73,7 +73,7 @@ public:
         coeffInput(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configDropAdjustmentEntry;
@@ -89,8 +89,8 @@ public:
 };
 
 RainDropTool::RainDropTool(QObject* parent)
-            : EditorToolThreaded(parent),
-              d(new RainDropToolPriv)
+    : EditorToolThreaded(parent),
+      d(new RainDropToolPriv)
 {
     setObjectName("raindrops");
     setToolName(i18n("Raindrops"));
@@ -140,7 +140,7 @@ RainDropTool::RainDropTool(QObject* parent)
     d->coeffInput->setSliderEnabled(true);
     d->coeffInput->setDefaultValue(30);
     d->coeffInput->setWhatsThis( i18n("This value is the fish-eye-effect optical "
-                                     "distortion coefficient."));
+                                      "distortion coefficient."));
 
     // -------------------------------------------------------------
 

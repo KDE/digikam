@@ -32,31 +32,31 @@ DBActionType::DBActionType()
 {
 }
 
-DBActionType::DBActionType(const DBActionType &actionType)
+DBActionType::DBActionType(const DBActionType& actionType)
 {
-	m_isValue		= actionType.m_isValue;
-	m_ActionValue	= actionType.m_ActionValue;
+    m_isValue       = actionType.m_isValue;
+    m_ActionValue   = actionType.m_ActionValue;
 }
 DBActionType::~DBActionType()
 {
-	m_ActionValue.~QVariant();
+    m_ActionValue.~QVariant();
 }
 
 QVariant DBActionType::getActionValue()
 {
-	return m_ActionValue;
+    return m_ActionValue;
 }
 void DBActionType::setActionValue(QVariant actionValue)
 {
-	m_ActionValue = actionValue;
+    m_ActionValue = actionValue;
 }
 bool DBActionType::isValue() const
 {
-	return m_isValue;
+    return m_isValue;
 }
 void DBActionType::setValue(bool isValue)
 {
-	m_isValue = isValue;
+    m_isValue = isValue;
 }
 
 }  // namespace Digikam

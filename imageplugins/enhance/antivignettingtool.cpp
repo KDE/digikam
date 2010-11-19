@@ -69,7 +69,7 @@ public:
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString           configGroupName;
 
@@ -79,8 +79,8 @@ public:
 };
 
 AntiVignettingTool::AntiVignettingTool(QObject* parent)
-                  : EditorToolThreaded(parent),
-                    d(new AntiVignettingToolPriv)
+    : EditorToolThreaded(parent),
+      d(new AntiVignettingToolPriv)
 {
     setObjectName("antivignetting");
     setToolName(i18n("Vignetting Correction"));

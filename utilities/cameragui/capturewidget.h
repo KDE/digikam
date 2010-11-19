@@ -42,19 +42,19 @@ class CaptureWidgetPriv;
 
 class CaptureWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    CaptureWidget(QWidget *parent=0);
+    CaptureWidget(QWidget* parent=0);
     ~CaptureWidget();
 
     void setPreview(const QImage& preview);
 
 protected:
 
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
+    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
 
 private:
 

@@ -39,7 +39,7 @@ using namespace Digikam;
 
 int main (int argc, char** argv)
 {
-    if(argc != 2)
+    if (argc != 2)
     {
         kDebug() << "testlensfuniface - test to parse metadata dedicated to LensFun";
         kDebug() << "Usage: <image>";
@@ -55,6 +55,7 @@ int main (int argc, char** argv)
     DMetadata    meta(img.getMetadata());
     LensFunIface iface;
     LensFunIface::MetadataMatch ret = iface.findFromMetadata(meta);
+
     if (ret == LensFunIface::MetadataExactMatch)
     {
         LensFunFilter filter(&img, 0L, iface.settings());

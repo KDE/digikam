@@ -97,7 +97,7 @@ public:
         smoothLevel(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString           configGroupName;
     const QString           configHistogramChannelEntry;
@@ -128,8 +128,8 @@ public:
 };
 
 RedEyeTool::RedEyeTool(QObject* parent)
-          : EditorTool(parent),
-            d(new RedEyeToolPriv)
+    : EditorTool(parent),
+      d(new RedEyeToolPriv)
 {
     setObjectName("redeye");
     setToolName(i18n("Red Eye"));
@@ -171,7 +171,7 @@ RedEyeTool::RedEyeTool(QObject* parent)
                                       "of the changed pixels. "
                                       "This leads to a more naturally looking pupil."));
 
-    QLabel *label3 = new QLabel(i18n("Coloring Tint:"));
+    QLabel* label3 = new QLabel(i18n("Coloring Tint:"));
 
     d->HSSelector  = new KHueSaturationSelector();
     d->HSSelector->setWhatsThis(i18n("Sets a custom color when re-colorizing the eyes."));
@@ -184,13 +184,13 @@ RedEyeTool::RedEyeTool(QObject* parent)
     d->VSelector->setMinimumSize(26, 142);
     d->VSelector->setIndent(false);
 
-    QLabel *label4 = new QLabel(i18n("Tint Level:"));
+    QLabel* label4 = new QLabel(i18n("Tint Level:"));
     d->tintLevel   = new RIntNumInput();
     d->tintLevel->setRange(1, 200, 1);
     d->tintLevel->setSliderEnabled(true);
     d->tintLevel->setDefaultValue(128);
     d->tintLevel->setWhatsThis(i18n("Set the tint level to adjust the luminosity of "
-                                   "the new color of the pupil."));
+                                    "the new color of the pupil."));
 
     // -------------------------------------------------------------
 
@@ -242,7 +242,9 @@ RedEyeTool::RedEyeTool(QObject* parent)
 RedEyeTool::~RedEyeTool()
 {
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     delete d;
 }
@@ -310,9 +312,9 @@ void RedEyeTool::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                        (int)LuminosityChannel));
+            (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                        (int)LogScaleHistogram));
+            (int)LogScaleHistogram));
 
     d->redThreshold->setValue(group.readEntry(d->configRedThresholdEntry,       d->redThreshold->defaultValue()));
     d->smoothLevel->setValue(group.readEntry(d->configSmoothLevelEntry,         d->smoothLevel->defaultValue()));
@@ -375,7 +377,9 @@ void RedEyeTool::slotEffect()
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     // Here, we need to use the real selection image data because we will apply
     // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
@@ -408,7 +412,7 @@ void RedEyeTool::finalRendering()
     kapp->setOverrideCursor( Qt::WaitCursor );
 
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getImageSelection();
+    uchar* data       = iface->getImageSelection();
     int w             = iface->selectedWidth();
     int h             = iface->selectedHeight();
     bool sixteenBit   = iface->originalSixteenBit();
@@ -426,7 +430,7 @@ void RedEyeTool::finalRendering()
 void RedEyeTool::redEyeFilter(DImg& selection)
 {
     DImg mask(selection.width(), selection.height(), selection.sixteenBit(), true,
-                       selection.bits(), true);
+              selection.bits(), true);
 
     selection          = mask.copy();
     float redThreshold = d->redThreshold->value()/10.0f;
@@ -522,16 +526,16 @@ void RedEyeTool::redEyeFilter(DImg& selection)
             if (r >= ( redThreshold * g))
             {
                 r1 = qMin(65535, (int)(red_norm * (red_chan.red_gain   * r +
-                                                         red_chan.green_gain * g +
-                                                         red_chan.blue_gain  * b)));
+                                                   red_chan.green_gain * g +
+                                                   red_chan.blue_gain  * b)));
 
                 g1 = qMin(65535, (int)(green_norm * (green_chan.red_gain   * r +
-                                                            green_chan.green_gain * g +
-                                                            green_chan.blue_gain  * b)));
+                                                     green_chan.green_gain * g +
+                                                     green_chan.blue_gain  * b)));
 
                 b1 = qMin(65535, (int)(blue_norm * (blue_chan.red_gain   * r +
-                                                          blue_chan.green_gain * g +
-                                                          blue_chan.blue_gain  * b)));
+                                                    blue_chan.green_gain * g +
+                                                    blue_chan.blue_gain  * b)));
 
                 mptr[0] = b1;
                 mptr[1] = g1;

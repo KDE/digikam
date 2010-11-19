@@ -71,12 +71,12 @@ public:
         }
     };
 
-    ~CurvesContainer(){};
+    ~CurvesContainer() {};
 
 public:
 
     ImageCurves::CurveType curvesType;      // Smooth : QPolygon have size of 18 points.
-                                            // Free   : QPolygon have size of 255 or 65535 values.
+    // Free   : QPolygon have size of 255 or 65535 values.
 
     QPolygon               lumCurveVals;
     QPolygon               redCurveVals;

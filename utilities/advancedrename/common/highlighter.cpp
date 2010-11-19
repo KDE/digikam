@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 Highlighter::Highlighter(QTextEdit* parent, Parser* _parser)
-           : QSyntaxHighlighter(parent), parser(_parser)
+    : QSyntaxHighlighter(parent), parser(_parser)
 
 {
     setupHighlightingGrammar();
@@ -52,6 +52,7 @@ void Highlighter::highlightBlock(const QString& text)
     {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
+
         while (index >= 0)
         {
             int length = expression.matchedLength();
@@ -67,12 +68,15 @@ void Highlighter::highlightBlock(const QString& text)
                     {
                         QString fullmatched  = expression.cap(0);
                         QString parameters   = expression.cap(1);
+
                         if (parameters.startsWith(':'))
                         {
                             parameters.remove(0, 1);
+
                             if (!parameters.isEmpty())
                             {
                                 int pindex = fullmatched.indexOf(parameters);
+
                                 while (pindex >= 0)
                                 {
                                     int plength = parameters.length();
@@ -83,8 +87,10 @@ void Highlighter::highlightBlock(const QString& text)
                         }
                     }
                 }
-                default: break;
+                default:
+                    break;
             }
+
             index = expression.indexIn(text, index + length);
         }
     }
@@ -102,6 +108,7 @@ void Highlighter::highlightBlock(const QString& text)
     {
         QRegExp expression(quotationRule.pattern);
         int index = expression.indexIn(text);
+
         while (index >= 0)
         {
             QString fullmatched  = expression.cap(0);

@@ -44,8 +44,8 @@ public:
 
 // --------------------------------------------------------
 
-ImagePlugin::ImagePlugin(QObject *parent, const char* name)
-           : QObject(parent), d(new ImagePluginPriv())
+ImagePlugin::ImagePlugin(QObject* parent, const char* name)
+    : QObject(parent), d(new ImagePluginPriv())
 {
     setObjectName(name);
 }
@@ -91,6 +91,7 @@ QString ImagePlugin::actionCategory() const
     {
         return QString("__INVALID__");
     }
+
     return d->actionCategory;
 }
 

@@ -66,7 +66,7 @@ public:
 // --------------------------------------------------------
 
 Parser::Parser()
-      : d(new ParserPriv)
+    : d(new ParserPriv)
 {
     registerOption(new FilePropertiesOption());
     registerOption(new DirectoryNameOption());
@@ -154,6 +154,7 @@ void Parser::unregisterOption(Option* option)
             delete *it;
             it = d->options.erase(it);
         }
+
         else
         {
             ++it;
@@ -186,6 +187,7 @@ void Parser::unregisterModifier(Modifier* modifier)
             delete *it;
             it = d->modifiers.erase(it);
         }
+
         else
         {
             ++it;
@@ -223,11 +225,13 @@ QString Parser::parse(ParseSettings& settings)
     }
 
     QString newName;
+
     if (settings.applyModifiers)
     {
         settings.invalidModifiers = applyModifiers(settings.parseString, results);
         newName                   = results.replaceTokens(settings.parseString);
     }
+
     settings.results = results;
 
     // remove invalid modifiers from the new name
@@ -284,6 +288,7 @@ bool Parser::tokenAtPosition(TokenType type, ParseSettings& settings, int pos, i
     {
         found = true;
     }
+
     return found;
 }
 
@@ -310,9 +315,11 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
     {
         QRegExp regExp = modifier->regExp();
         int pos = 0;
+
         while (pos > -1)
         {
             pos = regExp.indexIn(parseString, pos);
+
             if (pos > -1)
             {
                 ParseResults::ResultsKey   k(pos, regExp.matchedLength());
@@ -335,6 +342,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
     {
         int off  = results.offset(key);
         int diff = 0;
+
         for (int pos = off; pos < parseString.count();)
         {
             if (modifierResults.hasKeyAtPosition(pos))
@@ -347,12 +355,14 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
                 QString str2Modify            = results.result(key);
 
                 QString modResult;
+
                 if (mod)
                 {
                     settings.parseString       = modToken;
                     settings.currentResultsKey = key;
                     settings.str2Modify        = str2Modify;
                     ParseResults modResults    = mod->parse(settings);
+
                     if (!modResults.isEmpty() && modResults.values().length() == 1)
                     {
                         modResult = modResults.result(modResults.keys().first());
@@ -380,6 +390,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
                 // remove assigned modifier from modifierResults
                 modifierResults.deleteEntry(mkey);
             }
+
             else
             {
                 break;

@@ -62,7 +62,10 @@ public:
 
     // This is the single hook, ImageQueryPostHookS is the container
     virtual ~ImageQueryPostHook() {};
-    virtual bool checkPosition(double /*latitudeNumber*/, double /*longitudeNumber*/) { return true; };
+    virtual bool checkPosition(double /*latitudeNumber*/, double /*longitudeNumber*/)
+    {
+        return true;
+    };
 };
 
 ImageQueryPostHooks::~ImageQueryPostHooks()
@@ -94,6 +97,7 @@ ImageQueryBuilder::ImageQueryBuilder()
 {
     // build a lookup table for month names
     const KCalendarSystem* cal = KGlobal::locale()->calendar();
+
     for (int i=1; i<=12; ++i)
     {
         m_shortMonths[i-1] = cal->monthName(i, 2000, KCalendarSystem::ShortName).toLower();
@@ -101,16 +105,20 @@ ImageQueryBuilder::ImageQueryBuilder()
     }
 }
 
-QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
+QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const
 {
     // Handle legacy query descriptions
     if (q.startsWith(QLatin1String("digikamsearch:")))
+    {
         return buildQueryFromUrl(KUrl(q), boundValues);
+    }
     else
+    {
         return buildQueryFromXml(q, boundValues, hooks);
+    }
 }
 
-QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
+QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const
 {
     SearchXmlCachingReader reader(xml);
     QString sql;
@@ -121,13 +129,18 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
         reader.readNext();
 
         if (reader.isEndElement())
+        {
             continue;
+        }
 
         if (reader.isGroupElement())
         {
             addSqlOperator(sql, reader.groupOperator(), firstGroup);
+
             if (firstGroup)
+            {
                 firstGroup = false;
+            }
 
             buildGroup(sql, reader, boundValues, hooks);
         }
@@ -138,7 +151,7 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
 }
 
 void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
-                                   QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
+                                   QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const
 {
     sql += " (";
 
@@ -146,20 +159,26 @@ void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
 
     bool firstField = true;
     bool hasContent = false;
+
     while (!reader.atEnd())
     {
         reader.readNext();
 
         if (reader.isEndElement())
+        {
             break;
+        }
 
         // subgroup
         if (reader.isGroupElement())
         {
             hasContent = true;
             addSqlOperator(sql, reader.groupOperator(), firstField);
+
             if (firstField)
+            {
                 firstField = false;
+            }
 
             buildGroup(sql, reader, boundValues, hooks);
         }
@@ -169,16 +188,23 @@ void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
             hasContent = true;
             SearchXml::Operator fieldOperator = reader.fieldOperator();
             addSqlOperator(sql, fieldOperator, firstField);
+
             if (firstField)
+            {
                 firstField = false;
+            }
 
             if (!buildField(sql, reader, reader.fieldName(), boundValues, hooks))
+            {
                 addNoEffectContent(sql, fieldOperator);
+            }
         }
     }
 
     if (!hasContent)
+    {
         addNoEffectContent(sql, mainGroupOp);
+    }
 
     sql += ") ";
 }
@@ -187,19 +213,19 @@ class FieldQueryBuilder
 {
 public:
 
-    FieldQueryBuilder(QString &sql, SearchXmlCachingReader &reader,
-                      QList<QVariant> *boundValues, ImageQueryPostHooks *hooks, SearchXml::Relation relation)
-       : sql(sql), reader(reader), boundValues(boundValues), hooks(hooks), relation(relation)
+    FieldQueryBuilder(QString& sql, SearchXmlCachingReader& reader,
+                      QList<QVariant> *boundValues, ImageQueryPostHooks* hooks, SearchXml::Relation relation)
+        : sql(sql), reader(reader), boundValues(boundValues), hooks(hooks), relation(relation)
     {
     }
 
-    QString                &sql;
-    SearchXmlCachingReader &reader;
+    QString&                sql;
+    SearchXmlCachingReader& reader;
     QList<QVariant>        *boundValues;
-    ImageQueryPostHooks    *hooks;
+    ImageQueryPostHooks*    hooks;
     SearchXml::Relation     relation;
 
-    inline QString prepareForLike(const QString &str) const
+    inline QString prepareForLike(const QString& str) const
     {
         if (relation == SearchXml::Like || relation == SearchXml::NotLike)
         {
@@ -216,6 +242,7 @@ public:
         if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
         {
             QList<int> values = reader.valueToIntList();
+
             if (values.size() != 2)
             {
                 kWarning() << "Relation Interval requires a list of two values";
@@ -224,10 +251,10 @@ public:
 
             sql += " (" + name + ' ';
             ImageQueryBuilder::addSqlRelation(sql,
-                relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
+                                              relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
             sql += " ? AND " + name + ' ';
             ImageQueryBuilder::addSqlRelation(sql,
-                relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
+                                              relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
             sql += " ?) ";
 
             *boundValues << values.first() << values.last();
@@ -246,6 +273,7 @@ public:
         if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
         {
             QList<double> values = reader.valueToDoubleList();
+
             if (values.size() != 2)
             {
                 kWarning() << "Relation Interval requires a list of two values";
@@ -254,10 +282,10 @@ public:
 
             sql += " (" + name + ' ';
             ImageQueryBuilder::addSqlRelation(sql,
-                relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
+                                              relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
             sql += " ? AND " + name + ' ';
             ImageQueryBuilder::addSqlRelation(sql,
-                relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
+                                              relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
             sql += " ?) ";
 
             *boundValues << values.first() << values.last();
@@ -285,6 +313,7 @@ public:
         {
             // special case: split in < and >
             QDateTime date = QDateTime::fromString(reader.value(), Qt::ISODate);
+
             if (!date.isValid())
             {
                 kWarning() << "Date" << reader.value() << "is invalid";
@@ -292,6 +321,7 @@ public:
             }
 
             QDateTime startDate, endDate;
+
             if (date.time() == QTime(0,0,0,0))
             {
                 // day precision
@@ -306,12 +336,20 @@ public:
                 // sub-day precision
                 QDateTime startDate, endDate;
                 int diff;
+
                 if (date.time().hour() == 0)
+                {
                     diff = 3600;
+                }
                 else if (date.time().minute() == 0)
+                {
                     diff = 60;
+                }
                 else
+                {
                     diff = 1;
+                }
+
                 // we spare microseconds for the future
 
                 startDate = date.addSecs(-diff);
@@ -329,6 +367,7 @@ public:
         else if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
         {
             QList<QString> values = reader.valueToStringList();
+
             if (values.size() != 2)
             {
                 kWarning() << "Relation Interval requires a list of two values";
@@ -337,10 +376,10 @@ public:
 
             sql += " (" + name + ' ';
             ImageQueryBuilder::addSqlRelation(sql,
-                relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
+                                              relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
             sql += " ? AND " + name + ' ';
             ImageQueryBuilder::addSqlRelation(sql,
-                relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
+                                              relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
             sql += " ?) ";
 
             *boundValues << values.first() << values.last();
@@ -362,10 +401,16 @@ public:
             bool searchForNull = values.removeAll(-1);
             sql += " (" + name + " IN (";
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
+
             if (searchForNull)
+            {
                 sql += ") OR " + name + " IS NULL";
+            }
             else
+            {
                 sql += ") ";
+            }
+
             foreach (int v, values)
             {
                 *boundValues << v;
@@ -406,15 +451,22 @@ public:
             bool searchForNull = values.removeAll(-1);
             sql += "( ";
             bool first = true;
+
             for (int i=0; i<values.size(); ++i)
             {
                 if (!first)
+                {
                     sql += "OR ";
+                }
+
                 first = false;
                 sql += name + " & ? ";
             }
+
             if (searchForNull)
+            {
                 sql += "OR " + name + " IS NULL ";
+            }
 
             foreach (int v, values)
             {
@@ -425,9 +477,14 @@ public:
         else
         {
             if (relation == SearchXml::Equal)
+            {
                 sql += " (" + name + " & " + " ?) ";
+            }
             else
+            {
                 sql += " (NOT " + name + " & " + " ?) ";
+            }
+
             *boundValues << reader.valueToDouble();
         }
     }
@@ -437,6 +494,7 @@ public:
         if (relation == SearchXml::OneOf)
         {
             QStringList values = reader.valueToStringList();
+
             if (values.isEmpty())
             {
                 kDebug() << "List for OneOf is empty";
@@ -447,12 +505,17 @@ public:
             foreach(const QString& value, values)
             {
                 if (value.contains("*"))
+                {
                     wildcards << value;
+                }
                 else
+                {
                     simpleValues << value;
+                }
             }
             bool firstCondition = true;
             sql += " (";
+
             if (!simpleValues.isEmpty())
             {
                 firstCondition = false;
@@ -464,6 +527,7 @@ public:
                 }
                 sql += " ) ";
             }
+
             if (!wildcards.isEmpty())
             {
                 foreach(QString wildcard, wildcards) // krazy:exclude=foreach
@@ -477,11 +541,13 @@ public:
                     *boundValues << wildcard;
                 }
             }
+
             sql += ") ";
         }
         else
         {
             QString value = reader.value();
+
             if (relation == SearchXml::Like && value.contains("*"))
             {
                 // Handle special case: * denotes the place if the wildcard,
@@ -494,7 +560,9 @@ public:
                 *boundValues << wildcard;
             }
             else
+            {
                 addStringField(name);
+            }
         }
     }
 
@@ -507,18 +575,28 @@ public:
             QStringRef distanceString = reader.attributes().value("distance");
             // Distance in meters
             double distance = 100;
+
             if (!distanceString.isEmpty())
+            {
                 distance = distanceString.toString().toDouble();
+            }
+
             // Search type, "radius" or "rectangle"
             bool radiusSearch = true;
+
             if (type == "radius")
+            {
                 radiusSearch = true;
+            }
             else if (type == "rectangle")
+            {
                 radiusSearch = false;
+            }
 
             // Get a list of doubles:
             // Longitude and Latitude in (decimal) degrees
             QList<double> list = reader.valueToDoubleList();
+
             if (list.size() != 2)
             {
                 kWarning() << "Relation 'Near' requires a list of two values";
@@ -618,6 +696,7 @@ public:
         {
             // First read attributes
             QStringRef type = reader.attributes().value("type");
+
             // Search type, currently only "rectangle"
             if (type != "rectangle")
             {
@@ -628,11 +707,13 @@ public:
             // Get a list of doubles:
             // Longitude and Latitude in (decimal) degrees
             QList<double> list = reader.valueToDoubleList();
+
             if (list.size() != 4)
             {
                 kWarning() << "Relation 'Inside' requires a list of four values";
                 return;
             }
+
             // the list contains (lon1,lat1), (lon2,lat2) in this order,
             // like (x,y), (right,bottom) of a rectangle,
             // or like (West,North), (East,South),
@@ -672,10 +753,11 @@ public:
 
 
 bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
-                                   QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
+                                   QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const
 {
     SearchXml::Relation relation = reader.fieldRelation();
     FieldQueryBuilder fieldQuery(sql, reader, boundValues, hooks, relation);
+
     if (name == "albumid")
     {
         if (relation == SearchXml::Equal || relation == SearchXml::Unequal)
@@ -707,10 +789,15 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 QString relativePath = access.db()->getAlbumRelativePath(albumID);
 
                 QString childrenWildcard;
+
                 if (relativePath == "/")
+                {
                     childrenWildcard = "/%";
+                }
                 else
+                {
                     childrenWildcard = relativePath + "/%";
+                }
 
                 sql += " ( albumRoot=? AND (relativePath=? OR relativePath LIKE ?) ) ";
                 *boundValues << rootId << relativePath << childrenWildcard;
@@ -735,8 +822,8 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         if (relation == SearchXml::Equal)
         {
             sql += " (Images.id IN "
-                    "   (SELECT imageid FROM ImageTags "
-                    "    WHERE tagid = ?)) ";
+                   "   (SELECT imageid FROM ImageTags "
+                   "    WHERE tagid = ?)) ";
             *boundValues << reader.valueToInt();
         }
         else if (relation == SearchXml::Unequal)
@@ -757,9 +844,14 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             }
 
             if (relation == SearchXml::InTree)
+            {
                 sql += " (Images.id IN ";
+            }
             else
+            {
                 sql += " (Images.id NOT IN ";
+            }
+
             sql += "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                    "    WHERE ";
 
@@ -778,6 +870,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     else if (name == "tagname")
     {
         QString tagname = '%' + reader.value() + '%';
+
         if (relation == SearchXml::Equal || relation == SearchXml::Like)
         {
             sql += " (Images.id IN "
@@ -855,6 +948,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         if (relation == SearchXml::Equal)
         {
             int pageOrientation = reader.valueToInt();
+
             // "1" is landscape, "2" is portrait, "3" is landscape regardless of Exif, "4" is portrait regardless of Exif
             if (pageOrientation == 1)
             {
@@ -1083,6 +1177,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         kDebug() << "Search field" << name << "not known by this version of ImageQueryBuilder";
         return false;
     }
+
     return true;
 }
 
@@ -1091,7 +1186,10 @@ void ImageQueryBuilder::addSqlOperator(QString& sql, SearchXml::Operator op, boo
     if (isFirst)
     {
         if (op == SearchXml::AndNot || op == SearchXml::OrNot)
+        {
             sql += "NOT";
+        }
+
         return;
     }
 
@@ -1167,21 +1265,24 @@ void ImageQueryBuilder::addNoEffectContent(QString& sql, SearchXml::Operator op)
 
 class RuleTypeForConversion
 {
-    public:
+public:
 
-        RuleTypeForConversion()
-            : op(SearchXml::Equal) {}
+    RuleTypeForConversion()
+        : op(SearchXml::Equal) {}
 
-        QString             key;
-        SearchXml::Relation op;
-        QString             val;
+    QString             key;
+    SearchXml::Relation op;
+    QString             val;
 };
 
 QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
 {
     int  count = url.queryItem("count").toInt();
+
     if (count <= 0)
+    {
         return QString();
+    }
 
     QMap<int, RuleTypeForConversion> rulesMap;
 
@@ -1220,30 +1321,50 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
         }
 
         if (op == "eq")
+        {
             rule.op = SearchXml::Equal;
+        }
         else if (op == "ne")
+        {
             rule.op = SearchXml::Unequal;
+        }
         else if (op == "lt")
+        {
             rule.op = SearchXml::LessThan;
+        }
         else if (op == "lte")
+        {
             rule.op = SearchXml::LessThanOrEqual;
+        }
         else if (op == "gt")
+        {
             rule.op = SearchXml::GreaterThan;
+        }
         else if (op == "gte")
+        {
             rule.op = SearchXml::GreaterThanOrEqual;
+        }
         else if (op == "like")
         {
             if (key == "tag")
+            {
                 rule.op = SearchXml::InTree;
+            }
             else
+            {
                 rule.op = SearchXml::Like;
+            }
         }
         else if (op == "nlike")
         {
             if (key == "tag")
+            {
                 rule.op = SearchXml::NotInTree;
+            }
             else
+            {
                 rule.op = SearchXml::NotLike;
+            }
         }
 
         rule.val = url.queryItem(QString::number(i) + ".val");
@@ -1259,10 +1380,12 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
     writer.writeGroup();
 
     QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
+
     for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
     {
         bool ok;
         int  num = (*it).toInt(&ok);
+
         if (ok)
         {
             RuleTypeForConversion rule = rulesMap[num];
@@ -1273,6 +1396,7 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
         else
         {
             QString expr = (*it).trimmed();
+
             if (expr == "AND")
             {
                 // add another field
@@ -1295,6 +1419,7 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
             }
         }
     }
+
     writer.finishGroup();
     writer.finish();
 
@@ -1330,11 +1455,11 @@ enum SOperator
 
 class RuleType
 {
-    public:
+public:
 
-        SKey      key;
-        SOperator op;
-        QString   val;
+    SKey      key;
+    SOperator op;
+    QString   val;
 };
 
 class SubQueryBuilder
@@ -1348,8 +1473,11 @@ public:
 QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const
 {
     int  count = url.queryItem("count").toInt();
+
     if (count <= 0)
+    {
         return QString();
+    }
 
     QMap<int, RuleType> rulesMap;
 
@@ -1411,21 +1539,37 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
         }
 
         if (op == "eq")
+        {
             rule.op = EQ;
+        }
         else if (op == "ne")
+        {
             rule.op = NE;
+        }
         else if (op == "lt")
+        {
             rule.op = LT;
+        }
         else if (op == "lte")
+        {
             rule.op = LTE;
+        }
         else if (op == "gt")
+        {
             rule.op = GT;
+        }
         else if (op == "gte")
+        {
             rule.op = GTE;
+        }
         else if (op == "like")
+        {
             rule.op = LIKE;
+        }
         else if (op == "nlike")
+        {
             rule.op = NLIKE;
+        }
         else
         {
             kWarning() << "Unknown op type: " << op << " passed to kioslave";
@@ -1441,21 +1585,26 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
     SubQueryBuilder subQuery;
 
     QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
+
     for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
     {
         bool ok;
         int  num = (*it).toInt(&ok);
+
         if (ok)
         {
             RuleType rule = rulesMap[num];
+
             if (rule.key == KEYWORD)
             {
                 bool exact;
                 QString possDate = possibleDate(rule.val, exact);
+
                 if (!possDate.isEmpty())
                 {
                     rule.key = IMAGEDATE;
                     rule.val = possDate;
+
                     if (exact)
                     {
                         rule.op = EQ;
@@ -1480,13 +1629,18 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
 
                     sqlQuery += '(';
                     QList<SKey>::const_iterator it = todo.constBegin();
+
                     while ( it != todo.constEnd() )
                     {
                         sqlQuery += subQuery.build(*it, rule.op, rule.val, boundValues);
                         ++it;
+
                         if ( it != todo.constEnd() )
+                        {
                             sqlQuery += " OR ";
+                        }
                     }
+
                     sqlQuery += ')';
                 }
             }
@@ -1511,7 +1665,9 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
     QString val = passedVal;
 
     if (op == LIKE || op == NLIKE)
+    {
         val = '%' + val + '%';
+    }
 
     switch (key)
     {
@@ -1573,9 +1729,9 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
                 *boundValues << val.toInt() << val.toInt();
             }
 
-    //         query = " (Images.id IN "
-    //                 "   (SELECT imageid FROM ImageTags "
-    //                 "    WHERE tagid $$##$$ ?)) ";
+            //         query = " (Images.id IN "
+            //                 "   (SELECT imageid FROM ImageTags "
+            //                 "    WHERE tagid $$##$$ ?)) ";
 
             break;
         }
@@ -1671,12 +1827,15 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
     if (key == IMAGEDATE && op == EQ)
     {
         QDate date = QDate::fromString(val, Qt::ISODate);
+
         if (!date.isValid())
+        {
             return query;
+        }
 
         query = QString(" (Images.datetime > ? AND Images.datetime < ?) ");
         *boundValues << date.addDays(-1).toString(Qt::ISODate)
-                   << date.addDays( 1).toString(Qt::ISODate);
+                     << date.addDays( 1).toString(Qt::ISODate);
     }
 
     return query;
@@ -1685,6 +1844,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
 QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
 {
     QDate date = QDate::fromString(str, Qt::ISODate);
+
     if (date.isValid())
     {
         exact = true;
@@ -1695,6 +1855,7 @@ QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
 
     bool ok;
     int num = str.toInt(&ok);
+
     if (ok)
     {
         // ok. its an int, does it look like a year?

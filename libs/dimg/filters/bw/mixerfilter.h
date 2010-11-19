@@ -58,7 +58,7 @@ public:
         blackBlueGain  = 0.0;
     };
 
-    ~MixerContainer(){};
+    ~MixerContainer() {};
 
 public:
 

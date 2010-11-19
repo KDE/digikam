@@ -51,12 +51,12 @@ namespace Digikam
 {
 
 AdvancedRenameLineEditProxy::AdvancedRenameLineEditProxy(QWidget* parent)
-                           : ProxyLineEdit(parent)
+    : ProxyLineEdit(parent)
 {
     setClearButtonShown(true);
 }
 
-void AdvancedRenameLineEditProxy::setWidget(QWidget *widget)
+void AdvancedRenameLineEditProxy::setWidget(QWidget* widget)
 {
     if (m_widget)
     {
@@ -114,7 +114,7 @@ public:
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
-                      : KTextEdit(parent), d(new AdvancedRenameLineEditPriv)
+    : KTextEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
     setLineWrapMode(KTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);
@@ -228,6 +228,7 @@ void AdvancedRenameLineEdit::scrollContentsBy(int dx, int dy)
     {
         verticalScrollBar()->setValue(d->verticalSliderPosition);
     }
+
     viewport()->update();
 }
 
@@ -243,7 +244,7 @@ void AdvancedRenameLineEdit::slotCursorPositionChanged()
         int length           = INVALID;
         int pos              = textCursor().position();
         found                = d->parser->tokenAtPosition(Parser::OptionToken,
-                                                          settings, pos, start, length);
+                               settings, pos, start, length);
         found                = found && ( (start + length) == pos );
 
         if (!found)
@@ -253,6 +254,7 @@ void AdvancedRenameLineEdit::slotCursorPositionChanged()
             found = found && ( (start + length) == pos );
         }
     }
+
     emit signalTokenMarked(found);
 }
 
@@ -296,7 +298,7 @@ public:
 // --------------------------------------------------------
 
 AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
-                   : KComboBox(parent), d(new AdvancedRenameInputPriv)
+    : KComboBox(parent), d(new AdvancedRenameInputPriv)
 {
     // important: setEditable() has to be called before adding the actual line edit widget, otherwise
     //            our lineEdit gets removed again.
@@ -396,8 +398,7 @@ void AdvancedRenameInput::enableHighlighter(bool enable)
         delete d->highlighter;
     }
 
-    d->highlighter = enable ? new Highlighter(d->lineEdit, d->lineEdit->parser())
-                            : 0;
+    d->highlighter = enable ? new Highlighter(d->lineEdit, d->lineEdit->parser()) : 0;
 }
 
 void AdvancedRenameInput::changeEvent(QEvent* e)

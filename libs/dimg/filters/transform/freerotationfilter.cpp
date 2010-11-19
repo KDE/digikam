@@ -47,14 +47,14 @@ public:
     }
 
     // Degrees to radian conversion coeff (PI/180). To optimize computation.
-    const double DEG2RAD; 
+    const double DEG2RAD;
 
     FreeRotationContainer settings;
 };
 
 FreeRotationFilter::FreeRotationFilter(DImg* orgImage, QObject* parent, const FreeRotationContainer& settings)
-                  : DImgThreadedFilter(orgImage, parent, "FreeRotation"),
-                    d(new FreeRotationFilterPriv)
+    : DImgThreadedFilter(orgImage, parent, "FreeRotation"),
+      d(new FreeRotationFilterPriv)
 {
     d->settings = settings;
     initFilter();
@@ -66,7 +66,7 @@ FreeRotationFilter::~FreeRotationFilter()
     delete d;
 }
 
-QSize FreeRotationFilter::getNewSize() const 
+QSize FreeRotationFilter::getNewSize() const
 {
     return d->settings.newSize;
 }
@@ -94,15 +94,21 @@ double FreeRotationFilter::calculateAngle(const QPoint& p1, const QPoint& p2)
 
     // check if points are equal
     if (p1 == p2)
+    {
         return 0.0;
+    }
 
     // if y() is equal, no angle needs to be calculated
     if (p1.y() == p2.y())
+    {
         return 0.0;
+    }
 
     // if x() is equal, angle equals 90°
     if (p1.x() == p2.x())
+    {
         return 90.0;
+    }
 
     // do we rotate to the left (counter clock wise)?
     bool ccw = ((p1.x() < p2.x()) && (p2.y() > p1.y())) ||
@@ -131,7 +137,7 @@ void FreeRotationFilter::filterImage()
     int nHeight = m_orgImage.height();
 
     uchar* pBits            = m_orgImage.bits();
-    unsigned short *pBits16 = (unsigned short*)m_orgImage.bits();
+    unsigned short* pBits16 = (unsigned short*)m_orgImage.bits();
 
     // first of all, we need to calculate the sin and cos of the given angle
 
@@ -167,12 +173,14 @@ void FreeRotationFilter::filterImage()
     m_destImage     = DImg(nNewWidth, nNewHeight, sixteenBit, m_orgImage.hasAlpha());
 
     if (m_destImage.isNull())
+    {
         return;
+    }
 
     m_destImage.fill( DColor(d->settings.backgroundColor.rgb(), sixteenBit) );
 
     uchar* pResBits            = m_destImage.bits();
-    unsigned short* pResBits16 = (unsigned short *)m_destImage.bits();
+    unsigned short* pResBits16 = (unsigned short*)m_destImage.bits();
 
     PixelsAliasFilter alias;
 
@@ -211,9 +219,13 @@ void FreeRotationFilter::filterImage()
                     for (int p = 0 ; p < 4 ; ++p)
                     {
                         if (!sixteenBit)
+                        {
                             pResBits[i] = pBits[j];
+                        }
                         else
+                        {
                             pResBits16[i] = pBits16[j];
+                        }
 
                         ++i;
                         ++j;
@@ -224,8 +236,11 @@ void FreeRotationFilter::filterImage()
 
         // Update the progress bar in dialog.
         progress = (int) (((double) h * 100.0) / nNewHeight);
+
         if (progress % 5 == 0)
+        {
             postProgress(progress);
+        }
     }
 
     // Compute the rotated destination image size using original image dimensions.
@@ -265,7 +280,7 @@ void FreeRotationFilter::filterImage()
 
             if (!autoCrop.isValid())
             {
-                m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),  
+                m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
                                    m_orgImage.hasAlpha());
                 m_destImage.fill(DColor(d->settings.backgroundColor.rgb(), sixteenBit));
                 d->settings.newSize   = QSize();
@@ -276,6 +291,7 @@ void FreeRotationFilter::filterImage()
                 d->settings.newSize.setWidth((int)  (W - 2* d->settings.orgH * sin(absAngle * d->DEG2RAD)));
                 d->settings.newSize.setHeight((int) (H - 2* d->settings.orgW * sin(absAngle * d->DEG2RAD)));
             }
+
             break;
         }
 
@@ -292,13 +308,13 @@ void FreeRotationFilter::filterImage()
                 if (absAngle < 90.0)
                 {
                     autoCrop.setHeight((int) ((float) nWidth / cos(absAngle * d->DEG2RAD) / (tan(gamma) +
-                                       tan(absAngle * d->DEG2RAD))));
+                                              tan(absAngle * d->DEG2RAD))));
                     autoCrop.setWidth((int) ((float) autoCrop.height() * tan(gamma)));
                 }
                 else
                 {
                     autoCrop.setWidth((int) ((float) nWidth / cos((absAngle - 90.0) * d->DEG2RAD) / (tan(gamma) +
-                                      tan((absAngle - 90.0) * d->DEG2RAD))));
+                                             tan((absAngle - 90.0) * d->DEG2RAD))));
                     autoCrop.setHeight((int) ((float) autoCrop.width() * tan(gamma)));
                 }
             }
@@ -308,14 +324,14 @@ void FreeRotationFilter::filterImage()
 
                 if (absAngle < 90.0)
                 {
-                    autoCrop.setWidth((int) ((float) nHeight / cos(absAngle * d->DEG2RAD) / (tan(gamma) + 
-                                      tan(absAngle * d->DEG2RAD))));
+                    autoCrop.setWidth((int) ((float) nHeight / cos(absAngle * d->DEG2RAD) / (tan(gamma) +
+                                             tan(absAngle * d->DEG2RAD))));
                     autoCrop.setHeight((int) ((float) autoCrop.width() * tan(gamma)));
                 }
                 else
                 {
                     autoCrop.setHeight((int) ((float) nHeight / cos((absAngle - 90.0) * d->DEG2RAD) /
-                                       (tan(gamma) + tan((absAngle - 90.0) * d->DEG2RAD))));
+                                              (tan(gamma) + tan((absAngle - 90.0) * d->DEG2RAD))));
                     autoCrop.setWidth((int) ((float) autoCrop.height() * tan(gamma)));
                 }
             }
@@ -336,20 +352,21 @@ void FreeRotationFilter::filterImage()
 
                 if (absAngle < 90.0)
                 {
-                    d->settings.newSize.setWidth((int) ((float) d->settings.orgH / cos(absAngle * d->DEG2RAD) / (tan(gamma) + 
-                                       tan(absAngle * d->DEG2RAD))));
+                    d->settings.newSize.setWidth((int) ((float) d->settings.orgH / cos(absAngle * d->DEG2RAD) / (tan(gamma) +
+                                                        tan(absAngle * d->DEG2RAD))));
                     d->settings.newSize.setHeight((int) ((float) d->settings.newSize.width() * tan(gamma)));
                 }
                 else
                 {
                     d->settings.newSize.setHeight((int) ((float) d->settings.orgH / cos((absAngle - 90.0) * d->DEG2RAD) /
-                                        (tan(gamma) + tan((absAngle - 90.0) * d->DEG2RAD))));
+                                                         (tan(gamma) + tan((absAngle - 90.0) * d->DEG2RAD))));
                     d->settings.newSize.setWidth((int) ((float) d->settings.newSize.height() * tan(gamma)));
                 }
             }
+
             break;
         }
-        
+
         default: // No auto cropping.
         {
             d->settings.newSize.setWidth(W);

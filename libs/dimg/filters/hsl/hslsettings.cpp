@@ -70,7 +70,7 @@ public:
         vInput(0),
         lInput(0),
         HSPreview(0)
-        {}
+    {}
 
     const QString           configHueAdjustmentEntry;
     const QString           configSaturationAdjustmentEntry;
@@ -88,8 +88,8 @@ public:
 };
 
 HSLSettings::HSLSettings(QWidget* parent)
-           : QWidget(parent),
-             d(new HSLSettingsPriv)
+    : QWidget(parent),
+      d(new HSLSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -138,7 +138,7 @@ HSLSettings::HSLSettings(QWidget* parent)
     grid->addWidget(label2,        2, 0, 1, 1);
     grid->addWidget(d->hInput,     2, 1, 1, 4);
     grid->addWidget(label3,        3, 0, 1, 1);
-    grid->addWidget(d->sInput,     3, 1, 1, 4); 
+    grid->addWidget(d->sInput,     3, 1, 1, 4);
     grid->addWidget(label4,        4, 0, 1, 1);
     grid->addWidget(d->vInput,     4, 1, 1, 4);
     grid->addWidget(label5,        5, 0, 1, 1);
@@ -176,8 +176,11 @@ HSLSettings::~HSLSettings()
 void HSLSettings::slotHSChanged(int h, int s)
 {
     double hue = (double)(h);
+
     if (h >= 180 && h <= 359)
+    {
         hue = (double)(h) - 359.0;
+    }
 
     double sat = ((double)s * (200.0/255.0)) - 100.0;
 
@@ -195,8 +198,11 @@ void HSLSettings::slotHSChanged(int h, int s)
 void HSLSettings::slotHChanged(double h)
 {
     int hue = (int)(h);
+
     if (h >= -180 && h < 0)
+    {
         hue = (int)(h) + 359;
+    }
 
     d->HSSelector->blockSignals(true);
     d->HSSelector->setXValue(hue);

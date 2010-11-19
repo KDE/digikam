@@ -64,9 +64,9 @@ public:
     IccProfilesSettingsPriv() :
         configRecentlyUsedProfilesEntry("Recently Used Profiles"),
         profilesBox(0)
-        {
-            favoriteProfiles.setMaxCost(10);
-        }
+    {
+        favoriteProfiles.setMaxCost(10);
+    }
 
     const QString         configRecentlyUsedProfilesEntry;
 
@@ -76,8 +76,8 @@ public:
 };
 
 IccProfilesSettings::IccProfilesSettings(QWidget* parent)
-                   : KVBox(parent),
-                     d(new IccProfilesSettingsPriv)
+    : KVBox(parent),
+      d(new IccProfilesSettingsPriv)
 {
     QLabel* newProfileLabel  = new QLabel(i18n("Convert to:"), this);
     d->profilesBox           = new IccProfilesComboBox(this);

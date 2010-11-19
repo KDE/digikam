@@ -71,13 +71,16 @@ public:
      * This will execute a given SQL statement to the database.
      * @param sql The SQL statement
      * @param values This will be filled with the result of the SQL statement
-     * @param debug If true, it will output the SQL statement 
+     * @param debug If true, it will output the SQL statement
      * @return It will return if the execution of the statement was succesfull
      */
-    bool execSql(const QString& sql, QStringList* const values = 0, 
+    bool execSql(const QString& sql, QStringList* const values = 0,
                  const bool debug = false);
 
-    bool isValid() const { return m_valid; }
+    bool isValid() const
+    {
+        return m_valid;
+    }
 
 private:
 

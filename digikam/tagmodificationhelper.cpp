@@ -59,7 +59,7 @@ public:
 };
 
 TagModificationHelper::TagModificationHelper(QObject* parent, QWidget* dialogParent)
-                     : QObject(parent), d(new TagModificationHelperPriv)
+    : QObject(parent), d(new TagModificationHelperPriv)
 {
     d->dialogParent = dialogParent;
 }
@@ -74,13 +74,15 @@ void TagModificationHelper::setParentTag(TAlbum* parent)
     d->parentTag = parent;
 }
 
-TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString &title, const QString& iconName)
+TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, const QString& iconName)
 {
     // ensure that there is a parent
     TAlbum* p = parent;
+
     if (!p)
     {
         p = AlbumManager::instance()->findTAlbum(0);
+
         if (!p)
         {
             kError() << "Could not find root tag album";
@@ -94,7 +96,8 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString &title, 
     if (title.isEmpty())
     {
         bool doCreate = TagEditDlg::tagCreate(d->dialogParent, p, editTitle, editIconName);
-        if(!doCreate)
+
+        if (!doCreate)
         {
             return 0;
         }
@@ -131,30 +134,33 @@ TAlbum* TagModificationHelper::slotTagNew()
 
 void TagModificationHelper::slotTagEdit(TAlbum* tag)
 {
-    if(!tag)
+    if (!tag)
     {
         return;
     }
 
     QString title, icon;
     bool doEdit = TagEditDlg::tagEdit(d->dialogParent, tag, title, icon);
-    if(!doEdit)
+
+    if (!doEdit)
     {
         return;
     }
 
-    if(tag->title() != title)
+    if (tag->title() != title)
     {
         QString errMsg;
-        if(!AlbumManager::instance()->renameTAlbum(tag, title, errMsg))
+
+        if (!AlbumManager::instance()->renameTAlbum(tag, title, errMsg))
         {
             KMessageBox::error(0, errMsg);
         }
     }
 
-    if(tag->icon() != icon)
+    if (tag->icon() != icon)
     {
         QString errMsg;
+
         if (!AlbumManager::instance()->updateTAlbumIcon(tag, icon, 0, errMsg))
         {
             KMessageBox::error(0, errMsg);
@@ -167,7 +173,9 @@ void TagModificationHelper::slotTagEdit(TAlbum* tag)
 void TagModificationHelper::slotTagEdit()
 {
     if (d->parentTag)
+    {
         slotTagEdit(d->parentTag);
+    }
 }
 
 void TagModificationHelper::slotTagDelete(TAlbum* tag)
@@ -180,28 +188,29 @@ void TagModificationHelper::slotTagDelete(TAlbum* tag)
     // find number of subtags
     int children = 0;
     AlbumIterator iter(tag);
-    while(iter.current())
+
+    while (iter.current())
     {
         ++children;
         ++iter;
     }
 
     // ask for deletion of children
-    if(children)
+    if (children)
     {
         int result = KMessageBox::warningContinueCancel(d->dialogParent,
-                       i18np("Tag '%2' has one subtag. "
-                             "Deleting this will also delete "
-                             "the subtag. "
-                             "Do you want to continue?",
-                             "Tag '%2' has %1 subtags. "
-                             "Deleting this will also delete "
-                             "the subtags. "
-                             "Do you want to continue?",
-                             children,
-                             tag->title()));
+                     i18np("Tag '%2' has one subtag. "
+                           "Deleting this will also delete "
+                           "the subtag. "
+                           "Do you want to continue?",
+                           "Tag '%2' has %1 subtags. "
+                           "Deleting this will also delete "
+                           "the subtags. "
+                           "Do you want to continue?",
+                           children,
+                           tag->title()));
 
-        if(result != KMessageBox::Continue)
+        if (result != KMessageBox::Continue)
         {
             return;
         }
@@ -209,6 +218,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* tag)
 
     QString message;
     QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
+
     if (!assignedItems.isEmpty())
     {
         message = i18np("Tag '%2' is assigned to one item. "
@@ -223,14 +233,15 @@ void TagModificationHelper::slotTagDelete(TAlbum* tag)
     }
 
     int result = KMessageBox::warningContinueCancel(0, message,
-                                                    i18n("Delete Tag"),
-                                                    KGuiItem(i18n("Delete"),
-                                                    "edit-delete"));
+                 i18n("Delete Tag"),
+                 KGuiItem(i18n("Delete"),
+                          "edit-delete"));
 
-    if(result == KMessageBox::Continue)
+    if (result == KMessageBox::Continue)
     {
         emit aboutToDeleteTag(tag);
         QString errMsg;
+
         if (!AlbumManager::instance()->deleteTAlbum(tag, errMsg))
         {
             KMessageBox::error(0, errMsg);
@@ -241,7 +252,9 @@ void TagModificationHelper::slotTagDelete(TAlbum* tag)
 void TagModificationHelper::slotTagDelete()
 {
     if (d->parentTag)
+    {
         slotTagDelete(d->parentTag);
+    }
 }
 
 } // namespace Digikam

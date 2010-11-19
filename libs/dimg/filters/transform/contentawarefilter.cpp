@@ -64,7 +64,7 @@ public:
         progress = 0;
     }
 
-    ContentAwareContainer settings;      
+    ContentAwareContainer settings;
 
     LqrCarver*            carver;
     LqrProgress*          progress;
@@ -72,8 +72,8 @@ public:
 };
 
 ContentAwareFilter::ContentAwareFilter(DImg* orgImage, QObject* parent, const ContentAwareContainer& settings)
-                   : DImgThreadedFilter(orgImage, parent, "ContentAwareFilter"),
-                     d(new ContentAwareFilterPriv)
+    : DImgThreadedFilter(orgImage, parent, "ContentAwareFilter"),
+      d(new ContentAwareFilterPriv)
 {
     initFilter();
 
@@ -110,17 +110,25 @@ ContentAwareFilter::ContentAwareFilter(DImg* orgImage, QObject* parent, const Co
 
         // Choose the resize order
         if (d->settings.resize_order == 0)
+        {
             lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_HOR);
+        }
         else
+        {
             lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_VERT);
+        }
 
         // Set a bias if any mask
         if (!d->settings.mask.isNull())
+        {
             buildBias(d->settings.mask);
+        }
 
         // Set skin tone mask if option is activated
         if (d->settings.preserve_skin_tones)
+        {
             buildSkinToneBias();
+        }
     }
 }
 
@@ -129,14 +137,19 @@ ContentAwareFilter::~ContentAwareFilter()
     cancelFilter();
 
     if (d->carver)
+    {
         lqr_carver_destroy(d->carver);
+    }
 
     delete d;
 }
 
 void ContentAwareFilter::getEnergyImage()
 {
-    if (!d->carver) return;
+    if (!d->carver)
+    {
+        return;
+    }
 
     int w        = lqr_carver_get_width(d->carver);
     int h        = lqr_carver_get_height(d->carver);
@@ -147,7 +160,10 @@ void ContentAwareFilter::getEnergyImage()
 
 void ContentAwareFilter::filterImage()
 {
-    if (!d->carver) return;
+    if (!d->carver)
+    {
+        return;
+    }
 
     uint  x   = 0;
     uint  y   = 0;
@@ -160,7 +176,10 @@ void ContentAwareFilter::filterImage()
     // Liquid rescale
     lqr_carver_resize(d->carver, d->settings.width, d->settings.height);
 
-    if (!runningFlag()) return;
+    if (!runningFlag())
+    {
+        return;
+    }
 
     // Create a new image
     w           = lqr_carver_get_width(d->carver);
@@ -176,7 +195,7 @@ void ContentAwareFilter::filterImage()
 
     if (m_orgImage.sixteenBit())
     {
-        while(runningFlag() && lqr_carver_scan_ext(d->carver, (gint*)&x, (gint*)&y, &rgb))
+        while (runningFlag() && lqr_carver_scan_ext(d->carver, (gint*)&x, (gint*)&y, &rgb))
         {
             rgbOut16 = (unsigned short*)rgb;
             m_destImage.setPixelColor(x, y, DColor(rgbOut16[2], rgbOut16[1], rgbOut16[0], 65535, true));
@@ -184,7 +203,7 @@ void ContentAwareFilter::filterImage()
     }
     else
     {
-        while(runningFlag() && lqr_carver_scan_ext(d->carver, (gint*)&x, (gint*)&y, &rgb))
+        while (runningFlag() && lqr_carver_scan_ext(d->carver, (gint*)&x, (gint*)&y, &rgb))
         {
             rgbOut8 = (uchar*)rgb;
             m_destImage.setPixelColor(x, y, DColor(rgbOut8[2], rgbOut8[1], rgbOut8[0], 255, false));
@@ -195,7 +214,9 @@ void ContentAwareFilter::filterImage()
 void ContentAwareFilter::progressCallback(int progress)
 {
     if (progress%5 == 0)
+    {
         postProgress( progress );
+    }
 
     //kDebug() << "Content Aware Resizing: " << progress << " %";
 }
@@ -226,9 +247,10 @@ bool ContentAwareFilter::isSkinTone(const DColor& color)
 void ContentAwareFilter::buildSkinToneBias()
 {
     DColor c;
-    for(uint x=0; x < m_orgImage.width(); ++x)
+
+    for (uint x=0; x < m_orgImage.width(); ++x)
     {
-        for(uint y=0; y < m_orgImage.height(); ++y)
+        for (uint y=0; y < m_orgImage.height(); ++y)
         {
             c = m_orgImage.getPixelColor(x, y);
             c.convertToEightBit();
@@ -242,18 +264,24 @@ void ContentAwareFilter::buildBias(const QImage& mask)
 {
     QColor pixColor;
     int    r,g,b,a;
-    for(int x=0; x < mask.width(); ++x)
+
+    for (int x=0; x < mask.width(); ++x)
     {
-        for(int y=0; y < mask.height(); ++y)
+        for (int y=0; y < mask.height(); ++y)
         {
             pixColor = QColor::fromRgba(mask.pixel(x, y));
             pixColor.getRgb(&r, &g, &b, &a);
             gdouble bias=0.0;
 
             if (g == 255)
+            {
                 bias=1000000.0;
+            }
+
             if (r == 255)
+            {
                 bias=-1000000.0;
+            }
 
             lqr_carver_bias_add_xy(d->carver,bias, x, y);
         }
@@ -266,9 +294,13 @@ void ContentAwareFilter::buildBias(const QImage& mask)
 LqrRetVal s_carverProgressInit(const gchar* /*init_message*/)
 {
     if (!s_stage)
+    {
         s_resiser->progressCallback(0);
+    }
     else
+    {
         s_resiser->progressCallback(50);
+    }
 
     return LQR_OK;
 }
@@ -280,9 +312,13 @@ LqrRetVal s_carverProgressUpdate(gdouble percentage)
     if (!s_stage)
     {
         if (!s_wResize || !s_hResize)
+        {
             progress = (int)(percentage*100.0);
+        }
         else
+        {
             progress = (int)(percentage*50.0);
+        }
     }
     else
     {
@@ -298,9 +334,13 @@ LqrRetVal s_carverProgressEnd(const gchar* /*end_message*/)
     if (!s_stage)
     {
         if (!s_wResize || !s_hResize)
+        {
             s_resiser->progressCallback(100);
+        }
         else
+        {
             s_resiser->progressCallback(50);
+        }
 
         s_stage = true;
     }

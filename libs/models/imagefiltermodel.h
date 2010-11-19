@@ -64,13 +64,13 @@ public:
         ImageFilterModelPointerRole  = ImageModel::FilterModelRoles + 50
     };
 
-    ImageFilterModel(QObject *parent = 0);
+    ImageFilterModel(QObject* parent = 0);
     ~ImageFilterModel();
 
     /** This filter model is for use with ImageModel source models only. */
     void setSourceImageModel(ImageModel* model);
 
-    ImageModel *sourceModel() const;
+    ImageModel* sourceModel() const;
 
     /// Convenience methods mapped to ImageModel
     QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
@@ -99,7 +99,7 @@ public Q_SLOTS:
     /** Changes the current image filter settings and refilters. */
     virtual void setImageFilterSettings(const ImageFilterSettings& settings);
     /** Changes the current image sort settings and resorts. */
-    virtual void setImageSortSettings(const ImageSortSettings &settings);
+    virtual void setImageSortSettings(const ImageSortSettings& settings);
 
     /** Adjust the current ImageFilterSettings.
      *  Equivalent to retrieving the current filter settings, adjusting the parameter
@@ -131,7 +131,7 @@ Q_SIGNALS:
 
     /** Emitted when the filter settings have been changed
         (the model may not yet have been updated) */
-    void filterSettingsChanged(const ImageFilterSettings &settings);
+    void filterSettingsChanged(const ImageFilterSettings& settings);
 
 protected:
 
@@ -152,8 +152,8 @@ protected:
     /** Returns a unique identifier for the category if info. The string need not be for user display. */
     virtual QString categoryIdentifier(const ImageInfo& info) const;
 
-    ImageFilterModelPrivate *const d_ptr;
-    ImageFilterModel(ImageFilterModelPrivate& dd, QObject *parent);
+    ImageFilterModelPrivate* const d_ptr;
+    ImageFilterModel(ImageFilterModelPrivate& dd, QObject* parent);
 
 protected Q_SLOTS:
 

@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,7 +54,7 @@ public:
      * which is emitted when the cache gains knowledge about a possible
      * change of this file on disk.
      */
-    static void connectToSignalFileChanged(QObject *object, const char *slot);
+    static void connectToSignalFileChanged(QObject* object, const char* slot);
     /**
      * remove all images from the cache
      * (e.g. when loading settings changed)

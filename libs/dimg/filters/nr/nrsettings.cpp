@@ -76,7 +76,7 @@ public:
         softCrInput(0),
         thrCbInput(0),
         softCbInput(0)
-        {}
+    {}
 
     const QString    configThrLumInputAdjustmentEntry;
     const QString    configSoftLumInputAdjustmentEntry;
@@ -100,8 +100,8 @@ public:
 };
 
 NRSettings::NRSettings(QWidget* parent)
-          : QWidget(parent),
-            d(new NRSettingsPriv)
+    : QWidget(parent),
+      d(new NRSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -204,11 +204,11 @@ NRSettings::NRSettings(QWidget* parent)
     d->advExpanderBox->addItem(d->luminanceBox, KStandardDirs::locate("data", "digikam/data/colors-luma.png"),
                                i18n("Luminance"),
                                QString("Luminance"), true);
-    d->advExpanderBox->addItem(d->chrominanceRedBox, KStandardDirs::locate("data", "digikam/data/colors-chromared.png"), 
-                               i18n("Chrominance Red"),  
+    d->advExpanderBox->addItem(d->chrominanceRedBox, KStandardDirs::locate("data", "digikam/data/colors-chromared.png"),
+                               i18n("Chrominance Red"),
                                QString("ChrominanceRed"),true);
-    d->advExpanderBox->addItem(d->chrominanceBlueBox, KStandardDirs::locate("data", "digikam/data/colors-chromablue.png"), 
-                               i18n("Chrominance Blue"), 
+    d->advExpanderBox->addItem(d->chrominanceBlueBox, KStandardDirs::locate("data", "digikam/data/colors-chromablue.png"),
+                               i18n("Chrominance Blue"),
                                QString("ChrominanceBlue"), true);
     d->advExpanderBox->addStretch();
 
@@ -304,7 +304,7 @@ void NRSettings::readSettings(KConfigGroup& group)
 
     prm.thresholds[0] = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
     prm.thresholds[2] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[2]);
-    prm.thresholds[1] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[1]); 
+    prm.thresholds[1] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[1]);
     prm.softness[0]   = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
     prm.softness[2]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[2]);
     prm.softness[1]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[1]);
@@ -328,14 +328,18 @@ void NRSettings::loadSettings()
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                QString( "*" ), kapp->activeWindow(),
                                QString( i18n("Photograph Noise Reduction Settings File to Load")) );
+
     if ( loadRestorationFile.isEmpty() )
+    {
         return;
+    }
 
     QFile file(loadRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
         QTextStream stream( &file );
+
         if ( stream.readLine() != "# Photograph Wavelets Noise Reduction Configuration File V2" )
         {
             KMessageBox::error(kapp->activeWindow(),
@@ -369,8 +373,11 @@ void NRSettings::saveAsSettings()
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                QString( "*" ), kapp->activeWindow(),
                                QString( i18n("Photograph Noise Reduction Settings File to Save")) );
+
     if ( saveRestorationFile.isEmpty() )
+    {
         return;
+    }
 
     QFile file(saveRestorationFile.toLocalFile());
 

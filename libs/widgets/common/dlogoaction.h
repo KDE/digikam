@@ -37,7 +37,7 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DLogoAction : public KAction
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 

@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 TextureFilter::TextureFilter(DImg* orgImage, QObject* parent, int blendGain, const QString& texturePath)
-             : DImgThreadedFilter(orgImage, parent, "Texture")
+    : DImgThreadedFilter(orgImage, parent, "Texture")
 {
     m_blendGain   = blendGain;
     m_texturePath = texturePath;
@@ -84,7 +84,11 @@ void TextureFilter::filterImage()
 
     kDebug() << "Texture File: " << m_texturePath;
     DImg texture(m_texturePath);
-    if ( texture.isNull() ) return;
+
+    if ( texture.isNull() )
+    {
+        return;
+    }
 
     DImg textureImg(w, h, m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
 
@@ -106,14 +110,19 @@ void TextureFilter::filterImage()
     uint offset;
 
     DColor teData, transData, inData, outData;
-    uchar *ptr, *dptr, *tptr;
+    uchar* ptr, *dptr, *tptr;
     int progress;
 
     int blendGain;
+
     if (sixteenBit)
+    {
         blendGain = (m_blendGain + 1) * 256 - 1;
+    }
     else
+    {
         blendGain = m_blendGain;
+    }
 
     // Make textured transparent layout.
 
@@ -151,7 +160,9 @@ void TextureFilter::filterImage()
         progress = (int) (((double) x * 50.0) / w);
 
         if (progress % 5 == 0)
+        {
             postProgress(progress);
+        }
     }
 
     // Merge layout and image using overlay method.
@@ -181,6 +192,7 @@ void TextureFilter::filterImage()
                 outData.setGreen(intMult8(inData.green(), inData.green() + intMult8(2 * teData.green(), 255 - inData.green())));
                 outData.setBlue(intMult8(inData.blue(), inData.blue() + intMult8(2 * teData.blue(), 255 - inData.blue())));
             }
+
             outData.setAlpha(inData.alpha());
             outData.setPixel(dptr);
         }
@@ -189,7 +201,9 @@ void TextureFilter::filterImage()
         progress = (int) (50.0 + ((double) x * 50.0) / w);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 

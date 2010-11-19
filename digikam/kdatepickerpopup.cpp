@@ -42,7 +42,7 @@ class KDatePickerAction : public QWidgetAction
 {
 public:
 
-    KDatePickerAction( KDatePicker *widget, QObject *parent )
+    KDatePickerAction( KDatePicker* widget, QObject* parent )
         : QWidgetAction( parent ),
           mDatePicker( widget ), mOriginalParent( widget->parentWidget() )
     {
@@ -50,28 +50,30 @@ public:
 
 protected:
 
-    QWidget* createWidget( QWidget *parent )
+    QWidget* createWidget( QWidget* parent )
     {
-      mDatePicker->setParent( parent );
-      return mDatePicker;
+        mDatePicker->setParent( parent );
+        return mDatePicker;
     }
 
-    void deleteWidget( QWidget *widget )
+    void deleteWidget( QWidget* widget )
     {
-      if ( widget != mDatePicker )
-        return;
+        if ( widget != mDatePicker )
+        {
+            return;
+        }
 
-      mDatePicker->setParent( mOriginalParent );
+        mDatePicker->setParent( mOriginalParent );
     }
 
 private:
 
-    KDatePicker *mDatePicker;
-    QWidget *mOriginalParent;
+    KDatePicker* mDatePicker;
+    QWidget* mOriginalParent;
 };
 
-KDatePickerPopup::KDatePickerPopup( Items items, const QDate& date, QWidget *parent )
-                : KMenu( parent )
+KDatePickerPopup::KDatePickerPopup( Items items, const QDate& date, QWidget* parent )
+    : KMenu( parent )
 {
     mItems = items;
 
@@ -79,10 +81,10 @@ KDatePickerPopup::KDatePickerPopup( Items items, const QDate& date, QWidget *par
     mDatePicker->setCloseButton( false );
 
     connect( mDatePicker, SIGNAL( dateEntered( const QDate& ) ),
-            this, SLOT( slotDateChanged( const QDate& ) ) );
+             this, SLOT( slotDateChanged( const QDate& ) ) );
 
     connect( mDatePicker, SIGNAL( dateSelected( const QDate& ) ),
-            this, SLOT( slotDateChanged( const QDate& ) ) );
+             this, SLOT( slotDateChanged( const QDate& ) ) );
 
     mDatePicker->setDate( date );
 
@@ -91,15 +93,21 @@ KDatePickerPopup::KDatePickerPopup( Items items, const QDate& date, QWidget *par
 
 void KDatePickerPopup::buildMenu()
 {
-    if ( isVisible() ) return;
+    if ( isVisible() )
+    {
+        return;
+    }
+
     clear();
 
-    if ( mItems & DatePicker ) 
+    if ( mItems & DatePicker )
     {
         addAction( new KDatePickerAction( mDatePicker, this ) );
 
         if ( ( mItems & NoDate ) || ( mItems & Words ) )
+        {
             addSeparator();
+        }
     }
 
     if ( mItems & Words )
@@ -116,14 +124,18 @@ void KDatePickerPopup::buildMenu()
         addAction( i18n("Last M&onth"),  this, SLOT( slotPrevMonth() ) );
 
         if ( mItems & NoDate )
-        addSeparator();
+        {
+            addSeparator();
+        }
     }
 
     if ( mItems & NoDate )
+    {
         addAction( i18n("No Date"), this, SLOT( slotNoDate() ) );
+    }
 }
 
-KDatePicker *KDatePickerPopup::datePicker() const
+KDatePicker* KDatePickerPopup::datePicker() const
 {
     return mDatePicker;
 }
@@ -136,8 +148,8 @@ void KDatePickerPopup::setDate( const QDate& date )
 #if 0
 void KDatePickerPopup::setItems( int items )
 {
-  mItems = items;
-  buildMenu();
+    mItems = items;
+    buildMenu();
 }
 #endif
 
@@ -181,10 +193,15 @@ void KDatePickerPopup::slotPrevFriday()
 {
     QDate date = QDate::currentDate();
     int day = date.dayOfWeek();
+
     if ( day < 6 )
+    {
         date = date.addDays( 5 - 7 - day );
+    }
     else
+    {
         date = date.addDays( 5 - day );
+    }
 
     emit dateChanged( date );
 }

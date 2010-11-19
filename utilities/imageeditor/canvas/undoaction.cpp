@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 UndoAction::UndoAction(DImgInterface* iface)
-          : m_iface(iface)
+    : m_iface(iface)
 {
     m_title = i18n("unknown");
 }
@@ -54,9 +54,9 @@ QString UndoAction::getTitle() const
 
 UndoActionRotate::UndoActionRotate(DImgInterface* iface,
                                    UndoActionRotate::Angle angle)
-                : UndoAction(iface), m_angle(angle)
+    : UndoAction(iface), m_angle(angle)
 {
-    switch(m_angle)
+    switch (m_angle)
     {
         case(R90):
             m_title = i18n("Rotate 90 Degrees");
@@ -76,7 +76,7 @@ UndoActionRotate::~UndoActionRotate()
 
 void UndoActionRotate::rollBack()
 {
-    switch(m_angle)
+    switch (m_angle)
     {
         case(R90):
             m_iface->rotate270(false);
@@ -94,7 +94,7 @@ void UndoActionRotate::rollBack()
 
 void UndoActionRotate::execute()
 {
-    switch(m_angle)
+    switch (m_angle)
     {
         case R90:
             m_iface->rotate90(false);
@@ -113,12 +113,16 @@ void UndoActionRotate::execute()
 // ---------------------------------------------------------------------------------------------
 
 UndoActionFlip::UndoActionFlip(DImgInterface* iface, UndoActionFlip::Direction dir)
-              : UndoAction(iface), m_dir(dir)
+    : UndoAction(iface), m_dir(dir)
 {
     if (m_dir == Horizontal)
+    {
         m_title = i18n("Flip Horizontal");
+    }
     else if (m_dir == Vertical)
+    {
         m_title = i18n("Flip Vertical");
+    }
 }
 
 UndoActionFlip::~UndoActionFlip()
@@ -127,7 +131,7 @@ UndoActionFlip::~UndoActionFlip()
 
 void UndoActionFlip::rollBack()
 {
-    switch(m_dir)
+    switch (m_dir)
     {
         case Horizontal:
             m_iface->flipHoriz(false);
@@ -148,7 +152,7 @@ void UndoActionFlip::execute()
 // ---------------------------------------------------------------------------------------------
 
 UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface, const QString& title)
-                      : UndoAction(iface)
+    : UndoAction(iface)
 {
     m_title = title;
 }

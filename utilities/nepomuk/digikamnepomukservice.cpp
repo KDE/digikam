@@ -109,11 +109,13 @@ public:
     {
         QHash<QUrl, WatchedNepomukProperty>::iterator it;
         it = ignoreUris.find(url, property);
+
         if (it != ignoreUris.end())
         {
             ignoreUris.erase(it);
             return true;
         }
+
         return false;
     }
 
@@ -129,7 +131,9 @@ public:
     void triggerSyncToDigikam()
     {
         if (!nepomukChangeTimer->isActive())
+        {
             nepomukChangeTimer->start();
+        }
     }
 };
 
@@ -171,8 +175,8 @@ public:
 
 
 NepomukService::NepomukService(QObject* parent, const QVariantList&)
-              : Nepomuk::Service(parent),
-                d(new NepomukServicePriv)
+    : Nepomuk::Service(parent),
+      d(new NepomukServicePriv)
 {
     Nepomuk::ResourceManager::instance()->init();
 
@@ -181,14 +185,14 @@ NepomukService::NepomukService(QObject* parent, const QVariantList&)
     d->nepomukChangeTimer->setInterval(5000);
 
     connect(d->nepomukChangeTimer, SIGNAL(timeout()),
-             this, SLOT(syncNepomukToDigikam()));
+            this, SLOT(syncNepomukToDigikam()));
 
     d->cleanIgnoreListTimer = new QTimer(this);
     d->cleanIgnoreListTimer->setSingleShot(true);
     d->cleanIgnoreListTimer->setInterval(5000);
 
     connect(d->cleanIgnoreListTimer, SIGNAL(timeout()),
-             this, SLOT(cleanIgnoreList()));
+            this, SLOT(cleanIgnoreList()));
 
     readConfig();
 }
@@ -216,37 +220,45 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
     kDebug() << "Sync to digikam enabled: " << syncToDigikam;
 
     if (d->syncToDigikam == syncToDigikam)
+    {
         return;
+    }
 
     d->syncToDigikam = syncToDigikam;
 
     if (!d->isConnected)
+    {
         connectToDatabase(databaseParameters());
+    }
 
     if (!d->isConnected)
+    {
         return;
+    }
 
     if (d->syncToDigikam)
     {
         connect(mainModel(), SIGNAL(statementAdded(const Soprano::Statement&)),
-                 this, SLOT(slotStatementAdded(const Soprano::Statement&)));
+                this, SLOT(slotStatementAdded(const Soprano::Statement&)));
 
         connect(mainModel(), SIGNAL(statementRemoved(const Soprano::Statement&)),
-                 this, SLOT(slotStatementRemoved(const Soprano::Statement&)));
+                this, SLOT(slotStatementRemoved(const Soprano::Statement&)));
 
         /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
                 this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));*/
 
         if (lastSyncToDigikam().isNull())
+        {
             d->triggerSyncToDigikam();
+        }
     }
     else
     {
         disconnect(mainModel(), SIGNAL(statementAdded(const Soprano::Statement&)),
-                    this, SLOT(slotStatementAdded(const Soprano::Statement&)));
+                   this, SLOT(slotStatementAdded(const Soprano::Statement&)));
 
         disconnect(mainModel(), SIGNAL(statementRemoved(const Soprano::Statement&)),
-                    this, SLOT(slotStatementRemoved(const Soprano::Statement&)));
+                   this, SLOT(slotStatementRemoved(const Soprano::Statement&)));
 
         /*disconnect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
                    this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));*/
@@ -261,41 +273,49 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
     kDebug() << "Sync to nepomuk enabled:" << syncToNepomuk;
 
     if (d->syncToNepomuk == syncToNepomuk)
+    {
         return;
+    }
 
     d->syncToNepomuk = syncToNepomuk;
 
     if (!d->isConnected)
+    {
         connectToDatabase(databaseParameters());
+    }
 
     if (!d->isConnected)
+    {
         return;
+    }
 
     if (d->syncToNepomuk)
     {
-        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
-                this, SLOT(slotImageChange(const ImageChangeset &)));
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
+                this, SLOT(slotImageChange(const ImageChangeset&)));
 
-        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset &)),
-                this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
+                this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
 
-        connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset &)),
-                this, SLOT(slotTagChange(const TagChangeset &)));
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset&)),
+                this, SLOT(slotTagChange(const TagChangeset&)));
 
         // initial pushing to Nepomuk?
         if (!hasSyncToNepomuk())
+        {
             QTimer::singleShot(1000, this, SLOT(fullSyncDigikamToNepomuk()));
+        }
     }
     else
     {
-        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
-                   this, SLOT(slotImageChange(const ImageChangeset &)));
+        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
+                   this, SLOT(slotImageChange(const ImageChangeset&)));
 
-        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset &)),
-                   this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
+        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
+                   this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
 
-        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset &)),
-                   this, SLOT(slotTagChange(const TagChangeset &)));
+        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset&)),
+                   this, SLOT(slotTagChange(const TagChangeset&)));
     }
 }
 
@@ -303,17 +323,25 @@ void NepomukService::triggerResync()
 {
     clearSyncedToDigikam();
     clearSyncedToNepomuk();
+
     if (d->syncToNepomuk)
+    {
         fullSyncDigikamToNepomuk();
+    }
+
     if (d->syncToDigikam)
+    {
         d->triggerSyncToDigikam();
+    }
 }
 
 void NepomukService::setDatabase(const QString& paramsUrl)
 {
     // Called via DBus
     if (!d->syncToDigikam && !d->syncToNepomuk)
+    {
         return;
+    }
 
     KUrl url(paramsUrl);
     kDebug() << "Got database params pushed from running instance:" << url;
@@ -324,7 +352,9 @@ void NepomukService::connectToDatabase(const DatabaseParameters& params)
 {
     // (Re-)connects to the database
     if (params == DatabaseAccess::parameters() || !params.isValid())
+    {
         return;
+    }
 
     d->isConnected = false;
 
@@ -333,6 +363,7 @@ void NepomukService::connectToDatabase(const DatabaseParameters& params)
         DatabaseAccess::setParameters(params, DatabaseAccess::MainApplication);
 
         d->isConnected = DatabaseAccess::checkReadyForUse();
+
         if (!d->isConnected)
         {
             QString errorMsg = DatabaseAccess().lastError();
@@ -349,16 +380,22 @@ void NepomukService::slotImageChange(const ImageChangeset& changeset)
     // Receives signals (via DatabaseWatch via DBus) about changes in application
 
     if (d->changingDB)
+    {
         return;
+    }
 
     DatabaseFields::Set changes = changeset.changes();
     int settings                = 0;
 
     if (changes & DatabaseFields::Rating)
+    {
         settings |= SyncRating | SyncHasNoRating;
+    }
 
     if (changes & DatabaseFields::Comment)
+    {
         settings |= SyncComment;
+    }
 
     if (settings)
     {
@@ -371,7 +408,9 @@ void NepomukService::slotImageTagChange(const ImageTagChangeset& changeset)
     // Receives signals (via DatabaseWatch via DBus) about changes in application
 
     if (d->changingDB)
+    {
         return;
+    }
 
     kDebug() << changeset.ids() << changeset.tags() << (changeset.operation()==ImageTagChangeset::Added);
 
@@ -400,7 +439,7 @@ void NepomukService::fullSyncDigikamToNepomuk()
     foreach (const CollectionLocation &location, collections)
     {
         DatabaseUrl url = DatabaseUrl::fromAlbumAndName(QString(), "/", location.albumRootPath(), location.id());
-        KIO::Job *job = ImageLister::startListJob(url);
+        KIO::Job* job = ImageLister::startListJob(url);
         job->addMetaData("listAlbumsRecursively", "true");
 
         connect(job, SIGNAL(result(KJob*)),
@@ -416,15 +455,20 @@ void NepomukService::fullSyncDigikamToNepomuk()
 void NepomukService::slotFullSyncJobResult(KJob* job)
 {
     Q_UNUSED(job);
+
     // when initial full sync is done
     if ( (--d->fullSyncJobs) == 0)
+    {
         markAsSyncedToNepomuk();
+    }
 }
 
 void NepomukService::slotFullSyncJobData(KIO::Job*, const QByteArray& data)
 {
     if (data.isEmpty())
+    {
         return;
+    }
 
     QList<ImageInfo> infos;
 
@@ -447,19 +491,27 @@ static int nepomukToDigikamRating(int nepomukRating)
 {
     // Map [0,10] -> [-1,5]
     if (nepomukRating == 0)
+    {
         return -1;
+    }
 
     if (nepomukRating % 2)
+    {
         return (nepomukRating + 1) / 2;
+    }
     else
+    {
         return nepomukRating / 2;
+    }
 }
 
 static int digikamToNepomukRating(int digikamRating)
 {
     // Map [-1, 5] -> [0, 10]: 1->2, 2->4, 3->6, 4->8, 5->10 so that there are "full" and not half stars in dolphin
     if (digikamRating == -1)
+    {
         return 0;
+    }
 
     return 2*digikamRating;
 }
@@ -470,8 +522,11 @@ void NepomukService::syncToNepomuk(const QList<qlonglong>& imageIds, SyncToNepom
     foreach (const qlonglong &imageid, imageIds)
     {
         ImageInfo info(imageid);
+
         if (!info.isNull())
+        {
             infos << info;
+        }
     }
     syncToNepomuk(infos, syncSettings);
 }
@@ -487,6 +542,7 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukS
         if (syncSettings & SyncRating)
         {
             int rating = info.rating();
+
             if (rating != -1 || syncSettings & SyncHasNoRating)
             {
                 //kDebug() << "Setting rating" << info.rating() << res.resourceUri() << res.isValid();
@@ -498,6 +554,7 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukS
         if (syncSettings & SyncComment)
         {
             QString comment = info.comment();
+
             if (!comment.isEmpty())
             {
                 //kDebug() << "Setting comment" << info.comment() << res.resourceUri() << res.isValid();
@@ -522,6 +579,7 @@ static Nepomuk::Tag nepomukForDigikamTag(int tagId)
             tag.addIdentifier(tagName);
 
             TagInfo info = DatabaseAccess().db()->getTagInfo(tagId);
+
             if (info.icon.isNull())
             {
                 // Don't think we can use actual large files for tag icon
@@ -536,6 +594,7 @@ static Nepomuk::Tag nepomukForDigikamTag(int tagId)
                 tag.addSymbol(info.icon);
             }
         }
+
         return tag;
     }
 
@@ -562,9 +621,13 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
                     kDebug()<< res.resourceUri() << addOrRemove << res.properties();
 
                     if (addOrRemove)
+                    {
                         res.addTag(tag);
+                    }
                     else
+                    {
                         res.removeProperty(Soprano::Vocabulary::NAO::hasTag(), tag.resourceUri());
+                    }
 
                     d->addIgnoreUri(res.resourceUri(), NaoTags);
                     kDebug()<< "after change:" << res.properties();
@@ -615,28 +678,41 @@ void NepomukService::slotCollectionImageChange(const CollectionImageChangeset& c
 void NepomukService::slotStatementAdded(const Soprano::Statement& statement)
 {
     if (d->changingNepomuk) // no effect currently
+    {
         return;
+    }
 
-    const Soprano::Node &subject = statement.subject();
-    const Soprano::Node &predicate = statement.predicate();
+    const Soprano::Node& subject = statement.subject();
+
+    const Soprano::Node& predicate = statement.predicate();
+
     if (predicate == Soprano::Vocabulary::NAO::numericRating())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoRating))
+        {
             return;
+        }
+
         //kDebug() << "Changed rating" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         d->triggerSyncToDigikam();
     }
     else if (predicate == Soprano::Vocabulary::NAO::description())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoDescription))
+        {
             return;
+        }
+
         //kDebug() << "Changed comment" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         d->triggerSyncToDigikam();
     }
     else if (predicate == Soprano::Vocabulary::NAO::hasTag())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoTags))
+        {
             return;
+        }
+
         //kDebug() << "Added tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         d->triggerSyncToDigikam();
     }
@@ -647,15 +723,20 @@ void NepomukService::slotStatementRemoved(const Soprano::Statement& statement)
     Q_UNUSED(statement);
 
     if (d->changingNepomuk) // no effect currently
+    {
         return;
+    }
 
-    const Soprano::Node &subject   = statement.subject();
-    const Soprano::Node &predicate = statement.predicate();
+    const Soprano::Node& subject   = statement.subject();
+
+    const Soprano::Node& predicate = statement.predicate();
 
     if (predicate == Soprano::Vocabulary::NAO::hasTag())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoTags))
+        {
             return;
+        }
 
         kDebug() << "Removed tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         Nepomuk::Resource res(subject.uri());
@@ -678,11 +759,11 @@ static QString nepomukChangeQuery(const QString& predicate, const QDateTime& dat
                     " ?r nie:url ?path ."
                     " ?g nao:created ?t . "
                     " FILTER ( ?t > \"%5\"^^xls:dateTime ) . } ")
-                    .arg(Soprano::Vocabulary::NAO::naoNamespace().toString())
-                    .arg(Soprano::Vocabulary::XMLSchema::xsdNamespace().toString())
-                    .arg(Nepomuk::Vocabulary::NIE::nieNamespace().toString())
-                    .arg(predicate)
-                    .arg(Soprano::LiteralValue(dateTime).toString());
+            .arg(Soprano::Vocabulary::NAO::naoNamespace().toString())
+            .arg(Soprano::Vocabulary::XMLSchema::xsdNamespace().toString())
+            .arg(Nepomuk::Vocabulary::NIE::nieNamespace().toString())
+            .arg(predicate)
+            .arg(Soprano::LiteralValue(dateTime).toString());
     /*
     More elegant, for Soprano 2.2.65
                             " FILTER ( ?t > %2 ) . } ")
@@ -696,11 +777,16 @@ void NepomukService::syncNepomukToDigikam()
 {
     // wait until digikam -> nepomuk initial sync, if any, has finished
     if (d->fullSyncJobs)
+    {
         d->triggerSyncToDigikam();
+    }
 
     QDateTime lastSyncDate = lastSyncToDigikam();
+
     if (!lastSyncDate.isValid())
+    {
         lastSyncDate = QDateTime::fromTime_t(0);
+    }
 
     QString query;
     KUrl::List fileUrls;
@@ -712,16 +798,19 @@ void NepomukService::syncNepomukToDigikam()
     it    = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
     QList<int> ratings;
     int rating;
-    while( it.next() )
+
+    while ( it.next() )
     {
         fileUrl = KUrl(it.binding(pathBinding).uri());
         rating  = it.binding(valueBinding).literal().toInt();
+
         if (!fileUrl.isEmpty() && rating >= 0 && rating <= 10)
         {
             fileUrls << fileUrl;
             ratings << rating;
         }
     }
+
     syncRatingToDigikam(fileUrls, ratings);
 
     fileUrls.clear();
@@ -729,16 +818,19 @@ void NepomukService::syncNepomukToDigikam()
     it    = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
     QList<QString> comments;
     QString comment;
-    while( it.next() )
+
+    while ( it.next() )
     {
         fileUrl = KUrl(it.binding(pathBinding).uri());
         comment = it.binding(valueBinding).literal().toString();
+
         if (!fileUrl.isEmpty())
         {
             fileUrls << fileUrl;
             comments << comment;
         }
     }
+
     syncCommentToDigikam(fileUrls, comments);
 
     fileUrls.clear();
@@ -746,16 +838,19 @@ void NepomukService::syncNepomukToDigikam()
     it    = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
     QList<QUrl> tags;
     QUrl tag;
-    while( it.next() )
+
+    while ( it.next() )
     {
         fileUrl = KUrl(it.binding(pathBinding).uri());
         tag     = it.binding(valueBinding).uri();
+
         if (!fileUrl.isEmpty())
         {
             fileUrls << fileUrl;
             tags << tag;
         }
     }
+
     syncTagsToDigikam(fileUrls, tags);
 
     // we mark this regardless of having changed anything
@@ -801,7 +896,9 @@ void NepomukService::syncAddedImagesToDigikam(const QList<qlonglong> &ids)
 void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList<int>& ratings)
 {
     if (fileUrls.isEmpty())
+    {
         return;
+    }
 
     QList<ImageInfo> infos;
     QList<int> ratingsForInfos;
@@ -812,12 +909,14 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
         ImageInfo info(fileUrls[i]);
+
         if (!info.isNull())
         {
             infos << info;
             ratingsForInfos << nepomukToDigikamRating(ratings[i]);
         }
     }
+
     if (!infos.isEmpty())
     {
         ChangingDB changing(d);
@@ -825,6 +924,7 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
         DatabaseAccess access;
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
+
         for (int i=0; i<infosSize; i++)
         {
             infos[i].setRating(ratingsForInfos[i]);
@@ -835,22 +935,27 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
 void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStringList& comments)
 {
     if (fileUrls.isEmpty())
+    {
         return;
+    }
 
     QList<ImageInfo> infos;
     QList<QString> commentsForInfos;
     const int size = fileUrls.size();
+
     for (int i=0; i<size; i++)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
         ImageInfo info(fileUrls[i]);
+
         if (!info.isNull())
         {
             infos << info;
             commentsForInfos << comments[i];
         }
     }
+
     if (!infos.isEmpty())
     {
         ChangingDB changing(d);
@@ -858,6 +963,7 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
         DatabaseAccess access;
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
+
         for (int i=0; i<infosSize; i++)
         {
             DatabaseAccess access;
@@ -870,30 +976,39 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
 void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<QUrl>& tags)
 {
     if (fileUrls.isEmpty())
+    {
         return;
+    }
 
     QList<ImageInfo> infos;
     QList<int> tagIdsForInfos;
     const int size = fileUrls.size();
+
     for (int i=0; i<size; i++)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
         ImageInfo info(fileUrls[i]);
+
         if (!info.isNull())
         {
             infos << info;
             QString tagName = tagnameForNepomukTag(tags[i]);
             int tagId = bestDigikamTagForTagName(info, tagName);
+
             if (tagId)
+            {
                 tagIdsForInfos << tagId;
+            }
         }
     }
+
     if (!infos.isEmpty())
     {
         DatabaseAccess access;
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
+
         for (int i=0; i<infosSize; i++)
         {
             infos[i].setTag(tagIdsForInfos[i]);
@@ -904,32 +1019,47 @@ void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<Q
 void NepomukService::removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag)
 {
     if (fileUrl.isEmpty())
+    {
         return;
+    }
 
     ImageInfo info(fileUrl);
+
     if (info.isNull())
+    {
         return;
+    }
 
     QList<int> tags = info.tagIds();
+
     if (tags.isEmpty())
+    {
         return;
+    }
 
     QString tagName = tagnameForNepomukTag(tag);
     QList<int> candidates = TagsCache::instance()->tagsForName(tagName);
+
     if (candidates.isEmpty())
+    {
         return;
+    }
 
     foreach (int candidate, candidates)
     {
         if (tags.contains(candidate))
+        {
             info.removeTag(candidate);
+        }
     }
 }
 
 int NepomukService::bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname)
 {
     if (tagname.isEmpty())
+    {
         return 0;
+    }
 
     QList<int> candidates = TagsCache::instance()->tagsForName(tagname);
 
@@ -951,17 +1081,24 @@ int NepomukService::bestDigikamTagForTagName(const ImageInfo& info, const QStrin
         {
             // already assigned one of the candidates?
             if (assignedTags.contains(tagId))
+            {
                 return 0;
+            }
 
             int id = tagId;
             int score = 0;
-            do {
+
+            do
+            {
                 id = TagsCache::instance()->parentTag(id);
                 score++;
-            } while (id);
+            }
+            while (id);
 
             if (!currentMinimumScore || score < currentMinimumScore)
+            {
                 currentCandidate = tagId;
+            }
         }
         return currentCandidate;
     }
@@ -978,8 +1115,11 @@ QString NepomukService::tagnameForNepomukTag(const QUrl& tagUri) const
             return tag.genericLabel();
         }
         else
+        {
             kWarning() << "invalid tag" << tagUri;
+        }
     }
+
     return QString();
 }
 
@@ -988,8 +1128,12 @@ QString NepomukService::tagnameForNepomukTag(const QUrl& tagUri) const
 QDateTime NepomukService::lastSyncToDigikam() const
 {
     QString timeString = DatabaseAccess().db()->getSetting("SyncNepomukToDigikam-1-Time");
+
     if (!timeString.isNull())
+    {
         return QDateTime::fromString(timeString, Qt::ISODate);
+    }
+
     return QDateTime();
 }
 
@@ -1033,9 +1177,11 @@ DatabaseParameters NepomukService::databaseParameters() const
             if (service.startsWith(digikamService))
             {
                 QDBusInterface interface(service, "/Digikam", "org.kde.digikam");
+
                 if (interface.isValid())
                 {
                     QDBusReply<QString> paramReply = interface.call("currentDatabaseParameters");
+
                     if (paramReply.isValid())
                     {
                         KUrl url(paramReply.value());
@@ -1050,11 +1196,13 @@ DatabaseParameters NepomukService::databaseParameters() const
     // no running instance, read settings file
     KSharedConfig::Ptr config = digikamConfig();
     DatabaseParameters params = DatabaseParameters::parametersFromConfig(config);
+
     if (!params.databaseName.isEmpty())
     {
         kDebug() << "Using database path from config file:" << params;
         return params;
     }
+
     return DatabaseParameters();
 }
 

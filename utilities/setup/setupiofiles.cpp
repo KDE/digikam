@@ -77,7 +77,7 @@ public:
 #endif
     {}
 
-    const QString configGroupName; 
+    const QString configGroupName;
     const QString configJPEGCompressionEntry;
     const QString configJPEGSubSamplingEntry;
     const QString configPNGCompressionEntry;
@@ -100,9 +100,9 @@ public:
 };
 
 SetupIOFiles::SetupIOFiles(QWidget* parent )
-            : QScrollArea(parent), d(new SetupIOFilesPriv)
+    : QScrollArea(parent), d(new SetupIOFilesPriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
@@ -111,22 +111,22 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     //-- JPEG Settings ------------------------------------------------------
 
     d->JPEGOptions    = new JPEGSettings(panel);
-    KSeparator *line1 = new KSeparator(Qt::Horizontal, panel);
+    KSeparator* line1 = new KSeparator(Qt::Horizontal, panel);
 
     //-- PNG Settings -------------------------------------------------------
 
     d->PNGOptions     = new PNGSettings(panel);
-    KSeparator *line2 = new KSeparator(Qt::Horizontal, panel);
+    KSeparator* line2 = new KSeparator(Qt::Horizontal, panel);
 
     //-- TIFF Settings ------------------------------------------------------
 
     d->TIFFOptions    = new TIFFSettings(panel);
-    KSeparator *line3 = new KSeparator(Qt::Horizontal, panel);
+    KSeparator* line3 = new KSeparator(Qt::Horizontal, panel);
 
     //-- JPEG 2000 Settings -------------------------------------------------
 
     d->JPEG2000Options = new JP2KSettings(panel);
-    KSeparator *line4 = new KSeparator(Qt::Horizontal, panel);
+    KSeparator* line4 = new KSeparator(Qt::Horizontal, panel);
 
     //-- PGF Settings -------------------------------------------------
 
@@ -134,14 +134,14 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 
 #ifdef _WIN32
     //-- Show Settings Dialog ----------------------------------------------
-    
-    KSeparator *line5 = new KSeparator(Qt::Horizontal, panel);
+
+    KSeparator* line5 = new KSeparator(Qt::Horizontal, panel);
     d->showImageSettingsDialog = new QCheckBox(panel);
     d->showImageSettingsDialog->setText(i18n("Show Settings Dialog when Saving Image Files"));
     d->showImageSettingsDialog->setWhatsThis( i18n("<ul><li>Checked: A dialog where settings can be changed when saving image files</li>"
-                                                 "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
+            "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
 #endif
-                                                 
+
     vbox->setMargin(0);
     vbox->setSpacing(KDialog::spacingHint());
     vbox->addWidget(d->JPEGOptions);

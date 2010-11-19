@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-21
- * Description : a kio-slave to process date query on 
+ * Description : a kio-slave to process date query on
  *               digiKam albums.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>

@@ -39,18 +39,18 @@ ImageInfoCache::ImageInfoCache()
     qRegisterMetaType<ImageInfoList>("ImageInfoList");
     qRegisterMetaType<QList<ImageInfo> >("QList<ImageInfo>");
 
-    DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
+    DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
-            this, SLOT(slotImageChanged(const ImageChangeset &)),
+    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
+            this, SLOT(slotImageChanged(const ImageChangeset&)),
             Qt::DirectConnection);
 
-    connect(dbwatch, SIGNAL(imageTagChange(const ImageTagChangeset &)),
-            this, SLOT(slotImageTagChanged(const ImageTagChangeset &)),
+    connect(dbwatch, SIGNAL(imageTagChange(const ImageTagChangeset&)),
+            this, SLOT(slotImageTagChanged(const ImageTagChangeset&)),
             Qt::DirectConnection);
 
-    connect(dbwatch, SIGNAL(albumChange(const AlbumChangeset &)),
-            this, SLOT(slotAlbumChange(const AlbumChangeset &)),
+    connect(dbwatch, SIGNAL(albumChange(const AlbumChangeset&)),
+            this, SLOT(slotAlbumChange(const AlbumChangeset&)),
             Qt::DirectConnection);
 }
 
@@ -58,16 +58,18 @@ ImageInfoCache::~ImageInfoCache()
 {
 }
 
-ImageInfoData *ImageInfoCache::infoForId(qlonglong id)
+ImageInfoData* ImageInfoCache::infoForId(qlonglong id)
 {
-    QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(id);
+    QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(id);
+
     if (it == m_infos.end())
     {
-        ImageInfoData *data = new ImageInfoData();
+        ImageInfoData* data = new ImageInfoData();
         data->id            = id;
         m_infos[id]         = data;
         return data;
     }
+
     return (*it);
 }
 
@@ -76,25 +78,31 @@ bool ImageInfoCache::hasInfoForId(qlonglong id) const
     return m_infos.contains(id);
 }
 
-void ImageInfoCache::dropInfo(ImageInfoData *infodata)
+void ImageInfoCache::dropInfo(ImageInfoData* infodata)
 {
     // check again ref count, now in mutex-protected context
     if (infodata->isReferenced())
+    {
         return;
+    }
 
     if (m_infos.remove(infodata->id))
+    {
         delete infodata;
+    }
 }
 
 QString ImageInfoCache::albumName(DatabaseAccess& access, int albumId)
 {
     QHash<int, QString>::iterator it = m_albums.find(albumId);
+
     if (it == m_albums.end())
     {
         QString album = access.db()->getAlbumRelativePath(albumId);
         m_albums[albumId] = album;
         return album;
     }
+
     return (*it);
 }
 
@@ -105,27 +113,52 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 
     foreach (const qlonglong& imageId, changeset.ids())
     {
-        QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(imageId);
+        QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
+
         if (it != m_infos.end())
         {
             // invalidate the relevant field. It will be lazy-loaded at first access.
             DatabaseFields::Set changes = changeset.changes();
+
             if (changes & DatabaseFields::ImageCommentsAll)
+            {
                 (*it)->defaultCommentCached = false;
+            }
+
             if (changes & DatabaseFields::Category)
+            {
                 (*it)->categoryCached = false;
+            }
+
             if (changes & DatabaseFields::Format)
+            {
                 (*it)->formatCached = false;
+            }
+
             if (changes & DatabaseFields::Rating)
+            {
                 (*it)->ratingCached = false;
+            }
+
             if (changes & DatabaseFields::CreationDate)
+            {
                 (*it)->creationDateCached = false;
+            }
+
             if (changes & DatabaseFields::ModificationDate)
+            {
                 (*it)->modificationDateCached = false;
+            }
+
             if (changes & DatabaseFields::FileSize)
+            {
                 (*it)->fileSizeCached = false;
+            }
+
             if (changes & DatabaseFields::Width || changes & DatabaseFields::Height)
+            {
                 (*it)->imageSizeCached = false;
+            }
         }
     }
 }
@@ -136,9 +169,12 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
 
     foreach (const qlonglong& imageId, changeset.ids())
     {
-        QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(imageId);
+        QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
+
         if (it != m_infos.end())
+        {
             (*it)->tagIdsCached = false;
+        }
     }
 }
 
@@ -146,7 +182,7 @@ void ImageInfoCache::slotAlbumChange(const AlbumChangeset& changeset)
 {
     DatabaseAccess access;
 
-    switch(changeset.operation())
+    switch (changeset.operation())
     {
         case AlbumChangeset::Added:
         case AlbumChangeset::Deleted:

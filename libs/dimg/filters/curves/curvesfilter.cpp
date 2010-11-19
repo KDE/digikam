@@ -35,7 +35,7 @@ namespace Digikam
 {
 
 CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const CurvesContainer& settings)
-            : DImgThreadedFilter(orgImage, parent, "CurvesFilter")
+    : DImgThreadedFilter(orgImage, parent, "CurvesFilter")
 {
     m_settings = settings;
     initFilter();

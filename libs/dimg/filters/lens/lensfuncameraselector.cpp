@@ -110,7 +110,7 @@ public:
 };
 
 LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
-                     : QWidget(parent), d(new LensFunCameraSelectorPriv)
+    : QWidget(parent), d(new LensFunCameraSelectorPriv)
 {
     d->iface            = new LensFunIface();
 
@@ -160,7 +160,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
     d->metadataUsage->setEnabled(false);
     d->metadataUsage->setCheckState(Qt::Unchecked);
     d->metadataUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
-                                   "from the image metadata (as Exif or XMP)."));
+                                        "from the image metadata (as Exif or XMP)."));
 
     d->focalLabel       = new QLabel(i18n("Focal Length:"), this);
     d->aperLabel        = new QLabel(i18n("Aperture:"), this);
@@ -273,6 +273,7 @@ void LensFunCameraSelector::writeSettings(KConfigGroup& group)
 void LensFunCameraSelector::setMetadata(const DMetadata& meta)
 {
     d->metadata = meta;
+
     if (d->metadata.isEmpty())
     {
         d->metadataUsage->setCheckState(Qt::Unchecked);
@@ -297,7 +298,7 @@ void LensFunCameraSelector::setUseMetadata(bool b)
 
 bool LensFunCameraSelector::useMetadata() const
 {
-      return (d->metadataUsage->isChecked());
+    return (d->metadataUsage->isChecked());
 }
 
 void LensFunCameraSelector::setPassiveMetadataUsage(bool b)
@@ -339,6 +340,7 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
         else
         {
             LensFunIface::MetadataMatch ret = findFromMetadata();
+
             switch (ret)
             {
                 case LensFunIface::MetadataUnavailable:
@@ -384,7 +386,11 @@ void LensFunCameraSelector::refreshSettingsView()
     d->aperLabel->setStyleSheet(kapp->styleSheet());
     d->distLabel->setStyleSheet(kapp->styleSheet());
 
-    if (!d->passiveMetadataUsage) d->makeDescription->setText(QString("<i>%1</i>").arg(d->iface->makeDescription()));
+    if (!d->passiveMetadataUsage)
+    {
+        d->makeDescription->setText(QString("<i>%1</i>").arg(d->iface->makeDescription()));
+    }
+
     int makerIdx = -1;
 
     if (d->iface->usedCamera())
@@ -395,26 +401,44 @@ void LensFunCameraSelector::refreshSettingsView()
     else
     {
         int i = d->make->combo()->findText(d->iface->makeDescription());
-        if (i == -1) i = d->make->combo()->findText("Generic");
+
+        if (i == -1)
+        {
+            i = d->make->combo()->findText("Generic");
+        }
+
         if (i >= 0)
         {
             d->make->setCurrentIndex(i);
             populateDeviceCombos();
         }
-        if (!d->passiveMetadataUsage) d->makeLabel->setStyleSheet(d->orangeStyle);
+
+        if (!d->passiveMetadataUsage)
+        {
+            d->makeLabel->setStyleSheet(d->orangeStyle);
+        }
     }
 
     if (makerIdx >= 0)
     {
         d->make->setCurrentIndex(makerIdx);
         d->make->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->makeLabel->setStyleSheet(d->greenStyle);
+
+        if (!d->passiveMetadataUsage)
+        {
+            d->makeLabel->setStyleSheet(d->greenStyle);
+        }
+
         populateDeviceCombos();
     }
 
     // ------------------------------------------------------------------------------------------------
 
-    if (!d->passiveMetadataUsage) d->modelDescription->setText(QString("<i>%1</i>").arg(d->iface->modelDescription()));
+    if (!d->passiveMetadataUsage)
+    {
+        d->modelDescription->setText(QString("<i>%1</i>").arg(d->iface->modelDescription()));
+    }
+
     int modelIdx = -1;
 
     if (d->iface->usedCamera())
@@ -427,17 +451,29 @@ void LensFunCameraSelector::refreshSettingsView()
     {
         d->model->setCurrentIndex(modelIdx);
         d->model->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->modelLabel->setStyleSheet(d->greenStyle);
+
+        if (!d->passiveMetadataUsage)
+        {
+            d->modelLabel->setStyleSheet(d->greenStyle);
+        }
+
         populateLensCombo();
     }
     else
     {
-        if (!d->passiveMetadataUsage) d->modelLabel->setStyleSheet(d->orangeStyle);
+        if (!d->passiveMetadataUsage)
+        {
+            d->modelLabel->setStyleSheet(d->orangeStyle);
+        }
     }
 
     // ------------------------------------------------------------------------------------------------
 
-    if (!d->passiveMetadataUsage) d->lensDescription->setText(QString("<i>%1</i>").arg(d->iface->lensDescription()));
+    if (!d->passiveMetadataUsage)
+    {
+        d->lensDescription->setText(QString("<i>%1</i>").arg(d->iface->lensDescription()));
+    }
+
     int lensIdx = -1;
 
     if (d->iface->usedLens())
@@ -451,11 +487,18 @@ void LensFunCameraSelector::refreshSettingsView()
         // found lens model directly, best case :)
         d->lens->setCurrentIndex(lensIdx);
         d->lens->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->lensLabel->setStyleSheet(d->greenStyle);
+
+        if (!d->passiveMetadataUsage)
+        {
+            d->lensLabel->setStyleSheet(d->greenStyle);
+        }
     }
     else
     {
-        if (!d->passiveMetadataUsage) d->lensLabel->setStyleSheet(d->orangeStyle);
+        if (!d->passiveMetadataUsage)
+        {
+            d->lensLabel->setStyleSheet(d->orangeStyle);
+        }
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -464,33 +507,54 @@ void LensFunCameraSelector::refreshSettingsView()
     {
         d->focal->setValue(d->iface->settings().focalLength);
         d->focal->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->focalLabel->setStyleSheet(d->greenStyle);
+
+        if (!d->passiveMetadataUsage)
+        {
+            d->focalLabel->setStyleSheet(d->greenStyle);
+        }
     }
     else
     {
-        if (!d->passiveMetadataUsage) d->focalLabel->setStyleSheet(d->orangeStyle);
+        if (!d->passiveMetadataUsage)
+        {
+            d->focalLabel->setStyleSheet(d->orangeStyle);
+        }
     }
 
     if (d->iface->settings().aperture != -1.0)
     {
         d->aperture->setValue(d->iface->settings().aperture);
         d->aperture->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->aperLabel->setStyleSheet(d->greenStyle);
+
+        if (!d->passiveMetadataUsage)
+        {
+            d->aperLabel->setStyleSheet(d->greenStyle);
+        }
     }
     else
     {
-        if (!d->passiveMetadataUsage) d->aperLabel->setStyleSheet(d->orangeStyle);
+        if (!d->passiveMetadataUsage)
+        {
+            d->aperLabel->setStyleSheet(d->orangeStyle);
+        }
     }
 
     if (d->iface->settings().subjectDistance != -1.0)
     {
         d->distance->setValue(d->iface->settings().subjectDistance);
         d->distance->setEnabled(d->passiveMetadataUsage);
-        if (!d->passiveMetadataUsage) d->distLabel->setStyleSheet(d->greenStyle);
+
+        if (!d->passiveMetadataUsage)
+        {
+            d->distLabel->setStyleSheet(d->greenStyle);
+        }
     }
     else
     {
-        if (!d->passiveMetadataUsage) d->distLabel->setStyleSheet(d->orangeStyle);
+        if (!d->passiveMetadataUsage)
+        {
+            d->distLabel->setStyleSheet(d->orangeStyle);
+        }
     }
 }
 
@@ -505,32 +569,39 @@ void LensFunCameraSelector::populateDeviceCombos()
     d->model->combo()->clear();
 
     bool firstRun = false;
+
     if ( d->make->combo()->count() == 0 )
-       firstRun = true;
+    {
+        firstRun = true;
+    }
 
     while ( *it )
     {
-       if ( firstRun )
-       {
-           // Maker DB does not change, so we fill it only once.
-           if ( (*it)->Maker )
-           {
+        if ( firstRun )
+        {
+            // Maker DB does not change, so we fill it only once.
+            if ( (*it)->Maker )
+            {
                 QString t( (*it)->Maker );
-                if ( d->make->combo()->findText( t, Qt::MatchExactly ) < 0 )
-                    d->make->addItem( t );
-           }
-       }
 
-       // Fill models for current selected maker
-       if ( (*it)->Model && (*it)->Maker == d->make->combo()->currentText() )
-       {
+                if ( d->make->combo()->findText( t, Qt::MatchExactly ) < 0 )
+                {
+                    d->make->addItem( t );
+                }
+            }
+        }
+
+        // Fill models for current selected maker
+        if ( (*it)->Model && (*it)->Maker == d->make->combo()->currentText() )
+        {
             LensFunIface::DevicePtr dev = *it;
             QVariant b                  = qVariantFromValue(dev);
             d->model->combo()->addItem( dev->Model, b );
-       }
+        }
 
-       ++it;
+        ++it;
     }
+
     d->make->combo()->model()->sort(0, Qt::AscendingOrder);
     d->model->combo()->model()->sort(0, Qt::AscendingOrder);
 
@@ -544,14 +615,17 @@ void LensFunCameraSelector::populateLensCombo()
     d->lens->combo()->clear();
 
     QVariant v = d->model->combo()->itemData( d->model->currentIndex() );
+
     if (!v.isValid() || v.isNull())
     {
         kDebug() << "Invalid variant value for device!";
         return;
     }
+
     kDebug() << "variant: " << v;
 
     LensFunIface::DevicePtr dev = v.value<LensFunIface::DevicePtr>();
+
     if (!dev)
     {
         kDebug() << "Device is null!";
@@ -573,6 +647,7 @@ void LensFunCameraSelector::populateLensCombo()
         d->lens->combo()->addItem(lens->Model, b);
         ++lenses;
     }
+
     d->lens->combo()->model()->sort(0, Qt::AscendingOrder);
     d->lens->blockSignals(false);
 }
@@ -605,9 +680,13 @@ void LensFunCameraSelector::slotLensSelected()
 
     if (d->iface->usedLens() &&
         settings.cropFactor <= 0.0) // this should not happen
+    {
         settings.cropFactor = d->iface->usedLens()->CropFactor;
+    }
     else
+    {
         settings.cropFactor = -1.0;
+    }
 
     d->iface->setSettings(settings);
     emit signalLensSettingsChanged();

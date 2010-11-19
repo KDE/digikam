@@ -41,7 +41,7 @@ class ImageSelectionOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    ImageSelectionOverlayButton(QAbstractItemView *parentView);
+    ImageSelectionOverlayButton(QAbstractItemView* parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -58,12 +58,12 @@ class ImageSelectionOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ImageSelectionOverlay(QObject *parent);
+    ImageSelectionOverlay(QObject* parent);
     virtual void setActive(bool active);
 
 protected:
 
-    virtual ItemViewHoverButton *createButton();
+    virtual ItemViewHoverButton* createButton();
     virtual void updateButton(const QModelIndex& index);
 
 protected Q_SLOTS:

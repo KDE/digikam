@@ -83,7 +83,7 @@ public:
 Texture::Texture(int w, int h, const QColor& from, const QColor& to,
                  Theme::Bevel bevel, Theme::Gradient gradient,
                  bool border, const QColor& borderColor)
-       : d(new TexturePriv)
+    : d(new TexturePriv)
 {
     d->bevel       = bevel;
     d->gradient    = gradient;
@@ -102,7 +102,9 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
     }
 
     if (d->width <= 0 || d->height <= 0)
+    {
         return;
+    }
 
     if (bevel & Theme::SUNKEN)
     {
@@ -126,14 +128,22 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
         d->blue  = new unsigned char[w*h];
 
         if (gradient == Theme::HORIZONTAL)
+        {
             doHgradient();
+        }
         else if (gradient == Theme::VERTICAL)
+        {
             doVgradient();
+        }
         else if (gradient == Theme::DIAGONAL)
+        {
             doDgradient();
+        }
 
         if (bevel & Theme::RAISED || bevel & Theme::SUNKEN)
+        {
             doBevel();
+        }
 
         buildImage();
     }
@@ -142,11 +152,19 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
 Texture::~Texture()
 {
     if (d->red)
+    {
         delete [] d->red;
+    }
+
     if (d->green)
+    {
         delete [] d->green;
+    }
+
     if (d->blue)
+    {
         delete [] d->blue;
+    }
 
     delete d;
 }
@@ -154,10 +172,14 @@ Texture::~Texture()
 QPixmap Texture::renderPixmap() const
 {
     if (d->width <= 0 || d->height <= 0)
+    {
         return QPixmap();
+    }
 
     if (!d->border)
+    {
         return d->pixmap;
+    }
 
     QPixmap pix(d->width+2, d->height+2);
     QPainter p(&pix);
@@ -173,6 +195,7 @@ void Texture::doSolid()
     d->pixmap = QPixmap(d->width, d->height);
     QPainter p(&d->pixmap);
     p.fillRect(0, 0, d->width, d->height, d->color0);
+
     if (d->bevel == Theme::RAISED)
     {
         p.setPen(d->color0.light(120));
@@ -196,10 +219,10 @@ void Texture::doSolid()
 void Texture::doHgradient()
 {
     float drx, dgx, dbx,
-        xr = (float) d->color0.red(),
-        xg = (float) d->color0.green(),
-        xb = (float) d->color0.blue();
-    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
+          xr = (float) d->color0.red(),
+          xg = (float) d->color0.green(),
+          xb = (float) d->color0.blue();
+    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
 
     register int x, y;
 
@@ -233,9 +256,9 @@ void Texture::doHgradient()
 void Texture::doVgradient()
 {
     float dry, dgy, dby,
-        yr = (float) d->color0.red(),
-        yg = (float) d->color0.green(),
-        yb = (float) d->color0.blue();
+          yr = (float) d->color0.red(),
+          yg = (float) d->color0.green(),
+          yb = (float) d->color0.blue();
 
     dry = (float) (d->color1.red()   - d->color0.red());
     dgy = (float) (d->color1.green() - d->color0.green());
@@ -245,7 +268,7 @@ void Texture::doVgradient()
     dgy /= d->height;
     dby /= d->height;
 
-    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
+    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
     register int y;
 
     for (y = 0; y < d->height; ++y, pr += d->width, pg += d->width, pb += d->width)
@@ -269,10 +292,10 @@ void Texture::doDgradient()
                                         xr = (float) d->color0.red(),
                                         xg = (float) d->color0.green(),
                                         xb = (float) d->color0.blue();
-    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
+    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
     unsigned int w    = d->width * 2, h = d->height * 2;
-    unsigned int *xt  = xtable;
-    unsigned int *yt  = ytable;
+    unsigned int* xt  = xtable;
+    unsigned int* yt  = ytable;
 
     register int x, y;
 
@@ -330,7 +353,7 @@ void Texture::doDgradient()
 
 void Texture::doBevel()
 {
-    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
+    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
 
     register unsigned char r, g, b, rr ,gg ,bb;
     register unsigned int w = d->width, h = d->height - 1, wh = w * h;
@@ -339,13 +362,27 @@ void Texture::doBevel()
     {
         r  = *pr;
         rr = r + (r >> 1);
-        if (rr < r) rr = ~0;
+
+        if (rr < r)
+        {
+            rr = ~0;
+        }
+
         g  = *pg;
         gg = g + (g >> 1);
-        if (gg < g) gg = ~0;
+
+        if (gg < g)
+        {
+            gg = ~0;
+        }
+
         b  = *pb;
         bb = b + (b >> 1);
-        if (bb < b) bb = ~0;
+
+        if (bb < b)
+        {
+            bb = ~0;
+        }
 
         *pr = rr;
         *pg = gg;
@@ -353,13 +390,27 @@ void Texture::doBevel()
 
         r  = *(pr + wh);
         rr = (r >> 2) + (r >> 1);
-        if (rr > r) rr = 0;
+
+        if (rr > r)
+        {
+            rr = 0;
+        }
+
         g  = *(pg + wh);
         gg = (g >> 2) + (g >> 1);
-        if (gg > g) gg = 0;
+
+        if (gg > g)
+        {
+            gg = 0;
+        }
+
         b  = *(pb + wh);
         bb = (b >> 2) + (b >> 1);
-        if (bb > b) bb = 0;
+
+        if (bb > b)
+        {
+            bb = 0;
+        }
 
         *((pr++) + wh) = rr;
         *((pg++) + wh) = gg;
@@ -368,13 +419,27 @@ void Texture::doBevel()
 
     r  = *pr;
     rr = r + (r >> 1);
-    if (rr < r) rr = ~0;
+
+    if (rr < r)
+    {
+        rr = ~0;
+    }
+
     g  = *pg;
     gg = g + (g >> 1);
-    if (gg < g) gg = ~0;
+
+    if (gg < g)
+    {
+        gg = ~0;
+    }
+
     b  = *pb;
     bb = b + (b >> 1);
-    if (bb < b) bb = ~0;
+
+    if (bb < b)
+    {
+        bb = ~0;
+    }
 
     *pr = rr;
     *pg = gg;
@@ -382,13 +447,27 @@ void Texture::doBevel()
 
     r  = *(pr + wh);
     rr = (r >> 2) + (r >> 1);
-    if (rr > r) rr = 0;
+
+    if (rr > r)
+    {
+        rr = 0;
+    }
+
     g  = *(pg + wh);
     gg = (g >> 2) + (g >> 1);
-    if (gg > g) gg = 0;
+
+    if (gg > g)
+    {
+        gg = 0;
+    }
+
     b  = *(pb + wh);
     bb = (b >> 2) + (b >> 1);
-    if (bb > b) bb = 0;
+
+    if (bb > b)
+    {
+        bb = 0;
+    }
 
     *(pr + wh) = rr;
     *(pg + wh) = gg;
@@ -402,13 +481,27 @@ void Texture::doBevel()
     {
         r  = *pr;
         rr = r + (r >> 1);
-        if (rr < r) rr = ~0;
+
+        if (rr < r)
+        {
+            rr = ~0;
+        }
+
         g  = *pg;
         gg = g + (g >> 1);
-        if (gg < g) gg = ~0;
+
+        if (gg < g)
+        {
+            gg = ~0;
+        }
+
         b  = *pb;
         bb = b + (b >> 1);
-        if (bb < b) bb = ~0;
+
+        if (bb < b)
+        {
+            bb = ~0;
+        }
 
         *pr = rr;
         *pg = gg;
@@ -420,13 +513,27 @@ void Texture::doBevel()
 
         r  = *pr;
         rr = (r >> 2) + (r >> 1);
-        if (rr > r) rr = 0;
+
+        if (rr > r)
+        {
+            rr = 0;
+        }
+
         g  = *pg;
         gg = (g >> 2) + (g >> 1);
-        if (gg > g) gg = 0;
+
+        if (gg > g)
+        {
+            gg = 0;
+        }
+
         b  = *pb;
         bb = (b >> 2) + (b >> 1);
-        if (bb > b) bb = 0;
+
+        if (bb > b)
+        {
+            bb = 0;
+        }
 
         *(pr++) = rr;
         *(pg++) = gg;
@@ -435,13 +542,27 @@ void Texture::doBevel()
 
     r  = *pr;
     rr = r + (r >> 1);
-    if (rr < r) rr = ~0;
+
+    if (rr < r)
+    {
+        rr = ~0;
+    }
+
     g  = *pg;
     gg = g + (g >> 1);
-    if (gg < g) gg = ~0;
+
+    if (gg < g)
+    {
+        gg = ~0;
+    }
+
     b  = *pb;
     bb = b + (b >> 1);
-    if (bb < b) bb = ~0;
+
+    if (bb < b)
+    {
+        bb = ~0;
+    }
 
     *pr = rr;
     *pg = gg;
@@ -453,13 +574,27 @@ void Texture::doBevel()
 
     r  = *pr;
     rr = (r >> 2) + (r >> 1);
-    if (rr > r) rr = 0;
+
+    if (rr > r)
+    {
+        rr = 0;
+    }
+
     g  = *pg;
     gg = (g >> 2) + (g >> 1);
-    if (gg > g) gg = 0;
+
+    if (gg > g)
+    {
+        gg = 0;
+    }
+
     b  = *pb;
     bb = (b >> 2) + (b >> 1);
-    if (bb > b) bb = 0;
+
+    if (bb > b)
+    {
+        bb = 0;
+    }
 
     *pr = rr;
     *pg = gg;
@@ -468,13 +603,14 @@ void Texture::doBevel()
 
 void Texture::buildImage()
 {
-    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
+    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
 
     QImage image(d->width, d->height, QImage::Format_ARGB32);
 
     unsigned int* bits = (unsigned int*) image.bits();
 
     register int p;
+
     for (p =0; p < d->width*d->height; ++p)
     {
         *bits = 0xff << 24 | *pr << 16 | *pg << 8 | *pb;

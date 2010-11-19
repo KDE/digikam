@@ -83,7 +83,7 @@ public:
 };
 
 DatabaseServerStarter::DatabaseServerStarter(QObject* parent=0)
-                     : QObject(parent)
+    : QObject(parent)
 {
 }
 
@@ -94,6 +94,7 @@ bool DatabaseServerStarter::init()
         kError() << "Error while registering DatabaseServerError class.";
         return false;
     }
+
     return true;
 }
 
@@ -111,15 +112,20 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
      */
     QSystemSemaphore sem("DigikamDBSrvAccess", 1, QSystemSemaphore::Open);
     sem.acquire();
+
     if (!isServerRegistered())
     {
         const QString dbServerMgrPath(LIBEXEC_INSTALL_DIR "/digikamdatabaseserver");
+
         if ( dbServerMgrPath.isEmpty() )
+        {
             kDebug(50003) << "No path to digikamdatabaseserver set in server manager configuration!";
+        }
 
         const QStringList arguments;
 
         bool result = QProcess::startDetached( dbServerMgrPath, arguments );
+
         if ( !result )
         {
             kDebug(50003) << "Could not start database server manager !";
@@ -146,6 +152,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
     QDBusInterface dbus_iface("org.kde.digikam.DatabaseServer", "/DatabaseServer");
     QDBusMessage stateMsg = dbus_iface.call("isRunning");
+
     if (!stateMsg.arguments().at(0).toBool())
     {
         DatabaseServerError error;
@@ -154,6 +161,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
         arguments.append(dbType);
 
         QDBusMessage reply = dbus_iface.callWithArgumentList(QDBus::Block, "startDatabaseProcess", arguments);
+
         if (QDBusMessage::ErrorMessage == reply.type())
         {
             result.setErrorType(DatabaseServerError::StartError);
@@ -171,6 +179,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
             result = item;
         }
     }
+
     sem.release();
 
     return result;
@@ -186,6 +195,7 @@ bool DatabaseServerStarter::isServerRegistered()
         QStringList serviceNames = reply.value();
         return serviceNames.contains("org.kde.digikam.DatabaseServer");
     }
+
     return false;
 }
 

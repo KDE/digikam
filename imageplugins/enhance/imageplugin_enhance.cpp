@@ -91,8 +91,8 @@ public:
 };
 
 ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
-                   : ImagePlugin(parent, "ImagePlugin_Enhance"),
-                     d(new ImagePlugin_EnhancePriv)
+    : ImagePlugin(parent, "ImagePlugin_Enhance"),
+      d(new ImagePlugin_EnhancePriv)
 {
     d->restorationAction = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
     actionCollection()->addAction("imageplugin_restoration", d->restorationAction);
@@ -121,7 +121,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
 
     d->redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
     d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
-                                      "Select a region including the eyes to use this option."));
+                                       "Select a region including the eyes to use this option."));
     actionCollection()->addAction("imageplugin_redeye", d->redeyeAction);
     connect(d->redeyeAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRedEye()));
@@ -130,7 +130,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     actionCollection()->addAction("imageplugin_inpainting", d->inPaintingAction);
     d->inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
     d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
-                                            "To use this option, select a region to in-paint.") );
+                                       "To use this option, select a region to in-paint.") );
     connect(d->inPaintingAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInPainting()));
 
@@ -267,7 +267,7 @@ void ImagePlugin_Enhance::slotInPainting()
         return;
     }
 
-    InPaintingTool *tool = new InPaintingTool(this);
+    InPaintingTool* tool = new InPaintingTool(this);
     loadTool(tool);
 }
 

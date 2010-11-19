@@ -48,7 +48,7 @@ class GPConfigDlg : public KDialog
 
 public:
 
-    GPConfigDlg(Camera *camera, CameraWidget *widget, QWidget *parent=0);
+    GPConfigDlg(Camera* camera, CameraWidget* widget, QWidget* parent=0);
     ~GPConfigDlg();
 
 private Q_SLOTS:
@@ -57,7 +57,7 @@ private Q_SLOTS:
 
 private:
 
-    void appendWidget(QWidget *parent, CameraWidget* widget);
+    void appendWidget(QWidget* parent, CameraWidget* widget);
     void updateWidgetValue(CameraWidget* widget);
 
 private:

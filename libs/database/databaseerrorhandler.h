@@ -51,8 +51,8 @@ class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
 
 public:
 
-    DatabaseErrorHandler(){};
-    ~DatabaseErrorHandler(){};
+    DatabaseErrorHandler() {};
+    ~DatabaseErrorHandler() {};
 
 public Q_SLOTS:
 

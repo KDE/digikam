@@ -104,7 +104,7 @@ public:
     }
 
     IccTransformPriv(const IccTransformPriv& other)
-         : QSharedData(other)
+        : QSharedData(other)
     {
         handle = 0;
         operator=(other);
@@ -166,28 +166,43 @@ public:
     IccProfile& sRGB()
     {
         if (builtinProfile.isNull())
+        {
             builtinProfile = IccProfile::sRGB();
+        }
+
         return builtinProfile;
     }
 
     IccProfile& effectiveInputProfile()
     {
         if (!embeddedProfile.isNull())
+        {
             return embeddedProfile;
+        }
         else if (!inputProfile.isNull())
+        {
             return inputProfile;
+        }
         else
+        {
             return sRGB();
+        }
     }
 
     IccProfile effectiveInputProfileConst() const
     {
         if (!embeddedProfile.isNull())
+        {
             return embeddedProfile;
+        }
         else if (!inputProfile.isNull())
+        {
             return inputProfile;
+        }
         else
+        {
             return IccProfile::sRGB();
+        }
     }
 
     cmsHTRANSFORM        handle;
@@ -195,12 +210,12 @@ public:
 };
 
 IccTransform::IccTransform()
-            : d(new IccTransformPriv)
+    : d(new IccTransformPriv)
 {
 }
 
 IccTransform::IccTransform(const IccTransform& other)
-            : d(other.d)
+    : d(other.d)
 {
 }
 
@@ -224,7 +239,10 @@ void IccTransform::init()
 void IccTransform::setInputProfile(const IccProfile& profile)
 {
     if (profile == d->inputProfile)
+    {
         return;
+    }
+
     close();
     d->inputProfile = profile;
 }
@@ -232,8 +250,12 @@ void IccTransform::setInputProfile(const IccProfile& profile)
 void IccTransform::setEmbeddedProfile(const DImg& image)
 {
     IccProfile profile = image.getIccProfile();
+
     if (profile == d->embeddedProfile)
+    {
         return;
+    }
+
     close();
     d->embeddedProfile = profile;
 }
@@ -241,7 +263,10 @@ void IccTransform::setEmbeddedProfile(const DImg& image)
 void IccTransform::setOutputProfile(const IccProfile& profile)
 {
     if (profile == d->outputProfile)
+    {
         return;
+    }
+
     close();
     d->outputProfile = profile;
 }
@@ -249,7 +274,10 @@ void IccTransform::setOutputProfile(const IccProfile& profile)
 void IccTransform::setProofProfile(const IccProfile& profile)
 {
     if (profile == d->proofProfile)
+    {
         return;
+    }
+
     close();
     d->proofProfile = profile;
 }
@@ -299,7 +327,10 @@ static int renderingIntentToLcmsIntent(IccTransform::RenderingIntent intent)
 void IccTransform::setIntent(RenderingIntent intent)
 {
     if (intent == d->intent)
+    {
         return;
+    }
+
     d->intent = renderingIntentToLcmsIntent(intent);
     close();
 }
@@ -307,7 +338,10 @@ void IccTransform::setIntent(RenderingIntent intent)
 void IccTransform::setProofIntent(RenderingIntent intent)
 {
     if (intent == d->proofIntent)
+    {
         return;
+    }
+
     d->proofIntent = renderingIntentToLcmsIntent(intent);
     close();
 }
@@ -315,7 +349,10 @@ void IccTransform::setProofIntent(RenderingIntent intent)
 void IccTransform::setUseBlackPointCompensation(bool useBPC)
 {
     if (d->useBPC == useBPC)
+    {
         return;
+    }
+
     close();
     d->useBPC = useBPC;
 }
@@ -323,7 +360,10 @@ void IccTransform::setUseBlackPointCompensation(bool useBPC)
 void IccTransform::setCheckGamut(bool checkGamut)
 {
     if (d->checkGamut == checkGamut)
+    {
         return;
+    }
+
     close();
     d->checkGamut = checkGamut;
 }
@@ -355,7 +395,10 @@ void IccTransform::readFromConfig()
 bool IccTransform::willHaveEffect()
 {
     if (d->outputProfile.isNull())
+    {
         return false;
+    }
+
     return !d->effectiveInputProfile().isSameProfileAs(d->outputProfile);
 }
 
@@ -373,6 +416,7 @@ TransformDescription IccTransform::getDescription(const DImg& image)
     }
 
     LcmsLock lock;
+
     // Do not use TYPE_BGR_ - this implies 3 bytes per pixel, but even if !image.hasAlpha(),
     // our image data has 4 bytes per pixel with the fourth byte filled with 0xFF.
     if (image.sixteenBit())
@@ -407,6 +451,7 @@ TransformDescription IccTransform::getDescription(const DImg& image)
 
         description.outputFormat = TYPE_BGRA_8;
     }
+
     return description;
 }
 
@@ -437,6 +482,7 @@ TransformDescription IccTransform::getProofingDescription(const DImg& image)
     description.proofIntent  = d->proofIntent;
 
     description.transformFlags |= cmsFLAGS_SOFTPROOFING;
+
     if (d->checkGamut)
     {
         cmsSetAlarmCodes(d->checkGamutColor.red(), d->checkGamutColor.green(), d->checkGamutColor.blue());
@@ -540,38 +586,55 @@ bool IccTransform::checkProfiles()
     return true;
 }
 
-bool IccTransform::apply(DImg& image, DImgLoaderObserver *observer)
+bool IccTransform::apply(DImg& image, DImgLoaderObserver* observer)
 {
     if (!willHaveEffect())
     {
         if (!d->outputProfile.isNull() && !d->doNotEmbed)
+        {
             image.setIccProfile(d->outputProfile);
+        }
+
         return true;
     }
 
     if (!checkProfiles())
+    {
         return false;
+    }
 
     TransformDescription description;
+
     if (d->proofProfile.isNull())
     {
         description = getDescription(image);
+
         if (!open(description))
+        {
             return false;
+        }
     }
     else
     {
         description = getProofingDescription(image);
+
         if (!openProofing(description))
+        {
             return false;
+        }
     }
+
     if (observer)
+    {
         observer->progressInfo(&image, 0.1F);
+    }
 
     transform(image, description, observer);
 
     if (!d->doNotEmbed)
+    {
         image.setIccProfile(d->outputProfile);
+    }
 
     // if this was a RAW color image, it is no more
     image.removeAttribute("uncalibratedColor");
@@ -590,33 +653,44 @@ bool IccTransform::apply(QImage& qimage)
     }
 
     if (!willHaveEffect())
+    {
         return true;
+    }
 
     if (!checkProfiles())
+    {
         return false;
+    }
 
     TransformDescription description;
     description = getDescription(qimage);
+
     if (!open(description))
+    {
         return false;
+    }
 
     transform(qimage, description);
 
     return true;
 }
 
-void IccTransform::transform(DImg& image, const TransformDescription& description, DImgLoaderObserver *observer)
+void IccTransform::transform(DImg& image, const TransformDescription& description, DImgLoaderObserver* observer)
 {
     const int bytesDepth = image.bytesDepth();
     const int pixels     = image.width() * image.height();
     // convert ten scanlines in a batch
     const int pixelsPerStep = image.width() * 10;
-    uchar *data             = image.bits();
+    uchar* data             = image.bits();
 
     // see dimgloader.cpp, granularity().
     int granularity=1;
+
     if (observer)
+    {
         granularity = (int)(( pixels / (20 * 0.9)) / observer->granularity());
+    }
+
     int checkPoint = pixels;
 
     // it is safe to use the same input and output buffer if the format is the same
@@ -629,6 +703,7 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
             LcmsLock lock;
             cmsDoTransform(d->handle, data, data, pixelsThisStep);
             data += size;
+
             if (observer && p <= checkPoint)
             {
                 checkPoint -= granularity;
@@ -639,6 +714,7 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
     else
     {
         QVarLengthArray<uchar> buffer(pixelsPerStep * bytesDepth);
+
         for (int p=pixels; p > 0; p -= pixelsPerStep)
         {
             int pixelsThisStep = qMin(p, pixelsPerStep);
@@ -647,6 +723,7 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
             memcpy(buffer.data(), data, size);
             cmsDoTransform(d->handle, buffer.data(), data, pixelsThisStep);
             data += size;
+
             if (observer && p <= checkPoint)
             {
                 checkPoint -= granularity;
@@ -662,7 +739,7 @@ void IccTransform::transform(QImage& image, const TransformDescription&)
     const int pixels        = image.width() * image.height();
     // convert ten scanlines in a batch
     const int pixelsPerStep = image.width() * 10;
-    uchar *data             = image.bits();
+    uchar* data             = image.bits();
 
     for (int p=pixels; p > 0; p -= pixelsPerStep)
     {

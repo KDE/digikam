@@ -65,7 +65,7 @@ public:
 };
 
 HSPreviewWidget::HSPreviewWidget(QWidget* parent)
-               : QWidget(parent), d(new HSPreviewWidgetPrivate)
+    : QWidget(parent), d(new HSPreviewWidgetPrivate)
 {
     d->xBorder = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -107,9 +107,9 @@ void HSPreviewWidget::updatePixmap()
 
     for ( int s = ySize-1 ; s >= 0 ; --s )
     {
-        p = (uint *)image.scanLine(ySize - s - 1);
+        p = (uint*)image.scanLine(ySize - s - 1);
 
-        for( int h = 0 ; h < xSize ; ++h )
+        for ( int h = 0 ; h < xSize ; ++h )
         {
             col.setHsv( 359*h/(xSize-1), 255, 192 );
             *p = col.rgb();

@@ -48,7 +48,7 @@ public:
         info    = inf;
     };
 
-    ~ItemInfoSet(){};
+    ~ItemInfoSet() {};
 
     int       queueId;
     ImageInfo info;

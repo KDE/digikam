@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -45,9 +45,13 @@ namespace Digikam
 inline void DColor::premultiply()
 {
     if (sixteenBit())
+    {
         premultiply16(alpha());
+    }
     else
+    {
         premultiply8(alpha());
+    }
 }
 
 inline void DColor::demultiply()
@@ -158,18 +162,48 @@ inline void DColor::blendAdd(const DColor& src)
 
 inline void DColor::blendClamp16()
 {
-    if (0xFFFF0000 & red())   setRed(65535);
-    if (0xFFFF0000 & green()) setGreen(65535);
-    if (0xFFFF0000 & blue())  setBlue(65535);
-    if (0xFFFF0000 & alpha()) setAlpha(65535);
+    if (0xFFFF0000 & red())
+    {
+        setRed(65535);
+    }
+
+    if (0xFFFF0000 & green())
+    {
+        setGreen(65535);
+    }
+
+    if (0xFFFF0000 & blue())
+    {
+        setBlue(65535);
+    }
+
+    if (0xFFFF0000 & alpha())
+    {
+        setAlpha(65535);
+    }
 }
 
 inline void DColor::blendClamp8()
 {
-    if (0xFFFFFF00 & red())   setRed(255);
-    if (0xFFFFFF00 & green()) setGreen(255);
-    if (0xFFFFFF00 & blue())  setBlue(255);
-    if (0xFFFFFF00 & alpha()) setAlpha(255);
+    if (0xFFFFFF00 & red())
+    {
+        setRed(255);
+    }
+
+    if (0xFFFFFF00 & green())
+    {
+        setGreen(255);
+    }
+
+    if (0xFFFFFF00 & blue())
+    {
+        setBlue(255);
+    }
+
+    if (0xFFFFFF00 & alpha())
+    {
+        setAlpha(255);
+    }
 }
 
 inline void DColor::multiply(float factor)

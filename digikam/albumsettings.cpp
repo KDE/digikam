@@ -197,7 +197,7 @@ public:
         imageGroupMode(0),
         syncToDigikam(false),
         syncToNepomuk(false)
-        {}
+    {}
 
     const QString                       configGroupDefault;
     const QString                       configGroupExif;
@@ -388,7 +388,11 @@ public:
     AlbumSettings::StringComparisonType stringComparisonType;
 };
 
-class AlbumSettingsCreator { public: AlbumSettings object; };
+class AlbumSettingsCreator
+{
+public:
+    AlbumSettings object;
+};
 K_GLOBAL_STATIC(AlbumSettingsCreator, creator)
 
 AlbumSettings* AlbumSettings::instance()
@@ -397,7 +401,7 @@ AlbumSettings* AlbumSettings::instance()
 }
 
 AlbumSettings::AlbumSettings()
-             : QObject(), d(new AlbumSettingsPrivate)
+    : QObject(), d(new AlbumSettingsPrivate)
 {
     d->config = KGlobal::config();
     init();
@@ -517,6 +521,7 @@ void AlbumSettings::readSettings()
     KConfigGroup group  = config->group(d->configGroupDefault);
 
     QStringList collectionList = group.readEntry(d->configAlbumCollectionsEntry, QStringList());
+
     if (!collectionList.isEmpty())
     {
         collectionList.sort();
@@ -524,14 +529,14 @@ void AlbumSettings::readSettings()
     }
 
     d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry(d->configAlbumSortOrderEntry,
-                                                                      (int)AlbumSettings::ByFolder));
+                        (int)AlbumSettings::ByFolder));
 
     d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)ImageSortSettings::SortByFileName);
     d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)ImageSortSettings::AscendingOrder);
     d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)ImageSortSettings::CategoryByAlbum);
 
     d->itemLeftClickAction          = AlbumSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
-                                                                                     (int)AlbumSettings::ShowPreview));
+                                      (int)AlbumSettings::ShowPreview));
 
     d->thumbnailSize                = group.readEntry(d->configDefaultIconSizeEntry,        (int)ThumbnailSize::Medium);
     d->treeThumbnailSize            = group.readEntry(d->configDefaultTreeIconSizeEntry,    22);
@@ -539,7 +544,7 @@ void AlbumSettings::readSettings()
     d->currentTheme                 = group.readEntry(d->configThemeEntry,                  i18nc("default theme name", "Default"));
 
     d->sidebarTitleStyle            = (KMultiTabBar::KMultiTabBarStyle)group.readEntry(d->configSidebarTitleStyleEntry,
-                                                                                       (int)KMultiTabBar::VSNET);
+                                      (int)KMultiTabBar::VSNET);
 
 
     d->ratingFilterCond             = group.readEntry(d->configRatingFilterConditionEntry, (int)ImageFilterSettings::GreaterEqualCondition);
@@ -803,7 +808,9 @@ QStringList AlbumSettings::getAlbumCategoryNames()
 bool AlbumSettings::addAlbumCategoryName(const QString& name)
 {
     if (d->albumCategoryNames.contains(name))
+    {
         return false;
+    }
 
     d->albumCategoryNames.append(name);
     return true;
@@ -911,9 +918,13 @@ QString AlbumSettings::getRawFileFilter() const
     for (QStringList::iterator it = supportedRaws.begin(); it != supportedRaws.end(); )
     {
         if (imageSettings.contains(*it))
+        {
             ++it;
+        }
         else
+        {
             it = supportedRaws.erase(it);
+        }
     }
 
     QStringList wildcards;
@@ -1499,7 +1510,9 @@ bool AlbumSettings::showToolTipsIsValid() const
             d->tooltipShowComments   ||
             d->tooltipShowTags       ||
             d->tooltipShowRating)
-           return true;
+        {
+            return true;
+        }
     }
 
     return false;
@@ -1515,8 +1528,10 @@ bool AlbumSettings::showAlbumToolTipsIsValid() const
             d->tooltipShowAlbumCollection ||
             d->tooltipShowAlbumCaption    ||
             d->tooltipShowAlbumCategory
-           )
-           return true;
+        )
+        {
+            return true;
+        }
     }
 
     return false;
@@ -1611,7 +1626,7 @@ QString AlbumSettings::getDatabaseType() const
     return d->databaseParams.databaseType;
 }
 
-void AlbumSettings::setDatabaseType(const QString &databaseType)
+void AlbumSettings::setDatabaseType(const QString& databaseType)
 {
     d->databaseParams.databaseType = databaseType;
 }
@@ -1656,27 +1671,27 @@ bool AlbumSettings::getInternalDatabaseServer() const
     return d->databaseParams.internalServer;
 }
 
-void AlbumSettings::setDatabaseConnectoptions(const QString &connectoptions)
+void AlbumSettings::setDatabaseConnectoptions(const QString& connectoptions)
 {
     d->databaseParams.connectOptions = connectoptions;
 }
 
-void AlbumSettings::setDatabaseName(const QString &databaseName)
+void AlbumSettings::setDatabaseName(const QString& databaseName)
 {
     d->databaseParams.databaseName = databaseName;
 }
 
-void AlbumSettings::setDatabaseNameThumbnails(const QString &databaseNameThumbnails)
+void AlbumSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)
 {
     d->databaseParams.databaseNameThumbnails = databaseNameThumbnails;
 }
 
-void AlbumSettings::setDatabaseHostName(const QString &hostName)
+void AlbumSettings::setDatabaseHostName(const QString& hostName)
 {
     d->databaseParams.hostName = hostName;
 }
 
-void AlbumSettings::setDatabasePassword(const QString &password)
+void AlbumSettings::setDatabasePassword(const QString& password)
 {
     d->databaseParams.password = password;
 }
@@ -1686,7 +1701,7 @@ void AlbumSettings::setDatabasePort(int port)
     d->databaseParams.port = port;
 }
 
-void AlbumSettings::setDatabaseUserName(const QString &userName)
+void AlbumSettings::setDatabaseUserName(const QString& userName)
 {
     d->databaseParams.userName = userName;
 }
@@ -1710,12 +1725,14 @@ void AlbumSettings::applyNepomukSettings() const
 {
 #ifdef HAVE_NEPOMUK
     QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-                              "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+
     if (interface.isValid())
     {
         interface.call(QDBus::NoBlock, "enableSyncToDigikam", d->syncToDigikam);
         interface.call(QDBus::NoBlock, "enableSyncToNepomuk", d->syncToNepomuk);
     }
+
 #endif // HAVE_NEPOMUK
 }
 
@@ -1723,11 +1740,13 @@ void AlbumSettings::triggerResyncWithNepomuk() const
 {
 #ifdef HAVE_NEPOMUK
     QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-                              "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+
     if (interface.isValid())
     {
         interface.call(QDBus::NoBlock, "triggerResync");
     }
+
 #endif // HAVE_NEPOMUK
 }
 

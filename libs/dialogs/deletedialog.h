@@ -53,21 +53,21 @@ namespace Digikam
 
 namespace DeleteDialogMode
 {
-    enum ListMode
-    {
-        Files,
-        Albums,
-        Subalbums
-    };
+enum ListMode
+{
+    Files,
+    Albums,
+    Subalbums
+};
 
-    enum DeleteMode
-    {
-        NoChoiceTrash,             // "Do not show again" checkbox, does not show if config entry is set
-        NoChoiceDeletePermanently, // same as above
-        UserPreference,            // Checkbox to toggle trash/permanent, preset to user's last preference
-        UseTrash,                  // same checkbox as above, preset to trash
-        DeletePermanently          // same checkbox as above, preset to permanent
-    };
+enum DeleteMode
+{
+    NoChoiceTrash,             // "Do not show again" checkbox, does not show if config entry is set
+    NoChoiceDeletePermanently, // same as above
+    UserPreference,            // Checkbox to toggle trash/permanent, preset to user's last preference
+    UseTrash,                  // same checkbox as above, preset to trash
+    DeletePermanently          // same checkbox as above, preset to permanent
+};
 }
 
 // -----------------------------------------------------------
@@ -78,8 +78,8 @@ class DeleteWidget : public QWidget
 
 public:
 
-    DeleteWidget(QWidget *parent = 0);
-    virtual ~DeleteWidget(){};
+    DeleteWidget(QWidget* parent = 0);
+    virtual ~DeleteWidget() {};
 
     void setFiles(const KUrl::List& files);
     void setListMode(DeleteDialogMode::ListMode mode);
@@ -129,8 +129,8 @@ public:
 
 public:
 
-    DeleteDialog(QWidget *parent);
-    virtual ~DeleteDialog(){};
+    DeleteDialog(QWidget* parent);
+    virtual ~DeleteDialog() {};
 
     bool confirmDeleteList(const KUrl::List& condemnedURLs,
                            DeleteDialogMode::ListMode listMode,

@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 HSLCorrection::HSLCorrection(QObject* parent)
-             : BatchTool("HSLCorrection", ColorTool, parent)
+    : BatchTool("HSLCorrection", ColorTool, parent)
 {
     setToolTitle(i18n("HSL Correction"));
     setToolDescription(i18n("A tool to fix Hue/Saturation/Lightness."));
@@ -99,7 +99,10 @@ void HSLCorrection::slotSettingsChanged()
 
 bool HSLCorrection::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     HSLContainer prm;
     prm.hue        = settings()["Hue"].toDouble();

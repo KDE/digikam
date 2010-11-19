@@ -104,7 +104,7 @@ public:
         shadowsChromaRedInput(0),
         midtonesChromaRedInput(0),
         highlightsChromaRedInput(0)
-        {}
+    {}
 
     const QString configGrainSizeEntry;
     const QString configPhotoDistributionEntry;
@@ -142,15 +142,15 @@ public:
 
     RIntNumInput* grainSizeInput;
     RIntNumInput* intensityLumInput;
-    RIntNumInput* shadowsLumInput; 
+    RIntNumInput* shadowsLumInput;
     RIntNumInput* midtonesLumInput;
     RIntNumInput* highlightsLumInput;
     RIntNumInput* intensityChromaBlueInput;
-    RIntNumInput* shadowsChromaBlueInput; 
+    RIntNumInput* shadowsChromaBlueInput;
     RIntNumInput* midtonesChromaBlueInput;
     RIntNumInput* highlightsChromaBlueInput;
     RIntNumInput* intensityChromaRedInput;
-    RIntNumInput* shadowsChromaRedInput; 
+    RIntNumInput* shadowsChromaRedInput;
     RIntNumInput* midtonesChromaRedInput;
     RIntNumInput* highlightsChromaRedInput;
 
@@ -158,8 +158,8 @@ public:
 };
 
 FilmGrainSettings::FilmGrainSettings(QWidget* parent)
-                 : QWidget(parent),
-                   d(new FilmGrainSettingsPriv)
+    : QWidget(parent),
+      d(new FilmGrainSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -177,7 +177,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     d->photoDistribution = new QCheckBox(i18n("Photographic Distribution"), commonPage);
     d->photoDistribution->setWhatsThis(i18n("Set on this option to render grain using a photon statistic distribution. "
-                                            "This require more computation and can take a while."));    
+                                            "This require more computation and can take a while."));
 
     grid0->addWidget(d->sizeLabel,         0, 0, 1, 1);
     grid0->addWidget(d->grainSizeInput,    1, 0, 1, 1);
@@ -246,7 +246,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->intensityChromaBlueInput->setSliderEnabled(true);
     d->intensityChromaBlueInput->setDefaultValue(25);
     d->intensityChromaBlueInput->setWhatsThis(i18n("Set here the film sensitivity to use for "
-                                                   "simulating the CCD blue noise."));
+            "simulating the CCD blue noise."));
 
     // -------------------------------------------------------------
 
@@ -297,7 +297,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->intensityChromaRedInput->setSliderEnabled(true);
     d->intensityChromaRedInput->setDefaultValue(25);
     d->intensityChromaRedInput->setWhatsThis(i18n("Set here the film sensitivity to use for "
-                                                  "simulating the CCD red noise."));
+            "simulating the CCD red noise."));
 
     // -------------------------------------------------------------
 
@@ -342,16 +342,16 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->expanderBox = new RExpanderBox();
     d->expanderBox->setObjectName("Noise Expander");
 
-    d->expanderBox->addItem(commonPage, SmallIcon("system-run"), 
+    d->expanderBox->addItem(commonPage, SmallIcon("system-run"),
                             i18n("Common Settings"),
                             QString("CommonSettingsContainer"), true);
     d->expanderBox->addItem(firstPage, KStandardDirs::locate("data", "digikam/data/colors-luma.png"),
                             i18n("Luminance Noise"),
                             QString("LuminanceSettingsContainer"), true);
-    d->expanderBox->addItem(secondPage, KStandardDirs::locate("data", "digikam/data/colors-chromablue.png"), 
+    d->expanderBox->addItem(secondPage, KStandardDirs::locate("data", "digikam/data/colors-chromablue.png"),
                             i18n("Chrominance Blue Noise"),
                             QString("ChrominanceBlueSettingsContainer"), true);
-    d->expanderBox->addItem(thirdPage, KStandardDirs::locate("data", "digikam/data/colors-chromared.png"), 
+    d->expanderBox->addItem(thirdPage, KStandardDirs::locate("data", "digikam/data/colors-chromared.png"),
                             i18n("Chrominance Red Noise"),
                             QString("ChrominanceRedSettingsContainer"), true);
 
@@ -474,12 +474,12 @@ FilmGrainContainer FilmGrainSettings::settings() const
     prm.lumaHighlights          = d->highlightsLumInput->value();
     prm.addChrominanceBlueNoise = d->expanderBox->isChecked(2);
     prm.chromaBlueIntensity     = d->intensityChromaBlueInput->value();
-    prm.chromaBlueShadows       = d->shadowsChromaBlueInput->value(); 
+    prm.chromaBlueShadows       = d->shadowsChromaBlueInput->value();
     prm.chromaBlueMidtones      = d->midtonesChromaBlueInput->value();
     prm.chromaBlueHighlights    = d->highlightsChromaBlueInput->value();
     prm.addChrominanceRedNoise  = d->expanderBox->isChecked(3);
     prm.chromaRedIntensity      = d->intensityChromaRedInput->value();
-    prm.chromaRedShadows        = d->shadowsChromaRedInput->value(); 
+    prm.chromaRedShadows        = d->shadowsChromaRedInput->value();
     prm.chromaRedMidtones       = d->midtonesChromaRedInput->value();
     prm.chromaRedHighlights     = d->highlightsChromaRedInput->value();
     return prm;
@@ -498,12 +498,12 @@ void FilmGrainSettings::setSettings(const FilmGrainContainer& settings)
     d->highlightsLumInput->setValue(settings.lumaHighlights);
     d->expanderBox->setChecked(2, settings.addChrominanceBlueNoise);
     d->intensityChromaBlueInput->setValue(settings.chromaBlueIntensity);
-    d->shadowsChromaBlueInput->setValue(settings.chromaBlueShadows); 
+    d->shadowsChromaBlueInput->setValue(settings.chromaBlueShadows);
     d->midtonesChromaBlueInput->setValue(settings.chromaBlueMidtones);
     d->highlightsChromaBlueInput->setValue(settings.chromaBlueHighlights);
     d->expanderBox->setChecked(3, settings.addChrominanceRedNoise);
     d->intensityChromaRedInput->setValue(settings.chromaRedIntensity);
-    d->shadowsChromaRedInput->setValue(settings.chromaRedShadows); 
+    d->shadowsChromaRedInput->setValue(settings.chromaRedShadows);
     d->midtonesChromaRedInput->setValue(settings.chromaRedMidtones);
     d->highlightsChromaRedInput->setValue(settings.chromaRedHighlights);
     slotItemToggled(1, settings.addLuminanceNoise);

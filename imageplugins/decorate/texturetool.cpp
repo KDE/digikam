@@ -72,7 +72,7 @@ public:
         blendGain(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configTextureTypeEntry;
@@ -85,8 +85,8 @@ public:
 };
 
 TextureTool::TextureTool(QObject* parent)
-           : EditorToolThreaded(parent),
-             d(new TextureToolPriv)
+    : EditorToolThreaded(parent),
+      d(new TextureToolPriv)
 {
     setObjectName("texture");
     setToolName(i18n("Texture"));
@@ -145,7 +145,7 @@ TextureTool::TextureTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::AllPreviewModes);         
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     init();
 
     // -------------------------------------------------------------
@@ -236,69 +236,69 @@ QString TextureTool::getTexturePath(int texture)
 
     switch (texture)
     {
-       case PaperTexture:
-          pattern = "paper-texture";
-          break;
+        case PaperTexture:
+            pattern = "paper-texture";
+            break;
 
-       case Paper2Texture:
-          pattern = "paper2-texture";
-          break;
+        case Paper2Texture:
+            pattern = "paper2-texture";
+            break;
 
-       case FabricTexture:
-          pattern = "fabric-texture";
-          break;
+        case FabricTexture:
+            pattern = "fabric-texture";
+            break;
 
-       case BurlapTexture:
-          pattern = "burlap-texture";
-          break;
+        case BurlapTexture:
+            pattern = "burlap-texture";
+            break;
 
-       case BricksTexture:
-          pattern = "bricks-texture";
-          break;
+        case BricksTexture:
+            pattern = "bricks-texture";
+            break;
 
-       case Bricks2Texture:
-          pattern = "bricks2-texture";
-          break;
+        case Bricks2Texture:
+            pattern = "bricks2-texture";
+            break;
 
-       case CanvasTexture:
-          pattern = "canvas-texture";
-          break;
+        case CanvasTexture:
+            pattern = "canvas-texture";
+            break;
 
-       case MarbleTexture:
-          pattern = "marble-texture";
-          break;
+        case MarbleTexture:
+            pattern = "marble-texture";
+            break;
 
-       case Marble2Texture:
-          pattern = "marble2-texture";
-          break;
+        case Marble2Texture:
+            pattern = "marble2-texture";
+            break;
 
-       case BlueJeanTexture:
-          pattern = "bluejean-texture";
-          break;
+        case BlueJeanTexture:
+            pattern = "bluejean-texture";
+            break;
 
-       case CellWoodTexture:
-          pattern = "cellwood-texture";
-          break;
+        case CellWoodTexture:
+            pattern = "cellwood-texture";
+            break;
 
-       case MetalWireTexture:
-          pattern = "metalwire-texture";
-          break;
+        case MetalWireTexture:
+            pattern = "metalwire-texture";
+            break;
 
-       case ModernTexture:
-          pattern = "modern-texture";
-          break;
+        case ModernTexture:
+            pattern = "modern-texture";
+            break;
 
-       case WallTexture:
-          pattern = "wall-texture";
-          break;
+        case WallTexture:
+            pattern = "wall-texture";
+            break;
 
-       case MossTexture:
-          pattern = "moss-texture";
-          break;
+        case MossTexture:
+            pattern = "moss-texture";
+            break;
 
-       case StoneTexture:
-          pattern = "stone-texture";
-          break;
+        case StoneTexture:
+            pattern = "stone-texture";
+            break;
     }
 
     return (KStandardDirs::locate("data", QString("digikam/data/") + pattern + QString(".png")));

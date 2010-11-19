@@ -72,13 +72,13 @@ public:
 
 public:
 
-    static SearchField *createField(const QString& fieldName, SearchFieldGroup *parent);
+    static SearchField* createField(const QString& fieldName, SearchFieldGroup* parent);
 
-    SearchField(QObject *parent);
-    void setup(QGridLayout *layout, int row = -1);
+    SearchField(QObject* parent);
+    void setup(QGridLayout* layout, int row = -1);
     void setFieldName(const QString& fieldName);
     void setCategoryLabelVisible(bool visible);
-    void setCategoryLabelVisibleFromPreviousField(SearchField *previousField);
+    void setCategoryLabelVisibleFromPreviousField(SearchField* previousField);
 
     QList<QRect> widgetRects(WidgetRectType = ValueWidgetRectsOnly) const;
 
@@ -100,8 +100,8 @@ protected:
 
     void setValidValueState(bool valueIsValid);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column) = 0;
-    virtual void setupLabels(QGridLayout *layout, int line);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column) = 0;
+    virtual void setupLabels(QGridLayout* layout, int line);
 
     virtual void setValueWidgetsVisible(bool visible) = 0;
     virtual QList<QRect> valueWidgetRects() const = 0;
@@ -110,10 +110,10 @@ protected:
 
     QString              m_name;
 
-    QLabel              *m_label;
-    QLabel              *m_detailLabel;
+    QLabel*              m_label;
+    QLabel*              m_detailLabel;
 
-    AnimatedClearButton *m_clearButton;
+    AnimatedClearButton* m_clearButton;
 
     bool                 m_categoryLabelVisible;
     bool                 m_valueIsValid;
@@ -127,9 +127,9 @@ class SearchFieldText : public SearchField
 
 public:
 
-    SearchFieldText(QObject *parent);
+    SearchFieldText(QObject* parent);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
     virtual void setValueWidgetsVisible(bool visible);
@@ -142,7 +142,7 @@ protected Q_SLOTS:
 
 protected:
 
-    KLineEdit *m_edit;
+    KLineEdit* m_edit;
 };
 
 //-----------------------------------------------------------------------------
@@ -151,7 +151,7 @@ class SearchFieldKeyword : public SearchFieldText
 {
 public:
 
-    SearchFieldKeyword(QObject *parent);
+    SearchFieldKeyword(QObject* parent);
 
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
@@ -165,9 +165,9 @@ class SearchFieldRangeInt : public SearchField
 
 public:
 
-    SearchFieldRangeInt(QObject *parent);
+    SearchFieldRangeInt(QObject* parent);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
     virtual void reset();
@@ -194,9 +194,9 @@ protected:
     int                    m_min;
     int                    m_max;
     bool                   m_reciprocal;
-    CustomStepsIntSpinBox *m_firstBox;
-    CustomStepsIntSpinBox *m_secondBox;
-    QLabel                *m_betweenLabel;
+    CustomStepsIntSpinBox* m_firstBox;
+    CustomStepsIntSpinBox* m_secondBox;
+    QLabel*                m_betweenLabel;
 };
 
 //-----------------------------------------------------------------------------
@@ -207,9 +207,9 @@ class SearchFieldRangeDouble : public SearchField
 
 public:
 
-    SearchFieldRangeDouble(QObject *parent);
+    SearchFieldRangeDouble(QObject* parent);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
     virtual void reset();
@@ -236,9 +236,9 @@ protected:
     double                    m_min;
     double                    m_max;
     double                    m_factor;
-    CustomStepsDoubleSpinBox *m_firstBox;
-    CustomStepsDoubleSpinBox *m_secondBox;
-    QLabel                   *m_betweenLabel;
+    CustomStepsDoubleSpinBox* m_firstBox;
+    CustomStepsDoubleSpinBox* m_secondBox;
+    QLabel*                   m_betweenLabel;
 };
 
 //-----------------------------------------------------------------------------
@@ -257,9 +257,9 @@ public:
 
 public:
 
-    SearchFieldRangeDate(QObject *parent, Type type);
+    SearchFieldRangeDate(QObject* parent, Type type);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
     virtual void reset();
@@ -275,11 +275,11 @@ protected Q_SLOTS:
 
 protected:
 
-    QTimeEdit *m_firstTimeEdit;
-    KDateEdit *m_firstDateEdit;
-    QTimeEdit *m_secondTimeEdit;
-    KDateEdit *m_secondDateEdit;
-    QLabel    *m_betweenLabel;
+    QTimeEdit* m_firstTimeEdit;
+    KDateEdit* m_firstDateEdit;
+    QTimeEdit* m_secondTimeEdit;
+    KDateEdit* m_secondDateEdit;
+    QLabel*    m_betweenLabel;
 
     Type       m_type;
 };
@@ -292,13 +292,13 @@ class SearchFieldChoice : public SearchField
 
 public:
 
-    SearchFieldChoice(QObject *parent);
+    SearchFieldChoice(QObject* parent);
 
     void setChoice(const QMap<int, QString>& map);
     void setChoice(const QStringList& choice);
     void setAnyText(const QString& anyText);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
     virtual void reset();
@@ -315,10 +315,10 @@ protected:
 
 protected:
 
-    ChoiceSearchComboBox *m_comboBox;
+    ChoiceSearchComboBox* m_comboBox;
     QVariant::Type        m_type;
     QString               m_anyText;
-    ChoiceSearchModel    *m_model;
+    ChoiceSearchModel*    m_model;
 };
 
 //-----------------------------------------------------------------------------
@@ -340,9 +340,9 @@ public:
 
 public:
 
-    SearchFieldAlbum(QObject *parent, Type type);
+    SearchFieldAlbum(QObject* parent, Type type);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
     virtual void reset();
@@ -355,9 +355,9 @@ protected Q_SLOTS:
 
 protected:
 
-    AlbumSelectComboBox         *m_comboBox;
+    AlbumSelectComboBox*         m_comboBox;
     Type                         m_type;
-    AbstractCheckableAlbumModel *m_model;
+    AbstractCheckableAlbumModel* m_model;
 };
 
 //-----------------------------------------------------------------------------
@@ -368,9 +368,9 @@ class SearchFieldRating : public SearchField
 
 public:
 
-    SearchFieldRating(QObject *parent);
+    SearchFieldRating(QObject* parent);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
     virtual void reset();
@@ -386,9 +386,9 @@ protected Q_SLOTS:
 
 protected:
 
-    RatingComboBox *m_firstBox;
-    RatingComboBox *m_secondBox;
-    QLabel         *m_betweenLabel;
+    RatingComboBox* m_firstBox;
+    RatingComboBox* m_secondBox;
+    QLabel*         m_betweenLabel;
 };
 
 //-----------------------------------------------------------------------------
@@ -399,9 +399,9 @@ class SearchFieldComboBox : public SearchField
 
 public:
 
-    SearchFieldComboBox(QObject *parent);
+    SearchFieldComboBox(QObject* parent);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void write(SearchXmlWriter& writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
@@ -413,7 +413,7 @@ protected Q_SLOTS:
 
 protected:
 
-    KComboBox *m_comboBox;
+    KComboBox* m_comboBox;
 };
 
 //-----------------------------------------------------------------------------
@@ -424,11 +424,11 @@ class SearchFieldCheckBox : public SearchField
 
 public:
 
-    SearchFieldCheckBox(QObject *parent);
+    SearchFieldCheckBox(QObject* parent);
 
-    void setLabel(const QString &label);
+    void setLabel(const QString& label);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
     virtual void reset();
@@ -441,7 +441,7 @@ protected Q_SLOTS:
 
 protected:
 
-    QCheckBox *m_checkBox;
+    QCheckBox* m_checkBox;
     QString    m_label;
 };
 
@@ -453,9 +453,9 @@ class SearchFieldColorDepth : public SearchFieldComboBox
 
 public:
 
-    SearchFieldColorDepth(QObject *parent);
+    SearchFieldColorDepth(QObject* parent);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
 };
 
@@ -467,9 +467,9 @@ class SearchFieldPageOrientation: public SearchFieldComboBox
 
 public:
 
-    SearchFieldPageOrientation(QObject *parent);
+    SearchFieldPageOrientation(QObject* parent);
 
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
 };
 

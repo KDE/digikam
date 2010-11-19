@@ -41,13 +41,13 @@ class ImageAlbumFilterModel : public ImageFilterModel
 
 public:
 
-    ImageAlbumFilterModel(QObject *parent = 0);
+    ImageAlbumFilterModel(QObject* parent = 0);
     ~ImageAlbumFilterModel();
 
     virtual void setImageFilterSettings(const ImageFilterSettings& settings);
 
     void setSourceImageModel(ImageAlbumModel* model);
-    ImageAlbumModel *sourceModel() const;
+    ImageAlbumModel* sourceModel() const;
 
     // convenience mappers
     void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
@@ -58,14 +58,14 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotAlbumRenamed(Album *album);
-    void slotAlbumAdded(Album *album);
-    void slotAlbumAboutToBeDeleted(Album *album);
+    void slotAlbumRenamed(Album* album);
+    void slotAlbumAdded(Album* album);
+    void slotAlbumAboutToBeDeleted(Album* album);
     void slotAlbumsCleared();
 
 private:
 
-    void albumChange(Album *album);
+    void albumChange(Album* album);
 
     Q_DECLARE_PRIVATE(ImageAlbumFilterModel)
 };

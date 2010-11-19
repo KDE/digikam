@@ -46,7 +46,7 @@ namespace Digikam
 
 RainDropFilter::RainDropFilter(DImg* orgImage, QObject* parent, int drop,
                                int amount, int coeff, QRect* selection)
-              : DImgThreadedFilter(orgImage, parent, "RainDrop")
+    : DImgThreadedFilter(orgImage, parent, "RainDrop")
 {
     m_drop   = drop;
     m_amount = amount;
@@ -147,19 +147,25 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
     int    nHeight  = orgImage->height();
     bool   sixteenBit = orgImage->sixteenBit();
     int    bytesDepth = orgImage->bytesDepth();
-    uchar *data = orgImage->bits();
-    uchar *pResBits = destImage->bits();
+    uchar* data = orgImage->bits();
+    uchar* pResBits = destImage->bits();
 
     if (Amount <= 0)
+    {
         return;
+    }
 
     if (MinDropSize >= MaxDropSize)
+    {
         MaxDropSize = MinDropSize + 1;
+    }
 
     if (MaxDropSize <= 0)
+    {
         return;
+    }
 
-    uchar *pStatusBits = new uchar[nHeight * nWidth];
+    uchar* pStatusBits = new uchar[nHeight * nWidth];
     memset(pStatusBits, 0, nHeight * nWidth * sizeof(uchar));
 
     // Initially, copy all pixels to destination
@@ -209,7 +215,7 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
         }
 
         postProgress( (int)(progressMin + ((double)(i) *
-                      (double)(progressMax-progressMin)) / (double)Amount) );
+                                           (double)(progressMax-progressMin)) / (double)Amount) );
     }
 
     delete [] pStatusBits;
@@ -261,65 +267,97 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
                             if (lfOldRadius >= 0.9 * (double)nHalfSize)
                             {
                                 if ((lfAngle >= 0.0) && (lfAngle < 2.25))
+                                {
                                     nBright = -80;
+                                }
                                 else if ((lfAngle >= 2.25) && (lfAngle < 2.5))
+                                {
                                     nBright = -40;
+                                }
                                 else if ((lfAngle >= -0.25) && (lfAngle < 0.0))
+                                {
                                     nBright = -40;
+                                }
                             }
 
                             else if (lfOldRadius >= 0.8 * (double)nHalfSize)
                             {
                                 if ((lfAngle >= 0.75) && (lfAngle < 1.50))
+                                {
                                     nBright = -40;
+                                }
                                 else if ((lfAngle >= -0.10) && (lfAngle < 0.75))
+                                {
                                     nBright = -30;
+                                }
                                 else if ((lfAngle >= 1.50) && (lfAngle < 2.35))
+                                {
                                     nBright = -30;
+                                }
                             }
 
                             else if (lfOldRadius >= 0.7 * (double)nHalfSize)
                             {
                                 if ((lfAngle >= 0.10) && (lfAngle < 2.0))
+                                {
                                     nBright = -20;
+                                }
                                 else if ((lfAngle >= -2.50) && (lfAngle < -1.90))
+                                {
                                     nBright = 60;
+                                }
                             }
 
                             else if (lfOldRadius >= 0.6 * (double)nHalfSize)
                             {
                                 if ((lfAngle >= 0.50) && (lfAngle < 1.75))
+                                {
                                     nBright = -20;
+                                }
                                 else if ((lfAngle >= 0.0) && (lfAngle < 0.25))
+                                {
                                     nBright = 20;
+                                }
                                 else if ((lfAngle >= 2.0) && (lfAngle < 2.25))
+                                {
                                     nBright = 20;
+                                }
                             }
 
                             else if (lfOldRadius >= 0.5 * (double)nHalfSize)
                             {
                                 if ((lfAngle >= 0.25) && (lfAngle < 0.50))
+                                {
                                     nBright = 30;
+                                }
                                 else if ((lfAngle >= 1.75 ) && (lfAngle < 2.0))
+                                {
                                     nBright = 30;
+                                }
                             }
 
                             else if (lfOldRadius >= 0.4 * (double)nHalfSize)
                             {
                                 if ((lfAngle >= 0.5) && (lfAngle < 1.75))
+                                {
                                     nBright = 40;
+                                }
                             }
 
                             else if (lfOldRadius >= 0.3 * (double)nHalfSize)
                             {
                                 if ((lfAngle >= 0.0) && (lfAngle < 2.25))
+                                {
                                     nBright = 30;
+                                }
                             }
 
                             else if (lfOldRadius >= 0.2 * (double)nHalfSize)
                             {
                                 if ((lfAngle >= 0.5) && (lfAngle < 1.75))
+                                {
                                     nBright = 20;
+                                }
                             }
 
                             imageData.setColor(pBits + Offset(Width, nw1, nh1, bytesDepth), sixteenBit);
@@ -328,9 +366,13 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
                             {
                                 // convert difference to 16-bit range
                                 if (nBright > 0)
+                                {
                                     nBright = (nBright + 1) * 256 - 1;
+                                }
                                 else
+                                {
                                     nBright = (nBright - 1) * 256 + 1;
+                                }
 
                                 imageData.setRed  (LimitValues16(imageData.red()   + nBright));
                                 imageData.setGreen(LimitValues16(imageData.green() + nBright));
@@ -420,7 +462,9 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int
     int nHalfSize = DropSize / 2;
 
     if (pStatusBits == NULL)
+    {
         return (true);
+    }
 
     for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
     {
@@ -429,13 +473,18 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int
             if (IsInside (Width, Height, w, h))
             {
                 i = h * Width + w;
+
                 if (pStatusBits[i])
+                {
                     return (false);
+                }
             }
             else
             {
                 if (bLimitRange)
+                {
                     return (false);
+                }
             }
         }
     }
@@ -450,7 +499,9 @@ bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits
     int nHalfSize = DropSize / 2;
 
     if (pStatusBits == NULL)
+    {
         return (false);
+    }
 
     for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
     {

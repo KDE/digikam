@@ -72,7 +72,7 @@ class KipiInterface : public KIPI::Interface
 
 public:
 
-    explicit KipiInterface(QObject *parent, const char *name=0);
+    explicit KipiInterface(QObject* parent, const char* name=0);
     ~KipiInterface();
 
     KIPI::ImageCollection currentAlbum();
@@ -85,12 +85,12 @@ public:
     void refreshImages( const KUrl::List& urls );
 
     int features() const;
-  
+
     void thumbnail( const KUrl& url, int size );
     void thumbnails( const KUrl::List& list, int size );
 
-    KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
-    KIPI::UploadWidget* uploadWidget(QWidget *parent);
+    KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
+    KIPI::UploadWidget* uploadWidget(QWidget* parent);
 
 #if KIPI_VERSION >= 0x000300
     QVariant hostSetting(const QString& settingName);
@@ -101,7 +101,7 @@ public:
 public Q_SLOTS:
 
     void slotSelectionChanged(int count);
-    void slotCurrentAlbumChanged( Album *palbum );
+    void slotCurrentAlbumChanged( Album* palbum );
 
 private Q_SLOTS:
 
@@ -109,8 +109,8 @@ private Q_SLOTS:
 
 private:
 
-    AlbumManager        *m_albumManager;
-    ThumbnailLoadThread *m_thumbLoadThread;
+    AlbumManager*        m_albumManager;
+    ThumbnailLoadThread* m_thumbLoadThread;
 };
 
 }  // namespace Digikam

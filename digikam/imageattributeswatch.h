@@ -45,18 +45,18 @@ class ImageAttributesWatch : public QObject
 
 public:
 
-    static ImageAttributesWatch *instance();
+    static ImageAttributesWatch* instance();
     static void cleanUp();
     static void shutDown();
 
-/*
-    void imageTagsChanged(qint64 imageId);
-    void imagesChanged(int albumId);
+    /*
+        void imageTagsChanged(qint64 imageId);
+        void imagesChanged(int albumId);
 
-    void imageRatingChanged(qint64 imageId);
-    void imageDateChanged(qint64 imageId);
-    void imageCaptionChanged(qint64 imageId);
-*/
+        void imageRatingChanged(qint64 imageId);
+        void imageDateChanged(qint64 imageId);
+        void imageCaptionChanged(qint64 imageId);
+    */
 
     void fileMetadataChanged(const KUrl& url);
 
@@ -96,7 +96,7 @@ private:
     ImageAttributesWatch();
     ~ImageAttributesWatch();
 
-    static ImageAttributesWatch *m_instance;
+    static ImageAttributesWatch* m_instance;
 
 private Q_SLOTS:
 

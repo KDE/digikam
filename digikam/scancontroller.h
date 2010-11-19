@@ -54,7 +54,7 @@ class ScanController : public QThread, public InitializationObserver
 
 public:
 
-    static ScanController *instance();
+    static ScanController* instance();
     /** Wait for the thread to finish. Returns after all tasks are done. */
     void shutDown();
 
@@ -77,7 +77,7 @@ public:
      * Synchronous, returns when ready.
      * The database will be locked while the scan is running.
      */
-    void completeCollectionScan(SplashScreen *splash=0);
+    void completeCollectionScan(SplashScreen* splash=0);
 
     /**
      * Schedules a scan of the specified part of the collection.
@@ -139,8 +139,8 @@ public:
      *  dstPath is the new parent directory of the album, so
      *  do not include the album name to dstPath.
      */
-    void hintAtMoveOrCopyOfAlbum(const PAlbum *album, const PAlbum *dstAlbum, const QString& newAlbumName = QString());
-    void hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString& dstPath, const QString& newAlbumName = QString());
+    void hintAtMoveOrCopyOfAlbum(const PAlbum* album, const PAlbum* dstAlbum, const QString& newAlbumName = QString());
+    void hintAtMoveOrCopyOfAlbum(const PAlbum* album, const QString& dstPath, const QString& newAlbumName = QString());
 
     /** Hint at the imminent copy, move or rename of items, so that the
      *  collection scanner is informed about this.
@@ -148,13 +148,13 @@ public:
      *  and give the names at destination in itemNames (Unless for rename, names wont usually change.
      *  Give them nevertheless.)
      */
-    void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum *dstAlbum, QStringList itemNames);
-    void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum *dstAlbum, QString itemName);
+    void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* dstAlbum, QStringList itemNames);
+    void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* dstAlbum, QString itemName);
 
     /** Hint at the fact that an item may have changed, although its modification date may not have changed.
      *  Note that a scan of the containing directory will need to be triggered nonetheless for the hints to take effect. */
-     void hintAtModificationOfItems(const QList<qlonglong> ids);
-     void hintAtModificationOfItem(qlonglong id);
+    void hintAtModificationOfItems(const QList<qlonglong> ids);
+    void hintAtModificationOfItem(qlonglong id);
 
 Q_SIGNALS:
 
@@ -162,8 +162,8 @@ Q_SIGNALS:
     void completeScanDone();
     void triggerShowProgressDialog();
     void incrementProgressDialog(int);
-    void errorFromInitialization(const QString &);
-    void progressFromInitialization(const QString &, int);
+    void errorFromInitialization(const QString&);
+    void progressFromInitialization(const QString&, int);
 
 private Q_SLOTS:
 
@@ -193,7 +193,7 @@ private:
     virtual void moreSchemaUpdateSteps(int numberOfSteps);
     virtual void schemaUpdateProgress(const QString& message, int numberOfSteps);
     virtual void finishedSchemaUpdate(UpdateResult result);
-    virtual void connectCollectionScanner(CollectionScanner *scanner);
+    virtual void connectCollectionScanner(CollectionScanner* scanner);
     virtual void error(const QString& errorMessage);
     virtual bool continueQuery();
 

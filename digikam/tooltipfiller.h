@@ -36,8 +36,8 @@ class PAlbum;
 
 namespace ToolTipFiller
 {
-    QString imageInfoTipContents(const ImageInfo& info);
-    QString albumTipContents(PAlbum* album, int count);
+QString imageInfoTipContents(const ImageInfo& info);
+QString albumTipContents(PAlbum* album, int count);
 }
 
 }  // namespace Digikam

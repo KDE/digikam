@@ -39,8 +39,8 @@
 namespace Digikam
 {
 
-SearchFieldGroup::SearchFieldGroup(SearchGroup *parent)
-                : QWidget(parent)
+SearchFieldGroup::SearchFieldGroup(SearchGroup* parent)
+    : QWidget(parent)
 {
     m_layout = new QGridLayout;
     setLayout(m_layout);
@@ -48,35 +48,44 @@ SearchFieldGroup::SearchFieldGroup(SearchGroup *parent)
     m_controller->setContainerWidget(this);
 }
 
-void SearchFieldGroup::addField(SearchField *field)
+void SearchFieldGroup::addField(SearchField* field)
 {
     //FIXME: When all fields added in searchgroup.cpp are implemented, remove
-    if (!field) return;
+    if (!field)
+    {
+        return;
+    }
 
     // initialize widgets in field
     field->setup(m_layout);
+
     // take care that category labels are not duplicated in two subsequent rows
     if (!m_fields.isEmpty())
+    {
         field->setCategoryLabelVisibleFromPreviousField(m_fields.last());
+    }
+
     // add to our list
     m_fields << field;
     // add to visibility controller
     m_controller->addObject(field);
 }
 
-void SearchFieldGroup::setLabel(SearchFieldGroupLabel *label)
+void SearchFieldGroup::setLabel(SearchFieldGroupLabel* label)
 {
     m_label = label;
     connect(m_label, SIGNAL(clicked()),
             this, SLOT(slotLabelClicked()));
 }
 
-SearchField *SearchFieldGroup::fieldForName(const QString& fieldName)
+SearchField* SearchFieldGroup::fieldForName(const QString& fieldName)
 {
     foreach(SearchField *field, m_fields)
     {
         if (field->supportsField(fieldName))
+        {
             return field;
+        }
     }
     return 0;
 }
@@ -108,7 +117,7 @@ void SearchFieldGroup::slotLabelClicked()
     m_controller->triggerVisibility();
 }
 
-void SearchFieldGroup::markField(SearchField *field)
+void SearchFieldGroup::markField(SearchField* field)
 {
     m_markedFields << field;
 }
@@ -121,8 +130,11 @@ void SearchFieldGroup::clearMarkedFields()
 QList<QRect> SearchFieldGroup::areaOfMarkedFields() const
 {
     QList<QRect> rects;
+
     if (!m_controller->isVisible())
+    {
         return rects;
+    }
 
     foreach(SearchField *field, m_markedFields)
     {
@@ -131,23 +143,27 @@ QList<QRect> SearchFieldGroup::areaOfMarkedFields() const
             rects += field->widgetRects(SearchField::ValueWidgetRectsOnly);
         }
     }
+
     // adjust position relative to parent
     for (QList<QRect>::iterator it = rects.begin(); it != rects.end(); ++it)
+    {
         (*it).translate(pos());
+    }
+
     return rects;
 }
 
 // -------------------------------------------------------------------------
 
-SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget *parent)
-                     : QWidget(parent)
+SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget* parent)
+    : QWidget(parent)
 {
-    QGridLayout *layout = new QGridLayout;
+    QGridLayout* layout = new QGridLayout;
 
     m_titleLabel  = new RClickLabel;
     m_titleLabel->setObjectName("SearchFieldGroupLabel_Label");
     m_expandLabel = new QLabel;
-    QFrame *hline = new QFrame;
+    QFrame* hline = new QFrame;
     hline->setFrameStyle(QFrame::HLine | QFrame::Raised);
 
     layout->addWidget(m_titleLabel,  0, 0);

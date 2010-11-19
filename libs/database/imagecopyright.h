@@ -59,7 +59,7 @@ public:
 
     ImageCopyright(const ImageCopyright& other);
     ~ImageCopyright();
-    ImageCopyright &operator=(const ImageCopyright& other);
+    ImageCopyright& operator=(const ImageCopyright& other);
 
     enum ReplaceMode
     {
@@ -85,9 +85,15 @@ public:
      *  included. If there are more than one item in this array the first one should be considered as
      *  the IPTC Core Creator value.&rdquo;
      */
-     QStringList creator();
-     QStringList author() { return creator(); }
-     QStringList byLine() { return creator(); }
+    QStringList creator();
+    QStringList author()
+    {
+        return creator();
+    }
+    QStringList byLine()
+    {
+        return creator();
+    }
 
     /** Sets the creator.
      *  If you want to specify only one creator, set the replace mode to ReplaceAllEntries.
@@ -95,8 +101,14 @@ public:
      *  You shall not use ReplaceLanguageEntry for this method, creators have no language associated.
      */
     void setCreator(const QString& creator, ReplaceMode mode = ReplaceAllEntries);
-    void setAuthor(const QString& author, ReplaceMode mode = ReplaceAllEntries) { setCreator(author, mode); }
-    void setByLine(const QString& byline, ReplaceMode mode = ReplaceAllEntries) { setCreator(byline, mode); }
+    void setAuthor(const QString& author, ReplaceMode mode = ReplaceAllEntries)
+    {
+        setCreator(author, mode);
+    }
+    void setByLine(const QString& byline, ReplaceMode mode = ReplaceAllEntries)
+    {
+        setCreator(byline, mode);
+    }
 
     void removeCreators();
 
@@ -107,10 +119,16 @@ public:
      *  &ldquo;Identifies the provider of the news object, who is not necessarily the owner/creator.&rdquo;
      */
     QString provider();
-    QString credit() { return provider(); }
+    QString credit()
+    {
+        return provider();
+    }
 
     void setProvider(const QString& provider);
-    void setCredit(const QString& credit) { setProvider(credit); }
+    void setCredit(const QString& credit)
+    {
+        setProvider(credit);
+    }
 
     void removeProvider();
 
@@ -131,7 +149,10 @@ public:
      *  If you pass a null string as languageCode, the local language is returned.
      */
     QString copyrightNotice(const QString& languageCode = QString());
-    QString rights(const QString& languageCode = QString()) { return copyrightNotice(languageCode); }
+    QString rights(const QString& languageCode = QString())
+    {
+        return copyrightNotice(languageCode);
+    }
 
     KExiv2Iface::KExiv2::AltLangMap allCopyrightNotices();
 
@@ -143,7 +164,9 @@ public:
                             ReplaceMode mode = ReplaceLanguageEntry);
     void setRights(const QString& notice, const QString& languageCode = QString(),
                    ReplaceMode mode = ReplaceLanguageEntry)
-        { setCopyrightNotice(notice, languageCode, mode); }
+    {
+        setCopyrightNotice(notice, languageCode, mode);
+    }
 
     void removeCopyrightNotices();
 
@@ -185,12 +208,24 @@ public:
      *    using Creator's Jobtitle.&rdquo;
      */
     QString creatorJobTitle();
-    QString authorsPosition() { return creatorJobTitle(); }
-    QString byLineTitle()     { return creatorJobTitle(); }
+    QString authorsPosition()
+    {
+        return creatorJobTitle();
+    }
+    QString byLineTitle()
+    {
+        return creatorJobTitle();
+    }
 
     void setCreatorJobTitle(const QString& title);
-    void setAuthorsPosition(const QString& position) { setCreatorJobTitle(position); }
-    void setByLineTitle(const QString& title)        { setCreatorJobTitle(title); }
+    void setAuthorsPosition(const QString& position)
+    {
+        setCreatorJobTitle(position);
+    }
+    void setByLineTitle(const QString& title)
+    {
+        setCreatorJobTitle(title);
+    }
 
     void removeCreatorJobTitle();
 
@@ -215,17 +250,17 @@ public:
      *     the creator of this news object and comprises a set of sub-properties for proper addressing.&rdquo;
      */
     IptcCoreContactInfo contactInfo();
-    void setContactInfo(const IptcCoreContactInfo &info);
+    void setContactInfo(const IptcCoreContactInfo& info);
     void removeContactInfo();
 
     /** Fills the information fields in template concerning copyright info
      *  (note there are other fields in the a Template. There will not be touched)
      */
-    void fillTemplate(Template &t);
+    void fillTemplate(Template& t);
 
     /** Sets all database copyright fields from the template.
      *  This does not clear any fields before. */
-    void setFromTemplate(const Template &t);
+    void setFromTemplate(const Template& t);
 
     /** Calls all remove...() methods in this class */
     void removeAll();
@@ -242,8 +277,8 @@ protected:
     QString readLanguageProperty(const QString& property, const QString& languageCode);
     KExiv2Iface::KExiv2::AltLangMap readLanguageProperties(const QString& property);
     void    setLanguageProperty(const QString& property, const QString& value, const QString& languageCode, ReplaceMode mode);
-    void    removeProperties(const QString &property);
-    void    removeLanguageProperty(const QString &property, const QString &languageCode);
+    void    removeProperties(const QString& property);
+    void    removeLanguageProperty(const QString& property, const QString& languageCode);
     int     languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const;
 
 protected:
@@ -251,7 +286,7 @@ protected:
     friend class ImageCopyrightCache;
 
     qlonglong m_id;
-    ImageCopyrightCache *m_cache;
+    ImageCopyrightCache* m_cache;
 };
 
 } // namespace Digikam

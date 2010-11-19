@@ -46,7 +46,7 @@ class DigikamImageViewPriv : public QObject
 
 public:
 
-    DigikamImageViewPriv(DigikamImageView *qq);
+    DigikamImageViewPriv(DigikamImageView* qq);
     virtual ~DigikamImageViewPriv();
 
     ImageViewUtilities* utilities;

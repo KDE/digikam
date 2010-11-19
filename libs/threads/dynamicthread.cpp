@@ -80,7 +80,7 @@ public:
 };
 
 DynamicThread::DynamicThread(QObject* parent)
-             : QObject(parent), d(new DynamicThreadPriv(this))
+    : QObject(parent), d(new DynamicThreadPriv(this))
 {
     setAutoDelete(false);
     ThreadManager::instance()->initialize(this);
@@ -128,15 +128,20 @@ void DynamicThread::setEmitSignals(bool emitThem)
 void DynamicThread::setPriority(QThread::Priority priority)
 {
     if (d->priority == priority)
+    {
         return;
+    }
 
     d->priority = priority;
 
     if (d->priority != QThread::InheritPriority)
     {
         QMutexLocker locker(&d->mutex);
+
         if (d->assignedThread)
+        {
             d->assignedThread->setPriority(d->priority);
+        }
     }
 }
 
@@ -166,7 +171,9 @@ void DynamicThread::wait()
 void DynamicThread::start(QMutexLocker& locker)
 {
     if (d->inDestruction)
+    {
         return;
+    }
 
     switch (d->state)
     {
@@ -191,6 +198,7 @@ void DynamicThread::start(QMutexLocker& locker)
 void DynamicThread::stop(QMutexLocker& locker)
 {
     Q_UNUSED(locker);
+
     switch (d->state)
     {
         case Scheduled:
@@ -211,6 +219,7 @@ void DynamicThread::stop(QMutexLocker& locker)
 bool DynamicThread::DynamicThreadPriv::transitionToRunning()
 {
     QMutexLocker locker(&mutex);
+
     switch (state)
     {
         case DynamicThread::Scheduled:
@@ -218,7 +227,9 @@ bool DynamicThread::DynamicThreadPriv::transitionToRunning()
             // ensure that a newly scheduled thread does not run
             // while an old, deactivated one has not yet called transitionToInactive
             while (assignedThread)
+            {
                 condVar.wait(&mutex);
+            }
 
             state            = DynamicThread::Running;
             running          = true;
@@ -229,6 +240,7 @@ bool DynamicThread::DynamicThreadPriv::transitionToRunning()
             {
                 assignedThread->setPriority(priority);
             }
+
             return true;
         }
         case DynamicThread::Deactivating:
@@ -251,6 +263,7 @@ bool DynamicThread::DynamicThreadPriv::transitionToRunning()
 void DynamicThread::DynamicThreadPriv::transitionToInactive()
 {
     QMutexLocker locker(&mutex);
+
     switch (state)
     {
         case DynamicThread::Scheduled:
@@ -262,9 +275,14 @@ void DynamicThread::DynamicThreadPriv::transitionToInactive()
                 assignedThread->setPriority(previousPriority);
                 previousPriority = QThread::InheritPriority;
             }
+
             assignedThread = 0;
+
             if (state != DynamicThread::Scheduled)
+            {
                 state = DynamicThread::Inactive;
+            }
+
             condVar.wakeAll();
             break;
         }
@@ -279,19 +297,30 @@ void DynamicThread::DynamicThreadPriv::transitionToInactive()
 void DynamicThread::DynamicThreadPriv::run()
 {
     if (emitSignals)
+    {
         emit q->started();
+    }
+
     if (transitionToRunning())
+    {
         q->run();
+    }
+
     if (emitSignals)
+    {
         emit q->finished();
+    }
+
     transitionToInactive();
     // as soon as we are inactive, we may get deleted!
 }
 
-void DynamicThread::wait(QMutexLocker &locker)
+void DynamicThread::wait(QMutexLocker& locker)
 {
     while (d->state != Inactive)
+    {
         d->condVar.wait(locker.mutex());
+    }
 }
 
 bool DynamicThread::runningFlag() const volatile

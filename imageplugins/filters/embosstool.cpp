@@ -66,7 +66,7 @@ public:
         depthInput(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configDepthAdjustmentEntry;
@@ -77,8 +77,8 @@ public:
 };
 
 EmbossTool::EmbossTool(QObject* parent)
-          : EditorToolThreaded(parent),
-            d(new EmbossToolPriv)
+    : EditorToolThreaded(parent),
+      d(new EmbossToolPriv)
 {
     setObjectName("emboss");
     setToolName(i18n("Emboss"));

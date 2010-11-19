@@ -52,7 +52,7 @@
 
 kio_digikamdates::kio_digikamdates(const QByteArray& pool_socket,
                                    const QByteArray& app_socket)
-                : SlaveBase("kio_digikamdates", pool_socket, app_socket)
+    : SlaveBase("kio_digikamdates", pool_socket, app_socket)
 {
 }
 
@@ -92,6 +92,7 @@ void kio_digikamdates::special(const QByteArray& data)
         // send rest
         receiver.sendData();
     }
+
     finished();
 }
 
@@ -99,7 +100,7 @@ void kio_digikamdates::special(const QByteArray& data)
 
 extern "C"
 {
-    KDE_EXPORT int kdemain(int argc, char **argv)
+    KDE_EXPORT int kdemain(int argc, char** argv)
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);
@@ -108,7 +109,8 @@ extern "C"
         KComponentData componentData( "kio_digikamdates" );
         KGlobal::locale();
 
-        if (argc != 4) {
+        if (argc != 4)
+        {
             kDebug() << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2";
             exit(-1);
         }

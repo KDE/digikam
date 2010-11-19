@@ -67,7 +67,7 @@ public:
 };
 
 ImageThumbnailDelegate::ImageThumbnailDelegate(ImageCategorizedView* parent)
-                      : ImageDelegate(*new ImageThumbnailDelegatePrivate, parent)
+    : ImageDelegate(*new ImageThumbnailDelegatePrivate, parent)
 {
 }
 
@@ -102,7 +102,7 @@ int ImageThumbnailDelegate::minimumSize() const
 }
 
 bool ImageThumbnailDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect,
-                                               const QModelIndex& index, QRect* activationRect) const
+        const QModelIndex& index, QRect* activationRect) const
 {
     // reuse implementation from grandparent
     return ItemViewImageDelegate::acceptsActivation(pos, visualRect, index, activationRect);
@@ -112,6 +112,7 @@ void ImageThumbnailDelegate::updateContentWidth()
 {
     Q_D(ImageThumbnailDelegate);
     int maxSize;
+
     if (d->flow == QListView::LeftToRight)
     {
         maxSize = d->viewSize.height();
@@ -120,6 +121,7 @@ void ImageThumbnailDelegate::updateContentWidth()
     {
         maxSize = d->viewSize.width();
     }
+
     d->thumbSize = ThumbnailLoadThread::thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
 
     ImageDelegate::updateContentWidth();
@@ -139,9 +141,13 @@ void ImageThumbnailDelegate::updateRects()
     }
 
     if (d->flow == QListView::LeftToRight)
+    {
         d->gridSize  = QSize(d->rect.width() + d->spacing, d->rect.height());
+    }
     else
+    {
         d->gridSize  = QSize(d->rect.width(), d->rect.height() + d->spacing);
+    }
 }
 
 } // namespace Digikam

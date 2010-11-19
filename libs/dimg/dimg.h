@@ -118,12 +118,12 @@ public:
 
     /** Load image using QByteArray as file path
      */
-    explicit DImg(const QByteArray& filePath, DImgLoaderObserver *observer = 0,
+    explicit DImg(const QByteArray& filePath, DImgLoaderObserver* observer = 0,
                   DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Load image using QString as file path
      */
-    explicit DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
+    explicit DImg(const QString& filePath, DImgLoaderObserver* observer = 0,
                   DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Copy image: Creates a shallow copy that refers to the same shared data.
@@ -171,7 +171,7 @@ public:
 
     /** Replaces image data of this object. Metadata is unchanged. Parameters like constructor above.
      */
-    void        putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData = true);
+    void        putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar* data, bool copyData = true);
 
     /** Overloaded function, provided for convenience, behaves essentially
         like the function above if data is not 0.
@@ -179,7 +179,7 @@ public:
         If data is 0, the current data is deleted and the image is set to null
         (But metadata unchanged).
      */
-    void        putImageData(uchar *data, bool copyData = true);
+    void        putImageData(uchar* data, bool copyData = true);
 
     /** Reset metadata and image data to null image
      */
@@ -194,15 +194,15 @@ public:
      */
     uchar*      stripImageData();
 
-    bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
+    bool        load(const QString& filePath, DImgLoaderObserver* observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
     bool        load(const QString& filePath,
                      bool loadMetadata, bool loadICCData, bool loadUniqueHash,
-                     DImgLoaderObserver *observer = 0,
+                     DImgLoaderObserver* observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
 
-    bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver *observer = 0);
-    bool        save(const QString& filePath, const QString& format, DImgLoaderObserver *observer = 0);
+    bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver* observer = 0);
+    bool        save(const QString& filePath, const QString& format, DImgLoaderObserver* observer = 0);
 
     /** Loads most parts of the meta information, but never the image data.
         If loadMetadata is true, the metadata will be available with getComments, getExif, getIptc, getXmp .
@@ -363,10 +363,10 @@ public:
         and multiplication flags. See documentation of DColorComposer for more info.
         For the other arguments, see documentation of bitBltImage above.
      */
-    void       bitBlendImage(DColorComposer *composer, const DImg* src,
+    void       bitBlendImage(DColorComposer* composer, const DImg* src,
                              int sx, int sy, int w, int h, int dx, int dy,
                              DColorComposer::MultiplicationFlags multiplicationFlags =
-                             DColorComposer::NoMultiplication);
+                                 DColorComposer::NoMultiplication);
 
     /** QImage wrapper methods
      */
@@ -403,7 +403,7 @@ public:
     /** Return a mask image where pure white and pure black pixels are over-colored.
         This way is used to identify over and under exposed pixels.
      */
-    QImage     pureColorMask(ExposureSettingsContainer *expoSettings);
+    QImage     pureColorMask(ExposureSettingsContainer* expoSettings);
 
     /** Convert depth of image. Depth is bytesDepth * bitsDepth.
         If depth is 32, converts to 8 bits,
@@ -415,7 +415,7 @@ public:
      */
     void       convertToSixteenBit();
     void       convertToEightBit();
-    void       convertToDepthOfImage(const DImg *otherImage);
+    void       convertToDepthOfImage(const DImg* otherImage);
 
     /** Fill whole image with specified color.
         The bit depth of the color must be identical to the depth of this image.
@@ -448,19 +448,19 @@ private:
 
 private:
 
-    bool       load(const QString& filePath, int loadFlags, DImgLoaderObserver *observer,
+    bool       load(const QString& filePath, int loadFlags, DImgLoaderObserver* observer,
                     DRawDecoding rawDecodingSettings=DRawDecoding());
-    void       copyMetaData(const DImgPrivate *src);
-    void       copyImageData(const DImgPrivate *src);
+    void       copyMetaData(const DImgPrivate* src);
+    void       copyImageData(const DImgPrivate* src);
     void       setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
     void       setImageDimension(uint width, uint height);
     int        allocateData();
     DImg(const DImg& image, int w, int h);
-    static void bitBlt(const uchar *src, uchar *dest,
+    static void bitBlt(const uchar* src, uchar* dest,
                        int sx, int sy, int w, int h, int dx, int dy,
                        uint swidth, uint sheight, uint dwidth, uint dheight,
                        bool sixteenBit, int sdepth, int ddepth);
-    static void bitBlend(DColorComposer *composer, const uchar *src, uchar *dest,
+    static void bitBlend(DColorComposer* composer, const uchar* src, uchar* dest,
                          int sx, int sy, int w, int h, int dx, int dy,
                          uint swidth, uint sheight, uint dwidth, uint dheight,
                          bool sixteenBit, int sdepth, int ddepth,

@@ -60,29 +60,28 @@ public:
         direction      = BatchSyncMetadata::WriteFromDatabaseToFile;
     }
 
-    bool           cancel;
-    bool           everStarted;
-    bool           running;
+    bool                             cancel;
+    bool                             everStarted;
+    bool                             running;
 
-    int            count;
-    int            imageInfoIndex;
+    int                              count;
+    int                              imageInfoIndex;
 
-    Album         *album;
+    Album*                           album;
 
-    ImageInfoJob  *imageInfoJob;
+    ImageInfoJob*                    imageInfoJob;
 
-    ImageInfoList  imageInfoList;
+    ImageInfoList                    imageInfoList;
 
-    CollectionScanner scanner;
+    CollectionScanner                scanner;
 
-    BatchSyncMetadata::SyncDirection
-                   direction;
+    BatchSyncMetadata::SyncDirection direction;
 };
 
-BatchSyncMetadata::BatchSyncMetadata(Album *album, SyncDirection direction, QObject* parent)
-                 : QObject(parent), d(new BatchSyncMetadataPriv)
+BatchSyncMetadata::BatchSyncMetadata(Album* album, SyncDirection direction, QObject* parent)
+    : QObject(parent), d(new BatchSyncMetadataPriv)
 {
-    d->album = album;
+    d->album     = album;
     d->direction = direction;
 
     connect(this, SIGNAL(startParsingList()),
@@ -91,10 +90,10 @@ BatchSyncMetadata::BatchSyncMetadata(Album *album, SyncDirection direction, QObj
 }
 
 BatchSyncMetadata::BatchSyncMetadata(const ImageInfoList& list, SyncDirection direction, QObject* parent)
-                 : QObject(parent), d(new BatchSyncMetadataPriv)
+    : QObject(parent), d(new BatchSyncMetadataPriv)
 {
     d->imageInfoList = list;
-    d->direction = direction;
+    d->direction     = direction;
 }
 
 BatchSyncMetadata::~BatchSyncMetadata()
@@ -118,7 +117,9 @@ void BatchSyncMetadata::parseAlbum()
 void BatchSyncMetadata::slotComplete()
 {
     if (!d->running)
+    {
         emit startParsingList();
+    }
 }
 
 void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
@@ -126,7 +127,9 @@ void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
     d->imageInfoList << list;
 
     if (!d->running && !d->cancel)
+    {
         emit startParsingList();
+    }
 }
 
 void BatchSyncMetadata::parseList()
@@ -134,21 +137,29 @@ void BatchSyncMetadata::parseList()
     if (!d->everStarted)
     {
         QString message;
+
         if (d->direction == WriteFromDatabaseToFile)
+        {
             message = i18n("Synchronizing image metadata with database. Please wait...");
+        }
         else
+        {
             message = i18n("Updating database from image metadata. Please wait...");
+        }
+
         emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, message);
 
         d->everStarted = true;
     }
 
     d->running = true;
+
     while (d->imageInfoIndex != d->imageInfoList.size() && !d->cancel)
     {
         parsePicture();
         kapp->processEvents();
     }
+
     d->running = false;
 
     if (d->cancel ||
@@ -185,8 +196,11 @@ void BatchSyncMetadata::parsePicture()
 void BatchSyncMetadata::slotAbort()
 {
     d->cancel = true;
+
     if (d->imageInfoJob)
+    {
         d->imageInfoJob->stop();
+    }
 }
 
 void BatchSyncMetadata::complete()

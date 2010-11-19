@@ -50,7 +50,7 @@ namespace Digikam
 {
 
 CommonKeys::CommonKeys()
-          : DbKeysCollection(i18n("Common File Information"))
+    : DbKeysCollection(i18n("Common File Information"))
 {
     addId(KEY_DEFAULTCOMMENT, i18n("Default comment of the image"));
     addId(KEY_DEFAULTAUTHOR,  i18n("Default author of the image"));
@@ -81,6 +81,7 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
     else if (key == KEY_DEFAULTAUTHOR)
     {
         QStringList authors = copyright.author();
+
         if (!authors.isEmpty())
         {
             result = authors.at(0);
@@ -89,6 +90,7 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
     else if (key == KEY_AUTHORS)
     {
         QStringList authors = copyright.author();
+
         if (!authors.isEmpty())
         {
             foreach (const QString& author, authors)
@@ -96,6 +98,7 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
                 result += author + ",";
             }
         }
+
         if (result.endsWith(","))
         {
             result.chop(1);
@@ -104,29 +107,35 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
     else if (key == KEY_DIMENSION)
     {
         QSize dimension = info.dimensions();
+
         if (dimension.isEmpty() || dimension.isNull() || !dimension.isValid())
         {
             dimension.setWidth(0);
             dimension.setHeight(0);
         }
+
         result = QString("%1x%2").arg(dimension.width()).arg(dimension.height());
     }
     else if (key == KEY_HEIGHT)
     {
         int height = container.height;
+
         if (height < 0)
         {
             height = 0;
         }
+
         result = QString::number(height);
     }
     else if (key == KEY_WIDTH)
     {
         int width = container.width;
+
         if (width < 0)
         {
             width = 0;
         }
+
         result = QString::number(width);
     }
     else if (key == KEY_FILESIZE)
@@ -141,12 +150,22 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
     {
         switch (info.category())
         {
-            case DatabaseItem::UndefinedCategory: result = QString("Undefined"); break;
-            case DatabaseItem::Image:             result = QString("Image");     break;
-            case DatabaseItem::Video:             result = QString("Video");     break;
-            case DatabaseItem::Audio:             result = QString("Audio");     break;
+            case DatabaseItem::UndefinedCategory:
+                result = QString("Undefined");
+                break;
+            case DatabaseItem::Image:
+                result = QString("Image");
+                break;
+            case DatabaseItem::Video:
+                result = QString("Video");
+                break;
+            case DatabaseItem::Audio:
+                result = QString("Audio");
+                break;
             case DatabaseItem::Other:
-            default:                              result = QString("Other");     break;
+            default:
+                result = QString("Other");
+                break;
         }
     }
     else if (key == KEY_RATING)

@@ -68,7 +68,7 @@ public:
         Rating5  = 5
     };
 
-    RatingComboBox(QWidget *parent = 0);
+    RatingComboBox(QWidget* parent = 0);
 
     void setRatingValue(RatingValue value);
     RatingValue ratingValue() const;
@@ -84,8 +84,8 @@ protected Q_SLOTS:
 
 protected:
 
-    RatingComboBoxModel     *m_model;
-    RatingComboBoxWidget    *m_ratingWidget;
+    RatingComboBoxModel*     m_model;
+    RatingComboBoxWidget*    m_ratingWidget;
 
 private:
 
@@ -100,7 +100,7 @@ public:
 
     RatingStarDrawer();
 
-    QRect drawStarPolygons(QPainter *p, int numberOfStars) const;
+    QRect drawStarPolygons(QPainter* p, int numberOfStars) const;
 
 protected:
 
@@ -120,7 +120,7 @@ public:
     // Sub-classing the classic RatingWidget,
     // this provides support for the Null and NoRating states.
 
-    RatingComboBoxWidget(QWidget *parent = 0);
+    RatingComboBoxWidget(QWidget* parent = 0);
 
     RatingComboBox::RatingValue ratingValue() const;
     void setRatingValue(RatingComboBox::RatingValue value);
@@ -135,7 +135,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent *);
+    virtual void paintEvent(QPaintEvent*);
 
     RatingComboBox::RatingValue m_value;
 };
@@ -151,9 +151,9 @@ public:
         RatingRole = Qt::UserRole
     };
 
-    RatingComboBoxModel(QObject *parent = 0);
+    RatingComboBoxModel(QObject* parent = 0);
 
-    virtual int rowCount(const QModelIndex & parent) const;
+    virtual int rowCount(const QModelIndex& parent) const;
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
 
@@ -172,14 +172,14 @@ class RatingComboBoxDelegate : public QItemDelegate, public RatingStarDrawer
 {
 public:
 
-    RatingComboBoxDelegate(QObject *parent = 0);
+    RatingComboBoxDelegate(QObject* parent = 0);
 
-    virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    virtual void paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 protected:
 
-    void drawRating(QPainter *painter, const QRect& rect, int rating, bool selectable) const;
+    void drawRating(QPainter* painter, const QRect& rect, int rating, bool selectable) const;
 };
 
 } // namespace Digikam

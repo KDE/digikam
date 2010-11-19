@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-22-01
- * Description : digikamalbum KIO slave interface to get image 
+ * Description : digikamalbum KIO slave interface to get image
  *               info from database.
  *
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -55,7 +55,7 @@ public:
     ImageInfoJob();
     ~ImageInfoJob();
 
-    void allItemsFromAlbum(Album *album);
+    void allItemsFromAlbum(Album* album);
     void stop();
     bool isRunning();
 

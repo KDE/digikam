@@ -122,7 +122,7 @@ public:
         gammaInput(0),
         saturationInput(0),
         greenInput(0)
-        {}
+    {}
 
     const int        DefaultTemperature;
 
@@ -168,20 +168,22 @@ public:
         int index        = temperaturePresetCB->combo()->findData((int)preset);
         QString itemText = temperaturePresetCB->combo()->itemText(index);
         QString tempDesc = QString("<p><b>%1</b>: %2 (%3K).</p>")
-                                  .arg(itemText)
-                                  .arg(desc)
-                                  .arg((int)preset);
+                           .arg(itemText)
+                           .arg(desc)
+                           .arg((int)preset);
+
         if (preset == None)
         {
             tempDesc.remove(QRegExp("\\(.*\\)"));
         }
+
         return tempDesc;
     }
 };
 
 WBSettings::WBSettings(QWidget* parent)
-          : QWidget(parent),
-            d(new WBSettingsPriv)
+    : QWidget(parent),
+      d(new WBSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -225,7 +227,7 @@ WBSettings::WBSettings(QWidget* parent)
     toolTip += d->addTemperatureDescription(i18n("neutral color temperature"),             d->Neutral);
     toolTip += d->addTemperatureDescription(i18n("electronic photo flash"),                d->Flash);
     toolTip += d->addTemperatureDescription(i18n("tungsten lamp used in photo studio or "
-                                                 "light at 1 hour from dusk/dawn"),        d->StudioLamp);
+                                            "light at 1 hour from dusk/dawn"),        d->StudioLamp);
     toolTip += d->addTemperatureDescription(i18n("effective sun temperature"),             d->Sun);
     toolTip += d->addTemperatureDescription(i18n("sunrise or sunset light"),               d->Sunrise);
     toolTip += d->addTemperatureDescription(i18n("xenon lamp or light arc"),               d->XenonLamp);
@@ -293,7 +295,7 @@ WBSettings::WBSettings(QWidget* parent)
     d->autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
     d->autoAdjustExposure->setToolTip( i18n( "Auto exposure adjustments" ) );
     d->autoAdjustExposure->setWhatsThis(i18n("With this button, you can automatically adjust Exposure "
-                                             "and Black Point values."));
+                                        "and Black Point values."));
     d->mainExposureInput = new RDoubleNumInput;
     d->mainExposureInput->setDecimals(2);
     d->mainExposureInput->input()->setRange(-6.0, 8.0, 0.1, true);
@@ -398,10 +400,12 @@ void WBSettings::showAdvancedButtons(bool b)
 void WBSettings::slotTemperatureChanged(double temperature)
 {
     int index = d->temperaturePresetCB->combo()->findData(QVariant((int)temperature));
+
     if (index == -1)
     {
         index = d->temperaturePresetCB->combo()->findData(QVariant((int)d->None));
     }
+
     d->temperaturePresetCB->setCurrentIndex(index);
 
     emit signalSettingsChanged();
@@ -411,6 +415,7 @@ void WBSettings::slotTemperaturePresetChanged(int tempPreset)
 {
     bool ok         = true;
     int temperature = d->temperaturePresetCB->combo()->itemData(tempPreset).toInt(&ok);
+
     if (!ok)
     {
         temperature = d->DefaultTemperature;
@@ -524,10 +529,13 @@ void WBSettings::writeSettings(KConfigGroup& group)
 void WBSettings::loadSettings()
 {
     KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), kapp->activeWindow(),
-                                             QString(i18n("White Color Balance Settings File to Load")));
+                                QString( "*" ), kapp->activeWindow(),
+                                QString(i18n("White Color Balance Settings File to Load")));
+
     if (loadWhiteBalanceFile.isEmpty())
+    {
         return;
+    }
 
     QFile file(loadWhiteBalanceFile.toLocalFile());
 
@@ -539,7 +547,7 @@ void WBSettings::loadSettings()
         {
             KMessageBox::error(kapp->activeWindow(),
                                i18n("\"%1\" is not a White Color Balance settings text file.",
-                               loadWhiteBalanceFile.fileName()));
+                                    loadWhiteBalanceFile.fileName()));
             file.close();
             return;
         }
@@ -568,10 +576,13 @@ void WBSettings::loadSettings()
 void WBSettings::saveAsSettings()
 {
     KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), kapp->activeWindow(),
-                                             QString( i18n("White Color Balance Settings File to Save")));
+                                QString( "*" ), kapp->activeWindow(),
+                                QString( i18n("White Color Balance Settings File to Save")));
+
     if ( saveWhiteBalanceFile.isEmpty() )
-       return;
+    {
+        return;
+    }
 
     QFile file(saveWhiteBalanceFile.toLocalFile());
 

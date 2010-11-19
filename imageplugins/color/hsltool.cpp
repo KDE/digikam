@@ -68,7 +68,7 @@ public:
         hslSettings(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
     const QString       configHistogramChannelEntry;
@@ -82,8 +82,8 @@ public:
 };
 
 HSLTool::HSLTool(QObject* parent)
-       : EditorToolThreaded(parent),
-         d(new HSLToolPriv)
+    : EditorToolThreaded(parent),
+      d(new HSLToolPriv)
 {
     setObjectName("adjusthsl");
     setToolName(i18n("Hue / Saturation / Lightness"));
@@ -122,7 +122,9 @@ HSLTool::HSLTool(QObject* parent)
 HSLTool::~HSLTool()
 {
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     delete d;
 }
@@ -172,12 +174,14 @@ void HSLTool::putPreviewData()
     // Update histogram.
 
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-                                                             preview.width(), preview.height(), preview.sixteenBit(),
-                                                             0, 0, 0, false);
+            preview.width(), preview.height(), preview.sixteenBit(),
+            0, 0, 0, false);
 }
 
 void HSLTool::prepareFinal()

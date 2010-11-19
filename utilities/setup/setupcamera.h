@@ -78,7 +78,7 @@ class CameraAutoDetectThread : public DBusyThread
 
 public:
 
-    CameraAutoDetectThread(QObject *parent);
+    CameraAutoDetectThread(QObject* parent);
     virtual ~CameraAutoDetectThread();
 
     int     result();

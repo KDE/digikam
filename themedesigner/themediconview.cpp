@@ -64,14 +64,18 @@ public:
 };
 
 ThemedIconView::ThemedIconView(QWidget* parent)
-              : IconView(parent), d(new ThemedIconViewPriv)
+    : IconView(parent), d(new ThemedIconViewPriv)
 {
     ThemedIconGroupItem* groupItem = new ThemedIconGroupItem(this);
+
     for (int i=0; i<10; ++i)
     {
         ThemedIconItem* item = new ThemedIconItem(groupItem);
+
         if (i > 0 && i < 3)
+        {
             item->setSelected(true, false);
+        }
     }
 
     updateBannerRectPixmap();
@@ -173,7 +177,9 @@ void ThemedIconView::resizeEvent(QResizeEvent* e)
     IconView::resizeEvent(e);
 
     if (d->bannerRect.width() != frameRect().width())
+    {
         updateBannerRectPixmap();
+    }
 }
 
 void ThemedIconView::updateBannerRectPixmap()
@@ -184,6 +190,7 @@ void ThemedIconView::updateBannerRectPixmap()
     QFont fn(font());
     int fnSize = fn.pointSize();
     bool usePointSize;
+
     if (fnSize > 0)
     {
         fn.setPointSize(fnSize+2);
@@ -204,9 +211,13 @@ void ThemedIconView::updateBannerRectPixmap()
     d->bannerRect.setHeight(tr.height());
 
     if (usePointSize)
+    {
         fn.setPointSize(font().pointSize());
+    }
     else
+    {
         fn.setPixelSize(font().pixelSize());
+    }
 
     fn.setBold(false);
     fm = QFontMetrics(fn);
@@ -236,6 +247,7 @@ void ThemedIconView::updateItemRectsPixmap()
     d->fnCom.setItalic(true);
 
     int fnSz = d->fnReg.pointSize();
+
     if (fnSz > 0)
     {
         d->fnCom.setPointSize(fnSz-1);

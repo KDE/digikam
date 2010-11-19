@@ -60,7 +60,7 @@ public:
                     QWidget* parent = 0);
     ~FuzzySearchView();
 
-    SAlbum *currentAlbum() const;
+    SAlbum* currentAlbum() const;
     void setCurrentAlbum(SAlbum* album);
 
     void setActive(bool val);
@@ -93,7 +93,7 @@ private Q_SLOTS:
     void slotSaveSketchSAlbum();
     void slotCheckNameEditSketchConditions();
 
-    void slotAlbumSelected(Album *album);
+    void slotAlbumSelected(Album* album);
 
     void slotSaveImageSAlbum();
     void slotCheckNameEditImageConditions();

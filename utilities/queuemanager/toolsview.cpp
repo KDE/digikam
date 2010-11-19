@@ -50,18 +50,18 @@ public:
     ToolsViewPriv()
     {
         baseTools   = 0;
-//        customTools = 0;
+        //        customTools = 0;
         historyView = 0;
     }
 
     ToolsListView* baseTools;
-//    ToolsListView* customTools;
+    //    ToolsListView* customTools;
 
     DHistoryView*  historyView;
 };
 
 ToolsView::ToolsView(QWidget* parent)
-         : KTabWidget(parent), d(new ToolsViewPriv)
+    : KTabWidget(parent), d(new ToolsViewPriv)
 {
     setTabBarHidden(false);
 
@@ -83,10 +83,10 @@ ToolsView::ToolsView(QWidget* parent)
     new ToolListViewGroup(d->baseTools, BatchTool::MetadataTool);
     addTab(d->baseTools, SmallIcon("digikam"), i18n("Base Tools"));
 
-//    d->customTools = new ToolsListView(this);
-//    d->customTools->setWhatsThis(i18n("This is the list of user customized batch tools."));
-//    new ToolListViewGroup(d->customTools, BatchTool::CustomTool);
-//    addTab(d->customTools, SmallIcon("user-properties"), i18n("Custom Tools"));
+    //    d->customTools = new ToolsListView(this);
+    //    d->customTools->setWhatsThis(i18n("This is the list of user customized batch tools."));
+    //    new ToolListViewGroup(d->customTools, BatchTool::CustomTool);
+    //    addTab(d->customTools, SmallIcon("user-properties"), i18n("Custom Tools"));
 
     d->historyView = new DHistoryView(this);
     d->historyView->setWhatsThis(i18n("You can see below the history of last batch operations processed."));
@@ -97,8 +97,8 @@ ToolsView::ToolsView(QWidget* parent)
     connect(d->baseTools, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
             this, SIGNAL(signalAssignTools(const QMap<int, QString>&)));
 
-//    connect(d->customTools, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
-//            this, SIGNAL(signalAssignTools(const QMap<int, QString>&)));
+    //    connect(d->customTools, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
+    //            this, SIGNAL(signalAssignTools(const QMap<int, QString>&)));
 
     connect(d->historyView, SIGNAL(signalEntryClicked(const QVariant&)),
             this, SLOT(slotHistoryEntryClicked(const QVariant&)));
@@ -114,16 +114,22 @@ void ToolsView::setBusy(bool b)
     for (int i = 0; i < count(); ++i)
     {
         ToolsListView* view = dynamic_cast<ToolsListView*>(widget(i));
+
         if (view)
+        {
             view->viewport()->setEnabled(!b);
+        }
     }
 }
 
 void ToolsView::addTool(BatchTool* tool)
 {
-    if (!tool) return;
+    if (!tool)
+    {
+        return;
+    }
 
-    switch(tool->toolGroup())
+    switch (tool->toolGroup())
     {
         case BatchTool::ColorTool:
         case BatchTool::EnhanceTool:
@@ -138,7 +144,7 @@ void ToolsView::addTool(BatchTool* tool)
             // TODO
             break;
         default:      // User customized tools.
-//            d->customTools->addTool(tool);
+            //            d->customTools->addTool(tool);
             break;
     }
 }
@@ -149,7 +155,7 @@ bool ToolsView::removeTool(BatchTool* tool)
 
     if (tool)
     {
-        switch(tool->toolGroup())
+        switch (tool->toolGroup())
         {
             case BatchTool::ColorTool:
             case BatchTool::EnhanceTool:
@@ -164,10 +170,11 @@ bool ToolsView::removeTool(BatchTool* tool)
                 // TODO
                 break;
             default:      // User customized tools.
-//                ret = d->customTools->removeTool(tool);
+                //                ret = d->customTools->removeTool(tool);
                 break;
         }
     }
+
     return ret;
 }
 
@@ -193,6 +200,7 @@ void ToolsView::showHistory()
 void ToolsView::slotHistoryEntryClicked(const QVariant& metadata)
 {
     QList<QVariant> list = metadata.toList();
+
     if (!list.isEmpty())
     {
         int queueId      = list[0].toInt();

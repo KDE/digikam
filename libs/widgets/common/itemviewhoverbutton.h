@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT ItemViewHoverButton : public QAbstractButton
 
 public:
 
-    ItemViewHoverButton(QAbstractItemView *parentView);
+    ItemViewHoverButton(QAbstractItemView* parentView);
     void initIcon();
     void reset();
     void setIndex(const QModelIndex& index);
@@ -80,7 +80,7 @@ protected:
     bool                  m_isHovered;
     int                   m_fadingValue;
     QPixmap               m_icon;
-    QTimeLine            *m_fadingTimeLine;
+    QTimeLine*            m_fadingTimeLine;
 };
 
 } // namespace Digikam

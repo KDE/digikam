@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 Convert2JP2::Convert2JP2(QObject* parent)
-           : BatchTool("Convert2JP2", ConvertTool, parent)
+    : BatchTool("Convert2JP2", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To JP2"));
     setToolDescription(i18n("A tool to convert images to JPEG-2000 format."));
@@ -94,7 +94,10 @@ QString Convert2JP2::outputSuffix() const
 
 bool Convert2JP2::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     bool lossless = settings()["lossless"].toBool();
     image().setAttribute("quality", lossless ? 100 : settings()["quality"].toInt());

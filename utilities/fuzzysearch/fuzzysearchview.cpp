@@ -190,15 +190,15 @@ public:
     AlbumPointer<SAlbum>    imageSAlbum;
     AlbumPointer<SAlbum>    sketchSAlbum;
 
-    SearchModel *searchModel;
-    SearchModificationHelper *searchModificationHelper;
+    SearchModel* searchModel;
+    SearchModificationHelper* searchModificationHelper;
 };
 
-FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
-                                 SearchModificationHelper *searchModificationHelper,
-                                 QWidget *parent)
-               : QScrollArea(parent), StateSavingObject(this),
-                 d(new FuzzySearchViewPriv)
+FuzzySearchView::FuzzySearchView(SearchModel* searchModel,
+                                 SearchModificationHelper* searchModificationHelper,
+                                 QWidget* parent)
+    : QScrollArea(parent), StateSavingObject(this),
+      d(new FuzzySearchViewPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
@@ -212,8 +212,8 @@ FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
 
     // ---------------------------------------------------------------
 
-    QWidget *imagePanel    = setupFindSimilarPanel();
-    QWidget *sketchPanel   = setupSketchPanel();
+    QWidget* imagePanel    = setupFindSimilarPanel();
+    QWidget* sketchPanel   = setupSketchPanel();
     d->findDuplicatesPanel = new FindDuplicatesView();
 
     d->tabWidget = new KTabWidget();
@@ -225,7 +225,7 @@ FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
 
     d->folderView            = new KVBox();
     d->searchTreeView        = new EditableSearchTreeView(d->folderView, searchModel,
-                                                          searchModificationHelper);
+            searchModificationHelper);
     d->searchTreeView->filteredModel()->listHaarSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
     d->searchTreeView->setAlbumManagerCurrentAlbum(true);
@@ -238,8 +238,8 @@ FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
 
     // ---------------------------------------------------------------
 
-    QWidget *mainWidget     = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout();
+    QWidget* mainWidget     = new QWidget(this);
+    QVBoxLayout* mainLayout = new QVBoxLayout();
     mainLayout->addWidget(d->tabWidget);
     mainLayout->addWidget(d->folderView);
     mainLayout->setMargin(0);
@@ -276,7 +276,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel()
 
     QLabel* file   = new QLabel(i18n("<b>File</b>:"));
     d->labelFile   = new KSqueezedTextLabel(0);
-    QLabel *folder = new QLabel(i18n("<b>Folder</b>:"));
+    QLabel* folder = new QLabel(i18n("<b>Folder</b>:"));
     d->labelFolder = new KSqueezedTextLabel(0);
     int hgt        = fontMetrics().height()-2;
     file->setMaximumHeight(hgt);
@@ -536,10 +536,15 @@ void FuzzySearchView::newDuplicatesSearch(Album* album)
     if (album)
     {
         if (album->type() == Album::PHYSICAL)
+        {
             d->findDuplicatesPanel->slotSetSelectedAlbum(album);
+        }
         else if (album->type() == Album::TAG)
+        {
             d->findDuplicatesPanel->slotSetSelectedTag(album);
+        }
     }
+
     d->tabWidget->setCurrentIndex(FuzzySearchViewPriv::DUPLICATES);
 }
 
@@ -610,6 +615,7 @@ void FuzzySearchView::setActive(bool val)
                 emit signalGenerateFingerPrintsFirstTime();
             }
         }
+
         d->fingerprintsChecked = true;
     }
 
@@ -623,7 +629,7 @@ void FuzzySearchView::setActive(bool val)
 
 void FuzzySearchView::slotTabChanged(int tab)
 {
-    switch(tab)
+    switch (tab)
     {
         case FuzzySearchViewPriv::SIMILARS:
         {
@@ -651,7 +657,7 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
 
     kDebug() << "Selected new album" << album;
 
-    SAlbum *salbum = dynamic_cast<SAlbum*> (album);
+    SAlbum* salbum = dynamic_cast<SAlbum*> (album);
 
     if (!salbum || !salbum->isHaarSearch())
     {
@@ -682,8 +688,11 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
     {
         d->sketchSAlbum = salbum;
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SKETCH);
+
         if (reader.readToStartOfElement("SketchImage"))
+        {
             d->sketchWidget->setSketchImageFromXML(reader);
+        }
     }
 }
 
@@ -762,8 +771,8 @@ void FuzzySearchView::slotDirtySketch()
 {
     if (d->timerSketch)
     {
-       d->timerSketch->stop();
-       delete d->timerSketch;
+        d->timerSketch->stop();
+        delete d->timerSketch;
     }
 
     d->timerSketch = new QTimer( this );
@@ -783,7 +792,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name, b
 {
     AlbumManager::instance()->setCurrentAlbum(0);
     d->sketchSAlbum = d->searchModificationHelper->createFuzzySearchFromSketch(
-                    name, d->sketchWidget, d->resultsSketch->value(), force);
+                          name, d->sketchWidget, d->resultsSketch->value(), force);
     d->searchTreeView->slotSelectAlbum(d->sketchSAlbum);
 }
 
@@ -801,7 +810,9 @@ void FuzzySearchView::slotCheckNameEditSketchConditions()
         d->nameEditSketch->setEnabled(true);
 
         if (!d->nameEditSketch->text().isEmpty())
+        {
             d->saveBtnSketch->setEnabled(true);
+        }
     }
     else
     {
@@ -815,7 +826,9 @@ void FuzzySearchView::slotCheckNameEditSketchConditions()
 void FuzzySearchView::dragEnterEvent(QDragEnterEvent* e)
 {
     if (DItemDrag::canDecode(e->mimeData()))
+    {
         e->acceptProposedAction();
+    }
 }
 
 void FuzzySearchView::dropEvent(QDropEvent* e)
@@ -828,10 +841,14 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
         QList<int> imageIDs;
 
         if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+        {
             return;
+        }
 
         if (imageIDs.isEmpty())
+        {
             return;
+        }
 
         setCurrentImage(imageIDs.first());
         slotCheckNameEditImageConditions();
@@ -846,8 +863,8 @@ void FuzzySearchView::slotLevelImageChanged()
 {
     if (d->timerImage)
     {
-       d->timerImage->stop();
-       delete d->timerImage;
+        d->timerImage->stop();
+        delete d->timerImage;
     }
 
     d->timerImage = new QTimer( this );
@@ -860,7 +877,9 @@ void FuzzySearchView::slotLevelImageChanged()
 void FuzzySearchView::slotTimerImageDone()
 {
     if (!d->imageInfo.isNull())
+    {
         setImageInfo(d->imageInfo);
+    }
 }
 
 void FuzzySearchView::setCurrentImage(qlonglong imageid)
@@ -895,7 +914,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bo
 {
     AlbumManager::instance()->setCurrentAlbum(0);
     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(
-                     name, d->imageInfo, d->levelImage->value() / 100.0, force);
+                         name, d->imageInfo, d->levelImage->value() / 100.0, force);
     d->searchTreeView->slotSelectAlbum(d->imageSAlbum);
 }
 
@@ -906,7 +925,9 @@ void FuzzySearchView::slotCheckNameEditImageConditions()
         d->nameEditImage->setEnabled(true);
 
         if (!d->nameEditImage->text().isEmpty())
+        {
             d->saveBtnImage->setEnabled(true);
+        }
     }
     else
     {

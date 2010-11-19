@@ -50,13 +50,13 @@ public:
 
     QTime         notificationTime;
 
-    LoadSaveTask *lastTask;
+    LoadSaveTask* lastTask;
 };
 
 //---------------------------------------------------------------------------------------------------
 
 LoadSaveThread::LoadSaveThread()
-              : d(new LoadSaveThreadPriv)
+    : d(new LoadSaveThreadPriv)
 {
     m_currentTask        = 0;
     m_notificationPolicy = NotificationPolicyTimeLimited;
@@ -88,19 +88,23 @@ void LoadSaveThread::run()
     {
         {
             QMutexLocker lock(threadMutex());
+
             if (d->lastTask)
             {
                 delete d->lastTask;
                 d->lastTask = 0;
             }
+
             if (m_currentTask)
             {
                 delete m_currentTask;
                 m_currentTask = 0;
             }
+
             if (!m_todo.isEmpty())
             {
                 m_currentTask = m_todo.takeFirst();
+
                 if (m_notificationPolicy == NotificationPolicyTimeLimited)
                 {
                     // set timing values so that first event is sent only
@@ -110,10 +114,15 @@ void LoadSaveThread::run()
                 }
             }
             else
+            {
                 stop(lock);
+            }
         }
+
         if (m_currentTask)
+        {
             m_currentTask->execute();
+        }
     }
 }
 
@@ -153,7 +162,7 @@ void LoadSaveThread::imageLoaded(const LoadingDescription& loadingDescription, c
 }
 
 void LoadSaveThread::moreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
-                          const LoadingDescription& newLoadingDescription)
+        const LoadingDescription& newLoadingDescription)
 {
     notificationReceived();
     emit signalMoreCompleteLoadingAvailable(oldLoadingDescription, newLoadingDescription);
@@ -207,31 +216,42 @@ bool LoadSaveThread::querySendNotifyEvent()
     switch (m_notificationPolicy)
     {
         case NotificationPolicyDirect:
+
             // Note that m_blockNotification is not protected by a mutex. However, if there is a
             // race condition, the worst case is that one event is not sent, which is no problem.
             if (d->blockNotification)
+            {
                 return false;
+            }
             else
             {
                 d->blockNotification = true;
                 return true;
             }
+
             break;
         case NotificationPolicyTimeLimited:
+
             // Current default time value: 100 millisecs.
             if (d->blockNotification)
+            {
                 d->blockNotification = d->notificationTime.msecsTo(QTime::currentTime()) < 100;
+            }
 
             if (d->blockNotification)
+            {
                 return false;
+            }
             else
             {
                 d->notificationTime  = QTime::currentTime();
                 d->blockNotification = true;
                 return true;
             }
+
             break;
     }
+
     return false;
 }
 
@@ -239,13 +259,17 @@ bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
 {
     // Keep in sync with the variant in thumbnailcreator.cpp
     QVariant attribute(image.attribute("exifRotated"));
+
     if (attribute.isValid() && attribute.toBool())
+    {
         return false;
+    }
 
     // Raw files are already rotated properly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
     // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Return true anyway.
 
     attribute = image.attribute("fromRawEmbeddedPreview");
+
     if (DImg::fileFormat(filePath) == DImg::RAW && !(attribute.isValid() && attribute.toBool()) )
     {
         return true;
@@ -258,7 +282,7 @@ bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
 
     bool rotatedOrFlipped = false;
 
-    if(orientation != DMetadata::ORIENTATION_NORMAL)
+    if (orientation != DMetadata::ORIENTATION_NORMAL)
     {
         switch (orientation)
         {

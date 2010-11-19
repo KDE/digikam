@@ -87,12 +87,12 @@ public:
     CameraItemPropertiesTab*    cameraItemTab;
 };
 
-ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
-                                                           SidebarSplitter *splitter,
-                                                           KMultiTabBarPosition side,
-                                                           bool mimimizedDefault)
-                            : Sidebar(parent, splitter, side, mimimizedDefault),
-                              d(new ImagePropertiesSideBarCamGuiPriv)
+ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* parent,
+        SidebarSplitter* splitter,
+        KMultiTabBarPosition side,
+        bool mimimizedDefault)
+    : Sidebar(parent, splitter, side, mimimizedDefault),
+      d(new ImagePropertiesSideBarCamGuiPriv)
 {
     d->cameraItemTab = new CameraItemPropertiesTab(parent);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
@@ -119,11 +119,13 @@ void ImagePropertiesSideBarCamGui::applySettings()
 }
 
 void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl& url,
-                                               const QByteArray& exifData,
-                                               CameraIconView* view, CameraIconItem* item)
+        const QByteArray& exifData,
+        CameraIconView* view, CameraIconItem* item)
 {
     if (!itemInfo)
+    {
         return;
+    }
 
     d->metaData.setExif(exifData);
     d->itemInfo           = itemInfo;
@@ -160,7 +162,9 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
 void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
 {
     if (!d->itemInfo)
+    {
         return;
+    }
 
     setCursor(Qt::WaitCursor);
 

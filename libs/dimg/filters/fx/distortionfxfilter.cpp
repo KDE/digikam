@@ -47,8 +47,8 @@ namespace Digikam
 {
 
 DistortionFXFilter::DistortionFXFilter(DImg* orgImage, QObject* parent, int effectType,
-                           int level, int iteration, bool antialiasing)
-                  : DImgThreadedFilter(orgImage, parent, "DistortionFX")
+                                       int level, int iteration, bool antialiasing)
+    : DImgThreadedFilter(orgImage, parent, "DistortionFX")
 {
     m_effectType = effectType;
     m_level      = level;
@@ -144,8 +144,8 @@ void DistortionFXFilter::filterImage()
     Antialias if requested.
 */
 void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
-                                     uchar* data, uchar* pResBits,
-                                     int w, int h, double nw, double nh, bool AntiAlias)
+        uchar* data, uchar* pResBits,
+        int w, int h, double nw, double nh, bool AntiAlias)
 {
     DColor color;
     int offset, offsetOther;
@@ -155,16 +155,17 @@ void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBi
     if (AntiAlias)
     {
         uchar* ptr = pResBits + offset;
+
         if (sixteenBit)
         {
             unsigned short* ptr16 = (unsigned short*)ptr;
             PixelsAliasFilter().pixelAntiAliasing16((unsigned short*)data, Width, Height, nw, nh,
-                                                             ptr16+3, ptr16+2, ptr16+1, ptr16);
+                                                    ptr16+3, ptr16+2, ptr16+1, ptr16);
         }
         else
         {
             PixelsAliasFilter().pixelAntiAliasing(data, Width, Height, nw, nh,
-                                                           ptr+3, ptr+2, ptr+1, ptr);
+                                                  ptr+3, ptr+2, ptr+1, ptr);
         }
     }
     else
@@ -193,7 +194,10 @@ void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBi
  */
 void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, bool AntiAlias)
 {
-    if (Coeff == 0.0) return;
+    if (Coeff == 0.0)
+    {
+        return;
+    }
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -215,9 +219,13 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
     double lfRadius, lfRadMax, lfAngle, lfCoeff, lfCoeffStep = Coeff / 1000.0;
 
     if (Width > Height)
+    {
         lfYScale = (double)Width / (double)Height;
+    }
     else if (Height > Width)
+    {
         lfXScale = (double)Height / (double)Width;
+    }
 
     lfRadMax = (double)qMax(Height, Width) / 2.0;
     lfCoeff = lfRadMax / log (fabs (lfCoeffStep) * lfRadMax + 1.0);
@@ -240,9 +248,13 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
                 lfAngle = atan2 (th, tw);
 
                 if (Coeff > 0.0)
+                {
                     lfRadius = (exp (lfRadius / lfCoeff) - 1.0) / lfCoeffStep;
+                }
                 else
+                {
                     lfRadius = lfCoeff * log (1.0 + (-1.0 * lfCoeffStep) * lfRadius);
+                }
 
                 nw = (double)nHalfW + (lfRadius / lfXScale) * cos (lfAngle);
                 nh = (double)nHalfH + (lfRadius / lfYScale) * sin (lfAngle);
@@ -262,7 +274,9 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
         progress = (int) (((double)(h) * 100.0) / Height);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 
@@ -277,12 +291,14 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
  * Theory           => Take spiral studies, you will understand better, I'm studying
  *                     hard on this effect, because it is not too fast.
  */
-void DistortionFXFilter::twirl(DImg *orgImage, DImg *destImage, int Twirl, bool AntiAlias)
+void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int Twirl, bool AntiAlias)
 {
     // if twirl value is zero, we do nothing
 
     if (Twirl == 0)
+    {
         return;
+    }
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -304,9 +320,13 @@ void DistortionFXFilter::twirl(DImg *orgImage, DImg *destImage, int Twirl, bool 
     double lfAngle, lfNewAngle, lfAngleStep, lfAngleSum, lfCurrentRadius, lfRadMax;
 
     if (Width > Height)
+    {
         lfYScale = (double)Width / (double)Height;
+    }
     else if (Height > Width)
+    {
         lfXScale = (double)Height / (double)Width;
+    }
 
     // the angle step is twirl divided by 10000
     lfAngleStep = Twirl / 10000.0;
@@ -355,7 +375,9 @@ void DistortionFXFilter::twirl(DImg *orgImage, DImg *destImage, int Twirl, bool 
         progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 
@@ -375,12 +397,14 @@ void DistortionFXFilter::twirl(DImg *orgImage, DImg *destImage, int Twirl, bool 
  *                     Spherize use the same function but in a rectangular
  *                     environment.
  */
-void DistortionFXFilter::cilindrical(DImg *orgImage, DImg *destImage, double Coeff,
-                               bool Horizontal, bool Vertical, bool AntiAlias)
+void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coeff,
+                                     bool Horizontal, bool Vertical, bool AntiAlias)
 
 {
     if ((Coeff == 0.0) || (! (Horizontal || Vertical)))
+    {
         return;
+    }
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -398,9 +422,14 @@ void DistortionFXFilter::cilindrical(DImg *orgImage, DImg *destImage, double Coe
     double lfCoeffX = 1.0, lfCoeffY = 1.0, lfCoeffStep = Coeff / 1000.0;
 
     if (Horizontal)
+    {
         lfCoeffX = (double)nHalfW / log (fabs (lfCoeffStep) * nHalfW + 1.0);
+    }
+
     if (Vertical)
+    {
         lfCoeffY = (double)nHalfH / log (fabs (lfCoeffStep) * nHalfH + 1.0);
+    }
 
     // initial copy
     memcpy (pResBits, data, orgImage->numBytes());
@@ -418,17 +447,25 @@ void DistortionFXFilter::cilindrical(DImg *orgImage, DImg *destImage, double Coe
             if (Horizontal)
             {
                 if (Coeff > 0.0)
+                {
                     nw = (exp (nw / lfCoeffX) - 1.0) / lfCoeffStep;
+                }
                 else
+                {
                     nw = lfCoeffX * log (1.0 + (-1.0 * lfCoeffStep) * nw);
+                }
             }
 
             if (Vertical)
             {
                 if (Coeff > 0.0)
+                {
                     nh = (exp (nh / lfCoeffY) - 1.0) / lfCoeffStep;
+                }
                 else
+                {
                     nh = lfCoeffY * log (1.0 + (-1.0 * lfCoeffStep) * nh);
+                }
             }
 
             nw = (double)nHalfW + ((w >= nHalfW) ? nw : -nw);
@@ -441,7 +478,9 @@ void DistortionFXFilter::cilindrical(DImg *orgImage, DImg *destImage, double Coe
         progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 
@@ -458,9 +497,12 @@ void DistortionFXFilter::cilindrical(DImg *orgImage, DImg *destImage, double Coe
  *                     I multiply the angle by 2, the result is an image like this
  *                     If we multiply by 3, we can create the SixCorners effect.
  */
-void DistortionFXFilter::multipleCorners(DImg *orgImage, DImg *destImage, int Factor, bool AntiAlias)
+void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Factor, bool AntiAlias)
 {
-    if (Factor == 0) return;
+    if (Factor == 0)
+    {
+        return;
+    }
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -507,7 +549,9 @@ void DistortionFXFilter::multipleCorners(DImg *orgImage, DImg *destImage, int Fa
         progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 
@@ -522,7 +566,7 @@ void DistortionFXFilter::multipleCorners(DImg *orgImage, DImg *destImage, int Fa
  * Theory           => Similar to PolarCoordinates from Photoshop. We apply the polar
  *                     transformation in a proportional (Height and Width) radius.
  */
-void DistortionFXFilter::polarCoordinates(DImg *orgImage, DImg *destImage, bool Type, bool AntiAlias)
+void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias)
 {
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -540,9 +584,13 @@ void DistortionFXFilter::polarCoordinates(DImg *orgImage, DImg *destImage, bool 
     double lfAngle, lfRadius, lfRadMax;
 
     if (Width > Height)
+    {
         lfYScale = (double)Width / (double)Height;
+    }
     else if (Height > Width)
+    {
         lfXScale = (double)Height / (double)Width;
+    }
 
     lfRadMax = (double)qMax(Height, Width) / 2.0;
 
@@ -585,7 +633,9 @@ void DistortionFXFilter::polarCoordinates(DImg *orgImage, DImg *destImage, bool 
         progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 
@@ -604,11 +654,18 @@ void DistortionFXFilter::polarCoordinates(DImg *orgImage, DImg *destImage, bool 
  * Theory           => Similar to Waves effect, but here I apply a senoidal function
  *                     with the angle point.
  */
-void DistortionFXFilter::circularWaves(DImg *orgImage, DImg *destImage, int X, int Y, double Amplitude,
-                                 double Frequency, double Phase, bool WavesType, bool AntiAlias)
+void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
+                                       double Frequency, double Phase, bool WavesType, bool AntiAlias)
 {
-    if (Amplitude < 0.0) Amplitude = 0.0;
-    if (Frequency < 0.0) Frequency = 0.0;
+    if (Amplitude < 0.0)
+    {
+        Amplitude = 0.0;
+    }
+
+    if (Frequency < 0.0)
+    {
+        Frequency = 0.0;
+    }
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -638,7 +695,9 @@ void DistortionFXFilter::circularWaves(DImg *orgImage, DImg *destImage, int X, i
             lfRadius = sqrt (nw * nw + nh * nh);
 
             if (WavesType)
+            {
                 lfNewAmp = Amplitude * lfRadius / lfRadMax;
+            }
 
             nw = (double)w + lfNewAmp * sin(lfFreqAngle * lfRadius + Phase);
             nh = (double)h + lfNewAmp * cos(lfFreqAngle * lfRadius + Phase);
@@ -650,7 +709,9 @@ void DistortionFXFilter::circularWaves(DImg *orgImage, DImg *destImage, int X, i
         progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 
@@ -667,12 +728,19 @@ void DistortionFXFilter::circularWaves(DImg *orgImage, DImg *destImage, int X, i
  * Theory           => This is an amazing effect, very funny, and very simple to
  *                     understand. You just need understand how sin and cos works.
  */
-void DistortionFXFilter::waves(DImg *orgImage, DImg *destImage,
-                         int Amplitude, int Frequency,
-                         bool FillSides, bool Direction)
+void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
+                               int Amplitude, int Frequency,
+                               bool FillSides, bool Direction)
 {
-    if (Amplitude < 0) Amplitude = 0;
-    if (Frequency < 0) Frequency = 0;
+    if (Amplitude < 0)
+    {
+        Amplitude = 0;
+    }
+
+    if (Frequency < 0)
+    {
+        Frequency = 0;
+    }
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -699,7 +767,9 @@ void DistortionFXFilter::waves(DImg *orgImage, DImg *destImage,
             progress = (int) (((double)h * 100.0) / Height);
 
             if (progress%5 == 0)
+            {
                 postProgress(progress);
+            }
         }
     }
     else
@@ -721,7 +791,9 @@ void DistortionFXFilter::waves(DImg *orgImage, DImg *destImage,
             progress = (int) (((double)w * 100.0) / Width);
 
             if (progress%5 == 0)
+            {
                 postProgress(progress);
+            }
         }
     }
 }
@@ -738,11 +810,18 @@ void DistortionFXFilter::waves(DImg *orgImage, DImg *destImage,
  * Theory           => This is an amazing effect, very funny when amplitude and
  *                     frequency are small values.
  */
-void DistortionFXFilter::blockWaves(DImg *orgImage, DImg *destImage,
-                              int Amplitude, int Frequency, bool Mode)
+void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
+                                    int Amplitude, int Frequency, bool Mode)
 {
-    if (Amplitude < 0) Amplitude = 0;
-    if (Frequency < 0) Frequency = 0;
+    if (Amplitude < 0)
+    {
+        Amplitude = 0;
+    }
+
+    if (Frequency < 0)
+    {
+        Frequency = 0;
+    }
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -792,7 +871,9 @@ void DistortionFXFilter::blockWaves(DImg *orgImage, DImg *destImage,
         progress = (int) (((double)w * 100.0) / Width);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 
@@ -810,12 +891,23 @@ void DistortionFXFilter::blockWaves(DImg *orgImage, DImg *destImage,
  *                     replace in a position with a random distance from the original
  *                     position.
  */
-void DistortionFXFilter::tile(DImg *orgImage, DImg *destImage,
-                        int WSize, int HSize, int Random)
+void DistortionFXFilter::tile(DImg* orgImage, DImg* destImage,
+                              int WSize, int HSize, int Random)
 {
-    if (WSize < 1)  WSize = 1;
-    if (HSize < 1)  HSize = 1;
-    if (Random < 1) Random = 1;
+    if (WSize < 1)
+    {
+        WSize = 1;
+    }
+
+    if (HSize < 1)
+    {
+        HSize = 1;
+    }
+
+    if (Random < 1)
+    {
+        Random = 1;
+    }
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -847,7 +939,9 @@ void DistortionFXFilter::tile(DImg *orgImage, DImg *destImage,
         progress = (int)(((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 
@@ -861,22 +955,22 @@ void DistortionFXFilter::tile(DImg *orgImage, DImg *destImage,
  * Theory           => This function calculates the maximum radius to that angle
  *                     so, we can build an oval circumference
  */
- /*
+/*
 double DistortionFXFilter::maximumRadius(int Height, int Width, double Angle)
 {
-    double MaxRad, MinRad;
-    double Radius, DegAngle = fabs (Angle * 57.295);    // Rads -> Degrees
+   double MaxRad, MinRad;
+   double Radius, DegAngle = fabs (Angle * 57.295);    // Rads -> Degrees
 
-    MinRad = qMin (Height, Width) / 2.0;                // Gets the minor radius
-    MaxRad = qMax (Height, Width) / 2.0;                // Gets the major radius
+   MinRad = qMin (Height, Width) / 2.0;                // Gets the minor radius
+   MaxRad = qMax (Height, Width) / 2.0;                // Gets the major radius
 
-    // Find the quadrant between -PI/2 and PI/2
-    if (DegAngle > 90.0)
-        Radius = proportionalValue (MinRad, MaxRad, (DegAngle * (255.0 / 90.0)));
-    else
-        Radius = proportionalValue (MaxRad, MinRad, ((DegAngle - 90.0) * (255.0 / 90.0)));
-    return (Radius);
+   // Find the quadrant between -PI/2 and PI/2
+   if (DegAngle > 90.0)
+       Radius = proportionalValue (MinRad, MaxRad, (DegAngle * (255.0 / 90.0)));
+   else
+       Radius = proportionalValue (MaxRad, MinRad, ((DegAngle - 90.0) * (255.0 / 90.0)));
+   return (Radius);
 }
- */
+*/
 
 }  // namespace Digikam

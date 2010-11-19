@@ -78,7 +78,7 @@ protected:
 
 private:
 
-    void initializeTags(QModelIndex &parent);
+    void initializeTags(QModelIndex& parent);
     void setTagState(TAlbum* tag, MetadataHub::TagStatus status);
 
     void setInfos(const ImageInfoList& infos);

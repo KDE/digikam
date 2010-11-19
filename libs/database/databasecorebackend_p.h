@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 
-    DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend);
+    DatabaseCoreBackendPrivate(DatabaseCoreBackend* backend);
     virtual ~DatabaseCoreBackendPrivate() {}
     void init(const QString& connectionName, DatabaseLocking* locking);
 

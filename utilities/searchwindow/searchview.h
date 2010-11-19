@@ -88,7 +88,7 @@ protected:
     /// Re-implement: create and setup a search group
     virtual SearchGroup* createSearchGroup() = 0;
     /// Re-implement: Adds a newly created group to the layout structures
-    virtual void addGroupToLayout(SearchGroup *group) = 0;
+    virtual void addGroupToLayout(SearchGroup* group) = 0;
 
 protected Q_SLOTS:
 
