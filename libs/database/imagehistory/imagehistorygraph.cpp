@@ -72,8 +72,12 @@ bool HistoryVertexProperties::operator==(const ImageInfo& info) const
 bool HistoryVertexProperties::operator==(qlonglong id) const
 {
     foreach (const ImageInfo& info, infos)
+    {
         if (info.id() == id)
+        {
             return true;
+        }
+    }
     return false;
 }
 
@@ -118,7 +122,9 @@ HistoryVertexProperties &HistoryVertexProperties::operator+=(const HistoryImageI
     {
         referredImages << id;
         if (uuid.isNull())
+        {
             uuid = id.m_uuid;
+        }
     }
     return *this;
 }
@@ -126,7 +132,9 @@ HistoryVertexProperties &HistoryVertexProperties::operator+=(const HistoryImageI
 QDebug operator<<(QDebug dbg, const HistoryVertexProperties& props)
 {
     foreach (const ImageInfo& info, props.infos)
+    {
         dbg.space() << info.id();
+    }
     return dbg;
 }
 
@@ -245,26 +253,32 @@ void ImageHistoryGraphData::applyProperties(Vertex& v, const QList<ImageInfo>& i
 {
     // if needed, add a new vertex; or retrieve properties to add possibly new entries
     if (v.isNull())
+    {
         v = HistoryGraph::addVertex();
+    }
 
     HistoryVertexProperties& props = properties(v);
 
     // adjust properties
     foreach (const ImageInfo& info, infos)
+    {
         props += info;
+    }
     foreach (const HistoryImageId& id, ids)
+    {
         props += id;
+    }
 }
 
 // -----------------------------------------------------------------------------------------------
 
 ImageHistoryGraph::ImageHistoryGraph()
-    : d(*imageHistoryGraphDataSharedNull)
+                 : d(*imageHistoryGraphDataSharedNull)
 {
 }
 
 ImageHistoryGraph::ImageHistoryGraph(const ImageHistoryGraph& other)
-    : d(other.d)
+                 : d(other.d)
 {
 }
 
@@ -472,8 +486,12 @@ void ImageHistoryGraph::reduceEdges()
 bool ImageHistoryGraph::hasUnresolvedEntries() const
 {
     foreach (const HistoryGraph::Vertex& v, d->vertices())
+    {
         if (d->properties(v).infos.isEmpty())
+        {
             return true;
+        }
+    }
     return false;
 }
 
@@ -544,7 +562,9 @@ QList<ImageInfo> ImageHistoryGraph::allImageInfos() const
 {
     QList<ImageInfo> infos;
     foreach (const HistoryGraph::Vertex& v, d->vertices())
+    {
         infos << d->properties(v).infos;
+    }
     return infos;
 }
 

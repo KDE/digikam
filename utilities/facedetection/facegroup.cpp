@@ -255,7 +255,9 @@ QList<RegionFrameItem*> FaceGroup::items() const
 {
     QList<RegionFrameItem*> items;
     foreach (FaceItem* item, d->items)
+    {
         items << item;
+    }
     return items;
 }
 
@@ -541,7 +543,9 @@ void FaceGroup::clear()
 {
     d->visibilityController->clear();
     foreach (RegionFrameItem* item, d->items)
+    {
         delete item;
+    }
     d->items.clear();
     d->state = NoFaces;
 }

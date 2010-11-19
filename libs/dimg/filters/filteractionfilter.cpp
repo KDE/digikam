@@ -106,25 +106,37 @@ QList<FilterAction> FilterActionFilter::filterActions() const
 bool FilterActionFilter::isReproducible() const
 {
     foreach (const FilterAction& action, d->actions)
+    {
         if (!action.isNull() && action.category() != FilterAction::ReproducibleFilter)
+        {
             return false;
+        }
+    }
     return true;
 }
 
 bool FilterActionFilter::isComplexAction() const
 {
     foreach (const FilterAction& action, d->actions)
-        if (!action.isNull() && action.category() != FilterAction::ReproducibleFilter
-            && action.category() != FilterAction::ComplexFilter)
+    {
+        if (!action.isNull() && action.category() != FilterAction::ReproducibleFilter &&
+             action.category() != FilterAction::ComplexFilter)
+        {
             return false;
+        }
+    }
     return true;
 }
 
 bool FilterActionFilter::isSupported() const
 {
     foreach (const FilterAction& action, d->actions)
+    {
         if (!action.isNull() && !DImgFilterManager::instance()->isSupported(action.identifier(), action.version()))
+        {
             return false;
+        }
+    }
     return true;
 }
 

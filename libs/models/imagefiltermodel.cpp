@@ -118,7 +118,9 @@ QList<QModelIndex> ImageSortFilterModel::mapListToSource(const QList<QModelIndex
 {
     QList<QModelIndex> sourceIndexes;
     foreach (const QModelIndex& index, indexes)
+    {
         sourceIndexes << mapToSourceImageModel(index);
+    }
     return sourceIndexes;
 }
 
@@ -126,7 +128,9 @@ QList<QModelIndex> ImageSortFilterModel::mapListFromSource(const QList<QModelInd
 {
     QList<QModelIndex> indexes;
     foreach (const QModelIndex& index, sourceIndexes)
+    {
         indexes << mapFromSourceImageModel(index);
+    }
     return indexes;
 }
 
@@ -145,7 +149,9 @@ QList<ImageInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& inde
     QList<ImageInfo> infos;
     ImageModel* model = sourceImageModel();
     foreach (const QModelIndex& index, indexes)
+    {
         infos << model->imageInfo(mapToSourceImageModel(index));
+    }
     return infos;
 }
 
@@ -154,7 +160,9 @@ QList<qlonglong> ImageSortFilterModel::imageIds(const QList<QModelIndex>& indexe
     QList<qlonglong> ids;
     ImageModel* model = sourceImageModel();
     foreach (const QModelIndex& index, indexes)
+    {
         ids << model->imageId(mapToSourceImageModel(index));
+    }
     return ids;
 }
 
@@ -703,7 +711,9 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     }
 
     foreach (ImageFilterModelPrepareHook* hook, prepareHooks)
+    {
         hook->prepare(package.infos);
+    }
 
     emit processed(package);
 }

@@ -227,7 +227,9 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildVertexInfo(VertexI
     // Listing filter actions
     HistoryEdgeProperties props = graph().properties(item->vertex, previousItem->vertex);
     foreach (const FilterAction& action, props.actions)
+    {
         previousItem->addChild(createFilterActionItem(action));
+    }
 }
 
 void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::addBranches(VertexItem* previousItem,
@@ -236,18 +238,22 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::addBranches(VertexItem*
     //kDebug() << "Adding branches for items" << branches.size();
     QList<HistoryGraph::Vertex> subgraph;
     foreach (const HistoryGraph::Vertex& v, branches)
+    {
         subgraph << graph().verticesDominatedBy(v, previousItem->vertex, HistoryGraph::DepthFirstOrder); // or better breadth-first?
+    }
 
     if (!subgraph.isEmpty())
     {
         BranchesItem *branches = new BranchesItem;
         previousItem->addChild(branches);
         foreach (const HistoryGraph::Vertex& v, subgraph)
+        {
             branches->addChild(createVertexItem(v));
+        }
     }
 }
 
-void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::addSources(VertexItem* item, 
+void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::addSources(VertexItem* item,
                                                                     const QList<HistoryGraph::Vertex>& sources)
 {
     Q_UNUSED(item);

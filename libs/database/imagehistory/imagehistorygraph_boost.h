@@ -253,7 +253,9 @@ public:
     void remove(const QList<Vertex>& vertices)
     {
         foreach (const Vertex& v, vertices)
+        {
             remove(v);
+        }
     }
 
     Edge addEdge(const Vertex& v1, const Vertex& v2)
@@ -647,7 +649,9 @@ protected:
         QList<Vertex> children = predecessors.keys(v);
         vertices << children;
         foreach (const Vertex& child, children)
+        {
             treeFromPredecessorsRecursive(child, vertices, predecessors);
+        }
     }
 
     /**

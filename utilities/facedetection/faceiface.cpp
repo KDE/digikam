@@ -743,7 +743,9 @@ void FaceIface::FaceIfacePriv::add(ImageTagPair& pair, const DatabaseFace& face,
 
     QString region = face.region().toXml();
     foreach (const QString& property, properties)
+    {
         pair.addProperty(property, region);
+    }
 
     if (addTag)
         MetadataManager::instance()->assignTag(ImageInfo(face.imageId()), face.tagId());
@@ -762,7 +764,9 @@ void FaceIface::removeAllFaces(qlonglong imageid)
     foreach (ImageTagPair pair, faceImageTagPairs(imageid, DatabaseFace::AllTypes))
     {
         foreach (const QString& attribute, attributes)
+        {
             pair.removeProperties(attribute);
+        }
 
         if (pair.isAssigned())
             tagsToRemove << pair.tagId();
@@ -1217,7 +1221,7 @@ bool FaceIface::isFaceRecognized ( qlonglong imageid, const QRect& rect, const Q
         else
         {
             return true;
-	}
+        }
     }
 
     return false;

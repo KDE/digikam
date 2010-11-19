@@ -158,7 +158,7 @@ void AddTagsCompletionBox::setTagModel(AlbumFilterModel* model)
     d->model = 0;
 }
 
-AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum, 
+AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum,
                                                                                                    bool uniqueName)
 {
     if (!talbum || talbum->isRoot())
@@ -193,7 +193,7 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::create
     return item;
 }
 
-AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForNewTag(const QString& newName, 
+AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForNewTag(const QString& newName,
                                                                                               TAlbum* parent)
 {
     int parentTagId = parent ? parent->id() : 0;
@@ -257,7 +257,9 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
             addItem(createItemUnderParent);
             setCurrentItem(createItemUnderParent);
             foreach (AddTagsCompletionBoxItem* item, assignItems)
+            {
                 addItem(item);
+            }
             addItem(createItemTopLevel);
         }
         else // if (createItemTopLevel && createItemTopLevel->action() == defaultAction)
@@ -265,7 +267,9 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
             addItem(createItemTopLevel);
             setCurrentItem(createItemTopLevel);
             foreach (AddTagsCompletionBoxItem* item, assignItems)
+            {
                 addItem(item);
+            }
             addItem(createItemUnderParent);
         }
     }
@@ -540,7 +544,9 @@ TaggingAction AddTagsCompletionBox::makeDefaultTaggingAction(const QString& text
                 QMap<QString, int> map;
 
                 foreach (int id, tagIds)
+                {
                     map[TagsCache::instance()->tagPath(id, TagsCache::NoLeadingSlash)] = id;
+                }
 
                 tagId = map.begin().value();
             }

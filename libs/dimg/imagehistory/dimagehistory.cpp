@@ -285,8 +285,12 @@ QList<FilterAction> DImageHistory::allActions() const
 {
     QList<FilterAction> actions;
     foreach (const Entry& entry, d->entries)
+    {
         if (!entry.action.isNull())
+        {
             actions << entry.action;
+        }
+    }
     return actions;
 }
 

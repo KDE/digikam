@@ -79,7 +79,9 @@ void ImageTagPairPriv::checkProperties()
     {
         QList<ImageTagProperty> props = DatabaseAccess().db()->getImageTagProperties(info.id(), tagId);
         foreach (const ImageTagProperty &p, props)
+        {
             properties.insert(p.property, p.value);
+        }
         propertiesLoaded = true;
     }
 }
@@ -135,7 +137,9 @@ QList<ImageTagPair> ImageTagPair::availablePairs(const ImageInfo& info)
 
     QList<int> tagIds = DatabaseAccess().db()->getTagIdsWithProperties(info.id());
     foreach (int tagId, tagIds)
+    {
         pairs << ImageTagPair(info, tagId);
+    }
     return pairs;
 }
 

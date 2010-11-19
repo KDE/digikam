@@ -64,7 +64,9 @@ FacePipelineDatabaseFaceList::FacePipelineDatabaseFaceList(const QList<DatabaseF
 FacePipelineDatabaseFaceList& FacePipelineDatabaseFaceList::operator=(const QList<DatabaseFace>& faces)
 {
     foreach (const DatabaseFace& face, faces)
+    {
         operator<<(face);
+    }
     return *this;
 }
 
@@ -137,19 +139,25 @@ ParallelPipes::ParallelPipes()
 ParallelPipes::~ParallelPipes()
 {
     foreach (WorkerObject* object, m_workers)
+    {
         delete object;
+    }
 }
 
 void ParallelPipes::schedule()
 {
     foreach (WorkerObject* object, m_workers)
+    {
         object->schedule();
+    }
 }
 
 void ParallelPipes::deactivate(WorkerObject::DeactivatingMode mode)
 {
     foreach (WorkerObject* object, m_workers)
+    {
         object->deactivate(mode);
+    }
 }
 
 void ParallelPipes::add(WorkerObject *worker)
@@ -392,7 +400,7 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
 
     package->faces = detector.detectFaces(image);
 
-    kDebug() << "Found" << package->faces.size() << "faces in" << package->info.name() 
+    kDebug() << "Found" << package->faces.size() << "faces in" << package->info.name()
              << package->image.size() << package->image.originalSize();
 
     package->processFlags |= FacePipelinePackage::ProcessedByDetector;
@@ -615,7 +623,9 @@ void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
     else
     {
         foreach (const ImageInfo& info, infos)
+        {
             send(buildPackage(info));
+        }
     }
 }
 
@@ -624,7 +634,9 @@ void FacePipeline::FacePipelinePriv::sendFromFilter(const QList<FacePipelineExte
 {
     infosForFiltering -= packages.size();
     foreach (const FacePipelineExtendedPackage::Ptr& package, packages)
+    {
         send(package);
+    }
 }
 
 // called by filter

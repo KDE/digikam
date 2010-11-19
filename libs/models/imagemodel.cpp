@@ -217,7 +217,9 @@ QList<QModelIndex> ImageModel::indexesForImageId(qlonglong id) const
 {
     QList<QModelIndex> indexes;
     foreach (int index, d->idHash.values(id))
+    {
         indexes << createIndex(index, 0);
+    }
     return indexes;
 }
 
