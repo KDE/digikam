@@ -670,13 +670,15 @@ void TreeBuilder::readPairs(const QList<QPair<qlonglong, qlonglong> >& pairs)
                         const QList<qlonglong> &ancestorsAncestors = m_nodes.value(p).ancestors;
                         int score = 0;
                         foreach (qlonglong a, it->ancestors)
+                        {
                             if (ancestorsAncestors.contains(a))
                                 score++;
-                            if (score > maxScore)
-                            {
-                                it->parent = p;
-                                maxScore = score;
-                            }
+                        }
+                        if (score > maxScore)
+                        {
+                            it->parent = p;
+                            maxScore = score;
+                        }
                     }
                 }
             }
