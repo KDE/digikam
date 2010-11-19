@@ -557,12 +557,20 @@ bool TagPropertiesFilterModel::matches(Album *album) const
     TAlbum *talbum = static_cast<TAlbum*>(album);
 
     foreach (const QString& prop, m_propertiesBlackList)
+    {
         if (talbum->hasProperty(prop))
+        {
             return false;
+        }
+    }
 
     foreach (const QString& prop, m_propertiesWhiteList)
+    {
         if (!talbum->hasProperty(prop))
+        {
             return false;
+        }
+    }
 
     return true;
 }

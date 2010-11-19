@@ -298,7 +298,9 @@ QList<HistoryImageId> DImageHistory::allReferredImages() const
 {
     QList<HistoryImageId> ids;
     foreach (const Entry& entry, d->entries)
+    {
         ids << entry.referredImages;
+    }
     return ids;
 }
 

@@ -186,8 +186,12 @@ bool ImageTagPair::hasAnyProperty(const QStringList& keys) const
 {
     d->checkProperties();
     foreach (const QString& key, keys)
+    {
         if (d->properties.contains(key))
+        {
             return true;
+        }
+    }
     return false;
 }
 
@@ -208,7 +212,9 @@ QStringList ImageTagPair::allValues(const QStringList& keys) const
     d->checkProperties();
     QStringList values;
     foreach (const QString& key, keys)
+    {
         values << d->properties.values(key);
+    }
     return values;
 }
 

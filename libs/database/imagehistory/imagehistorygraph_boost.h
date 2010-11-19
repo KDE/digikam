@@ -628,8 +628,12 @@ public:
         // remove all vertices from the DFS of v that are not in the dominated tree
         QList<Vertex> orderedVertices;
         foreach (const Vertex& v, search.vertices)
+        {
             if (dominatedTree.contains(v))
+            {
                 orderedVertices << v;
+            }
+        }
 
         return orderedVertices;
     }

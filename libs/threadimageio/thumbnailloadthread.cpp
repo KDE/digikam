@@ -1054,7 +1054,9 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
 
     // first, handle results received between request and calling this method
     foreach (const ThumbnailImageCatcherResult& result, d->intermediate)
+    {
         d->harvest(result.description, result.image);
+    }
     d->intermediate.clear();
 
     // Now wait for the rest to arrive. If already finished, state will be Quitting
@@ -1063,7 +1065,9 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
 
     QList<QImage> result;
     foreach (const ThumbnailImageCatcherResult& task, d->tasks)
+    {
         result << task.image;
+    }
 
     d->reset();
 

@@ -312,14 +312,20 @@ QList<ImageInfo> ImageModel::imageInfos(const QString& filePath) const
         if (id)
         {
             foreach (int index, d->idHash.values(id))
+            {
                 infos << d->infos[index];
+            }
         }
     }
     else
     {
         foreach (const ImageInfo& info, d->infos)
+        {
             if (info.filePath() == filePath)
+            {
                 infos << info;
+            }
+        }
     }
     return infos;
 }

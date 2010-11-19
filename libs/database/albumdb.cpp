@@ -724,7 +724,9 @@ QList< int > AlbumDB::getTagsWithProperty(const QString& property)
 
     QList<int> tagIds;
     foreach (const QVariant& var, values)
+    {
         tagIds << var.toInt();
+    }
     return tagIds;
 }
 
@@ -1861,7 +1863,9 @@ QList<qlonglong> AlbumDB::findByNameAndCreationDate(const QString& fileName, con
 
     QList<qlonglong> ids;
     foreach (const QVariant& var, values)
+    {
         ids << var.toLongLong();
+    }
     return ids;
 }
 
@@ -3359,7 +3363,7 @@ QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
     parameters.insert(":tagID",  tagID);
 
     if (recursive)
-	d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTagRecursive")), parameters, &values);
+    d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTagRecursive")), parameters, &values);
     else
         d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTag")), parameters, &values);
 

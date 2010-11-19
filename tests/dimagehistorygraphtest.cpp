@@ -93,7 +93,9 @@ void DImageHistoryGraphTest::initTestCase()
     }
 
     foreach (const QString& file, readOnlyImages)
+    {
         ids << ImageInfo(file).id();
+    }
     QVERIFY(!ids.contains(-1));
     QVERIFY(ids.size() >= 24);
 }
@@ -119,7 +121,9 @@ QList<to> mapList(const QList<from>& l, const QMap<from,to> map)
 {
     QList<to> r;
     foreach (const from& f, l)
+    {
         r << map.value(f);
+    }
     return r;
 }
 

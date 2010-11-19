@@ -574,7 +574,9 @@ static QString toString(const HistoryVertexProperties& props)
     s = "Ids: ";
     QStringList ids;
     foreach (const ImageInfo& info, props.infos)
+    {
         ids << QString::number(info.id());
+    }
     if (props.uuid.isEmpty())
     {
         if (ids.size() == 1)
@@ -617,7 +619,9 @@ QDebug operator<<(QDebug dbg, const ImageHistoryGraph& g)
 
         QStringList sourceVertexTexts;
         foreach (const HistoryGraph::Vertex& source, g.data().adjacentVertices(target, HistoryGraph::InboundEdges))
+        {
             sourceVertexTexts << toString(g.data().properties(source));
+        }
 
         if (!sourceVertexTexts.isEmpty())
             dbg.nospace() << QString("{ ") + targetString + " } "

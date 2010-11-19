@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -241,7 +241,9 @@ DImgFilterManager::DImgFilterManager()
     d->setupFilterIcons();
     d->setupI18nStrings();
     foreach (DImgFilterGenerator* gen, d->coreGenerators)
+    {
         addGenerator(gen);
+    }
 }
 
 DImgFilterManager::~DImgFilterManager()

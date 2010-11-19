@@ -1076,7 +1076,9 @@ QList<QString> SearchXmlCachingReader::valueToStringOrStringList()
         QList<QString> QStringList = SearchXmlReader::valueToStringOrStringList();
         QList<QVariant> varList;
         foreach(QString v, QStringList)
+        {
             varList << v;
+        }
         m_value = varList;
         m_readValue = true;
         return QStringList;
@@ -1084,7 +1086,9 @@ QList<QString> SearchXmlCachingReader::valueToStringOrStringList()
     QList<QString> QStringList;
     QList<QVariant> varList = m_value.toList();
     foreach (const QVariant& var, varList)
+    {
         QStringList << var.toString();
+    }
     return QStringList;
 }
 

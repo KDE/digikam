@@ -524,7 +524,9 @@ bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& history
 
     typedef QPair<qlonglong, qlonglong> IdPair;
     foreach (const IdPair& pair, graph.relationCloud())
+    {
         DatabaseAccess().db()->addImageRelation(pair.first, pair.second, DatabaseRelation::DerivedFrom);
+    }
 
     return !graph.hasUnresolvedEntries();
 }
@@ -532,7 +534,9 @@ bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& history
 bool ImageScanner::sameReferredImage(const HistoryImageId& id1, const HistoryImageId& id2)
 {
     if (!id1.isValid() || !id2.isValid())
+    {
         return false;
+    }
 
     /*
      * We give the UUID the power of equivalence that none of the other criteria has:
@@ -540,22 +544,30 @@ bool ImageScanner::sameReferredImage(const HistoryImageId& id1, const HistoryIma
      *  a (same image as) b   <=>   x == y
      */
     if (!id1.m_uuid.isNull() && !id2.m_uuid.isNull())
+    {
         return id1.m_uuid == id2.m_uuid;
+    }
 
     if (!id1.m_uniqueHash.isNull() && id1.m_fileSize
         && id1.m_uniqueHash == id2.m_uniqueHash
         && id1.m_fileSize == id2.m_fileSize)
+    {
         return true;
+    }
 
     if (!id1.m_fileName.isNull() && !id1.m_creationDate.isNull()
         && id1.m_fileName == id2.m_fileName
         && id1.m_creationDate == id2.m_creationDate)
+    {
         return true;
+    }
 
     if (!id1.m_filePath.isNull() && !id1.m_fileName.isNull()
         && id1.m_filePath == id2.m_filePath
         && id1.m_fileName == id2.m_fileName)
+    {
         return true;
+    }
 
     return false;
 }
@@ -567,7 +579,9 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     {
         QList<qlonglong> uuidList = DatabaseAccess().db()->getItemsForUuid(historyId.m_uuid);
         if (!uuidList.isEmpty())
+        {
             return uuidList;
+        }
     }
 
     // Second: uniqueHash + fileSize. Sufficient to assume that a file is identical, but subject to frequent change.
@@ -578,8 +592,12 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
         {
             QList<qlonglong> ids;
             foreach (const ItemScanInfo& info, infos)
+            {
                 if (info.status != DatabaseItem::Removed)
+                {
                     ids << info.id;
+                }
+            }
             return ids;
         }
     }
