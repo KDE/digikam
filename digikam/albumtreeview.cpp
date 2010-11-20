@@ -141,11 +141,6 @@ public:
         selectOnContextMenu(true),
         enableContextMenu(false),
         setInAlbumManager(false),
-        configSelectionEntry("Selection"),
-        configExpansionEntry("Expansion"),
-        configCurrentIndexEntry("CurrentIndex"),
-        configSortColumnEntry("SortColumn"),
-        configSortOrderEntry("SortOrder"),
         resizeColumnsTimer(0)
     {
     }
@@ -159,20 +154,27 @@ public:
     bool enableContextMenu;
     bool setInAlbumManager;
 
-    QMap<int, State> statesByAlbumId;
-    QMap<int, State> searchBackup;
+    QMap<int, State>     statesByAlbumId;
+    QMap<int, State>     searchBackup;
 
-    const QString configSelectionEntry;
-    const QString configExpansionEntry;
-    const QString configCurrentIndexEntry;
-    const QString configSortColumnEntry;
-    const QString configSortOrderEntry;
+    static const QString configSelectionEntry;
+    static const QString configExpansionEntry;
+    static const QString configCurrentIndexEntry;
+    static const QString configSortColumnEntry;
+    static const QString configSortOrderEntry;
 
-    QTimer*       resizeColumnsTimer;
+    QTimer*              resizeColumnsTimer;
 
-    AlbumPointer<Album> lastSelectedAlbum;
+    AlbumPointer<Album>  lastSelectedAlbum;
 
 };
+const QString AbstractAlbumTreeViewPriv::configSelectionEntry("Selection");
+const QString AbstractAlbumTreeViewPriv::configExpansionEntry("Expansion");
+const QString AbstractAlbumTreeViewPriv::configCurrentIndexEntry("CurrentIndex");
+const QString AbstractAlbumTreeViewPriv::configSortColumnEntry("SortColumn");
+const QString AbstractAlbumTreeViewPriv::configSortOrderEntry("SortOrder");
+
+// --------------------------------------------------------
 
 AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel* model, AlbumFilterModel* filterModel, QWidget* parent)
     : QTreeView(parent), StateSavingObject(this),
@@ -1057,21 +1059,23 @@ class AbstractCheckableAlbumTreeViewPriv
 {
 public:
 
-    AbstractCheckableAlbumTreeViewPriv() :
-        configCheckedAlbumsEntry("Checked"),
-        configPartiallyCheckedAlbumsEntry("PartiallyChecked"),
-        configRestoreCheckedEntry("RestoreChecked")
+    AbstractCheckableAlbumTreeViewPriv()
     {
     }
 
-    const QString configCheckedAlbumsEntry;
-    const QString configPartiallyCheckedAlbumsEntry;
-    const QString configRestoreCheckedEntry;
+    static const QString configCheckedAlbumsEntry;
+    static const QString configPartiallyCheckedAlbumsEntry;
+    static const QString configRestoreCheckedEntry;
 
-    QList<int> checkedAlbumIds;
-    QList<int> partiallyCheckedAlbumIds;
+    QList<int>           checkedAlbumIds;
+    QList<int>           partiallyCheckedAlbumIds;
 
 };
+const QString AbstractCheckableAlbumTreeViewPriv::configCheckedAlbumsEntry("Checked");
+const QString AbstractCheckableAlbumTreeViewPriv::configPartiallyCheckedAlbumsEntry("PartiallyChecked");
+const QString AbstractCheckableAlbumTreeViewPriv::configRestoreCheckedEntry("RestoreChecked");
+
+// --------------------------------------------------------
 
 AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel* model,
         CheckableAlbumFilterModel* filterModel, QWidget* parent)

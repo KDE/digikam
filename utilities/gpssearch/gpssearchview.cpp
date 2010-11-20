@@ -69,7 +69,6 @@ class GPSSearchViewPriv
 public:
 
     GPSSearchViewPriv() :
-        configSplitterStateEntry("SplitterState"),
         saveBtn(0),
         zoomInBtn(0),
         zoomOutBtn(0),
@@ -90,33 +89,36 @@ public:
         mapThemeBtn(0)
     {}
 
-    const QString configSplitterStateEntry;
+    static const QString configSplitterStateEntry;
 
-    QToolButton*         saveBtn;
-    QToolButton*         zoomInBtn;
-    QToolButton*         zoomOutBtn;
+    QToolButton*            saveBtn;
+    QToolButton*            zoomInBtn;
+    QToolButton*            zoomOutBtn;
 #ifdef HAVE_MARBLEWIDGET
 #if MARBLE_VERSION >= 0x000800
-    QToolButton*         panBtn;
-    QToolButton*         filterBtn;
-    QToolButton*         selectBtn;
-    QToolButton*         clusterZoomBtn;
+    QToolButton*            panBtn;
+    QToolButton*            filterBtn;
+    QToolButton*            selectBtn;
+    QToolButton*            clusterZoomBtn;
 #endif // MARBLE_VERSION >= 0x000800
 #endif // HAVE_MARBLEWIDGET
 
-    KLineEdit*           nameEdit;
+    KLineEdit*              nameEdit;
 
-    ImageInfoJob         imageInfoJob;
+    ImageInfoJob            imageInfoJob;
 
-    SearchTextBar*       searchGPSBar;
+    SearchTextBar*          searchGPSBar;
 
     EditableSearchTreeView* searchTreeView;
 
-    QSplitter*           splitter;
+    QSplitter*              splitter;
 
-    GPSSearchWidget*     gpsSearchWidget;
-    WorldMapThemeBtn*    mapThemeBtn;
+    GPSSearchWidget*        gpsSearchWidget;
+    WorldMapThemeBtn*       mapThemeBtn;
 };
+const QString GPSSearchViewPriv::configSplitterStateEntry("SplitterState");
+
+// --------------------------------------------------------
 
 GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
                              SearchModificationHelper* searchModificationHelper)

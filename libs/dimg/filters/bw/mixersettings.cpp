@@ -61,20 +61,6 @@ class MixerSettings::MixerSettingsPriv
 public:
 
     MixerSettingsPriv() :
-        configMonochromeEntry("Monochrome"),
-        configPreserveLuminosityEntry("PreserveLuminosity"),
-        configRedRedGainEntry("RedRedGain"),
-        configRedGreenGainEntry("RedGreenGain"),
-        configRedBlueGainEntry("RedBlueGain"),
-        configGreenRedGainEntry("GreenRedGain"),
-        configGreenGreenGainEntry("GreenGreenGain"),
-        configGreenBlueGainEntry("GreenBlueGain"),
-        configBlueRedGainEntry("BlueRedGain"),
-        configBlueGreenGainEntry("BlueGreenGain"),
-        configBlueBlueGainEntry("BlueBlueGain"),
-        configBlackRedGainEntry("BlackRedGain"),
-        configBlackGreenGainEntry("BlackGreenGain"),
-        configBlackBlueGainEntry("BlackBlueGain"),
         currentChannel(RedChannel),
         resetButton(0),
         preserveLuminosity(0),
@@ -84,34 +70,50 @@ public:
         blueGain(0)
     {}
 
-    const QString       configMonochromeEntry;
-    const QString       configPreserveLuminosityEntry;
-    const QString       configRedRedGainEntry;
-    const QString       configRedGreenGainEntry;
-    const QString       configRedBlueGainEntry;
-    const QString       configGreenRedGainEntry;
-    const QString       configGreenGreenGainEntry;
-    const QString       configGreenBlueGainEntry;
-    const QString       configBlueRedGainEntry;
-    const QString       configBlueGreenGainEntry;
-    const QString       configBlueBlueGainEntry;
-    const QString       configBlackRedGainEntry;
-    const QString       configBlackGreenGainEntry;
-    const QString       configBlackBlueGainEntry;
+    static const QString  configMonochromeEntry;
+    static const QString  configPreserveLuminosityEntry;
+    static const QString  configRedRedGainEntry;
+    static const QString  configRedGreenGainEntry;
+    static const QString  configRedBlueGainEntry;
+    static const QString  configGreenRedGainEntry;
+    static const QString  configGreenGreenGainEntry;
+    static const QString  configGreenBlueGainEntry;
+    static const QString  configBlueRedGainEntry;
+    static const QString  configBlueGreenGainEntry;
+    static const QString  configBlueBlueGainEntry;
+    static const QString  configBlackRedGainEntry;
+    static const QString  configBlackGreenGainEntry;
+    static const QString  configBlackBlueGainEntry;
 
-    int                 currentChannel;
+    int                   currentChannel;
 
-    QPushButton*        resetButton;
+    QPushButton*          resetButton;
 
-    QCheckBox*          preserveLuminosity;
-    QCheckBox*          monochrome;
+    QCheckBox*            preserveLuminosity;
+    QCheckBox*            monochrome;
 
-    MixerContainer      mixerSettings;
+    MixerContainer        mixerSettings;
 
-    RDoubleNumInput*    redGain;
-    RDoubleNumInput*    greenGain;
-    RDoubleNumInput*    blueGain;
+    RDoubleNumInput*      redGain;
+    RDoubleNumInput*      greenGain;
+    RDoubleNumInput*      blueGain;
 };
+const QString MixerSettings::MixerSettingsPriv::configMonochromeEntry("Monochrome");
+const QString MixerSettings::MixerSettingsPriv::configPreserveLuminosityEntry("PreserveLuminosity");
+const QString MixerSettings::MixerSettingsPriv::configRedRedGainEntry("RedRedGain");
+const QString MixerSettings::MixerSettingsPriv::configRedGreenGainEntry("RedGreenGain");
+const QString MixerSettings::MixerSettingsPriv::configRedBlueGainEntry("RedBlueGain");
+const QString MixerSettings::MixerSettingsPriv::configGreenRedGainEntry("GreenRedGain");
+const QString MixerSettings::MixerSettingsPriv::configGreenGreenGainEntry("GreenGreenGain");
+const QString MixerSettings::MixerSettingsPriv::configGreenBlueGainEntry("GreenBlueGain");
+const QString MixerSettings::MixerSettingsPriv::configBlueRedGainEntry("BlueRedGain");
+const QString MixerSettings::MixerSettingsPriv::configBlueGreenGainEntry("BlueGreenGain");
+const QString MixerSettings::MixerSettingsPriv::configBlueBlueGainEntry("BlueBlueGain");
+const QString MixerSettings::MixerSettingsPriv::configBlackRedGainEntry("BlackRedGain");
+const QString MixerSettings::MixerSettingsPriv::configBlackGreenGainEntry("BlackGreenGain");
+const QString MixerSettings::MixerSettingsPriv::configBlackBlueGainEntry("BlackBlueGain");
+
+// --------------------------------------------------------
 
 MixerSettings::MixerSettings(QWidget* parent)
     : QWidget(parent),

@@ -68,16 +68,6 @@ class SharpSettingsPriv
 public:
 
     SharpSettingsPriv() :
-        configSharpenMethodEntry("SharpenMethod"),
-        configSimpleSharpRadiusAdjustmentEntry("SimpleSharpRadiusAdjustment"),
-        configUnsharpMaskRadiusAdjustmentEntry("UnsharpMaskRadiusAdjustment"),
-        configUnsharpMaskAmountAdjustmentEntry("UnsharpMaskAmountAdjustment"),
-        configUnsharpMaskThresholdAdjustmentEntry("UnsharpMaskThresholdAdjustment"),
-        configRefocusRadiusAdjustmentEntry("RefocusRadiusAdjustment"),
-        configRefocusCorrelationAdjustmentEntry("RefocusCorrelationAdjustment"),
-        configRefocusNoiseAdjustmentEntry("RefocusNoiseAdjustment"),
-        configRefocusGaussAdjustmentEntry("RefocusGaussAdjustment"),
-        configRefocusMatrixSizeEntry("RefocusMatrixSize"),
         stack(0),
         sharpMethod(0),
         radiusInput(0),
@@ -91,36 +81,48 @@ public:
         matrixSize(0)
     {}
 
-    const QString       configSharpenMethodEntry;
-    const QString       configSimpleSharpRadiusAdjustmentEntry;
-    const QString       configUnsharpMaskRadiusAdjustmentEntry;
-    const QString       configUnsharpMaskAmountAdjustmentEntry;
-    const QString       configUnsharpMaskThresholdAdjustmentEntry;
-    const QString       configRefocusRadiusAdjustmentEntry;
-    const QString       configRefocusCorrelationAdjustmentEntry;
-    const QString       configRefocusNoiseAdjustmentEntry;
-    const QString       configRefocusGaussAdjustmentEntry;
-    const QString       configRefocusMatrixSizeEntry;
+    static const QString configSharpenMethodEntry;
+    static const QString configSimpleSharpRadiusAdjustmentEntry;
+    static const QString configUnsharpMaskRadiusAdjustmentEntry;
+    static const QString configUnsharpMaskAmountAdjustmentEntry;
+    static const QString configUnsharpMaskThresholdAdjustmentEntry;
+    static const QString configRefocusRadiusAdjustmentEntry;
+    static const QString configRefocusCorrelationAdjustmentEntry;
+    static const QString configRefocusNoiseAdjustmentEntry;
+    static const QString configRefocusGaussAdjustmentEntry;
+    static const QString configRefocusMatrixSizeEntry;
 
-    QStackedWidget*     stack;
+    QStackedWidget*      stack;
 
-    RComboBox*          sharpMethod;
+    RComboBox*           sharpMethod;
 
     // Simple sharp.
-    RIntNumInput*       radiusInput;
+    RIntNumInput*        radiusInput;
 
     // Unsharp mask.
-    RDoubleNumInput*    radiusInput2;
-    RDoubleNumInput*    amountInput;
-    RDoubleNumInput*    thresholdInput;
+    RDoubleNumInput*     radiusInput2;
+    RDoubleNumInput*     amountInput;
+    RDoubleNumInput*     thresholdInput;
 
     // Refocus.
-    RDoubleNumInput*    radius;
-    RDoubleNumInput*    correlation;
-    RDoubleNumInput*    noise;
-    RDoubleNumInput*    gauss;
-    RIntNumInput*       matrixSize;
+    RDoubleNumInput*     radius;
+    RDoubleNumInput*     correlation;
+    RDoubleNumInput*     noise;
+    RDoubleNumInput*     gauss;
+    RIntNumInput*        matrixSize;
 };
+const QString SharpSettingsPriv::configSharpenMethodEntry("SharpenMethod");
+const QString SharpSettingsPriv::configSimpleSharpRadiusAdjustmentEntry("SimpleSharpRadiusAdjustment");
+const QString SharpSettingsPriv::configUnsharpMaskRadiusAdjustmentEntry("UnsharpMaskRadiusAdjustment");
+const QString SharpSettingsPriv::configUnsharpMaskAmountAdjustmentEntry("UnsharpMaskAmountAdjustment");
+const QString SharpSettingsPriv::configUnsharpMaskThresholdAdjustmentEntry("UnsharpMaskThresholdAdjustment");
+const QString SharpSettingsPriv::configRefocusRadiusAdjustmentEntry("RefocusRadiusAdjustment");
+const QString SharpSettingsPriv::configRefocusCorrelationAdjustmentEntry("RefocusCorrelationAdjustment");
+const QString SharpSettingsPriv::configRefocusNoiseAdjustmentEntry("RefocusNoiseAdjustment");
+const QString SharpSettingsPriv::configRefocusGaussAdjustmentEntry("RefocusGaussAdjustment");
+const QString SharpSettingsPriv::configRefocusMatrixSizeEntry("RefocusMatrixSize");
+
+// --------------------------------------------------------
 
 SharpSettings::SharpSettings(QWidget* parent)
     : QWidget(parent),

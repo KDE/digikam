@@ -46,18 +46,6 @@ class SetupSlideShowPriv
 public:
 
     SetupSlideShowPriv() :
-        configGroupName("ImageViewer Settings"),
-        configSlideShowDelayEntry("SlideShowDelay"),
-        configSlideShowStartCurrentEntry("SlideShowStartCurrent"),
-        configSlideShowLoopEntry("SlideShowLoop"),
-        configSlideShowPrintNameEntry("SlideShowPrintName"),
-        configSlideShowPrintDateEntry("SlideShowPrintDate"),
-        configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal"),
-        configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity"),
-        configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel"),
-        configSlideShowPrintCommentEntry("SlideShowPrintComment"),
-        configSlideShowPrintRatingEntry("SlideShowPrintRating"),
-
         startWithCurrent(0),
         loopMode(0),
         showName(0),
@@ -70,30 +58,43 @@ public:
         delayInput(0)
     {}
 
-    const QString configGroupName;
-    const QString configSlideShowDelayEntry;
-    const QString configSlideShowStartCurrentEntry;
-    const QString configSlideShowLoopEntry;
-    const QString configSlideShowPrintNameEntry;
-    const QString configSlideShowPrintDateEntry;
-    const QString configSlideShowPrintApertureFocalEntry;
-    const QString configSlideShowPrintExpoSensitivityEntry;
-    const QString configSlideShowPrintMakeModelEntry;
-    const QString configSlideShowPrintCommentEntry;
-    const QString configSlideShowPrintRatingEntry;
+    static const QString configGroupName;
+    static const QString configSlideShowDelayEntry;
+    static const QString configSlideShowStartCurrentEntry;
+    static const QString configSlideShowLoopEntry;
+    static const QString configSlideShowPrintNameEntry;
+    static const QString configSlideShowPrintDateEntry;
+    static const QString configSlideShowPrintApertureFocalEntry;
+    static const QString configSlideShowPrintExpoSensitivityEntry;
+    static const QString configSlideShowPrintMakeModelEntry;
+    static const QString configSlideShowPrintCommentEntry;
+    static const QString configSlideShowPrintRatingEntry;
 
-    QCheckBox*    startWithCurrent;
-    QCheckBox*    loopMode;
-    QCheckBox*    showName;
-    QCheckBox*    showDate;
-    QCheckBox*    showApertureFocal;
-    QCheckBox*    showExpoSensitivity;
-    QCheckBox*    showMakeModel;
-    QCheckBox*    showComment;
-    QCheckBox*    showRating;
+    QCheckBox*           startWithCurrent;
+    QCheckBox*           loopMode;
+    QCheckBox*           showName;
+    QCheckBox*           showDate;
+    QCheckBox*           showApertureFocal;
+    QCheckBox*           showExpoSensitivity;
+    QCheckBox*           showMakeModel;
+    QCheckBox*           showComment;
+    QCheckBox*           showRating;
 
-    KIntNumInput* delayInput;
+    KIntNumInput*        delayInput;
 };
+const QString SetupSlideShowPriv::configGroupName("ImageViewer Settings");
+const QString SetupSlideShowPriv::configSlideShowDelayEntry("SlideShowDelay");
+const QString SetupSlideShowPriv::configSlideShowStartCurrentEntry("SlideShowStartCurrent");
+const QString SetupSlideShowPriv::configSlideShowLoopEntry("SlideShowLoop");
+const QString SetupSlideShowPriv::configSlideShowPrintNameEntry("SlideShowPrintName");
+const QString SetupSlideShowPriv::configSlideShowPrintDateEntry("SlideShowPrintDate");
+const QString SetupSlideShowPriv::configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal");
+const QString SetupSlideShowPriv::configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity");
+const QString SetupSlideShowPriv::configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel");
+const QString SetupSlideShowPriv::configSlideShowPrintCommentEntry("SlideShowPrintComment");
+const QString SetupSlideShowPriv::configSlideShowPrintRatingEntry("SlideShowPrintRating");
+
+// --------------------------------------------------------
 
 SetupSlideShow::SetupSlideShow(QWidget* parent)
     : QScrollArea(parent), d(new SetupSlideShowPriv)

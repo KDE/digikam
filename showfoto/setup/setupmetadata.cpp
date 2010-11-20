@@ -66,27 +66,26 @@ class SetupMetadata::SetupMetadataPriv
 public:
 
     SetupMetadataPriv() :
-        configGroupName("ImageViewer Settings"),
-        configEXIFRotateEntry("EXIF Rotate"),
-        configEXIFSetOrientationEntry("EXIF Set Orientation"),
-
         exifRotateBox(0),
         exifSetOrientationBox(0),
         tab(0),
         tagsCfgPanel(0)
     {}
 
-    const QString  configGroupName;
-    const QString  configEXIFRotateEntry;
-    const QString  configEXIFSetOrientationEntry;
+    static const QString  configGroupName;
+    static const QString  configEXIFRotateEntry;
+    static const QString  configEXIFSetOrientationEntry;
 
-    QCheckBox*     exifRotateBox;
-    QCheckBox*     exifSetOrientationBox;
+    QCheckBox*            exifRotateBox;
+    QCheckBox*            exifSetOrientationBox;
 
-    KTabWidget*    tab;
+    KTabWidget*           tab;
 
-    MetadataPanel* tagsCfgPanel;
+    MetadataPanel*        tagsCfgPanel;
 };
+const QString SetupMetadata::SetupMetadataPriv::configGroupName("ImageViewer Settings");
+const QString SetupMetadata::SetupMetadataPriv::configEXIFRotateEntry("EXIF Rotate");
+const QString SetupMetadata::SetupMetadataPriv::configEXIFSetOrientationEntry("EXIF Set Orientation");
 
 SetupMetadata::SetupMetadata(QWidget* parent )
     : QScrollArea(parent), d(new SetupMetadataPriv)

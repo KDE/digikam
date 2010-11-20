@@ -46,13 +46,6 @@ class SetupLightTablePriv
 public:
 
     SetupLightTablePriv() :
-        configGroupName("LightTable Settings"),
-        configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
-        configAutoSyncPreviewEntry("Auto Sync Preview"),
-        configAutoLoadRightPanelEntry("Auto Load Right Panel"),
-        configLoadFullImagesizeEntry("Load Full Image size"),
-        configClearOnCloseEntry("Clear On Close"),
-
         hideToolBar(0),
         autoSyncPreview(0),
         autoLoadOnRightPanel(0),
@@ -60,19 +53,27 @@ public:
         clearOnClose(0)
     {}
 
-    const QString configGroupName;
-    const QString configFullScreenHideToolBarEntry;
-    const QString configAutoSyncPreviewEntry;
-    const QString configAutoLoadRightPanelEntry;
-    const QString configLoadFullImagesizeEntry;
-    const QString configClearOnCloseEntry;
+    static const QString configGroupName;
+    static const QString configFullScreenHideToolBarEntry;
+    static const QString configAutoSyncPreviewEntry;
+    static const QString configAutoLoadRightPanelEntry;
+    static const QString configLoadFullImagesizeEntry;
+    static const QString configClearOnCloseEntry;
 
-    QCheckBox*    hideToolBar;
-    QCheckBox*    autoSyncPreview;
-    QCheckBox*    autoLoadOnRightPanel;
-    QCheckBox*    loadFullImageSize;
-    QCheckBox*    clearOnClose;
+    QCheckBox*           hideToolBar;
+    QCheckBox*           autoSyncPreview;
+    QCheckBox*           autoLoadOnRightPanel;
+    QCheckBox*           loadFullImageSize;
+    QCheckBox*           clearOnClose;
 };
+const QString SetupLightTablePriv::configGroupName("LightTable Settings");
+const QString SetupLightTablePriv::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
+const QString SetupLightTablePriv::configAutoSyncPreviewEntry("Auto Sync Preview");
+const QString SetupLightTablePriv::configAutoLoadRightPanelEntry("Auto Load Right Panel");
+const QString SetupLightTablePriv::configLoadFullImagesizeEntry("Load Full Image size");
+const QString SetupLightTablePriv::configClearOnCloseEntry("Clear On Close");
+
+// --------------------------------------------------------
 
 SetupLightTable::SetupLightTable(QWidget* parent)
     : QScrollArea(parent), d(new SetupLightTablePriv)

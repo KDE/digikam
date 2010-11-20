@@ -61,23 +61,25 @@ class FreeRotationSettingsPriv
 public:
 
     FreeRotationSettingsPriv() :
-        configAutoCropTypeEntry("Auto Crop Type"),
-        configAntiAliasingEntry("Anti Aliasing"),
         antialiasInput(0),
         angleInput(0),
         fineAngleInput(0),
         autoCropCB(0)
     {}
 
-    const QString    configAutoCropTypeEntry;
-    const QString    configAntiAliasingEntry;
+    static const QString configAutoCropTypeEntry;
+    static const QString configAntiAliasingEntry;
 
-    QCheckBox*       antialiasInput;
+    QCheckBox*           antialiasInput;
 
-    RIntNumInput*    angleInput;
-    RDoubleNumInput* fineAngleInput;
-    RComboBox*       autoCropCB;
+    RIntNumInput*        angleInput;
+    RDoubleNumInput*     fineAngleInput;
+    RComboBox*           autoCropCB;
 };
+const QString FreeRotationSettingsPriv::configAutoCropTypeEntry("Auto Crop Type");
+const QString FreeRotationSettingsPriv::configAntiAliasingEntry("Anti Aliasing");
+
+// --------------------------------------------------------
 
 FreeRotationSettings::FreeRotationSettings(QWidget* parent)
     : QWidget(parent),

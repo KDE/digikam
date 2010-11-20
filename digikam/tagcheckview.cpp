@@ -48,7 +48,6 @@ class TagCheckViewPriv
 {
 public:
     TagCheckViewPriv() :
-        configToggleAutoTagsEntry("Toggle Auto Tags"),
         toggleAutoTags(TagCheckView::NoToggleAuto),
         checkNewTags(false),
         selectTagsMenu(0),
@@ -68,7 +67,7 @@ public:
     {
     }
 
-    const QString                configToggleAutoTagsEntry;
+    static const QString         configToggleAutoTagsEntry;
 
     TagCheckView::ToggleAutoTags toggleAutoTags;
     bool                         checkNewTags;
@@ -88,6 +87,9 @@ public:
     QAction*                     toggleParentsAction;
     QAction*                     toggleBothAction;
 };
+const QString TagCheckViewPriv::configToggleAutoTagsEntry("Toggle Auto Tags");
+
+// --------------------------------------------------------
 
 TagCheckView::TagCheckView(QWidget* parent, TagModel* tagModel) :
     TagFolderView(parent, tagModel),

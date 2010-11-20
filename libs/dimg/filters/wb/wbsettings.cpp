@@ -92,14 +92,6 @@ public:
 
     WBSettingsPriv() :
         DefaultTemperature(DaylightD65),
-        configDarkInputEntry("Dark"),
-        configBlackInputEntry("Black"),
-        configMainExposureEntry("MainExposure"),
-        configFineExposureEntry("FineExposure"),
-        configGammaInputEntry("Gamma"),
-        configSaturationInputEntry("Saturation"),
-        configGreenInputEntry("Green"),
-        configTemperatureInputEntry("Temperature"),
         pickTemperature(0),
         autoAdjustExposure(0),
         adjTemperatureLabel(0),
@@ -124,42 +116,42 @@ public:
         greenInput(0)
     {}
 
-    const int        DefaultTemperature;
+    static const QString    configDarkInputEntry;
+    static const QString    configBlackInputEntry;
+    static const QString    configMainExposureEntry;
+    static const QString    configFineExposureEntry;
+    static const QString    configGammaInputEntry;
+    static const QString    configSaturationInputEntry;
+    static const QString    configGreenInputEntry;
+    static const QString    configTemperatureInputEntry;
 
-    const QString    configDarkInputEntry;
-    const QString    configBlackInputEntry;
-    const QString    configMainExposureEntry;
-    const QString    configFineExposureEntry;
-    const QString    configGammaInputEntry;
-    const QString    configSaturationInputEntry;
-    const QString    configGreenInputEntry;
-    const QString    configTemperatureInputEntry;
+    const int               DefaultTemperature;
 
-    QToolButton*     pickTemperature;
-    QToolButton*     autoAdjustExposure;
+    QToolButton*            pickTemperature;
+    QToolButton*            autoAdjustExposure;
 
-    QLabel*          adjTemperatureLabel;
-    QLabel*          temperaturePresetLabel;
-    QLabel*          darkLabel;
-    QLabel*          blackLabel;
-    QLabel*          mainExposureLabel;
-    QLabel*          fineExposureLabel;
-    QLabel*          gammaLabel;
-    QLabel*          saturationLabel;
-    QLabel*          greenLabel;
-    QLabel*          exposureLabel;
-    QLabel*          temperatureLabel;
+    QLabel*                 adjTemperatureLabel;
+    QLabel*                 temperaturePresetLabel;
+    QLabel*                 darkLabel;
+    QLabel*                 blackLabel;
+    QLabel*                 mainExposureLabel;
+    QLabel*                 fineExposureLabel;
+    QLabel*                 gammaLabel;
+    QLabel*                 saturationLabel;
+    QLabel*                 greenLabel;
+    QLabel*                 exposureLabel;
+    QLabel*                 temperatureLabel;
 
-    RComboBox*       temperaturePresetCB;
+    RComboBox*              temperaturePresetCB;
 
-    RDoubleNumInput* temperatureInput;
-    RDoubleNumInput* darkInput;
-    RDoubleNumInput* blackInput;
-    RDoubleNumInput* mainExposureInput;
-    RDoubleNumInput* fineExposureInput;
-    RDoubleNumInput* gammaInput;
-    RDoubleNumInput* saturationInput;
-    RDoubleNumInput* greenInput;
+    RDoubleNumInput*        temperatureInput;
+    RDoubleNumInput*        darkInput;
+    RDoubleNumInput*        blackInput;
+    RDoubleNumInput*        mainExposureInput;
+    RDoubleNumInput*        fineExposureInput;
+    RDoubleNumInput*        gammaInput;
+    RDoubleNumInput*        saturationInput;
+    RDoubleNumInput*        greenInput;
 
 public:
 
@@ -180,6 +172,16 @@ public:
         return tempDesc;
     }
 };
+const QString WBSettingsPriv::configDarkInputEntry("Dark");
+const QString WBSettingsPriv::configBlackInputEntry("Black");
+const QString WBSettingsPriv::configMainExposureEntry("MainExposure");
+const QString WBSettingsPriv::configFineExposureEntry("FineExposure");
+const QString WBSettingsPriv::configGammaInputEntry("Gamma");
+const QString WBSettingsPriv::configSaturationInputEntry("Saturation");
+const QString WBSettingsPriv::configGreenInputEntry("Green");
+const QString WBSettingsPriv::configTemperatureInputEntry("Temperature");
+
+// --------------------------------------------------------
 
 WBSettings::WBSettings(QWidget* parent)
     : QWidget(parent),

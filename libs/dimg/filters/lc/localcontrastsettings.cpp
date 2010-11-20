@@ -72,22 +72,6 @@ class LocalContrastSettingsPriv
 public:
 
     LocalContrastSettingsPriv() :
-        configLowSaturationEntry("LowSaturation"),
-        configHighSaturationEntry("HighSaturation"),
-        configPower1Entry("Power1"),
-        configBlur1Entry("Blur1"),
-        configPower2Entry("Power2"),
-        configBlur2Entry("Blur2"),
-        configPower3Entry("Power3"),
-        configBlur3Entry("Blur3"),
-        configPower4Entry("Power4"),
-        configBlur4Entry("Blur4"),
-        configStretchContrastEntry("StretchContrast"),
-        configStageOneEntry("StageOne"),
-        configStageTwoEntry("StageTwo"),
-        configStageThreeEntry("StageThree"),
-        configStageFourEntry("StageFour"),
-        configFunctionInputEntry("FunctionInput"),
         stretchContrastCheck(0),
         label4(0),
         label5(0),
@@ -111,51 +95,69 @@ public:
         expanderBox(0)
     {}
 
-    const QString       configLowSaturationEntry;
-    const QString       configHighSaturationEntry;
-    const QString       configPower1Entry;
-    const QString       configBlur1Entry;
-    const QString       configPower2Entry;
-    const QString       configBlur2Entry;
-    const QString       configPower3Entry;
-    const QString       configBlur3Entry;
-    const QString       configPower4Entry;
-    const QString       configBlur4Entry;
-    const QString       configStretchContrastEntry;
-    const QString       configFastModeEntry;
-    const QString       configStageOneEntry;
-    const QString       configStageTwoEntry;
-    const QString       configStageThreeEntry;
-    const QString       configStageFourEntry;
-    const QString       configFunctionInputEntry;
+    static const QString  configLowSaturationEntry;
+    static const QString  configHighSaturationEntry;
+    static const QString  configPower1Entry;
+    static const QString  configBlur1Entry;
+    static const QString  configPower2Entry;
+    static const QString  configBlur2Entry;
+    static const QString  configPower3Entry;
+    static const QString  configBlur3Entry;
+    static const QString  configPower4Entry;
+    static const QString  configBlur4Entry;
+    static const QString  configStretchContrastEntry;
+    static const QString  configFastModeEntry;
+    static const QString  configStageOneEntry;
+    static const QString  configStageTwoEntry;
+    static const QString  configStageThreeEntry;
+    static const QString  configStageFourEntry;
+    static const QString  configFunctionInputEntry;
 
-    QCheckBox*          stretchContrastCheck;
+    QCheckBox*            stretchContrastCheck;
 
-    QLabel*             label4;
-    QLabel*             label5;
-    QLabel*             label6;
-    QLabel*             label7;
-    QLabel*             label8;
-    QLabel*             label9;
-    QLabel*             label10;
-    QLabel*             label11;
+    QLabel*               label4;
+    QLabel*               label5;
+    QLabel*               label6;
+    QLabel*               label7;
+    QLabel*               label8;
+    QLabel*               label9;
+    QLabel*               label10;
+    QLabel*               label11;
 
-    RIntNumInput*       lowSaturationInput;
-    RIntNumInput*       highSaturationInput;
+    RIntNumInput*         lowSaturationInput;
+    RIntNumInput*         highSaturationInput;
 
-    RComboBox*          functionInput;
+    RComboBox*            functionInput;
 
-    RDoubleNumInput*    powerInput1;
-    RDoubleNumInput*    blurInput1;
-    RDoubleNumInput*    powerInput2;
-    RDoubleNumInput*    blurInput2;
-    RDoubleNumInput*    powerInput3;
-    RDoubleNumInput*    blurInput3;
-    RDoubleNumInput*    powerInput4;
-    RDoubleNumInput*    blurInput4;
+    RDoubleNumInput*      powerInput1;
+    RDoubleNumInput*      blurInput1;
+    RDoubleNumInput*      powerInput2;
+    RDoubleNumInput*      blurInput2;
+    RDoubleNumInput*      powerInput3;
+    RDoubleNumInput*      blurInput3;
+    RDoubleNumInput*      powerInput4;
+    RDoubleNumInput*      blurInput4;
 
-    RExpanderBox*       expanderBox;
+    RExpanderBox*         expanderBox;
 };
+const QString LocalContrastSettingsPriv::configLowSaturationEntry("LowSaturation");
+const QString LocalContrastSettingsPriv::configHighSaturationEntry("HighSaturation");
+const QString LocalContrastSettingsPriv::configPower1Entry("Power1");
+const QString LocalContrastSettingsPriv::configBlur1Entry("Blur1");
+const QString LocalContrastSettingsPriv::configPower2Entry("Power2");
+const QString LocalContrastSettingsPriv::configBlur2Entry("Blur2");
+const QString LocalContrastSettingsPriv::configPower3Entry("Power3");
+const QString LocalContrastSettingsPriv::configBlur3Entry("Blur3");
+const QString LocalContrastSettingsPriv::configPower4Entry("Power4");
+const QString LocalContrastSettingsPriv::configBlur4Entry("Blur4");
+const QString LocalContrastSettingsPriv::configStretchContrastEntry("StretchContrast");
+const QString LocalContrastSettingsPriv::configStageOneEntry("StageOne");
+const QString LocalContrastSettingsPriv::configStageTwoEntry("StageTwo");
+const QString LocalContrastSettingsPriv::configStageThreeEntry("StageThree");
+const QString LocalContrastSettingsPriv::configStageFourEntry("StageFour");
+const QString LocalContrastSettingsPriv::configFunctionInputEntry("FunctionInput");
+
+// --------------------------------------------------------
 
 LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     : QWidget(parent),

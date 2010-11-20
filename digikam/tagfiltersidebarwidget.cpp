@@ -161,8 +161,6 @@ class TagFilterSideBarWidgetPriv
 public:
 
     TagFilterSideBarWidgetPriv() :
-        configLastShowUntaggedEntry("Show Untagged"),
-        configMatchingConditionEntry("Matching Condition"),
         tagFilterView(0),
         tagFilterSearchBar(0),
         tagFilterModel(0),
@@ -171,18 +169,22 @@ public:
     {
     }
 
-    QString        configLastShowUntaggedEntry;
-    QString        configMatchingConditionEntry;
+    static const QString configLastShowUntaggedEntry;
+    static const QString configMatchingConditionEntry;
 
-    TagFilterView* tagFilterView;
-    SearchTextBar* tagFilterSearchBar;
+    TagFilterView*       tagFilterView;
+    SearchTextBar*       tagFilterSearchBar;
 
-    TagModel*      tagFilterModel;
+    TagModel*            tagFilterModel;
 
-    QCheckBox*     withoutTagCheckBox;
-    KComboBox*     matchingConditionComboBox;
+    QCheckBox*           withoutTagCheckBox;
+    KComboBox*           matchingConditionComboBox;
 
 };
+const QString TagFilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
+const QString TagFilterSideBarWidgetPriv::configMatchingConditionEntry("Matching Condition");
+
+// --------------------------------------------------------
 
 TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent,
         TagModel* tagFilterModel) :

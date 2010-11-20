@@ -346,10 +346,6 @@ class TimelineSideBarWidgetPriv
 {
 public:
     TimelineSideBarWidgetPriv() :
-        configHistogramTimeUnitEntry("Histogram TimeUnit"),
-        configHistogramScaleEntry("Histogram Scale"),
-        configCursorPositionEntry("Cursor Position"),
-
         scaleBG(0),
         cursorCountLabel(0),
         scrollBar(0),
@@ -366,30 +362,34 @@ public:
         searchModificationHelper(0)
     {}
 
+    static const QString      configHistogramTimeUnitEntry;
+    static const QString      configHistogramScaleEntry;
+    static const QString      configCursorPositionEntry;
 
-    const QString       configHistogramTimeUnitEntry;
-    const QString       configHistogramScaleEntry;
-    const QString       configCursorPositionEntry;
+    QButtonGroup*             scaleBG;
+    QLabel*                   cursorCountLabel;
+    QScrollBar*               scrollBar;
+    QTimer*                   timer;
+    QToolButton*              resetButton;
+    QToolButton*              saveButton;
 
-    QButtonGroup*       scaleBG;
-    QLabel*             cursorCountLabel;
-    QScrollBar*         scrollBar;
-    QTimer*             timer;
-    QToolButton*        resetButton;
-    QToolButton*        saveButton;
+    KComboBox*                timeUnitCB;
+    KLineEdit*                nameEdit;
+    KSqueezedTextLabel*       cursorDateLabel;
 
-    KComboBox*          timeUnitCB;
-    KLineEdit*          nameEdit;
-    KSqueezedTextLabel* cursorDateLabel;
+    SearchTextBar*            searchDateBar;
+    EditableSearchTreeView*   timeLineFolderView;
+    TimeLineWidget*           timeLineWidget;
 
-    SearchTextBar*      searchDateBar;
-    EditableSearchTreeView* timeLineFolderView;
-    TimeLineWidget*     timeLineWidget;
-
-    SearchModel*        searchModel;
+    SearchModel*              searchModel;
 
     SearchModificationHelper* searchModificationHelper;
 };
+const QString TimelineSideBarWidgetPriv::configHistogramTimeUnitEntry("Histogram TimeUnit");
+const QString TimelineSideBarWidgetPriv::configHistogramScaleEntry("Histogram Scale");
+const QString TimelineSideBarWidgetPriv::configCursorPositionEntry("Cursor Position");
+
+// --------------------------------------------------------
 
 TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searchModel,
         SearchModificationHelper* searchModificationHelper) :

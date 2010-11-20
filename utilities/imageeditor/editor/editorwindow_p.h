@@ -66,41 +66,6 @@ class EditorWindow::EditorWindowPriv
 public:
 
     EditorWindowPriv() :
-        configAutoZoomEntry("AutoZoom"),
-        configBackgroundColorEntry("BackgroundColor"),
-        configFullScreenEntry("FullScreen"),
-        configFullScreenHideThumbBarEntry("FullScreenHideThumbBar"),
-        configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
-        configJpeg2000CompressionEntry("JPEG2000Compression"),
-        configJpeg2000LossLessEntry("JPEG2000LossLess"),
-        configJpegCompressionEntry("JPEGCompression"),
-        configJpegSubSamplingEntry("JPEGSubSampling"),
-        configPgfCompressionEntry("PGFCompression"),
-        configPgfLossLessEntry("PGFLossLess"),
-        configPngCompressionEntry("PNGCompression"),
-        configSlideShowDelayEntry("SlideShowDelay"),
-        configSlideShowLoopEntry("SlideShowLoop"),
-        configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal"),
-        configSlideShowPrintCommentEntry("SlideShowPrintComment"),
-        configSlideShowPrintDateEntry("SlideShowPrintDate"),
-        configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity"),
-        configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel"),
-        configSlideShowPrintNameEntry("SlideShowPrintName"),
-        configSlideShowPrintRatingEntry("SlideShowPrintRating"),
-        configSlideShowStartCurrentEntry("SlideShowStartCurrent"),
-        configSplitterStateEntry("SplitterState"),
-        configTiffCompressionEntry("TIFFCompression"),
-        configUnderExposureColorEntry("UnderExposureColor"),
-        configUnderExposureIndicatorEntry("UnderExposureIndicator"),
-        configUnderExposurePercentsEntry("UnderExposurePercentsEntry"),
-        configOverExposureColorEntry("OverExposureColor"),
-        configOverExposureIndicatorEntry("OverExposureIndicator"),        configOverExposurePercentsEntry("OverExposurePercentsEntry"),
-        configExpoIndicatorModeEntry("ExpoIndicatorMode"),
-        configUseRawImportToolEntry("UseRawImportTool"),
-        configUseThemeBackgroundColorEntry("UseThemeBackgroundColor"),
-        configVerticalSplitterSizesEntry("Vertical Splitter Sizes"),
-        configVerticalSplitterStateEntry("Vertical Splitter State"),
-
         removeFullScreenButton(false),
         fullScreenHideToolBar(false),
 
@@ -160,41 +125,41 @@ public:
     {
     }
 
-    const QString              configAutoZoomEntry;
-    const QString              configBackgroundColorEntry;
-    const QString              configFullScreenEntry;
-    const QString              configFullScreenHideThumbBarEntry;
-    const QString              configFullScreenHideToolBarEntry;
-    const QString              configJpeg2000CompressionEntry;
-    const QString              configJpeg2000LossLessEntry;
-    const QString              configJpegCompressionEntry;
-    const QString              configJpegSubSamplingEntry;
-    const QString              configPgfCompressionEntry;
-    const QString              configPgfLossLessEntry;
-    const QString              configPngCompressionEntry;
-    const QString              configSlideShowDelayEntry;
-    const QString              configSlideShowLoopEntry;
-    const QString              configSlideShowPrintApertureFocalEntry;
-    const QString              configSlideShowPrintCommentEntry;
-    const QString              configSlideShowPrintDateEntry;
-    const QString              configSlideShowPrintExpoSensitivityEntry;
-    const QString              configSlideShowPrintMakeModelEntry;
-    const QString              configSlideShowPrintNameEntry;
-    const QString              configSlideShowPrintRatingEntry;
-    const QString              configSlideShowStartCurrentEntry;
-    const QString              configSplitterStateEntry;
-    const QString              configTiffCompressionEntry;
-    const QString              configUnderExposureColorEntry;
-    const QString              configUnderExposureIndicatorEntry;
-    const QString              configUnderExposurePercentsEntry;
-    const QString              configOverExposureColorEntry;
-    const QString              configOverExposureIndicatorEntry;
-    const QString              configOverExposurePercentsEntry;
-    const QString              configExpoIndicatorModeEntry;
-    const QString              configUseRawImportToolEntry;
-    const QString              configUseThemeBackgroundColorEntry;
-    const QString              configVerticalSplitterSizesEntry;
-    const QString              configVerticalSplitterStateEntry;
+    static const QString       configAutoZoomEntry;
+    static const QString       configBackgroundColorEntry;
+    static const QString       configFullScreenEntry;
+    static const QString       configFullScreenHideThumbBarEntry;
+    static const QString       configFullScreenHideToolBarEntry;
+    static const QString       configJpeg2000CompressionEntry;
+    static const QString       configJpeg2000LossLessEntry;
+    static const QString       configJpegCompressionEntry;
+    static const QString       configJpegSubSamplingEntry;
+    static const QString       configPgfCompressionEntry;
+    static const QString       configPgfLossLessEntry;
+    static const QString       configPngCompressionEntry;
+    static const QString       configSlideShowDelayEntry;
+    static const QString       configSlideShowLoopEntry;
+    static const QString       configSlideShowPrintApertureFocalEntry;
+    static const QString       configSlideShowPrintCommentEntry;
+    static const QString       configSlideShowPrintDateEntry;
+    static const QString       configSlideShowPrintExpoSensitivityEntry;
+    static const QString       configSlideShowPrintMakeModelEntry;
+    static const QString       configSlideShowPrintNameEntry;
+    static const QString       configSlideShowPrintRatingEntry;
+    static const QString       configSlideShowStartCurrentEntry;
+    static const QString       configSplitterStateEntry;
+    static const QString       configTiffCompressionEntry;
+    static const QString       configUnderExposureColorEntry;
+    static const QString       configUnderExposureIndicatorEntry;
+    static const QString       configUnderExposurePercentsEntry;
+    static const QString       configOverExposureColorEntry;
+    static const QString       configOverExposureIndicatorEntry;
+    static const QString       configOverExposurePercentsEntry;
+    static const QString       configExpoIndicatorModeEntry;
+    static const QString       configUseRawImportToolEntry;
+    static const QString       configUseThemeBackgroundColorEntry;
+    static const QString       configVerticalSplitterSizesEntry;
+    static const QString       configVerticalSplitterStateEntry;
 
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;
@@ -305,6 +270,41 @@ public:
     }
 
 };
+const QString EditorWindow::EditorWindowPriv::configAutoZoomEntry("AutoZoom");
+const QString EditorWindow::EditorWindowPriv::configBackgroundColorEntry("BackgroundColor");
+const QString EditorWindow::EditorWindowPriv::configFullScreenEntry("FullScreen");
+const QString EditorWindow::EditorWindowPriv::configFullScreenHideThumbBarEntry("FullScreenHideThumbBar");
+const QString EditorWindow::EditorWindowPriv::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
+const QString EditorWindow::EditorWindowPriv::configJpeg2000CompressionEntry("JPEG2000Compression");
+const QString EditorWindow::EditorWindowPriv::configJpeg2000LossLessEntry("JPEG2000LossLess");
+const QString EditorWindow::EditorWindowPriv::configJpegCompressionEntry("JPEGCompression");
+const QString EditorWindow::EditorWindowPriv::configJpegSubSamplingEntry("JPEGSubSampling");
+const QString EditorWindow::EditorWindowPriv::configPgfCompressionEntry("PGFCompression");
+const QString EditorWindow::EditorWindowPriv::configPgfLossLessEntry("PGFLossLess");
+const QString EditorWindow::EditorWindowPriv::configPngCompressionEntry("PNGCompression");
+const QString EditorWindow::EditorWindowPriv::configSlideShowDelayEntry("SlideShowDelay");
+const QString EditorWindow::EditorWindowPriv::configSlideShowLoopEntry("SlideShowLoop");
+const QString EditorWindow::EditorWindowPriv::configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal");
+const QString EditorWindow::EditorWindowPriv::configSlideShowPrintCommentEntry("SlideShowPrintComment");
+const QString EditorWindow::EditorWindowPriv::configSlideShowPrintDateEntry("SlideShowPrintDate");
+const QString EditorWindow::EditorWindowPriv::configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity");
+const QString EditorWindow::EditorWindowPriv::configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel");
+const QString EditorWindow::EditorWindowPriv::configSlideShowPrintNameEntry("SlideShowPrintName");
+const QString EditorWindow::EditorWindowPriv::configSlideShowPrintRatingEntry("SlideShowPrintRating");
+const QString EditorWindow::EditorWindowPriv::configSlideShowStartCurrentEntry("SlideShowStartCurrent");
+const QString EditorWindow::EditorWindowPriv::configSplitterStateEntry("SplitterState");
+const QString EditorWindow::EditorWindowPriv::configTiffCompressionEntry("TIFFCompression");
+const QString EditorWindow::EditorWindowPriv::configUnderExposureColorEntry("UnderExposureColor");
+const QString EditorWindow::EditorWindowPriv::configUnderExposureIndicatorEntry("UnderExposureIndicator");
+const QString EditorWindow::EditorWindowPriv::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
+const QString EditorWindow::EditorWindowPriv::configOverExposureColorEntry("OverExposureColor");
+const QString EditorWindow::EditorWindowPriv::configOverExposureIndicatorEntry("OverExposureIndicator");
+const QString EditorWindow::EditorWindowPriv::configOverExposurePercentsEntry("OverExposurePercentsEntry");
+const QString EditorWindow::EditorWindowPriv::configExpoIndicatorModeEntry("ExpoIndicatorMode");
+const QString EditorWindow::EditorWindowPriv::configUseRawImportToolEntry("UseRawImportTool");
+const QString EditorWindow::EditorWindowPriv::configUseThemeBackgroundColorEntry("UseThemeBackgroundColor");
+const QString EditorWindow::EditorWindowPriv::configVerticalSplitterSizesEntry("Vertical Splitter Sizes");
+const QString EditorWindow::EditorWindowPriv::configVerticalSplitterStateEntry("Vertical Splitter State");
 
 }  // namespace Digikam
 

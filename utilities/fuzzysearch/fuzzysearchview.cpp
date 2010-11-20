@@ -92,13 +92,6 @@ public:
     };
 
     FuzzySearchViewPriv() :
-        configTabEntry("FuzzySearch Tab"),
-        configPenSketchSizeEntry("Pen Sketch Size"),
-        configResultSketchItemsEntry("Result Sketch items"),
-        configPenSketchHueEntry("Pen Sketch Hue"),
-        configPenSketchSaturationEntry("Pen Sketch Saturation"),
-        configPenSkethValueEntry("Pen Sketch Value"),
-        configSimilarsThresholdEntry("Similars Threshold"),
         // initially be active to update sketch panel when the search list is restored
         active(true),
         fingerprintsChecked(false),
@@ -133,66 +126,75 @@ public:
     {
     }
 
-    const QString configTabEntry;
-    const QString configPenSketchSizeEntry;
-    const QString configResultSketchItemsEntry;
-    const QString configPenSketchHueEntry;
-    const QString configPenSketchSaturationEntry;
-    const QString configPenSkethValueEntry;
-    const QString configSimilarsThresholdEntry;
+    static const QString configTabEntry;
+    static const QString configPenSketchSizeEntry;
+    static const QString configResultSketchItemsEntry;
+    static const QString configPenSketchHueEntry;
+    static const QString configPenSketchSaturationEntry;
+    static const QString configPenSkethValueEntry;
+    static const QString configSimilarsThresholdEntry;
 
-    bool                    active;
-    bool                    fingerprintsChecked;
+    bool                      active;
+    bool                      fingerprintsChecked;
 
-    QColor                  selColor;
+    QColor                    selColor;
 
-    QToolButton*            resetButton;
-    QToolButton*            saveBtnSketch;
-    QToolButton*            undoBtnSketch;
-    QToolButton*            redoBtnSketch;
-    QToolButton*            saveBtnImage;
+    QToolButton*              resetButton;
+    QToolButton*              saveBtnSketch;
+    QToolButton*              undoBtnSketch;
+    QToolButton*              redoBtnSketch;
+    QToolButton*              saveBtnImage;
 
-    QSpinBox*               penSize;
-    QSpinBox*               resultsSketch;
-    QSpinBox*               levelImage;
+    QSpinBox*                 penSize;
+    QSpinBox*                 resultsSketch;
+    QSpinBox*                 levelImage;
 
-    QLabel*                 imageWidget;
+    QLabel*                   imageWidget;
 
-    QTimer*                 timerSketch;
-    QTimer*                 timerImage;
+    QTimer*                   timerSketch;
+    QTimer*                   timerImage;
 
-    KVBox*                  folderView;
+    KVBox*                    folderView;
 
-    KLineEdit*              nameEditSketch;
-    KLineEdit*              nameEditImage;
+    KLineEdit*                nameEditSketch;
+    KLineEdit*                nameEditImage;
 
-    KTabWidget*             tabWidget;
+    KTabWidget*               tabWidget;
 
-    KHueSaturationSelector* hsSelector;
+    KHueSaturationSelector*   hsSelector;
 
-    KColorValueSelector*    vSelector;
+    KColorValueSelector*      vSelector;
 
-    KSqueezedTextLabel*     labelFile;
-    KSqueezedTextLabel*     labelFolder;
+    KSqueezedTextLabel*       labelFile;
+    KSqueezedTextLabel*       labelFolder;
 
-    ImageInfo               imageInfo;
+    ImageInfo                 imageInfo;
 
-    SearchTextBar*          searchFuzzyBar;
+    SearchTextBar*            searchFuzzyBar;
 
-    EditableSearchTreeView* searchTreeView;
+    EditableSearchTreeView*   searchTreeView;
 
-    SketchWidget*           sketchWidget;
+    SketchWidget*             sketchWidget;
 
-    ThumbnailLoadThread*    thumbLoadThread;
+    ThumbnailLoadThread*      thumbLoadThread;
 
-    FindDuplicatesView*     findDuplicatesPanel;
+    FindDuplicatesView*       findDuplicatesPanel;
 
-    AlbumPointer<SAlbum>    imageSAlbum;
-    AlbumPointer<SAlbum>    sketchSAlbum;
+    AlbumPointer<SAlbum>      imageSAlbum;
+    AlbumPointer<SAlbum>      sketchSAlbum;
 
-    SearchModel* searchModel;
+    SearchModel*              searchModel;
     SearchModificationHelper* searchModificationHelper;
 };
+const QString FuzzySearchView::FuzzySearchViewPriv::configTabEntry("FuzzySearch Tab");
+const QString FuzzySearchView::FuzzySearchViewPriv::configPenSketchSizeEntry("Pen Sketch Size");
+const QString FuzzySearchView::FuzzySearchViewPriv::configResultSketchItemsEntry("Result Sketch items");
+const QString FuzzySearchView::FuzzySearchViewPriv::configPenSketchHueEntry("Pen Sketch Hue");
+const QString FuzzySearchView::FuzzySearchViewPriv::configPenSketchSaturationEntry("Pen Sketch Saturation");
+const QString FuzzySearchView::FuzzySearchViewPriv::configPenSkethValueEntry("Pen Sketch Value");
+const QString FuzzySearchView::FuzzySearchViewPriv::configSimilarsThresholdEntry("Similars Threshold");
+
+// --------------------------------------------------------
 
 FuzzySearchView::FuzzySearchView(SearchModel* searchModel,
                                  SearchModificationHelper* searchModificationHelper,
@@ -223,13 +225,13 @@ FuzzySearchView::FuzzySearchView(SearchModel* searchModel,
 
     // ---------------------------------------------------------------
 
-    d->folderView            = new KVBox();
-    d->searchTreeView        = new EditableSearchTreeView(d->folderView, searchModel,
-            searchModificationHelper);
+    d->folderView     = new KVBox();
+    d->searchTreeView = new EditableSearchTreeView(d->folderView, searchModel, searchModificationHelper);
     d->searchTreeView->filteredModel()->listHaarSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
     d->searchTreeView->setAlbumManagerCurrentAlbum(true);
-    d->searchFuzzyBar        = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
+
+    d->searchFuzzyBar = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
     d->searchFuzzyBar->setModel(d->searchTreeView->filteredModel(),
                                 AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->searchFuzzyBar->setFilterModel(d->searchTreeView->albumFilterModel());

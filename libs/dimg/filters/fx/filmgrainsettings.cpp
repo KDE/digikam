@@ -60,23 +60,6 @@ class FilmGrainSettingsPriv
 public:
 
     FilmGrainSettingsPriv() :
-        configGrainSizeEntry("GrainSizeEntry"),
-        configPhotoDistributionEntry("PhotoDistributionEntry"),
-        configAddLumNoiseEntry("AddLumNoiseEntry"),
-        configIntensityLumAdjustmentEntry("IntensityLumAdjustment"),
-        configShadowsLumAdjustmentEntry("ShadowsLumAdjustment"),
-        configMidtonesLumAdjustmentEntry("MidtonesLumAdjustment"),
-        configHighlightsLumAdjustmentEntry("HighlightsLumAdjustment"),
-        configAddChromaBlueNoiseEntry("AddChromaBlueNoiseEntry"),
-        configIntensityChromaBlueAdjustmentEntry("IntensityChromaBlueAdjustment"),
-        configShadowsChromaBlueAdjustmentEntry("ShadowsChromaBlueAdjustment"),
-        configMidtonesChromaBlueAdjustmentEntry("MidtonesChromaBlueAdjustment"),
-        configHighlightsChromaBlueAdjustmentEntry("HighlightsChromaBlueAdjustment"),
-        configAddChromaRedNoiseEntry("AddChromaRedNoiseEntry"),
-        configIntensityChromaRedAdjustmentEntry("IntensityChromaRedAdjustment"),
-        configShadowsChromaRedAdjustmentEntry("ShadowsChromaRedAdjustment"),
-        configMidtonesChromaRedAdjustmentEntry("MidtonesChromaRedAdjustment"),
-        configHighlightsChromaRedAdjustmentEntry("HighlightsChromaRedAdjustment"),
         sizeLabel(0),
         label1(0),
         label2(0),
@@ -106,56 +89,75 @@ public:
         highlightsChromaRedInput(0)
     {}
 
-    const QString configGrainSizeEntry;
-    const QString configPhotoDistributionEntry;
-    const QString configAddLumNoiseEntry;
-    const QString configIntensityLumAdjustmentEntry;
-    const QString configShadowsLumAdjustmentEntry;
-    const QString configMidtonesLumAdjustmentEntry;
-    const QString configHighlightsLumAdjustmentEntry;
-    const QString configAddChromaBlueNoiseEntry;
-    const QString configIntensityChromaBlueAdjustmentEntry;
-    const QString configShadowsChromaBlueAdjustmentEntry;
-    const QString configMidtonesChromaBlueAdjustmentEntry;
-    const QString configHighlightsChromaBlueAdjustmentEntry;
-    const QString configAddChromaRedNoiseEntry;
-    const QString configIntensityChromaRedAdjustmentEntry;
-    const QString configShadowsChromaRedAdjustmentEntry;
-    const QString configMidtonesChromaRedAdjustmentEntry;
-    const QString configHighlightsChromaRedAdjustmentEntry;
+    static const QString configGrainSizeEntry;
+    static const QString configPhotoDistributionEntry;
+    static const QString configAddLumNoiseEntry;
+    static const QString configIntensityLumAdjustmentEntry;
+    static const QString configShadowsLumAdjustmentEntry;
+    static const QString configMidtonesLumAdjustmentEntry;
+    static const QString configHighlightsLumAdjustmentEntry;
+    static const QString configAddChromaBlueNoiseEntry;
+    static const QString configIntensityChromaBlueAdjustmentEntry;
+    static const QString configShadowsChromaBlueAdjustmentEntry;
+    static const QString configMidtonesChromaBlueAdjustmentEntry;
+    static const QString configHighlightsChromaBlueAdjustmentEntry;
+    static const QString configAddChromaRedNoiseEntry;
+    static const QString configIntensityChromaRedAdjustmentEntry;
+    static const QString configShadowsChromaRedAdjustmentEntry;
+    static const QString configMidtonesChromaRedAdjustmentEntry;
+    static const QString configHighlightsChromaRedAdjustmentEntry;
 
-    QLabel*       sizeLabel;
-    QLabel*       label1;
-    QLabel*       label2;
-    QLabel*       label3;
-    QLabel*       label4;
-    QLabel*       label5;
-    QLabel*       label6;
-    QLabel*       label7;
-    QLabel*       label8;
-    QLabel*       label9;
-    QLabel*       label10;
-    QLabel*       label11;
-    QLabel*       label12;
+    QLabel*              sizeLabel;
+    QLabel*              label1;
+    QLabel*              label2;
+    QLabel*              label3;
+    QLabel*              label4;
+    QLabel*              label5;
+    QLabel*              label6;
+    QLabel*              label7;
+    QLabel*              label8;
+    QLabel*              label9;
+    QLabel*              label10;
+    QLabel*              label11;
+    QLabel*              label12;
 
-    QCheckBox*    photoDistribution;
+    QCheckBox*           photoDistribution;
 
-    RIntNumInput* grainSizeInput;
-    RIntNumInput* intensityLumInput;
-    RIntNumInput* shadowsLumInput;
-    RIntNumInput* midtonesLumInput;
-    RIntNumInput* highlightsLumInput;
-    RIntNumInput* intensityChromaBlueInput;
-    RIntNumInput* shadowsChromaBlueInput;
-    RIntNumInput* midtonesChromaBlueInput;
-    RIntNumInput* highlightsChromaBlueInput;
-    RIntNumInput* intensityChromaRedInput;
-    RIntNumInput* shadowsChromaRedInput;
-    RIntNumInput* midtonesChromaRedInput;
-    RIntNumInput* highlightsChromaRedInput;
+    RIntNumInput*        grainSizeInput;
+    RIntNumInput*        intensityLumInput;
+    RIntNumInput*        shadowsLumInput;
+    RIntNumInput*        midtonesLumInput;
+    RIntNumInput*        highlightsLumInput;
+    RIntNumInput*        intensityChromaBlueInput;
+    RIntNumInput*        shadowsChromaBlueInput;
+    RIntNumInput*        midtonesChromaBlueInput;
+    RIntNumInput*        highlightsChromaBlueInput;
+    RIntNumInput*        intensityChromaRedInput;
+    RIntNumInput*        shadowsChromaRedInput;
+    RIntNumInput*        midtonesChromaRedInput;
+    RIntNumInput*        highlightsChromaRedInput;
 
-    RExpanderBox* expanderBox;
+    RExpanderBox*        expanderBox;
 };
+const QString FilmGrainSettingsPriv::configGrainSizeEntry("GrainSizeEntry");
+const QString FilmGrainSettingsPriv::configPhotoDistributionEntry("PhotoDistributionEntry");
+const QString FilmGrainSettingsPriv::configAddLumNoiseEntry("AddLumNoiseEntry");
+const QString FilmGrainSettingsPriv::configIntensityLumAdjustmentEntry("IntensityLumAdjustment");
+const QString FilmGrainSettingsPriv::configShadowsLumAdjustmentEntry("ShadowsLumAdjustment");
+const QString FilmGrainSettingsPriv::configMidtonesLumAdjustmentEntry("MidtonesLumAdjustment");
+const QString FilmGrainSettingsPriv::configHighlightsLumAdjustmentEntry("HighlightsLumAdjustment");
+const QString FilmGrainSettingsPriv::configAddChromaBlueNoiseEntry("AddChromaBlueNoiseEntry");
+const QString FilmGrainSettingsPriv::configIntensityChromaBlueAdjustmentEntry("IntensityChromaBlueAdjustment");
+const QString FilmGrainSettingsPriv::configShadowsChromaBlueAdjustmentEntry("ShadowsChromaBlueAdjustment");
+const QString FilmGrainSettingsPriv::configMidtonesChromaBlueAdjustmentEntry("MidtonesChromaBlueAdjustment");
+const QString FilmGrainSettingsPriv::configHighlightsChromaBlueAdjustmentEntry("HighlightsChromaBlueAdjustment");
+const QString FilmGrainSettingsPriv::configAddChromaRedNoiseEntry("AddChromaRedNoiseEntry");
+const QString FilmGrainSettingsPriv::configIntensityChromaRedAdjustmentEntry("IntensityChromaRedAdjustment");
+const QString FilmGrainSettingsPriv::configShadowsChromaRedAdjustmentEntry("ShadowsChromaRedAdjustment");
+const QString FilmGrainSettingsPriv::configMidtonesChromaRedAdjustmentEntry("MidtonesChromaRedAdjustment");
+const QString FilmGrainSettingsPriv::configHighlightsChromaRedAdjustmentEntry("HighlightsChromaRedAdjustment");
+
+// --------------------------------------------------------
 
 FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     : QWidget(parent),

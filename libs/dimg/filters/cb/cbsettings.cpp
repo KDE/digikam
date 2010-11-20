@@ -60,22 +60,24 @@ class CBSettingsPriv
 public:
 
     CBSettingsPriv() :
-        configRedAdjustmentEntry("RedAdjustment"),
-        configGreenAdjustmentEntry("GreenAdjustment"),
-        configBlueAdjustmentEntry("BlueAdjustment"),
         rInput(0),
         gInput(0),
         bInput(0)
     {}
 
-    const QString configRedAdjustmentEntry;
-    const QString configGreenAdjustmentEntry;
-    const QString configBlueAdjustmentEntry;
+    static const QString configRedAdjustmentEntry;
+    static const QString configGreenAdjustmentEntry;
+    static const QString configBlueAdjustmentEntry;
 
-    RIntNumInput* rInput;
-    RIntNumInput* gInput;
-    RIntNumInput* bInput;
+    RIntNumInput*        rInput;
+    RIntNumInput*        gInput;
+    RIntNumInput*        bInput;
 };
+const QString CBSettingsPriv::configRedAdjustmentEntry("RedAdjustment");
+const QString CBSettingsPriv::configGreenAdjustmentEntry("GreenAdjustment");
+const QString CBSettingsPriv::configBlueAdjustmentEntry("BlueAdjustment");
+
+// --------------------------------------------------------
 
 CBSettings::CBSettings(QWidget* parent)
     : QWidget(parent),

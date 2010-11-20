@@ -60,10 +60,6 @@ class HSLSettingsPriv
 public:
 
     HSLSettingsPriv() :
-        configHueAdjustmentEntry("HueAdjustment"),
-        configSaturationAdjustmentEntry("SaturationAdjustment"),
-        configVibranceAdjustmentEntry("VibranceAdjustment"),
-        configLighnessAdjustmentEntry("LighnessAdjustment"),
         HSSelector(0),
         hInput(0),
         sInput(0),
@@ -72,10 +68,10 @@ public:
         HSPreview(0)
     {}
 
-    const QString           configHueAdjustmentEntry;
-    const QString           configSaturationAdjustmentEntry;
-    const QString           configVibranceAdjustmentEntry;
-    const QString           configLighnessAdjustmentEntry;
+    static const QString    configHueAdjustmentEntry;
+    static const QString    configSaturationAdjustmentEntry;
+    static const QString    configVibranceAdjustmentEntry;
+    static const QString    configLighnessAdjustmentEntry;
 
     KHueSaturationSelector* HSSelector;
 
@@ -86,6 +82,12 @@ public:
 
     HSPreviewWidget*        HSPreview;
 };
+const QString HSLSettingsPriv::configHueAdjustmentEntry("HueAdjustment");
+const QString HSLSettingsPriv::configSaturationAdjustmentEntry("SaturationAdjustment");
+const QString HSLSettingsPriv::configVibranceAdjustmentEntry("VibranceAdjustment");
+const QString HSLSettingsPriv::configLighnessAdjustmentEntry("LighnessAdjustment");
+
+// --------------------------------------------------------
 
 HSLSettings::HSLSettings(QWidget* parent)
     : QWidget(parent),

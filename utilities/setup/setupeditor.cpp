@@ -65,18 +65,6 @@ class SetupEditor::SetupEditorPriv
 public:
 
     SetupEditorPriv() :
-        configGroupName("ImageViewer Settings"),
-        configUseThemeBackgroundColorEntry("UseThemeBackgroundColor"),
-        configBackgroundColorEntry("BackgroundColor"),
-        configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
-        configFullScreenHideThumbBarEntry("FullScreenHideThumbBar"),
-        configUseRawImportToolEntry("UseRawImportTool"),
-        configUnderExposureColorEntry("UnderExposureColor"),
-        configOverExposureColorEntry("OverExposureColor"),
-        configUnderExposurePercentsEntry("UnderExposurePercentsEntry"),
-        configOverExposurePercentsEntry("OverExposurePercentsEntry"),
-        configExpoIndicatorModeEntry("ExpoIndicatorMode"),
-
         themebackgroundColor(0),
         hideToolBar(0),
         hideThumbBar(0),
@@ -92,17 +80,17 @@ public:
         overExposurePcents(0)
     {}
 
-    const QString    configGroupName;
-    const QString    configUseThemeBackgroundColorEntry;
-    const QString    configBackgroundColorEntry;
-    const QString    configFullScreenHideToolBarEntry;
-    const QString    configFullScreenHideThumbBarEntry;
-    const QString    configUseRawImportToolEntry;
-    const QString    configUnderExposureColorEntry;
-    const QString    configOverExposureColorEntry;
-    const QString    configUnderExposurePercentsEntry;
-    const QString    configOverExposurePercentsEntry;
-    const QString    configExpoIndicatorModeEntry;
+    static const QString  configGroupName;
+    static const QString  configUseThemeBackgroundColorEntry;
+    static const QString  configBackgroundColorEntry;
+    static const QString  configFullScreenHideToolBarEntry;
+    static const QString  configFullScreenHideThumbBarEntry;
+    static const QString  configUseRawImportToolEntry;
+    static const QString  configUnderExposureColorEntry;
+    static const QString  configOverExposureColorEntry;
+    static const QString  configUnderExposurePercentsEntry;
+    static const QString  configOverExposurePercentsEntry;
+    static const QString  configExpoIndicatorModeEntry;
 
     QCheckBox*       themebackgroundColor;
     QCheckBox*       hideToolBar;
@@ -124,6 +112,19 @@ public:
     RDoubleNumInput* underExposurePcents;
     RDoubleNumInput* overExposurePcents;
 };
+const QString SetupEditor::SetupEditorPriv::configGroupName("ImageViewer Settings");
+const QString SetupEditor::SetupEditorPriv::configUseThemeBackgroundColorEntry("UseThemeBackgroundColor");
+const QString SetupEditor::SetupEditorPriv::configBackgroundColorEntry("BackgroundColor");
+const QString SetupEditor::SetupEditorPriv::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
+const QString SetupEditor::SetupEditorPriv::configFullScreenHideThumbBarEntry("FullScreenHideThumbBar");
+const QString SetupEditor::SetupEditorPriv::configUseRawImportToolEntry("UseRawImportTool");
+const QString SetupEditor::SetupEditorPriv::configUnderExposureColorEntry("UnderExposureColor");
+const QString SetupEditor::SetupEditorPriv::configOverExposureColorEntry("OverExposureColor");
+const QString SetupEditor::SetupEditorPriv::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
+const QString SetupEditor::SetupEditorPriv::configOverExposurePercentsEntry("OverExposurePercentsEntry");
+const QString SetupEditor::SetupEditorPriv::configExpoIndicatorModeEntry("ExpoIndicatorMode");
+
+// --------------------------------------------------------
 
 SetupEditor::SetupEditor(QWidget* parent)
     : QScrollArea(parent), d(new SetupEditorPriv)

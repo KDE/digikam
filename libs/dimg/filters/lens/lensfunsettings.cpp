@@ -43,12 +43,6 @@ class LensFunSettings::LensFunSettingsPriv
 public:
 
     LensFunSettingsPriv() :
-        configCCAEntry("CCA"),
-        configVignettingEntry("Vignetting"),
-        configCCIEntry("CCI"),
-        configDistortionEntry("Distortion"),
-        configGeometryEntry("Geometry"),
-
         filterCCA(0),
         filterVIG(0),
         filterCCI(0),
@@ -56,18 +50,25 @@ public:
         filterGEO(0)
     {}
 
-    const QString configCCAEntry;
-    const QString configVignettingEntry;
-    const QString configCCIEntry;
-    const QString configDistortionEntry;
-    const QString configGeometryEntry;
+    static const QString configCCAEntry;
+    static const QString configVignettingEntry;
+    static const QString configCCIEntry;
+    static const QString configDistortionEntry;
+    static const QString configGeometryEntry;
 
-    QCheckBox*    filterCCA;
-    QCheckBox*    filterVIG;
-    QCheckBox*    filterCCI;
-    QCheckBox*    filterDST;
-    QCheckBox*    filterGEO;
+    QCheckBox*           filterCCA;
+    QCheckBox*           filterVIG;
+    QCheckBox*           filterCCI;
+    QCheckBox*           filterDST;
+    QCheckBox*           filterGEO;
 };
+const QString LensFunSettings::LensFunSettingsPriv::configCCAEntry("CCA");
+const QString LensFunSettings::LensFunSettingsPriv::configVignettingEntry("Vignetting");
+const QString LensFunSettings::LensFunSettingsPriv::configCCIEntry("CCI");
+const QString LensFunSettings::LensFunSettingsPriv::configDistortionEntry("Distortion");
+const QString LensFunSettings::LensFunSettingsPriv::configGeometryEntry("Geometry");
+
+// --------------------------------------------------------
 
 LensFunSettings::LensFunSettings(QWidget* parent)
     : QWidget(parent),

@@ -63,18 +63,6 @@ class BorderSettingsPriv
 public:
 
     BorderSettingsPriv() :
-        configBorderTypeEntry("Border Type"),
-        configBorderPercentEntry("Border Percent"),
-        configBorderWidthEntry("Border Width"),
-        configPreserveAspectRatioEntry("Preserve Aspect Ratio"),
-        configSolidColorEntry("Solid Color"),
-        configNiepceBorderColorEntry("Niepce Border Color"),
-        configNiepceLineColorEntry("Niepce Line Color"),
-        configBevelUpperLeftColorEntry("Bevel Upper Left Color"),
-        configBevelLowerRightColorEntry("Bevel Lower Right Color"),
-        configDecorativeFirstColorEntry("Decorative First Color"),
-        configDecorativeSecondColorEntry("Decorative Second Color"),
-
         preserveAspectRatio(0),
         labelBackground(0),
         labelBorderPercent(0),
@@ -87,40 +75,53 @@ public:
         borderWidth(0)
     {}
 
-    const QString       configBorderTypeEntry;
-    const QString       configBorderPercentEntry;
-    const QString       configBorderWidthEntry;
-    const QString       configPreserveAspectRatioEntry;
-    const QString       configSolidColorEntry;
-    const QString       configNiepceBorderColorEntry;
-    const QString       configNiepceLineColorEntry;
-    const QString       configBevelUpperLeftColorEntry;
-    const QString       configBevelLowerRightColorEntry;
-    const QString       configDecorativeFirstColorEntry;
-    const QString       configDecorativeSecondColorEntry;
+    static const QString configBorderTypeEntry;
+    static const QString configBorderPercentEntry;
+    static const QString configBorderWidthEntry;
+    static const QString configPreserveAspectRatioEntry;
+    static const QString configSolidColorEntry;
+    static const QString configNiepceBorderColorEntry;
+    static const QString configNiepceLineColorEntry;
+    static const QString configBevelUpperLeftColorEntry;
+    static const QString configBevelLowerRightColorEntry;
+    static const QString configDecorativeFirstColorEntry;
+    static const QString configDecorativeSecondColorEntry;
 
-    QCheckBox*          preserveAspectRatio;
+    QCheckBox*           preserveAspectRatio;
 
-    QLabel*             labelBackground;
-    QLabel*             labelBorderPercent;
-    QLabel*             labelBorderWidth;
-    QLabel*             labelForeground;
+    QLabel*              labelBackground;
+    QLabel*              labelBorderPercent;
+    QLabel*              labelBorderWidth;
+    QLabel*              labelForeground;
 
-    QColor              bevelLowerRightColor;
-    QColor              bevelUpperLeftColor;
-    QColor              decorativeFirstColor;
-    QColor              decorativeSecondColor;
-    QColor              niepceBorderColor;
-    QColor              niepceLineColor;
-    QColor              solidColor;
+    QColor               bevelLowerRightColor;
+    QColor               bevelUpperLeftColor;
+    QColor               decorativeFirstColor;
+    QColor               decorativeSecondColor;
+    QColor               niepceBorderColor;
+    QColor               niepceLineColor;
+    QColor               solidColor;
 
-    KColorButton*       firstColorButton;
-    KColorButton*       secondColorButton;
+    KColorButton*        firstColorButton;
+    KColorButton*        secondColorButton;
 
-    RComboBox*          borderType;
-    RIntNumInput*       borderPercent;
-    RIntNumInput*       borderWidth;
+    RComboBox*           borderType;
+    RIntNumInput*        borderPercent;
+    RIntNumInput*        borderWidth;
 };
+const QString BorderSettingsPriv::configBorderTypeEntry("Border Type");
+const QString BorderSettingsPriv::configBorderPercentEntry("Border Percent");
+const QString BorderSettingsPriv::configBorderWidthEntry("Border Width");
+const QString BorderSettingsPriv::configPreserveAspectRatioEntry("Preserve Aspect Ratio");
+const QString BorderSettingsPriv::configSolidColorEntry("Solid Color");
+const QString BorderSettingsPriv::configNiepceBorderColorEntry("Niepce Border Color");
+const QString BorderSettingsPriv::configNiepceLineColorEntry("Niepce Line Color");
+const QString BorderSettingsPriv::configBevelUpperLeftColorEntry("Bevel Upper Left Color");
+const QString BorderSettingsPriv::configBevelLowerRightColorEntry("Bevel Lower Right Color");
+const QString BorderSettingsPriv::configDecorativeFirstColorEntry("Decorative First Color");
+const QString BorderSettingsPriv::configDecorativeSecondColorEntry("Decorative Second Color");
+
+// --------------------------------------------------------
 
 BorderSettings::BorderSettings(QWidget* parent)
     : QWidget(parent),

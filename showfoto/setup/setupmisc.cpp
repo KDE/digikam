@@ -52,13 +52,6 @@ class SetupMisc::SetupMiscPriv
 public:
 
     SetupMiscPriv() :
-        configGroupName("ImageViewer Settings"),
-        configDeleteItem2TrashEntry("DeleteItem2Trash"),
-        configShowSplashEntry("ShowSplash"),
-        configSidebarTitleStyleEntry("Sidebar Title Style"),
-        configSortOrderEntry("SortOrder"),
-        configReverseSortEntry("ReverseSort"),
-
         sidebarTypeLabel(0),
         showSplash(0),
         sortReverse(0),
@@ -67,22 +60,30 @@ public:
         sortOrderComboBox(0)
     {}
 
-    const QString configGroupName;
-    const QString configDeleteItem2TrashEntry;
-    const QString configShowSplashEntry;
-    const QString configSidebarTitleStyleEntry;
-    const QString configSortOrderEntry;
-    const QString configReverseSortEntry;
+    static const QString configGroupName;
+    static const QString configDeleteItem2TrashEntry;
+    static const QString configShowSplashEntry;
+    static const QString configSidebarTitleStyleEntry;
+    static const QString configSortOrderEntry;
+    static const QString configReverseSortEntry;
 
-    QLabel*       sidebarTypeLabel;
+    QLabel*              sidebarTypeLabel;
 
-    QCheckBox*    showSplash;
-    QCheckBox*    sortReverse;
-    QCheckBox*    useTrash;
+    QCheckBox*           showSplash;
+    QCheckBox*           sortReverse;
+    QCheckBox*           useTrash;
 
-    KComboBox*    sidebarType;
-    KComboBox*    sortOrderComboBox;
+    KComboBox*           sidebarType;
+    KComboBox*           sortOrderComboBox;
 };
+const QString SetupMisc::SetupMiscPriv::configGroupName("ImageViewer Settings");
+const QString SetupMisc::SetupMiscPriv::configDeleteItem2TrashEntry("DeleteItem2Trash");
+const QString SetupMisc::SetupMiscPriv::configShowSplashEntry("ShowSplash");
+const QString SetupMisc::SetupMiscPriv::configSidebarTitleStyleEntry("Sidebar Title Style");
+const QString SetupMisc::SetupMiscPriv::configSortOrderEntry("SortOrder");
+const QString SetupMisc::SetupMiscPriv::configReverseSortEntry("ReverseSort");
+
+// --------------------------------------------------------
 
 SetupMisc::SetupMisc(QWidget* parent)
     : QScrollArea(parent), d(new SetupMiscPriv)
