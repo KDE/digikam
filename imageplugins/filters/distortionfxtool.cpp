@@ -71,11 +71,6 @@ class DistortionFXTool::DistortionFXToolPriv
 public:
 
     DistortionFXToolPriv() :
-        configGroupName("distortionfx Tool"),
-        configEffectTypeEntry("EffectType"),
-        configIterationAdjustmentEntry("IterationAdjustment"),
-        configLevelAdjustmentEntry("LevelAdjustment"),
-
         effectTypeLabel(0),
         levelLabel(0),
         iterationLabel(0),
@@ -86,23 +81,29 @@ public:
         gboxSettings(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configEffectTypeEntry;
-    const QString       configIterationAdjustmentEntry;
-    const QString       configLevelAdjustmentEntry;
+    static const QString configGroupName;
+    static const QString configEffectTypeEntry;
+    static const QString configIterationAdjustmentEntry;
+    static const QString configLevelAdjustmentEntry;
 
-    QLabel*             effectTypeLabel;
-    QLabel*             levelLabel;
-    QLabel*             iterationLabel;
+    QLabel*              effectTypeLabel;
+    QLabel*              levelLabel;
+    QLabel*              iterationLabel;
 
-    RComboBox*          effectType;
+    RComboBox*           effectType;
 
-    RIntNumInput*       levelInput;
-    RIntNumInput*       iterationInput;
+    RIntNumInput*        levelInput;
+    RIntNumInput*        iterationInput;
 
-    ImageGuideWidget*   previewWidget;
-    EditorToolSettings* gboxSettings;
+    ImageGuideWidget*    previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString DistortionFXTool::DistortionFXToolPriv::configGroupName("distortionfx Tool");
+const QString DistortionFXTool::DistortionFXToolPriv::configEffectTypeEntry("EffectType");
+const QString DistortionFXTool::DistortionFXToolPriv::configIterationAdjustmentEntry("IterationAdjustment");
+const QString DistortionFXTool::DistortionFXToolPriv::configLevelAdjustmentEntry("LevelAdjustment");
+
+// --------------------------------------------------------
 
 DistortionFXTool::DistortionFXTool(QObject* parent)
     : EditorToolThreaded(parent),

@@ -61,21 +61,22 @@ class BlurTool::BlurToolPriv
 public:
 
     BlurToolPriv() :
-        configGroupName("gaussianblur Tool"),
-        configRadiusAdjustmentEntry("RadiusAdjustment"),
-
         radiusInput(0),
         previewWidget(0),
         gboxSettings(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configRadiusAdjustmentEntry;
+    static const QString configGroupName;
+    static const QString configRadiusAdjustmentEntry;
 
-    RIntNumInput*       radiusInput;
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    RIntNumInput*        radiusInput;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString BlurTool::BlurToolPriv::configGroupName("gaussianblur Tool");
+const QString BlurTool::BlurToolPriv::configRadiusAdjustmentEntry("RadiusAdjustment");
+
+// --------------------------------------------------------
 
 BlurTool::BlurTool(QObject* parent)
     : EditorToolThreaded(parent),

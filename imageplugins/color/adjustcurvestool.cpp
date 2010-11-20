@@ -66,26 +66,28 @@ class AdjustCurvesTool::AdjustCurvesToolPriv
 public:
 
     AdjustCurvesToolPriv() :
-        configGroupName("adjustcurves Tool"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
         destinationPreviewData(0),
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
+    static const QString configGroupName;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    CurvesSettings*     settingsView;
-    ImageRegionWidget*  previewWidget;
+    CurvesSettings*      settingsView;
+    ImageRegionWidget*   previewWidget;
 
-    EditorToolSettings* gboxSettings;
+    EditorToolSettings*  gboxSettings;
 };
+const QString AdjustCurvesTool::AdjustCurvesToolPriv::configGroupName("adjustcurves Tool");
+const QString AdjustCurvesTool::AdjustCurvesToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString AdjustCurvesTool::AdjustCurvesToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+// --------------------------------------------------------
 
 AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     : EditorToolThreaded(parent),

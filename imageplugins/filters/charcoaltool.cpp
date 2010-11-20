@@ -62,10 +62,6 @@ class CharcoalTool::CharcoalToolPriv
 public:
 
     CharcoalToolPriv() :
-        configGroupName("charcoal Tool"),
-        configPencilAdjustmentEntry("PencilAdjustment"),
-        configSmoothAdjustmentEntry("SmoothAdjustment"),
-
         pencilInput(0),
         smoothInput(0),
         previewWidget(0),
@@ -73,16 +69,21 @@ public:
     {}
 
 
-    const QString       configGroupName;
-    const QString       configPencilAdjustmentEntry;
-    const QString       configSmoothAdjustmentEntry;
+    static const QString configGroupName;
+    static const QString configPencilAdjustmentEntry;
+    static const QString configSmoothAdjustmentEntry;
 
-    RIntNumInput*       pencilInput;
-    RIntNumInput*       smoothInput;
+    RIntNumInput*        pencilInput;
+    RIntNumInput*        smoothInput;
 
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString CharcoalTool::CharcoalToolPriv::configGroupName("charcoal Tool");
+const QString CharcoalTool::CharcoalToolPriv::configPencilAdjustmentEntry("PencilAdjustment");
+const QString CharcoalTool::CharcoalToolPriv::configSmoothAdjustmentEntry("SmoothAdjustment");
+
+// --------------------------------------------------------
 
 CharcoalTool::CharcoalTool(QObject* parent)
     : EditorToolThreaded(parent),

@@ -63,11 +63,6 @@ class RainDropTool::RainDropToolPriv
 public:
 
     RainDropToolPriv() :
-        configGroupName("raindrops Tool"),
-        configDropAdjustmentEntry("DropAdjustment"),
-        configAmountAdjustmentEntry("AmountAdjustment"),
-        configCoeffAdjustmentEntry("CoeffAdjustment"),
-
         dropInput(0),
         amountInput(0),
         coeffInput(0),
@@ -75,18 +70,24 @@ public:
         gboxSettings(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configDropAdjustmentEntry;
-    const QString       configAmountAdjustmentEntry;
-    const QString       configCoeffAdjustmentEntry;
+    static const QString configGroupName;
+    static const QString configDropAdjustmentEntry;
+    static const QString configAmountAdjustmentEntry;
+    static const QString configCoeffAdjustmentEntry;
 
-    RIntNumInput*       dropInput;
-    RIntNumInput*       amountInput;
-    RIntNumInput*       coeffInput;
+    RIntNumInput*        dropInput;
+    RIntNumInput*        amountInput;
+    RIntNumInput*        coeffInput;
 
-    ImageGuideWidget*   previewWidget;
-    EditorToolSettings* gboxSettings;
+    ImageGuideWidget*    previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString RainDropTool::RainDropToolPriv::configGroupName("raindrops Tool");
+const QString RainDropTool::RainDropToolPriv::configDropAdjustmentEntry("DropAdjustment");
+const QString RainDropTool::RainDropToolPriv::configAmountAdjustmentEntry("AmountAdjustment");
+const QString RainDropTool::RainDropToolPriv::configCoeffAdjustmentEntry("CoeffAdjustment");
+
+// --------------------------------------------------------
 
 RainDropTool::RainDropTool(QObject* parent)
     : EditorToolThreaded(parent),

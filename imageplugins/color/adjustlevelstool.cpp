@@ -91,15 +91,6 @@ public:
 public:
 
     AdjustLevelsToolPriv() :
-        configGroupName("adjustlevels Tool"),
-        configGammaChannelEntry("GammaChannel%1"),
-        configLowInputChannelEntry("LowInputChannel%1"),
-        configLowOutputChannelEntry("LowOutputChannel%1"),
-        configHighInputChannelEntry("HighInputChannel%1"),
-        configHighOutputChannelEntry("HighOutputChannel%1"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
-
         destinationPreviewData(0),
         histoSegments(0),
         pickerBox(0),
@@ -123,49 +114,59 @@ public:
         gboxSettings(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configGammaChannelEntry;
-    const QString       configLowInputChannelEntry;
-    const QString       configLowOutputChannelEntry;
-    const QString       configHighInputChannelEntry;
-    const QString       configHighOutputChannelEntry;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
+    static const QString configGroupName;
+    static const QString configGammaChannelEntry;
+    static const QString configLowInputChannelEntry;
+    static const QString configLowOutputChannelEntry;
+    static const QString configHighInputChannelEntry;
+    static const QString configHighOutputChannelEntry;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    int                 histoSegments;
+    int                  histoSegments;
 
-    QWidget*            pickerBox;
+    QWidget*             pickerBox;
 
-    QPushButton*        resetButton;
-    QToolButton*        autoButton;
-    QToolButton*        pickBlack;
-    QToolButton*        pickGray;
-    QToolButton*        pickWhite;
+    QPushButton*         resetButton;
+    QToolButton*         autoButton;
+    QToolButton*         pickBlack;
+    QToolButton*         pickGray;
+    QToolButton*         pickWhite;
 
-    QButtonGroup*       pickerColorButtonGroup;
+    QButtonGroup*        pickerColorButtonGroup;
 
-    RIntNumInput*       minInput;
-    RIntNumInput*       maxInput;
-    RIntNumInput*       minOutput;
-    RIntNumInput*       maxOutput;
+    RIntNumInput*        minInput;
+    RIntNumInput*        maxInput;
+    RIntNumInput*        minOutput;
+    RIntNumInput*        maxOutput;
 
-    RDoubleNumInput*    gammaInput;
+    RDoubleNumInput*     gammaInput;
 
-    HistogramWidget*    levelsHistogramWidget;
+    HistogramWidget*     levelsHistogramWidget;
 
-    DGradientSlider*    inputLevels;
-    DGradientSlider*    outputLevels;
+    DGradientSlider*     inputLevels;
+    DGradientSlider*     outputLevels;
 
-    ImageRegionWidget*  previewWidget;
+    ImageRegionWidget*   previewWidget;
 
-    ImageLevels*        levels;
+    ImageLevels*         levels;
 
-    DImg*               originalImage;
+    DImg*                originalImage;
 
-    EditorToolSettings* gboxSettings;
+    EditorToolSettings*  gboxSettings;
 };
+const QString AdjustLevelsTool::AdjustLevelsToolPriv::configGroupName("adjustlevels Tool");
+const QString AdjustLevelsTool::AdjustLevelsToolPriv::configGammaChannelEntry("GammaChannel%1");
+const QString AdjustLevelsTool::AdjustLevelsToolPriv::configLowInputChannelEntry("LowInputChannel%1");
+const QString AdjustLevelsTool::AdjustLevelsToolPriv::configLowOutputChannelEntry("LowOutputChannel%1");
+const QString AdjustLevelsTool::AdjustLevelsToolPriv::configHighInputChannelEntry("HighInputChannel%1");
+const QString AdjustLevelsTool::AdjustLevelsToolPriv::configHighOutputChannelEntry("HighOutputChannel%1");
+const QString AdjustLevelsTool::AdjustLevelsToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString AdjustLevelsTool::AdjustLevelsToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+// --------------------------------------------------------
 
 AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     : EditorToolThreaded(parent),

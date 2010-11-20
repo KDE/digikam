@@ -74,35 +74,6 @@ class RatioCropTool::RatioCropToolPriv
 public:
 
     RatioCropToolPriv() :
-        configGroupName("aspectratiocrop Tool"),
-        configHorOrientedAspectRatioEntry("Hor.Oriented Aspect Ratio"),
-        configHorOrientedAspectRatioOrientationEntry("Hor.Oriented Aspect Ratio Orientation"),
-        configHorOrientedCustomAspectRatioNumEntry("Hor.Oriented Custom Aspect Ratio Num"),
-        configHorOrientedCustomAspectRatioDenEntry("Hor.Oriented Custom Aspect Ratio Den"),
-        configHorOrientedCustomAspectRatioXposEntry("Hor.Oriented Custom Aspect Ratio Xpos"),
-        configHorOrientedCustomAspectRatioYposEntry("Hor.Oriented Custom Aspect Ratio Ypos"),
-        configHorOrientedCustomAspectRatioWidthEntry("Hor.Oriented Custom Aspect Ratio Width"),
-        configHorOrientedCustomAspectRatioHeightEntry("Hor.Oriented Custom Aspect Ratio Height"),
-        configVerOrientedAspectRatioEntry("Ver.Oriented Aspect Ratio"),
-        configVerOrientedAspectRatioOrientationEntry("Ver.Oriented Aspect Ratio Orientation"),
-        configVerOrientedCustomAspectRatioNumEntry("Ver.Oriented Custom Aspect Ratio Num"),
-        configVerOrientedCustomAspectRatioDenEntry("Ver.Oriented Custom Aspect Ratio Den"),
-        configVerOrientedCustomAspectRatioXposEntry("Ver.Oriented Custom Aspect Ratio Xpos"),
-        configVerOrientedCustomAspectRatioYposEntry("Ver.Oriented Custom Aspect Ratio Ypos"),
-        configVerOrientedCustomAspectRatioWidthEntry("Ver.Oriented Custom Aspect Ratio Width"),
-        configVerOrientedCustomAspectRatioHeightEntry("Ver.Oriented Custom Aspect Ratio Height"),
-        configPreciseAspectRatioCropEntry("Precise Aspect Ratio Crop"),
-        configAutoOrientationEntry("Auto Orientation"),
-        configGuideLinesTypeEntry("Guide Lines Type"),
-        configGoldenSectionEntry("Golden Section"),
-        configGoldenSpiralSectionEntry("Golden Spiral Section"),
-        configGoldenSpiralEntry("Golden Spiral"),
-        configGoldenTriangleEntry("Golden Triangle"),
-        configGoldenFlipHorizontalEntry("Golden Flip Horizontal"),
-        configGoldenFlipVerticalEntry("Golden Flip Vertical"),
-        configGuideColorEntry("Guide Color"),
-        configGuideWidthEntry("Guide Width"),
-
         originalIsLandscape(false),
         customLabel(0),
         orientLabel(0),
@@ -133,34 +104,34 @@ public:
         gboxSettings(0)
     {}
 
-    const QString         configGroupName;
-    const QString         configHorOrientedAspectRatioEntry;
-    const QString         configHorOrientedAspectRatioOrientationEntry;
-    const QString         configHorOrientedCustomAspectRatioNumEntry;
-    const QString         configHorOrientedCustomAspectRatioDenEntry;
-    const QString         configHorOrientedCustomAspectRatioXposEntry;
-    const QString         configHorOrientedCustomAspectRatioYposEntry;
-    const QString         configHorOrientedCustomAspectRatioWidthEntry;
-    const QString         configHorOrientedCustomAspectRatioHeightEntry;
-    const QString         configVerOrientedAspectRatioEntry;
-    const QString         configVerOrientedAspectRatioOrientationEntry;
-    const QString         configVerOrientedCustomAspectRatioNumEntry;
-    const QString         configVerOrientedCustomAspectRatioDenEntry;
-    const QString         configVerOrientedCustomAspectRatioXposEntry;
-    const QString         configVerOrientedCustomAspectRatioYposEntry;
-    const QString         configVerOrientedCustomAspectRatioWidthEntry;
-    const QString         configVerOrientedCustomAspectRatioHeightEntry;
-    const QString         configPreciseAspectRatioCropEntry;
-    const QString         configAutoOrientationEntry;
-    const QString         configGuideLinesTypeEntry;
-    const QString         configGoldenSectionEntry;
-    const QString         configGoldenSpiralSectionEntry;
-    const QString         configGoldenSpiralEntry;
-    const QString         configGoldenTriangleEntry;
-    const QString         configGoldenFlipHorizontalEntry;
-    const QString         configGoldenFlipVerticalEntry;
-    const QString         configGuideColorEntry;
-    const QString         configGuideWidthEntry;
+    static const QString  configGroupName;
+    static const QString  configHorOrientedAspectRatioEntry;
+    static const QString  configHorOrientedAspectRatioOrientationEntry;
+    static const QString  configHorOrientedCustomAspectRatioNumEntry;
+    static const QString  configHorOrientedCustomAspectRatioDenEntry;
+    static const QString  configHorOrientedCustomAspectRatioXposEntry;
+    static const QString  configHorOrientedCustomAspectRatioYposEntry;
+    static const QString  configHorOrientedCustomAspectRatioWidthEntry;
+    static const QString  configHorOrientedCustomAspectRatioHeightEntry;
+    static const QString  configVerOrientedAspectRatioEntry;
+    static const QString  configVerOrientedAspectRatioOrientationEntry;
+    static const QString  configVerOrientedCustomAspectRatioNumEntry;
+    static const QString  configVerOrientedCustomAspectRatioDenEntry;
+    static const QString  configVerOrientedCustomAspectRatioXposEntry;
+    static const QString  configVerOrientedCustomAspectRatioYposEntry;
+    static const QString  configVerOrientedCustomAspectRatioWidthEntry;
+    static const QString  configVerOrientedCustomAspectRatioHeightEntry;
+    static const QString  configPreciseAspectRatioCropEntry;
+    static const QString  configAutoOrientationEntry;
+    static const QString  configGuideLinesTypeEntry;
+    static const QString  configGoldenSectionEntry;
+    static const QString  configGoldenSpiralSectionEntry;
+    static const QString  configGoldenSpiralEntry;
+    static const QString  configGoldenTriangleEntry;
+    static const QString  configGoldenFlipHorizontalEntry;
+    static const QString  configGoldenFlipVerticalEntry;
+    static const QString  configGuideColorEntry;
+    static const QString  configGuideWidthEntry;
 
     bool                  originalIsLandscape;
 
@@ -198,6 +169,36 @@ public:
     RExpanderBox*         expbox;
     EditorToolSettings*   gboxSettings;
 };
+const QString RatioCropTool::RatioCropToolPriv::configGroupName("aspectratiocrop Tool");
+const QString RatioCropTool::RatioCropToolPriv::configHorOrientedAspectRatioEntry("Hor.Oriented Aspect Ratio");
+const QString RatioCropTool::RatioCropToolPriv::configHorOrientedAspectRatioOrientationEntry("Hor.Oriented Aspect Ratio Orientation");
+const QString RatioCropTool::RatioCropToolPriv::configHorOrientedCustomAspectRatioNumEntry("Hor.Oriented Custom Aspect Ratio Num");
+const QString RatioCropTool::RatioCropToolPriv::configHorOrientedCustomAspectRatioDenEntry("Hor.Oriented Custom Aspect Ratio Den");
+const QString RatioCropTool::RatioCropToolPriv::configHorOrientedCustomAspectRatioXposEntry("Hor.Oriented Custom Aspect Ratio Xpos");
+const QString RatioCropTool::RatioCropToolPriv::configHorOrientedCustomAspectRatioYposEntry("Hor.Oriented Custom Aspect Ratio Ypos");
+const QString RatioCropTool::RatioCropToolPriv::configHorOrientedCustomAspectRatioWidthEntry("Hor.Oriented Custom Aspect Ratio Width");
+const QString RatioCropTool::RatioCropToolPriv::configHorOrientedCustomAspectRatioHeightEntry("Hor.Oriented Custom Aspect Ratio Height");
+const QString RatioCropTool::RatioCropToolPriv::configVerOrientedAspectRatioEntry("Ver.Oriented Aspect Ratio");
+const QString RatioCropTool::RatioCropToolPriv::configVerOrientedAspectRatioOrientationEntry("Ver.Oriented Aspect Ratio Orientation");
+const QString RatioCropTool::RatioCropToolPriv::configVerOrientedCustomAspectRatioNumEntry("Ver.Oriented Custom Aspect Ratio Num");
+const QString RatioCropTool::RatioCropToolPriv::configVerOrientedCustomAspectRatioDenEntry("Ver.Oriented Custom Aspect Ratio Den");
+const QString RatioCropTool::RatioCropToolPriv::configVerOrientedCustomAspectRatioXposEntry("Ver.Oriented Custom Aspect Ratio Xpos");
+const QString RatioCropTool::RatioCropToolPriv::configVerOrientedCustomAspectRatioYposEntry("Ver.Oriented Custom Aspect Ratio Ypos");
+const QString RatioCropTool::RatioCropToolPriv::configVerOrientedCustomAspectRatioWidthEntry("Ver.Oriented Custom Aspect Ratio Width");
+const QString RatioCropTool::RatioCropToolPriv::configVerOrientedCustomAspectRatioHeightEntry("Ver.Oriented Custom Aspect Ratio Height");
+const QString RatioCropTool::RatioCropToolPriv::configPreciseAspectRatioCropEntry("Precise Aspect Ratio Crop");
+const QString RatioCropTool::RatioCropToolPriv::configAutoOrientationEntry("Auto Orientation");
+const QString RatioCropTool::RatioCropToolPriv::configGuideLinesTypeEntry("Guide Lines Type");
+const QString RatioCropTool::RatioCropToolPriv::configGoldenSectionEntry("Golden Section");
+const QString RatioCropTool::RatioCropToolPriv::configGoldenSpiralSectionEntry("Golden Spiral Section");
+const QString RatioCropTool::RatioCropToolPriv::configGoldenSpiralEntry("Golden Spiral");
+const QString RatioCropTool::RatioCropToolPriv::configGoldenTriangleEntry("Golden Triangle");
+const QString RatioCropTool::RatioCropToolPriv::configGoldenFlipHorizontalEntry("Golden Flip Horizontal");
+const QString RatioCropTool::RatioCropToolPriv::configGoldenFlipVerticalEntry("Golden Flip Vertical");
+const QString RatioCropTool::RatioCropToolPriv::configGuideColorEntry("Guide Color");
+const QString RatioCropTool::RatioCropToolPriv::configGuideWidthEntry("Guide Width");
+
+// --------------------------------------------------------
 
 RatioCropTool::RatioCropTool(QObject* parent)
     : EditorTool(parent),

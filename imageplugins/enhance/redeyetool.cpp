@@ -77,16 +77,6 @@ class RedEyeTool::RedEyeToolPriv
 public:
 
     RedEyeToolPriv() :
-        configGroupName("redeye Tool"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
-        configRedThresholdEntry("RedThreshold"),
-        configSmoothLevelEntry("SmoothLevel"),
-        configHueColoringTintEntry("HueColoringTint"),
-        configSatColoringTintEntry("SatColoringTint"),
-        configValColoringTintEntry("ValColoringTint"),
-        configTintLevelEntry("TintLevel"),
-
         destinationPreviewData(0),
         thresholdLabel(0),
         smoothLabel(0),
@@ -99,15 +89,15 @@ public:
         gboxSettings(0)
     {}
 
-    const QString           configGroupName;
-    const QString           configHistogramChannelEntry;
-    const QString           configHistogramScaleEntry;
-    const QString           configRedThresholdEntry;
-    const QString           configSmoothLevelEntry;
-    const QString           configHueColoringTintEntry;
-    const QString           configSatColoringTintEntry;
-    const QString           configValColoringTintEntry;
-    const QString           configTintLevelEntry;
+    static const QString    configGroupName;
+    static const QString    configHistogramChannelEntry;
+    static const QString    configHistogramScaleEntry;
+    static const QString    configRedThresholdEntry;
+    static const QString    configSmoothLevelEntry;
+    static const QString    configHueColoringTintEntry;
+    static const QString    configSatColoringTintEntry;
+    static const QString    configValColoringTintEntry;
+    static const QString    configTintLevelEntry;
 
     uchar*                  destinationPreviewData;
 
@@ -126,6 +116,17 @@ public:
     ImageGuideWidget*       previewWidget;
     EditorToolSettings*     gboxSettings;
 };
+const QString RedEyeTool::RedEyeToolPriv::configGroupName("redeye Tool");
+const QString RedEyeTool::RedEyeToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString RedEyeTool::RedEyeToolPriv::configHistogramScaleEntry("Histogram Scale");
+const QString RedEyeTool::RedEyeToolPriv::configRedThresholdEntry("RedThreshold");
+const QString RedEyeTool::RedEyeToolPriv::configSmoothLevelEntry("SmoothLevel");
+const QString RedEyeTool::RedEyeToolPriv::configHueColoringTintEntry("HueColoringTint");
+const QString RedEyeTool::RedEyeToolPriv::configSatColoringTintEntry("SatColoringTint");
+const QString RedEyeTool::RedEyeToolPriv::configValColoringTintEntry("ValColoringTint");
+const QString RedEyeTool::RedEyeToolPriv::configTintLevelEntry("TintLevel");
+
+// --------------------------------------------------------
 
 RedEyeTool::RedEyeTool(QObject* parent)
     : EditorTool(parent),

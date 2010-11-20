@@ -72,16 +72,6 @@ class InsertTextTool::InsertTextToolPriv
 public:
 
     InsertTextToolPriv() :
-        configGroupName("inserttext Tool"),
-        configTextRotationEntry("Text Rotation"),
-        configFontColorEntry("Font Color"),
-        configTextStringEntry("Enter your text here."),
-        configFontPropertiesEntry("Font Properties"),
-        configTextAlignmentEntry("Text Alignment"),
-        configBorderTextEntry("Border Text"),
-        configTransparentTextEntry("Transparent Text"),
-        configPositionHintEntry("Position Hint"),
-
         alignTextMode(0),
         defaultSizeFont(0),
         borderText(0),
@@ -95,33 +85,44 @@ public:
         gboxSettings(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configTextRotationEntry;
-    const QString       configFontColorEntry;
-    const QString       configTextStringEntry;
-    const QString       configFontPropertiesEntry;
-    const QString       configTextAlignmentEntry;
-    const QString       configBorderTextEntry;
-    const QString       configTransparentTextEntry;
-    const QString       configPositionHintEntry;
+    static const QString configGroupName;
+    static const QString configTextRotationEntry;
+    static const QString configFontColorEntry;
+    static const QString configTextStringEntry;
+    static const QString configFontPropertiesEntry;
+    static const QString configTextAlignmentEntry;
+    static const QString configBorderTextEntry;
+    static const QString configTransparentTextEntry;
+    static const QString configPositionHintEntry;
 
-    int                 alignTextMode;
-    int                 defaultSizeFont;
+    int                  alignTextMode;
+    int                  defaultSizeFont;
 
-    QCheckBox*          borderText;
-    QCheckBox*          transparentText;
+    QCheckBox*           borderText;
+    QCheckBox*           transparentText;
 
-    QButtonGroup*       alignButtonGroup;
-    QFont               textFont;
+    QButtonGroup*        alignButtonGroup;
+    QFont                textFont;
 
-    KComboBox*          textRotation;
-    KColorButton*       fontColorButton;
-    KFontChooser*       fontChooserWidget;
-    KTextEdit*          textEdit;
+    KComboBox*           textRotation;
+    KColorButton*        fontColorButton;
+    KFontChooser*        fontChooserWidget;
+    KTextEdit*           textEdit;
 
-    InsertTextWidget*   previewWidget;
-    EditorToolSettings* gboxSettings;
+    InsertTextWidget*    previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString InsertTextTool::InsertTextToolPriv::configGroupName("inserttext Tool");
+const QString InsertTextTool::InsertTextToolPriv::configTextRotationEntry("Text Rotation");
+const QString InsertTextTool::InsertTextToolPriv::configFontColorEntry("Font Color");
+const QString InsertTextTool::InsertTextToolPriv::configTextStringEntry("Enter your text here.");
+const QString InsertTextTool::InsertTextToolPriv::configFontPropertiesEntry("Font Properties");
+const QString InsertTextTool::InsertTextToolPriv::configTextAlignmentEntry("Text Alignment");
+const QString InsertTextTool::InsertTextToolPriv::configBorderTextEntry("Border Text");
+const QString InsertTextTool::InsertTextToolPriv::configTransparentTextEntry("Transparent Text");
+const QString InsertTextTool::InsertTextToolPriv::configPositionHintEntry("Position Hint");
+
+// --------------------------------------------------------
 
 InsertTextTool::InsertTextTool(QObject* parent)
     : EditorTool(parent),

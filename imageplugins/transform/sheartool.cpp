@@ -64,13 +64,6 @@ class ShearTool::ShearToolPriv
 public:
 
     ShearToolPriv() :
-        configGroupName("shear Tool"),
-        configAntiAliasingEntry("Anti Aliasing"),
-        configMainHAngleEntry("Main HAngle"),
-        configMainVAngleEntry("Main VAngle"),
-        configFineHAngleEntry("Fine HAngle"),
-        configFineVAngleEntry("Fine VAngle"),
-
         newWidthLabel(0),
         newHeightLabel(0),
         antialiasInput(0),
@@ -82,27 +75,35 @@ public:
         gboxSettings(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configAntiAliasingEntry;
-    const QString       configMainHAngleEntry;
-    const QString       configMainVAngleEntry;
-    const QString       configFineHAngleEntry;
-    const QString       configFineVAngleEntry;
+    static const QString configGroupName;
+    static const QString configAntiAliasingEntry;
+    static const QString configMainHAngleEntry;
+    static const QString configMainVAngleEntry;
+    static const QString configFineHAngleEntry;
+    static const QString configFineVAngleEntry;
 
-    QLabel*             newWidthLabel;
-    QLabel*             newHeightLabel;
+    QLabel*              newWidthLabel;
+    QLabel*              newHeightLabel;
 
-    QCheckBox*          antialiasInput;
+    QCheckBox*           antialiasInput;
 
-    RIntNumInput*       mainHAngleInput;
-    RIntNumInput*       mainVAngleInput;
+    RIntNumInput*        mainHAngleInput;
+    RIntNumInput*        mainVAngleInput;
 
-    RDoubleNumInput*    fineHAngleInput;
-    RDoubleNumInput*    fineVAngleInput;
+    RDoubleNumInput*     fineHAngleInput;
+    RDoubleNumInput*     fineVAngleInput;
 
-    ImageGuideWidget*   previewWidget;
-    EditorToolSettings* gboxSettings;
+    ImageGuideWidget*    previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString ShearTool::ShearToolPriv::configGroupName("shear Tool");
+const QString ShearTool::ShearToolPriv::configAntiAliasingEntry("Anti Aliasing");
+const QString ShearTool::ShearToolPriv::configMainHAngleEntry("Main HAngle");
+const QString ShearTool::ShearToolPriv::configMainVAngleEntry("Main VAngle");
+const QString ShearTool::ShearToolPriv::configFineHAngleEntry("Fine HAngle");
+const QString ShearTool::ShearToolPriv::configFineVAngleEntry("Fine VAngle");
+
+// --------------------------------------------------------
 
 ShearTool::ShearTool(QObject* parent)
     : EditorToolThreaded(parent),

@@ -61,8 +61,6 @@ class ProfileConversionTool::ProfileConversionToolPriv
 public:
 
     ProfileConversionToolPriv() :
-        configGroupName("Profile Conversion Tool"),
-        configProfileEntry("Profile"),
         destinationPreviewData(0),
         profilesBox(0),
         previewWidget(0),
@@ -70,8 +68,8 @@ public:
     {
     }
 
-    const QString        configGroupName;
-    const QString        configProfileEntry;
+    static const QString configGroupName;
+    static const QString configProfileEntry;
 
     uchar*               destinationPreviewData;
 
@@ -88,6 +86,10 @@ public:
 
     static IccTransform getTransform(const IccProfile& in, const IccProfile& out);
 };
+const QString ProfileConversionTool::ProfileConversionToolPriv::configGroupName("Profile Conversion Tool");
+const QString ProfileConversionTool::ProfileConversionToolPriv::configProfileEntry("Profile");
+
+// --------------------------------------------------------
 
 IccTransform ProfileConversionTool::ProfileConversionToolPriv::getTransform(const IccProfile& in, const IccProfile& out)
 {

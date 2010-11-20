@@ -87,16 +87,6 @@ public:
 public:
 
     ContentAwareResizeToolPriv() :
-        configGroupName("liquidrescale Tool"),
-        configStepEntry("Step"),
-        configSideSwitchEntry("SideSwitch"),
-        configRigidityEntry("Rigidity"),
-        configFunctionEntry("Function"),
-        configOrderEntry("Order"),
-        configMixedRescaleValueEntry("MixedRescaleValue"),
-        configBrushSizeEntry("BrushSize"),
-        configPreserveTonesEntry("PreserveTones"),
-
         orgWidth(0),
         orgHeight(0),
         prevW(0),
@@ -126,54 +116,65 @@ public:
         maskGroup(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configStepEntry;
-    const QString       configSideSwitchEntry;
-    const QString       configRigidityEntry;
-    const QString       configFunctionEntry;
-    const QString       configOrderEntry;
-    const QString       configMixedRescaleValueEntry;
-    const QString       configBrushSizeEntry;
-    const QString       configPreserveTonesEntry;
+    static const QString configGroupName;
+    static const QString configStepEntry;
+    static const QString configSideSwitchEntry;
+    static const QString configRigidityEntry;
+    static const QString configFunctionEntry;
+    static const QString configOrderEntry;
+    static const QString configMixedRescaleValueEntry;
+    static const QString configBrushSizeEntry;
+    static const QString configPreserveTonesEntry;
 
-    int                 orgWidth;
-    int                 orgHeight;
-    int                 prevW;
-    int                 prevH;
+    int                  orgWidth;
+    int                  orgHeight;
+    int                  prevW;
+    int                  prevH;
 
-    double              prevWP;
-    double              prevHP;
+    double               prevWP;
+    double               prevHP;
 
-    QCheckBox*          preserveRatioBox;
-    QCheckBox*          weightMaskBox;
-    QCheckBox*          preserveSkinTones;
+    QCheckBox*           preserveRatioBox;
+    QCheckBox*           weightMaskBox;
+    QCheckBox*           preserveSkinTones;
 
-    ImageGuideWidget*   previewWidget;
+    ImageGuideWidget*    previewWidget;
 
-    EditorToolSettings* gboxSettings;
+    EditorToolSettings*  gboxSettings;
 
-    RIntNumInput*       wInput;
-    RIntNumInput*       hInput;
-    RIntNumInput*       stepInput;
-    RIntNumInput*       maskPenSize;
-    RIntNumInput*       sideSwitchInput;
+    RIntNumInput*        wInput;
+    RIntNumInput*        hInput;
+    RIntNumInput*        stepInput;
+    RIntNumInput*        maskPenSize;
+    RIntNumInput*        sideSwitchInput;
 
-    RDoubleNumInput*    wpInput;
-    RDoubleNumInput*    hpInput;
-    RDoubleNumInput*    mixedRescaleInput;
-    RDoubleNumInput*    rigidityInput;
+    RDoubleNumInput*     wpInput;
+    RDoubleNumInput*     hpInput;
+    RDoubleNumInput*     mixedRescaleInput;
+    RDoubleNumInput*     rigidityInput;
 
-    RComboBox*          funcInput;
-    RComboBox*          resizeOrderInput;
+    RComboBox*           funcInput;
+    RComboBox*           resizeOrderInput;
 
-    RExpanderBox*       expanderBox;
+    RExpanderBox*        expanderBox;
 
-    QToolButton*        redMaskTool;
-    QToolButton*        greenMaskTool;
-    QToolButton*        eraseMaskTool;
+    QToolButton*         redMaskTool;
+    QToolButton*         greenMaskTool;
+    QToolButton*         eraseMaskTool;
 
-    QButtonGroup*       maskGroup;
+    QButtonGroup*        maskGroup;
 };
+const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configGroupName("liquidrescale Tool");
+const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configStepEntry("Step");
+const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configSideSwitchEntry("SideSwitch");
+const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configRigidityEntry("Rigidity");
+const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configFunctionEntry("Function");
+const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configOrderEntry("Order");
+const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configMixedRescaleValueEntry("MixedRescaleValue");
+const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configBrushSizeEntry("BrushSize");
+const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configPreserveTonesEntry("PreserveTones");
+
+// --------------------------------------------------------
 
 ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     : EditorToolThreaded(parent), d(new ContentAwareResizeToolPriv)

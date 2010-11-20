@@ -72,10 +72,6 @@ class HotPixelsTool::HotPixelsToolPriv
 public:
 
     HotPixelsToolPriv() :
-        configGroupName("hotpixels Tool"),
-        configLastBlackFrameFileEntry("Last Black Frame File"),
-        configFilterMethodEntry("Filter Method"),
-
         blackFrameButton(0),
         progressBar(0),
         filterMethodCombo(0),
@@ -84,22 +80,27 @@ public:
         gboxSettings(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configLastBlackFrameFileEntry;
-    const QString       configFilterMethodEntry;
+    static const QString configGroupName;
+    static const QString configLastBlackFrameFileEntry;
+    static const QString configFilterMethodEntry;
 
-    QPushButton*        blackFrameButton;
-    QProgressBar*       progressBar;
-    QList<HotPixel>     hotPixelsList;
+    QPushButton*         blackFrameButton;
+    QProgressBar*        progressBar;
+    QList<HotPixel>      hotPixelsList;
 
-    KUrl                blackFrameURL;
+    KUrl                 blackFrameURL;
 
-    RComboBox*          filterMethodCombo;
+    RComboBox*           filterMethodCombo;
 
-    BlackFrameListView* blackFrameListView;
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    BlackFrameListView*  blackFrameListView;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString HotPixelsTool::HotPixelsToolPriv::configGroupName("hotpixels Tool");
+const QString HotPixelsTool::HotPixelsToolPriv::configLastBlackFrameFileEntry("Last Black Frame File");
+const QString HotPixelsTool::HotPixelsToolPriv::configFilterMethodEntry("Filter Method");
+
+// --------------------------------------------------------
 
 HotPixelsTool::HotPixelsTool(QObject* parent)
     : EditorToolThreaded(parent),

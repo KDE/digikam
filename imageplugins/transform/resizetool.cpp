@@ -125,21 +125,6 @@ class ResizeTool::ResizeToolPriv
 public:
 
     ResizeToolPriv() :
-        configGroupName("resize Tool"),
-        configFastApproxEntry("FastApprox"),
-        configInterpolationEntry("Interpolation"),
-        configAmplitudeEntry("Amplitude"),
-        configSharpnessEntry("Sharpness"),
-        configAnisotropyEntry("Anisotropy"),
-        configAlphaEntry("Alpha"),
-        configSigmaEntry("Sigma"),
-        configGaussPrecEntry("GaussPrec"),
-        configDlEntry("Dl"),
-        configDaEntry("Da"),
-        configIterationEntry("Iteration"),
-        configTileEntry("Tile"),
-        configBTileEntry("BTile"),
-
         orgWidth(0),
         orgHeight(0),
         prevW(0),
@@ -160,20 +145,20 @@ public:
         settingsWidget(0)
     {}
 
-    const QString           configGroupName;
-    const QString           configFastApproxEntry;
-    const QString           configInterpolationEntry;
-    const QString           configAmplitudeEntry;
-    const QString           configSharpnessEntry;
-    const QString           configAnisotropyEntry;
-    const QString           configAlphaEntry;
-    const QString           configSigmaEntry;
-    const QString           configGaussPrecEntry;
-    const QString           configDlEntry;
-    const QString           configDaEntry;
-    const QString           configIterationEntry;
-    const QString           configTileEntry;
-    const QString           configBTileEntry;
+    static const QString    configGroupName;
+    static const QString    configFastApproxEntry;
+    static const QString    configInterpolationEntry;
+    static const QString    configAmplitudeEntry;
+    static const QString    configSharpnessEntry;
+    static const QString    configAnisotropyEntry;
+    static const QString    configAlphaEntry;
+    static const QString    configSigmaEntry;
+    static const QString    configGaussPrecEntry;
+    static const QString    configDlEntry;
+    static const QString    configDaEntry;
+    static const QString    configIterationEntry;
+    static const QString    configTileEntry;
+    static const QString    configBTileEntry;
 
     int                     orgWidth;
     int                     orgHeight;
@@ -203,6 +188,20 @@ public:
     EditorToolSettings*     gboxSettings;
     GreycstorationSettings* settingsWidget;
 };
+const QString ResizeTool::ResizeToolPriv::configGroupName("resize Tool");
+const QString ResizeTool::ResizeToolPriv::configFastApproxEntry("FastApprox");
+const QString ResizeTool::ResizeToolPriv::configInterpolationEntry("Interpolation");
+const QString ResizeTool::ResizeToolPriv::configAmplitudeEntry("Amplitude");
+const QString ResizeTool::ResizeToolPriv::configSharpnessEntry("Sharpness");
+const QString ResizeTool::ResizeToolPriv::configAnisotropyEntry("Anisotropy");
+const QString ResizeTool::ResizeToolPriv::configAlphaEntry("Alpha");
+const QString ResizeTool::ResizeToolPriv::configSigmaEntry("Sigma");
+const QString ResizeTool::ResizeToolPriv::configGaussPrecEntry("GaussPrec");
+const QString ResizeTool::ResizeToolPriv::configDlEntry("Dl");
+const QString ResizeTool::ResizeToolPriv::configDaEntry("Da");
+const QString ResizeTool::ResizeToolPriv::configIterationEntry("Iteration");
+const QString ResizeTool::ResizeToolPriv::configTileEntry("Tile");
+const QString ResizeTool::ResizeToolPriv::configBTileEntry("BTile");
 
 // -------------------------------------------------------------
 

@@ -60,26 +60,27 @@ class HSLTool::HSLToolPriv
 public:
 
     HSLToolPriv() :
-        configGroupName("hsladjust Tool"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
-
         destinationPreviewData(0),
         hslSettings(0),
         previewWidget(0),
         gboxSettings(0)
     {}
 
-    const QString       configGroupName;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
+    static const QString configGroupName;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    HSLSettings*        hslSettings;
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    HSLSettings*         hslSettings;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString HSLTool::HSLToolPriv::configGroupName("hsladjust Tool");
+const QString HSLTool::HSLToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString HSLTool::HSLToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+// --------------------------------------------------------
 
 HSLTool::HSLTool(QObject* parent)
     : EditorToolThreaded(parent),
