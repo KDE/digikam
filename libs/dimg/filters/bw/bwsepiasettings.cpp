@@ -89,15 +89,15 @@ public:
         curvesBox(0)
     {}
 
-    static const QString       configThresholdAdjustmentEntry;
-    static const QString       configSoftnessAdjustmentEntry;
-    static const QString       configAdvancedAdjustmentEntry;
-    static const QString       configThrLumInputAdjustmentEntry;
-    static const QString       configSoftLumInputAdjustmentEntry;
-    static const QString       configThrCrInputAdjustmentEntry;
-    static const QString       configSoftCrInputAdjustmentEntry;
-    static const QString       configThrCbInputAdjustmentEntry;
-    static const QString       configSoftCbInputAdjustmentEntry;
+//    static const QString       configThresholdAdjustmentEntry;
+//    static const QString       configSoftnessAdjustmentEntry;
+//    static const QString       configAdvancedAdjustmentEntry;
+//    static const QString       configThrLumInputAdjustmentEntry;
+//    static const QString       configSoftLumInputAdjustmentEntry;
+//    static const QString       configThrCrInputAdjustmentEntry;
+//    static const QString       configSoftCrInputAdjustmentEntry;
+//    static const QString       configThrCbInputAdjustmentEntry;
+//    static const QString       configSoftCbInputAdjustmentEntry;
 
     static const QString       configSettingsTabEntry;
     static const QString       configBWFilterEntry;
