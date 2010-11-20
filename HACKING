@@ -194,6 +194,8 @@ astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
        --min-conditional-indent=0                                          \
        `find -type f -name '*.cpp'` `find -type f -name '*.cc'` `find -type f -name '*.h'`
 
+========================================================================
+
 To handle the command easier, create a bash function in ~/.bashrc, e.g.
 
 digikamformatcode()
@@ -206,7 +208,8 @@ digikamformatcode()
 }
 
 You can pass a parameter to the function, in this case the first parameter is the directory, where
-files should be modified.
+files should be formatted.
+
 Examples:
 
 1. Run astyle in the current directory
