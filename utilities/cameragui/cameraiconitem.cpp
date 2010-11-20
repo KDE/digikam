@@ -72,7 +72,7 @@ public:
 
 CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
                                const QImage& thumbnail, const QString& downloadName)
-    : IconItem(parent), d(new CameraIconItemPriv)
+              : IconItem(parent), d(new CameraIconItemPriv)
 {
     d->itemInfo      = new GPItemInfo(itemInfo);
     d->downloadName  = downloadName;
@@ -116,13 +116,9 @@ void CameraIconItem::setDownloaded(int status)
     d->progressCount        = 0;
 
     if (d->itemInfo->downloaded == GPItemInfo::DownloadStarted)
-    {
         d->progressTimer->start(500);
-    }
     else
-    {
         d->progressTimer->stop();
-    }
 
     update();
 }
@@ -135,13 +131,9 @@ bool CameraIconItem::isDownloaded() const
 void CameraIconItem::toggleLock()
 {
     if (d->itemInfo->writePermissions == 0)
-    {
         d->itemInfo->writePermissions = 1;
-    }
     else
-    {
         d->itemInfo->writePermissions = 0;
-    }
 
     update();
 }
@@ -171,7 +163,6 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& downloadNa
     if (!d->downloadName.isEmpty())
     {
         QFont fn(iconView()->font());
-
         if (fn.pointSize() > 0)
         {
             fn.setPointSize(qMax(fn.pointSize()-2, 6));
@@ -223,7 +214,7 @@ QRect CameraIconItem::clickToOpenRect()
     return pixRect.translated(r.x(), r.y());
 }
 
-void CameraIconItem::paintItem(QPainter* p)
+void CameraIconItem::paintItem(QPainter *p)
 {
     ThemeEngine* te      = ThemeEngine::instance();
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
@@ -246,15 +237,10 @@ void CameraIconItem::paintItem(QPainter* p)
 
     QRegion pixmapClipRegion = QRegion(0, 0, r.width(), r.height()) - QRegion(pixmapDrawRect);
     p->setClipRegion(pixmapClipRegion);
-
     if (isSelected())
-    {
         p->drawPixmap(0, 0, view->itemBaseSelPixmap());
-    }
     else
-    {
         p->drawPixmap(0, 0, view->itemBaseRegPixmap());
-    }
 
     QPixmap borderPix = view->thumbnailBorderPixmap(pixmapDrawRect.size());
     p->drawPixmap(pixmapDrawRect.x()-3, pixmapDrawRect.y()-3, borderPix);
@@ -265,9 +251,7 @@ void CameraIconItem::paintItem(QPainter* p)
     if (!d->downloadName.isEmpty())
     {
         if (fn.pointSize() > 0)
-        {
             fn.setPointSize(qMax(fn.pointSize()-2, 6));
-        }
 
         QFont oldFn = p->font();
         p->setFont(fn);
@@ -305,11 +289,7 @@ void CameraIconItem::paintItem(QPainter* p)
 
             QPixmap anim(view->progressPixmap().copy(0, d->progressCount*22, 22, 22));
             d->progressCount++;
-
-            if (d->progressCount == 8)
-            {
-                d->progressCount = 0;
-            }
+            if (d->progressCount == 8) d->progressCount = 0;
 
             p->save();
             int x = pixmapDrawRect.x() + pixmapDrawRect.width()/2  - anim.width()/2;
@@ -331,9 +311,7 @@ void CameraIconItem::paintItem(QPainter* p)
     }
 
     if (!downloaded.isNull())
-    {
         p->drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
-    }
 
     // If camera item is locked (read only), draw a "Lock" icon.
     if (d->itemInfo->writePermissions == 0)

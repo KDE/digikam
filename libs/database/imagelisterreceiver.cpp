@@ -31,7 +31,7 @@ namespace Digikam
 {
 
 ImageListerValueListReceiver::ImageListerValueListReceiver()
-    : hasError(false)
+                            : hasError(false)
 {
 }
 
@@ -45,8 +45,8 @@ void ImageListerValueListReceiver::receive(const ImageListerRecord& record)
     records << record;
 }
 
-ImageListerSlaveBaseReceiver::ImageListerSlaveBaseReceiver(KIO::SlaveBase* slave)
-    : m_slave(slave)
+ImageListerSlaveBaseReceiver::ImageListerSlaveBaseReceiver(KIO::SlaveBase *slave)
+                            : m_slave(slave)
 {
 }
 
@@ -71,15 +71,14 @@ void ImageListerSlaveBaseReceiver::sendData()
     records.clear();
 }
 
-ImageListerSlaveBasePartsSendingReceiver::ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase* slave, int limit)
-    : ImageListerSlaveBaseReceiver(slave), m_limit(limit), m_count(0)
+ImageListerSlaveBasePartsSendingReceiver::ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase *slave, int limit)
+                                        : ImageListerSlaveBaseReceiver(slave), m_limit(limit), m_count(0)
 {
 }
 
 void ImageListerSlaveBasePartsSendingReceiver::receive(const ImageListerRecord& record)
 {
     ImageListerSlaveBaseReceiver::receive(record);
-
     if (++m_count > m_limit)
     {
         sendData();

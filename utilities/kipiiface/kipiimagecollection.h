@@ -61,7 +61,7 @@ public:
 
 public:
 
-    KipiImageCollection(Type tp, Album* album, const QString& filter);
+    KipiImageCollection(Type tp, Album *album, const QString& filter);
     ~KipiImageCollection();
 
     virtual QString name();
@@ -86,7 +86,7 @@ private:
     QString  m_imgFilter;
 
     Type     m_tp;
-    Album*   m_album;
+    Album   *m_album;
 };
 
 }  // namespace Digikam

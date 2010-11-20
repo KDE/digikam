@@ -63,17 +63,17 @@ public:
         templateCombo = 0;
     }
 
-    QLabel*           label;
+    QLabel           *label;
 
-    QToolButton*      setupButton;
+    QToolButton      *setupButton;
 
-    SqueezedComboBox* templateCombo;
+    SqueezedComboBox *templateCombo;
 
     Template          metadataTemplate;
 };
 
 TemplateSelector::TemplateSelector(QWidget* parent=0)
-    : KHBox(parent), d(new TemplateSelectorPriv)
+                : KHBox(parent), d(new TemplateSelectorPriv)
 {
     d->label         = new QLabel(i18n("Template: "), this);
     d->templateCombo = new SqueezedComboBox(this);
@@ -97,13 +97,12 @@ TemplateSelector::TemplateSelector(QWidget* parent=0)
             this, SLOT(slotOpenSetup()));
 
     TemplateManager* tm = TemplateManager::defaultManager();
-
     if (tm)
     {
-        connect(tm, SIGNAL(signalTemplateAdded(const Template&)),
+        connect(tm, SIGNAL(signalTemplateAdded(const Template &)),
                 this, SLOT(slotTemplateListChanged()));
 
-        connect(tm, SIGNAL(signalTemplateRemoved(const Template&)),
+        connect(tm, SIGNAL(signalTemplateRemoved(const Template &)),
                 this, SLOT(slotTemplateListChanged()));
     }
 
@@ -123,7 +122,6 @@ void TemplateSelector::populateTemplates()
     d->templateCombo->insertSeparator(DONTCHANGE+1);
 
     TemplateManager* tm = TemplateManager::defaultManager();
-
     if (tm)
     {
         int i                 = DONTCHANGE+2;
@@ -139,7 +137,7 @@ void TemplateSelector::populateTemplates()
 
 Template TemplateSelector::getTemplate() const
 {
-    switch (d->templateCombo->currentIndex())
+    switch(d->templateCombo->currentIndex())
     {
         case REMOVETEMPLATE:
         {
@@ -156,16 +154,11 @@ Template TemplateSelector::getTemplate() const
         default:
         {
             TemplateManager* tm = TemplateManager::defaultManager();
-
             if (tm)
-            {
                 return tm->fromIndex(d->templateCombo->currentIndex()-3);
-            }
-
             break;
         }
     }
-
     return Template();
 }
 
@@ -174,15 +167,10 @@ void TemplateSelector::setTemplate(const Template& t)
     d->metadataTemplate = t;
 
     QString title = d->metadataTemplate.templateTitle();
-
     if (title == Template::removeTemplateTitle())
-    {
         return d->templateCombo->setCurrentIndex(REMOVETEMPLATE);
-    }
     else if (title.isEmpty())
-    {
         return d->templateCombo->setCurrentIndex(DONTCHANGE);
-    }
 
     d->templateCombo->setCurrent(title);
 }

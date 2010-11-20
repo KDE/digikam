@@ -73,13 +73,13 @@ class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseReceiver : public ImageListerV
 
 public:
 
-    ImageListerSlaveBaseReceiver(KIO::SlaveBase* slave);
+    ImageListerSlaveBaseReceiver(KIO::SlaveBase *slave);
     virtual void error(const QString& errMsg);
     void sendData();
 
 protected:
 
-    KIO::SlaveBase* m_slave;
+    KIO::SlaveBase *m_slave;
 };
 
 class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBasePartsSendingReceiver
@@ -88,7 +88,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBasePartsSendingReceiver
 
 public:
 
-    ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase* slave, int limit);
+    ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase *slave, int limit);
     virtual void receive(const ImageListerRecord& record);
 
 protected:

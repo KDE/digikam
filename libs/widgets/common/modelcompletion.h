@@ -60,22 +60,22 @@ public:
      * @param uniqueIdRole a role for which the model will return a unique integer for each entry
      * @param displayRole the role to retrieve the text for completion, default is Qt::DisplayRole.
      */
-    void setModel(QAbstractItemModel* model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
-    QAbstractItemModel* model() const;
+    void setModel(QAbstractItemModel *model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
+    QAbstractItemModel *model() const;
 
 private Q_SLOTS:
 
-    void slotRowsInserted(const QModelIndex& parent, int start, int end);
-    void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-    void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    void slotRowsInserted(const QModelIndex &parent, int start, int end);
+    void slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
+    void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void slotModelReset();
 
 private:
 
-    void connectToModel(QAbstractItemModel* model);
-    void disconnectFromModel(QAbstractItemModel* model);
-    void sync(QAbstractItemModel* model);
-    void sync(QAbstractItemModel* model, const QModelIndex& index);
+    void connectToModel(QAbstractItemModel *model);
+    void disconnectFromModel(QAbstractItemModel *model);
+    void sync(QAbstractItemModel *model);
+    void sync(QAbstractItemModel *model, const QModelIndex &index);
 
 private:
 

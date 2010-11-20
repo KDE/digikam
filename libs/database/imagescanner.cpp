@@ -50,19 +50,19 @@ namespace Digikam
 {
 
 ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
-    : m_hasImage(false), m_hasMetadata(false),
-      m_fileInfo(info), m_scanInfo(scanInfo), m_scanMode(ModifiedScan)
+            : m_hasImage(false), m_hasMetadata(false),
+              m_fileInfo(info), m_scanInfo(scanInfo), m_scanMode(ModifiedScan)
 {
 }
 
 ImageScanner::ImageScanner(const QFileInfo& info)
-    : m_hasImage(false), m_hasMetadata(false),
-      m_fileInfo(info), m_scanMode(ModifiedScan)
+            : m_hasImage(false), m_hasMetadata(false),
+              m_fileInfo(info), m_scanMode(ModifiedScan)
 {
 }
 
 ImageScanner::ImageScanner(qlonglong imageid)
-    : m_hasImage(false), m_hasMetadata(false), m_scanMode(ModifiedScan)
+            : m_hasImage(false), m_hasMetadata(false), m_scanMode(ModifiedScan)
 {
     ItemShortInfo shortInfo;
     {
@@ -98,11 +98,8 @@ void ImageScanner::newFile(int albumId)
 {
     loadFromDisk();
     addImage(albumId);
-
     if (!scanFromIdenticalFile())
-    {
         scanFile(NewScan);
-    }
 }
 
 void ImageScanner::newFileFullScan(int albumId)
@@ -123,19 +120,15 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
 {
     loadFromDisk();
     addImage(albumId);
-
     // first use source, if it exists
     if (!copyFromSource(srcId))
-
         // check if we can establish identity
         if (!scanFromIdenticalFile())
             // scan newly
-        {
             scanFile(NewScan);
-        }
 }
 
-bool lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo& b)
+bool lessThanForIdentity(const ItemScanInfo &a, const ItemScanInfo &b)
 {
     if (a.status != b.status)
     {
@@ -143,10 +136,7 @@ bool lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo& b)
 
         // put UndefinedStatus to back
         if (a.status == DatabaseItem::UndefinedStatus)
-        {
             return false;
-        }
-
         // enum values are in the order we want it
         return a.status < b.status;
     }
@@ -161,7 +151,7 @@ bool ImageScanner::scanFromIdenticalFile()
 {
     // Get a list of other images that are identical. Source image shall not be included.
     QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles(m_scanInfo.fileSize,
-                                     m_scanInfo.uniqueHash, m_scanInfo.id);
+                                                            m_scanInfo.uniqueHash, m_scanInfo.id);
 
     if (!candidates.isEmpty())
     {
@@ -175,7 +165,6 @@ bool ImageScanner::scanFromIdenticalFile()
         DatabaseAccess().db()->copyImageAttributes(candidates.first().id, m_scanInfo.id);
         return true;
     }
-
     return false;
 }
 
@@ -185,16 +174,11 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
 
     // some basic validity checking
     if (srcId == m_scanInfo.id)
-    {
         return false;
-    }
 
     ItemScanInfo info = access.db()->getItemScanInfo(srcId);
-
     if (!info.id)
-    {
         return false;
-    }
 
     kDebug() << "Recognized" << m_fileInfo.filePath() << "as copied from" << srcId;
     access.db()->copyImageAttributes(srcId, m_scanInfo.id);
@@ -222,9 +206,9 @@ void ImageScanner::addImage(int albumId)
 
     kDebug() << "Adding new item" << m_fileInfo.filePath();
     m_scanInfo.id               = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
-                                  m_scanInfo.status, m_scanInfo.category,
-                                  m_scanInfo.modificationDate, m_scanInfo.fileSize,
-                                  m_scanInfo.uniqueHash);
+                                                                 m_scanInfo.status, m_scanInfo.category,
+                                                                 m_scanInfo.modificationDate, m_scanInfo.fileSize,
+                                                                 m_scanInfo.uniqueHash);
 }
 
 void ImageScanner::updateImage()
@@ -251,7 +235,6 @@ void ImageScanner::scanFile(ScanMode mode)
         if (m_scanInfo.category == DatabaseItem::Image)
         {
             scanImageInformation();
-
             if (m_hasMetadata)
             {
                 scanImageMetadata();
@@ -318,36 +301,29 @@ void ImageScanner::scanImageInformation()
           << m_img.originalColorModel();
 
     if (m_scanMode == NewScan)
-    {
         DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos, dbFields);
-    }
     else if (m_scanMode == Rescan)
-    {
         DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos, dbFields);
-    }
     else // ModifiedScan
     {
         // Does _not_ update rating and orientation!
         DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos,
-                DatabaseFields::Width      |
-                DatabaseFields::Height     |
-                DatabaseFields::Format     |
-                DatabaseFields::ColorDepth |
-                DatabaseFields::ColorModel);
+                                                        DatabaseFields::Width      |
+                                                        DatabaseFields::Height     |
+                                                        DatabaseFields::Format     |
+                                                        DatabaseFields::ColorDepth |
+                                                        DatabaseFields::ColorModel);
     }
 }
 
-static bool hasValidField(const QVariantList& list)
+static bool hasValidField(const QVariantList &list)
 {
     for (QVariantList::const_iterator it = list.constBegin();
          it != list.constEnd(); ++it)
     {
         if (!(*it).isNull())
-        {
             return true;
-        }
     }
-
     return false;
 }
 
@@ -379,9 +355,7 @@ void ImageScanner::scanImageMetadata()
     QVariantList metadataInfos = m_metadata.getMetadataFields(allImageMetadataFields());
 
     if (hasValidField(metadataInfos))
-    {
         DatabaseAccess().db()->addImageMetadata(m_scanInfo.id, metadataInfos);
-    }
 }
 
 void ImageScanner::scanImagePosition()
@@ -402,9 +376,7 @@ void ImageScanner::scanImagePosition()
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
     if (hasValidField(metadataInfos))
-    {
         DatabaseAccess().db()->addImagePosition(m_scanInfo.id, metadataInfos);
-    }
 }
 
 void ImageScanner::scanImageComments()
@@ -419,9 +391,7 @@ void ImageScanner::scanImageComments()
     CaptionsMap captions = m_metadata.getImageComments();
 
     if (captions.isEmpty() && !hasValidField(metadataInfos))
-    {
         return;
-    }
 
     DatabaseAccess access;
     ImageComments comments(access, m_scanInfo.id);
@@ -448,11 +418,8 @@ void ImageScanner::scanImageComments()
 void ImageScanner::scanImageCopyright()
 {
     Template t;
-
     if (!m_metadata.getCopyrightInformation(t))
-    {
         return;
-    }
 
     ImageCopyright copyright(m_scanInfo.id);
     // It is not clear if removeAll() should be called if m_scanMode == Rescan
@@ -472,37 +439,28 @@ void ImageScanner::scanIPTCCore()
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
     if (!hasValidField(metadataInfos))
-    {
         return;
-    }
 
     ImageExtendedProperties props(m_scanInfo.id);
 
     if (!metadataInfos[0].isNull())
     {
         IptcCoreLocationInfo loc = metadataInfos[0].value<IptcCoreLocationInfo>();
-
         if (!loc.isNull())
-        {
             props.setLocation(loc);
-        }
     }
-
     if (!metadataInfos[1].isNull())
     {
         props.setIntellectualGenre(metadataInfos[1].toString());
     }
-
     if (!metadataInfos[2].isNull())
     {
         props.setJobId(metadataInfos[2].toString());
     }
-
     if (!metadataInfos[3].isNull())
     {
         props.setScene(metadataInfos[3].toStringList());
     }
-
     if (!metadataInfos[4].isNull())
     {
         props.setSubjectCode(metadataInfos[4].toStringList());
@@ -513,7 +471,6 @@ void ImageScanner::scanTags()
 {
     QVariant var = m_metadata.getMetadataField(MetadataInfo::Keywords);
     QStringList keywords = var.toStringList();
-
     if (!keywords.isEmpty())
     {
         // get tag ids, create if necessary
@@ -542,7 +499,6 @@ void ImageScanner::scanVideoFile()
         {
             metadataInfos[0] = -1;
         }
-
         // creation date: fall back to file system property
         if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
         {
@@ -562,9 +518,9 @@ void ImageScanner::scanVideoFile()
           << detectVideoFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-            DatabaseFields::Rating       |
-            DatabaseFields::CreationDate |
-            DatabaseFields::Format);
+                                               DatabaseFields::Rating       |
+                                               DatabaseFields::CreationDate |
+                                               DatabaseFields::Format);
 
     // KFileMetaInfo does not give us any useful information for relevant video files
     /*
@@ -596,9 +552,9 @@ void ImageScanner::scanAudioFile()
           << detectAudioFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-            DatabaseFields::Rating       |
-            DatabaseFields::CreationDate |
-            DatabaseFields::Format);
+                                               DatabaseFields::Rating       |
+                                               DatabaseFields::CreationDate |
+                                               DatabaseFields::Format);
 }
 
 void ImageScanner::copyProperties(qlonglong source, qlonglong dest)
@@ -606,22 +562,16 @@ void ImageScanner::copyProperties(qlonglong source, qlonglong dest)
     DatabaseAccess access;
 
     DatabaseFields::ImageInformation imageInfoFields =
-        DatabaseFields::Rating |
-        DatabaseFields::CreationDate |
-        DatabaseFields::DigitizationDate;
+            DatabaseFields::Rating |
+            DatabaseFields::CreationDate |
+            DatabaseFields::DigitizationDate;
     QVariantList imageInfos = access.db()->getImageInformation(source, imageInfoFields);
-
     if (!imageInfos.isEmpty())
-    {
         access.db()->changeImageInformation(dest, imageInfos, imageInfoFields);
-    }
 
     QVariantList positionData = access.db()->getImagePosition(source, DatabaseFields::ImagePositionsAll);
-
     if (!positionData.isEmpty())
-    {
         access.db()->addImagePosition(dest, positionData, DatabaseFields::ImagePositionsAll);
-    }
 
     ImageComments commentsSource(access, source);
     ImageComments commentsDest(access, dest);
@@ -639,15 +589,10 @@ void ImageScanner::copyProperties(qlonglong source, qlonglong dest)
 void ImageScanner::loadFromDisk()
 {
     m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
-
     if (m_scanInfo.category == DatabaseItem::Image)
-    {
         m_hasImage = m_img.loadImageInfo(m_fileInfo.filePath(), false, false);
-    }
     else
-    {
         m_hasImage = false;
-    }
 
     // faster than loading twice from disk
     if (m_hasMetadata)
@@ -660,19 +605,14 @@ QString ImageScanner::uniqueHash()
 {
     // the QByteArray is an ASCII hex string
     if (m_scanInfo.category == DatabaseItem::Image)
-    {
         return QString(m_img.getUniqueHash());
-    }
     else
-    {
         return QString(DImg::getUniqueHash(m_fileInfo.filePath()));
-    }
 }
 
 QString ImageScanner::detectFormat()
 {
     DImg::FORMAT dimgFormat = m_img.detectedFormat();
-
     switch (dimgFormat)
     {
         case DImg::JPEG:
@@ -697,38 +637,30 @@ QString ImageScanner::detectFormat()
         case DImg::QIMAGE:
         {
             QByteArray format = QImageReader::imageFormat(m_fileInfo.filePath());
-
             if (!format.isEmpty())
             {
                 return QString(format).toUpper();
             }
 
             KMimeType::Ptr mimetype = KMimeType::findByPath(m_fileInfo.filePath());
-
             if (mimetype)
             {
                 QString name = mimetype->name();
-
                 if (name.startsWith(QLatin1String("image/")))
                 {
                     QString imageTypeName = name.mid(6).toUpper();
-
                     // cut off the "X-" from some mimetypes
                     if (imageTypeName.startsWith(QLatin1String("X-")))
-                    {
                         imageTypeName = imageTypeName.mid(2);
-                    }
-
                     return imageTypeName;
                 }
             }
 
             kWarning() << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
-                       << "is null";
+                                      << "is null";
 
         }
     }
-
     return QString();
 }
 
@@ -737,14 +669,9 @@ QString ImageScanner::detectVideoFormat()
     QString suffix = m_fileInfo.suffix().toUpper();
 
     if (suffix == "MPEG" || suffix == "MPG" || suffix == "MPO" || suffix == "MPE")
-    {
         return "MPEG";
-    }
-
     if (suffix =="ASF" || suffix == "WMV")
-    {
         return "WMV";
-    }
 
     return suffix;
 }
@@ -755,22 +682,15 @@ QString ImageScanner::detectAudioFormat()
     return suffix;
 }
 
-QDateTime ImageScanner::creationDateFromFilesystem(const QFileInfo& info)
+QDateTime ImageScanner::creationDateFromFilesystem(const QFileInfo &info)
 {
     // creation date is not what it seems on Unix
     QDateTime ctime = info.created();
     QDateTime mtime = info.lastModified();
-
     if (ctime.isNull())
-    {
         return mtime;
-    }
-
     if (mtime.isNull())
-    {
         return ctime;
-    }
-
     return qMin(ctime, mtime);
 }
 
@@ -849,9 +769,7 @@ QString ImageScanner::formatToString(const QString& format)
         return "WAVE";
     }
     else
-    {
         return format;
-    }
 }
 
 QString ImageScanner::colorModelToString(DImg::COLORMODEL colorModel)
@@ -885,7 +803,7 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
     // These strings are specified in DBSCHEMA.ods
     switch (field)
     {
-            // copyright table
+        // copyright table
         case MetadataInfo::IptcCoreCopyrightNotice:
             return "copyrightNotice";
         case MetadataInfo::IptcCoreCreator:
@@ -901,7 +819,7 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
         case MetadataInfo::IptcCoreInstructions:
             return "instructions";
 
-            // ImageProperties table
+        // ImageProperties table
         case MetadataInfo::IptcCoreCountryCode:
             return "countryCode";
         case MetadataInfo::IptcCoreCountry:
@@ -941,7 +859,7 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
     }
 }
 
-void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* container)
+void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer *container)
 {
     QVariantList imagesFields;
     QVariantList imageInformationFields;
@@ -949,20 +867,20 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     {
         DatabaseAccess access;
         imagesFields = access.db()->getImagesFields(imageid,
-                       DatabaseFields::Name             |
-                       DatabaseFields::ModificationDate |
-                       DatabaseFields::FileSize);
+                                           DatabaseFields::Name             |
+                                           DatabaseFields::ModificationDate |
+                                           DatabaseFields::FileSize);
 
         imageInformationFields = access.db()->getImageInformation(imageid,
-                                 DatabaseFields::Rating           |
-                                 DatabaseFields::CreationDate     |
-                                 DatabaseFields::DigitizationDate |
-                                 DatabaseFields::Orientation      |
-                                 DatabaseFields::Width            |
-                                 DatabaseFields::Height           |
-                                 DatabaseFields::Format           |
-                                 DatabaseFields::ColorDepth       |
-                                 DatabaseFields::ColorModel);
+                                           DatabaseFields::Rating           |
+                                           DatabaseFields::CreationDate     |
+                                           DatabaseFields::DigitizationDate |
+                                           DatabaseFields::Orientation      |
+                                           DatabaseFields::Width            |
+                                           DatabaseFields::Height           |
+                                           DatabaseFields::Format           |
+                                           DatabaseFields::ColorDepth       |
+                                           DatabaseFields::ColorModel);
     }
 
     if (!imagesFields.isEmpty())
@@ -986,7 +904,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     }
 }
 
-void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* container)
+void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer *container)
 {
     // read from database
     QVariantList fields = DatabaseAccess().db()->getImageMetadata(imageid);
@@ -995,9 +913,7 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
     container->allFieldsNull = !hasValidField(fields);
 
     if (container->allFieldsNull)
-    {
         return;
-    }
 
     // DMetadata does all translation work
     QStringList strings = DMetadata::valuesToString(fields, allImageMetadataFields());

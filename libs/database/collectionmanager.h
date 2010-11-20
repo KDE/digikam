@@ -51,7 +51,7 @@ class DIGIKAM_DATABASE_EXPORT CollectionManager : public QObject
 
 public:
 
-    static CollectionManager* instance();
+    static CollectionManager *instance();
     static void cleanUp();
 
     /**
@@ -95,9 +95,9 @@ public:
      * The returned result enum describes the test result.
      */
     LocationCheckResult checkLocation(const KUrl& fileUrl, QList<CollectionLocation> assumeDeleted,
-                                      QString* message = 0, QString* suggestedMessageIconName = 0);
+                                      QString *message = 0, QString *suggestedMessageIconName = 0);
     LocationCheckResult checkNetworkLocation(const KUrl& fileUrl, QList<CollectionLocation> assumeDeleted,
-            QString* message = 0, QString* suggestedMessageIconName = 0);
+                                             QString *message = 0, QString *suggestedMessageIconName = 0);
 
     /**
      * Removes the given location. This means that all images contained on the
@@ -133,10 +133,10 @@ public:
      * and a list of identifiers and corresponding user presentable strings of candidates
      * to where the given location may have been moved.
      */
-    void migrationCandidates(const CollectionLocation& disappearedLocation,
-                             QString* technicalDescription,
-                             QStringList* candidateIdentifiers,
-                             QStringList* candidateDescriptions);
+    void migrationCandidates(const CollectionLocation &disappearedLocation,
+                             QString *technicalDescription,
+                             QStringList *candidateIdentifiers,
+                             QStringList *candidateDescriptions);
 
     /**
      * Migrates the existing collection to a new volume, identified by an internal identifier
@@ -253,8 +253,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void deviceAdded(const QString&);
-    void deviceRemoved(const QString&);
+    void deviceAdded(const QString &);
+    void deviceRemoved(const QString &);
     void accessibilityChanged(bool, const QString&);
     void slotAlbumRootChange(const AlbumRootChangeset& changeset);
 
@@ -262,7 +262,7 @@ private:
 
     CollectionManager();
     ~CollectionManager();
-    static CollectionManager* m_instance;
+    static CollectionManager *m_instance;
     void updateLocations();
 
     friend class DatabaseWatch;

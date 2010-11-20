@@ -60,7 +60,7 @@ class TagsListCreationErrorDialog : public KDialog
 public:
 
     TagsListCreationErrorDialog(QWidget* parent, const QMap<QString, QString>& errMap);
-    ~TagsListCreationErrorDialog() {};
+    ~TagsListCreationErrorDialog(){};
 };
 
 // ------------------------------------------------------------------------------
@@ -92,52 +92,46 @@ public:
     SearchTextBar* titleEdit;
 };
 
-TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
-    : KDialog(parent), d(new TagEditDlgPriv)
+TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
+          : KDialog(parent), d(new TagEditDlgPriv)
 {
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
     setModal(true);
     setHelp("tagscreation.anchor", "digikam");
 
-    if (create)
-    {
-        setCaption(i18n("New Tag"));
-    }
-    else
-    {
-        setCaption(i18n("Edit Tag"));
-    }
+    if (create) setCaption(i18n("New Tag"));
+    else        setCaption(i18n("Edit Tag"));
 
     d->mainRootAlbum = album;
     d->create        = create;
 
-    QWidget* page = new QWidget(this);
+    QWidget *page = new QWidget(this);
     setMainWidget(page);
 
     // --------------------------------------------------------
 
     QGridLayout* grid = new QGridLayout(page);
-    QLabel* logo      = new QLabel(page);
+    QLabel *logo      = new QLabel(page);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                    .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                            .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->topLabel = new QLabel(page);
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
 
-    KSeparator* line = new KSeparator(Qt::Horizontal, page);
+    KSeparator *line = new KSeparator(Qt::Horizontal, page);
 
     // --------------------------------------------------------
 
-    QLabel* titleLabel = new QLabel(page);
+    QLabel *titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
     d->titleEdit = new SearchTextBar(page, "TagEditDlgTitleEdit", i18n("Enter tag name here..."));
     d->titleEdit->setCaseSensitive(false);
     titleLabel->setBuddy(d->titleEdit);
 
-    QLabel* tipLabel = new QLabel(page);
+    QLabel *tipLabel = new QLabel(page);
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
     tipLabel->setText(i18n("<p>To create new tags, you can use the following rules:</p>"
@@ -146,15 +140,14 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
                            "<li>',' can be used to create more than one tags hierarchy at the same time.<br/>"
                            "Ex.: <i>\"City/Paris, Monument/Notre-Dame\"</i></li>"
                            "<li>If a tag hierarchy starts with '/', root tag album is used as parent.</li></ul></p>"
-                          ));
+                           ));
 
     if (d->create)
     {
         AlbumList tList = AlbumManager::instance()->allTAlbums();
-
         for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
         {
-            TAlbum* tag = dynamic_cast<TAlbum*>(*it);
+            TAlbum *tag = dynamic_cast<TAlbum*>(*it);
             d->titleEdit->completionObject()->addItem(tag->tagPath());
         }
     }
@@ -164,7 +157,7 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
         tipLabel->hide();
     }
 
-    QLabel* iconTextLabel = new QLabel(page);
+    QLabel *iconTextLabel = new QLabel(page);
     iconTextLabel->setText(i18n("&Icon:"));
 
     d->iconButton = new QPushButton(page);
@@ -173,22 +166,14 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
 
     // In create mode, by default assign the icon of the parent (if not root) to this new tag.
     if (create && !album->isRoot())
-    {
         d->icon = album->icon();
-    }
     else
-    {
         d->icon = album->icon();
-    }
 
     d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
 
     d->resetIconButton = new QPushButton(KIcon("view-refresh"), i18n("Reset"), page);
-
-    if (create)
-    {
-        d->resetIconButton->hide();
-    }
+    if (create) d->resetIconButton->hide();
 
     // --------------------------------------------------------
 
@@ -252,9 +237,7 @@ void TagEditDlg::slotIconChanged()
     QString icon = dlg.openDialog();
 
     if (icon.isEmpty() || icon == d->icon)
-    {
         return;
-    }
 
     d->icon = icon;
     d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
@@ -263,11 +246,8 @@ void TagEditDlg::slotIconChanged()
 void TagEditDlg::slotTitleChanged(const QString& newtitle)
 {
     QString tagName = d->mainRootAlbum->tagPath();
-
     if (tagName.endsWith('/') && !d->mainRootAlbum->isRoot())
-    {
         tagName.truncate(tagName.length()-1);
-    }
 
     if (d->create)
     {
@@ -292,12 +272,11 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
     enableButtonOk(enable);
 }
 
-bool TagEditDlg::tagEdit(QWidget* parent, TAlbum* album, QString& title, QString& icon)
+bool TagEditDlg::tagEdit(QWidget *parent, TAlbum* album, QString& title, QString& icon)
 {
     QPointer<TagEditDlg> dlg = new TagEditDlg(parent, album);
 
     bool valRet = dlg->exec();
-
     if (valRet == QDialog::Accepted)
     {
         title = dlg->title();
@@ -308,12 +287,11 @@ bool TagEditDlg::tagEdit(QWidget* parent, TAlbum* album, QString& title, QString
     return valRet;
 }
 
-bool TagEditDlg::tagCreate(QWidget* parent, TAlbum* album, QString& title, QString& icon)
+bool TagEditDlg::tagCreate(QWidget *parent, TAlbum* album, QString& title, QString& icon)
 {
     QPointer<TagEditDlg> dlg = new TagEditDlg(parent, album, true);
 
     bool valRet = dlg->exec();
-
     if (valRet == QDialog::Accepted)
     {
         title = dlg->title();
@@ -324,7 +302,7 @@ bool TagEditDlg::tagCreate(QWidget* parent, TAlbum* album, QString& title, QStri
     return valRet;
 }
 
-AlbumList TagEditDlg::createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr, const QString& icon,
+AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr, const QString& icon,
                                    QMap<QString, QString>& errMap)
 {
     errMap.clear();
@@ -334,31 +312,23 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr,
     // Ex: /Country/France/people,/City/France/Paris
 
     const QStringList tagsHierarchies = tagStr.split(',', QString::SkipEmptyParts);
-
     if (tagsHierarchies.isEmpty())
-    {
         return createdTagsList;
-    }
 
     for (QStringList::const_iterator it = tagsHierarchies.constBegin();
          it != tagsHierarchies.constEnd(); ++it)
     {
         QString hierarchy = (*it).trimmed();
-
         if (!hierarchy.isEmpty())
         {
             // Check if new tags is a hierarchy of tags separated by '/'.
 
-            TAlbum* root = 0;
+            TAlbum *root = 0;
 
             if (hierarchy.startsWith('/') || !mainRootAlbum)
-            {
                 root = AlbumManager::instance()->findTAlbum(0);
-            }
             else
-            {
                 root = mainRootAlbum;
-            }
 
             QStringList tagsList = hierarchy.split('/', QString::SkipEmptyParts);
             kDebug() << tagsList;
@@ -370,15 +340,10 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr,
                 {
                     QString tagPath, errMsg;
                     QString tag = (*it2).trimmed();
-
                     if (root->isRoot())
-                    {
                         tagPath = QString("/%1").arg(tag);
-                    }
                     else
-                    {
                         tagPath = QString("%1/%2").arg(root->tagPath()).arg(tag);
-                    }
 
                     kDebug() << tag << " :: " << tagPath;
 
@@ -386,7 +351,6 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr,
                     {
                         // Tag already exist ?
                         TAlbum* album = AlbumManager::instance()->findTAlbum(tagPath);
-
                         if (!album)
                         {
                             root = AlbumManager::instance()->createTAlbum(root, tag, icon, errMsg);
@@ -394,17 +358,12 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr,
                         else
                         {
                             root = album;
-
                             if (*it2 == tagsList.last())
-                            {
                                 errMap.insert(tagPath, i18n("Tag name already exists"));
-                            }
                         }
 
                         if (root)
-                        {
                             createdTagsList.append(root);
-                        }
                     }
 
                     // Sanity check if tag creation failed.
@@ -434,7 +393,7 @@ void TagEditDlg::showtagsListCreationError(QWidget* parent, const QMap<QString, 
 // ------------------------------------------------------------------------------
 
 TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* parent, const QMap<QString, QString>& errMap)
-    : KDialog(parent)
+                           : KDialog(parent)
 {
     setButtons(Help|Ok);
     setDefaultButton(Ok);
@@ -442,12 +401,12 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* parent, const 
     setHelp("tagscreation.anchor", "digikam");
     setCaption(i18n("Tag creation Error"));
 
-    QWidget* box = new QWidget(this);
+    QWidget *box = new QWidget(this);
     setMainWidget(box);
     QVBoxLayout* vLay = new QVBoxLayout(box);
 
-    QLabel* label         = new QLabel(i18n("An error occurred during tag creation:"), box);
-    QTreeWidget* listView = new QTreeWidget(box);
+    QLabel *label         = new QLabel(i18n("An error occurred during tag creation:"), box);
+    QTreeWidget *listView = new QTreeWidget(box);
     listView->setHeaderLabels(QStringList() << i18n("Tag Path") << i18n("Error"));
     listView->setRootIsDecorated(false);
     listView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -459,9 +418,7 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* parent, const 
     vLay->setSpacing(0);
 
     for (QMap<QString, QString>::const_iterator it = errMap.constBegin(); it != errMap.constEnd(); ++it)
-    {
         new QTreeWidgetItem(listView, QStringList() << it.key() << it.value());
-    }
 
     adjustSize();
 }

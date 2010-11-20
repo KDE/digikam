@@ -65,8 +65,8 @@ public:
 };
 
 ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* parent, const QVariantList&)
-    : ImagePlugin(parent, "ImagePlugin_Decorate"),
-      d(new ImagePlugin_DecoratePriv)
+                    : ImagePlugin(parent, "ImagePlugin_Decorate"), 
+                      d(new ImagePlugin_DecoratePriv)
 {
     d->insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
     d->insertTextAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T));

@@ -42,7 +42,7 @@ public:
 
     PreviewLoadingTask(LoadSaveThread* thread, LoadingDescription description)
         : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead, LoadingTaskStatusLoading)
-    {}
+        {}
 
     virtual void execute();
 

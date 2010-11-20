@@ -57,12 +57,12 @@ public:
         NoPreviewMode             = 0x00000080,      // Target image only without information displayed.
 
         AllPreviewModes           = PreviewOriginalImage      | PreviewBothImagesHorz     |
-        PreviewBothImagesVert     | PreviewBothImagesHorzCont |
-        PreviewBothImagesVertCont | PreviewTargetImage        |
-        PreviewToggleOnMouseOver,
+                                    PreviewBothImagesVert     | PreviewBothImagesHorzCont |
+                                    PreviewBothImagesVertCont | PreviewTargetImage        |
+                                    PreviewToggleOnMouseOver,
 
         UnSplitPreviewModes       = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver
-    };
+};
 
 public:
 

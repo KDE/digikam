@@ -47,7 +47,7 @@ class HistogramBoxPriv;
 
 class DIGIKAM_EXPORT HistogramBox : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 

@@ -60,13 +60,13 @@ public:
     }
 
     IccProfilePriv(const IccProfilePriv& other)
-        : QSharedData(other)
+                : QSharedData(other)
     {
         handle      = 0;
         operator=(other);
     }
 
-    IccProfilePriv& operator=(const IccProfilePriv& other)
+    IccProfilePriv &operator=(const IccProfilePriv& other)
     {
         data        = other.data;
         filePath    = other.filePath;
@@ -133,33 +133,31 @@ LcmsLock::~LcmsLock()
 // ----------------------------------------------------------------------------------
 
 IccProfile::IccProfile()
-    : d(0)
+          : d(0)
 {
 }
 
 IccProfile::IccProfile(const QByteArray& data)
-    : d(new IccProfilePriv)
+          : d(new IccProfilePriv)
 {
     d->data = data;
 }
 
 IccProfile::IccProfile(const QString& filePath)
-    : d(new IccProfilePriv)
+          : d(new IccProfilePriv)
 {
     d->filePath = filePath;
 }
 
-IccProfile::IccProfile(const char* location, const QString& relativePath)
-    : d(0)
+IccProfile::IccProfile(const char *location, const QString& relativePath)
+          : d(0)
 {
     QString filePath = KStandardDirs::locate(location, relativePath);
-
     if (filePath.isNull())
     {
         kError() << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
         return;
     }
-
     d = new IccProfilePriv;
     d->filePath = filePath;
 }
@@ -173,16 +171,11 @@ IccProfile IccProfile::sRGB()
 IccProfile IccProfile::adobeRGB()
 {
     QString path = static_d->adobeRGBPath;
-
     if (path.isEmpty())
-    {
         path = KStandardDirs::locate("data", "libkdcraw/profiles/compatibleWithAdobeRGB1998.icc");
-    }
 
     if (path.isEmpty()) // this one has a wrong whitepoint. Remove when sufficiently recent libkdcraw is a digikam dependency.
-    {
         path = KStandardDirs::locate("data", "libkdcraw/profiles/adobergb.icm");
-    }
 
     return IccProfile(path);
 }
@@ -215,7 +208,7 @@ QList<IccProfile> IccProfile::defaultProfiles()
 }
 
 IccProfile::IccProfile(const IccProfile& other)
-    : d(other.d)
+          : d(other.d)
 {
 }
 
@@ -223,7 +216,7 @@ IccProfile::~IccProfile()
 {
 }
 
-IccProfile& IccProfile::operator=(const IccProfile& other)
+IccProfile &IccProfile::operator=(const IccProfile& other)
 {
     d = other.d;
     return *this;
@@ -237,48 +230,35 @@ bool IccProfile::isNull() const
 bool IccProfile::operator==(const IccProfile& other) const
 {
     if (d == other.d)
-    {
         return true;
-    }
 
     if (d && other.d)
     {
         if (!d->filePath.isNull() || !other.d->filePath.isNull())
-        {
             return d->filePath == other.d->filePath;
-        }
-
         if (!d->data.isNull() || other.d->data.isNull())
-        {
             return d->data == other.d->data;
-        }
     }
-
     return false;
 }
 
 bool IccProfile::isSameProfileAs(IccProfile& other)
 {
     if (d == other.d)
-    {
         return true;
-    }
 
     if (d && other.d)
     {
         // uses memcmp
         return data() == other.data();
     }
-
     return false;
 }
 
 QByteArray IccProfile::data()
 {
     if (!d)
-    {
         return QByteArray();
-    }
 
     if (!d->data.isEmpty())
     {
@@ -287,31 +267,22 @@ QByteArray IccProfile::data()
     else if (!d->filePath.isNull())
     {
         QFile file(d->filePath);
-
         if ( !file.open(QIODevice::ReadOnly) )
-        {
             return QByteArray();
-        }
-
         d->data = file.readAll();
         file.close();
         return d->data;
     }
-
     return QByteArray();
 }
 
 bool IccProfile::open()
 {
     if (!d)
-    {
         return false;
-    }
 
     if (d->handle)
-    {
         return true;
-    }
 
     if (!d->data.isEmpty())
     {
@@ -324,9 +295,7 @@ bool IccProfile::open()
         data();
 
         if (d->data.isEmpty())
-        {
             return false;
-        }
 
         LcmsLock lock;
         d->handle = cmsOpenProfileFromMem(d->data.data(), (DWORD)d->data.size());
@@ -338,9 +307,7 @@ bool IccProfile::open()
 void IccProfile::close()
 {
     if (!d)
-    {
         return;
-    }
 
     d->close();
 }
@@ -348,9 +315,7 @@ void IccProfile::close()
 bool IccProfile::isOpen() const
 {
     if (!d)
-    {
         return false;
-    }
 
     return d->handle;
 }
@@ -358,9 +323,7 @@ bool IccProfile::isOpen() const
 QString IccProfile::filePath() const
 {
     if (!d)
-    {
         return QString();
-    }
 
     return d->filePath;
 }
@@ -368,27 +331,19 @@ QString IccProfile::filePath() const
 QString IccProfile::description()
 {
     if (!d)
-    {
         return QString();
-    }
 
     if (!d->description.isNull())
-    {
         return d->description;
-    }
 
     if (!open())
-    {
         return QString();
-    }
 
     LcmsLock lock;
-    const char* desc = cmsTakeProductDesc(d->handle);
+    const char *desc = cmsTakeProductDesc(d->handle);
 
     if (desc && desc[0] != '\0')
-    {
         d->description = QString::fromLatin1(desc);
-    }
 
     return d->description;
 }
@@ -396,19 +351,13 @@ QString IccProfile::description()
 IccProfile::ProfileType IccProfile::type()
 {
     if (!d)
-    {
         return InvalidType;
-    }
 
     if (d->type != InvalidType)
-    {
         return d->type;
-    }
 
     if (!open())
-    {
         return InvalidType;
-    }
 
     LcmsLock lock;
 
@@ -439,46 +388,34 @@ IccProfile::ProfileType IccProfile::type()
         default:
             break;
     }
-
     return d->type;
 }
 
 bool IccProfile::writeToFile(const QString& filePath)
 {
     if (!d)
-    {
         return false;
-    }
 
     QByteArray profile = data();
-
     if (!profile.isEmpty())
     {
         QFile file(filePath);
-
         if ( !file.open(QIODevice::WriteOnly) )
-        {
             return false;
-        }
 
         if (file.write(profile) == -1)
-        {
             return false;
-        }
 
         file.close();
         return true;
     }
-
     return false;
 }
 
-void* IccProfile::handle() const
+void *IccProfile::handle() const
 {
     if (!d)
-    {
         return 0;
-    }
 
     return d->handle;
 }
@@ -490,58 +427,49 @@ QStringList IccProfile::defaultSearchPaths()
 
     paths << KGlobal::dirs()->findDirs("data", "color/icc");
 
-#ifdef Q_WS_WIN
+    #ifdef Q_WS_WIN
     //TODO
-#elif defined (Q_WS_MAC)
+    #elif defined (Q_WS_MAC)
     //TODO
-#else
+    #else
 
-    // XDG data dirs, including /usr/share/color/icc
-    QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(':', QString::SkipEmptyParts);
+        // XDG data dirs, including /usr/share/color/icc
+        QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(':', QString::SkipEmptyParts);
 
-    if (!dataDirs.contains(QLatin1String("/usr/share")))
-    {
-        dataDirs << "/usr/share";
-    }
+        if (!dataDirs.contains(QLatin1String("/usr/share")))
+            dataDirs << "/usr/share";
 
-    if (!dataDirs.contains(QLatin1String("/usr/local/share")))
-    {
-        dataDirs << "/usr/local/share";
-    }
+        if (!dataDirs.contains(QLatin1String("/usr/local/share")))
+            dataDirs << "/usr/local/share";
 
-    foreach (const QString& dataDir, dataDirs)
-    {
-        candidates << dataDir + "/color/icc";
-    }
+        foreach (const QString& dataDir, dataDirs)
+        {
+            candidates << dataDir + "/color/icc";
+        }
 
-    // XDG_DATA_HOME
-    QString dataHomeDir = QString::fromLocal8Bit(getenv("XDG_DATA_HOME"));
+        // XDG_DATA_HOME
+        QString dataHomeDir = QString::fromLocal8Bit(getenv("XDG_DATA_HOME"));
+        if (!dataHomeDir.isEmpty())
+        {
+            candidates << dataHomeDir + "/color/icc";
+            candidates << dataHomeDir + "/icc";
+        }
 
-    if (!dataHomeDir.isEmpty())
-    {
-        candidates << dataHomeDir + "/color/icc";
-        candidates << dataHomeDir + "/icc";
-    }
+        // home dir directories
+        candidates << QDir::homePath() + "/.local/share/color/icc/";
+        candidates << QDir::homePath() + "/.local/share/icc/";
+        candidates << QDir::homePath() + "/.color/icc/";
 
-    // home dir directories
-    candidates << QDir::homePath() + "/.local/share/color/icc/";
-    candidates << QDir::homePath() + "/.local/share/icc/";
-    candidates << QDir::homePath() + "/.color/icc/";
-
-#endif
+    #endif
 
     foreach (const QString& candidate, candidates)
     {
         QDir dir(candidate);
-
         if (dir.exists() && dir.isReadable())
         {
             QString path = dir.canonicalPath();
-
             if (!paths.contains(path))
-            {
                 paths << path;
-            }
         }
     }
     //kDebug() << candidates << '\n' << paths;
@@ -552,17 +480,13 @@ QStringList IccProfile::defaultSearchPaths()
 void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
 {
     if (!static_d->adobeRGBPath.isNull())
-    {
         return;
-    }
 
     QFile file(filePath);
-
     if (file.open(QIODevice::ReadOnly))
     {
         KMD5 md5;
         md5.update(file);
-
         if (md5.hexDigest() == "dea88382d899d5f6e573b432473ae138")
         {
             kDebug() << "The original Adobe RGB (1998) profile has been found at" << filePath;

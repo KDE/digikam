@@ -82,7 +82,7 @@ class SetupICCPriv
 {
 public:
 
-    SetupICCPriv() :
+     SetupICCPriv() :
         iccFolderLabel(0),
         enableColorManagement(0),
         defaultSRGBConvert(0),
@@ -122,8 +122,8 @@ public:
         workProfilesKC(0),
         proofProfilesKC(0),
         monitorProfilesKC(0)
-    {
-    }
+     {
+     }
 
     QLabel*                     iccFolderLabel;
 
@@ -175,7 +175,7 @@ public:
 };
 
 SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
-    : QScrollArea(parent), d(new SetupICCPriv)
+        : QScrollArea(parent), d(new SetupICCPriv)
 {
     d->mainDialog = dialog;
     d->tab        = new KTabWidget(viewport());
@@ -183,20 +183,20 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     setWidgetResizable(true);
 
     d->behaviorPanel        = new QWidget;
-    QVBoxLayout* mainLayout = new QVBoxLayout(d->behaviorPanel);
+    QVBoxLayout *mainLayout = new QVBoxLayout(d->behaviorPanel);
 
     // --------------------------------------------------------
 
-    QWidget* colorPolicy    = new QWidget;
+    QWidget *colorPolicy    = new QWidget;
     QGridLayout* gridHeader = new QGridLayout(colorPolicy);
 
     d->enableColorManagement = new QCheckBox(colorPolicy);
     d->enableColorManagement->setText(i18n("Enable Color Management"));
     d->enableColorManagement->setWhatsThis( i18n("<ul><li>Checked: Color Management is enabled</li>"
-                                            "<li>Unchecked: Color Management is "
-                                            "disabled</li></ul>"));
+                                                 "<li>Unchecked: Color Management is "
+                                                 "disabled</li></ul>"));
 
-    KUrlLabel* lcmsLogoLabel = new KUrlLabel(colorPolicy);
+    KUrlLabel *lcmsLogoLabel = new KUrlLabel(colorPolicy);
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setUrl("http://www.littlecms.com");
     lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
@@ -211,9 +211,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     d->workspaceGB       = new QGroupBox(i18n("Working Color Space"));
-    QHBoxLayout* hboxWS  = new QHBoxLayout(d->workspaceGB);
+    QHBoxLayout *hboxWS  = new QHBoxLayout(d->workspaceGB);
 
-    QLabel* workIcon     = new QLabel;
+    QLabel *workIcon     = new QLabel;
     workIcon->setPixmap(SmallIcon("input-tablet"));
     d->workProfilesKC    = new IccProfilesComboBox;
     d->workProfilesKC->setWhatsThis( i18n("<p>This is the color space all the images will be converted to when opened "
@@ -232,30 +232,30 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     d->mismatchGB             = new QGroupBox;//(i18n("Behavior on Profile Mismatch");
-    QVBoxLayout* vlayMismatch = new QVBoxLayout(d->mismatchGB);
+    QVBoxLayout *vlayMismatch = new QVBoxLayout(d->mismatchGB);
 
-    QLabel* behaviorIcon  = new QLabel;
+    QLabel *behaviorIcon  = new QLabel;
     behaviorIcon->setPixmap(SmallIcon("image-loading", KIconLoader::SizeMedium));
-    QLabel* behaviorLabel = new QLabel(i18n("When the profile of an image does not match the working color space"));
+    QLabel *behaviorLabel = new QLabel(i18n("When the profile of an image does not match the working color space"));
     behaviorLabel->setWordWrap(true);
 
-    QHBoxLayout* hboxBL   = new QHBoxLayout;
+    QHBoxLayout *hboxBL   = new QHBoxLayout;
     hboxBL->addWidget(behaviorIcon);
     hboxBL->addWidget(behaviorLabel, 10);
 
     d->defaultAskMismatch = new QRadioButton(d->mismatchGB);
     d->defaultAskMismatch->setText(i18n("Ask when opening the image"));
     d->defaultAskMismatch->setWhatsThis(i18n("<p>If an image has an embedded color profile not matching the working "
-                                        "space profile, digiKam will ask if you want to convert to the working space, "
-                                        "keep the embedded profile or discard the embedded profile and assign "
-                                        "a different one.</p>"));
+                                             "space profile, digiKam will ask if you want to convert to the working space, "
+                                             "keep the embedded profile or discard the embedded profile and assign "
+                                             "a different one.</p>"));
 
     d->defaultConvertMismatch = new QRadioButton(d->mismatchGB);
     d->defaultConvertMismatch->setText(i18n("Convert the image to the working color space"));
     d->defaultConvertMismatch->setWhatsThis(i18n("<p>If an image has an embedded color profile not matching the working "
-                                            "space profile, digiKam will convert the image's color information to "
-                                            "the working color space. This changes the pixel data, but not the "
-                                            "appearance of the image.</p>"));
+                                                 "space profile, digiKam will convert the image's color information to "
+                                                 "the working color space. This changes the pixel data, but not the "
+                                                 "appearance of the image.</p>"));
 
     vlayMismatch->addLayout(hboxBL);
     vlayMismatch->addWidget(d->defaultAskMismatch);
@@ -264,14 +264,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     d->missingGB             = new QGroupBox;//(i18n("Missing Profile Behavior"));
-    QVBoxLayout* vlayMissing = new QVBoxLayout(d->missingGB);
+    QVBoxLayout *vlayMissing = new QVBoxLayout(d->missingGB);
 
-    QLabel* missingIcon  = new QLabel;
+    QLabel *missingIcon  = new QLabel;
     missingIcon->setPixmap(SmallIcon("image-missing", KIconLoader::SizeMedium));
-    QLabel* missingLabel = new QLabel(i18n("When an image has no color profile information"));
+    QLabel *missingLabel = new QLabel(i18n("When an image has no color profile information"));
     missingLabel->setWordWrap(true);
 
-    QHBoxLayout* hboxMP  = new QHBoxLayout;
+    QHBoxLayout *hboxMP  = new QHBoxLayout;
     hboxMP->addWidget(missingIcon);
     hboxMP->addWidget(missingLabel, 10);
 
@@ -291,7 +291,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
      */
     d->defaultSRGBConvert->setChecked(true);
 
-    QGridLayout* gridRgb = new QGridLayout;
+    QGridLayout *gridRgb = new QGridLayout;
     gridRgb->addWidget(d->defaultSRGBMissing, 0, 0, 1, 2);
     gridRgb->addWidget(d->defaultSRGBConvert, 1, 1);
     gridRgb->setColumnMinimumWidth(0, 10);
@@ -315,14 +315,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     d->rawGB                 = new QGroupBox;//(i18n("Raw File Behavior"));
-    QVBoxLayout* vlayRaw     = new QVBoxLayout(d->rawGB);
+    QVBoxLayout *vlayRaw     = new QVBoxLayout(d->rawGB);
 
-    QLabel* rawBehaviorIcon  = new QLabel;
+    QLabel *rawBehaviorIcon  = new QLabel;
     rawBehaviorIcon->setPixmap(SmallIcon("kdcraw", KIconLoader::SizeMedium));
-    QLabel* rawBehaviorLabel = new QLabel(i18n("When loading a RAW file with uncalibrated colors"));
+    QLabel *rawBehaviorLabel = new QLabel(i18n("When loading a RAW file with uncalibrated colors"));
     rawBehaviorLabel->setWordWrap(true);
 
-    QHBoxLayout* hboxRF = new QHBoxLayout;
+    QHBoxLayout *hboxRF = new QHBoxLayout;
     hboxRF->addWidget(rawBehaviorIcon);
     hboxRF->addWidget(rawBehaviorLabel, 10);
 
@@ -359,13 +359,13 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     d->profilesPanel         = new QWidget;
-    QVBoxLayout* vboxDisplay = new QVBoxLayout(d->profilesPanel);
+    QVBoxLayout *vboxDisplay = new QVBoxLayout(d->profilesPanel);
     d->viewGB                = new QGroupBox(i18n("Color Managed View"));
     QGridLayout* gridView    = new QGridLayout(d->viewGB);
 
-    QLabel* monitorIcon      = new QLabel;
+    QLabel *monitorIcon      = new QLabel;
     monitorIcon->setPixmap(SmallIcon("video-display", KIconLoader::SizeMedium));
-    QLabel* monitorProfiles  = new QLabel(i18n("Monitor profile:"));
+    QLabel *monitorProfiles  = new QLabel(i18n("Monitor profile:"));
 
     d->monitorProfilesKC     = new IccProfilesComboBox;
     monitorProfiles->setBuddy(d->monitorProfilesKC);
@@ -374,7 +374,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->infoMonitorProfiles   = new QPushButton;
     d->infoMonitorProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoMonitorProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
-                                         "information about the selected monitor profile.</p>"));
+                                              "information about the selected monitor profile.</p>"));
 
     d->managedView     = new QCheckBox;
     d->managedView->setText(i18n("Use color managed view in editor"));
@@ -401,11 +401,11 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     d->inputGB           = new QGroupBox(i18n("Camera and Scanner"));
-    QGridLayout* gridIP  = new QGridLayout(d->inputGB);
+    QGridLayout *gridIP  = new QGridLayout(d->inputGB);
 
-    QLabel* inputIcon    = new QLabel;
+    QLabel *inputIcon    = new QLabel;
     inputIcon->setPixmap(SmallIcon("input-tablet", KIconLoader::SizeMedium));
-    QLabel* inputLabel   = new QLabel(i18n("Default input color profile:"));
+    QLabel *inputLabel   = new QLabel(i18n("Default input color profile:"));
     d->inProfilesKC      = new IccProfilesComboBox;
     d->inProfilesKC->setWhatsThis(i18n("<p>This is the default color profile for your input device "
                                        "(that is your camera - or your scanner). A camera input profile "
@@ -426,11 +426,11 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     d->proofGB             = new QGroupBox(i18n("Printing and Proofing"));
-    QGridLayout* gridProof = new QGridLayout(d->proofGB);
+    QGridLayout *gridProof = new QGridLayout(d->proofGB);
 
-    QLabel* proofIcon      = new QLabel;
+    QLabel *proofIcon      = new QLabel;
     proofIcon->setPixmap(SmallIcon("printer", KIconLoader::SizeMedium));
-    QLabel* proofLabel     = new QLabel(i18n("Output device profile:"));
+    QLabel *proofLabel     = new QLabel(i18n("Output device profile:"));
     d->proofProfilesKC     = new IccProfilesComboBox;
     proofLabel->setBuddy(d->proofProfilesKC);
     d->proofProfilesKC->setWhatsThis(i18n("<p>Select the profile for your output device "
@@ -451,9 +451,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     d->iccFolderGB             = new QGroupBox(i18n("Color Profiles Repository"));
-    QGridLayout* gridIccFolder = new QGridLayout(d->iccFolderGB);
+    QGridLayout *gridIccFolder = new QGridLayout(d->iccFolderGB);
 
-    QLabel* iccFolderIcon      = new QLabel;
+    QLabel *iccFolderIcon      = new QLabel;
     iccFolderIcon->setPixmap(SmallIcon("folder-downloads", KIconLoader::SizeMedium));
     d->iccFolderLabel = new QLabel(i18n("digiKam looks for ICC profiles in a number of <a href='default'>default locations</a>. "
                                         "You can specify an additional folder:"));
@@ -481,7 +481,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     d->advancedPanel          = new QWidget;
-    QVBoxLayout* vboxAdvanced = new QVBoxLayout(d->advancedPanel);
+    QVBoxLayout *vboxAdvanced = new QVBoxLayout(d->advancedPanel);
     d->advancedSettingsGB     = new QGroupBox(i18n("Advanced Settings"));
     QGridLayout* gridAdvanced = new QGridLayout(d->advancedSettingsGB);
 
@@ -492,7 +492,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                                        "black levels of digital files and the black capabilities of various "
                                        "digital devices.</p>"));
 
-    QLabel* lablel = new QLabel(d->advancedSettingsGB);
+    QLabel *lablel = new QLabel(d->advancedSettingsGB);
     lablel->setText(i18n("Rendering Intents:"));
 
     d->renderingIntentKC = new IccRenderingIntentComboBox(d->advancedSettingsGB);
@@ -580,13 +580,9 @@ void SetupICC::applySettings()
     settings.enableCM = d->enableColorManagement->isChecked();
 
     if (d->defaultAskMismatch->isChecked())
-    {
         settings.defaultMismatchBehavior = ICCSettingsContainer::AskUser;
-    }
     else if (d->defaultConvertMismatch->isChecked())
-    {
         settings.defaultMismatchBehavior = ICCSettingsContainer::EmbeddedToWorkspace;
-    }
 
     if (d->defaultAskMissing->isChecked())
     {
@@ -597,13 +593,9 @@ void SetupICC::applySettings()
         settings.defaultMissingProfileBehavior = ICCSettingsContainer::UseSRGB;
 
         if (d->defaultSRGBConvert->isChecked())
-        {
             settings.defaultMissingProfileBehavior |= ICCSettingsContainer::ConvertToWorkspace;
-        }
         else
-        {
             settings.defaultMissingProfileBehavior |= ICCSettingsContainer::KeepProfile;
-        }
     }
     else if (d->defaultWSMissing->isChecked())
     {
@@ -615,17 +607,11 @@ void SetupICC::applySettings()
     }
 
     if (d->defaultAskRaw->isChecked())
-    {
         settings.defaultUncalibratedBehavior = ICCSettingsContainer::AskUser;
-    }
     else if (d->defaultInputRaw->isChecked())
-    {
         settings.defaultUncalibratedBehavior = ICCSettingsContainer::InputToWorkspace;
-    }
     else if (d->defaultGuessRaw->isChecked())
-    {
         settings.defaultUncalibratedBehavior = ICCSettingsContainer::AutomaticColors | ICCSettingsContainer::ConvertToWorkspace;
-    }
 
     settings.iccFolder          = d->defaultPathKU->url().toLocalFile();
     settings.useBPC             = d->bpcAlgorithm->isChecked();
@@ -638,9 +624,7 @@ void SetupICC::applySettings()
     settings.defaultProofProfile = d->proofProfilesKC->currentProfile().filePath();
 
     if (!IccSettings::instance()->monitorProfileFromSystem())
-    {
         settings.monitorProfile = d->monitorProfilesKC->currentProfile().filePath();
-    }
 
     IccSettings::instance()->setSettings(settings);
 }
@@ -650,9 +634,7 @@ void SetupICC::readSettings(bool restore)
     ICCSettingsContainer settings = IccSettings::instance()->settings();
 
     if (!restore)
-    {
         d->enableColorManagement->setChecked(settings.enableCM);
-    }
 
     d->bpcAlgorithm->setChecked(settings.useBPC);
     d->renderingIntentKC->setIntent(settings.renderingIntent);
@@ -660,13 +642,9 @@ void SetupICC::readSettings(bool restore)
     d->managedPreviews->setChecked(settings.useManagedPreviews);
 
     if (settings.defaultMismatchBehavior & ICCSettingsContainer::AskUser)
-    {
         d->defaultAskMismatch->setChecked(true);
-    }
     else if (settings.defaultMismatchBehavior & ICCSettingsContainer::ConvertToWorkspace)
-    {
         d->defaultConvertMismatch->setChecked(true);
-    }
 
     if (settings.defaultMissingProfileBehavior & ICCSettingsContainer::AskUser)
     {
@@ -690,17 +668,11 @@ void SetupICC::readSettings(bool restore)
     }
 
     if (settings.defaultUncalibratedBehavior & ICCSettingsContainer::AskUser)
-    {
         d->defaultAskRaw->setChecked(true);
-    }
     else if (settings.defaultUncalibratedBehavior & ICCSettingsContainer::UseDefaultInputProfile)
-    {
         d->defaultInputRaw->setChecked(true);
-    }
     else if (settings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
-    {
         d->defaultGuessRaw->setChecked(true);
-    }
 
     d->defaultPathKU->setUrl(settings.iccFolder);
     fillCombos(false);
@@ -729,9 +701,7 @@ void SetupICC::slotUrlChanged()
 void SetupICC::fillCombos(bool report)
 {
     if (!d->enableColorManagement->isChecked())
-    {
         return;
-    }
 
     QList<IccProfile> profiles = IccSettings::instance()->allProfiles();
 
@@ -811,50 +781,33 @@ void SetupICC::slotToggledEnabled()
 void SetupICC::slotClickedWork()
 {
     IccProfile profile = d->workProfilesKC->currentProfile();
-
     if (!profile.isNull())
-    {
-        profileInfo(profile);
-    }
+       profileInfo(profile);
 }
 
 void SetupICC::slotClickedIn()
 {
     IccProfile profile = d->inProfilesKC->currentProfile();
-
     if (!profile.isNull())
-    {
-        profileInfo(profile);
-    }
+       profileInfo(profile);
 }
 
 void SetupICC::slotClickedMonitor()
 {
     IccProfile profile;
-
     if (IccSettings::instance()->monitorProfileFromSystem())
-    {
         profile = IccSettings::instance()->monitorProfile();
-    }
     else
-    {
         profile = d->monitorProfilesKC->currentProfile();
-    }
-
     if (!profile.isNull())
-    {
-        profileInfo(profile);
-    }
+       profileInfo(profile);
 }
 
 void SetupICC::slotClickedProof()
 {
     IccProfile profile = d->proofProfilesKC->currentProfile();
-
     if (!profile.isNull())
-    {
-        profileInfo(profile);
-    }
+       profileInfo(profile);
 }
 
 void SetupICC::profileInfo(const IccProfile& profile)
@@ -872,10 +825,7 @@ void SetupICC::profileInfo(const IccProfile& profile)
 void SetupICC::slotMissingToggled(bool on)
 {
     if (!on)
-    {
         return;
-    }
-
     d->defaultSRGBConvert->setEnabled(d->defaultSRGBMissing->isChecked());
 }
 
@@ -885,13 +835,9 @@ void SetupICC::slotShowDefaultSearchPaths()
     QString existingPaths;
 
     if (defaultSearchPaths.isEmpty())
-    {
         existingPaths = i18nc("none of the paths", "none");
-    }
     else
-    {
         existingPaths = defaultSearchPaths.join("</li><li>");
-    }
 
     QString text = i18n("On Linux, the default search paths include "
                         "<ul>"
@@ -916,24 +862,17 @@ bool SetupICC::iccRepositoryIsValid()
 
     // If color management is disable, no need to check anymore.
     if (!group.readEntry("EnableCM", false))
-    {
         return true;
-    }
 
     // can at least libkdcraw profiles be opened?
     if (IccProfile::sRGB().open())
-    {
         return true;
-    }
 
     // To be valid, the ICC profiles repository must exist and be readable.
     QString extraPath = group.readEntry("DefaultPath", QString());
     QFileInfo info(extraPath);
-
     if (info.isDir() && info.exists() && info.isReadable())
-    {
         return true;
-    }
 
     QStringList paths = IccProfile::defaultSearchPaths();
     return !paths.isEmpty();

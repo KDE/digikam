@@ -38,17 +38,14 @@ class TagDragDropHandler : public AlbumModelDragDropHandler
 
 public:
 
-    TagDragDropHandler(TagModel* model);
+    TagDragDropHandler(TagModel *model);
 
-    TagModel* model() const
-    {
-        return static_cast<TagModel*>(m_model);
-    }
+    TagModel *model() const { return static_cast<TagModel*>(m_model); }
 
-    virtual bool dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
-    virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);
+    virtual bool dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex& droppedOn);
+    virtual Qt::DropAction accepts(const QDropEvent *e, const QModelIndex& dropIndex);
     virtual QStringList mimeTypes() const;
-    virtual QMimeData* createMimeData(const QList<Album*> &);
+    virtual QMimeData *createMimeData(const QList<Album*> &);
 
 Q_SIGNALS:
 

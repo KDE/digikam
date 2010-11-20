@@ -51,85 +51,62 @@
 namespace Digikam
 {
 
-ImageDragDropHandler::ImageDragDropHandler(ImageModel* model)
-    : ImageModelDragDropHandler(model)
+ImageDragDropHandler::ImageDragDropHandler(ImageModel *model)
+                    : ImageModelDragDropHandler(model)
 {
 }
 
-ImageAlbumModel* ImageDragDropHandler::albumModel() const
+ImageAlbumModel *ImageDragDropHandler::albumModel() const
 {
     return qobject_cast<ImageAlbumModel*>(model());
 }
 
-static Qt::DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool showMenu = true)
+static Qt::DropAction copyOrMove(const QDropEvent *e, QWidget *view, bool showMenu = true)
 {
     if (e->keyboardModifiers() & Qt::ControlModifier)
-    {
         return Qt::CopyAction;
-    }
     else if (e->keyboardModifiers() & Qt::ShiftModifier)
-    {
         return Qt::MoveAction;
-    }
 
     if (!showMenu)
-    {
         return e->proposedAction();
-    }
 
     KMenu popMenu(view);
-    QAction* moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
-    QAction* copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
+    QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
+    QAction *copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
     popMenu.addSeparator();
     popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
     popMenu.setMouseTracking(true);
-    QAction* choice = popMenu.exec(QCursor::pos());
-
+    QAction *choice = popMenu.exec(QCursor::pos());
     if (choice == moveAction)
-    {
         return Qt::MoveAction;
-    }
     else if (choice == copyAction)
-    {
         return Qt::CopyAction;
-    }
 
     return Qt::IgnoreAction;
 }
 
-bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
+bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDropEvent *e, const QModelIndex& droppedOn)
 {
-    ImageCategorizedView* view = static_cast<ImageCategorizedView*>(abstractview);
-    Album* album = view->albumAt(e->pos());
+    ImageCategorizedView *view = static_cast<ImageCategorizedView*>(abstractview);
+    Album *album = view->albumAt(e->pos());
 
     if (!album || album->isRoot())
-    {
         return false;
-    }
 
-    PAlbum* palbum = 0;
-    Album* currentAlbum = albumModel() ? albumModel()->currentAlbum() : 0;
-
+    PAlbum *palbum = 0;
+    Album *currentAlbum = albumModel() ? albumModel()->currentAlbum() : 0;
     if (album->type() == Album::PHYSICAL)
-    {
         palbum = static_cast<PAlbum*>(album);
-    }
     else if (currentAlbum && currentAlbum->type() == Album::PHYSICAL)
-    {
         palbum = static_cast<PAlbum*>(currentAlbum);
-    }
 
-    TAlbum* talbum = 0;
-
+    TAlbum *talbum = 0;
     if (album->type() == Album::TAG)
-    {
         talbum = static_cast<TAlbum*>(album);
-    }
     else if (currentAlbum && currentAlbum->type() == Album::TAG)
-    {
         talbum = static_cast<TAlbum*>(currentAlbum);
-    }
 
     if (DItemDrag::canDecode(e->mimeData()))
     {
@@ -140,25 +117,19 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         QList<int> imageIDs;
 
         if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
-        {
             return false;
-        }
 
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
-        {
             return false;
-        }
 
         if (palbum)
         {
             // Check if items dropped come from outside current album.
             KUrl::List extUrls, intUrls;
             QList<qlonglong> extImageIDs, intImageIDs;
-
             for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
             {
                 ImageInfo info(*it);
-
                 if (info.albumId() != album->id())
                 {
                     extUrls << info.databaseUrl();
@@ -189,7 +160,6 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                     connect(job, SIGNAL(result(KJob*)),
                             this, SIGNAL(dioResult(KJob*)));
                 }
-
                 return true;
             }
             else if (!intUrls.isEmpty() && extUrls.isEmpty())
@@ -208,11 +178,8 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                     return true;
                 }
                 else
-                {
                     return false;
-                }
             }
-
             if (!intUrls.isEmpty() && !extUrls.isEmpty())
             {
                 // Mixed items.
@@ -233,14 +200,12 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                     connect(job, SIGNAL(result(KJob*)),
                             this, SIGNAL(dioResult(KJob*)));
                 }
-
                 return true;
             }
         }
         else if (talbum)
         {
             QList<ImageInfo> infos;
-
             for (QList<int>::const_iterator it = imageIDs.constBegin();
                  it != imageIDs.constEnd(); ++it)
             {
@@ -251,22 +216,18 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             emit assignTags(infos, QList<int>() << talbum->id());
             return true;
         }
-
         return false;
     }
     else if (KUrl::List::canDecode(e->mimeData()))
     {
         if (!palbum)
-        {
             return false;
-        }
 
         // Drag & drop outside of digiKam
 
         KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
         Qt::DropAction action = copyOrMove(e, view);
-
         if (action == Qt::MoveAction)
         {
             KIO::Job* job = DIO::move(srcURLs, palbum);
@@ -279,50 +240,40 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             connect(job, SIGNAL(result(KJob*)),
                     this, SIGNAL(dioResult(KJob*)));
         }
-
         return true;
     }
-    else if (DTagDrag::canDecode(e->mimeData()))
+    else if(DTagDrag::canDecode(e->mimeData()))
     {
         int tagID;
-
         if (!DTagDrag::decode(e->mimeData(), tagID))
-        {
             return false;
-        }
 
         TAlbum* talbum = AlbumManager::instance()->findTAlbum(tagID);
-
         if (!talbum)
-        {
             return false;
-        }
 
         KMenu popMenu(view);
 
         QList<ImageInfo> selectedInfos = view->selectedImageInfosCurrentFirst();
 
-        QAction* assignToSelectedAction = 0;
-
+        QAction *assignToSelectedAction = 0;
         if (selectedInfos.count() > 1)
             assignToSelectedAction =
-                popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &Selected Items",talbum->tagPath().mid(1)));
+                    popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &Selected Items",talbum->tagPath().mid(1)));
 
-        QAction* assignToThisAction = 0;
-
+        QAction *assignToThisAction = 0;
         if (droppedOn.isValid())
             assignToThisAction =
-                popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &This Item",talbum->tagPath().mid(1)));
+                    popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &This Item",talbum->tagPath().mid(1)));
 
-        QAction* assignToAllAction =
+        QAction *assignToAllAction =
             popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &All Items",talbum->tagPath().mid(1)));
 
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
 
         popMenu.setMouseTracking(true);
-        QAction* choice = popMenu.exec(view->mapToGlobal(e->pos()));
-
+        QAction *choice = popMenu.exec(view->mapToGlobal(e->pos()));
         if (choice)
         {
             if (choice == assignToSelectedAction)    // Selected Items
@@ -338,10 +289,9 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 emit assignTags(QList<ImageInfo>() << model()->imageInfo(droppedOn), QList<int>() << tagID);
             }
         }
-
         return true;
     }
-    else if (DTagListDrag::canDecode(e->mimeData()))
+    else if(DTagListDrag::canDecode(e->mimeData()))
     {
         QList<int> tagIDs;
         DTagListDrag::decode(e->mimeData(), tagIDs);
@@ -350,29 +300,22 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         QList<ImageInfo> selectedInfos = view->selectedImageInfosCurrentFirst();
 
-        QAction* assignToSelectedAction = 0;
-
+        QAction *assignToSelectedAction = 0;
         if (selectedInfos.count() > 1)
-        {
             assignToSelectedAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &Selected Items"));
-        }
 
-        QAction* assignToThisAction = 0;
-
+        QAction *assignToThisAction = 0;
         if (droppedOn.isValid())
-        {
             assignToThisAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &This Item"));
-        }
 
-        QAction* assignToAllAction =
+        QAction *assignToAllAction =
             popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &All Items"));
 
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
 
         popMenu.setMouseTracking(true);
-        QAction* choice = popMenu.exec(view->mapToGlobal(e->pos()));
-
+        QAction *choice = popMenu.exec(view->mapToGlobal(e->pos()));
         if (choice)
         {
             if (choice == assignToSelectedAction)    // Selected Items
@@ -388,70 +331,51 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 emit assignTags(QList<ImageInfo>() << model()->imageInfo(droppedOn), tagIDs);
             }
         }
-
         return true;
     }
-    else if (DCameraItemListDrag::canDecode(e->mimeData()))
+    else if(DCameraItemListDrag::canDecode(e->mimeData()))
     {
         if (!palbum)
-        {
             return false;
-        }
 
-        CameraUI* ui = dynamic_cast<CameraUI*>(e->source());
-
+        CameraUI *ui = dynamic_cast<CameraUI*>(e->source());
         if (!ui)
-        {
             return false;
-        }
 
         KMenu popMenu(view);
         popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-        QAction* downAction    = popMenu.addAction(SmallIcon("file-export"),
-                                 i18n("Download From Camera"));
-        QAction* downDelAction = popMenu.addAction(SmallIcon("file-export"),
-                                 i18n("Download && Delete From Camera"));
+        QAction *downAction    = popMenu.addAction(SmallIcon("file-export"),
+                                                    i18n("Download From Camera"));
+        QAction *downDelAction = popMenu.addAction(SmallIcon("file-export"),
+                                                    i18n("Download && Delete From Camera"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
-        QAction* choice = popMenu.exec(view->mapToGlobal(e->pos()));
-
+        QAction *choice = popMenu.exec(view->mapToGlobal(e->pos()));
         if (choice)
         {
             if (choice == downAction)
-            {
                 ui->slotDownload(true, false, palbum);
-            }
             else if (choice == downDelAction)
-            {
                 ui->slotDownload(true, true, palbum);
-            }
         }
-
         return true;
     }
 
     return false;
 }
 
-Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent* e, const QModelIndex &/*dropIndex*/)
+Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent *e, const QModelIndex &/*dropIndex*/)
 {
     if (albumModel() && !albumModel()->currentAlbum())
-    {
         return Qt::IgnoreAction;
-    }
 
     if (DItemDrag::canDecode(e->mimeData()) || KUrl::List::canDecode(e->mimeData()))
     {
         if (e->keyboardModifiers() & Qt::ControlModifier)
-        {
             return Qt::CopyAction;
-        }
         else if (e->keyboardModifiers() & Qt::ShiftModifier)
-        {
             return Qt::MoveAction;
-        }
-
         return Qt::MoveAction;
     }
 
@@ -478,7 +402,7 @@ QStringList ImageDragDropHandler::mimeTypes() const
     return mimeTypes;
 }
 
-QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexes)
+QMimeData *ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexes)
 {
     QList<ImageInfo> infos = model()->imageInfos(indexes);
 

@@ -71,14 +71,11 @@ public:
 };
 
 TemplateManager::TemplateManager(QObject* parent, const QString& file)
-    : QObject(parent), d(new TemplateManagerPrivate)
+                : QObject(parent), d(new TemplateManagerPrivate)
 {
     d->file = file;
-
     if (!m_defaultManager)
-    {
         m_defaultManager = this;
-    }
 
     load();
 }
@@ -90,9 +87,7 @@ TemplateManager::~TemplateManager()
     delete d;
 
     if (m_defaultManager == this)
-    {
         m_defaultManager = 0;
-    }
 }
 
 bool TemplateManager::load()
@@ -102,37 +97,21 @@ bool TemplateManager::load()
     QFile file(d->file);
 
     if (!file.open(QIODevice::ReadOnly))
-    {
         return false;
-    }
 
     QDomDocument doc("templatelist");
-
     if (!doc.setContent(&file))
-    {
         return false;
-    }
 
     QDomElement docElem = doc.documentElement();
-
     if (docElem.tagName() != "templatelist")
-    {
         return false;
-    }
 
     for (QDomNode n = docElem.firstChild(); !n.isNull(); n = n.nextSibling())
     {
         QDomElement e = n.toElement();
-
-        if (e.isNull())
-        {
-            continue;
-        }
-
-        if (e.tagName() != "template")
-        {
-            continue;
-        }
+        if (e.isNull()) continue;
+        if (e.tagName() != "template") continue;
 
         Template             t;
         IptcCoreLocationInfo locationInf;
@@ -141,12 +120,7 @@ bool TemplateManager::load()
         for (QDomNode n2 = e.firstChild(); !n2.isNull(); n2 = n2.nextSibling())
         {
             QDomElement e2 = n2.toElement();
-
-            if (e2.isNull())
-            {
-                continue;
-            }
-
+            if (e2.isNull()) continue;
             QString name2  = e2.tagName();
             QString val2   = e2.attribute(QString::fromLatin1("value"));
 
@@ -173,7 +147,6 @@ bool TemplateManager::load()
             else if (name2 == QString::fromLatin1("authors"))
             {
                 QStringList list;
-
                 for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
                 {
                     QDomElement e3 = n3.toElement();
@@ -182,21 +155,15 @@ bool TemplateManager::load()
 
                     if (key == QString::fromLatin1("name"))
                     {
-                        if (val.isEmpty())
-                        {
-                            continue;
-                        }
-
+                        if (val.isEmpty()) continue;
                         list.append(val);
                     }
                 }
-
                 t.setAuthors(list);
             }
             else if (name2 == QString::fromLatin1("copyright"))
             {
                 KExiv2::AltLangMap copyrights;
-
                 for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
                 {
                     QDomElement e3 = n3.toElement();
@@ -204,13 +171,11 @@ bool TemplateManager::load()
                     QString val    = e3.attribute(QString::fromLatin1("value"));
                     copyrights.insert(key, val);
                 }
-
                 t.setCopyright(copyrights);
             }
             else if (name2 == QString::fromLatin1("rightusageterms"))
             {
                 KExiv2::AltLangMap usages;
-
                 for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
                 {
                     QDomElement e3 = n3.toElement();
@@ -218,7 +183,6 @@ bool TemplateManager::load()
                     QString val    = e3.attribute(QString::fromLatin1("value"));
                     usages.insert(key, val);
                 }
-
                 t.setRightUsageTerms(usages);
             }
             else if (name2 == QString::fromLatin1("locationcountry"))
@@ -276,7 +240,6 @@ bool TemplateManager::load()
             else if (name2 == QString::fromLatin1("subjects"))
             {
                 QStringList list;
-
                 for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
                 {
                     QDomElement e3 = n3.toElement();
@@ -285,15 +248,10 @@ bool TemplateManager::load()
 
                     if (key == QString::fromLatin1("subject"))
                     {
-                        if (val.isEmpty())
-                        {
-                            continue;
-                        }
-
+                        if (val.isEmpty()) continue;
                         list.append(val);
                     }
                 }
-
                 t.setIptcSubjects(list);
             }
         }
@@ -310,9 +268,7 @@ bool TemplateManager::save()
 {
     // If not modified don't save the file
     if (!d->modified)
-    {
         return true;
-    }
 
     QDomDocument doc("templatelist");
     doc.setContent(QString("<!DOCTYPE XMLTemplateList><templatelist version=\"2.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
@@ -358,7 +314,6 @@ bool TemplateManager::save()
             elem.appendChild(copyright);
             KExiv2::AltLangMap rights = t.copyright();
             KExiv2::AltLangMap::const_iterator it;
-
             for (it = rights.constBegin() ; it != rights.constEnd() ; ++it)
             {
                 QDomElement e = doc.createElement(it.key());
@@ -370,14 +325,12 @@ bool TemplateManager::save()
             elem.appendChild(rightusageterms);
             KExiv2::AltLangMap usages   = t.rightUsageTerms();
             KExiv2::AltLangMap::const_iterator it2;
-
             for (it2 = usages.constBegin() ; it2 != usages.constEnd() ; ++it2)
             {
                 QDomElement e = doc.createElement(it2.key());
                 e.setAttribute(QString::fromLatin1("value"), it2.value());
                 rightusageterms.appendChild(e);
             }
-
             docElem.appendChild(elem);
 
             QDomElement locationcountry = doc.createElement(QString::fromLatin1("locationcountry"));
@@ -446,9 +399,7 @@ bool TemplateManager::save()
     QFile file(d->file);
 
     if (!file.open(QIODevice::WriteOnly))
-    {
         return false;
-    }
 
     QTextStream stream(&file);
     stream.setCodec(QTextCodec::codecForName("UTF-8"));
@@ -461,10 +412,7 @@ bool TemplateManager::save()
 
 void TemplateManager::insert(const Template& t)
 {
-    if (t.isNull())
-    {
-        return;
-    }
+    if (t.isNull()) return;
 
     d->modified = true;
     insertPrivate(t);
@@ -472,10 +420,7 @@ void TemplateManager::insert(const Template& t)
 
 void TemplateManager::remove(const Template& t)
 {
-    if (t.isNull())
-    {
-        return;
-    }
+    if (t.isNull()) return;
 
     d->modified = true;
     removePrivate(t);
@@ -483,10 +428,7 @@ void TemplateManager::remove(const Template& t)
 
 void TemplateManager::insertPrivate(const Template& t)
 {
-    if (t.isNull())
-    {
-        return;
-    }
+    if (t.isNull()) return;
 
     {
         QMutexLocker lock(&d->mutex);
@@ -498,14 +440,10 @@ void TemplateManager::insertPrivate(const Template& t)
 
 void TemplateManager::removePrivate(const Template& t)
 {
-    if (t.isNull())
-    {
-        return;
-    }
+    if (t.isNull()) return;
 
     {
         QMutexLocker lock(&d->mutex);
-
         for (QList<Template>::iterator it = d->pList.begin(); it != d->pList.end(); ++it)
         {
             if (it->templateTitle() == t.templateTitle())
@@ -546,9 +484,7 @@ Template TemplateManager::findByTitle(const QString& title) const
     foreach (const Template& t, d->pList)
     {
         if (t.templateTitle() == title)
-        {
             return t;
-        }
     }
     return Template();
 }
@@ -572,9 +508,7 @@ Template TemplateManager::fromIndex(int index) const
     QMutexLocker lock(&d->mutex);
 
     if (index >= 0 && index < d->pList.size())
-    {
         return d->pList[index];
-    }
 
     return Template();
 }

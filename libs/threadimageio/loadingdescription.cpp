@@ -78,7 +78,7 @@ IccProfile LoadingDescription::PostProcessingParameters::profile() const
 }
 
 LoadingDescription::LoadingDescription(const QString& filePath, ColorManagementSettings cm)
-    : filePath(filePath)
+                  : filePath(filePath)
 {
     rawDecodingSettings = DRawDecoding();
     rawDecodingHint     = RawDecodingDefaultSettings;
@@ -87,7 +87,7 @@ LoadingDescription::LoadingDescription(const QString& filePath, ColorManagementS
 
 LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecoding& settings,
                                        RawDecodingHint hint, ColorManagementSettings cm)
-    : filePath(filePath), rawDecodingSettings(settings), rawDecodingHint(hint)
+                  : filePath(filePath), rawDecodingSettings(settings), rawDecodingHint(hint)
 {
     postProcessingParameters.colorManagement = cm;
 }
@@ -95,7 +95,7 @@ LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecodi
 LoadingDescription::LoadingDescription(const QString& filePath, int size, bool exifRotate,
                                        ColorManagementSettings cm,
                                        LoadingDescription::PreviewParameters::PreviewType type)
-    : filePath(filePath)
+                  : filePath(filePath)
 {
     rawDecodingSettings          = DRawDecoding();
     rawDecodingHint              = RawDecodingDefaultSettings;
@@ -112,9 +112,7 @@ QString LoadingDescription::cacheKey() const
 
     // Thumbnail loading. This one is easy.
     if (previewParameters.type == PreviewParameters::Thumbnail)
-    {
         return filePath + "-thumbnail-" + QString::number(previewParameters.size);
-    }
 
     // DImg loading
 
@@ -136,32 +134,21 @@ QString LoadingDescription::cacheKey() const
     {
         // Assumption: Size-limited previews are always eight bit and dont care for raw settings.
         if (previewParameters.size)
-        {
             return filePath + "-previewImage-" + QString::number(previewParameters.size);
-        }
         else
-        {
             return filePath + "-previewImage";
-        }
     }
 
     QString suffix;
-
     // Assumption: Time-optimized loading is used for previews and non-previews
     if (rawDecodingHint == RawDecodingTimeOptimized)
     {
         // Assumption: With time-optimized, we can have 8 or 16bit and halfSize or demosaiced.
         suffix += "-timeoptimized";
-
         if (!rawDecodingSettings.sixteenBitsImage)
-        {
             suffix += "-8";
-        }
-
         if (rawDecodingSettings.halfSizeColorImage)
-        {
             suffix += "-halfSize";
-        }
 
     }
 
@@ -174,9 +161,7 @@ QStringList LoadingDescription::lookupCacheKeys() const
 
     // Thumbnail loading. No other cache key included!
     if (previewParameters.type == PreviewParameters::Thumbnail)
-    {
         return QStringList() << cacheKey();
-    }
 
     // DImg loading.
     // Typically, the first is the best. An actual loading operation may use a
@@ -193,14 +178,10 @@ QStringList LoadingDescription::lookupCacheKeys() const
     //      reduced size
 
     QStringList cacheKeys;
-
     if (previewParameters.type != PreviewParameters::NoPreview)
     {
         if (previewParameters.size)
-        {
             cacheKeys << filePath + "-previewImage-" + QString::number(previewParameters.size);
-        }
-
         // full size preview
         cacheKeys << filePath + "-previewImage";
     }
@@ -215,20 +196,14 @@ QStringList LoadingDescription::lookupCacheKeys() const
         if (rawDecodingSettings.sixteenBitsImage)
         {
             cacheKeys << filePath + "-timeoptimized";
-
             if (rawDecodingSettings.halfSizeColorImage)
-            {
                 cacheKeys << filePath + "-timeoptimized-halfSize";
-            }
         }
         else
         {
             cacheKeys << filePath + "-timeoptimized-8";
-
             if (rawDecodingSettings.halfSizeColorImage)
-            {
                 cacheKeys << filePath + "-timeoptimized-8-halfSize";
-            }
         }
 
     }
@@ -248,22 +223,22 @@ QStringList LoadingDescription::lookupCacheKeys() const
 bool LoadingDescription::needCheckRawDecoding() const
 {
     return rawDecodingHint == RawDecodingGlobalSettings ||
-           rawDecodingHint == RawDecodingCustomSettings;
+            rawDecodingHint == RawDecodingCustomSettings;
 }
 
 bool LoadingDescription::isReducedVersion() const
 {
     // return true if this loads anything but the full version
     return rawDecodingSettings.halfSizeColorImage
-           || previewParameters.type != PreviewParameters::NoPreview;
+        || previewParameters.type != PreviewParameters::NoPreview;
 }
 
 bool LoadingDescription::operator==(const LoadingDescription& other) const
 {
     return filePath == other.filePath &&
-           rawDecodingSettings == other.rawDecodingSettings &&
-           previewParameters == other.previewParameters &&
-           postProcessingParameters == other.postProcessingParameters;
+            rawDecodingSettings == other.rawDecodingSettings &&
+            previewParameters == other.previewParameters &&
+            postProcessingParameters == other.postProcessingParameters;
 }
 
 bool LoadingDescription::equalsIgnoreReducedVersion(const LoadingDescription& other) const
@@ -282,14 +257,14 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription& other) con
     fast.optimizeTimeLoading();
 
     return filePath == other.filePath &&
-           (
-               rawDecodingSettings == other.rawDecodingSettings ||
-               fast == other.rawDecodingSettings
-           ) &&
-           (
-               (previewParameters.size == other.previewParameters.size) ||
-               other.previewParameters.size
-           );
+            (
+             rawDecodingSettings == other.rawDecodingSettings ||
+             fast == other.rawDecodingSettings
+            ) &&
+            (
+             (previewParameters.size == other.previewParameters.size) ||
+              other.previewParameters.size
+            );
 }
 
 bool LoadingDescription::isThumbnail() const
@@ -312,12 +287,8 @@ QStringList LoadingDescription::possibleCacheKeys(const QString& filePath)
     keys << filePath + "-timeoptimized";
     keys << filePath + "-customraw";
     keys << filePath + "-globalraw";
-
     for (int i=1; i<=256; ++i)
-    {
         keys << filePath + "-previewImage-" + QString::number(i);
-    }
-
     return keys;
 }
 
@@ -326,12 +297,8 @@ QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString& filePa
     QStringList keys;
     // there are 256 possible keys...
     QString path = filePath + "-thumbnail-";
-
     for (int i=1; i<=256; ++i)
-    {
         keys << path + QString::number(i);
-    }
-
     return keys;
 }
 

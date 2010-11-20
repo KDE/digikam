@@ -27,13 +27,13 @@
 namespace Digikam
 {
 
-DatabaseServerError::DatabaseServerError(DatabaseServerErrorEnum errorType, const QString& errorText)
+DatabaseServerError::DatabaseServerError(DatabaseServerErrorEnum errorType, const QString &errorText)
 {
     m_ErrorText = errorText;
     m_ErrorType = errorType;
 }
 
-DatabaseServerError::DatabaseServerError(const DatabaseServerError& dbServerError)
+DatabaseServerError::DatabaseServerError(const DatabaseServerError &dbServerError)
 {
     m_ErrorText = dbServerError.m_ErrorText;
     m_ErrorType = dbServerError.m_ErrorType;
@@ -44,16 +44,16 @@ DatabaseServerError::~DatabaseServerError()
 }
 
 // Marshall the DatabaseServerError data into a D-BUS argument
-DatabaseServerError& DatabaseServerError::operator<<(const QDBusArgument& argument)
+DatabaseServerError &DatabaseServerError::operator<<(const QDBusArgument &argument)
 {
-    argument.beginStructure();
-    argument >> m_ErrorType >> m_ErrorText;
-    argument.endStructure();
-    return *this;
+	argument.beginStructure();
+	argument >> m_ErrorType >> m_ErrorText;
+	argument.endStructure();
+	return *this;
 }
 
 // Retrieve the DatabaseServerError data from the D-BUS argument
-const DatabaseServerError& DatabaseServerError::operator>>(QDBusArgument& argument) const
+const DatabaseServerError &DatabaseServerError::operator>>(QDBusArgument &argument) const
 {
     argument.beginStructure();
     argument << m_ErrorType << m_ErrorText;
@@ -75,7 +75,7 @@ QString DatabaseServerError::getErrorText()
 {
     return m_ErrorText;
 }
-void DatabaseServerError::setErrorText(const QString& errorText)
+void DatabaseServerError::setErrorText(const QString &errorText)
 {
     m_ErrorText=errorText;
 }

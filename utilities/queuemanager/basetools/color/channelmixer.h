@@ -54,7 +54,7 @@ private Q_SLOTS:
 
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
-
+    
     void slotChannelChanged();
     void slotMonochromeActived(bool);
 

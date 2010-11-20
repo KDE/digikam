@@ -49,30 +49,30 @@ class HistogramWidgetPriv;
 
 class DIGIKAM_EXPORT HistogramWidget : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
     /** Constructor without image data. Needed to use updateData() method after to create instance.*/
     HistogramWidget(int w, int h,                              // Widget size.
-                    QWidget* parent=0, bool selectMode=true,
+                    QWidget *parent=0, bool selectMode=true,
                     bool showProgress=true,
                     bool statisticsVisible=false);
 
     /** Constructor with image data and without image selection data.*/
     HistogramWidget(int w, int h,                              // Widget size.
-                    uchar* i_data, uint i_w, uint i_h,         // Full image info.
+                    uchar *i_data, uint i_w, uint i_h,         // Full image info.
                     bool i_sixteenBits,                        // 8 or 16 bits image.
-                    QWidget* parent=0, bool selectMode=true,
+                    QWidget *parent=0, bool selectMode=true,
                     bool showProgress=true,
                     bool statisticsVisible=false);
 
     /** Constructor with image data and image selection data.*/
     HistogramWidget(int w, int h,                              // Widget size.
-                    uchar* i_data, uint i_w, uint i_h,         // Full image info.
-                    uchar* s_data, uint s_w, uint s_h,         // Image selection info.
+                    uchar *i_data, uint i_w, uint i_h,         // Full image info.
+                    uchar *s_data, uint s_w, uint s_h,         // Image selection info.
                     bool i_sixteenBits,                        // 8 or 16 bits image.
-                    QWidget* parent=0, bool selectMode=true,
+                    QWidget *parent=0, bool selectMode=true,
                     bool showProgress=true,
                     bool statisticsVisible=false);
 
@@ -86,13 +86,13 @@ public:
     void stopHistogramComputation();
 
     /** Update full image histogram data methods.*/
-    void updateData(uchar* i_data, uint i_w, uint i_h,
+    void updateData(uchar *i_data, uint i_w, uint i_h,
                     bool i_sixteenBits,                        // 8 or 16 bits image.
-                    uchar* s_data=0, uint s_w=0, uint s_h=0,
+                    uchar *s_data=0, uint s_w=0, uint s_h=0,
                     bool showProgress=true);
 
     /** Update image selection histogram data methods.*/
-    void updateSelectionData(uchar* s_data, uint s_w, uint s_h,
+    void updateSelectionData(uchar *s_data, uint s_w, uint s_h,
                              bool i_sixteenBits,               // 8 or 16 bits image.
                              bool showProgress=true);
 
@@ -106,7 +106,7 @@ public:
 public:
 
     void setRenderingType(HistogramRenderingType type);
-    ImageHistogram* currentHistogram();    // Currently rendered histogram, depending on current rendering type
+    ImageHistogram *currentHistogram();    // Currently rendered histogram, depending on current rendering type
 
 Q_SIGNALS:
 
@@ -125,8 +125,8 @@ public Q_SLOTS:
 protected Q_SLOTS:
 
     void slotProgressTimerDone();
-    void slotCalculationStarted(const ImageHistogram* histogram);
-    void slotCalculationFinished(const ImageHistogram* histogram, bool success);
+    void slotCalculationStarted(const ImageHistogram *histogram);
+    void slotCalculationFinished(const ImageHistogram *histogram, bool success);
 
 protected:
 
@@ -138,7 +138,7 @@ protected:
 private:
 
     void notifyValuesChanged();
-    void connectHistogram(const ImageHistogram* histogram);
+    void connectHistogram(const ImageHistogram *histogram);
 
 private:
 

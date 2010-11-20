@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT DImgThreadedFilter : public DynamicThread
 public:
 
     /** Constructs a filter without argument.
-        You need to call setOriginalImage(), setFilterName(), and startFilter()
+        You need to call setOriginalImage(), setFilterName(), and startFilter() 
         to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
@@ -72,14 +72,8 @@ public:
     void setFilterName(const QString& name);
     void setParent(QObject* parent);
 
-    DImg getTargetImage()
-    {
-        return m_destImage;
-    };
-    const QString& filterName()
-    {
-        return m_name;
-    };
+    DImg getTargetImage()       { return m_destImage; };
+    const QString& filterName() { return m_name; };
 
     /** Start the threaded computation */
     virtual void startFilter();

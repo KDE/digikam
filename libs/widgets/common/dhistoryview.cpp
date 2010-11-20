@@ -48,13 +48,13 @@ class DHistoryViewItem : public QTreeWidgetItem
 {
 public:
 
-    DHistoryViewItem(QTreeWidget* parent, const QString& msg, DHistoryView::EntryType type,
-                     const QVariant& metadata)
+    DHistoryViewItem(QTreeWidget *parent, const QString& msg, DHistoryView::EntryType type,
+                const QVariant& metadata)
         : QTreeWidgetItem(parent, QStringList())
     {
         m_metadata = metadata;
 
-        switch (type)
+        switch(type)
         {
             case DHistoryView::StartingEntry:
                 setIcon(0, SmallIcon("system-run"));
@@ -97,8 +97,8 @@ private:
 
 // ---------------------------------------------------------------------------
 
-DHistoryView::DHistoryView(QWidget* parent)
-    : QTreeWidget(parent)
+DHistoryView::DHistoryView(QWidget *parent)
+            : QTreeWidget(parent)
 {
     qRegisterMetaType<EntryType>("DHistoryView::EntryType");
 
@@ -131,7 +131,7 @@ DHistoryView::~DHistoryView()
 void DHistoryView::slotContextMenu()
 {
     KMenu popmenu(this);
-    KAction* action = new KAction(KIcon("edit-copy"), i18n("Copy to Clipboard"), this);
+    KAction *action = new KAction(KIcon("edit-copy"), i18n("Copy to Clipboard"), this);
     connect(action, SIGNAL(triggered(bool) ),
             this, SLOT(slotCopy2ClipBoard()));
 
@@ -144,7 +144,6 @@ void DHistoryView::slotCopy2ClipBoard()
     QString textInfo;
 
     QTreeWidgetItemIterator it(this);
-
     while (*it)
     {
         textInfo.append((*it)->text(1));
@@ -154,50 +153,41 @@ void DHistoryView::slotCopy2ClipBoard()
         ++it;
     }
 
-    QMimeData* mimeData = new QMimeData();
+    QMimeData *mimeData = new QMimeData();
     mimeData->setText(textInfo);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
 
 void DHistoryView::addedEntry(const QString& msg, EntryType type, const QVariant& metadata)
 {
-    DHistoryViewItem* item = new DHistoryViewItem(this, msg, type, metadata);
+    DHistoryViewItem *item = new DHistoryViewItem(this, msg, type, metadata);
     setCurrentItem(item);
 }
 
 void DHistoryView::slotItemDoubleClicked(QTreeWidgetItem* item)
 {
     DHistoryViewItem* lvi = dynamic_cast<DHistoryViewItem*>(item);
-
     if (lvi)
     {
         if (!lvi->metadata().isNull())
-        {
             emit signalEntryClicked(lvi->metadata());
-        }
     }
 }
 
 void DHistoryView::mouseMoveEvent(QMouseEvent* e)
 {
     DHistoryViewItem* lvi = dynamic_cast<DHistoryViewItem*>(itemAt(e->pos()));
-
     if (lvi)
     {
         if (!lvi->metadata().isNull())
-        {
             setCursor(Qt::PointingHandCursor);
-        }
         else
-        {
             unsetCursor();
-        }
     }
     else
     {
         unsetCursor();
     }
-
     QTreeWidget::mouseMoveEvent(e);
 }
 

@@ -93,7 +93,7 @@ public:
 };
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
-    : KDialog(0), d(new AlbumPropsEditPriv)
+              : KDialog(0), d(new AlbumPropsEditPriv)
 {
     setCaption(create ? i18n("New Album") : i18n("Edit Album"));
     setButtons(Help|Ok|Cancel);
@@ -106,10 +106,9 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QWidget* page = new QWidget(this);
     QLabel* logo  = new QLabel(page);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                    .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                            .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* topLabel = new QLabel(page);
-
     if (create)
     {
         topLabel->setText(i18n("<qt><b>Create new Album in<br/>\"<i>%1</i>\"</b></qt>", album->title()));
@@ -118,7 +117,6 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     {
         topLabel->setText(i18n("<qt><b>\"<i>%1</i>\"<br/>Album Properties</b></qt>", album->title()));
     }
-
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     topLabel->setWordWrap(false);
 
@@ -164,11 +162,11 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     KHBox* buttonRow            = new KHBox(page);
     QPushButton* dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image",
-            "&Oldest"), buttonRow);
+                                                  "&Oldest"), buttonRow);
     QPushButton* dateAvgButton  = new QPushButton(i18nc("Calculates the average date",
-            "&Average"), buttonRow);
+                                                  "&Average"), buttonRow);
     QPushButton* dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
-            "Newest"), buttonRow);
+                                                  "Newest"), buttonRow);
 
     setTabOrder(d->titleEdit, d->categoryCombo);
     setTabOrder(d->categoryCombo, d->commentsEdit);
@@ -199,7 +197,6 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     // Initialize ---------------------------------------------
 
     AlbumSettings* settings = AlbumSettings::instance();
-
     if (settings)
     {
         d->categoryCombo->addItem(QString());
@@ -281,14 +278,12 @@ QStringList AlbumPropsEdit::albumCategories() const
 {
     QStringList Categories;
     AlbumSettings* settings = AlbumSettings::instance();
-
     if (settings)
     {
         Categories = settings->getAlbumCategoryNames();
     }
 
     QString currentCategory = d->categoryCombo->currentText();
-
     if (Categories.indexOf(currentCategory) == -1)
     {
         Categories.append(currentCategory);

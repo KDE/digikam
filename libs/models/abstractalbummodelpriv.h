@@ -41,83 +41,63 @@ public:
         itemDrag      = true;
         itemDrop      = true;
         dragDropHandler
-        = 0;
+                      = 0;
     }
 
-    Album*            rootAlbum;
+    Album            *rootAlbum;
     Album::Type       type;
     AbstractAlbumModel::RootAlbumBehavior
-    rootBehavior;
+                      rootBehavior;
     bool              itemDrag;
     bool              itemDrop;
     AlbumModelDragDropHandler
-    *dragDropHandler;
+                     *dragDropHandler;
 
-    Album*            addingAlbum;
-    Album*            removingAlbum;
+    Album            *addingAlbum;
+    Album            *removingAlbum;
 
-    Album* findNthChild(Album* parent, int n)
+    Album *findNthChild(Album *parent, int n)
     {
         // return the n-th of the children of parent, or 0
-        Album* a = parent->firstChild();
-
+        Album *a = parent->firstChild();
         if (!a)
-        {
             return 0;
-        }
-
         for (int i=0; i<n; ++i)
         {
             a = a->next();
-
             if (!a)
-            {
                 return 0;
-            }
         }
-
         return a;
     }
 
-    int findIndexAsChild(Album* child)
+    int findIndexAsChild(Album *child)
     {
         // return index of child in the list of children of its parent
-        Album* parent = child->parent();
-
+        Album *parent = child->parent();
         if (!parent)
-        {
             return 0;
-        }
-
-        Album* a = parent->firstChild();
+        Album *a = parent->firstChild();
         int i = 0;
-
         while (a != child)
         {
             a = a->next();
-
             if (!a)
-            {
                 return -1;
-            }
-
             ++i;
         }
-
         return i;
     }
 
-    int numberOfChildren(Album* parent)
+    int numberOfChildren(Album *parent)
     {
-        Album* a = parent->firstChild();
+        Album *a = parent->firstChild();
         int count = 0;
-
         while (a)
         {
             ++count;
             a = a->next();
         }
-
         return count;
     }
 };

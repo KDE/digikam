@@ -153,7 +153,7 @@ public:
     /**
      * Set an observer to be able to cancel a running scan
      */
-    void setObserver(CollectionScannerObserver* observer);
+    void setObserver(CollectionScannerObserver *observer);
 
     /**
      * Returns if the initial scan of the database has been done.

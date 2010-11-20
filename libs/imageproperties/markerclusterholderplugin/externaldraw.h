@@ -62,9 +62,9 @@ public:
     void initialize ();
     bool isInitialized () const;
 
-    bool render( GeoPainter* painter, ViewportParams* viewport, const QString& renderPos, GeoSceneLayer* layer = 0 );
+    bool render( GeoPainter *painter, ViewportParams *viewport, const QString& renderPos, GeoSceneLayer * layer = 0 );
 
-    typedef void (*RenderCallbackFunction)(GeoPainter* painter, void* yourdata);
+    typedef void (*RenderCallbackFunction)(GeoPainter *painter, void* yourdata);
     RenderCallbackFunction renderCallbackFunction;
     void* renderCallbackFunctionData;
 

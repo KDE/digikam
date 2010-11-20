@@ -62,10 +62,10 @@ public:
     };
     ~DatabaseAccessStaticPriv() {};
 
-    DatabaseBackend*    backend;
-    AlbumDB*            db;
-    ImageInfoCache*     infoCache;
-    DatabaseWatch*      databaseWatch;
+    DatabaseBackend    *backend;
+    AlbumDB            *db;
+    ImageInfoCache     *infoCache;
+    DatabaseWatch      *databaseWatch;
     DatabaseParameters  parameters;
     DatabaseLocking     lock;
     QString             lastError;
@@ -78,7 +78,7 @@ class DatabaseAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    DatabaseAccessMutexLocker(DatabaseAccessStaticPriv* d)
+    DatabaseAccessMutexLocker(DatabaseAccessStaticPriv *d)
         : QMutexLocker(&d->lock.mutex), d(d)
     {
         d->lock.lockCount++;
@@ -92,14 +92,13 @@ public:
     DatabaseAccessStaticPriv* const d;
 };
 
-DatabaseAccessStaticPriv* DatabaseAccess::d = 0;
+DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
 
 DatabaseAccess::DatabaseAccess()
 {
     Q_ASSERT(d/*You will want to call setParameters before constructing DatabaseAccess*/);
     d->lock.mutex.lock();
     d->lock.lockCount++;
-
     if (!d->backend->isOpen() && !d->initializing)
     {
         // avoid endless loops (e.g. recursing from CollectionManager)
@@ -127,38 +126,33 @@ DatabaseAccess::DatabaseAccess(bool)
     d->lock.lockCount++;
 }
 
-AlbumDB* DatabaseAccess::db() const
+AlbumDB *DatabaseAccess::db() const
 {
     return d->db;
 }
 
-DatabaseBackend* DatabaseAccess::backend() const
+DatabaseBackend *DatabaseAccess::backend() const
 {
     return d->backend;
 }
 
-ImageInfoCache* DatabaseAccess::imageInfoCache() const
+ImageInfoCache *DatabaseAccess::imageInfoCache() const
 {
     return d->infoCache;
 }
 
-DatabaseWatch* DatabaseAccess::databaseWatch()
+DatabaseWatch *DatabaseAccess::databaseWatch()
 {
     if (d)
-    {
         return d->databaseWatch;
-    }
-
     return 0;
 }
 
-void DatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
-{
+void DatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler *errorhandler){
     if (!d)
-    {
-        d = new DatabaseAccessStaticPriv();
-    }
-
+        {
+            d = new DatabaseAccessStaticPriv();
+        }
     //DatabaseErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
@@ -166,10 +160,7 @@ void DatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler
 DatabaseParameters DatabaseAccess::parameters()
 {
     if (d)
-    {
         return d->parameters;
-    }
-
     return DatabaseParameters();
 }
 
@@ -177,11 +168,8 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters)
 {
     //TODO 0.11: Refine API
     setParameters(parameters, DatabaseSlave);
-
     if (d->databaseWatch)
-    {
         d->databaseWatch->doAnyProcessing();
-    }
 }
 
 void DatabaseAccess::setParameters(const DatabaseParameters& parameters, ApplicationStatus status)
@@ -194,20 +182,14 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     DatabaseAccessMutexLocker lock(d);
 
     if (d->parameters == parameters)
-    {
         return;
-    }
 
     if (d->backend && d->backend->isOpen())
-    {
         d->backend->close();
-    }
 
     // Kill the old database error handler
     if (d->backend)
-    {
         d->backend->setDatabaseErrorHandler(0);
-    }
 
     d->parameters = parameters;
 
@@ -215,15 +197,10 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     {
         d->databaseWatch = new DatabaseWatch();
         d->databaseWatch->setApplicationIdentifier(d->applicationIdentifier);
-
         if (status == MainApplication)
-        {
             d->databaseWatch->initializeRemote(DatabaseWatch::DatabaseMaster);
-        }
         else
-        {
             d->databaseWatch->initializeRemote(DatabaseWatch::DatabaseSlave);
-        }
     }
 
     if (!d->backend || !d->backend->isCompatible(parameters))
@@ -242,10 +219,9 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     CollectionManager::instance()->clear_locked();
 }
 
-bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
+bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
-
     if (!drivers.contains("QSQLITE"))
     {
         kError() << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
@@ -260,16 +236,13 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     if (!d->backend)
     {
         kWarning() << "No database backend available in checkReadyForUse. "
-                   "Did you call setParameters before?";
+                           "Did you call setParameters before?";
         return false;
     }
-
     if (d->backend->isReady())
-    {
         return true;
-    }
 
-    //TODO: Implement a method to wait until the database is open
+//TODO: Implement a method to wait until the database is open
     if (!d->backend->isOpen())
     {
         if (!d->backend->open(d->parameters))
@@ -288,7 +261,6 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     updater.setDatabaseAccess(&access);
 
     updater.setObserver(observer);
-
     if (!d->backend->initSchema(&updater))
     {
         access.setLastError(updater.getLastErrorMessage());
@@ -326,7 +298,6 @@ void DatabaseAccess::cleanUpDatabase()
         delete d->db;
         delete d->backend;
     }
-
     delete d;
     d = 0;
 }
@@ -341,31 +312,23 @@ DatabaseAccessUnlock::DatabaseAccessUnlock()
     count = DatabaseAccess::d->lock.lockCount;
     // set lock count to 0
     DatabaseAccess::d->lock.lockCount = 0;
-
     // unlock
     for (int i=0; i<count; ++i)
-    {
         DatabaseAccess::d->lock.mutex.unlock();
-    }
-
     // drop lock acquired in first line. Mutex is now free.
     DatabaseAccess::d->lock.mutex.unlock();
 }
 
-DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess*)
+DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess *)
 {
     // With the passed pointer, we have assured that the mutex is acquired
     // Store lock count
     count = DatabaseAccess::d->lock.lockCount;
     // set lock count to 0
     DatabaseAccess::d->lock.lockCount = 0;
-
     // unlock
     for (int i=0; i<count; ++i)
-    {
         DatabaseAccess::d->lock.mutex.unlock();
-    }
-
     // Mutex is now free
 }
 
@@ -373,10 +336,7 @@ DatabaseAccessUnlock::~DatabaseAccessUnlock()
 {
     // lock as often as it was locked before
     for (int i=0; i<count; ++i)
-    {
         DatabaseAccess::d->lock.mutex.lock();
-    }
-
     // update lock count
     DatabaseAccess::d->lock.lockCount = count;
 }

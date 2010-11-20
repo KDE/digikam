@@ -34,7 +34,7 @@
 
 namespace Digikam
 {
-class ImageIface;
+    class ImageIface;
 }
 
 using namespace Digikam;
@@ -45,7 +45,7 @@ namespace DigikamTransformImagePlugin
 class ImageSelectionWidget : public QWidget
 {
 
-    Q_OBJECT
+Q_OBJECT
 
 public:
 

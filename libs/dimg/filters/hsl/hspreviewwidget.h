@@ -41,7 +41,7 @@ class HSPreviewWidgetPrivate;
 
 class DIGIKAM_EXPORT HSPreviewWidget : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
 

@@ -63,7 +63,7 @@ private:
     // parse object related methods
     template <class T> QString createEntries(const QList<T*> &data);
     template <class T> QString createSection(const QString& sectionName, const QList<T*> &data, bool lastSection = false);
-    QString createHeader(const QString& str);
+                       QString createHeader(const QString& str);
 };
 
 } // namespace Digikam

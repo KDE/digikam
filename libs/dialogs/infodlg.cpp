@@ -63,7 +63,7 @@ public:
 };
 
 InfoDlg::InfoDlg(QWidget* parent)
-    : KDialog(parent), d(new InfoDlgPriv)
+       : KDialog(parent), d(new InfoDlgPriv)
 {
     setButtons(Help|User1|Ok);
     setDefaultButton(Ok);
@@ -80,13 +80,12 @@ InfoDlg::InfoDlg(QWidget* parent)
     // --------------------------------------------------------
 
     QLabel* logo = new QLabel(page);
-
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                        .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                                .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     else
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
-                        .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                                .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     // --------------------------------------------------------
 
@@ -94,9 +93,9 @@ InfoDlg::InfoDlg(QWidget* parent)
     header->setWordWrap(true);
     header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
                          "<p>%3</p>",
-                         KGlobal::mainComponent().aboutData()->programName(),
-                         KGlobal::mainComponent().aboutData()->version(),
-                         digiKamSlogan().toString()));
+                    KGlobal::mainComponent().aboutData()->programName(),
+                    KGlobal::mainComponent().aboutData()->version(),
+                    digiKamSlogan().toString()));
 
     // --------------------------------------------------------
 
@@ -141,9 +140,7 @@ QTreeWidget* InfoDlg::listView() const
 void InfoDlg::setInfoMap(const QMap<QString, QString>& list)
 {
     for (QMap<QString, QString>::const_iterator it = list.constBegin(); it != list.constEnd() ; ++it)
-    {
         new QTreeWidgetItem(d->listView, QStringList() << it.key() << it.value());
-    }
 }
 
 void InfoDlg::slotCopy2ClipBoard()
@@ -156,7 +153,6 @@ void InfoDlg::slotCopy2ClipBoard()
     textInfo.append("\n");
 
     QTreeWidgetItemIterator it(d->listView);
-
     while (*it)
     {
         textInfo.append((*it)->text(0));

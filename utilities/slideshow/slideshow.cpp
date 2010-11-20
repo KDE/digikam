@@ -115,7 +115,7 @@ public:
 };
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
-    : QWidget(0, Qt::FramelessWindowHint), d(new SlideShowPriv)
+         : QWidget(0, Qt::FramelessWindowHint), d(new SlideShowPriv)
 {
     d->settings = settings;
 
@@ -145,11 +145,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     d->toolBar = new ToolBar(this);
     d->toolBar->hide();
-
     if (!d->settings.loop)
-    {
         d->toolBar->setEnabledPrev(false);
-    }
 
     connect(d->toolBar, SIGNAL(signalPause()),
             this, SLOT(slotPause()));
@@ -223,7 +220,6 @@ SlideShow::~SlideShow()
 void SlideShow::setCurrent(const KUrl& url)
 {
     int index = d->settings.fileList.indexOf(url);
-
     if (index != -1)
     {
         d->currentImage = url;
@@ -307,9 +303,7 @@ void SlideShow::loadPrevImage()
 void SlideShow::slotGotImagePreview(const LoadingDescription& desc, const DImg& preview)
 {
     if (desc.filePath != d->currentImage.toLocalFile() || desc.isThumbnail())
-    {
         return;
-    }
 
     d->preview = preview;
 
@@ -323,7 +317,6 @@ void SlideShow::slotGotImagePreview(const LoadingDescription& desc, const DImg& 
             d->timer->setSingleShot(true);
             d->timer->start(d->settings.delay);
         }
-
         preloadNextImage();
     }
 }
@@ -396,16 +389,12 @@ void SlideShow::updatePixmap()
                 str.clear();
 
                 if (!photoInfo.make.isEmpty())
-                {
                     str = photoInfo.make;
-                }
 
                 if (!photoInfo.model.isEmpty())
                 {
                     if (!photoInfo.make.isEmpty())
-                    {
                         str += QString(" / ");
-                    }
 
                     str += photoInfo.model;
                 }
@@ -420,16 +409,12 @@ void SlideShow::updatePixmap()
                 str.clear();
 
                 if (!photoInfo.exposureTime.isEmpty())
-                {
                     str = photoInfo.exposureTime;
-                }
 
                 if (!photoInfo.sensitivity.isEmpty())
                 {
                     if (!photoInfo.exposureTime.isEmpty())
-                    {
                         str += QString(" / ");
-                    }
 
                     str += i18n("%1 ISO",photoInfo.sensitivity);
                 }
@@ -444,18 +429,14 @@ void SlideShow::updatePixmap()
                 str.clear();
 
                 if (!photoInfo.aperture.isEmpty())
-                {
                     str = photoInfo.aperture;
-                }
 
                 if (photoInfo.focalLength35mm.isEmpty())
                 {
                     if (!photoInfo.focalLength.isEmpty())
                     {
                         if (!photoInfo.aperture.isEmpty())
-                        {
                             str += QString(" / ");
-                        }
 
                         str += photoInfo.focalLength;
                     }
@@ -463,18 +444,12 @@ void SlideShow::updatePixmap()
                 else
                 {
                     if (!photoInfo.aperture.isEmpty())
-                    {
-                        str += QString(" / ");
-                    }
+                            str += QString(" / ");
 
                     if (!photoInfo.focalLength.isEmpty())
-                    {
                         str += QString("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
-                    }
                     else
-                    {
                         str += QString("35mm: %1)").arg(photoInfo.focalLength35mm);
-                    }
                 }
 
                 printInfoText(p, offset, str);
@@ -496,8 +471,8 @@ void SlideShow::updatePixmap()
             if (d->settings.printName)
             {
                 str = QString("%1 (%2/%3)").arg(d->currentImage.fileName())
-                      .arg(QString::number(d->fileIndex + 1))
-                      .arg(QString::number(d->settings.fileList.count()));
+                                           .arg(QString::number(d->fileIndex + 1))
+                                           .arg(QString::number(d->settings.fileList.count()));
 
                 printInfoText(p, offset, str);
             }
@@ -510,7 +485,7 @@ void SlideShow::updatePixmap()
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                        Qt::AlignCenter|Qt::TextWordWrap,
                        i18n("Cannot display image\n\"%1\"",
-                            d->currentImage.fileName()));
+                       d->currentImage.fileName()));
         }
     }
     else
@@ -518,16 +493,15 @@ void SlideShow::updatePixmap()
         // End of Slide Show.
 
         QPixmap logo;
-
         if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
         {
             logo = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                   .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                           .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         else
         {
             logo = QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
-                   .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                           .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
         QFont fn(font());
@@ -553,12 +527,9 @@ void SlideShow::printInfoText(QPainter& p, int& offset, const QString& str)
     {
         offset += 20;
         p.setPen(Qt::black);
-
         for (int x=19; x<=21; ++x)
             for (int y=offset+1; y>=offset-1; --y)
-            {
                 p.drawText(x, height()-y, str);
-            }
 
         p.setPen(Qt::white);
         p.drawText(20, height()-offset, str);
@@ -585,15 +556,11 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
              currIndex < (uint)comments.length() && !breakLine ; ++currIndex )
         {
             if ( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() )
-            {
                 breakLine = true;
-            }
         }
 
         if (commentsLinesLengthLocal <= (currIndex - commentsIndex))
-        {
             commentsLinesLengthLocal = (currIndex - commentsIndex);
-        }
 
         breakLine = false;
 
@@ -601,20 +568,16 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
              currIndex <= commentsIndex + commentsLinesLengthLocal &&
              currIndex < (uint)comments.length() && !breakLine ;
              ++currIndex )
-        {
-            breakLine = (comments[currIndex] == QChar('\n')) ? true : false;
-
-            if (breakLine)
             {
-                newLine.append(QString(" "));
-            }
-            else
-            {
-                newLine.append(comments[currIndex]);
-            }
-        }
+                breakLine = (comments[currIndex] == QChar('\n')) ? true : false;
 
-        commentsIndex = currIndex; // The line is ended
+                if (breakLine)
+                    newLine.append(QString(" "));
+                else
+                    newLine.append(comments[currIndex]);
+            }
+
+            commentsIndex = currIndex; // The line is ended
 
         if (commentsIndex != (uint)comments.length())
         {
@@ -677,7 +640,7 @@ void SlideShow::slotClose()
     close();
 }
 
-void SlideShow::wheelEvent(QWheelEvent* e)
+void SlideShow::wheelEvent(QWheelEvent *e)
 {
     if (e->delta() < 0)
     {
@@ -699,9 +662,7 @@ void SlideShow::wheelEvent(QWheelEvent* e)
 void SlideShow::mousePressEvent(QMouseEvent* e)
 {
     if (d->endOfShow)
-    {
         close();
-    }
 
     if (e->button() == Qt::LeftButton)
     {
@@ -722,9 +683,7 @@ void SlideShow::mousePressEvent(QMouseEvent* e)
 void SlideShow::keyPressEvent(QKeyEvent* e)
 {
     if (!e)
-    {
         return;
-    }
 
     d->toolBar->keyPressEvent(e);
 }
@@ -759,9 +718,7 @@ void SlideShow::mouseMoveEvent(QMouseEvent* e)
     d->mouseMoveTimer->start(1000);
 
     if (!d->toolBar->canHide())
-    {
         return;
-    }
 
     QPoint pos(e->pos());
 
@@ -795,9 +752,7 @@ void SlideShow::mouseMoveEvent(QMouseEvent* e)
     else
     {
         if (!d->toolBar->isHidden())
-        {
             d->toolBar->hide();
-        }
     }
 }
 
@@ -814,9 +769,7 @@ void SlideShow::slotMouseMoveTimeOut()
 
     if (topLeftLarger.contains(pos) || topRightLarger.contains(pos)
         || bottomLeftLarger.contains(pos) || bottomRightLarger.contains(pos))
-    {
         return;
-    }
 
     setCursor(QCursor(Qt::BlankCursor));
 }
@@ -825,16 +778,13 @@ void SlideShow::slotMouseMoveTimeOut()
 void SlideShow::inhibitScreenSaver()
 {
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.ScreenSaver", "/ScreenSaver",
-                           "org.freedesktop.ScreenSaver", "Inhibit" );
+                                                           "org.freedesktop.ScreenSaver", "Inhibit" );
     message << QString( "digiKam" );
     message << i18nc( "Reason for inhibiting the screensaver activation, when the presentation mode is active", "Giving a presentation" );
 
     QDBusReply<uint> reply = QDBusConnection::sessionBus().call( message );
-
     if ( reply.isValid() )
-    {
         d->screenSaverCookie = reply.value();
-    }
 }
 
 void SlideShow::allowScreenSaver()
@@ -842,7 +792,7 @@ void SlideShow::allowScreenSaver()
     if ( d->screenSaverCookie != -1 )
     {
         QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.ScreenSaver", "/ScreenSaver",
-                               "org.freedesktop.ScreenSaver", "UnInhibit" );
+                                                               "org.freedesktop.ScreenSaver", "UnInhibit" );
         message << (uint)d->screenSaverCookie;
         QDBusConnection::sessionBus().send( message );
     }

@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 Convert2TIFF::Convert2TIFF(QObject* parent)
-    : BatchTool("Convert2TIFF", ConvertTool, parent)
+            : BatchTool("Convert2TIFF", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To TIFF"));
     setToolDescription(i18n("A tool to convert images to TIFF format."));
@@ -90,10 +90,7 @@ QString Convert2TIFF::outputSuffix() const
 
 bool Convert2TIFF::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     image().setAttribute("compress", settings()["compress"].toBool());
 

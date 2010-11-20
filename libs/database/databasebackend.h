@@ -40,22 +40,22 @@ class DatabaseBackendPrivate;
 class DIGIKAM_DATABASE_EXPORT DatabaseBackend : public DatabaseCoreBackend
 {
 
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
-    DatabaseBackend(DatabaseLocking* locking, const QString& backendName="digikamDatabase-");
+    DatabaseBackend(DatabaseLocking *locking, const QString &backendName="digikamDatabase-");
     ~DatabaseBackend();
 
     /** Sets the global database watch */
-    void setDatabaseWatch(DatabaseWatch* watch);
+    void setDatabaseWatch(DatabaseWatch *watch);
 
     /**
      * Initialize the database schema to the current version,
      * carry out upgrades if necessary.
      * Shall only be called from the thread that called open().
      */
-    bool initSchema(SchemaUpdater* updater);
+    bool initSchema(SchemaUpdater *updater);
 
     /**
      * Notify all listeners of the changeset

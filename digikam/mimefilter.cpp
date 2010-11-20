@@ -34,7 +34,7 @@ namespace Digikam
 {
 
 MimeFilter::MimeFilter(QWidget* parent)
-    : KComboBox(parent)
+          : KComboBox(parent)
 {
     insertItem( AllFiles,    i18n("All Files") );
     insertItem( ImageFiles,  i18n("Image Files") );

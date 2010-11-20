@@ -64,11 +64,11 @@ public:
 
     class Task
     {
-    public:
+        public:
 
-        Task() {};
+            Task(){};
 
-        AssignedBatchTools item;
+            AssignedBatchTools item;
     };
 
     bool           running;
@@ -89,7 +89,7 @@ public:
 };
 
 ActionThread::ActionThread(QObject* parent)
-    : QThread(parent), d(new ActionThreadPriv)
+            : QThread(parent), d(new ActionThreadPriv)
 {
     qRegisterMetaType<ActionData>();
 }
@@ -129,11 +129,7 @@ void ActionThread::processFile(const AssignedBatchTools& item)
 void ActionThread::cancel()
 {
     d->cancel  = true;
-
-    if (d->tool)
-    {
-        d->tool->cancel();
-    }
+    if (d->tool) d->tool->cancel();
 
     QMutexLocker lock(&d->mutex);
     d->todo.clear();
@@ -153,15 +149,10 @@ void ActionThread::run()
         ActionThreadPriv::Task* t = 0;
         {
             QMutexLocker lock(&d->mutex);
-
             if (!d->todo.isEmpty())
-            {
                 t = d->todo.takeFirst();
-            }
             else
-            {
                 d->condVar.wait(&d->mutex);
-            }
         }
 
         if (t)
@@ -250,12 +241,7 @@ void ActionThread::run()
                     ActionData ad5;
                     ad5.fileUrl = t->item.m_itemUrl;
                     ad5.status  = ActionData::BatchFailed;
-
-                    if (!errMsg.isEmpty())
-                    {
-                        ad5.message = errMsg;
-                    }
-
+                    if (!errMsg.isEmpty()) ad5.message = errMsg;
                     emit finished(ad5);
 
                     break;

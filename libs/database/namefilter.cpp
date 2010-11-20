@@ -35,23 +35,16 @@ namespace Digikam
 NameFilter::NameFilter(const QString& filter)
 {
     if ( filter.isEmpty() )
-    {
         return;
-    }
 
     QChar sep( ';' );
     int i = filter.indexOf( sep );
-
     if ( i == -1 && filter.indexOf( ' ') != -1 )
-    {
         sep = QChar( ' ' );
-    }
 
     QStringList list = filter.split(sep, QString::SkipEmptyParts);
     QStringList::const_iterator it = list.constBegin();
-
-    while ( it != list.constEnd() )
-    {
+    while ( it != list.constEnd() ) {
         QRegExp wildcard( (*it).trimmed() );
         wildcard.setPatternSyntax(QRegExp::Wildcard);
         wildcard.setCaseSensitivity(Qt::CaseInsensitive);
@@ -63,17 +56,11 @@ NameFilter::NameFilter(const QString& filter)
 bool NameFilter::matches(const QString& name)
 {
     QList<QRegExp>::const_iterator rit = m_filterList.constBegin();
-
-    while ( rit != m_filterList.constEnd() )
-    {
+    while ( rit != m_filterList.constEnd() ) {
         if ( (*rit).exactMatch(name) )
-        {
             return true;
-        }
-
         ++rit;
     }
-
     return false;
 }
 

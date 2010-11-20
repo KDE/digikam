@@ -183,9 +183,7 @@ ImageWindow* ImageWindow::m_instance = 0;
 ImageWindow* ImageWindow::imagewindow()
 {
     if (!m_instance)
-    {
         new ImageWindow();
-    }
 
     return m_instance;
 }
@@ -196,14 +194,13 @@ bool ImageWindow::imagewindowCreated()
 }
 
 ImageWindow::ImageWindow()
-    : EditorWindow("Image Editor"), d(new ImageWindowPriv)
+           : EditorWindow("Image Editor"), d(new ImageWindowPriv)
 {
     setXMLFile("digikamimagewindowui.rc");
 
     // --------------------------------------------------------
 
     UiFileValidator validator(localXMLFile());
-
     if (!validator.isValid())
     {
         validator.fixConfigFile();
@@ -310,9 +307,7 @@ bool ImageWindow::queryClose()
 
     // wait if a save operation is currently running
     if (!waitForSavingToComplete())
-    {
         return false;
-    }
 
     return promptUserSave(d->urlCurrent);
 }
@@ -329,19 +324,19 @@ void ImageWindow::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
 
-    connect(this, SIGNAL(signalSelectionChanged( const QRect&)),
-            d->rightSideBar, SLOT(slotImageSelectionChanged( const QRect&)));
+    connect(this, SIGNAL(signalSelectionChanged( const QRect &)),
+            d->rightSideBar, SLOT(slotImageSelectionChanged( const QRect &)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
-    ImageAttributesWatch* watch = ImageAttributesWatch::instance();
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl&)),
-            this, SLOT(slotFileMetadataChanged(const KUrl&)));
+    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl &)),
+            this, SLOT(slotFileMetadataChanged(const KUrl &)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
+            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)),
             Qt::QueuedConnection);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
@@ -360,7 +355,7 @@ void ImageWindow::setupUserArea()
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     QWidget* widget = new QWidget(this);
-    QHBoxLayout* hlay = new QHBoxLayout(widget);
+    QHBoxLayout *hlay = new QHBoxLayout(widget);
     m_splitter        = new SidebarSplitter(widget);
 
     KMainWindow* viewContainer = new KMainWindow(widget, Qt::Widget);
@@ -393,7 +388,6 @@ void ImageWindow::setupUserArea()
     // by viewContainers built-in mechanism.
     Qt::DockWidgetArea dockArea    = Qt::LeftDockWidgetArea;
     Qt::Orientation    orientation = Qt::Vertical;
-
     if (group.hasKey(d->configHorizontalThumbbarEntry))
     {
         if (group.readEntry(d->configHorizontalThumbbarEntry, true))
@@ -402,7 +396,6 @@ void ImageWindow::setupUserArea()
             dockArea    = Qt::TopDockWidgetArea;
             orientation = Qt::Horizontal;
         }
-
         group.deleteEntry(d->configHorizontalThumbbarEntry);
     }
 
@@ -476,14 +469,14 @@ void ImageWindow::setupActions()
     // Power users may add them.
 
     d->fileDeletePermanentlyDirectlyAction = new KAction(KIcon("edit-delete"),
-            i18n("Delete Permanently without Confirmation"), this);
+                                                 i18n("Delete Permanently without Confirmation"), this);
     connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanentlyDirectly()));
     actionCollection()->addAction("image_delete_permanently_directly",
                                   d->fileDeletePermanentlyDirectlyAction);
 
     d->fileTrashDirectlyAction = new KAction(KIcon("user-trash"),
-            i18n("Move to Trash without Confirmation"), this);
+                                     i18n("Move to Trash without Confirmation"), this);
     connect(d->fileTrashDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotTrashCurrentItemDirectly()));
     actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
@@ -502,7 +495,7 @@ void ImageWindow::setupActions()
 void ImageWindow::applySettings()
 {
     applyStandardSettings();
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::instance();
     m_setExifOrientationTag = settings->getExifSetOrientation();
     m_canvas->setExifOrient(settings->getExifRotate());
     d->thumbBar->applySettings();
@@ -517,28 +510,18 @@ void ImageWindow::refreshView()
 void ImageWindow::slotThumbBarItemSelected(const KUrl& url)
 {
     if (d->urlCurrent == url)
-    {
         return;
-    }
 
     if (!promptUserSave(d->urlCurrent, AskIfNeeded, false))
-    {
         return;
-    }
 
     int index = d->urlList.indexOf(url);
-
     if (index == -1)
-    {
         return;
-    }
 
     d->urlCurrent = url;
-
     if (!d->imageInfoList.isEmpty())
-    {
         d->imageInfoCurrent = d->imageInfoList[index];
-    }
 
     m_saveAction->setEnabled(false);
     m_revertAction->setEnabled(false);
@@ -552,9 +535,7 @@ void ImageWindow::loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
                           const QString& caption, bool allowSaving)
 {
     if (!promptUserSave(d->urlCurrent))
-    {
         return;
-    }
 
     d->urlList          = urlList;
     d->urlCurrent       = urlCurrent;
@@ -571,9 +552,7 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
 
     // Very first thing is to check for changes, user may choose to cancel operation
     if (!promptUserSave(d->urlCurrent))
-    {
         return;
-    }
 
     // take over ImageInfo list
     d->imageInfoList    = imageInfoList;
@@ -584,18 +563,13 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
     d->thumbBar->clear();
 
     d->thumbBar->blockSignals(true);
-
     for (ImageInfoList::iterator it = d->imageInfoList.begin(); it != d->imageInfoList.end(); ++it)
     {
         d->urlList.append(it->fileUrl());
-        ImagePreviewBarItem* item = new ImagePreviewBarItem(d->thumbBar, *it);
-
+        ImagePreviewBarItem *item = new ImagePreviewBarItem(d->thumbBar, *it);
         if (imageInfoCurrent == *it)
-        {
             d->thumbBar->setSelectedItem(item);
-        }
     }
-
     d->thumbBar->blockSignals(false);
 
     d->urlCurrent = d->imageInfoCurrent.fileUrl();
@@ -614,13 +588,9 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
     }
 
     if (!caption.isEmpty())
-    {
         setCaption(i18n("Image Editor - %1",caption));
-    }
     else
-    {
         setCaption(i18n("Image Editor"));
-    }
 
     d->allowSaving = allowSaving;
 
@@ -641,9 +611,7 @@ void ImageWindow::slotLoadCurrent()
         m_canvas->load(d->urlCurrent.toLocalFile(), m_IOFileSettings);
 
         if (++index != d->urlList.size())
-        {
             m_canvas->preload(d->urlList[index].toLocalFile());
-        }
     }
 
     d->thumbBar->blockSignals(true);
@@ -664,25 +632,19 @@ void ImageWindow::setViewToURL(const KUrl& url)
 void ImageWindow::slotForward()
 {
     if (!promptUserSave(d->urlCurrent))
-    {
         return;
-    }
 
     int index = d->urlList.indexOf(d->urlCurrent);
 
     if (index != -1)
     {
         ++index;
-
         if (index != d->urlList.size())
         {
-            if (!d->imageInfoList.isEmpty())
-            {
-                d->imageInfoCurrent = d->imageInfoList[index];
-            }
-
-            d->urlCurrent = d->urlList[index];
-            slotLoadCurrent();
+           if (!d->imageInfoList.isEmpty())
+               d->imageInfoCurrent = d->imageInfoList[index];
+           d->urlCurrent = d->urlList[index];
+           slotLoadCurrent();
         }
     }
 }
@@ -690,9 +652,7 @@ void ImageWindow::slotForward()
 void ImageWindow::slotBackward()
 {
     if (!promptUserSave(d->urlCurrent))
-    {
         return;
-    }
 
     int index = d->urlList.indexOf(d->urlCurrent);
 
@@ -702,13 +662,10 @@ void ImageWindow::slotBackward()
 
         if (index >= 0)
         {
-            if (!d->imageInfoList.isEmpty())
-            {
-                d->imageInfoCurrent = d->imageInfoList[index];
-            }
-
-            d->urlCurrent = d->urlList[index];
-            slotLoadCurrent();
+           if (!d->imageInfoList.isEmpty())
+               d->imageInfoCurrent = d->imageInfoList[index];
+           d->urlCurrent = d->urlList[index];
+           slotLoadCurrent();
         }
     }
 }
@@ -716,34 +673,22 @@ void ImageWindow::slotBackward()
 void ImageWindow::slotFirst()
 {
     if (!promptUserSave(d->urlCurrent))
-    {
         return;
-    }
 
     d->urlCurrent = d->urlList.first();
-
     if (!d->imageInfoList.isEmpty())
-    {
         d->imageInfoCurrent = d->imageInfoList.first();
-    }
-
     slotLoadCurrent();
 }
 
 void ImageWindow::slotLast()
 {
     if (!promptUserSave(d->urlCurrent))
-    {
         return;
-    }
 
     d->urlCurrent = d->urlList.last();
-
     if (!d->imageInfoList.isEmpty())
-    {
         d->imageInfoCurrent = d->imageInfoList.last();
-    }
-
     slotLoadCurrent();
 }
 
@@ -751,9 +696,9 @@ void ImageWindow::slotContextMenu()
 {
     if (m_contextMenu)
     {
-        RatingPopupMenu* ratingMenu     = 0;
-        TagsPopupMenu*   assignTagsMenu = 0;
-        TagsPopupMenu*   removeTagsMenu = 0;
+        RatingPopupMenu *ratingMenu     = 0;
+        TagsPopupMenu   *assignTagsMenu = 0;
+        TagsPopupMenu   *removeTagsMenu = 0;
 
         if (!d->imageInfoCurrent.isNull())
         {
@@ -779,9 +724,7 @@ void ImageWindow::slotContextMenu()
                     this, SLOT(slotRemoveTag(int)));
 
             if (!DatabaseAccess().db()->hasTags( idList ))
-            {
                 m_contextMenu->menuAction()->setEnabled(false);
-            }
 
             m_contextMenu->addSeparator();
 
@@ -899,7 +842,6 @@ void ImageWindow::slotAssignRating(int rating)
 void ImageWindow::assignRating(const ImageInfo& info, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
-
     if (!info.isNull())
     {
         MetadataHub hub;
@@ -923,8 +865,8 @@ void ImageWindow::slotUpdateItemInfo()
 
     QString text = i18nc("<Image file name> (<Image number> of <Images in album>)",
                          "%1 (%2 of %3)", d->urlCurrent.fileName(),
-                         QString::number(index+1),
-                         QString::number(d->urlList.count()));
+                                          QString::number(index+1),
+                                          QString::number(d->urlList.count()));
     m_nameLabel->setText(text);
 
     if (d->urlList.count() == 1)
@@ -959,7 +901,7 @@ void ImageWindow::slotUpdateItemInfo()
     // This is necessary when ImageEditor is opened from cameraclient.
 
     KUrl u(d->urlCurrent.directory());
-    PAlbum* palbum = AlbumManager::instance()->findPAlbum(u);
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
     if (!palbum)
     {
@@ -1005,11 +947,8 @@ void ImageWindow::saveIsComplete()
     if (index != -1)
     {
         if (++index != d->urlList.size())
-        {
             m_canvas->preload(d->urlList[index].toLocalFile());
-        }
     }
-
     setViewToURL(d->urlCurrent);
 }
 
@@ -1017,9 +956,7 @@ void ImageWindow::saveAsIsComplete()
 {
     // Nothing to be done if operating without database
     if (d->imageInfoCurrent.isNull())
-    {
         return;
-    }
 
     // Find the src and dest albums ------------------------------------------
 
@@ -1034,7 +971,7 @@ void ImageWindow::saveAsIsComplete()
         // Now copy the metadata of the original file to the new file ------------
 
         ScanController::instance()->scanFileDirectlyCopyAttributes(m_savingContext->destinationURL.toLocalFile(),
-                d->imageInfoCurrent.id());
+                                                                   d->imageInfoCurrent.id());
         ImageInfo newInfo(m_savingContext->destinationURL.toLocalFile());
 
         if ( !d->urlList.contains(m_savingContext->destinationURL) )
@@ -1050,7 +987,6 @@ void ImageWindow::saveAsIsComplete()
             for (int i=0; i<d->imageInfoList.count(); ++i)
             {
                 ImageInfo info = d->imageInfoList[i];
-
                 if (info.fileUrl() == m_savingContext->destinationURL)
                 {
                     d->imageInfoCurrent = newInfo;
@@ -1068,19 +1004,13 @@ void ImageWindow::saveAsIsComplete()
         // This may irritate users who want to check for quality loss in lossy formats.
         // In any case, only do that if the format did not change - too many assumptions otherwise (see bug #138949).
         if (m_savingContext->originalFormat == m_savingContext->format)
-        {
             LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
-        }
 
         // notify main app that file changed or a file is added
         if (m_savingContext->destinationExisted)
-        {
             emit signalFileModified(m_savingContext->destinationURL);
-        }
         else
-        {
             emit signalFileAdded(m_savingContext->destinationURL);
-        }
 
         // all that is done in slotLoadCurrent, except for loading
         int index = d->urlList.indexOf(d->urlCurrent);
@@ -1088,21 +1018,16 @@ void ImageWindow::saveAsIsComplete()
         if (index != -1)
         {
             setViewToURL(d->urlCurrent);
-
             if (++index != d->urlList.count())
-            {
                 m_canvas->preload(d->urlList[index].toLocalFile());
-            }
         }
 
         // Add the file to the list of thumbbar images if it's not there already
-        ImagePreviewBarItem* foundItem = d->thumbBar->findItemByInfo(d->imageInfoCurrent);
+        ImagePreviewBarItem *foundItem = d->thumbBar->findItemByInfo(d->imageInfoCurrent);
         d->thumbBar->reloadThumb(foundItem);
 
         if (!foundItem)
-        {
             foundItem = new ImagePreviewBarItem(d->thumbBar, d->imageInfoCurrent);
-        }
 
         d->thumbBar->blockSignals(true);
         d->thumbBar->setSelected(foundItem);
@@ -1184,26 +1109,18 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     KUrl u;
     u.setPath(d->urlCurrent.directory());
-    PAlbum* palbum = AlbumManager::instance()->findPAlbum(u);
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
     // if available, provide a digikamalbums:// URL to KIO
     KUrl kioURL;
-
     if (!d->imageInfoCurrent.isNull())
-    {
         kioURL = d->imageInfoCurrent.databaseUrl();
-    }
     else
-    {
         kioURL = d->urlCurrent;
-    }
-
     KUrl fileURL = d->urlCurrent;
 
     if (!palbum)
-    {
         return;
-    }
 
     bool useTrash;
 
@@ -1215,14 +1132,11 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
         KUrl::List urlList;
         urlList.append(d->urlCurrent);
-
         if (!dialog.confirmDeleteList(urlList,
-                                      DeleteDialogMode::Files,
-                                      preselectDeletePermanently ?
-                                      DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
-        {
+             DeleteDialogMode::Files,
+             preselectDeletePermanently ?
+                     DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
             return;
-        }
 
         useTrash = !dialog.shouldDelete();
     }
@@ -1236,9 +1150,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     // trash does not like non-local URLs, put is not implemented
     if (useTrash)
-    {
         kioURL = fileURL;
-    }
 
     int index = d->urlList.indexOf(d->urlCurrent);
 
@@ -1247,7 +1159,6 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         // no database information: Do it the old way
 
         SyncJobResult deleteResult = SyncJob::del(kioURL, useTrash);
-
         if (!deleteResult)
         {
             KMessageBox::error(this, deleteResult.errorString);
@@ -1262,23 +1173,19 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         // We have database information, which means information will get through
         // everywhere. Just do it asynchronously.
 
-        KIO::Job* job = DIO::del(kioURL, useTrash);
+        KIO::Job *job = DIO::del(kioURL, useTrash);
         job->ui()->setWindow(this);
         job->ui()->setAutoErrorHandlingEnabled(true);
     }
 
     if (removeItem(index))
-    {
         QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
-    }
 }
 
 bool ImageWindow::removeItem(int index)
 {
     if (index == -1 || index >= d->urlList.size())
-    {
         return false;
-    }
 
     KUrl url = d->urlList[index];
 
@@ -1289,18 +1196,12 @@ bool ImageWindow::removeItem(int index)
 
     // remove from internal lists
     d->urlList.removeAt(index);
-
     if (!d->imageInfoList.isEmpty())
-    {
         d->imageInfoList.removeAt(index);
-    }
-
     // Remember: index now points to the next item in the list
 
     if (url != d->urlCurrent)
-    {
         return true;
-    }
 
     if (index < d->urlList.size())
     {
@@ -1321,9 +1222,9 @@ bool ImageWindow::removeItem(int index)
     // No image in the current Album -> Quit ImageEditor...
 
     KMessageBox::information(this,
-                             i18n("There is no image to show in the current album.\n"
-                                  "The image editor will be closed."),
-                             i18n("No Image in Current Album"));
+                            i18n("There is no image to show in the current album.\n"
+                                    "The image editor will be closed."),
+                            i18n("No Image in Current Album"));
 
     close();
     return false;
@@ -1341,72 +1242,51 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
 {
     // ignore when closed
     if (!isVisible())
-    {
         return;
-    }
 
     bool needLoadCurrent = false;
-
-    switch (changeset.operation())
+    switch(changeset.operation())
     {
         case CollectionImageChangeset::Removed:
-
-            for (int i=0; i<d->imageInfoList.size(); ++i)
+            for (int i=0;i<d->imageInfoList.size();++i)
             {
                 if (changeset.containsImage(d->imageInfoList[i].id()))
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
                     {
                         promptUserSave(d->urlCurrent, AlwaysSaveAs, false);
-
                         if (removeItem(i))
-                        {
                             needLoadCurrent = true;
-                        }
                     }
                     else
-                    {
                         removeItem(i);
-                    }
-
                     --i;
                 }
             }
-
             break;
         case CollectionImageChangeset::RemovedAll:
-
-            for (int i=0; i<d->imageInfoList.size(); ++i)
+            for (int i=0;i<d->imageInfoList.size();++i)
             {
                 if (changeset.containsAlbum(d->imageInfoList[i].albumId()))
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
                     {
                         promptUserSave(d->urlCurrent, AlwaysSaveAs, false);
-
                         if (removeItem(i))
-                        {
                             needLoadCurrent = true;
-                        }
                     }
                     else
-                    {
                         removeItem(i);
-                    }
-
                     --i;
                 }
             }
-
             break;
         default:
             break;
     }
 
     if (needLoadCurrent)
-    {
         QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
-    }
 }
 
 void ImageWindow::slotFilePrint()
@@ -1476,11 +1356,8 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         settings.fileList   = d->urlList;
 
         SlideShow* slide = new SlideShow(settings);
-
         if (startWithCurrent)
-        {
             slide->setCurrent(d->urlCurrent);
-        }
 
         connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
                 this, SLOT(slotRatingChanged(const KUrl&, int)));
@@ -1489,7 +1366,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     }
 }
 
-void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
+void ImageWindow::dragMoveEvent(QDragMoveEvent *e)
 {
     int        albumID;
     QList<int> albumIDs;
@@ -1508,7 +1385,7 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
     e->ignore();
 }
 
-void ImageWindow::dropEvent(QDropEvent* e)
+void ImageWindow::dropEvent(QDropEvent *e)
 {
     int        albumID;
     QList<int> albumIDs;
@@ -1536,18 +1413,10 @@ void ImageWindow::dropEvent(QDropEvent* e)
         QString ATitle;
         AlbumManager* man  = AlbumManager::instance();
         PAlbum* palbum     = man->findPAlbum(albumIDs.first());
-
-        if (palbum)
-        {
-            ATitle = palbum->title();
-        }
+        if (palbum) ATitle = palbum->title();
 
         TAlbum* talbum     = man->findTAlbum(albumIDs.first());
-
-        if (talbum)
-        {
-            ATitle = talbum->title();
-        }
+        if (talbum) ATitle = talbum->title();
 
         loadImageInfos(imageInfoList, imageInfoList.first(),
                        i18n("Album \"%1\"",ATitle), true);
@@ -1574,11 +1443,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
 
         QString ATitle;
         PAlbum* palbum     = man->findPAlbum(albumIDs.first());
-
-        if (palbum)
-        {
-            ATitle = palbum->title();
-        }
+        if (palbum) ATitle = palbum->title();
 
         loadImageInfos(imageInfoList, imageInfoList.first(),
                        i18n("Album \"%1\"",ATitle), true);
@@ -1587,11 +1452,8 @@ void ImageWindow::dropEvent(QDropEvent* e)
     else if (DTagDrag::canDecode(e->mimeData()))
     {
         int tagID;
-
         if (!DTagDrag::decode(e->mimeData(), tagID))
-        {
             return;
-        }
 
         AlbumManager* man        = AlbumManager::instance();
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
@@ -1612,11 +1474,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
 
         QString ATitle;
         TAlbum* talbum     = man->findTAlbum(tagID);
-
-        if (talbum)
-        {
-            ATitle = talbum->title();
-        }
+        if (talbum) ATitle = talbum->title();
 
         loadImageInfos(imageInfoList, imageInfoList.first(),
                        i18n("Album \"%1\"",ATitle), true);
@@ -1631,9 +1489,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
 void ImageWindow::slotRevert()
 {
     if (!promptUserSave(d->urlCurrent))
-    {
         return;
-    }
 
     m_canvas->slotRestore();
 }
@@ -1647,12 +1503,12 @@ void ImageWindow::slotChangeTheme(const QString& theme)
     ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
-ThumbBarDock* ImageWindow::thumbBar() const
+ThumbBarDock *ImageWindow::thumbBar() const
 {
     return d->thumbBarDock;
 }
 
-Sidebar* ImageWindow::rightSideBar() const
+Sidebar *ImageWindow::rightSideBar() const
 {
     return (dynamic_cast<Sidebar*>(d->rightSideBar));
 }

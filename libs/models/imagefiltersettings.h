@@ -46,10 +46,7 @@ namespace Digikam
 {
 
 class ImageInfo;
-namespace DatabaseFields
-{
-class Set;
-}
+namespace DatabaseFields { class Set; }
 
 class DIGIKAM_DATABASE_EXPORT ImageFilterSettings
 {
@@ -61,7 +58,7 @@ public:
      *  Returns true if the given ImageInfo matches the filter criteria.
      *  Optionally, foundText is set to true if it matched by text search.
      */
-    bool matches(const ImageInfo& info, bool* foundText = 0) const;
+    bool matches(const ImageInfo& info, bool *foundText = 0) const;
 
     /// --- Tags filter ---
 

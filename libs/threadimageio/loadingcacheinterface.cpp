@@ -42,7 +42,7 @@ void LoadingCacheInterface::cleanUp()
 
 void LoadingCacheInterface::fileChanged(const QString& filePath)
 {
-    LoadingCache* cache = LoadingCache::cache();
+    LoadingCache *cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
     cache->notifyFileChanged(filePath);
 
@@ -55,10 +55,10 @@ void LoadingCacheInterface::fileChanged(const QString& filePath)
     */
 }
 
-void LoadingCacheInterface::connectToSignalFileChanged(QObject* object, const char* slot)
+void LoadingCacheInterface::connectToSignalFileChanged(QObject *object, const char *slot)
 {
-    LoadingCache* cache = LoadingCache::cache();
-    QObject::connect(cache, SIGNAL(fileChanged(const QString&)),
+    LoadingCache *cache = LoadingCache::cache();
+    QObject::connect(cache, SIGNAL(fileChanged(const QString &)),
                      object, slot,
                      Qt::QueuedConnection);
     // make it a queued connection because the signal is emitted when the CacheLock is held!
@@ -66,26 +66,25 @@ void LoadingCacheInterface::connectToSignalFileChanged(QObject* object, const ch
 
 void LoadingCacheInterface::cleanCache()
 {
-    LoadingCache* cache = LoadingCache::cache();
+    LoadingCache *cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
     cache->removeImages();
 }
 
 void LoadingCacheInterface::cleanThumbnailCache()
 {
-    LoadingCache* cache = LoadingCache::cache();
+    LoadingCache *cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
     cache->removeThumbnails();
 }
 
 void LoadingCacheInterface::putImage(const QString& filePath, const DImg& img)
 {
-    LoadingCache* cache = LoadingCache::cache();
+    LoadingCache *cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
-
     if (cache->isCacheable(&img))
     {
-        DImg* copy = new DImg(img);
+        DImg *copy = new DImg(img);
         copy->detach();
         cache->putImage(filePath, copy, filePath);
     }
@@ -93,7 +92,7 @@ void LoadingCacheInterface::putImage(const QString& filePath, const DImg& img)
 
 void LoadingCacheInterface::setCacheOptions(int cacheSize)
 {
-    LoadingCache* cache = LoadingCache::cache();
+    LoadingCache *cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
     cache->setCacheSize(cacheSize);
 }

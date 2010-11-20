@@ -68,7 +68,7 @@ public:
     {
     }
 
-    AlbumRootLocation(const AlbumRootInfo& info)
+    AlbumRootLocation(const AlbumRootInfo &info)
     {
         kDebug() << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
         m_id         = info.id;
@@ -91,20 +91,15 @@ public:
         else
         {
             if (available)
-            {
                 m_status = CollectionLocation::LocationAvailable;
-            }
             else
-            {
                 m_status = CollectionLocation::LocationUnavailable;
-            }
         }
     }
 
     void setStatus(CollectionLocation::Status s)
     {
         m_status = s;
-
         // status is exclusive, and Hidden wins
         // but really both states are independent
         // - a hidden location might or might not be available
@@ -130,7 +125,7 @@ public:
         m_id = id;
     }
 
-    void setAbsolutePath(const QString& path)
+    void setAbsolutePath(const QString &path)
     {
         m_path = path;
     }
@@ -140,7 +135,7 @@ public:
         m_type = type;
     }
 
-    void setLabel(const QString& label)
+    void setLabel(const QString &label)
     {
         m_label = label;
     }
@@ -164,10 +159,7 @@ public:
     bool isOpticalDisc;
     bool isMounted;
 
-    bool isNull() const
-    {
-        return path.isNull();
-    }
+    bool isNull() const { return path.isNull(); }
 };
 
 // -------------------------------------------------
@@ -177,9 +169,9 @@ class CollectionManagerPrivate
 
 public:
 
-    CollectionManagerPrivate(CollectionManager* s);
+    CollectionManagerPrivate(CollectionManager *s);
 
-    QMap<int, AlbumRootLocation*> locations;
+    QMap<int, AlbumRootLocation *> locations;
     bool changingDB;
     QStringList udisToWatch;
 
@@ -196,16 +188,16 @@ public:
      *  Find from a given list (usually the result of listVolumes) the volume
      *  corresponding to the location
      */
-    SolidVolumeInfo findVolumeForLocation(const AlbumRootLocation* location, const QList<SolidVolumeInfo> volumes);
+    SolidVolumeInfo findVolumeForLocation(const AlbumRootLocation *location, const QList<SolidVolumeInfo> volumes);
 
     /**
      *  Find from a given list (usually the result of listVolumes) the volume
      *  on which the file path specified by the url is located.
      */
-    SolidVolumeInfo findVolumeForUrl(const KUrl& fileUrl, const QList<SolidVolumeInfo> volumes);
+    SolidVolumeInfo findVolumeForUrl(const KUrl &fileUrl, const QList<SolidVolumeInfo> volumes);
 
     /// Create the volume identifier for the given volume info
-    static QString volumeIdentifier(const SolidVolumeInfo& info);
+    static QString volumeIdentifier(const SolidVolumeInfo &info);
 
     /// Create a volume identifier based on the path only
     QString volumeIdentifier(const QString& path);
@@ -214,10 +206,10 @@ public:
     QString networkShareIdentifier(const QString& path);
 
     /// Return the path, if location has a path-only identifier. Else returns a null string.
-    QString pathFromIdentifier(const AlbumRootLocation* location);
+    QString pathFromIdentifier(const AlbumRootLocation *location);
 
     /// Return the path, if location has a path-only identifier. Else returns a null string.
-    QString networkShareMountPathFromIdentifier(const AlbumRootLocation* location);
+    QString networkShareMountPathFromIdentifier(const AlbumRootLocation *location);
 
     /// Create an MD5 hash of the top-level entries (file names, not file content) of the given path
     static QString directoryHash(const QString& path);
@@ -226,9 +218,9 @@ public:
     bool checkIfExists(const QString& path, QList<CollectionLocation> assumeDeleted);
 
     /// Make a user presentable description, regardless of current location status
-    QString technicalDescription(const AlbumRootLocation* location);
+    QString technicalDescription(const AlbumRootLocation *location);
 
-    CollectionManager* s;
+    CollectionManager *s;
 };
 
 class ChangingDB
@@ -236,7 +228,7 @@ class ChangingDB
 
 public:
 
-    ChangingDB(CollectionManagerPrivate* d) : d(d)
+    ChangingDB(CollectionManagerPrivate *d) : d(d)
     {
         d->changingDB = true;
     }
@@ -255,7 +247,7 @@ public:
 namespace Digikam
 {
 
-CollectionManagerPrivate::CollectionManagerPrivate(CollectionManager* s)
+CollectionManagerPrivate::CollectionManagerPrivate(CollectionManager *s)
     : changingDB(false), s(s)
 {
     QObject::connect(s, SIGNAL(triggerUpdateVolumesList()),
@@ -300,14 +292,12 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
     {
         // check for StorageAccess
         if (!accessDevice.is<Solid::StorageAccess>())
-        {
             continue;
-        }
 
         // mark as a device of principal interest
         udisToWatch << accessDevice.udi();
 
-        const Solid::StorageAccess* access = accessDevice.as<Solid::StorageAccess>();
+        const Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
 
         // watch mount status (remove previous connections)
         QObject::disconnect(access, SIGNAL(accessibilityChanged(bool, const QString&)),
@@ -316,13 +306,10 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
                          s, SLOT(accessibilityChanged(bool, const QString&)));
 
         if (!access->isAccessible())
-        {
             continue;
-        }
 
         // check for StorageDrive
         Solid::Device driveDevice;
-
         for (Solid::Device currentDevice = accessDevice; currentDevice.isValid(); currentDevice = currentDevice.parent())
         {
             if (currentDevice.is<Solid::StorageDrive>())
@@ -331,17 +318,13 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
                 break;
             }
         }
-
         if (!driveDevice.isValid())
-        {
             continue;
-        }
 
-        Solid::StorageDrive* drive = driveDevice.as<Solid::StorageDrive>();
+        Solid::StorageDrive *drive = driveDevice.as<Solid::StorageDrive>();
 
         // check for StorageVolume
         Solid::Device volumeDevice;
-
         for (Solid::Device currentDevice = accessDevice; currentDevice.isValid(); currentDevice = currentDevice.parent())
         {
             if (currentDevice.is<Solid::StorageVolume>())
@@ -350,24 +333,17 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
                 break;
             }
         }
-
         if (!volumeDevice.isValid())
-        {
             continue;
-        }
 
-        Solid::StorageVolume* volume = volumeDevice.as<Solid::StorageVolume>();
+        Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
 
         SolidVolumeInfo info;
         info.udi = accessDevice.udi();
         info.path = access->filePath();
         info.isMounted = access->isAccessible();
-
         if (!info.path.isEmpty() && !info.path.endsWith('/'))
-        {
             info.path += '/';
-        }
-
         info.uuid = volume->uuid();
         info.label = volume->label();
         info.isRemovable = drive->isHotpluggable() || drive->isRemovable();
@@ -391,30 +367,18 @@ QString CollectionManagerPrivate::volumeIdentifier(const SolidVolumeInfo& volume
     bool identifyByMountPath = !identifyByUUID && !identifyByLabel;
 
     if (identifyByUUID)
-    {
         url.addQueryItem("uuid", volume.uuid);
-    }
-
     if (identifyByLabel)
-    {
         url.addQueryItem("label", volume.label);
-    }
-
     if (addDirectoryHash)
     {
         // for CDs, we store a hash of the root directory. May be useful.
         QString dirHash = directoryHash(volume.path);
-
         if (!dirHash.isNull())
-        {
             url.addQueryItem("directoryhash", dirHash);
-        }
     }
-
     if (identifyByMountPath)
-    {
         url.addQueryItem("mountpath", volume.path);
-    }
 
     return url.url();
 }
@@ -435,26 +399,22 @@ QString CollectionManagerPrivate::networkShareIdentifier(const QString& path)
     return url.url();
 }
 
-QString CollectionManagerPrivate::pathFromIdentifier(const AlbumRootLocation* location)
+QString CollectionManagerPrivate::pathFromIdentifier(const AlbumRootLocation *location)
 {
     KUrl url(location->identifier);
 
     if (url.protocol() != "volumeid")
-    {
         return QString();
-    }
 
     return url.queryItem("path");
 }
 
-QString CollectionManagerPrivate::networkShareMountPathFromIdentifier(const AlbumRootLocation* location)
+QString CollectionManagerPrivate::networkShareMountPathFromIdentifier(const AlbumRootLocation *location)
 {
     KUrl url(location->identifier);
 
     if (url.protocol() != "networkshareid")
-    {
         return QString();
-    }
 
     return url.queryItem("mountpath");
 }
@@ -462,7 +422,6 @@ QString CollectionManagerPrivate::networkShareMountPathFromIdentifier(const Albu
 QString CollectionManagerPrivate::directoryHash(const QString& path)
 {
     QDir dir(path);
-
     if (dir.isReadable())
     {
         QStringList entries = dir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
@@ -473,28 +432,23 @@ QString CollectionManagerPrivate::directoryHash(const QString& path)
         }
         return hash.hexDigest();
     }
-
     return QString();
 }
 
-SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootLocation* location, const QList<SolidVolumeInfo> volumes)
+SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootLocation *location, const QList<SolidVolumeInfo> volumes)
 {
     KUrl url(location->identifier);
     QString queryItem;
 
     if (url.protocol() != "volumeid")
-    {
         return SolidVolumeInfo();
-    }
 
     if (!(queryItem = url.queryItem("uuid")).isNull())
     {
         foreach (const SolidVolumeInfo& volume, volumes)
         {
             if (volume.uuid.compare(queryItem, Qt::CaseInsensitive) == 0)
-            {
                 return volume;
-            }
         }
         return SolidVolumeInfo();
     }
@@ -508,27 +462,20 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
         foreach (const SolidVolumeInfo& volume, volumes)
         {
             if (volume.label == queryItem)
-            {
                 candidateVolumes << volume;
-            }
         }
 
         if (candidateVolumes.isEmpty())
-        {
             return SolidVolumeInfo();
-        }
 
         // find out of there is another location with the same label (usually not)
         bool hasOtherLocation = false;
         foreach (AlbumRootLocation *otherLocation, locations)
         {
             if (otherLocation == location)
-            {
                 continue;
-            }
 
             KUrl otherUrl(otherLocation->identifier);
-
             if (otherUrl.protocol() == "volumeid"
                 && otherUrl.queryItem("label") == queryItem)
             {
@@ -539,9 +486,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
 
         // the usual, easy case
         if (candidateVolumes.size() == 1 && !hasOtherLocation)
-        {
             return candidateVolumes.first();
-        }
         else
         {
             // not unique: try to use the directoryhash
@@ -559,14 +504,10 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
             foreach (const SolidVolumeInfo& volume, candidateVolumes)
             {
                 QString volumeDirHash = directoryHash(volume.path);
-
                 if (volumeDirHash == dirHash)
-                {
                     return volume;
-                }
             }
         }
-
         return SolidVolumeInfo();
     }
     else if (!(queryItem = url.queryItem("mountpath")).isNull())
@@ -574,9 +515,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
         foreach (const SolidVolumeInfo& volume, volumes)
         {
             if (volume.isMounted && volume.path == queryItem)
-            {
                 return volume;
-            }
         }
         return SolidVolumeInfo();
     }
@@ -584,7 +523,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
     return SolidVolumeInfo();
 }
 
-QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation* albumLoc)
+QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation *albumLoc)
 {
     KUrl url(albumLoc->identifier);
     QString queryItem;
@@ -635,7 +574,6 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& fileUrl, 
         if (v.isMounted && !v.path.isEmpty() && path.startsWith(v.path))
         {
             int length = v.path.length();
-
             if (length > volumeMatch)
             {
                 volumeMatch = v.path.length();
@@ -660,13 +598,12 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
     foreach (AlbumRootLocation *location, locations)
     {
         const KUrl locationPathUrl = location->albumRootPath();
-
         //kDebug() << filePathUrl << locationPathUrl;
         // make sure filePathUrl is neither a child nor a parent
         // of an existing collection
         if (!locationPathUrl.isEmpty() &&
-            ( filePathUrl.isParentOf(locationPathUrl) ||
-              locationPathUrl.isParentOf(filePathUrl) )
+              ( filePathUrl.isParentOf(locationPathUrl) ||
+                locationPathUrl.isParentOf(filePathUrl) )
            )
         {
             bool isDeleted = false;
@@ -678,11 +615,8 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
                     break;
                 }
             }
-
             if (!isDeleted)
-            {
                 return true;
-            }
         }
     }
     return false;
@@ -690,15 +624,12 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
 
 // -------------------------------------------------
 
-CollectionManager* CollectionManager::m_instance = 0;
+CollectionManager *CollectionManager::m_instance = 0;
 
-CollectionManager* CollectionManager::instance()
+CollectionManager *CollectionManager::instance()
 {
     if (!m_instance)
-    {
         m_instance = new CollectionManager;
-    }
-
     return m_instance;
 }
 
@@ -712,14 +643,14 @@ CollectionManager::CollectionManager()
     qRegisterMetaType<CollectionLocation>("CollectionLocation");
 
     connect(Solid::DeviceNotifier::instance(),
-            SIGNAL(deviceAdded(const QString&)),
+            SIGNAL(deviceAdded(const QString &)),
             this,
-            SLOT(deviceAdded(const QString&)));
+            SLOT(deviceAdded(const QString &)));
 
     connect(Solid::DeviceNotifier::instance(),
-            SIGNAL(deviceRemoved(const QString&)),
+            SIGNAL(deviceRemoved(const QString &)),
             this,
-            SLOT(deviceRemoved(const QString&)));
+            SLOT(deviceRemoved(const QString &)));
 
     // DatabaseWatch slot is connected at construction of DatabaseWatch, which may be later.
 }
@@ -746,9 +677,7 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
-    {
         return CollectionLocation();
-    }
 
     QList<SolidVolumeInfo> volumes = d->listVolumes();
     SolidVolumeInfo volume = d->findVolumeForUrl(fileUrl, volumes);
@@ -759,15 +688,10 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
         // volume.path has a trailing slash. We want to split in front of this.
         QString specificPath = path.mid(volume.path.length() - 1);
         AlbumRoot::Type type;
-
         if (volume.isRemovable)
-        {
             type = AlbumRoot::VolumeRemovable;
-        }
         else
-        {
             type = AlbumRoot::VolumeHardWired;
-        }
 
         ChangingDB changing(d);
         access.db()->addAlbumRoot(type, d->volumeIdentifier(volume), specificPath, label);
@@ -780,10 +704,9 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
             kError() << "Solid did not return any storage volumes on your system.";
             kError() << "This indicates a missing implementation or a problem with your installation";
             kError() << "On Linux, check that Solid and HAL are working correctly."
-                     "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
+                             "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
             kError() << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
         }
-
         // fall back
         kWarning() << "Unable to identify a path with Solid. Adding the location with path only.";
         ChangingDB changing(d);
@@ -803,9 +726,7 @@ CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, co
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
-    {
         return CollectionLocation();
-    }
 
     ChangingDB changing(d);
     DatabaseAccess().db()->addAlbumRoot(AlbumRoot::Network, d->networkShareIdentifier(path), "/", label);
@@ -817,54 +738,35 @@ CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, co
 }
 
 CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KUrl& fileUrl,
-        QList<CollectionLocation> assumeDeleted, QString* message, QString* iconName)
+        QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
     if (!fileUrl.isLocalFile())
     {
         if (message)
-        {
             *message = i18n("Sorry, digiKam does not support remote URLs as collections.");
-        }
-
         if (iconName)
-        {
             *iconName = "dialog-error";
-        }
-
         return LocationNotAllowed;
     }
 
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     QDir dir(path);
-
     if (!dir.isReadable())
     {
         if (message)
-        {
             *message = i18n("The selected folder does not exist or is not readable");
-        }
-
         if (iconName)
-        {
             *iconName = "dialog-error";
-        }
-
         return LocationNotAllowed;
     }
 
     if (d->checkIfExists(path, assumeDeleted))
     {
         if (message)
-        {
             *message = i18n("There is already a collection containing the folder \"%1\"", path);
-        }
-
         if (iconName)
-        {
             *iconName = "dialog-error";
-        }
-
         return LocationNotAllowed;
     }
 
@@ -878,28 +780,17 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
             if (volume.isRemovable)
             {
                 if (message)
-                {
                     *message = i18n("The storage media can be uniquely identified.");
-                }
-
                 if (iconName)
-                {
                     *iconName = "drive-removable-media-usb";
-                }
             }
             else
             {
                 if (message)
-                {
                     *message = i18n("The collection is located on your harddisk");
-                }
-
                 if (iconName)
-                {
                     *iconName = "drive-harddisk";
-                }
             }
-
             return LocationAllRight;
         }
         else if (!volume.label.isEmpty() && (volume.isOpticalDisc || volume.isRemovable))
@@ -910,7 +801,6 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
                 foreach (AlbumRootLocation *otherLocation, d->locations)
                 {
                     KUrl otherUrl(otherLocation->identifier);
-
                     if (otherUrl.protocol() == "volumeid"
                         && otherUrl.queryItem("label") == volume.label)
                     {
@@ -920,9 +810,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
                 }
 
                 if (iconName)
-                {
                     *iconName = "media-optical";
-                }
 
                 if (hasOtherLocation)
                 {
@@ -934,7 +822,6 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
                                         "so please do not append files to the CD, or it will not be recognized. "
                                         "In the future, please set a unique label on your CDs and DVDs "
                                         "if you intend to use them with digiKam.");
-
                     return LocationHasProblems;
                 }
                 else
@@ -945,7 +832,6 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
                                         "If you create further CDs for use with digikam in the future, "
                                         "please remember to give them a unique label as well.",
                                         volume.label);
-
                     return LocationAllRight;
                 }
             }
@@ -955,12 +841,8 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
                 if (message)
                     *message = i18n("This is a removable storage medium that will be identified by its label (\"%1\")",
                                     volume.label);
-
                 if (iconName)
-                {
                     *iconName = "drive-removable-media";
-                }
-
                 return LocationAllRight;
             }
         }
@@ -970,12 +852,8 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
                 *message = i18n("This entry will only be identified by the path where it is found on your system (\"%1\"). "
                                 "No more specific means of identification (UUID, label) is available.",
                                 volume.path);
-
-            if (iconName)
-            {
-                *iconName = "drive-removale-media";
-            }
-
+                if (iconName)
+                    *iconName = "drive-removale-media";
             return LocationHasProblems;
         }
     }
@@ -985,18 +863,14 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
             *message = i18n("It is not possible on your system to identify the storage medium of this path. "
                             "It will be added using the file path as the only identifier. "
                             "This will work well for your local hard disk.");
-
-        if (iconName)
-        {
-            *iconName = "folder-important";
-        }
-
+                if (iconName)
+                    *iconName = "folder-important";
         return LocationHasProblems;
     }
 }
 
 CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const KUrl& fileUrl,
-        QList<CollectionLocation> assumeDeleted, QString* message, QString* iconName)
+        QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
     if (!fileUrl.isLocalFile())
     {
@@ -1010,57 +884,37 @@ CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(c
                                 "as files and folders through the operating system. "
                                 "DigiKam does not support remote URLs.");
         }
-
         if (iconName)
-        {
             *iconName = "dialog-error";
-        }
-
         return LocationNotAllowed;
     }
 
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     QDir dir(path);
-
     if (!dir.isReadable())
     {
         if (message)
-        {
             *message = i18n("The selected folder does not exist or is not readable");
-        }
-
         if (iconName)
-        {
             *iconName = "dialog-error";
-        }
-
         return LocationNotAllowed;
     }
 
     if (d->checkIfExists(path, assumeDeleted))
     {
         if (message)
-        {
             *message = i18n("There is already a collection for a network share with the same path.");
-        }
-
         if (iconName)
-        {
             *iconName = "dialog-error";
-        }
-
         return LocationNotAllowed;
     }
 
     if (message)
         *message = i18n("The network share will be identified by the path you selected. "
                         "If the path is empty, the share will be considered unavailable.");
-
     if (iconName)
-    {
         *iconName = "network-wired";
-    }
 
     return LocationAllRight;
 }
@@ -1070,12 +924,9 @@ void CollectionManager::removeLocation(const CollectionLocation& location)
     {
         DatabaseAccess access;
 
-        AlbumRootLocation* albumLoc = d->locations.value(location.id());
-
+        AlbumRootLocation *albumLoc = d->locations.value(location.id());
         if (!albumLoc)
-        {
             return;
-        }
 
         // Ensure that all albums are set to orphan and no images will be permanently deleted,
         // as would do only calling deleteAlbumRoot by a Trigger
@@ -1113,8 +964,8 @@ QList<CollectionLocation> CollectionManager::checkHardWiredLocations()
 }
 
 
-void CollectionManager::migrationCandidates(const CollectionLocation& location, QString* description,
-        QStringList* candidateIdentifiers, QStringList* candidateDescriptions)
+void CollectionManager::migrationCandidates(const CollectionLocation &location, QString *description,
+                                             QStringList *candidateIdentifiers, QStringList *candidateDescriptions)
 {
     description->clear();
     candidateIdentifiers->clear();
@@ -1124,12 +975,9 @@ void CollectionManager::migrationCandidates(const CollectionLocation& location, 
 
     DatabaseAccess access;
 
-    AlbumRootLocation* albumLoc = d->locations.value(location.id());
-
+    AlbumRootLocation *albumLoc = d->locations.value(location.id());
     if (!albumLoc)
-    {
         return;
-    }
 
     *description = d->technicalDescription(albumLoc);
 
@@ -1139,7 +987,6 @@ void CollectionManager::migrationCandidates(const CollectionLocation& location, 
         if (info.isMounted && !info.path.isEmpty())
         {
             QDir dir(info.path + albumLoc->specificPath);
-
             if (dir.exists())
             {
                 *candidateIdentifiers << d->volumeIdentifier(info);
@@ -1153,12 +1000,9 @@ void CollectionManager::migrateToVolume(const CollectionLocation& location, cons
 {
     DatabaseAccess access;
 
-    AlbumRootLocation* albumLoc = d->locations.value(location.id());
-
+    AlbumRootLocation *albumLoc = d->locations.value(location.id());
     if (!albumLoc)
-    {
         return;
-    }
 
     // update db
     ChangingDB db(d);
@@ -1173,12 +1017,9 @@ void CollectionManager::setLabel(const CollectionLocation& location, const QStri
 {
     DatabaseAccess access;
 
-    AlbumRootLocation* albumLoc = d->locations.value(location.id());
-
+    AlbumRootLocation *albumLoc = d->locations.value(location.id());
     if (!albumLoc)
-    {
         return;
-    }
 
     // update db
     ChangingDB db(d);
@@ -1194,12 +1035,9 @@ void CollectionManager::changeType(const CollectionLocation& location, int type)
 {
     DatabaseAccess access;
 
-    AlbumRootLocation* albumLoc = d->locations.value(location.id());
-
+    AlbumRootLocation *albumLoc = d->locations.value(location.id());
     if (!albumLoc)
-    {
         return;
-    }
 
     // update db
     ChangingDB db(d);
@@ -1229,9 +1067,7 @@ QList<CollectionLocation> CollectionManager::allAvailableLocations()
     foreach (AlbumRootLocation *location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
-        {
             list << *location;
-        }
     }
     return list;
 }
@@ -1243,9 +1079,7 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
     foreach (AlbumRootLocation *location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
-        {
             list << location->albumRootPath();
-        }
     }
     return list;
 }
@@ -1253,16 +1087,11 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
 CollectionLocation CollectionManager::locationForAlbumRootId(int id)
 {
     DatabaseAccess access;
-    AlbumRootLocation* location = d->locations.value(id);
-
+    AlbumRootLocation *location = d->locations.value(id);
     if (location)
-    {
         return *location;
-    }
     else
-    {
         return CollectionLocation();
-    }
 }
 
 CollectionLocation CollectionManager::locationForAlbumRoot(const KUrl& fileUrl)
@@ -1277,9 +1106,7 @@ CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& al
     foreach (AlbumRootLocation *location, d->locations)
     {
         if (location->albumRootPath() == path)
-        {
             return *location;
-        }
     }
     return CollectionLocation();
 }
@@ -1296,14 +1123,11 @@ CollectionLocation CollectionManager::locationForPath(const QString& givenPath)
     {
         QString rootPath = location->albumRootPath();
         QString filePath = QDir::fromNativeSeparators(givenPath);
-
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
         {
             // see also bug #221155 for extra checks
             if (filePath == rootPath || filePath.startsWith(rootPath + '/'))
-            {
                 return *location;
-            }
         }
     }
     return CollectionLocation();
@@ -1312,13 +1136,11 @@ CollectionLocation CollectionManager::locationForPath(const QString& givenPath)
 QString CollectionManager::albumRootPath(int id)
 {
     DatabaseAccess access;
-    CollectionLocation* location = d->locations.value(id);
-
+    CollectionLocation *location = d->locations.value(id);
     if (location && location->status() == CollectionLocation::LocationAvailable)
     {
         return location->albumRootPath();
     }
-
     return QString();
 }
 
@@ -1339,14 +1161,11 @@ QString CollectionManager::albumRootPath(const QString& givenPath)
     {
         QString rootPath = location->albumRootPath();
         QString filePath = QDir::fromNativeSeparators(givenPath);
-
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
         {
             // see also bug #221155 for extra checks
             if (filePath == rootPath || filePath.startsWith(rootPath + '/'))
-            {
                 return location->albumRootPath();
-            }
         }
     }
     return QString();
@@ -1363,9 +1182,7 @@ bool CollectionManager::isAlbumRoot(const QString& filePath)
     foreach (AlbumRootLocation *location, d->locations)
     {
         if (filePath == location->albumRootPath())
-        {
             return true;
-        }
     }
     return false;
 }
@@ -1381,29 +1198,18 @@ QString CollectionManager::album(const QString& filePath)
     foreach (AlbumRootLocation *location, d->locations)
     {
         QString absolutePath = location->albumRootPath();
-
         if (absolutePath.isEmpty())
-        {
             continue;
-        }
-
         QString firstPart = filePath.left(absolutePath.length());
-
         if (firstPart == absolutePath)
         {
             if (filePath == absolutePath)
-            {
                 return "/";
-            }
             else
             {
                 QString album = filePath.mid(absolutePath.length());
-
                 if (album.endsWith('/'))
-                {
                     album.chop(1);
-                }
-
                 return album;
             }
         }
@@ -1419,25 +1225,15 @@ QString CollectionManager::album(const CollectionLocation& location, const KUrl&
 QString CollectionManager::album(const CollectionLocation& location, const QString& filePath)
 {
     if (location.isNull())
-    {
         return QString();
-    }
-
     QString absolutePath = location.albumRootPath();
-
     if (filePath == absolutePath)
-    {
         return "/";
-    }
     else
     {
         QString album = filePath.mid(absolutePath.length());
-
         if (album.endsWith('/'))
-        {
             album.chop(1);
-        }
-
         return album;
     }
 }
@@ -1453,9 +1249,7 @@ QString CollectionManager::oneAlbumRootPath()
     foreach (AlbumRootLocation *location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
-        {
             return location->albumRootPath();
-        }
     }
     return QString();
 }
@@ -1463,23 +1257,16 @@ QString CollectionManager::oneAlbumRootPath()
 void CollectionManager::deviceAdded(const QString& udi)
 {
     Solid::Device device(udi);
-
     if (device.is<Solid::StorageAccess>())
-    {
         updateLocations();
-    }
 }
 
 void CollectionManager::deviceRemoved(const QString& udi)
 {
     // we can't access the Solid::Device to check because it is removed
     DatabaseAccess access;
-
     if (!d->udisToWatch.contains(udi))
-    {
         return;
-    }
-
     updateLocations();
 }
 
@@ -1506,7 +1293,7 @@ void CollectionManager::updateLocations()
         QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
 
         // synchronize map with database
-        QMap<int, AlbumRootLocation*> locs = d->locations;
+        QMap<int, AlbumRootLocation *> locs = d->locations;
         d->locations.clear();
         foreach (const AlbumRootInfo& info, infos)
         {
@@ -1543,7 +1330,7 @@ void CollectionManager::updateLocations()
                 QString path = d->networkShareMountPathFromIdentifier(location);
                 QDir dir(path);
                 available = dir.isReadable()
-                            && dir.entryList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).count() > 0;
+                    && dir.entryList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).count() > 0;
                 absolutePath = path;
             }
             else
@@ -1564,7 +1351,6 @@ void CollectionManager::updateLocations()
                 else
                 {
                     QString path = d->pathFromIdentifier(location);
-
                     if (!path.isNull())
                     {
                         available = true;
@@ -1593,7 +1379,6 @@ void CollectionManager::updateLocations()
             {
                 emit locationStatusChanged(*location, oldStatus[i]);
             }
-
             ++i;
         }
     }
@@ -1616,11 +1401,9 @@ void CollectionManager::clear_locked()
 void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
 {
     if (d->changingDB)
-    {
         return;
-    }
 
-    switch (changeset.operation())
+    switch(changeset.operation())
     {
         case AlbumRootChangeset::Added:
         case AlbumRootChangeset::Deleted:
@@ -1628,33 +1411,29 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
             break;
         case AlbumRootChangeset::PropertiesChanged:
             // label has changed
-        {
-            CollectionLocation toBeEmitted;
             {
-                DatabaseAccess access;
-                AlbumRootLocation* location = d->locations.value(changeset.albumRootId());
-
-                if (location)
+                CollectionLocation toBeEmitted;
                 {
-                    QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
-                    foreach (const AlbumRootInfo& info, infos)
+                    DatabaseAccess access;
+                    AlbumRootLocation *location = d->locations.value(changeset.albumRootId());
+                    if (location)
                     {
-                        if (info.id == location->id())
+                        QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
+                        foreach (const AlbumRootInfo& info, infos)
                         {
-                            location->setLabel(info.label);
-                            toBeEmitted = *location;
-                            break;
+                            if (info.id == location->id())
+                            {
+                                location->setLabel(info.label);
+                                toBeEmitted = *location;
+                                break;
+                            }
                         }
                     }
                 }
+                if (!toBeEmitted.isNull())
+                    emit locationPropertiesChanged(toBeEmitted);
             }
-
-            if (!toBeEmitted.isNull())
-            {
-                emit locationPropertiesChanged(toBeEmitted);
-            }
-        }
-        break;
+            break;
         case AlbumRootChangeset::Unknown:
             break;
     }

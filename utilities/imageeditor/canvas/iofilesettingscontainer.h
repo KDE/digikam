@@ -50,7 +50,7 @@ public:
         useRAWImport        = true;
     };
 
-    ~IOFileSettingsContainer() {};
+    ~IOFileSettingsContainer(){};
 
 public:
 

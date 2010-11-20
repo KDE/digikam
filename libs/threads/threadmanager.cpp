@@ -73,9 +73,7 @@ public:
     void moveToCurrentThread(QObject* parkedObject)
     {
         if (parkedObject->thread() == QThread::currentThread())
-        {
             return;
-        }
 
         // We have 1. The current thread
         //         2. ParkingThread's thread
@@ -85,20 +83,16 @@ public:
 
         // first, wait until the object has been parked in ParkingThread by its owning thread.
         while (parkedObject->thread() != this)
-        {
             condVar.wait(&mutex);
-        }
 
-        QThread* targetThread = QThread::currentThread();
+        QThread *targetThread = QThread::currentThread();
         // then, now that it's parked in ParkingThread, make ParkingThread move it to the current thread.
         todo << qMakePair(parkedObject, targetThread);
         condVar.wakeAll();
 
         // wait until ParkingThread has pushed the object to current thread
         while (parkedObject->thread() != targetThread)
-        {
             condVar.wait(&mutex);
-        }
     }
 
     virtual void run()
@@ -113,7 +107,6 @@ public:
             {
                 QMutexLocker locker(&mutex);
                 condVar.wakeAll();
-
                 if (todo.isEmpty())
                 {
                     condVar.wait(&mutex);
@@ -162,7 +155,7 @@ protected:
 // --------------------------------------------------------------------------------------------------
 
 WorkerObjectRunnable::WorkerObjectRunnable(WorkerObject* object, ParkingThread* parkingThread)
-    : object(object), parkingThread(parkingThread)
+                    : object(object), parkingThread(parkingThread)
 {
     setAutoDelete(true);
 }
@@ -170,9 +163,7 @@ WorkerObjectRunnable::WorkerObjectRunnable(WorkerObject* object, ParkingThread* 
 void WorkerObjectRunnable::run()
 {
     if (!object)
-    {
         return;
-    }
 
     // if another thread should still be running, wait until the object is parked in ParkingThread
     parkingThread->moveToCurrentThread(object);
@@ -182,7 +173,6 @@ void WorkerObjectRunnable::run()
     object->addRunnable(this);
 
     emit object->started();
-
     if (object->transitionToRunning())
     {
         QEventLoop loop;
@@ -190,7 +180,6 @@ void WorkerObjectRunnable::run()
         loop.exec();
         object->setEventLoop(0);
     }
-
     object->transitionToInactive();
     emit object->finished();
 
@@ -222,11 +211,7 @@ public:
     }
 };
 
-class ThreadManagerCreator
-{
-public:
-    ThreadManager object;
-};
+class ThreadManagerCreator { public: ThreadManager object; };
 K_GLOBAL_STATIC(ThreadManagerCreator, creator)
 
 ThreadManager* ThreadManager::instance()
@@ -235,7 +220,7 @@ ThreadManager* ThreadManager::instance()
 }
 
 ThreadManager::ThreadManager()
-    : d(new ThreadManagerPriv)
+             : d(new ThreadManagerPriv)
 {
     d->parkingThread = new ParkingThread(this);
     d->pool          = new QThreadPool(this);

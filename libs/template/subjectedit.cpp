@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 SubjectEdit::SubjectEdit(QWidget* parent)
-    : SubjectWidget(parent)
+           : SubjectWidget(parent)
 {
     // Subject string do not accept these characters:
     // - '*' (\x2A)
@@ -82,10 +82,7 @@ SubjectEdit::SubjectEdit(QWidget* parent)
                                     "if you selected a standard XMP/NAA reference code."));
 
     // reset the note label, not used in XMP view
-    if (m_note)
-    {
-        delete m_note;
-    }
+    if (m_note) delete m_note;
 }
 
 SubjectEdit::~SubjectEdit()

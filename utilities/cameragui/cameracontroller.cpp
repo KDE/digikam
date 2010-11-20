@@ -139,7 +139,7 @@ public:
 CameraController::CameraController(QWidget* parent,
                                    const QString& title, const QString& model,
                                    const QString& port, const QString& path)
-    : QThread(parent), d(new CameraControllerPriv)
+                : QThread(parent), d(new CameraControllerPriv)
 {
     d->parent = parent;
 
@@ -149,7 +149,6 @@ CameraController::CameraController(QWidget* parent,
         KUrl url(path);
         kDebug() << "path " << path << " " << url <<  " " << url.host();
         QString xport = url.host();
-
         if (xport.startsWith(QLatin1String("usb:")))
         {
             kDebug() << "xport " << xport;
@@ -170,13 +169,9 @@ CameraController::CameraController(QWidget* parent,
     if (!d->camera)
     {
         if (model.toLower() == "directory browse")
-        {
             d->camera = new UMSCamera(title, model, port, path);
-        }
         else
-        {
             d->camera = new GPCamera(title, model, port, path);
-        }
     }
 
     // setup inter-thread signals
@@ -230,130 +225,79 @@ CameraController::~CameraController()
 
 bool CameraController::cameraThumbnailSupport()
 {
-    if (!d->camera)
-    {
-        return false;
-    }
-
+    if (!d->camera) return false;
     return d->camera->thumbnailSupport();
 }
 
 bool CameraController::cameraDeleteSupport()
 {
-    if (!d->camera)
-    {
-        return false;
-    }
-
+    if (!d->camera) return false;
     return d->camera->deleteSupport();
 }
 
 bool CameraController::cameraUploadSupport()
 {
-    if (!d->camera)
-    {
-        return false;
-    }
-
+    if (!d->camera) return false;
     return d->camera->uploadSupport();
 }
 
 bool CameraController::cameraMkDirSupport()
 {
-    if (!d->camera)
-    {
-        return false;
-    }
-
+    if (!d->camera) return false;
     return d->camera->mkDirSupport();
 }
 
 bool CameraController::cameraDelDirSupport()
 {
-    if (!d->camera)
-    {
-        return false;
-    }
-
+    if (!d->camera) return false;
     return d->camera->delDirSupport();
 }
 
 bool CameraController::cameraCaptureImageSupport()
 {
-    if (!d->camera)
-    {
-        return false;
-    }
-
+    if (!d->camera) return false;
     return d->camera->captureImageSupport();
 }
 
 QString CameraController::cameraPath()
 {
-    if (!d->camera)
-    {
-        return QString();
-    }
-
+    if (!d->camera) return QString();
     return d->camera->path();
 }
 
 QString CameraController::cameraTitle()
 {
-    if (!d->camera)
-    {
-        return QString();
-    }
-
+    if (!d->camera) return QString();
     return d->camera->title();
 }
 
 DKCamera::CameraDriverType CameraController::cameraDriverType()
 {
-    if (!d->camera)
-    {
-        return DKCamera::UMSDriver;
-    }
-
+    if (!d->camera) return DKCamera::UMSDriver;
     return d->camera->cameraDriverType();
 }
 
 QByteArray CameraController::cameraMD5ID()
 {
-    if (!d->camera)
-    {
-        return QByteArray();
-    }
-
+    if (!d->camera) return QByteArray();
     return d->camera->cameraMD5ID();
 }
 
 QPixmap CameraController::mimeTypeThumbnail(const QString& itemName)
 {
-    if (!d->camera)
-    {
-        return QPixmap();
-    }
+    if (!d->camera) return QPixmap();
 
     QFileInfo fi(itemName);
     QString mime = d->camera->mimeType(fi.suffix().toLower());
 
     if (mime.startsWith(QLatin1String("image/x-raw")))
-    {
         return DesktopIcon("kdcraw");
-    }
     else if (mime.startsWith(QLatin1String("image/")))
-    {
         return DesktopIcon("image-x-generic");
-    }
     else if (mime.startsWith(QLatin1String("video/")))
-    {
         return DesktopIcon("video-x-generic");
-    }
     else if (mime.startsWith(QLatin1String("audio/")))
-    {
         return DesktopIcon("audio-x-generic");
-    }
 
     return DesktopIcon("unknown");
 }
@@ -370,11 +314,10 @@ void CameraController::run()
 {
     while (d->running)
     {
-        CameraCommand* command;
+        CameraCommand *command;
 
         {
             QMutexLocker lock(&d->mutex);
-
             if (!d->commands.isEmpty())
             {
                 command = d->commands.takeFirst();
@@ -391,7 +334,6 @@ void CameraController::run()
         executeCommand(command);
         delete command;
     }
-
     sendBusy(false);
 }
 
@@ -408,13 +350,9 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalConnected(result);
 
             if (result)
-            {
                 sendLogMsg(i18n("Connection established."));
-            }
             else
-            {
                 sendLogMsg(i18n("Connection failed."));
-            }
 
             break;
         }
@@ -476,7 +414,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
             sendLogMsg(i18n("Listing files in %1...", folder));
 
             GPItemInfoList itemsList;
-
             if (!d->camera->getItemsInfoList(folder, itemsList, true))
             {
                 sendLogMsg(i18n("Failed to list files in %1.", folder), DHistoryView::ErrorEntry);
@@ -501,7 +438,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
                 {
                     break;
                 }
-
                 QString folder = (*it).toStringList()[0];
                 QString file   = (*it).toStringList()[1];
 
@@ -518,7 +454,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
                     emit signalThumbnailFailed(folder, file);
                 }
             }
-
             break;
         }
         case(CameraCommand::gp_exif):
@@ -548,7 +483,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
                     emit signalExifData(ba);
                 }
             }
-
             break;
         }
         case(CameraCommand::gp_download):
@@ -606,11 +540,9 @@ void CameraController::executeCommand(CameraCommand* cmd)
                     }
 
                     TemplateManager* tm = TemplateManager::defaultManager();
-
                     if (tm && !templateTitle.isEmpty())
                     {
                         kDebug() << "Metadata template title : " << templateTitle;
-
                         if (templateTitle == Template::removeTemplateTitle())
                         {
                             metadata.removeMetadataTemplate();
@@ -626,7 +558,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
                             metadata.setMetadataTemplate(tm->findByTitle(templateTitle));
                         }
                     }
-
                     metadata.applyChanges();
                 }
 
@@ -681,7 +612,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
             {
                 sendLogMsg(i18n("Failed to retrieve file %1 from camera.", file), DHistoryView::ErrorEntry, folder, file);
             }
-
             break;
         }
         case(CameraCommand::gp_upload):
@@ -709,7 +639,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
             {
                 emit signalInternalUploadFailed(folder, file, src);
             }
-
             break;
         }
         case(CameraCommand::gp_delete):
@@ -729,7 +658,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
             {
                 emit signalInternalDeleteFailed(folder, file);
             }
-
             break;
         }
         case(CameraCommand::gp_lock):
@@ -750,7 +678,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
             {
                 emit signalInternalLockFailed(folder, file);
             }
-
             break;
         }
         default:
@@ -769,9 +696,7 @@ void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType ty
                                   const QString& folder, const QString& file)
 {
     if (!d->canceled)
-    {
         emit signalLogMsg(msg, type, folder, file);
-    }
 }
 
 void CameraController::slotCheckRename(const QString& folder, const QString& file,
@@ -787,7 +712,6 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     // Check if dest file already exist, unless we overwrite anyway
 
     QFileInfo info(dest);
-
     if (!d->overwriteAll)
     {
 
@@ -800,10 +724,10 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
             }
 
             QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(d->parent, i18n("Rename File"),
-                    folder + QString("/") + file, dest,
-                    KIO::RenameDialog_Mode(KIO::M_MULTI     |
-                                           KIO::M_OVERWRITE |
-                                           KIO::M_SKIP));
+                                                                    folder + QString("/") + file, dest,
+                                                                    KIO::RenameDialog_Mode(KIO::M_MULTI |
+                                                                    KIO::M_OVERWRITE                    |
+                                                                    KIO::M_SKIP));
 
             int result = dlg->exec();
             dest       = dlg->newDestUrl().toLocalFile();
@@ -845,9 +769,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
             }
 
             if (cancel || skip || overwrite)
-            {
                 break;
-            }
         }
     }
 
@@ -897,11 +819,8 @@ void CameraController::slotDownloadFailed(const QString& folder, const QString& 
         {
             msg += i18n(" Do you want to continue?");
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
-
             if (result != KMessageBox::Continue)
-            {
                 slotCancel();
-            }
         }
     }
 }
@@ -924,11 +843,8 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
         {
             msg += i18n(" Do you want to continue?");
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
-
             if (result != KMessageBox::Continue)
-            {
                 slotCancel();
-            }
         }
     }
 }
@@ -950,11 +866,8 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
         {
             msg += i18n(" Do you want to continue?");
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
-
             if (result != KMessageBox::Continue)
-            {
                 slotCancel();
-            }
         }
     }
 }
@@ -976,11 +889,8 @@ void CameraController::slotLockFailed(const QString& folder, const QString& file
         {
             msg += i18n(" Do you want to continue?");
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
-
             if (result != KMessageBox::Continue)
-            {
                 slotCancel();
-            }
         }
     }
 }
@@ -998,18 +908,14 @@ void CameraController::slotOpen(const QString& folder, const QString& file, cons
     im->loadURL(urlList, url, i18n("Camera \"%1\"",d->camera->model()), false);
 
     if (im->isHidden())
-    {
         im->show();
-    }
     else
-    {
         im->raise();
-    }
 
     im->setFocus();
 }
 
-void CameraController::addCommand(CameraCommand* cmd)
+void CameraController::addCommand(CameraCommand *cmd)
 {
     QMutexLocker lock(&d->mutex);
     d->commands << cmd;

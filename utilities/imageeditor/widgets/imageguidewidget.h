@@ -49,7 +49,7 @@ class ImageIface;
 
 class DIGIKAM_EXPORT ImageGuideWidget : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
@@ -69,9 +69,9 @@ public:
 public:
 
     explicit ImageGuideWidget(QWidget* parent=0,
-                              bool spotVisible=true, int guideMode=PickColorMode,
-                              const QColor& guideColor=Qt::red, int guideSize=1,
-                              bool blink=false, bool useImageSelection=false);
+                     bool spotVisible=true, int guideMode=PickColorMode,
+                     const QColor& guideColor=Qt::red, int guideSize=1,
+                     bool blink=false, bool useImageSelection=false);
     ~ImageGuideWidget();
 
     ImageIface* imageIface() const;

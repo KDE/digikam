@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT DRawDecoding : public RawDecodingSettings
 
 public:
 
-    /** Standard constructor with default settings
+    /** Standard constructor with default settings 
      */
     DRawDecoding();
 
@@ -58,11 +58,11 @@ public:
      */
     DRawDecoding(const RawDecodingSettings& prm);
 
-    /** Standard destructor
+    /** Standard destructor 
      */
     virtual ~DRawDecoding();
 
-    /** Method to use a settings to optimize time loading, for example to compute image histogram
+    /** Method to use a settings to optimize time loading, for example to compute image histogram 
      */
     void optimizeTimeLoading();
 
@@ -70,7 +70,7 @@ public:
      */
     void resetPostProcessingSettings();
 
-    /** Method to check is a post-processing setting have been changed
+    /** Method to check is a post-processing setting have been changed 
      */
     bool postProcessingSettingsIsDirty();
 

@@ -47,7 +47,7 @@ namespace Digikam
 
 UnsharpMaskFilter::UnsharpMaskFilter(DImg* orgImage, QObject* parent, int radius,
                                      double amount, double threshold)
-    : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
+                 : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
 {
     m_radius    = radius;
     m_amount    = amount;
@@ -72,8 +72,8 @@ void UnsharpMaskFilter::filterImage()
 
     if (m_orgImage.isNull())
     {
-        kWarning() << "No image data available!";
-        return;
+       kWarning() << "No image data available!";
+       return;
     }
 
     BlurFilter(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
@@ -92,13 +92,9 @@ void UnsharpMaskFilter::filterImage()
             value = (double)(p.red())-(double)(q.red());
 
             if (fabs(2.0*value) < quantumThreshold)
-            {
                 value = (double)(p.red());
-            }
             else
-            {
                 value = (double)(p.red()) + value*m_amount;
-            }
 
             q.setRed(CLAMP(lround(value), zero, quantum));
 
@@ -106,13 +102,9 @@ void UnsharpMaskFilter::filterImage()
             value = (double)(p.green())-(double)(q.green());
 
             if (fabs(2.0*value) < quantumThreshold)
-            {
                 value = (double)(p.green());
-            }
             else
-            {
                 value = (double)(p.green()) + value*m_amount;
-            }
 
             q.setGreen(CLAMP(lround(value), zero, quantum));
 
@@ -120,13 +112,9 @@ void UnsharpMaskFilter::filterImage()
             value = (double)(p.blue())-(double)(q.blue());
 
             if (fabs(2.0*value) < quantumThreshold)
-            {
                 value = (double)(p.blue());
-            }
             else
-            {
                 value = (double)(p.blue()) + value*m_amount;
-            }
 
             q.setBlue(CLAMP(lround(value), zero, quantum));
 
@@ -134,13 +122,9 @@ void UnsharpMaskFilter::filterImage()
             value = (double)(p.alpha())-(double)(q.alpha());
 
             if (fabs(2.0*value) < quantumThreshold)
-            {
                 value = (double)(p.alpha());
-            }
             else
-            {
                 value = (double)(p.alpha()) + value*m_amount;
-            }
 
             q.setAlpha(CLAMP(lround(value), zero, quantum));
 
@@ -148,11 +132,8 @@ void UnsharpMaskFilter::filterImage()
         }
 
         progress = (int)(10.0 + ((double)y * 90.0) / m_destImage.height());
-
         if ( progress%5 == 0 )
-        {
-            postProgress( progress );
-        }
+           postProgress( progress );
     }
 }
 

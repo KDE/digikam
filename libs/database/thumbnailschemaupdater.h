@@ -38,11 +38,11 @@ class ThumbnailSchemaUpdater
 {
 public:
 
-    ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access);
+    ThumbnailSchemaUpdater(ThumbnailDatabaseAccess *access);
 
     static int schemaVersion();
     bool update();
-    void setObserver(InitializationObserver* observer);
+    void setObserver(InitializationObserver *observer);
 
 private:
 
@@ -59,9 +59,9 @@ private:
 
     int                     m_currentVersion;
 
-    ThumbnailDatabaseAccess* m_access;
+    ThumbnailDatabaseAccess*m_access;
 
-    InitializationObserver* m_observer;
+    InitializationObserver *m_observer;
 };
 
 }  // namespace Digikam

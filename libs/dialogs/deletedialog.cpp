@@ -54,10 +54,10 @@
 namespace Digikam
 {
 
-DeleteWidget::DeleteWidget(QWidget* parent)
-    : QWidget(parent),
-      m_listMode(DeleteDialogMode::Files),
-      m_deleteMode(DeleteDialogMode::UseTrash)
+DeleteWidget::DeleteWidget(QWidget *parent)
+            : QWidget(parent),
+              m_listMode(DeleteDialogMode::Files),
+              m_deleteMode(DeleteDialogMode::UseTrash)
 {
     setObjectName("DeleteDialogBase");
 
@@ -66,9 +66,9 @@ DeleteWidget::DeleteWidget(QWidget* parent)
 
     m_checkBoxStack = new QStackedWidget(this);
 
-    QLabel* logo = new QLabel(this);
+    QLabel *logo = new QLabel(this);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                    .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                            .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     m_warningIcon = new QLabel(this);
     m_warningIcon->setWordWrap(false);
@@ -83,7 +83,7 @@ DeleteWidget::DeleteWidget(QWidget* parent)
     m_deleteText->setAlignment(Qt::AlignCenter);
     m_deleteText->setWordWrap(true);
 
-    QHBoxLayout* hbox = new QHBoxLayout();
+    QHBoxLayout *hbox = new QHBoxLayout();
     hbox->setSpacing(KDialog::spacingHint());
     hbox->setMargin(0);
     hbox->addWidget(logo);
@@ -118,7 +118,7 @@ DeleteWidget::DeleteWidget(QWidget* parent)
     m_doNotShowAgain->setGeometry(QRect(0, 0, 100, 30));
     m_doNotShowAgain->setText(i18n("Do not &ask again"));
 
-    QVBoxLayout* vbox = new QVBoxLayout(this);
+    QVBoxLayout *vbox = new QVBoxLayout(this);
     vbox->setSpacing(KDialog::spacingHint());
     vbox->setMargin(KDialog::spacingHint());
     vbox->setContentsMargins(0, 0, 0, 0);
@@ -139,23 +139,15 @@ DeleteWidget::DeleteWidget(QWidget* parent)
 void DeleteWidget::setFiles(const KUrl::List& files)
 {
     m_fileList->clear();
-
-    for ( KUrl::List::ConstIterator it = files.begin(); it != files.end(); ++it)
+    for( KUrl::List::ConstIterator it = files.begin(); it != files.end(); ++it)
     {
-        if ( (*it).isLocalFile() ) //path is null for non-local
-        {
+        if( (*it).isLocalFile() ) //path is null for non-local
             m_fileList->addItem( (*it).toLocalFile() );
-        }
         else if ( (*it).protocol() == "digikamalbums")
-        {
             m_fileList->addItem( DatabaseUrl(*it).fileUrl().toLocalFile() );
-        }
         else
-        {
             m_fileList->addItem( (*it).prettyUrl() );
-        }
     }
-
     updateText();
 }
 
@@ -182,16 +174,16 @@ void DeleteWidget::updateText()
     if (m_deleteMode == DeleteDialogMode::DeletePermanently)
     {
         m_doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
-                                          "be directly and permanently deleted."));
+                "be directly and permanently deleted."));
         m_doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
-                                            "and files will be directly and permanently deleted."));
+                "and files will be directly and permanently deleted."));
     }
     else
     {
         m_doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
-                                          "be directly moved to the Trash."));
+                "be directly moved to the Trash."));
         m_doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
-                                            "and files will be directly moved to the Trash."));
+                "and files will be directly moved to the Trash."));
     }
 
     switch (m_listMode)
@@ -213,9 +205,8 @@ void DeleteWidget::updateText()
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
                 m_numFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.",
-                                          m_fileList->count()));
+                        m_fileList->count()));
             }
-
             break;
         }
         case DeleteDialogMode::Albums:
@@ -235,9 +226,8 @@ void DeleteWidget::updateText()
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
-
             m_numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
-                                      m_fileList->count()));
+                                m_fileList->count()));
             break;
         }
         case DeleteDialogMode::Subalbums:
@@ -263,9 +253,8 @@ void DeleteWidget::updateText()
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
-
             m_numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
-                                      m_fileList->count()));
+                                m_fileList->count()));
             break;
         }
     }
@@ -273,12 +262,12 @@ void DeleteWidget::updateText()
 
 //----------------------------------------------------------------------------
 
-DeleteDialog::DeleteDialog(QWidget* parent)
-    : KDialog(parent),
-      m_saveShouldDeleteUserPreference(true),
-      m_saveDoNotShowAgainTrash(false),
-      m_saveDoNotShowAgainPermanent(false),
-      m_trashGuiItem(i18n("&Move to Trash"), "user-trash-full")
+DeleteDialog::DeleteDialog(QWidget *parent)
+            : KDialog(parent),
+              m_saveShouldDeleteUserPreference(true),
+              m_saveDoNotShowAgainTrash(false),
+              m_saveDoNotShowAgainPermanent(false),
+              m_trashGuiItem(i18n("&Move to Trash"), "user-trash-full")
 {
     setButtons(User1 | Cancel);
     setButtonFocus(User1);
@@ -310,18 +299,13 @@ bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
     if (deleteMode == DeleteDialogMode::NoChoiceTrash)
     {
         if (!AlbumSettings::instance()->getShowTrashDeleteDialog())
-        {
             return true;
-        }
     }
     else if (deleteMode == DeleteDialogMode::NoChoiceDeletePermanently)
     {
         if (!AlbumSettings::instance()->getShowPermanentDeleteDialog())
-        {
             return true;
-        }
     }
-
     return exec() == QDialog::Accepted;
 }
 
@@ -333,19 +317,17 @@ void DeleteDialog::setURLs(const KUrl::List& files)
 void DeleteDialog::slotUser1Clicked()
 {
     // Save user's preference
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::instance();
 
     if (m_saveShouldDeleteUserPreference)
     {
         settings->setUseTrash(!shouldDelete());
     }
-
     if (m_saveDoNotShowAgainTrash)
     {
         kDebug() << "setShowTrashDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
         settings->setShowTrashDeleteDialog(!m_widget->m_doNotShowAgain->isChecked());
     }
-
     if (m_saveDoNotShowAgainPermanent)
     {
         kDebug() << "setShowPermanentDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
@@ -387,7 +369,7 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
             m_widget->m_shouldDelete->setChecked(true);
             m_widget->m_checkBoxStack->setCurrentWidget(m_widget->m_doNotShowAgain);
             m_saveDoNotShowAgainPermanent = true;
-            //            m_widget->m_checkBoxStack->hide();
+//            m_widget->m_checkBoxStack->hide();
             break;
         }
         case DeleteDialogMode::UserPreference:
@@ -412,7 +394,6 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
 void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
 {
     m_widget->setListMode(mode);
-
     switch (mode)
     {
         case DeleteDialogMode::Files:
@@ -426,7 +407,7 @@ void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
     }
 }
 
-void DeleteDialog::keyPressEvent(QKeyEvent* e)
+void DeleteDialog::keyPressEvent(QKeyEvent *e)
 {
     if ( e->modifiers() == 0 )
     {
@@ -446,7 +427,6 @@ void DeleteDialog::keyPressEvent(QKeyEvent* e)
             }
         }
     }
-
     KDialog::keyPressEvent(e);
 }
 

@@ -60,8 +60,8 @@ public:
 };
 
 PreviewPage::PreviewPage(KAssistantDialog* dlg)
-    : AssistantDlgPage(dlg, i18n("<b>Configure Preview Behavior</b>")),
-      d(new PreviewPagePriv)
+           : AssistantDlgPage(dlg, i18n("<b>Configure Preview Behavior</b>")), 
+             d(new PreviewPagePriv)
 {
     KVBox* vbox    = new KVBox(this);
     QLabel* label1 = new QLabel(vbox);
@@ -101,7 +101,7 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
     setPageWidget(vbox);
 
     QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-preview.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
+    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
 }
 
 PreviewPage::~PreviewPage()

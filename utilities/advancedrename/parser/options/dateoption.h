@@ -37,7 +37,7 @@
 
 namespace Ui
 {
-class DateOptionDialogWidget;
+    class DateOptionDialogWidget;
 }
 
 namespace Digikam
@@ -57,7 +57,7 @@ public:
         Standard = 0,
         ISO,
         FullText,
-        //        Locale,
+//        Locale,
         Custom
     };
 
@@ -66,10 +66,7 @@ public:
     QVariant formatType(Type type);
     QVariant formatType(QString identifier);
 
-    DateFormatMap& map()
-    {
-        return m_map;
-    };
+    DateFormatMap& map() { return m_map; };
 
 private:
 

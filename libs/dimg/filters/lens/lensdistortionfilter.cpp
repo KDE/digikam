@@ -38,9 +38,9 @@ namespace Digikam
 {
 
 LensDistortionFilter::LensDistortionFilter(DImg* orgImage, QObject* parent, double main,
-        double edge, double rescale, double brighten,
-        int center_x, int center_y)
-    : DImgThreadedFilter(orgImage, parent, "LensDistortionFilter")
+                                           double edge, double rescale, double brighten,
+                                           int center_x, int center_y)
+                    : DImgThreadedFilter(orgImage, parent, "LensDistortionFilter")
 {
     m_main     = main;
     m_edge     = edge;
@@ -79,7 +79,7 @@ void LensDistortionFilter::filterImage()
     double rescale              = pow(2.0, - m_rescale / 100.0);
     double brighten             = - m_brighten / 10.0;
 
-    PixelAccess* pa = new PixelAccess(&m_orgImage);
+    PixelAccess *pa = new PixelAccess(&m_orgImage);
 
     /*
      * start at image (i, j), increment by (step, step)
@@ -127,14 +127,11 @@ void LensDistortionFilter::filterImage()
             dst += bytesDepth;
         }
 
-        // Update progress bar in dialog.
+       // Update progress bar in dialog.
 
         progress = (int) (((double)dstJ * 100.0) / jLimit);
-
         if (m_parent && progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     delete pa;

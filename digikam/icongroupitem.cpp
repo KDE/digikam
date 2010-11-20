@@ -67,12 +67,12 @@ public:
 
     struct SortableItem
     {
-        IconItem* item;
+        IconItem *item;
     };
 };
 
 IconGroupItem::IconGroupItem(IconView* parent)
-    : d(new IconGroupItemPriv)
+             : d(new IconGroupItemPriv)
 {
     d->view = parent;
     m_next  = 0;
@@ -128,9 +128,7 @@ IconItem* IconGroupItem::lastItem() const
 void IconGroupItem::insertItem(IconItem* item)
 {
     if (!item)
-    {
         return;
-    }
 
     if (!d->firstItem)
     {
@@ -154,9 +152,7 @@ void IconGroupItem::insertItem(IconItem* item)
 void IconGroupItem::takeItem(IconItem* item)
 {
     if (!item)
-    {
         return;
-    }
 
     // take item triggers update
     d->view->takeItem(item);
@@ -165,44 +161,28 @@ void IconGroupItem::takeItem(IconItem* item)
     if (item == d->firstItem)
     {
         d->firstItem = d->firstItem->m_next;
-
         if (d->firstItem)
-        {
             d->firstItem->m_prev = 0;
-        }
         else
-        {
             d->firstItem = d->lastItem = 0;
-        }
     }
     else if (item == d->lastItem)
     {
         d->lastItem = d->lastItem->m_prev;
-
         if ( d->lastItem )
-        {
             d->lastItem->m_next = 0;
-        }
         else
-        {
             d->firstItem = d->lastItem = 0;
-        }
     }
     else
     {
-        IconItem* i = item;
-
+        IconItem *i = item;
         if (i)
         {
             if (i->m_prev )
-            {
                 i->m_prev->m_next = i->m_next;
-            }
-
             if ( i->m_next )
-            {
                 i->m_next->m_prev = i->m_prev;
-            }
         }
     }
 }
@@ -215,23 +195,16 @@ int IconGroupItem::count() const
 int IconGroupItem::index(IconItem* item) const
 {
     if ( !item )
-    {
         return -1;
-    }
 
     if ( item == d->firstItem )
-    {
         return 0;
-    }
     else if ( item == d->lastItem )
-    {
         return d->count - 1;
-    }
     else
     {
-        IconItem* i = d->firstItem;
+        IconItem *i = d->firstItem;
         int j = 0;
-
         while ( i && i != item )
         {
             i = i->m_next;
@@ -246,11 +219,10 @@ void IconGroupItem::clear(bool update)
 {
     d->clearing = true;
 
-    IconItem* item = d->firstItem;
-
+    IconItem *item = d->firstItem;
     while (item)
     {
-        IconItem* tmp = item->m_next;
+        IconItem *tmp = item->m_next;
         delete item;
         item = tmp;
     }
@@ -260,57 +232,39 @@ void IconGroupItem::clear(bool update)
     d->count     = 0;
 
     if (update)
-    {
         d->view->triggerRearrangement();
-    }
 
     d->clearing = false;
 }
 
 void IconGroupItem::sort()
 {
-    IconGroupItemPriv::SortableItem* items
-    = new IconGroupItemPriv::SortableItem[ count() ];
+    IconGroupItemPriv::SortableItem *items
+        = new IconGroupItemPriv::SortableItem[ count() ];
 
-    IconItem* item = d->firstItem;
+    IconItem *item = d->firstItem;
     int i = 0;
-
     for ( ; item; item = item->m_next )
-    {
         items[ i++ ].item = item;
-    }
 
     qsort( items, count(), sizeof( IconGroupItemPriv::SortableItem ), cmpItems );
 
-    IconItem* prev = 0;
+    IconItem *prev = 0;
     item = 0;
-
     for ( i = 0; i < (int)count(); ++i )
     {
         item = items[ i ].item;
-
         if ( item )
         {
             item->m_prev = prev;
-
             if ( item->m_prev )
-            {
                 item->m_prev->m_next = item;
-            }
-
             item->m_next = 0;
         }
-
         if ( i == 0 )
-        {
             d->firstItem = item;
-        }
-
         if ( i == (int)count() - 1 )
-        {
             d->lastItem = item;
-        }
-
         prev = item;
     }
 
@@ -320,15 +274,13 @@ void IconGroupItem::sort()
 bool IconGroupItem::move(int y)
 {
     if (d->y == y)
-    {
         return false;
-    }
 
     d->y = y;
     return true;
 }
 
-void IconGroupItem::paintBanner(QPainter* p)
+void IconGroupItem::paintBanner(QPainter *p)
 {
     p->fillRect(rect(), d->view->palette().color(QPalette::Base));
 }
@@ -338,15 +290,13 @@ int IconGroupItem::compare(IconGroupItem*)
     return 0;
 }
 
-int IconGroupItem::cmpItems(const void* n1, const void* n2)
+int IconGroupItem::cmpItems(const void *n1, const void *n2)
 {
     if ( !n1 || !n2 )
-    {
         return 0;
-    }
 
-    IconGroupItemPriv::SortableItem* i1 = (IconGroupItemPriv::SortableItem*)n1;
-    IconGroupItemPriv::SortableItem* i2 = (IconGroupItemPriv::SortableItem*)n2;
+    IconGroupItemPriv::SortableItem *i1 = (IconGroupItemPriv::SortableItem *)n1;
+    IconGroupItemPriv::SortableItem *i2 = (IconGroupItemPriv::SortableItem *)n2;
 
     return i1->item->compare( i2->item );
 }

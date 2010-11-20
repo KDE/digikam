@@ -114,7 +114,7 @@ public:
 };
 
 FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
-    : QWidget(parent), d(new FreeSpaceWidgetPriv)
+               : QWidget(parent), d(new FreeSpaceWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedWidth(width);
@@ -137,7 +137,6 @@ FreeSpaceWidget::~FreeSpaceWidget()
 void FreeSpaceWidget::setMode(FreeSpaceMode mode)
 {
     d->mode = mode;
-
     if (d->mode == FreeSpaceWidget::AlbumLibrary)
     {
         d->iconPix = SmallIcon("folder-image");
@@ -258,7 +257,6 @@ unsigned long FreeSpaceWidget::kBAvail(const QString& path) const
         if (info.isValid && !info.mountPoint.isEmpty() && path.startsWith(info.mountPoint))
         {
             int length = info.mountPoint.length();
-
             if (length > mountPointMatch)
             {
                 mountPointMatch = info.mountPoint.length();
@@ -292,15 +290,8 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         int peUsed            = (int)(100.0*((double)eUsedKb/(double)d->kBSize));
         int pClamp            = peUsed > 100 ? 100 : peUsed;
         QColor barcol         = QColor(62, 255, 62);          // Smooth Green.
-
-        if (peUsed > 80)
-        {
-            barcol = QColor(240, 255, 62);    // Smooth Yellow.
-        }
-        else if (peUsed > 95)
-        {
-            barcol = QColor(255, 62, 62);    // Smooth Red.
-        }
+        if (peUsed > 80)      barcol = QColor(240, 255, 62);  // Smooth Yellow.
+        else if (peUsed > 95) barcol = QColor(255, 62, 62);   // Smooth Red.
 
         p.setBrush(barcol);
         p.setPen(palette().light().color());
@@ -313,7 +304,7 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         QString text        = QString("%1%").arg(peUsed);
         QFontMetrics fontMt = p.fontMetrics();
         QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
-                              tRect.width(), tRect.height(), 0, text);
+                                                  tRect.width(), tRect.height(), 0, text);
         p.setPen(Qt::black);
         p.drawText(tRect, Qt::AlignCenter, text);
     }
@@ -325,11 +316,7 @@ void FreeSpaceWidget::updateToolTip()
     {
         QString value;
         QString header = i18n("Camera Media");
-
-        if (d->mode == FreeSpaceWidget::AlbumLibrary)
-        {
-            header = i18n("Album Library");
-        }
+        if (d->mode == FreeSpaceWidget::AlbumLibrary) header = i18n("Album Library");
 
         DToolTipStyleSheet cnt(AlbumSettings::instance()->getToolTipsFont());
         QString tip = cnt.tipHeader;
@@ -366,7 +353,7 @@ void FreeSpaceWidget::updateToolTip()
     }
 }
 
-void FreeSpaceWidget::enterEvent(QEvent* e)
+void FreeSpaceWidget::enterEvent(QEvent *e)
 {
     Q_UNUSED(e)
     d->toolTip->show();
@@ -384,7 +371,6 @@ void FreeSpaceWidget::slotTimeout()
     foreach (const QString& path, d->paths)
     {
         KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(path);
-
         if (info.isValid())
         {
             addInformation((unsigned long)(info.size()/1024.0),
@@ -403,10 +389,9 @@ void FreeSpaceWidget::slotTimeout()
     foreach (const QString& path, d->paths)
     {
         KMountPoint::Ptr mp = list.findByPath(path);
-
         if (mp)
         {
-            KDiskFreeSpace* job = new KDiskFreeSpace(this);
+            KDiskFreeSpace *job = new KDiskFreeSpace(this);
             connect(job, SIGNAL(foundMountPoint(const QString&, quint64, quint64, quint64)),
                     this, SLOT(slotAvailableFreeSpace(const QString&, quint64, quint64, quint64)));
             job->readDF(mp->mountPoint());
@@ -416,7 +401,7 @@ void FreeSpaceWidget::slotTimeout()
 #endif /* KDE_IS_VERSION(4,1,68) */
 
 void FreeSpaceWidget::slotAvailableFreeSpace(const QString& mountPoint, quint64 kBSize,
-        quint64 kBUsed, quint64 kBAvail)
+                                             quint64 kBUsed, quint64 kBAvail)
 {
 #if KDE_IS_VERSION(4,1,68)
     Q_UNUSED(mountPoint);

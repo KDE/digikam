@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 TemplateListItem::TemplateListItem(QTreeWidget* parent, const Template& t)
-    : QTreeWidgetItem(parent)
+                : QTreeWidgetItem(parent)
 {
     setTemplate(t);
 }
@@ -70,7 +70,7 @@ Template TemplateListItem::getTemplate() const
 // -------------------------------------------------------------------
 
 TemplateList::TemplateList(QWidget* parent)
-    : QTreeWidget(parent)
+            : QTreeWidget(parent)
 {
     setColumnCount(2);
     setRootIsDecorated(false);
@@ -94,7 +94,6 @@ TemplateList::~TemplateList()
 void TemplateList::readSettings()
 {
     TemplateManager* tm = TemplateManager::defaultManager();
-
     if (tm)
     {
         QList<Template> list = tm->templateList();
@@ -108,30 +107,24 @@ void TemplateList::readSettings()
 void TemplateList::applySettings()
 {
     TemplateManager* tm = TemplateManager::defaultManager();
-
     if (tm)
     {
         tm->clear();
 
         QTreeWidgetItemIterator it(this);
-
         while (*it)
         {
             TemplateListItem* item = dynamic_cast<TemplateListItem*>(*it);
-
             if (item)
             {
                 Template t = item->getTemplate();
-
                 if (!t.isNull())
                 {
                     tm->insert(t);
                 }
             }
-
             ++it;
         }
-
         tm->save();
     }
 }
@@ -139,27 +132,20 @@ void TemplateList::applySettings()
 TemplateListItem* TemplateList::find(const QString& title)
 {
     QTreeWidgetItemIterator it(this);
-
     while (*it)
     {
         TemplateListItem* item = dynamic_cast<TemplateListItem*>(*it);
-
         if (item)
         {
             Template t = item->getTemplate();
-
             if (!t.isNull())
             {
                 if (t.templateTitle() == title)
-                {
                     return item;
-                }
             }
         }
-
         ++it;
     }
-
     return 0;
 }
 

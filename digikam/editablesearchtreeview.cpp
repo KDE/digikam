@@ -50,16 +50,16 @@ public:
     {
     }
 
-    SearchModificationHelper* searchModificationHelper;
+    SearchModificationHelper *searchModificationHelper;
 
-    QAction* renameSearchAction;
-    QAction* deleteSearchAction;
+    QAction *renameSearchAction;
+    QAction *deleteSearchAction;
 };
 
 EditableSearchTreeView::EditableSearchTreeView(QWidget* parent,
-        SearchModel* searchModel,
-        SearchModificationHelper* searchModificationHelper)
-    : SearchTreeView(parent, searchModel), d(new EditableSearchTreeViewPriv)
+                                             SearchModel* searchModel,
+                                             SearchModificationHelper* searchModificationHelper)
+                      : SearchTreeView(parent, searchModel), d(new EditableSearchTreeViewPriv)
 {
     d->searchModificationHelper = searchModificationHelper;
 
@@ -87,7 +87,6 @@ void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
 
     // disable actions if there is no album or the album is a temporary search
     bool activate = false;
-
     if (searchAlbum)
     {
         activate = !searchAlbum->isTemporarySearch();

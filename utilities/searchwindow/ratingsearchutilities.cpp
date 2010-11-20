@@ -67,15 +67,13 @@ RatingStarDrawer::RatingStarDrawer()
     starPolygonSize = QSize(15, 15);
 }
 
-QRect RatingStarDrawer::drawStarPolygons(QPainter* painter, int numberOfStars) const
+QRect RatingStarDrawer::drawStarPolygons(QPainter *painter, int numberOfStars) const
 {
     QRect drawnRect(0, 0, 0, 0);
     QPolygon polygon(starPolygon);
 
     if (numberOfStars)
-    {
         drawnRect.adjust(0, 0, 0, starPolygonSize.height());
-    }
 
     for (int i=0; i<numberOfStars; ++i)
     {
@@ -89,15 +87,14 @@ QRect RatingStarDrawer::drawStarPolygons(QPainter* painter, int numberOfStars) c
 
 // -------------------------------------------------------------------------
 
-RatingComboBoxDelegate::RatingComboBoxDelegate(QObject* parent)
-    : QItemDelegate(parent)
+RatingComboBoxDelegate::RatingComboBoxDelegate(QObject *parent)
+                      : QItemDelegate(parent)
 {
 }
 
-QSize RatingComboBoxDelegate::sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+QSize RatingComboBoxDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     QVariant value = index.data(Qt::DisplayRole);
-
     if (value.type() == QVariant::Int)
     {
         return QSize(RatingMax * (starPolygonSize.width() + 1), starPolygonSize.height());
@@ -108,12 +105,11 @@ QSize RatingComboBoxDelegate::sizeHint ( const QStyleOptionViewItem& option, con
     }
 }
 
-void RatingComboBoxDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
-                                   const QModelIndex& index) const
+void RatingComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option,
+                                   const QModelIndex &index) const
 {
     QVariant value  = index.data(Qt::DisplayRole);
     bool selectable = index.flags() & Qt::ItemIsSelectable;
-
     if (value.type() == QVariant::Int)
     {
         painter->save();
@@ -132,7 +128,7 @@ void RatingComboBoxDelegate::paint(QPainter* painter, const QStyleOptionViewItem
     }
 }
 
-void RatingComboBoxDelegate::drawRating(QPainter* painter, const QRect& rect, int rating, bool selectable) const
+void RatingComboBoxDelegate::drawRating(QPainter *painter, const QRect& rect, int rating, bool selectable) const
 {
     painter->save();
 
@@ -141,9 +137,7 @@ void RatingComboBoxDelegate::drawRating(QPainter* painter, const QRect& rect, in
     painter->setPen(ThemeEngine::instance()->textRegColor());
 
     if (!selectable)
-    {
         painter->setOpacity(.1);
-    }
 
     painter->setBrush(ThemeEngine::instance()->textSpecialRegColor());
     // move painter while drawing polygons
@@ -159,22 +153,17 @@ void RatingComboBoxDelegate::drawRating(QPainter* painter, const QRect& rect, in
 
 // -------------------------------------------------------------------------
 
-RatingComboBoxModel::RatingComboBoxModel(QObject* parent)
-    : QAbstractListModel(parent)
+RatingComboBoxModel::RatingComboBoxModel(QObject *parent)
+                   : QAbstractListModel(parent)
 {
     for (int value = RatingComboBox::Null; value <= RatingComboBox::Rating5; ++value)
-    {
         m_entries << (RatingComboBox::RatingValue)value;
-    }
 }
 
-int RatingComboBoxModel::rowCount(const QModelIndex& parent) const
+int RatingComboBoxModel::rowCount(const QModelIndex & parent) const
 {
     if (parent.isValid())
-    {
         return 0;
-    }
-
     return m_entries.size();
 }
 
@@ -183,17 +172,11 @@ QVariant RatingComboBoxModel::data(const QModelIndex& index, int role) const
     if (index.isValid())
     {
         RatingComboBox::RatingValue value = (RatingComboBox::RatingValue)index.internalId();
-
         if (role == Qt::DisplayRole)
-        {
             return ratingValueToDisplay(value);
-        }
         else if (role == RatingRole)
-        {
             return (int)value;
-        }
     }
-
     return QVariant();
 }
 
@@ -213,16 +196,13 @@ QVariant RatingComboBoxModel::ratingValueToDisplay(RatingComboBox::RatingValue v
         case RatingComboBox::Rating5:
             return (int)value;
     }
-
     return QVariant();
 }
 
 QModelIndex RatingComboBoxModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (parent.isValid() || column != 0 || row >= m_entries.size())
-    {
         return QModelIndex();
-    }
 
     // third argument: RatingValue as internal data
     return createIndex(row, column, m_entries[row]);
@@ -231,19 +211,15 @@ QModelIndex RatingComboBoxModel::index(int row, int column, const QModelIndex& p
 QModelIndex RatingComboBoxModel::indexForRatingValue(RatingComboBox::RatingValue value) const
 {
     int row = m_entries.indexOf(value);
-
     if (row != -1)
-    {
         return createIndex(row, 0, value);
-    }
-
     return QModelIndex();
 }
 
 // -------------------------------------------------------------------------
 
-RatingComboBoxWidget::RatingComboBoxWidget(QWidget* parent)
-    : RatingWidget(parent)
+RatingComboBoxWidget::RatingComboBoxWidget(QWidget *parent)
+                    : RatingWidget(parent)
 {
     m_value = RatingComboBox::Null;
 
@@ -265,24 +241,16 @@ RatingComboBox::RatingValue RatingComboBoxWidget::ratingValue() const
 void RatingComboBoxWidget::setRatingValue(RatingComboBox::RatingValue value)
 {
     if (m_value == value)
-    {
         return;
-    }
 
     m_value = value;
 
     // sync with base class
     blockSignals(true);
-
     if (m_value >= RatingComboBox::Rating0)
-    {
         setRating(value);
-    }
     else
-    {
         setRating(0);
-    }
-
     blockSignals(false);
 
     update();
@@ -292,7 +260,6 @@ void RatingComboBoxWidget::setRatingValue(RatingComboBox::RatingValue value)
 void RatingComboBoxWidget::slotRatingChanged(int rating)
 {
     RatingComboBox::RatingValue newValue = (RatingComboBox::RatingValue)rating;
-
     if (m_value != newValue)
     {
         m_value = newValue;
@@ -300,7 +267,7 @@ void RatingComboBoxWidget::slotRatingChanged(int rating)
     }
 }
 
-void RatingComboBoxWidget::paintEvent(QPaintEvent* e)
+void RatingComboBoxWidget::paintEvent(QPaintEvent *e)
 {
     if (m_value >= RatingComboBox::Rating0)
     {
@@ -322,12 +289,10 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent* e)
     else if (m_value == RatingComboBox::Null)
     {
         QPainter p(this);
-
         if (underMouse() && isEnabled())
         {
             QPixmap pix = starPixmap();
             int x = 0;
-
             for (int i = 0; i < RatingMax; ++i)
             {
                 p.drawPixmap(x, 0, pix);
@@ -363,8 +328,8 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent* e)
 
 // -------------------------------------------------------------------------
 
-RatingComboBox::RatingComboBox(QWidget* parent)
-    : ModelIndexBasedComboBox(parent)
+RatingComboBox::RatingComboBox(QWidget *parent)
+              : ModelIndexBasedComboBox(parent)
 {
     m_syncing = false;
 
@@ -373,17 +338,17 @@ RatingComboBox::RatingComboBox(QWidget* parent)
     setModel(m_model);
 
     // set a custom delegate which draws rating stars
-    RatingComboBoxDelegate* delegate = new RatingComboBoxDelegate(this);
+    RatingComboBoxDelegate *delegate = new RatingComboBoxDelegate(this);
     view()->setItemDelegate(delegate);
 
     // set a line edit that carries a RatingWidget
-    ProxyLineEdit* lineEdit = new ProxyLineEdit;
+    ProxyLineEdit *lineEdit = new ProxyLineEdit;
     m_ratingWidget = new RatingComboBoxWidget;
     lineEdit->setWidget(m_ratingWidget);
     setLineEdit(lineEdit);
 
-    connect(view()->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(currentValueChanged(const QModelIndex&, const QModelIndex&)));
+    connect(view()->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
+            this, SLOT(currentValueChanged(const QModelIndex &, const QModelIndex &)));
 
     connect(m_ratingWidget, SIGNAL(ratingValueChanged(int)),
             this, SLOT(ratingWidgetChanged(int)));
@@ -392,14 +357,9 @@ RatingComboBox::RatingComboBox(QWidget* parent)
 void RatingComboBox::setRatingValue(RatingComboBox::RatingValue value)
 {
     if (value > Rating5)
-    {
         value = Rating5;
-    }
     else if (value < Null)
-    {
         value = Null;
-    }
-
     setCurrentIndex(m_model->indexForRatingValue(value));
 }
 
@@ -408,12 +368,10 @@ RatingComboBox::RatingValue RatingComboBox::ratingValue() const
     return (RatingValue)view()->currentIndex().data(RatingComboBoxModel::RatingRole).toInt();
 }
 
-void RatingComboBox::currentValueChanged(const QModelIndex& current, const QModelIndex&)
+void RatingComboBox::currentValueChanged(const QModelIndex& current, const QModelIndex &)
 {
     if (m_syncing)
-    {
         return;
-    }
 
     RatingValue value = (RatingValue)current.data(RatingComboBoxModel::RatingRole).toInt();
 
@@ -427,9 +385,7 @@ void RatingComboBox::currentValueChanged(const QModelIndex& current, const QMode
 void RatingComboBox::ratingWidgetChanged(int rv)
 {
     if (m_syncing)
-    {
         return;
-    }
 
     RatingValue value = (RatingValue)rv;
     QModelIndex index = m_model->indexForRatingValue(value);

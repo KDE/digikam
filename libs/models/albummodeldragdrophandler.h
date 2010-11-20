@@ -62,7 +62,7 @@ public:
     virtual QStringList mimeTypes() const;
 
     /** Create a mime data object for starting a drag from the given Albums */
-    virtual QMimeData* createMimeData(const QList<Album*>&);
+    virtual QMimeData *createMimeData(const QList<Album*>&);
 
     /** Returns if the given mime data can be handled. acceptsMimeData shall return true
      *  if a drop of the given mime data will be accepted on any index or place at all.

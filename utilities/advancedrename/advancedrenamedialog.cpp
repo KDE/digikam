@@ -65,12 +65,12 @@ public:
 // --------------------------------------------------------
 
 AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view)
-    : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
+                      : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
 {
 }
 
 AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const KUrl& url)
-    : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
+                      : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
 {
     setImageUrl(url);
 }
@@ -99,7 +99,6 @@ KUrl AdvancedRenameListItem::imageUrl() const
 void AdvancedRenameListItem::setName(const QString& name, bool check)
 {
     setText(OldName, name);
-
     if (check)
     {
         markInvalid(isInvalid());
@@ -114,7 +113,6 @@ QString AdvancedRenameListItem::name() const
 void AdvancedRenameListItem::setNewName(const QString& name, bool check)
 {
     setText(NewName, name);
-
     if (check)
     {
         markInvalid(isInvalid());
@@ -173,7 +171,7 @@ const QString AdvancedRenameDialog::AdvancedRenameDialogPriv::configDialogSizeEn
 // --------------------------------------------------------
 
 AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
-    : KDialog(parent), d(new AdvancedRenameDialogPriv)
+                    : KDialog(parent), d(new AdvancedRenameDialogPriv)
 {
     d->advancedRenameManager  = new AdvancedRenameManager();
     d->advancedRenameWidget   = new AdvancedRenameWidget(this);
@@ -255,18 +253,15 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 
     // fill the tree widget with the updated files
     QTreeWidgetItemIterator it(d->listView);
-
     while (*it)
     {
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
-
         if (item)
         {
             QString newName = d->advancedRenameManager->newName(item->imageUrl().toLocalFile());
             item->setNewName(newName);
             d->newNamesList << NewNameInfo(item->imageUrl(), newName);
         }
-
         ++it;
     }
 
@@ -310,7 +305,6 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
         d->advancedRenameWidget->highlightLineEdit(info.completeBaseName());
         d->singleFileModeOldFilename = info.fileName();
     }
-
     d->singleFileMode = (itemCount <= 1);
 
     enableButton(Ok, checkNewNames());
@@ -345,7 +339,6 @@ void AdvancedRenameDialog::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configDialogSizeEntry, size());
-
     if (d->singleFileMode)
     {
         d->advancedRenameWidget->clear();
@@ -362,11 +355,9 @@ bool AdvancedRenameDialog::checkNewNames()
     bool ok = true;
 
     QTreeWidgetItemIterator it(d->listView);
-
     while (*it)
     {
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
-
         if (item)
         {
             bool valid = !item->isInvalid() && ( !tmpNewNames.contains(item->newName()) );
@@ -374,7 +365,6 @@ bool AdvancedRenameDialog::checkNewNames()
             item->markInvalid(!valid);
             tmpNewNames << item->newName();
         }
-
         ++it;
     }
 

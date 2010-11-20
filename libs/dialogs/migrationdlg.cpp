@@ -60,14 +60,14 @@ class DatabaseCopyThreadPriv
 
 public:
 
-    DatabaseCopyThreadPriv() {}
+    DatabaseCopyThreadPriv(){}
 
     DatabaseParameters fromDatabaseParameters;
     DatabaseParameters toDatabaseParameters;
 };
 
-DatabaseCopyThread::DatabaseCopyThread(QWidget* parent)
-    : QThread(parent), d(new DatabaseCopyThreadPriv)
+DatabaseCopyThread::DatabaseCopyThread(QWidget* parent) 
+                  : QThread(parent), d(new DatabaseCopyThreadPriv)
 {
 }
 
@@ -117,7 +117,7 @@ public:
 };
 
 MigrationDlg::MigrationDlg(QWidget* parent)
-    : KDialog(parent), d(new MigrationDlgPriv)
+            : KDialog(parent), d(new MigrationDlgPriv)
 {
     setupMainArea();
 }
@@ -162,8 +162,8 @@ void MigrationDlg::setupMainArea()
     layout->addWidget(d->cancelButton,         2, 1);
     layout->addWidget(d->toDatabaseWidget,     0, 2, 4, 1);
     layout->addWidget(progressBox,          4, 0, 1, 3);
-    //  layout->addWidget(d->progressBar,          4, 0, 1, 3);
-    //  layout->addWidget(d->progressBarSmallStep, 5, 0, 1, 3);
+//  layout->addWidget(d->progressBar,          4, 0, 1, 3);
+//  layout->addWidget(d->progressBarSmallStep, 5, 0, 1, 3);
 
     setMainWidget(mainWidget);
     dataInit();
@@ -171,23 +171,23 @@ void MigrationDlg::setupMainArea()
     // setup dialog
     setButtons(Close);
 
-    connect(d->migrateButton, SIGNAL(clicked()),
+    connect(d->migrateButton, SIGNAL(clicked()), 
             this, SLOT(performCopy()));
 
     // connect signal handlers for copy d->copyThread
-    connect(&(d->copyThread->copyManager), SIGNAL(finished(int, QString)),
+    connect(&(d->copyThread->copyManager), SIGNAL(finished(int, QString)), 
             this, SLOT(handleFinish(int, QString)));
 
-    connect(&(d->copyThread->copyManager), SIGNAL(stepStarted(QString)),
+    connect(&(d->copyThread->copyManager), SIGNAL(stepStarted(QString)), 
             this, SLOT(handleStepStarted(QString)));
 
-    connect(&(d->copyThread->copyManager), SIGNAL(smallStepStarted(int, int)),
+    connect(&(d->copyThread->copyManager), SIGNAL(smallStepStarted(int, int)), 
             this, SLOT(handleSmallStepStarted(int, int)));
 
-    connect(this, SIGNAL(closeClicked()),
+    connect(this, SIGNAL(closeClicked()), 
             &(d->copyThread->copyManager), SLOT(stopProcessing()));
 
-    connect(d->cancelButton, SIGNAL(clicked()),
+    connect(d->cancelButton, SIGNAL(clicked()), 
             &(d->copyThread->copyManager), SLOT(stopProcessing()));
 }
 
@@ -220,28 +220,25 @@ void MigrationDlg::unlockInputFields()
 
 void MigrationDlg::lockInputFields()
 {
-    d->fromDatabaseWidget->setEnabled(false);
-    d->toDatabaseWidget->setEnabled(false);
-    d->migrateButton->setEnabled(false);
-    d->cancelButton->setEnabled(true);
+      d->fromDatabaseWidget->setEnabled(false);
+      d->toDatabaseWidget->setEnabled(false);
+      d->migrateButton->setEnabled(false);
+      d->cancelButton->setEnabled(true);
 }
 
 void MigrationDlg::handleFinish(int finishState, QString errorMsg)
 {
     switch (finishState)
     {
-        case DatabaseCopyManager::failed:
-            KMessageBox::error(this, errorMsg );
-            unlockInputFields();
-            break;
-        case DatabaseCopyManager::success:
-            KMessageBox::information(this, i18n("Database copied successfully.") );
-            unlockInputFields();
-            break;
-        case DatabaseCopyManager::canceled:
-            KMessageBox::information(this, i18n("Database conversion canceled.") );
-            unlockInputFields();
-            break;
+        case DatabaseCopyManager::failed:   KMessageBox::error(this, errorMsg );
+                                            unlockInputFields();
+                                            break;
+        case DatabaseCopyManager::success:  KMessageBox::information(this, i18n("Database copied successfully.") );
+                                            unlockInputFields();
+                                            break;
+        case DatabaseCopyManager::canceled: KMessageBox::information(this, i18n("Database conversion canceled.") );
+                                            unlockInputFields();
+                                            break;
     }
 }
 

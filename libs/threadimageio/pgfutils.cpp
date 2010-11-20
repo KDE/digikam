@@ -78,15 +78,11 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
             pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
         }
     }
-    catch (IOException& e)
+    catch(IOException& e)
     {
         int err = e.error;
 
-        if (err >= AppError)
-        {
-            err -= AppError;
-        }
-
+        if (err >= AppError) err -= AppError;
         kDebug() << "Error running libpgf (" << err << ")!";
         return false;
     }
@@ -106,9 +102,7 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
 
         // No need Alpha to optimize space on DB.
         if (img.format() != QImage::Format_ARGB32)
-        {
             img.convertToFormat(QImage::Format_ARGB32);
-        }
 
         CPGFImage pgfImg;
 
@@ -140,15 +134,11 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
 
         data = QByteArray((const char*)stream.GetBuffer(), nWrittenBytes);
     }
-    catch (IOException& e)
+    catch(IOException& e)
     {
         int err = e.error;
 
-        if (err >= AppError)
-        {
-            err -= AppError;
-        }
-
+        if (err >= AppError) err -= AppError;
         kDebug() << "Error running libpgf (" << err << ")!";
         return false;
     }
@@ -158,8 +148,7 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
 
 bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 {
-    FILE* file = fopen(QFile::encodeName(path), "rb");
-
+    FILE *file = fopen(QFile::encodeName(path), "rb");
     if (!file)
     {
         kDebug() << "Error: Could not open source file.";
@@ -194,20 +183,12 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 #else
     HANDLE fd = CreateFile(QFile::encodeName(path), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #endif
-
     if (fd == INVALID_HANDLE_VALUE)
-    {
         return false;
-    }
-
 #else
     int fd = open(QFile::encodeName(path), O_RDONLY);
-
     if (fd == -1)
-    {
         return false;
-    }
-
 #endif
 
     try
@@ -225,33 +206,27 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
             for (i=pgf.Levels()-1 ; i>=0 ; --i)
             {
                 if (qMin((int)pgf.Width(i), (int)pgf.Height(i)) >= maximumSize)
-                {
                     break;
-                }
             }
         }
 
-        if (i<0)
-        {
-            i=0;
-        }
+        if (i<0) i=0;
 
         pgf.Read(i);  // Read PGF image at reduced level i.
         img = QImage(pgf.Width(i), pgf.Height(i), QImage::Format_RGB32);
-
-        /*
-                const PGFHeader* header = pgf.GetHeader();
-                kDebug() << "PGF width    = " << header->width;
-                kDebug() << "PGF height   = " << header->height;
-                kDebug() << "PGF bbp      = " << header->bpp;
-                kDebug() << "PGF channels = " << header->channels;
-                kDebug() << "PGF quality  = " << header->quality;
-                kDebug() << "PGF mode     = " << header->mode;
-                kDebug() << "PGF levels   = " << header->nLevels;
-                kDebug() << "Level (w x h)= " << i << "(" << pgf.Width(i)
-                              << " x " << pgf.Height(i) << ")";
-                kDebug() << "QImage depth = " << img.depth();
-        */
+/*
+        const PGFHeader* header = pgf.GetHeader();
+        kDebug() << "PGF width    = " << header->width;
+        kDebug() << "PGF height   = " << header->height;
+        kDebug() << "PGF bbp      = " << header->bpp;
+        kDebug() << "PGF channels = " << header->channels;
+        kDebug() << "PGF quality  = " << header->quality;
+        kDebug() << "PGF mode     = " << header->mode;
+        kDebug() << "PGF levels   = " << header->nLevels;
+        kDebug() << "Level (w x h)= " << i << "(" << pgf.Width(i)
+                      << " x " << pgf.Height(i) << ")";
+        kDebug() << "QImage depth = " << img.depth();
+*/
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
         {
             int map[] = {3, 2, 1, 0};
@@ -263,15 +238,11 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
             pgf.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
         }
     }
-    catch (IOException& e)
+    catch(IOException& e)
     {
         int err = e.error;
 
-        if (err >= AppError)
-        {
-            err -= AppError;
-        }
-
+        if (err >= AppError) err -= AppError;
         kDebug() << "Error running libpgf (" << err << ")!";
         return false;
     }

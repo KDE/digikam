@@ -66,7 +66,7 @@ public:
 // --------------------------------------------------------
 
 CameraHistoryUpdater::CameraHistoryUpdater(QWidget* parent)
-    : QThread(parent), d(new CameraHistoryUpdaterPriv)
+                    : QThread(parent), d(new CameraHistoryUpdaterPriv)
 {
     qRegisterMetaType<CHUpdateItemMap>("CHUpdateItemMap");
 }
@@ -102,7 +102,6 @@ void CameraHistoryUpdater::run()
             CHUpdateItem item;
 
             QMutexLocker lock(&d->mutex);
-
             if (!d->updateItems.isEmpty())
             {
                 item = d->updateItems.takeFirst();
@@ -117,7 +116,6 @@ void CameraHistoryUpdater::run()
             }
         }
     }
-
     sendBusy(false);
 }
 
@@ -129,20 +127,16 @@ void CameraHistoryUpdater::sendBusy(bool val)
 void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
 {
     if (map.empty())
-    {
         return;
-    }
 
     QMutexLocker lock(&d->mutex);
     d->running = true;
     d->canceled = false;
     d->updateItems << CHUpdateItem(id, map);
-
     if (!isRunning())
     {
         start(LowPriority);
     }
-
     d->condVar.wakeAll();
 }
 
@@ -166,11 +160,9 @@ void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& ma
                 (*it).downloaded = GPItemInfo::DownloadUnknown;
                 break;
         }
-
         ++it;
 
-    }
-    while (it != map.end() && !d->canceled);
+    } while (it != map.end() && !d->canceled);
 
     emit signalHistoryMap(_map);
 }

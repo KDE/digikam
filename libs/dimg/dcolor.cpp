@@ -62,15 +62,12 @@ DColor::DColor(const QColor& color, bool sixteenBit)
         m_green = 0;
         m_blue  = 0;
     }
-
     m_alpha      = 255;
     m_sixteenBit = false;
 
     // convert to sixteen bit if requested
     if (sixteenBit)
-    {
         convertToSixteenBit();
-    }
 }
 
 /*
@@ -100,9 +97,7 @@ QColor DColor::getQColor() const
 void DColor::convertToSixteenBit()
 {
     if (m_sixteenBit)
-    {
         return;
-    }
 
     m_red        = (m_red + 1) * 256 - 1;
     m_green      = (m_green + 1) * 256 - 1;
@@ -114,9 +109,7 @@ void DColor::convertToSixteenBit()
 void DColor::convertToEightBit()
 {
     if (!m_sixteenBit)
-    {
         return;
-    }
 
     m_red        = (m_red + 1) / 256 - 1;
     m_green      = (m_green + 1) / 256 - 1;
@@ -146,42 +139,26 @@ void DColor::getHSL(int* h, int* s, int* l) const
     if (red > green)
     {
         if (red > blue)
-        {
             max = red;
-        }
         else
-        {
             max = blue;
-        }
 
         if (green < blue)
-        {
             min = green;
-        }
         else
-        {
             min = blue;
-        }
     }
     else
     {
         if (green > blue)
-        {
             max = green;
-        }
         else
-        {
             max = blue;
-        }
 
         if (red < blue)
-        {
             min = red;
-        }
         else
-        {
             min = blue;
-        }
     }
 
     sum = max + min;
@@ -195,36 +172,21 @@ void DColor::getHSL(int* h, int* s, int* l) const
         delta = max - min;
 
         if (lig <= 0.5)
-        {
             sat = delta / sum;
-        }
         else
-        {
             sat = delta / (2 - sum);
-        }
 
         if (red == max)
-        {
             hue = (green - blue) / delta;
-        }
         else if (green == max)
-        {
             hue = 2 + (blue - red) / delta;
-        }
         else if (blue == max)
-        {
             hue = 4 + (red - green) / delta;
-        }
 
         if (hue < 0)
-        {
             hue += 6;
-        }
-
         if (hue > 6)
-        {
             hue -= 6;
-        }
 
         hue *= 60;
     }
@@ -257,104 +219,58 @@ void DColor::setHSL(int h, int s, int l, bool sixteenBit)
         saturation = (double)(s / range);
 
         if (lightness <= 0.5)
-        {
             m2 = lightness * (1 + saturation);
-        }
         else
-        {
             m2 = lightness + saturation - lightness * saturation;
-        }
 
         m1 = 2 * lightness - m2;
 
         double mh;
 
         mh = hue + 120;
-
         while (mh > 360)
-        {
             mh -= 360;
-        }
-
         while (mh < 0)
-        {
             mh += 360;
-        }
 
         if (mh < 60)
-        {
             r = m1 + (m2 - m1) * mh / 60;
-        }
         else if (mh < 180)
-        {
             r = m2;
-        }
         else if (mh < 240)
-        {
             r = m1 + (m2 - m1) * (240 - mh) / 60;
-        }
         else
-        {
             r = m1;
-        }
 
         mh = hue;
-
         while (mh > 360)
-        {
             mh -= 360;
-        }
-
         while (mh < 0)
-        {
             mh += 360;
-        }
 
         if (mh < 60)
-        {
             g = m1 + (m2 - m1) * mh / 60;
-        }
         else if (mh < 180)
-        {
             g = m2;
-        }
         else if (mh < 240)
-        {
             g = m1 + (m2 - m1) * (240 - mh) / 60;
-        }
         else
-        {
             g = m1;
-        }
 
         mh = hue - 120;
-
         while (mh > 360)
-        {
             mh -= 360;
-        }
-
         while (mh < 0)
-        {
             mh += 360;
-        }
 
         if (mh < 60)
-        {
             b = m1 + (m2 - m1) * mh / 60;
-        }
         else if (mh < 180)
-        {
             b = m2;
-        }
         else if (mh < 240)
-        {
             b = m1 + (m2 - m1) * (240 - mh) / 60;
-        }
         else
-        {
             b = m1;
-        }
 
         m_red   = lround(r * range);
         m_green = lround(g * range);
@@ -365,13 +281,9 @@ void DColor::setHSL(int h, int s, int l, bool sixteenBit)
 
     // Fully opaque color.
     if (m_sixteenBit)
-    {
         m_alpha = 65535;
-    }
     else
-    {
         m_alpha = 255;
-    }
 }
 
 void DColor::getYCbCr(double* y, double* cb, double* cr) const
@@ -390,22 +302,18 @@ void DColor::setYCbCr(double y, double cb, double cr, bool sixteenBit)
     double g = y - 0.34414 * (cb - 0.5) - 0.71414 * (cr - 0.5);
     double b = y + 1.77200 * (cb - 0.5);
     double q = (sixteenBit ? 65535.0 : 255.0);
-
+    
     m_red    = CLAMP((int)lround(r * q), 0, (int)q);
     m_green  = CLAMP((int)lround(g * q), 0, (int)q);
     m_blue   = CLAMP((int)lround(b * q), 0, (int)q);
 
     m_sixteenBit = sixteenBit;
-
+    
     // Fully opaque color.
     if (m_sixteenBit)
-    {
         m_alpha = 65535;
-    }
     else
-    {
         m_alpha = 255;
-    }
 }
 
 }  // namespace Digikam

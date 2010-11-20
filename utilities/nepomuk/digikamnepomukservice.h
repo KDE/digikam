@@ -35,12 +35,12 @@
 class KJob;
 namespace KIO
 {
-class Job;
+    class Job;
 }
 
 namespace Soprano
 {
-class Statement;
+    class Statement;
 }
 
 namespace Digikam

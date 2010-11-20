@@ -43,11 +43,8 @@ ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const QString& path)
 {
     // If code here proves to be a bottleneck we can add custom queries to albumdb to retrieve info all-in-one
     ImageInfo imageinfo(KUrl::fromPath(path));
-
     if (imageinfo.isNull())
-    {
         return ThumbnailCreator::fileThumbnailInfo(path);
-    }
 
     ThumbnailInfo thumbinfo;
     QVariantList values;
@@ -57,8 +54,7 @@ ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const QString& path)
 
     DatabaseAccess access;
     values = access.db()->getImagesFields(imageinfo.id(),
-                                          DatabaseFields::ModificationDate | DatabaseFields::FileSize | DatabaseFields::UniqueHash);
-
+             DatabaseFields::ModificationDate | DatabaseFields::FileSize | DatabaseFields::UniqueHash);
     if (!values.isEmpty())
     {
         thumbinfo.modificationDate = values[0].toDateTime();
@@ -67,11 +63,8 @@ ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const QString& path)
     }
 
     values = access.db()->getImageInformation(imageinfo.id(), DatabaseFields::Orientation);
-
     if (!values.isEmpty())
-    {
         thumbinfo.orientationHint = values.first().toInt();
-    }
 
     return thumbinfo;
 }

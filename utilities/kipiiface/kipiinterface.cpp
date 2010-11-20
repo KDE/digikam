@@ -51,8 +51,8 @@
 namespace Digikam
 {
 
-KipiInterface::KipiInterface(QObject* parent, const char* name)
-    : KIPI::Interface(parent, name)
+KipiInterface::KipiInterface(QObject *parent, const char *name)
+             : KIPI::Interface(parent, name)
 {
     m_thumbLoadThread = ThumbnailLoadThread::defaultThread();
     m_albumManager    = AlbumManager::instance();
@@ -71,15 +71,14 @@ KipiInterface::~KipiInterface()
 KIPI::ImageCollection KipiInterface::currentAlbum()
 {
     Album* currAlbum = m_albumManager->currentAlbum();
-
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
-                                     currAlbum,
+                                         currAlbum,
 #if KIPI_VERSION >= 0x000300
-                                     hostSetting("FileExtensions").toString()));
+                                         hostSetting("FileExtensions").toString()));
 #else
-                                     fileExtensions()));
+                                         fileExtensions()));
 #endif
     }
     else
@@ -91,15 +90,14 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
 KIPI::ImageCollection KipiInterface::currentSelection()
 {
     Album* currAlbum = m_albumManager->currentAlbum();
-
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
-                                     currAlbum,
+                                                             currAlbum,
 #if KIPI_VERSION >= 0x000300
-                                     hostSetting("FileExtensions").toString()));
+                                         hostSetting("FileExtensions").toString()));
 #else
-                                     fileExtensions()));
+                                         fileExtensions()));
 #endif
     }
     else
@@ -118,34 +116,28 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
 #endif
 
     const AlbumList palbumList = m_albumManager->allPAlbums();
-
     for ( AlbumList::ConstIterator it = palbumList.constBegin();
           it != palbumList.constEnd(); ++it )
     {
         // don't add the root album
         if ((*it)->isRoot())
-        {
             continue;
-        }
 
         KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
-                *it, fileFilter);
+                                                           *it, fileFilter);
         result.append( KIPI::ImageCollection( col ) );
     }
 
     const AlbumList talbumList = m_albumManager->allTAlbums();
-
     for ( AlbumList::ConstIterator it = talbumList.constBegin();
           it != talbumList.constEnd(); ++it )
     {
         // don't add the root album
         if ((*it)->isRoot())
-        {
             continue;
-        }
 
         KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
-                *it, fileFilter);
+                                                           *it, fileFilter);
         result.append( KIPI::ImageCollection( col ) );
     }
 
@@ -167,12 +159,8 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
     foreach (const KUrl& url, urls)
     {
         ImageInfo info(url);
-
         if (!info.isNull())
-        {
             ids << info.id();
-        }
-
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);
         LoadingCacheInterface::fileChanged(path);
@@ -190,13 +178,13 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
 int KipiInterface::features() const
 {
     return(
-              KIPI::HostSupportsTags            | KIPI::HostSupportsRating      |
-              KIPI::HostAcceptNewImages         | KIPI::HostSupportsThumbnails  |
-              KIPI::HostSupportsProgressBar     |
-              KIPI::ImagesHasComments           | KIPI::ImagesHasTitlesWritable |
-              KIPI::ImagesHasTime               |
-              KIPI::CollectionsHaveComments     | KIPI::CollectionsHaveCategory |
-              KIPI::CollectionsHaveCreationDate
+           KIPI::HostSupportsTags            | KIPI::HostSupportsRating      |
+           KIPI::HostAcceptNewImages         | KIPI::HostSupportsThumbnails  |
+           KIPI::HostSupportsProgressBar     |
+           KIPI::ImagesHasComments           | KIPI::ImagesHasTitlesWritable |
+           KIPI::ImagesHasTime               |
+           KIPI::CollectionsHaveComments     | KIPI::CollectionsHaveCategory |
+           KIPI::CollectionsHaveCreationDate
           );
 }
 
@@ -210,7 +198,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
         return false;
     }
 
-    PAlbum* targetAlbum = m_albumManager->findPAlbum(url.directory());
+    PAlbum *targetAlbum = m_albumManager->findPAlbum(url.directory());
 
     if ( !targetAlbum )
     {
@@ -226,7 +214,6 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
 void KipiInterface::delImage( const KUrl& url )
 {
     KUrl rootURL(CollectionManager::instance()->albumRoot(url));
-
     if ( !rootURL.isParentOf(url) )
     {
         kWarning() << "URL not in the album library";
@@ -234,7 +221,7 @@ void KipiInterface::delImage( const KUrl& url )
 
     // Is there a PAlbum for this URL
 
-    PAlbum* palbum = m_albumManager->findPAlbum( KUrl(url.directory()) );
+    PAlbum *palbum = m_albumManager->findPAlbum( KUrl(url.directory()) );
 
     if ( palbum )
     {
@@ -252,7 +239,7 @@ void KipiInterface::slotSelectionChanged(int count)
     emit selectionChanged(count);
 }
 
-void KipiInterface::slotCurrentAlbumChanged( Album* album )
+void KipiInterface::slotCurrentAlbumChanged( Album *album )
 {
     emit currentAlbumChanged( album != 0 );
 }
@@ -266,9 +253,7 @@ void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 void KipiInterface::thumbnails(const KUrl::List& list, int size)
 {
     for (KUrl::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
-    {
         thumbnail(*it, size);
-    }
 }
 
 void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
@@ -276,12 +261,12 @@ void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QP
     emit gotThumbnail( KUrl(desc.filePath), pix );
 }
 
-KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget* parent)
+KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget *parent)
 {
     return (new KipiImageCollectionSelector(this, parent));
 }
 
-KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget* parent)
+KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget *parent)
 {
     return (new KipiUploadWidget(this, parent));
 }

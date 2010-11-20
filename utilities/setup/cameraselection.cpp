@@ -97,7 +97,7 @@ public:
 };
 
 CameraSelection::CameraSelection( QWidget* parent )
-    : KDialog(parent), d(new CameraSelectionPriv)
+               : KDialog(parent), d(new CameraSelectionPriv)
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     setHelp("cameraselection.anchor", "digikam");
@@ -134,7 +134,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     // --------------------------------------------------------------
 
     QGroupBox* titleBox   = new QGroupBox(i18n("Camera Title"), mainWidget());
-    QVBoxLayout* gLayout1 = new QVBoxLayout(titleBox);
+    QVBoxLayout *gLayout1 = new QVBoxLayout(titleBox);
     d->titleEdit          = new KLineEdit(titleBox);
     d->titleEdit->setWhatsThis(i18n("<p>Set here the name used in digiKam interface to "
                                     "identify this camera.</p>"));
@@ -146,7 +146,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     // --------------------------------------------------------------
 
     QGroupBox* portBox    = new QGroupBox(i18n("Camera Port Type"), mainWidget());
-    QVBoxLayout* gLayout2 = new QVBoxLayout(portBox);
+    QVBoxLayout *gLayout2 = new QVBoxLayout(portBox);
     d->portButtonGroup    = new QButtonGroup( portBox );
     d->portButtonGroup->setExclusive( true );
 
@@ -169,7 +169,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     // --------------------------------------------------------------
 
     QGroupBox* portPathBox = new QGroupBox(i18n("Camera Port Path"), mainWidget());
-    QVBoxLayout* gLayout3  = new QVBoxLayout(portPathBox);
+    QVBoxLayout *gLayout3  = new QVBoxLayout(portPathBox);
 
     d->portPathLabel = new QLabel( portPathBox);
     d->portPathLabel->setText(i18n("Note: only for serial port cameras."));
@@ -177,7 +177,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->portPathComboBox = new KComboBox( portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
     d->portPathComboBox->setWhatsThis( i18n("<p>Select the serial port to use on your computer here. "
-                                            "This option is only required if you use a serial camera.</p>"));
+                     "This option is only required if you use a serial camera.</p>"));
 
     gLayout3->addWidget(d->portPathLabel);
     gLayout3->addWidget(d->portPathComboBox);
@@ -187,7 +187,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     // --------------------------------------------------------------
 
     QGroupBox* umsMountBox = new QGroupBox(i18n("Camera Mount Path"), mainWidget());
-    QVBoxLayout* gLayout4  = new QVBoxLayout(umsMountBox);
+    QVBoxLayout *gLayout4  = new QVBoxLayout(umsMountBox);
 
     QLabel* umsMountLabel = new QLabel( umsMountBox );
     umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage cameras."));
@@ -210,7 +210,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     QLabel* logo = new QLabel(box2);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                    .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                            .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* link = new QLabel(box2);
     link->setText(i18n("<p>To set a <b>USB Mass Storage</b> camera<br/>"
@@ -228,8 +228,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     QLabel* explanation = new QLabel(box2);
     explanation->setOpenExternalLinks(true);
     explanation->setText(i18n("<p>A complete list of camera settings to use is<br/>"
-                              "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
-                              "this URL</a>.</p>"));
+                 "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
+                 "this URL</a>.</p>"));
 
     gLayout5->setMargin(KDialog::spacingHint());
     gLayout5->setSpacing(KDialog::spacingHint());
@@ -254,10 +254,10 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     // Connections --------------------------------------------------
 
-    connect(link, SIGNAL(linkActivated(const QString&)),
+    connect(link, SIGNAL(linkActivated(const QString &)),
             this, SLOT(slotUMSCameraLinkUsed()));
 
-    connect(link2, SIGNAL(linkActivated(const QString&)),
+    connect(link2, SIGNAL(linkActivated(const QString &)),
             this, SLOT(slotPTPCameraLinkUsed()));
 
     connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
@@ -296,11 +296,9 @@ CameraSelection::~CameraSelection()
 void CameraSelection::slotUMSCameraLinkUsed()
 {
     QList<QTreeWidgetItem*> list = d->listView->findItems(d->UMSCameraNameShown, Qt::MatchExactly, 0);
-
     if (!list.isEmpty())
     {
-        QTreeWidgetItem* item = list.first();
-
+        QTreeWidgetItem *item = list.first();
         if (item)
         {
             d->listView->setCurrentItem(item);
@@ -312,11 +310,9 @@ void CameraSelection::slotUMSCameraLinkUsed()
 void CameraSelection::slotPTPCameraLinkUsed()
 {
     QList<QTreeWidgetItem*> list = d->listView->findItems(d->PTPCameraNameShown, Qt::MatchExactly, 0);
-
     if (!list.isEmpty())
     {
-        QTreeWidgetItem* item = list.first();
-
+        QTreeWidgetItem *item = list.first();
         if (item)
         {
             d->listView->setCurrentItem(item);
@@ -331,20 +327,13 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
     QString camModel(model);
 
     if (camModel == d->UMSCameraNameActual)
-    {
         camModel = d->UMSCameraNameShown;
-    }
 
     QList<QTreeWidgetItem*> list = d->listView->findItems(camModel, Qt::MatchExactly, 0);
-
     if (!list.isEmpty())
     {
-        QTreeWidgetItem* item = list.first();
-
-        if (!item)
-        {
-            return;
-        }
+        QTreeWidgetItem *item = list.first();
+        if (!item) return;
 
         d->listView->setCurrentItem(item);
         d->listView->scrollToItem(item);
@@ -368,7 +357,6 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
                     break;
                 }
             }
-
             slotPortChanged();
         }
 
@@ -387,15 +375,10 @@ void CameraSelection::getCameraList()
     for (int i = 0 ; i < count ; ++i)
     {
         cname = clist[i];
-
         if (cname == d->UMSCameraNameActual)
-        {
             new QTreeWidgetItem(d->listView, QStringList() << d->UMSCameraNameShown);
-        }
         else
-        {
             new QTreeWidgetItem(d->listView, QStringList() << cname);
-        }
     }
 }
 
@@ -410,18 +393,13 @@ void CameraSelection::getSerialPortList()
     for (int i = 0; i < plist.count() ; ++i)
     {
         if ((plist[i]).startsWith(QLatin1String("serial:")))
-        {
             d->serialPortList.append(plist[i]);
-        }
     }
 }
 
-void CameraSelection::slotSelectionChanged(QTreeWidgetItem* item, int)
+void CameraSelection::slotSelectionChanged(QTreeWidgetItem *item, int)
 {
-    if (!item)
-    {
-        return;
-    }
+    if (!item) return;
 
     QString model(item->text(0));
 
@@ -513,18 +491,12 @@ QString CameraSelection::currentTitle()
 QString CameraSelection::currentModel()
 {
     QTreeWidgetItem* item = d->listView->currentItem();
-
     if (!item)
-    {
         return QString();
-    }
 
     QString model(item->text(0));
-
     if (model == d->UMSCameraNameShown)
-    {
         model = d->UMSCameraNameActual;
-    }
 
     return model;
 }
@@ -551,10 +523,9 @@ void CameraSelection::slotSearchTextChanged(const SearchTextSettings& settings)
     QString search = settings.text;
 
     QTreeWidgetItemIterator it(d->listView);
-
     while (*it)
     {
-        QTreeWidgetItem* item  = *it;
+        QTreeWidgetItem *item  = *it;
 
         if (item->text(0).contains(search, settings.caseSensitive))
         {

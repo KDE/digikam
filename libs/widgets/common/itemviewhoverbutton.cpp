@@ -44,11 +44,11 @@ namespace Digikam
 {
 
 ItemViewHoverButton::ItemViewHoverButton(QAbstractItemView* view)
-    : QAbstractButton(view->viewport()),
-      m_isHovered(false),
-      m_fadingValue(0),
-      m_icon(),
-      m_fadingTimeLine(0)
+                   : QAbstractButton(view->viewport()),
+                     m_isHovered(false),
+                     m_fadingValue(0),
+                     m_icon(),
+                     m_fadingTimeLine(0)
 {
     const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     const int duration = animate ? 600 : 1;
@@ -88,7 +88,6 @@ void ItemViewHoverButton::reset()
 void ItemViewHoverButton::setIndex(const QModelIndex& index)
 {
     m_index = index;
-
     if (index.isValid())
     {
         startFading();
@@ -105,7 +104,6 @@ void ItemViewHoverButton::setVisible(bool visible)
     QAbstractButton::setVisible(visible);
 
     stopFading();
-
     if (visible)
     {
         startFading();
@@ -184,12 +182,10 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
 void ItemViewHoverButton::setFadingValue(int value)
 {
     m_fadingValue = value;
-
     if (m_fadingValue >= 255)
     {
         m_fadingTimeLine->stop();
     }
-
     update();
 }
 
@@ -212,10 +208,7 @@ void ItemViewHoverButton::refreshIcon()
 void ItemViewHoverButton::startFading()
 {
     if (m_fadingTimeLine->state() != QTimeLine::Running)
-    {
         m_fadingTimeLine->start();
-    }
-
     m_fadingValue = 0;
 }
 

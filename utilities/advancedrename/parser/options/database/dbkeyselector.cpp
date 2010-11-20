@@ -46,8 +46,8 @@
 namespace Digikam
 {
 
-DbKeySelectorItem::DbKeySelectorItem(DbHeaderListItem* parent, const QString& title, const QString& desc)
-    : QTreeWidgetItem(parent), m_key(title), m_description(desc)
+DbKeySelectorItem::DbKeySelectorItem(DbHeaderListItem *parent, const QString& title, const QString& desc)
+                 : QTreeWidgetItem(parent), m_key(title), m_description(desc)
 {
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
@@ -56,7 +56,6 @@ DbKeySelectorItem::DbKeySelectorItem(DbHeaderListItem* parent, const QString& ti
     setText(0, title);
 
     QString descVal = desc.simplified();
-
     if (descVal.length() > 512)
     {
         descVal.truncate(512);
@@ -86,7 +85,7 @@ QString DbKeySelectorItem::description() const
 // ------------------------------------------------------------------------------------
 
 DbKeySelector::DbKeySelector(QWidget* parent)
-    : QTreeWidget(parent)
+             : QTreeWidget(parent)
 {
     setRootIsDecorated(false);
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -119,7 +118,6 @@ void DbKeySelector::setKeysMap(const DbOptionKeysMap& map)
         {
             headers.insert(it.value()->collectionName(), new DbHeaderListItem(this, it.value()->collectionName()));
         }
-
         new DbKeySelectorItem(headers.value(it.value()->collectionName()),
                               it.key(),
                               it.value()->ids().value(it.key()));
@@ -133,19 +131,15 @@ QStringList DbKeySelector::checkedKeysList()
 {
     QStringList list;
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
-
     while (*it)
     {
-        DbKeySelectorItem* item = dynamic_cast<DbKeySelectorItem*>(*it);
-
+        DbKeySelectorItem *item = dynamic_cast<DbKeySelectorItem*>(*it);
         if (item)
         {
             list.append(item->key());
         }
-
         ++it;
     }
-
     return list;
 }
 
@@ -166,9 +160,9 @@ public:
 };
 
 DbKeySelectorView::DbKeySelectorView(QWidget* parent)
-    : QWidget(parent), d(new DbKeySelectorViewPriv)
+                 : QWidget(parent), d(new DbKeySelectorViewPriv)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout *grid = new QGridLayout(this);
     d->selector       = new DbKeySelector(this);
     d->searchBar      = new SearchTextBar(this, "DbKeySelectorView");
 
@@ -206,30 +200,24 @@ void DbKeySelectorView::slotSearchTextChanged(const SearchTextSettings& settings
 
     // Restore all DbKey items.
     QTreeWidgetItemIterator it2(d->selector);
-
     while (*it2)
     {
-        DbHeaderListItem* item = dynamic_cast<DbHeaderListItem*>(*it2);
-
+        DbHeaderListItem *item = dynamic_cast<DbHeaderListItem*>(*it2);
         if (item)
         {
             item->setHidden(false);
         }
-
         ++it2;
     }
 
     QTreeWidgetItemIterator it(d->selector);
-
     while (*it)
     {
-        DbKeySelectorItem* item = dynamic_cast<DbKeySelectorItem*>(*it);
-
+        DbKeySelectorItem *item = dynamic_cast<DbKeySelectorItem*>(*it);
         if (item)
         {
             bool match = item->description().contains(search, settings.caseSensitive) ||
                          item->key().contains(search, settings.caseSensitive);
-
             if (match)
             {
                 atleastOneMatch = true;
@@ -240,7 +228,6 @@ void DbKeySelectorView::slotSearchTextChanged(const SearchTextSettings& settings
                 item->setHidden(true);
             }
         }
-
         ++it;
     }
 
@@ -252,32 +239,26 @@ void DbKeySelectorView::slotSearchTextChanged(const SearchTextSettings& settings
 void DbKeySelectorView::removeChildlessHeaders()
 {
     QTreeWidgetItemIterator it(d->selector);
-
     while (*it)
     {
-        DbHeaderListItem* item = dynamic_cast<DbHeaderListItem*>(*it);
-
+        DbHeaderListItem *item = dynamic_cast<DbHeaderListItem*>(*it);
         if (item)
         {
             int children   = item->childCount();
             int visibles = 0;
-
             for (int i = 0 ; i < children; ++i)
             {
                 QTreeWidgetItem* citem = (*it)->child(i);
-
                 if (!citem->isHidden())
                 {
                     ++visibles;
                 }
             }
-
             if (!children || !visibles)
             {
                 item->setHidden(true);
             }
         }
-
         ++it;
     }
 }

@@ -35,7 +35,7 @@ namespace Digikam
 {
 
 AlbumModelDragDropHandler::AlbumModelDragDropHandler(AbstractAlbumModel* model)
-    : QObject(model), m_model(model)
+                         : QObject(model), m_model(model)
 {
 }
 
@@ -59,7 +59,7 @@ QStringList AlbumModelDragDropHandler::mimeTypes() const
     return QStringList();
 }
 
-QMimeData* AlbumModelDragDropHandler::createMimeData(const QList<Album*>&)
+QMimeData *AlbumModelDragDropHandler::createMimeData(const QList<Album*>&)
 {
     return 0;
 }
@@ -67,15 +67,11 @@ QMimeData* AlbumModelDragDropHandler::createMimeData(const QList<Album*>&)
 bool AlbumModelDragDropHandler::acceptsMimeData(const QMimeData* mime)
 {
     QStringList modelTypes = mimeTypes();
-
     for (int i = 0; i < modelTypes.count(); ++i)
     {
         if (mime->hasFormat(modelTypes.at(i))) //&& (e->dropAction() & model->supportedDropActions()))
-        {
             return true;
-        }
     }
-
     return false;
 }
 

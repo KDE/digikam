@@ -75,7 +75,7 @@ public:
         brightenInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+        {}
 
     static const QString configGroupName;
     static const QString config2ndOrderDistortionEntry;
@@ -104,8 +104,8 @@ const QString LensDistortionTool::LensDistortionToolPriv::configBrightenEntry("B
 // --------------------------------------------------------
 
 LensDistortionTool::LensDistortionTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new LensDistortionToolPriv)
+                  : EditorToolThreaded(parent),
+                    d(new LensDistortionToolPriv)
 {
     setObjectName("lensdistortion");
     setToolName(i18n("Lens Distortion"));
@@ -124,34 +124,34 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     d->maskPreviewLabel = new QLabel(d->gboxSettings->plainPage());
     d->maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     d->maskPreviewLabel->setWhatsThis( i18n("You can see here a thumbnail preview of the "
-                                            "distortion correction applied to a cross pattern.") );
+                                           "distortion correction applied to a cross pattern.") );
 
     // -------------------------------------------------------------
 
-    QLabel* label1 = new QLabel(i18nc("value for amount of distortion", "Main:"), d->gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18nc("value for amount of distortion", "Main:"), d->gboxSettings->plainPage());
 
     d->mainInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->mainInput->setDecimals(1);
     d->mainInput->input()->setRange(-100.0, 100.0, 0.1, true);
     d->mainInput->setDefaultValue(0.0);
     d->mainInput->setWhatsThis( i18n("This value controls the amount of distortion. Negative values "
-                                     "correct lens barrel distortion, while positive values correct lens "
-                                     "pincushion distortion."));
+                                    "correct lens barrel distortion, while positive values correct lens "
+                                    "pincushion distortion."));
 
     // -------------------------------------------------------------
 
-    QLabel* label2 = new QLabel(i18n("Edge:"), d->gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18n("Edge:"), d->gboxSettings->plainPage());
 
     d->edgeInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->edgeInput->setDecimals(1);
     d->edgeInput->input()->setRange(-100.0, 100.0, 0.1, true);
     d->edgeInput->setDefaultValue(0.0);
     d->edgeInput->setWhatsThis( i18n("This value controls in the same manner as the Main control, "
-                                     "but has more effect at the edges of the image than at the center."));
+                                    "but has more effect at the edges of the image than at the center."));
 
     // -------------------------------------------------------------
 
-    QLabel* label3 = new QLabel(i18n("Zoom:"), d->gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("Zoom:"), d->gboxSettings->plainPage());
 
     d->rescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->rescaleInput->setDecimals(1);
@@ -161,7 +161,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label4 = new QLabel(i18n("Brighten:"), d->gboxSettings->plainPage());
+    QLabel *label4 = new QLabel(i18n("Brighten:"), d->gboxSettings->plainPage());
 
     d->brightenInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->brightenInput->setDecimals(1);
@@ -202,7 +202,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->gboxSettings, SIGNAL(signalColorGuideChanged()),
-            this, SLOT(slotColorGuideChanged()));
+                this, SLOT(slotColorGuideChanged()));
 
     // -------------------------------------------------------------
 

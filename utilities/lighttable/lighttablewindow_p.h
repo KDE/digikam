@@ -135,7 +135,7 @@ public:
     KAction*                  rightZoomMinusAction;
     KAction*                  rightZoomTo100percents;
     KAction*                  rightZoomFitToWindowAction;
-
+    
     // Rating actions.
     KAction*                  star0;
     KAction*                  star1;

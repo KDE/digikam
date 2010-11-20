@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 SequenceNumberDialog::SequenceNumberDialog(Parseable* parent)
-    : ParseableDialog(parent), ui(new Ui::SequenceNumberOptionDialogWidget())
+                    : ParseableDialog(parent), ui(new Ui::SequenceNumberOptionDialogWidget())
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
@@ -60,8 +60,8 @@ SequenceNumberDialog::~SequenceNumberDialog()
 // --------------------------------------------------------
 
 SequenceNumberOption::SequenceNumberOption()
-    : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
-             SmallIcon("accessories-calculator"))
+                    : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
+                             SmallIcon("accessories-calculator"))
 {
     addToken("#",                                   i18n("Sequence number"));
     addToken("#[||options||]",                      i18n("Sequence number (||options||: ||e|| = extension aware, ||f|| = folder aware)"));
@@ -79,7 +79,6 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
     QPointer<SequenceNumberDialog> dlg = new SequenceNumberDialog(this);
 
     QString result;
-
     if (dlg->exec() == KDialog::Accepted)
     {
         int digits          = dlg->ui->digits->value();
@@ -110,7 +109,6 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
                 {
                     result.append(QChar(','));
                 }
-
                 result.append(QString::number(start));
             }
 

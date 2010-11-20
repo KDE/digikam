@@ -51,27 +51,27 @@ class AlbumFolderViewSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
-    AlbumFolderViewSideBarWidget(QWidget* parent, AlbumModel* model,
-                                 AlbumModificationHelper* albumModificationHelper);
+    AlbumFolderViewSideBarWidget(QWidget *parent, AlbumModel *model,
+                                 AlbumModificationHelper *albumModificationHelper);
     virtual ~AlbumFolderViewSideBarWidget();
 
     void setActive(bool active);
     void doLoadState();
     void doSaveState();
     void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void changeAlbumFromHistory(Album *album);
     AlbumPointer<PAlbum> currentAlbum() const;
     QPixmap getIcon();
     QString getCaption();
 
 public Q_SLOTS:
-    void slotSelectAlbum(Album* album);
+    void slotSelectAlbum(Album *album);
 
 Q_SIGNALS:
     void signalFindDuplicatesInAlbum(Album*);
 
 private:
-    AlbumFolderViewSideBarWidgetPriv* d;
+    AlbumFolderViewSideBarWidgetPriv *d;
 
 };
 
@@ -85,28 +85,28 @@ class TagViewSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
-    TagViewSideBarWidget(QWidget* parent, TagModel* model);
+    TagViewSideBarWidget(QWidget *parent, TagModel *model);
     virtual ~TagViewSideBarWidget();
 
     void setActive(bool active);
     void doLoadState();
     void doSaveState();
     void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void changeAlbumFromHistory(Album *album);
     AlbumPointer<TAlbum> currentAlbum() const;
     QPixmap getIcon();
     QString getCaption();
 
 public Q_SLOTS:
 
-    void slotSelectAlbum(Album* album);
+    void slotSelectAlbum(Album *album);
 
 Q_SIGNALS:
 
     void signalFindDuplicatesInAlbum(Album*);
 
 private:
-    TagViewSideBarWidgetPriv* d;
+    TagViewSideBarWidgetPriv *d;
 
 };
 
@@ -120,23 +120,23 @@ class DateFolderViewSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
-    DateFolderViewSideBarWidget(QWidget* parent, DateAlbumModel* model,
-                                ImageAlbumFilterModel* imageFilterModel);
+    DateFolderViewSideBarWidget(QWidget *parent, DateAlbumModel *model,
+                    ImageAlbumFilterModel *imageFilterModel);
     virtual ~DateFolderViewSideBarWidget();
 
     void setActive(bool active);
     void doLoadState();
     void doSaveState();
     void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void changeAlbumFromHistory(Album *album);
     AlbumPointer<DAlbum> currentAlbum() const;
     QPixmap getIcon();
     QString getCaption();
 
-    void gotoDate(const QDate& date);
+    void gotoDate(const QDate &date);
 
 private:
-    DateFolderViewSideBarWidgetPriv* d;
+    DateFolderViewSideBarWidgetPriv *d;
 
 };
 
@@ -150,15 +150,15 @@ class TimelineSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
-    TimelineSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                          SearchModificationHelper* searchModificationHelper);
+    TimelineSideBarWidget(QWidget *parent, SearchModel *searchModel,
+                          SearchModificationHelper *searchModificationHelper);
     virtual ~TimelineSideBarWidget();
 
     void setActive(bool active);
     void doLoadState();
     void doSaveState();
     void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -178,7 +178,7 @@ private Q_SLOTS:
     void slotCheckAboutSelection();
 
 private:
-    TimelineSideBarWidgetPriv* d;
+    TimelineSideBarWidgetPriv *d;
 
 };
 
@@ -192,15 +192,15 @@ class SearchSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
-    SearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                        SearchModificationHelper* searchModeificationHelper);
+    SearchSideBarWidget(QWidget *parent, SearchModel *searchModel,
+                        SearchModificationHelper *searchModeificationHelper);
     virtual ~SearchSideBarWidget();
 
     void setActive(bool active);
     void doLoadState();
     void doSaveState();
     void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -208,7 +208,7 @@ public:
     void newAdvancedSearch();
 
 private:
-    SearchSideBarWidgetPriv* d;
+    SearchSideBarWidgetPriv *d;
 
 };
 
@@ -222,27 +222,27 @@ class FuzzySearchSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
-    FuzzySearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                             SearchModificationHelper* searchModificationHelper);
+    FuzzySearchSideBarWidget(QWidget *parent, SearchModel *searchModel,
+                    SearchModificationHelper *searchModificationHelper);
     virtual ~FuzzySearchSideBarWidget();
 
     void setActive(bool active);
     void doLoadState();
     void doSaveState();
     void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
     QString getCaption();
 
-    void newDuplicatesSearch(Album* album);
-    void newSimilarSearch(const ImageInfo& imageInfo);
+    void newDuplicatesSearch(Album *album);
+    void newSimilarSearch(const ImageInfo &imageInfo);
 
 Q_SIGNALS:
     void signalUpdateFingerPrints();
     void signalGenerateFingerPrintsFirstTime();
 
 private:
-    FuzzySearchSideBarWidgetPriv* d;
+    FuzzySearchSideBarWidgetPriv *d;
 
 };
 
@@ -257,14 +257,14 @@ class GPSSearchSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
-    GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel, SearchModificationHelper* searchModificationHelper);
+    GPSSearchSideBarWidget(QWidget *parent, SearchModel *searchModel, SearchModificationHelper *searchModificationHelper);
     virtual ~GPSSearchSideBarWidget();
 
     void setActive(bool active);
     void doLoadState();
     void doSaveState();
     void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -274,10 +274,10 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void slotDigikamViewNoCurrentItem();
-    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList& allImages);
+    void slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
 
 private:
-    GPSSearchSideBarWidgetPriv* d;
+    GPSSearchSideBarWidgetPriv *d;
 
 };
 #endif

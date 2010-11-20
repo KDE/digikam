@@ -85,7 +85,7 @@ public:
         parent(0),
         ABCmenu(0),
         stdActionCollection(0)
-    {}
+        {}
 
     QAction*                     gotoAlbumAction;
     QAction*                     gotoDateAction;
@@ -104,7 +104,7 @@ public:
 };
 
 ContextMenuHelper::ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection)
-    : QObject(parent), d(new ContextMenuHelperPriv)
+                 : QObject(parent), d(new ContextMenuHelperPriv)
 {
     d->parent = parent;
 
@@ -190,7 +190,6 @@ void ContextMenuHelper::addStandardActionThumbnail(imageIds& ids, Album* album)
     {
         return;
     }
-
     setSelectedIds(ids);
 
     if (album && ids.count() == 1)
@@ -222,7 +221,6 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
     foreach(const KUrl& item, d->selectedItems)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
-
         if (!mimeTypes.contains(mimeType))
         {
             mimeTypes << mimeType;
@@ -244,11 +242,9 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
 
         // remove duplicate service entries
         QSet<QString> seenApps;
-
         for (KService::List::iterator it = offers.begin(); it != offers.end();)
         {
             const QString appName((*it)->name());
-
             if (!seenApps.contains(appName))
             {
                 seenApps.insert(appName);
@@ -263,7 +259,7 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
 
     if (!offers.isEmpty())
     {
-        KMenu* servicesMenu = new KMenu(d->parent);
+        KMenu *servicesMenu = new KMenu(d->parent);
         qDeleteAll(servicesMenu->actions());
 
         QAction* serviceAction = servicesMenu->menuAction();
@@ -288,7 +284,7 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
     }
     else
     {
-        QAction* serviceAction = new QAction(i18n("Open With..."), this);
+        QAction *serviceAction = new QAction(i18n("Open With..."), this);
         addAction(serviceAction);
 
         connect(serviceAction, SIGNAL(triggered()),
@@ -308,17 +304,14 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     KUrl::List list = d->selectedItems;
 
     QString name = action ? action->data().toString() : QString();
-
     if (name.isEmpty())
     {
         QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(list);
-
         if (!dlg->exec() == KOpenWithDialog::Accepted)
         {
             delete dlg;
             return;
         }
-
         service = dlg->service();
 
         if (!service)
@@ -328,11 +321,9 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
             {
                 KRun::run(dlg->text(), list, d->parent);
             }
-
             delete dlg;
             return;
         }
-
         delete dlg;
     }
     else
@@ -346,11 +337,9 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
 void ContextMenuHelper::addKipiActions(imageIds& ids)
 {
     setSelectedIds(ids);
-
     if (imageIdsHaveSameCategory(ids, DatabaseItem::Image))
     {
         KAction* action = kipiRotateAction();
-
         if (action)
         {
             d->parent->addAction(action);
@@ -390,7 +379,6 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
     foreach (const qlonglong& id, ids)
     {
         varList = DatabaseAccess().db()->getImagesFields(id, DatabaseFields::Category);
-
         if ( varList.isEmpty() ||
              (DatabaseItem::Category)varList.first().toInt() != category )
         {
@@ -403,7 +391,7 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
 
 void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper)
 {
-    QAction* newTagAction = new QAction(SmallIcon("tag-new"), i18n("New Tag..."), this);
+    QAction *newTagAction = new QAction(SmallIcon("tag-new"), i18n("New Tag..."), this);
     addAction(newTagAction);
     connect(newTagAction, SIGNAL(triggered()),
             helper, SLOT(slotTagNew()));
@@ -411,7 +399,7 @@ void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper)
 
 void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper)
 {
-    QAction* deleteTagAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tag"), this);
+    QAction *deleteTagAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tag"), this);
     addAction(deleteTagAction);
     connect(deleteTagAction, SIGNAL(triggered()),
             helper, SLOT(slotTagDelete()));
@@ -471,7 +459,6 @@ void ContextMenuHelper::addRatingMenu()
 void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 {
 #ifdef HAVE_KDEPIMLIBS
-
     if (d->ABCmenu)
     {
         delete d->ABCmenu;
@@ -500,18 +487,15 @@ void ContextMenuHelper::slotABCContextMenu()
 
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
     QStringList names;
-
     for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
     {
         names.push_back(it->formattedName());
     }
-
     qSort(names);
 
     for ( QStringList::ConstIterator it = names.constBegin(); it != names.constEnd(); ++it )
     {
         QString name = *it;
-
         if (!name.isNull() )
         {
             d->ABCmenu->addAction(name);
@@ -523,7 +507,6 @@ void ContextMenuHelper::slotABCContextMenu()
         QAction* nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
         nothingFound->setEnabled(false);
     }
-
 #endif // HAVE_KDEPIMLIBS
 }
 
@@ -541,14 +524,13 @@ void ContextMenuHelper::slotDeselectAllAlbumItems()
     QTimer::singleShot(75, selectNoneAction, SIGNAL(triggered()));
 }
 
-void ContextMenuHelper::addSelectTagsMenu(Q3ListViewItem* item)
+void ContextMenuHelper::addSelectTagsMenu(Q3ListViewItem *item)
 {
     KMenu* selectTagsMenu         = new KMenu(i18nc("select tags menu", "Select"), d->parent);
     QAction* selectChildrenAction = 0;
     QAction* selectParentsAction  = 0;
     QAction* selectAllTagsAction  = 0;
     selectAllTagsAction           = selectTagsMenu->addAction(i18n("All Tags"));
-
     if (item)
     {
         selectTagsMenu->addSeparator();
@@ -556,7 +538,6 @@ void ContextMenuHelper::addSelectTagsMenu(Q3ListViewItem* item)
         selectParentsAction  = selectTagsMenu->addAction(i18n("Parents"));
         // TODO: handle selectAllTagsAction
     }
-
     d->parent->addMenu(selectTagsMenu);
 }
 
@@ -565,7 +546,7 @@ void ContextMenuHelper::addImportMenu()
     KMenu* menuImport = new KMenu(i18n("Import"), d->parent);
     const QList<QAction*> importActions = DigikamApp::instance()->menuImportActions();
 
-    if (!importActions.isEmpty())
+    if(!importActions.isEmpty())
     {
         menuImport->addActions(importActions);
     }
@@ -581,7 +562,7 @@ void ContextMenuHelper::addExportMenu()
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
 
-    if (!exportActions.isEmpty())
+    if(!exportActions.isEmpty())
     {
         menuExport->addActions(exportActions);
         connect (menuExport, SIGNAL(hovered(QAction*)),
@@ -601,7 +582,7 @@ void ContextMenuHelper::addBatchMenu()
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
 
-    if (!batchActions.isEmpty())
+    if(!batchActions.isEmpty())
     {
         menuKIPIBatch->addActions(batchActions);
         connect (menuKIPIBatch, SIGNAL(hovered(QAction*)),
@@ -616,8 +597,7 @@ void ContextMenuHelper::addBatchMenu()
 void ContextMenuHelper::addAlbumActions()
 {
     const QList<QAction*>& albumActions = DigikamApp::instance()->menuAlbumActions();
-
-    if (!albumActions.isEmpty())
+    if(!albumActions.isEmpty())
     {
         d->parent->addActions(albumActions);
     }
@@ -629,12 +609,10 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
     {
         return;
     }
-
     setSelectedIds(ids);
 
     // the currently selected image is always the first item
     ImageInfo item;
-
     if (!d->selectedIds.isEmpty())
     {
         item = ImageInfo(d->selectedIds.first());
@@ -684,7 +662,6 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
     {
         d->gotoDateAction->setEnabled(false);
     }
-
     QAction* gotoMenuAction = gotoMenu->menuAction();
     gotoMenuAction->setIcon(SmallIcon("go-jump"));
     gotoMenuAction->setText(i18n("Go To"));
@@ -708,7 +685,7 @@ void ContextMenuHelper::addQueueManagerMenu()
 
     // if queue list is empty, do not display the queue submenu
     if (QueueMgrWindow::queueManagerWindowCreated() &&
-        !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty())
+       !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty())
     {
         QueueMgrWindow* qmw = QueueMgrWindow::queueManagerWindow();
         KMenu* queueMenu    = new KMenu(i18n("Add to Existing Queue"), bqmMenu);
@@ -725,18 +702,15 @@ void ContextMenuHelper::addQueueManagerMenu()
         // get queue list from BQM window, do not access it directly, it might crash
         // when the list is changed
         QMap<int, QString> qmwMap = qmw->queuesMap();
-
         for (QMap<int, QString>::iterator it = qmwMap.begin(); it != qmwMap.end(); ++it)
         {
             QAction* action = new QAction(it.value(), this);
             queueList << action;
             d->queueActions[it.key()] = action;
         }
-
         queueMenu->addActions(queueList);
         bqmMenu->addMenu(queueMenu);
     }
-
     d->parent->addMenu(bqmMenu);
 
     // NOTE: see B.K.O #252130 : we need to disable new items to add on BQM is this one is running.
@@ -760,12 +734,10 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
     KAction* paste = KStandardAction::paste(recv, slot, d->parent);
 
     const QMimeData* data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
-
-    if (!data || !KUrl::List::canDecode(data))
+    if(!data || !KUrl::List::canDecode(data))
     {
         paste->setEnabled(false);
     }
-
     addAction(paste);
 }
 
@@ -781,7 +753,6 @@ void ContextMenuHelper::addStandardActionItemDelete(QObject* recv, const char* s
 QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
 {
     QAction* choice = d->parent->exec(pos, at);
-
     if (choice)
     {
         if (!d->selectedIds.isEmpty())
@@ -813,7 +784,6 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
             }
         }
     }
-
     return choice;
 }
 

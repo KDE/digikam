@@ -81,17 +81,17 @@ public:
 };
 
 SetupMime::SetupMime(QWidget* parent)
-    : QScrollArea(parent), d(new SetupMimePriv)
+         : QScrollArea(parent), d(new SetupMimePriv)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget *panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout *layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QLabel* explanationLabel = new QLabel;
+    QLabel *explanationLabel = new QLabel;
     explanationLabel->setText(i18n("<p>digiKam attempts to support all of the image formats that digital cameras produce, "
                                    "while being able to handle a few other important video and audio formats.</p> "
                                    "<p>You can add to the already-appreciable list of formats that digiKam handles by "
@@ -100,26 +100,26 @@ SetupMime::SetupMime(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* imageFileFilterBox = new QGroupBox(i18n("Image Files"), panel);
+    QGroupBox *imageFileFilterBox = new QGroupBox(i18n("Image Files"), panel);
     QGridLayout* grid1            = new QGridLayout(imageFileFilterBox);
 
-    QLabel* logoLabel1 = new QLabel(imageFileFilterBox);
+    QLabel *logoLabel1 = new QLabel(imageFileFilterBox);
     logoLabel1->setPixmap(DesktopIcon("image-jp2"));
 
     d->imageFileFilterLabel = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
 
-    KHBox* hbox1 = new KHBox(imageFileFilterBox);
+    KHBox *hbox1 = new KHBox(imageFileFilterBox);
     d->imageFileFilterEdit = new KLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis( i18n("<p>Here you can add the extensions of image files (including RAW files) "
-                                          "to be displayed in the Album view. Just put \"xyz abc\" "
-                                          "to display files with the xyz and abc extensions in your Album view.</p>"
-                                          "<p>You can also remove file formats that are shown by default "
-                                          "by putting a minus sign in front of the extension: e.g. \"-gif\" would remove all GIF files "
-                                          "from your Album view and any trace of them in your database. "
-                                          "They would not be deleted, just not shown in digiKam.</p>"
-                                          "<p><b>Warning:</b> Removing files from the database means losing "
-                                          "all of their tags and ratings.</p>"));
+                                               "to be displayed in the Album view. Just put \"xyz abc\" "
+                                               "to display files with the xyz and abc extensions in your Album view.</p>"
+                                               "<p>You can also remove file formats that are shown by default "
+                                               "by putting a minus sign in front of the extension: e.g. \"-gif\" would remove all GIF files "
+                                               "from your Album view and any trace of them in your database. "
+                                               "They would not be deleted, just not shown in digiKam.</p>"
+                                               "<p><b>Warning:</b> Removing files from the database means losing "
+                                               "all of their tags and ratings.</p>"));
     d->imageFileFilterLabel->setBuddy(d->imageFileFilterEdit);
     hbox1->setStretchFactor(d->imageFileFilterEdit, 10);
 
@@ -136,28 +136,28 @@ SetupMime::SetupMime(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* movieFileFilterBox = new QGroupBox(i18n("Movie Files"), panel);
+    QGroupBox *movieFileFilterBox = new QGroupBox(i18n("Movie Files"), panel);
     QGridLayout* grid2            = new QGridLayout(movieFileFilterBox);
 
-    QLabel* logoLabel2 = new QLabel(movieFileFilterBox);
+    QLabel *logoLabel2 = new QLabel(movieFileFilterBox);
     logoLabel2->setPixmap(DesktopIcon("video-mpeg"));
 
     d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
 
-    KHBox* hbox2 = new KHBox(movieFileFilterBox);
+    KHBox *hbox2 = new KHBox(movieFileFilterBox);
     d->movieFileFilterEdit = new KLineEdit(hbox2);
     d->movieFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of video files "
-                                          "to be displayed in your Album view. Just write \"xyz abc\" "
-                                          "to support files with the *.xyz and *.abc extensions. "
-                                          "Clicking on these files will "
-                                          "play them in an embedded KDE movie player.</p>"
-                                          "<p>You can also remove file formats that are supported by default "
-                                          "by putting a minus sign in front of the extension: e.g. \"-avi\" would remove "
-                                          "all AVI files from your Album view and any trace of them in your database. "
-                                          "They would not be deleted, just not shown in digiKam.</p>"
-                                          "<p><b>Warning:</b> Removing files from the database means losing "
-                                          "all of their tags and ratings.</p>"));
+                                               "to be displayed in your Album view. Just write \"xyz abc\" "
+                                               "to support files with the *.xyz and *.abc extensions. "
+                                               "Clicking on these files will "
+                                               "play them in an embedded KDE movie player.</p>"
+                                               "<p>You can also remove file formats that are supported by default "
+                                               "by putting a minus sign in front of the extension: e.g. \"-avi\" would remove "
+                                               "all AVI files from your Album view and any trace of them in your database. "
+                                               "They would not be deleted, just not shown in digiKam.</p>"
+                                               "<p><b>Warning:</b> Removing files from the database means losing "
+                                               "all of their tags and ratings.</p>"));
     d->movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
 
@@ -174,28 +174,28 @@ SetupMime::SetupMime(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* audioFileFilterBox = new QGroupBox(i18n("Audio Files"), panel);
+    QGroupBox *audioFileFilterBox = new QGroupBox(i18n("Audio Files"), panel);
     QGridLayout* grid3            = new QGridLayout(audioFileFilterBox);
 
-    QLabel* logoLabel3 = new QLabel(audioFileFilterBox);
+    QLabel *logoLabel3 = new QLabel(audioFileFilterBox);
     logoLabel3->setPixmap(DesktopIcon("audio-basic"));
 
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
 
-    KHBox* hbox3 = new KHBox(audioFileFilterBox);
+    KHBox *hbox3 = new KHBox(audioFileFilterBox);
     d->audioFileFilterEdit = new KLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of audio files "
-                                          "to be displayed in your Album view. Just write \"mp7\" "
-                                          "to support files with the *.mp7 extension. "
-                                          "Clicking on these files will "
-                                          "play them in an embedded KDE audio player.</p>"
-                                          "<p>You can also remove file formats that are supported by default "
-                                          "by putting a minus sign in front of the extension: e.g. \"-ogg\" would "
-                                          "remove all OGG files from your Album view and any trace of them in your database. "
-                                          "They would not be deleted, just not shown in digiKam.</p>"
-                                          "<p><b>Warning:</b> Removing files from the database means losing "
-                                          "all of their tags and ratings.</p>"));
+                                               "to be displayed in your Album view. Just write \"mp7\" "
+                                               "to support files with the *.mp7 extension. "
+                                               "Clicking on these files will "
+                                               "play them in an embedded KDE audio player.</p>"
+                                               "<p>You can also remove file formats that are supported by default "
+                                               "by putting a minus sign in front of the extension: e.g. \"-ogg\" would "
+                                               "remove all OGG files from your Album view and any trace of them in your database. "
+                                               "They would not be deleted, just not shown in digiKam.</p>"
+                                               "<p><b>Warning:</b> Removing files from the database means losing "
+                                               "all of their tags and ratings.</p>"));
     d->audioFileFilterLabel->setBuddy(d->audioFileFilterEdit);
     hbox3->setStretchFactor(d->audioFileFilterEdit, 10);
 
@@ -231,13 +231,13 @@ SetupMime::SetupMime(QWidget* parent)
     connect(d->revertAudioFileFilterBtn, SIGNAL(clicked()),
             this, SLOT(slotRevertAudioFileFilter()));
 
-    connect(d->imageFileFilterLabel, SIGNAL(linkActivated(const QString&)),
+    connect(d->imageFileFilterLabel, SIGNAL(linkActivated(const QString &)),
             this, SLOT(slotShowCurrentImageSettings()));
 
-    connect(d->movieFileFilterLabel, SIGNAL(linkActivated(const QString&)),
+    connect(d->movieFileFilterLabel, SIGNAL(linkActivated(const QString &)),
             this, SLOT(slotShowCurrentMovieSettings()));
 
-    connect(d->audioFileFilterLabel, SIGNAL(linkActivated(const QString&)),
+    connect(d->audioFileFilterLabel, SIGNAL(linkActivated(const QString &)),
             this, SLOT(slotShowCurrentAudioSettings()));
 
     // --------------------------------------------------------
@@ -269,32 +269,27 @@ void SetupMime::applySettings()
     {
         if (imageFilter.contains('-' + format)
             || imageFilter.contains("-*." + format))
-        {
             removedImageFormats << format;
-        }
     }
 
     if (!removedImageFormats.isEmpty())
     {
         int result = KMessageBox::warningYesNo(this,
-                                               i18n("<p>You have chosen to remove the following image formats "
-                                                       "from the list of supported formats: <b>%1</b>.</p>"
-                                                       "<p>These are very common formats. If you have images in your collection "
-                                                       "with these formats, they will be removed from the database and you will "
-                                                       "lose all information about them, including rating and tags.</p>"
-                                                       "<p>Are you sure you want to apply your changes and lose the support for these formats?</p>",
-                                                       removedImageFormats.join(" "))
+                                           i18n("<p>You have chosen to remove the following image formats "
+                                                "from the list of supported formats: <b>%1</b>.</p>"
+                                                "<p>These are very common formats. If you have images in your collection "
+                                                "with these formats, they will be removed from the database and you will "
+                                                "lose all information about them, including rating and tags.</p>"
+                                                "<p>Are you sure you want to apply your changes and lose the support for these formats?</p>",
+                                                removedImageFormats.join(" "))
                                               );
-
         if (result != KMessageBox::Yes)
-        {
             return;
-        }
     }
 
     DatabaseAccess().db()->setUserFilterSettings(d->imageFileFilterEdit->text(),
-            d->movieFileFilterEdit->text(),
-            d->audioFileFilterEdit->text());
+                                                 d->movieFileFilterEdit->text(),
+                                                 d->audioFileFilterEdit->text());
 }
 
 void SetupMime::readSettings()

@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT UnsharpMaskFilter : public DImgThreadedFilter
 public:
 
     explicit UnsharpMaskFilter(DImg* orgImage, QObject* parent=0, int radius=1,
-                               double amount=1.0, double threshold=0.05);
+                             double amount=1.0, double threshold=0.05);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     // UnsharpMaskFilter(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,

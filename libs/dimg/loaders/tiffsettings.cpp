@@ -50,13 +50,13 @@ public:
         TIFFcompression = 0;
     }
 
-    QGridLayout* TIFFGrid;
+    QGridLayout *TIFFGrid;
 
-    QCheckBox*   TIFFcompression;
+    QCheckBox   *TIFFcompression;
 };
 
-TIFFSettings::TIFFSettings(QWidget* parent)
-    : QWidget(parent), d(new TIFFSettingsPriv)
+TIFFSettings::TIFFSettings(QWidget *parent)
+            : QWidget(parent), d(new TIFFSettingsPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 

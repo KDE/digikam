@@ -57,20 +57,20 @@ namespace Digikam
 
 static const char* ICCHumanList[] =
 {
-    "Icc.Header.ColorSpace",
-    "Icc.Header.Copyright",
-    "Icc.Header.DeviceClass",
-    "Icc.Header.Name",
-    "Icc.Header.Description",
-    "Icc.Header.RenderingIntent",
-    "-1"
+     "Icc.Header.ColorSpace",
+     "Icc.Header.Copyright",
+     "Icc.Header.DeviceClass",
+     "Icc.Header.Name",
+     "Icc.Header.Description",
+     "Icc.Header.RenderingIntent",
+     "-1"
 };
 
 // This entry list is only require for compatibility with MetadataWidget implementation.
 static const char* ICCEntryList[] =
 {
-    "Header",
-    "-1"
+     "Header",
+     "-1"
 };
 
 class ICCTagInfo
@@ -78,19 +78,13 @@ class ICCTagInfo
 
 public:
 
-    ICCTagInfo() {}
+    ICCTagInfo(){}
 
     ICCTagInfo(const QString& title, const QString& description)
-        : m_title(title), m_description(description) {}
+        : m_title(title), m_description(description){}
 
-    QString title()       const
-    {
-        return m_title;
-    }
-    QString description() const
-    {
-        return m_description;
-    }
+    QString title()       const { return m_title;       }
+    QString description() const { return m_description; }
 
 private:
 
@@ -116,75 +110,69 @@ public:
 
     QStringList      keysFilter;
 
-    CIETongueWidget* cieTongue;
+    CIETongueWidget *cieTongue;
 
     ICCTagInfoMap    iccTagsDescription;
 };
 
 ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
-    : MetadataWidget(parent), d(new ICCProfileWidgetPriv)
+                : MetadataWidget(parent), d(new ICCProfileWidgetPriv)
 {
     cmsErrorAction(LCMS_ERROR_SHOW);
 
     // Set the translated ICC tags titles/descriptions list
     d->iccTagsDescription["Icc.Header.Name"]            = ICCTagInfo(i18n("Name"),
-            i18n("The ICC profile product name"));
+                                                          i18n("The ICC profile product name"));
     d->iccTagsDescription["Icc.Header.Description"]     = ICCTagInfo(i18n("Description"),
-            i18n("The ICC profile product description"));
+                                                          i18n("The ICC profile product description"));
     d->iccTagsDescription["Icc.Header.Information"]     = ICCTagInfo(i18n("Information"),
-            i18n("Additional ICC profile information"));
+                                                          i18n("Additional ICC profile information"));
     d->iccTagsDescription["Icc.Header.Manufacturer"]    = ICCTagInfo(i18n("Manufacturer"),
-            i18n("Raw information about the ICC profile manufacturer"));
+                                                          i18n("Raw information about the ICC profile manufacturer"));
     d->iccTagsDescription["Icc.Header.Model"]           = ICCTagInfo(i18n("Model"),
-            i18n("Raw information about the ICC profile model"));
+                                                          i18n("Raw information about the ICC profile model"));
     d->iccTagsDescription["Icc.Header.Copyright"]       = ICCTagInfo(i18n("Copyright"),
-            i18n("Raw information about the ICC profile copyright"));
+                                                          i18n("Raw information about the ICC profile copyright"));
     d->iccTagsDescription["Icc.Header.ProfileID"]       = ICCTagInfo(i18n("Profile ID"),
-            i18n("The ICC profile ID number"));
+                                                          i18n("The ICC profile ID number"));
     d->iccTagsDescription["Icc.Header.ColorSpace"]      = ICCTagInfo(i18n("Color Space"),
-            i18n("The color space used by the ICC profile"));
+                                                          i18n("The color space used by the ICC profile"));
     d->iccTagsDescription["Icc.Header.ConnectionSpace"] = ICCTagInfo(i18n("Connection Space"),
-            i18n("The connection space used by the ICC profile"));
+                                                          i18n("The connection space used by the ICC profile"));
     d->iccTagsDescription["Icc.Header.DeviceClass"]     = ICCTagInfo(i18n("Device Class"),
-            i18n("The ICC profile device class"));
+                                                          i18n("The ICC profile device class"));
     d->iccTagsDescription["Icc.Header.RenderingIntent"] = ICCTagInfo(i18n("Rendering Intent"),
-            i18n("The ICC profile rendering intent"));
+                                                          i18n("The ICC profile rendering intent"));
     d->iccTagsDescription["Icc.Header.ProfileVersion"]  = ICCTagInfo(i18n("Profile Version"),
-            i18n("The ICC version used to record the profile"));
+                                                          i18n("The ICC version used to record the profile"));
     d->iccTagsDescription["Icc.Header.CMMFlags"]        = ICCTagInfo(i18n("CMM Flags"),
-            i18n("The ICC profile color management flags"));
+                                                          i18n("The ICC profile color management flags"));
 
     // Set the list of keys and tags filters.
     for (int i=0 ; QString(ICCEntryList[i]) != QString("-1") ; ++i)
-    {
         d->keysFilter << ICCEntryList[i];
-    }
 
     QStringList tagsFilter;
-
     for (int i=0 ; QString(ICCHumanList[i]) != QString("-1") ; ++i)
-    {
         tagsFilter << ICCHumanList[i];
-    }
-
     setTagsFilter(tagsFilter);
 
     // Add CIE tongue graph to the widget area
 
     d->cieTongue = new CIETongueWidget(w, h, this);
     d->cieTongue->setWhatsThis( i18n("<p>This area contains a CIE or chromaticity diagram. "
-                                     "A CIE diagram is a representation of all the colors "
-                                     "that a person with normal vision can see. This is represented "
-                                     "by the colored sail-shaped area. In addition you will see a "
-                                     "triangle that is superimposed on the diagram outlined in white. "
-                                     "This triangle represents the outer boundaries of the color space "
-                                     "of the device that is characterized by the inspected profile. "
-                                     "This is called the device gamut.</p>"
-                                     "<p>In addition there are black dots and yellow lines on the diagram. "
-                                     "Each black dot represents one of the measurement points that were "
-                                     "used to create this profile. The yellow line represents the "
-                                     "amount that each point is corrected by the profile, and the "
-                                     "direction of this correction.</p>"));
+                    "A CIE diagram is a representation of all the colors "
+                    "that a person with normal vision can see. This is represented "
+                    "by the colored sail-shaped area. In addition you will see a "
+                    "triangle that is superimposed on the diagram outlined in white. "
+                    "This triangle represents the outer boundaries of the color space "
+                    "of the device that is characterized by the inspected profile. "
+                    "This is called the device gamut.</p>"
+                    "<p>In addition there are black dots and yellow lines on the diagram. "
+                    "Each black dot represents one of the measurement points that were "
+                    "used to create this profile. The yellow line represents the "
+                    "amount that each point is corrected by the profile, and the "
+                    "direction of this correction.</p>"));
 
     setUserAreaWidget(d->cieTongue);
     decodeMetadata();
@@ -256,7 +244,6 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
     else
     {
         IccProfile profile(url.toLocalFile());
-
         if (!setProfile(profile))
         {
             setProfile();
@@ -283,9 +270,7 @@ bool ICCProfileWidget::loadProfile(const QString& fileName, const IccProfile& pr
 bool ICCProfileWidget::decodeMetadata()
 {
     if (!d->profile.isOpen())
-    {
         return false;
-    }
 
     d->cieTongue->setProfileData(d->profile.data());
 
@@ -301,41 +286,28 @@ bool ICCProfileWidget::decodeMetadata()
     DMetadata::MetaDataMap metaDataMap;
 
     if ( !QString(cmsTakeProductName(hProfile)).isEmpty() )
-    {
         metaDataMap.insert("Icc.Header.Name", QString(cmsTakeProductName(hProfile)).replace('\n', ' '));
-    }
 
     if ( !QString(cmsTakeProductDesc(hProfile)).isEmpty() )
-    {
         metaDataMap.insert("Icc.Header.Description", QString(cmsTakeProductDesc(hProfile)).replace('\n', ' '));
-    }
 
     if ( !QString(cmsTakeProductInfo(hProfile)).isEmpty() )
-    {
         metaDataMap.insert("Icc.Header.Information", QString(cmsTakeProductInfo(hProfile)).replace('\n', ' '));
-    }
 
     if ( !QString(cmsTakeManufacturer(hProfile)).isEmpty() )
-    {
         metaDataMap.insert("Icc.Header.Manufacturer", QString(cmsTakeManufacturer(hProfile)).replace('\n', ' '));
-    }
 
     if ( !QString(cmsTakeModel(hProfile)).isEmpty() )
-    {
         metaDataMap.insert("Icc.Header.Model", QString(cmsTakeModel(hProfile)).replace('\n', ' '));
-    }
 
     if ( !QString(cmsTakeCopyright(hProfile)).isEmpty() )
-    {
         metaDataMap.insert("Icc.Header.Copyright", QString(cmsTakeCopyright(hProfile)).replace('\n', ' '));
-    }
 
     metaDataMap.insert("Icc.Header.ProfileID",      QString::number((uint)*cmsTakeProfileID(hProfile)));
     metaDataMap.insert("Icc.Header.ProfileVersion", QString::number((uint)cmsGetProfileICCversion(hProfile)));
     metaDataMap.insert("Icc.Header.CMMFlags",       QString::number((uint)cmsTakeHeaderFlags(hProfile)));
 
     QString colorSpace;
-
     switch (cmsGetColorSpace(hProfile))
     {
         case icSigLabData:
@@ -366,11 +338,9 @@ bool ICCProfileWidget::decodeMetadata()
             colorSpace = i18n("Unknown");
             break;
     }
-
     metaDataMap.insert("Icc.Header.ColorSpace", colorSpace);
 
     QString connectionSpace;
-
     switch (cmsGetPCS(hProfile))
     {
         case icSigLabData:
@@ -401,11 +371,9 @@ bool ICCProfileWidget::decodeMetadata()
             connectionSpace = i18n("Unknown");
             break;
     }
-
     metaDataMap.insert("Icc.Header.ConnectionSpace", connectionSpace);
 
     QString device;
-
     switch ((int)cmsGetDeviceClass(hProfile))
     {
         case icSigInputClass:
@@ -433,11 +401,9 @@ bool ICCProfileWidget::decodeMetadata()
             device = i18n("Unknown");
             break;
     }
-
     metaDataMap.insert("Icc.Header.DeviceClass", device);
 
     QString intent;
-
     switch (cmsTakeRenderingIntent(hProfile))
     {
         case 0:
@@ -456,7 +422,6 @@ bool ICCProfileWidget::decodeMetadata()
             intent = i18n("Unknown");
             break;
     }
-
     metaDataMap.insert("Icc.Header.RenderingIntent", intent);
 
     // Update all metadata contents.
@@ -481,11 +446,8 @@ void ICCProfileWidget::buildView()
 QString ICCProfileWidget::getTagTitle(const QString& key)
 {
     ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
-
     if (it != d->iccTagsDescription.end())
-    {
         return(it.value().title());
-    }
 
     return key.section('.', 2, 2);
 }
@@ -500,11 +462,8 @@ void ICCProfileWidget::slotSaveMetadataToFile()
 QString ICCProfileWidget::getTagDescription(const QString& key)
 {
     ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
-
     if (it != d->iccTagsDescription.end())
-    {
         return(it.value().description());
-    }
 
     return key.section('.', 2, 2);
 }

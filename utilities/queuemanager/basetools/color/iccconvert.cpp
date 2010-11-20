@@ -49,7 +49,7 @@ namespace Digikam
 {
 
 IccConvert::IccConvert(QObject* parent)
-    : BatchTool("IccConvert", ColorTool, parent)
+          : BatchTool("IccConvert", ColorTool, parent)
 {
     setToolTitle(i18n("ICC Convert"));
     setToolDescription(i18n("A tool to convert image to a color space."));
@@ -97,10 +97,7 @@ void IccConvert::slotSettingsChanged()
 
 bool IccConvert::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     QString              profPath = settings()["ProfilePath"].toString();
     IccProfile           in       = image().getIccProfile();

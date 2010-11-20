@@ -103,34 +103,34 @@ public:
     MarkerClusterHolderPrivate(Marble::MarbleWidget* parameterMarbleWidget)
         : marbleWidget(parameterMarbleWidget)
     {
-        clusters                   = QList<MarkerClusterHolder::ClusterInfo>();
-        markers                    = QList<MarkerClusterHolder::MarkerInfo>();
-        lastZoom                   = -1;
-        lastCenterLatitude         = marbleWidget->centerLatitude();
-        lastCenterLongitude        = marbleWidget->centerLongitude();
-        lastMapProjection          = marbleWidget->projection();
-        lastWidgetSize             = marbleWidget->size();
-        markerCountDirty           = true;
-        autoRedrawOnMarkerAdd      = true;
-        clusterStateDirty          = false;
-        haveAnySoloMarkers         = false;
-        markerDataEqual            = 0;
-        markerDataEqualData        = 0;
-        allowSelection             = true;
-        allowFiltering             = true;
-        tooltipFunction            = 0;
-        tooltipFunctionData        = 0;
-        clusterPixmapFunction      = 0;
-        clusterPixmapFunctionData  = 0;
-        customPaintFunction        = 0;
-        customPaintFunctionData    = 0;
+          clusters                   = QList<MarkerClusterHolder::ClusterInfo>();
+          markers                    = QList<MarkerClusterHolder::MarkerInfo>();
+          lastZoom                   = -1;
+          lastCenterLatitude         = marbleWidget->centerLatitude();
+          lastCenterLongitude        = marbleWidget->centerLongitude();
+          lastMapProjection          = marbleWidget->projection();
+          lastWidgetSize             = marbleWidget->size();
+          markerCountDirty           = true;
+          autoRedrawOnMarkerAdd      = true;
+          clusterStateDirty          = false;
+          haveAnySoloMarkers         = false;
+          markerDataEqual            = 0;
+          markerDataEqualData        = 0;
+          allowSelection             = true;
+          allowFiltering             = true;
+          tooltipFunction            = 0;
+          tooltipFunctionData        = 0;
+          clusterPixmapFunction      = 0;
+          clusterPixmapFunctionData  = 0;
+          customPaintFunction        = 0;
+          customPaintFunctionData    = 0;
 #if MARBLE_VERSION >= 0x000800
-        mouseModeActionGroup       = 0;
-        mouseModeActionPan         = 0;
-        mouseModeActionFilter      = 0;
-        mouseModeActionSelect      = 0;
-        mouseModeActionZoomCluster = 0;
-        externalDrawPlugin         = 0;
+          mouseModeActionGroup       = 0;
+          mouseModeActionPan         = 0;
+          mouseModeActionFilter      = 0;
+          mouseModeActionSelect      = 0;
+          mouseModeActionZoomCluster = 0;
+          externalDrawPlugin         = 0;
 #endif // MARBLE_VERSION >= 0x000800
     }
 
@@ -144,14 +144,11 @@ private:
  * @param painter Painter to paint clusters on
  * @param yourdata Pointer to MarkerClusterHolder
  */
-void MarkerClusterHolder::ExternalDrawCallback(Marble::GeoPainter* painter, void* yourdata)
+void MarkerClusterHolder::ExternalDrawCallback(Marble::GeoPainter *painter, void* yourdata)
 {
     MarkerClusterHolder* const myMCH = reinterpret_cast<MarkerClusterHolder*>(yourdata);
-
     if (!myMCH)
-    {
         return;
-    }
 
     myMCH->paintOnMarbleInternal(painter);
 }
@@ -161,14 +158,13 @@ void MarkerClusterHolder::ExternalDrawCallback(Marble::GeoPainter* painter, void
  * @param marbleWidget Map on which the clusters should be shown. Will also be used as parent for this object.
  */
 MarkerClusterHolder::MarkerClusterHolder(Marble::MarbleWidget* const marbleWidget)
-    : QObject(marbleWidget), d(new MarkerClusterHolderPrivate(marbleWidget))
+                   : QObject(marbleWidget), d(new MarkerClusterHolderPrivate(marbleWidget))
 {
     d->marbleWidget->installEventFilter(this);
 
 #if MARBLE_VERSION >= 0x000800
     // try to find the ExternalDrawPlugin
     d->externalDrawPlugin = Marble::ExternalDrawPlugin::findPluginInstance(d->marbleWidget);
-
     if (d->externalDrawPlugin)
     {
         d->externalDrawPlugin->setRenderCallback(ExternalDrawCallback, this);
@@ -192,7 +188,7 @@ MarkerClusterHolder::MarkerClusterHolder(Marble::MarbleWidget* const marbleWidge
 
     d->mouseModeActionPan->setChecked(true);
 #endif // MARBLE_VERSION >= 0x000800
-
+    
 }
 
 MarkerClusterHolder::~MarkerClusterHolder()
@@ -204,7 +200,6 @@ MarkerClusterHolder::~MarkerClusterHolder()
     {
         d->externalDrawPlugin->setRenderCallback(0, 0);
     }
-
 #endif // MARBLE_VERSION >= 0x000800
 }
 
@@ -239,7 +234,6 @@ QString MarkerClusterHolder::ClusterInfo::getLabelText() const
     const int nMarkers = markerCount();
 
     QString text;
-
     if (nMarkers<1000)
     {
         text = QString::number(nMarkers);
@@ -259,16 +253,13 @@ QString MarkerClusterHolder::ClusterInfo::getLabelText() const
         // convert to "1E5" notation for numbers >=20k:
         qreal exponent = floor(log(nMarkers)/log(10));
         qreal nMarkersFirstDigit=round(qreal(nMarkers)/pow(10,exponent));
-
         if (nMarkersFirstDigit>=10)
         {
             nMarkersFirstDigit=round(nMarkersFirstDigit/10.0);
             exponent++;
         }
-
         text = QString("%1E%2").arg(int(nMarkersFirstDigit)).arg(int(exponent));
     }
-
     return text;
 }
 
@@ -281,8 +272,8 @@ QString MarkerClusterHolder::ClusterInfo::getLabelText() const
  * @param labelText Text for the label
  * @param labelColor Color for the label text
  */
-void MarkerClusterHolder::ClusterInfo::getColorInfos(const bool haveAnySolo, QColor* fillColor, QColor* strokeColor,
-        Qt::PenStyle* strokeStyle, QString* labelText, QColor* labelColor) const
+void MarkerClusterHolder::ClusterInfo::getColorInfos(const bool haveAnySolo, QColor *fillColor, QColor *strokeColor, 
+                                                     Qt::PenStyle *strokeStyle, QString *labelText, QColor *labelColor) const
 {
     *labelText = getLabelText();
     *labelColor = QColor(Qt::black);
@@ -299,12 +290,10 @@ void MarkerClusterHolder::ClusterInfo::getColorInfos(const bool haveAnySolo, QCo
             *strokeStyle = Qt::SolidLine;
             break;
     }
-
     *strokeColor = QColor(Qt::blue);
 
     QColor fillAll, fillSome, fillNone;
     const int nMarkers = markerCount();
-
     if (nMarkers>=100)
     {
         fillAll  = QColor(255, 0, 0);
@@ -345,7 +334,6 @@ void MarkerClusterHolder::ClusterInfo::getColorInfos(const bool haveAnySolo, QCo
             *fillColor = fillSome;
             break;
         case PartialNone:
-
             if (haveAnySolo)
             {
                 *fillColor = fillNone;
@@ -354,7 +342,6 @@ void MarkerClusterHolder::ClusterInfo::getColorInfos(const bool haveAnySolo, QCo
             {
                 *fillColor = fillAll;
             }
-
             break;
     }
 }
@@ -376,7 +363,6 @@ void MarkerClusterHolder::paintOnMarble(Marble::GeoPainter* const painter)
     {
         paintOnMarbleInternal(painter);
     }
-
 #else
     paintOnMarbleInternal(painter);
 #endif // MARBLE_VERSION >= 0x000800
@@ -420,13 +406,12 @@ void MarkerClusterHolder::paintOnMarbleInternal(Marble::GeoPainter* const painte
 
         PixmapOperations pixmapOperations = PixmapInvalid;
         QPixmap clusterPixmap;
-
         // should we draw a pixmap instead of a circle?
         if (d->clusterPixmapFunction)
         {
             const QSize maxPixmapSize = cluster.maxSize;
             pixmapOperations = d->clusterPixmapFunction(clusterIndex, this, maxPixmapSize,
-                               d->clusterPixmapFunctionData, &clusterPixmap);
+                                                        d->clusterPixmapFunctionData, &clusterPixmap);
         }
 
         // determine the color:
@@ -458,9 +443,7 @@ void MarkerClusterHolder::paintOnMarbleInternal(Marble::GeoPainter* const painte
             }
 
             const int pixmapX = clusterX - clusterPixmap.width()/2;
-
             const int pixmapY = clusterY - clusterPixmap.height()/2;
-
             if ( (cluster.selected!=ClusterInfo::PartialNone) && ((pixmapOperations&PixmapNoSelectedModify)==0) )
             {
                 circlePen.setColor(strokeColor);
@@ -471,7 +454,6 @@ void MarkerClusterHolder::paintOnMarbleInternal(Marble::GeoPainter* const painte
                 // size of the rectangle is the size of the filled area, the border is drawn around it
                 painter->drawRect(pixmapX, pixmapY, clusterPixmap.width(), clusterPixmap.height());
             }
-
             painter->setPen(Qt::NoPen);
             painter->setBrush(Qt::NoBrush);
             painter->drawPixmap(pixmapX, pixmapY, clusterPixmap);
@@ -493,7 +475,7 @@ void MarkerClusterHolder::paintOnMarbleInternal(Marble::GeoPainter* const painte
                 painter->setPen(labelPen);
                 painter->setBrush(Qt::NoBrush);
                 painter->drawText(textRect,
-                                  Qt::AlignHCenter|Qt::AlignVCenter, labelText);
+                                    Qt::AlignHCenter|Qt::AlignVCenter, labelText);
 
                 // use this for debugging:
                 // painter->drawRect(cluster.pixelPos.x()-cluster.maxSize.width()/2,cluster.pixelPos.y()-cluster.maxSize.height()/2,cluster.maxSize.width(),cluster.maxSize.height());
@@ -511,7 +493,7 @@ void MarkerClusterHolder::paintOnMarbleInternal(Marble::GeoPainter* const painte
             painter->setPen(labelPen);
             painter->setBrush(Qt::NoBrush);
             painter->drawText(QRect(clusterX-radius,clusterY-radius,2*radius,2*radius),
-                              Qt::AlignHCenter|Qt::AlignVCenter, labelText);
+                                Qt::AlignHCenter|Qt::AlignVCenter, labelText);
 
             // we used the default size of the cluster:
             cluster.lastSize = ClusterDefaultSize;
@@ -641,43 +623,24 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
         int markerX, markerY;
 #if MARBLE_VERSION >= 0x000800
         qreal qrealMarkerX, qrealMarkerY;
-
         if (!d->marbleWidget->screenCoordinates(marker.lon(), marker.lat(), qrealMarkerX, qrealMarkerY))
-        {
             continue;
-        }
-
         markerX = (int)qrealMarkerX;
         markerY = (int)qrealMarkerY;
 #else
-
         if (!d->marbleWidget->screenCoordinates(marker.lon(), marker.lat(), markerX, markerY))
-        {
             continue;
-        }
-
 #endif
 
         // make sure we are in the grid
         if (markerX<0)
-        {
             markerX=0;
-        }
-
         if (markerY<0)
-        {
             markerY=0;
-        }
-
         if (markerX>=gridWidth)
-        {
             markerX=gridWidth-1;
-        }
-
         if (markerY>=gridHeight)
-        {
             markerY=gridHeight-1;
-        }
 
         // save the position of the marker:
         pixelGrid[ markerX + markerY*gridWidth ] << i;
@@ -689,9 +652,7 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
     for (int i=0; i<gridWidth*gridHeight; ++i)
     {
         if (!pixelGrid[i].isEmpty())
-        {
             pixelGridIndices << i;
-        }
     }
 
     // re-add the markers to clusters:
@@ -704,11 +665,8 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
         for (int pixelGridMetaIndex = 0; pixelGridMetaIndex<pixelGridIndices.size(); ++pixelGridMetaIndex)
         {
             const int index = pixelGridIndices[pixelGridMetaIndex];
-
             if (index<0)
-            {
                 continue;
-            }
 
             if (pixelGrid[index].isEmpty())
             {
@@ -737,16 +695,11 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
                 for (int i=0; (!tooClose)&&(i<d->clusters.size()); ++i)
                 {
                     if (i==lastTooCloseClusterIndex)
-                    {
                         continue;
-                    }
 
                     tooClose = QPointSquareDistance(d->clusters.at(i).pixelPos, markerPosition) < pow(ClusterGridSizeScreen/2, 2);
-
                     if (tooClose)
-                    {
                         lastTooCloseClusterIndex = i;
-                    }
                 }
 
                 if (tooClose)
@@ -767,9 +720,7 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
         }
 
         if (markerMax==0)
-        {
             break;
-        }
 
         // create a cluster at this point:
         ClusterInfo cluster;
@@ -789,7 +740,6 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
         const int yStart    = qMax( (markerY-eatRadius), 0);
         const int xEnd      = qMin( (markerX+eatRadius), gridWidth-1);
         const int yEnd      = qMin( (markerY+eatRadius), gridHeight-1);
-
         for (int indexX = xStart; indexX <= xEnd; ++indexX)
         {
             for (int indexY = yStart; indexY <= yEnd; ++indexY)
@@ -812,11 +762,9 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
         // find the closest cluster:
         int closestSquareDistance = 0;
         int closestIndex = -1;
-
         for (int i=0; i<d->clusters.size(); ++i)
         {
             const int squareDistance = QPointSquareDistance(d->clusters.at(i).pixelPos, markerPosition);
-
             if ((closestIndex < 0) || (squareDistance < closestSquareDistance))
             {
                 closestSquareDistance = squareDistance;
@@ -846,14 +794,10 @@ void MarkerClusterHolder::computeClusterDistances()
 {
     // compute distances only if thumbnails will be used
     if (!d->clusterPixmapFunction)
-    {
         return;
-    }
 
     const int nClusters = d->clusters.size();
-
     QVector<int> minDistX(nClusters, ClusterMaxPixmapSize.width());
-
     QVector<int> minDistY(nClusters, ClusterMaxPixmapSize.height());
 
     for (int idest = 0; idest < nClusters; ++idest)
@@ -896,7 +840,6 @@ void MarkerClusterHolder::clearFiltering()
     {
         destIt->setSolo(false);
     }
-
     updateClusterStates();
     redrawIfNecessary();
 }
@@ -911,7 +854,6 @@ void MarkerClusterHolder::clearSelection()
     {
         destIt->setSelected(false);
     }
-
     updateClusterStates();
     redrawIfNecessary();
 }
@@ -922,7 +864,7 @@ void MarkerClusterHolder::clearSelection()
  * @param setAsSolo Whether the markers are to be set as solo or not solo
  * @param resetOthers Whether other markers are to be reset to not solo
  */
-void MarkerClusterHolder::setSoloMarkers(const QIntList& markerIndicesList, const bool setAsSolo, const bool resetOthers)
+void MarkerClusterHolder::setSoloMarkers(const QIntList &markerIndicesList, const bool setAsSolo, const bool resetOthers)
 {
     if (resetOthers)
     {
@@ -949,7 +891,7 @@ void MarkerClusterHolder::setSoloMarkers(const QIntList& markerIndicesList, cons
  * @param setAsSolo Whether the markers are to be set as solo or not solo
  * @param resetOthers Whether other markers are to be reset to not solo
  */
-void MarkerClusterHolder::setSoloMarkers(const MarkerClusterHolder::MarkerInfoList& markerList, const bool setAsSolo, const bool resetOthers)
+void MarkerClusterHolder::setSoloMarkers(const MarkerClusterHolder::MarkerInfoList &markerList, const bool setAsSolo, const bool resetOthers)
 {
     for (MarkerInfo::List::iterator destIt = d->markers.begin();
          destIt!=d->markers.end(); ++destIt)
@@ -957,18 +899,13 @@ void MarkerClusterHolder::setSoloMarkers(const MarkerClusterHolder::MarkerInfoLi
         // NOTE: do not use QList::contains here, because MarkerInfo contains a QVariant with a custom type, therefore QVariant::operator== does not work!!!
         // is the marker to be selected?
         bool inList = false;
-
         for (MarkerInfo::List::const_iterator sourceIt = markerList.constBegin();
              sourceIt!=markerList.constEnd(); ++sourceIt)
         {
             inList = markersEqual(*destIt, *sourceIt);
-
             if (inList)
-            {
                 break;
-            }
         }
-
         if (inList)
         {
             destIt->setSolo( setAsSolo );
@@ -978,7 +915,6 @@ void MarkerClusterHolder::setSoloMarkers(const MarkerClusterHolder::MarkerInfoLi
             destIt->setSolo(false);
         }
     }
-
     updateClusterStates();
     redrawIfNecessary();
 }
@@ -991,13 +927,11 @@ void MarkerClusterHolder::setSoloMarkers(const MarkerClusterHolder::MarkerInfoLi
 MarkerClusterHolder::MarkerInfo::List MarkerClusterHolder::indicesToMarkers(const QIntList indicesList) const
 {
     MarkerInfo::List result;
-
     for (QIntList::const_iterator it = indicesList.constBegin();
          it != indicesList.constEnd(); ++it)
     {
         result << d->markers.at(*it);
     }
-
     return result;
 }
 
@@ -1008,16 +942,12 @@ MarkerClusterHolder::MarkerInfo::List MarkerClusterHolder::indicesToMarkers(cons
 MarkerClusterHolder::MarkerInfo::List MarkerClusterHolder::selectedMarkers() const
 {
     MarkerInfo::List result;
-
     for (MarkerInfo::List::const_iterator it = d->markers.constBegin();
          it != d->markers.constEnd(); ++it)
     {
         if (it->isSelected())
-        {
             result << *it;
-        }
     }
-
     return result;
 }
 
@@ -1028,21 +958,15 @@ MarkerClusterHolder::MarkerInfo::List MarkerClusterHolder::selectedMarkers() con
 MarkerClusterHolder::MarkerInfo::List MarkerClusterHolder::soloMarkers() const
 {
     MarkerInfo::List result;
-
     if (!d->haveAnySoloMarkers)
-    {
         return result;
-    }
 
     for (MarkerInfo::List::const_iterator it = d->markers.constBegin();
          it != d->markers.constEnd(); ++it)
     {
         if (it->isSolo())
-        {
             result << *it;
-        }
     }
-
     return result;
 }
 
@@ -1052,7 +976,7 @@ MarkerClusterHolder::MarkerInfo::List MarkerClusterHolder::soloMarkers() const
  * @param setAsSelected Whether the given markers are to be set as selected or not selected
  * @param resetOthers Whether other markers should be set as not selected
  */
-void MarkerClusterHolder::setSelectedMarkers(const QIntList& markerIndicesList, const bool setAsSelected, const bool resetOthers)
+void MarkerClusterHolder::setSelectedMarkers(const QIntList &markerIndicesList, const bool setAsSelected, const bool resetOthers)
 {
     if (resetOthers)
     {
@@ -1079,7 +1003,7 @@ void MarkerClusterHolder::setSelectedMarkers(const QIntList& markerIndicesList, 
  * @param setAsSelected Whether the given markers are to be set as selected or not selected
  * @param resetOthers Whether other markers should be set as not selected
  */
-void MarkerClusterHolder::setSelectedMarkers(const MarkerClusterHolder::MarkerInfoList& markerList, const bool setAsSelected, const bool resetOthers)
+void MarkerClusterHolder::setSelectedMarkers(const MarkerClusterHolder::MarkerInfoList &markerList, const bool setAsSelected, const bool resetOthers)
 {
     for (MarkerInfo::List::iterator destIt = d->markers.begin(); destIt!=d->markers.end(); ++destIt)
     {
@@ -1091,13 +1015,9 @@ void MarkerClusterHolder::setSelectedMarkers(const MarkerClusterHolder::MarkerIn
              sourceIt != markerList.constEnd(); ++sourceIt)
         {
             inList |= markersEqual(*destIt, *sourceIt);
-
             if (inList)
-            {
                 break;
-            }
         }
-
         if (inList)
         {
             destIt->setSelected( setAsSelected );
@@ -1107,7 +1027,6 @@ void MarkerClusterHolder::setSelectedMarkers(const MarkerClusterHolder::MarkerIn
             destIt->setSelected( false );
         }
     }
-
     updateClusterStates();
     redrawIfNecessary();
 }
@@ -1128,7 +1047,6 @@ void MarkerClusterHolder::updateClusterStates()
 {
     bool newDirtyState = false;
     bool newHaveAnySolo = false;
-
     for (ClusterInfo::List::iterator clusterIt = d->clusters.begin();
          clusterIt != d->clusters.end(); ++clusterIt)
     {
@@ -1140,12 +1058,10 @@ void MarkerClusterHolder::updateClusterStates()
              indexIt != clusterIt->markerIndices.constEnd(); ++indexIt)
         {
             const MarkerInfo& marker = d->markers.at(*indexIt);
-
             if (marker.isSelected())
             {
                 selectedMarkersCount++;
             }
-
             if (marker.isSolo())
             {
                 soloMarkersCount++;
@@ -1180,7 +1096,6 @@ void MarkerClusterHolder::updateClusterStates()
         {
             newDirtyState = true;
         }
-
         clusterIt->selected = selectedState;
         clusterIt->solo     = soloState;
     }
@@ -1205,11 +1120,8 @@ int MarkerClusterHolder::findClusterAt(const QPoint pos) const
         // is the mouse over the cluster?
         QPoint distance   = clusterPosition - pos;
         const bool hasHit = (abs(distance.x()) < cluster.lastSize.width()/2) && (abs(distance.y()) < cluster.lastSize.height()/2);
-
         if (hasHit)
-        {
             return i;
-        }
     }
 
     return -1;
@@ -1224,7 +1136,7 @@ int MarkerClusterHolder::findClusterAt(const QPoint pos) const
  * @param event Pointer to the event that occurred
  * @return true if the event was filtered by this function
  */
-bool MarkerClusterHolder::eventFilter(QObject* obj, QEvent* event)
+bool MarkerClusterHolder::eventFilter(QObject *obj, QEvent *event)
 {
     if ( (event->type() != QEvent::MouseButtonPress) &&
          ( !d->tooltipFunction || (event->type() != QEvent::MouseMove) ) )
@@ -1253,7 +1165,6 @@ bool MarkerClusterHolder::eventFilter(QObject* obj, QEvent* event)
         if (clusterIndex>=0)
         {
             const QString tooltipText = d->tooltipFunction(clusterIndex, this, d->tooltipFunctionData);
-
             if (!tooltipText.isEmpty())
             {
                 QToolTip::showText(mouseEvent->globalPos(), tooltipText);
@@ -1268,49 +1179,34 @@ bool MarkerClusterHolder::eventFilter(QObject* obj, QEvent* event)
             QToolTip::hideText();
         }
     }
-
     // event filter for mouse clicks does not work reliably in <0.8, no idea why...
 #if MARBLE_VERSION >= 0x000800
     else if ( ( event->type() == QEvent::MouseButtonPress ) &&
-              ( leftButtonPressed || rightButtonPressed ) )
+             ( leftButtonPressed || rightButtonPressed ) )
     {
         // determine the effective mouse mode given from the mouse mode selected
         // using the MouseModeActions and the keyboard modifiers:
         MouseMode mouseMode = getMouseMode();
-
         if ( leftButtonPressed )
         {
             switch (mouseMode)
             {
                 case MouseModePan:
-
                     if ( d->allowSelection && shiftPressed && !controlPressed )
-                    {
                         mouseMode = MouseModeSelect;
-                    }
                     else if ( controlPressed && d->allowFiltering )
-                    {
                         mouseMode = MouseModeFilter;
-                    }
 
                     break;
 
                 case MouseModeFilter:
-
                     if ( !d->allowFiltering )
-                    {
                         mouseMode = MouseModePan;
-                    }
-
                     break;
 
                 case MouseModeSelect:
-
                     if ( !d->allowSelection )
-                    {
                         mouseMode = MouseModePan;
-                    }
-
                     break;
 
                 default:
@@ -1322,11 +1218,8 @@ bool MarkerClusterHolder::eventFilter(QObject* obj, QEvent* event)
             switch (mouseMode)
             {
                 case MouseModePan:
-
                     if ( controlPressed )
-                    {
                         mouseMode = MouseModeZoomCluster;
-                    }
 
                     break;
 
@@ -1360,12 +1253,11 @@ bool MarkerClusterHolder::eventFilter(QObject* obj, QEvent* event)
                         {
                             setSelectedMarkers(cluster.markerIndices, false, false);
                         }
-
                         emit(signalSelectionChanged());
 
                         break;
                     }
-
+                    
 
                     case MouseModeFilter:
                     {
@@ -1373,7 +1265,6 @@ bool MarkerClusterHolder::eventFilter(QObject* obj, QEvent* event)
                         const bool doResetOtherClusters = !shiftPressed;
 
                         ClusterInfo::PartialState soloState = cluster.solo;
-
                         if ((soloState==ClusterInfo::PartialNone)||(soloState==ClusterInfo::PartialSome))
                         {
                             // mark all markers in the cluster as solo:
@@ -1384,7 +1275,6 @@ bool MarkerClusterHolder::eventFilter(QObject* obj, QEvent* event)
                             // mark all markers in the cluster as not solo:
                             setSoloMarkers(cluster.markerIndices, false, doResetOtherClusters);
                         }
-
                         emit(signalSoloChanged());
 
                         break;
@@ -1398,14 +1288,13 @@ bool MarkerClusterHolder::eventFilter(QObject* obj, QEvent* event)
                         // keep the compiler happy ;-)
                     case MouseModePan:
                         break;
-
+                        
                     default:
                         break;
                 }
             }
         }
     }
-
 #endif // MARBLE_VERSION >= 0x000800
 
     if (doFilterEvent)
@@ -1458,11 +1347,8 @@ void MarkerClusterHolder::setMarkerDataEqualFunction(const MarkerDataEqualFuncti
 void MarkerClusterHolder::setAllowFiltering(const bool allow)
 {
     d->allowFiltering = allow;
-
     if (!allow)
-    {
         clearFiltering();
-    }
 }
 
 /**
@@ -1472,11 +1358,8 @@ void MarkerClusterHolder::setAllowFiltering(const bool allow)
 void MarkerClusterHolder::setAllowSelection(const bool allow)
 {
     d->allowSelection = allow;
-
     if (!allow)
-    {
         clearSelection();
-    }
 }
 
 /**
@@ -1552,9 +1435,9 @@ void MarkerClusterHolder::zoomIntoCluster(ClusterInfo cluster)
     // do not use centeron(latLonBox.center()), because the returned GeoDataPoint has
     // an altitude of 0 and Marble changes to maximum zoom!
     d->marbleWidget->centerOn(
-        latLonBox.center().longitude(Marble::GeoDataCoordinates::Degree),
-        latLonBox.center().latitude(Marble::GeoDataCoordinates::Degree),
-        false);
+    latLonBox.center().longitude(Marble::GeoDataCoordinates::Degree),
+                                 latLonBox.center().latitude(Marble::GeoDataCoordinates::Degree),
+                                 false);
 #else // MARBLE_VERSION >= 0x000800
     // old Marble version does not provide the center of the latLonBox, just use the center of the cluster instead:
     d->marbleWidget->centerOn(cluster.lon, cluster.lat, false);
@@ -1572,9 +1455,7 @@ void MarkerClusterHolder::zoomIntoCluster(ClusterInfo cluster)
 
         // stop if we reached maximum zoom
         if ( oldZoom == newZoom )
-        {
             break;
-        }
 
         oldZoom = newZoom;
 
@@ -1585,21 +1466,12 @@ void MarkerClusterHolder::zoomIntoCluster(ClusterInfo cluster)
 #endif
 
         lostOne = !d->marbleWidget->screenCoordinates(boxEast, boxNorth, dummyX, dummyY);
-
         if (!lostOne)
-        {
             lostOne = !d->marbleWidget->screenCoordinates(boxEast, boxSouth, dummyX, dummyY);
-        }
-
         if (!lostOne)
-        {
             lostOne = !d->marbleWidget->screenCoordinates(boxWest, boxSouth, dummyX, dummyY);
-        }
-
         if (!lostOne)
-        {
             lostOne = !d->marbleWidget->screenCoordinates(boxWest, boxNorth, dummyX, dummyY);
-        }
     }
 
     // one marker is out of view, therefore zoom out once:
@@ -1653,7 +1525,6 @@ QAction* MarkerClusterHolder::getMouseModeAction(const MarkerClusterHolder::Mous
             return d->mouseModeActionZoomCluster;
             break;
     }
-
     return 0;
 }
 #endif // MARBLE_VERSION >= 0x000800
@@ -1665,22 +1536,15 @@ MarkerClusterHolder::MouseMode MarkerClusterHolder::getMouseMode() const
     const QAction* const checkedAction = d->mouseModeActionGroup->checkedAction();
 
     if (checkedAction==d->mouseModeActionFilter)
-    {
         return MouseModeFilter;
-    }
 
     if (checkedAction==d->mouseModeActionSelect)
-    {
         return MouseModeSelect;
-    }
 
     if (checkedAction==d->mouseModeActionZoomCluster)
-    {
         return MouseModeZoomCluster;
-    }
-
 #endif // MARBLE_VERSION >= 0x000800
-
+    
     return MouseModePan;
 }
 

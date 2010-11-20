@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 BCGCorrection::BCGCorrection(QObject* parent)
-    : BatchTool("BCGCorrection", ColorTool, parent)
+             : BatchTool("BCGCorrection", ColorTool, parent)
 {
     setToolTitle(i18n("BCG Correction"));
     setToolDescription(i18n("A tool to fix Brightness/Contrast/Gamma."));
@@ -96,10 +96,7 @@ void BCGCorrection::slotSettingsChanged()
 
 bool BCGCorrection::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     BCGContainer prm;
     prm.brightness = settings()["Brightness"].toDouble();

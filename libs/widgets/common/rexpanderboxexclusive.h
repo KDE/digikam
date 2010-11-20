@@ -38,10 +38,10 @@
 
 #include "digikam_export.h"
 
-namespace Digikam
+namespace Digikam 
 {
 
-class DIGIKAM_EXPORT RExpanderBoxExclusive : public KDcrawIface::RExpanderBox
+class DIGIKAM_EXPORT RExpanderBoxExclusive : public KDcrawIface::RExpanderBox 
 {
     Q_OBJECT
 

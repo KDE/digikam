@@ -68,7 +68,7 @@ public:
 };
 
 AssistantDlg::AssistantDlg(QWidget* parent)
-    : KAssistantDialog(parent), d(new AssistantDlgPriv)
+            : KAssistantDialog(parent), d(new AssistantDlgPriv)
 {
     setHelp("firstrundialog.anchor", "digikam");
 
@@ -110,11 +110,8 @@ void AssistantDlg::next()
     if (currentPage() == d->collectionPage->page())
     {
         if (!d->collectionPage->checkSettings())
-        {
             return;
-        }
     }
-
     KAssistantDialog::next();
 }
 

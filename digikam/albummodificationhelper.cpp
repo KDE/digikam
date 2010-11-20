@@ -45,11 +45,11 @@ namespace Digikam
 class AlbumModificationHelperPriv
 {
 public:
-    QWidget* dialogParent;
+    QWidget *dialogParent;
 };
 
-AlbumModificationHelper::AlbumModificationHelper(QObject* parent,
-        QWidget* dialogParent) :
+AlbumModificationHelper::AlbumModificationHelper(QObject *parent,
+                QWidget *dialogParent) :
     QObject(parent), d(new AlbumModificationHelperPriv)
 {
     d->dialogParent = dialogParent;
@@ -60,11 +60,10 @@ AlbumModificationHelper::~AlbumModificationHelper()
     delete d;
 }
 
-PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
+PAlbum *AlbumModificationHelper::slotAlbumNew(PAlbum *parent)
 {
     AlbumSettings* settings = AlbumSettings::instance();
-
-    if (!settings)
+    if(!settings)
     {
         kWarning() << "could not get Album Settings";
         return 0;
@@ -85,7 +84,6 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
 
     // if we create an album under root, need to supply the album root path.
     QString albumRootPath;
-
     if (parent->isRoot())
     {
         //TODO: Let user choose an album root
@@ -98,31 +96,29 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     QDate       date;
     QStringList albumCategories;
 
-    if (!AlbumPropsEdit::createNew(parent, title, comments, date, category,
-                                   albumCategories))
+    if(!AlbumPropsEdit::createNew(parent, title, comments, date, category,
+                                  albumCategories))
     {
         return 0;
     }
 
     QStringList oldAlbumCategories(AlbumSettings::instance()->getAlbumCategoryNames());
-
-    if (albumCategories != oldAlbumCategories)
+    if(albumCategories != oldAlbumCategories)
     {
         AlbumSettings::instance()->setAlbumCategoryNames(albumCategories);
     }
 
     QString errMsg;
     PAlbum* album;
-
     if (parent->isRoot())
     {
         album = AlbumManager::instance()->createPAlbum(albumRootPath, title, comments,
-                date, category, errMsg);
+                                          date, category, errMsg);
     }
     else
     {
         album = AlbumManager::instance()->createPAlbum(parent, title, comments,
-                date, category, errMsg);
+                                          date, category, errMsg);
     }
 
     if (!album)
@@ -135,13 +131,11 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
 
 }
 
-void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
+void AlbumModificationHelper::slotAlbumDelete(PAlbum *album)
 {
 
-    if (!album || album->isRoot() || album->isAlbumRoot())
-    {
+    if(!album || album->isRoot() || album->isAlbumRoot())
         return;
-    }
 
     // find subalbums
     KUrl::List childrenList;
@@ -154,9 +148,7 @@ void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
                                   childrenList.size() == 1 ?
                                   DeleteDialogMode::Albums : DeleteDialogMode::Subalbums,
                                   DeleteDialogMode::UserPreference))
-    {
         return;
-    }
 
     bool useTrash = !dialog.shouldDelete();
 
@@ -167,12 +159,12 @@ void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
     u.setProtocol("file");
     u.setPath(album->folderPath());
     KIO::Job* job = DIO::del(u, useTrash);
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDIOResult(KJob*)));
+    connect(job, SIGNAL(result(KJob *)),
+            this, SLOT(slotDIOResult(KJob *)));
 
 }
 
-void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
+void AlbumModificationHelper::slotAlbumRename(PAlbum *album)
 {
 
     if (!album)
@@ -186,33 +178,28 @@ void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
     QString title = KInputDialog::getText(i18n("Rename Album (%1)", oldTitle),
                                           i18n("Enter new album name:"),
                                           oldTitle, &ok, d->dialogParent);
-
     if (!ok)
     {
         return;
     }
 
-    if (title != oldTitle)
+    if(title != oldTitle)
     {
         QString errMsg;
-
         if (!AlbumManager::instance()->renamePAlbum(album, title, errMsg))
-        {
             KMessageBox::error(0, errMsg);
-        }
     }
 
 }
 
-void AlbumModificationHelper::addAlbumChildrenToList(KUrl::List& list, Album* album)
+void AlbumModificationHelper::addAlbumChildrenToList(KUrl::List& list, Album *album)
 {
     // simple recursive helper function
     if (album)
     {
         list.append(album->databaseUrl());
         AlbumIterator it(album);
-
-        while (it.current())
+        while(it.current())
         {
             addAlbumChildrenToList(list, *it);
             ++it;
@@ -223,8 +210,7 @@ void AlbumModificationHelper::addAlbumChildrenToList(KUrl::List& list, Album* al
 
 void AlbumModificationHelper::slotDIOResult(KJob* kjob)
 {
-    KIO::Job* job = static_cast<KIO::Job*>(kjob);
-
+    KIO::Job *job = static_cast<KIO::Job*>(kjob);
     if (job->error())
     {
         job->ui()->setWindow(d->dialogParent);
@@ -232,7 +218,7 @@ void AlbumModificationHelper::slotDIOResult(KJob* kjob)
     }
 }
 
-void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
+void AlbumModificationHelper::slotAlbumEdit(PAlbum *album)
 {
 
     if (!album || album->isRoot() || album->isAlbumRoot())
@@ -250,20 +236,20 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
     QDate       date;
     QStringList albumCategories;
 
-    if (AlbumPropsEdit::editProps(album, title, comments, date,
-                                  category, albumCategories))
+    if(AlbumPropsEdit::editProps(album, title, comments, date,
+                                 category, albumCategories))
     {
-        if (comments != oldComments)
+        if(comments != oldComments)
         {
             album->setCaption(comments);
         }
 
-        if (date != oldDate && date.isValid())
+        if(date != oldDate && date.isValid())
         {
             album->setDate(date);
         }
 
-        if (category != oldCategory)
+        if(category != oldCategory)
         {
             album->setCategory(category);
         }
@@ -273,10 +259,9 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
         // Do this last : so that if anything else changed we can
         // successfuly save to the db with the old name
 
-        if (title != oldTitle)
+        if(title != oldTitle)
         {
             QString errMsg;
-
             if (!AlbumManager::instance()->renamePAlbum(album, title, errMsg))
             {
                 KMessageBox::error(d->dialogParent, errMsg);

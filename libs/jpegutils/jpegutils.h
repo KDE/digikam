@@ -48,7 +48,7 @@ enum TransformAction
 };
 
 DIGIKAM_EXPORT bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize);
-DIGIKAM_EXPORT bool exifTransform(const QString& file, const QString& documentName,
+DIGIKAM_EXPORT bool exifTransform(const QString& file, const QString& documentName, 
                                   const QString& trgFile=QString(), TransformAction action=Auto);
 DIGIKAM_EXPORT bool jpegConvert(const QString& src, const QString& dest, const QString& documentName,
                                 const QString& format=QString("PNG"));

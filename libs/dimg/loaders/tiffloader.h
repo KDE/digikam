@@ -5,7 +5,7 @@
  *
  * Date        : 2005-06-17
  * Description : A TIFF IO file for DImg framework
- *
+ * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,7 +27,7 @@
 
 // C ANSI includes
 
-extern "C"
+extern "C" 
 {
 #include <tiffio.h>
 #include <tiff.h>
@@ -50,15 +50,12 @@ public:
 
     TIFFLoader(DImg* image);
 
-    bool load(const QString& filePath, DImgLoaderObserver* observer);
-    bool save(const QString& filePath, DImgLoaderObserver* observer);
+    bool load(const QString& filePath, DImgLoaderObserver *observer);
+    bool save(const QString& filePath, DImgLoaderObserver *observer);
 
     virtual bool hasAlpha()   const;
     virtual bool sixteenBit() const;
-    virtual bool isReadOnly() const
-    {
-        return false;
-    };
+    virtual bool isReadOnly() const { return false; };
 
 private:
 

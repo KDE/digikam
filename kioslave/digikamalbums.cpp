@@ -60,7 +60,7 @@
 
 kio_digikamalbums::kio_digikamalbums(const QByteArray& pool_socket,
                                      const QByteArray& app_socket)
-    : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
+                 : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
 {
     m_eventLoop = new QEventLoop(this);
 }
@@ -120,13 +120,10 @@ void kio_digikamalbums::get( const KUrl& url )
 
     Digikam::DatabaseUrl dbUrl(url);
 
-    KIO::TransferJob* job = KIO::get(dbUrl.fileUrl(), KIO::NoReload, KIO::HideProgressInfo);
+    KIO::TransferJob *job = KIO::get(dbUrl.fileUrl(), KIO::NoReload, KIO::HideProgressInfo);
     connectTransferJob(job);
-
     if (m_eventLoop->exec() != 0)
-    {
         return;
-    }
 
     finished();
 }
@@ -141,20 +138,16 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
 
     // get the parent album
     int albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
-
     if (albumID == -1)
     {
         error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database.", url.directory()));
         return;
     }
 
-    KIO::TransferJob* job = KIO::put(dbUrl.fileUrl(), permissions, flags | KIO::HideProgressInfo);
+    KIO::TransferJob *job = KIO::put(dbUrl.fileUrl(), permissions, flags | KIO::HideProgressInfo);
     connectTransferJob(job);
-
     if (m_eventLoop->exec() != 0)
-    {
         return;
-    }
 
     // Let CollectionScanner do the database part
 
@@ -186,7 +179,6 @@ void kio_digikamalbums::copy( const KUrl& src, const KUrl& dst, int mode, KIO::J
 
     // find the src parent album - do not create
     int srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootId(), dbUrlSrc.album(), false);
-
     if (srcAlbumID == -1)
     {
         error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database",
@@ -196,7 +188,6 @@ void kio_digikamalbums::copy( const KUrl& src, const KUrl& dst, int mode, KIO::J
 
     // find the dst parent album - do not create
     int dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
-
     if (dstAlbumID == -1)
     {
         error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database",dbUrlDst.album()));
@@ -221,13 +212,10 @@ void kio_digikamalbums::copy( const KUrl& src, const KUrl& dst, int mode, KIO::J
     }
     */
 
-    KIO::Job* job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, flags | KIO::HideProgressInfo );
+    KIO::Job *job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, flags | KIO::HideProgressInfo );
     connectJob(job);
-
     if (m_eventLoop->exec() != 0)
-    {
         return;
-    }
 
     // Let CollectionScanner do the database part
     //access.db()->copyItem(srcAlbumID, dbUrlSrc.fileName(), dstAlbumID, dbUrlSrc.fileName());
@@ -267,7 +255,6 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
     if (renamingAlbum)
     {
         srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootId(), dbUrlSrc.album(), false);
-
         if (srcAlbumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", src.url()));
@@ -277,7 +264,6 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
     else
     {
         srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootId(), dbUrlSrc.album(), false);
-
         if (srcAlbumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", src.directory()));
@@ -285,7 +271,6 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
         }
 
         int dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
-
         if (dstAlbumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database.", dst.directory()));
@@ -293,13 +278,10 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
         }
     }
 
-    KIO::Job* job = KIO::rename(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), flags);
+    KIO::Job *job = KIO::rename(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), flags);
     connectJob(job);
-
     if (m_eventLoop->exec() != 0)
-    {
         return;
-    }
 
     // Let CollectionScanner do the database part.
     /*
@@ -328,13 +310,10 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
     Digikam::DatabaseAccess::setParameters(dbUrl);
     Digikam::DatabaseAccess access;
 
-    KIO::SimpleJob* job = KIO::mkdir(dbUrl.fileUrl(), permissions);
+    KIO::SimpleJob *job = KIO::mkdir(dbUrl.fileUrl(), permissions);
     connectSimpleJob(job);
-
     if (m_eventLoop->exec() != 0)
-    {
         return;
-    }
 
     // We need to do this here, and not let CollectionScanner do this,
     // because the scanner might take time and put() will be called before
@@ -349,13 +328,10 @@ void kio_digikamalbums::chmod( const KUrl& url, int permissions )
 
     Digikam::DatabaseUrl dbUrl(url);
 
-    KIO::SimpleJob* job = KIO::chmod(dbUrl.fileUrl(), permissions);
+    KIO::SimpleJob *job = KIO::chmod(dbUrl.fileUrl(), permissions);
     connectSimpleJob(job);
-
     if (m_eventLoop->exec() != 0)
-    {
         return;
-    }
 
     finished();
 }
@@ -381,7 +357,6 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
     {
         // find the Album to which this file belongs.
         albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
-
         if (albumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", url.directory()));
@@ -392,7 +367,6 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
     {
         // find the corresponding album entry
         albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
-
         if (albumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", url.path()));
@@ -402,19 +376,16 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
 
     if (isFile)
     {
-        KIO::DeleteJob* job = KIO::del(dbUrl.fileUrl(), KIO::HideProgressInfo);
+        KIO::DeleteJob *job = KIO::del(dbUrl.fileUrl(), KIO::HideProgressInfo);
         connectJob(job);
     }
     else
     {
-        KIO::SimpleJob* job = KIO::rmdir(dbUrl.fileUrl());
+        KIO::SimpleJob *job = KIO::rmdir(dbUrl.fileUrl());
         connectSimpleJob(job);
     }
-
     if (m_eventLoop->exec() != 0)
-    {
         return;
-    }
 
     // Let CollectionScanner do the database part
 
@@ -438,13 +409,10 @@ void kio_digikamalbums::stat( const KUrl& url )
 {
     Digikam::DatabaseUrl dbUrl(url);
 
-    KIO::SimpleJob* job = KIO::stat(dbUrl.fileUrl(), KIO::HideProgressInfo);
+    KIO::SimpleJob *job = KIO::stat(dbUrl.fileUrl(), KIO::HideProgressInfo);
     connectSimpleJob(job);
-
     if (m_eventLoop->exec() != 0)
-    {
         return;
-    }
 
     finished();
 }
@@ -459,13 +427,10 @@ void kio_digikamalbums::listDir( const KUrl& url )
     //createDigikamPropsUDSEntry(entry);
     //listEntry(entry, false);
 
-    KIO::ListJob* job = KIO::listDir(dbUrl.fileUrl(), KIO::HideProgressInfo);
+    KIO::ListJob *job = KIO::listDir(dbUrl.fileUrl(), KIO::HideProgressInfo);
     connectListJob(job);
-
     if (m_eventLoop->exec() != 0)
-    {
         return;
-    }
 
     finished();
 }
@@ -486,7 +451,7 @@ void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 
 // ------------------------ Job forwarding code ------------------------ //
 
-void kio_digikamalbums::connectJob(KIO::Job* job)
+void kio_digikamalbums::connectJob(KIO::Job *job)
 {
     // We will forward the warning message, no need to let the job
     // display it itself
@@ -495,48 +460,48 @@ void kio_digikamalbums::connectJob(KIO::Job* job)
     // Forward metadata (e.g. modification time for put())
     job->setMetaData( allMetaData() );
 
-    connect( job, SIGNAL( result(KJob*) ),
-             this, SLOT( slotResult(KJob*) ) );
-    connect( job, SIGNAL( warning(KJob*, const QString&, const QString&) ),
-             this, SLOT( slotWarning(KJob*, const QString&) ) );
-    connect( job, SIGNAL( infoMessage(KJob*, const QString&, const QString&) ),
-             this, SLOT( slotInfoMessage(KJob*, const QString&) ) );
-    connect( job, SIGNAL( totalSize(KJob*, qulonglong) ),
-             this, SLOT( slotTotalSize(KJob*, qulonglong) ) );
-    connect( job, SIGNAL( processedSize(KJob*, qulonglong) ),
-             this, SLOT( slotProcessedSize(KJob*, qulonglong) ) );
-    connect( job, SIGNAL( speed(KJob*, unsigned long) ),
-             this, SLOT( slotSpeed(KJob*, unsigned long) ) );
+    connect( job, SIGNAL( result(KJob *) ),
+             this, SLOT( slotResult(KJob *) ) );
+    connect( job, SIGNAL( warning(KJob *, const QString &, const QString &) ),
+             this, SLOT( slotWarning(KJob *, const QString &) ) );
+    connect( job, SIGNAL( infoMessage(KJob *, const QString &, const QString &) ),
+             this, SLOT( slotInfoMessage(KJob *, const QString &) ) );
+    connect( job, SIGNAL( totalSize(KJob *, qulonglong) ),
+             this, SLOT( slotTotalSize(KJob *, qulonglong) ) );
+    connect( job, SIGNAL( processedSize(KJob *, qulonglong) ),
+             this, SLOT( slotProcessedSize(KJob *, qulonglong) ) );
+    connect( job, SIGNAL( speed(KJob *, unsigned long) ),
+             this, SLOT( slotSpeed(KJob *, unsigned long) ) );
 }
 
-void kio_digikamalbums::connectSimpleJob(KIO::SimpleJob* job)
+void kio_digikamalbums::connectSimpleJob(KIO::SimpleJob *job)
 {
     connectJob(job);
-    connect( job, SIGNAL( redirection(KIO::Job*, const KUrl&) ),
-             this, SLOT( slotRedirection(KIO::Job*, const KUrl&) ) );
+    connect( job, SIGNAL( redirection(KIO::Job *, const KUrl &) ),
+             this, SLOT( slotRedirection(KIO::Job *, const KUrl &) ) );
 }
 
-void kio_digikamalbums::connectListJob(KIO::ListJob* job)
+void kio_digikamalbums::connectListJob(KIO::ListJob *job)
 {
     connectSimpleJob(job);
-    connect( job, SIGNAL( entries(KIO::Job*, const KIO::UDSEntryList&) ),
-             this, SLOT( slotEntries(KIO::Job*, const KIO::UDSEntryList&) ) );
+    connect( job, SIGNAL( entries(KIO::Job *, const KIO::UDSEntryList &) ),
+             this, SLOT( slotEntries(KIO::Job *, const KIO::UDSEntryList &) ) );
 }
 
-void kio_digikamalbums::connectTransferJob(KIO::TransferJob* job)
+void kio_digikamalbums::connectTransferJob(KIO::TransferJob *job)
 {
     connectSimpleJob(job);
-    connect( job, SIGNAL( data(KIO::Job*, const QByteArray&) ),
-             this, SLOT( slotData(KIO::Job*, const QByteArray&) ) );
-    connect( job, SIGNAL( dataReq(KIO::Job*, QByteArray&) ),
-             this, SLOT( slotDataReq(KIO::Job*, QByteArray&) ) );
-    connect( job, SIGNAL( mimetype(KIO::Job*, const QString&) ),
-             this, SLOT( slotMimetype(KIO::Job*, const QString&) ) );
-    connect( job, SIGNAL( canResume(KIO::Job*, KIO::filesize_t) ),
-             this, SLOT( slotCanResume(KIO::Job*, KIO::filesize_t) ) );
+    connect( job, SIGNAL( data(KIO::Job *, const QByteArray &) ),
+             this, SLOT( slotData(KIO::Job *, const QByteArray &) ) );
+    connect( job, SIGNAL( dataReq(KIO::Job *, QByteArray &) ),
+             this, SLOT( slotDataReq(KIO::Job *, QByteArray &) ) );
+    connect( job, SIGNAL( mimetype(KIO::Job *, const QString &) ),
+             this, SLOT( slotMimetype(KIO::Job *, const QString &) ) );
+    connect( job, SIGNAL( canResume(KIO::Job *, KIO::filesize_t) ),
+             this, SLOT( slotCanResume(KIO::Job *, KIO::filesize_t) ) );
 }
 
-void kio_digikamalbums::slotResult(KJob* job)
+void kio_digikamalbums::slotResult(KJob *job)
 {
     if ( job->error() != 0)
     {
@@ -545,15 +510,13 @@ void kio_digikamalbums::slotResult(KJob* job)
     }
     else
     {
-        KIO::StatJob* stat_job = qobject_cast<KIO::StatJob*>(job);
-
+        KIO::StatJob *stat_job = qobject_cast<KIO::StatJob *>(job);
         if ( stat_job!=0L )
         {
             KIO::UDSEntry entry = stat_job->statResult();
             //prepareUDSEntry(entry);
             statEntry( entry );
         }
-
         //finished();
         m_eventLoop->exit();
     }
@@ -584,7 +547,7 @@ void kio_digikamalbums::slotSpeed(KJob* /*job*/, unsigned long bytesPerSecond)
     speed(bytesPerSecond);
 }
 
-void kio_digikamalbums::slotRedirection(KIO::Job* job, const KUrl& url)
+void kio_digikamalbums::slotRedirection(KIO::Job *job, const KUrl& url)
 {
     redirection(url);
 
@@ -596,7 +559,7 @@ void kio_digikamalbums::slotRedirection(KIO::Job* job, const KUrl& url)
 }
 
 void kio_digikamalbums::slotEntries(KIO::Job* /*job*/,
-                                    const KIO::UDSEntryList& entries)
+                                      const KIO::UDSEntryList& entries)
 {
     /*
     KIO::UDSEntryList final_entries = entries;
@@ -639,7 +602,7 @@ void kio_digikamalbums::slotCanResume (KIO::Job* /*job*/, KIO::filesize_t offset
 
 extern "C"
 {
-    KDE_EXPORT int kdemain(int argc, char** argv)
+    KDE_EXPORT int kdemain(int argc, char **argv)
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);
@@ -648,8 +611,7 @@ extern "C"
         KComponentData componentData( "kio_digikamalbums" );
         KGlobal::locale();
 
-        if (argc != 4)
-        {
+        if (argc != 4) {
             kDebug() << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2";
             exit(-1);
         }

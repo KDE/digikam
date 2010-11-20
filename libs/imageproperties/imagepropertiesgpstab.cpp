@@ -111,9 +111,9 @@ public:
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
-    : QWidget(parent), d(new ImagePropertiesGPSTabPriv)
+                     : QWidget(parent), d(new ImagePropertiesGPSTabPriv)
 {
-    QGridLayout* layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
     d->map              = new WorldMapWidget(256, 256, this);
     d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);
     d->latLabel         = new QLabel(i18n("<b>Latitude</b>:"),  this);
@@ -237,12 +237,12 @@ void ImagePropertiesGPSTab::slotGPSDetails()
 {
     QString val, url;
 
-    switch ( getWebGPSLocator() )
+    switch( getWebGPSLocator() )
     {
         case MapQuest:
         {
             url.append("http://www.mapquest.com/maps/map.adp?searchtype=address"
-                       "&formtype=address&latlongtype=decimal");
+                        "&formtype=address&latlongtype=decimal");
             url.append("&latitude=");
             url.append(val.setNum(d->map->getLatitude(), 'g', 12));
             url.append("&longitude=");
@@ -318,7 +318,6 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
 {
     double alt, lat, lon;
     QDateTime dt = meta.getImageDateTime();
-
     if (meta.getGPSInfo(alt, lat, lon))
     {
         GPSInfo gpsInfo;
@@ -330,9 +329,7 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
         setGPSInfoList(GPSInfoList() << gpsInfo);
     }
     else
-    {
         setGPSInfo();
-    }
 }
 
 void ImagePropertiesGPSTab::setGPSInfo()
@@ -363,7 +360,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
         d->latitude->setText(QString::number(list.first().latitude));
         d->longitude->setText(QString::number(list.first().longitude));
         d->date->setText(KGlobal::locale()->formatDateTime(list.first().dateTime,
-                         KLocale::ShortDate, true));
+                                                           KLocale::ShortDate, true));
         setEnabled(true);
     }
     else if (list.count() > 1)

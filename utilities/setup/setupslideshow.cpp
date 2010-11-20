@@ -56,7 +56,7 @@ public:
         showComment(0),
         showRating(0),
         delayInput(0)
-    {}
+        {}
 
     static const QString configGroupName;
     static const QString configSlideShowDelayEntry;
@@ -97,13 +97,13 @@ const QString SetupSlideShowPriv::configSlideShowPrintRatingEntry("SlideShowPrin
 // --------------------------------------------------------
 
 SetupSlideShow::SetupSlideShow(QWidget* parent)
-    : QScrollArea(parent), d(new SetupSlideShowPriv)
+              : QScrollArea(parent), d(new SetupSlideShowPriv)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget *panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout *layout = new QVBoxLayout(panel);
 
     d->delayInput = new KIntNumInput(5, panel);
     d->delayInput->setRange(1, 3600, 1);
@@ -141,9 +141,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
 
     // Only digiKam support this feature, showFoto do not support digiKam database information.
     if (kapp->applicationName() == "showfoto")
-    {
         d->showRating->hide();
-    }
 
     layout->addWidget(d->delayInput);
     layout->addWidget(d->startWithCurrent);

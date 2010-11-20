@@ -70,7 +70,7 @@ namespace Digikam
 
 UMSCamera::UMSCamera(const QString& title, const QString& model,
                      const QString& port, const QString& path)
-    : DKCamera(title, model, port, path)
+         : DKCamera(title, model, port, path)
 {
     m_cancel = false;
     getUUIDFromSolid();
@@ -101,11 +101,8 @@ bool UMSCamera::getFreeSpace(unsigned long& /*kBSize*/, unsigned long& /*kBAvail
 bool UMSCamera::doConnect()
 {
     QFileInfo dir(m_path);
-
     if (!dir.exists() || !dir.isReadable() || !dir.isDir())
-    {
         return false;
-    }
 
     if (dir.isWritable())
     {
@@ -149,18 +146,12 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
 
     QDir dir(folder);
     dir.setFilter(QDir::Files);
-
     if (!dir.exists())
-    {
         return false;
-    }
 
     const QFileInfoList list = dir.entryInfoList();
-
     if (list.isEmpty())
-    {
-        return true;    // Nothing to do.
-    }
+        return true;        // Nothing to do.
 
     QFileInfoList::const_iterator fi;
     QFileInfo                     thmlo, thmup;
@@ -206,9 +197,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             }
 
             if (dt.isNull()) // fall back to file system info
-            {
                 ImageScanner::creationDateFromFilesystem(*fi);
-            }
 
             info.name             = fi->fileName();
             info.folder           = !folder.endsWith('/') ? folder + QString('/') : folder;
@@ -237,20 +226,14 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     DMetadata metadata(folder + QString("/") + itemName);
     thumbnail = metadata.getExifThumbnail(true);
-
     if (!thumbnail.isNull())
-    {
         return true;
-    }
 
     // RAW files : try to extract embedded thumbnail using dcraw
 
     KDcrawIface::KDcraw::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
-
     if (!thumbnail.isNull())
-    {
         return true;
-    }
 
     // THM files: try to get thumbnail from '.thm' files if we didn't manage to get
     // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files.
@@ -263,16 +246,12 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".thm")))        // Lowercase
     {
         if (!thumbnail.isNull())
-        {
-            return true;
-        }
+           return true;
     }
     else if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".THM")))   // Uppercase
     {
         if (!thumbnail.isNull())
-        {
-            return true;
-        }
+           return true;
     }
 
     // Finally, we trying to get thumbnail using DImg API (slow).
@@ -284,7 +263,6 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         thumbnail = dimgThumb.copyQImage();
         return true;
     }
-
     return false;
 }
 
@@ -319,11 +297,9 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     }
 
     const int MAX_IPC_SIZE = (1024*32);
-
     char buffer[MAX_IPC_SIZE];
 
     Q_LONG len;
-
     while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
     {
         if (len == -1 || dFile.write(buffer, (Q_ULONG)len) != len)
@@ -359,17 +335,13 @@ bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool
     {
         // Lock the file to set read only flag
         if (::chmod(QFile::encodeName(src), S_IREAD) == -1)
-        {
             return false;
-        }
     }
     else
     {
         // Unlock the file to set read/write flag
         if (::chmod(QFile::encodeName(src), S_IREAD | S_IWRITE) == -1)
-        {
             return false;
-        }
     }
 
     return true;
@@ -386,16 +358,12 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
     QFileInfo thmLo(folder + QString("/") + fi.baseName() + ".thm");          // Lowercase
 
     if (thmLo.exists())
-    {
         ::unlink(QFile::encodeName(thmLo.filePath()));
-    }
 
     QFileInfo thmUp(folder + QString("/") + fi.baseName() + ".THM");          // Uppercase
 
     if (thmUp.exists())
-    {
         ::unlink(QFile::encodeName(thmUp.filePath()));
-    }
 
     // Remove the real image.
     return (::unlink(QFile::encodeName(folder + QString("/") + itemName)) == 0);
@@ -414,7 +382,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     if ( !sFile.open(QIODevice::ReadOnly) )
     {
         kWarning() << "Failed to open source file for reading: "
-                   << src;
+                        << src;
         return false;
     }
 
@@ -422,16 +390,14 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     {
         sFile.close();
         kWarning() << "Failed to open dest file for writing: "
-                   << dest;
+                        << dest;
         return false;
     }
 
     const int MAX_IPC_SIZE = (1024*32);
-
     char buffer[MAX_IPC_SIZE];
 
     Q_LONG len;
-
     while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
     {
         if (len == -1 || dFile.write(buffer, (Q_ULONG)len) == -1)
@@ -475,9 +441,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         pInfo = meta.getPhotographInformation();
 
         if (dt.isNull()) // fall back to file system info
-        {
             ImageScanner::creationDateFromFilesystem(fi);
-        }
 
         info.name             = fi.fileName();
         info.folder           = !folder.endsWith('/') ? folder + QString("/") : folder;
@@ -498,19 +462,14 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
 {
     if (m_cancel)
-    {
         return;
-    }
 
     QDir dir(folder);
     dir.setFilter(QDir::Dirs|QDir::Executable);
 
     const QFileInfoList list = dir.entryInfoList();
-
     if (list.isEmpty())
-    {
         return;
-    }
 
     QFileInfoList::const_iterator fi;
     QString                       subfolder;
@@ -518,9 +477,7 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
     for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
         if (fi->fileName() == "." || fi->fileName() == "..")
-        {
             continue;
-        }
 
         subfolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
         subFolderList.append(subfolder);
@@ -587,20 +544,15 @@ void UMSCamera::getUUIDFromSolid()
     {
         // check for StorageAccess
         if (!accessDevice.is<Solid::StorageAccess>())
-        {
             continue;
-        }
 
-        const Solid::StorageAccess* access = accessDevice.as<Solid::StorageAccess>();
+        const Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
 
         if (!access->isAccessible())
-        {
             continue;
-        }
 
         // check for StorageDrive
         Solid::Device driveDevice;
-
         for (Solid::Device currentDevice = accessDevice; currentDevice.isValid();
              currentDevice = currentDevice.parent())
         {
@@ -610,15 +562,11 @@ void UMSCamera::getUUIDFromSolid()
                 break;
             }
         }
-
         if (!driveDevice.isValid())
-        {
             continue;
-        }
 
         // check for StorageVolume
         Solid::Device volumeDevice;
-
         for (Solid::Device currentDevice = accessDevice; currentDevice.isValid(); currentDevice = currentDevice.parent())
         {
             if (currentDevice.is<Solid::StorageVolume>())
@@ -627,18 +575,13 @@ void UMSCamera::getUUIDFromSolid()
                 break;
             }
         }
-
         if (!volumeDevice.isValid())
-        {
             continue;
-        }
 
-        Solid::StorageVolume* volume = volumeDevice.as<Solid::StorageVolume>();
+        Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
 
         if (m_path.startsWith(access->filePath()))
-        {
             m_uuid = volume->uuid();
-        }
     }
 }
 

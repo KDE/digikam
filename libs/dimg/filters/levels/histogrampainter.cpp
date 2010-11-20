@@ -47,7 +47,7 @@ class HistogramPainterPriv
 
 public:
 
-    HistogramPainterPriv(HistogramPainter* q) :
+    HistogramPainterPriv(HistogramPainter *q) :
         q(q),
         histogram(0),
         widgetToInitFrom(0),
@@ -58,7 +58,7 @@ public:
         selectionMax(0.0),
         showColorGuide(false),
         showXGrid(true)
-    {}
+        {}
 
 private:
 
@@ -76,7 +76,6 @@ public:
         switch (scale)
         {
             case LinScaleHistogram:
-
                 switch (channelType)
                 {
                     case GreenChannel:
@@ -90,10 +89,10 @@ public:
                     case ColorChannels:
                         max = qMin(qMax(qMax(histogram->getMaximum(RedChannel, startSeg, endSeg),
                                              histogram->getMaximum(GreenChannel, startSeg, endSeg)),
-                                        histogram->getMaximum(BlueChannel, startSeg, endSeg)) / HISTOGRAM_CALC_CUTOFF_HEIGHT,
+                                             histogram->getMaximum(BlueChannel, startSeg, endSeg)) / HISTOGRAM_CALC_CUTOFF_HEIGHT,
                                    qMax(qMax(histogram->getMaximum(RedChannel, 0, segments - 1),
                                              histogram->getMaximum(GreenChannel, 0, segments - 1)),
-                                        histogram->getMaximum(BlueChannel, 0, segments - 1)));
+                                             histogram->getMaximum(BlueChannel, 0, segments - 1)));
                         break;
                     default:
                         kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
@@ -101,10 +100,8 @@ public:
                                    histogram->getMaximum(LuminosityChannel, 0, segments - 1));
                         break;
                 }
-
                 break;
             case LogScaleHistogram:
-
                 switch (channelType)
                 {
                     case GreenChannel:
@@ -117,14 +114,13 @@ public:
                     case ColorChannels:
                         max = qMax(qMax(histogram->getMaximum(RedChannel, 0, segments - 1),
                                         histogram->getMaximum(GreenChannel, 0, segments - 1)),
-                                   histogram->getMaximum(BlueChannel, 0, segments - 1));
+                                        histogram->getMaximum(BlueChannel, 0, segments - 1));
                         break;
                     default:
                         kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
                         max = histogram->getMaximum(LuminosityChannel, 0, segments - 1);
                         break;
                 }
-
                 if (max > 0.0)
                 {
                     max = log(max);
@@ -133,7 +129,6 @@ public:
                 {
                     max = 1.0;
                 }
-
                 break;
             default:
                 kError() << "Untreated histogram scale " << scale << ". Using linear as default.";
@@ -145,11 +140,7 @@ public:
 
     inline int scaleToPixmapHeight(const double& value, const int& pixmapHeight, const double& max)
     {
-        if (max == 0)
-        {
-            return 0;
-        }
-
+        if (max == 0) return 0;
         switch (scale)
         {
             case LinScaleHistogram:
@@ -159,16 +150,12 @@ public:
             case LogScaleHistogram:
             {
                 if (value == 0.0)
-                {
                     return 0;
-                }
-
                 if (value < 0.0)
                 {
                     kWarning() << "Scaling value < 0: " << value << ". Assuming 0.";
                     return 0;
                 }
-
                 return qMin((int) ((pixmapHeight * log(value)) / max), pixmapHeight);
             }
             default:
@@ -188,7 +175,6 @@ public:
             endSegment = 0;
             return;
         }
-
         startSegment = (x * (histogram->getHistogramSegments()) - 1) / drawWidth;
         endSegment   = ((x + 1) * (histogram->getHistogramSegments()) - 1) / drawWidth;
     }
@@ -222,16 +208,13 @@ public:
             double value = histogram->getMaximum(channelType, startSegment, endSegment);
 
             int y = scaleToPixmapHeight(value, wHeight - 2, max);
-
             if (x > 1)
             {
                 (y > yPrev) ? curvePath.lineTo(x, wHeight - yPrev) : curvePath.lineTo(x - 1, wHeight - y);
             }
-
             curvePath.lineTo(x, wHeight - y);
             yPrev = y;
         }
-
         curvePath.lineTo(wWidth - 2, wHeight - 1);
         curvePath.lineTo(1, wHeight - 1);
         curvePath.closeSubpath();
@@ -240,7 +223,6 @@ public:
         p2.setPen(QPen(palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p2.setBrush(QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
         p2.drawPath(curvePath);
-
         if (highlightSelection)
         {
             p2.setClipRect((int)(selectionMin * wWidth), 0,
@@ -260,7 +242,7 @@ public:
     void renderMultiColorLine(QPixmap& bufferPixmap, QPainter& p1)
     {
         p1.save();
-
+ 
         int wWidth  = bufferPixmap.width();
         int wHeight = bufferPixmap.height();
 
@@ -300,8 +282,7 @@ public:
                 (yr > yrPrev) ? curveRed.lineTo(x, wHeight - yrPrev) : curveRed.lineTo(x - 1, wHeight - yr);
                 (yg > ygPrev) ? curveGreen.lineTo(x, wHeight - ygPrev) : curveGreen.lineTo(x - 1, wHeight - yg);
                 (yb > ybPrev) ? curveBlue.lineTo(x, wHeight - ybPrev) : curveBlue.lineTo(x - 1, wHeight - yb);
-            }
-
+            }        
             curveRed.lineTo(x, wHeight - yr);
             curveGreen.lineTo(x, wHeight - yg);
             curveBlue.lineTo(x, wHeight - yb);
@@ -310,7 +291,6 @@ public:
             ygPrev = yg;
             ybPrev = yb;
         }
-
         curveRed.lineTo(wWidth - 2, wHeight - 1);
         curveRed.lineTo(1, wHeight - 1);
         curveRed.closeSubpath();
@@ -355,7 +335,6 @@ public:
             p2.fillPath(curveGreen, QBrush(QColor(0, 255, 0), Qt::SolidPattern));
             p2.setClipRect(0, 0, wWidth, wHeight);
         }
-
         p2.end();
         p1.drawImage(0, 0, bb);
 
@@ -366,7 +345,7 @@ public:
     {
         for (int x = 0; x < bufferPixmap.width(); x++)
         {
-            if ((x == bufferPixmap.width() / 4) || (x == bufferPixmap.width() / 2) ||
+            if ((x == bufferPixmap.width() / 4) || (x == bufferPixmap.width() / 2) || 
                 (x == 3 * bufferPixmap.width() / 4))
             {
                 p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
@@ -391,7 +370,7 @@ public:
 
         int guidePos = -1;
 
-        switch (channelType)
+        switch(channelType)
         {
             case RedChannel:
                 guidePos = colorGuide.red();
@@ -471,7 +450,7 @@ public:
 };
 
 HistogramPainter::HistogramPainter(QObject* parent)
-    : QObject(parent), d(new HistogramPainterPriv(this))
+                : QObject(parent), d(new HistogramPainterPriv(this))
 {
 }
 
@@ -497,17 +476,16 @@ void HistogramPainter::setChannelType(ChannelType channelType)
 
 void HistogramPainter::setHighlightSelection(bool highlightSelection)
 {
-    d->highlightSelection = highlightSelection;
+   d->highlightSelection = highlightSelection;
 }
 
 void HistogramPainter::setSelection(double selectionMin, double selectionMax)
 {
-    if (selectionMin < 0.0 || selectionMin > 1.0)
+   if (selectionMin < 0.0 || selectionMin > 1.0)
     {
         kWarning() << "selectionMin out of range: " << selectionMin << ". Clamping value";
         selectionMin = qMax(0.0, qMin(1.0, selectionMin));
     }
-
     if (selectionMax < 0.0 || selectionMax > 1.0)
     {
         kWarning() << "selectionMax out of range: " << selectionMax << ". Clamping value";
@@ -551,7 +529,6 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
     int wHeight = bufferPixmap.height();
 
     d->painter.begin(&bufferPixmap);
-
     if (d->widgetToInitFrom)
     {
         d->painter.initFrom(d->widgetToInitFrom);

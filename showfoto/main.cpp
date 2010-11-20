@@ -71,12 +71,10 @@ int main(int argc, char* argv[])
 
     KUrl::List urlList;
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-
-    for (int i = 0; i < args->count(); ++i)
+    for(int i = 0; i < args->count(); ++i)
     {
         urlList.append(args->url(i));
     }
-
     args->clear();
 
     ShowFoto::ShowFoto* w = new ShowFoto::ShowFoto(urlList);

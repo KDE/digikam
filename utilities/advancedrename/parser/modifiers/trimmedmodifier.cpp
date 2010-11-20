@@ -32,8 +32,8 @@ namespace Digikam
 {
 
 TrimmedModifier::TrimmedModifier()
-    : Modifier(i18n("Trimmed"), i18n("Remove leading, trailing and extra whitespace"),
-               SmallIcon("edit-cut"))
+               : Modifier(i18n("Trimmed"), i18n("Remove leading, trailing and extra whitespace"),
+                          SmallIcon("edit-cut"))
 {
     QString token = "{trim}";
     addToken(token, description());

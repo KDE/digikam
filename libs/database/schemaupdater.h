@@ -44,14 +44,14 @@ class DIGIKAM_DATABASE_EXPORT SchemaUpdater
 {
 public:
 
-    SchemaUpdater(AlbumDB* albumDB, DatabaseBackend* backend, DatabaseParameters parameters);
+    SchemaUpdater(AlbumDB *albumDB, DatabaseBackend *backend, DatabaseParameters parameters);
 
     static int schemaVersion();
     static int filterSettingsVersion();
     bool update();
-    void setObserver(InitializationObserver* observer);
+    void setObserver(InitializationObserver *observer);
     const QString getLastErrorMessage();
-    void setDatabaseAccess(DatabaseAccess* access);
+    void setDatabaseAccess(DatabaseAccess *access);
 
 private:
 

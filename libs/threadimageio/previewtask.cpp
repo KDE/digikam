@@ -62,16 +62,14 @@ namespace Digikam
 void PreviewLoadingTask::execute()
 {
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
-    {
         return;
-    }
 
-    LoadingCache* cache = LoadingCache::cache();
+    LoadingCache *cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
 
         // find possible cached images
-        DImg* cachedImg = 0;
+        DImg *cachedImg = 0;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
         // lookupCacheKeys returns "best first". Prepend the cache key to make the list "fastest first":
         // Scaling a full version takes longer!
@@ -83,13 +81,9 @@ void PreviewLoadingTask::execute()
                 if (m_loadingDescription.needCheckRawDecoding())
                 {
                     if (cachedImg->rawDecodingSettings() == m_loadingDescription.rawDecodingSettings)
-                    {
                         break;
-                    }
                     else
-                    {
                         cachedImg = 0;
-                    }
                 }
                 else
                 {
@@ -103,11 +97,8 @@ void PreviewLoadingTask::execute()
             // image is found in image cache, loading is successful
 
             m_img = *cachedImg;
-
             if (accessMode() == LoadSaveThread::AccessModeReadWrite)
-            {
                 m_img = m_img.copy();
-            }
 
             // rotate if needed - images are unrotated in the cache,
             // except for RAW images, which are already rotated by dcraw.
@@ -121,15 +112,12 @@ void PreviewLoadingTask::execute()
         {
             // find possible running loading process
             m_usedProcess = 0;
-
-            for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it )
-            {
+            for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it ) {
                 if ( (m_usedProcess = cache->retrieveLoadingProcess(*it)) )
                 {
                     break;
                 }
             }
-
             // do not wait on other loading processes?
             //m_usedProcess = cache->retrieveLoadingProcess(m_loadingDescription.cacheKey());
 
@@ -140,19 +128,12 @@ void PreviewLoadingTask::execute()
                 // attach this thread to the other thread, wait until loading
                 // has finished.
                 m_usedProcess->addListener(this);
-
                 // break loop when either the loading has completed, or this task is being stopped
                 while ( m_loadingTaskStatus != LoadingTaskStatusStopping && m_usedProcess && !m_usedProcess->completed())
-                {
                     lock.timedWait();
-                }
-
                 // remove listener from process
                 if (m_usedProcess)
-                {
                     m_usedProcess->removeListener(this);
-                }
-
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
@@ -201,9 +182,8 @@ void PreviewLoadingTask::execute()
         // First the QImage-dependent loading methods
 
         // check embedded previews
-#if KEXIV2_VERSION >= 0x010000
+        #if KEXIV2_VERSION >= 0x010000
         KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
-
         // Only check the first and largest preview
         if (!previews.isEmpty() && continueQuery())
         {
@@ -211,31 +191,21 @@ void PreviewLoadingTask::execute()
             if (qMax(previews.width(), previews.height()) >= size / 2)
             {
                 qimage = previews.image();
-
                 if (!qimage.isNull())
-                {
                     fromEmbeddedPreview = true;
-                }
             }
         }
-
-#else
-
+        #else
         // Trying to load with dcraw: RAW files.
         if (continueQuery() && KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
         {
             // Discard if too small
             if (qMax(qimage.width(), qimage.height()) < size / 2)
-            {
                 qimage = QImage();
-            }
             else
-            {
                 fromEmbeddedPreview = true;
-            }
         }
-
-#endif
+        #endif
 
         if (qimage.isNull() && continueQuery())
         {
@@ -259,10 +229,9 @@ void PreviewLoadingTask::execute()
             m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
 
             DMetadata metadata(m_loadingDescription.filePath);
-#if KEXIV2_VERSION >= 0x010100
+            #if KEXIV2_VERSION >= 0x010100
             m_img.setAttribute("originalSize", metadata.getPixelSize());
-#endif
-
+            #endif
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
             {
@@ -272,7 +241,6 @@ void PreviewLoadingTask::execute()
                 // the color space of the preview (see bug 195950 for NEF files)
                 m_img.setIccProfile(metadata.getIccProfile());
             }
-
             // free memory
             qimage = QImage();
         }
@@ -293,50 +261,38 @@ void PreviewLoadingTask::execute()
     else
     {
         KDcrawIface::DcrawInfoContainer dcrawIdentify;
-
         if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, m_loadingDescription.filePath))
         {
-#if KEXIV2_VERSION >= 0x010000
+            #if KEXIV2_VERSION >= 0x010000
             // Check if full-size preview is available
             {
                 KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
-
                 // Only check the first and largest preview
                 if (!previews.isEmpty() && continueQuery())
                 {
                     // discard if smaller than half preview
                     int acceptableWidth = lround(dcrawIdentify.imageSize.width() * 0.5);
                     int acceptableHeight = lround(dcrawIdentify.imageSize.height() * 0.5);
-
                     if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
                     {
                         qimage = previews.image();
-
                         if (!qimage.isNull())
-                        {
                             fromEmbeddedPreview = true;
-                        }
                     }
                 }
             }
-#else
-
+            #else
             // Trying to load with dcraw: RAW files.
             if (qimage.isNull() && continueQuery() && dcrawIdentify.isDecodable &&
                 KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
             {
                 // discard if smaller than half preview
                 if (qMax(qimage.width(), qimage.height()) < dcrawIdentify.imageSize.width() / 2)
-                {
                     qimage = QImage();
-                }
                 else
-                {
                     fromEmbeddedPreview = true;
-                }
             }
-
-#endif
+            #endif
 
             if (qimage.isNull() && continueQuery())
             {
@@ -354,10 +310,9 @@ void PreviewLoadingTask::execute()
             m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
 
             DMetadata metadata(m_loadingDescription.filePath);
-#if KEXIV2_VERSION >= 0x010100
+            #if KEXIV2_VERSION >= 0x010100
             m_img.setAttribute("originalSize", metadata.getPixelSize());
-#endif
-
+            #endif
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
             {
@@ -367,7 +322,6 @@ void PreviewLoadingTask::execute()
                 // the color space of the preview (see bug 195950 for NEF files)
                 m_img.setIccProfile(metadata.getIccProfile());
             }
-
             // free memory
             qimage = QImage();
         }
@@ -401,7 +355,6 @@ void PreviewLoadingTask::execute()
         // - only scale down if size is considerably larger
         // - only scale down, do not scale up
         QSize scaledSize = m_img.size();
-
         if (needToScale(scaledSize, size))
         {
             scaledSize.scale(size, size, Qt::KeepAspectRatio);
@@ -410,9 +363,7 @@ void PreviewLoadingTask::execute()
 
         // Scale if hinted, Store previews rotated in the cache (?)
         if (m_loadingDescription.previewParameters.exifRotate)
-        {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
-        }
 
         // For previews, we put the image post processed in the cache
         postProcess();
@@ -424,13 +375,9 @@ void PreviewLoadingTask::execute()
 
     {
         LoadingCache::CacheLock lock(cache);
-
         // put (valid) image into cache of loaded images
         if (!m_img.isNull())
-        {
             cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img), m_loadingDescription.filePath);
-        }
-
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
     }
@@ -443,8 +390,7 @@ void PreviewLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i=0; i<m_listeners.count(); ++i)
         {
-            LoadingProcessListener* l = m_listeners[i];
-
+            LoadingProcessListener *l = m_listeners[i];
             if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
             {
                 // If a listener requested ReadWrite access, it gets a deep copy.
@@ -467,13 +413,9 @@ void PreviewLoadingTask::execute()
         removeListener(this);
         // wake all listeners waiting on cache condVar, so that they remove themselves
         lock.wakeAll();
-
         // wait until all listeners have removed themselves
         while (m_listeners.count() != 0)
-        {
             lock.timedWait();
-        }
-
         // set to 0, as checked in setStatus
         m_usedProcess = 0;
     }
@@ -486,10 +428,7 @@ void PreviewLoadingTask::execute()
 bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
 {
     if (!previewSize)
-    {
         return false;
-    }
-
     int maxSize = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
     int acceptableUpperSize = lround(1.25 * (double)previewSize);
     return  maxSize >= acceptableUpperSize;
@@ -500,7 +439,6 @@ bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
 bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
 {
     DMetadata metadata(path);
-
     if (metadata.getImagePreview(image))
     {
         kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "

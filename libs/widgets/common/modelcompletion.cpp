@@ -66,8 +66,8 @@ public:
 };
 
 ModelCompletion::ModelCompletion()
-    : KCompletion(),
-      d(new ModelCompletionPriv)
+             : KCompletion(),
+               d(new ModelCompletionPriv)
 {
     setOrder(KCompletion::Sorted);
     setIgnoreCase(true);
@@ -78,7 +78,7 @@ ModelCompletion::~ModelCompletion()
     delete d;
 }
 
-void ModelCompletion::setModel(QAbstractItemModel* model, int uniqueIdRole, int displayRole)
+void ModelCompletion::setModel(QAbstractItemModel *model, int uniqueIdRole, int displayRole)
 {
     // first release old model
     if (d->model)
@@ -102,50 +102,49 @@ void ModelCompletion::setModel(QAbstractItemModel* model, int uniqueIdRole, int 
     }
 }
 
-void ModelCompletion::connectToModel(QAbstractItemModel* model)
+void ModelCompletion::connectToModel(QAbstractItemModel *model)
 {
     connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
             this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
     connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
-    connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
+    connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex &)),
+            this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex &)));
     connect(model, SIGNAL(modelReset()),
             this, SLOT(slotModelReset()));
 
 }
 
-QAbstractItemModel* ModelCompletion::model() const
+QAbstractItemModel *ModelCompletion::model() const
 {
     return d->model;
 }
 
-void ModelCompletion::slotRowsInserted(const QModelIndex& parent, int start, int end)
+void ModelCompletion::slotRowsInserted(const QModelIndex &parent, int start, int end)
 {
     //kDebug() << "rowInserted in parent " << parent << ", start = " << start
     //         << ", end = " << end;
 
     for (int i = start; i <= end; ++i)
     {
-        // this cannot work if this is called from rowsAboutToBeInserted
-        // because then the model doesn't know the index yet. So never do this
-        // ;)
+    	// this cannot work if this is called from rowsAboutToBeInserted
+    	// because then the model doesn't know the index yet. So never do this
+    	// ;)
         const QModelIndex child = d->model->index(i, 0, parent);
-
         if (child.isValid())
         {
             sync(d->model, child);
         }
         else
         {
-            kError() << "inserted rows are not valid for parent " << parent
-                     << parent.data(d->displayRole).toString() << "and child"
-                     << child;
+        	kError() << "inserted rows are not valid for parent " << parent
+					 << parent.data(d->displayRole).toString() << "and child"
+					 << child;
         }
     }
 }
 
-void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
     //kDebug() << "rows of parent " << parent << " removed, start = " << start
     //         << ", end = " << end;
@@ -153,7 +152,6 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
     {
 
         QModelIndex index = d->model->index(i, 0, parent);
-
         if (!index.isValid())
         {
             kError() << "Received an invalid index to be removed";
@@ -161,12 +159,10 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
         }
 
         int id = index.data(d->uniqueIdRole).toInt();
-
         if (d->idToTextMap.contains(id))
         {
             QString itemName = d->idToTextMap[id];
             d->idToTextMap.remove(id);
-
             // only delete an item in the completion object if there is no other
             // item with the same display name
             if (d->idToTextMap.keys(itemName).empty())
@@ -189,7 +185,7 @@ void ModelCompletion::slotModelReset()
     sync(d->model);
 }
 
-void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void ModelCompletion::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
 
     for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
@@ -205,35 +201,32 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
         }
 
         QModelIndex index = d->model->index(row, topLeft.column(), topLeft.parent());
-
         if (!index.isValid())
         {
-            kError() << "illegal index in changed data";
+        	kError() << "illegal index in changed data";
             continue;
         }
 
         int id = index.data(d->uniqueIdRole).toInt();
         QString itemName = index.data(d->displayRole).toString();
-
         if (d->idToTextMap.contains(id))
         {
             removeItem(d->idToTextMap.value(id));
         }
         else
         {
-            // FIXME normally this should be a bug. Fortunately we can handle
-            // it and it is a constant case that this happens because of some
-            // kind of race condition between the tree vies and this class.
-            // If the model emits the signal, that a new index was added, it may
-            // be first processed by the tree view. This updates the item
-            // counting based on the expansion state. Unfortunately, this
-            // operations needs a data change which is emitted as a dataChanged
-            // signal which then will arrive at this class before the original
-            // inserted signal arrived at this class.
+        	// FIXME normally this should be a bug. Fortunately we can handle
+        	// it and it is a constant case that this happens because of some
+        	// kind of race condition between the tree vies and this class.
+        	// If the model emits the signal, that a new index was added, it may
+        	// be first processed by the tree view. This updates the item
+        	// counting based on the expansion state. Unfortunately, this
+        	// operations needs a data change which is emitted as a dataChanged
+        	// signal which then will arrive at this class before the original
+        	// inserted signal arrived at this class.
             //kError() << "idToTextMap did not contain an entry for index "
             //         << index << itemName;
         }
-
         d->idToTextMap[id] = itemName;
         addItem(itemName);
 
@@ -241,12 +234,12 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
 
 }
 
-void ModelCompletion::disconnectFromModel(QAbstractItemModel* model)
+void ModelCompletion::disconnectFromModel(QAbstractItemModel *model)
 {
     disconnect(model);
 }
 
-void ModelCompletion::sync(QAbstractItemModel* model)
+void ModelCompletion::sync(QAbstractItemModel *model)
 {
 
     //kDebug() << "Starting sync with model " << model
@@ -263,7 +256,7 @@ void ModelCompletion::sync(QAbstractItemModel* model)
 
 }
 
-void ModelCompletion::sync(QAbstractItemModel* model, const QModelIndex& index)
+void ModelCompletion::sync(QAbstractItemModel *model, const QModelIndex &index)
 {
 
     QString itemName = index.data(d->displayRole).toString();

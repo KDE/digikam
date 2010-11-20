@@ -49,8 +49,8 @@ public:
     QHash<int, QString> albumNamesHash;
 };
 
-ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* parent)
-    : ImageFilterModel(*new ImageAlbumFilterModelPrivate, parent)
+ImageAlbumFilterModel::ImageAlbumFilterModel(QObject *parent)
+                     : ImageFilterModel(*new ImageAlbumFilterModelPrivate, parent)
 {
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -83,7 +83,7 @@ void ImageAlbumFilterModel::setSourceImageModel(ImageAlbumModel* model)
     ImageFilterModel::setSourceImageModel(model);
 }
 
-ImageAlbumModel* ImageAlbumFilterModel::sourceModel() const
+ImageAlbumModel *ImageAlbumFilterModel::sourceModel() const
 {
     Q_D(const ImageAlbumFilterModel);
     return static_cast<ImageAlbumModel*>(d->imageModel);
@@ -106,7 +106,6 @@ void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings& s)
 int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const
 {
     Q_D(const ImageAlbumFilterModel);
-
     switch (d->sorter.categorizationMode)
     {
         case ImageSortSettings::CategoryByAlbum:
@@ -114,19 +113,12 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
             int leftAlbumId = left.albumId();
             int rightAlbumId = right.albumId();
 
-            PAlbum* leftAlbum = AlbumManager::instance()->findPAlbum(leftAlbumId);
-            PAlbum* rightAlbum = AlbumManager::instance()->findPAlbum(rightAlbumId);
-
+            PAlbum *leftAlbum = AlbumManager::instance()->findPAlbum(leftAlbumId);
+            PAlbum *rightAlbum = AlbumManager::instance()->findPAlbum(rightAlbumId);
             if (!leftAlbum || !rightAlbum)
-            {
                 return -1;
-            }
-
             if (leftAlbum == rightAlbum)
-            {
                 return 0;
-            }
-
             if (d->sorter.sortRole == ImageSortSettings::SortByCreationDate ||
                 d->sorter.sortRole == ImageSortSettings::SortByModificationDate)
             {
@@ -134,72 +126,56 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
                 // We must still make sure that categorization is unique!
                 QDate leftDate = leftAlbum->date();
                 QDate rightDate = rightAlbum->date();
-
                 if (leftDate != rightDate)
                 {
                     int result;
-
                     if (leftDate == rightDate)
-                    {
                         result = 0;
-                    }
                     else if (leftDate < rightDate)
-                    {
                         result = -1;
-                    }
                     else
-                    {
                         result = 1;
-                    }
-
                     return ImageSortSettings::compareByOrder(result, d->sorter.currentSortOrder);
                 }
             }
 
             return ImageSortSettings::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath(),
-                    d->sorter.currentCategorizationSortOrder,
-                    d->sorter.categorizationCaseSensitivity);
+                                                     d->sorter.currentCategorizationSortOrder,
+                                                     d->sorter.categorizationCaseSensitivity);
         }
         default:
             return ImageFilterModel::compareInfosCategories(left, right);
     }
 }
 
-void ImageAlbumFilterModel::albumChange(Album* album)
+void ImageAlbumFilterModel::albumChange(Album *album)
 {
     Q_D(ImageAlbumFilterModel);
-
     if (album->type() == Album::PHYSICAL)
     {
         d->albumNamesHash = AlbumManager::instance()->albumTitles();
-
         if (d->filter.isFilteringByText())
-        {
             setImageFilterSettings(d->filter);
-        }
     }
     else if (album->type() == Album::TAG)
     {
         d->tagNamesHash = AlbumManager::instance()->tagNames();
-
         if (d->filter.isFilteringByText() || d->filter.isFilteringByTags())
-        {
             setImageFilterSettings(d->filter);
-        }
     }
 }
 
-void ImageAlbumFilterModel::slotAlbumRenamed(Album* album)
+void ImageAlbumFilterModel::slotAlbumRenamed(Album *album)
 {
     albumChange(album);
 }
 
-void ImageAlbumFilterModel::slotAlbumAdded(Album* album)
+void ImageAlbumFilterModel::slotAlbumAdded(Album *album)
 {
     albumChange(album);
 }
 
-void ImageAlbumFilterModel::slotAlbumAboutToBeDeleted(Album* album)
+void ImageAlbumFilterModel::slotAlbumAboutToBeDeleted(Album *album)
 {
     albumChange(album);
 }

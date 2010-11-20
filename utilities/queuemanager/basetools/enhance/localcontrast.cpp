@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 LocalContrast::LocalContrast(QObject* parent)
-    : BatchTool("LocalContrast", EnhanceTool, parent)
+             : BatchTool("LocalContrast", EnhanceTool, parent)
 {
     setToolTitle(i18n("Local Contrast"));
     setToolDescription(i18n("A tool to emulate tone mapping."));
@@ -87,7 +87,7 @@ BatchToolSettings LocalContrast::defaultSettings()
     prm.insert("stage4_enabled",   defaultPrm.stage[3].enabled);
     prm.insert("stage4_power",     defaultPrm.stage[3].power);
     prm.insert("stage4_blur",      defaultPrm.stage[3].blur);
-
+    
     return prm;
 }
 
@@ -123,7 +123,7 @@ void LocalContrast::slotSettingsChanged()
 {
     BatchToolSettings prm;
     LocalContrastContainer currentPrm = m_settingsView->settings();
-
+    
     prm.insert("stretch_contrast", currentPrm.stretch_contrast);
     prm.insert("low_saturation",   currentPrm.low_saturation);
     prm.insert("high_saturation",  currentPrm.high_saturation);
@@ -144,19 +144,16 @@ void LocalContrast::slotSettingsChanged()
     prm.insert("stage4_enabled",   currentPrm.stage[3].enabled);
     prm.insert("stage4_power",     currentPrm.stage[3].power);
     prm.insert("stage4_blur",      currentPrm.stage[3].blur);
-
+    
     BatchTool::slotSettingsChanged(prm);
 }
 
 bool LocalContrast::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     LocalContrastContainer prm;
-
+    
     prm.stretch_contrast = settings()["stretch_contrast"].toBool();
     prm.low_saturation   = settings()["low_saturation"].toInt();
     prm.high_saturation  = settings()["high_saturation"].toInt();
@@ -177,7 +174,7 @@ bool LocalContrast::toolOperations()
     prm.stage[3].enabled = settings()["stage4_enabled"].toBool();
     prm.stage[3].power   = settings()["stage4_power"].toDouble();
     prm.stage[3].blur    = settings()["stage4_blur"].toDouble();
-
+    
     LocalContrastFilter lc(&image(), 0L, prm);
     lc.startFilterDirectly();
     image().putImageData(lc.getTargetImage().bits());

@@ -143,7 +143,7 @@ public:
         hpInput(0),
         gboxSettings(0),
         settingsWidget(0)
-    {}
+        {}
 
     static const QString    configGroupName;
     static const QString    configFastApproxEntry;
@@ -206,7 +206,7 @@ const QString ResizeTool::ResizeToolPriv::configBTileEntry("BTile");
 // -------------------------------------------------------------
 
 ResizeTool::ResizeTool(QObject* parent)
-    : EditorToolThreaded(parent), d(new ResizeToolPriv)
+          : EditorToolThreaded(parent), d(new ResizeToolPriv)
 {
     setObjectName("resizeimage");
     setToolName(i18n("Resize Image"));
@@ -285,7 +285,7 @@ ResizeTool::ResizeTool(QObject* parent)
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
     d->useGreycstorationBox->setWhatsThis( i18n("Enable this option to scale-up an image to a huge size. "
-                                           "<b>Warning</b>: This process can take some time."));
+                                                "<b>Warning</b>: This process can take some time."));
 
     d->restorationTips = new QLabel(i18n("<b>Note:</b> use Restoration Mode to scale-up an image to a huge size. "
                                          "This process can take some time."), firstPage);
@@ -501,9 +501,7 @@ void ResizeTool::prepareEffect()
 {
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
-    {
         slotValuesChanged();
-    }
 
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewWidth();
@@ -533,9 +531,7 @@ void ResizeTool::prepareFinal()
 {
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
-    {
         slotValuesChanged();
-    }
 
     d->mainTab->setCurrentIndex(0);
 
@@ -588,8 +584,8 @@ void ResizeTool::putFinalData()
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginalImage(i18n("Resize"),
-                           targetImage.bits(),
-                           targetImage.width(), targetImage.height());
+                            targetImage.bits(),
+                            targetImage.width(), targetImage.height());
 }
 
 void ResizeTool::blockWidgetSignals(bool b)
@@ -617,13 +613,10 @@ void ResizeTool::processCImgUrl(const QString& url)
 void ResizeTool::slotLoadSettings()
 {
     KUrl loadBlowupFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                          QString( "*" ), kapp->activeWindow(),
-                          QString( i18n("Photograph Resizing Settings File to Load")) );
-
+                                       QString( "*" ), kapp->activeWindow(),
+                                       QString( i18n("Photograph Resizing Settings File to Load")) );
     if ( loadBlowupFile.isEmpty() )
-    {
-        return;
-    }
+       return;
 
     QFile file(loadBlowupFile.toLocalFile());
 
@@ -631,11 +624,11 @@ void ResizeTool::slotLoadSettings()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
         {
-            KMessageBox::error(kapp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph Resizing settings text file.",
-                                    loadBlowupFile.fileName()));
-            file.close();
-            return;
+           KMessageBox::error(kapp->activeWindow(),
+                        i18n("\"%1\" is not a Photograph Resizing settings text file.",
+                        loadBlowupFile.fileName()));
+           file.close();
+           return;
         }
     }
     else
@@ -650,24 +643,17 @@ void ResizeTool::slotLoadSettings()
 void ResizeTool::slotSaveAsSettings()
 {
     KUrl saveBlowupFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                          QString( "*" ), kapp->activeWindow(),
-                          QString( i18n("Photograph Resizing Settings File to Save")) );
-
+                                       QString( "*" ), kapp->activeWindow(),
+                                       QString( i18n("Photograph Resizing Settings File to Save")) );
     if ( saveBlowupFile.isEmpty() )
-    {
-        return;
-    }
+       return;
 
     QFile file(saveBlowupFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
-    {
         d->settingsWidget->saveSettings(file, QString("# Photograph Resizing Configuration File"));
-    }
     else
-    {
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Resizing text file."));
-    }
 
     file.close();
 }

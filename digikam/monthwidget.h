@@ -51,7 +51,7 @@ public:
     MonthWidget(QWidget* parent);
     ~MonthWidget();
 
-    void setImageModel(ImageFilterModel* model);
+    void setImageModel(ImageFilterModel *model);
 
     void setYearMonth(int year, int month);
     QSize sizeHint() const;
@@ -60,9 +60,9 @@ public:
 
 protected:
 
-    void resizeEvent(QResizeEvent* e);
+    void resizeEvent(QResizeEvent *e);
     void paintEvent(QPaintEvent*);
-    void mousePressEvent(QMouseEvent* e);
+    void mousePressEvent(QMouseEvent *e);
 
 private:
 

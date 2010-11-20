@@ -89,13 +89,11 @@ int ParseResults::offset(const ResultsKey& key)
     {
         return (pos + length);
     }
-
     else if (hasKeyAtApproximatePosition(pos))
     {
         ResultsKey key = keyAtApproximatePosition(pos);
         return ((key.first + key.second) - pos);
     }
-
     return INVALID_KEY_ID;
 }
 
@@ -124,7 +122,6 @@ ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
     {
         int start  = key.first;
         int length = key.second;
-
         if ((pos >= start) && (pos <= start + length))
         {
             return key;
@@ -177,14 +174,12 @@ QString ParseResults::replaceTokens(const QString& markedString)
             result.append(value.second);
             i += key.second;
         }
-
         else
         {
             result.append(markedString[i]);
             ++i;
         }
     }
-
     return result;
 }
 

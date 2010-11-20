@@ -63,7 +63,7 @@ public:
      *   It is advised to use terms from a controlled vocabulary.&rdquo;
      */
     QString intellectualGenre();
-    void setIntellectualGenre(const QString& intellectualGenre);
+    void setIntellectualGenre(const QString &intellectualGenre);
     void removeIntellectualGenre();
 
     /**

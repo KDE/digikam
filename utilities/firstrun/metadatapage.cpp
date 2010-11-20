@@ -60,8 +60,8 @@ public:
 };
 
 MetadataPage::MetadataPage(KAssistantDialog* dlg)
-    : AssistantDlgPage(dlg, i18n("<b>Configure Metadata Storage to Files</b>")),
-      d(new MetadataPagePriv)
+            : AssistantDlgPage(dlg, i18n("<b>Configure Metadata Storage to Files</b>")), 
+              d(new MetadataPagePriv)
 {
     KVBox* vbox    = new KVBox(this);
     QLabel* label1 = new QLabel(vbox);
@@ -99,7 +99,7 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
     setPageWidget(vbox);
 
     QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-metadata.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
+    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
 }
 
 MetadataPage::~MetadataPage()

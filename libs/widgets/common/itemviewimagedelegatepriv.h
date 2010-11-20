@@ -55,7 +55,7 @@ public:
 
     ItemViewImageDelegatePrivate();
     virtual ~ItemViewImageDelegatePrivate() {}
-    void init(ItemViewImageDelegate* _q);
+    void init(ItemViewImageDelegate *_q);
 
     int                       spacing;
     QSize                     gridSize;
@@ -79,10 +79,10 @@ public:
 
     QPersistentModelIndex     editingRating;
 
-    QList<ImageDelegateOverlay*>
-    overlays;
+    QList<ImageDelegateOverlay *>
+                              overlays;
 
-    ItemViewImageDelegate*    q;
+    ItemViewImageDelegate    *q;
 
     QRect                     oneRowRegRect;
     QRect                     oneRowComRect;

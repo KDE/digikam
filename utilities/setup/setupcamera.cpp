@@ -64,7 +64,7 @@ class SetupCameraItem : public QTreeWidgetItem
 
 public:
 
-    SetupCameraItem(QTreeWidget* parent, CameraType* ctype)
+    SetupCameraItem(QTreeWidget *parent, CameraType *ctype)
         : QTreeWidgetItem(parent), m_ctype(0)
     {
         setCameraType(ctype);
@@ -75,12 +75,10 @@ public:
         delete m_ctype;
     };
 
-    void setCameraType(CameraType* ctype)
+    void setCameraType(CameraType *ctype)
     {
         if (m_ctype)
-        {
             delete m_ctype;
-        }
 
         m_ctype = new CameraType(*ctype);
 
@@ -105,8 +103,8 @@ private:
 
 // -------------------------------------------------------------------
 
-CameraAutoDetectThread::CameraAutoDetectThread(QObject* parent)
-    : DBusyThread(parent)
+CameraAutoDetectThread::CameraAutoDetectThread(QObject *parent)
+                      : DBusyThread(parent)
 {
     m_result = -1;
 }
@@ -160,9 +158,9 @@ public:
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
-    : QScrollArea(parent), d(new SetupCameraPriv)
+           : QScrollArea(parent), d(new SetupCameraPriv)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget *panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
@@ -209,7 +207,7 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 
-    KUrlLabel* gphotoLogoLabel = new KUrlLabel(panel);
+    KUrlLabel *gphotoLogoLabel = new KUrlLabel(panel);
     gphotoLogoLabel->setText(QString());
     gphotoLogoLabel->setUrl("http://www.gphoto.org");
     gphotoLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-gphoto.png")));
@@ -289,8 +287,7 @@ void SetupCamera::slotProcessGphotoUrl(const QString& url)
 
 void SetupCamera::slotSelectionChanged()
 {
-    QTreeWidgetItem* item = d->listView->currentItem();
-
+    QTreeWidgetItem *item = d->listView->currentItem();
     if (!item)
     {
         d->removeButton->setEnabled(false);
@@ -304,7 +301,7 @@ void SetupCamera::slotSelectionChanged()
 
 void SetupCamera::slotAddCamera()
 {
-    CameraSelection* select = new CameraSelection;
+    CameraSelection *select = new CameraSelection;
 
     connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
                                            const QString&, const QString&)),
@@ -323,31 +320,20 @@ void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
 
 void SetupCamera::slotRemoveCamera()
 {
-    SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
-
+    SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
     if (item)
-    {
         delete item;
-    }
 }
 
 void SetupCamera::slotEditCamera()
 {
-    SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
-
-    if (!item)
-    {
-        return;
-    }
+    SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    if (!item) return;
 
     CameraType* ctype = item->cameraType();
+    if (!ctype) return;
 
-    if (!ctype)
-    {
-        return;
-    }
-
-    CameraSelection* select = new CameraSelection;
+    CameraSelection *select = new CameraSelection;
     select->setCamera(ctype->title(), ctype->model(), ctype->port(), ctype->path());
 
     connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
@@ -361,12 +347,8 @@ void SetupCamera::slotEditCamera()
 void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
                                    const QString& port, const QString& path)
 {
-    SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
-
-    if (!item)
-    {
-        return;
-    }
+    SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    if (!item) return;
 
     CameraType ctype(title, model, port, path, 1);
     item->setCameraType(&ctype);
@@ -374,8 +356,8 @@ void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
 
 void SetupCamera::slotAutoDetectCamera()
 {
-    DBusyDlg* dlg                  = new DBusyDlg(i18n("Device detection under progress, please wait..."), this);
-    CameraAutoDetectThread* thread = new CameraAutoDetectThread(this);
+    DBusyDlg *dlg                  = new DBusyDlg(i18n("Device detection under progress, please wait..."), this);
+    CameraAutoDetectThread *thread = new CameraAutoDetectThread(this);
     dlg->setBusyThread(thread);
     dlg->exec();
 
@@ -393,9 +375,7 @@ void SetupCamera::slotAutoDetectCamera()
 
     // NOTE: See note in digikam/digikam/cameralist.cpp
     if (port.startsWith(QLatin1String("usb:")))
-    {
-        port = "usb:";
-    }
+    port = "usb:";
 
     if (!d->listView->findItems(model, Qt::MatchExactly, 1).isEmpty())
     {
@@ -411,27 +391,22 @@ void SetupCamera::slotAutoDetectCamera()
 void SetupCamera::applySettings()
 {
     CameraList* clist = CameraList::defaultList();
-
     if (clist)
     {
         clist->clear();
 
         QTreeWidgetItemIterator it(d->listView);
-
         while (*it)
         {
-            SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(*it);
-
+            SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(*it);
             if (item)
             {
                 CameraType* ctype = item->cameraType();
-
                 if (ctype)
                 {
                     clist->insert(new CameraType(*ctype));
                 }
             }
-
             ++it;
         }
 

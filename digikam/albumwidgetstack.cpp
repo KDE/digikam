@@ -83,15 +83,15 @@ public:
     QTimer*           thumbbarTimer;
 
     DigikamImageView* imageIconView;
-    ImageThumbnailBar* thumbBar;
+    ImageThumbnailBar*thumbBar;
     ImagePreviewView* imagePreviewView;
     MediaPlayerView*  mediaPlayerView;
     ThumbBarDock*     thumbBarDock;
     WelcomePageView*  welcomePageView;
 };
 
-AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
-    : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
+AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
+                : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
 {
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
@@ -204,7 +204,7 @@ AlbumWidgetStack::~AlbumWidgetStack()
 
 void AlbumWidgetStack::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::instance();
     bool showThumbbar       = settings->getShowThumbbar();
     d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }
@@ -226,9 +226,7 @@ ThumbBarDock* AlbumWidgetStack::thumbBarDock()
 void AlbumWidgetStack::slotEscapePreview()
 {
     if (previewMode() == MediaPlayerMode)
-    {
         d->mediaPlayerView->escapePreview();
-    }
 }
 
 DigikamImageView* AlbumWidgetStack::imageIconView()
@@ -263,13 +261,12 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
     }
     else
     {
-        AlbumSettings* settings      = AlbumSettings::instance();
+        AlbumSettings *settings      = AlbumSettings::instance();
         QString currentFileExtension = QFileInfo(info.fileUrl().toLocalFile()).suffix();
         QString mediaplayerfilter    = settings->getMovieFileFilter().toLower() +
                                        settings->getMovieFileFilter().toUpper() +
                                        settings->getAudioFileFilter().toLower() +
                                        settings->getAudioFileFilter().toUpper();
-
         if (mediaplayerfilter.contains(currentFileExtension) )
         {
             setPreviewMode(MediaPlayerMode);
@@ -279,9 +276,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
         {
             // Stop media player if running...
             if (previewMode() == MediaPlayerMode)
-            {
                 setPreviewItem();
-            }
 
             /*
             if (previewMode() != PreviewImageMode)
@@ -308,9 +303,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 {
     if (mode != PreviewAlbumMode && mode != PreviewImageMode &&
         mode != WelcomePageMode  && mode != MediaPlayerMode)
-    {
         return;
-    }
 
     if (mode == PreviewImageMode)
     {
@@ -331,24 +324,21 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     {
         setCurrentIndex(mode);
     }
-
     d->imageIconView->setFocus();
 }
 
 void AlbumWidgetStack::previewLoaded()
 {
-    emit signalToggledToPreviewMode(true);
+     emit signalToggledToPreviewMode(true);
 }
 
 void AlbumWidgetStack::slotZoomFactorChanged(double z)
 {
     if (previewMode() == PreviewImageMode)
-    {
         emit signalZoomFactorChanged(z);
-    }
 }
 
-void AlbumWidgetStack::slotFileChanged(const QString& path)
+void AlbumWidgetStack::slotFileChanged(const QString &path)
 {
     // If item are updated from Icon View, and if we are in Preview Mode,
     // We will check if the current item preview need to be reloaded.
@@ -356,14 +346,10 @@ void AlbumWidgetStack::slotFileChanged(const QString& path)
     if (previewMode() == PreviewAlbumMode ||
         previewMode() == WelcomePageMode  ||
         previewMode() == MediaPlayerMode)    // What we can do with media player ?
-    {
         return;
-    }
 
     if (path == imagePreviewView()->getImageInfo().filePath())
-    {
         d->imagePreviewView->reload();
-    }
 }
 
 /*
@@ -468,7 +454,7 @@ double AlbumWidgetStack::zoomMax()
 
 void AlbumWidgetStack::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::instance();
     d->imagePreviewView->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
 }
 

@@ -55,7 +55,7 @@ public:
 };
 
 SearchModificationHelper::SearchModificationHelper(QObject* parent, QWidget* dialogParent)
-    : QObject(parent), d(new SearchModificationHelperPriv)
+                        : QObject(parent), d(new SearchModificationHelperPriv)
 {
     d->dialogParent = dialogParent;
 }
@@ -75,8 +75,8 @@ void SearchModificationHelper::slotSearchDelete(SAlbum* searchAlbum)
     // Make sure that a complicated search is not deleted accidentally
     int result = KMessageBox::warningYesNo(d->dialogParent,
                                            i18n("Are you sure you want to "
-                                                   "delete the selected Date Search "
-                                                   "\"%1\"?", searchAlbum->title()),
+                                                "delete the selected Date Search "
+                                                "\"%1\"?", searchAlbum->title()),
                                            i18n("Delete Date Search?"),
                                            KGuiItem(i18n("Delete")),
                                            KStandardGuiItem::cancel());
@@ -95,14 +95,12 @@ bool SearchModificationHelper::checkAlbum(const QString& name) const
 
     for (AlbumList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
-        SAlbum* album = (SAlbum*)(*it);
-
+        SAlbum *album = (SAlbum*)(*it);
         if (album->title() == name)
         {
             return false;
         }
     }
-
     return true;
 }
 
@@ -116,8 +114,7 @@ bool SearchModificationHelper::checkName(QString& name)
                               "Please enter a new name:" );
         bool ok;
         QString newTitle = KInputDialog::getText(i18n("Name exists"), label,
-                           name, &ok, d->dialogParent);
-
+                                                 name, &ok, d->dialogParent);
         if (!ok)
         {
             return false;
@@ -158,11 +155,10 @@ void SearchModificationHelper::slotSearchRename(SAlbum* searchAlbum)
 }
 
 void SearchModificationHelper::slotCreateTimeLineSearch(const QString& desiredName,
-        const DateRangeList& dateRanges,
-        bool overwriteIfExisting)
+                                                        const DateRangeList& dateRanges,
+                                                        bool overwriteIfExisting)
 {
     QString name = desiredName;
-
     if (!overwriteIfExisting && !checkName(name))
     {
         return;
@@ -188,7 +184,6 @@ void SearchModificationHelper::slotCreateTimeLineSearch(const QString& desiredNa
         writer.finishField();
         writer.finishGroup();
     }
-
     writer.finish();
 
     kDebug() << "Date search XML:\n" << writer.xml();
@@ -199,9 +194,9 @@ void SearchModificationHelper::slotCreateTimeLineSearch(const QString& desiredNa
 }
 
 SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& proposedName,
-        SketchWidget* sketchWidget,
-        unsigned int numberOfResults,
-        bool overwriteIfExisting)
+                                                              SketchWidget* sketchWidget,
+                                                              unsigned int numberOfResults,
+                                                              bool overwriteIfExisting)
 {
     if (sketchWidget->isClear())
     {
@@ -209,7 +204,6 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
     }
 
     QString name = proposedName;
-
     if (!overwriteIfExisting && !checkName(name))
     {
         return 0;
@@ -231,24 +225,24 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
     writer.finishGroup();
 
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name,
-                     DatabaseSearch::HaarSearch, writer.xml());
+                    DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
     return salbum;
 }
 
 void SearchModificationHelper::slotCreateFuzzySearchFromSketch(const QString& proposedName,
-        SketchWidget* sketchWidget,
-        unsigned int numberOfResults,
-        bool overwriteIfExisting)
+                                                               SketchWidget* sketchWidget,
+                                                               unsigned int numberOfResults,
+                                                               bool overwriteIfExisting)
 {
     createFuzzySearchFromSketch(proposedName, sketchWidget, numberOfResults, overwriteIfExisting);
 }
 
 SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& proposedName,
-        const ImageInfo& image,
-        float threshold,
-        bool overwriteIfExisting)
+                                                             const ImageInfo& image,
+                                                             float threshold,
+                                                             bool overwriteIfExisting)
 {
     if (image.isNull())
     {
@@ -256,7 +250,6 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
     }
 
     QString name = proposedName;
-
     if (!overwriteIfExisting && !checkName(name))
     {
         return 0;
@@ -276,16 +269,16 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
     writer.finishGroup();
 
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name,
-                     DatabaseSearch::HaarSearch, writer.xml());
+                    DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
     return salbum;
 }
 
 void SearchModificationHelper::slotCreateFuzzySearchFromImage(const QString& proposedName,
-        const ImageInfo& image,
-        float threshold,
-        bool overwriteIfExisting)
+                                                              const ImageInfo& image,
+                                                              float threshold,
+                                                              bool overwriteIfExisting)
 {
     createFuzzySearchFromImage(proposedName, image, threshold, overwriteIfExisting);
 }

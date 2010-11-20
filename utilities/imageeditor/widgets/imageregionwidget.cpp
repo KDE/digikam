@@ -84,7 +84,7 @@ public:
 };
 
 ImageRegionWidget::ImageRegionWidget(QWidget* parent)
-    : PreviewWidget(parent), d(new ImageRegionWidgetPriv)
+                 : PreviewWidget(parent), d(new ImageRegionWidgetPriv)
 {
     d->iface = new ImageIface(0, 0);
     d->image = d->iface->getOriginalImg()->copy();
@@ -109,11 +109,7 @@ ImageRegionWidget::ImageRegionWidget(QWidget* parent)
 
 ImageRegionWidget::~ImageRegionWidget()
 {
-    if (d->iface)
-    {
-        delete d->iface;
-    }
-
+    if (d->iface) delete d->iface;
     delete d;
 }
 
@@ -156,7 +152,6 @@ void ImageRegionWidget::setCapturePointMode(bool b)
 {
     d->capturePtMode = b;
     viewport()->setMouseTracking(b);
-
     if (b)
     {
         d->oldRenderingPreviewMode = d->renderingPreviewMode;
@@ -211,7 +206,7 @@ void ImageRegionWidget::viewportPaintExtraData()
         if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
             (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
         {
-            drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Before"));
+           drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Before"));
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                  d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
@@ -229,14 +224,10 @@ void ImageRegionWidget::viewportPaintExtraData()
                  d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
         {
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
-            {
                 rt.translate(rt.width(), 0);
-            }
 
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
-            {
                 ro.translate(-ro.width(), 0);
-            }
 
             p.drawPixmap(rt.x(), rt.y(), d->pixmapRegion, 0, 0, rt.width(), rt.height());
 
@@ -252,14 +243,10 @@ void ImageRegionWidget::viewportPaintExtraData()
                  d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
         {
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
-            {
                 rt.translate(0, rt.height());
-            }
 
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
-            {
                 ro.translate(0, -ro.height());
-            }
 
             p.drawPixmap(rt.x(), rt.y(), d->pixmapRegion, 0, 0, rt.width(), rt.height());
 
@@ -404,17 +391,13 @@ void ImageRegionWidget::setCenterImageRegionPosition()
 
 void ImageRegionWidget::setContentsPosition(int x, int y, bool targetDone)
 {
-    if ( targetDone )
-    {
+    if( targetDone )
         m_movingInProgress = false;
-    }
 
     setContentsPos(x, y);
 
-    if ( targetDone )
-    {
-        slotZoomFactorChanged();
-    }
+    if( targetDone )
+       slotZoomFactorChanged();
 }
 
 void ImageRegionWidget::backupPixmapRegion()
@@ -439,9 +422,7 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     // restore the embedded ICC color profile.
     // However, some plugins may set a profile on the preview image, which we accept of course.
     if (image.getIccProfile().isNull())
-    {
         image.setIccProfile(d->image.getIccProfile());
-    }
 
     d->pixmapRegion = d->iface->convertToPixmap(image);
     repaintContents(false);
@@ -450,13 +431,11 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
 DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage)
 {
     DImg image = d->image.copy(getOriginalImageRegionToRender());
-
     if (useDownscaledImage)
     {
         QRect r = getLocalImageRegionToRender();
         image.resize(r.width(), r.height());
     }
-
     return (image);
 }
 
@@ -543,45 +522,31 @@ void ImageRegionWidget::contentsMousePressEvent(QMouseEvent* e)
             (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
         {
             if (ro.contains(pt))
-            {
                 emitCapturedPointFromOriginal(pt - ro.topLeft());
-            }
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
-                 d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
+                d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
         {
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
-            {
                 rt.translate(rt.width(), 0);
-            }
 
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
-            {
                 ro.translate(-ro.width(), 0);
-            }
 
             if (!rt.contains(pt) && ro.contains(pt))
-            {
                 emitCapturedPointFromOriginal(pt - ro.topLeft());
-            }
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
-                 d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
+                d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
         {
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
-            {
                 rt.translate(0, rt.height());
-            }
 
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
-            {
                 ro.translate(0, -ro.height());
-            }
 
             if (!rt.contains(pt) && ro.contains(pt))
-            {
                 emitCapturedPointFromOriginal(pt - ro.topLeft());
-            }
         }
 
         return;

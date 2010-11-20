@@ -50,7 +50,7 @@ public:
         gamma      = 1.0;
     };
 
-    ~BCGContainer() {};
+    ~BCGContainer(){};
 
 public:
 

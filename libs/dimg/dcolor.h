@@ -46,18 +46,16 @@ public:
     /** Initialize with default value, fully transparent eight bit black */
     DColor()
         : m_red(0), m_green(0), m_blue(0), m_alpha(0), m_sixteenBit(false)
-    {};
+        {};
 
     /** Read value from data. Equivalent to setColor() */
-    explicit DColor(const uchar* data, bool sixteenBit = false)
-    {
-        setColor(data, sixteenBit);
-    }
+    explicit DColor(const uchar *data, bool sixteenBit = false)
+        { setColor(data, sixteenBit); }
 
     /** Initialize with given RGBA values */
     DColor(int red, int green, int blue, int alpha, bool sixteenBit)
         : m_red(red), m_green(green), m_blue(blue), m_alpha(alpha), m_sixteenBit(sixteenBit)
-    {};
+        {};
 
     /** Read values from QColor, convert to sixteenBit of sixteenBit is true */
     explicit DColor(const QColor& color, bool sixteenBit=false);
@@ -69,67 +67,31 @@ public:
         If sixteenBit is true, 8 bytes are read.
         Inline method.
      */
-    inline void setColor(const uchar* data, bool sixteenBit = false);
+    inline void setColor(const uchar *data, bool sixteenBit = false);
 
     /** Write the values of this color to the given memory location.
         If sixteenBit is false, 4 bytes are written.
         If sixteenBit is true, 8 bytes are written.
         Inline method.
     */
-    inline void setPixel(uchar* data) const;
+    inline void setPixel(uchar *data) const;
 
-    int  red  () const
-    {
-        return m_red;
-    }
-    int  green() const
-    {
-        return m_green;
-    }
-    int  blue () const
-    {
-        return m_blue;
-    }
-    int  alpha() const
-    {
-        return m_alpha;
-    }
-    bool sixteenBit() const
-    {
-        return m_sixteenBit;
-    }
+    int  red  () const { return m_red; }
+    int  green() const { return m_green; }
+    int  blue () const { return m_blue; }
+    int  alpha() const { return m_alpha; }
+    bool sixteenBit() const { return m_sixteenBit; }
 
-    void setRed  (int red)
-    {
-        m_red = red;
-    }
-    void setGreen(int green)
-    {
-        m_green = green;
-    }
-    void setBlue (int blue)
-    {
-        m_blue = blue;
-    }
-    void setAlpha(int alpha)
-    {
-        m_alpha = alpha;
-    }
-    void setSixteenBit(bool sixteenBit)
-    {
-        m_sixteenBit = sixteenBit;
-    }
+    void setRed  (int red)   { m_red = red; }
+    void setGreen(int green) { m_green = green; }
+    void setBlue (int blue)  { m_blue = blue; }
+    void setAlpha(int alpha) { m_alpha = alpha; }
+    void setSixteenBit(bool sixteenBit) { m_sixteenBit = sixteenBit; }
 
     QColor getQColor() const;
 
-    inline bool isPureGrayValue(int v)
-    {
-        return (m_red == v && m_green == v && m_blue == v);
-    };
-    inline bool isPureGray()
-    {
-        return ( (m_red == m_green) && (m_red == m_blue) );
-    };
+    inline bool isPureGrayValue(int v) { return (m_red == v && m_green == v && m_blue == v); };
+    inline bool isPureGray()           { return ( (m_red == m_green) && (m_red == m_blue) ); };
 
     /** Convert the color values of this color to and from sixteen bit
         and set the sixteenBit value accordingly
@@ -171,7 +133,7 @@ public:
         and the sixteenBit value of this color after this operation.
     */
     void setYCbCr(double y, double cb, double cr, bool sixteenBit);
-
+    
 private:
 
     int  m_red;

@@ -119,29 +119,19 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
 
 bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 {
-    if (!isJpegImage(path))
-    {
-        return false;
-    }
+    if (!isJpegImage(path)) return false;
 
     FILE* inputFile = fopen(QFile::encodeName(path), "rb");
-
-    if (!inputFile)
-    {
+    if(!inputFile)
         return false;
-    }
 
     struct jpeg_decompress_struct   cinfo;
-
     struct jpegutils_jpeg_error_mgr jerr;
 
     // JPEG error handling - thanks to Marcus Meissner
     cinfo.err                 = jpeg_std_error(&jerr);
-
     cinfo.err->error_exit     = jpegutils_jpeg_error_exit;
-
     cinfo.err->emit_message   = jpegutils_jpeg_emit_message;
-
     cinfo.err->output_message = jpegutils_jpeg_output_message;
 
     if (setjmp(jerr.setjmp_buffer))
@@ -155,8 +145,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 #ifdef Q_CC_MSVC
     QFile inFile(path);
     QByteArray buffer;
-
-    if (inFile.open(QIODevice::ReadOnly))
+    if(inFile.open(QIODevice::ReadOnly))
     {
         buffer = inFile.readAll();
         inFile.close();
@@ -172,16 +161,11 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     // libjpeg supports 1/1, 1/2, 1/4, 1/8
     int scale=1;
-
-    while (maximumSize* scale*2<=imgSize)
+    while(maximumSize*scale*2<=imgSize)
     {
         scale*=2;
     }
-
-    if (scale>8)
-    {
-        scale=8;
-    }
+    if(scale>8) scale=8;
 
     //cinfo.scale_num = 1;
     //cinfo.scale_denom = scale;
@@ -208,8 +192,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     // We only take RGB with 1 or 3 components, or CMYK with 4 components
     if (!(
-            (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
-            || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
+           (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
+        || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
         ))
     {
         jpeg_destroy_decompress(&cinfo);
@@ -217,7 +201,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         return false;
     }
 
-    switch (cinfo.output_components)
+    switch(cinfo.output_components)
     {
         case 3:
         case 4:
@@ -226,24 +210,18 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         case 1: // B&W image
             img = QImage( cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
             img.setNumColors(256);
-
             for (int i = 0 ; i < 256 ; ++i)
-            {
                 img.setColor(i, qRgb(i, i, i));
-            }
-
             break;
     }
 
     uchar* data = img.bits();
     int bpl = img.bytesPerLine();
-
     while (cinfo.output_scanline < cinfo.output_height)
     {
-        uchar* d = data + cinfo.output_scanline * bpl;
+        uchar *d = data + cinfo.output_scanline * bpl;
         jpeg_read_scanlines(&cinfo, &d, 1);
     }
-
     jpeg_finish_decompress(&cinfo);
 
     if (cinfo.output_components == 3)
@@ -251,8 +229,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         // Expand 24->32 bpp.
         for (uint j=0; j<cinfo.output_height; ++j)
         {
-            uchar* in = img.scanLine(j) + cinfo.output_width * 3;
-            QRgb* out = (QRgb*)img.scanLine(j);
+            uchar *in = img.scanLine(j) + cinfo.output_width * 3;
+            QRgb *out = (QRgb*)img.scanLine(j);
 
             for (uint i = cinfo.output_width; --i; )
             {
@@ -265,8 +243,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     {
         for (uint j = 0; j < cinfo.output_height; ++j)
         {
-            uchar* in = img.scanLine(j) + cinfo.output_width * 4;
-            QRgb* out = (QRgb*)img.scanLine(j);
+            uchar *in = img.scanLine(j) + cinfo.output_width * 4;
+            QRgb *out = (QRgb*)img.scanLine(j);
 
             for (uint i = cinfo.output_width; --i; )
             {
@@ -276,7 +254,6 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
             }
         }
     }
-
     if (cinfo.density_unit == 1)
     {
         img.setDotsPerMeterX(int(100. * cinfo.X_density / 2.54));
@@ -287,7 +264,6 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         img.setDotsPerMeterX(int(100. * cinfo.X_density));
         img.setDotsPerMeterY(int(100. * cinfo.Y_density));
     }
-
     //int newMax = qMax(cinfo.output_width, cinfo.output_height);
     //int newx = maximumSize*cinfo.output_width / newMax;
     //int newy = maximumSize*cinfo.output_height / newMax;
@@ -304,7 +280,6 @@ bool exifTransform(const QString& file, const QString& documentName,
                    const QString& trgFile, TransformAction action)
 {
     QFileInfo fi(file);
-
     if (!fi.exists())
     {
         kDebug() << "ExifRotate: file do not exist: " << file;
@@ -314,7 +289,6 @@ bool exifTransform(const QString& file, const QString& documentName,
     if (isJpegImage(file))
     {
         DMetadata metaData;
-
         if (!metaData.load(file))
         {
             kDebug() << "ExifRotate: no Exif data found: " << file;
@@ -365,7 +339,7 @@ bool exifTransform(const QString& file, const QString& documentName,
             default:  // Auto
             {
                 // we have the Exif info. check the orientation
-                switch (metaData.getImageOrientation())
+                switch(metaData.getImageOrientation())
                 {
                     case(DMetadata::ORIENTATION_UNSPECIFIED):
                     case(DMetadata::ORIENTATION_NORMAL):
@@ -406,7 +380,6 @@ bool exifTransform(const QString& file, const QString& documentName,
                         break;
                     }
                 }
-
                 break;
             }
         }
@@ -448,11 +421,10 @@ bool exifTransform(const QString& file, const QString& documentName,
             dstinfo.err->emit_message   = jpegutils_jpeg_emit_message;
             dstinfo.err->output_message = jpegutils_jpeg_output_message;
 
-            FILE* input_file;
-            FILE* output_file;
+            FILE *input_file;
+            FILE *output_file;
 
             input_file = fopen(in, "rb");
-
             if (!input_file)
             {
                 kWarning() << "ExifRotate: Error in opening input file: " << input_file;
@@ -460,7 +432,6 @@ bool exifTransform(const QString& file, const QString& documentName,
             }
 
             output_file = fopen(out, "wb");
-
             if (!output_file)
             {
                 fclose(input_file);
@@ -554,10 +525,9 @@ bool exifTransform(const QString& file, const QString& documentName,
 
         // Target file is original ?
         QByteArray trg = in;
-
         if (!trgFile.isEmpty())
         {
-            trg = QFile::encodeName(trgFile);
+             trg = QFile::encodeName(trgFile);
         }
 
         // Overwrite target file
@@ -581,7 +551,6 @@ bool exifTransform(const QString& file, const QString& documentName,
 bool jpegConvert(const QString& src, const QString& dest, const QString& documentName, const QString& format)
 {
     QFileInfo fi(src);
-
     if (!fi.exists())
     {
         kDebug() << "JpegConvert: file do not exist: " << src;
@@ -607,9 +576,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
 
         if (format.toUpper() != QString("JPG") && format.toUpper() != QString("JPEG") &&
             format.toUpper() != QString("JPE"))
-        {
             meta.setImagePreview(preview);
-        }
 
         // Update Exif thumbnail.
         QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -624,26 +591,18 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         // And now save the image to a new file format.
 
         if ( format.toUpper() == QString("PNG") )
-        {
             image.setAttribute("quality", 9);
-        }
 
         if ( format.toUpper() == QString("TIFF") || format.toUpper() == QString("TIF") )
-        {
             image.setAttribute("compress", true);
-        }
 
         if ( format.toUpper() == QString("JP2") || format.toUpper() == QString("JPX") ||
              format.toUpper() == QString("JPC") || format.toUpper() == QString("PGX") ||
              format.toUpper() == QString("J2K") )
-        {
-            image.setAttribute("quality", 100);    // LossLess
-        }
+            image.setAttribute("quality", 100);      // LossLess
 
         if ( format.toUpper() == QString("PGF") )
-        {
-            image.setAttribute("quality", 0);    // LossLess
-        }
+            image.setAttribute("quality", 0);      // LossLess
 
         return (image.save(dest, format));
     }
@@ -656,11 +615,7 @@ bool isJpegImage(const QString& file)
     // Check if the file is an JPEG image
     QString format = QString(QImageReader::imageFormat(file)).toUpper();
     kDebug() << "mimetype = " << format;
-
-    if (format !="JPEG")
-    {
-        return false;
-    }
+    if (format !="JPEG") return false;
 
     return true;
 }
@@ -671,9 +626,7 @@ bool copyFile(const QString& src, const QString& dst)
     QFile dFile(dst);
 
     if ( !sFile.open(QIODevice::ReadOnly) )
-    {
         return false;
-    }
 
     if ( !dFile.open(QIODevice::WriteOnly) )
     {
@@ -682,11 +635,9 @@ bool copyFile(const QString& src, const QString& dst)
     }
 
     const int MAX_IPC_SIZE = (1024*32);
-
     char buffer[MAX_IPC_SIZE];
 
     qint64 len;
-
     while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0)
     {
         if (len == -1 || dFile.write(buffer, (qint64)len) == -1)

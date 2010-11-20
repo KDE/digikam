@@ -58,7 +58,7 @@ public:
 };
 
 QueueToolTip::QueueToolTip(QueueListView* view)
-    : DItemToolTip(), d(new QueueToolTipPriv)
+            : DItemToolTip(), d(new QueueToolTipPriv)
 {
     d->view = view;
 }
@@ -81,20 +81,14 @@ void QueueToolTip::setQueueItem(QueueListViewItem* item)
     {
         updateToolTip();
         reposition();
-
         if (isHidden() && !toolTipIsEmpty())
-        {
             show();
-        }
     }
 }
 
 QRect QueueToolTip::repositionRect()
 {
-    if (!d->item)
-    {
-        return QRect();
-    }
+    if (!d->item) return QRect();
 
     QRect rect = d->view->visualItemRect(d->item);
     rect.moveTopLeft(d->view->viewport()->mapToGlobal(rect.topLeft()));
@@ -103,11 +97,7 @@ QRect QueueToolTip::repositionRect()
 
 QString QueueToolTip::tipContents()
 {
-    if (!d->item)
-    {
-        return QString();
-    }
-
+    if (!d->item) return QString();
     ImageInfo info = d->item->info();
     return ToolTipFiller::imageInfoTipContents(info);
 }

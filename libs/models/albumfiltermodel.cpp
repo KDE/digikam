@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-AlbumFilterModel::AlbumFilterModel(QObject* parent)
+AlbumFilterModel::AlbumFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
     m_chainedModel = 0;
@@ -73,19 +73,17 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
     {
         // find out if this setting has some results or not
         int validRows = 0;
-
         // for every collection we got
-        for (int i = 0; i < rowCount(rootAlbumIndex()); ++i)
+        for(int i = 0; i < rowCount(rootAlbumIndex()); ++i)
         {
             QModelIndex collectionIndex = index(i, 0, rootAlbumIndex());
             // count the number of rows
             validRows += rowCount(collectionIndex);
         }
-
         bool hasResult = validRows > 0;
         kDebug() << "new search text settings: " << settings.text
-                 << ": hasResult = " << hasResult << ", validRows = "
-                 << validRows;
+                << ": hasResult = " << hasResult << ", validRows = "
+                << validRows;
         emit hasSearchResult(hasResult);
     }
     else
@@ -95,7 +93,7 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
     }
 }
 
-bool AlbumFilterModel::settingsFilter(const SearchTextSettings& settings) const
+bool AlbumFilterModel::settingsFilter(const SearchTextSettings &settings) const
 {
     return !settings.text.isEmpty();
 }
@@ -110,13 +108,13 @@ SearchTextSettings AlbumFilterModel::searchTextSettings() const
     return m_settings;
 }
 
-void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
+void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
 {
     m_chainedModel = 0;
     setSourceModel(source);
 }
 
-void AlbumFilterModel::setSourceAlbumModel(AlbumFilterModel* source)
+void AlbumFilterModel::setSourceAlbumModel(AlbumFilterModel *source)
 {
     m_chainedModel = source;
     setSourceModel(source);
@@ -128,42 +126,33 @@ void AlbumFilterModel::setSourceModel(QAbstractItemModel* model)
     QSortFilterProxyModel::setSourceModel(model);
 }
 
-AbstractAlbumModel* AlbumFilterModel::sourceAlbumModel() const
+AbstractAlbumModel *AlbumFilterModel::sourceAlbumModel() const
 {
     if (m_chainedModel)
-    {
         return m_chainedModel->sourceAlbumModel();
-    }
-
     return static_cast<AbstractAlbumModel*>(sourceModel());
 }
 
 QModelIndex AlbumFilterModel::mapToSourceAlbumModel(const QModelIndex& index) const
 {
     if (m_chainedModel)
-    {
         return m_chainedModel->mapToSourceAlbumModel(mapToSource(index));
-    }
-
     return mapToSource(index);
 }
 
 QModelIndex AlbumFilterModel::mapFromSourceAlbumModel(const QModelIndex& albummodel_index) const
 {
     if (m_chainedModel)
-    {
         return mapFromSource(m_chainedModel->mapFromSourceAlbumModel(albummodel_index));
-    }
-
     return mapFromSource(albummodel_index);
 }
 
-Album* AlbumFilterModel::albumForIndex(const QModelIndex& index) const
+Album *AlbumFilterModel::albumForIndex(const QModelIndex& index) const
 {
     return AbstractAlbumModel::retrieveAlbum(index);
 }
 
-QModelIndex AlbumFilterModel::indexForAlbum(Album* album) const
+QModelIndex AlbumFilterModel::indexForAlbum(Album *album) const
 {
     return mapFromSourceAlbumModel(sourceAlbumModel()->indexForAlbum(album));
 }
@@ -173,19 +162,15 @@ QModelIndex AlbumFilterModel::rootAlbumIndex() const
     return mapFromSourceAlbumModel(sourceAlbumModel()->rootAlbumIndex());
 }
 
-bool AlbumFilterModel::matches(Album* album) const
+bool AlbumFilterModel::matches(Album *album) const
 {
     // We want to work on the visual representation, so we use model data with AlbumTitleRole,
     // not a direct Album method.
     // We use direct source's index, not our index,
     // because if the item is currently filtered out, we won't have an index for this album.
     QModelIndex source_index = sourceAlbumModel()->indexForAlbum(album);
-
     if (m_chainedModel)
-    {
         source_index = m_chainedModel->mapFromSourceAlbumModel(source_index);
-    }
-
     QString displayTitle = source_index.data(AbstractAlbumModel::AlbumTitleRole).toString();
     return displayTitle.contains(m_settings.text, m_settings.caseSensitive);
 }
@@ -195,49 +180,37 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(const QModelIndex& i
     return matchResult(albumForIndex(index));
 }
 
-AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album* album) const
+AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album *album) const
 {
     if (!album)
-    {
         return NoMatch;
-    }
 
-    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+    PAlbum *palbum = dynamic_cast<PAlbum*>(album);
 
     if (album->isRoot() || (palbum && palbum->isAlbumRoot()))
-    {
         return SpecialMatch;
-    }
 
     if (matches(album))
-    {
         return TitleMatch;
-    }
 
     // check if any of the parents match the search
-    Album* parent = album->parent();
+    Album *parent = album->parent();
     PAlbum* pparent = palbum ? static_cast<PAlbum*>(parent) : 0;
 
     while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
     {
         if (matches(parent))
-        {
             return ParentMatch;
-        }
 
         parent = parent->parent();
     }
 
     // check if any of the children match the search
     AlbumIterator it(album);
-
     while (it.current())
     {
         if (matches(*it))
-        {
             return ChildMatch;
-        }
-
         ++it;
     }
 
@@ -247,7 +220,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album* album) const
 bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
-    Album* album = AbstractAlbumModel::retrieveAlbum(index);
+    Album *album = AbstractAlbumModel::retrieveAlbum(index);
     MatchResult result = matchResult(album);
     return result;
 }
@@ -267,30 +240,28 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
                 return QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
         }
     else
-    {
         return QSortFilterProxyModel::lessThan(left, right);
-    }
 }
 
 // -----------------------------------------------------------------------------
 
-CheckableAlbumFilterModel::CheckableAlbumFilterModel(QObject* parent) :
-    AlbumFilterModel(parent), m_filterChecked(false),
-    m_filterPartiallyChecked(false)
+CheckableAlbumFilterModel::CheckableAlbumFilterModel(QObject *parent) :
+                AlbumFilterModel(parent), m_filterChecked(false),
+                m_filterPartiallyChecked(false)
 {
 }
 
-void CheckableAlbumFilterModel::setSourceCheckableAlbumModel(AbstractCheckableAlbumModel* source)
+void CheckableAlbumFilterModel::setSourceCheckableAlbumModel(AbstractCheckableAlbumModel *source)
 {
     setSourceModel(source);
 }
 
-AbstractCheckableAlbumModel* CheckableAlbumFilterModel::sourceAlbumModel() const
+AbstractCheckableAlbumModel *CheckableAlbumFilterModel::sourceAlbumModel() const
 {
     return dynamic_cast<AbstractCheckableAlbumModel*> (sourceModel());
 }
 
-void CheckableAlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
+void CheckableAlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
 {
     AlbumFilterModel::setSourceAlbumModel(source);
 }
@@ -312,10 +283,10 @@ void CheckableAlbumFilterModel::setFilterPartiallyChecked(bool filter)
 bool CheckableAlbumFilterModel::isFiltering() const
 {
     return AlbumFilterModel::isFiltering() || m_filterChecked
-           || m_filterPartiallyChecked;
+                    || m_filterPartiallyChecked;
 }
 
-bool CheckableAlbumFilterModel::matches(Album* album) const
+bool CheckableAlbumFilterModel::matches(Album *album) const
 {
 
     bool accepted = AlbumFilterModel::matches(album);
@@ -328,12 +299,10 @@ bool CheckableAlbumFilterModel::matches(Album* album) const
     Qt::CheckState state = sourceAlbumModel()->checkState(album);
 
     bool stateAccepted = false;
-
     if (m_filterPartiallyChecked)
     {
         stateAccepted |= state == Qt::PartiallyChecked;
     }
-
     if (m_filterChecked)
     {
         stateAccepted |= state == Qt::Checked;
@@ -346,17 +315,17 @@ bool CheckableAlbumFilterModel::matches(Album* album) const
 
 // -----------------------------------------------------------------------------
 
-SearchFilterModel::SearchFilterModel(QObject* parent)
-    : CheckableAlbumFilterModel(parent), m_searchType(-1)
+SearchFilterModel::SearchFilterModel(QObject *parent)
+            : CheckableAlbumFilterModel(parent), m_searchType(-1)
 {
 }
 
-void SearchFilterModel::setSourceSearchModel(SearchModel* source)
+void SearchFilterModel::setSourceSearchModel(SearchModel *source)
 {
     setSourceModel(source);
 }
 
-SearchModel* SearchFilterModel::sourceSearchModel() const
+SearchModel *SearchFilterModel::sourceSearchModel() const
 {
     return dynamic_cast<SearchModel*> (sourceModel());
 }
@@ -415,21 +384,17 @@ bool SearchFilterModel::isFiltering() const
     return m_searchType != -2 || !m_listTemporary;
 }
 
-bool SearchFilterModel::matches(Album* album) const
+bool SearchFilterModel::matches(Album *album) const
 {
     if (!AlbumFilterModel::matches(album))
-    {
         return false;
-    }
 
-    SAlbum* salbum = static_cast<SAlbum*>(album);
+    SAlbum *salbum = static_cast<SAlbum*>(album);
 
     if (m_searchType == -1)
     {
         if (!salbum->isNormalSearch())
-        {
             return false;
-        }
     }
     else if (m_searchType == -2)
     {
@@ -437,20 +402,16 @@ bool SearchFilterModel::matches(Album* album) const
     else
     {
         if (salbum->searchType() != (DatabaseSearch::Type)m_searchType)
-        {
             return false;
-        }
     }
 
     if (!m_listTemporary && salbum->isTemporarySearch())
-    {
         return false;
-    }
 
     return true;
 }
 
-void SearchFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
+void SearchFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
 {
     AlbumFilterModel::setSourceAlbumModel(source);
 }

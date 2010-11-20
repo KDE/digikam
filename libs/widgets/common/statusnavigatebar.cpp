@@ -59,13 +59,13 @@ public:
     QToolButton* lastButton;
 };
 
-StatusNavigateBar::StatusNavigateBar(QWidget* parent)
-    : QWidget(parent), d(new StatusNavigateBarPriv)
+StatusNavigateBar::StatusNavigateBar(QWidget *parent)
+                 : QWidget(parent), d(new StatusNavigateBarPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    QHBoxLayout* lay = new QHBoxLayout(this);
+    QHBoxLayout *lay = new QHBoxLayout(this);
 
     d->firstButton = new QToolButton(this);
     d->firstButton->setFocusPolicy(Qt::NoFocus);
@@ -121,21 +121,13 @@ StatusNavigateBar::~StatusNavigateBar()
 void StatusNavigateBar::setNavigateBarState(bool hasPrev, bool hasNext)
 {
     if (hasPrev && hasNext)
-    {
         setButtonsState(ItemCurrent);
-    }
     else if (!hasPrev && hasNext)
-    {
         setButtonsState(ItemFirst);
-    }
     else if (hasPrev && !hasNext)
-    {
         setButtonsState(ItemLast);
-    }
     else
-    {
         setButtonsState(NoNavigation);
-    }
 }
 
 void StatusNavigateBar::setButtonsState(int itemType)
@@ -144,31 +136,31 @@ void StatusNavigateBar::setButtonsState(int itemType)
 
     if (d->itemType == ItemFirst)
     {
-        d->firstButton->setEnabled(false);
-        d->prevButton->setEnabled(false);
-        d->nextButton->setEnabled(true);
-        d->lastButton->setEnabled(true);
+       d->firstButton->setEnabled(false);
+       d->prevButton->setEnabled(false);
+       d->nextButton->setEnabled(true);
+       d->lastButton->setEnabled(true);
     }
     else if (d->itemType == ItemLast)
     {
-        d->firstButton->setEnabled(true);
-        d->prevButton->setEnabled(true);
-        d->nextButton->setEnabled(false);
-        d->lastButton->setEnabled(false);
+       d->firstButton->setEnabled(true);
+       d->prevButton->setEnabled(true);
+       d->nextButton->setEnabled(false);
+       d->lastButton->setEnabled(false);
     }
     else if (d->itemType == ItemCurrent)
     {
-        d->firstButton->setEnabled(true);
-        d->prevButton->setEnabled(true);
-        d->nextButton->setEnabled(true);
-        d->lastButton->setEnabled(true);
+       d->firstButton->setEnabled(true);
+       d->prevButton->setEnabled(true);
+       d->nextButton->setEnabled(true);
+       d->lastButton->setEnabled(true);
     }
     else if (d->itemType == NoNavigation)
     {
-        d->firstButton->setEnabled(false);
-        d->prevButton->setEnabled(false);
-        d->nextButton->setEnabled(false);
-        d->lastButton->setEnabled(false);
+       d->firstButton->setEnabled(false);
+       d->prevButton->setEnabled(false);
+       d->nextButton->setEnabled(false);
+       d->lastButton->setEnabled(false);
     }
 }
 

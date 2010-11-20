@@ -30,7 +30,7 @@
 namespace Digikam
 {
 
-DragHandle::DragHandle(QDockWidget* parent)
+DragHandle::DragHandle(QDockWidget *parent)
     : QWidget(),
       m_currentArea(Qt::LeftDockWidgetArea)
 {
@@ -51,7 +51,7 @@ DragHandle::~DragHandle()
 void DragHandle::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
-    QStyle* style = m_parent->style();
+    QStyle *style = m_parent->style();
 
     // The QStyleOptionToolBar contains every parameter needed to draw the
     // handle.
@@ -82,7 +82,6 @@ void DragHandle::paintEvent(QPaintEvent*)
 void DragHandle::dockLocationChanged(Qt::DockWidgetArea area)
 {
     m_currentArea = area;
-
     // When the dock widget that contains this handle changes to a different
     // orientation, the DockWidgetVerticalTitleBar feature needs to be adjusted:
     // present when the thumbbar orientation is horizontal, absent when it is
@@ -100,11 +99,10 @@ void DragHandle::dockLocationChanged(Qt::DockWidgetArea area)
 QSize DragHandle::sizeHint() const
 {
     // Size is the sum of the margin, frame width and the handle itself.
-    QStyle* style = m_parent->style();
+    QStyle *style = m_parent->style();
     int handleWidth = style->pixelMetric(QStyle::PM_ToolBarHandleExtent);
     int margin      = style->pixelMetric(QStyle::PM_ToolBarItemMargin) +
                       style->pixelMetric(QStyle::PM_ToolBarFrameWidth);
-
     if (m_currentArea == Qt::LeftDockWidgetArea || m_currentArea == Qt::RightDockWidgetArea)
     {
         return QSize(m_parent->width(), handleWidth + 2*margin);
@@ -122,8 +120,8 @@ QSize DragHandle::minimumSizeHint() const
 
 // ----------------------------------------------------------------------------
 
-ThumbBarDock::ThumbBarDock(QWidget* parent, Qt::WindowFlags flags)
-    : QDockWidget(parent, flags), m_visible(SHOULD_BE_SHOWN)
+ThumbBarDock::ThumbBarDock(QWidget *parent, Qt::WindowFlags flags)
+            : QDockWidget(parent, flags), m_visible(SHOULD_BE_SHOWN)
 {
     // Use a DragHandle as title bar widget.
     setTitleBarWidget(new DragHandle(this));
@@ -141,16 +139,16 @@ void ThumbBarDock::reInitialize()
 {
     // Measure orientation of the widget and adjust the child thumbbar to this
     // orientation and size.
-    QMainWindow* parent = qobject_cast<QMainWindow*>(parentWidget());
+    QMainWindow *parent = qobject_cast<QMainWindow*>(parentWidget());
     emit dockLocationChanged(parent->dockWidgetArea(this));
     //ThumbBarView *child = qobject_cast<ThumbBarView *>(widget());
     widget()->resize(size());
     update();
 }
 
-KToggleAction* ThumbBarDock::getToggleAction(QObject* parent, QString caption)
+KToggleAction *ThumbBarDock::getToggleAction(QObject *parent, QString caption)
 {
-    KToggleAction* action = new KToggleAction(KIcon("view-choose"), caption, parent);
+    KToggleAction *action = new KToggleAction(KIcon("view-choose"), caption, parent);
 
     // Default shortcut is Ctrl+T.
     action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
@@ -172,50 +170,30 @@ void ThumbBarDock::restoreVisibility()
     // Set the visibility to what it should be or to what it was. Reset
     // SHOULD_BE_ values to their WAS_ values, to implement correct behavior
     // on subsequent calls.
-    if      (m_visible == SHOULD_BE_SHOWN)
-    {
-        m_visible = WAS_SHOWN;
-    }
-    else if (m_visible == SHOULD_BE_HIDDEN)
-    {
-        m_visible = WAS_HIDDEN;
-    }
-
+    if      (m_visible == SHOULD_BE_SHOWN)  m_visible = WAS_SHOWN;
+    else if (m_visible == SHOULD_BE_HIDDEN) m_visible = WAS_HIDDEN;
     setVisible(m_visible == WAS_SHOWN);
 }
 
 bool ThumbBarDock::shouldBeVisible()
 {
     if ((m_visible == WAS_SHOWN) || (m_visible == SHOULD_BE_SHOWN))
-    {
         return true;
-    }
-
     return false;
 }
 
 void ThumbBarDock::setShouldBeVisible(bool status)
 {
-    if (status)
-    {
-        m_visible = SHOULD_BE_SHOWN;
-    }
-    else
-    {
-        m_visible = SHOULD_BE_HIDDEN;
-    }
+    if (status) m_visible = SHOULD_BE_SHOWN;
+    else        m_visible = SHOULD_BE_HIDDEN;
 }
 
 void ThumbBarDock::slotDockLocationChanged(Qt::DockWidgetArea area)
 {
     // Change orientation of child thumbbar when location has changed.
-    ThumbBarView* child = qobject_cast<ThumbBarView*>(widget());
-
+    ThumbBarView *child = qobject_cast<ThumbBarView *>(widget());
     if (!child)
-    {
         return;
-    }
-
     if ((area == Qt::LeftDockWidgetArea) || (area == Qt::RightDockWidgetArea))
     {
         child->setOrientation(Qt::Vertical);
@@ -228,15 +206,8 @@ void ThumbBarDock::slotDockLocationChanged(Qt::DockWidgetArea area)
 
 void ThumbBarDock::showThumbBar(bool status)
 {
-    if (status)
-    {
-        m_visible = WAS_SHOWN;
-    }
-    else
-    {
-        m_visible = WAS_HIDDEN;
-    }
-
+    if (status) m_visible = WAS_SHOWN;
+    else        m_visible = WAS_HIDDEN;
     setVisible(status);
 }
 

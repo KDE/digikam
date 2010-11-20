@@ -51,7 +51,7 @@ public:
 
 private:
 
-    //    QStringList cache;
+//    QStringList cache;
     QMap<ParseResults::ResultsKey, QStringList> cache;
 };
 

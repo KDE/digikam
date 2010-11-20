@@ -57,18 +57,17 @@ namespace Digikam
 {
 
 JP2KLoader::JP2KLoader(DImg* image)
-    : DImgLoader(image)
+          : DImgLoader(image)
 {
     m_hasAlpha   = false;
     m_sixteenBit = false;
 }
 
-bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     readMetadata(filePath, DImg::JPEG);
 
-    FILE* file = fopen(QFile::encodeName(filePath), "rb");
-
+    FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
         loadingFailed();
@@ -99,7 +98,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     fclose(file);
 
     imageSetAttribute("format", "JP2K");
-
     if (!(m_loadFlags & LoadImageData) && !(m_loadFlags & LoadICCData))
     {
         // libjasper will load the full image in memory already when calling jas_image_decode.
@@ -107,13 +105,11 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         //FIXME: Use Exiv2 or OpenJPEG to extract this info
         DMetadata metadata(filePath);
         QSize size = metadata.getImageDimensions();
-
         if (size.isValid())
         {
             imageWidth() = size.width();
             imageHeight() = size.height();
         }
-
         return true;
     }
 
@@ -125,12 +121,11 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     unsigned int   maximum_component_depth, scale[4], x_step[4], y_step[4];
     unsigned long  number_components;
 
-    jas_image_t*  jp2_image   = 0;
-    jas_stream_t* jp2_stream  = 0;
-    jas_matrix_t* pixels[4];
+    jas_image_t  *jp2_image   = 0;
+    jas_stream_t *jp2_stream  = 0;
+    jas_matrix_t *pixels[4];
 
     int init = jas_init();
-
     if (init != 0)
     {
         kDebug() << "Unable to init JPEG2000 decoder";
@@ -139,7 +134,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     jp2_stream = jas_stream_fopen(QFile::encodeName(filePath), "rb");
-
     if (jp2_stream == 0)
     {
         kDebug() << "Unable to open JPEG2000 stream";
@@ -148,7 +142,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     jp2_image = jas_image_decode(jp2_stream, -1, 0);
-
     if (jp2_image == 0)
     {
         jas_stream_close(jp2_stream);
@@ -161,15 +154,12 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     // some pseudo-progress
     if (observer)
-    {
         observer->progressInfo(m_image, 0.1F);
-    }
 
     // -------------------------------------------------------------------
     // Check color space.
 
     int colorModel;
-
     switch (jas_clrspc_fam(jas_image_clrspc(jp2_image)))
     {
         case JAS_CLRSPC_FAM_RGB:
@@ -177,7 +167,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             components[0] = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_RGB_R);
             components[1] = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_RGB_G);
             components[2] = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_RGB_B);
-
             if ((components[0] < 0) || (components[1] < 0) || (components[2] < 0))
             {
                 jas_image_destroy(jp2_image);
@@ -188,20 +177,17 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
             number_components = 3;
             components[3]     = jas_image_getcmptbytype(jp2_image, 3);
-
             if (components[3] > 0)
             {
                 m_hasAlpha = true;
                 ++number_components;
             }
-
             colorModel = DImg::RGB;
             break;
         }
         case JAS_CLRSPC_FAM_GRAY:
         {
             components[0] = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_GRAY_Y);
-
             if (components[0] < 0)
             {
                 jas_image_destroy(jp2_image);
@@ -209,7 +195,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 loadingFailed();
                 return false;
             }
-
             number_components = 1;
             colorModel        = DImg::GRAYSCALE;
             break;
@@ -219,7 +204,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             components[0] = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_YCBCR_Y);
             components[1] = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_YCBCR_CB);
             components[2] = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_YCBCR_CR);
-
             if ((components[0] < 0) || (components[1] < 0) || (components[2] < 0))
             {
                 jas_image_destroy(jp2_image);
@@ -227,16 +211,13 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 loadingFailed();
                 return false;
             }
-
             number_components = 3;
             components[3]     = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_UNKNOWN);
-
             if (components[3] > 0)
             {
                 m_hasAlpha = true;
                 ++number_components;
             }
-
             // FIXME : image->colorspace=YCbCrColorspace;
             colorModel = DImg::YCBCR;
             break;
@@ -259,9 +240,9 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     for (i = 0; i < (long)number_components; ++i)
     {
         if ((((jas_image_cmptwidth(jp2_image, components[i])*
-               jas_image_cmpthstep(jp2_image, components[i])) != (long)imageWidth()))  ||
+            jas_image_cmpthstep(jp2_image, components[i])) != (long)imageWidth()))  ||
             (((jas_image_cmptheight(jp2_image, components[i])*
-               jas_image_cmptvstep(jp2_image, components[i])) != (long)imageHeight())) ||
+            jas_image_cmptvstep(jp2_image, components[i])) != (long)imageHeight())) ||
             (jas_image_cmpttlx(jp2_image, components[i]) != 0)                      ||
             (jas_image_cmpttly(jp2_image, components[i]) != 0)                      ||
             (jas_image_cmptsgnd(jp2_image, components[i]) != false))
@@ -285,9 +266,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     for (i = 0; i < (long)number_components; ++i)
     {
         maximum_component_depth = qMax((long)jas_image_cmptprec(jp2_image,components[i]),
-                                       (long)maximum_component_depth);
+                                  (long)maximum_component_depth);
         pixels[i] = jas_matrix_create(1, ((unsigned int)imageWidth())/x_step[i]);
-
         if (!pixels[i])
         {
             jas_image_destroy(jp2_image);
@@ -298,19 +278,14 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     if (maximum_component_depth > 8)
-    {
         m_sixteenBit = true;
-    }
 
     for (i = 0 ; i < (long)number_components ; ++i)
     {
         scale[i] = 1;
         int prec = jas_image_cmptprec(jp2_image, components[i]);
-
         if (m_sixteenBit && prec < 16)
-        {
             scale[i] = (1 << (16 - jas_image_cmptprec(jp2_image, components[i])));
-        }
     }
 
     // -------------------------------------------------------------------
@@ -321,23 +296,16 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     if (m_loadFlags & LoadImageData)
     {
         if (m_sixteenBit)          // 16 bits image.
-        {
             data = new_failureTolerant(imageWidth()*imageHeight()*8);
-        }
         else
-        {
             data = new_failureTolerant(imageWidth()*imageHeight()*4);
-        }
 
         if (!data)
         {
             kDebug() << "Error decoding JPEG2000 image data : Memory Allocation Failed";
             jas_image_destroy(jp2_image);
-
             for (i = 0 ; i < (long)number_components ; ++i)
-            {
                 jas_matrix_destroy(pixels[i]);
-            }
 
             jas_cleanup();
             loadingFailed();
@@ -345,8 +313,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         }
 
         uint   checkPoint     = 0;
-        uchar* dst            = data;
-        unsigned short* dst16 = (unsigned short*)data;
+        uchar *dst            = data;
+        unsigned short *dst16 = (unsigned short *)data;
 
         for (y = 0 ; y < (long)imageHeight() ; ++y)
         {
@@ -356,17 +324,13 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                                              ((unsigned int) y)            / y_step[i],
                                              ((unsigned int) imageWidth()) / x_step[i],
                                              1, pixels[i]);
-
                 if (ret != 0)
                 {
                     kDebug() << "Error decoding JPEG2000 image data";
                     delete [] data;
                     jas_image_destroy(jp2_image);
-
                     for (i = 0 ; i < (long)number_components ; ++i)
-                    {
                         jas_matrix_destroy(pixels[i]);
-                    }
 
                     jas_cleanup();
                     loadingFailed();
@@ -387,7 +351,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                         dst += 4;
                     }
-
                     break;
                 }
                 case 3: // RGB.
@@ -470,23 +433,18 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             if (observer && y >= (long)checkPoint)
             {
                 checkPoint += granularity(observer, y, 0.8F);
-
                 if (!observer->continueQuery(m_image))
                 {
                     delete [] data;
                     jas_image_destroy(jp2_image);
-
                     for (i = 0 ; i < (long)number_components ; ++i)
-                    {
-                        jas_matrix_destroy(pixels[i]);
-                    }
+                    jas_matrix_destroy(pixels[i]);
 
                     jas_cleanup();
 
                     loadingFailed();
                     return false;
                 }
-
                 observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)y)/((float)imageHeight()) )));
             }
         }
@@ -497,16 +455,13 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     if (m_loadFlags & LoadICCData)
     {
-        jas_iccprof_t* icc_profile = 0;
-        jas_stream_t*  icc_stream  = 0;
-        jas_cmprof_t*  cm_profile  = 0;
+        jas_iccprof_t *icc_profile = 0;
+        jas_stream_t  *icc_stream  = 0;
+        jas_cmprof_t  *cm_profile  = 0;
 
         cm_profile = jas_image_cmprof(jp2_image);
-
         if (cm_profile != 0)
-        {
             icc_profile = jas_iccprof_createfromcmprof(cm_profile);
-        }
 
         if (icc_profile != 0)
         {
@@ -518,7 +473,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 {
                     if (jas_stream_flush(icc_stream) == 0)
                     {
-                        jas_stream_memobj_t* blob = (jas_stream_memobj_t*) icc_stream->obj_;
+                        jas_stream_memobj_t *blob = (jas_stream_memobj_t *) icc_stream->obj_;
                         QByteArray profile_rawdata;
                         profile_rawdata.resize(blob->len_);
                         memcpy(profile_rawdata.data(), blob->buf_, blob->len_);
@@ -531,9 +486,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     if (observer)
-    {
         observer->progressInfo(m_image, 1.0);
-    }
 
     imageData() = data;
     imageSetAttribute("format", "JP2K");
@@ -541,25 +494,19 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     imageSetAttribute("originalBitDepth", maximum_component_depth);
 
     jas_image_destroy(jp2_image);
-
     for (i = 0 ; i < (long)number_components ; ++i)
-    {
         jas_matrix_destroy(pixels[i]);
-    }
 
     jas_cleanup();
 
     return true;
 }
 
-bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
+bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
-    FILE* file = fopen(QFile::encodeName(filePath), "wb");
-
+    FILE *file = fopen(QFile::encodeName(filePath), "wb");
     if (!file)
-    {
         return false;
-    }
 
     fclose(file);
 
@@ -569,13 +516,12 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     register long  i, x, y;
     unsigned long  number_components;
 
-    jas_image_t*          jp2_image   = 0;
-    jas_stream_t*         jp2_stream  = 0;
-    jas_matrix_t*         pixels[4];
+    jas_image_t          *jp2_image   = 0;
+    jas_stream_t         *jp2_stream  = 0;
+    jas_matrix_t         *pixels[4];
     jas_image_cmptparm_t  component_info[4];
 
     int init = jas_init();
-
     if (init != 0)
     {
         kDebug() << "Unable to init JPEG2000 decoder";
@@ -583,7 +529,6 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     jp2_stream = jas_stream_fopen(QFile::encodeName(filePath), "wb");
-
     if (jp2_stream == 0)
     {
         kDebug() << "Unable to open JPEG2000 stream";
@@ -605,7 +550,6 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     jp2_image = jas_image_create(number_components, component_info, JAS_CLRSPC_UNKNOWN);
-
     if (jp2_image == 0)
     {
         jas_stream_close(jp2_stream);
@@ -614,9 +558,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     if (observer)
-    {
         observer->progressInfo(m_image, 0.1F);
-    }
 
     // -------------------------------------------------------------------
     // Check color space.
@@ -625,9 +567,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     {
         // Alpha Channel
         if (number_components == 4 )
-        {
             jas_image_setcmpttype(jp2_image, 3, JAS_IMAGE_CT_OPACITY);
-        }
 
         jas_image_setclrspc(jp2_image, JAS_CLRSPC_SRGB);
         jas_image_setcmpttype(jp2_image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R));
@@ -640,17 +580,15 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     // FIXME : doesn't work yet!
 
-    jas_cmprof_t*  cm_profile  = 0;
-    jas_iccprof_t* icc_profile = 0;
+    jas_cmprof_t  *cm_profile  = 0;
+    jas_iccprof_t *icc_profile = 0;
 
     QByteArray profile_rawdata = m_image->getIccProfile().data();
 
     icc_profile = jas_iccprof_createfrombuf((uchar*)profile_rawdata.data(), profile_rawdata.size());
-
     if (icc_profile != 0)
     {
         cm_profile = jas_cmprof_createfromiccprof(icc_profile);
-
         if (cm_profile != 0)
         {
             jas_image_setcmprof(jp2_image, cm_profile);
@@ -663,13 +601,10 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     for (i = 0 ; i < (long)number_components ; ++i)
     {
         pixels[i] = jas_matrix_create(1, (unsigned int)imageWidth());
-
         if (pixels[i] == 0)
         {
             for (x = 0 ; x < i ; ++x)
-            {
-                jas_matrix_destroy(pixels[x]);
-            }
+            jas_matrix_destroy(pixels[x]);
 
             jas_image_destroy(jp2_image);
             kDebug() << "Error encoding JPEG2000 image data : Memory Allocation Failed";
@@ -687,21 +622,16 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
         if (observer && y == (long)checkpoint)
         {
             checkpoint += granularity(observer, imageHeight(), 0.8F);
-
             if (!observer->continueQuery(m_image))
             {
                 jas_image_destroy(jp2_image);
-
                 for (i = 0 ; i < (long)number_components ; ++i)
-                {
                     jas_matrix_destroy(pixels[i]);
-                }
 
                 jas_cleanup();
 
                 return false;
             }
-
             observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)y)/((float)imageHeight()) )));
         }
 
@@ -716,9 +646,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                 r = (unsigned short)(pixel[4]+256*pixel[5]);
 
                 if (imageHasAlpha())
-                {
                     a = (unsigned short)(pixel[6]+256*pixel[7]);
-                }
             }
             else                            // 8 bits image.
             {
@@ -727,9 +655,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                 r = (unsigned short)pixel[2];
 
                 if (imageHasAlpha())
-                {
                     a = (unsigned short)(pixel[3]);
-                }
             }
 
             jas_matrix_setv(pixels[0], x, r);
@@ -737,26 +663,20 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
             jas_matrix_setv(pixels[2], x, b);
 
             if (number_components > 3)
-            {
                 jas_matrix_setv(pixels[3], x, a);
-            }
         }
 
         for (i = 0 ; i < (long)number_components ; ++i)
         {
             int ret = jas_image_writecmpt(jp2_image, (short) i, 0, (unsigned int)y,
                                           (unsigned int)imageWidth(), 1, pixels[i]);
-
             if (ret != 0)
             {
                 kDebug() << "Error encoding JPEG2000 image data";
 
                 jas_image_destroy(jp2_image);
-
                 for (i = 0 ; i < (long)number_components ; ++i)
-                {
                     jas_matrix_destroy(pixels[i]);
-                }
 
                 jas_cleanup();
                 return false;
@@ -768,14 +688,9 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     if (quality < 0)
-    {
         quality = 90;
-    }
-
     if (quality > 100)
-    {
         quality = 100;
-    }
 
     QString     rate;
     QTextStream ts( &rate, QIODevice::WriteOnly );
@@ -791,18 +706,14 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     kDebug() << "JPEG2000 " << rate;
 
     int ret = jp2_encode(jp2_image, jp2_stream, rate.toUtf8().data());
-
     if (ret != 0)
     {
         kDebug() << "Unable to encode JPEG2000 image";
 
         jas_image_destroy(jp2_image);
         jas_stream_close(jp2_stream);
-
         for (i = 0 ; i < (long)number_components ; ++i)
-        {
             jas_matrix_destroy(pixels[i]);
-        }
 
         jas_cleanup();
 
@@ -810,9 +721,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     if (observer)
-    {
         observer->progressInfo(m_image, 1.0);
-    }
 
     imageSetAttribute("savedformat", "JP2K");
 
@@ -820,11 +729,8 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     jas_image_destroy(jp2_image);
     jas_stream_close(jp2_stream);
-
     for (i = 0 ; i < (long)number_components ; ++i)
-    {
         jas_matrix_destroy(pixels[i]);
-    }
 
     jas_cleanup();
 

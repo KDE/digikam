@@ -36,7 +36,7 @@ namespace DigikamEnhanceImagePlugin
 {
 
 BlackFrameListView::BlackFrameListView(QWidget* parent)
-    : QTreeWidget(parent)
+                  : QTreeWidget(parent)
 {
     setColumnCount(3);
     setRootIsDecorated(false);
@@ -56,7 +56,7 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
 // ----------------------------------------------------------------------------
 
 BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const KUrl& url)
-    : QObject(parent), QTreeWidgetItem(parent)
+                      : QObject(parent), QTreeWidgetItem(parent)
 {
     m_parent        = parent;
     m_blackFrameURL = url;
@@ -91,14 +91,11 @@ void BlackFrameListViewItem::slotParsed(const QList<HotPixel>& hotPixels)
     setIcon(0, QPixmap::fromImage(m_thumb));
 
     if (!m_imageSize.isEmpty())
-    {
         setText(1, QString("%1x%2").arg(m_imageSize.width()).arg(m_imageSize.height()));
-    }
 
     setText(2, QString::number(m_hotPixels.count()));
 
     m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");
-
     for (QList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != m_hotPixels.end() ; ++it)
     {
         m_blackFrameDesc.append( QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
@@ -125,7 +122,6 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
 
     //Draw hot pixels one by one
     QList<HotPixel>::Iterator it;
-
     for (it = m_hotPixels.begin(); it != m_hotPixels.end(); ++it)
     {
         hpRect = (*it).rect;

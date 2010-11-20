@@ -56,10 +56,10 @@ public:
      */
     QRect  getOriginalImageRegionToRender();
 
-    /** To get target image region image to use for render operations
+    /** To get target image region image to use for render operations 
         If the bool parameter is true a downscaled version of the image
-        region at screen resolution will be sent.
-        Should be use to increase preview speed for the effects whose
+        region at screen resolution will be sent. 
+        Should be use to increase preview speed for the effects whose 
         behaviour is a function of each pixel.
      */
     DImg   getOriginalRegionImage(bool useDownscaledImage = false);

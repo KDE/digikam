@@ -54,9 +54,9 @@ namespace Digikam
 class RatingMenuItem : public QWidget
 {
 
-public:
+  public:
 
-    RatingMenuItem(int star, QWidget* parent=0) : QWidget(parent)
+    RatingMenuItem(int star, QWidget *parent=0) : QWidget(parent)
     {
         m_hightlighted = false;
         m_star         = star;
@@ -111,16 +111,16 @@ public:
         update();
     }
 
-private:
+  private:
 
-    void paintEvent(QPaintEvent*)
+    void paintEvent(QPaintEvent *)
     {
         QPainter p(this);
         p.drawPixmap(contentsRect(), m_hightlighted ? m_ratingPixSel : m_ratingPixReg);
         p.end();
     }
 
-private:
+  private:
 
     bool     m_hightlighted;
     int      m_star;
@@ -130,23 +130,23 @@ private:
 };
 
 RatingPopupMenu::RatingPopupMenu(QWidget* parent)
-    : KMenu(parent)
+               : KMenu(parent)
 {
-    QAction* action = addAction(i18nc("assign no rating", "None"), this, SLOT(slotRatingTriggered()));
+    QAction *action = addAction(i18nc("assign no rating", "None"), this, SLOT(slotRatingTriggered()));
     action->setData(0);
 
     for (int i = 1 ; i <= RatingMax ; ++i)
     {
-        QWidgetAction* action2 = new QWidgetAction(this);
-        RatingMenuItem* item   = new RatingMenuItem(i);
+        QWidgetAction *action2 = new QWidgetAction(this);
+        RatingMenuItem *item   = new RatingMenuItem(i);
         action2->setDefaultWidget(item);
         action2->setData(i);
         connect(action2, SIGNAL(triggered()), this, SLOT(slotRatingTriggered()));
         addAction(action2);
     }
 
-    connect(this, SIGNAL(hovered(QAction*)),
-            this, SLOT(slotHovered(QAction*)));
+    connect(this, SIGNAL(hovered(QAction *)),
+            this, SLOT(slotHovered(QAction *)));
 }
 
 RatingPopupMenu::~RatingPopupMenu()
@@ -159,23 +159,23 @@ void RatingPopupMenu::slotRatingTriggered()
     emit signalRatingChanged(r);
 }
 
-void RatingPopupMenu::slotHovered(QAction* current)
+void RatingPopupMenu::slotHovered(QAction *current)
 {
     QList<QAction*> list = actions();
     foreach(QAction *action, list)
     {
         if (action->data().toInt() > 0)
         {
-            QWidget* w         = qobject_cast<QWidgetAction*>(action)->defaultWidget();
-            RatingMenuItem* mi = dynamic_cast<RatingMenuItem*>(w);
+            QWidget *w         = qobject_cast<QWidgetAction*>(action)->defaultWidget();
+            RatingMenuItem *mi = dynamic_cast<RatingMenuItem*>(w);
             mi->setHightLighted(false);
         }
     }
 
     if (current->data().toInt() > 0)
     {
-        QWidget* w         = qobject_cast<QWidgetAction*>(current)->defaultWidget();
-        RatingMenuItem* mi = dynamic_cast<RatingMenuItem*>(w);
+        QWidget *w         = qobject_cast<QWidgetAction*>(current)->defaultWidget();
+        RatingMenuItem *mi = dynamic_cast<RatingMenuItem*>(w);
         mi->setHightLighted(true);
     }
 }

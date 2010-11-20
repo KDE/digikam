@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * ============================================================ */
 
 #ifndef MATRIX_H_INCLUDED
@@ -93,12 +93,12 @@ Mat;
 class RefocusMatrix
 {
 
-public:
+public: 
 
     static void fill_matrix (CMat* matrix, const int m, double f(const int, const int, const double), const double fun_arg);
 
     static void fill_matrix2 (CMat* matrix, const int m,
-                              double f(const int, const int, const double, const double),
+                              double f(const int, const int, const double, const double), 
                               const double fun_arg1, const double fun_arg2);
 
     static void make_circle_convolution (const double radius, CMat* convolution, const int m);
@@ -128,7 +128,7 @@ private:
     static CMat* allocate_c_mat (const int radius);
     static inline double* c_mat_eltptr (CMat* mat, const int col, const int row);
     static inline double c_mat_elt (const CMat* const mat, const int col, const int row);
-    static void convolve_mat (CMat* result, const CMat* const mata, const CMat* const matb);
+    static void convolve_mat (CMat * result, const CMat* const mata, const CMat* const matb);
     static void convolve_mat_fun (CMat* result, const CMat* const mata, double (f) (int, int));
     static int as_idx (const int k, const int l, const int m);
     static int as_cidx (const int k, const int l);

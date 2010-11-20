@@ -56,12 +56,12 @@ public:
     volatile WorkerObject::State state;
     QMutex                       mutex;
     QWaitCondition               condVar;
-    QEventLoop*                  eventLoop;
-    WorkerObjectRunnable*        runnable;
+    QEventLoop                  *eventLoop;
+    WorkerObjectRunnable        *runnable;
 };
 
 WorkerObject::WorkerObject()
-    : d(new WorkerObjectPriv)
+            : d(new WorkerObjectPriv)
 {
     ThreadManager::instance()->initialize(this);
 }
@@ -76,11 +76,8 @@ WorkerObject::~WorkerObject()
 void WorkerObject::wait()
 {
     QMutexLocker locker(&d->mutex);
-
     while (d->state != Inactive || d->runnable)
-    {
         d->condVar.wait(&d->mutex);
-    }
 }
 
 bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal, const char* method,
@@ -99,7 +96,7 @@ bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal,
 }
 
 bool WorkerObject::disconnectAndSchedule(const QObject* sender, const char* signal,
-        const WorkerObject* receiver, const char* method)
+                                         const WorkerObject* receiver, const char* method)
 {
     disconnect(sender, signal, receiver, SLOT(schedule()));
     return QObject::disconnect(sender, signal, receiver, method);
@@ -110,7 +107,7 @@ WorkerObject::State WorkerObject::state() const
     return d->state;
 }
 
-bool WorkerObject::event(QEvent* e)
+bool WorkerObject::event(QEvent *e)
 {
     if (e->type() == QEvent::User)
     {
@@ -118,7 +115,6 @@ bool WorkerObject::event(QEvent* e)
         d->eventLoop->quit();
         return true;
     }
-
     return QObject::event(e);
 }
 
@@ -126,27 +122,23 @@ void WorkerObject::aboutToQuitLoop()
 {
 }
 
-void WorkerObject::setEventLoop(QEventLoop* loop)
+void WorkerObject::setEventLoop(QEventLoop *loop)
 {
     d->eventLoop = loop;
 }
 
-void WorkerObject::addRunnable(WorkerObjectRunnable* runnable)
+void WorkerObject::addRunnable(WorkerObjectRunnable *runnable)
 {
     QMutexLocker locker(&d->mutex);
     d->runnable = runnable;
 }
 
-void WorkerObject::removeRunnable(WorkerObjectRunnable* runnable)
+void WorkerObject::removeRunnable(WorkerObjectRunnable *runnable)
 {
     QMutexLocker locker(&d->mutex);
-
     // there could be a second runnable in the meantime, waiting for the other, leaving runnable to park
     if (d->runnable == runnable)
-    {
         d->runnable = 0;
-    }
-
     d->condVar.wakeAll();
 }
 
@@ -154,7 +146,6 @@ void WorkerObject::schedule()
 {
     {
         QMutexLocker locker(&d->mutex);
-
         switch (d->state)
         {
             case Inactive:
@@ -173,7 +164,6 @@ void WorkerObject::deactivate(DeactivatingMode mode)
 {
     {
         QMutexLocker locker(&d->mutex);
-
         switch (d->state)
         {
             case Scheduled:
@@ -189,19 +179,12 @@ void WorkerObject::deactivate(DeactivatingMode mode)
     aboutToDeactivate();
 
     if (mode == FlushSignals)
-    {
         QCoreApplication::removePostedEvents(this, QEvent::MetaCall);
-    }
-
     // cannot say that this is thread-safe: thread()->quit();
     if (mode == KeepSignals)
-    {
         QCoreApplication::postEvent(this, new QEvent(QEvent::User), Qt::HighEventPriority);
-    }
     else
-    {
         QCoreApplication::postEvent(this, new QEvent(QEvent::User));
-    }
 }
 
 void WorkerObject::aboutToDeactivate()
@@ -211,7 +194,6 @@ void WorkerObject::aboutToDeactivate()
 bool WorkerObject::transitionToRunning()
 {
     QMutexLocker locker(&d->mutex);
-
     switch (d->state)
     {
         case Running:
@@ -227,7 +209,6 @@ bool WorkerObject::transitionToRunning()
 void WorkerObject::transitionToInactive()
 {
     QMutexLocker locker(&d->mutex);
-
     switch (d->state)
     {
         case Scheduled:

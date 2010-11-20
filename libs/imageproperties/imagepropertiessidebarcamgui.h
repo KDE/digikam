@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-08
- * Description : simple image properties side bar used by
+ * Description : simple image properties side bar used by 
  *               camera GUI.
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -53,7 +53,7 @@ class ImagePropertiesSideBarCamGui : public Sidebar
 
 public:
 
-    ImagePropertiesSideBarCamGui(QWidget* parent, SidebarSplitter* splitter,
+    ImagePropertiesSideBarCamGui(QWidget* parent, SidebarSplitter *splitter,
                                  KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarCamGui();

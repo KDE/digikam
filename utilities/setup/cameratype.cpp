@@ -61,14 +61,14 @@ public:
 };
 
 CameraType::CameraType()
-    : d(new CameraTypePrivate)
+          : d(new CameraTypePrivate)
 {
 }
 
 CameraType::CameraType(const QString& title, const QString& model,
                        const QString& port, const QString& path,
-                       int startingNumber, KAction* action)
-    : d(new CameraTypePrivate)
+                       int startingNumber, KAction *action)
+          : d(new CameraTypePrivate)
 {
     setTitle(title);
     setModel(model);
@@ -85,7 +85,7 @@ CameraType::~CameraType()
 }
 
 CameraType::CameraType(const CameraType& ctype)
-    : d(new CameraTypePrivate)
+          : d(new CameraTypePrivate)
 {
     d->title          = ctype.d->title;
     d->model          = ctype.d->model;
@@ -108,7 +108,6 @@ CameraType& CameraType::operator=(const CameraType& ctype)
         d->action         = ctype.d->action;
         d->valid          = ctype.d->valid;
     }
-
     return *this;
 }
 
@@ -137,7 +136,7 @@ void CameraType::setStartingNumber(int sn)
     d->startingNumber = sn;
 }
 
-void CameraType::setAction(KAction* action)
+void CameraType::setAction(KAction *action)
 {
     d->action = action;
 }
@@ -147,7 +146,7 @@ void CameraType::setValid(bool valid)
     d->valid = valid;
 }
 
-void CameraType::setCurrentCameraUI(CameraUI* cameraui)
+void CameraType::setCurrentCameraUI(CameraUI *cameraui)
 {
     d->currentCameraUI = cameraui;
 }
@@ -187,7 +186,7 @@ bool CameraType::valid() const
     return d->valid;
 }
 
-CameraUI* CameraType::currentCameraUI() const
+CameraUI *CameraType::currentCameraUI() const
 {
     return d->currentCameraUI;
 }

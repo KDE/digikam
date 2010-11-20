@@ -50,16 +50,16 @@ public:
     ThumbnailDatabaseAccess();
     ~ThumbnailDatabaseAccess();
 
-    ThumbnailDB* db() const;
+    ThumbnailDB *db() const;
 
-    DatabaseCoreBackend* backend() const;
+    DatabaseCoreBackend *backend() const;
     QString lastError();
     static DatabaseParameters parameters();
 
 
-    static void initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler);
+    static void initDatabaseErrorHandler(DatabaseErrorHandler *errorhandler);
     static void setParameters(const DatabaseParameters& parameters);
-    static bool checkReadyForUse(InitializationObserver* observer);
+    static bool checkReadyForUse(InitializationObserver *observer);
 
     static void cleanUpDatabase();
 

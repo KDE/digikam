@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT ColorGradientWidget : public QWidget
 
 public:
 
-    ColorGradientWidget(Qt::Orientation orientation, int size, QWidget* parent=0);
+    ColorGradientWidget(Qt::Orientation orientation, int size, QWidget *parent=0);
     ~ColorGradientWidget();
 
     void setColors(const QColor& col1, const QColor& col2);

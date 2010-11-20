@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-05-15
- * Description : a dialog to see preview ICC color correction
+ * Description : a dialog to see preview ICC color correction 
  *               before to apply color profile.
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -61,7 +61,7 @@ public:
     };
 
     ColorCorrectionDlg(Mode mode, const DImg& preview,
-                       const QString& file, QWidget* parent = 0);
+                       const QString& file, QWidget *parent = 0);
     ~ColorCorrectionDlg();
 
     ICCSettingsContainer::Behavior behavior() const;
@@ -88,11 +88,11 @@ private:
 
     ICCSettingsContainer::Behavior currentBehavior() const;
 
-    QLayout* createHeading();
-    QLayout* createProfilesInfo();
-    QLayout* createPreviews();
-    QWidget* createAssumeOptions();
-    QWidget* createOptions();
+    QLayout *createHeading();
+    QLayout *createProfilesInfo();
+    QLayout *createPreviews();
+    QWidget *createAssumeOptions();
+    QWidget *createOptions();
 
     void updateInfo();
     void updateUsedProfileUI();

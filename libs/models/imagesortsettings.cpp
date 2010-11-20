@@ -45,7 +45,7 @@ ImageSortSettings::ImageSortSettings()
     sortCaseSensitivity = Qt::CaseSensitive;
 }
 
-bool ImageSortSettings::operator==(const ImageSortSettings& other) const
+bool ImageSortSettings::operator==(const ImageSortSettings &other) const
 {
     return
         categorizationMode == other.categorizationMode &&
@@ -59,49 +59,33 @@ bool ImageSortSettings::operator==(const ImageSortSettings& other) const
 void ImageSortSettings::setCategorizationMode(CategorizationMode mode)
 {
     categorizationMode = mode;
-
     if (categorizationSortOrder == DefaultOrder)
-    {
         currentCategorizationSortOrder = defaultSortOrderForCategorizationMode(categorizationMode);
-    }
 }
 
 void ImageSortSettings::setCategorizationSortOrder(SortOrder order)
 {
     categorizationSortOrder = order;
-
     if (categorizationSortOrder == DefaultOrder)
-    {
         currentCategorizationSortOrder = defaultSortOrderForCategorizationMode(categorizationMode);
-    }
     else
-    {
         currentCategorizationSortOrder = (Qt::SortOrder)categorizationSortOrder;
-    }
 }
 
 void ImageSortSettings::setSortRole(SortRole role)
 {
     sortRole = role;
-
     if (sortOrder == DefaultOrder)
-    {
         currentSortOrder = defaultSortOrderForSortRole(sortRole);
-    }
 }
 
 void ImageSortSettings::setSortOrder(SortOrder order)
 {
     sortOrder = order;
-
     if (sortOrder == DefaultOrder)
-    {
         currentSortOrder = defaultSortOrderForSortRole(sortRole);
-    }
     else
-    {
         currentSortOrder = (Qt::SortOrder)order;
-    }
 }
 
 Qt::SortOrder ImageSortSettings::defaultSortOrderForCategorizationMode(CategorizationMode mode)
@@ -151,17 +135,11 @@ int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo&
 
             // return comparation result
             if (leftAlbum == rightAlbum)
-            {
                 return 0;
-            }
             else if (lessThanByOrder(leftAlbum, rightAlbum, currentCategorizationSortOrder))
-            {
                 return -1;
-            }
             else
-            {
                 return 1;
-            }
         }
         case CategoryByFormat:
         {
@@ -176,44 +154,22 @@ int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo&
 bool ImageSortSettings::lessThan(const ImageInfo& left, const ImageInfo& right) const
 {
     int result = compare(left, right, sortRole);
-
     if (result != 0)
-    {
         return result < 0;
-    }
-
     // are they identical?
     if (left == right)
-    {
         return false;
-    }
-
     // If left and right equal for first sort order, use a hierarchy of all sort orders
     if ( (result = compare(left, right, SortByFileName)) != 0)
-    {
         return result < 0;
-    }
-
     if ( (result = compare(left, right, SortByCreationDate)) != 0)
-    {
         return result < 0;
-    }
-
     if ( (result = compare(left, right, SortByModificationDate)) != 0)
-    {
         return result < 0;
-    }
-
     if ( (result = compare(left, right, SortByFilePath)) != 0)
-    {
         return result < 0;
-    }
-
     if ( (result = compare(left, right, SortByFileSize)) != 0)
-    {
         return result < 0;
-    }
-
     return false;
 }
 
@@ -255,7 +211,6 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
 DatabaseFields::Set ImageSortSettings::watchFlags() const
 {
     DatabaseFields::Set set;
-
     switch (sortRole)
     {
         case SortByFileName:

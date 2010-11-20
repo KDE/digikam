@@ -64,7 +64,7 @@ public:
         radiusInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+        {}
 
     static const QString configGroupName;
     static const QString configRadiusAdjustmentEntry;
@@ -79,8 +79,8 @@ const QString BlurTool::BlurToolPriv::configRadiusAdjustmentEntry("RadiusAdjustm
 // --------------------------------------------------------
 
 BlurTool::BlurTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new BlurToolPriv)
+        : EditorToolThreaded(parent),
+          d(new BlurToolPriv)
 {
     setObjectName("gaussianblur");
     setToolName(i18n("Blur"));

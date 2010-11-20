@@ -40,8 +40,8 @@ class DIGIKAM_EXPORT PixelsAliasFilter
 {
 public:
 
-    PixelsAliasFilter() {};
-    ~PixelsAliasFilter() {};
+    PixelsAliasFilter(){};
+    ~PixelsAliasFilter(){};
 
 public:   // Public methods.
 

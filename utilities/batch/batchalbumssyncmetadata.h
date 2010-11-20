@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-22-01
- * Description : batch sync pictures metadata with
+ * Description : batch sync pictures metadata with 
  *               digiKam database
  *
  * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -62,7 +62,7 @@ private:
 
 protected:
 
-    void closeEvent(QCloseEvent* e);
+    void closeEvent(QCloseEvent *e);
 
 protected Q_SLOTS:
 

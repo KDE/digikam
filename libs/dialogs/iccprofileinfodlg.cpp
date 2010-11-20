@@ -37,7 +37,7 @@ namespace Digikam
 
 ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath,
                                      const IccProfile& profile)
-    : KDialog(parent)
+                 : KDialog(parent)
 {
     setCaption(i18n("Color Profile Info - %1", profilePath));
     setButtons(Help|Ok);
@@ -45,16 +45,12 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
     setModal(true);
     setHelp("iccprofile.anchor", "digikam");
 
-    ICCProfileWidget* profileWidget = new ICCProfileWidget(this, 340, 256);
+    ICCProfileWidget *profileWidget = new ICCProfileWidget(this, 340, 256);
 
     if (profile.isNull())
-    {
         profileWidget->loadFromURL(KUrl(profilePath));
-    }
     else
-    {
         profileWidget->loadProfile(profilePath, profile);
-    }
 
     setMainWidget(profileWidget);
 }

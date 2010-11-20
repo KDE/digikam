@@ -50,9 +50,9 @@
 namespace Digikam
 {
 
-SearchGroup::SearchGroup(SearchView* parent)
-    : AbstractSearchGroupContainer(parent),
-      m_view(parent), m_layout(0), m_label(0), m_groupType(FirstGroup)
+SearchGroup::SearchGroup(SearchView *parent)
+           : AbstractSearchGroupContainer(parent),
+             m_view(parent), m_layout(0), m_label(0), m_groupType(FirstGroup)
 {
 }
 
@@ -70,8 +70,8 @@ void SearchGroup::setup(Type type)
     connect(m_label, SIGNAL(removeClicked()),
             this, SIGNAL(removeRequested()));
 
-    SearchFieldGroup* group;
-    SearchFieldGroupLabel* label;
+    SearchFieldGroup *group;
+    SearchFieldGroupLabel *label;
 
     // ----- //
 
@@ -195,7 +195,7 @@ void SearchGroup::setup(Type type)
     // ----- //
 
     // prepare subgroup layout
-    QHBoxLayout* indentLayout = new QHBoxLayout;
+    QHBoxLayout *indentLayout = new QHBoxLayout;
     indentLayout->setContentsMargins(0, 0, 0, 0);
     indentLayout->setSpacing(0);
 
@@ -232,15 +232,12 @@ void SearchGroup::read(SearchXmlCachingReader& reader)
     m_label->setDefaultFieldOperator(reader.defaultFieldOperator());
 
     startReadingGroups(reader);
-
     while (!reader.atEnd())
     {
         reader.readNext();
 
         if (reader.isEndElement())
-        {
             break;
-        }
 
         // subgroup
         if (reader.isGroupElement())
@@ -252,14 +249,12 @@ void SearchGroup::read(SearchXmlCachingReader& reader)
         {
             QString name = reader.fieldName();
 
-            SearchField* field = 0;
-            SearchFieldGroup* fieldGroup = 0;
+            SearchField *field = 0;
+            SearchFieldGroup *fieldGroup = 0;
             foreach (fieldGroup, m_fieldGroups)
             {
                 if ( (field = fieldGroup->fieldForName(name)) )
-                {
                     break;
-                }
             }
 
             if (field)
@@ -275,19 +270,18 @@ void SearchGroup::read(SearchXmlCachingReader& reader)
             }
         }
     }
-
     finishReadingGroups();
 }
 
-SearchGroup* SearchGroup::createSearchGroup()
+SearchGroup *SearchGroup::createSearchGroup()
 {
     // create a sub group - view is the same
-    SearchGroup* group = new SearchGroup(m_view);
+    SearchGroup *group = new SearchGroup(m_view);
     group->setup(SearchGroup::ChainGroup);
     return group;
 }
 
-void SearchGroup::addGroupToLayout(SearchGroup* group)
+void SearchGroup::addGroupToLayout(SearchGroup *group)
 {
     // insert in front of the stretch
     m_subgroupLayout->addWidget(group);
@@ -336,13 +330,11 @@ QList<QRect> SearchGroup::startupAnimationArea() const
     {
         rects += fieldGroup->areaOfMarkedFields();
     }
-
     // adjust position relative to parent
     for (QList<QRect>::iterator it = rects.begin(); it != rects.end(); ++it)
     {
         (*it).translate(pos());
     }
-
     return rects;
 }
 
@@ -352,7 +344,7 @@ class RadioButtonHBox : public QHBoxLayout
 {
 public:
 
-    RadioButtonHBox(QWidget* left, QWidget* right, Qt::LayoutDirection dir)
+    RadioButtonHBox(QWidget* left, QWidget *right, Qt::LayoutDirection dir)
         : QHBoxLayout()
     {
         if (dir == Qt::RightToLeft)
@@ -365,38 +357,37 @@ public:
             addWidget(left);
             addWidget(right, Qt::AlignLeft);
         }
-
         setSpacing(0);
     }
 };
 
-SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* cache, SearchGroup::Type type, QWidget* parent)
-    : QWidget(parent),
-      m_extended(false), m_groupOp(SearchXml::And), m_fieldOp(SearchXml::And),
-      m_groupOpLabel(0), m_stackedLayout(0), m_themeCache(cache)
+SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGroup::Type type, QWidget *parent)
+                : QWidget(parent),
+                  m_extended(false), m_groupOp(SearchXml::And), m_fieldOp(SearchXml::And),
+                  m_groupOpLabel(0), m_stackedLayout(0), m_themeCache(cache)
 {
-    QGridLayout* m_layout = new QGridLayout;
+    QGridLayout *m_layout = new QGridLayout;
 
     // leave styling to style sheet (by object name)
 
-    QLabel* mainLabel = new QLabel(i18n("Find Pictures"));
+    QLabel *mainLabel = new QLabel(i18n("Find Pictures"));
     mainLabel->setObjectName("SearchGroupLabel_MainLabel");
 
     // Use radio button with a separate label to fix styling problem, see bug 195809
     m_allBox = new QRadioButton;
-    QLabel* allBoxLabel = new QLabel(i18n("Meet All of the following conditions"));
+    QLabel *allBoxLabel = new QLabel(i18n("Meet All of the following conditions"));
     allBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
     m_anyBox = new QRadioButton;
-    QLabel* anyBoxLabel = new QLabel(i18n("Meet Any of the following conditions"));
+    QLabel *anyBoxLabel = new QLabel(i18n("Meet Any of the following conditions"));
     anyBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
     m_noneBox = new QRadioButton;
-    QLabel* noneBoxLabel = new QLabel(i18n("None of these conditions are met"));
+    QLabel *noneBoxLabel = new QLabel(i18n("None of these conditions are met"));
     noneBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
     m_oneNotBox = new QRadioButton;
-    QLabel* oneNotBoxLabel = new QLabel(i18n("At least one of these conditions is not met"));
+    QLabel *oneNotBoxLabel = new QLabel(i18n("At least one of these conditions is not met"));
     oneNotBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
     connect(m_allBox, SIGNAL(toggled(bool)),
@@ -410,18 +401,18 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* cache, SearchGrou
 
     if (type == SearchGroup::FirstGroup)
     {
-        QLabel* logo = new QLabel;
+        QLabel *logo = new QLabel;
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                        .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
         m_optionsLabel = new RClickLabel;
         m_optionsLabel->setObjectName("SearchGroupLabel_OptionsLabel");
         connect(m_optionsLabel, SIGNAL(activated()),
-                this, SLOT(toggleShowOptions()));
+                 this, SLOT(toggleShowOptions()));
 
-        QWidget* simpleHeader     = new QWidget;
-        QVBoxLayout* headerLayout = new QVBoxLayout;
-        QLabel* simpleLabel1      = new QLabel;
+        QWidget *simpleHeader     = new QWidget;
+        QVBoxLayout *headerLayout = new QVBoxLayout;
+        QLabel *simpleLabel1      = new QLabel;
         //simpleLabel->setText(i18n("Find Pictures meeting all of these conditions"));
         //simpleLabel->setPixmap(SmallIcon("edit-find", 128));
         simpleLabel1->setText(i18n("<qt><p>Search your collection<br/>for pictures meeting the following conditions</p></qt>"));
@@ -432,8 +423,8 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* cache, SearchGrou
         headerLayout->setMargin(0);
         simpleHeader->setLayout(headerLayout);
 
-        QWidget* optionsBox        = new QWidget;
-        QGridLayout* optionsLayout = new QGridLayout;
+        QWidget *optionsBox        = new QWidget;
+        QGridLayout *optionsLayout = new QGridLayout;
         optionsLayout->addLayout(new RadioButtonHBox(m_allBox, allBoxLabel, layoutDirection()),       0, 0);
         optionsLayout->addLayout(new RadioButtonHBox(m_anyBox, anyBoxLabel, layoutDirection()),       1, 0);
         optionsLayout->addLayout(new RadioButtonHBox(m_noneBox, noneBoxLabel, layoutDirection()),     0, 1);
@@ -487,9 +478,7 @@ void SearchGroupLabel::setExtended(bool extended)
     m_extended = extended;
 
     if (!m_stackedLayout)
-    {
         return;
-    }
 
     if (m_extended)
     {
@@ -520,21 +509,13 @@ void SearchGroupLabel::toggleShowOptions()
 void SearchGroupLabel::toggleGroupOperator()
 {
     if (m_groupOp == SearchXml::And)
-    {
         m_groupOp = SearchXml::Or;
-    }
     else if (m_groupOp == SearchXml::Or)
-    {
         m_groupOp = SearchXml::And;
-    }
     else if (m_groupOp == SearchXml::AndNot)
-    {
         m_groupOp = SearchXml::OrNot;
-    }
     else if (m_groupOp == SearchXml::OrNot)
-    {
         m_groupOp = SearchXml::AndNot;
-    }
 
     updateGroupLabel();
 }
@@ -543,36 +524,24 @@ void SearchGroupLabel::boxesToggled()
 {
     // set field op
     if (m_allBox->isChecked() || m_oneNotBox->isChecked())
-    {
         m_fieldOp = SearchXml::And;
-    }
     else
-    {
         m_fieldOp = SearchXml::Or;
-    }
 
     // negate group op
     if (m_allBox->isChecked() || m_anyBox->isChecked())
     {
         if (m_groupOp == SearchXml::AndNot)
-        {
             m_groupOp = SearchXml::And;
-        }
         else if (m_groupOp == SearchXml::OrNot)
-        {
             m_groupOp = SearchXml::Or;
-        }
     }
     else
     {
         if (m_groupOp == SearchXml::And)
-        {
             m_groupOp = SearchXml::AndNot;
-        }
         else if (m_groupOp == SearchXml::Or)
-        {
             m_groupOp = SearchXml::OrNot;
-        }
     }
 }
 
@@ -588,13 +557,9 @@ void SearchGroupLabel::updateGroupLabel()
     if (m_groupOpLabel)
     {
         if (m_groupOp == SearchXml::And || m_groupOp == SearchXml::AndNot)
-        {
             m_groupOpLabel->setText(i18n("AND"));
-        }
         else
-        {
             m_groupOpLabel->setText(i18n("OR"));
-        }
     }
 }
 
@@ -620,36 +585,22 @@ void SearchGroupLabel::adjustOperatorOptions()
     {
         case SearchXml::And:
         case SearchXml::Or:
-
             if (m_fieldOp == SearchXml::And)
-            {
                 m_allBox->setChecked(true);
-            }
             else
-            {
                 m_anyBox->setChecked(true);
-            }
-
             break;
         case SearchXml::AndNot:
         case SearchXml::OrNot:
-
             if (m_fieldOp == SearchXml::And)
-            {
                 m_oneNotBox->setChecked(true);
-            }
             else
-            {
                 m_noneBox->setChecked(true);
-            }
-
             break;
     }
 
     if (!m_allBox->isChecked())
-    {
         setExtended(true);
-    }
 }
 
 SearchXml::Operator SearchGroupLabel::groupOperator() const
@@ -660,16 +611,12 @@ SearchXml::Operator SearchGroupLabel::groupOperator() const
 SearchXml::Operator SearchGroupLabel::defaultFieldOperator() const
 {
     if (m_anyBox->isChecked() || m_noneBox->isChecked())
-    {
         return SearchXml::Or;
-    }
     else
-    {
         return SearchXml::And;
-    }
 }
 
-void SearchGroupLabel::paintEvent(QPaintEvent*)
+void SearchGroupLabel::paintEvent(QPaintEvent *)
 {
     // paint themed background
     QPainter p(this);

@@ -65,7 +65,7 @@ public:
 };
 
 UndoManager::UndoManager(DImgInterface* iface)
-    : d(new UndoManagerPriv)
+           : d(new UndoManagerPriv)
 {
     d->dimgiface = iface;
     d->undoCache = new UndoCache;
@@ -81,9 +81,7 @@ UndoManager::~UndoManager()
 void UndoManager::addAction(UndoAction* action)
 {
     if (!action)
-    {
         return;
-    }
 
     // All redo actions are invalid now
     clearRedoActions();
@@ -103,21 +101,15 @@ void UndoManager::addAction(UndoAction* action)
     // if origin is at one of the redo action that are now invalid,
     // it is no longer reachable
     if (d->origin < 0)
-    {
         d->origin = INT_MAX;
-    }
     else
-    {
         d->origin++;
-    }
 }
 
 void UndoManager::undo()
 {
     if (d->undoActions.isEmpty())
-    {
         return;
-    }
 
     UndoAction* action = d->undoActions.back();
 
@@ -136,8 +128,7 @@ void UndoManager::undo()
         // And now, undo the action
 
         int    newW, newH, newBytesDepth;
-        uchar* newData = d->undoCache->getData(d->undoActions.size(), newW, newH, newBytesDepth, false);
-
+        uchar *newData = d->undoCache->getData(d->undoActions.size(), newW, newH, newBytesDepth, false);
         if (newData)
         {
             d->dimgiface->putImage(newData, newW, newH, newBytesDepth == 8 ? true : false);
@@ -157,17 +148,14 @@ void UndoManager::undo()
 void UndoManager::redo()
 {
     if (d->redoActions.isEmpty())
-    {
         return;
-    }
 
-    UndoAction* action = d->redoActions.back();
+    UndoAction *action = d->redoActions.back();
 
     if (typeid(*action) == typeid(UndoActionIrreversible))
     {
         int    w, h, bytesDepth;
-        uchar* data = d->undoCache->getData(d->undoActions.size() + 2, w, h, bytesDepth, false);
-
+        uchar *data = d->undoCache->getData(d->undoActions.size() + 2, w, h, bytesDepth, false);
         if (data)
         {
             d->dimgiface->putImage(data, w, h, bytesDepth == 8 ? true : false);
@@ -191,46 +179,39 @@ void UndoManager::clear(bool clearCache)
     setOrigin();
 
     if (clearCache)
-    {
         d->undoCache->clear();
-    }
 }
 
 void UndoManager::clearUndoActions()
 {
-    UndoAction* action;
+    UndoAction *action;
     QList<UndoAction*>::iterator it;
 
-    for (it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
+    for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
         action = *it;
         delete action;
     }
-
     d->undoActions.clear();
 }
 
 void UndoManager::clearRedoActions()
 {
     if (!anyMoreRedo())
-    {
         return;
-    }
 
-    UndoAction* action;
+    UndoAction *action;
     QList<UndoAction*>::iterator it;
 
     // get the level of the first redo action
     int level = d->undoActions.size() + 1;
-
-    for (it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
+    for(it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
     {
         action = *it;
         d->undoCache->erase(level);
         delete action;
         ++level;
     }
-
     d->undoCache->erase(level);
     d->redoActions.clear();
 }
@@ -249,7 +230,7 @@ void UndoManager::getUndoHistory(QStringList& titles)
 {
     QList<UndoAction*>::iterator it;
 
-    for (it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
+    for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
         titles.prepend((*it)->getTitle());
     }
@@ -259,7 +240,7 @@ void UndoManager::getRedoHistory(QStringList& titles)
 {
     QList<UndoAction*>::iterator it;
 
-    for (it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
+    for(it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
     {
         titles.prepend((*it)->getTitle());
     }

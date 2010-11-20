@@ -56,24 +56,24 @@ public:
 
 
     SetupDcrawPriv() :
-        configGroupName("ImageViewer Settings"),
+        configGroupName("ImageViewer Settings"), 
 
         dcrawSettings(0)
     {}
 
-    const QString        configGroupName;
+    const QString        configGroupName; 
 
     DcrawSettingsWidget* dcrawSettings;
 };
 
 SetupDcraw::SetupDcraw(QWidget* parent)
-    : QScrollArea(parent), d(new SetupDcrawPriv)
+          : QScrollArea(parent), d(new SetupDcrawPriv)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget *panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QGridLayout* layout = new QGridLayout(panel);
+    QGridLayout *layout = new QGridLayout(panel);
     d->dcrawSettings    = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS);
     d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));
     d->dcrawSettings->setItemIcon(1, SmallIcon("whitebalance"));

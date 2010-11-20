@@ -124,18 +124,18 @@ private Q_SLOTS:
     void slotToggleNavigateByPair();
 
     void slotEditItem();
-    void slotEditItem(const ImageInfo&);
+    void slotEditItem(const ImageInfo &);
 
     void slotDeleteItem();
-    void slotDeleteItem(const ImageInfo&);
+    void slotDeleteItem(const ImageInfo &);
 
     void slotDeleteFinalItem();
-    void slotDeleteFinalItem(const ImageInfo&);
+    void slotDeleteFinalItem(const ImageInfo &);
 
     void slotRemoveItem();
-    void slotRemoveItem(const ImageInfo&);
+    void slotRemoveItem(const ImageInfo &);
 
-    void slotItemSelected(const ImageInfo&);
+    void slotItemSelected(const ImageInfo &);
     void slotClearItemsList();
 
     void slotThumbbarDroppedItems(const ImageInfoList&);

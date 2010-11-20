@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-26-02
- * Description : a widget to select an image collection
+ * Description : a widget to select an image collection 
  *               to upload new items using digiKam album folder views
  *
  * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -43,7 +43,7 @@ class KipiUploadWidget : public KIPI::UploadWidget
 
 public:
 
-    explicit KipiUploadWidget(KipiInterface* iface, QWidget* parent=0);
+    explicit KipiUploadWidget(KipiInterface *iface, QWidget *parent=0);
     ~KipiUploadWidget();
 
     KIPI::ImageCollection selectedImageCollection() const;

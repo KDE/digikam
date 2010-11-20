@@ -84,7 +84,7 @@ public:
         settingsWidget(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+        {}
 
     static const QString    configGroupName;
     static const QString    configFastApproxEntry;
@@ -140,8 +140,8 @@ const QString InPaintingTool::InPaintingToolPriv::configPresetEntry("Preset");
 // --------------------------------------------------------
 
 InPaintingTool::InPaintingTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new InPaintingToolPriv)
+              : EditorToolThreaded(parent),
+                d(new InPaintingToolPriv)
 {
     setObjectName("inpainting");
     setToolName(i18n("In-painting"));
@@ -266,15 +266,10 @@ void InPaintingTool::readSettings()
 
     int p = group.readEntry(d->configPresetEntry, (int)NoPreset);
     d->inpaintingTypeCB->setCurrentIndex(p);
-
     if (p == NoPreset)
-    {
         d->settingsWidget->setEnabled(true);
-    }
     else
-    {
         d->settingsWidget->setEnabled(false);
-    }
 }
 
 void InPaintingTool::writeSettings()
@@ -304,13 +299,9 @@ void InPaintingTool::writeSettings()
 void InPaintingTool::slotResetValues(int i)
 {
     if (i == NoPreset)
-    {
         d->settingsWidget->setEnabled(true);
-    }
     else
-    {
         d->settingsWidget->setEnabled(false);
-    }
 
     slotResetSettings();
 }
@@ -320,7 +311,7 @@ void InPaintingTool::slotResetSettings()
     GreycstorationContainer settings;
     settings.setInpaintingDefaultSettings();
 
-    switch (d->inpaintingTypeCB->currentIndex())
+    switch(d->inpaintingTypeCB->currentIndex())
     {
         case RemoveSmallArtefact:
             // We use default settings here.
@@ -388,25 +379,10 @@ void InPaintingTool::prepareEffect()
     // Mask area normalization.
     // We need to check if mask area is out of image size else inpainting give strange results.
 
-    if (d->maskRect.left()   < 0)
-    {
-        d->maskRect.setLeft(0);
-    }
-
-    if (d->maskRect.top()    < 0)
-    {
-        d->maskRect.setTop(0);
-    }
-
-    if (d->maskRect.right()  > iface.originalWidth())
-    {
-        d->maskRect.setRight(iface.originalWidth());
-    }
-
-    if (d->maskRect.bottom() > iface.originalHeight())
-    {
-        d->maskRect.setBottom(iface.originalHeight());
-    }
+    if (d->maskRect.left()   < 0) d->maskRect.setLeft(0);
+    if (d->maskRect.top()    < 0) d->maskRect.setTop(0);
+    if (d->maskRect.right()  > iface.originalWidth())  d->maskRect.setRight(iface.originalWidth());
+    if (d->maskRect.bottom() > iface.originalHeight()) d->maskRect.setBottom(iface.originalHeight());
 
     d->maskImage = inPaintingMask.toImage().copy(d->maskRect);
     d->cropImage = d->originalImage.copy(d->maskRect);
@@ -441,7 +417,7 @@ void InPaintingTool::putPreviewData()
     DImg imDest = d->cropImage.copy(cropSel);
 
     iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
-                            iface->previewHeight())).bits());
+                                               iface->previewHeight())).bits());
     d->previewWidget->updatePreview();
     d->isComputed = true;
 }
@@ -451,9 +427,7 @@ void InPaintingTool::putFinalData()
     ImageIface iface(0, 0);
 
     if (!d->isComputed)
-    {
         d->cropImage = filter()->getTargetImage();
-    }
 
     d->originalImage.bitBltImage(&d->cropImage, d->maskRect.left(), d->maskRect.top());
 
@@ -463,13 +437,10 @@ void InPaintingTool::putFinalData()
 void InPaintingTool::slotLoadSettings()
 {
     KUrl loadInpaintingFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                              QString( "*" ), kapp->activeWindow(),
-                              QString( i18n("Photograph In-Painting Settings File to Load")) );
-
+                                            QString( "*" ), kapp->activeWindow(),
+                                            QString( i18n("Photograph In-Painting Settings File to Load")) );
     if ( loadInpaintingFile.isEmpty() )
-    {
-        return;
-    }
+       return;
 
     QFile file(loadInpaintingFile.toLocalFile());
 
@@ -477,11 +448,11 @@ void InPaintingTool::slotLoadSettings()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
         {
-            KMessageBox::error(kapp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph In-Painting settings text file.",
-                                    loadInpaintingFile.fileName()));
-            file.close();
-            return;
+           KMessageBox::error(kapp->activeWindow(),
+                        i18n("\"%1\" is not a Photograph In-Painting settings text file.",
+                             loadInpaintingFile.fileName()));
+           file.close();
+           return;
         }
     }
     else
@@ -499,24 +470,17 @@ void InPaintingTool::slotLoadSettings()
 void InPaintingTool::slotSaveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                               QString( "*" ), kapp->activeWindow(),
-                               QString( i18n("Photograph In-Painting Settings File to Save")) );
-
+                                            QString( "*" ), kapp->activeWindow(),
+                                            QString( i18n("Photograph In-Painting Settings File to Save")) );
     if ( saveRestorationFile.isEmpty() )
-    {
-        return;
-    }
+       return;
 
     QFile file(saveRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
-    {
         d->settingsWidget->saveSettings(file, QString("# Photograph Inpainting Configuration File V2"));
-    }
     else
-    {
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph In-Painting text file."));
-    }
 
     file.close();
 }

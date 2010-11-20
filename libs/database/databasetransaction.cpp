@@ -33,14 +33,14 @@ namespace Digikam
 {
 
 DatabaseTransaction::DatabaseTransaction()
-    : m_access(0)
+                   : m_access(0)
 {
     DatabaseAccess access;
     access.backend()->beginTransaction();
 }
 
-DatabaseTransaction::DatabaseTransaction(DatabaseAccess* access)
-    : m_access(access)
+DatabaseTransaction::DatabaseTransaction(DatabaseAccess *access)
+                   : m_access(access)
 {
     m_access->backend()->beginTransaction();
 }

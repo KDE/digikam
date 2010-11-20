@@ -81,7 +81,7 @@ public:
         expanderBox(0),
         gboxSettings(0),
         previewWidget(0)
-    {}
+        {}
 
     const QString         configGroupName;
 
@@ -103,8 +103,8 @@ public:
 };
 
 FreeRotationTool::FreeRotationTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new FreeRotationToolPriv)
+                : EditorToolThreaded(parent),
+                  d(new FreeRotationToolPriv)
 {
     setObjectName("freerotation");
     setToolName(i18n("Free Rotation"));
@@ -166,8 +166,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QPoint p;
     setPointInvalid(p);
     QString invalidText = generateButtonLabel(p);
-    p.setX(1);
-    p.setY(2);
+    p.setX(1); p.setY(2);
     QString validText   = generateButtonLabel(p);
 
     QFont fnt = d->autoAdjustPoint1Btn->font();
@@ -363,7 +362,6 @@ QString FreeRotationTool::generateButtonLabel(const QPoint& p)
     {
         label = clickToSetIsWider ? centerString(isOk, maxLength) : isOk;
     }
-
     return label;
 }
 
@@ -375,7 +373,6 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength)
     // fill with additional whitespace, to match the original label length and center
     // the text, without moving the button icon
     int diff = qAbs<int>(max - str.count());
-
     if (diff > 0)
     {
         QString delimiter(" ");
@@ -390,7 +387,6 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength)
 #endif
 
         diff = qAbs<int>(maxLength - tmp.count());
-
         if (diff != 0)
         {
             // too long?
@@ -409,7 +405,6 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength)
             }
         }
     }
-
     return tmp;
 }
 
@@ -424,7 +419,6 @@ void FreeRotationTool::updatePoints()
 
     // set points in preview widget, don't add invalid points
     QPolygon points;
-
     if (pointIsValid(d->autoAdjustPoint1))
     {
         points << d->autoAdjustPoint1;
@@ -434,12 +428,10 @@ void FreeRotationTool::updatePoints()
     {
         d->autoAdjustPoint2Btn->setEnabled(false);
     }
-
     if (pointIsValid(d->autoAdjustPoint2))
     {
         points << d->autoAdjustPoint2;
     }
-
     d->previewWidget->setPoints(points, true);
 
     // enable / disable adjustment buttons
@@ -474,12 +466,9 @@ void FreeRotationTool::slotAutoAdjustClicked()
     // we need to check manually here if the button is enabled, because this slot can be called
     // with an action now
     if (!d->autoAdjustBtn->isEnabled())
-    {
         return;
-    }
 
     double angle = calculateAutoAngle();
-
     if (fabs(angle) > 45.0)
     {
         if (angle < 0.0)
@@ -504,19 +493,11 @@ void FreeRotationTool::slotAutoAdjustClicked()
     {
         bool ok       = false;
         int mainAngle = anglesList[0].toInt(&ok);
-
-        if (!ok)
-        {
-            mainAngle = 0;
-        }
+        if (!ok) mainAngle = 0;
 
         double fineAngle = (QString("0.") + anglesList[1]).toDouble(&ok);
         fineAngle        = (angle < 0.0) ? -fineAngle : fineAngle;
-
-        if (!ok)
-        {
-            fineAngle = 0.0;
-        }
+        if (!ok) fineAngle = 0.0;
 
         FreeRotationContainer prm = d->settingsView->settings();
         prm.angle                 = mainAngle + fineAngle;
@@ -551,7 +532,6 @@ double FreeRotationTool::calculateAutoAngle()
     {
         return 0.0;
     }
-
     return FreeRotationFilter::calculateAngle(d->autoAdjustPoint1, d->autoAdjustPoint2);
 }
 
@@ -564,24 +544,20 @@ void FreeRotationTool::setPointInvalid(QPoint& p)
 bool FreeRotationTool::pointIsValid(const QPoint& p)
 {
     bool valid = true;
-
     if (p.x() == -1 || p.y() == -1)
     {
         valid = false;
     }
-
     return valid;
 }
 
 QString FreeRotationTool::repeatString(const QString& str, int times)
 {
     QString tmp;
-
     for (int i = 0; i < times; ++i)
     {
         tmp.append(str);
     }
-
     return tmp;
 }
 

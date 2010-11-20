@@ -68,9 +68,9 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-    //#ifdef ENABLE_DEBUG_MESSAGES
+//#ifdef ENABLE_DEBUG_MESSAGES
     kError() << buffer;
-    //#endif
+//#endif
 
     longjmp(myerr->setjmp_buffer, 1);
 }
@@ -98,18 +98,17 @@ void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
 }
 
 JPEGLoader::JPEGLoader(DImg* image)
-    : DImgLoader(image)
+          : DImgLoader(image)
 {
 }
 
-bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     readMetadata(filePath, DImg::JPEG);
 
     int colorModel = DImg::COLORMODELUNKNOWN;
 
-    FILE* file = fopen(QFile::encodeName(filePath), "rb");
-
+    FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
         loadingFailed();
@@ -162,38 +161,18 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         {
             delete [] data;
             delete [] dest;
-
-            if (f)
-            {
-                fclose(f);
-            }
+            if (f) fclose(f);
         }
-        void setData(uchar* d)
-        {
-            data = d;
-        }
-        void setDest(uchar* d)
-        {
-            dest = d;
-        }
-        void setFile(FILE* file)
-        {
-            f = file;
-        }
-        void deleteData()
-        {
-            delete [] data;
-            data = 0;
-        }
-        void takeDest()
-        {
-            dest = 0;
-        }
-        uchar* data;
-        uchar* dest;
-        FILE*  f;
+        void setData(uchar *d)   { data = d; }
+        void setDest(uchar *d)   { dest = d; }
+        void setFile(FILE *file) { f = file; }
+        void deleteData()        { delete [] data; data = 0; }
+        void takeDest()          { dest = 0; }
+        uchar *data;
+        uchar *dest;
+        FILE  *f;
     };
-    CleanupData* cleanupData = new CleanupData;
+    CleanupData *cleanupData = new CleanupData;
     cleanupData->setFile(file);
 
     // If an error occurs during reading, libjpeg will jump here
@@ -210,11 +189,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     // Find out if we do the fast-track loading with reduced size. Jpeg specific.
     int scaledLoadingSize = 0;
     QVariant attribute = imageGetAttribute("scaledLoadingSize");
-
     if (attribute.isValid())
-    {
         scaledLoadingSize = attribute.toInt();
-    }
 
     // -------------------------------------------------------------------
     // Set JPEG decompressor instance
@@ -225,9 +201,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 #ifdef Q_CC_MSVC
     QFile inFile(filePath);
     QByteArray buffer;
-
-    if (inFile.open(QIODevice::ReadOnly))
-    {
+    if(inFile.open(QIODevice::ReadOnly)) {
         buffer = inFile.readAll();
         inFile.close();
     }
@@ -239,9 +213,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     // Recording ICC profile marker (from iccjpeg.c)
     if (m_loadFlags & LoadICCData)
-    {
         setup_read_icc_profile(&cinfo);
-    }
 
     // read image information
     jpeg_read_header(&cinfo, true);
@@ -282,7 +254,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     // -------------------------------------------------------------------
     // Load image data.
 
-    uchar* dest = 0;
+    uchar *dest = 0;
 
     if (m_loadFlags & LoadImageData)
     {
@@ -297,16 +269,11 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
             // libjpeg supports 1/1, 1/2, 1/4, 1/8
             int scale=1;
-
-            while (scaledLoadingSize* scale*2<=imgSize)
+            while(scaledLoadingSize*scale*2<=imgSize)
             {
                 scale*=2;
             }
-
-            if (scale>8)
-            {
-                scale=8;
-            }
+            if(scale>8) scale=8;
 
             //cinfo.scale_num = 1;
             //cinfo.scale_denom = scale;
@@ -322,9 +289,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         // some pseudo-progress
         if (observer)
-        {
             observer->progressInfo(m_image, 0.1F);
-        }
 
         // re-read dimension (scaling included)
         w = cinfo.output_width;
@@ -333,8 +298,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         // -------------------------------------------------------------------
         // Get scanlines
 
-        uchar* ptr, *line[16], *data=0;
-        uchar* ptr2=0;
+        uchar *ptr, *line[16], *data=0;
+        uchar *ptr2=0;
         int    x, y, l, i, scans, count, prevy;
 
         if (cinfo.rec_outbuf_height > 16)
@@ -348,8 +313,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         // We only take RGB with 1 or 3 components, or CMYK with 4 components
         if (!(
-                (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
-                || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
+            (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
+            || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
             ))
         {
             jpeg_destroy_decompress(&cinfo);
@@ -395,19 +360,15 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         if (cinfo.output_components == 3)
         {
             for (i = 0; i < cinfo.rec_outbuf_height; ++i)
-            {
                 line[i] = data + (i * w * 3);
-            }
 
             int checkPoint = 0;
-
             for (l = 0; l < h; l += cinfo.rec_outbuf_height)
             {
                 // use 0-10% and 90-100% for pseudo-progress
                 if (observer && l >= checkPoint)
                 {
                     checkPoint += granularity(observer, h, 0.8F);
-
                     if (!observer->continueQuery(m_image))
                     {
                         jpeg_destroy_decompress(&cinfo);
@@ -415,7 +376,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         loadingFailed();
                         return false;
                     }
-
                     observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
                 }
 
@@ -423,9 +383,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 scans = cinfo.rec_outbuf_height;
 
                 if ((h - l) < scans)
-                {
                     scans = h - l;
-                }
 
                 ptr = data;
 
@@ -447,18 +405,14 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         else if (cinfo.output_components == 1)
         {
             for (i = 0; i < cinfo.rec_outbuf_height; ++i)
-            {
                 line[i] = data + (i * w);
-            }
 
             int checkPoint = 0;
-
             for (l = 0; l < h; l += cinfo.rec_outbuf_height)
             {
                 if (observer && l >= checkPoint)
                 {
                     checkPoint += granularity(observer, h, 0.8F);
-
                     if (!observer->continueQuery(m_image))
                     {
                         jpeg_destroy_decompress(&cinfo);
@@ -466,7 +420,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         loadingFailed();
                         return false;
                     }
-
                     observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
                 }
 
@@ -474,9 +427,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 scans = cinfo.rec_outbuf_height;
 
                 if ((h - l) < scans)
-                {
                     scans = h - l;
-                }
 
                 ptr = data;
 
@@ -498,19 +449,15 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         else // CMYK
         {
             for (i = 0; i < cinfo.rec_outbuf_height; ++i)
-            {
                 line[i] = data + (i * w * 4);
-            }
 
             int checkPoint = 0;
-
             for (l = 0; l < h; l += cinfo.rec_outbuf_height)
             {
                 // use 0-10% and 90-100% for pseudo-progress
                 if (observer && l >= checkPoint)
                 {
                     checkPoint += granularity(observer, h, 0.8F);
-
                     if (!observer->continueQuery(m_image))
                     {
                         jpeg_destroy_decompress(&cinfo);
@@ -518,7 +465,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         loadingFailed();
                         return false;
                     }
-
                     observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
                 }
 
@@ -526,9 +472,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 scans = cinfo.rec_outbuf_height;
 
                 if ((h - l) < scans)
-                {
                     scans = h - l;
-                }
 
                 ptr = data;
 
@@ -567,7 +511,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             startedDecompress = true;
         }
 
-        JOCTET* profile_data=NULL;
+        JOCTET *profile_data=NULL;
         uint    profile_size;
 
         read_icc_profile (&cinfo, &profile_data, &profile_size);
@@ -590,9 +534,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     // -------------------------------------------------------------------
 
     if (startedDecompress)
-    {
         jpeg_finish_decompress(&cinfo);
-    }
 
     jpeg_destroy_decompress(&cinfo);
 
@@ -602,9 +544,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     delete cleanupData;
 
     if (observer)
-    {
         observer->progressInfo(m_image, 1.0);
-    }
 
     imageWidth()  = w;
     imageHeight() = h;
@@ -617,28 +557,21 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     return true;
 }
 
-bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
+bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
-    FILE* file = fopen(QFile::encodeName(filePath), "wb");
-
+    FILE *file = fopen(QFile::encodeName(filePath), "wb");
     if (!file)
-    {
         return false;
-    }
 
     struct jpeg_compress_struct  cinfo;
-
     struct dimg_jpeg_error_mgr jerr;
 
     // -------------------------------------------------------------------
     // JPEG error handling.
 
     cinfo.err                 = jpeg_std_error(&jerr);
-
     cinfo.err->error_exit     = dimg_jpeg_error_exit;
-
     cinfo.err->emit_message   = dimg_jpeg_emit_message;
-
     cinfo.err->output_message = dimg_jpeg_output_message;
 
     // setjmp-save cleanup
@@ -649,32 +582,16 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
         ~CleanupData()
         {
             deleteLine();
+            if (f) fclose(f);
+        }
+        void setLine(uchar *l)   { line = l; }
+        void setFile(FILE *file) { f = file; }
+        void deleteLine()        { delete [] line; line = 0; }
 
-            if (f)
-            {
-                fclose(f);
-            }
-        }
-        void setLine(uchar* l)
-        {
-            line = l;
-        }
-        void setFile(FILE* file)
-        {
-            f = file;
-        }
-        void deleteLine()
-        {
-            delete [] line;
-            line = 0;
-        }
-
-        uchar* line;
-        FILE*  f;
+        uchar *line;
+        FILE  *f;
     };
-
-    CleanupData* cleanupData = new CleanupData;
-
+    CleanupData *cleanupData = new CleanupData;
     cleanupData->setFile(file);
 
     // If an error occurs during writing, libjpeg will jump here
@@ -708,14 +625,9 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     if (quality < 0)
-    {
         quality = 90;
-    }
-
     if (quality > 100)
-    {
         quality = 100;
-    }
 
     QVariant subSamplingAttr = imageGetAttribute("subsampling");
     int subsampling = subSamplingAttr.isValid() ? subSamplingAttr.toInt() : 1;  // Medium
@@ -768,9 +680,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     kDebug() << "Using LibJPEG quality compression value: " << quality;
 
     if (observer)
-    {
         observer->progressInfo(m_image, 0.1F);
-    }
 
     // -------------------------------------------------------------------
     // Write ICC profile.
@@ -779,13 +689,11 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     if (!profile_rawdata.isEmpty())
     {
-        write_icc_profile (&cinfo, (JOCTET*)profile_rawdata.data(), profile_rawdata.size());
+        write_icc_profile (&cinfo, (JOCTET *)profile_rawdata.data(), profile_rawdata.size());
     }
 
     if (observer)
-    {
         observer->progressInfo(m_image, 0.2F);
-    }
 
     // -------------------------------------------------------------------
     // Write Image data.
@@ -806,14 +714,12 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
             if (observer && j == checkPoint)
             {
                 checkPoint += granularity(observer, h, 0.8F);
-
                 if (!observer->continueQuery(m_image))
                 {
                     jpeg_destroy_compress(&cinfo);
                     delete cleanupData;
                     return false;
                 }
-
                 // use 0-20% for pseudo-progress, now fill 20-100%
                 observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)j)/((float)h) )));
             }
@@ -843,14 +749,12 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
             if (observer && j == checkPoint)
             {
                 checkPoint += granularity(observer, h, 0.8F);
-
                 if (!observer->continueQuery(m_image))
                 {
                     jpeg_destroy_compress(&cinfo);
                     delete cleanupData;
                     return false;
                 }
-
                 // use 0-20% for pseudo-progress, now fill 20-100%
                 observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)j)/((float)h) )));
             }

@@ -52,7 +52,7 @@ namespace Digikam
 {
 
 MetadataKeys::MetadataKeys()
-    : DbKeysCollection(i18n("Metadata Information"))
+            : DbKeysCollection(i18n("Metadata Information"))
 {
     addId(KEY_MAKE,                         i18n("Make of the camera"));
     addId(KEY_MODEL,                        i18n("Model of the camera"));
@@ -78,70 +78,22 @@ QString MetadataKeys::getDbValue(const QString& key, ParseSettings& settings)
     ImageMetadataContainer container = info.imageMetadataContainer();
     QString result;
 
-    if (key == KEY_MAKE)
-    {
-        result = container.make;
-    }
-    else if (key == KEY_MODEL)
-    {
-        result = container.model;
-    }
-    else if (key == KEY_LENS)
-    {
-        result = container.lens;
-    }
-    else if (key == KEY_APERTURE)
-    {
-        result = container.aperture;
-    }
-    else if (key == KEY_FOCALLENGTH)
-    {
-        result = container.focalLength;
-    }
-    else if (key == KEY_FOCALLENGTH35)
-    {
-        result = container.focalLength35;
-    }
-    else if (key == KEY_EXPOSURETIME)
-    {
-        result = container.exposureTime;
-    }
-    else if (key == KEY_EXPOSUREPROGRAM)
-    {
-        result = container.exposureProgram;
-    }
-    else if (key == KEY_EXPOSUREMODE)
-    {
-        result = container.exposureMode;
-    }
-    else if (key == KEY_SENSITIVITY)
-    {
-        result = container.sensitivity;
-    }
-    else if (key == KEY_FLASHMODE)
-    {
-        result = container.flashMode;
-    }
-    else if (key == KEY_WHITEBALANCE)
-    {
-        result = container.whiteBalance;
-    }
-    else if (key == KEY_WHITEBALANCECOLORTEMPERATURE)
-    {
-        result = container.whiteBalanceColorTemperature;
-    }
-    else if (key == KEY_METERINGMODE)
-    {
-        result = container.meteringMode;
-    }
-    else if (key == KEY_SUBJECTDISTANCE)
-    {
-        result = container.subjectDistance;
-    }
-    else if (key == KEY_SUBJECTDISTANCECATEGORY)
-    {
-        result = container.subjectDistanceCategory;
-    }
+    if      (key == KEY_MAKE)                         result = container.make;
+    else if (key == KEY_MODEL)                        result = container.model;
+    else if (key == KEY_LENS)                         result = container.lens;
+    else if (key == KEY_APERTURE)                     result = container.aperture;
+    else if (key == KEY_FOCALLENGTH)                  result = container.focalLength;
+    else if (key == KEY_FOCALLENGTH35)                result = container.focalLength35;
+    else if (key == KEY_EXPOSURETIME)                 result = container.exposureTime;
+    else if (key == KEY_EXPOSUREPROGRAM)              result = container.exposureProgram;
+    else if (key == KEY_EXPOSUREMODE)                 result = container.exposureMode;
+    else if (key == KEY_SENSITIVITY)                  result = container.sensitivity;
+    else if (key == KEY_FLASHMODE)                    result = container.flashMode;
+    else if (key == KEY_WHITEBALANCE)                 result = container.whiteBalance;
+    else if (key == KEY_WHITEBALANCECOLORTEMPERATURE) result = container.whiteBalanceColorTemperature;
+    else if (key == KEY_METERINGMODE)                 result = container.meteringMode;
+    else if (key == KEY_SUBJECTDISTANCE)              result = container.subjectDistance;
+    else if (key == KEY_SUBJECTDISTANCECATEGORY)      result = container.subjectDistanceCategory;
 
     return result;
 }

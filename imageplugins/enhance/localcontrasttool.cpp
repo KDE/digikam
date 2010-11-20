@@ -70,7 +70,7 @@ public:
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+        {}
 
     static const QString   configGroupName;
     static const QString   configHistogramChannelEntry;
@@ -89,8 +89,8 @@ const QString LocalContrastTool::LocalContrastToolPriv::configHistogramScaleEntr
 // --------------------------------------------------------
 
 LocalContrastTool::LocalContrastTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new LocalContrastToolPriv)
+                 : EditorToolThreaded(parent),
+                   d(new LocalContrastToolPriv)
 {
     setObjectName("localcontrast");
     setToolName(i18n("Local Contrast"));
@@ -126,9 +126,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 LocalContrastTool::~LocalContrastTool()
 {
     if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
+       delete [] d->destinationPreviewData;
 
     delete d;
 }
@@ -179,14 +177,12 @@ void LocalContrastTool::putPreviewData()
     // Update histogram.
 
     if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
+       delete [] d->destinationPreviewData;
 
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-            preview.width(), preview.height(), preview.sixteenBit(),
-            0, 0, 0, false);
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
 void LocalContrastTool::putFinalData()

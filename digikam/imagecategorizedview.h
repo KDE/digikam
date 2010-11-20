@@ -49,24 +49,24 @@ class ImageCategorizedView : public DCategorizedView
 
 public:
 
-    ImageCategorizedView(QWidget* parent = 0);
+    ImageCategorizedView(QWidget *parent = 0);
     ~ImageCategorizedView();
 
-    void setModels(ImageModel* model, ImageFilterModel* filterModel);
+    void setModels(ImageModel *model, ImageFilterModel *filterModel);
 
-    ImageModel* imageModel() const;
-    ImageFilterModel* imageFilterModel() const;
+    ImageModel *imageModel() const;
+    ImageFilterModel *imageFilterModel() const;
 
     /// Returns 0 if the ImageModel is not an ImageThumbnailModel
-    ImageThumbnailModel* imageThumbnailModel() const;
+    ImageThumbnailModel *imageThumbnailModel() const;
 
     /// Returns 0 if the ImageModel is not an ImageAlbumModel
-    ImageAlbumModel* imageAlbumModel() const;
-    ImageAlbumFilterModel* imageAlbumFilterModel() const;
+    ImageAlbumModel *imageAlbumModel() const;
+    ImageAlbumFilterModel *imageAlbumFilterModel() const;
 
-    ImageDelegate* delegate() const;
+    ImageDelegate *delegate() const;
 
-    Album* currentAlbum() const;
+    Album *currentAlbum() const;
 
     ImageInfo currentInfo() const;
     KUrl currentUrl() const;
@@ -85,15 +85,9 @@ public:
      *  and the next info for n = 1.
      *  Returns a null info if either startingPoint or the nth info are
      *  not contained in the model */
-    ImageInfo nextInOrder(const ImageInfo& startingPoint, int nth);
-    ImageInfo previousInfo(const ImageInfo& info)
-    {
-        return nextInOrder(info, -1);
-    }
-    ImageInfo nextInfo(const ImageInfo& info)
-    {
-        return nextInOrder(info, 1);
-    }
+    ImageInfo nextInOrder(const ImageInfo &startingPoint, int nth);
+    ImageInfo previousInfo(const ImageInfo &info) { return nextInOrder(info, -1); }
+    ImageInfo nextInfo(const ImageInfo &info) { return nextInOrder(info, 1); }
 
     ThumbnailSize thumbnailSize() const;
     virtual void setThumbnailSize(const ThumbnailSize& size);
@@ -101,17 +95,17 @@ public:
     /** If the model is categorized by an album, returns the album of the category
      *  that contains the position.
      *  If this is not applicable, return the current album. May return 0. */
-    Album* albumAt(const QPoint& pos);
+    Album *albumAt(const QPoint& pos);
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
-    void addOverlay(ImageDelegateOverlay* overlay);
-    void removeOverlay(ImageDelegateOverlay* overlay);
+    void addOverlay(ImageDelegateOverlay *overlay);
+    void removeOverlay(ImageDelegateOverlay *overlay);
 
     void addSelectionOverlay();
 
 public Q_SLOTS:
 
-    void openAlbum(Album* album);
+    void openAlbum(Album *album);
 
     void setThumbnailSize(int size);
     /** Scroll the view to the given item when it becomes available */
@@ -144,18 +138,18 @@ protected:
 
     /// Reimplement these in a subclass
     virtual void activated(const ImageInfo& info);
-    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
-    virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
+    virtual void showContextMenuOnInfo(QContextMenuEvent *event, const ImageInfo& info);
+    virtual void showContextMenuOnIndex(QContextMenuEvent *event, const QModelIndex& index);
 
     // reimplemented from parent class
-    void setItemDelegate(ImageDelegate* delegate);
+    void setItemDelegate(ImageDelegate *delegate);
     void indexActivated(const QModelIndex& index);
-    QSortFilterProxyModel* filterModel() const;
+    QSortFilterProxyModel *filterModel() const;
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);
-    void paintEvent(QPaintEvent* e);
-    void selectionChanged(const QItemSelection&, const QItemSelection&);
+    void paintEvent(QPaintEvent *e);
+    void selectionChanged(const QItemSelection &, const QItemSelection &);
     void updateGeometries();
-    ImageModelDragDropHandler* dragDropHandler() const;
+    ImageModelDragDropHandler *dragDropHandler() const;
 
 private Q_SLOTS:
 

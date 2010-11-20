@@ -74,17 +74,14 @@ class SimpleCollectionScannerObserver : public CollectionScannerObserver
 {
 public:
 
-    SimpleCollectionScannerObserver(bool* var) : m_continue(var)
+    SimpleCollectionScannerObserver(bool *var) : m_continue(var)
     {
         *m_continue = true;
     }
 
-    bool continueQuery()
-    {
-        return *m_continue;
-    }
+    bool continueQuery() { return *m_continue; }
 
-    bool* m_continue;
+    bool *m_continue;
 };
 
 class ScanControllerPriv
@@ -156,50 +153,35 @@ public:
     QPixmap albumPixmap()
     {
         if (albumPix.isNull())
-        {
             albumPix = KIconLoader::global()->loadIcon("folder-image", KIconLoader::NoGroup, 32);
-        }
-
         return albumPix;
     }
 
     QPixmap rootPixmap()
     {
         if (rootPix.isNull())
-        {
             rootPix = KIconLoader::global()->loadIcon("folder-open", KIconLoader::NoGroup, 32);
-        }
-
         return rootPix;
     }
 
     QPixmap actionPixmap()
     {
         if (actionPix.isNull())
-        {
             actionPix = KIconLoader::global()->loadIcon("system-run", KIconLoader::NoGroup, 32);
-        }
-
         return actionPix;
     }
 
     QPixmap errorPixmap()
     {
         if (errorPix.isNull())
-        {
             errorPix = KIconLoader::global()->loadIcon("dialog-error", KIconLoader::NoGroup, 32);
-        }
-
         return errorPix;
     }
 
     QPixmap restartPixmap()
     {
         if (errorPix.isNull())
-        {
             errorPix = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::NoGroup, 32);
-        }
-
         return errorPix;
     }
 
@@ -207,7 +189,6 @@ public:
     {
         // called with locked mutex
         QDateTime current = QDateTime::currentDateTime();
-
         if (idle &&
             lastHintAdded.isValid() && lastHintAdded.secsTo(current) > 5*60)
         {
@@ -215,11 +196,8 @@ public:
             albumHints.clear();
             itemChangeHints.clear();
         }
-
         if (setAccessTime)
-        {
             lastHintAdded = current;
-        }
     }
 };
 
@@ -244,11 +222,7 @@ private Q_SLOTS:
 // for ScanControllerLoadingCacheFileWatch
 #include "scancontroller.moc"
 
-class ScanControllerCreator
-{
-public:
-    ScanController object;
-};
+class ScanControllerCreator { public: ScanController object; };
 K_GLOBAL_STATIC(ScanControllerCreator, creator)
 
 ScanController* ScanController::instance()
@@ -257,7 +231,7 @@ ScanController* ScanController::instance()
 }
 
 ScanController::ScanController()
-    : d(new ScanControllerPriv)
+              : d(new ScanControllerPriv)
 {
     // create event loop
     d->eventLoop = new QEventLoop(this);
@@ -287,11 +261,11 @@ ScanController::ScanController()
             this, SLOT(slotRelaxedScanning()));
 
     // interthread connections
-    connect(this, SIGNAL(errorFromInitialization(const QString&)),
-            this, SLOT(slotErrorFromInitialization(const QString&)));
+    connect(this, SIGNAL(errorFromInitialization(const QString &)),
+            this, SLOT(slotErrorFromInitialization(const QString &)));
 
-    connect(this, SIGNAL(progressFromInitialization(const QString&, int)),
-            this, SLOT(slotProgressFromInitialization(const QString&, int)));
+    connect(this, SIGNAL(progressFromInitialization(const QString &, int)),
+            this, SLOT(slotProgressFromInitialization(const QString &, int)));
 
     // start thread
     d->running = true;
@@ -309,9 +283,7 @@ ScanController::~ScanController()
 void ScanController::shutDown()
 {
     if (!isRunning())
-    {
         return;
-    }
 
     d->running = false;
     {
@@ -325,9 +297,7 @@ void ScanController::shutDown()
 void ScanController::createProgressDialog()
 {
     if (d->progressDialog)
-    {
         return;
-    }
 
     d->progressDialog = new DProgressDlg(0);
     d->progressDialog->setLabel(i18n("<b>Scanning collections, please wait...</b>"));
@@ -354,9 +324,7 @@ void ScanController::slotCancelPressed()
 void ScanController::slotTriggerShowProgressDialog()
 {
     if (d->progressDialog && !d->showTimer->isActive() && !d->progressDialog->isVisible())
-    {
         d->showTimer->start(300);
-    }
 }
 
 void ScanController::slotShowProgressDialog()
@@ -364,9 +332,7 @@ void ScanController::slotShowProgressDialog()
     if (d->progressDialog)
     {
         if (!d->splash || !CollectionScanner::databaseInitialScanDone())
-        {
             d->progressDialog->show();
-        }
     }
 }
 
@@ -387,7 +353,7 @@ ScanController::Advice ScanController::databaseInitialization()
     if (!d->fileWatchInstalled)
     {
         d->fileWatchInstalled = true; // once per application lifetime only
-        LoadingCache* cache = LoadingCache::cache();
+        LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         cache->setFileWatch(new ScanControllerLoadingCacheFileWatch);
     }
@@ -398,7 +364,7 @@ ScanController::Advice ScanController::databaseInitialization()
     return d->advice;
 }
 
-void ScanController::completeCollectionScan(SplashScreen* splash)
+void ScanController::completeCollectionScan(SplashScreen *splash)
 {
     d->splash = splash;
     createProgressDialog();
@@ -424,28 +390,19 @@ void ScanController::completeCollectionScan(SplashScreen* splash)
 void ScanController::scheduleCollectionScan(const QString& path)
 {
     QMutexLocker lock(&d->mutex);
-
     if (!d->scanTasks.contains(path))
-    {
         d->scanTasks << path;
-    }
-
     d->condVar.wakeAll();
 }
 
 void ScanController::scheduleCollectionScanRelaxed(const QString& path)
 {
     if (!d->relaxedTimer->isActive())
-    {
         d->relaxedTimer->start();
-    }
 
     QMutexLocker lock(&d->mutex);
-
     if (!d->scanTasks.contains(path))
-    {
         d->scanTasks << path;
-    }
 }
 
 void ScanController::slotRelaxedScanning()
@@ -515,9 +472,7 @@ void ScanController::cancelAllAndSuspendCollectionScan()
     d->scanSuspended++;
 
     while (!d->idle)
-    {
         d->condVar.wait(&d->mutex, 20);
-    }
 }
 
 void ScanController::suspendCollectionScan()
@@ -529,16 +484,10 @@ void ScanController::suspendCollectionScan()
 void ScanController::resumeCollectionScan()
 {
     QMutexLocker lock(&d->mutex);
-
     if (d->scanSuspended)
-    {
         d->scanSuspended--;
-    }
-
     if (!d->scanSuspended)
-    {
         d->condVar.wakeAll();
-    }
 }
 
 void ScanController::run()
@@ -549,7 +498,6 @@ void ScanController::run()
         QString task;
         {
             QMutexLocker lock(&d->mutex);
-
             if (d->needsInitialization)
             {
                 d->needsInitialization = false;
@@ -578,13 +526,9 @@ void ScanController::run()
             d->continueInitialization = true;
             // pass "this" as InitializationObserver
             bool success = DatabaseAccess::checkReadyForUse(this);
-
             // If d->advice has not been adjusted to a value indicating failure, do this here
             if (!success && d->advice == Success)
-            {
                 d->advice = ContinueWithoutDatabase;
-            }
-
             emit databaseInitialized(success);
         }
         else if (doScan)
@@ -615,7 +559,7 @@ void ScanController::run()
 }
 
 // (also implementing InitializationObserver)
-void ScanController::connectCollectionScanner(CollectionScanner* scanner)
+void ScanController::connectCollectionScanner(CollectionScanner *scanner)
 {
     scanner->setSignalsEnabled(true);
 
@@ -644,9 +588,7 @@ void ScanController::connectCollectionScanner(CollectionScanner* scanner)
 void ScanController::slotTotalFilesToScan(int count)
 {
     if (d->progressDialog)
-    {
         d->progressDialog->incrementMaximum(count);
-    }
 }
 
 void ScanController::slotStartCompleteScan()
@@ -654,70 +596,47 @@ void ScanController::slotStartCompleteScan()
     slotTriggerShowProgressDialog();
 
     QString message = i18n("Preparing collection scan");
-
     if (d->splash)
-    {
         d->splash->message(message);
-    }
-
     if (d->progressDialog)
-    {
         d->progressDialog->addedAction(d->restartPixmap(), message);
-    }
 }
 
 void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QString& album)
 {
     Q_UNUSED(albumRoot);
-
     if (d->progressDialog)
-    {
         d->progressDialog->addedAction(d->albumPixmap(), ' ' + album);
-    }
 }
 
 void ScanController::slotScannedFiles(int filesScanned)
 {
     if (d->progressDialog)
-    {
         d->progressDialog->advance(filesScanned);
-    }
 }
 
 void ScanController::slotStartScanningAlbumRoot(const QString& albumRoot)
 {
     if (d->progressDialog)
-    {
         d->progressDialog->addedAction(d->rootPixmap(), albumRoot);
-    }
 }
 
 void ScanController::slotStartScanningForStaleAlbums()
 {
     QString message = i18n("Scanning for removed albums");
-
     if (d->splash)
-    {
         d->splash->message(message);
-    }
     else if (d->progressDialog)
-    {
         d->progressDialog->addedAction(d->actionPixmap(), message);
-    }
 }
 
 void ScanController::slotStartScanningAlbumRoots()
 {
     QString message = i18n("Scanning images in individual albums");
-
     if (d->splash)
-    {
         d->splash->message(message);
-    }
     else if (d->progressDialog)
-    {
         d->progressDialog->addedAction(d->actionPixmap(), message);
-    }
 }
 
 // implementing InitializationObserver
@@ -740,9 +659,7 @@ void ScanController::slotProgressFromInitialization(const QString& message, int 
     // main thread
 
     if (d->splash)
-    {
         d->splash->message(message);
-    }
     else if (d->progressDialog)
     {
         d->progressDialog->addedAction(d->actionPixmap(), message);
@@ -754,7 +671,7 @@ void ScanController::slotProgressFromInitialization(const QString& message, int 
 void ScanController::finishedSchemaUpdate(UpdateResult result)
 {
     // not from main thread
-    switch (result)
+    switch(result)
     {
         case InitializationObserver::UpdateSuccess:
             d->advice = Success;
@@ -786,15 +703,10 @@ void ScanController::slotErrorFromInitialization(const QString& errorMessage)
 {
     // main thread
     QString message = i18n("Error");
-
     if (d->splash)
-    {
         d->splash->message(message);
-    }
     else if (d->progressDialog)
-    {
         d->progressDialog->addedAction(d->errorPixmap(), message);
-    }
 
     KMessageBox::error(d->progressDialog, errorMessage);
 }
@@ -802,52 +714,38 @@ void ScanController::slotErrorFromInitialization(const QString& errorMessage)
 void ScanController::setInitializationMessage()
 {
     QString message = i18n("Initializing database");
-
     if (d->splash)
-    {
         d->splash->message(message);
-    }
-
     if (d->progressDialog)
-    {
         d->progressDialog->addedAction(d->restartPixmap(), message);
-    }
 }
 
-static AlbumCopyMoveHint hintForAlbum(const PAlbum* album, int dstAlbumRootId, const QString& relativeDstPath,
+static AlbumCopyMoveHint hintForAlbum(const PAlbum *album, int dstAlbumRootId, const QString& relativeDstPath,
                                       const QString& albumName)
 {
     QString dstAlbumPath;
-
     if (relativeDstPath == "/")
-    {
         dstAlbumPath = relativeDstPath + albumName;
-    }
     else
-    {
         dstAlbumPath = relativeDstPath + '/' + albumName;
-    }
 
     return AlbumCopyMoveHint(album->albumRootId(), album->id(),
                              dstAlbumRootId, dstAlbumPath);
 }
 
-static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* album, int dstAlbumRootId, QString relativeDstPath,
-        const QString& albumName)
+static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum *album, int dstAlbumRootId, QString relativeDstPath,
+                                              const QString& albumName)
 {
     QList<AlbumCopyMoveHint> newHints;
 
     newHints << hintForAlbum(album, dstAlbumRootId, relativeDstPath, albumName);
     QString parentAlbumPath = album->albumPath();
-
     if (parentAlbumPath == "/")
-    {
-        parentAlbumPath.clear();    // do not cut away a "/" in mid() below
-    }
+        parentAlbumPath.clear(); // do not cut away a "/" in mid() below
 
     for (AlbumIterator it(const_cast<PAlbum*>(album)); *it; ++it)
     {
-        PAlbum* a = (PAlbum*)*it;
+        PAlbum *a = (PAlbum *)*it;
         QString childAlbumPath = a->albumPath();
         newHints << hintForAlbum(a, dstAlbumRootId, relativeDstPath, albumName + childAlbumPath.mid(parentAlbumPath.length()));
     }
@@ -855,37 +753,35 @@ static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* album, int dstAlbumR
     return newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const QString& dstPath, const QString& newAlbumName)
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString& dstPath, const QString& newAlbumName)
 {
     // get album root and album from dst path
     CollectionLocation location = CollectionManager::instance()->locationForPath(dstPath);
-
     if (location.isNull())
     {
         kWarning() << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath
-                   << "does not point to an available location.";
+                        << "does not point to an available location.";
         return;
     }
-
     QString relativeDstPath = CollectionManager::instance()->album(location, dstPath);
 
     QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, location.id(), relativeDstPath,
-                                        newAlbumName.isNull() ? album->title() : newAlbumName);
+                                                      newAlbumName.isNull() ? album->title() : newAlbumName);
 
     QMutexLocker lock(&d->mutex);
     d->albumHints << newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const PAlbum* dstAlbum, const QString& newAlbumName)
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const PAlbum *dstAlbum, const QString& newAlbumName)
 {
     QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, dstAlbum->albumRootId(), dstAlbum->albumPath(),
-                                        newAlbumName.isNull() ? album->title() : newAlbumName);
+                                                      newAlbumName.isNull() ? album->title() : newAlbumName);
 
     QMutexLocker lock(&d->mutex);
     d->albumHints << newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* dstAlbum, QStringList itemNames)
+void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum *dstAlbum, QStringList itemNames)
 {
     ItemCopyMoveHint hint(ids, dstAlbum->albumRootId(), dstAlbum->id(), itemNames);
 
@@ -894,7 +790,7 @@ void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const P
     d->itemHints << hint;
 }
 
-void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* dstAlbum, QString itemName)
+void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum *dstAlbum, QString itemName)
 {
     ItemCopyMoveHint hint(QList<qlonglong>() << id, dstAlbum->albumRootId(), dstAlbum->id(), QStringList() << itemName);
 
@@ -925,11 +821,11 @@ void ScanController::hintAtModificationOfItem(qlonglong id)
 
 ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
 {
-    DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
+    DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
     // we opt for a queued connection to make stuff a bit relaxed
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChanged(const ImageChangeset&)),
+    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
+            this, SLOT(slotImageChanged(const ImageChangeset &)),
             Qt::QueuedConnection);
 }
 
@@ -940,7 +836,6 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
     foreach (const qlonglong& imageId, changeset.ids())
     {
         DatabaseFields::Set changes = changeset.changes();
-
         if (changes & DatabaseFields::ModificationDate)
         {
             ImageInfo info(imageId);

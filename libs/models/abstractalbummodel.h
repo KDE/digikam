@@ -87,8 +87,8 @@ public:
      * Pass the root album if it is already available.
      * Do not use this class directly, but one of the subclasses.
      */
-    AbstractAlbumModel(Album::Type albumType, Album* rootAlbum, RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                       QObject* parent = 0);
+    AbstractAlbumModel(Album::Type albumType, Album *rootAlbum, RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                       QObject *parent = 0);
     ~AbstractAlbumModel();
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -102,27 +102,27 @@ public:
 
     virtual Qt::DropActions supportedDropActions() const;
     virtual QStringList mimeTypes() const;
-    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
-    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
+    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
+    virtual QMimeData * mimeData(const QModelIndexList& indexes) const;
 
     /// Set a drag drop handler.
-    void setDragDropHandler(AlbumModelDragDropHandler* handler);
+    void setDragDropHandler(AlbumModelDragDropHandler *handler);
 
     /// Returns the drag drop handler, or 0 if none is installed
-    AlbumModelDragDropHandler* dragDropHandler() const;
+    AlbumModelDragDropHandler *dragDropHandler() const;
 
     /** Returns the album object associated with the given model index */
-    Album* albumForIndex(const QModelIndex& index) const;
+    Album *albumForIndex(const QModelIndex& index) const;
     /** Return the QModelIndex for the given album, or an invalid index if
         the album is not contained in this model. */
-    QModelIndex indexForAlbum(Album* album) const;
+    QModelIndex indexForAlbum(Album *album) const;
 
     /** Returns the album represented by the index. In contrast to albumForIndex(),
      *  the index can be from any proxy model, as long as an AbstractAlbumModel is at the end.
      */
-    static Album* retrieveAlbum(const QModelIndex& index);
+    static Album *retrieveAlbum(const QModelIndex& index);
 
-    Album* rootAlbum() const;
+    Album *rootAlbum() const;
     /// Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index. */
     QModelIndex rootAlbumIndex() const;
 
@@ -143,18 +143,18 @@ protected:
 
     // these can be reimplemented in a subclass
     /// For subclassing convenience: A part of the implementation of data()
-    virtual QVariant albumData(Album* a, int role) const;
+    virtual QVariant albumData(Album *a, int role) const;
     /// For subclassing convenience: A part of the implementation of data()
-    virtual QVariant decorationRoleData(Album* a) const;
+    virtual QVariant decorationRoleData(Album *a) const;
     /// For subclassing convenience: A port of the implementation of data()
-    virtual QVariant sortRoleData(Album* a) const;
+    virtual QVariant sortRoleData(Album *a) const;
     /// For subclassing convenience: A part of the implementation of headerData()
     virtual QString columnHeader() const;
     /// For subclassing convenience: A part of the implementation of itemFlags()
-    virtual Qt::ItemFlags itemFlags(Album* album) const;
+    virtual Qt::ItemFlags itemFlags(Album *album) const;
     /** Returns true for those and only those albums that shall be contained in this model.
      *  They must have a common root album, which is set in the constructor. */
-    virtual bool filterAlbum(Album* album) const;
+    virtual bool filterAlbum(Album *album) const;
     /// Notification when an entry is removed
     virtual void albumCleared(Album* /*album*/) {};
     /// Notification when all entries are removed
@@ -167,13 +167,13 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotAlbumAboutToBeAdded(Album* album, Album* parent, Album* prev);
-    void slotAlbumAdded(Album*);
-    void slotAlbumAboutToBeDeleted(Album* album);
-    void slotAlbumHasBeenDeleted(void*);
+    void slotAlbumAboutToBeAdded(Album *album, Album *parent, Album *prev);
+    void slotAlbumAdded(Album *);
+    void slotAlbumAboutToBeDeleted(Album *album);
+    void slotAlbumHasBeenDeleted(void *);
     void slotAlbumsCleared();
     void slotAlbumIconChanged(Album* album);
-    void slotAlbumRenamed(Album* album);
+    void slotAlbumRenamed(Album *album);
 
 private:
 
@@ -189,9 +189,9 @@ class AbstractSpecificAlbumModel : public AbstractAlbumModel
 public:
 
     /// Abstract base class, do not instantiate.
-    AbstractSpecificAlbumModel(Album::Type albumType, Album* rootAlbum,
+    AbstractSpecificAlbumModel(Album::Type albumType, Album *rootAlbum,
                                RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                               QObject* parent = 0);
+                               QObject *parent = 0);
 
 protected:
 
@@ -200,12 +200,12 @@ protected:
 
     /// You need to call this from your constructor if you intend to load the thumbnail facilities of this class
     void setupThumbnailLoading();
-    void emitDataChangedForChildren(Album* album);
+    void emitDataChangedForChildren(Album *album);
 
 protected Q_SLOTS:
 
-    void slotGotThumbnailFromIcon(Album* album, const QPixmap& thumbnail);
-    void slotThumbnailLost(Album* album);
+    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
+    void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
 
 protected:
@@ -223,9 +223,9 @@ public:
 
     /// Supports displaying a count alongside the album name in DisplayRole
 
-    AbstractCountingAlbumModel(Album::Type albumType, Album* rootAlbum,
+    AbstractCountingAlbumModel(Album::Type albumType, Album *rootAlbum,
                                RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                               QObject* parent = 0);
+                               QObject *parent = 0);
 
 public Q_SLOTS:
 
@@ -251,7 +251,7 @@ public Q_SLOTS:
      *
      * @return positive value or -1 if unknown
      */
-    virtual int albumCount(Album* album) const;
+    virtual int albumCount(Album *album) const;
 
 protected:
 
@@ -259,23 +259,23 @@ protected:
     virtual Album* albumForId(int id) const = 0;
 
     /// Can reimplement in subclass
-    virtual QString albumName(Album* a) const;
+    virtual QString albumName(Album *a) const;
 
     // Reimplemented from parent classes
-    virtual QVariant albumData(Album* a, int role) const;
-    virtual void albumCleared(Album* album);
+    virtual QVariant albumData(Album *a, int role) const;
+    virtual void albumCleared(Album *album);
     virtual void allAlbumsCleared();
 
     /// If you do not use setCountMap, excludeChildrenCount and includeChildrenCount, you can set a count here.
-    void setCount(Album* album, int count);
+    void setCount(Album *album, int count);
 
 protected Q_SLOTS:
 
-    void slotAlbumMoved(Album* album);
+    void slotAlbumMoved(Album *album);
 
 private:
 
-    void updateCount(Album* album);
+    void updateCount(Album *album);
 
 private:
 
@@ -296,9 +296,9 @@ public:
     /// Abstract base class that manages the check state of Albums.
     /// Call setCheckable(true) to enable checkable albums.
 
-    AbstractCheckableAlbumModel(Album::Type albumType, Album* rootAlbum,
+    AbstractCheckableAlbumModel(Album::Type albumType, Album *rootAlbum,
                                 RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                                QObject* parent = 0);
+                                QObject *parent = 0);
 
     /// Triggers if the albums in this model are checkable
     void setCheckable(bool isCheckable);
@@ -315,58 +315,58 @@ public:
     bool isTristate() const;
 
     /// Returns if the given album has the check state Checked
-    bool isChecked(Album* album) const;
+    bool isChecked(Album *album) const;
     /// Returns the check state of the album
-    Qt::CheckState checkState(Album* album) const;
+    Qt::CheckState checkState(Album *album) const;
 
     /// Sets the check state of album to Checked or Unchecked
-    void setChecked(Album* album, bool isChecked);
+    void setChecked(Album *album, bool isChecked);
     /// Sets the check state of the album
-    void setCheckState(Album* album, Qt::CheckState state);
+    void setCheckState(Album *album, Qt::CheckState state);
     /// Toggles the check state of album between Checked or Unchecked
-    void toggleChecked(Album* album);
+    void toggleChecked(Album *album);
 
     /// Returns a list of album with check state Checked
-    QList<Album*> checkedAlbums() const;
+    QList<Album *> checkedAlbums() const;
     /// Returns a list of album with partially check state Checked
-    QList<Album*> partiallyCheckedAlbums() const;
+    QList<Album *> partiallyCheckedAlbums() const;
 
     /// Resets the checked state of all albums to Qt::Unchecked
     void resetAllCheckedAlbums();
     /// Resets the checked state of all albums under the given parent
     void resetCheckedAlbums(QModelIndex parent = QModelIndex());
     /// Resets the checked state of all parents of the child including it.
-    void resetCheckedParentAlbums(QModelIndex& child);
+    void resetCheckedParentAlbums(QModelIndex &child);
     /// Checks all albums beneath the given parent
     void checkAllAlbums(QModelIndex parent = QModelIndex());
     // Checks all parent albums starting at the child, including it.
-    void checkAllParentAlbums(QModelIndex& child);
+    void checkAllParentAlbums(QModelIndex &child);
     /// Inverts the checked state of all albums under the given parent.
     void invertCheckedAlbums(QModelIndex parent = QModelIndex());
     /// Sets the checked state recursively for all children of and the given album.
-    void setCheckStateForChildren(Album* album, Qt::CheckState state);
+    void setCheckStateForChildren(Album *album, Qt::CheckState state);
     /// Sets the checked state recursively for all parents of and the given album.
-    void setCheckStateForParents(Album* album, Qt::CheckState state);
+    void setCheckStateForParents(Album *album, Qt::CheckState state);
 
 Q_SIGNALS:
 
     /** Emitted when the check state of an album changes.
      *  checkState contains the new Qt::CheckState of album */
-    void checkStateChanged(Album* album, Qt::CheckState checkState);
+    void checkStateChanged(Album *album, Qt::CheckState checkState);
 
 protected:
 
-    virtual QVariant albumData(Album* a, int role) const;
+    virtual QVariant albumData(Album *a, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
-    virtual void albumCleared(Album* album);
+    virtual void albumCleared(Album *album);
     virtual void allAlbumsCleared();
 
 private:
 
-    void setDataForParents(QModelIndex& child, const QVariant& value, int role = Qt::EditRole);
-    void setDataForChildren(QModelIndex& parent, const QVariant& value, int role = Qt::EditRole);
+    void setDataForParents(QModelIndex &child, const QVariant& value, int role = Qt::EditRole);
+    void setDataForChildren(QModelIndex &parent, const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags                 m_extraFlags;
     bool                          m_rootIsCheckable;

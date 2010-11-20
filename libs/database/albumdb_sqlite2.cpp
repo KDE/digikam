@@ -72,9 +72,8 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
         m_valid = false;
     }
 
-    char* errMsg = 0;
+    char *errMsg = 0;
     m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
-
     if (m_db == 0)
     {
         kWarning() << "Cannot open database: " << errMsg;
@@ -88,12 +87,10 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
 }
 
 bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
-                              const bool debug)
+                      const bool debug)
 {
     if ( debug )
-    {
         kDebug() << "SQL-query: " << sql;
-    }
 
     if ( !m_db )
     {
@@ -102,11 +99,8 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     }
 
     const char* tail;
-
     sqlite_vm*  vm;
-
     char*       errorStr;
-
     int         error;
 
     // Compile SQL program to virtual machine
@@ -115,8 +109,8 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     if ( error != SQLITE_OK )
     {
         kWarning() << "sqlite_compile error: "
-                   << errorStr
-                   << " on query: " << sql;
+                        << errorStr
+                        << " on query: " << sql;
         sqlite_freemem( errorStr );
         return false;
     }
@@ -129,11 +123,8 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     while ( true )
     {
         error = sqlite_step( vm, &number, &value, &colName );
-
         if ( error == SQLITE_DONE || error == SQLITE_ERROR )
-        {
             break;
-        }
 
         // Iterate over columns
         for ( int i = 0; values && i < number; ++i )
@@ -148,8 +139,8 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     if ( error != SQLITE_DONE )
     {
         kWarning() << "sqlite_step error: "
-                   << errorStr
-                   << " on query: " << sql;
+                        << errorStr
+                        << " on query: " << sql;
         return false;
     }
 

@@ -45,12 +45,12 @@ class DIGIKAM_EXPORT DCategorizedView : public KCategorizedView
 
 public:
 
-    DCategorizedView(QWidget* parent = 0);
+    DCategorizedView(QWidget *parent = 0);
     ~DCategorizedView();
 
-    virtual QSortFilterProxyModel* filterModel() const = 0;
+    virtual QSortFilterProxyModel *filterModel() const = 0;
 
-    DItemDelegate* delegate() const;
+    DItemDelegate *delegate() const;
 
     int numberOfSelectedIndexes() const;
 
@@ -94,12 +94,12 @@ Q_SIGNALS:
     /** For overlays: Like the respective parent class signals, but with additional info.
      *  Do not change the mouse events.
      */
-    void clicked(const QMouseEvent* e, const QModelIndex& index);
-    void entered(const QMouseEvent* e, const QModelIndex& index);
+    void clicked(const QMouseEvent *e, const QModelIndex& index);
+    void entered(const QMouseEvent *e, const QModelIndex& index);
     /**  Remember you may want to check if the event is accepted or ignored.
      *   This signal is emitted after being handled by this widget.
      *   You can accept it if ignored. */
-    void keyPressed(QKeyEvent* e);
+    void keyPressed(QKeyEvent *e);
 
 protected Q_SLOTS:
 
@@ -115,44 +115,44 @@ protected Q_SLOTS:
 protected:
 
     void encodeIsCutSelection(QMimeData* mime, bool isCutSelection);
-    bool decodeIsCutSelection(const QMimeData* mimeData);
+    bool decodeIsCutSelection(const QMimeData *mimeData);
 
-    void setToolTip(ItemViewToolTip* tip);
-    void setItemDelegate(DItemDelegate* delegate);
+    void setToolTip(ItemViewToolTip *tip);
+    void setItemDelegate(DItemDelegate *delegate);
     void updateDelegateSizes();
     void userInteraction();
 
     /// Reimplement these in a subclass
-    virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
-    virtual void showContextMenu(QContextMenuEvent* event);
+    virtual void showContextMenuOnIndex(QContextMenuEvent *event, const QModelIndex& index);
+    virtual void showContextMenu(QContextMenuEvent *event);
     virtual void indexActivated(const QModelIndex& index);
-    virtual ImageModelDragDropHandler* dragDropHandler() const = 0;
+    virtual ImageModelDragDropHandler *dragDropHandler() const = 0;
 
     /** Returns an index that is representative for the category at position pos */
     QModelIndex indexForCategoryAt(const QPoint& pos) const;
 
     // reimplemented from parent class
     void contextMenuEvent(QContextMenuEvent* event);
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dragMoveEvent(QDragMoveEvent* e);
-    void dropEvent(QDropEvent* e);
-    void keyPressEvent(QKeyEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *e);
+    void dropEvent(QDropEvent *e);
+    void keyPressEvent(QKeyEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
-    void resizeEvent(QResizeEvent* e);
+    void resizeEvent(QResizeEvent *e);
     void reset();
-    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-    void rowsInserted(const QModelIndex& parent, int start, int end);
-    void selectionChanged(const QItemSelection&, const QItemSelection&);
+    void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
+    void rowsInserted(const QModelIndex &parent, int start, int end);
+    void selectionChanged(const QItemSelection &, const QItemSelection &);
     void startDrag(Qt::DropActions supportedActions);
-    bool viewportEvent(QEvent* event);
+    bool viewportEvent(QEvent *event);
     void wheelEvent(QWheelEvent* event);
 
 private Q_SLOTS:
 
-    void slotGridSizeChanged(const QSize&);
+    void slotGridSizeChanged(const QSize &);
 
 private:
 

@@ -49,12 +49,12 @@ namespace Digikam
 {
 
 DatabaseOptionDialog::DatabaseOptionDialog(Parseable* parent)
-    : ParseableDialog(parent),
-      dbkeySelectorView(0), separatorLineEdit(0)
+                    : ParseableDialog(parent),
+                      dbkeySelectorView(0), separatorLineEdit(0)
 {
     QWidget* mainWidget  = new QWidget(this);
     dbkeySelectorView    = new DbKeySelectorView(this);
-    QLabel* customLabel  = new QLabel(i18n("Keyword separator:"));
+    QLabel *customLabel  = new QLabel(i18n("Keyword separator:"));
     separatorLineEdit    = new KLineEdit(this);
     separatorLineEdit->setText("_");
 
@@ -79,7 +79,7 @@ DatabaseOptionDialog::~DatabaseOptionDialog()
 // --------------------------------------------------------
 
 DatabaseOption::DatabaseOption()
-    : Option(i18n("Database..."), i18n("Add information from the database"), SmallIcon("server-database"))
+              : Option(i18n("Database..."), i18n("Add information from the database"), SmallIcon("server-database"))
 {
     addToken("[db:||key||]", i18n("Add database information"));
     QRegExp reg("\\[db(:(.*))\\]");
@@ -161,7 +161,6 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
 
     DbKeysCollection* dbkey = 0;
     dbkey = m_map.value(keyword);
-
     if (!dbkey)
     {
         return QString();
@@ -178,7 +177,6 @@ void DatabaseOption::addDbKeysCollection(DbKeysCollection* key)
     }
 
     DbKeyIdsMap map = key->ids();
-
     for (DbKeyIdsMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
         m_map.insert(it.key(), key);

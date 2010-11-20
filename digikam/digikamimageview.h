@@ -43,10 +43,10 @@ class DigikamImageView : public ImageCategorizedView
 
 public:
 
-    DigikamImageView(QWidget* parent = 0);
+    DigikamImageView(QWidget *parent = 0);
     ~DigikamImageView();
 
-    ImageViewUtilities* utilities() const;
+    ImageViewUtilities *utilities() const;
 
     virtual void setThumbnailSize(const ThumbnailSize& size);
 
@@ -70,7 +70,7 @@ public Q_SLOTS:
     void setExifOrientationOfSelected(int orientation);
     void rename();
 
-    void assignRating(const QModelIndex& index, int rating);
+    void assignRating(const QModelIndex &index, int rating);
 
 Q_SIGNALS:
 

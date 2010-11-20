@@ -96,7 +96,7 @@ public:
      *  The threshold is in the range 0..1, with 1 meaning identical signature.
      */
     QList<qlonglong> bestMatchesForImageWithThreshold(qlonglong imageid,
-            double requiredPercentage, SketchType type=ScannedSketch);
+                                                      double requiredPercentage, SketchType type=ScannedSketch);
 
     /** Calculates the Haar signature, bring it in a form as stored in the DB,
      *  and encode it to Ascii data. Can be used for bestMatchesForSignature.
@@ -115,17 +115,17 @@ public:
      *  The threshold is in the range 0..1, with 1 meaning identical signature.
      */
     QMap< qlonglong, QList<qlonglong> > findDuplicates(const QSet<qlonglong>& images2Scan, double requiredPercentage,
-            HaarProgressObserver* observer = 0);
+                                                       HaarProgressObserver* observer = 0);
 
     /** Calls findDuplicates with all images in the given album ids */
     QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbums(const QList<int>& albums2Scan, double requiredPercentage,
-            HaarProgressObserver* observer = 0);
+                                                               HaarProgressObserver* observer = 0);
 
     /** Calls findDuplicates with all images in the given album and tag ids */
     QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
-            const QList<int>& tags2Scan,
-            double requiredPercentage,
-            HaarProgressObserver* observer = 0);
+                                                                      const QList<int>& tags2Scan,
+                                                                      double requiredPercentage,
+                                                                      HaarProgressObserver* observer = 0);
 
     /** Rebuilds the special search albums in the database that contain a list of possible candidates
      *  for duplicate images (one album per group of duplicates)
@@ -152,7 +152,7 @@ private:
 
     QList<qlonglong> bestMatches(Haar::SignatureData* data, int numberOfResults, SketchType type);
     QList<qlonglong> bestMatchesWithThreshold(Haar::SignatureData* querySig,
-            double requiredPercentage, SketchType type);
+                                              double requiredPercentage, SketchType type);
 
     QMap<qlonglong, double> searchDatabase(Haar::SignatureData* data, SketchType type);
     double calculateScore(Haar::SignatureData& querySig, Haar::SignatureData& targetSig,

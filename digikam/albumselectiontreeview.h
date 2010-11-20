@@ -35,8 +35,7 @@
 #include "albumtreeview.h"
 #include "albummodificationhelper.h"
 
-namespace Digikam
-{
+namespace Digikam {
 
 class AlbumSelectionTreeViewPriv;
 
@@ -48,9 +47,9 @@ class AlbumSelectionTreeViewPriv;
  */
 class AlbumSelectionTreeView: public AlbumTreeView
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    AlbumSelectionTreeView(QWidget* parent, AlbumModel* model, AlbumModificationHelper* albumModificationHelper);
+    AlbumSelectionTreeView(QWidget *parent, AlbumModel *model, AlbumModificationHelper *albumModificationHelper);
     ~AlbumSelectionTreeView();
 
     /**
@@ -65,13 +64,13 @@ Q_SIGNALS:
      *
      * @param album the album to find duplicates in
      */
-    void signalFindDuplicatesInAlbum(Album* album);
+    void signalFindDuplicatesInAlbum(Album *album);
 
 protected:
 
     virtual QString contextMenuTitle() const;
-    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
-    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
 
 private:
 
@@ -80,10 +79,10 @@ private:
      *
      * @param event event to process.
      */
-    bool viewportEvent(QEvent* event);
+    bool viewportEvent(QEvent *event);
 
 private:
-    AlbumSelectionTreeViewPriv* d;
+    AlbumSelectionTreeViewPriv *d;
 
 };
 

@@ -42,9 +42,9 @@
 namespace Digikam
 {
 
-/** Re-implementation of KPassivePopup to move pop-up notification
-    window on the bottom right corner of parent window. The goal is to simulate
-    the position of KDE notifier pop-up from task bar if this one is not available,
+/** Re-implementation of KPassivePopup to move pop-up notification 
+    window on the bottom right corner of parent window. The goal is to simulate 
+    the position of KDE notifier pop-up from task bar if this one is not available, 
     as for ex under Windows, Gnome, or using a remote connection through ssh.
  */
 class NotificationPassivePopup : public KPassivePopup
@@ -79,17 +79,12 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
                           const QPixmap& pixmap)
 {
     QPixmap logoPixmap = pixmap;
-
     if (logoPixmap.isNull())
     {
         if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
-        {
             logoPixmap = QPixmap(SmallIcon("digikam"));
-        }
         else
-        {
             logoPixmap = QPixmap(SmallIcon("showfoto"));
-        }
     }
 
     // TODO: this detection is not perfect because KNotify may never be started

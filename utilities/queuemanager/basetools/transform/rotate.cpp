@@ -63,7 +63,7 @@ public:
         useExif(0),
         comboBox(0),
         frSettings(0)
-    {}
+        {}
 
     const int             CUSTOM_ANGLE;
 
@@ -77,8 +77,8 @@ public:
 };
 
 Rotate::Rotate(QObject* parent)
-    : BatchTool("Rotate", TransformTool, parent),
-      d(new RotatePriv)
+      : BatchTool("Rotate", TransformTool, parent),
+        d(new RotatePriv)
 {
     setToolTitle(i18n("Rotate"));
     setToolDescription(i18n("A tool to rotate images."));
@@ -180,13 +180,11 @@ bool Rotate::toolOperations()
         if (useExif)
         {
             if (!exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Auto))
-            {
                 return false;
-            }
         }
         else
         {
-            switch (rotation)
+            switch(rotation)
             {
                 case DImg::ROT90:
                     return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate90));
@@ -198,12 +196,8 @@ bool Rotate::toolOperations()
                     return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate270));
                     break;
                 default:      // Custom value
-                    // there is no loss less methode to turn JPEG image with a custom angle.
-                    if (!loadToDImg())
-                    {
-                        return false;
-                    }
-
+                              // there is no loss less methode to turn JPEG image with a custom angle.
+                    if (!loadToDImg()) return false;
                     FreeRotationFilter fr(&image(), 0L, prm);
                     fr.startFilterDirectly();
                     DImg trg = fr.getTargetImage();
@@ -216,16 +210,12 @@ bool Rotate::toolOperations()
 
     // Non-JPEG image: DImg
 
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     if (useExif)
     {
         DMetadata meta(inputUrl().toLocalFile());
-
-        switch (meta.getImageOrientation())
+        switch(meta.getImageOrientation())
         {
             case DMetadata::ORIENTATION_HFLIP:
                 image().flip(DImg::HORIZONTAL);
@@ -266,7 +256,7 @@ bool Rotate::toolOperations()
     }
     else
     {
-        switch (rotation)
+        switch(rotation)
         {
             case DImg::ROT90:
                 image().rotate(DImg::ROT90);

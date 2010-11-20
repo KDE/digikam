@@ -122,8 +122,8 @@ public:
 };
 
 GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
-    : QObject(static_cast<QObject*>(parent)),
-      d(new GreycstorationSettingsPriv)
+                      : QObject(static_cast<QObject*>(parent)),
+                        d(new GreycstorationSettingsPriv)
 {
     d->parent = parent;
 
@@ -138,23 +138,23 @@ GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
     d->sharpnessInput->setDecimals(2);
     d->sharpnessInput->input()->setRange(0.01, 1.0, 0.1, true);
     d->sharpnessInput->setWhatsThis( i18n("Preservation of details to set the sharpening level "
-                                          "of the small features in the target image. "
-                                          "Higher values leave details sharp."));
+                                             "of the small features in the target image. "
+                                             "Higher values leave details sharp."));
 
     d->anisotropyLabel = new QLabel(i18n("Anisotropy:"), d->generalPage);
     d->anisotropyInput = new RDoubleNumInput(d->generalPage);
     d->anisotropyInput->setDecimals(2);
     d->anisotropyInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->anisotropyInput->setWhatsThis( i18n("Anisotropic (directional) modifier of the details. "
-                                           "Keep it small for Gaussian noise."));
+                                              "Keep it small for Gaussian noise."));
 
     d->amplitudeLabel = new QLabel(i18n("Smoothing:"), d->generalPage);
     d->amplitudeInput = new RDoubleNumInput(d->generalPage);
     d->amplitudeInput->setDecimals(2);
     d->amplitudeInput->input()->setRange(0.01, 500.0, 0.1, true);
     d->amplitudeInput->setWhatsThis( i18n("Total smoothing power: if the Detail Factor sets the relative "
-                                          "smoothing and the Anisotropy Factor the direction, "
-                                          "the Smoothing Factor sets the overall effect."));
+                                             "smoothing and the Anisotropy Factor the direction, "
+                                             "the Smoothing Factor sets the overall effect."));
 
     d->sigmaLabel = new QLabel(i18n("Regularity:"), d->generalPage);
     d->sigmaInput = new RDoubleNumInput(d->generalPage);
@@ -334,9 +334,7 @@ bool GreycstorationSettings::loadSettings(QFile& file, const QString& header)
     QTextStream stream( &file );
 
     if (stream.readLine() != header)
-    {
         return false;
-    }
 
     blockSignals(true);
 

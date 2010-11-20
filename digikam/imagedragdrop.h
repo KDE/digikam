@@ -41,23 +41,20 @@ class ImageDragDropHandler : public ImageModelDragDropHandler
 
 public:
 
-    ImageDragDropHandler(ImageModel* model);
+    ImageDragDropHandler(ImageModel *model);
 
-    ImageModel* model() const
-    {
-        return static_cast<ImageModel*>(m_model);
-    }
-    ImageAlbumModel* albumModel() const;
+    ImageModel *model() const { return static_cast<ImageModel*>(m_model); }
+    ImageAlbumModel *albumModel() const;
 
-    virtual bool dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
-    virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);
+    virtual bool dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex& droppedOn);
+    virtual Qt::DropAction accepts(const QDropEvent *e, const QModelIndex& dropIndex);
     virtual QStringList mimeTypes() const;
-    virtual QMimeData* createMimeData(const QList<QModelIndex> &);
+    virtual QMimeData *createMimeData(const QList<QModelIndex> &);
 
 Q_SIGNALS:
 
     void assignTags(const QList<ImageInfo>& list, const QList<int>& tagIDs);
-    void dioResult(KJob*);
+    void dioResult(KJob *);
 };
 
 } // namespace Digikam

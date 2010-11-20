@@ -57,7 +57,7 @@ class AnimatedClearButton : public QWidget
 
 public:
 
-    AnimatedClearButton(QWidget* parent = 0);
+    AnimatedClearButton(QWidget *parent = 0);
 
     QSize sizeHint () const;
 
@@ -84,7 +84,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void paintEvent(QPaintEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
 protected Q_SLOTS:
@@ -94,7 +94,7 @@ protected Q_SLOTS:
 
 private:
 
-    QTimeLine* m_timeline;
+    QTimeLine *m_timeline;
     QPixmap    m_pixmap;
     bool       m_stayAlwaysVisible;
 };
@@ -112,7 +112,7 @@ public:
      *  linear steps are not applicable
      */
 
-    CustomStepsDoubleSpinBox(QWidget* parent = 0);
+    CustomStepsDoubleSpinBox(QWidget *parent = 0);
 
     virtual void stepBy(int steps);
 
@@ -164,7 +164,7 @@ public:
      *  linear steps are not applicable
      */
 
-    CustomStepsIntSpinBox(QWidget* parent = 0);
+    CustomStepsIntSpinBox(QWidget *parent = 0);
 
     virtual void stepBy(int steps);
 
@@ -235,7 +235,7 @@ public:
      *  new StyleSheetDebugger(myWidget);
      *  That's all. Change the style sheet by editing it and pressing Ok. */
 
-    StyleSheetDebugger(QWidget* object);
+    StyleSheetDebugger(QWidget *object);
 
 protected Q_SLOTS:
 
@@ -243,9 +243,9 @@ protected Q_SLOTS:
 
 protected:
 
-    KTextEdit*      m_edit;
-    KPushButton*    m_okButton;
-    QWidget*        m_widget;
+    KTextEdit      *m_edit;
+    KPushButton    *m_okButton;
+    QWidget        *m_widget;
 };
 
 } // namespace Digikam

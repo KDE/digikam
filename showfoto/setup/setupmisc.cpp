@@ -58,7 +58,7 @@ public:
         useTrash(0),
         sidebarType(0),
         sortOrderComboBox(0)
-    {}
+        {}
 
     static const QString configGroupName;
     static const QString configDeleteItem2TrashEntry;
@@ -86,7 +86,7 @@ const QString SetupMisc::SetupMiscPriv::configReverseSortEntry("ReverseSort");
 // --------------------------------------------------------
 
 SetupMisc::SetupMisc(QWidget* parent)
-    : QScrollArea(parent), d(new SetupMiscPriv)
+         : QScrollArea(parent), d(new SetupMiscPriv)
 {
     QWidget* panel = new QWidget(viewport());
     setWidget(panel);

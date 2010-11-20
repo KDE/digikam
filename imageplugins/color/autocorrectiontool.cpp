@@ -62,7 +62,7 @@ public:
         correctionTools(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+        {}
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
@@ -84,8 +84,8 @@ const QString AutoCorrectionTool::AutoCorrectionToolPriv::configAutoCorrectionFi
 // --------------------------------------------------------
 
 AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new AutoCorrectionToolPriv)
+                  : EditorToolThreaded(parent),
+                    d(new AutoCorrectionToolPriv)
 {
     setObjectName("autocorrection");
     setToolName(i18n("Auto Correction"));
@@ -108,7 +108,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-    //                                EditorToolSettings::Try);
+//                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
@@ -117,48 +117,48 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Auto Levels"), AutoLevelsCorrection);
     item->setWhatsThis(i18n("<b>Auto Levels</b>:"
-                            "<p>This option maximizes the tonal range in the Red, "
-                            "Green, and Blue channels. It searches the image shadow and highlight "
-                            "limit values and adjusts the Red, Green, and Blue channels "
-                            "to a full histogram range.</p>"));
+                               "<p>This option maximizes the tonal range in the Red, "
+                               "Green, and Blue channels. It searches the image shadow and highlight "
+                               "limit values and adjusts the Red, Green, and Blue channels "
+                               "to a full histogram range.</p>"));
 
     item = d->correctionTools->addItem(new NormalizeFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Normalize"), NormalizeCorrection);
     item->setWhatsThis(i18n("<b>Normalize</b>:"
-                            "<p>This option scales brightness values across the active "
-                            "image so that the darkest point becomes black, and the "
-                            "brightest point becomes as bright as possible without "
-                            "altering its hue. This is often a \"magic fix\" for "
-                            "images that are dim or washed out.</p>"));
+                               "<p>This option scales brightness values across the active "
+                               "image so that the darkest point becomes black, and the "
+                               "brightest point becomes as bright as possible without "
+                               "altering its hue. This is often a \"magic fix\" for "
+                               "images that are dim or washed out.</p>"));
 
 
     item = d->correctionTools->addItem(new EqualizeFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Equalize"), EqualizeCorrection);
     item->setWhatsThis(i18n("<b>Equalize</b>:"
-                            "<p>This option adjusts the brightness of colors across the "
-                            "active image so that the histogram for the value channel "
-                            "is as nearly as possible flat, that is, so that each possible "
-                            "brightness value appears at about the same number of pixels "
-                            "as each other value. Sometimes Equalize works wonderfully at "
-                            "enhancing the contrasts in an image. Other times it gives "
-                            "garbage. It is a very powerful operation, which can either work "
-                            "miracles on an image or destroy it.</p>"));
+                               "<p>This option adjusts the brightness of colors across the "
+                               "active image so that the histogram for the value channel "
+                               "is as nearly as possible flat, that is, so that each possible "
+                               "brightness value appears at about the same number of pixels "
+                               "as each other value. Sometimes Equalize works wonderfully at "
+                               "enhancing the contrasts in an image. Other times it gives "
+                               "garbage. It is a very powerful operation, which can either work "
+                               "miracles on an image or destroy it.</p>"));
 
     item = d->correctionTools->addItem(new StretchFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Stretch Contrast"), StretchContrastCorrection);
     item->setWhatsThis(i18n("<b>Stretch Contrast</b>:"
-                            "<p>This option enhances the contrast and brightness "
-                            "of the RGB values of an image by stretching the lowest "
-                            "and highest values to their fullest range, adjusting "
-                            "everything in between.</p>"));
+                               "<p>This option enhances the contrast and brightness "
+                               "of the RGB values of an image by stretching the lowest "
+                               "and highest values to their fullest range, adjusting "
+                               "everything in between.</p>"));
 
     item = d->correctionTools->addItem(new AutoExpoFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Auto Exposure"), AutoExposureCorrection);
     item->setWhatsThis(i18n("<b>Auto Exposure</b>:"
-                            "<p>This option enhances the contrast and brightness "
-                            "of the RGB values of an image to calculate optimal "
-                            "exposition and black level using image histogram "
-                            "properties.</p>"));
+                               "<p>This option enhances the contrast and brightness "
+                               "of the RGB values of an image to calculate optimal "
+                               "exposition and black level using image histogram "
+                               "properties.</p>"));
 
     d->correctionTools->setFocus();
 
@@ -188,10 +188,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 AutoCorrectionTool::~AutoCorrectionTool()
 {
     if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
+       delete [] d->destinationPreviewData;
     delete d->correctionTools;
     delete d;
 }
@@ -250,14 +247,12 @@ void AutoCorrectionTool::putPreviewData()
     // Update histogram.
 
     if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
+       delete [] d->destinationPreviewData;
 
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-            preview.width(), preview.height(), preview.sixteenBit(),
-            0, 0, 0, false);
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
 void AutoCorrectionTool::prepareFinal()

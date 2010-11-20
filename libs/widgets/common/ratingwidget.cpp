@@ -95,7 +95,7 @@ public:
 };
 
 RatingWidget::RatingWidget(QWidget* parent)
-    : QWidget(parent), d(new RatingWidgetPriv)
+            : QWidget(parent), d(new RatingWidgetPriv)
 {
     slotThemeChanged();
 
@@ -111,9 +111,7 @@ RatingWidget::~RatingWidget()
 void RatingWidget::setupTimeLine()
 {
     if (d->fadingTimeLine)
-    {
         delete d->fadingTimeLine;
-    }
 
     d->fadingTimeLine = new QTimeLine(d->duration, this);
     d->fadingTimeLine->setFrameRange(0, 255);
@@ -131,17 +129,11 @@ int RatingWidget::regPixmapWidth() const
 
 void RatingWidget::setRating(int val)
 {
-    if ((val < RatingMin || val > RatingMax) && val != NoRating)
-    {
-        return;
-    }
+    if ((val < RatingMin || val > RatingMax) && val != NoRating) return;
 
     d->rating = val;
-
     if (d->tracking)
-    {
         emit signalRatingChanged(d->rating);
-    }
 
     update();
 }
@@ -174,12 +166,10 @@ bool RatingWidget::hasFading() const
 void RatingWidget::setFadingValue(int value)
 {
     d->fadingValue = value;
-
     if (d->fadingValue >= 255 && d->fadingTimeLine)
     {
         d->fadingTimeLine->stop();
     }
-
     update();
 }
 
@@ -188,13 +178,9 @@ void RatingWidget::setVisible(bool visible)
     QWidget::setVisible(visible);
 
     if (visible)
-    {
         startFading();
-    }
     else
-    {
         stopFading();
-    }
 }
 
 int RatingWidget::maximumVisibleWidth() const
@@ -204,10 +190,7 @@ int RatingWidget::maximumVisibleWidth() const
 
 void RatingWidget::startFading()
 {
-    if (!hasFading())
-    {
-        return;
-    }
+    if (!hasFading()) return;
 
     if (!d->isHovered)
     {
@@ -219,15 +202,10 @@ void RatingWidget::startFading()
 
 void RatingWidget::stopFading()
 {
-    if (!hasFading())
-    {
-        return;
-    }
+    if (!hasFading()) return;
 
     if (d->fadingTimeLine)
-    {
         d->fadingTimeLine->stop();
-    }
 
     d->isHovered   = false;
     d->fadingValue = 0;
@@ -261,10 +239,7 @@ void RatingWidget::regeneratePixmaps()
 
 void RatingWidget::mousePressEvent(QMouseEvent* e)
 {
-    if (hasFading() && d->fadingValue < 255)
-    {
-        return;
-    }
+    if (hasFading() && d->fadingValue < 255) return;
 
     int pos = (e->x() - d->offset) / d->regPixmap.width() +1;
 
@@ -278,50 +253,33 @@ void RatingWidget::mousePressEvent(QMouseEvent* e)
     }
 
     if (d->rating > RatingMax)
-    {
         d->rating = RatingMax;
-    }
-
     if (d->rating < RatingMin)
-    {
         d->rating = RatingMin;
-    }
 
     if (d->tracking)
-    {
         emit signalRatingChanged(d->rating);
-    }
 
     update();
 }
 
 void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    if (hasFading() && d->fadingValue < 255)
-    {
-        return;
-    }
+    if (hasFading() && d->fadingValue < 255) return;
 
     int pos = (e->x() - d->offset) / d->regPixmap.width() +1;
 
     if (d->rating != pos)
     {
         if (pos > RatingMax)       // B.K.O.: # 151357
-        {
             pos = RatingMax;
-        }
-
         if (pos < RatingMin)
-        {
             pos = RatingMin;
-        }
 
         d->rating = pos;
 
         if (d->tracking)
-        {
             emit signalRatingChanged(d->rating);
-        }
 
         update();
     }
@@ -329,10 +287,7 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 
 void RatingWidget::mouseReleaseEvent(QMouseEvent*)
 {
-    if (hasFading() && d->fadingValue < 255)
-    {
-        return;
-    }
+    if (hasFading() && d->fadingValue < 255) return;
 
     emit signalRatingChanged(d->rating);
 }
@@ -381,7 +336,6 @@ void RatingWidget::paintEvent(QPaintEvent*)
     if (!isEnabled())
     {
         int x = d->offset;
-
         for (int i = 0; i < RatingMax; ++i)
         {
             p.drawPixmap(x, 0, d->disPixmap);
@@ -394,7 +348,6 @@ void RatingWidget::paintEvent(QPaintEvent*)
         int rate    = d->rating != NoRating ? d->rating : 0;
         QPixmap sel = d->selPixmap;
         applyFading(sel);
-
         for (int i = 0; i < rate; ++i)
         {
             p.drawPixmap(x, 0, sel);
@@ -403,14 +356,12 @@ void RatingWidget::paintEvent(QPaintEvent*)
 
         QPixmap reg = d->regPixmap;
         applyFading(reg);
-
         for (int i = rate; i < RatingMax; ++i)
         {
             p.drawPixmap(x, 0, reg);
             x += reg.width()+1;
         }
     }
-
     p.end();
 }
 

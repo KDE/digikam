@@ -29,7 +29,7 @@ namespace Digikam
 {
 
 RExpanderBoxExclusive::RExpanderBoxExclusive(QWidget* parent)
-    : KDcrawIface::RExpanderBox(parent)
+                     : KDcrawIface::RExpanderBox(parent)
 {
     setIsToolBox(true);
 }
@@ -41,11 +41,7 @@ RExpanderBoxExclusive::~RExpanderBoxExclusive()
 void RExpanderBoxExclusive::slotItemExpanded(bool b)
 {
     KDcrawIface::RLabelExpander* exp = dynamic_cast<KDcrawIface::RLabelExpander*>(sender());
-
-    if (!exp)
-    {
-        return;
-    }
+    if (!exp) return;
 
     if (isToolBox() && b)
     {
@@ -57,11 +53,9 @@ void RExpanderBoxExclusive::slotItemExpanded(bool b)
             {
                 setItemExpanded(item, false);
             }
-
             item++;
         }
     }
-
     emit signalItemExpanded(indexOf(exp), b);
 }
 
@@ -75,4 +69,4 @@ bool RExpanderBoxExclusive::isToolBox() const
     return (m_toolbox);
 }
 
-} // namespace Digikam
+} // namespace Digikam 

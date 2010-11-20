@@ -37,7 +37,7 @@ namespace Digikam
 
 class PrintHelperPrivate;
 
-class DIGIKAM_EXPORT PrintHelper
+class DIGIKAM_EXPORT PrintHelper 
 {
 
 public:

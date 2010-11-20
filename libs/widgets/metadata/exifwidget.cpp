@@ -44,25 +44,23 @@ namespace Digikam
 // Standard Exif Entry list from to less important to the most important for photograph.
 static const char* StandardExifEntryList[] =
 {
-    "Iop",
-    "Thumbnail",
-    "SubImage1",
-    "SubImage2",
-    "Image",
-    "Photo",
-    "GPSInfo",
-    "-1"
+     "Iop",
+     "Thumbnail",
+     "SubImage1",
+     "SubImage2",
+     "Image",
+     "Photo",
+     "GPSInfo",
+     "-1"
 };
 
 ExifWidget::ExifWidget(QWidget* parent, const char* name)
-    : MetadataWidget(parent, name)
+          : MetadataWidget(parent, name)
 {
     view()->setSortingEnabled(false);
 
     for (int i=0 ; QString(StandardExifEntryList[i]) != QString("-1") ; ++i)
-    {
         m_keysFilter << StandardExifEntryList[i];
-    }
 }
 
 ExifWidget::~ExifWidget()
@@ -93,9 +91,7 @@ bool ExifWidget::loadFromURL(const KUrl& url)
             return false;
         }
         else
-        {
             setMetadata(metadata);
-        }
     }
 
     return true;
@@ -104,11 +100,8 @@ bool ExifWidget::loadFromURL(const KUrl& url)
 bool ExifWidget::decodeMetadata()
 {
     DMetadata data = getMetadata();
-
     if (!data.hasExif())
-    {
         return false;
-    }
 
     // Update all metadata contents.
     setMetadataMap(data.getExifTagsDataList(m_keysFilter));
@@ -135,9 +128,7 @@ QString ExifWidget::getTagTitle(const QString& key)
     QString title = metadataIface.getExifTagTitle(key.toAscii());
 
     if (title.isEmpty())
-    {
         return key.section('.', -1);
-    }
 
     return title;
 }
@@ -148,9 +139,7 @@ QString ExifWidget::getTagDescription(const QString& key)
     QString desc = metadataIface.getExifTagDescription(key.toAscii());
 
     if (desc.isEmpty())
-    {
         return i18n("No description available");
-    }
 
     return desc;
 }

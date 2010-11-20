@@ -37,36 +37,36 @@ class ImageInfo;
 
 namespace DIO
 {
-/// Copy an album to another album
-KIO::Job* copy(const PAlbum* src, const PAlbum* dest);
+    /// Copy an album to another album
+    KIO::Job* copy(const PAlbum *src, const PAlbum *dest);
 
-/// Copy items to another album
-KIO::Job* copy(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum* dest);
+    /// Copy items to another album
+    KIO::Job *copy(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum *dest);
 
-/// Copy an external file to another album
-KIO::Job* copy(const KUrl& src, const PAlbum* dest);
+    /// Copy an external file to another album
+    KIO::Job* copy(const KUrl& src, const PAlbum *dest);
 
-/// Copy external files to another album
-KIO::Job* copy(const KUrl::List& srcList, const PAlbum* dest);
+    /// Copy external files to another album
+    KIO::Job* copy(const KUrl::List& srcList, const PAlbum *dest);
 
-/// Move an album into another album
-KIO::Job* move(const PAlbum* src, const PAlbum* dest);
+    /// Move an album into another album
+    KIO::Job* move(const PAlbum *src, const PAlbum *dest);
 
-/// Move items to another album
-KIO::Job* move(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum* dest);
+    /// Move items to another album
+    KIO::Job *move(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum *dest);
 
-/// Move external files another album
-KIO::Job* move(const KUrl& src, const PAlbum* dest);
+    /// Move external files another album
+    KIO::Job* move(const KUrl& src, const PAlbum *dest);
 
-/// Move external files into another album
-KIO::Job* move(const KUrl::List& srcList, const PAlbum* dest);
+    /// Move external files into another album
+    KIO::Job* move(const KUrl::List& srcList, const PAlbum *dest);
 
-KIO::Job* del(const KUrl& src, bool useTrash = true);
+    KIO::Job* del(const KUrl& src, bool useTrash = true);
 
-KIO::Job* del(const KUrl::List& srcList, bool useTrash = true);
+    KIO::Job* del(const KUrl::List& srcList, bool useTrash = true);
 
-/// Rename item to new name
-KIO::CopyJob* rename(const ImageInfo& info, const QString& newName);
+    /// Rename item to new name
+    KIO::CopyJob *rename(const ImageInfo& info, const QString& newName);
 }
 
 } // namespace Digikam

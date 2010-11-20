@@ -133,7 +133,7 @@ public:
 };
 
 EditorToolSettings::EditorToolSettings(QWidget* parent)
-    : QScrollArea(parent), d(new EditorToolSettingsPriv)
+                  : QScrollArea(parent), d(new EditorToolSettingsPriv)
 {
     setFrameStyle( QFrame::NoFrame );
     setWidgetResizable(true);
@@ -162,18 +162,18 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
     d->toolName->setFont(font);
 
     QString frameStyle = QString("QFrame {"
-                                 "color: %1;"
-                                 "border: 1px solid %2;"
-                                 "border-radius: 5px;"
-                                 "background-color: %3;"
-                                 "}")
-                         .arg(ThemeEngine::instance()->textSelColor().name())
-                         .arg(ThemeEngine::instance()->textSelColor().name())
-                         .arg(ThemeEngine::instance()->thumbSelColor().name());
+            "color: %1;"
+            "border: 1px solid %2;"
+            "border-radius: 5px;"
+            "background-color: %3;"
+            "}")
+            .arg(ThemeEngine::instance()->textSelColor().name())
+            .arg(ThemeEngine::instance()->textSelColor().name())
+            .arg(ThemeEngine::instance()->thumbSelColor().name());
 
     QString noFrameStyle("QFrame {"
-                         "border: none;"
-                         "}");
+            "border: none;"
+            "}");
 
     toolDescriptor->setStyleSheet(frameStyle);
     d->toolName->setStyleSheet(noFrameStyle);
@@ -343,34 +343,22 @@ HistogramBox* EditorToolSettings::histogramBox() const
 KPushButton* EditorToolSettings::button(int buttonCode) const
 {
     if (buttonCode & Default)
-    {
         return d->defaultBtn;
-    }
 
     if (buttonCode & Try)
-    {
         return d->tryBtn;
-    }
 
     if (buttonCode & Ok)
-    {
         return d->okBtn;
-    }
 
     if (buttonCode & Cancel)
-    {
         return d->cancelBtn;
-    }
 
     if (buttonCode & Load)
-    {
         return d->loadBtn;
-    }
 
     if (buttonCode & SaveAs)
-    {
         return d->saveAsBtn;
-    }
 
     return 0;
 }
@@ -378,11 +366,7 @@ KPushButton* EditorToolSettings::button(int buttonCode) const
 void EditorToolSettings::enableButton(int buttonCode, bool state)
 {
     KPushButton* btn = button(buttonCode);
-
-    if (btn)
-    {
-        btn->setEnabled(state);
-    }
+    if (btn) btn->setEnabled(state);
 }
 
 QColor EditorToolSettings::guideColor() const

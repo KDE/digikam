@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT DItemDelegate : public QAbstractItemDelegate
 
 public:
 
-    DItemDelegate(DCategorizedView* parent);
+    DItemDelegate(DCategorizedView *parent);
     ~DItemDelegate();
 
     /// Returns the gridsize to be set by the view. It's sizeHint plus spacing.
@@ -64,14 +64,14 @@ public:
      *  the index, and optionally a parameter into which, if the return value is true,
      *  a rectangle can be written for which the return value will be true as well. */
     virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
-                                const QModelIndex& index, QRect* tooltipRect = 0) const = 0;
+                                const QModelIndex& index, QRect *tooltipRect = 0) const = 0;
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
-                                   const QModelIndex& index, QRect* activationRect = 0) const = 0;
+                                   const QModelIndex& index, QRect *activationRect = 0) const = 0;
 
     // to be called by DCategorizedView only
-    virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index) = 0;
+    virtual void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index) = 0;
 
-    static QString squeezedText(const QFontMetrics& fm, int width, const QString& text);
+    static QString squeezedText(const QFontMetrics &fm, int width, const QString& text);
     static QString dateToString(const QDateTime& datetime);
 
 Q_SIGNALS:

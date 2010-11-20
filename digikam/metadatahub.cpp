@@ -116,7 +116,7 @@ MetadataWriteSettings::MetadataWriteSettings()
     updateFileTimeStamp = false;
 }
 
-MetadataWriteSettings::MetadataWriteSettings(AlbumSettings* albumSettings)
+MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
 {
     saveComments        = albumSettings->getSaveComments();
     saveDateTime        = albumSettings->getSaveDateTime();
@@ -130,12 +130,12 @@ MetadataWriteSettings::MetadataWriteSettings(AlbumSettings* albumSettings)
 // ------------------------------------------------------------------------------------------
 
 MetadataHub::MetadataHub()
-    : d(new MetadataHubPriv)
+           : d(new MetadataHubPriv)
 {
 }
 
 MetadataHub::MetadataHub(const MetadataHub& other)
-    : d(new MetadataHubPriv(*other.d))
+           : d(new MetadataHubPriv(*other.d))
 {
 }
 
@@ -200,7 +200,6 @@ void MetadataHub::load(const DMetadata& metadata)
     // In third, from Iptc date & time tags.
     // else use file system time stamp.
     datetime = metadata.getImageDateTime();
-
     if ( !datetime.isValid() )
     {
         QFileInfo info( metadata.getFilePath() );
@@ -220,7 +219,6 @@ void MetadataHub::load(const DMetadata& metadata)
     // Try to get image tags from Xmp using digiKam namespace tags.
 
     QStringList tagPaths;
-
     if (metadata.getImageTagsPath(tagPaths))
     {
         QList<int> tagIds = TagsCache::instance()->tagsForPaths(tagPaths);
@@ -246,28 +244,22 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
     foreach (int tagId, loadedTags)
     {
         // that is a reference
-        TagStatus& status = d->tags[tagId];
-
+        TagStatus &status = d->tags[tagId];
         // if it was not contained in the list, the default constructor will mark it as invalid
         if (status == MetadataInvalid)
         {
             if (d->count == 1)
                 // there were no previous sets that could have contained the set
-            {
                 status = TagStatus(MetadataAvailable, true);
-            }
             else
                 // previous sets did not contain the tag, we do => disjoint
-            {
                 status = TagStatus(MetadataDisjoint, true);
-            }
         }
         else if (status == TagStatus(MetadataAvailable, false))
         {
             // set to explicitly not contained, but we contain it => disjoint
             status = TagStatus(MetadataDisjoint, true);
         }
-
         // else if mapIt.value() ==  MetadataAvailable, true: all right, we contain it too
         // else if mapIt.value() ==  MetadataDisjoint: it's already disjoint
 
@@ -280,7 +272,6 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
     foreach (int tagId, previousTags)
     {
         QMap<int, TagStatus>::iterator mapIt = d->tags.find(tagId);
-
         if (mapIt != d->tags.end() && mapIt.value() == TagStatus(MetadataAvailable, true))
         {
             mapIt.value() = TagStatus(MetadataDisjoint, true);
@@ -330,9 +321,9 @@ void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments, i
 
 // template method to share code for dateTime and rating
 template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& data,
-        T& storage,
-        T& highestStorage,
-        MetadataHub::Status& status)
+                                                                       T& storage,
+                                                                       T& highestStorage,
+                                                                       MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -341,16 +332,11 @@ template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& 
             status  = MetadataHub::MetadataAvailable;
             break;
         case MetadataHub::MetadataAvailable:
-
             // we have two values. If they are equal, status is unchanged
             if (data == storage)
-            {
                 break;
-            }
-
             // they are not equal. We need to enter the disjoint state.
             status = MetadataHub::MetadataDisjoint;
-
             if (data > storage)
             {
                 highestStorage = data;
@@ -360,28 +346,21 @@ template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& 
                 highestStorage = storage;
                 storage        = data;
             }
-
             break;
         case MetadataHub::MetadataDisjoint:
-
             // smaller value is stored in storage
             if (data < storage)
-            {
                 storage = data;
-            }
             else if (highestStorage < data)
-            {
                 highestStorage = data;
-            }
-
             break;
     }
 }
 
 // template method used by comment and template
 template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& data,
-        T& storage,
-        MetadataHub::Status& status)
+                                                                      T& storage,
+                                                                      MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -390,13 +369,9 @@ template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& d
             status  = MetadataHub::MetadataAvailable;
             break;
         case MetadataHub::MetadataAvailable:
-
             // we have two values. If they are equal, status is unchanged
             if (data == storage)
-            {
                 break;
-            }
-
             // they are not equal. We need to enter the disjoint state.
             status = MetadataHub::MetadataDisjoint;
             break;
@@ -419,7 +394,6 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     bool saveRating   = (d->ratingStatus   == MetadataAvailable);
     bool saveTemplate = (d->templateStatus == MetadataAvailable);
     bool saveTags     = false;
-
     for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
         if (it.value() == MetadataAvailable)
@@ -430,23 +404,18 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     }
 
     bool writeAllFields;
-
     if (writeMode == FullWrite)
-    {
         writeAllFields = true;
-    }
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                             (saveComment  && d->commentsChanged) ||
-                             (saveDateTime && d->dateTimeChanged) ||
-                             (saveRating   && d->ratingChanged)   ||
-                             (saveTemplate && d->templateChanged) ||
-                             (saveTags     && d->tagsChanged)
+                           (saveComment  && d->commentsChanged) ||
+                           (saveDateTime && d->dateTimeChanged) ||
+                           (saveRating   && d->ratingChanged)   ||
+                           (saveTemplate && d->templateChanged) ||
+                           (saveTags     && d->tagsChanged)
                          );
     else // PartialWrite
-    {
         writeAllFields = false;
-    }
 
     if (saveComment && (writeAllFields || d->commentsChanged))
     {
@@ -455,28 +424,23 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         comments.replaceComments(d->comments);
         changed = true;
     }
-
     if (saveDateTime && (writeAllFields || d->dateTimeChanged))
     {
         info.setDateTime(d->dateTime);
         changed = true;
     }
-
     if (saveRating && (writeAllFields || d->ratingChanged))
     {
         info.setRating(d->rating);
         changed = true;
     }
-
     if (saveTemplate && writeAllFields)
     {
         QString title = d->metadataTemplate.templateTitle();
-
         if (title == Template::removeTemplateTitle())
         {
             info.removeMetadataTemplate();
         }
-
         if (title.isEmpty())
         {
             // Nothing to do.
@@ -485,7 +449,6 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         {
             info.setMetadataTemplate(d->metadataTemplate);
         }
-
         changed = true;
     }
 
@@ -496,19 +459,13 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
             if (it.value() == MetadataAvailable)
             {
                 if (it.value().hasTag)
-                {
                     info.setTag(it.key());
-                }
                 else
-                {
                     info.removeTag(it.key());
-                }
-
                 changed = true;
             }
         }
     }
-
     return changed;
 }
 
@@ -534,7 +491,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     if (settings.saveTags)
     {
         saveTags = false;
-
         // find at least one tag to write
         for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
@@ -547,23 +503,18 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     }
 
     bool writeAllFields;
-
     if (writeMode == FullWrite)
-    {
         writeAllFields = true;
-    }
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                             (saveComment  && d->commentsChanged) ||
-                             (saveDateTime && d->dateTimeChanged) ||
-                             (saveRating   && d->ratingChanged)   ||
-                             (saveTemplate && d->templateChanged) ||
-                             (saveTags     && d->tagsChanged)
+                           (saveComment  && d->commentsChanged) ||
+                           (saveDateTime && d->dateTimeChanged) ||
+                           (saveRating   && d->ratingChanged)   ||
+                           (saveTemplate && d->templateChanged) ||
+                           (saveTags     && d->tagsChanged)
                          );
     else // PartialWrite
-    {
         writeAllFields = false;
-    }
 
     if (saveComment && (writeAllFields || d->commentsChanged))
     {
@@ -586,7 +537,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     if (saveTemplate && (writeAllFields || d->templateChanged))
     {
         QString title = d->metadataTemplate.templateTitle();
-
         if (title == Template::removeTemplateTitle())
         {
             dirty |= metadata.removeMetadataTemplate();
@@ -612,7 +562,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 
         // create list of keywords to be added and to be removed
         QStringList oldTagsPathList, newTagsPathList, oldKeywords, newKeywords;
-
         for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
             // it is important that MetadataDisjoint keywords are not touched
@@ -658,19 +607,15 @@ bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const Meta
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!
     if (!willWriteMetadata(writeMode, settings))
-    {
         return false;
-    }
 
     DMetadata metadata(filePath);
-
     if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
         ImageAttributesWatch::instance()->fileMetadataChanged(filePath);
         return success;
     }
-
     return false;
 }
 
@@ -680,9 +625,7 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataWriteSet
 
     // if no DMetadata object is needed at all, don't construct one
     if (!willWriteMetadata(writeMode, settings))
-    {
         return false;
-    }
 
     // See DImgLoader::readMetadata() and saveMetadata()
     DMetadata metadata;
@@ -705,7 +648,6 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSett
     if (settings.saveTags)
     {
         saveTags = false;
-
         // find at least one tag to write
         for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
@@ -718,44 +660,35 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSett
     }
 
     bool writeAllFields;
-
     if (writeMode == FullWrite)
-    {
         writeAllFields = true;
-    }
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                             (saveComment  && d->commentsChanged) ||
-                             (saveDateTime && d->dateTimeChanged) ||
-                             (saveRating   && d->ratingChanged)   ||
-                             (saveTemplate && d->templateChanged) ||
-                             (saveTags     && d->tagsChanged)
+                           (saveComment  && d->commentsChanged) ||
+                           (saveDateTime && d->dateTimeChanged) ||
+                           (saveRating   && d->ratingChanged)   ||
+                           (saveTemplate && d->templateChanged) ||
+                           (saveTags     && d->tagsChanged)
                          );
     else // PartialWrite
-    {
         writeAllFields = false;
-    }
 
     return (
-               (saveComment &&  (writeAllFields || d->commentsChanged)) ||
-               (saveDateTime && (writeAllFields || d->dateTimeChanged)) ||
-               (saveRating &&   (writeAllFields || d->ratingChanged))   ||
-               (saveTags &&     (writeAllFields || d->tagsChanged))     ||
-               (saveTemplate && (writeAllFields || d->templateChanged))
+            (saveComment &&  (writeAllFields || d->commentsChanged)) ||
+            (saveDateTime && (writeAllFields || d->dateTimeChanged)) ||
+            (saveRating &&   (writeAllFields || d->ratingChanged))   ||
+            (saveTags &&     (writeAllFields || d->tagsChanged))     ||
+            (saveTemplate && (writeAllFields || d->templateChanged))
            );
 }
 
 MetadataWriteSettings MetadataHub::defaultWriteSettings()
 {
     if (AlbumSettings::instance())
-    {
         return MetadataWriteSettings(AlbumSettings::instance());
-    }
     else
         // is this check necessary?
-    {
         return MetadataWriteSettings();
-    }
 }
 
 // --------------------------------------------------
@@ -783,12 +716,8 @@ MetadataHub::Status MetadataHub::templateStatus() const
 MetadataHub::TagStatus MetadataHub::tagStatus(int tagId) const
 {
     QMap<int, TagStatus>::iterator mapIt = d->tags.find(tagId);
-
     if (mapIt == d->tags.end())
-    {
         return TagStatus(MetadataInvalid);
-    }
-
     return mapIt.value();
 }
 
@@ -879,15 +808,11 @@ void MetadataHub::ratingInterval(int& lowest, int& highest) const
 QStringList MetadataHub::keywords() const
 {
     QStringList tagList;
-
     for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
         if (it.value() == TagStatus(MetadataAvailable, true))
-        {
             tagList.append(TagsCache::instance()->tagPath(it.key(), TagsCache::NoLeadingSlash));
-        }
     }
-
     return tagList;
 }
 
@@ -901,12 +826,10 @@ QMap<int, MetadataHub::TagStatus> MetadataHub::tagIDs() const
 {
     // DatabaseMode == ManagedTags is assumed
     QMap<int, TagStatus> intmap;
-
     for (QMap<int, TagStatus>::const_iterator it = d->tags.constBegin(); it != d->tags.constEnd(); ++it)
     {
         intmap.insert(it.key(), it.value());
     }
-
     return intmap;
 }
 
@@ -938,7 +861,7 @@ void MetadataHub::setRating(int rating, Status status)
     d->ratingChanged  = true;
 }
 
-void MetadataHub::setMetadataTemplate(const Template& t, Status status)
+void MetadataHub::setMetadataTemplate(const Template &t, Status status)
 {
     d->templateStatus   = status;
     d->metadataTemplate = t;
@@ -980,7 +903,7 @@ public:
 };
 
 MetadataHubOnTheRoad::MetadataHubOnTheRoad(QObject* parent)
-    : QObject(parent), d(new MetadataHubOnTheRoadPriv)
+                    : QObject(parent), d(new MetadataHubOnTheRoadPriv)
 {
     connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
             this, SLOT(slotTagDeleted(int)),
@@ -999,12 +922,12 @@ MetadataHubOnTheRoad& MetadataHubOnTheRoad::operator=(const MetadataHub& other)
 }
 
 MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHub& other)
-    : QObject(0), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
+                    : QObject(0), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
 {
 }
 
 MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHubOnTheRoad& other, QObject* parent)
-    : QObject(parent), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
+                    : QObject(parent), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
 {
     applyChangeNotifications();
 }

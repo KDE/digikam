@@ -140,35 +140,30 @@ public:
 
     struct ItemContainer
     {
-        ItemContainer(ItemContainer* p, ItemContainer* n, const QRect& r)
+        ItemContainer(ItemContainer *p, ItemContainer *n, const QRect& r)
             : prev(p), next(n), rect(r)
         {
             if (prev)
-            {
                 prev->next = this;
-            }
-
             if (next)
-            {
                 next->prev = this;
-            }
         }
 
-        ItemContainer*        prev, *next;
+        ItemContainer        *prev, *next;
         QRect                 rect;
         QList<IconItem*>      items;
     } *firstContainer, *lastContainer;
 
     struct SortableItem
     {
-        IconGroupItem* group;
+        IconGroupItem *group;
     };
 };
 
 // -----------------------------------------------------------------------
 
 IconView::IconView(QWidget* parent, const char* name)
-    : Q3ScrollView(parent), d(new IconViewPriv)
+        : Q3ScrollView(parent), d(new IconViewPriv)
 {
     setObjectName(name);
     setWindowFlags(Qt::WStaticContents|Qt::WNoAutoErase);
@@ -223,9 +218,7 @@ IconGroupItem* IconView::lastGroup() const
 IconItem* IconView::firstItem() const
 {
     if (!d->firstGroup)
-    {
         return 0;
-    }
 
     return d->firstGroup->firstItem();
 }
@@ -233,9 +226,7 @@ IconItem* IconView::firstItem() const
 IconItem* IconView::lastItem() const
 {
     if (!d->lastGroup)
-    {
         return 0;
-    }
 
     return d->lastGroup->lastItem();
 }
@@ -264,8 +255,7 @@ IconItem* IconView::ratingItem() const
 
 IconItem* IconView::findItem(const QPoint& pos)
 {
-    IconViewPriv::ItemContainer* c = d->firstContainer;
-
+    IconViewPriv::ItemContainer *c = d->firstContainer;
     for (; c; c = c->next)
     {
         if ( c->rect.contains(pos) )
@@ -286,20 +276,14 @@ IconItem* IconView::findItem(const QPoint& pos)
 IconGroupItem* IconView::findGroup(const QPoint& pos)
 {
     QPoint p = viewportToContents(viewport()->mapFromGlobal(pos));
-
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
         QRect rect = group->rect();
         int bottom;
-
         if (group == d->lastGroup)
-        {
             bottom = contentsHeight();
-        }
         else
-        {
             bottom = group->nextGroup()->rect().top();
-        }
 
         rect.setBottom(bottom);
 
@@ -315,7 +299,6 @@ IconGroupItem* IconView::findGroup(const QPoint& pos)
 int IconView::count() const
 {
     int c = 0;
-
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
         c += group->count();
@@ -328,14 +311,11 @@ int IconView::count() const
 int IconView::countSelected() const
 {
     int c = 0;
-
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
-        for (IconItem* it = group->firstItem(); it; it = it->nextItem())
+        for (IconItem *it = group->firstItem(); it; it = it->nextItem())
             if (it->isSelected())
-            {
                 ++c;
-            }
     }
 
     return c;
@@ -344,7 +324,6 @@ int IconView::countSelected() const
 int IconView::groupCount() const
 {
     int c = 0;
-
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
         ++c;
@@ -373,11 +352,10 @@ void IconView::clear(bool update)
 
     d->selectedItems.clear();
 
-    IconGroupItem* group = d->firstGroup;
-
+    IconGroupItem *group = d->firstGroup;
     while (group)
     {
-        IconGroupItem* tmp = group->m_next;
+        IconGroupItem *tmp = group->m_next;
         delete group;
         group = tmp;
     }
@@ -393,9 +371,7 @@ void IconView::clear(bool update)
     viewport()->setUpdatesEnabled(true);
 
     if (update)
-    {
         updateContents();
-    }
 
     d->clearing = false;
 
@@ -407,9 +383,7 @@ void IconView::clearSelection()
     bool wasBlocked = signalsBlocked();
 
     if (!wasBlocked)
-    {
         blockSignals(true);
-    }
 
     QSet<IconItem*> selItems = d->selectedItems;
     foreach(IconItem *item, selItems)
@@ -500,7 +474,7 @@ void IconView::selectItem(IconItem* item, bool select)
     emit signalSelectionChanged();
 }
 
-void IconView::setStoredVisibleItem(IconItem* item)
+void IconView::setStoredVisibleItem(IconItem *item)
 {
     d->storedVisibleItem = item;
 }
@@ -540,13 +514,12 @@ void IconView::takeGroup(IconGroupItem* group)
 
     // this is only to find an alternative visible item if all visible items
     // are removed
-    IconGroupItem* alternativeVisibleGroup = 0;
+    IconGroupItem *alternativeVisibleGroup = 0;
     d->storedVisibleItem = 0;
 
     if (group == d->firstGroup)
     {
         d->firstGroup = d->firstGroup->m_next;
-
         if (d->firstGroup)
         {
             d->firstGroup->m_prev = 0;
@@ -555,13 +528,11 @@ void IconView::takeGroup(IconGroupItem* group)
         {
             d->firstGroup = d->lastGroup = 0;
         }
-
         alternativeVisibleGroup = d->firstGroup;
     }
     else if (group == d->lastGroup)
     {
         d->lastGroup = d->lastGroup->m_prev;
-
         if (d->lastGroup)
         {
             d->lastGroup->m_next = 0;
@@ -570,20 +541,17 @@ void IconView::takeGroup(IconGroupItem* group)
         {
             d->firstGroup = d->lastGroup = 0;
         }
-
         alternativeVisibleGroup = d->lastGroup->m_prev;
     }
     else
     {
-        IconGroupItem* i = group;
-
+        IconGroupItem *i = group;
         if (i)
         {
             if (i->m_prev)
             {
                 i->m_prev->m_next = i->m_next;
             }
-
             if (i->m_next)
             {
                 i->m_next->m_prev = i->m_prev;
@@ -603,13 +571,11 @@ void IconView::takeGroup(IconGroupItem* group)
     if (!d->clearing)
     {
         d->storedVisibleItem = findFirstVisibleItem();
-
         if (!d->storedVisibleItem && alternativeVisibleGroup)
         {
             // find an alternative visible item
             d->storedVisibleItem = alternativeVisibleGroup->lastItem();
         }
-
         startRearrangeTimer();
     }
 }
@@ -633,8 +599,7 @@ void IconView::takeItem(IconItem* item)
     }
 
     // First remove item from any containers holding it
-    IconViewPriv::ItemContainer* tmp = d->firstContainer;
-
+    IconViewPriv::ItemContainer *tmp = d->firstContainer;
     while (tmp)
     {
         tmp->items.removeAll(item);
@@ -643,12 +608,9 @@ void IconView::takeItem(IconItem* item)
 
     // Remove from selected item list
     d->selectedItems.remove(item);
-
     // See bug 161084
     if (d->selectedItems.count() || item->isSelected())
-    {
         d->needEmitSelectionChanged = true;
-    }
 
     if (d->toolTipItem == item)
     {
@@ -674,11 +636,10 @@ void IconView::takeItem(IconItem* item)
     if (d->currItem == item)
     {
         d->currItem = item->nextItem();
-
         if (!d->currItem)
         {
             d->currItem = item->prevItem();
-            // defer calling d->currItem->setSelected (and emitting the signals) to slotRearrange
+        // defer calling d->currItem->setSelected (and emitting the signals) to slotRearrange
         }
     }
 
@@ -687,12 +648,10 @@ void IconView::takeItem(IconItem* item)
     if (!d->clearing)
     {
         d->storedVisibleItem = findFirstVisibleItem();
-
         if (d->storedVisibleItem == item)
         {
             d->storedVisibleItem = d->currItem;
         }
-
         startRearrangeTimer();
     }
 }
@@ -740,9 +699,9 @@ void IconView::sort()
     int gcount = groupCount();
 
     // then sort the groups themselves
-    IconViewPriv::SortableItem* groups = new IconViewPriv::SortableItem[ gcount ];
+    IconViewPriv::SortableItem *groups = new IconViewPriv::SortableItem[ gcount ];
 
-    IconGroupItem* group = d->firstGroup;
+    IconGroupItem *group = d->firstGroup;
     int i = 0;
 
     for (; group; group = group->m_next)
@@ -752,13 +711,12 @@ void IconView::sort()
 
     qsort( groups, gcount, sizeof( IconViewPriv::SortableItem ), cmpItems );
 
-    IconGroupItem* prev = 0;
+    IconGroupItem *prev = 0;
     group = 0;
 
     for (i = 0; i < (int) gcount; ++i)
     {
         group = groups[i].group;
-
         if (group)
         {
             group->m_prev = prev;
@@ -780,7 +738,6 @@ void IconView::sort()
         {
             d->lastGroup = group;
         }
-
         prev = group;
     }
 
@@ -820,7 +777,6 @@ void IconView::slotRearrange()
             d->currItem = d->firstGroup->firstItem();
         }
     }
-
     d->anchorItem = d->currItem;
 
     // ensure there is a selection
@@ -832,7 +788,6 @@ void IconView::slotRearrange()
     {
         emit signalSelectionChanged();
     }
-
     d->needEmitSelectionChanged = false;
 
     // set first visible item if they where stored before update was triggered
@@ -864,7 +819,6 @@ bool IconView::arrangeItems()
 
     IconGroupItem* group = d->firstGroup;
     IconItem*      item  = 0;
-
     while (group)
     {
         changed = group->move(y) || changed;
@@ -874,7 +828,6 @@ bool IconView::arrangeItems()
 
         int col = 0;
         int x   = d->spacing;
-
         while (item)
         {
             changed = item->move(x, y) || changed;
@@ -944,7 +897,6 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
 
     // now paint any items which intersect
     QList<IconItem*> itemsToRepaint;
-
     for (IconViewPriv::ItemContainer* c = d->firstContainer; c;
          c = c->next)
     {
@@ -964,20 +916,20 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
 
     foreach(IconItem *item, itemsToRepaint)
     {
-        QRect viewportRect = contentsRectToViewport(item->rect());
-        //painter.save();
-        painter.translate(viewportRect.x(), viewportRect.y());
-        item->paintItem(&painter);
-        painter.translate( - viewportRect.x(), - viewportRect.y());
-        //painter.restore();
-        unpaintedRegion -= QRegion(viewportRect);
+         QRect viewportRect = contentsRectToViewport(item->rect());
+         //painter.save();
+         painter.translate(viewportRect.x(), viewportRect.y());
+         item->paintItem(&painter);
+         painter.translate( - viewportRect.x(), - viewportRect.y());
+         //painter.restore();
+         unpaintedRegion -= QRegion(viewportRect);
     }
 
     painter.setClipRegion(unpaintedRegion);
     painter.fillRect(pe->rect(), palette().color(QPalette::Base));
 }
 
-void IconView::prepareRepaint(const QList<IconItem*> &)
+void IconView::prepareRepaint(const QList<IconItem *> &)
 {
 }
 
@@ -997,16 +949,13 @@ void IconView::rebuildContainers()
 {
     deleteContainers();
 
-    IconItem* item = 0;
+    IconItem *item = 0;
     appendContainer();
 
     if (d->firstGroup)
-    {
         item = d->firstGroup->firstItem();
-    }
 
     IconViewPriv::ItemContainer* c = d->lastContainer;
-
     while (item)
     {
         if (c->rect.contains(item->rect()))
@@ -1038,7 +987,6 @@ void IconView::rebuildContainers()
             }
 
             c = c->next;
-
             if (!c)
             {
                 appendContainer();
@@ -1060,14 +1008,14 @@ void IconView::appendContainer()
     else
     {
         d->lastContainer = new IconViewPriv::ItemContainer(
-            d->lastContainer, 0, QRect(d->lastContainer->rect.bottomLeft(), s));
+                           d->lastContainer, 0, QRect(d->lastContainer->rect.bottomLeft(), s));
     }
 }
 
 void IconView::deleteContainers()
 {
-    IconViewPriv::ItemContainer* c = d->firstContainer;
-    IconViewPriv::ItemContainer* tmp;
+    IconViewPriv::ItemContainer *c = d->firstContainer;
+    IconViewPriv::ItemContainer *tmp;
 
     while (c)
     {
@@ -1079,7 +1027,7 @@ void IconView::deleteContainers()
     d->firstContainer = d->lastContainer = 0;
 }
 
-void IconView::leaveEvent(QEvent* e)
+void IconView::leaveEvent(QEvent *e)
 {
 
     // if the mouse leaves the widget we are not dragging
@@ -1133,7 +1081,6 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     if (e->button() == Qt::RightButton)
     {
         IconItem* item = findItem(e->pos());
-
         if (item)
         {
             IconItem* prevCurrItem = d->currItem;
@@ -1141,14 +1088,10 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
             d->anchorItem          = item;
 
             if (prevCurrItem)
-            {
                 prevCurrItem->repaint();
-            }
 
             if (!item->isSelected())
-            {
                 item->setSelected(true, true);
-            }
 
             item->repaint();
 
@@ -1159,12 +1102,10 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
             clearSelection();
             emit signalRightButtonClicked(e->globalPos());
         }
-
         return;
     }
 
-    IconItem* item = findItem(e->pos());
-
+    IconItem *item = findItem(e->pos());
     if (item)
     {
         if (e->modifiers() == Qt::ControlModifier)
@@ -1179,9 +1120,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
             if (d->currItem)
             {
                 if ( !(e->modifiers() & Qt::ControlModifier) )
-                {
                     clearSelection();
-                }
 
                 // select all items from/upto the current item
                 bool bwdSelect = false;
@@ -1201,11 +1140,8 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
                     for (IconItem* it = item; it; it = it->prevItem())
                     {
                         it->setSelected(true, false);
-
                         if (it == d->currItem)
-                        {
                             break;
-                        }
                     }
                 }
                 else
@@ -1213,11 +1149,8 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
                     for (IconItem* it = item; it; it = it->nextItem())
                     {
                         it->setSelected(true, false);
-
                         if (it == d->currItem)
-                        {
                             break;
-                        }
                     }
                 }
             }
@@ -1247,9 +1180,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         d->anchorItem          = item;
 
         if (prevCurrItem)
-        {
             prevCurrItem->repaint();
-        }
 
         d->currItem->repaint();
 
@@ -1280,7 +1211,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     {
         IconItem* item = findItem(e->pos());
 
-        if (d->showTips)
+        if(d->showTips)
         {
             if (!isActiveWindow())
             {
@@ -1296,7 +1227,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
                 d->toolTipTimer->stop();
                 slotToolTip();
 
-                if (acceptToolTip(item, e->pos()))
+                if(acceptToolTip(item, e->pos()))
                 {
                     d->toolTipItem = item;
                     d->toolTipTimer->setSingleShot(true);
@@ -1304,7 +1235,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
                 }
             }
 
-            if (item == d->toolTipItem && !acceptToolTip(item, e->pos()))
+            if(item == d->toolTipItem && !acceptToolTip(item, e->pos()))
             {
                 d->toolTipItem = 0;
                 d->toolTipTimer->stop();
@@ -1316,23 +1247,16 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         {
             setCursor(Qt::PointingHandCursor);
             d->ratingWidget->hide();
-
             if (d->ratingItem)
-            {
                 d->ratingItem->setEditRating(false);
-            }
-
             d->ratingItem = 0;
         }
         else if (item && item->clickToRateRect().contains(e->pos()))
         {
             setCursor(Qt::CrossCursor);
             d->ratingItem = item;
-
             if (d->ratingItem)
-            {
                 d->ratingItem->setEditRating(true);
-            }
 
             QRect rect = item->clickToRateRect();
             rect.moveTopLeft(contentsToViewport(rect.topLeft()));
@@ -1345,12 +1269,8 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         {
             unsetCursor();
             d->ratingWidget->hide();
-
             if (d->ratingItem)
-            {
                 d->ratingItem->setEditRating(false);
-            }
-
             d->ratingItem = 0;
         }
 
@@ -1359,16 +1279,12 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         if (item != d->highlightedItem)
         {
             if (d->highlightedItem)
-            {
                 d->highlightedItem->setHighlighted(false);
-            }
 
             d->highlightedItem = item;
 
             if (d->highlightedItem)
-            {
                 d->highlightedItem->setHighlighted(true);
-            }
         }
 
         return;
@@ -1385,14 +1301,11 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         {
             startDrag();
         }
-
         return;
     }
 
     if (!d->rubber->isActive())
-    {
         return;
-    }
 
     QRect oldArea = d->rubber->rubberBandAreaOnContents();
 
@@ -1406,8 +1319,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     viewport()->setUpdatesEnabled(false);
     blockSignals(true);
 
-    IconViewPriv::ItemContainer* c = d->firstContainer;
-
+    IconViewPriv::ItemContainer *c = d->firstContainer;
     for (; c; c = c->next)
     {
         if ( rubberUnion.intersects(c->rect) )
@@ -1450,9 +1362,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     d->pressedMoved = true;
 
     if (changed)
-    {
         emit signalSelectionChanged();
-    }
 }
 
 void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
@@ -1461,9 +1371,7 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
     d->prevSelectedItems.clear();
 
     if (d->rubber->isActive())
-    {
         d->rubber->setActive(false);
-    }
 
     if (e->button() == Qt::LeftButton
         && e->buttons() == Qt::NoButton
@@ -1477,20 +1385,15 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
         }
 
         // click on item
-        IconItem* item = findItem(e->pos());
-
+        IconItem *item = findItem(e->pos());
         if (item && !item->clickToToggleSelectRect().contains(e->pos()))
         {
             IconItem* prevCurrItem = d->currItem;
             item->setSelected(true, true);
             d->currItem   = item;
             d->anchorItem = item;
-
             if (prevCurrItem)
-            {
                 prevCurrItem->repaint();
-            }
-
             if (KGlobalSettings::singleClick())
             {
                 if (item->clickToOpenRect().contains(e->pos()))
@@ -1528,13 +1431,9 @@ void IconView::contentsWheelEvent(QWheelEvent* e)
     if (e->modifiers() & Qt::ControlModifier)
     {
         if (e->delta() < 0)
-        {
             emit signalZoomOut();
-        }
         else if (e->delta() > 0)
-        {
             emit signalZoomIn();
-        }
 
         // We don't want to scroll contents.
         return;
@@ -1543,15 +1442,12 @@ void IconView::contentsWheelEvent(QWheelEvent* e)
     Q3ScrollView::contentsWheelEvent(e);
 }
 
-void IconView::contentsMouseDoubleClickEvent(QMouseEvent* e)
+void IconView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 {
     if (KGlobalSettings::singleClick())
-    {
         return;
-    }
 
-    IconItem* item = findItem(e->pos());
-
+    IconItem *item = findItem(e->pos());
     if (item)
     {
         itemClickedToOpen(item);
@@ -1563,9 +1459,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     bool handled = false;
 
     if (!firstItem())
-    {
         return;
-    }
 
     switch ( e->key() )
     {
@@ -1575,21 +1469,16 @@ void IconView::keyPressEvent(QKeyEvent* e)
             {
                 IconItem* const tmp = d->currItem;
                 d->currItem = firstItem();
-
                 if (tmp)
-                {
                     tmp->repaint();
-                }
 
                 // select items: anchor until before firstItem
                 // block signals while selecting all except the firstItem
                 blockSignals(true);
-
                 for (IconItem* i = d->anchorItem; i && ( i != firstItem() ); i = i->prevItem())
                 {
                     i->setSelected(true, false);
                 }
-
                 blockSignals(false);
 
                 // select the firstItem with signals enabled to ensure updates
@@ -1600,11 +1489,8 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 IconItem* const tmp = d->currItem;
                 d->currItem = firstItem();
                 d->anchorItem = d->currItem;
-
                 if (tmp)
-                {
                     tmp->repaint();
-                }
 
                 // select only the first item
                 firstItem()->setSelected(true, true);
@@ -1621,21 +1507,16 @@ void IconView::keyPressEvent(QKeyEvent* e)
             {
                 IconItem* const tmp = d->currItem;
                 d->currItem = lastItem();
-
                 if (tmp)
-                {
                     tmp->repaint();
-                }
 
                 // select items: current until lastItem
                 // block signals while selecting all except the lastItem
                 blockSignals(true);
-
                 for (IconItem* i = d->anchorItem; i && ( i != lastItem() ); i = i->nextItem())
                 {
                     i->setSelected(true, false);
                 }
-
                 blockSignals(false);
 
                 // select the lastItem with signals enabled to ensure updates
@@ -1646,15 +1527,11 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 IconItem* const tmp = d->currItem;
                 d->currItem = lastItem();
                 d->anchorItem = d->currItem;
-
                 if (tmp)
-                {
                     tmp->repaint();
-                }
 
                 lastItem()->setSelected(true, true);
             }
-
             ensureItemVisible(lastItem());
             handled = true;
             break;
@@ -1668,13 +1545,12 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 emit signalReturnPressed(d->currItem);
                 handled = true;
             }
-
             break;
         }
 
         case Qt::Key_Right:
         {
-            IconItem* item = 0;
+            IconItem *item = 0;
 
             if (d->currItem)
             {
@@ -1700,9 +1576,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         // the previously selected item. otherwise unselect the
                         // previously selected item
                         if (!anchorIsBehind())
-                        {
                             tmp->setSelected(false, false);
-                        }
 
                         d->currItem->setSelected(true, false);
 
@@ -1735,7 +1609,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
         case Qt::Key_Left:
         {
-            IconItem* item = 0;
+            IconItem *item = 0;
 
             if (d->currItem)
             {
@@ -1761,9 +1635,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         // the previously selected item. otherwise unselect the
                         // previously selected item
                         if (anchorIsBehind())
-                        {
                             tmp->setSelected(false, false);
-                        }
 
                         d->currItem->setSelected(true, false);
 
@@ -1796,14 +1668,14 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
         case Qt::Key_Up:
         {
-            IconItem* item = 0;
+            IconItem *item = 0;
 
             if (d->currItem)
             {
                 int x = d->currItem->x() + itemRect().width()/2;
                 int y = d->currItem->y() - d->spacing*2;
 
-                IconItem* it = 0;
+                IconItem *it = 0;
 
                 while (!it && y > 0)
                 {
@@ -1830,17 +1702,13 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         tmp->repaint();
 
                         clearSelection();
-
                         if (anchorIsBehind())
                         {
                             for (IconItem* i = d->currItem; i; i = i->prevItem())
                             {
                                 i->setSelected(true, false);
-
                                 if (i == d->anchorItem)
-                                {
                                     break;
-                                }
                             }
                         }
                         else
@@ -1848,11 +1716,8 @@ void IconView::keyPressEvent(QKeyEvent* e)
                             for (IconItem* i = d->currItem; i; i = i->nextItem())
                             {
                                 i->setSelected(true, false);
-
                                 if (i == d->anchorItem)
-                                {
                                     break;
-                                }
                             }
                         }
 
@@ -1885,14 +1750,14 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
         case Qt::Key_Down:
         {
-            IconItem* item = 0;
+            IconItem *item = 0;
 
             if (d->currItem)
             {
                 int x = d->currItem->x() + itemRect().width()/2;
                 int y = d->currItem->y() + itemRect().height() + d->spacing*2;
 
-                IconItem* it = 0;
+                IconItem *it = 0;
 
                 while (!it && y < contentsHeight())
                 {
@@ -1919,17 +1784,13 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         tmp->repaint();
 
                         clearSelection();
-
                         if (anchorIsBehind())
                         {
                             for (IconItem* i = d->currItem; i; i = i->prevItem())
                             {
                                 i->setSelected(true, false);
-
                                 if (i == d->anchorItem)
-                                {
                                     break;
-                                }
                             }
                         }
                         else
@@ -1937,11 +1798,8 @@ void IconView::keyPressEvent(QKeyEvent* e)
                             for (IconItem* i = d->currItem; i; i = i->nextItem())
                             {
                                 i->setSelected(true, false);
-
                                 if (i == d->anchorItem)
-                                {
                                     break;
-                                }
                             }
                         }
 
@@ -1974,18 +1832,18 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
         case Qt::Key_PageDown:
         {
-            IconItem* item = 0;
+            IconItem *item = 0;
 
             if (d->currItem)
             {
                 QRect r( 0, d->currItem->y() + visibleHeight(),
-                         contentsWidth(), visibleHeight() );
-                IconItem* ni = findFirstVisibleItem(r, false);
+                        contentsWidth(), visibleHeight() );
+                IconItem *ni = findFirstVisibleItem(r, false);
 
                 if (!ni)
                 {
                     r = QRect( 0, d->currItem->y() + itemRect().height(),
-                               contentsWidth(), contentsHeight() );
+                              contentsWidth(), contentsHeight() );
                     ni = findLastVisibleItem(r, false);
                 }
 
@@ -2014,14 +1872,14 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
         case Qt::Key_PageUp:
         {
-            IconItem* item = 0;
+            IconItem *item = 0;
 
             if (d->currItem)
             {
                 QRect r(0, d->currItem->y() - visibleHeight(),
                         contentsWidth(), visibleHeight() );
 
-                IconItem* ni = findFirstVisibleItem(r, false);
+                IconItem *ni = findFirstVisibleItem(r, false);
 
                 if (!ni)
                 {
@@ -2065,14 +1923,10 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 else
                 {
                     if (!d->currItem->isSelected())
-                    {
                         d->currItem->setSelected(true, true);
-                    }
                 }
-
                 handled = true;
             }
-
             break;
         }
 
@@ -2081,9 +1935,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             if (d->currItem)
             {
                 if (!d->currItem->isSelected())
-                {
                     d->currItem->setSelected(true, false);
-                }
 
                 ensureItemVisible(d->currItem);
 
@@ -2094,7 +1946,6 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
                 emit signalRightButtonClicked(d->currItem, mapToGlobal(contentsToViewport(p)));
             }
-
             break;
         }
 
@@ -2133,16 +1984,12 @@ void IconView::keyPressEvent(QKeyEvent* e)
 bool IconView::anchorIsBehind() const
 {
     if (!d->anchorItem || !d->currItem)
-    {
         return false;
-    }
 
     for (IconItem* it = d->anchorItem; it; it = it->nextItem())
     {
         if (it == d->currItem)
-        {
             return true;
-        }
     }
 
     return false;
@@ -2153,12 +2000,10 @@ void IconView::startDrag()
 {
 }
 
-void IconView::ensureItemVisible(IconItem* item)
+void IconView::ensureItemVisible(IconItem *item)
 {
     if ( !item )
-    {
         return;
-    }
 
     if ( item->y() == firstItem()->y() )
     {
@@ -2190,10 +2035,9 @@ IconItem* IconView::findLastVisibleItem(bool useThumbnailRect) const
 
 IconItem* IconView::findFirstVisibleItem(const QRect& r, bool useThumbnailRect) const
 {
-    IconViewPriv::ItemContainer* c = d->firstContainer;
+    IconViewPriv::ItemContainer *c = d->firstContainer;
     bool alreadyIntersected = false;
     IconItem* i = 0;
-
     for ( ; c; c = c->next )
     {
         if ( c->rect.intersects( r ) )
@@ -2213,16 +2057,11 @@ IconItem* IconView::findFirstVisibleItem(const QRect& r, bool useThumbnailRect) 
                     {
                         QRect r2 = item->rect();
                         QRect r3 = i->rect();
-
                         if ( r2.y() < r3.y() )
-                        {
                             i = item;
-                        }
                         else if ( r2.y() == r3.y() &&
                                   r2.x() < r3.x() )
-                        {
                             i = item;
-                        }
                     }
                 }
             }
@@ -2230,9 +2069,7 @@ IconItem* IconView::findFirstVisibleItem(const QRect& r, bool useThumbnailRect) 
         else
         {
             if ( alreadyIntersected )
-            {
                 break;
-            }
         }
     }
 
@@ -2241,10 +2078,9 @@ IconItem* IconView::findFirstVisibleItem(const QRect& r, bool useThumbnailRect) 
 
 IconItem* IconView::findLastVisibleItem(const QRect& r, bool useThumbnailRect) const
 {
-    IconViewPriv::ItemContainer* c = d->firstContainer;
-    IconItem* i = 0;
+    IconViewPriv::ItemContainer *c = d->firstContainer;
+    IconItem *i = 0;
     bool alreadyIntersected = false;
-
     for ( ; c; c = c->next )
     {
         if ( c->rect.intersects( r ) )
@@ -2262,26 +2098,18 @@ IconItem* IconView::findLastVisibleItem(const QRect& r, bool useThumbnailRect) c
                     {
                         QRect r2 = item->rect();
                         QRect r3 = i->rect();
-
                         if ( r2.y() > r3.y() )
-                        {
                             i = item;
-                        }
                         else if ( r2.y() == r3.y() &&
                                   r2.x() > r3.x() )
-                        {
                             i = item;
-                        }
                     }
                 }
             }
         }
-        else
-        {
+        else {
             if ( alreadyIntersected )
-            {
                 break;
-            }
         }
     }
 
@@ -2292,7 +2120,7 @@ void IconView::drawFrameRaised(QPainter* p)
 {
     QRect r               = frameRect();
     int lwidth            = lineWidth();
-    const QColorGroup& g = QColorGroup(palette());
+    const QColorGroup & g = QColorGroup(palette());
     qDrawShadeRect( p, r, g, false, lwidth, midLineWidth() );
 }
 
@@ -2300,14 +2128,13 @@ void IconView::drawFrameSunken(QPainter* p)
 {
     QRect r               = frameRect();
     int lwidth            = lineWidth();
-    const QColorGroup& g = QColorGroup(palette());
+    const QColorGroup & g = QColorGroup(palette());
     qDrawShadeRect( p, r, g, true, lwidth, midLineWidth() );
 }
 
 void IconView::setEnableToolTips(bool val)
 {
     d->showTips = val;
-
     if (!val)
     {
         d->toolTipItem = 0;
@@ -2324,32 +2151,26 @@ void IconView::slotToolTip()
 void IconView::itemClickedToOpen(IconItem* item)
 {
     if (!item)
-    {
         return;
-    }
 
     IconItem* prevCurrItem = d->currItem;
     d->currItem            = item;
     d->anchorItem          = item;
 
     if (prevCurrItem)
-    {
         prevCurrItem->repaint();
-    }
 
     item->setSelected(true);
     emit signalDoubleClicked(item);
 }
 
-int IconView::cmpItems(const void* n1, const void* n2)
+int IconView::cmpItems(const void *n1, const void *n2)
 {
     if ( !n1 || !n2 )
-    {
         return 0;
-    }
 
-    IconViewPriv::SortableItem* i1 = (IconViewPriv::SortableItem*)n1;
-    IconViewPriv::SortableItem* i2 = (IconViewPriv::SortableItem*)n2;
+    IconViewPriv::SortableItem *i1 = (IconViewPriv::SortableItem *)n1;
+    IconViewPriv::SortableItem *i2 = (IconViewPriv::SortableItem *)n2;
 
     return i1->group->compare( i2->group );
 }
@@ -2360,13 +2181,13 @@ QPixmap IconView::thumbnailBorderPixmap(const QSize& pixSize)
     const QColor borderColor = QColor(0, 0, 0, 128);
 
     QString cacheKey  = QString::number(pixSize.width()) + '-' + QString::number(pixSize.height());
-    QPixmap* cachePix = d->thumbnailBorderCache.object(cacheKey);
+    QPixmap *cachePix = d->thumbnailBorderCache.object(cacheKey);
 
     if (!cachePix)
     {
         QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
-                      pixSize.height() + 2*radius),
-                      borderColor, radius);
+                                                            pixSize.height() + 2*radius),
+                                                      borderColor, radius);
         d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
         return pix;
     }

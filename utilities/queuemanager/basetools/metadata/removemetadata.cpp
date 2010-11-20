@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 RemoveMetadata::RemoveMetadata(QObject* parent)
-    : BatchTool("RemoveMetadata", MetadataTool, parent)
+              : BatchTool("RemoveMetadata", MetadataTool, parent)
 {
     setToolTitle(i18n("Remove Metadata"));
     setToolDescription(i18n("A tool to remove Exif, Iptc, or Xmp metadata from images."));
@@ -105,27 +105,15 @@ bool RemoveMetadata::toolOperations()
     bool removeIptc = settings()["RemoveIptc"].toBool();
     bool removeXmp  = settings()["RemoveXmp"].toBool();
 
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     DMetadata meta(image().getMetadata());
 
-    if (removeExif)
-    {
-        meta.clearExif();
-    }
+    if (removeExif) meta.clearExif();
 
-    if (removeIptc)
-    {
-        meta.clearIptc();
-    }
+    if (removeIptc) meta.clearIptc();
 
-    if (removeXmp)
-    {
-        meta.clearXmp();
-    }
+    if (removeXmp) meta.clearXmp();
 
     image().setMetadata(meta.data());
 

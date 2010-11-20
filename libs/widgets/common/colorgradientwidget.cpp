@@ -36,7 +36,7 @@ class ColorGradientWidgetPriv
 
 public:
 
-    ColorGradientWidgetPriv() {}
+    ColorGradientWidgetPriv(){}
 
     Qt::Orientation orientation;
 
@@ -44,8 +44,8 @@ public:
     QColor          color2;
 };
 
-ColorGradientWidget::ColorGradientWidget(Qt::Orientation orientation, int size, QWidget* parent)
-    : QWidget(parent), d(new ColorGradientWidgetPriv)
+ColorGradientWidget::ColorGradientWidget(Qt::Orientation orientation, int size, QWidget *parent)
+                   : QWidget(parent), d(new ColorGradientWidgetPriv)
 {
     d->orientation = orientation;
     d->color1.setRgb(0, 0, 0);
@@ -54,13 +54,9 @@ ColorGradientWidget::ColorGradientWidget(Qt::Orientation orientation, int size, 
     setAttribute(Qt::WA_DeleteOnClose);
 
     if ( d->orientation == Qt::Horizontal )
-    {
         setFixedHeight(size);
-    }
     else
-    {
         setFixedWidth(size);
-    }
 
     setContentsMargins(1, 1, 1, 1);
 }
@@ -77,7 +73,7 @@ void ColorGradientWidget::setColors( const QColor& col1, const QColor& col2 )
     update();
 }
 
-void ColorGradientWidget::paintEvent( QPaintEvent* )
+void ColorGradientWidget::paintEvent( QPaintEvent * )
 {
     QImage image(contentsRect().width(), contentsRect().height(), QImage::Format_ARGB32);
 
@@ -111,17 +107,15 @@ void ColorGradientWidget::paintEvent( QPaintEvent* )
                         color1.green() + int(greenDiff * scale),
                         color1.blue()  + int(blueDiff  * scale) );
 
-            unsigned int* p = (uint*) image.scanLine( y );
+            unsigned int *p = (uint *) image.scanLine( y );
 
             for ( int x = 0; x < image.width(); ++x )
-            {
                 *p++ = col.rgb();
-            }
         }
     }
     else
     {
-        unsigned int* p = (uint*) image.scanLine( 0 );
+        unsigned int *p = (uint *) image.scanLine( 0 );
 
         for ( int x = 0; x < image.width(); ++x )
         {
@@ -140,7 +134,6 @@ void ColorGradientWidget::paintEvent( QPaintEvent* )
     }
 
     const int psize = 256;
-
     QColor ditherPalette[psize];
 
     for ( int s = 0; s < psize; ++s )

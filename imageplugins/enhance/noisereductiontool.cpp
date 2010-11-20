@@ -55,7 +55,7 @@ public:
         nrSettings(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+        {}
 
     const QString       configGroupName;
 
@@ -65,8 +65,8 @@ public:
 };
 
 NoiseReductionTool::NoiseReductionTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new NoiseReductionToolPriv)
+                  : EditorToolThreaded(parent),
+                    d(new NoiseReductionToolPriv)
 {
     setObjectName("noisereduction");
     setToolName(i18n("Noise Reduction"));

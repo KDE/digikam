@@ -77,10 +77,9 @@ public:
 };
 
 DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
-    : KAction(parent), d(new DLogoActionPriv)
+           : KAction(parent), d(new DLogoActionPriv)
 {
     setText("digikam.org");
-
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
         setIcon(KIcon("digikam"));
@@ -115,11 +114,8 @@ void DLogoAction::stop()
 {
     d->progressCount = 0;
     d->progressTimer->stop();
-
     if (d->urlLabel)
-    {
         d->urlLabel->setPixmap(d->progressPixmap.copy(0, 0, 144, 32));
-    }
 }
 
 bool DLogoAction::running() const
@@ -131,16 +127,10 @@ void DLogoAction::slotProgressTimerDone()
 {
     QPixmap anim(d->progressPixmap.copy(0, d->progressCount*32, 144, 32));
     d->progressCount++;
-
-    if (d->progressCount == 36)
-    {
-        d->progressCount = 0;
-    }
+    if (d->progressCount == 36) d->progressCount = 0;
 
     if (d->urlLabel)
-    {
         d->urlLabel->setPixmap(anim);
-    }
 
     d->progressTimer->start(100);
 }
@@ -161,9 +151,7 @@ QWidget* DLogoAction::createWidget(QWidget* parent)
     layout->setSpacing(0);
 
     if (d->alignOnright)
-    {
         layout->addStretch();
-    }
 
     layout->addWidget(d->urlLabel);
 

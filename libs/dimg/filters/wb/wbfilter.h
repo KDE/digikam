@@ -60,7 +60,7 @@ public:
         saturation  = 1.0;
     };
 
-    ~WBContainer() {};
+    ~WBContainer(){};
 
 public:
 
@@ -90,7 +90,7 @@ protected:
 
     void filterImage();
 
-protected:
+  protected:
 
     WBContainer m_settings;
 

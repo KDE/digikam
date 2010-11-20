@@ -50,7 +50,7 @@ namespace Digikam
  */
 class SidebarWidget: public QWidget, public StateSavingObject
 {
-    Q_OBJECT
+Q_OBJECT
 public:
 
     /**
@@ -58,7 +58,7 @@ public:
      *
      * @param parent parent of this widget, may be null
      */
-    SidebarWidget(QWidget* parent);
+    SidebarWidget(QWidget *parent);
 
     /**
      * Destructor.
@@ -83,7 +83,7 @@ public:
      * This is called on this widget when the history requires to move back to
      * the specified album
      */
-    virtual void changeAlbumFromHistory(Album* album) = 0;
+    virtual void changeAlbumFromHistory(Album *album) = 0;
 
     /**
      * Must be implemented and return the icon that shall be visible for this

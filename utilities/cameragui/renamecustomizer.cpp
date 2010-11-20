@@ -70,7 +70,7 @@ public:
         renameDefaultCaseType = 0;
         renameCustom          = 0;
         startIndex            = 1;
-    }
+}
 
     int                    startIndex;
 
@@ -95,7 +95,7 @@ public:
 };
 
 RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
-    : QWidget(parent), d(new RenameCustomizerPriv)
+                : QWidget(parent), d(new RenameCustomizerPriv)
 {
     d->changedTimer = new QTimer(this);
     d->cameraTitle  = cameraTitle;
@@ -125,7 +125,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCaseType->insertItem(2, i18nc("Filename to lowercase",   "Lower"));
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     d->renameDefaultCaseType->setWhatsThis( i18n("Set the method to use to change the case "
-                                            "of the image filenames."));
+                                                 "of the image filenames."));
 
     boxLayout1->setMargin(KDialog::spacingHint());
     boxLayout1->setSpacing(KDialog::spacingHint());
@@ -209,9 +209,7 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
     Q_UNUSED(dateTime)
 
     if (d->renameDefault->isChecked())
-    {
         return QString();
-    }
 
     return d->advancedRenameManager->newName(fileName);
 }
@@ -243,14 +241,9 @@ RenameCustomizer::Case RenameCustomizer::changeCase() const
     RenameCustomizer::Case type = NONE;
 
     if (d->renameDefaultCaseType->currentIndex() == 1)
-    {
         type=UPPER;
-    }
-
     if (d->renameDefaultCaseType->currentIndex() == 2)
-    {
         type=LOWER;
-    }
 
     return type;
 }
@@ -258,11 +251,8 @@ RenameCustomizer::Case RenameCustomizer::changeCase() const
 void RenameCustomizer::slotRadioButtonClicked(int id)
 {
     QRadioButton* btn = dynamic_cast<QRadioButton*>(d->buttonGroup->button(id));
-
     if (!btn)
-    {
         return;
-    }
 
     btn->setChecked(true);
     d->renameDefaultBox->setEnabled( btn == d->renameDefault );

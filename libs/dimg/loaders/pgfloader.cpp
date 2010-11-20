@@ -79,36 +79,30 @@ extern "C"
 namespace Digikam
 {
 
-static bool CallbackForLibPGF(double percent, bool escapeAllowed, void* data)
+static bool CallbackForLibPGF(double percent, bool escapeAllowed, void *data)
 {
     if (data)
     {
-        PGFLoader* d = static_cast<PGFLoader*>(data);
-
-        if (d)
-        {
-            return d->progressCallback(percent, escapeAllowed);
-        }
+        PGFLoader *d = static_cast<PGFLoader*>(data);
+        if (d) return d->progressCallback(percent, escapeAllowed);
     }
-
     return false;
 }
 
 PGFLoader::PGFLoader(DImg* image)
-    : DImgLoader(image)
+         : DImgLoader(image)
 {
     m_hasAlpha   = false;
     m_sixteenBit = false;
     m_observer   = 0;
 }
 
-bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     m_observer = observer;
     readMetadata(filePath, DImg::PGF);
 
-    FILE* file = fopen(QFile::encodeName(filePath), "rb");
-
+    FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
         kDebug() << "Error: Could not open source file.";
@@ -146,22 +140,18 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 #else
     HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #endif
-
     if (fd == INVALID_HANDLE_VALUE)
     {
         loadingFailed();
         return false;
     }
-
 #else
     int fd = open(QFile::encodeName(filePath), O_RDONLY);
-
     if (fd == -1)
     {
         loadingFailed();
         return false;
     }
-
 #endif
 
     CPGFFileStream stream(fd);
@@ -236,7 +226,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         int width   = pgf.Width();
         int height  = pgf.Height();
-        uchar* data = 0;
+        uchar *data = 0;
 
         QSize originalSize(width, height);
 
@@ -247,21 +237,16 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             int scaledLoadingSize = 0;
             int level             = 0;
             QVariant attribute = imageGetAttribute("scaledLoadingSize");
-
             if (attribute.isValid() && pgf.Levels() > 0)
             {
                 scaledLoadingSize = attribute.toInt();
                 int i, w, h;
-
                 for (i=pgf.Levels()-1 ; i>=0 ; --i)
                 {
                     w = pgf.Width(i);
                     h = pgf.Height(i);
-
                     if (qMin(w, h) >= scaledLoadingSize)
-                    {
                         break;
-                    }
                 }
 
                 if (i >= 0)
@@ -270,19 +255,15 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     height = h;
                     level  = i;
                     kDebug() << "Loading PGF scaled version at level " << i
-                             << " (" << w << " x " << h << ") for size "
-                             << scaledLoadingSize;
+                                  << " (" << w << " x " << h << ") for size "
+                                  << scaledLoadingSize;
                 }
             }
 
             if (m_sixteenBit)
-            {
-                data = new uchar[width*height*8];    // 16 bits/color/pixel
-            }
+                data = new uchar[width*height*8];  // 16 bits/color/pixel
             else
-            {
-                data = new uchar[width*height*4];    // 8 bits/color/pixel
-            }
+                data = new uchar[width*height*4];  // 8 bits/color/pixel
 
             // Fill all with 255 including alpha channel.
             memset(data, sizeof(data), 0xFF);
@@ -295,9 +276,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                           CallbackForLibPGF, this);
 
             if (observer)
-            {
                 observer->progressInfo(m_image, 1.0);
-            }
         }
 
         imageWidth()  = width;
@@ -316,15 +295,10 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         return true;
     }
-    catch (IOException& e)
+    catch(IOException& e)
     {
         int err = e.error;
-
-        if (err >= AppError)
-        {
-            err -= AppError;
-        }
-
+        if (err >= AppError) err -= AppError;
         kDebug() << "Error: Opening and reading PGF image failed (" << err << ")!";
 
 #ifdef WIN32
@@ -336,7 +310,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         loadingFailed();
         return false;
     }
-    catch (std::bad_alloc& e)
+    catch(std::bad_alloc& e)
     {
         kError() << "Failed to allocate memory for loading" << filePath << e.what();
 
@@ -351,7 +325,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     }
 }
 
-bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
+bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
     m_observer = observer;
 
@@ -361,22 +335,18 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 #else
     HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #endif
-
     if (fd == INVALID_HANDLE_VALUE)
     {
         kDebug() << "Error: Could not open destination file.";
         return false;
     }
-
 #elif defined(__POSIX__)
     int fd = open(QFile::encodeName(filePath), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-
     if (fd == -1)
     {
         kDebug() << "Error: Could not open destination file.";
         return false;
     }
-
 #endif
 
     try
@@ -454,24 +424,17 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 #endif
 
         if (observer)
-        {
             observer->progressInfo(m_image, 1.0);
-        }
 
         imageSetAttribute("savedformat", "PGF");
         saveMetadata(filePath);
 
         return true;
     }
-    catch (IOException& e)
+    catch(IOException& e)
     {
         int err = e.error;
-
-        if (err >= AppError)
-        {
-            err -= AppError;
-        }
-
+        if (err >= AppError) err -= AppError;
         kDebug() << "Error: Opening and saving PGF image failed (" << err << ")!";
 
 #ifdef WIN32
@@ -500,10 +463,8 @@ bool PGFLoader::progressCallback(double percent, bool escapeAllowed)
     {
         m_observer->progressInfo(m_image, percent);
 
-        if (escapeAllowed)
-        {
-            return (!m_observer->continueQuery(m_image));
-        }
+    if (escapeAllowed)
+        return (!m_observer->continueQuery(m_image));
     }
 
     return false;

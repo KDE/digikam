@@ -33,7 +33,7 @@ class KIntNumInput;
 
 namespace Ui
 {
-class SequenceNumberOptionDialogWidget;
+    class SequenceNumberOptionDialogWidget;
 }
 
 namespace Digikam

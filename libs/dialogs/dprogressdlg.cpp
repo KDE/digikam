@@ -76,7 +76,7 @@ public:
 };
 
 DProgressDlg::DProgressDlg(QWidget* parent, const QString& caption)
-    : KDialog(parent), d(new DProgressDlgPriv)
+            : KDialog(parent), d(new DProgressDlgPriv)
 {
     setCaption(caption);
     setButtons(Cancel);
@@ -148,7 +148,6 @@ void DProgressDlg::setButtonGuiItem(const KGuiItem& item)
 void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
 {
     QPixmap pix = itemPix;
-
     if (pix.isNull())
     {
         pix = DesktopIcon("image-missing", KIconLoader::SizeMedium);    // 32x32 px

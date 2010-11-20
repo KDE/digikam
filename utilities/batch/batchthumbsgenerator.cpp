@@ -77,11 +77,11 @@ public:
 
     QStringList          allPicturesPath;
 
-    ThumbnailLoadThread* thumbLoadThread;
+    ThumbnailLoadThread *thumbLoadThread;
 };
 
 BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, bool rebuildAll)
-    : DProgressDlg(0), d(new BatchThumbsGeneratorPriv)
+                    : DProgressDlg(0), d(new BatchThumbsGeneratorPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->rebuildAll      = rebuildAll;
@@ -124,7 +124,6 @@ void BatchThumbsGenerator::slotRebuildThumbs()
         QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getFilePathsWithThumbnail();
 
         QStringList::iterator it = d->allPicturesPath.begin();
-
         while (it != d->allPicturesPath.end())
         {
             if (filePaths.contains(*it))
@@ -142,11 +141,9 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
     // remove non-image files from the list
     QStringList::iterator it = d->allPicturesPath.begin();
-
     while (it != d->allPicturesPath.end())
     {
         ImageInfo info((*it));
-
         if (info.category() != DatabaseItem::Image)
         {
             it = d->allPicturesPath.erase(it);
@@ -161,8 +158,8 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
     if (d->allPicturesPath.isEmpty())
     {
-        slotCancel();
-        return;
+       slotCancel();
+       return;
     }
 
     processOne();
@@ -194,32 +191,18 @@ void BatchThumbsGenerator::complete()
 
 void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (d->cancel || d->allPicturesPath.isEmpty())
-    {
-        return;
-    }
+    if (d->cancel || d->allPicturesPath.isEmpty()) return;
 
-    if (d->allPicturesPath.first() != desc.filePath)
-    {
-        return;
-    }
+    if (d->allPicturesPath.first() != desc.filePath) return;
 
     addedAction(pix, desc.filePath);
     advance(1);
-
     if (!d->allPicturesPath.isEmpty())
-    {
         d->allPicturesPath.removeFirst();
-    }
-
     if (d->allPicturesPath.isEmpty())
-    {
         complete();
-    }
     else
-    {
         processOne();
-    }
 }
 
 void BatchThumbsGenerator::slotCancel()
@@ -228,7 +211,7 @@ void BatchThumbsGenerator::slotCancel()
     done(Cancel);
 }
 
-void BatchThumbsGenerator::closeEvent(QCloseEvent* e)
+void BatchThumbsGenerator::closeEvent(QCloseEvent *e)
 {
     abort();
     e->accept();

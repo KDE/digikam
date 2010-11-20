@@ -69,8 +69,8 @@ public:
 };
 
 FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "FilmGrain"),
-      d(new FilmGrainFilterPriv)
+               : DImgThreadedFilter(orgImage, parent, "FilmGrain"),
+                 d(new FilmGrainFilterPriv)
 {
     d->settings = settings;
     initFilter();
@@ -80,9 +80,9 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
                                  const DImg& orgImage, const DImg& destImage,
                                  int progressBegin, int progressEnd,
                                  const FilmGrainContainer& settings)
-    : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                         parentFilter->filterName() + ": FilmGrain"),
-    d(new FilmGrainFilterPriv)
+               : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                                    parentFilter->filterName() + ": FilmGrain"),
+                 d(new FilmGrainFilterPriv)
 {
     d->settings = settings;
     filterImage();
@@ -106,10 +106,10 @@ void FilmGrainFilter::filterImage()
         d->settings.chromaBlueIntensity <= 0 ||
         d->settings.chromaRedIntensity <= 0  ||
         !d->settings.isDirty())
-    {
-        m_destImage = m_orgImage;
-        return;
-    }
+        {
+            m_destImage = m_orgImage;
+            return;
+        }
 
     // To emulate grain size we use a matrix [grainSize x grainSize].
     // We will parse whole image using grainSize step. Color from a reference point located
@@ -162,47 +162,35 @@ void FilmGrainFilter::filterImage()
 
                     if (posX < width && posY < height)
                     {
-                        matCol = m_orgImage.getPixelColor(posX, posY);
+                         matCol = m_orgImage.getPixelColor(posX, posY);
 
-                        computeNoiseSettings(matCol,
-                                             matLumaRange,       matLumaNoise,
-                                             matChromaBlueRange, matChromaBlueNoise,
-                                             matChromaRedRange,  matChromaRedNoise);
+                         computeNoiseSettings(matCol,
+                                              matLumaRange,       matLumaNoise,
+                                              matChromaBlueRange, matChromaBlueNoise,
+                                              matChromaRedRange,  matChromaRedNoise);
 
                         if (d->settings.addLuminanceNoise)
                         {
                             if (((refLumaRange - matLumaRange) / refLumaRange) > 0.1)
-                            {
                                 adjustYCbCr(matCol, matLumaRange, matLumaNoise, FilmGrainFilterPriv::Luma);
-                            }
                             else
-                            {
                                 adjustYCbCr(matCol, refLumaRange, refLumaNoise, FilmGrainFilterPriv::Luma);
-                            }
                         }
 
                         if (d->settings.addChrominanceBlueNoise)
                         {
                             if (((refChromaBlueRange - matChromaBlueRange) / refChromaBlueRange) > 0.1)
-                            {
                                 adjustYCbCr(matCol, matChromaBlueRange, matChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
-                            }
                             else
-                            {
                                 adjustYCbCr(matCol, refChromaBlueRange, refChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
-                            }
                         }
 
                         if (d->settings.addChrominanceRedNoise)
                         {
                             if (((refChromaRedRange - matChromaRedRange) / refChromaRedRange) > 0.1)
-                            {
                                 adjustYCbCr(matCol, matChromaRedRange, matChromaRedNoise, FilmGrainFilterPriv::ChromaBlue);
-                            }
                             else
-                            {
                                 adjustYCbCr(matCol, refChromaRedRange, refChromaRedNoise, FilmGrainFilterPriv::ChromaRed);
-                            }
                         }
 
                         m_destImage.setPixelColor(posX, posY, matCol);
@@ -215,18 +203,16 @@ void FilmGrainFilter::filterImage()
         progress = (int) (((double)x * 100.0) / width);
 
         if (progress%5 == 0)
-        {
             postProgress( progress );
-        }
     }
 }
 
 /** This method compute lead noise of reference matrix point used to similate graininess size
  */
 void FilmGrainFilter::computeNoiseSettings(const DColor& col,
-        double& luRange, double& luNoise,
-        double& cbRange, double& cbNoise,
-        double& crRange, double& crNoise)
+                                           double& luRange, double& luNoise,
+                                           double& cbRange, double& cbNoise,
+                                           double& crRange, double& crNoise)
 {
     if (d->settings.addLuminanceNoise)
     {
@@ -260,13 +246,9 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
     col.getYCbCr(&y, &cb, &cr);
 
     if (d->settings.photoDistribution)
-    {
         n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414));
-    }
     else
-    {
         n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414));
-    }
 
     switch (channel)
     {

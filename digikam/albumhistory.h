@@ -61,12 +61,12 @@ public:
     AlbumHistory();
     ~AlbumHistory();
 
-    void            addAlbum(Album* album, QWidget* widget = 0);
-    void            deleteAlbum(Album* album);
+    void            addAlbum(Album *album, QWidget *widget = 0);
+    void            deleteAlbum(Album *album);
     void            clearHistory();
-    void            back(Album** album, QWidget** widget, unsigned int steps=1);
-    void            forward(Album** album, QWidget** widget, unsigned int steps=1);
-    void            getCurrentAlbum(Album** album, QWidget** widget) const;
+    void            back(Album **album, QWidget **widget, unsigned int steps=1);
+    void            forward(Album **album, QWidget **widget, unsigned int steps=1);
+    void            getCurrentAlbum(Album **album, QWidget **widget) const;
 
     void            getBackwardHistory(QStringList& list) const;
     void            getForwardHistory(QStringList& list) const;
@@ -101,8 +101,8 @@ private:
     bool            m_moving;
     bool            m_blockSelection;
 
-    AlbumStack*      m_backwardStack;
-    AlbumStack*      m_forwardStack;
+    AlbumStack      *m_backwardStack;
+    AlbumStack      *m_forwardStack;
     QMap<Album*, HistoryPosition> m_historyPos;
 };
 

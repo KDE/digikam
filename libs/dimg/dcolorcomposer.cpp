@@ -136,7 +136,6 @@ void DColorComposerPorterDuffNone::compose(DColor& dest, DColor src)
     // preserve src alpha value for dest blending,
     // src.alpha() will be changed after blending src
     int sa = src.alpha();
-
     if (dest.sixteenBit())
     {
         src.blendAlpha16(sa);
@@ -285,7 +284,6 @@ void DColorComposerPorterDuffSrcIn::compose(DColor& dest, DColor src, Multiplica
 void DColorComposerPorterDuffDstIn::compose(DColor& dest, DColor src)
 {
     int sa = src.alpha();
-
     if (dest.sixteenBit())
     {
         src.blendZero();
@@ -343,7 +341,6 @@ void DColorComposerPorterDuffSrcOut::compose(DColor& dest, DColor src, Multiplic
 void DColorComposerPorterDuffDstOut::compose(DColor& dest, DColor src)
 {
     int sa = src.alpha();
-
     if (dest.sixteenBit())
     {
         src.blendZero();
@@ -373,7 +370,6 @@ void DColorComposerPorterDuffDstOut::compose(DColor& dest, DColor src, Multiplic
 void DColorComposerPorterDuffSrcAtop::compose(DColor& dest, DColor src)
 {
     int sa = src.alpha();
-
     if (dest.sixteenBit())
     {
         src.blendAlpha16(dest.alpha());
@@ -403,7 +399,6 @@ void DColorComposerPorterDuffSrcAtop::compose(DColor& dest, DColor src, Multipli
 void DColorComposerPorterDuffDstAtop::compose(DColor& dest, DColor src)
 {
     int sa = src.alpha();
-
     if (dest.sixteenBit())
     {
         src.blendInvAlpha16(dest.alpha());
@@ -433,7 +428,6 @@ void DColorComposerPorterDuffDstAtop::compose(DColor& dest, DColor src, Multipli
 void DColorComposerPorterDuffXor::compose(DColor& dest, DColor src)
 {
     int sa = src.alpha();
-
     if (dest.sixteenBit())
     {
         src.blendInvAlpha16(dest.alpha());
@@ -461,26 +455,19 @@ void DColorComposerPorterDuffXor::compose(DColor& dest, DColor src, Multiplicati
 void DColorComposer::compose(DColor& dest, DColor src, DColorComposer::MultiplicationFlags multiplicationFlags)
 {
     if (multiplicationFlags & PremultiplySrc)
-    {
         src.premultiply();
-    }
-
     if (multiplicationFlags & PremultiplyDst)
-    {
         dest.premultiply();
-    }
 
     compose(dest, src);
 
     if (multiplicationFlags & DemultiplyDst)
-    {
         dest.demultiply();
-    }
 }
 
-DColorComposer* DColorComposer::getComposer(DColorComposer::CompositingOperation rule)
+DColorComposer *DColorComposer::getComposer(DColorComposer::CompositingOperation rule)
 {
-    switch (rule)
+    switch(rule)
     {
         case PorterDuffNone:
             return new DColorComposerPorterDuffNone;
@@ -507,7 +494,6 @@ DColorComposer* DColorComposer::getComposer(DColorComposer::CompositingOperation
         case PorterDuffXor:
             return new DColorComposerPorterDuffDstOut;
     }
-
     return 0;
 }
 

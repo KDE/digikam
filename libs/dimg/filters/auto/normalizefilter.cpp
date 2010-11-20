@@ -40,8 +40,8 @@ namespace Digikam
 {
 
 NormalizeFilter::NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
-    : DImgThreadedFilter(orgImage, parent, "NormalizeFilter"),
-      m_refImage(*refImage)
+               : DImgThreadedFilter(orgImage, parent, "NormalizeFilter"),
+                 m_refImage(*refImage)
 {
     initFilter();
 }
@@ -72,7 +72,7 @@ void NormalizeFilter::normalizeImage()
 
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        kDebug() << "Ref. image and Org. has different bits depth";
+        kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
     }
 
@@ -100,35 +100,14 @@ void NormalizeFilter::normalizeImage()
             green = ptr[1];
             red   = ptr[2];
 
-            if (red < param.min)
-            {
-                param.min = red;
-            }
+            if (red < param.min) param.min = red;
+            if (red > param.max) param.max = red;
 
-            if (red > param.max)
-            {
-                param.max = red;
-            }
+            if (green < param.min) param.min = green;
+            if (green > param.max) param.max = green;
 
-            if (green < param.min)
-            {
-                param.min = green;
-            }
-
-            if (green > param.max)
-            {
-                param.max = green;
-            }
-
-            if (blue < param.min)
-            {
-                param.min = blue;
-            }
-
-            if (blue > param.max)
-            {
-                param.max = blue;
-            }
+            if (blue < param.min) param.min = blue;
+            if (blue > param.max) param.max = blue;
 
             ptr += 4;
         }
@@ -144,35 +123,14 @@ void NormalizeFilter::normalizeImage()
             green = ptr[1];
             red   = ptr[2];
 
-            if (red < param.min)
-            {
-                param.min = red;
-            }
+            if (red < param.min) param.min = red;
+            if (red > param.max) param.max = red;
 
-            if (red > param.max)
-            {
-                param.max = red;
-            }
+            if (green < param.min) param.min = green;
+            if (green > param.max) param.max = green;
 
-            if (green < param.min)
-            {
-                param.min = green;
-            }
-
-            if (green > param.max)
-            {
-                param.max = green;
-            }
-
-            if (blue < param.min)
-            {
-                param.min = blue;
-            }
-
-            if (blue > param.max)
-            {
-                param.max = blue;
-            }
+            if (blue < param.min) param.min = blue;
+            if (blue > param.max) param.max = blue;
 
             ptr += 4;
         }
@@ -187,9 +145,7 @@ void NormalizeFilter::normalizeImage()
         if (range != 0)
         {
             for (x = (int)param.min ; x <= (int)param.max ; ++x)
-            {
                 param.lut[x] = (unsigned short)((segments-1) * (x - param.min) / range);
-            }
         }
         else
         {
@@ -197,7 +153,7 @@ void NormalizeFilter::normalizeImage()
         }
     }
 
-    uchar* data = m_orgImage.bits();
+    uchar* data = m_orgImage.bits(); 
     int w       = m_orgImage.width();
     int h       = m_orgImage.height();
     uint size   = w*h;
@@ -222,11 +178,8 @@ void NormalizeFilter::normalizeImage()
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
-
             if ( progress%5 == 0 )
-            {
                 postProgress( progress );
-            }
         }
     }
     else                    // 16 bits image.
@@ -247,11 +200,8 @@ void NormalizeFilter::normalizeImage()
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
-
             if ( progress%5 == 0 )
-            {
                 postProgress( progress );
-            }
         }
     }
 

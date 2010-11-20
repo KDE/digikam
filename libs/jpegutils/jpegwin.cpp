@@ -40,7 +40,7 @@ extern "C"
 
 #include "jpegwin.h"
 
-namespace Digikam
+namespace Digikam 
 {
 
 void init_source (j_decompress_ptr cinfo)
@@ -64,14 +64,13 @@ void skip_input_data (j_decompress_ptr cinfo, long nbytes)
 {
     digikam_source_mgr* src = (digikam_source_mgr*) cinfo->src;
 
-    if (nbytes > 0)
+    if (nbytes > 0) 
     {
-        while (nbytes > (long) src->pub.bytes_in_buffer)
+        while (nbytes > (long) src->pub.bytes_in_buffer) 
         {
             nbytes -= (long) src->pub.bytes_in_buffer;
             (void) fill_input_buffer(cinfo);
         }
-
         src->pub.next_input_byte += (size_t) nbytes;
         src->pub.bytes_in_buffer -= (size_t) nbytes;
     }
@@ -85,10 +84,10 @@ void jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET* buffer, size_t bufsi
 {
     digikam_source_mgr* src=0;
 
-    if (cinfo->src == NULL)
+    if (cinfo->src == NULL) 
     {
-        cinfo->src = (struct jpeg_source_mgr*) (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-                     sizeof(digikam_source_mgr));
+        cinfo->src = (struct jpeg_source_mgr *) (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
+        sizeof(digikam_source_mgr));
     }
 
     src                        = (digikam_source_mgr*) cinfo->src;

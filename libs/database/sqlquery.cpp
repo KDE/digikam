@@ -27,12 +27,12 @@ namespace Digikam
 {
 
 SqlQuery::SqlQuery(const QSqlQuery& other)
-    : QSqlQuery(other)
+        : QSqlQuery(other)
 {
 }
 
 SqlQuery::SqlQuery(QSqlDatabase db)
-    : QSqlQuery(db)
+        : QSqlQuery(db)
 {
 }
 

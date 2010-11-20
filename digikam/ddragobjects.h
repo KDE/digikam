@@ -57,7 +57,7 @@ class DItemDrag : public QMimeData
 {
 public:
 
-    DItemDrag(const KUrl::List& urls,
+    DItemDrag(const KUrl::List& urls, 
               const KUrl::List& kioURLs,
               const QList<int>& albumIDs,
               const QList<int>& imageIDs);
@@ -76,7 +76,7 @@ public:
 /**
  * Provides a drag object for a tag
  *
- * When a tag is moved through drag'n'drop an object of this class
+ * When a tag is moved through drag'n'drop an object of this class 
  * is created.
  */
 class DTagDrag : public QMimeData
@@ -94,7 +94,7 @@ public:
 /**
  * Provides a drag object for an album
  *
- * When an album is moved through drag'n'drop an object of this class
+ * When an album is moved through drag'n'drop an object of this class 
  * is created.
  */
 class DAlbumDrag : public QMimeData
@@ -112,7 +112,7 @@ public:
 /**
  * Provides a drag object for a list of tags
  *
- * When a tag is moved through drag'n'drop an object of this class
+ * When a tag is moved through drag'n'drop an object of this class 
  * is created.
  */
 class DTagListDrag : public QMimeData

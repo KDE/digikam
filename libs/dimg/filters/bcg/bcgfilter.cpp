@@ -44,7 +44,7 @@ class BCGFilterPriv
 {
 public:
 
-    BCGFilterPriv() {}
+    BCGFilterPriv(){}
 
     int          map16[65536];
     int          map[256];
@@ -53,8 +53,8 @@ public:
 };
 
 BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "BCGFilter"),
-      d(new BCGFilterPriv)
+         : DImgThreadedFilter(orgImage, parent, "BCGFilter"),
+           d(new BCGFilterPriv)
 {
     d->settings = settings;
     reset();
@@ -81,14 +81,10 @@ void BCGFilter::setGamma(double val)
     val = (val < 0.01) ? 0.01 : val;
 
     for (int i=0; i<65536; ++i)
-    {
         d->map16[i] = lround(pow(((double)d->map16[i] / 65535.0), (1.0 / val)) * 65535.0);
-    }
 
     for (int i=0; i<256; ++i)
-    {
         d->map[i] = lround(pow(((double)d->map[i] / 255.0), (1.0 / val)) * 255.0);
-    }
 }
 
 void BCGFilter::setBrightness(double val)
@@ -96,29 +92,21 @@ void BCGFilter::setBrightness(double val)
     int val1 = lround(val * 65535);
 
     for (int i = 0; i < 65536; ++i)
-    {
         d->map16[i] = d->map16[i] + val1;
-    }
 
     val1 = lround(val * 255);
 
     for (int i = 0; i < 256; ++i)
-    {
         d->map[i] = d->map[i] + val1;
-    }
 }
 
 void BCGFilter::setContrast(double val)
 {
     for (int i = 0; i < 65536; ++i)
-    {
         d->map16[i] = lround((d->map16[i] - 32767) * val) + 32767;
-    }
 
     for (int i = 0; i < 256; ++i)
-    {
         d->map[i] = lround((d->map[i] - 127) * val) + 127;
-    }
 }
 
 void BCGFilter::reset()
@@ -126,32 +114,22 @@ void BCGFilter::reset()
     // initialize to linear mapping
 
     for (int i=0; i<65536; ++i)
-    {
         d->map16[i] = i;
-    }
 
     for (int i=0; i<256; ++i)
-    {
         d->map[i] = i;
-    }
 }
 
 void BCGFilter::applyBCG(DImg& image)
 {
-    if (image.isNull())
-    {
-        return;
-    }
+    if (image.isNull()) return;
 
     applyBCG(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
 void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
 {
-    if (!bits)
-    {
-        return;
-    }
+    if (!bits) return;
 
     uint size = width*height;
     int  progress;
@@ -186,11 +164,8 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
             data += 4;
 
             progress = (int)(((double)i * 100.0) / size);
-
             if ( progress%5 == 0 )
-            {
                 postProgress( progress );
-            }
         }
     }
     else                                        // 16 bits image.
@@ -223,11 +198,8 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
             data += 4;
 
             progress = (int)(((double)i * 100.0) / size);
-
             if ( progress%5 == 0 )
-            {
                 postProgress( progress );
-            }
         }
     }
 }

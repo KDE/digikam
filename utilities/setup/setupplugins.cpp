@@ -60,15 +60,14 @@ public:
 };
 
 SetupPlugins::SetupPlugins(QWidget* parent)
-    : QScrollArea(parent), d(new SetupPluginsPriv)
+            : QScrollArea(parent), d(new SetupPluginsPriv)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget *panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout *layout = new QVBoxLayout(panel);
     d->pluginsNumber    = new QLabel(panel);
-
     if (KIPI::PluginLoader::instance())
     {
         d->kipiConfig = KIPI::PluginLoader::instance()->configWidget(panel);
@@ -108,9 +107,7 @@ void SetupPlugins::initPlugins(int kipiPluginsNumber)
 void SetupPlugins::applyPlugins()
 {
     if (KIPI::PluginLoader::instance())
-    {
         d->kipiConfig->apply();
-    }
 }
 
 }  // namespace Digikam

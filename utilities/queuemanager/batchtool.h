@@ -280,7 +280,7 @@ class AssignedBatchTools
 {
 public:
 
-    AssignedBatchTools() {};
+    AssignedBatchTools(){};
 
     QString targetSuffix(bool* extSet = 0) const
     {
@@ -288,11 +288,9 @@ public:
         foreach(BatchToolSet set, m_toolsMap)
         {
             QString s = set.tool->outputSuffix();
-
             if (!s.isEmpty())
             {
                 suffix = s;
-
                 if (extSet != 0)
                 {
                     *extSet = true;
@@ -306,7 +304,6 @@ public:
             {
                 *extSet = false;
             }
-
             return (QFileInfo(m_itemUrl.fileName()).suffix());
         }
 

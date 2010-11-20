@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 MetadataListView::MetadataListView(QWidget* parent)
-    : QTreeWidget(parent)
+                : QTreeWidget(parent)
 {
     setRootIsDecorated(false);
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -83,21 +83,16 @@ QString MetadataListView::getCurrentItemKey()
 void MetadataListView::setCurrentItemByKey(const QString& itemKey)
 {
     if (itemKey.isNull())
-    {
         return;
-    }
 
     int i                 = 0;
     QTreeWidgetItem* item = 0;
-
     do
     {
         item = topLevelItem(i);
-
         if (item && item->flags() & Qt::ItemIsSelectable)
         {
             MetadataListViewItem* lvItem = dynamic_cast<MetadataListViewItem*>(item);
-
             if (lvItem)
             {
                 if (lvItem->getKey() == itemKey)
@@ -109,7 +104,6 @@ void MetadataListView::setCurrentItemByKey(const QString& itemKey)
                 }
             }
         }
-
         ++i;
     }
     while (item);
@@ -118,16 +112,13 @@ void MetadataListView::setCurrentItemByKey(const QString& itemKey)
 void MetadataListView::slotSelectionChanged(QTreeWidgetItem* item, int)
 {
     if (!item)
-    {
         return;
-    }
 
     MetadataListViewItem* viewItem = static_cast<MetadataListViewItem*>(item);
     m_selectedItemKey              = viewItem->getKey();
     QString tagValue               = viewItem->getValue().simplified();
     QString tagTitle               = m_parent->getTagTitle(m_selectedItemKey);
     QString tagDesc                = m_parent->getTagDescription(m_selectedItemKey);
-
     if (tagValue.length() > 128)
     {
         tagValue.truncate(128);
@@ -160,9 +151,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
             // Check if the current IfD have any items. If no remove it before to toggle to the next IfD.
             if ( subItems == 0 && parentifDItem)
-            {
                 delete parentifDItem;
-            }
 
             parentifDItem = new MdKeyListViewItem(this, currentIfDName);
             subItems      = 0;
@@ -204,9 +193,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
     // To check if the last IfD have any items...
     if ( subItems == 0 && parentifDItem)
-    {
         delete parentifDItem;
-    }
 
     // Add not found tags from filter as grey items.
     if (!filters.isEmpty() && filters[0] != QString("FULL") && filters[0].contains("."))
@@ -214,11 +201,8 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         foreach(const QString& key, filters)
         {
             MdKeyListViewItem* pitem = findMdKeyItem(key);
-
             if (!pitem)
-            {
                 pitem = new MdKeyListViewItem(this, key.section('.', 1, 1));
-            }
 
             QString tagTitle = m_parent->getTagTitle(key);
             new MetadataListViewItem(pitem, key, tagTitle);
@@ -237,11 +221,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     QStringList        filters       = tagsFilter;
     uint               subItems      = 0;
     MdKeyListViewItem* parentifDItem = 0;
-
-    if (ifds.count() == 0)
-    {
-        return;
-    }
+    if (ifds.count() == 0) return;
 
     for (QStringList::const_iterator itKeysFilter = keysFilter.constBegin();
          itKeysFilter != keysFilter.constEnd();
@@ -251,7 +231,6 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         parentifDItem = new MdKeyListViewItem(this, *itKeysFilter);
 
         DMetadata::MetaDataMap::const_iterator it = ifds.constEnd();
-
         while (it != ifds.constBegin())
         {
             --it;
@@ -295,9 +274,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
         // We checking if the last IfD have any items. If no, we remove it.
         if ( subItems == 0 && parentifDItem)
-        {
             delete parentifDItem;
-        }
     }
 
     // Add not found tags from filter as grey items.
@@ -306,11 +283,8 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         foreach(const QString &key, filters)
         {
             MdKeyListViewItem* pitem = findMdKeyItem(key);
-
             if (!pitem)
-            {
                 pitem = new MdKeyListViewItem(this, key.section('.', 1, 1));
-            }
 
             QString tagTitle = m_parent->getTagTitle(key);
             new MetadataListViewItem(pitem, key, tagTitle);
@@ -328,25 +302,18 @@ void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
 
     // Restore all MdKey items.
     QTreeWidgetItemIterator it2(this);
-
     while (*it2)
     {
         MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it2);
-
         if (item)
-        {
             item->setHidden(false);
-        }
-
         ++it2;
     }
 
     QTreeWidgetItemIterator it(this);
-
     while (*it)
     {
         MetadataListViewItem* item = dynamic_cast<MetadataListViewItem*>(*it);
-
         if (item)
         {
             if (item->text(0).contains(search, settings.caseSensitive) ||
@@ -360,7 +327,6 @@ void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
                 item->setHidden(true);
             }
         }
-
         ++it;
     }
 
@@ -373,32 +339,22 @@ void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
 void MetadataListView::cleanUpMdKeyItem()
 {
     QTreeWidgetItemIterator it(this);
-
     while (*it)
     {
         MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it);
-
         if (item)
         {
             int children = item->childCount();
             int visibles = 0;
-
             for (int i = 0 ; i < children; ++i)
             {
                 QTreeWidgetItem* citem = (*it)->child(i);
-
                 if (!citem->isHidden())
-                {
                     ++visibles;
-                }
             }
-
             if (!children || !visibles)
-            {
                 item->setHidden(true);
-            }
         }
-
         ++it;
     }
 }
@@ -406,11 +362,9 @@ void MetadataListView::cleanUpMdKeyItem()
 MdKeyListViewItem* MetadataListView::findMdKeyItem(const QString& key)
 {
     QTreeWidgetItemIterator it(this);
-
     while (*it)
     {
         MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it);
-
         if (item)
         {
             if (key.section('.', 1, 1) == item->getKey())
@@ -418,10 +372,8 @@ MdKeyListViewItem* MetadataListView::findMdKeyItem(const QString& key)
                 return item;
             }
         }
-
         ++it;
     }
-
     return 0;
 }
 

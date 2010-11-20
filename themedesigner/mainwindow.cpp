@@ -110,7 +110,7 @@ public:
 };
 
 MainWindow::MainWindow()
-    : KDialog(0), d(new MainWindowPriv)
+          : KDialog(0), d(new MainWindowPriv)
 {
     setWindowTitle(i18n("digiKam Theme Designer"));
     setAttribute(Qt::WA_DeleteOnClose);
@@ -147,7 +147,7 @@ MainWindow::MainWindow()
 
     // Property Editor ---------------------------------------------
 
-    QGroupBox* groupBox = new QGroupBox(this);
+    QGroupBox *groupBox = new QGroupBox(this);
     QVBoxLayout* vlay   = new QVBoxLayout(groupBox);
 
     QLabel* label1   = new QLabel(i18n("Property: "), groupBox);
@@ -282,21 +282,19 @@ MainWindow::MainWindow()
     d->treeView->setHeaderLabel("My Albums");
     d->treeView->setRootIsDecorated(true);
 
-    KIconLoader* iconLoader = KIconLoader::global();
+    KIconLoader *iconLoader = KIconLoader::global();
 
-    QTreeWidgetItem* root = new QTreeWidgetItem(d->treeView, QStringList(QString("Album Root")));
+    QTreeWidgetItem *root = new QTreeWidgetItem(d->treeView, QStringList(QString("Album Root")));
     root->setIcon(0, iconLoader->loadIcon("folder", KIconLoader::NoGroup, 32));
     d->treeView->insertTopLevelItem(0, root);
 
     QList<QTreeWidgetItem*> items;
-
     for (int i=0; i<10; ++i)
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem(root, QStringList(QString("Album %1").arg(i)));
+        QTreeWidgetItem *item = new QTreeWidgetItem(root, QStringList(QString("Album %1").arg(i)));
         item->setIcon(0, iconLoader->loadIcon("folder", KIconLoader::NoGroup, 32));
         items.append(item);
     }
-
     root->addChildren(items);
 
     // ------------------------------------------------------------------------
@@ -315,11 +313,8 @@ void MainWindow::slotLoad()
     KUrl themesUrl(KGlobal::dirs()->findResourceDir("themes", QString()));
 
     QString path = KFileDialog::getOpenFileName(themesUrl, QString(), this, QString());
-
     if (path.isEmpty())
-    {
         return;
-    }
 
     QFileInfo fi(path);
     d->theme->name     = fi.fileName();
@@ -333,14 +328,10 @@ void MainWindow::slotLoad()
 void MainWindow::slotSave()
 {
     QString path = KFileDialog::getSaveFileName(KUrl(), QString(), this, QString());
-
     if (path.isEmpty())
-    {
         return;
-    }
 
     QFile file(path);
-
     if (!file.open(QIODevice::WriteOnly))
     {
         KMessageBox::error(this, i18n("Failed to open file for writing"));
@@ -376,7 +367,7 @@ void MainWindow::slotPropertyChanged()
     d->borderColorBtn->setEnabled(false);
     d->borderColorLabel->setEnabled(false);
 
-    switch (d->propertyCombo->currentIndex())
+    switch(d->propertyCombo->currentIndex())
     {
         case(BASE):
         {
@@ -541,21 +532,16 @@ void MainWindow::slotPropertyChanged()
     };
 
     d->bevelCombo->blockSignals(false);
-
     d->gradientCombo->blockSignals(false);
-
     d->begColorBtn->blockSignals(false);
-
     d->endColorBtn->blockSignals(false);
-
     d->addBorderCheck->blockSignals(false);
-
     d->borderColorBtn->blockSignals(false);
 }
 
 void MainWindow::slotUpdateTheme()
 {
-    switch (d->propertyCombo->currentIndex())
+    switch(d->propertyCombo->currentIndex())
     {
         case(BASE):
         {

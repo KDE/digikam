@@ -70,7 +70,7 @@ public:
                    Use KMultiTabBar::Left or KMultiTabBar::Right.
      * @param minimizedDefault hide the sidebar when the program is started the first time.
      */
-    Sidebar(QWidget* parent, SidebarSplitter* sp, KMultiTabBarPosition side=KMultiTabBar::Left,
+    Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side=KMultiTabBar::Left,
             bool minimizedDefault=false);
 
     virtual ~Sidebar();
@@ -83,17 +83,17 @@ public:
      * @param pic icon which is shown in this tab
      * @param title text which is shown it this tab
      */
-    void appendTab(QWidget* w, const QPixmap& pic, const QString& title);
+    void appendTab(QWidget *w, const QPixmap& pic, const QString& title);
 
     /**
      * Deletes a tab from the tabbar
      */
-    void deleteTab(QWidget* w);
+    void deleteTab(QWidget *w);
 
     /**
      * Activates a tab
      */
-    void setActiveTab(QWidget* w);
+    void setActiveTab(QWidget *w);
 
     /**
      * Returns the currently activated tab, or 0 if no tab is active
@@ -150,7 +150,7 @@ public:
 
 private:
 
-    bool eventFilter(QObject* o, QEvent* e);
+    bool eventFilter(QObject *o, QEvent *e);
     void switchTabAndStackToTab(int tab);
 
 private Q_SLOTS:
@@ -169,7 +169,7 @@ Q_SIGNALS:
     /**
      * is emitted, when another tab is activated
      */
-    void signalChangedTab(QWidget* w);
+    void signalChangedTab(QWidget *w);
 
     /**
      * is emitted, when tab is shrink or expanded
@@ -197,8 +197,8 @@ public:
      *  This is a QSplitter with better support for storing its state
      *  in config files, especially if Sidebars are contained in the splitter.
      */
-    explicit SidebarSplitter(QWidget* parent = 0);
-    explicit SidebarSplitter(Qt::Orientation orientation, QWidget* parent = 0);
+    explicit SidebarSplitter(QWidget *parent = 0);
+    explicit SidebarSplitter(Qt::Orientation orientation, QWidget *parent = 0);
 
     ~SidebarSplitter();
 
@@ -226,14 +226,14 @@ public:
     /**
      * Returns the value of sizes() that corresponds to the given Sidebar or splitter child widget.
      */
-    int size(Sidebar* bar) const;
-    int size(QWidget* widget) const;
+    int size(Sidebar *bar) const;
+    int size(QWidget *widget) const;
     /**
      * Sets the splitter size for the given sidebar or splitter child widget to size.
      * Special value -1: Sets the minimum size hint of the widget.
      */
-    void setSize(Sidebar* bar, int size);
-    void setSize(QWidget* widget, int size);
+    void setSize(Sidebar *bar, int size);
+    void setSize(QWidget *widget, int size);
 
     void addSplitterCollapserButton(QWidget* widget);
 

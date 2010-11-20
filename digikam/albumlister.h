@@ -4,11 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-26
- * Description : Albums lister.
+ * Description : Albums lister. 
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,7 @@ class AlbumListerPriv;
 /**
  * Manages imageinfo
  *
- * does listing of imageinfo for the current album and controls the lifetime
+ * does listing of imageinfo for the current album and controls the lifetime 
  * of the imageinfo. kioslaves are used for listing the imageinfo
  * corresponding to an album. Similar to the albummanager, frontend entities need
  * to connect to the AlbumLister for notifications of new Images, deletion of
@@ -101,7 +101,7 @@ public:
     /**
      * Opens an album to lists its items
      */
-    void openAlbum(Album* album);
+    void openAlbum(Album *album);
     void stop();
 
     /**
@@ -166,7 +166,7 @@ private:
 
     AlbumListerPriv* const d;
 
-    static AlbumLister* m_instance;
+    static AlbumLister *m_instance;
 };
 
 }  // namespace Digikam

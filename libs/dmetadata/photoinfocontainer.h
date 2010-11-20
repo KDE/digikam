@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT PhotoInfoContainer
 
 public:
 
-    PhotoInfoContainer() {};
+    PhotoInfoContainer(){};
 
     bool isEmpty()
     {
@@ -58,13 +58,9 @@ public:
              flash.isEmpty()           &&
              whiteBalance.isEmpty()    &&
              !dateTime.isValid() )
-        {
             return true;
-        }
         else
-        {
             return false;
-        }
     };
 
     QString   make;

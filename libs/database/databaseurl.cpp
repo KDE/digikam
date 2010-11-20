@@ -62,19 +62,19 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl& fileUrl,
 }
 
 DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
-        const QString& album,
-        const KUrl& albumRoot,
-        const DatabaseParameters& parameters)
+                                          const QString& album,
+                                          const KUrl& albumRoot,
+                                          const DatabaseParameters& parameters)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
     return fromAlbumAndName(name, album, albumRoot, location.id(), parameters);
 }
 
 DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
-        const QString& album,
-        const KUrl& albumRoot,
-        int   albumRootId,
-        const DatabaseParameters& parameters)
+                                          const QString& album,
+                                          const KUrl& albumRoot,
+                                          int   albumRootId,
+                                          const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamalbums");
@@ -98,7 +98,7 @@ DatabaseUrl DatabaseUrl::albumUrl(const DatabaseParameters& parameters)
 }
 
 DatabaseUrl DatabaseUrl::fromTagIds(const QList<int>& tagIds,
-                                    const DatabaseParameters& parameters)
+                                   const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamtags");
@@ -121,7 +121,7 @@ DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters& parameters)
 }
 
 DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate& date,
-        const DatabaseParameters& parameters)
+                                   const DatabaseParameters& parameters)
 {
     QDate firstDayOfMonth(date.year(), date.month(), 1);
     QDate firstDayOfNextMonth = firstDayOfMonth.addMonths(1);
@@ -130,7 +130,7 @@ DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate& date,
 }
 
 DatabaseUrl DatabaseUrl::fromDateForYear(const QDate& date,
-        const DatabaseParameters& parameters)
+                                  const DatabaseParameters& parameters)
 {
     QDate firstDayOfYear(date.year(), 1, 1);
     QDate firstDayOfNextYear = firstDayOfYear.addYears(1);
@@ -162,12 +162,12 @@ DatabaseUrl DatabaseUrl::searchUrl(int id,
 }
 
 DatabaseUrl::DatabaseUrl(const KUrl& digikamalbumsUrl)
-    : KUrl(digikamalbumsUrl)
+           : KUrl(digikamalbumsUrl)
 {
 }
 
 DatabaseUrl::DatabaseUrl(const DatabaseUrl& url)
-    : KUrl(url)
+           : KUrl(url)
 {
 }
 
@@ -240,14 +240,12 @@ bool DatabaseUrl::isSearchUrl() const
 KUrl DatabaseUrl::albumRoot() const
 {
     QString albumRoot = queryItem("albumRoot");
-
     if (!albumRoot.isNull())
     {
         KUrl albumRootUrl;
         albumRootUrl.setPath(albumRoot);
         return albumRootUrl;
     }
-
     return KUrl();
 }
 
@@ -287,10 +285,7 @@ KUrl DatabaseUrl::fileUrl() const
 int DatabaseUrl::tagId() const
 {
     if (path() == "/")
-    {
         return -1;
-    }
-
     return fileName().toInt();
 }
 
@@ -298,12 +293,10 @@ QList<int> DatabaseUrl::tagIds() const
 {
     QList<int> ids;
     QStringList stringIds = path().split('/', QString::SkipEmptyParts);
-
     for (int i=0; i<stringIds.count(); ++i)
     {
         ids << stringIds[i].toInt();
     }
-
     return ids;
 }
 
@@ -312,29 +305,19 @@ QList<int> DatabaseUrl::tagIds() const
 QDate DatabaseUrl::startDate() const
 {
     QStringList dates = path().split('/');
-
     if (dates.size() >= 1)
-    {
         return QDate::fromString(dates[0], Qt::ISODate);
-    }
     else
-    {
         return QDate();
-    }
 }
 
 QDate DatabaseUrl::endDate() const
 {
     QStringList dates = path().split('/');
-
     if (dates.size() >= 2)
-    {
         return QDate::fromString(dates[1], Qt::ISODate);
-    }
     else
-    {
         return QDate();
-    }
 }
 
 // --- Search URL ---

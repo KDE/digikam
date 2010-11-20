@@ -37,7 +37,7 @@ class Triangle
 public:
 
     Triangle(const QPoint& A, const QPoint& B, const QPoint& C);
-    ~Triangle() {};
+    ~Triangle(){};
 
     float angleABC();
     float angleACB();

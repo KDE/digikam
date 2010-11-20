@@ -86,8 +86,8 @@ public:
      * @see slotCreateFuzzySearchFromImage()
      * @return the newly created album
      */
-    SAlbum* createFuzzySearchFromImage(const QString& name,
-                                       const ImageInfo& image,
+    SAlbum *createFuzzySearchFromImage(const QString &name,
+                                       const ImageInfo &image,
                                        float threshold,
                                        bool overwriteIfExisting = false);
 

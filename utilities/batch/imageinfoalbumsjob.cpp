@@ -45,7 +45,7 @@ class ImageInfoAlbumsJobPriv
 {
 public:
 
-    ImageInfoAlbumsJobPriv() {}
+    ImageInfoAlbumsJobPriv(){}
 
     AlbumList           albumsList;
     AlbumList::Iterator albumIt;
@@ -56,7 +56,7 @@ public:
 };
 
 ImageInfoAlbumsJob::ImageInfoAlbumsJob()
-    : d(new ImageInfoAlbumsJobPriv)
+                  : d(new ImageInfoAlbumsJobPriv)
 {
     connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
             this, SLOT(slotItemsInfo(const ImageInfoList&)));
@@ -73,9 +73,7 @@ ImageInfoAlbumsJob::~ImageInfoAlbumsJob()
 void ImageInfoAlbumsJob::allItemsFromAlbums(const AlbumList& albumsList)
 {
     if (albumsList.isEmpty())
-    {
         return;
-    }
 
     d->albumsList = albumsList;
     d->albumIt    = d->albumsList.begin();
@@ -101,7 +99,6 @@ void ImageInfoAlbumsJob::slotItemsInfo(const ImageInfoList& items)
 void ImageInfoAlbumsJob::slotComplete()
 {
     ++d->albumIt;
-
     if (d->albumIt == d->albumsList.end())
     {
         stop();

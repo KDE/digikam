@@ -93,7 +93,7 @@ Q_SIGNALS:
 
 public:
 
-    static AlbumSettings* instance();
+    static AlbumSettings *instance();
 
     void readSettings();
     void saveSettings();
@@ -349,28 +349,28 @@ public:
     void setDatabaseParameters(const DatabaseParameters& params);
 
     QString getDatabaseType() const;
-    void setDatabaseType(const QString& databaseType);
+    void setDatabaseType(const QString &databaseType);
 
     QString getDatabaseConnectoptions() const;
-    void setDatabaseConnectoptions(const QString& connectoptions);
+    void setDatabaseConnectoptions(const QString &connectoptions);
 
     QString getDatabaseName() const;
-    void setDatabaseName(const QString& databaseName);
+    void setDatabaseName(const QString &databaseName);
 
     QString getDatabaseNameThumbnails() const;
-    void setDatabaseNameThumbnails(const QString& databaseNameThumbnails);
+    void setDatabaseNameThumbnails(const QString &databaseNameThumbnails);
 
     QString getDatabaseHostName() const;
-    void setDatabaseHostName(const QString& hostName);
+    void setDatabaseHostName(const QString &hostName);
 
     QString getDatabasePassword() const;
-    void setDatabasePassword(const QString& password);
+    void setDatabasePassword(const QString &password);
 
     int getDatabasePort() const;
     void setDatabasePort(int port);
 
     QString getDatabaseUserName() const;
-    void setDatabaseUserName(const QString& userName);
+    void setDatabaseUserName(const QString &userName);
 
     bool getInternalDatabaseServer() const;
     void setInternalDatabaseServer(const bool useInternalDBServer);

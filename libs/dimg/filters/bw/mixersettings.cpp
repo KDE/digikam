@@ -68,7 +68,7 @@ public:
         redGain(0),
         greenGain(0),
         blueGain(0)
-    {}
+        {}
 
     static const QString  configMonochromeEntry;
     static const QString  configPreserveLuminosityEntry;
@@ -116,8 +116,8 @@ const QString MixerSettings::MixerSettingsPriv::configBlackBlueGainEntry("BlackB
 // --------------------------------------------------------
 
 MixerSettings::MixerSettings(QWidget* parent)
-    : QWidget(parent),
-      d(new MixerSettingsPriv)
+             : QWidget(parent),
+               d(new MixerSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(this);
 
@@ -127,7 +127,7 @@ MixerSettings::MixerSettings(QWidget* parent)
     d->redGain->setRange(-200.0, 200.0, 1);
     d->redGain->setDefaultValue(0);
     d->redGain->setWhatsThis(i18n("Select the red color gain, as a percentage, "
-                                  "for the current channel."));
+                                 "for the current channel."));
 
     QLabel* greenLabel = new QLabel(i18n("Green:"));
     d->greenGain       = new RDoubleNumInput;
@@ -159,7 +159,7 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     d->preserveLuminosity = new QCheckBox(i18n("Preserve luminosity"));
     d->preserveLuminosity->setWhatsThis(i18n("Enable this option is you want preserve "
-                                        "the image luminosity."));
+                                             "the image luminosity."));
 
     // -------------------------------------------------------------
 
@@ -247,7 +247,6 @@ void MixerSettings::slotResetCurrentChannel()
                 d->mixerSettings.redGreenGain = 0.0;
                 d->mixerSettings.redBlueGain  = 0.0;
             }
-
             break;
         }
     }
@@ -258,7 +257,7 @@ void MixerSettings::slotResetCurrentChannel()
 
 void MixerSettings::slotGainsChanged()
 {
-    switch (d->currentChannel)
+    switch(d->currentChannel)
     {
         case GreenChannel:
         {
@@ -280,17 +279,16 @@ void MixerSettings::slotGainsChanged()
         {
             if ( d->monochrome->isChecked() )
             {
-                d->mixerSettings.blackRedGain   = d->redGain->value()   / 100.0;
-                d->mixerSettings.blackGreenGain = d->greenGain->value() / 100.0;
-                d->mixerSettings.blackBlueGain  = d->blueGain->value()  / 100.0;
+              d->mixerSettings.blackRedGain   = d->redGain->value()   / 100.0;
+              d->mixerSettings.blackGreenGain = d->greenGain->value() / 100.0;
+              d->mixerSettings.blackBlueGain  = d->blueGain->value()  / 100.0;
             }
             else
             {
-                d->mixerSettings.redRedGain   = d->redGain->value()   / 100.0;
-                d->mixerSettings.redGreenGain = d->greenGain->value() / 100.0;
-                d->mixerSettings.redBlueGain  = d->blueGain->value()  / 100.0;
+              d->mixerSettings.redRedGain   = d->redGain->value()   / 100.0;
+              d->mixerSettings.redGreenGain = d->greenGain->value() / 100.0;
+              d->mixerSettings.redBlueGain  = d->blueGain->value()  / 100.0;
             }
-
             break;
         }
     }
@@ -306,7 +304,7 @@ void MixerSettings::updateSettingsWidgets()
     d->greenGain->blockSignals(true);
     d->blueGain->blockSignals(true);
 
-    switch (d->currentChannel)
+    switch(d->currentChannel)
     {
         case GreenChannel:
         {
@@ -330,27 +328,26 @@ void MixerSettings::updateSettingsWidgets()
             break;
         }
 
-        default:          // Red or monochrome.
-        {
+       default:          // Red or monochrome.
+       {
             if ( d->monochrome->isChecked() )
             {
-                d->redGain->setDefaultValue(100);
-                d->greenGain->setDefaultValue(0);
-                d->blueGain->setDefaultValue(0);
-                d->redGain->setValue(d->mixerSettings.blackRedGain     * 100.0);
-                d->greenGain->setValue(d->mixerSettings.blackGreenGain * 100.0);
-                d->blueGain->setValue(d->mixerSettings.blackBlueGain   * 100.0);
+              d->redGain->setDefaultValue(100);
+              d->greenGain->setDefaultValue(0);
+              d->blueGain->setDefaultValue(0);
+              d->redGain->setValue(d->mixerSettings.blackRedGain     * 100.0);
+              d->greenGain->setValue(d->mixerSettings.blackGreenGain * 100.0);
+              d->blueGain->setValue(d->mixerSettings.blackBlueGain   * 100.0);
             }
             else
             {
-                d->redGain->setDefaultValue(100);
-                d->greenGain->setDefaultValue(0);
-                d->blueGain->setDefaultValue(0);
-                d->redGain->setValue(d->mixerSettings.redRedGain     * 100.0);
-                d->greenGain->setValue(d->mixerSettings.redGreenGain * 100.0);
-                d->blueGain->setValue(d->mixerSettings.redBlueGain   * 100.0);
+              d->redGain->setDefaultValue(100);
+              d->greenGain->setDefaultValue(0);
+              d->blueGain->setDefaultValue(0);
+              d->redGain->setValue(d->mixerSettings.redRedGain     * 100.0);
+              d->greenGain->setValue(d->mixerSettings.redGreenGain * 100.0);
+              d->blueGain->setValue(d->mixerSettings.redBlueGain   * 100.0);
             }
-
             break;
         }
     }
@@ -481,13 +478,10 @@ void MixerSettings::loadSettings()
     MixerContainer settings;
 
     loadGainsFileUrl = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                       QString( "*" ), kapp->activeWindow(),
-                       QString( i18n("Select Gimp Gains Mixer File to Load")) );
-
+                                            QString( "*" ), kapp->activeWindow(),
+                                            QString( i18n("Select Gimp Gains Mixer File to Load")) );
     if ( loadGainsFileUrl.isEmpty() )
-    {
-        return;
-    }
+       return;
 
     fp = fopen(QFile::encodeName(loadGainsFileUrl.toLocalFile()), "r");
 
@@ -507,41 +501,27 @@ void MixerSettings::loadSettings()
         // Get the current output channel in dialog.
 
         if (strcmp (buf1, "RED") == 0)
-        {
             currentOutputChannel = RedChannel;
-        }
         else if (strcmp (buf1, "GREEN") == 0)
-        {
             currentOutputChannel = GreenChannel;
-        }
         else if (strcmp (buf1, "BLUE") == 0)
-        {
             currentOutputChannel = BlueChannel;
-        }
 
         fscanf (fp, "%*s %s", buf1); // preview flag, preserved for compatibility
 
         fscanf (fp, "%*s %s", buf1);
 
         if (strcmp (buf1, "true") == 0)
-        {
             settings.bMonochrome = true;
-        }
         else
-        {
             settings.bMonochrome = false;
-        }
 
         fscanf (fp, "%*s %s", buf1);
 
         if (strcmp (buf1, "true") == 0)
-        {
             settings.bPreserveLum = true;
-        }
         else
-        {
             settings.bPreserveLum = false;
-        }
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
         settings.redRedGain   = atof(buf1);
@@ -581,13 +561,10 @@ void MixerSettings::saveAsSettings()
     FILE* fp = 0L;
 
     saveGainsFileUrl = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                       QString( "*" ), kapp->activeWindow(),
-                       QString( i18n("Gimp Gains Mixer File to Save")) );
-
+                                               QString( "*" ), kapp->activeWindow(),
+                                               QString( i18n("Gimp Gains Mixer File to Save")) );
     if ( saveGainsFileUrl.isEmpty() )
-    {
-        return;
-    }
+       return;
 
     fp = fopen(QFile::encodeName(saveGainsFileUrl.toLocalFile()), "w");
 
@@ -600,18 +577,18 @@ void MixerSettings::saveAsSettings()
 
         switch (d->currentChannel)
         {
-            case RedChannel:
-                str = "RED";
-                break;
-            case GreenChannel:
-                str = "GREEN";
-                break;
-            case BlueChannel:
-                str = "BLUE";
-                break;
-            default:
-                kWarning() <<  "Unknown Color channel gains";
-                break;
+           case RedChannel:
+              str = "RED";
+              break;
+           case GreenChannel:
+              str = "GREEN";
+              break;
+           case BlueChannel:
+              str = "BLUE";
+              break;
+           default:
+              kWarning() <<  "Unknown Color channel gains";
+              break;
         }
 
         fprintf (fp, "# Channel Mixer Configuration File\n");

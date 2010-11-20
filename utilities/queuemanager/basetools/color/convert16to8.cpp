@@ -37,7 +37,7 @@ namespace Digikam
 {
 
 Convert16to8::Convert16to8(QObject* parent)
-    : BatchTool("Convert16to8", ColorTool, parent)
+            : BatchTool("Convert16to8", ColorTool, parent)
 {
     setToolTitle(i18n("Convert to 8 bits"));
     setToolDescription(i18n("A tool to convert color depth from 16 to 8 bits."));
@@ -51,10 +51,7 @@ Convert16to8::~Convert16to8()
 
 bool Convert16to8::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     image().convertDepth(32);
 

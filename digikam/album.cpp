@@ -57,10 +57,7 @@ Album::Album(Album::Type type, int id, bool root)
 Album::~Album()
 {
     if (m_parent)
-    {
         m_parent->removeChild(this);
-    }
-
     clear();
     AlbumManager::internalInstance->notifyAlbumDeletion(this);
 }
@@ -102,9 +99,7 @@ Album* Album::prev() const
 void Album::insertChild(Album* child)
 {
     if (!child)
-    {
         return;
-    }
 
     if (!m_firstChild)
     {
@@ -125,49 +120,31 @@ void Album::insertChild(Album* child)
 void Album::removeChild(Album* child)
 {
     if (!child || m_clearing)
-    {
         return;
-    }
 
     if (child == m_firstChild)
     {
         m_firstChild = m_firstChild->m_next;
-
         if (m_firstChild)
-        {
             m_firstChild->m_prev = 0;
-        }
         else
-        {
             m_firstChild = m_lastChild = 0;
-        }
     }
     else if (child == m_lastChild)
     {
         m_lastChild = m_lastChild->m_prev;
-
         if (m_lastChild)
-        {
             m_lastChild->m_next = 0;
-        }
         else
-        {
             m_firstChild = m_lastChild = 0;
-        }
     }
     else
     {
         Album* c = child;
-
         if (c->m_prev)
-        {
             c->m_prev->m_next = c->m_next;
-        }
-
         if (c->m_next)
-        {
             c->m_next->m_prev = c->m_prev;
-        }
     }
 }
 
@@ -177,7 +154,6 @@ void Album::clear()
 
     Album* child = m_firstChild;
     Album* nextChild;
-
     while (child)
     {
         nextChild = child->m_next;
@@ -194,7 +170,7 @@ int Album::globalID() const
 {
     switch (m_type)
     {
-            // Use the upper bits to create unique ids.
+        // Use the upper bits to create unique ids.
         case (PHYSICAL):
             return m_id;
         case(TAG):
@@ -243,11 +219,8 @@ void* Album::extraData(const void* key) const
 {
     typedef QMap<const void*, void*> Map;
     Map::const_iterator it = m_extraMap.constFind(key);
-
     if (it == m_extraMap.constEnd())
-    {
         return 0;
-    }
 
     return it.value();
 }
@@ -261,7 +234,6 @@ bool Album::isAncestorOf(Album* album) const
 {
     bool val = false;
     Album* a = album;
-
     while (a && !a->isRoot())
     {
         if (a == this)
@@ -269,17 +241,15 @@ bool Album::isAncestorOf(Album* album) const
             val = true;
             break;
         }
-
         a = a->parent();
     }
-
     return val;
 }
 
 // ------------------------------------------------------------------------------
 
 PAlbum::PAlbum(const QString& title)
-    : Album(Album::PHYSICAL, 0, true)
+      : Album(Album::PHYSICAL, 0, true)
 {
     setTitle(title);
     m_isAlbumRootAlbum = false;
@@ -289,7 +259,7 @@ PAlbum::PAlbum(const QString& title)
 }
 
 PAlbum::PAlbum(int albumRoot, const QString& label)
-    : Album(Album::PHYSICAL, -1, false)
+      : Album(Album::PHYSICAL, -1, false)
 {
     // set the id to -1 (line above). AlbumManager may change that later.
     setTitle(label);
@@ -300,7 +270,7 @@ PAlbum::PAlbum(int albumRoot, const QString& label)
 }
 
 PAlbum::PAlbum(int albumRoot, const QString& parentPath, const QString& title, int id)
-    : Album(Album::PHYSICAL, id, false)
+      : Album(Album::PHYSICAL, id, false)
 {
     // If path is /holidays/2007, title is only "2007", path is "/holidays"
     setTitle(title);
@@ -410,7 +380,7 @@ QString PAlbum::folderPath() const
 // --------------------------------------------------------------------------
 
 TAlbum::TAlbum(const QString& title, int id, bool root)
-    : Album(Album::TAG, id, root)
+      : Album(Album::TAG, id, root)
 {
     setTitle(title);
 }
@@ -422,20 +392,15 @@ TAlbum::~TAlbum()
 QString TAlbum::tagPath(bool leadingSlash) const
 {
     if (isRoot())
-    {
         return leadingSlash ? "/" : "";
-    }
 
     QString u;
 
     if (parent())
     {
         u = ((TAlbum*)parent())->tagPath(leadingSlash);
-
         if (!parent()->isRoot())
-        {
             u += '/';
-        }
     }
 
     u += title();
@@ -480,7 +445,7 @@ QString TAlbum::icon() const
 int DAlbum::m_uniqueID = 0;
 
 DAlbum::DAlbum(const QDate& date, bool root, Range range)
-    : Album(Album::DATE, root ? 0 : ++m_uniqueID, root)
+      : Album(Album::DATE, root ? 0 : ++m_uniqueID, root)
 {
     m_date  = date;
     m_range = range;
@@ -489,13 +454,9 @@ DAlbum::DAlbum(const QDate& date, bool root, Range range)
     QString dateTitle;
 
     if (m_range == Month)
-    {
         dateTitle = m_date.toString("MMMM yyyy");
-    }
     else
-    {
         dateTitle = m_date.toString("yyyy");
-    }
 
     setTitle(dateTitle);
 }
@@ -517,9 +478,7 @@ DAlbum::Range DAlbum::range() const
 DatabaseUrl DAlbum::databaseUrl() const
 {
     if (m_range == Month)
-    {
         return DatabaseUrl::fromDateForMonth(m_date);
-    }
 
     return DatabaseUrl::fromDateForYear(m_date);
 }
@@ -527,8 +486,8 @@ DatabaseUrl DAlbum::databaseUrl() const
 // --------------------------------------------------------------------------
 
 SAlbum::SAlbum(const QString& title, int id, bool root)
-    : Album(Album::SEARCH, id, root),
-      m_searchType(DatabaseSearch::UndefinedType)
+      : Album(Album::SEARCH, id, root),
+        m_searchType(DatabaseSearch::UndefinedType)
 {
     setTitle(title);
 }
@@ -604,10 +563,9 @@ bool SAlbum::isDuplicatesSearch() const
 bool SAlbum::isTemporarySearch() const
 {
 
-    if (isHaarSearch())
-    {
+    if (isHaarSearch()) {
         return (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch)) ||
-               title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
+                title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
     }
 
     return (title() == getTemporaryTitle(m_searchType));
@@ -618,21 +576,16 @@ QString SAlbum::displayTitle() const
 {
     if (isTemporarySearch())
     {
-        switch (m_searchType)
+        switch(m_searchType)
         {
             case DatabaseSearch::TimeLineSearch:
                 return i18n("Current Timeline Search");
             case DatabaseSearch::HaarSearch:
             {
                 if (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
-                {
                     return i18n("Current Fuzzy Image Search");
-                }
                 else if (title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
-                {
                     return i18n("Current Fuzzy Sketch Search");
-                }
-
                 break;
             }
             case DatabaseSearch::MapSearch:
@@ -647,51 +600,50 @@ QString SAlbum::displayTitle() const
                 break;
         }
     }
-
     return title();
 }
 
 QString SAlbum::getTemporaryTitle(DatabaseSearch::Type type, DatabaseSearch::HaarSearchType haarType)
 {
 
-    switch (type)
+    switch(type)
     {
-        case DatabaseSearch::TimeLineSearch:
-            return "_Current_Time_Line_Search_";
-        case DatabaseSearch::HaarSearch:
-            return getTemporaryHaarTitle(haarType);
-        case DatabaseSearch::MapSearch:
-            return "_Current_Map_Search_";
-        case DatabaseSearch::KeywordSearch:
-        case DatabaseSearch::AdvancedSearch:
-        case DatabaseSearch::LegacyUrlSearch:
-            return "_Current_Search_View_Search_";
-        case DatabaseSearch::DuplicatesSearch:
-            return "_Current_Duplicates_Search_";
-        default:
-            kError() << "Untreated temporary search type " << type;
-            return "_Current_Unknown_Search_";
+    case DatabaseSearch::TimeLineSearch:
+        return "_Current_Time_Line_Search_";
+    case DatabaseSearch::HaarSearch:
+        return getTemporaryHaarTitle(haarType);
+    case DatabaseSearch::MapSearch:
+        return "_Current_Map_Search_";
+    case DatabaseSearch::KeywordSearch:
+    case DatabaseSearch::AdvancedSearch:
+    case DatabaseSearch::LegacyUrlSearch:
+        return "_Current_Search_View_Search_";
+    case DatabaseSearch::DuplicatesSearch:
+        return "_Current_Duplicates_Search_";
+    default:
+        kError() << "Untreated temporary search type " << type;
+        return "_Current_Unknown_Search_";
     }
 
 }
 
 QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
 {
-    switch (haarType)
+    switch(haarType)
     {
-        case DatabaseSearch::HaarImageSearch:
-            return "_Current_Fuzzy_Image_Search_";
-        case DatabaseSearch::HaarSketchSearch:
-            return "_Current_Fuzzy_Sketch_Search_";
-        default:
-            kError() << "Untreated temporary haar search type " << haarType;
-            return "_Current_Unknown_Haar_Search_";
+    case DatabaseSearch::HaarImageSearch:
+        return "_Current_Fuzzy_Image_Search_";
+    case DatabaseSearch::HaarSketchSearch:
+        return "_Current_Fuzzy_Sketch_Search_";
+    default:
+        kError() << "Untreated temporary haar search type " << haarType;
+        return "_Current_Unknown_Haar_Search_";
     }
 }
 
 // --------------------------------------------------------------------------
 
-AlbumIterator::AlbumIterator(Album* album)
+AlbumIterator::AlbumIterator(Album *album)
 {
     m_root    = album;
     m_current = album ? album->firstChild() : 0;
@@ -704,12 +656,9 @@ AlbumIterator::~AlbumIterator()
 AlbumIterator& AlbumIterator::operator++()
 {
     if (!m_current)
-    {
         return *this;
-    }
 
-    Album* album = m_current->firstChild();
-
+    Album *album = m_current->firstChild();
     if ( !album )
     {
         while ( (album = m_current->next()) == 0  )
@@ -725,9 +674,7 @@ AlbumIterator& AlbumIterator::operator++()
             }
 
             if ( m_current == 0 )
-            {
                 break;
-            }
         }
     }
 

@@ -186,7 +186,7 @@ public:
      * @see extraData
      * @see removeExtraData
      */
-    void    setExtraData(const void* key, void* value);
+    void    setExtraData(const void* key, void *value);
 
     /**
      * Remove the associated extra data associated with @p key
@@ -497,7 +497,7 @@ class AlbumIterator
 {
 public:
 
-    AlbumIterator(Album* album);
+    AlbumIterator(Album *album);
     ~AlbumIterator();
 
     AlbumIterator& operator++();
@@ -508,10 +508,7 @@ private:
 
     AlbumIterator() {}
     AlbumIterator(const AlbumIterator&) {}
-    AlbumIterator& operator=(const AlbumIterator&)
-    {
-        return *this;
-    }
+    AlbumIterator& operator=(const AlbumIterator&){ return *this; }
 
 private:
 

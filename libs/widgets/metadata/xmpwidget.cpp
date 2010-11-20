@@ -42,37 +42,35 @@ namespace Digikam
 
 static const char* StandardXmpEntryList[] =
 {
-    "aux",             // Schema for Additional Exif Properties.
-    "crs",             // Camera Raw schema.
-    "dc",              // Dublin Core schema.
-    "digiKam",         // Our Xmp schema used to store private information (see DMetadata class for details).
-    "kipi",            // Our 2nd Xmp schema used to store private information from kipi-plugins.
-    "exif",            // Schema for Exif-specific Properties.
-    "iptc",            // IPTC Core schema.
-    "iptcExt",         // IPTC Extension schema.
-    "MicrosoftPhoto",  // Microsoft schema.
-    "pdf",             // Adobe PDF schema.
-    "photoshop",       // Adobe Photoshop schema.
-    "plus",            // PLUS License Data Format Schema.
-    "tiff",            // Schema for TIFF Properties
-    "xmp",             // Basic schema.
-    "xmpBJ",           // Basic Job Ticket schema.
-    "xmpDM",           // Dynamic Media schema.
-    "xmpMM",           // Media Management schema.
-    "xmpRights",       // Rights Management schema.
-    "xmpTPg",          // Paged-Text schema.
-    "lr",              // Adobe LightRoom schema.
+     "aux",             // Schema for Additional Exif Properties.
+     "crs",             // Camera Raw schema.
+     "dc",              // Dublin Core schema.
+     "digiKam",         // Our Xmp schema used to store private information (see DMetadata class for details).
+     "kipi",            // Our 2nd Xmp schema used to store private information from kipi-plugins.
+     "exif",            // Schema for Exif-specific Properties.
+     "iptc",            // IPTC Core schema.
+     "iptcExt",         // IPTC Extension schema.
+     "MicrosoftPhoto",  // Microsoft schema.
+     "pdf",             // Adobe PDF schema.
+     "photoshop",       // Adobe Photoshop schema.
+     "plus",            // PLUS License Data Format Schema.
+     "tiff",            // Schema for TIFF Properties
+     "xmp",             // Basic schema.
+     "xmpBJ",           // Basic Job Ticket schema.
+     "xmpDM",           // Dynamic Media schema.
+     "xmpMM",           // Media Management schema.
+     "xmpRights",       // Rights Management schema.
+     "xmpTPg",          // Paged-Text schema.
+     "lr",              // Adobe LightRoom schema.
 
-    "-1"
+     "-1"
 };
 
 XmpWidget::XmpWidget(QWidget* parent, const char* name)
-    : MetadataWidget(parent, name)
+         : MetadataWidget(parent, name)
 {
     for (int i=0 ; QString(StandardXmpEntryList[i]) != QString("-1") ; ++i)
-    {
         m_keysFilter << StandardXmpEntryList[i];
-    }
 }
 
 XmpWidget::~XmpWidget()
@@ -103,9 +101,7 @@ bool XmpWidget::loadFromURL(const KUrl& url)
             return false;
         }
         else
-        {
             setMetadata(metadata);
-        }
     }
 
     return true;
@@ -114,11 +110,8 @@ bool XmpWidget::loadFromURL(const KUrl& url)
 bool XmpWidget::decodeMetadata()
 {
     DMetadata data = getMetadata();
-
     if (!data.hasXmp())
-    {
         return false;
-    }
 
     // Update all metadata contents.
     setMetadataMap(data.getXmpTagsDataList(m_keysFilter));
@@ -145,9 +138,7 @@ QString XmpWidget::getTagTitle(const QString& key)
     QString title = metadataIface.getXmpTagTitle(key.toAscii());
 
     if (title.isEmpty())
-    {
         return key.section('.', -1);
-    }
 
     return title;
 }
@@ -158,9 +149,7 @@ QString XmpWidget::getTagDescription(const QString& key)
     QString desc = metadataIface.getXmpTagDescription(key.toAscii());
 
     if (desc.isEmpty())
-    {
         return i18n("No description available");
-    }
 
     return desc;
 }

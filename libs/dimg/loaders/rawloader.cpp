@@ -54,7 +54,7 @@ namespace Digikam
 {
 
 RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
-    : DImgLoader(image)
+         : DImgLoader(image)
 {
     m_rawDecodingSettings = rawDecodingSettings;
     m_customRawSettings   = rawDecodingSettings;
@@ -79,40 +79,27 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         if (m_rawDecodingSettings.outputColorSpace == DRawDecoding::CUSTOMOUTPUTCS)
         {
             if (m_rawDecodingSettings.outputProfile == IccProfile::sRGB().filePath())
-            {
                 m_rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
-            }
             else if (m_rawDecodingSettings.outputProfile == IccProfile::adobeRGB().filePath())
-            {
                 m_rawDecodingSettings.outputColorSpace = DRawDecoding::ADOBERGB;
-            }
             else if (m_rawDecodingSettings.outputProfile == IccProfile::wideGamutRGB().filePath())
-            {
                 m_rawDecodingSettings.outputColorSpace = DRawDecoding::WIDEGAMMUT;
-            }
             else if (m_rawDecodingSettings.outputProfile == IccProfile::proPhotoRGB().filePath())
-            {
                 m_rawDecodingSettings.outputColorSpace = DRawDecoding::PROPHOTO;
-            }
             else
             {
                 // Specifying a custom output is broken somewhere. We use the extremely
                 // wide gamut pro photo profile for 16bit (sRGB for 8bit) and convert afterwards.
                 m_customOutputProfile = m_rawDecodingSettings.outputProfile;
-
                 if (m_rawDecodingSettings.sixteenBitsImage)
-                {
                     m_rawDecodingSettings.outputColorSpace = DRawDecoding::PROPHOTO;
-                }
                 else
-                {
                     m_rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
-                }
             }
         }
 
         if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings,
-                data, width, height, rgbmax))
+             data, width, height, rgbmax))
         {
             loadingFailed();
             return false;
@@ -127,12 +114,8 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     else
     {
         KDcrawIface::DcrawInfoContainer dcrawIdentify;
-
         if (!KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath))
-        {
             return false;
-        }
-
         imageWidth()  = dcrawIdentify.imageSize.width();
         imageHeight() = dcrawIdentify.imageSize.height();
         imageSetAttribute("format", "RAW");
@@ -152,9 +135,7 @@ bool RAWLoader::checkToCancelWaitingData()
 void RAWLoader::setWaitingDataProgress(double value)
 {
     if (m_observer)
-    {
         m_observer->progressInfo(m_image, value);
-    }
 }
 
 bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbmax,
@@ -164,16 +145,15 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     if (m_rawDecodingSettings.sixteenBitsImage)       // 16 bits image
     {
-        uchar* image = new_failureTolerant(width*height*8);
-
+        uchar *image = new_failureTolerant(width*height*8);
         if (!image)
         {
             kDebug() << "Failed to allocate memory for loading raw file";
             return false;
         }
 
-        unsigned short* dst = (unsigned short*)image;
-        uchar*          src = (uchar*)data.data();
+        unsigned short *dst = (unsigned short *)image;
+        uchar          *src = (uchar*)data.data();
         float fac           = 65535.0 / rgbmax;
         checkpoint          = 0;
 
@@ -182,12 +162,10 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             if (observer && h == checkpoint)
             {
                 checkpoint += granularity(observer, height, 1.0);
-
                 if (!observer->continueQuery(m_image))
                 {
                     return false;
                 }
-
                 observer->progressInfo(m_image, 0.7 + 0.2*(((float)h)/((float)height)) );
             }
 
@@ -205,7 +183,6 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                     dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
                     dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
                 }
-
                 dst[3] = 0xFFFF;
 
                 dst += 4;
@@ -215,20 +192,19 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
         // ----------------------------------------------------------
 
-        imageData() = (uchar*)image;
+        imageData() = (uchar *)image;
     }
     else        // 8 bits image
     {
-        uchar* image = new_failureTolerant(width*height*4);
-
+        uchar *image = new_failureTolerant(width*height*4);
         if (!image)
         {
             kDebug() << "Failed to allocate memory for loading raw file";
             return false;
         }
 
-        uchar* dst   = image;
-        uchar* src   = (uchar*)data.data();
+        uchar *dst   = image;
+        uchar *src   = (uchar*)data.data();
         checkpoint   = 0;
 
         for (int h = 0; h < height; ++h)
@@ -237,12 +213,10 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             if (observer && h == checkpoint)
             {
                 checkpoint += granularity(observer, height, 1.0);
-
                 if (!observer->continueQuery(m_image))
                 {
                     return false;
                 }
-
                 observer->progressInfo(m_image, 0.7 + 0.2*(((float)h)/((float)height)) );
             }
 
@@ -270,7 +244,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     //----------------------------------------------------------
     // Assign the right color-space profile.
 
-    switch (m_rawDecodingSettings.outputColorSpace)
+    switch(m_rawDecodingSettings.outputColorSpace)
     {
         case DRawDecoding::SRGB:
         {
@@ -332,9 +306,7 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
     }
 
     if (!m_customRawSettings.postProcessingSettingsIsDirty())
-    {
         return;
-    }
 
     if (m_customRawSettings.exposureComp != 0.0 || m_customRawSettings.saturation != 1.0)
     {
@@ -348,13 +320,10 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         settings.green        = 1.0;
         WBFilter wb(m_image, 0L, settings);
         wb.startFilterDirectly();
-        m_image->putImageData(wb.getTargetImage().bits());
+        m_image->putImageData(wb.getTargetImage().bits());       
     }
-
-    if (observer)
-    {
-        observer->progressInfo(m_image, 0.92F);
-    }
+    
+    if (observer) observer->progressInfo(m_image, 0.92F);
 
     if (m_customRawSettings.lightness != 0.0 ||
         m_customRawSettings.contrast  != 1.0 ||
@@ -366,13 +335,10 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         settings.gamma      = m_customRawSettings.gamma;
         BCGFilter bcg(m_image, 0L, settings);
         bcg.startFilterDirectly();
-        m_image->putImageData(bcg.getTargetImage().bits());
+        m_image->putImageData(bcg.getTargetImage().bits());        
     }
-
-    if (observer)
-    {
-        observer->progressInfo(m_image, 0.94F);
-    }
+    
+    if (observer) observer->progressInfo(m_image, 0.94F);
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
     {
@@ -383,11 +349,8 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         curves.startFilterDirectly();
         m_image->putImageData(curves.getTargetImage().bits());
     }
-
-    if (observer)
-    {
-        observer->progressInfo(m_image, 0.96F);
-    }
+    
+    if (observer) observer->progressInfo(m_image, 0.96F);
 }
 
 }  // namespace Digikam

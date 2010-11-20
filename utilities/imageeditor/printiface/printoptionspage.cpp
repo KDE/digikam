@@ -88,7 +88,7 @@ public:
         colorManaged   = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
         colorManaged->setChecked( false );
         cmPreferences  = new QPushButton(i18n("Settings..."), cmbox);
-        QWidget* space = new QWidget(cmbox);
+        QWidget *space = new QWidget(cmbox);
         cmbox->setStretchFactor(space, 10);
         cmbox->setSpacing(KDialog::spacingHint());
     }
@@ -116,7 +116,6 @@ public:
         QGridLayout* layout = new QGridLayout ( mPositionFrame );
         layout->setMargin ( 0 );
         layout->setSpacing ( 1 );
-
         for ( int row = 0; row < 3; ++row )
         {
             for ( int col = 0; col < 3; ++col )
@@ -127,7 +126,6 @@ public:
                 layout->addWidget ( button, row, col );
 
                 Qt::Alignment alignment;
-
                 if ( row == 0 )
                 {
                     alignment = Qt::AlignTop;
@@ -140,7 +138,6 @@ public:
                 {
                     alignment = Qt::AlignBottom;
                 }
-
                 if ( col == 0 )
                 {
                     alignment |= Qt::AlignLeft;
@@ -161,8 +158,8 @@ public:
 };
 
 
-PrintOptionsPage::PrintOptionsPage (QWidget* parent, const QSize& imageSize)
-    : QWidget(), d ( new PrintOptionsPagePrivate )
+PrintOptionsPage::PrintOptionsPage (QWidget *parent, const QSize& imageSize)
+                : QWidget(), d ( new PrintOptionsPagePrivate )
 {
     d->setupUi ( this );
     d->mParent   = parent;
@@ -253,7 +250,6 @@ void PrintOptionsPage::adjustWidthToRatio()
     {
         return;
     }
-
     double width = d->mImageSize.width() * d->kcfg_PrintHeight->value() / d->mImageSize.height();
 
     SignalBlocker blocker ( d->kcfg_PrintWidth );
@@ -266,7 +262,6 @@ void PrintOptionsPage::adjustHeightToRatio()
     {
         return;
     }
-
     double height = d->mImageSize.height() * d->kcfg_PrintWidth->value() / d->mImageSize.width();
 
     SignalBlocker blocker ( d->kcfg_PrintHeight );
@@ -278,7 +273,6 @@ void PrintOptionsPage::loadConfig()
     QAbstractButton* button;
 
     button = d->mPositionGroup.button ( DigikamConfig::printPosition() );
-
     if ( button )
     {
         button->setChecked ( true );
@@ -289,7 +283,6 @@ void PrintOptionsPage::loadConfig()
     }
 
     button = d->mScaleGroup.button ( DigikamConfig::printScaleMode() );
-
     if ( button )
     {
         button->setChecked ( true );
@@ -333,7 +326,7 @@ void PrintOptionsPage::slotAlertSettings( bool t)
                                "<p>You can enable it now by clicking on the \"Settings\" button.</p>");
         KMessageBox::information(this, message);
         d->colorManaged->setChecked(!t);
-    }
+     }
 }
 
 void PrintOptionsPage::slotSetupDlg()

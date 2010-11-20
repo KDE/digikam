@@ -55,10 +55,9 @@ public:
 };
 
 FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album)
-    : QTreeWidgetItem(parent), d(new FindDuplicatesAlbumItemPriv)
+                       : QTreeWidgetItem(parent), d(new FindDuplicatesAlbumItemPriv)
 {
     d->album = album;
-
     if (d->album)
     {
         d->refImgInfo = ImageInfo(d->album->title().toLongLong());
@@ -111,11 +110,8 @@ bool FindDuplicatesAlbumItem::operator<(const QTreeWidgetItem& other) const
 {
     int column = treeWidget()->sortColumn();
     int result = KStringHandler::naturalCompare(text(column), other.text(column));
-
     if (result < 0)
-    {
         return true;
-    }
 
     return false;
 }

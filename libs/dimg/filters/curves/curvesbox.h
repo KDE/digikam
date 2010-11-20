@@ -67,11 +67,11 @@ public:
 
     CurvesBox(int w, int h, QWidget* parent=0, bool readOnly=false);
     CurvesBox(int w, int h,                         // Widget size.
-              uchar* i_data, uint i_w, uint i_h,    // Full image info.
+              uchar *i_data, uint i_w, uint i_h,    // Full image info.
               bool i_sixteenBits,                   // 8 or 16 bits image.
-              QWidget* parent=0,                    // Parent widget instance.
+              QWidget *parent=0,                    // Parent widget instance.
               bool readOnly=false);                 // If true : widget with full edition mode capabilities.
-    // If false : display curve data only without edition.
+                                                    // If false : display curve data only without edition.
     ~CurvesBox();
 
     void enablePickers(bool enable);

@@ -59,7 +59,7 @@ public:
 
     {};
 
-    void lineTo(const QPoint& pos)
+    void lineTo(const QPoint &pos)
     {
         path.lineTo(pos);
     }
@@ -125,7 +125,6 @@ public:
     DrawEvent& currentDrawEvent()
     {
         QTime currentTime = QTime::currentTime();
-
         if (drawEventCreationTime.isNull() || drawEventCreationTime.msecsTo(currentTime) > 1000)
         {
             drawEventCreationTime = currentTime;
@@ -134,7 +133,6 @@ public:
             drawEventList << event;
             ++eventIndex;
         }
-
         return drawEventList.last();
     }
 
@@ -145,7 +143,7 @@ public:
 };
 
 SketchWidget::SketchWidget(QWidget* parent)
-    : QWidget(parent), d(new SketchWidgetPriv)
+            : QWidget(parent), d(new SketchWidgetPriv)
 {
     setWhatsThis(i18n("You simply draw here a rough sketch of what you want to find "
                       "and digiKam will displays the best matches in thumbnail view."));
@@ -202,13 +200,8 @@ int SketchWidget::penWidth() const
 
 void SketchWidget::slotUndo()
 {
-    if (d->eventIndex == -1)
-    {
-        return;
-    }
-
+    if (d->eventIndex == -1) return;
     d->eventIndex--;
-
     if (d->eventIndex == -1)
     {
         d->isClear    = true;
@@ -226,11 +219,7 @@ void SketchWidget::slotUndo()
 
 void SketchWidget::slotRedo()
 {
-    if (d->eventIndex == d->drawEventList.count() - 1)
-    {
-        return;
-    }
-
+    if (d->eventIndex == d->drawEventList.count() - 1) return;
     d->eventIndex++;
     d->isClear = false;
     replayEvents(d->eventIndex);
@@ -244,7 +233,7 @@ void SketchWidget::replayEvents(int index)
 
     for (int i = 0; i <= index; ++i)
     {
-        const DrawEvent& drawEvent = d->drawEventList[i];
+        const DrawEvent &drawEvent = d->drawEventList[i];
         drawPath(drawEvent.penWidth, drawEvent.penColor, drawEvent.path);
     }
 
@@ -257,7 +246,7 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
 
     for (int i=0; i<=d->eventIndex; ++i)
     {
-        const DrawEvent& event = d->drawEventList[i];
+        const DrawEvent &event = d->drawEventList[i];
 
         // Write the pen size and color
         writer.writeStartElement("Path");
@@ -268,11 +257,9 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
 
         // Initial position is 0,0
         QPointF pos(0,0);
-
         for (int j=0; j<event.path.elementCount(); ++j)
         {
-            const QPainterPath::Element& element = event.path.elementAt(j);
-
+            const QPainterPath::Element &element = event.path.elementAt(j);
             // Store begin and end point of a line, so no need to write moveTo elements to XML
             if (element.isLineTo())
             {
@@ -291,10 +278,8 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
             // This handles both lineTo and moveTo elements
             pos = element;
         }
-
         writer.writeEndElement();
     }
-
     writer.writeEndElement();
 }
 
@@ -312,17 +297,12 @@ bool SketchWidget::setSketchImageFromXML(const QString& xml)
 {
     QXmlStreamReader reader(xml);
     QXmlStreamReader::TokenType element;
-
     while (!reader.atEnd())
     {
         element = reader.readNext();
-
         if (element == QXmlStreamReader::StartElement && reader.name() == "SketchImage")
-        {
             return setSketchImageFromXML(reader);
-        }
     }
-
     return false;
 }
 
@@ -332,9 +312,7 @@ bool SketchWidget::setSketchImageFromXML(QXmlStreamReader& reader)
 
     // We assume that the reader is positioned at the start element for our XML
     if (!reader.isStartElement() || reader.name() != "SketchImage")
-    {
         return false;
-    }
 
     d->isClear = false;
     // rebuild list of drawing chunks
@@ -348,17 +326,13 @@ bool SketchWidget::setSketchImageFromXML(QXmlStreamReader& reader)
         {
             // every chunk (DrawEvent) is stored as a vector path
             if (reader.name() == "Path")
-            {
-                addPath(reader);    // recurse
-            }
+                addPath(reader); // recurse
         }
         else if (element == QXmlStreamReader::EndElement)
         {
             // we have finished
             if (reader.name() == "SketchImage")
-            {
                 break;
-            }
         }
     }
 
@@ -382,14 +356,9 @@ void SketchWidget::addPath(QXmlStreamReader& reader)
     QStringRef color = reader.attributes().value("Color");
 
     if (!size.isEmpty())
-    {
         event.penWidth = size.toString().toInt();
-    }
-
     if (!color.isEmpty())
-    {
         event.penColor.setNamedColor(color.toString());
-    }
 
     QPointF begin(0,0), end(0,0);
 
@@ -433,9 +402,7 @@ void SketchWidget::addPath(QXmlStreamReader& reader)
         {
             // we have finished
             if (reader.name() == "Path")
-            {
                 break;
-            }
         }
     }
 
@@ -528,7 +495,6 @@ void SketchWidget::wheelEvent (QWheelEvent* e)
         {
             size -= decr;
         }
-
         emit signalPenSizeChanged(size);
         setCursor(d->drawCursor);
     }
@@ -569,7 +535,6 @@ void SketchWidget::keyReleaseEvent(QKeyEvent* e)
 void SketchWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
-
     if (d->isClear)
     {
         p.drawText(0, 0, width(), height(), Qt::AlignCenter,
@@ -611,16 +576,10 @@ void SketchWidget::drawPath(int width, const QColor& color, const QPainterPath& 
 void SketchWidget::updateDrawCursor()
 {
     int size = d->penWidth;
-
     if (size > 64)
-    {
         size = 64;
-    }
-
     if (size < 3)
-    {
         size = 3;
-    }
 
     QPixmap pix(size, size);
     pix.fill(Qt::transparent);

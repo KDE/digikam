@@ -321,25 +321,25 @@ void AdvancedRenameWidgetTest::testReplaceModifier_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("[file]{replace:\"adv\",\"AAA\"}")
-            << QString("[file]{replace:\"adv\",\"AAA\"}") << QString("AAAancedrename_testimage.jpg");
+       << QString("[file]{replace:\"adv\",\"AAA\"}") << QString("AAAancedrename_testimage.jpg");
 
     QTest::newRow("[file]{replace:\"Adv\",\"AAA\"}")
-            << QString("[file]{replace:\"Adv\",\"AAA\"}") << QString("advancedrename_testimage.jpg");
+       << QString("[file]{replace:\"Adv\",\"AAA\"}") << QString("advancedrename_testimage.jpg");
 
     QTest::newRow("[file]{replace:\"Adv\",\"AAA\",i}")
-            << QString("[file]{replace:\"Adv\",\"AAA\",i}") << QString("AAAancedrename_testimage.jpg");
+       << QString("[file]{replace:\"Adv\",\"AAA\",i}") << QString("AAAancedrename_testimage.jpg");
 
     QTest::newRow("[file]{replace:\"Adv\",\"AAA\",ri}")
-            << QString("[file]{replace:\"Adv\",\"AAA\",ri}") << QString("AAAancedrename_testimage.jpg");
+       << QString("[file]{replace:\"Adv\",\"AAA\",ri}") << QString("AAAancedrename_testimage.jpg");
 
     QTest::newRow("[file]{replace:\"Adv\",\"AAA\",ir}")
-            << QString("[file]{replace:\"Adv\",\"AAA\",ir}") << QString("AAAancedrename_testimage.jpg");
+       << QString("[file]{replace:\"Adv\",\"AAA\",ir}") << QString("AAAancedrename_testimage.jpg");
 
     QTest::newRow("[file]{replace:\"a.v\",\"AAA\"}")
-            << QString("[file]{replace:\"a.v\",\"AAA\"}") << QString("advancedrename_testimage.jpg");
+       << QString("[file]{replace:\"a.v\",\"AAA\"}") << QString("advancedrename_testimage.jpg");
 
     QTest::newRow("[file]{replace:\"a.v\",\"AAA\",r}")
-            << QString("[file]{replace:\"a.v\",\"AAA\",r}") << QString("AAAancedrename_testimage.jpg");
+       << QString("[file]{replace:\"a.v\",\"AAA\",r}") << QString("AAAancedrename_testimage.jpg");
 }
 
 void AdvancedRenameWidgetTest::testReplaceModifier()
@@ -397,10 +397,10 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier_data()
     QDateTime curdate = QDateTime::currentDateTime();
 
     QTest::newRow("[meta:Iptc.Application2.Keywords]_[file]") << QString("[meta:Iptc.Application2.Keywords]{default:\"Unknown\"}_[file]")
-            << QString("Colca Canyon_advancedrename_testimage.jpg");
+                                  << QString("Colca Canyon_advancedrename_testimage.jpg");
 
     QTest::newRow("[meta:Exif.GPSInfo.GPSAltitude]_[file]") << QString("[meta:Exif.GPSInfo.GPSAltitude]{default:\"Unknown\"}_[file]")
-            << QString("Unknown_advancedrename_testimage.jpg");
+                                                            << QString("Unknown_advancedrename_testimage.jpg");
 }
 
 void AdvancedRenameWidgetTest::testDefaultValueModifier()

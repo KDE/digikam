@@ -105,7 +105,7 @@ public:
 };
 
 MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
-    : QWidget(parent), d(new MetadataWidgetPriv)
+              : QWidget(parent), d(new MetadataWidgetPriv)
 {
     setObjectName(name);
 
@@ -251,13 +251,9 @@ bool MetadataWidget::setMetadata(const DMetadata& data)
 
     // Try to decode current metadata.
     if (decodeMetadata())
-    {
         enabledToolButtons(true);
-    }
     else
-    {
         enabledToolButtons(false);
-    }
 
     // Refresh view using decoded metadata.
     buildView();
@@ -278,17 +274,12 @@ const DMetadata& MetadataWidget::getMetadata()
 
 bool MetadataWidget::storeMetadataToFile(const KUrl& url, const QByteArray& metaData)
 {
-    if ( url.isEmpty() )
-    {
+    if( url.isEmpty() )
         return false;
-    }
 
     QFile file(url.toLocalFile());
-
     if ( !file.open(QIODevice::WriteOnly) )
-    {
         return false;
-    }
 
     QDataStream stream( &file );
     stream.writeRawData(metaData.data(), metaData.size());
@@ -327,12 +318,10 @@ void MetadataWidget::slotCopy2Clipboard()
     QString textmetadata  = i18n("File name: %1 (%2)",d->fileName,getMetadataTitle());
     int i                 = 0;
     QTreeWidgetItem* item = 0;
-
     do
     {
         item                      = d->view->topLevelItem(i);
         MdKeyListViewItem* lvItem = dynamic_cast<MdKeyListViewItem*>(item);
-
         if (lvItem)
         {
             textmetadata.append("\n\n>>> ");
@@ -341,12 +330,10 @@ void MetadataWidget::slotCopy2Clipboard()
 
             int j                  = 0;
             QTreeWidgetItem* item2 = 0;
-
             do
             {
                 item2                         = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
                 MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
-
                 if (lvItem2)
                 {
                     textmetadata.append(lvItem2->text(0));
@@ -354,12 +341,10 @@ void MetadataWidget::slotCopy2Clipboard()
                     textmetadata.append(lvItem2->text(1));
                     textmetadata.append("\n");
                 }
-
                 ++j;
             }
             while (item2);
         }
-
         ++i;
     }
     while (item);
@@ -376,12 +361,10 @@ void MetadataWidget::slotPrintMetadata()
 
     int i                 = 0;
     QTreeWidgetItem* item = 0;
-
     do
     {
         item                      = d->view->topLevelItem(i);
         MdKeyListViewItem* lvItem = dynamic_cast<MdKeyListViewItem*>(item);
-
         if (lvItem)
         {
             textmetadata.append("<br/><br/><b>");
@@ -390,12 +373,10 @@ void MetadataWidget::slotPrintMetadata()
 
             int j                  = 0;
             QTreeWidgetItem* item2 = 0;
-
             do
             {
                 item2                         = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
                 MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
-
                 if (lvItem2)
                 {
                     textmetadata.append(lvItem2->text(0));
@@ -403,12 +384,10 @@ void MetadataWidget::slotPrintMetadata()
                     textmetadata.append(lvItem2->text(1));
                     textmetadata.append("</i><br/>");
                 }
-
                 ++j;
             }
             while (item2);
         }
-
         ++i;
     }
     while (item);
@@ -419,7 +398,6 @@ void MetadataWidget::slotPrintMetadata()
     printer.setFullPage(true);
 
     QPointer<QPrintDialog> dialog = new QPrintDialog(&printer, kapp->activeWindow());
-
     if (dialog->exec())
     {
         QTextDocument doc;
@@ -429,14 +407,13 @@ void MetadataWidget::slotPrintMetadata()
         doc.setDefaultFont(font);
         doc.print(&printer);
     }
-
     delete dialog;
 }
 
 KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
     QPointer<KFileDialog> fileSaveDialog = new KFileDialog(KUrl(KGlobalSettings::documentPath()),
-            QString(), this);
+                                                           QString(), this);
     fileSaveDialog->setOperationMode(KFileDialog::Saving);
     fileSaveDialog->setMode(KFile::File);
     fileSaveDialog->setSelection(d->fileName);
@@ -458,9 +435,7 @@ KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& f
 void MetadataWidget::setMode(int mode)
 {
     if (d->levelButtons->checkedId() == mode)
-    {
         return;
-    }
 
     d->levelButtons->button(mode)->setChecked(true);
     buildView();
@@ -503,7 +478,7 @@ void MetadataWidget::setFileName(const QString& fileName)
     d->fileName = fileName;
 }
 
-void MetadataWidget::setUserAreaWidget(QWidget* w)
+void MetadataWidget::setUserAreaWidget(QWidget *w)
 {
     QVBoxLayout* vLayout = new QVBoxLayout();
     vLayout->setSpacing(KDialog::spacingHint());

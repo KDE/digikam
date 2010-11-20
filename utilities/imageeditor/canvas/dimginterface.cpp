@@ -152,25 +152,25 @@ DImgInterface* DImgInterface::defaultInterface()
     return m_defaultInterface;
 }
 
-void DImgInterface::setDefaultInterface(DImgInterface* defaultInterface)
+void DImgInterface::setDefaultInterface(DImgInterface *defaultInterface)
 {
     m_defaultInterface = defaultInterface;
 }
 
 DImgInterface::DImgInterface()
-    : QObject(), d(new DImgInterfacePrivate)
+             : QObject(), d(new DImgInterfacePrivate)
 {
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
 
-    connect( d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-             this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)) );
+    connect( d->thread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg&)),
+             this, SLOT(slotImageLoaded(const LoadingDescription &, const DImg&)) );
 
     connect( d->thread, SIGNAL(signalImageSaved(const QString&, bool)),
              this, SLOT(slotImageSaved(const QString&, bool)) );
 
-    connect( d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
-             this, SLOT(slotLoadingProgress(const LoadingDescription&, float)) );
+    connect( d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription &, float)),
+             this, SLOT(slotLoadingProgress(const LoadingDescription &, float)) );
 
     connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
              this, SLOT(slotSavingProgress(const QString&, float)) );
@@ -181,19 +181,16 @@ DImgInterface::~DImgInterface()
     delete d->undoMan;
     delete d->thread;
     delete d;
-
     if (m_defaultInterface == this)
-    {
         m_defaultInterface = 0;
-    }
 }
 
-void DImgInterface::setDisplayingWidget(QWidget* widget)
+void DImgInterface::setDisplayingWidget(QWidget *widget)
 {
     d->displayingWidget = widget;
 }
 
-void DImgInterface::load(const QString& filename, IOFileSettingsContainer* iofileSettings)
+void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings)
 {
     LoadingDescription description(filename, LoadingDescription::ConvertForEditor);
 
@@ -207,17 +204,17 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer* iofil
         {
             d->nextRawDescription = description;
 
-            RawImport* rawImport = new RawImport(KUrl(filename), this);
+            RawImport *rawImport = new RawImport(KUrl(filename), this);
             EditorToolIface::editorToolIface()->loadTool(rawImport);
 
             connect(rawImport, SIGNAL(okClicked()),
                     this, SLOT(slotLoadRawFromTool()));
 
-            connect(rawImport, SIGNAL(cancelClicked()),
-                    this, SLOT(slotLoadRaw()));
+                    connect(rawImport, SIGNAL(cancelClicked()),
+                            this, SLOT(slotLoadRaw()));
 
-            d->thread->stopLoading();
-            return;
+                            d->thread->stopLoading();
+                            return;
         }
     }
     else
@@ -230,20 +227,18 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer* iofil
 
 void DImgInterface::slotLoadRawFromTool()
 {
-    RawImport* rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
-
+    RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
     if (rawImport)
     {
         d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
         d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
     }
-
     slotLoadRaw();
 }
 
 void DImgInterface::slotLoadRaw()
 {
-    //    kDebug() << d->nextRawDescription.rawDecodingSettings;
+//    kDebug() << d->nextRawDescription.rawDecodingSettings;
     load(d->nextRawDescription);
     d->nextRawDescription = LoadingDescription();
 }
@@ -270,9 +265,7 @@ void DImgInterface::load(const LoadingDescription& description)
 void DImgInterface::applyTransform(const IccTransform& transform)
 {
     if (!d->valid)
-    {
         return;
-    }
 
     d->currentDescription.postProcessingParameters.colorManagement = LoadingDescription::ApplyTransform;
     d->currentDescription.postProcessingParameters.setTransform(transform);
@@ -345,18 +338,14 @@ ExposureSettingsContainer* DImgInterface::getExposureSettings()
 
 void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
 {
-    const QString& fileName = loadingDescription.filePath;
+    const QString &fileName = loadingDescription.filePath;
 
     if (fileName != d->filename)
-    {
         return;
-    }
 
     // RAW tool active? Discard previous loaded image
     if (!d->nextRawDescription.filePath.isNull())
-    {
         return;
-    }
 
     bool valRet = false;
     d->image    = img;
@@ -375,18 +364,13 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
         // flag as well.
 
         if (d->image.detectedFormat() == DImg::RAW)
-        {
             d->rotatedOrFlipped = true;
-        }
         else if (d->exifOrient)
         {
             // Do not rotate twice if already rotated, e.g. for full size preview.
             QVariant attribute(d->image.attribute("exifRotated"));
-
             if (!attribute.isValid() || !attribute.toBool())
-            {
                 exifRotate(d->filename);
-            }
         }
 
         updateColorManagement();
@@ -403,15 +387,10 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 void DImgInterface::updateColorManagement()
 {
     IccManager manager(d->image);
-
     if (d->doSoftProofing)
-    {
         d->monitorICCtrans = manager.displaySoftProofingTransform(d->cmSettings->defaultProofProfile, d->displayingWidget);
-    }
     else
-    {
         d->monitorICCtrans = manager.displayTransform(d->displayingWidget);
-    }
 }
 
 void DImgInterface::setSoftProofingEnabled(bool enabled)
@@ -423,9 +402,7 @@ void DImgInterface::setSoftProofingEnabled(bool enabled)
 void DImgInterface::slotLoadingProgress(const LoadingDescription& loadingDescription, float progress)
 {
     if (loadingDescription.filePath == d->filename)
-    {
         emit signalLoadingProgress(loadingDescription.filePath, progress);
-    }
 }
 
 bool DImgInterface::exifRotated()
@@ -512,7 +489,7 @@ void DImgInterface::redo()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
-void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer* iofileSettings,
+void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType)
 {
     // No need to toggle off undo, redo or save action during saving using
@@ -523,9 +500,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer* iof
 
     // This is possibly empty
     if (mimeType.isEmpty())
-    {
         mimeType = getImageFormat();
-    }
 
     kDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " ("
              << mimeType << ")";
@@ -534,21 +509,17 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer* iof
     if ( mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
          mimeType.toUpper() == QString("JPE"))
     {
-        d->image.setAttribute("quality",     iofileSettings->JPEGCompression);
-        d->image.setAttribute("subsampling", iofileSettings->JPEGSubSampling);
+       d->image.setAttribute("quality",     iofileSettings->JPEGCompression);
+       d->image.setAttribute("subsampling", iofileSettings->JPEGSubSampling);
     }
 
     // PNG file format.
     if ( mimeType.toUpper() == QString("PNG") )
-    {
-        d->image.setAttribute("quality", iofileSettings->PNGCompression);
-    }
+       d->image.setAttribute("quality", iofileSettings->PNGCompression);
 
     // TIFF file format.
     if ( mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF") )
-    {
-        d->image.setAttribute("compress", iofileSettings->TIFFCompression);
-    }
+       d->image.setAttribute("compress", iofileSettings->TIFFCompression);
 
     // JPEG 2000 file format.
     if ( mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
@@ -556,26 +527,18 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer* iof
          mimeType.toUpper() == QString("J2K"))
     {
         if (iofileSettings->JPEG2000LossLess)
-        {
             d->image.setAttribute("quality", 100);    // LossLess compression
-        }
         else
-        {
             d->image.setAttribute("quality", iofileSettings->JPEG2000Compression);
-        }
     }
 
     // PGF file format.
     if ( mimeType.toUpper() == QString("PGF"))
     {
         if (iofileSettings->PGFLossLess)
-        {
             d->image.setAttribute("quality", 0);    // LossLess compression
-        }
         else
-        {
             d->image.setAttribute("quality", iofileSettings->PGFCompression);
-        }
     }
 
     d->savingFilename = fileName;
@@ -588,14 +551,10 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer* iof
 void DImgInterface::slotImageSaved(const QString& filePath, bool success)
 {
     if (filePath != d->savingFilename)
-    {
         return;
-    }
 
     if (!success)
-    {
         kWarning() << "error saving image '" << QFile::encodeName(filePath).data();
-    }
 
     emit signalImageSaved(filePath, success);
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
@@ -604,9 +563,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
 void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
 {
     if (filePath == d->savingFilename)
-    {
         emit signalSavingProgress(filePath, progress);
-    }
 }
 
 void DImgInterface::abortSaving()
@@ -702,13 +659,9 @@ bool DImgInterface::hasAlpha()
 bool DImgInterface::isReadOnly()
 {
     if (d->image.isNull())
-    {
         return true;
-    }
     else
-    {
         return d->image.isReadOnly();
-    }
 }
 
 void DImgInterface::setSelectedArea(int x, int y, int w, int h)
@@ -733,9 +686,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
                                   int /*antialias*/)
 {
     if (d->image.isNull())
-    {
         return;
-    }
 
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
     img.convertDepth(32);
@@ -771,9 +722,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
                                   int /*antialias*/)
 {
     if (d->image.isNull())
-    {
         return;
-    }
 
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
     img.convertDepth(32);
@@ -979,14 +928,14 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
 {
     if (d->image.isNull())
     {
-        kWarning() << "d->image is NULL";
-        return;
+       kWarning() << "d->image is NULL";
+       return;
     }
 
     if (!data)
     {
-        kWarning() << "New image is NULL";
-        return;
+       kWarning() << "New image is NULL";
+       return;
     }
 
     if (w == -1 && h == -1)
@@ -1025,9 +974,7 @@ void DImgInterface::putIccProfile(const IccProfile& profile)
 uchar* DImgInterface::getImageSelection()
 {
     if (!d->selW || !d->selH)
-    {
         return 0;
-    }
 
     if (!d->image.isNull())
     {
@@ -1041,9 +988,7 @@ uchar* DImgInterface::getImageSelection()
 void DImgInterface::putImageSelection(const QString& caller, uchar* data)
 {
     if (!data || d->image.isNull())
-    {
         return;
-    }
 
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
 
@@ -1085,19 +1030,15 @@ QString DImgInterface::getImageFileName()
 QString DImgInterface::getImageFormat()
 {
     if (d->image.isNull())
-    {
         return QString();
-    }
 
     QString mimeType = d->image.format();
-
     // It is a bug in the loader if format attribute is not given
     if (mimeType.isEmpty())
     {
         kWarning() << "DImg object does not contain attribute \"format\"";
         mimeType = QImageReader::imageFormat(d->filename);
     }
-
     return mimeType;
 }
 
@@ -1112,13 +1053,9 @@ QPixmap DImgInterface::convertToPixmap(DImg& img)
         IccTransform transform;
 
         if (d->doSoftProofing)
-        {
             transform = manager.displaySoftProofingTransform(d->cmSettings->defaultProofProfile, d->displayingWidget);
-        }
         else
-        {
             transform = manager.displayTransform(d->displayingWidget);
-        }
 
         pix = img.convertToPixmap(transform);
     }

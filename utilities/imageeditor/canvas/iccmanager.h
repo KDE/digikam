@@ -53,7 +53,7 @@ public:
                         const ICCSettingsContainer& settings = IccSettings::instance()->settings());
     ~IccManager();
 
-    void setObserver(DImgLoaderObserver* observer);
+    void setObserver(DImgLoaderObserver *observer);
 
     bool hasValidWorkspace() const;
 
@@ -89,18 +89,18 @@ public:
      * later (in a thread), or you can get a transform from displayTransform and apply it yourself.
      */
     void transformForDisplay();
-    void transformForDisplay(QWidget* widget);
+    void transformForDisplay(QWidget *widget);
     void transformForDisplay(const IccProfile& displayProfile);
 
-    static IccProfile displayProfile(QWidget* displayingWidget = 0);
-    IccTransform displayTransform(QWidget* displayingWidget = 0);
+    static IccProfile displayProfile(QWidget *displayingWidget = 0);
+    IccTransform displayTransform(QWidget *displayingWidget = 0);
     IccTransform displayTransform(const IccProfile& displayProfile);
 
     /**
      * Returns a display transform, with soft-proofing enabled for the given device profile.
      */
-    IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* displayingWidget = 0);
-    IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, const IccProfile& displayProfile);
+    IccTransform displaySoftProofingTransform(const IccProfile &deviceProfile, QWidget *displayingWidget = 0);
+    IccTransform displaySoftProofingTransform(const IccProfile &deviceProfile, const IccProfile& displayProfile);
 
     /**
      * Returns true if the given image is marked as needing user interaction
@@ -112,7 +112,7 @@ public:
      * Carries out color management asking the user for his decision.
      * Afterwards, needsPostLoadingManagement will return false.
      */
-    IccTransform postLoadingManage(QWidget* parent = 0);
+    IccTransform postLoadingManage(QWidget *parent = 0);
 
     /** Returns the profile that will be used to interpret the image,
      *  using the given behavior
@@ -121,9 +121,9 @@ public:
                             IccProfile specifiedProfile = IccProfile());
 
     /** Transforms the given QImage from the given inputProfile to sRGB. */
-    static void transformToSRGB(QImage& qimage, const IccProfile& inputProfile);
+    static void transformToSRGB(QImage &qimage, const IccProfile& inputProfile);
     /** Transforms the given QImage from sRGB to given display profile. */
-    static void transformForDisplay(QImage& qimage, const IccProfile& displayProfile = displayProfile());
+    static void transformForDisplay(QImage &qimage, const IccProfile& displayProfile = displayProfile());
 
 protected:
 
@@ -131,7 +131,7 @@ protected:
     void setIccProfile(const IccProfile& profile);
     ICCSettingsContainer::Behavior safestBestBehavior() const;
 
-    IccManagerPriv* const d;
+    IccManagerPriv * const d;
 };
 
 }  // namespace Digikam

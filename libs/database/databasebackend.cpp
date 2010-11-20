@@ -47,8 +47,8 @@
 namespace Digikam
 {
 
-DatabaseBackend::DatabaseBackend(DatabaseLocking* locking, const QString& backendName)
-    : DatabaseCoreBackend(backendName, locking, *new DatabaseBackendPrivate(this))
+DatabaseBackend::DatabaseBackend(DatabaseLocking *locking, const QString &backendName)
+               : DatabaseCoreBackend(backendName, locking, *new DatabaseBackendPrivate(this))
 {
 }
 
@@ -56,32 +56,24 @@ DatabaseBackend::~DatabaseBackend()
 {
 }
 
-void DatabaseBackend::setDatabaseWatch(DatabaseWatch* watch)
+void DatabaseBackend::setDatabaseWatch(DatabaseWatch *watch)
 {
     Q_D(DatabaseBackend);
     d->watch = watch;
 }
 
-bool DatabaseBackend::initSchema(SchemaUpdater* updater)
+bool DatabaseBackend::initSchema(SchemaUpdater *updater)
 {
     Q_D(DatabaseBackend);
-
     if (d->status == OpenSchemaChecked)
-    {
         return true;
-    }
-
     if (d->status == Unavailable)
-    {
         return false;
-    }
-
     if (updater->update())
     {
         d->status = OpenSchemaChecked;
         return true;
     }
-
     return false;
 }
 

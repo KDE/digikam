@@ -44,7 +44,7 @@ class CameraFolderDialog : public KDialog
 
 public:
 
-    CameraFolderDialog(QWidget* parent, CameraIconView* cameraView,
+    CameraFolderDialog(QWidget* parent, CameraIconView* cameraView, 
                        const QStringList& cameraFolderList,
                        const QString& cameraName, const QString& rootPath);
     ~CameraFolderDialog();

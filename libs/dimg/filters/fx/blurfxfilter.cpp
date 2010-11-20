@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 BlurFXFilter::BlurFXFilter(DImg* orgImage, QObject* parent, int blurFXType, int distance, int level)
-    : DImgThreadedFilter(orgImage, parent, "BlurFX")
+            : DImgThreadedFilter(orgImage, parent, "BlurFX")
 {
     m_blurFXType = blurFXType;
     m_distance   = distance;
@@ -122,13 +122,9 @@ void BlurFXFilter::filterImage()
  *                     This radius is always from the center to out of the image, we
  *                     calc a proportional radius from the center.
  */
-void BlurFXFilter::zoomBlur(DImg* orgImage, DImg* destImage, int X, int Y, int Distance, QRect pArea)
+void BlurFXFilter::zoomBlur(DImg *orgImage, DImg *destImage, int X, int Y, int Distance, QRect pArea)
 {
-    if (Distance <= 1)
-    {
-        return;
-    }
-
+    if (Distance <= 1) return;
     int progress;
 
     int Width       = orgImage->width();
@@ -202,10 +198,7 @@ void BlurFXFilter::zoomBlur(DImg* orgImage, DImg* destImage, int X, int Y, int D
                 }
             }
 
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
+            if (nCount == 0) nCount = 1;
 
             // calculate pointer
             offset = GetOffset(Width, w, h, bytesDepth);
@@ -225,9 +218,7 @@ void BlurFXFilter::zoomBlur(DImg* orgImage, DImg* destImage, int X, int Y, int D
         progress = (int) (((double)(h - yMin) * 100.0) / (yMax - yMin));
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 }
 
@@ -247,13 +238,9 @@ void BlurFXFilter::zoomBlur(DImg* orgImage, DImg* destImage, int X, int Y, int D
  *                     angle. After this, we sum this pixel with others with the same
  *                     radius, but different angles. Here I'm using degrees angles.
  */
-void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int Distance, QRect pArea)
+void BlurFXFilter::radialBlur(DImg *orgImage, DImg *destImage, int X, int Y, int Distance, QRect pArea)
 {
-    if (Distance <= 1)
-    {
-        return;
-    }
-
+    if (Distance <= 1) return;
     int progress;
 
     int Width       = orgImage->width();
@@ -284,12 +271,10 @@ void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int
     DColor color;
     int offset;
 
-    double* nMultArray = new double[Distance * 2 + 1];
+    double *nMultArray = new double[Distance * 2 + 1];
 
     for (int i = -Distance; i <= Distance; ++i)
-    {
         nMultArray[i + Distance] = i * ANGLE_RATIO;
-    }
 
     // number of added pixels
     int nCount = 0;
@@ -332,10 +317,7 @@ void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int
                 }
             }
 
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
+            if (nCount == 0) nCount = 1;
 
             // calculate pointer
             offset = GetOffset(Width, w, h, bytesDepth);
@@ -355,9 +337,7 @@ void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int
         progress = (int) (((double)(h - yMin) * 100.0) / (yMax - yMin));
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     delete [] nMultArray;
@@ -374,9 +354,9 @@ void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int
  * pArea            => Preview area.
  *
  */
-void BlurFXFilter::focusBlur(DImg* orgImage, DImg* destImage,
-                             int X, int Y, int BlurRadius, int BlendRadius,
-                             bool bInversed, QRect pArea)
+void BlurFXFilter::focusBlur(DImg *orgImage, DImg *destImage,
+                       int X, int Y, int BlurRadius, int BlendRadius,
+                       bool bInversed, QRect pArea)
 {
     int progress;
 
@@ -442,10 +422,10 @@ void BlurFXFilter::focusBlur(DImg* orgImage, DImg* destImage,
 
     DColor colorOrgImage, colorBlurredImage;
     int alpha;
-    uchar* ptr;
+    uchar *ptr;
 
     // get composer for default blending
-    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+    DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
 
     int nh = 0, nw = 0;
 
@@ -460,13 +440,9 @@ void BlurFXFilter::focusBlur(DImg* orgImage, DImg* destImage,
             lfRadius = sqrt (nh * nh + nw * nw);
 
             if (sixteenBit)
-            {
                 nBlendFactor = LimitValues16 ((int)(65535.0 * lfRadius / (double)BlendRadius));
-            }
             else
-            {
                 nBlendFactor = LimitValues8  ((int)(255.0 * lfRadius / (double)BlendRadius));
-            }
 
             // Read color values
             offset = GetOffset(Width, w, h, bytesDepth);
@@ -510,9 +486,7 @@ void BlurFXFilter::focusBlur(DImg* orgImage, DImg* destImage,
         progress = (int) (80.0 + ((double)(h - yMin) * 20.0) / (yMax - yMin));
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     delete composer;
@@ -536,40 +510,29 @@ void BlurFXFilter::focusBlur(DImg* orgImage, DImg* destImage,
  *                     We sum all the pixels with value = 1 and apply at the pixel with*
  *                     the position "C".
  */
-void BlurFXFilter::farBlur(DImg* orgImage, DImg* destImage, int Distance)
+void BlurFXFilter::farBlur(DImg *orgImage, DImg *destImage, int Distance)
 {
-    if (Distance < 1)
-    {
-        return;
-    }
+    if (Distance < 1) return;
 
     // we need to create our kernel
     // e.g. distance = 3, so kernel={3 1 1 2 1 1 3}
 
-    int* nKern = new int[Distance * 2 + 1];
+    int *nKern = new int[Distance * 2 + 1];
 
     for (int i = 0; i < Distance * 2 + 1; ++i)
     {
         // the first element is 3
         if (i == 0)
-        {
             nKern[i] = 2;
-        }
         // the center element is 2
         else if (i == Distance)
-        {
             nKern[i] = 3;
-        }
         // the last element is 3
         else if (i == Distance * 2)
-        {
             nKern[i] = 3;
-        }
         // all other elements will be 1
         else
-        {
             nKern[i] = 1;
-        }
     }
 
     // now, we apply a convolution with kernel
@@ -594,12 +557,9 @@ void BlurFXFilter::farBlur(DImg* orgImage, DImg* destImage, int Distance)
  *                     with correction between pixels.
  */
 
-void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int Strength)
+void BlurFXFilter::smartBlur(DImg *orgImage, DImg *destImage, int Radius, int Strength)
 {
-    if (Radius <= 0)
-    {
-        return;
-    }
+    if (Radius <= 0) return;
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -612,11 +572,8 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
     int sumR, sumG, sumB, nCount, w, h, a;
 
     int StrengthRange = Strength;
-
     if (sixteenBit)
-    {
         StrengthRange = (StrengthRange + 1) * 256 - 1;
-    }
 
     DColor color, radiusColor, radiusColorBlur;
     int offset, loopOffset;
@@ -652,8 +609,8 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
 
                     // now, we have to check if is inside the sensibility filter
                     if (IsColorInsideTheRange (color.red(), color.green(), color.blue(),
-                                               radiusColor.red(), radiusColor.green(), radiusColor.blue(),
-                                               StrengthRange))
+                        radiusColor.red(), radiusColor.green(), radiusColor.blue(),
+                        StrengthRange))
                     {
                         // finally we sum the bits
                         sumR += radiusColor.red();
@@ -686,16 +643,14 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
         progress = (int) (((double)h * 50.0) / Height);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     // we have reached the second part of main loop
 
     for (w = 0; runningFlag() && (w < Width); ++w)
     {
-        for (h = 0; runningFlag() && ( h < Height); ++h)
+        for (h = 0;runningFlag() && ( h < Height); ++h)
         {
             // we initialize the variables
             sumR = sumG = sumB = nCount = 0;
@@ -716,8 +671,8 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
 
                     // now, we have to check if is inside the sensibility filter
                     if (IsColorInsideTheRange (color.red(), color.green(), color.blue(),
-                                               radiusColor.red(), radiusColor.green(), radiusColor.blue(),
-                                               StrengthRange))
+                        radiusColor.red(), radiusColor.green(), radiusColor.blue(),
+                        StrengthRange))
                     {
                         radiusColorBlur.setColor(pBlur + loopOffset, sixteenBit);
                         // finally we sum the bits
@@ -751,9 +706,7 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
         progress = (int) (50.0 + ((double)w * 50.0) / Width);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     // now, we must free memory
@@ -773,13 +726,9 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
  *                     will taking near pixels. After this we blur (add and do a
  *                     division).
  */
-void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, double Angle)
+void BlurFXFilter::motionBlur(DImg *orgImage, DImg *destImage, int Distance, double Angle)
 {
-    if (Distance == 0)
-    {
-        return;
-    }
-
+    if (Distance == 0) return;
     int progress;
 
     int Width       = orgImage->width();
@@ -793,10 +742,7 @@ void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, dou
     int offset;
 
     // we try to avoid division by 0 (zero)
-    if (Angle == 0.0)
-    {
-        Angle = 360.0;
-    }
+    if (Angle == 0.0) Angle = 360.0;
 
     int sumR, sumG, sumB, nCount, nw, nh;
     double nAngX, nAngY;
@@ -809,8 +755,8 @@ void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, dou
     nCount = Distance * 2 + 1;
 
     // we will alloc size and calc the possible results
-    int* lpXArray = new int[nCount];
-    int* lpYArray = new int[nCount];
+    int *lpXArray = new int[nCount];
+    int *lpYArray = new int[nCount];
 
     for (int i = 0; i < nCount; ++i)
     {
@@ -843,10 +789,7 @@ void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, dou
                 sumB += color.blue();
             }
 
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
+            if (nCount == 0) nCount = 1;
 
             // calculate pointer
             offset = GetOffset(Width, w, h, bytesDepth);
@@ -866,9 +809,7 @@ void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, dou
         progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     delete [] lpXArray;
@@ -885,7 +826,7 @@ void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, dou
  *                     blur with 3x3 dimentions, in light tones, we apply a blur with
  *                     5x5 dimentions. Easy, hun?
  */
-void BlurFXFilter::softenerBlur(DImg* orgImage, DImg* destImage)
+void BlurFXFilter::softenerBlur(DImg *orgImage, DImg *destImage)
 {
     int progress;
 
@@ -923,13 +864,10 @@ void BlurFXFilter::softenerBlur(DImg* orgImage, DImg* destImage)
                     for (int b = -3; runningFlag() && (b <= 3); ++b)
                     {
                         if ((h + a < 0) || (w + b < 0))
-                        {
                             offsetSoma = offset;
-                        }
                         else
                             offsetSoma = GetOffset(Width, (w + Lim_Max (w, b, Width)),
                                                    (h + Lim_Max (h, a, Height)), bytesDepth);
-
                         colorSoma.setColor(data + offsetSoma, sixteenBit);
 
                         SomaR += colorSoma.red();
@@ -952,13 +890,10 @@ void BlurFXFilter::softenerBlur(DImg* orgImage, DImg* destImage)
                     for (int b = -1; runningFlag() && (b <= 1); ++b)
                     {
                         if ((h + a < 0) || (w + b < 0))
-                        {
                             offsetSoma = offset;
-                        }
                         else
                             offsetSoma = GetOffset(Width, (w + Lim_Max (w, b, Width)),
-                                                   (h + Lim_Max (h, a, Height)), bytesDepth);
-
+                                (h + Lim_Max (h, a, Height)), bytesDepth);
                         colorSoma.setColor(data + offsetSoma, sixteenBit);
 
                         SomaR += colorSoma.red();
@@ -979,9 +914,7 @@ void BlurFXFilter::softenerBlur(DImg* orgImage, DImg* destImage)
         progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 }
 
@@ -997,7 +930,7 @@ void BlurFXFilter::softenerBlur(DImg* orgImage, DImg* destImage)
  *                    different positions (top, button, left and right), with these 4
  *                    layers, we join all the pixels.
  */
-void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
+void BlurFXFilter::shakeBlur(DImg *orgImage, DImg *destImage, int Distance)
 {
     int progress;
 
@@ -1050,9 +983,7 @@ void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
         progress = (int) (((double)h * 50.0) / Height);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     for (int h = 0; runningFlag() && (h < Height); ++h)
@@ -1080,9 +1011,7 @@ void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
         progress = (int) (50.0 + ((double)h * 50.0) / Height);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     delete [] Layer1;
@@ -1101,7 +1030,7 @@ void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
  * Theory           => Similar to Diffuse effect, but the random byte is defined
  *                     in a matrix. Diffuse uses a random diagonal byte.
  */
-void BlurFXFilter::frostGlass(DImg* orgImage, DImg* destImage, int Frost)
+void BlurFXFilter::frostGlass(DImg *orgImage, DImg *destImage, int Frost)
 {
     int progress;
 
@@ -1128,10 +1057,10 @@ void BlurFXFilter::frostGlass(DImg* orgImage, DImg* destImage, int Frost)
     int range = sixteenBit ? 65535 : 255;
 
     // it is a huge optimization to allocate these here once
-    uchar* IntensityCount = new uchar[range + 1];
-    uint* AverageColorR   = new uint[range + 1];
-    uint* AverageColorG   = new uint[range + 1];
-    uint* AverageColorB   = new uint[range + 1];
+    uchar *IntensityCount = new uchar[range + 1];
+    uint *AverageColorR   = new uint[range + 1];
+    uint *AverageColorG   = new uint[range + 1];
+    uint *AverageColorB   = new uint[range + 1];
 
     for (h = 0; runningFlag() && (h < Height); ++h)
     {
@@ -1154,9 +1083,7 @@ void BlurFXFilter::frostGlass(DImg* orgImage, DImg* destImage, int Frost)
         progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     delete [] IntensityCount;
@@ -1180,7 +1107,7 @@ void BlurFXFilter::frostGlass(DImg* orgImage, DImg* destImage, int Frost)
  *                     center pixel.
  *                     Now the function scan the rows from the top (like photoshop).
  */
-void BlurFXFilter::mosaic(DImg* orgImage, DImg* destImage, int SizeW, int SizeH)
+void BlurFXFilter::mosaic(DImg *orgImage, DImg *destImage, int SizeW, int SizeH)
 {
     int progress;
 
@@ -1192,20 +1119,9 @@ void BlurFXFilter::mosaic(DImg* orgImage, DImg* destImage, int SizeW, int SizeH)
     uchar* pResBits = destImage->bits();
 
     // we need to check for valid values
-    if (SizeW < 1)
-    {
-        SizeW = 1;
-    }
-
-    if (SizeH < 1)
-    {
-        SizeH = 1;
-    }
-
-    if ((SizeW == 1) && (SizeH == 1))
-    {
-        return;
-    }
+    if (SizeW < 1) SizeW = 1;
+    if (SizeH < 1) SizeH = 1;
+    if ((SizeW == 1) && (SizeH == 1)) return;
 
     DColor color;
     int offsetCenter, offset;
@@ -1242,9 +1158,7 @@ void BlurFXFilter::mosaic(DImg* orgImage, DImg* destImage, int SizeW, int SizeH)
         progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 }
 
@@ -1259,10 +1173,10 @@ void BlurFXFilter::mosaic(DImg* orgImage, DImg* destImage, int SizeW, int SizeH)
  *
  * Theory            => This function takes from a distinct matrix a random color
  */
-DColor BlurFXFilter::RandomColor(uchar* Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
-                                 int X, int Y, int Radius,
-                                 int alpha, uint* randomSeed, int range, uchar* IntensityCount,
-                                 uint* AverageColorR, uint* AverageColorG, uint* AverageColorB)
+DColor BlurFXFilter::RandomColor(uchar *Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
+                                    int X, int Y, int Radius,
+                                    int alpha, uint *randomSeed, int range, uchar *IntensityCount,
+                                    uint *AverageColorR, uint *AverageColorG, uint *AverageColorB)
 {
     DColor color;
     int offset;
@@ -1308,9 +1222,7 @@ DColor BlurFXFilter::RandomColor(uchar* Bits, int Width, int Height, bool sixtee
 
     // check for runningFlag here before entering the do loop (will crash with SIGFPE otherwise)
     if (!runningFlag())
-    {
         return DColor(0, 0, 0, 0, sixteenBit);
-    }
 
     int RandNumber, count, Index, ErrorCount = 0;
     int J;
@@ -1318,7 +1230,6 @@ DColor BlurFXFilter::RandomColor(uchar* Bits, int Width, int Height, bool sixtee
 #ifdef _WIN32
     srand(*randomSeed);
 #endif
-
     do
     {
 #ifndef _WIN32
@@ -1343,9 +1254,7 @@ DColor BlurFXFilter::RandomColor(uchar* Bits, int Width, int Height, bool sixtee
     while ((IntensityCount[J] == 0) && (ErrorCount <= counter)  && runningFlag());
 
     if (!runningFlag())
-    {
         return DColor(0, 0, 0, 0, sixteenBit);
-    }
 
 
     color.setSixteenBit(sixteenBit);
@@ -1380,12 +1289,9 @@ DColor BlurFXFilter::RandomColor(uchar* Bits, int Width, int Height, bool sixtee
  *                     this, but the trick here its to store the sum used by the
  *                     previous pixel, so we sum with the other pixels that wasn't get
  */
-void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius, int Kernel[])
+void BlurFXFilter::MakeConvolution (DImg *orgImage, DImg *destImage, int Radius, int Kernel[])
 {
-    if (Radius <= 0)
-    {
-        return;
-    }
+    if (Radius <= 0) return;
 
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -1415,9 +1321,7 @@ void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius,
 
     for (int i = 0; i < nKernelWidth; ++i)
         for (int j = 0; j < range; ++j)
-        {
             arrMult[i][j] = j * Kernel[i];
-        }
 
     // Now, we enter in the main loop
 
@@ -1449,10 +1353,7 @@ void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius,
                 }
             }
 
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
+            if (nCount == 0) nCount = 1;
 
             // calculate pointer
             offset = GetOffset(Width, w, h, bytesDepth);
@@ -1481,9 +1382,7 @@ void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius,
         progress = (int) (((double)h * 50.0) / Height);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     // We enter in the second main loop
@@ -1514,10 +1413,7 @@ void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius,
                 }
             }
 
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
+            if (nCount == 0) nCount = 1;
 
             // calculate pointer
             offset = GetOffset(Width, w, h, bytesDepth);
@@ -1546,9 +1442,7 @@ void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius,
         progress = (int) (50.0 + ((double)w * 50.0) / Width);
 
         if (progress%5 == 0)
-        {
             postProgress(progress);
-        }
     }
 
     // now, we must free memory

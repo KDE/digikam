@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-KipiImageCollection::KipiImageCollection(Type tp, Album* album, const QString& filter)
+KipiImageCollection::KipiImageCollection(Type tp, Album *album, const QString& filter)
 {
     m_tp        = tp;
     m_album     = album;
@@ -75,53 +75,45 @@ QString KipiImageCollection::name()
         return i18n("Tag: %1", m_album->title());
     }
     else
-    {
         return m_album->title();
-    }
 }
 
 QString KipiImageCollection::category()
 {
     if ( m_album->type() == Album::PHYSICAL )
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         return p->category();
     }
     else if ( m_album->type() == Album::TAG )
     {
-        TAlbum* p = dynamic_cast<TAlbum*>(m_album);
+        TAlbum *p = dynamic_cast<TAlbum*>(m_album);
         return i18n("Tag: %1", p->tagPath());
     }
     else
-    {
         return QString();
-    }
 }
 
 QDate KipiImageCollection::date()
 {
     if ( m_album->type() == Album::PHYSICAL )
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         return p->date();
     }
     else
-    {
         return QDate();
-    }
 }
 
 QString KipiImageCollection::comment()
 {
     if ( m_album->type() == Album::PHYSICAL )
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         return p->caption();
     }
     else
-    {
         return QString();
-    }
 }
 
 KUrl::List KipiImageCollection::images()
@@ -139,7 +131,7 @@ KUrl::List KipiImageCollection::images()
                 return imagesFromTAlbum(dynamic_cast<TAlbum*>(m_album));
             }
             else if (m_album->type() == Album::DATE ||
-                     m_album->type() == Album::SEARCH)
+                    m_album->type() == Album::SEARCH)
             {
                 return DigikamApp::instance()->view()->allUrls();
             }
@@ -170,7 +162,6 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* album) const
     // get the images from the database and return the items found
 
     AlbumDB::ItemSortOrder sortOrder = AlbumDB::NoItemSorting;
-
     switch (AlbumSettings::instance()->getImageSortOrder())
     {
         default:
@@ -186,7 +177,7 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* album) const
         case ImageSortSettings::SortByRating:
             sortOrder = AlbumDB::ByItemRating;
             break;
-            // ByISize not supported
+        // ByISize not supported
     }
 
     QStringList urls = DatabaseAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
@@ -198,9 +189,7 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* album) const
     for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
         if (nameFilter.matches(*it))
-        {
             urlList.append(*it);
-        }
     }
 
     return urlList;
@@ -220,9 +209,7 @@ KUrl::List KipiImageCollection::imagesFromTAlbum(TAlbum* album) const
     for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
         if (nameFilter.matches(*it))
-        {
             urlList.append(*it);
-        }
     }
 
     return urlList;
@@ -232,7 +219,7 @@ KUrl KipiImageCollection::path()
 {
     if (m_album->type() == Album::PHYSICAL)
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;
@@ -248,7 +235,7 @@ KUrl KipiImageCollection::uploadPath()
 {
     if (m_album->type() == Album::PHYSICAL)
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;
@@ -273,13 +260,9 @@ QString KipiImageCollection::uploadRootName()
 bool KipiImageCollection::isDirectory()
 {
     if (m_album->type() == Album::PHYSICAL)
-    {
         return true;
-    }
     else
-    {
         return false;
-    }
 }
 
 bool KipiImageCollection::operator==(ImageCollectionShared& imgCollection)

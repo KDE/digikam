@@ -56,7 +56,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param dialogParent parent widget for dialogs displayed by this object
      */
-    AlbumModificationHelper(QObject* parent, QWidget* dialogParent);
+    AlbumModificationHelper(QObject *parent, QWidget *dialogParent);
 
     /**
      * Destructor.
@@ -72,7 +72,7 @@ public Q_SLOTS:
      * @param parentAlbum parent album for the new one
      * @return the new album or 0 if no album was created
      */
-    PAlbum* slotAlbumNew(PAlbum* parentAlbum);
+    PAlbum *slotAlbumNew(PAlbum *parentAlbum);
 
     /**
      * Deletes the given album after waiting for a graphical confirmation of the
@@ -80,29 +80,29 @@ public Q_SLOTS:
      *
      * @param album album to delete
      */
-    void slotAlbumDelete(PAlbum* album);
+    void slotAlbumDelete(PAlbum *album);
 
     /**
      * Renames the given album. The user will be prompted for a new name.
      *
      * @param album album to rename
      */
-    void slotAlbumRename(PAlbum* album);
+    void slotAlbumRename(PAlbum *album);
 
     /**
      * Graphically edits the properties of the given album.
      *
      * @param album album to edit
      */
-    void slotAlbumEdit(PAlbum* album);
+    void slotAlbumEdit(PAlbum *album);
 
 private Q_SLOTS:
     void slotDIOResult(KJob* kjob);
 
 private:
-    void addAlbumChildrenToList(KUrl::List& list, Album* album);
+    void addAlbumChildrenToList(KUrl::List& list, Album *album);
 
-    AlbumModificationHelperPriv* d;
+    AlbumModificationHelperPriv *d;
 
 };
 

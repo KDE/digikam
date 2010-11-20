@@ -54,7 +54,7 @@ public:
     int minimumSize() const;
 
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
-    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
+    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, 
                                    QRect* activationRect) const;
 
 protected:

@@ -57,7 +57,7 @@ class DragHandle : public QWidget
 
 public:
 
-    DragHandle(QDockWidget*);
+    DragHandle(QDockWidget *);
     ~DragHandle();
 
     QSize sizeHint() const;
@@ -65,7 +65,7 @@ public:
 
 protected:
 
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent *);
 
 private Q_SLOTS:
 
@@ -73,7 +73,7 @@ private Q_SLOTS:
 
 private:
 
-    QDockWidget*       m_parent;
+    QDockWidget       *m_parent;
     Qt::DockWidgetArea m_currentArea;
 };
 
@@ -94,7 +94,7 @@ class DIGIKAM_EXPORT ThumbBarDock : public QDockWidget
 
 public:
 
-    explicit ThumbBarDock(QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    explicit ThumbBarDock(QWidget *parent = 0, Qt::WindowFlags flags = 0);
     ~ThumbBarDock();
 
     /* Measure the orientation and size of the widget and adjust the containing
@@ -105,7 +105,7 @@ public:
     void reInitialize();
 
     /* Return a KToggleAction to show and hide the thumbnail bar. */
-    KToggleAction* getToggleAction(QObject* parent, QString caption = i18n("Show Thumbbar"));
+    KToggleAction *getToggleAction(QObject *parent, QString caption = i18n("Show Thumbbar"));
 
     /* The normal show() and hide() functions don't apply that well, because
      * there are two orthogonal reasons to hide the thumbbar: the user doesn't
@@ -122,7 +122,7 @@ public:
 
 public Q_SLOTS:
 
-    void showThumbBar(bool);
+	void showThumbBar(bool);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
 
 private:

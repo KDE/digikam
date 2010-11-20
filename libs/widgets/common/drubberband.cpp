@@ -41,16 +41,16 @@ public:
         active     = false;
     }
 
-    Q3ScrollView* scrollView;
+    Q3ScrollView *scrollView;
     bool          active;
     QPoint        firstPoint;
     QPoint        secondPoint;
     QRect         restriction;
 };
 
-DRubberBand::DRubberBand(Q3ScrollView* scrollView)
-    : QRubberBand(QRubberBand::Rectangle, scrollView->viewport()),
-      d(new DRubberBandPrivate)
+DRubberBand::DRubberBand(Q3ScrollView *scrollView)
+           : QRubberBand(QRubberBand::Rectangle, scrollView->viewport()),
+             d(new DRubberBandPrivate)
 {
     d->scrollView = scrollView;
     hide();
@@ -65,12 +65,8 @@ QRect DRubberBand::rubberBandAreaOnContents()
 {
     QRect rubber = QRect(d->firstPoint, d->secondPoint);
     rubber       = rubber.normalized();
-
     if (!d->restriction.isNull())
-    {
         rubber = rubber.intersected(d->restriction);
-    }
-
     return rubber;
 }
 
@@ -82,15 +78,10 @@ bool DRubberBand::isActive() const
 void DRubberBand::setActive(bool active)
 {
     d->active = active;
-
     if (d->active)
-    {
         show();
-    }
     else
-    {
         hide();
-    }
 }
 
 void DRubberBand::setFirstPointOnViewport(const QPoint& p)
@@ -111,9 +102,7 @@ void DRubberBand::setSecondPointOnViewport(const QPoint& p)
     updateForContentsPosition(d->scrollView->contentsX(), d->scrollView->contentsY());
 
     if (d->active)
-    {
         show();
-    }
 }
 
 void DRubberBand::setSecondPointOnContents(const QPoint& p)

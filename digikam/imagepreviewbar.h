@@ -85,7 +85,7 @@ protected:
      *          role like being selected etc.
      * @param tile the pixmap to draw on
      */
-    virtual void drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile);
+    virtual void drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile);
 
     /**
      * Hook method that can be implemented to draw a custom message if there are
@@ -93,7 +93,7 @@ protected:
      *
      * @param pixmap pixmap to paint on
      */
-    virtual void drawEmptyMessage(QPixmap& pixmap);
+    virtual void drawEmptyMessage(QPixmap &pixmap);
 
     virtual void rearrangeItems();
     virtual void contentsMouseMoveEvent(QMouseEvent*);
@@ -101,7 +101,7 @@ protected:
     virtual void leaveEvent(QEvent*);
     virtual void focusOutEvent(QFocusEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
-    virtual bool eventFilter(QObject* obj, QEvent* ev);
+    virtual bool eventFilter(QObject *obj, QEvent *ev);
 
 private Q_SLOTS:
 
@@ -123,7 +123,7 @@ class ImagePreviewBarItem : public ThumbBarItem
 {
 public:
 
-    ImagePreviewBarItem(ImagePreviewBar* view, const ImageInfo& info);
+    ImagePreviewBarItem(ImagePreviewBar *view, const ImageInfo& info);
     ~ImagePreviewBarItem();
 
     ImageInfo info();
@@ -146,7 +146,7 @@ class ImagePreviewBarToolTip : public ThumbBarToolTip
 
 public:
 
-    ImagePreviewBarToolTip(ThumbBarView* parent);
+    ImagePreviewBarToolTip(ThumbBarView *parent);
     ~ImagePreviewBarToolTip();
 
 protected:

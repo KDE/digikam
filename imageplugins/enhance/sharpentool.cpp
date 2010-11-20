@@ -66,7 +66,7 @@ public:
         sharpSettings(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+        {}
 
     const QString       configGroupName;
 
@@ -76,8 +76,8 @@ public:
 };
 
 SharpenTool::SharpenTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new SharpenToolPriv)
+           : EditorToolThreaded(parent),
+             d(new SharpenToolPriv)
 {
     setObjectName("sharpen");
     setToolName(i18n("Sharpen"));
@@ -165,14 +165,8 @@ void SharpenTool::prepareEffect()
             double radius = settings.ssRadius/10.0;
             double sigma;
 
-            if (radius < 1.0)
-            {
-                sigma = radius;
-            }
-            else
-            {
-                sigma = sqrt(radius);
-            }
+            if (radius < 1.0) sigma = radius;
+            else sigma = sqrt(radius);
 
             setFilter(new SharpenFilter(&img, this, radius, sigma));
             break;
@@ -222,14 +216,8 @@ void SharpenTool::prepareFinal()
             double radius = settings.ssRadius/10.0;
             double sigma;
 
-            if (radius < 1.0)
-            {
-                sigma = radius;
-            }
-            else
-            {
-                sigma = sqrt(radius);
-            }
+            if (radius < 1.0) sigma = radius;
+            else sigma = sqrt(radius);
 
             setFilter(new SharpenFilter(iface.getOriginalImg(), this, radius, sigma));
             break;

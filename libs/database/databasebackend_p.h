@@ -40,7 +40,7 @@ class DatabaseBackendPrivate : public DatabaseCoreBackendPrivate
 {
 public:
 
-    DatabaseBackendPrivate(DatabaseBackend* backend)
+    DatabaseBackendPrivate(DatabaseBackend *backend)
         : DatabaseCoreBackendPrivate(backend),
           imageChangesetContainer(this),
           imageTagChangesetContainer(this),
@@ -53,43 +53,29 @@ public:
         watch = 0;
     }
 
-    DatabaseWatch*       watch;
+    DatabaseWatch       *watch;
 
     void sendToWatch(const ImageChangeset changeset)
-    {
-        watch->sendImageChange(changeset);
-    }
+    { watch->sendImageChange(changeset); }
     void sendToWatch(const ImageTagChangeset changeset)
-    {
-        watch->sendImageTagChange(changeset);
-    }
+    { watch->sendImageTagChange(changeset); }
     void sendToWatch(const CollectionImageChangeset changeset)
-    {
-        watch->sendCollectionImageChange(changeset);
-    }
+    { watch->sendCollectionImageChange(changeset); }
     void sendToWatch(const AlbumChangeset changeset)
-    {
-        watch->sendAlbumChange(changeset);
-    }
+    { watch->sendAlbumChange(changeset); }
     void sendToWatch(const TagChangeset changeset)
-    {
-        watch->sendTagChange(changeset);
-    }
+    { watch->sendTagChange(changeset); }
     void sendToWatch(const AlbumRootChangeset changeset)
-    {
-        watch->sendAlbumRootChange(changeset);
-    }
+    { watch->sendAlbumRootChange(changeset); }
     void sendToWatch(const SearchChangeset changeset)
-    {
-        watch->sendSearchChange(changeset);
-    }
+    { watch->sendSearchChange(changeset); }
 
     template <class T>
     class ChangesetContainer
     {
     public:
 
-        ChangesetContainer(DatabaseBackendPrivate* d)
+        ChangesetContainer(DatabaseBackendPrivate *d)
             : d(d)
         {
         }

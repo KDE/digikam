@@ -57,7 +57,7 @@ class DIGIKAM_EXPORT CIETongueWidget : public QWidget
 
 public:
 
-    CIETongueWidget(int w, int h, QWidget* parent=0, cmsHPROFILE hMonitor=0);
+    CIETongueWidget(int w, int h, QWidget *parent=0, cmsHPROFILE hMonitor=0);
     ~CIETongueWidget();
 
     bool setProfileData(const QByteArray& profileData=QByteArray());
@@ -80,7 +80,7 @@ protected:
     QRgb colorByCoord(double x, double y);
     void drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz);
 
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent * event);
     void paintEvent(QPaintEvent*);
 
 private:

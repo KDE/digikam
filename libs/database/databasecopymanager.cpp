@@ -61,7 +61,6 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     isStopProcessing = false;
     DatabaseLocking fromLocking;
     DatabaseBackend fromDBbackend(&fromLocking, "MigrationFromDatabase");
-
     if (!fromDBbackend.open(fromDBParameters))
     {
         emit finished(DatabaseCopyManager::failed, i18n("Error while opening the source database."));
@@ -113,7 +112,6 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     }
 
     emit stepStarted(i18n("Copy Albums..."));
-
     if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_Albums"), toDBbackend, QString("Migrate_Write_Albums")))
     {
         handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
@@ -215,21 +213,20 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
         handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
         return;
     }
-
-    /*
-        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_Settings"), toDBbackend, QString("Migrate_Write_Settings")))
-        {
-            handleClosing(isStopThread, fromDBbackend, toDBbackend);
-            return;
-        }
-    */
+/*
+    if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_Settings"), toDBbackend, QString("Migrate_Write_Settings")))
+    {
+        handleClosing(isStopThread, fromDBbackend, toDBbackend);
+        return;
+    }
+*/
     fromDBbackend.close();
     toDBbackend.close();
 
     emit finished(DatabaseCopyManager::success, QString());
 }
 
-bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, QString fromActionName, DatabaseBackend& toDBbackend, QString toActionName)
+bool DatabaseCopyManager::copyTable(DatabaseBackend &fromDBbackend, QString fromActionName, DatabaseBackend &toDBbackend, QString toActionName)
 {
     kDebug(50003) << "Trying to copy contents from DB with ActionName: [" << fromActionName
                   << "] to DB with ActionName [" << toActionName << "]";
@@ -240,23 +237,20 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, QString from
     QSqlQuery result = fromDBbackend.execDBActionQuery(fromDBbackend.getDBAction(fromActionName), bindingMap) ;
 
     int resultSize = -1;
-
     if (result.driver()->hasFeature(QSqlDriver::QuerySize))
     {
-        resultSize=result.size();
-    }
-    else
+    	resultSize=result.size();
+    }else
     {
-        kDebug(50003) << "Driver doesn't support query size. We try to go to the last row and back to the current.";
-        result.last();
-        /*
-         * Now get the current row. If this is not possible, a value lower than 0 will be returned.
-         * To not confuse the log reading user, we reset this value to 0.
-         */
-        resultSize = result.at()<0 ? 0 : result.at();
-        result.first();
+    	kDebug(50003) << "Driver doesn't support query size. We try to go to the last row and back to the current.";
+    	result.last();
+    	/*
+    	 * Now get the current row. If this is not possible, a value lower than 0 will be returned.
+    	 * To not confuse the log reading user, we reset this value to 0.
+    	 */
+    	resultSize = result.at()<0 ? 0 : result.at();
+    	result.first();
     }
-
     kDebug(50003) << "Result size: ["<< resultSize << "]";
 
     /*
@@ -266,15 +260,14 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, QString from
      */
     if (result.isForwardOnly())
     {
-        result.finish();
-        result = fromDBbackend.execDBActionQuery(fromDBbackend.getDBAction(fromActionName), bindingMap) ;
+    	result.finish();
+    	result = fromDBbackend.execDBActionQuery(fromDBbackend.getDBAction(fromActionName), bindingMap) ;
     }
 
     int columnCount = result.record().count();
-
     for (int i=0; i<columnCount; i++)
     {
-        //            kDebug(50003) << "Column: ["<< result.record().fieldName(i) << "]";
+//            kDebug(50003) << "Column: ["<< result.record().fieldName(i) << "]";
         columnNames.append(result.record().fieldName(i));
     }
 
@@ -282,15 +275,14 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, QString from
 
     while (result.next())
     {
-        kDebug(50003) << "Query isOnValidRow ["<< result.isValid() <<"] isActive ["<< result.isActive() <<"] result size: ["<< result.size() << "]";
-
+    	kDebug(50003) << "Query isOnValidRow ["<< result.isValid() <<"] isActive ["<< result.isActive() <<"] result size: ["<< result.size() << "]";
         if (isStopProcessing==true)
         {
             return false;
         }
 
-        // Send a signal to the GUI to entertain the user
-        emit smallStepStarted(++resultCounter, resultSize);
+		// Send a signal to the GUI to entertain the user
+		emit smallStepStarted(++resultCounter, resultSize);
 
         // read the values from the fromDB into a hash
         QMap<QString, QVariant> tempBindingMap;
@@ -316,7 +308,6 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, QString from
         }
 
     }
-
     return true;
 }
 

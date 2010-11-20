@@ -70,7 +70,7 @@ public:
         exifSetOrientationBox(0),
         tab(0),
         tagsCfgPanel(0)
-    {}
+        {}
 
     static const QString  configGroupName;
     static const QString  configEXIFRotateEntry;
@@ -88,7 +88,7 @@ const QString SetupMetadata::SetupMetadataPriv::configEXIFRotateEntry("EXIF Rota
 const QString SetupMetadata::SetupMetadataPriv::configEXIFSetOrientationEntry("EXIF Set Orientation");
 
 SetupMetadata::SetupMetadata(QWidget* parent )
-    : QScrollArea(parent), d(new SetupMetadataPriv)
+             : QScrollArea(parent), d(new SetupMetadataPriv)
 {
     d->tab = new KTabWidget(viewport());
     setWidget(d->tab);

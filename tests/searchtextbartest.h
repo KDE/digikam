@@ -45,7 +45,7 @@ private Q_SLOTS:
     void testSearchTextSettings();
     void testModelParsing();
 
-    void newSearchTextSettings(const SearchTextSettings& settings);
+    void newSearchTextSettings(const SearchTextSettings &settings);
 
 private:
 

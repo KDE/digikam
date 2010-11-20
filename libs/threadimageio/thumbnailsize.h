@@ -60,18 +60,13 @@ public:
     ThumbnailSize(const ThumbnailSize& thumbsize)
     {
         if (this != &thumbsize)
-        {
             m_Size = thumbsize.m_Size;
-        }
     }
 
     ThumbnailSize& operator=(const ThumbnailSize& thumbsize)
     {
         if (this != &thumbsize)
-        {
             m_Size = thumbsize.m_Size;
-        }
-
         return *this;
     }
 

@@ -88,7 +88,7 @@ public:
 };
 
 QueueSettingsView::QueueSettingsView(QWidget* parent)
-    : KTabWidget(parent), d(new QueueSettingsViewPriv)
+                 : KTabWidget(parent), d(new QueueSettingsViewPriv)
 {
     setTabBarHidden(false);
 #if KDE_IS_VERSION(4,3,0)
@@ -204,9 +204,7 @@ QueueSettingsView::~QueueSettingsView()
 void QueueSettingsView::setBusy(bool b)
 {
     for (int i = 0; i < count(); ++i)
-    {
         widget(i)->setEnabled(!b);
-    }
 }
 
 void QueueSettingsView::slotResetSettings()

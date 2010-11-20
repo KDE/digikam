@@ -81,7 +81,7 @@ public:
 
     IconView* iconView() const;
 
-    virtual int compare(IconItem* item);
+    virtual int compare(IconItem *item);
     virtual QRect clickToOpenRect();
     virtual QRect clickToRateRect();
 
@@ -90,13 +90,13 @@ public:
 
 protected:
 
-    void paintToggleSelectButton(QPainter* p);
-    virtual void paintItem(QPainter* p);
+    void paintToggleSelectButton(QPainter *p);
+    virtual void paintItem(QPainter *p);
 
 private:
 
-    IconItem*    m_next;
-    IconItem*    m_prev;
+    IconItem    *m_next;
+    IconItem    *m_prev;
 
     IconItemPriv* const d;
 };

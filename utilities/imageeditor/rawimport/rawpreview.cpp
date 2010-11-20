@@ -75,7 +75,7 @@ public:
 };
 
 RawPreview::RawPreview(const KUrl& url, QWidget* parent)
-    : PreviewWidget(parent), d(new RawPreviewPriv)
+          : PreviewWidget(parent), d(new RawPreviewPriv)
 {
     d->thread = new ManagedLoadSaveThread;
     d->url    = url;
@@ -158,9 +158,7 @@ void RawPreview::cancelLoading()
 void RawPreview::slotLoadingProgress(const LoadingDescription& description, float progress)
 {
     if (description.filePath != d->loadingDesc.filePath)
-    {
         return;
-    }
 
     emit signalLoadingProgress(progress);
 }
@@ -168,9 +166,7 @@ void RawPreview::slotLoadingProgress(const LoadingDescription& description, floa
 void RawPreview::slotImageLoaded(const LoadingDescription& description, const DImg& image)
 {
     if (description.filePath != d->loadingDesc.filePath)
-    {
         return;
-    }
 
     if (image.isNull())
     {
@@ -181,7 +177,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Cannot decode RAW image for\n\"%1\"",
-                        QFileInfo(d->loadingDesc.filePath).fileName()));
+                   QFileInfo(d->loadingDesc.filePath).fileName()));
         p.end();
         // three copies - but the image is small
         setPostProcessedImage(DImg(pix.toImage()));
@@ -204,10 +200,7 @@ void RawPreview::slotThemeChanged()
 
 void RawPreview::resizeEvent(QResizeEvent* e)
 {
-    if (!e)
-    {
-        return;
-    }
+    if (!e) return;
 
     PreviewWidget::resizeEvent(e);
 
@@ -282,7 +275,6 @@ void RawPreview::paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)
     // Show the Over/Under exposure pixels indicators
 
     ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
-
     if (expoSettings)
     {
         if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)

@@ -46,7 +46,7 @@ namespace Digikam
 {
 
 CharcoalFilter::CharcoalFilter(DImg* orgImage, QObject* parent, double pencil, double smooth)
-    : DImgThreadedFilter(orgImage, parent, "Charcoal")
+              : DImgThreadedFilter(orgImage, parent, "Charcoal")
 {
     m_pencil = pencil;
     m_smooth = smooth;
@@ -63,14 +63,14 @@ void CharcoalFilter::filterImage()
 {
     if (m_orgImage.isNull())
     {
-        kWarning() << "No image data available!";
-        return;
+       kWarning() << "No image data available!";
+       return;
     }
 
     if (m_pencil <= 0.0)
     {
-        m_destImage = m_orgImage;
-        return;
+       m_destImage = m_orgImage;
+       return;
     }
 
     // -- Applying Edge effect -----------------------------------------------
@@ -92,10 +92,8 @@ void CharcoalFilter::filterImage()
         return;
     }
 
-    for (i = 0 ; i < (kernelWidth*kernelWidth) ; ++i)
-    {
+    for(i = 0 ; i < (kernelWidth*kernelWidth) ; ++i)
         kernel[i]=(-1.0);
-    }
 
     kernel[i/2]=kernelWidth*kernelWidth-1.0;
     convolveImage(kernelWidth, kernel);
@@ -106,9 +104,7 @@ void CharcoalFilter::filterImage()
     BlurFilter(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth/10.0));
 
     if (!runningFlag())
-    {
         return;
-    }
 
     // -- Applying stretch contrast color effect -------------------------------
 
@@ -117,11 +113,8 @@ void CharcoalFilter::filterImage()
     m_destImage.putImageData(stretch.getTargetImage().bits());
 
     postProgress( 90 );
-
     if (!runningFlag())
-    {
         return;
-    }
 
     // -- Inverting image color -----------------------------------------------
 
@@ -130,11 +123,8 @@ void CharcoalFilter::filterImage()
     m_destImage.putImageData(invert.getTargetImage().bits());
 
     postProgress( 95 );
-
     if (!runningFlag())
-    {
         return;
-    }
 
     // -- Convert to neutral black & white ------------------------------------
 
@@ -148,14 +138,11 @@ void CharcoalFilter::filterImage()
     m_destImage.putImageData(mixer.getTargetImage().bits());
 
     postProgress( 100 );
-
     if (!runningFlag())
-    {
         return;
-    }
 }
 
-bool CharcoalFilter::convolveImage(const unsigned int order, const double* kernel)
+bool CharcoalFilter::convolveImage(const unsigned int order, const double *kernel)
 {
     uint    x, y;
     int     mx, my, sx, sy, mcx, mcy, progress;
@@ -171,7 +158,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
         return(false);
     }
 
-    double* normal_kernel = new double[kernelWidth * kernelWidth];
+    double *normal_kernel = new double[kernelWidth * kernelWidth];
 
     if (!normal_kernel)
     {
@@ -245,12 +232,11 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
             alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha+0.5;
 
             DColor color((int)(red / 257UL),  (int)(green / 257UL),
-                         (int)(blue / 257UL), (int)(alpha / 257UL), sixteenBit);
+                                  (int)(blue / 257UL), (int)(alpha / 257UL), sixteenBit);
             color.setPixel((ddata + x * ddepth + (width * y * ddepth)));
         }
 
         progress = (int) (((double) y * 80.0) / height);
-
         if (progress % 5 == 0)
         {
             postProgress(progress);
@@ -268,26 +254,20 @@ int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)
     register long u;
 
     if (radius > 0.0)
-    {
         return((int)(2.0*ceil(radius)+1.0));
-    }
 
-    for (kernelWidth=5; ;)
+    for(kernelWidth=5; ;)
     {
         normalize=0.0;
 
-        for (u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; ++u)
-        {
+        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; ++u)
             normalize += exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma);
-        }
 
         u     = kernelWidth/2;
         value = exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma)/normalize;
 
         if ((long)(65535*value) <= 0)
-        {
             break;
-        }
 
         kernelWidth+=2;
     }

@@ -69,25 +69,15 @@ public:
 
     // Signal-emitter glue code
     void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
-    {
-        emit signalAddTags(infos, tagIDs);
-    }
+        { emit signalAddTags(infos, tagIDs); }
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
-    {
-        emit signalRemoveTags(infos, tagIDs);
-    }
+        { emit signalRemoveTags(infos, tagIDs); }
     void assignRating(const QList<ImageInfo>& infos, int rating)
-    {
-        emit signalAssignRating(infos, rating);
-    }
+        { emit signalAssignRating(infos, rating); }
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation)
-    {
-        emit signalSetExifOrientation(infos, orientation);
-    }
-    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
-    {
-        emit signalApplyMetadata(infos, hub);
-    }
+        { emit signalSetExifOrientation(infos, orientation); }
+    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub)
+        { emit signalApplyMetadata(infos, hub); }
 
 public:
 
@@ -120,7 +110,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
+    void slotImageDataChanged(const QString &path, bool removeThumbnails, bool notifyCache);
 
 Q_SIGNALS:
 
@@ -134,7 +124,7 @@ Q_SIGNALS:
     void signalRemoveTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
     void signalAssignRating(const QList<ImageInfo>& infos, int rating);
     void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
-    void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
+    void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
 };
 
 class MetadataManagerWorker : public QObject
@@ -153,7 +143,7 @@ public:
 
     void shutDown()
     {
-        thread->quit();
+        thread->quit(); 
         thread->wait();
     }
 
@@ -161,16 +151,13 @@ protected:
 
     class Thread : public QThread
     {
-    public:
-        Thread(QObject* parent = 0)
-            : QThread(parent)
-        {
-        }
+        public:
+            Thread(QObject* parent = 0)
+                : QThread(parent)
+                {
+                }
 
-        virtual void run()
-        {
-            exec();
-        }
+            virtual void run() { exec(); }
     };
 
     Thread*                               thread;
@@ -193,13 +180,13 @@ public Q_SLOTS:
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
     void assignRating(const QList<ImageInfo>& infos, int rating);
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
-    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
+    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
 
 Q_SIGNALS:
 
     void writeMetadataToFiles(const QList<ImageInfo>& infos);
     void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
-    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
+    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
 
 protected:
 

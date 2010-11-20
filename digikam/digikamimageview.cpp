@@ -74,15 +74,15 @@
 namespace Digikam
 {
 
-DigikamImageView::DigikamImageView(QWidget* parent)
-    : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
+DigikamImageView::DigikamImageView(QWidget *parent)
+                : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
 {
     installDefaultModels();
 
     setItemDelegate(new DigikamImageDelegate(this));
     setSpacing(10);
 
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::instance();
 
     imageFilterModel()->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
 
@@ -109,10 +109,10 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     d->updateOverlays();
 
     // rating overlay
-    ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
+    ImageRatingOverlay *ratingOverlay = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
 
-    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex&, int)),
+    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
             this, SLOT(assignRating(const QModelIndex&, int)));
 
     d->utilities = new ImageViewUtilities(this);
@@ -137,7 +137,7 @@ DigikamImageView::~DigikamImageView()
     delete d;
 }
 
-ImageViewUtilities* DigikamImageView::utilities() const
+ImageViewUtilities *DigikamImageView::utilities() const
 {
     return d->utilities;
 }
@@ -161,18 +161,12 @@ void DigikamImageView::slotSetupChanged()
 void DigikamImageView::activated(const ImageInfo& info)
 {
     if (info.isNull())
-    {
         return;
-    }
 
     if (AlbumSettings::instance()->getItemLeftClickAction() == AlbumSettings::ShowPreview)
-    {
         emit previewRequested(info);
-    }
     else
-    {
         openInEditor(info);
-    }
 }
 
 void DigikamImageView::openInEditor(const ImageInfo& info)
@@ -183,11 +177,8 @@ void DigikamImageView::openInEditor(const ImageInfo& info)
 void DigikamImageView::openCurrentInEditor()
 {
     ImageInfo info = currentInfo();
-
     if (!info.isNull())
-    {
         d->utilities->openInEditor(info, imageInfos(), currentAlbum());
-    }
 }
 
 void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info)
@@ -201,7 +192,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // Temporary actions --------------------------------------
 
-    QAction*  viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "View"),  this);
+    QAction  *viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "View"),  this);
     viewAction->setEnabled(selectedImageIDs.count() == 1);
 
     // --------------------------------------------------------
@@ -265,39 +256,34 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // --------------------------------------------------------
 
-    QAction* choice = cmhelper.exec(event->globalPos());
-
+    QAction *choice = cmhelper.exec(event->globalPos());
     if (choice)
     {
         if (choice == viewAction)
-        {
             emit previewRequested(info);
-        }
     }
 }
 
 void DigikamImageView::showContextMenu(QContextMenuEvent* event)
 {
-    Album* album = currentAlbum();
+    Album *album = currentAlbum();
 
     if (!album ||
-        album->isRoot() ||
+         album->isRoot() ||
         (album->type() != Album::PHYSICAL && album->type() != Album::TAG) )
     {
         return;
     }
 
     KMenu popmenu(this);
-    KAction* paste        = KStandardAction::paste(this, SLOT(paste()), 0);
-    const QMimeData* data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
+    KAction *paste        = KStandardAction::paste(this, SLOT(paste()), 0);
+    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
 
     /**
     * @todo
     */
-    if (!data || !KUrl::List::canDecode(data))
-    {
+    if(!data || !KUrl::List::canDecode(data))
         paste->setEnabled(false);
-    }
 
     popmenu.addAction(paste);
     popmenu.exec(event->globalPos());
@@ -320,7 +306,6 @@ void DigikamImageView::insertSelectedToLightTable(bool addTo)
 void DigikamImageView::insertSelectedToCurrentQueue()
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-
     if (!imageInfoList.isEmpty())
     {
         d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), false);
@@ -330,7 +315,6 @@ void DigikamImageView::insertSelectedToCurrentQueue()
 void DigikamImageView::insertSelectedToNewQueue()
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-
     if (!imageInfoList.isEmpty())
     {
         d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), true);
@@ -340,7 +324,6 @@ void DigikamImageView::insertSelectedToNewQueue()
 void DigikamImageView::insertSelectedToExistingQueue(int queueid)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-
     if (!imageInfoList.isEmpty())
     {
         d->utilities->insertSilentToQueueManager(imageInfoList, imageInfoList.first(), queueid);
@@ -350,11 +333,8 @@ void DigikamImageView::insertSelectedToExistingQueue(int queueid)
 void DigikamImageView::deleteSelected(bool permanently)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-
     if (d->utilities->deleteImages(imageInfoList, permanently))
-    {
         awayFromSelection();
-    }
 }
 
 void DigikamImageView::deleteSelectedDirectly(bool permanently)
@@ -379,7 +359,7 @@ void DigikamImageView::assignRatingToSelected(int rating)
     MetadataManager::instance()->assignRating(selectedImageInfos(), rating);
 }
 
-void DigikamImageView::assignRating(const QModelIndex& index, int rating)
+void DigikamImageView::assignRating(const QModelIndex &index, int rating)
 {
     MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), rating);
 }
@@ -411,7 +391,6 @@ void DigikamImageView::rename()
     {
         newNamesList = dlg->newNames();
     }
-
     delete dlg;
 
     if (!newNamesList.isEmpty())
@@ -425,7 +404,6 @@ void DigikamImageView::rename()
 void DigikamImageView::slotRotateLeft()
 {
     KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
-
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();
@@ -442,7 +420,6 @@ void DigikamImageView::slotRotateLeft()
 void DigikamImageView::slotRotateRight()
 {
     KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
-
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();

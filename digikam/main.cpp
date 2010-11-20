@@ -65,7 +65,7 @@
 
 using namespace Digikam;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     KAboutData aboutData("digikam",
                          0,
@@ -100,15 +100,15 @@ int main(int argc, char* argv[])
         if (QSqlDatabase::drivers().isEmpty())
         {
             KMessageBox::error(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
-                                       "please install it.\n"
-                                       "There is no database plugin installed on your computer."));
+            "please install it.\n"
+            "There is no database plugin installed on your computer."));
         }
         else
         {
             KMessageBox::errorList(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
-                                           "please install it.\n"
-                                           "Database plugins installed on your computer are listed below:"),
-                                   QSqlDatabase::drivers());
+            "please install it.\n"
+            "Database plugins installed on your computer are listed below:"),
+                                           QSqlDatabase::drivers());
         }
 
         kDebug() << "QT Sql drivers list: " << QSqlDatabase::drivers();
@@ -118,11 +118,9 @@ int main(int argc, char* argv[])
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
     QString commandLineDBPath;
-
     if (args && args->isSet("database-directory"))
     {
         QFileInfo commandLineDBDir(args->getOption("database-directory"));
-
         if (!commandLineDBDir.exists() || !commandLineDBDir.isDir())
         {
             kError() << "The given database-directory does not exist or is not readable. Ignoring." << commandLineDBDir.path();
@@ -146,7 +144,6 @@ int main(int argc, char* argv[])
     {
         AssistantDlg firstRun;
         app.setTopWidget(&firstRun);
-
         if (firstRun.exec() == QDialog::Rejected)
         {
             return 1;
@@ -174,7 +171,7 @@ int main(int argc, char* argv[])
     AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
 
     // create main window
-    DigikamApp* digikam = new DigikamApp();
+    DigikamApp *digikam = new DigikamApp();
 
     // Bug #247175:
     // Add a connection to the destroyed() signal when the digiKam mainwindow has been

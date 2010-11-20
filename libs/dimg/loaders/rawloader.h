@@ -54,30 +54,18 @@ public:
     void postProcess(DImgLoaderObserver* observer);
 
     // NOTE: RAW files are always Read only.
-    bool save(const QString& /*filePath*/, DImgLoaderObserver* /*observer=0*/)
-    {
-        return false;
-    };
+    bool save(const QString& /*filePath*/, DImgLoaderObserver* /*observer=0*/) { return false; };
 
-    bool hasAlpha()   const
-    {
-        return false;
-    };
-    bool isReadOnly() const
-    {
-        return true;
-    };
-    bool sixteenBit() const
-    {
-        return m_rawDecodingSettings.sixteenBitsImage;
-    };
+    bool hasAlpha()   const { return false;                                  };
+    bool isReadOnly() const { return true;                                   };
+    bool sixteenBit() const { return m_rawDecodingSettings.sixteenBitsImage; };
 
 private:
 
     // Methods to load RAW image using external dcraw instance.
 
     bool loadedFromDcraw(QByteArray data, int width, int height, int rgbmax,
-                         DImgLoaderObserver* observer);
+                         DImgLoaderObserver *observer);
 
     bool checkToCancelWaitingData();
     void setWaitingDataProgress(double value);

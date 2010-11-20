@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 ReplaceDialog::ReplaceDialog(Parseable* parent)
-    : ParseableDialog(parent), ui(new Ui::ReplaceModifierDialogWidget())
+             : ParseableDialog(parent), ui(new Ui::ReplaceModifierDialogWidget())
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
@@ -59,8 +59,8 @@ ReplaceDialog::~ReplaceDialog()
 // --------------------------------------------------------
 
 ReplaceModifier::ReplaceModifier()
-    : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
-               SmallIcon("document-edit"))
+               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
+                          SmallIcon("document-edit"))
 {
     addToken("{replace:\"||old||\", \"||new||\",||options||}",
              i18n("Replace text (||options||: ||r|| = regular expression, ||i|| = ignore case)"));
@@ -77,12 +77,10 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
     QString result;
 
     QPointer<ReplaceDialog> dlg = new ReplaceDialog(this);
-
     if (dlg->exec() == KDialog::Accepted)
     {
         QString oldStr = dlg->ui->source->text();
         QString newStr = dlg->ui->destination->text();
-
         if (!oldStr.isEmpty())
         {
             QString options;
@@ -105,7 +103,6 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
             result = QString("{replace:\"%1\",\"%2\"%3}").arg(oldStr).arg(newStr).arg(options);
         }
     }
-
     delete dlg;
 
     emit signalTokenTriggered(result);
@@ -135,7 +132,6 @@ QString ReplaceModifier::parseOperation(ParseSettings& settings)
     {
         result.replace(original, replacement, caseType);
     }
-
     return result;
 }
 

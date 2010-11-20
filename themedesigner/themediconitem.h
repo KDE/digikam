@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-07-15
- * Description : themed icon item
+ * Description : themed icon item 
  *
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>

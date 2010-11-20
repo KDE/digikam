@@ -102,9 +102,7 @@ void Blur::slotSettingsChanged()
 bool Blur::toolOperations()
 {
     if (!loadToDImg())
-    {
         return false;
-    }
 
     double radius = settings()["Radius"].toInt();
 

@@ -109,7 +109,7 @@ public:
     static DatabaseParameters defaultParameters(const QString databaseType);
 
     static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KGlobal::config(),
-            const QString& configGroup = QString());
+                                                   const QString& configGroup = QString());
     /**
      * Read and write parameters from config. You can specify the group,
      * or use the default value.
@@ -118,7 +118,7 @@ public:
     void writeToConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString()) const;
 
     /**
-     * In case of SQLite, the databaseName typically is a file.
+     * In case of SQLite, the databaseName typically is a file. 
      * With getDatabasePath, you can get the folder.
      */
     QString getDatabaseNameOrDir() const;
@@ -132,8 +132,8 @@ public:
     void setDatabasePath(const QString& folderOrFileOrName);
     void setThumbsDatabasePath(const QString& folderOrFileOrName);
 
-    static QString databaseFileSQLite(const QString& folderOrFile);
-    static QString thumbnailDatabaseFileSQLite(const QString& folderOrFile);
+    static QString databaseFileSQLite(const QString &folderOrFile);
+    static QString thumbnailDatabaseFileSQLite(const QString &folderOrFile);
     static QString databaseDirectorySQLite(const QString& path);
     static QString thumbnailDatabaseDirectorySQLite(const QString& path);
 

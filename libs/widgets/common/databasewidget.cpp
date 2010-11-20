@@ -67,7 +67,7 @@ public:
 };
 
 DatabaseWidget::DatabaseWidget(QWidget* parent)
-    : QWidget(parent), d(new DatabaseWidgetPriv)
+              : QWidget(parent), d(new DatabaseWidgetPriv)
 {
     setupMainArea();
 }
@@ -92,7 +92,7 @@ void DatabaseWidget::setupMainArea()
                                            "There is one common database file for all root albums.<br/>"
                                            "Write access is required to be able to edit image properties.</p>"
                                            "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
-                                      dbPathBox);
+                                           dbPathBox);
     d->databasePathLabel->setWordWrap(true);
     d->databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
@@ -205,7 +205,7 @@ void DatabaseWidget::slotChangeDatabasePath(const KUrl& result)
 #endif
     {
         KMessageBox::information(0, i18n("You do not seem to have write access to this database folder.\n"
-                                         "Without this access, the caption and tag features will not work."));
+                                            "Without this access, the caption and tag features will not work."));
     }
 
     checkDBPath();
@@ -214,12 +214,10 @@ void DatabaseWidget::slotChangeDatabasePath(const KUrl& result)
 void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
 {
 #ifndef _WIN32
-
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
         databasePathEdit->setUrl(QDir::homePath() + '/' + newPath);
     }
-
 #endif
 
     checkDBPath();
@@ -227,8 +225,8 @@ void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
 
 void DatabaseWidget::slotHandleDBTypeIndexChanged(int index)
 {
-    const QString& dbType = databaseType->itemData(index).toString();
-    setDatabaseInputFields(dbType);
+	const QString& dbType = databaseType->itemData(index).toString();
+	setDatabaseInputFields(dbType);
 }
 
 void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
@@ -311,7 +309,7 @@ void DatabaseWidget::checkDBPath()
     //d->mainDialog->enableButtonOk(dbOk);
 }
 
-void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
+void DatabaseWidget::setParametersFromSettings(const AlbumSettings *settings)
 {
     originalDbPath = settings->getDatabaseFilePath();
     originalDbType = settings->getDatabaseType();
@@ -334,7 +332,7 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
     for (int i=0; i<databaseType->count(); i++)
     {
         //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
-        //            << "] with ["<< settings->getDatabaseType() << "]";
+          //            << "] with ["<< settings->getDatabaseType() << "]";
         if (databaseType->itemData(i).toString() == settings->getDatabaseType())
         {
             databaseType->setCurrentIndex(i);
@@ -345,7 +343,6 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
 DatabaseParameters DatabaseWidget::getDatabaseParameters()
 {
     DatabaseParameters parameters;
-
     if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
     {
         parameters.connectOptions = connectionOptions->text();
@@ -371,7 +368,6 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
         parameters = DatabaseParameters::defaultParameters(currentDatabaseType());
         DatabaseServerStarter::startServerManagerProcess(currentDatabaseType());
     }
-
     return parameters;
 }
 

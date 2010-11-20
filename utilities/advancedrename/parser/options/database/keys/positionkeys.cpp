@@ -49,7 +49,7 @@ namespace Digikam
 {
 
 PositionKeys::PositionKeys()
-    : DbKeysCollection(i18n("Position Information (GPS)"))
+            : DbKeysCollection(i18n("Position Information (GPS)"))
 {
     addId(KEY_LATITUDE,           i18n("Latitude in the format as described by the XMP specification"));
     addId(KEY_LONGITUDE,          i18n("Longitude in the format as described by the XMP specification"));
@@ -73,58 +73,19 @@ QString PositionKeys::getDbValue(const QString& key, ParseSettings& settings)
 
     QString result;
 
-    if (key == KEY_LATITUDE)
-    {
-        result = position.latitude().simplified();
-    }
-    else if (key == KEY_LONGITUDE)
-    {
-        result = position.longitude().simplified();
-    }
-    else if (key == KEY_LATTITUDENUMBER)
-    {
-        result = QString::number(position.latitudeNumber());
-    }
-    else if (key == KEY_LONGITUDENUMBER)
-    {
-        result = QString::number(position.longitudeNumber());
-    }
-    else if (key == KEY_LATITUDEFORMATTED)
-    {
-        result = position.latitudeFormatted().simplified();
-    }
-    else if (key == KEY_LONGITUDEFORMATTED)
-    {
-        result = position.longitudeFormatted().simplified();
-    }
-    else if (key == KEY_ALTITUDE)
-    {
-        result = QString::number(position.altitude());
-    }
-    else if (key == KEY_ALTITUDEFORMATTED)
-    {
-        result = position.altitudeFormatted().simplified();
-    }
-    else if (key == KEY_ORIENTATION)
-    {
-        result = QString::number(position.orientation());
-    }
-    else if (key == KEY_ROLL)
-    {
-        result = QString::number(position.roll());
-    }
-    else if (key == KEY_TILT)
-    {
-        result = QString::number(position.tilt());
-    }
-    else if (key == KEY_ACCURACY)
-    {
-        result = QString::number(position.accuracy());
-    }
-    else if (key == KEY_DESCRIPTION)
-    {
-        result = position.description().simplified();
-    }
+    if      (key == KEY_LATITUDE)           result = position.latitude().simplified();
+    else if (key == KEY_LONGITUDE)          result = position.longitude().simplified();
+    else if (key == KEY_LATTITUDENUMBER)    result = QString::number(position.latitudeNumber());
+    else if (key == KEY_LONGITUDENUMBER)    result = QString::number(position.longitudeNumber());
+    else if (key == KEY_LATITUDEFORMATTED)  result = position.latitudeFormatted().simplified();
+    else if (key == KEY_LONGITUDEFORMATTED) result = position.longitudeFormatted().simplified();
+    else if (key == KEY_ALTITUDE)           result = QString::number(position.altitude());
+    else if (key == KEY_ALTITUDEFORMATTED)  result = position.altitudeFormatted().simplified();
+    else if (key == KEY_ORIENTATION)        result = QString::number(position.orientation());
+    else if (key == KEY_ROLL)               result = QString::number(position.roll());
+    else if (key == KEY_TILT)               result = QString::number(position.tilt());
+    else if (key == KEY_ACCURACY)           result = QString::number(position.accuracy());
+    else if (key == KEY_DESCRIPTION)        result = position.description().simplified();
 
     return result;
 }

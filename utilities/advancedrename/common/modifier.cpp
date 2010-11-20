@@ -37,13 +37,13 @@ public:
 };
 
 Modifier::Modifier(const QString& name, const QString& description)
-    : Parseable(name), d(new ModifierPriv)
+        : Parseable(name), d(new ModifierPriv)
 {
     setDescription(description);
 }
 
 Modifier::Modifier(const QString& name, const QString& description, const QPixmap& icon)
-    : Parseable(name, icon), d(new ModifierPriv)
+        : Parseable(name, icon), d(new ModifierPriv)
 {
     setDescription(description);
 }
@@ -63,13 +63,10 @@ ParseResults Modifier::parse(ParseSettings& settings)
     }
 
     const QRegExp& reg         = regExp();
-
     const QString& parseString = settings.parseString;
 
     int pos = 0;
-
     pos = reg.indexIn(parseString, pos);
-
     if (pos > -1)
     {
         QString result = parseOperation(settings);

@@ -45,13 +45,13 @@ class GPSSearchWidgetPriv
 {
 public:
 
-    GPSSearchWidgetPriv() {}
+    GPSSearchWidgetPriv(){}
 
     QList<double> selection;
 };
 
-GPSSearchWidget::GPSSearchWidget(QWidget* parent)
-    : WorldMapWidget(256, 256, parent), d(new GPSSearchWidgetPriv)
+GPSSearchWidget::GPSSearchWidget(QWidget *parent)
+               : WorldMapWidget(256, 256, parent), d(new GPSSearchWidgetPriv)
 {
     // NOTE: see B.K.O #153070
     // Marble will include selection area over map canvas with KDE 4.2
@@ -116,50 +116,48 @@ void GPSSearchWidget::markerClusterHolderCustomPaint(Marble::GeoPainter* const g
 
     if (isBefore)
     {
-        if (me->d->selection.isEmpty())
-        {
-            return;
-        }
+      if (me->d->selection.isEmpty())
+        return;
 
-        // prepare drawing of a polygon (because drawRect does not take four geo-corners...)
-        // West, North, East, South
-        const qreal lonWest = me->d->selection.at(0);
-        const qreal latNorth = me->d->selection.at(1);
-        const qreal lonEast = me->d->selection.at(2);
-        const qreal latSouth = me->d->selection.at(3);
+      // prepare drawing of a polygon (because drawRect does not take four geo-corners...)
+      // West, North, East, South
+      const qreal lonWest = me->d->selection.at(0);
+      const qreal latNorth = me->d->selection.at(1);
+      const qreal lonEast = me->d->selection.at(2);
+      const qreal latSouth = me->d->selection.at(3);
 
-        // TODO: once support for Marble<0.8 is dropped, mark these variables as const
-        Marble::GeoDataCoordinates coordTopLeft(lonWest, latNorth, 0, Marble::GeoDataCoordinates::Degree);
-        Marble::GeoDataCoordinates coordTopRight(lonEast, latNorth, 0, Marble::GeoDataCoordinates::Degree);
-        Marble::GeoDataCoordinates coordBottomLeft(lonWest, latSouth, 0, Marble::GeoDataCoordinates::Degree);
-        Marble::GeoDataCoordinates coordBottomRight(lonEast, latSouth, 0, Marble::GeoDataCoordinates::Degree);
-        Marble::GeoDataLinearRing polyRing;
+      // TODO: once support for Marble<0.8 is dropped, mark these variables as const
+      Marble::GeoDataCoordinates coordTopLeft(lonWest, latNorth, 0, Marble::GeoDataCoordinates::Degree);
+      Marble::GeoDataCoordinates coordTopRight(lonEast, latNorth, 0, Marble::GeoDataCoordinates::Degree);
+      Marble::GeoDataCoordinates coordBottomLeft(lonWest, latSouth, 0, Marble::GeoDataCoordinates::Degree);
+      Marble::GeoDataCoordinates coordBottomRight(lonEast, latSouth, 0, Marble::GeoDataCoordinates::Degree);
+      Marble::GeoDataLinearRing polyRing;
 #if MARBLE_VERSION < 0x000800
-        polyRing.append(&coordTopLeft);
-        polyRing.append(&coordTopRight);
-        polyRing.append(&coordBottomRight);
-        polyRing.append(&coordBottomLeft);
+      polyRing.append(&coordTopLeft);
+      polyRing.append(&coordTopRight);
+      polyRing.append(&coordBottomRight);
+      polyRing.append(&coordBottomLeft);
 #else // MARBLE_VERSION < 0x000800
-        polyRing << coordTopLeft << coordTopRight << coordBottomRight << coordBottomLeft;
+      polyRing << coordTopLeft << coordTopRight << coordBottomRight << coordBottomLeft;
 #endif // MARBLE_VERSION < 0x000800
 
-        geoPainter->save();
+      geoPainter->save();
 
-        // paint the selection:
-        QPen selectionPen;
-        selectionPen.setColor(Qt::blue);
-        selectionPen.setStyle(Qt::SolidLine);
-        selectionPen.setWidth(1);
-        geoPainter->setPen(selectionPen);
-        geoPainter->setBrush(Qt::NoBrush);
-        geoPainter->drawPolygon(polyRing);
+      // paint the selection:
+      QPen selectionPen;
+      selectionPen.setColor(Qt::blue);
+      selectionPen.setStyle(Qt::SolidLine);
+      selectionPen.setWidth(1);
+      geoPainter->setPen(selectionPen);
+      geoPainter->setBrush(Qt::NoBrush);
+      geoPainter->drawPolygon(polyRing);
 
-        geoPainter->restore();
+      geoPainter->restore();
     }
     else if ( !isBefore && me->d->selection.isEmpty() )
     {
         geoPainter->save();
-
+        
         // no selection has been made, tell the user how to make one:
         const QString selectionHowto = i18n("Use CTRL+left mouse button to select a search area.");
 
@@ -172,7 +170,7 @@ void GPSSearchWidget::markerClusterHolderCustomPaint(Marble::GeoPainter* const g
         QFont myFont = geoPainter->font();
         myFont.setPointSize(myFont.pointSize()+2);
         geoPainter->setFont(myFont);
-
+        
         QPen textPen;
         textPen.setColor(Qt::black);
         textPen.setStyle(Qt::SolidLine);

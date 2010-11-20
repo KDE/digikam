@@ -50,12 +50,12 @@ public:
     /**
      * Use an existing DatabaseAccess object, which must live as long as this object exists.
      */
-    DatabaseTransaction(DatabaseAccess* access);
+    DatabaseTransaction(DatabaseAccess *access);
     ~DatabaseTransaction();
 
 private:
 
-    DatabaseAccess* m_access;
+    DatabaseAccess *m_access;
 };
 
 }  // namespace Digikam

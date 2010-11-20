@@ -51,8 +51,8 @@
 namespace Digikam
 {
 
-AbstractSearchGroupContainer::AbstractSearchGroupContainer(QWidget* parent)
-    : QWidget(parent), m_groupIndex(0)
+AbstractSearchGroupContainer::AbstractSearchGroupContainer(QWidget *parent)
+                            : QWidget(parent), m_groupIndex(0)
 {
 }
 
@@ -73,7 +73,6 @@ void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup* group)
         kWarning() << "Attempt to delete the primary search group";
         return;
     }
-
     m_groups.removeAll(group);
     // This method call may arise from an event handler of a widget within group. Defer deletion.
     group->deleteLater();
@@ -86,16 +85,11 @@ void AbstractSearchGroupContainer::startReadingGroups(SearchXmlCachingReader&)
 
 void AbstractSearchGroupContainer::readGroup(SearchXmlCachingReader& reader)
 {
-    SearchGroup* group = 0;
-
+    SearchGroup *group = 0;
     if (m_groupIndex >= m_groups.size())
-    {
         group = addSearchGroup();
-    }
     else
-    {
         group = m_groups[m_groupIndex];
-    }
 
     group->read(reader);
 
@@ -106,15 +100,11 @@ void AbstractSearchGroupContainer::finishReadingGroups()
 {
     // remove superfluous groups
     while (m_groups.size() > (m_groupIndex+1))
-    {
         delete m_groups.takeLast();
-    }
 
     // for empty searches, and we have an initial search group, reset the remaining search group
     if (!m_groupIndex && !m_groups.isEmpty())
-    {
         m_groups.first()->reset();
-    }
 }
 
 void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter& writer)
@@ -127,7 +117,7 @@ void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter& writer)
 
 void AbstractSearchGroupContainer::removeSendingSearchGroup()
 {
-    removeSearchGroup(static_cast<SearchGroup*>(sender()));
+    removeSearchGroup(static_cast<SearchGroup *>(sender()));
 }
 
 QList<QRect> AbstractSearchGroupContainer::startupAnimationAreaOfGroups() const
@@ -160,11 +150,11 @@ public:
     QCache<QString, QPixmap> pixmapCache;
     QTimeLine*               timeline;
 
-    SearchViewBottomBar* bar;
+    SearchViewBottomBar *bar;
 };
 
 SearchView::SearchView()
-    : d(new SearchViewPrivate)
+          : d(new SearchViewPrivate)
 {
     d->pixmapCache.setMaxCost(4);
 }
@@ -204,7 +194,7 @@ void SearchView::setup()
             this, SLOT(animationFrame(int)));
 }
 
-void SearchView::setBottomBar(SearchViewBottomBar* bar)
+void SearchView::setBottomBar(SearchViewBottomBar *bar)
 {
     d->bar = bar;
 
@@ -230,30 +220,22 @@ void SearchView::read(const QString& xml)
 
     startReadingGroups(reader);
     SearchXml::Element element;
-
     while (!reader.atEnd())
     {
         element = reader.readNext();
-
         if (element == SearchXml::Group)
-        {
             readGroup(reader);
-        }
     }
 
     finishReadingGroups();
 
     if (isVisible())
-    {
         startAnimation();
-    }
     else
-    {
         d->needAnimationForReadIn = true;
-    }
 }
 
-void SearchView::addGroupToLayout(SearchGroup* group)
+void SearchView::addGroupToLayout(SearchGroup *group)
 {
     // insert at last-but-one position; leave stretch at the bottom
     d->layout->insertWidget(d->layout->count()-1, group);
@@ -274,9 +256,7 @@ void SearchView::slotAddGroupButton()
 void SearchView::slotResetButton()
 {
     while (m_groups.size() > 1)
-    {
         delete m_groups.takeLast();
-    }
 
     // FIXME: remove the comments again
     // What if the above while loop is never executed, due to a m_groups size of zero?
@@ -328,7 +308,7 @@ void SearchView::timeLineFinished()
     }
 }
 
-void SearchView::showEvent(QShowEvent*)
+void SearchView::showEvent(QShowEvent *)
 {
     if (d->needAnimationForReadIn)
     {
@@ -337,18 +317,14 @@ void SearchView::showEvent(QShowEvent*)
     }
 }
 
-void SearchView::paintEvent(QPaintEvent*)
+void SearchView::paintEvent(QPaintEvent *)
 {
 #if QT_VERSION >= 0x040400
-
     if (d->timeline->state() == QTimeLine::Running)
     {
         QList<QRect> rects = startupAnimationAreaOfGroups();
-
         if (rects.isEmpty())
-        {
             return;
-        }
 
         int animationStep = d->timeline->currentFrame();
         const int margin = 2;
@@ -373,7 +349,6 @@ void SearchView::paintEvent(QPaintEvent*)
             p.drawRoundedRect(rect, 4, 4);
         }
     }
-
 #endif
 }
 
@@ -385,7 +360,6 @@ void SearchView::setTheme()
     QFont f = font();
     QString fontSizeLarger;
     QString fontSizeSmaller;
-
     if (f.pointSizeF() == -1)
     {
         // set pixel size
@@ -399,63 +373,63 @@ void SearchView::setTheme()
     }
 
     QString sheet =
-        // ".SearchView { background-color: " + ThemeEngine::instance()->baseColor().name() + "; } "
-        "#SearchGroupLabel_MainLabel "
-        " { font-weight: bold; font-size: "
-        + fontSizeLarger + ';' +
-        "   color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
-        " } "
-        "#SearchGroupLabel_SimpleLabel "
-        " { font-size: "
-        + fontSizeLarger + ';' +
-        "   color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
-        " } "
-        "#SearchGroupLabel_GroupOpLabel "
-        " { font-weight: bold; font-size: "
-        + fontSizeLarger + ';' +
-        "   color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
-        "   text-decoration: underline; "
-        " } "
-        "#SearchGroupLabel_CheckBox "
-        " { color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
-        " } "
-        "#SearchGroupLabel_RemoveLabel "
-        " { color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
-        "   font-style: italic; "
-        "   text-decoration: underline; "
-        " } "
-        "#SearchGroupLabel_OptionsLabel "
-        " { color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
-        "   font-style: italic; "
-        "   text-decoration: underline; font-size: "
-        + fontSizeSmaller + ';' +
-        " } "
-        "#SearchFieldGroupLabel_Label "
-        " { color: "
-        + ThemeEngine::instance()->textSpecialRegColor().name() + ';' +
-        "   font-weight: bold; "
-        " } "
-        "#SearchField_MainLabel "
-        " { font-weight: bold; } "
-        "#SearchFieldChoice_ClickLabel "
-        " { color: "
-        + ThemeEngine::instance()->textSpecialRegColor().name() + ';' +
-        "   font-style: italic; "
-        "   text-decoration: underline; "
-        " } "
-        "QComboBox#SearchFieldChoice_ComboBox"
-        " {  border-width: 0px; border-style: solid; padding-left: 5px; "
-        " } "
-        "QComboBox::drop-down#SearchFieldChoice_ComboBox"
-        " {  subcontrol-origin: padding; subcontrol-position: right top; "
-        "    border: 0px; background: rgba(0,0,0,0); width: 0px; height: 0px; "
-        " } ";
+            // ".SearchView { background-color: " + ThemeEngine::instance()->baseColor().name() + "; } "
+            "#SearchGroupLabel_MainLabel "
+            " { font-weight: bold; font-size: "
+              + fontSizeLarger + ';' +
+            "   color: "
+              + ThemeEngine::instance()->textSelColor().name() + ';' +
+            " } "
+            "#SearchGroupLabel_SimpleLabel "
+            " { font-size: "
+              + fontSizeLarger + ';' +
+            "   color: "
+              + ThemeEngine::instance()->textSelColor().name() + ';' +
+            " } "
+            "#SearchGroupLabel_GroupOpLabel "
+            " { font-weight: bold; font-size: "
+              + fontSizeLarger + ';' +
+            "   color: "
+              + ThemeEngine::instance()->textSelColor().name() + ';' +
+            "   text-decoration: underline; "
+            " } "
+            "#SearchGroupLabel_CheckBox "
+            " { color: "
+              + ThemeEngine::instance()->textSelColor().name() + ';' +
+            " } "
+            "#SearchGroupLabel_RemoveLabel "
+            " { color: "
+              + ThemeEngine::instance()->textSelColor().name() + ';' +
+            "   font-style: italic; "
+            "   text-decoration: underline; "
+            " } "
+            "#SearchGroupLabel_OptionsLabel "
+            " { color: "
+              + ThemeEngine::instance()->textSelColor().name() + ';' +
+            "   font-style: italic; "
+            "   text-decoration: underline; font-size: "
+              + fontSizeSmaller + ';' +
+            " } "
+            "#SearchFieldGroupLabel_Label "
+            " { color: "
+              + ThemeEngine::instance()->textSpecialRegColor().name() + ';' +
+            "   font-weight: bold; "
+            " } "
+            "#SearchField_MainLabel "
+            " { font-weight: bold; } "
+            "#SearchFieldChoice_ClickLabel "
+            " { color: "
+              + ThemeEngine::instance()->textSpecialRegColor().name() + ';' +
+            "   font-style: italic; "
+            "   text-decoration: underline; "
+            " } "
+            "QComboBox#SearchFieldChoice_ComboBox"
+            " {  border-width: 0px; border-style: solid; padding-left: 5px; "
+            " } "
+            "QComboBox::drop-down#SearchFieldChoice_ComboBox"
+            " {  subcontrol-origin: padding; subcontrol-position: right top; "
+            "    border: 0px; background: rgba(0,0,0,0); width: 0px; height: 0px; "
+            " } ";
 
     QWidget::setStyleSheet(sheet);
 
@@ -465,8 +439,7 @@ void SearchView::setTheme()
 QPixmap SearchView::cachedBannerPixmap(int w, int h)
 {
     QString key = "BannerPixmap-" + QString::number(w) + '-' + QString::number(h);
-    QPixmap* pix = d->pixmapCache.object(key);
-
+    QPixmap *pix = d->pixmapCache.object(key);
     if (!pix)
     {
         QPixmap pixmap = ThemeEngine::instance()->bannerPixmap(w, h);
@@ -491,9 +464,9 @@ QPixmap SearchView::bottomBarPixmap(int w, int h)
 
 // -------------------------------------------------------------------------
 
-SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* cache, QWidget* parent)
-    : QWidget(parent),
-      m_themeCache(cache)
+SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWidget *parent)
+                   : QWidget(parent),
+                     m_themeCache(cache)
 {
     m_mainLayout = new QHBoxLayout;
 
@@ -521,16 +494,16 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* cache, QWid
                            this,
                            SIGNAL(cancelPressed()));
     KPushButton* aBtn = m_buttonBox->addButton(KStandardGuiItem::apply(),
-                        QDialogButtonBox::ApplyRole,
-                        this,
-                        SIGNAL(tryoutPressed()));
+                                               QDialogButtonBox::ApplyRole,
+                                               this,
+                                               SIGNAL(tryoutPressed()));
     aBtn->setText(i18n("Try"));
     m_mainLayout->addWidget(m_buttonBox);
 
     setLayout(m_mainLayout);
 }
 
-void SearchViewBottomBar::paintEvent(QPaintEvent*)
+void SearchViewBottomBar::paintEvent(QPaintEvent *)
 {
     // paint themed background
     QPainter p(this);

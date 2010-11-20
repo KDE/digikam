@@ -54,9 +54,9 @@ class SidebarState
 public:
 
     SidebarState() : activeWidget(0), size(0) {}
-    SidebarState(QWidget* w, int size) : activeWidget(w), size(size) {}
+    SidebarState(QWidget *w, int size) : activeWidget(w), size(size) {}
 
-    QWidget* activeWidget;
+    QWidget *activeWidget;
     int      size;
 };
 
@@ -112,8 +112,8 @@ public:
 
 // -------------------------------------------------------------------------------------
 
-Sidebar::Sidebar(QWidget* parent, SidebarSplitter* sp, KMultiTabBarPosition side, bool minimizedDefault)
-    : KMultiTabBar(side, parent), StateSavingObject(this), d(new SidebarPriv)
+Sidebar::Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side, bool minimizedDefault)
+       : KMultiTabBar(side, parent), StateSavingObject(this), d(new SidebarPriv)
 {
     d->splitter         = sp;
     d->minimizedDefault = minimizedDefault;
@@ -131,12 +131,8 @@ Sidebar::Sidebar(QWidget* parent, SidebarSplitter* sp, KMultiTabBarPosition side
 Sidebar::~Sidebar()
 {
     saveState();
-
     if (d->splitter)
-    {
         d->splitter->d->sidebars.removeAll(this);
-    }
-
     delete d;
 }
 
@@ -153,10 +149,8 @@ void Sidebar::doLoadState()
     d->restoreSize            = group.readEntry(entryName(d->optionRestoreSizeEntry), -1);
 
     // validate
-    if (tab >= d->tabs || tab < 0)
-    {
+    if(tab >= d->tabs || tab < 0)
         tab = 0;
-    }
 
     if (minimized)
     {
@@ -185,9 +179,7 @@ void Sidebar::backup()
     d->isMinimized = d->minimized;
 
     if (!d->isMinimized)
-    {
         shrink();
-    }
 
     KMultiTabBar::hide();
 }
@@ -206,9 +198,7 @@ void Sidebar::backup(const QList<QWidget*> thirdWidgetsToBackup, QList<int> *siz
 void Sidebar::restore()
 {
     if (!d->isMinimized)
-    {
         expand();
-    }
 
     KMultiTabBar::show();
 }
@@ -220,19 +210,15 @@ void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<i
     if (thirdWidgetsToRestore.size() == sizes.size())
     {
         for (int i=0; i<thirdWidgetsToRestore.size(); ++i)
-        {
             d->splitter->setSize(thirdWidgetsToRestore[i], sizes[i]);
-        }
     }
 }
 
-void Sidebar::appendTab(QWidget* w, const QPixmap& pic, const QString& title)
+void Sidebar::appendTab(QWidget *w, const QPixmap& pic, const QString& title)
 {
     // Store state (but not on initialization)
     if (isVisible())
-    {
         d->appendedTabsStateCache[w] = SidebarState(d->stack->currentWidget(), d->splitter->size(this));
-    }
 
     // Add tab
     w->setParent(d->stack);
@@ -248,21 +234,15 @@ void Sidebar::appendTab(QWidget* w, const QPixmap& pic, const QString& title)
     d->tabs++;
 }
 
-void Sidebar::deleteTab(QWidget* w)
+void Sidebar::deleteTab(QWidget *w)
 {
     int tab = d->stack->indexOf(w);
-
-    if (tab < 0)
-    {
+    if(tab < 0)
         return;
-    }
 
     bool removingActiveTab = (tab == d->activeTab);
-
     if (removingActiveTab)
-    {
         d->activeTab = -1;
-    }
 
     d->stack->removeWidget(d->stack->widget(tab));
     // delete widget
@@ -275,12 +255,10 @@ void Sidebar::deleteTab(QWidget* w)
         // restore to state before adding tab
         // using a hash is simple, but does not handle well multiple add/removal operations at a time
         SidebarState state = d->appendedTabsStateCache.take(w);
-
         if (state.activeWidget)
         {
             int tab = d->stack->indexOf(state.activeWidget);
-
-            if (tab != -1)
+            if(tab != -1)
             {
                 switchTabAndStackToTab(tab);
                 emit signalChangedTab(d->stack->currentWidget());
@@ -290,17 +268,13 @@ void Sidebar::deleteTab(QWidget* w)
                     d->minimized = true;
                     setTab(d->activeTab, false);
                 }
-
                 d->splitter->setSize(this, state.size);
             }
         }
         else
         {
             if (removingActiveTab)
-            {
                 clicked(d->tabs - 1);
-            }
-
             d->splitter->setSize(this, -1);
         }
     }
@@ -312,12 +286,10 @@ void Sidebar::deleteTab(QWidget* w)
 
 void Sidebar::clicked(int tab)
 {
-    if (tab >= d->tabs || tab < 0)
-    {
+    if(tab >= d->tabs || tab < 0)
         return;
-    }
 
-    if (tab == d->activeTab)
+    if(tab == d->activeTab)
     {
         d->stack->isHidden() ? expand() : shrink();
     }
@@ -325,40 +297,31 @@ void Sidebar::clicked(int tab)
     {
         switchTabAndStackToTab(tab);
 
-        if (d->minimized)
-        {
+        if(d->minimized)
             expand();
-        }
 
         emit signalChangedTab(d->stack->currentWidget());
     }
 }
 
-void Sidebar::setActiveTab(QWidget* w)
+void Sidebar::setActiveTab(QWidget *w)
 {
     int tab = d->stack->indexOf(w);
-
-    if (tab < 0)
-    {
+    if(tab < 0)
         return;
-    }
 
     switchTabAndStackToTab(tab);
 
-    if (d->minimized)
-    {
+    if(d->minimized)
         expand();
-    }
 
     emit signalChangedTab(d->stack->currentWidget());
 }
 
 void Sidebar::switchTabAndStackToTab(int tab)
 {
-    if (d->activeTab >= 0)
-    {
+    if(d->activeTab >= 0)
         setTab(d->activeTab, false);
-    }
 
     d->activeTab = tab;
     setTab(d->activeTab, true);
@@ -368,13 +331,9 @@ void Sidebar::switchTabAndStackToTab(int tab)
 QWidget* Sidebar::getActiveTab()
 {
     if (d->splitter)
-    {
         return d->stack->currentWidget();
-    }
     else
-    {
         return 0;
-    }
 }
 
 void Sidebar::shrink()
@@ -383,11 +342,8 @@ void Sidebar::shrink()
 
     // store the size that we had. We may later need it when we restore to visible.
     int currentSize = d->splitter->size(this);
-
     if (currentSize)
-    {
         d->restoreSize = currentSize;
-    }
 
     d->stack->hide();
     emit signalViewChanged();
@@ -414,7 +370,7 @@ bool Sidebar::isExpanded()
     return !d->minimized;
 }
 
-bool Sidebar::eventFilter(QObject* obj, QEvent* ev)
+bool Sidebar::eventFilter(QObject *obj, QEvent *ev)
 {
     for (int i = 0 ; i < d->tabs; ++i)
     {
@@ -422,7 +378,7 @@ bool Sidebar::eventFilter(QObject* obj, QEvent* ev)
         {
             if ( ev->type() == QEvent::DragEnter)
             {
-                QDragEnterEvent* e = static_cast<QDragEnterEvent*>(ev);
+                QDragEnterEvent *e = static_cast<QDragEnterEvent *>(ev);
                 enterEvent(e);
                 e->accept();
                 return false;
@@ -435,20 +391,19 @@ bool Sidebar::eventFilter(QObject* obj, QEvent* ev)
                     d->dragSwitchTimer->start(800);
                     d->dragSwitchId = i;
                 }
-
                 return false;
             }
             else if (ev->type() == QEvent::DragLeave)
             {
                 d->dragSwitchTimer->stop();
-                QDragLeaveEvent* e = static_cast<QDragLeaveEvent*>(ev);
+                QDragLeaveEvent *e = static_cast<QDragLeaveEvent *>(ev);
                 leaveEvent(e);
                 return false;
             }
             else if (ev->type() == QEvent::Drop)
             {
                 d->dragSwitchTimer->stop();
-                QDropEvent* e = static_cast<QDropEvent*>(ev);
+                QDropEvent *e = static_cast<QDropEvent *>(ev);
                 leaveEvent(e);
                 return false;
             }
@@ -477,15 +432,15 @@ void Sidebar::slotSplitterBtnClicked()
 
 const QString SidebarSplitter::DEFAULT_CONFIG_KEY = "SplitterState";
 
-SidebarSplitter::SidebarSplitter(QWidget* parent)
-    : QSplitter(parent), d(new SidebarSplitterPriv)
+SidebarSplitter::SidebarSplitter(QWidget *parent)
+               : QSplitter(parent), d(new SidebarSplitterPriv)
 {
     connect(this, SIGNAL(splitterMoved(int,int)),
             this, SLOT(slotSplitterMoved(int,int)));
 }
 
-SidebarSplitter::SidebarSplitter(Qt::Orientation orientation, QWidget* parent)
-    : QSplitter(orientation, parent), d(new SidebarSplitterPriv)
+SidebarSplitter::SidebarSplitter(Qt::Orientation orientation, QWidget *parent)
+               : QSplitter(orientation, parent), d(new SidebarSplitterPriv)
 {
     connect(this, SIGNAL(splitterMoved(int,int)),
             this, SLOT(slotSplitterMoved(int,int)));
@@ -527,49 +482,38 @@ void SidebarSplitter::saveState(KConfigGroup& group, QString key)
     group.writeEntry(key, QSplitter::saveState().toBase64());
 }
 
-int SidebarSplitter::size(Sidebar* bar) const
+int SidebarSplitter::size(Sidebar *bar) const
 {
     return size(bar->d->stack);
 }
 
-int SidebarSplitter::size(QWidget* widget) const
+int SidebarSplitter::size(QWidget *widget) const
 {
     int index = indexOf(widget);
-
     if (index == -1)
-    {
         return -1;
-    }
 
     return sizes()[index];
 }
 
-void SidebarSplitter::setSize(Sidebar* bar, int size)
+void SidebarSplitter::setSize(Sidebar *bar, int size)
 {
     setSize(bar->d->stack, size);
 }
 
-void SidebarSplitter::setSize(QWidget* widget, int size)
+void SidebarSplitter::setSize(QWidget *widget, int size)
 {
     int index = indexOf(widget);
-
     if (index == -1)
-    {
         return;
-    }
 
     // special case: Use minimum size hint
     if (size == -1)
     {
         if (orientation() == Qt::Horizontal)
-        {
             size = widget->minimumSizeHint().width();
-        }
-
         if (orientation() == Qt::Vertical)
-        {
             size = widget->minimumSizeHint().height();
-        }
     }
 
     QList<int> sizeList = sizes();
@@ -592,11 +536,10 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     // and the one between index and index+1
 
     QList<int> sizeList = sizes();
-
     // Is there a sidebar with size 0 before index
     if (index > 0 && sizeList[index-1] == 0)
     {
-        QWidget* w = widget(index-1);
+        QWidget *w = widget(index-1);
         foreach(Sidebar *sidebar, d->sidebars)
         {
             if (w == sidebar->d->stack)
@@ -606,7 +549,6 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
                     sidebar->setTab(sidebar->d->activeTab, false);
                     sidebar->shrink();
                 }
-
                 break;
             }
         }
@@ -615,7 +557,7 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     // Is there a sidebar with size 0 after index?
     if (sizeList[index] == 0)
     {
-        QWidget* w = widget(index);
+        QWidget *w = widget(index);
         foreach(Sidebar *sidebar, d->sidebars)
         {
             if (w == sidebar->d->stack)
@@ -625,7 +567,6 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
                     sidebar->setTab(sidebar->d->activeTab, false);
                     sidebar->shrink();
                 }
-
                 break;
             }
         }

@@ -54,17 +54,17 @@ public:
         JPEG2000LossLess         = 0;
     }
 
-    QGridLayout*  JPEG2000Grid;
+    QGridLayout  *JPEG2000Grid;
 
-    QLabel*       labelJPEG2000compression;
+    QLabel       *labelJPEG2000compression;
 
-    QCheckBox*    JPEG2000LossLess;
+    QCheckBox    *JPEG2000LossLess;
 
-    KIntNumInput* JPEG2000compression;
+    KIntNumInput *JPEG2000compression;
 };
 
-JP2KSettings::JP2KSettings(QWidget* parent)
-    : QWidget(parent), d(new JP2KSettingsPriv)
+JP2KSettings::JP2KSettings(QWidget *parent)
+            : QWidget(parent), d(new JP2KSettingsPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -81,14 +81,14 @@ JP2KSettings::JP2KSettings(QWidget* parent)
     d->labelJPEG2000compression = new QLabel(i18n("JPEG 2000 quality:"), this);
 
     d->JPEG2000compression->setWhatsThis( i18n("<p>The quality value for JPEG 2000 images:</p>"
-                                          "<p><b>1</b>: low quality (high compression and small "
-                                          "file size)<br/>"
-                                          "<b>50</b>: medium quality<br/>"
-                                          "<b>75</b>: good quality (default)<br/>"
-                                          "<b>100</b>: high quality (no compression and "
-                                          "large file size)</p>"
-                                          "<p><b>Note: JPEG 2000 is not a lossless image "
-                                          "compression format when you use this setting.</b></p>"));
+                                               "<p><b>1</b>: low quality (high compression and small "
+                                               "file size)<br/>"
+                                               "<b>50</b>: medium quality<br/>"
+                                               "<b>75</b>: good quality (default)<br/>"
+                                               "<b>100</b>: high quality (no compression and "
+                                               "large file size)</p>"
+                                               "<p><b>Note: JPEG 2000 is not a lossless image "
+                                               "compression format when you use this setting.</b></p>"));
 
     d->JPEG2000Grid->addWidget(d->JPEG2000LossLess,         0, 0, 1, 2);
     d->JPEG2000Grid->addWidget(d->labelJPEG2000compression, 1, 0, 1, 2);

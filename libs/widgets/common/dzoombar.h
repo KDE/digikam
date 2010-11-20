@@ -71,7 +71,7 @@ public:
     void setZoomMinusAction(QAction* action);
 
     void triggerZoomTrackerToolTip();
-
+    
     static int    sizeFromZoom(double zoom, double zmin, double zmax);
     static double zoomFromSize(int size, double zmin, double zmax);
 

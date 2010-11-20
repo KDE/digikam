@@ -67,8 +67,8 @@ public:
     KSqueezedTextLabel* textLabel;
 };
 
-StatusProgressBar::StatusProgressBar(QWidget* parent)
-    : QStackedWidget(parent), d(new StatusProgressBarPriv)
+StatusProgressBar::StatusProgressBar(QWidget *parent)
+                 : QStackedWidget(parent), d(new StatusProgressBarPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);

@@ -44,14 +44,14 @@ typedef QPair<int, int> YearMonth;
 
 namespace AlbumRoot
 {
-enum Type
-{
-    // Keep values constant
-    UndefinedType   = 0,
-    VolumeHardWired = 1,
-    VolumeRemovable = 2,
-    Network         = 3
-};
+    enum Type
+    {
+        // Keep values constant
+        UndefinedType   = 0,
+        VolumeHardWired = 1,
+        VolumeRemovable = 2,
+        Network         = 3
+    };
 }
 
 /**
@@ -84,10 +84,7 @@ public:
 
     typedef QList<AlbumInfo> List;
 
-    bool isNull() const
-    {
-        return id == 0;
-    }
+    bool isNull() const { return id == 0; }
 
     int     id;
     int     albumRootId;
@@ -121,10 +118,7 @@ public:
 
     typedef QList<TagInfo> List;
 
-    bool isNull() const
-    {
-        return id == 0;
-    }
+    bool isNull() const { return id == 0; }
 
     int     id;
     int     pid;
@@ -141,23 +135,23 @@ public:
 
 namespace DatabaseSearch
 {
-enum Type
-{
-    UndefinedType,
-    KeywordSearch,
-    AdvancedSearch,
-    LegacyUrlSearch,
-    TimeLineSearch,
-    HaarSearch,
-    MapSearch,
-    DuplicatesSearch
-};
+    enum Type
+    {
+        UndefinedType,
+        KeywordSearch,
+        AdvancedSearch,
+        LegacyUrlSearch,
+        TimeLineSearch,
+        HaarSearch,
+        MapSearch,
+        DuplicatesSearch
+    };
 
-enum HaarSearchType
-{
-    HaarImageSearch,
-    HaarSketchSearch
-};
+    enum HaarSearchType
+    {
+        HaarImageSearch,
+        HaarSketchSearch
+    };
 }
 
 /**
@@ -173,10 +167,7 @@ public:
 
     typedef QList<SearchInfo> List;
 
-    bool isNull() const
-    {
-        return id == 0;
-    }
+    bool isNull() const { return id == 0; }
 
     int                  id;
     QString              name;
@@ -198,10 +189,7 @@ public:
 
     AlbumShortInfo() : id(0), albumRootId(0) {};
 
-    bool isNull() const
-    {
-        return id == 0;
-    }
+    bool isNull() const { return id == 0; }
 
     int     id;
     QString relativePath;
@@ -214,10 +202,7 @@ public:
 
     TagShortInfo() : id(0), pid(0) {};
 
-    bool isNull() const
-    {
-        return id == 0;
-    }
+    bool isNull() const { return id == 0; }
 
     int     id;
     int     pid;
@@ -226,24 +211,24 @@ public:
 
 namespace DatabaseItem
 {
-enum Status
-{
-    // Keep values constant
-    UndefinedStatus = 0,
-    Visible         = 1,
-    Hidden          = 2,
-    Removed         = 3
-};
+    enum Status
+    {
+        // Keep values constant
+        UndefinedStatus = 0,
+        Visible         = 1,
+        Hidden          = 2,
+        Removed         = 3
+    };
 
-enum Category
-{
-    // Keep values constant
-    UndefinedCategory = 0,
-    Image             = 1,
-    Video             = 2,
-    Audio             = 3,
-    Other             = 4
-};
+    enum Category
+    {
+        // Keep values constant
+        UndefinedCategory = 0,
+        Image             = 1,
+        Video             = 2,
+        Audio             = 3,
+        Other             = 4
+    };
 }
 
 class ItemShortInfo
@@ -252,10 +237,7 @@ public:
 
     ItemShortInfo() : id(0), albumID(0), albumRootID(0) {};
 
-    bool isNull() const
-    {
-        return id == 0;
-    }
+    bool isNull() const { return id == 0; }
 
     qlonglong id;
     QString   itemName;
@@ -273,10 +255,7 @@ public:
           category(DatabaseItem::UndefinedCategory), fileSize(0)
     {};
 
-    bool isNull() const
-    {
-        return id == 0;
-    }
+    bool isNull() const { return id == 0; }
 
     qlonglong              id;
     int                    albumID;
@@ -290,25 +269,25 @@ public:
 
 namespace DatabaseComment
 {
-enum Type
-{
-    // Keep values constant
-    /// UndefinedType: Shall never appear in the database
-    UndefinedType   = 0,
-    /**
-     *  Comment: The default - a normal comment
-     *  This is what the user in digikam edits as the comment.
-     *  It is mapped to and from the JFIF comment,
-     *  the EXIF user comment, the IPTC Caption,
-     *  Dublin Core and Photoshop Description.
-     */
-    Comment         = 1,
-    /// Headline: as with IPTC or Photoshop
-    Headline        = 2,
-    /// Title: as with Dublin Core Title, Photoshop Title, IPTC Object Name
-    Title           = 3
-    // Feel free to add here any more types that you need!
-};
+    enum Type
+    {
+        // Keep values constant
+        /// UndefinedType: Shall never appear in the database
+        UndefinedType   = 0,
+        /**
+         *  Comment: The default - a normal comment
+         *  This is what the user in digikam edits as the comment.
+         *  It is mapped to and from the JFIF comment,
+         *  the EXIF user comment, the IPTC Caption,
+         *  Dublin Core and Photoshop Description.
+         */
+        Comment         = 1,
+        /// Headline: as with IPTC or Photoshop
+        Headline        = 2,
+        /// Title: as with Dublin Core Title, Photoshop Title, IPTC Object Name
+        Title           = 3
+        // Feel free to add here any more types that you need!
+    };
 }
 
 class CommentInfo
@@ -317,10 +296,7 @@ public:
 
     CommentInfo() : id(-1), imageId(-1), type(DatabaseComment::UndefinedType) {};
 
-    bool isNull() const
-    {
-        return id == -1;
-    }
+    bool isNull() const { return id == -1; }
 
     int                   id;
     qlonglong             imageId;
@@ -337,10 +313,7 @@ public:
 
     CopyrightInfo() : id(-1) {};
 
-    bool isNull() const
-    {
-        return id == -1;
-    }
+    bool isNull() const { return id == -1; }
 
     qlonglong id;
     QString   property;

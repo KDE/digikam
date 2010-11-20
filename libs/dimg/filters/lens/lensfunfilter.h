@@ -55,7 +55,7 @@ public:
         lensModel       = QString();
     };
 
-    ~LensFunContainer() {};
+    ~LensFunContainer(){};
 
 public:
 

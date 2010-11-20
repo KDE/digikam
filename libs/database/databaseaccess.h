@@ -72,12 +72,12 @@ public:
     /**
       * Retrieve a pointer to the album database
       */
-    AlbumDB* db() const;
+    AlbumDB *db() const;
 
     /**
       * Retrieve a pointer to the database backend
       */
-    DatabaseBackend* backend() const;
+    DatabaseBackend *backend() const;
 
     /**
       * Returns the error message for the last error that occurred,
@@ -114,7 +114,7 @@ public:
       * If the parameters were not changed, this method has no effect.
       * @returns if the database is ready for use
       */
-    static bool checkReadyForUse(InitializationObserver* observer = 0);
+    static bool checkReadyForUse(InitializationObserver *observer = 0);
 
     /**
       * Clean up the database access.
@@ -126,15 +126,15 @@ public:
     /**
       * Return the ImageInfoCache. This object is not for public use outside libs/database/
       */
-    ImageInfoCache* imageInfoCache() const;
+    ImageInfoCache *imageInfoCache() const;
 
     /**
       * Return the DatabaseWatch.
       */
-    static DatabaseWatch* databaseWatch();
+    static DatabaseWatch *databaseWatch();
 
 
-    static void initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler);
+    static void initDatabaseErrorHandler(DatabaseErrorHandler *errorhandler);
     /**
       * Set the "last error" message. This method is not for public use.
       */
@@ -162,7 +162,7 @@ public:
      *  DatabaseAccess.
      */
     DatabaseAccessUnlock();
-    DatabaseAccessUnlock(DatabaseAccess* access);
+    DatabaseAccessUnlock(DatabaseAccess *access);
     ~DatabaseAccessUnlock();
 
 private:

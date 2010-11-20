@@ -52,22 +52,22 @@ public:
     {
     }
 
-    QAction* newAction;
-    QAction* editAction;
+    QAction *newAction;
+    QAction *editAction;
 
 };
 
-NormalSearchTreeView::NormalSearchTreeView(QWidget* parent,
-        SearchModel* searchModel,
-        SearchModificationHelper* searchModificationHelper) :
+NormalSearchTreeView::NormalSearchTreeView(QWidget *parent,
+                SearchModel *searchModel,
+                SearchModificationHelper *searchModificationHelper) :
     EditableSearchTreeView(parent, searchModel, searchModificationHelper),
     d(new NormalSearchTreeViewPriv)
 {
 
     d->newAction = new QAction(SmallIcon("document-new"),
-                               i18nc("Create new search", "New..."), this);
+                                     i18nc("Create new search", "New..."), this);
     d->editAction = new QAction(SmallIcon("edit-find"),
-                                i18nc("Edit selected search", "Edit..."), this);
+                                     i18nc("Edit selected search", "Edit..."), this);
 
 }
 
@@ -76,8 +76,8 @@ NormalSearchTreeView::~NormalSearchTreeView()
     delete d;
 }
 
-void NormalSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
-        Album* album)
+void NormalSearchTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh,
+                                         Album *album)
 {
 
     cmh.addAction(d->newAction);
@@ -85,18 +85,18 @@ void NormalSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
 
     EditableSearchTreeView::addCustomContextMenuActions(cmh, album);
 
-    SAlbum* salbum = dynamic_cast<SAlbum*> (album);
+    SAlbum *salbum = dynamic_cast<SAlbum*> (album);
 
     d->editAction->setEnabled(salbum);
     cmh.addAction(d->editAction);
 
 }
 
-void NormalSearchTreeView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
+void NormalSearchTreeView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
 
-    Album* a = album;
-    SAlbum* salbum = dynamic_cast<SAlbum*> (a);
+    Album *a = album;
+    SAlbum *salbum = dynamic_cast<SAlbum*> (a);
 
     if (action == d->newAction && salbum)
     {

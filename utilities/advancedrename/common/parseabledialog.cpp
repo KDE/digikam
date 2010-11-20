@@ -61,7 +61,7 @@ public:
 };
 
 ParseableDialog::ParseableDialog(Parseable* parent)
-    : KDialog(0), d(new ParseableDialogPriv)
+               : KDialog(0), d(new ParseableDialogPriv)
 {
     d->dialogTitle       = new QLabel(this);
     d->dialogDescription = new QLabel(this);

@@ -54,25 +54,22 @@ public:
         job         = 0;
     }
 
-    KIO::TransferJob*  job;
+    KIO::TransferJob  *job;
 };
 
 ImageInfoJob::ImageInfoJob()
-    : d(new ImageInfoJobPriv)
+            : d(new ImageInfoJobPriv)
 {
 }
 
 ImageInfoJob::~ImageInfoJob()
 {
     if (d->job)
-    {
-        d->job->kill();
-    }
-
+       d->job->kill();
     delete d;
 }
 
-void ImageInfoJob::allItemsFromAlbum(Album* album)
+void ImageInfoJob::allItemsFromAlbum(Album *album)
 {
     if (d->job)
     {
@@ -81,9 +78,7 @@ void ImageInfoJob::allItemsFromAlbum(Album* album)
     }
 
     if (!album)
-    {
         return;
-    }
 
     ImageLister lister;
     d->job = lister.startListJob(album->databaseUrl());
@@ -125,9 +120,7 @@ void ImageInfoJob::slotResult(KJob* job)
 void ImageInfoJob::slotData(KIO::Job*, const QByteArray& data)
 {
     if (data.isEmpty())
-    {
         return;
-    }
 
     ImageInfoList itemsList;
     QDataStream   ds(data);

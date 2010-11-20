@@ -46,7 +46,7 @@ namespace Digikam
 {
 
 AntiVignetting::AntiVignetting(QObject* parent)
-    : BatchTool("AntiVignetting", EnhanceTool, parent)
+              : BatchTool("AntiVignetting", EnhanceTool, parent)
 {
     setToolTitle(i18n("Anti-Vignetting"));
     setToolDescription(i18n("A tool to remove/add vignetting to photograph."));
@@ -76,7 +76,7 @@ BatchToolSettings AntiVignetting::defaultSettings()
     prm.insert("outerradius",   (double)defaultPrm.outerradius);
     prm.insert("xshift",        (double)defaultPrm.xshift);
     prm.insert("yshift",        (double)defaultPrm.yshift);
-
+    
     return prm;
 }
 
@@ -111,10 +111,7 @@ void AntiVignetting::slotSettingsChanged()
 
 bool AntiVignetting::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     AntiVignettingContainer prm;
     prm.addvignetting = settings()["addvignetting"].toBool();

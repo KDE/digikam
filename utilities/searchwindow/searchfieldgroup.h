@@ -58,17 +58,17 @@ class SearchFieldGroup : public QWidget
 
 public:
 
-    SearchFieldGroup(SearchGroup* parent);
+    SearchFieldGroup(SearchGroup *parent);
 
-    void addField(SearchField* field);
-    void setLabel(SearchFieldGroupLabel* label);
+    void addField(SearchField *field);
+    void setLabel(SearchFieldGroupLabel *label);
 
-    SearchField* fieldForName(const QString& fieldName);
+    SearchField *fieldForName(const QString& fieldName);
     void write(SearchXmlWriter& writer);
 
     void reset();
 
-    void markField(SearchField* field);
+    void markField(SearchField *field);
     void clearMarkedFields();
     QList<QRect> areaOfMarkedFields() const;
 
@@ -83,9 +83,9 @@ protected Q_SLOTS:
 protected:
 
     QList<SearchField*>    m_fields;
-    QGridLayout*           m_layout;
-    SearchFieldGroupLabel* m_label;
-    VisibilityController*  m_controller;
+    QGridLayout           *m_layout;
+    SearchFieldGroupLabel *m_label;
+    VisibilityController  *m_controller;
 
     QSet<SearchField*>     m_markedFields;
 };
@@ -96,7 +96,7 @@ class SearchFieldGroupLabel : public QWidget
 
 public:
 
-    SearchFieldGroupLabel(QWidget* parent);
+    SearchFieldGroupLabel(QWidget *parent);
 
     void setTitle(const QString& title);
 
@@ -112,8 +112,8 @@ Q_SIGNALS:
 protected:
 
     QString      m_title;
-    RClickLabel* m_titleLabel;
-    QLabel*      m_expandLabel;
+    RClickLabel *m_titleLabel;
+    QLabel      *m_expandLabel;
 };
 
 } // namespace Digikam

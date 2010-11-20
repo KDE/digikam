@@ -60,7 +60,7 @@ public:
 };
 
 CaptionEdit::CaptionEdit(QWidget* parent)
-    : KVBox(parent), d(new CaptionEditPriv)
+           : KVBox(parent), d(new CaptionEditPriv)
 {
 
     d->altLangStrEdit = new AltLangStrEdit(this);
@@ -122,7 +122,6 @@ void CaptionEdit::slotAddValue(const QString& lang, const QString& text)
         d->authorEdit->setText(val.author);
         d->authorEdit->blockSignals(false);
     }
-
     d->lastDeletedLanguage.clear();
 
     d->captionsValues.insert(lang, val);
@@ -171,7 +170,6 @@ CaptionsMap& CaptionEdit::values()
 void CaptionEdit::slotAuthorChanged(const QString& text)
 {
     CaptionValues captionValues = d->captionsValues.value(d->altLangStrEdit->currentLanguageCode());
-
     if (text != captionValues.author)
     {
         d->altLangStrEdit->addCurrent();

@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 Restoration::Restoration(QObject* parent)
-    : BatchTool("Restoration", EnhanceTool, parent), m_cimgIface(0)
+           : BatchTool("Restoration", EnhanceTool, parent), m_cimgIface(0)
 {
     setToolTitle(i18n("Restoration"));
     setToolDescription(i18n("A tool to restore photographs based on Greystoration."));
@@ -105,17 +105,14 @@ void Restoration::slotSettingsChanged()
 
 bool Restoration::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     int type = settings()["RestorationMethod"].toInt();
 
     GreycstorationContainer settings;
     settings.setRestorationDefaultSettings();
 
-    switch (type)
+    switch(type)
     {
         case ReduceUniformNoise:
         {
@@ -149,10 +146,7 @@ bool Restoration::toolOperations()
     m_cimgIface->setup();
     m_cimgIface->startFilterDirectly();
 
-    if (isCancelled())
-    {
-        return false;
-    }
+    if (isCancelled()) return false;
 
     image().putImageData(m_cimgIface->getTargetImage().bits());
     delete m_cimgIface;
@@ -164,10 +158,7 @@ bool Restoration::toolOperations()
 void Restoration::cancel()
 {
     if (m_cimgIface)
-    {
         m_cimgIface->cancelFilter();
-    }
-
     BatchTool::cancel();
 }
 

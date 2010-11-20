@@ -78,7 +78,7 @@ public:
         blackFrameListView(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+        {}
 
     static const QString configGroupName;
     static const QString configLastBlackFrameFileEntry;
@@ -103,8 +103,8 @@ const QString HotPixelsTool::HotPixelsToolPriv::configFilterMethodEntry("Filter 
 // --------------------------------------------------------
 
 HotPixelsTool::HotPixelsTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new HotPixelsToolPriv)
+             : EditorToolThreaded(parent),
+               d(new HotPixelsToolPriv)
 {
     setObjectName("hotpixels");
     setToolName(i18n("Hot Pixels"));
@@ -120,7 +120,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    QLabel* filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
+    QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
     d->filterMethodCombo      = new RComboBox(d->gboxSettings->plainPage());
     d->filterMethodCombo->addItem(i18nc("average filter mode", "Average"));
     d->filterMethodCombo->addItem(i18nc("linear filter mode", "Linear"));
@@ -220,7 +220,6 @@ void HotPixelsTool::slotResetSettings()
 void HotPixelsTool::slotAddBlackFrame()
 {
     KUrl url = ImageDialog::getImageURL(kapp->activeWindow(), d->blackFrameURL, i18n("Select Black Frame Image"));
-
     if (!url.isEmpty())
     {
         // Load the selected file and insert into the list.
@@ -251,8 +250,8 @@ void HotPixelsTool::prepareEffect()
 
         if (area.contains( hp.rect ))
         {
-            hp.rect.moveTopLeft(QPoint( hp.rect.x()-area.x(), hp.rect.y()-area.y() ));
-            hotPixelsRegion.append(hp);
+           hp.rect.moveTopLeft(QPoint( hp.rect.x()-area.x(), hp.rect.y()-area.y() ));
+           hotPixelsRegion.append(hp);
         }
     }
 
@@ -288,9 +287,7 @@ void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& bl
     int i = 0;
 
     for (it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it, ++i)
-    {
-        pointList.setPoint(i, (*it).rect.center());
-    }
+       pointList.setPoint(i, (*it).rect.center());
 
     d->previewWidget->setHighLightPoints(pointList);
 

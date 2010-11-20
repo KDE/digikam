@@ -93,7 +93,7 @@ public:
         decorativeSecondColor = QColor(0, 0, 0);
     };
 
-    ~BorderContainer() {};
+    ~BorderContainer(){};
 
 public:
 

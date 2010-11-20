@@ -66,13 +66,13 @@ struct _Tag
     QString icon;
 };
 
-qlonglong findOrAddImage(DatabaseBackend* backend, int dirid, const QString& name,
+qlonglong findOrAddImage(DatabaseBackend *backend, int dirid, const QString& name,
                          const QString& caption)
 {
     QList<QVariant> values;
 
     backend->execSql(QString("SELECT id FROM Images WHERE dirid=? AND name=?"),
-                     dirid, name, &values);
+                              dirid, name, &values);
 
     if (!values.isEmpty())
     {
@@ -81,14 +81,14 @@ qlonglong findOrAddImage(DatabaseBackend* backend, int dirid, const QString& nam
 
     QVariant id;
     backend->execSql(QString("INSERT INTO Images (dirid, name, caption) \n "
-                             "VALUES(?, ?, ?);"),
-                     dirid, name, caption, 0, &id);
+                                      "VALUES(?, ?, ?);"),
+                              dirid, name, caption, 0, &id);
 
     return id.toInt();
 }
 
 
-bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, const QString& sql2DBPath)
+bool upgradeDB_Sqlite2ToSqlite3(AlbumDB *albumDB, DatabaseBackend *backend, const QString& sql2DBPath)
 {
     QString libraryPath = QDir::cleanPath(sql2DBPath);
 
@@ -112,9 +112,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
     //DatabaseAccess access;
 
     if (albumDB->getSetting("UpgradedFromSqlite2") == "yes")
-    {
         return true;
-    }
 
     QString dbPath = libraryPath + "/digikam3.db";
 
@@ -136,7 +134,6 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
 
     AlbumDB_Sqlite2 db2;
     db2.setDBPath( dbPath );
-
     if (!db2.isValid())
     {
         kDebug() << "Failed to initialize Old Album Database";
@@ -166,7 +163,6 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
     AlbumMap albumMap;
 
     backend->beginTransaction();
-
     for (QStringList::const_iterator it=values.constBegin(); it!=values.constEnd();)
     {
         _Album album;
@@ -191,10 +187,9 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
         boundValues << album.id << album.url << album.date << album.caption << album.collection;
 
         backend->execSql(QString("INSERT INTO Albums (id, url, date, caption, collection) "
-                                 "VALUES(?, ?, ?, ?, ?);"),
-                         boundValues);
+                                          "VALUES(?, ?, ?, ?, ?);"),
+                                  boundValues);
     }
-
     backend->commitTransaction();
 
     // update tags -------------------------------------------------
@@ -207,7 +202,6 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
     TagList tagList;
 
     backend->beginTransaction();
-
     for (QStringList::const_iterator it=values.constBegin(); it!=values.constEnd();)
     {
         _Tag tag;
@@ -224,10 +218,9 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
         tagList.append(tag);
 
         backend->execSql(QString("INSERT INTO Tags (id, pid, name) "
-                                 "VALUES(?, ?, ?);"),
-                         tag.id, tag.pid, tag.name);
+                                          "VALUES(?, ?, ?);"),
+                                  tag.id, tag.pid, tag.name);
     }
-
     backend->commitTransaction();
 
     // update images -------------------------------------------------
@@ -237,7 +230,6 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
                 &values);
 
     backend->beginTransaction();
-
     for (QStringList::const_iterator it=values.constBegin(); it!=values.constEnd();)
     {
         int dirid   = (*it).toInt();
@@ -249,7 +241,6 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
 
         findOrAddImage(backend, dirid, name, caption);
     }
-
     backend->commitTransaction();
 
     // update imagetags -----------------------------------------------
@@ -258,7 +249,6 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
     db2.execSql("SELECT dirid, name, tagid FROM ImageTags;",
                 &values);
     backend->beginTransaction();
-
     for (QStringList::const_iterator it=values.constBegin(); it!=values.constEnd();)
     {
         int dirid = (*it).toInt();
@@ -273,52 +263,43 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
         qlonglong imageid = findOrAddImage(backend, dirid, name, QString());
 
         backend->execSql(QString("INSERT INTO ImageTags VALUES(?, ?)"),
-                         imageid, tagid);
+                                  imageid, tagid);
     }
-
     backend->commitTransaction();
 
     // update album icons -------------------------------------------------
 
     backend->beginTransaction();
-
     for (AlbumList::const_iterator it = albumList.constBegin(); it != albumList.constEnd();
          ++it)
     {
         _Album album = *it;
 
         if (album.icon.isEmpty())
-        {
             continue;
-        }
 
         qlonglong imageid = findOrAddImage(backend, album.id, album.icon, QString());
 
         backend->execSql(QString("UPDATE Albums SET icon=? WHERE id=?"),
-                         imageid, album.id);
+                                  imageid, album.id);
     }
-
     backend->commitTransaction();
 
     // -- update tag icons ---------------------------------------------------
 
     backend->beginTransaction();
-
     for (TagList::const_iterator it = tagList.constBegin(); it != tagList.constEnd(); ++it)
     {
         _Tag tag = *it;
 
         if (tag.icon.isEmpty())
-        {
             continue;
-        }
 
         QFileInfo fi(tag.icon);
-
         if (fi.isRelative())
         {
             backend->execSql(QString("UPDATE Tags SET iconkde=? WHERE id=?"),
-                             tag.icon, tag.id);
+                                      tag.icon, tag.id);
             continue;
         }
 
@@ -329,7 +310,6 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
         QString name = fi.fileName();
 
         AlbumMap::iterator it1 = albumMap.find(url);
-
         if (it1 == albumMap.end())
         {
             kDebug() << "Could not find album with url: " << url;
@@ -342,10 +322,9 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
         qlonglong imageid = findOrAddImage(backend, dirid, name, QString());;
 
         backend->execSql(QString("UPDATE Tags SET icon=? WHERE id=?"),
-                         imageid, tag.id);
+                                  imageid, tag.id);
 
     }
-
     backend->commitTransaction();
 
     // -- Remove invalid entries ----------------------------------------

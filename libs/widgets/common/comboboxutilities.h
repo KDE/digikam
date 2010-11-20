@@ -60,9 +60,9 @@ public:
      * want actually to use a different widget.
      */
 
-    ProxyLineEdit(QWidget* parent = 0);
+    ProxyLineEdit(QWidget *parent = 0);
     /// After constructing, set the actual widget here
-    virtual void setWidget(QWidget* widget);
+    virtual void setWidget(QWidget *widget);
 
 protected:
 
@@ -104,7 +104,7 @@ public:
      * if the widget does not accept() them.
      */
 
-    ProxyClickLineEdit(QWidget* parent = 0);
+    ProxyClickLineEdit(QWidget *parent = 0);
 
 Q_SIGNALS:
 
@@ -112,7 +112,7 @@ Q_SIGNALS:
 
 protected:
 
-    void mouseReleaseEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent *event);
 };
 
 // -------------------------------------------------------------------------
@@ -128,7 +128,7 @@ public:
      * based on QModelIndex.
      */
 
-    ModelIndexBasedComboBox(QWidget* parent = 0);
+    ModelIndexBasedComboBox(QWidget *parent = 0);
 
     virtual void hidePopup();
     virtual void showPopup();
@@ -159,7 +159,7 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a view.
      */
-    StayPoppedUpComboBox(QWidget* parent = 0);
+    StayPoppedUpComboBox(QWidget *parent = 0);
 
 protected:
 
@@ -167,16 +167,16 @@ protected:
      *  Send the given event to the viewportEvent() method of m_view.
      *  This method is protected for a usual QAbstractItemView.
      */
-    virtual void sendViewportEventToView(QEvent* e) = 0;
+    virtual void sendViewportEventToView(QEvent *e) = 0;
 
     /** Replace the standard combo box list view with the given view.
      *  The view will be set as the view of the combo box
      *  (including re-parenting) and be stored in the m_view variable */
-    void installView(QAbstractItemView* view);
+    void installView(QAbstractItemView *view);
 
-    virtual bool eventFilter(QObject* watched, QEvent* event);
+    virtual bool eventFilter(QObject *watched, QEvent *event);
 
-    QAbstractItemView*   m_view;
+    QAbstractItemView   *m_view;
 };
 
 // -------------------------------------------------------------------------
@@ -194,18 +194,18 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a QTreeView.
      */
-    TreeViewComboBox(QWidget* parent = 0);
+    TreeViewComboBox(QWidget *parent = 0);
 
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model. */
     virtual void installView();
 
     /** Returns the QTreeView of this class. Valid after installView() has been called */
-    QTreeView* view() const;
+    QTreeView *view() const;
 
 protected:
 
-    virtual void sendViewportEventToView(QEvent* e);
+    virtual void sendViewportEventToView(QEvent *e);
 };
 
 // -------------------------------------------------------------------------
@@ -223,18 +223,18 @@ public:
      *  Construct the object, call setModel() with an appropriate
      *  QAbstractItemModel, then call installView().
      */
-    ListViewComboBox(QWidget* parent = 0);
+    ListViewComboBox(QWidget *parent = 0);
 
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model. */
     virtual void installView();
 
     /** Returns the QTreeView of this class. Valid after installView() has been called */
-    QListView* view() const;
+    QListView *view() const;
 
 protected:
 
-    virtual void sendViewportEventToView(QEvent* e);
+    virtual void sendViewportEventToView(QEvent *e);
 };
 
 // -------------------------------------------------------------------------
@@ -252,7 +252,7 @@ public:
      *  the standard combo box view with a QTreeView.
      */
 
-    TreeViewLineEditComboBox(QWidget* parent = 0);
+    TreeViewLineEditComboBox(QWidget *parent = 0);
 
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model. */
@@ -264,7 +264,7 @@ public:
 
 protected:
 
-    QLineEdit* m_comboLineEdit;
+    QLineEdit *m_comboLineEdit;
 };
 
 } // namespace Digikam

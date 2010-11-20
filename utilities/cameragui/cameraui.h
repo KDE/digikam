@@ -97,12 +97,12 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotDownload(bool onlySelected, bool deleteAfter, Album* pAlbum=0);
+    void slotDownload(bool onlySelected, bool deleteAfter, Album *pAlbum=0);
 
 protected:
 
     void closeEvent(QCloseEvent* e);
-    void moveEvent(QMoveEvent* e);
+    void moveEvent(QMoveEvent *e);
 
 private:
 

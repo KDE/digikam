@@ -61,11 +61,11 @@ namespace Digikam
 */
 class KDateEdit : public KComboBox
 {
-    Q_OBJECT
+  Q_OBJECT
 
-public:
+  public:
 
-    explicit KDateEdit(QWidget* parent=0, const char* name=0);
+    explicit KDateEdit(QWidget *parent=0, const char *name=0);
     virtual ~KDateEdit();
 
     /**
@@ -89,14 +89,14 @@ public:
 
     virtual void showPopup();
 
-Q_SIGNALS:
+  Q_SIGNALS:
     /**
       This signal is emitted whenever the user modifies the date.
       The passed date can be invalid.
      */
     void dateChanged( const QDate& date );
 
-public Q_SLOTS:
+  public Q_SLOTS:
     /**
       Sets the date.
 
@@ -105,14 +105,14 @@ public Q_SLOTS:
      */
     void setDate( const QDate& date );
 
-protected Q_SLOTS:
+  protected Q_SLOTS:
 
     void lineEnterPressed();
     void slotTextChanged( const QString& );
     void dateEntered( const QDate& );
     void dateSelected( const QDate& );
 
-protected:
+  protected:
 
     virtual bool eventFilter( QObject*, QEvent* );
     virtual void mousePressEvent( QMouseEvent* );
@@ -136,12 +136,12 @@ protected:
      */
     void setupKeywords();
 
-private:
+  private:
 
     QDate parseDate( bool* = 0 ) const;
     void updateView();
 
-private:
+  private:
 
     bool                mReadOnly;
     bool                mTextChanged;
@@ -151,7 +151,7 @@ private:
 
     QMap<QString, int>  mKeywordMap;
 
-    KDatePickerPopup*   mPopup;
+    KDatePickerPopup   *mPopup;
 };
 
 }  // namespace Digikam

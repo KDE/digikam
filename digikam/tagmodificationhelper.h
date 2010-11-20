@@ -79,8 +79,8 @@ public Q_SLOTS:
      * @param iconName an optional name for the icon to suggest for the new tag
      * @return new tag album or 0 if not created
      */
-    TAlbum* slotTagNew(TAlbum* parent, const QString& title = QString(),
-                       const QString& iconName = QString());
+    TAlbum* slotTagNew(TAlbum* parent, const QString &title = QString(),
+                       const QString &iconName = QString());
 
     /**
      * Same as above, but this slot is using the parent TAlbum set previously

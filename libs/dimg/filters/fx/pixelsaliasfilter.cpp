@@ -45,8 +45,8 @@ namespace Digikam
 
 /** Function to perform pixel antialiasing with 8 bits/color/pixel images. This method is used to smooth target
     image in transformation  method like free rotation or shear tool. */
-void PixelsAliasFilter::pixelAntiAliasing(uchar* data, int Width, int Height, double X, double Y,
-        uchar* A, uchar* R, uchar* G, uchar* B)
+void PixelsAliasFilter::pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
+                                         uchar *A, uchar *R, uchar *G, uchar *B)
 {
     int nX, nY, j;
     double lfWeightX[2], lfWeightY[2], lfWeight;
@@ -56,22 +56,14 @@ void PixelsAliasFilter::pixelAntiAliasing(uchar* data, int Width, int Height, do
     nY = (int)Y;
 
     if (Y >= 0.0)
-    {
         lfWeightY[0] = 1.0 - (lfWeightY[1] = Y - (double)nY);
-    }
     else
-    {
         lfWeightY[1] = 1.0 - (lfWeightY[0] = -(Y - (double)nY));
-    }
 
     if (X >= 0.0)
-    {
         lfWeightX[0] = 1.0 - (lfWeightX[1] = X - (double)nX);
-    }
     else
-    {
         lfWeightX[1] = 1.0 - (lfWeightX[0] = -(X - (double)nX));
-    }
 
     for (int loopx = 0; loopx <= 1; ++loopx)
     {
@@ -99,9 +91,9 @@ void PixelsAliasFilter::pixelAntiAliasing(uchar* data, int Width, int Height, do
 
 /** Function to perform pixel antialiasing with 16 bits/color/pixel images. This method is used to smooth target
     image in transformation  method like free rotation or shear tool. */
-void PixelsAliasFilter::pixelAntiAliasing16(unsigned short* data, int Width, int Height, double X, double Y,
-        unsigned short* A, unsigned short* R, unsigned short* G,
-        unsigned short* B)
+void PixelsAliasFilter::pixelAntiAliasing16(unsigned short *data, int Width, int Height, double X, double Y,
+                                           unsigned short *A, unsigned short *R, unsigned short *G,
+                                           unsigned short *B)
 {
     int nX, nY, j;
     double lfWeightX[2], lfWeightY[2], lfWeight;
@@ -111,22 +103,14 @@ void PixelsAliasFilter::pixelAntiAliasing16(unsigned short* data, int Width, int
     nY = (int)Y;
 
     if (Y >= 0.0)
-    {
         lfWeightY[0] = 1.0 - (lfWeightY[1] = Y - (double)nY);
-    }
     else
-    {
         lfWeightY[1] = 1.0 - (lfWeightY[0] = -(Y - (double)nY));
-    }
 
     if (X >= 0.0)
-    {
         lfWeightX[0] = 1.0 - (lfWeightX[1] = X - (double)nX);
-    }
     else
-    {
         lfWeightX[1] = 1.0 - (lfWeightX[0] = -(X - (double)nX));
-    }
 
     for (int loopx = 0; loopx <= 1; ++loopx)
     {

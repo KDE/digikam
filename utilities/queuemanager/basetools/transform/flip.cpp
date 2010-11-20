@@ -97,7 +97,7 @@ bool Flip::toolOperations()
 
     if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
-        switch (flip)
+        switch(flip)
         {
             case DImg::HORIZONTAL:
                 return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipHorizontal));
@@ -112,10 +112,7 @@ bool Flip::toolOperations()
         }
     }
 
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     image().flip(flip);
 

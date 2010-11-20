@@ -55,18 +55,18 @@ public:
         hasTouchedXml   = false;
     }
 
-    QScrollArea*         scrollArea;
-    SearchView*          searchView;
-    SearchViewBottomBar* bottomBar;
+    QScrollArea         *scrollArea;
+    SearchView          *searchView;
+    SearchViewBottomBar *bottomBar;
     int                  currentId;
     bool                 hasTouchedXml;
     QString              oldXml;
 };
 
 SearchWindow::SearchWindow()
-    : QWidget(0), d(new SearchWindowPriv)
+            : QWidget(0), d(new SearchWindowPriv)
 {
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
 
     d->scrollArea = new QScrollArea(this);
     d->scrollArea->setWidgetResizable(true);
@@ -142,7 +142,6 @@ void SearchWindow::searchCancel()
         emit searchEdited(d->currentId, d->oldXml);
         d->hasTouchedXml = false;
     }
-
     hide();
 }
 
@@ -152,12 +151,12 @@ void SearchWindow::searchTryout()
     emit searchEdited(d->currentId, search());
 }
 
-void SearchWindow::keyPressEvent(QKeyEvent* e)
+void SearchWindow::keyPressEvent(QKeyEvent *e)
 {
     // Implement keys like in a dialog
     if (!e->modifiers() || (e->modifiers() & Qt::KeypadModifier && e->key() == Qt::Key_Enter))
     {
-        switch (e->key())
+        switch(e->key())
         {
             case Qt::Key_Enter:
             case Qt::Key_Return:

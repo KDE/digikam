@@ -77,13 +77,13 @@ public:
 };
 
 SetupCategory::SetupCategory(QWidget* parent )
-    : QScrollArea(parent), d(new SetupCategoryPriv)
+             : QScrollArea(parent), d(new SetupCategoryPriv)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget *panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QGridLayout* grid = new QGridLayout(panel);
+    QGridLayout *grid = new QGridLayout(panel);
 
     // --------------------------------------------------------
 
@@ -151,13 +151,8 @@ SetupCategory::~SetupCategory()
 
 void SetupCategory::slotDelCategory()
 {
-    QListWidgetItem* item = d->albumCategoryBox->currentItem();
-
-    if (!item)
-    {
-        return;
-    }
-
+    QListWidgetItem *item = d->albumCategoryBox->currentItem();
+    if (!item) return;
     d->albumCategoryBox->takeItem(d->albumCategoryBox->row(item));
     delete item;
 }
@@ -165,11 +160,7 @@ void SetupCategory::slotDelCategory()
 void SetupCategory::slotRepCategory()
 {
     QString newCategory = d->categoryEdit->text();
-
-    if (newCategory.isEmpty())
-    {
-        return;
-    }
+    if (newCategory.isEmpty()) return;
 
     if (!d->albumCategoryBox->selectedItems().isEmpty())
     {
@@ -196,18 +187,12 @@ void SetupCategory::slotCategorySelectionChanged()
 void SetupCategory::slotAddCategory()
 {
     QString newCategory = d->categoryEdit->text();
-
-    if (newCategory.isEmpty())
-    {
-        return;
-    }
+    if (newCategory.isEmpty()) return;
 
     bool found = false;
-
     for (int i = 0 ; i < d->albumCategoryBox->count(); ++i)
     {
-        QListWidgetItem* item = d->albumCategoryBox->item(i);
-
+        QListWidgetItem *item = d->albumCategoryBox->item(i);
         if (newCategory == item->text())
         {
             found = true;
@@ -226,16 +211,13 @@ void SetupCategory::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
-    if (!settings)
-    {
-        return;
-    }
+    if (!settings) return;
 
     QStringList categoryList;
 
     for (int i = 0 ; i < d->albumCategoryBox->count(); ++i)
     {
-        QListWidgetItem* item = d->albumCategoryBox->item(i);
+        QListWidgetItem *item = d->albumCategoryBox->item(i);
         categoryList.append(item->text());
     }
 
@@ -246,11 +228,7 @@ void SetupCategory::applySettings()
 void SetupCategory::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-
-    if (!settings)
-    {
-        return;
-    }
+    if (!settings) return;
 
     d->albumCategoryBox->insertItems(0, settings->getAlbumCategoryNames());
 }

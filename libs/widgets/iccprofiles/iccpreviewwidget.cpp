@@ -46,7 +46,7 @@ namespace Digikam
 {
 
 ICCPreviewWidget::ICCPreviewWidget(QWidget* parent)
-    : KPreviewWidgetBase( parent )
+                : KPreviewWidgetBase( parent )
 {
     QVBoxLayout* mainLayout = new QVBoxLayout;
     QScrollArea* scrollArea = new QScrollArea;

@@ -43,23 +43,21 @@ namespace Digikam
 
 static const char* ExifEntryListToIgnore[] =
 {
-    "GPSInfo",
-    "Iop",
-    "Thumbnail",
-    "SubImage1",
-    "SubImage2",
-    "Image",
-    "Photo",
-    "-1"
+     "GPSInfo",
+     "Iop",
+     "Thumbnail",
+     "SubImage1",
+     "SubImage2",
+     "Image",
+     "Photo",
+     "-1"
 };
 
 MakerNoteWidget::MakerNoteWidget(QWidget* parent, const char* name)
-    : MetadataWidget(parent, name)
+               : MetadataWidget(parent, name)
 {
     for (int i=0 ; QString(ExifEntryListToIgnore[i]) != QString("-1") ; ++i)
-    {
         m_keysFilter << ExifEntryListToIgnore[i];
-    }
 }
 
 MakerNoteWidget::~MakerNoteWidget()
@@ -90,9 +88,7 @@ bool MakerNoteWidget::loadFromURL(const KUrl& url)
             return false;
         }
         else
-        {
             setMetadata(metadata);
-        }
     }
 
     return true;
@@ -101,11 +97,8 @@ bool MakerNoteWidget::loadFromURL(const KUrl& url)
 bool MakerNoteWidget::decodeMetadata()
 {
     DMetadata data = getMetadata();
-
     if (!data.hasExif())
-    {
         return false;
-    }
 
     // Update all metadata contents.
     setMetadataMap(data.getExifTagsDataList(m_keysFilter, true));
@@ -132,9 +125,7 @@ QString MakerNoteWidget::getTagTitle(const QString& key)
     QString title = metadataIface.getExifTagTitle(key.toAscii());
 
     if (title.isEmpty())
-    {
         return key.section('.', -1);
-    }
 
     return title;
 }
@@ -145,9 +136,7 @@ QString MakerNoteWidget::getTagDescription(const QString& key)
     QString desc = metadataIface.getExifTagDescription(key.toAscii());
 
     if (desc.isEmpty())
-    {
         return i18n("No description available");
-    }
 
     return desc;
 }

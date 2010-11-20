@@ -44,25 +44,25 @@
 namespace Digikam
 {
 
-static const char* configGroupDatabase = "Database Settings";
-static const char* configInternalDatabaseServer = "Internal Database Server";
-static const char* configDatabaseType = "Database Type";
-static const char* configDatabaseName = "Database Name";
-static const char* configDatabaseNameThumbnails = "Database Name Thumbnails";
-static const char* configDatabaseHostName = "Database Hostname";
-static const char* configDatabasePort = "Database Port";
-static const char* configDatabaseUsername = "Database Username";
-static const char* configDatabasePassword = "Database Password";
-static const char* configDatabaseConnectOptions = "Database Connectoptions";
+static const char *configGroupDatabase = "Database Settings";
+static const char *configInternalDatabaseServer = "Internal Database Server";
+static const char *configDatabaseType = "Database Type";
+static const char *configDatabaseName = "Database Name";
+static const char *configDatabaseNameThumbnails = "Database Name Thumbnails";
+static const char *configDatabaseHostName = "Database Hostname";
+static const char *configDatabasePort = "Database Port";
+static const char *configDatabaseUsername = "Database Username";
+static const char *configDatabasePassword = "Database Password";
+static const char *configDatabaseConnectOptions = "Database Connectoptions";
 // legacy
-static const char* configDatabaseFilePathEntry = "Database File Path";
-static const char* configAlbumPathEntry = "Album Path";
+static const char *configDatabaseFilePathEntry = "Database File Path";
+static const char *configAlbumPathEntry = "Album Path";
 
-static const char* digikam4db = "digikam4.db";
-static const char* thumbnails_digikamdb = "thumbnails-digikam.db";
+static const char *digikam4db = "digikam4.db";
+static const char *thumbnails_digikamdb = "thumbnails-digikam.db";
 
 DatabaseParameters::DatabaseParameters()
-    : port(-1)
+                  : port(-1)
 {
 }
 
@@ -75,15 +75,15 @@ DatabaseParameters::DatabaseParameters(const QString& type,
                                        const QString& userName,
                                        const QString& password,
                                        const QString& databaseNameThumbnails)
-    : databaseType(type), databaseName(databaseName),
-      connectOptions(connectOptions), hostName(hostName),
-      port(port), internalServer(internalServer), userName(userName),
-      password(password), databaseNameThumbnails(databaseNameThumbnails)
+                  : databaseType(type), databaseName(databaseName),
+                    connectOptions(connectOptions), hostName(hostName),
+                    port(port), internalServer(internalServer), userName(userName),
+                    password(password), databaseNameThumbnails(databaseNameThumbnails)
 {
 }
 
 DatabaseParameters::DatabaseParameters(const KUrl& url)
-    : port(-1), internalServer(false)
+                  : port(-1), internalServer(false)
 {
     databaseType   = url.queryItem("databaseType");
     databaseName   = url.queryItem("databaseName");
@@ -91,19 +91,11 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
     connectOptions = url.queryItem("connectOptions");
     hostName       = url.queryItem("hostName");
     QString queryPort = url.queryItem("port");
-
     if (!queryPort.isNull())
-    {
         port = queryPort.toInt();
-    }
-
     QString queryServer = url.queryItem("internalServer");
-
     if (!queryServer.isNull())
-    {
         internalServer = (queryServer == "true");
-    }
-
     userName       = url.queryItem("userName");
     password       = url.queryItem("password");
 }
@@ -129,10 +121,7 @@ bool DatabaseParameters::operator!=(const DatabaseParameters& other) const
 bool DatabaseParameters::isValid() const
 {
     if (isSQLite())
-    {
         return !databaseName.isEmpty();
-    }
-
     return false;
 }
 
@@ -159,10 +148,7 @@ QString DatabaseParameters::MySQLDatabaseType()
 QString DatabaseParameters::SQLiteDatabaseFile() const
 {
     if (isSQLite())
-    {
         return databaseName;
-    }
-
     return QString();
 }
 
@@ -173,7 +159,7 @@ QByteArray DatabaseParameters::hash() const
     md5.update(databaseName.toUtf8());
     md5.update(connectOptions.toUtf8());
     md5.update(hostName.toUtf8());
-    md5.update((const char*)&port, sizeof(int));
+    md5.update((const char *)&port, sizeof(int));
     md5.update(userName.toUtf8());
     md5.update(password.toUtf8());
     return md5.hexDigest();
@@ -189,15 +175,10 @@ DatabaseParameters DatabaseParameters::parametersFromConfig(KSharedConfig::Ptr c
 void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
 {
     KConfigGroup group;
-
     if (configGroup.isNull())
-    {
         group = config->group(configGroupDatabase);
-    }
     else
-    {
         group = config->group(configGroup);
-    }
 
     databaseType             = group.readEntry(configDatabaseType, QString());
     databaseName             = group.readEntry(configDatabaseName, QString());
@@ -220,48 +201,32 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
 void DatabaseParameters::setDatabasePath(const QString& folderOrFileOrName)
 {
     if (isSQLite())
-    {
         databaseName = databaseFileSQLite(folderOrFileOrName);
-    }
     else
-    {
         databaseName = folderOrFileOrName;
-    }
 }
 
 void DatabaseParameters::setThumbsDatabasePath(const QString& folderOrFileOrName)
 {
     if (isSQLite())
-    {
         databaseNameThumbnails = thumbnailDatabaseFileSQLite(folderOrFileOrName);
-    }
     else
-    {
         databaseNameThumbnails = folderOrFileOrName;
-    }
 }
 
-QString DatabaseParameters::databaseFileSQLite(const QString& folderOrFile)
+QString DatabaseParameters::databaseFileSQLite(const QString &folderOrFile)
 {
     QFileInfo fileInfo(folderOrFile);
-
     if (fileInfo.isDir())
-    {
         return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + digikam4db);
-    }
-
     return QDir::cleanPath(folderOrFile);
 }
 
-QString DatabaseParameters::thumbnailDatabaseFileSQLite(const QString& folderOrFile)
+QString DatabaseParameters::thumbnailDatabaseFileSQLite(const QString &folderOrFile)
 {
     QFileInfo fileInfo(folderOrFile);
-
     if (fileInfo.isDir())
-    {
         return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + thumbnails_digikamdb);
-    }
-
     return QDir::cleanPath(folderOrFile);
 }
 
@@ -292,18 +257,12 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 
         // 1.0 - 1.2 style database file path?
         if (group.hasKey(configDatabaseFilePathEntry))
-        {
             databaseFilePath = group.readEntry(configDatabaseFilePathEntry, QString());
-        }
         // <= 0.9 style album path entry?
         else if (group.hasKey(configAlbumPathEntry))
-        {
             databaseFilePath = group.readEntry(configAlbumPathEntry, QString());
-        }
         else if (!suggestedPath.isNull())
-        {
             databaseFilePath = suggestedPath;
-        }
 
 
         if (!databaseFilePath.isEmpty())
@@ -318,7 +277,6 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 void DatabaseParameters::removeLegacyConfig(KSharedConfig::Ptr config)
 {
     KConfigGroup group  = config->group("Album Settings");
-
     if (group.hasKey(configDatabaseFilePathEntry))
     {
         group.deleteEntry(configDatabaseFilePathEntry);
@@ -333,15 +291,10 @@ void DatabaseParameters::removeLegacyConfig(KSharedConfig::Ptr config)
 void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString& configGroup) const
 {
     KConfigGroup group;
-
     if (configGroup.isNull())
-    {
         group = config->group(configGroupDatabase);
-    }
     else
-    {
         group = config->group(configGroup);
-    }
 
     QString dbName = getDatabaseNameOrDir();
     QString dbNameThumbs = getThumbsDatabaseNameOrDir();
@@ -360,20 +313,14 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
 QString DatabaseParameters::getDatabaseNameOrDir() const
 {
     if (isSQLite())
-    {
         return databaseDirectorySQLite(databaseName);
-    }
-
     return databaseName;
 }
 
 QString DatabaseParameters::getThumbsDatabaseNameOrDir() const
 {
     if (isSQLite())
-    {
         return thumbnailDatabaseDirectorySQLite(databaseNameThumbnails);
-    }
-
     return databaseNameThumbnails;
 }
 
@@ -385,7 +332,6 @@ QString DatabaseParameters::databaseDirectorySQLite(const QString& path)
         chopped.chop(QString(digikam4db).length());
         return chopped;
     }
-
     return path;
 }
 
@@ -397,7 +343,6 @@ QString DatabaseParameters::thumbnailDatabaseDirectorySQLite(const QString& path
         chopped.chop(QString(thumbnails_digikamdb).length());
         return chopped;
     }
-
     return path;
 }
 
@@ -452,36 +397,18 @@ void DatabaseParameters::insertInUrl(KUrl& url) const
 
     url.addQueryItem("databaseType", databaseType);
     url.addQueryItem("databaseName", databaseName);
-
     if (!connectOptions.isNull())
-    {
         url.addQueryItem("connectOptions", connectOptions);
-    }
-
     if (!hostName.isNull())
-    {
         url.addQueryItem("hostName", hostName);
-    }
-
     if (port != -1)
-    {
         url.addQueryItem("port", QString::number(port));
-    }
-
     if (internalServer)
-    {
         url.addQueryItem("internalServer", "true");
-    }
-
     if (!userName.isNull())
-    {
         url.addQueryItem("userName", userName);
-    }
-
     if (!password.isNull())
-    {
         url.addQueryItem("password", password);
-    }
 }
 
 void DatabaseParameters::removeFromUrl(KUrl& url)
@@ -508,16 +435,11 @@ QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
     if (!p.connectOptions.isEmpty())
         dbg.nospace() << "ConnectOptions: "
                       << p.connectOptions << ", ";
-
     if (!p.hostName.isEmpty())
         dbg.nospace() << "Host Name and Port: "
                       << p.hostName << " " << p.port << "; ";
-
     if (p.internalServer)
-    {
         dbg.nospace() << "Using an Internal Server; ";
-    }
-
     if (!p.userName.isEmpty())
         dbg.nospace() << "Username and Password: "
                       << p.userName << ", " << p.password;

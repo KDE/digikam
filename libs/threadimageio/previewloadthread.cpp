@@ -33,14 +33,13 @@ namespace Digikam
 {
 
 PreviewLoadThread::PreviewLoadThread()
-    : m_displayingWidget(0)
+            : m_displayingWidget(0)
 {
 }
 
 LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size, bool exifRotate)
 {
     LoadingDescription description(filePath, size, exifRotate);
-
     if (DImg::fileFormat(filePath) == DImg::RAW)
     {
         description.rawDecodingSettings.optimizeTimeLoading();
@@ -50,7 +49,6 @@ LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& fi
     }
 
     ICCSettingsContainer settings = IccSettings::instance()->settings();
-
     if (settings.enableCM && settings.useManagedPreviews)
     {
         description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
@@ -76,7 +74,7 @@ void PreviewLoadThread::load(LoadingDescription description)
     ManagedLoadSaveThread::loadPreview(description);
 }
 
-void PreviewLoadThread::setDisplayingWidget(QWidget* widget)
+void PreviewLoadThread::setDisplayingWidget(QWidget *widget)
 {
     m_displayingWidget = widget;
 }

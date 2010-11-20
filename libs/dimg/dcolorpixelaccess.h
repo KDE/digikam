@@ -53,7 +53,7 @@ inline void DColor::setColor(const uchar* data, bool sixteenBit)
     }
 }
 
-inline void DColor::setPixel(uchar* data) const
+inline void DColor::setPixel(uchar *data) const
 {
     if (sixteenBit())       // 16 bits image.
     {
@@ -72,6 +72,6 @@ inline void DColor::setPixel(uchar* data) const
     }
 }
 
-}  // namespace Digikam
+}  // namespace Digikam 
 
 #endif  // DCOLORPIXELACCESS_H

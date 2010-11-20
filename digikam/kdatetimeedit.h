@@ -59,23 +59,23 @@ public:
      * @param parent the parent widget
      * @param name the name of the widget
      */
-    KDateTimeEdit(QWidget* parent, const char* name);
+    KDateTimeEdit(QWidget *parent, const char *name);
 
-    /**
-     * destructor
-     */
-    ~KDateTimeEdit();
+     /**
+      * destructor
+      */
+     ~KDateTimeEdit();
 
-    /**
-     * returns the date and time
-     * @return a QDateTime with the currently chosen date and time
-     */
-    QDateTime dateTime();
+     /**
+      * returns the date and time
+      * @return a QDateTime with the currently chosen date and time
+      */
+     QDateTime dateTime();
 
-    /**
-     * Sets the date and the time of this widget.
-     */
-    void setDateTime(const QDateTime dateTime);
+     /**
+      * Sets the date and the time of this widget.
+      */
+     void setDateTime(const QDateTime dateTime);
 
 Q_SIGNALS:
 

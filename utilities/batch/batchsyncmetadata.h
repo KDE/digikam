@@ -52,10 +52,10 @@ public:
         ReadFromFileToDatabase
     };
 
-    /** Constructor which sync all metadata pictures from an Album */
-    explicit BatchSyncMetadata(Album* album, SyncDirection direction = WriteFromDatabaseToFile, QObject* parent = 0);
+    /** Constructor which sync all metadata pictures from an Album */ 
+    explicit BatchSyncMetadata(Album *album, SyncDirection direction = WriteFromDatabaseToFile, QObject* parent = 0);
 
-    /** Constructor which sync all metadata from an images list */
+    /** Constructor which sync all metadata from an images list */ 
     explicit BatchSyncMetadata(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, QObject* parent = 0);
 
     ~BatchSyncMetadata();

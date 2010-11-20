@@ -61,7 +61,7 @@ public Q_SLOTS:
 
     void slotFilterMatches(bool);
     void slotFilterMatchesForText(bool);
-    void slotFilterSettingsChanged(const ImageFilterSettings& settings);
+    void slotFilterSettingsChanged(const ImageFilterSettings &settings);
 
 Q_SIGNALS:
 
@@ -72,7 +72,7 @@ Q_SIGNALS:
 
 private:
 
-    bool eventFilter(QObject* object, QEvent* e);
+    bool eventFilter(QObject *object, QEvent *e);
 
 private:
 

@@ -147,7 +147,7 @@ public:
 };
 
 Setup::Setup(QWidget* parent)
-    : KPageDialog(parent), d(new SetupPrivate)
+     : KPageDialog(parent), d(new SetupPrivate)
 {
     setCaption(i18n("Configure"));
     setButtons(Help|Ok|Cancel );
@@ -159,7 +159,7 @@ Setup::Setup(QWidget* parent)
     d->databasePage     = new SetupDatabase(this);
     d->page_database    = addPage(d->databasePage, i18n("Database"));
     d->page_database->setHeader(i18n("<qt>Database Settings<br/>"
-                                     "<i>Customize database settings</i></qt>"));
+                                   "<i>Customize database settings</i></qt>"));
     d->page_database->setIcon(KIcon("server-database"));
 
     d->collectionsPage  = new SetupCollections(this);
@@ -261,19 +261,12 @@ Setup::Setup(QWidget* parent)
     for (int i = 0; i != SetupPageEnumLast; ++i)
     {
         KPageWidgetItem* item = d->pageItem((Page)i);
-
         if (!item)
-        {
             continue;
-        }
-
         QWidget* wgt            = item->widget();
         QScrollArea* scrollArea = qobject_cast<QScrollArea*>(wgt);
-
         if (scrollArea)
-        {
             scrollArea->setFrameShape(QFrame::NoFrame);
-        }
     }
 
     connect(this, SIGNAL(okClicked()),
@@ -299,9 +292,7 @@ Setup::~Setup()
 void Setup::setTemplate(const Template& t)
 {
     if (d->templatePage)
-    {
         d->templatePage->setTemplate(t);
-    }
 }
 
 QSize Setup::sizeHint() const
@@ -328,29 +319,22 @@ QSize Setup::sizeHint() const
             page == MiscellaneousPage)
         {
             KPageWidgetItem* item   = d->pageItem((Page)page);
-
             if (!item)
-            {
                 continue;
-            }
 
             QWidget* page           = item->widget();
             maxHintHeight           = qMax(maxHintHeight, page->sizeHint().height());
             QScrollArea* scrollArea = qobject_cast<QScrollArea*>(page);
 
             if (scrollArea)
-            {
                 maxWidgetHeight = qMax(maxWidgetHeight, scrollArea->widget()->sizeHint().height());
-            }
         }
     }
 
     // The additional 20 is a hack to make it work.
     // Don't know why, the largest page would have scroll bars without this
     if (maxWidgetHeight > maxHintHeight)
-    {
         hint.setHeight(hint.height() + (maxWidgetHeight - maxHintHeight) + 20);
-    }
 
     return hint;
 }
@@ -428,11 +412,8 @@ void Setup::slotOkClicked()
                            "Note: thumbnail processing can take a while. You can start "
                            "this job later from the \"Tools\" menu.");
         int result = KMessageBox::warningYesNo(this, msg);
-
         if (result != KMessageBox::Yes)
-        {
             return;
-        }
 
         BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this);
         thumbsGenerator->show();
@@ -444,7 +425,6 @@ void Setup::slotOkClicked()
 void Setup::showPage(Setup::Page page)
 {
     KPageWidgetItem* item = 0;
-
     if (page == LastPageUsed)
     {
         KSharedConfig::Ptr config = KGlobal::config();
@@ -458,9 +438,7 @@ void Setup::showPage(Setup::Page page)
     }
 
     if (!item)
-    {
         item = d->pageItem(CollectionsPage);
-    }
 
     setCurrentPage(item);
 }
@@ -469,92 +447,29 @@ Setup::Page Setup::activePageIndex()
 {
     KPageWidgetItem* cur = currentPage();
 
-    if (cur == d->page_collections)
-    {
-        return CollectionsPage;
-    }
-
-    if (cur == d->page_albumView)
-    {
-        return AlbumViewPage;
-    }
-
-    if (cur == d->page_tooltip)
-    {
-        return ToolTipPage;
-    }
-
-    if (cur == d->page_metadata)
-    {
-        return MetadataPage;
-    }
-
-    if (cur == d->page_template)
-    {
-        return TemplatePage;
-    }
-
-    if (cur == d->page_category)
-    {
-        return CategoryPage;
-    }
-
-    if (cur == d->page_mime)
-    {
-        return MimePage;
-    }
-
-    if (cur == d->page_lighttable)
-    {
-        return LightTablePage;
-    }
-
-    if (cur == d->page_editor)
-    {
-        return EditorPage;
-    }
-
-    if (cur == d->page_dcraw)
-    {
-        return DcrawPage;
-    }
-
-    if (cur == d->page_iofiles)
-    {
-        return IOFilesPage;
-    }
-
-    if (cur == d->page_slideshow)
-    {
-        return SlideshowPage;
-    }
-
-    if (cur == d->page_icc)
-    {
-        return ICCPage;
-    }
-
-    if (cur == d->page_plugins)
-    {
-        return KipiPluginsPage;
-    }
-
-    if (cur == d->page_camera)
-    {
-        return CameraPage;
-    }
-
-    if (cur == d->page_misc)
-    {
-        return MiscellaneousPage;
-    }
+    if (cur == d->page_collections) return CollectionsPage;
+    if (cur == d->page_albumView)   return AlbumViewPage;
+    if (cur == d->page_tooltip)     return ToolTipPage;
+    if (cur == d->page_metadata)    return MetadataPage;
+    if (cur == d->page_template)    return TemplatePage;
+    if (cur == d->page_category)    return CategoryPage;
+    if (cur == d->page_mime)        return MimePage;
+    if (cur == d->page_lighttable)  return LightTablePage;
+    if (cur == d->page_editor)      return EditorPage;
+    if (cur == d->page_dcraw)       return DcrawPage;
+    if (cur == d->page_iofiles)     return IOFilesPage;
+    if (cur == d->page_slideshow)   return SlideshowPage;
+    if (cur == d->page_icc)         return ICCPage;
+    if (cur == d->page_plugins)     return KipiPluginsPage;
+    if (cur == d->page_camera)      return CameraPage;
+    if (cur == d->page_misc)        return MiscellaneousPage;
 
     return DatabasePage;
 }
 
 KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
 {
-    switch (page)
+    switch(page)
     {
         case Setup::DatabasePage:
             return page_database;

@@ -150,7 +150,7 @@ bool AlbumCopyMoveHint::isDstAlbum(int albumRootId, const QString& relativePath)
 uint AlbumCopyMoveHint::qHash() const
 {
     return ::qHash(m_src.albumRootId) ^ ::qHash(m_src.albumId)
-           ^ ::qHash(m_dst.albumRootId) ^ ::qHash(m_dst.relativePath);
+         ^ ::qHash(m_dst.albumRootId) ^ ::qHash(m_dst.relativePath);
 }
 
 AlbumCopyMoveHint& AlbumCopyMoveHint::operator<<(const QDBusArgument& argument)
@@ -215,10 +215,7 @@ QStringList ItemCopyMoveHint::dstNames() const
 QString ItemCopyMoveHint::dstName(qlonglong id) const
 {
     if (m_dstNames.isEmpty())
-    {
         return QString();
-    }
-
     int index = m_srcIds.indexOf(id);
     return m_dstNames[index];
 }

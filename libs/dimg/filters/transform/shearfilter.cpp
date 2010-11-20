@@ -44,7 +44,7 @@ namespace Digikam
 
 ShearFilter::ShearFilter(DImg* orgImage, QObject* parent, float hAngle, float vAngle,
                          bool antialiasing, const QColor& backgroundColor, int orgW, int orgH)
-    : DImgThreadedFilter(orgImage, parent, "sheartool")
+     : DImgThreadedFilter(orgImage, parent, "sheartool")
 {
     m_hAngle          = hAngle;
     m_vAngle          = vAngle;
@@ -130,13 +130,13 @@ void ShearFilter::filterImage()
     m_destImage.fill( DColor(m_backgroundColor.rgb(), sixteenBit) );
 
     uchar* pResBits            = m_destImage.bits();
-    unsigned short* pResBits16 = (unsigned short*)m_destImage.bits();
+    unsigned short* pResBits16 = (unsigned short *)m_destImage.bits();
 
     PixelsAliasFilter alias;
 
-    for ( y = 0; y < new_height; ++y)
+    for( y = 0; y < new_height; ++y)
     {
-        for ( x = 0; x < new_width; ++x, p += 4 )
+        for( x = 0; x < new_width; ++x, p += 4 )
         {
             // get new positions
             nx = x + dx + y * horz_factor;
@@ -163,13 +163,9 @@ void ShearFilter::filterImage()
                     for (int z = 0 ; z < 4 ; ++z)
                     {
                         if (!sixteenBit)
-                        {
                             pResBits[p+z] = pBits[pt+z];
-                        }
                         else
-                        {
                             pResBits16[p+z] = pBits16[pt+z];
-                        }
                     }
                 }
             }
@@ -177,11 +173,8 @@ void ShearFilter::filterImage()
 
         // Update the progress bar in dialog.
         progress = (int)(((double)y * 100.0) / new_height);
-
         if (progress%5 == 0)
-        {
             postProgress( progress );
-        }
     }
 
     // To compute the rotated destination image size using original image dimensions.

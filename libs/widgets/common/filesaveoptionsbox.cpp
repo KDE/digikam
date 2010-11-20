@@ -91,8 +91,8 @@ public:
     QString       autoFilter;
 };
 
-FileSaveOptionsBox::FileSaveOptionsBox(QWidget* parent)
-    : QStackedWidget(parent), d(new FileSaveOptionsBoxPriv)
+FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
+                  : QStackedWidget(parent), d(new FileSaveOptionsBoxPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -144,7 +144,7 @@ FileSaveOptionsBox::~FileSaveOptionsBox()
     delete d;
 }
 
-void FileSaveOptionsBox::setDialog(KFileDialog* dialog)
+void FileSaveOptionsBox::setDialog(KFileDialog *dialog)
 {
 
     if (d->dialog)
@@ -160,12 +160,12 @@ void FileSaveOptionsBox::setDialog(KFileDialog* dialog)
     connect(d->dialog, SIGNAL(filterChanged(const QString&)),
             this, SLOT(slotFilterChanged(const QString&)));
 
-    connect(d->dialog, SIGNAL(fileSelected(const QString&)),
+    connect(d->dialog, SIGNAL(fileSelected(const QString &)),
             this, SLOT(slotImageFileSelected(const QString&)));
 
 }
 
-void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
+void FileSaveOptionsBox::slotFilterChanged(const QString &newFilter)
 {
 
     kDebug() << "filter changed to '" << newFilter << "'";
@@ -196,7 +196,7 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
 
 }
 
-void FileSaveOptionsBox::setAutoFilter(const QString& autoFilter)
+void FileSaveOptionsBox::setAutoFilter(const QString &autoFilter)
 {
 
     kDebug() << "new auto filter is '" << autoFilter << "'";
@@ -217,7 +217,6 @@ void FileSaveOptionsBox::setAutoFilter(const QString& autoFilter)
 void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 {
     kDebug() << "called for filename " << file;
-
     if (d->autoFilter.isEmpty())
     {
         QString format = QImageReader::imageFormat(file);
@@ -225,8 +224,8 @@ void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
     }
 }
 
-DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename,
-        DImg::FORMAT fallback)
+DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString &filename,
+                DImg::FORMAT fallback)
 {
 
     kDebug() << "Trying to discover format based on filename '" << filename
@@ -234,7 +233,6 @@ DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename,
 
     QStringList splitParts = filename.split('.');
     QString ext;
-
     if (splitParts.size() < 2)
     {
         kDebug() << "filename '" << filename
@@ -251,26 +249,16 @@ DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename,
     DImg::FORMAT format = fallback;
 
     if (ext.contains("JPEG") || ext.contains("JPG") || ext.contains("JPE"))
-    {
         format = DImg::JPEG;
-    }
     else if (ext.contains("PNG"))
-    {
         format = DImg::PNG;
-    }
     else if (ext.contains("TIFF") || ext.contains("TIF"))
-    {
         format = DImg::TIFF;
-    }
     else if (ext.contains("JP2") || ext.contains("JPX") || ext.contains("JPC") ||
              ext.contains("PGX") || ext.contains("J2K"))
-    {
         format = DImg::JP2K;
-    }
     else if (ext.contains("PGF"))
-    {
         format = DImg::PGF;
-    }
     else
     {
         kWarning() << "Using fallback format " << fallback;

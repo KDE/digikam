@@ -73,24 +73,24 @@ public:
     {
     }
 
-    KTabWidget*     tab;
+    KTabWidget     *tab;
 
-    AlbumModel*     albumModel;
-    AlbumTreeView*  albumTreeView;
+    AlbumModel     *albumModel;
+    AlbumTreeView  *albumTreeView;
 
-    TagModel*       tagModel;
-    TagTreeView*    tagTreeView;
+    TagModel       *tagModel;
+    TagTreeView    *tagTreeView;
 
-    SearchModel*    searchModel;
-    SearchTreeView* searchTreeView;
+    SearchModel    *searchModel;
+    SearchTreeView *searchTreeView;
 
-    KipiInterface*  iface;
+    KipiInterface  *iface;
 
-    SearchTextBar*  albumSearchBar;
-    SearchTextBar*  tagSearchBar;
-    SearchTextBar*  searchSearchBar;
+    SearchTextBar  *albumSearchBar;
+    SearchTextBar  *tagSearchBar;
+    SearchTextBar  *searchSearchBar;
 
-    void prepareTreeView(AbstractCheckableAlbumTreeView* treeView)
+    void prepareTreeView(AbstractCheckableAlbumTreeView *treeView)
     {
 
         treeView->checkableModel()->setShowCount(false);
@@ -106,8 +106,8 @@ public:
     }
 
     void fillCollectionsFromCheckedModel(QList<KIPI::ImageCollection> &collectionList,
-                                         AbstractCheckableAlbumModel* model,
-                                         const QString& ext)
+                                         AbstractCheckableAlbumModel *model,
+                                         const QString &ext)
     {
 
         foreach(Album *album, model->checkedAlbums())
@@ -118,7 +118,7 @@ public:
                 continue;
             }
 
-            KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, album, ext);
+            KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, album, ext);
             collectionList.append(col);
 
         }
@@ -127,9 +127,9 @@ public:
 
 };
 
-KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* iface, QWidget* parent)
-    : KIPI::ImageCollectionSelector(parent),
-      d(new KipiImageCollectionSelectorPriv)
+KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)
+                           : KIPI::ImageCollectionSelector(parent),
+                             d(new KipiImageCollectionSelectorPriv)
 {
 
     KSharedConfigPtr config = KGlobal::config();
@@ -138,7 +138,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* iface, Q
     d->iface = iface;
     d->tab   = new KTabWidget(this);
 
-    KVBox* albumBox  = new KVBox(d->tab);
+    KVBox *albumBox  = new KVBox(d->tab);
     d->albumModel = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
     d->albumTreeView = new AlbumTreeView(d->albumModel, albumBox);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
@@ -158,7 +158,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* iface, Q
 
     // -------------------------------------------------------------------------------
 
-    KVBox* tagBox = new KVBox(d->tab);
+    KVBox *tagBox = new KVBox(d->tab);
     d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, tagBox);
     d->tagTreeView = new TagTreeView(d->tagModel, tagBox);
     d->tagTreeView->setEntryPrefix("TagTreeView");
@@ -178,7 +178,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* iface, Q
 
     // -------------------------------------------------------------------------------
 
-    KVBox* searchBox = new KVBox(d->tab);
+    KVBox *searchBox = new KVBox(d->tab);
     d->searchModel = new SearchModel(searchBox);
     d->searchTreeView = new SearchTreeView(searchBox, d->searchModel);
     d->searchTreeView->setEntryPrefix("SearchTreeView");
@@ -203,7 +203,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* iface, Q
     d->tab->addTab(tagBox, i18n("My Tags"));
     d->tab->addTab(searchBox, i18n("My Searches"));
 
-    QHBoxLayout* hlay = new QHBoxLayout(this);
+    QHBoxLayout *hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
     hlay->setMargin(0);
     hlay->setSpacing(0);

@@ -28,30 +28,23 @@ class KCategoryDrawer;
 class SparseModelIndexVector : public QVector<QModelIndex>
 {
 public:
-    SparseModelIndexVector(int rowCount, QAbstractItemModel* model, int column)
+    SparseModelIndexVector(int rowCount, QAbstractItemModel *model, int column)
         : QVector<QModelIndex>(rowCount), model(model), column(column)
     {
     }
 
-    inline QModelIndex& operator[](int i)
+    inline QModelIndex & operator[](int i)
     {
-        QModelIndex& index = QVector<QModelIndex>::operator[](i);
-
+        QModelIndex &index = QVector<QModelIndex>::operator[](i);
         if (!index.isValid())
-        {
             index = model->index(i, column);
-        }
-
         return index;
     }
 private:
     // not to be used
-    const QModelIndex& operator[](int i) const
-    {
-        return QVector<QModelIndex>::operator[](i);
-    }
+    const QModelIndex & operator[](int i) const { return QVector<QModelIndex>::operator[](i); }
 
-    QAbstractItemModel* model;
+    QAbstractItemModel *model;
     int                 column;
 };
 
@@ -61,7 +54,7 @@ private:
 class KCategorizedView::Private
 {
 public:
-    Private(KCategorizedView* listView);
+    Private(KCategorizedView *listView);
     ~Private();
 
 
@@ -70,51 +63,51 @@ public:
     /**
       * Returns the list of items that intersects with @p rect
       */
-    const QModelIndexList& intersectionSet(const QRect& rect);
+    const QModelIndexList &intersectionSet(const QRect &rect);
 
     /**
       * Gets the item rect in the viewport for @p index
       */
-    QRect visualRectInViewport(const QModelIndex& index) const;
+    QRect visualRectInViewport(const QModelIndex &index) const;
 
     /**
       * Returns the category rect in the viewport for @p category
       */
-    QRect visualCategoryRectInViewport(const QString& category) const;
+    QRect visualCategoryRectInViewport(const QString &category) const;
 
     /**
       * Caches and returns the rect that corresponds to @p index
       */
-    const QRect& cacheIndex(const QModelIndex& index);
+    const QRect &cacheIndex(const QModelIndex &index);
 
     /**
       * Caches and returns the rect that corresponds to @p category
       */
-    const QRect& cacheCategory(const QString& category);
+    const QRect &cacheCategory(const QString &category);
 
     /**
       * Returns the rect that corresponds to @p index
       * @note If the rect is not cached, it becomes cached
       */
-    const QRect& cachedRectIndex(const QModelIndex& index);
+    const QRect &cachedRectIndex(const QModelIndex &index);
 
     /**
       * Returns the rect that corresponds to @p category
       * @note If the rect is not cached, it becomes cached
       */
-    const QRect& cachedRectCategory(const QString& category);
+    const QRect &cachedRectCategory(const QString &category);
 
     /**
       * Returns the visual rect (taking in count x and y offsets) for @p index
       * @note If the rect is not cached, it becomes cached
       */
-    QRect visualRect(const QModelIndex& index);
+    QRect visualRect(const QModelIndex &index);
 
     /**
       * Returns the visual rect (taking in count x and y offsets) for @p category
       * @note If the rect is not cached, it becomes cached
       */
-    QRect categoryVisualRect(const QString& category);
+    QRect categoryVisualRect(const QString &category);
 
     /**
       * Returns the contents size of this view (topmost category to bottommost index + spacing)
@@ -126,10 +119,10 @@ public:
       * @p index on the rect specified by @p option.rect, with
       * painter @p painter
       */
-    void drawNewCategory(const QModelIndex& index,
+    void drawNewCategory(const QModelIndex &index,
                          int sortRole,
-                         const QStyleOption& option,
-                         QPainter* painter);
+                         const QStyleOption &option,
+                         QPainter *painter);
 
     /**
       * This method will update scrollbars ranges. Called when our model changes
@@ -140,7 +133,7 @@ public:
     /**
       * This method will draw dragged items in the painting operation
       */
-    void drawDraggedItems(QPainter* painter);
+    void drawDraggedItems(QPainter *painter);
 
     /**
       * This method will determine which rect needs to be updated because of a
@@ -152,12 +145,12 @@ public:
       * This method will, starting from the index at begin in the given (sorted) modelIndex List,
       * find the last index having the same category as the index to begin with.
       */
-    int categoryUpperBound(SparseModelIndexVector& modelIndexList, int begin, int averageSize = 0);
+    int categoryUpperBound(SparseModelIndexVector &modelIndexList, int begin, int averageSize = 0);
 
     /**
       * Returns a QItemSelection for all items intersection rect.
       */
-    QItemSelection selectionForRect(const QRect& rect);
+    QItemSelection selectionForRect(const QRect &rect);
 
     // Attributes
 

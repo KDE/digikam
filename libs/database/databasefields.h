@@ -48,8 +48,8 @@ enum ImagesField
     FileSize           = 1 << 5,
     UniqueHash         = 1 << 6,
     ImagesAll          =
-    Album | Name | Status | Category |
-    ModificationDate | FileSize | UniqueHash,
+            Album | Name | Status | Category |
+            ModificationDate | FileSize | UniqueHash,
     ImagesFirst        = Album,
     ImagesLast         = UniqueHash
 };
@@ -67,8 +67,8 @@ enum ImageInformationField
     ColorDepth           = 1 << 7,
     ColorModel           = 1 << 8,
     ImageInformationAll  =
-    Rating | CreationDate | DigitizationDate | Orientation |
-    Width | Height | Format | ColorDepth | ColorModel,
+            Rating | CreationDate | DigitizationDate | Orientation |
+            Width | Height | Format | ColorDepth | ColorModel,
     ImageInformationFirst = Rating,
     ImageInformationLast  = ColorModel
 };
@@ -93,10 +93,10 @@ enum ImageMetadataField
     SubjectDistance              = 1 << 14,
     SubjectDistanceCategory      = 1 << 15,
     ImageMetadataAll             =
-    Make | Model | Lens | Aperture | FocalLength | FocalLength35 |
-    ExposureTime | ExposureProgram | ExposureMode | Sensitivity |
-    FlashMode | WhiteBalance | WhiteBalanceColorTemperature |
-    MeteringMode | SubjectDistance | SubjectDistanceCategory,
+            Make | Model | Lens | Aperture | FocalLength | FocalLength35 |
+            ExposureTime | ExposureProgram | ExposureMode | Sensitivity |
+            FlashMode | WhiteBalance | WhiteBalanceColorTemperature |
+            MeteringMode | SubjectDistance | SubjectDistanceCategory,
     ImageMetadataFirst           = Make,
     ImageMetadataLast            = SubjectDistanceCategory
 };
@@ -115,8 +115,8 @@ enum ImagePositionsField
     PositionAccuracy    = 1 << 8,
     PositionDescription = 1 << 9,
     ImagePositionsAll   =
-    Latitude | LatitudeNumber | Longitude | LongitudeNumber | Altitude |
-    PositionOrientation | PositionRoll | PositionTilt | PositionAccuracy | PositionDescription,
+            Latitude | LatitudeNumber | Longitude | LongitudeNumber | Altitude |
+            PositionOrientation | PositionRoll | PositionTilt | PositionAccuracy | PositionDescription,
     ImagePositionsFirst = Latitude,
     ImagePositionsLast  = PositionDescription
 };
@@ -130,7 +130,7 @@ enum ImageCommentsField
     CommentDate       = 1 << 3,
     Comment           = 1 << 4,
     ImageCommentsAll  =
-    CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment,
+            CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment,
     ImageCommentsFirst = CommentType,
     ImageCommentsLast  = Comment
 };
@@ -195,9 +195,7 @@ class Set
 public:
 
     Set()
-    {
-        initialize();
-    }
+    { initialize(); }
 
     void initialize()
     {
@@ -216,36 +214,16 @@ public:
     DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions, imagePositions)
 
     inline bool operator&(const Set& other)
-    {
-        return (images & other.images) || (imageInformation & other.imageInformation)  ||
-               (imageMetadata & other.imageMetadata) || (imageComments & other.imageComments) ||
-               (imagePositions & other.imagePositions) || (customEnum & other.customEnum);
-    }
+    { return (images & other.images) || (imageInformation & other.imageInformation)  ||
+             (imageMetadata & other.imageMetadata) || (imageComments & other.imageComments) ||
+             (imagePositions & other.imagePositions) || (customEnum & other.customEnum); }
 
-    inline CustomEnum& operator=(const CustomEnum& f)
-    {
-        return customEnum.operator=(f);
-    }
-    inline CustomEnum& operator|=(CustomEnum f)
-    {
-        return customEnum.operator|=(f);
-    }
-    inline CustomEnum& operator^=(CustomEnum f)
-    {
-        return customEnum.operator^=(f);
-    }
-    inline CustomEnum operator|(CustomEnum f) const
-    {
-        return customEnum.operator|(f);
-    }
-    inline CustomEnum operator^(CustomEnum f) const
-    {
-        return customEnum.operator^(f);
-    }
-    inline CustomEnum operator&(CustomEnum f) const
-    {
-        return customEnum.operator&(f);
-    }
+    inline CustomEnum& operator=(const CustomEnum& f) { return customEnum.operator=(f); }
+    inline CustomEnum& operator|=(CustomEnum f)       { return customEnum.operator|=(f); }
+    inline CustomEnum& operator^=(CustomEnum f)       { return customEnum.operator^=(f); }
+    inline CustomEnum operator|(CustomEnum f) const   { return customEnum.operator|(f); }
+    inline CustomEnum operator^(CustomEnum f) const   { return customEnum.operator^(f); }
+    inline CustomEnum operator&(CustomEnum f) const   { return customEnum.operator&(f); }
 
 
     // databasechangesets.cpp
@@ -293,30 +271,12 @@ public:
 
     // We use the upper 6 bits to distinguish the enums, and give the lower 26 bits to the flags.
     // So we can store up to 64 enums, with 26 flags each.
-    static inline unsigned int uniqueKey(Images f)
-    {
-        return (int)f | (0 << 26);
-    }
-    static inline unsigned int uniqueKey(ImageInformation f)
-    {
-        return (int)f | (1 << 26);
-    }
-    static inline unsigned int uniqueKey(ImageMetadata f)
-    {
-        return (int)f | (2 << 26);
-    }
-    static inline unsigned int uniqueKey(ImageComments f)
-    {
-        return (int)f | (3 << 26);
-    }
-    static inline unsigned int uniqueKey(ImagePositions f)
-    {
-        return (int)f | (4 << 26);
-    }
-    static inline unsigned int uniqueKey(CustomEnum f)
-    {
-        return      f | (63 << 26);
-    }
+    static inline unsigned int uniqueKey(Images f)            { return (int)f | (0 << 26);  }
+    static inline unsigned int uniqueKey(ImageInformation f)  { return (int)f | (1 << 26);  }
+    static inline unsigned int uniqueKey(ImageMetadata f)     { return (int)f | (2 << 26);  }
+    static inline unsigned int uniqueKey(ImageComments f)     { return (int)f | (3 << 26);  }
+    static inline unsigned int uniqueKey(ImagePositions f)    { return (int)f | (4 << 26);  }
+    static inline unsigned int uniqueKey(CustomEnum f)        { return      f | (63 << 26); }
 
     // override relevant methods from QHash
     DATABASEFIELDS_HASH_DECLARE_METHODS(Images, uniqueKey);

@@ -53,7 +53,7 @@ public:
         overExposureColor      = Qt::black;
     };
 
-    ~ExposureSettingsContainer() {};
+    ~ExposureSettingsContainer(){};
 
 public:
 

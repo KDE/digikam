@@ -50,8 +50,8 @@ public:
 
     TagModelCompletion();
 
-    void setModel(TagModel* model);
-    TagModel* model() const;
+    void setModel(TagModel *model);
+    TagModel *model() const;
 };
 
 class TaggingAction
@@ -87,38 +87,17 @@ public:
                m_tagName == other.m_tagName;
     }
 
-    Type type() const
-    {
-        return m_type;
-    }
-    bool isValid() const
-    {
-        return m_type != NoAction;
-    }
-    bool shallAssignTag() const
-    {
-        return m_type == AssignTag;
-    }
-    bool shallCreateNewTag() const
-    {
-        return m_type == CreateNewTag;
-    }
+    Type type() const              { return m_type; }
+    bool isValid() const           { return m_type != NoAction; }
+    bool shallAssignTag() const    { return m_type == AssignTag; }
+    bool shallCreateNewTag() const { return m_type == CreateNewTag; }
 
     /// If shallAssignTag(), returns the tag id
-    int tagId() const
-    {
-        return m_tagId;
-    }
+    int tagId() const          { return m_tagId; }
 
     /// If shallCreateNewTag(), returns the tag name and the parent tag id, 0 for toplevel tag
-    QString newTagName() const
-    {
-        return m_tagName;
-    }
-    int parentTagId() const
-    {
-        return m_tagId;
-    }
+    QString newTagName() const { return m_tagName; }
+    int parentTagId() const    { return m_tagId; }
 
 protected:
 

@@ -53,8 +53,8 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-BlackFrameParser::BlackFrameParser(QObject* parent)
-    : QObject(parent)
+BlackFrameParser::BlackFrameParser(QObject *parent)
+                : QObject(parent)
 {
     m_imageLoaderThread = 0;
 }
@@ -90,7 +90,7 @@ void BlackFrameParser::parseBlackFrame(const KUrl& url)
 
 void BlackFrameParser::slotLoadingProgress(const LoadingDescription&, float v)
 {
-    emit signalLoadingProgress(v);
+   emit signalLoadingProgress(v);
 }
 
 void BlackFrameParser::slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg& img)
@@ -135,11 +135,7 @@ void BlackFrameParser::blackFrameParsing()
             int       threshold = DENOM/10;
             const int threshold_value = REL_TO_ABS(threshold,255);
             maxValue = (color.red()>color.blue()) ? color.red() : color.blue();
-
-            if (color.green()>maxValue)
-            {
-                maxValue = color.green();
-            }
+            if (color.green()>maxValue) maxValue = color.green();
 
             // If the component is bigger than the threshold, add the point
             if (maxValue > threshold_value)
@@ -152,11 +148,8 @@ void BlackFrameParser::blackFrameParsing()
                 hpList.append(point);
             }
         }
-
         if (hpList.count() > maxHotPixels)
-        {
             break;
-        }
     }
 
     //Now join points together into groups
@@ -171,9 +164,7 @@ void BlackFrameParser::blackFrameParsing()
 void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
 {
     if (list.isEmpty())
-    {
         return;
-    }
 
     /* Consolidate horizontally.  */
 
@@ -186,7 +177,6 @@ void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
     HotPixel tmp;
     HotPixel point;
     HotPixel point_below;
-
     for (; it != list.end(); ++it )
     {
         while (1)
@@ -199,14 +189,8 @@ void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
             //find any intersecting hotpixels below tmp
             int i = list.indexOf(tmp);
 
-            if (i == -1)
-            {
-                point_below_it = list.end();
-            }
-            else
-            {
-                point_below_it = list.begin() + i;
-            }
+            if (i == -1) point_below_it = list.end();
+            else         point_below_it = list.begin() + i;
 
             if (point_below_it != list.end())
             {
@@ -215,9 +199,9 @@ void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
 
                 point.rect.setX(qMin(point.x(), point_below.x()));
                 point.rect.setWidth(qMax(point.x() + point.width(),
-                                         point_below.x() + point_below.width()) - point.x());
+                                    point_below.x() + point_below.width()) - point.x());
                 point.rect.setHeight(qMax(point.y() + point.height(),
-                                          point_below.y() + point_below.height()) - point.y());
+                                     point_below.y() + point_below.height()) - point.y());
                 *it = point;
                 list.erase(point_below_it); //TODO: Check! this could remove it++?
             }

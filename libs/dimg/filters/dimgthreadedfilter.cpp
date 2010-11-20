@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 DImgThreadedFilter::DImgThreadedFilter(QObject* parent)
-    : DynamicThread()
+                  : DynamicThread()
 {
     setOriginalImage(DImg());
     setFilterName(QString());
@@ -51,7 +51,7 @@ DImgThreadedFilter::DImgThreadedFilter(QObject* parent)
 
 DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
                                        const QString& name)
-    : DynamicThread()
+                  : DynamicThread()
 {
     // remove meta data
     setOriginalImage(orgImage->copyImageData());
@@ -79,18 +79,15 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter* master, const DImg& o
     m_progressBegin   = progressBegin;
     m_progressSpan    = progressEnd - progressBegin;
     m_progressCurrent = 0;
-
+    
     m_master->setSlave(this);
 }
 
 DImgThreadedFilter::~DImgThreadedFilter()
 {
     cancelFilter();
-
     if (m_master)
-    {
         m_master->setSlave(0);
-    }
 }
 
 void DImgThreadedFilter::setOriginalImage(const DImg& orgImage)
@@ -115,9 +112,7 @@ void DImgThreadedFilter::initFilter()
                        m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
 
     if (m_master)
-    {
         startFilterDirectly();
-    }
 }
 
 void DImgThreadedFilter::startFilter()
@@ -140,12 +135,11 @@ void DImgThreadedFilter::startFilterDirectly()
         emit started();
 
         m_wasCancelled = false;
-
         try
         {
             filterImage();
         }
-        catch (std::bad_alloc& ex)
+        catch (std::bad_alloc &ex)
         {
             //TODO: User notification
             kError() << "Caught out-of-memory exception! Aborting operation" << ex.what();
@@ -170,19 +164,14 @@ void DImgThreadedFilter::run()
 void DImgThreadedFilter::cancelFilter()
 {
     if (isRunning())
-    {
         m_wasCancelled = true;
-    }
-
     stop();
-
     if (m_slave)
     {
         m_slave->stop();
         // do not wait on slave, it is not running in its own separate thread!
         //m_slave->cleanupFilter();
     }
-
     wait();
     cleanupFilter();
 }

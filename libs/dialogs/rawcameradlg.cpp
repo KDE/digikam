@@ -57,11 +57,11 @@ public:
     {
         searchBar = 0;
     }
-    SearchTextBar* searchBar;
+    SearchTextBar *searchBar;
 };
 
-RawCameraDlg::RawCameraDlg(QWidget* parent)
-    : InfoDlg(parent), d(new RawCameraDlgPriv)
+RawCameraDlg::RawCameraDlg(QWidget *parent)
+            : InfoDlg(parent), d(new RawCameraDlgPriv)
 {
 
     QStringList list      = KDcrawIface::KDcraw::supportedCamera();
@@ -70,7 +70,7 @@ RawCameraDlg::RawCameraDlg(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel* header = new QLabel(this);
+    QLabel *header = new QLabel(this);
     header->setText(i18np("<p>Using KDcraw library version %2<br/>"
                           "Using LibRaw version %3<br/>"
                           "1 model in the list</p>",
@@ -81,7 +81,7 @@ RawCameraDlg::RawCameraDlg(QWidget* parent)
 
     // --------------------------------------------------------
 
-    //    kapp->setOverrideCursor(Qt::WaitCursor);
+//    kapp->setOverrideCursor(Qt::WaitCursor);
     setCaption(i18n("List of supported RAW cameras"));
 
     d->searchBar = new SearchTextBar(this, "RawCameraDlgSearchBar");
@@ -91,13 +91,11 @@ RawCameraDlg::RawCameraDlg(QWidget* parent)
     listView()->header()->hide();
 
     for (QStringList::Iterator it = list.begin() ; it != list.end() ; ++it)
-    {
         new QTreeWidgetItem(listView(), QStringList() << *it);
-    }
 
     // --------------------------------------------------------
 
-    QGridLayout* grid = dynamic_cast<QGridLayout*>(mainWidget()->layout());
+    QGridLayout *grid = dynamic_cast<QGridLayout*>(mainWidget()->layout());
     grid->addWidget(header,       1, 0, 1,-1);
     grid->addWidget(d->searchBar, 3, 0, 1,-1);
 
@@ -118,10 +116,9 @@ void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
     QString search = settings.text.toLower();
 
     QTreeWidgetItemIterator it(listView());
-
     while (*it)
     {
-        QTreeWidgetItem* item  = *it;
+        QTreeWidgetItem *item  = *it;
 
         if (item->text(0).toLower().contains(search, settings.caseSensitive))
         {

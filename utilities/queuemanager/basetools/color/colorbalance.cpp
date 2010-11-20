@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 ColorBalance::ColorBalance(QObject* parent)
-    : BatchTool("ColorBalance", ColorTool, parent)
+             : BatchTool("ColorBalance", ColorTool, parent)
 {
     setToolTitle(i18n("Color Balance"));
     setToolDescription(i18n("A tool to adjust color balance."));
@@ -96,10 +96,7 @@ void ColorBalance::slotSettingsChanged()
 
 bool ColorBalance::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     CBContainer prm;
     prm.red   = settings()["Red"].toDouble();

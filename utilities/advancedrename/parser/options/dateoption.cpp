@@ -45,7 +45,7 @@ namespace Digikam
 
 const QString dateFormatLinkDescr = i18nc("date format settings", "format settings");
 const QString dateFormatLink      = QString("<a href='http://doc.trolltech.com/latest/qdatetime.html#toString'>%1</a>")
-                                    .arg(dateFormatLinkDescr);
+                                           .arg(dateFormatLinkDescr);
 
 // --------------------------------------------------------
 
@@ -56,7 +56,7 @@ DateFormat::DateFormat()
     m_map.insert(Standard, DateFormatDescriptor(QString("Standard"), QString("yyyyMMddThhmmss")));
     m_map.insert(ISO,      DateFormatDescriptor(QString("ISO"),      Qt::ISODate));
     m_map.insert(FullText, DateFormatDescriptor(QString("Text"),     Qt::TextDate));
-    //    m_map.insert(Locale,   DateFormatDescriptor(QString("Locale"),   Qt::SystemLocaleShortDate));
+//    m_map.insert(Locale,   DateFormatDescriptor(QString("Locale"),   Qt::SystemLocaleShortDate));
     m_map.insert(Custom,   DateFormatDescriptor(QString("Custom"),   QString("")));
 }
 
@@ -95,7 +95,7 @@ QVariant DateFormat::formatType(QString identifier)
 // --------------------------------------------------------
 
 DateOptionDialog::DateOptionDialog(Parseable* parent)
-    : ParseableDialog(parent), ui(new Ui::DateOptionDialogWidget)
+                : ParseableDialog(parent), ui(new Ui::DateOptionDialogWidget)
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
@@ -105,8 +105,8 @@ DateOptionDialog::DateOptionDialog(Parseable* parent)
     // fill the date source combobox
     ui->dateSourcePicker->addItem(i18nc("Get date information from the image", "Image"),
                                   QVariant(FromImage));
-    //    ui->dateSourcePicker->addItem(i18nc("Get date information from the current date", "Current Date"),
-    //                                  QVariant(CurrentDateTime));
+//    ui->dateSourcePicker->addItem(i18nc("Get date information from the current date", "Current Date"),
+//                                  QVariant(CurrentDateTime));
     ui->dateSourcePicker->addItem(i18nc("Set a fixed date", "Fixed Date"),
                                   QVariant(FixedDateTime));
 
@@ -127,7 +127,7 @@ DateOptionDialog::DateOptionDialog(Parseable* parent)
     ui->dateFormatLink->setText(dateFormatLink);
 
     QRegExp validRegExp("[^/]+");
-    QValidator* validator = new QRegExpValidator(validRegExp, this);
+    QValidator *validator = new QRegExpValidator(validRegExp, this);
     ui->customFormatInput->setValidator(validator);
     ui->customFormatInput->setClickMessage(i18n("Enter custom format"));
 
@@ -178,7 +178,6 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
 
     v = df.formatType((DateFormat::Type)ui->dateFormatPicker->currentIndex());
     QString result;
-
     if (v.type() == QVariant::String)
     {
         result = date.toString(v.toString());
@@ -187,7 +186,6 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
     {
         result = date.toString((Qt::DateFormat)v.toInt());
     }
-
     return result;
 }
 
@@ -225,12 +223,12 @@ void DateOptionDialog::updateExampleLabel()
 // --------------------------------------------------------
 
 DateOption::DateOption()
-    : Option(i18n("Date && Time..."),
-             i18n("Add date and time information"),
-             SmallIcon("view-pim-calendar"))
+          : Option(i18n("Date && Time..."),
+                   i18n("Add date and time information"),
+                   SmallIcon("view-pim-calendar"))
 {
     addToken("[date]",            i18n("Date and time (standard format)"));
-    //    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text|Locale)"));
+//    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text|Locale)"));
     addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text)"));
     addToken("[date:||format||]", i18n("Date and time") + " (" +  dateFormatLink + ')');
 
@@ -249,7 +247,7 @@ QString DateOption::parseOperation(ParseSettings& settings)
     QString token = reg.cap(2);
 
     if ( !(token.isEmpty() || token.isNull()) &&
-         (token.startsWith('"') && token.endsWith('"'))
+          (token.startsWith('"') && token.endsWith('"'))
        )
     {
         token = token.remove(0, 1);
@@ -267,7 +265,6 @@ QString DateOption::parseOperation(ParseSettings& settings)
     {
         // lets try to re-read the file information
         ImageInfo info(settings.fileUrl);
-
         if (!info.isNull())
         {
             dateTime = info.dateTime();
@@ -288,7 +285,6 @@ QString DateOption::parseOperation(ParseSettings& settings)
     }
 
     QVariant v = df.formatType(token);
-
     if (v.isNull())
     {
         result = dateTime.toString(token);
@@ -331,7 +327,7 @@ void DateOption::slotTokenTriggered(const QString& token)
             date.setTime(dlg->ui->timePicker->time());
 
             v = (index == DateFormat::Custom) ? dlg->ui->customFormatInput->text()
-                : df.formatType((DateFormat::Type)index);
+                                              : df.formatType((DateFormat::Type)index);
 
             if (v.type() == QVariant::String)
             {

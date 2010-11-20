@@ -42,14 +42,14 @@ public:
         filterInstalled = false;
     }
 
-    QAbstractItemView* view;
+    QAbstractItemView *view;
     QModelIndex        index;
     QRect              rect;
     bool               filterInstalled;
 };
 
-ItemViewToolTip::ItemViewToolTip(QAbstractItemView* view)
-    : DItemToolTip(view), d(new ItemViewToolTipPriv)
+ItemViewToolTip::ItemViewToolTip(QAbstractItemView *view)
+               : DItemToolTip(view), d(new ItemViewToolTipPriv)
 {
     d->view = view;
 
@@ -61,7 +61,7 @@ ItemViewToolTip::~ItemViewToolTip()
     delete d;
 }
 
-QAbstractItemView* ItemViewToolTip::view() const
+QAbstractItemView *ItemViewToolTip::view() const
 {
     return d->view;
 }
@@ -71,14 +71,13 @@ QModelIndex ItemViewToolTip::currentIndex() const
     return d->index;
 }
 
-void ItemViewToolTip::show(QHelpEvent*, const QStyleOptionViewItem& option, const QModelIndex& index)
+void ItemViewToolTip::show(QHelpEvent *, const QStyleOptionViewItem& option, const QModelIndex& index)
 {
     d->index = index;
     d->rect  = option.rect;
     d->rect.moveTopLeft(d->view->viewport()->mapToGlobal(d->rect.topLeft()));
     updateToolTip();
     reposition();
-
     if (isHidden() && !toolTipIsEmpty())
     {
         if (!d->filterInstalled)
@@ -86,7 +85,6 @@ void ItemViewToolTip::show(QHelpEvent*, const QStyleOptionViewItem& option, cons
             qApp->installEventFilter(this);
             d->filterInstalled = true;
         }
-
         DItemToolTip::show();
     }
 }
@@ -96,11 +94,10 @@ QRect ItemViewToolTip::repositionRect()
     return d->rect;
 }
 
-void ItemViewToolTip::hideEvent(QHideEvent*)
+void ItemViewToolTip::hideEvent(QHideEvent *)
 {
     d->rect  = QRect();
     d->index = QModelIndex();
-
     if (d->filterInstalled)
     {
         d->filterInstalled = false;
@@ -111,27 +108,23 @@ void ItemViewToolTip::hideEvent(QHideEvent*)
 // The following code is inspired by qtooltip.cpp,
 // Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
 
-bool ItemViewToolTip::eventFilter(QObject* o, QEvent* e)
+bool ItemViewToolTip::eventFilter(QObject *o, QEvent *e)
 {
     switch (e->type())
     {
-#ifdef Q_WS_MAC
+        #ifdef Q_WS_MAC
         case QEvent::KeyPress:
         case QEvent::KeyRelease:
         {
-            int key = static_cast<QKeyEvent*>(e)->key();
-            Qt::KeyboardModifiers mody = static_cast<QKeyEvent*>(e)->modifiers();
-
+            int key = static_cast<QKeyEvent *>(e)->key();
+            Qt::KeyboardModifiers mody = static_cast<QKeyEvent *>(e)->modifiers();
             if (!(mody & Qt::KeyboardModifierMask)
                 && key != Qt::Key_Shift && key != Qt::Key_Control
                 && key != Qt::Key_Alt && key != Qt::Key_Meta)
-            {
                 hide();
-            }
-
             break;
         }
-#endif
+        #endif
         case QEvent::Leave:
             hide(); // could add a 300ms timer here, like Qt
             break;
@@ -147,35 +140,23 @@ bool ItemViewToolTip::eventFilter(QObject* o, QEvent* e)
             break;
 
         case QEvent::MouseMove:
-
             // needs mouse tracking, obviously
             if (o == d->view->viewport() && !d->rect.isNull() && !d->rect.contains(static_cast<QMouseEvent*>(e)->globalPos()))
-            {
                 hide();
-            }
-
         default:
             break;
     }
-
     return false;
 }
 
-void ItemViewToolTip::mouseMoveEvent(QMouseEvent* e)
+void ItemViewToolTip::mouseMoveEvent(QMouseEvent *e)
 {
     if (d->rect.isNull())
-    {
         return;
-    }
-
     QPoint pos = e->globalPos();
     pos = d->view->viewport()->mapFromGlobal(pos);
-
     if (!d->rect.contains(pos))
-    {
         hide();
-    }
-
     DItemToolTip::mouseMoveEvent(e);
 }
 

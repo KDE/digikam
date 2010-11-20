@@ -72,20 +72,20 @@ public:
     void insertItem(IconItem* item);
     void takeItem(IconItem* item);
 
-    virtual int compare(IconGroupItem* group);
+    virtual int compare(IconGroupItem *group);
 
 protected:
 
-    virtual void paintBanner(QPainter* p);
+    virtual void paintBanner(QPainter *p);
 
 private:
 
-    static int cmpItems(const void* n1, const void* n2);
+    static int cmpItems(const void *n1, const void *n2);
 
 private:
 
-    IconGroupItem*            m_next;
-    IconGroupItem*            m_prev;
+    IconGroupItem            *m_next;
+    IconGroupItem            *m_prev;
 
     IconGroupItemPriv* const  d;
 };

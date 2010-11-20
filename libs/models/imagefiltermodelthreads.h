@@ -41,18 +41,12 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelWorker : public QObject
 
 public:
 
-    ImageFilterModelWorker(ImageFilterModelPrivate* d);
+    ImageFilterModelWorker(ImageFilterModelPrivate *d);
 
-    void shutDown()
-    {
-        thread->quit();
-        thread->wait();
-    }
+    void shutDown() { thread->quit(); thread->wait(); }
 
     bool checkVersion(const ImageFilterModelTodoPackage& package)
-    {
-        return d->version == package.version;
-    }
+    { return d->version == package.version; }
 
 public Q_SLOTS:
 
@@ -67,16 +61,13 @@ protected:
 
     class Thread : public QThread
     {
-    public:
-        Thread(QObject* parent = 0) : QThread(parent) {}
-        virtual void run()
-        {
-            exec();
-        }
+        public:
+        Thread(QObject *parent = 0) : QThread(parent) {}
+        virtual void run() { exec(); }
     };
-    Thread*                  thread;
+    Thread                  *thread;
 
-    ImageFilterModelPrivate* d;
+    ImageFilterModelPrivate *d;
 };
 
 class DIGIKAM_DATABASE_EXPORT ImageFilterModelPreparer : public ImageFilterModelWorker
@@ -85,7 +76,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelPreparer : public ImageFilterModel
 
 public:
 
-    ImageFilterModelPreparer(ImageFilterModelPrivate* d)
+    ImageFilterModelPreparer(ImageFilterModelPrivate *d)
         : ImageFilterModelWorker(d) {}
 
     void process(ImageFilterModelTodoPackage package);
@@ -97,7 +88,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelFilterer : public ImageFilterModel
 
 public:
 
-    ImageFilterModelFilterer(ImageFilterModelPrivate* d)
+    ImageFilterModelFilterer(ImageFilterModelPrivate *d)
         : ImageFilterModelWorker(d) {}
 
     void process(ImageFilterModelTodoPackage package);

@@ -135,22 +135,22 @@ public:
 };
 
 ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
-    : KTabWidget(parent), d(new ImagePropertiesColorsTabPriv)
+                        : KTabWidget(parent), d(new ImagePropertiesColorsTabPriv)
 {
     // Histogram tab area -----------------------------------------------------
 
-    QScrollArea* sv = new QScrollArea(this);
+    QScrollArea *sv = new QScrollArea(this);
     sv->setFrameStyle(QFrame::NoFrame);
     sv->setWidgetResizable(true);
 
     QWidget* histogramPage = new QWidget(sv->viewport());
-    QGridLayout* topLayout = new QGridLayout(histogramPage);
+    QGridLayout *topLayout = new QGridLayout(histogramPage);
     sv->setWidget(histogramPage);
 
     // -------------------------------------------------------------
 
     d->regionBox       = new QWidget(histogramPage);
-    QHBoxLayout* hlay2 = new QHBoxLayout(d->regionBox);
+    QHBoxLayout *hlay2 = new QHBoxLayout(d->regionBox);
     d->regionBG        = new QButtonGroup(d->regionBox);
     d->regionBG->setExclusive(true);
     d->regionBox->hide();
@@ -159,13 +159,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
                                      "<b>Selection</b>: Compute histogram using the current image "
                                      "selection.</p>"));
 
-    QPushButton* fullImageButton = new QPushButton(d->regionBox);
+    QPushButton *fullImageButton = new QPushButton(d->regionBox);
     fullImageButton->setToolTip( i18n( "Full Image" ) );
     fullImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-full.png")));
     fullImageButton->setCheckable(true);
     d->regionBG->addButton(fullImageButton, FullImageHistogram);
 
-    QPushButton* SelectionImageButton = new QPushButton(d->regionBox);
+    QPushButton *SelectionImageButton = new QPushButton(d->regionBox);
     SelectionImageButton->setToolTip( i18n( "Selection" ) );
     SelectionImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-selection.png")));
     SelectionImageButton->setCheckable(true);
@@ -178,16 +178,16 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    KVBox* histoBox    = new KVBox(histogramPage);
+    KVBox *histoBox    = new KVBox(histogramPage);
     d->histogramBox    = new HistogramBox(histoBox, Digikam::LRGBAC, true);
 
-    QLabel* space = new QLabel(histoBox);
+    QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
 
     // -------------------------------------------------------------
 
-    QHBoxLayout* hlay3 = new QHBoxLayout();
-    QLabel* label3     = new QLabel(i18n("Range:"), histogramPage);
+    QHBoxLayout *hlay3 = new QHBoxLayout();
+    QLabel *label3     = new QLabel(i18n("Range:"), histogramPage);
     label3->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     d->minInterv = new QSpinBox(histogramPage);
@@ -210,34 +210,34 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QGroupBox* gbox = new QGroupBox(i18n("Statistics"), histogramPage);
+    QGroupBox *gbox = new QGroupBox(i18n("Statistics"), histogramPage);
     gbox->setWhatsThis(i18n("Here you can see the statistical results calculated from the "
                             "selected histogram part. These values are available for all "
                             "channels."));
     QGridLayout* grid       = new QGridLayout(gbox);
 
-    DTextLabelName* label5  = new DTextLabelName(i18n("Pixels: "), gbox);
+    DTextLabelName *label5  = new DTextLabelName(i18n("Pixels: "), gbox);
     d->labelPixelsValue     = new DTextLabelValue(0, gbox);
 
-    DTextLabelName* label7  = new DTextLabelName(i18n("Count: "), gbox);
+    DTextLabelName *label7  = new DTextLabelName(i18n("Count: "), gbox);
     d->labelCountValue      = new DTextLabelValue(0, gbox);
 
-    DTextLabelName* label4  = new DTextLabelName(i18n("Mean: "), gbox);
+    DTextLabelName *label4  = new DTextLabelName(i18n("Mean: "), gbox);
     d->labelMeanValue       = new DTextLabelValue(0, gbox);
 
-    DTextLabelName* label6  = new DTextLabelName(i18n("Std. deviation: "), gbox);
+    DTextLabelName *label6  = new DTextLabelName(i18n("Std. deviation: "), gbox);
     d->labelStdDevValue     = new DTextLabelValue(0, gbox);
 
-    DTextLabelName* label8  = new DTextLabelName(i18n("Median: "), gbox);
+    DTextLabelName *label8  = new DTextLabelName(i18n("Median: "), gbox);
     d->labelMedianValue     = new DTextLabelValue(0, gbox);
 
-    DTextLabelName* label9  = new DTextLabelName(i18n("Percentile: "), gbox);
+    DTextLabelName *label9  = new DTextLabelName(i18n("Percentile: "), gbox);
     d->labelPercentileValue = new DTextLabelValue(0, gbox);
 
-    DTextLabelName* label10 = new DTextLabelName(i18n("Color depth: "), gbox);
+    DTextLabelName *label10 = new DTextLabelName(i18n("Color depth: "), gbox);
     d->labelColorDepth      = new DTextLabelValue(0, gbox);
 
-    DTextLabelName* label11 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
+    DTextLabelName *label11 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
     d->labelAlphaChannel    = new DTextLabelValue(0, gbox);
 
     grid->addWidget(label5,                  0, 0, 1, 1);
@@ -274,7 +274,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     // ICC Profiles tab area ---------------------------------------
 
-    QScrollArea* sv2 = new QScrollArea(this);
+    QScrollArea *sv2 = new QScrollArea(this);
     sv2->setFrameStyle(QFrame::NoFrame);
     sv2->setWidgetResizable(true);
 
@@ -288,7 +288,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
 
     setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
-                                    (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
+                    (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
     d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::CUSTOM));
     d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
 
@@ -351,15 +351,13 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     config->sync();
 
     if (d->imageLoaderThread)
-    {
-        delete d->imageLoaderThread;
-    }
+       delete d->imageLoaderThread;
 
     delete d;
 }
 
 void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionArea,
-                                       DImg* img)
+                                       DImg *img)
 {
     // We might be getting duplicate events from AlbumIconView,
     // which will cause all sorts of duplicate work.
@@ -368,9 +366,7 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
     // So filter here, before the stopHistogramComputation!
     // But do not filter if current path is null, as it would not disable the widget on first run.
     if (!img && !d->currentFilePath.isNull() && url.toLocalFile() == d->currentFilePath)
-    {
         return;
-    }
 
     // This is necessary to stop computation because d->image.bits() is currently used by
     // threaded histogram algorithm.
@@ -392,9 +388,9 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
 
     if (url.isEmpty())
     {
-        setEnabled(false);
-        d->image.reset();
-        return;
+       setEnabled(false);
+       d->image.reset();
+       return;
     }
 
     d->selectionArea = selectionArea;
@@ -419,15 +415,15 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
             {
                 d->imageSelection = d->image.copy(d->selectionArea);
                 d->histogramBox->histogram()->updateData(d->image.bits(), d->image.width(), d->image.height(),
-                        d->image.sixteenBit(), d->imageSelection.bits(),
-                        d->imageSelection.width(), d->imageSelection.height());
+                                               d->image.sixteenBit(), d->imageSelection.bits(),
+                                               d->imageSelection.width(), d->imageSelection.height());
                 d->regionBox->show();
                 updateInformation();
             }
             else
             {
                 d->histogramBox->histogram()->updateData(d->image.bits(), d->image.width(),
-                        d->image.height(), d->image.sixteenBit());
+                                               d->image.height(), d->image.sixteenBit());
                 d->regionBox->hide();
                 updateInformation();
             }
@@ -448,11 +444,11 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
     {
         d->imageLoaderThread = new SharedLoadSaveThread();
 
-        connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-                this, SLOT(slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg&)));
+        connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg&)),
+                this, SLOT(slotLoadImageFromUrlComplete(const LoadingDescription &, const DImg&)));
 
-        connect(d->imageLoaderThread, SIGNAL(signalMoreCompleteLoadingAvailable(const LoadingDescription&, const LoadingDescription&)),
-                this, SLOT(slotMoreCompleteLoadingAvailable(const LoadingDescription&, const LoadingDescription&)));
+        connect(d->imageLoaderThread, SIGNAL(signalMoreCompleteLoadingAvailable(const LoadingDescription &, const LoadingDescription &)),
+                this, SLOT(slotMoreCompleteLoadingAvailable(const LoadingDescription &, const LoadingDescription &)));
     }
 
     LoadingDescription desc = LoadingDescription(url.toLocalFile());
@@ -467,9 +463,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
     }
 
     if (d->currentLoadingDescription.equalsOrBetterThan(desc))
-    {
         return;
-    }
 
     d->currentFilePath = desc.filePath;
     d->currentLoadingDescription = desc;
@@ -486,9 +480,7 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescrip
 {
     // Discard any leftover messages from previous, possibly aborted loads
     if ( !loadingDescription.equalsOrBetterThan(d->currentLoadingDescription) )
-    {
         return;
-    }
 
     if ( !img.isNull() )
     {
@@ -510,7 +502,7 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescrip
 }
 
 void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
-        const LoadingDescription& newLoadingDescription)
+                                                                const LoadingDescription& newLoadingDescription)
 {
     if (oldLoadingDescription == d->currentLoadingDescription &&
         newLoadingDescription.equalsOrBetterThan(d->currentLoadingDescription))
@@ -528,9 +520,7 @@ void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDes
 void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
 {
     if (selectionArea == d->selectionArea)
-    {
         return;
-    }
 
     // This is necessary to stop computation because d->image.bits() is currently used by
     // threaded histogram algorithm.
@@ -541,7 +531,7 @@ void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
     {
         d->imageSelection = d->image.copy(d->selectionArea);
         d->histogramBox->histogram()->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
-                d->imageSelection.height(), d->imageSelection.sixteenBit());
+                                                d->imageSelection.height(), d->imageSelection.sixteenBit());
         d->regionBox->show();
         slotRenderingChanged(d->regionBG->checkedId());
     }
@@ -559,9 +549,7 @@ void ImagePropertiesColorsTab::slotRefreshOptions(bool /*sixteenBit*/)
     slotScaleChanged();
 
     if (d->selectionArea.isValid())
-    {
-        slotRenderingChanged(d->regionBG->checkedId());
-    }
+       slotRenderingChanged(d->regionBG->checkedId());
 }
 
 void ImagePropertiesColorsTab::slotHistogramComputationFailed()
@@ -593,10 +581,7 @@ void ImagePropertiesColorsTab::slotMinValueChanged(int min)
 
     // make the one control "push" the other
     if (min == d->maxInterv->value()+1)
-    {
         d->maxInterv->setValue(min);
-    }
-
     d->maxInterv->setMinimum(min-1);
     d->histogramBox->histogram()->slotMinValueChanged(min);
     updateStatistics();
@@ -605,10 +590,7 @@ void ImagePropertiesColorsTab::slotMinValueChanged(int min)
 void ImagePropertiesColorsTab::slotMaxValueChanged(int max)
 {
     if (max == d->minInterv->value()-1)
-    {
         d->minInterv->setValue(max);
-    }
-
     d->minInterv->setMaximum(max+1);
     d->histogramBox->histogram()->slotMaxValueChanged(max);
     updateStatistics();
@@ -645,12 +627,9 @@ void ImagePropertiesColorsTab::updateInformation()
 
 void ImagePropertiesColorsTab::updateStatistics()
 {
-    ImageHistogram* renderedHistogram = d->histogramBox->histogram()->currentHistogram();
-
+    ImageHistogram *renderedHistogram = d->histogramBox->histogram()->currentHistogram();
     if (!renderedHistogram)
-    {
         return;
-    }
 
     QString value;
     int min = d->minInterv->value();

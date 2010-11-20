@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-21
- * Description : a generic list view widget to
+ * Description : a generic list view widget to 
  *               display metadata
  *
  * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -80,7 +80,7 @@ private:
 
     QString         m_selectedItemKey;
 
-    MetadataWidget* m_parent;
+    MetadataWidget *m_parent;
 };
 
 }  // namespace Digikam

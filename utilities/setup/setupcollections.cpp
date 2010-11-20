@@ -73,39 +73,39 @@ public:
 
     bool                     rootsPathChanged;
 
-    SetupCollectionTreeView* collectionView;
-    SetupCollectionModel*    collectionModel;
+    SetupCollectionTreeView *collectionView;
+    SetupCollectionModel    *collectionModel;
 
-    KPageDialog*             mainDialog;
+    KPageDialog             *mainDialog;
 };
 
 SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
-    : QScrollArea(parent), d(new SetupCollectionsPriv)
+                : QScrollArea(parent), d(new SetupCollectionsPriv)
 {
     d->mainDialog  = dialog;
-    QWidget* panel = new QWidget(viewport());
+    QWidget *panel = new QWidget(viewport());
     panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
     viewport()->setAutoFillBackground(false);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout *layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox* albumPathBox = new QGroupBox(i18n("Root Album Folders"), panel);
+    QGroupBox *albumPathBox = new QGroupBox(i18n("Root Album Folders"), panel);
 
 #ifndef _WIN32
-    QLabel* albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
-                                         "your images. Write access is necessary to be able "
-                                         "to edit images in these albums.</p>"
-                                         "<p>Note: Removable media (such as USB drives or DVDs) and remote file systems "
-                                         "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p><p></p>"),
+    QLabel *albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
+                                              "your images. Write access is necessary to be able "
+                                              "to edit images in these albums.</p>"
+                                              "<p>Note: Removable media (such as USB drives or DVDs) and remote file systems "
+                                              "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p><p></p>"),
                                          albumPathBox);
 #else
-    QLabel* albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
-                                         "your images. Write access is necessary to be able "
-                                         "to edit images in these albums.</p><p></p>"),
+    QLabel *albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
+                                              "your images. Write access is necessary to be able "
+                                              "to edit images in these albums.</p><p></p>"),
                                          albumPathBox);
 #endif
     albumPathLabel->setWordWrap(true);
@@ -115,7 +115,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->collectionModel = new SetupCollectionModel(panel);
     d->collectionView->setModel(d->collectionModel);
 
-    QVBoxLayout* albumPathBoxLayout = new QVBoxLayout;
+    QVBoxLayout *albumPathBoxLayout = new QVBoxLayout;
     albumPathBoxLayout->addWidget(albumPathLabel);
     albumPathBoxLayout->addWidget(d->collectionView);
     albumPathBox->setLayout(albumPathBoxLayout);

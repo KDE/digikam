@@ -79,7 +79,7 @@ public:
 };
 
 ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent)
-    : KTabWidget(parent), d(new ImagePropertiesMetadataTabPriv)
+                          : KTabWidget(parent), d(new ImagePropertiesMetadataTabPriv)
 {
     // Exif tab area ---------------------------------------
 
@@ -99,15 +99,10 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent)
     // XMP tab area ----------------------------------------
 
     d->xmpWidget = new XmpWidget(this);
-
     if (DMetadata::supportXmp())
-    {
         insertTab(ImagePropertiesMetadataTabPriv::XMP, d->xmpWidget, i18n("XMP"));
-    }
     else
-    {
         d->xmpWidget->hide();
-    }
 
     readSettings();
 }
@@ -128,7 +123,7 @@ void ImagePropertiesMetaDataTab::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
     setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
-                                    (int)ImagePropertiesMetadataTabPriv::EXIF));
+                    (int)ImagePropertiesMetadataTabPriv::EXIF));
     d->exifWidget->setMode(group.readEntry("EXIF Level",                              (int)ExifWidget::CUSTOM));
     d->makernoteWidget->setMode(group.readEntry("MAKERNOTE Level",                    (int)MakerNoteWidget::CUSTOM));
     d->iptcWidget->setMode(group.readEntry("IPTC Level",                              (int)IptcWidget::CUSTOM));

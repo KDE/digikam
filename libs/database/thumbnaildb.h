@@ -89,19 +89,19 @@ public:
     bool setSetting(const QString& keyword, const QString& value);
     QString getSetting(const QString& keyword);
 
-    DatabaseThumbnailInfo findByHash(const QString& uniqueHash, int fileSize);
-    DatabaseThumbnailInfo findByFilePath(const QString& path);
+    DatabaseThumbnailInfo findByHash(const QString &uniqueHash, int fileSize);
+    DatabaseThumbnailInfo findByFilePath(const QString &path);
 
-    DatabaseCoreBackend::QueryState insertUniqueHash(const QString& uniqueHash, int fileSize, int thumbId);
-    DatabaseCoreBackend::QueryState insertFilePath(const QString& path, int thumbId);
+    DatabaseCoreBackend::QueryState insertUniqueHash(const QString &uniqueHash, int fileSize, int thumbId);
+    DatabaseCoreBackend::QueryState insertFilePath(const QString &path, int thumbId);
 
     /** Removes thumbnail data associated to the given uniqueHash/fileSize */
-    DatabaseCoreBackend::QueryState removeByUniqueHash(const QString& uniqueHash, int fileSize);
+    DatabaseCoreBackend::QueryState removeByUniqueHash(const QString &uniqueHash, int fileSize);
     /** Removes thumbnail data associated to the given file path */
-    DatabaseCoreBackend::QueryState removeByFilePath(const QString& path);
+    DatabaseCoreBackend::QueryState removeByFilePath(const QString &path);
 
-    DatabaseCoreBackend::QueryState insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* lastInsertId = 0);
-    DatabaseCoreBackend::QueryState replaceThumbnail(const DatabaseThumbnailInfo& info);
+    DatabaseCoreBackend::QueryState insertThumbnail(const DatabaseThumbnailInfo &info, QVariant *lastInsertId = 0);
+    DatabaseCoreBackend::QueryState replaceThumbnail(const DatabaseThumbnailInfo &info);
 
     QHash<QString, int> getFilePathsWithThumbnail();
 
@@ -109,7 +109,7 @@ private:
 
     friend class Digikam::ThumbnailDatabaseAccess;
 
-    ThumbnailDB(DatabaseCoreBackend* backend);
+    ThumbnailDB(DatabaseCoreBackend *backend);
     ~ThumbnailDB();
 
     ThumbnailDBPriv* const d;

@@ -57,13 +57,13 @@ class GPSSearchView : public QWidget, public StateSavingObject
 
 public:
 
-    GPSSearchView(QWidget* parent, SearchModel* searchModel,
-                  SearchModificationHelper* searchModificationHelper);
+    GPSSearchView(QWidget *parent, SearchModel *searchModel,
+                  SearchModificationHelper *searchModificationHelper);
     ~GPSSearchView();
 
     void setActive(bool val);
 
-    void changeAlbumFromHistory(SAlbum* album);
+    void changeAlbumFromHistory(SAlbum *album);
 
     virtual void setConfigGroup(KConfigGroup group);
     void doLoadState();
@@ -71,7 +71,7 @@ public:
 
 public Q_SLOTS:
     void slotDigikamViewNoCurrentItem();
-    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList& allImages);
+    void slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
 
 private:
 
@@ -91,10 +91,10 @@ private Q_SLOTS:
     void slotSelectionChanged();
 
     void slotItemsInfo(const ImageInfoList&);
-
+    
     void slotMapSelectedItems(const GPSInfoList& gpsList);
     void slotMapSoloItems(const GPSInfoList& gpsList);
-
+    
 Q_SIGNALS:
     void signalMapSelectedItems(const KUrl::List url);
     void signalMapSoloItems(const KUrl::List url, const QString& id);

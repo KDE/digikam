@@ -65,17 +65,17 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotAboutToShow();
-    void slotToggleTag(QAction*);
-    void slotAddTag(QAction*);
-    void slotTagThumbnail(Album*, const QPixmap&);
+    void slotToggleTag(QAction *);
+    void slotAddTag(QAction *);
+    void slotTagThumbnail(Album *, const QPixmap&);
 
 private:
 
     void   setup(Mode mode);
     void   clearPopup();
     KMenu* buildSubMenu(int tagid);
-    void   iterateAndBuildMenu(KMenu* menu, TAlbum* album);
-    void   setAlbumIcon(QAction* action, TAlbum* album);
+    void   iterateAndBuildMenu(KMenu *menu, TAlbum *album);
+    void   setAlbumIcon(QAction *action, TAlbum *album);
 
 private:
 

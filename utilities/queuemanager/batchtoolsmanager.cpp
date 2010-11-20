@@ -67,13 +67,13 @@ class BatchToolsManager::BatchToolsManagerPriv
 
 public:
 
-    BatchToolsManagerPriv() {}
+    BatchToolsManagerPriv(){}
 
     BatchToolsList toolsList;
 };
 
 BatchToolsManager::BatchToolsManager(QObject* parent)
-    : QObject(parent), d(new BatchToolsManagerPriv)
+                 : QObject(parent), d(new BatchToolsManagerPriv)
 {
     // Convert
     registerTool(new Convert2JPEG(this));
@@ -137,9 +137,7 @@ BatchToolsList BatchToolsManager::toolsList() const
 void BatchToolsManager::registerTool(BatchTool* tool)
 {
     if (!tool)
-    {
         return;
-    }
 
     d->toolsList.append(tool);
 }
@@ -147,12 +145,10 @@ void BatchToolsManager::registerTool(BatchTool* tool)
 void BatchToolsManager::unregisterTool(BatchTool* tool)
 {
     if (!tool)
-    {
         return;
-    }
 
     for (BatchToolsList::iterator it = d->toolsList.begin();
-         it != d->toolsList.end(); )
+            it != d->toolsList.end(); )
     {
         if (*it == tool)
         {
@@ -171,9 +167,7 @@ BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchTool
     for (BatchToolsList::const_iterator it = d->toolsList.constBegin(); it != d->toolsList.constEnd(); ++it)
     {
         if ((*it)->objectName() == name && (*it)->toolGroup() == group)
-        {
             return *it;
-        }
     }
 
     return 0;

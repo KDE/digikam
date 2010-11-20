@@ -72,14 +72,14 @@ public:
 };
 
 AdvancedRenameManager::AdvancedRenameManager()
-    : d(new ParseManagerPriv)
+                     : d(new ParseManagerPriv)
 {
     setParserType(DefaultParser);
     setSortType(SortAscending);
 }
 
 AdvancedRenameManager::AdvancedRenameManager(const QList<ParseSettings>& files, SortType type)
-    : d(new ParseManagerPriv)
+                     : d(new ParseManagerPriv)
 {
     setParserType(DefaultParser);
     setSortType(type);
@@ -89,12 +89,10 @@ AdvancedRenameManager::AdvancedRenameManager(const QList<ParseSettings>& files, 
 AdvancedRenameManager::~AdvancedRenameManager()
 {
     clearAll();
-
     if (d->parser)
     {
         delete d->parser;
     }
-
     delete d;
 }
 
@@ -132,7 +130,6 @@ void AdvancedRenameManager::setWidget(AdvancedRenameWidget* widget)
         d->widget = 0;
         return;
     }
-
     d->widget = widget;
     setParserType(d->parserType);
 }
@@ -152,13 +149,11 @@ void AdvancedRenameManager::setParserType(ParserType type)
     {
         d->parser = new DefaultRenameParser();
     }
-
     d->parserType = type;
 
     if (d->widget)
     {
         d->widget->setParser(d->parser);
-
         if (type == ImportParser)
         {
             d->widget->setLayoutStyle(AdvancedRenameWidget::LayoutCompact);
@@ -176,7 +171,6 @@ Parser* AdvancedRenameManager::getParser()
     {
         return 0;
     }
-
     return d->parser;
 }
 
@@ -186,7 +180,6 @@ void AdvancedRenameManager::parseFiles()
     {
         return;
     }
-
     parseFiles(d->widget->parseString());
 }
 
@@ -292,12 +285,10 @@ QStringList AdvancedRenameManager::fileList()
         case SortDescending:
         {
             QStringList sortedList = sortListCaseInsensitive(d->files);
-
             for (int i = sortedList.size() - 1; i >= 0; --i)
             {
                 tmpFiles << sortedList[i];
             }
-
             break;
         }
         case SortCustom:
@@ -305,7 +296,6 @@ QStringList AdvancedRenameManager::fileList()
             tmpFiles = d->files;
             break;
     }
-
     return tmpFiles;
 }
 
@@ -349,14 +339,12 @@ bool AdvancedRenameManager::initialize()
         {
             QFileInfo fi(file);
             QString path = fi.absolutePath();
-
             if (!path.isEmpty())
             {
                 if (!dirMap.contains(path))
                 {
                     dirMap[path] = QList<QString>();
                 }
-
                 dirMap[path].push_back(file);
             }
         }
@@ -426,7 +414,6 @@ QString AdvancedRenameManager::newName(const QString& filename)
     {
         return filename;
     }
-
     return d->renamedFiles.value(filename);
 }
 

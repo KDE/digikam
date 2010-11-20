@@ -77,7 +77,7 @@ public:
 };
 
 SetupDatabase::SetupDatabase(KPageDialog* dialog, QWidget* parent)
-    : QScrollArea(parent), d(new SetupDatabasePriv)
+             : QScrollArea(parent), d(new SetupDatabasePriv)
 {
     d->mainDialog  = dialog;
     d->databaseWidget = new DatabaseWidget(viewport());
@@ -100,11 +100,7 @@ SetupDatabase::~SetupDatabase()
 void SetupDatabase::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-
-    if (!settings)
-    {
-        return;
-    }
+    if (!settings) return;
 
     if (d->databaseWidget->currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
@@ -149,7 +145,6 @@ void SetupDatabase::applySettings()
             settings->setDatabaseUserName(d->databaseWidget->userName->text());
             settings->setDatabasePassword(d->databaseWidget->password->text());
         }
-
         settings->saveSettings();
     }
 }
@@ -157,11 +152,7 @@ void SetupDatabase::applySettings()
 void SetupDatabase::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-
-    if (!settings)
-    {
-        return;
-    }
+    if (!settings) return;
 
     d->databaseWidget->setParametersFromSettings(settings);
 }

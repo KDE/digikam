@@ -88,19 +88,10 @@ public:
     /** A user-visible, optional label. */
     QString label() const;
 
-    bool isAvailable() const
-    {
-        return m_status == LocationAvailable;
-    }
-    bool isNull() const
-    {
-        return m_status == LocationNull;
-    }
+    bool isAvailable() const { return m_status == LocationAvailable; }
+    bool isNull() const      { return m_status == LocationNull;      }
 
-    uint hash() const
-    {
-        return ::qHash(m_id);
-    }
+    uint hash() const { return ::qHash(m_id); }
 
 protected:
 
@@ -114,9 +105,6 @@ protected:
 
 }  // namespace Digikam
 
-inline uint qHash(const Digikam::CollectionLocation& loc)
-{
-    return loc.hash();
-}
+inline uint qHash(const Digikam::CollectionLocation& loc) { return loc.hash(); }
 
 #endif // COLLECTIONLOCATION_H

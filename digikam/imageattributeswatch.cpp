@@ -31,17 +31,17 @@
 namespace Digikam
 {
 
-ImageAttributesWatch* ImageAttributesWatch::m_instance = 0;
+ImageAttributesWatch *ImageAttributesWatch::m_instance = 0;
 
 ImageAttributesWatch::ImageAttributesWatch()
 {
-    DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
+    DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChange(const ImageChangeset&)));
+    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
+            this, SLOT(slotImageChange(const ImageChangeset &)));
 
-    connect(dbwatch, SIGNAL(imageTagChange(const ImageTagChangeset&)),
-            this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+    connect(dbwatch, SIGNAL(imageTagChange(const ImageTagChangeset &)),
+            this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
 }
 
 ImageAttributesWatch::~ImageAttributesWatch()
@@ -58,18 +58,13 @@ void ImageAttributesWatch::cleanUp()
 void ImageAttributesWatch::shutDown()
 {
     if (m_instance)
-    {
         m_instance->disconnect(0, 0, 0);
-    }
 }
 
-ImageAttributesWatch* ImageAttributesWatch::instance()
+ImageAttributesWatch *ImageAttributesWatch::instance()
 {
     if (!m_instance)
-    {
         m_instance = new ImageAttributesWatch;
-    }
-
     return m_instance;
 }
 
@@ -85,20 +80,12 @@ void ImageAttributesWatch::slotImageChange(const ImageChangeset& changeset)
         foreach (const qlonglong& imageId, changeset.ids())
         {
             if (set & DatabaseFields::ImageCommentsAll)
-            {
                 emit signalImageCaptionChanged(imageId);
-            }
-
             if ((set & DatabaseFields::CreationDate) ||
                 (set & DatabaseFields::ModificationDate))
-            {
                 emit signalImageDateChanged(imageId);
-            }
-
             if (set & DatabaseFields::Rating)
-            {
                 emit signalImageRatingChanged(imageId);
-            }
         }
     }
 }

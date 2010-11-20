@@ -47,7 +47,7 @@ namespace Digikam
 {
 
 AssignTemplate::AssignTemplate(QObject* parent)
-    : BatchTool("AssignTemplate", MetadataTool, parent)
+              : BatchTool("AssignTemplate", MetadataTool, parent)
 {
     setToolTitle(i18n("Apply Metadata Template"));
     setToolDescription(i18n("A tool to apply template metadata"));
@@ -78,7 +78,6 @@ void AssignTemplate::slotAssignSettings2Widget()
     QString title = settings()["TemplateTitle"].toString();
 
     Template t;
-
     if (title == Template::removeTemplateTitle())
     {
         t.setTemplateTitle(Template::removeTemplateTitle());
@@ -105,10 +104,7 @@ void AssignTemplate::slotSettingsChanged()
 
 bool AssignTemplate::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     QString title = settings()["TemplateTitle"].toString();
 

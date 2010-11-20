@@ -67,7 +67,7 @@ public:
 };
 
 ImageCategoryDrawer::ImageCategoryDrawer(ImageCategorizedView* parent)
-    : d(new ImageCategoryDrawerPriv)
+                   : d(new ImageCategoryDrawerPriv)
 {
     d->view = parent;
 }
@@ -95,20 +95,14 @@ void ImageCategoryDrawer::setLowerSpacing(int spacing)
 void ImageCategoryDrawer::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     d->font = option.font;
-
     if (option.rect.width() != d->rect.width())
-    {
         updateRectsAndPixmaps(option.rect.width());
-    }
 }
 
 void ImageCategoryDrawer::invalidatePaintingCache()
 {
     if (d->rect.isNull())
-    {
         return;
-    }
-
     updateRectsAndPixmaps(d->rect.width());
 }
 
@@ -116,9 +110,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
                                        const QStyleOption& option, QPainter* p) const
 {
     if (option.rect.width() != d->rect.width())
-    {
         const_cast<ImageCategoryDrawer*>(this)->updateRectsAndPixmaps(option.rect.width());
-    }
 
     p->save();
 
@@ -133,18 +125,17 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
     QFont fontNormal(d->font);
     fontBold.setBold(true);
     int fnSize = fontBold.pointSize();
-
-    //    bool usePointSize;
+//    bool usePointSize;
     if (fnSize > 0)
     {
         fontBold.setPointSize(fnSize+2);
-        //        usePointSize = true;
+//        usePointSize = true;
     }
     else
     {
         fnSize = fontBold.pixelSize();
         fontBold.setPixelSize(fnSize+2);
-        //        usePointSize = false;
+//        usePointSize = false;
     }
 
     QString header;
@@ -170,8 +161,8 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 
     QRect tr;
     p->drawText(5, 5, d->rect.width(), d->rect.height(),
-                Qt::AlignLeft | Qt::AlignTop,
-                header, &tr);
+            Qt::AlignLeft | Qt::AlignTop,
+            header, &tr);
 
     int y = tr.height() + 2;
 
@@ -186,26 +177,19 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const
 {
     ImageModel* sourceModel = index.data(ImageModel::ImageModelPointerRole).value<ImageModel*>();
-
     if (!sourceModel)
-    {
         return;
-    }
 
     int count = d->view->categoryRange(index).height();
 
     // Add here further model subclasses in use with ImageCategoryDrawer.
     // Note you need a Q_OBJECT in the class's header for this to work.
     ImageAlbumModel* albumModel = qobject_cast<ImageAlbumModel*>(sourceModel);
-
     if (albumModel)
     {
         Album* album = albumModel->currentAlbum();
-
         if (!album)
-        {
             return;
-        }
 
         switch (album->type())
         {
@@ -245,11 +229,8 @@ void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString* heade
 void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count, QString* header, QString* subLine) const
 {
     Q_UNUSED(recursive);
-
     if (!album)
-    {
         return;
-    }
 
     QDate date    = album->date();
 
@@ -285,19 +266,16 @@ void ImageCategoryDrawer::textForTAlbum(TAlbum* talbum, bool recursive, int coun
     if (recursive && talbum->firstChild())
     {
         int n=0;
-
         for (AlbumIterator it(talbum); it.current(); ++it)
-        {
             n++;
-        }
 
         QString firstPart = i18ncp("%2: a tag title; %3: number of subtags",
                                    "%2 including 1 subtag", "%2 including %1 subtags",
                                    n, talbum->tagPath(false));
 
         *subLine = i18ncp("%2: the previous string (e.g. 'Foo including 7 subtags'); %1: number of items in tag",
-                          "%2 - 1 Item", "%2 - %1 Items",
-                          count, firstPart);
+                         "%2 - 1 Item", "%2 - %1 Items",
+                         count, firstPart);
     }
     else
     {
@@ -310,41 +288,25 @@ void ImageCategoryDrawer::textForSAlbum(SAlbum* salbum, int count, QString* head
     QString title = salbum->title();
 
     if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
-    {
         title = i18n("Fuzzy Sketch Search");
-    }
     else if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
-    {
         title = i18n("Fuzzy Image Search");
-    }
     else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
-    {
         title = i18n("Map Search");
-    }
     else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch) ||
              title == SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch))
-    {
         title = i18n("Current Search");
-    }
     else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch))
-    {
         title = i18n("Search By Time Line");
-    }
 
     *header = title;
 
     if (salbum->isNormalSearch())
-    {
         *subLine = i18np("Keyword Search - 1 Item", "Keyword Search - %1 Items", count);
-    }
     else if (salbum->isAdvancedSearch())
-    {
         *subLine = i18np("Advanced Search - 1 Item", "Advanced Search - %1 Items", count);
-    }
     else
-    {
         *subLine = i18np("1 Item", "%1 Items", count);
-    }
 }
 
 void ImageCategoryDrawer::textForDAlbum(DAlbum* album, int count, QString* header, QString* subLine) const
@@ -372,7 +334,6 @@ void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
     QFont fn(d->font);
     int fnSize = fn.pointSize();
     bool usePointSize;
-
     if (fnSize > 0)
     {
         fn.setPointSize(fnSize+2);
@@ -393,13 +354,9 @@ void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
     d->rect.setHeight(tr.height());
 
     if (usePointSize)
-    {
         fn.setPointSize(d->font.pointSize());
-    }
     else
-    {
         fn.setPixelSize(d->font.pixelSize());
-    }
 
     fn.setBold(false);
     fm = QFontMetrics(fn);

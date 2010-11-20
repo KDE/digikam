@@ -73,7 +73,7 @@ public:
 
     QTime                duration;
 
-    ImageInfoJob*        imageInfoJob;
+    ImageInfoJob        *imageInfoJob;
 
     AlbumList            palbumList;
     AlbumList::Iterator  albumsIt;
@@ -81,7 +81,7 @@ public:
 };
 
 BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* /*parent*/)
-    : DProgressDlg(0), d(new BatchAlbumsSyncMetadataPriv)
+                       : DProgressDlg(0), d(new BatchAlbumsSyncMetadataPriv)
 {
     d->imageInfoJob = new ImageInfoJob();
 
@@ -157,7 +157,6 @@ void BatchAlbumsSyncMetadata::slotAlbumItemsInfo(const ImageInfoList& list)
     if (d->status == LoadingAlbum)
     {
         d->status = ReceivingImageInfos;
-
         if (!list.isEmpty())
         {
             QPixmap pix = KIconLoader::global()->loadIcon("folder-image", KIconLoader::NoGroup, 32);
@@ -187,7 +186,7 @@ void BatchAlbumsSyncMetadata::slotCancel()
     done(Cancel);
 }
 
-void BatchAlbumsSyncMetadata::closeEvent(QCloseEvent* e)
+void BatchAlbumsSyncMetadata::closeEvent(QCloseEvent *e)
 {
     abort();
     e->accept();

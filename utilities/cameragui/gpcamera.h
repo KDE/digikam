@@ -60,7 +60,7 @@ public:
     bool getItemsList(const QString& folder, QStringList& itemsList);
     bool getItemsInfoList(const QString& folder, GPItemInfoList& items, bool getImageDimensions = true);
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
-    bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize);
+    bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize);
 
     bool setLockItem(const QString& folder, const QString& itemName, bool lock);
 
@@ -77,10 +77,7 @@ public:
     bool cameraManual(QString& manual);
     bool cameraAbout(QString& about);
 
-    DKCamera::CameraDriverType cameraDriverType()
-    {
-        return DKCamera::GPhotoDriver;
-    };
+    DKCamera::CameraDriverType cameraDriverType(){ return DKCamera::GPhotoDriver; };
 
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
     bool getPreview(QImage& preview);

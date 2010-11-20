@@ -32,21 +32,18 @@ namespace Digikam
 {
 
 CaseModifier::CaseModifier()
-    : Modifier(i18n("Change Case"), i18n("change the case of a renaming option"))
+            : Modifier(i18n("Change Case"), i18n("change the case of a renaming option"))
 {
     setUseTokenMenu(true);
 
-    addToken("{upper}",
-             i18n("Convert to uppercase"),
-             i18n("Uppercase"));
+    addToken("{upper}",      i18n("Convert to uppercase"),
+                             i18n("Uppercase"));
 
-    addToken("{lower}",
-             i18n("Convert to lowercase"),
-             i18n("Lowercase"));
+    addToken("{lower}",      i18n("Convert to lowercase"),
+                             i18n("Lowercase"));
 
-    addToken("{firstupper}",
-             i18n("Convert the first letter of each word to uppercase"),
-             i18n("First Letter of Each Word Uppercase"));
+    addToken("{firstupper}", i18n("Convert the first letter of each word to uppercase"),
+                             i18n("First Letter of Each Word Uppercase"));
 
     QRegExp reg("\\{(firstupper|lower|upper)\\}");
     reg.setMinimal(true);
@@ -89,16 +86,15 @@ QString CaseModifier::firstupper(const QString& str2Modify)
     for (int i = 0; i < result.length(); ++i)
     {
         if ( result[i + 1].isLetter()  &&
-             !result[i].isLetter()     &&
+            !result[i].isLetter()      &&
              result[i] != '\''         &&
              result[i] != '?'          &&
              result[i] != '`'
-           )
+        )
         {
             result[i + 1] = result[i + 1].toUpper();
         }
     }
-
     return result;
 }
 

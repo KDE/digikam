@@ -58,14 +58,14 @@ public:
 };
 
 UndoCache::UndoCache()
-    : d(new UndoCachePriv)
+         : d(new UndoCachePriv)
 {
     QString cacheDir = KStandardDirs::locateLocal("cache",
-                       KGlobal::mainComponent().aboutData()->programName() + '/');
+                                 KGlobal::mainComponent().aboutData()->programName() + '/');
 
     d->cachePrefix = QString("%1undocache-%2")
-                     .arg(cacheDir)
-                     .arg(getpid());
+                             .arg(cacheDir)
+                             .arg(getpid());
 }
 
 UndoCache::~UndoCache()
@@ -100,9 +100,7 @@ bool UndoCache::putData(int level, int w, int h, int bytesDepth, uchar* data)
     QFile file(cacheFile);
 
     if (file.exists() || !file.open(QIODevice::WriteOnly))
-    {
         return false;
-    }
 
     QDataStream ds(&file);
     ds << w;
@@ -129,23 +127,17 @@ uchar* UndoCache::getData(int level, int& w, int& h, int& bytesDepth, bool del)
                         .arg(level);
 
     QFile file(cacheFile);
-
     if (!file.open(QIODevice::ReadOnly))
-    {
         return 0;
-    }
 
     QDataStream ds(&file);
     ds >> w;
     ds >> h;
     ds >> bytesDepth;
 
-    uchar* data = new uchar[w*h*bytesDepth];
-
+    uchar *data = new uchar[w*h*bytesDepth];
     if (!data)
-    {
         return 0;
-    }
 
     QByteArray ba;
     ds >> ba;
@@ -173,9 +165,7 @@ void UndoCache::erase(int level)
 
     if (!d->cacheFilenames.isEmpty() &&
         d->cacheFilenames.indexOf(cacheFile) == d->cacheFilenames.indexOf(d->cacheFilenames.last()))
-    {
         return;
-    }
 
     ::unlink(QFile::encodeName(cacheFile));
 }

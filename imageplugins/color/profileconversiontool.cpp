@@ -108,8 +108,8 @@ IccTransform ProfileConversionTool::ProfileConversionToolPriv::getTransform(cons
 // ----------------------------------------------------------------------------
 
 ProfileConversionTool::ProfileConversionTool(QObject* parent)
-    : EditorToolThreaded(parent),
-      d(new ProfileConversionToolPriv)
+                     : EditorToolThreaded(parent),
+                       d(new ProfileConversionToolPriv)
 {
     setObjectName("profile conversion");
     setToolName(i18n("Color Profile Conversion"));
@@ -173,9 +173,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 ProfileConversionTool::~ProfileConversionTool()
 {
     if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
+       delete [] d->destinationPreviewData;
 
     delete d;
 }
@@ -234,14 +232,12 @@ void ProfileConversionTool::putPreviewData()
     // Update histogram.
 
     if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
+       delete [] d->destinationPreviewData;
 
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-            preview.width(), preview.height(), preview.sixteenBit(),
-            0, 0, 0, false);
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
 void ProfileConversionTool::prepareFinal()

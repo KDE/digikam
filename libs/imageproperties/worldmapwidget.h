@@ -55,13 +55,13 @@ class DIGIKAM_EXPORT GPSInfo
 public:
 
     GPSInfo()
-        : latitude(0.0),
-          longitude(0.0),
-          altitude(0.0),
-          dateTime(),
-          rating(0),
-          url(),
-          dimensions()
+    : latitude(0.0),
+      longitude(0.0),
+      altitude(0.0),
+      dateTime(),
+      rating(0),
+      url(),
+      dimensions()
     {
     };
 
@@ -95,7 +95,7 @@ public:
 
 public:
 
-    WorldMapWidget(int w, int h, QWidget* parent);
+    WorldMapWidget(int w, int h, QWidget *parent);
     virtual ~WorldMapWidget();
 
     void   setGPSPositions(const GPSInfoList& list);
@@ -139,7 +139,7 @@ public Q_SLOTS:
     void slotZoomIn();
     void slotZoomOut();
     void slotZoomChanged(int zoom);
-    void slotSetSelectedImages(const GPSInfoList& infoList);
+    void slotSetSelectedImages(const GPSInfoList &infoList);
     void slotMapMarkerSelectionChanged();
     void slotMapMarkerSoloChanged();
     void slotSetAllowItemSelection(const bool allow);
@@ -147,9 +147,9 @@ public Q_SLOTS:
     void slotSetFocusOnAddedItems(const bool doIt);
     void slotSetEnableTooltips(const bool doIt);
     void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& pix);
-    //#ifdef HAVE_MARBLEWIDGET
-    //    MarkerClusterHolder* getMarkerClusterHolder() const;
-    //#endif // HAVE_MARBLEWIDGET
+//#ifdef HAVE_MARBLEWIDGET
+//    MarkerClusterHolder* getMarkerClusterHolder() const;
+//#endif // HAVE_MARBLEWIDGET
 
 protected:
 
@@ -176,7 +176,7 @@ class DIGIKAM_EXPORT WorldMapThemeBtn : public QToolButton
 
 public:
 
-    WorldMapThemeBtn(WorldMapWidget* map, QWidget* parent);
+    WorldMapThemeBtn(WorldMapWidget *map, QWidget *parent);
     virtual ~WorldMapThemeBtn();
 
 private Q_SLOTS:

@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 AutoCorrection::AutoCorrection(QObject* parent)
-    : BatchTool("AutoCorrection", ColorTool, parent)
+              : BatchTool("AutoCorrection", ColorTool, parent)
 {
     setToolTitle(i18n("Color Auto-correction"));
     setToolDescription(i18n("A tool to automatically correct image colors."));
@@ -97,10 +97,7 @@ void AutoCorrection::slotSettingsChanged()
 
 bool AutoCorrection::toolOperations()
 {
-    if (!loadToDImg())
-    {
-        return false;
-    }
+    if (!loadToDImg()) return false;
 
     int type = settings()["AutoCorrectionFilter"].toInt();
 

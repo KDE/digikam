@@ -66,7 +66,7 @@ CaptionsMap::~CaptionsMap()
 
 void CaptionsMap::setData(const KExiv2::AltLangMap& comments,
                           const KExiv2::AltLangMap& authors,
-                          const QString& commonAuthor,
+                          const QString &commonAuthor,
                           const KExiv2::AltLangMap& dates)
 {
     fromAltLangMap(comments);
@@ -77,19 +77,16 @@ void CaptionsMap::setData(const KExiv2::AltLangMap& comments,
 KExiv2::AltLangMap CaptionsMap::toAltLangMap() const
 {
     KExiv2::AltLangMap map;
-
     for (CaptionsMap::const_iterator it = constBegin(); it != constEnd(); ++it)
     {
         map.insert(it.key(), (*it).caption);
     }
-
     return map;
 }
 
 void CaptionsMap::fromAltLangMap(const KExiv2::AltLangMap& map)
 {
     clear();
-
     for (KExiv2::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
         CaptionValues val;
@@ -101,41 +98,32 @@ void CaptionsMap::fromAltLangMap(const KExiv2::AltLangMap& map)
 KExiv2::AltLangMap CaptionsMap::authorsList() const
 {
     KExiv2::AltLangMap map;
-
     for (CaptionsMap::const_iterator it = constBegin(); it != constEnd(); ++it)
     {
         map.insert(it.key(), (*it).author);
     }
-
     return map;
 }
 
-void CaptionsMap::setAuthorsList(const KExiv2::AltLangMap& map, const QString& commonAuthor)
+void CaptionsMap::setAuthorsList(const KExiv2::AltLangMap& map, const QString &commonAuthor)
 {
     for (CaptionsMap::iterator it = begin(); it != end(); ++it)
     {
         KExiv2::AltLangMap::const_iterator authorIt = map.find(it.key());
-
         if (authorIt != map.constEnd())
-        {
             (*it).author = authorIt.value();
-        }
         else if (!commonAuthor.isNull())
-        {
             (*it).author = commonAuthor;
-        }
     }
 }
 
 KExiv2::AltLangMap CaptionsMap::datesList() const
 {
     KExiv2::AltLangMap map;
-
     for (CaptionsMap::const_iterator it = constBegin(); it != constEnd(); ++it)
     {
         map.insert(it.key(), (*it).date.toString(Qt::ISODate));
     }
-
     return map;
 }
 
@@ -144,7 +132,6 @@ void CaptionsMap::setDatesList(const KExiv2::AltLangMap& map)
     for (KExiv2::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
         CaptionsMap::iterator val = find(it.key());
-
         if (val != end())
         {
             (*val).date = QDateTime::fromString(it.value(), Qt::ISODate);

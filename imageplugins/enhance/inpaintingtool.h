@@ -50,10 +50,7 @@ public:
 
 protected:
 
-    virtual void positionSelf()
-    {
-        move(m_parent->x() + 30, m_parent->y() + 30);
-    }
+    virtual void positionSelf() { move(m_parent->x() + 30, m_parent->y() + 30); }
 
 private:
 

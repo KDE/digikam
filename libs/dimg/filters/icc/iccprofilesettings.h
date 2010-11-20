@@ -60,7 +60,7 @@ public:
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
-
+    
     static QStringList favoriteProfiles(KConfigGroup& group);
 
 Q_SIGNALS:
@@ -68,10 +68,10 @@ Q_SIGNALS:
     void signalSettingsChanged();
 
 private Q_SLOTS:
-
+  
     void slotNewProfInfo();
     void slotProfileChanged();
-
+    
 private:
 
     IccProfilesSettingsPriv* const d;

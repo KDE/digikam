@@ -105,8 +105,8 @@ public:
     AbstractCheckableAlbumModel* tagModel;
 };
 
-FindDuplicatesView::FindDuplicatesView(QWidget* parent)
-    : QWidget(parent), d(new FindDuplicatesViewPriv)
+FindDuplicatesView::FindDuplicatesView(QWidget *parent)
+                  : QWidget(parent), d(new FindDuplicatesViewPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
@@ -171,7 +171,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* parent)
 
     // ---------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout();
+    QGridLayout *mainLayout = new QGridLayout();
     mainLayout->addWidget(d->listView,           0, 0, 1,-1);
     mainLayout->addWidget(d->includeAlbumsLabel, 1, 0, 1, 1);
     mainLayout->addWidget(d->albumSelectCB,      1, 1, 1,-1);
@@ -230,14 +230,11 @@ FindDuplicatesView::~FindDuplicatesView()
 
 SAlbum* FindDuplicatesView::currentFindDuplicatesAlbum() const
 {
-    SAlbum* salbum = 0;
+    SAlbum *salbum = 0;
 
     FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(d->listView->currentItem());
-
     if (item)
-    {
         salbum = item->album();
-    }
 
     return salbum;
 }
@@ -249,10 +246,9 @@ void FindDuplicatesView::populateTreeView()
     for (AlbumList::const_iterator it = aList.constBegin(); it != aList.constEnd(); ++it)
     {
         SAlbum* salbum = dynamic_cast<SAlbum*>(*it);
-
         if (salbum && salbum->isDuplicatesSearch() && !salbum->extraData(this))
         {
-            FindDuplicatesAlbumItem* item = new FindDuplicatesAlbumItem(d->listView, salbum);
+            FindDuplicatesAlbumItem *item = new FindDuplicatesAlbumItem(d->listView, salbum);
             salbum->setExtraData(this, item);
             ThumbnailLoadThread::defaultThread()->find(item->refUrl().toLocalFile());
         }
@@ -272,9 +268,7 @@ void FindDuplicatesView::slotUpdateAlbumsAndTags()
 void FindDuplicatesView::updateAlbumsBox()
 {
     if (d->albumModel)
-    {
         disconnect(d->albumModel, 0, this, 0);
-    }
 
     d->albumSelectCB->setDefaultAlbumModels();
     d->albumModel = d->albumSelectCB->model();
@@ -288,9 +282,7 @@ void FindDuplicatesView::updateAlbumsBox()
 void FindDuplicatesView::updateTagsBox()
 {
     if (d->tagModel)
-    {
         disconnect(d->tagModel, 0, this, 0);
-    }
 
 
     d->tagSelectCB->setDefaultTagModels();
@@ -305,16 +297,12 @@ void FindDuplicatesView::updateTagsBox()
 void FindDuplicatesView::slotAlbumAdded(Album* a)
 {
     if (!a || a->type() != Album::SEARCH)
-    {
         return;
-    }
 
     SAlbum* salbum  = (SAlbum*)a;
 
     if (!salbum->isDuplicatesSearch())
-    {
         return;
-    }
 
     if (!salbum->extraData(this))
     {
@@ -327,14 +315,11 @@ void FindDuplicatesView::slotAlbumAdded(Album* a)
 void FindDuplicatesView::slotAlbumDeleted(Album* a)
 {
     if (!a || a->type() != Album::SEARCH)
-    {
         return;
-    }
 
     SAlbum* album = (SAlbum*)a;
 
     FindDuplicatesAlbumItem* item = (FindDuplicatesAlbumItem*) album->extraData(this);
-
     if (item)
     {
         a->removeExtraData(this);
@@ -345,9 +330,7 @@ void FindDuplicatesView::slotAlbumDeleted(Album* a)
 void FindDuplicatesView::slotSearchUpdated(SAlbum* a)
 {
     if (!a->isDuplicatesSearch())
-    {
         return;
-    }
 
     slotAlbumDeleted(a);
     slotAlbumAdded(a);
@@ -355,39 +338,28 @@ void FindDuplicatesView::slotSearchUpdated(SAlbum* a)
 
 void FindDuplicatesView::slotClear()
 {
-    for (QTreeWidgetItemIterator it(d->listView); *it; ++it)
+    for(QTreeWidgetItemIterator it(d->listView); *it; ++it)
     {
         SAlbum* salbum = static_cast<FindDuplicatesAlbumItem*>(*it)->album();
-
         if (salbum)
-        {
             salbum->removeExtraData(this);
-        }
     }
-
     d->listView->clear();
 }
 
 void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
     QTreeWidgetItemIterator it(d->listView);
-
     while (*it)
     {
         FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
-
         if (item->refUrl().toLocalFile() == desc.filePath)
         {
             if (pix.isNull())
-            {
                 item->setThumb(SmallIcon("image-x-generic", d->iconSize, KIconLoader::DisabledState));
-            }
             else
-            {
                 item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
-            }
         }
-
         ++it;
     }
 }
@@ -403,7 +375,7 @@ void FindDuplicatesView::enableControlWidgets(bool val)
     d->similarity->setEnabled(val);
 
     d->progressBar->progressBarMode(val ? StatusProgressBar::TextMode
-                                    : StatusProgressBar::CancelProgressBarMode);
+                                        : StatusProgressBar::CancelProgressBarMode);
     d->progressBar->setProgressValue(0);
     d->progressBar->setEnabled(!val);
 }
@@ -438,11 +410,11 @@ void FindDuplicatesView::slotFindDuplicates()
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDuplicatesSearchResult(KJob*)));
 
-    connect(job, SIGNAL(totalAmount(KJob*, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong)));
+    connect(job, SIGNAL(totalAmount(KJob *, KJob::Unit, qulonglong)),
+            this, SLOT(slotDuplicatesSearchTotalAmount(KJob *, KJob::Unit, qulonglong)));
 
-    connect(job, SIGNAL(processedAmount(KJob*, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong)));
+    connect(job, SIGNAL(processedAmount(KJob *, KJob::Unit, qulonglong)),
+            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong)));
 }
 
 void FindDuplicatesView::slotCancelButtonPressed()
@@ -479,55 +451,44 @@ void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
 void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
 {
     FindDuplicatesAlbumItem* sitem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
-
     if (sitem)
-    {
         AlbumManager::instance()->setCurrentAlbum(sitem->album());
-    }
 }
 
 void FindDuplicatesView::slotAlbumSelectionChanged(Album* album, Qt::CheckState checkState)
 {
     QModelIndex index = d->albumModel->indexForAlbum(album);
-
     if (index.isValid() && d->albumModel->hasChildren(index))
     {
         AlbumIterator it(album);
-
         while (it.current())
         {
             d->albumModel->setCheckState(it.current(), checkState);
             ++it;
         }
     }
-
     checkForValidSettings();
 }
 
 void FindDuplicatesView::slotTagSelectionChanged(Album* album, Qt::CheckState checkState)
 {
     QModelIndex index = d->tagModel->indexForAlbum(album);
-
     if (index.isValid() && d->tagModel->hasChildren(index))
     {
         AlbumIterator it(album);
-
         while (it.current())
         {
             d->tagModel->setCheckState(it.current(), checkState);
             ++it;
         }
     }
-
     checkForValidSettings();
 }
 
 void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
 {
     if (!album)
-    {
         return;
-    }
 
     resetAlbumsAndTags();
     d->albumModel->setChecked(album, true);
@@ -537,9 +498,7 @@ void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
 void FindDuplicatesView::slotSetSelectedTag(Album* album)
 {
     if (!album)
-    {
         return;
-    }
 
     resetAlbumsAndTags();
     d->tagModel->setChecked(album, true);

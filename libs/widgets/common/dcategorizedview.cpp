@@ -84,8 +84,8 @@ public:
 
 // -------------------------------------------------------------------------------
 
-DCategorizedView::DCategorizedView(QWidget* parent)
-    : KCategorizedView(parent), d(new DCategorizedViewPriv)
+DCategorizedView::DCategorizedView(QWidget *parent)
+                : KCategorizedView(parent), d(new DCategorizedViewPriv)
 {
     setViewMode(QListView::IconMode);
     setLayoutDirection(Qt::LeftToRight);
@@ -105,14 +105,14 @@ DCategorizedView::DCategorizedView(QWidget* parent)
     viewport()->setAcceptDrops(true);
     setMouseTracking(true);
 
-    connect(this, SIGNAL(activated(const QModelIndex&)),
-            this, SLOT(slotActivated(const QModelIndex&)));
+    connect(this, SIGNAL(activated(const QModelIndex &)),
+            this, SLOT(slotActivated(const QModelIndex &)));
 
-    connect(this, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(slotClicked(const QModelIndex&)));
+    connect(this, SIGNAL(clicked(const QModelIndex &)),
+            this, SLOT(slotClicked(const QModelIndex &)));
 
-    connect(this, SIGNAL(entered(const QModelIndex&)),
-            this, SLOT(slotEntered(const QModelIndex&)));
+    connect(this, SIGNAL(entered(const QModelIndex &)),
+            this, SLOT(slotEntered(const QModelIndex &)));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -123,29 +123,27 @@ DCategorizedView::~DCategorizedView()
     delete d;
 }
 
-void DCategorizedView::setToolTip(ItemViewToolTip* tip)
+void DCategorizedView::setToolTip(ItemViewToolTip *tip)
 {
     d->toolTip = tip;
 }
 
-void DCategorizedView::setItemDelegate(DItemDelegate* delegate)
+void DCategorizedView::setItemDelegate(DItemDelegate *delegate)
 {
     if (d->delegate == delegate)
-    {
         return;
-    }
 
     if (d->delegate)
     {
-        disconnect(d->delegate, SIGNAL(gridSizeChanged(const QSize&)),
-                   this, SLOT(slotGridSizeChanged(const QSize&)));
+        disconnect(d->delegate, SIGNAL(gridSizeChanged(const QSize &)),
+                   this, SLOT(slotGridSizeChanged(const QSize &)));
     }
 
     d->delegate = delegate;
     KCategorizedView::setItemDelegate(d->delegate);
 
-    connect(d->delegate, SIGNAL(gridSizeChanged(const QSize&)),
-            this, SLOT(slotGridSizeChanged(const QSize&)));
+    connect(d->delegate, SIGNAL(gridSizeChanged(const QSize &)),
+            this, SLOT(slotGridSizeChanged(const QSize &)));
 }
 
 void DCategorizedView::setSpacing(int spacing)
@@ -163,7 +161,7 @@ void DCategorizedView::setScrollStepGranularity(int factor)
     d->scrollStepFactor = qMax(1, factor);
 }
 
-DItemDelegate* DCategorizedView::delegate() const
+DItemDelegate *DCategorizedView::delegate() const
 {
     return d->delegate;
 }
@@ -202,10 +200,7 @@ void DCategorizedView::toPreviousIndex()
 void DCategorizedView::toIndex(const QModelIndex& index)
 {
     if (!index.isValid())
-    {
         return;
-    }
-
     clearSelection();
     setCurrentIndex(index);
     scrollTo(index);
@@ -214,31 +209,22 @@ void DCategorizedView::toIndex(const QModelIndex& index)
 void DCategorizedView::awayFromSelection()
 {
     QItemSelection selection = selectionModel()->selection();
-
     if (selection.isEmpty())
-    {
         return;
-    }
-
     const QModelIndex first = model()->index(0, 0);
-
     const QModelIndex last  = model()->index(model()->rowCount() - 1, 0);
-
     if (selection.contains(first) && selection.contains(last))
     {
         QItemSelection remaining(first, last);
         remaining.merge(selection, QItemSelectionModel::Toggle);
         QList<QModelIndex> indexes = remaining.indexes();
-
         if (indexes.isEmpty())
         {
             clearSelection();
             setCurrentIndex(QModelIndex());
         }
         else
-        {
             toIndex(remaining.indexes().first());
-        }
     }
     else if (selection.contains(last))
     {
@@ -319,44 +305,31 @@ void DCategorizedView::slotActivated(const QModelIndex& index)
         Qt::KeyboardModifiers modifiers = d->currentMouseEvent->modifiers();
         const bool shiftKeyPressed = modifiers & Qt::ShiftModifier;
         const bool controlKeyPressed = modifiers & Qt::ControlModifier;
-
         if (shiftKeyPressed || controlKeyPressed)
-        {
             return;
-        }
 
         const bool rightClick = d->currentMouseEvent->button() & Qt::RightButton;
-
-        if (rightClick)
-        {
+        if(rightClick)
             return;
-        }
 
         // if the activation is caused by mouse click (not keyboard)
         // we need to check the hot area
         if (!d->delegate->acceptsActivation(d->currentMouseEvent->pos(), visualRect(index), index))
-        {
             return;
-        }
     }
-
     indexActivated(index);
 }
 
 void DCategorizedView::slotClicked(const QModelIndex& index)
 {
     if (d->currentMouseEvent)
-    {
         emit clicked(d->currentMouseEvent, index);
-    }
 }
 
 void DCategorizedView::slotEntered(const QModelIndex& index)
 {
     if (d->currentMouseEvent)
-    {
         emit entered(d->currentMouseEvent, index);
-    }
 }
 
 void DCategorizedView::reset()
@@ -374,52 +347,38 @@ void DCategorizedView::selectionChanged(const QItemSelection& selectedItems, con
     KCategorizedView::selectionChanged(selectedItems, deselectedItems);
 
     emit selectionChanged();
-
     if (!selectionModel()->hasSelection())
-    {
         emit selectionCleared();
-    }
 
     userInteraction();
 }
 
-void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int end)
+void DCategorizedView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
     KCategorizedView::rowsInserted(parent, start, end);
-
     if (start == 0)
-    {
         ensureSelectionAfterChanges();
-    }
 }
 
-void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
     KCategorizedView::rowsAboutToBeRemoved(parent, start, end);
 
     // Ensure one selected item
     int totalToRemove = end - start + 1;
-
     if (selectionModel()->hasSelection() && model()->rowCount(parent) > totalToRemove)
     {
         // find out which selected indexes are left after rows are removed
         QItemSelection selected = selectionModel()->selection();
         QItemSelection removed(model()->index(start, 0), model()->index(end, 0));
         selected.merge(removed, QItemSelectionModel::Deselect);
-
         if (selected.isEmpty())
         {
             QModelIndex newCurrent;
-
             if (end == model()->rowCount(parent) - 1)
-            {
-                newCurrent = model()->index(start - 1, 0);    // last remaining, no next one left
-            }
+                newCurrent = model()->index(start - 1, 0); // last remaining, no next one left
             else
-            {
-                newCurrent = model()->index(end + 1, 0);    // next remaining
-            }
-
+                newCurrent = model()->index(end + 1, 0); // next remaining
             selectionModel()->setCurrentIndex(newCurrent, QItemSelectionModel::SelectCurrent);
         }
     }
@@ -428,28 +387,21 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
 void DCategorizedView::layoutAboutToBeChanged()
 {
     d->ensureOneSelectedItem = selectionModel()->hasSelection();
-
     // store some hints so that if all selected items were removed dont need to default to 0,0.
     if (d->ensureOneSelectedItem)
     {
         QItemSelection currentSelection = selectionModel()->selection();
         QModelIndex current = currentIndex();
         QModelIndex indexToAnchor;
-
         if (currentSelection.contains(current))
-        {
             indexToAnchor = current;
-        }
         else if (!currentSelection.isEmpty())
-        {
             indexToAnchor = currentSelection.first().topLeft();
-        }
-
         if (indexToAnchor.isValid())
         {
             d->hintAtSelectionRow = indexToAnchor.row();
             d->hintAtSelectionIndex = model()->index(d->hintAtSelectionRow == model()->rowCount()
-                                      ? d->hintAtSelectionRow : d->hintAtSelectionRow + 1, 0);
+                                            ? d->hintAtSelectionRow : d->hintAtSelectionRow + 1, 0);
         }
     }
 }
@@ -479,47 +431,34 @@ void DCategorizedView::ensureSelectionAfterChanges()
         d->ensureOneSelectedItem     = false;
 
         QModelIndex index = model()->index(0,0);
-
         if (index.isValid())
         {
             selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
             setCurrentIndex(index);
-
             // we want ensureInitial set to false if and only if the selection
             // is done from any other place than the previous line (i.e., by user action)
             // Effect: we select whatever is the current index(0,0)
             if (hadInitial)
-            {
                 d->ensureInitialSelectedItem = true;
-            }
         }
     }
     else if (d->ensureOneSelectedItem)
     {
         // ensure we have a selection if there was one before
         d->ensureOneSelectedItem = false;
-
         if (model()->rowCount() && selectionModel()->selection().isEmpty())
         {
             QModelIndex index;
 
             if (d->hintAtSelectionIndex.isValid())
-            {
                 index = d->hintAtSelectionIndex;
-            }
             else if (d->hintAtSelectionRow != -1)
-            {
                 index = model()->index(qMin(model()->rowCount(), d->hintAtSelectionRow), 0);
-            }
             else
-            {
                 index = currentIndex();
-            }
 
             if (!index.isValid())
-            {
                 index = model()->index(0,0);
-            }
 
             d->hintAtSelectionRow = -1;
             d->hintAtSelectionIndex = QModelIndex();
@@ -541,11 +480,8 @@ QModelIndex DCategorizedView::indexForCategoryAt(const QPoint& pos) const
 QModelIndex DCategorizedView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
     QModelIndex current = currentIndex();
-
     if (!current.isValid())
-    {
         return KCategorizedView::moveCursor(cursorAction, modifiers);
-    }
 
     // We want a simple wrapping navigation.
     // Default behavior we do not want: right/left does never change row; Next/Previous is equivalent to Down/Up
@@ -555,32 +491,20 @@ QModelIndex DCategorizedView::moveCursor(CursorAction cursorAction, Qt::Keyboard
         case MoveRight:
         {
             QModelIndex next = model()->index(current.row() + 1, 0);
-
             if (next.isValid())
-            {
                 return next;
-            }
             else
-            {
                 return current;
-            }
-
             break;
         }
         case MovePrevious:
         case MoveLeft:
         {
             QModelIndex previous = model()->index(current.row() - 1, 0);
-
             if (previous.isValid())
-            {
                 return previous;
-            }
             else
-            {
                 return current;
-            }
-
             break;
         }
         default:
@@ -591,12 +515,12 @@ QModelIndex DCategorizedView::moveCursor(CursorAction cursorAction, Qt::Keyboard
 }
 
 
-void DCategorizedView::showContextMenuOnIndex(QContextMenuEvent*, const QModelIndex&)
+void DCategorizedView::showContextMenuOnIndex(QContextMenuEvent *, const QModelIndex &)
 {
     // implemented in subclass
 }
 
-void DCategorizedView::showContextMenu(QContextMenuEvent*)
+void DCategorizedView::showContextMenu(QContextMenuEvent *)
 {
     // implemented in subclass
 }
@@ -609,18 +533,13 @@ void DCategorizedView::contextMenuEvent(QContextMenuEvent* event)
 {
     userInteraction();
     QModelIndex index = indexAt(event->pos());
-
     if (index.isValid())
-    {
         showContextMenuOnIndex(event, index);
-    }
     else
-    {
         showContextMenu(event);
-    }
 }
 
-void DCategorizedView::mousePressEvent(QMouseEvent* event)
+void DCategorizedView::mousePressEvent(QMouseEvent *event)
 {
     userInteraction();
     const QModelIndex index = indexAt(event->pos());
@@ -631,27 +550,19 @@ void DCategorizedView::mousePressEvent(QMouseEvent* event)
     const bool rightButtonPressed = button & Qt::RightButton;
     const bool shiftKeyPressed = modifiers & Qt::ShiftModifier;
     const bool controlKeyPressed = modifiers & Qt::ControlModifier;
-
     if (!index.isValid() && !rightButtonPressed && !shiftKeyPressed && !controlKeyPressed)
-    {
         clearSelection();
-    }
 
     // store event for entered(), clicked(), activated() signal handlers
-    if (!rightButtonPressed)
-    {
+    if(!rightButtonPressed)
         d->currentMouseEvent = event;
-    }
     else
-    {
         d->currentMouseEvent = 0;
-    }
-
     KCategorizedView::mousePressEvent(event);
     d->currentMouseEvent = 0;
 }
 
-void DCategorizedView::mouseReleaseEvent(QMouseEvent* event)
+void DCategorizedView::mouseReleaseEvent(QMouseEvent *event)
 {
     userInteraction();
     d->currentMouseEvent = event;
@@ -659,15 +570,13 @@ void DCategorizedView::mouseReleaseEvent(QMouseEvent* event)
     d->currentMouseEvent = 0;
 }
 
-void DCategorizedView::mouseMoveEvent(QMouseEvent* event)
+void DCategorizedView::mouseMoveEvent(QMouseEvent *event)
 {
     QModelIndex index = indexAt(event->pos());
     QRect indexVisualRect;
-
     if (index.isValid())
     {
         indexVisualRect = visualRect(index);
-
         if (d->usePointingHand &&
             KGlobalSettings::changeCursorOverIcon() &&
             d->delegate->acceptsActivation(event->pos(), indexVisualRect, index))
@@ -697,19 +606,12 @@ void DCategorizedView::wheelEvent(QWheelEvent* event)
     horizontalScrollBar()->setSingleStep(d->delegate->gridSize().height() / d->scrollStepFactor);
     verticalScrollBar()->setSingleStep(d->delegate->gridSize().width() / d->scrollStepFactor);
 
-    if (event->modifiers() & Qt::ControlModifier)
-    {
+    if (event->modifiers() & Qt::ControlModifier) {
         const int delta = event->delta();
-
         if (delta > 0)
-        {
             emit zoomInStep();
-        }
         else if (delta < 0)
-        {
             emit zoomOutStep();
-        }
-
         event->accept();
         return;
     }
@@ -722,15 +624,12 @@ void DCategorizedView::wheelEvent(QWheelEvent* event)
         event->setAccepted(n.isAccepted());
     }
     else
-    {
         KCategorizedView::wheelEvent(event);
-    }
 }
 
-void DCategorizedView::keyPressEvent(QKeyEvent* event)
+void DCategorizedView::keyPressEvent(QKeyEvent *event)
 {
     userInteraction();
-
     if (event == QKeySequence::Copy)
     {
         copy();
@@ -765,13 +664,13 @@ void DCategorizedView::keyPressEvent(QKeyEvent* event)
     emit keyPressed(event);
 }
 
-void DCategorizedView::resizeEvent(QResizeEvent* e)
+void DCategorizedView::resizeEvent(QResizeEvent *e)
 {
     KCategorizedView::resizeEvent(e);
     updateDelegateSizes();
 }
 
-bool DCategorizedView::viewportEvent(QEvent* event)
+bool DCategorizedView::viewportEvent(QEvent *event)
 {
     switch (event->type())
     {
@@ -783,46 +682,32 @@ bool DCategorizedView::viewportEvent(QEvent* event)
         case QEvent::ToolTip:
         {
             if (!d->showToolTip)
-            {
                 return true;
-            }
-
-            QHelpEvent* he = static_cast<QHelpEvent*>(event);
+            QHelpEvent *he = static_cast<QHelpEvent*>(event);
             const QModelIndex index = indexAt(he->pos());
-
             if (!index.isValid())
-            {
                 break;
-            }
-
             QStyleOptionViewItem option = viewOptions();
             option.rect = visualRect(index);
             option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
             QRect innerRect;
-
             if (d->delegate->acceptsToolTip(he->pos(), option.rect, index, &innerRect))
             {
                 if (!innerRect.isNull())
-                {
                     option.rect = innerRect;
-                }
-
                 d->toolTip->show(he, option, index);
             }
-
             return true;
         }
         default:
             break;
     }
-
     return KCategorizedView::viewportEvent(event);
 }
 
 void DCategorizedView::cut()
 {
-    QMimeData* data = model()->mimeData(selectedIndexes());
-
+    QMimeData *data = model()->mimeData(selectedIndexes());
     if (data)
     {
         encodeIsCutSelection(data, true);
@@ -832,8 +717,7 @@ void DCategorizedView::cut()
 
 void DCategorizedView::copy()
 {
-    QMimeData* data = model()->mimeData(selectedIndexes());
-
+    QMimeData *data = model()->mimeData(selectedIndexes());
     if (data)
     {
         encodeIsCutSelection(data, false);
@@ -843,20 +727,13 @@ void DCategorizedView::copy()
 
 void DCategorizedView::paste()
 {
-    const QMimeData* data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
-
+    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
     if (!data)
-    {
         return;
-    }
-
     // We need to have a real (context menu action) or fake (Ctrl+V shortcut) mouse position
     QPoint eventPos = mapFromGlobal(QCursor::pos());
-
     if (!rect().contains(eventPos))
-    {
         eventPos = QPoint(0, 0);
-    }
 
     bool cutAction = decodeIsCutSelection(data);
     QDropEvent event(eventPos,
@@ -864,66 +741,47 @@ void DCategorizedView::paste()
                      data, Qt::NoButton,
                      cutAction ? Qt::ShiftModifier : Qt::ControlModifier);
     QModelIndex index = indexAt(event.pos());
-
     if (!dragDropHandler()->accepts(&event, index))
-    {
         return;
-    }
-
     dragDropHandler()->dropEvent(this, &event, index);
 }
 
 void DCategorizedView::startDrag(Qt::DropActions supportedActions)
 {
     QModelIndexList indexes = selectedIndexes();
-
-    if (indexes.count() > 0)
-    {
-        QMimeData* data = model()->mimeData(indexes);
-
+    if (indexes.count() > 0) {
+        QMimeData *data = model()->mimeData(indexes);
         if (!data)
-        {
             return;
-        }
-
         QStyleOptionViewItem option = viewOptions();
         option.rect = viewport()->rect();
         QPixmap pixmap = d->delegate->pixmapForDrag(option, indexes);
-        QDrag* drag = new QDrag(this);
+        QDrag *drag = new QDrag(this);
         drag->setPixmap(pixmap);
         drag->setMimeData(data);
         drag->exec(supportedActions, Qt::IgnoreAction);
     }
 }
 
-void DCategorizedView::dragEnterEvent(QDragEnterEvent* e)
+void DCategorizedView::dragEnterEvent(QDragEnterEvent *e)
 {
-    ImageModelDragDropHandler* handler = dragDropHandler();
-
+    ImageModelDragDropHandler *handler = dragDropHandler();
     if (handler && handler->acceptsMimeData(e->mimeData()))
-    {
         e->accept();
-    }
     else
-    {
         e->ignore();
-    }
 }
 
-void DCategorizedView::dragMoveEvent(QDragMoveEvent* e)
+void DCategorizedView::dragMoveEvent(QDragMoveEvent *e)
 {
     KCategorizedView::dragMoveEvent(e);
-    ImageModelDragDropHandler* handler = dragDropHandler();
-
+    ImageModelDragDropHandler *handler = dragDropHandler();
     if (handler)
     {
         QModelIndex index = indexAt(e->pos());
         Qt::DropAction action = handler->accepts(e, filterModel()->mapToSource(index));
-
         if (action == Qt::IgnoreAction)
-        {
             e->ignore();
-        }
         else
         {
             e->setDropAction(action);
@@ -932,19 +790,15 @@ void DCategorizedView::dragMoveEvent(QDragMoveEvent* e)
     }
 }
 
-void DCategorizedView::dropEvent(QDropEvent* e)
+void DCategorizedView::dropEvent(QDropEvent *e)
 {
     KCategorizedView::dropEvent(e);
-    ImageModelDragDropHandler* handler = dragDropHandler();
-
+    ImageModelDragDropHandler *handler = dragDropHandler();
     if (handler)
     {
         QModelIndex index = indexAt(e->pos());
-
         if (handler->dropEvent(this, e, filterModel()->mapToSource(index)))
-        {
             e->accept();
-        }
     }
 }
 
@@ -957,12 +811,8 @@ void DCategorizedView::encodeIsCutSelection(QMimeData* mime, bool cut)
 bool DCategorizedView::decodeIsCutSelection(const QMimeData* mime)
 {
     QByteArray a = mime->data(d->mimeTypeCutSelection);
-
     if (a.isEmpty())
-    {
         return false;
-    }
-
     return (a.at(0) == '1'); // true if 1
 }
 

@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 FilmGrain::FilmGrain(QObject* parent)
-    : BatchTool("FilmGrain", FiltersTool, parent)
+         : BatchTool("FilmGrain", FiltersTool, parent)
 {
     setToolTitle(i18n("Film Grain"));
     setToolDescription(i18n("A tool to add film grain"));
@@ -94,7 +94,7 @@ void FilmGrain::slotAssignSettings2Widget()
 {
     FilmGrainContainer prm;
     prm.grainSize               = settings()["grainSize"].toInt();
-    prm.photoDistribution       = settings()["photoDistribution"].toBool();
+    prm.photoDistribution       = settings()["photoDistribution"].toBool();    
     prm.addLuminanceNoise       = settings()["addLuminanceNoise"].toBool();
     prm.lumaIntensity           = settings()["lumaIntensity"].toInt();
     prm.lumaShadows             = settings()["lumaShadows"].toInt();
@@ -125,12 +125,12 @@ void FilmGrain::slotSettingsChanged()
     prm.insert("lumaShadows",             (int)currentPrm.lumaShadows);
     prm.insert("lumaMidtones",            (int)currentPrm.lumaMidtones);
     prm.insert("lumaHighlights",          (int)currentPrm.lumaHighlights);
-    prm.insert("addChrominanceBlueNoise", (bool)currentPrm.addChrominanceBlueNoise);
+    prm.insert("addChrominanceBlueNoise", (bool)currentPrm.addChrominanceBlueNoise);    
     prm.insert("chromaBlueIntensity",     (int)currentPrm.chromaBlueIntensity);
     prm.insert("chromaBlueShadows",       (int)currentPrm.chromaBlueShadows);
     prm.insert("chromaBlueMidtones",      (int)currentPrm.chromaBlueMidtones);
     prm.insert("chromaBlueHighlights",    (int)currentPrm.chromaBlueHighlights);
-    prm.insert("addChrominanceRedNoise",  (bool)currentPrm.addChrominanceRedNoise);
+    prm.insert("addChrominanceRedNoise",  (bool)currentPrm.addChrominanceRedNoise);    
     prm.insert("chromaRedIntensity",      (int)currentPrm.chromaRedIntensity);
     prm.insert("chromaRedShadows",        (int)currentPrm.chromaRedShadows);
     prm.insert("chromaRedMidtones",       (int)currentPrm.chromaRedMidtones);
@@ -142,9 +142,7 @@ void FilmGrain::slotSettingsChanged()
 bool FilmGrain::toolOperations()
 {
     if (!loadToDImg())
-    {
         return false;
-    }
 
     FilmGrainContainer prm;
     prm.grainSize               = settings()["grainSize"].toInt();
@@ -154,12 +152,12 @@ bool FilmGrain::toolOperations()
     prm.lumaShadows             = settings()["lumaShadows"].toInt();
     prm.lumaMidtones            = settings()["lumaMidtones"].toInt();
     prm.lumaHighlights          = settings()["lumaHighlights"].toInt();
-    prm.addChrominanceBlueNoise = settings()["addChrominanceBlueNoise"].toBool();
+    prm.addChrominanceBlueNoise = settings()["addChrominanceBlueNoise"].toBool();    
     prm.chromaBlueIntensity     = settings()["chromaBlueIntensity"].toInt();
     prm.chromaBlueShadows       = settings()["chromaBlueShadows"].toInt();
     prm.chromaBlueMidtones      = settings()["chromaBlueMidtones"].toInt();
     prm.chromaBlueHighlights    = settings()["chromaBlueHighlights"].toInt();
-    prm.addChrominanceRedNoise  = settings()["addChrominanceRedNoise"].toBool();
+    prm.addChrominanceRedNoise  = settings()["addChrominanceRedNoise"].toBool();    
     prm.chromaRedIntensity      = settings()["chromaRedIntensity"].toInt();
     prm.chromaRedShadows        = settings()["chromaRedShadows"].toInt();
     prm.chromaRedMidtones       = settings()["chromaRedMidtones"].toInt();

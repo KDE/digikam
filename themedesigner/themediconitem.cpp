@@ -51,7 +51,7 @@ namespace Digikam
 {
 
 ThemedIconItem::ThemedIconItem(IconGroupItem* parent)
-    : IconItem(parent)
+              : IconItem(parent)
 {
 }
 
@@ -62,23 +62,16 @@ ThemedIconItem::~ThemedIconItem()
 void ThemedIconItem::paintItem(QPainter* p2)
 {
     ThemedIconView* view = qobject_cast<ThemedIconView*>(iconView());
-
     if (!view)
-    {
         return;
-    }
 
     QPixmap pix;
     QRect   r;
 
     if (isSelected())
-    {
         pix = *(view->itemBaseSelPixmap());
-    }
     else
-    {
         pix = *(view->itemBaseRegPixmap());
-    }
 
     ThemeEngine* te = ThemeEngine::instance();
 
@@ -87,7 +80,7 @@ void ThemedIconItem::paintItem(QPainter* p2)
 
     {
         r                       = view->itemPixmapRect();
-        KIconLoader* iconLoader = KIconLoader::global();
+        KIconLoader *iconLoader = KIconLoader::global();
         QPixmap thumbnail       = iconLoader->loadIcon("image-jpeg", KIconLoader::NoGroup, 128);
 
         p.drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
@@ -132,8 +125,8 @@ void ThemedIconItem::paintItem(QPainter* p2)
     p.end();
 
     r = view->itemRect();
-    //    r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
-    //              QSize(r.width(), r.height()));
+//    r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
+//              QSize(r.width(), r.height()));
 
     p2->drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
 }

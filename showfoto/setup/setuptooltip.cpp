@@ -69,7 +69,7 @@ public:
         fileSettingBox(0),
         photoSettingBox(0),
         fontSelect(0)
-    {}
+        {}
 
     static const QString configGroupName;
     static const QString configShowToolTipsEntry;
@@ -125,7 +125,7 @@ const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoWBEntry("To
 // --------------------------------------------------------
 
 SetupToolTip::SetupToolTip(QWidget* parent)
-    : QScrollArea(parent), d(new SetupToolTipPriv)
+            : QScrollArea(parent), d(new SetupToolTipPriv)
 {
     QWidget* panel      = new QWidget(viewport());
     setWidget(panel);
@@ -174,30 +174,30 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis( i18n("Set this option to display the make and model of the "
-                                            "camera with which the image has been taken."));
+                                               "camera with which the image has been taken."));
 
     d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
     d->showPhotoDateBox->setWhatsThis( i18n("Set this option to display the date when the image was taken."));
 
     d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
     d->showPhotoFocalBox->setWhatsThis( i18n("Set this option to display the camera aperture and focal settings "
-                                        "used to take the image."));
+                     "used to take the image."));
 
     d->showPhotoExpoBox = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
     d->showPhotoExpoBox->setWhatsThis( i18n("Set this option to display the camera exposure and sensitivity "
-                                            "used to take the image."));
+                     "used to take the image."));
 
     d->showPhotoModeBox = new QCheckBox(i18n("Show camera mode and program"), d->photoSettingBox);
     d->showPhotoModeBox->setWhatsThis( i18n("Set this option to display the camera mode and program "
-                                            "used to take the image."));
+                     "used to take the image."));
 
     d->showPhotoFlashBox = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
     d->showPhotoFlashBox->setWhatsThis( i18n("Set this option to display the camera flash settings "
-                                        "used to take the image."));
+                     "used to take the image."));
 
     d->showPhotoWbBox = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
     d->showPhotoWbBox->setWhatsThis( i18n("Set this option to display the camera white balance settings "
-                                          "used to take the image."));
+                     "used to take the image."));
 
     gLayout2->addWidget(d->showPhotoMakeBox);
     gLayout2->addWidget(d->showPhotoDateBox);

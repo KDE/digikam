@@ -52,8 +52,8 @@ public:
     QImage   preview;
 };
 
-CaptureWidget::CaptureWidget(QWidget* parent)
-    : QWidget(parent), d(new CaptureWidgetPriv)
+CaptureWidget::CaptureWidget(QWidget *parent)
+             : QWidget(parent), d(new CaptureWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -97,14 +97,14 @@ void CaptureWidget::updatePixmap()
     p.end();
 }
 
-void CaptureWidget::paintEvent(QPaintEvent*)
+void CaptureWidget::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
     p.drawPixmap(contentsRect().top(), contentsRect().left(), d->pixmap);
     p.end();
 }
 
-void CaptureWidget::resizeEvent(QResizeEvent*)
+void CaptureWidget::resizeEvent(QResizeEvent *)
 {
     blockSignals(true);
     d->pixmap = QPixmap(contentsRect().size());

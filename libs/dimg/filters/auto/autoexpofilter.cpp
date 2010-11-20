@@ -35,8 +35,8 @@ namespace Digikam
 {
 
 AutoExpoFilter::AutoExpoFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
-    : WBFilter(orgImage, parent),
-      m_refImage(*refImage)
+                : WBFilter(orgImage, parent),
+                  m_refImage(*refImage)
 {
     initFilter();
 }
@@ -49,7 +49,7 @@ void AutoExpoFilter::filterImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        kDebug() << "Ref. image and Org. has different bits depth";
+        kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
     }
 

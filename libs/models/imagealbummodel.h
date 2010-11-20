@@ -29,10 +29,7 @@
 #include "imagethumbnailmodel.h"
 #include "album.h"
 
-namespace KIO
-{
-class Job;
-}
+namespace KIO { class Job; }
 class KJob;
 
 namespace Digikam
@@ -50,10 +47,10 @@ class ImageAlbumModel : public ImageThumbnailModel
 
 public:
 
-    ImageAlbumModel(QObject* parent = 0);
+    ImageAlbumModel(QObject *parent = 0);
     ~ImageAlbumModel();
 
-    Album* currentAlbum() const;
+    Album *currentAlbum() const;
 
     bool hasScheduledRefresh() const;
     bool isRecursingAlbums() const;
@@ -66,7 +63,7 @@ public Q_SLOTS:
      * If called with 0, the model will be empty.
      * Opening the same album again is a no-op.
      */
-    void openAlbum(Album* album);
+    void openAlbum(Album *album);
     /** Reloads the current album */
     void refresh();
 
@@ -75,7 +72,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void listedAlbumChanged(Album* album);
+    void listedAlbumChanged(Album *album);
 
 protected Q_SLOTS:
 
@@ -93,9 +90,9 @@ protected Q_SLOTS:
     void slotCollectionImageChange(const CollectionImageChangeset& changeset);
     void slotSearchChange(const SearchChangeset& changeset);
 
-    void slotAlbumAdded(Album* album);
-    void slotAlbumDeleted(Album* album);
-    void slotAlbumRenamed(Album* album);
+    void slotAlbumAdded(Album *album);
+    void slotAlbumDeleted(Album *album);
+    void slotAlbumRenamed(Album *album);
     void slotAlbumsCleared();
 
     void incrementalRefresh();
@@ -106,7 +103,7 @@ protected:
 
 private:
 
-    ImageAlbumModelPriv* const d;
+    ImageAlbumModelPriv *const d;
 };
 
 } // namespace Digikam

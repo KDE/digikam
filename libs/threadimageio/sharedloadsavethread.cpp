@@ -39,13 +39,11 @@ void SharedLoadSaveThread::load(LoadingDescription description, AccessMode mode,
 
 DImg SharedLoadSaveThread::cacheLookup(const QString& filePath, AccessMode /*accessMode*/)
 {
-    LoadingCache* cache = LoadingCache::cache();
+    LoadingCache *cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
-    DImg* cachedImg = cache->retrieveImage(filePath);
-
+    DImg *cachedImg = cache->retrieveImage(filePath);
     // Qt4: uncomment this code.
     // See comments in SharedLoadingTask::execute for explanation.
-
     /*
     if (cachedImg)
     {
@@ -58,13 +56,9 @@ DImg SharedLoadSaveThread::cacheLookup(const QString& filePath, AccessMode /*acc
         return DImg();
     */
     if (cachedImg)
-    {
         return cachedImg->copy();
-    }
     else
-    {
         return DImg();
-    }
 }
 
 }   // namespace Digikam

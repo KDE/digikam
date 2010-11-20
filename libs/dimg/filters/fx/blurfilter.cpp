@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 BlurFilter::BlurFilter(DImg* orgImage, QObject* parent, int radius)
-    : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
+          : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
 {
     m_radius = radius;
     initFilter();
@@ -52,8 +52,8 @@ BlurFilter::BlurFilter(DImg* orgImage, QObject* parent, int radius)
 BlurFilter::BlurFilter(DImgThreadedFilter* parentFilter,
                        const DImg& orgImage, const DImg& destImage,
                        int progressBegin, int progressEnd, int radius)
-    : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                         parentFilter->filterName() + ": GaussianBlur")
+          : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                               parentFilter->filterName() + ": GaussianBlur")
 {
     m_radius = radius;
     filterImage();
@@ -79,20 +79,16 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
 {
     if (!data || !width || !height)
     {
-        kWarning() << ("no image data available!");
-        return;
+       kWarning() << ("no image data available!");
+       return;
     }
 
-    if (radius > 100.0)
-    {
-        radius = 100.0;
-    }
-
+    if (radius > 100.0) radius = 100.0;
     if (radius <= 0.0)
     {
-        m_destImage = m_orgImage;
-        postProgress(100);
-        return;
+       m_destImage = m_orgImage;
+       postProgress(100);
+       return;
     }
 
     kDebug() << "Radius: " << radius;
@@ -114,7 +110,6 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
         kDebug() << "BlurFilter::Finalization...";
 
         uchar* ptr = m_destImage.bits();
-
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
@@ -127,7 +122,6 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
                 ptr    += 4;
             }
         }
-
         postProgress(75);
     }
     else                                // 16 bits image.
@@ -145,7 +139,6 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
         kDebug() << "BlurFilter::Finalization...";
 
         unsigned short* ptr = (unsigned short*)m_destImage.bits();
-
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
@@ -158,7 +151,6 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
                 ptr    += 4;
             }
         }
-
         postProgress(75);
     }
 
@@ -173,11 +165,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
         return;
     }
 
-    if (radius > 100)
-    {
-        radius = 100;
-    }
-
+    if (radius > 100) radius = 100;
     if (radius <= 0)
     {
         m_destImage = m_orgImage;
@@ -222,11 +210,9 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 
     for (i = 0; runningFlag() && (i < nKernelWidth); ++i)
         for (j = 0; runningFlag() && (j < (sixteenBit ? 65536 : 256)); ++j)
-        {
             arrMult[i][j] = j * Kernel[i];
-        }
 
-    // We need to copy our bits to blur bits
+        // We need to copy our bits to blur bits
 
     uchar* pOutBits = m_destImage.bits();
     uchar* pBlur    = new uchar[m_destImage.numBytes()];
@@ -248,7 +234,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
         {
             if (!sixteenBit)        // 8 bits image.
             {
-                uchar* org, *dst;
+                uchar *org, *dst;
 
                 // first of all, we need to blur the horizontal lines
 
@@ -273,10 +259,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
                     }
                 }
 
-                if (nCount == 0)
-                {
-                    nCount = 1;
-                }
+                if (nCount == 0) nCount = 1;
 
                 // now, we return to blur bits the horizontal blur values
                 dst    = &pBlur[i];
@@ -290,7 +273,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
             }
             else                 // 16 bits image.
             {
-                unsigned short* org, *dst;
+                unsigned short *org, *dst;
 
                 // first of all, we need to blur the horizontal lines
 
@@ -315,10 +298,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
                     }
                 }
 
-                if (nCount == 0)
-                {
-                    nCount = 1;
-                }
+                if (nCount == 0) nCount = 1;
 
                 // now, we return to blur bits the horizontal blur values
                 dst    = &pBlur16[i];
@@ -333,11 +313,8 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
         }
 
         progress = (int) (((double)h * 50.0) / height);
-
         if ( progress%5 == 0 )
-        {
             postProgress( progress );
-        }
     }
 
     // getting the blur bits, we initialize position variables
@@ -350,7 +327,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
         {
             if (!sixteenBit)        // 8 bits image.
             {
-                uchar* org, *dst;
+                uchar *org, *dst;
 
                 // first of all, we need to blur the vertical lines
                 for (n = -radius; runningFlag() && (n <= radius); ++n)
@@ -373,10 +350,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
                     }
                 }
 
-                if (nCount == 0)
-                {
-                    nCount = 1;
-                }
+                if (nCount == 0) nCount = 1;
 
                 // To preserve Alpha channel.
                 memcpy (&pOutBits[i], &data[i], 4);
@@ -393,7 +367,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
             }
             else                 // 16 bits image.
             {
-                unsigned short* org, *dst;
+                unsigned short *org, *dst;
 
                 // first of all, we need to blur the vertical lines
                 for (n = -radius; runningFlag() && (n <= radius); ++n)
@@ -416,10 +390,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
                     }
                 }
 
-                if (nCount == 0)
-                {
-                    nCount = 1;
-                }
+                if (nCount == 0) nCount = 1;
 
                 // To preserve Alpha channel.
                 memcpy (&pOutBits16[i], &data16[i], 8);
@@ -437,11 +408,8 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
         }
 
         progress = (int) (50.0 + ((double)w * 50.0) / width);
-
         if ( progress%5 == 0 )
-        {
             postProgress( progress );
-        }
     }
 
     // now, we must free memory

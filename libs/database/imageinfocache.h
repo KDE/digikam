@@ -54,7 +54,7 @@ public:
      * A new object is created, or an existing object is returned.
      * If a new object is created, the id field will be initialized.
      */
-    ImageInfoData* infoForId(qlonglong id);
+    ImageInfoData *infoForId(qlonglong id);
     /**
      * Returns whether an ImageInfoObject for the given image id
      * is contained in the cache.
@@ -68,7 +68,7 @@ public:
      * left here in the cache, all ImageInfo containers are gone.
      * The cache will delete this object when it wants.
      */
-    void dropInfo(ImageInfoData* infodata);
+    void dropInfo(ImageInfoData *infodata);
 
     QString albumName(DatabaseAccess& access, int albumId);
 
@@ -76,11 +76,11 @@ private Q_SLOTS:
 
     void slotImageChanged(const ImageChangeset& changeset);
     void slotImageTagChanged(const ImageTagChangeset& changeset);
-    void slotAlbumChange(const AlbumChangeset&);
+    void slotAlbumChange(const AlbumChangeset &);
 
 private:
 
-    QHash<qlonglong, ImageInfoData*> m_infos;
+    QHash<qlonglong, ImageInfoData *> m_infos;
     QHash<int, QString>               m_albums;
 };
 

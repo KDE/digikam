@@ -44,14 +44,14 @@ class FreeRotationFilterPriv;
 class DIGIKAM_EXPORT FreeRotationContainer
 {
 public:
-
+    
     enum AutoCropTypes
     {
         NoAutoCrop = 0,
         WidestArea,
         LargestArea
     };
-
+    
 public:
 
     FreeRotationContainer()
@@ -64,16 +64,16 @@ public:
         orgH            = 0;
     };
 
-    ~FreeRotationContainer() {};
+    ~FreeRotationContainer(){};
 
 public:
-
+    
     bool   antiAlias;
 
     int    autoCrop;
     int    orgW;
     int    orgH;
-
+    
     double angle;
 
     QSize  newSize;
@@ -86,7 +86,7 @@ class DIGIKAM_EXPORT FreeRotationFilter : public DImgThreadedFilter
 
 public:
 
-    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0,
+    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0, 
                                 const FreeRotationContainer& settings=FreeRotationContainer());
 
     virtual ~FreeRotationFilter();

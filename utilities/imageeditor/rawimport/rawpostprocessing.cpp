@@ -40,7 +40,7 @@ namespace Digikam
 {
 
 RawPostProcessing::RawPostProcessing(DImg* orgImage, QObject* parent, const DRawDecoding& settings)
-    : DImgThreadedFilter(orgImage, parent, "RawPostProcessing")
+                 : DImgThreadedFilter(orgImage, parent, "RawPostProcessing")
 {
     m_customRawSettings = settings;
     initFilter();
@@ -49,8 +49,8 @@ RawPostProcessing::RawPostProcessing(DImg* orgImage, QObject* parent, const DRaw
 RawPostProcessing::RawPostProcessing(DImgThreadedFilter* parentFilter,
                                      const DImg& orgImage, const DImg& destImage,
                                      int progressBegin, int progressEnd, const DRawDecoding& settings)
-    : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                         parentFilter->filterName() + ": RawPostProcessing")
+                 : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                                      parentFilter->filterName() + ": RawPostProcessing")
 {
     m_customRawSettings = settings;
     filterImage();
@@ -70,8 +70,8 @@ void RawPostProcessing::rawPostProcessing()
 {
     if (!m_orgImage.bits() || !m_orgImage.width() || !m_orgImage.height())
     {
-        kWarning() << ("RawPostProcessing::rawPostProcessing: no image m_orgImage.bits() available!");
-        return;
+       kWarning() << ("RawPostProcessing::rawPostProcessing: no image m_orgImage.bits() available!");
+       return;
     }
 
     if (!m_customRawSettings.postProcessingSettingsIsDirty())

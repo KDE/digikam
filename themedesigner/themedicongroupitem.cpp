@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 ThemedIconGroupItem::ThemedIconGroupItem(ThemedIconView* view)
-    : IconGroupItem(view), m_view(view)
+                   : IconGroupItem(view), m_view(view)
 {
 }
 
@@ -50,7 +50,7 @@ ThemedIconGroupItem::~ThemedIconGroupItem()
 {
 }
 
-void ThemedIconGroupItem::paintBanner(QPainter* p2)
+void ThemedIconGroupItem::paintBanner(QPainter *p2)
 {
     QRect   r(0, 0, rect().width(), rect().height());
     QPixmap pix(m_view->bannerPixmap());
@@ -59,7 +59,6 @@ void ThemedIconGroupItem::paintBanner(QPainter* p2)
     fn.setBold(true);
     int fnSize = fn.pointSize();
     bool usePointSize;
-
     if (fnSize > 0)
     {
         fn.setPointSize(fnSize+2);
@@ -83,13 +82,9 @@ void ThemedIconGroupItem::paintBanner(QPainter* p2)
     r.setY(tr.height() + 2);
 
     if (usePointSize)
-    {
         fn.setPointSize(m_view->font().pointSize());
-    }
     else
-    {
         fn.setPixelSize(m_view->font().pixelSize());
-    }
 
     fn.setBold(false);
     p.setFont(fn);
@@ -101,8 +96,8 @@ void ThemedIconGroupItem::paintBanner(QPainter* p2)
     p.end();
 
     r = m_view->bannerRect();
-    //    r = QRect(iconView()->contentsToViewport(QPoint(r.x(), r.y())),
-    //              QSize(r.width(), r.height()));
+//    r = QRect(iconView()->contentsToViewport(QPoint(r.x(), r.y())),
+//              QSize(r.width(), r.height()));
 
     p2->drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
 }

@@ -46,13 +46,13 @@ public:
 };
 
 Option::Option(const QString& name, const QString& description)
-    : Parseable(name), d(new OptionPriv)
+      : Parseable(name), d(new OptionPriv)
 {
     setDescription(description);
 }
 
 Option::Option(const QString& name, const QString& description, const QPixmap& icon)
-    : Parseable(name, icon), d(new OptionPriv)
+      : Parseable(name, icon), d(new OptionPriv)
 {
     setDescription(description);
 }
@@ -70,11 +70,9 @@ ParseResults Option::parse(ParseSettings& settings)
     const QString& parseString = settings.parseString;
 
     int pos = 0;
-
     while (pos > -1)
     {
         pos = reg.indexIn(parseString, pos);
-
         if (pos > -1)
         {
             QString result = parseOperation(settings);

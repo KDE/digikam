@@ -40,7 +40,7 @@ class MetadataManager : public QObject
 
 public:
 
-    static MetadataManager* instance();
+    static MetadataManager *instance();
 
     bool requestShutDown();
     void shutDown();
@@ -62,8 +62,8 @@ public Q_SLOTS:
     void assignRating(const QList<ImageInfo>& infos, int rating);
 
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
-    void applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub);
-    void applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub);
+    void applyMetadata(const QList<ImageInfo>& infos, const MetadataHub &hub);
+    void applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad &hub);
 
 Q_SIGNALS:
 
