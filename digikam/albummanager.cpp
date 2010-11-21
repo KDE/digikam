@@ -782,7 +782,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             KMessageBox::warningYesNo(0,
                                       i18n("Your locale has changed since this "
                                            "album was last opened.\n"
-                                           "Old Locale : %1, New Locale : %2\n"
+                                           "Old locale: %1, new locale: %2\n"
                                            "If you have recently changed your locale, you need not be concerned.\n"
                                            "Please note that if you switched to a locale "
                                            "that does not support some of the filenames in your collection, "

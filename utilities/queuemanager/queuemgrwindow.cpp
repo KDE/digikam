@@ -1274,7 +1274,7 @@ void QueueMgrWindow::addHistoryMessage(const QString& msg, DHistoryView::EntryTy
     {
         int queueId  = d->queuePool->currentIndex();
         int itemId   = d->currentProcessItem->info().id();
-        QString text = i18n("Item \"%1\" from queue \"%2\" : %3", d->currentProcessItem->info().name(),
+        QString text = i18n("Item \"%1\" from queue \"%2\": %3", d->currentProcessItem->info().name(),
                             d->queuePool->queueTitle(queueId), msg);
         d->toolsView->addHistoryEntry(text, type, queueId, itemId);
     }
