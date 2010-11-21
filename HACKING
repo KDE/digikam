@@ -204,7 +204,7 @@ digikamformatcode()
         --break-blocks --break-closing-brackets --pad-header \
         --align-pointer=type --indent-col1-comments --add-brackets \
         --min-conditional-indent=0 \
-        `find $1 -type f -name '*.cpp'` `find -type f -name '*.cc'` `find -type f -name '*.h'`
+        `find $1 -type f -name '*.cpp'` `find $1 -type f -name '*.cc'` `find $1 -type f -name '*.h'`
 }
 
 You can pass a parameter to the function, in this case the first parameter is the directory, where
