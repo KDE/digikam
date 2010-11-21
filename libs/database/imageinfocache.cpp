@@ -124,7 +124,7 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
                 (*it)->modificationDateCached = false;
             if (changes & DatabaseFields::FileSize)
                 (*it)->fileSizeCached = false;
-            if (changes & DatabaseFields::Width || changes & DatabaseFields::Height)
+            if ((changes & DatabaseFields::Width) || (changes & DatabaseFields::Height))
                 (*it)->imageSizeCached = false;
         }
     }

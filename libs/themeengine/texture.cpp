@@ -132,7 +132,7 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
         else if (gradient == Theme::DIAGONAL)
             doDgradient();
 
-        if (bevel & Theme::RAISED || bevel & Theme::SUNKEN)
+        if ((bevel & Theme::RAISED) || (bevel & Theme::SUNKEN))
             doBevel();
 
         buildImage();

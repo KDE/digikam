@@ -655,7 +655,7 @@ void ColorCorrectionDlg::readSettings()
 
     if (d->mode == ProfileMismatch)
     {
-        if (settings.lastMismatchBehavior & ICCSettingsContainer::UseSpecifiedProfile
+        if ((settings.lastMismatchBehavior & ICCSettingsContainer::UseSpecifiedProfile)
             && d->otherProfileBox->count() > 0)
         {
             d->thirdOption->setChecked(true);
@@ -703,7 +703,7 @@ void ColorCorrectionDlg::readSettings()
                 d->imageSRGB->setChecked(true);
             if (settings.lastMissingProfileBehavior & ICCSettingsContainer::UseWorkspace)
                 d->imageWorkingSpace->setChecked(true);
-            if (settings.lastMissingProfileBehavior & ICCSettingsContainer::UseSpecifiedProfile
+            if ((settings.lastMissingProfileBehavior & ICCSettingsContainer::UseSpecifiedProfile)
                 && d->imageProfileBox->count() > 0)
                 d->imageOtherSpace->setChecked(true);
         }

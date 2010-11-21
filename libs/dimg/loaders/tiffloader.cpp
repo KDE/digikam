@@ -188,7 +188,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (photometric != PHOTOMETRIC_RGB &&
         photometric != PHOTOMETRIC_MINISBLACK &&
         photometric != PHOTOMETRIC_PALETTE &&
-        m_loadFlags & LoadImageData)
+        (m_loadFlags & LoadImageData))
     {
         kWarning() << "Can not handle image without RGB color-space: "
                         << photometric;

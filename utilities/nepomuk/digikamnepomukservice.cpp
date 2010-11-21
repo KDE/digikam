@@ -487,7 +487,7 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukS
         if (syncSettings & SyncRating)
         {
             int rating = info.rating();
-            if (rating != -1 || syncSettings & SyncHasNoRating)
+            if (rating != -1 || (syncSettings & SyncHasNoRating))
             {
                 //kDebug() << "Setting rating" << info.rating() << res.resourceUri() << res.isValid();
                 res.setRating(digikamToNepomukRating(info.rating()));

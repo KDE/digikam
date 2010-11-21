@@ -674,9 +674,9 @@ void PreviewWidget::contentsMouseMoveEvent(QMouseEvent* e)
 {
     if (!e) return;
 
-    if ((e->buttons() & Qt::LeftButton || e->buttons() & Qt::MidButton) && !d->mousePressPos.isNull())
+    if (((e->buttons() & Qt::LeftButton) || (e->buttons() & Qt::MidButton)) && !d->mousePressPos.isNull())
     {
-        if (!m_movingInProgress && e->buttons() & Qt::LeftButton)
+        if (!m_movingInProgress && (e->buttons() & Qt::LeftButton))
         {
             if ((d->mousePressPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
                 startPanning(d->mousePressPos);

@@ -176,7 +176,7 @@ unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
 
 bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 {
-    if (! (m_loadFlags & LoadMetadata || m_loadFlags & LoadUniqueHash) )
+    if (! ((m_loadFlags & LoadMetadata) || (m_loadFlags & LoadUniqueHash)) )
         return false;
 
     DMetadata metaDataFromFile;
