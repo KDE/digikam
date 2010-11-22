@@ -47,6 +47,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 247175 : digiKam doesn't exit after closing main window.
 029 ==> 252737 : Direct capture bug 2 of 2.
 030 ==> 243497 : digikam does not exit when "quit", stuck in select.
-031 ==> 
+031 ==> 257329 : Build fails - openmp flags.
+032 ==> 
+
 
 
