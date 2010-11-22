@@ -1,3 +1,3436 @@
+1.6.0 2010-11-22
+
+2010-11-22 09:08  cgilles
+
+	* NEWS: update
+
+2010-11-22 08:59  cgilles
+
+	* NEWS: update
+
+2010-11-21 19:05  aclemens
+
+	* libs/template/templateselector.cpp: I just removed the return
+	  statement, if we really want to escape at this point
+	  in the function, please fix it. I don't know the logic behind it.
+	  
+	  CCMAIL:digikam-devel@kde.org
+
+2010-11-21 15:45  aclemens
+
+	* themedesigner/main.cpp: main should return a value
+
+2010-11-21 15:45  aclemens
+
+	* libs/database/albumdb.cpp, libs/database/imageinfocache.cpp,
+	  libs/dimg/loaders/dimgloader.cpp,
+	  libs/dimg/loaders/tiffloader.cpp,
+	  libs/models/abstractalbummodel.cpp, libs/themeengine/texture.cpp,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/metadata/metadatalistview.cpp,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  utilities/nepomuk/digikamnepomukservice.cpp,
+	  utilities/searchwindow/searchwindow.cpp: code polish
+
+2010-11-21 15:37  pino
+
+	* digikam/albummanager.cpp, tips,
+	  utilities/queuemanager/queuemgrwindow.cpp: i18n fixes
+	  
+	  - remove space before colons or question marks
+	  - fix CamelCasing
+
+2010-11-21 00:44  aclemens
+
+	* HACKING: fix example function
+
+2010-11-20 14:09  aclemens
+
+	* HACKING: polish
+
+2010-11-20 14:07  aclemens
+
+	* HACKING: update HACKING file, add information about automatic
+	  code formatting.
+
+2010-11-20 10:51  aclemens
+
+	* databaseserver/databaseserver.cpp,
+	  databaseserver/databaseserver.h, databaseserver/pollthread.cpp,
+	  digikam/addtagslineedit.cpp, digikam/addtagslineedit.h,
+	  digikam/album.cpp, digikam/album.h, digikam/albumdragdrop.cpp,
+	  digikam/albumdragdrop.h, digikam/albumhistory.cpp,
+	  digikam/albumhistory.h, digikam/albumiconviewfilter.cpp,
+	  digikam/albumiconviewfilter.h, digikam/albumlister.cpp,
+	  digikam/albumlister.h, digikam/albummanager.cpp,
+	  digikam/albummanager.h, digikam/albummodificationhelper.cpp,
+	  digikam/albummodificationhelper.h, digikam/albumpropsedit.cpp,
+	  digikam/albumselectcombobox.cpp, digikam/albumselectcombobox.h,
+	  digikam/albumselectdialog.cpp,
+	  digikam/albumselectiontreeview.cpp,
+	  digikam/albumselectiontreeview.h, digikam/albumselectwidget.cpp,
+	  digikam/albumselectwidget.h, digikam/albumsettings.cpp,
+	  digikam/albumsettings.h, digikam/albumthumbnailloader.cpp,
+	  digikam/albumthumbnailloader.h, digikam/albumtreeview.cpp,
+	  digikam/albumtreeview.h, digikam/albumwidgetstack.cpp,
+	  digikam/albumwidgetstack.h, digikam/contextmenuhelper.cpp,
+	  digikam/databaseguierrorhandler.cpp, digikam/datefolderview.cpp,
+	  digikam/datefolderview.h, digikam/dbstatdlg.cpp,
+	  digikam/ddragobjects.cpp, digikam/ddragobjects.h,
+	  digikam/digikam_export.h, digikam/digikamapp.cpp,
+	  digikam/digikamapp.h, digikam/digikamimagedelegate.cpp,
+	  digikam/digikamimagedelegate.h, digikam/digikamimageview.cpp,
+	  digikam/digikamimageview.h, digikam/digikamimageview_p.cpp,
+	  digikam/digikamimageview_p.h, digikam/digikammodelcollection.cpp,
+	  digikam/digikammodelcollection.h, digikam/digikamview.cpp,
+	  digikam/dio.cpp, digikam/dio.h,
+	  digikam/editablesearchtreeview.cpp, digikam/icongroupitem.cpp,
+	  digikam/icongroupitem.h, digikam/iconitem.cpp,
+	  digikam/iconitem.h, digikam/iconview.cpp, digikam/iconview.h,
+	  digikam/imageattributeswatch.cpp, digikam/imageattributeswatch.h,
+	  digikam/imagecategorizedview.cpp, digikam/imagecategorizedview.h,
+	  digikam/imagecategorydrawer.cpp, digikam/imagedelegate.cpp,
+	  digikam/imagedragdrop.cpp, digikam/imagedragdrop.h,
+	  digikam/imagepreviewbar.cpp, digikam/imagepreviewbar.h,
+	  digikam/imagepreviewview.cpp, digikam/imageratingoverlay.cpp,
+	  digikam/imageratingoverlay.h, digikam/imagerotationoverlay.cpp,
+	  digikam/imagerotationoverlay.h,
+	  digikam/imageselectionoverlay.cpp,
+	  digikam/imageselectionoverlay.h, digikam/imagethumbnailbar.cpp,
+	  digikam/imagethumbnailbar.h, digikam/imagethumbnaildelegate.cpp,
+	  digikam/imagethumbnaildelegate.h, digikam/imageviewutilities.cpp,
+	  digikam/imageviewutilities.h, digikam/kdateedit.cpp,
+	  digikam/kdateedit.h, digikam/kdatepickerpopup.cpp,
+	  digikam/kdatepickerpopup.h, digikam/kdatetimeedit.cpp,
+	  digikam/kdatetimeedit.h, digikam/leftsidebarwidgets.cpp,
+	  digikam/leftsidebarwidgets.h, digikam/main.cpp,
+	  digikam/mediaplayerview.cpp, digikam/mediaplayerview.h,
+	  digikam/metadatahub.cpp, digikam/metadatahub.h,
+	  digikam/metadatamanager.cpp, digikam/metadatamanager.h,
+	  digikam/metadatamanager_p.h, digikam/mimefilter.cpp,
+	  digikam/monthwidget.cpp, digikam/monthwidget.h,
+	  digikam/ratingfilter.cpp, digikam/ratingpopupmenu.cpp,
+	  digikam/ratingpopupmenu.h, digikam/scancontroller.cpp,
+	  digikam/scancontroller.h, digikam/searchmodificationhelper.cpp,
+	  digikam/searchmodificationhelper.h, digikam/sidebarwidget.cpp,
+	  digikam/sidebarwidget.h, digikam/syncjob.cpp, digikam/syncjob.h,
+	  digikam/tagcheckview.cpp, digikam/tagcheckview.h,
+	  digikam/tagdragdrop.cpp, digikam/tagdragdrop.h,
+	  digikam/tageditdlg.cpp, digikam/tageditdlg.h,
+	  digikam/tagfiltersidebarwidget.cpp,
+	  digikam/tagfiltersidebarwidget.h, digikam/tagfolderview.cpp,
+	  digikam/tagfolderview.h, digikam/tagmodificationhelper.cpp,
+	  digikam/tagmodificationhelper.h, digikam/tagspopupmenu.cpp,
+	  digikam/tagspopupmenu.h, digikam/tooltipfiller.cpp,
+	  digikam/tooltipfiller.h, digikam/uifilevalidator.cpp,
+	  digikam/welcomepageview.cpp,
+	  imageplugins/color/adjustcurvestool.cpp,
+	  imageplugins/color/adjustlevelstool.cpp,
+	  imageplugins/color/autocorrectiontool.cpp,
+	  imageplugins/color/bcgtool.cpp,
+	  imageplugins/color/bwsepiatool.cpp,
+	  imageplugins/color/cbtool.cpp,
+	  imageplugins/color/channelmixertool.cpp,
+	  imageplugins/color/hsltool.cpp,
+	  imageplugins/color/imageplugin_color.cpp,
+	  imageplugins/color/imageplugin_color.h,
+	  imageplugins/color/profileconversiontool.cpp,
+	  imageplugins/color/whitebalancetool.cpp,
+	  imageplugins/decorate/bordertool.cpp,
+	  imageplugins/decorate/imageplugin_decorate.cpp,
+	  imageplugins/decorate/inserttexttool.cpp,
+	  imageplugins/decorate/inserttextwidget.cpp,
+	  imageplugins/decorate/superimpose/dirselectwidget.cpp,
+	  imageplugins/decorate/superimpose/dirselectwidget.h,
+	  imageplugins/decorate/superimpose/superimpose.cpp,
+	  imageplugins/decorate/superimpose/superimpose.h,
+	  imageplugins/decorate/superimpose/superimposetool.cpp,
+	  imageplugins/decorate/superimpose/superimposewidget.cpp,
+	  imageplugins/decorate/superimpose/superimposewidget.h,
+	  imageplugins/decorate/texturetool.cpp,
+	  imageplugins/enhance/antivignettingtool.cpp,
+	  imageplugins/enhance/blurtool.cpp,
+	  imageplugins/enhance/hotpixels/blackframelistview.cpp,
+	  imageplugins/enhance/hotpixels/blackframelistview.h,
+	  imageplugins/enhance/hotpixels/blackframeparser.cpp,
+	  imageplugins/enhance/hotpixels/blackframeparser.h,
+	  imageplugins/enhance/hotpixels/hotpixel.h,
+	  imageplugins/enhance/hotpixels/hotpixelfixer.cpp,
+	  imageplugins/enhance/hotpixels/hotpixelstool.cpp,
+	  imageplugins/enhance/hotpixels/weights.cpp,
+	  imageplugins/enhance/hotpixels/weights.h,
+	  imageplugins/enhance/imageplugin_enhance.cpp,
+	  imageplugins/enhance/inpaintingtool.cpp,
+	  imageplugins/enhance/inpaintingtool.h,
+	  imageplugins/enhance/lensautofixtool.cpp,
+	  imageplugins/enhance/lensdistortiontool.cpp,
+	  imageplugins/enhance/localcontrasttool.cpp,
+	  imageplugins/enhance/noisereductiontool.cpp,
+	  imageplugins/enhance/redeyetool.cpp,
+	  imageplugins/enhance/restorationtool.cpp,
+	  imageplugins/enhance/sharpentool.cpp,
+	  imageplugins/filters/blurfxtool.cpp,
+	  imageplugins/filters/charcoaltool.cpp,
+	  imageplugins/filters/colorfxtool.cpp,
+	  imageplugins/filters/distortionfxtool.cpp,
+	  imageplugins/filters/embosstool.cpp,
+	  imageplugins/filters/filmgraintool.cpp,
+	  imageplugins/filters/imageplugin_fxfilters.cpp,
+	  imageplugins/filters/oilpainttool.cpp,
+	  imageplugins/filters/raindroptool.cpp,
+	  imageplugins/transform/contentawareresizetool.cpp,
+	  imageplugins/transform/freerotationtool.cpp,
+	  imageplugins/transform/imageplugin_transform.cpp,
+	  imageplugins/transform/imageselectionwidget.cpp,
+	  imageplugins/transform/imageselectionwidget.h,
+	  imageplugins/transform/matrix.cpp,
+	  imageplugins/transform/perspectivetool.cpp,
+	  imageplugins/transform/perspectivewidget.cpp,
+	  imageplugins/transform/ratiocroptool.cpp,
+	  imageplugins/transform/resizetool.cpp,
+	  imageplugins/transform/sheartool.cpp,
+	  imageplugins/transform/triangle.h, kioslave/digikamalbums.cpp,
+	  kioslave/digikamalbums.h, kioslave/digikamdates.cpp,
+	  kioslave/digikamdates.h, kioslave/digikamsearch.cpp,
+	  kioslave/digikamtags.cpp, kioslave/digikamtags.h,
+	  libs/database/albumdb.cpp, libs/database/albumdb.h,
+	  libs/database/albumdb_sqlite2.cpp,
+	  libs/database/albumdb_sqlite2.h, libs/database/albuminfo.h,
+	  libs/database/collectionlocation.cpp,
+	  libs/database/collectionlocation.h,
+	  libs/database/collectionmanager.cpp,
+	  libs/database/collectionmanager.h,
+	  libs/database/collectionscanner.cpp,
+	  libs/database/collectionscanner.h,
+	  libs/database/collectionscannerhints.cpp,
+	  libs/database/collectionscannerhints.h,
+	  libs/database/collectionscannerobserver.h,
+	  libs/database/databaseaccess.cpp, libs/database/databaseaccess.h,
+	  libs/database/databasebackend.cpp,
+	  libs/database/databasebackend.h,
+	  libs/database/databasebackend_p.h,
+	  libs/database/databasechangesets.cpp,
+	  libs/database/databasechangesets.h,
+	  libs/database/databaseconfigelement.cpp,
+	  libs/database/databasecopymanager.cpp,
+	  libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend.h,
+	  libs/database/databasecorebackend_p.h,
+	  libs/database/databaseerrorhandler.h,
+	  libs/database/databasefields.h,
+	  libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h,
+	  libs/database/databaseservererror.cpp,
+	  libs/database/databaseservererror.h,
+	  libs/database/databaseserverstarter.cpp,
+	  libs/database/databaseserverstarter.h,
+	  libs/database/databasethumbnailinfoprovider.cpp,
+	  libs/database/databasetransaction.cpp,
+	  libs/database/databasetransaction.h,
+	  libs/database/databaseurl.cpp, libs/database/databasewatch.cpp,
+	  libs/database/databasewatch.h,
+	  libs/database/databasewatchadaptor.h,
+	  libs/database/dbactiontype.cpp, libs/database/dbactiontype.h,
+	  libs/database/downloadhistory.cpp,
+	  libs/database/downloadhistory.h, libs/database/haar/haar.cpp,
+	  libs/database/haar/haar.h, libs/database/haar/haariface.cpp,
+	  libs/database/haar/haariface.h, libs/database/imagecomments.cpp,
+	  libs/database/imagecomments.h, libs/database/imagecopyright.cpp,
+	  libs/database/imagecopyright.h,
+	  libs/database/imageextendedproperties.cpp,
+	  libs/database/imageextendedproperties.h,
+	  libs/database/imageinfo.cpp, libs/database/imageinfo.h,
+	  libs/database/imageinfocache.cpp, libs/database/imageinfocache.h,
+	  libs/database/imagelister.cpp, libs/database/imagelister.h,
+	  libs/database/imagelisterreceiver.cpp,
+	  libs/database/imagelisterreceiver.h,
+	  libs/database/imageposition.cpp, libs/database/imageposition.h,
+	  libs/database/imagequerybuilder.cpp,
+	  libs/database/imagequerybuilder.h,
+	  libs/database/imagescanner.cpp, libs/database/imagescanner.h,
+	  libs/database/namefilter.cpp, libs/database/schemaupdater.cpp,
+	  libs/database/schemaupdater.h, libs/database/searchxml.cpp,
+	  libs/database/searchxml.h, libs/database/sqlquery.cpp,
+	  libs/database/tagscache.cpp,
+	  libs/database/thumbnaildatabaseaccess.cpp,
+	  libs/database/thumbnaildatabaseaccess.h,
+	  libs/database/thumbnaildb.cpp, libs/database/thumbnaildb.h,
+	  libs/database/thumbnailschemaupdater.cpp,
+	  libs/database/thumbnailschemaupdater.h,
+	  libs/database/upgradedb_sqlite2tosqlite3.cpp,
+	  libs/database/upgradedb_sqlite2tosqlite3.h,
+	  libs/dialogs/dbusydlg.cpp, libs/dialogs/dbusydlg.h,
+	  libs/dialogs/deletedialog.cpp, libs/dialogs/deletedialog.h,
+	  libs/dialogs/dprogressdlg.cpp,
+	  libs/dialogs/filesaveoptionsdlg.cpp,
+	  libs/dialogs/iccprofileinfodlg.cpp,
+	  libs/dialogs/iccprofileinfodlg.h, libs/dialogs/imagedialog.cpp,
+	  libs/dialogs/imagedialog.h, libs/dialogs/infodlg.cpp,
+	  libs/dialogs/libsinfodlg.cpp, libs/dialogs/migrationdlg.cpp,
+	  libs/dialogs/rawcameradlg.cpp, libs/dimg/dcolor.cpp,
+	  libs/dimg/dcolor.h, libs/dimg/dcolorblend.h,
+	  libs/dimg/dcolorcomposer.cpp, libs/dimg/dcolorcomposer.h,
+	  libs/dimg/dcolorpixelaccess.h, libs/dimg/dimg.cpp,
+	  libs/dimg/dimg.h, libs/dimg/dimgscale.cpp,
+	  libs/dimg/drawdecoding.h, libs/dimg/dshareddata.h,
+	  libs/dimg/exposurecontainer.h,
+	  libs/dimg/filters/auto/autoexpofilter.cpp,
+	  libs/dimg/filters/auto/autolevelsfilter.cpp,
+	  libs/dimg/filters/auto/equalizefilter.cpp,
+	  libs/dimg/filters/auto/normalizefilter.cpp,
+	  libs/dimg/filters/auto/stretchfilter.cpp,
+	  libs/dimg/filters/bcg/bcgfilter.cpp,
+	  libs/dimg/filters/bcg/bcgfilter.h,
+	  libs/dimg/filters/bcg/bcgsettings.cpp,
+	  libs/dimg/filters/bw/bwsepiafilter.cpp,
+	  libs/dimg/filters/bw/bwsepiafilter.h,
+	  libs/dimg/filters/bw/bwsepiasettings.cpp,
+	  libs/dimg/filters/bw/infraredfilter.cpp,
+	  libs/dimg/filters/bw/infraredfilter.h,
+	  libs/dimg/filters/bw/mixerfilter.cpp,
+	  libs/dimg/filters/bw/mixerfilter.h,
+	  libs/dimg/filters/bw/mixersettings.cpp,
+	  libs/dimg/filters/bw/tonalityfilter.cpp,
+	  libs/dimg/filters/bw/tonalityfilter.h,
+	  libs/dimg/filters/cb/cbfilter.cpp,
+	  libs/dimg/filters/cb/cbfilter.h,
+	  libs/dimg/filters/cb/cbsettings.cpp,
+	  libs/dimg/filters/curves/curvesbox.cpp,
+	  libs/dimg/filters/curves/curvesbox.h,
+	  libs/dimg/filters/curves/curvesfilter.cpp,
+	  libs/dimg/filters/curves/curvesfilter.h,
+	  libs/dimg/filters/curves/curvessettings.cpp,
+	  libs/dimg/filters/curves/curveswidget.cpp,
+	  libs/dimg/filters/curves/curveswidget.h,
+	  libs/dimg/filters/curves/imagecurves.cpp,
+	  libs/dimg/filters/decorate/borderfilter.cpp,
+	  libs/dimg/filters/decorate/borderfilter.h,
+	  libs/dimg/filters/decorate/bordersettings.cpp,
+	  libs/dimg/filters/decorate/texturefilter.cpp,
+	  libs/dimg/filters/dimgthreadedfilter.cpp,
+	  libs/dimg/filters/dimgthreadedfilter.h,
+	  libs/dimg/filters/fx/blurfilter.cpp,
+	  libs/dimg/filters/fx/blurfilter.h,
+	  libs/dimg/filters/fx/blurfxfilter.cpp,
+	  libs/dimg/filters/fx/blurfxfilter.h,
+	  libs/dimg/filters/fx/charcoalfilter.cpp,
+	  libs/dimg/filters/fx/distortionfxfilter.cpp,
+	  libs/dimg/filters/fx/distortionfxfilter.h,
+	  libs/dimg/filters/fx/embossfilter.cpp,
+	  libs/dimg/filters/fx/filmgrainfilter.cpp,
+	  libs/dimg/filters/fx/filmgrainfilter.h,
+	  libs/dimg/filters/fx/filmgrainsettings.cpp,
+	  libs/dimg/filters/fx/invertfilter.cpp,
+	  libs/dimg/filters/fx/oilpaintfilter.cpp,
+	  libs/dimg/filters/fx/pixelsaliasfilter.cpp,
+	  libs/dimg/filters/fx/pixelsaliasfilter.h,
+	  libs/dimg/filters/fx/raindropfilter.cpp,
+	  libs/dimg/filters/fx/raindropfilter.h,
+	  libs/dimg/filters/greycstoration/greycstorationfilter.cpp,
+	  libs/dimg/filters/greycstoration/greycstorationfilter.h,
+	  libs/dimg/filters/greycstoration/greycstorationsettings.cpp,
+	  libs/dimg/filters/hsl/hslfilter.cpp,
+	  libs/dimg/filters/hsl/hslfilter.h,
+	  libs/dimg/filters/hsl/hslsettings.cpp,
+	  libs/dimg/filters/hsl/hspreviewwidget.cpp,
+	  libs/dimg/filters/hsl/hspreviewwidget.h,
+	  libs/dimg/filters/icc/iccprofile.cpp,
+	  libs/dimg/filters/icc/iccprofile.h,
+	  libs/dimg/filters/icc/iccprofilesettings.cpp,
+	  libs/dimg/filters/icc/iccprofilesettings.h,
+	  libs/dimg/filters/icc/iccsettings.cpp,
+	  libs/dimg/filters/icc/iccsettings.h,
+	  libs/dimg/filters/icc/iccsettingscontainer.cpp,
+	  libs/dimg/filters/icc/iccsettingscontainer.h,
+	  libs/dimg/filters/icc/icctransform.cpp,
+	  libs/dimg/filters/icc/icctransform.h,
+	  libs/dimg/filters/icc/icctransformfilter.cpp,
+	  libs/dimg/filters/lc/localcontrastfilter.cpp,
+	  libs/dimg/filters/lc/localcontrastsettings.cpp,
+	  libs/dimg/filters/lens/antivignettingfilter.cpp,
+	  libs/dimg/filters/lens/antivignettingfilter.h,
+	  libs/dimg/filters/lens/antivignettingsettings.cpp,
+	  libs/dimg/filters/lens/lensdistortionfilter.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfunsettings.cpp,
+	  libs/dimg/filters/lens/pixelaccess.cpp,
+	  libs/dimg/filters/lens/testlensfuniface.cpp,
+	  libs/dimg/filters/levels/histogrambox.cpp,
+	  libs/dimg/filters/levels/histogrambox.h,
+	  libs/dimg/filters/levels/histogrampainter.cpp,
+	  libs/dimg/filters/levels/histogramwidget.cpp,
+	  libs/dimg/filters/levels/histogramwidget.h,
+	  libs/dimg/filters/levels/imagehistogram.cpp,
+	  libs/dimg/filters/levels/imagelevels.cpp,
+	  libs/dimg/filters/levels/levelsfilter.cpp,
+	  libs/dimg/filters/levels/levelsfilter.h,
+	  libs/dimg/filters/nr/nrfilter.cpp,
+	  libs/dimg/filters/nr/nrfilter.h,
+	  libs/dimg/filters/nr/nrsettings.cpp,
+	  libs/dimg/filters/sharp/matrix.cpp,
+	  libs/dimg/filters/sharp/matrix.h,
+	  libs/dimg/filters/sharp/refocusfilter.cpp,
+	  libs/dimg/filters/sharp/sharpenfilter.cpp,
+	  libs/dimg/filters/sharp/sharpsettings.cpp,
+	  libs/dimg/filters/sharp/sharpsettings.h,
+	  libs/dimg/filters/sharp/unsharpmaskfilter.cpp,
+	  libs/dimg/filters/sharp/unsharpmaskfilter.h,
+	  libs/dimg/filters/transform/contentawarefilter.cpp,
+	  libs/dimg/filters/transform/contentawarefilter.h,
+	  libs/dimg/filters/transform/freerotationfilter.cpp,
+	  libs/dimg/filters/transform/freerotationfilter.h,
+	  libs/dimg/filters/transform/freerotationsettings.cpp,
+	  libs/dimg/filters/transform/shearfilter.cpp,
+	  libs/dimg/filters/transform/shearfilter.h,
+	  libs/dimg/filters/wb/wbfilter.cpp,
+	  libs/dimg/filters/wb/wbfilter.h,
+	  libs/dimg/filters/wb/wbsettings.cpp,
+	  libs/dimg/loaders/dimgloader.cpp, libs/dimg/loaders/dimgloader.h,
+	  libs/dimg/loaders/dimgloaderobserver.h,
+	  libs/dimg/loaders/iccjpeg.h, libs/dimg/loaders/jp2kloader.cpp,
+	  libs/dimg/loaders/jp2kloader.h,
+	  libs/dimg/loaders/jp2ksettings.cpp,
+	  libs/dimg/loaders/jp2ksettings.h,
+	  libs/dimg/loaders/jpegloader.cpp, libs/dimg/loaders/jpegloader.h,
+	  libs/dimg/loaders/jpegsettings.cpp,
+	  libs/dimg/loaders/jpegsettings.h,
+	  libs/dimg/loaders/pgfloader.cpp, libs/dimg/loaders/pgfloader.h,
+	  libs/dimg/loaders/pgfsettings.cpp,
+	  libs/dimg/loaders/pgfsettings.h, libs/dimg/loaders/pngloader.cpp,
+	  libs/dimg/loaders/pngloader.h, libs/dimg/loaders/pngsettings.cpp,
+	  libs/dimg/loaders/pngsettings.h, libs/dimg/loaders/ppmloader.cpp,
+	  libs/dimg/loaders/ppmloader.h,
+	  libs/dimg/loaders/qimageloader.cpp,
+	  libs/dimg/loaders/qimageloader.h,
+	  libs/dimg/loaders/rawloader.cpp, libs/dimg/loaders/rawloader.h,
+	  libs/dimg/loaders/tiffloader.cpp, libs/dimg/loaders/tiffloader.h,
+	  libs/dimg/loaders/tiffsettings.cpp,
+	  libs/dimg/loaders/tiffsettings.h,
+	  libs/dmetadata/captionvalues.cpp, libs/dmetadata/captionvalues.h,
+	  libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h,
+	  libs/dmetadata/geodetictools.cpp, libs/dmetadata/geodetictools.h,
+	  libs/dmetadata/photoinfocontainer.h, libs/dmetadata/template.cpp,
+	  libs/dmetadata/template.h,
+	  libs/imageproperties/cameraitempropertiestab.cpp,
+	  libs/imageproperties/captionedit.cpp,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.h,
+	  libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  libs/imageproperties/imagepropertiesmetadatatab.h,
+	  libs/imageproperties/imagepropertiessidebar.cpp,
+	  libs/imageproperties/imagepropertiessidebar.h,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.h,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.h,
+	  libs/imageproperties/imagepropertiestab.cpp,
+	  libs/imageproperties/imagepropertiestxtlabel.h,
+	  libs/imageproperties/markerclusterholder.cpp,
+	  libs/imageproperties/markerclusterholder.h,
+	  libs/imageproperties/markerclusterholderplugin/externaldraw.h,
+	  libs/imageproperties/worldmapwidget.cpp,
+	  libs/imageproperties/worldmapwidget.h,
+	  libs/jpegutils/jpegutils.cpp, libs/jpegutils/jpegutils.h,
+	  libs/jpegutils/jpegwin.cpp, libs/jpegutils/jpegwin.h,
+	  libs/models/abstractalbummodel.cpp,
+	  libs/models/abstractalbummodel.h,
+	  libs/models/abstractalbummodelpriv.h,
+	  libs/models/albumfiltermodel.cpp, libs/models/albumfiltermodel.h,
+	  libs/models/albummodel.cpp, libs/models/albummodel.h,
+	  libs/models/albummodeldragdrophandler.cpp,
+	  libs/models/albummodeldragdrophandler.h,
+	  libs/models/imagealbumfiltermodel.cpp,
+	  libs/models/imagealbumfiltermodel.h,
+	  libs/models/imagealbummodel.cpp, libs/models/imagealbummodel.h,
+	  libs/models/imagefiltermodel.cpp, libs/models/imagefiltermodel.h,
+	  libs/models/imagefiltermodelpriv.h,
+	  libs/models/imagefiltermodelthreads.h,
+	  libs/models/imagefiltersettings.cpp,
+	  libs/models/imagefiltersettings.h, libs/models/imagemodel.cpp,
+	  libs/models/imagemodel.h,
+	  libs/models/imagemodeldragdrophandler.cpp,
+	  libs/models/imagemodeldragdrophandler.h,
+	  libs/models/imagesortsettings.cpp,
+	  libs/models/imagesortsettings.h,
+	  libs/models/imagethumbnailmodel.cpp,
+	  libs/models/imagethumbnailmodel.h, libs/template/subjectedit.cpp,
+	  libs/template/templatelist.cpp,
+	  libs/template/templatemanager.cpp,
+	  libs/template/templatepanel.cpp,
+	  libs/template/templateselector.cpp,
+	  libs/template/templateviewer.cpp, libs/themeengine/texture.cpp,
+	  libs/themeengine/theme.cpp, libs/themeengine/themeengine.cpp,
+	  libs/threadimageio/loadingcache.cpp,
+	  libs/threadimageio/loadingcache.h,
+	  libs/threadimageio/loadingcacheinterface.cpp,
+	  libs/threadimageio/loadingcacheinterface.h,
+	  libs/threadimageio/loadingdescription.cpp,
+	  libs/threadimageio/loadingdescription.h,
+	  libs/threadimageio/loadsavetask.cpp,
+	  libs/threadimageio/loadsavetask.h,
+	  libs/threadimageio/loadsavethread.cpp,
+	  libs/threadimageio/loadsavethread.h,
+	  libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/managedloadsavethread.h,
+	  libs/threadimageio/pgfutils.cpp, libs/threadimageio/pgfutils.h,
+	  libs/threadimageio/previewloadthread.cpp,
+	  libs/threadimageio/previewloadthread.h,
+	  libs/threadimageio/previewtask.cpp,
+	  libs/threadimageio/previewtask.h,
+	  libs/threadimageio/sharedloadsavethread.cpp,
+	  libs/threadimageio/thumbnailbasic.cpp,
+	  libs/threadimageio/thumbnailcreator.cpp,
+	  libs/threadimageio/thumbnailcreator.h,
+	  libs/threadimageio/thumbnailcreator_p.h,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailsize.h,
+	  libs/threadimageio/thumbnailtask.cpp,
+	  libs/threadimageio/thumbnailtask.h,
+	  libs/threads/dynamicthread.cpp, libs/threads/threadmanager.cpp,
+	  libs/threads/workerobject.cpp, libs/threads/workerobject.h,
+	  libs/widgets/common/buttonicondisabler.cpp,
+	  libs/widgets/common/colorgradientwidget.cpp,
+	  libs/widgets/common/colorgradientwidget.h,
+	  libs/widgets/common/comboboxutilities.cpp,
+	  libs/widgets/common/comboboxutilities.h,
+	  libs/widgets/common/databasewidget.cpp,
+	  libs/widgets/common/databasewidget.h,
+	  libs/widgets/common/dcategorizedview.cpp,
+	  libs/widgets/common/dcategorizedview.h,
+	  libs/widgets/common/dcursortracker.cpp,
+	  libs/widgets/common/dcursortracker.h,
+	  libs/widgets/common/dfontselect.cpp,
+	  libs/widgets/common/dgradientslider.cpp,
+	  libs/widgets/common/dhistoryview.cpp,
+	  libs/widgets/common/dhistoryview.h,
+	  libs/widgets/common/ditemdelegate.cpp,
+	  libs/widgets/common/ditemdelegate.h,
+	  libs/widgets/common/ditemtooltip.cpp,
+	  libs/widgets/common/ditemtooltip.h,
+	  libs/widgets/common/dlogoaction.cpp,
+	  libs/widgets/common/dlogoaction.h,
+	  libs/widgets/common/dpopupmenu.cpp,
+	  libs/widgets/common/drubberband.cpp,
+	  libs/widgets/common/drubberband.h,
+	  libs/widgets/common/dzoombar.cpp, libs/widgets/common/dzoombar.h,
+	  libs/widgets/common/filesaveoptionsbox.cpp,
+	  libs/widgets/common/filesaveoptionsbox.h,
+	  libs/widgets/common/imagedelegateoverlay.cpp,
+	  libs/widgets/common/imagedelegateoverlay.h,
+	  libs/widgets/common/itemviewhoverbutton.cpp,
+	  libs/widgets/common/itemviewhoverbutton.h,
+	  libs/widgets/common/itemviewimagedelegate.cpp,
+	  libs/widgets/common/itemviewimagedelegate.h,
+	  libs/widgets/common/itemviewimagedelegatepriv.h,
+	  libs/widgets/common/itemviewtooltip.cpp,
+	  libs/widgets/common/itemviewtooltip.h,
+	  libs/widgets/common/kcategorizedview.cpp,
+	  libs/widgets/common/kcategorizedview.h,
+	  libs/widgets/common/kcategorizedview_p.h,
+	  libs/widgets/common/knotificationwrapper.cpp,
+	  libs/widgets/common/knotificationwrapper.h,
+	  libs/widgets/common/modelcompletion.cpp,
+	  libs/widgets/common/modelcompletion.h,
+	  libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/paniconwidget.h,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  libs/widgets/common/ratingwidget.cpp,
+	  libs/widgets/common/rexpanderboxexclusive.cpp,
+	  libs/widgets/common/rexpanderboxexclusive.h,
+	  libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h,
+	  libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h,
+	  libs/widgets/common/splashscreen.cpp,
+	  libs/widgets/common/statesavingobject.cpp,
+	  libs/widgets/common/statesavingobject.h,
+	  libs/widgets/common/statusled.cpp,
+	  libs/widgets/common/statusled.h,
+	  libs/widgets/common/statusnavigatebar.cpp,
+	  libs/widgets/common/statusnavigatebar.h,
+	  libs/widgets/common/statusprogressbar.cpp,
+	  libs/widgets/common/statusprogressbar.h,
+	  libs/widgets/common/thumbbar.cpp, libs/widgets/common/thumbbar.h,
+	  libs/widgets/common/thumbbardock.cpp,
+	  libs/widgets/common/thumbbardock.h,
+	  libs/widgets/common/thumbbartooltip.cpp,
+	  libs/widgets/common/thumbbartooltip.h,
+	  libs/widgets/common/visibilitycontroller.cpp,
+	  libs/widgets/common/visibilitycontroller.h,
+	  libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.h,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/iccprofiles/iccpreviewwidget.h,
+	  libs/widgets/iccprofiles/iccprofilescombobox.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  libs/widgets/metadata/exifwidget.cpp,
+	  libs/widgets/metadata/iptcwidget.cpp,
+	  libs/widgets/metadata/makernotewidget.cpp,
+	  libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  libs/widgets/metadata/mdkeylistviewitem.h,
+	  libs/widgets/metadata/metadatalistview.cpp,
+	  libs/widgets/metadata/metadatalistview.h,
+	  libs/widgets/metadata/metadatalistviewitem.cpp,
+	  libs/widgets/metadata/metadatalistviewitem.h,
+	  libs/widgets/metadata/metadatapanel.cpp,
+	  libs/widgets/metadata/metadataselector.cpp,
+	  libs/widgets/metadata/metadatawidget.cpp,
+	  libs/widgets/metadata/xmpwidget.cpp, showfoto/main.cpp,
+	  showfoto/setup/setup.cpp, showfoto/setup/setupmetadata.cpp,
+	  showfoto/setup/setupmisc.cpp, showfoto/setup/setuptooltip.cpp,
+	  showfoto/showfoto.cpp, tests/advancedrenametest.cpp,
+	  tests/advancedrenametest.h, tests/albummodeltest.cpp,
+	  tests/albummodeltest.h, tests/filesaveoptionsboxtest.cpp,
+	  tests/filesaveoptionsboxtest.h, tests/modeltest/modeltest.cpp,
+	  tests/modeltest/modeltest.h, tests/pgfscaled.cpp,
+	  tests/qtpgftest.cpp, tests/searchtextbartest.cpp,
+	  tests/searchtextbartest.h, tests/statesavingobjecttest.cpp,
+	  tests/statesavingobjecttest.h, tests/uifilevalidatortest.cpp,
+	  themedesigner/main.cpp, themedesigner/mainwindow.cpp,
+	  themedesigner/themedicongroupitem.cpp,
+	  themedesigner/themediconitem.cpp, themedesigner/themediconitem.h,
+	  themedesigner/themediconview.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenamemanager.cpp,
+	  utilities/advancedrename/advancedrenameprocessdialog.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/common/dynamiclayout.cpp,
+	  utilities/advancedrename/common/highlighter.cpp,
+	  utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/parseable.cpp,
+	  utilities/advancedrename/common/parseabledialog.cpp,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h,
+	  utilities/advancedrename/common/parseresults.cpp,
+	  utilities/advancedrename/common/token.cpp,
+	  utilities/advancedrename/common/token.h,
+	  utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h,
+	  utilities/advancedrename/common/tooltipdialog.cpp,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/importrenameparser.cpp,
+	  utilities/advancedrename/parser/modifiers/casemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.h,
+	  utilities/advancedrename/parser/modifiers/removedoublesmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.h,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/dbheaderlistitem.cpp,
+	  utilities/advancedrename/parser/options/database/dbheaderlistitem.h,
+	  utilities/advancedrename/parser/options/database/dbkeyscollection.cpp,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.cpp,
+	  utilities/advancedrename/parser/options/database/keys/commonkeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/metadatakeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/positionkeys.cpp,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchalbumssyncmetadata.h,
+	  utilities/batch/batchsyncmetadata.cpp,
+	  utilities/batch/batchsyncmetadata.h,
+	  utilities/batch/batchthumbsgenerator.cpp,
+	  utilities/batch/batchthumbsgenerator.h,
+	  utilities/batch/fingerprintsgenerator.cpp,
+	  utilities/batch/fingerprintsgenerator.h,
+	  utilities/batch/imageinfoalbumsjob.cpp,
+	  utilities/batch/imageinfojob.cpp, utilities/batch/imageinfojob.h,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/cameracontroller.h,
+	  utilities/cameragui/camerafolderdialog.cpp,
+	  utilities/cameragui/camerafolderdialog.h,
+	  utilities/cameragui/camerafolderitem.cpp,
+	  utilities/cameragui/camerafolderitem.h,
+	  utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/camerahistoryupdater.cpp,
+	  utilities/cameragui/camerahistoryupdater.h,
+	  utilities/cameragui/cameraiconitem.cpp,
+	  utilities/cameragui/cameraiconitem.h,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/cameraiconview.h,
+	  utilities/cameragui/cameraiconviewtooltip.cpp,
+	  utilities/cameragui/camerainfodialog.cpp,
+	  utilities/cameragui/camerainfodialog.h,
+	  utilities/cameragui/cameranamehelper.cpp,
+	  utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+	  utilities/cameragui/capturedlg.cpp,
+	  utilities/cameragui/capturedlg.h,
+	  utilities/cameragui/capturewidget.cpp,
+	  utilities/cameragui/capturewidget.h,
+	  utilities/cameragui/dkcamera.cpp, utilities/cameragui/dkcamera.h,
+	  utilities/cameragui/downloadsettingscontainer.h,
+	  utilities/cameragui/freespacetooltip.cpp,
+	  utilities/cameragui/freespacetooltip.h,
+	  utilities/cameragui/freespacewidget.cpp,
+	  utilities/cameragui/gpcamera.cpp, utilities/cameragui/gpcamera.h,
+	  utilities/cameragui/gpconfigdlg.cpp,
+	  utilities/cameragui/gpconfigdlg.h,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/cameragui/umscamera.cpp,
+	  utilities/cameragui/umscamera.h,
+	  utilities/firstrun/assistantdlg.cpp,
+	  utilities/firstrun/assistantdlgpage.cpp,
+	  utilities/firstrun/collectionpage.cpp,
+	  utilities/firstrun/metadatapage.cpp,
+	  utilities/firstrun/openfilepage.cpp,
+	  utilities/firstrun/previewpage.cpp,
+	  utilities/firstrun/rawpage.cpp,
+	  utilities/firstrun/startscanpage.cpp,
+	  utilities/firstrun/tooltipspage.cpp,
+	  utilities/firstrun/welcomepage.cpp,
+	  utilities/fuzzysearch/findduplicatesalbumitem.cpp,
+	  utilities/fuzzysearch/findduplicatesview.cpp,
+	  utilities/fuzzysearch/findduplicatesview.h,
+	  utilities/fuzzysearch/fuzzysearchview.cpp,
+	  utilities/fuzzysearch/fuzzysearchview.h,
+	  utilities/fuzzysearch/sketchwidget.cpp,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/gpssearch/gpssearchview.h,
+	  utilities/gpssearch/gpssearchwidget.cpp,
+	  utilities/gpssearch/gpssearchwidget.h,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/canvas.h,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.h,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/dimginterface.h,
+	  utilities/imageeditor/canvas/iccmanager.cpp,
+	  utilities/imageeditor/canvas/iccmanager.h,
+	  utilities/imageeditor/canvas/imageplugin.cpp,
+	  utilities/imageeditor/canvas/imageplugin.h,
+	  utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  utilities/imageeditor/canvas/iofilesettingscontainer.h,
+	  utilities/imageeditor/canvas/softproofdialog.cpp,
+	  utilities/imageeditor/canvas/softproofdialog.h,
+	  utilities/imageeditor/canvas/undoaction.cpp,
+	  utilities/imageeditor/canvas/undoaction.h,
+	  utilities/imageeditor/canvas/undocache.cpp,
+	  utilities/imageeditor/canvas/undocache.h,
+	  utilities/imageeditor/canvas/undomanager.cpp,
+	  utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/editorwindow_p.h,
+	  utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h,
+	  utilities/imageeditor/printiface/printhelper.cpp,
+	  utilities/imageeditor/printiface/printhelper.h,
+	  utilities/imageeditor/printiface/printoptionspage.cpp,
+	  utilities/imageeditor/printiface/printoptionspage.h,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h,
+	  utilities/imageeditor/widgets/previewlist.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.h,
+	  utilities/kipiiface/kipiimagecollection.cpp,
+	  utilities/kipiiface/kipiimagecollection.h,
+	  utilities/kipiiface/kipiimagecollectionselector.cpp,
+	  utilities/kipiiface/kipiimagecollectionselector.h,
+	  utilities/kipiiface/kipiimageinfo.cpp,
+	  utilities/kipiiface/kipiinterface.cpp,
+	  utilities/kipiiface/kipiinterface.h,
+	  utilities/kipiiface/kipiuploadwidget.cpp,
+	  utilities/kipiiface/kipiuploadwidget.h,
+	  utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablepreview.h,
+	  utilities/lighttable/lighttableview.cpp,
+	  utilities/lighttable/lighttableview.h,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h,
+	  utilities/lighttable/lighttablewindow_p.h,
+	  utilities/nepomuk/digikamnepomukservice.cpp,
+	  utilities/nepomuk/digikamnepomukservice.h,
+	  utilities/queuemanager/actionthread.cpp,
+	  utilities/queuemanager/assignedlist.cpp,
+	  utilities/queuemanager/basetools/color/autocorrection.cpp,
+	  utilities/queuemanager/basetools/color/bcgcorrection.cpp,
+	  utilities/queuemanager/basetools/color/bwconvert.cpp,
+	  utilities/queuemanager/basetools/color/bwconvert.h,
+	  utilities/queuemanager/basetools/color/channelmixer.cpp,
+	  utilities/queuemanager/basetools/color/channelmixer.h,
+	  utilities/queuemanager/basetools/color/colorbalance.cpp,
+	  utilities/queuemanager/basetools/color/convert16to8.cpp,
+	  utilities/queuemanager/basetools/color/convert16to8.h,
+	  utilities/queuemanager/basetools/color/convert8to16.cpp,
+	  utilities/queuemanager/basetools/color/convert8to16.h,
+	  utilities/queuemanager/basetools/color/curvesadjust.cpp,
+	  utilities/queuemanager/basetools/color/curvesadjust.h,
+	  utilities/queuemanager/basetools/color/hslcorrection.cpp,
+	  utilities/queuemanager/basetools/color/iccconvert.cpp,
+	  utilities/queuemanager/basetools/color/invert.cpp,
+	  utilities/queuemanager/basetools/color/invert.h,
+	  utilities/queuemanager/basetools/color/whitebalance.cpp,
+	  utilities/queuemanager/basetools/convert/convert2jp2.cpp,
+	  utilities/queuemanager/basetools/convert/convert2jpeg.cpp,
+	  utilities/queuemanager/basetools/convert/convert2pgf.cpp,
+	  utilities/queuemanager/basetools/convert/convert2png.cpp,
+	  utilities/queuemanager/basetools/convert/convert2tiff.cpp,
+	  utilities/queuemanager/basetools/decorate/border.cpp,
+	  utilities/queuemanager/basetools/decorate/watermark.cpp,
+	  utilities/queuemanager/basetools/enhance/antivignetting.cpp,
+	  utilities/queuemanager/basetools/enhance/blur.cpp,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp,
+	  utilities/queuemanager/basetools/enhance/localcontrast.cpp,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp,
+	  utilities/queuemanager/basetools/enhance/restoration.cpp,
+	  utilities/queuemanager/basetools/enhance/sharpen.cpp,
+	  utilities/queuemanager/basetools/filters/filmgrain.cpp,
+	  utilities/queuemanager/basetools/metadata/assigntemplate.cpp,
+	  utilities/queuemanager/basetools/metadata/removemetadata.cpp,
+	  utilities/queuemanager/basetools/transform/flip.cpp,
+	  utilities/queuemanager/basetools/transform/resize.cpp,
+	  utilities/queuemanager/basetools/transform/rotate.cpp,
+	  utilities/queuemanager/basetools/transform/rotate.h,
+	  utilities/queuemanager/batchtool.cpp,
+	  utilities/queuemanager/batchtool.h,
+	  utilities/queuemanager/batchtoolsmanager.cpp,
+	  utilities/queuemanager/iteminfoset.h,
+	  utilities/queuemanager/queuelist.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuepool.cpp,
+	  utilities/queuemanager/queuepool.h,
+	  utilities/queuemanager/queuesettingsview.cpp,
+	  utilities/queuemanager/queuetooltip.cpp,
+	  utilities/queuemanager/toolsettingsview.cpp,
+	  utilities/queuemanager/toolslistview.cpp,
+	  utilities/queuemanager/toolsview.cpp,
+	  utilities/searchwindow/choicesearchutilities.cpp,
+	  utilities/searchwindow/choicesearchutilities.h,
+	  utilities/searchwindow/ratingsearchutilities.cpp,
+	  utilities/searchwindow/ratingsearchutilities.h,
+	  utilities/searchwindow/searchfieldgroup.cpp,
+	  utilities/searchwindow/searchfieldgroup.h,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchfields.h,
+	  utilities/searchwindow/searchfolderview.cpp,
+	  utilities/searchwindow/searchfolderview.h,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/searchwindow/searchgroup.h,
+	  utilities/searchwindow/searchtabheader.cpp,
+	  utilities/searchwindow/searchtabheader.h,
+	  utilities/searchwindow/searchutilities.cpp,
+	  utilities/searchwindow/searchutilities.h,
+	  utilities/searchwindow/searchview.cpp,
+	  utilities/searchwindow/searchview.h,
+	  utilities/searchwindow/searchwindow.cpp,
+	  utilities/setup/cameralist.cpp, utilities/setup/cameralist.h,
+	  utilities/setup/cameraselection.cpp,
+	  utilities/setup/cameratype.cpp, utilities/setup/cameratype.h,
+	  utilities/setup/setup.cpp, utilities/setup/setupalbumview.cpp,
+	  utilities/setup/setupcamera.cpp, utilities/setup/setupcamera.h,
+	  utilities/setup/setupcategory.cpp,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupcollectionview.cpp,
+	  utilities/setup/setupcollectionview.h,
+	  utilities/setup/setupdatabase.cpp,
+	  utilities/setup/setupdcraw.cpp, utilities/setup/setupeditor.cpp,
+	  utilities/setup/setupicc.cpp, utilities/setup/setupiofiles.cpp,
+	  utilities/setup/setuplighttable.cpp,
+	  utilities/setup/setupmetadata.cpp, utilities/setup/setupmime.cpp,
+	  utilities/setup/setupmisc.cpp, utilities/setup/setupplugins.cpp,
+	  utilities/setup/setupslideshow.cpp,
+	  utilities/setup/setuptemplate.cpp,
+	  utilities/setup/setuptooltip.cpp,
+	  utilities/slideshow/slideshow.cpp,
+	  utilities/slideshow/slideshow.h,
+	  utilities/slideshow/slideshowsettings.h,
+	  utilities/slideshow/toolbar.cpp,
+	  utilities/timeline/timelinewidget.cpp,
+	  utilities/timeline/timelinewidget.h: Revert "Adapt digiKam coding
+	  style guides:", but keep the other patches like
+	  the "static const" patches.
+	  Actually the patch should build fine, but just in case I remove
+	  it due to the
+	  upcoming release of 1.6.0 on Monday.
+	  
+	  This reverts commit 5513778ecbc00e2116574187df01806db1270d56.
+	  
+	  Conflicts:
+	  
+	  digikam/albumtreeview.cpp
+	  libs/dimg/filters/fx/filmgrainsettings.cpp
+	  utilities/fuzzysearch/fuzzysearchview.cpp
+	  utilities/setup/setupiofiles.cpp
+
+2010-11-20 10:18  aclemens
+
+	* libs/dimg/filters/bw/bwsepiasettings.cpp: remove old code
+
+2010-11-20 00:53  aclemens
+
+	* imageplugins/color/adjustcurvestool.cpp,
+	  imageplugins/color/adjustlevelstool.cpp,
+	  imageplugins/color/autocorrectiontool.cpp,
+	  imageplugins/color/bcgtool.cpp,
+	  imageplugins/color/bwsepiatool.cpp,
+	  imageplugins/color/cbtool.cpp,
+	  imageplugins/color/channelmixertool.cpp,
+	  imageplugins/color/hsltool.cpp,
+	  imageplugins/color/profileconversiontool.cpp,
+	  imageplugins/color/whitebalancetool.cpp,
+	  imageplugins/decorate/inserttexttool.cpp,
+	  imageplugins/decorate/superimpose/superimposetool.cpp,
+	  imageplugins/decorate/texturetool.cpp,
+	  imageplugins/enhance/blurtool.cpp,
+	  imageplugins/enhance/hotpixels/hotpixelstool.cpp,
+	  imageplugins/enhance/inpaintingtool.cpp,
+	  imageplugins/enhance/lensdistortiontool.cpp,
+	  imageplugins/enhance/localcontrasttool.cpp,
+	  imageplugins/enhance/redeyetool.cpp,
+	  imageplugins/enhance/restorationtool.cpp,
+	  imageplugins/filters/blurfxtool.cpp,
+	  imageplugins/filters/charcoaltool.cpp,
+	  imageplugins/filters/colorfxtool.cpp,
+	  imageplugins/filters/distortionfxtool.cpp,
+	  imageplugins/filters/embosstool.cpp,
+	  imageplugins/filters/oilpainttool.cpp,
+	  imageplugins/filters/raindroptool.cpp,
+	  imageplugins/transform/contentawareresizetool.cpp,
+	  imageplugins/transform/perspectivetool.cpp,
+	  imageplugins/transform/ratiocroptool.cpp,
+	  imageplugins/transform/resizetool.cpp,
+	  imageplugins/transform/sheartool.cpp: use static const strings
+	  for configEntry variables
+
+2010-11-20 00:18  aclemens
+
+	* libs/dimg/filters/bw/bwsepiasettings.cpp: code polish
+
+2010-11-20 00:18  aclemens
+
+	* libs/dimg/filters/bw/bwsepiasettings.cpp: These variables are not
+	  used anymore?
+
+2010-11-20 00:18  aclemens
+
+	* digikam/albumsettings.cpp, digikam/albumtreeview.cpp,
+	  digikam/leftsidebarwidgets.cpp, digikam/tagcheckview.cpp,
+	  digikam/tagfiltersidebarwidget.cpp,
+	  libs/dimg/filters/bcg/bcgsettings.cpp,
+	  libs/dimg/filters/bw/bwsepiasettings.cpp,
+	  libs/dimg/filters/bw/mixersettings.cpp,
+	  libs/dimg/filters/cb/cbsettings.cpp,
+	  libs/dimg/filters/curves/curvessettings.cpp,
+	  libs/dimg/filters/decorate/bordersettings.cpp,
+	  libs/dimg/filters/fx/filmgrainsettings.cpp,
+	  libs/dimg/filters/hsl/hslsettings.cpp,
+	  libs/dimg/filters/icc/iccprofilesettings.cpp,
+	  libs/dimg/filters/lc/localcontrastsettings.cpp,
+	  libs/dimg/filters/lens/antivignettingsettings.cpp,
+	  libs/dimg/filters/lens/lensfunsettings.cpp,
+	  libs/dimg/filters/nr/nrsettings.cpp,
+	  libs/dimg/filters/sharp/sharpsettings.cpp,
+	  libs/dimg/filters/transform/freerotationsettings.cpp,
+	  libs/dimg/filters/wb/wbsettings.cpp,
+	  showfoto/setup/setupmetadata.cpp, showfoto/setup/setupmisc.cpp,
+	  showfoto/setup/setuptooltip.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/fuzzysearch/fuzzysearchview.cpp,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/imageeditor/editor/editorwindow_p.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/setup/setupeditor.cpp,
+	  utilities/setup/setupiofiles.cpp,
+	  utilities/setup/setuplighttable.cpp,
+	  utilities/setup/setupslideshow.cpp: use static const for
+	  configEntry strings
+
+2010-11-19 18:19  aclemens
+
+	* databaseserver/databaseserver.cpp,
+	  databaseserver/databaseserver.h, databaseserver/pollthread.cpp,
+	  digikam/addtagslineedit.cpp, digikam/addtagslineedit.h,
+	  digikam/album.cpp, digikam/album.h, digikam/albumdragdrop.cpp,
+	  digikam/albumdragdrop.h, digikam/albumhistory.cpp,
+	  digikam/albumhistory.h, digikam/albumiconviewfilter.cpp,
+	  digikam/albumiconviewfilter.h, digikam/albumlister.cpp,
+	  digikam/albumlister.h, digikam/albummanager.cpp,
+	  digikam/albummanager.h, digikam/albummodificationhelper.cpp,
+	  digikam/albummodificationhelper.h, digikam/albumpropsedit.cpp,
+	  digikam/albumselectcombobox.cpp, digikam/albumselectcombobox.h,
+	  digikam/albumselectdialog.cpp,
+	  digikam/albumselectiontreeview.cpp,
+	  digikam/albumselectiontreeview.h, digikam/albumselectwidget.cpp,
+	  digikam/albumselectwidget.h, digikam/albumsettings.cpp,
+	  digikam/albumsettings.h, digikam/albumthumbnailloader.cpp,
+	  digikam/albumthumbnailloader.h, digikam/albumtreeview.cpp,
+	  digikam/albumtreeview.h, digikam/albumwidgetstack.cpp,
+	  digikam/albumwidgetstack.h, digikam/contextmenuhelper.cpp,
+	  digikam/databaseguierrorhandler.cpp, digikam/datefolderview.cpp,
+	  digikam/datefolderview.h, digikam/dbstatdlg.cpp,
+	  digikam/ddragobjects.cpp, digikam/ddragobjects.h,
+	  digikam/digikam_export.h, digikam/digikamapp.cpp,
+	  digikam/digikamapp.h, digikam/digikamimagedelegate.cpp,
+	  digikam/digikamimagedelegate.h, digikam/digikamimageview.cpp,
+	  digikam/digikamimageview.h, digikam/digikamimageview_p.cpp,
+	  digikam/digikamimageview_p.h, digikam/digikammodelcollection.cpp,
+	  digikam/digikammodelcollection.h, digikam/digikamview.cpp,
+	  digikam/dio.cpp, digikam/dio.h,
+	  digikam/editablesearchtreeview.cpp, digikam/icongroupitem.cpp,
+	  digikam/icongroupitem.h, digikam/iconitem.cpp,
+	  digikam/iconitem.h, digikam/iconview.cpp, digikam/iconview.h,
+	  digikam/imageattributeswatch.cpp, digikam/imageattributeswatch.h,
+	  digikam/imagecategorizedview.cpp, digikam/imagecategorizedview.h,
+	  digikam/imagecategorydrawer.cpp, digikam/imagedelegate.cpp,
+	  digikam/imagedragdrop.cpp, digikam/imagedragdrop.h,
+	  digikam/imagepreviewbar.cpp, digikam/imagepreviewbar.h,
+	  digikam/imagepreviewview.cpp, digikam/imageratingoverlay.cpp,
+	  digikam/imageratingoverlay.h, digikam/imagerotationoverlay.cpp,
+	  digikam/imagerotationoverlay.h,
+	  digikam/imageselectionoverlay.cpp,
+	  digikam/imageselectionoverlay.h, digikam/imagethumbnailbar.cpp,
+	  digikam/imagethumbnailbar.h, digikam/imagethumbnaildelegate.cpp,
+	  digikam/imagethumbnaildelegate.h, digikam/imageviewutilities.cpp,
+	  digikam/imageviewutilities.h, digikam/kdateedit.cpp,
+	  digikam/kdateedit.h, digikam/kdatepickerpopup.cpp,
+	  digikam/kdatepickerpopup.h, digikam/kdatetimeedit.cpp,
+	  digikam/kdatetimeedit.h, digikam/leftsidebarwidgets.cpp,
+	  digikam/leftsidebarwidgets.h, digikam/main.cpp,
+	  digikam/mediaplayerview.cpp, digikam/mediaplayerview.h,
+	  digikam/metadatahub.cpp, digikam/metadatahub.h,
+	  digikam/metadatamanager.cpp, digikam/metadatamanager.h,
+	  digikam/metadatamanager_p.h, digikam/mimefilter.cpp,
+	  digikam/monthwidget.cpp, digikam/monthwidget.h,
+	  digikam/ratingfilter.cpp, digikam/ratingpopupmenu.cpp,
+	  digikam/ratingpopupmenu.h, digikam/scancontroller.cpp,
+	  digikam/scancontroller.h, digikam/searchmodificationhelper.cpp,
+	  digikam/searchmodificationhelper.h, digikam/sidebarwidget.cpp,
+	  digikam/sidebarwidget.h, digikam/syncjob.cpp, digikam/syncjob.h,
+	  digikam/tagcheckview.cpp, digikam/tagcheckview.h,
+	  digikam/tagdragdrop.cpp, digikam/tagdragdrop.h,
+	  digikam/tageditdlg.cpp, digikam/tageditdlg.h,
+	  digikam/tagfiltersidebarwidget.cpp,
+	  digikam/tagfiltersidebarwidget.h, digikam/tagfolderview.cpp,
+	  digikam/tagfolderview.h, digikam/tagmodificationhelper.cpp,
+	  digikam/tagmodificationhelper.h, digikam/tagspopupmenu.cpp,
+	  digikam/tagspopupmenu.h, digikam/tooltipfiller.cpp,
+	  digikam/tooltipfiller.h, digikam/uifilevalidator.cpp,
+	  digikam/welcomepageview.cpp,
+	  imageplugins/color/adjustcurvestool.cpp,
+	  imageplugins/color/adjustlevelstool.cpp,
+	  imageplugins/color/autocorrectiontool.cpp,
+	  imageplugins/color/bcgtool.cpp,
+	  imageplugins/color/bwsepiatool.cpp,
+	  imageplugins/color/cbtool.cpp,
+	  imageplugins/color/channelmixertool.cpp,
+	  imageplugins/color/hsltool.cpp,
+	  imageplugins/color/imageplugin_color.cpp,
+	  imageplugins/color/imageplugin_color.h,
+	  imageplugins/color/profileconversiontool.cpp,
+	  imageplugins/color/whitebalancetool.cpp,
+	  imageplugins/decorate/bordertool.cpp,
+	  imageplugins/decorate/imageplugin_decorate.cpp,
+	  imageplugins/decorate/inserttexttool.cpp,
+	  imageplugins/decorate/inserttextwidget.cpp,
+	  imageplugins/decorate/superimpose/dirselectwidget.cpp,
+	  imageplugins/decorate/superimpose/dirselectwidget.h,
+	  imageplugins/decorate/superimpose/superimpose.cpp,
+	  imageplugins/decorate/superimpose/superimpose.h,
+	  imageplugins/decorate/superimpose/superimposetool.cpp,
+	  imageplugins/decorate/superimpose/superimposewidget.cpp,
+	  imageplugins/decorate/superimpose/superimposewidget.h,
+	  imageplugins/decorate/texturetool.cpp,
+	  imageplugins/enhance/antivignettingtool.cpp,
+	  imageplugins/enhance/blurtool.cpp,
+	  imageplugins/enhance/hotpixels/blackframelistview.cpp,
+	  imageplugins/enhance/hotpixels/blackframelistview.h,
+	  imageplugins/enhance/hotpixels/blackframeparser.cpp,
+	  imageplugins/enhance/hotpixels/blackframeparser.h,
+	  imageplugins/enhance/hotpixels/hotpixel.h,
+	  imageplugins/enhance/hotpixels/hotpixelfixer.cpp,
+	  imageplugins/enhance/hotpixels/hotpixelstool.cpp,
+	  imageplugins/enhance/hotpixels/weights.cpp,
+	  imageplugins/enhance/hotpixels/weights.h,
+	  imageplugins/enhance/imageplugin_enhance.cpp,
+	  imageplugins/enhance/inpaintingtool.cpp,
+	  imageplugins/enhance/inpaintingtool.h,
+	  imageplugins/enhance/lensautofixtool.cpp,
+	  imageplugins/enhance/lensdistortiontool.cpp,
+	  imageplugins/enhance/localcontrasttool.cpp,
+	  imageplugins/enhance/noisereductiontool.cpp,
+	  imageplugins/enhance/redeyetool.cpp,
+	  imageplugins/enhance/restorationtool.cpp,
+	  imageplugins/enhance/sharpentool.cpp,
+	  imageplugins/filters/blurfxtool.cpp,
+	  imageplugins/filters/charcoaltool.cpp,
+	  imageplugins/filters/colorfxtool.cpp,
+	  imageplugins/filters/distortionfxtool.cpp,
+	  imageplugins/filters/embosstool.cpp,
+	  imageplugins/filters/filmgraintool.cpp,
+	  imageplugins/filters/imageplugin_fxfilters.cpp,
+	  imageplugins/filters/oilpainttool.cpp,
+	  imageplugins/filters/raindroptool.cpp,
+	  imageplugins/transform/contentawareresizetool.cpp,
+	  imageplugins/transform/freerotationtool.cpp,
+	  imageplugins/transform/imageplugin_transform.cpp,
+	  imageplugins/transform/imageselectionwidget.cpp,
+	  imageplugins/transform/imageselectionwidget.h,
+	  imageplugins/transform/matrix.cpp,
+	  imageplugins/transform/perspectivetool.cpp,
+	  imageplugins/transform/perspectivewidget.cpp,
+	  imageplugins/transform/ratiocroptool.cpp,
+	  imageplugins/transform/resizetool.cpp,
+	  imageplugins/transform/sheartool.cpp,
+	  imageplugins/transform/triangle.h, kioslave/digikamalbums.cpp,
+	  kioslave/digikamalbums.h, kioslave/digikamdates.cpp,
+	  kioslave/digikamdates.h, kioslave/digikamsearch.cpp,
+	  kioslave/digikamtags.cpp, kioslave/digikamtags.h,
+	  libs/database/albumdb.cpp, libs/database/albumdb.h,
+	  libs/database/albumdb_sqlite2.cpp,
+	  libs/database/albumdb_sqlite2.h, libs/database/albuminfo.h,
+	  libs/database/collectionlocation.cpp,
+	  libs/database/collectionlocation.h,
+	  libs/database/collectionmanager.cpp,
+	  libs/database/collectionmanager.h,
+	  libs/database/collectionscanner.cpp,
+	  libs/database/collectionscanner.h,
+	  libs/database/collectionscannerhints.cpp,
+	  libs/database/collectionscannerhints.h,
+	  libs/database/collectionscannerobserver.h,
+	  libs/database/databaseaccess.cpp, libs/database/databaseaccess.h,
+	  libs/database/databasebackend.cpp,
+	  libs/database/databasebackend.h,
+	  libs/database/databasebackend_p.h,
+	  libs/database/databasechangesets.cpp,
+	  libs/database/databasechangesets.h,
+	  libs/database/databaseconfigelement.cpp,
+	  libs/database/databasecopymanager.cpp,
+	  libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend.h,
+	  libs/database/databasecorebackend_p.h,
+	  libs/database/databaseerrorhandler.h,
+	  libs/database/databasefields.h,
+	  libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h,
+	  libs/database/databaseservererror.cpp,
+	  libs/database/databaseservererror.h,
+	  libs/database/databaseserverstarter.cpp,
+	  libs/database/databaseserverstarter.h,
+	  libs/database/databasethumbnailinfoprovider.cpp,
+	  libs/database/databasetransaction.cpp,
+	  libs/database/databasetransaction.h,
+	  libs/database/databaseurl.cpp, libs/database/databasewatch.cpp,
+	  libs/database/databasewatch.h,
+	  libs/database/databasewatchadaptor.h,
+	  libs/database/dbactiontype.cpp, libs/database/dbactiontype.h,
+	  libs/database/downloadhistory.cpp,
+	  libs/database/downloadhistory.h, libs/database/haar/haar.cpp,
+	  libs/database/haar/haar.h, libs/database/haar/haariface.cpp,
+	  libs/database/haar/haariface.h, libs/database/imagecomments.cpp,
+	  libs/database/imagecomments.h, libs/database/imagecopyright.cpp,
+	  libs/database/imagecopyright.h,
+	  libs/database/imageextendedproperties.cpp,
+	  libs/database/imageextendedproperties.h,
+	  libs/database/imageinfo.cpp, libs/database/imageinfo.h,
+	  libs/database/imageinfocache.cpp, libs/database/imageinfocache.h,
+	  libs/database/imagelister.cpp, libs/database/imagelister.h,
+	  libs/database/imagelisterreceiver.cpp,
+	  libs/database/imagelisterreceiver.h,
+	  libs/database/imageposition.cpp, libs/database/imageposition.h,
+	  libs/database/imagequerybuilder.cpp,
+	  libs/database/imagequerybuilder.h,
+	  libs/database/imagescanner.cpp, libs/database/imagescanner.h,
+	  libs/database/namefilter.cpp, libs/database/schemaupdater.cpp,
+	  libs/database/schemaupdater.h, libs/database/searchxml.cpp,
+	  libs/database/searchxml.h, libs/database/sqlquery.cpp,
+	  libs/database/tagscache.cpp,
+	  libs/database/thumbnaildatabaseaccess.cpp,
+	  libs/database/thumbnaildatabaseaccess.h,
+	  libs/database/thumbnaildb.cpp, libs/database/thumbnaildb.h,
+	  libs/database/thumbnailschemaupdater.cpp,
+	  libs/database/thumbnailschemaupdater.h,
+	  libs/database/upgradedb_sqlite2tosqlite3.cpp,
+	  libs/database/upgradedb_sqlite2tosqlite3.h,
+	  libs/dialogs/dbusydlg.cpp, libs/dialogs/dbusydlg.h,
+	  libs/dialogs/deletedialog.cpp, libs/dialogs/deletedialog.h,
+	  libs/dialogs/dprogressdlg.cpp,
+	  libs/dialogs/filesaveoptionsdlg.cpp,
+	  libs/dialogs/iccprofileinfodlg.cpp,
+	  libs/dialogs/iccprofileinfodlg.h, libs/dialogs/imagedialog.cpp,
+	  libs/dialogs/imagedialog.h, libs/dialogs/infodlg.cpp,
+	  libs/dialogs/libsinfodlg.cpp, libs/dialogs/migrationdlg.cpp,
+	  libs/dialogs/rawcameradlg.cpp, libs/dimg/dcolor.cpp,
+	  libs/dimg/dcolor.h, libs/dimg/dcolorblend.h,
+	  libs/dimg/dcolorcomposer.cpp, libs/dimg/dcolorcomposer.h,
+	  libs/dimg/dcolorpixelaccess.h, libs/dimg/dimg.cpp,
+	  libs/dimg/dimg.h, libs/dimg/dimgscale.cpp,
+	  libs/dimg/drawdecoding.h, libs/dimg/dshareddata.h,
+	  libs/dimg/exposurecontainer.h,
+	  libs/dimg/filters/auto/autoexpofilter.cpp,
+	  libs/dimg/filters/auto/autolevelsfilter.cpp,
+	  libs/dimg/filters/auto/equalizefilter.cpp,
+	  libs/dimg/filters/auto/normalizefilter.cpp,
+	  libs/dimg/filters/auto/stretchfilter.cpp,
+	  libs/dimg/filters/bcg/bcgfilter.cpp,
+	  libs/dimg/filters/bcg/bcgfilter.h,
+	  libs/dimg/filters/bcg/bcgsettings.cpp,
+	  libs/dimg/filters/bw/bwsepiafilter.cpp,
+	  libs/dimg/filters/bw/bwsepiafilter.h,
+	  libs/dimg/filters/bw/bwsepiasettings.cpp,
+	  libs/dimg/filters/bw/infraredfilter.cpp,
+	  libs/dimg/filters/bw/infraredfilter.h,
+	  libs/dimg/filters/bw/mixerfilter.cpp,
+	  libs/dimg/filters/bw/mixerfilter.h,
+	  libs/dimg/filters/bw/mixersettings.cpp,
+	  libs/dimg/filters/bw/tonalityfilter.cpp,
+	  libs/dimg/filters/bw/tonalityfilter.h,
+	  libs/dimg/filters/cb/cbfilter.cpp,
+	  libs/dimg/filters/cb/cbfilter.h,
+	  libs/dimg/filters/cb/cbsettings.cpp,
+	  libs/dimg/filters/curves/curvesbox.cpp,
+	  libs/dimg/filters/curves/curvesbox.h,
+	  libs/dimg/filters/curves/curvesfilter.cpp,
+	  libs/dimg/filters/curves/curvesfilter.h,
+	  libs/dimg/filters/curves/curvessettings.cpp,
+	  libs/dimg/filters/curves/curveswidget.cpp,
+	  libs/dimg/filters/curves/curveswidget.h,
+	  libs/dimg/filters/curves/imagecurves.cpp,
+	  libs/dimg/filters/decorate/borderfilter.cpp,
+	  libs/dimg/filters/decorate/borderfilter.h,
+	  libs/dimg/filters/decorate/bordersettings.cpp,
+	  libs/dimg/filters/decorate/texturefilter.cpp,
+	  libs/dimg/filters/dimgthreadedfilter.cpp,
+	  libs/dimg/filters/dimgthreadedfilter.h,
+	  libs/dimg/filters/fx/blurfilter.cpp,
+	  libs/dimg/filters/fx/blurfilter.h,
+	  libs/dimg/filters/fx/blurfxfilter.cpp,
+	  libs/dimg/filters/fx/blurfxfilter.h,
+	  libs/dimg/filters/fx/charcoalfilter.cpp,
+	  libs/dimg/filters/fx/distortionfxfilter.cpp,
+	  libs/dimg/filters/fx/distortionfxfilter.h,
+	  libs/dimg/filters/fx/embossfilter.cpp,
+	  libs/dimg/filters/fx/filmgrainfilter.cpp,
+	  libs/dimg/filters/fx/filmgrainfilter.h,
+	  libs/dimg/filters/fx/filmgrainsettings.cpp,
+	  libs/dimg/filters/fx/invertfilter.cpp,
+	  libs/dimg/filters/fx/oilpaintfilter.cpp,
+	  libs/dimg/filters/fx/pixelsaliasfilter.cpp,
+	  libs/dimg/filters/fx/pixelsaliasfilter.h,
+	  libs/dimg/filters/fx/raindropfilter.cpp,
+	  libs/dimg/filters/fx/raindropfilter.h,
+	  libs/dimg/filters/greycstoration/greycstorationfilter.cpp,
+	  libs/dimg/filters/greycstoration/greycstorationfilter.h,
+	  libs/dimg/filters/greycstoration/greycstorationsettings.cpp,
+	  libs/dimg/filters/hsl/hslfilter.cpp,
+	  libs/dimg/filters/hsl/hslfilter.h,
+	  libs/dimg/filters/hsl/hslsettings.cpp,
+	  libs/dimg/filters/hsl/hspreviewwidget.cpp,
+	  libs/dimg/filters/hsl/hspreviewwidget.h,
+	  libs/dimg/filters/icc/iccprofile.cpp,
+	  libs/dimg/filters/icc/iccprofile.h,
+	  libs/dimg/filters/icc/iccprofilesettings.cpp,
+	  libs/dimg/filters/icc/iccprofilesettings.h,
+	  libs/dimg/filters/icc/iccsettings.cpp,
+	  libs/dimg/filters/icc/iccsettings.h,
+	  libs/dimg/filters/icc/iccsettingscontainer.cpp,
+	  libs/dimg/filters/icc/iccsettingscontainer.h,
+	  libs/dimg/filters/icc/icctransform.cpp,
+	  libs/dimg/filters/icc/icctransform.h,
+	  libs/dimg/filters/icc/icctransformfilter.cpp,
+	  libs/dimg/filters/lc/localcontrastfilter.cpp,
+	  libs/dimg/filters/lc/localcontrastsettings.cpp,
+	  libs/dimg/filters/lens/antivignettingfilter.cpp,
+	  libs/dimg/filters/lens/antivignettingfilter.h,
+	  libs/dimg/filters/lens/antivignettingsettings.cpp,
+	  libs/dimg/filters/lens/lensdistortionfilter.cpp,
+	  libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.h,
+	  libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfunsettings.cpp,
+	  libs/dimg/filters/lens/pixelaccess.cpp,
+	  libs/dimg/filters/lens/testlensfuniface.cpp,
+	  libs/dimg/filters/levels/histogrambox.cpp,
+	  libs/dimg/filters/levels/histogrambox.h,
+	  libs/dimg/filters/levels/histogrampainter.cpp,
+	  libs/dimg/filters/levels/histogramwidget.cpp,
+	  libs/dimg/filters/levels/histogramwidget.h,
+	  libs/dimg/filters/levels/imagehistogram.cpp,
+	  libs/dimg/filters/levels/imagelevels.cpp,
+	  libs/dimg/filters/levels/levelsfilter.cpp,
+	  libs/dimg/filters/levels/levelsfilter.h,
+	  libs/dimg/filters/nr/nrfilter.cpp,
+	  libs/dimg/filters/nr/nrfilter.h,
+	  libs/dimg/filters/nr/nrsettings.cpp,
+	  libs/dimg/filters/sharp/matrix.cpp,
+	  libs/dimg/filters/sharp/matrix.h,
+	  libs/dimg/filters/sharp/refocusfilter.cpp,
+	  libs/dimg/filters/sharp/sharpenfilter.cpp,
+	  libs/dimg/filters/sharp/sharpsettings.cpp,
+	  libs/dimg/filters/sharp/sharpsettings.h,
+	  libs/dimg/filters/sharp/unsharpmaskfilter.cpp,
+	  libs/dimg/filters/sharp/unsharpmaskfilter.h,
+	  libs/dimg/filters/transform/contentawarefilter.cpp,
+	  libs/dimg/filters/transform/contentawarefilter.h,
+	  libs/dimg/filters/transform/freerotationfilter.cpp,
+	  libs/dimg/filters/transform/freerotationfilter.h,
+	  libs/dimg/filters/transform/freerotationsettings.cpp,
+	  libs/dimg/filters/transform/shearfilter.cpp,
+	  libs/dimg/filters/transform/shearfilter.h,
+	  libs/dimg/filters/wb/wbfilter.cpp,
+	  libs/dimg/filters/wb/wbfilter.h,
+	  libs/dimg/filters/wb/wbsettings.cpp,
+	  libs/dimg/loaders/dimgloader.cpp, libs/dimg/loaders/dimgloader.h,
+	  libs/dimg/loaders/dimgloaderobserver.h,
+	  libs/dimg/loaders/iccjpeg.h, libs/dimg/loaders/jp2kloader.cpp,
+	  libs/dimg/loaders/jp2kloader.h,
+	  libs/dimg/loaders/jp2ksettings.cpp,
+	  libs/dimg/loaders/jp2ksettings.h,
+	  libs/dimg/loaders/jpegloader.cpp, libs/dimg/loaders/jpegloader.h,
+	  libs/dimg/loaders/jpegsettings.cpp,
+	  libs/dimg/loaders/jpegsettings.h,
+	  libs/dimg/loaders/pgfloader.cpp, libs/dimg/loaders/pgfloader.h,
+	  libs/dimg/loaders/pgfsettings.cpp,
+	  libs/dimg/loaders/pgfsettings.h, libs/dimg/loaders/pngloader.cpp,
+	  libs/dimg/loaders/pngloader.h, libs/dimg/loaders/pngsettings.cpp,
+	  libs/dimg/loaders/pngsettings.h, libs/dimg/loaders/ppmloader.cpp,
+	  libs/dimg/loaders/ppmloader.h,
+	  libs/dimg/loaders/qimageloader.cpp,
+	  libs/dimg/loaders/qimageloader.h,
+	  libs/dimg/loaders/rawloader.cpp, libs/dimg/loaders/rawloader.h,
+	  libs/dimg/loaders/tiffloader.cpp, libs/dimg/loaders/tiffloader.h,
+	  libs/dimg/loaders/tiffsettings.cpp,
+	  libs/dimg/loaders/tiffsettings.h,
+	  libs/dmetadata/captionvalues.cpp, libs/dmetadata/captionvalues.h,
+	  libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h,
+	  libs/dmetadata/geodetictools.cpp, libs/dmetadata/geodetictools.h,
+	  libs/dmetadata/photoinfocontainer.h, libs/dmetadata/template.cpp,
+	  libs/dmetadata/template.h,
+	  libs/imageproperties/cameraitempropertiestab.cpp,
+	  libs/imageproperties/captionedit.cpp,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.h,
+	  libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  libs/imageproperties/imagepropertiesmetadatatab.h,
+	  libs/imageproperties/imagepropertiessidebar.cpp,
+	  libs/imageproperties/imagepropertiessidebar.h,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.h,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.h,
+	  libs/imageproperties/imagepropertiestab.cpp,
+	  libs/imageproperties/imagepropertiestxtlabel.h,
+	  libs/imageproperties/markerclusterholder.cpp,
+	  libs/imageproperties/markerclusterholder.h,
+	  libs/imageproperties/markerclusterholderplugin/externaldraw.h,
+	  libs/imageproperties/worldmapwidget.cpp,
+	  libs/imageproperties/worldmapwidget.h,
+	  libs/jpegutils/jpegutils.cpp, libs/jpegutils/jpegutils.h,
+	  libs/jpegutils/jpegwin.cpp, libs/jpegutils/jpegwin.h,
+	  libs/models/abstractalbummodel.cpp,
+	  libs/models/abstractalbummodel.h,
+	  libs/models/abstractalbummodelpriv.h,
+	  libs/models/albumfiltermodel.cpp, libs/models/albumfiltermodel.h,
+	  libs/models/albummodel.cpp, libs/models/albummodel.h,
+	  libs/models/albummodeldragdrophandler.cpp,
+	  libs/models/albummodeldragdrophandler.h,
+	  libs/models/imagealbumfiltermodel.cpp,
+	  libs/models/imagealbumfiltermodel.h,
+	  libs/models/imagealbummodel.cpp, libs/models/imagealbummodel.h,
+	  libs/models/imagefiltermodel.cpp, libs/models/imagefiltermodel.h,
+	  libs/models/imagefiltermodelpriv.h,
+	  libs/models/imagefiltermodelthreads.h,
+	  libs/models/imagefiltersettings.cpp,
+	  libs/models/imagefiltersettings.h, libs/models/imagemodel.cpp,
+	  libs/models/imagemodel.h,
+	  libs/models/imagemodeldragdrophandler.cpp,
+	  libs/models/imagemodeldragdrophandler.h,
+	  libs/models/imagesortsettings.cpp,
+	  libs/models/imagesortsettings.h,
+	  libs/models/imagethumbnailmodel.cpp,
+	  libs/models/imagethumbnailmodel.h, libs/template/subjectedit.cpp,
+	  libs/template/templatelist.cpp,
+	  libs/template/templatemanager.cpp,
+	  libs/template/templatepanel.cpp,
+	  libs/template/templateselector.cpp,
+	  libs/template/templateviewer.cpp, libs/themeengine/texture.cpp,
+	  libs/themeengine/theme.cpp, libs/themeengine/themeengine.cpp,
+	  libs/threadimageio/loadingcache.cpp,
+	  libs/threadimageio/loadingcache.h,
+	  libs/threadimageio/loadingcacheinterface.cpp,
+	  libs/threadimageio/loadingcacheinterface.h,
+	  libs/threadimageio/loadingdescription.cpp,
+	  libs/threadimageio/loadingdescription.h,
+	  libs/threadimageio/loadsavetask.cpp,
+	  libs/threadimageio/loadsavetask.h,
+	  libs/threadimageio/loadsavethread.cpp,
+	  libs/threadimageio/loadsavethread.h,
+	  libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/managedloadsavethread.h,
+	  libs/threadimageio/pgfutils.cpp, libs/threadimageio/pgfutils.h,
+	  libs/threadimageio/previewloadthread.cpp,
+	  libs/threadimageio/previewloadthread.h,
+	  libs/threadimageio/previewtask.cpp,
+	  libs/threadimageio/previewtask.h,
+	  libs/threadimageio/sharedloadsavethread.cpp,
+	  libs/threadimageio/thumbnailbasic.cpp,
+	  libs/threadimageio/thumbnailcreator.cpp,
+	  libs/threadimageio/thumbnailcreator.h,
+	  libs/threadimageio/thumbnailcreator_p.h,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailsize.h,
+	  libs/threadimageio/thumbnailtask.cpp,
+	  libs/threadimageio/thumbnailtask.h,
+	  libs/threads/dynamicthread.cpp, libs/threads/threadmanager.cpp,
+	  libs/threads/workerobject.cpp, libs/threads/workerobject.h,
+	  libs/widgets/common/buttonicondisabler.cpp,
+	  libs/widgets/common/colorgradientwidget.cpp,
+	  libs/widgets/common/colorgradientwidget.h,
+	  libs/widgets/common/comboboxutilities.cpp,
+	  libs/widgets/common/comboboxutilities.h,
+	  libs/widgets/common/databasewidget.cpp,
+	  libs/widgets/common/databasewidget.h,
+	  libs/widgets/common/dcategorizedview.cpp,
+	  libs/widgets/common/dcategorizedview.h,
+	  libs/widgets/common/dcursortracker.cpp,
+	  libs/widgets/common/dcursortracker.h,
+	  libs/widgets/common/dfontselect.cpp,
+	  libs/widgets/common/dgradientslider.cpp,
+	  libs/widgets/common/dhistoryview.cpp,
+	  libs/widgets/common/dhistoryview.h,
+	  libs/widgets/common/ditemdelegate.cpp,
+	  libs/widgets/common/ditemdelegate.h,
+	  libs/widgets/common/ditemtooltip.cpp,
+	  libs/widgets/common/ditemtooltip.h,
+	  libs/widgets/common/dlogoaction.cpp,
+	  libs/widgets/common/dlogoaction.h,
+	  libs/widgets/common/dpopupmenu.cpp,
+	  libs/widgets/common/drubberband.cpp,
+	  libs/widgets/common/drubberband.h,
+	  libs/widgets/common/dzoombar.cpp, libs/widgets/common/dzoombar.h,
+	  libs/widgets/common/filesaveoptionsbox.cpp,
+	  libs/widgets/common/filesaveoptionsbox.h,
+	  libs/widgets/common/imagedelegateoverlay.cpp,
+	  libs/widgets/common/imagedelegateoverlay.h,
+	  libs/widgets/common/itemviewhoverbutton.cpp,
+	  libs/widgets/common/itemviewhoverbutton.h,
+	  libs/widgets/common/itemviewimagedelegate.cpp,
+	  libs/widgets/common/itemviewimagedelegate.h,
+	  libs/widgets/common/itemviewimagedelegatepriv.h,
+	  libs/widgets/common/itemviewtooltip.cpp,
+	  libs/widgets/common/itemviewtooltip.h,
+	  libs/widgets/common/kcategorizedview.cpp,
+	  libs/widgets/common/kcategorizedview.h,
+	  libs/widgets/common/kcategorizedview_p.h,
+	  libs/widgets/common/knotificationwrapper.cpp,
+	  libs/widgets/common/knotificationwrapper.h,
+	  libs/widgets/common/modelcompletion.cpp,
+	  libs/widgets/common/modelcompletion.h,
+	  libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/paniconwidget.h,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  libs/widgets/common/ratingwidget.cpp,
+	  libs/widgets/common/rexpanderboxexclusive.cpp,
+	  libs/widgets/common/rexpanderboxexclusive.h,
+	  libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h,
+	  libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h,
+	  libs/widgets/common/splashscreen.cpp,
+	  libs/widgets/common/statesavingobject.cpp,
+	  libs/widgets/common/statesavingobject.h,
+	  libs/widgets/common/statusled.cpp,
+	  libs/widgets/common/statusled.h,
+	  libs/widgets/common/statusnavigatebar.cpp,
+	  libs/widgets/common/statusnavigatebar.h,
+	  libs/widgets/common/statusprogressbar.cpp,
+	  libs/widgets/common/statusprogressbar.h,
+	  libs/widgets/common/thumbbar.cpp, libs/widgets/common/thumbbar.h,
+	  libs/widgets/common/thumbbardock.cpp,
+	  libs/widgets/common/thumbbardock.h,
+	  libs/widgets/common/thumbbartooltip.cpp,
+	  libs/widgets/common/thumbbartooltip.h,
+	  libs/widgets/common/visibilitycontroller.cpp,
+	  libs/widgets/common/visibilitycontroller.h,
+	  libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.h,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/iccprofiles/iccpreviewwidget.h,
+	  libs/widgets/iccprofiles/iccprofilescombobox.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  libs/widgets/metadata/exifwidget.cpp,
+	  libs/widgets/metadata/iptcwidget.cpp,
+	  libs/widgets/metadata/makernotewidget.cpp,
+	  libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  libs/widgets/metadata/mdkeylistviewitem.h,
+	  libs/widgets/metadata/metadatalistview.cpp,
+	  libs/widgets/metadata/metadatalistview.h,
+	  libs/widgets/metadata/metadatalistviewitem.cpp,
+	  libs/widgets/metadata/metadatalistviewitem.h,
+	  libs/widgets/metadata/metadatapanel.cpp,
+	  libs/widgets/metadata/metadataselector.cpp,
+	  libs/widgets/metadata/metadatawidget.cpp,
+	  libs/widgets/metadata/xmpwidget.cpp, showfoto/main.cpp,
+	  showfoto/setup/setup.cpp, showfoto/setup/setupmetadata.cpp,
+	  showfoto/setup/setupmisc.cpp, showfoto/setup/setuptooltip.cpp,
+	  showfoto/showfoto.cpp, tests/advancedrenametest.cpp,
+	  tests/advancedrenametest.h, tests/albummodeltest.cpp,
+	  tests/albummodeltest.h, tests/filesaveoptionsboxtest.cpp,
+	  tests/filesaveoptionsboxtest.h, tests/modeltest/modeltest.cpp,
+	  tests/modeltest/modeltest.h, tests/pgfscaled.cpp,
+	  tests/qtpgftest.cpp, tests/searchtextbartest.cpp,
+	  tests/searchtextbartest.h, tests/statesavingobjecttest.cpp,
+	  tests/statesavingobjecttest.h, tests/uifilevalidatortest.cpp,
+	  themedesigner/main.cpp, themedesigner/mainwindow.cpp,
+	  themedesigner/themedicongroupitem.cpp,
+	  themedesigner/themediconitem.cpp, themedesigner/themediconitem.h,
+	  themedesigner/themediconview.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenamemanager.cpp,
+	  utilities/advancedrename/advancedrenameprocessdialog.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/common/dynamiclayout.cpp,
+	  utilities/advancedrename/common/highlighter.cpp,
+	  utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/parseable.cpp,
+	  utilities/advancedrename/common/parseabledialog.cpp,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h,
+	  utilities/advancedrename/common/parseresults.cpp,
+	  utilities/advancedrename/common/token.cpp,
+	  utilities/advancedrename/common/token.h,
+	  utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h,
+	  utilities/advancedrename/common/tooltipdialog.cpp,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/importrenameparser.cpp,
+	  utilities/advancedrename/parser/modifiers/casemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.h,
+	  utilities/advancedrename/parser/modifiers/removedoublesmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.h,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/dbheaderlistitem.cpp,
+	  utilities/advancedrename/parser/options/database/dbheaderlistitem.h,
+	  utilities/advancedrename/parser/options/database/dbkeyscollection.cpp,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.cpp,
+	  utilities/advancedrename/parser/options/database/keys/commonkeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/metadatakeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/positionkeys.cpp,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchalbumssyncmetadata.h,
+	  utilities/batch/batchsyncmetadata.cpp,
+	  utilities/batch/batchsyncmetadata.h,
+	  utilities/batch/batchthumbsgenerator.cpp,
+	  utilities/batch/batchthumbsgenerator.h,
+	  utilities/batch/fingerprintsgenerator.cpp,
+	  utilities/batch/fingerprintsgenerator.h,
+	  utilities/batch/imageinfoalbumsjob.cpp,
+	  utilities/batch/imageinfojob.cpp, utilities/batch/imageinfojob.h,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/cameracontroller.h,
+	  utilities/cameragui/camerafolderdialog.cpp,
+	  utilities/cameragui/camerafolderdialog.h,
+	  utilities/cameragui/camerafolderitem.cpp,
+	  utilities/cameragui/camerafolderitem.h,
+	  utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/camerahistoryupdater.cpp,
+	  utilities/cameragui/camerahistoryupdater.h,
+	  utilities/cameragui/cameraiconitem.cpp,
+	  utilities/cameragui/cameraiconitem.h,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/cameraiconview.h,
+	  utilities/cameragui/cameraiconviewtooltip.cpp,
+	  utilities/cameragui/camerainfodialog.cpp,
+	  utilities/cameragui/camerainfodialog.h,
+	  utilities/cameragui/cameranamehelper.cpp,
+	  utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+	  utilities/cameragui/capturedlg.cpp,
+	  utilities/cameragui/capturedlg.h,
+	  utilities/cameragui/capturewidget.cpp,
+	  utilities/cameragui/capturewidget.h,
+	  utilities/cameragui/dkcamera.cpp, utilities/cameragui/dkcamera.h,
+	  utilities/cameragui/downloadsettingscontainer.h,
+	  utilities/cameragui/freespacetooltip.cpp,
+	  utilities/cameragui/freespacetooltip.h,
+	  utilities/cameragui/freespacewidget.cpp,
+	  utilities/cameragui/gpcamera.cpp, utilities/cameragui/gpcamera.h,
+	  utilities/cameragui/gpconfigdlg.cpp,
+	  utilities/cameragui/gpconfigdlg.h,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/cameragui/umscamera.cpp,
+	  utilities/cameragui/umscamera.h,
+	  utilities/firstrun/assistantdlg.cpp,
+	  utilities/firstrun/assistantdlgpage.cpp,
+	  utilities/firstrun/collectionpage.cpp,
+	  utilities/firstrun/metadatapage.cpp,
+	  utilities/firstrun/openfilepage.cpp,
+	  utilities/firstrun/previewpage.cpp,
+	  utilities/firstrun/rawpage.cpp,
+	  utilities/firstrun/startscanpage.cpp,
+	  utilities/firstrun/tooltipspage.cpp,
+	  utilities/firstrun/welcomepage.cpp,
+	  utilities/fuzzysearch/findduplicatesalbumitem.cpp,
+	  utilities/fuzzysearch/findduplicatesview.cpp,
+	  utilities/fuzzysearch/findduplicatesview.h,
+	  utilities/fuzzysearch/fuzzysearchview.cpp,
+	  utilities/fuzzysearch/fuzzysearchview.h,
+	  utilities/fuzzysearch/sketchwidget.cpp,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/gpssearch/gpssearchview.h,
+	  utilities/gpssearch/gpssearchwidget.cpp,
+	  utilities/gpssearch/gpssearchwidget.h,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/canvas.h,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.h,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/dimginterface.h,
+	  utilities/imageeditor/canvas/iccmanager.cpp,
+	  utilities/imageeditor/canvas/iccmanager.h,
+	  utilities/imageeditor/canvas/imageplugin.cpp,
+	  utilities/imageeditor/canvas/imageplugin.h,
+	  utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  utilities/imageeditor/canvas/iofilesettingscontainer.h,
+	  utilities/imageeditor/canvas/softproofdialog.cpp,
+	  utilities/imageeditor/canvas/softproofdialog.h,
+	  utilities/imageeditor/canvas/undoaction.cpp,
+	  utilities/imageeditor/canvas/undoaction.h,
+	  utilities/imageeditor/canvas/undocache.cpp,
+	  utilities/imageeditor/canvas/undocache.h,
+	  utilities/imageeditor/canvas/undomanager.cpp,
+	  utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/editorwindow_p.h,
+	  utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h,
+	  utilities/imageeditor/printiface/printhelper.cpp,
+	  utilities/imageeditor/printiface/printhelper.h,
+	  utilities/imageeditor/printiface/printoptionspage.cpp,
+	  utilities/imageeditor/printiface/printoptionspage.h,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h,
+	  utilities/imageeditor/widgets/previewlist.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.h,
+	  utilities/kipiiface/kipiimagecollection.cpp,
+	  utilities/kipiiface/kipiimagecollection.h,
+	  utilities/kipiiface/kipiimagecollectionselector.cpp,
+	  utilities/kipiiface/kipiimagecollectionselector.h,
+	  utilities/kipiiface/kipiimageinfo.cpp,
+	  utilities/kipiiface/kipiinterface.cpp,
+	  utilities/kipiiface/kipiinterface.h,
+	  utilities/kipiiface/kipiuploadwidget.cpp,
+	  utilities/kipiiface/kipiuploadwidget.h,
+	  utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablepreview.h,
+	  utilities/lighttable/lighttableview.cpp,
+	  utilities/lighttable/lighttableview.h,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h,
+	  utilities/lighttable/lighttablewindow_p.h,
+	  utilities/nepomuk/digikamnepomukservice.cpp,
+	  utilities/nepomuk/digikamnepomukservice.h,
+	  utilities/queuemanager/actionthread.cpp,
+	  utilities/queuemanager/assignedlist.cpp,
+	  utilities/queuemanager/basetools/color/autocorrection.cpp,
+	  utilities/queuemanager/basetools/color/bcgcorrection.cpp,
+	  utilities/queuemanager/basetools/color/bwconvert.cpp,
+	  utilities/queuemanager/basetools/color/bwconvert.h,
+	  utilities/queuemanager/basetools/color/channelmixer.cpp,
+	  utilities/queuemanager/basetools/color/channelmixer.h,
+	  utilities/queuemanager/basetools/color/colorbalance.cpp,
+	  utilities/queuemanager/basetools/color/convert16to8.cpp,
+	  utilities/queuemanager/basetools/color/convert16to8.h,
+	  utilities/queuemanager/basetools/color/convert8to16.cpp,
+	  utilities/queuemanager/basetools/color/convert8to16.h,
+	  utilities/queuemanager/basetools/color/curvesadjust.cpp,
+	  utilities/queuemanager/basetools/color/curvesadjust.h,
+	  utilities/queuemanager/basetools/color/hslcorrection.cpp,
+	  utilities/queuemanager/basetools/color/iccconvert.cpp,
+	  utilities/queuemanager/basetools/color/invert.cpp,
+	  utilities/queuemanager/basetools/color/invert.h,
+	  utilities/queuemanager/basetools/color/whitebalance.cpp,
+	  utilities/queuemanager/basetools/convert/convert2jp2.cpp,
+	  utilities/queuemanager/basetools/convert/convert2jpeg.cpp,
+	  utilities/queuemanager/basetools/convert/convert2pgf.cpp,
+	  utilities/queuemanager/basetools/convert/convert2png.cpp,
+	  utilities/queuemanager/basetools/convert/convert2tiff.cpp,
+	  utilities/queuemanager/basetools/decorate/border.cpp,
+	  utilities/queuemanager/basetools/decorate/watermark.cpp,
+	  utilities/queuemanager/basetools/enhance/antivignetting.cpp,
+	  utilities/queuemanager/basetools/enhance/blur.cpp,
+	  utilities/queuemanager/basetools/enhance/lensautofix.cpp,
+	  utilities/queuemanager/basetools/enhance/localcontrast.cpp,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp,
+	  utilities/queuemanager/basetools/enhance/restoration.cpp,
+	  utilities/queuemanager/basetools/enhance/sharpen.cpp,
+	  utilities/queuemanager/basetools/filters/filmgrain.cpp,
+	  utilities/queuemanager/basetools/metadata/assigntemplate.cpp,
+	  utilities/queuemanager/basetools/metadata/removemetadata.cpp,
+	  utilities/queuemanager/basetools/transform/flip.cpp,
+	  utilities/queuemanager/basetools/transform/resize.cpp,
+	  utilities/queuemanager/basetools/transform/rotate.cpp,
+	  utilities/queuemanager/basetools/transform/rotate.h,
+	  utilities/queuemanager/batchtool.cpp,
+	  utilities/queuemanager/batchtool.h,
+	  utilities/queuemanager/batchtoolsmanager.cpp,
+	  utilities/queuemanager/iteminfoset.h,
+	  utilities/queuemanager/queuelist.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuepool.cpp,
+	  utilities/queuemanager/queuepool.h,
+	  utilities/queuemanager/queuesettingsview.cpp,
+	  utilities/queuemanager/queuetooltip.cpp,
+	  utilities/queuemanager/toolsettingsview.cpp,
+	  utilities/queuemanager/toolslistview.cpp,
+	  utilities/queuemanager/toolsview.cpp,
+	  utilities/searchwindow/choicesearchutilities.cpp,
+	  utilities/searchwindow/choicesearchutilities.h,
+	  utilities/searchwindow/ratingsearchutilities.cpp,
+	  utilities/searchwindow/ratingsearchutilities.h,
+	  utilities/searchwindow/searchfieldgroup.cpp,
+	  utilities/searchwindow/searchfieldgroup.h,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchfields.h,
+	  utilities/searchwindow/searchfolderview.cpp,
+	  utilities/searchwindow/searchfolderview.h,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/searchwindow/searchgroup.h,
+	  utilities/searchwindow/searchtabheader.cpp,
+	  utilities/searchwindow/searchtabheader.h,
+	  utilities/searchwindow/searchutilities.cpp,
+	  utilities/searchwindow/searchutilities.h,
+	  utilities/searchwindow/searchview.cpp,
+	  utilities/searchwindow/searchview.h,
+	  utilities/searchwindow/searchwindow.cpp,
+	  utilities/setup/cameralist.cpp, utilities/setup/cameralist.h,
+	  utilities/setup/cameraselection.cpp,
+	  utilities/setup/cameratype.cpp, utilities/setup/cameratype.h,
+	  utilities/setup/setup.cpp, utilities/setup/setupalbumview.cpp,
+	  utilities/setup/setupcamera.cpp, utilities/setup/setupcamera.h,
+	  utilities/setup/setupcategory.cpp,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupcollectionview.cpp,
+	  utilities/setup/setupcollectionview.h,
+	  utilities/setup/setupdatabase.cpp,
+	  utilities/setup/setupdcraw.cpp, utilities/setup/setupeditor.cpp,
+	  utilities/setup/setupicc.cpp, utilities/setup/setupiofiles.cpp,
+	  utilities/setup/setuplighttable.cpp,
+	  utilities/setup/setupmetadata.cpp, utilities/setup/setupmime.cpp,
+	  utilities/setup/setupmisc.cpp, utilities/setup/setupplugins.cpp,
+	  utilities/setup/setupslideshow.cpp,
+	  utilities/setup/setuptemplate.cpp,
+	  utilities/setup/setuptooltip.cpp,
+	  utilities/slideshow/slideshow.cpp,
+	  utilities/slideshow/slideshow.h,
+	  utilities/slideshow/slideshowsettings.h,
+	  utilities/slideshow/toolbar.cpp,
+	  utilities/timeline/timelinewidget.cpp,
+	  utilities/timeline/timelinewidget.h: Adapt digiKam coding style
+	  guides:
+	  This is a huge patch to finally have a common coding style in the
+	  source code.
+	  This patch adds:
+	  - curly brackets to all single line statements
+	  - left pointer / reference operator style (char* bla)
+	  - indent 4 spaces
+	  - convert tab -> spaces
+	  
+	  I did not change the libs from 3rdparty and the ones from
+	  libs/jpegutils.
+	  Code compiles fine under Linux, there shouldn't be code breakage
+	  because we
+	  only reformat the code and add missing brackets. If code is
+	  broken now (logic
+	  errors due to missing brackets), it was broken before.
+	  
+	  I add this as one single patch so we can easily revert it, if
+	  needed.
+	  I think it is really important to have one common style in the
+	  code, and that
+	  we don't mix it.
+	  
+	  I will also add some comments to the HACKING file later on.
+	  
+	  Gilles,
+	  if all compiles fine under Windows and Mac, I'd like to do the
+	  same for the
+	  GSoC branch, so that changes from trunk are easier to apply to
+	  the branch.
+	  
+	  Andi
+	  
+	  CCMAIL:digikam-devel@kde.org
+
+2010-11-19 14:14  cgilles
+
+	* CMakeLists.txt, NEWS: fix release date
+
+2010-11-19 12:10  cgilles
+
+	* NEWS: update
+
+2010-11-18 11:44  aclemens
+
+	* CMakeLists.txt, databaseserver/CMakeLists.txt, digikam.lsm.cmake,
+	  digikam/CMakeLists.txt, imageplugins/CMakeLists.txt,
+	  imageplugins/decorate/CMakeLists.txt,
+	  imageplugins/enhance/CMakeLists.txt,
+	  imageplugins/transform/CMakeLists.txt, kioslave/CMakeLists.txt,
+	  libs/CMakeLists.txt, libs/dimg/filters/lens/CMakeLists.txt,
+	  libs/imageproperties/markerclusterholderplugin/CMakeLists.txt,
+	  libs/widgets/common/CMakeLists.txt, showfoto/CMakeLists.txt,
+	  tests/CMakeLists.txt, themedesigner/CMakeLists.txt,
+	  utilities/CMakeLists.txt,
+	  utilities/advancedrename/CMakeLists.txt,
+	  utilities/cameragui/CMakeLists.txt,
+	  utilities/queuemanager/CMakeLists.txt: Refactoring of the CMake
+	  files: Only little changes have been made so far,
+	  because it is way more complicated than I thought.
+	  Right now the following things have been done:
+	  
+	  - static lib for queuemanager
+	  - static lib for advancedrename
+	  - one INCLUDE_DIRECTORIES in the main CMakeLists.txt file
+	  - removed duplicate entries
+	  
+	  We should do the refactoring in small amounts, every now and then
+	  we can fix
+	  some problems, so that one day we are able to build other
+	  projects like the
+	  unit tests and the themedesigner without recompiling the whole
+	  digiKam code
+	  again.
+	  
+	  Gilles,
+	  can you test this patch with Windows and Mac?
+	  
+	  Andi
+	  
+	  CCMAIL:caulier.gilles@gmail.com
+
+2010-11-18 11:22  aclemens
+
+	* digikam/addtagslineedit.cpp, digikam/digikamview.cpp,
+	  digikam/digikamview.h, digikam/kdateedit.cpp,
+	  digikam/kdateedit.h, kioslave/digikamalbums.cpp,
+	  kioslave/digikamalbums.h, libs/dimg/filters/curves/imagecurves.h,
+	  libs/dimg/filters/icc/iccsettings.cpp,
+	  libs/themeengine/texture.cpp, libs/themeengine/texture.h,
+	  libs/widgets/common/dgradientslider.cpp,
+	  libs/widgets/common/dgradientslider.h,
+	  libs/widgets/metadata/metadatalistview.cpp: polish copyright
+	  header
+
+2010-11-18 10:51  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.cpp:
+	  code polish
+
+2010-11-18 10:47  aclemens
+
+	* digikam/metadatamanager.cpp,
+	  imageplugins/color/imageplugin_color.cpp,
+	  libs/database/collectionmanager.cpp,
+	  libs/database/collectionscanner.cpp,
+	  libs/database/databasebackend_p.h,
+	  libs/database/imagecomments.cpp,
+	  libs/database/imagecopyright.cpp, libs/database/imagelister.cpp,
+	  libs/database/imagequerybuilder.cpp, libs/database/searchxml.cpp,
+	  libs/database/tagscache.cpp,
+	  libs/dimg/filters/icc/iccprofile.cpp,
+	  libs/dimg/filters/icc/iccprofilesettings.cpp,
+	  libs/dimg/filters/icc/iccsettings.cpp,
+	  libs/models/imagealbumfiltermodel.cpp,
+	  libs/models/imagefiltermodel.cpp, libs/models/imagemodel.cpp,
+	  libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/widgets/common/dzoombar.cpp,
+	  libs/widgets/common/itemviewimagedelegate.cpp,
+	  libs/widgets/common/sidebar.cpp,
+	  libs/widgets/common/visibilitycontroller.cpp,
+	  utilities/kipiiface/kipiinterface.cpp,
+	  utilities/queuemanager/queuelist.cpp,
+	  utilities/searchwindow/choicesearchutilities.h,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/searchwindow/searchview.cpp,
+	  utilities/setup/setupcollectionview.cpp: use curly bracket for
+	  "foreach" statements, it is so much easier to read and
+	  prevents errors, when adding code.
+
+2010-11-18 10:25  aclemens
+
+	* NEWS, digikam/main.cpp: update
+	  
+	  BUG:247175
+
+2010-11-18 10:25  aclemens
+
+	* databaseserver/pollthread.cpp, digikam/addtagslineedit.cpp,
+	  digikam/albumdragdrop.cpp, digikam/albumlister.cpp,
+	  digikam/albummanager.cpp, digikam/albumpropsedit.cpp,
+	  digikam/albumselectwidget.cpp, digikam/albumsettings.cpp,
+	  digikam/albumtreeview.cpp, digikam/ddragobjects.cpp,
+	  digikam/digikamapp.cpp, digikam/digikamimageview.cpp,
+	  digikam/dio.cpp, digikam/iconview.cpp,
+	  digikam/imageattributeswatch.cpp,
+	  digikam/imagecategorizedview.cpp, digikam/imagedragdrop.cpp,
+	  digikam/imagepreviewview.cpp, digikam/imageviewutilities.cpp,
+	  digikam/main.cpp, digikam/metadatahub.cpp,
+	  digikam/metadatamanager.cpp,
+	  libs/database/databaseconfigelement.cpp,
+	  libs/database/databasewatch.cpp, libs/database/schemaupdater.h,
+	  libs/dimg/filters/greycstoration/greycstorationsettings.cpp,
+	  libs/dimg/loaders/jpegsettings.cpp,
+	  libs/imageproperties/cameraitempropertiestab.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/imagepropertiestab.cpp,
+	  libs/widgets/common/dcategorizedview.cpp,
+	  libs/widgets/common/dfontselect.cpp,
+	  libs/widgets/common/filesaveoptionsbox.cpp,
+	  libs/widgets/common/statusnavigatebar.cpp,
+	  libs/widgets/common/statusprogressbar.cpp,
+	  libs/widgets/common/thumbbar.cpp,
+	  libs/widgets/common/thumbbartooltip.cpp,
+	  libs/widgets/common/visibilitycontroller.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  utilities/advancedrename/advancedrenameprocessdialog.cpp,
+	  utilities/advancedrename/advancedrenameprocessdialog.h,
+	  utilities/advancedrename/common/dynamiclayout.cpp: code polish,
+	  init lists
+
+2010-11-18 00:25  aclemens
+
+	* libs/models/imagethumbnailmodel.cpp: Revert "set the
+	  lastGlobalThumbSize, otherwise it is always zero and therefore a
+	  wrong"
+	  
+	  This fix is not sufficient, we need some better way for handling
+	  this...
+	  
+	  This reverts commit 87a531d162b8066cd9290a59f2460bd40fd71ac6.
+
+2010-11-17 17:57  cgilles
+
+	* NEWS: update
+
+2010-11-17 15:59  aclemens
+
+	* libs/models/imagethumbnailmodel.cpp: code polish, init lists
+
+2010-11-17 15:53  aclemens
+
+	* libs/models/imagethumbnailmodel.cpp: set the lastGlobalThumbSize,
+	  otherwise it is always zero and therefore a wrong
+	  label is set for the dtooltiptracker as well as the slider on
+	  album switch.
+	  
+	  There is still some weird issue:
+	  Everytime you set an thumbsize (e.g. 80) and switch to another
+	  album, the size
+	  is always
+	  size +=2
+	  even if you use the maxsize of 256 (it becomes 258).
+	  
+	  This only happens when the slider has been moved (a new thumbsize
+	  has been
+	  defined), if you switch the album a second time, the size+=2
+	  version is used.
+
+2010-11-17 15:43  mwiesweg
+
+	* libs/threadimageio/loadsavetask.h: Seems that all these years,
+	  the variable was never initialized.
+	  With Andi's changes it got initialized, but it should be Saving,
+	  not Stopping,
+	  else all saving is stopped at the first checkpoint.
+	  
+	  BUG: 257103
+
+2010-11-17 14:47  aclemens
+
+	* project/D&D-Behavior-For-Tags.txt: polish
+
+2010-11-17 14:47  cgilles
+
+	* project/nsis/digikam.nsi: add more executable provided by digiKam
+
+2010-11-17 14:42  aclemens
+
+	* project/D&D-Behavior-For-Tags.txt: D&D behavior for Tags, taken
+	  and updated from the following bugreport:
+	  https://bugs.kde.org/show_bug.cgi?id=256252
+	  
+	  CCBUG:256252
+
+2010-11-17 12:10  cgilles
+
+	* NEWS: update
+
+2010-11-17 12:01  mwiesweg
+
+	* digikam/tagdragdrop.cpp: Fix PAlbum/TAlbum mismatch.
+	  With tags, we can check if the tag is assigned for the same
+	  effect.
+	  
+	  CCBUG: 256252
+
+2010-11-17 11:29  mwiesweg
+
+	* libs/dimg/loaders/dimgloader.cpp, libs/dimg/loaders/dimgloader.h,
+	  libs/dimg/loaders/jp2kloader.cpp,
+	  libs/dimg/loaders/jpegloader.cpp,
+	  libs/dimg/loaders/pgfloader.cpp, libs/dimg/loaders/pngloader.cpp,
+	  libs/dimg/loaders/ppmloader.cpp,
+	  libs/dimg/loaders/qimageloader.cpp,
+	  libs/dimg/loaders/rawloader.cpp,
+	  libs/dimg/loaders/tiffloader.cpp: When a loader fails, ensure
+	  that data and size are reset
+	  and the image is marked as null.
+	  
+	  CCBUG: 257119
+
+2010-11-17 09:20  mwiesweg
+
+	* digikam/albummanager.cpp: static_cast will be sufficient,
+	  children will always have the same type
+
+2010-11-16 20:23  cgilles
+
+	* NEWS: update
+
+2010-11-16 14:57  jnarboux
+
+	* project/nsis/digikam.nsi: fix typo
+
+2010-11-16 13:10  cgilles
+
+	* project/nsis/digikam.nsi: install showfoto icon
+	  try to set kde4 install dir name using original dir name used as
+	  source
+
+2010-11-16 11:46  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-11-16 11:19  cgilles
+
+	* libs/3rdparty/cimg/CImg.h: bakport commit #1197618 from GoSC2010
+	  branche
+
+2010-11-15 21:13  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenamemanager.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.cpp,
+	  utilities/advancedrename/parser/options/database/keys/commonkeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/metadatakeys.cpp:
+	  code polish
+
+2010-11-15 20:25  cgilles
+
+	* NEWS: update
+
+2010-11-15 14:22  cgilles
+
+	* libs/dimg/filters/nr/nrsettings.cpp: fix layout under MacOSX (not
+	  visible under Linux and Windows).
+
+2010-11-15 09:36  aclemens
+
+	* NEWS: update
+
+2010-11-15 09:33  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/albumdb.h,
+	  libs/database/collectionscanner.cpp: No sense in passing album
+	  ids to delete removed entries.
+	  Andi, I think you tested this? Then we can close the bug.
+	  
+	  CCBUG: 255478
+
+2010-11-15 09:33  mwiesweg
+
+	* digikam/albummanager.cpp: Dont delete the dir watch to clear it,
+	  just keep it and store the added
+	  directories to explicitly remove them. Object is deleted by
+	  QObject destructor
+	  at shutdown.
+	  Should prevent any situation where d->dirwatch is 0.
+	  
+	  CCBUG: 255054
+
+2010-11-14 22:30  aclemens
+
+	* digikam/digikamimageview.cpp, digikam/digikamimageview_p.cpp,
+	  digikam/digikamimageview_p.h, digikam/imageviewutilities.cpp,
+	  utilities/advancedrename/CMakeLists.txt,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenameprocessdialog.cpp,
+	  utilities/advancedrename/advancedrenameprocessdialog.h,
+	  utilities/advancedrename/common/renamethread.cpp,
+	  utilities/advancedrename/common/renamethread.h: Use a progress
+	  dialog for renaming files. The RenameThread is now useless. The
+	  dialog is modal, so you have to wait for the files to be renamed.
+	  When digiKam is renaming, it is hard to use anyway, so a modal
+	  dialog is ok in
+	  this case.
+
+2010-11-14 18:36  aclemens
+
+	* NEWS: update
+
+2010-11-14 18:11  aclemens
+
+	* libs/database/thumbnaildb.cpp,
+	  libs/threadimageio/thumbnailcreator.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  utilities/batch/batchthumbsgenerator.cpp: Remove thumbnails in
+	  scan mode, too. We need to implement some method to update
+	  the thumbnail database by unique-hashes, right now we are not
+	  doing this and
+	  therefore the thumbdb gets not updated correctly.
+	  
+	  Marcel,
+	  if there is already a way to update the thumbdb by unique-hashes
+	  (only the
+	  filepath will be set in this case), please show me where this is
+	  done.
+	  
+	  Andi
+	  
+	  CCMAIL:digikam-devel@kde.org
+	  CCMAIL:marcel.wiesweg@gmx.de
+
+2010-11-14 14:47  aclemens
+
+	* libs/database/collectionscanner.cpp: code polish, use init lists,
+	  initialize all member vars
+
+2010-11-14 14:30  aclemens
+
+	* digikam/albummanager.cpp, digikam/albumselectwidget.cpp,
+	  digikam/albumsettings.cpp, digikam/digikamapp_p.h,
+	  digikam/digikamview.cpp, digikam/imagecategorizedview.cpp,
+	  digikam/leftsidebarwidgets.cpp, digikam/monthwidget.cpp,
+	  digikam/scancontroller.cpp, digikam/syncjob.cpp,
+	  digikam/tagcheckview.cpp, digikam/tagfiltersidebarwidget.cpp,
+	  digikam/tagspopupmenu.cpp, libs/database/albuminfo.h,
+	  libs/database/collectionmanager.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/threadimageio/loadsavetask.h,
+	  libs/widgets/common/dpopupmenu.cpp,
+	  libs/widgets/common/filesaveoptionsbox.cpp,
+	  libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/sidebar.cpp,
+	  utilities/cameragui/camerafolderitem.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/queuemanager/basetools/transform/rotate.cpp,
+	  utilities/queuemanager/iteminfoset.h,
+	  utilities/setup/setupicc.cpp, utilities/setup/setupmetadata.cpp:
+	  code polish, use init lists, initialize all member vars
+
+2010-11-13 17:51  cgilles
+
+	* libs/dimg/filters/fx/blurfilter.cpp: compile
+
+2010-11-13 15:32  aclemens
+
+	* libs/dimg/filters/curves/imagecurves.cpp: code polish
+
+2010-11-13 15:32  aclemens
+
+	* libs/dimg/filters/curves/imagecurves.cpp: Fix memory leak: close
+	  the file here
+
+2010-11-13 15:28  aclemens
+
+	* libs/dimg/dimg.cpp: Fix (possible) memory corruption: Files that
+	  were opened with fopen() should be
+	  closed with fclose()
+
+2010-11-13 15:14  cgilles
+
+	* imageplugins/enhance/blurtool.cpp,
+	  libs/dimg/filters/fx/blurfilter.cpp,
+	  libs/dimg/filters/fx/blurfilter.h,
+	  utilities/queuemanager/basetools/enhance/blur.cpp,
+	  utilities/queuemanager/basetools/enhance/blur.h: use integer
+	  value to set radius of blur filter. Integer is nore universal to
+	  be shared between gaussian and CImg blur algorithm
+	  Marcel, this need a little adjust in GoSC2010 branche
+
+2010-11-13 15:09  aclemens
+
+	* libs/dimg/filters/icc/icctransform.cpp,
+	  libs/threadimageio/thumbnailsize.h: These methods can be const.
+
+2010-11-13 15:09  aclemens
+
+	* libs/database/albuminfo.h, libs/database/databasecorebackend.h,
+	  libs/database/haar/haar.h, libs/database/imagequerybuilder.cpp:
+	  These methods can be const
+
+2010-11-13 14:31  aclemens
+
+	* libs/database/databasebackend.cpp,
+	  libs/database/databasebackend.h: Use call-by-reference here
+
+2010-11-13 14:24  aclemens
+
+	* digikam/imagecategorydrawer.cpp: This variable is never used, so
+	  why set it at all. I'll comment the code
+	  instead of removing it, maybe someone forgot to do something with
+	  it?
+
+2010-11-13 14:19  aclemens
+
+	* digikam/albummanager.cpp: polish code
+
+2010-11-13 14:19  aclemens
+
+	* digikam/albummanager.cpp: polish code
+
+2010-11-13 14:09  aclemens
+
+	* digikam/albummanager.cpp: code polish
+
+2010-11-13 14:08  aclemens
+
+	* digikam/databaseguierrorhandler.cpp,
+	  digikam/databaseguierrorhandler.h: Parameter should be passed by
+	  reference, constructor signature should match the
+	  one in the header file
+
+2010-11-13 14:04  aclemens
+
+	* digikam/albummanager.cpp: Avoid C-style casts, add more safety
+	  checks
+
+2010-11-13 14:04  aclemens
+
+	* kioslave/digikamalbums.cpp: The scope of the variable can be
+	  reduced
+
+2010-11-13 14:04  aclemens
+
+	* libs/dialogs/libsinfodlg.cpp: Invalid number of character (()
+	  when these macros are defined: 'USE_EXT_LIBPGF'.
+
+2010-11-13 14:04  aclemens
+
+	* imageplugins/decorate/superimpose/superimpose.h,
+	  libs/database/albuminfo.h: These functions can be const.
+
+2010-11-13 14:04  aclemens
+
+	* imageplugins/enhance/hotpixels/hotpixel.h: Function parameter 'p'
+	  is passed by value. It could be passed by reference instead.
+
+2010-11-13 14:04  aclemens
+
+	* imageplugins/enhance/hotpixels/weights.cpp,
+	  imageplugins/enhance/hotpixels/weights.h: Member variable not
+	  initialized in the constructor
+
+2010-11-13 14:04  aclemens
+
+	* digikam/dio.cpp, digikam/dio.h: use reference instead of value
+
+2010-11-13 14:04  aclemens
+
+	* libs/models/abstractalbummodel.cpp: polish code
+
+2010-11-13 12:17  aclemens
+
+	* utilities/imageeditor/editor/editorwindow.cpp: Check for correct
+	  symlink handling.
+	  
+	  CCBUG: 140175
+
+2010-11-13 11:34  aclemens
+
+	* NEWS, digikam/albumselectcombobox.cpp,
+	  digikam/albumselectcombobox.h, digikam/albumtreeview.cpp,
+	  digikam/albumtreeview.h, digikam/digikammodelcollection.cpp,
+	  digikam/digikammodelcollection.h, digikam/digikamview.cpp,
+	  digikam/digikamview.h, digikam/tagcheckview.cpp,
+	  digikam/tagcheckview.h, digikam/tagfiltersidebarwidget.cpp,
+	  digikam/tagfiltersidebarwidget.h,
+	  libs/models/abstractalbummodel.cpp,
+	  libs/models/abstractalbummodel.h,
+	  libs/models/imagefiltermodel.cpp, libs/models/imagefiltermodel.h,
+	  libs/models/imagefiltersettings.cpp,
+	  libs/models/imagefiltersettings.h: Add the ability to exclude
+	  tags in the tagfilter view.
+	  Thanks to Bastiaan Hovestreydt for this patch.
+	  
+	  BUG: 141753
+
+2010-11-13 08:32  cgilles
+
+	* libs/dimg/filters/fx/blurfilter.cpp: polish
+
+2010-11-12 22:44  aclemens
+
+	* NEWS: update
+
+2010-11-12 22:19  aclemens
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp: Use init
+	  lists, they are more efficient
+
+2010-11-12 22:19  aclemens
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp: Use static
+	  QString objects to avoid redefining the preview labels over and
+	  over
+	  again
+
+2010-11-12 22:19  aclemens
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp: Do not
+	  overlay the label with the mask, draw the label after the mask
+	  has been
+	  applied.
+
+2010-11-12 20:12  aclemens
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp: Use
+	  antialiasing for the mask cursor
+
+2010-11-12 19:49  aclemens
+
+	* utilities/fuzzysearch/sketchwidget.cpp: Use antialiasing for the
+	  cursor, also don't draw a cursor smaller than 3 pixels
+
+2010-11-12 19:49  aclemens
+
+	* utilities/fuzzysearch/sketchwidget.cpp: No need to draw a
+	  crosshair in the cursor, we use the normal crosshair cursor
+	  when sampling a color.
+
+2010-11-12 19:49  aclemens
+
+	* utilities/fuzzysearch/sketchwidget.cpp: It is much more logical
+	  to show the draw cursor all the time when the mouse is
+	  over the sketch widget, not only when pressing the left mouse
+	  button.
+	  Also we should be able to set the brush size without a modifier
+	  key.
+	  
+	  New behavior:
+	  - Scroll wheel will increment / decrement the pen size
+	  - SHIFT + Scroll wheel will increment / decrement the pen size
+	  (single step)
+	  - CTRL + mouse click will take a color sample
+
+2010-11-12 16:42  cgilles
+
+	* libs/dimg/filters/fx/blurfilter.cpp,
+	  libs/dimg/filters/fx/blurfilter.h: Andy, this is not
+	  understadable.
+	  All CImg::*blur() method crash under MacOsX. and i don't know
+	  why...
+	  Probably, this is fixed with last CImg 1.4.x release, as digiKam
+	  still use 1.3.0...
+	  but we cannot update because all Greystoration algorithm have
+	  been removed from CImg and migrated to GMic library
+	  The solution is to port greystoration code to GMic, as it have
+	  been recommended by CImg author in the past by a private mail.
+	  But it's a long and complex task.
+	  Note : Greystoration tools do not crash under MAC Os X !!! I'm
+	  lost...
+	  So, I restore old gaussian blur algorithm for Mac only...
+	  CCMAIL: digikam-devel@kde.org
+
+2010-11-12 15:36  aclemens
+
+	* utilities/fuzzysearch/fuzzysearchview.cpp,
+	  utilities/fuzzysearch/fuzzysearchview.h,
+	  utilities/fuzzysearch/sketchwidget.cpp,
+	  utilities/fuzzysearch/sketchwidget.h: Make the SketchWidget a
+	  little bit more user-friendly:
+	  - Use the CTRL+mouse wheel to increase / decrease the pen size
+	  - Use the SHIFT+CTRL+mouse wheel to increase / decrease the pen
+	  size (single step)
+	  - Use the CTRL key and left mouse click to sample the underlying
+	  color
+	  
+	  We could do the same thing for the liquid rescale plugin??
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2010-11-12 12:23  cgilles
+
+	* NEWS: update
+
+2010-11-12 08:12  cgilles
+
+	* libs/dimg/filters/fx/blurfilter.cpp,
+	  libs/dimg/filters/fx/blurfilter.h: the image data are shared
+	  between CIMg and DImg. Do not ask to Cimg instance to clean image
+	  data. Under MACosX, this crash digiKam. under Windows and Linux,
+	  nothing happen. Why ?
+
+2010-11-10 10:03  cgilles
+
+	* project/nsis/digikam.nsi: adapt LZMA compressin settings to
+	  perform a better ratio, as 7Zip Utra mode.
+	  Archive size is now 230Mb instead 320Mb. More than 100Mb !
+	  CCBUGS: 256372
+
+2010-11-10 09:55  mwiesweg
+
+	* libs/threads/dynamicthread.cpp, libs/threads/dynamicthread.h,
+	  libs/threads/threadmanager.cpp, libs/threads/workerobject.cpp,
+	  libs/threads/workerobject.h: Backport thread classes from branch
+	  
+	  CCBUG: 255852
+
+2010-11-09 15:18  cgilles
+
+	* utilities/advancedrename/CMakeLists.txt: fix linking under
+	  windows
+
+2010-11-09 14:34  cgilles
+
+	* project/nsis/TODO: add rkward link
+
+2010-11-09 14:02  cgilles
+
+	* project/nsis/digikam.nsi: polish
+
+2010-11-09 12:49  cgilles
+
+	* project/nsis/digikam.nsi: polish
+
+2010-11-09 12:31  cgilles
+
+	* project/nsis/digikam.nsi: add script argument to specify KDE4
+	  path
+
+2010-11-09 10:53  cgilles
+
+	* project/nsis/TODO: update
+
+2010-11-09 10:49  jnarboux
+
+	* project/nsis/TODO: add TODO list for the installer
+
+2010-11-09 10:33  cgilles
+
+	* project/nsis, project/nsis/COPYING, project/nsis/digikam.nsi,
+	  project/nsis/digikam_header.bmp,
+	  project/nsis/digikam_welcome.bmp: add nsis windows script to
+	  package windows installation
+	  CCBUGS: 256372
+
+2010-11-09 06:51  aclemens
+
+	* digikam/CMakeLists.txt: These variables are not used anymore
+
+2010-11-08 15:04  aclemens
+
+	* utilities/advancedrename/advancedrenamemanager.cpp,
+	  utilities/advancedrename/advancedrenamemanager.h,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoptiondialogwidget.ui:
+	  Add "folder aware numbering" to the AdvancedRename utility.
+	  This allows a user to select an album in recursive mode, and add
+	  numbers that
+	  will be reset for each new album.
+	  
+	  Right now this can't be mixed with the "extension aware
+	  numbering", it is
+	  missing some logic how to handle these situations.
+
+2010-11-08 12:37  cgilles
+
+	* digikam/imagedelegate.cpp: fix warning
+
+2010-11-08 11:25  aclemens
+
+	* utilities/advancedrename/CMakeLists.txt: Oops, I forgot to commit
+	  a file, sorry!
+
+2010-11-08 10:41  cgilles
+
+	* digikam/digikamimagedelegate.cpp,
+	  digikam/imagecategorydrawer.cpp, digikam/imagecategorydrawer.h,
+	  digikam/imagedelegate.cpp, digikam/imagedelegate.h,
+	  digikam/imagedelegatepriv.h, digikam/imagethumbnaildelegate.cpp,
+	  digikam/imagethumbnaildelegate.h: As KDE API said that
+	  KCategoryDrawer is deprecated, and as digiKam depand of KDE 4.5,
+	  we use now KCategoryDrawerV2, avaialble since KDE 4.4.x
+	  Use more private internal containers
+
+2010-11-08 09:18  aclemens
+
+	* CMakeLists.txt, digikam/CMakeLists.txt, tests/CMakeLists.txt,
+	  themedesigner/CMakeLists.txt, utilities/CMakeLists.txt: Create a
+	  static lib for advancedrename. This prevents recompiling of the
+	  object
+	  files when building the test suite or the themedesigner. Right
+	  now when the
+	  themedesigner target is build, nearly all objects from the
+	  digiKam target are
+	  recompiled again, which is a waste of time.
+	  We should create static libs for all the libXXX_SRCS variables in
+	  the main
+	  CMakeLists.txt file. I also think we should remove those
+	  libXXX_SRCS variables
+	  from there completely, they have nothing to do in there and make
+	  the code
+	  hard to understand.
+	  
+	  Right now I only created a static lib for advancedrename, but in
+	  the future we
+	  should do this for all the other so called "libs", too.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2010-11-07 21:47  cgilles
+
+	* NEWS: update
+
+2010-11-07 14:56  aclemens
+
+	* config-digikam.h.cmake: These defines are not used anymore, they
+	  are replaced by CMAKE macros.
+
+2010-11-07 13:52  pino
+
+	* digikam/version.h.cmake: ... and make it as proper string
+
+2010-11-07 13:50  pino
+
+	* digikam/version.h.cmake: put the build type _without_ breaking
+	  the message extraction
+	  
+	  CCMAIL: andi.clemens@gmx.net
+
+2010-11-07 13:45  aclemens
+
+	* digikam/version.h.cmake: I'd like to add the build target to the
+	  About dialog, so that users can
+	  immediately see which digiKam version they are running.
+	  I have at least two digiKam versions running on my system, so for
+	  me
+	  this information is quite useful sometimes :-)
+	  I guess this little extra information doesn't hurt anyway.
+
+2010-11-07 12:28  aclemens
+
+	* digikam/main.cpp: Add a connection to the destroyed() signal when
+	  the digiKam mainwindow has been
+	  closed. This should prevent digiKam from staying open in the
+	  background.
+	  
+	  This bug appeared for me the first time when I installed Qt4.7.
+	  Even if this is
+	  not digiKam's fault, we should make sure that the application
+	  gets closed
+	  properly.
+	  
+	  I will not close this bug until we found a better solution.
+	  
+	  CCBUG:247175
+
+2010-11-07 11:56  aclemens
+
+	* utilities/advancedrename/common/parseable.cpp: use qDeleteAll
+	  instead of a foreach loop
+
+2010-11-07 11:52  aclemens
+
+	* utilities/advancedrename/common/parser.cpp: code cleanup
+
+2010-11-07 11:48  aclemens
+
+	* utilities/advancedrename/common/parser.cpp: use qDeleteAll
+	  instead of a foreach loop
+
+2010-11-06 09:08  aclemens
+
+	* tests/CMakeLists.txt: Comment the albummodeltest testcase: it
+	  doesn't work anyway, we should fix this
+	  some day.
+
+2010-11-06 09:03  aclemens
+
+	* showfoto/CMakeLists.txt, tests/CMakeLists.txt: fix building of
+	  the test suite
+
+2010-11-04 22:17  aclemens
+
+	* HACKING: fix typo
+
+2010-11-04 14:35  cgilles
+
+	* libs/dimg/filters/lens/testlensfuniface.cpp: fix memory leak
+
+2010-11-04 11:01  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp,
+	  libs/dimg/filters/lens/lensfuniface.h: code simplification
+	  (again)
+	  fix memory leak in destructor
+
+2010-11-03 13:15  cgilles
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: polish
+
+2010-11-03 12:41  cgilles
+
+	* HACKING: polish
+
+2010-11-03 11:28  cgilles
+
+	* digikam/imagecategorydrawer.cpp, digikam/imagecategorydrawer.h:
+	  more private internal container
+	  polish
+
+2010-11-03 09:36  cgilles
+
+	* utilities/cameragui/renamecustomizer.cpp,
+	  utilities/queuemanager/queuesettingsview.cpp: fi x memory leak.
+	  AdvancedRenameManager is not QObject based. We need to clean up
+	  instances by hand.
+
+2010-11-03 09:35  cgilles
+
+	* utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamedialog.h,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h,
+	  utilities/advancedrename/advancedrenamemanager.cpp,
+	  utilities/advancedrename/advancedrenamemanager.h,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h: use mor eprivate
+	  internal container
+
+2010-10-31 21:01  cgilles
+
+	* NEWS: update
+
+2010-10-30 14:09  cgilles
+
+	* CMakeLists.txt: another tune under macosx about clapack which
+	  exist in standard, but digiKam cannot be compiled as well. Need
+	  investiguation here...
+
+2010-10-30 10:24  cgilles
+
+	* CMakeLists.txt: another path used by macports to store mysqld
+	  under MACOS-X
+
+2010-10-30 10:06  cgilles
+
+	* CMakeLists.txt: update mysql script name to search for Windows
+	  and MACOS-X
+
+2010-10-29 21:15  cgilles
+
+	* project/scripts/bootstrap.macports: this version work fine with
+	  kdegraphics/libs.
+
+2010-10-29 16:14  cgilles
+
+	* project/scripts/bootstrap.macports: new script to configure CMAKe
+	  under macosx through MacPorts
+
+2010-10-29 07:41  cgilles
+
+	* NEWS: update
+
+2010-10-28 10:40  cgilles
+
+	* digikam/imageviewutilities.cpp: hacking delete items under
+	  windows.
+	  This patch have better feedback. file url are recognized now but
+	  acess to trash is denied. It sound like a bug in KDELibs which
+	  need right to acces to Windows trash. This need to be confirmed
+	  of course.
+	  Note : previous implementation return a bad KIO error about a
+	  wrong source url item to delete.
+
+2010-10-26 21:15  cgilles
+
+	* NEWS: update
+
+2010-10-26 12:38  cgilles
+
+	* libs/3rdparty/lensfun/include, libs/3rdparty/lensfun/libs: del
+
+2010-10-26 12:38  cgilles
+
+	* libs/3rdparty/lensfun/include/regex,
+	  libs/3rdparty/lensfun/libs/lensfun: del
+
+2010-10-26 12:37  cgilles
+
+	* libs/3rdparty/regex/README: polish
+
+2010-10-26 12:36  cgilles
+
+	* CMakeLists.txt, libs/3rdparty/lensfun/README,
+	  libs/3rdparty/lensfun/auxfun.cpp,
+	  libs/3rdparty/lensfun/camera.cpp,
+	  libs/3rdparty/lensfun/config-lensfun.h.cmake,
+	  libs/3rdparty/lensfun/cpuid.cpp,
+	  libs/3rdparty/lensfun/database.cpp,
+	  libs/3rdparty/lensfun/include/config-lensfun.h.cmake,
+	  libs/3rdparty/lensfun/include/lensfun,
+	  libs/3rdparty/lensfun/include/regex/regex.h,
+	  libs/3rdparty/lensfun/lens.cpp, libs/3rdparty/lensfun/lensfun.h,
+	  libs/3rdparty/lensfun/lensfunprv.h,
+	  libs/3rdparty/lensfun/libs/lensfun/auxfun.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/camera.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/cpuid.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/database.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/lens.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/lensfunprv.h,
+	  libs/3rdparty/lensfun/libs/lensfun/mod-color.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/mod-coord.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/mod-subpix.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/modifier.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/mount.cpp,
+	  libs/3rdparty/lensfun/libs/regex,
+	  libs/3rdparty/lensfun/mod-color.cpp,
+	  libs/3rdparty/lensfun/mod-coord.cpp,
+	  libs/3rdparty/lensfun/mod-subpix.cpp,
+	  libs/3rdparty/lensfun/modifier.cpp,
+	  libs/3rdparty/lensfun/mount.cpp, libs/3rdparty/regex,
+	  libs/3rdparty/regex/regex.h: Move regex library source code and
+	  header to a common place.
+	  Later, we can patch easily cmake script to use an external
+	  version is available.
+	  regex is only used by LensFun library, especially under Windows.
+	  regex source don't need to be updated with lensfun source code.
+	  Factorize lensfun code and header in a common place to simplify
+	  files management.
+
+2010-10-26 11:58  cgilles
+
+	* libs/3rdparty/lensfun/include/regex/regex.h: polish
+
+2010-10-26 11:42  cgilles
+
+	* libs/dimg/filters/icc/icctransformfilter.cpp: compile
+
+2010-10-26 11:41  cgilles
+
+	* NEWS: update
+
+2010-10-26 11:41  cgilles
+
+	* libs/dimg/filters/fx/oilpaintfilter.cpp: compile
+
+2010-10-26 11:40  cgilles
+
+	* imageplugins/enhance/hotpixels/hotpixelfixer.cpp,
+	  imageplugins/transform/resizetool.cpp,
+	  libs/dimg/filters/auto/autolevelsfilter.cpp,
+	  libs/dimg/filters/auto/normalizefilter.cpp,
+	  libs/dimg/filters/auto/stretchfilter.cpp,
+	  libs/dimg/filters/bcg/bcgfilter.cpp,
+	  libs/dimg/filters/bw/bwsepiafilter.cpp,
+	  libs/dimg/filters/bw/infraredfilter.cpp,
+	  libs/dimg/filters/bw/infraredfilter.h,
+	  libs/dimg/filters/bw/mixerfilter.cpp,
+	  libs/dimg/filters/bw/tonalityfilter.cpp,
+	  libs/dimg/filters/cb/cbfilter.cpp,
+	  libs/dimg/filters/curves/curvesfilter.cpp,
+	  libs/dimg/filters/decorate/borderfilter.cpp,
+	  libs/dimg/filters/decorate/texturefilter.cpp,
+	  libs/dimg/filters/decorate/texturefilter.h,
+	  libs/dimg/filters/fx/blurfilter.cpp,
+	  libs/dimg/filters/fx/blurfilter.h,
+	  libs/dimg/filters/fx/charcoalfilter.cpp,
+	  libs/dimg/filters/fx/charcoalfilter.h,
+	  libs/dimg/filters/fx/distortionfxfilter.cpp,
+	  libs/dimg/filters/fx/distortionfxfilter.h,
+	  libs/dimg/filters/fx/embossfilter.cpp,
+	  libs/dimg/filters/fx/embossfilter.h,
+	  libs/dimg/filters/fx/filmgrainfilter.cpp,
+	  libs/dimg/filters/fx/invertfilter.cpp,
+	  libs/dimg/filters/fx/invertfilter.h,
+	  libs/dimg/filters/fx/oilpaintfilter.cpp,
+	  libs/dimg/filters/fx/oilpaintfilter.h,
+	  libs/dimg/filters/fx/raindropfilter.cpp,
+	  libs/dimg/filters/fx/raindropfilter.h,
+	  libs/dimg/filters/hsl/hslfilter.cpp,
+	  libs/dimg/filters/icc/icctransformfilter.cpp,
+	  libs/dimg/filters/icc/icctransformfilter.h,
+	  libs/dimg/filters/lc/localcontrastfilter.cpp,
+	  libs/dimg/filters/lens/antivignettingfilter.cpp,
+	  libs/dimg/filters/lens/antivignettingfilter.h,
+	  libs/dimg/filters/lens/lensdistortionfilter.cpp,
+	  libs/dimg/filters/lens/lensdistortionfilter.h,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/levels/levelsfilter.cpp,
+	  libs/dimg/filters/nr/nrfilter.cpp,
+	  libs/dimg/filters/sharp/sharpenfilter.cpp,
+	  libs/dimg/filters/sharp/sharpenfilter.h,
+	  libs/dimg/filters/sharp/unsharpmaskfilter.cpp,
+	  libs/dimg/filters/sharp/unsharpmaskfilter.h,
+	  libs/dimg/filters/transform/contentawarefilter.cpp,
+	  libs/dimg/filters/transform/freerotationfilter.cpp,
+	  libs/dimg/filters/transform/shearfilter.cpp,
+	  libs/dimg/filters/transform/shearfilter.h,
+	  libs/dimg/filters/wb/wbfilter.cpp: call cancelFilter in filter
+	  destructors.
+	  BUGS: 254679
+
+2010-10-26 10:45  cgilles
+
+	* libs/dimg/filters/greycstoration/greycstorationfilter.cpp,
+	  libs/dimg/filters/greycstoration/greycstorationfilter.h: sound
+	  like Cimg::Greystoration filter do not like more than 2 childs
+	  thread to stop when cancelFilter is called.
+
+2010-10-26 07:16  cgilles
+
+	* libs/dimg/filters/greycstoration/greycstorationfilter.cpp: polish
+
+2010-10-26 07:06  cgilles
+
+	* NEWS: update
+
+2010-10-26 07:03  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: use trimmed version of
+	  camera/lens description to perform LensFun DB query
+	  CCBUGS: 255271
+
+2010-10-25 19:49  cfeck
+
+	* CMakeLists.txt: SVN_SILENT build outside digikam
+
+2010-10-25 15:00  cgilles
+
+	* libs/dimg/filters/greycstoration/greycstorationfilter.cpp: CImg
+	  filter : call cancelFilter() in destructor
+	  CCBUGS: 254679
+
+2010-10-25 14:58  cgilles
+
+	* libs/dimg/filters/greycstoration/greycstorationfilter.cpp,
+	  libs/dimg/filters/greycstoration/greycstorationfilter.h: optimize
+	  memorty allocation
+	  use more private internal container
+
+2010-10-25 12:35  cgilles
+
+	* libs/dimg/filters/greycstoration/greycstorationsettings.cpp,
+	  libs/dimg/filters/greycstoration/greycstorationsettings.h: more
+	  private internal container
+
+2010-10-25 05:15  cgilles
+
+	* data/lensfun/compact-panasonic.xml: sync with lensfun trunk rev.
+	  126
+
+2010-10-24 08:55  cgilles
+
+	* CMakeLists.txt, config-digikam.h.cmake,
+	  libs/dialogs/libsinfodlg.cpp: report libpgf and clapack
+	  information into lib info dialog
+
+2010-10-23 16:41  cgilles
+
+	* libs/3rdparty/libpgf/PGFplatform.h: fix sparc macro from gcc
+	  CCBUGS: 254203
+
+2010-10-23 16:29  cgilles
+
+	* cmake/modules/FindCLAPACK.cmake, cmake/modules/FindPGF.cmake:
+	  missing files
+
+2010-10-23 07:34  cgilles
+
+	* libs/dialogs/libsinfodlg.cpp: compile
+
+2010-10-22 20:41  cgilles
+
+	* libs/histogram: rm
+
+2010-10-22 18:50  schwarzer
+
+	* databaseserver/databaseserver.cpp: fix typo
+
+2010-10-22 13:30  cgilles
+
+	* CMakeLists.txt: and this path have been removed
+
+2010-10-22 13:29  cgilles
+
+	* CMakeLists.txt, libs/3rdparty/lensfun/README,
+	  libs/3rdparty/lensfun/include/auxfun,
+	  libs/3rdparty/lensfun/libs/auxfun: these files are not necessary
+	  for an suitable embeded lensfun in digiKam core. in fact these
+	  files are used in lensfun to compile test programs.
+
+2010-10-22 13:00  cgilles
+
+	* libs/dialogs/libsinfodlg.cpp: add info about liblqr
+
+2010-10-22 12:20  cgilles
+
+	* NEWS: update
+
+2010-10-22 11:37  cgilles
+
+	* NEWS: update
+
+2010-10-22 11:05  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: no need focus
+	  policy on these buttons
+
+2010-10-22 10:36  cgilles
+
+	* data/lensfun/slr-panasonic.xml: sync with Lensfun svn trunk rev
+	  #124
+
+2010-10-22 08:42  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/hotplug/digikam-opencamera.desktop.cmake,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-10-22 08:36  cgilles
+
+	* NEWS: update
+
+2010-10-22 08:34  cgilles
+
+	* CMakeLists.txt, digikam/CMakeLists.txt, libs/CMakeLists.txt,
+	  showfoto/CMakeLists.txt: apply patch #52735 to be able to use an
+	  external version of libpgf and clapack if there are available in
+	  host system.
+	  BUGS: 254315
+
+2010-10-21 15:44  dfaure
+
+	* digikam/CMakeLists.txt, showfoto/CMakeLists.txt: Make executable
+	  the Type=Application .desktop files we install,
+	  so that they can be used even from a KDE running in another
+	  prefix (http://markmail.org/message/4p3krovtnzwx35zd)
+
+2010-10-21 13:32  cgilles
+
+	* data/pics/sample-aix.png: add (c) in metadata
+
+2010-10-21 12:31  mklapetek
+
+	* NEWS: Fix typo
+
+2010-10-21 12:21  cgilles
+
+	* NEWS: update
+
+2010-10-21 11:57  mklapetek
+
+	* imageplugins/transform/imageselectionwidget.cpp,
+	  imageplugins/transform/imageselectionwidget.h,
+	  imageplugins/transform/ratiocroptool.cpp: Introduce new aspect
+	  ratio type with Aspect Ratio Crop tool - use aspect ratio of the
+	  current loaded image in editor, so you can keep the original
+	  proportions of the image after cropping.
+
+2010-10-21 10:47  cgilles
+
+	* libs/dimg/filters/nr/nrfilter.cpp: I confirm. Calling
+	  cancelFilter() in NR filter destructor fix crash.
+	  CCBUGS: 254679
+
+2010-10-21 09:43  cgilles
+
+	* data/pics/CMakeLists.txt, data/pics/sample-aix.png,
+	  utilities/setup/setupeditor.cpp, utilities/setup/setupeditor.h:
+	  Add a preview of over/under exposure indicators in settings
+	  dialog. this preview include a sample photo taken at Aix en
+	  provence and the histogram in Full color mode.
+	  Screenshot :
+	  http://www.flickr.com/photos/digikam/5101369823/sizes/o/in/photostream/
+
+2010-10-21 05:12  yurchor
+
+	* imageplugins/transform/contentawareresizetool.cpp,
+	  utilities/setup/setupeditor.cpp: fix typos
+
+2010-10-20 13:50  cgilles
+
+	* NEWS: update
+
+2010-10-20 13:49  cgilles
+
+	* libs/dimg/dimg.cpp, libs/dimg/exposurecontainer.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow_p.h,
+	  utilities/setup/setupeditor.cpp: it now possible to adjust the
+	  percent level of over or under exposed pixels from histogram,
+	  displayed by over/under exposure indicators
+
+2010-10-20 13:06  cgilles
+
+	* showfoto/setup/setup.cpp: polish
+
+2010-10-20 13:06  cgilles
+
+	* showfoto/setup/setup.cpp, showfoto/setup/setupmisc.cpp: polish
+
+2010-10-20 13:01  cgilles
+
+	* CMakeLists.txt, showfoto/setup/setup.cpp, showfoto/setup/setup.h,
+	  showfoto/setup/setupeditor.cpp, showfoto/setup/setupeditor.h,
+	  showfoto/setup/setupmisc.cpp, showfoto/setup/setupmisc.h,
+	  showfoto/showfoto.cpp, utilities/setup/setup.cpp,
+	  utilities/setup/setup.h, utilities/setup/setupeditor.h: Factoring
+	  editor page between digiKam image editor setup and showfoto image
+	  editor setup
+
+2010-10-20 11:40  cgilles
+
+	* showfoto/setup/setupeditor.cpp: separate misc and editor options.
+	  Prepare to factoring
+
+2010-10-20 11:29  cgilles
+
+	* showfoto/setup/setupeditor.cpp, utilities/setup/setupeditor.cpp:
+	  polish option layout
+
+2010-10-20 10:29  cgilles
+
+	* libs/dimg/filters/nr/nrfilter.cpp,
+	  libs/dimg/filters/nr/nrfilter.h: more private internal container
+
+2010-10-20 10:28  cgilles
+
+	* libs/dimg/filters/nr/nrsettings.cpp,
+	  libs/dimg/filters/nr/nrsettings.h: use more private internal
+	  container
+
+2010-10-20 08:38  cgilles
+
+	* libs/3rdparty/lensfun/include/auxfun/rgbpixel.h: Fix endianness
+	  detection into LensFun library, as LibPGF do.
+	  CCBUGS: 254203
+	  CCMAIL: zap@homelink.ru
+
+2010-10-20 08:20  cgilles
+
+	* libs/3rdparty/libpgf/Decoder.cpp,
+	  libs/3rdparty/libpgf/Encoder.cpp,
+	  libs/3rdparty/libpgf/PGFplatform.h: apply endianness patch #52681
+	  from Raphael Schweizer
+	  CCBUGS: 254203
+
+2010-10-19 13:45  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: when exposure or
+	  icc settings has changed from config pannel, pass new settings to
+	  editor tool interface
+
+2010-10-19 13:29  cgilles
+
+	* showfoto/main.cpp, showfoto/setup/setup.cpp,
+	  showfoto/setup/setup.h, showfoto/setup/setupeditor.cpp,
+	  showfoto/setup/setupeditor.h, showfoto/setup/setupmetadata.cpp,
+	  showfoto/setup/setupmetadata.h, showfoto/setup/setuptooltip.cpp,
+	  showfoto/setup/setuptooltip.h, showfoto/showfoto.cpp,
+	  showfoto/showfoto.h: Showfoto need to handle over/under exposure
+	  settings properlly
+
+2010-10-19 10:12  cgilles
+
+	* utilities/setup/setupeditor.cpp: typo
+
+2010-10-19 07:26  cgilles
+
+	* data/lensfun/compact-canon.xml, data/lensfun/compact-olympus.xml,
+	  data/lensfun/slr-canon.xml, data/lensfun/slr-olympus.xml,
+	  data/lensfun/slr-panasonic.xml, data/lensfun/slr-sony.xml,
+	  data/lensfun/slr-tokina.xml,
+	  libs/3rdparty/lensfun/include/lensfun/lensfun.h,
+	  libs/3rdparty/lensfun/libs/lensfun/lens.cpp,
+	  libs/3rdparty/lensfun/libs/lensfun/lensfunprv.h: sync lensfun
+	  code with trunk rev #123
+
+2010-10-18 11:24  cgilles
+
+	* NEWS: update
+
+2010-10-18 10:30  cgilles
+
+	* NEWS: update
+
+2010-10-18 09:23  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/editorwindow_p.h: more private
+	  internal container
+
+2010-10-18 09:01  cgilles
+
+	* utilities/imageeditor/editor/editorwindow_p.h: constify
+
+2010-10-18 09:01  cgilles
+
+	* utilities/imageeditor/editor/savingcontextcontainer.h: polish
+
+2010-10-17 20:47  cgilles
+
+	* NEWS, libs/dimg/dimg.cpp, libs/dimg/exposurecontainer.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow_p.h,
+	  utilities/setup/setupeditor.cpp: New option to display over/under
+	  exposure indicators if pure colors is detected
+	  or if only one color component match the condition.
+	  BUGS: 148382
+
+2010-10-17 16:18  cgilles
+
+	* utilities/setup/setupeditor.cpp, utilities/setup/setupeditor.h:
+	  more private internal container
+
+2010-10-16 20:50  cgilles
+
+	* NEWS: update
+
+2010-10-16 20:27  cgilles
+
+	* NEWS: update
+
+2010-10-16 20:25  cgilles
+
+	* utilities/setup/setupmisc.cpp, utilities/setup/setupmisc.h:
+	  remove trailing dots
+	  BUGS: 254397
+
+2010-10-15 13:18  cgilles
+
+	* NEWS: update
+
+2010-10-15 13:18  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: perform
+	  over/under exposure indicator when convert to pixmap is used in
+	  image editor tool to render preview.
+	  CCBUGS: 253702
+
+2010-10-15 12:51  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h,
+	  utilities/imageeditor/widgets/previewtoolbar.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.h: use more private
+	  internal container
+
+2010-10-15 11:56  cgilles
+
+	* libs/dimg/dimg.cpp: fix endianess with over/under exposure
+	  indicator.
+	  set over exposure limit to more than 1% of max histogram segment.
+	  set under exposure limit to less than 1% of min histogram
+	  segment.
+	  BUGS: 253702
+
+2010-10-15 11:03  cgilles
+
+	* libs/3rdparty/libpgf/PGFplatform.h,
+	  libs/3rdparty/libpgf/PGFtypes.h: fix endiannes detection into
+	  libpgf. If it work properly unde SPARC architecture, this patch
+	  must be backported to libpgf as well.
+	  CCBUGS: 254203
+	  CCMAIL: rschweizer@schweizer-informatik.ch
+
+2010-10-15 10:47  cgilles
+
+	* NEWS: update
+
+2010-10-15 10:37  cgilles
+
+	* libs/threadimageio/pgfutils.cpp: at this place endianess can be
+	  handle using Qt4 api
+	  CCBUGS: 254203
+
+2010-10-15 09:15  scripty
+
+	* digikam/digikam.notifyrc,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-10-14 11:25  cgilles
+
+	* NEWS: update
+
+2010-10-14 11:25  cgilles
+
+	* imageplugins/color/adjustlevelstool.h: fix broken signals/slots
+	  BUGS: 254135
+
+2010-10-14 11:21  cgilles
+
+	* imageplugins/color/adjustcurvestool.h,
+	  imageplugins/color/whitebalancetool.cpp,
+	  imageplugins/color/whitebalancetool.h: fix signals/slots
+	  connections
+	  CCBUGS: 254135
+
+2010-10-14 11:10  cgilles
+
+	* CMakeLists.txt, libs/dimg/filters/levels/histogrambox.cpp,
+	  libs/dimg/filters/levels/histogrambox.h,
+	  libs/dimg/filters/levels/histogrampainter.cpp,
+	  libs/dimg/filters/levels/histogrampainter.h,
+	  libs/dimg/filters/levels/histogramwidget.cpp,
+	  libs/dimg/filters/levels/histogramwidget.h,
+	  libs/widgets/common/CMakeLists.txt,
+	  libs/widgets/common/histogrambox.cpp,
+	  libs/widgets/common/histogrambox.h,
+	  libs/widgets/common/histogrampainter.cpp,
+	  libs/widgets/common/histogrampainter.h,
+	  libs/widgets/common/histogramwidget.cpp,
+	  libs/widgets/common/histogramwidget.h: another file to store in
+	  common place
+
+2010-10-14 10:47  cgilles
+
+	* CMakeLists.txt, digikam/CMakeLists.txt,
+	  imageplugins/CMakeLists.txt, libs/CMakeLists.txt,
+	  libs/dimg/filters/levels/imagehistogram.cpp,
+	  libs/dimg/filters/levels/imagehistogram.h,
+	  libs/histogram/CMakeLists.txt, libs/histogram/imagehistogram.cpp,
+	  libs/histogram/imagehistogram.h, showfoto/CMakeLists.txt,
+	  themedesigner/CMakeLists.txt: move imagehistogram to dimg filter
+	  levels
+
+2010-10-14 10:08  cgilles
+
+	* libs/dimg/filters/levels/imagelevels.cpp,
+	  libs/dimg/filters/levels/imagelevels.h,
+	  libs/dimg/filters/levels/levelsfilter.cpp,
+	  libs/dimg/filters/levels/levelsfilter.h: use more private
+	  internal container
+
+2010-10-14 10:03  cgilles
+
+	* CMakeLists.txt, libs/dimg/filters/curves/curvesbox.cpp,
+	  libs/dimg/filters/curves/curvesbox.h,
+	  libs/dimg/filters/curves/curveswidget.cpp,
+	  libs/dimg/filters/curves/curveswidget.h,
+	  libs/widgets/common/CMakeLists.txt,
+	  libs/widgets/common/curvesbox.cpp,
+	  libs/widgets/common/curvesbox.h,
+	  libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/curveswidget.h: move curve widget at common
+	  place where all curve implementatio are stored
+
+2010-10-14 08:55  cgilles
+
+	* imageplugins/color/adjustcurvestool.cpp,
+	  libs/dimg/filters/curves/curvessettings.cpp,
+	  libs/dimg/filters/curves/curvessettings.h,
+	  libs/widgets/common/curvesbox.h: fix color picker signals and
+	  slots in Curves Tool. Reported by Thorsten Schnebeck on devel
+	  Mailling list
+
+2010-10-14 08:47  scripty
+
+	* utilities/hotplug/digikam-gphoto2-camera.desktop.cmake:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-10-14 07:37  cgilles
+
+	* libs/dimg/filters/curves/curvesfilter.h,
+	  libs/dimg/filters/curves/curvessettings.cpp,
+	  libs/dimg/filters/curves/curvessettings.h,
+	  libs/dimg/filters/curves/imagecurves.cpp,
+	  libs/dimg/filters/curves/imagecurves.h: more private internal
+	  container
+
+2010-10-13 12:20  cgilles
+
+	* AUTHORS: update
+
+2010-10-13 12:07  cgilles
+
+	* data/pics/splash-showfoto.png: Showfoto 1.6.0 splashscreen from
+	  Santoro Domenico
+	  CCMAIL: Domenico.Santoro@m-dis.it
+
+2010-10-13 12:00  cgilles
+
+	* data/pics/splash-digikam.png: new digiKam 1.6.0 splashscreen from
+	  Dmitri Popov
+	  CCMAIL: dmpop@openoffice.org
+
+2010-10-13 10:40  cgilles
+
+	* libs/dialogs/libsinfodlg.cpp: polish
+
+2010-10-12 16:05  cgilles
+
+	* NEWS: update
+
+2010-10-12 14:09  cgilles
+
+	* CMakeLists.txt, digikam/ratingwidget.cpp, digikam/ratingwidget.h,
+	  libs/widgets/common/ratingwidget.cpp,
+	  libs/widgets/common/ratingwidget.h: bump version to 1.6.0
+	  move rating widget to common place
+
+2010-10-12 13:58  cgilles
+
+	* NEWS: update
+
+2010-10-12 13:54  cgilles
+
+	* CMakeLists.txt, digikam/digikamview.cpp, digikam/digikamview.h,
+	  digikam/ratingwidget.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow_p.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h,
+	  utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablebar.h,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/slideshow/slideshow.cpp,
+	  utilities/slideshow/slideshow.h, utilities/slideshow/toolbar.cpp:
+	  with this commit, Slideshow is now able to change item rating.
+	  It fix also a little bug to not display tool bar over information
+	  text displayed on the bottom/left corner.
+	  BUGS: 148434
+	  CCBUGS: 242119
+
+2010-10-12 11:14  cgilles
+
+	* libs/dimg/filters/lens/lensfuniface.cpp: if camera info and lens
+	  info are missing, continue to parse shot info as well
+
+2010-10-12 10:17  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2010-10-12 07:39  cgilles
+
+	* digikam/ratingwidget.cpp, digikam/ratingwidget.h: more private
+	  internal container
+
+2010-10-12 07:39  cgilles
+
+	* utilities/timeline/timelinewidget.cpp,
+	  utilities/timeline/timelinewidget.h: use more private container
+	  use const ref
+
+2010-10-11 09:07  cgilles
+
+	* CMakeLists.txt: add todo for win32
+
+2010-10-11 08:58  cgilles
+
+	* data/lensfun/README: some info
+
+2010-10-11 08:18  cgilles
+
+	* NEWS: update
+
+2010-10-10 20:30  nlecureuil
+
+	* NEWS, project/NEWS.1.5.0: Open for next version
+
+2010-10-10 19:34  nlecureuil
+
+	* ChangeLog, project/NEWS.1.5.0: Update changelog
+
+
 1.5.0 2010-10-10
 
 2010-10-10 05:04  cgilles
