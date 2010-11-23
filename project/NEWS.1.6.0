@@ -3,17 +3,17 @@ digiKam 1.6.0 - Release date: 2010-11-22
 
 NEW FEATURES:
 
-AlbumUI        : User can exclude tags in the tagfilter view.
+General        : Fix compilation under Mac OS-X through MacPorts project.
+General        : External dependencies to libPGF and Clapack can use used now instead internal implementation
+                 if available in host system dedicated to compile.
+AlbumGUI       : User can exclude tags in the tag-filter view.
 Slideshow      : User can change item rating during a slide.
 ImageEditor    : New option to display over/under exposure indicators if pure colors is detected
                  or if only one color component match the condition.
-ImageEditor    : New options to adjust the levels of over/under exposured pixels from histogram,
+ImageEditor    : New options to adjust the levels of over/under exposed pixels from histogram,
                  displayed by over/under exposure indicators.
-ImageEditor    : Aspect ratio crop tool is now able to deal with the aspect ratio of the current loaded image in editor.
-                 You can keep the original proportions of the image after cropping.
-General        : External depencies to libPGF and Clapack can use used now instead internal implementation
-                 if available in host sytem dedicated to compile.
-General        : Fix compilation under Mac OS-X through MAcPorts project.
+ImageEditor    : Aspect ratio crop tool is now able to deal with the aspect ratio of the current loaded image
+                 in editor. You can keep the original proportions of the image after cropping.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -48,7 +48,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 252737 : Direct capture bug 2 of 2.
 030 ==> 243497 : digikam does not exit when "quit", stuck in select.
 031 ==> 257329 : Build fails - openmp flags.
-032 ==> 
-
-
-
