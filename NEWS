@@ -12,7 +12,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 224454 : Don't show raw files with metadata when searching or filtering.
 005 ==> 214837 : Crash while saving picture in pic editor.
 006 ==> 256951 : Showfoto crashes on color correction.
-007 ==> 
+007 ==> 217069 : Undo/Redo are greyed out in image editor under MacOSX.
+008 ==> 
+
 
 
 
