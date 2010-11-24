@@ -7,7 +7,8 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 180224 : memory leakage in image editor?
-002 ==> 
+002 ==> 257676 : Crash when I renane files.
+003 ==> 
 
 
 
