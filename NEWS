@@ -15,7 +15,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 217069 : Undo/Redo are greyed out in image editor under MacOSX.
 008 ==> 257769 : Crash on Enhance->Lens->Auto-Correction.
 009 ==> 257784 : Lens auto correction does not specify unit for "distance to the object".
-010 ==> 
+010 ==> 256050 : digiKam crashed after modifying tag name.
+011 ==> 
 
 
 
