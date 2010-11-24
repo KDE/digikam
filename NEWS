@@ -13,7 +13,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 214837 : Crash while saving picture in pic editor.
 006 ==> 256951 : Showfoto crashes on color correction.
 007 ==> 217069 : Undo/Redo are greyed out in image editor under MacOSX.
-008 ==> 
+008 ==> 257769 - Crash on Enhance->Lens->Auto-Correction.
+009 ==> 
+
 
 
 
