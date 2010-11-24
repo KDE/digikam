@@ -8,7 +8,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 180224 : memory leakage in image editor?
 002 ==> 257676 : Crash when I renane files.
-003 ==> 
+003 ==> 239862 : digiKam crashes when trying to edit a picture.
+004 ==> 
+
 
 
 
