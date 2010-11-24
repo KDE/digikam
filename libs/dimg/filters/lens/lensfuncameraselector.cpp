@@ -162,9 +162,9 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* parent)
     d->metadataUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
                                    "from the image metadata (as Exif or XMP)."));
 
-    d->focalLabel       = new QLabel(i18n("Focal Length:"), this);
+    d->focalLabel       = new QLabel(i18n("Focal Length (mm):"), this);
     d->aperLabel        = new QLabel(i18n("Aperture:"), this);
-    d->distLabel        = new QLabel(i18n("Subject Distance:"), this);
+    d->distLabel        = new QLabel(i18n("Subject Distance (m):"), this);
 
     d->focal            = new RDoubleNumInput(this);
     d->focal->setDecimals(1);
