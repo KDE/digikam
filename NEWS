@@ -11,7 +11,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 239862 : digiKam crashes when trying to edit a picture.
 004 ==> 224454 : Don't show raw files with metadata when searching or filtering.
 005 ==> 214837 : Crash while saving picture in pic editor.
-006 ==> 
+006 ==> 256951 : Showfoto crashes on color correction.
+007 ==> 
+
 
 
 
