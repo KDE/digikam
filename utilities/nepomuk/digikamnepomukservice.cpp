@@ -398,7 +398,7 @@ void NepomukService::fullSyncDigikamToNepomuk()
 {
     // List album root albums of all available collections recursively
     QList<CollectionLocation> collections = CollectionManager::instance()->allAvailableLocations();
-    foreach (const CollectionLocation &location, collections)
+    foreach (const CollectionLocation& location, collections)
     {
         DatabaseUrl url = DatabaseUrl::fromAlbumAndName(QString(), "/", location.albumRootPath(), location.id());
         KIO::Job *job = ImageLister::startListJob(url);
@@ -468,7 +468,7 @@ static int digikamToNepomukRating(int digikamRating)
 void NepomukService::syncToNepomuk(const QList<qlonglong>& imageIds, SyncToNepomukSettings syncSettings)
 {
     QList<ImageInfo> infos;
-    foreach (const qlonglong &imageid, imageIds)
+    foreach (const qlonglong& imageid, imageIds)
     {
         ImageInfo info(imageid);
         if (!info.isNull())
@@ -479,7 +479,7 @@ void NepomukService::syncToNepomuk(const QList<qlonglong>& imageIds, SyncToNepom
 
 void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukSettings syncSettings)
 {
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         ChangingNepomuk changing(d);
 
@@ -553,7 +553,7 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
 
         if (tag.isValid())
         {
-            foreach (const qlonglong &imageId, imageIds)
+            foreach (const qlonglong& imageId, imageIds)
             {
                 ImageInfo info(imageId);
 
@@ -577,7 +577,7 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
 
 void NepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
 {
-    foreach (const ImageInfo &info, imageInfos)
+    foreach (const ImageInfo& info, imageInfos)
     {
         ChangingNepomuk changing(d);
 
@@ -789,7 +789,7 @@ void NepomukService::syncAddedImagesToDigikam(const QList<qlonglong> &ids)
         }
 
         QList<Nepomuk::Tag> tags = res.tags();
-        foreach (const Nepomuk::Tag &tag, tags)
+        foreach (const Nepomuk::Tag& tag, tags)
         {
             int id = bestDigikamTagForTagName(info, tag.genericLabel());
             if (id)
@@ -1029,7 +1029,7 @@ DatabaseParameters NepomukService::databaseParameters() const
     {
         QStringList serviceNames = reply.value();
         QLatin1String digikamService("org.kde.digikam-");
-        foreach (const QString &service, serviceNames)
+        foreach (const QString& service, serviceNames)
         {
             if (service.startsWith(digikamService))
             {

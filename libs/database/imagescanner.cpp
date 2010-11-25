@@ -627,7 +627,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
 DImageHistory ImageScanner::resolvedImageHistory(const DImageHistory& history, bool mustBeAvailable)
 {
     DImageHistory h;
-    foreach (const DImageHistory::Entry &e, history.entries())
+    foreach (const DImageHistory::Entry& e, history.entries())
     {
         // Copy entry, without referredImages
         DImageHistory::Entry entry;

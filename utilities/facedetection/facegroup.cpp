@@ -519,7 +519,7 @@ void FaceGroup::load()
 
     QList<DatabaseFace> faces = d->faceIface.databaseFaces(d->info.id());
 
-    foreach (const DatabaseFace &face, faces)
+    foreach (const DatabaseFace& face, faces)
     {
         FaceItem* item = d->createItem(face);
 

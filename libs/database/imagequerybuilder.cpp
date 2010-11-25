@@ -393,7 +393,7 @@ public:
             sql += " (" + name + " IN (";
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
             sql += ") ";
-            foreach (const qlonglong &v, values)
+            foreach (const qlonglong& v, values)
             {
                 *boundValues << v;
             }

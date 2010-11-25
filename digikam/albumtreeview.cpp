@@ -329,7 +329,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, b
 
         // selection is ignored here because the user may have changed this
         // while searching
-        foreach (const int &expandedId, expansion)
+        foreach (const int& expandedId, expansion)
         {
             d->searchBackup[expandedId].expanded = true;
         }
@@ -584,7 +584,7 @@ void AbstractAlbumTreeView::doLoadState()
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry),
                     QStringList());
     //kDebug() << "selection: " << selection;
-    foreach(const QString &key, selection)
+    foreach (const QString& key, selection)
     {
         bool validId;
         int id = key.toInt(&validId);
@@ -598,7 +598,7 @@ void AbstractAlbumTreeView::doLoadState()
     const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry),
                     QStringList());
     //kDebug() << "expansion: " << expansion;
-    foreach(const QString &key, expansion)
+    foreach (const QString& key, expansion)
     {
         bool validId;
         int id = key.toInt(&validId);

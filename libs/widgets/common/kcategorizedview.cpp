@@ -211,7 +211,7 @@ QRect KCategorizedView::Private::visualRectInViewport(const QModelIndex &index) 
         row = elementsInfo[index.row()].relativeOffsetToCategory / elementsPerRow;
     }
 
-    foreach (const QString &category, categories)
+    foreach (const QString& category, categories)
     {
         if (category == curCategory)
             break;
@@ -304,7 +304,7 @@ QRect KCategorizedView::Private::visualCategoryRectInViewport(const QString &cat
         elementsPerRow = 1;
     }
 
-    foreach (const QString &itCategory, categories)
+    foreach (const QString& itCategory, categories)
     {
         if (itCategory == category)
             break;
@@ -471,7 +471,7 @@ void KCategorizedView::Private::drawDraggedItems(QPainter *painter)
 {
     QStyleOptionViewItemV4 option = listView->viewOptions();
     option.state &= ~QStyle::State_MouseOver;
-    foreach (const QModelIndex &index, listView->selectionModel()->selectedIndexes())
+    foreach (const QModelIndex& index, listView->selectionModel()->selectedIndexes())
     {
         const int dx = mousePosition.x() - initialPressPosition.x() + listView->horizontalOffset();
         const int dy = mousePosition.y() - initialPressPosition.y() + listView->verticalOffset();
@@ -490,7 +490,7 @@ void KCategorizedView::Private::drawDraggedItems()
 {
     QRect rectToUpdate;
     QRect currentRect;
-    foreach (const QModelIndex &index, listView->selectionModel()->selectedIndexes())
+    foreach (const QModelIndex& index, listView->selectionModel()->selectedIndexes())
     {
         int dx = mousePosition.x() - initialPressPosition.x() + listView->horizontalOffset();
         int dy = mousePosition.y() - initialPressPosition.y() + listView->verticalOffset();
@@ -618,7 +618,7 @@ QModelIndex KCategorizedView::categoryAt(const QPoint &point) const
     // We traverse the categories and find the first where point.y() is below the visualRect
     int y = 0, lastY = 0;
     QString lastCategory;
-    foreach (const QString &category, d->categories)
+    foreach (const QString& category, d->categories)
     {
         y = d->categoryVisualRect(category).top();
 
@@ -800,7 +800,7 @@ void KCategorizedView::paintEvent(QPaintEvent *event)
     {
         alternate = dirtyIndexes[0].row() % 2;
     }
-    foreach (const QModelIndex &index, dirtyIndexes)
+    foreach (const QModelIndex& index, dirtyIndexes)
     {
         if (alternatingRows && alternate)
         {
@@ -853,7 +853,7 @@ void KCategorizedView::paintEvent(QPaintEvent *event)
     // Redraw categories
     QStyleOptionViewItemV4 otherOption;
     bool intersectedInThePast = false;
-    foreach (const QString &category, d->categories)
+    foreach (const QString& category, d->categories)
     {
         otherOption = option;
         otherOption.rect = d->categoryVisualRect(category);
@@ -1155,7 +1155,7 @@ void KCategorizedView::mouseMoveEvent(QMouseEvent *event)
     d->hoveredCategory.clear();
 
     // Redraw categories
-    foreach (const QString &category, d->categories)
+    foreach (const QString& category, d->categories)
     {
         if (d->categoryVisualRect(category).intersects(QRect(event->pos(), event->pos())))
         {
@@ -1246,7 +1246,7 @@ void KCategorizedView::mouseReleaseEvent(QMouseEvent *event)
     if ((selectionMode() != SingleSelection) && (selectionMode() != NoSelection) &&
         (initialPressPosition == d->initialPressPosition))
     {
-        foreach(const QString &category, d->categories)
+        foreach (const QString& category, d->categories)
         {
             if (d->categoryVisualRect(category).contains(event->pos()) &&
                 selectionModel())
@@ -1423,7 +1423,7 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
     QString afterCategory = d->categories.first();
 
     bool hasToBreak = false;
-    foreach (const QString &category, d->categories)
+    foreach (const QString& category, d->categories)
     {
         if (hasToBreak)
         {

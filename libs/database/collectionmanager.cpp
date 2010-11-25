@@ -982,7 +982,7 @@ void CollectionManager::migrationCandidates(const CollectionLocation &location, 
     *description = d->technicalDescription(albumLoc);
 
     // Find possible new volumes where the specific path is found.
-    foreach (const SolidVolumeInfo &info, volumes)
+    foreach (const SolidVolumeInfo& info, volumes)
     {
         if (info.isMounted && !info.path.isEmpty())
         {

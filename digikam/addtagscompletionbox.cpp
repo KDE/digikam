@@ -235,7 +235,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
     AddTagsCompletionBoxItem* createItemTopLevel    = d->createItemForNewTag(currentText, 0);
 
     QList<AddTagsCompletionBoxItem*> assignItems;
-    foreach (const QString &tagName, completionEntries)
+    foreach (const QString& tagName, completionEntries)
     {
         QList<int> tagIds = TagsCache::instance()->tagsForName(tagName);
         bool uniqueName   = tagIds.count() == 1;

@@ -303,7 +303,7 @@ bool TemplateManager::save()
 
             QDomElement authors = doc.createElement(QString::fromLatin1("authors"));
             elem.appendChild(authors);
-            foreach (const QString &name, t.authors())
+            foreach (const QString& name, t.authors())
             {
                 QDomElement e = doc.createElement(QString::fromLatin1("name"));
                 e.setAttribute(QString::fromLatin1("value"), name);
@@ -387,7 +387,7 @@ bool TemplateManager::save()
 
             QDomElement subjects = doc.createElement(QString::fromLatin1("subjects"));
             elem.appendChild(subjects);
-            foreach (const QString &subject, t.IptcSubjects())
+            foreach (const QString& subject, t.IptcSubjects())
             {
                 QDomElement e = doc.createElement(QString::fromLatin1("subject"));
                 e.setAttribute(QString::fromLatin1("value"), subject);

@@ -805,7 +805,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     // -- UUID Checking ---------------------------------------------------------
 
     QList<CollectionLocation> disappearedLocations = CollectionManager::instance()->checkHardWiredLocations();
-    foreach (const CollectionLocation &loc, disappearedLocations)
+    foreach (const CollectionLocation& loc, disappearedLocations)
     {
         QString locDescription;
         QStringList candidateIds, candidateDescriptions;
@@ -3176,7 +3176,7 @@ void AlbumManager::slotNotifyFileChange(const QString& path)
 void AlbumManager::slotDirWatchDirty(const QString& path)
 {
     // Filter out dirty signals triggered by changes on the database file
-    foreach (const QString &bannedFile, d->dirWatchBlackList)
+    foreach (const QString& bannedFile, d->dirWatchBlackList)
     {
         if (path.endsWith(bannedFile))
         {

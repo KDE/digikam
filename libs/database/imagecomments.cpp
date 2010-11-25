@@ -451,7 +451,7 @@ void ImageComments::removeAll()
     if (!d)
         return;
 
-    foreach (const CommentInfo &info, d->infos)
+    foreach (const CommentInfo& info, d->infos)
     {
         d->idsToRemove << info.id;
     }
@@ -549,7 +549,7 @@ CaptionsMap ImageComments::toCaptionsMap(DatabaseComment::Type type) const
 
     if (d)
     {
-        foreach (const CommentInfo &info, d->infos)
+        foreach (const CommentInfo& info, d->infos)
         {
             if (info.type == type)
             {

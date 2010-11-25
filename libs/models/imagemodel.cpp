@@ -540,7 +540,7 @@ void ImageModel::finishIncrementalRefresh()
 
     int removedRows = 0, offset = 0;
     typedef QPair<int,int> IntPair; // to make foreach macro happy
-    foreach (const IntPair &pair, pairs)
+    foreach (const IntPair& pair, pairs)
     {
         const int begin = pair.first - offset;
         const int end   = pair.second - offset; // inclusive
@@ -610,7 +610,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
 {
     if (extraValues.isEmpty())
     {
-        foreach (const ImageInfo &info, infos)
+        foreach (const ImageInfo& info, infos)
         {
             QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
             if (it != oldIds.end())

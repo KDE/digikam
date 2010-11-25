@@ -1365,7 +1365,7 @@ SqlQuery DatabaseCoreBackend::copyQuery(const SqlQuery& old)
     query.setForwardOnly(old.isForwardOnly());
     // only for positional binding
     QList<QVariant> boundValues = old.boundValues().values();
-    foreach (const QVariant &value, boundValues)
+    foreach (const QVariant& value, boundValues)
     {
         #ifdef DATABASCOREBACKEND_DEBUG
         kDebug() << "Bind value to query ["<<value<<"]";

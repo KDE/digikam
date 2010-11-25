@@ -146,7 +146,7 @@ bool IccSettings::monitorProfileFromSystem()
     // First, look into cache
     {
         QMutexLocker lock(&d->mutex);
-        foreach (const IccProfile &profile, d->screenProfiles)
+        foreach (const IccProfile& profile, d->screenProfiles)
         {
             if (!profile.isNull())
             {

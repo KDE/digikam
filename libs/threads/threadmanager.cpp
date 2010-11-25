@@ -118,7 +118,7 @@ public:
                     todo.clear();
                 }
             }
-            foreach (const TodoPair &pair, copyTodo)
+            foreach (const TodoPair& pair, copyTodo)
             {
                 pair.first->moveToThread(pair.second);
             }

@@ -331,7 +331,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
     // We need to create a second ParseResults object with modified keys, otherwise the final parsing step will not
     // remove the modifier tokens from the result.
 
-    foreach (const ParseResults::ResultsKey &key, results.keys())
+    foreach (const ParseResults::ResultsKey& key, results.keys())
     {
         int off  = results.offset(key);
         int diff = 0;

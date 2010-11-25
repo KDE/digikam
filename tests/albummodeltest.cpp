@@ -231,7 +231,7 @@ void AlbumModelTest::init()
     kDebug() << "copying images " << imageFiles << " to "
              << palbumChild0Root0->fileUrl();
 
-    foreach (const QString &imageFile, imageFiles)
+    foreach (const QString& imageFile, imageFiles)
     {
         QString src = IMAGE_PATH + "/" + imageFile;
         QString dst = palbumChild0Root0->fileUrl().toLocalFile() + "/" + imageFile;
