@@ -409,21 +409,37 @@ QString DImageHistory::toXml() const
             stream.writeAttribute("filterName", step.action.identifier());
             stream.writeAttribute("filterDisplayName", step.action.displayableName());
             stream.writeAttribute("filterVersion", QString::number(step.action.version()));
-            stream.writeAttribute("filterCategory", QString::number(step.action.category()));
+
+            switch (step.action.category())
+            {
+                case FilterAction::ReproducibleFilter:
+                    stream.writeAttribute("filterCategory", "reproducible");
+                    break;
+                case FilterAction::ComplexFilter:
+                    stream.writeAttribute("filterCategory", "complex");
+                    break;
+                case FilterAction::DocumentedHistory:
+                    stream.writeAttribute("filterCategory", "documentedHistory");
+                    break;
+            }
 
             stream.writeStartElement("params");
 
-            if(!step.action.parameters().isEmpty())
+            const QHash<QString,QVariant>& params = step.action.parameters();
+            if (!params.isEmpty())
             {
-                QHashIterator<QString, QVariant> iter(step.action.parameters());
-                while (iter.hasNext())
+                QList<QString> keys = params.keys();
+                qSort(keys);
+                foreach (const QString& key, keys)
                 {
-                  iter.next();
-
-                  stream.writeStartElement("param");
-                  stream.writeAttribute("name", iter.key());
-                  stream.writeAttribute("value", iter.value().toString());
-                  stream.writeEndElement(); //param
+                    QHash<QString, QVariant>::const_iterator it;
+                    for (it = params.find(key); it != params.end() && it.key() == key; ++it)
+                    {
+                        stream.writeStartElement("param");
+                        stream.writeAttribute("name", key);
+                        stream.writeAttribute("value", it.value().toString());
+                        stream.writeEndElement(); //param
+                    }
                 }
             }
 
@@ -557,10 +573,14 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
         else if (stream.name() == "filter")
         {
             //kDebug() << "Parsing filter tag";
-            FilterAction::Category c
-                    = static_cast<FilterAction::Category>(stream.attributes().value("filterCategory").toString().toInt());
-            if (c < FilterAction::CategoryFirst || c > FilterAction::CategoryLast)
+            FilterAction::Category c = FilterAction::ComplexFilter;
+            QStringRef categoryString = stream.attributes().value("filterCategory");
+            if (categoryString == "reproducible")
+                c = FilterAction::ReproducibleFilter;
+            else if (categoryString == "complex")
                 c = FilterAction::ComplexFilter;
+            else if (categoryString == "documentedHistory")
+                c = FilterAction::DocumentedHistory;
 
             FilterAction action(stream.attributes().value("filterName").toString(),
                                 stream.attributes().value("filterVersion").toString().toInt(), c);
@@ -570,7 +590,6 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             {
                 if (stream.name() == "params")
                 {
-
                     while (stream.readNextStartElement())
                     {
                         if (stream.name() == "param" && stream.attributes().hasAttribute("name"))

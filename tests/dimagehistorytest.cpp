@@ -135,11 +135,20 @@ void DImageHistoryTest::slotImageSaved(const QString& fileName, bool success)
 
     DImg img(fileName);
     DImageHistory history = img.getImageHistory();
-    //qDebug() << history.toXml();
+    qDebug() << history.toXml();
 
     QCOMPARE(history.size(), 3);
     QCOMPARE(history.entries().first().referredImages.size(), 1);
     QCOMPARE(history.entries().first().referredImages.first().m_type, HistoryImageId::Original);
+    QCOMPARE(history.action(1).category(), FilterAction::ReproducibleFilter);
+    QCOMPARE(history.action(2).category(), FilterAction::ReproducibleFilter);
+
+    DImageHistory history2 = DImageHistory::fromXml(history.toXml());
+    QCOMPARE(history2.size(), 3);
+    QCOMPARE(history2.entries().first().referredImages.size(), 1);
+    QCOMPARE(history2.entries().first().referredImages.first().m_type, HistoryImageId::Original);
+    QCOMPARE(history2.action(1).category(), FilterAction::ReproducibleFilter);
+    QCOMPARE(history2.action(2).category(), FilterAction::ReproducibleFilter);
 
     m_loop.quit();
 }
