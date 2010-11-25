@@ -61,20 +61,22 @@ class EmbossTool::EmbossToolPriv
 public:
 
     EmbossToolPriv() :
-        configGroupName("emboss Tool"),
-        configDepthAdjustmentEntry("DepthAdjustment"),
         depthInput(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configDepthAdjustmentEntry;
+    static const QString configGroupName;
+    static const QString configDepthAdjustmentEntry;
 
-    RIntNumInput*       depthInput;
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    RIntNumInput*        depthInput;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString EmbossTool::EmbossToolPriv::configGroupName("emboss Tool");
+const QString EmbossTool::EmbossToolPriv::configDepthAdjustmentEntry("DepthAdjustment");
+
+// --------------------------------------------------------
 
 EmbossTool::EmbossTool(QObject* parent)
           : EditorToolThreaded(parent),

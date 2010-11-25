@@ -63,26 +63,27 @@ class OilPaintTool::OilPaintToolPriv
 public:
 
     OilPaintToolPriv() :
-        configGroupName("oilpaint Tool"),
-        configBrushSizeEntry("BrushSize"),
-        configSmoothAdjustmentEntry("SmoothAdjustment"),
-
         brushSizeInput(0),
         smoothInput(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configBrushSizeEntry;
-    const QString       configSmoothAdjustmentEntry;
+    static const QString configGroupName;
+    static const QString configBrushSizeEntry;
+    static const QString configSmoothAdjustmentEntry;
 
-    RIntNumInput*       brushSizeInput;
-    RIntNumInput*       smoothInput;
+    RIntNumInput*        brushSizeInput;
+    RIntNumInput*        smoothInput;
 
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString OilPaintTool::OilPaintToolPriv::configGroupName("oilpaint Tool");
+const QString OilPaintTool::OilPaintToolPriv::configBrushSizeEntry("BrushSize");
+const QString OilPaintTool::OilPaintToolPriv::configSmoothAdjustmentEntry("SmoothAdjustment");
+
+// --------------------------------------------------------
 
 OilPaintTool::OilPaintTool(QObject* parent)
             : EditorToolThreaded(parent),

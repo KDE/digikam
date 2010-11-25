@@ -65,27 +65,28 @@ class WhiteBalanceTool::WhiteBalanceToolPriv
 public:
 
     WhiteBalanceToolPriv() :
-        configGroupName("whitebalance Tool"),
-        configHistogramChannelEntry("Histogram Chanel"),
-        configHistogramScaleEntry("Histogram Scale"),
-
         destinationPreviewData(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
+    static const QString configGroupName;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    WBSettings*         settingsView;
+    WBSettings*          settingsView;
 
-    ImageRegionWidget*  previewWidget;
+    ImageRegionWidget*   previewWidget;
 
-    EditorToolSettings* gboxSettings;
+    EditorToolSettings*  gboxSettings;
 };
+const QString WhiteBalanceTool::WhiteBalanceToolPriv::configGroupName("whitebalance Tool");
+const QString WhiteBalanceTool::WhiteBalanceToolPriv::configHistogramChannelEntry("Histogram Chanel");
+const QString WhiteBalanceTool::WhiteBalanceToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+// --------------------------------------------------------
 
 WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
                 : EditorToolThreaded(parent), d(new WhiteBalanceToolPriv)

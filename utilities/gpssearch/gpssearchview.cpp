@@ -81,7 +81,6 @@ class GPSSearchView::GPSSearchViewPriv
 public:
 
     GPSSearchViewPriv() :
-        configSplitterStateEntry("SplitterState"),
         saveBtn(0),
         nameEdit(0),
         imageInfoJob(),
@@ -96,7 +95,7 @@ public:
         existsFilterModelBased(false)
     {}
 
-    const QString               configSplitterStateEntry;
+    static const QString        configSplitterStateEntry;
     QToolButton*                saveBtn;
     KLineEdit*                  nameEdit;
     ImageInfoJob                imageInfoJob;
@@ -119,6 +118,7 @@ public:
     bool                        existsFilterDatabaseBased;
     bool                        existsFilterModelBased; 
 };
+const QString GPSSearchView::GPSSearchViewPriv::configSplitterStateEntry("SplitterState");
 
 /**
  * @brief Constructor

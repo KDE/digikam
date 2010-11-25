@@ -62,18 +62,20 @@ class IccProfilesSettingsPriv
 public:
 
     IccProfilesSettingsPriv() :
-        configRecentlyUsedProfilesEntry("Recently Used Profiles"),
         profilesBox(0)
         {
             favoriteProfiles.setMaxCost(10);
         }
 
-    const QString         configRecentlyUsedProfilesEntry;
+    static const QString  configRecentlyUsedProfilesEntry;
 
     QCache<QString, bool> favoriteProfiles;
 
     IccProfilesComboBox*  profilesBox;
 };
+const QString IccProfilesSettingsPriv::configRecentlyUsedProfilesEntry("Recently Used Profiles");
+
+// --------------------------------------------------------
 
 IccProfilesSettings::IccProfilesSettings(QWidget* parent)
                    : KVBox(parent),

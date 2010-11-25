@@ -53,22 +53,6 @@ class SetupToolTip::SetupToolTipPriv
 public:
 
     SetupToolTipPriv() :
-        configGroupName("ImageViewer Settings"),
-        configShowToolTipsEntry("Show ToolTips"),
-        configToolTipsFontEntry("ToolTips Font"),
-        configToolTipsShowFileNameEntry("ToolTips Show File Name"),
-        configToolTipsShowFileDateEntry("ToolTips Show File Date"),
-        configToolTipsShowFileSizeEntry("ToolTips Show File Size"),
-        configToolTipsShowImageTypeEntry("ToolTips Show Image Type"),
-        configToolTipsShowImageDimEntry("ToolTips Show Image Dim"),
-        configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make"),
-        configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date"),
-        configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal"),
-        configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo"),
-        configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode"),
-        configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash"),
-        configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB"),
-
         showFileDateBox(0),
         showFileNameBox(0),
         showFileSizeBox(0),
@@ -87,41 +71,58 @@ public:
         fontSelect(0)
         {}
 
-    const QString configGroupName;
-    const QString configShowToolTipsEntry;
-    const QString configToolTipsFontEntry;
-    const QString configToolTipsShowFileNameEntry;
-    const QString configToolTipsShowFileDateEntry;
-    const QString configToolTipsShowFileSizeEntry;
-    const QString configToolTipsShowImageTypeEntry;
-    const QString configToolTipsShowImageDimEntry;
-    const QString configToolTipsShowPhotoMakeEntry;
-    const QString configToolTipsShowPhotoDateEntry;
-    const QString configToolTipsShowPhotoFocalEntry;
-    const QString configToolTipsShowPhotoExpoEntry;
-    const QString configToolTipsShowPhotoModeEntry;
-    const QString configToolTipsShowPhotoFlashEntry;
-    const QString configToolTipsShowPhotoWBEntry;
+    static const QString configGroupName;
+    static const QString configShowToolTipsEntry;
+    static const QString configToolTipsFontEntry;
+    static const QString configToolTipsShowFileNameEntry;
+    static const QString configToolTipsShowFileDateEntry;
+    static const QString configToolTipsShowFileSizeEntry;
+    static const QString configToolTipsShowImageTypeEntry;
+    static const QString configToolTipsShowImageDimEntry;
+    static const QString configToolTipsShowPhotoMakeEntry;
+    static const QString configToolTipsShowPhotoDateEntry;
+    static const QString configToolTipsShowPhotoFocalEntry;
+    static const QString configToolTipsShowPhotoExpoEntry;
+    static const QString configToolTipsShowPhotoModeEntry;
+    static const QString configToolTipsShowPhotoFlashEntry;
+    static const QString configToolTipsShowPhotoWBEntry;
 
-    QCheckBox*    showFileDateBox;
-    QCheckBox*    showFileNameBox;
-    QCheckBox*    showFileSizeBox;
-    QCheckBox*    showImageDimBox;
-    QCheckBox*    showImageTypeBox;
-    QCheckBox*    showPhotoDateBox;
-    QCheckBox*    showPhotoExpoBox;
-    QCheckBox*    showPhotoFlashBox;
-    QCheckBox*    showPhotoFocalBox;
-    QCheckBox*    showPhotoMakeBox;
-    QCheckBox*    showPhotoModeBox;
-    QCheckBox*    showPhotoWbBox;
-    QCheckBox*    showToolTipsBox;
+    QCheckBox*           showFileDateBox;
+    QCheckBox*           showFileNameBox;
+    QCheckBox*           showFileSizeBox;
+    QCheckBox*           showImageDimBox;
+    QCheckBox*           showImageTypeBox;
+    QCheckBox*           showPhotoDateBox;
+    QCheckBox*           showPhotoExpoBox;
+    QCheckBox*           showPhotoFlashBox;
+    QCheckBox*           showPhotoFocalBox;
+    QCheckBox*           showPhotoMakeBox;
+    QCheckBox*           showPhotoModeBox;
+    QCheckBox*           showPhotoWbBox;
+    QCheckBox*           showToolTipsBox;
 
-    QGroupBox*    fileSettingBox;
-    QGroupBox*    photoSettingBox;
+    QGroupBox*           fileSettingBox;
+    QGroupBox*           photoSettingBox;
 
-    DFontSelect*  fontSelect;
+    DFontSelect*         fontSelect;
 };
+const QString SetupToolTip::SetupToolTipPriv::configGroupName("ImageViewer Settings");
+const QString SetupToolTip::SetupToolTipPriv::configShowToolTipsEntry("Show ToolTips");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsFontEntry("ToolTips Font");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowFileNameEntry("ToolTips Show File Name");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowFileDateEntry("ToolTips Show File Date");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
+const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
+
+// --------------------------------------------------------
 
 SetupToolTip::SetupToolTip(QWidget* parent)
             : QScrollArea(parent), d(new SetupToolTipPriv)

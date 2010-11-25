@@ -63,27 +63,27 @@ class BWSepiaTool::BWSepiaToolPriv
 public:
 
     BWSepiaToolPriv() :
-        configGroupName("convertbw Tool"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
         destinationPreviewData(0),
         bwsepiaSettings(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
+    static const QString configGroupName;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    BWSepiaSettings*    bwsepiaSettings;
+    BWSepiaSettings*     bwsepiaSettings;
 
-    ImageRegionWidget*  previewWidget;
+    ImageRegionWidget*   previewWidget;
 
-    EditorToolSettings* gboxSettings;
+    EditorToolSettings*  gboxSettings;
 };
+const QString BWSepiaTool::BWSepiaToolPriv::configGroupName("convertbw Tool");
+const QString BWSepiaTool::BWSepiaToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString BWSepiaTool::BWSepiaToolPriv::configHistogramScaleEntry("Histogram Scale");
 
 // -----------------------------------------------------------------------------------
 

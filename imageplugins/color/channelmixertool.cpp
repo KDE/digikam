@@ -77,26 +77,28 @@ class ChannelMixerTool::ChannelMixerToolPriv
 public:
 
     ChannelMixerToolPriv() :
-        configGroupName("channelmixer Tool"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
         destinationPreviewData(0),
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
+    static const QString configGroupName;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    MixerSettings*      settingsView;
+    MixerSettings*       settingsView;
 
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString ChannelMixerTool::ChannelMixerToolPriv::configGroupName("channelmixer Tool");
+const QString ChannelMixerTool::ChannelMixerToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString ChannelMixerTool::ChannelMixerToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+// --------------------------------------------------------
 
 ChannelMixerTool::ChannelMixerTool(QObject* parent)
                 : EditorToolThreaded(parent),

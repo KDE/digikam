@@ -60,23 +60,25 @@ class BCGSettingsPriv
 public:
 
     BCGSettingsPriv() :
-        configBrightnessAdjustmentEntry("BrightnessAdjustment"),
-        configContrastAdjustmentEntry("ContrastAdjustment"),
-        configGammaAdjustmentEntry("GammaAdjustment"),
         bInput(0),
         cInput(0),
         gInput(0)
         {}
 
-    const QString    configBrightnessAdjustmentEntry;
-    const QString    configContrastAdjustmentEntry;
-    const QString    configGammaAdjustmentEntry;
+    static const QString configBrightnessAdjustmentEntry;
+    static const QString configContrastAdjustmentEntry;
+    static const QString configGammaAdjustmentEntry;
 
-    RIntNumInput*    bInput;
-    RIntNumInput*    cInput;
+    RIntNumInput*        bInput;
+    RIntNumInput*        cInput;
 
-    RDoubleNumInput* gInput;
+    RDoubleNumInput*     gInput;
 };
+const QString BCGSettingsPriv::configBrightnessAdjustmentEntry("BrightnessAdjustment");
+const QString BCGSettingsPriv::configContrastAdjustmentEntry("ContrastAdjustment");
+const QString BCGSettingsPriv::configGammaAdjustmentEntry("GammaAdjustment");
+
+// --------------------------------------------------------
 
 BCGSettings::BCGSettings(QWidget* parent)
            : QWidget(parent),

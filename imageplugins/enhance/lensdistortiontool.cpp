@@ -68,12 +68,6 @@ class LensDistortionTool::LensDistortionToolPriv
 public:
 
     LensDistortionToolPriv() :
-        configGroupName("lensdistortion Tool"),
-        config2ndOrderDistortionEntry("2nd Order Distortion"),
-        config4thOrderDistortionEntry("4th Order Distortion"),
-        configZoomFactorEntry("Zoom Factor"),
-        configBrightenEntry("Brighten"),
-
         maskPreviewLabel(0),
         mainInput(0),
         edgeInput(0),
@@ -83,11 +77,11 @@ public:
         gboxSettings(0)
         {}
 
-    const QString        configGroupName;
-    const QString        config2ndOrderDistortionEntry;
-    const QString        config4thOrderDistortionEntry;
-    const QString        configZoomFactorEntry;
-    const QString        configBrightenEntry;
+    static const QString configGroupName;
+    static const QString config2ndOrderDistortionEntry;
+    static const QString config4thOrderDistortionEntry;
+    static const QString configZoomFactorEntry;
+    static const QString configBrightenEntry;
 
     QLabel*              maskPreviewLabel;
 
@@ -101,6 +95,13 @@ public:
     ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
+const QString LensDistortionTool::LensDistortionToolPriv::configGroupName("lensdistortion Tool");
+const QString LensDistortionTool::LensDistortionToolPriv::config2ndOrderDistortionEntry("2nd Order Distortion");
+const QString LensDistortionTool::LensDistortionToolPriv::config4thOrderDistortionEntry("4th Order Distortion");
+const QString LensDistortionTool::LensDistortionToolPriv::configZoomFactorEntry("Zoom Factor");
+const QString LensDistortionTool::LensDistortionToolPriv::configBrightenEntry("Brighten");
+
+// --------------------------------------------------------
 
 LensDistortionTool::LensDistortionTool(QObject* parent)
                   : EditorToolThreaded(parent),

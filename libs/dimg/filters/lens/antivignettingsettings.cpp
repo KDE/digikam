@@ -62,14 +62,6 @@ class AntiVignettingSettings::AntiVignettingSettingsPriv
 public:
 
     AntiVignettingSettingsPriv() :
-        configAddVignettingAdjustmentEntry("AddVignettingAdjustment"),
-        configDensityAdjustmentEntry("DensityAdjustment"),
-        configPowerAdjustmentEntry("PowerAdjustment"),
-        configInnerRadiusAdjustmentEntry("InnerRadiusAdjustment"),
-        configOuterRadiusAdjustmentEntry("OuterRadiusAdjustment"),
-        configAddVignettingEntry("AddVignetting"),
-        configXOffsetEntry("XOffset"),
-        configYOffsetEntry("YOffset"),
         addVignettingCheck(0),
         maskPreviewLabel(0),
         densityInput(0),
@@ -80,26 +72,36 @@ public:
         yOffsetInput(0)
         {}
 
-    const QString    configAddVignettingAdjustmentEntry;
-    const QString    configDensityAdjustmentEntry;
-    const QString    configPowerAdjustmentEntry;
-    const QString    configInnerRadiusAdjustmentEntry;
-    const QString    configOuterRadiusAdjustmentEntry;
-    const QString    configAddVignettingEntry;
-    const QString    configXOffsetEntry;
-    const QString    configYOffsetEntry;
+    static const QString  configAddVignettingAdjustmentEntry;
+    static const QString  configDensityAdjustmentEntry;
+    static const QString  configPowerAdjustmentEntry;
+    static const QString  configInnerRadiusAdjustmentEntry;
+    static const QString  configOuterRadiusAdjustmentEntry;
+    static const QString  configAddVignettingEntry;
+    static const QString  configXOffsetEntry;
+    static const QString  configYOffsetEntry;
 
-    QCheckBox*       addVignettingCheck;
+    QCheckBox*            addVignettingCheck;
 
-    QLabel*          maskPreviewLabel;
+    QLabel*               maskPreviewLabel;
 
-    RDoubleNumInput* densityInput;
-    RDoubleNumInput* powerInput;
-    RDoubleNumInput* innerRadiusInput;
-    RDoubleNumInput* outerRadiusInput;
-    RDoubleNumInput* xOffsetInput;
-    RDoubleNumInput* yOffsetInput;
+    RDoubleNumInput*      densityInput;
+    RDoubleNumInput*      powerInput;
+    RDoubleNumInput*      innerRadiusInput;
+    RDoubleNumInput*      outerRadiusInput;
+    RDoubleNumInput*      xOffsetInput;
+    RDoubleNumInput*      yOffsetInput;
 };
+const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configAddVignettingAdjustmentEntry("AddVignettingAdjustment");
+const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configDensityAdjustmentEntry("DensityAdjustment");
+const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configPowerAdjustmentEntry("PowerAdjustment");
+const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configInnerRadiusAdjustmentEntry("InnerRadiusAdjustment");
+const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configOuterRadiusAdjustmentEntry("OuterRadiusAdjustment");
+const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configAddVignettingEntry("AddVignetting");
+const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configXOffsetEntry("XOffset");
+const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configYOffsetEntry("YOffset");
+
+// --------------------------------------------------------
 
 AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
                       : QWidget(parent),

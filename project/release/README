@@ -2,5 +2,9 @@ This is the release script wizard.
 
 You need to install these packages:
 - ruby
-- kdialog
-- svn2cl
+
+You first need to modify the config.ini file and change the version.
+
+To create the tarball you need to do : 
+
+ruby create_tarball.rb --noaccount --application digikam

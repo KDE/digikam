@@ -58,29 +58,30 @@ class AutoCorrectionTool::AutoCorrectionToolPriv
 public:
 
     AutoCorrectionToolPriv() :
-        configGroupName("autocorrection Tool"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
-        configAutoCorrectionFilterEntry("Auto Correction Filter"),
-
         destinationPreviewData(0),
         correctionTools(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
-    const QString       configAutoCorrectionFilterEntry;
+    static const QString configGroupName;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
+    static const QString configAutoCorrectionFilterEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    PreviewList*        correctionTools;
+    PreviewList*         correctionTools;
 
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString AutoCorrectionTool::AutoCorrectionToolPriv::configGroupName("autocorrection Tool");
+const QString AutoCorrectionTool::AutoCorrectionToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString AutoCorrectionTool::AutoCorrectionToolPriv::configHistogramScaleEntry("Histogram Scale");
+const QString AutoCorrectionTool::AutoCorrectionToolPriv::configAutoCorrectionFilterEntry("Auto Correction Filter");
+
+// --------------------------------------------------------
 
 AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                   : EditorToolThreaded(parent),

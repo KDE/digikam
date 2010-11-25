@@ -168,9 +168,13 @@ void TemplateSelector::setTemplate(const Template& t)
 
     QString title = d->metadataTemplate.templateTitle();
     if (title == Template::removeTemplateTitle())
-        return d->templateCombo->setCurrentIndex(REMOVETEMPLATE);
+    {
+        d->templateCombo->setCurrentIndex(REMOVETEMPLATE);
+    }
     else if (title.isEmpty())
-        return d->templateCombo->setCurrentIndex(DONTCHANGE);
+    {
+        d->templateCombo->setCurrentIndex(DONTCHANGE);
+    }
 
     d->templateCombo->setCurrent(title);
 }

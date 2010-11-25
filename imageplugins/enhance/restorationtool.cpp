@@ -63,21 +63,6 @@ class RestorationTool::RestorationToolPriv
 public:
 
     RestorationToolPriv() :
-        configGroupName("restoration Tool"),
-        configPresetEntry("Preset"),
-        configFastApproxEntry("FastApprox"),
-        configInterpolationEntry("Interpolation"),
-        configAmplitudeEntry("Amplitude"),
-        configSharpnessEntry("Sharpness"),
-        configAnisotropyEntry("Anisotropy"),
-        configAlphaEntry("Alpha"),
-        configSigmaEntry("Sigma"),
-        configGaussPrecEntry("GaussPrec"),
-        configDlEntry("Dl"), configDaEntry("Da"),
-        configIterationEntry("Iteration"),
-        configTileEntry("Tile"),
-        configBTileEntry("BTile"),
-
         mainTab(0),
         restorationTypeCB(0),
         settingsWidget(0),
@@ -85,21 +70,21 @@ public:
         gboxSettings(0)
         {}
 
-    const QString           configGroupName;
-    const QString           configPresetEntry;
-    const QString           configFastApproxEntry;
-    const QString           configInterpolationEntry;
-    const QString           configAmplitudeEntry;
-    const QString           configSharpnessEntry;
-    const QString           configAnisotropyEntry;
-    const QString           configAlphaEntry;
-    const QString           configSigmaEntry;
-    const QString           configGaussPrecEntry;
-    const QString           configDlEntry;
-    const QString           configDaEntry;
-    const QString           configIterationEntry;
-    const QString           configTileEntry;
-    const QString           configBTileEntry;
+    static const QString    configGroupName;
+    static const QString    configPresetEntry;
+    static const QString    configFastApproxEntry;
+    static const QString    configInterpolationEntry;
+    static const QString    configAmplitudeEntry;
+    static const QString    configSharpnessEntry;
+    static const QString    configAnisotropyEntry;
+    static const QString    configAlphaEntry;
+    static const QString    configSigmaEntry;
+    static const QString    configGaussPrecEntry;
+    static const QString    configDlEntry;
+    static const QString    configDaEntry;
+    static const QString    configIterationEntry;
+    static const QString    configTileEntry;
+    static const QString    configBTileEntry;
 
     KTabWidget*             mainTab;
 
@@ -109,6 +94,23 @@ public:
     ImageRegionWidget*      previewWidget;
     EditorToolSettings*     gboxSettings;
 };
+const QString RestorationTool::RestorationToolPriv::configGroupName("restoration Tool");
+const QString RestorationTool::RestorationToolPriv::configPresetEntry("Preset");
+const QString RestorationTool::RestorationToolPriv::configFastApproxEntry("FastApprox");
+const QString RestorationTool::RestorationToolPriv::configInterpolationEntry("Interpolation");
+const QString RestorationTool::RestorationToolPriv::configAmplitudeEntry("Amplitude");
+const QString RestorationTool::RestorationToolPriv::configSharpnessEntry("Sharpness");
+const QString RestorationTool::RestorationToolPriv::configAnisotropyEntry("Anisotropy");
+const QString RestorationTool::RestorationToolPriv::configAlphaEntry("Alpha");
+const QString RestorationTool::RestorationToolPriv::configSigmaEntry("Sigma");
+const QString RestorationTool::RestorationToolPriv::configGaussPrecEntry("GaussPrec");
+const QString RestorationTool::RestorationToolPriv::configDlEntry("Dl");
+const QString RestorationTool::RestorationToolPriv::configDaEntry("Da");
+const QString RestorationTool::RestorationToolPriv::configIterationEntry("Iteration");
+const QString RestorationTool::RestorationToolPriv::configTileEntry("Tile");
+const QString RestorationTool::RestorationToolPriv::configBTileEntry("BTile");
+
+// --------------------------------------------------------
 
 RestorationTool::RestorationTool(QObject* parent)
                : EditorToolThreaded(parent),

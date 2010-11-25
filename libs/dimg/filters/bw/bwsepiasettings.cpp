@@ -79,13 +79,6 @@ public:
 public:
 
     BWSepiaSettingsPriv() :
-        configSettingsTabEntry("Settings Tab"),
-        configBWFilterEntry("BW Filter"),
-        configBWFilmEntry("BW Film"),
-        configBWToneEntry("BW Tone"),
-        configContrastAdjustmentEntry("ContrastValueAdjustment"),
-        configStrengthAdjustmentEntry("StrengthAdjustment"),
-        configCurveEntry("BWSepiaCurve"),
         bwFilters(0),
         bwFilm(0),
         bwTone(0),
@@ -95,23 +88,13 @@ public:
         curvesBox(0)
         {}
 
-    const QString              configThresholdAdjustmentEntry;
-    const QString              configSoftnessAdjustmentEntry;
-    const QString              configAdvancedAdjustmentEntry;
-    const QString              configThrLumInputAdjustmentEntry;
-    const QString              configSoftLumInputAdjustmentEntry;
-    const QString              configThrCrInputAdjustmentEntry;
-    const QString              configSoftCrInputAdjustmentEntry;
-    const QString              configThrCbInputAdjustmentEntry;
-    const QString              configSoftCbInputAdjustmentEntry;
-
-    const QString              configSettingsTabEntry;
-    const QString              configBWFilterEntry;
-    const QString              configBWFilmEntry;
-    const QString              configBWToneEntry;
-    const QString              configContrastAdjustmentEntry;
-    const QString              configStrengthAdjustmentEntry;
-    const QString              configCurveEntry;
+    static const QString       configSettingsTabEntry;
+    static const QString       configBWFilterEntry;
+    static const QString       configBWFilmEntry;
+    static const QString       configBWToneEntry;
+    static const QString       configContrastAdjustmentEntry;
+    static const QString       configStrengthAdjustmentEntry;
+    static const QString       configCurveEntry;
 
     PreviewList*               bwFilters;
     PreviewList*               bwFilm;
@@ -126,6 +109,15 @@ public:
 
     DImg                       thumbImage;
 };
+const QString BWSepiaSettings::BWSepiaSettingsPriv::configSettingsTabEntry("Settings Tab");
+const QString BWSepiaSettings::BWSepiaSettingsPriv::configBWFilterEntry("BW Filter");
+const QString BWSepiaSettings::BWSepiaSettingsPriv::configBWFilmEntry("BW Film");
+const QString BWSepiaSettings::BWSepiaSettingsPriv::configBWToneEntry("BW Tone");
+const QString BWSepiaSettings::BWSepiaSettingsPriv::configContrastAdjustmentEntry("ContrastValueAdjustment");
+const QString BWSepiaSettings::BWSepiaSettingsPriv::configStrengthAdjustmentEntry("StrengthAdjustment");
+const QString BWSepiaSettings::BWSepiaSettingsPriv::configCurveEntry("BWSepiaCurve");
+
+// --------------------------------------------------------
 
 BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
                : QWidget(parent),

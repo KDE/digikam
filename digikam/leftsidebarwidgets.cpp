@@ -342,10 +342,6 @@ class TimelineSideBarWidgetPriv
 public:
 
     TimelineSideBarWidgetPriv() :
-        configHistogramTimeUnitEntry("Histogram TimeUnit"),
-        configHistogramScaleEntry("Histogram Scale"),
-        configCursorPositionEntry("Cursor Position"),
-
         scaleBG(0),
         cursorCountLabel(0),
         scrollBar(0),
@@ -362,10 +358,9 @@ public:
         searchModificationHelper(0)
     {}
 
-
-    const QString             configHistogramTimeUnitEntry;
-    const QString             configHistogramScaleEntry;
-    const QString             configCursorPositionEntry;
+    static const QString      configHistogramTimeUnitEntry;
+    static const QString      configHistogramScaleEntry;
+    static const QString      configCursorPositionEntry;
 
     QButtonGroup*             scaleBG;
     QLabel*                   cursorCountLabel;
@@ -386,6 +381,11 @@ public:
 
     SearchModificationHelper* searchModificationHelper;
 };
+const QString TimelineSideBarWidgetPriv::configHistogramTimeUnitEntry("Histogram TimeUnit");
+const QString TimelineSideBarWidgetPriv::configHistogramScaleEntry("Histogram Scale");
+const QString TimelineSideBarWidgetPriv::configCursorPositionEntry("Cursor Position");
+
+// --------------------------------------------------------
 
 TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searchModel,
                                              SearchModificationHelper* searchModificationHelper)

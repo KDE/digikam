@@ -154,7 +154,7 @@ void SearchWindow::searchTryout()
 void SearchWindow::keyPressEvent(QKeyEvent *e)
 {
     // Implement keys like in a dialog
-    if (!e->modifiers() || (e->modifiers() & Qt::KeypadModifier && e->key() == Qt::Key_Enter))
+    if (!e->modifiers() || ((e->modifiers() & Qt::KeypadModifier) && e->key() == Qt::Key_Enter))
     {
         switch(e->key())
         {

@@ -64,10 +64,6 @@ class PerspectiveTool::PerspectiveToolPriv
 public:
 
     PerspectiveToolPriv() :
-        configGroupName("perspective Tool"),
-        configDrawWhileMovingEntry("Draw While Moving"),
-        configDrawGridEntry("Draw Grid"),
-        configInverseTransformationEntry("Inverse Transformation"),
         newWidthLabel(0),
         newHeightLabel(0),
         topLeftAngleLabel(0),
@@ -81,25 +77,31 @@ public:
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configDrawWhileMovingEntry;
-    const QString       configDrawGridEntry;
-    const QString       configInverseTransformationEntry;
+    static const QString configGroupName;
+    static const QString configDrawWhileMovingEntry;
+    static const QString configDrawGridEntry;
+    static const QString configInverseTransformationEntry;
 
-    QLabel*             newWidthLabel;
-    QLabel*             newHeightLabel;
-    QLabel*             topLeftAngleLabel;
-    QLabel*             topRightAngleLabel;
-    QLabel*             bottomLeftAngleLabel;
-    QLabel*             bottomRightAngleLabel;
+    QLabel*              newWidthLabel;
+    QLabel*              newHeightLabel;
+    QLabel*              topLeftAngleLabel;
+    QLabel*              topRightAngleLabel;
+    QLabel*              bottomLeftAngleLabel;
+    QLabel*              bottomRightAngleLabel;
 
-    QCheckBox*          drawWhileMovingCheckBox;
-    QCheckBox*          drawGridCheckBox;
-    QCheckBox*          inverseTransformation;
+    QCheckBox*           drawWhileMovingCheckBox;
+    QCheckBox*           drawGridCheckBox;
+    QCheckBox*           inverseTransformation;
 
-    PerspectiveWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    PerspectiveWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString PerspectiveTool::PerspectiveToolPriv::configGroupName("perspective Tool");
+const QString PerspectiveTool::PerspectiveToolPriv::configDrawWhileMovingEntry("Draw While Moving");
+const QString PerspectiveTool::PerspectiveToolPriv::configDrawGridEntry("Draw Grid");
+const QString PerspectiveTool::PerspectiveToolPriv::configInverseTransformationEntry("Inverse Transformation");
+
+// --------------------------------------------------------
 
 PerspectiveTool::PerspectiveTool(QObject* parent)
                : EditorTool(parent),

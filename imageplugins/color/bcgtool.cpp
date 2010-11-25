@@ -65,26 +65,27 @@ class BCGTool::BCGToolPriv
 public:
 
     BCGToolPriv() :
-        configGroupName("bcgadjust Tool"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
-
         destinationPreviewData(0),
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
+    static const QString configGroupName;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    BCGSettings*        settingsView;
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    BCGSettings*         settingsView;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString BCGTool::BCGToolPriv::configGroupName("bcgadjust Tool");
+const QString BCGTool::BCGToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString BCGTool::BCGToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+// --------------------------------------------------------
 
 BCGTool::BCGTool(QObject* parent)
        : EditorToolThreaded(parent),

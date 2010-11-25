@@ -70,28 +70,29 @@ class SuperImposeTool::SuperImposeToolPriv
 public:
 
     SuperImposeToolPriv() :
-        configGroupName("superimpose Tool"),
-        configTemplatesRootURLEntry("Templates Root URL"),
-        configTemplatesURLEntry("Templates URL"),
-
         thumbnailsBar(0),
         gboxSettings(0),
         previewWidget(0),
         dirSelect(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configTemplatesRootURLEntry;
-    const QString       configTemplatesURLEntry;
+    static const QString configGroupName;
+    static const QString configTemplatesRootURLEntry;
+    static const QString configTemplatesURLEntry;
 
-    KUrl                templatesUrl;
-    KUrl                templatesRootUrl;
+    KUrl                 templatesUrl;
+    KUrl                 templatesRootUrl;
 
-    ThumbBarView*       thumbnailsBar;
-    EditorToolSettings* gboxSettings;
-    SuperImposeWidget*  previewWidget;
-    DirSelectWidget*    dirSelect;
+    ThumbBarView*        thumbnailsBar;
+    EditorToolSettings*  gboxSettings;
+    SuperImposeWidget*   previewWidget;
+    DirSelectWidget*     dirSelect;
 };
+const QString SuperImposeTool::SuperImposeToolPriv::configGroupName("superimpose Tool");
+const QString SuperImposeTool::SuperImposeToolPriv::configTemplatesRootURLEntry("Templates Root URL");
+const QString SuperImposeTool::SuperImposeToolPriv::configTemplatesURLEntry("Templates URL");
+
+// --------------------------------------------------------
 
 SuperImposeTool::SuperImposeTool(QObject* parent)
                : EditorTool(parent),

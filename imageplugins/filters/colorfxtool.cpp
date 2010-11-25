@@ -81,13 +81,6 @@ class ColorFxTool::ColorFxToolPriv
 public:
 
     ColorFxToolPriv() :
-        configGroupName("coloreffect Tool"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
-        configEffectTypeEntry("EffectType"),
-        configLevelAdjustmentEntry("LevelAdjustment"),
-        configIterationAdjustmentEntry("IterationAdjustment"),
-
         destinationPreviewData(0),
         effectTypeLabel(0),
         levelLabel(0),
@@ -99,27 +92,35 @@ public:
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
-    const QString       configEffectTypeEntry;
-    const QString       configLevelAdjustmentEntry;
-    const QString       configIterationAdjustmentEntry;
+    static const QString configGroupName;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
+    static const QString configEffectTypeEntry;
+    static const QString configLevelAdjustmentEntry;
+    static const QString configIterationAdjustmentEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    QLabel*             effectTypeLabel;
-    QLabel*             levelLabel;
-    QLabel*             iterationLabel;
+    QLabel*              effectTypeLabel;
+    QLabel*              levelLabel;
+    QLabel*              iterationLabel;
 
-    RComboBox*          effectType;
+    RComboBox*           effectType;
 
-    RIntNumInput*       levelInput;
-    RIntNumInput*       iterationInput;
+    RIntNumInput*        levelInput;
+    RIntNumInput*        iterationInput;
 
-    ImageGuideWidget*   previewWidget;
-    EditorToolSettings* gboxSettings;
+    ImageGuideWidget*    previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString ColorFxTool::ColorFxToolPriv::configGroupName("coloreffect Tool");
+const QString ColorFxTool::ColorFxToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString ColorFxTool::ColorFxToolPriv::configHistogramScaleEntry("Histogram Scale");
+const QString ColorFxTool::ColorFxToolPriv::configEffectTypeEntry("EffectType");
+const QString ColorFxTool::ColorFxToolPriv::configLevelAdjustmentEntry("LevelAdjustment");
+const QString ColorFxTool::ColorFxToolPriv::configIterationAdjustmentEntry("IterationAdjustment");
+
+// --------------------------------------------------------
 
 ColorFxTool::ColorFxTool(QObject* parent)
            : EditorToolThreaded(parent),

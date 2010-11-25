@@ -64,11 +64,6 @@ class BlurFXTool::BlurFXToolPriv
 public:
 
     BlurFXToolPriv() :
-        configGroupName("blurfx Tool"),
-        configEffectTypeEntry("EffectType"),
-        configDistanceAdjustmentEntry("DistanceAdjustment"),
-        configLevelAdjustmentEntry("LevelAdjustment"),
-
         effectTypeLabel(0),
         distanceLabel(0),
         levelLabel(0),
@@ -80,24 +75,30 @@ public:
         {}
 
 
-    const QString       configGroupName;
-    const QString       configEffectTypeEntry;
-    const QString       configDistanceAdjustmentEntry;
-    const QString       configLevelAdjustmentEntry;
+    static const QString configGroupName;
+    static const QString configEffectTypeEntry;
+    static const QString configDistanceAdjustmentEntry;
+    static const QString configLevelAdjustmentEntry;
 
-    QLabel*             effectTypeLabel;
-    QLabel*             distanceLabel;
-    QLabel*             levelLabel;
+    QLabel*              effectTypeLabel;
+    QLabel*              distanceLabel;
+    QLabel*              levelLabel;
 
-    RComboBox*          effectType;
+    RComboBox*           effectType;
 
-    RIntNumInput*       distanceInput;
-    RIntNumInput*       levelInput;
+    RIntNumInput*        distanceInput;
+    RIntNumInput*        levelInput;
 
-    ImageRegionWidget*  previewWidget;
+    ImageRegionWidget*   previewWidget;
 
-    EditorToolSettings* gboxSettings;
+    EditorToolSettings*  gboxSettings;
 };
+const QString BlurFXTool::BlurFXToolPriv::configGroupName("blurfx Tool");
+const QString BlurFXTool::BlurFXToolPriv::configEffectTypeEntry("EffectType");
+const QString BlurFXTool::BlurFXToolPriv::configDistanceAdjustmentEntry("DistanceAdjustment");
+const QString BlurFXTool::BlurFXToolPriv::configLevelAdjustmentEntry("LevelAdjustment");
+
+// --------------------------------------------------------
 
 BlurFXTool::BlurFXTool(QObject* parent)
           : EditorToolThreaded(parent),

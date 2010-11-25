@@ -78,22 +78,6 @@ class InPaintingTool::InPaintingToolPriv
 public:
 
     InPaintingToolPriv() :
-        configGroupName("inpainting Tool"),
-        configFastApproxEntry("FastApprox"),
-        configInterpolationEntry("Interpolation"),
-        configAmplitudeEntry("Amplitude"),
-        configSharpnessEntry("Sharpness"),
-        configAnisotropyEntry("Anisotropy"),
-        configAlphaEntry("Alpha"),
-        configSigmaEntry("Sigma"),
-        configGaussPrecEntry("GaussPrec"),
-        configDlEntry("Dl"),
-        configDaEntry("Da"),
-        configIterationEntry("Iteration"),
-        configTileEntry("Tile"),
-        configBTileEntry("BTile"),
-        configPresetEntry("Preset"),
-
         isComputed(false),
         mainTab(0),
         inpaintingTypeCB(0),
@@ -102,21 +86,21 @@ public:
         gboxSettings(0)
         {}
 
-    const QString           configGroupName;
-    const QString           configFastApproxEntry;
-    const QString           configInterpolationEntry;
-    const QString           configAmplitudeEntry;
-    const QString           configSharpnessEntry;
-    const QString           configAnisotropyEntry;
-    const QString           configAlphaEntry;
-    const QString           configSigmaEntry;
-    const QString           configGaussPrecEntry;
-    const QString           configDlEntry;
-    const QString           configDaEntry;
-    const QString           configIterationEntry;
-    const QString           configTileEntry;
-    const QString           configBTileEntry;
-    const QString           configPresetEntry;
+    static const QString    configGroupName;
+    static const QString    configFastApproxEntry;
+    static const QString    configInterpolationEntry;
+    static const QString    configAmplitudeEntry;
+    static const QString    configSharpnessEntry;
+    static const QString    configAnisotropyEntry;
+    static const QString    configAlphaEntry;
+    static const QString    configSigmaEntry;
+    static const QString    configGaussPrecEntry;
+    static const QString    configDlEntry;
+    static const QString    configDaEntry;
+    static const QString    configIterationEntry;
+    static const QString    configTileEntry;
+    static const QString    configBTileEntry;
+    static const QString    configPresetEntry;
 
     bool                    isComputed;
 
@@ -137,6 +121,23 @@ public:
 
     EditorToolSettings*     gboxSettings;
 };
+const QString InPaintingTool::InPaintingToolPriv::configGroupName("inpainting Tool");
+const QString InPaintingTool::InPaintingToolPriv::configFastApproxEntry("FastApprox");
+const QString InPaintingTool::InPaintingToolPriv::configInterpolationEntry("Interpolation");
+const QString InPaintingTool::InPaintingToolPriv::configAmplitudeEntry("Amplitude");
+const QString InPaintingTool::InPaintingToolPriv::configSharpnessEntry("Sharpness");
+const QString InPaintingTool::InPaintingToolPriv::configAnisotropyEntry("Anisotropy");
+const QString InPaintingTool::InPaintingToolPriv::configAlphaEntry("Alpha");
+const QString InPaintingTool::InPaintingToolPriv::configSigmaEntry("Sigma");
+const QString InPaintingTool::InPaintingToolPriv::configGaussPrecEntry("GaussPrec");
+const QString InPaintingTool::InPaintingToolPriv::configDlEntry("Dl");
+const QString InPaintingTool::InPaintingToolPriv::configDaEntry("Da");
+const QString InPaintingTool::InPaintingToolPriv::configIterationEntry("Iteration");
+const QString InPaintingTool::InPaintingToolPriv::configTileEntry("Tile");
+const QString InPaintingTool::InPaintingToolPriv::configBTileEntry("BTile");
+const QString InPaintingTool::InPaintingToolPriv::configPresetEntry("Preset");
+
+// --------------------------------------------------------
 
 InPaintingTool::InPaintingTool(QObject* parent)
               : EditorToolThreaded(parent),

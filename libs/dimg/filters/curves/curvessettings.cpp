@@ -76,16 +76,17 @@ public:
 
     CurvesSettingsPriv() :
         histoSegments(0),
-        configCurveEntry("AdjustCurves"),
         curvesBox(0)
         {}
 
-    int           histoSegments;
+    static const QString configCurveEntry;
 
-    const QString configCurveEntry;
-
-    CurvesBox*    curvesBox;
+    int                  histoSegments;
+    CurvesBox*           curvesBox;
 };
+const QString CurvesSettings::CurvesSettingsPriv::configCurveEntry("AdjustCurves");
+
+// --------------------------------------------------------
 
 CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
               : QWidget(parent),

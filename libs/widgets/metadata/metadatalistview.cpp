@@ -71,7 +71,7 @@ MetadataListView::~MetadataListView()
 
 QString MetadataListView::getCurrentItemKey()
 {
-    if (currentItem() && currentItem()->flags() & Qt::ItemIsSelectable)
+    if (currentItem() && (currentItem()->flags() & Qt::ItemIsSelectable))
     {
         MetadataListViewItem* item = static_cast<MetadataListViewItem*>(currentItem());
         return item->getKey();
@@ -90,7 +90,7 @@ void MetadataListView::setCurrentItemByKey(const QString& itemKey)
     do
     {
         item = topLevelItem(i);
-        if (item && item->flags() & Qt::ItemIsSelectable)
+        if (item && (item->flags() & Qt::ItemIsSelectable))
         {
             MetadataListViewItem* lvItem = dynamic_cast<MetadataListViewItem*>(item);
             if (lvItem)

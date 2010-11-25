@@ -56,6 +56,15 @@ DRawDecoding::DRawDecoding(const RawDecodingSettings& prm)
     autoBrightness          = prm.autoBrightness;
     fixColorsHighlights     = prm.fixColorsHighlights;
 
+#if KDCRAW_VERSION>=0x010300
+    dcbIterations           = prm.dcbIterations;
+    dcbEnhanceFl            = prm.dcbEnhanceFl;
+    fbddNR                  = prm.fbddNR;
+    eeciRefine              = prm.eeciRefine;
+    esMedPasses             = prm.esMedPasses;
+    amazeCARefine           = prm.amazeCARefine;
+#endif
+
     resetPostProcessingSettings();
 }
 

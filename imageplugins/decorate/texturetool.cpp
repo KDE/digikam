@@ -64,25 +64,26 @@ class TextureTool::TextureToolPriv
 public:
 
     TextureToolPriv():
-        configGroupName("texture Tool"),
-        configTextureTypeEntry("TextureType"),
-        configBlendGainEntry("BlendGain"),
-
         textureType(0),
         blendGain(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configTextureTypeEntry;
-    const QString       configBlendGainEntry;
+    static const QString configGroupName;
+    static const QString configTextureTypeEntry;
+    static const QString configBlendGainEntry;
 
-    RComboBox*          textureType;
-    RIntNumInput*       blendGain;
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    RComboBox*           textureType;
+    RIntNumInput*        blendGain;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString TextureTool::TextureToolPriv::configGroupName("texture Tool");
+const QString TextureTool::TextureToolPriv::configTextureTypeEntry("TextureType");
+const QString TextureTool::TextureToolPriv::configBlendGainEntry("BlendGain");
+
+// --------------------------------------------------------
 
 TextureTool::TextureTool(QObject* parent)
            : EditorToolThreaded(parent),

@@ -57,7 +57,7 @@ cases are rare). Having long lines greatly reduces readability of code
 * Bracketing
 -------------------------------------------------------------------------
 
-In almost all cases, {} brackets should start on a newline and should be
+In all cases, {} brackets should start on a newline and should be
 aligned with previous line (follow the indentation spaces). for eg.
 
 class A
@@ -177,6 +177,48 @@ class A
 {
 ....QFileInfo* m_fileInfo;
 
+
+========================================================================
+Automatic source code formatting
+========================================================================
+
+The above coding style guidelines can be automatically applied with
+astyle (http://astyle.sourceforge.net/).
+
+Run it in the directory where the files are located that should be formatted
+with the following command:
+
+astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
+       --break-blocks --break-closing-brackets --pad-header                \
+       --align-pointer=type --indent-col1-comments --add-brackets          \
+       --min-conditional-indent=0                                          \
+       `find -type f -name '*.cpp'` `find -type f -name '*.cc'` `find -type f -name '*.h'`
+
+========================================================================
+
+To handle the command easier, create a bash function in ~/.bashrc, e.g.
+
+digikamformatcode()
+{
+    astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches  \
+        --break-blocks --break-closing-brackets --pad-header \
+        --align-pointer=type --indent-col1-comments --add-brackets \
+        --min-conditional-indent=0 \
+        `find $1 -type f -name '*.cpp'` `find $1 -type f -name '*.cc'` `find $1 -type f -name '*.h'`
+}
+
+You can pass a parameter to the function, in this case the first parameter is the directory, where
+files should be formatted.
+
+Examples:
+
+1. Run astyle in the current directory
+$> digikamformatcode
+
+2. Run astyle in a different directory
+$> digikamformatcode /home/user/code/svn/digikam/
+
+
 ========================================================================
 General recommendations
 ========================================================================
@@ -287,7 +329,7 @@ To see kdebug messages during testing you need to setup kdebug once again for a
 special testing environment used while running the unit tests. This can be done
 via
 
-KDEHOME=$HOME/.kde-unit-test kdebugdialog 
+KDEHOME=$HOME/.kde-unit-test kdebugdialog
 
 =========================================================================
 Checking for corrupt Qt signal slot connection

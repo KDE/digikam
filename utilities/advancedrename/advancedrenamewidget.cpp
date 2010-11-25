@@ -65,8 +65,6 @@ class AdvancedRenameWidget::AdvancedRenameWidgetPriv
 public:
 
     AdvancedRenameWidgetPriv() :
-        configGroupName("AdvancedRename Widget"),
-        configExpandedStateEntry("Options are expanded"),
         configExpandedStateDefault(true),
         tooltipToggleButton(0),
         modifiersToolButton(0),
@@ -81,8 +79,9 @@ public:
         layoutStyle(AdvancedRenameWidget::LayoutNormal)
     {}
 
-    const QString        configGroupName;
-    const QString        configExpandedStateEntry;
+    static const QString configGroupName;
+    static const QString configExpandedStateEntry;
+
     bool                 configExpandedStateDefault;
 
     QToolButton*         tooltipToggleButton;
@@ -101,6 +100,10 @@ public:
     CWMask               controlWidgetsMask;
     LStyle               layoutStyle;
 };
+const QString AdvancedRenameWidget::AdvancedRenameWidgetPriv::configGroupName("AdvancedRename Widget");
+const QString AdvancedRenameWidget::AdvancedRenameWidgetPriv::configExpandedStateEntry("Options are expanded");
+
+// --------------------------------------------------------
 
 AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
                     : QWidget(parent), d(new AdvancedRenameWidgetPriv)

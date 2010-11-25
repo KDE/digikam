@@ -143,9 +143,6 @@ class AdvancedRenameDialog::AdvancedRenameDialogPriv
 public:
 
     AdvancedRenameDialogPriv() :
-        configGroupName("AdvancedRename Dialog"),
-        configLastUsedRenamePatternEntry("Last Used Rename Pattern"),
-        configDialogSizeEntry("Dialog Size"),
         singleFileMode(false),
         minSizeDialog(450),
         listView(0),
@@ -153,9 +150,9 @@ public:
         advancedRenameWidget(0)
     {}
 
-    const QString          configGroupName;
-    const QString          configLastUsedRenamePatternEntry;
-    const QString          configDialogSizeEntry;
+    static const QString   configGroupName;
+    static const QString   configLastUsedRenamePatternEntry;
+    static const QString   configDialogSizeEntry;
 
     QString                singleFileModeOldFilename;
 
@@ -167,6 +164,11 @@ public:
     AdvancedRenameWidget*  advancedRenameWidget;
     NewNamesList           newNamesList;
 };
+const QString AdvancedRenameDialog::AdvancedRenameDialogPriv::configGroupName("AdvancedRename Dialog");
+const QString AdvancedRenameDialog::AdvancedRenameDialogPriv::configLastUsedRenamePatternEntry("Last Used Rename Pattern");
+const QString AdvancedRenameDialog::AdvancedRenameDialogPriv::configDialogSizeEntry("Dialog Size");
+
+// --------------------------------------------------------
 
 AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
                     : KDialog(parent), d(new AdvancedRenameDialogPriv)

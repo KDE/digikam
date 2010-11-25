@@ -52,18 +52,7 @@ class SetupIOFilesPriv
 {
 public:
 
-
     SetupIOFilesPriv() :
-        configGroupName("ImageViewer Settings"),
-        configJPEGCompressionEntry("JPEGCompression"),
-        configJPEGSubSamplingEntry("JPEGSubSampling"),
-        configPNGCompressionEntry("PNGCompression"),
-        configTIFFCompressionEntry("TIFFCompression"),
-        configJPEG2000CompressionEntry("JPEG2000Compression"),
-        configJPEG2000LossLessEntry("JPEG2000LossLess"),
-        configPGFCompressionEntry("PGFCompression"),
-        configPGFLossLessEntry("PGFLossLess"),
-
         JPEGOptions(0),
         PNGOptions(0),
         TIFFOptions(0),
@@ -72,20 +61,19 @@ public:
 
 #ifdef _WIN32
         ,
-        configShowImageSettingsDialog("ShowImageSettingsDialog"),
         showImageSettingsDialog(0)
 #endif
     {}
 
-    const QString configGroupName; 
-    const QString configJPEGCompressionEntry;
-    const QString configJPEGSubSamplingEntry;
-    const QString configPNGCompressionEntry;
-    const QString configTIFFCompressionEntry;
-    const QString configJPEG2000CompressionEntry;
-    const QString configJPEG2000LossLessEntry;
-    const QString configPGFCompressionEntry;
-    const QString configPGFLossLessEntry;
+    static const QString configGroupName;
+    static const QString configJPEGCompressionEntry;
+    static const QString configJPEGSubSamplingEntry;
+    static const QString configPNGCompressionEntry;
+    static const QString configTIFFCompressionEntry;
+    static const QString configJPEG2000CompressionEntry;
+    static const QString configJPEG2000LossLessEntry;
+    static const QString configPGFCompressionEntry;
+    static const QString configPGFLossLessEntry;
 
     JPEGSettings* JPEGOptions;
     PNGSettings*  PNGOptions;
@@ -94,10 +82,24 @@ public:
     PGFSettings*  PGFOptions;
 
 #ifdef _WIN32
-    const QString configShowImageSettingsDialog;
-    QCheckBox*    showImageSettingsDialog;
+    static const QString configShowImageSettingsDialog;
+    QCheckBox*           showImageSettingsDialog;
 #endif
 };
+const QString SetupIOFilesPriv::configGroupName("ImageViewer Settings");
+const QString SetupIOFilesPriv::configJPEGCompressionEntry("JPEGCompression");
+const QString SetupIOFilesPriv::configJPEGSubSamplingEntry("JPEGSubSampling");
+const QString SetupIOFilesPriv::configPNGCompressionEntry("PNGCompression");
+const QString SetupIOFilesPriv::configTIFFCompressionEntry("TIFFCompression");
+const QString SetupIOFilesPriv::configJPEG2000CompressionEntry("JPEG2000Compression");
+const QString SetupIOFilesPriv::configJPEG2000LossLessEntry("JPEG2000LossLess");
+const QString SetupIOFilesPriv::configPGFCompressionEntry("PGFCompression");
+const QString SetupIOFilesPriv::configPGFLossLessEntry("PGFLossLess");
+#ifdef _WIN32
+const QString SetupIOFilesPriv::configShowImageSettingsDialog("ShowImageSettingsDialog");
+#endif
+
+// --------------------------------------------------------
 
 SetupIOFiles::SetupIOFiles(QWidget* parent )
             : QScrollArea(parent), d(new SetupIOFilesPriv)

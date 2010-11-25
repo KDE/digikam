@@ -60,12 +60,6 @@ class NRSettings::NRSettingsPriv
 public:
 
     NRSettingsPriv() :
-        configThrLumInputAdjustmentEntry("ThrLumAdjustment"),
-        configSoftLumInputAdjustmentEntry("SoftLumAdjustment"),
-        configThrCrInputAdjustmentEntry("ThrCrAdjustment"),
-        configSoftCrInputAdjustmentEntry("SoftCrAdjustment"),
-        configThrCbInputAdjustmentEntry("ThrCbAdjustment"),
-        configSoftCbInputAdjustmentEntry("SoftCbAdjustment"),
         luminanceBox(0),
         chrominanceRedBox(0),
         chrominanceBlueBox(0),
@@ -78,26 +72,34 @@ public:
         softCbInput(0)
         {}
 
-    const QString    configThrLumInputAdjustmentEntry;
-    const QString    configSoftLumInputAdjustmentEntry;
-    const QString    configThrCrInputAdjustmentEntry;
-    const QString    configSoftCrInputAdjustmentEntry;
-    const QString    configThrCbInputAdjustmentEntry;
-    const QString    configSoftCbInputAdjustmentEntry;
+    static const QString configThrLumInputAdjustmentEntry;
+    static const QString configSoftLumInputAdjustmentEntry;
+    static const QString configThrCrInputAdjustmentEntry;
+    static const QString configSoftCrInputAdjustmentEntry;
+    static const QString configThrCbInputAdjustmentEntry;
+    static const QString configSoftCbInputAdjustmentEntry;
 
-    QWidget*         luminanceBox;
-    QWidget*         chrominanceRedBox;
-    QWidget*         chrominanceBlueBox;
+    QWidget*             luminanceBox;
+    QWidget*             chrominanceRedBox;
+    QWidget*             chrominanceBlueBox;
 
-    RExpanderBox*    advExpanderBox;
+    RExpanderBox*        advExpanderBox;
 
-    RDoubleNumInput* thrLumInput;
-    RDoubleNumInput* softLumInput;
-    RDoubleNumInput* thrCrInput;
-    RDoubleNumInput* softCrInput;
-    RDoubleNumInput* thrCbInput;
-    RDoubleNumInput* softCbInput;
+    RDoubleNumInput*     thrLumInput;
+    RDoubleNumInput*     softLumInput;
+    RDoubleNumInput*     thrCrInput;
+    RDoubleNumInput*     softCrInput;
+    RDoubleNumInput*     thrCbInput;
+    RDoubleNumInput*     softCbInput;
 };
+const QString NRSettings::NRSettingsPriv::configThrLumInputAdjustmentEntry("ThrLumAdjustment");
+const QString NRSettings::NRSettingsPriv::configSoftLumInputAdjustmentEntry("SoftLumAdjustment");
+const QString NRSettings::NRSettingsPriv::configThrCrInputAdjustmentEntry("ThrCrAdjustment");
+const QString NRSettings::NRSettingsPriv::configSoftCrInputAdjustmentEntry("SoftCrAdjustment");
+const QString NRSettings::NRSettingsPriv::configThrCbInputAdjustmentEntry("ThrCbAdjustment");
+const QString NRSettings::NRSettingsPriv::configSoftCbInputAdjustmentEntry("SoftCbAdjustment");
+
+// --------------------------------------------------------
 
 NRSettings::NRSettings(QWidget* parent)
           : QWidget(parent),

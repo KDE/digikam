@@ -1334,7 +1334,7 @@ QVariantList AlbumDB::getImagesFields(qlonglong imageID, DatabaseFields::Images 
         d->db->execSql(query, imageID, &values);
 
         // Convert date times to QDateTime, they come as QString
-        if (fields & DatabaseFields::ModificationDate && !values.isEmpty())
+        if ((fields & DatabaseFields::ModificationDate) && !values.isEmpty())
         {
             int index = fieldNames.indexOf("modificationDate");
             values[index] = (values[index].isNull() ? QDateTime()
@@ -1357,13 +1357,13 @@ QVariantList AlbumDB::getImageInformation(qlonglong imageID, DatabaseFields::Ima
         d->db->execSql(query, imageID, &values);
 
         // Convert date times to QDateTime, they come as QString
-        if (fields & DatabaseFields::CreationDate && !values.isEmpty())
+        if ((fields & DatabaseFields::CreationDate) && !values.isEmpty())
         {
             int index = fieldNames.indexOf("creationDate");
             values[index] = (values[index].isNull() ? QDateTime()
                               : QDateTime::fromString(values[index].toString(), Qt::ISODate));
         }
-        if (fields & DatabaseFields::DigitizationDate && !values.isEmpty())
+        if ((fields & DatabaseFields::DigitizationDate) && !values.isEmpty())
         {
             int index = fieldNames.indexOf("digitizationDate");
             values[index] = (values[index].isNull() ? QDateTime()
@@ -1387,11 +1387,11 @@ QVariantList AlbumDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageM
 
         // For some reason REAL values may come as QString QVariants. Convert here.
         if (values.size() == fieldNames.size() &&
-            (fields & DatabaseFields::Aperture ||
-             fields & DatabaseFields::FocalLength ||
-             fields & DatabaseFields::FocalLength35 ||
-             fields & DatabaseFields::ExposureTime ||
-             fields & DatabaseFields::SubjectDistance)
+            ((fields & DatabaseFields::Aperture) ||
+             (fields & DatabaseFields::FocalLength) ||
+             (fields & DatabaseFields::FocalLength35) ||
+             (fields & DatabaseFields::ExposureTime) ||
+             (fields & DatabaseFields::SubjectDistance))
            )
         {
             for (int i=0; i<values.size(); ++i)
@@ -1424,13 +1424,13 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
 
         // For some reason REAL values may come as QString QVariants. Convert here.
         if (values.size() == fieldNames.size() &&
-            (fields & DatabaseFields::LatitudeNumber ||
-             fields & DatabaseFields::LongitudeNumber ||
-             fields & DatabaseFields::Altitude ||
-             fields & DatabaseFields::PositionOrientation ||
-             fields & DatabaseFields::PositionTilt ||
-             fields & DatabaseFields::PositionRoll ||
-             fields & DatabaseFields::PositionAccuracy)
+            ((fields & DatabaseFields::LatitudeNumber) ||
+             (fields & DatabaseFields::LongitudeNumber) ||
+             (fields & DatabaseFields::Altitude) ||
+             (fields & DatabaseFields::PositionOrientation) ||
+             (fields & DatabaseFields::PositionTilt) ||
+             (fields & DatabaseFields::PositionRoll) ||
+             (fields & DatabaseFields::PositionAccuracy))
            )
         {
             for (int i=0; i<values.size(); ++i)
@@ -1517,7 +1517,7 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList& infos, 
     QVariantList boundValues;
     boundValues << imageID;
     // Take care for datetime values
-    if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
+    if ((fields & DatabaseFields::CreationDate) || (fields & DatabaseFields::DigitizationDate))
     {
         foreach (const QVariant& value, infos)
         {

@@ -145,8 +145,6 @@ class ImageWindowPriv
 public:
 
     ImageWindowPriv() :
-        configShowThumbbarEntry("Show Thumbbar"),
-        configHorizontalThumbbarEntry("HorizontalThumbbar"),
         allowSaving(true),
         toMainWindowAction(0),
         star0(0),
@@ -165,8 +163,8 @@ public:
     {
     }
 
-    QString                   configShowThumbbarEntry;
-    QString                   configHorizontalThumbbarEntry;
+    static const QString      configShowThumbbarEntry;
+    static const QString      configHorizontalThumbbarEntry;
 
     // If image editor is launched by camera interface, current
     // image cannot be saved.
@@ -202,6 +200,8 @@ public:
 
     DatabaseVersionManager    versionManager;
 };
+const QString ImageWindowPriv::configShowThumbbarEntry("Show Thumbbar");
+const QString ImageWindowPriv::configHorizontalThumbbarEntry("HorizontalThumbbar");
 
 ImageWindow* ImageWindow::m_instance = 0;
 

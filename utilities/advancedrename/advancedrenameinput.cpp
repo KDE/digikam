@@ -273,16 +273,14 @@ class AdvancedRenameInput::AdvancedRenameInputPriv
 public:
 
     AdvancedRenameInputPriv() :
-        configGroupName("AdvancedRename Input"),
-        configPatternHistoryListEntry("Pattern History List"),
         maxVisibleItems(10),
         maxHistoryItems(30),
         lineEdit(0),
         highlighter(0)
     {}
 
-    const QString           configGroupName;
-    const QString           configPatternHistoryListEntry;
+    static const QString    configGroupName;
+    static const QString    configPatternHistoryListEntry;
 
     const int               maxVisibleItems;
     const int               maxHistoryItems;
@@ -292,6 +290,8 @@ public:
     AdvancedRenameLineEdit* lineEdit;
     Highlighter*            highlighter;
 };
+const QString AdvancedRenameInput::AdvancedRenameInputPriv::configGroupName("AdvancedRename Input");
+const QString AdvancedRenameInput::AdvancedRenameInputPriv::configPatternHistoryListEntry("Pattern History List");
 
 // --------------------------------------------------------
 

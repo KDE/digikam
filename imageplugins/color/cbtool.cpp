@@ -61,25 +61,27 @@ class CBTool::CBToolPriv
 public:
 
     CBToolPriv() :
-        configGroupName("colorbalance Tool"),
-        configHistogramChannelEntry("Histogram Channel"),
-        configHistogramScaleEntry("Histogram Scale"),
         destinationPreviewData(0),
         cbSettings(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configHistogramChannelEntry;
-    const QString       configHistogramScaleEntry;
+    static const QString configGroupName;
+    static const QString configHistogramChannelEntry;
+    static const QString configHistogramScaleEntry;
 
-    uchar*              destinationPreviewData;
+    uchar*               destinationPreviewData;
 
-    CBSettings*         cbSettings;
-    ImageRegionWidget*  previewWidget;
-    EditorToolSettings* gboxSettings;
+    CBSettings*          cbSettings;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 };
+const QString CBTool::CBToolPriv::configGroupName("colorbalance Tool");
+const QString CBTool::CBToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString CBTool::CBToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+// --------------------------------------------------------
 
 CBTool::CBTool(QObject* parent)
       : EditorToolThreaded(parent),

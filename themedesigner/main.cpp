@@ -67,5 +67,6 @@ int main(int argc, char** argv)
     im->resize(800, 600);
     im->show();
 
-    app.exec();
+    int res = app.exec();
+    return res;
 }

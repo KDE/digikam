@@ -64,77 +64,6 @@ class AlbumSettingsPrivate
 
 public:
     AlbumSettingsPrivate() :
-        configGroupDefault("Album Settings"),
-        configGroupExif("EXIF Settings"),
-        configGroupMetadata("Metadata Settings"),
-        configGroupNepomuk("Nepomuk Settings"),
-        configGroupGeneral("General Settings"),
-        configGroupVersioning("Versioning Settings"),
-        configGroupFaceDetection("Face Detection Settings"),
-
-        configAlbumCollectionsEntry("Album Collections"),
-        configAlbumSortOrderEntry("Album Sort Order"),
-        configImageSortOrderEntry("Image Sort Order"),
-        configImageSortingEntry("Image Sorting"),
-        configImageGroupModeEntry("Image Group Mode"),
-        configItemLeftClickActionEntry("Item Left Click Action"),
-        configDefaultIconSizeEntry("Default Icon Size"),
-        configDefaultTreeIconSizeEntry("Default Tree Icon Size"),
-        configTreeViewFontEntry("TreeView Font"),
-        configThemeEntry("Theme"),
-        configSidebarTitleStyleEntry("Sidebar Title Style"),
-        configRatingFilterConditionEntry("Rating Filter Condition"),
-        configRecursiveAlbumsEntry("Recursive Albums"),
-        configRecursiveTagsEntry("Recursive Tags"),
-        configIconShowNameEntry("Icon Show Name"),
-        configIconShowResolutionEntry("Icon Show Resolution"),
-        configIconShowSizeEntry("Icon Show Size"),
-        configIconShowDateEntry("Icon Show Date"),
-        configIconShowModificationDateEntry("Icon Show Modification Date"),
-        configIconShowCommentsEntry("Icon Show Comments"),
-        configIconShowTagsEntry("Icon Show Tags"),
-        configIconShowRatingEntry("Icon Show Rating"),
-        configIconShowOverlaysEntry("Icon Show Overlays"),
-        configIconViewFontEntry("IconView Font"),
-        configToolTipsFontEntry("ToolTips Font"),
-        configShowToolTipsEntry("Show ToolTips"),
-        configToolTipsShowFileNameEntry("ToolTips Show File Name"),
-        configToolTipsShowFileDateEntry("ToolTips Show File Date"),
-        configToolTipsShowFileSizeEntry("ToolTips Show File Size"),
-        configToolTipsShowImageTypeEntry("ToolTips Show Image Type"),
-        configToolTipsShowImageDimEntry("ToolTips Show Image Dim"),
-        configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make"),
-        configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date"),
-        configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal"),
-        configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo"),
-        configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode"),
-        configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash"),
-        configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB"),
-        configToolTipsShowAlbumNameEntry("ToolTips Show Album Name"),
-        configToolTipsShowCommentsEntry("ToolTips Show Comments"),
-        configToolTipsShowTagsEntry("ToolTips Show Tags"),
-        configToolTipsShowRatingEntry("ToolTips Show Rating"),
-        configShowAlbumToolTipsEntry("Show Album ToolTips"),
-        configToolTipsShowAlbumTitleEntry("ToolTips Show Album Title"),
-        configToolTipsShowAlbumDateEntry("ToolTips Show Album Date"),
-        configToolTipsShowAlbumCollectionEntry("ToolTips Show Album Collection"),
-        configToolTipsShowAlbumCategoryEntry("ToolTips Show Album Category"),
-        configToolTipsShowAlbumCaptionEntry("ToolTips Show Album Caption"),
-        configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size"),
-        configShowThumbbarEntry("Show Thumbbar"),
-        configShowFolderTreeViewItemsCountEntry("Show Folder Tree View Items Count"),
-        configShowSplashEntry("Show Splash"),
-        configUseTrashEntry("Use Trash"),
-        configShowTrashDeleteDialogEntry("Show Trash Delete Dialog"),
-        configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog"),
-        configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly"),
-        configScanAtStartEntry("Scan At Start"),
-        configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam"),
-        configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk"),
-        configStringComparisonTypeEntry("String Comparison Type"),
-        configFaceDetectionAccuracy("Detection Accuracy"),
-        configFaceDetectionSpecificity("Detection Specificity"),
-
         showSplash(false),
         useTrash(false),
         showTrashDeleteDialog(false),
@@ -188,80 +117,85 @@ public:
         syncToNepomuk(false)
         {}
 
-    const QString                       configGroupDefault;
-    const QString                       configGroupExif;
-    const QString                       configGroupMetadata;
-    const QString                       configGroupNepomuk;
-    const QString                       configGroupGeneral;
-    const QString                       configGroupVersioning;
-    const QString                       configGroupFaceDetection;
+    static const QString                configGroupDefault;
+    static const QString                configGroupExif;
+    static const QString                configGroupMetadata;
+    static const QString                configGroupNepomuk;
+    static const QString                configGroupGeneral;
+    static const QString                configGroupVersioning;
+    static const QString                configGroupFaceDetection;
+    static const QString                configAlbumCollectionsEntry;
+    static const QString                configAlbumSortOrderEntry;
+    static const QString                configImageSortOrderEntry;
+    static const QString                configImageSortingEntry;
+    static const QString                configImageGroupModeEntry;
+    static const QString                configItemLeftClickActionEntry;
+    static const QString                configDefaultIconSizeEntry;
+    static const QString                configDefaultTreeIconSizeEntry;
+    static const QString                configTreeViewFontEntry;
+    static const QString                configThemeEntry;
+    static const QString                configSidebarTitleStyleEntry;
+    static const QString                configRatingFilterConditionEntry;
+    static const QString                configRecursiveAlbumsEntry;
+    static const QString                configRecursiveTagsEntry;
+    static const QString                configIconShowNameEntry;
+    static const QString                configIconShowResolutionEntry;
+    static const QString                configIconShowSizeEntry;
+    static const QString                configIconShowDateEntry;
+    static const QString                configIconShowModificationDateEntry;
+    static const QString                configIconShowCommentsEntry;
+    static const QString                configIconShowTagsEntry;
+    static const QString                configIconShowRatingEntry;
+    static const QString                configIconShowOverlaysEntry;
+    static const QString                configIconViewFontEntry;
+    static const QString                configToolTipsFontEntry;
+    static const QString                configShowToolTipsEntry;
+    static const QString                configToolTipsShowFileNameEntry;
+    static const QString                configToolTipsShowFileDateEntry;
+    static const QString                configToolTipsShowFileSizeEntry;
+    static const QString                configToolTipsShowImageTypeEntry;
+    static const QString                configToolTipsShowImageDimEntry;
+    static const QString                configToolTipsShowPhotoMakeEntry;
+    static const QString                configToolTipsShowPhotoDateEntry;
+    static const QString                configToolTipsShowPhotoFocalEntry;
+    static const QString                configToolTipsShowPhotoExpoEntry;
+    static const QString                configToolTipsShowPhotoModeEntry;
+    static const QString                configToolTipsShowPhotoFlashEntry;
+    static const QString                configToolTipsShowPhotoWBEntry;
+    static const QString                configToolTipsShowAlbumNameEntry;
+    static const QString                configToolTipsShowCommentsEntry;
+    static const QString                configToolTipsShowTagsEntry;
+    static const QString                configToolTipsShowRatingEntry;
+    static const QString                configShowAlbumToolTipsEntry;
+    static const QString                configToolTipsShowAlbumTitleEntry;
+    static const QString                configToolTipsShowAlbumDateEntry;
+    static const QString                configToolTipsShowAlbumCollectionEntry;
+    static const QString                configToolTipsShowAlbumCategoryEntry;
+    static const QString                configToolTipsShowAlbumCaptionEntry;
+    static const QString                configPreviewLoadFullImageSizeEntry;
+    static const QString                configShowThumbbarEntry;
+    static const QString                configShowFolderTreeViewItemsCountEntry;
+    static const QString                configEXIFRotateEntry;
+    static const QString                configEXIFSetOrientationEntry;
+    static const QString                configSaveTagsEntry;
+    static const QString                configSaveTemplateEntry;
+    static const QString                configSaveEXIFCommentsEntry;
+    static const QString                configSaveDateTimeEntry;
+    static const QString                configSaveRatingEntry;
+    static const QString                configWriteRAWFilesEntry;
+    static const QString                configUpdateFileTimestampEntry;
+    static const QString                configShowSplashEntry;
+    static const QString                configUseTrashEntry;
+    static const QString                configShowTrashDeleteDialogEntry;
+    static const QString                configShowPermanentDeleteDialogEntry;
+    static const QString                configApplySidebarChangesDirectlyEntry;
+    static const QString                configScanAtStartEntry;
+    static const QString                configSyncNepomuktoDigikamEntry;
+    static const QString                configSyncDigikamtoNepomukEntry;
+    static const QString                configStringComparisonTypeEntry;
+    static const QString                configFaceDetectionAccuracy;
+    static const QString                configFaceDetectionSpecificity;
 
-    const QString                       configAlbumCollectionsEntry;
-    const QString                       configAlbumSortOrderEntry;
-    const QString                       configImageSortOrderEntry;
-    const QString                       configImageSortingEntry;
-    const QString                       configImageGroupModeEntry;
-    const QString                       configItemLeftClickActionEntry;
-    const QString                       configDefaultIconSizeEntry;
-    const QString                       configDefaultTreeIconSizeEntry;
-    const QString                       configTreeViewFontEntry;
-    const QString                       configThemeEntry;
-    const QString                       configSidebarTitleStyleEntry;
-    const QString                       configRatingFilterConditionEntry;
-    const QString                       configRecursiveAlbumsEntry;
-    const QString                       configRecursiveTagsEntry;
-    const QString                       configIconShowNameEntry;
-    const QString                       configIconShowResolutionEntry;
-    const QString                       configIconShowSizeEntry;
-    const QString                       configIconShowDateEntry;
-    const QString                       configIconShowModificationDateEntry;
-    const QString                       configIconShowCommentsEntry;
-    const QString                       configIconShowTagsEntry;
-    const QString                       configIconShowRatingEntry;
-    const QString                       configIconShowOverlaysEntry;
-    const QString                       configIconViewFontEntry;
-    const QString                       configToolTipsFontEntry;
-    const QString                       configShowToolTipsEntry;
-    const QString                       configToolTipsShowFileNameEntry;
-    const QString                       configToolTipsShowFileDateEntry;
-    const QString                       configToolTipsShowFileSizeEntry;
-    const QString                       configToolTipsShowImageTypeEntry;
-    const QString                       configToolTipsShowImageDimEntry;
-    const QString                       configToolTipsShowPhotoMakeEntry;
-    const QString                       configToolTipsShowPhotoDateEntry;
-    const QString                       configToolTipsShowPhotoFocalEntry;
-    const QString                       configToolTipsShowPhotoExpoEntry;
-    const QString                       configToolTipsShowPhotoModeEntry;
-    const QString                       configToolTipsShowPhotoFlashEntry;
-    const QString                       configToolTipsShowPhotoWBEntry;
-    const QString                       configToolTipsShowAlbumNameEntry;
-    const QString                       configToolTipsShowCommentsEntry;
-    const QString                       configToolTipsShowTagsEntry;
-    const QString                       configToolTipsShowRatingEntry;
-    const QString                       configShowAlbumToolTipsEntry;
-    const QString                       configToolTipsShowAlbumTitleEntry;
-    const QString                       configToolTipsShowAlbumDateEntry;
-    const QString                       configToolTipsShowAlbumCollectionEntry;
-    const QString                       configToolTipsShowAlbumCategoryEntry;
-    const QString                       configToolTipsShowAlbumCaptionEntry;
-    const QString                       configPreviewLoadFullImageSizeEntry;
-    const QString                       configShowThumbbarEntry;
-    const QString                       configShowFolderTreeViewItemsCountEntry;
-    const QString                       configShowSplashEntry;
-    const QString                       configUseTrashEntry;
-    const QString                       configShowTrashDeleteDialogEntry;
-    const QString                       configShowPermanentDeleteDialogEntry;
-    const QString                       configApplySidebarChangesDirectlyEntry;
-    const QString                       configScanAtStartEntry;
-    const QString                       configSyncNepomuktoDigikamEntry;
-    const QString                       configSyncDigikamtoNepomukEntry;
-    const QString                       configStringComparisonTypeEntry;
-    const QString                       configShowAllVersionsEntry;
-    const QString                       configSaveIntermediateVersionsEntry;
-    const QString                       configFormatForStoringRAWEntry;
-    const QString                       configFormatForStoringSubversionsEntry;
-    const QString                       configFaceDetectionAccuracy;
-    const QString                       configFaceDetectionSpecificity;
 
     // start up setting
     bool                                showSplash;
@@ -369,8 +303,92 @@ public:
     //misc
     AlbumSettings::StringComparisonType stringComparisonType;
 };
+const QString AlbumSettingsPrivate::configGroupDefault("Album Settings");
+const QString AlbumSettingsPrivate::configGroupExif("EXIF Settings");
+const QString AlbumSettingsPrivate::configGroupMetadata("Metadata Settings");
+const QString AlbumSettingsPrivate::configGroupNepomuk("Nepomuk Settings");
+const QString AlbumSettingsPrivate::configGroupGeneral("General Settings");
+const QString AlbumSettingsPrivate::configGroupVersioning("Versioning Settings");
+const QString AlbumSettingsPrivate::configGroupFaceDetection("Face Detection Settings");
+const QString AlbumSettingsPrivate::configAlbumCollectionsEntry("Album Collections");
+const QString AlbumSettingsPrivate::configAlbumSortOrderEntry("Album Sort Order");
+const QString AlbumSettingsPrivate::configImageSortOrderEntry("Image Sort Order");
+const QString AlbumSettingsPrivate::configImageSortingEntry("Image Sorting");
+const QString AlbumSettingsPrivate::configImageGroupModeEntry("Image Group Mode");
+const QString AlbumSettingsPrivate::configItemLeftClickActionEntry("Item Left Click Action");
+const QString AlbumSettingsPrivate::configDefaultIconSizeEntry("Default Icon Size");
+const QString AlbumSettingsPrivate::configDefaultTreeIconSizeEntry("Default Tree Icon Size");
+const QString AlbumSettingsPrivate::configTreeViewFontEntry("TreeView Font");
+const QString AlbumSettingsPrivate::configThemeEntry("Theme");
+const QString AlbumSettingsPrivate::configSidebarTitleStyleEntry("Sidebar Title Style");
+const QString AlbumSettingsPrivate::configRatingFilterConditionEntry("Rating Filter Condition");
+const QString AlbumSettingsPrivate::configRecursiveAlbumsEntry("Recursive Albums");
+const QString AlbumSettingsPrivate::configRecursiveTagsEntry("Recursive Tags");
+const QString AlbumSettingsPrivate::configIconShowNameEntry("Icon Show Name");
+const QString AlbumSettingsPrivate::configIconShowResolutionEntry("Icon Show Resolution");
+const QString AlbumSettingsPrivate::configIconShowSizeEntry("Icon Show Size");
+const QString AlbumSettingsPrivate::configIconShowDateEntry("Icon Show Date");
+const QString AlbumSettingsPrivate::configIconShowModificationDateEntry("Icon Show Modification Date");
+const QString AlbumSettingsPrivate::configIconShowCommentsEntry("Icon Show Comments");
+const QString AlbumSettingsPrivate::configIconShowTagsEntry("Icon Show Tags");
+const QString AlbumSettingsPrivate::configIconShowRatingEntry("Icon Show Rating");
+const QString AlbumSettingsPrivate::configIconShowOverlaysEntry("Icon Show Overlays");
+const QString AlbumSettingsPrivate::configIconViewFontEntry("IconView Font");
+const QString AlbumSettingsPrivate::configToolTipsFontEntry("ToolTips Font");
+const QString AlbumSettingsPrivate::configShowToolTipsEntry("Show ToolTips");
+const QString AlbumSettingsPrivate::configToolTipsShowFileNameEntry("ToolTips Show File Name");
+const QString AlbumSettingsPrivate::configToolTipsShowFileDateEntry("ToolTips Show File Date");
+const QString AlbumSettingsPrivate::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
+const QString AlbumSettingsPrivate::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
+const QString AlbumSettingsPrivate::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
+const QString AlbumSettingsPrivate::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
+const QString AlbumSettingsPrivate::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
+const QString AlbumSettingsPrivate::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
+const QString AlbumSettingsPrivate::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
+const QString AlbumSettingsPrivate::configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode");
+const QString AlbumSettingsPrivate::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
+const QString AlbumSettingsPrivate::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
+const QString AlbumSettingsPrivate::configToolTipsShowAlbumNameEntry("ToolTips Show Album Name");
+const QString AlbumSettingsPrivate::configToolTipsShowCommentsEntry("ToolTips Show Comments");
+const QString AlbumSettingsPrivate::configToolTipsShowTagsEntry("ToolTips Show Tags");
+const QString AlbumSettingsPrivate::configToolTipsShowRatingEntry("ToolTips Show Rating");
+const QString AlbumSettingsPrivate::configShowAlbumToolTipsEntry("Show Album ToolTips");
+const QString AlbumSettingsPrivate::configToolTipsShowAlbumTitleEntry("ToolTips Show Album Title");
+const QString AlbumSettingsPrivate::configToolTipsShowAlbumDateEntry("ToolTips Show Album Date");
+const QString AlbumSettingsPrivate::configToolTipsShowAlbumCollectionEntry("ToolTips Show Album Collection");
+const QString AlbumSettingsPrivate::configToolTipsShowAlbumCategoryEntry("ToolTips Show Album Category");
+const QString AlbumSettingsPrivate::configToolTipsShowAlbumCaptionEntry("ToolTips Show Album Caption");
+const QString AlbumSettingsPrivate::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
+const QString AlbumSettingsPrivate::configShowThumbbarEntry("Show Thumbbar");
+const QString AlbumSettingsPrivate::configShowFolderTreeViewItemsCountEntry("Show Folder Tree View Items Count");
+const QString AlbumSettingsPrivate::configEXIFRotateEntry("EXIF Rotate");
+const QString AlbumSettingsPrivate::configEXIFSetOrientationEntry("EXIF Set Orientation");
+const QString AlbumSettingsPrivate::configSaveTagsEntry("Save Tags");
+const QString AlbumSettingsPrivate::configSaveTemplateEntry("Save Template");
+const QString AlbumSettingsPrivate::configSaveEXIFCommentsEntry("Save EXIF Comments");
+const QString AlbumSettingsPrivate::configSaveDateTimeEntry("Save Date Time");
+const QString AlbumSettingsPrivate::configSaveRatingEntry("Save Rating");
+const QString AlbumSettingsPrivate::configWriteRAWFilesEntry("Write RAW Files");
+const QString AlbumSettingsPrivate::configUpdateFileTimestampEntry("Update File Timestamp");
+const QString AlbumSettingsPrivate::configShowSplashEntry("Show Splash");
+const QString AlbumSettingsPrivate::configUseTrashEntry("Use Trash");
+const QString AlbumSettingsPrivate::configShowTrashDeleteDialogEntry("Show Trash Delete Dialog");
+const QString AlbumSettingsPrivate::configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog");
+const QString AlbumSettingsPrivate::configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly");
+const QString AlbumSettingsPrivate::configScanAtStartEntry("Scan At Start");
+const QString AlbumSettingsPrivate::configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam");
+const QString AlbumSettingsPrivate::configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk");
+const QString AlbumSettingsPrivate::configStringComparisonTypeEntry("String Comparison Type");
+const QString AlbumSettingsPrivate::configFaceDetectionAccuracy("Detection Accuracy");
+const QString AlbumSettingsPrivate::configFaceDetectionSpecificity("Detection Specificity");
 
-class AlbumSettingsCreator { public: AlbumSettings object; };
+// --------------------------------------------------------
+
+class AlbumSettingsCreator
+{
+public:
+    AlbumSettings object;
+};
 K_GLOBAL_STATIC(AlbumSettingsCreator, creator)
 
 AlbumSettings* AlbumSettings::instance()
