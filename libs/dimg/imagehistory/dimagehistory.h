@@ -84,21 +84,35 @@ public:
      */
     DImageHistory& operator<<(const HistoryImageId& imageId);
 
+    /// Removes the last entry from the history
+    void removeLast();
+    /// Remove all referredImages, leaving the entries list untouched
+    void clearReferredImages();
+
     bool operator<(const DImageHistory& other);
     bool operator>(const DImageHistory& other);
 
     QList<DImageHistory::Entry>& entries();
     const QList<DImageHistory::Entry>& entries() const;
 
+    /// Gets all actions which are not null
     QList<FilterAction> allActions() const;
+    int actionCount() const;
+    /// Returns if there is any not-null action
+    bool hasActions() const;
+
     const FilterAction& action(int i) const;
     QList<HistoryImageId>& referredImages(int i);
     const QList<HistoryImageId>& referredImages(int i) const;
 
     QList<HistoryImageId> allReferredImages() const;
-    bool hasCurrentReferredImage() const;
     HistoryImageId currentReferredImage() const;
     HistoryImageId originalReferredImage() const;
+    QList<HistoryImageId> referredImagesOfType(HistoryImageId::Type type) const;
+    bool hasReferredImages() const;
+    bool hasReferredImageOfType(HistoryImageId::Type type) const;
+    bool hasCurrentReferredImage() const;
+    bool hasOriginalReferredImage() const;
 
     void setOriginalFileName(const QString& fileName);
     QString originalFileName();
@@ -111,8 +125,6 @@ public:
     QString toXml() const;
     static DImageHistory fromXml(const QString& xml);
 
-    void removeLastFilter();
-
     /**
      * Adjusts the type of a Current HistoryImageId:
      * If it is the first entry, it becomes Original,
@@ -123,6 +135,15 @@ public:
 
     /// Changes the UUID of the current (last added current) referred image
     void adjustCurrentUuid(const QString& uuid);
+
+    /**
+     * Remove file path entries pointing to the given absolute path
+     * from any referred images. This is useful when said file
+     * is about to be overwritten.
+     * All other HistoryImageId fields remain unchanged, no HistoryImageId is removed.
+     * path: directory path, without filename.
+     */
+    void purgePathFromReferredImages(const QString& path, const QString& fileName);
 
 public:
 

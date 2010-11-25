@@ -68,7 +68,14 @@ void HistoryImageId::setCreationDate(const QDateTime& creationDate)
 void HistoryImageId::setPathOnDisk(const QString& filePath)
 {
     KUrl url   = KUrl::fromPath(filePath);
-    m_filePath = url.directory(KUrl::ObeyTrailingSlash);
+    m_filePath = url.directory(KUrl::ObeyTrailingSlash | KUrl::AppendTrailingSlash);
+}
+
+void HistoryImageId::setPath(const QString& path)
+{
+    m_filePath = path;
+    if (!m_filePath.endsWith("/"))
+        m_filePath += "/";
 }
 
 void HistoryImageId::setUniqueHash(const QString& uniqueHash, int fileSize)
@@ -81,6 +88,76 @@ bool HistoryImageId::isValid() const
 {
     return (m_type != InvalidType)
         && (!m_uuid.isEmpty() || !m_fileName.isEmpty());
+}
+
+HistoryImageId::Type HistoryImageId::type() const
+{
+    return m_type;
+}
+
+QString HistoryImageId::path() const
+{
+    return m_filePath;
+}
+
+QString HistoryImageId::filePath() const
+{
+    return m_filePath + m_fileName;
+}
+
+bool HistoryImageId::hasFileOnDisk() const
+{
+    return !m_filePath.isEmpty() && !m_fileName.isEmpty();
+}
+
+bool HistoryImageId::hasFileName() const
+{
+    return !m_fileName.isEmpty();
+}
+
+QString HistoryImageId::fileName() const
+{
+    return m_fileName;
+}
+
+bool HistoryImageId::hasUuid() const
+{
+    return !m_uuid.isEmpty();
+}
+
+QString HistoryImageId::uuid() const
+{
+    return m_uuid;
+}
+
+bool HistoryImageId::hasCreationDate() const
+{
+    return m_creationDate.isValid();
+}
+
+QDateTime HistoryImageId::creationDate() const
+{
+    return m_creationDate;
+}
+
+bool HistoryImageId::hasUniqueHashIdentifier() const
+{
+    return !m_uniqueHash.isEmpty() && m_fileSize;
+}
+
+QString HistoryImageId::uniqueHash() const
+{
+    return m_uniqueHash;
+}
+
+int HistoryImageId::fileSize() const
+{
+    return m_fileSize;
+}
+
+QString HistoryImageId::originalUuid() const
+{
+    return m_originalUUID;
 }
 
 bool HistoryImageId::operator==(const HistoryImageId& other) const

@@ -138,6 +138,9 @@ bool DImageHistory::operator==(const DImageHistory& other) const
 
 DImageHistory& DImageHistory::operator<<(const FilterAction& action)
 {
+    if (action.isNull())
+        return *this;
+
     Entry entry;
     entry.action = action;
     d->entries << entry;
@@ -163,6 +166,20 @@ DImageHistory& DImageHistory::operator<<(const HistoryImageId& id)
         d->entries << Entry();
     d->entries.last().referredImages << id;
     return *this;
+}
+
+void DImageHistory::removeLast()
+{
+    if (!d->entries.isEmpty())
+        d->entries.removeLast();
+}
+
+void DImageHistory::clearReferredImages()
+{
+    for (int i=0; i<d->entries.size(); ++i)
+    {
+        d->entries[i].referredImages.clear();
+    }
 }
 
 void DImageHistory::adjustReferredImages()
@@ -198,17 +215,60 @@ void DImageHistory::adjustCurrentUuid(const QString& uuid)
     }
 }
 
-bool DImageHistory::hasCurrentReferredImage() const
+void DImageHistory::purgePathFromReferredImages(const QString& path, const QString& fileName)
+{
+    for (int i=0; i<d->entries.size(); ++i)
+    {
+        Entry &entry = d->entries[i];
+        for (int e=0; e<entry.referredImages.size(); ++e)
+        {
+            HistoryImageId &id = entry.referredImages[e];
+            {
+                if (id.m_filePath == path && id.m_fileName == fileName)
+                {
+                    id.m_filePath = QString();
+                    id.m_fileName = QString();
+                }
+            }
+        }
+    }
+}
+
+bool DImageHistory::hasReferredImageOfType(HistoryImageId::Type type) const
 {
     foreach (const Entry& entry, d->entries)
     {
         foreach (const HistoryImageId& id, entry.referredImages)
         {
-            if (id.isCurrentFile())
+            if (id.m_type == type)
                 return true;
         }
     }
     return false;
+}
+
+bool DImageHistory::hasCurrentReferredImage() const
+{
+    return hasReferredImageOfType(HistoryImageId::Current);
+}
+
+bool DImageHistory::hasOriginalReferredImage() const
+{
+    return hasReferredImageOfType(HistoryImageId::Original);
+}
+
+QList<HistoryImageId> DImageHistory::referredImagesOfType(HistoryImageId::Type type) const
+{
+    QList<HistoryImageId> ids;
+    foreach (const Entry& entry, d->entries)
+    {
+        foreach (const HistoryImageId& id, entry.referredImages)
+        {
+            if (id.m_type == type)
+                ids << id;
+        }
+    }
+    return ids;
 }
 
 HistoryImageId DImageHistory::currentReferredImage() const
@@ -294,6 +354,23 @@ QList<FilterAction> DImageHistory::allActions() const
     return actions;
 }
 
+int DImageHistory::actionCount() const
+{
+    int count = 0;
+    foreach (const Entry& entry, d->entries)
+        if (!entry.action.isNull())
+            count++;
+    return count;
+}
+
+bool DImageHistory::hasActions() const
+{
+    foreach (const Entry& entry, d->entries)
+        if (!entry.action.isNull())
+            return true;
+    return false;
+}
+
 QList<HistoryImageId> DImageHistory::allReferredImages() const
 {
     QList<HistoryImageId> ids;
@@ -302,6 +379,14 @@ QList<HistoryImageId> DImageHistory::allReferredImages() const
         ids << entry.referredImages;
     }
     return ids;
+}
+
+bool DImageHistory::hasReferredImages() const
+{
+    foreach (const Entry& entry, d->entries)
+        if (!entry.referredImages.isEmpty())
+            return true;
+    return false;
 }
 
 QString DImageHistory::toXml() const
@@ -435,15 +520,14 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             {
                 if (stream.name() == "fileParams")
                 {
-                    imageId.m_fileName = stream.attributes().value("fileName").toString();
-                    imageId.m_filePath = stream.attributes().value("filePath").toString();
+                    imageId.setFileName(stream.attributes().value("fileName").toString());
+                    imageId.setPath(stream.attributes().value("filePath").toString());
                     QString date = stream.attributes().value("creationDate").toString();
                     if (!date.isNull())
-                        imageId.m_creationDate = QDateTime::fromString(date, Qt::ISODate);
-                    imageId.m_uniqueHash = stream.attributes().value("fileHash").toString();
+                        imageId.setCreationDate(QDateTime::fromString(date, Qt::ISODate));
                     QString size = stream.attributes().value("fileSize").toString();
-                    if (!size.isNull())
-                        imageId.m_fileSize = size.toInt();
+                    if (stream.attributes().hasAttribute("fileHash") && !size.isNull())
+                        imageId.setUniqueHash(stream.attributes().value("fileHash").toString(), size.toInt());
                     stream.skipCurrentElement();
                 }
                 else
@@ -544,12 +628,6 @@ QString DImageHistory::originalFilePath()
 void DImageHistory::setOriginalFilePath(const QString& filePath)
 {
     d->originalPath = filePath;
-}
-
-void DImageHistory::removeLastFilter()
-{
-    if(!d->entries.last().action.isNull())
-        d->entries.removeLast();
 }
 
 QString DImageHistory::originalUUID() const

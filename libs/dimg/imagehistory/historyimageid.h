@@ -75,10 +75,11 @@ public:
     /// A valid id needs at least a valid type and a UUID or a filename
     bool isValid() const;
 
-    bool isOriginalFile() const { return m_type == Original; }
-    bool isSourceFile() const { return m_type == Source; }
-    bool isIntermediateFile() const { return m_type == Intermediate; }
-    bool isCurrentFile() const  { return m_type == Current; }
+    Type type() const;
+    bool isOriginalFile() const { return type() == Original; }
+    bool isSourceFile() const { return type() == Source; }
+    bool isIntermediateFile() const { return type() == Intermediate; }
+    bool isCurrentFile() const  { return type() == Current; }
 
     bool operator==(const HistoryImageId& other) const;
 
@@ -87,7 +88,25 @@ public:
     void setFileName(const QString& fileName);
     void setCreationDate(const QDateTime& creationDate);
     void setPathOnDisk(const QString& filePath);
+    void setPath(const QString& path);
     void setUniqueHash(const QString& uniqueHash, int fileSize);
+
+    bool hasFileOnDisk() const;
+    ///If a file on disk is referenced: Returns the path, without filename, with a trailing slash
+    QString path() const;
+    /// If a file on disk is referenced: Returns the full file path (folder + filename)
+    QString filePath() const;
+    bool hasFileName() const;
+    /// If a file on disk is referenced: Returns the file name (without folder)
+    QString fileName() const;
+    bool hasUuid() const;
+    QString uuid() const;
+    bool hasCreationDate() const;
+    QDateTime creationDate() const;
+    bool hasUniqueHashIdentifier() const;
+    QString uniqueHash() const;
+    int fileSize() const;
+    QString originalUuid() const;
 
 public:
 
@@ -104,7 +123,7 @@ public:
     QString   m_fileName;
     /// The creationDate of the original image
     QDateTime m_creationDate;
-    /// The path of the referred file (without file name)
+    /// The path of the referred file (NOTE: without file name!, including trailing slash)
     QString   m_filePath;
     /// The uniqueHash of the referred file
     QString   m_uniqueHash;
