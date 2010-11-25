@@ -91,11 +91,10 @@ public:
     virtual void startFilterDirectly();
 
     /** Returns the action description corresponding to currently set options */
-    //TODO: Remove default implementation and make these pure virtual, once implemented in all currently existing filters
-    virtual FilterAction filterAction() { return FilterAction(); }// = 0;
-    virtual void readParameters(const FilterAction&) {}// = 0;
+    virtual FilterAction filterAction() = 0;
+    virtual void readParameters(const FilterAction&) = 0;
     /** Return the identifier for this filter in the image history */
-    virtual QString filterIdentifier() const { return QString(); }// = 0;
+    virtual QString filterIdentifier() const = 0;
     virtual QList<int> supportedVersions() const;
 
     /** Set the filter version. A filter may implement different versions, to preserve

@@ -158,6 +158,8 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
 
 #endif // HAVE_GLIB2
 
+    HotPixelsTool::registerFilter();
+
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
     kDebug() << "ImagePlugin_Enhance plugin loaded";
