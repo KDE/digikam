@@ -219,7 +219,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildVertexInfo(VertexI
         addSources(item, vertices);
 
     // Any other egdes off the main path?
-    vertices = graph().adjacentVertices(previousItem->vertex, HistoryGraph::EdgesToLeave);
+    vertices = graph().adjacentVertices(previousItem->vertex, HistoryGraph::EdgesToLeaf);
     vertices.removeOne(item->vertex);
     if (!vertices.isEmpty())
         addBranches(previousItem, vertices);
@@ -292,7 +292,7 @@ void ImageHistoryGraphModel::setHistory(const ImageInfo& subject, const ImageHis
 
     // fill helper model
     d->imageModel.clearImageInfos();
-    d->imageModel.addImageInfos(d->historyGraph.allImageInfos());
+    d->imageModel.addImageInfos(d->historyGraph.allImages());
 
     d->buildPath();
 

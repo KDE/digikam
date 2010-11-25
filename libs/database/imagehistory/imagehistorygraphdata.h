@@ -63,6 +63,9 @@ public:
 
     ImageInfo firstImageInfo() const;
 
+    bool markedAs(HistoryImageId::Type) const;
+    bool alwaysMarkedAs(HistoryImageId::Type) const;
+
     bool operator==(const QString& uuid) const;
     bool operator==(const ImageInfo& info) const;
     bool operator==(qlonglong id) const;
@@ -123,6 +126,16 @@ public:
     Vertex addVertex(const ImageInfo& info);
 
     void addHistory(const DImageHistory& givenHistory, qlonglong extraCurrent = 0);
+
+    inline QList<ImageInfo> toInfoList(const QList<Vertex>& vertices) const
+    {
+        QList<ImageInfo> infos;
+        foreach (const HistoryGraph::Vertex& v, vertices)
+        {
+            infos << properties(v).infos;
+        }
+        return infos;
+    }
 
 protected:
 

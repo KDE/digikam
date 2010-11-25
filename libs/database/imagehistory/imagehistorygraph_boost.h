@@ -355,14 +355,14 @@ public:
         OutboundEdges = 1 << 0,
         InboundEdges  = 1 << 1,
         /// These resolve to one of the flags above, depending on MeaningOfDirection
-        EdgesToLeave  = 1 << 2,
+        EdgesToLeaf   = 1 << 2,
         EdgesToRoot   = 1 << 3,
         AllEdges = InboundEdges | OutboundEdges
     };
 
     QList<Vertex> adjacentVertices(const Vertex& v, AdjacencyFlags flags = AllEdges) const
     {
-        if (flags & EdgesToLeave)
+        if (flags & EdgesToLeaf)
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
         if (flags & EdgesToRoot)
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
@@ -375,6 +375,8 @@ public:
         return vertices;
     }
 
+    // for "hasAdjacentVertices", simply use hasEdges(v, flags)
+
     int vertexCount() const
     {
         return boost::num_vertices(graph);
@@ -382,7 +384,7 @@ public:
 
     bool isEmpty() const
     {
-        return !vertexCount();
+        return isEmptyRange(boost::vertices(graph));
     }
 
     int outDegree(const Vertex& v) const
@@ -390,10 +392,19 @@ public:
         return boost::out_degree(v, graph);
     }
 
-
     int inDegree(const Vertex& v) const
     {
         return boost::in_degree(v, graph);
+    }
+
+    bool isRoot(const Vertex& v) const
+    {
+        return !hasEdges(v, EdgesToRoot);
+    }
+
+    bool isLeaf(const Vertex& v) const
+    {
+        return !hasEdges(v, EdgesToLeaf);
     }
 
     Vertex source(const Edge& e) const
@@ -408,7 +419,7 @@ public:
 
     QList<Edge> edges(const Vertex& v, AdjacencyFlags flags = AllEdges) const
     {
-        if (flags & EdgesToLeave)
+        if (flags & EdgesToLeaf)
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
         if (flags & EdgesToRoot)
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
@@ -419,6 +430,36 @@ public:
         if (flags & InboundEdges)
             es << toEdgeList(boost::in_edges(v, graph));
         return es;
+    }
+
+    int edgeCount() const
+    {
+        return boost::num_edges(graph);
+    }
+
+    bool hasEdges(const Vertex& v, AdjacencyFlags flags = AllEdges) const
+    {
+        if (flags & EdgesToLeaf)
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
+        if (flags & EdgesToRoot)
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
+
+        if (flags & OutboundEdges)
+        {
+            if (!isEmptyRange(boost::out_edges(v, graph)))
+                return true;
+        }
+        if (flags & InboundEdges)
+        {
+            if (!isEmptyRange(boost::in_edges(v, graph)))
+                return true;
+        }
+        return false;
+    }
+
+    bool hasEdges() const
+    {
+        return !isEmptyRange(boost::edges(graph));
     }
 
     QList<Edge> edges() const
@@ -676,6 +717,12 @@ protected:
 
     template <typename range_t> QList<Edge> toEdgeList(const range_t& range) const
     { return toList<Edge, range_t>(range); }
+
+    template <typename range_t>
+    bool isEmptyRange(const range_t& range) const
+    {
+        return range.first == range.second;
+    }
 
     /**
      * According to the given flags and based on the map,

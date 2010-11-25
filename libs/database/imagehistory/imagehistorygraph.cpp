@@ -59,6 +59,32 @@ ImageInfo HistoryVertexProperties::firstImageInfo() const
     return infos.first();
 }
 
+bool HistoryVertexProperties::markedAs(HistoryImageId::Type type) const
+{
+    if (referredImages.isEmpty())
+        return false;
+
+    foreach (const HistoryImageId& ref, referredImages)
+    {
+        if (ref.m_type == type)
+            return true;
+    }
+    return false;
+}
+
+bool HistoryVertexProperties::alwaysMarkedAs(HistoryImageId::Type type) const
+{
+    if (referredImages.isEmpty())
+        return false;
+
+    foreach (const HistoryImageId& ref, referredImages)
+    {
+        if (ref.m_type != type)
+            return false;
+    }
+    return true;
+}
+
 bool HistoryVertexProperties::operator==(const QString& id) const
 {
     return uuid == id;
@@ -83,14 +109,16 @@ bool HistoryVertexProperties::operator==(qlonglong id) const
 
 bool HistoryVertexProperties::operator==(const HistoryImageId& other) const
 {
-    if (!uuid.isNull() && uuid == other.m_uuid)
-        return true;
+    if (!uuid.isEmpty() && !other.m_uuid.isEmpty())
+    {
+        return uuid == other.m_uuid;
+    }
 
     foreach (const HistoryImageId& id, referredImages)
     {
         if (ImageScanner::sameReferredImage(id, other))
         {
-            kDebug() << id << "is the same as" << other;
+            //kDebug() << id << "is the same as" << other;
             return true;
         }
     }
@@ -121,7 +149,7 @@ HistoryVertexProperties &HistoryVertexProperties::operator+=(const HistoryImageI
     if (id.isValid() && !referredImages.contains(id))
     {
         referredImages << id;
-        if (uuid.isNull())
+        if (uuid.isNull() && !id.m_uuid.isEmpty())
         {
             uuid = id.m_uuid;
         }
@@ -185,26 +213,29 @@ ImageHistoryGraphData::addVertex(const HistoryImageId& imageId)
 
     Vertex v;
     QList<ImageInfo> infos;
+    //kDebug() << "Adding vertex" << imageId.m_uuid.left(6);
 
-    // first: find by HistoryImageId
+    // find by UUID
+
+    // find by HistoryImageId (most notably, by UUID)
     v = findVertexByProperties(imageId);
-    //kDebug() << "Find by h-i-m: found" << !v.isNull();
+    //kDebug() << "Found by properties:" << (v.isNull() ? -1 : int(v));
 
     if (v.isNull())
     {
-        // second: Resolve HistoryImageId, find by ImageInfo
+        // Resolve HistoryImageId, find by ImageInfo
         foreach (qlonglong id, ImageScanner::resolveHistoryImageId(imageId))
         {
             ImageInfo info(id);
+            //kDebug() << "Found info id:" << info.id();
             infos << info;
             if (v.isNull())
                 v = findVertexByProperties(info);
         }
-        //kDebug() << "Find by image id:" << !v.isNull();
     }
 
     applyProperties(v, infos, QList<HistoryImageId>() << imageId);
-    //kDebug() << "Returning vertex" << v << properties(v).referredImages.size();
+    //kDebug() << "Returning vertex" << v;
     return v;
 }
 
@@ -219,10 +250,12 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
     QString uuid;
     HistoryImageId id;
 
+    // Simply find by image id
     v = findVertexByProperties(info);
     //kDebug() << "Find by id" << info.id() << ": found" << v.isNull();
     if (v.isNull())
     {
+        // Find by contents
         uuid = info.uuid();
         if (!uuid.isNull())
             v = findVertexByProperties(uuid);
@@ -299,12 +332,17 @@ bool ImageHistoryGraph::isNull() const
 
 bool ImageHistoryGraph::isEmpty() const
 {
-    return d->vertexCount() == 0;
+    return d->isEmpty();
 }
 
 bool ImageHistoryGraph::isSingleVertex() const
 {
     return d->vertexCount() == 1;
+}
+
+bool ImageHistoryGraph::hasEdges() const
+{
+    return d->hasEdges();
 }
 
 ImageHistoryGraphData &ImageHistoryGraph::data()
@@ -322,13 +360,25 @@ void ImageHistoryGraph::clear()
     *d = HistoryGraph();
 }
 
-ImageHistoryGraph ImageHistoryGraph::fromInfo(const ImageInfo& info, ProcessingMode mode)
+ImageHistoryGraph ImageHistoryGraph::fromInfo(const ImageInfo& info, HistoryLoadingMode loadingMode,
+                                              ProcessingMode processingMode)
 {
     ImageHistoryGraph graph;
-    graph.addHistory(info.imageHistory(), info);
-    graph.addRelations(info.relationCloud());
 
-    if (mode == PrepareForDisplay)
+    if (loadingMode & LoadRelationCloud)
+        graph.addRelations(info.relationCloud());
+    if (loadingMode & LoadSubjectHistory)
+        graph.addHistory(info.imageHistory(), info);
+    if (loadingMode & LoadLeavesHistory)
+    {
+        foreach (const ImageInfo& leaf, graph.leafImages())
+        {
+            if (leaf != info)
+                graph.addHistory(leaf.imageHistory(), leaf);
+        }
+    }
+
+    if (processingMode == PrepareForDisplay)
         graph.prepareForDisplay(info);
 
     return graph;
@@ -393,10 +443,10 @@ void ImageHistoryGraphData::addHistory(const DImageHistory& history, qlonglong e
         }
     }
 
-    if (extraCurrent && !last.isNull())
+    if (extraCurrent)
     {
         HistoryGraph::Vertex v = addVertexScanned(extraCurrent);
-        if (!v.isNull() && v != last)
+        if (!v.isNull() && !last.isNull() && v != last)
         {
             HistoryGraph::Edge e = addEdge(v, last);
             setProperties(e, edgeProps);
@@ -422,43 +472,6 @@ void ImageHistoryGraph::addRelations(const QList<QPair<qlonglong, qlonglong> >& 
         d->addEdge(v1, v2);
     }
 }
-
-class lessThanByProximityToSubject
-{
-public:
-    lessThanByProximityToSubject(const ImageInfo& subject) : subject(subject) {}
-    bool operator()(const ImageInfo&a, const ImageInfo& b)
-    {
-        if (a == b)
-            return false;
-        // same collection
-        if (a.albumId() != b.albumId())
-        {
-            // same album
-            if (a.albumId() == subject.albumId())
-                return true;
-            if (b.albumId() == subject.albumId())
-                return false;
-
-            if (a.albumRootId() != b.albumRootId())
-            {
-                // different collection
-                if (a.albumRootId() == subject.albumRootId())
-                    return true;
-                if (b.albumRootId() == subject.albumRootId())
-                    return false;
-            }
-        }
-
-        if (a.modDateTime() != b.modDateTime())
-            return a.modDateTime() < b.modDateTime();
-        if (a.name() != b.name())
-            return qAbs(a.name().compare(subject.name())) < qAbs(b.name().compare(subject.name()));
-        // last resort
-        return a.id() < b.id();
-    }
-    ImageInfo subject;
-};
 
 void ImageHistoryGraph::reduceEdges()
 {
@@ -506,7 +519,7 @@ void ImageHistoryGraph::dropUnresolvedEntries()
         {
             foreach (const HistoryGraph::Edge& upperEdge, d->edges(v, HistoryGraph::EdgesToRoot))
             {
-                foreach (const HistoryGraph::Edge& lowerEdge, d->edges(v, HistoryGraph::EdgesToLeave))
+                foreach (const HistoryGraph::Edge& lowerEdge, d->edges(v, HistoryGraph::EdgesToLeaf))
                 {
                     HistoryEdgeProperties combinedProps;
                     combinedProps.actions += d->properties(upperEdge).actions;
@@ -528,8 +541,7 @@ void ImageHistoryGraph::sortForInfo(const ImageInfo& subject)
     foreach (const HistoryGraph::Vertex& v, d->vertices())
     {
         HistoryVertexProperties& props = d->properties(v);
-        if (props.infos.isEmpty())
-            std::sort(props.infos.begin(), props.infos.end(), lessThanByProximityToSubject(subject));
+        ImageScanner::sortByProximity(props.infos, subject);
     }
 }
 
@@ -558,15 +570,92 @@ QList<QPair<qlonglong, qlonglong> > ImageHistoryGraph::relationCloud() const
     return pairs;
 }
 
-QList<ImageInfo> ImageHistoryGraph::allImageInfos() const
+QPair<QList<qlonglong>, QList<qlonglong> > ImageHistoryGraph::relationCloudParallel() const
 {
-    QList<ImageInfo> infos;
+    QList<qlonglong> subjects, objects;
+    ImageHistoryGraphData closure = d->transitiveClosure();
+    QList<HistoryGraph::VertexPair> edges = closure.edgePairs();
+    foreach (const HistoryGraph::VertexPair& edge, edges)
+    {
+        foreach (const ImageInfo& source, closure.properties(edge.first).infos)
+        {
+            foreach (const ImageInfo& target, closure.properties(edge.second).infos)
+            {
+                subjects << source.id();
+                objects  << target.id();
+            }
+        }
+    }
+    return qMakePair(subjects, objects);
+}
+
+QList<ImageInfo> ImageHistoryGraph::allImages() const
+{
+    return d->toInfoList(d->vertices());
+}
+
+QList<qlonglong> ImageHistoryGraph::allImageIds() const
+{
+    QList<qlonglong> ids;
     foreach (const HistoryGraph::Vertex& v, d->vertices())
     {
-        infos << d->properties(v).infos;
+        foreach (const ImageInfo& info, d->properties(v).infos)
+        {
+            ids << info.id();
+        }
     }
-    return infos;
+    return ids;
 }
+
+QList<ImageInfo> ImageHistoryGraph::rootImages() const
+{
+    return d->toInfoList(d->roots());
+}
+
+QList<ImageInfo> ImageHistoryGraph::leafImages() const
+{
+    return d->toInfoList(d->leaves());
+}
+
+QHash<ImageInfo, HistoryImageId::Type> ImageHistoryGraph::categorize() const
+{
+    QHash<ImageInfo, HistoryImageId::Type> types;
+    foreach (const HistoryGraph::Vertex& v, d->vertices())
+    {
+        const HistoryVertexProperties& props = d->properties(v);
+        if (props.infos.isEmpty())
+            continue;
+
+        HistoryImageId::Type type = HistoryImageId::InvalidType;
+        if (props.alwaysMarkedAs(HistoryImageId::Source))
+        {
+            type = HistoryImageId::Source;
+        }
+        else if (d->isLeaf(v))
+        {
+            // Leaf: Assume current version
+            type = HistoryImageId::Current;
+        }
+        else if (d->isRoot(v))
+        {
+            // Root: Assume original if at least once marked as such
+            if (props.markedAs(HistoryImageId::Original))
+                type = HistoryImageId::Original;
+        }
+        else
+        {
+            type = HistoryImageId::Intermediate;
+        }
+
+        foreach (const ImageInfo& info, props.infos)
+        {
+            types[info] = type;
+        }
+    }
+    return types;
+}
+
+
 
 static QString toString(const HistoryVertexProperties& props)
 {

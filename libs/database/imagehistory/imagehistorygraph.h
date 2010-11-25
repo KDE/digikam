@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QFlags>
 #include <QSharedDataPointer>
 
 // KDE includes
@@ -58,9 +59,27 @@ public:
     bool isNull() const;
     bool isEmpty() const;
     bool isSingleVertex() const;
+    /**
+     * Returns if the graph contains any edges. Because loops are not allowed,
+     * this also means (!isEmpty() && !isSingleVertex()).
+     */
+    bool hasEdges() const;
 
     ImageHistoryGraphData &data();
     const ImageHistoryGraphData &data() const;
+
+    enum HistoryLoadingFlag
+    {
+        /// Load the relation cloud to the graph. Will give all edges, but no further info
+        LoadRelationCloud  = 1 << 0,
+        /// Will load the DImageHistory of the given subject
+        LoadSubjectHistory = 1 << 1,
+        /// Will load the DImageHistory of all leave vertices of the graph
+        LoadLeavesHistory  = 1 << 2,
+
+        LoadAll            = LoadRelationCloud | LoadSubjectHistory | LoadLeavesHistory
+    };
+    Q_DECLARE_FLAGS(HistoryLoadingMode, HistoryLoadingFlag)
 
     enum ProcessingMode
     {
@@ -74,7 +93,9 @@ public:
      * Depending on mode, the graph will be preparedForDisplay().
      * If no history is recorded and no relations found, a single-vertex graph is returned.
      */
-    static ImageHistoryGraph fromInfo(const ImageInfo& info, ProcessingMode mode = PrepareForDisplay);
+    static ImageHistoryGraph fromInfo(const ImageInfo& info,
+                                      HistoryLoadingMode loadingMode = LoadAll,
+                                      ProcessingMode processingMode  = PrepareForDisplay);
 
     /**
      * Add the given history.
@@ -132,13 +153,35 @@ public:
     /**
      * Returns all possible relations between images in this graph,
      * the edges of the transitive closure.
+     * The first variant returns (1,2),(3,4),(6,8), the second (1,3,6)(2,4,8).
      */
     QList<QPair<qlonglong, qlonglong> > relationCloud() const;
+    QPair<QList<qlonglong>, QList<qlonglong> > relationCloudParallel() const;
 
     /**
-     * Returns all image infos from all vertices in this graph
+     * Returns image infos / ids from all vertices in this graph
      */
-    QList<ImageInfo> allImageInfos() const;
+    QList<ImageInfo> allImages() const;
+    QList<qlonglong> allImageIds() const;
+
+    /**
+     * Returns image infos / ids from all root vertices in this graph,
+     * i.e. vertices with no precedent history.
+     */
+    QList<ImageInfo> rootImages() const;
+
+    /**
+     * Returns image infos / ids from all leaf vertices in this graph,
+     * i.e. vertices with no subsequent history.
+     */
+    QList<ImageInfo> leafImages() const;
+
+    /**
+     * Attempts at a categorization of all images in the graph
+     * into the types defined by HistoryImageId.
+     * The type will be invalid if no decision can be made due to conflicting data.
+     */
+    QHash<ImageInfo, HistoryImageId::Type> categorize() const;
 
 private:
 
@@ -148,6 +191,9 @@ private:
 QDebug DIGIKAM_DATABASE_EXPORT operator<<(QDebug dbg, const ImageHistoryGraph& g);
 
 } // namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ImageHistoryGraph::HistoryLoadingMode)
+
 
 #endif // IMAGEHISTORYGRAPHDATA_H
 
