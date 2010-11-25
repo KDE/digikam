@@ -38,7 +38,6 @@ namespace Digikam
 UndoAction::UndoAction(DImgInterface* iface)
           : m_iface(iface)
 {
-    m_title = i18n("unknown");
     m_history = iface->getImageHistory();
 }
 
@@ -51,6 +50,11 @@ QString UndoAction::getTitle() const
     return m_title;
 }
 
+void UndoAction::setHistory(const DImageHistory& history)
+{
+    m_history = history;
+}
+
 DImageHistory UndoAction::getHistory() const
 {
     return m_history;
@@ -58,97 +62,20 @@ DImageHistory UndoAction::getHistory() const
 
 // ---------------------------------------------------------------------------------------------
 
-UndoActionRotate::UndoActionRotate(DImgInterface* iface,
-                                   UndoActionRotate::Angle angle)
-                : UndoAction(iface), m_angle(angle)
+UndoActionReversible::UndoActionReversible(DImgInterface* iface, const DImgBuiltinFilter& reversibleFilter)
+    : UndoAction(iface), m_filter(reversibleFilter)
 {
-    switch(m_angle)
-    {
-        case(R90):
-            m_title = i18n("Rotate 90 Degrees");
-            break;
-        case(R180):
-            m_title = i18n("Rotate 180 Degrees");
-            break;
-        case(R270):
-            m_title = i18n("Rotate 270 Degrees");
-            break;
-    }
+    m_title = m_filter.i18nDisplayableName();
 }
 
-UndoActionRotate::~UndoActionRotate()
+DImgBuiltinFilter UndoActionReversible::getFilter() const
 {
+    return m_filter;
 }
 
-void UndoActionRotate::rollBack()
+DImgBuiltinFilter UndoActionReversible::getReverseFilter() const
 {
-    switch(m_angle)
-    {
-        case(R90):
-            m_iface->rotate270(false);
-            return;
-        case(R180):
-            m_iface->rotate180(false);
-            return;
-        case(R270):
-            m_iface->rotate90(false);
-            return;
-        default:
-            kWarning() << "Unknown rotate angle specified";
-    }
-}
-
-void UndoActionRotate::execute()
-{
-    switch(m_angle)
-    {
-        case R90:
-            m_iface->rotate90(false);
-            return;
-        case R180:
-            m_iface->rotate180(false);
-            return;
-        case R270:
-            m_iface->rotate270(false);
-            return;
-        default:
-            kWarning() << "Unknown rotate angle specified";
-    }
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UndoActionFlip::UndoActionFlip(DImgInterface* iface, UndoActionFlip::Direction dir)
-              : UndoAction(iface), m_dir(dir)
-{
-    if (m_dir == Horizontal)
-        m_title = i18n("Flip Horizontal");
-    else if (m_dir == Vertical)
-        m_title = i18n("Flip Vertical");
-}
-
-UndoActionFlip::~UndoActionFlip()
-{
-}
-
-void UndoActionFlip::rollBack()
-{
-    switch(m_dir)
-    {
-        case Horizontal:
-            m_iface->flipHoriz(false);
-            return;
-        case Vertical:
-            m_iface->flipVert(false);
-            return;
-        default:
-            kWarning() << "Unknown flip direction specified";
-    }
-}
-
-void UndoActionFlip::execute()
-{
-    rollBack();
+    return m_filter.reverseFilter();
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -160,14 +87,6 @@ UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface, const QStri
 }
 
 UndoActionIrreversible::~UndoActionIrreversible()
-{
-}
-
-void UndoActionIrreversible::rollBack()
-{
-}
-
-void UndoActionIrreversible::execute()
 {
 }
 
