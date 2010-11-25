@@ -63,11 +63,11 @@ public:
     int            xpos;
     int            ypos;
 
-    IconGroupItem *group;
+    IconGroupItem* group;
 };
 
 IconItem::IconItem(IconGroupItem* parent)
-        : QObject(), d(new IconItemPriv)
+    : QObject(), d(new IconItemPriv)
 {
     m_next   = 0;
     m_prev   = 0;
@@ -84,10 +84,14 @@ IconItem::~IconItem()
 IconItem* IconItem::nextItem() const
 {
     if (m_next)
+    {
         return m_next;
+    }
 
     if (d->group->nextGroup())
+    {
         return d->group->nextGroup()->firstItem();
+    }
 
     return 0;
 }
@@ -95,10 +99,14 @@ IconItem* IconItem::nextItem() const
 IconItem* IconItem::prevItem() const
 {
     if (m_prev)
+    {
         return m_prev;
+    }
 
     if (d->group->prevGroup())
+    {
         return d->group->prevGroup()->lastItem();
+    }
 
     return 0;
 }
@@ -154,9 +162,12 @@ QRect IconItem::clickToToggleSelectRect() const
 bool IconItem::move(int x, int y)
 {
     if (d->xpos == x && d->ypos == y)
+    {
         return false;
+    }
 
-    d->xpos = x; d->ypos = y;
+    d->xpos = x;
+    d->ypos = y;
     return true;
 }
 
@@ -164,7 +175,7 @@ void IconItem::setSelected(bool val, bool cb)
 {
     IconView* view = d->group->iconView();
 
-    if (cb) 
+    if (cb)
     {
         view->blockSignals(true);
         view->clearSelection();
@@ -232,7 +243,7 @@ int IconItem::compare(IconItem* /*item*/)
     return 0;
 }
 
-void IconItem::paintItem(QPainter *p)
+void IconItem::paintItem(QPainter* p)
 {
     IconView* view = d->group->iconView();
 
@@ -256,7 +267,7 @@ void IconItem::paintItem(QPainter *p)
     p->drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
 }
 
-void IconItem::paintToggleSelectButton(QPainter *p)
+void IconItem::paintToggleSelectButton(QPainter* p)
 {
     IconView*   view      = d->group->iconView();
     const int   fadingVal = 128;
@@ -282,9 +293,13 @@ void IconItem::paintToggleSelectButton(QPainter *p)
     p->drawEllipse(toggleSelectRect());
 
     if (isSelected())
+    {
         selPix = view->deselectPixmap();
+    }
     else
+    {
         selPix = view->selectPixmap();
+    }
 
     p->drawPixmap(toggleSelectRect(), iconEffect.apply(selPix, KIconLoader::Desktop, KIconLoader::ActiveState));
     p->restore();

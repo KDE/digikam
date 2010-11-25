@@ -57,7 +57,7 @@ public:
     }
 
     AbstractCheckableAlbumModel* model;
-    AlbumFilterModel           * filterModel;
+    AlbumFilterModel*            filterModel;
     QString                      noSelectionText;
     bool                         isCheckable;
     bool                         closeOnActivate;
@@ -70,7 +70,7 @@ public:
 };
 
 AlbumSelectComboBox::AlbumSelectComboBox(QWidget* parent)
-            : TreeViewLineEditComboBox(parent), d(new AlbumSelectComboBoxPriv(this))
+    : TreeViewLineEditComboBox(parent), d(new AlbumSelectComboBoxPriv(this))
 {
     d->noSelectionText = i18n("No Album Selected");
 }
@@ -93,12 +93,14 @@ void AlbumSelectComboBox::setDefaultTagModel()
     setModel(new TagModel(AlbumModel::IgnoreRootAlbum, this));
 }
 
-void AlbumSelectComboBox::setModel(AbstractCheckableAlbumModel *model, AlbumFilterModel *filterModel)
+void AlbumSelectComboBox::setModel(AbstractCheckableAlbumModel* model, AlbumFilterModel* filterModel)
 {
     d->model = model;
 
     if (filterModel)
+    {
         d->filterModel = filterModel;
+    }
     else
     {
         d->filterModel = new AlbumFilterModel(this);
@@ -118,7 +120,9 @@ void AlbumSelectComboBox::setModel(AbstractCheckableAlbumModel *model, AlbumFilt
 void AlbumSelectComboBox::installView(QAbstractItemView* v)
 {
     if (view())
+    {
         return;
+    }
 
     TreeViewLineEditComboBox::installView(v);
     view()->setSortingEnabled(true);
@@ -129,7 +133,9 @@ void AlbumSelectComboBox::installView(QAbstractItemView* v)
 void AlbumSelectComboBox::setCheckable(bool checkable)
 {
     if (checkable == d->isCheckable)
+    {
         return;
+    }
 
     d->isCheckable = checkable;
     d->updateCheckable();
@@ -143,8 +149,12 @@ bool AlbumSelectComboBox::isCheckable() const
 void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCheckable()
 {
     if (!model)
+    {
         return;
+    }
+
     model->setCheckable(isCheckable);
+
     if (isCheckable)
     {
         connect(model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
@@ -160,7 +170,9 @@ void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCheckable()
 void AlbumSelectComboBox::setCloseOnActivate(bool close)
 {
     if (d->closeOnActivate == close)
+    {
         return;
+    }
 
     d->closeOnActivate = close;
     d->updateCloseOnActivate();
@@ -169,7 +181,10 @@ void AlbumSelectComboBox::setCloseOnActivate(bool close)
 void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCloseOnActivate()
 {
     if (!q->view())
+    {
         return;
+    }
+
     if (closeOnActivate)
     {
         connect(q->view(), SIGNAL(activated(const QModelIndex&)),
@@ -213,7 +228,9 @@ void AlbumSelectComboBox::hidePopup()
 void AlbumSelectComboBox::updateText()
 {
     if (!d->isCheckable || !d->showCheckStateSummary)
+    {
         return;
+    }
 
     QList<Album*> checkedAlbums          = d->model->checkedAlbums();
     QList<Album*> partiallyCheckedAlbums = d->model->partiallyCheckedAlbums();
@@ -268,14 +285,17 @@ void AlbumSelectComboBox::updateText()
 // ---------------------------------------------------------------------------------------------------
 
 AbstractAlbumTreeViewSelectComboBox::AbstractAlbumTreeViewSelectComboBox(QWidget* parent)
-                                   : AlbumSelectComboBox(parent), m_treeView(0)
+    : AlbumSelectComboBox(parent), m_treeView(0)
 {
 }
 
 void AbstractAlbumTreeViewSelectComboBox::installView(QAbstractItemView* view)
 {
     if (!view)
+    {
         view = m_treeView;
+    }
+
     AlbumSelectComboBox::installView(view);
 }
 
@@ -288,7 +308,7 @@ void AbstractAlbumTreeViewSelectComboBox::sendViewportEventToView(QEvent* e)
 // ---------------------------------------------------------------------------------
 
 AlbumTreeViewSelectComboBox::AlbumTreeViewSelectComboBox(QWidget* parent)
-                           : AbstractAlbumTreeViewSelectComboBox(parent)
+    : AbstractAlbumTreeViewSelectComboBox(parent)
 {
 }
 
@@ -311,9 +331,14 @@ void AlbumTreeViewSelectComboBox::setModel(AlbumModel* model, CheckableAlbumFilt
     }
 
     if (!model)
+    {
         model = new AlbumModel(AlbumModel::IgnoreRootAlbum, this);
+    }
+
     if (!filterModel)
+    {
         filterModel = new CheckableAlbumFilterModel(this);
+    }
 
     view()->setAlbumModel(model);
     view()->setAlbumFilterModel(filterModel);
@@ -326,7 +351,7 @@ void AlbumTreeViewSelectComboBox::setModel(AlbumModel* model, CheckableAlbumFilt
 // ---------------------------------------------------------------------------------------------------
 
 TagTreeViewSelectComboBox::TagTreeViewSelectComboBox(QWidget* parent)
-                         : AbstractAlbumTreeViewSelectComboBox(parent)
+    : AbstractAlbumTreeViewSelectComboBox(parent)
 {
 }
 
@@ -341,7 +366,7 @@ void TagTreeViewSelectComboBox::setDefaultModel()
 }
 
 void TagTreeViewSelectComboBox::setModel(TagModel* model,
-                                         TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
+        TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
 {
     if (!m_treeView)
     {
@@ -350,11 +375,19 @@ void TagTreeViewSelectComboBox::setModel(TagModel* model,
     }
 
     if (!model)
+    {
         model = new TagModel(AlbumModel::IgnoreRootAlbum, this);
+    }
+
     if (!filteredModel)
+    {
         filteredModel = new TagPropertiesFilterModel(this);
+    }
+
     if (!filterModel)
+    {
         filterModel = new CheckableAlbumFilterModel(this);
+    }
 
     view()->setAlbumModel(model);
     view()->setAlbumFilterModel(filteredModel, filterModel);

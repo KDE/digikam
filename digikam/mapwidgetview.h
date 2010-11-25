@@ -91,7 +91,7 @@ class MapWidgetView : public QWidget, public StateSavingObject
 {
     Q_OBJECT
 
-public: 
+public:
 
     MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent);
     ~MapWidgetView();
@@ -101,7 +101,7 @@ public:
     bool getActiveState() const;
     void setConfigGroup(KConfigGroup group);
     void doLoadState();
-    void doSaveState();    
+    void doSaveState();
 
 private:
 

@@ -75,46 +75,46 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-SearchField *SearchField::createField(const QString& name, SearchFieldGroup *parent)
+SearchField* SearchField::createField(const QString& name, SearchFieldGroup* parent)
 {
     if (name == "albumid")
     {
-        SearchFieldAlbum *field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeAlbum);
+        SearchFieldAlbum* field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeAlbum);
         field->setFieldName(name);
         field->setText(i18n("Album"), i18n("Search pictures located in"));
         return field;
     }
     else if (name == "albumname")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Album"), i18n("The album name contains"));
         return field;
     }
     else if (name == "albumcaption")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Album"), i18n("The album caption contains"));
         return field;
     }
     else if (name == "albumcollection")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Album"), i18n("The album collection contains"));
         return field;
     }
     else if (name == "tagid")
     {
-        SearchFieldAlbum *field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeTag);
+        SearchFieldAlbum* field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeTag);
         field->setFieldName(name);
         field->setText(i18n("Tags"), i18n("Return pictures with tag"));
         return field;
     }
     else if (name == "tagname")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Tags"), i18n("A tag of the picture contains"));
         return field;
@@ -125,7 +125,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         * @todo Merge a "Not tagged" field into TagModel together with AND/OR control
         * for checked tags and logical connections (AND and Not Tagged checked => all other tags disabled)
         */
-        SearchFieldCheckBox *field = new SearchFieldCheckBox(parent);
+        SearchFieldCheckBox* field = new SearchFieldCheckBox(parent);
         field->setFieldName(name);
         field->setText(i18n("Tags"), i18n("Image has no tags"));
         field->setLabel(i18n("Not Tagged"));
@@ -133,14 +133,14 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else if (name == "filename")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("File Name"), i18n("Return pictures whose file name contains"));
         return field;
     }
     else if (name == "modificationdate")
     {
-        SearchFieldRangeDate *field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateOnly);
+        SearchFieldRangeDate* field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateOnly);
         field->setFieldName(name);
         field->setText(i18n("Modification"), i18n("Return pictures modified between"));
         field->setBetweenText(i18nc("'Return pictures modified between...and...", "and"));
@@ -148,7 +148,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else if (name == "filesize")
     {
-        SearchFieldRangeDouble *field = new SearchFieldRangeDouble(parent);
+        SearchFieldRangeDouble* field = new SearchFieldRangeDouble(parent);
         field->setFieldName(name);
         field->setText(i18n("File Size"), i18n("Size of the file"));
         field->setBetweenText("-");
@@ -160,7 +160,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
 
     else if (name == "rating")
     {
-        SearchFieldRating *field = new SearchFieldRating(parent);
+        SearchFieldRating* field = new SearchFieldRating(parent);
         field->setFieldName(name);
         field->setText(i18n("Rating"), i18n("Return pictures rated at least"));
         field->setBetweenText(i18nc("Return pictures rated at least...at most...", "at most"));
@@ -168,7 +168,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else if (name == "creationdate")
     {
-        SearchFieldRangeDate *field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateOnly);
+        SearchFieldRangeDate* field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateOnly);
         field->setFieldName(name);
         field->setText(i18n("Date"), i18n("Return pictures created between"));
         field->setBetweenText(i18nc("'Return pictures created between...and...", "and"));
@@ -176,15 +176,16 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else if (name == "digitizationdate")
     {
-        SearchFieldRangeDate *field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateOnly);
+        SearchFieldRangeDate* field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateOnly);
         field->setFieldName(name);
         field->setText(i18n("Digitization"), i18n("Return pictures digitized between"));
         field->setBetweenText(i18nc("'Return pictures digitized between...and...", "and"));
         return field;
     }
     else if (name == "orientation")
-    {//choice
-        SearchFieldChoice *field = new SearchFieldChoice(parent);
+    {
+        //choice
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Exif Orientation"), i18n("Find pictures with orientation flag"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::Orientation);
@@ -197,49 +198,50 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else if (name == "width")
     {
-        SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Width"), i18n("Find pictures with a width between"));
         field->setBetweenText(i18nc("Find pictures with a width between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 100000, 250);
         field->setSuggestedValues(QList<int>()
-                << 50 << 100 << 200 << 300 << 400 << 500 << 600 <<700 << 800 << 900
-                << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
-                << 5000 << 6000 << 7000 << 8000 << 9000 << 10000
-                                  );
+                                  << 50 << 100 << 200 << 300 << 400 << 500 << 600 <<700 << 800 << 900
+                                  << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
+                                  << 5000 << 6000 << 7000 << 8000 << 9000 << 10000
+                                 );
         field->setSuggestedInitialValue(1000);
         field->setSingleSteps(50, 1000);
         return field;
     }
     else if (name == "height")
     {
-        SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Height"), i18n("Find pictures with a height between"));
         field->setBetweenText(i18nc("Find pictures with a height between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 100000, 250);
         field->setSuggestedValues(QList<int>()
-                << 50 << 100 << 200 << 300 << 400 << 500 << 600 <<700 << 800 << 900
-                << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
-                << 5000 << 6000 << 7000 << 8000 << 9000 << 10000
-                                  );
+                                  << 50 << 100 << 200 << 300 << 400 << 500 << 600 <<700 << 800 << 900
+                                  << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
+                                  << 5000 << 6000 << 7000 << 8000 << 9000 << 10000
+                                 );
         field->setSuggestedInitialValue(1000);
         field->setSingleSteps(50, 1000);
         return field;
     }
     else if (name == "pageorientation")
     {
-        SearchFieldPageOrientation *field = new SearchFieldPageOrientation(parent);
+        SearchFieldPageOrientation* field = new SearchFieldPageOrientation(parent);
         field->setFieldName(name);
         field->setText(i18n("Orientation"), i18nc("Find pictures with any orientation / landscape / portrait orientation...",
-                                                  "Find pictures with"));
+                       "Find pictures with"));
         return field;
     }
     else if (name == "format")
-    {//choice
-        SearchFieldChoice *field = new SearchFieldChoice(parent);
+    {
+        //choice
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("File Format"), i18n("Return pictures with the image file format"));
         QStringList formats;
@@ -253,15 +255,17 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         return field;
     }
     else if (name == "colordepth")
-    {//choice
-        SearchFieldColorDepth *field = new SearchFieldColorDepth(parent);
+    {
+        //choice
+        SearchFieldColorDepth* field = new SearchFieldColorDepth(parent);
         field->setFieldName(name);
         field->setText(i18n("Color Depth"), i18nc("Find pictures with any color depth / 8 bits per channel...", "Find pictures with"));
         return field;
     }
     else if (name == "colormodel")
-    {//choice
-        SearchFieldChoice *field = new SearchFieldChoice(parent);
+    {
+        //choice
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Color Model"), i18n("Find pictures with the color model"));
         QMap<int, QString> map;
@@ -279,22 +283,25 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
 
     else if (name == "make")
-    {//string
-        SearchFieldText *field = new SearchFieldText(parent);
+    {
+        //string
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Camera"), i18n("The make of the camera"));
         return field;
     }
     else if (name == "model")
-    {//string
-        SearchFieldText *field = new SearchFieldText(parent);
+    {
+        //string
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Camera"), i18n("The model of the camera"));
         return field;
     }
     else if (name == "aperture")
-    {//double
-        SearchFieldRangeDouble *field = new SearchFieldRangeDouble(parent);
+    {
+        //double
+        SearchFieldRangeDouble* field = new SearchFieldRangeDouble(parent);
         field->setFieldName(name);
         field->setText(i18n("Aperture"), i18n("Lens aperture as f-number"));
         field->setBetweenText("-");
@@ -302,48 +309,51 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         field->setNumberPrefixAndSuffix("f/", QString());
         field->setBoundary(0.3, 128, 1, 0.1);
         field->setSuggestedValues(QList<double>()
-                << 0.5 << 0.7 << 1.0 << 1.4 << 2 << 2.8 << 4 << 5.6
-                << 8 << 11 << 16 << 22 << 32 << 45 << 64 << 90 << 128
-                                );
+                                  << 0.5 << 0.7 << 1.0 << 1.4 << 2 << 2.8 << 4 << 5.6
+                                  << 8 << 11 << 16 << 22 << 32 << 45 << 64 << 90 << 128
+                                 );
         field->setSuggestedInitialValue(1.0);
         field->setSingleSteps(0.1, 10);
         return field;
     }
     else if (name == "focallength")
-    {//double
-        SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
+    {
+        //double
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Focal length"), i18n("Focal length of the lens"));
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix(QString(), "mm");
         field->setBoundary(0, 20000, 10);
         field->setSuggestedValues(QList<int>()
-                << 10 << 15 << 20 << 25 << 30 << 40 << 50 << 60 << 70 << 80 << 90
-                << 100 << 150 << 200 << 250 << 300 << 400 << 500 << 750 << 1000
-                                  );
+                                  << 10 << 15 << 20 << 25 << 30 << 40 << 50 << 60 << 70 << 80 << 90
+                                  << 100 << 150 << 200 << 250 << 300 << 400 << 500 << 750 << 1000
+                                 );
         field->setSuggestedInitialValue(30);
         field->setSingleSteps(2, 500);
         return field;
     }
     else if (name == "focallength35")
-    {//double
-        SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
+    {
+        //double
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Focal length"), i18n("35mm equivalent focal length"));
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix(QString(), "mm");
         field->setBoundary(0, 10000, 10);
         field->setSuggestedValues(QList<int>()
-                << 8 << 10 << 15 << 16 << 20 << 28 << 30 << 40 << 50 << 60 << 70 << 80
-                << 90 << 100 << 150 << 200 << 250 << 300 << 400 << 500 << 750 << 1000
-                                  );
+                                  << 8 << 10 << 15 << 16 << 20 << 28 << 30 << 40 << 50 << 60 << 70 << 80
+                                  << 90 << 100 << 150 << 200 << 250 << 300 << 400 << 500 << 750 << 1000
+                                 );
         field->setSuggestedInitialValue(28);
         field->setSingleSteps(2, 500);
         return field;
     }
     else if (name == "exposuretime")
-    {//double
-        SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
+    {
+        //double
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Exposure"), i18n("Exposure time"));
         field->setBetweenText("-");
@@ -351,17 +361,18 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         field->enableFractionMagic("1/"); // it's 1/250, not 250 as in the spin box
         field->setBoundary(120, -10000, 10); // negative is 1/
         field->setSuggestedValues(QList<int>()
-                << 30 << 15 << 8 << 4 << 2 << 1 << -2 << -4 << -8 << -15
-                << -30 << -50 << -60 << -100 << -125 << -150 << -200
-                << -250 << -500 << -750 << -1000 << -2000 << -4000 << -8000
-                                  );
+                                  << 30 << 15 << 8 << 4 << 2 << 1 << -2 << -4 << -8 << -15
+                                  << -30 << -50 << -60 << -100 << -125 << -150 << -200
+                                  << -250 << -500 << -750 << -1000 << -2000 << -4000 << -8000
+                                 );
         field->setSuggestedInitialValue(-200);
         field->setSingleSteps(2000, 5);
         return field;
     }
     else if (name == "exposureprogram")
-    {//choice
-        SearchFieldChoice *field = new SearchFieldChoice(parent);
+    {
+        //choice
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Exposure"), i18n("Automatic exposure program"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::ExposureProgram);
@@ -369,8 +380,9 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         return field;
     }
     else if (name == "exposuremode")
-    {//choice
-        SearchFieldChoice *field = new SearchFieldChoice(parent);
+    {
+        //choice
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Exposure"), i18n("Automatic or manual exposure"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::ExposureMode);
@@ -378,28 +390,30 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         return field;
     }
     else if (name == "sensitivity")
-    {//int
-        SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
+    {
+        //int
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Sensitivity"), i18n("ISO film speed (linear scale, ASA)"));
         field->setBetweenText("-");
         field->setBoundary(5, 6400, 50);
         field->setSuggestedValues(QList<int>()
-                << 6 << 8 << 10 << 12 << 16 << 20 << 25 << 32 << 40 << 50 << 64
-                << 80 << 100 << 125 << 160 << 200 << 250 << 320 << 400 << 500
-                << 640 << 800 << 1000 << 1250 << 1600 << 2000 << 2500 << 3200
-                << 4000 << 5000 << 6400
-                                  );
+                                  << 6 << 8 << 10 << 12 << 16 << 20 << 25 << 32 << 40 << 50 << 64
+                                  << 80 << 100 << 125 << 160 << 200 << 250 << 320 << 400 << 500
+                                  << 640 << 800 << 1000 << 1250 << 1600 << 2000 << 2500 << 3200
+                                  << 4000 << 5000 << 6400
+                                 );
         field->setSuggestedInitialValue(200);
         field->setSingleSteps(1, 400);
         return field;
     }
     else if (name == "flashmode")
-    {//choice
+    {
+        //choice
         /**
         * @todo This is a bitmask, and gives some more information
         */
-        SearchFieldChoice *field = new SearchFieldChoice(parent);
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Flash"), i18n("Flash mode"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::FlashMode);
@@ -407,8 +421,9 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         return field;
     }
     else if (name == "whitebalance")
-    {//choice
-        SearchFieldChoice *field = new SearchFieldChoice(parent);
+    {
+        //choice
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("White Balance"), i18n("Automatic or manual white balance"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::WhiteBalance);
@@ -416,8 +431,9 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         return field;
     }
     else if (name == "whitebalancecolortemperature")
-    {//int
-        SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
+    {
+        //int
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("White balance"), i18n("Color temperature used for white balance"));
         field->setBetweenText("-");
@@ -426,8 +442,9 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         return field;
     }
     else if (name == "meteringmode")
-    {//choice
-        SearchFieldChoice *field = new SearchFieldChoice(parent);
+    {
+        //choice
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Metering Mode"), i18n("Method to determine the exposure"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::MeteringMode);
@@ -435,8 +452,9 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         return field;
     }
     else if (name == "subjectdistance")
-    {//double
-        SearchFieldRangeDouble *field = new SearchFieldRangeDouble(parent);
+    {
+        //double
+        SearchFieldRangeDouble* field = new SearchFieldRangeDouble(parent);
         field->setFieldName(name);
         field->setText(i18n("Subject Distance"), i18n("Distance of the subject from the lens"));
         field->setBetweenText("-");
@@ -445,8 +463,9 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         return field;
     }
     else if (name == "subjectdistancecategory")
-    {//choice
-        SearchFieldChoice *field = new SearchFieldChoice(parent);
+    {
+        //choice
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Subject Distance"), i18n("Macro, close or distant view"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::SubjectDistanceCategory);
@@ -481,21 +500,21 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
 
     else if (name == "comment")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Caption"), i18n("Return pictures whose comment contains"));
         return field;
     }
     else if (name == "commentauthor")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Author"), i18n("Return pictures commented by"));
         return field;
     }
     else if (name == "headline")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Headline"), i18n("Return pictures with the IPTC headline"));
         return field;
@@ -503,14 +522,14 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else if (name == "title")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText* field = new SearchFieldText(parent);
         field->setFieldName(name);
         field->setText(i18n("Title"), i18n("Return pictures with the IPTC title"));
         return field;
     }
     else if (name == "keyword")
     {
-        SearchFieldText *field = new SearchFieldKeyword(parent);
+        SearchFieldText* field = new SearchFieldKeyword(parent);
         field->setFieldName(name);
         field->setText(QString(), i18n("Find pictures that have associated all these words:"));
         return field;
@@ -519,13 +538,14 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     {
         kWarning() << "SearchField::createField: cannot create SearchField for" << name;
     }
+
     return 0;
 }
 
 // -------------------------------------------------------------------------------------------
 
-SearchField::SearchField(QObject *parent)
-           : QObject(parent)
+SearchField::SearchField(QObject* parent)
+    : QObject(parent)
 {
     m_label                = new QLabel;
     m_detailLabel          = new QLabel;
@@ -534,10 +554,12 @@ SearchField::SearchField(QObject *parent)
     m_valueIsValid         = false;
 }
 
-void SearchField::setup(QGridLayout *layout, int line)
+void SearchField::setup(QGridLayout* layout, int line)
 {
     if (line == -1)
+    {
         line = layout->rowCount();
+    }
 
     // 10px indent
     layout->setColumnMinimumWidth(0, 10);
@@ -563,6 +585,7 @@ void SearchField::setup(QGridLayout *layout, int line)
     {
         m_clearButton->setPixmap(SmallIcon("edit-clear-locationbar-ltr", 0, KIconLoader::DefaultState));
     }
+
     // Important: Don't cause re-layouting when button gets hidden/shown!
     m_clearButton->stayVisibleWhenAnimatedOut(true);
     m_clearButton->setToolTip(i18n("Reset contents"));
@@ -573,7 +596,7 @@ void SearchField::setup(QGridLayout *layout, int line)
     layout->addWidget(m_clearButton, line, 7);
 }
 
-void SearchField::setupLabels(QGridLayout *layout, int line)
+void SearchField::setupLabels(QGridLayout* layout, int line)
 {
     m_label->setObjectName("SearchField_MainLabel");
     m_detailLabel->setObjectName("SearchField_DetailLabel");
@@ -614,28 +637,37 @@ bool SearchField::isVisible()
 void SearchField::setCategoryLabelVisible(bool visible)
 {
     if (m_categoryLabelVisible == visible)
+    {
         return;
+    }
+
     m_categoryLabelVisible = visible;
     // update status: compare setVisible() and isVisible()
     m_label->setVisible(m_detailLabel->isVisible() && m_categoryLabelVisible);
 }
 
-void SearchField::setCategoryLabelVisibleFromPreviousField(SearchField *previousField)
+void SearchField::setCategoryLabelVisibleFromPreviousField(SearchField* previousField)
 {
     if (previousField->m_label->text() == m_label->text())
+    {
         setCategoryLabelVisible(false);
+    }
     else
+    {
         setCategoryLabelVisible(true);
+    }
 }
 
 QList<QRect> SearchField::widgetRects(WidgetRectType type) const
 {
     QList<QRect> rects;
+
     if (type == LabelAndValueWidgetRects)
     {
         rects << m_label->geometry();
         rects << m_detailLabel->geometry();
     }
+
     rects += valueWidgetRects();
     return rects;
 }
@@ -657,18 +689,18 @@ void SearchField::setValidValueState(bool valueIsValid)
 
 // -------------------------------------------------------------------------
 
-SearchFieldText::SearchFieldText(QObject *parent)
-               : SearchField(parent), m_edit(0)
+SearchFieldText::SearchFieldText(QObject* parent)
+    : SearchField(parent), m_edit(0)
 {
 }
 
-void SearchFieldText::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldText::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     m_edit = new KLineEdit;
     layout->addWidget(m_edit, row, column, 1, 3);
 
-    connect(m_edit, SIGNAL(textChanged(const QString &)),
-            this, SLOT(valueChanged(const QString &)));
+    connect(m_edit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(valueChanged(const QString&)));
 }
 
 void SearchFieldText::read(SearchXmlCachingReader& reader)
@@ -680,6 +712,7 @@ void SearchFieldText::read(SearchXmlCachingReader& reader)
 void SearchFieldText::write(SearchXmlWriter& writer)
 {
     QString value = m_edit->text();
+
     if (!value.isEmpty())
     {
         writer.writeField(m_name, SearchXml::Like);
@@ -712,8 +745,8 @@ void SearchFieldText::valueChanged(const QString& text)
 
 // -------------------------------------------------------------------------
 
-SearchFieldKeyword::SearchFieldKeyword(QObject *parent)
-                  : SearchFieldText(parent)
+SearchFieldKeyword::SearchFieldKeyword(QObject* parent)
+    : SearchFieldText(parent)
 {
 }
 
@@ -739,18 +772,18 @@ void SearchFieldKeyword::write(SearchXmlWriter& writer)
 
 // -------------------------------------------------------------------------
 
-SearchFieldRangeDate::SearchFieldRangeDate(QObject *parent, Type type)
-                    : SearchField(parent),
-                      m_firstTimeEdit(0), m_firstDateEdit(0),
-                      m_secondTimeEdit(0), m_secondDateEdit(0), m_type(type)
+SearchFieldRangeDate::SearchFieldRangeDate(QObject* parent, Type type)
+    : SearchField(parent),
+      m_firstTimeEdit(0), m_firstDateEdit(0),
+      m_secondTimeEdit(0), m_secondDateEdit(0), m_type(type)
 {
     m_betweenLabel = new QLabel;
 }
 
-void SearchFieldRangeDate::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldRangeDate::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
-//     QHBoxLayout *hbox = new QHBoxLayout;
-//     layout->addLayout(hbox, row, column, 1, 3);
+    //     QHBoxLayout *hbox = new QHBoxLayout;
+    //     layout->addLayout(hbox, row, column, 1, 3);
 
     m_firstDateEdit  = new KDateEdit;
     m_secondDateEdit = new KDateEdit;
@@ -770,8 +803,8 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout *layout, int row, int c
     }
     else
     {
-        QHBoxLayout *hbox1 = new QHBoxLayout;
-        QHBoxLayout *hbox2 = new QHBoxLayout;
+        QHBoxLayout* hbox1 = new QHBoxLayout;
+        QHBoxLayout* hbox2 = new QHBoxLayout;
 
         layout->addLayout(hbox1, row, column);
         layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
@@ -796,10 +829,10 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout *layout, int row, int c
         */
     }
 
-    connect(m_firstDateEdit, SIGNAL(dateChanged(const QDate &)),
+    connect(m_firstDateEdit, SIGNAL(dateChanged(const QDate&)),
             this, SLOT(valueChanged()));
 
-    connect(m_secondDateEdit, SIGNAL(dateChanged(const QDate &)),
+    connect(m_secondDateEdit, SIGNAL(dateChanged(const QDate&)),
             this, SLOT(valueChanged()));
 }
 
@@ -811,11 +844,15 @@ void SearchFieldRangeDate::setBetweenText(const QString& between)
 void SearchFieldRangeDate::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
+
     if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
     {
         QList<QDateTime> dates = reader.valueToDateTimeList();
+
         if (dates.size() != 2)
+        {
             return;
+        }
 
         if (m_type == DateTime)
         {
@@ -827,7 +864,9 @@ void SearchFieldRangeDate::read(SearchXmlCachingReader& reader)
         else
         {
             if (relation == SearchXml::Interval)
+            {
                 dates.last() = dates.last().addDays(-1);
+            }
 
             m_firstDateEdit->setDate(dates.first().date());
             m_secondDateEdit->setDate(dates.last().date());
@@ -836,6 +875,7 @@ void SearchFieldRangeDate::read(SearchXmlCachingReader& reader)
     else
     {
         QDateTime dt = reader.valueToDateTime();
+
         if (m_type == DateTime)
         {
             if (relation == SearchXml::Equal)
@@ -850,6 +890,7 @@ void SearchFieldRangeDate::read(SearchXmlCachingReader& reader)
                 m_firstDateEdit->setDate(dt.date());
                 m_firstTimeEdit->setTime(dt.time());
             }
+
             {
                 m_secondDateEdit->setDate(dt.date());
                 m_secondTimeEdit->setTime(dt.time());
@@ -884,11 +925,18 @@ void SearchFieldRangeDate::write(SearchXmlWriter& writer)
     if (m_firstDateEdit->date().isValid() && m_secondDateEdit->date().isValid())
     {
         QDateTime firstDate(m_firstDateEdit->date());
+
         if (m_type == DateTime)
+        {
             firstDate.setTime(m_firstTimeEdit->time());
+        }
+
         QDateTime secondDate(m_secondDateEdit->date());
+
         if (m_type == DateTime)
+        {
             secondDate.setTime(m_secondTimeEdit->time());
+        }
 
         if (firstDate == secondDate)
         {
@@ -899,7 +947,10 @@ void SearchFieldRangeDate::write(SearchXmlWriter& writer)
         else
         {
             if (m_type == DateOnly)
+            {
                 secondDate = secondDate.addDays(1);
+            }
+
             writer.writeField(m_name, SearchXml::Interval);
             writer.writeValue(QList<QDateTime>() << firstDate << secondDate);
             writer.finishField();
@@ -908,25 +959,37 @@ void SearchFieldRangeDate::write(SearchXmlWriter& writer)
     else
     {
         QDate date = m_firstDateEdit->date();
+
         if (date.isValid())
         {
             writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
             QDateTime dt(date);
+
             if (m_type == DateTime)
+            {
                 dt.setTime(m_firstTimeEdit->time());
+            }
+
             writer.writeValue(dt);
             writer.finishField();
         }
 
         date = m_secondDateEdit->date();
+
         if (date.isValid())
         {
             writer.writeField(m_name, SearchXml::LessThan);
             QDateTime dt(date);
+
             if (m_type == DateTime)
+            {
                 dt.setTime(m_secondTimeEdit->time());
+            }
             else
-                dt = dt.addDays(1); // include whole day
+            {
+                dt = dt.addDays(1);    // include whole day
+            }
+
             writer.writeValue(dt);
             writer.finishField();
         }
@@ -936,11 +999,19 @@ void SearchFieldRangeDate::write(SearchXmlWriter& writer)
 void SearchFieldRangeDate::reset()
 {
     m_firstDateEdit->setDate(QDate());
+
     if (m_type == DateTime)
+    {
         m_firstTimeEdit->setTime(QTime(0, 0, 0, 0));
+    }
+
     m_secondDateEdit->setDate(QDate());
+
     if (m_type == DateTime)
+    {
         m_secondTimeEdit->setTime(QTime(0, 0, 0, 0));
+    }
+
     valueChanged();
 }
 
@@ -954,11 +1025,19 @@ void SearchFieldRangeDate::setBoundary(QDateTime min, QDateTime max)
 void SearchFieldRangeDate::setValueWidgetsVisible(bool visible)
 {
     m_firstDateEdit->setVisible(visible);
+
     if (m_firstTimeEdit)
+    {
         m_firstTimeEdit->setVisible(visible);
+    }
+
     m_secondDateEdit->setVisible(visible);
+
     if (m_secondTimeEdit)
+    {
         m_secondTimeEdit->setVisible(visible);
+    }
+
     m_betweenLabel->setVisible(visible);
 }
 
@@ -966,11 +1045,19 @@ QList<QRect> SearchFieldRangeDate::valueWidgetRects() const
 {
     QList<QRect> rects;
     rects << m_firstDateEdit->geometry();
+
     if (m_firstTimeEdit)
+    {
         rects << m_firstTimeEdit->geometry();
+    }
+
     rects << m_secondDateEdit->geometry();
+
     if (m_secondTimeEdit)
+    {
         rects << m_secondTimeEdit->geometry();
+    }
+
     return rects;
 }
 
@@ -981,28 +1068,28 @@ void SearchFieldRangeDate::valueChanged()
 
 // -------------------------------------------------------------------------
 
-SearchFieldRangeInt::SearchFieldRangeInt(QObject *parent)
-                   : SearchField(parent),
-                     m_min(0), m_max(100), m_reciprocal(false),
-                     m_firstBox(0), m_secondBox(0)
+SearchFieldRangeInt::SearchFieldRangeInt(QObject* parent)
+    : SearchField(parent),
+      m_min(0), m_max(100), m_reciprocal(false),
+      m_firstBox(0), m_secondBox(0)
 {
     m_betweenLabel = new QLabel;
     m_firstBox     = new CustomStepsIntSpinBox;
     m_secondBox    = new CustomStepsIntSpinBox;
 }
 
-void SearchFieldRangeInt::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldRangeInt::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
-//     QHBoxLayout *hbox = new QHBoxLayout;
-//     layout->addLayout(hbox, row, column);
+    //     QHBoxLayout *hbox = new QHBoxLayout;
+    //     layout->addLayout(hbox, row, column);
 
     m_firstBox->setSpecialValueText(" ");
     m_secondBox->setSpecialValueText(" ");
 
-//     hbox->addWidget(m_firstBox);
-//     hbox->addWidget(m_betweenLabel);
-//     hbox->addWidget(m_secondBox);
-//     hbox->addStretch(1);
+    //     hbox->addWidget(m_firstBox);
+    //     hbox->addWidget(m_betweenLabel);
+    //     hbox->addWidget(m_secondBox);
+    //     hbox->addStretch(1);
     layout->addWidget(m_firstBox, row, column);
     layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
     layout->addWidget(m_secondBox, row, column+2);
@@ -1017,6 +1104,7 @@ void SearchFieldRangeInt::setupValueWidgets(QGridLayout *layout, int row, int co
 void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
+
     if (m_reciprocal)
     {
         switch (relation)
@@ -1037,8 +1125,12 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
             case SearchXml::IntervalOpen:
             {
                 QList<double> list = reader.valueToDoubleList();
+
                 if (list.size() != 2)
+                {
                     return;
+                }
+
                 m_secondBox->setFractionMagicValue(list.first());
                 m_firstBox->setFractionMagicValue(list.last());
             }
@@ -1070,8 +1162,12 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
             case SearchXml::IntervalOpen:
             {
                 QList<int> list = reader.valueToIntList();
+
                 if (list.size() != 2)
+                {
                     return;
+                }
+
                 m_firstBox->setValue(list.first());
                 m_secondBox->setValue(list.last());
             }
@@ -1089,10 +1185,16 @@ void SearchFieldRangeInt::write(SearchXmlWriter& writer)
         if (m_firstBox->value() != m_secondBox->value())
         {
             writer.writeField(m_name, SearchXml::Interval);
+
             if (m_reciprocal)
+            {
                 writer.writeValue(QList<double>() << m_secondBox->fractionMagicValue() << m_firstBox->fractionMagicValue());
+            }
             else
+            {
                 writer.writeValue(QList<int>() << m_firstBox->value() << m_secondBox->value());
+            }
+
             writer.finishField();
         }
         else
@@ -1103,10 +1205,16 @@ void SearchFieldRangeInt::write(SearchXmlWriter& writer)
             * or one step larger than left
             */
             writer.writeField(m_name, SearchXml::Equal);
+
             if (m_reciprocal)
+            {
                 writer.writeValue(m_firstBox->fractionMagicValue());
+            }
             else
+            {
                 writer.writeValue(m_firstBox->value());
+            }
+
             writer.finishField();
         }
     }
@@ -1124,8 +1232,10 @@ void SearchFieldRangeInt::write(SearchXmlWriter& writer)
                 writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
                 writer.writeValue(m_firstBox->value());
             }
+
             writer.finishField();
         }
+
         if (m_secondBox->value() != m_secondBox->minimum())
         {
             if (m_reciprocal)
@@ -1138,6 +1248,7 @@ void SearchFieldRangeInt::write(SearchXmlWriter& writer)
                 writer.writeField(m_name, SearchXml::LessThanOrEqual);
                 writer.writeValue(m_secondBox->value());
             }
+
             writer.finishField();
         }
     }
@@ -1216,25 +1327,31 @@ void SearchFieldRangeInt::setInvertStepping(bool invert)
 void SearchFieldRangeInt::valueChanged()
 {
     bool validValue = false;
+
     if (m_reciprocal)
     {
         bool firstAtMinimum = (m_firstBox->value() == m_firstBox->minimum());
         bool secondAtMinimum = (m_secondBox->value() == m_secondBox->minimum());
+
         if (!secondAtMinimum)
         {
             m_firstBox->setRange(m_secondBox->value(), m_max);
             validValue = true;
         }
+
         if (!firstAtMinimum)
         {
             m_secondBox->setRange(m_min-1, m_firstBox->value());
+
             if (secondAtMinimum)
             {
                 m_firstBox->setRange(m_min, m_max);
                 m_secondBox->setValue(m_secondBox->minimum());
             }
+
             validValue = true;
         }
+
         if (firstAtMinimum && secondAtMinimum)
         {
             m_firstBox->setRange(m_min, m_max);
@@ -1245,27 +1362,33 @@ void SearchFieldRangeInt::valueChanged()
     {
         bool firstAtMinimum = (m_firstBox->value() == m_firstBox->minimum());
         bool secondAtMinimum = (m_secondBox->value() == m_secondBox->minimum());
+
         if (!secondAtMinimum)
         {
             m_firstBox->setRange(m_min, m_secondBox->value());
             validValue = true;
         }
+
         if (!firstAtMinimum)
         {
             m_secondBox->setRange(m_firstBox->value(), m_max);
+
             if (secondAtMinimum)
             {
                 m_firstBox->setRange(m_min, m_max);
                 m_secondBox->setValue(m_secondBox->minimum());
             }
+
             validValue = true;
         }
+
         if (firstAtMinimum && secondAtMinimum)
         {
             m_firstBox->setRange(m_min, m_max);
             m_secondBox->setRange(m_min, m_max);
         }
     }
+
     setValidValueState(validValue);
 }
 
@@ -1294,28 +1417,28 @@ QList<QRect> SearchFieldRangeInt::valueWidgetRects() const
 
 // -------------------------------------------------------------------------
 
-SearchFieldRangeDouble::SearchFieldRangeDouble(QObject *parent)
-                      : SearchField(parent),
-                        m_min(0), m_max(100), m_factor(1),
-                        m_firstBox(0), m_secondBox(0)
+SearchFieldRangeDouble::SearchFieldRangeDouble(QObject* parent)
+    : SearchField(parent),
+      m_min(0), m_max(100), m_factor(1),
+      m_firstBox(0), m_secondBox(0)
 {
     m_betweenLabel = new QLabel;
     m_firstBox     = new CustomStepsDoubleSpinBox;
     m_secondBox    = new CustomStepsDoubleSpinBox;
 }
 
-void SearchFieldRangeDouble::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldRangeDouble::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
-//     QHBoxLayout *hbox = new QHBoxLayout;
-//     layout->addLayout(hbox, row, column);
+    //     QHBoxLayout *hbox = new QHBoxLayout;
+    //     layout->addLayout(hbox, row, column);
 
     m_firstBox->setSpecialValueText(" ");
     m_secondBox->setSpecialValueText(" ");
 
-/*    hbox->addWidget(m_firstBox);
-    hbox->addWidget(m_betweenLabel);
-    hbox->addWidget(m_secondBox);
-    hbox->addStretch(1);*/
+    /*    hbox->addWidget(m_firstBox);
+        hbox->addWidget(m_betweenLabel);
+        hbox->addWidget(m_secondBox);
+        hbox->addStretch(1);*/
     layout->addWidget(m_firstBox, row, column);
     layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
     layout->addWidget(m_secondBox, row, column+2);
@@ -1330,15 +1453,24 @@ void SearchFieldRangeDouble::setupValueWidgets(QGridLayout *layout, int row, int
 void SearchFieldRangeDouble::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
+
     if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
+    {
         m_firstBox->setValue(reader.valueToDouble() / m_factor );
+    }
     else if (relation == SearchXml::LessThanOrEqual || relation == SearchXml::LessThan)
+    {
         m_secondBox->setValue(reader.valueToDouble() / m_factor );
+    }
     else if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
     {
         QList<double> list = reader.valueToDoubleList();
+
         if (list.size() != 2)
+        {
             return;
+        }
+
         m_firstBox->setValue(list.first() / m_factor);
         m_secondBox->setValue(list.last() / m_factor);
     }
@@ -1353,7 +1485,7 @@ void SearchFieldRangeDouble::write(SearchXmlWriter& writer)
         {
             writer.writeField(m_name, SearchXml::Interval);
             writer.writeValue(QList<double>()
-                    << (m_firstBox->value() * m_factor) << (m_secondBox->value() * m_factor));
+                              << (m_firstBox->value() * m_factor) << (m_secondBox->value() * m_factor));
             writer.finishField();
         }
         else
@@ -1372,6 +1504,7 @@ void SearchFieldRangeDouble::write(SearchXmlWriter& writer)
             writer.writeValue(m_firstBox->value() * m_factor);
             writer.finishField();
         }
+
         if (m_secondBox->value() != m_secondBox->minimum())
         {
             writer.writeField(m_name, SearchXml::LessThanOrEqual);
@@ -1450,26 +1583,32 @@ void SearchFieldRangeDouble::valueChanged()
     bool validValue      = false;
     bool firstAtMinimum  = (m_firstBox->value() == m_firstBox->minimum());
     bool secondAtMinimum = (m_secondBox->value() == m_secondBox->minimum());
+
     if (!secondAtMinimum)
     {
         m_firstBox->setRange(m_min, m_secondBox->value());
         validValue = true;
     }
+
     if (!firstAtMinimum)
     {
         m_secondBox->setRange(m_firstBox->value(), m_max);
+
         if (secondAtMinimum)
         {
             m_firstBox->setRange(m_min, m_max);
             m_secondBox->setValue(m_secondBox->minimum());
         }
+
         validValue = true;
     }
+
     if (firstAtMinimum && secondAtMinimum)
     {
         m_firstBox->setRange(m_min, m_max);
         m_secondBox->setRange(m_min, m_max);
     }
+
     setValidValueState(validValue);
 }
 
@@ -1498,15 +1637,15 @@ QList<QRect> SearchFieldRangeDouble::valueWidgetRects() const
 
 // -------------------------------------------------------------------------
 
-SearchFieldChoice::SearchFieldChoice(QObject *parent)
-                 : SearchField(parent),
-                   m_comboBox(0), m_type(QVariant::Invalid)
+SearchFieldChoice::SearchFieldChoice(QObject* parent)
+    : SearchField(parent),
+      m_comboBox(0), m_type(QVariant::Invalid)
 {
     m_model = new ChoiceSearchModel(this);
     m_anyText = i18n("Any");
 }
 
-void SearchFieldChoice::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldChoice::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     m_comboBox = new ChoiceSearchComboBox;
     m_comboBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -1549,6 +1688,7 @@ void SearchFieldChoice::checkStateChanged()
 void SearchFieldChoice::updateComboText()
 {
     QStringList checkedChoices = m_model->checkedDisplayTexts();
+
     if (checkedChoices.isEmpty())
     {
         m_comboBox->setLabelText(m_anyText);
@@ -1570,12 +1710,17 @@ void SearchFieldChoice::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     QList<int> values;
+
     if (relation == SearchXml::OneOf)
     {
         if (m_type == QVariant::Int)
+        {
             m_model->setChecked<int>(reader.valueToIntList());
+        }
         else if (m_type == QVariant::String)
+        {
             m_model->setChecked<QString>(reader.valueToStringList());
+        }
     }
     else
     {
@@ -1597,6 +1742,7 @@ void SearchFieldChoice::write(SearchXmlWriter& writer)
     if (m_type == QVariant::Int)
     {
         QList<int> v = m_model->checkedKeys<int>();
+
         if (!v.isEmpty())
         {
             if (v.size() == 1)
@@ -1616,6 +1762,7 @@ void SearchFieldChoice::write(SearchXmlWriter& writer)
     else if (m_type == QVariant::String)
     {
         QList<QString> v = m_model->checkedKeys<QString>();
+
         if (!v.isEmpty())
         {
             if (v.size() == 1)
@@ -1623,9 +1770,14 @@ void SearchFieldChoice::write(SearchXmlWriter& writer)
                 // For choice string fields, we have the possibility to specify the wildcard
                 // position with the position of *.
                 if (v.first().contains("*"))
+                {
                     writer.writeField(m_name, SearchXml::Like);
+                }
                 else
+                {
                     writer.writeField(m_name, SearchXml::Equal);
+                }
+
                 writer.writeValue(v.first());
                 writer.finishField();
             }
@@ -1873,13 +2025,13 @@ QList<int> SearchFieldChoice::values() const
 
 // -------------------------------------------------------------------------
 
-SearchFieldAlbum::SearchFieldAlbum(QObject *parent, Type type)
-                : SearchField(parent),
-                  m_comboBox(0), m_type(type)
+SearchFieldAlbum::SearchFieldAlbum(QObject* parent, Type type)
+    : SearchField(parent),
+      m_comboBox(0), m_type(type)
 {
 }
 
-void SearchFieldAlbum::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     m_comboBox = new AlbumSelectComboBox;
     m_comboBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -1915,14 +2067,21 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
     QList<int> ids = reader.valueToIntOrIntList();
     foreach(int id, ids)
     {
-        Album *a = 0;
+        Album* a = 0;
+
         if (m_type == TypeAlbum)
+        {
             a = AlbumManager::instance()->findPAlbum(id);
+        }
         else if (m_type == TypeTag)
+        {
             a = AlbumManager::instance()->findTAlbum(id);
+        }
 
         if (!a)
+        {
             kDebug() << "Search: Did not find album for ID" << id << "given in Search XML";
+        }
 
         m_model->setChecked(a, true);
     }
@@ -1930,10 +2089,12 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
 
 void SearchFieldAlbum::write(SearchXmlWriter& writer)
 {
-    QList<Album *> checkedAlbums = m_model->checkedAlbums();
+    QList<Album*> checkedAlbums = m_model->checkedAlbums();
 
     if (checkedAlbums.isEmpty())
+    {
         return;
+    }
 
     QList<int> albumIds;
     foreach (Album* album, checkedAlbums)
@@ -1942,10 +2103,16 @@ void SearchFieldAlbum::write(SearchXmlWriter& writer)
     }
 
     writer.writeField(m_name, SearchXml::InTree);
+
     if (albumIds.size() > 1)
+    {
         writer.writeValue(albumIds);
+    }
     else
+    {
         writer.writeValue(albumIds.first());
+    }
+
     writer.finishField();
 }
 
@@ -1968,15 +2135,15 @@ QList<QRect> SearchFieldAlbum::valueWidgetRects() const
 
 // -------------------------------------------------------------------------
 
-SearchFieldRating::SearchFieldRating(QObject *parent)
-                 : SearchField(parent)
+SearchFieldRating::SearchFieldRating(QObject* parent)
+    : SearchField(parent)
 {
     m_betweenLabel = new QLabel;
     m_firstBox     = new RatingComboBox;
     m_secondBox    = new RatingComboBox;
 }
 
-void SearchFieldRating::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldRating::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     layout->addWidget(m_firstBox, row, column);
     layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
@@ -1992,6 +2159,7 @@ void SearchFieldRating::setupValueWidgets(QGridLayout *layout, int row, int colu
 void SearchFieldRating::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
+
     switch (relation)
     {
         case SearchXml::GreaterThanOrEqual:
@@ -2014,8 +2182,12 @@ void SearchFieldRating::read(SearchXmlCachingReader& reader)
         case SearchXml::IntervalOpen:
         {
             QList<int> list = reader.valueToIntList();
+
             if (list.size() != 2)
+            {
                 return;
+            }
+
             m_firstBox->setRatingValue((RatingComboBox::RatingValue)list.first());
             m_secondBox->setRatingValue((RatingComboBox::RatingValue)list.last());
         }
@@ -2056,6 +2228,7 @@ void SearchFieldRating::write(SearchXmlWriter& writer)
             writer.writeValue(first);
             writer.finishField();
         }
+
         if (second != RatingComboBox::Null)
         {
             writer.writeField(m_name, SearchXml::LessThanOrEqual);
@@ -2088,7 +2261,9 @@ void SearchFieldRating::firstValueChanged()
     if (first >= RatingComboBox::Rating0 && first <= RatingComboBox::Rating5)
     {
         if (first > second)
+        {
             m_secondBox->setRatingValue(RatingComboBox::Null);
+        }
     }
 
     setValidValueState(first != RatingComboBox::Null || second != RatingComboBox::Null);
@@ -2104,7 +2279,9 @@ void SearchFieldRating::secondValueChanged()
     if (second >= RatingComboBox::Rating0 && second <= RatingComboBox::Rating5)
     {
         if (first > second)
+        {
             m_firstBox->setRatingValue(second);
+        }
     }
 
     setValidValueState(first != RatingComboBox::Null || second != RatingComboBox::Null);
@@ -2133,13 +2310,13 @@ QList<QRect> SearchFieldRating::valueWidgetRects() const
 
 // -------------------------------------------------------------------------
 
-SearchFieldComboBox::SearchFieldComboBox(QObject *parent)
-                     : SearchField(parent),
-                       m_comboBox(0)
+SearchFieldComboBox::SearchFieldComboBox(QObject* parent)
+    : SearchField(parent),
+      m_comboBox(0)
 {
 }
 
-void SearchFieldComboBox::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldComboBox::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     m_comboBox = new KComboBox;
     m_comboBox->setEditable(false);
@@ -2152,9 +2329,11 @@ void SearchFieldComboBox::setupValueWidgets(QGridLayout *layout, int row, int co
 void SearchFieldComboBox::write(SearchXmlWriter& writer)
 {
     int index = m_comboBox->currentIndex();
+
     if (index != -1)
     {
         QVariant bits = m_comboBox->itemData(index);
+
         if (!bits.isNull())
         {
             writer.writeField(m_name, SearchXml::Equal);
@@ -2188,13 +2367,13 @@ void SearchFieldComboBox::indexChanged(int index)
 
 // -------------------------------------------------------------------------
 
-SearchFieldCheckBox::SearchFieldCheckBox(QObject *parent)
-                     : SearchField(parent),
-                       m_checkBox(0)
+SearchFieldCheckBox::SearchFieldCheckBox(QObject* parent)
+    : SearchField(parent),
+      m_checkBox(0)
 {
 }
 
-void SearchFieldCheckBox::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldCheckBox::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     m_checkBox = new QCheckBox(m_label);
     layout->addWidget(m_checkBox, row, column, 1, 3);
@@ -2203,11 +2382,14 @@ void SearchFieldCheckBox::setupValueWidgets(QGridLayout *layout, int row, int co
             this, SLOT(slotToggled(bool)));
 }
 
-void SearchFieldCheckBox::setLabel(const QString &label)
+void SearchFieldCheckBox::setLabel(const QString& label)
 {
     m_label = label;
+
     if (m_checkBox)
+    {
         m_checkBox->setText(label);
+    }
 }
 
 void SearchFieldCheckBox::write(SearchXmlWriter& writer)
@@ -2223,8 +2405,11 @@ void SearchFieldCheckBox::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     reader.readToEndOfElement();
+
     if (relation == SearchXml::Equal)
+    {
         m_checkBox->setChecked(true);
+    }
 }
 
 void SearchFieldCheckBox::setValueWidgetsVisible(bool visible)
@@ -2251,12 +2436,12 @@ void SearchFieldCheckBox::slotToggled(bool checked)
 
 // -------------------------------------------------------------------------
 
-SearchFieldColorDepth::SearchFieldColorDepth(QObject *parent)
-                     : SearchFieldComboBox(parent)
+SearchFieldColorDepth::SearchFieldColorDepth(QObject* parent)
+    : SearchFieldComboBox(parent)
 {
 }
 
-void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldColorDepth::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     SearchFieldComboBox::setupValueWidgets(layout, row, column);
     m_comboBox->addItem(i18n("any color depth"));
@@ -2269,24 +2454,30 @@ void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int 
 void SearchFieldColorDepth::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
+
     if (relation == SearchXml::Equal)
     {
         int bits = reader.valueToInt();
+
         if (bits == 8)
+        {
             m_comboBox->setCurrentIndex(1);
+        }
         else if (bits == 16)
+        {
             m_comboBox->setCurrentIndex(2);
+        }
     }
 }
 
 // -------------------------------------------------------------------------
 
-SearchFieldPageOrientation::SearchFieldPageOrientation(QObject *parent)
-                          : SearchFieldComboBox(parent)
+SearchFieldPageOrientation::SearchFieldPageOrientation(QObject* parent)
+    : SearchFieldComboBox(parent)
 {
 }
 
-void SearchFieldPageOrientation::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldPageOrientation::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     SearchFieldComboBox::setupValueWidgets(layout, row, column);
     m_comboBox->addItem(i18n("Any Orientation"));
@@ -2299,13 +2490,19 @@ void SearchFieldPageOrientation::setupValueWidgets(QGridLayout *layout, int row,
 void SearchFieldPageOrientation::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
+
     if (relation == SearchXml::Equal)
     {
         int value = reader.valueToInt();
+
         if (value == 1)
+        {
             m_comboBox->setCurrentIndex(1);
+        }
         else if (value == 2)
+        {
             m_comboBox->setCurrentIndex(2);
+        }
     }
 }
 

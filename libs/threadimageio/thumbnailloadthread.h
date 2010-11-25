@@ -299,11 +299,11 @@ public:
      */
 
     ThumbnailImageCatcher(QObject* parent = 0);
-    ThumbnailImageCatcher(ThumbnailLoadThread *thread, QObject* parent = 0);
+    ThumbnailImageCatcher(ThumbnailLoadThread* thread, QObject* parent = 0);
     ~ThumbnailImageCatcher();
 
     ThumbnailLoadThread* thread() const;
-    void setThumbnailLoadThread(ThumbnailLoadThread *thread);
+    void setThumbnailLoadThread(ThumbnailLoadThread* thread);
 
     /**
      * After requesting a thumbnail from the thread, call enqueue()

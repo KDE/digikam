@@ -86,16 +86,16 @@ public:
     QTimer*           thumbbarTimer;
 
     DigikamImageView* imageIconView;
-    ImageThumbnailBar*thumbBar;
-    ImagePreviewView*imagePreviewView;
+    ImageThumbnailBar* thumbBar;
+    ImagePreviewView* imagePreviewView;
     MediaPlayerView*  mediaPlayerView;
     ThumbBarDock*     thumbBarDock;
     WelcomePageView*  welcomePageView;
     MapWidgetView*    mapWidgetView;
 };
 
-AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
-                : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
+AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
+    : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
 {
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
@@ -208,7 +208,7 @@ AlbumWidgetStack::~AlbumWidgetStack()
 
 void AlbumWidgetStack::readSettings()
 {
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::instance();
     bool showThumbbar       = settings->getShowThumbbar();
     d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }
@@ -230,7 +230,9 @@ ThumbBarDock* AlbumWidgetStack::thumbBarDock()
 void AlbumWidgetStack::slotEscapePreview()
 {
     if (previewMode() == MediaPlayerMode)
+    {
         d->mediaPlayerView->escapePreview();
+    }
 }
 
 DigikamImageView* AlbumWidgetStack::imageIconView()
@@ -251,8 +253,10 @@ MapWidgetView* AlbumWidgetStack::mapWidgetView()
 void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
 
-    if(previewMode() == MapWidgetMode)
+    if (previewMode() == MapWidgetMode)
+    {
         return;
+    }
 
     if (info.isNull())
     {
@@ -274,12 +278,13 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
     }
     else
     {
-        AlbumSettings *settings      = AlbumSettings::instance();
+        AlbumSettings* settings      = AlbumSettings::instance();
         QString currentFileExtension = QFileInfo(info.fileUrl().toLocalFile()).suffix();
         QString mediaplayerfilter    = settings->getMovieFileFilter().toLower() +
                                        settings->getMovieFileFilter().toUpper() +
                                        settings->getAudioFileFilter().toLower() +
                                        settings->getAudioFileFilter().toUpper();
+
         if (mediaplayerfilter.contains(currentFileExtension) )
         {
             setPreviewMode(MediaPlayerMode);
@@ -289,7 +294,9 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
         {
             // Stop media player if running...
             if (previewMode() == MediaPlayerMode)
+            {
                 setPreviewItem();
+            }
 
             /*
             if (previewMode() != PreviewImageMode)
@@ -331,7 +338,9 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 {
     if (mode != PreviewAlbumMode && mode != PreviewImageMode &&
         mode != WelcomePageMode  && mode != MediaPlayerMode && mode != MapWidgetMode)
+    {
         return;
+    }
 
 
     if (mode == PreviewImageMode)
@@ -342,7 +351,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     {
         d->thumbBarDock->hide();
     }
-    
+
     if (mode == PreviewAlbumMode || mode == WelcomePageMode)
     {
         setPreviewItem();
@@ -353,20 +362,26 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     {
         setCurrentIndex(mode);
     }
+
     d->imageIconView->setFocus();
 }
 
 void AlbumWidgetStack::previewLoaded()
 {
-    if(previewMode() == MapWidgetMode)
+    if (previewMode() == MapWidgetMode)
+    {
         return;
-     emit signalToggledToPreviewMode(true);
+    }
+
+    emit signalToggledToPreviewMode(true);
 }
 
 void AlbumWidgetStack::slotZoomFactorChanged(double z)
 {
     if (previewMode() == PreviewImageMode)
+    {
         emit signalZoomFactorChanged(z);
+    }
 }
 
 /*

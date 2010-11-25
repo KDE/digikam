@@ -61,7 +61,7 @@ public:
 class DIGIKAM_EXPORT DatabaseCoreBackend : public QObject
 {
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -69,8 +69,8 @@ public:
      *  shall be unique for this backend object.
      *  It will be used to create unique connection names per backend and thread.
      */
-    DatabaseCoreBackend(const QString &backendName, DatabaseLocking* locking);
-    DatabaseCoreBackend(const QString &backendName, DatabaseLocking* locking, DatabaseCoreBackendPrivate& dd);
+    DatabaseCoreBackend(const QString& backendName, DatabaseLocking* locking);
+    DatabaseCoreBackend(const QString& backendName, DatabaseLocking* locking, DatabaseCoreBackendPrivate& dd);
     ~DatabaseCoreBackend();
 
     /**
@@ -122,8 +122,14 @@ public:
         QueryState() : value(DatabaseCoreBackend::NoErrors) {}
         QueryState(QueryStateEnum value) : value(value) {}
 
-        operator QueryStateEnum() const { return value; }
-        operator bool() const { return value == DatabaseCoreBackend::NoErrors; }
+        operator QueryStateEnum() const
+        {
+            return value;
+        }
+        operator bool() const
+        {
+            return value == DatabaseCoreBackend::NoErrors;
+        }
 
     private:
 
@@ -157,14 +163,20 @@ public:
      */
     Status status() const;
 
-    bool isOpen() const { return status() > Unavailable; }
-    bool isReady() const { return status() == OpenSchemaChecked; }
+    bool isOpen() const
+    {
+        return status() > Unavailable;
+    }
+    bool isReady() const
+    {
+        return status() == OpenSchemaChecked;
+    }
 
     /**
      * Add a DatabaseErrorHandler. This object must be created in the main thread.
      * If a database error occurs, this object can handle problem solving and user interaction.
      */
-    void setDatabaseErrorHandler(DatabaseErrorHandler *handler);
+    void setDatabaseErrorHandler(DatabaseErrorHandler* handler);
 
     enum QueryOperationStatus
     {
@@ -274,7 +286,7 @@ public:
      * the last insertion id is taken from the query
      * and DatabaseCoreBackend::NoErrors is returned.
      */
-    QueryState handleQueryResult(SqlQuery &query, QList<QVariant>* values, QVariant* lastInsertId);
+    QueryState handleQueryResult(SqlQuery& query, QList<QVariant>* values, QVariant* lastInsertId);
 
     /**
      * Method which accepts a map for named binding.
@@ -315,12 +327,12 @@ public:
      */
     void execQuery(SqlQuery& preparedQuery, const QVariant& boundValue1);
     void execQuery(SqlQuery& preparedQuery,
-                       const QVariant& boundValue1, const QVariant& boundValue2);
+                   const QVariant& boundValue1, const QVariant& boundValue2);
     void execQuery(SqlQuery& preparedQuery,
-                       const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
+                   const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
     void execQuery(SqlQuery& preparedQuery,
-                       const QVariant& boundValue1, const QVariant& boundValue2,
-                       const QVariant& boundValue3, const QVariant& boundValue4);
+                   const QVariant& boundValue1, const QVariant& boundValue2,
+                   const QVariant& boundValue3, const QVariant& boundValue4);
     void execQuery(SqlQuery& preparedQuery, const QList<QVariant>& boundValues);
 
     /**
@@ -410,29 +422,29 @@ public:
      */
     QSqlError lastSQLError();
 
-/*
-    Qt SQL driver supported features
-    SQLITE3:
-        BLOB
-        Transactions
-        Unicode
-        LastInsertId
-        PreparedQueries
-        PositionalPlaceholders
-        SimpleLocking
-    MySQL:
-        Transactions (3.?)
-        QuerySize
-        BLOB
-        LastInsertId
-        Unicode
-        PreparedQueries (4.1)
-        PositionalPlaceholders (4.1)
-    Postgresql:
-        Transactions
-        QuerySize
-        LastInsertId
-*/
+    /*
+        Qt SQL driver supported features
+        SQLITE3:
+            BLOB
+            Transactions
+            Unicode
+            LastInsertId
+            PreparedQueries
+            PositionalPlaceholders
+            SimpleLocking
+        MySQL:
+            Transactions (3.?)
+            QuerySize
+            BLOB
+            LastInsertId
+            Unicode
+            PreparedQueries (4.1)
+            PositionalPlaceholders (4.1)
+        Postgresql:
+            Transactions
+            QuerySize
+            LastInsertId
+    */
 
 private Q_SLOTS:
 

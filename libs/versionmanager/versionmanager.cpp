@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -103,18 +103,27 @@ QString DefaultVersionNamingScheme::baseName(const QString& currentPath, const Q
 
     // DSC000636_v5-3.JPG
     QRegExp versionIntermediate("(.+)(_v\\d+)(-\\d+)\\.([^\\.]+)");
+
     if (versionIntermediate.exactMatch(fileName))
+    {
         return versionIntermediate.cap(1);
+    }
 
     // DSC000636_v5.JPG
     QRegExp version("(.+)(_v\\d+)\\.([^\\.]+)");
+
     if (version.exactMatch(fileName))
+    {
         return version.cap(1);
+    }
 
     // DSC000636.JPG
     QRegExp basename("(.+)\\.([^\\.]+)");
+
     if (basename.exactMatch(fileName))
+    {
         return basename.cap(1);
+    }
 
     // failure: no file suffix?
     // DSC000636
@@ -122,15 +131,15 @@ QString DefaultVersionNamingScheme::baseName(const QString& currentPath, const Q
 }
 
 QString DefaultVersionNamingScheme::versionFileName(const QString& currentPath, const QString& fileName,
-                                                    const QString& format, const QVariant& counter)
+        const QString& format, const QVariant& counter)
 {
     Q_UNUSED(currentPath);
     return QString("%1_v%2.%3").arg(fileName).arg(counter.toInt()).arg(format.toLower());
 }
 
 QString DefaultVersionNamingScheme::intermediateFileName(const QString& currentPath, const QString& fileName,
-                                                         const QString& format, const QVariant& version,
-                                                         const QVariant& counter)
+        const QString& format, const QVariant& version,
+        const QVariant& counter)
 {
     Q_UNUSED(currentPath);
     return QString("%1_v%2-%3.%4").arg(fileName).arg(version.toInt()).arg(counter.toInt()).arg(format.toLower());
@@ -150,7 +159,7 @@ public:
 
     VersionNameCreator(const VersionFileInfo& loadedFile,
                        const DImageHistory& m_resolvedInitialHistory, const DImageHistory& m_currentHistory,
-                       VersionManager *q);
+                       VersionManager* q);
 
     void checkNeedNewVersion();
     void fork();
@@ -179,10 +188,10 @@ public:
 
 VersionNameCreator::VersionNameCreator(const VersionFileInfo& loadedFile,
                                        const DImageHistory& m_resolvedInitialHistory, const DImageHistory& m_currentHistory,
-                                       VersionManager *q)
-        : m_loadedFile(loadedFile),
-          m_resolvedInitialHistory(m_resolvedInitialHistory), m_currentHistory(m_currentHistory),
-          m_fromRaw(false), m_newVersion(false), q(q)
+                                       VersionManager* q)
+    : m_loadedFile(loadedFile),
+      m_resolvedInitialHistory(m_resolvedInitialHistory), m_currentHistory(m_currentHistory),
+      m_fromRaw(false), m_newVersion(false), q(q)
 {
     m_loadedFile.format = m_loadedFile.format.toUpper();
 
@@ -198,8 +207,9 @@ void VersionNameCreator::checkNeedNewVersion()
     // The resolved initial history contains only referred files found in the collection
     // Note: The loaded file will have type Current
     kDebug() << m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Original)
-    << m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Intermediate)
-    << m_fromRaw << q->workspaceFileFormats().contains(m_loadedFile.format);
+             << m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Intermediate)
+             << m_fromRaw << q->workspaceFileFormats().contains(m_loadedFile.format);
+
     if (!m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Original)
         && !m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Intermediate))
     {
@@ -229,21 +239,26 @@ void VersionNameCreator::setSaveDirectory()
 void VersionNameCreator::setSaveFormat()
 {
     if (m_fromRaw)
+    {
         m_result.format = q->settings().formatForStoringRAW;
+    }
     else
+    {
         m_result.format = q->settings().formatForStoringSubversions;
+    }
 }
 
 void VersionNameCreator::setSaveFileName()
 {
     kDebug() << "need new version" << m_newVersion;
+
     if (!m_newVersion)
     {
         m_result.fileName = m_loadedFile.fileName;
     }
     else
     {
-        VersionNamingScheme *scheme = q->namingScheme();
+        VersionNamingScheme* scheme = q->namingScheme();
 
         QString baseName = scheme->baseName(m_loadedFile.path, m_loadedFile.fileName);
         QDir dirInfo(m_loadedFile.path);
@@ -251,6 +266,7 @@ void VersionNameCreator::setSaveFileName()
         // To find the right number for the new version, go through all the items in the given dir,
         // the version number won't be bigger than count()
         QVariant counter = scheme->initialCounter();
+
         for (uint i = 0; i <= dirInfo.count(); i++)
         {
             QString suggestedName = scheme->versionFileName(m_loadedFile.path, baseName, m_result.format, counter);
@@ -269,7 +285,7 @@ void VersionNameCreator::setSaveFileName()
 
 void VersionNameCreator::nextIntermediateName()
 {
-    VersionNamingScheme *scheme = q->namingScheme();
+    VersionNamingScheme* scheme = q->namingScheme();
 
     m_intermediate.path   = m_result.path;
     m_intermediate.format = m_result.format;
@@ -280,7 +296,7 @@ void VersionNameCreator::nextIntermediateName()
     for (uint i = 0; i <= dirInfo.count(); i++)
     {
         QString suggestedName = scheme->intermediateFileName(m_loadedFile.path, baseName,
-                                                             m_result.format, m_version, m_intermediateCounter);
+                                m_result.format, m_version, m_intermediateCounter);
 
         if (!dirInfo.exists(suggestedName))
         {
@@ -318,7 +334,7 @@ public:
     }
 
     VersionManagerSettings  settings;
-    VersionNamingScheme    *scheme;
+    VersionNamingScheme*    scheme;
 
     DefaultVersionNamingScheme defaultScheme;
 };
@@ -335,7 +351,7 @@ bool VersionManager::VersionManagerPriv::hasFreeSpace(const QString& path, int a
 // --------------
 
 VersionManager::VersionManager()
-              : d(new VersionManagerPriv)
+    : d(new VersionManagerPriv)
 {
 }
 
@@ -355,28 +371,38 @@ VersionManagerSettings VersionManager::settings() const
     return d->settings;
 }
 
-void VersionManager::setNamingScheme(VersionNamingScheme *scheme)
+void VersionManager::setNamingScheme(VersionNamingScheme* scheme)
 {
     d->scheme = scheme;
 }
 
-VersionNamingScheme *VersionManager::namingScheme() const
+VersionNamingScheme* VersionManager::namingScheme() const
 {
     if (d->scheme)
+    {
         return d->scheme;
+    }
     else
+    {
         return &d->defaultScheme;
+    }
 }
 
 VersionFileOperation VersionManager::operation(FileNameType request, const VersionFileInfo& loadedFile,
-                                               const DImageHistory& initialResolvedHistory,
-                                               const DImageHistory& currentHistory)
+        const DImageHistory& initialResolvedHistory,
+        const DImageHistory& currentHistory)
 {
     VersionNameCreator name(loadedFile, initialResolvedHistory, currentHistory, this);
+
     if (request == CurrentVersionName)
+    {
         name.checkNeedNewVersion();
+    }
     else if (request == NewVersionName)
+    {
         name.fork();
+    }
+
     name.setSaveDirectory();
     name.setSaveFormat();
     name.setSaveFileName();
@@ -393,6 +419,7 @@ VersionFileOperation VersionManager::operation(FileNameType request, const Versi
     else
     {
         operation.tasks |= VersionFileOperation::Replace;
+
         if (d->settings.saveIntermediateVersions & VersionManagerSettings::AfterEachSession)
         {
             operation.tasks |= VersionFileOperation::MoveToIntermediate;
@@ -417,11 +444,19 @@ QStringList VersionManager::workspaceFileFormats() const
     QStringList formats;
     formats << "JPEG" << "PNG" << "TIFF" << "PGF";
     QString f = d->settings.formatForStoringRAW.toUpper();
+
     if (!formats.contains(f))
+    {
         formats << f;
+    }
+
     f = d->settings.formatForStoringSubversions.toUpper();
+
     if (!formats.contains(f))
+    {
         formats << f;
+    }
+
     return formats;
 }
 

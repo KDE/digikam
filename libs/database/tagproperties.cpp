@@ -52,18 +52,18 @@ public:
 
 class TagPropertiesPrivSharedNull : public QSharedDataPointer<TagPropertiesPriv>
 {
-    public:
+public:
     TagPropertiesPrivSharedNull() : QSharedDataPointer<TagPropertiesPriv>(new TagPropertiesPriv) {}
 };
 K_GLOBAL_STATIC(TagPropertiesPrivSharedNull, tagPropertiesPrivSharedNull)
 
 TagProperties::TagProperties()
-            : d(*tagPropertiesPrivSharedNull)
+    : d(*tagPropertiesPrivSharedNull)
 {
 }
 
 TagProperties::TagProperties(int tagId)
-            : d(new TagPropertiesPriv)
+    : d(new TagPropertiesPriv)
 {
     d->tagId = tagId;
     QList<TagProperty> properties = DatabaseAccess().db()->getTagProperties(tagId);
@@ -82,7 +82,7 @@ TagProperties::TagProperties(const TagProperties& other)
     d = other.d;
 }
 
-TagProperties &TagProperties::operator=(const TagProperties& other)
+TagProperties& TagProperties::operator=(const TagProperties& other)
 {
     d = other.d;
     return *this;
@@ -132,7 +132,10 @@ QMap<QString, QString> TagProperties::properties() const
 void TagProperties::setProperty(const QString& key, const QString& value)
 {
     if (d->properties.contains(key, value) && d->properties.count(key) == 1)
+    {
         return;
+    }
+
     // for single entries in db, this can of course be optimized using a single UPDATE WHERE
     removeProperties(key);
     d->properties.insert(key, value);
@@ -142,7 +145,10 @@ void TagProperties::setProperty(const QString& key, const QString& value)
 void TagProperties::addProperty(const QString& key, const QString& value)
 {
     if (d->properties.contains(key, value))
+    {
         return;
+    }
+
     d->properties.insert(key, value);
     DatabaseAccess().db()->addTagProperty(d->tagId, key, value);
 }

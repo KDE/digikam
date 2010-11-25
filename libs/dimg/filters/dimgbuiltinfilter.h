@@ -106,8 +106,8 @@ public:
     /**
      * Returns a DImgThreadedFilter which executes this builtin action.
      */
-    DImgThreadedFilter *createThreadedFilter(QObject *parent = 0) const;
-    DImgThreadedFilter *createThreadedFilter(DImg* orgImage, QObject *parent = 0) const;
+    DImgThreadedFilter* createThreadedFilter(QObject* parent = 0) const;
+    DImgThreadedFilter* createThreadedFilter(DImg* orgImage, QObject* parent = 0) const;
 
     static QString i18nDisplayableName(const QString& filterIdentifier);
     static QString filterIcon(const QString& filterIdentifier);

@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 WhiteBalance::WhiteBalance(QObject* parent)
-            : BatchTool("WhiteBalance", ColorTool, parent)
+    : BatchTool("WhiteBalance", ColorTool, parent)
 {
     setToolTitle(i18n("White Balance"));
     setToolDescription(i18n("A tool to adjust White Balance."));
@@ -111,7 +111,10 @@ void WhiteBalance::slotSettingsChanged()
 
 bool WhiteBalance::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     WBContainer prm;
 

@@ -78,7 +78,7 @@ public:
         FadingOut
     };
 
-    ItemVisibilityController(QObject *parent = 0);
+    ItemVisibilityController(QObject* parent = 0);
     ~ItemVisibilityController();
 
     bool  shallBeShown() const;
@@ -111,8 +111,8 @@ public:
      * No ownership is taken, so the objects should live as long as this object
      * is used.
      */
-    void addItem(QObject *object);
-    void removeItem(QObject *object);
+    void addItem(QObject* object);
+    void removeItem(QObject* object);
 
     /**
      * Returns all items under control
@@ -127,7 +127,7 @@ public:
     /**
      * Allows to change the default parameters of all animations.
      */
-    void setEasingCurve(const QEasingCurve &easing);
+    void setEasingCurve(const QEasingCurve& easing);
     void setAnimationDuration(int msecs);
 
 Q_SIGNALS:
@@ -138,9 +138,9 @@ Q_SIGNALS:
      * Emitted when a transition for a single item finished
      * (see setItemVisible())
      */
-    void propertiesAssigned(QObject *item, bool visible);
+    void propertiesAssigned(QObject* item, bool visible);
     /// Emitted when hideAndRemoveItem has finished
-    void hiddenAndRemoved(QObject *item);
+    void hiddenAndRemoved(QObject* item);
 
 public Q_SLOTS:
 
@@ -152,7 +152,7 @@ public Q_SLOTS:
      * effect only this single item, as if calling setItemVisible().
      * Reset by calling with 0 or setShallBeShown().
      */
-    void setItemThatShallBeShown(QObject *item);
+    void setItemThatShallBeShown(QObject* item);
 
     /**
      * Adjusts the main condition.
@@ -171,16 +171,16 @@ public Q_SLOTS:
      * The next call to the "global" method will take precedence again.
      * "Directly" means no animation is employed.
      */
-    void showItem(QObject *item);
-    void hideItem(QObject *item);
-    void setItemVisible(QObject *item, bool visible);
-    void setItemDirectlyVisible(QObject *item, bool visible);
+    void showItem(QObject* item);
+    void hideItem(QObject* item);
+    void setItemVisible(QObject* item, bool visible);
+    void setItemDirectlyVisible(QObject* item, bool visible);
 
     /**
      * Hide the item, and then remove it.
      * When finished, hiddenAndRemoved() is emitted.
      */
-    void hideAndRemoveItem(QObject *item);
+    void hideAndRemoveItem(QObject* item);
 
 protected:
 
@@ -191,12 +191,12 @@ protected:
      * from 0.0 to 1.0, using default easing curve and duration,
      * which can and will be changed by setEasingCurve and setAnimationDuration.
      */
-    virtual QPropertyAnimation *createAnimation(QObject *item);
+    virtual QPropertyAnimation* createAnimation(QObject* item);
 
 protected Q_SLOTS:
 
     void animationFinished();
-    void objectDestroyed(QObject *);
+    void objectDestroyed(QObject*);
 
 private:
 
@@ -218,7 +218,7 @@ public:
      *  Connect to the signals accordingly, e.g. to trigger a repaint.
      */
 
-    ItemVisibilityControllerPropertyObject(QObject *parent = 0);
+    ItemVisibilityControllerPropertyObject(QObject* parent = 0);
 
     qreal opacity() const;
     void setOpacity(qreal opacity);
@@ -250,13 +250,13 @@ public:
      *  You want to call the controller's method!
      */
 
-    AnimatedVisibility(QObject *parent = 0);
+    AnimatedVisibility(QObject* parent = 0);
 
-    ItemVisibilityController *controller() const;
+    ItemVisibilityController* controller() const;
 
 protected:
 
-    ItemVisibilityController *m_controller;
+    ItemVisibilityController* m_controller;
 };
 
 class DIGIKAM_EXPORT HidingStateChanger : public ItemVisibilityController
@@ -273,12 +273,12 @@ public:
      * Note that the targetObject is not necessarily a controlled item!
      */
 
-    HidingStateChanger(QObject *parent = 0);
+    HidingStateChanger(QObject* parent = 0);
 
     /// Convenience constructor: Sets target and property name
-    HidingStateChanger(QObject *target, const QByteArray property, QObject *parent = 0);
+    HidingStateChanger(QObject* target, const QByteArray property, QObject* parent = 0);
 
-    void setTargetObject(QObject *object);
+    void setTargetObject(QObject* object);
     void setPropertyName(const QByteArray& propertyName);
 
 public Q_SLOTS:

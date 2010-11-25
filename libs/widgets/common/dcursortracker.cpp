@@ -62,8 +62,8 @@ public:
     QPointer<QWidget> parent;
 };
 
-DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent, Qt::Alignment align)
-              : QLabel(txt, parent, Qt::ToolTip), d(new DCursorTrackerPriv)
+DCursorTracker::DCursorTracker(const QString& txt, QWidget* parent, Qt::Alignment align)
+    : QLabel(txt, parent, Qt::ToolTip), d(new DCursorTrackerPriv)
 {
     d->parent = parent;
     d->parent->setMouseTracking(true);
@@ -127,17 +127,18 @@ void DCursorTracker::slotAutoHide()
     hide();
 }
 
-bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
+bool DCursorTracker::eventFilter(QObject* object, QEvent* e)
 {
-    QWidget *widget = static_cast<QWidget*>(object);
+    QWidget* widget = static_cast<QWidget*>(object);
 
     switch (e->type())
     {
         case QEvent::MouseMove:
         {
-            QMouseEvent *event = static_cast<QMouseEvent*>(e);
+            QMouseEvent* event = static_cast<QMouseEvent*>(e);
+
             if (canBeDisplayed() && (widget->rect().contains(event->pos()) ||
-                             (event->buttons() & Qt::LeftButton)))
+                                     (event->buttons() & Qt::LeftButton)))
             {
                 show();
                 moveToParent(widget);
@@ -146,13 +147,17 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
             {
                 hide();
             }
+
             break;
         }
 
         case QEvent::Leave:
         {
             if (!d->keepOpen)
+            {
                 hide();
+            }
+
             break;
         }
 
@@ -166,7 +171,9 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
 void DCursorTracker::moveToParent(QWidget* parent)
 {
     if (!parent)
+    {
         return;
+    }
 
     switch (d->alignment)
     {
@@ -201,8 +208,8 @@ bool DCursorTracker::canBeDisplayed()
 }
 
 
-DTipTracker::DTipTracker(const QString& txt, QWidget *parent, Qt::Alignment align)
-           : DCursorTracker(txt, parent, align)
+DTipTracker::DTipTracker(const QString& txt, QWidget* parent, Qt::Alignment align)
+    : DCursorTracker(txt, parent, align)
 {
     setPalette(QToolTip::palette());
     setFrameStyle(QFrame::Plain | QFrame::Box);

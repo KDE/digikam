@@ -107,7 +107,7 @@ MetadataSettings* MetadataSettings::instance()
 }
 
 MetadataSettings::MetadataSettings()
-                : d(new MetadataSettingsPriv)
+    : d(new MetadataSettingsPriv)
 {
     readFromConfig();
     qRegisterMetaType<MetadataSettingsContainer>("MetadataSettingsContainer");

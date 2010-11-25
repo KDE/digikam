@@ -68,12 +68,15 @@ public:
     void acquire()
     {
         if (access)
+        {
             acquired = access->backend()->beginTransaction();
+        }
         else
         {
             DatabaseAccess access;
             acquired = access.backend()->beginTransaction();
         }
+
         timeAcquired.start();
     }
 
@@ -95,18 +98,23 @@ public:
 };
 
 DatabaseOperationGroup::DatabaseOperationGroup()
-                      : d(new DatabaseOperationGroupPriv)
+    : d(new DatabaseOperationGroupPriv)
 {
     if (d->needsTransaction())
+    {
         d->acquire();
+    }
 }
 
 DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess* access)
-                      : d(new DatabaseOperationGroupPriv)
+    : d(new DatabaseOperationGroupPriv)
 {
     d->access = access;
+
     if (d->needsTransaction())
+    {
         d->acquire();
+    }
 }
 
 DatabaseOperationGroup::~DatabaseOperationGroup()
@@ -120,8 +128,12 @@ void DatabaseOperationGroup::lift()
     if (d->acquired)
     {
         d->release();
+
         if (d->access)
+        {
             DatabaseAccessUnlock unlock(d->access);
+        }
+
         d->acquire();
     }
 }

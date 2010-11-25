@@ -73,13 +73,17 @@ FacePipelineDatabaseFaceList& FacePipelineDatabaseFaceList::operator=(const QLis
 void FacePipelineDatabaseFaceList::setRole(FacePipelineDatabaseFace::Roles role)
 {
     for (iterator it = begin(); it != end(); ++it)
+    {
         it->roles |= role;
+    }
 }
 
 void FacePipelineDatabaseFaceList::clearRole(FacePipelineDatabaseFace::Roles role)
 {
     for (iterator it = begin(); it != end(); ++it)
+    {
         it->roles &= ~role;
+    }
 }
 
 void FacePipelineDatabaseFaceList::replaceRole(FacePipelineDatabaseFace::Roles remove, FacePipelineDatabaseFace::Roles add)
@@ -97,17 +101,25 @@ void FacePipelineDatabaseFaceList::replaceRole(FacePipelineDatabaseFace::Roles r
 QList<DatabaseFace> FacePipelineDatabaseFaceList::toDatabaseFaceList() const
 {
     QList<DatabaseFace> faces;
+
     for (const_iterator it = constBegin(); it != constEnd(); ++it)
+    {
         faces << *it;
+    }
+
     return faces;
 }
 
 FacePipelineDatabaseFaceList FacePipelineDatabaseFaceList::facesForRole(FacePipelineDatabaseFace::Roles role) const
 {
     FacePipelineDatabaseFaceList faces;
+
     for (const_iterator it = constBegin(); it != constEnd(); ++it)
         if (it->roles & role)
+        {
             faces << *it;
+        }
+
     return faces;
 }
 
@@ -117,6 +129,7 @@ FacePipelineExtendedPackage::Ptr PackageLoadingDescriptionList::take(const Loadi
 {
     FacePipelineExtendedPackage::Ptr package;
     QList<FacePipelineExtendedPackage::Ptr>::iterator it;
+
     for (it = begin(); it != end(); ++it)
     {
         if ( *(*it) == description)
@@ -126,13 +139,14 @@ FacePipelineExtendedPackage::Ptr PackageLoadingDescriptionList::take(const Loadi
             break;
         }
     }
+
     return package;
 }
 
 // ----------------------------------------------------------------------------------------
 
 ParallelPipes::ParallelPipes()
-             : m_currentIndex(0)
+    : m_currentIndex(0)
 {
 }
 
@@ -160,10 +174,11 @@ void ParallelPipes::deactivate(WorkerObject::DeactivatingMode mode)
     }
 }
 
-void ParallelPipes::add(WorkerObject *worker)
+void ParallelPipes::add(WorkerObject* worker)
 {
     QByteArray normalizedSignature = QMetaObject::normalizedSignature("process(FacePipelineExtendedPackage::Ptr)");
     int methodIndex                = worker->metaObject()->indexOfMethod(normalizedSignature);
+
     if (methodIndex == -1)
     {
         kError() << "Object" << worker << "does not have a slot" << normalizedSignature << " - cannot use for processing.";
@@ -185,13 +200,15 @@ void ParallelPipes::process(FacePipelineExtendedPackage::Ptr package)
                                      Q_ARG(FacePipelineExtendedPackage::Ptr, package));
 
     if (++m_currentIndex == m_workers.size())
+    {
         m_currentIndex = 0;
+    }
 }
 
 // ----------------------------------------------------------------------------------------
 
 ScanStateFilter::ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::FacePipelinePriv* d)
-               : d(d), mode(mode)
+    : d(d), mode(mode)
 {
     connect(this, SIGNAL(infosToDispatch()),
             this, SLOT(dispatch()));
@@ -208,7 +225,10 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
         case FacePipeline::SkipAlreadyScanned:
         {
             if (!d->iface->hasBeenScanned(info))
+            {
                 return d->buildPackage(info);
+            }
+
             break;
         }
         case FacePipeline::ReadUnconfirmedFaces:
@@ -216,12 +236,19 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
         case FacePipeline::ReadConfirmedFaces:
         {
             QList<DatabaseFace> databaseFaces;
+
             if (mode == FacePipeline::ReadUnconfirmedFaces)
+            {
                 databaseFaces = d->iface->unconfirmedDatabaseFaces(info.id());
+            }
             else if (mode == FacePipeline::ReadFacesForTraining)
+            {
                 databaseFaces = d->iface->databaseFacesForTraining(info.id());
+            }
             else
+            {
                 databaseFaces = d->iface->confirmedDatabaseFaces(info.id());
+            }
 
             if (!databaseFaces.isEmpty())
             {
@@ -229,11 +256,16 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
                 package->databaseFaces = databaseFaces;
                 //kDebug() << "Prepared package with" << databaseFaces.size();
                 package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
+
                 if (tasks)
+                {
                     package->databaseFaces.setRole(tasks);
+                }
+
                 package->faces         = d->iface->toFaces(databaseFaces);
                 return package;
             }
+
             break;
         }
     }
@@ -264,13 +296,16 @@ void ScanStateFilter::run()
         QList<ImageInfo> todo;
         {
             QMutexLocker lock(threadMutex());
+
             if (!toFilter.isEmpty())
             {
                 todo = toFilter;
                 toFilter.clear();
             }
             else
+            {
                 stop(lock);
+            }
         }
 
         // process list
@@ -281,10 +316,15 @@ void ScanStateFilter::run()
             foreach (const ImageInfo& info, todo)
             {
                 FacePipelineExtendedPackage::Ptr package = filter(info);
+
                 if (package)
+                {
                     send << package;
+                }
                 else
+                {
                     skip << info;
+                }
             }
             //kDebug() << "Filtered" << todo.size() << "images, send" << send.size() << "skip" << skip.size();
 
@@ -310,17 +350,23 @@ void ScanStateFilter::dispatch()
         skip = toBeSkipped;
         toBeSkipped.clear();
     }
+
     //kDebug() << "Dispatching, sending" << send.size() << "skipping" << skip.size();
     if (!skip.isEmpty())
+    {
         d->skipFromFilter(skip);
+    }
+
     if (!send.isEmpty())
+    {
         d->sendFromFilter(send);
+    }
 }
 
 // ----------------------------------------------------------------------------------------
 
 PreviewLoader::PreviewLoader(FacePipeline::FacePipelinePriv* d)
-             : d(d)
+    : d(d)
 {
     // upper limit for memory cost
     maximumSentOutPackages = qMin(QThread::idealThreadCount(), 5);
@@ -345,6 +391,7 @@ void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
         emit processed(package);
         return;
     }
+
     scheduledPackages << package;
     loadFastButLarge(package->filePath, 1600, MetadataSettings::instance()->settings().exifRotate);
     //load(package->filePath, 800, MetadataSettings::instance()->settings().exifRotate);
@@ -356,17 +403,24 @@ void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
 void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
 {
     FacePipelineExtendedPackage::Ptr package = scheduledPackages.take(loadingDescription);
+
     if (!package)
+    {
         return;
+    }
 
     // Avoid congestion before detection or recognition by pausing the thread.
     // We are throwing around serious amounts of memory!
     //kDebug() << "sent out packages:" << d->packagesOnTheRoad - scheduledPackages.size() << "scheduled:" << scheduledPackages.size();
     if (sentOutLimitReached() && !scheduledPackages.isEmpty())
+    {
         stop();
+    }
 
     if (img.isNull())
+    {
         return d->finishProcess(package);
+    }
 
     package->image = img;
     package->processFlags |= FacePipelinePackage::PreviewImageLoaded;
@@ -382,13 +436,15 @@ bool PreviewLoader::sentOutLimitReached()
 void PreviewLoader::checkRestart()
 {
     if (!sentOutLimitReached() && !scheduledPackages.isEmpty())
+    {
         start();
+    }
 }
 
 // ----------------------------------------------------------------------------------------
 
 DetectionWorker::DetectionWorker(FacePipeline::FacePipelinePriv* d)
-               : d(d)
+    : d(d)
 {
 }
 
@@ -410,10 +466,12 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
 DImg DetectionWorker::scaleForDetection(const DImg& image) const
 {
     int recommendedSize = detector.recommendedImageSize(image.size());
+
     if (qMax(image.width(), image.height()) > (uint)recommendedSize)
     {
         return image.smoothScale(recommendedSize, recommendedSize, Qt::KeepAspectRatio);
     }
+
     return image;
 }
 
@@ -430,7 +488,7 @@ void DetectionWorker::setSpecificity(double specificity)
 // ----------------------------------------------------------------------------------------
 
 RecognitionWorker::RecognitionWorker(FacePipeline::FacePipelinePriv* d)
-                 : d(d)
+    : d(d)
 {
     database             = KFaceIface::RecognitionDatabase::addDatabase();
     recognitionThreshold = 10000000;
@@ -449,11 +507,13 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
                  << "recognized as" << package->faces[i].id() << package->faces[i].name()
                  << "at distance"   << distances[i]
                  << ((distances[i] > recognitionThreshold) ? "(discarded)" : "(accepted)");
+
         if (distances[i] > recognitionThreshold)
         {
             package->faces[i].clearRecognition();
         }
     }
+
     package->processFlags |= FacePipelinePackage::ProcessedByRecognizer;
     emit processed(package);
 }
@@ -466,7 +526,7 @@ void RecognitionWorker::setThreshold(double threshold)
 // ----------------------------------------------------------------------------------------
 
 DatabaseWriter::DatabaseWriter(FacePipeline::WriteMode mode, FacePipeline::FacePipelinePriv* d)
-              : mode(mode), d(d)
+    : mode(mode), d(d)
 {
 }
 
@@ -504,6 +564,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
         FacePipelineDatabaseFaceList add;
 
         FacePipelineDatabaseFaceList::iterator it;
+
         for (it = package->databaseFaces.begin(); it != package->databaseFaces.end(); ++it)
         {
             if (it->roles & FacePipelineDatabaseFace::ForConfirmation)
@@ -518,6 +579,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
                 it->roles &= ~FacePipelineDatabaseFace::ForRemoval;
                 it->roles |= FacePipelineDatabaseFace::Removed;
             }
+
             // Training is done by trainer
         }
 
@@ -559,12 +621,14 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 
         // Fill images in faces - either from given DImg, or from thumbnails
         QSize size = database.recommendedImageSize(package->image.size());
+
         if (package->image.isNull())
         {
             if (!catcher)
             {
                 catcher = new ThumbnailImageCatcher(d->thumbnailLoadThread, this);
             }
+
             catcher->setActive(true);
             d->iface->fillImageInFaces(catcher, package->filePath, package->faces, size);
             catcher->setActive(false);
@@ -590,13 +654,15 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 void Trainer::aboutToDeactivate()
 {
     if (catcher)
+    {
         catcher->cancel();
+    }
 }
 
 // ----------------------------------------------------------------------------------------
 
 FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline* q)
-                              : q(q)
+    : q(q)
 {
     databaseFilter       = 0;
     previewThread        = 0;
@@ -651,9 +717,13 @@ void FacePipeline::FacePipelinePriv::skipFromFilter(const QList<ImageInfo>& info
 FacePipelineExtendedPackage::Ptr FacePipeline::FacePipelinePriv::filterOrBuildPackage(const ImageInfo& info)
 {
     if (databaseFilter)
+    {
         return databaseFilter->filter(info);
+    }
     else
+    {
         return buildPackage(info);
+    }
 }
 
 FacePipelineExtendedPackage::Ptr
@@ -697,7 +767,9 @@ void FacePipeline::FacePipelinePriv::finishProcess(FacePipelineExtendedPackage::
     package = 0;
 
     if (previewThread)
+    {
         previewThread->checkRestart();
+    }
 
     checkFinished();
 }
@@ -711,6 +783,7 @@ void FacePipeline::FacePipelinePriv::checkFinished()
 {
     kDebug() << "Check for finish: " << packagesOnTheRoad << "packages,"
              << infosForFiltering << "infos to filter, hasFinished()" << hasFinished();
+
     if (hasFinished())
     {
         emit q->finished();
@@ -722,16 +795,22 @@ void FacePipeline::FacePipelinePriv::checkFinished()
 void FacePipeline::FacePipelinePriv::start()
 {
     if (started)
+    {
         return;
+    }
 
-    WorkerObject  *workerObject;
-    ParallelPipes *pipes;
+    WorkerObject*  workerObject;
+    ParallelPipes* pipes;
     foreach (QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
+        {
             workerObject->schedule();
+        }
         else if ( (pipes = qobject_cast<ParallelPipes*>(element)) )
+        {
             pipes->schedule();
+        }
     }
 
     started = true;
@@ -740,22 +819,32 @@ void FacePipeline::FacePipelinePriv::start()
 void FacePipeline::FacePipelinePriv::stop()
 {
     if (!started)
+    {
         return;
+    }
 
     if (previewThread)
+    {
         previewThread->cancel();
+    }
 
-    WorkerObject  *workerObject;
-    ParallelPipes *pipes;
-    DynamicThread *thread;
+    WorkerObject*  workerObject;
+    ParallelPipes* pipes;
+    DynamicThread* thread;
     foreach (QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
+        {
             workerObject->deactivate();
+        }
         else if ( (pipes = qobject_cast<ParallelPipes*>(element)) )
+        {
             pipes->deactivate();
+        }
         else if ( (thread = qobject_cast<DynamicThread*>(element)) )
+        {
             thread->stop();
+        }
     }
 
     started = false;
@@ -771,13 +860,14 @@ void FacePipeline::FacePipelinePriv::createThumbnailLoadThread()
         // KFaceIface::Image::recommendedSizeForRecognition()
         thumbnailLoadThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
     }
+
     //FaceIface::faceRectDisplayMargin()
 }
 
 // ----------------------------------------------------------------------------------------
 
 FacePipeline::FacePipeline()
-            : d(new FacePipelinePriv(this))
+    : d(new FacePipelinePriv(this))
 {
     d->iface = new FaceIface;
 
@@ -834,7 +924,9 @@ void FacePipeline::plugFaceDetector()
 void FacePipeline::plugParallelFaceDetectors()
 {
     if (QThread::idealThreadCount() <= 1)
+    {
         return plugFaceDetector();
+    }
 
     // limit number of parallel detectors to 3, because of memory cost (cascades)
     const int n          = qMin(3, QThread::idealThreadCount());
@@ -842,7 +934,7 @@ void FacePipeline::plugParallelFaceDetectors()
 
     for (int i=0; i<n; i++)
     {
-        DetectionWorker *worker = new DetectionWorker(d);
+        DetectionWorker* worker = new DetectionWorker(d);
 
         connect(d, SIGNAL(accuracyChanged(double)),
                 worker, SLOT(setAccuracy(double)));
@@ -882,21 +974,33 @@ void FacePipeline::plugDatabaseEditor()
 void FacePipeline::construct()
 {
     if (d->previewThread)
+    {
         d->pipeline << d->previewThread;
+    }
 
     if (d->parallelDetectors)
+    {
         d->pipeline << d->parallelDetectors;
+    }
     else if (d->detectionWorker)
+    {
         d->pipeline << d->detectionWorker;
+    }
 
     if (d->recognitionWorker)
+    {
         d->pipeline << d->recognitionWorker;
+    }
 
     if (d->databaseWriter)
+    {
         d->pipeline << d->databaseWriter;
+    }
 
     if (d->trainer)
+    {
         d->pipeline << d->trainer;
+    }
 
     if (d->pipeline.isEmpty())
     {
@@ -925,6 +1029,7 @@ void FacePipeline::cancel()
 bool FacePipeline::process(const ImageInfo& info)
 {
     QString filePath = info.filePath();
+
     if (filePath.isNull())
     {
         kWarning() << "ImageInfo has no valid file path. Skipping.";
@@ -932,8 +1037,12 @@ bool FacePipeline::process(const ImageInfo& info)
     }
 
     FacePipelineExtendedPackage::Ptr package = d->filterOrBuildPackage(info);
+
     if (!package)
+    {
         return false;
+    }
+
     d->send(package);
     return true;
 }
@@ -941,8 +1050,12 @@ bool FacePipeline::process(const ImageInfo& info)
 bool FacePipeline::process(const ImageInfo& info, const DImg& image)
 {
     FacePipelineExtendedPackage::Ptr package = d->filterOrBuildPackage(info);
+
     if (!package)
+    {
         return false;
+    }
+
     package->image = image;
     d->send(package);
 
@@ -961,14 +1074,14 @@ void FacePipeline::train(const ImageInfo& info, const QList<DatabaseFace> &datab
     d->send(package);
 }
 
-DatabaseFace FacePipeline::confirm(const ImageInfo& info, const DatabaseFace &databaseFace,
+DatabaseFace FacePipeline::confirm(const ImageInfo& info, const DatabaseFace& databaseFace,
                                    int assignedTagId, const TagRegion& assignedRegion)
 {
     return confirm(info, databaseFace, DImg(), assignedTagId, assignedRegion);
 }
 
-DatabaseFace FacePipeline::confirm(const ImageInfo& info, const DatabaseFace &databaseFace,
-                           const DImg& image, int assignedTagId, const TagRegion& assignedRegion)
+DatabaseFace FacePipeline::confirm(const ImageInfo& info, const DatabaseFace& databaseFace,
+                                   const DImg& image, int assignedTagId, const TagRegion& assignedRegion)
 {
     FacePipelineDatabaseFace face = databaseFace;
     face.assignedTagId  = assignedTagId;
@@ -981,7 +1094,7 @@ DatabaseFace FacePipeline::confirm(const ImageInfo& info, const DatabaseFace &da
     return d->iface->confirmedEntry(face, assignedTagId, assignedRegion);
 }
 
-void FacePipeline::remove(const ImageInfo& info, const DatabaseFace &databaseFace)
+void FacePipeline::remove(const ImageInfo& info, const DatabaseFace& databaseFace)
 {
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, databaseFace, DImg());
     package->databaseFaces.setRole(FacePipelineDatabaseFace::ForRemoval);

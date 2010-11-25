@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 
-    DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend);
+    DatabaseCoreBackendPrivate(DatabaseCoreBackend* backend);
     virtual ~DatabaseCoreBackendPrivate() {}
     void init(const QString& connectionName, DatabaseLocking* locking);
 
@@ -135,7 +135,7 @@ public :
     {
     public:
 
-        AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* d, QMutex* mutex, QWaitCondition *condVar);
+        AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* d, QMutex* mutex, QWaitCondition* condVar);
         ~AbstractWaitingUnlocker();
 
         bool wait(unsigned long time = ULONG_MAX);

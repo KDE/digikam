@@ -35,7 +35,7 @@
 
 #include "digikam_export.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT HistoryImageId
@@ -76,10 +76,22 @@ public:
     bool isValid() const;
 
     Type type() const;
-    bool isOriginalFile() const { return type() == Original; }
-    bool isSourceFile() const { return type() == Source; }
-    bool isIntermediateFile() const { return type() == Intermediate; }
-    bool isCurrentFile() const  { return type() == Current; }
+    bool isOriginalFile() const
+    {
+        return type() == Original;
+    }
+    bool isSourceFile() const
+    {
+        return type() == Source;
+    }
+    bool isIntermediateFile() const
+    {
+        return type() == Intermediate;
+    }
+    bool isCurrentFile() const
+    {
+        return type() == Current;
+    }
 
     bool operator==(const HistoryImageId& other) const;
 

@@ -55,23 +55,36 @@ DImgBuiltinFilter::DImgBuiltinFilter(Type type, const QVariant& arg)
 void DImgBuiltinFilter::setAction(const FilterAction& action)
 {
     m_type = NoOperation;
+
     if (action.identifier() == "transform:rotate" && action.version() == 1)
     {
         int angle = action.parameter("angle").toInt();
+
         if (angle == 90)
+        {
             m_type = Rotate90;
+        }
         else if (angle == 180)
+        {
             m_type = Rotate180;
+        }
         else
+        {
             m_type = Rotate270;
+        }
     }
     else if (action.identifier() == "transform:flip" && action.version() == 1)
     {
         QString direction = action.parameter("direction").toString();
+
         if (direction == "vertical")
+        {
             m_type = FlipVertically;
+        }
         else
+        {
             m_type = FlipHorizontally;
+        }
     }
     else if (action.identifier() == "transform:crop" && action.version() == 1)
     {
@@ -92,10 +105,15 @@ void DImgBuiltinFilter::setAction(const FilterAction& action)
     else if (action.identifier() == "transform:convertDepth" && action.version() == 1)
     {
         int depth = action.parameter("depth").toInt();
+
         if (depth == 16)
+        {
             m_type = ConvertTo16Bit;
+        }
         else
+        {
             m_type = ConvertTo8Bit;
+        }
     }
 }
 
@@ -172,12 +190,20 @@ FilterAction DImgBuiltinFilter::filterAction() const
         {
             FilterAction action("transform:rotate", 1);
             int angle;
+
             if (m_type == Rotate90)
+            {
                 angle = 90;
+            }
             else if (m_type == Rotate180)
+            {
                 angle = 180;
+            }
             else
+            {
                 angle = 270;
+            }
+
             action.addParameter("angle", angle);
             return action;
         }
@@ -247,18 +273,22 @@ bool DImgBuiltinFilter::isReversible() const
 QStringList DImgBuiltinFilter::supportedFilters()
 {
     return QStringList() << "transform:rotate"
-                         << "transform:flip"
-                         << "transform:crop"
-                         << "transform:resize"
-                         << "transform:convertDepth";
+           << "transform:flip"
+           << "transform:crop"
+           << "transform:resize"
+           << "transform:convertDepth";
 }
 
 QList<int> DImgBuiltinFilter::supportedVersions(const QString& filterIdentifier)
 {
     QList<int> versions;
+
     // So far, all filters are at version 1
     if (isSupported(filterIdentifier))
+    {
         versions << 1;
+    }
+
     return versions;
 }
 
@@ -293,6 +323,7 @@ QString DImgBuiltinFilter::displayableName() const
         case ConvertTo16Bit:
             return I18N_NOOP("Convert to 16 Bit");
     }
+
     return QString();
 }
 
@@ -321,6 +352,7 @@ QString DImgBuiltinFilter::filterIcon() const
         case ConvertTo16Bit:
             return "depth8to16";
     }
+
     return QString();
 }
 
@@ -346,6 +378,7 @@ QString DImgBuiltinFilter::i18nDisplayableName(const QString& filterIdentifier)
     {
         return i18nc("Convert image bit depth", "Convert Depth");
     }
+
     return QString();
 }
 
@@ -371,6 +404,7 @@ QString DImgBuiltinFilter::filterIcon(const QString& filterIdentifier)
     {
         return "fill-color";
     }
+
     return QString();
 }
 
@@ -382,7 +416,10 @@ bool DImgBuiltinFilter::isSupported(const QString& filterIdentifier)
 bool DImgBuiltinFilter::isSupported(const QString& filterIdentifier, int version)
 {
     if (!isSupported(filterIdentifier))
+    {
         return false;
+    }
+
     // at the moment, all filters are at version 1
     return version == 1;
 }
@@ -392,12 +429,12 @@ class DImgBuiltinThreadedFilter : public DImgThreadedFilter
 
 public:
 
-    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, DImg *orgImage, QObject *parent = 0)
+    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, DImg* orgImage, QObject* parent = 0)
         : DImgThreadedFilter(orgImage, parent), m_filter(filter)
     {
     }
 
-    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, QObject *parent = 0)
+    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, QObject* parent = 0)
         : DImgThreadedFilter(parent), m_filter(filter)
     {
     }
@@ -426,12 +463,12 @@ protected:
     DImgBuiltinFilter m_filter;
 };
 
-DImgThreadedFilter *DImgBuiltinFilter::createThreadedFilter(DImg *orgImage, QObject *parent) const
+DImgThreadedFilter* DImgBuiltinFilter::createThreadedFilter(DImg* orgImage, QObject* parent) const
 {
     return new DImgBuiltinThreadedFilter(*this, orgImage, parent);
 }
 
-DImgThreadedFilter *DImgBuiltinFilter::createThreadedFilter(QObject *parent) const
+DImgThreadedFilter* DImgBuiltinFilter::createThreadedFilter(QObject* parent) const
 {
     return new DImgBuiltinThreadedFilter(*this, parent);
 }

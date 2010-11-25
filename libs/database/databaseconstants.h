@@ -38,91 +38,91 @@ namespace Digikam
 
 namespace AlbumRoot
 {
-    enum Type
-    {
-        // Keep values constant
-        UndefinedType   = 0,
-        VolumeHardWired = 1,
-        VolumeRemovable = 2,
-        Network         = 3
-    };
+enum Type
+{
+    // Keep values constant
+    UndefinedType   = 0,
+    VolumeHardWired = 1,
+    VolumeRemovable = 2,
+    Network         = 3
+};
 }
 
 namespace DatabaseSearch
 {
-    enum Type
-    {
-        UndefinedType,
-        KeywordSearch,
-        AdvancedSearch,
-        LegacyUrlSearch,
-        TimeLineSearch,
-        HaarSearch,
-        MapSearch,
-        DuplicatesSearch,
-        FaceSearch
-    };
+enum Type
+{
+    UndefinedType,
+    KeywordSearch,
+    AdvancedSearch,
+    LegacyUrlSearch,
+    TimeLineSearch,
+    HaarSearch,
+    MapSearch,
+    DuplicatesSearch,
+    FaceSearch
+};
 
-    enum HaarSearchType
-    {
-        HaarImageSearch,
-        HaarSketchSearch
-    };
+enum HaarSearchType
+{
+    HaarImageSearch,
+    HaarSketchSearch
+};
 }
 
 namespace DatabaseItem
 {
-    enum Status
-    {
-        // Keep values constant
-        UndefinedStatus = 0,
-        Visible         = 1,
-        Hidden          = 2,
-        Removed         = 3
-    };
+enum Status
+{
+    // Keep values constant
+    UndefinedStatus = 0,
+    Visible         = 1,
+    Hidden          = 2,
+    Removed         = 3
+};
 
-    enum Category
-    {
-        // Keep values constant
-        UndefinedCategory = 0,
-        Image             = 1,
-        Video             = 2,
-        Audio             = 3,
-        Other             = 4
-    };
+enum Category
+{
+    // Keep values constant
+    UndefinedCategory = 0,
+    Image             = 1,
+    Video             = 2,
+    Audio             = 3,
+    Other             = 4
+};
 }
 
 namespace DatabaseRelation
 {
-    enum Type
-    {
-        UndefinedType = 0,
-        /** The subject is a derivative of the object */
-        DerivedFrom   = 1
-    };
+enum Type
+{
+    UndefinedType = 0,
+    /** The subject is a derivative of the object */
+    DerivedFrom   = 1
+};
 }
 
 namespace DatabaseComment
 {
-    enum Type
-    {
-        // Keep values constant
-        /// UndefinedType: Shall never appear in the database
-        UndefinedType   = 0,
-        /**
-         *  Comment: The default - a normal comment
-         *  This is what the user in digikam edits as the comment.
-         *  It is mapped to and from the JFIF comment,
-         *  the EXIF user comment, the IPTC Caption,
-         *  Dublin Core and Photoshop Description.
-         */
-        Comment         = 1,
-        /// Headline: as with IPTC or Photoshop
-        Headline        = 2,
-        /// Title: as with Dublin Core Title, Photoshop Title, IPTC Object Name
-        Title           = 3
-        // Feel free to add here any more types that you need!
-    };
+enum Type
+{
+    // Keep values constant
+    /// UndefinedType: Shall never appear in the database
+    UndefinedType   = 0,
+    /**
+     *  Comment: The default - a normal comment
+     *  This is what the user in digikam edits as the comment.
+     *  It is mapped to and from the JFIF comment,
+     *  the EXIF user comment, the IPTC Caption,
+     *  Dublin Core and Photoshop Description.
+     */
+    Comment         = 1,
+    /// Headline: as with IPTC or Photoshop
+    Headline        = 2,
+    /// Title: as with Dublin Core Title, Photoshop Title, IPTC Object Name
+    Title           = 3
+    // Feel free to add here any more types that you need!
+};
 }
 
 class DIGIKAM_DATABASE_EXPORT InternalTagName

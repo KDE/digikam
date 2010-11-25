@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : simple image properties side bar (without support 
+ * Description : simple image properties side bar (without support
  *               of digiKam database).
  *
  * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -53,13 +53,13 @@ class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 
 public:
 
-    ImagePropertiesSideBar(QWidget* parent, SidebarSplitter *splitter,
+    ImagePropertiesSideBar(QWidget* parent, SidebarSplitter* splitter,
                            KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
     ~ImagePropertiesSideBar();
 
     void applySettings();
 
-    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg *img = 0);
+    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* img = 0);
 
 public Q_SLOTS:
 
@@ -86,12 +86,12 @@ protected:
 
     KUrl                        m_currentURL;
 
-    DImg                       *m_image;
+    DImg*                       m_image;
 
-    ImagePropertiesGPSTab      *m_gpsTab;
-    ImagePropertiesTab         *m_propertiesTab;
-    ImagePropertiesMetaDataTab *m_metadataTab;
-    ImagePropertiesColorsTab   *m_colorTab;
+    ImagePropertiesGPSTab*      m_gpsTab;
+    ImagePropertiesTab*         m_propertiesTab;
+    ImagePropertiesMetaDataTab* m_metadataTab;
+    ImagePropertiesColorsTab*   m_colorTab;
 };
 
 }  // namespace Digikam

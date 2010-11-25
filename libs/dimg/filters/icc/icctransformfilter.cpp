@@ -36,13 +36,13 @@ namespace Digikam
 {
 
 IccTransformFilter::IccTransformFilter(QObject* parent)
-                 : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 IccTransformFilter::IccTransformFilter(DImg* orgImage, QObject* parent, const IccTransform& transform)
-                  : DImgThreadedFilter(orgImage, parent, "ICC Transform")
+    : DImgThreadedFilter(orgImage, parent, "ICC Transform")
 {
     m_transform = transform;
     // initialize filter
@@ -88,11 +88,18 @@ void IccTransformFilter::readParameters(const Digikam::FilterAction& action)
 
     QList<IccProfile> profiles;
     profiles = IccSettings::instance()->profilesForDescription(action.parameter("inputProfileDescription").toString());
+
     if (!profiles.isEmpty())
+    {
         m_transform.setInputProfile(profiles.first());
+    }
+
     profiles = IccSettings::instance()->profilesForDescription(action.parameter("outputProfileDescription").toString());
+
     if (!profiles.isEmpty())
+    {
         m_transform.setOutputProfile(profiles.first());
+    }
 }
 
 bool IccTransformFilter::parametersSuccessfullyRead() const
@@ -105,9 +112,11 @@ QString IccTransformFilter::readParametersError(const FilterAction& actionThatFa
     if (m_transform.inputProfile().isNull())
         return i18n("Input color profile \"%1\" not available",
                     actionThatFailed.parameter("inputProfileDescription").toString());
+
     if (m_transform.outputProfile().isNull())
         return i18n("Output color profile \"%1\" not available",
                     actionThatFailed.parameter("outputProfileDescription").toString());
+
     return QString();
 }
 

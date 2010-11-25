@@ -87,10 +87,10 @@ public:
     ImagePropertiesVersionsTab* versionsHistoryTab;
 };
 
-ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplitter *splitter,
-                                                   KMultiTabBarPosition side, bool mimimizedDefault)
-                        : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
-                          d(new ImagePropertiesSideBarDBPriv)
+ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplitter* splitter,
+        KMultiTabBarPosition side, bool mimimizedDefault)
+    : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
+      d(new ImagePropertiesSideBarDBPriv)
 {
     d->desceditTab = new ImageDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
@@ -129,27 +129,32 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& rect,
-                                           DImg *img, const DImageHistory& history)
+        DImg* img, const DImageHistory& history)
 {
     itemChanged(info.fileUrl(), info, rect, img, history);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg* img)
 {
     itemChanged(url, ImageInfo(), rect, img, DImageHistory());
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& info,
-                                           const QRect& rect, DImg *img, const DImageHistory& history)
+        const QRect& rect, DImg* img, const DImageHistory& history)
 {
     if ( !url.isValid() )
+    {
         return;
+    }
 
     m_currentURL = url;
 
     ImageInfoList list;
+
     if (!info.isNull())
+    {
         list << info;
+    }
 
     itemChanged(list, rect, img, history);
 }
@@ -157,14 +162,16 @@ void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& inf
 void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
 {
     if (infos.isEmpty())
+    {
         return;
+    }
 
     m_currentURL = infos.first().fileUrl();
 
     itemChanged(infos, QRect(), 0, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg *img, const DImageHistory& history)
+void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history)
 {
     m_currentRect = rect;
     m_image       = img;
@@ -223,7 +230,9 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                 m_metadataTab->setCurrentData(data, m_currentURL.fileName());
             }
             else
+            {
                 m_metadataTab->setCurrentURL(m_currentURL);
+            }
 
             m_dirtyMetadataTab = true;
         }
@@ -266,7 +275,9 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                 m_metadataTab->setCurrentData(data, m_currentURL.fileName());
             }
             else
+            {
                 m_metadataTab->setCurrentURL(m_currentURL);
+            }
 
             m_dirtyMetadataTab = true;
         }
@@ -283,6 +294,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             ImagePosition pos = d->currentInfos.first().imagePosition();
+
             if (pos.isEmpty())
             {
                 m_gpsTab->setCurrentURL();
@@ -335,10 +347,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             GPSInfoList list;
+
             for (ImageInfoList::const_iterator it = d->currentInfos.constBegin();
                  it != d->currentInfos.constEnd(); ++it)
             {
                 ImagePosition pos = (*it).imagePosition();
+
                 if (!pos.isEmpty())
                 {
                     GPSInfo info;
@@ -352,6 +366,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                     list.append(info);
                 }
             }
+
             if (list.isEmpty())
             {
                 m_gpsTab->setCurrentURL();
@@ -360,6 +375,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             {
                 m_gpsTab->setGPSInfoList(list);
             }
+
             m_dirtyGpsTab = true;
         }
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
@@ -392,23 +408,33 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
 {
     if (!d->currentInfos.isEmpty())
     {
-        QWidget *tab = getActiveTab();
-        if (!tab) return;
+        QWidget* tab = getActiveTab();
+
+        if (!tab)
+        {
+            return;
+        }
 
         if (tab == m_propertiesTab || tab == m_gpsTab)
         {
             ImageInfo& info = d->currentInfos.first();
+
             if (changeset.ids().contains(info.id()))
             {
                 // trigger an update, if changes touch the tab's information
                 DatabaseFields::Set set = changeset.changes();
+
                 if ( (set & DatabaseFields::ImagesAll) ||
                      (set & DatabaseFields::ImageInformationAll) ||
                      (set & DatabaseFields::ImageMetadataAll) ||
                      (set & DatabaseFields::ImageCommentsAll) )
+                {
                     m_dirtyPropertiesTab = false;
+                }
                 else if (set & DatabaseFields::ImagePositionsAll)
+                {
                     m_dirtyGpsTab = false;
+                }
 
                 if ( tab == m_propertiesTab || tab == m_gpsTab)
                 {
@@ -480,7 +506,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             m_propertiesTab->setFileModifiedDate(str);
 
             str = QString("%1 (%2)").arg(KIO::convertSize(commonInfo.fileSize))
-                                    .arg(KGlobal::locale()->formatNumber(commonInfo.fileSize, 0));
+                  .arg(KGlobal::locale()->formatNumber(commonInfo.fileSize, 0));
             m_propertiesTab->setFileSize(str);
 
             //  These infos are not stored in DB
@@ -490,14 +516,17 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             // -- Image Properties --------------------------------------------------
 
             if (commonInfo.width == 0 || commonInfo.height == 0)
+            {
                 str = i18n("Unknown");
+            }
             else
             {
                 QString mpixels;
                 mpixels.setNum(commonInfo.width * commonInfo.height / 1000000.0, 'f', 2);
                 str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
-                           commonInfo.width, commonInfo.height, mpixels);
+                            commonInfo.width, commonInfo.height, mpixels);
             }
+
             m_propertiesTab->setImageDimensions(str);
             m_propertiesTab->setImageBitDepth(i18n("%1 bpp", commonInfo.colorDepth));
             m_propertiesTab->setImageColorMode(commonInfo.colorModel.isEmpty() ? unavailable : commonInfo.colorModel);
@@ -521,13 +550,17 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
                 m_propertiesTab->setPhotoDateTime(str);
             }
             else
+            {
                 m_propertiesTab->setPhotoDateTime(unavailable);
+            }
 
             m_propertiesTab->setPhotoLens(photoInfo.lens.isEmpty() ? unavailable : photoInfo.lens);
             m_propertiesTab->setPhotoAperture(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
 
             if (photoInfo.focalLength35.isEmpty())
+            {
                 m_propertiesTab->setPhotoFocalLength(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
+            }
             else
             {
                 str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35);
@@ -538,11 +571,17 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             m_propertiesTab->setPhotoSensitivity(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
 
             if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+            {
                 m_propertiesTab->setPhotoExposureMode(unavailable);
+            }
             else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+            {
                 m_propertiesTab->setPhotoExposureMode(photoInfo.exposureMode);
+            }
             else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+            {
                 m_propertiesTab->setPhotoExposureMode(photoInfo.exposureProgram);
+            }
             else
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);

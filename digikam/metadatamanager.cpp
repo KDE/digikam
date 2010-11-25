@@ -49,7 +49,11 @@
 namespace Digikam
 {
 
-class MetadataManagerCreator { public: MetadataManager object; };
+class MetadataManagerCreator
+{
+public:
+    MetadataManager object;
+};
 K_GLOBAL_STATIC(MetadataManagerCreator, metadataManagercreator)
 
 MetadataManager* MetadataManager::instance()
@@ -58,10 +62,10 @@ MetadataManager* MetadataManager::instance()
 }
 
 MetadataManager::MetadataManager()
-               : d(new MetadataManagerPriv(this))
+    : d(new MetadataManagerPriv(this))
 {
-    connect(d, SIGNAL(progressMessageChanged(const QString &)),
-            this, SIGNAL(progressMessageChanged(const QString &)));
+    connect(d, SIGNAL(progressMessageChanged(const QString&)),
+            this, SIGNAL(progressMessageChanged(const QString&)));
 
     connect(d, SIGNAL(progressValueChanged(float)),
             this, SIGNAL(progressValueChanged(float)));
@@ -69,8 +73,8 @@ MetadataManager::MetadataManager()
     connect(d, SIGNAL(progressFinished()),
             this, SIGNAL(progressFinished()));
 
-    connect(d->fileWorker, SIGNAL(orientationChangeFailed(const QStringList &)),
-            this, SIGNAL(orientationChangeFailed(const QStringList &)));
+    connect(d->fileWorker, SIGNAL(orientationChangeFailed(const QStringList&)),
+            this, SIGNAL(orientationChangeFailed(const QStringList&)));
 }
 
 MetadataManager::~MetadataManager()
@@ -97,6 +101,7 @@ void MetadataManager::assignTags(const QList<int>& ids, const QList<int>& tagIDs
     foreach (int id, ids)
     {
         ImageInfo info(id);
+
         if (!info.isNull())
         {
             infos << info;
@@ -179,7 +184,7 @@ void MetadataManager::applyMetadata(const QList<ImageInfo>& infos, const Metadat
 // --------------------------------------------------------------------------------------
 
 MetadataManager::MetadataManagerPriv::MetadataManagerPriv(MetadataManager* q)
-                                    : q(q)
+    : q(q)
 {
     dbWorker   = new MetadataManagerDatabaseWorker(this);
     fileWorker = new MetadataManagerFileWorker(this);
@@ -248,8 +253,12 @@ void MetadataManager::MetadataManagerPriv::setDBAction(const QString& action)
 bool MetadataManager::MetadataManagerPriv::shallSendForWriting(qlonglong id)
 {
     QMutexLocker lock(&mutex);
+
     if (scheduledToWrite.contains(id))
+    {
         return false;
+    }
+
     scheduledToWrite << id;
     return true;
 }
@@ -257,7 +266,9 @@ bool MetadataManager::MetadataManagerPriv::shallSendForWriting(qlonglong id)
 void MetadataManager::MetadataManagerPriv::dbProcessedOne()
 {
     if ( (dbDone++ % 10) == 0)
+    {
         updateProgress();
+    }
 }
 
 void MetadataManager::MetadataManagerPriv::dbProcessed(int numberOfInfos)
@@ -318,12 +329,20 @@ void MetadataManager::MetadataManagerPriv::finishedWriting(int numberOfInfos)
 void MetadataManager::MetadataManagerPriv::updateProgressMessage()
 {
     QString message;
+
     if (dbTodo && writerTodo)
+    {
         message = dbMessage;
+    }
     else if (dbTodo)
+    {
         message = dbMessage;
+    }
     else if (writerTodo)
+    {
         message = writerMessage;
+    }
+
     emit progressMessageChanged(message);
 }
 
@@ -334,6 +353,7 @@ void MetadataManager::MetadataManagerPriv::updateProgress()
         emit progressFinished();
         return;
     }
+
     // we use a weighting factor of 10 for file writing
     float allTodo = dbTodo + 10*writerTodo;
     float allDone = dbDone + 10*writerDone;
@@ -341,23 +361,31 @@ void MetadataManager::MetadataManagerPriv::updateProgress()
     emit progressValueChanged(percent);
 }
 
-void MetadataManager::MetadataManagerPriv::slotImageDataChanged(const QString &path, bool removeThumbnails, bool notifyCache)
+void MetadataManager::MetadataManagerPriv::slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache)
 {
     // must be done from the UI thread, touches pixmaps
     if (removeThumbnails)
+    {
         ThumbnailLoadThread::deleteThumbnail(path);
+    }
 
     if (notifyCache)
+    {
         LoadingCacheInterface::fileChanged(path);
+    }
 }
 
 void MetadataManager::MetadataManagerPriv::slotSleepTimer()
 {
     if (dbTodo == 0)
+    {
         dbWorker->deactivate();
+    }
 
     if (writerTodo == 0)
+    {
         fileWorker->deactivate();
+    }
 }
 
 // -------------------------------------------------------------------------------
@@ -375,7 +403,7 @@ void MetadataManagerDatabaseWorker::removeTags(const QList<ImageInfo>& infos, co
 }
 
 void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
-                                               const QList<int>& tagIDs, bool addOrRemove)
+        const QList<int>& tagIDs, bool addOrRemove)
 {
     MetadataHub      hub;
     QList<ImageInfo> forWriting;
@@ -397,7 +425,9 @@ void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
             hub.write(info, MetadataHub::PartialWrite);
 
             if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
+            {
                 forWriting << info;
+            }
 
             d->dbProcessedOne();
             group.allowLift();
@@ -434,7 +464,9 @@ void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, 
             hub.write(info, MetadataHub::PartialWrite);
 
             if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
+            {
                 forWriting << info;
+            }
 
             d->dbProcessedOne();
             group.allowLift();
@@ -521,7 +553,9 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
     }
 
     if (!failedItems.isEmpty())
+    {
         emit orientationChangeFailed(failedItems);
+    }
 
     d->finishedWriting(infos.size());
 }
@@ -540,9 +574,13 @@ void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo>& inf
         hub.load(info);
         QString filePath = info.filePath();
         bool fileChanged = hub.write(filePath, MetadataHub::FullWrite);
+
         if (fileChanged)
+        {
             ScanController::instance()->scanFileDirectly(filePath);
-            // hub emits fileMetadataChanged
+        }
+
+        // hub emits fileMetadataChanged
 
         d->writtenToOne();
     }
@@ -551,7 +589,7 @@ void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo>& inf
     d->finishedWriting(infos.size());
 }
 
-void MetadataManagerFileWorker::writeMetadata(const QList<ImageInfo>& infos, MetadataHub *hub)
+void MetadataManagerFileWorker::writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
 {
     d->setWriterAction(i18n("Writing metadata to files. Please wait..."));
     d->startingToWrite(infos);
@@ -568,8 +606,11 @@ void MetadataManagerFileWorker::writeMetadata(const QList<ImageInfo>& infos, Met
 
         // trigger db scan (to update file size etc.)
         if (fileChanged)
+        {
             ScanController::instance()->scanFileDirectly(filePath);
-            // hub emits fileMetadataChanged
+        }
+
+        // hub emits fileMetadataChanged
 
         d->writtenToOne();
     }

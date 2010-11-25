@@ -44,7 +44,7 @@ class CBFilterPriv
 {
 public:
 
-    CBFilterPriv(){}
+    CBFilterPriv() {}
 
     int         redMap[256];
     int         greenMap[256];
@@ -60,16 +60,16 @@ public:
 };
 
 CBFilter::CBFilter(QObject* parent)
-        : DImgThreadedFilter(parent),
-          d(new CBFilterPriv)
+    : DImgThreadedFilter(parent),
+      d(new CBFilterPriv)
 {
     reset();
     initFilter();
 }
 
 CBFilter::CBFilter(DImg* orgImage, QObject* parent, const CBContainer& settings)
-        : DImgThreadedFilter(orgImage, parent, "CBFilter"),
-          d(new CBFilterPriv)
+    : DImgThreadedFilter(orgImage, parent, "CBFilter"),
+      d(new CBFilterPriv)
 {
     d->settings = settings;
     reset();
@@ -117,13 +117,24 @@ void CBFilter::setTables(int* redMap, int* greenMap, int* blueMap, int* alphaMap
         for (int i = 0; i < 256; ++i)
         {
             if (redMap)
+            {
                 d->redMap[i]   = redMap[i];
+            }
+
             if (greenMap)
+            {
                 d->greenMap[i] = greenMap[i];
+            }
+
             if (blueMap)
+            {
                 d->blueMap[i]  = blueMap[i];
+            }
+
             if (alphaMap)
+            {
                 d->alphaMap[i] = alphaMap[i];
+            }
         }
     }
     else
@@ -131,13 +142,24 @@ void CBFilter::setTables(int* redMap, int* greenMap, int* blueMap, int* alphaMap
         for (int i = 0; i < 65536; ++i)
         {
             if (redMap)
+            {
                 d->redMap16[i]   = redMap[i];
+            }
+
             if (greenMap)
+            {
                 d->greenMap16[i] = greenMap[i];
+            }
+
             if (blueMap)
+            {
                 d->blueMap16[i]  = blueMap[i];
+            }
+
             if (alphaMap)
+            {
                 d->alphaMap16[i] = alphaMap[i];
+            }
         }
     }
 }
@@ -147,31 +169,55 @@ void CBFilter::getTables(int* redMap, int* greenMap, int* blueMap, int* alphaMap
     if (!sixteenBit)
     {
         if (redMap)
+        {
             memcpy(redMap, d->redMap, (256 * sizeof(int)));
+        }
+
         if (greenMap)
+        {
             memcpy(greenMap, d->greenMap, (256 * sizeof(int)));
+        }
+
         if (blueMap)
+        {
             memcpy(blueMap, d->blueMap, (256 * sizeof(int)));
+        }
+
         if (alphaMap)
+        {
             memcpy(alphaMap, d->alphaMap, (256 * sizeof(int)));
+        }
     }
     else
     {
         if (redMap)
+        {
             memcpy(redMap, d->redMap16, (65536 * sizeof(int)));
+        }
+
         if (greenMap)
+        {
             memcpy(greenMap, d->greenMap16, (65536 * sizeof(int)));
+        }
+
         if (blueMap)
+        {
             memcpy(blueMap, d->blueMap16, (65536 * sizeof(int)));
+        }
+
         if (alphaMap)
+        {
             memcpy(alphaMap, d->alphaMap16, (65536 * sizeof(int)));
+        }
     }
 }
 
 void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a)
 {
     if (image.isNull())
+    {
         return;
+    }
 
     uint size = image.width()*image.height();
     int  progress;
@@ -192,8 +238,11 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
             data += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
     else                                        // 16 bits image.
@@ -210,8 +259,11 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
             data += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
 }
@@ -261,45 +313,47 @@ void CBFilter::adjustRGB(double r, double g, double b, double a, bool sixteenBit
     int dummy_table[65536];
 
     if (r == 1.0 && g == 1.0 && b == 1.0 && a == 1.0)
+    {
         return ;
+    }
 
     if (r == g && r == b && r == a)
     {
-       setGamma(r);
+        setGamma(r);
     }
     else
     {
-       getTables(r_table, g_table, b_table, a_table, sixteenBit);
+        getTables(r_table, g_table, b_table, a_table, sixteenBit);
 
-       if(r != 1.0)
-       {
-          setGamma(r);
-          getTables(r_table, dummy_table, dummy_table, dummy_table, sixteenBit);
-          reset();
-       }
+        if (r != 1.0)
+        {
+            setGamma(r);
+            getTables(r_table, dummy_table, dummy_table, dummy_table, sixteenBit);
+            reset();
+        }
 
-       if(g != 1.0)
-       {
-          setGamma(g);
-          getTables(dummy_table, g_table, dummy_table, dummy_table, sixteenBit);
-          reset();
-       }
+        if (g != 1.0)
+        {
+            setGamma(g);
+            getTables(dummy_table, g_table, dummy_table, dummy_table, sixteenBit);
+            reset();
+        }
 
-       if(b != 1.0)
-       {
-          setGamma(b);
-          getTables(dummy_table, dummy_table, b_table, dummy_table, sixteenBit);
-          reset();
-       }
+        if (b != 1.0)
+        {
+            setGamma(b);
+            getTables(dummy_table, dummy_table, b_table, dummy_table, sixteenBit);
+            reset();
+        }
 
-       if(a != 1.0)
-       {
-          setGamma(a);
-          getTables(dummy_table, dummy_table, dummy_table, a_table, sixteenBit);
-          reset();
-       }
+        if (a != 1.0)
+        {
+            setGamma(a);
+            getTables(dummy_table, dummy_table, dummy_table, a_table, sixteenBit);
+            reset();
+        }
 
-       setTables(r_table, g_table, b_table, a_table, sixteenBit);
+        setTables(r_table, g_table, b_table, a_table, sixteenBit);
     }
 }
 

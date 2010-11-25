@@ -60,7 +60,7 @@ public:
 // ---------------------------------------------------------------------------------------
 
 AddTagsComboBox::AddTagsComboBox(QWidget* parent)
-               : TagTreeViewSelectComboBox(parent), d(new AddTagsComboBoxPriv)
+    : TagTreeViewSelectComboBox(parent), d(new AddTagsComboBoxPriv)
 {
     QComboBox::setAutoCompletion(false);
     setInsertPolicy(QComboBox::NoInsert); // dont let Qt interfere when Enter is pressed
@@ -69,7 +69,7 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
 
     d->lineEdit = new AddTagsLineEdit(this);
     setLineEdit(d->lineEdit);
- 
+
     connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
             this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
 
@@ -90,7 +90,7 @@ AddTagsComboBox::~AddTagsComboBox()
     delete d;
 }
 
-void AddTagsComboBox::setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
+void AddTagsComboBox::setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
 {
     TagTreeViewSelectComboBox::setModel(model, filteredModel, filterModel);
 
@@ -102,12 +102,12 @@ void AddTagsComboBox::installLineEdit()
 {
 }
 
-AddTagsLineEdit *AddTagsComboBox::lineEdit() const
+AddTagsLineEdit* AddTagsComboBox::lineEdit() const
 {
     return d->lineEdit;
 }
 
-AddTagsCompletionBox *AddTagsComboBox::completionBox() const
+AddTagsCompletionBox* AddTagsComboBox::completionBox() const
 {
     return d->lineEdit->completionBox();
 }
@@ -147,13 +147,17 @@ void AddTagsComboBox::setText(const QString& text)
 TaggingAction AddTagsComboBox::currentTaggingAction()
 {
     if (d->viewTaggingAction.isValid())
+    {
         return d->viewTaggingAction;
+    }
+
     return d->lineEdit->currentTaggingAction();
 }
 
 void AddTagsComboBox::slotViewIndexActivated(const QModelIndex& index)
 {
-    TAlbum *album = view()->albumForIndex(index);
+    TAlbum* album = view()->albumForIndex(index);
+
     //d->lineEdit->selectAll();
     if (album)
     {
@@ -165,6 +169,7 @@ void AddTagsComboBox::slotViewIndexActivated(const QModelIndex& index)
         d->lineEdit->setText(QString());
         d->viewTaggingAction = TaggingAction();
     }
+
     emit taggingActionSelected(currentTaggingAction());
 }
 

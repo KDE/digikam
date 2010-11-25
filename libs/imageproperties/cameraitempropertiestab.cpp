@@ -146,15 +146,15 @@ public:
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
-                       : RExpanderBox(parent), d(new CameraItemPropertiesTabPriv)
+    : RExpanderBox(parent), d(new CameraItemPropertiesTabPriv)
 {
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
 
     // --------------------------------------------------
 
-    QWidget *w1               = new QWidget(this);
-    QGridLayout *glay1        = new QGridLayout(w1);
+    QWidget* w1               = new QWidget(this);
+    QGridLayout* glay1        = new QGridLayout(w1);
 
     d->file                   = new DTextLabelName(i18n("File: "),       w1);
     d->folder                 = new DTextLabelName(i18n("Folder: "),     w1);
@@ -207,8 +207,8 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget *w2               = new QWidget(this);
-    QGridLayout *glay2        = new QGridLayout(w2);
+    QWidget* w2               = new QWidget(this);
+    QGridLayout* glay2        = new QGridLayout(w2);
 
     d->make                   = new DTextLabelName(i18n("Make: "),          w2);
     d->model                  = new DTextLabelName(i18n("Model: "),         w2);
@@ -272,8 +272,8 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
 }
 
 void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
-                                             const QString& newFileName, const QByteArray& exifData,
-                                             const KUrl& currentURL)
+        const QString& newFileName, const QByteArray& exifData,
+        const KUrl& currentURL)
 {
     if (!itemInfo)
     {
@@ -315,48 +315,70 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     d->labelFolder->setText(itemInfo->folder);
 
     if (itemInfo->readPermissions < 0)
+    {
         str = unknown;
+    }
     else if (itemInfo->readPermissions == 0)
+    {
         str = i18n("No");
+    }
     else
+    {
         str = i18n("Yes");
+    }
 
     d->labelFileIsReadable->setText(str);
 
     if (itemInfo->writePermissions < 0)
+    {
         str = unknown;
+    }
     else if (itemInfo->writePermissions == 0)
+    {
         str = i18n("No");
+    }
     else
+    {
         str = i18n("Yes");
+    }
 
     d->labelFileIsWritable->setText(str);
 
     if (itemInfo->mtime.isValid())
         d->labelFileDate->setText(KGlobal::locale()->formatDateTime(itemInfo->mtime,
-                                                                    KLocale::ShortDate, true));
+                                  KLocale::ShortDate, true));
     else
+    {
         d->labelFileDate->setText(unknown);
+    }
 
     str = i18n("%1 (%2)", KIO::convertSize(itemInfo->size),
-                          KGlobal::locale()->formatNumber(itemInfo->size, 0));
+               KGlobal::locale()->formatNumber(itemInfo->size, 0));
     d->labelFileSize->setText(str);
 
     // -- Image Properties --------------------------------------------------
 
     if (itemInfo->mime == "image/x-raw")
+    {
         d->labelImageMime->setText(i18n("RAW Image"));
+    }
     else
     {
         KMimeType::Ptr mimeType = KMimeType::mimeType(itemInfo->mime, KMimeType::ResolveAliases);
+
         if (mimeType)
+        {
             d->labelImageMime->setText(mimeType->comment());
+        }
         else
-            d->labelImageMime->setText(itemInfo->mime); // last fallback
+        {
+            d->labelImageMime->setText(itemInfo->mime);    // last fallback
+        }
     }
 
     QString mpixels;
     QSize dims;
+
     if (itemInfo->width == -1 && itemInfo->height == -1 && !currentURL.isEmpty())
     {
         // delayed loading to list faster from UMSCamera
@@ -369,18 +391,18 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         {
             KFileMetaInfo meta(currentURL.toLocalFile());
 
-/*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                            Check if new method to search "Dimensions" information is enough.
+            /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
+                                        Check if new method to search "Dimensions" information is enough.
 
-            if (meta.isValid())
-            {
-                if (meta.containsGroup("Jpeg EXIF Data"))
-                    dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-                else if (meta.containsGroup("General"))
-                    dims = meta.group("General").item("Dimensions").value().toSize();
-                else if (meta.containsGroup("Technical"))
-                    dims = meta.group("Technical").item("Dimensions").value().toSize();
-            }*/
+                        if (meta.isValid())
+                        {
+                            if (meta.containsGroup("Jpeg EXIF Data"))
+                                dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+                            else if (meta.containsGroup("General"))
+                                dims = meta.group("General").item("Dimensions").value().toSize();
+                            else if (meta.containsGroup("Technical"))
+                                dims = meta.group("Technical").item("Dimensions").value().toSize();
+                        }*/
 
             if (meta.isValid() && meta.item("Dimensions").isValid())
             {
@@ -393,9 +415,10 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         // if available (GPCamera), take dimensions directly from itemInfo
         dims = QSize(itemInfo->width, itemInfo->height);
     }
+
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     str = (!dims.isValid()) ? unknown : i18n("%1x%2 (%3Mpx)",
-           dims.width(), dims.height(), mpixels);
+            dims.width(), dims.height(), mpixels);
     d->labelImageDimensions->setText(str);
 
     // -- Download information ------------------------------------------
@@ -403,11 +426,17 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     d->labelNewFileName->setText(newFileName.isEmpty() ? i18n("<i>unchanged</i>") : newFileName);
 
     if (itemInfo->downloaded == GPItemInfo::DownloadUnknown)
+    {
         str = unknown;
+    }
     else if (itemInfo->downloaded == GPItemInfo::DownloadedYes)
+    {
         str = i18n("Yes");
+    }
     else
+    {
         str = i18n("No");
+    }
 
     d->labelAlreadyDownloaded->setText(str);
 
@@ -420,9 +449,13 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     PhotoInfoContainer photoInfo = metaData.getPhotographInformation();
 
     if (photoInfo.isEmpty())
+    {
         widget(1)->hide();
+    }
     else
+    {
         widget(1)->show();
+    }
 
     d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
     d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
@@ -433,13 +466,17 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         d->labelPhotoDateTime->setText(str);
     }
     else
+    {
         d->labelPhotoDateTime->setText(unavailable);
+    }
 
     d->labelPhotoLens->setText(photoInfo.lens.isEmpty() ? unavailable : photoInfo.lens);
     d->labelPhotoAperture->setText(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
 
     if (photoInfo.focalLength35mm.isEmpty())
+    {
         d->labelPhotoFocalLength->setText(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
+    }
     else
     {
         str = i18n("%1 (35mm: %2)", photoInfo.focalLength,
@@ -451,11 +488,17 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     d->labelPhotoSensitivity->setText(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
 
     if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+    {
         d->labelPhotoExposureMode->setText(unavailable);
+    }
     else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+    {
         d->labelPhotoExposureMode->setText(photoInfo.exposureMode);
+    }
     else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+    {
         d->labelPhotoExposureMode->setText(photoInfo.exposureProgram);
+    }
     else
     {
         str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);

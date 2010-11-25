@@ -42,7 +42,10 @@ public:
         exifOrientation = DMetadata::ORIENTATION_UNSPECIFIED;
     }
 
-    bool isNull() const { return qimage.isNull(); }
+    bool isNull() const
+    {
+        return qimage.isNull();
+    }
 
     QImage qimage;
     int    exifOrientation;

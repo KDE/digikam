@@ -53,7 +53,7 @@
 #include "imagelister.h"
 
 kio_digikammapimages::kio_digikammapimages(const QByteArray& pool_socket, const QByteArray& app_socket)
-                : SlaveBase("kio_digikammapimages", pool_socket, app_socket)
+    : SlaveBase("kio_digikammapimages", pool_socket, app_socket)
 {
 }
 
@@ -87,7 +87,7 @@ void kio_digikammapimages::special(const QByteArray& data)
         qreal lng2 = strLng2.toDouble();
 
         QList<QVariant> imagesInfoFromArea = Digikam::DatabaseAccess().db()->getImageIdsFromArea(lat1, lat2, lng1, lng2, 0, QString("rating"));
-       // kDebug()<<"IMAGE IDS:"<<imageIds;
+        // kDebug()<<"IMAGE IDS:"<<imageIds;
 
         QByteArray  ba;
         QDataStream os(&ba, QIODevice::WriteOnly);

@@ -47,7 +47,7 @@ public:
 public Q_SLOTS:
 
     void slotResetSettingsToDefault();
-    
+
 private:
 
     bool toolOperations();

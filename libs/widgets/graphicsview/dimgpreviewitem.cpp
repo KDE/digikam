@@ -43,14 +43,14 @@ namespace Digikam
 {
 
 DImgPreviewItem::DImgPreviewItem(QGraphicsItem* parent)
-               : GraphicsDImgItem(*new DImgPreviewItemPrivate, parent)
+    : GraphicsDImgItem(*new DImgPreviewItemPrivate, parent)
 {
     Q_D(DImgPreviewItem);
     d->init(this);
 }
 
 DImgPreviewItem::DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* parent)
-               : GraphicsDImgItem(dd, parent)
+    : GraphicsDImgItem(dd, parent)
 {
     Q_D(DImgPreviewItem);
     d->init(this);
@@ -79,13 +79,19 @@ void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* q)
     // get preview size from screen size, but limit from VGA to WQXGA
     previewSize = qMax(QApplication::desktop()->height(),
                        QApplication::desktop()->width());
+
     if (previewSize < 640)
+    {
         previewSize = 640;
+    }
+
     if (previewSize > 2560)
+    {
         previewSize = 2560;
+    }
 
     LoadingCacheInterface::connectToSignalFileChanged(q,
-        SLOT(slotFileChanged(const QString&)));
+            SLOT(slotFileChanged(const QString&)));
 }
 
 DImgPreviewItem::~DImgPreviewItem()
@@ -103,8 +109,12 @@ void DImgPreviewItem::setDisplayingWidget(QWidget* widget)
 void DImgPreviewItem::setLoadFullImageSize(bool b)
 {
     Q_D(DImgPreviewItem);
+
     if (d->loadFullImageSize == b)
+    {
         return;
+    }
+
     d->loadFullImageSize = b;
     reload();
 }
@@ -124,8 +134,11 @@ QString DImgPreviewItem::path() const
 void DImgPreviewItem::setPath(const QString& path)
 {
     Q_D(DImgPreviewItem);
+
     if (path == d->path)
+    {
         return;
+    }
 
     d->path = path;
 
@@ -137,6 +150,7 @@ void DImgPreviewItem::setPath(const QString& path)
     else
     {
         d->state = Loading;
+
         if (d->loadFullImageSize)
         {
             d->previewThread->loadHighQuality(d->path, d->exifRotate);
@@ -145,6 +159,7 @@ void DImgPreviewItem::setPath(const QString& path)
         {
             d->previewThread->load(d->path, d->previewSize, d->exifRotate);
         }
+
         emit stateChanged(d->state);
     }
 }
@@ -159,17 +174,23 @@ void DImgPreviewItem::setPreloadPaths(const QStringList& pathsToPreload)
 static bool approximates(const QSizeF& s1, const QSizeF& s2)
 {
     if (s1 == s2)
+    {
         return true;
+    }
 
     double widthRatio = s1.width() / s2.width();
 
     if (widthRatio < 0.98 || widthRatio > 1.02)
+    {
         return false;
+    }
 
     double heightRatio = s1.height() / s2.height();
 
     if (heightRatio < 0.98 || heightRatio > 1.02)
+    {
         return false;
+    }
 
     return true;
 }
@@ -177,6 +198,7 @@ static bool approximates(const QSizeF& s1, const QSizeF& s2)
 QString DImgPreviewItem::userLoadingHint() const
 {
     Q_D(const DImgPreviewItem);
+
     switch (d->state)
     {
         case NoImage:
@@ -188,16 +210,24 @@ QString DImgPreviewItem::userLoadingHint() const
             if (d->image.detectedFormat() == DImg::RAW)
             {
                 if (d->image.attribute("fromRawEmbeddedPreview").toBool())
+                {
                     return i18n("Embedded JPEG Preview");
+                }
                 else
+                {
                     return i18n("Half Size Raw Preview");
+                }
             }
             else
             {
                 if (approximates(d->image.originalSize(),d->image.size()))
+                {
                     return i18n("Full Size Preview");
+                }
                 else
+                {
                     return i18n("Reduced Size Preview");
+                }
             }
 
             return QString();   // To please compiler without warnings.
@@ -230,8 +260,11 @@ bool DImgPreviewItem::isLoaded() const
 void DImgPreviewItem::slotGotImagePreview(const LoadingDescription& description, const DImg& image)
 {
     Q_D(DImgPreviewItem);
+
     if (description.filePath != d->path || description.isThumbnail())
+    {
         return;
+    }
 
     setImage(image);
 
@@ -252,22 +285,32 @@ void DImgPreviewItem::slotGotImagePreview(const LoadingDescription& description,
 void DImgPreviewItem::preloadNext()
 {
     Q_D(DImgPreviewItem);
+
     if (!isLoaded() || d->pathsToPreload.isEmpty())
+    {
         return;
+    }
 
     QString preloadPath = d->pathsToPreload.takeFirst();
 
     if (d->loadFullImageSize)
+    {
         d->preloadThread->loadHighQuality(preloadPath, d->exifRotate);
+    }
     else
+    {
         d->preloadThread->load(preloadPath, d->previewSize, d->exifRotate);
+    }
 }
 
 void DImgPreviewItem::slotFileChanged(const QString& path)
 {
     Q_D(DImgPreviewItem);
+
     if (d->path == path)
+    {
         reload();
+    }
 }
 
 } // namespace Digikam

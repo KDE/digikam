@@ -51,7 +51,7 @@ public:
         lightness  = 0.0;
     };
 
-    ~HSLContainer(){};
+    ~HSLContainer() {};
 
 public:
 
@@ -72,12 +72,27 @@ public:
     explicit HSLFilter(DImg* orgImage, QObject* parent=0, const HSLContainer& settings=HSLContainer());
     virtual ~HSLFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:HSLFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Hue / Saturation / Lightness Filter"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:HSLFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Hue / Saturation / Lightness Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

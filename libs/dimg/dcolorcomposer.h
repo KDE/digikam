@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -97,7 +97,7 @@ public:
         Retrieve a DColorComposer object for one of the predefined rules.
         The object needs to be deleted by the caller.
     */
-    static DColorComposer *getComposer(CompositingOperation rule);
+    static DColorComposer* getComposer(CompositingOperation rule);
 
     /**
         Carry out the actual composition process.
@@ -125,7 +125,7 @@ public:
     */
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 
-    virtual ~DColorComposer(){};
+    virtual ~DColorComposer() {};
 };
 
 }  // namespace Digikam

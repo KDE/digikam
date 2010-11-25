@@ -109,10 +109,10 @@ public:
     void setDragDropHandler(AlbumModelDragDropHandler* handler);
 
     /// Returns the drag drop handler, or 0 if none is installed
-    AlbumModelDragDropHandler *dragDropHandler() const;
+    AlbumModelDragDropHandler* dragDropHandler() const;
 
     /** Returns the album object associated with the given model index */
-    Album *albumForIndex(const QModelIndex& index) const;
+    Album* albumForIndex(const QModelIndex& index) const;
     /** Return the QModelIndex for the given album, or an invalid index if
         the album is not contained in this model. */
     QModelIndex indexForAlbum(Album* album) const;
@@ -120,9 +120,9 @@ public:
     /** Returns the album represented by the index. In contrast to albumForIndex(),
      *  the index can be from any proxy model, as long as an AbstractAlbumModel is at the end.
      */
-    static Album *retrieveAlbum(const QModelIndex& index);
+    static Album* retrieveAlbum(const QModelIndex& index);
 
-    Album *rootAlbum() const;
+    Album* rootAlbum() const;
     /// Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index. */
     QModelIndex rootAlbumIndex() const;
 
@@ -320,9 +320,9 @@ public:
     Qt::CheckState checkState(Album* album) const;
 
     /// Returns a list of album with check state Checked
-    QList<Album *> checkedAlbums() const;
+    QList<Album*> checkedAlbums() const;
     /// Returns a list of album with partially check state Checked
-    QList<Album *> partiallyCheckedAlbums() const; 
+    QList<Album*> partiallyCheckedAlbums() const;
 
 public Q_SLOTS:
 
@@ -367,8 +367,8 @@ protected:
 
 private:
 
-    void setDataForParents(QModelIndex &child, const QVariant& value, int role = Qt::EditRole);
-    void setDataForChildren(QModelIndex &parent, const QVariant& value, int role = Qt::EditRole);
+    void setDataForParents(QModelIndex& child, const QVariant& value, int role = Qt::EditRole);
+    void setDataForChildren(QModelIndex& parent, const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags                 m_extraFlags;
     bool                          m_rootIsCheckable;

@@ -72,7 +72,7 @@ class AnimatedClearButton::AnimatedClearButtonPriv : public AnimatedVisibility
 {
 public:
 
-    AnimatedClearButtonPriv(QObject *parent) : AnimatedVisibility(parent)
+    AnimatedClearButtonPriv(QObject* parent) : AnimatedVisibility(parent)
     {
         stayAlwaysVisible = false;
     }
@@ -81,8 +81,8 @@ public:
     QPixmap pixmap;
 };
 
-AnimatedClearButton::AnimatedClearButton(QWidget *parent)
-                   : QWidget(parent), d(new AnimatedClearButtonPriv(this))
+AnimatedClearButton::AnimatedClearButton(QWidget* parent)
+    : QWidget(parent), d(new AnimatedClearButtonPriv(this))
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
@@ -118,7 +118,10 @@ void AnimatedClearButton::animateVisible(bool visible)
 {
     // skip animation if parent widget is not visible
     if (!parentWidget() || !parentWidget()->isVisible())
+    {
         d->controller()->setDirectlyVisible(visible);
+    }
+
     d->controller()->setAnimationDuration(visible ? 150 : 250);
     d->controller()->setVisible(visible);
 }
@@ -142,20 +145,22 @@ void AnimatedClearButton::updateAnimationSettings()
 {
 }
 
-void AnimatedClearButton::paintEvent(QPaintEvent *event)
+void AnimatedClearButton::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event)
 
     if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)
     {
         if (d->opacity() == 0)
+        {
             return;
+        }
 
         QPainter p(this);
         p.setOpacity(d->opacity() * 255);
         p.drawPixmap((width() - d->pixmap.width()) / 2,
                      (height() - d->pixmap.height()) / 2,
-                      d->pixmap);
+                     d->pixmap);
     }
     else
     {
@@ -163,16 +168,20 @@ void AnimatedClearButton::paintEvent(QPaintEvent *event)
         p.setOpacity(1); // make sure
         p.drawPixmap((width() - d->pixmap.width()) / 2,
                      (height() - d->pixmap.height()) / 2,
-                      d->pixmap);
+                     d->pixmap);
     }
 }
 
 void AnimatedClearButton::visibleChanged()
 {
     if (d->isVisible())
+    {
         show();
+    }
     else if (!d->controller()->shallBeShown() || !d->stayAlwaysVisible)
+    {
         hide();
+    }
 }
 
 void AnimatedClearButton::mouseReleaseEvent(QMouseEvent* event)
@@ -185,20 +194,22 @@ void AnimatedClearButton::mouseReleaseEvent(QMouseEvent* event)
 
 // ------------------------------------------------------------------------
 
-CustomStepsDoubleSpinBox::CustomStepsDoubleSpinBox(QWidget *parent)
-                        : QDoubleSpinBox(parent),
-                          m_beforeInitialValue(true),
-                          m_initialValue(0),
-                          m_smallerStep(0),
-                          m_largerStep(0),
-                          m_invertStepping(false)
+CustomStepsDoubleSpinBox::CustomStepsDoubleSpinBox(QWidget* parent)
+    : QDoubleSpinBox(parent),
+      m_beforeInitialValue(true),
+      m_initialValue(0),
+      m_smallerStep(0),
+      m_largerStep(0),
+      m_invertStepping(false)
 {
 }
 
 void CustomStepsDoubleSpinBox::stepBy(int steps)
 {
     if (m_invertStepping)
+    {
         steps = -steps;
+    }
 
     if (m_values.isEmpty())
     {
@@ -213,9 +224,11 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
     }
 
     double v = value();
+
     if (v >= m_values.first() && v <= m_values.last())
     {
         int nextStep = 0;
+
         if (steps > 0)
         {
             // find the next value in m_values after current value
@@ -230,16 +243,20 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
 
             // go as many steps in m_values as we need
             int stepsToGo = steps;
+
             for ( ; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
             {
                 v = m_values[nextStep++];
             }
+
             // set the new value
             setValue(v);
 
             // if anything is left, use Qt code
             if (stepsToGo)
+            {
                 QDoubleSpinBox::stepBy(stepsToGo);
+            }
         }
         else
         {
@@ -253,14 +270,18 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
             }
 
             int stepsToGo = -steps;
+
             for ( ; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
             {
                 v = m_values[nextStep--];
             }
+
             setValue(v);
 
             if (stepsToGo)
+            {
                 QDoubleSpinBox::stepBy(-stepsToGo);
+            }
         }
     }
     else
@@ -303,33 +324,41 @@ void CustomStepsDoubleSpinBox::reset()
 void CustomStepsDoubleSpinBox::slotValueChanged(double d)
 {
     if (d != minimum())
+    {
         m_beforeInitialValue = false;
+    }
 
     if (!m_values.isEmpty())
     {
         if (m_largerStep && d >= m_values.last())
+        {
             setSingleStep(m_largerStep);
+        }
         else if (m_smallerStep)
+        {
             setSingleStep(m_smallerStep);
+        }
     }
 }
 
 // ------------------------------------------------------------------------
 
-CustomStepsIntSpinBox::CustomStepsIntSpinBox(QWidget *parent)
-                     : QSpinBox(parent),
-                       m_beforeInitialValue(true),
-                       m_initialValue(0),
-                       m_smallerStep(0),
-                       m_largerStep(0),
-                       m_invertStepping(false)
+CustomStepsIntSpinBox::CustomStepsIntSpinBox(QWidget* parent)
+    : QSpinBox(parent),
+      m_beforeInitialValue(true),
+      m_initialValue(0),
+      m_smallerStep(0),
+      m_largerStep(0),
+      m_invertStepping(false)
 {
 }
 
 void CustomStepsIntSpinBox::stepBy(int steps)
 {
     if (m_invertStepping)
+    {
         steps = -steps;
+    }
 
     if (m_values.isEmpty())
     {
@@ -344,9 +373,11 @@ void CustomStepsIntSpinBox::stepBy(int steps)
     }
 
     int v = value();
+
     if (v >= m_values.first() && v <= m_values.last())
     {
         int nextStep = 0;
+
         if (steps > 0)
         {
             // find the next value in m_values after current value
@@ -361,16 +392,20 @@ void CustomStepsIntSpinBox::stepBy(int steps)
 
             // go as many steps in m_values as we need
             int stepsToGo = steps;
+
             for ( ; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
             {
                 v = m_values[nextStep++];
             }
+
             // set the new value
             setValue(v);
 
             // if anything is left, use Qt code
             if (stepsToGo)
+            {
                 QSpinBox::stepBy(stepsToGo);
+            }
         }
         else
         {
@@ -384,14 +419,18 @@ void CustomStepsIntSpinBox::stepBy(int steps)
             }
 
             int stepsToGo = -steps;
+
             for ( ; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
             {
                 v = m_values[nextStep--];
             }
+
             setValue(v);
 
             if (stepsToGo)
+            {
                 QSpinBox::stepBy(-stepsToGo);
+            }
         }
     }
     else
@@ -441,19 +480,27 @@ QString CustomStepsIntSpinBox::textFromValue(int value) const
 {
     // reimplemented for fraction magic handling
     if (m_fractionPrefix.isNull())
+    {
         return QSpinBox::textFromValue(value);
+    }
 
     if (value < 0)
+    {
         return m_fractionPrefix + QSpinBox::textFromValue(- value);
+    }
     else
+    {
         return QSpinBox::textFromValue(value);
+    }
 }
 
 int CustomStepsIntSpinBox::valueFromText(const QString& text) const
 {
     // reimplemented for fraction magic handling
     if (m_fractionPrefix.isNull())
+    {
         return QSpinBox::valueFromText(text);
+    }
 
     if (text.startsWith(m_fractionPrefix))
     {
@@ -468,13 +515,21 @@ int CustomStepsIntSpinBox::valueFromText(const QString& text) const
 QAbstractSpinBox::StepEnabled CustomStepsIntSpinBox::stepEnabled() const
 {
     if (m_fractionPrefix.isNull())
+    {
         return QSpinBox::stepEnabled();
+    }
 
     QAbstractSpinBox::StepEnabled s;
+
     if (value() > minimum() || value() == minimum())
+    {
         s |= QAbstractSpinBox::StepUpEnabled;
+    }
+
     if (value() < maximum())
+    {
         s |= QAbstractSpinBox::StepDownEnabled;
+    }
 
     return s;
 }
@@ -482,13 +537,20 @@ QAbstractSpinBox::StepEnabled CustomStepsIntSpinBox::stepEnabled() const
 double CustomStepsIntSpinBox::fractionMagicValue() const
 {
     if (m_fractionPrefix.isNull())
+    {
         return value();
+    }
 
     int v = QSpinBox::value();
+
     if (v < 0)
+    {
         return - 1.0 / v;
+    }
     else
+    {
         return v;
+    }
 }
 
 void CustomStepsIntSpinBox::setFractionMagicValue(double value)
@@ -500,33 +562,43 @@ void CustomStepsIntSpinBox::setFractionMagicValue(double value)
     }
 
     if (value < 1.0)
+    {
         setValue(- lround(1.0 / value));
+    }
     else
+    {
         setValue((int)value);
+    }
 }
 
 void CustomStepsIntSpinBox::slotValueChanged(int d)
 {
     if (d != minimum())
+    {
         m_beforeInitialValue = false;
+    }
 
     if (!m_values.isEmpty())
     {
         if (m_largerStep && d >= m_values.last())
+        {
             setSingleStep(m_largerStep);
+        }
         else if (m_smallerStep)
+        {
             setSingleStep(m_smallerStep);
+        }
     }
 }
 
 // ------------------------------------------------------------------------
 
-StyleSheetDebugger::StyleSheetDebugger(QWidget *object)
-                  : QWidget(0), m_widget(object)
+StyleSheetDebugger::StyleSheetDebugger(QWidget* object)
+    : QWidget(0), m_widget(object)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QVBoxLayout *vbox = new QVBoxLayout;
+    QVBoxLayout* vbox = new QVBoxLayout;
 
     m_edit = new KTextEdit;
     vbox->addWidget(m_edit, 1);

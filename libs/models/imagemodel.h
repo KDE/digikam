@@ -40,7 +40,10 @@ namespace Digikam
 
 class ImageChangeset;
 class ImageTagChangeset;
-namespace DatabaseFields { class Set; }
+namespace DatabaseFields
+{
+class Set;
+}
 class ImageModelDragDropHandler;
 class ImageModelPriv;
 
@@ -72,7 +75,7 @@ public:
         FilterModelRoles      = Qt::UserRole + 500
     };
 
-    ImageModel(QObject *parent = 0);
+    ImageModel(QObject* parent = 0);
     ~ImageModel();
 
     /** If a cache is kept, lookup by file path is fast,
@@ -145,13 +148,13 @@ public:
     // Drag and Drop
     virtual Qt::DropActions supportedDropActions() const;
     virtual QStringList mimeTypes() const;
-    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
-    virtual QMimeData * mimeData(const QModelIndexList& indexes) const;
+    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
+    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
 
     /// Set a drag drop handler.
-    void setDragDropHandler(ImageModelDragDropHandler *handler);
+    void setDragDropHandler(ImageModelDragDropHandler* handler);
     /// Returns the drag drop handler, or 0 if none is installed
-    ImageModelDragDropHandler *dragDropHandler() const;
+    ImageModelDragDropHandler* dragDropHandler() const;
 
     /** Switch on drag and drop globally for all items. Default is true.
      *  For per-item cases reimplement flags(). */
@@ -170,8 +173,8 @@ public:
      * and make or already hold a connection modelReset() -> your slot.
      * There is only one preprocessor at a time, a previously set object will be disconnected.
      */
-    void setPreprocessor(QObject *processor);
-    void unsetPreprocessor(QObject *processor);
+    void setPreprocessor(QObject* processor);
+    void unsetPreprocessor(QObject* processor);
 
     /**
      * Returns true if this model is currently refreshing.
@@ -194,10 +197,10 @@ Q_SIGNALS:
 
     /** If an ImageChangeset affected indexes of this model with changes as set in watchFlags(),
      *  this signal contains the changeset and the affected indexes. */
-    void imageChange(const ImageChangeset &, const QItemSelection &);
+    void imageChange(const ImageChangeset&, const QItemSelection&);
     /** If an ImageTagChangeset affected indexes of this model,
      *  this signal contains the changeset and the affected indexes. */
-    void imageTagChange(const ImageTagChangeset &, const QItemSelection &);
+    void imageTagChange(const ImageTagChangeset&, const QItemSelection&);
 
     /** Signals that the model is right now ready to start an incremental refresh.
      *  This is guaranteed only for the scope of emitting this signal. */
@@ -252,7 +255,7 @@ private:
     void publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void cleanSituationChecks();
 
-    ImageModelPriv *const d;
+    ImageModelPriv* const d;
 };
 
 } // namespace Digikam

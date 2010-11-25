@@ -37,8 +37,8 @@
 namespace Digikam
 {
 
-StatusLed::StatusLed(QWidget *parent)
-         : QLabel(parent)
+StatusLed::StatusLed(QWidget* parent)
+    : QLabel(parent)
 {
     setLedColor(Gray);
     setFocusPolicy(Qt::NoFocus);
@@ -53,7 +53,8 @@ void StatusLed::setLedColor(LedColor color)
     m_color = color;
 
     QString file;
-    switch(m_color)
+
+    switch (m_color)
     {
         case Green:
             file = QString("indicator-green");

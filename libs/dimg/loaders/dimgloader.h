@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -72,7 +72,7 @@ public:
     virtual bool hasLoadedData() const;
 
     static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
-    static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata &metadata);
+    static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
 
 protected:
 

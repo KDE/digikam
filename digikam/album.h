@@ -84,7 +84,7 @@ public:
      * @return the last child of this album or 0 if no children
      */
     Album*  lastChild() const;
-    
+
     /**
      * @return the next sibling of this album of this album or 0
      * if no next sibling
@@ -103,12 +103,12 @@ public:
      * @return a list of all child Albums
      */
     QList<Album*>  childAlbums(bool recursive = false);
-    
+
     /**
      * @return a list of all child Albums
      */
     QList<int>  childAlbumIds(bool recursive = false);
-    
+
     /**
      * @return the type of album
      * @see Type
@@ -197,7 +197,7 @@ public:
      * @see extraData
      * @see removeExtraData
      */
-    void    setExtraData(const void* key, void *value);
+    void    setExtraData(const void* key, void* value);
 
     /**
      * Remove the associated extra data associated with @p key
@@ -223,7 +223,7 @@ protected:
      * Constructor
      */
     Album(Album::Type type, int id, bool root);
-    
+
     /**
      * Constructor
      */
@@ -293,7 +293,7 @@ private:
 
     int                      m_id;
     QString                  m_name;
-    
+
     QString                  m_title;
     QMap<const void*, void*> m_extraMap;
 
@@ -396,7 +396,7 @@ private:
     QString m_icon;
 
     bool    m_person;
-    
+
     friend class AlbumManager;
 };
 
@@ -512,11 +512,11 @@ public:
     explicit FAlbum(const QString& f_name, bool root=false);
     ~FAlbum();
 
-     /**
-     * @return The name path, e.g. "/People/Friend/John" if leadingSlash is true,
-               "People/Friend/John" if leadingSlash if false.
-     *         The root FAlbum returns "/" resp. "".
-     */
+    /**
+    * @return The name path, e.g. "/People/Friend/John" if leadingSlash is true,
+              "People/Friend/John" if leadingSlash if false.
+    *         The root FAlbum returns "/" resp. "".
+    */
 
     QString     name() const;
     QString     namePath(bool leadingSlash = true) const;
@@ -565,7 +565,10 @@ private:
 
     AlbumIterator() {}
     AlbumIterator(const AlbumIterator&) {}
-    AlbumIterator& operator=(const AlbumIterator&){ return *this; }
+    AlbumIterator& operator=(const AlbumIterator&)
+    {
+        return *this;
+    }
 
 private:
 

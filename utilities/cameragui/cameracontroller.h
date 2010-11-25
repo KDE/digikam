@@ -7,7 +7,7 @@
  * Description : digital camera controller
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -117,7 +117,7 @@ Q_SIGNALS:
     void signalExifFromFile(const QString& folder, const QString& file);
     void signalExifData(const QByteArray& exifData);
 
-    void signalInternalCheckRename(const QString& folder, const QString& file, 
+    void signalInternalCheckRename(const QString& folder, const QString& file,
                                    const QString& destination, const QString& temp);
     void signalInternalDownloadFailed(const QString& folder, const QString& file);
     void signalInternalUploadFailed(const QString& folder, const QString& file, const QString& src);
@@ -137,7 +137,7 @@ protected:
 
 private Q_SLOTS:
 
-    void slotCheckRename(const QString& folder, const QString& file, 
+    void slotCheckRename(const QString& folder, const QString& file,
                          const QString& destination, const QString& temp);
     void slotDownloadFailed(const QString& folder, const QString& file);
     void slotUploadFailed(const QString& folder, const QString& file, const QString& src);
@@ -151,7 +151,7 @@ private:
     void sendLogMsg(const QString& msg, DHistoryView::EntryType type=DHistoryView::StartingEntry,
                     const QString& folder=QString(), const QString& file=QString());
 
-    void addCommand(CameraCommand *cmd);
+    void addCommand(CameraCommand* cmd);
     bool queueIsEmpty();
 
 private:

@@ -125,7 +125,7 @@ public:
 };
 
 ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
-                : PreviewWidget(parent), d(new ImagePreviewViewPriv)
+    : PreviewWidget(parent), d(new ImagePreviewViewPriv)
 {
     d->stack            = parent;
     d->back2AlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                  this);
@@ -137,10 +137,16 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
                           KApplication::desktop()->width());
+
     if (d->previewSize < 640)
+    {
         d->previewSize = 640;
+    }
+
     if (d->previewSize > 2560)
+    {
         d->previewSize = 2560;
+    }
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -261,15 +267,21 @@ void ImagePreviewView::setImagePath(const QString& path)
     }
 
     if (d->loadFullImageSize)
+    {
         d->previewThread->loadHighQuality(path, MetadataSettings::instance()->settings().exifRotate);
+    }
     else
+    {
         d->previewThread->load(path, d->previewSize, MetadataSettings::instance()->settings().exifRotate);
+    }
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description, const DImg& preview)
 {
     if (description.filePath != d->path || description.isThumbnail())
+    {
         return;
+    }
 
     if (preview.isNull())
     {
@@ -282,7 +294,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Cannot display preview for\n\"%1\"",
-                   info.fileName()));
+                        info.fileName()));
         p.end();
         // three copies - but the image is small
         setImage(DImg(pix.toImage()));
@@ -293,8 +305,12 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
     else
     {
         DImg img(preview);
+
         if (MetadataSettings::instance()->settings().exifRotate)
+        {
             d->previewThread->exifRotate(img, description.filePath);
+        }
+
         d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(img);
         d->stack->previewLoaded();
@@ -312,6 +328,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
 void ImagePreviewView::slotNextPreload()
 {
     QString loadPath;
+
     if (!d->nextPath.isNull())
     {
         loadPath = d->nextPath;
@@ -328,9 +345,13 @@ void ImagePreviewView::slotNextPreload()
     }
 
     if (d->loadFullImageSize)
+    {
         d->previewPreloadThread->loadHighQuality(loadPath, MetadataSettings::instance()->settings().exifRotate);
+    }
     else
+    {
         d->previewPreloadThread->load(loadPath, d->previewSize, MetadataSettings::instance()->settings().exifRotate);
+    }
 }
 
 void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
@@ -338,10 +359,15 @@ void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& prev
     if (d->imageInfo != info)
     {
         d->imageInfo = info;
+
         if (!d->imageInfo.isNull())
+        {
             setImagePath(info.filePath());
+        }
         else
+        {
             setImagePath();
+        }
     }
 
     d->prevAction->setEnabled(!previous.isNull());
@@ -358,7 +384,9 @@ ImageInfo ImagePreviewView::getImageInfo() const
 void ImagePreviewView::slotContextMenu()
 {
     if (d->imageInfo.isNull())
+    {
         return;
+    }
 
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
@@ -448,6 +476,7 @@ void ImagePreviewView::slotRemoveTag(int tagID)
 void ImagePreviewView::slotAssignRating(int rating)
 {
     rating = qMin(5, qMax(0, rating));
+
     if (!d->imageInfo.isNull())
     {
         MetadataHub hub;
@@ -472,7 +501,10 @@ void ImagePreviewView::slotDeleteItem()
 
 void ImagePreviewView::resizeEvent(QResizeEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     Q3ScrollView::resizeEvent(e);
 
@@ -504,7 +536,7 @@ void ImagePreviewView::resetPreview()
     emit signalPreviewLoaded(false);
 }
 
-void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
+void ImagePreviewView::paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)
 {
     DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
     QPixmap pix2 = img.convertToPixmap();
@@ -530,16 +562,24 @@ void ImagePreviewView::viewportPaintExtraData()
         if (!d->loadFullImageSize)
         {
             if (d->imageInfo.format().startsWith(QLatin1String("RAW")))
+            {
                 text = i18n("Embedded JPEG Preview");
+            }
             else
+            {
                 text = i18n("Reduced Size Preview");
+            }
         }
         else
         {
             if (d->imageInfo.format().startsWith(QLatin1String("RAW")))
+            {
                 text = i18n("Half Size Raw Preview");
+            }
             else
+            {
                 text = i18n("Full Size Preview");
+            }
         }
 
         fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
@@ -561,13 +601,16 @@ QImage ImagePreviewView::previewToQImage() const
 void ImagePreviewView::slotRotateLeft()
 {
     KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();
         foreach(QAction* ac, list)
         {
             if (ac->objectName() == QString("rotate_ccw"))
+            {
                 ac->trigger();
+            }
         }
     }
 }
@@ -575,13 +618,16 @@ void ImagePreviewView::slotRotateLeft()
 void ImagePreviewView::slotRotateRight()
 {
     KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();
         foreach(QAction* ac, list)
         {
             if (ac->objectName() == QString("rotate_cw"))
+            {
                 ac->trigger();
+            }
         }
     }
 }

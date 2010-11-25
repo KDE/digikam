@@ -32,16 +32,16 @@
 
 #include <kurl.h>
 
-namespace Digikam 
+namespace Digikam
 {
 
 HistoryImageId::HistoryImageId()
-              : m_type(InvalidType), m_fileSize(0)
+    : m_type(InvalidType), m_fileSize(0)
 {
 }
 
 HistoryImageId::HistoryImageId(const QString& uuid, Type type)
-              : m_type(type), m_uuid(uuid)
+    : m_type(type), m_uuid(uuid)
 {
 }
 
@@ -74,8 +74,11 @@ void HistoryImageId::setPathOnDisk(const QString& filePath)
 void HistoryImageId::setPath(const QString& path)
 {
     m_filePath = path;
+
     if (!m_filePath.endsWith("/"))
+    {
         m_filePath += "/";
+    }
 }
 
 void HistoryImageId::setUniqueHash(const QString& uniqueHash, int fileSize)
@@ -87,7 +90,7 @@ void HistoryImageId::setUniqueHash(const QString& uniqueHash, int fileSize)
 bool HistoryImageId::isValid() const
 {
     return (m_type != InvalidType)
-        && (!m_uuid.isEmpty() || !m_fileName.isEmpty());
+           && (!m_uuid.isEmpty() || !m_fileName.isEmpty());
 }
 
 HistoryImageId::Type HistoryImageId::type() const
@@ -163,13 +166,13 @@ QString HistoryImageId::originalUuid() const
 bool HistoryImageId::operator==(const HistoryImageId& other) const
 {
     return m_uuid         == other.m_uuid
-       &&  m_type         == other.m_type
-       &&  m_fileName     == other.m_fileName
-       &&  m_filePath     == other.m_filePath
-       &&  m_creationDate == other.m_creationDate
-       &&  m_uniqueHash   == other.m_uniqueHash
-       &&  m_fileSize     == other.m_fileSize
-       &&  m_originalUUID == other.m_originalUUID;
+           &&  m_type         == other.m_type
+           &&  m_fileName     == other.m_fileName
+           &&  m_filePath     == other.m_filePath
+           &&  m_creationDate == other.m_creationDate
+           &&  m_uniqueHash   == other.m_uniqueHash
+           &&  m_fileSize     == other.m_fileSize
+           &&  m_originalUUID == other.m_originalUUID;
 }
 
 } // namespace Digikam

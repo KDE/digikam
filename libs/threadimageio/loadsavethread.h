@@ -57,7 +57,7 @@ public:
     virtual void loadingProgress(const LoadingDescription& loadingDescription, float progress) = 0;
     virtual void imageLoaded(const LoadingDescription& loadingDescription, const DImg& img) = 0;
     virtual void moreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
-                                              const LoadingDescription& newLoadingDescription) = 0;
+            const LoadingDescription& newLoadingDescription) = 0;
     virtual void imageStartedSaving(const QString& filePath) = 0;
     virtual void savingProgress(const QString& filePath, float progress) = 0;
     virtual void imageSaved(const QString& filePath, bool success) = 0;
@@ -158,7 +158,7 @@ public:
     virtual void loadingProgress(const LoadingDescription& loadingDescription, float progress);
     virtual void imageLoaded(const LoadingDescription& loadingDescription, const DImg& img);
     virtual void moreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
-                                      const LoadingDescription& newLoadingDescription);
+            const LoadingDescription& newLoadingDescription);
     virtual void imageStartedSaving(const QString& filePath);
     virtual void savingProgress(const QString& filePath, float progress);
     virtual void imageSaved(const QString& filePath, bool success);
@@ -178,7 +178,7 @@ protected:
 
     QList<LoadSaveTask*> m_todo;
 
-    LoadSaveTask        *m_currentTask;
+    LoadSaveTask*        m_currentTask;
 
     NotificationPolicy   m_notificationPolicy;
 

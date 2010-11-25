@@ -71,7 +71,7 @@ public:
 };
 
 VersionsWidget::VersionsWidget(QWidget* parent)
-               : QWidget(parent), d(new VersionsWidgetPriv)
+    : QWidget(parent), d(new VersionsWidgetPriv)
 {
     d->view                 = new QListView(this);
     d->layout               = new QGridLayout(this);

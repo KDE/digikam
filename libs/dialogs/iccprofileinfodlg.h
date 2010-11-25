@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT ICCProfileInfoDlg : public KDialog
 
 public:
 
-    ICCProfileInfoDlg(QWidget *parent, const QString& profilePath, const IccProfile& profileData = IccProfile());
+    ICCProfileInfoDlg(QWidget* parent, const QString& profilePath, const IccProfile& profileData = IccProfile());
     ~ICCProfileInfoDlg();
 };
 

@@ -64,93 +64,93 @@ namespace Digikam
 
 namespace DImgScale
 {
-    class DImgScaleInfo
+class DImgScaleInfo
+{
+public:
+
+    DImgScaleInfo()
     {
-    public:
+        xpoints = 0;
+        ypoints = 0;
+        ypoints16 = 0;
+        xapoints  = 0;
+        yapoints  = 0;
+        xup_yup   = 0;
+    }
 
-        DImgScaleInfo()
-        {
-            xpoints = 0;
-            ypoints = 0;
-            ypoints16 = 0;
-            xapoints  = 0;
-            yapoints  = 0;
-            xup_yup   = 0;
-        }
+    ~DImgScaleInfo()
+    {
+        delete [] xpoints;
+        delete [] ypoints;
+        delete [] ypoints16;
+        delete [] xapoints;
+        delete [] yapoints;
+    }
 
-        ~DImgScaleInfo()
-        {
-            delete [] xpoints;
-            delete [] ypoints;
-            delete [] ypoints16;
-            delete [] xapoints;
-            delete [] yapoints;
-        }
+    int*     xpoints;
+    uint**   ypoints;
+    ullong** ypoints16;
+    int*     xapoints;
+    int*     yapoints;
+    int      xup_yup;
+};
 
-        int*     xpoints;
-        uint**   ypoints;
-        ullong** ypoints16;
-        int*     xapoints;
-        int*     yapoints;
-        int      xup_yup;
-    };
+uint**   dimgCalcYPoints(uint* src, int sw, int sh, int dh);
+ullong** dimgCalcYPoints16(ullong* src, int sw, int sh, int dh);
+int*     dimgCalcXPoints(int sw, int dw);
+int*     dimgCalcApoints(int s, int d, int up);
 
-    uint**   dimgCalcYPoints(uint* src, int sw, int sh, int dh);
-    ullong** dimgCalcYPoints16(ullong* src, int sw, int sh, int dh);
-    int*     dimgCalcXPoints(int sw, int dw);
-    int*     dimgCalcApoints(int s, int d, int up);
+DImgScaleInfo* dimgCalcScaleInfo(const DImg& img,
+                                 int sw, int sh,
+                                 int dw, int dh,
+                                 bool sixteenBit,
+                                 bool aa);
 
-    DImgScaleInfo* dimgCalcScaleInfo(const DImg& img,
-                                     int sw, int sh,
-                                     int dw, int dh,
-                                     bool sixteenBit,
-                                     bool aa);
+// 8 bit, not smoothed
+void dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
+                    int dxx, int dyy, int dw, int dh, int dow);
+void dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
+                    int dxx, int dyy, int dw, int dh, int dow,
+                    int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
-    // 8 bit, not smoothed
-    void dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
-                        int dxx, int dyy, int dw, int dh, int dow);
-    void dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
-                        int dxx, int dyy, int dw, int dh, int dow,
-                        int clip_dx, int clip_dy, int clip_dw, int clip_dh);
+// 16 bit, not smoothed
+void dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
+                      int dxx, int dyy, int dw, int dh, int dow);
+void dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
+                      int dxx, int dyy, int dw, int dh, int dow,
+                      int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
-    // 16 bit, not smoothed
-    void dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
-                        int dxx, int dyy, int dw, int dh, int dow);
-    void dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
-                        int dxx, int dyy, int dw, int dh, int dow,
-                        int clip_dx, int clip_dy, int clip_dw, int clip_dh);
+// 8 bit, RGBA
+void dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
+                     int dxx, int dyy, int dw, int dh, int dow, int sow);
+void dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
+                     int dxx, int dyy, int dw, int dh, int dow, int sow,
+                     int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
-    // 8 bit, RGBA
-    void dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
-                         int dxx, int dyy, int dw, int dh, int dow, int sow);
-    void dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
-                         int dxx, int dyy, int dw, int dh, int dow, int sow,
-                         int clip_dx, int clip_dy, int clip_dw, int clip_dh);
+// 8 bit, RGB
+void dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
+                    int dxx, int dyy, int dw, int dh, int dow, int sow);
+void dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
+                    int dxx, int dyy, int dw, int dh, int dow, int sow,
+                    int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
-    // 8 bit, RGB
-    void dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
-                        int dxx, int dyy, int dw, int dh, int dow, int sow);
-    void dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
-                        int dxx, int dyy, int dw, int dh, int dow, int sow,
-                        int clip_dx, int clip_dy, int clip_dw, int clip_dh);
+// 16 bit, RGBA
+void dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
+                       int dxx, int dyy, int dw, int dh,
+                       int dow, int sow);
+void dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
+                       int dxx, int dyy, int dw, int dh,
+                       int dow, int sow,
+                       int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
-    // 16 bit, RGBA
-    void dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
-                           int dxx, int dyy, int dw, int dh,
-                           int dow, int sow);
-    void dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
-                           int dxx, int dyy, int dw, int dh,
-                           int dow, int sow,
-                           int clip_dx, int clip_dy, int clip_dw, int clip_dh);
-
-    // 16 bit, RGB
-    void dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
-                          int dxx, int dyy, int dw, int dh,
-                          int dow, int sow);
-    void dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
-                          int dxx, int dyy, int dw, int dh,
-                          int dow, int sow,
-                          int clip_dx, int clip_dy, int clip_dw, int clip_dh);
+// 16 bit, RGB
+void dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
+                      int dxx, int dyy, int dw, int dh,
+                      int dow, int sow);
+void dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
+                      int dxx, int dyy, int dw, int dh,
+                      int dow, int sow,
+                      int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 }
 
 using namespace DImgScale;
@@ -163,10 +163,11 @@ if ((x + w) > ((xx) + (ww))) {w = (ww) - (x - xx);} \
 if ((y + h) > ((yy) + (hh))) {h = (hh) - (y - yy);}
 */
 
-bool DImgPrivate::clipped(int &x, int &y, int &w, int &h, uint width, uint height)
+bool DImgPrivate::clipped(int& x, int& y, int& w, int& h, uint width, uint height)
 {
     QRect inner(x, y, w, h);
     QRect outer(0, 0, width, height);
+
     if (!outer.contains(inner))
     {
         QRect clipped = inner.intersected(outer);
@@ -176,6 +177,7 @@ bool DImgPrivate::clipped(int &x, int &y, int &w, int &h, uint width, uint heigh
         h = clipped.height();
         return clipped.isValid();
     }
+
     return inner.isValid();
 }
 
@@ -183,8 +185,12 @@ DImg DImg::smoothScale(const QSize& destSize, Qt::AspectRatioMode aspectRatioMod
 {
     QSize scaleSize = size();
     scaleSize.scale(destSize, aspectRatioMode);
+
     if (!scaleSize.isValid())
+    {
         return DImg();
+    }
+
     return smoothScaleClipped(scaleSize, QRect(QPoint(0,0), scaleSize));
 }
 
@@ -203,25 +209,35 @@ DImg DImg::smoothScaleClipped(int dw, int dh,
                               int clipx, int clipy, int clipw, int cliph) const
 {
     if (dw <= 0 || dh <= 0 || clipw <=0 || cliph <=0 || isNull())
+    {
         return DImg();
+    }
 
     uint w = width();
     uint h = height();
 
     if (w <= 0 || h <= 0)
+    {
         return DImg();
+    }
 
     // ensure clip is valid
     if (!DImgPrivate::clipped(clipx, clipy, clipw, cliph, dw, dh))
+    {
         return DImg();
+    }
 
     // do we actually need to scale?
     if ((w == (uint)dw) && (h == (uint)dh))
     {
         if (clipw == dw && cliph == dh)
+        {
             return copy();
+        }
         else
+        {
             return copy(clipx, clipy, clipw, cliph);
+        }
     }
 
     DImgScaleInfo* scaleinfo = dimgCalcScaleInfo(*this, w, h, dw, dh, sixteenBit(), true);
@@ -279,10 +295,14 @@ DImg DImg::smoothScaleSection(int sx, int sy,
 
     // sanity checks
     if ((dw <= 0) || (dh <= 0))
+    {
         return DImg();
+    }
 
     if ((sw <= 0) || (sh <= 0))
+    {
         return DImg();
+    }
 
     // clip the source rect to be within the actual image
     int  psx, psy, psw, psh;
@@ -290,23 +310,35 @@ DImg DImg::smoothScaleSection(int sx, int sy,
     psy = sy;
     psw = sw;
     psh = sh;
+
     if (!DImgPrivate::clipped(sx, sy, sw, sh, w, h))
+    {
         return DImg();
+    }
 
     // clip output coords to clipped input coords
     if (psw != sw)
+    {
         dw = (dw * sw) / psw;
+    }
+
     if (psh != sh)
+    {
         dh = (dh * sh) / psh;
+    }
 
     // do a second check to see if we now have invalid coords
     // do not do anything if we have a 0 width or height image to render
     if ((dw <= 0) || (dh <= 0))
+    {
         return DImg();
+    }
 
     // if the input rect size < 0 do not render either
     if ((sw <= 0) || (sh <= 0))
+    {
         return DImg();
+    }
 
     // do we actually need to scale?
     if ((sw == dw) && (sh == dh))
@@ -351,12 +383,12 @@ DImg DImg::smoothScaleSection(int sx, int sy,
         }
         else
         {
-           dimgScaleAARGB(scaleinfo,
-                          (uint*)buffer.bits(),
-                          ((sx * dw) / sw),
-                          ((sy * dh) / sh),
-                          dw, dh,
-                          dw, w);
+            dimgScaleAARGB(scaleinfo,
+                           (uint*)buffer.bits(),
+                           ((sx * dw) / sw),
+                           ((sy * dh) / sh),
+                           dw, dh,
+                           dw, w);
         }
     }
 
@@ -391,7 +423,8 @@ uint** DImgScale::dimgCalcYPoints(uint* src, int sw, int sh, int dh)
 
     val = 0;
     inc = (((ullong)sh) << 16) / dh;
-    for(i = 0; i < dh; ++i)
+
+    for (i = 0; i < dh; ++i)
     {
         p[j++] = src + ((val >> 16) * sw);
         val += inc;
@@ -410,7 +443,8 @@ ullong** DImgScale::dimgCalcYPoints16(ullong* src, int sw, int sh, int dh)
 
     val = 0;
     inc = (((ullong)sh) << 16) / dh;
-    for(i = 0; i < dh; ++i)
+
+    for (i = 0; i < dh; ++i)
     {
         p[j++] = src + ((val >> 16) * sw);
         val += inc;
@@ -428,13 +462,14 @@ int* DImgScale::dimgCalcXPoints(int sw, int dw)
 
     val = 0;
     inc = (((ullong)sw) << 16) / dw;
-    for(i = 0; i < dw; ++i)
+
+    for (i = 0; i < dw; ++i)
     {
         p[j++] = (val >> 16);
         val    += inc;
     }
 
-   return(p);
+    return(p);
 }
 
 int* DImgScale::dimgCalcApoints(int s, int d, int up)
@@ -444,17 +479,22 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
     p = new int[d];
 
     /* scaling up */
-    if(up)
+    if (up)
     {
         ullong val, inc;
 
         val = 0;
         inc = (((ullong)s) << 16) / d;
-        for(i = 0; i < d; ++i)
+
+        for (i = 0; i < d; ++i)
         {
             p[j++] = (val >> 8) - ((val >> 8) & 0xffffff00);
-            if((int)(val >> 16) >= (s - 1))
+
+            if ((int)(val >> 16) >= (s - 1))
+            {
                 p[j - 1] = 0;
+            }
+
             val    += inc;
         }
     }
@@ -467,7 +507,7 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
         inc = (((ullong)s) << 16) / d;
         Cp  = ((d << 14) / s) + 1;
 
-        for(i = 0; i < d; ++i)
+        for (i = 0; i < d; ++i)
         {
             ap   = ((0x100 - ((val >> 8) & 0xff)) * Cp) >> 8;
             p[j] = ap | (Cp << 16);
@@ -480,10 +520,10 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
 }
 
 DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg& img,
-                                            int sw, int sh,
-                                            int dw, int dh,
-                                            bool /*sixteenBit*/,
-                                            bool aa)
+        int sw, int sh,
+        int dw, int dh,
+        bool /*sixteenBit*/,
+        bool aa)
 {
     DImgScaleInfo* isi = new DImgScaleInfo;
     int scw, sch;
@@ -515,12 +555,18 @@ DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg& img,
     else
     {
         isi->xapoints = new int[scw];
-        for(int i = 0; i < scw; ++i)
+
+        for (int i = 0; i < scw; ++i)
+        {
             isi->xapoints[i] = 0;
+        }
 
         isi->yapoints = new int[sch];
-        for(int i = 0; i < sch; ++i)
+
+        for (int i = 0; i < sch; ++i)
+        {
             isi->yapoints[i] = 0;
+        }
     }
 
     return isi;
@@ -552,28 +598,31 @@ void DImgScale::dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
     const int y_end   = clip_dy + clip_dh; // no clip set = dh
 
     /* go through every scanline in the output buffer */
-    for(y = y_begin; y < y_end; ++y)
+    for (y = y_begin; y < y_end; ++y)
     {
         /* get the pointer to the start of the destination scanline */
         dptr = dest + (y - y_begin) * dow;
         /* calculate the source line we'll scan from */
         sptr = ypoints[dyy + y];
+
         /* go through the scanline and copy across */
-        for(x = x_begin; x < x_end; ++x)
+        for (x = x_begin; x < x_end; ++x)
+        {
             *dptr++ = sptr[xpoints[x]];
+        }
     }
 }
 
 void DImgScale::dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
-                               int dxx, int dyy, int dw, int dh, int dow)
+                                 int dxx, int dyy, int dw, int dh, int dow)
 {
     dimgSampleRGBA16(isi, dest, dxx, dyy, dw, dh, dow,
                      0, 0, dw, dh);
 }
 
 void DImgScale::dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
-                               int dxx, int dyy, int dw, int dh, int dow,
-                               int clip_dx, int clip_dy, int clip_dw, int clip_dh)
+                                 int dxx, int dyy, int dw, int dh, int dow,
+                                 int clip_dx, int clip_dy, int clip_dw, int clip_dh)
 {
     Q_UNUSED(dw);
     Q_UNUSED(dh);
@@ -589,21 +638,24 @@ void DImgScale::dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
     const int y_end   = clip_dy + clip_dh; // no clip set = dh
 
     /* go through every scanline in the output buffer */
-    for(y = y_begin; y < y_end; ++y)
+    for (y = y_begin; y < y_end; ++y)
     {
         /* get the pointer to the start of the destination scanline */
         dptr = dest + (y - y_begin) * dow;
         /* calculate the source line we'll scan from */
         sptr = ypoints[dyy + y];
+
         /* go through the scanline and copy across */
-        for(x = x_begin; x < x_end; ++x)
+        for (x = x_begin; x < x_end; ++x)
+        {
             *dptr++ = sptr[xpoints[x]];
+        }
     }
 }
 
 /* FIXME: NEED to optimize ScaleAARGBA - currently its "ok" but needs work*/
 
-/** 
+/**
 dimgScaleAARGBA : scale by area sampling. Arguments:
   DImgScaleInfo* isi,              // scaleinfo
   uint*  dest,             // destination img data
@@ -647,24 +699,26 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
     const int x_end   = x_begin + clip_dw; // no clip set = dxx + dw
     const int y_begin = clip_dy;           // no clip set = 0
     const int y_end   = clip_dy + clip_dh; // no clip set = dh
+
     /* scaling up both ways */
-    if(isi->xup_yup == 3)
+    if (isi->xup_yup == 3)
     {
         /* go through every scanline in the output buffer */
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             /* calculate the source line we'll scan from */
             dptr = dest + (y - y_begin) * dow;
             sptr = ypoints[dyy + y];
-            if(YAP > 0)
+
+            if (YAP > 0)
             {
-                for(x = x_begin; x < x_end; ++x)
+                for (x = x_begin; x < x_end; ++x)
                 {
                     int r, g, b, a;
                     int rr, gg, bb, aa;
                     uint* pix=0;
 
-                    if(XAP > 0)
+                    if (XAP > 0)
                     {
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL(pix) * INV_XAP;
@@ -726,12 +780,12 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
             }
             else
             {
-                for(x = x_begin; x < x_end; ++x)
+                for (x = x_begin; x < x_end; ++x)
                 {
                     int r, g, b, a;
                     uint* pix=0;
 
-                    if(XAP > 0)
+                    if (XAP > 0)
                     {
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL(pix) * INV_XAP;
@@ -764,7 +818,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
         }
     }
     /* if we're scaling down vertically */
-    else if(isi->xup_yup == 1)
+    else if (isi->xup_yup == 1)
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cy, j;
@@ -773,20 +827,21 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
         int yap;
 
         /* go through every scanline in the output buffer */
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             Cy   = YAP >> 16;
             yap  = YAP & 0xffff;
             dptr = dest + (y - y_begin) * dow;
 
-            for(x = x_begin; x < x_end; ++x)
+            for (x = x_begin; x < x_end; ++x)
             {
                 pix = ypoints[dyy + y] + xpoints[x];
                 r   = (R_VAL(pix) * yap) >> 10;
                 g   = (G_VAL(pix) * yap) >> 10;
                 b   = (B_VAL(pix) * yap) >> 10;
                 a   = (A_VAL(pix) * yap) >> 10;
-                for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+
+                for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                 {
                     pix += sow;
                     r   += (R_VAL(pix) * Cy) >> 10;
@@ -794,7 +849,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                     b   += (B_VAL(pix) * Cy) >> 10;
                     a   += (A_VAL(pix) * Cy) >> 10;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     pix += sow;
                     r   += (R_VAL(pix) * j) >> 10;
@@ -802,14 +858,16 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                     b   += (B_VAL(pix) * j) >> 10;
                     a   += (A_VAL(pix) * j) >> 10;
                 }
-                if(XAP > 0)
+
+                if (XAP > 0)
                 {
                     pix = ypoints[dyy + y] + xpoints[x] + 1;
                     rr  = (R_VAL(pix) * yap) >> 10;
                     gg  = (G_VAL(pix) * yap) >> 10;
                     bb  = (B_VAL(pix) * yap) >> 10;
                     aa  = (A_VAL(pix) * yap) >> 10;
-                    for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+
+                    for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                     {
                         pix += sow;
                         rr  += (R_VAL(pix) * Cy) >> 10;
@@ -817,7 +875,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                         bb  += (B_VAL(pix) * Cy) >> 10;
                         aa  += (A_VAL(pix) * Cy) >> 10;
                     }
-                    if(j > 0)
+
+                    if (j > 0)
                     {
                         pix += sow;
                         rr  += (R_VAL(pix) * j) >> 10;
@@ -825,6 +884,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                         bb  += (B_VAL(pix) * j) >> 10;
                         aa  += (A_VAL(pix) * j) >> 10;
                     }
+
                     r = r * INV_XAP;
                     g = g * INV_XAP;
                     b = b * INV_XAP;
@@ -852,7 +912,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
         }
     }
     /* if we're scaling down horizontally */
-    else if(isi->xup_yup == 2)
+    else if (isi->xup_yup == 2)
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, j;
@@ -861,10 +921,11 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
         int xap;
 
         /* go through every scanline in the output buffer */
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             dptr = dest + (y - y_begin) * dow;
-            for(x = x_begin; x < x_end; ++x)
+
+            for (x = x_begin; x < x_end; ++x)
             {
                 Cx  = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -873,7 +934,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                 g   = (G_VAL(pix) * xap) >> 10;
                 b   = (B_VAL(pix) * xap) >> 10;
                 a   = (A_VAL(pix) * xap) >> 10;
-                for(j = (1 << 14) - xap; j > Cx; j -= Cx)
+
+                for (j = (1 << 14) - xap; j > Cx; j -= Cx)
                 {
                     ++pix;
                     r += (R_VAL(pix) * Cx) >> 10;
@@ -881,7 +943,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                     b += (B_VAL(pix) * Cx) >> 10;
                     a += (A_VAL(pix) * Cx) >> 10;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     ++pix;
                     r += (R_VAL(pix) * j) >> 10;
@@ -889,14 +952,16 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                     b += (B_VAL(pix) * j) >> 10;
                     a += (A_VAL(pix) * j) >> 10;
                 }
-                if(YAP > 0)
+
+                if (YAP > 0)
                 {
                     pix = ypoints[dyy + y] + xpoints[x] + sow;
                     rr  = (R_VAL(pix) * xap) >> 10;
                     gg  = (G_VAL(pix) * xap) >> 10;
                     bb  = (B_VAL(pix) * xap) >> 10;
                     aa  = (A_VAL(pix) * xap) >> 10;
-                    for(j = (1 << 14) - xap; j > Cx; j -= Cx)
+
+                    for (j = (1 << 14) - xap; j > Cx; j -= Cx)
                     {
                         ++pix;
                         rr += (R_VAL(pix) * Cx) >> 10;
@@ -904,7 +969,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                         bb += (B_VAL(pix) * Cx) >> 10;
                         aa += (A_VAL(pix) * Cx) >> 10;
                     }
-                    if(j > 0)
+
+                    if (j > 0)
                     {
                         ++pix;
                         rr += (R_VAL(pix) * j) >> 10;
@@ -912,6 +978,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                         bb += (B_VAL(pix) * j) >> 10;
                         aa += (A_VAL(pix) * j) >> 10;
                     }
+
                     r = r * INV_YAP;
                     g = g * INV_YAP;
                     b = b * INV_YAP;
@@ -941,23 +1008,23 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
     /* if we're scaling down horizontally & vertically */
     else
     {
-         /*\ 'Correct' version, with math units prepared for MMXification:
-         |*|  The operation 'b = (b * c) >> 16' translates to pmulhw,
-         |*|  so the operation 'b = (b * c) >> d' would translate to
-         |*|  psllw (16 - d), %mmb; pmulh %mmc, %mmb
-         \*/
+        /*\ 'Correct' version, with math units prepared for MMXification:
+        |*|  The operation 'b = (b * c) >> 16' translates to pmulhw,
+        |*|  so the operation 'b = (b * c) >> d' would translate to
+        |*|  psllw (16 - d), %mmb; pmulh %mmc, %mmb
+        \*/
         int Cx, Cy, i, j;
         uint* pix=0;
         int a, r, g, b, ax, rx, gx, bx;
         int xap, yap;
 
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             Cy   = YAP >> 16;
             yap  = YAP & 0xffff;
             dptr = dest + (y - y_begin) * dow;
 
-            for(x = x_begin; x < x_end; ++x)
+            for (x = x_begin; x < x_end; ++x)
             {
                 Cx  = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -970,7 +1037,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                 bx   = (B_VAL(pix) * xap) >> 9;
                 ax   = (A_VAL(pix) * xap) >> 9;
                 ++pix;
-                for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                 {
                     rx += (R_VAL(pix) * Cx) >> 9;
                     gx += (G_VAL(pix) * Cx) >> 9;
@@ -978,7 +1046,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                     ax += (A_VAL(pix) * Cx) >> 9;
                     ++pix;
                 }
-                if(i > 0)
+
+                if (i > 0)
                 {
                     rx += (R_VAL(pix) * i) >> 9;
                     gx += (G_VAL(pix) * i) >> 9;
@@ -991,7 +1060,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                 b = (bx * yap) >> 14;
                 a = (ax * yap) >> 14;
 
-                for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+                for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                 {
                     pix  = sptr;
                     sptr += sow;
@@ -1000,7 +1069,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                     bx   = (B_VAL(pix) * xap) >> 9;
                     ax   = (A_VAL(pix) * xap) >> 9;
                     ++pix;
-                    for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                    for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                     {
                         rx += (R_VAL(pix) * Cx) >> 9;
                         gx += (G_VAL(pix) * Cx) >> 9;
@@ -1008,7 +1078,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                         ax += (A_VAL(pix) * Cx) >> 9;
                         ++pix;
                     }
-                    if(i > 0)
+
+                    if (i > 0)
                     {
                         rx += (R_VAL(pix) * i) >> 9;
                         gx += (G_VAL(pix) * i) >> 9;
@@ -1021,7 +1092,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                     b += (bx * Cy) >> 14;
                     a += (ax * Cy) >> 14;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     pix  = sptr;
                     sptr += sow;
@@ -1030,7 +1102,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                     bx   = (B_VAL(pix) * xap) >> 9;
                     ax   = (A_VAL(pix) * xap) >> 9;
                     ++pix;
-                    for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                    for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                     {
                         rx += (R_VAL(pix) * Cx) >> 9;
                         gx += (G_VAL(pix) * Cx) >> 9;
@@ -1038,7 +1111,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                         ax += (A_VAL(pix) * Cx) >> 9;
                         ++pix;
                     }
-                    if(i > 0)
+
+                    if (i > 0)
                     {
                         rx += (R_VAL(pix) * i) >> 9;
                         gx += (G_VAL(pix) * i) >> 9;
@@ -1063,13 +1137,13 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
 }
 
 void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
-                                int dxx, int dyy,
-                                int dw, int dh,
-                                int dow, int sow
-                               )
+                               int dxx, int dyy,
+                               int dw, int dh,
+                               int dow, int sow
+                              )
 {
     dimgScaleAARGB(isi, dest, dxx, dyy, dw, dh, dow, sow,
-                    0, 0, dw, dh);
+                   0, 0, dw, dh);
 }
 
 /** scale by area sampling - IGNORE the ALPHA byte */
@@ -1094,24 +1168,26 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
     const int x_end   = x_begin + clip_dw; // no clip set = dxx + dw
     const int y_begin = clip_dy;           // no clip set = 0
     const int y_end   = clip_dy + clip_dh; // no clip set = dh
+
     /* scaling up both ways */
-    if(isi->xup_yup == 3)
+    if (isi->xup_yup == 3)
     {
         /* go through every scanline in the output buffer */
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             /* calculate the source line we'll scan from */
             dptr = dest + (y - y_begin) * dow;
             sptr = ypoints[dyy + y];
-            if(YAP > 0)
+
+            if (YAP > 0)
             {
-                for(x = x_begin; x < x_end; ++x)
+                for (x = x_begin; x < x_end; ++x)
                 {
                     int r = 0, g = 0, b = 0;
                     int rr = 0, gg = 0, bb = 0;
                     uint* pix=0;
 
-                    if(XAP > 0)
+                    if (XAP > 0)
                     {
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL(pix) * INV_XAP;
@@ -1165,12 +1241,12 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
             }
             else
             {
-                for(x = x_begin; x < x_end; ++x)
+                for (x = x_begin; x < x_end; ++x)
                 {
                     int r = 0, g = 0, b = 0;
                     uint* pix=0;
 
-                    if(XAP > 0)
+                    if (XAP > 0)
                     {
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL(pix) * INV_XAP;
@@ -1194,13 +1270,13 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
                     else
                     {
                         *dptr++ = sptr[xpoints[x] ];
-                   }
+                    }
                 }
             }
         }
     }
     /* if we're scaling down vertically */
-    else if(isi->xup_yup == 1)
+    else if (isi->xup_yup == 1)
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cy, j;
@@ -1209,52 +1285,58 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
         int yap;
 
         /* go through every scanline in the output buffer */
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             Cy   = YAP >> 16;
             yap  = YAP & 0xffff;
             dptr = dest + (y - y_begin) * dow;
 
-            for(x = x_begin; x < x_end; ++x)
+            for (x = x_begin; x < x_end; ++x)
             {
                 pix = ypoints[dyy + y] + xpoints[x];
                 r   = (R_VAL(pix) * yap) >> 10;
                 g   = (G_VAL(pix) * yap) >> 10;
                 b   = (B_VAL(pix) * yap) >> 10;
                 pix += sow;
-                for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+
+                for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                 {
                     r   += (R_VAL(pix) * Cy) >> 10;
                     g   += (G_VAL(pix) * Cy) >> 10;
                     b   += (B_VAL(pix) * Cy) >> 10;
                     pix += sow;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     r += (R_VAL(pix) * j) >> 10;
                     g += (G_VAL(pix) * j) >> 10;
                     b += (B_VAL(pix) * j) >> 10;
                 }
-                if(XAP > 0)
+
+                if (XAP > 0)
                 {
                     pix = ypoints[dyy + y] + xpoints[x] + 1;
                     rr  = (R_VAL(pix) * yap) >> 10;
                     gg  = (G_VAL(pix) * yap) >> 10;
                     bb  = (B_VAL(pix) * yap) >> 10;
                     pix += sow;
-                    for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+
+                    for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                     {
                         rr  += (R_VAL(pix) * Cy) >> 10;
                         gg  += (G_VAL(pix) * Cy) >> 10;
                         bb  += (B_VAL(pix) * Cy) >> 10;
                         pix += sow;
                     }
-                    if(j > 0)
+
+                    if (j > 0)
                     {
                         rr += (R_VAL(pix) * j) >> 10;
                         gg += (G_VAL(pix) * j) >> 10;
                         bb += (B_VAL(pix) * j) >> 10;
                     }
+
                     r = r * INV_XAP;
                     g = g * INV_XAP;
                     b = b * INV_XAP;
@@ -1279,7 +1361,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
         }
     }
     /* if we're scaling down horizontally */
-    else if(isi->xup_yup == 2)
+    else if (isi->xup_yup == 2)
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, j;
@@ -1288,10 +1370,11 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
         int xap;
 
         /* go through every scanline in the output buffer */
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             dptr = dest + (y - y_begin) * dow;
-            for(x = x_begin; x < x_end; ++x)
+
+            for (x = x_begin; x < x_end; ++x)
             {
                 Cx  = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -1300,39 +1383,45 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
                 g   = (G_VAL(pix) * xap) >> 10;
                 b   = (B_VAL(pix) * xap) >> 10;
                 ++pix;
-                for(j = (1 << 14) - xap; j > Cx; j -= Cx)
+
+                for (j = (1 << 14) - xap; j > Cx; j -= Cx)
                 {
                     r += (R_VAL(pix) * Cx) >> 10;
                     g += (G_VAL(pix) * Cx) >> 10;
                     b += (B_VAL(pix) * Cx) >> 10;
                     ++pix;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     r += (R_VAL(pix) * j) >> 10;
                     g += (G_VAL(pix) * j) >> 10;
                     b += (B_VAL(pix) * j) >> 10;
                 }
-                if(YAP > 0)
+
+                if (YAP > 0)
                 {
                     pix = ypoints[dyy + y] + xpoints[x] + sow;
                     rr  = (R_VAL(pix) * xap) >> 10;
                     gg  = (G_VAL(pix) * xap) >> 10;
                     bb  = (B_VAL(pix) * xap) >> 10;
                     ++pix;
-                    for(j = (1 << 14) - xap; j > Cx; j -= Cx)
+
+                    for (j = (1 << 14) - xap; j > Cx; j -= Cx)
                     {
                         rr += (R_VAL(pix) * Cx) >> 10;
                         gg += (G_VAL(pix) * Cx) >> 10;
                         bb += (B_VAL(pix) * Cx) >> 10;
                         ++pix;
                     }
-                    if(j > 0)
+
+                    if (j > 0)
                     {
                         rr += (R_VAL(pix) * j) >> 10;
                         gg += (G_VAL(pix) * j) >> 10;
                         bb += (B_VAL(pix) * j) >> 10;
                     }
+
                     r = r * INV_YAP;
                     g = g * INV_YAP;
                     b = b * INV_YAP;
@@ -1366,13 +1455,13 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
         int r, g, b, rx, gx, bx;
         int xap, yap;
 
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             Cy   = YAP >> 16;
             yap  = YAP & 0xffff;
             dptr = dest + (y - y_begin) * dow;
 
-            for(x = x_begin; x < x_end; ++x)
+            for (x = x_begin; x < x_end; ++x)
             {
                 Cx   = XAP >> 16;
                 xap  = XAP & 0xffff;
@@ -1383,14 +1472,16 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
                 gx   = (G_VAL(pix) * xap) >> 9;
                 bx   = (B_VAL(pix) * xap) >> 9;
                 ++pix;
-                for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                 {
                     rx += (R_VAL(pix) * Cx) >> 9;
                     gx += (G_VAL(pix) * Cx) >> 9;
                     bx += (B_VAL(pix) * Cx) >> 9;
                     ++pix;
                 }
-                if(i > 0)
+
+                if (i > 0)
                 {
                     rx += (R_VAL(pix) * i) >> 9;
                     gx += (G_VAL(pix) * i) >> 9;
@@ -1401,7 +1492,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
                 g = (gx * yap) >> 14;
                 b = (bx * yap) >> 14;
 
-                for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+                for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                 {
                     pix  = sptr;
                     sptr += sow;
@@ -1409,14 +1500,16 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
                     gx   = (G_VAL(pix) * xap) >> 9;
                     bx   = (B_VAL(pix) * xap) >> 9;
                     ++pix;
-                    for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                    for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                     {
                         rx += (R_VAL(pix) * Cx) >> 9;
                         gx += (G_VAL(pix) * Cx) >> 9;
                         bx += (B_VAL(pix) * Cx) >> 9;
                         ++pix;
                     }
-                    if(i > 0)
+
+                    if (i > 0)
                     {
                         rx += (R_VAL(pix) * i) >> 9;
                         gx += (G_VAL(pix) * i) >> 9;
@@ -1427,7 +1520,8 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
                     g += (gx * Cy) >> 14;
                     b += (bx * Cy) >> 14;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     pix  = sptr;
                     sptr += sow;
@@ -1435,14 +1529,16 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
                     gx   = (G_VAL(pix) * xap) >> 9;
                     bx   = (B_VAL(pix) * xap) >> 9;
                     ++pix;
-                    for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                    for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                     {
                         rx += (R_VAL(pix) * Cx) >> 9;
                         gx += (G_VAL(pix) * Cx) >> 9;
                         bx += (B_VAL(pix) * Cx) >> 9;
                         ++pix;
                     }
-                    if(i > 0)
+
+                    if (i > 0)
                     {
                         rx += (R_VAL(pix) * i) >> 9;
                         gx += (G_VAL(pix) * i) >> 9;
@@ -1475,7 +1571,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
                                  int dow, int sow)
 {
     dimgScaleAARGB16(isi, dest, dxx, dyy, dw, dh, dow, sow,
-                    0, 0, dw, dh);
+                     0, 0, dw, dh);
 }
 
 /** scale by area sampling - IGNORE the ALPHA byte*/
@@ -1501,23 +1597,24 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
     const int y_end   = clip_dy + clip_dh; // no clip set = dh
 
     // scaling up both ways
-    if(isi->xup_yup == 3)
+    if (isi->xup_yup == 3)
     {
         // go through every scanline in the output buffer
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             // calculate the source line we'll scan from
             dptr = dest + (y - y_begin) * dow;
             sptr = ypoints[dyy + y];
-            if(YAP > 0)
+
+            if (YAP > 0)
             {
-                for(x = x_begin; x < x_end; ++x)
+                for (x = x_begin; x < x_end; ++x)
                 {
                     llong r = 0, g = 0, b = 0;
                     llong rr = 0, gg = 0, bb = 0;
                     ullong* pix=0;
 
-                    if(XAP > 0)
+                    if (XAP > 0)
                     {
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL16(pix) * INV_XAP;
@@ -1571,12 +1668,12 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
             }
             else
             {
-                for(x = x_begin; x < x_end; ++x)
+                for (x = x_begin; x < x_end; ++x)
                 {
                     llong r = 0, g = 0, b = 0;
                     ullong* pix=0;
 
-                    if(XAP > 0)
+                    if (XAP > 0)
                     {
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL16(pix) * INV_XAP;
@@ -1606,7 +1703,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
         }
     }
     // if we're scaling down vertically
-    else if(isi->xup_yup == 1)
+    else if (isi->xup_yup == 1)
     {
         // 'Correct' version, with math units prepared for MMXification
         int Cy, j;
@@ -1615,52 +1712,58 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
         int yap;
 
         // go through every scanline in the output buffer
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             Cy   = YAP >> 16;
             yap  = YAP & 0xffff;
             dptr = dest + (y - y_begin) * dow;
 
-            for(x = x_begin; x < x_end; ++x)
+            for (x = x_begin; x < x_end; ++x)
             {
                 pix = ypoints[dyy + y] + xpoints[x];
                 r   = (R_VAL16(pix) * yap) >> 10;
                 g   = (G_VAL16(pix) * yap) >> 10;
                 b   = (B_VAL16(pix) * yap) >> 10;
                 pix += sow;
-                for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+
+                for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                 {
                     r   += (R_VAL16(pix) * Cy) >> 10;
                     g   += (G_VAL16(pix) * Cy) >> 10;
                     b   += (B_VAL16(pix) * Cy) >> 10;
                     pix += sow;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     r += (R_VAL16(pix) * j) >> 10;
                     g += (G_VAL16(pix) * j) >> 10;
                     b += (B_VAL16(pix) * j) >> 10;
                 }
-                if(XAP > 0)
+
+                if (XAP > 0)
                 {
                     pix = ypoints[dyy + y] + xpoints[x] + 1;
                     rr  = (R_VAL16(pix) * yap) >> 10;
                     gg  = (G_VAL16(pix) * yap) >> 10;
                     bb  = (B_VAL16(pix) * yap) >> 10;
                     pix += sow;
-                    for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+
+                    for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                     {
                         rr  += (R_VAL16(pix) * Cy) >> 10;
                         gg  += (G_VAL16(pix) * Cy) >> 10;
                         bb  += (B_VAL16(pix) * Cy) >> 10;
                         pix += sow;
                     }
-                    if(j > 0)
+
+                    if (j > 0)
                     {
                         rr += (R_VAL16(pix) * j) >> 10;
                         gg += (G_VAL16(pix) * j) >> 10;
                         bb += (B_VAL16(pix) * j) >> 10;
                     }
+
                     r = r * INV_XAP;
                     g = g * INV_XAP;
                     b = b * INV_XAP;
@@ -1684,7 +1787,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
         }
     }
     // if we're scaling down horizontally
-    else if(isi->xup_yup == 2)
+    else if (isi->xup_yup == 2)
     {
         // 'Correct' version, with math units prepared for MMXification
         int Cx, j;
@@ -1693,10 +1796,11 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
         int xap;
 
         // go through every scanline in the output buffer
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             dptr = dest + (y - y_begin) * dow;
-            for(x = x_begin; x < x_end; ++x)
+
+            for (x = x_begin; x < x_end; ++x)
             {
                 Cx  = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -1705,39 +1809,45 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
                 g   = (G_VAL16(pix) * xap) >> 10;
                 b   = (B_VAL16(pix) * xap) >> 10;
                 ++pix;
-                for(j = (1 << 14) - xap; j > Cx; j -= Cx)
+
+                for (j = (1 << 14) - xap; j > Cx; j -= Cx)
                 {
                     r += (R_VAL16(pix) * Cx) >> 10;
                     g += (G_VAL16(pix) * Cx) >> 10;
                     b += (B_VAL16(pix) * Cx) >> 10;
                     ++pix;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     r += (R_VAL16(pix) * j) >> 10;
                     g += (G_VAL16(pix) * j) >> 10;
                     b += (B_VAL16(pix) * j) >> 10;
                 }
-                if(YAP > 0)
+
+                if (YAP > 0)
                 {
                     pix = ypoints[dyy + y] + xpoints[x] + sow;
                     rr  = (R_VAL16(pix) * xap) >> 10;
                     gg  = (G_VAL16(pix) * xap) >> 10;
                     bb  = (B_VAL16(pix) * xap) >> 10;
                     ++pix;
-                    for(j = (1 << 14) - xap; j > Cx; j -= Cx)
+
+                    for (j = (1 << 14) - xap; j > Cx; j -= Cx)
                     {
                         rr += (R_VAL16(pix) * Cx) >> 10;
                         gg += (G_VAL16(pix) * Cx) >> 10;
                         bb += (B_VAL16(pix) * Cx) >> 10;
                         ++pix;
                     }
-                    if(j > 0)
+
+                    if (j > 0)
                     {
                         rr += (R_VAL16(pix) * j) >> 10;
                         gg += (G_VAL16(pix) * j) >> 10;
                         bb += (B_VAL16(pix) * j) >> 10;
                     }
+
                     r = r * INV_YAP;
                     g = g * INV_YAP;
                     b = b * INV_YAP;
@@ -1770,13 +1880,13 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
         llong r, g, b, rx, gx, bx;
         int xap, yap;
 
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             Cy   = YAP >> 16;
             yap  = YAP & 0xffff;
             dptr = dest + (y - y_begin) * dow;
 
-            for(x = x_begin; x < x_end; ++x)
+            for (x = x_begin; x < x_end; ++x)
             {
                 Cx   = XAP >> 16;
                 xap  = XAP & 0xffff;
@@ -1787,14 +1897,16 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
                 gx   = (G_VAL16(pix) * xap) >> 9;
                 bx   = (B_VAL16(pix) * xap) >> 9;
                 ++pix;
-                for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                 {
                     rx += (R_VAL16(pix) * Cx) >> 9;
                     gx += (G_VAL16(pix) * Cx) >> 9;
                     bx += (B_VAL16(pix) * Cx) >> 9;
                     ++pix;
                 }
-                if(i > 0)
+
+                if (i > 0)
                 {
                     rx += (R_VAL16(pix) * i) >> 9;
                     gx += (G_VAL16(pix) * i) >> 9;
@@ -1805,7 +1917,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
                 g = (gx * yap) >> 14;
                 b = (bx * yap) >> 14;
 
-                for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+                for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                 {
                     pix  = sptr;
                     sptr += sow;
@@ -1813,14 +1925,16 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
                     gx   = (G_VAL16(pix) * xap) >> 9;
                     bx   = (B_VAL16(pix) * xap) >> 9;
                     ++pix;
-                    for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                    for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                     {
                         rx += (R_VAL16(pix) * Cx) >> 9;
                         gx += (G_VAL16(pix) * Cx) >> 9;
                         bx += (B_VAL16(pix) * Cx) >> 9;
                         ++pix;
                     }
-                    if(i > 0)
+
+                    if (i > 0)
                     {
                         rx += (R_VAL16(pix) * i) >> 9;
                         gx += (G_VAL16(pix) * i) >> 9;
@@ -1831,7 +1945,8 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
                     g += (gx * Cy) >> 14;
                     b += (bx * Cy) >> 14;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     pix  = sptr;
                     sptr += sow;
@@ -1839,14 +1954,16 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
                     gx   = (G_VAL16(pix) * xap) >> 9;
                     bx   = (B_VAL16(pix) * xap) >> 9;
                     ++pix;
-                    for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                    for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                     {
                         rx += (R_VAL16(pix) * Cx) >> 9;
                         gx += (G_VAL16(pix) * Cx) >> 9;
                         bx += (B_VAL16(pix) * Cx) >> 9;
                         ++pix;
                     }
-                    if(i > 0)
+
+                    if (i > 0)
                     {
                         rx += (R_VAL16(pix) * i) >> 9;
                         gx += (G_VAL16(pix) * i) >> 9;
@@ -1869,10 +1986,10 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
 }
 
 void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
-                                int dxx, int dyy,
-                                int dw, int dh,
-                                int dow, int sow
-                               )
+                                  int dxx, int dyy,
+                                  int dw, int dh,
+                                  int dow, int sow
+                                 )
 {
     dimgScaleAARGBA16(isi, dest, dxx, dyy, dw, dh, dow, sow,
                       0, 0, dw, dh);
@@ -1900,24 +2017,26 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
     const int x_end   = x_begin + clip_dw; // no clip set = dxx + dw
     const int y_begin = clip_dy;           // no clip set = 0
     const int y_end   = clip_dy + clip_dh; // no clip set = dh
+
     /* scaling up both ways */
-    if(isi->xup_yup == 3)
+    if (isi->xup_yup == 3)
     {
         /* go through every scanline in the output buffer */
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             /* calculate the source line we'll scan from */
             dptr = dest + (y - y_begin) * dow;
             sptr = ypoints[dyy + y];
-            if(YAP > 0)
+
+            if (YAP > 0)
             {
-                for(x = x_begin; x < x_end; ++x)
+                for (x = x_begin; x < x_end; ++x)
                 {
                     llong r, g, b, a;
                     llong rr, gg, bb, aa;
                     ullong* pix=0;
 
-                    if(XAP > 0)
+                    if (XAP > 0)
                     {
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL16(pix) * INV_XAP;
@@ -1979,12 +2098,12 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
             }
             else
             {
-                for(x = x_begin; x < x_end; ++x)
+                for (x = x_begin; x < x_end; ++x)
                 {
                     llong r, g, b, a;
                     ullong* pix=0;
 
-                    if(XAP > 0)
+                    if (XAP > 0)
                     {
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL16(pix) * INV_XAP;
@@ -2017,7 +2136,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
         }
     }
     /* if we're scaling down vertically */
-    else if(isi->xup_yup == 1)
+    else if (isi->xup_yup == 1)
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cy, j;
@@ -2026,20 +2145,21 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
         int yap;
 
         /* go through every scanline in the output buffer */
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             Cy   = YAP >> 16;
             yap  = YAP & 0xffff;
             dptr = dest + (y - y_begin) * dow;
 
-            for(x = x_begin; x < x_end; ++x)
+            for (x = x_begin; x < x_end; ++x)
             {
                 pix = ypoints[dyy + y] + xpoints[x];
                 r   = (R_VAL16(pix) * yap) >> 10;
                 g   = (G_VAL16(pix) * yap) >> 10;
                 b   = (B_VAL16(pix) * yap) >> 10;
                 a   = (A_VAL16(pix) * yap) >> 10;
-                for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+
+                for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                 {
                     pix += sow;
                     r   += (R_VAL16(pix) * Cy) >> 10;
@@ -2047,7 +2167,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                     b   += (B_VAL16(pix) * Cy) >> 10;
                     a   += (A_VAL16(pix) * Cy) >> 10;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     pix += sow;
                     r   += (R_VAL16(pix) * j) >> 10;
@@ -2055,14 +2176,16 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                     b   += (B_VAL16(pix) * j) >> 10;
                     a   += (A_VAL16(pix) * j) >> 10;
                 }
-                if(XAP > 0)
+
+                if (XAP > 0)
                 {
                     pix = ypoints[dyy + y] + xpoints[x] + 1;
                     rr  = (R_VAL16(pix) * yap) >> 10;
                     gg  = (G_VAL16(pix) * yap) >> 10;
                     bb  = (B_VAL16(pix) * yap) >> 10;
                     aa  = (A_VAL16(pix) * yap) >> 10;
-                    for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+
+                    for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                     {
                         pix += sow;
                         rr  += (R_VAL16(pix) * Cy) >> 10;
@@ -2070,7 +2193,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                         bb  += (B_VAL16(pix) * Cy) >> 10;
                         aa  += (A_VAL16(pix) * Cy) >> 10;
                     }
-                    if(j > 0)
+
+                    if (j > 0)
                     {
                         pix += sow;
                         rr  += (R_VAL16(pix) * j) >> 10;
@@ -2078,6 +2202,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                         bb  += (B_VAL16(pix) * j) >> 10;
                         aa  += (A_VAL16(pix) * j) >> 10;
                     }
+
                     r = r * INV_XAP;
                     g = g * INV_XAP;
                     b = b * INV_XAP;
@@ -2105,7 +2230,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
         }
     }
     /* if we're scaling down horizontally */
-    else if(isi->xup_yup == 2)
+    else if (isi->xup_yup == 2)
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, j;
@@ -2114,10 +2239,11 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
         int xap;
 
         /* go through every scanline in the output buffer */
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             dptr = dest + (y - y_begin) * dow;
-            for(x = x_begin; x < x_end; ++x)
+
+            for (x = x_begin; x < x_end; ++x)
             {
                 Cx  = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -2126,7 +2252,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                 g   = (G_VAL16(pix) * xap) >> 10;
                 b   = (B_VAL16(pix) * xap) >> 10;
                 a   = (A_VAL16(pix) * xap) >> 10;
-                for(j = (1 << 14) - xap; j > Cx; j -= Cx)
+
+                for (j = (1 << 14) - xap; j > Cx; j -= Cx)
                 {
                     ++pix;
                     r += (R_VAL16(pix) * Cx) >> 10;
@@ -2134,7 +2261,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                     b += (B_VAL16(pix) * Cx) >> 10;
                     a += (A_VAL16(pix) * Cx) >> 10;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     ++pix;
                     r += (R_VAL16(pix) * j) >> 10;
@@ -2142,14 +2270,16 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                     b += (B_VAL16(pix) * j) >> 10;
                     a += (A_VAL16(pix) * j) >> 10;
                 }
-                if(YAP > 0)
+
+                if (YAP > 0)
                 {
                     pix = ypoints[dyy + y] + xpoints[x] + sow;
                     rr = (R_VAL16(pix) * xap) >> 10;
                     gg = (G_VAL16(pix) * xap) >> 10;
                     bb = (B_VAL16(pix) * xap) >> 10;
                     aa = (A_VAL16(pix) * xap) >> 10;
-                    for(j = (1 << 14) - xap; j > Cx; j -= Cx)
+
+                    for (j = (1 << 14) - xap; j > Cx; j -= Cx)
                     {
                         ++pix;
                         rr += (R_VAL16(pix) * Cx) >> 10;
@@ -2157,7 +2287,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                         bb += (B_VAL16(pix) * Cx) >> 10;
                         aa += (A_VAL16(pix) * Cx) >> 10;
                     }
-                    if(j > 0)
+
+                    if (j > 0)
                     {
                         ++pix;
                         rr += (R_VAL16(pix) * j) >> 10;
@@ -2165,6 +2296,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                         bb += (B_VAL16(pix) * j) >> 10;
                         aa += (A_VAL16(pix) * j) >> 10;
                     }
+
                     r = r * INV_YAP;
                     g = g * INV_YAP;
                     b = b * INV_YAP;
@@ -2192,24 +2324,25 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
         }
     }
     /* if we're scaling down horizontally & vertically */
-    else{
-         /*\ 'Correct' version, with math units prepared for MMXification:
-         |*|  The operation 'b = (b * c) >> 16' translates to pmulhw,
-         |*|  so the operation 'b = (b * c) >> d' would translate to
-         |*|  psllw (16 - d), %mmb; pmulh %mmc, %mmb
-         \*/
+    else
+    {
+        /*\ 'Correct' version, with math units prepared for MMXification:
+        |*|  The operation 'b = (b * c) >> 16' translates to pmulhw,
+        |*|  so the operation 'b = (b * c) >> d' would translate to
+        |*|  psllw (16 - d), %mmb; pmulh %mmc, %mmb
+        \*/
         int Cx, Cy, i, j;
         ullong* pix=0;
         llong a, r, g, b, ax, rx, gx, bx;
         int xap, yap;
 
-        for(y = y_begin; y < y_end; ++y)
+        for (y = y_begin; y < y_end; ++y)
         {
             Cy   = YAP >> 16;
             yap  = YAP & 0xffff;
             dptr = dest + (y - y_begin) * dow;
 
-            for(x = x_begin; x < x_end; ++x)
+            for (x = x_begin; x < x_end; ++x)
             {
                 Cx   = XAP >> 16;
                 xap  = XAP & 0xffff;
@@ -2221,7 +2354,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                 bx   = (B_VAL16(pix) * xap) >> 9;
                 ax   = (A_VAL16(pix) * xap) >> 9;
                 ++pix;
-                for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                 {
                     rx += (R_VAL16(pix) * Cx) >> 9;
                     gx += (G_VAL16(pix) * Cx) >> 9;
@@ -2229,7 +2363,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                     ax += (A_VAL16(pix) * Cx) >> 9;
                     ++pix;
                 }
-                if(i > 0)
+
+                if (i > 0)
                 {
                     rx += (R_VAL16(pix) * i) >> 9;
                     gx += (G_VAL16(pix) * i) >> 9;
@@ -2243,7 +2378,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                 a = (ax * yap) >> 14;
 
 
-                for(j = (1 << 14) - yap; j > Cy; j -= Cy)
+                for (j = (1 << 14) - yap; j > Cy; j -= Cy)
                 {
                     pix  = sptr;
                     sptr += sow;
@@ -2252,7 +2387,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                     bx   = (B_VAL16(pix) * xap) >> 9;
                     ax   = (A_VAL16(pix) * xap) >> 9;
                     ++pix;
-                    for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                    for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                     {
                         rx += (R_VAL16(pix) * Cx) >> 9;
                         gx += (G_VAL16(pix) * Cx) >> 9;
@@ -2260,7 +2396,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                         ax += (A_VAL16(pix) * Cx) >> 9;
                         ++pix;
                     }
-                    if(i > 0)
+
+                    if (i > 0)
                     {
                         rx += (R_VAL16(pix) * i) >> 9;
                         gx += (G_VAL16(pix) * i) >> 9;
@@ -2273,7 +2410,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                     b += (bx * Cy) >> 14;
                     a += (ax * Cy) >> 14;
                 }
-                if(j > 0)
+
+                if (j > 0)
                 {
                     pix  = sptr;
                     sptr += sow;
@@ -2282,7 +2420,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                     bx   = (B_VAL16(pix) * xap) >> 9;
                     ax   = (A_VAL16(pix) * xap) >> 9;
                     ++pix;
-                    for(i = (1 << 14) - xap; i > Cx; i -= Cx)
+
+                    for (i = (1 << 14) - xap; i > Cx; i -= Cx)
                     {
                         rx += (R_VAL16(pix) * Cx) >> 9;
                         gx += (G_VAL16(pix) * Cx) >> 9;
@@ -2290,7 +2429,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
                         ax += (A_VAL16(pix) * Cx) >> 9;
                         ++pix;
                     }
-                    if(i > 0)
+
+                    if (i > 0)
                     {
                         rx += (R_VAL16(pix) * i) >> 9;
                         gx += (G_VAL16(pix) * i) >> 9;

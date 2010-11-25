@@ -53,12 +53,27 @@ public:
 
     ~DistortionFXFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:DistortionFXFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Distortion Effect"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:DistortionFXFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Distortion Effect");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -89,23 +104,23 @@ private:
     void filterImage();
 
     // Backported from ImageProcessing version 2
-    void fisheye(DImg *orgImage, DImg *destImage, double Coeff, bool AntiAlias=true);
-    void twirl(DImg *orgImage, DImg *destImage, int Twirl, bool AntiAlias=true);
-    void cilindrical(DImg *orgImage, DImg *destImage, double Coeff,
+    void fisheye(DImg* orgImage, DImg* destImage, double Coeff, bool AntiAlias=true);
+    void twirl(DImg* orgImage, DImg* destImage, int Twirl, bool AntiAlias=true);
+    void cilindrical(DImg* orgImage, DImg* destImage, double Coeff,
                      bool Horizontal, bool Vertical, bool AntiAlias=true);
-    void multipleCorners(DImg *orgImage, DImg *destImage, int Factor, bool AntiAlias=true);
-    void polarCoordinates(DImg *orgImage, DImg *destImage, bool Type, bool AntiAlias=true);
-    void circularWaves(DImg *orgImage, DImg *destImage, int X, int Y, double Amplitude,
+    void multipleCorners(DImg* orgImage, DImg* destImage, int Factor, bool AntiAlias=true);
+    void polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias=true);
+    void circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
                        double Frequency, double Phase, bool WavesType, bool AntiAlias=true);
 
     // Backported from ImageProcessing version 1
-    void waves(DImg *orgImage, DImg *destImage, int Amplitude, int Frequency,
+    void waves(DImg* orgImage, DImg* destImage, int Amplitude, int Frequency,
                bool FillSides, bool Direction);
-    void blockWaves(DImg *orgImage, DImg *destImage, int Amplitude, int Frequency, bool Mode);
-    void tile(DImg *orgImage, DImg *destImage, int WSize, int HSize, int Random);
+    void blockWaves(DImg* orgImage, DImg* destImage, int Amplitude, int Frequency, bool Mode);
+    void tile(DImg* orgImage, DImg* destImage, int WSize, int HSize, int Random);
 
     void setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
-                           uchar *data, uchar *pResBits,
+                           uchar* data, uchar* pResBits,
                            int w, int h, double nw, double nh, bool AntiAlias);
     /*
     //UNUSED
@@ -125,7 +140,12 @@ private:
     inline int Lim_Max(int Now, int Up, int Max)
     {
         --Max;
-        while (Now > Max - Up) --Up;
+
+        while (Now > Max - Up)
+        {
+            --Up;
+        }
+
         return (Up);
     };
 

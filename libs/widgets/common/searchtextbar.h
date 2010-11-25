@@ -61,7 +61,7 @@ public:
 
 };
 
-bool DIGIKAM_EXPORT operator==(const SearchTextSettings &a, const SearchTextSettings &b);
+bool DIGIKAM_EXPORT operator==(const SearchTextSettings& a, const SearchTextSettings& b);
 
 /**
  * A text input for searching entries with visual feedback. Can be used on
@@ -103,7 +103,7 @@ public:
 
     };
 
-    SearchTextBar(QWidget *parent, const char* name, const QString& msg=i18n("Search..."));
+    SearchTextBar(QWidget* parent, const char* name, const QString& msg=i18n("Search..."));
     ~SearchTextBar();
 
     void setTextQueryCompletion(bool b);
@@ -129,8 +129,8 @@ public:
      * @param uniqueIdRole a role for which the model will return a unique integer for each entry
      * @param displayRole the role to retrieve the text for completion, default is Qt::DisplayRole.
      */
-    void setModel(QAbstractItemModel *model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
-    void setModel(AbstractAlbumModel *model);
+    void setModel(QAbstractItemModel* model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
+    void setModel(AbstractAlbumModel* model);
 
 
     /**
@@ -142,7 +142,7 @@ public:
      *                    connections need to be created with
      *                    signalSearchTextSettings and slotSearchResult
      */
-    void setFilterModel(AlbumFilterModel *filterModel);
+    void setFilterModel(AlbumFilterModel* filterModel);
 
     /**
      * Tells the current highlighting state of the text input indicated via the

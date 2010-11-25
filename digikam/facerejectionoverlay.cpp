@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 FaceRejectionOverlayButton::FaceRejectionOverlayButton(QAbstractItemView* parentView)
-                          : ItemViewHoverButton(parentView)
+    : ItemViewHoverButton(parentView)
 {
 }
 
@@ -67,7 +67,7 @@ void FaceRejectionOverlayButton::updateToolTip()
 // --------------------------------------------------------------------
 
 FaceRejectionOverlay::FaceRejectionOverlay(QObject* parent)
-                    : HoverButtonDelegateOverlay(parent)
+    : HoverButtonDelegateOverlay(parent)
 {
 }
 
@@ -103,6 +103,7 @@ void FaceRejectionOverlay::updateButton(const QModelIndex& index)
 void FaceRejectionOverlay::slotClicked()
 {
     QModelIndex index = button()->index();
+
     if (index.isValid())
     {
         emit rejectFace(index);

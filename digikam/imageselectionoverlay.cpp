@@ -37,8 +37,8 @@
 namespace Digikam
 {
 
-ImageSelectionOverlayButton::ImageSelectionOverlayButton(QAbstractItemView *parentView)
-                           : ItemViewHoverButton(parentView)
+ImageSelectionOverlayButton::ImageSelectionOverlayButton(QAbstractItemView* parentView)
+    : ItemViewHoverButton(parentView)
 {
 }
 
@@ -58,13 +58,13 @@ QPixmap ImageSelectionOverlayButton::icon()
 void ImageSelectionOverlayButton::updateToolTip()
 {
     setToolTip(isChecked() ? i18nc("@info:tooltip", "Deselect Item") :
-                             i18nc("@info:tooltip", "Select Item"));
+               i18nc("@info:tooltip", "Select Item"));
 }
 
 // --------------------------------------------------------------------
 
-ImageSelectionOverlay::ImageSelectionOverlay(QObject *parent)
-                     : HoverButtonDelegateOverlay(parent)
+ImageSelectionOverlay::ImageSelectionOverlay(QObject* parent)
+    : HoverButtonDelegateOverlay(parent)
 {
 }
 
@@ -92,7 +92,7 @@ void ImageSelectionOverlay::setActive(bool active)
     }
 }
 
-ItemViewHoverButton *ImageSelectionOverlay::createButton()
+ItemViewHoverButton* ImageSelectionOverlay::createButton()
 {
     return new ImageSelectionOverlayButton(view());
 }
@@ -113,9 +113,11 @@ void ImageSelectionOverlay::updateButton(const QModelIndex& index)
 void ImageSelectionOverlay::slotClicked(bool checked)
 {
     QModelIndex index = button()->index();
+
     if (index.isValid())
     {
         QItemSelectionModel* selModel = m_view->selectionModel();
+
         if (checked)
         {
             selModel->select(index, QItemSelectionModel::Select);
@@ -124,6 +126,7 @@ void ImageSelectionOverlay::slotClicked(bool checked)
         {
             selModel->select(index, QItemSelectionModel::Deselect);
         }
+
         selModel->setCurrentIndex(index, QItemSelectionModel::Current);
     }
 }
@@ -131,12 +134,17 @@ void ImageSelectionOverlay::slotClicked(bool checked)
 void ImageSelectionOverlay::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
     QModelIndex index = button()->index();
+
     if (index.isValid())
     {
         if (selected.contains(index))
+        {
             button()->setChecked(true);
+        }
         else if (deselected.contains(index))
+        {
             button()->setChecked(false);
+        }
     }
 }
 

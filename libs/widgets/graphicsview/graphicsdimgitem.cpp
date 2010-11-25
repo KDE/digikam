@@ -67,19 +67,22 @@ void CachedPixmaps::clear()
     keys.clear();
 }
 
-bool CachedPixmaps::find(const QRect& region, QPixmap *pix, QRect* source) const
+bool CachedPixmaps::find(const QRect& region, QPixmap* pix, QRect* source) const
 {
     foreach (const CachedPixmapKey& key, keys)
     {
         if (key.region.contains(region) && QPixmapCache::find(key.key, pix))
         {
             if (key.region == region)
+            {
                 *source = QRect();
+            }
             else
             {
                 QPoint startPoint = region.topLeft() - key.region.topLeft();
                 *source = QRect(startPoint, region.size());
             }
+
             return true;
         }
     }
@@ -102,16 +105,16 @@ void CachedPixmaps::insert(const QRect& region, const QPixmap& pixmap)
 
 // ---
 
-GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem *parent)
-                : QGraphicsObject(parent),
-                  d_ptr(new GraphicsDImgItemPrivate)
+GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem* parent)
+    : QGraphicsObject(parent),
+      d_ptr(new GraphicsDImgItemPrivate)
 {
     d_ptr->init(this);
 }
 
 GraphicsDImgItem::GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* parent)
-                : QGraphicsObject(parent),
-                  d_ptr(&dd)
+    : QGraphicsObject(parent),
+      d_ptr(&dd)
 {
     d_ptr->init(this);
 }
@@ -185,9 +188,13 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     if (d->cachedPixmaps.find(drawRect, &pix, &pixSourceRect))
     {
         if (pixSourceRect.isNull())
+        {
             painter->drawPixmap(drawRect.topLeft(), pix);
+        }
         else
+        {
             painter->drawPixmap(drawRect.topLeft(), pix, pixSourceRect);
+        }
     }
     else
     {
@@ -195,13 +202,14 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
         // scale "as if" scaling to whole image, but clip output to our exposed region
         DImg scaledImage = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
-                                                       drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
+                           drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
 
         pix = scaledImage.convertToPixmap();
         d->cachedPixmaps.insert(drawRect, pix);
 
         painter->drawPixmap(drawRect.topLeft(), pix);
     }
+
     /*
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());

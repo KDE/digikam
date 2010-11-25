@@ -69,7 +69,7 @@ public:
         rfMatrix      = 5;
     };
 
-    ~SharpContainer(){};
+    ~SharpContainer() {};
 
 public:
 

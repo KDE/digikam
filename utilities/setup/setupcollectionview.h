@@ -88,13 +88,13 @@ public:
         NumberOfCategories
     };
 
-    SetupCollectionModel(QObject *parent = 0);
+    SetupCollectionModel(QObject* parent = 0);
     ~SetupCollectionModel();
 
     /// Read collections from CollectionManager
     void loadCollections();
     /// Set a widget used as parent for dialogs and message boxes
-    void setParentWidgetForDialogs(QWidget *widget);
+    void setParentWidgetForDialogs(QWidget* widget);
     /// Apply the changed settings to CollectionManager
     void apply();
 
@@ -164,7 +164,7 @@ protected:
     };
 
     QList<Item>  m_collections;
-    QWidget     *m_dialogParentWidget;
+    QWidget*     m_dialogParentWidget;
 };
 
 // -----------------------------------------------------------------------
@@ -175,9 +175,9 @@ class SetupCollectionTreeView : public QTreeView
 
 public:
 
-    SetupCollectionTreeView(QWidget *parent = 0);
+    SetupCollectionTreeView(QWidget* parent = 0);
 
-    void setModel(SetupCollectionModel *model);
+    void setModel(SetupCollectionModel* model);
 
 protected Q_SLOTS:
 
@@ -185,8 +185,10 @@ protected Q_SLOTS:
 
 private:
 
-    void setModel(QAbstractItemModel *model)
-    { setModel(static_cast<SetupCollectionModel *>(model)); }
+    void setModel(QAbstractItemModel* model)
+    {
+        setModel(static_cast<SetupCollectionModel*>(model));
+    }
 };
 
 } // namespace Digikam

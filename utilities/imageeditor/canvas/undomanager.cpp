@@ -69,7 +69,7 @@ public:
 };
 
 UndoManager::UndoManager(DImgInterface* iface)
-           : d(new UndoManagerPriv)
+    : d(new UndoManagerPriv)
 {
     d->dimgiface = iface;
     d->undoCache = new UndoCache;
@@ -85,14 +85,16 @@ UndoManager::~UndoManager()
 void UndoManager::addAction(UndoAction* action)
 {
     if (!action)
+    {
         return;
+    }
 
     // All redo actions are invalid now
     clearRedoActions();
 
     d->undoActions << action;
 
-    UndoActionIrreversible *irreversible = dynamic_cast<UndoActionIrreversible*>(action);
+    UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
     // action has already read the "history before step" from DImgInterface in its constructor
 
     // we always make an initial snapshot to be able to do a flying rollback in one step
@@ -104,15 +106,21 @@ void UndoManager::addAction(UndoAction* action)
     // if origin is at one of the redo action that are now invalid,
     // it is no longer reachable
     if (d->origin < 0)
+    {
         d->origin = INT_MAX;
+    }
     else
+    {
         d->origin++;
+    }
 }
 
 void UndoManager::undo()
 {
     if (d->undoActions.isEmpty())
+    {
         return;
+    }
 
     undoStep(true, true, false);
 
@@ -122,7 +130,9 @@ void UndoManager::undo()
 void UndoManager::redo()
 {
     if (d->redoActions.isEmpty())
+    {
         return;
+    }
 
     redoStep(true, false);
 
@@ -132,7 +142,9 @@ void UndoManager::redo()
 void UndoManager::rollbackToOrigin()
 {
     if (d->undoActions.isEmpty() || isAtOrigin())
+    {
         return;
+    }
 
     if (d->origin > 0)
     {
@@ -144,10 +156,12 @@ void UndoManager::rollbackToOrigin()
         else
         {
             undoStep(true, false, true);
+
             while (d->origin > 1)
             {
                 undoStep(false, false, true);
             }
+
             undoStep(false, true, true);
         }
     }
@@ -164,6 +178,7 @@ void UndoManager::rollbackToOrigin()
             {
                 redoStep(false, true);
             }
+
             redoStep(true, true);
         }
     }
@@ -178,8 +193,8 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
     DImageHistory historyBeforeStep = action->getHistory();
     DImageHistory historyAfterStep  = d->dimgiface->getImageHistory();
 
-    UndoActionIrreversible *irreversible = dynamic_cast<UndoActionIrreversible*>(action);
-    UndoActionReversible   *reversible   = dynamic_cast<UndoActionReversible*>(action);
+    UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
+    UndoActionReversible*   reversible   = dynamic_cast<UndoActionReversible*>(action);
 
     if (saveRedo && d->redoActions.isEmpty())
     {
@@ -220,13 +235,13 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 
 void UndoManager::redoStep(bool execute, bool flyingRollback)
 {
-    UndoAction *action = d->redoActions.back();
+    UndoAction* action = d->redoActions.back();
 
     DImageHistory historyBeforeStep = d->dimgiface->getImageHistory();
     DImageHistory historyAfterStep  = action->getHistory();
 
-    UndoActionIrreversible *irreversible = dynamic_cast<UndoActionIrreversible*>(action);
-    UndoActionReversible   *reversible   = dynamic_cast<UndoActionReversible*>(action);
+    UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
+    UndoActionReversible*   reversible   = dynamic_cast<UndoActionReversible*>(action);
 
     if (execute)
     {
@@ -265,7 +280,8 @@ void UndoManager::makeSnapshot(int index)
 void UndoManager::restoreSnapshot(int index, const DImageHistory& history)
 {
     int    newW, newH, newBytesDepth;
-    uchar *newData = d->undoCache->getData(index, newW, newH, newBytesDepth, false);
+    uchar* newData = d->undoCache->getData(index, newW, newH, newBytesDepth, false);
+
     if (newData)
     {
         d->dimgiface->setUndoImageData(history, newData, newW, newH, newBytesDepth == 8 ? true : false);
@@ -280,39 +296,46 @@ void UndoManager::clear(bool clearCache)
     setOrigin();
 
     if (clearCache)
+    {
         d->undoCache->clear();
+    }
 }
 
 void UndoManager::clearUndoActions()
 {
-    UndoAction *action;
+    UndoAction* action;
     QList<UndoAction*>::iterator it;
 
-    for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
+    for (it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
         action = *it;
         delete action;
     }
+
     d->undoActions.clear();
 }
 
 void UndoManager::clearRedoActions()
 {
     if (!anyMoreRedo())
+    {
         return;
+    }
 
-    UndoAction *action;
+    UndoAction* action;
     QList<UndoAction*>::iterator it;
 
     // get the level of the first redo action
     int level = d->undoActions.size() + 1;
-    for(it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
+
+    for (it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
     {
         action = *it;
         d->undoCache->erase(level);
         delete action;
         ++level;
     }
+
     d->undoCache->erase(level);
     d->redoActions.clear();
 }
@@ -341,7 +364,7 @@ QStringList UndoManager::getUndoHistory() const
 {
     QStringList titles;
     foreach (UndoAction* action, d->undoActions)
-        titles << action->getTitle();
+    titles << action->getTitle();
     return titles;
 }
 
@@ -349,7 +372,7 @@ QStringList UndoManager::getRedoHistory() const
 {
     QStringList titles;
     foreach (UndoAction* action, d->redoActions)
-        titles.prepend(action->getTitle());
+    titles.prepend(action->getTitle());
     return titles;
 }
 
@@ -366,8 +389,12 @@ void UndoManager::setOrigin() const
 DImageHistory UndoManager::getImageHistoryOfFullRedo() const
 {
     kDebug() << d->redoActions.count();
+
     if (!d->redoActions.isEmpty())
+    {
         return d->redoActions.first()->getHistory();
+    }
+
     return d->dimgiface->getImageHistory();
 }
 

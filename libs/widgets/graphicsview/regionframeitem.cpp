@@ -120,7 +120,7 @@ public:
 
     RegionFrameItem::Flags flags;
 
-    AnimatedVisibility    *resizeHandleVisibility;
+    AnimatedVisibility*    resizeHandleVisibility;
     qreal                  hoverAnimationOpacity;
     QTimer*                hudTimer;
     QPointF                hudEndPos;
@@ -130,9 +130,9 @@ public:
 };
 
 RegionFrameItem::RegionFrameItemPriv::RegionFrameItemPriv(RegionFrameItem* q)
-                                    : q(q),
-                                      HUD_TIMER_MAX_PIXELS_PER_UPDATE(20),
-                                      HUD_TIMER_ANIMATION_INTERVAL(20)
+    : q(q),
+      HUD_TIMER_MAX_PIXELS_PER_UPDATE(20),
+      HUD_TIMER_ANIMATION_INTERVAL(20)
 {
     hudSide               = HS_None;
     movingHandle          = CH_None;
@@ -152,6 +152,7 @@ QRectF RegionFrameItem::RegionFrameItemPriv::handleRect(CropHandle handle) const
 {
     QSizeF size = q->boundingRect().size();
     double left, top;
+
     if (handle & CH_Top)
     {
         top = 0;
@@ -188,12 +189,14 @@ CropHandle RegionFrameItem::RegionFrameItemPriv::handleAt(const QPointF& pos) co
         foreach (const CropHandle& handle, cropHandleList)
         {
             QRectF rect = handleRect(handle);
+
             if (rect.contains(pos))
             {
                 return handle;
             }
         }
     }
+
     if (flags & RegionFrameItem::MoveByDrag)
     {
         if (q->boundingRect().contains(pos))
@@ -201,12 +204,14 @@ CropHandle RegionFrameItem::RegionFrameItemPriv::handleAt(const QPointF& pos) co
             return CH_Content;
         }
     }
+
     return CH_None;
 }
 
 void RegionFrameItem::RegionFrameItemPriv::updateCursor(CropHandle handle, bool buttonDown)
 {
     Qt::CursorShape shape;
+
     switch (handle)
     {
         case CH_TopLeft:
@@ -237,6 +242,7 @@ void RegionFrameItem::RegionFrameItemPriv::updateCursor(CropHandle handle, bool 
             shape = Qt::ArrowCursor;
             break;
     }
+
     q->setCursor(shape);
 }
 
@@ -261,6 +267,7 @@ QRectF RegionFrameItem::RegionFrameItemPriv::keepRectInsideImage(const QRectF& r
     {
         r.moveLeft(0);
     }
+
     if (r.bottom() > imageSize.height())
     {
         r.moveBottom(imageSize.height());
@@ -269,6 +276,7 @@ QRectF RegionFrameItem::RegionFrameItemPriv::keepRectInsideImage(const QRectF& r
     {
         r.moveTop(0);
     }
+
     return r;
 }
 
@@ -286,11 +294,11 @@ OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPos
     // Compute preferred and fallback positions. Preferred is outside rect
     // on the same side, fallback is outside on the other side.
     OptimalPosition preferred = OptimalPosition(
-        QPointF(rect.left(), rect.bottom() + margin),
-        HS_Bottom);
+                                    QPointF(rect.left(), rect.bottom() + margin),
+                                    HS_Bottom);
     OptimalPosition fallback = OptimalPosition(
-        QPointF(rect.left(), rect.top() - margin - hudHeight),
-        HS_Top);
+                                   QPointF(rect.left(), rect.top() - margin - hudHeight),
+                                   HS_Top);
 
     if (hudSide & HS_Top)
     {
@@ -310,6 +318,7 @@ OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPos
     {
         // Does not fit outside, use a position inside rect
         QPoint pos;
+
         if (hudSide & HS_Top)
         {
             pos = QPoint(rect.left() + margin, rect.top() + margin);
@@ -318,6 +327,7 @@ OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPos
         {
             pos = QPoint(rect.left() + margin, rect.bottom() - margin - hudHeight);
         }
+
         ret = OptimalPosition(pos, HudSide(hudSide | HS_Inside));
     }
 
@@ -332,17 +342,22 @@ OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPos
 void RegionFrameItem::RegionFrameItemPriv::updateHudWidgetPosition()
 {
     if (!hudWidget || !q->scene())
+    {
         return;
+    }
 
     OptimalPosition result = computeOptimalHudWidgetPosition();
 
     if (result.first == hudWidget->pos() && result.second == hudSide)
+    {
         return;
+    }
 
     if (hudSide == HS_None)
     {
         hudSide = result.second;
     }
+
     if (hudSide == result.second && !hudTimer->isActive())
     {
         // Not changing side and not in an animation, move directly the hud
@@ -353,6 +368,7 @@ void RegionFrameItem::RegionFrameItemPriv::updateHudWidgetPosition()
     {
         hudEndPos = result.first;
         hudSide   = result.second;
+
         if (!hudTimer->isActive())
         {
             hudTimer->start();
@@ -363,7 +379,7 @@ void RegionFrameItem::RegionFrameItemPriv::updateHudWidgetPosition()
 // ---------------------------------------------------------------------------------------
 
 RegionFrameItem::RegionFrameItem(QGraphicsItem* item)
-               : DImgChildItem(item), d(new RegionFrameItemPriv(this))
+    : DImgChildItem(item), d(new RegionFrameItemPriv(this))
 {
     d->resizeHandleVisibility = new AnimatedVisibility(this);
     d->resizeHandleVisibility->controller()->setShallBeShown(false);
@@ -397,18 +413,18 @@ RegionFrameItem::~RegionFrameItem()
     delete d;
 }
 
-void RegionFrameItem::setHudWidget(QWidget *widget, Qt::WindowFlags wFlags)
+void RegionFrameItem::setHudWidget(QWidget* widget, Qt::WindowFlags wFlags)
 {
-    QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget(0, wFlags);
+    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(0, wFlags);
     /*
      * This is utterly undocumented magic. If you add a normal widget directly,
      * with transparent parts (round corners), you will have ugly color in the corners.
      * If you set WA_TranslucentBackground on the widget directly, a lot of the
      * painting and stylesheets is broken. Like this, with an extra container, it seems to work.
      */
-    QWidget *container = new QWidget;
+    QWidget* container = new QWidget;
     container->setAttribute(Qt::WA_TranslucentBackground);
-    QHBoxLayout *layout = new QHBoxLayout;
+    QHBoxLayout* layout = new QHBoxLayout;
     layout->setSizeConstraint(QLayout::SetFixedSize);
     layout->setContentsMargins(QMargins());
     layout->setSpacing(0);
@@ -422,10 +438,12 @@ void RegionFrameItem::setHudWidget(QWidget *widget, Qt::WindowFlags wFlags)
     setHudWidget(proxy);
 }
 
-void RegionFrameItem::setHudWidget(QGraphicsWidget *hudWidget)
+void RegionFrameItem::setHudWidget(QGraphicsWidget* hudWidget)
 {
     if (d->hudWidget == hudWidget)
+    {
         return;
+    }
 
     if (d->hudWidget)
     {
@@ -442,7 +460,7 @@ void RegionFrameItem::setHudWidget(QGraphicsWidget *hudWidget)
     }
 }
 
-QGraphicsWidget *RegionFrameItem::hudWidget() const
+QGraphicsWidget* RegionFrameItem::hudWidget() const
 {
     return d->hudWidget;
 }
@@ -450,7 +468,10 @@ QGraphicsWidget *RegionFrameItem::hudWidget() const
 void RegionFrameItem::setFlags(Flags flags)
 {
     if (d->flags == flags)
+    {
         return;
+    }
+
     d->flags = flags;
     update();
     setAcceptHoverEvents(d->flags & GeometryEditable);
@@ -460,15 +481,21 @@ void RegionFrameItem::setFlags(Flags flags)
 void RegionFrameItem::changeFlags(Flags flags, bool addOrRemove)
 {
     if (addOrRemove)
+    {
         setFlags(d->flags | flags);
+    }
     else
+    {
         setFlags(d->flags & ~flags);
+    }
 }
 
 void RegionFrameItem::setHudWidgetVisible(bool visible)
 {
     if (d->hudWidget)
+    {
         d->hudWidget->setVisible(visible);
+    }
 }
 
 RegionFrameItem::Flags RegionFrameItem::flags() const
@@ -509,19 +536,19 @@ QRectF RegionFrameItem::boundingRect() const
 
 void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-/*
-    QRect rect = d->viewportCropRect();
+    /*
+        QRect rect = d->viewportCropRect();
 
-    QRect imageRect = imageView()->rect();
+        QRect imageRect = imageView()->rect();
 
-    static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
+        static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
 
-    QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
-    foreach (const QRect& outerRect, outerRegion.rects())
-    {
-        painter->fillRect(outerRect, outerColor);
-    }
-*/
+        QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
+        foreach (const QRect& outerRect, outerRegion.rects())
+        {
+            painter->fillRect(outerRect, outerColor);
+        }
+    */
 
     const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66 + 0.34 * d->hoverAnimationOpacity);
     const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
@@ -556,13 +583,17 @@ void RegionFrameItem::slotUpdate()
 void RegionFrameItem::hoverEnterEvent(QGraphicsSceneHoverEvent* e)
 {
     if (boundingRect().contains(e->pos()))
+    {
         d->resizeHandleVisibility->controller()->show();
+    }
 }
 
 void RegionFrameItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* e)
 {
     if (!boundingRect().contains(e->pos()))
+    {
         d->resizeHandleVisibility->controller()->hide();
+    }
 }
 
 void RegionFrameItem::hoverMoveEvent(QGraphicsSceneHoverEvent* e)
@@ -574,6 +605,7 @@ void RegionFrameItem::hoverMoveEvent(QGraphicsSceneHoverEvent* e)
             CropHandle handle = d->handleAt(e->pos());
             d->updateCursor(handle, false/* buttonDown*/);
         }
+
         d->resizeHandleVisibility->controller()->show();
     }
 }
@@ -583,7 +615,9 @@ void RegionFrameItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
     // FIXME: Fade out?
     //d->hudWidget->hide();
     if (!d->flags & GeometryEditable)
+    {
         return DImgChildItem::mousePressEvent(event);
+    }
 
     d->movingHandle = d->handleAt(event->pos());
     d->updateCursor(d->movingHandle, event->buttons() != Qt::NoButton);
@@ -614,6 +648,7 @@ void RegionFrameItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     {
         r.setBottom(posY);
     }
+
     if (d->movingHandle & CH_Left)
     {
         r.setLeft(posX);
@@ -629,10 +664,12 @@ void RegionFrameItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     {
         d->movingHandle = d->movingHandle ^ (CH_Top | CH_Bottom);
     }
+
     if (r.width() < 0)
     {
         d->movingHandle = d->movingHandle ^ (CH_Left | CH_Right);
     }
+
     r = r.normalized();
 
     // Enforce ratio
@@ -693,6 +730,7 @@ bool RegionFrameItem::eventFilter(QObject* watched, QEvent* event)
     {
         d->updateHudWidgetPosition();
     }
+
     return DImgChildItem::eventFilter(watched, event);
 }
 

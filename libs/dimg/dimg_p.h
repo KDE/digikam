@@ -110,7 +110,7 @@ public:
      * Returns if the (clipped) section is a valid rectangle.
      */
     // implementation in dimgscale.cpp
-    static bool clipped(int &x, int &y, int &w, int &h, uint width, uint height);
+    static bool clipped(int& x, int& y, int& w, int& h, uint width, uint height);
 };
 
 }  // namespace Digikam

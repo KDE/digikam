@@ -120,50 +120,50 @@ void DImgFilterManager::DImgFilterManagerPriv::setupCoreGenerators()
 {
     //Please keep this list sorted alphabetically
     coreGenerators
-        << new BasicDImgFilterGenerator<AntiVignettingFilter>()
-        << new BasicDImgFilterGenerator<AutoExpoFilter>()
-        << new BasicDImgFilterGenerator<AutoLevelsFilter>()
-        << new BasicDImgFilterGenerator<BCGFilter>()
-        << new BasicDImgFilterGenerator<BlurFilter>()
-        << new BasicDImgFilterGenerator<BlurFXFilter>()
-        << new BasicDImgFilterGenerator<BorderFilter>()
-        << new BasicDImgFilterGenerator<BWSepiaFilter>()
-        << new BasicDImgFilterGenerator<CBFilter>()
-        << new BasicDImgFilterGenerator<CharcoalFilter>()
-        << new BasicDImgFilterGenerator<ColorFXFilter>()
-        #ifdef HAVE_GLIB2
-        << new BasicDImgFilterGenerator<ContentAwareFilter>()
-        #endif
-        << new BasicDImgFilterGenerator<CurvesFilter>()
-        << new BasicDImgFilterGenerator<DistortionFXFilter>()
-        << new BasicDImgFilterGenerator<EmbossFilter>()
-        << new BasicDImgFilterGenerator<EqualizeFilter>()
-        << new BasicDImgFilterGenerator<FilmGrainFilter>()
-        << new BasicDImgFilterGenerator<FreeRotationFilter>()
-        << new BasicDImgFilterGenerator<GreycstorationFilter>()
-        << new BasicDImgFilterGenerator<HSLFilter>()
-        << new BasicDImgFilterGenerator<IccTransformFilter>()
-        << new BasicDImgFilterGenerator<InfraredFilter>()
-        << new BasicDImgFilterGenerator<InvertFilter>()
-        << new BasicDImgFilterGenerator<LensDistortionFilter>()
-        #ifdef HAVE_GLIB2
-        << new BasicDImgFilterGenerator<LensFunFilter>()
-        #endif
-        << new BasicDImgFilterGenerator<LevelsFilter>()
-        << new BasicDImgFilterGenerator<LocalContrastFilter>()
-        << new BasicDImgFilterGenerator<MixerFilter>()
-        << new BasicDImgFilterGenerator<NormalizeFilter>()
-        << new BasicDImgFilterGenerator<NRFilter>()
-        << new BasicDImgFilterGenerator<OilPaintFilter>()
-        << new BasicDImgFilterGenerator<RainDropFilter>()
-        << new BasicDImgFilterGenerator<RefocusFilter>()
-        << new BasicDImgFilterGenerator<SharpenFilter>()
-        << new BasicDImgFilterGenerator<ShearFilter>()
-        << new BasicDImgFilterGenerator<StretchFilter>()
-        << new BasicDImgFilterGenerator<TextureFilter>()
-        << new BasicDImgFilterGenerator<TonalityFilter>()
-        << new BasicDImgFilterGenerator<UnsharpMaskFilter>()
-        << new BasicDImgFilterGenerator<WBFilter>();
+            << new BasicDImgFilterGenerator<AntiVignettingFilter>()
+            << new BasicDImgFilterGenerator<AutoExpoFilter>()
+            << new BasicDImgFilterGenerator<AutoLevelsFilter>()
+            << new BasicDImgFilterGenerator<BCGFilter>()
+            << new BasicDImgFilterGenerator<BlurFilter>()
+            << new BasicDImgFilterGenerator<BlurFXFilter>()
+            << new BasicDImgFilterGenerator<BorderFilter>()
+            << new BasicDImgFilterGenerator<BWSepiaFilter>()
+            << new BasicDImgFilterGenerator<CBFilter>()
+            << new BasicDImgFilterGenerator<CharcoalFilter>()
+            << new BasicDImgFilterGenerator<ColorFXFilter>()
+#ifdef HAVE_GLIB2
+            << new BasicDImgFilterGenerator<ContentAwareFilter>()
+#endif
+            << new BasicDImgFilterGenerator<CurvesFilter>()
+            << new BasicDImgFilterGenerator<DistortionFXFilter>()
+            << new BasicDImgFilterGenerator<EmbossFilter>()
+            << new BasicDImgFilterGenerator<EqualizeFilter>()
+            << new BasicDImgFilterGenerator<FilmGrainFilter>()
+            << new BasicDImgFilterGenerator<FreeRotationFilter>()
+            << new BasicDImgFilterGenerator<GreycstorationFilter>()
+            << new BasicDImgFilterGenerator<HSLFilter>()
+            << new BasicDImgFilterGenerator<IccTransformFilter>()
+            << new BasicDImgFilterGenerator<InfraredFilter>()
+            << new BasicDImgFilterGenerator<InvertFilter>()
+            << new BasicDImgFilterGenerator<LensDistortionFilter>()
+#ifdef HAVE_GLIB2
+            << new BasicDImgFilterGenerator<LensFunFilter>()
+#endif
+            << new BasicDImgFilterGenerator<LevelsFilter>()
+            << new BasicDImgFilterGenerator<LocalContrastFilter>()
+            << new BasicDImgFilterGenerator<MixerFilter>()
+            << new BasicDImgFilterGenerator<NormalizeFilter>()
+            << new BasicDImgFilterGenerator<NRFilter>()
+            << new BasicDImgFilterGenerator<OilPaintFilter>()
+            << new BasicDImgFilterGenerator<RainDropFilter>()
+            << new BasicDImgFilterGenerator<RefocusFilter>()
+            << new BasicDImgFilterGenerator<SharpenFilter>()
+            << new BasicDImgFilterGenerator<ShearFilter>()
+            << new BasicDImgFilterGenerator<StretchFilter>()
+            << new BasicDImgFilterGenerator<TextureFilter>()
+            << new BasicDImgFilterGenerator<TonalityFilter>()
+            << new BasicDImgFilterGenerator<UnsharpMaskFilter>()
+            << new BasicDImgFilterGenerator<WBFilter>();
 }
 
 void DImgFilterManager::DImgFilterManagerPriv::setupFilterIcons()
@@ -234,7 +234,7 @@ DImgFilterManager* DImgFilterManager::instance()
 }
 
 DImgFilterManager::DImgFilterManager()
-                 : d(new DImgFilterManagerPriv)
+    : d(new DImgFilterManagerPriv)
 {
     QMutexLocker lock(&d->mutex);
     d->setupCoreGenerators();
@@ -261,6 +261,7 @@ void DImgFilterManager::addGenerator(DImgFilterGenerator* generator)
             kError() << "Attempt to register filter identifier" << id << "twice. Ignoring.";
             continue;
         }
+
         d->filterMap[id] = generator;
     }
 }
@@ -269,12 +270,17 @@ void DImgFilterManager::removeGenerator(DImgFilterGenerator* generator)
 {
     QMutexLocker lock(&d->mutex);
     QMap<QString, DImgFilterGenerator*>::iterator it;
+
     for ( it = d->filterMap.begin(); it != d->filterMap.end(); )
     {
         if (it.value() == generator)
+        {
             it = d->filterMap.erase(it);
+        }
         else
+        {
             ++it;
+        }
     }
 }
 
@@ -287,12 +293,17 @@ QStringList DImgFilterManager::supportedFilters()
 QList<int> DImgFilterManager::supportedVersions(const QString& filterIdentifier)
 {
     if (DImgBuiltinFilter::isSupported(filterIdentifier))
+    {
         return DImgBuiltinFilter::supportedVersions(filterIdentifier);
+    }
 
     QMutexLocker lock(&d->mutex);
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
+
     if (gen)
+    {
         return gen->supportedVersions(filterIdentifier);
+    }
 
     return QList<int>();
 }
@@ -301,8 +312,11 @@ QString DImgFilterManager::displayableName(const QString& filterIdentifier)
 {
     QMutexLocker lock(&d->mutex);
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
+
     if (gen)
+    {
         return gen->displayableName(filterIdentifier);
+    }
 
     return QString();
 }
@@ -310,7 +324,10 @@ QString DImgFilterManager::displayableName(const QString& filterIdentifier)
 QString DImgFilterManager::filterIcon(const QString& filterIdentifier)
 {
     if (DImgBuiltinFilter::isSupported(filterIdentifier))
+    {
         return DImgBuiltinFilter::filterIcon(filterIdentifier);
+    }
+
     QMutexLocker lock(&d->mutex);
     return d->filterIcons.value(filterIdentifier);
 }
@@ -319,25 +336,38 @@ QString DImgFilterManager::i18nDisplayableName(const QString& filterIdentifier)
 {
     QMutexLocker lock(&d->mutex);
     QString name = d->i18nFilterNames.value(filterIdentifier);
+
     if (!name.isEmpty())
+    {
         return name;
+    }
 
     if (DImgBuiltinFilter::isSupported(filterIdentifier))
+    {
         return DImgBuiltinFilter::i18nDisplayableName(filterIdentifier);
+    }
 
     name = displayableName(filterIdentifier);
+
     if (!name.isEmpty())
     {
         QByteArray latin1 = name.toLatin1();
         QString translated = i18n(latin1.constData());
+
         if (translated != name)
+        {
             return translated;
+        }
+
         return name;
     }
 
     QString digikamNamespace("digikam:");
+
     if (filterIdentifier.startsWith(digikamNamespace))
+    {
         return filterIdentifier.mid(digikamNamespace.length());
+    }
 
     return filterIdentifier;
 }
@@ -345,19 +375,30 @@ QString DImgFilterManager::i18nDisplayableName(const QString& filterIdentifier)
 bool DImgFilterManager::isSupported(const QString& filterIdentifier)
 {
     QMutexLocker lock(&d->mutex);
+
     if (DImgBuiltinFilter::isSupported(filterIdentifier))
+    {
         return true;
+    }
+
     return d->filterMap.contains(filterIdentifier);
 }
 
 bool DImgFilterManager::isSupported(const QString& filterIdentifier, int version)
 {
     QMutexLocker lock(&d->mutex);
+
     if (DImgBuiltinFilter::isSupported(filterIdentifier, version))
+    {
         return true;
+    }
+
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
+
     if (gen)
+    {
         return gen->isSupported(filterIdentifier, version);
+    }
 
     return false;
 }
@@ -367,8 +408,11 @@ DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentif
     QMutexLocker lock(&d->mutex);
     kDebug() << "Creating filter " << filterIdentifier;
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
+
     if (gen)
+    {
         return gen->createFilter(filterIdentifier, version);
+    }
 
     return 0;
 }

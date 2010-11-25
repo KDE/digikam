@@ -118,8 +118,8 @@ public:
 };
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const iface, QWidget* parent)
-                           : KIPI::ImageCollectionSelector(parent),
-                             d(new KipiImageCollectionSelectorPriv)
+    : KIPI::ImageCollectionSelector(parent),
+      d(new KipiImageCollectionSelectorPriv)
 {
 
     KSharedConfigPtr config  = KGlobal::config();

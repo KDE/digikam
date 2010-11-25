@@ -61,7 +61,7 @@ public:
 };
 
 ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegate(QObject* parent)
-                               : QStyledItemDelegate(parent), d(new ImagePropertiesVersionsDelegatePriv)
+    : QStyledItemDelegate(parent), d(new ImagePropertiesVersionsDelegatePriv)
 {
     d->workingWidget = new WorkingWidget();
     d->thumbsPainted = 0;
@@ -93,7 +93,7 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     painter->setRenderHint(QPainter::Antialiasing, true);
     QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
-    if(dynamic_cast<const ImageVersionsModel*>(index.model())->paintTree())
+    if (dynamic_cast<const ImageVersionsModel*>(index.model())->paintTree())
     {
         const_cast<QStyleOptionViewItem&>(option).rect.setLeft(option.rect.left() + (index.data(Qt::UserRole).toInt() * 16));
     }
@@ -103,9 +103,10 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     painter->drawRect(thumbRect);
 
     QPixmap thumbnail;
-    if(ThumbnailLoadThread::defaultIconViewThread()->find(index.data(Qt::DisplayRole).toString(), thumbnail))
+
+    if (ThumbnailLoadThread::defaultIconViewThread()->find(index.data(Qt::DisplayRole).toString(), thumbnail))
     {
-        if(!thumbnail.isNull())
+        if (!thumbnail.isNull())
         {
             thumbnail = thumbnail.scaled(64, 48, Qt::KeepAspectRatio);
             const_cast<ImagePropertiesVersionsDelegate*>(this)->d->thumbsPainted++;
@@ -115,7 +116,8 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
             //if the thumbnail pixmap is null, display an error icon instead
             thumbnail = BarIcon("task-reject");
         }
-        if(d->thumbsPainted == index.model()->rowCount())
+
+        if (d->thumbsPainted == index.model()->rowCount())
         {
             // the timer can be stopped after last thumbnail is drawn,
             // but it needs to be delayed a little, so that all thumbs
@@ -141,11 +143,11 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     textRect.setLeft(textRect.left() + 72);
     KUrl path(index.data(Qt::DisplayRole).toString());
 
-    if(index.row() == 0 && index.model()->rowCount() > 1)
+    if (index.row() == 0 && index.model()->rowCount() > 1)
     {
         painter->drawText(textRect, Qt::AlignVCenter, i18n("%1 (Original)").arg(path.fileName()));
     }
-    else if(index.row() == 0 && index.model()->rowCount() == 1)
+    else if (index.row() == 0 && index.model()->rowCount() == 1)
     {
         painter->drawText(textRect, Qt::AlignVCenter, i18n("This is the original image"));
     }
@@ -153,6 +155,7 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     {
         painter->drawText(textRect, Qt::AlignVCenter, path.fileName());
     }
+
     painter->restore();
 }
 

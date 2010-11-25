@@ -51,15 +51,15 @@ public:
         PNGcompression      = 0;
     }
 
-    QGridLayout  *PNGGrid;
+    QGridLayout*  PNGGrid;
 
-    QLabel       *labelPNGcompression;
+    QLabel*       labelPNGcompression;
 
-    KIntNumInput *PNGcompression;
+    KIntNumInput* PNGcompression;
 };
 
-PNGSettings::PNGSettings(QWidget *parent)
-           : QWidget(parent), d(new PNGSettingsPriv)
+PNGSettings::PNGSettings(QWidget* parent)
+    : QWidget(parent), d(new PNGSettingsPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 

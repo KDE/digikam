@@ -45,7 +45,7 @@ class HSLFilterPriv
 {
 public:
 
-    HSLFilterPriv(){}
+    HSLFilterPriv() {}
 
     int          htransfer[256];
     int          ltransfer[256];
@@ -59,16 +59,16 @@ public:
 };
 
 HSLFilter::HSLFilter(QObject* parent)
-         : DImgThreadedFilter(parent),
-           d(new HSLFilterPriv)
+    : DImgThreadedFilter(parent),
+      d(new HSLFilterPriv)
 {
     reset();
     initFilter();
 }
 
 HSLFilter::HSLFilter(DImg* orgImage, QObject* parent, const HSLContainer& settings)
-         : DImgThreadedFilter(orgImage, parent, "HSLFilter"),
-           d(new HSLFilterPriv)
+    : DImgThreadedFilter(orgImage, parent, "HSLFilter"),
+      d(new HSLFilterPriv)
 {
     d->settings = settings;
     reset();
@@ -115,26 +115,38 @@ void HSLFilter::setHue(double val)
 
     for (int i = 0; i < 65536; ++i)
     {
-       value = lround(val * 65535.0 / 360.0);
+        value = lround(val * 65535.0 / 360.0);
 
-       if ((i + value) < 0)
-          d->htransfer16[i] = 65535 + (i + value);
-       else if ((i + value) > 65535)
-          d->htransfer16[i] = i + value - 65535;
-       else
-          d->htransfer16[i] = i + value;
+        if ((i + value) < 0)
+        {
+            d->htransfer16[i] = 65535 + (i + value);
+        }
+        else if ((i + value) > 65535)
+        {
+            d->htransfer16[i] = i + value - 65535;
+        }
+        else
+        {
+            d->htransfer16[i] = i + value;
+        }
     }
 
     for (int i = 0; i < 256; ++i)
     {
-       value = lround(val * 255.0 / 360.0);
+        value = lround(val * 255.0 / 360.0);
 
-       if ((i + value) < 0)
-          d->htransfer[i] = 255 + (i + value);
-       else if ((i + value) > 255)
-          d->htransfer[i] = i + value - 255;
-       else
-          d->htransfer[i] = i + value;
+        if ((i + value) < 0)
+        {
+            d->htransfer[i] = 255 + (i + value);
+        }
+        else if ((i + value) > 255)
+        {
+            d->htransfer[i] = i + value - 255;
+        }
+        else
+        {
+            d->htransfer[i] = i + value;
+        }
     }
 }
 
@@ -217,7 +229,9 @@ int HSLFilter::vibranceBias(double sat, double hue, double vib, bool sixteenbit)
 void HSLFilter::applyHSL(DImg& image)
 {
     if (image.isNull())
+    {
         return;
+    }
 
     bool   sixteenBit     = image.sixteenBit();
     uint   numberOfPixels = image.numPixels();
@@ -247,8 +261,11 @@ void HSLFilter::applyHSL(DImg& image)
             data += 4;
 
             progress = (int)(((double)i * 100.0) / numberOfPixels);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
     else                                      // 8 bits image.
@@ -272,8 +289,11 @@ void HSLFilter::applyHSL(DImg& image)
             data += 4;
 
             progress = (int)(((double)i * 100.0) / numberOfPixels);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
 }

@@ -36,13 +36,13 @@ namespace Digikam
 {
 
 CurvesFilter::CurvesFilter(QObject* parent)
-                 : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const CurvesContainer& settings)
-            : DImgThreadedFilter(orgImage, parent, "CurvesFilter")
+    : DImgThreadedFilter(orgImage, parent, "CurvesFilter")
 {
     m_settings = settings;
     initFilter();
@@ -84,6 +84,7 @@ bool CurvesFilter::isStoredLosslessly(const CurvesContainer& settings)
 void CurvesFilter::addCurvesParameters(FilterAction& action, const CurvesContainer& settings)
 {
     ImageCurves curves(settings);
+
     // Convert to 8bit: 16 bits curves takes 85kb, 8 bits only 400 bytes.
     if (curves.isSixteenBits())
     {
@@ -95,18 +96,22 @@ void CurvesFilter::addCurvesParameters(FilterAction& action, const CurvesContain
     action.addParameter("curveBitDepth", 8);
 
     for (int i=0; i<ColorChannels; i++)
+    {
         action.addParameter(QString("curveData[%1]").arg(i), curves.channelToBase64(i));
+    }
 }
 
 CurvesContainer CurvesFilter::readCurvesParameters(const FilterAction& action)
 {
     ImageCurves curves(action.parameter("curveBitDepth").toInt() == 16);
+
     for (int i=0; i<ColorChannels; i++)
     {
         QByteArray base64 = action.parameter(QString("curveData[%1]").arg(i)).toByteArray();
         // check return value and set readParametersError?
         curves.setChannelFromBase64(i, base64);
     }
+
     return curves.getContainer();
 }
 

@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -43,8 +43,8 @@ class DIGIKAM_EXPORT DImgFilterGenerator
 {
 public:
 
-    DImgFilterGenerator(){};
-    virtual ~DImgFilterGenerator(){};
+    DImgFilterGenerator() {};
+    virtual ~DImgFilterGenerator() {};
 
     /// Returns a list with identifiers of supported filters
     virtual QStringList supportedFilters() = 0;
@@ -83,7 +83,10 @@ public:
     QList<int> supportedVersions(const QString& filterIdentifier)
     {
         if (filterIdentifier == T::FilterIdentifier())
+        {
             return T::SupportedVersions();
+        }
+
         return QList<int>();
     }
 
@@ -96,13 +99,17 @@ public:
             t->setFilterVersion(version);
             return t;
         }
+
         return 0;
     }
 
     QString displayableName(const QString& filterIdentifier)
     {
         if (filterIdentifier == T::FilterIdentifier())
+        {
             return T::DisplayableName();
+        }
+
         return QString();
     }
 };

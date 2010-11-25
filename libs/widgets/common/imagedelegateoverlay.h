@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT ImageDelegateOverlay : public QObject
 
 public:
 
-    ImageDelegateOverlay(QObject *parent = 0);
+    ImageDelegateOverlay(QObject* parent = 0);
     ~ImageDelegateOverlay();
 
     /** Called when the overlay was installed and shall begin working,
@@ -57,13 +57,13 @@ public:
      *  For all other events, connect to the view's signals.
      *  There are a few signals specifically for overlays and all
      *  QAbstractItemView standard signals. */
-    virtual void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
-    virtual void paint(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index);
+    virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
+    virtual void paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index);
 
-    void setView(QAbstractItemView *view);
-    QAbstractItemView *view() const;
-    void setDelegate(ItemViewImageDelegate *delegate);
-    ItemViewImageDelegate *delegate() const;
+    void setView(QAbstractItemView* view);
+    QAbstractItemView* view() const;
+    void setDelegate(ItemViewImageDelegate* delegate);
+    ItemViewImageDelegate* delegate() const;
 
 Q_SIGNALS:
 
@@ -77,8 +77,8 @@ protected Q_SLOTS:
 
 protected:
 
-    QAbstractItemView     *m_view;
-    ItemViewImageDelegate *m_delegate;
+    QAbstractItemView*     m_view;
+    ItemViewImageDelegate* m_delegate;
 };
 
 // -------------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ public:
      *  You must reimplement at least createWidget to return your widget.
      *  Per default it will be shown when the cursor enters an index and hidden when left.
      *  Reimplement slotEntered() and mouseMove() for more fine grained control. */
-    AbstractWidgetDelegateOverlay(QObject *parent);
+    AbstractWidgetDelegateOverlay(QObject* parent);
 
     /** If active is true, this will call createWidget(), initialize the widget for use,
      *  and setup connections for the virtual slots.
@@ -105,13 +105,13 @@ protected:
 
     /** Create your widget here. When creating the object, pass parentWidget() as parent widget.
      *  Ownership of the object is passed. It will be deleted in setActive(false). */
-    virtual QWidget *createWidget() = 0;
+    virtual QWidget* createWidget() = 0;
     /** Called when the widget shall be hidden (mouse cursor left index, viewport, uninstalled etc.).
      *  Default implementation hide()s m_widget. */
     virtual void hide();
 
     /// Returns the widget to be used as parent for your widget created in createWidget()
-    QWidget *parentWidget() const;
+    QWidget* parentWidget() const;
 
     /** Return true here if you want to show the overlay for the given index.
      *  The default implementation returns true. */
@@ -135,7 +135,7 @@ protected:
 
     bool eventFilter(QObject* obj, QEvent* event);
 
-    QWidget *m_widget;
+    QWidget* m_widget;
 
     bool m_mouseButtonPressedOnWidget;
 };
@@ -146,22 +146,22 @@ class DIGIKAM_EXPORT HoverButtonDelegateOverlay : public AbstractWidgetDelegateO
 
 public:
 
-    HoverButtonDelegateOverlay(QObject *parent);
+    HoverButtonDelegateOverlay(QObject* parent);
 
     /** Will call createButton(). */
     virtual void setActive(bool active);
 
-    ItemViewHoverButton *button() const;
+    ItemViewHoverButton* button() const;
 
 protected:
 
     /** Create your widget here. Pass view() as parent. */
-    virtual ItemViewHoverButton *createButton() = 0;
+    virtual ItemViewHoverButton* createButton() = 0;
     /** Called when a new index is entered. Reposition your button here,
      *  adjust and store state. */
     virtual void updateButton(const QModelIndex& index) = 0;
 
-    virtual QWidget *createWidget();
+    virtual QWidget* createWidget();
     virtual void visualChange();
 
 

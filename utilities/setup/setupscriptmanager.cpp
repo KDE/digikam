@@ -52,7 +52,7 @@ class SetupScriptManager::SetupScriptManagerPriv
 public:
 
     SetupScriptManagerPriv() :
-    configGroupName("ScriptManager Settings")
+        configGroupName("ScriptManager Settings")
 
     {
         group        = 0;
@@ -70,7 +70,7 @@ public:
 };
 
 SetupScriptManager::SetupScriptManager(QWidget* parent)
-                  : QScrollArea(parent), d(new SetupScriptManagerPriv)
+    : QScrollArea(parent), d(new SetupScriptManagerPriv)
 {
     //first create a GroupBox
     d->group = new QGroupBox(viewport());
@@ -127,7 +127,7 @@ void SetupScriptManager::readSettings()
     d->mainLayout->addStretch();
 }
 
-void SetupScriptManager::addEntry(ScriptPluginType *plugin)
+void SetupScriptManager::addEntry(ScriptPluginType* plugin)
 {
     //create a set of widgets
     QCheckBox* box             = new QCheckBox(plugin->name());

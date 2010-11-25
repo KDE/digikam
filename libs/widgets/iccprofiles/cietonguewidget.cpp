@@ -54,104 +54,104 @@
 namespace Digikam
 {
 
-    /**
-    The following table gives the CIE  color matching functions
-    \f$\bar{x}(\lambda)\f$, \f$\bar{y}(\lambda)\f$, and
-    \f$\bar{z}(\lambda)\f$, for wavelengths \f$\lambda\f$ at 5 nanometer
-    increments from 380 nm through 780 nm. This table is used in conjunction
-    with Planck's law for the energy spectrum of a black body at a given
-    temperature to plot the black body curve on the CIE chart.
+/**
+The following table gives the CIE  color matching functions
+\f$\bar{x}(\lambda)\f$, \f$\bar{y}(\lambda)\f$, and
+\f$\bar{z}(\lambda)\f$, for wavelengths \f$\lambda\f$ at 5 nanometer
+increments from 380 nm through 780 nm. This table is used in conjunction
+with Planck's law for the energy spectrum of a black body at a given
+temperature to plot the black body curve on the CIE chart.
 
-    The following table gives the spectral chromaticity co-ordinates
-    \f$x(\lambda)\f$ and \f$y(\lambda)\f$ for wavelengths in 5 nanometer
-    increments from 380 nm through 780 nm. These coordinates represent the
-    position in the CIE x-y space of pure spectral colors of the given
-    wavelength, and thus define the outline of the CIE "tongue" diagram.
-    */
-    static const double spectral_chromaticity[81][3] =
-    {
-        { 0.1741, 0.0050 },               // 380 nm
-        { 0.1740, 0.0050 },
-        { 0.1738, 0.0049 },
-        { 0.1736, 0.0049 },
-        { 0.1733, 0.0048 },
-        { 0.1730, 0.0048 },
-        { 0.1726, 0.0048 },
-        { 0.1721, 0.0048 },
-        { 0.1714, 0.0051 },
-        { 0.1703, 0.0058 },
-        { 0.1689, 0.0069 },
-        { 0.1669, 0.0086 },
-        { 0.1644, 0.0109 },
-        { 0.1611, 0.0138 },
-        { 0.1566, 0.0177 },
-        { 0.1510, 0.0227 },
-        { 0.1440, 0.0297 },
-        { 0.1355, 0.0399 },
-        { 0.1241, 0.0578 },
-        { 0.1096, 0.0868 },
-        { 0.0913, 0.1327 },
-        { 0.0687, 0.2007 },
-        { 0.0454, 0.2950 },
-        { 0.0235, 0.4127 },
-        { 0.0082, 0.5384 },
-        { 0.0039, 0.6548 },
-        { 0.0139, 0.7502 },
-        { 0.0389, 0.8120 },
-        { 0.0743, 0.8338 },
-        { 0.1142, 0.8262 },
-        { 0.1547, 0.8059 },
-        { 0.1929, 0.7816 },
-        { 0.2296, 0.7543 },
-        { 0.2658, 0.7243 },
-        { 0.3016, 0.6923 },
-        { 0.3373, 0.6589 },
-        { 0.3731, 0.6245 },
-        { 0.4087, 0.5896 },
-        { 0.4441, 0.5547 },
-        { 0.4788, 0.5202 },
-        { 0.5125, 0.4866 },
-        { 0.5448, 0.4544 },
-        { 0.5752, 0.4242 },
-        { 0.6029, 0.3965 },
-        { 0.6270, 0.3725 },
-        { 0.6482, 0.3514 },
-        { 0.6658, 0.3340 },
-        { 0.6801, 0.3197 },
-        { 0.6915, 0.3083 },
-        { 0.7006, 0.2993 },
-        { 0.7079, 0.2920 },
-        { 0.7140, 0.2859 },
-        { 0.7190, 0.2809 },
-        { 0.7230, 0.2770 },
-        { 0.7260, 0.2740 },
-        { 0.7283, 0.2717 },
-        { 0.7300, 0.2700 },
-        { 0.7311, 0.2689 },
-        { 0.7320, 0.2680 },
-        { 0.7327, 0.2673 },
-        { 0.7334, 0.2666 },
-        { 0.7340, 0.2660 },
-        { 0.7344, 0.2656 },
-        { 0.7346, 0.2654 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 }  // 780 nm
-    };
+The following table gives the spectral chromaticity co-ordinates
+\f$x(\lambda)\f$ and \f$y(\lambda)\f$ for wavelengths in 5 nanometer
+increments from 380 nm through 780 nm. These coordinates represent the
+position in the CIE x-y space of pure spectral colors of the given
+wavelength, and thus define the outline of the CIE "tongue" diagram.
+*/
+static const double spectral_chromaticity[81][3] =
+{
+    { 0.1741, 0.0050 },               // 380 nm
+    { 0.1740, 0.0050 },
+    { 0.1738, 0.0049 },
+    { 0.1736, 0.0049 },
+    { 0.1733, 0.0048 },
+    { 0.1730, 0.0048 },
+    { 0.1726, 0.0048 },
+    { 0.1721, 0.0048 },
+    { 0.1714, 0.0051 },
+    { 0.1703, 0.0058 },
+    { 0.1689, 0.0069 },
+    { 0.1669, 0.0086 },
+    { 0.1644, 0.0109 },
+    { 0.1611, 0.0138 },
+    { 0.1566, 0.0177 },
+    { 0.1510, 0.0227 },
+    { 0.1440, 0.0297 },
+    { 0.1355, 0.0399 },
+    { 0.1241, 0.0578 },
+    { 0.1096, 0.0868 },
+    { 0.0913, 0.1327 },
+    { 0.0687, 0.2007 },
+    { 0.0454, 0.2950 },
+    { 0.0235, 0.4127 },
+    { 0.0082, 0.5384 },
+    { 0.0039, 0.6548 },
+    { 0.0139, 0.7502 },
+    { 0.0389, 0.8120 },
+    { 0.0743, 0.8338 },
+    { 0.1142, 0.8262 },
+    { 0.1547, 0.8059 },
+    { 0.1929, 0.7816 },
+    { 0.2296, 0.7543 },
+    { 0.2658, 0.7243 },
+    { 0.3016, 0.6923 },
+    { 0.3373, 0.6589 },
+    { 0.3731, 0.6245 },
+    { 0.4087, 0.5896 },
+    { 0.4441, 0.5547 },
+    { 0.4788, 0.5202 },
+    { 0.5125, 0.4866 },
+    { 0.5448, 0.4544 },
+    { 0.5752, 0.4242 },
+    { 0.6029, 0.3965 },
+    { 0.6270, 0.3725 },
+    { 0.6482, 0.3514 },
+    { 0.6658, 0.3340 },
+    { 0.6801, 0.3197 },
+    { 0.6915, 0.3083 },
+    { 0.7006, 0.2993 },
+    { 0.7079, 0.2920 },
+    { 0.7140, 0.2859 },
+    { 0.7190, 0.2809 },
+    { 0.7230, 0.2770 },
+    { 0.7260, 0.2740 },
+    { 0.7283, 0.2717 },
+    { 0.7300, 0.2700 },
+    { 0.7311, 0.2689 },
+    { 0.7320, 0.2680 },
+    { 0.7327, 0.2673 },
+    { 0.7334, 0.2666 },
+    { 0.7340, 0.2660 },
+    { 0.7344, 0.2656 },
+    { 0.7346, 0.2654 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 },
+    { 0.7347, 0.2653 }  // 780 nm
+};
 
 class CIETongueWidget::CIETongueWidgetPriv
 {
@@ -210,7 +210,7 @@ public:
 };
 
 CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMonitor)
-               : QWidget(parent), d(new CIETongueWidgetPriv)
+    : QWidget(parent), d(new CIETongueWidgetPriv)
 {
     d->progressTimer = new QTimer(this);
     setMinimumSize(w, h);
@@ -385,6 +385,7 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
     if (cmsTakeCharTargetData(hProfile, &CharTarget, &CharTargetSize))
     {
         LCMSHANDLE hSheet = cmsxIT8LoadFromMem(CharTarget, CharTargetSize);
+
         if (hSheet != NULL)
         {
             cmsxPCollLoadFromSheet(&(d->Measurement),  hSheet);
@@ -442,7 +443,8 @@ void CIETongueWidget::outlineTongue()
         int ix = (x - 380) / 5;
 
         cmsCIExyY p = {spectral_chromaticity[ix][0],
-                       spectral_chromaticity[ix][1], 1};
+                       spectral_chromaticity[ix][1], 1
+                      };
 
         int icx, icy;
         mapPoint(icx, icy, &p);
@@ -459,7 +461,7 @@ void CIETongueWidget::outlineTongue()
 
         lx = icx;
         ly = icy;
-     }
+    }
 
     biasedLine(lx, ly, fx, fy);
 }
@@ -575,7 +577,8 @@ void CIETongueWidget::drawLabels()
         int ix = (x - 380) / 5;
 
         cmsCIExyY p = {spectral_chromaticity[ix][0],
-                       spectral_chromaticity[ix][1], 1};
+                       spectral_chromaticity[ix][1], 1
+                      };
 
         int icx, icy;
         mapPoint(icx, icy, &p);
@@ -621,12 +624,12 @@ void CIETongueWidget::drawPatches()
             {
                 if (p->XYZ.Y < 0.03)
                 {
-                   continue;
+                    continue;
                 }
 
                 if (p->XYZProof.Y < 0.03)
                 {
-                   continue;
+                    continue;
                 }
 
                 cmsCIExyY Pt;
@@ -676,7 +679,7 @@ void CIETongueWidget::sweep_sRGB()
     hsRGB = cmsCreate_sRGBProfile();
 
     cmsHTRANSFORM xform = cmsCreateTransform(hsRGB, TYPE_RGB_16, hXYZ, TYPE_XYZ_16,
-                                             INTENT_ABSOLUTE_COLORIMETRIC, cmsFLAGS_NOTPRECALC);
+                          INTENT_ABSOLUTE_COLORIMETRIC, cmsFLAGS_NOTPRECALC);
     WORD RGB[3], XYZ[3];
     cmsCIEXYZ xyz, MediaWhite;
     cmsCIExyY xyY, WhitePt;
@@ -691,7 +694,9 @@ void CIETongueWidget::sweep_sRGB()
         {
             for (b=0; b < 65536; b += 1024)
             {
-                RGB[0] = r; RGB[1] = g; RGB[2] = b;
+                RGB[0] = r;
+                RGB[1] = g;
+                RGB[2] = b;
                 cmsDoTransform(xform, RGB, XYZ, 1);
                 cmsXYZEncoded2Float(&xyz, XYZ);
                 cmsXYZ2xyY(&xyY, &xyz);
@@ -820,8 +825,11 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
         QPixmap anim(d->progressPix.frameAt(d->progressCount));
         d->progressCount++;
+
         if (d->progressCount >= d->progressPix.frameCount())
+        {
             d->progressCount = 0;
+        }
 
         // ... and we render busy text.
 
@@ -854,13 +862,13 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
         if (d->uncalibratedColor)
         {
             p.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                    i18n("Uncalibrated color space"));
+                       i18n("Uncalibrated color space"));
         }
         else
         {
             p.setPen(Qt::red);
             p.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                    i18n("No profile available..."));
+                       i18n("No profile available..."));
         }
 
         return;

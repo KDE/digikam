@@ -80,8 +80,8 @@ public:
 };
 
 LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
-             : ImagePreviewBar(parent, orientation, exifRotate),
-               d(new LightTableBarPriv)
+    : ImagePreviewBar(parent, orientation, exifRotate),
+      d(new LightTableBarPriv)
 {
     connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
             this, SLOT(slotItemSelected(ThumbBarItem*)));
@@ -103,18 +103,21 @@ void LightTableBar::setNavigateByPair(bool b)
 
 void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     ThumbBarView::contentsMouseReleaseEvent(e);
 
     QPoint pos = QCursor::pos();
-    LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(findItemByPos(e->pos()));
+    LightTableBarItem* item = dynamic_cast<LightTableBarItem*>(findItemByPos(e->pos()));
 
     if (e->button() == Qt::RightButton)
     {
         // temporary actions ----------------------------------
 
-        QAction *leftPanelAction, *rightPanelAction, *editAction, *removeAction, *clearAllAction = 0;
+        QAction* leftPanelAction, *rightPanelAction, *editAction, *removeAction, *clearAllAction = 0;
 
         leftPanelAction  = new QAction(SmallIcon("arrow-left"),         i18n("Show on left panel"), this);
         rightPanelAction = new QAction(SmallIcon("arrow-right"),        i18n("Show on right panel"), this);
@@ -145,6 +148,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
             cmhelper.addSeparator();
             // ------------------------------------------------
         }
+
         cmhelper.addAction(clearAllAction, true);
 
         // special action handling --------------------------------
@@ -153,13 +157,29 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
                 this, SLOT(slotAssignRating(int)));
 
         QAction* choice = cmhelper.exec(pos);
+
         if (choice)
         {
-            if (choice == leftPanelAction)       emit signalSetItemOnLeftPanel(item->info());
-            else if (choice == rightPanelAction) emit signalSetItemOnRightPanel(item->info());
-            else if (choice == editAction)       emit signalEditItem(item->info());
-            else if (choice == removeAction)     emit signalRemoveItem(item->info());
-            else if (choice == clearAllAction)   emit signalClearAll();
+            if (choice == leftPanelAction)
+            {
+                emit signalSetItemOnLeftPanel(item->info());
+            }
+            else if (choice == rightPanelAction)
+            {
+                emit signalSetItemOnRightPanel(item->info());
+            }
+            else if (choice == editAction)
+            {
+                emit signalEditItem(item->info());
+            }
+            else if (choice == removeAction)
+            {
+                emit signalRemoveItem(item->info());
+            }
+            else if (choice == clearAllAction)
+            {
+                emit signalClearAll();
+            }
         }
     }
 }
@@ -177,6 +197,7 @@ void LightTableBar::slotAssignRating(int rating)
 void LightTableBar::assignRating(const ImageInfo& info, int rating)
 {
     rating = qMin(5, qMax(0, rating));
+
     if (!info.isNull())
     {
         MetadataHub hub;
@@ -219,9 +240,10 @@ void LightTableBar::slotAssignRatingFiveStar()
 
 void LightTableBar::setOnLeftPanel(const ImageInfo& info)
 {
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    for (ThumbBarItem* item = firstItem(); item; item = item->next())
     {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
+        LightTableBarItem* ltItem = dynamic_cast<LightTableBarItem*>(item);
+
         if (ltItem)
         {
             if (!info.isNull())
@@ -248,9 +270,10 @@ void LightTableBar::setOnLeftPanel(const ImageInfo& info)
 
 void LightTableBar::setOnRightPanel(const ImageInfo& info)
 {
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    for (ThumbBarItem* item = firstItem(); item; item = item->next())
     {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
+        LightTableBarItem* ltItem = dynamic_cast<LightTableBarItem*>(item);
+
         if (ltItem)
         {
             if (!info.isNull())
@@ -279,7 +302,8 @@ void LightTableBar::slotItemSelected(ThumbBarItem* item)
 {
     if (item)
     {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
+        LightTableBarItem* ltItem = dynamic_cast<LightTableBarItem*>(item);
+
         if (ltItem)
         {
             emit signalLightTableBarItemSelected(ltItem->info());
@@ -292,44 +316,58 @@ void LightTableBar::slotItemSelected(ThumbBarItem* item)
 
 void LightTableBar::removeItemByInfo(const ImageInfo& info)
 {
-    if (info.isNull()) return;
+    if (info.isNull())
+    {
+        return;
+    }
 
     ImagePreviewBarItem* ltItem = findItemByInfo(info);
-    ThumbBarItem *item          = dynamic_cast<ThumbBarItem*>(ltItem);
+    ThumbBarItem* item          = dynamic_cast<ThumbBarItem*>(ltItem);
+
     if (item)
+    {
         removeItem(item);
+    }
 }
 
 void LightTableBar::removeItemById(qlonglong id)
 {
     ImagePreviewBarItem* item = findItemById(id);
+
     if (item)
+    {
         removeItem(item);
+    }
 }
 
 ImagePreviewBarItem* LightTableBar::findItemById(qlonglong id) const
 {
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    for (ThumbBarItem* item = firstItem(); item; item = item->next())
     {
-        ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+        ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+
         if (ltItem)
         {
             if (ltItem->info().id() == id)
+            {
                 return ltItem;
+            }
         }
     }
+
     return 0;
 }
 
 void LightTableBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
 {
-    LightTableBarItem *rItem = dynamic_cast<LightTableBarItem*>(item);
+    LightTableBarItem* rItem = dynamic_cast<LightTableBarItem*>(item);
 
     if (rItem->isOnLeftPanel())
     {
         QPixmap lPix = SmallIcon("arrow-left");
         p.drawPixmap(getMargin(), getMargin(), lPix);
     }
+
     if (rItem->isOnRightPanel())
     {
         QPixmap rPix = SmallIcon("arrow-right");
@@ -372,7 +410,10 @@ void LightTableBar::drawEmptyMessage(QPixmap& bgPix)
 
 void LightTableBar::startDrag()
 {
-    if (!currentItem()) return;
+    if (!currentItem())
+    {
+        return;
+    }
 
     KUrl::List urls;
     KUrl::List kioURLs;
@@ -398,7 +439,7 @@ void LightTableBar::startDrag()
     p.drawPixmap(2, 2, icon);
     p.end();
 
-    QDrag *drag = new QDrag(this);
+    QDrag* drag = new QDrag(this);
     drag->setMimeData(new DItemDrag(urls, kioURLs, albumIDs, imageIDs));
     drag->setPixmap(pix);
     drag->exec();
@@ -439,6 +480,7 @@ void LightTableBar::contentsDropEvent(QDropEvent* e)
              it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
+
             if (!findItemByInfo(info))
             {
                 imageInfoList.append(info);
@@ -457,6 +499,7 @@ void LightTableBar::contentsDropEvent(QDropEvent* e)
              it != itemIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
+
             if (!findItemByInfo(info))
             {
                 imageInfoList.append(info);
@@ -469,8 +512,11 @@ void LightTableBar::contentsDropEvent(QDropEvent* e)
     else if (DTagDrag::canDecode(e->mimeData()))
     {
         int tagID;
+
         if (!DTagDrag::decode(e->mimeData(), tagID))
+        {
             return;
+        }
 
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
@@ -479,6 +525,7 @@ void LightTableBar::contentsDropEvent(QDropEvent* e)
              it != itemIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
+
             if (!findItemByInfo(info))
             {
                 imageInfoList.append(info);
@@ -496,7 +543,7 @@ void LightTableBar::contentsDropEvent(QDropEvent* e)
 
 void LightTableBar::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
-    switch(changeset.operation())
+    switch (changeset.operation())
     {
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:
@@ -505,6 +552,7 @@ void LightTableBar::slotCollectionImageChange(const CollectionImageChangeset& ch
             foreach (const qlonglong& id, changeset.ids())
             {
                 ImagePreviewBarItem* item = findItemById(id);
+
                 if (item)
                 {
                     info = item->info();
@@ -539,8 +587,8 @@ public:
 };
 
 LightTableBarItem::LightTableBarItem(LightTableBar* view, const ImageInfo& info)
-                 : ImagePreviewBarItem(view, info.fileUrl()),
-                   d(new LightTableBarItemPriv)
+    : ImagePreviewBarItem(view, info.fileUrl()),
+      d(new LightTableBarItemPriv)
 {
 }
 

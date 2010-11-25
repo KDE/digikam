@@ -453,13 +453,13 @@ public:
      * removes all properties for the given tag.
      */
     void removeTagProperties(int tagId, const QString& property = QString(), const QString& value = QString());
-    
+
     /**
      * Returns a list of tag ids with the specified property.
      * FIXME: Not tested, might not work at all.
      */
     QList<int> getTagsWithProperty(const QString& property);
-    
+
 
     // ----------- Operations on SAlbums -----------
 
@@ -761,7 +761,7 @@ public:
      * passed in the ImageMetadata flag in the third parameters.
      */
     void addImageMetadata(qlonglong imageID, const QVariantList& infos,
-                           DatabaseFields::ImageMetadata fields = DatabaseFields::ImageMetadataAll);
+                          DatabaseFields::ImageMetadata fields = DatabaseFields::ImageMetadataAll);
 
     /**
      * Change the indicated fields of the image information for the specified item.
@@ -795,7 +795,7 @@ public:
      * passed in the ImageInfo flag in the third parameters.
      */
     void addImagePosition(qlonglong imageID, const QVariantList& infos,
-                           DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
+                          DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
 
     /**
      * Change the indicated fields of the image information for the specified item.
@@ -959,7 +959,7 @@ public:
      * If type is given, filters by type, otherwise returns all types.
      */
     QList<QPair<qlonglong, qlonglong> > getRelationCloud(qlonglong imageId,
-                                                         DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+            DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
 
     /**
      * For each of the given ids, find one single related image (direction does not matter).

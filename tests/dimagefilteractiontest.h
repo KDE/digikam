@@ -31,11 +31,14 @@
 
 // Local includes
 
-namespace Digikam { class DImg; }
+namespace Digikam
+{
+class DImg;
+}
 
 class DImageFilterActionTest : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 

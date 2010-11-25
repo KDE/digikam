@@ -34,12 +34,12 @@ namespace DigikamEnhanceImagePlugin
 {
 
 Weights::Weights() :
-     mHeight(0),
-     mWidth(0),
-     mCoefficientNumber(0),
-     mTwoDim(false),
-     mPolynomeOrder(0),
-     mWeightMatrices(0)
+    mHeight(0),
+    mWidth(0),
+    mCoefficientNumber(0),
+    mTwoDim(false),
+    mPolynomeOrder(0),
+    mWeightMatrices(0)
 {
 }
 
@@ -60,12 +60,15 @@ void Weights::operator=(const Weights& w)
     // Allocate memory and copy weights
     // if the original one was calculated
 
-    if (!w.weightMatrices()) return;
+    if (!w.weightMatrices())
+    {
+        return;
+    }
     else
     {
-        double*** origMatrices = w.weightMatrices();
+        double** * origMatrices = w.weightMatrices();
         // Allocate mPositions.count() matrices
-        mWeightMatrices        = new double**[mPositions.count()];
+        mWeightMatrices        = new double** [mPositions.count()];
 
         for (int i=0 ; i < mPositions.count() ; ++i)
         {
@@ -89,10 +92,10 @@ void Weights::operator=(const Weights& w)
 void Weights::calculateWeights()
 {
     mCoefficientNumber = (mTwoDim ? ((size_t)mPolynomeOrder + 1) * ((size_t)mPolynomeOrder + 1)
-                                  : (size_t)mPolynomeOrder + 1);
-    double *matrix;     /* num_coeff * num_coeff */
-    double *vector0;    /* mPositions.count()   * num_coeff */
-    double *vector1;    /* mPositions.count()   * num_coeff */
+                          : (size_t)mPolynomeOrder + 1);
+    double* matrix;     /* num_coeff * num_coeff */
+    double* vector0;    /* mPositions.count()   * num_coeff */
+    double* vector1;    /* mPositions.count()   * num_coeff */
     size_t  ix,iy,i,j;
     int     x, y;
 
@@ -101,9 +104,9 @@ void Weights::calculateWeights()
     if (mTwoDim)
     {
 
-    int iPolynomeOrder = (int) mPolynomeOrder; //lets avoid signed/unsigned comparison warnings
-    int iHeight        = (int) height();
-    int iWidth         = (int) width();
+        int iPolynomeOrder = (int) mPolynomeOrder; //lets avoid signed/unsigned comparison warnings
+        int iHeight        = (int) height();
+        int iWidth         = (int) width();
 
         for (y = -iPolynomeOrder; y < iHeight + iPolynomeOrder; ++y)
         {
@@ -150,16 +153,18 @@ void Weights::calculateWeights()
     for (iy = 0; iy < mCoefficientNumber; ++iy)
     {
         for (ix = 0; ix < mCoefficientNumber; ++ix)
-            matrix [iy*mCoefficientNumber+ix] = 0.0;
+        {
+            matrix [iy* mCoefficientNumber+ix] = 0.0;
+        }
 
         for (j = 0; j < (size_t)mPositions.count(); ++j)
         {
             vector0 [iy * mPositions.count() + j] = polyTerm (iy, mPositions [j].x(),
-                    mPositions [j].y(), mPolynomeOrder);
+                                                    mPositions [j].y(), mPolynomeOrder);
 
             for (ix = 0; ix < mCoefficientNumber; ++ix)
-                matrix [iy * mCoefficientNumber + ix] += (vector0 [iy * mPositions.count() + j]
-                           * polyTerm (ix, mPositions [j].x(), mPositions[j].y(), mPolynomeOrder));
+                matrix [iy* mCoefficientNumber + ix] += (vector0 [iy * mPositions.count() + j]
+                                                        * polyTerm (ix, mPositions [j].x(), mPositions[j].y(), mPolynomeOrder));
         }
     }
 
@@ -178,7 +183,7 @@ void Weights::calculateWeights()
             for (ix = 0; ix < mCoefficientNumber; ++ix)
             {
                 vector1 [iy * mPositions.count() + j] += matrix [iy * mCoefficientNumber + ix]
-                            * vector0 [ix * mPositions.count() + j];
+                        * vector0 [ix * mPositions.count() + j];
             }
         }
     }
@@ -186,7 +191,7 @@ void Weights::calculateWeights()
     // Store weights
 
     // Allocate mPositions.count() matrices.
-    mWeightMatrices = new double**[mPositions.count()];
+    mWeightMatrices = new double** [mPositions.count()];
 
     for (i=0 ; i < (size_t)mPositions.count() ; ++i)
     {
@@ -209,8 +214,8 @@ void Weights::calculateWeights()
                 mWeightMatrices [j][y][x] = 0.0;
 
                 for (iy = 0; iy < mCoefficientNumber; ++iy)
-                   mWeightMatrices [j][y][x] += vector1 [iy * mPositions.count() + j]
-                                             * polyTerm (iy, x, y, mPolynomeOrder);
+                    mWeightMatrices [j][y][x] += vector1 [iy * mPositions.count() + j]
+                                                 * polyTerm (iy, x, y, mPolynomeOrder);
 
                 mWeightMatrices [j][y][x] *= (double) mPositions.count();
             }
@@ -228,13 +233,13 @@ bool Weights::operator==(const Weights& ws) const
             mWidth == ws.width()                 &&
             mPolynomeOrder == ws.polynomeOrder() &&
             mTwoDim == ws.twoDim()
-            );
+           );
 }
 
- //Invert a quadratic matrix.
-void Weights::matrixInv (double *const a, const size_t size)
+//Invert a quadratic matrix.
+void Weights::matrixInv (double* const a, const size_t size)
 {
-    double *const b = new double[size * size];
+    double* const b = new double[size * size];
     size_t ix, iy, j;
 
     // Copy matrix to new location.
@@ -245,7 +250,9 @@ void Weights::matrixInv (double *const a, const size_t size)
 
     for (iy = 0; iy < size; ++iy)
         for (ix = 0; ix < size; ++ix)
-            a [iy * size + ix] = ix == iy ? 1.0 : 0.0;
+        {
+            a [iy* size + ix] = ix == iy ? 1.0 : 0.0;
+        }
 
     // Convert matrix to upper triangle form.
 
@@ -257,8 +264,8 @@ void Weights::matrixInv (double *const a, const size_t size)
 
             for (ix = 0; ix < size; ++ix)
             {
-                b [j * size + ix] -= factor * b [iy * size + ix];
-                a [j * size + ix] -= factor * a [iy * size + ix];
+                b [j* size + ix] -= factor * b [iy * size + ix];
+                a [j* size + ix] -= factor * a [iy * size + ix];
             }
         }
     }
@@ -272,7 +279,9 @@ void Weights::matrixInv (double *const a, const size_t size)
             const double factor =  b [j * size + iy] / b [iy * size + iy];
 
             for (ix = 0; ix < size; ++ix)
-                a [j * size + ix] -= factor * a [iy * size + ix];
+            {
+                a [j* size + ix] -= factor * a [iy * size + ix];
+            }
         }
     }
 
@@ -280,7 +289,9 @@ void Weights::matrixInv (double *const a, const size_t size)
 
     for (iy = 0; iy < size; ++iy)
         for (ix = 0; ix < size; ++ix)
-            a [iy * size + ix] /= b [iy * size + iy];
+        {
+            a [iy* size + ix] /= b [iy * size + iy];
+        }
 
     delete [] b;
 }
@@ -296,10 +307,14 @@ double Weights::polyTerm (const size_t i_coeff, const int x, const int y, const 
     result = 1;
 
     for (i = 0; i < x_power; ++i)
+    {
         result *= x;
+    }
 
     for (i = 0; i < y_power; ++i)
+    {
         result *= y;
+    }
 
     return (double)result;
 }

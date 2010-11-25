@@ -52,12 +52,12 @@ public:
 };
 
 ScriptPluginType::ScriptPluginType()
-                : d(new ScriptPluginTypePriv)
+    : d(new ScriptPluginTypePriv)
 {
 }
 
 ScriptPluginType::ScriptPluginType(const QString& name, const QString& path, bool modified)
-                : d(new ScriptPluginTypePriv)
+    : d(new ScriptPluginTypePriv)
 {
     d->name     = name;
     d->path     = path;

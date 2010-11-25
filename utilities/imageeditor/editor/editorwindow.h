@@ -79,7 +79,7 @@ class DIGIKAM_EXPORT EditorWindow : public KXmlGuiWindow
 
 public:
 
-    EditorWindow(const char *name);
+    EditorWindow(const char* name);
     ~EditorWindow();
 
     virtual bool setup()=0;
@@ -105,43 +105,43 @@ protected:
     bool                     m_setExifOrientationTag;
     bool                     m_editingOriginalImage;
 
-    QLabel                  *m_resLabel;
+    QLabel*                  m_resLabel;
 
     QColor                   m_bgColor;
 
-    SidebarSplitter         *m_splitter;
-    QSplitter               *m_vSplitter;
+    SidebarSplitter*         m_splitter;
+    QSplitter*               m_vSplitter;
 
-    KAction                 *m_openVersionAction;
-    KAction                 *m_saveAction;
-    KAction                 *m_saveAsAction;
-    KAction                 *m_saveNewVersionAction;
-    KAction                 *m_saveCurrentVersionAction;
-    KAction                 *m_exportAction;
-    KAction                 *m_revertAction;
-    KAction                 *m_discardChangesAction;
-    KAction                 *m_fileDeleteAction;
-    KAction                 *m_forwardAction;
-    KAction                 *m_backwardAction;
-    KAction                 *m_fullScreenAction;
+    KAction*                 m_openVersionAction;
+    KAction*                 m_saveAction;
+    KAction*                 m_saveAsAction;
+    KAction*                 m_saveNewVersionAction;
+    KAction*                 m_saveCurrentVersionAction;
+    KAction*                 m_exportAction;
+    KAction*                 m_revertAction;
+    KAction*                 m_discardChangesAction;
+    KAction*                 m_fileDeleteAction;
+    KAction*                 m_forwardAction;
+    KAction*                 m_backwardAction;
+    KAction*                 m_fullScreenAction;
 
-    KAction                 *m_lastAction;
-    KAction                 *m_firstAction;
+    KAction*                 m_lastAction;
+    KAction*                 m_firstAction;
 
-    KSelectAction           *m_themeMenuAction;
+    KSelectAction*           m_themeMenuAction;
 
-    KToggleAction           *m_showBarAction;
+    KToggleAction*           m_showBarAction;
 
-    KToolBarPopupAction     *m_undoAction;
-    KToolBarPopupAction     *m_redoAction;
+    KToolBarPopupAction*     m_undoAction;
+    KToolBarPopupAction*     m_redoAction;
 
-    DLogoAction             *m_animLogo;
-    DPopupMenu              *m_contextMenu;
-    EditorStackView         *m_stackView;
-    Canvas                  *m_canvas;
-    ImagePluginLoader       *m_imagePluginLoader;
-    StatusProgressBar       *m_nameLabel;
-    IOFileSettingsContainer *m_IOFileSettings;
+    DLogoAction*             m_animLogo;
+    DPopupMenu*              m_contextMenu;
+    EditorStackView*         m_stackView;
+    Canvas*                  m_canvas;
+    ImagePluginLoader*       m_imagePluginLoader;
+    StatusProgressBar*       m_nameLabel;
+    IOFileSettingsContainer* m_IOFileSettings;
     QPointer<KProgressDialog> m_savingProgressDialog;
 
     SavingContextContainer   m_savingContext;
@@ -206,8 +206,8 @@ protected:
 
     void toggleGUI2FullScreen();
 
-    virtual ThumbBarDock *thumbBar() const=0;
-    virtual Sidebar *rightSideBar() const=0;
+    virtual ThumbBarDock* thumbBar() const=0;
+    virtual Sidebar* rightSideBar() const=0;
 
     virtual void slideShow(bool startWithCurrent, SlideShowSettings& settings)=0;
 
@@ -219,7 +219,7 @@ protected:
     virtual bool saveNewVersion()=0;
     virtual bool saveCurrentVersion()=0;
 
-    virtual VersionManager *versionManager();
+    virtual VersionManager* versionManager();
 
     /**
      * Hook method that subclasses must implement to return the destination url
@@ -268,7 +268,10 @@ protected Q_SLOTS:
     virtual void slotLoadingFinished(const QString& filename, bool success);
     virtual void slotSavingStarted(const QString& filename);
 
-    virtual void slotSetup(){ setup(); };
+    virtual void slotSetup()
+    {
+        setup();
+    };
     virtual void slotChangeTheme(const QString& theme);
 
     virtual void slotComponentsInfo();
@@ -311,7 +314,7 @@ private Q_SLOTS:
     void slotShowMenuBar();
     void slotCloseTool();
     void slotApplyTool();
-    void slotKioMoveFinished(KJob *job);
+    void slotKioMoveFinished(KJob* job);
     void slotUndoStateChanged(bool, bool, bool);
 
 private:
@@ -341,7 +344,7 @@ private:
      *
      * @param url file to save the image to
      */
-    void setupTempSaveFile(const KUrl & url);
+    void setupTempSaveFile(const KUrl& url);
 
     /**
      * Returns a list of filters that can be passed to a KFileDialog for all
@@ -381,7 +384,7 @@ private:
      */
     bool selectValidSavingFormat(const QString& filter,
                                  const KUrl& targetUrl,
-                                 const QString &autoFilter);
+                                 const QString& autoFilter);
 
     void movingSaveFileFinished(bool successful);
 

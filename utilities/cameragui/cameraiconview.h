@@ -68,7 +68,7 @@ public:
     void removeItem(const QString& folder, const QString& file);
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
 
-    void ensureItemVisible(CameraIconItem *item);
+    void ensureItemVisible(CameraIconItem* item);
     void ensureItemVisible(const GPItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& file);
 
@@ -91,7 +91,7 @@ public:
     QPixmap downloadFailedPixmap() const;
     KPixmapSequence progressPixmap() const;
 
-    QString defaultDownloadName(CameraIconItem *item);
+    QString defaultDownloadName(CameraIconItem* item);
 
     void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
 
@@ -132,10 +132,10 @@ private Q_SLOTS:
 protected:
 
     void startDrag();
-    void contentsDragEnterEvent(QDragEnterEvent *e);
-    void contentsDropEvent(QDropEvent *e);
+    void contentsDragEnterEvent(QDragEnterEvent* e);
+    void contentsDropEvent(QDropEvent* e);
     void updateItemRectsPixmap();
-    bool acceptToolTip(IconItem *item, const QPoint& mousePos);
+    bool acceptToolTip(IconItem* item, const QPoint& mousePos);
 
 private:
 

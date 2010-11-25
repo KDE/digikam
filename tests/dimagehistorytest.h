@@ -36,7 +36,7 @@
 
 class DImageHistoryTest : public AbstractDImageHistoryTest
 {
-Q_OBJECT
+    Q_OBJECT
 
 public Q_SLOTS:
 

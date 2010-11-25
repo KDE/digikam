@@ -44,30 +44,30 @@ class AlbumFilterModel : public QSortFilterProxyModel
 
 public:
 
-    AlbumFilterModel(QObject *parent = 0);
+    AlbumFilterModel(QObject* parent = 0);
 
     /**
      * Sets the source model.
      * Note: If a chained filter model is set, it will not be reset, but
      * the source album model will be made source of the chained filter model.
      */
-    void setSourceAlbumModel(AbstractAlbumModel *source);
+    void setSourceAlbumModel(AbstractAlbumModel* source);
 
     /**
-     * Sets a chained filter model. 
+     * Sets a chained filter model.
      * Note: If a direct source album model is set as current source, it will be set as
      * sourceAlbumModel of the new source filter model.
      */
-    void setSourceFilterModel(AlbumFilterModel *source);
+    void setSourceFilterModel(AlbumFilterModel* source);
 
-    AbstractAlbumModel *sourceAlbumModel() const;
-    AlbumFilterModel   *sourceFilterModel() const;
+    AbstractAlbumModel* sourceAlbumModel() const;
+    AlbumFilterModel*   sourceFilterModel() const;
     QModelIndex mapToSourceAlbumModel(const QModelIndex& index) const;
     QModelIndex mapFromSourceAlbumModel(const QModelIndex& index) const;
 
     /// Convenience methods
-    Album *albumForIndex(const QModelIndex& index) const;
-    QModelIndex indexForAlbum(Album *album) const;
+    Album* albumForIndex(const QModelIndex& index) const;
+    QModelIndex indexForAlbum(Album* album) const;
     QModelIndex rootAlbumIndex() const;
 
     /**
@@ -178,7 +178,7 @@ protected:
      * in the album's title or in a child album's title, or if it is a special album (root)
      * that is never filtered out.
      **/
-    MatchResult matchResult(Album *album) const;
+    MatchResult matchResult(Album* album) const;
 
     /**
      * This method provides the basic match checking algorithm.
@@ -187,7 +187,7 @@ protected:
      *
      * @param album album to tell if it matches the filter criteria or not.
      */
-    virtual bool matches(Album *album) const;
+    virtual bool matches(Album* album) const;
 
     /**
      * Use setSourceAlbumModel.
@@ -202,7 +202,7 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotAlbumRenamed(Album *album);
+    void slotAlbumRenamed(Album* album);
     void slotAlbumsHaveBeenUpdated(int type);
 
 protected:
@@ -219,7 +219,7 @@ private:
      * @return <code>true</code> if the provided settings result in filtering
      *         the model
      */
-    bool settingsFilter(const SearchTextSettings &settings) const;
+    bool settingsFilter(const SearchTextSettings& settings) const;
 
 };
 
@@ -231,11 +231,11 @@ class CheckableAlbumFilterModel : public AlbumFilterModel
 {
     Q_OBJECT
 public:
-    CheckableAlbumFilterModel(QObject *parent = 0);
+    CheckableAlbumFilterModel(QObject* parent = 0);
 
-    void setSourceAlbumModel(AbstractCheckableAlbumModel *source);
-    void setSourceFilterModel(CheckableAlbumFilterModel *source);
-    AbstractCheckableAlbumModel *sourceAlbumModel() const;
+    void setSourceAlbumModel(AbstractCheckableAlbumModel* source);
+    void setSourceFilterModel(CheckableAlbumFilterModel* source);
+    AbstractCheckableAlbumModel* sourceAlbumModel() const;
 
     void setFilterChecked(bool filter);
     void setFilterPartiallyChecked(bool filter);
@@ -244,7 +244,7 @@ public:
 
 protected:
 
-    virtual bool matches(Album *album) const;
+    virtual bool matches(Album* album) const;
 
     bool m_filterChecked;
     bool m_filterPartiallyChecked;
@@ -259,9 +259,9 @@ class SearchFilterModel : public CheckableAlbumFilterModel
 
 public:
 
-    SearchFilterModel(QObject *parent = 0);
-    void setSourceSearchModel(SearchModel *source);
-    SearchModel *sourceSearchModel() const;
+    SearchFilterModel(QObject* parent = 0);
+    void setSourceSearchModel(SearchModel* source);
+    SearchModel* sourceSearchModel() const;
 
     /** Set the DatabaseSearch::Type. */
     void setFilterSearchType(DatabaseSearch::Type);
@@ -279,9 +279,9 @@ public:
 
 protected:
 
-    virtual bool matches(Album *album) const;
+    virtual bool matches(Album* album) const;
     // make protected
-    void setSourceAlbumModel(AbstractAlbumModel *source);
+    void setSourceAlbumModel(AbstractAlbumModel* source);
 
     void setTypeFilter(int type);
 
@@ -298,9 +298,9 @@ class TagPropertiesFilterModel : public CheckableAlbumFilterModel
 
 public:
 
-    TagPropertiesFilterModel(QObject *parent = 0);
-    void setSourceAlbumModel(TagModel *source);
-    TagModel *sourceTagModel() const;
+    TagPropertiesFilterModel(QObject* parent = 0);
+    void setSourceAlbumModel(TagModel* source);
+    TagModel* sourceTagModel() const;
 
     void listOnlyTagsWithProperty(const QString& property);
     void removeListOnlyProperty(const QString& property);
@@ -315,7 +315,7 @@ protected slots:
 
 protected:
 
-    virtual bool matches(Album *album) const;
+    virtual bool matches(Album* album) const;
 
     QStringList        m_propertiesBlackList;
     QStringList        m_propertiesWhiteList;

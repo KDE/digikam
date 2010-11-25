@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 Convert2PNG::Convert2PNG(QObject* parent)
-           : BatchTool("Convert2PNG", ConvertTool, parent)
+    : BatchTool("Convert2PNG", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To PNG"));
     setToolDescription(i18n("A tool to convert images to PNG format."));
@@ -90,7 +90,10 @@ QString Convert2PNG::outputSuffix() const
 
 bool Convert2PNG::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     int PNGCompression = PNGSettings::convertCompressionForLibPng(settings()["Quality"].toInt());
     image().setAttribute("quality", PNGCompression);

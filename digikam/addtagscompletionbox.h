@@ -86,7 +86,7 @@ public:
      * A "parent tag" taken into account when suggesting a
      * parent tag for a new tag, and a default action.
      */
-    TAlbum *parentTag() const;
+    TAlbum* parentTag() const;
 
     /**
      * Allow the box to expand horizontally over the bounds of the parent widget.

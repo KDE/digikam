@@ -55,9 +55,9 @@ namespace Digikam
 */
 class KDatePickerPopup: public KMenu
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
 
     enum ItemFlag
     {
@@ -76,13 +76,13 @@ class KDatePickerPopup: public KMenu
        @param parent The object's parent.
     */
     explicit KDatePickerPopup( Items items = DatePicker, const QDate& date = QDate::currentDate(),
-                               QWidget *parent = 0 );
+                               QWidget* parent = 0 );
 
     /**
        @return A pointer to the private variable mDatePicker, an instance of
        KDatePicker.
     */
-    KDatePicker *datePicker() const;
+    KDatePicker* datePicker() const;
 
     void setDate( const QDate& date );
 
@@ -93,9 +93,12 @@ class KDatePickerPopup: public KMenu
     void setItems( int items = 1 );
 #endif
     /** @return Returns the bitwise result of the active items in the popup. */
-    int items() const { return mItems; }
+    int items() const
+    {
+        return mItems;
+    }
 
- Q_SIGNALS:
+Q_SIGNALS:
 
     /**
       This signal emits the new date (selected with datepicker or other
@@ -125,7 +128,7 @@ private:
 
 private:
 
-    KDatePicker *mDatePicker;
+    KDatePicker* mDatePicker;
 
     Items        mItems;
 };

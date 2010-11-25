@@ -56,12 +56,12 @@ public:
     KTextEdit* edit;
     QLabel*    label;
     //create a new QScript Engine object
-    QScriptEngine *engine;
+    QScriptEngine* engine;
 };
 
 ScriptIface::ScriptIface(QWidget* parent)
-           : KDialog(parent),
-             d(new ScriptIfacePriv)
+    : KDialog(parent),
+      d(new ScriptIfacePriv)
 {
     setCaption(i18n("Script Console"));
     setButtons(Help|User1|Close);

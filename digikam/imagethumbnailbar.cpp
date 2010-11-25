@@ -71,11 +71,11 @@ public:
     }
 
     Qt::ScrollBarPolicy           scrollPolicy;
-    NoDuplicatesImageFilterModel *duplicatesFilter;
+    NoDuplicatesImageFilterModel* duplicatesFilter;
 };
 
-ImageThumbnailBar::ImageThumbnailBar(QWidget *parent)
-                : ImageCategorizedView(parent), d(new ImageThumbnailBarPriv())
+ImageThumbnailBar::ImageThumbnailBar(QWidget* parent)
+    : ImageCategorizedView(parent), d(new ImageThumbnailBarPriv())
 {
     setItemDelegate(new ImageThumbnailDelegate(this));
     setSpacing(3);
@@ -92,10 +92,10 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget *parent)
     d->duplicatesFilter = new NoDuplicatesImageFilterModel(this);
 
     // rating overlay
-    ImageRatingOverlay *ratingOverlay = new ImageRatingOverlay(this);
+    ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
 
-    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
+    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex&, int)),
             this, SLOT(assignRating(const QModelIndex&, int)));
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
@@ -109,7 +109,7 @@ ImageThumbnailBar::~ImageThumbnailBar()
     delete d;
 }
 
-void ImageThumbnailBar::setModels(ImageModel *model, ImageSortFilterModel *filterModel)
+void ImageThumbnailBar::setModels(ImageModel* model, ImageSortFilterModel* filterModel)
 {
     d->duplicatesFilter->setSourceFilterModel(filterModel);
     ImageCategorizedView::setModels(model, d->duplicatesFilter);
@@ -118,9 +118,13 @@ void ImageThumbnailBar::setModels(ImageModel *model, ImageSortFilterModel *filte
 void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 {
     if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea)
+    {
         setFlow(TopToBottom);
+    }
     else
+    {
         setFlow(LeftToRight);
+    }
 }
 
 void ImageThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
@@ -132,6 +136,7 @@ void ImageThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
     }
 
     d->scrollPolicy = policy;
+
     if (flow() == TopToBottom)
     {
         setVerticalScrollBarPolicy(d->scrollPolicy);
@@ -150,7 +155,7 @@ void ImageThumbnailBar::setFlow(QListView::Flow flow)
 
     ImageCategorizedView::setFlow(flow);
 
-    ImageThumbnailDelegate *del = static_cast<ImageThumbnailDelegate*>(delegate());
+    ImageThumbnailDelegate* del = static_cast<ImageThumbnailDelegate*>(delegate());
     del->setFlow(flow);
 
     // Reset the minimum and maximum sizes.
@@ -185,22 +190,27 @@ void ImageThumbnailBar::slotSetupChanged()
 void ImageThumbnailBar::activated(const ImageInfo& info)
 {
     kDebug() << info.filePath();
+
     if (info.isNull())
+    {
         return;
+    }
 
     emit imageActivated(info);
 }
 
-void ImageThumbnailBar::assignRating(const QModelIndex &index, int rating)
+void ImageThumbnailBar::assignRating(const QModelIndex& index, int rating)
 {
     MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), rating);
 }
 
-bool ImageThumbnailBar::event(QEvent *e)
+bool ImageThumbnailBar::event(QEvent* e)
 {
     // reset widget max/min sizes
     if (e->type() == QEvent::StyleChange)
+    {
         setFlow(flow());
+    }
 
     return ImageCategorizedView::event(e);
 }

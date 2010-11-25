@@ -47,7 +47,7 @@ namespace Digikam
 {
 
 AlbumIconGroupItem::AlbumIconGroupItem(AlbumIconView* view, int albumID)
-                  : IconGroupItem(view), m_albumID(albumID), m_view(view)
+    : IconGroupItem(view), m_albumID(albumID), m_view(view)
 {
 }
 
@@ -63,9 +63,11 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
     PAlbum* his  = AlbumManager::instance()->findPAlbum(agroup->m_albumID);
 
     if (!mine || !his)
+    {
         return 0;
+    }
 
-    const AlbumSettings *settings = m_view->settings();
+    const AlbumSettings* settings = m_view->settings();
 
     switch (settings->getImageSortOrder())
     {
@@ -79,18 +81,24 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
         case(AlbumSettings::ByIDate):
         {
             if (mine->date() < his->date())
+            {
                 return -1;
+            }
             else if (mine->date() > his->date())
+            {
                 return 1;
+            }
             else
+            {
                 return 0;
+            }
         }
     }
 
     return 0;
 }
 
-void AlbumIconGroupItem::paintBanner(QPainter *p)
+void AlbumIconGroupItem::paintBanner(QPainter* p)
 {
     AlbumManager* man = AlbumManager::instance();
     PAlbum* album     = man->findPAlbum(m_albumID);
@@ -134,6 +142,7 @@ void AlbumIconGroupItem::paintBanner(QPainter *p)
     fn.setBold(true);
     int fnSize = fn.pointSize();
     bool usePointSize;
+
     if (fnSize > 0)
     {
         fn.setPointSize(fnSize+2);
@@ -151,21 +160,25 @@ void AlbumIconGroupItem::paintBanner(QPainter *p)
 
     QRect tr;
     p->drawText(5, 5, r.width(), r.height(),
-               Qt::AlignLeft | Qt::AlignTop,
-               prettyUrl.left(-1), &tr);
+                Qt::AlignLeft | Qt::AlignTop,
+                prettyUrl.left(-1), &tr);
 
     r.setY(tr.height() + 2);
 
     if (usePointSize)
+    {
         fn.setPointSize(m_view->font().pointSize());
+    }
     else
+    {
         fn.setPixelSize(m_view->font().pixelSize());
+    }
 
     fn.setBold(false);
     p->setFont(fn);
 
     p->drawText(5, r.y(), r.width(), r.height(),
-               Qt::AlignLeft | Qt::AlignVCenter, dateAndComments);
+                Qt::AlignLeft | Qt::AlignVCenter, dateAndComments);
 }
 
 }  // namespace Digikam

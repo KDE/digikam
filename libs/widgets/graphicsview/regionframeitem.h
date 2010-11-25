@@ -72,9 +72,9 @@ public:
      * Ownership of the item is taken, and it is made a child item of this item.
      * You can also add QWidget directly. It will be wrapped in a proxy item.
      */
-    void setHudWidget(QGraphicsWidget *hudWidget);
-    void setHudWidget(QWidget *widget, Qt::WindowFlags wFlags = 0);
-    QGraphicsWidget *hudWidget() const;
+    void setHudWidget(QGraphicsWidget* hudWidget);
+    void setHudWidget(QWidget* widget, Qt::WindowFlags wFlags = 0);
+    QGraphicsWidget* hudWidget() const;
 
     void setHudWidgetVisible(bool visible);
 

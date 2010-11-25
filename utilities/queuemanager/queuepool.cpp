@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 QueuePool::QueuePool(QWidget* parent)
-         : KTabWidget(parent)
+    : KTabWidget(parent)
 {
     setTabBarHidden(false);
 #if KDE_IS_VERSION(4,3,0)
@@ -110,8 +110,12 @@ QueueListView* QueuePool::findQueueById(int index) const
 QMap<int, QString> QueuePool::queuesMap() const
 {
     QMap<int, QString> map;
+
     for (int i = 0; i < count(); ++i)
+    {
         map.insert(i, queueTitle(i));
+    }
+
     return map;
 }
 
@@ -140,10 +144,12 @@ void QueuePool::slotAddQueue()
 QueuePoolItemsList QueuePool::totalPendingItemsList()
 {
     QueuePoolItemsList qpool;
+
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         ImageInfoList list   = queue->pendingItemsList();
+
         for (ImageInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
         {
             ImageInfo info = *it;
@@ -151,39 +157,51 @@ QueuePoolItemsList QueuePool::totalPendingItemsList()
             qpool.append(set);
         }
     }
+
     return qpool;
 }
 
 int QueuePool::totalPendingItems()
 {
     int items = 0;
+
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         items                += queue->pendingItemsCount();
     }
+
     return items;
 }
 
 int QueuePool::totalPendingTasks()
 {
     int tasks = 0;
+
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         tasks                += queue->pendingTasksCount();
     }
+
     return tasks;
 }
 
 void QueuePool::slotRemoveCurrentQueue()
 {
     QueueListView* queue = currentQueue();
-    if (!queue) return;
+
+    if (!queue)
+    {
+        return;
+    }
 
     removeTab(indexOf(queue));
+
     if (count() == 0)
+    {
         slotAddQueue();
+    }
 
     emit signalQueuePoolChanged();
 }
@@ -191,36 +209,57 @@ void QueuePool::slotRemoveCurrentQueue()
 void QueuePool::slotClearList()
 {
     QueueListView* queue = currentQueue();
-    if (queue) queue->slotClearList();
+
+    if (queue)
+    {
+        queue->slotClearList();
+    }
 }
 
 void QueuePool::slotRemoveSelectedItems()
 {
     QueueListView* queue = currentQueue();
-    if (queue) queue->slotRemoveSelectedItems();
+
+    if (queue)
+    {
+        queue->slotRemoveSelectedItems();
+    }
 }
 
 void QueuePool::slotRemoveItemsDone()
 {
     QueueListView* queue = currentQueue();
-    if (queue) queue->slotRemoveItemsDone();
+
+    if (queue)
+    {
+        queue->slotRemoveItemsDone();
+    }
 }
 
 void QueuePool::slotAddItems(const ImageInfoList& list, int queueId)
 {
     QueueListView* queue = findQueueById(queueId);
-    if (queue) queue->slotAddItems(list);
+
+    if (queue)
+    {
+        queue->slotAddItems(list);
+    }
 }
 
 void QueuePool::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
 {
     QueueListView* queue = currentQueue();
-    if (queue) queue->slotAssignedToolsChanged(tools4Item);
+
+    if (queue)
+    {
+        queue->slotAssignedToolsChanged(tools4Item);
+    }
 }
 
 void QueuePool::slotQueueSelected(int index)
 {
     QueueListView* queue = dynamic_cast<QueueListView*>(widget(index));
+
     if (queue)
     {
         emit signalItemSelectionChanged();
@@ -231,8 +270,11 @@ void QueuePool::slotQueueSelected(int index)
 void QueuePool::slotCloseQueueRequest(QWidget* w)
 {
     removeTab(indexOf(w));
+
     if (count() == 0)
+    {
         slotAddQueue();
+    }
 
     emit signalQueuePoolChanged();
 }
@@ -241,14 +283,18 @@ void QueuePool::removeTab(int index)
 {
     QueueListView* queue = dynamic_cast<QueueListView*>(widget(index));
     int count            = queue->pendingItemsCount();
+
     if (count > 0)
     {
         int ret = KMessageBox::questionYesNo(this,
-                  i18np("There is still 1 unprocessed item in \"%2\". Do you want to close this queue?",
-                        "There are still %1 unprocessed items in \"%2\". Do you want to close this queue?",
-                  count, queueTitle(index)));
+                                             i18np("There is still 1 unprocessed item in \"%2\". Do you want to close this queue?",
+                                                     "There are still %1 unprocessed items in \"%2\". Do you want to close this queue?",
+                                                     count, queueTitle(index)));
+
         if (ret == KMessageBox::No)
+        {
             return;
+        }
     }
 
     KTabWidget::removeTab(index);
@@ -269,13 +315,18 @@ void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)
         accept = true;
         return;
     }
+
     accept = false;
 }
 
 void QueuePool::slotSettingsChanged(const QueueSettings& settings)
 {
     QueueListView* queue = currentQueue();
-    if (queue) queue->setSettings(settings);
+
+    if (queue)
+    {
+        queue->setSettings(settings);
+    }
 }
 
 void QueuePool::setEnableToolTips(bool b)
@@ -283,16 +334,22 @@ void QueuePool::setEnableToolTips(bool b)
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
-        if (queue) queue->setEnableToolTips(b);
+
+        if (queue)
+        {
+            queue->setEnableToolTips(b);
+        }
     }
 }
 
 bool QueuePool::customRenamingRulesAreValid()
 {
     QStringList list;
+
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+
         if (queue)
         {
             if (queue->settings().renamingRule == QueueSettings::CUSTOMIZE &&
@@ -310,15 +367,18 @@ bool QueuePool::customRenamingRulesAreValid()
                                     "Please fix them."), list);
         return false;
     }
+
     return true;
 }
 
 bool QueuePool::assignedBatchToolsListsAreValid()
 {
     QStringList list;
+
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+
         if (queue)
         {
             if (queue->assignedTools().m_toolsMap.isEmpty())
@@ -335,6 +395,7 @@ bool QueuePool::assignedBatchToolsListsAreValid()
                                     "Please assign tools."), list);
         return false;
     }
+
     return true;
 }
 
@@ -343,8 +404,11 @@ void QueuePool::slotFileChanged(const QString& filePath)
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+
         if (queue)
+        {
             queue->reloadThumbs(KUrl::fromPath(filePath));
+        }
     }
 }
 

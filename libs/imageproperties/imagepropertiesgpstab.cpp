@@ -109,7 +109,7 @@ public:
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
-                     : QWidget(parent), d(new ImagePropertiesGPSTabPriv)
+    : QWidget(parent), d(new ImagePropertiesGPSTabPriv)
 {
     QGridLayout* const layout = new QGridLayout(this);
 
@@ -156,6 +156,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     QWidget* const box            = new KHBox(this);
     QHBoxLayout* const hBoxLayout = reinterpret_cast<QHBoxLayout*>(box->layout());
+
     if (hBoxLayout)
     {
         hBoxLayout->addStretch();
@@ -241,14 +242,16 @@ void ImagePropertiesGPSTab::slotGPSDetails()
     QString val, url;
 
     if (d->gpsInfoList.isEmpty())
+    {
         return;
+    }
 
-    switch( getWebGPSLocator() )
+    switch ( getWebGPSLocator() )
     {
         case MapQuest:
         {
             url.append("http://www.mapquest.com/maps/map.adp?searchtype=address"
-                        "&formtype=address&latlongtype=decimal");
+                       "&formtype=address&latlongtype=decimal");
             url.append("&latitude=");
             url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
             url.append("&longitude=");
@@ -317,6 +320,7 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
     }
 
     const DMetadata meta(url.toLocalFile());
+
     setMetadata(meta, url);
 }
 
@@ -341,7 +345,9 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
         setGPSInfoList(GPSInfoList() << gpsInfo);
     }
     else
+    {
         setGPSInfo();
+    }
 }
 
 void ImagePropertiesGPSTab::setGPSInfo()
@@ -369,13 +375,18 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     else if (list.count() == 1)
     {
         if (!list.first().hasAltitude)
+        {
             d->altitude->setText("Undefined");
+        }
         else
+        {
             d->altitude->setText(QString("%1 m").arg(QString::number(list.first().altitude)));
+        }
+
         d->latitude->setText(QString::number(list.first().latitude));
         d->longitude->setText(QString::number(list.first().longitude));
         d->date->setText(KGlobal::locale()->formatDateTime(list.first().dateTime,
-                                                           KLocale::ShortDate, true));
+                         KLocale::ShortDate, true));
         setEnabled(true);
     }
     else if (list.count() > 1)
@@ -387,6 +398,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     d->itemModel->clear();
 
     d->gpsInfoList = list;
+
     for (int i=0; i<d->gpsInfoList.count(); ++i)
     {
         ImageGPSItem* const currentImageGPSItem = new ImageGPSItem(d->gpsInfoList.at(i));

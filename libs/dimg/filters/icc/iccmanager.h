@@ -52,7 +52,7 @@ public:
     explicit IccManager(DImg& image, const ICCSettingsContainer& settings = IccSettings::instance()->settings());
     ~IccManager();
 
-    void setObserver(DImgLoaderObserver *observer);
+    void setObserver(DImgLoaderObserver* observer);
 
     DImg image() const;
     ICCSettingsContainer settings() const;
@@ -108,8 +108,8 @@ public:
     /**
      * Returns a display transform, with soft-proofing enabled for the given device profile.
      */
-    IccTransform displaySoftProofingTransform(const IccProfile &deviceProfile, QWidget* displayingWidget = 0);
-    IccTransform displaySoftProofingTransform(const IccProfile &deviceProfile, const IccProfile& displayProfile);
+    IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* displayingWidget = 0);
+    IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, const IccProfile& displayProfile);
 
     /**
      * Returns true if the given image is marked as needing user interaction
@@ -125,9 +125,9 @@ public:
                             IccProfile specifiedProfile = IccProfile());
 
     /** Transforms the given QImage from the given inputProfile to sRGB. */
-    static void transformToSRGB(QImage &qimage, const IccProfile& inputProfile);
+    static void transformToSRGB(QImage& qimage, const IccProfile& inputProfile);
     /** Transforms the given QImage from sRGB to given display profile. */
-    static void transformForDisplay(QImage &qimage, const IccProfile& displayProfile = displayProfile());
+    static void transformForDisplay(QImage& qimage, const IccProfile& displayProfile = displayProfile());
 
 protected:
 

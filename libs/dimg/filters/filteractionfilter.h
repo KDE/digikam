@@ -107,9 +107,15 @@ public:
     /**
      * These methods dont make sense here. Use filterActions.
      */
-    virtual FilterAction filterAction() { return FilterAction(); }
+    virtual FilterAction filterAction()
+    {
+        return FilterAction();
+    }
     virtual void readParameters(const FilterAction&) {}
-    virtual QString filterIdentifier() const { return QString(); }
+    virtual QString filterIdentifier() const
+    {
+        return QString();
+    }
 
 protected:
 

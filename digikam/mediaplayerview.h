@@ -54,7 +54,7 @@ public:
 
 protected:
 
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject* obj, QEvent* event);
 
 private:
 
@@ -66,7 +66,7 @@ private:
 class MediaPlayerViewPriv;
 class MediaPlayerView : public QStackedWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 

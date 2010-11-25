@@ -61,14 +61,14 @@ public:
 
 // --------------------------------------------------------
 
-DynamicLayout::DynamicLayout(QWidget *parent, int margin, int hSpacing, int vSpacing)
-             : QLayout(parent), d(new DynamicLayoutPriv(hSpacing,vSpacing))
+DynamicLayout::DynamicLayout(QWidget* parent, int margin, int hSpacing, int vSpacing)
+    : QLayout(parent), d(new DynamicLayoutPriv(hSpacing,vSpacing))
 {
     setContentsMargins(margin, margin, margin, margin);
 }
 
 DynamicLayout::DynamicLayout(int margin, int hSpacing, int vSpacing)
-             : d(new DynamicLayoutPriv(hSpacing,vSpacing))
+    : d(new DynamicLayoutPriv(hSpacing,vSpacing))
 {
     setContentsMargins(margin, margin, margin, margin);
 }
@@ -76,13 +76,14 @@ DynamicLayout::DynamicLayout(int margin, int hSpacing, int vSpacing)
 DynamicLayout::~DynamicLayout()
 {
     QLayoutItem* item;
+
     while ((item = takeAt(0)))
     {
         delete item;
     }
 }
 
-void DynamicLayout::addItem(QLayoutItem *item)
+void DynamicLayout::addItem(QLayoutItem* item)
 {
     d->minItemWidth = 0;
     d->itemList.append(item);
@@ -91,9 +92,9 @@ void DynamicLayout::addItem(QLayoutItem *item)
     {
         QWidget* wid    = item->widget();
         d->spaceX       = qMax<int>(wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton,
-                                                                Qt::Horizontal), d->spaceX);
+                                    Qt::Horizontal), d->spaceX);
         d->spaceY       = qMax<int>(wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton,
-                                                                Qt::Vertical), d->spaceY);
+                                    Qt::Vertical), d->spaceY);
         d->minItemWidth = qMax<int>(wid->sizeHint().width(), d->minItemWidth);
     }
 
@@ -119,12 +120,12 @@ int DynamicLayout::count() const
     return d->itemList.size();
 }
 
-QLayoutItem *DynamicLayout::itemAt(int index) const
+QLayoutItem* DynamicLayout::itemAt(int index) const
 {
     return d->itemList.value(index);
 }
 
-QLayoutItem *DynamicLayout::takeAt(int index)
+QLayoutItem* DynamicLayout::takeAt(int index)
 {
     QLayoutItem* item = 0;
 
@@ -132,6 +133,7 @@ QLayoutItem *DynamicLayout::takeAt(int index)
     {
         item = d->itemList.takeAt(index);
     }
+
     return item;
 }
 
@@ -151,7 +153,7 @@ int DynamicLayout::heightForWidth(int width) const
     return height;
 }
 
-void DynamicLayout::setGeometry(const QRect &rect)
+void DynamicLayout::setGeometry(const QRect& rect)
 {
     QLayout::setGeometry(rect);
     reLayout(rect, false);
@@ -176,7 +178,7 @@ QSize DynamicLayout::minimumSize() const
     return size;
 }
 
-int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
+int DynamicLayout::reLayout(const QRect& rect, bool testOnly) const
 {
     int left   = 0;
     int top    = 0;
@@ -195,6 +197,7 @@ int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
     buttonWidth         = (buttonWidth == 0) ? 1 : buttonWidth;
 
     int maxButtonsInRow = (effectiveRect.width() - d->spaceX) / buttonWidth;
+
     if (maxButtonsInRow < d->minColumns)
     {
         maxButtonsInRow = d->minColumns;
@@ -202,7 +205,7 @@ int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
 
     maxButtonsInRow     = (maxButtonsInRow == 0) ? d->minColumns : maxButtonsInRow;
     int maxButtonWidth  = d->minItemWidth + (
-            (effectiveRect.width() - (maxButtonsInRow * buttonWidth)) / maxButtonsInRow );
+                              (effectiveRect.width() - (maxButtonsInRow * buttonWidth)) / maxButtonsInRow );
 
     int currentBtnWidth = (maxButtonsInRow >= d->itemList.count()) ? buttonWidth : maxButtonWidth;
 
@@ -211,6 +214,7 @@ int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
     foreach (QLayoutItem* item, d->itemList)
     {
         int nextX = x + currentBtnWidth + d->spaceX;
+
         if ( (nextX - d->spaceX) > effectiveRect.right() && (lineHeight > 0) )
         {
             x          = effectiveRect.x();

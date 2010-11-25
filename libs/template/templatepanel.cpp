@@ -114,7 +114,7 @@ public:
 };
 
 TemplatePanel::TemplatePanel(QWidget* parent)
-             : KTabWidget(parent), d(new TemplatePanelPriv)
+    : KTabWidget(parent), d(new TemplatePanelPriv)
 {
     // -- Rights Template information panel -------------------------------------------------------------
 
@@ -141,10 +141,10 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->authorsPositionEdit->setClickMessage(i18n("Enter the job titles of the authors here."));
     label2->setBuddy(d->authorsPositionEdit);
     d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job titles of the authors. Examples might include "
-                                              "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
-                                              "Photographer. Since this is a qualifier for the Author field, the Author field must also "
-                                              "be filled out.</p>"
-                                              "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
+                                         "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
+                                         "Photographer. Since this is a qualifier for the Author field, the Author field must also "
+                                         "be filled out.</p>"
+                                         "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
 
     // --------------------------------------------------------
 
@@ -266,7 +266,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->locationSublocationEdit->setClickMessage(i18n("Enter the city sublocation of contents here."));
     label10->setBuddy(d->locationSublocationEdit);
     d->locationSublocationEdit->setWhatsThis(i18n("<p>This field should contain the sublocation of the city "
-                                                  "where the photograph was taken.</p>"));
+            "where the photograph was taken.</p>"));
 
     // --------------------------------------------------------
 
@@ -276,7 +276,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->locationProvinceStateEdit->setClickMessage(i18n("Enter the province or state of contents here."));
     label11->setBuddy(d->locationProvinceStateEdit);
     d->locationProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain the province or state "
-                                                    "where the photograph was taken.</p>"));
+            "where the photograph was taken.</p>"));
 
     // --------------------------------------------------------
 
@@ -284,7 +284,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->locationCountryCodeEdit = new CountrySelector(page2);
     label12->setBuddy(d->locationCountryCodeEdit);
     d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country "
-                                                  "where the photograph was taken.</p>"));
+            "where the photograph was taken.</p>"));
 
     // --------------------------------------------------------
 
@@ -330,7 +330,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->contactCountryEdit->setClickMessage(i18n("Enter the country name of the lead author here."));
     label14->setBuddy(d->contactCountryEdit);
     d->contactCountryEdit->setWhatsThis(i18n("<p>This field should contain the country name "
-                                             "where the lead author lives.</p>"));
+                                        "where the lead author lives.</p>"));
 
     // --------------------------------------------------------
 
@@ -340,7 +340,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->contactAddressEdit->setClickMessage(i18n("Enter the address of the lead author here."));
     label15->setBuddy(d->contactAddressEdit);
     d->contactAddressEdit->setWhatsThis(i18n("<p>This field should contain the address "
-                                             "where the lead author lives.</p>"));
+                                        "where the lead author lives.</p>"));
 
     // --------------------------------------------------------
 
@@ -350,7 +350,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->contactPostalCodeEdit->setClickMessage(i18n("Enter the postal code of the lead author here."));
     label16->setBuddy(d->contactPostalCodeEdit);
     d->contactPostalCodeEdit->setWhatsThis(i18n("<p>This field should contain the postal code "
-                                                "where the lead author lives.</p>"));
+                                           "where the lead author lives.</p>"));
 
     // --------------------------------------------------------
 
@@ -360,7 +360,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->contactProvinceStateEdit->setClickMessage(i18n("Enter the province of the lead author here."));
     label17->setBuddy(d->contactProvinceStateEdit);
     d->contactProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain the province "
-                                                   "where the lead author lives.</p>"));
+            "where the lead author lives.</p>"));
 
     // --------------------------------------------------------
 

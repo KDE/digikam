@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 Border::Border(QObject* parent)
-      : BatchTool("Border", DecorateTool, parent)
+    : BatchTool("Border", DecorateTool, parent)
 {
     setToolTitle(i18n("Add Border"));
     setToolDescription(i18n("A tool to add a border around images"));
@@ -137,7 +137,10 @@ void Border::slotSettingsChanged()
 
 bool Border::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     BorderContainer prm;
     prm.preserveAspectRatio   = settings()["preserveAspectRatio"].toBool();

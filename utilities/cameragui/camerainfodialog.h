@@ -40,7 +40,7 @@ class CameraInfoDialog : public KPageDialog
 {
 public:
 
-    CameraInfoDialog(QWidget *parent, const QString& summary, const QString& manual,
+    CameraInfoDialog(QWidget* parent, const QString& summary, const QString& manual,
                      const QString& about);
     ~CameraInfoDialog();
 };

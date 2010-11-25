@@ -40,7 +40,7 @@
 #include "digikam_export.h"
 #include "dimagehistory.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 class ImageInfoList;

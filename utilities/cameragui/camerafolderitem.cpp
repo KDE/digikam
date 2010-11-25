@@ -46,7 +46,7 @@ public:
 };
 
 CameraFolderItem::CameraFolderItem(QTreeWidget* parent, const QString& name, const QPixmap& pixmap)
-                : QTreeWidgetItem(parent), d(new CameraFolderItemPriv)
+    : QTreeWidgetItem(parent), d(new CameraFolderItemPriv)
 {
     d->name = name;
     setIcon(0, pixmap);
@@ -55,7 +55,7 @@ CameraFolderItem::CameraFolderItem(QTreeWidget* parent, const QString& name, con
 
 CameraFolderItem::CameraFolderItem(QTreeWidgetItem* parent, const QString& folderName,
                                    const QString& folderPath, const QPixmap& pixmap)
-                : QTreeWidgetItem(parent), d(new CameraFolderItemPriv)
+    : QTreeWidgetItem(parent), d(new CameraFolderItemPriv)
 {
     d->folderName    = folderName;
     d->folderPath    = folderPath;

@@ -42,17 +42,17 @@ public:
 };
 
 ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QList<QVariant>& data,
-                                                         ImageFiltersHistoryTreeItem* parent)
-                           : d(new ImageFiltersHistoryTreeItemPriv)
+        ImageFiltersHistoryTreeItem* parent)
+    : d(new ImageFiltersHistoryTreeItemPriv)
 {
     d->parentItem = parent;
     d->itemData   = data;
     d->disabled = false;
 }
 
-ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QString& data, 
-                                                         ImageFiltersHistoryTreeItem* parent)
-                           : d(new ImageFiltersHistoryTreeItemPriv)
+ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QString& data,
+        ImageFiltersHistoryTreeItem* parent)
+    : d(new ImageFiltersHistoryTreeItemPriv)
 {
     d->parentItem = parent;
     d->itemData.append(data);
@@ -98,7 +98,9 @@ ImageFiltersHistoryTreeItem* ImageFiltersHistoryTreeItem::parent() const
 int ImageFiltersHistoryTreeItem::row() const
 {
     if (d->parentItem)
+    {
         return d->parentItem->d->childItems.indexOf(const_cast<ImageFiltersHistoryTreeItem*>(this));
+    }
 
     return 0;
 }

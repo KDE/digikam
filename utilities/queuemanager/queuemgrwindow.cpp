@@ -103,7 +103,9 @@ QueueMgrWindow* QueueMgrWindow::m_instance = 0;
 QueueMgrWindow* QueueMgrWindow::queueManagerWindow()
 {
     if (!m_instance)
+    {
         new QueueMgrWindow();
+    }
 
     return m_instance;
 }
@@ -114,13 +116,14 @@ bool QueueMgrWindow::queueManagerWindowCreated()
 }
 
 QueueMgrWindow::QueueMgrWindow()
-              : KXmlGuiWindow(0), d(new QueueMgrWindowPriv)
+    : KXmlGuiWindow(0), d(new QueueMgrWindowPriv)
 {
     setXMLFile("queuemgrwindowui.rc");
 
     // --------------------------------------------------------
 
     UiFileValidator validator(localXMLFile());
+
     if (!validator.isValid())
     {
         validator.fixConfigFile();
@@ -176,7 +179,9 @@ BatchToolsManager* QueueMgrWindow::batchToolsManager() const
 QMap<int, QString> QueueMgrWindow::queuesMap() const
 {
     if (d->queuePool)
+    {
         return d->queuePool->queuesMap();
+    }
 
     return QMap<int, QString>();
 }
@@ -188,7 +193,10 @@ bool QueueMgrWindow::isBusy() const
 
 void QueueMgrWindow::closeEvent(QCloseEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     writeSettings();
     e->accept();
@@ -500,7 +508,10 @@ void QueueMgrWindow::writeSettings()
 void QueueMgrWindow::applySettings()
 {
     // Do not apply general settings from config panel if BQM is busy.
-    if (d->busy) return;
+    if (d->busy)
+    {
+        return;
+    }
 
     AlbumSettings* settings   = AlbumSettings::instance();
     KSharedConfig::Ptr config = KGlobal::config();
@@ -681,7 +692,9 @@ void QueueMgrWindow::slotToggleFullScreen()
 void QueueMgrWindow::slotEscapePressed()
 {
     if (d->fullScreen)
+    {
         d->fullScreenAction->activate(QAction::Trigger);
+    }
 }
 
 void QueueMgrWindow::showToolBars()
@@ -760,8 +773,11 @@ void QueueMgrWindow::slotThemeChanged()
 {
     QStringList themes(ThemeEngine::instance()->themeNames());
     int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
+
     if (index == -1)
+    {
         index = themes.indexOf(i18n("Default"));
+    }
 
     d->themeMenuAction->setCurrentItem(index);
 }
@@ -789,9 +805,9 @@ bool QueueMgrWindow::queryClose()
 {
     if (isBusy())
     {
-        int result = KMessageBox::warningYesNo(this, 
-                        i18n("Batch Queue Manager is running. Do you want to cancel current job?"),
-                        i18n("Processing under progress"));
+        int result = KMessageBox::warningYesNo(this,
+                                               i18n("Batch Queue Manager is running. Do you want to cancel current job?"),
+                                               i18n("Processing under progress"));
 
         if (result == KMessageBox::Yes)
         {
@@ -819,7 +835,11 @@ int QueueMgrWindow::currentQueueId()
 void QueueMgrWindow::loadImageInfos(const ImageInfoList& list, int queueId)
 {
     QueueListView* queue = d->queuePool->findQueueById(queueId);
-    if (queue) queue->slotAddItems(list);
+
+    if (queue)
+    {
+        queue->slotAddItems(list);
+    }
 }
 
 void QueueMgrWindow::slotQueueContentsChanged()
@@ -891,10 +911,14 @@ void QueueMgrWindow::slotStop()
     d->progressTimer->stop();
 
     if (d->currentProcessItem)
+    {
         d->currentProcessItem->setCanceled();
+    }
 
     if (d->currentTaskItem)
+    {
         d->currentTaskItem->setCanceled();
+    }
 
     d->itemsList.clear();
     d->thread->cancel();
@@ -924,6 +948,7 @@ void QueueMgrWindow::processOne()
 
     ItemInfoSet set = d->itemsList.first();
     d->queuePool->setCurrentIndex(set.queueId);
+
     if (!checkTargetAlbum(set.queueId))
     {
         processingAborted();
@@ -934,6 +959,7 @@ void QueueMgrWindow::processOne()
     AssignedBatchTools tools4Item = d->queuePool->currentQueue()->assignedTools();
     tools4Item.m_itemUrl          = set.info.fileUrl();
     QueueListViewItem* item       = d->queuePool->currentQueue()->findItemByUrl(tools4Item.m_itemUrl);
+
     if (item)
     {
         d->itemsList.removeFirst();
@@ -942,8 +968,11 @@ void QueueMgrWindow::processOne()
         {
             d->thread->setWorkingUrl(settings.targetUrl);
             d->thread->processFile(tools4Item);
+
             if (!d->thread->isRunning())
+            {
                 d->thread->start();
+            }
         }
         else
         {
@@ -954,7 +983,7 @@ void QueueMgrWindow::processOne()
 
 void QueueMgrWindow::slotAction(const ActionData& ad)
 {
-    switch(ad.status)
+    switch (ad.status)
     {
         case ActionData::BatchStarted:
         {
@@ -1018,13 +1047,21 @@ void QueueMgrWindow::slotProgressTimerDone()
 {
     QPixmap ico(d->progressPix.frameAt(d->progressCount));
     d->progressCount++;
+
     if (d->progressCount >= d->progressPix.frameCount())
+    {
         d->progressCount = 0;
+    }
 
     if (d->currentProcessItem)
+    {
         d->currentProcessItem->setProgressIcon(ico);
+    }
+
     if (d->currentTaskItem)
+    {
         d->currentTaskItem->setProgressIcon(ico);
+    }
 
     d->progressTimer->start(300);
 }
@@ -1032,6 +1069,7 @@ void QueueMgrWindow::slotProgressTimerDone()
 void QueueMgrWindow::processing(const KUrl& url)
 {
     d->currentProcessItem = d->queuePool->currentQueue()->findItemByUrl(url);
+
     if (d->currentProcessItem)
     {
         d->currentProcessItem->reset();
@@ -1055,10 +1093,11 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
     if (settings.conflictRule != QueueSettings::OVERWRITE)
     {
         struct stat statBuf;
+
         if (::stat(QFile::encodeName(dest.toLocalFile()), &statBuf) == 0)
         {
             KIO::RenameDialog dlg(this, i18n("Save Queued Image from '%1' as",
-                                  url.fileName()),
+                                             url.fileName()),
                                   tmp, dest,
                                   KIO::RenameDialog_Mode(KIO::M_SINGLE | KIO::M_OVERWRITE | KIO::M_SKIP));
 
@@ -1074,11 +1113,13 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 case KIO::R_SKIP:
                 {
                     dest = KUrl();
+
                     if (d->currentProcessItem)
                     {
                         d->currentProcessItem->setCanceled();
                         addHistoryMessage(i18n("Item skipped..."), DHistoryView::WarningEntry);
                     }
+
                     break;
                 }
                 case KIO::R_RENAME:
@@ -1142,7 +1183,9 @@ void QueueMgrWindow::processingFailed(const KUrl&, const QString& errMsg)
     }
 
     if (d->currentTaskItem)
+    {
         d->currentTaskItem->setCanceled();
+    }
 
     d->currentProcessItem = 0;
 }
@@ -1156,7 +1199,9 @@ void QueueMgrWindow::processingCanceled(const KUrl&)
     }
 
     if (d->currentTaskItem)
+    {
         d->currentTaskItem->setCanceled();
+    }
 
     d->currentProcessItem = 0;
 }
@@ -1233,8 +1278,11 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 bool QueueMgrWindow::checkTargetAlbum(int queueId)
 {
     QueueListView* queue = d->queuePool->findQueueById(queueId);
+
     if (!queue)
+    {
         return false;
+    }
 
     QString queueName              = d->queuePool->queueTitle(queueId);
     KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
@@ -1243,9 +1291,9 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
     if (processedItemsAlbumUrl.isEmpty())
     {
         KMessageBox::error(this,
-                        i18n("Album to host processed items from queue \"%1\" is not set. "
-                             "Please select one from Queue Settings panel.", queueName),
-                        i18n("Processed items album settings"));
+                           i18n("Album to host processed items from queue \"%1\" is not set. "
+                                "Please select one from Queue Settings panel.", queueName),
+                           i18n("Processed items album settings"));
         return false;
     }
 
@@ -1254,10 +1302,10 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
     if ( !dir.exists() || !dir.isWritable() )
     {
         KMessageBox::error(this,
-                        i18n("Album to host processed items from queue \"%1\" "
-                             "is not available or not writable. "
-                             "Please set another one from Queue Settings panel.", queueName),
-                        i18n("Processed items album settings"));
+                           i18n("Album to host processed items from queue \"%1\" "
+                                "is not available or not writable. "
+                                "Please set another one from Queue Settings panel.", queueName),
+                           i18n("Processed items album settings"));
         return false;
     }
 
@@ -1288,12 +1336,17 @@ void QueueMgrWindow::addHistoryMessage(const QString& msg, DHistoryView::EntryTy
 
 void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
 {
-    if (d->busy) return;
+    if (d->busy)
+    {
+        return;
+    }
 
     QueueListView* view = d->queuePool->findQueueById(queueId);
+
     if (view)
     {
         QueueListViewItem* item = view->findItemById(itemId);
+
         if (item)
         {
             d->queuePool->setCurrentIndex(queueId);

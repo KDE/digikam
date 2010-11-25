@@ -55,7 +55,7 @@ public:
 
     ~TagProperties();
     TagProperties(const TagProperties& other);
-    TagProperties &operator=(const TagProperties& other);
+    TagProperties& operator=(const TagProperties& other);
 
     bool isNull() const;
 

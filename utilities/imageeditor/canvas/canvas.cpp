@@ -162,8 +162,8 @@ public:
     QString                  errorMessage;
 };
 
-Canvas::Canvas(QWidget *parent)
-      : Q3ScrollView(parent), d(new CanvasPrivate)
+Canvas::Canvas(QWidget* parent)
+    : Q3ScrollView(parent), d(new CanvasPrivate)
 {
     d->im     = new DImgInterface();
     d->parent = parent;
@@ -230,7 +230,9 @@ Canvas::~Canvas()
     delete d->im;
 
     if (d->rubber)
+    {
         delete d->rubber;
+    }
 
     delete d;
 }
@@ -246,15 +248,18 @@ void Canvas::reset()
     if (d->rubber->isActive())
     {
         d->rubber->setActive(false);
+
         if (d->im->imageValid())
+        {
             emit signalSelected(false);
+        }
     }
 
     d->errorMessage.clear();
     d->tileCache.clear();
 }
 
-void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettings)
+void Canvas::load(const QString& filename, IOFileSettingsContainer* IOFileSettings)
 {
     reset();
 
@@ -267,7 +272,9 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
     d->im->zoom(d->zoom);
 
     if (d->autoZoom)
+    {
         updateAutoZoom();
+    }
 
     // Note: in showFoto, we using a null filename to clear canvas.
     if (!success && !filePath.isEmpty())
@@ -276,7 +283,9 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
         d->errorMessage = i18n("Failed to load image\n\"%1\"", info.fileName());
     }
     else
+    {
         d->errorMessage.clear();
+    }
 
     updateContentsSize(true);
 
@@ -290,8 +299,11 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
 void Canvas::applyTransform(const IccTransform& t)
 {
     IccTransform transform(t);
+
     if (transform.willHaveEffect())
+    {
         d->im->applyTransform(transform);
+    }
     else
     {
         d->im->updateColorManagement();
@@ -302,7 +314,7 @@ void Canvas::applyTransform(const IccTransform& t)
 
 void Canvas::preload(const QString& /*filename*/)
 {
-//    d->im->preload(filename);
+    //    d->im->preload(filename);
 }
 
 /*
@@ -321,7 +333,7 @@ void Canvas::saveAs(const QString& filename,IOFileSettingsContainer *IOFileSetti
 }
 */
 
-void Canvas::saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
+void Canvas::saveAs(const QString& filename, IOFileSettingsContainer* IOFileSettings,
                     bool setExifOrientationTag, const QString& mimeType)
 {
     d->im->saveAs(filename, IOFileSettings, setExifOrientationTag, mimeType);
@@ -380,9 +392,13 @@ void Canvas::updateUndoState()
 
 DImg Canvas::currentImage()
 {
-    DImg *image = d->im->getImg();
+    DImg* image = d->im->getImg();
+
     if (image)
+    {
         return DImg(*image);
+    }
+
     return DImg();
 }
 
@@ -428,7 +444,7 @@ QRect Canvas::visibleArea()
     return ( QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()) );
 }
 
-DImgInterface *Canvas::interface() const
+DImgInterface* Canvas::interface() const
 {
     return d->im;
 }
@@ -440,7 +456,10 @@ void Canvas::makeDefaultEditingCanvas()
 
 double Canvas::calcAutoZoomFactor()
 {
-    if (!d->im->imageValid()) return d->zoom;
+    if (!d->im->imageValid())
+    {
+        return d->zoom;
+    }
 
     double srcWidth  = d->im->origWidth();
     double srcHeight = d->im->origHeight();
@@ -475,8 +494,11 @@ void Canvas::updateContentsSize(bool deleteRubber)
         d->pressedMoved = false;
         viewport()->unsetCursor();
         viewport()->setMouseTracking(false);
+
         if (d->im->imageValid())
+        {
             emit signalSelected(false);
+        }
     }
 
     int wZ = d->im->width();
@@ -522,12 +544,16 @@ void Canvas::updateContentsSize(bool deleteRubber)
 void Canvas::resizeEvent(QResizeEvent* e)
 {
     if (!e)
+    {
         return;
+    }
 
     Q3ScrollView::resizeEvent(e);
 
     if (d->autoZoom)
+    {
         updateAutoZoom();
+    }
 
     updateContentsSize(false);
 
@@ -539,7 +565,7 @@ void Canvas::resizeEvent(QResizeEvent* e)
     slotZoomChanged(d->zoom);
 }
 
-void Canvas::viewportPaintEvent(QPaintEvent *e)
+void Canvas::viewportPaintEvent(QPaintEvent* e)
 {
     QRect er(e->rect());
     er = QRect(qMax(er.x() - 1, 0),
@@ -582,7 +608,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
             for (int i = x1 ; i < x2 ; i += d->tileSize)
             {
                 QString key  = QString("%1,%2").arg(i).arg(j);
-                QPixmap *pix = d->tileCache.object(key);
+                QPixmap* pix = d->tileCache.object(key);
 
                 if (!pix)
                 {
@@ -648,6 +674,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                             p.drawRect(QRect(rr.x()+rr.width()-halfSA, rr.y()+rr.height()-halfSA, d->snapArea, d->snapArea));
                             p.drawRect(QRect(rr.x()+rr.width()-halfSA, rr.y()-halfSA,             d->snapArea, d->snapArea));
                         }
+
                         p.end();
                     }
                     else
@@ -686,10 +713,12 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
     painter.end();
 }
 
-void Canvas::contentsMousePressEvent(QMouseEvent *e)
+void Canvas::contentsMousePressEvent(QMouseEvent* e)
 {
     if (!e || e->button() == Qt::RightButton)
+    {
         return;
+    }
 
     d->midButtonPressed = false;
 
@@ -702,7 +731,9 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
             d->dragActive)
         {
             if (!d->rubber->isActive())
+            {
                 return;
+            }
 
             // Set diagonally opposite corner as anchor
 
@@ -754,6 +785,7 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
             d->midButtonX       = e->x();
             d->midButtonY       = e->y();
         }
+
         return;
     }
 
@@ -771,10 +803,12 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
     viewport()->setMouseTracking(false);
 }
 
-void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
+void Canvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
     if (!e)
+    {
         return;
+    }
 
     if (e->buttons() & Qt::MidButton)
     {
@@ -787,7 +821,9 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     else if (!viewport()->hasMouseTracking())
     {
         if (!d->rubber->isActive())
+        {
             return;
+        }
 
         if (e->buttons() != Qt::LeftButton &&
             !(d->ltActive || d->rtActive ||
@@ -795,7 +831,9 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
               d->lsActive || d->rsActive ||
               d->tsActive || d->bsActive ||
               d->dragActive))
+        {
             return;
+        }
 
         // Move content if necessary.
         blockSignals(true);
@@ -808,10 +846,13 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         if (!(d->lsActive || d->rsActive ||
               d->tsActive || d->bsActive ||
               d->dragActive))
+        {
             d->rubber->setSecondPointOnViewport(e->pos());
+        }
         else
         {
             QRect r(d->rubber->rubberBandAreaOnContents());
+
             if (d->lsActive)
             {
                 d->rubber->setSecondPointOnViewport(QPoint(e->x(), r.bottom()));
@@ -833,14 +874,25 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
                 QPoint tr = e->pos()-d->dragStart;
                 QRect nr = d->dragStartRect;
                 nr.translate(tr);
+
                 if (nr.left() <= d->pixmapRect.left())
+                {
                     nr.moveLeft(d->pixmapRect.left());
+                }
                 else if (nr.right() >= d->pixmapRect.right())
+                {
                     nr.moveRight(d->pixmapRect.right());
+                }
+
                 if (nr.top() <= d->pixmapRect.top())
+                {
                     nr.moveTop(d->pixmapRect.top());
+                }
                 else if (nr.bottom() >= d->pixmapRect.bottom())
+                {
                     nr.moveBottom(d->pixmapRect.bottom());
+                }
+
                 d->rubber->setRectOnViewport(nr);
                 d->dragStart = e->pos();
                 d->dragStartRect = nr;
@@ -856,30 +908,48 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     else
     {
         if (!d->rubber->isActive())
+        {
             return;
+        }
 
         const int halfSA = d->snapArea / 2;
 
         QRect r(d->rubber->rubberBandAreaOnContents());
 
         QRect lt(r.x()-halfSA,           r.y()-halfSA,            d->snapArea,            d->snapArea);
+
         QRect rt(r.x()+r.width()-halfSA, r.y()-halfSA,            d->snapArea,            d->snapArea);
+
         QRect lb(r.x()-halfSA,           r.y()+r.height()-halfSA, d->snapArea,            d->snapArea);
+
         QRect rb(r.x()+r.width()-halfSA, r.y()+r.height()-halfSA, d->snapArea,            d->snapArea);
+
         QRect ls(r.x()-halfSA,           r.y()+halfSA,            d->snapArea,            r.height()-d->snapArea);
+
         QRect rs(r.x()+r.width()-halfSA, r.y()+halfSA,            d->snapArea,            r.height()-d->snapArea);
+
         QRect ts(r.x()+halfSA,           r.y()-halfSA,            r.width()-d->snapArea,  d->snapArea);
+
         QRect bs(r.x()+halfSA,           r.y()+r.height()-halfSA, r.width()-d->snapArea,  d->snapArea);
+
         QRect dg(r.x()+halfSA,           r.y()+halfSA,            r.width()-d->snapArea,  r.height()-d->snapArea);
 
         d->ltActive   = false;
+
         d->rtActive   = false;
+
         d->lbActive   = false;
+
         d->rbActive   = false;
+
         d->lsActive   = false;
+
         d->rsActive   = false;
+
         d->bsActive   = false;
+
         d->tsActive   = false;
+
         d->dragActive = false;
 
         if (lt.contains(e->x(), e->y()))
@@ -934,10 +1004,12 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
+void Canvas::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     if (!e)
+    {
         return;
+    }
 
     d->midButtonPressed = false;
 
@@ -951,8 +1023,11 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
     {
         d->tileCache.clear();
         viewport()->setMouseTracking(true);
+
         if (d->im->imageValid())
+        {
             emit signalSelected(true);
+        }
     }
     else
     {
@@ -968,8 +1043,11 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         d->rubber->setActive(false);
         viewport()->setMouseTracking(false);
         viewport()->unsetCursor();
+
         if (d->im->imageValid())
+        {
             emit signalSelected(false);
+        }
     }
 
     if (e->button() != Qt::LeftButton)
@@ -983,24 +1061,34 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void Canvas::contentsWheelEvent(QWheelEvent *e)
+void Canvas::contentsWheelEvent(QWheelEvent* e)
 {
     e->accept();
 
     if (e->modifiers() & Qt::ShiftModifier)
     {
         if (e->delta() < 0)
+        {
             emit signalShowNextImage();
+        }
         else if (e->delta() > 0)
+        {
             emit signalShowPrevImage();
+        }
+
         return;
     }
     else if (e->modifiers() & Qt::ControlModifier)
     {
         if (e->delta() < 0)
+        {
             slotDecreaseZoom();
+        }
         else if (e->delta() > 0)
+        {
             slotIncreaseZoom();
+        }
+
         return;
     }
 
@@ -1044,13 +1132,18 @@ double Canvas::snapZoom(double zoom)
     snapValues.append(fit);
 
     if (d->zoom < zoom)
+    {
         qStableSort(snapValues);
+    }
     else
+    {
         qStableSort(snapValues.begin(), snapValues.end(), qGreater<double>());
+    }
 
-    for(QList<double>::const_iterator it = snapValues.constBegin(); it != snapValues.constEnd(); ++it)
+    for (QList<double>::const_iterator it = snapValues.constBegin(); it != snapValues.constEnd(); ++it)
     {
         double z = *it;
+
         if ((d->zoom < z) && (zoom > z))
         {
             zoom = z;
@@ -1064,7 +1157,9 @@ double Canvas::snapZoom(double zoom)
 void Canvas::slotIncreaseZoom()
 {
     if (maxZoom())
+    {
         return;
+    }
 
     double zoom = d->zoom * d->zoomMultiplier;
     zoom        = snapZoom(zoom);
@@ -1074,7 +1169,9 @@ void Canvas::slotIncreaseZoom()
 void Canvas::slotDecreaseZoom()
 {
     if (minZoom())
+    {
         return;
+    }
 
     double zoom = d->zoom / d->zoomMultiplier;
     zoom        = snapZoom(zoom);
@@ -1107,11 +1204,13 @@ void Canvas::setZoomFactorSnapped(double zoom)
         {
             zoom = 1.0;
         }
+
         if (fabs(zoom-0.5) < 0.05)
         {
             zoom = 0.5;
         }
     }
+
     setZoomFactor(zoom);
 }
 
@@ -1243,7 +1342,9 @@ void Canvas::slotCrop()
     d->im->getSelectedArea(x, y, w, h);
 
     if (!w && !h )  // No current selection.
+    {
         return;
+    }
 
     d->im->crop(x, y, w, h);
 }
@@ -1256,13 +1357,15 @@ void Canvas::resizeImage(int w, int h)
 void Canvas::setBackgroundColor(const QColor& color)
 {
     if (d->bgColor == color)
+    {
         return;
+    }
 
     d->bgColor = color;
     viewport()->update();
 }
 
-void Canvas::setICCSettings(ICCSettingsContainer *cmSettings)
+void Canvas::setICCSettings(ICCSettingsContainer* cmSettings)
 {
     d->im->setICCSettings(cmSettings);
     d->tileCache.clear();
@@ -1276,7 +1379,7 @@ void Canvas::setSoftProofingEnabled(bool enable)
     viewport()->update();
 }
 
-void Canvas::setExposureSettings(ExposureSettingsContainer *expoSettings)
+void Canvas::setExposureSettings(ExposureSettingsContainer* expoSettings)
 {
     d->im->setExposureSettings(expoSettings);
     d->tileCache.clear();
@@ -1298,7 +1401,7 @@ void Canvas::slotUndo(int steps)
 {
     emit signalUndoSteps(steps);
 
-    while(steps > 0)
+    while (steps > 0)
     {
         d->im->undo();
         --steps;
@@ -1309,7 +1412,7 @@ void Canvas::slotRedo(int steps)
 {
     emit signalRedoSteps(steps);
 
-    while(steps > 0)
+    while (steps > 0)
     {
         d->im->redo();
         --steps;
@@ -1322,7 +1425,9 @@ void Canvas::slotCopy()
     d->im->getSelectedArea(x, y, w, h);
 
     if (!w && !h )  // No current selection.
+    {
         return;
+    }
 
     QApplication::setOverrideCursor (Qt::WaitCursor);
     uchar* data  = d->im->getImageSelection();
@@ -1330,7 +1435,7 @@ void Canvas::slotCopy()
     delete [] data;
 
     QImage selImg       = selDImg.copyQImage();
-    QMimeData *mimeData = new QMimeData();
+    QMimeData* mimeData = new QMimeData();
     mimeData->setImageData(selImg);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
     QApplication::restoreOverrideCursor ();
@@ -1374,9 +1479,14 @@ QRect Canvas::calcSelectedArea()
         // Avoid empty selection by rubberband - at least mark one pixel
         // At high zoom factors, the rubberband may operate at subpixel level!
         if (w == 0)
+        {
             w = 1;
+        }
+
         if (h == 0)
+        {
             h = 1;
+        }
     }
 
     return QRect(x, y, w, h);
@@ -1385,7 +1495,10 @@ QRect Canvas::calcSelectedArea()
 void Canvas::slotModified()
 {
     if (d->autoZoom)
+    {
         updateAutoZoom();
+    }
+
     d->im->zoom(d->zoom);
 
     updateContentsSize(true);
@@ -1408,7 +1521,7 @@ void Canvas::slotCornerButtonPressed()
     }
 
     d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
+    PanIconWidget* pan = new PanIconWidget(d->panIconPopup);
 
     connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
             this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
@@ -1457,9 +1570,13 @@ void Canvas::slotZoomChanged(double /*zoom*/)
     updateScrollBars();
 
     if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
+    {
         d->cornerButton->show();
+    }
     else
+    {
         d->cornerButton->hide();
+    }
 }
 
 void Canvas::slotSelectAll()
@@ -1471,7 +1588,9 @@ void Canvas::slotSelectAll()
     viewport()->update();
 
     if (d->im->imageValid())
+    {
         emit signalSelected(true);
+    }
 }
 
 void Canvas::slotSelectNone()
@@ -1482,11 +1601,17 @@ void Canvas::slotSelectNone()
 
 void Canvas::keyPressEvent(QKeyEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     int mult = 1;
+
     if ( (e->modifiers() & Qt::ControlModifier))
+    {
         mult = 10;
+    }
 
     switch ( e->key() )
     {

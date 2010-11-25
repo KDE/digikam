@@ -53,7 +53,7 @@ public:
         gamma = 1.0;
     };
 
-    ~CBContainer(){};
+    ~CBContainer() {};
 
 public:
 
@@ -75,12 +75,27 @@ public:
     explicit CBFilter(DImg* orgImage, QObject* parent=0, const CBContainer& settings=CBContainer());
     virtual ~CBFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:ColorBalanceFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Color Balance Tool"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:ColorBalanceFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Color Balance Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

@@ -55,7 +55,7 @@ public:
 };
 
 ImageVersionsModel::ImageVersionsModel(QObject* parent)
-                  : QAbstractListModel(parent), d(new ImageVersionsModelPriv)
+    : QAbstractListModel(parent), d(new ImageVersionsModelPriv)
 {
     d->data = new QList<QPair<QString, int> >;
 }
@@ -69,7 +69,9 @@ ImageVersionsModel::~ImageVersionsModel()
 Qt::ItemFlags ImageVersionsModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
+    {
         return 0;
+    }
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
@@ -77,18 +79,21 @@ Qt::ItemFlags ImageVersionsModel::flags(const QModelIndex& index) const
 QVariant ImageVersionsModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
+    {
         return QVariant();
+    }
 
-    if(role == Qt::DisplayRole && !d->data->isEmpty())
+    if (role == Qt::DisplayRole && !d->data->isEmpty())
     {
         return d->data->at(index.row()).first;
     }
-    else if(role == Qt::UserRole && !d->data->isEmpty())
+    else if (role == Qt::UserRole && !d->data->isEmpty())
     {
         return d->data->at(index.row()).second;
     }
-    else if(role == Qt::DisplayRole && d->data->isEmpty())
-    {   //TODO: make this text Italic
+    else if (role == Qt::DisplayRole && d->data->isEmpty())
+    {
+        //TODO: make this text Italic
         return QVariant(QString(i18n("No image selected")));
     }
 
@@ -107,7 +112,7 @@ void ImageVersionsModel::setupModelData(QList<QPair<QString, int> >& data)
 
     d->data->clear();
 
-    if(!data.isEmpty())
+    if (!data.isEmpty())
     {
         d->data->append(data);
     }
@@ -122,10 +127,12 @@ void ImageVersionsModel::setupModelData(QList<QPair<QString, int> >& data)
 void ImageVersionsModel::clearModelData()
 {
     beginResetModel();
-    if(!d->data->isEmpty())
+
+    if (!d->data->isEmpty())
     {
         d->data->clear();
     }
+
     endResetModel();
 }
 
@@ -161,11 +168,14 @@ void ImageVersionsModel::setPaintTree(bool paint)
 
 int ImageVersionsModel::listIndexOf(const QString& item) const
 {
-    for(int i = 0; i < d->data->size(); i++)
+    for (int i = 0; i < d->data->size(); i++)
     {
-        if(d->data->at(i).first == item)
+        if (d->data->at(i).first == item)
+        {
             return i;
+        }
     }
+
     return -1;
 }
 

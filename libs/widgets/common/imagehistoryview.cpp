@@ -31,7 +31,7 @@ class ImageHistoryView::ImageHistoryViewPriv
 };
 
 ImageHistoryView::ImageHistoryView(QWidget* parent)
-                : QTreeView(parent)
+    : QTreeView(parent)
 {
 }
 

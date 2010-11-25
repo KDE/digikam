@@ -50,42 +50,42 @@ namespace Digikam
 
 static const char* ObsoleteImagePluginsList[] =
 {
-     "digikamimageplugin_blowup",                   // Merged with "Resize" tool since 0.9.2.
-     "digikamimageplugin_solarize",                 // Renamed "ColorFx" since 0.9.2.
-     "digikamimageplugin_unsharp",                  // Merged with "Sharpen" tool since 0.9.2.
-     "digikamimageplugin_refocus",                  // Merged with "Sharpen" tool since 0.9.2.
-     "digikamimageplugin_despeckle",                // Renamed "Noise Reduction" since 0.9.2.
-     "digikamimageplugin_antivignetting",           // Merged with "Lens Correction" since 0.10.0.
-     "digikamimageplugin_lensdistortion",           // Merged with "Lens Correction" since 0.10.0.
-     "digikamimageplugin_noisereduction",           // Merged to core plugin since 1.0.0-rc.
-     "digikamimageplugin_infrared",                 // Merged to core plugin with B&W converter since 1.2.0.
-     "digikamimageplugin_whitebalance",             // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_channelmixer",             // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_adjustcurves",             // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_adjustlevels",             // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_localcontrast",            // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_colorfx",                  // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_charcoal",                 // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_emboss",                   // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_oilpaint",                 // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_blurfx",                   // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_distortionfx",             // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_raindrop",                 // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_filmgrain",                // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_perspective",              // Merged to "Transform" plugin since 1.2.0.
-     "digikamimageplugin_freerotation",             // Merged to "Transform" plugin since 1.2.0.
-     "digikamimageplugin_sheartool",                // Merged to "Transform" plugin since 1.2.0.
-     "digikamimageplugin_contentawareresizing",     // Merged to "Transform" plugin since 1.2.0.
-     "digikamimageplugin_inserttext",               // Merged to "Decorate" plugin since 1.2.0.
-     "digikamimageplugin_border",                   // Merged to "Decorate" plugin since 1.2.0.
-     "digikamimageplugin_texture",                  // Merged to "Decorate" plugin since 1.2.0.
-     "digikamimageplugin_superimpose",              // Merged to "Decorate" plugin since 1.2.0.
-     "digikamimageplugin_restoration",              // Merged to "Enhance" plugin since 1.2.0.
-     "digikamimageplugin_inpainting",               // Merged to "Enhance" plugin since 1.2.0.
-     "digikamimageplugin_lenscorrection",           // Merged to "Enhance" plugin since 1.2.0.
-     "digikamimageplugin_hotpixels",                // Merged to "Enhance" plugin since 1.2.0.
-     "digikamimageplugin_core",                     // Renamed "Color" plugin since 1.2.0.
-     "-1"
+    "digikamimageplugin_blowup",                   // Merged with "Resize" tool since 0.9.2.
+    "digikamimageplugin_solarize",                 // Renamed "ColorFx" since 0.9.2.
+    "digikamimageplugin_unsharp",                  // Merged with "Sharpen" tool since 0.9.2.
+    "digikamimageplugin_refocus",                  // Merged with "Sharpen" tool since 0.9.2.
+    "digikamimageplugin_despeckle",                // Renamed "Noise Reduction" since 0.9.2.
+    "digikamimageplugin_antivignetting",           // Merged with "Lens Correction" since 0.10.0.
+    "digikamimageplugin_lensdistortion",           // Merged with "Lens Correction" since 0.10.0.
+    "digikamimageplugin_noisereduction",           // Merged to core plugin since 1.0.0-rc.
+    "digikamimageplugin_infrared",                 // Merged to core plugin with B&W converter since 1.2.0.
+    "digikamimageplugin_whitebalance",             // Merged to core plugin since 1.2.0.
+    "digikamimageplugin_channelmixer",             // Merged to core plugin since 1.2.0.
+    "digikamimageplugin_adjustcurves",             // Merged to core plugin since 1.2.0.
+    "digikamimageplugin_adjustlevels",             // Merged to core plugin since 1.2.0.
+    "digikamimageplugin_localcontrast",            // Merged to core plugin since 1.2.0.
+    "digikamimageplugin_colorfx",                  // Merged to "FxFilters" plugin since 1.2.0.
+    "digikamimageplugin_charcoal",                 // Merged to "FxFilters" plugin since 1.2.0.
+    "digikamimageplugin_emboss",                   // Merged to "FxFilters" plugin since 1.2.0.
+    "digikamimageplugin_oilpaint",                 // Merged to "FxFilters" plugin since 1.2.0.
+    "digikamimageplugin_blurfx",                   // Merged to "FxFilters" plugin since 1.2.0.
+    "digikamimageplugin_distortionfx",             // Merged to "FxFilters" plugin since 1.2.0.
+    "digikamimageplugin_raindrop",                 // Merged to "FxFilters" plugin since 1.2.0.
+    "digikamimageplugin_filmgrain",                // Merged to "FxFilters" plugin since 1.2.0.
+    "digikamimageplugin_perspective",              // Merged to "Transform" plugin since 1.2.0.
+    "digikamimageplugin_freerotation",             // Merged to "Transform" plugin since 1.2.0.
+    "digikamimageplugin_sheartool",                // Merged to "Transform" plugin since 1.2.0.
+    "digikamimageplugin_contentawareresizing",     // Merged to "Transform" plugin since 1.2.0.
+    "digikamimageplugin_inserttext",               // Merged to "Decorate" plugin since 1.2.0.
+    "digikamimageplugin_border",                   // Merged to "Decorate" plugin since 1.2.0.
+    "digikamimageplugin_texture",                  // Merged to "Decorate" plugin since 1.2.0.
+    "digikamimageplugin_superimpose",              // Merged to "Decorate" plugin since 1.2.0.
+    "digikamimageplugin_restoration",              // Merged to "Enhance" plugin since 1.2.0.
+    "digikamimageplugin_inpainting",               // Merged to "Enhance" plugin since 1.2.0.
+    "digikamimageplugin_lenscorrection",           // Merged to "Enhance" plugin since 1.2.0.
+    "digikamimageplugin_hotpixels",                // Merged to "Enhance" plugin since 1.2.0.
+    "digikamimageplugin_core",                     // Renamed "Color" plugin since 1.2.0.
+    "-1"
 };
 
 class ImagePluginLoaderPrivate
@@ -98,7 +98,9 @@ public:
         splash = 0;
 
         for (int i=0 ; QString(ObsoleteImagePluginsList[i]) != QString("-1") ; ++i)
+        {
             obsoleteImagePluginsList << ObsoleteImagePluginsList[i];
+        }
     }
 
     QStringList   obsoleteImagePluginsList;
@@ -118,7 +120,7 @@ ImagePluginLoader* ImagePluginLoader::instance()
 }
 
 ImagePluginLoader::ImagePluginLoader(QObject* parent, SplashScreen* splash)
-                 : QObject(parent), d(new ImagePluginLoaderPrivate)
+    : QObject(parent), d(new ImagePluginLoaderPrivate)
 {
     m_instance = this;
     d->splash  = splash;
@@ -129,7 +131,9 @@ ImagePluginLoader::ImagePluginLoader(QObject* parent, SplashScreen* splash)
     foreach (const KService::Ptr& service, offers)
     {
         if (service)
+        {
             d->pluginServiceMap[service->name()] = service;
+        }
     }
 
     foreach (const KService::Ptr& service, d->pluginServiceMap)
@@ -148,7 +152,7 @@ ImagePluginLoader::~ImagePluginLoader()
     QList<QString> pluginNames = d->pluginMap.keys();
     foreach(const QString& name, pluginNames)
     {
-        ImagePlugin *plugin = d->pluginMap.value(name);
+        ImagePlugin* plugin = d->pluginMap.value(name);
         KService::Ptr service = d->pluginServiceMap.value(name);
         delete plugin;
     }
@@ -159,7 +163,9 @@ ImagePluginLoader::~ImagePluginLoader()
 void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 {
     if (d->splash)
+    {
         d->splash->message(i18n("Loading Image Plugins"));
+    }
 
     int cpt = 0;
 
@@ -169,7 +175,9 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         ImagePlugin* plugin;
 
         if ( pluginIsLoaded(name) )
+        {
             continue;
+        }
         else
         {
             QString error;
@@ -188,6 +196,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 
                 // fix old ui file layout
                 UiFileValidator validator(plugin->localXMLFile());
+
                 if (!validator.isValid())
                 {
                     kDebug() << "Old ui file layout detected: " << service->name();
@@ -206,8 +215,8 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
     }
 
     d->splash = 0;       // Splashcreen is only displayed at the first time.
-                         // If user change plugins list to use in setup, don't try to
-                         // use the old splashscreen instance.
+    // If user change plugins list to use in setup, don't try to
+    // use the old splashscreen instance.
 }
 
 ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name)
@@ -235,7 +244,9 @@ bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
         if (service->library() == libraryName)
         {
             if ( pluginIsLoaded(service->name()) )
+            {
                 return true;
+            }
         }
     }
 

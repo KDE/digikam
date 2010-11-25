@@ -126,7 +126,7 @@ ImageGuideWidget::ImageGuideWidget(QWidget* parent,
                                    bool spotVisible, int guideMode,
                                    const QColor& guideColor, int guideSize,
                                    bool blink, bool useImageSelection)
-                : QWidget(parent), d(new ImageGuideWidgetPriv)
+    : QWidget(parent), d(new ImageGuideWidgetPriv)
 {
     int w = 480, h = 320;
     d->spotVisible = spotVisible;
@@ -140,7 +140,7 @@ ImageGuideWidget::ImageGuideWidget(QWidget* parent,
 
     d->iface        = new ImageIface(w, h);
     d->iface->setPreviewType(useImageSelection);
-    uchar *data     = d->iface->getPreviewImage();
+    uchar* data     = d->iface->getPreviewImage();
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
@@ -170,16 +170,24 @@ ImageGuideWidget::~ImageGuideWidget()
     delete d->iface;
 
     if (d->timerID)
+    {
         killTimer(d->timerID);
+    }
 
     if (d->pixmap)
+    {
         delete d->pixmap;
+    }
 
-    if(d->maskPixmap)
+    if (d->maskPixmap)
+    {
         delete d->maskPixmap;
+    }
 
-    if(d->previewPixmap)
+    if (d->previewPixmap)
+    {
         delete d->previewPixmap;
+    }
 
     delete d;
 }
@@ -226,9 +234,13 @@ QPoint ImageGuideWidget::getSpotPosition()
 DColor ImageGuideWidget::getSpotColor(int getColorFrom)
 {
     if (getColorFrom == OriginalImage)                          // Get point color from full original image
+    {
         return (d->iface->getColorInfoFromOriginalImage(getSpotPosition()));
+    }
     else if (getColorFrom == PreviewImage)                      // Get point color from full preview image
+    {
         return (d->iface->getColorInfoFromPreviewImage(d->spot));
+    }
 
     // In other cases, get point color from preview target image
     return (d->iface->getColorInfoFromTargetPreviewImage(d->spot));
@@ -241,7 +253,9 @@ void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
     if (blink)
     {
         if (d->spotVisible)
+        {
             d->timerID = startTimer(800);
+        }
         else
         {
             killTimer(d->timerID);
@@ -289,7 +303,7 @@ void ImageGuideWidget::updatePixmap()
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
              d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
-            (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
+             (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
     {
         d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
 
@@ -372,40 +386,40 @@ void ImageGuideWidget::updatePixmap()
 
     if (d->spotVisible)
     {
-       // Adapt spot from image coordinate to widget coordinate.
-       int xspot = d->spot.x() + d->rect.x();
-       int yspot = d->spot.y() + d->rect.y();
+        // Adapt spot from image coordinate to widget coordinate.
+        int xspot = d->spot.x() + d->rect.x();
+        int yspot = d->spot.y() + d->rect.y();
 
-       switch (d->guideMode)
-       {
-          case HVGuideMode:
-          {
-             p.setPen(QPen(Qt::white, d->guideSize, Qt::SolidLine));
-             p.drawLine(xspot, d->rect.top() + d->flicker, xspot, d->rect.bottom() - d->flicker);
-             p.drawLine(d->rect.left() + d->flicker, yspot, d->rect.right() - d->flicker, yspot);
-             p.setPen(QPen(d->guideColor, d->guideSize, Qt::DotLine));
-             p.drawLine(xspot, d->rect.top() + d->flicker, xspot, d->rect.bottom() - d->flicker);
-             p.drawLine(d->rect.left() + d->flicker, yspot, d->rect.right() - d->flicker, yspot);
-             break;
-          }
+        switch (d->guideMode)
+        {
+            case HVGuideMode:
+            {
+                p.setPen(QPen(Qt::white, d->guideSize, Qt::SolidLine));
+                p.drawLine(xspot, d->rect.top() + d->flicker, xspot, d->rect.bottom() - d->flicker);
+                p.drawLine(d->rect.left() + d->flicker, yspot, d->rect.right() - d->flicker, yspot);
+                p.setPen(QPen(d->guideColor, d->guideSize, Qt::DotLine));
+                p.drawLine(xspot, d->rect.top() + d->flicker, xspot, d->rect.bottom() - d->flicker);
+                p.drawLine(d->rect.left() + d->flicker, yspot, d->rect.right() - d->flicker, yspot);
+                break;
+            }
 
-          case PickColorMode:
-          {
-             p.setPen(QPen(d->guideColor, 1, Qt::SolidLine));
-             p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
-             p.drawLine(xspot+10, yspot-10, xspot-10, yspot+10);
-             p.setPen(QPen(d->guideColor, 3, Qt::SolidLine));
-             p.drawEllipse( xspot-5, yspot-5, 11, 11 );
-
-             if (d->flicker%2 != 0)
-             {
-                p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+            case PickColorMode:
+            {
+                p.setPen(QPen(d->guideColor, 1, Qt::SolidLine));
+                p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
+                p.drawLine(xspot+10, yspot-10, xspot-10, yspot+10);
+                p.setPen(QPen(d->guideColor, 3, Qt::SolidLine));
                 p.drawEllipse( xspot-5, yspot-5, 11, 11 );
-             }
 
-             break;
-          }
-       }
+                if (d->flicker%2 != 0)
+                {
+                    p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+                    p.drawEllipse( xspot-5, yspot-5, 11, 11 );
+                }
+
+                break;
+            }
+        }
     }
 
     // draw additional points added by the image plugin
@@ -441,7 +455,7 @@ void ImageGuideWidget::updatePixmap()
 
             // draw a line between the points
             if (d->drawLineBetweenPoints &&
-               (i+1) < d->selectedPoints.count() && !d->selectedPoints.point(i+1).isNull())
+                (i+1) < d->selectedPoints.count() && !d->selectedPoints.point(i+1).isNull())
             {
                 p.save();
                 p.setPen(QPen(d->guideColor, d->guideSize, Qt::SolidLine));
@@ -496,13 +510,13 @@ void ImageGuideWidget::paintEvent(QPaintEvent*)
         p.drawPixmap(d->rect.x(), d->rect.y(), *d->maskPixmap);
 
         if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
-                (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
+            (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
         {
             drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), beforeLabel);
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
-                d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
-                (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
+                 d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
+                 (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
         {
             drawText(&p, QPoint(d->rect.x() + 20, d->rect.y() + 20), afterLabel);
         }
@@ -515,13 +529,20 @@ void ImageGuideWidget::timerEvent(QTimerEvent* e)
 {
     if (e->timerId() == d->timerID)
     {
-       if (d->flicker == 5) d->flicker=0;
-       else d->flicker++;
-       updatePreview();
+        if (d->flicker == 5)
+        {
+            d->flicker=0;
+        }
+        else
+        {
+            d->flicker++;
+        }
+
+        updatePreview();
     }
     else
     {
-       QWidget::timerEvent(e);
+        QWidget::timerEvent(e);
     }
 }
 
@@ -536,7 +557,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent* e)
     int old_w = d->width;
     int old_h = d->height;
 
-    uchar *data     = d->iface->setPreviewImageSize(w, h);
+    uchar* data     = d->iface->setPreviewImageSize(w, h);
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
@@ -609,7 +630,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent* e)
                 {
                     color = getSpotColor(TargetPreviewImage);
                     emit spotPositionChangedFromTarget(color, QPoint(d->spot.x() - d->rect.width()/2,
-                                                    d->spot.y()));
+                                                       d->spot.y()));
                 }
                 else
                 {
@@ -636,7 +657,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent* e)
                 {
                     color = getSpotColor(TargetPreviewImage);
                     emit spotPositionChangedFromTarget(color, QPoint(d->spot.x(),
-                                                    d->spot.y() - d->rect.height()/2 ));
+                                                       d->spot.y() - d->rect.height()/2 ));
                 }
                 else
                 {
@@ -679,6 +700,7 @@ void ImageGuideWidget::mouseMoveEvent(QMouseEvent* e)
         else if (d->enableDrawMask)
         {
             setCursor(d->maskCursor);
+
             if ((e->buttons() & Qt::LeftButton) && d->drawingMask)
             {
                 QPoint currentPos = QPoint(e->x()-d->rect.x(), e->y()-d->rect.y());
@@ -734,6 +756,7 @@ void ImageGuideWidget::drawLineTo(int width, bool erase, const QColor& color, co
 {
 
     QPainter painter(d->maskPixmap);
+
     if (erase)
     {
         // drawLine() seems to ignore composition modes, use a tmp pixmap and combine it later on
@@ -813,10 +836,16 @@ void ImageGuideWidget::setMaskPenSize(int size)
 void ImageGuideWidget::updateMaskCursor()
 {
     int size = d->penWidth;
+
     if (size > 64)
+    {
         size = 64;
+    }
+
     if (size < 3)
+    {
         size = 3;
+    }
 
     QPixmap pix(size, size);
     pix.fill(Qt::transparent);

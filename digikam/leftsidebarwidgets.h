@@ -134,7 +134,7 @@ class DateFolderViewSideBarWidget : public SidebarWidget
 public:
 
     DateFolderViewSideBarWidget(QWidget* parent, DateAlbumModel* model,
-                    ImageAlbumFilterModel* imageFilterModel);
+                                ImageAlbumFilterModel* imageFilterModel);
     virtual ~DateFolderViewSideBarWidget();
 
     void setActive(bool active);
@@ -240,7 +240,7 @@ class FuzzySearchSideBarWidget : public SidebarWidget
     Q_OBJECT
 public:
     FuzzySearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                    SearchModificationHelper* searchModificationHelper);
+                             SearchModificationHelper* searchModificationHelper);
     virtual ~FuzzySearchSideBarWidget();
 
     void setActive(bool active);
@@ -292,7 +292,7 @@ public:
 Q_SIGNALS:
 
     void signalMapSelectedItems(const KUrl::List);
-//    void signalMapSoloItems(const KUrl::List, const QString&);
+    //    void signalMapSoloItems(const KUrl::List, const QString&);
     void signalMapSoloItems(const QList<qlonglong>&, const QString&);
 
 public Q_SLOTS:
@@ -332,7 +332,7 @@ public:
 private Q_SLOTS:
 
     void slotInit();
-    
+
 Q_SIGNALS:
 
     void requestFaceMode(bool on);
@@ -341,7 +341,7 @@ Q_SIGNALS:
     void signalScanForFacesFirstTime();
     void signalResumeScanForFaces();
     void signalFindDuplicatesInAlbum(Album*);
-    
+
 private:
 
     PeopleSideBarWidgetPriv* const d;

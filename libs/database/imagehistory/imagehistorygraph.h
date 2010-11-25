@@ -54,7 +54,7 @@ public:
     ImageHistoryGraph(const ImageHistoryGraph& other);
     ~ImageHistoryGraph();
 
-    ImageHistoryGraph &operator=(const ImageHistoryGraph& other);
+    ImageHistoryGraph& operator=(const ImageHistoryGraph& other);
 
     bool isNull() const;
     bool isEmpty() const;
@@ -65,8 +65,8 @@ public:
      */
     bool hasEdges() const;
 
-    ImageHistoryGraphData &data();
-    const ImageHistoryGraphData &data() const;
+    ImageHistoryGraphData& data();
+    const ImageHistoryGraphData& data() const;
 
     enum HistoryLoadingFlag
     {

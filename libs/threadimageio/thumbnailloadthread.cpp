@@ -139,8 +139,8 @@ public:
     bool                      exifRotate() const;
     LoadingDescription        createLoadingDescription(const QString& filePath, int size, bool setLastDescription = true);
     LoadingDescription        createLoadingDescription(const QString& filePath, int size,
-                                                       const QRect& detailRect, bool setLastDescription = true);
-    bool                      checkDescription(const LoadingDescription &description);
+            const QRect& detailRect, bool setLastDescription = true);
+    bool                      checkDescription(const LoadingDescription& description);
     QList<LoadingDescription> makeDescriptions(const QStringList& filePaths, int size);
     QList<LoadingDescription> makeDescriptions(const QList<QPair<QString, QRect> >& filePathsAndRects, int size);
     bool                      hasHighlightingBorder() const;
@@ -153,12 +153,16 @@ K_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject)
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultThumbBarObject)
 
 ThumbnailLoadThread::ThumbnailLoadThread()
-                   : d(new ThumbnailLoadThreadPriv)
+    : d(new ThumbnailLoadThreadPriv)
 {
     static_d->firstThreadCreated = true;
     d->creator = new ThumbnailCreator(static_d->storageMethod);
+
     if (static_d->provider)
+    {
         d->creator->setThumbnailInfoProvider(static_d->provider);
+    }
+
     d->creator->setOnlyLargeThumbnails(true);
     d->creator->setRemoveAlphaChannel(true);
 
@@ -200,10 +204,12 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
     if (static_d->firstThreadCreated)
     {
         kError() << "Call initializeThumbnailDatabase at application start. "
-                    "There are already thumbnail loading threads created, "
-                    "and these will not be switched to use the database. ";
+                 "There are already thumbnail loading threads created, "
+                 "and these will not be switched to use the database. ";
     }
+
     ThumbnailDatabaseAccess::setParameters(params);
+
     if (ThumbnailDatabaseAccess::checkReadyForUse(0))
     {
         kDebug() << "Thumbnail db ready for use";
@@ -225,8 +231,11 @@ void ThumbnailLoadThread::setDisplayingWidget(QWidget* widget)
 void ThumbnailLoadThread::setThumbnailSize(int size, bool forFace)
 {
     d->size = size;
-    if(forFace)
+
+    if (forFace)
+    {
         d->creator->setThumbnailSize(size);
+    }
 }
 
 int ThumbnailLoadThread::maximumThumbnailSize()
@@ -237,9 +246,13 @@ int ThumbnailLoadThread::maximumThumbnailSize()
 int ThumbnailLoadThread::maximumThumbnailPixmapSize(bool highlight)
 {
     if (highlight)
+    {
         return ThumbnailSize::Huge;
+    }
     else
-        return ThumbnailSize::Huge + 2; // see slotThumbnailLoaded
+    {
+        return ThumbnailSize::Huge + 2;    // see slotThumbnailLoaded
+    }
 }
 
 void ThumbnailLoadThread::setExifRotate(bool exifRotate)
@@ -285,7 +298,10 @@ int ThumbnailLoadThread::thumbnailPixmapSize(int size) const
 int ThumbnailLoadThread::thumbnailPixmapSize(bool withHighlight, int size)
 {
     if (withHighlight && size >= 10)
+    {
         return size + 2;
+    }
+
     return size;
 }
 
@@ -297,7 +313,10 @@ bool ThumbnailLoadThread::ThumbnailLoadThreadPriv::hasHighlightingBorder() const
 int ThumbnailLoadThread::ThumbnailLoadThreadPriv::pixmapSizeForThumbnailSize(int thumbnailSize) const
 {
     if (hasHighlightingBorder())
+    {
         return thumbnailSize + 2;
+    }
+
     return thumbnailSize;
 }
 
@@ -305,14 +324,17 @@ int ThumbnailLoadThread::ThumbnailLoadThreadPriv::thumbnailSizeForPixmapSize(int
 {
     // bug #206666: Do not cut off one-pixel line for highlighting border
     if (hasHighlightingBorder())
+    {
         return pixmapSize - 2;
+    }
+
     return pixmapSize;
 }
 
 // --- Creating loading descriptions ---
 
 LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv
-                        ::createLoadingDescription(const QString& filePath, int size, bool setLastDescription)
+::createLoadingDescription(const QString& filePath, int size, bool setLastDescription)
 {
     size = thumbnailSizeForPixmapSize(size);
 
@@ -336,7 +358,7 @@ LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv
 }
 
 LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv
-                        ::createLoadingDescription(const QString& filePath, int size, const QRect& detailRect, bool setLastDescription)
+::createLoadingDescription(const QString& filePath, int size, const QRect& detailRect, bool setLastDescription)
 {
     size = thumbnailSizeForPixmapSize(size);
 
@@ -357,6 +379,7 @@ LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv
         lastDescriptions.clear();
         lastDescriptions << description;
     }
+
     return description;
 }
 
@@ -367,20 +390,26 @@ bool ThumbnailLoadThread::ThumbnailLoadThreadPriv::checkDescription(const Loadin
     {
         LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
+
         if (cache->hasThumbnailPixmap(cacheKey))
+        {
             return false;
+        }
     }
 
     {
         QMutexLocker lock(&resultsMutex);
+
         if (collectedResults.contains(cacheKey))
+        {
             return false;
+        }
     }
     return true;
 }
 
 QList<LoadingDescription> ThumbnailLoadThread::ThumbnailLoadThreadPriv::makeDescriptions(const QStringList& filePaths,
-                                                                                         int size)
+        int size)
 {
     QList<LoadingDescription> descriptions;
     {
@@ -388,8 +417,12 @@ QList<LoadingDescription> ThumbnailLoadThread::ThumbnailLoadThreadPriv::makeDesc
         foreach(const QString& filePath, filePaths)
         {
             description.filePath = filePath;
+
             if (!checkDescription(description))
+            {
                 continue;
+            }
+
             descriptions << description;
         }
     }
@@ -406,8 +439,12 @@ QList<LoadingDescription> ThumbnailLoadThread::ThumbnailLoadThreadPriv::makeDesc
         foreach(const StringRectPair& pair, filePathsAndRects)
         {
             description.filePath = pair.first;
+
             if (!checkDescription(description))
+            {
                 continue;
+            }
+
             description.previewParameters.extraParameter = pair.second;
             descriptions << description;
         }
@@ -420,10 +457,15 @@ bool ThumbnailLoadThread::find(const QString& filePath, int size, QPixmap* retPi
 {
     const QPixmap* pix = 0;
     LoadingDescription description;
+
     if (detailRect.isNull())
+    {
         description = d->createLoadingDescription(filePath, size);
+    }
     else
+    {
         description = d->createLoadingDescription(filePath, size, detailRect);
+    }
 
     QString cacheKey = description.cacheKey();
 
@@ -436,17 +478,26 @@ bool ThumbnailLoadThread::find(const QString& filePath, int size, QPixmap* retPi
     if (pix)
     {
         if (retPixmap)
+        {
             *retPixmap = *pix;
+        }
+
         if (emitSignal)
+        {
             emit signalThumbnailLoaded(description, QPixmap(*pix));
+        }
+
         return true;
     }
 
     {
         // If there is a result waiting for conversion to pixmap, return false - pixmap will come shortly
         QMutexLocker lock(&d->resultsMutex);
+
         if (d->collectedResults.contains(cacheKey))
+        {
             return false;
+        }
     }
 
     load(description);
@@ -521,7 +572,9 @@ void ThumbnailLoadThread::findGroup(const QList<QPair<QString, QRect> >& filePat
 void ThumbnailLoadThread::findGroup(const QList<QPair<QString, QRect> >& filePathsAndRects, int size)
 {
     if (!checkSize(size))
+    {
         return;
+    }
 
     QList<LoadingDescription> descriptions = d->makeDescriptions(filePathsAndRects, size);
     ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
@@ -537,8 +590,11 @@ void ThumbnailLoadThread::preload(const QString& filePath)
 void ThumbnailLoadThread::preload(const QString& filePath, int size)
 {
     LoadingDescription description = d->createLoadingDescription(filePath, size);
+
     if (d->checkDescription(description))
+    {
         load(description, true);
+    }
 }
 
 void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths)
@@ -549,7 +605,9 @@ void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths)
 void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths, int size)
 {
     if (!checkSize(size))
+    {
         return;
+    }
 
     QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
     ManagedLoadSaveThread::preloadThumbnailGroup(descriptions);
@@ -563,11 +621,17 @@ void ThumbnailLoadThread::pregenerateGroup(const QStringList& filePaths)
 void ThumbnailLoadThread::pregenerateGroup(const QStringList& filePaths, int size)
 {
     if (!checkSize(size))
+    {
         return;
+    }
 
     QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
+
     for (int i=0; i<descriptions.size(); i++)
+    {
         descriptions[i].previewParameters.flags |= LoadingDescription::PreviewParameters::OnlyPregenerate;
+    }
+
     ManagedLoadSaveThread::preloadThumbnailGroup(descriptions);
 }
 
@@ -581,12 +645,18 @@ void ThumbnailLoadThread::load(const LoadingDescription& desc)
 void ThumbnailLoadThread::load(const LoadingDescription& description, bool preload)
 {
     if (!checkSize(description.previewParameters.size))
+    {
         return;
+    }
 
     if (preload)
+    {
         ManagedLoadSaveThread::preloadThumbnail(description);
+    }
     else
+    {
         ManagedLoadSaveThread::loadThumbnail(description);
+    }
 }
 
 QList<LoadingDescription> ThumbnailLoadThread::lastDescriptions() const
@@ -597,6 +667,7 @@ QList<LoadingDescription> ThumbnailLoadThread::lastDescriptions() const
 bool ThumbnailLoadThread::checkSize(int size)
 {
     size = d->thumbnailSizeForPixmapSize(size);
+
     if (size <= 0)
     {
         kError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
@@ -605,9 +676,10 @@ bool ThumbnailLoadThread::checkSize(int size)
     else if (size > ThumbnailSize::Huge)
     {
         kError() << "ThumbnailLoadThread::load: Thumbnail size " << size
-                      << " is larger than " << ThumbnailSize::Huge << ". Refusing to load.";
+                 << " is larger than " << ThumbnailSize::Huge << ". Refusing to load.";
         return false;
     }
+
     return true;
 }
 
@@ -621,13 +693,16 @@ void ThumbnailLoadThread::thumbnailLoaded(const LoadingDescription& loadingDescr
     ManagedLoadSaveThread::thumbnailLoaded(loadingDescription, img);
 
     if (!d->wantPixmap)
+    {
         return;
+    }
 
     // Store result in our list and fire one signal
     // This means there can be several results per pixmap,
     // to speed up cases where inter-thread communication is the limiting factor
     QMutexLocker lock(&d->resultsMutex);
     d->collectedResults.insert(loadingDescription.cacheKey(), ThumbnailResult(loadingDescription, img));
+
     // only sent signal when flag indicates there is no signal on the way currently
     if (!d->notifiedForResults)
     {
@@ -657,7 +732,9 @@ void ThumbnailLoadThread::slotThumbnailsAvailable()
 void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& description, const QImage& thumb)
 {
     if (thumb.isNull())
+    {
         loadWithKDE(description);
+    }
 
     QPixmap pix;
 
@@ -681,7 +758,7 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
 
     // put into cache
     {
-        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         cache->putThumbnail(description.cacheKey(), pix, description.filePath);
     }
@@ -700,7 +777,9 @@ void ThumbnailLoadThread::loadWithKDE(const LoadingDescription& description)
 void ThumbnailLoadThread::startKdePreviewJob()
 {
     if (d->kdeJob || d->kdeTodo.isEmpty())
+    {
         return;
+    }
 
     KUrl::List list;
     foreach (const LoadingDescription& description, d->kdeTodo)
@@ -712,11 +791,11 @@ void ThumbnailLoadThread::startKdePreviewJob()
     d->kdeTodo.clear();
     d->kdeJob = KIO::filePreview(list, d->creator->storedSize()); // dont know if size 0 is allowed
 
-    connect(d->kdeJob, SIGNAL(gotPreview(const KFileItem &, const QPixmap &)),
-            this, SLOT(gotKDEPreview(const KFileItem &, const QPixmap &)));
+    connect(d->kdeJob, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
+            this, SLOT(gotKDEPreview(const KFileItem&, const QPixmap&)));
 
-    connect(d->kdeJob, SIGNAL(failed(const KFileItem &)),
-            this, SLOT(failedKDEPreview(const KFileItem &)));
+    connect(d->kdeJob, SIGNAL(failed(const KFileItem&)),
+            this, SLOT(failedKDEPreview(const KFileItem&)));
 
     connect(d->kdeJob, SIGNAL(finished(KJob*)),
             this, SLOT(kdePreviewFinished(KJob*)));
@@ -741,7 +820,7 @@ void ThumbnailLoadThread::gotKDEPreview(const KFileItem& item, const QPixmap& kd
 
     // put into cache
     {
-        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         cache->putThumbnail(description.cacheKey(), pix, description.filePath);
     }
@@ -765,6 +844,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
     QPixmap pix;
 
     KMimeType::Ptr mimeType = KMimeType::findByPath(description.filePath);
+
     if (mimeType)
     {
         pix = DesktopIcon(mimeType->iconName(), KIconLoader::SizeEnormous);
@@ -808,6 +888,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
 
     QSize size(pix.size());
     size.scale(description.previewParameters.size, description.previewParameters.size, Qt::KeepAspectRatio);
+
     if (!pix.isNull() && size.width() < pix.width() && size.height() < pix.height())
     {
         // only scale down
@@ -844,10 +925,12 @@ void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
     }
 
     ThumbnailCreator creator(static_d->storageMethod);
+
     if (static_d->provider)
     {
         creator.setThumbnailInfoProvider(static_d->provider);
     }
+
     creator.deleteThumbnailsFromDisk(filePath);
 }
 
@@ -857,12 +940,12 @@ class ThumbnailImageCatcherResult
 {
 public:
 
-    ThumbnailImageCatcherResult(const LoadingDescription &d)
+    ThumbnailImageCatcherResult(const LoadingDescription& d)
         : description(d), received(false)
     {
     }
 
-    ThumbnailImageCatcherResult(const LoadingDescription &d, const QImage& image)
+    ThumbnailImageCatcherResult(const LoadingDescription& d, const QImage& image)
         : image(image), description(d), received(true)
     {
     }
@@ -894,7 +977,7 @@ public:
     ThumbnailImageCatcherState         state;
 
     bool                               active;
-    ThumbnailLoadThread               *thread;
+    ThumbnailLoadThread*               thread;
     QList<ThumbnailImageCatcherResult> tasks;
     QList<ThumbnailImageCatcherResult> intermediate;
 
@@ -902,7 +985,7 @@ public:
     QWaitCondition                     condVar;
 
     void reset();
-    void harvest(const LoadingDescription& description, const QImage &image);
+    void harvest(const LoadingDescription& description, const QImage& image);
 };
 
 ThumbnailImageCatcher::ThumbnailImageCatcher(QObject* parent)
@@ -910,7 +993,7 @@ ThumbnailImageCatcher::ThumbnailImageCatcher(QObject* parent)
 {
 }
 
-ThumbnailImageCatcher::ThumbnailImageCatcher(ThumbnailLoadThread *thread, QObject* parent)
+ThumbnailImageCatcher::ThumbnailImageCatcher(ThumbnailLoadThread* thread, QObject* parent)
     : QObject(parent), d(new ThumbnailImageCatcherPriv)
 {
     setThumbnailLoadThread(thread);
@@ -926,10 +1009,12 @@ ThumbnailLoadThread* ThumbnailImageCatcher::thread() const
     return d->thread;
 }
 
-void ThumbnailImageCatcher::setThumbnailLoadThread(ThumbnailLoadThread *thread)
+void ThumbnailImageCatcher::setThumbnailLoadThread(ThumbnailLoadThread* thread)
 {
     if (d->thread == thread)
+    {
         return;
+    }
 
     d->state = Inactive;
 
@@ -959,10 +1044,15 @@ void ThumbnailImageCatcher::setThumbnailLoadThread(ThumbnailLoadThread *thread)
 void ThumbnailImageCatcher::setActive(bool active)
 {
     if (d->active == active)
+    {
         return;
+    }
 
     if (!active)
+    {
         cancel();
+    }
+
     QMutexLocker lock(&d->mutex);
     d->active = active;
     d->reset();
@@ -971,6 +1061,7 @@ void ThumbnailImageCatcher::setActive(bool active)
 void ThumbnailImageCatcher::cancel()
 {
     QMutexLocker lock(&d->mutex);
+
     if (d->state == Waiting)
     {
         d->state = Quitting;
@@ -982,24 +1073,32 @@ void ThumbnailImageCatcher::ThumbnailImageCatcherPriv::reset()
 {
     intermediate.clear();
     tasks.clear();
+
     if (active)
+    {
         state = Accepting;
+    }
     else
+    {
         state = Inactive;
+    }
 }
 
-void ThumbnailImageCatcher::ThumbnailImageCatcherPriv::harvest(const LoadingDescription& description, const QImage &image)
+void ThumbnailImageCatcher::ThumbnailImageCatcherPriv::harvest(const LoadingDescription& description, const QImage& image)
 {
     // called under lock
     bool finished = true;
+
     for (int i=0; i<tasks.size(); i++)
     {
         ThumbnailImageCatcherResult& task = tasks[i];
+
         if (task.description == description)
         {
             task.image    = image;
             task.received = true;
         }
+
         finished = finished && task.received;
     }
 
@@ -1010,7 +1109,7 @@ void ThumbnailImageCatcher::ThumbnailImageCatcherPriv::harvest(const LoadingDesc
     }
 }
 
-void ThumbnailImageCatcher::slotThumbnailLoaded(const LoadingDescription& description, const QImage &image)
+void ThumbnailImageCatcher::slotThumbnailLoaded(const LoadingDescription& description, const QImage& image)
 {
     // We are in the thumbnail thread here, DirectConnection!
 
@@ -1047,7 +1146,9 @@ int ThumbnailImageCatcher::enqueue()
 QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
 {
     if (!d->thread || d->tasks.isEmpty() || !d->active)
+    {
         return QList<QImage>();
+    }
 
     QMutexLocker lock(&d->mutex);
     d->state = Waiting;
@@ -1061,7 +1162,9 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
 
     // Now wait for the rest to arrive. If already finished, state will be Quitting
     while (d->state == Waiting)
+    {
         d->condVar.wait(&d->mutex);
+    }
 
     QList<QImage> result;
     foreach (const ThumbnailImageCatcherResult& task, d->tasks)

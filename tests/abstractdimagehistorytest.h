@@ -35,7 +35,7 @@ QDebug operator<<(QDebug dbg, const HistoryImageId& id);
 
 class AbstractDImageHistoryTest : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -70,7 +70,7 @@ protected:
     void cleanupBaseTestCase();
 
     QEventLoop m_loop;
-    Digikam::DImgInterface *m_im;
+    Digikam::DImgInterface* m_im;
     QString m_tempFile;
 };
 

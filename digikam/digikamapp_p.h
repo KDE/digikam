@@ -331,7 +331,7 @@ public:
     StatusProgressBar*                  statusProgressBar;
     StatusNavigateBar*                  statusNavigateBar;
     QString                             statusBarSelectionText;
-    KComboBox*                          mapViewSwitcher; 
+    KComboBox*                          mapViewSwitcher;
 
     KIPI::PluginLoader*                 kipiPluginLoader;
 

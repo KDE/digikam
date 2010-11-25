@@ -42,12 +42,27 @@ public:
     explicit IccTransformFilter(DImg* orgImage, QObject* parent, const IccTransform& transform);
     ~IccTransformFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:IccTransformFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Color Profile Conversion"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:IccTransformFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Color Profile Conversion");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
     bool                    parametersSuccessfullyRead() const;

@@ -59,7 +59,7 @@ public:
         lensModel       = QString();
     };
 
-    ~LensFunContainer(){};
+    ~LensFunContainer() {};
 
 public:
 
@@ -90,12 +90,27 @@ public:
 
     bool registerSettingsToXmp(KExiv2Data& data) const;
 
-    static QString          FilterIdentifier()  { return "digikam:LensFunFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Lens Auto-Correction Tool"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:LensFunFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Lens Auto-Correction Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

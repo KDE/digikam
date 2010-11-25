@@ -70,7 +70,7 @@ K_GLOBAL_STATIC(ImageHistoryPrivSharedNull, imageHistoryPrivSharedNull)
 // -----------------------------------------------------------------------------------------------
 
 DImageHistory::DImageHistory()
-             : d(*imageHistoryPrivSharedNull)
+    : d(*imageHistoryPrivSharedNull)
 {
 }
 
@@ -97,7 +97,7 @@ bool DImageHistory::isNull() const
 
 bool DImageHistory::isEmpty() const
 {
-    if(d->entries.isEmpty())
+    if (d->entries.isEmpty())
     {
         return true;
     }
@@ -107,16 +107,22 @@ bool DImageHistory::isEmpty() const
     {
         return true;
     }
-    else return false;
+    else
+    {
+        return false;
+    }
 }
 
 bool DImageHistory::hasFilters() const
 {
-    for(int i = 0; i < d->entries.size(); i++)
+    for (int i = 0; i < d->entries.size(); i++)
     {
-        if(!d->entries.at(i).action.isNull())
+        if (!d->entries.at(i).action.isNull())
+        {
             return true;
+        }
     }
+
     return false;
 }
 
@@ -125,10 +131,10 @@ int DImageHistory::size() const
     return d->entries.size();
 }
 
-static bool operator==(const DImageHistory::Entry &e1, const DImageHistory::Entry &e2)
+static bool operator==(const DImageHistory::Entry& e1, const DImageHistory::Entry& e2)
 {
     return e1.action == e2.action
-     && e1.referredImages == e2.referredImages;
+           && e1.referredImages == e2.referredImages;
 }
 
 bool DImageHistory::operator==(const DImageHistory& other) const
@@ -139,7 +145,9 @@ bool DImageHistory::operator==(const DImageHistory& other) const
 DImageHistory& DImageHistory::operator<<(const FilterAction& action)
 {
     if (action.isNull())
+    {
         return *this;
+    }
 
     Entry entry;
     entry.action = action;
@@ -163,7 +171,10 @@ DImageHistory& DImageHistory::operator<<(const HistoryImageId& id)
     }
 
     if (d->entries.isEmpty())
+    {
         d->entries << Entry();
+    }
+
     d->entries.last().referredImages << id;
     return *this;
 }
@@ -171,7 +182,9 @@ DImageHistory& DImageHistory::operator<<(const HistoryImageId& id)
 void DImageHistory::removeLast()
 {
     if (!d->entries.isEmpty())
+    {
         d->entries.removeLast();
+    }
 }
 
 void DImageHistory::clearReferredImages()
@@ -186,10 +199,12 @@ void DImageHistory::adjustReferredImages()
 {
     for (int i=0; i<d->entries.size(); ++i)
     {
-        Entry &entry = d->entries[i];
+        Entry& entry = d->entries[i];
+
         for (int e=0; e<entry.referredImages.size(); ++e)
         {
-            HistoryImageId &id = entry.referredImages[e];
+            HistoryImageId& id = entry.referredImages[e];
+
             if (id.isCurrentFile())
             {
                 id.m_type = i==0 ? HistoryImageId::Original : HistoryImageId::Intermediate;
@@ -202,14 +217,18 @@ void DImageHistory::adjustCurrentUuid(const QString& uuid)
 {
     for (int i=0; i<d->entries.size(); ++i)
     {
-        Entry &entry = d->entries[i];
+        Entry& entry = d->entries[i];
+
         for (int e=0; e<entry.referredImages.size(); ++e)
         {
-            HistoryImageId &id = entry.referredImages[e];
+            HistoryImageId& id = entry.referredImages[e];
+
             if (id.isCurrentFile())
             {
                 if (id.m_uuid.isNull())
+                {
                     id.m_uuid = uuid;
+                }
             }
         }
     }
@@ -219,10 +238,11 @@ void DImageHistory::purgePathFromReferredImages(const QString& path, const QStri
 {
     for (int i=0; i<d->entries.size(); ++i)
     {
-        Entry &entry = d->entries[i];
+        Entry& entry = d->entries[i];
+
         for (int e=0; e<entry.referredImages.size(); ++e)
         {
-            HistoryImageId &id = entry.referredImages[e];
+            HistoryImageId& id = entry.referredImages[e];
             {
                 if (id.m_filePath == path && id.m_fileName == fileName)
                 {
@@ -241,7 +261,9 @@ bool DImageHistory::hasReferredImageOfType(HistoryImageId::Type type) const
         foreach (const HistoryImageId& id, entry.referredImages)
         {
             if (id.m_type == type)
+            {
                 return true;
+            }
         }
     }
     return false;
@@ -265,7 +287,9 @@ QList<HistoryImageId> DImageHistory::referredImagesOfType(HistoryImageId::Type t
         foreach (const HistoryImageId& id, entry.referredImages)
         {
             if (id.m_type == type)
+            {
                 ids << id;
+            }
         }
     }
     return ids;
@@ -278,7 +302,9 @@ HistoryImageId DImageHistory::currentReferredImage() const
         foreach (const HistoryImageId& id, entry.referredImages)
         {
             if (id.isCurrentFile())
+            {
                 return id;
+            }
         }
     }
     return HistoryImageId();
@@ -291,7 +317,9 @@ HistoryImageId DImageHistory::originalReferredImage() const
         foreach (const HistoryImageId& id, entry.referredImages)
         {
             if (id.isOriginalFile())
+            {
                 return id;
+            }
         }
     }
     return HistoryImageId();
@@ -299,19 +327,21 @@ HistoryImageId DImageHistory::originalReferredImage() const
 
 bool DImageHistory::operator<(const Digikam::DImageHistory& other)
 {
-    if(d->entries.size() < other.size())
+    if (d->entries.size() < other.size())
     {
         return true;
     }
+
     return false;
 }
 
 bool DImageHistory::operator>(const Digikam::DImageHistory& other)
 {
-    if(d->entries.size() > other.size())
+    if (d->entries.size() > other.size())
     {
         return true;
     }
+
     return false;
 }
 
@@ -326,7 +356,7 @@ const QList<DImageHistory::Entry> &DImageHistory::entries() const
     return d->entries;
 }
 
-const FilterAction &DImageHistory::action(int i) const
+const FilterAction& DImageHistory::action(int i) const
 {
     return d->entries[i].action;
 }
@@ -358,16 +388,24 @@ int DImageHistory::actionCount() const
 {
     int count = 0;
     foreach (const Entry& entry, d->entries)
-        if (!entry.action.isNull())
-            count++;
+
+    if (!entry.action.isNull())
+    {
+        count++;
+    }
+
     return count;
 }
 
 bool DImageHistory::hasActions() const
 {
     foreach (const Entry& entry, d->entries)
-        if (!entry.action.isNull())
-            return true;
+
+    if (!entry.action.isNull())
+    {
+        return true;
+    }
+
     return false;
 }
 
@@ -384,8 +422,12 @@ QList<HistoryImageId> DImageHistory::allReferredImages() const
 bool DImageHistory::hasReferredImages() const
 {
     foreach (const Entry& entry, d->entries)
-        if (!entry.referredImages.isEmpty())
-            return true;
+
+    if (!entry.referredImages.isEmpty())
+    {
+        return true;
+    }
+
     return false;
 }
 
@@ -400,9 +442,10 @@ QString DImageHistory::toXml() const
     stream.writeStartElement("history");
     stream.writeAttribute("version", QString::number(1));
 
-    for(int i = 0; i < entries().count(); i++)
+    for (int i = 0; i < entries().count(); i++)
     {
         const Entry& step = entries().at(i);
+
         if (!step.action.isNull())
         {
             stream.writeStartElement("filter");
@@ -426,6 +469,7 @@ QString DImageHistory::toXml() const
             stream.writeStartElement("params");
 
             const QHash<QString,QVariant>& params = step.action.parameters();
+
             if (!params.isEmpty())
             {
                 QList<QString> keys = params.keys();
@@ -433,6 +477,7 @@ QString DImageHistory::toXml() const
                 foreach (const QString& key, keys)
                 {
                     QHash<QString, QVariant>::const_iterator it;
+
                     for (it = params.find(key); it != params.end() && it.key() == key; ++it)
                     {
                         stream.writeStartElement("param");
@@ -452,34 +497,57 @@ QString DImageHistory::toXml() const
             foreach (const HistoryImageId& imageId, step.referredImages)
             {
                 if (!imageId.isValid())
+                {
                     continue;
+                }
 
                 if (imageId.isCurrentFile())
+                {
                     continue;
+                }
 
                 stream.writeStartElement("file");
 
                 if (!imageId.m_uuid.isNull())
+                {
                     stream.writeAttribute("uuid", imageId.m_uuid);
+                }
 
                 if (imageId.isOriginalFile())
+                {
                     stream.writeAttribute("type", "original");
+                }
                 else if (imageId.isSourceFile())
+                {
                     stream.writeAttribute("type", "source");
+                }
 
                 stream.writeStartElement("fileParams");
 
                 if (!imageId.m_fileName.isNull())
+                {
                     stream.writeAttribute("fileName", imageId.m_fileName);
+                }
+
                 if (!imageId.m_filePath.isNull())
+                {
                     stream.writeAttribute("filePath", imageId.m_filePath);
+                }
+
                 if (!imageId.m_uniqueHash.isNull())
+                {
                     stream.writeAttribute("fileHash", imageId.m_uniqueHash);
+                }
+
                 if (imageId.m_fileSize)
+                {
                     stream.writeAttribute("fileSize", QString::number(imageId.m_fileSize));
+                }
 
                 if (imageId.isOriginalFile() && !imageId.m_creationDate.isNull())
+                {
                     stream.writeAttribute("creationDate", imageId.m_creationDate.toString(Qt::ISODate));
+                }
 
                 stream.writeEndElement(); //fileParams
 
@@ -502,17 +570,23 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 {
     //kDebug() << "Parsing image history XML";
     DImageHistory h;
+
     if (xml.isEmpty())
     {
         return h;
     }
 
     QXmlStreamReader stream(xml);
+
     if (!stream.readNextStartElement())
+    {
         return h;
+    }
 
     if (stream.name() != "history")
+    {
         return h;
+    }
 
     QString originalUUID;
     QDateTime originalCreationDate;
@@ -525,11 +599,17 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             HistoryImageId imageId(stream.attributes().value("uuid").toString());
 
             if (stream.attributes().value("type") == "original")
+            {
                 imageId.m_type = HistoryImageId::Original;
+            }
             else if (stream.attributes().value("type") == "source")
+            {
                 imageId.m_type = HistoryImageId::Source;
+            }
             else
+            {
                 imageId.m_type = HistoryImageId::Intermediate;
+            }
 
 
             while (stream.readNextStartElement())
@@ -539,11 +619,19 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
                     imageId.setFileName(stream.attributes().value("fileName").toString());
                     imageId.setPath(stream.attributes().value("filePath").toString());
                     QString date = stream.attributes().value("creationDate").toString();
+
                     if (!date.isNull())
+                    {
                         imageId.setCreationDate(QDateTime::fromString(date, Qt::ISODate));
+                    }
+
                     QString size = stream.attributes().value("fileSize").toString();
+
                     if (stream.attributes().hasAttribute("fileHash") && !size.isNull())
+                    {
                         imageId.setUniqueHash(stream.attributes().value("fileHash").toString(), size.toInt());
+                    }
+
                     stream.skipCurrentElement();
                 }
                 else
@@ -562,12 +650,17 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             else
             {
                 imageId.m_originalUUID = originalUUID;
+
                 if (imageId.m_creationDate.isNull())
+                {
                     imageId.m_creationDate = originalCreationDate;
+                }
             }
 
             if (imageId.isValid())
+            {
                 h << imageId;
+            }
 
         }
         else if (stream.name() == "filter")
@@ -575,12 +668,19 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             //kDebug() << "Parsing filter tag";
             FilterAction::Category c = FilterAction::ComplexFilter;
             QStringRef categoryString = stream.attributes().value("filterCategory");
+
             if (categoryString == "reproducible")
+            {
                 c = FilterAction::ReproducibleFilter;
+            }
             else if (categoryString == "complex")
+            {
                 c = FilterAction::ComplexFilter;
+            }
             else if (categoryString == "documentedHistory")
+            {
                 c = FilterAction::DocumentedHistory;
+            }
 
             FilterAction action(stream.attributes().value("filterName").toString(),
                                 stream.attributes().value("filterVersion").toString().toInt(), c);
@@ -609,7 +709,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
                 {
                     stream.skipCurrentElement();
                 }
-           }
+            }
 
             h << action;
         }
@@ -651,19 +751,20 @@ void DImageHistory::setOriginalFilePath(const QString& filePath)
 
 QString DImageHistory::originalUUID() const
 {
-    for(int i = 0; i < entries().count(); i++)
+    for (int i = 0; i < entries().count(); i++)
     {
-        if(!entries().at(i).referredImages.isEmpty())
+        if (!entries().at(i).referredImages.isEmpty())
         {
-            for(int j = 0; j < entries().at(i).referredImages.size(); j++)
+            for (int j = 0; j < entries().at(i).referredImages.size(); j++)
             {
-                if(entries().at(i).referredImages.at(j).isOriginalFile())
+                if (entries().at(i).referredImages.at(j).isOriginalFile())
                 {
                     return entries().at(i).referredImages.at(j).m_uuid;
-                 }
+                }
             }
         }
     }
+
     return QString();
 }
 

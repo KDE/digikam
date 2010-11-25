@@ -74,7 +74,7 @@ public:
 };
 
 GraphicsDImgView::GraphicsDImgView(QWidget* parent)
-                : QGraphicsView(parent), d(new GraphicsDImgViewPriv)
+    : QGraphicsView(parent), d(new GraphicsDImgViewPriv)
 {
     d->scene  = new QGraphicsScene(this);
 
@@ -121,15 +121,18 @@ void GraphicsDImgView::installPanIcon()
             this, SLOT(slotCornerButtonPressed()));
 }
 
-void GraphicsDImgView::drawForeground(QPainter* p, const QRectF &rect)
+void GraphicsDImgView::drawForeground(QPainter* p, const QRectF& rect)
 {
     QGraphicsView::drawForeground(p, rect);
 
     if (!d->movingInProgress)
     {
         QString text = d->item->userLoadingHint();
+
         if (text.isNull())
+        {
             return;
+        }
 
         QRect viewportRect = viewport()->rect();
         QRect fontRect = p->fontMetrics().boundingRect(viewportRect, 0, text);
@@ -138,8 +141,11 @@ void GraphicsDImgView::drawForeground(QPainter* p, const QRectF &rect)
 
         QPointF sceneDrawingPoint = mapToScene(drawingPoint);
         QRectF sceneDrawingRect(sceneDrawingPoint, fontRect.size());
+
         if (!rect.intersects(sceneDrawingRect))
+        {
             return;
+        }
 
         drawText(p, sceneDrawingRect, text);
     }
@@ -177,13 +183,18 @@ void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent* e)
     QGraphicsView::mouseDoubleClickEvent(e);
 
     if (!acceptsMouseClick(e))
+    {
         return;
+    }
 
     if (e->button() == Qt::LeftButton)
     {
         emit leftButtonDoubleClicked();
+
         if (!KGlobalSettings::singleClick())
+        {
             emit activated();
+        }
     }
 }
 
@@ -195,13 +206,18 @@ void GraphicsDImgView::mousePressEvent(QMouseEvent* e)
     d->movingInProgress = false;
 
     if (!acceptsMouseClick(e))
+    {
         return;
+    }
 
     if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
     {
         d->mousePressPos = e->pos();
+
         if (!KGlobalSettings::singleClick() || e->button() == Qt::MidButton)
+        {
             startPanning(e->pos());
+        }
 
         return;
     }
@@ -216,7 +232,9 @@ void GraphicsDImgView::mouseMoveEvent(QMouseEvent* e)
         if (!d->movingInProgress && e->buttons() & Qt::LeftButton)
         {
             if ((d->mousePressPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
+            {
                 startPanning(d->mousePressPos);
+            }
         }
 
         if (d->movingInProgress)
@@ -237,8 +255,11 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
         if (!d->movingInProgress && e->button() == Qt::LeftButton)
         {
             emit leftButtonClicked();
+
             if (KGlobalSettings::singleClick())
+            {
                 emit activated();
+            }
         }
         else
         {
@@ -255,11 +276,14 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
     d->mousePressPos    = QPoint();
 }
 
-bool GraphicsDImgView::acceptsMouseClick(QMouseEvent *e)
+bool GraphicsDImgView::acceptsMouseClick(QMouseEvent* e)
 {
     // the basic condition is that now item ate the event
     if (e->isAccepted())
+    {
         return false;
+    }
+
     return true;
 }
 
@@ -323,8 +347,11 @@ void GraphicsDImgView::scrollPointOnPoint(const QPointF& scenePos, const QPoint&
             horizontalScrollBar()->setValue(int(viewPoint.x() - viewportPos.x()));
         }
     }
+
     if (verticalScrollBar()->maximum())
+    {
         verticalScrollBar()->setValue(int(viewPoint.y() - viewportPos.y()));
+    }
 }
 
 void GraphicsDImgView::wheelEvent(QWheelEvent* e)
@@ -332,19 +359,30 @@ void GraphicsDImgView::wheelEvent(QWheelEvent* e)
     if (e->modifiers() & Qt::ShiftModifier)
     {
         e->accept();
+
         if (e->delta() < 0)
+        {
             emit toNextImage();
+        }
         else if (e->delta() > 0)
+        {
             emit toPreviousImage();
+        }
+
         return;
     }
     else if (e->modifiers() & Qt::ControlModifier)
     {
         // When zooming with the mouse-wheel, the image center is kept fixed.
         if (e->delta() < 0)
+        {
             d->layout->decreaseZoom(e->pos());
+        }
         else if (e->delta() > 0)
+        {
             d->layout->increaseZoom(e->pos());
+        }
+
         return;
     }
 
@@ -364,7 +402,7 @@ void GraphicsDImgView::slotCornerButtonPressed()
     PanIconWidget* pan = new PanIconWidget(d->panIconPopup);
 
     //connect(pan, SIGNAL(signalSelectionTakeFocus()),
-      //      this, SIGNAL(signalContentTakeFocus()));
+    //      this, SIGNAL(signalContentTakeFocus()));
 
     connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
             this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));

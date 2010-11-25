@@ -47,7 +47,7 @@ public:
 };
 
 TooltipDialog::TooltipDialog(QWidget* parent)
-             : KDialog(parent), d(new TooltipDialogPriv)
+    : KDialog(parent), d(new TooltipDialogPriv)
 {
     d->textBrowser = new KTextBrowser(this);
     d->textBrowser->setFrameStyle(QFrame::NoFrame);

@@ -48,7 +48,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelPrepareHook
 {
 public:
 
-    virtual ~ImageFilterModelPrepareHook(){};
+    virtual ~ImageFilterModelPrepareHook() {};
     virtual void prepare(const QVector<ImageInfo>& infos) = 0;
 };
 
@@ -149,7 +149,7 @@ public Q_SLOTS:
     /** Changes the current image filter settings and refilters. */
     virtual void setImageFilterSettings(const ImageFilterSettings& settings);
     /** Changes the current image sort settings and resorts. */
-    virtual void setImageSortSettings(const ImageSortSettings &settings);
+    virtual void setImageSortSettings(const ImageSortSettings& settings);
 
     /** Adjust the current ImageFilterSettings.
      *  Equivalent to retrieving the current filter settings, adjusting the parameter
@@ -183,7 +183,7 @@ Q_SIGNALS:
     /** Emitted when the filter settings have been changed
         (the model may not yet have been updated)
      */
-    void filterSettingsChanged(const ImageFilterSettings &settings);
+    void filterSettingsChanged(const ImageFilterSettings& settings);
 
     /** These signals need to be explicitly enabled with setSendImageInfoSignals()
      */

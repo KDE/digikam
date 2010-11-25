@@ -47,7 +47,7 @@ namespace Digikam
 
 
 RemoveFilterAction::RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* parent)
-                  : QAction(label, parent)
+    : QAction(label, parent)
 {
     m_index = index;
 }
@@ -74,7 +74,7 @@ public:
 };
 
 FiltersHistoryWidget::FiltersHistoryWidget(QWidget* parent)
-                    : QWidget(parent), d(new FiltersHistoryWidgetPriv)
+    : QWidget(parent), d(new FiltersHistoryWidgetPriv)
 {
     d->layout      = new QGridLayout(this);
     d->view        = new QTreeView(this);
@@ -114,15 +114,15 @@ void FiltersHistoryWidget::showCustomContextMenu(const QPoint& position)
 {
     QList<QAction*> actions;
 
-    if(d->view->indexAt(position).isValid())
+    if (d->view->indexAt(position).isValid())
     {
         QModelIndex index = d->view->indexAt(position);
 
         QString s(i18n("Remove filter"));
-        RemoveFilterAction *removeFilterAction = new RemoveFilterAction(s, index, 0);
+        RemoveFilterAction* removeFilterAction = new RemoveFilterAction(s, index, 0);
         removeFilterAction->setDisabled(true);
 
-        if(!index.model()->parent(index).isValid())
+        if (!index.model()->parent(index).isValid())
         {
             actions.append(removeFilterAction);
 
@@ -134,8 +134,10 @@ void FiltersHistoryWidget::showCustomContextMenu(const QPoint& position)
         }
     }
 
-    if(actions.count() > 0)
+    if (actions.count() > 0)
+    {
         QMenu::exec(actions, d->view->mapToGlobal(position));
+    }
 }
 
 void FiltersHistoryWidget::setHistory(const DImageHistory& history)

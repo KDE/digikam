@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 NoiseReduction::NoiseReduction(QObject* parent)
-              : BatchTool("NoiseReduction", EnhanceTool, parent)
+    : BatchTool("NoiseReduction", EnhanceTool, parent)
 {
     setToolTitle(i18n("Noise Reduction"));
     setToolDescription(i18n("A tool to remove photograph noise using wavelets."));
@@ -105,7 +105,10 @@ void NoiseReduction::slotSettingsChanged()
 
 bool NoiseReduction::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     NRContainer prm;
     prm.thresholds[0] = settings()["YThreshold"].toDouble();

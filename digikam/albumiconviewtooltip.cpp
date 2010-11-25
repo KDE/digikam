@@ -58,13 +58,13 @@ public:
         iconItem = 0;
     }
 
-    AlbumIconView *view;
+    AlbumIconView* view;
 
-    AlbumIconItem *iconItem;
+    AlbumIconItem* iconItem;
 };
 
 AlbumIconViewToolTip::AlbumIconViewToolTip(AlbumIconView* view)
-                    : DItemToolTip(), d(new AlbumIconViewToolTipPriv)
+    : DItemToolTip(), d(new AlbumIconViewToolTipPriv)
 {
     d->view = view;
 }
@@ -87,14 +87,20 @@ void AlbumIconViewToolTip::setIconItem(AlbumIconItem* iconItem)
     {
         updateToolTip();
         reposition();
+
         if (isHidden() && !toolTipIsEmpty())
+        {
             show();
+        }
     }
 }
 
 QRect AlbumIconViewToolTip::repositionRect()
 {
-    if (!d->iconItem) return QRect();
+    if (!d->iconItem)
+    {
+        return QRect();
+    }
 
     QRect rect = d->iconItem->clickToOpenRect();
     rect.moveTopLeft(d->view->contentsToViewport(rect.topLeft()));
@@ -104,7 +110,11 @@ QRect AlbumIconViewToolTip::repositionRect()
 
 QString AlbumIconViewToolTip::tipContents()
 {
-    if (!d->iconItem) return QString();
+    if (!d->iconItem)
+    {
+        return QString();
+    }
+
     ImageInfo info = d->iconItem->imageInfo();
     return ToolTipFiller::imageInfoTipContents(info);
 }

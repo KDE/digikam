@@ -49,7 +49,7 @@ public:
 };
 
 PeopleWidget::PeopleWidget(QWidget* parent, int numPeople)
-            : QWidget(parent), d(new PeopleWidgetPriv)
+    : QWidget(parent), d(new PeopleWidgetPriv)
 {
     d->peopleCount->setNum(numPeople);
     d->label->setText("Number of People");

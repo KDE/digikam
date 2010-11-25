@@ -45,11 +45,26 @@ public:
     StretchFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~StretchFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:StretchFilter"; }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    static QString          DisplayableName()   { return I18N_NOOP("Stretch Contrast"); }
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:StretchFilter";
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Stretch Contrast");
+    }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

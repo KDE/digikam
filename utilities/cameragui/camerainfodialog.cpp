@@ -38,9 +38,9 @@
 namespace Digikam
 {
 
-CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, const QString& manual,
+CameraInfoDialog::CameraInfoDialog(QWidget* parent, const QString& summary, const QString& manual,
                                    const QString& about)
-                : KPageDialog(parent)
+    : KPageDialog(parent)
 {
     setCaption(i18n("Device Information"));
     setButtons(KDialog::Help|KDialog::Ok);
@@ -52,31 +52,31 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     // ----------------------------------------------------------
 
-    KTextEdit *summaryView = new KTextEdit(summary);
+    KTextEdit* summaryView = new KTextEdit(summary);
     summaryView->setWordWrapMode(QTextOption::WordWrap);
     summaryView->setReadOnly(true);
 
-    KPageWidgetItem *p1 = addPage(summaryView, i18n("Summary"));
+    KPageWidgetItem* p1 = addPage(summaryView, i18n("Summary"));
     p1->setHeader( i18n("Device Summary") );
     p1->setIcon( KIcon("dialog-information") );
 
     // ----------------------------------------------------------
 
-    KTextEdit *manualView = new KTextEdit(manual);
+    KTextEdit* manualView = new KTextEdit(manual);
     manualView->setWordWrapMode(QTextOption::WordWrap);
     manualView->setReadOnly(true);
 
-    KPageWidgetItem *p2 = addPage(manualView, i18n("Manual"));
+    KPageWidgetItem* p2 = addPage(manualView, i18n("Manual"));
     p2->setHeader( i18n("Device Manual") );
     p2->setIcon( KIcon("help-contents") );
 
     // ----------------------------------------------------------
 
-    KTextEdit *aboutView = new KTextEdit(about);
+    KTextEdit* aboutView = new KTextEdit(about);
     aboutView->setWordWrapMode(QTextOption::WordWrap);
     aboutView->setReadOnly(true);
 
-    KPageWidgetItem *p3 = addPage(aboutView, i18n("About"));
+    KPageWidgetItem* p3 = addPage(aboutView, i18n("About"));
     p3->setHeader( i18n("About Driver") );
     p3->setIcon( KIcon("camera-photo") );
 }

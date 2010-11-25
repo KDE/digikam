@@ -37,15 +37,16 @@ namespace Digikam
 {
 
 TagRegion::TagRegion()
-         : m_type(Invalid)
+    : m_type(Invalid)
 {
 }
 
 TagRegion::TagRegion(const QString& descriptor)
-         : m_value(descriptor), m_type(Invalid)
+    : m_value(descriptor), m_type(Invalid)
 {
     QString xmlStartDocument = "<?xml version=\"1.0\"?>";
     QXmlStreamReader reader(xmlStartDocument + descriptor);
+
     if (reader.readNextStartElement())
     {
         if (reader.name() == "rect")
@@ -65,7 +66,7 @@ TagRegion::TagRegion(const QString& descriptor)
 }
 
 TagRegion::TagRegion(const QRect& rect)
-         : m_value(rect), m_type(Rect)
+    : m_value(rect), m_type(Rect)
 {
 }
 
@@ -82,13 +83,15 @@ bool TagRegion::isValid() const
 bool TagRegion::operator==(const TagRegion& other) const
 {
     return m_type == other.m_type
-        && m_value == other.m_value;
+           && m_value == other.m_value;
 }
 
 QString TagRegion::toXml() const
 {
     if (m_type == Invalid)
+    {
         return QString();
+    }
 
     QString output;
     QXmlStreamWriter writer(&output);
@@ -113,7 +116,10 @@ QString TagRegion::toXml() const
 QRect TagRegion::toRect() const
 {
     if (m_type == Rect)
+    {
         return m_value.toRect();
+    }
+
     return QRect();
 }
 
@@ -138,18 +144,26 @@ TagRegion TagRegion::fromVariant(const QVariant& var)
 bool TagRegion::intersects(const TagRegion& other, double fraction)
 {
     if (m_type == Invalid || other.m_type == Invalid)
+    {
         return false;
+    }
 
     if (m_type == Rect)
     {
         QRect r = toRect();
+
         if (other.m_type == Rect)
         {
             QRect r2 = other.toRect();
+
             if (fraction == 0)
+            {
                 return r.intersects(r2);
+            }
             else if (fraction == 1)
+            {
                 return r.contains(r2);
+            }
             else
             {
                 QRect i = r.intersected(r2);
@@ -164,7 +178,10 @@ bool TagRegion::intersects(const TagRegion& other, double fraction)
 QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& reducedSizeDetail)
 {
     if (fullImageSize == reducedImageSize)
+    {
         return reducedSizeDetail;
+    }
+
     double ratio =  double(fullImageSize.width()) / double(reducedImageSize.width());
     return QRectF(reducedSizeDetail.x() * ratio,
                   reducedSizeDetail.y() * ratio,
@@ -175,7 +192,9 @@ QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& redu
 QRect TagRegion::mapFromOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& fullSizeDetail)
 {
     if (fullImageSize == reducedImageSize)
+    {
         return fullSizeDetail;
+    }
 
     double ratio = double(reducedImageSize.width()) / double(fullImageSize.width());
     return QRectF(fullSizeDetail.x() * ratio,
@@ -194,9 +213,10 @@ QRect TagRegion::mapFromOriginalSize(const DImg& reducedSizeImage, const QRect& 
     return mapFromOriginalSize(reducedSizeImage.originalSize(), reducedSizeImage.size(), fullSizeDetail);
 }
 
-QDebug operator<<(QDebug dbg, const TagRegion &r)
+QDebug operator<<(QDebug dbg, const TagRegion& r)
 {
     QVariant var = r.toVariant();
+
     switch (var.type())
     {
         case QVariant::Rect:
@@ -206,6 +226,7 @@ QDebug operator<<(QDebug dbg, const TagRegion &r)
         default:
             dbg.nospace() << var;
     }
+
     return dbg;
 }
 

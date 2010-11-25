@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 DigikamImageFaceDelegate::DigikamImageFaceDelegate(ImageCategorizedView* parent)
-                        : DigikamImageDelegate(*new DigikamImageFaceDelegatePrivate, parent)
+    : DigikamImageDelegate(*new DigikamImageFaceDelegatePrivate, parent)
 {
 }
 
@@ -61,36 +61,50 @@ void DigikamImageFaceDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel
 QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) const
 {
     QRect rect = largerFaceRect(index);
-    if(rect.isNull())
+
+    if (rect.isNull())
+    {
         return DigikamImageDelegate::thumbnailPixmap(index);
+    }
 
     // set requested thumbnail detail
     if (rect.isValid())
+    {
         const_cast<QAbstractItemModel*>(index.model())->setData(index, rect, ImageModel::ThumbnailRole);
+    }
 
     // parent implementation already resets the thumb size and rect set on model
     return DigikamImageDelegate::thumbnailPixmap(index);
 }
 
-QRect DigikamImageFaceDelegate::faceRect(const QModelIndex &index) const
+QRect DigikamImageFaceDelegate::faceRect(const QModelIndex& index) const
 {
     return face(index).region().toRect();
 }
 
-QRect DigikamImageFaceDelegate::largerFaceRect(const QModelIndex &index) const
+QRect DigikamImageFaceDelegate::largerFaceRect(const QModelIndex& index) const
 {
     QRect rect = faceRect(index);
+
     if (rect.isNull())
+    {
         return rect;
+    }
+
     const int margin = FaceIface::faceRectDisplayMargin();
+
     return rect.adjusted(-margin, -margin, margin, margin);
 }
 
 DatabaseFace DigikamImageFaceDelegate::face(const QModelIndex& index) const
 {
     QVariant extraData = index.data(ImageModel::ExtraDataRole);
+
     if (extraData.isNull())
+    {
         return DatabaseFace();
+    }
+
     DatabaseFace face = DatabaseFace::fromVariant(extraData);
     return face;
 }

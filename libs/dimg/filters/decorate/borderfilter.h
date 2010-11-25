@@ -94,7 +94,7 @@ public:
         decorativeSecondColor = QColor(0, 0, 0);
     };
 
-    ~BorderContainer(){};
+    ~BorderContainer() {};
 
 public:
 
@@ -134,12 +134,27 @@ public:
     explicit BorderFilter(DImg* orgImage, QObject* parent=0, const BorderContainer& settings = BorderContainer());
     virtual ~BorderFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:BorderFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Border Tool"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:BorderFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Border Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

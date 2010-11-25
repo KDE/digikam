@@ -54,9 +54,10 @@
 /** Install custom property ids, out-of-namespace */
 enum vertex_properties_t { vertex_properties };
 enum edge_properties_t { edge_properties };
-namespace boost {
-        BOOST_INSTALL_PROPERTY(vertex, properties);
-        BOOST_INSTALL_PROPERTY(edge, properties);
+namespace boost
+{
+BOOST_INSTALL_PROPERTY(vertex, properties);
+BOOST_INSTALL_PROPERTY(edge, properties);
 }
 
 namespace Digikam
@@ -100,13 +101,13 @@ class Graph
 public:
 
     typedef boost::adjacency_list<
-            boost::vecS, /// Standard storage. listS was desirable, but many algorithms work only with vecS
-            boost::vecS,
-            boost::bidirectionalS, /// directed graph
-            boost::property<boost::vertex_index_t, int,
-                boost::property<vertex_properties_t, VertexProperties> >,
-            boost::property<edge_properties_t, EdgeProperties> /// One property for each edge: EdgeProperties
-    > GraphContainer;
+    boost::vecS, /// Standard storage. listS was desirable, but many algorithms work only with vecS
+          boost::vecS,
+          boost::bidirectionalS, /// directed graph
+          boost::property<boost::vertex_index_t, int,
+          boost::property<vertex_properties_t, VertexProperties> >,
+          boost::property<edge_properties_t, EdgeProperties> /// One property for each edge: EdgeProperties
+          > GraphContainer;
 
 
     /** a bunch of graph-specific typedefs that make the long boost types manageable */
@@ -148,15 +149,30 @@ public:
         Vertex() : v(graph_traits::null_vertex()) {}
         Vertex(const vertex_t& v) : v(v) {}
 
-        Vertex &operator=(const vertex_t& other)
-        { v = other; return *this; }
+        Vertex& operator=(const vertex_t& other)
+        {
+            v = other;
+            return *this;
+        }
 
-        operator const vertex_t&() const { return v; }
-        operator vertex_t&() { return v; }
+        operator const vertex_t&() const
+        {
+            return v;
+        }
+        operator vertex_t&()
+        {
+            return v;
+        }
 
-        bool operator==(const vertex_t& other) const { return v == other; }
+        bool operator==(const vertex_t& other) const
+        {
+            return v == other;
+        }
 
-        bool isNull() const { return v == graph_traits::null_vertex(); }
+        bool isNull() const
+        {
+            return v == graph_traits::null_vertex();
+        }
 
     protected:
         vertex_t v;
@@ -169,18 +185,40 @@ public:
         Edge() : null(true) {}
         Edge(const edge_t& e) : e(e), null(false) {}
 
-        Edge &operator=(const edge_t& other)
-        { e = other; null = false; return *this; }
+        Edge& operator=(const edge_t& other)
+        {
+            e = other;
+            null = false;
+            return *this;
+        }
 
-        operator const edge_t&() const { return e; }
-        operator edge_t&() { return e; }
+        operator const edge_t&() const
+        {
+            return e;
+        }
+        operator edge_t&()
+        {
+            return e;
+        }
 
-        const edge_t& toEdge() const { return e; }
-        edge_t& toEdge() { return e; }
+        const edge_t& toEdge() const
+        {
+            return e;
+        }
+        edge_t& toEdge()
+        {
+            return e;
+        }
 
-        bool operator==(const edge_t& other) const { return e == other; }
+        bool operator==(const edge_t& other) const
+        {
+            return e == other;
+        }
 
-        bool isNull() const { return null; }
+        bool isNull() const
+        {
+            return null;
+        }
 
     protected:
         edge_t e;
@@ -211,7 +249,7 @@ public:
     {
     }
 
-    Graph& operator=(const Graph &other)
+    Graph& operator=(const Graph& other)
     {
         graph     = other.graph;
         direction = other.direction;
@@ -244,7 +282,9 @@ public:
     void remove(const Vertex& v)
     {
         if (v.isNull())
+        {
             return;
+        }
 
         boost::clear_vertex(v, graph);
         boost::remove_vertex(v, graph);
@@ -261,16 +301,24 @@ public:
     Edge addEdge(const Vertex& v1, const Vertex& v2)
     {
         Edge e = edge(v1, v2);
+
         if (e.isNull())
+        {
             e = boost::add_edge(v1, v2, graph).first;
+        }
+
         return e;
     }
 
     Edge edge(const Vertex& v1, const Vertex& v2) const
     {
         std::pair<edge_t, bool> pair = boost::edge(v1, v2, graph);
+
         if (pair.second)
+        {
             return pair.first;
+        }
+
         return Edge();
     }
 
@@ -282,9 +330,15 @@ public:
     bool isConnected(const Vertex& v1, const Vertex& v2) const
     {
         if (boost::edge(v1, v2, graph).second)
+        {
             return true;
+        }
+
         if (boost::edge(v2, v1, graph).second)
+        {
             return true;
+        }
+
         return false;
     }
 
@@ -311,30 +365,37 @@ public:
     Vertex findVertexByProperties(const T& value) const
     {
         vertex_range_t range = boost::vertices(graph);
+
         for (vertex_iter it = range.first; it != range.second; ++it)
         {
             const VertexProperties& props = properties(*it);
+
             // must implement operator==(const T&)
             if (props == value)
             {
                 return *it;
             }
         }
+
         return Vertex();
     }
 
     EdgeProperties properties(const Vertex& v1, const Vertex& v2) const
     {
         Edge e = edge(v1, v2);
+
         if (e.isNull())
+        {
             return EdgeProperties();
+        }
+
         return properties(e);
     }
-    const EdgeProperties &properties(const Edge& e) const
+    const EdgeProperties& properties(const Edge& e) const
     {
         return boost::get(edge_properties, graph, e);
     }
-    EdgeProperties &properties(const Edge& e)
+    EdgeProperties& properties(const Edge& e)
     {
         return boost::get(edge_properties, graph, e);
     }
@@ -363,15 +424,27 @@ public:
     QList<Vertex> adjacentVertices(const Vertex& v, AdjacencyFlags flags = AllEdges) const
     {
         if (flags & EdgesToLeaf)
+        {
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
+        }
+
         if (flags & EdgesToRoot)
+        {
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
+        }
 
         QList<Vertex> vertices;
+
         if (flags & OutboundEdges)
+        {
             vertices << toVertexList(boost::adjacent_vertices(v, graph));
+        }
+
         if (flags & InboundEdges)
+        {
             vertices << toVertexList(boost::inv_adjacent_vertices(v, graph));
+        }
+
         return vertices;
     }
 
@@ -420,15 +493,27 @@ public:
     QList<Edge> edges(const Vertex& v, AdjacencyFlags flags = AllEdges) const
     {
         if (flags & EdgesToLeaf)
+        {
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
+        }
+
         if (flags & EdgesToRoot)
+        {
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
+        }
 
         QList<Edge> es;
+
         if (flags & OutboundEdges)
+        {
             es << toEdgeList(boost::out_edges(v, graph));
+        }
+
         if (flags & InboundEdges)
+        {
             es << toEdgeList(boost::in_edges(v, graph));
+        }
+
         return es;
     }
 
@@ -440,20 +525,31 @@ public:
     bool hasEdges(const Vertex& v, AdjacencyFlags flags = AllEdges) const
     {
         if (flags & EdgesToLeaf)
+        {
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
+        }
+
         if (flags & EdgesToRoot)
+        {
             flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
+        }
 
         if (flags & OutboundEdges)
         {
             if (!isEmptyRange(boost::out_edges(v, graph)))
+            {
                 return true;
+            }
         }
+
         if (flags & InboundEdges)
         {
             if (!isEmptyRange(boost::in_edges(v, graph)))
+            {
                 return true;
+            }
         }
+
         return false;
     }
 
@@ -471,8 +567,12 @@ public:
     {
         QList<VertexPair> pairs;
         edge_range_t range = boost::edges(graph);
+
         for (edge_iter it = range.first; it != range.second; ++it)
+        {
             pairs << VertexPair(boost::source(*it, graph), boost::target(*it, graph));
+        }
+
         return pairs;
     }
 
@@ -484,9 +584,17 @@ public:
     QList<Vertex> topologicalSort() const
     {
         std::list<Vertex> vertices;
-        try {
-        boost::topological_sort(graph, std::back_inserter(vertices));
-        } catch (boost::bad_graph& e) { kDebug() << e.what(); return QList<Vertex>(); }
+
+        try
+        {
+            boost::topological_sort(graph, std::back_inserter(vertices));
+        }
+        catch (boost::bad_graph& e)
+        {
+            kDebug() << e.what();
+            return QList<Vertex>();
+        }
+
         typedef typename std::list<Vertex>::iterator vertex_list_iter;
         return toVertexList(std::pair<vertex_list_iter, vertex_list_iter>(vertices.begin(), vertices.end()));
     }
@@ -510,11 +618,17 @@ public:
         std::vector<vertex_t> copiedVertices(vertexCount(), Vertex());
         Graph closure;
 
-        try {
-        boost::transitive_closure(graph, closure.graph,
-                                  orig_to_copy(make_iterator_property_map(copiedVertices.begin(), get(boost::vertex_index, graph)))
-                                 );
-        } catch (boost::bad_graph& e) { kDebug() << e.what(); return Graph(); }
+        try
+        {
+            boost::transitive_closure(graph, closure.graph,
+                                      orig_to_copy(make_iterator_property_map(copiedVertices.begin(), get(boost::vertex_index, graph)))
+                                     );
+        }
+        catch (boost::bad_graph& e)
+        {
+            kDebug() << e.what();
+            return Graph();
+        }
 
         copyProperties(closure, flags, copiedVertices);
 
@@ -531,16 +645,24 @@ public:
         Graph reduction;
 
         // named parameters is not implemented
-        try {
-        boost::transitive_reduction(graph, reduction.graph,
-                                    make_iterator_property_map(copiedVertices.begin(), get(boost::vertex_index, graph)),
-                                    get(boost::vertex_index, graph));
-        } catch (boost::bad_graph& e) { kDebug() << e.what(); return Graph(); }
+        try
+        {
+            boost::transitive_reduction(graph, reduction.graph,
+                                        make_iterator_property_map(copiedVertices.begin(), get(boost::vertex_index, graph)),
+                                        get(boost::vertex_index, graph));
+        }
+        catch (boost::bad_graph& e)
+        {
+            kDebug() << e.what();
+            return Graph();
+        }
 
         copyProperties(reduction, flags, copiedVertices);
 
         if (removedEdges)
+        {
             *removedEdges = edgeDifference(reduction, copiedVertices);
+        }
 
         return reduction;
     }
@@ -571,7 +693,9 @@ public:
     QList<Vertex> longestPathTouching(const Vertex& v) const
     {
         if (v.isNull())
+        {
             return QList<Vertex>();
+        }
 
         QList<Vertex> fromRoot;
         QList<Vertex> toLeave;
@@ -600,9 +724,13 @@ public:
         }
 
         if (direction == ParentToChild)
+        {
             return fromRoot << v << toLeave;
+        }
         else
+        {
             return toLeave  << v << fromRoot;
+        }
     }
 
     /**
@@ -614,7 +742,9 @@ public:
     QList<Vertex> shortestPath(const Vertex& v1, const Vertex& v2) const
     {
         if (v1.isNull() || v2.isNull())
+        {
             return QList<Vertex>();
+        }
 
         QList<Vertex> vertices;
 
@@ -630,12 +760,14 @@ public:
         {
             // assume inverted parameters
             path.shortestPath(graph, v2);
+
             if (path.isReachable(v1))
             {
                 vertices = listPath(v1, v2, path.predecessors);
                 vertices.append(v2);
             }
         }
+
         return vertices;
     }
 
@@ -653,13 +785,20 @@ public:
     QList<Vertex> verticesDominatedBy(const Vertex& v, const Vertex& root, ReturnOrder order = BreadthFirstOrder) const
     {
         if (v.isNull())
+        {
             return QList<Vertex>();
+        }
 
         GraphSearch search;
+
         if (order == BreadthFirstOrder)
+        {
             search.breadthFirstSearch(graph, root, direction);
+        }
         else
+        {
             search.depthFirstSearch(graph, root, direction);
+        }
 
         DominatorTree tree;
         tree.enter(graph, root, direction);
@@ -707,16 +846,24 @@ protected:
     {
         typedef typename range_t::first_type iterator_t;
         QList<Value> list;
+
         for (iterator_t it = range.first; it != range.second; ++it)
+        {
             list << *it;
+        }
+
         return list;
     }
 
     template <typename range_t> QList<Vertex> toVertexList(const range_t& range) const
-    { return toList<Vertex, range_t>(range); }
+    {
+        return toList<Vertex, range_t>(range);
+    }
 
     template <typename range_t> QList<Edge> toEdgeList(const range_t& range) const
-    { return toList<Edge, range_t>(range); }
+    {
+        return toList<Edge, range_t>(range);
+    }
 
     template <typename range_t>
     bool isEmptyRange(const range_t& range) const
@@ -728,36 +875,51 @@ protected:
      * According to the given flags and based on the map,
      * copies vertex and edge properties from this to the other graph
      */
-    void copyProperties(Graph &other, GraphCopyFlags flags, const std::vector<vertex_t>& copiedVertices) const
+    void copyProperties(Graph& other, GraphCopyFlags flags, const std::vector<vertex_t>& copiedVertices) const
     {
         other.direction = direction;
+
         if (flags & CopyVertexProperties)
         {
             vertex_index_map_t indexMap = boost::get(boost::vertex_index, graph);
             vertex_range_t range = boost::vertices(graph);
+
             for (vertex_iter it = range.first; it != range.second; ++it)
             {
                 Vertex copiedVertex = copiedVertices[boost::get(indexMap, *it)];
+
                 if (copiedVertex.isNull())
+                {
                     continue;
+                }
+
                 other.setProperties(copiedVertex, properties(*it));
             }
         }
+
         if (flags & CopyEdgeProperties)
         {
             vertex_index_map_t indexMap = boost::get(boost::vertex_index, graph);
             edge_range_t range = boost::edges(graph);
+
             for (edge_iter it = range.first; it != range.second; ++it)
             {
                 Vertex s = boost::source(*it, graph);
                 Vertex t = boost::target(*it, graph);
                 Vertex copiedS = copiedVertices[boost::get(indexMap, s)];
                 Vertex copiedT = copiedVertices[boost::get(indexMap, t)];
+
                 if (copiedS.isNull() || copiedT.isNull())
+                {
                     continue;
+                }
+
                 Edge copiedEdge = other.edge(copiedS, copiedT);
+
                 if (!copiedEdge.isNull())
+                {
                     other.setProperties(copiedEdge, properties(s, t));
+                }
             }
         }
     }
@@ -766,23 +928,32 @@ protected:
      * Returns a list of edges of this graph that have been removed in other.
      * copiedVertices maps the vertices of this graph to other.
      */
-    QList<Edge> edgeDifference(const Graph &other, const std::vector<vertex_t>& copiedVertices) const
+    QList<Edge> edgeDifference(const Graph& other, const std::vector<vertex_t>& copiedVertices) const
     {
         QList<Edge> removed;
         vertex_index_map_t indexMap = boost::get(boost::vertex_index, graph);
         edge_range_t range = boost::edges(graph);
+
         for (edge_iter it = range.first; it != range.second; ++it)
         {
             Vertex s = boost::source(*it, graph);
             Vertex t = boost::target(*it, graph);
             Vertex copiedS = copiedVertices[boost::get(indexMap, s)];
             Vertex copiedT = copiedVertices[boost::get(indexMap, t)];
+
             if (copiedS.isNull() || copiedT.isNull())
+            {
                 continue;
+            }
+
             Edge copiedEdge = other.edge(copiedS, copiedT);
+
             if (copiedEdge.isNull())
+            {
                 removed << *it;
+            }
         }
+
         return removed;
     }
 
@@ -793,9 +964,13 @@ protected:
     {
         QList<Vertex> vertices;
         vertex_range_t range = boost::vertices(graph);
-        for(vertex_iter it = range.first; it != range.second; ++it)
+
+        for (vertex_iter it = range.first; it != range.second; ++it)
             if ( (inOrOut ? in_degree(*it, graph) : out_degree(*it, graph)) == 0)
+            {
                 vertices << *it;
+            }
+
         return vertices;
     }
 
@@ -812,37 +987,50 @@ protected:
         {
             int weight = 1;
 
-            try {
-            boost::dag_shortest_paths(graph, v,
-                            // we provide a constant weight of 1
-                            weight_map(boost::ref_property_map<edge_t,int>(weight)).
-                            // Store distance and predecessors in QMaps, wrapped to serve as property maps
-                            distance_map(VertexIntMapAdaptor(distances)).
-                            predecessor_map(VertexVertexMapAdaptor(predecessors))
-                            );
-            } catch (boost::bad_graph& e) { kDebug() << e.what(); }
+            try
+            {
+                boost::dag_shortest_paths(graph, v,
+                                          // we provide a constant weight of 1
+                                          weight_map(boost::ref_property_map<edge_t,int>(weight)).
+                                          // Store distance and predecessors in QMaps, wrapped to serve as property maps
+                                          distance_map(VertexIntMapAdaptor(distances)).
+                                          predecessor_map(VertexVertexMapAdaptor(predecessors))
+                                         );
+            }
+            catch (boost::bad_graph& e)
+            {
+                kDebug() << e.what();
+            }
         }
         template <class GraphType>
         void longestPath(const GraphType& graph, const Vertex& v)
         {
             int weight = 1;
 
-            try {
-            boost::dag_shortest_paths(graph, v,
-                            // we provide a constant weight of 1
-                            weight_map(boost::ref_property_map<edge_t,int>(weight)).
-                            // Invert the default compare method: With greater, we get the longest path
-                            distance_compare(std::greater<int>()).
-                            // will be returned if a node is unreachable
-                            distance_inf(-1).
-                            // Store distance and predecessors in QMaps, wrapped to serve as property maps
-                            distance_map(VertexIntMapAdaptor(distances)).
-                            predecessor_map(VertexVertexMapAdaptor(predecessors))
-                            );
-            } catch (boost::bad_graph& e) { kDebug() << e.what(); }
+            try
+            {
+                boost::dag_shortest_paths(graph, v,
+                                          // we provide a constant weight of 1
+                                          weight_map(boost::ref_property_map<edge_t,int>(weight)).
+                                          // Invert the default compare method: With greater, we get the longest path
+                                          distance_compare(std::greater<int>()).
+                                          // will be returned if a node is unreachable
+                                          distance_inf(-1).
+                                          // Store distance and predecessors in QMaps, wrapped to serve as property maps
+                                          distance_map(VertexIntMapAdaptor(distances)).
+                                          predecessor_map(VertexVertexMapAdaptor(predecessors))
+                                         );
+            }
+            catch (boost::bad_graph& e)
+            {
+                kDebug() << e.what();
+            }
         }
 
-        bool isReachable(const Vertex& v) const { return predecessors.value(v, v) != v; }
+        bool isReachable(const Vertex& v) const
+        {
+            return predecessors.value(v, v) != v;
+        }
 
         VertexVertexMap predecessors;
         VertexIntMap    distances;
@@ -855,13 +1043,20 @@ protected:
         template <class GraphType>
         void enter(const GraphType& graph, const Vertex& v, MeaningOfDirection direction = ParentToChild)
         {
-            try {
+            try
+            {
                 if (direction == ParentToChild)
+                {
                     boost::lengauer_tarjan_dominator_tree(graph, v, VertexVertexMapAdaptor(predecessors));
+                }
                 else
                     boost::lengauer_tarjan_dominator_tree(boost::make_reverse_graph(graph), v,
                                                           VertexVertexMapAdaptor(predecessors));
-            } catch (boost::bad_graph& e) { kDebug() << e.what(); }
+            }
+            catch (boost::bad_graph& e)
+            {
+                kDebug() << e.what();
+            }
         }
 
         VertexVertexMap predecessors;
@@ -876,50 +1071,77 @@ protected:
         {
             // remember that the visitor is passed by value
             DepthFirstSearchVisitor vis(this);
-            try {
+
+            try
+            {
                 if (direction == ParentToChild)
+                {
                     boost::depth_first_search(graph, visitor(vis).root_vertex(v));
+                }
                 else
+                {
                     boost::depth_first_search(boost::make_reverse_graph(graph), visitor(vis).root_vertex(v));
-            } catch (boost::bad_graph& e) { kDebug() << e.what(); }
+                }
+            }
+            catch (boost::bad_graph& e)
+            {
+                kDebug() << e.what();
+            }
         }
 
         template <class GraphType>
         void breadthFirstSearch(const GraphType& graph, const Vertex& v, MeaningOfDirection direction = ParentToChild)
         {
             BreadthFirstSearchVisitor vis(this);
-            try {
+
+            try
+            {
                 if (direction == ParentToChild)
+                {
                     boost::breadth_first_search(graph, v, visitor(vis));
+                }
                 else
+                {
                     boost::breadth_first_search(boost::make_reverse_graph(graph), v, visitor(vis));
-            } catch (boost::bad_graph& e) { kDebug() << e.what(); }
+                }
+            }
+            catch (boost::bad_graph& e)
+            {
+                kDebug() << e.what();
+            }
         }
 
         class CommonVisitor
         {
         protected:
-            CommonVisitor(GraphSearch *q) : q(q) {}
-            void record(const Vertex& v) const { q->vertices << v; }
+            CommonVisitor(GraphSearch* q) : q(q) {}
+            void record(const Vertex& v) const
+            {
+                q->vertices << v;
+            }
             GraphSearch* const q;
         };
 
         class DepthFirstSearchVisitor : public boost::default_dfs_visitor, public CommonVisitor
         {
         public:
-            DepthFirstSearchVisitor(GraphSearch *q) : CommonVisitor(q) {}
+            DepthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
             template <typename VertexType, typename GraphType>
-            void discover_vertex(VertexType u, const GraphType &) const
-            { record(u); }
+            void discover_vertex(VertexType u, const GraphType&) const
+            {
+                record(u);
+            }
         };
 
         class BreadthFirstSearchVisitor : public boost::default_bfs_visitor, public CommonVisitor
         {
         public:
-            BreadthFirstSearchVisitor(GraphSearch *q) : CommonVisitor(q) {}
+            BreadthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
             template <typename VertexType, typename GraphType>
-            void discover_vertex(VertexType u, const GraphType &) const
-            { record(u); }
+            void discover_vertex(VertexType u, const GraphType&) const
+            {
+                record(u);
+            }
         };
 
         QList<Vertex> vertices;
@@ -931,6 +1153,7 @@ protected:
         typename VertexIntMap::const_iterator it;
         int maxDist = 1;
         QList<Vertex> candidates;
+
         for (it = distances.begin(); it != distances.end(); ++it)
         {
             if (it.value() > maxDist)
@@ -939,11 +1162,13 @@ protected:
                 //qDebug() << "Increasing maxDist to" << maxDist;
                 candidates.clear();
             }
+
             if (it.value() >= maxDist)
             {
                 //qDebug() << "Adding candidate" << id(it.key()) <<  "at distance" << maxDist;
                 candidates << it.key();
             }
+
             /*
             if (it.value() == -1)
                 qDebug() << id(it.key()) << "unreachable";
@@ -951,6 +1176,7 @@ protected:
                 qDebug() << "Distance to" << id(it.key()) << "is" << it.value();
             */
         }
+
         return candidates;
     }
 
@@ -962,19 +1188,27 @@ protected:
                            const VertexVertexMap& predecessors, MeaningOfDirection dir = ParentToChild) const
     {
         QList<Vertex> vertices;
+
         for (Vertex v = root; v != target; v = predecessors.value(v))
         {
             //qDebug() << "Adding waypoint" << id(v);
             if (dir == ParentToChild)
+            {
                 vertices.append(v);
+            }
             else
+            {
                 vertices.prepend(v);
+            }
 
             // If a node is not reachable, it seems its entry in the predecessors map is itself
             // Avoid endless loop
             if (predecessors.value(v) == v)
+            {
                 break;
+            }
         }
+
         return vertices;
     }
 

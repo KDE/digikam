@@ -49,8 +49,8 @@ namespace Digikam
  * @param pixmap      Pixmap to show in the notification, in addition to the digikam logo.
  */
 void DIGIKAM_EXPORT KNotificationWrapper(const QString& eventId, const QString& message,
-                                         QWidget* const parent, const QString& windowTitle,
-                                         const QPixmap& pixmap = QPixmap());
+        QWidget* const parent, const QString& windowTitle,
+        const QPixmap& pixmap = QPixmap());
 
 } // namespace Digikam
 

@@ -69,7 +69,9 @@ public:
     }
 
     ImageCategorizedView* view() const
-    { return static_cast<ImageCategorizedView*>(ItemViewToolTip::view()); }
+    {
+        return static_cast<ImageCategorizedView*>(ItemViewToolTip::view());
+    }
 
 protected:
 
@@ -113,7 +115,7 @@ public:
 // -------------------------------------------------------------------------------
 
 ImageCategorizedView::ImageCategorizedView(QWidget* parent)
-                    : DCategorizedView(parent), d(new ImageCategorizedViewPriv)
+    : DCategorizedView(parent), d(new ImageCategorizedViewPriv)
 {
     setToolTip(new ImageItemViewToolTip(this));
 
@@ -154,7 +156,9 @@ void ImageCategorizedView::installDefaultModels()
 void ImageCategorizedView::setModels(ImageModel* model, ImageSortFilterModel* filterModel)
 {
     if (d->delegate)
+    {
         d->delegate->setAllOverlaysActive(false);
+    }
 
     if (d->filterModel)
     {
@@ -164,6 +168,7 @@ void ImageCategorizedView::setModels(ImageModel* model, ImageSortFilterModel* fi
         disconnect(d->filterModel, SIGNAL(layoutChanged()),
                    this, SLOT(layoutWasChanged()));
     }
+
     if (d->model)
     {
         disconnect(d->model, SIGNAL(imageInfosAdded(const QList<ImageInfo> &)),
@@ -188,7 +193,9 @@ void ImageCategorizedView::setModels(ImageModel* model, ImageSortFilterModel* fi
     emit modelChanged();
 
     if (d->delegate)
+    {
         d->delegate->setAllOverlaysActive(true);
+    }
 }
 
 ImageModel* ImageCategorizedView::imageModel() const
@@ -211,7 +218,7 @@ ImageThumbnailModel* ImageCategorizedView::imageThumbnailModel() const
     return qobject_cast<ImageThumbnailModel*>(d->model);
 }
 
-ImageAlbumModel *ImageCategorizedView::imageAlbumModel() const
+ImageAlbumModel* ImageCategorizedView::imageAlbumModel() const
 {
     return qobject_cast<ImageAlbumModel*>(d->model);
 }
@@ -235,6 +242,7 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
 {
     ThumbnailSize oldSize      = thumbnailSize();
     ImageDelegate* oldDelegate = d->delegate;
+
     if (oldDelegate)
     {
         d->delegate->setAllOverlaysActive(false);
@@ -245,7 +253,9 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
     d->delegate->setThumbnailSize(oldSize);
 
     if (oldDelegate)
+    {
         d->delegate->setSpacing(oldDelegate->spacing());
+    }
 
     DCategorizedView::setItemDelegate(d->delegate);
     setCategoryDrawer(d->delegate->categoryDrawer());
@@ -258,8 +268,12 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
 Album* ImageCategorizedView::currentAlbum() const
 {
     ImageAlbumModel* albumModel = imageAlbumModel();
+
     if (albumModel)
+    {
         return albumModel->currentAlbum();
+    }
+
     return 0;
 }
 
@@ -286,10 +300,15 @@ QList<ImageInfo> ImageCategorizedView::selectedImageInfosCurrentFirst() const
     foreach (const QModelIndex& index, indexes)
     {
         ImageInfo info = d->filterModel->imageInfo(index);
+
         if (index == current)
+        {
             infos.prepend(info);
+        }
         else
+        {
             infos.append(info);
+        }
     }
     return infos;
 }
@@ -329,29 +348,37 @@ void ImageCategorizedView::toIndex(const KUrl& url)
 ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo& startingPoint, int nth)
 {
     QModelIndex index = d->filterModel->indexForImageInfo(startingPoint);
+
     if (!index.isValid())
     {
         return ImageInfo();
     }
+
     return d->filterModel->imageInfo(d->filterModel->index(index.row() + nth, 0, QModelIndex()));
 }
 
 void ImageCategorizedView::openAlbum(Album* album)
 {
     ImageAlbumModel* albumModel = imageAlbumModel();
+
     if (albumModel)
+    {
         albumModel->openAlbum(album);
+    }
 }
 
 ThumbnailSize ImageCategorizedView::thumbnailSize() const
 {
-/*
-    ImageThumbnailModel *thumbModel = imageThumbnailModel();
-    if (thumbModel)
-        return thumbModel->thumbnailSize();
-*/
+    /*
+        ImageThumbnailModel *thumbModel = imageThumbnailModel();
+        if (thumbModel)
+            return thumbModel->thumbnailSize();
+    */
     if (d->delegate)
+    {
         return d->delegate->thumbnailSize();
+    }
+
     return ThumbnailSize();
 }
 
@@ -381,10 +408,15 @@ void ImageCategorizedView::setCurrentUrl(const KUrl& url)
         setCurrentIndex(QModelIndex());
         return;
     }
+
     QString path = url.toLocalFile();
     QModelIndex index = d->filterModel->indexForPath(path);
+
     if (!index.isValid())
+    {
         return;
+    }
+
     clearSelection();
     setCurrentIndex(index);
 }
@@ -400,10 +432,12 @@ void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
 {
     kDebug()<<"urlList.size():"<<urlList.size();
     QItemSelection mySelection;
+
     for (KUrl::List::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
     {
         const QString path = it->path();
         const QModelIndex index = d->filterModel->indexForPath(path);
+
         if (!index.isValid())
         {
             kWarning() << "no QModelIndex found for" << *it;
@@ -414,6 +448,7 @@ void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
             mySelection.select(index, index);
         }
     }
+
     clearSelection();
     selectionModel()->select(mySelection, QItemSelectionModel::Select);
 }
@@ -421,9 +456,12 @@ void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
 void ImageCategorizedView::addOverlay(ImageDelegateOverlay* overlay, ImageDelegate* delegate)
 {
     if (!delegate)
+    {
         delegate = d->delegate;
+    }
 
     delegate->installOverlay(overlay);
+
     if (delegate == d->delegate)
     {
         overlay->setView(this);
@@ -434,8 +472,12 @@ void ImageCategorizedView::addOverlay(ImageDelegateOverlay* overlay, ImageDelega
 void ImageCategorizedView::removeOverlay(ImageDelegateOverlay* overlay)
 {
     ImageDelegate* delegate = dynamic_cast<ImageDelegate*>(overlay->delegate());
+
     if (delegate)
+    {
         delegate->removeOverlay(overlay);
+    }
+
     overlay->setView(0);
 }
 
@@ -449,8 +491,11 @@ void ImageCategorizedView::slotDelayedEnter()
 {
     // re-emit entered() for index under mouse (after layout).
     QModelIndex mouseIndex = indexAt(mapFromGlobal(QCursor::pos()));
+
     if (mouseIndex.isValid())
+    {
         emit KCategorizedView::entered(mouseIndex);
+    }
 }
 
 void ImageCategorizedView::addSelectionOverlay(ImageDelegate* delegate)
@@ -475,21 +520,29 @@ void ImageCategorizedView::scrollToStoredItem()
 void ImageCategorizedView::slotImageInfosAdded()
 {
     if (d->scrollToItemId)
+    {
         scrollToStoredItem();
+    }
 }
 
 void ImageCategorizedView::slotFileChanged(const QString& filePath)
 {
     QModelIndex index = d->filterModel->indexForPath(filePath);
+
     if (index.isValid())
+    {
         update(index);
+    }
 }
 
 void ImageCategorizedView::indexActivated(const QModelIndex& index)
 {
     ImageInfo info = d->filterModel->imageInfo(index);
+
     if (!info.isNull())
+    {
         activated(info);
+    }
 }
 
 void ImageCategorizedView::currentChanged(const QModelIndex& index, const QModelIndex& previous)
@@ -504,22 +557,29 @@ void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems,
     DCategorizedView::selectionChanged(selectedItems, deselectedItems);
 
     if (!selectedItems.isEmpty())
+    {
         emit selected(d->filterModel->imageInfos(selectedItems.indexes()));
+    }
+
     if (!deselectedItems.isEmpty())
+    {
         emit deselected(d->filterModel->imageInfos(deselectedItems.indexes()));
+    }
 }
 
-Album *ImageCategorizedView::albumAt(const QPoint& pos)
+Album* ImageCategorizedView::albumAt(const QPoint& pos)
 {
     if (imageFilterModel()->imageSortSettings().categorizationMode == ImageSortSettings::CategoryByAlbum)
     {
         QModelIndex categoryIndex = indexForCategoryAt(pos);
+
         if (categoryIndex.isValid())
         {
             int albumId = categoryIndex.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
             return AlbumManager::instance()->findPAlbum(albumId);
         }
     }
+
     return currentAlbum();
 }
 
@@ -542,7 +602,8 @@ void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const Image
 void ImageCategorizedView::paintEvent(QPaintEvent* e)
 {
     // We want the thumbnails to be loaded in order.
-    ImageThumbnailModel *thumbModel = imageThumbnailModel();
+    ImageThumbnailModel* thumbModel = imageThumbnailModel();
+
     if (thumbModel)
     {
         QModelIndexList indexesToThumbnail = imageFilterModel()->mapListToSource(categorizedIndexesIn(viewport()->rect()));

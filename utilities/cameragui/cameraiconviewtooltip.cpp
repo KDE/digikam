@@ -63,7 +63,7 @@ public:
 };
 
 CameraIconViewToolTip::CameraIconViewToolTip(CameraIconView* view)
-                     : DItemToolTip(), d(new CameraIconViewToolTipPriv)
+    : DItemToolTip(), d(new CameraIconViewToolTipPriv)
 {
     d->view = view;
 }
@@ -86,14 +86,20 @@ void CameraIconViewToolTip::setIconItem(CameraIconItem* iconItem)
     {
         updateToolTip();
         reposition();
+
         if (isHidden() && !toolTipIsEmpty())
+        {
             show();
+        }
     }
 }
 
 QRect CameraIconViewToolTip::repositionRect()
 {
-    if (!d->iconItem) return QRect();
+    if (!d->iconItem)
+    {
+        return QRect();
+    }
 
     QRect rect = d->iconItem->clickToOpenRect();
     rect.moveTopLeft(d->view->contentsToViewport(rect.topLeft()));
@@ -103,8 +109,12 @@ QRect CameraIconViewToolTip::repositionRect()
 
 QString CameraIconViewToolTip::tipContents()
 {
-    if (!d->iconItem) return QString();
-    GPItemInfo *info = d->iconItem->itemInfo();
+    if (!d->iconItem)
+    {
+        return QString();
+    }
+
+    GPItemInfo* info = d->iconItem->itemInfo();
     return fillTipContents(info);
 }
 
@@ -144,15 +154,18 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
         {
             tip += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             str = i18n("%1 (%2)", KIO::convertSize(info->size),
-                                  KGlobal::locale()->formatNumber(info->size, 0));
+                       KGlobal::locale()->formatNumber(info->size, 0));
             tip += str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowImageType())
         {
             KMimeType::Ptr mt = KMimeType::mimeType(info->mime);
+
             if (mt)
+            {
                 tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + mt->comment() + cnt.cellEnd;
+            }
         }
 
         if (settings->getToolTipsShowImageDim())
@@ -168,6 +181,7 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
                 str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
                             info->width, info->height, mpixels);
             }
+
             tip += cnt.cellBeg + i18n("Dimensions:") + cnt.cellMid + str + cnt.cellEnd;
         }
     }
@@ -190,8 +204,13 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
             if (settings->getToolTipsShowPhotoMake())
             {
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
-                                        .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+                      .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
@@ -200,7 +219,12 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
                 if (photoInfo.dateTime.isValid())
                 {
                     str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
-                    if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+
+                    if (str.length() > cnt.maxStringLength)
+                    {
+                        str = str.left(cnt.maxStringLength-3) + "...";
+                    }
+
                     metaStr += cnt.cellBeg + i18n("Created:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
                 }
                 else
@@ -214,12 +238,18 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
                 str = photoInfo.aperture.isEmpty() ? cnt.unavailable : photoInfo.aperture;
 
                 if (photoInfo.focalLength35mm.isEmpty())
+                {
                     str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? cnt.unavailable : photoInfo.focalLength);
+                }
                 else
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)",
-                           photoInfo.focalLength, photoInfo.focalLength35mm));
+                                                     photoInfo.focalLength, photoInfo.focalLength35mm));
 
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
@@ -227,37 +257,65 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? cnt.unavailable :
                                              photoInfo.exposureTime)
-                                        .arg(photoInfo.sensitivity.isEmpty() ? cnt.unavailable :
-                                             i18n("%1 ISO", photoInfo.sensitivity));
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+                      .arg(photoInfo.sensitivity.isEmpty() ? cnt.unavailable :
+                           i18n("%1 ISO", photoInfo.sensitivity));
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoMode())
             {
                 if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                {
                     str = cnt.unavailable;
+                }
                 else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                {
                     str = photoInfo.exposureMode;
+                }
                 else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+                {
                     str = photoInfo.exposureProgram;
+                }
                 else
+                {
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("Mode/Program:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoFlash())
             {
                 str = photoInfo.flash.isEmpty() ? cnt.unavailable : photoInfo.flash;
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoWB())
             {
                 str = photoInfo.whiteBalance.isEmpty() ? cnt.unavailable : photoInfo.whiteBalance;
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 

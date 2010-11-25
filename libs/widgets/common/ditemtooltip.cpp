@@ -56,26 +56,26 @@ DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
     tipFooter   = QString("</table></qt>");
 
     headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
-                            "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
-                            .arg(ThemeEngine::instance()->baseColor().name())
-                            .arg(ThemeEngine::instance()->textRegColor().name())
-                            .arg(font.family());
+                          "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
+                  .arg(ThemeEngine::instance()->baseColor().name())
+                  .arg(ThemeEngine::instance()->textRegColor().name())
+                  .arg(font.family());
     headEnd     = QString("</b></center></font></nobr></td></tr>");
 
     cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                            .arg(ThemeEngine::instance()->textRegColor().name())
-                            .arg(font.family());
+                  .arg(ThemeEngine::instance()->textRegColor().name())
+                  .arg(font.family());
     cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                            .arg(ThemeEngine::instance()->textRegColor().name())
-                            .arg(font.family());
+                  .arg(ThemeEngine::instance()->textRegColor().name())
+                  .arg(font.family());
     cellEnd     = QString("</font></nobr></td></tr>");
 
     cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                            .arg(ThemeEngine::instance()->textRegColor().name())
-                            .arg(font.family());
+                  .arg(ThemeEngine::instance()->textRegColor().name())
+                  .arg(font.family());
     cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
-                            .arg(ThemeEngine::instance()->textSpecialRegColor().name())
-                            .arg(font.family());
+                  .arg(ThemeEngine::instance()->textSpecialRegColor().name())
+                  .arg(font.family());
     cellSpecEnd = QString("</i></font></nobr></td></tr>");
 }
 
@@ -85,7 +85,9 @@ QString DToolTipStyleSheet::breakString(const QString& input)
     str         = Qt::escape(str);
 
     if (str.length() <= maxStringLength)
+    {
         return str;
+    }
 
     QString br;
 
@@ -107,13 +109,16 @@ QString DToolTipStyleSheet::breakString(const QString& input)
         ++i;
         ++count;
     }
+
     return br;
 }
 
 QString DToolTipStyleSheet::elidedText(const QString& str, Qt::TextElideMode elideMode)
 {
     if (str.length() <= maxStringLength)
+    {
         return str;
+    }
 
     switch (elideMode)
     {
@@ -147,8 +152,8 @@ public:
     QPixmap     corners[4];
 };
 
-DItemToolTip::DItemToolTip(QWidget *parent)
-            : QLabel(parent, Qt::ToolTip), d(new DItemToolTipPriv)
+DItemToolTip::DItemToolTip(QWidget* parent)
+    : QLabel(parent, Qt::ToolTip), d(new DItemToolTipPriv)
 {
     hide();
 
@@ -189,8 +194,11 @@ bool DItemToolTip::toolTipIsEmpty() const
 void DItemToolTip::reposition()
 {
     QRect rect = repositionRect();
+
     if (rect.isNull())
+    {
         return;
+    }
 
     QPoint pos = rect.center();
     // d->corner:
@@ -248,7 +256,9 @@ void DItemToolTip::renderArrows()
     p0.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
 
     for (int j=0; j<w; ++j)
+    {
         p0.drawLine(0, j, w-j-1, j);
+    }
 
     p0.end();
 
@@ -262,7 +272,9 @@ void DItemToolTip::renderArrows()
     p1.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
 
     for (int j=0; j<w; ++j)
+    {
         p1.drawLine(j, j, w-1, j);
+    }
 
     p1.end();
 
@@ -276,7 +288,9 @@ void DItemToolTip::renderArrows()
     p2.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
 
     for (int j=0; j<w; ++j)
+    {
         p2.drawLine(0, j, j, j);
+    }
 
     p2.end();
 
@@ -290,12 +304,14 @@ void DItemToolTip::renderArrows()
     p3.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
 
     for (int j=0; j<w; ++j)
+    {
         p3.drawLine(w-j-1, j, w-1, j);
+    }
 
     p3.end();
 }
 
-bool DItemToolTip::event(QEvent *e)
+bool DItemToolTip::event(QEvent* e)
 {
     switch ( e->type() )
     {
@@ -320,13 +336,16 @@ void DItemToolTip::resizeEvent(QResizeEvent* e)
     QStyleHintReturnMask frameMask;
     QStyleOption option;
     option.init(this);
+
     if (style()->styleHint(QStyle::SH_ToolTip_Mask, &option, this, &frameMask))
+    {
         setMask(frameMask.region);
+    }
 
     reposition();
 }
 
-void DItemToolTip::paintEvent(QPaintEvent *e)
+void DItemToolTip::paintEvent(QPaintEvent* e)
 {
     {
         QStylePainter p(this);
@@ -338,10 +357,13 @@ void DItemToolTip::paintEvent(QPaintEvent *e)
     QLabel::paintEvent(e);
 
     QPainter p(this);
-    if (d->corner >= 4)
-        return;
 
-    QPixmap &pix = d->corners[d->corner];
+    if (d->corner >= 4)
+    {
+        return;
+    }
+
+    QPixmap& pix = d->corners[d->corner];
 
     switch (d->corner)
     {

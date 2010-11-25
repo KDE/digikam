@@ -53,9 +53,15 @@ private:
     /**
      * This filter is only for preview calculation.
      */
-    virtual FilterAction filterAction() { return FilterAction(); }
+    virtual FilterAction filterAction()
+    {
+        return FilterAction();
+    }
     virtual void readParameters(const FilterAction&) {}
-    virtual QString filterIdentifier() const { return QString(); }
+    virtual QString filterIdentifier() const
+    {
+        return QString();
+    }
 
 private:
 

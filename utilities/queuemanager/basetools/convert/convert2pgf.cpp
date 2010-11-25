@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 Convert2PGF::Convert2PGF(QObject* parent)
-           : BatchTool("Convert2PGF", ConvertTool, parent)
+    : BatchTool("Convert2PGF", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To PGF"));
     setToolDescription(i18n("A tool to convert images to PGF format."));
@@ -94,7 +94,10 @@ QString Convert2PGF::outputSuffix() const
 
 bool Convert2PGF::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     bool lossless = settings()["lossless"].toBool();
     image().setAttribute("quality", lossless ? 0 : settings()["quality"].toInt());

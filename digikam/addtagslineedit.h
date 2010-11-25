@@ -60,7 +60,7 @@ public:
      */
     void setModel(TagModel* model);
     void setModel(AlbumFilterModel* model);
-    void setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, AlbumFilterModel* filterModel);
+    void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, AlbumFilterModel* filterModel);
     /** Reads a tag treeview and takes the currently selected tag into account
      *  when suggesting a parent tag for a new tag, and a default action. */
     void setTagTreeView(TagTreeView* treeView);
@@ -68,7 +68,7 @@ public:
     /**
      * Sets the currently selected tagging action to the given tag
      */
-    void setCurrentTag(TAlbum *album);
+    void setCurrentTag(TAlbum* album);
 
     void setCurrentTaggingAction(const TaggingAction& action);
     TaggingAction currentTaggingAction() const;
@@ -107,7 +107,7 @@ protected:
 
 private:
 
-class AddTagsLineEditPriv;
+    class AddTagsLineEditPriv;
     AddTagsLineEditPriv* const d;
 };
 

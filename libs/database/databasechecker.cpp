@@ -97,7 +97,7 @@ bool DatabasePrivilegesChecker::checkPriv(DatabaseBackend& dbBackend, const QStr
     // now perform the copy action
     QList<QString> columnNames;
     DatabaseCoreBackend::QueryState queryStateResult = dbBackend.execDBAction(dbBackend.getDBAction(dbActionName),
-                                                                              bindingMap);
+            bindingMap);
 
     if (queryStateResult != DatabaseCoreBackend::NoErrors &&
         dbBackend.lastSQLError().isValid()                &&

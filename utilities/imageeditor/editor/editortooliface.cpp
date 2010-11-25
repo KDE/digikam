@@ -65,7 +65,7 @@ EditorToolIface* EditorToolIface::editorToolIface()
 }
 
 EditorToolIface::EditorToolIface(EditorWindow* editor)
-               : QObject(), d(new EditorToolIfacePriv)
+    : QObject(), d(new EditorToolIfacePriv)
 {
     d->editor = editor;
     m_iface   = this;
@@ -74,8 +74,11 @@ EditorToolIface::EditorToolIface(EditorWindow* editor)
 EditorToolIface::~EditorToolIface()
 {
     delete d;
+
     if (m_iface == this)
+    {
         m_iface = 0;
+    }
 }
 
 EditorTool* EditorToolIface::currentTool() const
@@ -85,7 +88,10 @@ EditorTool* EditorToolIface::currentTool() const
 
 void EditorToolIface::loadTool(EditorTool* tool)
 {
-    if (d->tool) unLoadTool();
+    if (d->tool)
+    {
+        unLoadTool();
+    }
 
     d->tool = tool;
     d->editor->editorStackView()->setToolView(d->tool->toolView());
@@ -96,9 +102,12 @@ void EditorToolIface::loadTool(EditorTool* tool)
 
     // If editor tool has zoomable preview, switch on zoom actions.
     if (d->editor->editorStackView()->previewWidget())
+    {
         d->editor->toggleZoomActions(true);
+    }
 
     ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->tool->toolView());
+
     if (view)
     {
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
@@ -108,6 +117,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
     }
 
     ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->tool->toolView());
+
     if (view2)
     {
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
@@ -123,6 +133,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
             QPoint tl = d->editor->editorStackView()->canvas()->visibleArea().topLeft();
             view2->setContentsPos(tl.x(), tl.y());
         }
+
         view2->slotPreviewModeChanged(d->editor->previewMode());
     }
 
@@ -132,23 +143,30 @@ void EditorToolIface::loadTool(EditorTool* tool)
 
     connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
             d->tool, SLOT(slotPreviewModeChanged()));
-    
+
     connect(d->tool, SIGNAL(okClicked()),
             this, SLOT(slotToolApplied()));
 }
 
 void EditorToolIface::unLoadTool()
 {
-    if (!d->tool) return;
+    if (!d->tool)
+    {
+        return;
+    }
 
     d->editor->editorStackView()->setViewMode(EditorStackView::CanvasMode);
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
     d->editor->toggleActions(true);
     d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
+
     // To restore canvas zoom level in zoom combobox.
     if (!d->editor->editorStackView()->canvas()->fitToWindow())
+    {
         d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
+    }
+
     delete d->tool;
     d->tool = 0;
 
@@ -164,8 +182,11 @@ void EditorToolIface::setToolInfoMessage(const QString& txt)
 void EditorToolIface::setToolStartProgress(const QString& toolName)
 {
     d->editor->setToolStartProgress(toolName);
+
     if (d->editor->editorStackView()->previewWidget())
+    {
         d->editor->toggleZoomActions(false);
+    }
 }
 
 void EditorToolIface::setToolProgress(int progress)
@@ -176,26 +197,41 @@ void EditorToolIface::setToolProgress(int progress)
 void EditorToolIface::setToolStopProgress()
 {
     d->editor->setToolStopProgress();
+
     if (d->editor->editorStackView()->previewWidget())
+    {
         d->editor->toggleZoomActions(true);
+    }
 }
 
 void EditorToolIface::slotToolAborted()
 {
     EditorToolThreaded* tool = dynamic_cast<EditorToolThreaded*>(d->tool);
-    if (tool) tool->slotAbort();
+
+    if (tool)
+    {
+        tool->slotAbort();
+    }
 }
 
 void EditorToolIface::slotCloseTool()
 {
     EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
-    if (tool) tool->slotCloseTool();
+
+    if (tool)
+    {
+        tool->slotCloseTool();
+    }
 }
 
 void EditorToolIface::slotApplyTool()
 {
     EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
-    if (tool) tool->slotApplyTool();
+
+    if (tool)
+    {
+        tool->slotApplyTool();
+    }
 }
 
 void EditorToolIface::setupICC()
@@ -208,7 +244,11 @@ void EditorToolIface::updateICCSettings()
     ICCSettingsContainer* cmSettings = d->editor->cmSettings();
     d->editor->editorStackView()->canvas()->setICCSettings(cmSettings);
     EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
-    if (tool) tool->ICCSettingsChanged();
+
+    if (tool)
+    {
+        tool->ICCSettingsChanged();
+    }
 }
 
 void EditorToolIface::updateExposureSettings()
@@ -216,7 +256,11 @@ void EditorToolIface::updateExposureSettings()
     ExposureSettingsContainer* expoSettings = d->editor->exposureSettings();
     d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
     EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
-    if (tool) tool->exposureSettingsChanged();
+
+    if (tool)
+    {
+        tool->exposureSettingsChanged();
+    }
 }
 
 void EditorToolIface::setPreviewModeMask(int mask)

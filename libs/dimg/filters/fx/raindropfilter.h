@@ -48,12 +48,27 @@ public:
                             int amount=150, int coeff=30, QRect* selection=0L);
     ~RainDropFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:RainDropFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Rain Drops Effect"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:RainDropFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Rain Drops Effect");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -65,7 +80,7 @@ private:
                         int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax);
 
     bool CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
-                        uchar* pResBits, uchar *pStatusBits,
+                        uchar* pResBits, uchar* pStatusBits,
                         int X, int Y, int DropSize, double Coeff, bool bLimitRange);
 
     bool CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
@@ -77,15 +92,31 @@ private:
     // the value and limits to this range.
     inline int LimitValues8(int ColorValue)
     {
-        if (ColorValue > 255) ColorValue = 255;
-        if (ColorValue < 0) ColorValue = 0;
+        if (ColorValue > 255)
+        {
+            ColorValue = 255;
+        }
+
+        if (ColorValue < 0)
+        {
+            ColorValue = 0;
+        }
+
         return ColorValue;
     };
 
     inline int LimitValues16(int ColorValue)
     {
-        if (ColorValue > 65535) ColorValue = 65535;
-        if (ColorValue < 0) ColorValue = 0;
+        if (ColorValue > 65535)
+        {
+            ColorValue = 65535;
+        }
+
+        if (ColorValue < 0)
+        {
+            ColorValue = 0;
+        }
+
         return ColorValue;
     };
 

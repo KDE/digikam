@@ -43,18 +43,20 @@ namespace Digikam
 {
 
 QImageLoader::QImageLoader(DImg* image)
-            : DImgLoader(image)
+    : DImgLoader(image)
 {
 }
 
-bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
+bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 {
     // Loading is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
     QImage image(filePath);
 
     if (observer)
+    {
         observer->progressInfo(m_image, 0.9F);
+    }
 
     if (image.isNull())
     {
@@ -65,6 +67,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     int colorModel = DImg::COLORMODELUNKNOWN;
     int originalDepth = 0;
+
     switch (image.format())
     {
         case QImage::Format_Invalid:
@@ -98,12 +101,14 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uint w      = target.width();
     uint h      = target.height();
     uchar* data = new_failureTolerant(w*h*4);
+
     if (!data)
     {
         kDebug() << "Failed to allocate memory for loading" << filePath;
         loadingFailed();
         return false;
     }
+
     uint*  sptr = (uint*)target.bits();
     uchar* dptr = data;
 
@@ -119,7 +124,9 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     if (observer)
+    {
         observer->progressInfo(m_image, 1.0);
+    }
 
     imageWidth()  = w;
     imageHeight() = h;
@@ -134,15 +141,20 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     return true;
 }
 
-bool QImageLoader::save(const QString& filePath, DImgLoaderObserver *observer)
+bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 {
     QVariant qualityAttr = imageGetAttribute("quality");
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     if (quality < 0)
+    {
         quality = 90;
+    }
+
     if (quality > 100)
+    {
         quality = 100;
+    }
 
     QVariant formatAttr = imageGetAttribute("format");
     QByteArray format   = formatAttr.toByteArray();
@@ -150,13 +162,18 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     QImage image = m_image->copyQImage();
 
     if (observer)
+    {
         observer->progressInfo(m_image, 0.1F);
+    }
 
     // Saving is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
     bool success = image.save(filePath, format.toUpper(), quality);
+
     if (observer && success)
+    {
         observer->progressInfo(m_image, 1.0F);
+    }
 
     imageSetAttribute("format", format.toUpper());
 

@@ -56,15 +56,15 @@ public:
 };
 
 LocalContrastFilter::LocalContrastFilter(QObject* parent)
-                   : DImgThreadedFilter(parent),
-                     d(new LocalContrastFilterPriv)
+    : DImgThreadedFilter(parent),
+      d(new LocalContrastFilterPriv)
 {
     initFilter();
 }
 
 LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const LocalContrastContainer& par)
-                   : DImgThreadedFilter(image, parent, "LocalContrast"),
-                     d(new LocalContrastFilterPriv)
+    : DImgThreadedFilter(image, parent, "LocalContrast"),
+      d(new LocalContrastFilterPriv)
 {
     d->par = par;
     d->generator.seedByTime();
@@ -79,14 +79,14 @@ LocalContrastFilter::~LocalContrastFilter()
 
 void LocalContrastFilter::filterImage()
 {
-    if(!m_orgImage.isNull())
+    if (!m_orgImage.isNull())
     {
         int size = m_orgImage.width()*m_orgImage.height()*3;
         int i, j;
 
         d->generator.reseed();
 
-        if(m_orgImage.sixteenBit())
+        if (m_orgImage.sixteenBit())
         {
             // sixteen bit image
             unsigned short* data    = new unsigned short[size];
@@ -241,8 +241,16 @@ float LocalContrastFilter::func(float x1, float x2)
         case 0:  //power function
         {
             p = (float)(pow((double)10.0,(double)fabs((x2*2.0-1.0))*d->current_process_power_value*0.02));
-            if (x2 >= 0.5) result = pow(x1,p);
-            else result = (float)(1.0-pow((double)1.0-x1,(double)p));
+
+            if (x2 >= 0.5)
+            {
+                result = pow(x1,p);
+            }
+            else
+            {
+                result = (float)(1.0-pow((double)1.0-x1,(double)p));
+            }
+
             break;
         }
         case 1:  //linear function
@@ -263,7 +271,9 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
     float* srcimg    = new float[size*3];
 
     for (int i=0 ; i < (size*3) ; i++)
+    {
         srcimg[i] = img[i];
+    }
 
     if (d->par.stretch_contrast)
     {
@@ -321,10 +331,10 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
     int low_saturation_value  = 100-d->par.low_saturation;
 
     if ((d->par.high_saturation != 100) || (d->par.low_saturation != 100))
-    {      
+    {
         kDebug() << "high_saturation : " << d->par.high_saturation;
         kDebug() << "low_saturation : " << d->par.low_saturation;
-        
+
         float src_h,  src_s,  src_v;
         float dest_h, dest_s, dest_v;
         float dest_saturation, s1;
@@ -336,6 +346,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
             rgb2hsv(img[pos], img[pos+1], img[pos+2], dest_h, dest_s, dest_v);
 
             dest_saturation = (float)((src_s*high_saturation_value + dest_s*(100.0-high_saturation_value))*0.01);
+
             if (dest_v > src_v)
             {
                 s1              = (float)(dest_saturation*src_v/(dest_v+1.0/255.0));
@@ -379,13 +390,18 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         {
             float dval     = (val[i]-blurimage[i])*pow;
             float abs_dval = fabs(dval);
+
             if (abs_dval < threshold)
             {
                 if (abs_dval > threshold2)
                 {
                     bool sign = (dval < 0.0);
                     dval      = (float)((abs_dval-threshold2)*2.0);
-                    if (sign) dval =- dval;
+
+                    if (sign)
+                    {
+                        dval =- dval;
+                    }
                 }
                 else
                 {
@@ -397,12 +413,35 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
             float g   = img[pos+1]+dval;
             float b   = img[pos+2]+dval;
 
-            if (r < 0.0) r = 0.0;
-            if (r > 1.0) r = 1.0;
-            if (g < 0.0) g = 0.0;
-            if (g > 1.0) g = 1.0;
-            if (b < 0.0) b = 0.0;
-            if (b > 1.0) b = 1.0;
+            if (r < 0.0)
+            {
+                r = 0.0;
+            }
+
+            if (r > 1.0)
+            {
+                r = 1.0;
+            }
+
+            if (g < 0.0)
+            {
+                g = 0.0;
+            }
+
+            if (g > 1.0)
+            {
+                g = 1.0;
+            }
+
+            if (b < 0.0)
+            {
+                b = 0.0;
+            }
+
+            if (b > 1.0)
+            {
+                b = 1.0;
+            }
 
             img[pos]   = r;
             img[pos+1] = g;
@@ -422,11 +461,17 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
 void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float blur)
 {
-    if (blur < 0.3) return;
+    if (blur < 0.3)
+    {
+        return;
+    }
 
     float a = (float)(exp(log(0.25)/blur));
 
-    if ((a <= 0.0) || (a >= 1.0)) return;
+    if ((a <= 0.0) || (a >= 1.0))
+    {
+        return;
+    }
 
     a *= a;
     float denormal_remove = (float)(1e-15);
@@ -488,13 +533,24 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
     unsigned int histogram[histogram_size];
 
     for (unsigned int i=0 ; i < histogram_size ; i++)
-    histogram[i] = 0;
+    {
+        histogram[i] = 0;
+    }
 
     for (unsigned int i=0 ; runningFlag() && (i < (unsigned int)datasize) ; i++)
     {
         int m = (int)(data[i]*(histogram_size-1));
-        if (m < 0) m = 0;
-        if (m > (int)(histogram_size-1)) m = histogram_size-1;
+
+        if (m < 0)
+        {
+            m = 0;
+        }
+
+        if (m > (int)(histogram_size-1))
+        {
+            m = histogram_size-1;
+        }
+
         histogram[m]++;
     }
 
@@ -508,6 +564,7 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
     for (unsigned int i=0 ; runningFlag() && (i < histogram_size) ; i++)
     {
         sum_min += histogram[i];
+
         if (sum_min > desired_sum)
         {
             min = i;
@@ -542,9 +599,14 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
         x       = (x-min_src_val)/(max_src_val-min_src_val);
 
         if (x < 0.0)
+        {
             x = 0.0;
+        }
+
         if (x > 1.0)
+        {
             x = 1.0;
+        }
 
         data[i] = x;
     }
@@ -609,22 +671,34 @@ void LocalContrastFilter::hsv2rgb(const float& h, const float& s, const float& v
     switch (hi)
     {
         case 0:
-            r = v ; g = t ; b = p;
+            r = v ;
+            g = t ;
+            b = p;
             break;
         case 1:
-            r = q ; g = v ; b = p;
+            r = q ;
+            g = v ;
+            b = p;
             break;
         case 2:
-            r = p ; g = v ; b = t;
+            r = p ;
+            g = v ;
+            b = t;
             break;
         case 3:
-            r = p ; g = q ; b = v;
+            r = p ;
+            g = q ;
+            b = v;
             break;
         case 4:
-            r = t ; g = p; b = v;
+            r = t ;
+            g = p;
+            b = v;
             break;
         case 5:
-            r = v ; g = p ; b = q;
+            r = v ;
+            g = p ;
+            b = q;
             break;
     }
 }
@@ -643,6 +717,7 @@ FilterAction LocalContrastFilter::filterAction()
     {
         QString stage = QString("stage[%1]:").arg(nstage);
         action.addParameter(stage + "enabled", d->par.stage[nstage].enabled);
+
         if (d->par.stage[nstage].enabled)
         {
             action.addParameter(stage + "power", d->par.stage[nstage].power);
@@ -651,6 +726,7 @@ FilterAction LocalContrastFilter::filterAction()
     }
 
     action.addParameter("unsharp_mask:enabled", d->par.unsharp_mask.enabled);
+
     if (d->par.unsharp_mask.enabled)
     {
         action.addParameter("unsharp_mask:blur", d->par.unsharp_mask.blur);
@@ -674,6 +750,7 @@ void LocalContrastFilter::readParameters(const Digikam::FilterAction& action)
     {
         QString stage = QString("stage[%1]:").arg(nstage);
         d->par.stage[nstage].enabled = action.parameter(stage + "enabled").toBool();
+
         if (d->par.stage[nstage].enabled)
         {
             d->par.stage[nstage].power = action.parameter(stage + "power").toFloat();
@@ -682,6 +759,7 @@ void LocalContrastFilter::readParameters(const Digikam::FilterAction& action)
     }
 
     d->par.unsharp_mask.enabled = action.parameter("unsharp_mask:enabled").toBool();
+
     if (d->par.unsharp_mask.enabled)
     {
         d->par.unsharp_mask.blur = action.parameter("unsharp_mask:blur").toFloat();

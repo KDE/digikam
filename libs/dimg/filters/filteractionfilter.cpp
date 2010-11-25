@@ -60,9 +60,9 @@ public:
 };
 
 
-FilterActionFilter::FilterActionFilter(QObject *parent)
-            : DImgThreadedFilter(parent),
-              d(new FilterActionFilterPriv)
+FilterActionFilter::FilterActionFilter(QObject* parent)
+    : DImgThreadedFilter(parent),
+      d(new FilterActionFilterPriv)
 {
     initFilter();
 }
@@ -120,7 +120,7 @@ bool FilterActionFilter::isComplexAction() const
     foreach (const FilterAction& action, d->actions)
     {
         if (!action.isNull() && action.category() != FilterAction::ReproducibleFilter &&
-             action.category() != FilterAction::ComplexFilter)
+            action.category() != FilterAction::ComplexFilter)
         {
             return false;
         }
@@ -153,7 +153,10 @@ QList<FilterAction> FilterActionFilter::appliedFilterActions() const
 FilterAction FilterActionFilter::failedAction() const
 {
     if (d->appliedActions.size() >= d->actions.size())
+    {
         return FilterAction();
+    }
+
     return d->actions[d->appliedActions.size()];
 }
 
@@ -181,34 +184,66 @@ void FilterActionFilter::filterImage()
     foreach (const FilterAction& action, d->actions)
     {
         kDebug() << "Replaying action" << action.identifier();
+
         if (action.isNull())
+        {
             continue;
+        }
+
         if (DImgBuiltinFilter::isSupported(action.identifier()))
         {
             DImgBuiltinFilter filter(action);
+
             if (!filter.isValid())
             {
                 d->errorMessage = i18n("Built-in transformation not supported");
-                if (d->continueOnError) continue; else break;
+
+                if (d->continueOnError)
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
             }
+
             filter.apply(img);
             d->appliedActions << filter.filterAction();
         }
         else
         {
             QScopedPointer<DImgThreadedFilter> filter
-                (DImgFilterManager::instance()->createFilter(action.identifier(), action.version()));
+            (DImgFilterManager::instance()->createFilter(action.identifier(), action.version()));
 
             if (!filter)
             {
                 d->errorMessage = i18n("Filter identifier or version is not supported");
-                if (d->continueOnError) continue; else break;
+
+                if (d->continueOnError)
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
             }
+
             filter->readParameters(action);
+
             if (!filter->parametersSuccessfullyRead())
             {
                 d->errorMessage = filter->readParametersError(action);
-                if (d->continueOnError) continue; else break;
+
+                if (d->continueOnError)
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
             }
 
             // compute

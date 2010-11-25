@@ -57,24 +57,24 @@ public:
         StartError
     };
 
-    DatabaseServerError(DatabaseServerErrorEnum errorType=NoErrors, const QString &errorText="");
-    DatabaseServerError(const DatabaseServerError &dbServerError);
+    DatabaseServerError(DatabaseServerErrorEnum errorType=NoErrors, const QString& errorText="");
+    DatabaseServerError(const DatabaseServerError& dbServerError);
     ~DatabaseServerError();
 
     // Marshall the DatabaseServerError data into a D-BUS argument
-    DatabaseServerError &operator<<(const QDBusArgument &argument);
+    DatabaseServerError& operator<<(const QDBusArgument& argument);
     // Retrieve the DatabaseServerError data from the D-BUS argument
-    const DatabaseServerError &operator>>(QDBusArgument &argument) const;
+    const DatabaseServerError& operator>>(QDBusArgument& argument) const;
 
-    int					     getErrorType();
-    void 					 setErrorType(DatabaseServerErrorEnum errorType);
+    int                      getErrorType();
+    void                     setErrorType(DatabaseServerErrorEnum errorType);
     QString                  getErrorText();
-    void 					 setErrorText(const QString &errorText);
+    void                     setErrorText(const QString& errorText);
 
 
 private:
     QString                     m_ErrorText;
-    int						    m_ErrorType;
+    int                         m_ErrorType;
 };
 
 } // namespace Digikam

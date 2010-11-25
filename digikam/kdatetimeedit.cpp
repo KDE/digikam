@@ -34,8 +34,8 @@
 namespace Digikam
 {
 
-KDateTimeEdit::KDateTimeEdit(QWidget *parent, const char *name)
-             : KHBox(parent)
+KDateTimeEdit::KDateTimeEdit(QWidget* parent, const char* name)
+    : KHBox(parent)
 {
     setObjectName(name);
 

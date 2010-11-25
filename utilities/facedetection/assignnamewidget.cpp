@@ -91,12 +91,22 @@ private:
 
     QToolButton* createToolButton(const KGuiItem& item);
 
-    QWidget *addTagsWidget() const { if (comboBox) return comboBox; else return lineEdit; }
-    template <class T> void setupAddTagsWidget(T *widget);
+    QWidget* addTagsWidget() const
+    {
+        if (comboBox)
+        {
+            return comboBox;
+        }
+        else
+        {
+            return lineEdit;
+        }
+    }
+    template <class T> void setupAddTagsWidget(T* widget);
     void layoutAddTagsWidget(bool exceedBounds, int minimumContentsLength);
     void setSizePolicies(QSizePolicy::Policy h, QSizePolicy::Policy v);
     void setToolButtonStyles(Qt::ToolButtonStyle style);
-    template <class T> void setAddTagsWidgetContents(T *widget);
+    template <class T> void setAddTagsWidgetContents(T* widget);
 
 public:
 
@@ -129,9 +139,9 @@ public:
 bool AssignNameWidget::AssignNameWidgetPriv::isValid() const
 {
     return mode        != InvalidMode
-        && layoutMode  != InvalidLayout
-        && visualStyle != InvalidVisualStyle
-        && widgetMode  != InvalidTagEntryWidgetMode;
+           && layoutMode  != InvalidLayout
+           && visualStyle != InvalidVisualStyle
+           && widgetMode  != InvalidTagEntryWidgetMode;
 }
 
 void AssignNameWidget::AssignNameWidgetPriv::clearWidgets()
@@ -170,12 +180,17 @@ void AssignNameWidget::AssignNameWidgetPriv::updateModes()
 }
 
 template <class T>
-void AssignNameWidget::AssignNameWidgetPriv::setupAddTagsWidget(T *widget)
+void AssignNameWidget::AssignNameWidgetPriv::setupAddTagsWidget(T* widget)
 {
     if (modelsGiven)
+    {
         widget->setModel(tagModel, tagFilteredModel, tagFilterModel);
+    }
+
     if (parentTag)
+    {
         widget->setParentTag(parentTag);
+    }
 
     q->connect(widget, SIGNAL(taggingActionActivated(const TaggingAction&)),
                q, SLOT(slotActionActivated(const TaggingAction&)));
@@ -187,7 +202,9 @@ void AssignNameWidget::AssignNameWidgetPriv::setupAddTagsWidget(T *widget)
 void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
 {
     if (!isValid())
+    {
         return;
+    }
 
     switch (mode)
     {
@@ -201,38 +218,47 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
                 case InvalidTagEntryWidgetMode:
                     break;
                 case AddTagsComboBoxMode:
+
                     if (!comboBox)
                     {
                         comboBox = new AddTagsComboBox(q);
                         setupAddTagsWidget(comboBox);
                     }
+
                     break;
                 case AddTagsLineEditMode:
+
                     if (!lineEdit)
                     {
                         lineEdit = new AddTagsLineEdit(q);
                         lineEdit->setClearButtonShown(true);
                         setupAddTagsWidget(lineEdit);
                     }
+
                     break;
             }
 
             if (!confirmButton)
             {
                 confirmButton = createToolButton(KStandardGuiItem::ok());
+
                 if (mode == UnconfirmedEditMode)
+                {
                     confirmButton->setText(i18n("Confirm"));
+                }
+
                 //confirmButton->setToolTip(i18n("Confirm that the selected person is shown here"));
                 q->connect(confirmButton, SIGNAL(clicked()),
-                        q, SLOT(slotConfirm()));
+                           q, SLOT(slotConfirm()));
             }
 
             if (!rejectButton)
             {
                 rejectButton  = createToolButton(KStandardGuiItem::remove());
                 q->connect(rejectButton, SIGNAL(clicked()),
-                        q, SLOT(slotReject()));
+                           q, SLOT(slotReject()));
             }
+
             break;
         case ConfirmedMode:
         {
@@ -275,7 +301,9 @@ void AssignNameWidget::AssignNameWidgetPriv::setToolButtonStyles(Qt::ToolButtonS
 void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
 {
     if (!isValid())
+    {
         return;
+    }
 
     delete layout;
     layout = new QGridLayout;
@@ -323,9 +351,11 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
                         setToolButtonStyles(Qt::ToolButtonIconOnly);
                         layoutAddTagsWidget(true, 0);
                     }
+
                     break;
                 }
             }
+
             break;
 
         case ConfirmedMode:
@@ -341,8 +371,8 @@ static QString styleSheetFontDescriptor(const QFont& font)
 {
     QString s;
     s += (font.pointSize() == -1)
-            ? QString("font-size: %1px; ").arg(font.pixelSize())
-            : QString("font-size: %1pt; ").arg(font.pointSize());
+         ? QString("font-size: %1px; ").arg(font.pixelSize())
+         : QString("font-size: %1pt; ").arg(font.pointSize());
     s += QString("font-family: \"%1\"; ").arg(font.family());
     return s;
 }
@@ -350,7 +380,9 @@ static QString styleSheetFontDescriptor(const QFont& font)
 void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
 {
     if (!isValid())
+    {
         return;
+    }
 
     switch (visualStyle)
     {
@@ -360,61 +392,61 @@ void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
         {
             q->setStyleSheet(
                 QString(
-                "QWidget { "
-                " %1 "
-                "} "
-                "QFrame {"
-                "  background-color: rgba(0, 0, 0, 66%); "
-                "  border: 1px solid rgba(100, 100, 100, 66%); "
-                "  border-radius: 8px; "
-                "} "
+                    "QWidget { "
+                    " %1 "
+                    "} "
+                    "QFrame {"
+                    "  background-color: rgba(0, 0, 0, 66%); "
+                    "  border: 1px solid rgba(100, 100, 100, 66%); "
+                    "  border-radius: 8px; "
+                    "} "
 
-                "QToolButton { "
-                "  color: rgba(255,255,255,220); "
-                "  padding: 1px; "
-                "  background-color: "
-                "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,100), "
-                "                    stop:1 rgba(255,255,255,0)); "
-                "  border: 1px solid rgba(255,255,255,127); "
-                "  border-radius: 4px; "
-                "} "
+                    "QToolButton { "
+                    "  color: rgba(255,255,255,220); "
+                    "  padding: 1px; "
+                    "  background-color: "
+                    "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,100), "
+                    "                    stop:1 rgba(255,255,255,0)); "
+                    "  border: 1px solid rgba(255,255,255,127); "
+                    "  border-radius: 4px; "
+                    "} "
 
-                "QToolButton:hover { "
-                "  border-color: white; "
-                "} "
+                    "QToolButton:hover { "
+                    "  border-color: white; "
+                    "} "
 
-                "QToolButton:pressed { "
-                "  background-color: "
-                "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,0), "
-                "                    stop:1 rgba(255,255,255,100)); "
-                "  border-color: white; "
-                "} "
+                    "QToolButton:pressed { "
+                    "  background-color: "
+                    "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,0), "
+                    "                    stop:1 rgba(255,255,255,100)); "
+                    "  border-color: white; "
+                    "} "
 
-                "QToolButton:disabled { "
-                "  color: rgba(255,255,255,120); "
-                "  background-color: "
-                "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,50), "
-                "                    stop:1 rgba(255,255,255,0)); "
-                "} "
+                    "QToolButton:disabled { "
+                    "  color: rgba(255,255,255,120); "
+                    "  background-color: "
+                    "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,50), "
+                    "                    stop:1 rgba(255,255,255,0)); "
+                    "} "
 
-                "QComboBox { "
-                "  color: white; "
-                "  background-color: transparent; "
-                "} "
+                    "QComboBox { "
+                    "  color: white; "
+                    "  background-color: transparent; "
+                    "} "
 
-                "QComboBox QAbstractItemView, KCompletionBox::item:!selected { "
-                "  color: white; "
-                "  background-color: rgba(0,0,0,80%); "
-                "} "
+                    "QComboBox QAbstractItemView, KCompletionBox::item:!selected { "
+                    "  color: white; "
+                    "  background-color: rgba(0,0,0,80%); "
+                    "} "
 
-                "QLabel { "
-                "  color: white; background-color: transparent; border: none; "
-                " }"
-                /*"KCompletionBox::item:hover, KCompletionBox::item:selected { "
-                "  background-color: "
-                "     qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(150,150,150,80%), "
-                "                     stop:0.5 rgba(25,25,25,100%), stop:1 rgba(150,150,150,80%)); "
-                " } "*/
+                    "QLabel { "
+                    "  color: white; background-color: transparent; border: none; "
+                    " }"
+                    /*"KCompletionBox::item:hover, KCompletionBox::item:selected { "
+                    "  background-color: "
+                    "     qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(150,150,150,80%), "
+                    "                     stop:0.5 rgba(25,25,25,100%), stop:1 rgba(150,150,150,80%)); "
+                    " } "*/
                 ).arg(styleSheetFontDescriptor(KGlobalSettings::smallestReadableFont()))
             );
             break;
@@ -424,18 +456,18 @@ void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
             QColor bg = ThemeEngine::instance()->baseColor();
             q->setStyleSheet(
                 QString(
-                "QWidget { "
-                " %1 "
-                "} "
-                "QFrame#assignNameWidget {"
-                "  background-color: "
-                "    qradialgradient(cx:0, cy:0, fx:0, fy:0, radius: 1, stop:0 rgba(%2,%3,%4,255), "
-                "                    stop:0.8 rgba(%2,%3,%4,200), stop:1 rgba(%2,%3,%4,0));"
-                "  border: none; "
-                "  border-radius: 8px; "
-                "} "
+                    "QWidget { "
+                    " %1 "
+                    "} "
+                    "QFrame#assignNameWidget {"
+                    "  background-color: "
+                    "    qradialgradient(cx:0, cy:0, fx:0, fy:0, radius: 1, stop:0 rgba(%2,%3,%4,255), "
+                    "                    stop:0.8 rgba(%2,%3,%4,200), stop:1 rgba(%2,%3,%4,0));"
+                    "  border: none; "
+                    "  border-radius: 8px; "
+                    "} "
                 ).arg(styleSheetFontDescriptor(KGlobalSettings::smallestReadableFont()))
-                 .arg(bg.red()).arg(bg.green()).arg(bg.blue())
+                .arg(bg.red()).arg(bg.green()).arg(bg.blue())
             );
             break;
         }
@@ -449,35 +481,46 @@ void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
 }
 
 template <class T>
-void AssignNameWidget::AssignNameWidgetPriv::setAddTagsWidgetContents(T *widget)
+void AssignNameWidget::AssignNameWidgetPriv::setAddTagsWidgetContents(T* widget)
 {
     if (widget)
     {
         widget->setCurrentTag(currentTag);
         widget->setClickMessage((mode == UnconfirmedEditMode) ? i18n("Who is this?") : QString());
+
         if (confirmButton)
+        {
             confirmButton->setEnabled(widget->currentTaggingAction().isValid());
+        }
     }
 }
 
 void AssignNameWidget::AssignNameWidgetPriv::updateContents()
 {
     if (!isValid())
+    {
         return;
+    }
 
     if (comboBox)
+    {
         setAddTagsWidgetContents(comboBox);
+    }
     else if (lineEdit)
+    {
         setAddTagsWidgetContents(lineEdit);
+    }
 
     if (clickLabel)
+    {
         clickLabel->setText(currentTag ? currentTag->title() : QString());
+    }
 }
 
 // ---
 
 AssignNameWidget::AssignNameWidget(QWidget* parent)
-                : QFrame(parent), d(new AssignNameWidgetPriv(this))
+    : QFrame(parent), d(new AssignNameWidgetPriv(this))
 {
     setObjectName("assignNameWidget");
     setVisualStyle(StyledFrame);
@@ -493,12 +536,16 @@ void AssignNameWidget::setDefaultModel()
     setModel(0,0,0);
 }
 
-void AssignNameWidget::setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel)
+void AssignNameWidget::setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
 {
     if (d->comboBox)
+    {
         d->comboBox->setModel(model, filteredModel, filterModel);
+    }
     else if (d->lineEdit)
+    {
         d->lineEdit->setModel(model, filteredModel, filterModel);
+    }
 
     if (model || filteredModel || filterModel)
     {
@@ -513,10 +560,15 @@ void AssignNameWidget::setModel(TagModel* model, TagPropertiesFilterModel *filte
 void AssignNameWidget::setParentTag(TAlbum* album)
 {
     d->parentTag = album;
+
     if (d->comboBox)
+    {
         d->comboBox->setParentTag(album);
+    }
     else if (d->lineEdit)
+    {
         d->lineEdit->setParentTag(album);
+    }
 }
 
 AddTagsComboBox* AssignNameWidget::comboBox() const
@@ -532,7 +584,9 @@ AddTagsLineEdit* AssignNameWidget::lineEdit() const
 void AssignNameWidget::setMode(Mode mode)
 {
     if (mode == d->mode)
+    {
         return;
+    }
 
     d->mode = mode;
     d->updateModes();
@@ -547,7 +601,9 @@ AssignNameWidget::Mode AssignNameWidget::mode() const
 void AssignNameWidget::setTagEntryWidgetMode(TagEntryWidgetMode mode)
 {
     if (d->widgetMode == mode)
+    {
         return;
+    }
 
     d->widgetMode = mode;
     d->updateModes();
@@ -562,7 +618,9 @@ AssignNameWidget::TagEntryWidgetMode AssignNameWidget::tagEntryWidgetMode() cons
 void AssignNameWidget::setLayoutMode(LayoutMode mode)
 {
     if (d->layoutMode == mode)
+    {
         return;
+    }
 
     d->layoutMode = mode;
     d->updateModes();
@@ -577,7 +635,9 @@ AssignNameWidget::LayoutMode AssignNameWidget::layoutMode() const
 void AssignNameWidget::setVisualStyle(VisualStyle style)
 {
     if (d->visualStyle == style)
+    {
         return;
+    }
 
     d->visualStyle = style;
     d->updateModes();
@@ -606,9 +666,13 @@ QVariant AssignNameWidget::faceIdentifier() const
 
 void AssignNameWidget::setCurrentFace(const DatabaseFace& face)
 {
-    TAlbum *album = 0;
+    TAlbum* album = 0;
+
     if (!face.isNull() && !face.isUnknownName())
+    {
         album = AlbumManager::instance()->findTAlbum(face.tagId());
+    }
+
     setCurrentTag(album);
 }
 
@@ -617,10 +681,13 @@ void AssignNameWidget::setCurrentTag(int tagId)
     setCurrentTag(AlbumManager::instance()->findTAlbum(tagId));
 }
 
-void AssignNameWidget::setCurrentTag(TAlbum *album)
+void AssignNameWidget::setCurrentTag(TAlbum* album)
 {
     if (d->currentTag == album)
+    {
         return;
+    }
+
     d->currentTag = album;
     d->updateContents();
 }
@@ -628,9 +695,13 @@ void AssignNameWidget::setCurrentTag(TAlbum *album)
 void AssignNameWidget::slotConfirm()
 {
     if (d->comboBox)
+    {
         emit assigned(d->comboBox->currentTaggingAction(), d->info, d->faceIdentifier);
+    }
     else if (d->lineEdit)
+    {
         emit assigned(d->lineEdit->currentTaggingAction(), d->info, d->faceIdentifier);
+    }
 }
 
 void AssignNameWidget::slotReject()
@@ -646,7 +717,9 @@ void AssignNameWidget::slotActionActivated(const TaggingAction& action)
 void AssignNameWidget::slotActionSelected(const TaggingAction& action)
 {
     if (d->confirmButton)
+    {
         d->confirmButton->setEnabled(action.isValid());
+    }
 }
 
 void AssignNameWidget::slotLabelClicked()
@@ -654,7 +727,7 @@ void AssignNameWidget::slotLabelClicked()
     emit labelClicked(d->info, d->faceIdentifier);
 }
 
-void AssignNameWidget::keyPressEvent(QKeyEvent *e)
+void AssignNameWidget::keyPressEvent(QKeyEvent* e)
 {
     switch (e->key())
     {

@@ -42,13 +42,13 @@ namespace Digikam
 {
 
 EmbossFilter::EmbossFilter(QObject* parent)
-                 : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 EmbossFilter::EmbossFilter(DImg* orgImage, QObject* parent, int depth)
-            : DImgThreadedFilter(orgImage, parent, "Emboss")
+    : DImgThreadedFilter(orgImage, parent, "Emboss")
 {
     m_depth = depth;
     initFilter();
@@ -120,8 +120,11 @@ void EmbossFilter::filterImage()
         }
 
         progress = (int) (((double)h * 100.0) / Height);
+
         if ( progress%5 == 0 )
+        {
             postProgress( progress );
+        }
     }
 }
 
@@ -130,8 +133,12 @@ void EmbossFilter::filterImage()
 int EmbossFilter::Lim_Max (int Now, int Up, int Max)
 {
     --Max;
+
     while (Now > Max - Up)
+    {
         --Up;
+    }
+
     return (Up);
 }
 

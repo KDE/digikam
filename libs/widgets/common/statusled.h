@@ -39,7 +39,7 @@ class StatusNavigateBarPriv;
 
 class DIGIKAM_EXPORT StatusLed : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -52,7 +52,7 @@ public:
 
 public:
 
-    StatusLed(QWidget *parent=0);
+    StatusLed(QWidget* parent=0);
     ~StatusLed();
 
     LedColor ledColor() const;

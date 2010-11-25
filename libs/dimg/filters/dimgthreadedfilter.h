@@ -80,8 +80,14 @@ public:
     void setOriginalImage(const DImg& orgImage);
     void setFilterName(const QString& name);
 
-    DImg getTargetImage()       { return m_destImage; };
-    const QString& filterName() { return m_name; };
+    DImg getTargetImage()
+    {
+        return m_destImage;
+    };
+    const QString& filterName()
+    {
+        return m_name;
+    };
 
     /** Start the threaded computation */
     virtual void startFilter();

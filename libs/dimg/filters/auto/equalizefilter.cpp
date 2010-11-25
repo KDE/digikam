@@ -41,15 +41,15 @@ namespace Digikam
 {
 
 EqualizeFilter::EqualizeFilter(QObject* parent)
-              : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 
 EqualizeFilter::EqualizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
-              : DImgThreadedFilter(orgImage, parent, "EqualizeFilter"),
-                m_refImage(*refImage)
+    : DImgThreadedFilter(orgImage, parent, "EqualizeFilter"),
+      m_refImage(*refImage)
 {
     initFilter();
 }
@@ -61,7 +61,10 @@ EqualizeFilter::~EqualizeFilter()
 void EqualizeFilter::filterImage()
 {
     if (m_refImage.isNull())
+    {
         m_refImage = m_orgImage;
+    }
+
     equalizeImage();
     m_destImage = m_orgImage;
 }
@@ -85,32 +88,38 @@ void EqualizeFilter::equalizeImage()
 
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        kDebug() << "Ref. image and Org. has different bits depth"; 
+        kDebug() << "Ref. image and Org. has different bits depth";
         return;
     }
 
     // Create an histogram of the reference image.
-    ImageHistogram *histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
-                                                   m_refImage.height(), m_refImage.sixteenBit());
+    ImageHistogram* histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
+            m_refImage.height(), m_refImage.sixteenBit());
     histogram->calculate();
 
     // Memory allocation.
     map          = new double_packet[histogram->getHistogramSegments()];
     equalize_map = new int_packet[histogram->getHistogramSegments()];
 
-    if( !histogram || !map || !equalize_map )
+    if ( !histogram || !map || !equalize_map )
     {
-       if(histogram)
-           delete histogram;
+        if (histogram)
+        {
+            delete histogram;
+        }
 
-       if(map)
-           delete [] map;
+        if (map)
+        {
+            delete [] map;
+        }
 
-       if(equalize_map)
-           delete [] equalize_map;
+        if (equalize_map)
+        {
+            delete [] equalize_map;
+        }
 
-       kWarning() << ("Unable to allocate memory!");
-       return;
+        kWarning() << ("Unable to allocate memory!");
+        return;
     }
 
     // Integrate the histogram to get the equalization map.
@@ -119,13 +128,13 @@ void EqualizeFilter::equalizeImage()
     memset(&high,      0, sizeof(struct double_packet));
     memset(&low,       0, sizeof(struct double_packet));
 
-    for(i = 0 ; runningFlag() && (i < histogram->getHistogramSegments()) ; ++i)
+    for (i = 0 ; runningFlag() && (i < histogram->getHistogramSegments()) ; ++i)
     {
-       intensity.red   += histogram->getValue(RedChannel, i);
-       intensity.green += histogram->getValue(GreenChannel, i);
-       intensity.blue  += histogram->getValue(BlueChannel, i);
-       intensity.alpha += histogram->getValue(AlphaChannel, i);
-       map[i]           = intensity;
+        intensity.red   += histogram->getValue(RedChannel, i);
+        intensity.green += histogram->getValue(GreenChannel, i);
+        intensity.blue  += histogram->getValue(BlueChannel, i);
+        intensity.alpha += histogram->getValue(AlphaChannel, i);
+        map[i]           = intensity;
     }
 
     // Stretch the histogram.
@@ -135,23 +144,23 @@ void EqualizeFilter::equalizeImage()
     memset(equalize_map, 0, histogram->getHistogramSegments()*sizeof(int_packet));
 
     // TODO magic number 256
-    for(i = 0 ; runningFlag() && (i < histogram->getHistogramSegments()) ; ++i)
+    for (i = 0 ; runningFlag() && (i < histogram->getHistogramSegments()) ; ++i)
     {
-       if(high.red != low.red)
-          equalize_map[i].red = (uint)(((256*histogram->getHistogramSegments() -1) *
-                                (map[i].red-low.red))/(high.red-low.red));
+        if (high.red != low.red)
+            equalize_map[i].red = (uint)(((256*histogram->getHistogramSegments() -1) *
+                                          (map[i].red-low.red))/(high.red-low.red));
 
-       if(high.green != low.green)
-          equalize_map[i].green = (uint)(((256*histogram->getHistogramSegments() -1) *
-                                  (map[i].green-low.green))/(high.green-low.green));
+        if (high.green != low.green)
+            equalize_map[i].green = (uint)(((256*histogram->getHistogramSegments() -1) *
+                                            (map[i].green-low.green))/(high.green-low.green));
 
-       if(high.blue != low.blue)
-          equalize_map[i].blue = (uint)(((256*histogram->getHistogramSegments() -1) *
-                                 (map[i].blue-low.blue))/(high.blue-low.blue));
+        if (high.blue != low.blue)
+            equalize_map[i].blue = (uint)(((256*histogram->getHistogramSegments() -1) *
+                                           (map[i].blue-low.blue))/(high.blue-low.blue));
 
-       if(high.alpha != low.alpha)
-          equalize_map[i].alpha = (uint)(((256*histogram->getHistogramSegments() -1) *
-                                  (map[i].alpha-low.alpha))/(high.alpha-low.alpha));
+        if (high.alpha != low.alpha)
+            equalize_map[i].alpha = (uint)(((256*histogram->getHistogramSegments() -1) *
+                                            (map[i].alpha-low.alpha))/(high.alpha-low.alpha));
     }
 
     delete histogram;
@@ -177,17 +186,25 @@ void EqualizeFilter::equalizeImage()
             red   = ptr[2];
             alpha = ptr[3];
 
-            if(low.red != high.red)
+            if (low.red != high.red)
+            {
                 red = (equalize_map[red].red)/257;
+            }
 
-            if(low.green != high.green)
+            if (low.green != high.green)
+            {
                 green = (equalize_map[green].green)/257;
+            }
 
-            if(low.blue != high.blue)
+            if (low.blue != high.blue)
+            {
                 blue = (equalize_map[blue].blue)/257;
+            }
 
-            if(low.alpha != high.alpha)
+            if (low.alpha != high.alpha)
+            {
                 alpha = (equalize_map[alpha].alpha)/257;
+            }
 
             ptr[0] = blue;
             ptr[1] = green;
@@ -196,14 +213,17 @@ void EqualizeFilter::equalizeImage()
             ptr   += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
     else               // 16 bits image.
     {
         unsigned short  red, green, blue, alpha;
-        unsigned short* ptr = (unsigned short *)data;
+        unsigned short* ptr = (unsigned short*)data;
 
         for (i = 0 ; runningFlag() && (i < size) ; ++i)
         {
@@ -212,17 +232,25 @@ void EqualizeFilter::equalizeImage()
             red   = ptr[2];
             alpha = ptr[3];
 
-            if(low.red != high.red)
+            if (low.red != high.red)
+            {
                 red = (equalize_map[red].red)/257;
+            }
 
-            if(low.green != high.green)
+            if (low.green != high.green)
+            {
                 green = (equalize_map[green].green)/257;
+            }
 
-            if(low.blue != high.blue)
+            if (low.blue != high.blue)
+            {
                 blue = (equalize_map[blue].blue)/257;
+            }
 
-            if(low.alpha != high.alpha)
+            if (low.alpha != high.alpha)
+            {
                 alpha = (equalize_map[alpha].alpha)/257;
+            }
 
             ptr[0] = blue;
             ptr[1] = green;
@@ -231,8 +259,11 @@ void EqualizeFilter::equalizeImage()
             ptr   += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
 

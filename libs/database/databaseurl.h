@@ -132,7 +132,7 @@ public:
      * Create an empty digikammapimages:/ url
      */
 
-    static DatabaseUrl mapImagesUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters()); 
+    static DatabaseUrl mapImagesUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters());
     static DatabaseUrl fromAreaRange(const qreal lat1, const qreal lng1, const qreal lat2, const qreal lng2, const DatabaseParameters& parameters = DatabaseAccess::parameters());
     /**
      * Create a digikamsearch: URL for the search with the given id.
@@ -236,7 +236,7 @@ public:
      * Returns true if the string to number conversion was ok.
      */
 
-    bool areaCoordinates(double *lat1, double *lat2, double *lon1, double *lon2) const;
+    bool areaCoordinates(double* lat1, double* lat2, double* lon1, double* lon2) const;
 
     /// Search URL
 

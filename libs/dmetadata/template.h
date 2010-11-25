@@ -91,7 +91,10 @@ public:
     IptcCoreContactInfo  contactInfo()     const;
     QStringList          IptcSubjects()    const;
 
-    static QString removeTemplateTitle() { return QString("_REMOVE_TEMPLATE_"); };
+    static QString removeTemplateTitle()
+    {
+        return QString("_REMOVE_TEMPLATE_");
+    };
 
 protected:
 

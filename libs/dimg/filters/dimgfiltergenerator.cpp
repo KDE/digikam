@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -34,7 +34,10 @@ bool DImgFilterGenerator::isSupported(const QString& filterIdentifier)
 bool DImgFilterGenerator::isSupported(const QString& filterIdentifier, int version)
 {
     if (isSupported(filterIdentifier))
+    {
         return supportedVersions(filterIdentifier).contains(version);
+    }
+
     return false;
 }
 

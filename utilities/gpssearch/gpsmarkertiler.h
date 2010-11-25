@@ -79,7 +79,7 @@ public:
     {
     public:
         MyTile()
-        : Tile()
+            : Tile()
         {
         }
 
@@ -88,13 +88,13 @@ public:
 
     class GPSImageInfo
     {
-        public:
+    public:
 
         GPSImageInfo()
             : id(-2),
-          coordinate(),
-          rating(),
-          creationDate()
+              coordinate(),
+              rating(),
+              creationDate()
         {
         }
         ~GPSImageInfo();

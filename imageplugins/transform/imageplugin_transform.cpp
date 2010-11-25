@@ -75,8 +75,8 @@ public:
 };
 
 ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList&)
-                     : ImagePlugin(parent, "ImagePlugin_Transform"),
-                       d(new ImagePlugin_TransformPriv)
+    : ImagePlugin(parent, "ImagePlugin_Transform"),
+      d(new ImagePlugin_TransformPriv)
 {
     d->perspectiveAction = new KAction(KIcon("perspective"), i18n("Perspective Adjustment..."), this);
     actionCollection()->addAction("imageplugin_perspective", d->perspectiveAction);
@@ -117,25 +117,25 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
 
     d->freerotationAction = new KAction(KIcon("freerotation"), QString("%1...").arg(pluginName), this);
     actionCollection()->addAction("imageplugin_freerotation", d->freerotationAction );
-    connect(d->freerotationAction, SIGNAL(triggered(bool) ), 
+    connect(d->freerotationAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotFreeRotation()));
 
     KAction* point1Action = new KAction(i18n("Set Point 1"), this);
     point1Action->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_1));
     actionCollection()->addAction("imageplugin_freerotation_point1", point1Action);
-    connect(point1Action, SIGNAL(triggered(bool)), 
+    connect(point1Action, SIGNAL(triggered(bool)),
             this, SIGNAL(signalPoint1Action()));
 
     KAction* point2Action = new KAction(i18n("Set Point 2"), this);
     point2Action->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_2));
     actionCollection()->addAction("imageplugin_freerotation_point2", point2Action);
-    connect(point2Action, SIGNAL(triggered(bool)), 
+    connect(point2Action, SIGNAL(triggered(bool)),
             this, SIGNAL(signalPoint2Action()));
 
     KAction* autoAdjustAction = new KAction(i18n("Auto Adjust"), this);
     autoAdjustAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     actionCollection()->addAction("imageplugin_freerotation_autoadjust", autoAdjustAction);
-    connect(autoAdjustAction, SIGNAL(triggered(bool)), 
+    connect(autoAdjustAction, SIGNAL(triggered(bool)),
             this, SIGNAL(signalAutoAdjustAction()));
 
     setXMLFile("digikamimageplugin_transform_ui.rc");

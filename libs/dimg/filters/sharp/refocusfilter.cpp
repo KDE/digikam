@@ -50,14 +50,14 @@ int RefocusFilter::maxMatrixSize()
 }
 
 RefocusFilter::RefocusFilter(QObject* parent)
-                 : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 RefocusFilter::RefocusFilter(DImg* orgImage, QObject* parent, int matrixSize, double radius,
                              double gauss, double correlation, double noise)
-             : DImgThreadedFilter(orgImage, parent, "Refocus")
+    : DImgThreadedFilter(orgImage, parent, "Refocus")
 {
     m_matrixSize  = matrixSize;
     m_radius      = radius;
@@ -146,10 +146,10 @@ void RefocusFilter::filterImage()
 }
 
 void RefocusFilter::refocusImage(uchar* data, int width, int height, bool sixteenBit,
-                               int matrixSize, double radius, double gauss,
-                               double correlation, double noise)
+                                 int matrixSize, double radius, double gauss,
+                                 double correlation, double noise)
 {
-    CMat *matrix=0;
+    CMat* matrix=0;
 
     // Compute matrix
     kDebug() << "RefocusFilter::Compute matrix...";
@@ -177,7 +177,7 @@ void RefocusFilter::refocusImage(uchar* data, int width, int height, bool sixtee
 }
 
 void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, int height,
-                                bool sixteenBit, const double* const matrix, int mat_size)
+                                  bool sixteenBit, const double* const matrix, int mat_size)
 {
     int progress;
     unsigned short* orgData16  = (unsigned short*)orgData;
@@ -198,11 +198,12 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
             if (!sixteenBit)        // 8 bits image.
             {
                 uchar red, green, blue;
-                uchar *ptr;
+                uchar* ptr;
 
                 for (y2 = 0; runningFlag() && (y2 < mat_size); ++y2)
                 {
                     int y2_matsize = y2 * mat_size;
+
                     for (x2 = 0; runningFlag() && (x2 < mat_size); ++x2)
                     {
                         index1 = width * (y1 + y2 - mat_offset) +
@@ -239,11 +240,12 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
             else                 // 16 bits image.
             {
                 unsigned short red, green, blue;
-                unsigned short *ptr;
+                unsigned short* ptr;
 
                 for (y2 = 0; runningFlag() && (y2 < mat_size); ++y2)
                 {
                     int y2_matsize = y2 * mat_size;
+
                     for (x2 = 0; runningFlag() && (x2 < mat_size); ++x2)
                     {
                         index1 = width * (y1 + y2 - mat_offset) +
@@ -281,8 +283,11 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
 
         // Update the progress bar in dialog.
         progress = (int)(((double)y1 * 100.0) / height);
+
         if (progress%5 == 0)
+        {
             postProgress( progress );
+        }
     }
 }
 

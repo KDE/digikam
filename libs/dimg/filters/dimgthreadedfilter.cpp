@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 DImgThreadedFilter::DImgThreadedFilter(QObject* parent, const QString& name)
-                  : DynamicThread(parent)
+    : DynamicThread(parent)
 {
     setOriginalImage(DImg());
     setFilterName(name);
@@ -46,7 +46,7 @@ DImgThreadedFilter::DImgThreadedFilter(QObject* parent, const QString& name)
 
 DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
                                        const QString& name)
-                  : DynamicThread(parent)
+    : DynamicThread(parent)
 {
     // remove meta data
     setOriginalImage(orgImage->copyImageData());
@@ -70,8 +70,11 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter* master, const DImg& o
 DImgThreadedFilter::~DImgThreadedFilter()
 {
     cancelFilter();
+
     if (m_master)
+    {
         m_master->setSlave(0);
+    }
 }
 
 void DImgThreadedFilter::initSlave(DImgThreadedFilter* master, int progressBegin, int progressEnd)
@@ -102,7 +105,7 @@ void DImgThreadedFilter::setupFilter(const DImg& orgImage)
 }
 
 void DImgThreadedFilter::setupAndStartDirectly(const DImg& orgImage, DImgThreadedFilter* master,
-                                               int progressBegin, int progressEnd)
+        int progressBegin, int progressEnd)
 {
     initSlave(master, progressBegin, progressEnd);
     setupFilter(orgImage);
@@ -126,7 +129,9 @@ QList<int> DImgThreadedFilter::supportedVersions() const
 void DImgThreadedFilter::setFilterVersion(int version)
 {
     if (supportedVersions().contains(version))
+    {
         m_version = version;
+    }
 }
 
 int DImgThreadedFilter::filterVersion() const
@@ -137,13 +142,17 @@ int DImgThreadedFilter::filterVersion() const
 void DImgThreadedFilter::initFilter()
 {
     prepareDestImage();
+
     if (m_master)
+    {
         startFilterDirectly();
+    }
 }
 
 void DImgThreadedFilter::prepareDestImage()
 {
     m_destImage.reset();
+
     if (!m_orgImage.isNull())
     {
         m_destImage = DImg(m_orgImage.width(), m_orgImage.height(),
@@ -171,11 +180,12 @@ void DImgThreadedFilter::startFilterDirectly()
         emit started();
 
         m_wasCancelled = false;
+
         try
         {
             filterImage();
         }
-        catch (std::bad_alloc &ex)
+        catch (std::bad_alloc& ex)
         {
             //TODO: User notification
             kError() << "Caught out-of-memory exception! Aborting operation" << ex.what();
@@ -200,14 +210,19 @@ void DImgThreadedFilter::run()
 void DImgThreadedFilter::cancelFilter()
 {
     if (isRunning())
+    {
         m_wasCancelled = true;
+    }
+
     stop();
+
     if (m_slave)
     {
         m_slave->stop();
         // do not wait on slave, it is not running in its own separate thread!
         //m_slave->cleanupFilter();
     }
+
     wait();
     cleanupFilter();
 }

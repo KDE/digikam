@@ -90,7 +90,7 @@ public:
         iterationInput(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
@@ -123,8 +123,8 @@ const QString ColorFxTool::ColorFxToolPriv::configIterationAdjustmentEntry("Iter
 // --------------------------------------------------------
 
 ColorFxTool::ColorFxTool(QObject* parent)
-           : EditorToolThreaded(parent),
-             d(new ColorFxToolPriv)
+    : EditorToolThreaded(parent),
+      d(new ColorFxToolPriv)
 {
     setObjectName("coloreffects");
     setToolName(i18n("Color Effects"));
@@ -214,7 +214,9 @@ ColorFxTool::ColorFxTool(QObject* parent)
 ColorFxTool::~ColorFxTool()
 {
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     delete d;
 }
@@ -225,9 +227,9 @@ void ColorFxTool::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                        (int)LuminosityChannel));
+            (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                        (int)LogScaleHistogram));
+            (int)LogScaleHistogram));
 
     d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       d->effectType->defaultIndex()));
     d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         d->levelInput->defaultValue()));
@@ -367,7 +369,7 @@ void ColorFxTool::putPreviewData()
     DImg imDest  = preview.smoothScale(iface->previewWidth(), iface->previewHeight());
     iface->putPreviewImage(imDest.bits());
     d->gboxSettings->histogramBox()->histogram()->updateData(preview.bits(), preview.width(), preview.height(),
-                                                             preview.sixteenBit(), 0, 0, 0, false);
+            preview.sixteenBit(), 0, 0, 0, false);
 
     d->previewWidget->updatePreview();
 }
@@ -377,6 +379,7 @@ void ColorFxTool::putFinalData()
     ImageIface iface(0, 0);
 
     QString name;
+
     switch (d->effectType->currentIndex())
     {
         case ColorFXFilter::Solarize:
@@ -395,6 +398,7 @@ void ColorFxTool::putFinalData()
             name = i18n("Find Edges");
             break;
     }
+
     iface.putOriginalImage(name, filter()->filterAction(), filter()->getTargetImage().bits());
 }
 

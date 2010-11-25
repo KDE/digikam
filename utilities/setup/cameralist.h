@@ -47,7 +47,7 @@ class CameraList : public QObject
 
 public:
 
-    CameraList(QObject *parent, const QString& file);
+    CameraList(QObject* parent, const QString& file);
     ~CameraList();
 
     bool load();
@@ -79,7 +79,7 @@ private:
 
 private:
 
-    static CameraList *m_defaultList;
+    static CameraList* m_defaultList;
     CameraListPrivate* const d;
 };
 

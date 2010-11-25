@@ -66,7 +66,7 @@ public:
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString       configGroupName;
 
@@ -77,8 +77,8 @@ public:
 };
 
 FilmGrainTool::FilmGrainTool(QObject* parent)
-             : EditorToolThreaded(parent),
-               d(new FilmGrainToolPriv)
+    : EditorToolThreaded(parent),
+      d(new FilmGrainToolPriv)
 {
     setObjectName("filmgrain");
     setToolName(i18n("Film Grain"));
@@ -86,7 +86,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::AllPreviewModes);    
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 

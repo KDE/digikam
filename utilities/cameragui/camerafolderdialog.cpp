@@ -63,7 +63,7 @@ public:
 CameraFolderDialog::CameraFolderDialog(QWidget* parent, CameraIconView* cameraView,
                                        const QStringList& cameraFolderList,
                                        const QString& cameraName, const QString& rootPath)
-                  : KDialog(parent), d(new CameraFolderDialogPriv)
+    : KDialog(parent), d(new CameraFolderDialogPriv)
 {
     setHelp("camerainterface.anchor", "digikam");
     setCaption(i18n("%1 - Select Camera Folder",cameraName));
@@ -83,7 +83,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* parent, CameraIconView* cameraVi
     QLabel* message   = new QLabel(page);
 
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                            .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                    .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     message->setText(i18n("<p>Please select the camera folder "
                           "where you want to upload the images.</p>"));
@@ -103,13 +103,20 @@ CameraFolderDialog::CameraFolderDialog(QWidget* parent, CameraIconView* cameraVi
          it != cameraFolderList.constEnd(); ++it)
     {
         QString folder(*it);
+
         if (folder.startsWith(rootPath) && rootPath != QString("/"))
+        {
             folder.remove(0, rootPath.length());
+        }
 
         if (folder != QString("/") && !folder.isEmpty())
         {
             QString root = folder.section( '/', 0, -2 );
-            if (root.isEmpty()) root = QString("/");
+
+            if (root.isEmpty())
+            {
+                root = QString("/");
+            }
 
             QString sub = folder.section( '/', -1 );
             d->folderView->addFolder(root, sub, cameraView->countItemsByFolder(*it));
@@ -134,15 +141,24 @@ CameraFolderDialog::~CameraFolderDialog()
 QString CameraFolderDialog::selectedFolderPath() const
 {
     QTreeWidgetItem* item = d->folderView->currentItem();
-    if (!item) return QString();
+
+    if (!item)
+    {
+        return QString();
+    }
 
     CameraFolderItem* folderItem = dynamic_cast<CameraFolderItem*>(item);
+
     if (folderItem->isVirtualFolder())
+    {
         return QString(d->rootPath);
+    }
 
     // Case of Gphoto2 cameras. No need to duplicate root '/'.
     if (d->rootPath == QString("/"))
+    {
         return(folderItem->folderPath());
+    }
 
     return(d->rootPath + folderItem->folderPath());
 }

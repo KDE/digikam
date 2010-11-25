@@ -52,12 +52,27 @@ public:
     explicit CurvesFilter(DImg* orgImage, QObject* parent=0, const CurvesContainer& settings=CurvesContainer());
     virtual ~CurvesFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:CurvesFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Adjust Curves"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:CurvesFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Adjust Curves");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

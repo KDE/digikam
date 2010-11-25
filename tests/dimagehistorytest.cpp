@@ -117,11 +117,15 @@ void DImageHistoryTest::slotImageLoaded(const QString&, bool success)
 
     DImageHistory h = m_im->getImg()->getImageHistory();
     h.adjustReferredImages();
-    for (int i=0;i<3;i++)
+
+    for (int i=0; i<3; i++)
     {
         qDebug() << i << h.entries()[i].referredImages.size();
+
         if (h.entries()[i].referredImages.size())
+        {
             qDebug() << " " << i << h.entries()[i].referredImages.first().m_type;
+        }
     }
 
     m_loop.quit();

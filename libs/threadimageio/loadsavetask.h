@@ -48,7 +48,7 @@ public:
 
     LoadSaveTask(LoadSaveThread* thread)
         : m_thread(thread)
-        {};
+    {};
     virtual ~LoadSaveTask() {};
 
     virtual void execute() = 0;
@@ -63,7 +63,7 @@ public:
 
 protected:
 
-    LoadSaveThread *m_thread;
+    LoadSaveThread* m_thread;
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ public:
     LoadingTask(LoadSaveThread* thread, LoadingDescription description,
                 LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
         : LoadSaveTask(thread), m_loadingDescription(description), m_loadingTaskStatus(loadingTaskStatus)
-        {}
+    {}
 
     // LoadSaveTask
 
@@ -91,8 +91,8 @@ public:
 
     // DImgLoaderObserver
 
-    virtual void progressInfo(const DImg *, float progress);
-    virtual bool continueQuery(const DImg *);
+    virtual void progressInfo(const DImg*, float progress);
+    virtual bool continueQuery(const DImg*);
 
     virtual void setStatus(LoadingTaskStatus status);
 
@@ -128,8 +128,8 @@ public:
                       LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
 
     virtual void execute();
-    virtual void progressInfo(const DImg *, float progress);
-    virtual bool continueQuery(const DImg *img = 0);
+    virtual void progressInfo(const DImg*, float progress);
+    virtual bool continueQuery(const DImg* img = 0);
     virtual void setStatus(LoadingTaskStatus status);
 
     virtual bool needsPostProcessing() const;
@@ -140,15 +140,15 @@ public:
     virtual bool completed();
     virtual QString filePath();
     virtual QString cacheKey();
-    virtual void addListener(LoadingProcessListener *listener);
-    virtual void removeListener(LoadingProcessListener *listener);
-    virtual void notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description);
+    virtual void addListener(LoadingProcessListener* listener);
+    virtual void removeListener(LoadingProcessListener* listener);
+    virtual void notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description);
 
     // LoadingProcessListener
 
     virtual bool querySendNotifyEvent();
     virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img);
-    virtual LoadSaveNotifier *loadSaveNotifier();
+    virtual LoadSaveNotifier* loadSaveNotifier();
     virtual LoadSaveThread::AccessMode accessMode();
 
 protected:
@@ -176,13 +176,13 @@ public:
     SavingTask(LoadSaveThread* thread, DImg& img, const QString& filePath, const QString& format)
         : LoadSaveTask(thread),
           m_filePath(filePath), m_format(format), m_img(img), m_savingTaskStatus(SavingTaskStatusSaving)
-        {};
+    {};
 
     virtual void execute();
     virtual TaskType type();
 
-    virtual void progressInfo(const DImg *, float progress);
-    virtual bool continueQuery(const DImg *);
+    virtual void progressInfo(const DImg*, float progress);
+    virtual bool continueQuery(const DImg*);
 
     virtual void setStatus(SavingTaskStatus status);
 

@@ -61,7 +61,7 @@ class FaceIface::FaceIfacePriv
 {
 public:
 
-    FaceIfacePriv(FaceIface *q) : q(q)
+    FaceIfacePriv(FaceIface* q) : q(q)
     {
         setupTags();
     }
@@ -87,7 +87,7 @@ public:
 
 private:
 
-    FaceIface * const     q;
+    FaceIface* const     q;
 };
 
 // --- Private methods, face tag utility methods --------------------------------------------------------
@@ -105,8 +105,12 @@ int FaceIface::FaceIfacePriv::peopleTagId() const
 int FaceIface::FaceIfacePriv::unknownPeopleTagId() const
 {
     QList<int> ids = TagsCache::instance()->tagsWithPropertyCached(TagPropertyName::unknownPerson());
+
     if (!ids.isEmpty())
+    {
         return ids.first();
+    }
+
     return 0;
 }
 
@@ -131,8 +135,12 @@ void FaceIface::FaceIfacePriv::setupTags()
 int FaceIface::FaceIfacePriv::findFirstTagWithProperty(const QString& property, const QString& value) const
 {
     QList<int> candidates = TagsCache::instance()->tagsWithProperty(property, value);
+
     if (!candidates.isEmpty())
+    {
         return candidates.first();
+    }
+
     return 0;
 }
 
@@ -156,10 +164,12 @@ void FaceIface::FaceIfacePriv::makeFaceTag(int tagId, const QString& fullName) c
 }
 
 int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName,
-                                         bool convert, bool create) const
+        bool convert, bool create) const
 {
     if (name.isEmpty() && givenFullName.isEmpty() && !tagId)
+    {
         return unknownPeopleTagId();
+    }
 
     QString fullName = givenFullName.isNull() ? name : givenFullName;
 
@@ -173,11 +183,15 @@ int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int par
         else if (convert)
         {
             if (fullName.isNull())
+            {
                 fullName = TagsCache::instance()->tagName(tagId);
+            }
+
             kDebug() << "Converting proposed tag to person, full name" << fullName;
             makeFaceTag(tagId, fullName);
             return tagId;
         }
+
         return 0;
     }
 
@@ -186,22 +200,33 @@ int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int par
     foreach (int id, candidates)
     {
         kDebug() << "Candidate with set full name:" << id << fullName;
+
         if (parentId == -1)
+        {
             return id;
+        }
         else if (TagsCache::instance()->parentTag(id) == parentId)
+        {
             return id;
+        }
     }
 
     // Second attempt: Find by tag name
     if (parentId == -1)
+    {
         candidates = TagsCache::instance()->tagsForName(name);
+    }
     else
     {
         tagId = TagsCache::instance()->tagForName(name, parentId);
         candidates.clear();
+
         if (tagId)
+        {
             candidates << tagId;
+        }
     }
+
     foreach (int id, candidates)
     {
         // Is this tag already a person tag?
@@ -222,8 +247,12 @@ int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int par
     if (create)
     {
         kDebug() << "Creating new tag for name" << name << "fullName" << fullName;
+
         if (parentId == -1)
+        {
             parentId = peopleTagId();
+        }
+
         tagId = TagsCache::instance()->getOrCreateTag(tagPath(name, parentId));
         makeFaceTag(tagId, fullName);
         return tagId;
@@ -235,7 +264,7 @@ int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int par
 // --- Constructor / Destructor -------------------------------------------------------------------------------------
 
 FaceIface::FaceIface()
-         : d( new FaceIfacePriv(this) )
+    : d( new FaceIfacePriv(this) )
 {
 }
 
@@ -264,9 +293,13 @@ void FaceIface::markAsScanned(qlonglong imageid, bool hasBeenScanned) const
 void FaceIface::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
 {
     if (hasBeenScanned)
+    {
         ImageInfo(info).setTag(d->scannedForFacesTagId());
+    }
     else
+    {
         ImageInfo(info).removeTag(d->scannedForFacesTagId());
+    }
 }
 
 // --- Face tags ---------------------------------------------------------------------------------------------------
@@ -274,12 +307,17 @@ void FaceIface::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
 int FaceIface::tagForFaceName(const QString& kfaceId) const
 {
     if (kfaceId.isNull())
+    {
         return d->unknownPeopleTagId();
+    }
 
     // Find in "kfaceId" attribute
     int tagId = d->findFirstTagWithProperty(TagPropertyName::kfaceId(), kfaceId);
+
     if (tagId)
+    {
         return tagId;
+    }
 
     // First find by full name or name. If not, id is in libface's database, but not in ours, so create.
     return getOrCreateTagForPerson(kfaceId);
@@ -288,13 +326,22 @@ int FaceIface::tagForFaceName(const QString& kfaceId) const
 QString FaceIface::faceNameForTag(int tagId) const
 {
     if (!TagsCache::instance()->hasTag(tagId))
+    {
         return QString();
+    }
 
     QString id = TagsCache::instance()->propertyValue(tagId, TagPropertyName::kfaceId());
+
     if (id.isNull())
+    {
         id = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
+    }
+
     if (id.isNull())
+    {
         id = TagsCache::instance()->tagName(tagId);
+    }
+
     return id;
 }
 
@@ -389,13 +436,17 @@ QList<KFaceIface::Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFa
         QRect rect = databaseFace.region().toRect();
 
         if (!rect.isValid())
+        {
             continue;
+        }
 
         KFaceIface::Face f;
         f.setRect(rect);
 
         if (databaseFace.tagId() != d->unknownPeopleTagId())
+        {
             f.setName(faceNameForTag(databaseFace.tagId()));
+        }
 
         faceList += f;
     }
@@ -417,7 +468,9 @@ QList<DatabaseFace> FaceIface::databaseFaces(qlonglong imageid, DatabaseFace::Ty
                 kDebug() << "rect found as "<< region << "for attribute" << attribute << "tag" << pair.tagId();
 
                 if (!region.isValid())
+                {
                     continue;
+                }
 
                 faces << DatabaseFace(attribute, imageid, pair.tagId(), region);
             }
@@ -436,14 +489,20 @@ QList<ImageTagPair> FaceIface::faceImageTagPairs(qlonglong imageid, DatabaseFace
     {
         //kDebug() << pair.tagId() << pair.properties();
         if (!isPerson(pair.tagId()))
+        {
             continue;
+        }
 
         // UnknownName and UnconfirmedName have the same attribute
         if (!(flags & DatabaseFace::UnknownName) && pair.tagId() == d->unknownPeopleTagId())
+        {
             continue;
+        }
 
         if (!pair.hasAnyProperty(attributes))
+        {
             continue;
+        }
 
         pairs << pair;
     }
@@ -462,8 +521,11 @@ QList< QRect > FaceIface::getTagRects(qlonglong imageid) const
         foreach (const QString& region, regions)
         {
             QRect rect = TagRegion(region).toRect();
+
             if (rect.isValid())
+            {
                 rectList << rect;
+            }
         }
     }
 
@@ -498,11 +560,16 @@ void FaceIface::fillImageInFaces(const DImg& image, QList<KFaceIface::Face>& fac
 void FaceIface::fillImageInFace(const DImg& image, KFaceIface::Face& face, const QSize& scaleSize) const
 {
     QRect rect = TagRegion::mapFromOriginalSize(image, face.toRect());
+
     if (rect.isValid())
     {
         DImg detail = image.copy(rect);
+
         if (scaleSize.isValid())
+        {
             detail = detail.smoothScale(scaleSize, Qt::IgnoreAspectRatio);
+        }
+
         face.setImage(toImage(detail));
     }
 }
@@ -513,8 +580,11 @@ void FaceIface::fillImageInFaces(ThumbnailImageCatcher* catcher, const QString& 
     foreach (const KFaceIface::Face& face, faces)
     {
         QRect rect = face.toRect();
+
         if (!rect.isValid())
+        {
             continue;
+        }
 
         catcher->thread()->find(filePath, rect);
         catcher->enqueue();
@@ -528,8 +598,12 @@ void FaceIface::fillImageInFaces(ThumbnailImageCatcher* catcher, const QString& 
         KFaceIface::Face& face = faces[i];
         QImage detail          = details[i];
         kDebug() << "Loaded detail" << detail.size();
+
         if (scaleSize.isValid())
+        {
             detail = detail.scaled(scaleSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+
         face.setImage(detail);
     }
 }
@@ -584,7 +658,9 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
     }
 
     if (newFaces.isEmpty())
+    {
         return newFaces;
+    }
 
     // list of existing entries
     QList<DatabaseFace> currentFaces = databaseFaces(imageid);
@@ -598,6 +674,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
         foreach (const DatabaseFace& oldFace, currentFaces)
         {
             double minOverlap = oldFace.isConfirmedName() ? 0.25 : 0.5;
+
             if (oldFace.region().intersects(newFace.region(), minOverlap))
             {
                 overlappingEntries << oldFace;
@@ -617,6 +694,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
                 for (int i=0; i<overlappingEntries.size(); i++)
                 {
                     DatabaseFace& oldFace = overlappingEntries[i];
+
                     if (oldFace.isUnknownName())
                     {
                         // remove old face
@@ -635,6 +713,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
                 for (int i=0; i<overlappingEntries.size(); i++)
                 {
                     DatabaseFace& oldFace = overlappingEntries[i];
+
                     if (oldFace.isUnknownName())
                     {
                         // remove old face
@@ -649,6 +728,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
                                 newFace = DatabaseFace();
                                 break;
                             }
+
                             // else remove old face
                         }
                         else
@@ -731,8 +811,12 @@ void FaceIface::add(const DatabaseFace& face, bool trainFace)
 {
     ImageTagPair pair(face.imageId(), face.tagId());
     DatabaseFace::TypeFlags flags = DatabaseFace::ConfirmedName;
+
     if (trainFace)
+    {
         flags |= DatabaseFace::FaceForTraining;
+    }
+
     d->add(pair, face, DatabaseFace::attributesForFlags(flags), true);
 }
 
@@ -748,7 +832,9 @@ void FaceIface::FaceIfacePriv::add(ImageTagPair& pair, const DatabaseFace& face,
     }
 
     if (addTag)
+    {
         MetadataManager::instance()->assignTag(ImageInfo(face.imageId()), face.tagId());
+    }
 }
 
 // --- Removing faces ---
@@ -769,7 +855,9 @@ void FaceIface::removeAllFaces(qlonglong imageid)
         }
 
         if (pair.isAssigned())
+        {
             tagsToRemove << pair.tagId();
+        }
     }
 
     MetadataManager::instance()->removeTags(info, tagsToRemove);
@@ -785,7 +873,7 @@ void FaceIface::removeFace(qlonglong imageid, const QRect& rect)
 
     for (int i=0; i<pairs.size(); i++)
     {
-        ImageTagPair &pair = pairs[i];
+        ImageTagPair& pair = pairs[i];
         foreach (const QString& attribute, attributes)
         {
             foreach (const QString& regionString, pair.values(attribute))
@@ -793,19 +881,26 @@ void FaceIface::removeFace(qlonglong imageid, const QRect& rect)
                 if (rect == TagRegion(regionString).toRect())
                 {
                     pair.removeProperty(attribute, regionString);
+
                     if (pair.isAssigned())
+                    {
                         tagsToRemove << pair.tagId();
+                    }
                 }
             }
         }
     }
+
     MetadataManager::instance()->removeTags(ImageInfo(imageid), tagsToRemove);
 }
 
 void FaceIface::removeFace(const DatabaseFace& face)
 {
     if (face.isNull())
+    {
         return;
+    }
+
     ImageTagPair pair(face.imageId(), face.tagId());
     d->remove(pair, face, true);
 }
@@ -815,7 +910,10 @@ void FaceIface::removeFaces(const QList<DatabaseFace>& faces)
     foreach (const DatabaseFace& face, faces)
     {
         if (face.isNull())
+        {
             continue;
+        }
+
         ImageTagPair pair(face.imageId(), face.tagId());
         d->remove(pair, face, true);
     }
@@ -827,13 +925,17 @@ void FaceIface::FaceIfacePriv::remove(ImageTagPair& pair, const DatabaseFace& fa
     pair.removeProperty(DatabaseFace::attributeForType(face.type()), regionString);
 
     if (face.type() == DatabaseFace::ConfirmedName)
+    {
         pair.removeProperty(DatabaseFace::attributeForType(DatabaseFace::FaceForTraining), regionString);
+    }
 
     // Tag assigned and no other entry left?
     if (touchTags
         && pair.isAssigned()
         && !pair.hasProperty(DatabaseFace::attributeForType(DatabaseFace::ConfirmedName)))
+    {
         MetadataManager::instance()->removeTag(ImageInfo(face.imageId()), pair.tagId());
+    }
 }
 
 // --- Utilities ---
@@ -1031,12 +1133,12 @@ void FaceIface::readConfigSettings()
 }
 */
 
-   /* *
-    * Returns a list of image ids of all images in the DB which have a specified person within.
-    * @param tagId The person's id. Or tag id for the person tag. Same thing.
-    * @param repeat If repeat is specified as true, then if person with id tagId is found n times in an image,
-    * that image's id will be pushed into the returned list n times. Useful for thumbnailing as I see it.
-    */
+/* *
+ * Returns a list of image ids of all images in the DB which have a specified person within.
+ * @param tagId The person's id. Or tag id for the person tag. Same thing.
+ * @param repeat If repeat is specified as true, then if person with id tagId is found n times in an image,
+ * that image's id will be pushed into the returned list n times. Useful for thumbnailing as I see it.
+ */
 //QList<qlonglong>    imagesWithPerson(int tagId, bool repeat = false);
 
 /*
@@ -1102,36 +1204,36 @@ QList< qlonglong > FaceIface::imagesWithPerson(int tagId, bool repeat)
 */
 
 
-    /**
-     * Method to mark a face as trained, so that we don't retrain it
-     */
+/**
+ * Method to mark a face as trained, so that we don't retrain it
+ */
 //     void                markFaceAsTrained(qlonglong imageid, const QRect& rect, const QString& name);
 //     void                markFaceAsTrained(qlonglong imageid, const Face& face);
 
-    /**
-     * Method to mark a list of faces as trained, so that we don't retrain them
-     */
+/**
+ * Method to mark a list of faces as trained, so that we don't retrain them
+ */
 //     void                markFacesAsTrained(qlonglong imageid, QList<Face> faces);
 
-    /**
-     * Method to mark a face as recognized, so we don't attempt to recognize it again
-     */
+/**
+ * Method to mark a face as recognized, so we don't attempt to recognize it again
+ */
 //     void                markFaceAsRecognized(qlonglong imageid, const QRect& rect, const QString& name);
 //     void                markFaceAsRecognized(qlonglong imageid, const Face& face);
 
-    /**
-     * Method to mark a list of faces as recognized, so that we don't attempt to identify them again
-     */
+/**
+ * Method to mark a list of faces as recognized, so that we don't attempt to identify them again
+ */
 //     void                markFacesAsRecognized(qlonglong imageid, QList<Face> faces);
 
-    /**
-     * Tells if the face has been marked as Trained
-     */
+/**
+ * Tells if the face has been marked as Trained
+ */
 //     bool                isFaceTrained(qlonglong imageid, const QRect& rect, const QString& name);
 
-    /**
-     * Tells if the face has been marked as recognized
-     */
+/**
+ * Tells if the face has been marked as recognized
+ */
 //     bool                isFaceRecognized( qlonglong imageid, const QRect& rect, const QString& name);
 /*
 void FaceIface::markFaceAsTrained ( qlonglong imageid, const QRect& rect, const QString& name )

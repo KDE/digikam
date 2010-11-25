@@ -32,13 +32,13 @@ namespace Digikam
 {
 
 InvertFilter::InvertFilter(QObject* parent)
-                 : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 InvertFilter::InvertFilter(DImg* orgImage, QObject* parent)
-            : DImgThreadedFilter(orgImage, parent, "InvertFilter")
+    : DImgThreadedFilter(orgImage, parent, "InvertFilter")
 {
     initFilter();
 }
@@ -46,8 +46,8 @@ InvertFilter::InvertFilter(DImg* orgImage, QObject* parent)
 InvertFilter::InvertFilter(DImgThreadedFilter* parentFilter,
                            const DImg& orgImage, const DImg& destImage,
                            int progressBegin, int progressEnd)
-            : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                                 parentFilter->filterName() + ": InvertFilter")
+    : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                         parentFilter->filterName() + ": InvertFilter")
 {
     filterImage();
 }

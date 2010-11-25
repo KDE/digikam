@@ -60,11 +60,11 @@
 namespace Digikam
 {
 
-ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
-                                               SidebarSplitter *splitter,
-                                               KMultiTabBarPosition side,
-                                               bool mimimizedDefault)
-                      : Sidebar(parent, splitter, side, mimimizedDefault)
+ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* parent,
+        SidebarSplitter* splitter,
+        KMultiTabBarPosition side,
+        bool mimimizedDefault)
+    : Sidebar(parent, splitter, side, mimimizedDefault)
 {
     m_image              = 0;
     m_currentRect        = QRect();
@@ -100,10 +100,12 @@ void ImagePropertiesSideBar::applySettings()
     m_metadataTab->applySettings();
 }
 
-void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg *img)
+void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg* img)
 {
     if (!url.isValid())
+    {
         return;
+    }
 
     m_currentURL         = url;
     m_currentRect        = rect;
@@ -138,15 +140,21 @@ void ImagePropertiesSideBar::slotImageSelectionChanged(const QRect& rect)
     m_currentRect = rect;
 
     if (m_dirtyColorTab)
-       m_colorTab->setSelection(rect);
+    {
+        m_colorTab->setSelection(rect);
+    }
     else
-       slotChangedTab(m_colorTab);
+    {
+        slotChangedTab(m_colorTab);
+    }
 }
 
 void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 {
     if (!m_currentURL.isValid())
+    {
         return;
+    }
 
     setCursor(Qt::WaitCursor);
 
@@ -178,7 +186,9 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 {
     if (!url.isValid())
+    {
         return;
+    }
 
     QString str;
     QString unavailable(i18n("<i>unavailable</i>"));
@@ -194,7 +204,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     m_propertiesTab->setFileModifiedDate(str);
 
     str = QString("%1 (%2)").arg(KIO::convertSize(fi.size()))
-                            .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
+          .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
     m_propertiesTab->setFileSize(str);
     m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fi.user()).arg(fi.group()));
     m_propertiesTab->setFilePermissions(fi.permissionsString());
@@ -222,67 +232,77 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
         if (meta.isValid())
         {
             if (meta.item("Dimensions").isValid())
+            {
                 dims = meta.item("Dimensions").value().toSize();
+            }
 
             if (meta.item("JPEG quality").isValid())
+            {
                 compression = i18n("JPEG quality %1", meta.item("JPEG quality").value().toString());
+            }
 
             if (meta.item("Compression").isValid())
+            {
                 compression =  meta.item("Compression").value().toString();
+            }
 
             if (meta.item("BitDepth").isValid())
+            {
                 bitDepth = meta.item("BitDepth").value().toString();
+            }
 
             if (meta.item("ColorMode").isValid())
+            {
                 colorMode = meta.item("ColorMode").value().toString();
+            }
         }
 
-/*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                            Check if new method to search information is enough.
+        /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
+                                    Check if new method to search information is enough.
 
-        if (meta.isValid())
-        {
-            if (meta.containsGroup("Jpeg EXIF Data"))     // JPEG image ?
-            {
-                dims        = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+                if (meta.isValid())
+                {
+                    if (meta.containsGroup("Jpeg EXIF Data"))     // JPEG image ?
+                    {
+                        dims        = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
 
-                QString quality = meta.group("Jpeg EXIF Data").item("JPEG quality").value().toString();
-                quality.isEmpty() ? compression = unavailable :
-                                    compression = i18n("JPEG quality %1",quality);
-                bitDepth    = meta.group("Jpeg EXIF Data").item("BitDepth").value().toString();
-                colorMode   = meta.group("Jpeg EXIF Data").item("ColorMode").value().toString();
-            }
+                        QString quality = meta.group("Jpeg EXIF Data").item("JPEG quality").value().toString();
+                        quality.isEmpty() ? compression = unavailable :
+                                            compression = i18n("JPEG quality %1",quality);
+                        bitDepth    = meta.group("Jpeg EXIF Data").item("BitDepth").value().toString();
+                        colorMode   = meta.group("Jpeg EXIF Data").item("ColorMode").value().toString();
+                    }
 
-            if (meta.containsGroup("General"))
-            {
-                if (dims.isEmpty() )
-                    dims = meta.group("General").item("Dimensions").value().toSize();
-                if (compression.isEmpty())
-                    compression =  meta.group("General").item("Compression").value().toString();
-                if (bitDepth.isEmpty())
-                    bitDepth = meta.group("General").item("BitDepth").value().toString();
-                if (colorMode.isEmpty())
-                    colorMode = meta.group("General").item("ColorMode").value().toString();
-            }
+                    if (meta.containsGroup("General"))
+                    {
+                        if (dims.isEmpty() )
+                            dims = meta.group("General").item("Dimensions").value().toSize();
+                        if (compression.isEmpty())
+                            compression =  meta.group("General").item("Compression").value().toString();
+                        if (bitDepth.isEmpty())
+                            bitDepth = meta.group("General").item("BitDepth").value().toString();
+                        if (colorMode.isEmpty())
+                            colorMode = meta.group("General").item("ColorMode").value().toString();
+                    }
 
-            if (meta.containsGroup("Technical"))
-            {
-                if (dims.isEmpty())
-                    dims = meta.group("Technical").item("Dimensions").value().toSize();
-                if (compression.isEmpty())
-                    compression = meta.group("Technical").item("Compression").value().toString();
-                if (bitDepth.isEmpty())
-                    bitDepth = meta.group("Technical").item("BitDepth").value().toString();
-                if (colorMode.isEmpty())
-                    colorMode =  meta.group("Technical").item("ColorMode").value().toString();
-            }
-        }*/
+                    if (meta.containsGroup("Technical"))
+                    {
+                        if (dims.isEmpty())
+                            dims = meta.group("Technical").item("Dimensions").value().toSize();
+                        if (compression.isEmpty())
+                            compression = meta.group("Technical").item("Compression").value().toString();
+                        if (bitDepth.isEmpty())
+                            bitDepth = meta.group("Technical").item("BitDepth").value().toString();
+                        if (colorMode.isEmpty())
+                            colorMode =  meta.group("Technical").item("ColorMode").value().toString();
+                    }
+                }*/
     }
 
     QString mpixels;
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
-           dims.width(), dims.height(), mpixels);
+            dims.width(), dims.height(), mpixels);
     m_propertiesTab->setImageDimensions(str);
     m_propertiesTab->setImageCompression(compression.isEmpty() ? unavailable : compression);
     m_propertiesTab->setImageBitDepth(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp", bitDepth));
@@ -303,13 +323,17 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
         m_propertiesTab->setPhotoDateTime(str);
     }
     else
+    {
         m_propertiesTab->setPhotoDateTime(unavailable);
+    }
 
     m_propertiesTab->setPhotoLens(photoInfo.lens.isEmpty() ? unavailable : photoInfo.lens);
     m_propertiesTab->setPhotoAperture(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
 
     if (photoInfo.focalLength35mm.isEmpty())
+    {
         m_propertiesTab->setPhotoFocalLength(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
+    }
     else
     {
         str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35mm);
@@ -320,11 +344,17 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     m_propertiesTab->setPhotoSensitivity(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
 
     if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+    {
         m_propertiesTab->setPhotoExposureMode(unavailable);
+    }
     else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+    {
         m_propertiesTab->setPhotoExposureMode(photoInfo.exposureMode);
+    }
     else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+    {
         m_propertiesTab->setPhotoExposureMode(photoInfo.exposureProgram);
+    }
     else
     {
         str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);

@@ -167,7 +167,7 @@ public:
     void setAlbumManagerCurrentAlbum(bool setCurrentAlbum);
 
     // for internal use: public viewportEvent
-    virtual bool viewportEvent(QEvent *event);
+    virtual bool viewportEvent(QEvent* event);
 
 public Q_SLOTS:
 
@@ -197,7 +197,7 @@ public Q_SLOTS:
      *
      * @param index index to start expanding everything
      */
-    void expandEverything(const QModelIndex &index);
+    void expandEverything(const QModelIndex& index);
 
 Q_SIGNALS:
 
@@ -369,7 +369,7 @@ public:
 
 protected:
 
-    void setAlbumModel(AbstractCountingAlbumModel *model);
+    void setAlbumModel(AbstractCountingAlbumModel* model);
     void setAlbumFilterModel(AlbumFilterModel* filterModel);
     virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
@@ -405,8 +405,14 @@ public:
     AbstractCheckableAlbumModel* albumModel() const;
     CheckableAlbumFilterModel* albumFilterModel() const;
 
-    AbstractCheckableAlbumModel* checkableModel() const { return albumModel(); }
-    CheckableAlbumFilterModel* checkableAlbumFilterModel() const { return albumFilterModel(); }
+    AbstractCheckableAlbumModel* checkableModel() const
+    {
+        return albumModel();
+    }
+    CheckableAlbumFilterModel* checkableAlbumFilterModel() const
+    {
+        return albumFilterModel();
+    }
 
     /// Enable checking on middle mouse button click (default: on)
     void setCheckOnMiddleClick(bool doThat);
@@ -455,14 +461,14 @@ public:
     virtual ~AlbumTreeView();
     AlbumModel* albumModel() const;
     PAlbum* currentAlbum() const;
-    PAlbum* albumForIndex(const QModelIndex &index) const;
+    PAlbum* albumForIndex(const QModelIndex& index) const;
 
     void setAlbumFilterModel(CheckableAlbumFilterModel* filterModel);
     void setAlbumModel(AlbumModel* model);
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(PAlbum *album, bool selectInAlbumManager = true);
+    void setCurrentAlbum(PAlbum* album, bool selectInAlbumManager = true);
     void setCurrentAlbum(int albumId, bool selectInAlbumManager = true);
 
 private Q_SLOTS:
@@ -484,15 +490,15 @@ public:
     /// Contains only the tags filtered by properties - prefer to albumModel()
     TagPropertiesFilterModel* filteredModel() const;
     TAlbum* currentAlbum() const;
-    TAlbum* albumForIndex(const QModelIndex &index) const;
+    TAlbum* albumForIndex(const QModelIndex& index) const;
     TagModificationHelper* tagModificationHelper() const;
 
-    void setAlbumFilterModel(TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel);
+    void setAlbumFilterModel(TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel);
     void setAlbumModel(TagModel* model);
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(TAlbum *tag, bool selectInAlbumManager = true);
+    void setCurrentAlbum(TAlbum* tag, bool selectInAlbumManager = true);
     void setCurrentAlbum(int tagId, bool selectInAlbumManager = true);
 
 Q_SIGNALS:
@@ -501,8 +507,8 @@ Q_SIGNALS:
 
 protected:
 
-    TagPropertiesFilterModel *m_filteredModel;
-    TagModificationHelper    *m_modificationHelper;
+    TagPropertiesFilterModel* m_filteredModel;
+    TagModificationHelper*    m_modificationHelper;
 };
 
 // -------------------------------------------------------------------------------------
@@ -522,11 +528,11 @@ public:
     SAlbum* currentAlbum() const;
 
     void setAlbumModel(SearchModel* model);
-    void setAlbumFilterModel(SearchFilterModel *filteredModel, CheckableAlbumFilterModel* model);
+    void setAlbumFilterModel(SearchFilterModel* filteredModel, CheckableAlbumFilterModel* model);
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(SAlbum *album, bool selectInAlbumManager = true);
+    void setCurrentAlbum(SAlbum* album, bool selectInAlbumManager = true);
     void setCurrentAlbum(int searchId, bool selectInAlbumManager = true);
 
 protected:
@@ -545,14 +551,14 @@ public:
     DateAlbumTreeView(QWidget* parent = 0, Flags flags = DefaultFlags);
     DateAlbumModel* albumModel() const;
     DAlbum* currentAlbum() const;
-    DAlbum* albumForIndex(const QModelIndex &index) const;
+    DAlbum* albumForIndex(const QModelIndex& index) const;
 
     void setAlbumModel(DateAlbumModel* model);
     void setAlbumFilterModel(AlbumFilterModel* filterModel);
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(DAlbum *album, bool selectInAlbumManager = true);
+    void setCurrentAlbum(DAlbum* album, bool selectInAlbumManager = true);
     void setCurrentAlbum(int dateId, bool selectInAlbumManager = true);
 };
 

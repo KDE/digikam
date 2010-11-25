@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT MetadataSettingsContainer
 public:
 
     MetadataSettingsContainer();
-    ~MetadataSettingsContainer(){};
+    ~MetadataSettingsContainer() {};
 
 public:
 

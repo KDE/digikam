@@ -42,10 +42,12 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelWorker : public WorkerObject
 
 public:
 
-    ImageFilterModelWorker(ImageFilterModelPrivate *d);
+    ImageFilterModelWorker(ImageFilterModelPrivate* d);
 
     bool checkVersion(const ImageFilterModelTodoPackage& package)
-    { return d->version == package.version; }
+    {
+        return d->version == package.version;
+    }
 
 public Q_SLOTS:
 
@@ -58,7 +60,7 @@ Q_SIGNALS:
 
 protected:
 
-    ImageFilterModelPrivate *d;
+    ImageFilterModelPrivate* d;
 };
 
 class DIGIKAM_DATABASE_EXPORT ImageFilterModelPreparer : public ImageFilterModelWorker
@@ -67,7 +69,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelPreparer : public ImageFilterModel
 
 public:
 
-    ImageFilterModelPreparer(ImageFilterModelPrivate *d)
+    ImageFilterModelPreparer(ImageFilterModelPrivate* d)
         : ImageFilterModelWorker(d) {}
 
     void process(ImageFilterModelTodoPackage package);
@@ -79,7 +81,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelFilterer : public ImageFilterModel
 
 public:
 
-    ImageFilterModelFilterer(ImageFilterModelPrivate *d)
+    ImageFilterModelFilterer(ImageFilterModelPrivate* d)
         : ImageFilterModelWorker(d) {}
 
     void process(ImageFilterModelTodoPackage package);

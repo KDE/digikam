@@ -60,7 +60,7 @@ public:
      * Apply this transform with the set profiles and options to the image.
      * Optionally pass an observer to get progress information.
      */
-    bool apply(DImg& image, DImgLoaderObserver *observer = 0);
+    bool apply(DImg& image, DImgLoaderObserver* observer = 0);
     /// Apply this transform to the QImage. This has only basic functionality.
     bool apply(QImage& qimage);
 
@@ -97,9 +97,15 @@ public:
 
     /// Set options
     void setIntent(RenderingIntent intent);
-    void setIntent(int intent) { setIntent((RenderingIntent)intent); }
+    void setIntent(int intent)
+    {
+        setIntent((RenderingIntent)intent);
+    }
     void setProofIntent(RenderingIntent intent);
-    void setProofIntent(int intent) { setProofIntent((RenderingIntent)intent); }
+    void setProofIntent(int intent)
+    {
+        setProofIntent((RenderingIntent)intent);
+    }
     void setUseBlackPointCompensation(bool useBPC);
     void setCheckGamut(bool checkGamut);
     void setCheckGamutMaskColor(const QColor& color);
@@ -139,7 +145,7 @@ private:
     TransformDescription getDescription(const QImage& image);
     bool open(TransformDescription& description);
     bool openProofing(TransformDescription& description);
-    void transform(DImg& img, const TransformDescription&, DImgLoaderObserver *observer = 0);
+    void transform(DImg& img, const TransformDescription&, DImgLoaderObserver* observer = 0);
     void transform(QImage& img, const TransformDescription&);
 
 private:

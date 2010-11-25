@@ -80,6 +80,7 @@ public:
 void DImgChildItem::DImgChildItemPriv::connectParent(bool active)
 {
     GraphicsDImgItem* parent = q->parentDImgItem();
+
     if (parent)
     {
         if (active)
@@ -96,7 +97,7 @@ void DImgChildItem::DImgChildItemPriv::connectParent(bool active)
 }
 
 DImgChildItem::DImgChildItem(QGraphicsItem* parent)
-             : QGraphicsObject(parent), d(new DImgChildItemPriv(this))
+    : QGraphicsObject(parent), d(new DImgChildItemPriv(this))
 {
     d->connectParent();
 }
@@ -109,7 +110,9 @@ DImgChildItem::~DImgChildItem()
 void DImgChildItem::setRelativePos(const QPointF& relativePos)
 {
     if (d->relativePos == relativePos)
+    {
         return;
+    }
 
     d->relativePos = relativePos;
     updatePos();
@@ -119,7 +122,9 @@ void DImgChildItem::setRelativePos(const QPointF& relativePos)
 void DImgChildItem::setRelativeSize(const QSizeF& relativeSize)
 {
     if (d->relativeSize == relativeSize)
+    {
         return;
+    }
 
     d->relativeSize = relativeSize;
     updateSize();
@@ -150,7 +155,9 @@ QSizeF DImgChildItem::relativeSize() const
 void DImgChildItem::setOriginalPos(const QPointF& posInOriginal)
 {
     if (!parentItem())
+    {
         return;
+    }
 
     QSizeF originalSize = parentDImgItem()->zoomSettings()->originalImageSize();
     setRelativePos( QPointF(posInOriginal.x() / originalSize.width(),
@@ -160,7 +167,9 @@ void DImgChildItem::setOriginalPos(const QPointF& posInOriginal)
 void DImgChildItem::setOriginalSize(const QSizeF& sizeInOriginal)
 {
     if (!parentItem())
+    {
         return;
+    }
 
     QSizeF originalSize = parentDImgItem()->zoomSettings()->originalImageSize();
     setRelativeSize( QSizeF(sizeInOriginal.width() / originalSize.width(),
@@ -195,9 +204,12 @@ QPoint DImgChildItem::originalPos() const
 void DImgChildItem::setPos(const QPointF& pos)
 {
     if (!parentItem())
+    {
         return;
+    }
 
     const QSizeF imageSize = parentItem()->boundingRect().size();
+
     setRelativePos( QPointF(pos.x() / imageSize.width(),
                             pos.y() / imageSize.height()) );
 }
@@ -205,9 +217,12 @@ void DImgChildItem::setPos(const QPointF& pos)
 void DImgChildItem::setSize(const QSizeF& size)
 {
     if (!parentItem())
+    {
         return;
+    }
 
     const QSizeF imageSize = parentItem()->boundingRect().size();
+
     setRelativeSize( QSizeF(size.width() / imageSize.width(),
                             size.height() / imageSize.height()) );
 }
@@ -226,9 +241,12 @@ QRectF DImgChildItem::rect() const
 QSizeF DImgChildItem::size() const
 {
     if (!parentItem())
+    {
         return QSizeF();
+    }
 
     const QSizeF imageSize = parentItem()->boundingRect().size();
+
     return QSizeF(d->relativeSize.width()  * imageSize.width(),
                   d->relativeSize.height() * imageSize.height());
 }
@@ -241,7 +259,9 @@ GraphicsDImgItem* DImgChildItem::parentDImgItem() const
 void DImgChildItem::updatePos()
 {
     if (!parentItem())
+    {
         return;
+    }
 
     QSizeF imageSize = parentItem()->boundingRect().size();
     QGraphicsObject::setPos(imageSize.width() * d->relativePos.x(), imageSize.height() * d->relativePos.y());
@@ -263,9 +283,13 @@ void DImgChildItem::imageSizeChanged(const QSizeF&)
 QVariant DImgChildItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
     if (change == QGraphicsItem::ItemParentChange)
-        d->connectParent(false); // disconnect old parent
+    {
+        d->connectParent(false);    // disconnect old parent
+    }
     else if (change == QGraphicsItem::ItemParentHasChanged)
-        d->connectParent(true); // connect new parent
+    {
+        d->connectParent(true);    // connect new parent
+    }
 
     return QGraphicsObject::itemChange(change, value);
 }
@@ -273,7 +297,9 @@ QVariant DImgChildItem::itemChange(QGraphicsItem::GraphicsItemChange change, con
 QRectF DImgChildItem::boundingRect() const
 {
     if (!parentItem())
+    {
         return QRectF();
+    }
 
     return QRectF(QPointF(0,0), size());
 }

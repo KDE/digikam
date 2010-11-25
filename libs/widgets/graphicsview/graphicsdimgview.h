@@ -72,7 +72,7 @@ Q_SIGNALS:
 
 protected:
 
-    void drawForeground(QPainter* painter, const QRectF &rect);
+    void drawForeground(QPainter* painter, const QRectF& rect);
     void drawText(QPainter* p, const QRectF& rect, const QString& text);
 
     void setItem(DImgPreviewItem* item);
@@ -89,7 +89,7 @@ protected:
     void continuePanning(const QPoint& pos);
     void finishPanning();
 
-    virtual bool acceptsMouseClick(QMouseEvent *e);
+    virtual bool acceptsMouseClick(QMouseEvent* e);
 
     virtual void scrollContentsBy(int dx, int dy);
 

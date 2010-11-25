@@ -40,12 +40,12 @@ namespace Digikam
 {
 
 ChoiceSearchModel::Entry::Entry()
-                 : checkState(false)
+    : checkState(false)
 {
 }
 
 ChoiceSearchModel::Entry::Entry(QVariant key, const QString userDisplay)
-                 : key(key), display(userDisplay), checkState(false)
+    : key(key), display(userDisplay), checkState(false)
 {
 }
 
@@ -54,7 +54,7 @@ bool ChoiceSearchModel::Entry::operator==(const Entry& other)
     return key == other.key;
 }
 
-ChoiceSearchModel::ChoiceSearchModel(QObject *parent)
+ChoiceSearchModel::ChoiceSearchModel(QObject* parent)
     : QAbstractListModel(parent)
 {
 }
@@ -82,6 +82,7 @@ void ChoiceSearchModel::setChoice(QVariantList data)
     }
 
     Q_ASSERT(data.size() % 2 == 0);
+
     for (QVariantList::const_iterator it = data.constBegin(); it != data.constEnd(); )
     {
         QVariant key = *it;
@@ -101,6 +102,7 @@ void ChoiceSearchModel::setChoice(QStringList data)
     }
 
     Q_ASSERT(data.size() % 2 == 0);
+
     for (QStringList::const_iterator it = data.constBegin(); it != data.constEnd(); )
     {
         QVariant key = *it;
@@ -114,22 +116,30 @@ void ChoiceSearchModel::setChoice(QStringList data)
 QVariantList ChoiceSearchModel::checkedKeys() const
 {
     QVariantList list;
+
     for (QList<Entry>::const_iterator it = m_entries.constBegin(); it != m_entries.constEnd(); ++it)
     {
         if ((*it).checkState)
+        {
             list << (*it).key;
+        }
     }
+
     return list;
 }
 
 QStringList ChoiceSearchModel::checkedDisplayTexts() const
 {
     QStringList list;
+
     for (QList<Entry>::const_iterator it = m_entries.constBegin(); it != m_entries.constEnd(); ++it)
     {
         if ((*it).checkState)
+        {
             list << (*it).display;
+        }
     }
+
     return list;
 }
 
@@ -146,14 +156,19 @@ void ChoiceSearchModel::resetChecked()
     for (int i=0; i<m_entries.size(); ++i)
     {
         if (m_entries[i].checkState)
+        {
             setChecked(i, false);
+        }
     }
 }
 
-int ChoiceSearchModel::rowCount(const QModelIndex & parent) const
+int ChoiceSearchModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
+    {
         return 0;
+    }
+
     return m_entries.count();
 }
 
@@ -162,19 +177,28 @@ QVariant ChoiceSearchModel::data(const QModelIndex& index, int role) const
     if (index.isValid())
     {
         if (role == Qt::DisplayRole)
+        {
             return m_entries[index.row()].display;
+        }
         else if (role == Qt::CheckStateRole)
+        {
             return m_entries[index.row()].checkState ? Qt::Checked : Qt::Unchecked;
+        }
         else if (role == IdRole)
+        {
             return m_entries[index.row()].key;
+        }
     }
+
     return QVariant();
 }
 
 QModelIndex ChoiceSearchModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (parent.isValid() || column != 0 || row >= m_entries.size())
+    {
         return QModelIndex();
+    }
 
     return createIndex(row, 0);
 }
@@ -200,23 +224,23 @@ bool ChoiceSearchModel::setData(const QModelIndex& index, const QVariant& value,
 
 // --------------------------------------------------------------------------------------
 
-ChoiceSearchComboBox::ChoiceSearchComboBox(QWidget *parent)
-                    : ListViewComboBox(parent)
+ChoiceSearchComboBox::ChoiceSearchComboBox(QWidget* parent)
+    : ListViewComboBox(parent)
 {
 }
 
-void ChoiceSearchComboBox::setModel(ChoiceSearchModel *model)
+void ChoiceSearchComboBox::setModel(ChoiceSearchModel* model)
 {
     ModelIndexBasedComboBox::setModel(model);
     installView();
 }
 
-ChoiceSearchModel *ChoiceSearchComboBox::model() const
+ChoiceSearchModel* ChoiceSearchComboBox::model() const
 {
     return static_cast<ChoiceSearchModel*>(ListViewComboBox::model());
 }
 
-RSqueezedClickLabel *ChoiceSearchComboBox::label() const
+RSqueezedClickLabel* ChoiceSearchComboBox::label() const
 {
     return m_label;
 }
@@ -232,7 +256,7 @@ void ChoiceSearchComboBox::labelClicked()
     showPopup();
 }
 
-void ChoiceSearchComboBox::installView(QAbstractItemView *v)
+void ChoiceSearchComboBox::installView(QAbstractItemView* v)
 {
     // make protected again
     ListViewComboBox::installView(v);
@@ -245,7 +269,7 @@ void ChoiceSearchComboBox::installView(QAbstractItemView *v)
     m_label->setTextElideMode(Qt::ElideRight);
 
     // set a line edit that carries the label
-    ProxyClickLineEdit *lineEdit = new ProxyClickLineEdit;
+    ProxyClickLineEdit* lineEdit = new ProxyClickLineEdit;
     lineEdit->setCursor(m_label->cursor());
     lineEdit->setWidget(m_label);
     setLineEdit(lineEdit);

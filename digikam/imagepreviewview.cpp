@@ -9,7 +9,7 @@
  * Copyright (C) 2006-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  * Copyright (C) 2010 Aditya Bhatt <adityabhatt1991 at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -92,7 +92,7 @@ public:
         setAcceptHoverEvents(true);
     }
 
-    void setFaceGroup(FaceGroup *group)
+    void setFaceGroup(FaceGroup* group)
     {
         m_group = group;
     }
@@ -182,7 +182,7 @@ public:
 };
 
 ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
-                  : GraphicsDImgView(parent), d(new ImagePreviewViewPriv)
+    : GraphicsDImgView(parent), d(new ImagePreviewViewPriv)
 {
     d->item = new ImagePreviewViewItem(this);
     setItem(d->item);
@@ -317,20 +317,22 @@ ImageInfo ImagePreviewView::getImageInfo() const
     return d->item->imageInfo();
 }
 
-bool ImagePreviewView::acceptsMouseClick(QMouseEvent *e)
+bool ImagePreviewView::acceptsMouseClick(QMouseEvent* e)
 {
     if (!GraphicsDImgView::acceptsMouseClick(e))
+    {
         return false;
+    }
 
     return d->faceGroup->acceptsMouseClick(mapToScene(e->pos()));
 }
 
-void ImagePreviewView::enterEvent(QEvent *e)
+void ImagePreviewView::enterEvent(QEvent* e)
 {
     d->faceGroup->enterEvent(e);
 }
 
-void ImagePreviewView::leaveEvent(QEvent *e)
+void ImagePreviewView::leaveEvent(QEvent* e)
 {
     d->faceGroup->leaveEvent(e);
 }
@@ -338,7 +340,9 @@ void ImagePreviewView::leaveEvent(QEvent *e)
 void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event)
 {
     if (info.isNull())
+    {
         return;
+    }
 
     event->accept();
 
@@ -453,6 +457,7 @@ void ImagePreviewView::slotSetupChanged()
 void ImagePreviewView::slotRotateLeft()
 {
     KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();
@@ -469,6 +474,7 @@ void ImagePreviewView::slotRotateLeft()
 void ImagePreviewView::slotRotateRight()
 {
     KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();

@@ -42,13 +42,13 @@ namespace Digikam
 {
 
 TonalityFilter::TonalityFilter(QObject* parent)
-              : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 TonalityFilter::TonalityFilter(DImg* orgImage, QObject* parent, const TonalityContainer& settings)
-              : DImgThreadedFilter(orgImage, parent, "TonalityFilter")
+    : DImgThreadedFilter(orgImage, parent, "TonalityFilter")
 {
     m_settings = settings;
     initFilter();
@@ -95,13 +95,16 @@ void TonalityFilter::filterImage()
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
     else               // 16 bits image.
     {
-        unsigned short* ptr = (unsigned short *)bits;
+        unsigned short* ptr = (unsigned short*)bits;
 
         for (uint i = 0 ; i < size ; ++i)
         {
@@ -117,8 +120,11 @@ void TonalityFilter::filterImage()
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
 }

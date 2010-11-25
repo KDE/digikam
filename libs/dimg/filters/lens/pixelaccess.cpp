@@ -58,8 +58,10 @@ PixelAccess::PixelAccess(DImg* srcImage)
 
 PixelAccess::~PixelAccess()
 {
-    for( int i = 0 ; i < PixelAccessRegions ; ++i )
-       delete m_buffer[i];
+    for ( int i = 0 ; i < PixelAccessRegions ; ++i )
+    {
+        delete m_buffer[i];
+    }
 }
 
 uchar* PixelAccess::pixelAccessAddress(int i, int j)
@@ -80,7 +82,7 @@ void PixelAccess::pixelAccessSelectRegion(int n)
     c    = m_tileMinY[n];
     d    = m_tileMaxY[n];
 
-    for( i = n ; i > 0 ; --i)
+    for ( i = n ; i > 0 ; --i)
     {
         m_buffer[i]   = m_buffer[i-1];
         m_tileMinX[i] = m_tileMinX[i-1];
@@ -105,20 +107,41 @@ void PixelAccess::pixelAccessDoEdge(int i, int j)
     uchar* line;
 
     lineStart = i;
-    if (lineStart < 0) lineStart = 0;
+
+    if (lineStart < 0)
+    {
+        lineStart = 0;
+    }
+
     lineEnd = i + m_width;
-    if (lineEnd > m_imageWidth) lineEnd = m_imageWidth;
+
+    if (lineEnd > m_imageWidth)
+    {
+        lineEnd = m_imageWidth;
+    }
+
     lineWidth = lineEnd - lineStart;
 
     if ( lineStart >= lineEnd )
-       return;
+    {
+        return;
+    }
 
     rowStart = j;
-    if (rowStart < 0) rowStart = 0;
-    rowEnd = j + m_height;
-    if (rowEnd > m_imageHeight) rowEnd = m_imageHeight;
 
-    for( int y = rowStart ; y < rowEnd ; ++y )
+    if (rowStart < 0)
+    {
+        rowStart = 0;
+    }
+
+    rowEnd = j + m_height;
+
+    if (rowEnd > m_imageHeight)
+    {
+        rowEnd = m_imageHeight;
+    }
+
+    for ( int y = rowStart ; y < rowEnd ; ++y )
     {
         line = pixelAccessAddress(lineStart, y);
         memcpy(line, m_image->scanLine(y) + lineStart * m_depth, lineWidth * m_depth);
@@ -138,7 +161,7 @@ void PixelAccess::pixelAccessReposition(int xInt, int yInt)
 
 
     if ( (newStartX < 0) || ((newStartX + m_width) >= m_imageWidth) ||
-          (newStartY < 0) || ((newStartY + m_height) >= m_imageHeight) )
+         (newStartY < 0) || ((newStartY + m_height) >= m_imageHeight) )
     {
         // some data is off edge of image
 
@@ -149,9 +172,9 @@ void PixelAccess::pixelAccessReposition(int xInt, int yInt)
         //m_buffer[0]->bitBltImage(m_image, newStartX, newStartY, m_width, m_height, 0, 0);
 
         if ( ((newStartX + m_width) < 0) || (newStartX >= m_imageWidth) ||
-               ((newStartY + m_height) < 0) || (newStartY >= m_imageHeight) )
+             ((newStartY + m_height) < 0) || (newStartY >= m_imageHeight) )
         {
-          // totally outside, just leave it.
+            // totally outside, just leave it.
         }
         else
         {
@@ -179,7 +202,7 @@ void PixelAccess::pixelAccessGetCubic(double srcX, double srcY, double brighten,
     // they're probably in the last place we looked...
 
     if ((xInt >= m_tileMinX[0]) && (xInt < m_tileMaxX[0]) &&
-         (yInt >= m_tileMinY[0]) && (yInt < m_tileMaxY[0]) )
+        (yInt >= m_tileMinY[0]) && (yInt < m_tileMaxY[0]) )
     {
         corner = pixelAccessAddress(xInt - 1, yInt - 1);
         cubicInterpolate(corner, m_depth * m_width, dst, m_sixteenBit, dx, dy, brighten);
@@ -191,7 +214,7 @@ void PixelAccess::pixelAccessGetCubic(double srcX, double srcY, double brighten,
     for ( int i = 1 ; i < PixelAccessRegions ; ++i)
     {
         if ((xInt >= m_tileMinX[i]) && (xInt < m_tileMaxX[i]) &&
-             (yInt >= m_tileMinY[i]) && (yInt < m_tileMaxY[i]) )
+            (yInt >= m_tileMinY[i]) && (yInt < m_tileMaxY[i]) )
         {
             // Check here first next time
 
@@ -244,8 +267,8 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
 
     if (sixteenBit)
     {
-        unsigned short *src16 = (unsigned short *)src;
-        unsigned short *dst16 = (unsigned short *)dst;
+        unsigned short* src16 = (unsigned short*)src;
+        unsigned short* dst16 = (unsigned short*)dst;
 
         // for each component, read the values of 4 pixels into array
 

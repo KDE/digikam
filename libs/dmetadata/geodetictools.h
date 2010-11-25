@@ -71,13 +71,13 @@ inline double toDegreesFactor()
 
 class DIGIKAM_EXPORT Ellipsoid
 {
-/**
-* Geometric figure that can be used to describe the approximate shape of the earth.
-* In mathematical terms, it is a surface formed by the rotation of an ellipse about
-* its minor axis. An ellipsoid requires two defining parameters:
-*  - semi-major axis and inverse flattening, or
-*  - semi-major axis and semi-minor axis.
-*/
+    /**
+    * Geometric figure that can be used to describe the approximate shape of the earth.
+    * In mathematical terms, it is a surface formed by the rotation of an ellipse about
+    * its minor axis. An ellipsoid requires two defining parameters:
+    *  - semi-major axis and inverse flattening, or
+    *  - semi-major axis and semi-minor axis.
+    */
 
 public:
     /**
@@ -269,29 +269,29 @@ protected:
 
 class DIGIKAM_EXPORT GeodeticCalculator
 {
-/**
- * Performs geodetic calculations on an ellipsoid. This class encapsulates
- * a generic ellipsoid and calculates the following properties:
- *
- *
- *   Distance and azimuth between two points.
- *   Point located at a given distance and azimuth from an other point.
- *
- *
- * The calculation use the following information:
- *
- *
- *   The starting position (setStartingPosition), which is always considered valid.
- *       It is initially set at (0,0) and can only be changed to another legitimate value.
- *   Only one of the following:
- *
- *         The destination position (setDestinationPosition), or
- *         An azimuth and distance (setDirection).
- *
- *       The latest one set overrides the other and determines what will be calculated.
- *
- *
- */
+    /**
+     * Performs geodetic calculations on an ellipsoid. This class encapsulates
+     * a generic ellipsoid and calculates the following properties:
+     *
+     *
+     *   Distance and azimuth between two points.
+     *   Point located at a given distance and azimuth from an other point.
+     *
+     *
+     * The calculation use the following information:
+     *
+     *
+     *   The starting position (setStartingPosition), which is always considered valid.
+     *       It is initially set at (0,0) and can only be changed to another legitimate value.
+     *   Only one of the following:
+     *
+     *         The destination position (setDestinationPosition), or
+     *         An azimuth and distance (setDirection).
+     *
+     *       The latest one set overrides the other and determines what will be calculated.
+     *
+     *
+     */
 
 public:
 
@@ -337,7 +337,7 @@ public:
      * @return The destination point. The x and y coordinates
      *         are the longitude and latitude in decimal degrees, respectively.
      */
-    bool destinationGeographicPoint(double *longitude, double *latitude);
+    bool destinationGeographicPoint(double* longitude, double* latitude);
     QPointF destinationGeographicPoint();
 
     /**
@@ -427,7 +427,7 @@ protected:
     *
     * @param  latitude The latitude value in decimal degrees.
     */
-    bool checkLatitude(double *latitude);
+    bool checkLatitude(double* latitude);
 
     /**
     * Checks the longitude validity. The argument @c longitude should be
@@ -436,7 +436,7 @@ protected:
     *
     * @param  longitude The longitude value in decimal degrees.
     */
-    bool checkLongitude(double *longitude);
+    bool checkLongitude(double* longitude);
 
     /**
     * Checks the azimuth validity. The argument @c azimuth should be
@@ -445,7 +445,7 @@ protected:
     *
     * @param  azimuth The azimuth value in decimal degrees.
     */
-    bool checkAzimuth(double *azimuth);
+    bool checkAzimuth(double* azimuth);
 
     /**
     * Checks the orthodromic distance validity. Arguments @c orthodromicDistance

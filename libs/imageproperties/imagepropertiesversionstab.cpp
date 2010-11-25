@@ -76,7 +76,7 @@ public:
 };
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
-                          : KTabWidget(parent), d(new ImagePropertiesVersionsTabPriv)
+    : KTabWidget(parent), d(new ImagePropertiesVersionsTabPriv)
 {
     d->versionsWidget = new VersionsWidget(this);
     insertTab(0, d->versionsWidget, i18n("Versions"));
@@ -117,11 +117,16 @@ void ImagePropertiesVersionsTab::setItem(const ImageInfo& info, const DImageHist
     clear();
 
     if (info.isNull())
+    {
         return;
+    }
 
     d->history = history;
+
     if (d->history.isNull())
+    {
         d->history = info.imageHistory();
+    }
 
     d->info = info;
     d->currentSelectedImagePath = info.filePath();
@@ -149,21 +154,27 @@ void ImagePropertiesVersionsTab::setItem(const ImageInfo& info, const DImageHist
 
 int ImagePropertiesVersionsTab::findImagePositionInList(qlonglong id) const
 {
-    for(int i = 0; i < d->versionsList.size(); i++)
+    for (int i = 0; i < d->versionsList.size(); i++)
     {
         if (d->versionsList.at(i).first == id)
+        {
             return i;
+        }
     }
+
     return -1;
 }
 
 bool ImagePropertiesVersionsTab::hasImage(qlonglong id) const
 {
-    for(int i = 0; i < d->versionsList.size(); i++)
+    for (int i = 0; i < d->versionsList.size(); i++)
     {
         if (d->versionsList.at(i).first == id)
+        {
             return true;
+        }
     }
+
     return false;
 }
 
@@ -179,10 +190,11 @@ void ImagePropertiesVersionsTab::showCustomContextMenu(const QPoint& position)
 
 void ImagePropertiesVersionsTab::setupVersionsData() const
 {
-    if(!d->versionsList.isEmpty())
+    if (!d->versionsList.isEmpty())
     {
         QList<QPair<QString, int> > l;
-        for(int i = 0; i < d->versionsList.size(); i++)
+
+        for (int i = 0; i < d->versionsList.size(); i++)
         {
             l.append(qMakePair(ImageInfo(d->versionsList.at(i).first).filePath(), d->versionsList.at(i).second));
         }
@@ -213,14 +225,14 @@ void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
     qlonglong current = 0;
     qlonglong newOne = 0;
 
-    for(int i = 0; i < d->versionsList.size(); i++)
+    for (int i = 0; i < d->versionsList.size(); i++)
     {
-        if(d->versionsList.at(i).first == selectedImage)
+        if (d->versionsList.at(i).first == selectedImage)
         {
             newOne = d->versionsList.at(i).first;
             d->currentSelectedImageListPosition = i;
         }
-        else if(d->versionsList.at(i).first == d->currentSelectedImageId)
+        else if (d->versionsList.at(i).first == d->currentSelectedImageId)
         {
             current = d->versionsList.at(i).first;
         }

@@ -57,9 +57,9 @@ public:
     void setPort(const QString& port);
     void setPath(const QString& path);
     void setStartingNumber(int sn);
-    void setAction(KAction *action);
+    void setAction(KAction* action);
     void setValid(bool valid);
-    void setCurrentCameraUI(CameraUI *cameraui);
+    void setCurrentCameraUI(CameraUI* cameraui);
 
     QString   title()           const;
     QString   model()           const;

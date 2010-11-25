@@ -78,7 +78,11 @@ public:
     AlbumThumbnailMap    thumbnailMap;
 };
 
-class AlbumThumbnailLoaderCreator { public: AlbumThumbnailLoader object; };
+class AlbumThumbnailLoaderCreator
+{
+public:
+    AlbumThumbnailLoader object;
+};
 K_GLOBAL_STATIC(AlbumThumbnailLoaderCreator, creator)
 
 AlbumThumbnailLoader* AlbumThumbnailLoader::instance()
@@ -87,7 +91,7 @@ AlbumThumbnailLoader* AlbumThumbnailLoader::instance()
 }
 
 AlbumThumbnailLoader::AlbumThumbnailLoader()
-                    : d(new AlbumThumbnailLoaderPrivate)
+    : d(new AlbumThumbnailLoaderPrivate)
 {
     connect(this, SIGNAL(signalDispatchThumbnailInternal(int, const QPixmap&)),
             this, SLOT(slotDispatchThumbnailInternal(int, const QPixmap&)));
@@ -127,9 +131,13 @@ QPixmap AlbumThumbnailLoader::getStandardTagRootIcon(RelativeSize relativeSize)
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum* album, RelativeSize relativeSize)
 {
     if (album->isRoot())
+    {
         return getStandardTagRootIcon(relativeSize);
+    }
     else
+    {
         return getStandardTagIcon(relativeSize);
+    }
 }
 
 QPixmap AlbumThumbnailLoader::getNewTagIcon(RelativeSize relativeSize)
@@ -150,9 +158,13 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(RelativeSize relativeSize
 QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum* album, RelativeSize relativeSize)
 {
     if (album->isRoot() || album->isAlbumRoot())
+    {
         return getStandardAlbumRootIcon(relativeSize);
+    }
     else
+    {
         return getStandardAlbumIcon(relativeSize);
+    }
 }
 
 int AlbumThumbnailLoader::computeIconSize(RelativeSize relativeSize)
@@ -162,6 +174,7 @@ int AlbumThumbnailLoader::computeIconSize(RelativeSize relativeSize)
         // when size was 32 smaller was 20. Scale.
         return lround(20.0 / 32.0 * (double)d->iconSize);
     }
+
     return d->iconSize;
 }
 
@@ -192,9 +205,9 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* album, QPixmap& icon)
     }
     */
 
-    if(!album->icon().isEmpty())
+    if (!album->icon().isEmpty())
     {
-        if(album->icon().startsWith('/'))
+        if (album->icon().startsWith('/'))
         {
             KUrl iconKURL;
             iconKURL.setPath(album->icon());
@@ -219,19 +232,24 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* album, bool blendI
 {
     int size = computeIconSize(SmallerSize);
 
-    if(!album->icon().isEmpty())
+    if (!album->icon().isEmpty())
     {
         // icon cached?
         AlbumThumbnailMap::iterator it = d->thumbnailMap.find(album->globalID());
+
         if (it != d->thumbnailMap.end())
         {
             if (blendIcon)
+            {
                 return blendIcons(getStandardTagIcon(), *it);
+            }
             else
+            {
                 return *it;
+            }
         }
 
-        if(album->icon().startsWith('/'))
+        if (album->icon().startsWith('/'))
         {
             KUrl iconKURL;
             iconKURL.setPath(album->icon());
@@ -240,10 +258,15 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* album, bool blendI
         else
         {
             QPixmap pixmap = loadIcon(album->icon(), size);
+
             if (blendIcon)
+            {
                 return blendIcons(getStandardTagIcon(), pixmap);
+            }
             else
+            {
                 return pixmap;
+            }
         }
     }
 
@@ -252,7 +275,7 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* album, bool blendI
 
 bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum* album)
 {
-    if(!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
         addUrl(album, album->iconKURL());
     }
@@ -266,12 +289,15 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum* album)
 
 QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum* album)
 {
-    if(!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
         // icon cached?
         AlbumThumbnailMap::iterator it = d->thumbnailMap.find(album->globalID());
+
         if (it != d->thumbnailMap.end())
+        {
             return *it;
+        }
 
         // schedule for loading
         addUrl(album, album->iconKURL());
@@ -293,6 +319,7 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
     // At startup, this is not relevant, as the views will add their requests in a row.
     // This is to speed up context menu and IE imagedescedit
     AlbumThumbnailMap::iterator ttit = d->thumbnailMap.find(album->globalID());
+
     if (ttit != d->thumbnailMap.end())
     {
         // It is not necessary to return cached icon asynchronously - they could be
@@ -311,15 +338,15 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
         // in parallel and not first album, then tag thumbnails
         if (album->type() == Album::TAG)
         {
-            if(!d->iconTagThumbThread)
+            if (!d->iconTagThumbThread)
             {
                 d->iconTagThumbThread = new ThumbnailLoadThread();
                 d->iconTagThumbThread->setThumbnailSize(d->iconSize);
                 d->iconTagThumbThread->setSendSurrogatePixmap(false);
                 d->iconTagThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconTagThumbThread,
-                        SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
-                        SLOT(slotGotThumbnailFromIcon(const LoadingDescription &, const QPixmap&)),
+                        SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+                        SLOT(slotGotThumbnailFromIcon(const LoadingDescription&, const QPixmap&)),
                         Qt::QueuedConnection);
             }
 
@@ -328,15 +355,15 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
         }
         else
         {
-            if(!d->iconAlbumThumbThread)
+            if (!d->iconAlbumThumbThread)
             {
                 d->iconAlbumThumbThread = new ThumbnailLoadThread();
                 d->iconAlbumThumbThread->setThumbnailSize(d->iconSize);
                 d->iconAlbumThumbThread->setSendSurrogatePixmap(false);
                 d->iconAlbumThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconAlbumThumbThread,
-                        SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
-                        SLOT(slotGotThumbnailFromIcon(const LoadingDescription &, const QPixmap&)),
+                        SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+                        SLOT(slotGotThumbnailFromIcon(const LoadingDescription&, const QPixmap&)),
                         Qt::QueuedConnection);
             }
 
@@ -359,7 +386,9 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
 void AlbumThumbnailLoader::setThumbnailSize(int size)
 {
     if (d->iconSize == size)
+    {
         return;
+    }
 
     d->iconSize = size;
 
@@ -373,6 +402,7 @@ void AlbumThumbnailLoader::setThumbnailSize(int size)
         d->iconAlbumThumbThread->stopLoading();
         d->iconAlbumThumbThread->setThumbnailSize(size);
     }
+
     if (d->iconTagThumbThread)
     {
         d->iconTagThumbThread->stopLoading();
@@ -396,16 +426,19 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription& lo
 
     if (it != d->pathAlbumMap.end())
     {
-        AlbumManager *manager = AlbumManager::instance();
+        AlbumManager* manager = AlbumManager::instance();
 
         if (thumbnail.isNull())
         {
             // Loading failed
             for (QList<int>::const_iterator vit = (*it).constBegin(); vit != (*it).constEnd(); ++vit)
             {
-                Album *album = manager->findAlbum(*vit);
+                Album* album = manager->findAlbum(*vit);
+
                 if (album)
+                {
                     emit signalFailed(album);
+                }
             }
         }
         else
@@ -417,7 +450,8 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription& lo
             for (QList<int>::const_iterator vit = (*it).constBegin(); vit != (*it).constEnd(); ++vit)
             {
                 // look up with global id
-                Album *album = manager->findAlbum(*vit);
+                Album* album = manager->findAlbum(*vit);
+
                 if (album)
                 {
                     if (album->type() == Album::TAG)
@@ -448,21 +482,28 @@ void AlbumThumbnailLoader::slotDispatchThumbnailInternal(int albumID, const QPix
 {
     // for cached thumbnails
 
-    AlbumManager *manager = AlbumManager::instance();
-    Album *album          = manager->findAlbum(albumID);
+    AlbumManager* manager = AlbumManager::instance();
+    Album* album          = manager->findAlbum(albumID);
+
     if (album)
     {
         if (thumbnail.isNull())
+        {
             emit signalFailed(album);
+        }
         else
+        {
             emit signalThumbnail(album, thumbnail);
+        }
     }
 }
 
 void AlbumThumbnailLoader::slotIconChanged(Album* album)
 {
     if (!album || (album->type() != Album::TAG && album->type() != Album::PHYSICAL))
+    {
         return;
+    }
 
     d->thumbnailMap.remove(album->globalID());
 }
@@ -474,7 +515,7 @@ QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap& albumThumbnail)
     QPixmap tagThumbnail;
     int thumbSize = qMax(albumThumbnail.width(), albumThumbnail.height());
 
-    if(!albumThumbnail.isNull() && thumbSize >= d->minBlendSize)
+    if (!albumThumbnail.isNull() && thumbSize >= d->minBlendSize)
     {
         QRect rect   = computeBlendRect(thumbSize);
         int w1       = albumThumbnail.width();
@@ -500,13 +541,14 @@ QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap& tagIcon
 
     if (dstIconSize >= d->minBlendSize)
     {
-        if(!tagIcon.isNull())
+        if (!tagIcon.isNull())
         {
             QRect rect = computeBlendRect(dstIconSize);
             QPainter p(&dstIcon);
             p.drawPixmap(rect.x(), rect.y(), tagIcon, 0, 0, rect.width(), rect.height());
             p.end();
         }
+
         return dstIcon;
     }
     else

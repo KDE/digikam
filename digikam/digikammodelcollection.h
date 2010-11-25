@@ -53,19 +53,19 @@ public:
     DigikamModelCollection();
     virtual ~DigikamModelCollection();
 
-    AlbumModel *getAlbumModel() const;
-    TagModel *getTagModel() const;
-    TagModel *getTagFilterModel() const;
-    SearchModel *getSearchModel() const;
-    DateAlbumModel *getDateAlbumModel() const;
-    ImageVersionsModel *getImageVersionsModel() const;
+    AlbumModel* getAlbumModel() const;
+    TagModel* getTagModel() const;
+    TagModel* getTagFilterModel() const;
+    SearchModel* getSearchModel() const;
+    DateAlbumModel* getDateAlbumModel() const;
+    ImageVersionsModel* getImageVersionsModel() const;
 
 private Q_SLOTS:
 
     void albumSettingsChanged();
 
 private:
-    DigikamModelCollectionPriv *d;
+    DigikamModelCollectionPriv* d;
 
 };
 

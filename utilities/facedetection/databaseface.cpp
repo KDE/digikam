@@ -42,17 +42,17 @@ namespace Digikam
 {
 
 DatabaseFace::DatabaseFace()
-            : m_type(InvalidFace), m_imageId(0), m_tagId(0)
+    : m_type(InvalidFace), m_imageId(0), m_tagId(0)
 {
 }
 
 DatabaseFace::DatabaseFace(Type type, qlonglong imageId, int tagId, const TagRegion& region)
-            : m_type(type), m_imageId(imageId), m_tagId(tagId), m_region(region)
+    : m_type(type), m_imageId(imageId), m_tagId(tagId), m_region(region)
 {
 }
 
 DatabaseFace::DatabaseFace(const QString& attribute, qlonglong imageId, int tagId, const TagRegion& region)
-            : m_imageId(imageId), m_tagId(tagId), m_region(region)
+    : m_imageId(imageId), m_tagId(tagId), m_region(region)
 {
     m_type = typeForAttribute(attribute, tagId);
 }
@@ -108,26 +108,39 @@ bool DatabaseFace::operator==(const DatabaseFace& other) const
 QStringList DatabaseFace::attributesForFlags(TypeFlags flags)
 {
     QStringList attributes;
+
     for (int i = DatabaseFace::TypeFirst; i <= DatabaseFace::TypeLast; i <<= 1)
     {
         if (flags & DatabaseFace::Type(i))
         {
             QString attribute = attributeForType(DatabaseFace::Type(i));
+
             if (!attributes.contains(attribute))
+            {
                 attributes << attribute;
+            }
         }
     }
+
     return attributes;
 }
 
 QString DatabaseFace::attributeForType(Type type)
 {
     if (type == DatabaseFace::UnknownName || type == DatabaseFace::UnconfirmedName)
+    {
         return ImageTagPropertyName::autodetectedFace();
+    }
+
     if (type == DatabaseFace::ConfirmedName)
+    {
         return ImageTagPropertyName::tagRegion();
+    }
+
     if (type == DatabaseFace::FaceForTraining)
+    {
         return ImageTagPropertyName::faceToTrain();
+    }
 
     return QString();
 }
@@ -137,14 +150,22 @@ DatabaseFace::Type DatabaseFace::typeForAttribute(const QString& attribute, int 
     if (attribute == ImageTagPropertyName::autodetectedFace())
     {
         if (tagId && TagsCache::instance()->hasProperty(tagId, TagPropertyName::unknownPerson()))
+        {
             return DatabaseFace::UnknownName;
+        }
         else
+        {
             return DatabaseFace::UnconfirmedName;
+        }
     }
     else if (attribute == ImageTagPropertyName::tagRegion())
+    {
         return DatabaseFace::ConfirmedName;
+    }
     else if (attribute == ImageTagPropertyName::faceToTrain())
+    {
         return DatabaseFace::FaceForTraining;
+    }
 
     return DatabaseFace::InvalidFace;
 }
@@ -154,6 +175,7 @@ DatabaseFace DatabaseFace::fromVariant(const QVariant& var)
     if (var.type() == QVariant::List)
     {
         QList<QVariant> list = var.toList();
+
         if (list.size() == 4)
         {
             return DatabaseFace((Type)list[0].toInt(),
@@ -162,6 +184,7 @@ DatabaseFace DatabaseFace::fromVariant(const QVariant& var)
                                 TagRegion::fromVariant(list[3]));
         }
     }
+
     return DatabaseFace();
 }
 
@@ -180,7 +203,9 @@ QVariant DatabaseFace::toVariant() const
 DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>& extraValues)
 {
     if (extraValues.size() < 3)
+    {
         return DatabaseFace();
+    }
 
     // See imagelister.cpp: value - property - tagId
     int tagId = extraValues[2].toInt();

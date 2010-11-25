@@ -56,8 +56,8 @@ public:
      *                                 perform operations on the displayed
      *                                 searches
      */
-    NormalSearchTreeView(QWidget *parent, SearchModel *searchModel,
-                         SearchModificationHelper *searchModificationHelper);
+    NormalSearchTreeView(QWidget* parent, SearchModel* searchModel,
+                         SearchModificationHelper* searchModificationHelper);
 
     /**
      * Destructor.
@@ -76,16 +76,16 @@ Q_SIGNALS:
      *
      * @param album search to edit
      */
-    void editSearch(SAlbum *album);
+    void editSearch(SAlbum* album);
 
 protected:
 
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh,
-                                             Album *album);
-    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh,
+            Album* album);
+    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 private:
-    NormalSearchTreeViewPriv *d;
+    NormalSearchTreeViewPriv* d;
 
 };
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-06
- * Description : setup tab for image versioning 
+ * Description : setup tab for image versioning
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *

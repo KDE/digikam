@@ -58,14 +58,22 @@ public:
      * The values of relativePosition must be in the interval [0;1].
      */
     void setRelativePos(const QPointF& relativePosition);
-    void setRelativePos(qreal x, qreal y) { setRelativePos(QPointF(x, y)); }
+    void setRelativePos(qreal x, qreal y)
+    {
+        setRelativePos(QPointF(x, y));
+    }
 
     void setRelativeSize(const QSizeF& relativeSize);
-    void setRelativeSize(qreal width, qreal height) { setRelativeSize(QSizeF(width, height)); }
+    void setRelativeSize(qreal width, qreal height)
+    {
+        setRelativeSize(QSizeF(width, height));
+    }
 
     void setRelativeRect(const QRectF& rect);
     void setRelativeRect(qreal x, qreal y, qreal width, qreal height)
-        { setRelativeRect(QRectF(x,y,width, height)); }
+    {
+        setRelativeRect(QRectF(x,y,width, height));
+    }
 
     /**
      * Returns the position and size relative to the DImg displayed in the parent item.
@@ -82,15 +90,21 @@ public:
 
     void setOriginalPos(const QPointF& posInOriginal);
     void setOriginalPos(qreal x, qreal y)
-        { setOriginalPos(QPointF(x, y)); }
+    {
+        setOriginalPos(QPointF(x, y));
+    }
 
     void setOriginalSize(const QSizeF& sizeInOriginal);
     void setOriginalSize(qreal width, qreal height)
-        { setOriginalSize(QSizeF(width, height)); }
+    {
+        setOriginalSize(QSizeF(width, height));
+    }
 
     void setOriginalRect(const QRectF& rect);
     void setOriginalRect(qreal x, qreal y, qreal width, qreal height)
-        { setOriginalRect(QRectF(x,y,width, height)); }
+    {
+        setOriginalRect(QRectF(x,y,width, height));
+    }
 
     /**
      * Returns the position and size in coordinates of the original image.
@@ -109,15 +123,22 @@ public:
      */
     void setPos(const QPointF& zoomedPos);
     void setPos(qreal x, qreal y)
-        { setPos(QPointF(x, y)); }
+    {
+        setPos(QPointF(x, y));
+    }
 
     void setSize(const QSizeF& zoomedSize);
     void setSize(qreal width, qreal height)
-        { setSize(QSizeF(width, height)); }
+    {
+        setSize(QSizeF(width, height));
+    }
 
     void setRect(const QRectF& rect);
     void setRect(qreal x, qreal y, qreal width, qreal height)
-        { setPos(QPointF(x,y)); setSize(QSizeF(width, height)); }
+    {
+        setPos(QPointF(x,y));
+        setSize(QSizeF(width, height));
+    }
 
     /**
      * Returns position and size of this item, in coordinates of the parent DImg with the current zoom.
@@ -128,7 +149,10 @@ public:
     QSizeF size() const;
 
     // Override
-    void moveBy(qreal dx, qreal dy) { setPos(pos().x() + dx, pos().y() + dy); }
+    void moveBy(qreal dx, qreal dy)
+    {
+        setPos(pos().x() + dx, pos().y() + dy);
+    }
 
     /**
      * If the parent item is a GraphicsDImgItem, return it,

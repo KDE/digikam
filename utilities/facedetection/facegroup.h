@@ -88,17 +88,17 @@ public:
     RegionFrameItem* closestItem(const QPointF& p, qreal* manhattanLength = 0) const;
 
     bool acceptsMouseClick(const QPointF& scenePos);
-    void itemHoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    void itemHoverMoveEvent(QGraphicsSceneHoverEvent *event);
-    void itemHoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-    void leaveEvent(QEvent *);
-    void enterEvent(QEvent *);
+    void itemHoverEnterEvent(QGraphicsSceneHoverEvent* event);
+    void itemHoverMoveEvent(QGraphicsSceneHoverEvent* event);
+    void itemHoverLeaveEvent(QGraphicsSceneHoverEvent* event);
+    void leaveEvent(QEvent*);
+    void enterEvent(QEvent*);
 
 public Q_SLOTS:
 
     /** Shows or hides the frames */
     void setVisible(bool visible);
-    void setVisibleItem(RegionFrameItem *item);
+    void setVisibleItem(RegionFrameItem* item);
 
     /** Sets the current ImageInfo */
     void setInfo(const ImageInfo& info);
@@ -138,7 +138,7 @@ class AssignNameWidgetHidingStateChanger : public HidingStateChanger
 
 public:
 
-    AssignNameWidgetHidingStateChanger(FaceItem *item);
+    AssignNameWidgetHidingStateChanger(FaceItem* item);
 
 protected Q_SLOTS:
 

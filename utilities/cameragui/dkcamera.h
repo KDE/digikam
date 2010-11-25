@@ -7,7 +7,7 @@
  * Description : abstract camera interface class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@ public:
     virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions = true) = 0;
 
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
-    virtual bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize) = 0;
+    virtual bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize) = 0;
 
     virtual bool getPreview(QImage& preview) = 0;
     virtual bool capture(GPItemInfo& itemInfo) = 0;

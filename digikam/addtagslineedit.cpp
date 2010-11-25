@@ -69,7 +69,7 @@ public:
 // ---------------------------------------------------------------------------------------
 
 AddTagsLineEdit::AddTagsLineEdit(QWidget* parent)
-               : KLineEdit(parent), d(new AddTagsLineEditPriv)
+    : KLineEdit(parent), d(new AddTagsLineEditPriv)
 {
     setEnableSignals(true);
     setHandleSignals(false);
@@ -128,17 +128,23 @@ void AddTagsLineEdit::setModel(AlbumFilterModel* model)
     d->completionBox->setTagModel(model);
 }
 
-void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, AlbumFilterModel* filterModel)
+void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, AlbumFilterModel* filterModel)
 {
     if (filterModel)
+    {
         setModel(filterModel);
+    }
     else if (filteredModel)
+    {
         setModel(filteredModel);
+    }
     else
+    {
         setModel(model);
+    }
 }
 
-void AddTagsLineEdit::setTagTreeView(TagTreeView *view)
+void AddTagsLineEdit::setTagTreeView(TagTreeView* view)
 {
     if (d->tagView)
         disconnect(d->tagView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
@@ -159,7 +165,7 @@ void AddTagsLineEdit::setParentTag(TAlbum* album)
     d->completionBox->setParentTag(album);
 }
 
-void AddTagsLineEdit::setCurrentTag(TAlbum *album)
+void AddTagsLineEdit::setCurrentTag(TAlbum* album)
 {
     setCurrentTaggingAction(album ? TaggingAction(album->id()) : TaggingAction());
     setText(album ? album->title() : QString());
@@ -168,7 +174,9 @@ void AddTagsLineEdit::setCurrentTag(TAlbum *album)
 void AddTagsLineEdit::setCurrentTaggingAction(const TaggingAction& action)
 {
     if (d->currentTaggingAction == action)
+    {
         return;
+    }
 
     d->currentTaggingAction = action;
     emit taggingActionSelected(action);
@@ -177,11 +185,17 @@ void AddTagsLineEdit::setCurrentTaggingAction(const TaggingAction& action)
 TaggingAction AddTagsLineEdit::currentTaggingAction() const
 {
     if (d->currentTaggingAction.isValid())
+    {
         return d->currentTaggingAction;
+    }
     else if (!text().isEmpty())
+    {
         return d->makeTaggingAction(text());
+    }
     else
+    {
         return TaggingAction();
+    }
 }
 
 void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
@@ -216,10 +230,14 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
     d->currentTaggingAction = TaggingAction();
 
     if (text.isEmpty())
+    {
         emit taggingActionSelected(TaggingAction());
+    }
 
     if ( !comp || mode == KGlobalSettings::CompletionNone )
-        return;  // No completion object...
+    {
+        return;    // No completion object...
+    }
 
     const QString match = comp->makeCompletion( text );
 
@@ -244,17 +262,23 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
         // all other completion modes
         // If no match or the same match, simply return without completing.
         if ( match.isEmpty() || match == text )
+        {
             return;
+        }
 
         if ( mode != KGlobalSettings::CompletionShell )
+        {
             setUserSelection(false);
+        }
 
         if ( autoSuggest() )
+        {
             setCompletedText( match );
+        }
     }
 }
 
-void AddTagsLineEdit::setCompletedItems(const QStringList &items, bool doAutoSuggest)
+void AddTagsLineEdit::setCompletedItems(const QStringList& items, bool doAutoSuggest)
 {
     // Solution in kdelibs is suboptimal for our needs
     QString txt;
@@ -274,7 +298,9 @@ void AddTagsLineEdit::setCompletedItems(const QStringList &items, bool doAutoSug
     if (txt.isEmpty() /*|| (items.count() == 1 && txt == items.first())*/)
     {
         if (d->completionBox->isVisible())
+        {
             d->completionBox->hide();
+        }
     }
     else
     {
@@ -291,7 +317,10 @@ void AddTagsLineEdit::setCompletedItems(const QStringList &items, bool doAutoSug
         else // completion box not visible yet -> show it
         {
             if ( !txt.isEmpty() )
+            {
                 d->completionBox->setCancelledText( txt );
+            }
+
             d->completionBox->setItems(txt, items);
             d->completionBox->popup();
         }
@@ -343,7 +372,9 @@ void AddTagsLineEdit::slotReturnPressed(const QString& text)
 void AddTagsLineEdit::slotTextChanged(const QString& text)
 {
     if (text.isEmpty())
+    {
         setCurrentTaggingAction(TaggingAction());
+    }
 }
 
 TaggingAction AddTagsLineEdit::AddTagsLineEditPriv::makeTaggingAction(const QString& text)

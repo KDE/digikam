@@ -46,7 +46,7 @@ namespace Digikam
 {
 
 CurvesAdjust::CurvesAdjust(QObject* parent)
-            : BatchTool("CurvesAdjust", ColorTool, parent)
+    : BatchTool("CurvesAdjust", ColorTool, parent)
 {
     setToolTitle(i18n("Curves Adjust"));
     setToolDescription(i18n("A tool to perform curves adjustments."));
@@ -88,7 +88,7 @@ void CurvesAdjust::slotChannelChanged()
 
 void CurvesAdjust::slotResetSettingsToDefault()
 {
-    // We need to call this method there to reset all curves points. 
+    // We need to call this method there to reset all curves points.
     // Curves values are cleaned with default settings passed after.
     m_settingsView->resetToDefault();
     BatchTool::slotResetSettingsToDefault();
@@ -139,7 +139,10 @@ void CurvesAdjust::slotSettingsChanged()
 
 bool CurvesAdjust::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     CurvesContainer prm;
 

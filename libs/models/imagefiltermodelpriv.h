@@ -112,17 +112,17 @@ public:
 
     QList<ImageFilterModelPrepareHook*> prepareHooks;
 
-/*
-    QHash<int, QSet<qlonglong> >        categoryCountHashInt;
-    QHash<QString, QSet<qlonglong> >    categoryCountHashString;
+    /*
+        QHash<int, QSet<qlonglong> >        categoryCountHashInt;
+        QHash<QString, QSet<qlonglong> >    categoryCountHashString;
 
-public:
+    public:
 
-    void cacheCategoryCount(int id, qlonglong imageid) const
-    { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
-    void cacheCategoryCount(const QString& id, qlonglong imageid) const
-    { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }
-*/
+        void cacheCategoryCount(int id, qlonglong imageid) const
+        { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
+        void cacheCategoryCount(const QString& id, qlonglong imageid) const
+        { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }
+    */
 
 public Q_SLOTS:
 

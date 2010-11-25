@@ -41,8 +41,8 @@
 
 namespace KFaceIface
 {
-    class Face;
-    class Image;
+class Face;
+class Image;
 }
 
 class QImage;
@@ -264,7 +264,7 @@ public:
      * Remove the given face.
      * If appropriate, the tag is also removed.
      */
-    void                removeFace(const DatabaseFace &face);
+    void                removeFace(const DatabaseFace& face);
     void                removeFaces(const QList<DatabaseFace> &faces);
 
     /**

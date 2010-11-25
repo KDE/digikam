@@ -73,7 +73,7 @@ public:
         borderType(0),
         borderPercent(0),
         borderWidth(0)
-        {}
+    {}
 
     static const QString configBorderTypeEntry;
     static const QString configBorderPercentEntry;
@@ -124,8 +124,8 @@ const QString BorderSettingsPriv::configDecorativeSecondColorEntry("Decorative S
 // --------------------------------------------------------
 
 BorderSettings::BorderSettings(QWidget* parent)
-              : QWidget(parent),
-             d(new BorderSettingsPriv)
+    : QWidget(parent),
+      d(new BorderSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -161,9 +161,9 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->preserveAspectRatio = new QCheckBox();
     d->preserveAspectRatio->setText(i18n("Preserve Aspect Ratio"));
     d->preserveAspectRatio->setWhatsThis(i18n("Enable this option if you want to preserve the aspect "
-                                              "ratio of image. If enabled, the border width will be "
-                                              "a percentage of the image size, else the border width will be "
-                                              "in pixels."));
+                                         "ratio of image. If enabled, the border width will be "
+                                         "a percentage of the image size, else the border width will be "
+                                         "in pixels."));
 
     d->labelBorderPercent  = new QLabel(i18n("Width (%):"));
     d->borderPercent       = new RIntNumInput();
@@ -475,73 +475,73 @@ QString BorderSettings::getBorderPath(int border)
 
     switch (border)
     {
-       case BorderContainer::PineBorder:
-          pattern = "pine-pattern";
-          break;
+        case BorderContainer::PineBorder:
+            pattern = "pine-pattern";
+            break;
 
-       case BorderContainer::WoodBorder:
-          pattern = "wood-pattern";
-          break;
+        case BorderContainer::WoodBorder:
+            pattern = "wood-pattern";
+            break;
 
-       case BorderContainer::PaperBorder:
-          pattern = "paper-pattern";
-          break;
+        case BorderContainer::PaperBorder:
+            pattern = "paper-pattern";
+            break;
 
-       case BorderContainer::ParqueBorder:
-          pattern = "parque-pattern";
-          break;
+        case BorderContainer::ParqueBorder:
+            pattern = "parque-pattern";
+            break;
 
-       case BorderContainer::IceBorder:
-          pattern = "ice-pattern";
-          break;
+        case BorderContainer::IceBorder:
+            pattern = "ice-pattern";
+            break;
 
-       case BorderContainer::LeafBorder:
-          pattern = "leaf-pattern";
-          break;
+        case BorderContainer::LeafBorder:
+            pattern = "leaf-pattern";
+            break;
 
-       case BorderContainer::MarbleBorder:
-          pattern = "marble-pattern";
-          break;
+        case BorderContainer::MarbleBorder:
+            pattern = "marble-pattern";
+            break;
 
-       case BorderContainer::RainBorder:
-          pattern = "rain-pattern";
-          break;
+        case BorderContainer::RainBorder:
+            pattern = "rain-pattern";
+            break;
 
-       case BorderContainer::CratersBorder:
-          pattern = "craters-pattern";
-          break;
+        case BorderContainer::CratersBorder:
+            pattern = "craters-pattern";
+            break;
 
-       case BorderContainer::DriedBorder:
-          pattern = "dried-pattern";
-          break;
+        case BorderContainer::DriedBorder:
+            pattern = "dried-pattern";
+            break;
 
-       case BorderContainer::PinkBorder:
-          pattern = "pink-pattern";
-          break;
+        case BorderContainer::PinkBorder:
+            pattern = "pink-pattern";
+            break;
 
-       case BorderContainer::StoneBorder:
-          pattern = "stone-pattern";
-          break;
+        case BorderContainer::StoneBorder:
+            pattern = "stone-pattern";
+            break;
 
-       case BorderContainer::ChalkBorder:
-          pattern = "chalk-pattern";
-          break;
+        case BorderContainer::ChalkBorder:
+            pattern = "chalk-pattern";
+            break;
 
-       case BorderContainer::GraniteBorder:
-          pattern = "granit-pattern";
-          break;
+        case BorderContainer::GraniteBorder:
+            pattern = "granit-pattern";
+            break;
 
-       case BorderContainer::RockBorder:
-          pattern = "rock-pattern";
-          break;
+        case BorderContainer::RockBorder:
+            pattern = "rock-pattern";
+            break;
 
-       case BorderContainer::WallBorder:
-          pattern = "wall-pattern";
-          break;
+        case BorderContainer::WallBorder:
+            pattern = "wall-pattern";
+            break;
 
-       default:
-          return pattern;
-          break;
+        default:
+            return pattern;
+            break;
     }
 
     return (KStandardDirs::locate("data", QString("digikam/data/") + pattern + QString(".png")));

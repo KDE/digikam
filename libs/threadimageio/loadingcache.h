@@ -48,7 +48,7 @@ public:
     virtual ~LoadingProcessListener() {}
     virtual bool querySendNotifyEvent() = 0;
     virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img) = 0;
-    virtual LoadSaveNotifier *loadSaveNotifier() = 0;
+    virtual LoadSaveNotifier* loadSaveNotifier() = 0;
     virtual LoadSaveThread::AccessMode accessMode() = 0;
 };
 
@@ -60,9 +60,9 @@ public:
     virtual bool completed() = 0;
     virtual QString filePath() = 0;
     virtual QString cacheKey() = 0;
-    virtual void addListener(LoadingProcessListener *listener) = 0;
-    virtual void removeListener(LoadingProcessListener *listener) = 0;
-    virtual void notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description) = 0;
+    virtual void addListener(LoadingProcessListener* listener) = 0;
+    virtual void removeListener(LoadingProcessListener* listener) = 0;
+    virtual void notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description) = 0;
 };
 
 class DIGIKAM_EXPORT LoadingCacheFileWatch
@@ -85,7 +85,7 @@ protected:
      */
     void notifyFileChanged(const QString& filePath);
 
-    class LoadingCache *m_cache;
+    class LoadingCache* m_cache;
 };
 
 class DIGIKAM_EXPORT ClassicLoadingCacheFileWatch : public QObject, public LoadingCacheFileWatch
@@ -112,7 +112,7 @@ Q_SIGNALS:
 
 protected:
 
-    KDirWatch   *m_watch;
+    KDirWatch*   m_watch;
     QStringList  m_watchedFiles;
 };
 
@@ -124,7 +124,7 @@ class DIGIKAM_EXPORT LoadingCache : public QObject
 
 public:
 
-    static LoadingCache *cache();
+    static LoadingCache* cache();
     static void cleanUp();
     virtual ~LoadingCache();
 
@@ -134,23 +134,23 @@ public:
     {
     public:
 
-        CacheLock(LoadingCache *cache);
+        CacheLock(LoadingCache* cache);
         ~CacheLock();
         void wakeAll();
         void timedWait();
 
     private:
 
-        LoadingCache *m_cache;
+        LoadingCache* m_cache;
     };
 
     /**
      * Retrieves an image for the given string from the cache,
      * or 0 if no image is found.
      */
-    DImg *retrieveImage(const QString& cacheKey);
+    DImg* retrieveImage(const QString& cacheKey);
     /// Returns whether the given DImg fits in the cache.
-    bool isCacheable(const DImg *img);
+    bool isCacheable(const DImg* img);
     /** Put image into for given string into the cache.
      *  Returns true if image has been put in the cache, false otherwise.
      *  Ownership of the DImg instance is passed to the cache.
@@ -158,7 +158,7 @@ public:
      *  The third parameter specifies a file path that will be watched.
      *  If this file changes, the object will be removed from the cache.
      */
-    bool putImage(const QString& cacheKey, DImg *img, const QString& filePath);
+    bool putImage(const QString& cacheKey, DImg* img, const QString& filePath);
     /**
      *  Remove entries for the given cacheKey from the cache
      */
@@ -173,20 +173,20 @@ public:
     /**
      *  Find the loading process for given cacheKey, or 0 if not found
      */
-    LoadingProcess *retrieveLoadingProcess(const QString& cacheKey);
+    LoadingProcess* retrieveLoadingProcess(const QString& cacheKey);
     /**
      *  Add a loading process to the list. Only one loading process
      *  for the same cache key is registered at a time.
      */
-    void addLoadingProcess(LoadingProcess *process);
+    void addLoadingProcess(LoadingProcess* process);
     /**
      *  Remove loading process for given cache key
      */
-    void removeLoadingProcess(LoadingProcess *process);
+    void removeLoadingProcess(LoadingProcess* process);
     /**
      *  Notify all currently registered loading processes
      */
-    void notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description);
+    void notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description);
 
     /**
      *  Sets the cache size in megabytes.
@@ -202,8 +202,8 @@ public:
      * Retrieves a thumbnail for the given filePath from the thumbnail cache,
      * or a 0 if the thumbnail is not found.
      */
-    const QImage *retrieveThumbnail(const QString& cacheKey) const;
-    const QPixmap *retrieveThumbnailPixmap(const QString& cacheKey) const;
+    const QImage* retrieveThumbnail(const QString& cacheKey) const;
+    const QPixmap* retrieveThumbnailPixmap(const QString& cacheKey) const;
     bool hasThumbnailPixmap(const QString& cacheKey) const;
 
     /**
@@ -240,7 +240,7 @@ public:
      * Sets a LoadingCacheFileWatch to watch the files contained in this cache.
      * Ownership of this object is transferred to the cache.
      */
-    void setFileWatch(LoadingCacheFileWatch *watch);
+    void setFileWatch(LoadingCacheFileWatch* watch);
 
     /**
      * Returns a list of all possible file paths in cache.
@@ -271,11 +271,11 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void iccSettingsChanged(const ICCSettingsContainer &current, const ICCSettingsContainer &previous);
+    void iccSettingsChanged(const ICCSettingsContainer& current, const ICCSettingsContainer& previous);
 
 private:
 
-    static LoadingCache *m_instance;
+    static LoadingCache* m_instance;
 
     LoadingCache();
 

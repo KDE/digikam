@@ -49,13 +49,13 @@ namespace Digikam
 {
 
 InfraredFilter::InfraredFilter(QObject* parent)
-              : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, const InfraredContainer& settings)
-              : DImgThreadedFilter(orgImage, parent, "Infrared")
+    : DImgThreadedFilter(orgImage, parent, "Infrared")
 {
     m_settings = settings;
     initFilter();
@@ -85,7 +85,11 @@ void InfraredFilter::filterImage()
     uchar* data     = m_destImage.bits();
 
     postProgress( 10 );
-    if (!runningFlag()) return;
+
+    if (!runningFlag())
+    {
+        return;
+    }
 
     // Infrared film variables depending on Sensibility.
     // We can reproduce famous Ilford SFX200 infrared film
@@ -102,7 +106,11 @@ void InfraredFilter::filterImage()
     DColor bwData, bwBlurData, maskData, overData, outData;
 
     postProgress( 20 );
-    if (!runningFlag()) return;
+
+    if (!runningFlag())
+    {
+        return;
+    }
 
     //------------------------------------------
     // 1 - Create GrayScale green boosted image.
@@ -123,7 +131,11 @@ void InfraredFilter::filterImage()
     BWImage.putImageData(mixer.getTargetImage().bits());
 
     postProgress( 30 );
-    if (!runningFlag()) return;
+
+    if (!runningFlag())
+    {
+        return;
+    }
 
     // Apply a Gaussian blur to the black and white image.
     // This way simulate Infrared film dispersion for the highlights.
@@ -135,7 +147,11 @@ void InfraredFilter::filterImage()
     pOverlayBits = BWBlurImage.bits();
 
     postProgress( 40 );
-    if (!runningFlag()) return;
+
+    if (!runningFlag())
+    {
+        return;
+    }
 
     //------------------------------------------
     // 2 - Merge Grayscale image & overlay mask.
@@ -168,6 +184,7 @@ void InfraredFilter::filterImage()
                 outData.setGreen( intMult8  (bwData.green(), bwData.green() + intMult8(2 * overData.green(),  255 - bwData.green()) ) );
                 outData.setBlue ( intMult8  (bwData.blue(),  bwData.blue()  + intMult8(2 * overData.blue(),   255 - bwData.blue())  ) );
             }
+
             outData.setAlpha(bwData.alpha());
             outData.setPixel( pOutBits + offset );
         }
@@ -176,7 +193,9 @@ void InfraredFilter::filterImage()
         progress = (int) (50.0 + ((double)x * 50.0) / Width);
 
         if (progress%5 == 0)
+        {
             postProgress(progress);
+        }
     }
 }
 

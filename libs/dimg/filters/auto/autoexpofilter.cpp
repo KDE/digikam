@@ -35,14 +35,14 @@ namespace Digikam
 {
 
 AutoExpoFilter::AutoExpoFilter(QObject* parent)
-              : WBFilter(parent)
+    : WBFilter(parent)
 {
     initFilter();
 }
 
 AutoExpoFilter::AutoExpoFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
-                : WBFilter(orgImage, parent),
-                  m_refImage(*refImage)
+    : WBFilter(orgImage, parent),
+      m_refImage(*refImage)
 {
     initFilter();
 }
@@ -54,7 +54,9 @@ AutoExpoFilter::~AutoExpoFilter()
 void AutoExpoFilter::filterImage()
 {
     if (m_refImage.isNull())
+    {
         m_refImage = m_orgImage;
+    }
 
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {

@@ -49,12 +49,27 @@ public:
 
     ~TextureFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:TextureFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Texture Filter");}
-    static QList<int>       SupportedVersions() { return QList<int>() << 1;       }
-    static int              CurrentVersion()    { return 1;                       }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:TextureFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Texture Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

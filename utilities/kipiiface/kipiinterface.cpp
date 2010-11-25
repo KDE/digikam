@@ -73,7 +73,7 @@ public:
 };
 
 KipiInterface::KipiInterface(QObject* parent, const char* name)
-             : KIPI::Interface(parent, name), d(new KipiInterfacePrivate())
+    : KIPI::Interface(parent, name), d(new KipiInterfacePrivate())
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->albumManager    = AlbumManager::instance();
@@ -92,11 +92,12 @@ KipiInterface::~KipiInterface()
 KIPI::ImageCollection KipiInterface::currentAlbum()
 {
     Album* currAlbum = d->albumManager->currentAlbum();
+
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
-                                         currAlbum,
-                                         hostSetting("FileExtensions").toString()));
+                                     currAlbum,
+                                     hostSetting("FileExtensions").toString()));
     }
     else
     {
@@ -107,11 +108,12 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
 KIPI::ImageCollection KipiInterface::currentSelection()
 {
     Album* currAlbum = d->albumManager->currentAlbum();
+
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
-                                                             currAlbum,
-                                         hostSetting("FileExtensions").toString()));
+                                     currAlbum,
+                                     hostSetting("FileExtensions").toString()));
     }
     else
     {
@@ -125,27 +127,33 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
     QString fileFilter(hostSetting("FileExtensions").toString());
 
     const AlbumList palbumList = d->albumManager->allPAlbums();
+
     for ( AlbumList::ConstIterator it = palbumList.constBegin();
           it != palbumList.constEnd(); ++it )
     {
         // don't add the root album
         if ((*it)->isRoot())
+        {
             continue;
+        }
 
         KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, *it, fileFilter);
         result.append( KIPI::ImageCollection( col ) );
     }
 
     const AlbumList talbumList = d->albumManager->allTAlbums();
+
     for ( AlbumList::ConstIterator it = talbumList.constBegin();
           it != talbumList.constEnd(); ++it )
     {
         // don't add the root album
         if ((*it)->isRoot())
+        {
             continue;
+        }
 
         KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
-                                                           *it, fileFilter);
+                *it, fileFilter);
         result.append( KIPI::ImageCollection( col ) );
     }
 
@@ -167,8 +175,12 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
     foreach (const KUrl& url, urls)
     {
         ImageInfo info(url);
+
         if (!info.isNull())
+        {
             ids << info.id();
+        }
+
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);
         LoadingCacheInterface::fileChanged(path);
@@ -186,13 +198,13 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
 int KipiInterface::features() const
 {
     return(
-           KIPI::HostSupportsTags            | KIPI::HostSupportsRating      |
-           KIPI::HostAcceptNewImages         | KIPI::HostSupportsThumbnails  |
-           KIPI::HostSupportsProgressBar     |
-           KIPI::ImagesHasComments           | KIPI::ImagesHasTitlesWritable |
-           KIPI::ImagesHasTime               |
-           KIPI::CollectionsHaveComments     | KIPI::CollectionsHaveCategory |
-           KIPI::CollectionsHaveCreationDate
+              KIPI::HostSupportsTags            | KIPI::HostSupportsRating      |
+              KIPI::HostAcceptNewImages         | KIPI::HostSupportsThumbnails  |
+              KIPI::HostSupportsProgressBar     |
+              KIPI::ImagesHasComments           | KIPI::ImagesHasTitlesWritable |
+              KIPI::ImagesHasTime               |
+              KIPI::CollectionsHaveComments     | KIPI::CollectionsHaveCategory |
+              KIPI::CollectionsHaveCreationDate
           );
 }
 
@@ -222,6 +234,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
 void KipiInterface::delImage( const KUrl& url )
 {
     KUrl rootURL(CollectionManager::instance()->albumRoot(url));
+
     if ( !rootURL.isParentOf(url) )
     {
         kWarning() << "URL not in the album library";
@@ -247,7 +260,7 @@ void KipiInterface::slotSelectionChanged(int count)
     emit selectionChanged(count);
 }
 
-void KipiInterface::slotCurrentAlbumChanged( Album *album )
+void KipiInterface::slotCurrentAlbumChanged( Album* album )
 {
     emit currentAlbumChanged( album != 0 );
 }
@@ -261,7 +274,9 @@ void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 void KipiInterface::thumbnails(const KUrl::List& list, int size)
 {
     for (KUrl::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
+    {
         thumbnail(*it, size);
+    }
 }
 
 void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
@@ -282,18 +297,23 @@ KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget* parent)
 QAbstractItemModel* KipiInterface::getTagTree() const
 {
 
-    if(!d->tagModel)
+    if (!d->tagModel)
     {
         QAbstractItemModel* newTagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, NULL);
         d->tagModel = newTagModel;
     }
+
     return d->tagModel;
 }
 
 QVariant KipiInterface::hostSetting(const QString& settingName)
 {
     MetadataSettings* mSettings = MetadataSettings::instance();
-    if (!mSettings) return QVariant();
+
+    if (!mSettings)
+    {
+        return QVariant();
+    }
 
     MetadataSettingsContainer set = mSettings->settings();
 

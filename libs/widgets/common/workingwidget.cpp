@@ -59,13 +59,13 @@ public:
 };
 
 WorkingWidget::WorkingWidget(QWidget* parent)
-             : QLabel(parent), d(new WorkingWidgetPriv)
+    : QLabel(parent), d(new WorkingWidgetPriv)
 {
     QPixmap pix(KIconLoader::global()->iconPath("process-working.png", KIconLoader::Dialog));
 
     d->pixmaps = KPixmapSequence(pix);
 
-    connect(&d->timer, SIGNAL(timeout()), 
+    connect(&d->timer, SIGNAL(timeout()),
             this, SLOT(changeImage()));
 
     d->timer.start(100);
@@ -80,7 +80,9 @@ WorkingWidget::~WorkingWidget()
 void WorkingWidget::changeImage()
 {
     if (d->currentPixmap >= d->pixmaps.frameCount())
+    {
         d->currentPixmap = 0;
+    }
 
     setPixmap(d->pixmaps.frameAt(d->currentPixmap));
 
@@ -91,11 +93,11 @@ void WorkingWidget::changeImage()
 
 void WorkingWidget::toggleTimer(bool turnOn)
 {
-    if(turnOn && !d->timer.isActive())
+    if (turnOn && !d->timer.isActive())
     {
         d->timer.start();
     }
-    else if(!turnOn && d->timer.isActive())
+    else if (!turnOn && d->timer.isActive())
     {
         d->timer.stop();
     }

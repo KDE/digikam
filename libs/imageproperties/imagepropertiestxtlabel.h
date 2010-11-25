@@ -56,7 +56,7 @@ public:
         setWordWrap(false);
     };
 
-    ~DTextLabelName(){};
+    ~DTextLabelName() {};
 };
 
 // -------------------------------------------------------------------
@@ -76,7 +76,7 @@ public:
         setTextElideMode(Qt::ElideRight);
     };
 
-    ~DTextLabelValue(){};
+    ~DTextLabelValue() {};
 };
 
 // -------------------------------------------------------------------
@@ -95,7 +95,7 @@ public:
         setFocusPolicy(Qt::NoFocus);
     };
 
-    ~DTextBrowser(){};
+    ~DTextBrowser() {};
 
     void setLinesNumber(int l)
     {
@@ -123,7 +123,7 @@ public:
         sortItems();
     };
 
-    ~DTextList(){};
+    ~DTextList() {};
 
     void setLinesNumber(int l)
     {

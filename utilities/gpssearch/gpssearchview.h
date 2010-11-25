@@ -83,7 +83,7 @@ public:
 public Q_SLOTS:
 
     void slotDigikamViewNoCurrentItem();
-    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, 
+    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext,
                                       const ImageInfoList& allImages);
     void slotRemoveCurrentSelection();
     void slotRemoveCurrentFilter();

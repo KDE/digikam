@@ -82,16 +82,25 @@ public:
             size            = 0;
             flags           = NoFlags;
         }
-        
+
 
         PreviewType type;
         int  size;
         PreviewFlags flags;
         QVariant extraParameter;
 
-        bool exifRotate() const       { return flags & ExifRotate; }
-        bool onlyPregenerate() const  { return flags & OnlyPregenerate; }
-        bool fastButLarge() const     { return flags & FastButLarge; }
+        bool exifRotate() const
+        {
+            return flags & ExifRotate;
+        }
+        bool onlyPregenerate() const
+        {
+            return flags & OnlyPregenerate;
+        }
+        bool fastButLarge() const
+        {
+            return flags & FastButLarge;
+        }
 
         bool operator==(const PreviewParameters& other) const;
     };
@@ -207,12 +216,14 @@ public:
      */
     bool                isPreviewImage() const;
 
-   /**
-     * Returns whether the other loading task equals this one
-     */
+    /**
+      * Returns whether the other loading task equals this one
+      */
     bool operator==(const LoadingDescription& other) const;
     bool operator!=(const LoadingDescription& other) const
-        { return !operator==(other); }
+    {
+        return !operator==(other);
+    }
     /**
      * Returns whether the other loading task equals this one
      * ignoring parameters used to specify a reduced version.

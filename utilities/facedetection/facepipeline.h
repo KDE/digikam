@@ -224,9 +224,9 @@ public Q_SLOTS:
      * it is not yet in the database (connect to signal processed() to react when the processing finished).
      * If a trainer is plugged, the face will be trained.
      */
-    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace &face,
+    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace& face,
                          int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());
-    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace &face, const DImg& image,
+    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace& face, const DImg& image,
                          int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());
     /**
      * Train the given faces.
@@ -236,7 +236,7 @@ public Q_SLOTS:
     /**
      * Remove the given face.
      */
-    void remove(const ImageInfo& info, const DatabaseFace &face);
+    void remove(const ImageInfo& info, const DatabaseFace& face);
 
     /**
      * Batch processing. If a filter is installed, the skipped() signal

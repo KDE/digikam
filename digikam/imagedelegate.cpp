@@ -71,12 +71,12 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
 }
 
 ImageDelegate::ImageDelegate(QObject* parent)
-             : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
+    : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
 {
 }
 
 ImageDelegate::ImageDelegate(ImageDelegate::ImageDelegatePrivate& dd, QObject* parent)
-             : ItemViewImageDelegate(dd, parent)
+    : ItemViewImageDelegate(dd, parent)
 {
 }
 
@@ -118,7 +118,9 @@ void ImageDelegate::setModel(QAbstractItemModel* model)
     // 2) We do not need to care for overlays. The view calls setActive() on them on model change
 
     if (model == d->currentModel)
+    {
         return;
+    }
 
     if (d->currentModel)
     {
@@ -149,8 +151,12 @@ void ImageDelegate::setModel(QAbstractItemModel* model)
 void ImageDelegate::setSpacing(int spacing)
 {
     Q_D(ImageDelegate);
+
     if (d->categoryDrawer)
+    {
         d->categoryDrawer->setLowerSpacing(spacing);
+    }
+
     ItemViewImageDelegate::setSpacing(spacing);
 }
 
@@ -210,7 +216,9 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     ImageInfo info = ImageModel::retrieveImageInfo(index);
 
     if (info.isNull())
+    {
         return;
+    }
 
     // state of painter must not be changed
     p->save();
@@ -221,20 +229,28 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     bool isSelected = (option.state & QStyle::State_Selected);
 
     QPixmap pix;
+
     if (isSelected)
+    {
         pix = d->selPixmap;
+    }
     else
+    {
         pix = d->regPixmap;
+    }
 
     p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
 
     // Thumbnail
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbnailPixmap(index));
+
     if (!actualPixmapRect.isNull())
+    {
         const_cast<ImageDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
+    }
 
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
-    if(info.hasImageHistory())
+    if (info.hasImageHistory())
     {
         p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22,22));
     }
@@ -281,9 +297,14 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     }
 
     if (d->drawFocusFrame)
+    {
         drawFocusRect(p, option, isSelected);
+    }
+
     if (d->drawMouseOverFrame)
+    {
         drawMouseOverRect(p, option);
+    }
 
     p->restore();
 
@@ -297,8 +318,11 @@ QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const Q
     if (indexes.count() == 1)
     {
         QVariant thumbData = indexes.first().data(ImageModel::ThumbnailRole);
+
         if (!thumbData.isNull())
+        {
             icon = thumbData.value<QPixmap>();
+        }
     }
 
     return makeDragPixmap(option, indexes, icon);
@@ -320,28 +344,43 @@ bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRec
                                        QRect* returnRect) const
 {
     QRect actualRect = actualPixmapRect(index);
+
     if (actualRect.isNull())
+    {
         return false;
+    }
 
     actualRect.translate(visualRect.topLeft());
+
     if (returnRect)
+    {
         *returnRect = actualRect;
+    }
+
     return actualRect.contains(pos);
 }
 
 void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     Q_D(ImageDelegate);
+
     if (d->categoryDrawer)
+    {
         d->categoryDrawer->setDefaultViewOptions(option);
+    }
+
     ItemViewImageDelegate::setDefaultViewOptions(option);
 }
 
 void ImageDelegate::invalidatePaintingCache()
 {
     Q_D(ImageDelegate);
+
     if (d->categoryDrawer)
+    {
         d->categoryDrawer->invalidatePaintingCache();
+    }
+
     ItemViewImageDelegate::invalidatePaintingCache();
 }
 
@@ -415,18 +454,26 @@ QRect ImageDelegate::actualPixmapRect(const QModelIndex& index) const
     Q_D(const ImageDelegate);
     // We do not recompute if not found. Assumption is cache is always properly updated.
     QRect* rect = d->actualPixmapRectCache.object(index.row());
+
     if (rect)
+    {
         return *rect;
+    }
     else
+    {
         return d->pixmapRect;
+    }
 }
 
 void ImageDelegate::updateActualPixmapRect(const QModelIndex& index, const QRect& rect)
 {
     Q_D(ImageDelegate);
     QRect* old = d->actualPixmapRectCache.object(index.row());
+
     if (!old || *old != rect)
+    {
         d->actualPixmapRectCache.insert(index.row(), new QRect(rect));
+    }
 }
 
 } // namespace Digikam

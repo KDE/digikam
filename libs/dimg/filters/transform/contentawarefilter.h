@@ -63,14 +63,14 @@ public:
         preserve_skin_tones = false;
         width               = 0;
         height              = 0;
-        step                = 1; 
-        side_switch_freq    = 4; 
+        step                = 1;
+        side_switch_freq    = 4;
         rigidity            = 0.0;
         func                = GradientNorm;
         resize_order        = Qt::Horizontal;
     };
 
-    ~ContentAwareContainer(){};
+    ~ContentAwareContainer() {};
 
 public:
 
@@ -78,17 +78,17 @@ public:
 
     uint                     width;
     uint                     height;
-    
-    int                      step; 
+
+    int                      step;
     int                      side_switch_freq;
 
     double                   rigidity;
 
-    QImage                   mask; 
+    QImage                   mask;
 
     EnergyFunction           func;
     Qt::Orientation          resize_order;
-};  
+};
 
 class ContentAwareFilterPriv;
 
@@ -103,12 +103,27 @@ public:
 
     void progressCallback(int progress);
 
-    static QString          FilterIdentifier()  { return "digikam:ContentAwareFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Content-Aware Filter"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:ContentAwareFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Content-Aware Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -121,7 +136,7 @@ private:
     void buildSkinToneBias();
     inline bool isSkinTone(const DColor& c);
     void getEnergyImage();
-    
+
 private:
 
     ContentAwareFilterPriv* const d;

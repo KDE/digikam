@@ -43,7 +43,10 @@ namespace Digikam
 {
 
 class ImageInfo;
-namespace DatabaseFields { class Set; }
+namespace DatabaseFields
+{
+class Set;
+}
 
 class DIGIKAM_DATABASE_EXPORT ImageSortSettings
 {
@@ -51,7 +54,7 @@ public:
 
     ImageSortSettings();
 
-    bool operator==(const ImageSortSettings &other) const;
+    bool operator==(const ImageSortSettings& other) const;
 
     /** Compares the categories of left and right.
      *  Return -1 if left is less than right, 0 if both fall in the same category,
@@ -143,24 +146,35 @@ public:
 
     /** Returns a < b if sortOrder is Ascending, or b < a if order is descending */
     template <typename T>
-    static inline bool lessThanByOrder(const T &a, const T&b, Qt::SortOrder sortOrder)
+    static inline bool lessThanByOrder(const T& a, const T& b, Qt::SortOrder sortOrder)
     {
         if (sortOrder == Qt::AscendingOrder)
+        {
             return a < b;
+        }
         else
+        {
             return b < a;
+        }
     }
 
     /** Returns the usual compare result of -1, 0, or 1 for lessThan, equals and greaterThan. */
     template <typename T>
-    static inline int compareValue(const T &a, const T&b)
+    static inline int compareValue(const T& a, const T& b)
     {
         if (a == b)
+        {
             return 0;
+        }
+
         if (a < b)
+        {
             return -1;
+        }
         else
+        {
             return 1;
+        }
     }
 
     /** Takes a typical result from a compare method (0 is equal, -1 is less than, 1 is greater than)
@@ -168,20 +182,24 @@ public:
     static inline int compareByOrder(int compareResult,  Qt::SortOrder sortOrder)
     {
         if (sortOrder == Qt::AscendingOrder)
+        {
             return compareResult;
+        }
         else
+        {
             return - compareResult;
+        }
     }
 
     template <typename T>
-    static inline int compareByOrder(const T &a, const T&b, Qt::SortOrder sortOrder)
+    static inline int compareByOrder(const T& a, const T& b, Qt::SortOrder sortOrder)
     {
         return compareByOrder(compareValue(a, b), sortOrder);
     }
 
     /** Compares the two string by natural comparison and adheres to given sort order */
-    static inline int naturalCompare(const QString &a, const QString &b, Qt::SortOrder sortOrder,
-                                    Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
+    static inline int naturalCompare(const QString& a, const QString& b, Qt::SortOrder sortOrder,
+                                     Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
     {
         return compareByOrder(KStringHandler::naturalCompare(a, b, caseSensitive),
                               sortOrder);

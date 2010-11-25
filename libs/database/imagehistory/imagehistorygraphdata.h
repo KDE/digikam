@@ -71,9 +71,9 @@ public:
     bool operator==(qlonglong id) const;
     bool operator==(const HistoryImageId& info) const;
 
-    HistoryVertexProperties &operator+=(const QString& uuid);
-    HistoryVertexProperties &operator+=(const ImageInfo& info);
-    HistoryVertexProperties &operator+=(const HistoryImageId& info);
+    HistoryVertexProperties& operator+=(const QString& uuid);
+    HistoryVertexProperties& operator+=(const ImageInfo& info);
+    HistoryVertexProperties& operator+=(const HistoryImageId& info);
 };
 
 QDebug operator<<(QDebug dbg, const HistoryVertexProperties& props);
@@ -94,14 +94,14 @@ public:
 
     QList<FilterAction> actions;
 
-    HistoryEdgeProperties &operator+=(const FilterAction& action);
+    HistoryEdgeProperties& operator+=(const FilterAction& action);
 };
 
 typedef Graph<HistoryVertexProperties, HistoryEdgeProperties> HistoryGraph;
 
 class ImageHistoryGraphData
     : public HistoryGraph,
-      public QSharedData
+  public QSharedData
 {
 public:
 
@@ -113,7 +113,7 @@ public:
     {
     }
 
-    ImageHistoryGraphData &operator=(const HistoryGraph& g)
+    ImageHistoryGraphData& operator=(const HistoryGraph& g)
     {
         HistoryGraph::operator=(g);
         return *this;

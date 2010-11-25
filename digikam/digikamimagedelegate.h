@@ -42,14 +42,14 @@ class DigikamImageDelegate : public ImageDelegate
 
 public:
 
-    DigikamImageDelegate(ImageCategorizedView *parent);
+    DigikamImageDelegate(ImageCategorizedView* parent);
     ~DigikamImageDelegate();
 
 protected:
 
     virtual void updateRects();
 
-    DigikamImageDelegate(DigikamImageDelegatePrivate& dd, ImageCategorizedView *parent);
+    DigikamImageDelegate(DigikamImageDelegatePrivate& dd, ImageCategorizedView* parent);
 
 private:
 

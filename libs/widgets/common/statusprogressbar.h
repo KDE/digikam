@@ -41,7 +41,7 @@ class StatusProgressBarPriv;
 
 class DIGIKAM_EXPORT StatusProgressBar : public QStackedWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -54,7 +54,7 @@ public:
 
 public:
 
-    StatusProgressBar(QWidget *parent=0);
+    StatusProgressBar(QWidget* parent=0);
     ~StatusProgressBar();
 
     void setAlignment(Qt::Alignment a);

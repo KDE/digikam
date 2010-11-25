@@ -69,11 +69,11 @@ public:
 
 };
 
-AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel *model,
-                                         AlbumModificationHelper *albumModificationHelper,
-                                         QWidget *parent) :
-                                         AlbumTreeView(parent),
-                                         d(new AlbumSelectTreeViewPriv)
+AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel* model,
+        AlbumModificationHelper* albumModificationHelper,
+        QWidget* parent) :
+    AlbumTreeView(parent),
+    d(new AlbumSelectTreeViewPriv)
 {
 
     setAlbumModel(model);
@@ -88,19 +88,20 @@ AlbumSelectTreeView::~AlbumSelectTreeView()
     delete d;
 }
 
-void AlbumSelectTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh,
-                                                      Album *album)
+void AlbumSelectTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
+        Album* album)
 {
     cmh.addAction(d->newAlbumAction);
     d->newAlbumAction->setEnabled(album);
 }
 
-void AlbumSelectTreeView::handleCustomContextMenuAction(QAction *action,
-                                                        AlbumPointer<Album> album)
+void AlbumSelectTreeView::handleCustomContextMenuAction(QAction* action,
+        AlbumPointer<Album> album)
 {
 
-    Album *a = album;
-    PAlbum *palbum = dynamic_cast<PAlbum*> (a);
+    Album* a = album;
+    PAlbum* palbum = dynamic_cast<PAlbum*> (a);
+
     if (palbum && action == d->newAlbumAction)
     {
         d->albumModificationHelper->slotAlbumNew(palbum);
@@ -110,10 +111,12 @@ void AlbumSelectTreeView::handleCustomContextMenuAction(QAction *action,
 
 void AlbumSelectTreeView::slotNewAlbum()
 {
-    PAlbum *palbum = currentAlbum();
+    PAlbum* palbum = currentAlbum();
+
     if (palbum)
     {
-        PAlbum *createdAlbum = d->albumModificationHelper->slotAlbumNew(palbum);
+        PAlbum* createdAlbum = d->albumModificationHelper->slotAlbumNew(palbum);
+
         if (createdAlbum)
         {
             setCurrentAlbum(createdAlbum, false);
@@ -144,9 +147,9 @@ public:
     KPushButton*             newAlbumBtn;
 };
 
-AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
-                 : QWidget(parent),
-                   d(new AlbumSelectWidgetPriv)
+AlbumSelectWidget::AlbumSelectWidget(QWidget* parent, PAlbum* albumToSelect)
+    : QWidget(parent),
+      d(new AlbumSelectWidgetPriv)
 {
 
     setObjectName("AlbumSelectWidget");
@@ -156,7 +159,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
     // TODO let this class implement StateSavingObject
     KConfigGroup group = KGlobal::config()->group(objectName());
 
-    QGridLayout *grid = new QGridLayout(this);
+    QGridLayout* grid = new QGridLayout(this);
     d->albumModel     = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, this);
     d->albumTreeView  = new AlbumSelectTreeView(d->albumModel, d->albumModificationHelper, this);
     d->albumTreeView->setDragEnabled(false);
@@ -177,7 +180,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
 
     d->newAlbumBtn    = new KPushButton(KGuiItem(i18n("&New Album"), "albumfolder-new",
-                                                 i18n("Create new album")), this);
+                                        i18n("Create new album")), this);
 
     grid->addWidget(d->albumTreeView,  0, 0, 1, 2);
     grid->addWidget(d->searchBar,   1, 0, 1, 1);
@@ -188,11 +191,13 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
 
     // ------------------------------------------------------------------------------------
 
-    PAlbum *select = albumToSelect;
+    PAlbum* select = albumToSelect;
+
     if (!select)
     {
         select = AlbumManager::instance()->currentPAlbum();
     }
+
     d->albumTreeView->setCurrentAlbum(select, false);
 
     // ------------------------------------------------------------------------------------
@@ -223,7 +228,7 @@ PAlbum* AlbumSelectWidget::currentAlbum() const
     return d->albumTreeView->currentAlbum();
 }
 
-void AlbumSelectWidget::setCurrentAlbum(PAlbum *albumToSelect)
+void AlbumSelectWidget::setCurrentAlbum(PAlbum* albumToSelect)
 {
     d->albumTreeView->setCurrentAlbum(albumToSelect);
 }
@@ -231,14 +236,19 @@ void AlbumSelectWidget::setCurrentAlbum(PAlbum *albumToSelect)
 KUrl AlbumSelectWidget::currentAlbumUrl() const
 {
     PAlbum* palbum = d->albumTreeView->currentAlbum();
-    if (palbum) return palbum->fileUrl();
+
+    if (palbum)
+    {
+        return palbum->fileUrl();
+    }
 
     return KUrl();
 }
 
 void AlbumSelectWidget::setCurrentAlbumUrl(const KUrl& albumUrl)
 {
-    PAlbum *urlAlbum = AlbumManager::instance()->findPAlbum(albumUrl);
+    PAlbum* urlAlbum = AlbumManager::instance()->findPAlbum(albumUrl);
+
     if (urlAlbum)
     {
         d->albumTreeView->setCurrentAlbum(urlAlbum);
@@ -257,6 +267,7 @@ void AlbumSelectWidget::slotAlbumRenamed(Album* album)
     }
 
     QModelIndex index = d->albumModel->indexForAlbum(album);
+
     if (index.isValid())
     {
         emit itemSelectionChanged();

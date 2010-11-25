@@ -66,7 +66,7 @@ public:
         smoothInput(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
 
     static const QString configGroupName;
@@ -86,8 +86,8 @@ const QString CharcoalTool::CharcoalToolPriv::configSmoothAdjustmentEntry("Smoot
 // --------------------------------------------------------
 
 CharcoalTool::CharcoalTool(QObject* parent)
-            : EditorToolThreaded(parent),
-              d(new CharcoalToolPriv)
+    : EditorToolThreaded(parent),
+      d(new CharcoalToolPriv)
 {
     setObjectName("charcoal");
     setToolName(i18n("Charcoal"));

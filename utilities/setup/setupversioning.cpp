@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-06
- * Description : setup tab for image versioning 
+ * Description : setup tab for image versioning
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -69,7 +69,7 @@ public:
 };
 
 SetupVersioning::SetupVersioning(QWidget* parent)
-               : QScrollArea(parent), d(new SetupVersioningPriv)
+    : QScrollArea(parent), d(new SetupVersioningPriv)
 {
     QWidget* panel = new QWidget(viewport());
     setWidget(panel);
@@ -107,11 +107,11 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     d->formatForStoringSubversions->setToolTip(i18n("This options sets in what format will your new created versions be saved."));
 
     d->saveIntermediateVersions = new QCheckBox(i18n("Create new file for every modification"),
-                                            versioningOptionsGroup);
+            versioningOptionsGroup);
     d->saveIntermediateVersions->setWhatsThis(i18n("Set this option to automatically save each "
-                                                    "modification you make in image editor "
-                                                    "into new file. This will be viewed "
-                                                    "as a subversion of the current image"));
+            "modification you make in image editor "
+            "into new file. This will be viewed "
+            "as a subversion of the current image"));
 
     gLayout->setMargin(KDialog::spacingHint());
     gLayout->setSpacing(KDialog::spacingHint());
@@ -150,7 +150,7 @@ void SetupVersioning::applySettings()
     VersionManagerSettings settings;
     settings.showAllVersions = d->showAllVersions->isChecked();
     settings.saveIntermediateVersions = d->saveIntermediateVersions->isChecked()
-        ? VersionManagerSettings::AfterEachSession : VersionManagerSettings::NoIntermediates;
+                                        ? VersionManagerSettings::AfterEachSession : VersionManagerSettings::NoIntermediates;
     settings.formatForStoringRAW = d->formatForStoringRAW->currentText();
     settings.formatForStoringSubversions = d->formatForStoringSubversions->currentText();
 

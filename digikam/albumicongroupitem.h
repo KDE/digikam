@@ -41,13 +41,16 @@ public:
     AlbumIconGroupItem(AlbumIconView* view, int albumID);
     ~AlbumIconGroupItem();
 
-    int albumID() const { return m_albumID; }
+    int albumID() const
+    {
+        return m_albumID;
+    }
 
     virtual int compare(IconGroupItem* group);
 
 protected:
 
-    void paintBanner(QPainter *p);
+    void paintBanner(QPainter* p);
 
 private:
 

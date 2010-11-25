@@ -46,17 +46,35 @@ public:
 
     explicit ShearFilter(QObject* parent = 0);
     explicit ShearFilter(DImg* orgImage, QObject* parent=0, float hAngle=0.0, float vAngle=0.0,
-              bool antialiasing=true, const QColor& backgroundColor=Qt::black, int orgW=0, int orgH=0);
+                         bool antialiasing=true, const QColor& backgroundColor=Qt::black, int orgW=0, int orgH=0);
     ~ShearFilter();
 
-    QSize getNewSize(void){ return m_newSize; };
+    QSize getNewSize(void)
+    {
+        return m_newSize;
+    };
 
-    static QString          FilterIdentifier()  { return "digikam:ShearFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Shear Tool"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:ShearFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Shear Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -66,14 +84,14 @@ private:
 
     inline int setPosition (int Width, int X, int Y)
     {
-       return (Y *Width*4 + 4*X);
+        return (Y *Width*4 + 4*X);
     };
 
     inline bool isInside (int Width, int Height, int X, int Y)
     {
-       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-       return (bIsWOk && bIsHOk);
+        bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
+        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+        return (bIsWOk && bIsHOk);
     };
 
 private:

@@ -118,19 +118,19 @@ public:
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent)
-             : QScrollArea(parent), d(new SetupMetadataPriv)
+    : QScrollArea(parent), d(new SetupMetadataPriv)
 {
     d->tab = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
     QWidget* panel          = new QWidget(d->tab);
-    QVBoxLayout *mainLayout = new QVBoxLayout(panel);
+    QVBoxLayout* mainLayout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
     QGroupBox* ExifGroup     = new QGroupBox(i18n("EXIF Actions"), panel);
-    QVBoxLayout *gLayout1    = new QVBoxLayout(ExifGroup);
+    QVBoxLayout* gLayout1    = new QVBoxLayout(ExifGroup);
 
     d->exifRotateBox         = new QCheckBox(ExifGroup);
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
@@ -283,8 +283,8 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->readFromNepomukBox   = new QCheckBox;
     d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
     d->readFromNepomukBox->setWhatsThis( i18n("Turn on this option if you want to apply changes to "
-                                              "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
-                                              "Please note that image metadata will not be edited automatically."));
+                                         "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
+                                         "Please note that image metadata will not be edited automatically."));
 
     gLayout3->addWidget(d->saveToNepomukBox);
     gLayout3->addWidget(d->readFromNepomukBox);
@@ -318,12 +318,12 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     QString nepotxt;
 
     nepotxt.append(i18n("<p><a href='http://nepomuk.kde.org'>Nepomuk</a> "
-                    "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
-                    "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
-                    "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
-                    "Nepomuk Semantic Desktop.</p> "
-                    "<p>If you have enabled writing of metadata to files, please note that changes done through Nepomuk "
-                    "are not automatically applied to the image's metadata when read into digiKam's database.</p> "));
+                        "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
+                        "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
+                        "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
+                        "Nepomuk Semantic Desktop.</p> "
+                        "<p>If you have enabled writing of metadata to files, please note that changes done through Nepomuk "
+                        "are not automatically applied to the image's metadata when read into digiKam's database.</p> "));
 
     nepoExplanation->setText(nepotxt);
     nepoExplanation->setFont(KGlobalSettings::smallestReadableFont());
@@ -381,10 +381,18 @@ void SetupMetadata::slotProcessExiv2Url(const QString& url)
 void SetupMetadata::applySettings()
 {
     AlbumSettings* aSettings    = AlbumSettings::instance();
-    if (!aSettings) return;
+
+    if (!aSettings)
+    {
+        return;
+    }
 
     MetadataSettings* mSettings = MetadataSettings::instance();
-    if (!mSettings) return;
+
+    if (!mSettings)
+    {
+        return;
+    }
 
     MetadataSettingsContainer set;
     set.exifRotate            = d->exifRotateBox->isChecked();
@@ -403,8 +411,12 @@ void SetupMetadata::applySettings()
 #ifdef HAVE_NEPOMUK
     aSettings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
     aSettings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
+
     if (d->resyncButton->isEnabled() && d->resyncButton->isChecked())
+    {
         aSettings->triggerResyncWithNepomuk();
+    }
+
 #endif
 
     aSettings->saveSettings();
@@ -415,9 +427,18 @@ void SetupMetadata::applySettings()
 void SetupMetadata::readSettings()
 {
     AlbumSettings* aSettings      = AlbumSettings::instance();
-    if (!aSettings) return;
+
+    if (!aSettings)
+    {
+        return;
+    }
+
     MetadataSettings* mSettings   = MetadataSettings::instance();
-    if (!mSettings) return;
+
+    if (!mSettings)
+    {
+        return;
+    }
 
     MetadataSettingsContainer set = mSettings->settings();
 
@@ -449,9 +470,13 @@ bool SetupMetadata::exifAutoRotateAsChanged()
 void SetupMetadata::slotExifAutoRotateToggled(bool b)
 {
     if ( b != d->exifAutoRotateOrg)
+    {
         d->exifAutoRotateAsChanged = true;
+    }
     else
+    {
         d->exifAutoRotateAsChanged = false;
+    }
 }
 
 void SetupMetadata::slotNepomukToggled()

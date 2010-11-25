@@ -49,12 +49,27 @@ public:
 
     ~BlurFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:BlurFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Blur Filter"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:BlurFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Blur Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -74,7 +89,9 @@ private:
         lpcArray = new int*[Columns];
 
         for (int i = 0; i < Columns; ++i)
+        {
             lpcArray[i] = new int[Rows];
+        }
 
         return (lpcArray);
     };
@@ -84,7 +101,9 @@ private:
     {
         // loop to deallocate the columns
         for (int i = 0; i < Columns; ++i)
+        {
             delete [] lpcArray[i];
+        }
 
         // now, we delete the main pointer
         delete [] lpcArray;

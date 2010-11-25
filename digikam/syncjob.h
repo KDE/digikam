@@ -64,7 +64,10 @@ public:
     bool success;
     QString errorString;
 
-    operator bool() const { return success; }
+    operator bool() const
+    {
+        return success;
+    }
 };
 
 class SyncJob : public QObject
@@ -77,7 +80,7 @@ public:
     static SyncJobResult del(const KUrl::List& urls, bool useTrash);
 
     /* Load the image or icon for the tag thumbnail */
-    static QPixmap getTagThumbnail(TAlbum *album);
+    static QPixmap getTagThumbnail(TAlbum* album);
     static QPixmap getTagThumbnail(const QString& name, int size);
 
 private:
@@ -91,13 +94,13 @@ private:
     bool delPriv(const KUrl::List& urls);
     bool trashPriv(const KUrl::List& urls);
 
-    QPixmap getTagThumbnailPriv(TAlbum *album);
+    QPixmap getTagThumbnailPriv(TAlbum* album);
 
 private Q_SLOTS:
 
-    void slotResult( KJob *job );
-    void slotGotThumbnailFromIcon(Album *album, const QPixmap& pix);
-    void slotLoadThumbnailFailed(Album *album);
+    void slotResult( KJob* job );
+    void slotGotThumbnailFromIcon(Album* album, const QPixmap& pix);
+    void slotLoadThumbnailFailed(Album* album);
 
 private:
 

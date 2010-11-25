@@ -42,7 +42,7 @@ public:
 
     explicit UnsharpMaskFilter(QObject* parent = 0);
     explicit UnsharpMaskFilter(DImg* orgImage, QObject* parent=0, int radius=1,
-                             double amount=1.0, double threshold=0.05);
+                               double amount=1.0, double threshold=0.05);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     // UnsharpMaskFilter(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,
@@ -50,12 +50,27 @@ public:
 
     ~UnsharpMaskFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:UnsharpMaskFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Unsharp Mask Tool"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:UnsharpMaskFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Unsharp Mask Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

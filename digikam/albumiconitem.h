@@ -61,7 +61,7 @@ public:
     static void dateToString(const QDateTime& datetime, QString& str);
     static QString squeezedText(QPainter* p, int width, const QString& text);
 
-    virtual int compare(IconItem *item);
+    virtual int compare(IconItem* item);
     virtual QRect clickToOpenRect();
     virtual QRect clickToRateRect();
 
@@ -70,7 +70,7 @@ public:
 
 protected:
 
-    virtual void paintItem(QPainter *p);
+    virtual void paintItem(QPainter* p);
 
 private:
 

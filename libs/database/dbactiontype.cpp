@@ -33,10 +33,10 @@ DBActionType::DBActionType()
     m_isValue = false;
 }
 
-DBActionType::DBActionType(const DBActionType &actionType)
+DBActionType::DBActionType(const DBActionType& actionType)
 {
-    m_isValue		= actionType.m_isValue;
-    m_ActionValue	= actionType.m_ActionValue;
+    m_isValue       = actionType.m_isValue;
+    m_ActionValue   = actionType.m_ActionValue;
 }
 DBActionType::~DBActionType()
 {

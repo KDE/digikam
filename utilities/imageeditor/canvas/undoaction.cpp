@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 UndoAction::UndoAction(DImgInterface* iface)
-          : m_iface(iface)
+    : m_iface(iface)
 {
     m_history = iface->getImageHistory();
 }
@@ -81,7 +81,7 @@ DImgBuiltinFilter UndoActionReversible::getReverseFilter() const
 // ---------------------------------------------------------------------------------------------
 
 UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface, const QString& title)
-                      : UndoAction(iface)
+    : UndoAction(iface)
 {
     m_title = title;
 }

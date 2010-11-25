@@ -168,9 +168,9 @@ void DImageHistoryGraphTest::testEditing()
 
     ImageInfo orig(readOnlyImages.first());
     ImageInfo one(collectionDir.filePath("1.jpg")),
-    two(collectionDir.filePath("2.jpg")),
-    three(collectionDir.filePath("3.jpg")),
-    four(collectionDir.filePath("4.jpg"));
+              two(collectionDir.filePath("2.jpg")),
+              three(collectionDir.filePath("3.jpg")),
+              four(collectionDir.filePath("4.jpg"));
 
     typedef QPair<qlonglong, qlonglong> IdPair;
     QList<IdPair> controlCloud;
@@ -414,7 +414,7 @@ void DImageHistoryGraphTest::testGraph()
 
     // depth-first
     QList<qlonglong> subgraphTwo = mapList(graph.data().verticesDominatedBy(idToVertex.value(2), idToVertex.value(1),
-                                                                            HistoryGraph::DepthFirstOrder), vertexToId);
+                                           HistoryGraph::DepthFirstOrder), vertexToId);
     qSort(subgraphTwo);
     qDebug() << subgraphTwo;
     QVERIFY(subgraphTwo == controlSubgraphTwo);
@@ -439,7 +439,7 @@ void DImageHistoryGraphTest::testGraph()
     QTest::qWait(10000);*/
 }
 
-void DImageHistoryGraphTest::slotImageLoaded(const QString&fileName, bool success)
+void DImageHistoryGraphTest::slotImageLoaded(const QString& fileName, bool success)
 {
     QVERIFY(success);
     qDebug() << "Loaded" << fileName;

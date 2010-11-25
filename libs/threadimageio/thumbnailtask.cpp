@@ -55,21 +55,24 @@ namespace Digikam
 {
 
 ThumbnailLoadingTask::ThumbnailLoadingTask(LoadSaveThread* thread, LoadingDescription description)
-                    : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead,
-                                        LoadingTaskStatusLoading)
+    : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead,
+                        LoadingTaskStatusLoading)
 {
-    ThumbnailLoadThread *thumbThread = dynamic_cast<ThumbnailLoadThread *>(thread);
+    ThumbnailLoadThread* thumbThread = dynamic_cast<ThumbnailLoadThread*>(thread);
     m_creator = thumbThread->thumbnailCreator();
 }
 
 void ThumbnailLoadingTask::execute()
 {
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
+    {
         return;
+    }
 
     if (m_loadingDescription.previewParameters.onlyPregenerate())
     {
         setupCreator();
+
         switch (m_loadingDescription.previewParameters.type)
         {
             case LoadingDescription::PreviewParameters::Thumbnail:
@@ -82,19 +85,23 @@ void ThumbnailLoadingTask::execute()
             default:
                 break;
         }
+
         m_thread->taskHasFinished();
         // dont emit any signal
         return;
     }
 
-    LoadingCache *cache = LoadingCache::cache();
+    LoadingCache* cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
 
         // find possible cached images
-        const QImage *cachedImage = cache->retrieveThumbnail(m_loadingDescription.cacheKey());
+        const QImage* cachedImage = cache->retrieveThumbnail(m_loadingDescription.cacheKey());
+
         if (cachedImage)
+        {
             m_qimage = QImage(*cachedImage);
+        }
 
         if (m_qimage.isNull())
         {
@@ -110,12 +117,19 @@ void ThumbnailLoadingTask::execute()
                 // attach this thread to the other thread, wait until loading
                 // has finished.
                 m_usedProcess->addListener(this);
+
                 // break loop when either the loading has completed, or this task is being stopped
                 while ( !m_usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
+                {
                     lock.timedWait();
+                }
+
                 // remove listener from process
                 if (m_usedProcess)
+                {
                     m_usedProcess->removeListener(this);
+                }
+
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
@@ -148,6 +162,7 @@ void ThumbnailLoadingTask::execute()
 
     // Load or create thumbnail
     setupCreator();
+
     switch (m_loadingDescription.previewParameters.type)
     {
         case LoadingDescription::PreviewParameters::Thumbnail:
@@ -163,9 +178,13 @@ void ThumbnailLoadingTask::execute()
 
     {
         LoadingCache::CacheLock lock(cache);
+
         // put (valid) image into cache of loaded images
         if (!m_qimage.isNull())
+        {
             cache->putThumbnail(m_loadingDescription.cacheKey(), m_qimage, m_loadingDescription.filePath);
+        }
+
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
     }
@@ -178,18 +197,25 @@ void ThumbnailLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i=0; i<m_listeners.count(); ++i)
         {
-            ThumbnailLoadingTask *task = dynamic_cast<ThumbnailLoadingTask*>(m_listeners[i]);
+            ThumbnailLoadingTask* task = dynamic_cast<ThumbnailLoadingTask*>(m_listeners[i]);
+
             if (task)
+            {
                 task->setResult(m_loadingDescription, m_qimage);
+            }
         }
 
         // remove myself from list of listeners
         removeListener(this);
         // wake all listeners waiting on cache condVar, so that they remove themselves
         lock.wakeAll();
+
         // wait until all listeners have removed themselves
         while (m_listeners.count() != 0)
+        {
             lock.timedWait();
+        }
+
         // set to 0, as checked in setStatus
         m_usedProcess = 0;
     }
@@ -220,6 +246,7 @@ void ThumbnailLoadingTask::setResult(const LoadingDescription& loadingDescriptio
 void ThumbnailLoadingTask::postProcess()
 {
     m_loadingDescription.postProcessingParameters.profile().description();
+
     switch (m_loadingDescription.postProcessingParameters.colorManagement)
     {
         case LoadingDescription::NoColorConversion:
@@ -234,7 +261,7 @@ void ThumbnailLoadingTask::postProcess()
         }
         default:
             kError() << "Unsupported postprocessing parameter for thumbnail loading:"
-                          << m_loadingDescription.postProcessingParameters.colorManagement;
+                     << m_loadingDescription.postProcessingParameters.colorManagement;
             break;
     }
 }

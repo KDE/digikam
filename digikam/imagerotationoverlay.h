@@ -41,7 +41,7 @@ class ImageRotateLeftOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    ImageRotateLeftOverlayButton(QAbstractItemView *parentView);
+    ImageRotateLeftOverlayButton(QAbstractItemView* parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -56,7 +56,7 @@ class ImageRotateRightOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    ImageRotateRightOverlayButton(QAbstractItemView *parentView);
+    ImageRotateRightOverlayButton(QAbstractItemView* parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -73,7 +73,7 @@ class ImageRotateLeftOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ImageRotateLeftOverlay(QObject *parent);
+    ImageRotateLeftOverlay(QObject* parent);
     virtual void setActive(bool active);
 
 Q_SIGNALS:
@@ -82,7 +82,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual ItemViewHoverButton *createButton();
+    virtual ItemViewHoverButton* createButton();
     virtual void updateButton(const QModelIndex& index);
     virtual bool checkIndex(const QModelIndex& index) const;
 
@@ -99,7 +99,7 @@ class ImageRotateRightOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ImageRotateRightOverlay(QObject *parent);
+    ImageRotateRightOverlay(QObject* parent);
     virtual void setActive(bool active);
 
 Q_SIGNALS:
@@ -108,7 +108,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual ItemViewHoverButton *createButton();
+    virtual ItemViewHoverButton* createButton();
     virtual void updateButton(const QModelIndex& index);
     virtual bool checkIndex(const QModelIndex& index) const;
 

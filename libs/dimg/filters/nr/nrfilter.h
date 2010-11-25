@@ -49,7 +49,7 @@ public:
         softness[2]   = 0.9;     // Cb
     };
 
-    ~NRContainer(){};
+    ~NRContainer() {};
 
 public:
 
@@ -70,12 +70,27 @@ public:
     NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings);
     ~NRFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:NoiseReductionFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Noise Reduction Filter"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:NoiseReductionFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Noise Reduction Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -85,7 +100,7 @@ private:
 
     void waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
                         float threshold, double softness);
-    inline void hatTransform(float* temp, float *base, int st, int size, int sc);
+    inline void hatTransform(float* temp, float* base, int st, int size, int sc);
 
     void srgb2ycbcr(float** fimg, int size);
     void ycbcr2srgb(float** fimg, int size);

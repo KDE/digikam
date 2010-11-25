@@ -7,7 +7,7 @@
  * Description : Item model containing GPS information for right-side map
  *
  * Copyright (C) 2010 by Voicu Gabriel <ping dot gabi at gmail dot com>
- * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de> 
+ * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,15 +46,15 @@ class DIGIKAM_EXPORT GPSInfo
 public:
 
     GPSInfo()
-      : latitude(0.0),
-        longitude(0.0),
-        altitude(0.0),
-        dateTime(),
-        rating(0),
-        url(),
-        id(-1),
-        dimensions(),
-        hasAltitude(false)
+        : latitude(0.0),
+          longitude(0.0),
+          altitude(0.0),
+          dateTime(),
+          rating(0),
+          url(),
+          id(-1),
+          dimensions(),
+          hasAltitude(false)
     {
     };
 
@@ -78,7 +78,7 @@ Q_DECLARE_METATYPE(Digikam::GPSInfo)
 namespace Digikam
 {
 
-const int RoleGPSInfo = Qt::UserRole + 1; 
+const int RoleGPSInfo = Qt::UserRole + 1;
 
 class ImageGPSItem : public QStandardItem
 {

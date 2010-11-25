@@ -55,7 +55,7 @@ public:
         IdRole = Qt::UserRole
     };
 
-    ChoiceSearchModel(QObject *parent = 0);
+    ChoiceSearchModel(QObject* parent = 0);
 
     /** Sets the data from the given map, with integer keys and QString user displayable value */
     void setChoice(QMap<int, QString> data);
@@ -89,10 +89,10 @@ public:
     /** Sets all entries to unchecked. */
     void resetChecked();
 
-    virtual int rowCount(const QModelIndex & parent) const;
+    virtual int rowCount(const QModelIndex& parent) const;
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
-    virtual Qt::ItemFlags flags ( const QModelIndex & index ) const;
+    virtual Qt::ItemFlags flags ( const QModelIndex& index ) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
 
 Q_SIGNALS:
@@ -125,10 +125,13 @@ template <typename T>
 void ChoiceSearchModel::setChecked(const T& key, bool checked)
 {
     QVariant variantKey(key);
+
     for (int i=0; i<m_entries.size(); ++i)
     {
         if (m_entries[i].key == variantKey)
+        {
             setChecked(i, checked);
+        }
     }
 }
 
@@ -153,11 +156,15 @@ void ChoiceSearchModel::setChecked(const QList<T>& keys, bool checked)
 template <typename T> QList<T> ChoiceSearchModel::checkedKeys() const
 {
     QList<T> list;
+
     for (QList<Entry>::const_iterator it = m_entries.begin(); it != m_entries.end(); ++it)
     {
         if ((*it).checkState)
+        {
             list << (*it).key.value<T>();
+        }
     }
+
     return list;
 }
 
@@ -175,16 +182,16 @@ public:
      *  with your model.
      */
 
-    ChoiceSearchComboBox(QWidget *parent = 0);
+    ChoiceSearchComboBox(QWidget* parent = 0);
 
     /** Sets the model and initializes the widget.
      *  Can only be called once for a widget. */
-    void setModel(ChoiceSearchModel *model);
+    void setModel(ChoiceSearchModel* model);
     /** Updates the text on the line edit area */
     void setLabelText(const QString& text);
 
-    ChoiceSearchModel *model() const;
-    RSqueezedClickLabel *label() const;
+    ChoiceSearchModel* model() const;
+    RSqueezedClickLabel* label() const;
 
 Q_SIGNALS:
 
@@ -196,11 +203,11 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void installView(QAbstractItemView *view = 0);
+    virtual void installView(QAbstractItemView* view = 0);
 
 protected:
 
-    RSqueezedClickLabel *m_label;
+    RSqueezedClickLabel* m_label;
 };
 
 } // namespace Digikam

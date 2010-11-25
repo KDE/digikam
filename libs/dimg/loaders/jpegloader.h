@@ -7,7 +7,7 @@
  * Description : A JPEG IO file for DImg framework
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>, Gilles Caulier
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,11 +32,11 @@
 
 // C ANSI includes
 
-extern "C" 
+extern "C"
 {
 #include <setjmp.h>
 
-// to avoid warnings under win32
+    // to avoid warnings under win32
 #undef HAVE_STDLIB_H
 #undef HAVE_STDDEF_H
 #include <jpeglib.h>
@@ -58,12 +58,21 @@ public:
 
     JPEGLoader(DImg* image);
 
-    bool load(const QString& filePath, DImgLoaderObserver *observer);
-    bool save(const QString& filePath, DImgLoaderObserver *observer);
+    bool load(const QString& filePath, DImgLoaderObserver* observer);
+    bool save(const QString& filePath, DImgLoaderObserver* observer);
 
-    virtual bool hasAlpha()   const { return false; };
-    virtual bool sixteenBit() const { return false; };
-    virtual bool isReadOnly() const { return false; };
+    virtual bool hasAlpha()   const
+    {
+        return false;
+    };
+    virtual bool sixteenBit() const
+    {
+        return false;
+    };
+    virtual bool isReadOnly() const
+    {
+        return false;
+    };
 
 private:
 

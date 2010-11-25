@@ -39,12 +39,12 @@ namespace Digikam
 {
 
 ImageZoomSettings::ImageZoomSettings()
-                 : m_zoom(1), m_zoomConst(1)
+    : m_zoom(1), m_zoomConst(1)
 {
 }
 
 ImageZoomSettings::ImageZoomSettings(const QSize& imageSize, const QSize& originalSize)
-                 : m_zoom(1), m_zoomConst(1)
+    : m_zoom(1), m_zoomConst(1)
 {
     setImageSize(imageSize, originalSize);
 }
@@ -54,9 +54,13 @@ void ImageZoomSettings::setImageSize(const QSize& size, const QSize& originalSiz
     m_size = size;
 
     if (!originalSize.isNull() && originalSize.isValid())
+    {
         m_zoomConst = m_size.width() / double(originalSize.width());
+    }
     else
+    {
         m_zoomConst = 1;
+    }
 }
 
 double ImageZoomSettings::zoomFactor() const
@@ -97,9 +101,12 @@ void ImageZoomSettings::fitToSize(const QSizeF& frameSize, FitToSizeMode mode)
 double ImageZoomSettings::fitToSizeZoomFactor(const QSizeF& frameSize, FitToSizeMode mode) const
 {
     if (!frameSize.isValid() || !m_size.isValid())
+    {
         return 1;
+    }
 
     double zoom;
+
     if (frameSize.width() / frameSize.height() < m_size.width() / m_size.height())
     {
         zoom = m_zoomConst * frameSize.width() / m_size.width();
@@ -113,7 +120,9 @@ double ImageZoomSettings::fitToSizeZoomFactor(const QSizeF& frameSize, FitToSize
     {
         // OnlyScaleDown: accept that an image is smaller than available space, don't scale up
         if (frameSize.width() > originalImageSize().width() && frameSize.height() > originalImageSize().height())
+        {
             zoom = 1;
+        }
     }
 
     return zoom;
@@ -154,7 +163,9 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
     snapValues << 1.0;
 
     if (frameSize.isValid())
+    {
         snapValues << fitToSizeZoomFactor(frameSize);
+    }
 
     double currentZoom = zoomFactor();
 
@@ -163,7 +174,9 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
         foreach (double z, snapValues)
         {
             if (lessThanLimitedPrecision(currentZoom, z) && lessThanLimitedPrecision(z, nextZoom))
+            {
                 return z;
+            }
         }
     }
     else
@@ -171,7 +184,9 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
         foreach (double z, snapValues)
         {
             if (lessThanLimitedPrecision(z, currentZoom) && lessThanLimitedPrecision(nextZoom, z))
+            {
                 return z;
+            }
         }
     }
 
@@ -185,12 +200,16 @@ double ImageZoomSettings::snappedZoomFactor(double zoom, const QSizeF& frameSize
     snapValues << 1.0;
 
     if (frameSize.isValid())
+    {
         snapValues << fitToSizeZoomFactor(frameSize);
+    }
 
     foreach (double z, snapValues)
     {
         if (fabs(zoom - z) < 0.05)
+        {
             return z;
+        }
     }
 
     return zoom;

@@ -81,7 +81,7 @@ public:
 };
 
 SplashScreen::SplashScreen()
-            : KSplashScreen(QPixmap()), d(new SplashScreenPriv)
+    : KSplashScreen(QPixmap()), d(new SplashScreenPriv)
 {
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
@@ -92,7 +92,7 @@ SplashScreen::SplashScreen()
         setPixmap(KStandardDirs::locate("data","showfoto/data/splash-showfoto.png"));
     }
 
-    QTimer *timer = new QTimer( this );
+    QTimer* timer = new QTimer( this );
 
     connect(timer, SIGNAL(timeout()),
             this, SLOT(animate()));
@@ -118,11 +118,13 @@ void SplashScreen::setAlignment(int alignment)
 void SplashScreen::animate()
 {
     QTime currentTime = QTime::currentTime();
+
     if (d->lastStateUpdateTime.msecsTo(currentTime) > 100)
     {
         d->state = ((d->state + 1) % (2*d->progressBarSize-1));
         d->lastStateUpdateTime = currentTime;
     }
+
     update();
 }
 
@@ -156,6 +158,7 @@ void SplashScreen::drawContents(QPainter* p)
     for (int i = 0; i < d->progressBarSize; ++i)
     {
         position = (d->state+i)%(2*d->progressBarSize-1);
+
         if (position < 3)
         {
             p->setBrush(QColor(basecolor.red()  -18*i,
@@ -178,7 +181,9 @@ void SplashScreen::drawContents(QPainter* p)
     // Draw message at given position, limited to 43 chars
     // If message is too long, string is truncated
     if (d->message.length() > 50)
+    {
         d->message.truncate(49);
+    }
 
     d->message += "...";
     p->setPen(d->messageColor);

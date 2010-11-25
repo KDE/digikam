@@ -61,7 +61,7 @@ public:
 };
 
 ToolBar::ToolBar(QWidget* parent)
-       : QWidget(parent), d(new ToolBarPriv)
+    : QWidget(parent), d(new ToolBarPriv)
 {
     QHBoxLayout* lay = new QHBoxLayout();
     setLayout(lay);
@@ -122,7 +122,9 @@ bool ToolBar::isPaused() const
 void ToolBar::setPaused(bool val)
 {
     if (val == isPaused())
+    {
         return;
+    }
 
     d->playBtn->setChecked(val);
     slotPlayBtnToggled();
@@ -146,6 +148,7 @@ void ToolBar::setEnabledPrev(bool val)
 void ToolBar::slotPlayBtnToggled()
 {
     KIconLoader* loader = KIconLoader::global();
+
     if (d->playBtn->isChecked())
     {
         d->canHide = false;
@@ -174,30 +177,42 @@ void ToolBar::slotNexPrevClicked()
 
 void ToolBar::keyPressEvent(QKeyEvent* e)
 {
-    switch(e->key())
+    switch (e->key())
     {
         case(Qt::Key_Space):
         {
             if (d->playBtn->isEnabled())
+            {
                 d->playBtn->animateClick();
+            }
+
             break;
         }
         case(Qt::Key_PageUp):
         {
             if (d->prevBtn->isEnabled())
+            {
                 d->prevBtn->animateClick();
+            }
+
             break;
         }
         case(Qt::Key_PageDown):
         {
             if (d->nextBtn->isEnabled())
+            {
                 d->nextBtn->animateClick();
+            }
+
             break;
         }
         case(Qt::Key_Escape):
         {
             if (d->stopBtn->isEnabled())
+            {
                 d->stopBtn->animateClick();
+            }
+
             break;
         }
         default:

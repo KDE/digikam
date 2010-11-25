@@ -70,15 +70,15 @@ public:
 };
 
 BWSepiaFilter::BWSepiaFilter(QObject* parent)
-             : DImgThreadedFilter(parent),
-               d(new BWSepiaFilterPriv)
+    : DImgThreadedFilter(parent),
+      d(new BWSepiaFilterPriv)
 {
     initFilter();
 }
 
 BWSepiaFilter::BWSepiaFilter(DImg* orgImage, QObject* parent, const BWSepiaContainer& settings)
-             : DImgThreadedFilter(orgImage, parent, "BWSepiaFilter"),
-               d(new BWSepiaFilterPriv)
+    : DImgThreadedFilter(orgImage, parent, "BWSepiaFilter"),
+      d(new BWSepiaFilterPriv)
 {
     d->settings = settings;
     initFilter();
@@ -495,7 +495,7 @@ FilterAction BWSepiaFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion(),
                         CurvesFilter::isStoredLosslessly(d->settings.curvesPrm)
-                            ? FilterAction::ComplexFilter : FilterAction::ReproducibleFilter);
+                        ? FilterAction::ComplexFilter : FilterAction::ReproducibleFilter);
     action.setDisplayableName(DisplayableName());
 
     action.addParameter("filmType", d->settings.filmType);

@@ -65,23 +65,23 @@ public:
         thumbLoadThread = 0;
     }
 
-    QLabel              *imageLabel;
-    QLabel              *infoLabel;
+    QLabel*              imageLabel;
+    QLabel*              infoLabel;
 
     KUrl                 currentURL;
 
     DMetadata            metaIface;
 
-    ThumbnailLoadThread *thumbLoadThread;
+    ThumbnailLoadThread* thumbLoadThread;
 };
 
-ImageDialogPreview::ImageDialogPreview(QWidget *parent)
-                  : KPreviewWidgetBase(parent),
-                    d(new ImageDialogPreviewPrivate)
+ImageDialogPreview::ImageDialogPreview(QWidget* parent)
+    : KPreviewWidgetBase(parent),
+      d(new ImageDialogPreviewPrivate)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
-    QVBoxLayout *vlay  = new QVBoxLayout(this);
+    QVBoxLayout* vlay  = new QVBoxLayout(this);
     d->imageLabel      = new QLabel(this);
     d->imageLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     d->imageLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -110,7 +110,7 @@ QSize ImageDialogPreview::sizeHint() const
     return QSize(256, 256);
 }
 
-void ImageDialogPreview::resizeEvent(QResizeEvent *)
+void ImageDialogPreview::resizeEvent(QResizeEvent*)
 {
     QMetaObject::invokeMethod(this, "showPreview", Qt::QueuedConnection);
 }
@@ -138,32 +138,75 @@ void ImageDialogPreview::showPreview(const KUrl& url)
 
         d->metaIface.load(d->currentURL.toLocalFile());
         PhotoInfoContainer info = d->metaIface.getPhotographInformation();
+
         if (!info.isEmpty())
         {
             DToolTipStyleSheet cnt;
             QString identify("<qt><center>");
             QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
 
-            if (info.make.isEmpty()) make = cnt.unavailable;
-            else make = info.make;
+            if (info.make.isEmpty())
+            {
+                make = cnt.unavailable;
+            }
+            else
+            {
+                make = info.make;
+            }
 
-            if (info.model.isEmpty()) model = cnt.unavailable;
-            else model = info.model;
+            if (info.model.isEmpty())
+            {
+                model = cnt.unavailable;
+            }
+            else
+            {
+                model = info.model;
+            }
 
-            if (!info.dateTime.isValid()) dateTime = cnt.unavailable;
-            else dateTime = KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
+            if (!info.dateTime.isValid())
+            {
+                dateTime = cnt.unavailable;
+            }
+            else
+            {
+                dateTime = KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
+            }
 
-            if (info.aperture.isEmpty()) aperture = cnt.unavailable;
-            else aperture = info.aperture;
+            if (info.aperture.isEmpty())
+            {
+                aperture = cnt.unavailable;
+            }
+            else
+            {
+                aperture = info.aperture;
+            }
 
-            if (info.focalLength.isEmpty()) focalLength = cnt.unavailable;
-            else focalLength = info.focalLength;
+            if (info.focalLength.isEmpty())
+            {
+                focalLength = cnt.unavailable;
+            }
+            else
+            {
+                focalLength = info.focalLength;
+            }
 
-            if (info.exposureTime.isEmpty()) exposureTime = cnt.unavailable;
-            else exposureTime = info.exposureTime;
+            if (info.exposureTime.isEmpty())
+            {
+                exposureTime = cnt.unavailable;
+            }
+            else
+            {
+                exposureTime = info.exposureTime;
+            }
 
-            if (info.sensitivity.isEmpty()) sensitivity = cnt.unavailable;
-            else sensitivity = i18n("%1 ISO", info.sensitivity);
+            if (info.sensitivity.isEmpty())
+            {
+                sensitivity = cnt.unavailable;
+            }
+            else
+            {
+                sensitivity = i18n("%1 ISO", info.sensitivity);
+            }
 
             identify += "<table cellspacing=0 cellpadding=0>";
             identify += cnt.cellBeg + i18n("<i>Make:</i>")        + cnt.cellMid + make         + cnt.cellEnd;
@@ -192,9 +235,13 @@ void ImageDialogPreview::slotThumbnail(const LoadingDescription& desc, const QPi
         QSize s = d->imageLabel->contentsRect().size();
 
         if (s.width() < pix.width() || s.height() < pix.height())
+        {
             pixmap = pix.scaled(s, Qt::KeepAspectRatio);
+        }
         else
+        {
             pixmap = pix;
+        }
 
         d->imageLabel->setPixmap(pixmap);
     }
@@ -228,7 +275,7 @@ public:
 };
 
 ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, const QString& caption)
-           : d(new ImageDialogPrivate)
+    : d(new ImageDialogPrivate)
 {
     d->singleSelect = singleSelect;
 
@@ -251,26 +298,43 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     kDebug() << "file formats=" << d->fileFormats;
 
     QPointer<KFileDialog> dlg   = new KFileDialog(url, d->fileFormats, parent);
-    ImageDialogPreview *preview = new ImageDialogPreview(dlg);
+    ImageDialogPreview* preview = new ImageDialogPreview(dlg);
     dlg->setPreviewWidget(preview);
     dlg->setOperationMode(KFileDialog::Opening);
 
     if (d->singleSelect)
     {
         dlg->setMode(KFile::File);
-        if (caption.isEmpty()) dlg->setCaption(i18n("Select an Image"));
-        else dlg->setWindowTitle(caption);
+
+        if (caption.isEmpty())
+        {
+            dlg->setCaption(i18n("Select an Image"));
+        }
+        else
+        {
+            dlg->setWindowTitle(caption);
+        }
+
         dlg->exec();
         d->url = dlg->selectedUrl();
     }
     else
     {
         dlg->setMode(KFile::Files);
-        if (caption.isEmpty()) dlg->setCaption(i18n("Select Images"));
-        else dlg->setWindowTitle(caption);
+
+        if (caption.isEmpty())
+        {
+            dlg->setCaption(i18n("Select Images"));
+        }
+        else
+        {
+            dlg->setWindowTitle(caption);
+        }
+
         dlg->exec();
         d->urls = dlg->selectedUrls();
     }
+
     delete dlg;
 }
 
@@ -302,20 +366,30 @@ KUrl::List ImageDialog::urls() const
 KUrl::List ImageDialog::getImageURLs(QWidget* parent, const KUrl& url, const QString& caption)
 {
     ImageDialog dlg(parent, url, false, caption);
+
     if (!dlg.urls().isEmpty())
+    {
         return dlg.urls();
+    }
     else
+    {
         return KUrl::List();
+    }
 }
 
 
 KUrl ImageDialog::getImageURL(QWidget* parent, const KUrl& url, const QString& caption)
 {
     ImageDialog dlg(parent, url, true, caption);
+
     if (dlg.url() != KUrl())
+    {
         return dlg.url();
+    }
     else
+    {
         return KUrl();
+    }
 }
 
 } // namespace Digikam

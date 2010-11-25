@@ -66,9 +66,9 @@ public:
     KipiInterface*     iface;
 };
 
-KipiUploadWidget::KipiUploadWidget(KipiInterface* const iface, QWidget *parent)
-                : KIPI::UploadWidget(parent),
-                  d(new KipiUploadWidgetPriv)
+KipiUploadWidget::KipiUploadWidget(KipiInterface* const iface, QWidget* parent)
+    : KIPI::UploadWidget(parent),
+      d(new KipiUploadWidgetPriv)
 {
     d->iface          = iface;
     QVBoxLayout* vlay = new QVBoxLayout(this);
@@ -89,15 +89,18 @@ KipiUploadWidget::~KipiUploadWidget()
 KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 {
     KIPI::ImageCollection collection;
+
     if (d->iface)
     {
         QString ext          = d->iface->hostSetting("FileExtensions").toString();
         PAlbum* currentAlbum = d->albumSel->currentAlbum();
+
         if (currentAlbum)
         {
             collection = new KipiImageCollection(KipiImageCollection::AllItems, currentAlbum, ext);
         }
     }
+
     return collection;
 }
 

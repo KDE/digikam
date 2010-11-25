@@ -66,7 +66,7 @@ public:
         ChainGroup
     };
 
-    SearchGroup(SearchView *parent);
+    SearchGroup(SearchView* parent);
 
     void setup(Type type = FirstGroup);
 
@@ -84,17 +84,17 @@ Q_SIGNALS:
 
 protected:
 
-    virtual SearchGroup *createSearchGroup();
-    virtual void addGroupToLayout(SearchGroup *group);
+    virtual SearchGroup* createSearchGroup();
+    virtual void addGroupToLayout(SearchGroup* group);
 
-    SearchView                   *m_view;
+    SearchView*                   m_view;
 
     QList<SearchFieldGroup*>      m_fieldGroups;
     QList<SearchFieldGroupLabel*> m_fieldLabels;
 
-    QVBoxLayout                  *m_layout;
-    SearchGroupLabel             *m_label;
-    QVBoxLayout                  *m_subgroupLayout;
+    QVBoxLayout*                  m_layout;
+    SearchGroupLabel*             m_label;
+    QVBoxLayout*                  m_subgroupLayout;
 
     Type                          m_groupType;
 };
@@ -107,7 +107,7 @@ class SearchGroupLabel : public QWidget
 
 public:
 
-    SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGroup::Type type, QWidget *parent = 0);
+    SearchGroupLabel(SearchViewThemedPartsCache* cache, SearchGroup::Type type, QWidget* parent = 0);
 
     void setGroupOperator(SearchXml::Operator op);
     void setDefaultFieldOperator(SearchXml::Operator op);
@@ -138,17 +138,17 @@ private:
     bool                        m_extended;
     SearchXml::Operator         m_groupOp;
     SearchXml::Operator         m_fieldOp;
-    QGridLayout                *m_layout;
+    QGridLayout*                m_layout;
     //QComboBox                  *m_groupOpBox;
-    RClickLabel                *m_groupOpLabel;
-    QRadioButton               *m_allBox;
-    QRadioButton               *m_anyBox;
-    QRadioButton               *m_noneBox;
-    QRadioButton               *m_oneNotBox;
-    RClickLabel                *m_optionsLabel;
-    RClickLabel                *m_removeLabel;
-    QStackedLayout             *m_stackedLayout;
-    SearchViewThemedPartsCache *m_themeCache;
+    RClickLabel*                m_groupOpLabel;
+    QRadioButton*               m_allBox;
+    QRadioButton*               m_anyBox;
+    QRadioButton*               m_noneBox;
+    QRadioButton*               m_oneNotBox;
+    RClickLabel*                m_optionsLabel;
+    RClickLabel*                m_removeLabel;
+    QStackedLayout*             m_stackedLayout;
+    SearchViewThemedPartsCache* m_themeCache;
 };
 
 } // namespace Digikam

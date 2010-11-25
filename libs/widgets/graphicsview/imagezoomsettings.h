@@ -92,7 +92,10 @@ public:
      * For a given rectangle contained in ((0,0), zoomedSize())
      * returns the corresponding rectangle in (0,0),imageSize().
      */
-    QRectF sourceRect(const QRectF& imageRect) const { return mapZoomToImage(imageRect); }
+    QRectF sourceRect(const QRectF& imageRect) const
+    {
+        return mapZoomToImage(imageRect);
+    }
     QRectF mapZoomToImage(const QRectF& imageRect) const;
 
     /**

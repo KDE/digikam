@@ -68,7 +68,10 @@ public:
     bool isValid() const;
 
     bool operator==(const TagRegion& other) const;
-    bool operator!=(const TagRegion& other) const { return !operator==(other); }
+    bool operator!=(const TagRegion& other) const
+    {
+        return !operator==(other);
+    }
 
     /// Returns an XML textual representation of this region
     QString toXml() const;
@@ -105,7 +108,7 @@ protected:
     Type     m_type;
 };
 
-QDebug DIGIKAM_EXPORT operator<<(QDebug dbg, const TagRegion &r);
+QDebug DIGIKAM_EXPORT operator<<(QDebug dbg, const TagRegion& r);
 
 } // namespace Digikam
 

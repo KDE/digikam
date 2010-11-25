@@ -71,7 +71,7 @@ class AlbumSettings;
 class ThumbnailSize;
 
 class AlbumIconView : public IconView,
-                      public AlbumItemHandler
+    public AlbumItemHandler
 {
     Q_OBJECT
 
@@ -102,7 +102,7 @@ public:
     /** Returns the list of ImageInfos of all items.
         Current selected item ImageInfo will be copied into 'current'.
      */
-    ImageInfoList allImageInfos(ImageInfo *current = 0) const;
+    ImageInfoList allImageInfos(ImageInfo* current = 0) const;
     ImageInfoList selectedImageInfosCurrentFirst() const;
     ImageInfoList selectedImageInfos() const;
 
@@ -169,7 +169,7 @@ public Q_SLOTS:
     void slotRename(AlbumIconItem* item);
     void slotDeleteSelectedItems(bool deletePermanently=false);
     void slotDeleteSelectedItemsDirectly(bool useTrash);
-    void slotDisplayItem(AlbumIconItem *item=0);
+    void slotDisplayItem(AlbumIconItem* item=0);
     void slotAlbumModified();
     void slotSetAlbumThumbnail(ImageInfo& imageInfo);
     void slotCopy();
@@ -190,12 +190,12 @@ protected:
 
     // DnD
     void startDrag();
-    void contentsDragEnterEvent(QDragEnterEvent *e);
-    void contentsDropEvent(QDropEvent *e);
+    void contentsDragEnterEvent(QDragEnterEvent* e);
+    void contentsDropEvent(QDropEvent* e);
 
-    void prepareRepaint(const QList<IconItem *>& itemsToRepaint);
+    void prepareRepaint(const QList<IconItem*>& itemsToRepaint);
 
-    bool acceptToolTip(IconItem *item, const QPoint& mousePos);
+    bool acceptToolTip(IconItem* item, const QPoint& mousePos);
 
 private Q_SLOTS:
 
@@ -203,16 +203,16 @@ private Q_SLOTS:
     void slotImageListerDeleteItem(const ImageInfo& item);
     void slotImageListerClear();
 
-    void slotDoubleClicked(IconItem *item);
+    void slotDoubleClicked(IconItem* item);
     void slotRightButtonClicked(const QPoint& pos);
-    void slotRightButtonClicked(IconItem *item, const QPoint& pos);
+    void slotRightButtonClicked(IconItem* item, const QPoint& pos);
 
     void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb);
     void slotSelectionChanged();
 
     void slotFilesModified();
     void slotFilesModified(const KUrl& url);
-    void slotFileChanged(const QString &);
+    void slotFileChanged(const QString&);
     void slotImageWindowURLChanged(const KUrl& url);
 
     void slotShowToolTip(IconItem* item);
@@ -227,7 +227,7 @@ private Q_SLOTS:
     void slotRemoveTag(int tagID);
 
     void slotDIOResult(KJob* job);
-    void slotRenamed(KIO::Job*, const KUrl &, const KUrl&);
+    void slotRenamed(KIO::Job*, const KUrl&, const KUrl&);
 
     void slotImageAttributesChanged(qlonglong imageId);
     void slotAlbumImagesChanged(int albumId);

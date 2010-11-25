@@ -77,14 +77,14 @@ protected:
 
     AssignNameWidget*   m_widget;
     DatabaseFace        m_face;
-    HidingStateChanger *m_changer;
+    HidingStateChanger* m_changer;
 };
 
 // ---
 
 FaceItem::FaceItem(QGraphicsItem* parent)
     : RegionFrameItem(parent),
-        m_widget(0), m_changer(0)
+      m_widget(0), m_changer(0)
 {
 }
 
@@ -115,10 +115,14 @@ AssignNameWidget* FaceItem::widget() const
 void FaceItem::switchMode(AssignNameWidget::Mode mode)
 {
     if (!m_widget || m_widget->mode() == mode)
+    {
         return;
+    }
 
     if (!m_changer)
+    {
         m_changer = new AssignNameWidgetHidingStateChanger(this);
+    }
 
     m_changer->changeValue(mode);
 }
@@ -131,12 +135,14 @@ void FaceItem::setEditable(bool allowEdit)
 void FaceItem::updateCurrentTag()
 {
     if (m_widget)
+    {
         m_widget->setCurrentFace(m_face);
+    }
 }
 
 // ---
 
-AssignNameWidgetHidingStateChanger::AssignNameWidgetHidingStateChanger(FaceItem *item)
+AssignNameWidgetHidingStateChanger::AssignNameWidgetHidingStateChanger(FaceItem* item)
     : HidingStateChanger(item->widget(), "mode", item)
 {
     // The WidgetProxyItem
@@ -148,7 +154,7 @@ AssignNameWidgetHidingStateChanger::AssignNameWidgetHidingStateChanger(FaceItem 
 
 void AssignNameWidgetHidingStateChanger::slotStateChanged()
 {
-    FaceItem *item = static_cast<FaceItem*>(parent());
+    FaceItem* item = static_cast<FaceItem*>(parent());
     // Show resize handles etc. only in edit modes
     item->setEditable(item->widget()->mode() != AssignNameWidget::ConfirmedMode);
 }
@@ -201,7 +207,7 @@ public:
 };
 
 FaceGroup::FaceGroup(GraphicsDImgView* view)
-         : QObject(view), d(new FaceGroupPriv(this))
+    : QObject(view), d(new FaceGroupPriv(this))
 {
     d->view                 = view;
     d->visibilityController = new ItemVisibilityController(this);
@@ -230,8 +236,12 @@ void FaceGroup::itemStateChanged(int itemState)
             d->visibilityController->hide();
             break;
         case DImgPreviewItem::ImageLoaded:
+
             if (d->state == FacesLoaded)
+            {
                 d->visibilityController->show();
+            }
+
             break;
     }
 }
@@ -264,7 +274,10 @@ QList<RegionFrameItem*> FaceGroup::items() const
 void FaceGroup::setAutoSuggest(bool doAutoSuggest)
 {
     if (d->autoSuggest == doAutoSuggest)
+    {
         return;
+    }
+
     d->autoSuggest = doAutoSuggest;
 }
 
@@ -294,7 +307,9 @@ void FaceGroup::FaceGroupPriv::applyVisible()
     {
         // show existing faces, if we have an image
         if (view->previewItem()->isLoaded())
+        {
             visibilityController->show();
+        }
     }
 }
 
@@ -304,7 +319,7 @@ void FaceGroup::setVisible(bool visible)
     d->applyVisible();
 }
 
-void FaceGroup::setVisibleItem(RegionFrameItem *item)
+void FaceGroup::setVisibleItem(RegionFrameItem* item)
 {
     d->visibilityController->setItemThatShallBeShown(item);
     d->applyVisible();
@@ -313,28 +328,41 @@ void FaceGroup::setVisibleItem(RegionFrameItem *item)
 void FaceGroup::setInfo(const ImageInfo& info)
 {
     if (d->info == info)
+    {
         return;
+    }
 
     clear();
 
     d->info = info;
 
     if (d->visibilityController->shallBeShown())
+    {
         load();
+    }
 }
 
 static QPointF closestPointOfRect(const QPointF& p, const QRectF& r)
 {
     QPointF cp = p;
+
     if (p.x() < r.left())
+    {
         cp.setX(r.left());
+    }
     else if (p.x() > r.right())
+    {
         cp.setX(r.right());
+    }
 
     if (p.y() < r.top())
+    {
         cp.setY(r.top());
+    }
     else if (p.y() > r.bottom())
+    {
         cp.setY(r.bottom());
+    }
 
     return cp;
 }
@@ -357,13 +385,18 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* manhattanLength
         {
             closestItem = item;
             minDistance = distance;
+
             if (distance == 0)
+            {
                 minCenterDistance = (p - r.center()).manhattanLength();
+            }
         }
     }
 
     if (manhattanLength)
+    {
         *manhattanLength = minDistance;
+    }
 
     return closestItem;
 }
@@ -371,12 +404,20 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* manhattanLength
 QList<QGraphicsItem*> FaceGroup::FaceGroupPriv::hotItems(const QPointF& scenePos)
 {
     if (!q->hasVisibleItems())
+    {
         return QList<QGraphicsItem*>();
+    }
+
     const int distance = 15;
+
     QRectF hotSceneRect = QRectF(scenePos, QSize(0,0)).adjusted(-distance, -distance, distance, distance);
+
     QList<QGraphicsItem*> closeItems = view->scene()->items(hotSceneRect, Qt::IntersectsItemBoundingRect);
+
     closeItems.removeOne(view->previewItem());
+
     return closeItems;
+
     /*
     qreal distance;
     d->faceGroup->closestItem(mapToScene(e->pos()), &distance);
@@ -390,16 +431,19 @@ bool FaceGroup::acceptsMouseClick(const QPointF& scenePos)
     return d->hotItems(scenePos).isEmpty();
 }
 
-void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent *e)
+void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent* e)
 {
     if (d->showOnHover && !isVisible())
     {
         qreal distance;
-        RegionFrameItem *item = closestItem(e->scenePos(), &distance);
+        RegionFrameItem* item = closestItem(e->scenePos(), &distance);
+
         // There's a possible nuisance when the direct mouse way from hovering pos to HUD widget
         // is not part of the condition. Maybe, we should add a exemption for this case.
         if (distance < 25)
+        {
             setVisibleItem(item);
+        }
         else
         {
             // get all items close to pos
@@ -411,7 +455,9 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent *e)
                 foreach (QObject* parent, visible)
                 {
                     if (static_cast<QGraphicsObject*>(parent)->isAncestorOf(item))
+                    {
                         return;
+                    }
                 }
             }
             setVisibleItem(0);
@@ -419,21 +465,23 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent *e)
     }
 }
 
-void FaceGroup::itemHoverLeaveEvent(QGraphicsSceneHoverEvent *)
+void FaceGroup::itemHoverLeaveEvent(QGraphicsSceneHoverEvent*)
 {
 }
 
-void FaceGroup::itemHoverEnterEvent(QGraphicsSceneHoverEvent *)
+void FaceGroup::itemHoverEnterEvent(QGraphicsSceneHoverEvent*)
 {
 }
 
-void FaceGroup::leaveEvent(QEvent *)
+void FaceGroup::leaveEvent(QEvent*)
 {
     if (d->showOnHover && !isVisible())
+    {
         setVisibleItem(0);
+    }
 }
 
-void FaceGroup::enterEvent(QEvent *)
+void FaceGroup::enterEvent(QEvent*)
 {
 }
 
@@ -456,10 +504,12 @@ void FaceGroup::FaceGroupPriv::checkModels()
     {
         tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, q);
     }
+
     if (!filterModel)
     {
         filterModel = new CheckableAlbumFilterModel(q);
     }
+
     if (!filteredModel)
     {
         filteredModel = new TagPropertiesFilterModel(q);
@@ -507,7 +557,9 @@ AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const Databas
 void FaceGroup::load()
 {
     if (d->state != NoFaces)
+    {
         return;
+    }
 
     d->state = LoadingFaces;
 
@@ -536,7 +588,9 @@ void FaceGroup::load()
     d->state = FacesLoaded;
 
     if (d->view->previewItem()->isLoaded())
+    {
         d->visibilityController->show();
+    }
 }
 
 void FaceGroup::clear()
@@ -552,14 +606,14 @@ void FaceGroup::clear()
 
 void FaceGroup::addFace()
 {
-/*
-    int w = this->scene()->width()/2;
-    int h = w;
-    int x = this->scene()->width()/2 - w/2;
-    int y = this->scene()->height()/2 - w/2;
+    /*
+        int w = this->scene()->width()/2;
+        int h = w;
+        int x = this->scene()->width()/2 - w/2;
+        int y = this->scene()->height()/2 - w/2;
 
-    d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale , "", d->scale));
-*/
+        d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale , "", d->scale));
+    */
 }
 
 void FaceGroup::rejectAll()
@@ -577,16 +631,22 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
         || action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()) )
     {
         int tagId = 0;
+
         if (action.shallAssignTag())
+        {
             tagId = action.tagId();
+        }
         else if (action.shallCreateNewTag())
+        {
             tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
+        }
 
         if (d->faceIface.isTheUnknownPerson(tagId))
         {
             kDebug() << "Refusing to assign the unknown person to an image";
             return;
         }
+
         if (!tagId)
         {
             kDebug() << "Failed to get person tag";
@@ -594,7 +654,9 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
         }
 
         if (tagId)
+        {
             face = d->editPipeline.confirm(d->info, face, d->view->previewItem()->image(), tagId, currentRegion);
+        }
     }
 
     item->setFace(face);
@@ -619,7 +681,9 @@ void FaceGroup::slotLabelClicked(const ImageInfo&, const QVariant& faceIdentifie
 void FaceGroup::startAutoSuggest()
 {
     if (!d->autoSuggest)
+    {
         return;
+    }
 }
 
 /*

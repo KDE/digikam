@@ -79,15 +79,15 @@ public:
     SearchTextBar*           searchTextBar;
 };
 
-AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* parent, AlbumModel *model,
-                                                           AlbumModificationHelper* albumModificationHelper)
-                            : SidebarWidget(parent), d(new AlbumFolderViewSideBarWidgetPriv)
+AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* parent, AlbumModel* model,
+        AlbumModificationHelper* albumModificationHelper)
+    : SidebarWidget(parent), d(new AlbumFolderViewSideBarWidgetPriv)
 {
     setObjectName("AlbumFolderView Sidebar");
 
     d->albumModificationHelper = albumModificationHelper;
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QVBoxLayout* layout = new QVBoxLayout(this);
 
     d->albumFolderView = new AlbumSelectionTreeView(this, model, d->albumModificationHelper);
     d->albumFolderView->setObjectName("AlbumFolderView");
@@ -132,7 +132,7 @@ void AlbumFolderViewSideBarWidget::doSaveState()
 
 void AlbumFolderViewSideBarWidget::applySettings()
 {
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::instance();
     d->albumFolderView->setEnableToolTips(settings->getShowAlbumToolTips());
 }
 
@@ -181,7 +181,7 @@ public:
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* parent, TagModel* model)
-                    : SidebarWidget(parent), d(new TagViewSideBarWidgetPriv)
+    : SidebarWidget(parent), d(new TagViewSideBarWidgetPriv)
 {
     setObjectName("TagView Sidebar");
 
@@ -192,7 +192,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* parent, TagModel* model)
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
-    d->tagFolderView->setAlbumManagerCurrentAlbum(true);    
+    d->tagFolderView->setAlbumManagerCurrentAlbum(true);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -252,7 +252,7 @@ QString TagViewSideBarWidget::getCaption()
     return i18n("Tags");
 }
 
-void TagViewSideBarWidget::setCurrentAlbum(TAlbum *album)
+void TagViewSideBarWidget::setCurrentAlbum(TAlbum* album)
 {
     d->tagFolderView->setCurrentAlbum(album);
 }
@@ -272,8 +272,8 @@ public:
 };
 
 DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* parent, DateAlbumModel* model,
-                                                         ImageAlbumFilterModel* imageFilterModel)
-                           : SidebarWidget(parent), d(new DateFolderViewSideBarWidgetPriv)
+        ImageAlbumFilterModel* imageFilterModel)
+    : SidebarWidget(parent), d(new DateFolderViewSideBarWidgetPriv)
 {
     setObjectName("DateFolderView Sidebar");
 
@@ -388,8 +388,8 @@ const QString TimelineSideBarWidgetPriv::configCursorPositionEntry("Cursor Posit
 // --------------------------------------------------------
 
 TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                                             SearchModificationHelper* searchModificationHelper)
-                     : SidebarWidget(parent), d(new TimelineSideBarWidgetPriv)
+        SearchModificationHelper* searchModificationHelper)
+    : SidebarWidget(parent), d(new TimelineSideBarWidgetPriv)
 {
     setObjectName("TimeLine Sidebar");
 
@@ -425,10 +425,10 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searc
     d->scaleBG         = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
     scaleBox->setWhatsThis( i18n("<p>Select the histogram scale.</p>"
-                                  "<p>If the date's maximal counts are small, you can use the linear scale.</p>"
-                                  "<p>Logarithmic scale can be used when the maximal counts are big; "
-                                  "if it is used, all values (small and large) will be visible on the "
-                                  "graph.</p>"));
+                                 "<p>If the date's maximal counts are small, you can use the linear scale.</p>"
+                                 "<p>Logarithmic scale can be used when the maximal counts are big; "
+                                 "if it is used, all values (small and large) will be visible on the "
+                                 "graph.</p>"));
 
     QToolButton* linHistoButton = new QToolButton(scaleBox);
     linHistoButton->setToolTip( i18n( "Linear" ) );
@@ -603,8 +603,12 @@ void TimelineSideBarWidget::doLoadState()
     slotTimeUnitChanged(d->timeUnitCB->currentIndex());
 
     int id = group.readEntry(d->configHistogramScaleEntry, (int)TimeLineWidget::LinScale);
+
     if ( d->scaleBG->button( id ) )
+    {
         d->scaleBG->button( id )->setChecked(true);
+    }
+
     slotScaleChanged(d->scaleBG->checkedId());
 
     QDateTime now = QDateTime::currentDateTime();
@@ -691,7 +695,7 @@ void TimelineSideBarWidget::slotUpdateCurrentDateSearchAlbum()
     int totalCount           = 0;
     DateRangeList dateRanges = d->timeLineWidget->selectedDateRange(totalCount);
     d->searchModificationHelper->slotCreateTimeLineSearch(SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch),
-                                                          dateRanges, true);
+            dateRanges, true);
 }
 
 void TimelineSideBarWidget::slotSaveSelection()
@@ -716,6 +720,7 @@ void TimelineSideBarWidget::slotAlbumSelected(Album* album)
 
     // The timeline query consists of groups, with two date time fields each
     DateRangeList list;
+
     while (!reader.atEnd())
     {
         // read groups
@@ -723,13 +728,16 @@ void TimelineSideBarWidget::slotAlbumSelected(Album* album)
         {
             QDateTime start, end;
             int numberOfFields = 0;
+
             while (!reader.atEnd())
             {
                 // read fields
                 reader.readNext();
 
                 if (reader.isEndElement())
+                {
                     break;
+                }
 
                 if (reader.isFieldElement())
                 {
@@ -741,9 +749,11 @@ void TimelineSideBarWidget::slotAlbumSelected(Album* album)
                     {
                         end = reader.valueToDateTime();
                     }
+
                     ++numberOfFields;
                 }
             }
+
             if (numberOfFields)
             {
                 list << DateRange(start, end);
@@ -765,12 +775,15 @@ void TimelineSideBarWidget::slotCheckAboutSelection()
 {
     int totalCount     = 0;
     DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
+
     if (!list.isEmpty())
     {
         d->nameEdit->setEnabled(true);
 
         if (!d->nameEdit->text().isEmpty())
+        {
             d->saveButton->setEnabled(true);
+        }
     }
     else
     {
@@ -799,8 +812,8 @@ public:
 };
 
 SearchSideBarWidget::SearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                                         SearchModificationHelper* searchModeificationHelper)
-                   : SidebarWidget(parent), d(new SearchSideBarWidgetPriv)
+        SearchModificationHelper* searchModeificationHelper)
+    : SidebarWidget(parent), d(new SearchSideBarWidgetPriv)
 {
     setObjectName("Search Sidebar");
 
@@ -810,7 +823,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* parent, SearchModel* searchMod
 
     d->searchTabHeader  = new SearchTabHeader(this);
     d->searchTreeView   = new NormalSearchTreeView(this, searchModel,
-                                                   searchModeificationHelper);
+            searchModeificationHelper);
     d->searchTreeView->setConfigGroup(getConfigGroup());
     d->searchTreeView->filteredModel()->listNormalSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
@@ -908,8 +921,8 @@ public:
 };
 
 FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                                                   SearchModificationHelper* searchModificationHelper)
-                        : SidebarWidget(parent), d(new FuzzySearchSideBarWidgetPriv)
+        SearchModificationHelper* searchModificationHelper)
+    : SidebarWidget(parent), d(new FuzzySearchSideBarWidgetPriv)
 {
     setObjectName("Fuzzy Search Sidebar");
 
@@ -937,6 +950,7 @@ FuzzySearchSideBarWidget::~FuzzySearchSideBarWidget()
 void FuzzySearchSideBarWidget::setActive(bool active)
 {
     d->fuzzySearchView->setActive(active);
+
     if (active)
     {
         AlbumManager::instance()->setCurrentAlbum(d->fuzzySearchView->currentAlbum());
@@ -957,7 +971,7 @@ void FuzzySearchSideBarWidget::applySettings()
 {
 }
 
-void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album *album)
+void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     SAlbum* salbum = dynamic_cast<SAlbum*>(album);
     d->fuzzySearchView->setCurrentAlbum(salbum);
@@ -1004,9 +1018,9 @@ public:
 };
 
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                                               SearchModificationHelper* searchModificationHelper, 
-                                               ImageFilterModel* imageFilterModel,  QItemSelectionModel* itemSelectionModel)
-                      : SidebarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
+        SearchModificationHelper* searchModificationHelper,
+        ImageFilterModel* imageFilterModel,  QItemSelectionModel* itemSelectionModel)
+    : SidebarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
 {
     setObjectName("GPS Search Sidebar");
 
@@ -1070,7 +1084,7 @@ void GPSSearchSideBarWidget::slotDigikamViewNoCurrentItem()
     d->gpsSearchView->slotDigikamViewNoCurrentItem();
 }
 
-void GPSSearchSideBarWidget::slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages)
+void GPSSearchSideBarWidget::slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList& allImages)
 {
     d->gpsSearchView->slotDigikamViewImageSelected(selectedImage, hasPrevious, hasNext, allImages);
 }
@@ -1088,7 +1102,7 @@ public:
         rescanButton = 0;
         searchModificationHelper = 0;
     }
-    
+
     QLabel*      personIcon;
     QLabel*      textLabel;
     QPushButton* rescanButton;
@@ -1097,8 +1111,8 @@ public:
 };
 
 PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
-                                         SearchModificationHelper* searchModificationHelper)
-                   : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
+        SearchModificationHelper* searchModificationHelper)
+    : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
 {
     setObjectName("People Sidebar");
 
@@ -1168,8 +1182,11 @@ void PeopleSideBarWidget::slotInit()
 void PeopleSideBarWidget::setActive(bool active)
 {
     emit requestFaceMode(active);
+
     if (active)
+    {
         d->tagFolderView->setCurrentAlbum(d->tagFolderView->currentAlbum());
+    }
 }
 
 void PeopleSideBarWidget::doLoadState()

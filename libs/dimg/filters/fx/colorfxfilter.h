@@ -48,14 +48,29 @@ public:
     explicit ColorFXFilter(QObject* parent = 0);
     explicit ColorFXFilter(DImg* orgImage, QObject* parent,
                            int colorFXType = Solarize, int level = 25, int iterations = 2);
-    ~ColorFXFilter(){};
+    ~ColorFXFilter() {};
 
-    static QString          FilterIdentifier()  { return "digikam:ColorFXFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Color FX Filter"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:ColorFXFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Color FX Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -73,11 +88,11 @@ private:
 
     void filterImage();
 
-    void solarize(DImg *orgImage, DImg *destImage, int factor);
-    void vivid(DImg *orgImage, DImg *destImage, int factor);
-    void neon(DImg *orgImage, DImg *destImage, int Intensity, int BW);
-    void findEdges(DImg *orgImage, DImg *destImage, int Intensity, int BW);
-    void neonFindEdges(DImg *orgImage, DImg *destImage, bool neon, int Intensity, int BW);
+    void solarize(DImg* orgImage, DImg* destImage, int factor);
+    void vivid(DImg* orgImage, DImg* destImage, int factor);
+    void neon(DImg* orgImage, DImg* destImage, int Intensity, int BW);
+    void findEdges(DImg* orgImage, DImg* destImage, int Intensity, int BW);
+    void neonFindEdges(DImg* orgImage, DImg* destImage, bool neon, int Intensity, int BW);
 
 private:
 

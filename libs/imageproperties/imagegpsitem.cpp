@@ -7,7 +7,7 @@
  * Description : Item model containing GPS information for right-side map
  *
  * Copyright (C) 2010 by Voicu Gabriel <ping dot gabi at gmail dot com>
- * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de> 
+ * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ ImageGPSItem::~ImageGPSItem()
 
 QVariant ImageGPSItem::data(int role) const
 {
-    if(role == RoleGPSInfo)
+    if (role == RoleGPSInfo)
     {
         return QVariant::fromValue(m_gpsInfo);
     }
@@ -54,12 +54,13 @@ QVariant ImageGPSItem::data(int role) const
 
 void ImageGPSItem::setData(const QVariant& value, int role)
 {
-    if(role == RoleGPSInfo)
+    if (role == RoleGPSInfo)
     {
-        if(value.canConvert<GPSInfo>())
+        if (value.canConvert<GPSInfo>())
         {
             m_gpsInfo = value.value<GPSInfo>();
         }
+
         return;
     }
 
@@ -68,7 +69,7 @@ void ImageGPSItem::setData(const QVariant& value, int role)
 
 int ImageGPSItem::type() const
 {
-    return RoleGPSInfo; 
+    return RoleGPSInfo;
 }
 
 } //namespace Digikam

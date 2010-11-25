@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-05
- * Description : a widget to display 2 preview image on 
+ * Description : a widget to display 2 preview image on
  *               lightable to compare pictures.
  *
  * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>

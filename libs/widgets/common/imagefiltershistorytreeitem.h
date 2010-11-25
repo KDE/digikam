@@ -57,8 +57,8 @@ public:
 
 private:
 
-     class ImageFiltersHistoryTreeItemPriv;
-     ImageFiltersHistoryTreeItemPriv* const d;
+    class ImageFiltersHistoryTreeItemPriv;
+    ImageFiltersHistoryTreeItemPriv* const d;
 };
 
 } // namespace Digikam

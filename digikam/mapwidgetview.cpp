@@ -68,12 +68,12 @@ class MapWidgetView::MapWidgetViewPriv
 public:
 
     MapWidgetViewPriv()
-        :vbox(), 
-        mapWidget(),
-        imageModel(),
-        selectionModel(), 
-        mapViewModelHelper(),
-        activeState(false) 
+        :vbox(),
+         mapWidget(),
+         imageModel(),
+         selectionModel(),
+         mapViewModelHelper(),
+         activeState(false)
     {
         mapWidget          = 0;
         vbox               = 0;
@@ -97,7 +97,7 @@ public:
  * @param parent Parent object
  */
 MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent)
-             : QWidget(parent), StateSavingObject(this), d(new MapWidgetViewPriv)
+    : QWidget(parent), StateSavingObject(this), d(new MapWidgetViewPriv)
 {
     d->imageModel           = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel       = selectionModel;
@@ -190,7 +190,7 @@ public:
 
 MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
                                        ImageFilterModel* const filterModel, QObject* const parent)
-                  : KMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
+    : KMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
 
     d->model               = filterModel;
@@ -200,12 +200,12 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
-            this, SLOT(slotImageChange(const ImageChangeset &)), Qt::QueuedConnection);
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
+            this, SLOT(slotImageChange(const ImageChangeset&)), Qt::QueuedConnection);
 
     // TODO: disable this connection and rely only on the database based one above
-//     connect(d->model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-//             this, SLOT(signalModelChangedDrastically()));
+    //     connect(d->model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+    //             this, SLOT(signalModelChangedDrastically()));
 }
 
 /**
@@ -238,14 +238,17 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
  * @param coordinates Here will be returned the coordinates of the current marker.
  * @return True, if the marker has coordinates.
  */
-bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates * const coordinates) const
+bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates* const coordinates) const
 {
     ImageInfo info = d->model->imageInfo(index);
 
     if (info.isNull() || !info.hasCoordinates())
+    {
         return false;
+    }
 
     const KMap::GeoCoordinates gpsCoordinates(info.latitudeNumber(), info.longitudeNumber());
+
     *coordinates = gpsCoordinates;
 
     return true;
@@ -260,19 +263,27 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoor
 QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
 {
     if (index == QPersistentModelIndex())
+    {
         return QPixmap();
+    }
 
     QPixmap thumbnail;
     ImageInfo info = d->model->imageInfo(index);
+
     if (!info.isNull())
-    { 
+    {
         QString path   = info.filePath();
 
         if (d->thumbnailLoadThread->find(path, thumbnail,qMax(size.width(), size.height())))
+        {
             return thumbnail;
+        }
         else
-            return QPixmap(); 
+        {
+            return QPixmap();
+        }
     }
+
     return QPixmap();
 }
 
@@ -282,14 +293,16 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
  * @param sortKey Sets the criteria for selecting the representative thumbnail. When sortKey == 0 the most youngest thumbnail is chosen, when sortKey == 1 the most oldest thumbnail is chosen and when sortKey == 2 the thumbnail with the highest rating is chosen(if 2 thumbnails have the same rating, the youngest one is chosen).
  * @return Returns the index of the marker.
  */
-QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, 
-                                                                          const int sortKey)
+QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
+        const int sortKey)
 {
     const bool oldestFirst = sortKey & 1;
     QList<QModelIndex> indexList;
 
     if (list.isEmpty())
+    {
         return QPersistentModelIndex();
+    }
 
     for (int i=0; i<list.count(); ++i)
     {
@@ -299,7 +312,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 
     QModelIndex bestIndex;
     ImageInfo bestImageInfo;
-    QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);    
+    QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
 
     for (int i=0; i<imageInfoList.count(); ++i)
     {
@@ -311,14 +324,20 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             if (oldestFirst)
             {
                 takeThisIndex = currentInfo < bestImageInfo;
+
                 if (takeThisIndex)
+                {
                     bestImageInfo = currentInfo;
+                }
             }
             else
             {
                 takeThisIndex = bestImageInfo < currentInfo;
+
                 if (takeThisIndex)
+                {
                     bestImageInfo = currentInfo;
+                }
             }
         }
         else
@@ -338,7 +357,9 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
     if (thumb.isNull())
+    {
         return;
+    }
 
     QModelIndex currentIndex = d->model->indexForPath(loadingDescription.filePath);
 
@@ -350,13 +371,14 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
 }
 
 /**
- * This functions is called when one clicks on a thumbnail. 
+ * This functions is called when one clicks on a thumbnail.
  * @param A list containing the marker indices belonging the group whose thumbnail has been clicked.
  */
 void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices)
 {
     //TODO: there isn't another way to convert QPersistentModelIndex to QModelIndex?
     QList<QModelIndex> indexList;
+
     for (int i=0; i<clickedIndices.count(); ++i)
     {
         QModelIndex newIndex(clickedIndices[i]);
@@ -365,11 +387,12 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
 
     QList<ImageInfo> imageInfoList = d->model->imageInfos(indexList);
     QList<qlonglong> imagesIdList;
+
     for (int i=0; i<imageInfoList.count(); ++i)
     {
         imagesIdList.append(imageInfoList[i].id());
     }
-    
+
     emit signalFilteredImages(imagesIdList);
 }
 
@@ -381,15 +404,16 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 
     // TODO: more detailed check
     if (   ( changes & DatabaseFields::LatitudeNumber )
-        || ( changes & DatabaseFields::LongitudeNumber )
-        || ( changes & DatabaseFields::Altitude ) )
-    { 
+           || ( changes & DatabaseFields::LongitudeNumber )
+           || ( changes & DatabaseFields::Altitude ) )
+    {
         kDebug() << "changes!";
 
         foreach (const qlonglong& id, changeset.ids())
         {
             QModelIndex index = d->model->indexForImageId(id);
             kDebug()<<id<<index;
+
             if (index.isValid())
             {
                 kDebug()<<index;
@@ -398,6 +422,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
             }
         }
     }
+
     kDebug() << "---------------------------------------------------------------";
 }
 

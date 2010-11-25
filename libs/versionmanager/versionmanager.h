@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -148,8 +148,8 @@ public:
     void setSettings(const VersionManagerSettings& settings);
     VersionManagerSettings settings() const;
 
-    void setNamingScheme(VersionNamingScheme *scheme);
-    VersionNamingScheme *namingScheme() const;
+    void setNamingScheme(VersionNamingScheme* scheme);
+    VersionNamingScheme* namingScheme() const;
 
     enum FileNameType
     {

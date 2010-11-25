@@ -27,7 +27,7 @@ namespace Digikam
 {
 
 SearchXmlReader::SearchXmlReader(const QString& xml)
-               : QXmlStreamReader(xml)
+    : QXmlStreamReader(xml)
 {
     m_defaultFieldOperator = SearchXml::And;
 
@@ -150,10 +150,14 @@ QList<int> SearchXmlReader::valueToIntList()
         QXmlStreamReader::readNext();
 
         if (name() != "listitem")
+        {
             break;
+        }
 
         if (isStartElement())
+        {
             list << readElementText().toInt();
+        }
     }
 
     return list;
@@ -168,10 +172,14 @@ QList<qlonglong> SearchXmlReader::valueToLongLongList()
         QXmlStreamReader::readNext();
 
         if (name() != "listitem")
+        {
             break;
+        }
 
         if (isStartElement())
+        {
             list << readElementText().toLongLong();
+        }
     }
 
     return list;
@@ -186,10 +194,14 @@ QList<double> SearchXmlReader::valueToDoubleList()
         QXmlStreamReader::readNext();
 
         if (name() != "listitem")
+        {
             break;
+        }
 
         if (isStartElement())
+        {
             list << readElementText().toDouble();
+        }
     }
 
     return list;
@@ -204,10 +216,14 @@ QStringList SearchXmlReader::valueToStringList()
         QXmlStreamReader::readNext();
 
         if (name() != "listitem")
+        {
             break;
+        }
 
         if (isStartElement())
+        {
             list << readElementText();
+        }
     }
 
     return list;
@@ -222,10 +238,14 @@ QList<QDateTime> SearchXmlReader::valueToDateTimeList()
         QXmlStreamReader::readNext();
 
         if (name() != "listitem")
+        {
             break;
+        }
 
         if (isStartElement())
+        {
             list << QDateTime::fromString(readElementText(), Qt::ISODate);
+        }
     }
 
     return list;
@@ -250,7 +270,9 @@ QList<int> SearchXmlReader::valueToIntOrIntList()
     while (!atEnd())
     {
         if (token != QXmlStreamReader::StartElement || name() != "listitem")
+        {
             break;
+        }
 
         list << readElementText().toInt();
 
@@ -279,7 +301,9 @@ QList<double> SearchXmlReader::valueToDoubleOrDoubleList()
     while (!atEnd())
     {
         if (token != QXmlStreamReader::StartElement || name() != "listitem")
+        {
             break;
+        }
 
         list << readElementText().toDouble();
 
@@ -308,7 +332,9 @@ QList<QString> SearchXmlReader::valueToStringOrStringList()
     while (!atEnd())
     {
         if (token != QXmlStreamReader::StartElement || name() != "listitem")
+        {
             break;
+        }
 
         list << readElementText();
 
@@ -319,55 +345,96 @@ QList<QString> SearchXmlReader::valueToStringOrStringList()
 }
 
 SearchXml::Operator SearchXmlReader::readOperator(const QString& attributeName,
-                                                  SearchXml::Operator defaultOperator) const
+        SearchXml::Operator defaultOperator) const
 {
     QStringRef op = attributes().value(attributeName);
+
     if (op == "and")
+    {
         return SearchXml::And;
+    }
     else if (op == "or")
+    {
         return SearchXml::Or;
+    }
     else if (op == "andnot")
+    {
         return SearchXml::AndNot;
+    }
     else if (op == "ornot")
+    {
         return SearchXml::OrNot;
+    }
 
     return defaultOperator;
 }
 
 SearchXml::Relation SearchXmlReader::readRelation(const QString& attributeName,
-                                                  SearchXml::Relation defaultRelation) const
+        SearchXml::Relation defaultRelation) const
 {
     QStringRef relation = attributes().value(attributeName);
+
     if (relation == "equal")
+    {
         return SearchXml::Equal;
+    }
+
     if (relation == "unequal")
+    {
         return SearchXml::Unequal;
+    }
     else if (relation == "like")
+    {
         return SearchXml::Like;
+    }
     else if (relation == "notlike")
+    {
         return SearchXml::NotLike;
+    }
     else if (relation == "lessthan")
+    {
         return SearchXml::LessThan;
+    }
     else if (relation == "greaterthan")
+    {
         return SearchXml::GreaterThan;
+    }
     else if (relation == "lessthanequal")
+    {
         return SearchXml::LessThanOrEqual;
+    }
     else if (relation == "greaterthanequal")
+    {
         return SearchXml::GreaterThanOrEqual;
+    }
     else if (relation == "interval")
+    {
         return SearchXml::Interval;
+    }
     else if (relation == "intervalopen")
+    {
         return SearchXml::IntervalOpen;
+    }
     else if (relation == "oneof")
+    {
         return SearchXml::OneOf;
+    }
     else if (relation == "intree")
+    {
         return SearchXml::InTree;
+    }
     else if (relation == "notintree")
+    {
         return SearchXml::NotInTree;
+    }
     else if (relation == "near")
+    {
         return SearchXml::Near;
+    }
     else if (relation == "inside")
+    {
         return SearchXml::Inside;
+    }
 
     return defaultRelation;
 }
@@ -378,8 +445,12 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
     forever
     {
         bool atStart = isStartElement();
+
         if (atStart)
+        {
             break;
+        }
+
         switch (QXmlStreamReader::readNext())
         {
             case StartElement:
@@ -399,12 +470,19 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
             case StartElement:
             {
                 if (name() == elementName)
+                {
                     return true;
+                }
+
                 ++stack;
             }
             case EndElement:
+
                 if (!--stack)
+                {
                     return false;
+                }
+
             case EndDocument:
                 return false;
             default:
@@ -417,6 +495,7 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
 void SearchXmlReader::readToEndOfElement()
 {
     int stack = 1;
+
     if (isStartElement())
     {
         forever
@@ -426,8 +505,12 @@ void SearchXmlReader::readToEndOfElement()
                 case StartElement:
                     ++stack;
                 case EndElement:
+
                     if (!--stack)
+                    {
                         return;
+                    }
+
                 case EndDocument:
                     return;
                 default:
@@ -441,6 +524,7 @@ void SearchXmlReader::readToFirstField()
 {
     SearchXml::Element element;
     bool hasGroup = false;
+
     while (!atEnd())
     {
         element = readNext();
@@ -478,19 +562,25 @@ void SearchXmlWriter::writeGroup()
 void SearchXmlWriter::setGroupOperator(SearchXml::Operator op)
 {
     if (op != SearchXml::Or)
+    {
         writeOperator("operator", op);
+    }
 }
 
 void SearchXmlWriter::setGroupCaption(const QString& caption)
 {
     if (!caption.isNull())
+    {
         writeAttribute("caption", caption);
+    }
 }
 
 void SearchXmlWriter::setDefaultFieldOperator(SearchXml::Operator op)
 {
     if (op != SearchXml::And)
+    {
         writeOperator("fieldoperator", op);
+    }
 }
 
 void SearchXmlWriter::writeField(const QString& name, SearchXml::Relation relation)
@@ -691,7 +781,9 @@ QStringList KeywordSearch::split(const QString& keywords)
         {
             // inside marks: leave as is
             if (!group.isEmpty())
+            {
                 keywordList << group;
+            }
         }
         else
         {
@@ -707,12 +799,16 @@ QStringList KeywordSearch::split(const QString& keywords)
 QString KeywordSearch::merge(const QStringList& keywordList)
 {
     QStringList list(keywordList);
+
     // group keyword with spaces in quotation marks
     for (QStringList::iterator it = list.begin(); it != list.end(); ++it)
     {
         if ((*it).contains(' '))
+        {
             *it = (*it).prepend('"').append('"');
+        }
     }
+
     // join in a string
     return list.join(" ");
 }
@@ -721,15 +817,19 @@ QString KeywordSearch::merge(const QString& previousContent, const QString& newE
 {
     QString ne(newEntry);
     QString pc(previousContent);
+
     if (ne.contains(' '))
+    {
         ne = ne.prepend('"').append('"');
+    }
+
     return pc.append(' ').append(ne);
 }
 
 // ---------------------------------------- //
 
 KeywordSearchReader::KeywordSearchReader(const QString& xml)
-                   : SearchXmlReader(xml)
+    : SearchXmlReader(xml)
 {
 }
 
@@ -738,6 +838,7 @@ QStringList KeywordSearchReader::keywords()
     QStringList list;
 
     SearchXml::Element element;
+
     while (!atEnd())
     {
         element = readNext();
@@ -754,6 +855,7 @@ QStringList KeywordSearchReader::keywords()
 void KeywordSearchReader::readGroup(QStringList& list)
 {
     SearchXml::Element element;
+
     while (!atEnd())
     {
         element = readNext();
@@ -761,19 +863,27 @@ void KeywordSearchReader::readGroup(QStringList& list)
         if (element == SearchXml::Field)
         {
             QString value = readField();
+
             if (!value.isEmpty())
+            {
                 list << value;
+            }
         }
 
         if (element == SearchXml::GroupEnd)
+        {
             return;
+        }
     }
 }
 
 QString KeywordSearchReader::readField()
 {
     if (fieldName() == "keyword")
+    {
         return value();
+    }
+
     return QString();
 }
 
@@ -783,6 +893,7 @@ bool KeywordSearchReader::isSimpleKeywordSearch()
     // as created with KeywordSearchWriter
     SearchXml::Element element;
     int groupCount = 0;
+
     while (!atEnd())
     {
         element = readNext();
@@ -791,11 +902,17 @@ bool KeywordSearchReader::isSimpleKeywordSearch()
         {
             // only one group please
             if (++groupCount > 1)
+            {
                 return false;
+            }
+
             if (!isSimpleKeywordSearchGroup())
+            {
                 return false;
+            }
         }
     }
+
     return true;
 }
 
@@ -805,11 +922,17 @@ bool KeywordSearchReader::isSimpleKeywordSearchGroup()
     // as created with KeywordSearchWriter
 
     if (groupOperator() != SearchXml::standardGroupOperator())
+    {
         return false;
+    }
+
     if (defaultFieldOperator() != SearchXml::standardFieldOperator())
+    {
         return false;
+    }
 
     SearchXml::Element element;
+
     while (!atEnd())
     {
         element = readNext();
@@ -824,23 +947,34 @@ bool KeywordSearchReader::isSimpleKeywordSearchGroup()
         if (element == SearchXml::Field)
         {
             if (fieldName() != "keyword")
+            {
                 return false;
+            }
+
             if (fieldRelation() != SearchXml::Like)
+            {
                 return false;
+            }
+
             if (fieldOperator() != SearchXml::standardFieldOperator())
+            {
                 return false;
+            }
         }
 
         if (element == SearchXml::GroupEnd)
+        {
             return true;
+        }
     }
+
     return true;
 }
 
 // ---------------------------------------- //
 
 KeywordSearchWriter::KeywordSearchWriter()
-                   : SearchXmlWriter()
+    : SearchXmlWriter()
 {
 }
 
@@ -862,15 +996,16 @@ QString KeywordSearchWriter::xml(const QStringList& keywordList)
 // ---------------------------------------- //
 
 SearchXmlCachingReader::SearchXmlCachingReader(const QString& xml)
-                      : SearchXmlReader(xml),
-                        m_groupOperator(SearchXml::And), m_fieldOperator(SearchXml::And),
-                        m_fieldRelation(SearchXml::Equal), m_readValue(false)
+    : SearchXmlReader(xml),
+      m_groupOperator(SearchXml::And), m_fieldOperator(SearchXml::And),
+      m_fieldRelation(SearchXml::Equal), m_readValue(false)
 {
 }
 
 SearchXml::Element SearchXmlCachingReader::readNext()
 {
     SearchXml::Element element = SearchXmlReader::readNext();
+
     if (element == SearchXml::Group)
     {
         m_groupOperator = SearchXmlReader::groupOperator();
@@ -883,6 +1018,7 @@ SearchXml::Element SearchXmlCachingReader::readNext()
         m_fieldRelation = SearchXmlReader::fieldRelation();
         m_readValue     = false;
     }
+
     return element;
 }
 
@@ -918,6 +1054,7 @@ QString SearchXmlCachingReader::value()
         m_value = SearchXmlReader::value();
         m_readValue = true;
     }
+
     return m_value.toString();
 }
 
@@ -928,6 +1065,7 @@ int SearchXmlCachingReader::valueToInt()
         m_value = SearchXmlReader::valueToInt();
         m_readValue = true;
     }
+
     return m_value.toInt();
 }
 
@@ -938,6 +1076,7 @@ qlonglong SearchXmlCachingReader::valueToLongLong()
         m_value = SearchXmlReader::valueToLongLong();
         m_readValue = true;
     }
+
     return m_value.toLongLong();
 }
 
@@ -948,6 +1087,7 @@ double SearchXmlCachingReader::valueToDouble()
         m_value = SearchXmlReader::valueToDouble();
         m_readValue = true;
     }
+
     return m_value.toDouble();
 }
 
@@ -958,6 +1098,7 @@ QDateTime SearchXmlCachingReader::valueToDateTime()
         m_value = SearchXmlReader::valueToDateTime();
         m_readValue = true;
     }
+
     return m_value.toDateTime();
 }
 
@@ -1020,6 +1161,7 @@ QStringList SearchXmlCachingReader::valueToStringList()
         m_value = SearchXmlReader::valueToStringList();
         m_readValue = true;
     }
+
     return m_value.toStringList();
 }
 
@@ -1037,6 +1179,7 @@ QList<int> SearchXmlCachingReader::valueToIntOrIntList()
         m_readValue = true;
         return intList;
     }
+
     QList<int> intList;
     QList<QVariant> varList = m_value.toList();
     foreach (const QVariant& var, varList)
@@ -1060,6 +1203,7 @@ QList<double> SearchXmlCachingReader::valueToDoubleOrDoubleList()
         m_readValue = true;
         return doubleList;
     }
+
     QList<double> doubleList;
     QList<QVariant> varList = m_value.toList();
     foreach (const QVariant& var, varList)
@@ -1083,6 +1227,7 @@ QList<QString> SearchXmlCachingReader::valueToStringOrStringList()
         m_readValue = true;
         return QStringList;
     }
+
     QList<QString> QStringList;
     QList<QVariant> varList = m_value.toList();
     foreach (const QVariant& var, varList)

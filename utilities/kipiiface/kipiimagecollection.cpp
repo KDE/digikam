@@ -63,7 +63,7 @@ public:
 };
 
 KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter)
-                   : KIPI::ImageCollectionShared(), d(new KipiImageCollectionPriv)
+    : KIPI::ImageCollectionShared(), d(new KipiImageCollectionPriv)
 {
     d->type      = type;
     d->album     = album;
@@ -151,7 +151,7 @@ KUrl::List KipiImageCollection::images()
                 return imagesFromTAlbum(dynamic_cast<TAlbum*>(d->album));
             }
             else if (d->album->type() == Album::DATE ||
-                    d->album->type() == Album::SEARCH)
+                     d->album->type() == Album::SEARCH)
             {
                 return DigikamApp::instance()->view()->allUrls();
             }
@@ -182,6 +182,7 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* const album) const
     // get the images from the database and return the items found
 
     AlbumDB::ItemSortOrder sortOrder = AlbumDB::NoItemSorting;
+
     switch (AlbumSettings::instance()->getImageSortOrder())
     {
         default:
@@ -197,7 +198,7 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* const album) const
         case ImageSortSettings::SortByRating:
             sortOrder = AlbumDB::ByItemRating;
             break;
-        // ByISize not supported
+            // ByISize not supported
     }
 
     QStringList urls = DatabaseAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
@@ -209,7 +210,9 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* const album) const
     for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
         if (nameFilter.matches(*it))
+        {
             urlList.append(*it);
+        }
     }
 
     return urlList;
@@ -229,7 +232,9 @@ KUrl::List KipiImageCollection::imagesFromTAlbum(TAlbum* const album) const
     for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
         if (nameFilter.matches(*it))
+        {
             urlList.append(*it);
+        }
     }
 
     return urlList;
@@ -280,9 +285,13 @@ QString KipiImageCollection::uploadRootName()
 bool KipiImageCollection::isDirectory()
 {
     if (d->album->type() == Album::PHYSICAL)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 bool KipiImageCollection::operator==(ImageCollectionShared& imgCollection)

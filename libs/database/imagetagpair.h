@@ -59,7 +59,7 @@ public:
 
     ~ImageTagPair();
     ImageTagPair(const ImageTagPair& other);
-    ImageTagPair &operator=(const ImageTagPair& other);
+    ImageTagPair& operator=(const ImageTagPair& other);
 
     bool isNull() const;
 
@@ -78,7 +78,7 @@ public:
 
     /** Assigns the tag to the image */
     void assignTag();
-    
+
     /** Removes the tag from the image */
     void unAssignTag();
 

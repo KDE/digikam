@@ -60,15 +60,15 @@ public:
 };
 
 RawPage::RawPage(KAssistantDialog* dlg)
-       : AssistantDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")), 
-         d(new RawPagePriv)
+    : AssistantDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")),
+      d(new RawPagePriv)
 {
     KVBox* vbox    = new KVBox(this);
     QLabel* label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
-                        "<p>Set here how you want to open Raw images in the editor:</p>"
-                        "</qt>"));
+                         "<p>Set here how you want to open Raw images in the editor:</p>"
+                         "</qt>"));
 
     QWidget* btns     = new QWidget(vbox);
     QVBoxLayout* vlay = new QVBoxLayout(btns);
@@ -99,7 +99,7 @@ RawPage::RawPage(KAssistantDialog* dlg)
     setPageWidget(vbox);
 
     QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-rawimport.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
+    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 }
 
 RawPage::~RawPage()

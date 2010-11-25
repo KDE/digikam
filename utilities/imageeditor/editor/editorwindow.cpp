@@ -153,8 +153,8 @@ namespace Digikam
 
 const QString EditorWindow::CONFIG_GROUP_NAME = "ImageViewer Settings";
 
-EditorWindow::EditorWindow(const char *name)
-            : KXmlGuiWindow(0), d(new EditorWindowPriv)
+EditorWindow::EditorWindow(const char* name)
+    : KXmlGuiWindow(0), d(new EditorWindowPriv)
 {
     setObjectName(name);
     setWindowFlags(Qt::Window);
@@ -229,23 +229,46 @@ ICCSettingsContainer* EditorWindow::cmSettings() const
 void EditorWindow::setupContextMenu()
 {
     m_contextMenu         = new DPopupMenu(this);
-    KActionCollection *ac = actionCollection();
+    KActionCollection* ac = actionCollection();
+
     if (ac->action("editorwindow_backward"))
+    {
         m_contextMenu->addAction(ac->action("editorwindow_backward"));
+    }
+
     if (ac->action("editorwindow_forward"))
+    {
         m_contextMenu->addAction(ac->action("editorwindow_forward"));
+    }
+
     m_contextMenu->addSeparator();
+
     if (ac->action("editorwindow_slideshow"))
+    {
         m_contextMenu->addAction(ac->action("editorwindow_slideshow"));
+    }
+
     if (ac->action("editorwindow_rotate_left"))
+    {
         m_contextMenu->addAction(ac->action("editorwindow_rotate_left"));
+    }
+
     if (ac->action("editorwindow_rotate_right"))
+    {
         m_contextMenu->addAction(ac->action("editorwindow_rotate_right"));
+    }
+
     if (ac->action("editorwindow_crop"))
+    {
         m_contextMenu->addAction(ac->action("editorwindow_crop"));
+    }
+
     m_contextMenu->addSeparator();
+
     if (ac->action("editorwindow_delete"))
+    {
         m_contextMenu->addAction(ac->action("editorwindow_delete"));
+    }
 }
 
 void EditorWindow::setupStandardConnections()
@@ -360,7 +383,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_save", m_saveAction);
 
     m_saveCurrentVersionAction = new KAction(KIcon("dialog-ok-apply"),//"task-accepted//"document-save"),
-                                             i18nc("@action Save changes to current version", "Save Changes"), this);
+            i18nc("@action Save changes to current version", "Save Changes"), this);
     m_saveCurrentVersionAction->setToolTip(i18nc("@info:tooltip", "Save the modifications to the current version of the file"));
     connect(m_saveCurrentVersionAction, SIGNAL(triggered()), this, SLOT(slotSaveCurrentVersion()));
     actionCollection()->addAction("editorwindow_savecurrentversion", m_saveCurrentVersionAction);
@@ -494,7 +517,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_zoomfit2select", d->zoomFitToSelectAction);
     d->zoomFitToSelectAction->setEnabled(false);
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
-                                                "current selection area."));
+                                           "current selection area."));
 
     // --------------------------------------------------------
 
@@ -509,16 +532,16 @@ void EditorWindow::setupStandardActions()
     d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"), i18n("Under-Exposure Indicator"), this);
     d->viewUnderExpoAction->setShortcut(KShortcut(Qt::Key_F10));
     d->viewUnderExpoAction->setWhatsThis(i18n("Set this option to display black "
-                                              "overlaid on the image. This will help you to avoid "
-                                              "under-exposing the image."));
+                                         "overlaid on the image. This will help you to avoid "
+                                         "under-exposing the image."));
     connect(d->viewUnderExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetUnderExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
 
     d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"), i18n("Over-Exposure Indicator"), this);
     d->viewOverExpoAction->setShortcut(KShortcut(Qt::Key_F11));
     d->viewOverExpoAction->setWhatsThis(i18n("Set this option to display white "
-                                             "overlaid on the image. This will help you to avoid "
-                                             "over-exposing the image." ) );
+                                        "overlaid on the image. This will help you to avoid "
+                                        "over-exposing the image." ) );
     connect(d->viewOverExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetOverExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
 
@@ -617,17 +640,17 @@ void EditorWindow::setupStandardActions()
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    KAction *closeToolAction = new KAction(i18n("Close Tool"), this);
+    KAction* closeToolAction = new KAction(i18n("Close Tool"), this);
     actionCollection()->addAction("editorwindow_closetool", closeToolAction);
     closeToolAction->setShortcut(KShortcut(Qt::Key_Escape) );
     connect(closeToolAction, SIGNAL(triggered()), this, SLOT(slotCloseTool()));
 
-    KAction *altBackwardAction = new KAction(i18n("Previous Image"), this);
+    KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("editorwindow_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
-    KAction *applyToolAction = new KAction(i18n("Apply Tool"), this);
+    KAction* applyToolAction = new KAction(i18n("Apply Tool"), this);
     actionCollection()->addAction("editorwindow_apply_enter", applyToolAction);
     applyToolAction->setShortcut( KShortcut(Qt::Key_Return) );
     connect(applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));
@@ -682,12 +705,12 @@ void EditorWindow::setupStatusBar()
     d->underExposureIndicator = new QToolButton(buttonsBox);
     d->underExposureIndicator->setDefaultAction(d->viewUnderExpoAction);
     d->underExposureIndicator->setFocusPolicy(Qt::NoFocus);
-//    new ButtonIconDisabler(d->underExposureIndicator);
+    //    new ButtonIconDisabler(d->underExposureIndicator);
 
     d->overExposureIndicator  = new QToolButton(buttonsBox);
     d->overExposureIndicator->setDefaultAction(d->viewOverExpoAction);
     d->overExposureIndicator->setFocusPolicy(Qt::NoFocus);
-//    new ButtonIconDisabler(d->overExposureIndicator);
+    //    new ButtonIconDisabler(d->overExposureIndicator);
 
     d->cmViewIndicator        = new QToolButton(buttonsBox);
     d->cmViewIndicator->setDefaultAction(d->viewCMViewAction);
@@ -716,7 +739,9 @@ void EditorWindow::printImage(const KUrl& /*url*/)
     bool sixteenBit = m_canvas->interface()->sixteenBit();
 
     if (!ptr || !w || !h)
+    {
         return;
+    }
 
     DImg image(w, h, sixteenBit, hasAlpha, ptr);
 
@@ -740,7 +765,7 @@ void EditorWindow::slotAboutToShowUndoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction *action = m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
+        QAction* action = m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
         d->undoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -752,7 +777,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction *action = m_redoAction->menu()->addAction(titles[i], d->redoSignalMapper, SLOT(map()));
+        QAction* action = m_redoAction->menu()->addAction(titles[i], d->redoSignalMapper, SLOT(map()));
         d->redoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -832,7 +857,9 @@ void EditorWindow::slotToggleOffFitToWindow()
 void EditorWindow::slotEscapePressed()
 {
     if (m_fullScreen)
+    {
         m_fullScreenAction->activate(QAction::Trigger);
+    }
 }
 
 void EditorWindow::loadImagePlugins()
@@ -842,9 +869,10 @@ void EditorWindow::loadImagePlugins()
         d->imagepluginsActionCollection->clear();
         delete d->imagepluginsActionCollection;
     }
+
     d->imagepluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
 
-    QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
+    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
     foreach (ImagePlugin* plugin, pluginList)
     {
@@ -859,7 +887,7 @@ void EditorWindow::loadImagePlugins()
 
             if (categoryStr != QString("__INVALID__") && !categoryStr.isEmpty())
             {
-                KActionCategory *category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
+                KActionCategory* category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
                 foreach (QAction* action, plugin->actionCollection()->actions())
                 {
                     category->addAction(action->objectName(), action);
@@ -874,6 +902,7 @@ void EditorWindow::loadImagePlugins()
                 }
 #if KDE_IS_VERSION(4,1,68)
             }
+
 #endif
         }
         else
@@ -894,7 +923,7 @@ void EditorWindow::unLoadImagePlugins()
         delete d->imagepluginsActionCollection;
     }
 
-    QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
+    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
     foreach (ImagePlugin* plugin, pluginList)
     {
@@ -928,8 +957,11 @@ void EditorWindow::readStandardSettings()
 
     // Restore Auto zoom action
     bool autoZoom = group.readEntry(d->configAutoZoomEntry, true);
+
     if (autoZoom)
+    {
         d->zoomFitToWindowAction->activate(QAction::Trigger);
+    }
 
     slotSetUnderExposureIndicator(group.readEntry(d->configUnderExposureIndicatorEntry, false));
     slotSetOverExposureIndicator(group.readEntry(d->configOverExposureIndicatorEntry, false));
@@ -1023,8 +1055,11 @@ void EditorWindow::saveStandardSettings()
 
     group.writeEntry(d->configAutoZoomEntry, d->zoomFitToWindowAction->isChecked());
     m_splitter->saveState(group);
+
     if (m_vSplitter)
+    {
         group.writeEntry(d->configVerticalSplitterStateEntry, m_vSplitter->saveState().toBase64());
+    }
 
     group.writeEntry("Show Thumbbar", thumbBar()->shouldBeVisible());
     group.writeEntry(d->configFullScreenEntry, m_fullScreenAction->isChecked());
@@ -1097,7 +1132,7 @@ void EditorWindow::toggleStandardActions(bool val)
         m_redoAction->setEnabled(false);
     }
 
-    QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
+    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
     foreach (ImagePlugin* plugin, pluginList)
     {
@@ -1135,7 +1170,7 @@ void EditorWindow::slotToggleFullScreen()
 
         if (d->removeFullScreenButton)
         {
-            QList<KToolBar *> toolbars = toolBars();
+            QList<KToolBar*> toolbars = toolBars();
             foreach (KToolBar* toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
@@ -1166,8 +1201,8 @@ void EditorWindow::slotToggleFullScreen()
         {
             showToolBars();
 
-            QList<KToolBar *> toolbars = toolBars();
-            KToolBar *mainToolbar = 0;
+            QList<KToolBar*> toolbars = toolBars();
+            KToolBar* mainToolbar = 0;
             foreach (KToolBar* toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
@@ -1210,17 +1245,22 @@ void EditorWindow::slotLoadingProgress(const QString&, float progress)
 void EditorWindow::slotSavingProgress(const QString&, float progress)
 {
     m_nameLabel->setProgressValue((int)(progress*100.0));
+
     if (m_savingProgressDialog)
+    {
         m_savingProgressDialog->progressBar()->setValue((int)(progress*100.0));
+    }
 }
 
 void EditorWindow::execSavingProgressDialog()
 {
     if (m_savingProgressDialog)
+    {
         return;
+    }
 
     m_savingProgressDialog = new KProgressDialog(this, i18n("Saving image..."),
-                                                 i18n("Please wait for the image to be saved..."));
+            i18n("Please wait for the image to be saved..."));
     m_savingProgressDialog->setAttribute(Qt::WA_DeleteOnClose);
     m_savingProgressDialog->setAutoClose(true);
     m_savingProgressDialog->setMinimumDuration(1000);
@@ -1241,11 +1281,11 @@ bool EditorWindow::promptForOverWrite()
         QFileInfo fi(m_canvas->currentImageFilePath());
         QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", fi.fileName()));
         return (KMessageBox::warningContinueCancel(this,
-                                                   warnMsg,
-                                                   i18n("Warning"),
-                                                   KGuiItem(i18n("Overwrite")),
-                                                   KStandardGuiItem::cancel(),
-                                                   QString("editorWindowSaveOverwrite"))
+                warnMsg,
+                i18n("Warning"),
+                KGuiItem(i18n("Overwrite")),
+                KStandardGuiItem::cancel(),
+                QString("editorWindowSaveOverwrite"))
                 ==  KMessageBox::Continue);
 
     }
@@ -1275,7 +1315,9 @@ void EditorWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSa
     m_openVersionAction->setEnabled(hasOriginalToRestore());
 
     if (!moreUndo)
+    {
         m_rotatedOrFlipped = false;
+    }
 }
 
 bool EditorWindow::hasChangesToSave()
@@ -1294,18 +1336,26 @@ DImageHistory EditorWindow::resolvedImageHistory(const DImageHistory& history)
     // simple, database-less version
     DImageHistory r = history;
     QList<DImageHistory::Entry>::iterator it;
+
     for (it = r.entries().begin(); it != r.entries().end(); ++it)
     {
         QList<HistoryImageId>::iterator hit;
+
         for (hit = it->referredImages.begin(); hit != it->referredImages.end(); )
         {
             QFileInfo info(hit->m_filePath + "/" + hit->m_fileName);
+
             if (!info.exists())
+            {
                 hit = it->referredImages.erase(hit);
+            }
             else
+            {
                 ++hit;
+            }
         }
     }
+
     return r;
 }
 
@@ -1313,7 +1363,7 @@ class VersioningPromptUserSaveDialog : public KDialog
 {
 public:
 
-    VersioningPromptUserSaveDialog(QWidget *parent, bool allowCancel = true)
+    VersioningPromptUserSaveDialog(QWidget* parent, bool allowCancel = true)
         : KDialog(parent),
           m_clicked(None)
     {
@@ -1323,36 +1373,39 @@ public:
 
         button(Ok)->setVisible(false);
         button(Apply)->setVisible(false);
+
         if (!allowCancel)
+        {
             button(Cancel)->setVisible(false);
+        }
 
-        QWidget *mainWidget = new QWidget;
+        QWidget* mainWidget = new QWidget;
 
-        QLabel *warningIcon = new QLabel;
+        QLabel* warningIcon = new QLabel;
         warningIcon->setPixmap(SmallIcon("dialog-warning", KIconLoader::SizeHuge));
-        QLabel *editIcon = new QLabel;
+        QLabel* editIcon = new QLabel;
         editIcon->setPixmap(SmallIcon("document-edit", iconSize()));
-        QLabel *question = new QLabel;
+        QLabel* question = new QLabel;
         question->setText(i18nc("@label", "The current image has been changed.<nl/>"
-                                          "Do you wish to save your changes?"));
+                                "Do you wish to save your changes?"));
 
-        QHBoxLayout *headerLayout = new QHBoxLayout;
+        QHBoxLayout* headerLayout = new QHBoxLayout;
         headerLayout->addWidget(question);
         headerLayout->addWidget(editIcon);
 
-        QGroupBox *buttonGroup = new QGroupBox;
-        QVBoxLayout *groupLayout = new QVBoxLayout;
+        QGroupBox* buttonGroup = new QGroupBox;
+        QVBoxLayout* groupLayout = new QVBoxLayout;
 
-        QToolButton *saveCurrent = setupButton(Ok, "dialog-ok-apply",
+        QToolButton* saveCurrent = setupButton(Ok, "dialog-ok-apply",
                                                i18nc("@action:button", "Save Changes"));
         saveCurrent->setToolTip(i18nc("@info:tooltip",
                                       "Save the current changes. Note: The original image will never be overwritten."));
-        QToolButton *saveVersion = setupButton(Apply, "list-add",
+        QToolButton* saveVersion = setupButton(Apply, "list-add",
                                                i18nc("@action:button", "Save Changes as a New Version"));
         saveVersion->setToolTip(i18nc("@info:tooltip",
                                       "Save the current changes as a new version. "
                                       "The loaded file will remain unchanged, a new file will be created."));
-        QToolButton *discard     = setupButton(User1, "task-reject",
+        QToolButton* discard     = setupButton(User1, "task-reject",
                                                i18nc("@action:button", "Discard Changes"));
         discard->setToolTip(i18nc("@info:tooltip",
                                   "Discard the changes applied to the image during this editing session."));
@@ -1362,7 +1415,7 @@ public:
         buttonLayout->addWidget(saveVersion);
         buttonLayout->addWidget(discard);
         */
-        QToolBar *bar = new QToolBar;
+        QToolBar* bar = new QToolBar;
         bar->setOrientation(Qt::Vertical);
         bar->setIconSize(QSize(iconSize(), iconSize()));
         bar->addSeparator();
@@ -1376,7 +1429,7 @@ public:
         groupLayout->addWidget(bar);
         buttonGroup->setLayout(groupLayout);
 
-        QGridLayout *mainLayout = new QGridLayout;
+        QGridLayout* mainLayout = new QGridLayout;
         mainLayout->addWidget(warningIcon, 0, 0, 2, 1, Qt::AlignTop);
         mainLayout->addLayout(headerLayout, 0, 1);
         //mainLayout->addLayout(buttonLayout);
@@ -1389,27 +1442,45 @@ public:
         connect(&m_mapper, SIGNAL(mapped(int)), this, SLOT(slotButtonClicked(int)));
     }
 
-    bool shallSave() const { return m_clicked == Ok; }
-    bool newVersion() const { return m_clicked == Apply; }
-    bool shallDiscard() const { return m_clicked == User1; }
+    bool shallSave() const
+    {
+        return m_clicked == Ok;
+    }
+    bool newVersion() const
+    {
+        return m_clicked == Apply;
+    }
+    bool shallDiscard() const
+    {
+        return m_clicked == User1;
+    }
 
 protected:
 
-    int iconSize() const { return KIconLoader::SizeMedium; }
+    int iconSize() const
+    {
+        return KIconLoader::SizeMedium;
+    }
 
     virtual void slotButtonClicked(int button)
     {
         m_clicked = button;
+
         if (button == Cancel)
+        {
             reject();
+        }
         else
+        {
             accept();
+        }
+
         //KDialog::slotButtonClicked(button);
     }
 
     QToolButton* setupButton(int key, const QString& iconName, const QString& text)
     {
-        QToolButton *button = new QToolButton;
+        QToolButton* button = new QToolButton;
         button->setText(text);
         button->setIcon(SmallIcon(iconName, iconSize()));
         button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -1449,8 +1520,11 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
             {
                 QPointer<VersioningPromptUserSaveDialog> dialog = new VersioningPromptUserSaveDialog(this);
                 dialog->exec();
+
                 if (!dialog)
+                {
                     return false;
+                }
 
                 shallSave    = dialog->shallSave();
                 shallDiscard = dialog->shallDiscard();
@@ -1464,21 +1538,22 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
                                    "Do you want to save it?", url.fileName());
 
                 int result;
+
                 if (allowCancel)
                 {
                     result = KMessageBox::warningYesNoCancel(this,
-                                        boxMessage,
-                                        QString(),
-                                        KStandardGuiItem::save(),
-                                        KStandardGuiItem::discard());
+                             boxMessage,
+                             QString(),
+                             KStandardGuiItem::save(),
+                             KStandardGuiItem::discard());
                 }
                 else
                 {
                     result = KMessageBox::warningYesNo(this,
-                                        boxMessage,
-                                        QString(),
-                                        KStandardGuiItem::save(),
-                                        KStandardGuiItem::discard());
+                                                       boxMessage,
+                                                       QString(),
+                                                       KStandardGuiItem::save(),
+                                                       KStandardGuiItem::discard());
                 }
 
                 shallSave = (result == KMessageBox::Yes);
@@ -1493,6 +1568,7 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
             switch (mode)
             {
                 case AskIfNeeded:
+
                     if (m_nonDestructive)
                     {
                         // will know on its own if new version is required
@@ -1501,12 +1577,18 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
                     else
                     {
                         if (m_canvas->isReadOnly())
+                        {
                             saving = saveAs();
+                        }
                         else if (promptForOverWrite())
+                        {
                             saving = save();
+                        }
                     }
+
                     break;
                 case OverwriteWithoutAsking:
+
                     if (m_nonDestructive)
                     {
                         saving = saveCurrentVersion();
@@ -1514,12 +1596,18 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
                     else
                     {
                         if (m_canvas->isReadOnly())
+                        {
                             saving = saveAs();
+                        }
                         else
+                        {
                             saving = save();
+                        }
                     }
+
                     break;
                 case AlwaysSaveAs:
+
                     if (m_nonDestructive)
                     {
                         saving = saveNewVersion();
@@ -1528,6 +1616,7 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
                     {
                         saving = saveAs();
                     }
+
                     break;
             }
 
@@ -1565,7 +1654,9 @@ bool EditorWindow::waitForSavingToComplete()
 {
     // avoid reentrancy - return false means we have reentered the loop already.
     if (m_savingContext.synchronizingState == SavingContextContainer::SynchronousSaving)
+    {
         return false;
+    }
 
     if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
     {
@@ -1575,13 +1666,14 @@ bool EditorWindow::waitForSavingToComplete()
         StatusProgressBar *pb = m_nameLabel;
         pb->setParent(&processFrame);
         processFrame.show();*/
-/*      KMessageBox::queuedMessageBox(this,
-                                      KMessageBox::Information,
-                                      i18n("Please wait while the image is being saved..."));
-*/
+        /*      KMessageBox::queuedMessageBox(this,
+                                              KMessageBox::Information,
+                                              i18n("Please wait while the image is being saved..."));
+        */
         enterWaitingLoop();
         m_savingContext.synchronizingState = SavingContextContainer::NormalSaving;
     }
+
     return true;
 }
 
@@ -1595,7 +1687,9 @@ void EditorWindow::quitWaitingLoop()
 {
     //d->waitingLoop->quit();
     if (m_savingProgressDialog)
+    {
         m_savingProgressDialog->close();
+    }
 }
 
 void EditorWindow::slotSelected(bool val)
@@ -1620,14 +1714,18 @@ void EditorWindow::slotSelected(bool val)
 
     // Update status bar
     if (val)
+    {
         setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
+    }
     else
+    {
         setToolInfoMessage(i18n("No selection"));
+    }
 }
 
 void EditorWindow::hideToolBars()
 {
-    QList<KToolBar *> toolbars = toolBars();
+    QList<KToolBar*> toolbars = toolBars();
     foreach (KToolBar* toolbar, toolbars)
     {
         toolbar->hide();
@@ -1636,7 +1734,7 @@ void EditorWindow::hideToolBars()
 
 void EditorWindow::showToolBars()
 {
-    QList<KToolBar *> toolbars = toolBars();
+    QList<KToolBar*> toolbars = toolBars();
     foreach (KToolBar* toolbar, toolbars)
     {
         toolbar->show();
@@ -1686,16 +1784,24 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
 void EditorWindow::colorManage()
 {
     if (!d->ICCSettings->enableCM)
+    {
         return;
+    }
 
     DImg image = m_canvas->currentImage();
+
     if (image.isNull())
+    {
         return;
+    }
 
     if (!IccManager::needsPostLoadingManagement(image))
+    {
         return;
+    }
 
     IccPostLoadingManager manager(image, m_canvas->currentImageFilePath());
+
     if (!manager.hasValidWorkspace())
     {
         QString message = i18n("Cannot open the specified working space profile (\"%1\"). "
@@ -1729,9 +1835,13 @@ void EditorWindow::slotNameLabelCancelButtonPressed()
 void EditorWindow::slotSave()
 {
     if (m_canvas->isReadOnly())
+    {
         saveAs();
+    }
     else if (promptForOverWrite())
+    {
         save();
+    }
 }
 
 void EditorWindow::slotSaveAs()
@@ -1818,6 +1928,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
                                               m_savingContext.destinationURL.fileName(),
                                               m_savingContext.destinationURL.toLocalFile()));
             }
+
             finishSaving(false);
             return;
         }
@@ -1843,7 +1954,9 @@ void EditorWindow::finishSaving(bool success)
 
     // Exit of internal Qt event loop to unlock promptUserSave() method.
     if (m_savingContext.synchronizingState == SavingContextContainer::SynchronousSaving)
+    {
         quitWaitingLoop();
+    }
 
     // Enable actions as appropriate after saving
     toggleActions(true);
@@ -1864,7 +1977,7 @@ void EditorWindow::finishSaving(bool success)
     }
 }
 
-void EditorWindow::setupTempSaveFile(const KUrl & url)
+void EditorWindow::setupTempSaveFile(const KUrl& url)
 {
 #ifdef _WIN32
     KUrl parent(url.directory(KUrl::AppendTrailingSlash));
@@ -1875,12 +1988,14 @@ void EditorWindow::setupTempSaveFile(const KUrl & url)
 
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext.saveTempFile = new KTemporaryFile();
+
     // if the destination url is on local file system, try to set the temp file
     // location to the destination folder, otherwise use a local default
     if (url.isLocalFile())
     {
         m_savingContext.saveTempFile->setPrefix(tempDir);
     }
+
     m_savingContext.saveTempFile->setSuffix(".digikamtempfile.tmp");
     m_savingContext.saveTempFile->setAutoRemove(false);
     m_savingContext.saveTempFile->open();
@@ -1904,12 +2019,16 @@ void EditorWindow::startingSave(const KUrl& url)
 
     // avoid any reentrancy. Should be impossible anyway since actions will be disabled.
     if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    {
         return;
+    }
 
     m_savingContext = SavingContextContainer();
 
     if (!checkPermissions(url))
+    {
         return;
+    }
 
     setupTempSaveFile(url);
 
@@ -1974,6 +2093,7 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
 
     // find locations of interesting characters in the filter string
     const int asteriskLocation = filter.indexOf('*');
+
     if (asteriskLocation < 0)
     {
         kDebug() << "Could not find a * in the filter";
@@ -1981,6 +2101,7 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
     }
 
     int endLocation = filter.indexOf(QRegExp("[|\\* ]"), asteriskLocation + 1);
+
     if (endLocation < 0)
     {
         endLocation = filter.length();
@@ -1998,7 +2119,7 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
 }
 
 bool EditorWindow::selectValidSavingFormat(const QString& filter,
-                                           const KUrl& targetUrl, const QString &autoFilter)
+        const KUrl& targetUrl, const QString& autoFilter)
 {
     kDebug() << "Trying to find a saving format with filter = "
              << filter << ", targetUrl = " << targetUrl;
@@ -2022,6 +2143,7 @@ bool EditorWindow::selectValidSavingFormat(const QString& filter,
     if (filter == autoFilter)
     {
         QString suffix;
+
         if (targetUrl.isLocalFile())
         {
             // for local files QFileInfo can be used
@@ -2034,12 +2156,15 @@ bool EditorWindow::selectValidSavingFormat(const QString& filter,
             // for remote files string manipulation is needed unfortunately
             QString fileName = targetUrl.fileName();
             const int periodLocation = fileName.lastIndexOf('.');
+
             if (periodLocation >= 0)
             {
                 suffix = fileName.right(fileName.size() - periodLocation - 1);
             }
+
             kDebug() << "Possible format from remote file: " << suffix;
         }
+
         if (!suffix.isEmpty() && validTypes.contains(suffix, Qt::CaseInsensitive))
         {
             kDebug() << "Using format from target url " << suffix;
@@ -2052,6 +2177,7 @@ bool EditorWindow::selectValidSavingFormat(const QString& filter,
         // use extension from the filter
 
         QString filterExtension = getExtensionFromFilter(filter);
+
         if (!filterExtension.isEmpty() &&
             validTypes.contains(filterExtension, Qt::CaseInsensitive))
         {
@@ -2064,7 +2190,8 @@ bool EditorWindow::selectValidSavingFormat(const QString& filter,
     // another way to determine the format is to use the original file
     {
         QString originalFormat(QImageReader::imageFormat(
-                        m_savingContext.srcURL.toLocalFile()));
+                                   m_savingContext.srcURL.toLocalFile()));
+
         if (validTypes.contains(originalFormat, Qt::CaseInsensitive))
         {
             kDebug() << "Using format from original file: " << originalFormat;
@@ -2083,7 +2210,9 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     kDebug() << "startSavingAs called";
 
     if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    {
         return false;
+    }
 
     m_savingContext = SavingContextContainer();
     m_savingContext.srcURL = url;
@@ -2091,6 +2220,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     // prepare the save dialog
 
     KUrl suggested;
+
     if (m_nonDestructive)
     {
         suggested = KUrl("kfiledialog:///digikam-image-export");
@@ -2098,17 +2228,21 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     else
     {
         if (m_savingContext.srcURL.isLocalFile())
+        {
             suggested = m_savingContext.srcURL;
+        }
         else
+        {
             suggested = KUrl("kfiledialog:///digikam-image-saveas");
+        }
     }
 
-    FileSaveOptionsBox *options      = new FileSaveOptionsBox();
+    FileSaveOptionsBox* options      = new FileSaveOptionsBox();
     QPointer<KFileDialog> imageFileSaveDialog
-                                     = new KFileDialog(suggested, QString(), this,options);
+    = new KFileDialog(suggested, QString(), this,options);
     options->setDialog(imageFileSaveDialog);
 
-    ImageDialogPreview *preview = new ImageDialogPreview(imageFileSaveDialog);
+    ImageDialogPreview* preview = new ImageDialogPreview(imageFileSaveDialog);
     imageFileSaveDialog->setPreviewWidget(preview);
     imageFileSaveDialog->setOperationMode(KFileDialog::Saving);
     imageFileSaveDialog->setMode(KFile::File);
@@ -2120,10 +2254,12 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
     const QString optionLastExtension = "LastSavedImageExtension";
     QString ext               = group.readEntry(optionLastExtension, "png");
+
     if (ext.isEmpty())
     {
         ext = "png";
     }
+
     QString fileName          = info.completeBaseName() + QString(".") + ext;
 
     // Determine the default filter from LastSavedImageTypeMime
@@ -2140,6 +2276,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     // Start dialog and check if canceled.
     int result;
+
     if (d->currentWindowModalDialog)
     {
         // go application-modal - we will create utter confusion if descending into more than one window-modal dialog
@@ -2153,9 +2290,10 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         result = imageFileSaveDialog->exec();
         d->currentWindowModalDialog = 0;
     }
+
     if (result != KFileDialog::Accepted || !imageFileSaveDialog)
     {
-       return false;
+        return false;
     }
 
     KUrl newURL = imageFileSaveDialog->selectedUrl();
@@ -2166,8 +2304,10 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     const QString configShowImageSettingsDialog="ShowImageSettingsDialog";
     bool showDialog = group.readEntry(configShowImageSettingsDialog, true);
-    if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE)!=DImg::NONE) {
-        FileSaveOptionsDlg *fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
+
+    if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE)!=DImg::NONE)
+    {
+        FileSaveOptionsDlg* fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
         options->slotImageFileFormatChanged(newURL.fileName());
 
         if (d->currentWindowModalDialog)
@@ -2183,11 +2323,13 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             result = fileSaveOptionsDialog->exec();
             d->currentWindowModalDialog = 0;
         }
+
         if (result != KFileDialog::Accepted || !fileSaveOptionsDialog)
         {
             return false;
         }
     }
+
 #endif
 
     // Update file save settings in editor instance.
@@ -2231,25 +2373,30 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     QFileInfo fi(newURL.toLocalFile());
     m_savingContext.destinationExisted = fi.exists();
+
     if ( m_savingContext.destinationExisted )
     {
         int result =
 
             KMessageBox::warningYesNo( this, i18n("A file named \"%1\" already "
-                                                  "exists. Are you sure you want "
-                                                  "to overwrite it?",
-                                                  newURL.fileName()),
+                                       "exists. Are you sure you want "
+                                       "to overwrite it?",
+                                       newURL.fileName()),
                                        i18n("Overwrite File?"),
                                        KStandardGuiItem::overwrite(),
                                        KStandardGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
+        {
             return false;
+        }
 
         // There will be two message boxes if the file is not writable.
         // This may be controversial, and it may be changed, but it was a deliberate decision.
         if (!checkPermissions(newURL))
+        {
             return false;
+        }
     }
 
     // Now do the actual saving -----------------------------------------------------
@@ -2284,7 +2431,10 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
     kDebug() << "Saving image non-destructive, new version:" << fork;
 
     if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    {
         return false;
+    }
+
     m_savingContext = SavingContextContainer();
 
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
@@ -2292,8 +2442,8 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
 
     VersionFileInfo currentName(url.directory(), url.fileName(), m_canvas->currentImageFileFormat());
     m_savingContext.versionFileOperation
-        = versionManager()->operation(fork ? VersionManager::NewVersionName : VersionManager::CurrentVersionName,
-                                      currentName, resolvedHistory, history);
+    = versionManager()->operation(fork ? VersionManager::NewVersionName : VersionManager::CurrentVersionName,
+                                  currentName, resolvedHistory, history);
 
     KUrl newURL = KUrl::fromPath(m_savingContext.versionFileOperation.saveFile.path);
     newURL.addPath(m_savingContext.versionFileOperation.saveFile.fileName);
@@ -2315,7 +2465,9 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
     m_savingContext.destinationExisted = fi.exists();
 
     if (!checkPermissions(newURL))
+    {
         return false;
+    }
 
     setupTempSaveFile(newURL);
 
@@ -2344,19 +2496,21 @@ bool EditorWindow::checkPermissions(const KUrl& url)
 
     if (fi.exists() && !fi.isWritable())
     {
-       int result =
+        int result =
 
             KMessageBox::warningYesNo( this, i18n("You do not have write permissions "
-                                                  "for the file named \"%1\". "
-                                                  "Are you sure you want "
-                                                  "to overwrite it?",
-                                                  url.fileName()),
+                                       "for the file named \"%1\". "
+                                       "Are you sure you want "
+                                       "to overwrite it?",
+                                       url.fileName()),
                                        i18n("Overwrite File?"),
                                        KStandardGuiItem::overwrite(),
                                        KStandardGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
+        {
             return false;
+        }
     }
 
     return true;
@@ -2367,6 +2521,7 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& destPath, bo
     QString dest = destPath;
     // check that we're not replacing a symlink
     QFileInfo info(dest);
+
     if (info.isSymLink())
     {
         dest = info.symLinkTarget();
@@ -2374,28 +2529,30 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& destPath, bo
                  << dest << ". Storing image there.";
     }
 
-    #ifndef _WIN32
-        QByteArray dstFileName = QFile::encodeName(dest);
+#ifndef _WIN32
+    QByteArray dstFileName = QFile::encodeName(dest);
 
-        // Store old permissions:
-        // Just get the current umask.
-        mode_t curr_umask = umask(S_IREAD | S_IWRITE);
-        // Restore the umask.
-        umask(curr_umask);
+    // Store old permissions:
+    // Just get the current umask.
+    mode_t curr_umask = umask(S_IREAD | S_IWRITE);
+    // Restore the umask.
+    umask(curr_umask);
 
-        // For new files respect the umask setting.
-        mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
+    // For new files respect the umask setting.
+    mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
 
-        // For existing files, use the mode of the original file.
-        if (destinationExisted)
+    // For existing files, use the mode of the original file.
+    if (destinationExisted)
+    {
+        struct stat stbuf;
+
+        if (::stat(dstFileName, &stbuf) == 0)
         {
-            struct stat stbuf;
-            if (::stat(dstFileName, &stbuf) == 0)
-            {
-                filePermissions = stbuf.st_mode;
-            }
+            filePermissions = stbuf.st_mode;
         }
-    #endif
+    }
+
+#endif
 
     // rename tmp file to dest
     int ret;
@@ -2406,18 +2563,20 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& destPath, bo
     if (ret != 0)
     {
         KMessageBox::error(this, i18n("Failed to overwrite original file"),
-                                      i18n("Error Saving File"));
+                           i18n("Error Saving File"));
         movingSaveFileFinished(false);
         return false;
     }
 
-    #ifndef _WIN32
-        // restore permissions
-        if (::chmod(dstFileName, filePermissions) != 0)
-        {
-            kWarning() << "Failed to restore file permissions for file " << dstFileName;
-        }
-    #endif
+#ifndef _WIN32
+
+    // restore permissions
+    if (::chmod(dstFileName, filePermissions) != 0)
+    {
+        kWarning() << "Failed to restore file permissions for file " << dstFileName;
+    }
+
+#endif
 
     return true;
 }
@@ -2456,15 +2615,15 @@ void EditorWindow::moveFile()
 
         kDebug() << "moving a remote file via KIO";
 
-        KIO::CopyJob *moveJob = KIO::move(KUrl(
-                        m_savingContext.saveTempFileName),
-                        m_savingContext.destinationURL);
+        KIO::CopyJob* moveJob = KIO::move(KUrl(
+                                              m_savingContext.saveTempFileName),
+                                          m_savingContext.destinationURL);
         connect(moveJob, SIGNAL(result(KJob*)),
                 this, SLOT(slotKioMoveFinished(KJob*)));
     }
 }
 
-void EditorWindow::slotKioMoveFinished(KJob *job)
+void EditorWindow::slotKioMoveFinished(KJob* job)
 {
     if (job->error())
     {
@@ -2507,6 +2666,7 @@ void EditorWindow::slotToggleColorManagedView()
 {
     d->viewCMViewAction->blockSignals(true);
     bool cmv = false;
+
     if (d->ICCSettings->enableCM)
     {
         cmv = !d->ICCSettings->useManagedView;
@@ -2523,17 +2683,23 @@ void EditorWindow::slotToggleColorManagedView()
 void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
 {
     QString tooltip;
+
     if (available)
     {
         if (cmv)
+        {
             tooltip = i18n("Color-Managed View is enabled.");
+        }
         else
+        {
             tooltip = i18n("Color-Managed View is disabled.");
+        }
     }
     else
     {
         tooltip = i18n("Color Management is not configured, so the Color-Managed View is not available.");
     }
+
     d->cmViewIndicator->setToolTip(tooltip);
 }
 
@@ -2565,8 +2731,8 @@ void EditorWindow::slotSetUnderExposureIndicator(bool on)
 void EditorWindow::setUnderExposureToolTip(bool on)
 {
     d->underExposureIndicator->setToolTip(
-                   on ? i18n("Under-Exposure indicator is enabled")
-                      : i18n("Under-Exposure indicator is disabled"));
+        on ? i18n("Under-Exposure indicator is enabled")
+        : i18n("Under-Exposure indicator is disabled"));
 }
 
 void EditorWindow::slotSetOverExposureIndicator(bool on)
@@ -2580,8 +2746,8 @@ void EditorWindow::slotSetOverExposureIndicator(bool on)
 void EditorWindow::setOverExposureToolTip(bool on)
 {
     d->overExposureIndicator->setToolTip(
-                   on ? i18n("Over-Exposure indicator is enabled")
-                      : i18n("Over-Exposure indicator is disabled"));
+        on ? i18n("Over-Exposure indicator is enabled")
+        : i18n("Over-Exposure indicator is disabled"));
 }
 
 void EditorWindow::slotDonateMoney()
@@ -2620,7 +2786,7 @@ void EditorWindow::slotSelectionChanged(const QRect& sel)
 
 void EditorWindow::slotRawCameraList()
 {
-    RawCameraDlg *dlg = new RawCameraDlg(kapp->activeWindow());
+    RawCameraDlg* dlg = new RawCameraDlg(kapp->activeWindow());
     dlg->show();
 }
 
@@ -2628,8 +2794,11 @@ void EditorWindow::slotThemeChanged()
 {
     QStringList themes(ThemeEngine::instance()->themeNames());
     int index = themes.indexOf(ThemeEngine::instance()->getCurrentThemeName());
+
     if (index == -1)
+    {
         index = themes.indexOf(i18n("Default"));
+    }
 
     m_themeMenuAction->setCurrentItem(index);
 
@@ -2637,9 +2806,13 @@ void EditorWindow::slotThemeChanged()
     KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
     if (!group.readEntry(d->configUseThemeBackgroundColorEntry, true))
+    {
         m_bgColor = group.readEntry(d->configBackgroundColorEntry, QColor(Qt::black));
+    }
     else
+    {
         m_bgColor = ThemeEngine::instance()->baseColor();
+    }
 
     m_canvas->setBackgroundColor(m_bgColor);
 }
@@ -2656,7 +2829,9 @@ void EditorWindow::toggleGUI2FullScreen()
         rightSideBar()->restore(QList<QWidget*>() << thumbBar(), d->fullscreenSizeBackup);
 
         if (m_fullScreenHideThumbBar)
+        {
             thumbBar()->restoreVisibility();
+        }
     }
     else
     {
@@ -2665,13 +2840,15 @@ void EditorWindow::toggleGUI2FullScreen()
         rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
 
         if (m_fullScreenHideThumbBar)
-                thumbBar()->hide();
+        {
+            thumbBar()->hide();
+        }
     }
 }
 
 void EditorWindow::slotComponentsInfo()
 {
-    LibsInfoDlg *dlg = new LibsInfoDlg(this);
+    LibsInfoDlg* dlg = new LibsInfoDlg(this);
     dlg->show();
 }
 
@@ -2703,13 +2880,17 @@ void EditorWindow::slotShowMenuBar()
 void EditorWindow::slotCloseTool()
 {
     if (d->toolIface)
+    {
         d->toolIface->slotCloseTool();
+    }
 }
 
 void EditorWindow::slotApplyTool()
 {
     if (d->toolIface)
+    {
         d->toolIface->slotApplyTool();
+    }
 }
 
 void EditorWindow::setPreviewModeMask(int mask)
@@ -2727,7 +2908,7 @@ void EditorWindow::setToolInfoMessage(const QString& txt)
     d->infoLabel->setText(txt);
 }
 
-VersionManager *EditorWindow::versionManager()
+VersionManager* EditorWindow::versionManager()
 {
     return &d->defaultVersionManager;
 }

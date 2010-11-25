@@ -61,7 +61,7 @@ public:
     QPixmap             toolIcon() const;
     QWidget*            toolView() const;
     EditorToolSettings* toolSettings() const;
-    
+
     FilterAction::Category toolCategory() const;
 
     virtual void        ICCSettingsChanged();
@@ -94,7 +94,7 @@ protected:
     virtual void setBusy(bool);
     virtual void readSettings();
     virtual void writeSettings();
-    virtual void finalRendering(){};
+    virtual void finalRendering() {};
 
 protected Q_SLOTS:
 
@@ -103,12 +103,12 @@ protected Q_SLOTS:
     virtual void slotOk();
     virtual void slotCancel();
     virtual void slotInit();
-    virtual void slotLoadSettings(){};
-    virtual void slotSaveAsSettings(){};
+    virtual void slotLoadSettings() {};
+    virtual void slotSaveAsSettings() {};
     virtual void slotResetSettings();
-    virtual void slotEffect(){};
-    virtual void slotChannelChanged(){};
-    virtual void slotScaleChanged(){};
+    virtual void slotEffect() {};
+    virtual void slotChannelChanged() {};
+    virtual void slotScaleChanged() {};
 
 private:
 
@@ -160,11 +160,11 @@ protected:
     void deleteFilterInstance(bool b=true);
 
     virtual void setToolView(QWidget* view);
-    virtual void prepareEffect(){};
-    virtual void prepareFinal(){};
-    virtual void putPreviewData(){};
-    virtual void putFinalData(){};
-    virtual void renderingFinished(){};
+    virtual void prepareEffect() {};
+    virtual void prepareFinal() {};
+    virtual void putPreviewData() {};
+    virtual void putFinalData() {};
+    virtual void renderingFinished() {};
 
 protected Q_SLOTS:
 

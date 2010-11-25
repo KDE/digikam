@@ -95,20 +95,23 @@ void BorderFilterPriv::setup(const DImg& m_orgImage)
         border2ndWidth  = (int)(size * 0.005);
 
         // Clamp internal border with to 1 pixel to be visible with small image.
-        if (border2ndWidth < 1) border2ndWidth = 1;
+        if (border2ndWidth < 1)
+        {
+            border2ndWidth = 1;
+        }
     }
 }
 
 BorderFilter::BorderFilter(QObject* parent)
-                 : DImgThreadedFilter(parent),
-                   d(new BorderFilterPriv)
+    : DImgThreadedFilter(parent),
+      d(new BorderFilterPriv)
 {
     initFilter();
 }
 
 BorderFilter::BorderFilter(DImg* image, QObject* parent, const BorderContainer& settings)
-            : DImgThreadedFilter(image, parent, "Border"),
-              d(new BorderFilterPriv)
+    : DImgThreadedFilter(image, parent, "Border"),
+      d(new BorderFilterPriv)
 {
     d->settings = settings;
     initFilter();
@@ -126,29 +129,39 @@ void BorderFilter::filterImage()
 
     switch (d->settings.borderType)
     {
-      case BorderContainer::SolidBorder:
+        case BorderContainer::SolidBorder:
+
             if (d->settings.preserveAspectRatio)
+            {
                 solid(m_orgImage, m_destImage, d->solidColor, d->borderMainWidth);
+            }
             else
+            {
                 solid2(m_orgImage, m_destImage, d->solidColor, d->settings.borderWidth1);
+            }
+
             break;
 
         case BorderContainer::NiepceBorder:
+
             if (d->settings.preserveAspectRatio)
                 niepce(m_orgImage, m_destImage, d->niepceBorderColor, d->borderMainWidth,
                        d->niepceLineColor, d->border2ndWidth);
             else
                 niepce2(m_orgImage, m_destImage, d->niepceBorderColor, d->settings.borderWidth1,
                         d->niepceLineColor, d->settings.borderWidth4);
+
             break;
 
         case BorderContainer::BeveledBorder:
+
             if (d->settings.preserveAspectRatio)
                 bevel(m_orgImage, m_destImage, d->bevelUpperLeftColor,
                       d->bevelLowerRightColor, d->borderMainWidth);
             else
                 bevel2(m_orgImage, m_destImage, d->bevelUpperLeftColor,
                        d->bevelLowerRightColor, d->settings.borderWidth1);
+
             break;
 
         case BorderContainer::PineBorder:
@@ -167,6 +180,7 @@ void BorderFilter::filterImage()
         case BorderContainer::GraniteBorder:
         case BorderContainer::RockBorder:
         case BorderContainer::WallBorder:
+
             if (d->settings.preserveAspectRatio)
                 pattern(m_orgImage, m_destImage, d->borderMainWidth,
                         d->decorativeFirstColor, d->decorativeSecondColor,
@@ -175,6 +189,7 @@ void BorderFilter::filterImage()
                 pattern2(m_orgImage, m_destImage, d->settings.borderWidth1,
                          d->decorativeFirstColor, d->decorativeSecondColor,
                          d->settings.borderWidth2, d->settings.borderWidth2);
+
             break;
     }
 }
@@ -235,14 +250,16 @@ void BorderFilter::bevel(DImg& src, DImg& dest, const DColor& topColor,
     // paint upper right corner
     QPoint upperRightCorner((width - ((width - src.width()) / 2) - 2),
                             ((0 + (height - src.height())) / 2 + 2)
-    );
+                           );
 
     for (int x = upperRightCorner.x(); x < width; ++x)
     {
         for (int y = 0; y < upperRightCorner.y(); ++y)
         {
             if (btRegion.contains(QPoint(x, y)))
+            {
                 dest.setPixelColor(x, y, btmColor);
+            }
         }
     }
 
@@ -258,14 +275,16 @@ void BorderFilter::bevel(DImg& src, DImg& dest, const DColor& topColor,
     // paint lower left corner
     QPoint lowerLeftCorner((0 + ((width - src.width()) / 2) + 2),
                            (height - ((height - src.height()) / 2) - 2)
-    );
+                          );
 
     for (int x = 0; x < lowerLeftCorner.x(); ++x)
     {
         for (int y = lowerLeftCorner.y(); y < height; ++y)
         {
             if (btRegion.contains(QPoint(x, y)))
+            {
                 dest.setPixelColor(x, y, btmColor);
+            }
         }
     }
 
@@ -279,9 +298,13 @@ void BorderFilter::bevel(DImg& src, DImg& dest, const DColor& topColor,
     }
 
     if (d->settings.orgWidth > d->settings.orgHeight)
+    {
         dest.bitBltImage(&src, (dest.width() - src.width()) / 2, borderWidth);
+    }
     else
+    {
         dest.bitBltImage(&src, borderWidth, (dest.height() - src.height()) / 2);
+    }
 }
 
 void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
@@ -309,8 +332,11 @@ void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
     DImg tmp2(width, height, tmp.sixteenBit(), tmp.hasAlpha());
     kDebug() << "Border File:" << d->settings.borderPath;
     DImg border(d->settings.borderPath);
+
     if ( border.isNull() )
+    {
         return;
+    }
 
     border.convertToDepthOfImage(&tmp2);
 
@@ -361,40 +387,52 @@ void BorderFilter::bevel2(DImg& src, DImg& dest, const DColor& topColor,
     int wc;
 
     dest = DImg(src.width() + borderWidth*2,
-                         src.height() + borderWidth*2,
-                         src.sixteenBit(), src.hasAlpha());
+                src.height() + borderWidth*2,
+                src.sixteenBit(), src.hasAlpha());
 
     // top
 
-    for(y=0, wc = (int)dest.width()-1; y < borderWidth; ++y, --wc)
+    for (y=0, wc = (int)dest.width()-1; y < borderWidth; ++y, --wc)
     {
-        for(x=0; x < wc; ++x)
+        for (x=0; x < wc; ++x)
+        {
             dest.setPixelColor(x, y, topColor);
+        }
 
-        for(;x < (int)dest.width(); ++x)
+        for (; x < (int)dest.width(); ++x)
+        {
             dest.setPixelColor(x, y, btmColor);
+        }
     }
 
     // left and right
 
-    for(; y < (int)dest.height()-borderWidth; ++y)
+    for (; y < (int)dest.height()-borderWidth; ++y)
     {
-       for(x=0; x < borderWidth; ++x)
-           dest.setPixelColor(x, y, topColor);
+        for (x=0; x < borderWidth; ++x)
+        {
+            dest.setPixelColor(x, y, topColor);
+        }
 
-       for(x = (int)dest.width()-1; x > (int)dest.width()-borderWidth-1; --x)
-           dest.setPixelColor(x, y, btmColor);
+        for (x = (int)dest.width()-1; x > (int)dest.width()-borderWidth-1; --x)
+        {
+            dest.setPixelColor(x, y, btmColor);
+        }
     }
 
     // bottom
 
-    for(wc = borderWidth; y < (int)dest.height(); ++y, --wc)
+    for (wc = borderWidth; y < (int)dest.height(); ++y, --wc)
     {
-       for(x=0; x < wc; ++x)
-           dest.setPixelColor(x, y, topColor);
+        for (x=0; x < wc; ++x)
+        {
+            dest.setPixelColor(x, y, topColor);
+        }
 
-       for(; x < (int)dest.width(); ++x)
-           dest.setPixelColor(x, y, btmColor);
+        for (; x < (int)dest.width(); ++x)
+        {
+            dest.setPixelColor(x, y, btmColor);
+        }
     }
 
     dest.bitBltImage(&src, borderWidth, borderWidth);
@@ -411,8 +449,11 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
 
     kDebug() << "Border File:" << d->settings.borderPath;
     DImg border(d->settings.borderPath);
+
     if ( border.isNull() )
+    {
         return;
+    }
 
     DImg borderImg(w, h, src.sixteenBit(), src.hasAlpha());
     border.convertToDepthOfImage(&borderImg);
@@ -427,7 +468,7 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
 
     // First line around the pattern tile.
     DImg tmp = borderImg.smoothScale(src.width() + borderWidth*2,
-                                              src.height() + borderWidth*2 );
+                                     src.height() + borderWidth*2 );
 
     solid2(tmp, dest, firstColor, firstWidth);
 
@@ -442,25 +483,36 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
 static QString colorToString(const QColor& c)
 {
     if (c.alpha() != 255)
+    {
         return QString("rgb(%1,%2,%3)").arg(c.red()).arg(c.green()).arg(c.blue());
+    }
     else
+    {
         return QString("rgba(%1,%2,%3,%4)").arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
+    }
 }
 
 static QColor stringToColor(const QString& s)
 {
     QRegExp regexp("(rgb|rgba)\\s*\\((.+)\\)\\s*");
+
     if (regexp.exactMatch(s))
     {
         QStringList colors = regexp.cap(1).split(",", QString::SkipEmptyParts);
+
         if (colors.size() >= 3)
         {
             QColor c(colors[0].toInt(), colors[1].toInt(), colors[2].toInt());
+
             if (regexp.cap(0) == "rgba" && colors.size() == 4)
+            {
                 c.setAlpha(colors[4].toInt());
+            }
+
             return c;
         }
     }
+
     return QColor();
 }
 

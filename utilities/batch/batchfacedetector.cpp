@@ -75,7 +75,7 @@ public:
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings& settings)
-                 : DProgressDlg(0), d(new BatchFaceDetectorPriv)
+    : DProgressDlg(0), d(new BatchFaceDetectorPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setModal(false);
@@ -95,6 +95,7 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
     {
         FacePipeline::FilterMode filterMode;
         FacePipeline::WriteMode  writeMode;
+
         if (settings.task == FaceScanSettings::DetectAndRecognize)
         {
             if (settings.alreadyScannedHandling == FaceScanSettings::Skip)
@@ -126,9 +127,13 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
             d->pipeline.plugPreviewLoader();
 
             if (settings.useFullCpu)
+            {
                 d->pipeline.plugParallelFaceDetectors();
+            }
             else
+            {
                 d->pipeline.plugFaceDetector();
+            }
         }
 
         d->pipeline.plugFaceRecognizer();
@@ -155,9 +160,13 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
             this, SLOT(slotImagesSkipped(const QList<ImageInfo>&)));
 
     if (settings.albums.isEmpty() || settings.task == FaceScanSettings::RetrainAll)
+    {
         d->albumTodoList = AlbumManager::instance()->allPAlbums();
+    }
     else
+    {
         d->albumTodoList = settings.albums;
+    }
 
     startAlbumListing();
 }
@@ -176,11 +185,15 @@ void BatchFaceDetector::startAlbumListing()
     foreach (Album* album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
+        {
             d->total += palbumCounts.value(album->id());
+        }
         else
             // this is possibly broken of course because we dont know if images have multiple tags,
             // but there's no better solution without expensive operation
+        {
             d->total += talbumCounts.value(album->id());
+        }
     }
     kDebug() << "Total is" << d->total;
     setMaximum(d->total);
@@ -191,14 +204,19 @@ void BatchFaceDetector::startAlbumListing()
 void BatchFaceDetector::continueAlbumListing()
 {
     kDebug() << d->albumListing.isRunning() << !d->pipeline.hasFinished();
+
     // we get here by the finished signal from both, and want both to have finished to continue
     if (d->albumListing.isRunning() || !d->pipeline.hasFinished())
+    {
         return;
+    }
 
     if (d->albumTodoList.isEmpty())
+    {
         return complete();
+    }
 
-    Album *album = d->albumTodoList.takeFirst();
+    Album* album = d->albumTodoList.takeFirst();
     kDebug() << "Album" << album->title();
     d->albumListing.allItemsFromAlbum(album);
 }
@@ -249,10 +267,16 @@ void BatchFaceDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
 void BatchFaceDetector::slotShowOneDetected(const FacePipelinePackage& package)
 {
     QPixmap pix;
+
     if (!package.image.isNull())
+    {
         pix = package.image.smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
+    }
     else if (!package.faces.isEmpty())
+    {
         pix = QPixmap::fromImage(package.faces.first().image().toQImage().scaled(128, 128, Qt::KeepAspectRatio));
+    }
+
     addedAction(pix, package.info.filePath());
     advance(1);
 }

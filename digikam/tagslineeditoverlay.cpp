@@ -1,28 +1,28 @@
- /* ============================================================
- *
- * This file is a part of digiKam project
- * http://www.digikam.org
- *
- * Date        : 2009-04-30
- * Description : rating icon view item at mouse hover
- *
- * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
- * Copyright (C) 2010 by Aditya Bhatt <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * ============================================================ */
+/* ============================================================
+*
+* This file is a part of digiKam project
+* http://www.digikam.org
+*
+* Date        : 2009-04-30
+* Description : rating icon view item at mouse hover
+*
+* Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
+* Copyright (C) 2010 by Aditya Bhatt <caulier dot gilles at gmail dot com>
+* Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+* Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+*
+* This program is free software; you can redistribute it
+* and/or modify it under the terms of the GNU General
+* Public License as published by the Free Software Foundation;
+* either version 2, or (at your option)
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* ============================================================ */
 
 #include "tagslineeditoverlay.moc"
 
@@ -50,7 +50,7 @@ namespace Digikam
 {
 
 TagsLineEditOverlay::TagsLineEditOverlay(QObject* parent)
-                   : AbstractWidgetDelegateOverlay(parent)
+    : AbstractWidgetDelegateOverlay(parent)
 {
 }
 
@@ -84,15 +84,17 @@ void TagsLineEditOverlay::setActive(bool active)
                 this, SLOT(slotTagChanged(QString)));
 
         if (view()->model())
-            connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-                    this, SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
+            connect(view()->model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+                    this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
     }
     else
     {
         // widget is deleted
 
         if (view() && view()->model())
+        {
             disconnect(view()->model(), 0, this, 0);
+        }
     }
 }
 
@@ -110,7 +112,7 @@ void TagsLineEditOverlay::hide()
     AbstractWidgetDelegateOverlay::hide();
     //kDebug() << "Hide called, probably mouse left";
 
-    if(!m_widget->hasFocus())
+    if (!m_widget->hasFocus())
     {
         m_widget->releaseKeyboard();
         m_widget->releaseMouse();
@@ -121,7 +123,9 @@ void TagsLineEditOverlay::hide()
 void TagsLineEditOverlay::updatePosition()
 {
     if (!m_index.isValid())
+    {
         return;
+    }
 
     QRect thumbrect = delegate()->ratingRect();
     //kDebug() << "updatePosition called, probably a mouseover : " << thumbrect;
@@ -132,6 +136,7 @@ void TagsLineEditOverlay::updatePosition()
         int offset = (rect.width() - addTagsLineEdit()->width()) / 2;
         rect.adjust(offset, 0, -offset, 0);
     }
+
     QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 
@@ -143,7 +148,10 @@ void TagsLineEditOverlay::updatePosition()
 void TagsLineEditOverlay::updateTag()
 {
     if (!m_index.isValid())
+    {
         return;
+    }
+
     ImageInfo info = ImageModel::retrieveImageInfo(m_index);
     kDebug() << "called updateTag()";
     //TODO: ADD ratingWidget()->setRating(info.rating());
@@ -152,23 +160,29 @@ void TagsLineEditOverlay::updateTag()
 void TagsLineEditOverlay::slotTagChanged(int tagId)
 {
     kDebug() << "Tag changed";
+
     if (m_widget && m_widget->isVisible() && m_index.isValid())
+    {
         emit this->tagEdited(m_index, tagId);
+    }
 }
 
 void TagsLineEditOverlay::slotTagChanged(const QString& name)
 {
     kDebug() << "Tag changed";
+
     if (m_widget && m_widget->isVisible() && m_index.isValid())
+    {
         emit this->tagEdited(m_index, name);
+    }
 }
 
 void TagsLineEditOverlay::slotDataChanged(const QModelIndex& /*topLeft*/, const QModelIndex& /*bottomRight*/)
 {
-/*
-    if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
-        updateTag();
-*/
+    /*
+        if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
+            updateTag();
+    */
 }
 
 void TagsLineEditOverlay::slotEntered(const QModelIndex& index)
@@ -177,7 +191,9 @@ void TagsLineEditOverlay::slotEntered(const QModelIndex& index)
 
     // see bug 228810, this is a small workaround
     if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
+    {
         addTagsLineEdit()->setVisible(true);
+    }
 
     m_index = index;
 

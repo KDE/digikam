@@ -46,11 +46,11 @@ bool FilterAction::isNull() const
 bool FilterAction::operator==(const FilterAction& other) const
 {
     return m_identifier      == other.m_identifier
-      &&   m_version         == other.m_version
-      &&   m_category        == other.m_category
-      &&   m_description     == other.m_description
-      &&   m_displayableName == other.m_displayableName
-      &&   m_params          == other.m_params;
+           &&   m_version         == other.m_version
+           &&   m_category        == other.m_category
+           &&   m_description     == other.m_description
+           &&   m_displayableName == other.m_displayableName
+           &&   m_params          == other.m_params;
 }
 
 FilterAction::Category FilterAction::category() const
@@ -98,7 +98,7 @@ const QVariant FilterAction::parameter(const QString& key) const
     return m_params.value(key);
 }
 
-QVariant &FilterAction::parameter(const QString& key)
+QVariant& FilterAction::parameter(const QString& key)
 {
     return m_params[key];
 }

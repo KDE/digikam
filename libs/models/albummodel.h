@@ -40,14 +40,14 @@ class AlbumModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing all physical albums
-    explicit AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
+    explicit AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject* parent = 0);
     virtual ~AlbumModel();
 
-    PAlbum *albumForIndex(const QModelIndex& index) const;
+    PAlbum* albumForIndex(const QModelIndex& index) const;
 
 protected:
 
-    virtual QVariant decorationRoleData(Album *a) const;
+    virtual QVariant decorationRoleData(Album* a) const;
     virtual Album* albumForId(int id) const;
 };
 
@@ -58,14 +58,14 @@ class TagModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing all tags
-    explicit TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
+    explicit TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject* parent = 0);
 
-    TAlbum *albumForIndex(const QModelIndex& index) const;
+    TAlbum* albumForIndex(const QModelIndex& index) const;
     void setColumnHeader(const QString& header);
-    
+
 protected:
 
-    virtual QVariant decorationRoleData(Album *a) const;
+    virtual QVariant decorationRoleData(Album* a) const;
     virtual Album* albumForId(int id) const;
 };
 
@@ -77,9 +77,9 @@ class SearchModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing searches
-    SearchModel(QObject *parent = 0);
+    SearchModel(QObject* parent = 0);
 
-    SAlbum *albumForIndex(const QModelIndex& index) const;
+    SAlbum* albumForIndex(const QModelIndex& index) const;
 
     /** Set a hash of internal names (key) that shall be replaced by a user-visible string (value).
      *  This affects Qt::DisplayRole and AlbumTitleRole. */
@@ -96,7 +96,7 @@ public:
 
 protected:
 
-    virtual QVariant albumData(Album *a, int role) const;
+    virtual QVariant albumData(Album* a, int role) const;
     virtual Album* albumForId(int id) const;
 
 private Q_SLOTS:
@@ -125,9 +125,9 @@ public:
      *
      * @param parent parent for Qt's parent child mechanism
      */
-    DateAlbumModel(QObject *parent = 0);
+    DateAlbumModel(QObject* parent = 0);
 
-    DAlbum *albumForIndex(const QModelIndex& index) const;
+    DAlbum* albumForIndex(const QModelIndex& index) const;
 
     /**
      * Finds an album index based on a date. The given date is therefore
@@ -138,7 +138,7 @@ public:
      * @return model index corresponding to the album with the given date or an
      *         empty index if not found
      */
-    QModelIndex monthIndexForDate(const QDate &date) const;
+    QModelIndex monthIndexForDate(const QDate& date) const;
 
     /** Set pixmaps for the DecorationRole */
     void setPixmaps(const QPixmap& forYearAlbums, const QPixmap& forMonthAlbums);
@@ -149,9 +149,9 @@ public Q_SLOTS:
 
 protected:
 
-    virtual QString  albumName(Album *a) const;
-    virtual QVariant decorationRoleData(Album *a) const;
-    virtual QVariant sortRoleData(Album *a) const;
+    virtual QString  albumName(Album* a) const;
+    virtual QVariant decorationRoleData(Album* a) const;
+    virtual QVariant sortRoleData(Album* a) const;
     virtual Album* albumForId(int id) const;
 
 protected:

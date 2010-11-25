@@ -69,7 +69,7 @@ public:
 };
 
 DPopupMenu::DPopupMenu(QWidget* parent)
-          : KMenu(parent), d(new DPopupMenuPriv)
+    : KMenu(parent), d(new DPopupMenuPriv)
 {
     d->fontAppName = KGlobalSettings::generalFont();
     d->fontVersion = KGlobalSettings::generalFont();
@@ -90,7 +90,7 @@ DPopupMenu::~DPopupMenu()
     delete d;
 }
 
-void DPopupMenu::renderSidebarGradient(QPainter *p)
+void DPopupMenu::renderSidebarGradient(QPainter* p)
 {
     p->setRenderHint(QPainter::TextAntialiasing);
     p->setPen(Qt::white);
@@ -98,7 +98,7 @@ void DPopupMenu::renderSidebarGradient(QPainter *p)
     int frameWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
     QRect drawRect = QStyle::visualRect(layoutDirection(), rect(),
                                         QRect(frameWidth, frameWidth,
-                                              d->gradientWidth, height() - 2*frameWidth));
+                                                d->gradientWidth, height() - 2*frameWidth));
     p->setClipRect(drawRect);
 
     // ----------------------------------------
@@ -112,7 +112,7 @@ void DPopupMenu::renderSidebarGradient(QPainter *p)
     linearGrad.setColorAt(1, QColor(98, 98, 98));
 
     // FIXME: this doesn't seem to work in 0.10.x versions, so I disable it for now
-//    linearGrad.setColorAt(1, calcPixmapColor());
+    //    linearGrad.setColorAt(1, calcPixmapColor());
 
     p->fillRect(drawRect, QBrush(linearGrad));
 
@@ -179,14 +179,19 @@ QColor DPopupMenu::calcPixmapColor()
 
     if ( (qAbs(h1-h3)+qAbs(s1-s3)+qAbs(v1-v3) < qAbs(h2-h3)+qAbs(s2-s3)+qAbs(v2-v3)) &&
          ((qAbs(h1-h3)+qAbs(s1-s3)+qAbs(v1-v3) < 32) || (s1 < 32)) && (s2 > s1))
+    {
         color = inactiveTitle;
+    }
     else
+    {
         color = activeTitle;
+    }
 
     // limit max/min brightness
     int r, g, b;
     color.getRgb(&r, &g, &b);
     int gray = qGray(r, g, b);
+
     if (gray > 180)
     {
         r = (r - (gray - 180) < 0 ? 0 : r - (gray - 180));
@@ -199,6 +204,7 @@ QColor DPopupMenu::calcPixmapColor()
         g = (g + (76 - gray) > 255 ? 255 : g + (76 - gray));
         b = (b + (76 - gray) > 255 ? 255 : b + (76 - gray));
     }
+
     color.setRgb(r, g, b);
 
     return color;

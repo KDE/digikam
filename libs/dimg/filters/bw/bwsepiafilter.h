@@ -120,7 +120,7 @@ public:
         curvesPrm   = container;
     };
 
-    ~BWSepiaContainer(){};
+    ~BWSepiaContainer() {};
 
 public:
 
@@ -149,12 +149,27 @@ public:
     explicit BWSepiaFilter(DImg* orgImage, QObject* parent=0, const BWSepiaContainer& settings=BWSepiaContainer());
     virtual ~BWSepiaFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:BWSepiaFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Black & White / Sepia Filter"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:BWSepiaFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Black & White / Sepia Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

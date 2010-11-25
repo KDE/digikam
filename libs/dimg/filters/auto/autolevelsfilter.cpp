@@ -42,14 +42,14 @@ namespace Digikam
 {
 
 AutoLevelsFilter::AutoLevelsFilter(QObject* parent)
-                 : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
-                : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter"),
-                  m_refImage(*refImage)
+    : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter"),
+      m_refImage(*refImage)
 {
     initFilter();
 }
@@ -62,7 +62,10 @@ AutoLevelsFilter::~AutoLevelsFilter()
 void AutoLevelsFilter::filterImage()
 {
     if (m_refImage.isNull())
+    {
         m_refImage = m_orgImage;
+    }
+
     autoLevelsCorrectionImage();
     m_destImage = m_orgImage;
 }
@@ -76,11 +79,11 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        kDebug() << "Ref. image and Org. has different bits depth"; 
+        kDebug() << "Ref. image and Org. has different bits depth";
         return;
     }
 
-    uchar* data     = m_orgImage.bits(); 
+    uchar* data     = m_orgImage.bits();
     int w           = m_orgImage.width();
     int h           = m_orgImage.height();
     bool sixteenBit = m_orgImage.sixteenBit();
@@ -95,9 +98,13 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     if (runningFlag())
     {
         if (sixteenBit)
+        {
             desData = new uchar[w*h*8];
+        }
         else
+        {
             desData = new uchar[w*h*4];
+        }
 
         postProgress(20);
     }
@@ -105,7 +112,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     // Create an histogram of the reference image.
     if (runningFlag())
     {
-        histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(), 
+        histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
                                        m_refImage.height(), m_refImage.sixteenBit());
         histogram->calculate();
         postProgress(30);
@@ -142,9 +149,13 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     if (runningFlag())
     {
         if (sixteenBit)
+        {
             memcpy (data, desData, w*h*8);
+        }
         else
+        {
             memcpy (data, desData, w*h*4);
+        }
 
         postProgress(80);
     }
@@ -154,7 +165,9 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     delete levels;
 
     if (runningFlag())
+    {
         postProgress(90);
+    }
 }
 
 FilterAction AutoLevelsFilter::filterAction()

@@ -128,7 +128,7 @@ public:
      * Returns a suitable creation date from file system information.
      * Use this as a fallback if metadata is not available.
      */
-    static QDateTime creationDateFromFilesystem(const QFileInfo &info);
+    static QDateTime creationDateFromFilesystem(const QFileInfo& info);
 
     /**
      * Resolves the image history of the image id by filling the ImageRelations table
@@ -178,8 +178,8 @@ public:
      * Returns containers with user-presentable information.
      * These methods provide the reverse service: Not writing into the db, but reading from the db.
      */
-    static void fillCommonContainer(qlonglong imageid, ImageCommonContainer *container);
-    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer *container);
+    static void fillCommonContainer(qlonglong imageid, ImageCommonContainer* container);
+    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* container);
 
     /**
      * Helper methods to translate enum values to user presentable strings

@@ -108,7 +108,7 @@ public:
         greenMaskTool(0),
         eraseMaskTool(0),
         maskGroup(0)
-        {}
+    {}
 
     static const QString configGroupName;
     static const QString configStepEntry;
@@ -171,7 +171,7 @@ const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configPreserve
 // --------------------------------------------------------
 
 ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
-                      : EditorToolThreaded(parent), d(new ContentAwareResizeToolPriv)
+    : EditorToolThreaded(parent), d(new ContentAwareResizeToolPriv)
 {
     setObjectName("liquidrescale");
     setToolName(i18n("Liquid Rescale"));
@@ -301,7 +301,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     d->greenMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->greenMaskTool, ContentAwareResizeToolPriv::greenMask);
 
-    QLabel *labeEraseMaskTool = new QLabel(i18n("Erase mask:"), d->gboxSettings->plainPage());
+    QLabel* labeEraseMaskTool = new QLabel(i18n("Erase mask:"), d->gboxSettings->plainPage());
     d->eraseMaskTool          = new QToolButton(d->gboxSettings->plainPage());
     d->eraseMaskTool->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/indicator-gray.png")));
     d->eraseMaskTool->setCheckable(true);
@@ -310,7 +310,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     d->eraseMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->eraseMaskTool, ContentAwareResizeToolPriv::eraseMask);
 
-    QLabel *labelMaskPenSize = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
+    QLabel* labelMaskPenSize = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
     d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
     d->maskPenSize->setRange(1, 100, 1);
     d->maskPenSize->setDefaultValue(10);
@@ -432,7 +432,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     d->expanderBox->setObjectName("ContentAwareResizeTool Expander");
     d->expanderBox->addItem(sizeSettingsContainer, SmallIcon("transform-scale"), i18n("Target size"),
                             QString("SizeSettingsContainer"), true);
-    d->expanderBox->addItem(mixedRescaleContainer, SmallIcon("transform-scale"), 
+    d->expanderBox->addItem(mixedRescaleContainer, SmallIcon("transform-scale"),
                             i18n("Content-aware rescale percentage"),
                             QString("MixedRescaleContainer"), true);
     d->expanderBox->addItem(maskSettingsContainer, SmallIcon("transform-scale"), i18n("Mask Settings"),
@@ -671,7 +671,9 @@ void ContentAwareResizeTool::prepareEffect()
 {
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
+    {
         slotValuesChanged();
+    }
 
     disableSettings();
 
@@ -692,8 +694,11 @@ void ContentAwareResizeTool::prepareEffect()
     }
 
     QImage mask;
+
     if (d->weightMaskBox->isChecked())
+    {
         mask = d->previewWidget->getMask();
+    }
 
     contentAwareResizeCore(&imTemp, new_w, new_h, mask);
 }
@@ -702,7 +707,9 @@ void ContentAwareResizeTool::prepareFinal()
 {
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
+    {
         slotValuesChanged();
+    }
 
     disableSettings();
 
@@ -715,20 +722,23 @@ void ContentAwareResizeTool::prepareFinal()
         int diff_w         = (int)(stdRescaleP * (iface.originalWidth()  - d->wInput->value()));
         int diff_h         = (int)(stdRescaleP * (iface.originalHeight() - d->hInput->value()));
         DImg image         = iface.getOriginalImg()->smoothScale(iface.originalWidth()  - diff_w,
-                                                                 iface.originalHeight() - diff_h,
-                                                                 Qt::IgnoreAspectRatio);
+                             iface.originalHeight() - diff_h,
+                             Qt::IgnoreAspectRatio);
 
         if (d->weightMaskBox->isChecked())
         {
             mask = d->previewWidget->getMask().scaled(iface.originalWidth()  - diff_w,
-                                                      iface.originalHeight() - diff_h);
+                    iface.originalHeight() - diff_h);
         }
+
         contentAwareResizeCore(&image, d->wInput->value(), d->hInput->value(), mask);
     }
     else
     {
         if (d->weightMaskBox->isChecked())
+        {
             mask = d->previewWidget->getMask().scaled(iface.originalWidth(), iface.originalHeight());
+        }
 
         contentAwareResizeCore(iface.getOriginalImg(), d->wInput->value(), d->hInput->value(), mask);
     }
@@ -788,11 +798,17 @@ void ContentAwareResizeTool::slotMaskColorChanged(int type)
     d->previewWidget->setEraseMode(type == ContentAwareResizeToolPriv::eraseMask);
 
     if (type == ContentAwareResizeToolPriv::redMask)
+    {
         d->previewWidget->setPaintColor(QColor(255, 0, 0));
+    }
     else if (type == ContentAwareResizeToolPriv::greenMask)
+    {
         d->previewWidget->setPaintColor(QColor(0, 255, 0));
+    }
     else // erase
+    {
         d->previewWidget->setPaintColor(QColor(255, 255, 0));
+    }
 }
 
 void ContentAwareResizeTool::slotWeightMaskBoxStateChanged(int state)
@@ -814,9 +830,13 @@ void ContentAwareResizeTool::slotWeightMaskBoxStateChanged(int state)
         d->previewWidget->setMaskEnabled(true);
 
         if (d->redMaskTool->isChecked())
+        {
             d->previewWidget->setPaintColor(QColor(255, 0, 0, 255));
+        }
         else
+        {
             d->previewWidget->setPaintColor(QColor(0, 255, 0, 255));
+        }
     }
 }
 

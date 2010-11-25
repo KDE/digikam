@@ -79,7 +79,7 @@ public:
      *  Then the object will be scheduled each time you emit the signal.
      */
     bool connectAndSchedule(const QObject* sender, const char* signal, const char* method,
-                             Qt::ConnectionType type = Qt::AutoConnection) const;
+                            Qt::ConnectionType type = Qt::AutoConnection) const;
 
     static bool connectAndSchedule(const QObject* sender, const char* signal,
                                    const WorkerObject* receiver, const char* method,
@@ -126,12 +126,12 @@ protected:
     bool transitionToRunning();
     void transitionToInactive();
 
-    virtual bool event(QEvent *e);
+    virtual bool event(QEvent* e);
 
     void run();
-    void setEventLoop(QEventLoop *loop);
-    void addRunnable(WorkerObjectRunnable *loop);
-    void removeRunnable(WorkerObjectRunnable *loop);
+    void setEventLoop(QEventLoop* loop);
+    void addRunnable(WorkerObjectRunnable* loop);
+    void removeRunnable(WorkerObjectRunnable* loop);
 
     /**
      * Called from within thread's event loop to quit processing.

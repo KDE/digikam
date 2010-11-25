@@ -48,10 +48,10 @@ class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate
 
 public:
 
-    ItemViewImageDelegate(QObject *parent = 0);
+    ItemViewImageDelegate(QObject* parent = 0);
     ~ItemViewImageDelegate();
 
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex & index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize gridSize() const;
 
     ThumbnailSize thumbnailSize() const;
@@ -61,9 +61,9 @@ public:
     virtual void setSpacing(int spacing);
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
     virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
-                                const QModelIndex& index, QRect *tooltipRect = 0) const;
+                                const QModelIndex& index, QRect* tooltipRect = 0) const;
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
-                                   const QModelIndex& index, QRect *activationRect = 0) const;
+                                   const QModelIndex& index, QRect* activationRect = 0) const;
 
     int spacing() const;
 
@@ -82,18 +82,18 @@ public:
 
     /** Can be used to temporarily disable drawing of the rating.
      *  Call with QModelIndex() afterwards. */
-    void setRatingEdited(const QModelIndex &index);
+    void setRatingEdited(const QModelIndex& index);
     /** Returns the rectangle where the rating is drawn,
      *  or a null rectangle if not supported. */
     virtual QRect ratingRect() const;
 
     /** Support for overlays. To be called by the item view only. */
-    void installOverlay(ImageDelegateOverlay *overlay);
-    void removeOverlay(ImageDelegateOverlay *overlay);
+    void installOverlay(ImageDelegateOverlay* overlay);
+    void removeOverlay(ImageDelegateOverlay* overlay);
     void setAllOverlaysActive(bool active);
-    void setViewOnAllOverlays(QAbstractItemView *view);
+    void setViewOnAllOverlays(QAbstractItemView* view);
     void removeAllOverlays();
-    void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
+    void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
 
 protected Q_SLOTS:
 
@@ -103,18 +103,18 @@ protected Q_SLOTS:
 protected:
 
     /// Use the tool methods for painting in subclasses
-    QRect drawThumbnail(QPainter *p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
-    void drawRating(QPainter *p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const;
-    void drawName(QPainter *p,const QRect& nameRect, const QString& name) const;
-    void drawComments(QPainter *p, const QRect& commentsRect, const QString& comments) const;
-    void drawCreationDate(QPainter *p, const QRect& dateRect, const QDateTime& date) const;
-    void drawModificationDate(QPainter *p, const QRect& dateRect, const QDateTime& date) const;
-    void drawImageSize(QPainter *p, const QRect& dimsRect, const QSize& dims) const;
-    void drawFileSize(QPainter *p, const QRect& r, int bytes) const;
-    void drawTags(QPainter *p, const QRect& r, const QString& tagsString, bool isSelected) const;
-    void drawFocusRect(QPainter *p, const QStyleOptionViewItem& option, bool isSelected) const;
-    void drawMouseOverRect(QPainter *p, const QStyleOptionViewItem& option) const;
-    void drawDelegates(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
+    void drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const;
+    void drawName(QPainter* p,const QRect& nameRect, const QString& name) const;
+    void drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const;
+    void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
+    void drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
+    void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
+    void drawFileSize(QPainter* p, const QRect& r, int bytes) const;
+    void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const;
+    void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const;
+    void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const;
+    void drawDelegates(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void prepareFonts();
     void prepareMetrics(int maxWidth);
     void prepareBackground();
@@ -127,9 +127,9 @@ protected:
     /// Returns the relevant pixmap from the cached rating pixmaps
     QPixmap ratingPixmap(int rating, bool selected) const;
 
-    ItemViewImageDelegatePrivate *const d_ptr;
-    ItemViewImageDelegate(ItemViewImageDelegatePrivate &dd, QObject *parent);
-    
+    ItemViewImageDelegatePrivate* const d_ptr;
+    ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, QObject* parent);
+
 private:
 
     Q_DECLARE_PRIVATE(ItemViewImageDelegate)

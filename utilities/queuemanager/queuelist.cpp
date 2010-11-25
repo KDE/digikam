@@ -76,7 +76,7 @@ public:
 };
 
 QueueListViewItem::QueueListViewItem(QTreeWidget* view, const ImageInfo& info)
-                 : QTreeWidgetItem(view), d(new QueueListViewItemPriv)
+    : QTreeWidgetItem(view), d(new QueueListViewItemPriv)
 {
     setThumb(SmallIcon("image-x-generic", KIconLoader::SizeLarge, KIconLoader::DisabledState));
     setInfo(info);
@@ -233,7 +233,7 @@ public:
 };
 
 QueueListView::QueueListView(QWidget* parent)
-             : QTreeWidget(parent), d(new QueueListViewPriv)
+    : QTreeWidget(parent), d(new QueueListViewPriv)
 {
     setIconSize(QSize(d->iconSize, d->iconSize));
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -301,6 +301,7 @@ QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
     foreach(QTreeWidgetItem* itm, items)
     {
         QueueListViewItem* vitem = dynamic_cast<QueueListViewItem*>(itm);
+
         if (vitem)
         {
             urls.append(vitem->info().fileUrl());
@@ -317,8 +318,11 @@ QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
 void QueueListView::startDrag(Qt::DropActions /*supportedActions*/)
 {
     QList<QTreeWidgetItem*> items = selectedItems();
+
     if (items.isEmpty())
+    {
         return;
+    }
 
     QPixmap icon(DesktopIcon("image-jp2", 48));
     int w = icon.width();
@@ -372,11 +376,14 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
             ImageInfoList imageInfoList;
 
             for (QList<int>::const_iterator it = imageIDs.constBegin();
-                it != imageIDs.constEnd(); ++it)
+                 it != imageIDs.constEnd(); ++it)
             {
                 ImageInfo info(*it);
+
                 if (!findItemByInfo(info))
+                {
                     imageInfoList.append(info);
+                }
             }
 
             if (!imageInfoList.isEmpty())
@@ -387,6 +394,7 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
             }
         }
     }
+
     e->ignore();
 }
 
@@ -406,6 +414,7 @@ void QueueListView::dropEvent(QDropEvent* e)
              it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
+
             if (!findItemByInfo(info))
             {
                 imageInfoList.append(info);
@@ -418,6 +427,7 @@ void QueueListView::dropEvent(QDropEvent* e)
             e->acceptProposedAction();
 
             QueueListView* vitem = dynamic_cast<QueueListView*>(e->source());
+
             if (vitem && vitem != this)
             {
                 foreach(ImageInfo info, imageInfoList)
@@ -436,6 +446,7 @@ void QueueListView::dropEvent(QDropEvent* e)
              it != itemIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
+
             if (!findItemByInfo(info))
             {
                 imageInfoList.append(info);
@@ -451,8 +462,11 @@ void QueueListView::dropEvent(QDropEvent* e)
     else if (DTagDrag::canDecode(e->mimeData()))
     {
         int tagID;
+
         if (!DTagDrag::decode(e->mimeData(), tagID))
+        {
             return;
+        }
 
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
@@ -461,6 +475,7 @@ void QueueListView::dropEvent(QDropEvent* e)
              it != itemIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
+
             if (!findItemByInfo(info))
             {
                 imageInfoList.append(info);
@@ -484,8 +499,11 @@ void QueueListView::dropEvent(QDropEvent* e)
 void QueueListView::setEnableToolTips(bool val)
 {
     d->showTips = val;
+
     if (!val)
+    {
         hideToolTip();
+    }
 }
 
 void QueueListView::hideToolTip()
@@ -498,7 +516,9 @@ void QueueListView::hideToolTip()
 bool QueueListView::acceptToolTip(const QPoint& pos)
 {
     if (columnAt(pos.x()) == 0)
+    {
         return true;
+    }
 
     return false;
 }
@@ -573,9 +593,12 @@ void QueueListView::leaveEvent(QEvent* e)
 
 void QueueListView::slotAddItems(const ImageInfoList& list)
 {
-    if ( list.count() == 0 ) return;
+    if ( list.count() == 0 )
+    {
+        return;
+    }
 
-    for( ImageInfoList::ConstIterator it = list.begin(); it != list.end(); ++it )
+    for ( ImageInfoList::ConstIterator it = list.begin(); it != list.end(); ++it )
     {
         ImageInfo info = *it;
 
@@ -585,12 +608,15 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
         QueueListViewItem* item = 0;
 
         QTreeWidgetItemIterator iter(this);
+
         while (*iter)
         {
             item = dynamic_cast<QueueListViewItem*>(*iter);
 
             if (item->info() == info)
+            {
                 find = true;
+            }
 
             ++iter;
         }
@@ -601,6 +627,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
             d->thumbLoadThread->find(info.fileUrl().toLocalFile());
         }
     }
+
     updateDestFileNames();
     emit signalQueueContentsChanged();
 }
@@ -608,18 +635,25 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
 void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+
         if (item->info().fileUrl() == KUrl(desc.filePath))
         {
             if (pix.isNull())
+            {
                 item->setThumb(SmallIcon("image-x-generic", d->iconSize, KIconLoader::DisabledState));
+            }
             else
+            {
                 item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
+            }
 
             return;
         }
+
         ++it;
     }
 }
@@ -647,14 +681,17 @@ void QueueListView::removeItems(int removeType)
     hideToolTip();
 
     bool find;
+
     do
     {
         find = false;
         QTreeWidgetItemIterator it(this);
+
         while (*it)
         {
             QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
-            switch(removeType)
+
+            switch (removeType)
             {
                 case QueueListViewPriv::ItemsSelected:
                 {
@@ -663,6 +700,7 @@ void QueueListView::removeItems(int removeType)
                         delete item;
                         find = true;
                     }
+
                     break;
                 }
                 case QueueListViewPriv::ItemsDone:
@@ -672,6 +710,7 @@ void QueueListView::removeItems(int removeType)
                         delete item;
                         find = true;
                     }
+
                     break;
                 }
                 default:  // ItemsAll
@@ -681,10 +720,11 @@ void QueueListView::removeItems(int removeType)
                     break;
                 }
             }
+
             ++it;
         }
     }
-    while(find);
+    while (find);
 
     emit signalQueueContentsChanged();
 }
@@ -699,23 +739,27 @@ void QueueListView::removeItemById(qlonglong id)
     hideToolTip();
 
     bool find;
+
     do
     {
         find = false;
         QTreeWidgetItemIterator it(this);
+
         while (*it)
         {
             QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+
             if (item->info().id() == id)
             {
                 delete item;
                 find = true;
                 break;
             }
+
             ++it;
         }
     }
-    while(find);
+    while (find);
 
     emit signalQueueContentsChanged();
 }
@@ -728,25 +772,34 @@ bool QueueListView::findItemByInfo(const ImageInfo& info)
 QueueListViewItem* QueueListView::findItemById(qlonglong id)
 {
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+
         if (item->info().id() == id)
+        {
             return item;
+        }
 
         ++it;
     }
+
     return 0;
 }
 
 QueueListViewItem* QueueListView::findItemByUrl(const KUrl& url)
 {
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+
         if (item->info().fileUrl() == url)
+        {
             return item;
+        }
 
         ++it;
     }
@@ -758,12 +811,19 @@ int QueueListView::itemsCount()
 {
     int count = 0;
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
-        if (item) ++count;
+
+        if (item)
+        {
+            ++count;
+        }
+
         ++it;
     }
+
     return count;
 }
 
@@ -771,13 +831,19 @@ ImageInfoList QueueListView::pendingItemsList()
 {
     ImageInfoList list;
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+
         if (item && !item->isDone())
+        {
             list.append(item->info());
+        }
+
         ++it;
     }
+
     return list;
 }
 
@@ -790,13 +856,19 @@ int QueueListView::pendingTasksCount()
 {
     int count = 0;
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+
         if (item && !item->isDone())
+        {
             count += assignedTools().m_toolsMap.count();
+        }
+
         ++it;
     }
+
     return count;
 }
 
@@ -833,13 +905,16 @@ void QueueListView::resetQueue()
 {
     //reset all items
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+
         if (item)
         {
             item->reset();
         }
+
         it++;
     }
 }
@@ -857,9 +932,11 @@ void QueueListView::updateDestFileNames()
 
         QList<ParseSettings> files;
         QTreeWidgetItemIterator it(this);
+
         while (*it)
         {
             QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+
             if (item)
             {
                 // Update base name using queue renaming rules.
@@ -870,6 +947,7 @@ void QueueListView::updateDestFileNames()
                 ps.fileUrl = KUrl(fi.absoluteFilePath());
                 files << ps;
             }
+
             ++it;
         }
 
@@ -881,9 +959,11 @@ void QueueListView::updateDestFileNames()
     AssignedBatchTools tools = assignedTools();
 
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+
         if (item)
         {
             // Update base name using queue renaming rules.
@@ -899,25 +979,31 @@ void QueueListView::updateDestFileNames()
             if (settings().renamingRule == QueueSettings::CUSTOMIZE && !renamingResults.isEmpty())
             {
                 QFileInfo fi2(renamingResults[fi.absoluteFilePath()]);
+
                 if (extensionSet)
                 {
                     newName = QString("%1.%2").arg(fi2.completeBaseName())
-                                              .arg(newSuffix);
+                              .arg(newSuffix);
                 }
                 else
                 {
                     newName = fi2.fileName();
                 }
             }
+
             item->setDestFileName(newName);
         }
+
         ++it;
     }
 }
 
 void QueueListView::slotContextMenu()
 {
-    if (!viewport()->isEnabled()) return;
+    if (!viewport()->isEnabled())
+    {
+        return;
+    }
 
     KActionCollection* acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
     KMenu popmenu(this);
@@ -930,9 +1016,11 @@ void QueueListView::slotContextMenu()
 void QueueListView::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
     if (QueueMgrWindow::queueManagerWindow()->isBusy())
+    {
         return;
+    }
 
-    switch(changeset.operation())
+    switch (changeset.operation())
     {
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:

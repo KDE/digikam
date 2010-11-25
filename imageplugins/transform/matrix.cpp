@@ -37,8 +37,9 @@ namespace DigikamTransformImagePlugin
 {
 
 static double identityMatrix[3][3] = { { 1.0, 0.0, 0.0 },
-                                       { 0.0, 1.0, 0.0 },
-                                       { 0.0, 0.0, 1.0 } };
+    { 0.0, 1.0, 0.0 },
+    { 0.0, 0.0, 1.0 }
+};
 
 Matrix::Matrix()
 {
@@ -99,9 +100,13 @@ void Matrix::transformPoint(double x, double y, double* newx, double* newy) cons
     double  w = coeff[2][0] * x + coeff[2][1] * y + coeff[2][2];
 
     if (w == 0.0)
-       w = 1.0;
+    {
+        w = 1.0;
+    }
     else
-       w = 1.0/w;
+    {
+        w = 1.0/w;
+    }
 
     *newx = (coeff[0][0] * x +
              coeff[0][1] * y +
@@ -117,7 +122,9 @@ void Matrix::invert()
     double  det = determinant();
 
     if (det == 0.0)
-       return;
+    {
+        return;
+    }
 
     det = 1.0 / det;
 
@@ -156,14 +163,14 @@ double Matrix::determinant() const
     double determinant;
 
     determinant  = (coeff[0][0] *
-                   (coeff[1][1] * coeff[2][2] -
-                    coeff[1][2] * coeff[2][1]));
+                    (coeff[1][1] * coeff[2][2] -
+                     coeff[1][2] * coeff[2][1]));
     determinant -= (coeff[1][0] *
-                   (coeff[0][1] * coeff[2][2] -
-                    coeff[0][2] * coeff[2][1]));
+                    (coeff[0][1] * coeff[2][2] -
+                     coeff[0][2] * coeff[2][1]));
     determinant += (coeff[2][0] *
-                   (coeff[0][1] * coeff[1][2] -
-                    coeff[0][2] * coeff[1][1]));
+                    (coeff[0][1] * coeff[1][2] -
+                     coeff[0][2] * coeff[1][1]));
 
     return determinant;
 }

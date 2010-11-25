@@ -50,7 +50,7 @@ public:
         blueMask  = 0;
     };
 
-    ~TonalityContainer(){};
+    ~TonalityContainer() {};
 
 public:
 
@@ -70,12 +70,27 @@ public:
     explicit TonalityFilter(DImg* orgImage, QObject* parent=0, const TonalityContainer& settings=TonalityContainer());
     virtual ~TonalityFilter();
 
-    static QString          FilterIdentifier()  { return "digikam:TonalityFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Tonality Filter"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:TonalityFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Tonality Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

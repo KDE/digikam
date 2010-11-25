@@ -53,7 +53,7 @@ class MapWidgetView;
 
 class AlbumWidgetStack : public QStackedWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 

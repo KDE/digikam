@@ -90,7 +90,7 @@ public:
     ~AssignNameWidget();
 
     /** Set the tag model to use for completion. */
-    void setModel(TagModel* model, TagPropertiesFilterModel *filteredModel, CheckableAlbumFilterModel* filterModel);
+    void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel);
     void setDefaultModel();
 
     void setMode(Mode mode);
@@ -119,7 +119,7 @@ public Q_SLOTS:
 
     /** Sets the suggested (UnconfirmedEditMode) or assigned (ConfirmedMode) tag to be displayed. */
     void setCurrentTag(int tagId);
-    void setCurrentTag(TAlbum *album);
+    void setCurrentTag(TAlbum* album);
     void setCurrentFace(const DatabaseFace& face);
 
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */

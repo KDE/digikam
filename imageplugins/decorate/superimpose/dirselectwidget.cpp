@@ -45,7 +45,7 @@ class DirSelectWidget::DirSelectWidgetPrivate
 {
 public:
 
-    DirSelectWidgetPrivate(){};
+    DirSelectWidgetPrivate() {};
 
     KFileTreeBranch* m_item;
     QStringList      m_pendingPath;
@@ -54,26 +54,30 @@ public:
 };
 
 DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, const QString& headerLabel)
-               : K3FileTreeView( parent), d(new DirSelectWidgetPrivate)
+    : K3FileTreeView( parent), d(new DirSelectWidgetPrivate)
 {
     setObjectName(name);
     addColumn(headerLabel);
 
     if ( headerLabel.isNull() )
+    {
         header()->hide();
+    }
 
     setAlternateBackground(QColor());
 }
 
 DirSelectWidget::DirSelectWidget(const KUrl& rootUrl, const KUrl& currentUrl,
                                  QWidget* parent, const char* name, const QString& headerLabel)
-               : K3FileTreeView( parent), d(new DirSelectWidgetPrivate)
+    : K3FileTreeView( parent), d(new DirSelectWidgetPrivate)
 {
     setObjectName(name);
     addColumn(headerLabel);
 
     if ( headerLabel.isNull() )
+    {
         header()->hide();
+    }
 
     setAlternateBackground(QColor());
     setRootPath(rootUrl, currentUrl);
@@ -93,7 +97,7 @@ void DirSelectWidget::load()
 {
     if ( d->m_pendingPath.isEmpty() )
     {
-        disconnect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem *) ),
+        disconnect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem*) ),
                     this, SLOT( load() ) );
 
         emit folderItemSelected(currentUrl());
@@ -117,14 +121,18 @@ void DirSelectWidget::load()
         d->m_handled += '/';
 
         if ( branch->alreadyListed() )
+        {
             load();
+        }
     }
 }
 
 void DirSelectWidget::setCurrentPath(const KUrl& currentUrl)
 {
     if ( !currentUrl.isValid() )
-       return;
+    {
+        return;
+    }
 
     QString currentPath = QDir::cleanPath(currentUrl.toLocalFile());
     currentPath = currentPath.mid(d->m_rootUrl.toLocalFile().length());
@@ -133,9 +141,11 @@ void DirSelectWidget::setCurrentPath(const KUrl& currentUrl)
     d->m_pendingPath = currentPath.split('/', QString::KeepEmptyParts);
 
     if (!d->m_pendingPath[0].isEmpty())
-        d->m_pendingPath.prepend(""); // ensure we open the root first.
+    {
+        d->m_pendingPath.prepend("");    // ensure we open the root first.
+    }
 
-    connect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem *) ),
+    connect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem*) ),
              this, SLOT( load() ) );
     load();
 }
@@ -147,7 +157,9 @@ void DirSelectWidget::setRootPath(const KUrl& rootUrl, const KUrl& currentUrl)
     QString root = QDir::cleanPath(rootUrl.toLocalFile());
 
     if (!root.endsWith('/'))
+    {
         root.append("/");
+    }
 
     QString currentPath = QDir::cleanPath(currentUrl.isValid() ? currentUrl.toLocalFile() : root);
 
@@ -157,15 +169,17 @@ void DirSelectWidget::setRootPath(const KUrl& rootUrl, const KUrl& currentUrl)
     d->m_pendingPath = currentPath.split('/', QString::KeepEmptyParts);
 
     if ( !d->m_pendingPath[0].isEmpty() )
-        d->m_pendingPath.prepend( "" ); // ensure we open the root first.
+    {
+        d->m_pendingPath.prepend( "" );    // ensure we open the root first.
+    }
 
-    connect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem *) ),
+    connect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem*) ),
              this, SLOT( load() ) );
 
     load();
 
-    connect( this, SIGNAL( executed(Q3ListViewItem *) ),
-             this, SLOT( slotFolderSelected(Q3ListViewItem *) ) );
+    connect( this, SIGNAL( executed(Q3ListViewItem*) ),
+             this, SLOT( slotFolderSelected(Q3ListViewItem*) ) );
 }
 
 KUrl DirSelectWidget::rootPath() const
@@ -173,7 +187,7 @@ KUrl DirSelectWidget::rootPath() const
     return d->m_rootUrl;
 }
 
-void DirSelectWidget::slotFolderSelected(Q3ListViewItem *)
+void DirSelectWidget::slotFolderSelected(Q3ListViewItem*)
 {
     emit folderItemSelected(currentUrl());
 }

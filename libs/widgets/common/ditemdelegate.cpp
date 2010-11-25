@@ -64,8 +64,8 @@ public:
 
 };
 
-DItemDelegate::DItemDelegate(QObject *parent)
-             : QAbstractItemDelegate(parent), d(new DItemDelegatePriv)
+DItemDelegate::DItemDelegate(QObject* parent)
+    : QAbstractItemDelegate(parent), d(new DItemDelegatePriv)
 {
 }
 
@@ -86,13 +86,13 @@ QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
     const QColor borderColor = QColor(0, 0, 0, 128);
 
     QString cacheKey  = QString::number(pixSize.width()) + '-' + QString::number(pixSize.height());
-    QPixmap *cachePix = d->thumbnailBorderCache.object(cacheKey);
+    QPixmap* cachePix = d->thumbnailBorderCache.object(cacheKey);
 
     if (!cachePix)
     {
         QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
-                                                            pixSize.height() + 2*radius),
-                                                      borderColor, radius);
+                      pixSize.height() + 2*radius),
+                      borderColor, radius);
         const_cast<DItemDelegate*>(this)->d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
         return pix;
     }
@@ -151,9 +151,12 @@ QString DItemDelegate::squeezedTextCached(QPainter* p, int width, const QString&
     QCache<QString, QString> *cache = &const_cast<DItemDelegate*>(this)->d->squeezedTextCache;
     // We do not need to include the font into cache key, the cache is cleared on font change
     QString cacheKey = QString::number(width) + QString::number(qHash(text));
-    QString *cachedString = cache->object(cacheKey);
+    QString* cachedString = cache->object(cacheKey);
+
     if (cachedString)
+    {
         return *cachedString;
+    }
 
     QString result = squeezedText(p->fontMetrics(), width, text);
 
@@ -161,7 +164,7 @@ QString DItemDelegate::squeezedTextCached(QPainter* p, int width, const QString&
     return result;
 }
 
-QString DItemDelegate::squeezedText(const QFontMetrics &fm, int width, const QString& text)
+QString DItemDelegate::squeezedText(const QFontMetrics& fm, int width, const QString& text)
 {
     QString fullText(text);
     fullText.replace('\n',' ');
@@ -176,7 +179,12 @@ QString DItemDelegate::squeezedText(const QFontMetrics &fm, int width, const QSt
 
         // estimate how many letters we can add to the dots on both sides
         int letters = fullText.length() * (width - squeezedWidth) / textWidth;
-        if (width < squeezedWidth) letters=1;
+
+        if (width < squeezedWidth)
+        {
+            letters=1;
+        }
+
         squeezedText  = fullText.left(letters) + "...";
         squeezedWidth = fm.width(squeezedText);
 
@@ -214,6 +222,7 @@ QString DItemDelegate::squeezedText(const QFontMetrics &fm, int width, const QSt
             result = squeezedText;
         }
     }
+
     return result;
 }
 

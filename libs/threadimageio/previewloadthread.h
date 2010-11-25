@@ -65,7 +65,7 @@ public:
     void load(LoadingDescription description);
 
     /// Optionally, set the displaying widget for color management
-    void setDisplayingWidget(QWidget *widget);
+    void setDisplayingWidget(QWidget* widget);
 
     /**
      * Set the loading policy (see ManagedLoadSaveThread for details).
@@ -77,7 +77,7 @@ public:
 protected:
 
     LoadingDescription createLoadingDescription(const QString& filePath, int size, bool exifRotate);
-    QWidget      *m_displayingWidget;
+    QWidget*      m_displayingWidget;
     LoadingPolicy m_loadingPolicy;
 };
 

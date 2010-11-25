@@ -41,13 +41,13 @@ namespace Digikam
 {
 
 OilPaintFilter::OilPaintFilter(QObject* parent)
-                 : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 OilPaintFilter::OilPaintFilter(DImg* orgImage, QObject* parent, int brushSize, int smoothness)
-              : DImgThreadedFilter(orgImage, parent, "OilPaintFilter")
+    : DImgThreadedFilter(orgImage, parent, "OilPaintFilter")
 {
     m_brushSize  = brushSize;
     m_smoothness = smoothness;
@@ -95,8 +95,11 @@ void OilPaintFilter::filterImage()
         }
 
         progress = (int) (((double)h2 * 100.0) / h);
+
         if ( progress%5 == 0 )
+        {
             postProgress( progress );
+        }
     }
 
     // free all the arrays

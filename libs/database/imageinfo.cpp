@@ -91,7 +91,7 @@ ImageInfoData::ImageInfoData()
 }
 
 ImageInfo::ImageInfo()
-         : m_data(0)
+    : m_data(0)
 {
 }
 
@@ -125,11 +125,13 @@ ImageInfo::ImageInfo(qlonglong ID)
 {
     DatabaseAccess access;
     m_data = access.imageInfoCache()->infoForId(ID);
+
     // is this a newly created structure, need to populate?
     if (m_data->albumId == -1)
     {
         // retrieve immutable values now, the rest on demand
         ItemShortInfo info  = access.db()->getItemShortInfo(ID);
+
         if (info.id)
         {
             m_data->albumId     = info.albumID;
@@ -139,9 +141,13 @@ ImageInfo::ImageInfo(qlonglong ID)
         else
         {
             // invalid image id
-            ImageInfoData *olddata = m_data.unassign();
+            ImageInfoData* olddata = m_data.unassign();
+
             if (olddata)
+            {
                 access.imageInfoCache()->dropInfo(olddata);
+            }
+
             m_data = 0;
         }
     }
@@ -152,12 +158,14 @@ ImageInfo::ImageInfo(const KUrl& url)
     DatabaseAccess access;
 
     CollectionLocation location = CollectionManager::instance()->locationForUrl(url);
+
     if (location.isNull())
     {
         m_data = 0;
         qWarning() << "No location could be retrieved for url" << url;
         return;
     }
+
     KUrl _url(url.directory());
     QString album = CollectionManager::instance()->album(_url.toLocalFile());
     QString name  = url.fileName();
@@ -179,6 +187,7 @@ ImageInfo::ImageInfo(const KUrl& url)
     }
     */
     ItemShortInfo info = access.db()->getItemShortInfo(location.id(), album, name);
+
     if (!info.id)
     {
         m_data = 0;
@@ -194,9 +203,12 @@ ImageInfo::ImageInfo(const KUrl& url)
 
 ImageInfo::~ImageInfo()
 {
-    ImageInfoData *olddata = m_data.unassign();
+    ImageInfoData* olddata = m_data.unassign();
+
     if (olddata)
+    {
         DatabaseAccess().imageInfoCache()->dropInfo(olddata);
+    }
 }
 
 ImageInfo::ImageInfo(const ImageInfo& info)
@@ -207,11 +219,16 @@ ImageInfo::ImageInfo(const ImageInfo& info)
 ImageInfo& ImageInfo::operator=(const ImageInfo& info)
 {
     if (m_data == info.m_data)
+    {
         return *this;
+    }
 
-    ImageInfoData *olddata = m_data.assign(info.m_data);
+    ImageInfoData* olddata = m_data.assign(info.m_data);
+
     if (olddata)
+    {
         DatabaseAccess().imageInfoCache()->dropInfo(olddata);
+    }
 
     return *this;
 }
@@ -241,10 +258,14 @@ bool ImageInfo::operator<(const ImageInfo& info) const
     {
         if (info.m_data)
             // both not null, sort by id
+        {
             return m_data->id < info.m_data->id;
+        }
         else
             // only other is null, this is greater than
+        {
             return false;
+        }
     }
     else
     {
@@ -256,9 +277,13 @@ bool ImageInfo::operator<(const ImageInfo& info) const
 uint ImageInfo::hash() const
 {
     if (m_data)
+    {
         return ::qHash(m_data->id);
+    }
     else
+    {
         return ::qHash((int)0);
+    }
 }
 
 /**
@@ -285,7 +310,9 @@ int ImageInfo::albumRootId() const
 QString ImageInfo::name() const
 {
     if (!m_data)
+    {
         return QString();
+    }
 
     DatabaseAccess access;
     return m_data->name;
@@ -294,14 +321,21 @@ QString ImageInfo::name() const
 uint ImageInfo::fileSize() const
 {
     if (!m_data)
+    {
         return 0;
+    }
 
     DatabaseAccess access;
+
     if (!m_data->fileSizeCached)
     {
         QVariantList values = access.db()->getImagesFields(m_data->id, DatabaseFields::FileSize);
+
         if (!values.isEmpty())
+        {
             m_data.constCastData()->fileSize = values.first().toUInt();
+        }
+
         m_data.constCastData()->fileSizeCached = true;
     }
 
@@ -311,132 +345,190 @@ uint ImageInfo::fileSize() const
 QString ImageInfo::comment() const
 {
     if (!m_data)
+    {
         return QString();
+    }
 
     DatabaseAccess access;
+
     if (!m_data->defaultCommentCached)
     {
         ImageComments comments(access, m_data->id);
         m_data.constCastData()->defaultComment = comments.defaultComment();
         m_data.constCastData()->defaultCommentCached = true;
     }
+
     return m_data->defaultComment;
 }
 
 int ImageInfo::rating() const
 {
     if (!m_data)
+    {
         return 0;
+    }
 
     DatabaseAccess access;
+
     if (!m_data->ratingCached)
     {
         QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::Rating);
+
         if (!values.isEmpty())
+        {
             m_data.constCastData()->rating = values.first().toInt();
+        }
+
         m_data.constCastData()->ratingCached = true;
     }
+
     return m_data->rating;
 }
 
 QString ImageInfo::format() const
 {
     if (!m_data)
+    {
         return 0;
+    }
 
     DatabaseAccess access;
+
     if (!m_data->formatCached)
     {
         QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::Format);
+
         if (!values.isEmpty())
+        {
             m_data.constCastData()->format = values.first().toString();
+        }
+
         m_data.constCastData()->formatCached = true;
     }
+
     return m_data->format;
 }
 
 DatabaseItem::Category ImageInfo::category() const
 {
     if (!m_data)
+    {
         return DatabaseItem::UndefinedCategory;
+    }
 
     DatabaseAccess access;
+
     if (!m_data->categoryCached)
     {
         QVariantList values = access.db()->getImagesFields(m_data->id, DatabaseFields::Category);
+
         if (!values.isEmpty())
+        {
             m_data.constCastData()->category = (DatabaseItem::Category)values.first().toInt();
+        }
+
         m_data.constCastData()->categoryCached = true;
     }
+
     return m_data->category;
 }
 
 QDateTime ImageInfo::dateTime() const
 {
     if (!m_data)
+    {
         return QDateTime();
+    }
 
     DatabaseAccess access;
+
     if (!m_data->creationDateCached)
     {
         QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
+
         if (!values.isEmpty())
+        {
             m_data.constCastData()->creationDate = values.first().toDateTime();
+        }
+
         m_data.constCastData()->creationDateCached = true;
     }
+
     return m_data->creationDate;
 }
 
 QDateTime ImageInfo::modDateTime() const
 {
     if (!m_data)
+    {
         return QDateTime();
+    }
 
     DatabaseAccess access;
+
     if (!m_data->modificationDateCached)
     {
         QVariantList values = access.db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
+
         if (!values.isEmpty())
+        {
             m_data.constCastData()->modificationDate = values.first().toDateTime();
+        }
+
         m_data.constCastData()->modificationDateCached = true;
     }
+
     return m_data->modificationDate;
 }
 
 QSize ImageInfo::dimensions() const
 {
     if (!m_data)
+    {
         return QSize();
+    }
 
     DatabaseAccess access;
+
     if (!m_data->imageSizeCached)
     {
         QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
+
         if (values.size() == 2)
+        {
             m_data.constCastData()->imageSize = QSize(values[0].toInt(), values[1].toInt());
+        }
+
         m_data.constCastData()->imageSizeCached = true;
     }
+
     return m_data->imageSize;
 }
 
 QList<int> ImageInfo::tagIds() const
 {
     if (!m_data)
+    {
         return QList<int>();
+    }
 
     DatabaseAccess access;
+
     if (!m_data->tagIdsCached)
     {
         m_data.constCastData()->tagIds = access.db()->getItemTagIDs(m_data->id);
         m_data.constCastData()->tagIdsCached = true;
     }
+
     return m_data->tagIds;
 }
 
 DatabaseUrl ImageInfo::databaseUrl() const
 {
     if (!m_data)
+    {
         return DatabaseUrl();
+    }
 
     DatabaseAccess access;
 
@@ -454,38 +546,54 @@ KUrl ImageInfo::fileUrl() const
 QString ImageInfo::filePath() const
 {
     if (!m_data)
+    {
         return QString();
+    }
 
     DatabaseAccess access;
 
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
 
     if (albumRoot.isNull())
+    {
         return QString();
+    }
 
     QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
 
     if (album == "/")
+    {
         return albumRoot + album + m_data->name;
+    }
     else
+    {
         return albumRoot + album + '/' + m_data->name;
+    }
 }
 
 bool ImageInfo::isVisible() const
 {
     if (!m_data)
+    {
         return false;
+    }
 
     QVariantList value = DatabaseAccess().db()->getImagesFields(m_data->id, DatabaseFields::Status);
+
     if (!value.isEmpty())
+    {
         return value.first().toInt() == DatabaseItem::Visible;
+    }
+
     return false;
 }
 
 void ImageInfo::setVisible(bool isVisible)
 {
     if (!m_data)
+    {
         return;
+    }
 
     if (m_data->albumId == 0)
     {
@@ -499,7 +607,9 @@ void ImageInfo::setVisible(bool isVisible)
 bool ImageInfo::hasDerivedImages() const
 {
     if (!m_data)
+    {
         return false;
+    }
 
     //TODO: Decide whether to cache some of these values, or create an optimized SQL query
     return DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom).isEmpty();
@@ -508,7 +618,9 @@ bool ImageInfo::hasDerivedImages() const
 bool ImageInfo::hasAncestorImages() const
 {
     if (!m_data)
+    {
         return false;
+    }
 
     return !DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom).isEmpty();
 }
@@ -516,7 +628,9 @@ bool ImageInfo::hasAncestorImages() const
 QList<ImageInfo> ImageInfo::derivedImages() const
 {
     if (!m_data)
+    {
         return QList<ImageInfo>();
+    }
 
     return ImageInfoList(DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom));
 }
@@ -524,7 +638,9 @@ QList<ImageInfo> ImageInfo::derivedImages() const
 QList<ImageInfo> ImageInfo::ancestorImages() const
 {
     if (!m_data)
+    {
         return QList<ImageInfo>();
+    }
 
     return ImageInfoList(DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
 }
@@ -548,8 +664,14 @@ public:
     TreeBuilder(const QList<QPair<qlonglong, qlonglong> >& pairs);
 
     QList<QPair<qlonglong, int> > toList() const;
-    QList<qlonglong> getOrigins() const { return m_origins; }
-    QHash<qlonglong, TreeNode> getNodes() const { return m_nodes; }
+    QList<qlonglong> getOrigins() const
+    {
+        return m_origins;
+    }
+    QHash<qlonglong, TreeNode> getNodes() const
+    {
+        return m_nodes;
+    }
     QList<qlonglong> getBranchIdsByLeafId(qlonglong leafId) const;
 
 protected:
@@ -572,7 +694,7 @@ QList<qlonglong> TreeBuilder::getBranchIdsByLeafId(qlonglong leafId) const
     QList<qlonglong> list;
     foreach(const TreeNode& node, m_nodes)
     {
-        if(node.children.contains(leafId))
+        if (node.children.contains(leafId))
         {
             list.append(node.id);
             list.append(node.ancestors);
@@ -600,6 +722,7 @@ void TreeBuilder::treeToListRecursive(const QList<qlonglong>& siblings, int leve
         result << qMakePair(id, level);
 
         QHash<qlonglong, TreeNode>::const_iterator node = m_nodes.find(id);
+
         if (node != m_nodes.end() && !node->children.isEmpty())
         {
             treeToListRecursive(node->children, level + 1, result);
@@ -618,14 +741,21 @@ void TreeBuilder::readPairs(const QList<QPair<qlonglong, qlonglong> >& pairs)
         childId  = pair.first;
 
         if (!m_nodes.contains(childId))
+        {
             m_nodes[childId] = TreeNode(childId);
+        }
+
         m_nodes[childId].ancestors << parentId;
+
         if (!m_nodes.contains(parentId))
+        {
             m_nodes[parentId] = TreeNode(parentId);
+        }
     }
 
     // Sort ancestors list. Needed when comparing for exactMatch.
     QHash<qlonglong, TreeNode>::iterator it;
+
     for (it = m_nodes.begin(); it != m_nodes.end(); ++it)
     {
         qSort(it->ancestors);
@@ -672,8 +802,11 @@ void TreeBuilder::readPairs(const QList<QPair<qlonglong, qlonglong> >& pairs)
                         foreach (qlonglong a, it->ancestors)
                         {
                             if (ancestorsAncestors.contains(a))
+                            {
                                 score++;
+                            }
                         }
+
                         if (score > maxScore)
                         {
                             it->parent = p;
@@ -689,7 +822,9 @@ void TreeBuilder::readPairs(const QList<QPair<qlonglong, qlonglong> >& pairs)
     for (it = m_nodes.begin(); it != m_nodes.end(); ++it)
     {
         if (it->parent)
+        {
             m_nodes[it->parent].children << it->id;
+        }
     }
 
     // and sort children
@@ -707,7 +842,9 @@ void TreeBuilder::readPairs(const QList<QPair<qlonglong, qlonglong> >& pairs)
 QList<QPair<qlonglong, qlonglong> > ImageInfo::relationCloud() const
 {
     if (!m_data)
+    {
         return QList<QPair<qlonglong, qlonglong> >();
+    }
 
     return DatabaseAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom);
 }
@@ -715,7 +852,9 @@ QList<QPair<qlonglong, qlonglong> > ImageInfo::relationCloud() const
 QList<QPair<qlonglong, int> > ImageInfo::allAvailableVersions() const
 {
     if (!m_data)
+    {
         return QList<QPair<qlonglong, int> >();
+    }
 
     TreeBuilder treeBuilder(DatabaseAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom));
 
@@ -725,11 +864,13 @@ QList<QPair<qlonglong, int> > ImageInfo::allAvailableVersions() const
 void ImageInfo::removeTagCurrentFromVersionBranch(int tagCurrentId)
 {
     if (!m_data)
+    {
         return;
+    }
 
     QList<int> tagList;
     tagList.append(tagCurrentId);
-    
+
     TreeBuilder treeBuilder(DatabaseAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom));
     DatabaseAccess().db()->removeTagsFromItems(treeBuilder.getBranchIdsByLeafId(m_data->id), tagList);
 }
@@ -737,7 +878,9 @@ void ImageInfo::removeTagCurrentFromVersionBranch(int tagCurrentId)
 void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
 {
     if (!m_data || ancestor.isNull())
+    {
         return;
+    }
 
     DatabaseAccess().db()->addImageRelation(m_data->id, ancestor.id(), DatabaseRelation::DerivedFrom);
 }
@@ -745,7 +888,9 @@ void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
 ImageComments ImageInfo::imageComments(DatabaseAccess& access) const
 {
     if (!m_data)
+    {
         return ImageComments();
+    }
 
     return ImageComments(access, m_data->id);
 }
@@ -753,7 +898,9 @@ ImageComments ImageInfo::imageComments(DatabaseAccess& access) const
 ImageCopyright ImageInfo::imageCopyright() const
 {
     if (!m_data)
+    {
         return ImageCopyright();
+    }
 
     return ImageCopyright(m_data->id);
 }
@@ -761,7 +908,9 @@ ImageCopyright ImageInfo::imageCopyright() const
 ImageExtendedProperties ImageInfo::imageExtendedProperties() const
 {
     if (!m_data)
+    {
         return ImageExtendedProperties();
+    }
 
     return ImageExtendedProperties(m_data->id);
 }
@@ -769,7 +918,9 @@ ImageExtendedProperties ImageInfo::imageExtendedProperties() const
 ImagePosition ImageInfo::imagePosition() const
 {
     if (!m_data)
+    {
         return ImagePosition();
+    }
 
     DatabaseAccess access;
     ImagePosition pos(access, m_data->id);
@@ -791,10 +942,14 @@ ImagePosition ImageInfo::imagePosition() const
 double ImageInfo::longitudeNumber() const
 {
     if (!m_data)
+    {
         return 0;
+    }
 
     if (!m_data->positionsCached)
+    {
         imagePosition();
+    }
 
     return m_data->longitude;
 }
@@ -802,10 +957,14 @@ double ImageInfo::longitudeNumber() const
 double ImageInfo::latitudeNumber() const
 {
     if (!m_data)
+    {
         return 0;
+    }
 
     if (!m_data->positionsCached)
+    {
         imagePosition();
+    }
 
     return m_data->latitude;
 }
@@ -813,10 +972,14 @@ double ImageInfo::latitudeNumber() const
 double ImageInfo::altitudeNumber() const
 {
     if (!m_data)
+    {
         return 0;
+    }
 
     if (!m_data->positionsCached)
+    {
         imagePosition();
+    }
 
     return m_data->altitude;
 }
@@ -824,10 +987,14 @@ double ImageInfo::altitudeNumber() const
 bool ImageInfo::hasCoordinates() const
 {
     if (!m_data)
+    {
         return 0;
+    }
 
     if (!m_data->positionsCached)
+    {
         imagePosition();
+    }
 
     return m_data->hasCoordinates;
 }
@@ -835,10 +1002,14 @@ bool ImageInfo::hasCoordinates() const
 bool ImageInfo::hasAltitude() const
 {
     if (!m_data)
+    {
         return 0;
+    }
 
     if (!m_data->positionsCached)
+    {
         imagePosition();
+    }
 
     return m_data->hasAltitude;
 }
@@ -846,7 +1017,9 @@ bool ImageInfo::hasAltitude() const
 ImageTagPair ImageInfo::imageTagPair(int tagId) const
 {
     if (!m_data)
+    {
         return ImageTagPair();
+    }
 
     return ImageTagPair(*this, tagId);
 }
@@ -854,7 +1027,9 @@ ImageTagPair ImageInfo::imageTagPair(int tagId) const
 QList<ImageTagPair> ImageInfo::availableImageTagPairs() const
 {
     if (!m_data)
+    {
         return QList<ImageTagPair>();
+    }
 
     return ImageTagPair::availablePairs(*this);
 }
@@ -862,7 +1037,9 @@ QList<ImageTagPair> ImageInfo::availableImageTagPairs() const
 DImageHistory ImageInfo::imageHistory() const
 {
     if (!m_data)
+    {
         return DImageHistory();
+    }
 
     ImageHistoryEntry entry = DatabaseAccess().db()->getImageHistory(m_data->id);
     return DImageHistory::fromXml(entry.history);
@@ -871,7 +1048,9 @@ DImageHistory ImageInfo::imageHistory() const
 void ImageInfo::setImageHistory(const DImageHistory& history)
 {
     if (!m_data)
+    {
         return;
+    }
 
     DatabaseAccess().db()->setImageHistory(m_data->id, history.toXml());
 }
@@ -879,7 +1058,9 @@ void ImageInfo::setImageHistory(const DImageHistory& history)
 bool ImageInfo::hasImageHistory() const
 {
     if (!m_data)
+    {
         return false;
+    }
 
     return DatabaseAccess().db()->hasImageHistory(m_data->id);
 }
@@ -887,7 +1068,9 @@ bool ImageInfo::hasImageHistory() const
 QString ImageInfo::uuid() const
 {
     if (!m_data)
+    {
         return QString();
+    }
 
     return DatabaseAccess().db()->getImageUuid(m_data->id);
 }
@@ -895,7 +1078,9 @@ QString ImageInfo::uuid() const
 void ImageInfo::setUuid(const QString& uuid)
 {
     if (!m_data)
+    {
         return;
+    }
 
     DatabaseAccess().db()->setImageUuid(m_data->id, uuid);
 }
@@ -903,7 +1088,9 @@ void ImageInfo::setUuid(const QString& uuid)
 HistoryImageId ImageInfo::historyImageId() const
 {
     if (!m_data)
+    {
         return HistoryImageId();
+    }
 
     HistoryImageId id(uuid());
     id.setCreationDate(dateTime());
@@ -919,7 +1106,9 @@ HistoryImageId ImageInfo::historyImageId() const
 ImageCommonContainer ImageInfo::imageCommonContainer() const
 {
     if (!m_data)
+    {
         return ImageCommonContainer();
+    }
 
     ImageCommonContainer container;
     ImageScanner::fillCommonContainer(m_data->id, &container);
@@ -929,7 +1118,9 @@ ImageCommonContainer ImageInfo::imageCommonContainer() const
 ImageMetadataContainer ImageInfo::imageMetadataContainer() const
 {
     if (!m_data)
+    {
         return ImageMetadataContainer();
+    }
 
     ImageMetadataContainer container;
     ImageScanner::fillMetadataContainer(m_data->id, &container);
@@ -939,7 +1130,9 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
 PhotoInfoContainer ImageInfo::photoInfoContainer() const
 {
     if (!m_data)
+    {
         return PhotoInfoContainer();
+    }
 
     ImageMetadataContainer meta = imageMetadataContainer();
     PhotoInfoContainer photoInfo;
@@ -964,7 +1157,9 @@ PhotoInfoContainer ImageInfo::photoInfoContainer() const
 Template ImageInfo::metadataTemplate() const
 {
     if (!m_data)
+    {
         return Template();
+    }
 
     Template t;
     imageCopyright().fillTemplate(t);
@@ -978,7 +1173,9 @@ Template ImageInfo::metadataTemplate() const
 void ImageInfo::setMetadataTemplate(const Template& t)
 {
     if (!m_data)
+    {
         return;
+    }
 
     removeMetadataTemplate();
 
@@ -992,7 +1189,9 @@ void ImageInfo::setMetadataTemplate(const Template& t)
 void ImageInfo::removeMetadataTemplate()
 {
     if (!m_data)
+    {
         return;
+    }
 
     imageCopyright().removeAll();
 
@@ -1004,7 +1203,9 @@ void ImageInfo::removeMetadataTemplate()
 void ImageInfo::setRating(int value)
 {
     if (!m_data)
+    {
         return;
+    }
 
     DatabaseAccess access;
     access.db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
@@ -1016,7 +1217,9 @@ void ImageInfo::setRating(int value)
 void ImageInfo::setDateTime(const QDateTime& dateTime)
 {
     if (!m_data)
+    {
         return;
+    }
 
     if (dateTime.isValid())
     {
@@ -1031,7 +1234,9 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
 void ImageInfo::setTag(int tagID)
 {
     if (!m_data)
+    {
         return;
+    }
 
     DatabaseAccess access;
     access.db()->addItemTag(m_data->id, tagID);
@@ -1040,7 +1245,9 @@ void ImageInfo::setTag(int tagID)
 void ImageInfo::removeTag(int tagID)
 {
     if (!m_data)
+    {
         return;
+    }
 
     DatabaseAccess access;
     access.db()->removeItemTag(m_data->id, tagID);
@@ -1050,7 +1257,9 @@ void ImageInfo::removeTag(int tagID)
 void ImageInfo::removeAllTags()
 {
     if (!m_data)
+    {
         return;
+    }
 
     DatabaseAccess access;
     access.db()->removeItemAllTags(m_data->id, tagIds());
@@ -1059,7 +1268,9 @@ void ImageInfo::removeAllTags()
 void ImageInfo::addTagPaths(const QStringList& tagPaths)
 {
     if (!m_data)
+    {
         return;
+    }
 
     QList<int> tagIds = TagsCache::instance()->tagsForPaths(tagPaths);
     DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_data->id, tagIds);
@@ -1068,18 +1279,24 @@ void ImageInfo::addTagPaths(const QStringList& tagPaths)
 ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
 {
     if (!m_data)
+    {
         return ImageInfo();
+    }
 
     DatabaseAccess access;
     //kDebug() << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName;
 
     if (dstAlbumID == m_data->albumId && dstFileName == m_data->name)
+    {
         return (*this);
+    }
 
     int id = access.db()->copyItem(m_data->albumId, m_data->name, dstAlbumID, dstFileName);
 
     if (id == -1)
+    {
         return ImageInfo();
+    }
 
     return ImageInfo(id);
 }
@@ -1087,7 +1304,7 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
 QDebug& operator<<(QDebug& stream, const ImageInfo& info)
 {
     return stream << "ImageInfo [id = " << info.id() << ", databaseurl = "
-                  << info.databaseUrl() << "]";
+           << info.databaseUrl() << "]";
 }
 
 }  // namespace Digikam

@@ -54,7 +54,7 @@ private:
     void setupCreator();
 
     QImage            m_qimage;
-    ThumbnailCreator *m_creator;
+    ThumbnailCreator* m_creator;
 };
 
 } // namespace Digikam

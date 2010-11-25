@@ -33,7 +33,7 @@
 
 #include "digikam_export.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 class WorkingWidget;

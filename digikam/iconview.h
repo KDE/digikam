@@ -85,9 +85,9 @@ public:
 
     void selectItem(IconItem* item, bool select);
 
-    /** Define the item which is visible after changing an album 
+    /** Define the item which is visible after changing an album
         (applies both to physical and virtual albums, like tags and date view). */
-    void setStoredVisibleItem(IconItem *item);
+    void setStoredVisibleItem(IconItem* item);
 
     void triggerRearrangement();
 
@@ -97,7 +97,7 @@ public:
     void insertItem(IconItem* item);
     void takeItem(IconItem* item);
 
-    void ensureItemVisible(IconItem *item);
+    void ensureItemVisible(IconItem* item);
     IconItem* findFirstVisibleItem(const QRect& r, bool useThumbnailRect = true) const;
     IconItem* findLastVisibleItem(const QRect& r, bool useThumbnailRect = true) const;
     IconItem* findFirstVisibleItem(bool useThumbnailRect = true) const;
@@ -141,9 +141,9 @@ protected:
     virtual void contentsMousePressEvent(QMouseEvent* e);
     virtual void contentsMouseMoveEvent(QMouseEvent* e);
     virtual void contentsMouseReleaseEvent(QMouseEvent* e);
-    virtual void contentsMouseDoubleClickEvent(QMouseEvent *e);
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent* e);
     virtual void contentsWheelEvent(QWheelEvent* e);
-    virtual void leaveEvent(QEvent *e);
+    virtual void leaveEvent(QEvent* e);
     virtual void focusOutEvent(QFocusEvent* e);
     virtual void keyPressEvent(QKeyEvent* e);
 
@@ -158,7 +158,7 @@ protected:
 
 protected Q_SLOTS:
 
-    virtual void slotEditRatingFromItem(int){};
+    virtual void slotEditRatingFromItem(int) {};
 
 private Q_SLOTS:
 
@@ -178,7 +178,7 @@ private:
 
     void startRearrangeTimer();
 
-    static int cmpItems(const void *n1, const void *n2);
+    static int cmpItems(const void* n1, const void* n2);
 
 private:
 

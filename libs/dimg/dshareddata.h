@@ -53,19 +53,23 @@ public:
     QAtomicInt ref;
 
     inline DSharedData() : ref(0) { }
-    inline DSharedData(const DSharedData &) : ref(0) { }
+    inline DSharedData(const DSharedData&) : ref(0) { }
 
     /** Returns true if the reference count is not 0.
      *  For the normal use case, you do not need this method.
      */
     inline bool isReferenced() const
-        { return (int)ref > 0; }
+    {
+        return (int)ref > 0;
+    }
     inline bool hasMoreReferences() const
-        { return (int)ref != 1; }
+    {
+        return (int)ref != 1;
+    }
 
 private:
     // using the assignment operator would lead to corruption in the ref-counting
-    DSharedData& operator=(const DSharedData &);
+    DSharedData& operator=(const DSharedData&);
 };
 
 template <class T> class DSharedDataPointer
@@ -84,37 +88,91 @@ public:
      */
 
     /** Various operators for accessing the pointer const and non-const */
-    inline T& operator*() { return *d; }
-    inline const T& operator*() const { return *d; }
-    inline T *operator->() { return d; }
-    inline const T *operator->() const { return d; }
-    inline operator T *() { return d; }
-    inline operator const T *() const { return d; }
-    inline T *data() { return d; }
+    inline T& operator*()
+    {
+        return *d;
+    }
+    inline const T& operator*() const
+    {
+        return *d;
+    }
+    inline T* operator->()
+    {
+        return d;
+    }
+    inline const T* operator->() const
+    {
+        return d;
+    }
+    inline operator T *()
+    {
+        return d;
+    }
+    inline operator const T *() const
+    {
+        return d;
+    }
+    inline T* data()
+    {
+        return d;
+    }
 
-    inline const T *data() const { return d; }
-    inline const T *constData() const { return d; }
+    inline const T* data() const
+    {
+        return d;
+    }
+    inline const T* constData() const
+    {
+        return d;
+    }
 
     /** This method carries out a const_cast, so it returns a non-const pointer
      *  from a const DSharedDataPointer.
      *  Typically, this should only be used if you know it should be used
      *  (to implement a lazy loading caching technique or similar)
      */
-    inline T* constCastData() const { return const_cast<T*>(d); }
+    inline T* constCastData() const
+    {
+        return const_cast<T*>(d);
+    }
 
-    inline bool operator==(const DSharedDataPointer<T>& other) const { return d == other.d; }
-    inline bool operator!=(const DSharedDataPointer<T>& other) const { return d != other.d; }
+    inline bool operator==(const DSharedDataPointer<T>& other) const
+    {
+        return d == other.d;
+    }
+    inline bool operator!=(const DSharedDataPointer<T>& other) const
+    {
+        return d != other.d;
+    }
 
-    inline DSharedDataPointer() { d = 0; }
+    inline DSharedDataPointer()
+    {
+        d = 0;
+    }
 
-    explicit inline DSharedDataPointer(T *data) : d(data)
-        { if (d) d->ref.ref(); }
+    explicit inline DSharedDataPointer(T* data) : d(data)
+    {
+        if (d)
+        {
+            d->ref.ref();
+        }
+    }
 
     inline ~DSharedDataPointer()
-        { if (d && !d->ref.deref()) delete d; }
+    {
+        if (d && !d->ref.deref())
+        {
+            delete d;
+        }
+    }
 
     inline DSharedDataPointer(const DSharedDataPointer<T>& o) : d(o.d)
-        { if (d) d->ref.ref(); }
+    {
+        if (d)
+        {
+            d->ref.ref();
+        }
+    }
 
     inline DSharedDataPointer<T> & operator=(const DSharedDataPointer<T>& o)
     {
@@ -122,7 +180,7 @@ public:
         return *this;
     }
 
-    inline DSharedDataPointer& operator=(T *o)
+    inline DSharedDataPointer& operator=(T* o)
     {
         delete assign(o);
         return *this;
@@ -137,53 +195,70 @@ public:
      * @returns A T object with reference count 0, which may be deleted;
      *          or 0 if no object need to be dropped.
      */
-    inline T *assign(const DSharedDataPointer<T>& o)
+    inline T* assign(const DSharedDataPointer<T>& o)
     {
         if (o.d != d)
         {
             // reference new value
             if (o.d)
+            {
                 o.d->ref.ref();
+            }
+
             // store old value
-            T *x = d;
+            T* x = d;
             // assign new value
             d = o.d;
+
             // dereference old value,
             // return value and ownership if dereferenced
             if (x && !x->ref.deref())
+            {
                 return x;
+            }
         }
+
         return 0;
     }
 
-    inline T *assign(T *o)
+    inline T* assign(T* o)
     {
         if (o != d)
         {
             // reference new value
             if (o)
+            {
                 o->ref.ref();
+            }
+
             // store old value
-            T *x = d;
+            T* x = d;
             // assign new value
             d = o;
+
             // dereference old value,
             // return value and ownership if dereferenced
             if (x && !x->ref.deref())
+            {
                 return x;
+            }
         }
+
         return 0;
     }
 
     /**
      * Semantics like assign, but no new pointer is assigned to this.
      */
-    inline T *unassign()
+    inline T* unassign()
     {
         return assign(0);
     }
 
-    inline bool operator!() const { return !d; }
+    inline bool operator!() const
+    {
+        return !d;
+    }
 
 private:
 

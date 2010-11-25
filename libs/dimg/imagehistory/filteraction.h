@@ -96,10 +96,13 @@ public:
     bool hasParameter(const QString& key) const;
 
     const QVariant parameter(const QString& key) const;
-    QVariant &parameter(const QString& key);
+    QVariant& parameter(const QString& key);
 
     template <typename T>
-    T parameter(const QString& key) const { return parameter(key).value<T>(); }
+    T parameter(const QString& key) const
+    {
+        return parameter(key).value<T>();
+    }
 
     /// Sets parameter, removing all other values for the same key
     void setParameter(const QString& key, const QVariant& value);

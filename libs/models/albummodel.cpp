@@ -40,10 +40,10 @@
 namespace Digikam
 {
 
-AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject *parent)
-          : AbstractCheckableAlbumModel(Album::PHYSICAL,
-                                        AlbumManager::instance()->findPAlbum(0),
-                                        rootBehavior, parent)
+AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* parent)
+    : AbstractCheckableAlbumModel(Album::PHYSICAL,
+                                  AlbumManager::instance()->findPAlbum(0),
+                                  rootBehavior, parent)
 {
     m_columnHeader = i18n("My Albums");
     setupThumbnailLoading();
@@ -57,15 +57,15 @@ AlbumModel::~AlbumModel()
 {
 }
 
-PAlbum *AlbumModel::albumForIndex(const QModelIndex& index) const
+PAlbum* AlbumModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<PAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
 
-QVariant AlbumModel::decorationRoleData(Album *album) const
+QVariant AlbumModel::decorationRoleData(Album* album) const
 {
     // asynchronous signals are handled by parent class
-    return AlbumThumbnailLoader::instance()->getAlbumThumbnailDirectly(static_cast<PAlbum *>(album));
+    return AlbumThumbnailLoader::instance()->getAlbumThumbnailDirectly(static_cast<PAlbum*>(album));
 }
 
 Album* AlbumModel::albumForId(int id) const
@@ -75,16 +75,16 @@ Album* AlbumModel::albumForId(int id) const
 
 // ------------------------------------------------------------------
 
-TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject *parent)
-        : AbstractCheckableAlbumModel(Album::TAG,
-                                      AlbumManager::instance()->findTAlbum(0),
-                                      rootBehavior, parent)
+TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject* parent)
+    : AbstractCheckableAlbumModel(Album::TAG,
+                                  AlbumManager::instance()->findTAlbum(0),
+                                  rootBehavior, parent)
 {
     m_columnHeader = i18n("My Tags");
     setupThumbnailLoading();
 
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
-             this, SLOT(setCountMap(const QMap<int, int>&)));
+            this, SLOT(setCountMap(const QMap<int, int>&)));
     setCountMap(AlbumManager::instance()->getTAlbumsCount());
 }
 
@@ -94,14 +94,14 @@ void TagModel::setColumnHeader(const QString& header)
 }
 
 
-TAlbum *TagModel::albumForIndex(const QModelIndex& index) const
+TAlbum* TagModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<TAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
 
-QVariant TagModel::decorationRoleData(Album *album) const
+QVariant TagModel::decorationRoleData(Album* album) const
 {
-    return AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum *>(album), true);
+    return AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum*>(album), true);
 }
 
 Album* TagModel::albumForId(int id) const
@@ -111,10 +111,10 @@ Album* TagModel::albumForId(int id) const
 
 // ------------------------------------------------------------------
 
-SearchModel::SearchModel(QObject *parent)
-            : AbstractCheckableAlbumModel(Album::SEARCH,
-                                         AlbumManager::instance()->findSAlbum(0),
-                                         IgnoreRootAlbum, parent)
+SearchModel::SearchModel(QObject* parent)
+    : AbstractCheckableAlbumModel(Album::SEARCH,
+                                  AlbumManager::instance()->findSAlbum(0),
+                                  IgnoreRootAlbum, parent)
 {
 
     setShowCount(false);
@@ -126,7 +126,7 @@ SearchModel::SearchModel(QObject *parent)
 
 }
 
-SAlbum *SearchModel::albumForIndex(const QModelIndex& index) const
+SAlbum* SearchModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<SAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
@@ -171,27 +171,30 @@ void SearchModel::setPixmapForDuplicatesSearches(const QPixmap& pix)
     m_pixmaps.insert(DatabaseSearch::DuplicatesSearch, pix);
 }
 
-QVariant SearchModel::albumData(Album *a, int role) const
+QVariant SearchModel::albumData(Album* a, int role) const
 {
     if (role == Qt::DisplayRole || role == AlbumTitleRole || role == Qt::ToolTipRole)
     {
-        SAlbum *salbum = static_cast<SAlbum*>(a);
+        SAlbum* salbum = static_cast<SAlbum*>(a);
         QString title = a->title();
         QString displayTitle = salbum->displayTitle();
         return m_replaceNames.value(title, displayTitle);
     }
     else if (role == Qt::DecorationRole)
     {
-        SAlbum *salbum = static_cast<SAlbum*>(a);
+        SAlbum* salbum = static_cast<SAlbum*>(a);
         QPixmap pixmap = m_pixmaps.value(salbum->searchType());
+
         if (pixmap.isNull() && salbum->isNormalSearch())
         {
             pixmap = m_pixmaps.value(-1);
         }
+
         if (pixmap.isNull())
         {
             pixmap = m_pixmaps.value(-2);
         }
+
         return pixmap;
     }
 
@@ -213,34 +216,34 @@ void SearchModel::albumSettingsChanged()
 
 // ------------------------------------------------------------------
 
-DateAlbumModel::DateAlbumModel(QObject *parent)
-            : AbstractCountingAlbumModel(Album::DATE,
-                                         AlbumManager::instance()->findDAlbum(0),
-                                         IgnoreRootAlbum, parent)
+DateAlbumModel::DateAlbumModel(QObject* parent)
+    : AbstractCountingAlbumModel(Album::DATE,
+                                 AlbumManager::instance()->findDAlbum(0),
+                                 IgnoreRootAlbum, parent)
 {
     connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(const QMap<YearMonth, int>&)),
             this, SLOT(setYearMonthMap(const QMap<YearMonth, int>&)));
     setYearMonthMap(AlbumManager::instance()->getDAlbumsCount());
 }
 
-DAlbum *DateAlbumModel::albumForIndex(const QModelIndex& index) const
+DAlbum* DateAlbumModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<DAlbum*>(AbstractCountingAlbumModel::albumForIndex(index));
 }
 
-QModelIndex DateAlbumModel::monthIndexForDate(const QDate &date) const
+QModelIndex DateAlbumModel::monthIndexForDate(const QDate& date) const
 {
 
     // iterate over all years
     for (int yearIndex = 0; yearIndex < rowCount(); ++yearIndex)
     {
         QModelIndex year = index(yearIndex, 0);
-        DAlbum *yearAlbum = albumForIndex(year);
+        DAlbum* yearAlbum = albumForIndex(year);
 
         // do not search through months if we are sure, that the year already
         // does not match
         if (yearAlbum && (yearAlbum->range() == DAlbum::Year)
-                      && (yearAlbum->date().year() != date.year()))
+            && (yearAlbum->date().year() != date.year()))
         {
             continue;
         }
@@ -249,10 +252,11 @@ QModelIndex DateAlbumModel::monthIndexForDate(const QDate &date) const
         for (int monthIndex = 0; monthIndex < rowCount(year); ++monthIndex)
         {
             QModelIndex month = index(monthIndex, 0, year);
-            DAlbum *monthAlbum = albumForIndex(month);
+            DAlbum* monthAlbum = albumForIndex(month);
+
             if (monthAlbum && (monthAlbum->range() == DAlbum::Month)
-                           && (monthAlbum->date().year() == date.year())
-                           && (monthAlbum->date().month() == date.month()))
+                && (monthAlbum->date().year() == date.year())
+                && (monthAlbum->date().month() == date.month()))
             {
                 return month;
             }
@@ -270,30 +274,43 @@ void DateAlbumModel::setPixmaps(const QPixmap& forYearAlbums, const QPixmap& for
     m_monthPixmap = forMonthAlbums;
 }
 
-QString DateAlbumModel::albumName(Album *album) const
+QString DateAlbumModel::albumName(Album* album) const
 {
-    DAlbum *dalbum = static_cast<DAlbum*>(album);
+    DAlbum* dalbum = static_cast<DAlbum*>(album);
+
     if (dalbum->range() == DAlbum::Year)
+    {
         return QString::number(dalbum->date().year());
+    }
     else
+    {
         return KGlobal::locale()->calendar()->monthName(dalbum->date(), KCalendarSystem::LongName);
+    }
 }
 
-QVariant DateAlbumModel::decorationRoleData(Album *album) const
+QVariant DateAlbumModel::decorationRoleData(Album* album) const
 {
-    DAlbum *dalbum = static_cast<DAlbum*>(album);
+    DAlbum* dalbum = static_cast<DAlbum*>(album);
+
     if (dalbum->range() == DAlbum::Year)
+    {
         return m_yearPixmap;
+    }
     else
+    {
         return m_monthPixmap;
+    }
 }
 
-QVariant DateAlbumModel::sortRoleData(Album *a) const
+QVariant DateAlbumModel::sortRoleData(Album* a) const
 {
-    DAlbum *dalbum = static_cast<DAlbum*>(a);
-    if (dalbum) {
+    DAlbum* dalbum = static_cast<DAlbum*>(a);
+
+    if (dalbum)
+    {
         return dalbum->date();
     }
+
     kError() << "There must be a data album.";
     return QDate();
 }
@@ -309,30 +326,33 @@ void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
     AlbumIterator it(rootAlbum());
 
     QMap<int, int> albumToCountMap;
+
     while (it.current())
     {
-        DAlbum *dalbum = static_cast<DAlbum*>(*it);
+        DAlbum* dalbum = static_cast<DAlbum*>(*it);
         QDate date = dalbum->date();
 
         switch (dalbum->range())
         {
-        case DAlbum::Month:
+            case DAlbum::Month:
             {
                 QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.constFind(YearMonth(date.year(), date.month()));
+
                 if ( it2 != yearMonthMap.constEnd() )
                 {
                     albumToCountMap.insert((*it)->id(), it2.value());
                 }
+
                 break;
             }
-        case DAlbum::Year:
-            // a year itself cannot contain images and therefore always has count 0
-            albumToCountMap.insert((*it)->id(), 0);
-            break;
-        default:
-            kError() << "Untreated DAlbum range " << dalbum->range();
-            albumToCountMap.insert((*it)->id(), 0);
-            break;
+            case DAlbum::Year:
+                // a year itself cannot contain images and therefore always has count 0
+                albumToCountMap.insert((*it)->id(), 0);
+                break;
+            default:
+                kError() << "Untreated DAlbum range " << dalbum->range();
+                albumToCountMap.insert((*it)->id(), 0);
+                break;
         }
 
         ++it;

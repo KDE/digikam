@@ -40,12 +40,12 @@ class DigikamModelCollectionPriv
 
 public:
 
-    AlbumModel         *albumModel;
-    TagModel           *tagModel;
-    TagModel           *tagFilterModel;
-    SearchModel        *searchModel;
-    DateAlbumModel     *dateAlbumModel;
-    ImageVersionsModel *imageVersionModel;
+    AlbumModel*         albumModel;
+    TagModel*           tagModel;
+    TagModel*           tagFilterModel;
+    SearchModel*        searchModel;
+    DateAlbumModel*     dateAlbumModel;
+    ImageVersionsModel* imageVersionModel;
 };
 
 DigikamModelCollection::DigikamModelCollection() :
@@ -64,7 +64,7 @@ DigikamModelCollection::DigikamModelCollection() :
     d->dateAlbumModel = new DateAlbumModel();
 
     d->imageVersionModel = new ImageVersionsModel();
-    
+
     // set icons initially
     albumSettingsChanged();
 
@@ -85,27 +85,27 @@ DigikamModelCollection::~DigikamModelCollection()
     delete d;
 }
 
-AlbumModel *DigikamModelCollection::getAlbumModel() const
+AlbumModel* DigikamModelCollection::getAlbumModel() const
 {
     return d->albumModel;
 }
 
-TagModel *DigikamModelCollection::getTagModel() const
+TagModel* DigikamModelCollection::getTagModel() const
 {
     return d->tagModel;
 }
 
-TagModel *DigikamModelCollection::getTagFilterModel() const
+TagModel* DigikamModelCollection::getTagFilterModel() const
 {
     return d->tagFilterModel;
 }
 
-SearchModel *DigikamModelCollection::getSearchModel() const
+SearchModel* DigikamModelCollection::getSearchModel() const
 {
     return d->searchModel;
 }
 
-DateAlbumModel *DigikamModelCollection::getDateAlbumModel() const
+DateAlbumModel* DigikamModelCollection::getDateAlbumModel() const
 {
     return d->dateAlbumModel;
 }
@@ -114,12 +114,12 @@ void DigikamModelCollection::albumSettingsChanged()
 {
 
     d->dateAlbumModel->setPixmaps(
-                    SmallIcon(
-                                    "view-calendar-list",
-                                    AlbumSettings::instance()->getTreeViewIconSize()),
-                    SmallIcon(
-                                    "view-calendar-month",
-                                    AlbumSettings::instance()->getTreeViewIconSize()));
+        SmallIcon(
+            "view-calendar-list",
+            AlbumSettings::instance()->getTreeViewIconSize()),
+        SmallIcon(
+            "view-calendar-month",
+            AlbumSettings::instance()->getTreeViewIconSize()));
 }
 
 ImageVersionsModel* DigikamModelCollection::getImageVersionsModel() const

@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-ItemVisibilityControllerPropertyObject::ItemVisibilityControllerPropertyObject(QObject *parent)
+ItemVisibilityControllerPropertyObject::ItemVisibilityControllerPropertyObject(QObject* parent)
     : QObject(parent)
 {
     m_opacity = 0;
@@ -68,28 +68,28 @@ void ItemVisibilityControllerPropertyObject::setVisible(bool visible)
 
 // ---
 
-AnimatedVisibility::AnimatedVisibility(QObject *parent)
+AnimatedVisibility::AnimatedVisibility(QObject* parent)
     : ItemVisibilityControllerPropertyObject(parent)
 {
     m_controller = new ItemVisibilityController(this);
     m_controller->addItem(this);
 }
 
-ItemVisibilityController *AnimatedVisibility::controller() const
+ItemVisibilityController* AnimatedVisibility::controller() const
 {
     return m_controller;
 }
 
 // ---
 
-HidingStateChanger::HidingStateChanger(QObject *parent)
+HidingStateChanger::HidingStateChanger(QObject* parent)
     : ItemVisibilityController(parent)
 {
     connect(this, SIGNAL(propertiesAssigned(bool)),
             this, SLOT(slotPropertiesAssigned(bool)));
 }
 
-HidingStateChanger::HidingStateChanger(QObject *target, const QByteArray property, QObject *parent)
+HidingStateChanger::HidingStateChanger(QObject* target, const QByteArray property, QObject* parent)
     : ItemVisibilityController(parent)
 {
     connect(this, SIGNAL(propertiesAssigned(bool)),
@@ -102,7 +102,7 @@ HidingStateChanger::HidingStateChanger(QObject *target, const QByteArray propert
     setVisible(true);
 }
 
-void HidingStateChanger::setTargetObject(QObject *object)
+void HidingStateChanger::setTargetObject(QObject* object)
 {
     m_object = object;
 }
@@ -115,6 +115,7 @@ void HidingStateChanger::setPropertyName(const QByteArray& propertyName)
 void HidingStateChanger::changeValue(const QVariant& value)
 {
     m_value = value;
+
     if (!hasVisibleItems())
     {
         // shortcut
@@ -132,7 +133,10 @@ void HidingStateChanger::slotPropertiesAssigned(bool visible)
     if (!visible)
     {
         if (m_object)
+        {
             m_object->setProperty(m_property, m_value);
+        }
+
         emit stateChanged();
         show();
     }
@@ -155,53 +159,53 @@ public:
         RemovingControl
     };
 
-    AnimationControl(ItemVisibilityController *q);
-    AnimationControl(AnimationControl *other, QObject *item);
+    AnimationControl(ItemVisibilityController* q);
+    AnimationControl(AnimationControl* other, QObject* item);
     ~AnimationControl();
 
     void clear();
 
-    void addItem(QAbstractAnimation *animation, QObject *item);
-    QAbstractAnimation *takeItem(QObject *item);
-    void moveTo(AnimationControl *other, QObject *item);
-    void moveAllTo(AnimationControl *other);
+    void addItem(QAbstractAnimation* animation, QObject* item);
+    QAbstractAnimation* takeItem(QObject* item);
+    void moveTo(AnimationControl* other, QObject* item);
+    void moveAllTo(AnimationControl* other);
 
-    bool hasItem(QObject *o) const;
+    bool hasItem(QObject* o) const;
     bool hasVisibleItems(ItemVisibilityController::IncludeFadingOutMode mode) const;
 
     void transitionToVisible(bool show, bool immediately = false);
     void animationFinished();
 
-    void syncProperties(QObject *o);
-    void connect(QObject *item);
-    void disconnect(QObject *item);
+    void syncProperties(QObject* o);
+    void connect(QObject* item);
+    void disconnect(QObject* item);
 
-    void setEasingCurve(const QEasingCurve &easing);
+    void setEasingCurve(const QEasingCurve& easing);
     void setAnimationDuration(int msecs);
 
     QList<QObject*>                 items;
-    QAbstractAnimation             *animation;
+    QAbstractAnimation*             animation;
     ItemVisibilityController::State state;
     Situation                       situation;
 
 private:
 
     void setVisibleProperty(bool value);
-    void connect(QAbstractAnimation *anim);
-    void disconnect(QAbstractAnimation *anim);
+    void connect(QAbstractAnimation* anim);
+    void disconnect(QAbstractAnimation* anim);
     void moveToGroup();
 
-    QParallelAnimationGroup        *animationGroup;
+    QParallelAnimationGroup*        animationGroup;
     ItemVisibilityController* const q;
 };
 
-AnimationControl::AnimationControl(ItemVisibilityController *q)
+AnimationControl::AnimationControl(ItemVisibilityController* q)
     : animation(0), state(ItemVisibilityController::Hidden),
       situation(MainControl), animationGroup(0), q(q)
 {
 }
 
-AnimationControl::AnimationControl(AnimationControl *other, QObject *object)
+AnimationControl::AnimationControl(AnimationControl* other, QObject* object)
     : animation(0), state(other->state),
       situation(IndependentControl), animationGroup(0), q(other->q)
 {
@@ -228,25 +232,25 @@ void AnimationControl::clear()
     items.clear();
 }
 
-void AnimationControl::connect(QObject *item)
+void AnimationControl::connect(QObject* item)
 {
     q->connect(item, SIGNAL(destroyed(QObject*)),
                q, SLOT(objectDestroyed(QObject*)));
 }
 
-void AnimationControl::disconnect(QObject *item)
+void AnimationControl::disconnect(QObject* item)
 {
     q->disconnect(item, SIGNAL(destroyed(QObject*)),
                   q, SLOT(objectDestroyed(QObject*)));
 }
 
-void AnimationControl::connect(QAbstractAnimation *anim)
+void AnimationControl::connect(QAbstractAnimation* anim)
 {
     q->connect(anim, SIGNAL(finished()),
                q, SLOT(animationFinished()));
 }
 
-void AnimationControl::disconnect(QAbstractAnimation *anim)
+void AnimationControl::disconnect(QAbstractAnimation* anim)
 {
     q->disconnect(anim, SIGNAL(finished()),
                   q, SLOT(animationFinished()));
@@ -258,16 +262,18 @@ void AnimationControl::moveToGroup()
     {
         animationGroup = new QParallelAnimationGroup;
         connect(animationGroup);
+
         if (animation)
         {
             disconnect(animation);
             animationGroup->addAnimation(animation);
         }
+
         animation = animationGroup;
     }
 }
 
-void AnimationControl::addItem(QAbstractAnimation *anim, QObject *item)
+void AnimationControl::addItem(QAbstractAnimation* anim, QObject* item)
 {
     // Either there is no group but now for the first time two items,
     // or the control got empty intermittently, but still has the group installed
@@ -285,31 +291,41 @@ void AnimationControl::addItem(QAbstractAnimation *anim, QObject *item)
     items << item;
 }
 
-QAbstractAnimation *AnimationControl::takeItem(QObject *item)
+QAbstractAnimation* AnimationControl::takeItem(QObject* item)
 {
     int index = items.indexOf(item);
+
     if (index == -1)
+    {
         return 0;
+    }
+
     items.removeAt(index);
+
     if (animationGroup)
+    {
         return animationGroup->takeAnimation(index);
+    }
     else
     {
-        QAbstractAnimation *anim = animation;
+        QAbstractAnimation* anim = animation;
         disconnect(animation);
         animation = 0;
         return anim;
     }
 }
 
-void AnimationControl::moveTo(AnimationControl *other, QObject *item)
+void AnimationControl::moveTo(AnimationControl* other, QObject* item)
 {
-    QAbstractAnimation *anim = takeItem(item);
+    QAbstractAnimation* anim = takeItem(item);
+
     if (anim)
+    {
         other->addItem(anim, item);
+    }
 }
 
-void AnimationControl::moveAllTo(AnimationControl *other)
+void AnimationControl::moveAllTo(AnimationControl* other)
 {
     foreach (QObject* item, items)
     {
@@ -317,7 +333,7 @@ void AnimationControl::moveAllTo(AnimationControl *other)
     }
 }
 
-bool AnimationControl::hasItem(QObject *o) const
+bool AnimationControl::hasItem(QObject* o) const
 {
     return items.contains(o);
 }
@@ -325,11 +341,18 @@ bool AnimationControl::hasItem(QObject *o) const
 bool AnimationControl::hasVisibleItems(ItemVisibilityController::IncludeFadingOutMode mode) const
 {
     if (items.isEmpty())
+    {
         return false;
+    }
+
     if (mode == ItemVisibilityController::IncludeFadingOut)
+    {
         return state != ItemVisibilityController::Hidden;
+    }
     else
+    {
         return state != ItemVisibilityController::Hidden && state != ItemVisibilityController::FadingOut;
+    }
 }
 
 void AnimationControl::setVisibleProperty(bool value)
@@ -340,7 +363,7 @@ void AnimationControl::setVisibleProperty(bool value)
     }
 }
 
-void AnimationControl::syncProperties(QObject *o)
+void AnimationControl::syncProperties(QObject* o)
 {
     if (state == ItemVisibilityController::Visible || state == ItemVisibilityController::FadingIn)
     {
@@ -361,15 +384,24 @@ void AnimationControl::transitionToVisible(bool show, bool immediately)
     if (show)
     {
         if (state == ItemVisibilityController::Visible || state == ItemVisibilityController::FadingIn)
+        {
             return;
+        }
+
         if (state == ItemVisibilityController::Hidden)
+        {
             setVisibleProperty(true);
+        }
+
         state = ItemVisibilityController::FadingIn;
     }
     else
     {
         if (state == ItemVisibilityController::Hidden || state == ItemVisibilityController::FadingOut)
+        {
             return;
+        }
+
         state = ItemVisibilityController::FadingOut;
     }
 
@@ -377,8 +409,12 @@ void AnimationControl::transitionToVisible(bool show, bool immediately)
     {
         QAbstractAnimation::Direction direction = show ? QAbstractAnimation::Forward : QAbstractAnimation::Backward;
         animation->setDirection(direction);
+
         if (immediately)
+        {
             animation->setCurrentTime(show ? animation->totalDuration() : 0);
+        }
+
         animation->start();
     }
 }
@@ -396,21 +432,24 @@ void AnimationControl::animationFinished()
     }
 }
 
-void AnimationControl::setEasingCurve(const QEasingCurve &easing)
+void AnimationControl::setEasingCurve(const QEasingCurve& easing)
 {
     if (animationGroup)
     {
         for (int i=0; i<animationGroup->animationCount(); i++)
         {
-            QVariantAnimation *anim = /*qobject*/static_cast<QVariantAnimation*>(animationGroup->animationAt(i));
+            QVariantAnimation* anim = /*qobject*/static_cast<QVariantAnimation*>(animationGroup->animationAt(i));
             anim->setEasingCurve(easing);
         }
     }
     else if (animation)
     {
-        QVariantAnimation *anim = /*qobject*/static_cast<QVariantAnimation*>(animation);
+        QVariantAnimation* anim = /*qobject*/static_cast<QVariantAnimation*>(animation);
+
         if (anim)
+        {
             anim->setEasingCurve(easing);
+        }
     }
 }
 
@@ -420,15 +459,18 @@ void AnimationControl::setAnimationDuration(int msecs)
     {
         for (int i=0; i<animationGroup->animationCount(); i++)
         {
-            QVariantAnimation *anim = /*qobject*/static_cast<QVariantAnimation*>(animationGroup->animationAt(i));
+            QVariantAnimation* anim = /*qobject*/static_cast<QVariantAnimation*>(animationGroup->animationAt(i));
             anim->setDuration(msecs);
         }
     }
     else if (animation)
     {
-        QVariantAnimation *anim = /*qobject*/static_cast<QVariantAnimation*>(animation);
+        QVariantAnimation* anim = /*qobject*/static_cast<QVariantAnimation*>(animation);
+
         if (anim)
+        {
             anim->setDuration(msecs);
+        }
     }
 }
 
@@ -438,7 +480,7 @@ class ItemVisibilityController::ItemVisibilityControllerPriv
 {
 public:
 
-    ItemVisibilityControllerPriv(ItemVisibilityController *q) : q(q)
+    ItemVisibilityControllerPriv(ItemVisibilityController* q) : q(q)
     {
         visible          = false;
         shallBeShown     = true;
@@ -450,25 +492,25 @@ public:
 
     bool                               visible;
     bool                               shallBeShown;
-    QObject                           *itemShallBeShown;
+    QObject*                           itemShallBeShown;
 
     int                                animationDuration;
     QEasingCurve                       easingCurve;
 
-    AnimationControl                  *control;
+    AnimationControl*                  control;
     QList<AnimationControl*>           childControls;
 
     void                       setVisible(bool v, bool immediately);
-    void                       setItemVisible(QObject *item, bool visible, bool immediately);
+    void                       setItemVisible(QObject* item, bool visible, bool immediately);
 
-    AnimationControl          *findInChildren(QObject *item) const;
-    AnimationControl          *getChild(QObject *item);
-    void                       cleanupChildren(QAbstractAnimation *finishedAnimation);
+    AnimationControl*          findInChildren(QObject* item) const;
+    AnimationControl*          getChild(QObject* item);
+    void                       cleanupChildren(QAbstractAnimation* finishedAnimation);
 
     ItemVisibilityController* const q;
 };
 
-AnimationControl *ItemVisibilityController::ItemVisibilityControllerPriv::findInChildren(QObject *item) const
+AnimationControl* ItemVisibilityController::ItemVisibilityControllerPriv::findInChildren(QObject* item) const
 {
     foreach (AnimationControl* child, childControls)
     {
@@ -480,24 +522,28 @@ AnimationControl *ItemVisibilityController::ItemVisibilityControllerPriv::findIn
     return 0;
 }
 
-AnimationControl *ItemVisibilityController::ItemVisibilityControllerPriv::getChild(QObject *item)
+AnimationControl* ItemVisibilityController::ItemVisibilityControllerPriv::getChild(QObject* item)
 {
     if (control->hasItem(item))
     {
-        AnimationControl *child = new AnimationControl(control, item);
+        AnimationControl* child = new AnimationControl(control, item);
         childControls << child;
         return child;
     }
     else
+    {
         return findInChildren(item);
+    }
 }
 
-void ItemVisibilityController::ItemVisibilityControllerPriv::cleanupChildren(QAbstractAnimation *finishedAnimation)
+void ItemVisibilityController::ItemVisibilityControllerPriv::cleanupChildren(QAbstractAnimation* finishedAnimation)
 {
     QList<AnimationControl*>::iterator it;
+
     for (it = childControls.begin(); it != childControls.end(); )
     {
-        AnimationControl *child = *it;
+        AnimationControl* child = *it;
+
         if (child->state == control->state && child->situation == AnimationControl::IndependentControl)
         {
             // merge back to main control
@@ -527,7 +573,10 @@ void ItemVisibilityController::ItemVisibilityControllerPriv::setVisible(bool v, 
     visible = v;
 
     if (control)
+    {
         control->transitionToVisible(shallBeShown && visible, immediately);
+    }
+
     foreach (AnimationControl* child, childControls)
     {
         if (child->situation == AnimationControl::IndependentControl)
@@ -542,16 +591,19 @@ void ItemVisibilityController::ItemVisibilityControllerPriv::setVisible(bool v, 
     }
 }
 
-void ItemVisibilityController::ItemVisibilityControllerPriv::setItemVisible(QObject *item, bool visible, bool immediately)
+void ItemVisibilityController::ItemVisibilityControllerPriv::setItemVisible(QObject* item, bool visible, bool immediately)
 {
-    AnimationControl *child = getChild(item);
+    AnimationControl* child = getChild(item);
+
     if (child)
+    {
         child->transitionToVisible(visible, immediately);
+    }
 }
 
 // ---
 
-ItemVisibilityController::ItemVisibilityController(QObject *parent)
+ItemVisibilityController::ItemVisibilityController(QObject* parent)
     : QObject(parent), d(new ItemVisibilityControllerPriv(this))
 {
 }
@@ -562,9 +614,9 @@ ItemVisibilityController::~ItemVisibilityController()
     delete d;
 }
 
-QPropertyAnimation *ItemVisibilityController::createAnimation(QObject *)
+QPropertyAnimation* ItemVisibilityController::createAnimation(QObject*)
 {
-    QPropertyAnimation *anim = new QPropertyAnimation(this);
+    QPropertyAnimation* anim = new QPropertyAnimation(this);
     anim->setPropertyName("opacity");
     anim->setStartValue(0);
     anim->setEndValue(1.0);
@@ -573,10 +625,12 @@ QPropertyAnimation *ItemVisibilityController::createAnimation(QObject *)
     return anim;
 }
 
-void ItemVisibilityController::addItem(QObject *item)
+void ItemVisibilityController::addItem(QObject* item)
 {
     if (!item)
+    {
         return;
+    }
 
     if (!d->control)
     {
@@ -593,10 +647,12 @@ void ItemVisibilityController::addItem(QObject *item)
     d->control->addItem(anim, item);
 }
 
-void ItemVisibilityController::removeItem(QObject *item)
+void ItemVisibilityController::removeItem(QObject* item)
 {
     if (!item)
+    {
         return;
+    }
 
     if (d->control->hasItem(item))
     {
@@ -605,7 +661,8 @@ void ItemVisibilityController::removeItem(QObject *item)
     }
     else
     {
-        AnimationControl *child = d->findInChildren(item);
+        AnimationControl* child = d->findInChildren(item);
+
         if (child)
         {
             child->disconnect(item);
@@ -618,7 +675,9 @@ void ItemVisibilityController::removeItem(QObject *item)
 void ItemVisibilityController::clear()
 {
     if (d->control)
+    {
         d->control->clear();
+    }
 
     foreach (AnimationControl* child, d->childControls)
     {
@@ -632,8 +691,12 @@ void ItemVisibilityController::clear()
 QList<QObject*> ItemVisibilityController::items() const
 {
     QList<QObject*> items;
+
     if (d->control)
+    {
         items = d->control->items;
+    }
+
     foreach (AnimationControl* child, d->childControls)
     {
         items += child->items;
@@ -644,10 +707,12 @@ QList<QObject*> ItemVisibilityController::items() const
 QList<QObject*> ItemVisibilityController::visibleItems(IncludeFadingOutMode mode) const
 {
     QList<QObject*> items;
+
     if (d->control && d->control->hasVisibleItems(mode))
     {
         items = d->control->items;
     }
+
     foreach (AnimationControl* child, d->childControls)
     {
         if (child->hasVisibleItems(mode))
@@ -679,6 +744,7 @@ bool ItemVisibilityController::hasVisibleItems(IncludeFadingOutMode mode) const
     {
         return true;
     }
+
     foreach (AnimationControl* child, d->childControls)
     {
         if (child->hasVisibleItems(mode))
@@ -689,13 +755,15 @@ bool ItemVisibilityController::hasVisibleItems(IncludeFadingOutMode mode) const
     return false;
 }
 
-void ItemVisibilityController::setEasingCurve(const QEasingCurve &easing)
+void ItemVisibilityController::setEasingCurve(const QEasingCurve& easing)
 {
     d->easingCurve = easing;
+
     if (d->control)
     {
         d->control->setEasingCurve(easing);
     }
+
     foreach (AnimationControl* child, d->childControls)
     {
         child->setEasingCurve(easing);
@@ -705,10 +773,12 @@ void ItemVisibilityController::setEasingCurve(const QEasingCurve &easing)
 void ItemVisibilityController::setAnimationDuration(int msecs)
 {
     d->animationDuration = msecs;
+
     if (d->control)
     {
         d->control->setAnimationDuration(msecs);
     }
+
     foreach (AnimationControl* child, d->childControls)
     {
         child->setAnimationDuration(msecs);
@@ -735,7 +805,7 @@ void ItemVisibilityController::setShallBeShownDirectly(bool shallBeShown)
     setDirectlyVisible(d->visible);
 }
 
-void ItemVisibilityController::setItemThatShallBeShown(QObject *item)
+void ItemVisibilityController::setItemThatShallBeShown(QObject* item)
 {
     d->itemShallBeShown = item;
     d->shallBeShown     = false;
@@ -762,29 +832,30 @@ void ItemVisibilityController::setDirectlyVisible(bool visible)
     d->setVisible(visible, true);
 }
 
-void ItemVisibilityController::showItem(QObject *item)
+void ItemVisibilityController::showItem(QObject* item)
 {
     setItemVisible(item, true);
 }
 
-void ItemVisibilityController::hideItem(QObject *item)
+void ItemVisibilityController::hideItem(QObject* item)
 {
     setItemVisible(item, false);
 }
 
-void ItemVisibilityController::setItemVisible(QObject *item, bool visible)
+void ItemVisibilityController::setItemVisible(QObject* item, bool visible)
 {
     d->setItemVisible(item, visible, false);
 }
 
-void ItemVisibilityController::setItemDirectlyVisible(QObject *item, bool visible)
+void ItemVisibilityController::setItemDirectlyVisible(QObject* item, bool visible)
 {
     d->setItemVisible(item, visible, true);
 }
 
-void ItemVisibilityController::hideAndRemoveItem(QObject *item)
+void ItemVisibilityController::hideAndRemoveItem(QObject* item)
 {
-    AnimationControl *child = d->getChild(item);
+    AnimationControl* child = d->getChild(item);
+
     if (child)
     {
         child->situation = AnimationControl::RemovingControl;
@@ -794,12 +865,14 @@ void ItemVisibilityController::hideAndRemoveItem(QObject *item)
 
 void ItemVisibilityController::animationFinished()
 {
-    QAbstractAnimation *animation = static_cast<QAbstractAnimation*>(sender());
+    QAbstractAnimation* animation = static_cast<QAbstractAnimation*>(sender());
+
     if (d->control && d->control->animation == animation)
     {
         d->control->animationFinished();
         emit propertiesAssigned(d->control->state == Visible);
     }
+
     foreach (AnimationControl* child, d->childControls)
     {
         if (child->animation == animation)

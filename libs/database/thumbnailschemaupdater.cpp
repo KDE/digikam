@@ -54,7 +54,7 @@ int ThumbnailSchemaUpdater::schemaVersion()
     return 2;
 }
 
-ThumbnailSchemaUpdater::ThumbnailSchemaUpdater(ThumbnailDatabaseAccess *access)
+ThumbnailSchemaUpdater::ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access)
 {
     m_access         = access;
     m_currentVersion = 0;
@@ -66,15 +66,22 @@ ThumbnailSchemaUpdater::ThumbnailSchemaUpdater(ThumbnailDatabaseAccess *access)
 bool ThumbnailSchemaUpdater::update()
 {
     bool success = startUpdates();
+
     // even on failure, try to set current version - it may have incremented
     if (m_currentVersion)
+    {
         m_access->db()->setSetting("DBThumbnailsVersion", QString::number(m_currentVersion));
+    }
+
     if (m_currentRequiredVersion)
+    {
         m_access->db()->setSetting("DBThumbnailsVersionRequired", QString::number(m_currentRequiredVersion));
+    }
+
     return success;
 }
 
-void ThumbnailSchemaUpdater::setObserver(InitializationObserver *observer)
+void ThumbnailSchemaUpdater::setObserver(InitializationObserver* observer)
 {
     m_observer = observer;
 }
@@ -103,17 +110,19 @@ bool ThumbnailSchemaUpdater::startUpdates()
             // Something is damaged. Give up.
             kError(50003) << "DBThumbnailsVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
-                    "The database is not valid: "
-                    "the \"DBThumbnailsVersion\" setting does not exist. "
-                    "The current database schema version cannot be verified. "
-                    "Try to start with an empty database. "
-                                   );
+                                   "The database is not valid: "
+                                   "the \"DBThumbnailsVersion\" setting does not exist. "
+                                   "The current database schema version cannot be verified. "
+                                   "Try to start with an empty database. "
+                               );
             m_access->setLastError(errorMsg);
+
             if (m_observer)
             {
                 m_observer->error(errorMsg);
                 m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
+
             return false;
         }
 
@@ -132,40 +141,48 @@ bool ThumbnailSchemaUpdater::startUpdates()
             else
             {
                 QString errorMsg = i18n(
-                            "The database has been used with a more recent version of digiKam "
-                            "and has been updated to a database schema which cannot be used with this version. "
-                            "(This means this digiKam version is too old, or the database format is to recent) "
-                            "Please use the more recent version of digikam that you used before. "
-                                       );
+                                       "The database has been used with a more recent version of digiKam "
+                                       "and has been updated to a database schema which cannot be used with this version. "
+                                       "(This means this digiKam version is too old, or the database format is to recent) "
+                                       "Please use the more recent version of digikam that you used before. "
+                                   );
                 m_access->setLastError(errorMsg);
+
                 if (m_observer)
                 {
                     m_observer->error(errorMsg);
                     m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
                 }
+
                 return false;
             }
         }
         else
+        {
             return makeUpdates();
+        }
     }
     else
     {
         //kDebug(50003) << "No database file available";
         DatabaseParameters parameters = m_access->parameters();
+
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
             QString errorMsg = i18n("Failed to create tables in database.\n ")
-                                    + m_access->backend()->lastError();
+                               + m_access->backend()->lastError();
             m_access->setLastError(errorMsg);
+
             if (m_observer)
             {
                 m_observer->error(errorMsg);
                 m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
+
             return false;
         }
+
         return true;
     }
 }
@@ -175,8 +192,11 @@ bool ThumbnailSchemaUpdater::makeUpdates()
     if (m_currentVersion < schemaVersion())
     {
         if (m_currentVersion == 1)
+        {
             updateV1ToV2();
+        }
     }
+
     return true;
 }
 
@@ -192,7 +212,9 @@ bool ThumbnailSchemaUpdater::createDatabase()
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 bool ThumbnailSchemaUpdater::createTables()

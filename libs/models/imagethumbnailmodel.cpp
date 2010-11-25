@@ -69,12 +69,13 @@ public:
         {
             return preloadThumbSize.size();
         }
+
         return thumbSize.size();
     }
 };
 
 ImageThumbnailModel::ImageThumbnailModel(QObject* parent)
-                   : ImageModel(parent), d(new ImageThumbnailModelPriv)
+    : ImageModel(parent), d(new ImageThumbnailModelPriv)
 {
     setKeepsFilePathCache(true);
 }
@@ -130,6 +131,7 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
             d->preloadThread->setExifRotate(d->exifRotate);
             d->preloadThread->setPriority(QThread::LowestPriority);
         }
+
         connect(this, SIGNAL(allRefreshingFinished()),
                 this, SLOT(preloadAllThumbnails()));
     }
@@ -145,10 +147,12 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
 void ImageThumbnailModel::setExifRotate(bool rotate)
 {
     d->exifRotate = rotate;
+
     if (d->thread)
     {
         d->thread->setExifRotate(rotate);
     }
+
     if (d->preloadThread)
     {
         d->preloadThread->setExifRotate(rotate);
@@ -227,18 +231,25 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         QPixmap thumbnail;
         ImageInfo info = imageInfoRef(index);
         QString path = info.filePath();
+
         if (!d->detailRect.isNull())
         {
             if (d->thread->find(path, d->detailRect, thumbnail, d->thumbSize.size()))
+            {
                 return thumbnail;
+            }
         }
         else
         {
             if (d->thread->find(path, thumbnail, d->thumbSize.size()))
+            {
                 return thumbnail;
+            }
         }
+
         return QVariant(QVariant::Pixmap);
     }
+
     if (role == ThumbnailSetRole && d->thread && index.isValid())
     {
         //FIXME: Usecase? Clean implementation
@@ -249,17 +260,24 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         QString originalPath = info.imageHistory().originalFilePath() + "/" + info.imageHistory().originalFileName();
 
         if (d->thread->find(path, thumbnail, d->thumbSize.size()))
-            thumbnailSet.append(thumbnail);
-        if (d->thread->find(originalPath, thumbnail, d->thumbSize.size()))
-            thumbnailSet.append(thumbnail);
-        return QVariant(thumbnailSet);
-/*
-        else
         {
-            return QVariant(QVariant::Pixmap);
+            thumbnailSet.append(thumbnail);
         }
-*/
+
+        if (d->thread->find(originalPath, thumbnail, d->thumbSize.size()))
+        {
+            thumbnailSet.append(thumbnail);
+        }
+
+        return QVariant(thumbnailSet);
+        /*
+                else
+                {
+                    return QVariant(QVariant::Pixmap);
+                }
+        */
     }
+
     return ImageModel::data(index, role);
 }
 
@@ -274,33 +292,52 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
                 d->detailRect = QRect();
                 break;
             case QVariant::Int:
+
                 if (value.isNull())
+                {
                     d->thumbSize = d->lastGlobalThumbSize;
+                }
                 else
+                {
                     d->thumbSize = value.toInt();
+                }
+
                 break;
             case QVariant::Rect:
+
                 if (value.isNull())
+                {
                     d->detailRect = QRect();
+                }
                 else
+                {
                     d->detailRect = value.toRect();
+                }
+
             default:
                 break;
         }
     }
+
     return ImageModel::setData(index, value, role);
 }
 
 void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
     if (thumb.isNull())
+    {
         return;
+    }
+
     // In case of multiple occurrence, we currently dont know which thumbnail is this. Signal change on all.
     foreach (const QModelIndex& changed, indexesForPath(loadingDescription.filePath))
     {
         emit thumbnailAvailable(changed, loadingDescription.previewParameters.size);
+
         if (d->emitDataChanged)
+        {
             emit dataChanged(changed, changed);
+        }
     }
 }
 

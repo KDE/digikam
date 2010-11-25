@@ -38,8 +38,8 @@
 namespace Digikam
 {
 
-ImageRotateLeftOverlayButton::ImageRotateLeftOverlayButton(QAbstractItemView *parentView)
-                            : ItemViewHoverButton(parentView)
+ImageRotateLeftOverlayButton::ImageRotateLeftOverlayButton(QAbstractItemView* parentView)
+    : ItemViewHoverButton(parentView)
 {
 }
 
@@ -60,8 +60,8 @@ void ImageRotateLeftOverlayButton::updateToolTip()
 
 // --------------------------------------------------------------------
 
-ImageRotateRightOverlayButton::ImageRotateRightOverlayButton(QAbstractItemView *parentView)
-                             : ItemViewHoverButton(parentView)
+ImageRotateRightOverlayButton::ImageRotateRightOverlayButton(QAbstractItemView* parentView)
+    : ItemViewHoverButton(parentView)
 {
 }
 
@@ -82,8 +82,8 @@ void ImageRotateRightOverlayButton::updateToolTip()
 
 // --------------------------------------------------------------------
 
-ImageRotateLeftOverlay::ImageRotateLeftOverlay(QObject *parent)
-                      : HoverButtonDelegateOverlay(parent)
+ImageRotateLeftOverlay::ImageRotateLeftOverlay(QObject* parent)
+    : HoverButtonDelegateOverlay(parent)
 {
 }
 
@@ -96,10 +96,11 @@ void ImageRotateLeftOverlay::setActive(bool active)
         connect(button(), SIGNAL(clicked(bool)),
                 this, SLOT(slotClicked()));
     }
+
     // if !active, button() is deleted
 }
 
-ItemViewHoverButton *ImageRotateLeftOverlay::createButton()
+ItemViewHoverButton* ImageRotateLeftOverlay::createButton()
 {
     return new ImageRotateLeftOverlayButton(view());
 }
@@ -116,6 +117,7 @@ void ImageRotateLeftOverlay::updateButton(const QModelIndex& index)
 void ImageRotateLeftOverlay::slotClicked()
 {
     QModelIndex index = button()->index();
+
     if (index.isValid())
     {
         QItemSelectionModel* selModel = m_view->selectionModel();
@@ -134,8 +136,8 @@ bool ImageRotateLeftOverlay::checkIndex(const QModelIndex& index) const
 
 // --------------------------------------------------------------------
 
-ImageRotateRightOverlay::ImageRotateRightOverlay(QObject *parent)
-                       : HoverButtonDelegateOverlay(parent)
+ImageRotateRightOverlay::ImageRotateRightOverlay(QObject* parent)
+    : HoverButtonDelegateOverlay(parent)
 {
 }
 
@@ -148,10 +150,11 @@ void ImageRotateRightOverlay::setActive(bool active)
         connect(button(), SIGNAL(clicked(bool)),
                 this, SLOT(slotClicked()));
     }
+
     // if !active, button() is deleted
 }
 
-ItemViewHoverButton *ImageRotateRightOverlay::createButton()
+ItemViewHoverButton* ImageRotateRightOverlay::createButton()
 {
     return new ImageRotateRightOverlayButton(view());
 }
@@ -168,6 +171,7 @@ void ImageRotateRightOverlay::updateButton(const QModelIndex& index)
 void ImageRotateRightOverlay::slotClicked()
 {
     QModelIndex index = button()->index();
+
     if (index.isValid())
     {
         QItemSelectionModel* selModel = m_view->selectionModel();

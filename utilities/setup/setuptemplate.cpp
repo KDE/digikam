@@ -79,7 +79,7 @@ public:
 };
 
 SetupTemplate::SetupTemplate(QWidget* parent)
-             : QScrollArea(parent), d(new SetupTemplatePriv)
+    : QScrollArea(parent), d(new SetupTemplatePriv)
 {
     QWidget* panel = new QWidget(viewport());
     setWidget(panel);
@@ -105,12 +105,12 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     // --------------------------------------------------------
 
     QLabel* note = new QLabel(i18n("<b>Note: These information are used to set "
-                   "<b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> "
-                   "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tag contents. "
-                   "There is no limitation with XMP, but note that IPTC text tags "
-                   "only support the printable <b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
-                   "character set, and tag sizes are limited. "
-                   "Use contextual help for details.</b>"), panel);
+                                   "<b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> "
+                                   "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tag contents. "
+                                   "There is no limitation with XMP, but note that IPTC text tags "
+                                   "only support the printable <b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
+                                   "character set, and tag sizes are limited. "
+                                   "Use contextual help for details.</b>"), panel);
     note->setOpenExternalLinks(true);
     note->setWordWrap(true);
     note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
@@ -209,7 +209,7 @@ void SetupTemplate::setTemplate(const Template& t)
 {
     if (!t.isNull())
     {
-        TemplateListItem *item = d->listView->find(t.templateTitle());
+        TemplateListItem* item = d->listView->find(t.templateTitle());
         d->listView->setCurrentItem(item);
         return;
     }
@@ -220,12 +220,14 @@ void SetupTemplate::setTemplate(const Template& t)
 void SetupTemplate::slotSelectionChanged()
 {
     TemplateListItem* item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
+
     if (!item)
     {
         d->delButton->setEnabled(false);
         d->repButton->setEnabled(false);
         return;
     }
+
     d->delButton->setEnabled(true);
     d->repButton->setEnabled(true);
     populateTemplate(item->getTemplate());
@@ -264,7 +266,11 @@ void SetupTemplate::slotAddTemplate()
 void SetupTemplate::slotDelTemplate()
 {
     TemplateListItem* item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
-    if (item) delete item;
+
+    if (item)
+    {
+        delete item;
+    }
 }
 
 void SetupTemplate::slotRepTemplate()
@@ -277,8 +283,12 @@ void SetupTemplate::slotRepTemplate()
         return;
     }
 
-    TemplateListItem *item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
-    if (!item) return;
+    TemplateListItem* item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
+
+    if (!item)
+    {
+        return;
+    }
 
     d->tview->apply();
 

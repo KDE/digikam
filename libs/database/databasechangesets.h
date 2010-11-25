@@ -109,11 +109,17 @@ public:
     Operation operation() const;
 
     bool tagsWereAdded() const
-    { return operation() == Added; }
+    {
+        return operation() == Added;
+    }
     bool tagsWereRemoved() const
-    { return operation() == Removed || operation() == RemovedAll; }
+    {
+        return operation() == Removed || operation() == RemovedAll;
+    }
     bool propertiesWereChanged() const
-    { return operation() == PropertiesChanged; }
+    {
+        return operation() == PropertiesChanged;
+    }
 
 private:
 

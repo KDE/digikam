@@ -45,14 +45,14 @@ class FreeRotationFilterPriv;
 class DIGIKAM_EXPORT FreeRotationContainer
 {
 public:
-    
+
     enum AutoCropTypes
     {
         NoAutoCrop = 0,
         WidestArea,
         LargestArea
     };
-    
+
 public:
 
     FreeRotationContainer()
@@ -65,16 +65,16 @@ public:
         orgH            = 0;
     };
 
-    ~FreeRotationContainer(){};
+    ~FreeRotationContainer() {};
 
 public:
-    
+
     bool   antiAlias;
 
     int    autoCrop;
     int    orgW;
     int    orgH;
-    
+
     double angle;
 
     QSize  newSize;
@@ -88,7 +88,7 @@ class DIGIKAM_EXPORT FreeRotationFilter : public DImgThreadedFilter
 public:
 
     explicit FreeRotationFilter(QObject* parent = 0);
-    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0, 
+    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0,
                                 const FreeRotationContainer& settings=FreeRotationContainer());
 
     virtual ~FreeRotationFilter();
@@ -97,12 +97,27 @@ public:
     static double calculateAngle(int x1, int y1, int x2, int y2);
     static double calculateAngle(const QPoint& p1, const QPoint& p2);
 
-    static QString          FilterIdentifier()  { return "digikam:FreeRotationFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Free Rotation"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
-    
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:FreeRotationFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Free Rotation");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

@@ -69,12 +69,27 @@ public:
                            const QList<HotPixel>& hpList, int interpolationMethod);
     ~HotPixelFixer();
 
-    static QString          FilterIdentifier()  { return "digikam:HotPixelFilter"; }
-    static QString          DisplayableName()   { return I18N_NOOP("Hot Pixels Tool"); }
-    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
-    static int              CurrentVersion()    { return 1; }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:HotPixelFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Hot Pixels Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
-    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
     virtual Digikam::FilterAction filterAction();
     void                    readParameters(const Digikam::FilterAction& action);
 

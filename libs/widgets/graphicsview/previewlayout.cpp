@@ -80,7 +80,7 @@ public:
 };
 
 SinglePhotoPreviewLayout::SinglePhotoPreviewLayout(QObject* parent)
-                        : QObject(parent), d(new SinglePhotoPreviewLayoutPriv)
+    : QObject(parent), d(new SinglePhotoPreviewLayoutPriv)
 {
 }
 
@@ -119,7 +119,9 @@ bool SinglePhotoPreviewLayout::isFitToWindow() const
 double SinglePhotoPreviewLayout::zoomFactor() const
 {
     if (!d->item || !d->view)
+    {
         return 1;
+    }
 
     return d->zoomSettings()->zoomFactor();
 }
@@ -157,7 +159,9 @@ void SinglePhotoPreviewLayout::setMinZoomFactor(double z)
 void SinglePhotoPreviewLayout::increaseZoom(const QPoint& viewportAnchor)
 {
     if (!d->item || !d->view)
+    {
         return;
+    }
 
     double zoom = d->zoomSettings()->zoomFactor() * d->zoomMultiplier;
     zoom        = qMin(zoom, d->maxZoom);
@@ -168,7 +172,9 @@ void SinglePhotoPreviewLayout::increaseZoom(const QPoint& viewportAnchor)
 void SinglePhotoPreviewLayout::decreaseZoom(const QPoint& viewportAnchor)
 {
     if (!d->item || !d->view)
+    {
         return;
+    }
 
     double zoom    = d->zoomSettings()->zoomFactor() / d->zoomMultiplier;
     zoom           = qMax(zoom, d->minZoom);
@@ -184,7 +190,9 @@ void SinglePhotoPreviewLayout::setZoomFactorSnapped(double z)
 void SinglePhotoPreviewLayout::setZoomFactor(double z, const QPoint& givenAnchor, SetZoomFlags flags)
 {
     if (!d->item || !d->view)
+    {
         return;
+    }
 
     QPoint  viewportAnchor = givenAnchor.isNull() ? d->view->viewport()->rect().center() : givenAnchor;
     QPointF sceneAnchor    = d->view->mapToScene(viewportAnchor);
@@ -198,10 +206,14 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, const QPoint& givenAnchor
 void SinglePhotoPreviewLayout::setZoomFactor(double z, SetZoomFlags flags)
 {
     if (!d->item || !d->view)
+    {
         return;
+    }
 
     if (flags & SnapZoomFactor)
+    {
         z = d->zoomSettings()->snappedZoomFactor(z, d->frameSize());
+    }
 
     d->isFitToWindow = false;
     d->previousZoom  = d->zoomSettings()->zoomFactor();
@@ -224,7 +236,9 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, SetZoomFlags flags)
 void SinglePhotoPreviewLayout::fitToWindow()
 {
     if (!d->item || !d->view)
+    {
         return;
+    }
 
     d->isFitToWindow = true;
     d->previousZoom  = d->zoomSettings()->zoomFactor();
@@ -241,29 +255,43 @@ void SinglePhotoPreviewLayout::fitToWindow()
 void SinglePhotoPreviewLayout::toggleFitToWindow()
 {
     if (!d->item || !d->view)
+    {
         return;
+    }
 
     if (d->isFitToWindow)
+    {
         setZoomFactor(d->previousZoom);
+    }
     else
+    {
         fitToWindow();
+    }
 }
 
 void SinglePhotoPreviewLayout::toggleFitToWindowOr100()
 {
     if (!d->item || !d->view)
+    {
         return;
+    }
 
     if (d->isFitToWindow)
+    {
         setZoomFactor(1.0);
+    }
     else
+    {
         fitToWindow();
+    }
 }
 
 void SinglePhotoPreviewLayout::updateLayout()
 {
     if (!d->item || !d->view)
+    {
         return;
+    }
 
     d->view->scene()->setSceneRect(d->item->boundingRect());
     d->item->setPos(0, 0);

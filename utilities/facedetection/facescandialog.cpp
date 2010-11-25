@@ -81,7 +81,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent*)
     {
         if (m_button)
+        {
             m_button->toggle();
+        }
     }
 
     QAbstractButton* m_button;
@@ -91,7 +93,7 @@ class ModelClearButton : public AnimatedClearButton
 {
 public:
 
-    ModelClearButton(AbstractCheckableAlbumModel *model)
+    ModelClearButton(AbstractCheckableAlbumModel* model)
     {
         setPixmap(SmallIcon(qApp->isLeftToRight() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr",
                             0, KIconLoader::DefaultState));
@@ -162,9 +164,9 @@ public:
     const QString configSettingsVisible;
 };
 
-FaceScanDialog::FaceScanDialog(QWidget *parent)
-              : KDialog(parent), StateSavingObject(this), 
-                d(new FaceScanDialogPriv)
+FaceScanDialog::FaceScanDialog(QWidget* parent)
+    : KDialog(parent), StateSavingObject(this),
+      d(new FaceScanDialogPriv)
 {
     setButtons(Ok | Cancel | Details);
     setDefaultButton(Ok);
@@ -212,19 +214,32 @@ void FaceScanDialog::doLoadState()
     KConfigGroup group = getConfigGroup();
 
     QString mainTask = group.readEntry(entryName(d->configMainTask), d->configValueDetectAndRecognize);
+
     if (mainTask == d->configValueRecognizedMarkedFaces)
+    {
         d->reRecognizeButton->setChecked(true);
+    }
     else // if (mainTask == d->configValueDetectAndRecognize)
+    {
         d->detectAndRecognizeButton->setChecked(true);
+    }
 
     FaceScanSettings::AlreadyScannedHandling handling;
     QString skipHandling = group.readEntry(entryName(d->configAlreadyScannedHandling), "Skip");
+
     if (skipHandling == "Rescan")
+    {
         handling = FaceScanSettings::Rescan;
+    }
     else if (skipHandling == "Merge")
+    {
         handling = FaceScanSettings::Merge;
+    }
     else //if (skipHandling == "Skip")
+    {
         handling = FaceScanSettings::Skip;
+    }
+
     d->alreadyScannedBox->setCurrentIndex(d->alreadyScannedBox->findData(handling));
 
     d->accuracyInput->setValue(AlbumSettings::instance()->getFaceDetectionAccuracy() * 100);
@@ -246,20 +261,34 @@ void FaceScanDialog::doSaveState()
     KConfigGroup group = getConfigGroup();
 
     QString mainTask;
+
     if (d->detectAndRecognizeButton->isChecked())
+    {
         mainTask = d->configValueDetectAndRecognize;
+    }
     else // if (d->reRecognizeButton->isChecked())
+    {
         mainTask = d->configValueRecognizedMarkedFaces;
+    }
+
     group.writeEntry(entryName(d->configMainTask), mainTask);
 
     QString handling;
+
     switch ((FaceScanSettings::AlreadyScannedHandling)
             d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt())
     {
-        case FaceScanSettings::Skip:   handling = "Skip"; break;
-        case FaceScanSettings::Rescan: handling = "Rescan"; break;
-        case FaceScanSettings::Merge:  handling = "Merge"; break;
+        case FaceScanSettings::Skip:
+            handling = "Skip";
+            break;
+        case FaceScanSettings::Rescan:
+            handling = "Rescan";
+            break;
+        case FaceScanSettings::Merge:
+            handling = "Merge";
+            break;
     }
+
     group.writeEntry(entryName(d->configAlreadyScannedHandling), handling);
 
     AlbumSettings::instance()->setFaceDetectionAccuracy(double(d->accuracyInput->value()) / 100);
@@ -298,7 +327,7 @@ void FaceScanDialog::setupUi()
     QGridLayout* optionLayout = new QGridLayout;
 
     d->detectAndRecognizeButton                  = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces"));
-    ButtonExtendedLabel *detectAndRecognizeLabel = new ButtonExtendedLabel;
+    ButtonExtendedLabel* detectAndRecognizeLabel = new ButtonExtendedLabel;
     detectAndRecognizeLabel->setText(i18nc("@info",
                                            "Find all faces in your photos<nl/> and try to recognize "
                                            "which person is depicted"));
@@ -505,17 +534,23 @@ FaceScanSettings FaceScanDialog::settings() const
     FaceScanSettings settings;
 
     if (d->retrainAllButton->isChecked())
+    {
         settings.task = FaceScanSettings::RetrainAll;
+    }
     else
     {
         if (d->detectAndRecognizeButton->isChecked())
+        {
             settings.task = FaceScanSettings::DetectAndRecognize;
+        }
         else
+        {
             settings.task = FaceScanSettings::RecognizeMarkedFaces;
+        }
     }
 
     settings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)
-            d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt();
+                                      d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt();
 
     settings.accuracy    = double(d->accuracyInput->value()) / 100;
     settings.specificity = double(d->specificityInput->value()) / 100;

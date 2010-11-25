@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 ImageFiltersHistoryItemDelegate::ImageFiltersHistoryItemDelegate(QObject* parent)
-                               : QStyledItemDelegate(parent)
+    : QStyledItemDelegate(parent)
 {
 }
 
@@ -57,8 +57,12 @@ QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& opti
 {
     // Add padding of 6px
     QSize size = QStyledItemDelegate::sizeHint(option, index);
+
     if (!size.isNull())
+    {
         return QSize(size.width(), size.height() + 12);
+    }
+
     return size;
 }
 

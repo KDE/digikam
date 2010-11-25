@@ -77,7 +77,7 @@ public:
 };
 
 SetupFaceTags::SetupFaceTags(QWidget* parent)
-             : QScrollArea(parent), d(new SetupFaceTagsPriv)
+    : QScrollArea(parent), d(new SetupFaceTagsPriv)
 {
     QWidget* panel = new QWidget(viewport());
     setWidget(panel);
@@ -88,9 +88,9 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
     d->detectionSliderLabel = new QLabel;
     d->detectionSliderLabel->setTextFormat(Qt::PlainText);
     d->detectionSliderLabel->setText(i18n("The accuracy of face detection.\n"
-                                             "If you have a weak computer, it is a good idea to choose a lower value.\n"
-                                             "Choosing a higher value will increase the accuracy of face detection,\n"
-                                             "but will be slow.\n"));
+                                          "If you have a weak computer, it is a good idea to choose a lower value.\n"
+                                          "Choosing a higher value will increase the accuracy of face detection,\n"
+                                          "but will be slow.\n"));
 
     d->detectionAccuracySlider = new QSlider(Qt::Horizontal, panel);
     d->detectionAccuracySlider->setRange(1, 5);
@@ -101,8 +101,8 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
     d->suggestionSliderLabel = new QLabel;
     d->suggestionSliderLabel->setTextFormat(Qt::PlainText);
     d->suggestionSliderLabel->setText(i18n("The threshold of face suggestions.\n"
-                                             "More suggestion threshold means that lesser suggestions will be presented,\n"
-                                             "however these will be more accurate.\n"));
+                                           "More suggestion threshold means that lesser suggestions will be presented,\n"
+                                           "however these will be more accurate.\n"));
 
     d->suggestionThresholdSlider = new QSlider(Qt::Horizontal, panel);
     d->suggestionThresholdSlider->setRange(1, 10);
@@ -113,14 +113,14 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
     d->detectionCBLabel = new QLabel;
     d->detectionCBLabel->setTextFormat(Qt::PlainText);
     d->detectionCBLabel->setText(i18n("If this option is enabled, digiKam will search for faces in your images,\n"
-                                               "thus making it easier to tag people in your photographs.\n"));
+                                      "thus making it easier to tag people in your photographs.\n"));
     d->enableFaceDetection = new QCheckBox(i18n("Enable face detection"), panel);
 
     d->suggestionCBLabel = new QLabel;
     d->suggestionCBLabel->setTextFormat(Qt::PlainText);
     d->suggestionCBLabel->setText(i18n("If this option is enabled, digiKam will try to identify detected faces,\n"
-                                                 "and present you with suggestions of similar faces,\n"
-                                                 "thus making person tagging even faster.\n"));
+                                       "and present you with suggestions of similar faces,\n"
+                                       "thus making person tagging even faster.\n"));
     d->enableFaceSuggestions = new QCheckBox(i18n("Enable face suggestion"), panel);
     d->enableFaceSuggestions->setCheckState(Qt::Unchecked);
 
@@ -161,7 +161,7 @@ SetupFaceTags::~SetupFaceTags()
 
 void SetupFaceTags::updateDetection(int /*value*/)
 {
-    if(!d->enableFaceDetection->isChecked())
+    if (!d->enableFaceDetection->isChecked())
     {
         d->detectionAccuracySlider->setEnabled(false);
         d->enableFaceSuggestions->setCheckState(Qt::Unchecked);
@@ -187,7 +187,7 @@ void SetupFaceTags::updateDetection(int /*value*/)
 
 void SetupFaceTags::updateSuggestion(int /*value*/)
 {
-    if(!d->enableFaceSuggestions->isChecked())
+    if (!d->enableFaceSuggestions->isChecked())
     {
         d->suggestionThresholdSlider->setEnabled(false);
         d->suggestionSliderLabel->setEnabled(false);

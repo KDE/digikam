@@ -76,18 +76,18 @@ const QString SetupLightTablePriv::configClearOnCloseEntry("Clear On Close");
 // --------------------------------------------------------
 
 SetupLightTable::SetupLightTable(QWidget* parent)
-               : QScrollArea(parent), d(new SetupLightTablePriv)
+    : QScrollArea(parent), d(new SetupLightTablePriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    QVBoxLayout* layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
-    QVBoxLayout *gLayout             = new QVBoxLayout(interfaceOptionsGroup);
+    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
+    QVBoxLayout* gLayout             = new QVBoxLayout(interfaceOptionsGroup);
 
     d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"), interfaceOptionsGroup);
     d->autoSyncPreview->setWhatsThis(i18n("Set this option to automatically synchronize "
@@ -97,15 +97,15 @@ SetupLightTable::SetupLightTable(QWidget* parent)
     d->autoLoadOnRightPanel = new QCheckBox(i18n("Selecting a thumbbar item loads the image to the right panel"),
                                             interfaceOptionsGroup);
     d->autoLoadOnRightPanel->setWhatsThis( i18n("Set this option to automatically load an image "
-                     "into the right panel when the corresponding item is selected on the thumbbar."));
+                                           "into the right panel when the corresponding item is selected on the thumbbar."));
 
     d->loadFullImageSize = new QCheckBox(i18n("Load full-sized image"), interfaceOptionsGroup);
     d->loadFullImageSize->setWhatsThis( i18n("<p>Set this option to load images at their full size "
-                                             "for preview, rather than at a reduced size. As this option "
-                                             "will make it take longer to load images, only use it if you have "
-                                             "a fast computer.</p>"
-                                             "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
-                                             "is used instead of the embedded JPEG preview.</p>"));
+                                        "for preview, rather than at a reduced size. As this option "
+                                        "will make it take longer to load images, only use it if you have "
+                                        "a fast computer.</p>"
+                                        "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
+                                        "is used instead of the embedded JPEG preview.</p>"));
 
     d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
 

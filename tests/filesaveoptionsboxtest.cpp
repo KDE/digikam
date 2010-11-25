@@ -37,40 +37,40 @@ QTEST_KDEMAIN(FileSaveOptionsBoxTest, GUI)
 
 void FileSaveOptionsBoxTest::testDiscoverFormat_data()
 {
-	QTest::addColumn<QString>("filename");
-	QTest::addColumn<int>("format");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<int>("format");
 
-	QTest::newRow("jpg") << "test.jpg" << (int) DImg::JPEG;
-	QTest::newRow("jpeg") << "test.jpeg" << (int) DImg::JPEG;
-	QTest::newRow("JPG") << "test.JPG" << (int) DImg::JPEG;
-	QTest::newRow("jpg") << "jpg" << (int) DImg::JPEG;
-	QTest::newRow("jpeg") << "jpeg" << (int) DImg::JPEG;
+    QTest::newRow("jpg") << "test.jpg" << (int) DImg::JPEG;
+    QTest::newRow("jpeg") << "test.jpeg" << (int) DImg::JPEG;
+    QTest::newRow("JPG") << "test.JPG" << (int) DImg::JPEG;
+    QTest::newRow("jpg") << "jpg" << (int) DImg::JPEG;
+    QTest::newRow("jpeg") << "jpeg" << (int) DImg::JPEG;
 
-	QTest::newRow("bla.tiff.jpeg") << "bla.tiff.jpeg" << (int) DImg::JPEG;
-	QTest::newRow("bla.jpg.tiff") << "bla.jpg.tiff" << (int) DImg::TIFF;
+    QTest::newRow("bla.tiff.jpeg") << "bla.tiff.jpeg" << (int) DImg::JPEG;
+    QTest::newRow("bla.jpg.tiff") << "bla.jpg.tiff" << (int) DImg::TIFF;
 
-	QTest::newRow("bla.png.jpeg.pgx") << "bla.png.jpeg.pgx" << (int) DImg::JP2K;
+    QTest::newRow("bla.png.jpeg.pgx") << "bla.png.jpeg.pgx" << (int) DImg::JP2K;
 
-	QTest::newRow("pgf") << "PGF" << (int) DImg::PGF;
+    QTest::newRow("pgf") << "PGF" << (int) DImg::PGF;
 
-	QTest::newRow("unknwon") << "i.dont.know" << (int) DImg::NONE;
+    QTest::newRow("unknwon") << "i.dont.know" << (int) DImg::NONE;
 
 }
 
 void FileSaveOptionsBoxTest::testDiscoverFormat()
 {
 
-	QFETCH(QString, filename);
-	QFETCH(int, format);
+    QFETCH(QString, filename);
+    QFETCH(int, format);
 
-	FileSaveOptionsBox box;
-	QCOMPARE((int) box.discoverFormat(filename), format);
+    FileSaveOptionsBox box;
+    QCOMPARE((int) box.discoverFormat(filename), format);
 
 }
 
 void FileSaveOptionsBoxTest::testDiscoverFormatDefault()
 {
-	FileSaveOptionsBox box;
-	QCOMPARE(box.discoverFormat("unknown"), DImg::NONE);
-	QCOMPARE(box.discoverFormat("unknown", DImg::PGF), DImg::PGF);
+    FileSaveOptionsBox box;
+    QCOMPARE(box.discoverFormat("unknown"), DImg::NONE);
+    QCOMPARE(box.discoverFormat("unknown", DImg::PGF), DImg::PGF);
 }

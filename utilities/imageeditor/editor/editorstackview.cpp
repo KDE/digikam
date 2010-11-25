@@ -49,7 +49,7 @@ public:
 };
 
 EditorStackView::EditorStackView(QWidget* parent)
-               : QStackedWidget(parent), d(new EditorStackViewPriv)
+    : QStackedWidget(parent), d(new EditorStackViewPriv)
 {
 }
 
@@ -60,7 +60,10 @@ EditorStackView::~EditorStackView()
 
 void EditorStackView::setCanvas(Canvas* canvas)
 {
-    if (d->canvas) return;
+    if (d->canvas)
+    {
+        return;
+    }
 
     d->canvas = canvas;
     insertWidget(CanvasMode, d->canvas);
@@ -80,14 +83,19 @@ Canvas* EditorStackView::canvas() const
 void EditorStackView::setToolView(QWidget* view)
 {
     if (d->toolView)
+    {
         removeWidget(d->toolView);
+    }
 
     d->toolView = view;
 
     if (d->toolView)
+    {
         insertWidget(ToolViewMode, d->toolView);
+    }
 
     PreviewWidget* preview = previewWidget();
+
     if (preview)
     {
         connect(preview, SIGNAL(signalZoomFactorChanged(double)),
@@ -111,7 +119,9 @@ int EditorStackView::viewMode()
 void EditorStackView::setViewMode(int mode)
 {
     if (mode != CanvasMode && mode != ToolViewMode)
+    {
         return;
+    }
 
     setCurrentIndex(mode);
 }
@@ -125,8 +135,11 @@ void EditorStackView::increaseZoom()
     else
     {
         PreviewWidget* preview = previewWidget();
+
         if (preview)
+        {
             preview->slotIncreaseZoom();
+        }
     }
 }
 
@@ -139,8 +152,11 @@ void EditorStackView::decreaseZoom()
     else
     {
         PreviewWidget* preview = previewWidget();
+
         if (preview)
+        {
             preview->slotDecreaseZoom();
+        }
     }
 }
 
@@ -151,14 +167,19 @@ void EditorStackView::toggleFitToWindow()
     // Both are toggle at the same time.
     d->canvas->toggleFitToWindow();
     PreviewWidget* preview = previewWidget();
+
     if (preview)
+    {
         preview->toggleFitToWindow();
+    }
 }
 
 void EditorStackView::fitToSelect()
 {
     if (viewMode() == CanvasMode)
+    {
         d->canvas->fitToSelect();
+    }
 }
 
 void EditorStackView::zoomTo100Percent()
@@ -170,8 +191,11 @@ void EditorStackView::zoomTo100Percent()
     else
     {
         PreviewWidget* preview = previewWidget();
+
         if (preview)
+        {
             preview->setZoomFactor(1.0);
+        }
     }
 }
 
@@ -184,8 +208,11 @@ void EditorStackView::setZoomFactor(double zoom)
     else
     {
         PreviewWidget* preview = previewWidget();
+
         if (preview)
+        {
             preview->setZoomFactor(zoom);
+        }
     }
 }
 
@@ -198,10 +225,15 @@ double EditorStackView::zoomMax()
     else
     {
         PreviewWidget* preview = previewWidget();
+
         if (preview)
+        {
             return preview->zoomMax();
-        else 
+        }
+        else
+        {
             return -1.0;
+        }
     }
 }
 
@@ -214,17 +246,24 @@ double EditorStackView::zoomMin()
     else
     {
         PreviewWidget* preview = previewWidget();
+
         if (preview)
+        {
             return preview->zoomMin();
-        else 
+        }
+        else
+        {
             return -1.0;
+        }
     }
 }
-    
+
 void EditorStackView::slotZoomSliderChanged(int size)
 {
     if (viewMode() == ToolViewMode && !previewWidget())
+    {
         return;
+    }
 
     double z = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
 
@@ -235,8 +274,11 @@ void EditorStackView::slotZoomSliderChanged(int size)
     else
     {
         PreviewWidget* preview = previewWidget();
+
         if (preview)
+        {
             preview->setZoomFactorSnapped(z);
+        }
     }
 }
 
@@ -253,6 +295,7 @@ void EditorStackView::slotZoomChanged(double zoom)
     else
     {
         PreviewWidget* preview = previewWidget();
+
         if (preview)
         {
             max = preview->maxZoom();
@@ -265,7 +308,11 @@ void EditorStackView::slotZoomChanged(double zoom)
 PreviewWidget* EditorStackView::previewWidget() const
 {
     PreviewWidget* preview = dynamic_cast<PreviewWidget*>(d->toolView);
-    if (preview) return preview;
+
+    if (preview)
+    {
+        return preview;
+    }
 
     return 0;
 }

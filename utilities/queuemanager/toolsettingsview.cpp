@@ -80,7 +80,7 @@ public:
 };
 
 ToolSettingsView::ToolSettingsView(QWidget* parent)
-                : QStackedWidget(parent), d(new ToolSettingsViewPriv)
+    : QStackedWidget(parent), d(new ToolSettingsViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -106,18 +106,18 @@ ToolSettingsView::ToolSettingsView(QWidget* parent)
     d->settingsViewReset->setToolTip(i18n("Reset current tool settings to default values."));
 
     QString frameStyle = QString("QFrame {"
-            "color: %1;"
-            "border: 1px solid %2;"
-            "border-radius: 5px;"
-            "background-color: %3;"
-            "}")
-            .arg(ThemeEngine::instance()->textSelColor().name())
-            .arg(ThemeEngine::instance()->textSelColor().name())
-            .arg(ThemeEngine::instance()->thumbSelColor().name());
+                                 "color: %1;"
+                                 "border: 1px solid %2;"
+                                 "border-radius: 5px;"
+                                 "background-color: %3;"
+                                 "}")
+                         .arg(ThemeEngine::instance()->textSelColor().name())
+                         .arg(ThemeEngine::instance()->textSelColor().name())
+                         .arg(ThemeEngine::instance()->thumbSelColor().name());
 
     QString noFrameStyle("QFrame {"
-            "border: none;"
-            "}");
+                         "border: none;"
+                         "}");
 
     d->settingsViewIcon->setStyleSheet(noFrameStyle);
     d->settingsViewTitle->setStyleSheet(noFrameStyle);
@@ -168,8 +168,14 @@ void ToolSettingsView::setToolSettingsWidget(QWidget* w)
 {
     QWidget* wdt = 0;
 
-    if (!w) wdt = new QWidget;
-    else    wdt = w;
+    if (!w)
+    {
+        wdt = new QWidget;
+    }
+    else
+    {
+        wdt = w;
+    }
 
     d->settingsView->takeWidget();
     wdt->setParent(d->settingsView->viewport());
@@ -196,12 +202,18 @@ int ToolSettingsView::viewMode()
 void ToolSettingsView::setViewMode(int mode)
 {
     if (mode != ToolSettingsViewPriv::MessageView && mode != ToolSettingsViewPriv::SettingsView)
+    {
         return;
+    }
 
     if (mode == ToolSettingsViewPriv::MessageView)
+    {
         d->settingsViewReset->setEnabled(false);
+    }
     else
+    {
         d->settingsViewReset->setEnabled(true);
+    }
 
     setCurrentIndex(mode);
 }
@@ -218,6 +230,7 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
     }
 
     d->tool = set.tool;
+
     if (d->tool)
     {
         d->settingsViewIcon->setPixmap(d->tool->toolIcon().pixmap(QSize(22, 22)));

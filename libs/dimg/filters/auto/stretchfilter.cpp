@@ -40,14 +40,14 @@
 namespace Digikam
 {
 StretchFilter::StretchFilter(QObject* parent)
-             : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 StretchFilter::StretchFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
-             : DImgThreadedFilter(orgImage, parent, "StretchFilter"),
-               m_refImage(*refImage)
+    : DImgThreadedFilter(orgImage, parent, "StretchFilter"),
+      m_refImage(*refImage)
 {
     initFilter();
 }
@@ -60,7 +60,10 @@ StretchFilter::~StretchFilter()
 void StretchFilter::filterImage()
 {
     if (m_refImage.isNull())
+    {
         m_refImage = m_orgImage;
+    }
+
     stretchContrastImage();
     m_destImage = m_orgImage;
 }
@@ -79,28 +82,32 @@ void StretchFilter::stretchContrastImage()
 
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        kDebug() << "Ref. image and Org. has different bits depth"; 
+        kDebug() << "Ref. image and Org. has different bits depth";
         return;
     }
 
     // Create an histogram of the reference image.
-    ImageHistogram* histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(), 
-                                                   m_refImage.height(), m_refImage.sixteenBit());
+    ImageHistogram* histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
+            m_refImage.height(), m_refImage.sixteenBit());
     histogram->calculate();
 
     // Memory allocation.
     normalize_map = new int_packet[histogram->getHistogramSegments()];
 
-    if( !histogram || !normalize_map )
+    if ( !histogram || !normalize_map )
     {
-       if(histogram)
-           delete histogram;
+        if (histogram)
+        {
+            delete histogram;
+        }
 
-       if(normalize_map)
-           delete [] normalize_map;
+        if (normalize_map)
+        {
+            delete [] normalize_map;
+        }
 
-       kWarning() << ("Unable to allocate memory!");
-       return;
+        kWarning() << ("Unable to allocate memory!");
+        return;
     }
 
     // Find the histogram boundaries by locating the 0.1 percent levels.
@@ -115,144 +122,168 @@ void StretchFilter::stretchContrastImage()
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.red = histogram->getMaxSegmentIndex() ; high.red != 0 ; --high.red)
+    for (high.red = histogram->getMaxSegmentIndex() ; high.red != 0 ; --high.red)
     {
-       intensity.red += histogram->getValue(RedChannel, (int)high.red);
+        intensity.red += histogram->getValue(RedChannel, (int)high.red);
 
-       if( intensity.red > threshold_intensity )
-          break;
+        if ( intensity.red > threshold_intensity )
+        {
+            break;
+        }
     }
 
-    if( low.red == high.red )
+    if ( low.red == high.red )
     {
-       threshold_intensity = 0;
-       memset(&intensity, 0, sizeof(struct double_packet));
+        threshold_intensity = 0;
+        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.red = 0 ; low.red < histogram->getMaxSegmentIndex() ; ++low.red)
-       {
-          intensity.red += histogram->getValue(RedChannel, (int)low.red);
+        for (low.red = 0 ; low.red < histogram->getMaxSegmentIndex() ; ++low.red)
+        {
+            intensity.red += histogram->getValue(RedChannel, (int)low.red);
 
-          if( intensity.red > threshold_intensity )
-              break;
-       }
+            if ( intensity.red > threshold_intensity )
+            {
+                break;
+            }
+        }
 
-       memset(&intensity, 0, sizeof(struct double_packet));
+        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.red = histogram->getMaxSegmentIndex() ; high.red != 0 ; --high.red)
-       {
-          intensity.red += histogram->getValue(RedChannel, (int)high.red);
+        for (high.red = histogram->getMaxSegmentIndex() ; high.red != 0 ; --high.red)
+        {
+            intensity.red += histogram->getValue(RedChannel, (int)high.red);
 
-          if( intensity.red > threshold_intensity )
-             break;
-       }
+            if ( intensity.red > threshold_intensity )
+            {
+                break;
+            }
+        }
     }
 
     // Green.
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.green = histogram->getMaxSegmentIndex() ; high.green != 0 ; --high.green)
+    for (high.green = histogram->getMaxSegmentIndex() ; high.green != 0 ; --high.green)
     {
-       intensity.green += histogram->getValue(GreenChannel, (int)high.green);
+        intensity.green += histogram->getValue(GreenChannel, (int)high.green);
 
-       if( intensity.green > threshold_intensity )
-          break;
+        if ( intensity.green > threshold_intensity )
+        {
+            break;
+        }
     }
 
-    if( low.green == high.green )
+    if ( low.green == high.green )
     {
-       threshold_intensity = 0;
-       memset(&intensity, 0, sizeof(struct double_packet));
+        threshold_intensity = 0;
+        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.green = 0 ; low.green < histogram->getMaxSegmentIndex() ; ++low.green)
-       {
-          intensity.green += histogram->getValue(GreenChannel, (int)low.green);
+        for (low.green = 0 ; low.green < histogram->getMaxSegmentIndex() ; ++low.green)
+        {
+            intensity.green += histogram->getValue(GreenChannel, (int)low.green);
 
-          if( intensity.green > threshold_intensity )
-             break;
-       }
+            if ( intensity.green > threshold_intensity )
+            {
+                break;
+            }
+        }
 
-       memset(&intensity, 0, sizeof(struct double_packet));
+        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.green = histogram->getMaxSegmentIndex() ; high.green != 0 ; --high.green)
-       {
-          intensity.green += histogram->getValue(GreenChannel, (int)high.green);
+        for (high.green = histogram->getMaxSegmentIndex() ; high.green != 0 ; --high.green)
+        {
+            intensity.green += histogram->getValue(GreenChannel, (int)high.green);
 
-          if( intensity.green > threshold_intensity )
-             break;
-       }
+            if ( intensity.green > threshold_intensity )
+            {
+                break;
+            }
+        }
     }
 
     // Blue.
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.blue = histogram->getMaxSegmentIndex() ; high.blue != 0 ; --high.blue)
+    for (high.blue = histogram->getMaxSegmentIndex() ; high.blue != 0 ; --high.blue)
     {
-       intensity.blue += histogram->getValue(BlueChannel, (int)high.blue);
+        intensity.blue += histogram->getValue(BlueChannel, (int)high.blue);
 
-       if( intensity.blue > threshold_intensity )
-          break;
+        if ( intensity.blue > threshold_intensity )
+        {
+            break;
+        }
     }
 
-    if( low.blue == high.blue )
+    if ( low.blue == high.blue )
     {
-       threshold_intensity = 0;
-       memset(&intensity, 0, sizeof(struct double_packet));
+        threshold_intensity = 0;
+        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.blue = 0 ; low.blue < histogram->getMaxSegmentIndex() ; ++low.blue)
-       {
-          intensity.blue += histogram->getValue(BlueChannel, (int)low.blue);
+        for (low.blue = 0 ; low.blue < histogram->getMaxSegmentIndex() ; ++low.blue)
+        {
+            intensity.blue += histogram->getValue(BlueChannel, (int)low.blue);
 
-          if( intensity.blue > threshold_intensity )
-              break;
-       }
+            if ( intensity.blue > threshold_intensity )
+            {
+                break;
+            }
+        }
 
-       memset(&intensity, 0, sizeof(struct double_packet));
+        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.blue = histogram->getMaxSegmentIndex() ; high.blue != 0 ; --high.blue)
-       {
-          intensity.blue += histogram->getValue(BlueChannel, (int)high.blue);
+        for (high.blue = histogram->getMaxSegmentIndex() ; high.blue != 0 ; --high.blue)
+        {
+            intensity.blue += histogram->getValue(BlueChannel, (int)high.blue);
 
-          if( intensity.blue > threshold_intensity )
-             break;
-       }
+            if ( intensity.blue > threshold_intensity )
+            {
+                break;
+            }
+        }
     }
 
     // Alpha.
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.alpha = histogram->getMaxSegmentIndex() ; high.alpha != 0 ; --high.alpha)
+    for (high.alpha = histogram->getMaxSegmentIndex() ; high.alpha != 0 ; --high.alpha)
     {
-       intensity.alpha += histogram->getValue(AlphaChannel, (int)high.alpha);
+        intensity.alpha += histogram->getValue(AlphaChannel, (int)high.alpha);
 
-       if( intensity.alpha > threshold_intensity )
-          break;
+        if ( intensity.alpha > threshold_intensity )
+        {
+            break;
+        }
     }
 
-    if( low.alpha == high.alpha )
+    if ( low.alpha == high.alpha )
     {
-       threshold_intensity = 0;
-       memset(&intensity, 0, sizeof(struct double_packet));
+        threshold_intensity = 0;
+        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.alpha = 0 ; low.alpha < histogram->getMaxSegmentIndex() ; ++low.alpha)
-       {
-          intensity.alpha += histogram->getValue(AlphaChannel, (int)low.alpha);
+        for (low.alpha = 0 ; low.alpha < histogram->getMaxSegmentIndex() ; ++low.alpha)
+        {
+            intensity.alpha += histogram->getValue(AlphaChannel, (int)low.alpha);
 
-          if( intensity.alpha > threshold_intensity )
-             break;
-       }
+            if ( intensity.alpha > threshold_intensity )
+            {
+                break;
+            }
+        }
 
-       memset(&intensity, 0, sizeof(struct double_packet));
+        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.alpha = histogram->getMaxSegmentIndex() ; high.alpha != 0 ; --high.alpha)
-       {
-          intensity.alpha += histogram->getValue(AlphaChannel, (int)high.alpha);
+        for (high.alpha = histogram->getMaxSegmentIndex() ; high.alpha != 0 ; --high.alpha)
+        {
+            intensity.alpha += histogram->getValue(AlphaChannel, (int)high.alpha);
 
-          if( intensity.alpha > threshold_intensity )
-             break;
-       }
+            if ( intensity.alpha > threshold_intensity )
+            {
+                break;
+            }
+        }
     }
 
     // Stretch the histogram to create the normalized image mapping.
@@ -260,40 +291,64 @@ void StretchFilter::stretchContrastImage()
     memset(normalize_map, 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
 
     // TODO magic number 256
-    for(i = 0 ; runningFlag() && (i <= (long)histogram->getMaxSegmentIndex()) ; ++i)
+    for (i = 0 ; runningFlag() && (i <= (long)histogram->getMaxSegmentIndex()) ; ++i)
     {
-       if(i < (long) low.red)
-          normalize_map[i].red = 0;
-       else if (i > (long) high.red)
-          normalize_map[i].red = (256*histogram->getHistogramSegments() -1);
-       else if (low.red != high.red)
-          normalize_map[i].red = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.red))/(high.red-low.red));
+        if (i < (long) low.red)
+        {
+            normalize_map[i].red = 0;
+        }
+        else if (i > (long) high.red)
+        {
+            normalize_map[i].red = (256*histogram->getHistogramSegments() -1);
+        }
+        else if (low.red != high.red)
+        {
+            normalize_map[i].red = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.red))/(high.red-low.red));
+        }
 
-       if(i < (long) low.green)
-          normalize_map[i].green = 0;
-       else if (i > (long) high.green)
-          normalize_map[i].green = (256*histogram->getHistogramSegments() -1);
-       else if (low.green != high.green)
-          normalize_map[i].green = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.green))/(high.green-low.green));
+        if (i < (long) low.green)
+        {
+            normalize_map[i].green = 0;
+        }
+        else if (i > (long) high.green)
+        {
+            normalize_map[i].green = (256*histogram->getHistogramSegments() -1);
+        }
+        else if (low.green != high.green)
+        {
+            normalize_map[i].green = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.green))/(high.green-low.green));
+        }
 
-       if(i < (long) low.blue)
-          normalize_map[i].blue = 0;
-       else if (i > (long) high.blue)
-          normalize_map[i].blue = (256*histogram->getHistogramSegments() -1);
-       else if (low.blue != high.blue)
-          normalize_map[i].blue = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.blue))/(high.blue-low.blue));
+        if (i < (long) low.blue)
+        {
+            normalize_map[i].blue = 0;
+        }
+        else if (i > (long) high.blue)
+        {
+            normalize_map[i].blue = (256*histogram->getHistogramSegments() -1);
+        }
+        else if (low.blue != high.blue)
+        {
+            normalize_map[i].blue = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.blue))/(high.blue-low.blue));
+        }
 
-       if(i < (long) low.alpha)
-          normalize_map[i].alpha = 0;
-       else if (i > (long) high.alpha)
-          normalize_map[i].alpha = (256*histogram->getHistogramSegments() -1);
-       else if (low.alpha != high.alpha)
-          normalize_map[i].alpha = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.alpha))/(high.alpha-low.alpha));
+        if (i < (long) low.alpha)
+        {
+            normalize_map[i].alpha = 0;
+        }
+        else if (i > (long) high.alpha)
+        {
+            normalize_map[i].alpha = (256*histogram->getHistogramSegments() -1);
+        }
+        else if (low.alpha != high.alpha)
+        {
+            normalize_map[i].alpha = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.alpha))/(high.alpha-low.alpha));
+        }
     }
 
     // Apply result to image.
 
-    uchar* data     = m_orgImage.bits(); 
+    uchar* data     = m_orgImage.bits();
     int w           = m_orgImage.width();
     int h           = m_orgImage.height();
     bool sixteenBit = m_orgImage.sixteenBit();
@@ -312,17 +367,25 @@ void StretchFilter::stretchContrastImage()
             red   = ptr[2];
             alpha = ptr[3];
 
-            if(low.red != high.red)
+            if (low.red != high.red)
+            {
                 red = (normalize_map[red].red)/257;
+            }
 
-            if(low.green != high.green)
+            if (low.green != high.green)
+            {
                 green = (normalize_map[green].green)/257;
+            }
 
-            if(low.blue != high.blue)
+            if (low.blue != high.blue)
+            {
                 blue = (normalize_map[blue].blue)/257;
+            }
 
-            if(low.alpha != high.alpha)
+            if (low.alpha != high.alpha)
+            {
                 alpha = (normalize_map[alpha].alpha)/257;
+            }
 
             ptr[0] = blue;
             ptr[1] = green;
@@ -331,14 +394,17 @@ void StretchFilter::stretchContrastImage()
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
     else               // 16 bits image.
     {
         unsigned short  red, green, blue, alpha;
-        unsigned short* ptr = (unsigned short *)data;
+        unsigned short* ptr = (unsigned short*)data;
 
         for (i = 0 ; runningFlag() && (i < size) ; ++i)
         {
@@ -347,17 +413,25 @@ void StretchFilter::stretchContrastImage()
             red   = ptr[2];
             alpha = ptr[3];
 
-            if(low.red != high.red)
+            if (low.red != high.red)
+            {
                 red = (normalize_map[red].red)/257;
+            }
 
-            if(low.green != high.green)
+            if (low.green != high.green)
+            {
                 green = (normalize_map[green].green)/257;
+            }
 
-            if(low.blue != high.blue)
+            if (low.blue != high.blue)
+            {
                 blue = (normalize_map[blue].blue)/257;
+            }
 
-            if(low.alpha != high.alpha)
+            if (low.alpha != high.alpha)
+            {
                 alpha = (normalize_map[alpha].alpha)/257;
+            }
 
             ptr[0] = blue;
             ptr[1] = green;
@@ -366,8 +440,11 @@ void StretchFilter::stretchContrastImage()
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
+
             if ( progress%5 == 0 )
+            {
                 postProgress( progress );
+            }
         }
     }
 

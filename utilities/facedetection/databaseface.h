@@ -73,11 +73,26 @@ public:
     int       tagId()   const;
     TagRegion region()  const;
 
-    bool      isUnknownName() const     { return type() == UnknownName;     }
-    bool      isUnconfirmedName() const { return type() == UnconfirmedName; }
-    bool      isUnconfirmedType() const { return type() & UnconfirmedTypes; }
-    bool      isConfirmedName() const   { return type() == ConfirmedName;   }
-    bool      isForTraining() const     { return type() == FaceForTraining; }
+    bool      isUnknownName() const
+    {
+        return type() == UnknownName;
+    }
+    bool      isUnconfirmedName() const
+    {
+        return type() == UnconfirmedName;
+    }
+    bool      isUnconfirmedType() const
+    {
+        return type() & UnconfirmedTypes;
+    }
+    bool      isConfirmedName() const
+    {
+        return type() == ConfirmedName;
+    }
+    bool      isForTraining() const
+    {
+        return type() == FaceForTraining;
+    }
 
     void setType(Type type);
     void setTagId(int tagId);

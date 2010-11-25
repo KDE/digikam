@@ -49,7 +49,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotRatingTriggered();
-    void slotHovered(QAction *);
+    void slotHovered(QAction*);
 };
 
 }  // namespace Digikam

@@ -71,19 +71,22 @@ public:
     */
     class TagStatus
     {
-        public:
-            explicit TagStatus(Status status, bool hasTag = false) : status(status), hasTag(hasTag) {};
-            TagStatus() : status(MetadataInvalid), hasTag(false) {};
+    public:
+        explicit TagStatus(Status status, bool hasTag = false) : status(status), hasTag(hasTag) {};
+        TagStatus() : status(MetadataInvalid), hasTag(false) {};
 
-            Status status;
-            bool   hasTag;
+        Status status;
+        bool   hasTag;
 
-            bool operator==(TagStatus otherstatus)
-            {
-                return otherstatus.status == status &&
-                        otherstatus.hasTag == hasTag;
-            }
-            bool operator==(Status otherstatus) { return otherstatus == status; }
+        bool operator==(TagStatus otherstatus)
+        {
+            return otherstatus.status == status &&
+                   otherstatus.hasTag == hasTag;
+        }
+        bool operator==(Status otherstatus)
+        {
+            return otherstatus == status;
+        }
     };
 
     enum WriteMode

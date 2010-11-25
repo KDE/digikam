@@ -58,7 +58,7 @@ public:
     ~ImagePropertiesColorsTab();
 
     void setData(const KUrl& url=KUrl(), const QRect& selectionArea = QRect(),
-                 DImg *img=0);
+                 DImg* img=0);
 
     void setSelection(const QRect& selectionArea);
 

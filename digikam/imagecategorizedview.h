@@ -90,8 +90,14 @@ public:
      *  Returns a null info if either startingPoint or the nth info are
      *  not contained in the model */
     ImageInfo nextInOrder(const ImageInfo& startingPoint, int nth);
-    ImageInfo previousInfo(const ImageInfo& info) { return nextInOrder(info, -1); }
-    ImageInfo nextInfo(const ImageInfo& info) { return nextInOrder(info, 1); }
+    ImageInfo previousInfo(const ImageInfo& info)
+    {
+        return nextInOrder(info, -1);
+    }
+    ImageInfo nextInfo(const ImageInfo& info)
+    {
+        return nextInOrder(info, 1);
+    }
 
     ThumbnailSize thumbnailSize() const;
     virtual void setThumbnailSize(const ThumbnailSize& size);
@@ -99,7 +105,7 @@ public:
     /** If the model is categorized by an album, returns the album of the category
      *  that contains the position.
      *  If this is not applicable, return the current album. May return 0. */
-    Album *albumAt(const QPoint& pos);
+    Album* albumAt(const QPoint& pos);
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.

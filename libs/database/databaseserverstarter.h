@@ -44,17 +44,17 @@ class DIGIKAM_DATABASE_EXPORT DatabaseServerStarter : public QObject
 {
     Q_OBJECT
 
-    public:
+public:
 
-        DatabaseServerStarter(QObject* parent);
-        static DatabaseServerError startServerManagerProcess(const QString& dbType = DatabaseParameters::MySQLDatabaseType());
-        static void cleanUp();
+    DatabaseServerStarter(QObject* parent);
+    static DatabaseServerError startServerManagerProcess(const QString& dbType = DatabaseParameters::MySQLDatabaseType());
+    static void cleanUp();
 
-    private:
+private:
 
-        static bool isServerRegistered();
-        static bool __init;
-        static bool init();
+    static bool isServerRegistered();
+    static bool __init;
+    static bool init();
 };
 
 }  // namespace Digikam

@@ -63,7 +63,7 @@ private:
 
 protected:
 
-    void closeEvent(QCloseEvent *e);
+    void closeEvent(QCloseEvent* e);
 
 protected Q_SLOTS:
 

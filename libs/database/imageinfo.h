@@ -104,7 +104,10 @@ public:
     ImageInfo& operator=(const ImageInfo& info);
 
     bool operator==(const ImageInfo& info) const;
-    bool operator!=(const ImageInfo& info) const { return !operator==(info); }
+    bool operator!=(const ImageInfo& info) const
+    {
+        return !operator==(info);
+    }
     bool operator<(const ImageInfo& info) const;
     uint hash() const;
 
@@ -257,7 +260,7 @@ public:
      * Note: The image history retrieved here does typically include all
      * steps from the original to this image, but does not reference this image
      * itself.
-     * 
+     *
      */
     DImageHistory imageHistory() const;
     void setImageHistory(const DImageHistory& history);
@@ -403,7 +406,10 @@ private:
     DSharedDataPointer<ImageInfoData> m_data;
 };
 
-inline uint qHash(const ImageInfo& info) { return info.hash(); }
+inline uint qHash(const ImageInfo& info)
+{
+    return info.hash();
+}
 DIGIKAM_DATABASE_EXPORT QDebug& operator<<(QDebug& stream, const ImageInfo& info);
 
 }  // namespace Digikam

@@ -57,7 +57,7 @@ public:
      * @param extraValue If -1, nothing is sent. If it takes another value,
      *                   this value will be sent as a second parameter.
      */
-    static KIO::TransferJob *startListJob(const DatabaseUrl& url, int extraValue = -1);
+    static KIO::TransferJob* startListJob(const DatabaseUrl& url, int extraValue = -1);
 
     ImageLister();
 
@@ -81,37 +81,37 @@ public:
     /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
-    void list(ImageListerReceiver *receiver,
+    void list(ImageListerReceiver* receiver,
               const DatabaseUrl& url);
 
     /**
       * List images in the Album (physical album) specified by albumRoot, album.
       * The results will be fed to the specified receiver.
       */
-    void listAlbum(ImageListerReceiver *receiver,
+    void listAlbum(ImageListerReceiver* receiver,
                    int albumRootId, const QString& album);
 
     /**
      * List the images which have assigned the tag specified by tagId
      */
-    void listTag(ImageListerReceiver *receiver, int tagId);
-    
+    void listTag(ImageListerReceiver* receiver, int tagId);
+
     /**
      * List the images which have faces. An image with n faces will be listed n times.
      * FIXME: Obviously an ugly way. Should be trashed later in favor of a better method.
      */
-    void listFaces(ImageListerReceiver *receiver, int personId);
-    
+    void listFaces(ImageListerReceiver* receiver, int personId);
+
     /**
       * List those images whose date lies in the range beginning with startDate (inclusive)
       * and ending before endDate (exclusive).
       */
-    void listDateRange(ImageListerReceiver *receiver, const QDate& startDate, const QDate& endDate);
+    void listDateRange(ImageListerReceiver* receiver, const QDate& startDate, const QDate& endDate);
 
     /**
      * List the images whose coordinates are between coordinates contained in areaCoordinates(lat1, lat2, lng1, lng2)
      */
-    void listAreaRange(ImageListerReceiver *receiver, double lat1, double lat2, double lon1, double lon2);
+    void listAreaRange(ImageListerReceiver* receiver, double lat1, double lat2, double lon1, double lon2);
 
     /**
      * Execute the search specified by search XML
@@ -119,7 +119,7 @@ public:
      * @param xml SearchXml describing the query
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
-    void listSearch(ImageListerReceiver *receiver,
+    void listSearch(ImageListerReceiver* receiver,
                     const QString& xml,
                     int limit = 0);
 
@@ -130,21 +130,21 @@ public:
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      */
-    void listImageTagPropertySearch(ImageListerReceiver *receiver, const QString& xml);
+    void listImageTagPropertySearch(ImageListerReceiver* receiver, const QString& xml);
 
     /**
      * Execute the search specified by search XML describing a Haar search
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      */
-    void listHaarSearch(ImageListerReceiver *receiver,
+    void listHaarSearch(ImageListerReceiver* receiver,
                         const QString& xml);
 
     QString tagSearchXml(const DatabaseUrl&, const QString& type);
 
 private:
 
-    void listFromIdList(ImageListerReceiver *receiver, QList<qlonglong> imageIds);
+    void listFromIdList(ImageListerReceiver* receiver, QList<qlonglong> imageIds);
     QSet<int> albumRootsToList();
 
 private:

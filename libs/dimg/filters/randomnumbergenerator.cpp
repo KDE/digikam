@@ -51,11 +51,15 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
     {
         // Try urandom for UNIX platforms.
         QFile urandom("/dev/urandom");
+
         if (urandom.exists() && urandom.open(QIODevice::ReadOnly))
         {
             resize(s);
+
             if (urandom.read(data(), s) == s)
+            {
                 return;
+            }
         }
     }
 #endif
@@ -64,29 +68,39 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
     if (isEmpty())
     {
         reserve(s);
+
         while (size() < s)
+        {
             append(QByteArray::fromHex(QUuid::createUuid().toString().remove('{').remove('}').remove('-').toLatin1()));
+        }
+
         resize(s);
     }
 
 #if 0
-/**
- * Implementation with boost::random_device.
- * Works on Windows only starting with boost 1.43,
- * before, only urandom is supported, but for that,
- * we have a easy code snippet already.
- */
+    /**
+     * Implementation with boost::random_device.
+     * Works on Windows only starting with boost 1.43,
+     * before, only urandom is supported, but for that,
+     * we have a easy code snippet already.
+     */
     const int stepSize = sizeof(boost::random_device::result_type);
     int steps          = s / stepSize;
+
     if (s % stepSize)
+    {
         steps++;
+    }
 
     resize(steps * stepSize);
 
     boost::random_device device;
     boost::random_device::result_type* ptr = reinterpret_cast<boost::random_device::result_type*>(data());
+
     for (int i=0; i<stepSize; i++)
+    {
         *ptr++ = device();
+    }
 
     resize(s);
 #endif
@@ -109,7 +123,7 @@ public:
 };
 
 RandomNumberGenerator::RandomNumberGenerator()
-                     : d(new RandomNumberGeneratorPriv)
+    : d(new RandomNumberGeneratorPriv)
 {
 }
 

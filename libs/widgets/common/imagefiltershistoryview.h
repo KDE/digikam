@@ -37,7 +37,7 @@ namespace Digikam
 
 class  ImageFiltersHistoryView //: QTreeView
 {
-//    Q_OBJECT
+    //    Q_OBJECT
 public:
 
     //ImageFiltersHistoryView(QWidget* parent = 0);

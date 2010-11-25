@@ -32,7 +32,7 @@ namespace Digikam
 {
 
 ImportRenameParser::ImportRenameParser()
-                  : Parser()
+    : Parser()
 {
     // unregister options that are not suitable during import
     OptionsList oplist = options();
@@ -41,6 +41,7 @@ ImportRenameParser::ImportRenameParser()
     {
         Option* toBeRemoved = 0;
         toBeRemoved = dynamic_cast<DatabaseOption*>(option);
+
         if (toBeRemoved)
         {
             unregisterOption(toBeRemoved);

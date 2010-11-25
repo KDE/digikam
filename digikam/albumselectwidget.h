@@ -61,15 +61,15 @@ public:
      * @param albumModificationHelper helper object for modifying albums
      * @param parent parent for Qt's parent child mechanism
      */
-    AlbumSelectTreeView(AlbumModel *model, AlbumModificationHelper *albumModificationHelper, QWidget *parent = 0);
+    AlbumSelectTreeView(AlbumModel* model, AlbumModificationHelper* albumModificationHelper, QWidget* parent = 0);
 
     /**
      * Destructor.
      */
     ~AlbumSelectTreeView();
 
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
-    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
+    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 public Q_SLOTS:
 
@@ -80,7 +80,7 @@ public Q_SLOTS:
     void slotNewAlbum();
 
 private:
-    AlbumSelectTreeViewPriv *d;
+    AlbumSelectTreeViewPriv* d;
 
 };
 
@@ -92,14 +92,14 @@ class AlbumSelectWidget : public QWidget
 
 public:
 
-    explicit AlbumSelectWidget(QWidget *parent = 0, PAlbum *albumToSelect = 0);
+    explicit AlbumSelectWidget(QWidget* parent = 0, PAlbum* albumToSelect = 0);
     ~AlbumSelectWidget();
 
     void setCurrentAlbumUrl(const KUrl& albumUrl);
     KUrl currentAlbumUrl() const;
 
     PAlbum* currentAlbum() const;
-    void    setCurrentAlbum(PAlbum *albumToSelect);
+    void    setCurrentAlbum(PAlbum* albumToSelect);
 
 Q_SIGNALS:
 

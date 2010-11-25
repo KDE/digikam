@@ -42,21 +42,21 @@ class DIGIKAM_EXPORT ItemViewToolTip : public DItemToolTip
 {
 public:
 
-    ItemViewToolTip(QAbstractItemView *view);
+    ItemViewToolTip(QAbstractItemView* view);
     ~ItemViewToolTip();
 
-    QAbstractItemView *view() const;
+    QAbstractItemView* view() const;
     QModelIndex currentIndex() const;
 
-    void show(QHelpEvent *event, const QStyleOptionViewItem& option, const QModelIndex& index);
+    void show(QHelpEvent* event, const QStyleOptionViewItem& option, const QModelIndex& index);
 
 protected:
 
     virtual QRect repositionRect();
 
-    bool eventFilter(QObject *o, QEvent *e);
+    bool eventFilter(QObject* o, QEvent* e);
     void hideEvent(QHideEvent*);
-    void mouseMoveEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent* e);
 
 private:
 

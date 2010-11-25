@@ -41,23 +41,28 @@ SuperImpose::SuperImpose(DImg* orgImage, DImg* templ,
 void SuperImpose::filterImage()
 {
     if (m_template.isNull())
+    {
         return;
+    }
 
     int templateWidth  = m_template.width();
     int templateHeight = m_template.height();
 
     // take selection of src image and scale it to size of template
     m_destImage = m_orgImage.smoothScaleSection(m_selection.x(), m_selection.y(),
-                m_selection.width(), m_selection.height(), templateWidth, templateHeight);
+                  m_selection.width(), m_selection.height(), templateWidth, templateHeight);
 
     // convert depth if necessary
     m_template.convertToDepthOfImage(&m_destImage);
 
     // get composer for compositing rule
-    DColorComposer *composer = DColorComposer::getComposer(m_compositeRule);
+    DColorComposer* composer = DColorComposer::getComposer(m_compositeRule);
     DColorComposer::MultiplicationFlags flags = DColorComposer::NoMultiplication;
+
     if (m_compositeRule != DColorComposer::PorterDuffNone)
+    {
         flags = DColorComposer::MultiplicationFlagsDImg;
+    }
 
     // do alpha blending of template on dest image
     m_destImage.bitBlendImage(composer, &m_template, 0, 0, templateWidth, templateHeight, 0, 0, flags);

@@ -43,7 +43,7 @@ class AlbumSelectComboBox : public TreeViewLineEditComboBox
 
 public:
 
-    AlbumSelectComboBox(QWidget *parent = 0);
+    AlbumSelectComboBox(QWidget* parent = 0);
     ~AlbumSelectComboBox();
 
     /** Once after creation, call one of these three methods.
@@ -54,7 +54,7 @@ public:
     */
     void setDefaultAlbumModel();
     void setDefaultTagModel();
-    void setModel(AbstractCheckableAlbumModel *model, AlbumFilterModel *filterModel = 0);
+    void setModel(AbstractCheckableAlbumModel* model, AlbumFilterModel* filterModel = 0);
 
     /** Enable checkboxes next to the items. Default: true */
     void setCheckable(bool checkable);
@@ -74,9 +74,9 @@ public:
     void setNoSelectionText(const QString& text);
 
     /** Returns the source model. Retrieve selection information from here. */
-    AbstractCheckableAlbumModel *model() const;
+    AbstractCheckableAlbumModel* model() const;
     /** Return the filter model in use. */
-    QSortFilterProxyModel *filterModel() const;
+    QSortFilterProxyModel* filterModel() const;
 
 public Q_SLOTS:
 
@@ -90,7 +90,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void installView(QAbstractItemView *view = 0);
+    virtual void installView(QAbstractItemView* view = 0);
 
 private:
 
@@ -118,14 +118,14 @@ public:
      * not a plain QTreeView, as view.
      */
 
-    AbstractAlbumTreeViewSelectComboBox(QWidget *parent = 0);
+    AbstractAlbumTreeViewSelectComboBox(QWidget* parent = 0);
 
 protected:
 
-    virtual void installView(QAbstractItemView *view = 0);
+    virtual void installView(QAbstractItemView* view = 0);
     virtual void sendViewportEventToView(QEvent* e);
 
-    AbstractAlbumTreeView *m_treeView;
+    AbstractAlbumTreeView* m_treeView;
 };
 
 class AlbumTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
@@ -134,11 +134,11 @@ class AlbumTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
 
 public:
 
-    AlbumTreeViewSelectComboBox(QWidget *parent = 0);
+    AlbumTreeViewSelectComboBox(QWidget* parent = 0);
 
     void setDefaultModel();
-    void setModel(AlbumModel *model, CheckableAlbumFilterModel *filterModel = 0);
-    AlbumTreeView *view() const;
+    void setModel(AlbumModel* model, CheckableAlbumFilterModel* filterModel = 0);
+    AlbumTreeView* view() const;
 };
 
 class TagTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
@@ -147,12 +147,12 @@ class TagTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
 
 public:
 
-    TagTreeViewSelectComboBox(QWidget *parent = 0);
+    TagTreeViewSelectComboBox(QWidget* parent = 0);
 
     void setDefaultModel();
-    void setModel(TagModel *model,
-                  TagPropertiesFilterModel *filteredModel = 0, CheckableAlbumFilterModel* filterModel = 0);
-    TagTreeView *view() const;
+    void setModel(TagModel* model,
+                  TagPropertiesFilterModel* filteredModel = 0, CheckableAlbumFilterModel* filterModel = 0);
+    TagTreeView* view() const;
 
 };
 

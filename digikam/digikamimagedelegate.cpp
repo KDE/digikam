@@ -47,14 +47,14 @@ namespace Digikam
 {
 
 DigikamImageDelegate::DigikamImageDelegate(ImageCategorizedView* parent)
-                    : ImageDelegate(*new DigikamImageDelegatePrivate, parent)
+    : ImageDelegate(*new DigikamImageDelegatePrivate, parent)
 {
     Q_D(DigikamImageDelegate);
     d->init(this, parent);
 }
 
 DigikamImageDelegate::DigikamImageDelegate(DigikamImageDelegatePrivate& dd, ImageCategorizedView* parent)
-                    : ImageDelegate(dd, parent)
+    : ImageDelegate(dd, parent)
 {
     Q_D(DigikamImageDelegate);
     d->init(this, parent);
@@ -129,6 +129,7 @@ void DigikamImageDelegate::updateRects()
         d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
         y          = d->tagRect.bottom();
     }
+
     d->imageInformationRect.setBottom(y);
 
     d->rect     = QRect(0, 0, d->contentWidth + 2*d->margin, y+d->margin+d->radius);

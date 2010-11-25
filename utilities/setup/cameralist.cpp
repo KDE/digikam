@@ -69,12 +69,15 @@ public:
     QString            file;
 };
 
-CameraList::CameraList(QObject *parent, const QString& file)
-          : QObject(parent), d(new CameraListPrivate)
+CameraList::CameraList(QObject* parent, const QString& file)
+    : QObject(parent), d(new CameraListPrivate)
 {
     d->file = file;
+
     if (!m_defaultList)
+    {
         m_defaultList = this;
+    }
 }
 
 CameraList::~CameraList()
@@ -84,7 +87,9 @@ CameraList::~CameraList()
     delete d;
 
     if (m_defaultList == this)
+    {
         m_defaultList = 0;
+    }
 }
 
 bool CameraList::load()
@@ -94,28 +99,44 @@ bool CameraList::load()
     QFile cfile(d->file);
 
     if (!cfile.open(QIODevice::ReadOnly))
+    {
         return false;
+    }
 
     QDomDocument doc("cameralist");
+
     if (!doc.setContent(&cfile))
+    {
         return false;
+    }
 
     QDomElement docElem = doc.documentElement();
+
     if (docElem.tagName()!="cameralist")
+    {
         return false;
+    }
 
     for (QDomNode n = docElem.firstChild(); !n.isNull(); n = n.nextSibling())
     {
         QDomElement e = n.toElement();
-        if (e.isNull()) continue;
-        if (e.tagName() != "item") continue;
+
+        if (e.isNull())
+        {
+            continue;
+        }
+
+        if (e.tagName() != "item")
+        {
+            continue;
+        }
 
         QString title     = e.attribute("title");
         QString model     = e.attribute("model");
         QString port      = e.attribute("port");
         QString path      = e.attribute("path");
         int sn            = e.attribute("startingnumber").toInt();
-        CameraType *ctype = new CameraType(title, model, port, path, sn);
+        CameraType* ctype = new CameraType(title, model, port, path, sn);
         insertPrivate(ctype);
     }
 
@@ -126,7 +147,9 @@ bool CameraList::save()
 {
     // If not modified don't save the file
     if (!d->modified)
+    {
         return true;
+    }
 
     QDomDocument doc("cameralist");
     doc.setContent(QString("<!DOCTYPE XMLCameraList><cameralist version=\"1.2\" client=\"digikam\"/>"));
@@ -135,18 +158,21 @@ bool CameraList::save()
 
     foreach (CameraType* ctype, d->clist)
     {
-       QDomElement elem = doc.createElement("item");
-       elem.setAttribute("title",          ctype->title());
-       elem.setAttribute("model",          ctype->model());
-       elem.setAttribute("port",           ctype->port());
-       elem.setAttribute("path",           ctype->path());
-       elem.setAttribute("startingnumber", QString::number(ctype->startingNumber()));
-       docElem.appendChild(elem);
+        QDomElement elem = doc.createElement("item");
+        elem.setAttribute("title",          ctype->title());
+        elem.setAttribute("model",          ctype->model());
+        elem.setAttribute("port",           ctype->port());
+        elem.setAttribute("path",           ctype->path());
+        elem.setAttribute("startingnumber", QString::number(ctype->startingNumber()));
+        docElem.appendChild(elem);
     }
 
     QFile cfile(d->file);
+
     if (!cfile.open(QIODevice::WriteOnly))
+    {
         return false;
+    }
 
     QTextStream stream(&cfile);
     stream.setCodec(QTextCodec::codecForName("UTF-8"));
@@ -159,7 +185,10 @@ bool CameraList::save()
 
 void CameraList::insert(CameraType* ctype)
 {
-    if (!ctype) return;
+    if (!ctype)
+    {
+        return;
+    }
 
     d->modified = true;
     insertPrivate(ctype);
@@ -167,7 +196,10 @@ void CameraList::insert(CameraType* ctype)
 
 void CameraList::remove(CameraType* ctype)
 {
-    if (!ctype) return;
+    if (!ctype)
+    {
+        return;
+    }
 
     d->modified = true;
     removePrivate(ctype);
@@ -175,26 +207,38 @@ void CameraList::remove(CameraType* ctype)
 
 void CameraList::insertPrivate(CameraType* ctype)
 {
-    if (!ctype) return;
+    if (!ctype)
+    {
+        return;
+    }
+
     d->clist.append(ctype);
     emit signalCameraAdded(ctype);
 }
 
 void CameraList::removePrivate(CameraType* ctype)
 {
-    if (!ctype) return;
+    if (!ctype)
+    {
+        return;
+    }
 
     emit signalCameraRemoved(ctype->action());
 
     int i = d->clist.indexOf(ctype);
+
     if (i != -1)
+    {
         delete d->clist.takeAt(i);
+    }
 }
 
 void CameraList::clear()
 {
     while (!d->clist.isEmpty())
+    {
         removePrivate( d->clist.first());
+    }
 }
 
 QList<CameraType*>* CameraList::cameraList()
@@ -207,7 +251,9 @@ CameraType* CameraList::find(const QString& title)
     foreach (CameraType* ctype, d->clist)
     {
         if (ctype->title() == title)
+        {
             return ctype;
+        }
     }
     return 0;
 }
@@ -217,13 +263,14 @@ CameraType* CameraList::autoDetect(bool& retry)
     retry = false;
 
     QString model, port;
+
     if (GPCamera::autoDetect(model, port) != 0)
     {
         retry = ( KMessageBox::warningYesNo(0, i18n("Failed to auto-detect camera; "
-                                                    "please make sure it is connected "
-                                                    "properly and is turned on. "
-                                                    "Would you like to try again?"))
-                 == KMessageBox::Yes );
+                                            "please make sure it is connected "
+                                            "properly and is turned on. "
+                                            "Would you like to try again?"))
+                  == KMessageBox::Yes );
         return 0;
     }
 
@@ -233,7 +280,9 @@ CameraType* CameraList::autoDetect(bool& retry)
         // We can get away with checking only the model, as the auto-detection
         // works only for usb cameras. so the port is always usb:
         if (ctype->model() == model)
+        {
             return ctype;
+        }
     }
 
     // Looks like a new camera
@@ -246,7 +295,9 @@ CameraType* CameraList::autoDetect(bool& retry)
     // connected at the same time (whack them if they do).
 
     if (port.startsWith(QLatin1String("usb:")))
+    {
         port = "usb:";
+    }
 
     CameraType* ctype = new CameraType(model, model, port, "/", 1);
     insert(ctype);
@@ -262,6 +313,7 @@ bool CameraList::findConnectedCamera(int vendorId, int productId, QString& model
 bool CameraList::changeCameraStartIndex(const QString& cameraTitle, int startIndex)
 {
     CameraType* cam = find(cameraTitle);
+
     if (cam)
     {
         cam->setStartingNumber(startIndex);
@@ -269,6 +321,7 @@ bool CameraList::changeCameraStartIndex(const QString& cameraTitle, int startInd
         save();
         return true;
     }
+
     return false;
 }
 

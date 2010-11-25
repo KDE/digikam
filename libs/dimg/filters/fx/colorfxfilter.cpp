@@ -40,13 +40,13 @@ namespace Digikam
 {
 
 ColorFXFilter::ColorFXFilter(QObject* parent)
-                 : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 ColorFXFilter::ColorFXFilter(DImg* orgImage, QObject* parent, int type, int level, int iterations)
-            : DImgThreadedFilter(orgImage, parent, "ColorFX")
+    : DImgThreadedFilter(orgImage, parent, "ColorFX")
 {
     m_colorFXType = type;
     m_level = level;
@@ -77,7 +77,7 @@ void ColorFXFilter::filterImage()
     }
 }
 
-void ColorFXFilter::solarize(DImg *orgImage, DImg *destImage, int factor)
+void ColorFXFilter::solarize(DImg* orgImage, DImg* destImage, int factor)
 {
     bool stretch = true;
 
@@ -91,8 +91,8 @@ void ColorFXFilter::solarize(DImg *orgImage, DImg *destImage, int factor)
     {
         uint threshold = (uint)((100-factor)*(255+1)/100);
         threshold      = qMax((uint)1, threshold);
-        const uchar *ptr = data;
-        uchar *dst       = pResBits;
+        const uchar* ptr = data;
+        uchar* dst       = pResBits;
         uchar  a, r, g, b;
 
         for (int x=0 ; x < w*h ; ++x)
@@ -111,11 +111,19 @@ void ColorFXFilter::solarize(DImg *orgImage, DImg *destImage, int factor)
             else
             {
                 if (r > threshold)
+                {
                     r = (255-r);
+                }
+
                 if (g > threshold)
+                {
                     g = (255-g);
+                }
+
                 if (b > threshold)
+                {
                     b = (255-b);
+                }
             }
 
             dst[0] = b;
@@ -131,8 +139,8 @@ void ColorFXFilter::solarize(DImg *orgImage, DImg *destImage, int factor)
     {
         uint threshold      = (uint)((100-factor)*(65535+1)/100);
         threshold           = qMax((uint)1, threshold);
-        const unsigned short* ptr = (const unsigned short *)data;
-        unsigned short* dst = (unsigned short *)pResBits;
+        const unsigned short* ptr = (const unsigned short*)data;
+        unsigned short* dst = (unsigned short*)pResBits;
         unsigned short  a, r, g, b;
 
         for (int x=0 ; x < w*h ; ++x)
@@ -151,11 +159,19 @@ void ColorFXFilter::solarize(DImg *orgImage, DImg *destImage, int factor)
             else
             {
                 if (r > threshold)
+                {
                     r = (65535-r);
+                }
+
                 if (g > threshold)
+                {
                     g = (65535-g);
+                }
+
                 if (b > threshold)
+                {
                     b = (65535-b);
+                }
             }
 
             dst[0] = b;
@@ -169,7 +185,7 @@ void ColorFXFilter::solarize(DImg *orgImage, DImg *destImage, int factor)
     }
 }
 
-void ColorFXFilter::vivid(DImg *orgImage, DImg *destImage, int factor)
+void ColorFXFilter::vivid(DImg* orgImage, DImg* destImage, int factor)
 {
     float amount = factor/100.0;
 
@@ -226,7 +242,7 @@ void ColorFXFilter::vivid(DImg *orgImage, DImg *destImage, int factor)
  *                     like this on PSC. Is very similar to Growing Edges (photoshop)
  *                     Some pictures will be very interesting
  */
-void ColorFXFilter::neon(DImg *orgImage, DImg *destImage, int Intensity, int BW)
+void ColorFXFilter::neon(DImg* orgImage, DImg* destImage, int Intensity, int BW)
 {
     neonFindEdges(orgImage, destImage, true, Intensity, BW);
 }
@@ -243,7 +259,7 @@ void ColorFXFilter::neon(DImg *orgImage, DImg *destImage, int Intensity, int BW)
  *                     Neon effect ? This is the same engine, but is inversed with
  *                     255 - color.
  */
-void ColorFXFilter::findEdges(DImg *orgImage, DImg *destImage, int Intensity, int BW)
+void ColorFXFilter::findEdges(DImg* orgImage, DImg* destImage, int Intensity, int BW)
 {
     neonFindEdges(orgImage, destImage, false, Intensity, BW);
 }
@@ -256,12 +272,17 @@ static inline int getOffset(int Width, int X, int Y, int bytesDepth)
 static inline int Lim_Max(int Now, int Up, int Max)
 {
     --Max;
-    while (Now > Max - Up) --Up;
+
+    while (Now > Max - Up)
+    {
+        --Up;
+    }
+
     return (Up);
 }
 
 // Implementation of neon and FindEdges. They share 99% of their code.
-void ColorFXFilter::neonFindEdges(DImg *orgImage, DImg *destImage, bool neon, int Intensity, int BW)
+void ColorFXFilter::neonFindEdges(DImg* orgImage, DImg* destImage, bool neon, int Intensity, int BW)
 {
     int Width         = orgImage->width();
     int Height        = orgImage->height();
@@ -273,7 +294,7 @@ void ColorFXFilter::neonFindEdges(DImg *orgImage, DImg *destImage, bool neon, in
     Intensity = (Intensity < 0) ? 0 : (Intensity > 5) ? 5 : Intensity;
     BW        = (BW < 1) ? 1 : (BW > 5) ? 5 : BW;
 
-    uchar *ptr, *ptr1, *ptr2;
+    uchar* ptr, *ptr1, *ptr2;
 
     // these must be uint, we need full 2^32 range for 16 bit
     uint color_1, color_2, colorPoint, colorOther1, colorOther2;
@@ -295,9 +316,9 @@ void ColorFXFilter::neonFindEdges(DImg *orgImage, DImg *destImage, bool neon, in
             {
                 for (int k = 0; k <= 2; ++k)
                 {
-                    colorPoint  = ((unsigned short *)ptr)[k];
-                    colorOther1 = ((unsigned short *)ptr1)[k];
-                    colorOther2 = ((unsigned short *)ptr2)[k];
+                    colorPoint  = ((unsigned short*)ptr)[k];
+                    colorOther1 = ((unsigned short*)ptr1)[k];
+                    colorOther2 = ((unsigned short*)ptr2)[k];
                     color_1     = (colorPoint - colorOther1) * (colorPoint - colorOther1);
                     color_2     = (colorPoint - colorOther2) * (colorPoint - colorOther2);
 
@@ -306,9 +327,13 @@ void ColorFXFilter::neonFindEdges(DImg *orgImage, DImg *destImage, bool neon, in
                     // As (a << I) = a * (1 << I) = a * (2^I), and we can split the square root
 
                     if (neon)
-                        ((unsigned short *)ptr)[k] = CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    {
+                        ((unsigned short*)ptr)[k] = CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    }
                     else
-                        ((unsigned short *)ptr)[k] = 65535 - CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    {
+                        ((unsigned short*)ptr)[k] = 65535 - CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    }
                 }
             }
             else
@@ -322,9 +347,13 @@ void ColorFXFilter::neonFindEdges(DImg *orgImage, DImg *destImage, bool neon, in
                     color_2     = (colorPoint - colorOther2) * (colorPoint - colorOther2);
 
                     if (neon)
+                    {
                         ptr[k] = CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    }
                     else
+                    {
                         ptr[k] = 255 - CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    }
                 }
             }
         }

@@ -79,7 +79,7 @@ public:
         iterationInput(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     static const QString configGroupName;
     static const QString configEffectTypeEntry;
@@ -106,8 +106,8 @@ const QString DistortionFXTool::DistortionFXToolPriv::configLevelAdjustmentEntry
 // --------------------------------------------------------
 
 DistortionFXTool::DistortionFXTool(QObject* parent)
-                : EditorToolThreaded(parent),
-                  d(new DistortionFXToolPriv)
+    : EditorToolThreaded(parent),
+      d(new DistortionFXToolPriv)
 {
     setObjectName("distortionfx");
     setToolName(i18n("Distortion Effects"));
@@ -147,28 +147,28 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
     d->effectType->setDefaultIndex(DistortionFXFilter::FishEye);
     d->effectType->setWhatsThis(i18n("<p>Here, select the type of effect to apply to an image.</p>"
                                      "<p><b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
-                                            "reproduce the common photograph 'Fish Eyes' effect.</p>"
+                                     "reproduce the common photograph 'Fish Eyes' effect.</p>"
                                      "<p><b>Twirl</b>: spins the photograph to produce a Twirl pattern.</p>"
                                      "<p><b>Cylinder Hor.</b>: warps the photograph around a horizontal cylinder.</p>"
                                      "<p><b>Cylinder Vert.</b>: warps the photograph around a vertical cylinder.</p>"
                                      "<p><b>Cylinder H/V.</b>: warps the photograph around 2 cylinders, vertical "
-                                            "and horizontal.</p>"
+                                     "and horizontal.</p>"
                                      "<p><b>Caricature</b>: distorts the photograph with the 'Fish Eyes' effect inverted.</p>"
                                      "<p><b>Multiple Corners</b>: splits the photograph like a multiple corners pattern.</p>"
                                      "<p><b>Waves Horizontal</b>: distorts the photograph with horizontal waves.</p>"
                                      "<p><b>Waves Vertical</b>: distorts the photograph with vertical waves.</p>"
                                      "<p><b>Block Waves 1</b>: divides the image into cells and makes it look as "
-                                            "if it is being viewed through glass blocks.</p>"
+                                     "if it is being viewed through glass blocks.</p>"
                                      "<p><b>Block Waves 2</b>: like Block Waves 1 but with another version "
-                                            "of glass blocks distortion.</p>"
+                                     "of glass blocks distortion.</p>"
                                      "<p><b>Circular Waves 1</b>: distorts the photograph with circular waves.</p>"
                                      "<p><b>Circular Waves 2</b>: another variation of the Circular Waves effect.</p>"
                                      "<p><b>Polar Coordinates</b>: converts the photograph from rectangular "
-                                            "to polar coordinates.</p>"
+                                     "to polar coordinates.</p>"
                                      "<p><b>Unpolar Coordinates</b>: the Polar Coordinate effect inverted.</p>"
                                      "<p><b>Tile</b>: splits the photograph into square blocks and moves "
-                                            "them randomly inside the image.</p>"
-                                     ));
+                                     "them randomly inside the image.</p>"
+                                    ));
 
     d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"));
     d->levelInput = new RIntNumInput();
@@ -183,7 +183,7 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
     d->iterationInput->setSliderEnabled(true);
     d->iterationInput->setDefaultValue(10);
     d->iterationInput->setWhatsThis( i18n("This value controls the iterations to use for Waves, "
-                                         "Tile, and Neon effects."));
+                                          "Tile, and Neon effects."));
 
     // -------------------------------------------------------------
 

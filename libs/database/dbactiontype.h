@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT DBActionType
 {
 public:
     DBActionType();
-    DBActionType(const DBActionType &actionType);
+    DBActionType(const DBActionType& actionType);
     ~DBActionType();
 
     static DBActionType value(const QVariant& value);
@@ -75,8 +75,8 @@ public:
 
 private:
 
-    bool	 m_isValue;
-	QVariant m_ActionValue;
+    bool     m_isValue;
+    QVariant m_ActionValue;
 };
 
 }  // namespace Digikam

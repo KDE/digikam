@@ -40,7 +40,7 @@ class ContextMenuHelper;
 class TagFolderViewPriv;
 class TagFolderView: public TagTreeView
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -86,7 +86,7 @@ protected:
      * @param album tag on which the context menu will be created. May be null if
      *              it is requested on no tag entry
      */
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
 
     /**
      * Hook method to handle the custom context menu actions that were added
@@ -97,14 +97,14 @@ protected:
      * @param album the tag on which the context menu was requested. May be null
      *              if there was no
      */
-    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
+    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 private Q_SLOTS:
 
-    void slotTagNewFromABCMenu(const QString &personName);
+    void slotTagNewFromABCMenu(const QString& personName);
 
 private:
-    TagFolderViewPriv *d;
+    TagFolderViewPriv* d;
 
 };
 

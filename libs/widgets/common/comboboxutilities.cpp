@@ -43,9 +43,9 @@ namespace Digikam
 {
 
 
-ProxyLineEdit::ProxyLineEdit(QWidget *parent)
-             : KLineEdit(parent),
-               m_widget(0)
+ProxyLineEdit::ProxyLineEdit(QWidget* parent)
+    : KLineEdit(parent),
+      m_widget(0)
 {
     m_layout = new QVBoxLayout;
     m_layout->setSpacing(0);
@@ -59,10 +59,13 @@ ProxyLineEdit::ProxyLineEdit(QWidget *parent)
     setClearButtonShown(false);
 }
 
-void ProxyLineEdit::setWidget(QWidget *widget)
+void ProxyLineEdit::setWidget(QWidget* widget)
 {
     if (m_widget)
+    {
         delete m_widget;
+    }
+
     m_widget = widget;
     m_widget->setParent(this);
     m_layout->addWidget(m_widget);
@@ -72,77 +75,77 @@ void ProxyLineEdit::setWidget(QWidget *widget)
  * We just re-implement all relevant QWidget event handlers and call
  * the QWidget implementation, not the KLineEdit one.
  */
-void ProxyLineEdit::mousePressEvent(QMouseEvent *event)
+void ProxyLineEdit::mousePressEvent(QMouseEvent* event)
 {
     QWidget::mousePressEvent(event);
 }
 
-void ProxyLineEdit::mouseMoveEvent(QMouseEvent *event)
+void ProxyLineEdit::mouseMoveEvent(QMouseEvent* event)
 {
     QWidget::mouseMoveEvent(event);
 }
 
-void ProxyLineEdit::mouseReleaseEvent(QMouseEvent *event)
+void ProxyLineEdit::mouseReleaseEvent(QMouseEvent* event)
 {
     QWidget::mouseReleaseEvent(event);
 }
 
-void ProxyLineEdit::mouseDoubleClickEvent(QMouseEvent *event)
+void ProxyLineEdit::mouseDoubleClickEvent(QMouseEvent* event)
 {
     QWidget::mouseDoubleClickEvent(event);
 }
 
-void ProxyLineEdit::keyPressEvent(QKeyEvent *event)
+void ProxyLineEdit::keyPressEvent(QKeyEvent* event)
 {
     QWidget::keyPressEvent(event);
 }
 
-void ProxyLineEdit::focusInEvent(QFocusEvent *event)
+void ProxyLineEdit::focusInEvent(QFocusEvent* event)
 {
     QWidget::focusInEvent(event);
 }
 
-void ProxyLineEdit::focusOutEvent(QFocusEvent *event)
+void ProxyLineEdit::focusOutEvent(QFocusEvent* event)
 {
     QWidget::focusOutEvent(event);
 }
 
-void ProxyLineEdit::paintEvent(QPaintEvent *event)
+void ProxyLineEdit::paintEvent(QPaintEvent* event)
 {
     QWidget::paintEvent(event);
 }
 
-void ProxyLineEdit::dragEnterEvent(QDragEnterEvent *event)
+void ProxyLineEdit::dragEnterEvent(QDragEnterEvent* event)
 {
     QWidget::dragEnterEvent(event);
 }
 
-void ProxyLineEdit::dragMoveEvent(QDragMoveEvent *event)
+void ProxyLineEdit::dragMoveEvent(QDragMoveEvent* event)
 {
     QWidget::dragMoveEvent(event);
 }
 
-void ProxyLineEdit::dragLeaveEvent(QDragLeaveEvent *event)
+void ProxyLineEdit::dragLeaveEvent(QDragLeaveEvent* event)
 {
     QWidget::dragLeaveEvent(event);
 }
 
-void ProxyLineEdit::dropEvent(QDropEvent *event)
+void ProxyLineEdit::dropEvent(QDropEvent* event)
 {
     QWidget::dropEvent(event);
 }
 
-void ProxyLineEdit::changeEvent(QEvent *event)
+void ProxyLineEdit::changeEvent(QEvent* event)
 {
     QWidget::changeEvent(event);
 }
 
-void ProxyLineEdit::contextMenuEvent(QContextMenuEvent *event)
+void ProxyLineEdit::contextMenuEvent(QContextMenuEvent* event)
 {
     QWidget::contextMenuEvent(event);
 }
 
-void ProxyLineEdit::inputMethodEvent(QInputMethodEvent *event)
+void ProxyLineEdit::inputMethodEvent(QInputMethodEvent* event)
 {
     QWidget::inputMethodEvent(event);
 }
@@ -159,12 +162,12 @@ QSize ProxyLineEdit::sizeHint() const
 
 // -------------------------------------------------------------------------
 
-ProxyClickLineEdit::ProxyClickLineEdit(QWidget *parent)
-                  : ProxyLineEdit(parent)
+ProxyClickLineEdit::ProxyClickLineEdit(QWidget* parent)
+    : ProxyLineEdit(parent)
 {
 }
 
-void ProxyClickLineEdit::mouseReleaseEvent(QMouseEvent *event)
+void ProxyClickLineEdit::mouseReleaseEvent(QMouseEvent* event)
 {
     ProxyLineEdit::mouseReleaseEvent(event);
 
@@ -177,8 +180,8 @@ void ProxyClickLineEdit::mouseReleaseEvent(QMouseEvent *event)
 
 // -------------------------------------------------------------------------
 
-ModelIndexBasedComboBox::ModelIndexBasedComboBox(QWidget *parent)
-                       : KComboBox(parent)
+ModelIndexBasedComboBox::ModelIndexBasedComboBox(QWidget* parent)
+    : KComboBox(parent)
 {
 }
 
@@ -191,8 +194,11 @@ void ModelIndexBasedComboBox::hidePopup()
 void ModelIndexBasedComboBox::showPopup()
 {
     KComboBox::showPopup();
+
     if (m_currentIndex.isValid())
+    {
         view()->selectionModel()->setCurrentIndex(m_currentIndex, QItemSelectionModel::ClearAndSelect);
+    }
 }
 
 QModelIndex ModelIndexBasedComboBox::currentIndex() const
@@ -208,16 +214,18 @@ void ModelIndexBasedComboBox::setCurrentIndex(const QModelIndex& index)
 
 // -------------------------------------------------------------------------
 
-StayPoppedUpComboBox::StayPoppedUpComboBox(QWidget *parent)
-                    : ModelIndexBasedComboBox(parent)
+StayPoppedUpComboBox::StayPoppedUpComboBox(QWidget* parent)
+    : ModelIndexBasedComboBox(parent)
 {
     m_view = 0;
 }
 
-void StayPoppedUpComboBox::installView(QAbstractItemView *view)
+void StayPoppedUpComboBox::installView(QAbstractItemView* view)
 {
     if (m_view)
+    {
         return;
+    }
 
     // Create view
     m_view = view;
@@ -235,7 +243,7 @@ void StayPoppedUpComboBox::installView(QAbstractItemView *view)
     m_view->viewport()->installEventFilter(this);
 }
 
-bool StayPoppedUpComboBox::eventFilter(QObject *o, QEvent *e)
+bool StayPoppedUpComboBox::eventFilter(QObject* o, QEvent* e)
 {
     // The combo box has installed an event filter on the view.
     // If it catches a valid mouse button release there, it will hide the popup.
@@ -247,15 +255,21 @@ bool StayPoppedUpComboBox::eventFilter(QObject *o, QEvent *e)
         {
             case QEvent::MouseButtonRelease:
             {
-                QMouseEvent *m = static_cast<QMouseEvent *>(e);
+                QMouseEvent* m = static_cast<QMouseEvent*>(e);
+
                 if (m_view->isVisible() && m_view->rect().contains(m->pos()))
                 {
                     if (o == m_view)
+                    {
                         o->event(e);
+                    }
                     else
                         // Viewport: Calling event() does not work, viewportEvent() is needed.
                         // This is the event that gets redirected to the QTreeView finally!
+                    {
                         sendViewportEventToView(e);
+                    }
+
                     // we have dispatched the event privately; we filter it out from the main dispatching
                     return true;
                 }
@@ -264,6 +278,7 @@ bool StayPoppedUpComboBox::eventFilter(QObject *o, QEvent *e)
                 break;
         }
     }
+
     return QComboBox::eventFilter(o, e);
 }
 
@@ -277,31 +292,31 @@ public:
 
     TreeViewComboBoxTreeView() : QTreeView() {}
 
-    virtual bool viewportEvent(QEvent *event)
+    virtual bool viewportEvent(QEvent* event)
     {
         return QTreeView::viewportEvent(event);
     }
 };
 
-TreeViewComboBox::TreeViewComboBox(QWidget *parent)
-                : StayPoppedUpComboBox(parent)
+TreeViewComboBox::TreeViewComboBox(QWidget* parent)
+    : StayPoppedUpComboBox(parent)
 {
 }
 
-void TreeViewComboBox::installView(QAbstractItemView *view)
+void TreeViewComboBox::installView(QAbstractItemView* view)
 {
     // parent does the heavy work
     StayPoppedUpComboBox::installView(view ? view : new TreeViewComboBoxTreeView);
 }
 
-void TreeViewComboBox::sendViewportEventToView(QEvent *e)
+void TreeViewComboBox::sendViewportEventToView(QEvent* e)
 {
     static_cast<TreeViewComboBoxTreeView*>(m_view)->viewportEvent(e);
 }
 
-QTreeView *TreeViewComboBox::view() const
+QTreeView* TreeViewComboBox::view() const
 {
-    return static_cast<QTreeView *>(m_view);
+    return static_cast<QTreeView*>(m_view);
 }
 
 // -------------------------------------------------------------------------
@@ -314,31 +329,31 @@ public:
 
     ListViewComboBoxListView() : QListView() {}
 
-    virtual bool viewportEvent(QEvent *event)
+    virtual bool viewportEvent(QEvent* event)
     {
         return QListView::viewportEvent(event);
     }
 };
 
-ListViewComboBox::ListViewComboBox(QWidget *parent)
-                : StayPoppedUpComboBox(parent)
+ListViewComboBox::ListViewComboBox(QWidget* parent)
+    : StayPoppedUpComboBox(parent)
 {
 }
 
-void ListViewComboBox::installView(QAbstractItemView *view)
+void ListViewComboBox::installView(QAbstractItemView* view)
 {
     // parent does the heavy work
     StayPoppedUpComboBox::installView(view ? view : new ListViewComboBoxListView);
 }
 
-void ListViewComboBox::sendViewportEventToView(QEvent *e)
+void ListViewComboBox::sendViewportEventToView(QEvent* e)
 {
     static_cast<ListViewComboBoxListView*>(m_view)->viewportEvent(e);
 }
 
-QListView *ListViewComboBox::view() const
+QListView* ListViewComboBox::view() const
 {
-    return static_cast<QListView *>(m_view);
+    return static_cast<QListView*>(m_view);
 }
 
 // -------------------------------------------------------------------------
@@ -350,14 +365,14 @@ public:
     // This line edit works like a weblink:
     // Readonly; A mouse press shows the popup; Cursor is the pointing hand.
 
-    TreeViewComboBoxLineEdit(KComboBox *box) : KLineEdit(box)
+    TreeViewComboBoxLineEdit(KComboBox* box) : KLineEdit(box)
     {
         m_box = box;
         setReadOnly(true);
         setCursor(Qt::PointingHandCursor);
     }
 
-    virtual void mouseReleaseEvent(QMouseEvent *event)
+    virtual void mouseReleaseEvent(QMouseEvent* event)
     {
         KLineEdit::mouseReleaseEvent(event);
         m_box->showPopup();
@@ -368,22 +383,24 @@ public:
         m_box->showPopup();
     }
 
-    KComboBox *m_box;
+    KComboBox* m_box;
 };
 
-TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget *parent)
-                        : TreeViewComboBox(parent),
-                          m_comboLineEdit(0)
+TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget* parent)
+    : TreeViewComboBox(parent),
+      m_comboLineEdit(0)
 {
 }
 
 void TreeViewLineEditComboBox::setLineEditText(const QString& text)
 {
     if (m_comboLineEdit)
+    {
         m_comboLineEdit->setText(text);
+    }
 }
 
-void TreeViewLineEditComboBox::installView(QAbstractItemView *view)
+void TreeViewLineEditComboBox::installView(QAbstractItemView* view)
 {
     // parent does the heavy work
     TreeViewComboBox::installView(view);
@@ -394,10 +411,12 @@ void TreeViewLineEditComboBox::installView(QAbstractItemView *view)
 void TreeViewLineEditComboBox::installLineEdit()
 {
     if (!m_comboLineEdit)
+    {
         setLineEdit(new TreeViewComboBoxLineEdit(this));
+    }
 }
 
-void TreeViewLineEditComboBox::setLineEdit(QLineEdit *edit)
+void TreeViewLineEditComboBox::setLineEdit(QLineEdit* edit)
 {
     m_comboLineEdit = edit;
     TreeViewComboBox::setLineEdit(edit);

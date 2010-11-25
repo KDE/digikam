@@ -96,7 +96,7 @@ private:
     void checkDBPath();
     void setupMainArea();
 
-  private:
+private:
 
     DatabaseWidgetPriv* const d;
 };

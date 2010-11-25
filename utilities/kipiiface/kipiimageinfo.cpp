@@ -51,7 +51,7 @@ namespace Digikam
 {
 
 KipiImageInfo::KipiImageInfo(KIPI::Interface* const interface, const KUrl& url)
-             : KIPI::ImageInfoShared(interface, url)
+    : KIPI::ImageInfoShared(interface, url)
 {
     m_info = ImageInfo(url);
 }
@@ -130,6 +130,7 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
     QMap<QString, QVariant> res;
 
     PAlbum* p = parentAlbum();
+
     if (p)
     {
         QList<int> tagIds = m_info.tagIds();
@@ -150,6 +151,7 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
 
         // Get GPS location of picture from database.
         ImagePosition pos = m_info.imagePosition();
+
         if (!pos.isEmpty())
         {
             double lat           = pos.latitudeNumber();
@@ -162,12 +164,14 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
 
         // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
+
     return res;
 }
 
 void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 {
     PAlbum* p = parentAlbum();
+
     if (p)
     {
         QMap<QString, QVariant> attributes = res;
@@ -186,8 +190,11 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         if (attributes.contains("rating"))
         {
             int rating = attributes["rating"].toInt();
+
             if (rating >= RatingMin && rating <= RatingMax)
+            {
                 m_info.setRating(rating);
+            }
         }
 
         // GPS location management from plugins.
@@ -202,6 +209,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             if (attributes.contains("latitude"))
             {
                 double lat = attributes["latitude"].toDouble();
+
                 if (lat >= -90.0 && lat <= 90.0)
                 {
                     position.setLatitude(lat);
@@ -212,6 +220,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             if (attributes.contains("longitude"))
             {
                 double lng = attributes["longitude"].toDouble();
+
                 if (lng >= -180.0 && lng <= 180.0)
                 {
                     position.setLongitude(lng);
@@ -240,6 +249,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
 {
 
     PAlbum* p = parentAlbum();
+
     if (p)
     {
         // Remove all tags of a picture from database.

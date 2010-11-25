@@ -55,7 +55,7 @@ class DIGIKAM_EXPORT ThumbnailInfo
 public:
 
     ThumbnailInfo();
-    ~ThumbnailInfo(){};
+    ~ThumbnailInfo() {};
 
     /** The file path from which the thumbnail shall be generated */
     QString   filePath;

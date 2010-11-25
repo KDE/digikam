@@ -184,7 +184,10 @@ class DetectionWorker : public WorkerObject
 public:
 
     DetectionWorker(FacePipeline::FacePipelinePriv* d);
-    ~DetectionWorker() { wait(); } // protect detector
+    ~DetectionWorker()
+    {
+        wait();    // protect detector
+    }
     DImg scaleForDetection(const DImg& image) const;
 
 public Q_SLOTS:
@@ -212,7 +215,10 @@ class RecognitionWorker : public WorkerObject
 public:
 
     RecognitionWorker(FacePipeline::FacePipelinePriv* d);
-    ~RecognitionWorker() { wait(); } // protect database
+    ~RecognitionWorker()
+    {
+        wait();    // protect database
+    }
 
 public Q_SLOTS:
 
@@ -263,7 +269,10 @@ class Trainer : public WorkerObject
 public:
 
     Trainer(FacePipeline::FacePipelinePriv* d);
-    ~Trainer() { wait(); } // protect detector
+    ~Trainer()
+    {
+        wait();    // protect detector
+    }
 
 protected:
 
@@ -279,7 +288,7 @@ Q_SIGNALS:
 
 protected:
 
-    ThumbnailImageCatcher                *catcher;
+    ThumbnailImageCatcher*                catcher;
     KFaceIface::RecognitionDatabase       database;
     FacePipeline::FacePipelinePriv* const d;
 };
@@ -300,9 +309,9 @@ public:
     void send(FacePipelineExtendedPackage::Ptr package);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
-                                                  const FacePipelineDatabaseFace&, const DImg& image);
+            const FacePipelineDatabaseFace&, const DImg& image);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
-                                                  const FacePipelineDatabaseFaceList& faces, const DImg& image);
+            const FacePipelineDatabaseFaceList& faces, const DImg& image);
     FacePipelineExtendedPackage::Ptr filterOrBuildPackage(const ImageInfo& info);
 
     bool hasFinished();
@@ -325,7 +334,7 @@ public:
     QList<QObject*>    pipeline;
 
     FaceIface*         iface;
-    ThumbnailLoadThread*thumbnailLoadThread;
+    ThumbnailLoadThread* thumbnailLoadThread;
     bool               started;
     int                infosForFiltering;
     int                packagesOnTheRoad;
