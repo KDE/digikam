@@ -46,6 +46,7 @@ namespace Digikam
 
 class AlbumSettingsPrivate;
 class DatabaseParameters;
+class VersionManagerSettings;
 
 class AlbumSettings : public QObject
 {
@@ -348,17 +349,8 @@ public:
     bool getInternalDatabaseServer() const;
     void setInternalDatabaseServer(const bool useInternalDBServer);
 
-    void setShowAllVersions(bool val);
-    bool getShowAllVersions() const;
-
-    void setSaveIntermediateVersions(bool val);
-    bool getSaveIntermediateVersions() const;
-
-    void setFormatForStoringRAW(const QString &val);
-    QString getFormatForStoringRAW() const;
-
-    void setFormatForStoringSubversions(const QString &val);
-    QString getFormatForStoringSubversions() const;
+    void setVersionManagerSettings(const VersionManagerSettings& settings);
+    VersionManagerSettings getVersionManagerSettings() const;
 
     double getFaceDetectionAccuracy() const;
     void setFaceDetectionAccuracy(double value);

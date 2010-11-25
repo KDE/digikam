@@ -45,12 +45,14 @@
 #include "collectionmanager.h"
 #include "collectionscanner.h"
 #include "dimginterface.h"
+#include "dmetadata.h"
 #include "imageinfo.h"
 #include "imagehistorygraph.h"
 #include "imagehistorygraphdata.h"
 #include "imagehistorygraphmodel.h"
 #include "iofilesettingscontainer.h"
 #include "modeltest.h"
+#include "tagscache.h"
 
 using namespace Digikam;
 
@@ -132,10 +134,11 @@ void DImageHistoryGraphTest::testEditing()
     QDir imageDir(imagePath());
 
     /*
-    1
-        2
-            4
-        3
+    orig
+        1
+            2
+                3
+                4
     */
 
     IOFileSettingsContainer container;
@@ -163,10 +166,24 @@ void DImageHistoryGraphTest::testEditing()
 
     CollectionScanner().completeScan();
 
+    ImageInfo orig(readOnlyImages.first());
     ImageInfo one(collectionDir.filePath("1.jpg")),
     two(collectionDir.filePath("2.jpg")),
     three(collectionDir.filePath("3.jpg")),
     four(collectionDir.filePath("4.jpg"));
+
+    typedef QPair<qlonglong, qlonglong> IdPair;
+    QList<IdPair> controlCloud;
+    controlCloud << IdPair(one.id(), orig.id()); //X
+    controlCloud << IdPair(two.id(), one.id());  //X
+    controlCloud << IdPair(three.id(), two.id());//X
+    controlCloud << IdPair(four.id(), two.id()); //X
+    controlCloud << IdPair(three.id(), one.id());
+    controlCloud << IdPair(four.id(), one.id());
+    controlCloud << IdPair(two.id(), orig.id());
+    controlCloud << IdPair(three.id(), orig.id());
+    controlCloud << IdPair(four.id(), orig.id());
+    qSort(controlCloud);
 
     ImageHistoryGraph graph1 = ImageHistoryGraph::fromInfo(three);
     qDebug() << graph1;
@@ -180,6 +197,27 @@ void DImageHistoryGraphTest::testEditing()
     QVERIFY(graph2.data().vertexCount() == 5);
     QVERIFY(graph3.data().vertexCount() == 5);
 
+    QList<IdPair> cloud = graph3.relationCloud();
+    qSort(cloud);
+    QVERIFY(cloud == controlCloud);
+
+    int needResolvingTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needResolvingHistory());
+    int needTaggingTag   = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
+
+    int originalVersionTag     = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
+    int currentVersionTag      = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::currentVersion());
+    int intermediateVersionTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::intermediateVersion());
+
+    //qDebug() << orig.tagIds() << one.tagIds() << two.tagIds() << three.tagIds() << four.tagIds();
+    QVERIFY(!orig.tagIds().contains(needResolvingTag));
+    QVERIFY(!orig.tagIds().contains(needTaggingTag));
+
+    QVERIFY(orig.tagIds().contains(originalVersionTag));
+    QVERIFY(one.tagIds().contains(intermediateVersionTag));
+    QVERIFY(two.tagIds().contains(intermediateVersionTag));
+    QVERIFY(three.tagIds().contains(currentVersionTag));
+    QVERIFY(four.tagIds().contains(currentVersionTag));
+
     QFile fileTwo(two.filePath());
     fileTwo.remove();
     QVERIFY(!fileTwo.exists());
@@ -188,6 +226,16 @@ void DImageHistoryGraphTest::testEditing()
     // graph is prepared for display, vertex of removed file cleared
     QVERIFY(graph2.data().vertexCount() == 4);
     qDebug() << graph2;
+
+    // Check that removal of current version leads to resetting of current verion tag
+    QFile fileThree(three.filePath());
+    fileThree.remove();
+    QFile fileFour(four.filePath());
+    fileFour.remove();
+    CollectionScanner().completeScan();
+    qDebug() << originalVersionTag << currentVersionTag << intermediateVersionTag<<  orig.tagIds() << one.tagIds();
+    QVERIFY(one.tagIds().contains(currentVersionTag));
+    QVERIFY(!one.tagIds().contains(intermediateVersionTag));
 }
 
 void DImageHistoryGraphTest::testHistory()
@@ -368,6 +416,7 @@ void DImageHistoryGraphTest::testGraph()
     QList<qlonglong> subgraphTwo = mapList(graph.data().verticesDominatedBy(idToVertex.value(2), idToVertex.value(1),
                                                                             HistoryGraph::DepthFirstOrder), vertexToId);
     qSort(subgraphTwo);
+    qDebug() << subgraphTwo;
     QVERIFY(subgraphTwo == controlSubgraphTwo);
 
     // breadth-first

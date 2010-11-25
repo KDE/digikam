@@ -39,6 +39,7 @@
 
 #include "setupversioning.h"
 #include "albumsettings.h"
+#include "versionmanager.h"
 
 namespace Digikam
 {
@@ -146,27 +147,25 @@ SetupVersioning::~SetupVersioning()
 
 void SetupVersioning::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+    VersionManagerSettings settings;
+    settings.showAllVersions = d->showAllVersions->isChecked();
+    settings.saveIntermediateVersions = d->saveIntermediateVersions->isChecked()
+        ? VersionManagerSettings::AfterEachSession : VersionManagerSettings::NoIntermediates;
+    settings.formatForStoringRAW = d->formatForStoringRAW->currentText();
+    settings.formatForStoringSubversions = d->formatForStoringSubversions->currentText();
 
-    settings->setShowAllVersions(d->showAllVersions->isChecked());
-    settings->setSaveIntermediateVersions(d->saveIntermediateVersions->isChecked());
-    settings->setFormatForStoringRAW(d->formatForStoringRAW->currentText());
-    settings->setFormatForStoringSubversions(d->formatForStoringSubversions->currentText());
-
-    settings->saveSettings();
+    AlbumSettings::instance()->setVersionManagerSettings(settings);
+    AlbumSettings::instance()->saveSettings();
 }
 
 void SetupVersioning::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+    VersionManagerSettings settings = AlbumSettings::instance()->getVersionManagerSettings();
 
-    d->showAllVersions->setChecked(settings->getShowAllVersions());
-    d->saveIntermediateVersions->setChecked(settings->getSaveIntermediateVersions());
-    d->formatForStoringRAW->setCurrentItem(settings->getFormatForStoringRAW());
-    d->formatForStoringSubversions->setCurrentItem(settings->getFormatForStoringSubversions());
-    
+    d->showAllVersions->setChecked(settings.showAllVersions);
+    d->saveIntermediateVersions->setChecked(settings.saveIntermediateVersions);
+    d->formatForStoringRAW->setCurrentItem(settings.formatForStoringRAW);
+    d->formatForStoringSubversions->setCurrentItem(settings.formatForStoringSubversions);
 }
 
 } // namespace Digikam

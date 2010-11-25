@@ -82,11 +82,12 @@ private:
     bool saveAs();
     void finishSaving(bool success);
     KUrl saveDestinationUrl();
-    inline bool saveNewVersion() { return false; };
-    inline bool saveNewSubversion() { return false; };
+    bool saveNewVersion();
+    bool saveCurrentVersion();
 
     void saveIsComplete();
     void saveAsIsComplete();
+    void saveVersionIsComplete();
 
     void slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings);
 

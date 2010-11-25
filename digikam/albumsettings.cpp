@@ -54,6 +54,7 @@
 #include "imagesortsettings.h"
 #include "mimefilter.h"
 #include "thumbnailsize.h"
+#include "versionmanager.h"
 
 namespace Digikam
 {
@@ -131,10 +132,6 @@ public:
         configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam"),
         configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk"),
         configStringComparisonTypeEntry("String Comparison Type"),
-        configShowAllVersionsEntry("Show All Available Versions"),
-        configSaveIntermediateVersionsEntry("Save Intermediate Versions"),
-        configFormatForStoringRAWEntry("Format For Storing Versions Of RAW Images"),
-        configFormatForStoringSubversionsEntry("Format For Storing Other Versions Of Files"),
         configFaceDetectionAccuracy("Detection Accuracy"),
         configFaceDetectionSpecificity("Detection Specificity"),
 
@@ -362,10 +359,8 @@ public:
     bool                                syncToNepomuk;
 
     // versioning settings
-    bool                                showAllVersions;
-    bool                                saveIntermediateVersions;
-    QString                             formatForStoringRAW;
-    QString                             formatForStoringSubversions;
+
+    VersionManagerSettings              versionSettings;
 
     // face detection settings
     double                              faceDetectionAccuracy;
@@ -475,11 +470,6 @@ void AlbumSettings::init()
 
     d->syncToDigikam                = false;
     d->syncToNepomuk                = false;
-
-    d->showAllVersions              = true;
-    d->saveIntermediateVersions     = false;
-    d->formatForStoringRAW          = QString("JPG");
-    d->formatForStoringSubversions  = QString("JPG");
 
     d->faceDetectionAccuracy        = 0.8;
     d->faceDetectionSpecificity     = 0.8;
@@ -599,11 +589,7 @@ void AlbumSettings::readSettings()
     // ---------------------------------------------------------------------
 
     group = config->group(d->configGroupVersioning);
-
-    d->showAllVersions             = group.readEntry(d->configShowAllVersionsEntry, true);
-    d->saveIntermediateVersions    = group.readEntry(d->configSaveIntermediateVersionsEntry, false);
-    d->formatForStoringRAW         = group.readEntry(d->configFormatForStoringRAWEntry, QString("JPG"));
-    d->formatForStoringSubversions = group.readEntry(d->configFormatForStoringSubversionsEntry, QString("JPG"));
+    d->versionSettings.readFromConfig(group);
 
     // ---------------------------------------------------------------------
 
@@ -710,11 +696,7 @@ void AlbumSettings::saveSettings()
     // ---------------------------------------------------------------------
 
     group = config->group(d->configGroupVersioning);
-    
-    group.writeEntry(d->configShowAllVersionsEntry, d->showAllVersions);
-    group.writeEntry(d->configSaveIntermediateVersionsEntry, d->saveIntermediateVersions);
-    group.writeEntry(d->configFormatForStoringRAWEntry, d->formatForStoringRAW);
-    group.writeEntry(d->configFormatForStoringSubversionsEntry, d->formatForStoringSubversions);
+    d->versionSettings.writeToConfig(group);
 
     // ---------------------------------------------------------------------
 
@@ -1588,44 +1570,14 @@ AlbumSettings::StringComparisonType AlbumSettings::getStringComparisonType() con
     return d->stringComparisonType;
 }
 
-void AlbumSettings::setShowAllVersions(bool val)
+void AlbumSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
 {
-    d->showAllVersions = val;
+    d->versionSettings = settings;
 }
 
-bool AlbumSettings::getShowAllVersions() const
+VersionManagerSettings AlbumSettings::getVersionManagerSettings() const
 {
-    return d->showAllVersions;
-}
-
-void AlbumSettings::setFormatForStoringRAW(const QString& val)
-{
-    d->formatForStoringRAW = val;
-}
-
-QString AlbumSettings::getFormatForStoringRAW() const
-{
-    return d->formatForStoringRAW;
-}
-
-void AlbumSettings::setSaveIntermediateVersions(bool val)
-{
-    d->saveIntermediateVersions = val;
-}
-
-bool AlbumSettings::getSaveIntermediateVersions() const
-{
-    return d->saveIntermediateVersions;
-}
-
-void AlbumSettings::setFormatForStoringSubversions(const QString& val)
-{
-    d->formatForStoringSubversions = val;
-}
-
-QString AlbumSettings::getFormatForStoringSubversions() const
-{
-    return d->formatForStoringSubversions;
+    return d->versionSettings;
 }
 
 double AlbumSettings::getFaceDetectionAccuracy() const

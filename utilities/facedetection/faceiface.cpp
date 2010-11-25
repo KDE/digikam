@@ -94,7 +94,7 @@ private:
 
 int FaceIface::FaceIfacePriv::scannedForFacesTagId() const
 {
-    return TagsCache::instance()->getOrCreateInternalTag("Scanned for Faces"); // no i18n
+    return TagsCache::instance()->getOrCreateInternalTag(InternalTagName::scannedForFaces()); // no i18n
 }
 
 int FaceIface::FaceIfacePriv::peopleTagId() const

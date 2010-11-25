@@ -2200,9 +2200,6 @@ void DigikamApp::slotSetupChanged()
 
     AlbumThumbnailLoader::instance()->setThumbnailSize(AlbumSettings::instance()->getTreeViewIconSize());
 
-    if (ImageWindow::imagewindowCreated())
-        ImageWindow::imagewindow()->applySettings();
-
     if (LightTableWindow::lightTableWindowCreated())
         LightTableWindow::lightTableWindow()->applySettings();
 
@@ -2538,9 +2535,6 @@ void DigikamApp::slotDatabaseRescan()
     ScanController::instance()->completeCollectionScan();
 
     d->view->refreshView();
-
-    if (ImageWindow::imagewindowCreated())
-        ImageWindow::imagewindow()->refreshView();
 
     if (LightTableWindow::lightTableWindowCreated())
         LightTableWindow::lightTableWindow()->refreshView();

@@ -169,6 +169,8 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 {
     setXMLFile("showfotoui.rc");
 
+    m_nonDestructive = false;
+
     // --------------------------------------------------------
 
     Digikam::UiFileValidator validator(localXMLFile());
@@ -975,7 +977,7 @@ void ShowFoto::finishSaving(bool success)
 
 void ShowFoto::saveIsComplete()
 {
-    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
+    Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
     d->thumbBar->invalidateThumb(d->currentItem);
 
     // Pop-up a message to bring user when save is done.
@@ -985,15 +987,15 @@ void ShowFoto::saveIsComplete()
 
 void ShowFoto::saveAsIsComplete()
 {
-    m_canvas->switchToLastSaved(m_savingContext->destinationURL.toLocalFile());
-    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
+    m_canvas->switchToLastSaved(m_savingContext.destinationURL.toLocalFile());
+    Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
 
     // Add the file to the list of thumbbar images if it's not there already
-    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext->destinationURL);
+    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext.destinationURL);
     d->thumbBar->invalidateThumb(foundItem);
 
     if (!foundItem)
-        foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext->destinationURL);
+        foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext.destinationURL);
 
     // shortcut slotOpenUrl
     d->thumbBar->blockSignals(true);
@@ -1005,6 +1007,10 @@ void ShowFoto::saveAsIsComplete()
     // Pop-up a message to bring user when save is done.
     Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
                                   this, windowTitle());
+}
+
+void ShowFoto::saveVersionIsComplete()
+{
 }
 
 KUrl ShowFoto::saveDestinationUrl()
@@ -1178,5 +1184,15 @@ void ShowFoto::slotRevert()
 
     m_canvas->slotRestore();
 }
+
+bool ShowFoto::saveNewVersion()
+{
+    return false;
+};
+
+bool ShowFoto::saveCurrentVersion()
+{
+    return false;
+};
 
 }   // namespace ShowFoto

@@ -559,7 +559,7 @@ void DigikamView::setupConnections()
             d->albumHistory, SLOT(slotAlbumDeleted(Album*)));
 
     // -- Image versions ----------------
-    connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
+/*    connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
             d->rightSideBar->getFiltersHistoryTab(), SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
@@ -570,6 +570,7 @@ void DigikamView::setupConnections()
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(updateMainViewSignal()),
             d->iconView->imageAlbumModel(), SLOT(refresh()));
+            */
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(setCurrentIdSignal(qlonglong)),
             d->iconView, SLOT(setCurrentWhenAvailable(qlonglong)));
