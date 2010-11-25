@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="200" name="digikamimagewindow" >
+<gui version="201" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -14,6 +14,9 @@
         <Separator/>
         <Action name="editorwindow_save" />
         <Action name="editorwindow_saveas" />
+        <Action name="editorwindow_savecurrentversion" />
+        <Action name="editorwindow_savenewversion" />
+        <Action name="editorwindow_export" />
         <Action name="editorwindow_revert" />
         <Separator/>
         <Action name="editorwindow_delete" />
@@ -24,6 +27,7 @@
     <Menu name="Edit" ><text>&amp;Edit</text>
         <Action name="editorwindow_copy" />
         <Separator/>
+        <Action name="editorwindow_discardchanges" />
         <Action name="editorwindow_undo" />
         <Action name="editorwindow_redo" />
         <Separator/>
@@ -100,13 +104,16 @@
 </MenuBar>
 
 <ToolBar name="mainToolBar" ><text>Main Toolbar</text>
-     <Action name="editorwindow_first" />
-     <Action name="editorwindow_backward" />
-     <Action name="editorwindow_forward" />
-     <Action name="editorwindow_last" />
+     <Action name="imageview_tomainwindow"/>
+     <Action name="editorwindow_openversion"/>
+     <Action name="editorwindow_export" />
      <Separator/>
      <Action name="editorwindow_save" />
      <Action name="editorwindow_saveas" />
+     <Action name="editorwindow_savecurrentversion" />
+     <Action name="editorwindow_savenewversion" />
+     <Action name="editorwindow_discardchanges" />
+     <Separator/>
      <Action name="editorwindow_undo" />
      <Action name="editorwindow_redo" />
      <Action name="editorwindow_revert" />
@@ -114,9 +121,6 @@
      <Action name="editorwindow_rotate_left" />
      <Action name="editorwindow_rotate_right" />
      <Action name="editorwindow_crop" />
-     <Separator/>
-     <Action name="editorwindow_fullscreen" />
-     <Action name="editorwindow_slideshow" />
      <Merge />
      <WeakSeparator/>
      <Action name="logo_action" />

@@ -68,18 +68,15 @@ public:
     static ImageWindow* imagewindow();
     static bool         imagewindowCreated();
 
-    void applySettings();
-    void refreshView();
     bool setup();
     bool setupICC();
 
     bool queryClose();
+    virtual VersionManager* versionManager();
 
 Q_SIGNALS:
 
     void signalFileDeleted(const KUrl& url);
-    void signalFileAdded(const KUrl& url);
-    void signalFileModified(const KUrl& url);
     void signalURLChanged(const KUrl& url);
     void signalSavingDialogProgress(float value);
 
@@ -99,14 +96,17 @@ private:
     bool save();
     bool saveAs();
     bool saveNewVersion();
-    bool saveNewSubversion();
+    bool saveCurrentVersion();
     KUrl saveDestinationUrl();
     bool hasChangesToSave();
+    bool hasOriginalToRestore();
+    DImageHistory resolvedImageHistory(const DImageHistory& history);
 
     void prepareImageToSave();
 
     void saveIsComplete();
     void saveAsIsComplete();
+    void saveVersionIsComplete();
     void setViewToURL(const KUrl& url);
     void deleteCurrentItem(bool ask, bool permanently);
     bool removeItem(int index);
@@ -128,6 +128,8 @@ private Q_SLOTS:
     void slotLast();
     void slotFilePrint();
 
+    void slotToMainWindow();
+
     void slotThumbBarItemSelected(const KUrl&);
     void slotLoadCurrent();
     void slotDeleteCurrentItem();
@@ -140,6 +142,7 @@ private Q_SLOTS:
 
     void slotContextMenu();
     void slotRevert();
+    void slotOpenOriginal();
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
@@ -161,11 +164,7 @@ private Q_SLOTS:
     void slotComponentsInfo();
     void slotDBStat();
 
-    void slotSidebarTabTitleStyleChanged();
-
-    void slotUpdateFiltersHistorySidebar();
-    void slotDisableEntriesInFiltersHistorySidebar(int count);
-    void slotEnableEntriesInFiltersHistorySidebar(int count);
+    void slotSetupChanged();
 
 private:
 

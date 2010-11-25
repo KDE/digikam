@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QColor>
+#include <QPointer>
 #include <QRect>
 #include <QString>
 
@@ -43,6 +44,7 @@
 #include "digikam_export.h"
 #include "thumbbardock.h"
 #include "previewtoolbar.h"
+#include "savingcontextcontainer.h"
 
 class QSplitter;
 class QLabel;
@@ -56,6 +58,7 @@ namespace Digikam
 {
 
 class Canvas;
+class DImageHistory;
 class DPopupMenu;
 class DLogoAction;
 class EditorStackView;
@@ -63,12 +66,12 @@ class ExposureSettingsContainer;
 class IOFileSettingsContainer;
 class ImagePluginLoader;
 class ICCSettingsContainer;
-class SavingContextContainer;
 class Sidebar;
 class SidebarSplitter;
 class SlideShowSettings;
 class StatusProgressBar;
 class ThumbBarView;
+class VersionManager;
 
 class DIGIKAM_EXPORT EditorWindow : public KXmlGuiWindow
 {
@@ -79,7 +82,6 @@ public:
     EditorWindow(const char *name);
     ~EditorWindow();
 
-    virtual void applySettings(){};
     virtual bool setup()=0;
     virtual bool setupICC()=0;
 
@@ -93,6 +95,8 @@ Q_SIGNALS:
     void signalToolApplied();
 
 protected:
+
+    bool                     m_nonDestructive;
 
     bool                     m_fullScreenHideThumbBar;
     bool                     m_cancelSlideShow;
@@ -108,9 +112,14 @@ protected:
     SidebarSplitter         *m_splitter;
     QSplitter               *m_vSplitter;
 
+    KAction                 *m_openVersionAction;
     KAction                 *m_saveAction;
     KAction                 *m_saveAsAction;
+    KAction                 *m_saveNewVersionAction;
+    KAction                 *m_saveCurrentVersionAction;
+    KAction                 *m_exportAction;
     KAction                 *m_revertAction;
+    KAction                 *m_discardChangesAction;
     KAction                 *m_fileDeleteAction;
     KAction                 *m_forwardAction;
     KAction                 *m_backwardAction;
@@ -132,9 +141,10 @@ protected:
     Canvas                  *m_canvas;
     ImagePluginLoader       *m_imagePluginLoader;
     StatusProgressBar       *m_nameLabel;
-    KProgressDialog         *m_savingProgressDialog;
     IOFileSettingsContainer *m_IOFileSettings;
-    SavingContextContainer  *m_savingContext;
+    QPointer<KProgressDialog> m_savingProgressDialog;
+
+    SavingContextContainer   m_savingContext;
 
     QString                  m_formatForRAWVersioning;
     QString                  m_formatForSubversions;
@@ -151,6 +161,7 @@ protected:
     void setupContextMenu();
     void toggleStandardActions(bool val);
     void toggleZoomActions(bool val);
+    void toggleNonDestructiveActions();
 
     void printImage(const KUrl& url);
 
@@ -159,24 +170,29 @@ protected:
 
     bool promptForOverWrite();
     virtual bool hasChangesToSave();
+    virtual bool hasOriginalToRestore();
+    virtual DImageHistory resolvedImageHistory(const DImageHistory& history);
 
-    enum SaveOrSaveAs
+    enum SaveAskMode
     {
         AskIfNeeded,
         OverwriteWithoutAsking,
         AlwaysSaveAs,
-        NewVersion
+        SaveVersionWithoutAsking = OverwriteWithoutAsking,
+        AlwaysNewVersion = AlwaysSaveAs
     };
 
-    bool promptUserSave(const KUrl& url, SaveOrSaveAs = AskIfNeeded, bool allowCancel = true);
+    bool promptUserSave(const KUrl& url, SaveAskMode mode = AskIfNeeded, bool allowCancel = true);
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
     bool startingSaveAs(const KUrl& url);
-    bool startingSaveNewVersion(const KUrl& url, bool subversion);
+    bool startingSaveCurrentVersion(const KUrl& url);
+    bool startingSaveNewVersion(const KUrl& url);
     bool checkPermissions(const KUrl& url);
+    bool moveLocalFile(const QString& src, const QString& dest, bool destinationExisted);
     void moveFile();
     void colorManage();
-    void setOriginalImageFlag();
+    void execSavingProgressDialog();
 
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
@@ -184,9 +200,9 @@ protected:
 
     virtual void finishSaving(bool success);
 
-    virtual void readSettings()               { readStandardSettings();     };
-    virtual void saveSettings()               { saveStandardSettings();     };
-    virtual void toggleActions(bool val)      { setOriginalImageFlag(); toggleStandardActions(val); };
+    virtual void readSettings();
+    virtual void saveSettings();
+    virtual void toggleActions(bool val);
 
     void toggleGUI2FullScreen();
 
@@ -201,7 +217,9 @@ protected:
     virtual bool saveAs()=0;
     virtual bool save()=0;
     virtual bool saveNewVersion()=0;
-    virtual bool saveNewSubversion()=0;
+    virtual bool saveCurrentVersion()=0;
+
+    virtual VersionManager *versionManager();
 
     /**
      * Hook method that subclasses must implement to return the destination url
@@ -215,12 +233,14 @@ protected:
 
     virtual void saveIsComplete()=0;
     virtual void saveAsIsComplete()=0;
+    virtual void saveVersionIsComplete()=0;
 
 protected Q_SLOTS:
 
     void slotSave();
-    void slotSaveSubversion();
-    void slotSaveAs() { saveAs(); };
+    void slotSaveAs();
+    void slotSaveCurrentVersion();
+    void slotSaveNewVersion();
 
     void slotEditKeys();
 
@@ -252,7 +272,6 @@ protected Q_SLOTS:
     virtual void slotChangeTheme(const QString& theme);
 
     virtual void slotComponentsInfo();
-    virtual void slotSetCurrentImageHistory();
 
     virtual void slotFilePrint()=0;
     virtual void slotDeleteCurrentItem()=0;
@@ -264,6 +283,8 @@ protected Q_SLOTS:
     virtual void slotChanged()=0;
     virtual void slotContextMenu()=0;
     virtual void slotRevert()=0;
+    virtual void slotDiscardChanges();
+    virtual void slotOpenOriginal();
 
 private Q_SLOTS:
 
@@ -308,6 +329,8 @@ private:
     void setToolStopProgress();
 
     void setToolInfoMessage(const QString& txt);
+
+    bool startingSaveVersion(const KUrl& url, bool subversion);
 
     void setPreviewModeMask(int mask);
     PreviewToolBar::PreviewMode previewMode();

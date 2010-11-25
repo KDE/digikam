@@ -38,6 +38,7 @@
 // Local includes
 
 #include "editorwindow.h"
+#include "versionmanager.h"
 
 class QDialog;
 class QEventLoop;
@@ -250,6 +251,8 @@ public:
     ExposureSettingsContainer* exposureSettings;
 
     EditorToolIface*           toolIface;
+
+    VersionManager             defaultVersionManager;
 
 
     void legacyUpdateSplitterState(KConfigGroup &group)

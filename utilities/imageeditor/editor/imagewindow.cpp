@@ -74,12 +74,15 @@
 
 // Local includes
 
-#include "componentsinfo.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
+#include "albummodel.h"
 #include "albumsettings.h"
 #include "canvas.h"
+#include "collectionlocation.h"
+#include "collectionmanager.h"
+#include "componentsinfo.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
@@ -92,6 +95,7 @@
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "editorstackview.h"
+#include "globals.h"
 #include "iccsettingscontainer.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
@@ -99,10 +103,13 @@
 #include "imagepluginloader.h"
 #include "imagepreviewbar.h"
 #include "imagepropertiessidebardb.h"
+#include "imagepropertiesversionstab.h"
 #include "imagescanner.h"
 #include "iofilesettingscontainer.h"
+#include "knotificationwrapper.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
+#include "metadatasettings.h"
 #include "ratingpopupmenu.h"
 #include "savingcontextcontainer.h"
 #include "scancontroller.h"
@@ -114,15 +121,23 @@
 #include "tagspopupmenu.h"
 #include "themeengine.h"
 #include "thumbbardock.h"
-#include "globals.h"
 #include "uifilevalidator.h"
-#include "albummodel.h"
-#include "imagepropertiesversionstab.h"
-#include "knotificationwrapper.h"
-#include "metadatasettings.h"
+#include "versionmanager.h"
 
 namespace Digikam
 {
+
+class DatabaseVersionManager : public VersionManager
+{
+public:
+    virtual QString toplevelDirectory(const QString& path)
+    {
+        CollectionLocation loc = CollectionManager::instance()->locationForPath(path);
+        if (!loc.isNull())
+            return loc.albumRootPath();
+        return "/";
+    }
+};
 
 class ImageWindowPriv
 {
@@ -133,6 +148,7 @@ public:
         configShowThumbbarEntry("Show Thumbbar"),
         configHorizontalThumbbarEntry("HorizontalThumbbar"),
         allowSaving(true),
+        toMainWindowAction(0),
         star0(0),
         star1(0),
         star2(0),
@@ -159,6 +175,8 @@ public:
     KUrl::List                urlList;
     KUrl                      urlCurrent;
 
+    KAction                  *toMainWindowAction;
+
     // Rating actions.
     KAction*                  star0;
     KAction*                  star1;
@@ -181,6 +199,8 @@ public:
     ThumbBarDock*             thumbBarDock;
 
     ImagePropertiesSideBarDB* rightSideBar;
+
+    DatabaseVersionManager    versionManager;
 };
 
 ImageWindow* ImageWindow::m_instance = 0;
@@ -240,7 +260,6 @@ ImageWindow::ImageWindow()
     // -- Read settings --------------------------------
 
     readSettings();
-    applySettings();
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
     applyMainWindowSettings(group);
@@ -251,8 +270,8 @@ ImageWindow::ImageWindow()
 
     d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
-    slotSidebarTabTitleStyleChanged();
-    d->rightSideBar->getFiltersHistoryTab()->setCurrentIndex(1);
+
+    slotSetupChanged();
 }
 
 ImageWindow::~ImageWindow()
@@ -268,19 +287,6 @@ ImageWindow::~ImageWindow()
 
 void ImageWindow::closeEvent(QCloseEvent* e)
 {
-    if (hasChangesToSave())
-    {
-        if(saveNewVersion())
-        {
-            m_savingProgressDialog = new KProgressDialog(this, i18n("Saving image..."), i18n("Please wait for the image to be saved..."));
-            m_savingProgressDialog->setModal(true);
-            m_savingProgressDialog->setAutoClose(true);
-            m_savingProgressDialog->setMinimumDuration(1000);
-            m_savingProgressDialog->progressBar()->setMaximum(100);
-            m_savingProgressDialog->exec();
-        }
-    }
-    
     if (!queryClose())
     {
         e->ignore();
@@ -328,8 +334,7 @@ bool ImageWindow::queryClose()
     if (!waitForSavingToComplete())
         return false;
 
-    return true;
-    //return promptUserSave(d->urlCurrent, NewVersion);
+    return promptUserSave(d->urlCurrent);
 }
 
 void ImageWindow::setupConnections()
@@ -366,20 +371,7 @@ void ImageWindow::setupConnections()
             this, SLOT(slotThumbBarItemSelected(const KUrl&)));
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSidebarTabTitleStyleChanged()));
-
-    connect(this, SIGNAL(signalToolApplied()),
-            this, SLOT(slotUpdateFiltersHistorySidebar()));
-
-    connect(m_canvas, SIGNAL(signalUndoSteps(int)),
-            this, SLOT(slotDisableEntriesInFiltersHistorySidebar(int)));
-
-    connect(m_canvas, SIGNAL(signalRedoSteps(int)),
-            this, SLOT(slotEnableEntriesInFiltersHistorySidebar(int)));
-
-    connect(m_canvas->interface(), SIGNAL(signalModifiedWithFilterAction()),
-            this, SLOT(slotUpdateFiltersHistorySidebar()));
-
+            this, SLOT(slotSetupChanged()));
 }
 
 void ImageWindow::setupUserArea()
@@ -456,6 +448,11 @@ void ImageWindow::setupActions()
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
 
+    d->toMainWindowAction = new KAction(KIcon("view-list-icons"),
+                                        i18nc("@action Finish editing, close editor, back to main window", "Close Editor"), this);
+    connect(d->toMainWindowAction, SIGNAL(triggered()), this, SLOT(slotToMainWindow()));
+    actionCollection()->addAction("imageview_tomainwindow", d->toMainWindowAction);
+
     // -- Rating actions ---------------------------------------------------------------
 
     d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), this);
@@ -525,23 +522,19 @@ void ImageWindow::setupActions()
     createGUI(xmlFile());
 }
 
-void ImageWindow::applySettings()
+void ImageWindow::slotSetupChanged()
 {
     applyStandardSettings();
-    AlbumSettings* settings                 = AlbumSettings::instance();
-    m_formatForRAWVersioning                = settings->getFormatForStoringRAW();
-    m_formatForSubversions                  = settings->getFormatForStoringSubversions();
+    toggleNonDestructiveActions();
+
     MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
     m_setExifOrientationTag                 = writeSettings.exifSetOrientation;
     m_canvas->setExifOrient(writeSettings.exifRotate);
+    d->versionManager.setSettings(AlbumSettings::instance()->getVersionManagerSettings());
 
     d->thumbBar->applySettings();
-    refreshView();
-}
-
-void ImageWindow::refreshView()
-{
-    d->rightSideBar->refreshTagsView();
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 void ImageWindow::slotThumbBarItemSelected(const KUrl& url)
@@ -571,7 +564,7 @@ void ImageWindow::slotThumbBarItemSelected(const KUrl& url)
 void ImageWindow::loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
                           const QString& caption, bool allowSaving)
 {
-    if (!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
         return;
 
     d->urlList          = urlList;
@@ -588,7 +581,7 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
     // imageInfoCurrent is contained in imageInfoList.
 
     // Very first thing is to check for changes, user may choose to cancel operation
-    if (!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
         return;
 
     // take over ImageInfo list
@@ -655,8 +648,6 @@ void ImageWindow::slotLoadCurrent()
     d->thumbBar->setSelected(d->thumbBar->findItemByUrl(d->urlCurrent));
     d->thumbBar->blockSignals(false);
 
-    d->rightSideBar->getFiltersHistoryTab()->slotUpdateImageInfo(d->imageInfoCurrent);
-    
     // Do this _after_ the canvas->load(), so that the main view histogram does not load
     // a smaller version if a raw image, and after that the DImgInterface loads the full version.
     // So first let DImgInterface create its loading task, only then any external objects.
@@ -670,7 +661,7 @@ void ImageWindow::setViewToURL(const KUrl& url)
 
 void ImageWindow::slotForward()
 {
-    if (!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
         return;
 
     int index = d->urlList.indexOf(d->urlCurrent);
@@ -690,7 +681,7 @@ void ImageWindow::slotForward()
 
 void ImageWindow::slotBackward()
 {
-    if (!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
         return;
 
     int index = d->urlList.indexOf(d->urlCurrent);
@@ -711,7 +702,7 @@ void ImageWindow::slotBackward()
 
 void ImageWindow::slotFirst()
 {
-    if (!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
         return;
 
     d->urlCurrent = d->urlList.first();
@@ -722,7 +713,7 @@ void ImageWindow::slotFirst()
 
 void ImageWindow::slotLast()
 {
-    if (!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
         return;
 
     d->urlCurrent = d->urlList.last();
@@ -804,8 +795,15 @@ void ImageWindow::slotChanged()
 
         if (!d->imageInfoCurrent.isNull())
         {
-            d->rightSideBar->itemChanged(d->imageInfoCurrent,
-                                         m_canvas->getSelectedArea(), img);
+            DImageHistory history     = m_canvas->interface()->getImageHistory();
+            DImageHistory redoHistory = m_canvas->interface()->getImageHistoryOfFullRedo();
+            kDebug() << "Current history:" << history.actionCount() << "full redo:" << redoHistory.actionCount();
+
+            d->rightSideBar->itemChanged(d->imageInfoCurrent, m_canvas->getSelectedArea(),
+                                         img, redoHistory);
+
+            // Filters for redo will be greyed out
+            d->rightSideBar->getFiltersHistoryTab()->setEnabledEntries(history.actionCount());
         }
         else
         {
@@ -962,6 +960,11 @@ bool ImageWindow::setupICC()
     return Setup::execSinglePage(this, Setup::ICCPage);
 }
 
+void ImageWindow::slotToMainWindow()
+{
+    close();
+}
+
 void ImageWindow::saveIsComplete()
 {
     // With save(), we do not reload the image but just continue using the data.
@@ -969,12 +972,9 @@ void ImageWindow::saveIsComplete()
     // subsequent editing operations.
 
     // put image in cache, the LoadingCacheInterface cares for the details
-    LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
+    LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
     d->thumbBar->refreshThumbs(KUrl::List() << d->urlCurrent);
-    ScanController::instance()->scanFileDirectly(m_savingContext->destinationURL.toLocalFile());
-
-    // notify main app that file changed
-    emit signalFileModified(m_savingContext->destinationURL);
+    ScanController::instance()->scanFileDirectly(m_savingContext.destinationURL.toLocalFile());
 
     // Pop-up a message to bring user when save is done.
     KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
@@ -991,109 +991,90 @@ void ImageWindow::saveIsComplete()
     setViewToURL(d->urlCurrent);
 }
 
+void ImageWindow::saveVersionIsComplete()
+{
+    kDebug() << "save version done";
+    saveAsIsComplete();
+}
+
 void ImageWindow::saveAsIsComplete()
 {
+    kDebug() << "Saved" << m_savingContext.srcURL << "to" << m_savingContext.destinationURL;
     // Nothing to be done if operating without database
     if (d->imageInfoCurrent.isNull())
         return;
 
-    // Get tags id for subversion and current marking
-    int subversionTagId = TagsCache::instance()->getOrCreateInternalTag("subversion");
-    int currentVersionTagId = TagsCache::instance()->getOrCreateInternalTag("current-version");
-
-    // Find the src and dest albums ------------------------------------------
-
-    KUrl srcDirURL(QDir::cleanPath(m_savingContext->srcURL.directory()));
-    PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
-
-    KUrl dstDirURL(QDir::cleanPath(m_savingContext->destinationURL.directory()));
-    PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
-
-    if (dstAlbum && srcAlbum)
+    if (CollectionManager::instance()->albumRootPath(m_savingContext.srcURL).isNull()
+        || CollectionManager::instance()->albumRootPath(m_savingContext.destinationURL).isNull())
     {
-        // Assign the versioning tag before we change the imageInfoCurrent into the new image
-        d->imageInfoCurrent.setTag(subversionTagId);
-        
-        // Now copy the metadata of the original file to the new file ------------
+        // not in-collection operation - nothing to do
+        return;
+    }
 
-        ScanController::instance()->scanFileDirectlyCopyAttributes(m_savingContext->destinationURL.toLocalFile(),
-                                                                   d->imageInfoCurrent.id());
-        ImageInfo newInfo(m_savingContext->destinationURL.toLocalFile());
+    // Now copy the metadata of the original file to the new file ------------
 
-        if ( !d->urlList.contains(m_savingContext->destinationURL) )
+    ScanController::instance()->scanFileDirectlyCopyAttributes(m_savingContext.destinationURL.toLocalFile(),
+                                                               d->imageInfoCurrent.id());
+    ImageInfo newInfo(m_savingContext.destinationURL.toLocalFile());
+
+    if (!d->urlList.contains(m_savingContext.destinationURL) )
+    {
+        // The image file did not exist in the list.
+        int index = d->urlList.indexOf(m_savingContext.srcURL);
+        d->urlList.insert(index, m_savingContext.destinationURL);
+        d->imageInfoCurrent = newInfo;
+        d->imageInfoList.insert(index, d->imageInfoCurrent);
+    }
+    else if (d->urlCurrent != m_savingContext.destinationURL)
+    {
+        for (int i=0; i<d->imageInfoList.count(); ++i)
         {
-            // The image file did not exist in the list.
-            int index = d->urlList.indexOf(m_savingContext->srcURL);
-            d->urlList.insert(index, m_savingContext->destinationURL);
-            d->imageInfoCurrent = newInfo;
-            d->imageInfoList.insert(index, d->imageInfoCurrent);
-        }
-        else if (d->urlCurrent != m_savingContext->destinationURL)
-        {
-            for (int i=0; i<d->imageInfoList.count(); ++i)
+            ImageInfo info = d->imageInfoList[i];
+            if (info.fileUrl() == m_savingContext.destinationURL)
             {
-                ImageInfo info = d->imageInfoList[i];
-                if (info.fileUrl() == m_savingContext->destinationURL)
-                {
-                    d->imageInfoCurrent = newInfo;
-                    // setAutoDelete is true
-                    d->imageInfoList.replace(i, d->imageInfoCurrent);
-                    break;
-                }
+                d->imageInfoCurrent = newInfo;
+                // setAutoDelete is true
+                d->imageInfoList.replace(i, d->imageInfoCurrent);
+                break;
             }
         }
-
-        d->urlCurrent = m_savingContext->destinationURL;
-        m_canvas->switchToLastSaved(m_savingContext->destinationURL.toLocalFile());
-
-        // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
-        // This may irritate users who want to check for quality loss in lossy formats.
-        // In any case, only do that if the format did not change - too many assumptions otherwise (see bug #138949).
-        if (m_savingContext->originalFormat == m_savingContext->format)
-            LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
-
-        // notify main app that file changed or a file is added
-        if (m_savingContext->destinationExisted)
-            emit signalFileModified(m_savingContext->destinationURL);
-        else
-            emit signalFileAdded(m_savingContext->destinationURL);
-
-        // all that is done in slotLoadCurrent, except for loading
-        int index = d->urlList.indexOf(d->urlCurrent);
-
-        if (index != -1)
-        {
-            setViewToURL(d->urlCurrent);
-            if (++index != d->urlList.count())
-                m_canvas->preload(d->urlList[index].toLocalFile());
-        }
-
-        // Add the file to the list of thumbbar images if it's not there already
-        ImagePreviewBarItem *foundItem = d->thumbBar->findItemByInfo(d->imageInfoCurrent);
-        d->thumbBar->reloadThumb(foundItem);
-
-        if (!foundItem)
-            foundItem = new ImagePreviewBarItem(d->thumbBar, d->imageInfoCurrent);
-
-        d->thumbBar->blockSignals(true);
-        d->thumbBar->setSelected(foundItem);
-        d->thumbBar->blockSignals(false);
-
-        slotUpdateItemInfo();
-
-        d->imageInfoCurrent.removeTagCurrentFromVersionBranch(currentVersionTagId);
-        d->imageInfoCurrent.setTag(subversionTagId);
-        d->imageInfoCurrent.setTag(currentVersionTagId);
-
-        // Pop-up a message to bring user when save is done.
-        KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
-                             this, windowTitle());
     }
-    else
+
+    d->urlCurrent = m_savingContext.destinationURL;
+    m_canvas->switchToLastSaved(m_savingContext.destinationURL.toLocalFile());
+
+    // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
+    // This may irritate users who want to check for quality loss in lossy formats.
+    // In any case, only do that if the format did not change - too many assumptions otherwise (see bug #138949).
+    if (m_savingContext.originalFormat == m_savingContext.format)
+        LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
+
+    // all that is done in slotLoadCurrent, except for loading
+    int index = d->urlList.indexOf(d->urlCurrent);
+
+    if (index != -1)
     {
-        //TODO: make the user aware that the new path has not been used as new current filename
-        //      because it is outside the digikam album hierarchy
+        setViewToURL(d->urlCurrent);
+        if (++index != d->urlList.count())
+            m_canvas->preload(d->urlList[index].toLocalFile());
     }
+
+    // Add the file to the list of thumbbar images if it's not there already
+    ImagePreviewBarItem *foundItem = d->thumbBar->findItemByInfo(d->imageInfoCurrent);
+    d->thumbBar->reloadThumb(foundItem);
+
+    if (!foundItem)
+        foundItem = new ImagePreviewBarItem(d->thumbBar, d->imageInfoCurrent);
+
+    d->thumbBar->blockSignals(true);
+    d->thumbBar->setSelected(foundItem);
+    d->thumbBar->blockSignals(false);
+
+    slotUpdateItemInfo();
+
+    // Pop-up a message to bring user when save is done.
+    KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
+                            this, windowTitle());
 }
 
 void ImageWindow::prepareImageToSave()
@@ -1116,6 +1097,11 @@ void ImageWindow::prepareImageToSave()
     }
 }
 
+VersionManager *ImageWindow::versionManager()
+{
+    return &d->versionManager;
+}
+
 bool ImageWindow::save()
 {
     prepareImageToSave();
@@ -1131,12 +1117,14 @@ bool ImageWindow::saveAs()
 
 bool ImageWindow::saveNewVersion()
 {
-    return ( startingSaveNewVersion(d->urlCurrent, false) );
+    prepareImageToSave();
+    return startingSaveNewVersion(d->urlCurrent);
 }
 
-bool ImageWindow::saveNewSubversion()
+bool ImageWindow::saveCurrentVersion()
 {
-    return ( startingSaveNewVersion(d->urlCurrent, true) );
+    prepareImageToSave();
+    return startingSaveCurrentVersion(d->urlCurrent);
 }
 
 KUrl ImageWindow::saveDestinationUrl()
@@ -1316,7 +1304,7 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
                     {
-                        promptUserSave(d->urlCurrent, AlwaysSaveAs, false);
+                        promptUserSave(d->urlCurrent, AlwaysNewVersion, false);
                         if (removeItem(i))
                             needLoadCurrent = true;
                     }
@@ -1333,7 +1321,7 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
                     {
-                        promptUserSave(d->urlCurrent, AlwaysSaveAs, false);
+                        promptUserSave(d->urlCurrent, AlwaysNewVersion, false);
                         if (removeItem(i))
                             needLoadCurrent = true;
                     }
@@ -1550,29 +1538,68 @@ void ImageWindow::dropEvent(QDropEvent *e)
 
 void ImageWindow::slotRevert()
 {
-    if (!promptUserSave(d->urlCurrent, NewVersion))
+    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
         return;
 
-    if(m_editingOriginalImage || (!m_editingOriginalImage && m_canvas->interface()->hasChangesToSave()) )
+    if (hasChangesToSave())
     {
         m_canvas->slotRestore();
     }
-    else if(!m_editingOriginalImage && !m_canvas->interface()->hasChangesToSave())
+}
+
+void ImageWindow::slotOpenOriginal()
+{
+    if (!hasOriginalToRestore())
+        return;
+
+    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
+        return;
+
+    // this time, with mustBeAvailable = true
+    DImageHistory availableResolved = ImageScanner::resolvedImageHistory(m_canvas->interface()->getImageHistory(), true);
+
+    QList<HistoryImageId> originals = availableResolved.referredImagesOfType(HistoryImageId::Original);
+    HistoryImageId originalId = m_canvas->interface()->getImageHistory().originalReferredImage();
+
+    if (originals.isEmpty())
     {
-        QList<qlonglong> originalsList = ImageScanner::resolveHistoryImageId(m_canvas->interface()->getImageHistory().originalReferredImage());
-        foreach (qlonglong imageId, originalsList)
-        {
-            ImageInfo info(imageId);
-            if(!info.isNull())
-            {
-                d->imageInfoCurrent = info;
-                d->urlCurrent = info.fileUrl();
-                slotLoadCurrent();
-                break;
-            }
-        }
-        kDebug() << "Current image id:" << d->imageInfoCurrent.id() << " | Resolved original id:" << d->imageInfoCurrent.id();
+        //TODO: point to remote collection
+        KMessageBox::sorry(this,
+                            i18nc("@info",
+                                    "The original file (<filename>%1</filename>) is currently not available",
+                                    originalId.m_fileName),
+                            i18nc("@title",
+                                    "File Not Available"));
+        return;
     }
+
+    QList<ImageInfo> imageInfos;
+    foreach (const HistoryImageId& id, originals)
+    {
+        KUrl url;
+        url.addPath(id.m_filePath);
+        url.addPath(id.m_fileName);
+        imageInfos << ImageInfo(url);
+    }
+    ImageScanner::sortByProximity(imageInfos, d->imageInfoCurrent);
+
+    if (!imageInfos.isEmpty() && !imageInfos.first().isNull())
+    {
+        d->imageInfoCurrent = imageInfos.first();
+        d->urlCurrent       = d->imageInfoCurrent.fileUrl();
+        slotLoadCurrent();
+    }
+}
+
+bool ImageWindow::hasOriginalToRestore()
+{
+    // not implemented for db-less situation, so check for ImageInfo
+    return !d->imageInfoCurrent.isNull() && EditorWindow::hasOriginalToRestore();
+}
+
+DImageHistory ImageWindow::resolvedImageHistory(const DImageHistory& history)
+{
+    return ImageScanner::resolvedImageHistory(history);
 }
 
 void ImageWindow::slotChangeTheme(const QString& theme)
@@ -1602,30 +1629,6 @@ void ImageWindow::slotComponentsInfo()
 void ImageWindow::slotDBStat()
 {
     showDigikamDatabaseStat();
-}
-
-void ImageWindow::slotSidebarTabTitleStyleChanged()
-{
-    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->applySettings();
-}
-
-void ImageWindow::slotUpdateFiltersHistorySidebar()
-{
-     d->rightSideBar->getFiltersHistoryTab()->setModelData(m_canvas->interface()->getImageHistory().entries());
-     d->rightSideBar->setFiltersHistoryDirty(true);
-}
-
-void ImageWindow::slotDisableEntriesInFiltersHistorySidebar(int count)
-{
-     d->rightSideBar->getFiltersHistoryTab()->disableEntries(count);
-     d->rightSideBar->setFiltersHistoryDirty(true);
-}
-
-void ImageWindow::slotEnableEntriesInFiltersHistorySidebar(int count)
-{
-    d->rightSideBar->getFiltersHistoryTab()->enableEntries(count);
-    d->rightSideBar->setFiltersHistoryDirty(true);
 }
 
 }  // namespace Digikam
