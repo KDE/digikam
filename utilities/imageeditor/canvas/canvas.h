@@ -124,9 +124,6 @@ public:
 
     void  setExifOrient(bool exifOrient);
 
-    void  getUndoHistory(QStringList& titles);
-    void  getRedoHistory(QStringList& titles);
-
     void  toggleFitToWindow();
     void  fitToSelect();
 

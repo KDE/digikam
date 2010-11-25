@@ -138,6 +138,7 @@ public:
 
     DImg                       image;
     DImageHistory              imageHistoryWhenLoaded;
+    DImageHistory              resolvedInitialHistory;
     UndoManager*               undoMan;
 
     ICCSettingsContainer*      cmSettings;
@@ -327,6 +328,7 @@ void DImgInterface::resetValues()
     d->contrast       = 1.0f;
     d->brightness     = 0.0f;
     d->imageHistoryWhenLoaded = DImageHistory();
+    d->resolvedInitialHistory = DImageHistory();
     d->undoMan->clear();
 }
 
@@ -373,19 +375,26 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
         d->height     = d->origHeight;
         valRet        = true;
         d->imageHistoryWhenLoaded = d->image.getImageHistory();
+        d->resolvedInitialHistory = d->image.getImageHistory();
+        d->resolvedInitialHistory.clearReferredImages(); // default empty, real values set by higher level
 
         // Raw files are already rotated properly by dcraw. Only perform auto-rotation with non-RAW files.
-        // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Well set transformed
-        // flag as well.
+        // We don't have a feedback from dcraw about auto-rotated RAW file during decoding.
+        // Setting rotatedOrFlipped to true will reset the exif flag on save (the data is then already rotated)
 
         if (d->image.detectedFormat() == DImg::RAW)
+        {
             d->rotatedOrFlipped = true;
+        }
         else if (d->exifOrient)
         {
             // Do not rotate twice if already rotated, e.g. for full size preview.
             QVariant attribute(d->image.attribute("exifRotated"));
             if (!attribute.isValid() || !attribute.toBool())
-                exifRotate(d->filename);
+            {
+                DMetadata metadata(d->image.getMetadata());
+                d->rotatedOrFlipped = d->image.rotateAndFlip(metadata.getImageOrientation());
+            }
         }
 
         updateColorManagement();
@@ -441,56 +450,6 @@ bool DImgInterface::exifRotated()
     return d->rotatedOrFlipped;
 }
 
-void DImgInterface::exifRotate(const QString& filename)
-{
-    // Rotate image based on EXIF rotate tag
-
-    DMetadata metadata(filename);
-    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-
-    if (orientation != DMetadata::ORIENTATION_NORMAL)
-    {
-        switch (orientation)
-        {
-            case DMetadata::ORIENTATION_NORMAL:
-            case DMetadata::ORIENTATION_UNSPECIFIED:
-                break;
-
-            case DMetadata::ORIENTATION_HFLIP:
-                flipHoriz(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_180:
-                rotate180(false);
-                break;
-
-            case DMetadata::ORIENTATION_VFLIP:
-                flipVert(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                rotate90(false);
-                flipHoriz(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90:
-                rotate90(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                rotate90(false);
-                flipVert(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_270:
-                rotate270(false);
-                break;
-        }
-
-        d->rotatedOrFlipped = true;
-    }
-}
-
 void DImgInterface::setExifOrient(bool exifOrient)
 {
     d->exifOrient = exifOrient;
@@ -517,6 +476,12 @@ void DImgInterface::redo()
     }
 
     d->undoMan->redo();
+    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+}
+
+void DImgInterface::rollbackToOrigin()
+{
+    d->undoMan->rollbackToOrigin();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
@@ -641,15 +606,6 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
 void DImgInterface::setModified()
 {
     emit signalModified();
-    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
-}
-
-void DImgInterface::setModified(const FilterAction& action)
-{
-    d->image.setFilterAction(action);
-    emit signalModified();
-    d->undoMan->setCurrentImageHistory(d->image.getImageHistory());
-    emit signalModifiedWithFilterAction();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
@@ -851,110 +807,66 @@ void DImgInterface::zoom(double val)
     d->height = (int)(d->origHeight * val);
 }
 
-void DImgInterface::rotate90(bool saveUndo)
+void DImgInterface::applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter)
 {
-    DImgBuiltinFilter filter(DImgBuiltinFilter::Rotate90);
+    applyBuiltinFilter(filter, new UndoActionReversible(this, filter));
+}
+
+void DImgInterface::applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction *action)
+{
+    d->undoMan->addAction(action);
+
     filter.apply(d->image);
+    d->image.addFilterAction(filter.filterAction());
+
+    // many operations change the image size
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R90));
-        setModified(filter.filterAction());
-    }
-    else
-        setModified();
+    setModified();
 }
 
-void DImgInterface::rotate180(bool saveUndo)
+void DImgInterface::rotate90()
 {
-    DImgBuiltinFilter filter(DImgBuiltinFilter::Rotate180);
-    filter.apply(d->image);
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
-
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R180));
-        setModified(filter.filterAction());
-    }
-    else
-        setModified();
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate90));
 }
 
-void DImgInterface::rotate270(bool saveUndo)
+void DImgInterface::rotate180()
 {
-    DImgBuiltinFilter filter(DImgBuiltinFilter::Rotate270);
-    filter.apply(d->image);
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
-
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R270));
-        setModified(filter.filterAction());
-    }
-    else setModified();
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate180));
 }
 
-void DImgInterface::flipHoriz(bool saveUndo)
+void DImgInterface::rotate270()
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Horizontal));
-    }
-
-    DImgBuiltinFilter filter(DImgBuiltinFilter::FlipHorizontally);
-    filter.apply(d->image);
-    setModified(filter.filterAction());
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate270));
 }
 
-void DImgInterface::flipVert(bool saveUndo)
+void DImgInterface::flipHoriz()
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Vertical));
-    }
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::FlipHorizontally));
+}
 
-    DImgBuiltinFilter filter(DImgBuiltinFilter::FlipVertically);
-    filter.apply(d->image);
-    setModified(filter.filterAction());
+void DImgInterface::flipVert()
+{
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::FlipVertically));
 }
 
 void DImgInterface::crop(int x, int y, int w, int h)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this, "Crop"));
-
-    DImgBuiltinFilter filter(DImgBuiltinFilter::Crop, QRect(x, y, w, h));
-    filter.apply(d->image);
-
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
-
-    setModified(filter.filterAction());
+    applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Crop, QRect(x, y, w, h)),
+                       new UndoActionIrreversible(this, "Crop"));
 }
 
 void DImgInterface::resize(int w, int h)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this, "Resize"));
-
-    DImgBuiltinFilter filter(DImgBuiltinFilter::Resize, QSize(w, h));
-    filter.apply(d->image);
-
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
-
-    setModified(filter.filterAction());
+    applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Resize, QSize(w, h)),
+                       new UndoActionIrreversible(this, "Resize"));
 }
 
 void DImgInterface::convertDepth(int depth)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this, "Convert Color Depth"));
-
-    DImgBuiltinFilter filter(depth == 32 ? DImgBuiltinFilter::ConvertTo8Bit : DImgBuiltinFilter::ConvertTo16Bit);
-    filter.apply(d->image);
-    setModified(filter.filterAction());
+    applyBuiltinFilter(DImgBuiltinFilter(depth == 32 ? DImgBuiltinFilter::ConvertTo8Bit : DImgBuiltinFilter::ConvertTo16Bit),
+                       new UndoActionIrreversible(this, "Convert Color Depth"));
 }
 
 DImg* DImgInterface::getImg()
@@ -988,19 +900,24 @@ DImageHistory DImgInterface::getImageHistory()
     return d->image.getImageHistory();
 }
 
-void DImgInterface::setImageHistoryToCurrent()
-{
-    d->image.setImageHistory(d->undoMan->getCurrentImageHistory());
-}
-
 DImageHistory DImgInterface::getInitialImageHistory()
 {
     return d->imageHistoryWhenLoaded;
 }
 
-void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h)
+DImageHistory DImgInterface::getImageHistoryOfFullRedo()
 {
-    putImage(caller, data, w, h, d->image.sixteenBit());
+    return d->undoMan->getImageHistoryOfFullRedo();
+}
+
+DImageHistory DImgInterface::getResolvedInitialHistory()
+{
+    return d->resolvedInitialHistory;
+}
+
+void DImgInterface::setResolvedInitialHistory(const DImageHistory& history)
+{
+    d->resolvedInitialHistory = history;
 }
 
 void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
@@ -1008,27 +925,15 @@ void DImgInterface::putImage(const QString& caller, const FilterAction& action, 
     putImage(caller, action, data, w, h, d->image.sixteenBit());
 }
 
-void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h, bool sixteenBit)
-{
-    putImage(caller, FilterAction(), data, w, h, sixteenBit);
-}
-
 void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit)
 {
-    //FilterAction needs to be set before UndoManager, otherwise UM will always
-    //be one step behind with DImageHistory
-    d->image.setFilterAction(action);
-
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
-    putImage(data, w, h, sixteenBit);
+    putImageData(data, w, h, sixteenBit);
+    d->image.addFilterAction(action);
+    setModified();
 }
 
-void DImgInterface::putImage(uchar* data, int w, int h)
-{
-    putImage(data, w, h, d->image.sixteenBit());
-}
-
-void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
+void DImgInterface::putImageData(uchar* data, int w, int h, bool sixteenBit)
 {
     if (d->image.isNull())
     {
@@ -1055,9 +960,48 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
         d->origHeight = h;
     }
 
-    //kDebug() << data << " " << w << " " << h;
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
+}
 
+void DImgInterface::setUndoImageData(const DImageHistory& history, uchar* data, int w, int h, bool sixteenBit)
+{
+    // called from UndoManager
+    putImageData(data, w, h, sixteenBit);
+    d->image.setImageHistory(history);
+}
+
+void DImgInterface::imageUndoChanged(const DImageHistory& history)
+{
+    // called from UndoManager
+    d->origWidth  = d->image.width();
+    d->origHeight = d->image.height();
+    d->image.setImageHistory(history);
+}
+
+uchar* DImgInterface::getImageSelection()
+{
+    if (!d->selW || !d->selH)
+        return 0;
+
+    if (!d->image.isNull())
+    {
+        DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
+        return im.stripImageData();
+    }
+
+    return 0;
+}
+
+void DImgInterface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
+{
+    if (!data || d->image.isNull())
+        return;
+
+    d->undoMan->addAction(new UndoActionIrreversible(this, caller));
+
+    d->image.bitBltImage(data, 0, 0, d->selW, d->selH, d->selX, d->selY, d->selW, d->selH, d->image.bytesDepth());
+
+    d->image.addFilterAction(action);
     setModified();
 }
 
@@ -1075,47 +1019,24 @@ void DImgInterface::putIccProfile(const IccProfile& profile)
     setModified();
 }
 
-uchar* DImgInterface::getImageSelection()
+QStringList DImgInterface::getUndoHistory() const
 {
-    if (!d->selW || !d->selH)
-        return 0;
-
-    if (!d->image.isNull())
-    {
-        DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
-        return im.stripImageData();
-    }
-
-    return 0;
+    return d->undoMan->getUndoHistory();
 }
 
-void DImgInterface::putImageSelection(const QString& caller, uchar* data)
+QStringList DImgInterface::getRedoHistory() const
 {
-    putImageSelection(caller, FilterAction(), data);
+    return d->undoMan->getRedoHistory();
 }
 
-void DImgInterface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
+int DImgInterface::availableUndoSteps() const
 {
-    if (!data || d->image.isNull())
-        return;
-
-    d->image.setFilterAction(action);
-
-    d->undoMan->addAction(new UndoActionIrreversible(this, caller));
-
-    d->image.bitBltImage(data, 0, 0, d->selW, d->selH, d->selX, d->selY, d->selW, d->selH, d->image.bytesDepth());
-
-    setModified();
+    return d->undoMan->availableUndoSteps();
 }
 
-void DImgInterface::getUndoHistory(QStringList& titles)
+int DImgInterface::availableRedoSteps() const
 {
-    d->undoMan->getUndoHistory(titles);
-}
-
-void DImgInterface::getRedoHistory(QStringList& titles)
-{
-    d->undoMan->getRedoHistory(titles);
+    return d->undoMan->availableRedoSteps();
 }
 
 IccProfile DImgInterface::getEmbeddedICC()

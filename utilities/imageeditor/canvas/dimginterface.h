@@ -48,6 +48,8 @@ class ExposureSettingsContainer;
 class IOFileSettingsContainer;
 class LoadingDescription;
 class DImgInterfacePrivate;
+class DImgBuiltinFilter;
+class UndoAction;
 
 class DIGIKAM_EXPORT DImgInterface : public QObject
 {
@@ -78,6 +80,7 @@ public:
     void   undo();
     void   redo();
     void   restore();
+    void   rollbackToOrigin();
 
     void   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
                   bool setExifOrientationTag, const QString& mimeType=QString());
@@ -86,7 +89,6 @@ public:
     void   switchToLastSaved(const QString& newFilename);
     void   abortSaving();
     void   setModified();
-    void   setModified(const FilterAction& action);
     void   readMetadataFromFile(const QString& file);
     void   clearUndoManager();
     void   setUndoManagerOrigin();
@@ -121,12 +123,12 @@ public:
     void   setSelectedArea(int x, int y, int w, int h);
     void   getSelectedArea(int& x, int& y, int& w, int& h);
 
-    void   rotate90(bool saveUndo=true);
-    void   rotate180(bool saveUndo=true);
-    void   rotate270(bool saveUndo=true);
+    void   rotate90();
+    void   rotate180();
+    void   rotate270();
 
-    void   flipHoriz(bool saveUndo=true);
-    void   flipVert(bool saveUndo=true);
+    void   flipHoriz();
+    void   flipVert();
 
     void   crop(int x, int y, int w, int h);
 
@@ -134,25 +136,25 @@ public:
 
     void   convertDepth(int depth);
 
-    void   getUndoHistory(QStringList& titles);
-    void   getRedoHistory(QStringList& titles);
+    QStringList getUndoHistory() const;
+    QStringList getRedoHistory() const;
+    int    availableUndoSteps() const;
+    int    availableRedoSteps() const;
 
     DImg*  getImg();
     uchar* getImage();
 
-    void   putImage(uchar* data, int w, int h);
-    void   putImage(uchar* data, int w, int h, bool sixteenBit);
-    void   putImage(const QString& caller, uchar* data, int w, int h);
-    //TODO: remove the variants not passing a FilterAction, once fully implemented
     void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h);
-    void   putImage(const QString& caller, uchar* data, int w, int h, bool sixteenBit);
     void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit);
 
     uchar* getImageSelection();
-    void   putImageSelection(const QString& caller, uchar* data);
     void   putImageSelection(const QString& caller, const FilterAction& action, uchar* data);
 
     void   putIccProfile(const IccProfile& profile);
+
+    /// For internal usage by UndoManager
+    void   setUndoImageData(const DImageHistory& history, uchar* data, int w, int h, bool sixteenBit);
+    void   imageUndoChanged(const DImageHistory& history);
 
     /** Convert a DImg image to a pixmap for screen using color
         managed view if necessary */
@@ -162,9 +164,9 @@ public:
     KExiv2Data            getMetadata();
     DImageHistory         getImageHistory();
     DImageHistory         getInitialImageHistory();
-    /** This takes ImageHistory from UndoManager's current history point
-        and sets it as current image's ImageHistory */
-    void                  setImageHistoryToCurrent();
+    DImageHistory         getImageHistoryOfFullRedo();
+    DImageHistory         getResolvedInitialHistory();
+    void                  setResolvedInitialHistory(const DImageHistory& history);
 
     QString               getImageFileName();
     QString               getImageFilePath();
@@ -180,7 +182,6 @@ protected Q_SLOTS:
 Q_SIGNALS:
 
     void   signalModified();
-    void   signalModifiedWithFilterAction();
     void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
 
     void   signalLoadingStarted(const QString& filename);
@@ -196,9 +197,12 @@ private Q_SLOTS:
 
 private:
 
+    void   putImageData(uchar* data, int w, int h, bool sixteenBit);
+    void   applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction *action);
+    void   applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
+
     void   load(const LoadingDescription& description);
     void   loadCurrent();
-    void   exifRotate(const QString& filename);
     void   resetValues();
 
 private:
