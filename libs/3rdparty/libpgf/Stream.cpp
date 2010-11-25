@@ -81,7 +81,7 @@ CPGFMemoryStream::CPGFMemoryStream(size_t size) THROW_ : m_size(size), m_allocat
 }
 
 //////////////////////////////////////////////////////////////////////
-/// Use alreay allocated memory of given size
+/// Use already allocated memory of given size
 /// @param pBuffer Memory location
 /// @param size Memory size
 CPGFMemoryStream::CPGFMemoryStream(UINT8 *pBuffer, size_t size) THROW_ : m_buffer(pBuffer), m_pos(pBuffer), m_size(size), m_allocated(false) {
@@ -101,8 +101,14 @@ void CPGFMemoryStream::Write(int *count, void *buffPtr) THROW_ {
 	} else if (m_allocated) {
 		// memory block is too small -> reallocate a deltaSize larger block
 		size_t offset = m_pos - m_buffer;
-		m_buffer = (UINT8 *)realloc(m_buffer, m_size + deltaSize);
-		if (!m_buffer) ReturnWithError(InsufficientMemory);
+		UINT8 *buf_tmp = (UINT8 *)realloc(m_buffer, m_size + deltaSize);
+		if (!buf_tmp) {
+		    delete[] m_buffer;
+		    m_buffer = 0;
+		    ReturnWithError(InsufficientMemory);
+		} else {
+		    m_buffer = buf_tmp;
+		}
 		m_size += deltaSize;
 
 		// reposition m_pos
