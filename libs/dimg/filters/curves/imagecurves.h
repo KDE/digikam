@@ -125,7 +125,17 @@ public:
     QPolygon getCurvePoints(int channel) const;
     QPolygon getCurveValues(int channel) const;
 
+    /**
+     * Returns a container with the settings for all channels of this Curves object
+     */
     CurvesContainer getContainer() const;
+
+    /**
+     * Returns a container containing the values of this Curves
+     * object for the given channel, and linear values for all
+     * other channels.
+     */
+    CurvesContainer getContainer(int channel) const;
 
     /**
      * Returns true if the curve is linear for the given channel.

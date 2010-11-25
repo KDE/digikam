@@ -98,7 +98,7 @@ void BWSepiaFilter::filterImage()
     }
     else
     {
-        m_destImage.putImageData(m_orgImage.bits());
+        m_destImage = m_orgImage;
         postProgress(10);
 
         // Apply black and white filter.

@@ -817,6 +817,23 @@ CurvesContainer ImageCurves::getContainer() const
     return c;
 }
 
+CurvesContainer ImageCurves::getContainer(int channel) const
+{
+    CurveType type = getCurveType(channel);
+    CurvesContainer c(type, isSixteenBits());
+
+    if (type == CURVE_FREE)
+    {
+        c.values[channel] = getCurveValues(channel);
+    }
+    else
+    {
+        c.values[channel] = getCurvePoints(channel);
+    }
+
+    return c;
+}
+
 void ImageCurves::setCurves(const CurvesContainer& container)
 {
     if (container.curvesType == CURVE_FREE)
