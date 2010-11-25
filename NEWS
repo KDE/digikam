@@ -18,7 +18,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 256050 : digiKam crashed after modifying tag name.
 011 ==> 250134 : digiKam crashed during search for duplicates.
 012 ==> 243988 : digiKam crashes trying to save plugin changes.
-013 ==> 
+013 ==> 257744 : digiKam crash on importing large collection.
+014 ==> 
+
 
 
 
