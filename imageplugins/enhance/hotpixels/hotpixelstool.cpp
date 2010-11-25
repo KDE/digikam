@@ -53,6 +53,7 @@
 #include "blackframelistview.h"
 #include "daboutdata.h"
 #include "dimg.h"
+#include "dimgfiltermanager.h"
 #include "editortooliface.h"
 #include "editortoolsettings.h"
 #include "hotpixelfixer.h"
@@ -101,6 +102,11 @@ const QString HotPixelsTool::HotPixelsToolPriv::configLastBlackFrameFileEntry("L
 const QString HotPixelsTool::HotPixelsToolPriv::configFilterMethodEntry("Filter Method");
 
 // --------------------------------------------------------
+
+void HotPixelsTool::registerFilter()
+{
+    Digikam::DImgFilterManager::instance()->addGenerator(new Digikam::BasicDImgFilterGenerator<HotPixelFixer>());
+}
 
 HotPixelsTool::HotPixelsTool(QObject* parent)
              : EditorToolThreaded(parent),
