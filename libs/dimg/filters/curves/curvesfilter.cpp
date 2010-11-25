@@ -78,7 +78,7 @@ void CurvesFilter::filterImage()
 
 bool CurvesFilter::isStoredLosslessly(const CurvesContainer& settings)
 {
-    return !settings.sixteenBit || !settings.curvesType == ImageCurves::CURVE_FREE;
+    return !(settings.sixteenBit && settings.curvesType == ImageCurves::CURVE_FREE);
 }
 
 void CurvesFilter::addCurvesParameters(FilterAction& action, const CurvesContainer& settings)
@@ -113,7 +113,7 @@ CurvesContainer CurvesFilter::readCurvesParameters(const FilterAction& action)
 FilterAction CurvesFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion(),
-                        isStoredLosslessly(m_settings) ? FilterAction::ComplexFilter : FilterAction::ReproducibleFilter);
+                        isStoredLosslessly(m_settings) ? FilterAction::ReproducibleFilter : FilterAction::ComplexFilter);
     action.setDisplayableName(DisplayableName());
 
     addCurvesParameters(action, m_settings);
