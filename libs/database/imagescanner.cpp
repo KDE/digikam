@@ -52,19 +52,19 @@ namespace Digikam
 {
 
 ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
-            : m_hasImage(false), m_hasMetadata(false), m_historyResolved(true),
-              m_fileInfo(info), m_scanInfo(scanInfo), m_scanMode(ModifiedScan)
+            : m_hasImage(false), m_hasMetadata(false),
+              m_fileInfo(info), m_scanInfo(scanInfo), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
 {
 }
 
 ImageScanner::ImageScanner(const QFileInfo& info)
-            : m_hasImage(false), m_hasMetadata(false), m_historyResolved(true),
-              m_fileInfo(info), m_scanMode(ModifiedScan)
+            : m_hasImage(false), m_hasMetadata(false),
+              m_fileInfo(info), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
 {
 }
 
 ImageScanner::ImageScanner(qlonglong imageid)
-            : m_hasImage(false), m_hasMetadata(false), m_historyResolved(true),  m_scanMode(ModifiedScan)
+            : m_hasImage(false), m_hasMetadata(false), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
 {
     ItemShortInfo shortInfo;
     {
@@ -128,6 +128,11 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
         if (!scanFromIdenticalFile())
             // scan newly
             scanFile(NewScan);
+}
+
+bool ImageScanner::hasHistoryToResolve() const
+{
+    return m_hasHistoryToResolve;
 }
 
 bool lessThanForIdentity(const ItemScanInfo &a, const ItemScanInfo &b)
@@ -230,6 +235,7 @@ void ImageScanner::scanFile(ScanMode mode)
         if (m_scanInfo.category == DatabaseItem::Image)
         {
             scanImageInformation();
+            scanImageHistoryIfModified();
         }
     }
     else
@@ -484,51 +490,180 @@ void ImageScanner::scanTags()
 
 void ImageScanner::scanImageHistory()
 {
+    /** Stage 1 of history scanning */
+
     QString historyXml = m_metadata.getImageHistory();
     if (!historyXml.isEmpty())
     {
         DatabaseAccess().db()->setImageHistory(m_scanInfo.id, historyXml);
+        // Delay history resolution by setting this tag:
+        // Resolution depends on the presence of other images, possibly only when the scanning process has finished
+        DatabaseAccess().db()->addItemTag(m_scanInfo.id, TagsCache::instance()->
+                                            getOrCreateInternalTag(InternalTagName::needResolvingHistory()));
+        m_hasHistoryToResolve = true;
     }
 
     QString uuid = m_metadata.getImageUniqueId();
     if (!uuid.isNull())
         DatabaseAccess().db()->setImageUuid(m_scanInfo.id, uuid);
-
-    m_historyResolved = resolveImageHistory(m_scanInfo.id, historyXml);
-    //TODO if resolution of history references is incomplete,
-    //        think how to repeat this step later on
-    //          a) mark the image in the database as unresolved history
-    //          b) just communicate this to the CollectionScanner, who will do it again when the directory is finished
 }
 
-bool ImageScanner::historyIsCompletelyResolved() const
+void ImageScanner::scanImageHistoryIfModified()
 {
-    return m_historyResolved;
+    // If a file has a modified history, it must have a new UUID
+    QString previousUuid = DatabaseAccess().db()->getImageUuid(m_scanInfo.id);
+    QString currentUuid  = m_metadata.getImageUniqueId();
+
+    if (previousUuid != currentUuid)
+    {
+        scanImageHistory();
+    }
 }
 
-bool ImageScanner::resolveImageHistory(qlonglong id)
+bool ImageScanner::resolveImageHistory(qlonglong id, QList<qlonglong> *needTaggingIds)
 {
     ImageHistoryEntry history = DatabaseAccess().db()->getImageHistory(id);
-    return resolveImageHistory(id, history.history);
+    return resolveImageHistory(id, history.history, needTaggingIds);
 }
 
-bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& historyXml)
+bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& historyXml, QList<qlonglong> *needTaggingIds)
 {
+    /** Stage 2 of history scanning */
+
     if (historyXml.isNull())
         return true; // "true" means nothing is left to resolve
 
     DImageHistory history = DImageHistory::fromXml(historyXml);
 
+    if (history.isNull())
+        return true;
+
     ImageHistoryGraph graph;
     graph.addScannedHistory(history, imageId);
 
-    typedef QPair<qlonglong, qlonglong> IdPair;
-    foreach (const IdPair& pair, graph.relationCloud())
+    if (!graph.hasEdges())
+        return true;
+
+    QPair<QList<qlonglong>, QList<qlonglong> > cloud = graph.relationCloudParallel();
+    DatabaseAccess().db()->addImageRelations(cloud.first, cloud.second, DatabaseRelation::DerivedFrom);
+
+    int needResolvingTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needResolvingHistory());
+    int needTaggingTag   = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
+
+    // remove the needResolvingHistory tag from all images in graph
+    DatabaseAccess().db()->removeTagsFromItems(graph.allImageIds(), QList<int>() << needResolvingTag);
+
+    // mark a single image from the graph (sufficient for find the full relation cloud)
+    QList<ImageInfo> roots = graph.rootImages();
+    if (!roots.isEmpty())
     {
-        DatabaseAccess().db()->addImageRelation(pair.first, pair.second, DatabaseRelation::DerivedFrom);
+        DatabaseAccess().db()->addItemTag(roots.first().id(), needTaggingTag);
+        if (needTaggingIds)
+            *needTaggingIds << roots.first().id();
     }
 
     return !graph.hasUnresolvedEntries();
+}
+
+void ImageScanner::tagImageHistoryGraph(qlonglong id)
+{
+    /** Stage 3 of history scanning */
+
+    ImageInfo info(id);
+    kDebug() << "tagImageHistoryGraph" << id;
+
+    if (info.isNull())
+        return;
+
+    // Load relation cloud, history of info and of all leaves of the tree into the graph, fully resolved
+    ImageHistoryGraph graph = ImageHistoryGraph::fromInfo(info, ImageHistoryGraph::LoadAll, ImageHistoryGraph::NoProcessing);
+    kDebug() << graph;
+
+    int originalVersionTag     = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
+    int currentVersionTag      = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::currentVersion());
+    int intermediateVersionTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::intermediateVersion());
+
+    int needTaggingTag         = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
+
+    // Remove all relevant tags
+    DatabaseAccess().db()->removeTagsFromItems(graph.allImageIds(), QList<int>() << originalVersionTag
+                                                    << currentVersionTag << intermediateVersionTag << needTaggingTag);
+
+    if (!graph.hasEdges())
+        return;
+
+    // get category info
+    QList<qlonglong> originals, intermediates, currents;
+    QHash<ImageInfo, HistoryImageId::Type> types = graph.categorize();
+    QHash<ImageInfo, HistoryImageId::Type>::iterator it;
+    for (it = types.begin(); it != types.end(); ++it)
+    {
+        kDebug() << "Image" << it.key().id() << "type" << it.value();
+        switch (it.value())
+        {
+            case HistoryImageId::Original:
+                originals << it.key().id();
+                break;
+            case HistoryImageId::Intermediate:
+                intermediates << it.key().id();
+                break;
+            case HistoryImageId::Current:
+                currents << it.key().id();
+                break;
+            case HistoryImageId::Source:
+            case HistoryImageId::InvalidType:
+                break;
+        }
+    }
+
+    if (!originals.isEmpty())
+        DatabaseAccess().db()->addTagsToItems(originals, QList<int>() << originalVersionTag);
+    if (!intermediates.isEmpty())
+        DatabaseAccess().db()->addTagsToItems(intermediates, QList<int>() << intermediateVersionTag);
+    if (!currents.isEmpty())
+        DatabaseAccess().db()->addTagsToItems(currents, QList<int>() << currentVersionTag);
+}
+
+DImageHistory ImageScanner::resolvedImageHistory(const DImageHistory& history, bool mustBeAvailable)
+{
+    DImageHistory h;
+    foreach (const DImageHistory::Entry &e, history.entries())
+    {
+        // Copy entry, without referredImages
+        DImageHistory::Entry entry;
+        entry.action = e.action;
+
+        // resolve referredImages
+        foreach (const HistoryImageId& id, e.referredImages)
+        {
+            QList<qlonglong> imageIds = resolveHistoryImageId(id);
+
+            // append each image found in collection to referredImages
+            foreach (qlonglong imageId, imageIds)
+            {
+                ImageInfo info(imageId);
+
+                if(info.isNull())
+                    continue;
+
+                if (mustBeAvailable)
+                {
+                    CollectionLocation location = CollectionManager::instance()->locationForAlbumRootId(info.albumRootId());
+                    if (!location.isAvailable())
+                        continue;
+                }
+
+                HistoryImageId newId = info.historyImageId();
+                newId.setType(id.m_type);
+                entry.referredImages << newId;
+            }
+        }
+
+        // add to history
+        h.entries() << entry;
+    }
+
+    return h;
 }
 
 bool ImageScanner::sameReferredImage(const HistoryImageId& id1, const HistoryImageId& id2)
@@ -543,26 +678,26 @@ bool ImageScanner::sameReferredImage(const HistoryImageId& id1, const HistoryIma
      * For two images a,b with uuids x,y, where x and y not null,
      *  a (same image as) b   <=>   x == y
      */
-    if (!id1.m_uuid.isNull() && !id2.m_uuid.isNull())
+    if (id1.hasUuid() && id2.hasUuid())
     {
         return id1.m_uuid == id2.m_uuid;
     }
 
-    if (!id1.m_uniqueHash.isNull() && id1.m_fileSize
+    if (id1.hasUniqueHashIdentifier()
         && id1.m_uniqueHash == id2.m_uniqueHash
         && id1.m_fileSize == id2.m_fileSize)
     {
         return true;
     }
 
-    if (!id1.m_fileName.isNull() && !id1.m_creationDate.isNull()
+    if (id1.hasFileName() && id1.hasCreationDate()
         && id1.m_fileName == id2.m_fileName
         && id1.m_creationDate == id2.m_creationDate)
     {
         return true;
     }
 
-    if (!id1.m_filePath.isNull() && !id1.m_fileName.isNull()
+    if (id1.hasFileOnDisk()
         && id1.m_filePath == id2.m_filePath
         && id1.m_fileName == id2.m_fileName)
     {
@@ -575,7 +710,7 @@ bool ImageScanner::sameReferredImage(const HistoryImageId& id1, const HistoryIma
 QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& historyId)
 {
     // first and foremost: UUID
-    if (!historyId.m_uuid.isNull())
+    if (historyId.hasUuid())
     {
         QList<qlonglong> uuidList = DatabaseAccess().db()->getItemsForUuid(historyId.m_uuid);
         if (!uuidList.isEmpty())
@@ -585,7 +720,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     }
 
     // Second: uniqueHash + fileSize. Sufficient to assume that a file is identical, but subject to frequent change.
-    if (!historyId.m_uniqueHash.isNull() && historyId.m_fileSize)
+    if (historyId.hasUniqueHashIdentifier())
     {
         QList<ItemScanInfo> infos = DatabaseAccess().db()->getIdenticalFiles(historyId.m_uniqueHash, historyId.m_fileSize);
         if (!infos.isEmpty())
@@ -604,7 +739,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 
     // As a third combination, we try file name and creation date. Susceptible to renaming,
     // but not to metadata changes.
-    if (!historyId.m_fileName.isNull() && !historyId.m_creationDate.isNull())
+    if (historyId.hasFileName() && historyId.hasCreationDate())
     {
         QList<qlonglong> ids = DatabaseAccess().db()->findByNameAndCreationDate(historyId.m_fileName, historyId.m_creationDate);
         if (!ids.isEmpty())
@@ -615,12 +750,12 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     // and make an assumption from this group of images. Currently not implemented.
 
     // resolve old-style by full file path
-    if (!historyId.m_filePath.isNull())
+    if (historyId.hasFileOnDisk())
     {
-        QFileInfo file(historyId.m_filePath);
+        QFileInfo file(historyId.filePath());
         if (file.exists())
         {
-            CollectionLocation location = CollectionManager::instance()->locationForPath(historyId.m_filePath);
+            CollectionLocation location = CollectionManager::instance()->locationForPath(historyId.path());
             if (!location.isNull())
             {
                 QString album = CollectionManager::instance()->album(file.path());
@@ -633,6 +768,65 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     }
 
     return QList<qlonglong>();
+}
+
+class lessThanByProximityToSubject
+{
+public:
+
+    lessThanByProximityToSubject(const ImageInfo& subject) : subject(subject) {}
+
+    bool operator()(const ImageInfo&a, const ImageInfo& b)
+    {
+        if (a.isNull() || b.isNull())
+        {
+            // both null: false
+            // only a null: a greater than b (null infos at end of list)
+            //  (a && b) || (a && !b) = a
+            // only b null: a less than b
+            if (a.isNull())
+                return false;
+            return true;
+        }
+
+        if (a == b)
+            return false;
+        // same collection
+        if (a.albumId() != b.albumId())
+        {
+            // same album
+            if (a.albumId() == subject.albumId())
+                return true;
+            if (b.albumId() == subject.albumId())
+                return false;
+
+            if (a.albumRootId() != b.albumRootId())
+            {
+                // different collection
+                if (a.albumRootId() == subject.albumRootId())
+                    return true;
+                if (b.albumRootId() == subject.albumRootId())
+                    return false;
+            }
+        }
+
+        if (a.modDateTime() != b.modDateTime())
+            return a.modDateTime() < b.modDateTime();
+        if (a.name() != b.name())
+            return qAbs(a.name().compare(subject.name())) < qAbs(b.name().compare(subject.name()));
+        // last resort
+        return a.id() < b.id();
+    }
+
+public:
+
+    ImageInfo subject;
+};
+
+void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subject)
+{
+    if (!list.isEmpty() && !subject.isNull())
+        qStableSort(list.begin(), list.end(), lessThanByProximityToSubject(subject));
 }
 
 void ImageScanner::scanVideoFile()

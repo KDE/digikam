@@ -52,14 +52,15 @@
 #include "albumdb.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
+#include "collectionscannerhints.h"
+#include "collectionscannerobserver.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "databasetransaction.h"
 #include "databaseoperationgroup.h"
 #include "imageinfo.h"
 #include "imagescanner.h"
-#include "collectionscannerhints.h"
-#include "collectionscannerobserver.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -95,6 +96,7 @@ public:
     CollectionScannerPriv() :
         wantSignals(false),
         needTotalFiles(false),
+        recordHistoryIds(false),
         observer(0)
     {
     }
@@ -117,6 +119,10 @@ public:
     QSet<int>         modifiedItemHints;
     QSet<int>         rescanItemHints;
 
+    bool              recordHistoryIds;
+    QSet<qlonglong>   needResolveHistorySet;
+    QSet<qlonglong>   needTaggingHistorySet;
+
     CollectionScannerObserver* observer;
 
     void resetRemovedItemsTime() { removedItemsTime = QDateTime(); }
@@ -130,6 +136,8 @@ public:
         }
         return true;
     }
+
+    void finishScanner(const ImageScanner& scanner);
 };
 
 CollectionScanner::CollectionScanner()
@@ -226,7 +234,8 @@ void CollectionScanner::completeScan()
     // lock database
     DatabaseTransaction transaction;
 
-    loadNameFilters();
+    mainEntryPoint(true);
+
     d->resetRemovedItemsTime();
 
     //TODO: Implement a mechanism to watch for album root changes while we keep this list
@@ -280,6 +289,8 @@ void CollectionScanner::completeScan()
         emit cancelled();
         return;
     }
+
+    completeHistoryScanning();
 
     updateRemovedItemsTime();
     // Items may be set to status removed, without being definitely deleted.
@@ -336,7 +347,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     }
     */
 
-    loadNameFilters();
+    mainEntryPoint(false);
     d->resetRemovedItemsTime();
 
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
@@ -372,6 +383,8 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
         scanAlbum(location, album);
     }
 
+    finishHistoryScanning();
+
     if (!d->checkObserver())
     {
         emit cancelled();
@@ -404,16 +417,6 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
         return -1;
     }
 
-    /*
-    if (DatabaseAccess().backend()->isInTransaction())
-    {
-        // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
-        kError() << "Detected an active database transaction when starting a collection file scan. "
-                         "Please report this error.";
-        return -1;
-    }
-    */
-
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
 
     if (location.isNull())
@@ -434,7 +437,24 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
     int albumId       = checkAlbum(location, album);
     qlonglong imageId = DatabaseAccess().db()->getImageId(albumId, fileName);
 
-    loadNameFilters();
+    scanFile(fi, albumId, imageId, mode);
+    return imageId;
+}
+
+void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
+{
+    if (info.isNull())
+    {
+        return;
+    }
+
+    QFileInfo fi(info.filePath());
+    scanFile(fi, info.albumId(), info.id(), mode);
+}
+
+void CollectionScanner::scanFile(const QFileInfo& fi, int albumId, qlonglong imageId, FileScanMode mode)
+{
+    mainEntryPoint(false);
 
     if (imageId == -1)
     {
@@ -466,43 +486,13 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
         }
     }
 
-    return imageId;
+    finishHistoryScanning();
 }
 
-void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
+void CollectionScanner::mainEntryPoint(bool complete)
 {
-    if (info.isNull())
-    {
-        return;
-    }
-
-    /*
-    if (DatabaseAccess().backend()->isInTransaction())
-    {
-        // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
-        kError() << "Detected an active database transaction when starting a collection file scan. "
-                         "Please report this error.";
-        return;
-    }
-    */
-
     loadNameFilters();
-
-    QFileInfo fi(info.filePath());
-    ItemScanInfo scanInfo = DatabaseAccess().db()->getItemScanInfo(info.id());
-
-    switch (mode)
-    {
-        case NormalScan:
-            scanFileNormal(fi, scanInfo);
-            break;
-        case ModifiedScan:
-            scanModifiedFile(fi, scanInfo);
-            break;
-        case Rescan:
-            rescanFile(fi, scanInfo);
-            break;
-    }
+    d->recordHistoryIds = !complete;
 }
 
 void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
@@ -614,9 +604,10 @@ void CollectionScanner::safelyRemoveAlbums(const QList<int>& albumIds)
     DatabaseTransaction transaction(&access);
     foreach (int albumId, albumIds)
     {
-        access.db()->removeItemsFromAlbum(albumId);
+        QList<qlonglong> ids = access.db()->getItemIDsInAlbum(albumId);
+        access.db()->removeItemsFromAlbum(albumId, ids);
         access.db()->makeStaleAlbum(albumId);
-        d->removedItems();
+        itemsWereRemoved(ids);
     }
 }
 
@@ -758,8 +749,10 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     // Mark items in the db which we did not see on disk.
     if (!itemIdSet.isEmpty())
     {
-        DatabaseAccess().db()->removeItems(itemIdSet.toList(), QList<int>() << albumID);
-        d->removedItems();
+        QList<qlonglong> ids = itemIdSet.toList();
+        DatabaseOperationGroup group;
+        DatabaseAccess().db()->removeItems(ids, QList<int>() << albumID);
+        itemsWereRemoved(ids);
     }
 
     // mark album as scanned
@@ -806,6 +799,12 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     }
 }
 
+void CollectionScannerPriv::finishScanner(const ImageScanner& scanner)
+{
+    if (recordHistoryIds && scanner.hasHistoryToResolve())
+        needResolveHistorySet << scanner.id();
+}
+
 qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
 {
     DatabaseOperationGroup group;
@@ -839,6 +838,7 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
         }
     }
 
+    d->finishScanner(scanner);
     return scanner.id();
 }
 
@@ -848,6 +848,7 @@ qlonglong CollectionScanner::scanNewFileFullScan(const QFileInfo& info, int albu
     ImageScanner scanner(info);
     scanner.setCategory(category(info));
     scanner.newFileFullScan(albumId);
+    d->finishScanner(scanner);
     return scanner.id();
 }
 
@@ -857,6 +858,7 @@ void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanIn
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.fileModified();
+    d->finishScanner(scanner);
 }
 
 void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo)
@@ -865,6 +867,7 @@ void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& sc
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.rescan();
+    d->finishScanner(scanner);
 }
 
 void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageInfo& dest)
@@ -875,6 +878,100 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     }
     DatabaseOperationGroup group;
     ImageScanner::copyProperties(source.id(), dest.id());
+}
+
+void CollectionScanner::itemsWereRemoved(const QList<qlonglong> &removedIds)
+{
+    // set time stamp
+    d->removedItems();
+
+    // manage relations
+    QList<qlonglong> relatedImages = DatabaseAccess().db()->getOneRelatedImageEach(removedIds, DatabaseRelation::DerivedFrom);
+    kDebug() << "Removed items:" << removedIds << "related items:" << relatedImages;
+
+    if (d->recordHistoryIds)
+    {
+        foreach (qlonglong id, relatedImages)
+        {
+            d->needTaggingHistorySet << id;
+        }
+    }
+    else
+    {
+        int needTaggingTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
+        DatabaseAccess().db()->addTagsToItems(relatedImages, QList<int>() << needTaggingTag);
+    }
+}
+
+void CollectionScanner::completeHistoryScanning()
+{
+    // scan tagged images
+
+    int needResolvingTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needResolvingHistory());
+    int needTaggingTag   = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
+
+    QList<qlonglong> ids = DatabaseAccess().db()->getItemIDsInTag(needResolvingTag);
+    historyScanningStage2(ids);
+
+    ids = DatabaseAccess().db()->getItemIDsInTag(needTaggingTag);
+    kDebug() << "items to tag" << ids;
+    historyScanningStage3(ids);
+}
+
+void CollectionScanner::finishHistoryScanning()
+{
+    // scan recorded ids
+
+    QList<qlonglong> ids;
+
+    // stage 2
+    ids = d->needResolveHistorySet.toList();
+    d->needResolveHistorySet.clear();
+    historyScanningStage2(ids);
+
+    if (!d->checkObserver())
+        return;
+
+    // stage 3
+    ids = d->needTaggingHistorySet.toList();
+    d->needTaggingHistorySet.clear();
+    historyScanningStage3(ids);
+}
+
+void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
+{
+    foreach (qlonglong id, ids)
+    {
+        if (!d->checkObserver())
+            return;
+
+        DatabaseOperationGroup group;
+        if (d->recordHistoryIds)
+        {
+            QList<qlonglong> needTaggingIds;
+            ImageScanner::resolveImageHistory(id, &needTaggingIds);
+            foreach (qlonglong needTag, needTaggingIds)
+            {
+                d->needTaggingHistorySet << needTag;
+            }
+        }
+        else
+        {
+            ImageScanner::resolveImageHistory(id);
+        }
+    }
+}
+
+void CollectionScanner::historyScanningStage3(const QList<qlonglong>& ids)
+{
+    foreach (qlonglong id, ids)
+    {
+        if (!d->checkObserver())
+            return;
+
+        DatabaseOperationGroup group;
+        ImageScanner::tagImageHistoryGraph(id);
+    }
 }
 
 int CollectionScanner::countItemsInFolder(const QString& directory)

@@ -28,6 +28,35 @@
 namespace Digikam
 {
 
+QLatin1String InternalTagName::scannedForFaces()
+{
+    return QLatin1String("Scanned for Faces");
+}
+
+QLatin1String InternalTagName::needResolvingHistory()
+{
+    return QLatin1String("Need Resolving History");
+}
+
+QLatin1String InternalTagName::needTaggingHistoryGraph()
+{
+    return QLatin1String("Need Tagging History Graph");
+}
+
+QLatin1String InternalTagName::originalVersion()
+{
+    return QLatin1String("Original Version");
+}
+
+QLatin1String InternalTagName::currentVersion()
+{
+    return QLatin1String("Current Version");
+}
+
+QLatin1String InternalTagName::intermediateVersion()
+{
+    return QLatin1String("Intermediate Version");
+}
 
 QLatin1String TagPropertyName::person()
 {

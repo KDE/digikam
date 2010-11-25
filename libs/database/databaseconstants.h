@@ -125,6 +125,18 @@ namespace DatabaseComment
     };
 }
 
+class DIGIKAM_DATABASE_EXPORT InternalTagName
+{
+public:
+    static QLatin1String scannedForFaces();
+    static QLatin1String needResolvingHistory();
+    static QLatin1String needTaggingHistoryGraph();
+
+    static QLatin1String originalVersion();
+    static QLatin1String currentVersion();
+    static QLatin1String intermediateVersion();
+};
+
 class DIGIKAM_DATABASE_EXPORT TagPropertyName
 {
 public:

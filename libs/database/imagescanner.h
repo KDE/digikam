@@ -38,6 +38,8 @@
 namespace Digikam
 {
 
+class ImageInfo;
+
 class DIGIKAM_DATABASE_EXPORT ImageScanner
 {
 
@@ -113,11 +115,9 @@ public:
     void copiedFrom(int albumId, qlonglong srcId);
 
     /**
-     * Returns true if the images referenced by any available image history could be
-     * completely identified. Returns false if any referenced images where not found,
-     * indicating necessity to repeat the attempt.
+     * Returns true if this file has been marked as needing history resolution at a later stage
      */
-    bool historyIsCompletelyResolved() const;
+    bool hasHistoryToResolve() const;
 
     /**
      * Copy all relevant attributes like comments, tags, rating from source to destination.
@@ -133,9 +133,28 @@ public:
     /**
      * Resolves the image history of the image id by filling the ImageRelations table
      * for all contained referred images.
+     * If needTaggingIds is given, all ids marked for needing tagging of the history graph are added.
      */
-    static bool resolveImageHistory(qlonglong id);
-    static bool resolveImageHistory(qlonglong imageId, const QString& historyXml);
+    static bool resolveImageHistory(qlonglong id, QList<qlonglong> *needTaggingIds = 0);
+    static bool resolveImageHistory(qlonglong imageId, const QString& historyXml, QList<qlonglong> *needTaggingIds = 0);
+
+    /**
+     * Takes the history graph reachable from the given image, and assigns
+     * versioning tags to all entries based on history image types and graph structure
+     */
+    static void tagImageHistoryGraph(qlonglong id);
+
+    /**
+     * All referred images of the given history will be resolved.
+     * In the returned history, the actions are the same, while each
+     * referred image actually exists in the collection
+     * (if mustBeAvailable is true, it is even in a currently available collection).
+     * That means the number of referred images may be less or greater than initially.
+     * Note that this history may have peculiar properties, like multiple Original or Current entries
+     * (if the source entry resolves to multiple collection images), so this history
+     * is only for internal use, not for storage.
+     */
+    static DImageHistory resolvedImageHistory(const DImageHistory& history, bool mustBeAvailable = false);
 
     /**
      * Determines if the two ids refer to the same image.
@@ -147,6 +166,13 @@ public:
      * Returns all image ids fulfilling the given image id.
      */
     static QList<qlonglong> resolveHistoryImageId(const HistoryImageId& historyId);
+
+    /**
+     * Sort a list of infos by proximity to the given subject.
+     * Infos are near if they are e.g. in the same album.
+     * They are not near if they are e.g. in different collections.
+     */
+    static void sortByProximity(QList<ImageInfo>& infos, const ImageInfo& subject);
 
     /**
      * Returns containers with user-presentable information.
@@ -193,6 +219,7 @@ protected:
     void scanIPTCCore();
     void scanTags();
     void scanImageHistory();
+    void scanImageHistoryIfModified();
     void scanVideoFile();
     void scanAudioFile();
 
@@ -208,14 +235,14 @@ protected:
     bool         m_hasImage;
     bool         m_hasMetadata;
 
-    bool         m_historyResolved;
-
     QFileInfo    m_fileInfo;
 
     DMetadata    m_metadata;
     DImg         m_img;
     ItemScanInfo m_scanInfo;
     ScanMode     m_scanMode;
+
+    bool         m_hasHistoryToResolve;
 };
 
 } // namespace Digikam

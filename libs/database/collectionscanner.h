@@ -164,15 +164,23 @@ public:
 
 protected:
 
+    void mainEntryPoint(bool complete);
     void scanForStaleAlbums(QList<CollectionLocation> locations);
     void scanAlbumRoot(const CollectionLocation& location);
     void scanAlbum(const CollectionLocation& location, const QString& album);
     int checkAlbum(const CollectionLocation& location, const QString& album);
+    void scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
+    void scanExistingFile(const QFileInfo& fi, qlonglong id);
     void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
     qlonglong scanNewFile(const QFileInfo& info, int albumId);
     qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
     void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
     void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void itemsWereRemoved(const QList<qlonglong> &removedIds);
+    void completeHistoryScanning();
+    void finishHistoryScanning();
+    void historyScanningStage2(const QList<qlonglong>& ids);
+    void historyScanningStage3(const QList<qlonglong>& ids);
 
 Q_SIGNALS:
 
