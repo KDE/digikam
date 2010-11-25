@@ -2254,7 +2254,7 @@ void DigikamApp::slotToggleFullScreen()
         statusBar()->show();
 
         QList<KToolBar *> toolbars = toolBars();
-        foreach(KToolBar *toolbar, toolbars)
+        foreach (KToolBar* toolbar, toolbars)
         {
             toolbar->show();
         }
@@ -2276,7 +2276,7 @@ void DigikamApp::slotToggleFullScreen()
         if (fullScreenHideToolBar)
         {
             QList<KToolBar *> toolbars = toolBars();
-            foreach(KToolBar *toolbar, toolbars)
+            foreach (KToolBar* toolbar, toolbars)
             {
                 toolbar->hide();
             }
@@ -2367,7 +2367,7 @@ void DigikamApp::slotKipiPluginPlug()
     d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
 
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
-    foreach(QAction *action, d->slideShowAction->menu()->actions())
+    foreach (QAction* action, d->slideShowAction->menu()->actions())
     {
         if (action->objectName() == QString("advancedslideshow"))
         {
@@ -2417,7 +2417,7 @@ void DigikamApp::slotKipiPluginPlug()
         if (allPluginActions.count() > 3)
         {
             KActionCategory *category = new KActionCategory(plugin->objectName(), d->kipipluginsActionCollection);
-            foreach (QAction *action, allPluginActions)
+            foreach (QAction* action, allPluginActions)
             {
                 QString actionName(action->objectName());
                 if (!pluginActionsDisabled.contains(actionName))
@@ -2429,7 +2429,7 @@ void DigikamApp::slotKipiPluginPlug()
         else
         {
 #endif
-            foreach (QAction *action, allPluginActions)
+            foreach (QAction* action, allPluginActions)
             {
                 QString actionName(action->objectName());
                 if (!pluginActionsDisabled.contains(actionName))

@@ -67,7 +67,7 @@ public:
 
 ImageQueryPostHooks::~ImageQueryPostHooks()
 {
-    foreach (ImageQueryPostHook *hook, m_postHooks)
+    foreach (ImageQueryPostHook* hook, m_postHooks)
     {
         delete hook;
     }
@@ -80,7 +80,7 @@ void ImageQueryPostHooks::addHook(ImageQueryPostHook* hook)
 
 bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeNumber)
 {
-    foreach (ImageQueryPostHook *hook, m_postHooks)
+    foreach (ImageQueryPostHook* hook, m_postHooks)
     {
         if (!hook->checkPosition(latitudeNumber, longitudeNumber))
         {

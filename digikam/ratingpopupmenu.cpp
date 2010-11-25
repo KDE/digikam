@@ -162,7 +162,7 @@ void RatingPopupMenu::slotRatingTriggered()
 void RatingPopupMenu::slotHovered(QAction *current)
 {
     QList<QAction*> list = actions();
-    foreach(QAction *action, list)
+    foreach (QAction* action, list)
     {
         if (action->data().toInt() > 0)
         {

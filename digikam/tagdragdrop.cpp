@@ -257,7 +257,7 @@ QMimeData *TagDragDropHandler::createMimeData(const QList<Album*>& albums)
     {
         // TODO update, supporting this sounds harder ;)
 //        QList<int> ids;
-//        foreach(Album *album, albums)
+//        foreach (Album* album, albums)
 //        {
 //            ids << album->id();
 //        }

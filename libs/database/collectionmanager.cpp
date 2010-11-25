@@ -470,7 +470,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
 
         // find out of there is another location with the same label (usually not)
         bool hasOtherLocation = false;
-        foreach (AlbumRootLocation *otherLocation, locations)
+        foreach (AlbumRootLocation* otherLocation, locations)
         {
             if (otherLocation == location)
                 continue;
@@ -595,7 +595,7 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
     const KUrl filePathUrl = filePath;
 
     DatabaseAccess access;
-    foreach (AlbumRootLocation *location, locations)
+    foreach (AlbumRootLocation* location, locations)
     {
         const KUrl locationPathUrl = location->albumRootPath();
         //kDebug() << filePathUrl << locationPathUrl;
@@ -798,7 +798,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
             if (volume.isOpticalDisc)
             {
                 bool hasOtherLocation = false;
-                foreach (AlbumRootLocation *otherLocation, d->locations)
+                foreach (AlbumRootLocation* otherLocation, d->locations)
                 {
                     KUrl otherUrl(otherLocation->identifier);
                     if (otherUrl.protocol() == "volumeid"
@@ -950,7 +950,7 @@ QList<CollectionLocation> CollectionManager::checkHardWiredLocations()
 
     DatabaseAccess access;
 
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         // Hardwired and unavailable?
         if (location->type() == CollectionLocation::TypeVolumeHardWired
@@ -1053,7 +1053,7 @@ QList<CollectionLocation> CollectionManager::allLocations()
 {
     DatabaseAccess access;
     QList<CollectionLocation> list;
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         list << *location;
     }
@@ -1064,7 +1064,7 @@ QList<CollectionLocation> CollectionManager::allAvailableLocations()
 {
     DatabaseAccess access;
     QList<CollectionLocation> list;
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
             list << *location;
@@ -1076,7 +1076,7 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
 {
     DatabaseAccess access;
     QStringList list;
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
             list << location->albumRootPath();
@@ -1103,7 +1103,7 @@ CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& al
 {
     DatabaseAccess access;
     QString path = albumRootPath;
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         if (location->albumRootPath() == path)
             return *location;
@@ -1119,7 +1119,7 @@ CollectionLocation CollectionManager::locationForUrl(const KUrl& fileUrl)
 CollectionLocation CollectionManager::locationForPath(const QString& givenPath)
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         QString rootPath = location->albumRootPath();
         QString filePath = QDir::fromNativeSeparators(givenPath);
@@ -1157,7 +1157,7 @@ QString CollectionManager::albumRootPath(const KUrl& fileUrl)
 QString CollectionManager::albumRootPath(const QString& givenPath)
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         QString rootPath = location->albumRootPath();
         QString filePath = QDir::fromNativeSeparators(givenPath);
@@ -1179,7 +1179,7 @@ bool CollectionManager::isAlbumRoot(const KUrl& fileUrl)
 bool CollectionManager::isAlbumRoot(const QString& filePath)
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         if (filePath == location->albumRootPath())
             return true;
@@ -1195,7 +1195,7 @@ QString CollectionManager::album(const KUrl& fileUrl)
 QString CollectionManager::album(const QString& filePath)
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         QString absolutePath = location->albumRootPath();
         if (absolutePath.isEmpty())
@@ -1246,7 +1246,7 @@ KUrl CollectionManager::oneAlbumRoot()
 QString CollectionManager::oneAlbumRootPath()
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
             return location->albumRootPath();
@@ -1309,7 +1309,7 @@ void CollectionManager::updateLocations()
         }
 
         // delete old locations
-        foreach (AlbumRootLocation *location, locs)
+        foreach (AlbumRootLocation* location, locs)
         {
             CollectionLocation::Status oldStatus = location->status();
             location->setStatus(CollectionLocation::LocationDeleted);
@@ -1319,7 +1319,7 @@ void CollectionManager::updateLocations()
 
         // update status with current access state, store old status in list
         QList<CollectionLocation::Status> oldStatus;
-        foreach (AlbumRootLocation *location, d->locations)
+        foreach (AlbumRootLocation* location, d->locations)
         {
             oldStatus << location->status();
             bool available = false;
@@ -1373,7 +1373,7 @@ void CollectionManager::updateLocations()
 
         // emit status changes (and new locations)
         int i=0;
-        foreach (AlbumRootLocation *location, d->locations)
+        foreach (AlbumRootLocation* location, d->locations)
         {
             if (oldStatus[i] != location->status())
             {
@@ -1388,7 +1388,7 @@ void CollectionManager::clear_locked()
 {
     // Internal method: Called with mutex locked
     // Cave: Difficult recursions with DatabaseAccess constructor and setParameters
-    foreach (AlbumRootLocation *location, d->locations)
+    foreach (AlbumRootLocation* location, d->locations)
     {
         CollectionLocation::Status oldStatus = location->status();
         location->setStatus(CollectionLocation::LocationDeleted);

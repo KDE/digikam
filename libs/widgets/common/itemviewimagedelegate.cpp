@@ -166,7 +166,7 @@ void ItemViewImageDelegate::removeOverlay(ImageDelegateOverlay *overlay)
 void ItemViewImageDelegate::setAllOverlaysActive(bool active)
 {
     Q_D(ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay *overlay, d->overlays)
+    foreach (ImageDelegateOverlay* overlay, d->overlays)
     {
         overlay->setActive(active);
     }
@@ -175,7 +175,7 @@ void ItemViewImageDelegate::setAllOverlaysActive(bool active)
 void ItemViewImageDelegate::setViewOnAllOverlays(QAbstractItemView *view)
 {
     Q_D(ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay *overlay, d->overlays)
+    foreach (ImageDelegateOverlay* overlay, d->overlays)
     {
         overlay->setView(view);
     }
@@ -184,7 +184,7 @@ void ItemViewImageDelegate::setViewOnAllOverlays(QAbstractItemView *view)
 void ItemViewImageDelegate::removeAllOverlays()
 {
     Q_D(ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay *overlay, d->overlays)
+    foreach (ImageDelegateOverlay* overlay, d->overlays)
     {
         overlay->setActive(false);
         overlay->setDelegate(0);
@@ -224,7 +224,7 @@ void ItemViewImageDelegate::setRatingEdited(const QModelIndex &index)
 void ItemViewImageDelegate::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index)
 {
     Q_D(ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay *overlay, d->overlays)
+    foreach (ImageDelegateOverlay* overlay, d->overlays)
     {
         overlay->mouseMoved(e, visualRect, index);
     }
@@ -418,7 +418,7 @@ void ItemViewImageDelegate::drawMouseOverRect(QPainter *p, const QStyleOptionVie
 void ItemViewImageDelegate::drawDelegates(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay *overlay, d->overlays)
+    foreach (ImageDelegateOverlay* overlay, d->overlays)
     {
         overlay->paint(p, option, index);
     }

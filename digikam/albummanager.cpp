@@ -1227,13 +1227,13 @@ void AlbumManager::scanPAlbums()
     // removePAlbum takes care of that.
     // So we only feed it the albums from oldAlbums topmost in hierarchy.
     QSet<PAlbum *> topMostOldAlbums;
-    foreach (PAlbum *album, oldAlbums)
+    foreach (PAlbum* album, oldAlbums)
     {
         if (!album->parent() || !oldAlbums.contains(album->parent()->id()))
             topMostOldAlbums << album;
     }
 
-    foreach(PAlbum *album, topMostOldAlbums)
+    foreach (PAlbum* album, topMostOldAlbums)
     {
         // this might look like there is memory leak here, since removePAlbum
         // doesn't delete albums and looks like child Albums don't get deleted.
@@ -1636,7 +1636,7 @@ void AlbumManager::scanSAlbums()
     }
 
     // remove old albums that have been deleted
-    foreach (SAlbum *album, oldSearches)
+    foreach (SAlbum* album, oldSearches)
     {
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());

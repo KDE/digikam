@@ -726,7 +726,7 @@ void FacePipeline::FacePipelinePriv::start()
 
     WorkerObject  *workerObject;
     ParallelPipes *pipes;
-    foreach (QObject *element, pipeline)
+    foreach (QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
             workerObject->schedule();
@@ -748,7 +748,7 @@ void FacePipeline::FacePipelinePriv::stop()
     WorkerObject  *workerObject;
     ParallelPipes *pipes;
     DynamicThread *thread;
-    foreach (QObject *element, pipeline)
+    foreach (QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
             workerObject->deactivate();

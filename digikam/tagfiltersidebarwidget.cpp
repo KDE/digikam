@@ -275,14 +275,14 @@ void TagFilterSideBarWidget::filterChanged()
     QList<int> excludedTagIds;
     if (!showUntagged || matchCond == ImageFilterSettings::OrCondition)
     {
-        foreach(TAlbum *tag, d->tagFilterView->getCheckedTags())
+        foreach (TAlbum* tag, d->tagFilterView->getCheckedTags())
         {
             if (tag)
             {
                 includedTagIds << tag->id();
             }
         }
-        foreach(TAlbum *tag, d->tagFilterView->getPartiallyCheckedTags())
+        foreach (TAlbum* tag, d->tagFilterView->getPartiallyCheckedTags())
         {
             if (tag)
             {

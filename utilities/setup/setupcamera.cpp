@@ -262,7 +262,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     {
         QList<CameraType*>* cl = clist->cameraList();
 
-        foreach (CameraType *ctype, *cl)
+        foreach (CameraType* ctype, *cl)
         {
             new SetupCameraItem(d->listView, ctype);
         }

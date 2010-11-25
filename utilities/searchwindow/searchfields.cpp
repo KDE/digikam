@@ -1936,7 +1936,7 @@ void SearchFieldAlbum::write(SearchXmlWriter& writer)
         return;
 
     QList<int> albumIds;
-    foreach (Album *album, checkedAlbums)
+    foreach (Album* album, checkedAlbums)
     {
         albumIds << album->id();
     }

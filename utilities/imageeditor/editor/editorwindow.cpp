@@ -846,7 +846,7 @@ void EditorWindow::loadImagePlugins()
 
     QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach (ImagePlugin *plugin, pluginList)
+    foreach (ImagePlugin* plugin, pluginList)
     {
         if (plugin)
         {
@@ -896,7 +896,7 @@ void EditorWindow::unLoadImagePlugins()
 
     QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach (ImagePlugin *plugin, pluginList)
+    foreach (ImagePlugin* plugin, pluginList)
     {
         if (plugin)
         {
@@ -1099,7 +1099,7 @@ void EditorWindow::toggleStandardActions(bool val)
 
     QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach (ImagePlugin *plugin, pluginList)
+    foreach (ImagePlugin* plugin, pluginList)
     {
         if (plugin)
         {
@@ -1136,7 +1136,7 @@ void EditorWindow::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar *> toolbars = toolBars();
-            foreach(KToolBar *toolbar, toolbars)
+            foreach (KToolBar* toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -1168,7 +1168,7 @@ void EditorWindow::slotToggleFullScreen()
 
             QList<KToolBar *> toolbars = toolBars();
             KToolBar *mainToolbar = 0;
-            foreach(KToolBar *toolbar, toolbars)
+            foreach (KToolBar* toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -1606,7 +1606,7 @@ void EditorWindow::slotSelected(bool val)
     d->copyAction->setEnabled(val);
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-    foreach (ImagePlugin *plugin, pluginList)
+    foreach (ImagePlugin* plugin, pluginList)
     {
         if (plugin)
         {
@@ -1628,7 +1628,7 @@ void EditorWindow::slotSelected(bool val)
 void EditorWindow::hideToolBars()
 {
     QList<KToolBar *> toolbars = toolBars();
-    foreach(KToolBar *toolbar, toolbars)
+    foreach (KToolBar* toolbar, toolbars)
     {
         toolbar->hide();
     }
@@ -1637,7 +1637,7 @@ void EditorWindow::hideToolBars()
 void EditorWindow::showToolBars()
 {
     QList<KToolBar *> toolbars = toolBars();
-    foreach(KToolBar *toolbar, toolbars)
+    foreach (KToolBar* toolbar, toolbars)
     {
         toolbar->show();
     }

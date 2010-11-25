@@ -173,7 +173,7 @@ void BatchFaceDetector::startAlbumListing()
     QMap<int, int> palbumCounts = AlbumManager::instance()->getPAlbumsCount();
     QMap<int, int> talbumCounts = AlbumManager::instance()->getTAlbumsCount();
     d->total = 0;
-    foreach (Album *album, d->albumTodoList)
+    foreach (Album* album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
             d->total += palbumCounts.value(album->id());

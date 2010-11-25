@@ -2190,7 +2190,7 @@ void CameraUI::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar *> toolbars = toolBars();
-            foreach(KToolBar *toolbar, toolbars)
+            foreach (KToolBar* toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -2221,7 +2221,7 @@ void CameraUI::slotToggleFullScreen()
 
             QList<KToolBar *> toolbars = toolBars();
             KToolBar *mainToolbar = 0;
-            foreach(KToolBar *toolbar, toolbars)
+            foreach (KToolBar* toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -2260,7 +2260,7 @@ void CameraUI::slotEscapePressed()
 void CameraUI::showToolBars()
 {
     QList<KToolBar *> toolbars = toolBars();
-    foreach(KToolBar *toolbar, toolbars)
+    foreach (KToolBar* toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -2269,7 +2269,7 @@ void CameraUI::showToolBars()
 void CameraUI::hideToolBars()
 {
     QList<KToolBar *> toolbars = toolBars();
-    foreach(KToolBar *toolbar, toolbars)
+    foreach (KToolBar* toolbar, toolbars)
     {
         toolbar->hide();
     }

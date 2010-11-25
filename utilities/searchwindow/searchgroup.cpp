@@ -293,7 +293,7 @@ void SearchGroup::write(SearchXmlWriter& writer)
     writer.setGroupOperator(m_label->groupOperator());
     writer.setDefaultFieldOperator(m_label->defaultFieldOperator());
 
-    foreach (SearchFieldGroup *fieldGroup, m_fieldGroups)
+    foreach (SearchFieldGroup* fieldGroup, m_fieldGroups)
     {
         fieldGroup->write(writer);
     }
@@ -306,7 +306,7 @@ void SearchGroup::write(SearchXmlWriter& writer)
 
 void SearchGroup::reset()
 {
-    foreach (SearchFieldGroup *fieldGroup, m_fieldGroups)
+    foreach (SearchFieldGroup* fieldGroup, m_fieldGroups)
     {
         fieldGroup->reset();
     }
@@ -326,7 +326,7 @@ QList<QRect> SearchGroup::startupAnimationArea() const
     // from subgroups;
     rects += startupAnimationAreaOfGroups();
     // field groups
-    foreach (SearchFieldGroup *fieldGroup, m_fieldGroups)
+    foreach (SearchFieldGroup* fieldGroup, m_fieldGroups)
     {
         rects += fieldGroup->areaOfMarkedFields();
     }

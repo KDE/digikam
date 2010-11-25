@@ -187,7 +187,7 @@ void Sidebar::backup()
 void Sidebar::backup(const QList<QWidget*> thirdWidgetsToBackup, QList<int> *sizes)
 {
     sizes->clear();
-    foreach (QWidget *widget, thirdWidgetsToBackup)
+    foreach (QWidget* widget, thirdWidgetsToBackup)
     {
         *sizes << d->splitter->size(widget);
     }
@@ -449,7 +449,7 @@ SidebarSplitter::SidebarSplitter(Qt::Orientation orientation, QWidget *parent)
 SidebarSplitter::~SidebarSplitter()
 {
     // retreat cautiously from sidebars that live longer
-    foreach(Sidebar *sidebar, d->sidebars)
+    foreach (Sidebar* sidebar, d->sidebars)
     {
         sidebar->d->splitter = 0;
     }
@@ -540,7 +540,7 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     if (index > 0 && sizeList[index-1] == 0)
     {
         QWidget *w = widget(index-1);
-        foreach(Sidebar *sidebar, d->sidebars)
+        foreach (Sidebar* sidebar, d->sidebars)
         {
             if (w == sidebar->d->stack)
             {
@@ -558,7 +558,7 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     if (sizeList[index] == 0)
     {
         QWidget *w = widget(index);
-        foreach(Sidebar *sidebar, d->sidebars)
+        foreach (Sidebar* sidebar, d->sidebars)
         {
             if (w == sidebar->d->stack)
             {

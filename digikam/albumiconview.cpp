@@ -1708,7 +1708,7 @@ void AlbumIconView::slotThumbnailLoaded(const LoadingDescription& loadingDescrip
 void AlbumIconView::prepareRepaint(const QList<IconItem *>& itemsToRepaint)
 {
     QStringList filePaths;
-    foreach(IconItem *iconItem, itemsToRepaint)
+    foreach (IconItem* iconItem, itemsToRepaint)
     {
         AlbumIconItem *item = static_cast<AlbumIconItem *>(iconItem);
         filePaths << item->filePath();

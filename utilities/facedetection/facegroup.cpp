@@ -406,9 +406,9 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent *e)
             QList<QGraphicsItem*> hotItems = d->hotItems(e->scenePos());
             // this will be the one item shown by mouse over
             QList<QObject*> visible = d->visibilityController->visibleItems(ItemVisibilityController::ExcludeFadingOut);
-            foreach (QGraphicsItem *item, hotItems)
+            foreach (QGraphicsItem* item, hotItems)
             {
-                foreach (QObject *parent, visible)
+                foreach (QObject* parent, visible)
                 {
                     if (static_cast<QGraphicsObject*>(parent)->isAncestorOf(item))
                         return;

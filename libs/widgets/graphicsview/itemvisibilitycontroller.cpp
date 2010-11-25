@@ -221,7 +221,7 @@ void AnimationControl::clear()
     animation      = 0;
     animationGroup = 0; // the same pointer as animation
 
-    foreach (QObject *item, items)
+    foreach (QObject* item, items)
     {
         disconnect(item);
     }
@@ -311,7 +311,7 @@ void AnimationControl::moveTo(AnimationControl *other, QObject *item)
 
 void AnimationControl::moveAllTo(AnimationControl *other)
 {
-    foreach (QObject *item, items)
+    foreach (QObject* item, items)
     {
         moveTo(other, item);
     }
@@ -334,7 +334,7 @@ bool AnimationControl::hasVisibleItems(ItemVisibilityController::IncludeFadingOu
 
 void AnimationControl::setVisibleProperty(bool value)
 {
-    foreach (QObject *o, items)
+    foreach (QObject* o, items)
     {
         o->setProperty("visible", value);
     }
@@ -470,7 +470,7 @@ public:
 
 AnimationControl *ItemVisibilityController::ItemVisibilityControllerPriv::findInChildren(QObject *item) const
 {
-    foreach (AnimationControl *child, childControls)
+    foreach (AnimationControl* child, childControls)
     {
         if (child->hasItem(item))
         {
@@ -620,7 +620,7 @@ void ItemVisibilityController::clear()
     if (d->control)
         d->control->clear();
 
-    foreach (AnimationControl *child, d->childControls)
+    foreach (AnimationControl* child, d->childControls)
     {
         child->clear();
     }
@@ -634,7 +634,7 @@ QList<QObject*> ItemVisibilityController::items() const
     QList<QObject*> items;
     if (d->control)
         items = d->control->items;
-    foreach (AnimationControl *child, d->childControls)
+    foreach (AnimationControl* child, d->childControls)
     {
         items += child->items;
     }
@@ -648,7 +648,7 @@ QList<QObject*> ItemVisibilityController::visibleItems(IncludeFadingOutMode mode
     {
         items = d->control->items;
     }
-    foreach (AnimationControl *child, d->childControls)
+    foreach (AnimationControl* child, d->childControls)
     {
         if (child->hasVisibleItems(mode))
         {
