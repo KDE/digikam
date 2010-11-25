@@ -26,20 +26,20 @@
 
 // Qt includes
 
-#include <QtGui/QAbstractItemDelegate>
+#include <QStyledItemDelegate>
 
 namespace Digikam
 {
 
-class ImageFiltersHistoryItemDelegate : public QAbstractItemDelegate
+class ImageFiltersHistoryItemDelegate : public QStyledItemDelegate
 {
 public:
 
     ImageFiltersHistoryItemDelegate(QObject* parent = 0);
     ~ImageFiltersHistoryItemDelegate();
 
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 } //namespace Digikam

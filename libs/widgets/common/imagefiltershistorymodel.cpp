@@ -31,6 +31,7 @@
 
 #include <KUrl>
 #include <KDebug>
+#include <KIconLoader>
 
 // Local includes
 
@@ -257,7 +258,9 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
             QString iconName = DImgFilterManager::instance()->filterIcon(entries.at(i).action.identifier());
             if (iconName.isNull())
                 iconName = "document-edit";
-            itemData.append(iconName);
+            QPixmap icon = SmallIcon(iconName, KIconLoader::SizeSmallMedium);
+                                     //(flags & Qt::ItemIsEnabled) ? KIconLoader::DefaultState : KIconLoader::DisabledState);
+            itemData.append(icon);
         }
         kDebug() << "Adding an entry: " << itemData;
         parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
@@ -301,6 +304,17 @@ bool ImageFiltersHistoryModel::removeRows(int row, int /*count*/, const QModelIn
     return false;
 }
 
+void ImageFiltersHistoryModel::setEnabledEntries(int count)
+{
+    for (int i=0; i<d->rootItem->childCount(); i++)
+    {
+        d->rootItem->child(i)->setDisabled(i >= count);
+    }
+    d->disabledEntries = qMax(rowCount() - count, 0);
+
+    emit dataChanged(index(0, 0), index(rowCount() - 1, 0));
+}
+
 void ImageFiltersHistoryModel::disableEntries(int count)
 {
     if(count > rowCount())
@@ -309,9 +323,11 @@ void ImageFiltersHistoryModel::disableEntries(int count)
     d->disabledEntries += count;
     while(count > 0)
     {
-        d->rootItem->child(rowCount()-d->disabledEntries-1+count)->setDisabled(true);
+        d->rootItem->child(rowCount() - d->disabledEntries - 1 + count)->setDisabled(true);
         --count;
     }
+
+    emit dataChanged(index(0, 0), index(rowCount() - 1, 0));
 }
 
 void ImageFiltersHistoryModel::enableEntries(int count)
@@ -326,6 +342,8 @@ void ImageFiltersHistoryModel::enableEntries(int count)
         --count;
     }
     d->disabledEntries -= tmp;
+
+    emit dataChanged(index(0, 0), index(rowCount() - 1, 0));
 }
 
 } // namespace Digikam

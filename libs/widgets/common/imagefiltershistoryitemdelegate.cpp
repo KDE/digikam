@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 ImageFiltersHistoryItemDelegate::ImageFiltersHistoryItemDelegate(QObject* parent)
-                               : QAbstractItemDelegate(parent)
+                               : QStyledItemDelegate(parent)
 {
 }
 
@@ -53,20 +53,39 @@ ImageFiltersHistoryItemDelegate::~ImageFiltersHistoryItemDelegate()
 {
 }
 
-QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
+QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    if(!index.model()->parent(index).isValid())
-    {
-        return QSize(230, 32);
-    }
-    else
-    {
-        return QSize(230, 18);
-    }
+    // Add padding of 6px
+    QSize size = QStyledItemDelegate::sizeHint(option, index);
+    if (!size.isNull())
+        return QSize(size.width(), size.height() + 12);
+    return size;
 }
 
 void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
+    if (!(option.state & QStyle::State_Enabled))
+    {
+        // If disabled, use italic font
+        QStyleOptionViewItem o(option);
+        QFont font(o.font);
+        font.setItalic(true);
+        o.font = font;
+        QStyledItemDelegate::paint(painter, o, index);
+    }
+    else
+    {
+        QStyledItemDelegate::paint(painter, option, index);
+    }
+
+    // draw 1px border
+    QPen oldPen = painter->pen();
+    QPen pen(option.palette.windowText(), 0);
+    painter->setPen(pen);
+    painter->drawRect(option.rect);
+    painter->setPen(oldPen);
+
+    /*
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
     QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
@@ -118,12 +137,13 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
         painter->drawText(textRect, Qt::AlignVCenter, index.data(Qt::DecorationRole).toString());
     }
 
-    /*if (entryDisabled)
+    / *if (entryDisabled)
     {
         //painter->fillRect(option.rect, QColor(200,200,200,160));
-    }*/
+    }* /
 
     painter->restore();
+    */
 }
 
 } //namespace Digikam

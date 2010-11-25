@@ -67,6 +67,7 @@ public:
 public Q_SLOTS:
 
     void removeEntry(QModelIndex index);
+    void setEnabledEntries(int count);
     void disableEntries(int count);
     void enableEntries(int count);
 

@@ -138,27 +138,29 @@ void FiltersHistoryWidget::showCustomContextMenu(const QPoint& position)
         QMenu::exec(actions, d->view->mapToGlobal(position));
 }
 
-void FiltersHistoryWidget::setModelData(const QList<DImageHistory::Entry>& entries)
+void FiltersHistoryWidget::setHistory(const DImageHistory& history)
 {
-    d->model->setupModelData(entries);
+    d->model->setupModelData(history.entries());
+}
+
+void FiltersHistoryWidget::setEnabledEntries(int count)
+{
+    d->model->setEnabledEntries(count);
 }
 
 void FiltersHistoryWidget::disableEntries(int count)
 {
     d->model->disableEntries(count);
-    d->view->viewport()->repaint();
 }
 
 void FiltersHistoryWidget::enableEntries(int count)
 {
     d->model->enableEntries(count);
-    d->view->viewport()->repaint();
 }
 
 void FiltersHistoryWidget::clearData()
 {
     d->model->removeRows(0, d->model->rowCount(), d->model->index(0,0));
-    d->view->viewport()->repaint();
 }
 
 } // namespace Digikam
