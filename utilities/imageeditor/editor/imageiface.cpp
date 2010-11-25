@@ -260,14 +260,6 @@ void ImageIface::putPreviewIccProfile(const IccProfile& profile)
     d->targetPreviewImage.setIccProfile(profile);
 }
 
-void ImageIface::putOriginalImage(const QString& caller, uchar* data, int w, int h)
-{
-    if (!data)
-        return;
-
-    DImgInterface::defaultInterface()->putImage(caller, data, w, h);
-}
-
 void ImageIface::putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
 {
     if (!data)
@@ -279,11 +271,6 @@ void ImageIface::putOriginalImage(const QString& caller, const FilterAction& act
 void ImageIface::putOriginalIccProfile(const IccProfile& profile)
 {
     DImgInterface::defaultInterface()->putIccProfile( profile );
-}
-
-void ImageIface::putImageSelection(const QString& caller, uchar* data)
-{
-    putImageSelection(caller, FilterAction(), data);
 }
 
 void ImageIface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
