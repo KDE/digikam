@@ -37,6 +37,7 @@ namespace Digikam
 {
 
 class DImg;
+class DImgThreadedFilter;
 class FilterAction;
 
 class DIGIKAM_EXPORT DImgBuiltinFilter
@@ -101,6 +102,12 @@ public:
     QString displayableName() const;
     QString i18nDisplayableName() const;
     QString filterIcon() const;
+
+    /**
+     * Returns a DImgThreadedFilter which executes this builtin action.
+     */
+    DImgThreadedFilter *createThreadedFilter(QObject *parent = 0) const;
+    DImgThreadedFilter *createThreadedFilter(DImg* orgImage, QObject *parent = 0) const;
 
     static QString i18nDisplayableName(const QString& filterIdentifier);
     static QString filterIcon(const QString& filterIdentifier);

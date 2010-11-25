@@ -31,6 +31,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dimgthreadedfilter.h"
 #include "filteraction.h"
 
 namespace Digikam
@@ -384,6 +385,55 @@ bool DImgBuiltinFilter::isSupported(const QString& filterIdentifier, int version
         return false;
     // at the moment, all filters are at version 1
     return version == 1;
+}
+
+class DImgBuiltinThreadedFilter : public DImgThreadedFilter
+{
+
+public:
+
+    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, DImg *orgImage, QObject *parent = 0)
+        : DImgThreadedFilter(orgImage, parent), m_filter(filter)
+    {
+    }
+
+    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, QObject *parent = 0)
+        : DImgThreadedFilter(parent), m_filter(filter)
+    {
+    }
+
+    virtual QString filterIdentifier() const
+    {
+        return m_filter.filterAction().identifier();
+    }
+    virtual FilterAction filterAction()
+    {
+        return m_filter.filterAction();
+    }
+    void readParameters(const FilterAction& action)
+    {
+        m_filter = DImgBuiltinFilter(action);
+    }
+
+protected:
+
+    void filterImage()
+    {
+        m_destImage = m_orgImage;
+        m_filter.apply(m_destImage);
+    }
+
+    DImgBuiltinFilter m_filter;
+};
+
+DImgThreadedFilter *DImgBuiltinFilter::createThreadedFilter(DImg *orgImage, QObject *parent) const
+{
+    return new DImgBuiltinThreadedFilter(*this, orgImage, parent);
+}
+
+DImgThreadedFilter *DImgBuiltinFilter::createThreadedFilter(QObject *parent) const
+{
+    return new DImgBuiltinThreadedFilter(*this, parent);
 }
 
 } // namespace Digikam
