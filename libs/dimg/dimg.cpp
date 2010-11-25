@@ -2415,6 +2415,7 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
 void DImg::addAsReferredImage(const QString& filePath, HistoryImageId::Type type)
 {
     HistoryImageId id = DImgLoader::createHistoryImageId(filePath, *this, DMetadata(getMetadata()));
+    m_priv->imageHistory.purgePathFromReferredImages(id.filePath(), id.fileName());
     id.setType(type);
     addAsReferredImage(id);
 }
@@ -2429,103 +2430,9 @@ void DImg::addCurrentUniqueImageId(const QString& uuid)
     m_priv->imageHistory.adjustCurrentUuid(uuid);
 }
 
-void DImg::setFilterAction(const QString& identifier, int version, FilterAction::Category category,
-                           const QHash<QString, QVariant>& values)
+void DImg::addFilterAction(const Digikam::FilterAction& action)
 {
-    /*
-    // add the original file to the entries
-    if(m_priv->imageHistory.isEmpty())
-    {
-        HistoryImageId id;
-        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
-        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
-        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
-      
-        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
-        
-        m_priv->imageHistory << h;
-    }  
-    if(category == FilterAction::ComplexFilter || category == FilterAction::DocumentedHistory)
-    {
-      //create new file entry
-        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
-        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
-        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
-      
-        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
-        
-        m_priv->imageHistory << h;    
-    }
-    */
-    FilterAction f(identifier, version, category);
-    
-    QHashIterator<QString, QVariant> iter(values);
-    while (iter.hasNext())
-    {
-        iter.next();
-        f.addParameter(iter.key(), iter.value());
-        //setFilterAction(identifier, version, category, iter.key(), iter.value());
-    }
-
-    m_priv->imageHistory << f;
-}
-
-void DImg::setFilterAction(const QString& identifier, int version, FilterAction::Category category,
-                           const QString& param, const QVariant& value)
-{
-    // add the original file to the entries
-    /*
-    if(m_priv->imageHistory.isEmpty())
-    {
-        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
-        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
-        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
-      
-        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
-        
-        m_priv->imageHistory << h;
-    }  
-    if(category == FilterAction::ComplexFilter || category == FilterAction::DocumentedHistory)
-    {
-      //create new file entry
-        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
-        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
-        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
-      
-        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
-        
-        m_priv->imageHistory << h;    
-    }
-    */
-    
-    FilterAction f(identifier, version, category);
-    f.addParameter(param, value);
-    
-    m_priv->imageHistory << f;
-    
-    kDebug() << "FilterAction " << identifier << " with param " << param << ": " << value;
-}
-
-void DImg::setFilterAction(const Digikam::FilterAction& action)
-{
-    /*
-    // add the original file to the entries
-    if(m_priv->imageHistory.isEmpty())
-    {
-        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
-        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
-        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
-
-        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
-
-        m_priv->imageHistory << h;
-        kDebug() << "Path and Name: " << filePathAndName;
-    }
-    */
-
     m_priv->imageHistory << action;
-
-    kDebug() << "FilterAction added by reference";
 }
 
 DImageHistory DImg::getImageHistory() const

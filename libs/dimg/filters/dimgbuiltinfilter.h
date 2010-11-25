@@ -75,6 +75,13 @@ public:
     void setAction(Type type, const QVariant& arg = QVariant());
 
     /**
+     * Returns the reverse action of this filter.
+     * If the current action is not revertible, returns an invalid filter.
+     */
+    DImgBuiltinFilter reverseFilter() const;
+    bool isReversible() const;
+
+    /**
      * Checks that the action is supported and valid arguments are set
      */
     bool isValid() const;
@@ -92,6 +99,7 @@ public:
     FilterAction filterAction() const;
     /// Returns a displayableName for this filter
     QString displayableName() const;
+    QString i18nDisplayableName() const;
     QString filterIcon() const;
 
     static QString i18nDisplayableName(const QString& filterIdentifier);
@@ -108,7 +116,7 @@ protected:
 
     Type     m_type;
     QVariant m_arg;
-    
+
 };
 
 } // namespace Digikam

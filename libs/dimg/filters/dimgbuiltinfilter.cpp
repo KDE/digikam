@@ -215,6 +215,34 @@ FilterAction DImgBuiltinFilter::filterAction() const
     }
 }
 
+DImgBuiltinFilter DImgBuiltinFilter::reverseFilter() const
+{
+    switch (m_type)
+    {
+        case Rotate90:
+            return DImgBuiltinFilter(Rotate270);
+        case Rotate180:
+            return DImgBuiltinFilter(Rotate180);
+        case Rotate270:
+            return DImgBuiltinFilter(Rotate90);
+        case FlipHorizontally:
+        case FlipVertically:
+            return DImgBuiltinFilter(m_type);
+        case Crop:
+        case Resize:
+        case ConvertTo8Bit:
+        case ConvertTo16Bit:
+        case NoOperation:
+        default:
+            return DImgBuiltinFilter();
+    }
+}
+
+bool DImgBuiltinFilter::isReversible() const
+{
+    return reverseFilter().isValid();
+}
+
 QStringList DImgBuiltinFilter::supportedFilters()
 {
     return QStringList() << "transform:rotate"
@@ -231,6 +259,12 @@ QList<int> DImgBuiltinFilter::supportedVersions(const QString& filterIdentifier)
     if (isSupported(filterIdentifier))
         versions << 1;
     return versions;
+}
+
+QString DImgBuiltinFilter::i18nDisplayableName() const
+{
+    QByteArray latin1 = displayableName().toLatin1();
+    return i18n(latin1.data());
 }
 
 QString DImgBuiltinFilter::displayableName() const

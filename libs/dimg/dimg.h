@@ -267,7 +267,7 @@ public:
     /** Returns the format string of the format that this image was last saved to.
         An image can be loaded from a file - retrieve that format with fileFormat()
         and loadedFormat() - and can the multiple times be saved to different formats.
-        Format strings used include JPEG, PGF, PNG, TIFF and JP2K.
+        Format strings used include JPG, PGF, PNG, TIFF and JP2K.
         If this file was not save, a null string is returned.
     */
     QString     savedFormat() const;
@@ -313,12 +313,7 @@ public:
     DImageHistory getImageHistory() const;
     void          setImageHistory(const DImageHistory& history);
     bool          hasImageHistory() const;
-
-    void       setFilterAction(const QString& identifier, int version, Digikam::FilterAction::Category category,
-                               const QString& param, const QVariant& value);
-    void       setFilterAction(const QString& identifier, int version, Digikam::FilterAction::Category category,
-                               const QHash<QString, QVariant>& values);
-    void       setFilterAction(const FilterAction& action);
+    void          addFilterAction(const FilterAction& action);
 
     /** Use this method to update lead metadata after image transformations.
         This fix Iptc preview, Exif thumbnail, image size information, etc.

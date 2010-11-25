@@ -549,7 +549,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     imageWidth()  = w;
     imageHeight() = h;
     imageData()   = dest;
-    imageSetAttribute("format", "JPEG");
+    imageSetAttribute("format", "JPG");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", 8);
     imageSetAttribute("originalSize", originalSize);
@@ -783,7 +783,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_destroy_compress(&cinfo);
     delete cleanupData;
 
-    imageSetAttribute("savedformat", "JPEG");
+    imageSetAttribute("savedformat", "JPG");
 
     saveMetadata(filePath);
 
