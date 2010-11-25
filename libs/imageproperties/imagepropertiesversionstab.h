@@ -60,23 +60,14 @@ public:
     int findImagePositionInList(qlonglong id) const;
     bool hasImage(qlonglong id) const;
 
-//    void setCurrentURL(const KUrl& url = KUrl());
-//    void setImageHistory(const DImageHistory& history);
+    void clear();
+    void setItem(const ImageInfo& info, const DImageHistory& history);
 
 public Q_SLOTS:
 
-    //versions tab slots
-    void slotDigikamViewNoCurrentItem();
-    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages) const;
-    void slotUpdateImageInfo(const ImageInfo& info);
-    void slotViewItemSelected(QModelIndex index);
     void slotNewVersionSelected(KUrl url);
-
-    //filters history tab slots
     void showCustomContextMenu(const QPoint& position);
-    void setModelData(const QList<DImageHistory::Entry>& entries);
-    void disableEntries(int count);
-    void enableEntries(int count);
+    void setEnabledEntries(int count);
 
 Q_SIGNALS:
 

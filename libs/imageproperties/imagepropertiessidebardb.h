@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "dimagehistory.h"
 #include "imageinfolist.h"
 #include "imagepropertiessidebar.h"
 #include "digikam_export.h"
@@ -63,7 +64,8 @@ public:
 
     virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg *img = 0);
 
-    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(), DImg *img = 0);
+    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(),
+                             DImg *img = 0, const DImageHistory& history = DImageHistory());
     virtual void itemChanged(const ImageInfoList& infos);
 
     void populateTags(void);
@@ -102,8 +104,8 @@ private Q_SLOTS:
 
 private:
 
-    void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg *img);
-    void itemChanged(const ImageInfoList infos, const QRect& rect, DImg *img);
+    void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg *img, const DImageHistory& history);
+    void itemChanged(const ImageInfoList infos, const QRect& rect, DImg *img, const DImageHistory& history);
     void setImagePropertiesInformation(const KUrl& url);
 
 private:

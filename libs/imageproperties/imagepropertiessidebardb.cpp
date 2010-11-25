@@ -71,6 +71,9 @@ public:
         hasImageInfoOwnership(false),
         desceditTab(0)
     {
+        desceditTab           = 0;
+        versionsHistoryTab    = 0;
+        dirtyDesceditTab      = false;
     }
 
     bool                        dirtyDesceditTab;
@@ -79,6 +82,7 @@ public:
     bool                        hasImageInfoOwnership;
 
     ImageInfoList               currentInfos;
+    DImageHistory               currentHistory;
     ImageDescEditTab*           desceditTab;
     ImagePropertiesVersionsTab* versionsHistoryTab;
 };
@@ -98,6 +102,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplit
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
+
     connect(d->desceditTab, SIGNAL(signalProgressBarMode(int, const QString&)),
             this, SIGNAL(signalProgressBarMode(int, const QString&)));
 
@@ -110,14 +115,11 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplit
     connect(d->desceditTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
 
-    DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
             this, SLOT(slotImageChangeDatabase(const ImageChangeset&)));
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
-
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl&)),
+    connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(const KUrl&)),
             this, SLOT(slotFileMetadataChanged(const KUrl&)));
 }
 
@@ -126,19 +128,19 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
     delete d;
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info,
-                                           const QRect& rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& rect,
+                                           DImg *img, const DImageHistory& history)
 {
-    itemChanged(info.fileUrl(), info, rect, img);
+    itemChanged(info.fileUrl(), info, rect, img, history);
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg *img)
 {
-    itemChanged(url, ImageInfo(), rect, img);
+    itemChanged(url, ImageInfo(), rect, img, DImageHistory());
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& info,
-                                           const QRect& rect, DImg *img)
+                                           const QRect& rect, DImg *img, const DImageHistory& history)
 {
     if ( !url.isValid() )
         return;
@@ -149,7 +151,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& inf
     if (!info.isNull())
         list << info;
 
-    itemChanged(list, rect, img);
+    itemChanged(list, rect, img, history);
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
@@ -159,13 +161,14 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
 
     m_currentURL = infos.first().fileUrl();
 
-    itemChanged(infos, QRect(), 0);
+    itemChanged(infos, QRect(), 0, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg *img, const DImageHistory& history)
 {
     m_currentRect = rect;
     m_image       = img;
+    d->currentHistory = history;
 
     d->currentInfos      = infos;
     m_dirtyPropertiesTab = false;
@@ -242,7 +245,8 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
-//            d->versionsHistoryTab->setCurrentURL(m_currentURL);
+            //TODO: Make a database-less parent class with only the filters tab
+            d->versionsHistoryTab->clear();
             m_dirtyHistoryTab = true;
         }
     }
@@ -299,7 +303,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
-//            d->versionsHistoryTab->setCurrentURL(m_currentURL);
+            d->versionsHistoryTab->setItem(d->currentInfos.first(), d->currentHistory);
             m_dirtyHistoryTab = true;
         }
     }
@@ -360,7 +364,8 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
-//            d->versionsHistoryTab->setCurrentURL(m_currentURL);
+            // FIXME: Any sensible multi-selection functionality? Must scale for large n!
+            d->versionsHistoryTab->clear();
             m_dirtyHistoryTab = true;
         }
     }
@@ -554,11 +559,6 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
 {
     return d->versionsHistoryTab;
-}
-
-void ImagePropertiesSideBarDB::setFiltersHistoryDirty(bool dirty)
-{
-    m_dirtyHistoryTab = dirty;
 }
 
 }  // namespace Digikam
