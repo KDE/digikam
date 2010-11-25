@@ -528,8 +528,10 @@ public:
      * the entries for the items, which
      * can later be removed by deleteRemovedItems().
      * @param albumID The id of the album
+     * @param ids Fully optional: The image ids in the album, if you know them anyway.
+     *  This parameter is only used for distributing the change notification.
      */
-    void removeItemsFromAlbum(int albumID);
+    void removeItemsFromAlbum(int albumID, const QList<qlonglong>& ids_forInformation = QList<qlonglong>());
 
     /**
      * Marks all items in the list as removed,
@@ -930,10 +932,12 @@ public:
     bool hasImageHistory(qlonglong imageId);
 
     /**
-     * Adds an image relation entry
+     * Adds an image relation entry.
      */
     void addImageRelation(qlonglong subjectId, qlonglong objectId, DatabaseRelation::Type type);
     void addImageRelation(const ImageRelation& relation);
+    /// This method requires two lists of same size and will add list1[0]->list2[0],...,list1[n]->list2[n]
+    void addImageRelations(const QList<qlonglong>& subjectIds, const QList<qlonglong>& objectIds, DatabaseRelation::Type type);
 
     /**
      * Retrieves all images that the given image is related to (retrieves objects, given image is subject)
@@ -956,6 +960,13 @@ public:
      */
     QList<QPair<qlonglong, qlonglong> > getRelationCloud(qlonglong imageId,
                                                          DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+
+    /**
+     * For each of the given ids, find one single related image (direction does not matter).
+     * Ids are unique in the returned list, and do not correspond by index to the given list.
+     */
+    QList<qlonglong> getOneRelatedImageEach(const QList<qlonglong>& ids,
+                                            DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
 
     /**
      * Returns if there are valid entries in the ImageHaarMatrix table.
