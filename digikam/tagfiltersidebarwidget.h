@@ -56,7 +56,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param tagFilterModel tag model to work on
      */
-    TagFilterView(QWidget *parent, TagModel *tagFilterModel);
+    TagFilterView(QWidget* parent, TagModel* tagFilterModel);
 
     /**
      * Destructor.
@@ -64,11 +64,11 @@ public:
     virtual ~TagFilterView();
 
 protected:
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
-    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
+    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 private:
-    TagFilterViewPriv *d;
+    TagFilterViewPriv* d;
 
 };
 
@@ -90,7 +90,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param tagFilterModel tag model to work on
      */
-    TagFilterSideBarWidget(QWidget *parent, TagModel *tagFilterModel);
+    TagFilterSideBarWidget(QWidget* parent, TagModel* tagFilterModel);
 
     /**
      * Destructor.
@@ -133,7 +133,7 @@ private:
     void filterChanged();
 
 private:
-    TagFilterSideBarWidgetPriv *d;
+    TagFilterSideBarWidgetPriv* d;
 
 };
 

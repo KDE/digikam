@@ -44,8 +44,8 @@ class ImageCopyrightCache
 {
 public:
 
-    ImageCopyrightCache(ImageCopyright *object)
-                : object(object)
+    ImageCopyrightCache(ImageCopyright* object)
+        : object(object)
     {
         // set this as cache
         object->m_cache = this;
@@ -61,21 +61,21 @@ public:
 
 private:
 
-    ImageCopyright *object;
+    ImageCopyright* object;
 };
 
 ImageCopyright::ImageCopyright(qlonglong imageid)
-              : m_id(imageid), m_cache(0)
+    : m_id(imageid), m_cache(0)
 {
 }
 
 ImageCopyright::ImageCopyright()
-              : m_id(0), m_cache(0)
+    : m_id(0), m_cache(0)
 {
 }
 
 ImageCopyright::ImageCopyright(const ImageCopyright& other)
-              : m_id(other.m_id), m_cache(0)
+    : m_id(other.m_id), m_cache(0)
 {
     // the cache is only short-lived, to keep complexity low
 }
@@ -89,13 +89,14 @@ ImageCopyright::~ImageCopyright()
     }
 }
 
-ImageCopyright &ImageCopyright::operator=(const ImageCopyright& other)
+ImageCopyright& ImageCopyright::operator=(const ImageCopyright& other)
 {
     if (m_cache)
     {
         delete m_cache;
         m_cache = 0;
     }
+
     m_id = other.m_id;
     return *this;
 }
@@ -103,13 +104,17 @@ ImageCopyright &ImageCopyright::operator=(const ImageCopyright& other)
 void ImageCopyright::replaceFrom(const ImageCopyright& source)
 {
     if (!m_id)
+    {
         return;
+    }
 
     DatabaseAccess access;
     access.db()->removeImageCopyrightProperties(m_id);
 
     if (!source.m_id)
+    {
         return;
+    }
 
     QList<CopyrightInfo> infos = access.db()->getImageCopyright(source.m_id, QString());
     foreach (const CopyrightInfo& info, infos)
@@ -133,13 +138,18 @@ QStringList ImageCopyright::creator()
 void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
 {
     AlbumDB::CopyrightPropertyUnique uniqueness;
+
     if (mode == ReplaceAllEntries)
+    {
         uniqueness = AlbumDB::PropertyUnique;
+    }
     else
+    {
         uniqueness = AlbumDB::PropertyNoConstraint;
+    }
 
     DatabaseAccess().db()->setImageCopyrightProperty(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
-                                                     creator, QString(), uniqueness);
+            creator, QString(), uniqueness);
 }
 
 void ImageCopyright::removeCreators()
@@ -285,7 +295,7 @@ void ImageCopyright::removeContactInfo()
     removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
 }
 
-void ImageCopyright::fillTemplate(Template &t)
+void ImageCopyright::fillTemplate(Template& t)
 {
     ImageCopyrightCache cache(this);
 
@@ -299,7 +309,7 @@ void ImageCopyright::fillTemplate(Template &t)
     t.setContactInfo(contactInfo());
 }
 
-void ImageCopyright::setFromTemplate(const Template &t)
+void ImageCopyright::setFromTemplate(const Template& t)
 {
     foreach(QString author, t.authors()) // krazy:exclude=foreach
     {
@@ -310,13 +320,19 @@ void ImageCopyright::setFromTemplate(const Template &t)
 
     KExiv2::AltLangMap copyrights = t.copyright();
     KExiv2::AltLangMap::const_iterator it;
+
     for (it = copyrights.constBegin() ; it != copyrights.constEnd() ; ++it)
+    {
         setRights(it.value(), it.key(), ImageCopyright::AddEntryToExisting);
+    }
 
     KExiv2::AltLangMap usages = t.rightUsageTerms();
     KExiv2::AltLangMap::const_iterator it2;
+
     for (it2 = usages.constBegin() ; it2 != usages.constEnd() ; ++it2)
+    {
         setRightsUsageTerms(it2.value(), it2.key(), ImageCopyright::AddEntryToExisting);
+    }
 
     setSource(t.source());
     setAuthorsPosition(t.authorsPosition());
@@ -342,7 +358,7 @@ CopyrightInfo ImageCopyright::copyrightInfo(const QString& property)
 {
     if (m_cache)
     {
-        foreach (const CopyrightInfo &info, m_cache->infos)
+        foreach (const CopyrightInfo& info, m_cache->infos)
         {
             if (info.property == property)
             {
@@ -353,9 +369,13 @@ CopyrightInfo ImageCopyright::copyrightInfo(const QString& property)
     else
     {
         QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
+
         if (!infos.isEmpty())
+        {
             return infos.first();
+        }
     }
+
     return CopyrightInfo();
 }
 
@@ -364,7 +384,7 @@ QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property)
     if (m_cache)
     {
         QList<CopyrightInfo> infos;
-        foreach (const CopyrightInfo &info, m_cache->infos)
+        foreach (const CopyrightInfo& info, m_cache->infos)
         {
             if (info.property == property)
             {
@@ -393,17 +413,22 @@ QString ImageCopyright::readLanguageProperty(const QString& property, const QStr
 {
     QList<CopyrightInfo> infos = copyrightInfos(property);
     int index = languageMatch(infos, languageCode);
+
     if (index == -1)
+    {
         return QString();
+    }
     else
+    {
         return infos[index].value;
+    }
 }
 
 KExiv2Iface::KExiv2::AltLangMap ImageCopyright::readLanguageProperties(const QString& property)
 {
     KExiv2Iface::KExiv2::AltLangMap map;
     QList<CopyrightInfo> infos = copyrightInfos(property);
-    foreach (const CopyrightInfo &info, infos)
+    foreach (const CopyrightInfo& info, infos)
     {
         map[info.extraValue] = info.value;
     }
@@ -411,19 +436,29 @@ KExiv2Iface::KExiv2::AltLangMap ImageCopyright::readLanguageProperties(const QSt
 }
 
 void ImageCopyright::setLanguageProperty(const QString& property, const QString& value,
-                                         const QString& languageCode, ReplaceMode mode)
+        const QString& languageCode, ReplaceMode mode)
 {
     AlbumDB::CopyrightPropertyUnique uniqueness;
+
     if (mode == ReplaceAllEntries)
+    {
         uniqueness = AlbumDB::PropertyUnique;
+    }
     else if (mode == ReplaceLanguageEntry)
+    {
         uniqueness = AlbumDB::PropertyExtraValueUnique;
+    }
     else
+    {
         uniqueness = AlbumDB::PropertyNoConstraint;
+    }
 
     QString language = languageCode;
+
     if (language.isNull())
+    {
         language = "x-default";
+    }
 
     DatabaseAccess().db()->setImageCopyrightProperty(m_id, property, value, language, uniqueness);
 }
@@ -432,14 +467,20 @@ void ImageCopyright::removeProperties(const QString& property)
 {
     // if we have a cache, find out if anything need to be done at all
     if (m_cache && copyrightInfo(property).isNull())
+    {
         return;
+    }
+
     DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property);
 }
 
 void ImageCopyright::removeLanguageProperty(const QString& property, const QString& languageCode)
 {
     if (m_cache && copyrightInfo(property).isNull())
+    {
         return;
+    }
+
     DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property, languageCode);
 }
 
@@ -447,10 +488,11 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
 {
     QString langCode;
     QString fullCode = languageCode;
+
     if (languageCode.isNull())
     {
         // find local language
-        KLocale *locale = KGlobal::locale();
+        KLocale* locale = KGlobal::locale();
         langCode = locale->language().toLower() + '-';
         fullCode = langCode + locale->country().toLower();
     }
@@ -506,12 +548,21 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     }
 
     int chosen = fullCodeMatch;
+
     if (chosen == -1)
+    {
         chosen = langCodeMatch;
+    }
+
     if (chosen == -1)
+    {
         chosen = defaultCodeMatch;
+    }
+
     if (chosen == -1)
+    {
         chosen = firstMatch;
+    }
 
     return chosen;
 }

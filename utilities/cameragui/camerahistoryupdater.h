@@ -55,7 +55,7 @@ public:
 
     void addItems(const QByteArray& id, CHUpdateItemMap& map);
 
-    Q_SIGNALS:
+Q_SIGNALS:
 
     void signalBusy(bool val);
     void signalHistoryMap(const CHUpdateItemMap&);

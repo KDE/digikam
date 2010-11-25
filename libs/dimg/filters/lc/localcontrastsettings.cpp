@@ -93,7 +93,7 @@ public:
         powerInput4(0),
         blurInput4(0),
         expanderBox(0)
-        {}
+    {}
 
     static const QString  configLowSaturationEntry;
     static const QString  configHighSaturationEntry;
@@ -160,8 +160,8 @@ const QString LocalContrastSettingsPriv::configFunctionInputEntry("FunctionInput
 // --------------------------------------------------------
 
 LocalContrastSettings::LocalContrastSettings(QWidget* parent)
-                     : QWidget(parent),
-                       d(new LocalContrastSettingsPriv)
+    : QWidget(parent),
+      d(new LocalContrastSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -183,7 +183,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     d->stretchContrastCheck = new QCheckBox(i18n("Stretch contrast"), firstPage);
     d->stretchContrastCheck->setWhatsThis(i18n("<b>Stretch contrast</b>: This stretches the contrast of the original image. "
-                                               "It is applied before the tonemapping process."));
+                                          "It is applied before the tonemapping process."));
     d->stretchContrastCheck->setChecked(true);
 
     // -------------------------------------------------------------
@@ -195,8 +195,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->highSaturationInput->setSliderEnabled(true);
     d->highSaturationInput->setObjectName("highSaturationInput");
     d->highSaturationInput->setWhatsThis(i18n("<b>Highlights saturation</b>: Usually the (perceived) saturation is "
-                                              "increased. The user can choose to lower the saturation on original highlight "
-                                              "and shadows from the image with these parameters."));
+                                         "increased. The user can choose to lower the saturation on original highlight "
+                                         "and shadows from the image with these parameters."));
 
     // -------------------------------------------------------------
 
@@ -207,8 +207,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->lowSaturationInput->setSliderEnabled(true);
     d->lowSaturationInput->setObjectName("lowSaturationInput");
     d->lowSaturationInput->setWhatsThis(i18n("<b>Shadow saturation</b>: Usually the (perceived) saturation is "
-                                             "increased. The user can choose to lower the saturation on original highlight "
-                                             "and shadows from the image with these parameters."));
+                                        "increased. The user can choose to lower the saturation on original highlight "
+                                        "and shadows from the image with these parameters."));
 
     // -------------------------------------------------------------
 
@@ -226,7 +226,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     QWidget* secondPage = new QWidget();
     QGridLayout* grid2  = new QGridLayout( secondPage );
-    
+
     // -------------------------------------------------------------
 
     d->label4      = new QLabel(i18n("Power:"), secondPage);
@@ -365,14 +365,14 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->expanderBox->setCheckBoxVisible(2, true);
     d->expanderBox->setCheckBoxVisible(3, true);
     d->expanderBox->setCheckBoxVisible(4, true);
-    
+
     grid->addWidget(d->expanderBox, 0, 0, 1, 1);
     grid->setRowStretch(0, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
-            
+
     connect(d->expanderBox, SIGNAL(signalItemToggled(int, bool)),
             this, SLOT(slotStageEnabled(int, bool)));
 
@@ -381,7 +381,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     connect(d->highSaturationInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->powerInput1, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
@@ -405,10 +405,10 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     connect(d->blurInput4, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->functionInput, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->stretchContrastCheck, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 }
@@ -419,7 +419,7 @@ LocalContrastSettings::~LocalContrastSettings()
 }
 
 void LocalContrastSettings::slotStageEnabled(int index, bool b)
-{    
+{
     switch (index)
     {
         case 1:
@@ -439,7 +439,7 @@ void LocalContrastSettings::slotStageEnabled(int index, bool b)
             break;
         }
         case 3:
-        { 
+        {
             d->label8->setEnabled(b);
             d->powerInput3->setEnabled(b);
             d->label9->setEnabled(b);
@@ -447,14 +447,15 @@ void LocalContrastSettings::slotStageEnabled(int index, bool b)
             break;
         }
         case 4:
-        { 
+        {
             d->label10->setEnabled(b);
             d->powerInput4->setEnabled(b);
             d->label11->setEnabled(b);
             d->blurInput4->setEnabled(b);
             break;
-        }  
+        }
     }
+
     emit signalSettingsChanged();
 }
 
@@ -520,8 +521,8 @@ void LocalContrastSettings::setSettings(const LocalContrastContainer& settings)
     slotStage2Enabled(d->stageTwo->isChecked());
     slotStage3Enabled(d->stageThree->isChecked());
     slotStage4Enabled(d->stageFour->isChecked());
- */
-    
+     */
+
     blockSignals(false);
 }
 
@@ -542,10 +543,10 @@ void LocalContrastSettings::resetToDefault()
     d->powerInput2->slotReset();
     d->blurInput2->slotReset();
 
-    d->expanderBox->setChecked(3,false);  
+    d->expanderBox->setChecked(3,false);
     d->powerInput3->slotReset();
     d->blurInput3->slotReset();
-    
+
     d->expanderBox->setChecked(4,false);
     d->powerInput4->slotReset();
     d->blurInput4->slotReset();
@@ -640,16 +641,20 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 void LocalContrastSettings::loadSettings()
 {
     KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                    QString( "*" ), kapp->activeWindow(),
-                    QString( i18n("Photograph Local Contrast Settings File to Load")) );
+                                            QString( "*" ), kapp->activeWindow(),
+                                            QString( i18n("Photograph Local Contrast Settings File to Load")) );
+
     if ( loadFile.isEmpty() )
+    {
         return;
+    }
 
     QFile file(loadFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
         QTextStream stream( &file );
+
         if ( stream.readLine() != "# Photograph Local Contrast Configuration File" )
         {
             KMessageBox::error(kapp->activeWindow(),
@@ -690,10 +695,13 @@ void LocalContrastSettings::loadSettings()
 void LocalContrastSettings::saveAsSettings()
 {
     KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                    QString( "*" ), kapp->activeWindow(),
-                    QString( i18n("Photograph Local Contrast Settings File to Save")) );
+                                            QString( "*" ), kapp->activeWindow(),
+                                            QString( i18n("Photograph Local Contrast Settings File to Save")) );
+
     if ( saveFile.isEmpty() )
+    {
         return;
+    }
 
     QFile file(saveFile.toLocalFile());
 

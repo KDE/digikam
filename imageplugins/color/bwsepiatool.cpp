@@ -67,7 +67,7 @@ public:
         bwsepiaSettings(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
@@ -88,7 +88,7 @@ const QString BWSepiaTool::BWSepiaToolPriv::configHistogramScaleEntry("Histogram
 // -----------------------------------------------------------------------------------
 
 BWSepiaTool::BWSepiaTool(QObject* parent)
-           : EditorToolThreaded(parent), d(new BWSepiaToolPriv)
+    : EditorToolThreaded(parent), d(new BWSepiaToolPriv)
 {
     setObjectName("convertbw");
     setToolName(i18n("Black and White"));
@@ -131,7 +131,9 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 BWSepiaTool::~BWSepiaTool()
 {
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     delete d;
 }
@@ -150,9 +152,9 @@ void BWSepiaTool::readSettings()
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                    (int)LuminosityChannel));
+            (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                    (int)LogScaleHistogram));
+            (int)LogScaleHistogram));
 
     d->bwsepiaSettings->readSettings(group);
     slotScaleChanged();
@@ -196,12 +198,14 @@ void BWSepiaTool::putPreviewData()
     // Update histogram.
 
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-                                                             preview.width(), preview.height(), preview.sixteenBit(),
-                                                             0, 0, 0, false);
+            preview.width(), preview.height(), preview.sixteenBit(),
+            0, 0, 0, false);
 }
 
 void BWSepiaTool::prepareFinal()

@@ -40,12 +40,12 @@ namespace Digikam
 {
 
 ImageExtendedProperties::ImageExtendedProperties(qlonglong imageid)
-                       : m_id(imageid)
+    : m_id(imageid)
 {
 }
 
 ImageExtendedProperties::ImageExtendedProperties()
-                       : m_id(0)
+    : m_id(0)
 {
 }
 
@@ -142,9 +142,13 @@ QString ImageExtendedProperties::readProperty(const QString& property)
 void ImageExtendedProperties::setProperty(const QString& property, const QString& value)
 {
     if (value.isNull()) // there is a NOT NULL restriction on the table.
+    {
         removeProperty(property);
+    }
     else
+    {
         DatabaseAccess().db()->setImageProperty(m_id, property, value);
+    }
 }
 
 QStringList ImageExtendedProperties::readFakeListProperty(const QString& property)
@@ -156,9 +160,13 @@ QStringList ImageExtendedProperties::readFakeListProperty(const QString& propert
 void ImageExtendedProperties::setFakeListProperty(const QString& property, const QStringList& value)
 {
     if (value.isEmpty())
+    {
         removeProperty(property);
+    }
     else
+    {
         DatabaseAccess().db()->setImageProperty(m_id, property, value.join(";"));
+    }
 }
 
 void ImageExtendedProperties::removeProperty(const QString& property)

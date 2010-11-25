@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,21 +38,25 @@ class DIGIKAM_EXPORT DImgLoaderObserver
 
 public:
     // posts progress information about image IO
-    virtual void progressInfo(const DImg *, float /*progress*/)
-            {};
+    virtual void progressInfo(const DImg*, float /*progress*/)
+    {};
 
     // queries whether the image IO operation shall be continued
-    virtual bool continueQuery(const DImg *)
-            { return true; };
+    virtual bool continueQuery(const DImg*)
+    {
+        return true;
+    };
 
     // Return a relative value which determines the granularity, the frequency
     // with which the DImgLoaderObserver is checked and progress is posted.
     // Standard is 1.0. Values < 1 mean less granularity (fewer checks),
     // values > 1 mean higher granularity (more checks).
     virtual float granularity()
-            { return 1.0; };
+    {
+        return 1.0;
+    };
 
-    virtual ~DImgLoaderObserver(){};
+    virtual ~DImgLoaderObserver() {};
 };
 
 }      // namespace Digikam

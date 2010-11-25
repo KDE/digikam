@@ -42,7 +42,7 @@ class AlbumSelectComboBox : public TreeViewLineEditComboBox
 
 public:
 
-    AlbumSelectComboBox(QWidget *parent = 0);
+    AlbumSelectComboBox(QWidget* parent = 0);
     ~AlbumSelectComboBox();
 
     /** Once after creation, call one of these three methods.
@@ -53,16 +53,16 @@ public:
     */
     void setDefaultAlbumModels();
     void setDefaultTagModels();
-    void setModels(AbstractCheckableAlbumModel *model, QSortFilterProxyModel *filterModel);
+    void setModels(AbstractCheckableAlbumModel* model, QSortFilterProxyModel* filterModel);
 
     /** Sets the text that is used to describe the state when no album is selected.
         This may be something like "Any album" or "No tag selected" */
     void setNoSelectionText(const QString& text);
 
     /** Returns the source model. Retrieve selection information from here. */
-    AbstractCheckableAlbumModel *model() const;
+    AbstractCheckableAlbumModel* model() const;
     /** Return the filter model in use. */
-    QSortFilterProxyModel *filterModel() const;
+    QSortFilterProxyModel* filterModel() const;
 
 protected Q_SLOTS:
 
@@ -72,8 +72,8 @@ protected Q_SLOTS:
 
 protected:
 
-    AbstractCheckableAlbumModel *m_model;
-    QSortFilterProxyModel       *m_filterModel;
+    AbstractCheckableAlbumModel* m_model;
+    QSortFilterProxyModel*       m_filterModel;
     QString                      m_noSelectionText;
 };
 

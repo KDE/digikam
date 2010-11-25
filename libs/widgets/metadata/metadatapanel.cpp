@@ -52,121 +52,121 @@ namespace Digikam
 
 static const char* ExifHumanList[] =
 {
-     "Make",
-     "Model",
-     "DateTime",
-     "ImageDescription",
-     "Copyright",
-     "ShutterSpeedValue",
-     "ApertureValue",
-     "ExposureProgram",
-     "ExposureMode",
-     "ExposureBiasValue",
-     "ExposureTime",
-     "WhiteBalance",
-     "ISOSpeedRatings",
-     "FocalLength",
-     "SubjectDistance",
-     "MeteringMode",
-     "Contrast",
-     "Saturation",
-     "Sharpness",
-     "LightSource",
-     "Flash",
-     "FNumber",
-     "GPSLatitude",
-     "GPSLongitude",
-     "GPSAltitude",
-     "-1"
+    "Make",
+    "Model",
+    "DateTime",
+    "ImageDescription",
+    "Copyright",
+    "ShutterSpeedValue",
+    "ApertureValue",
+    "ExposureProgram",
+    "ExposureMode",
+    "ExposureBiasValue",
+    "ExposureTime",
+    "WhiteBalance",
+    "ISOSpeedRatings",
+    "FocalLength",
+    "SubjectDistance",
+    "MeteringMode",
+    "Contrast",
+    "Saturation",
+    "Sharpness",
+    "LightSource",
+    "Flash",
+    "FNumber",
+    "GPSLatitude",
+    "GPSLongitude",
+    "GPSAltitude",
+    "-1"
 };
 
 // This list mix different tags name used by camera makers.
 static const char* MakerNoteHumanList[] =
 {
-     "AFFocusPos",
-     "AFMode",
-     "AFPoint",
-     "AutofocusMode",
-     "ColorMode",
-     "ColorTemperature",
-     "Contrast",
-     "DigitalZoom",
-     "ExposureMode",
-     "ExposureProgram",
-     "ExposureCompensation",
-     "ExposureManualBias",
-     "Flash",
-     "FlashBias",
-     "FlashMode",
-     "FlashType",
-     "FlashDevice",
-     "FNumber",
-     "Focus"
-     "FocusDistance",
-     "FocusMode",
-     "FocusSetting",
-     "FocusType",
-     "Hue",
-     "HueAdjustment",
-     "ImageStabilizer",
-     "ImageStabilization",
-     "InternalFlash",
-     "ISOSelection",
-     "ISOSpeed",
-     "Lens",
-     "LensType",
-     "LensRange",
-     "Macro",
-     "MacroFocus",
-     "MeteringMode",
-     "NoiseReduction",
-     "OwnerName",
-     "Quality",
-     "Tone",
-     "ToneComp",
-     "Saturation",
-     "Sharpness",
-     "ShootingMode",
-     "ShutterSpeedValue",
-     "SpotMode",
-     "SubjectDistance",
-     "WhiteBalance",
-     "WhiteBalanceBias",
-     "-1"
+    "AFFocusPos",
+    "AFMode",
+    "AFPoint",
+    "AutofocusMode",
+    "ColorMode",
+    "ColorTemperature",
+    "Contrast",
+    "DigitalZoom",
+    "ExposureMode",
+    "ExposureProgram",
+    "ExposureCompensation",
+    "ExposureManualBias",
+    "Flash",
+    "FlashBias",
+    "FlashMode",
+    "FlashType",
+    "FlashDevice",
+    "FNumber",
+    "Focus"
+    "FocusDistance",
+    "FocusMode",
+    "FocusSetting",
+    "FocusType",
+    "Hue",
+    "HueAdjustment",
+    "ImageStabilizer",
+    "ImageStabilization",
+    "InternalFlash",
+    "ISOSelection",
+    "ISOSpeed",
+    "Lens",
+    "LensType",
+    "LensRange",
+    "Macro",
+    "MacroFocus",
+    "MeteringMode",
+    "NoiseReduction",
+    "OwnerName",
+    "Quality",
+    "Tone",
+    "ToneComp",
+    "Saturation",
+    "Sharpness",
+    "ShootingMode",
+    "ShutterSpeedValue",
+    "SpotMode",
+    "SubjectDistance",
+    "WhiteBalance",
+    "WhiteBalanceBias",
+    "-1"
 };
 
 static const char* IptcHumanList[] =
 {
-     "Caption",
-     "City",
-     "Contact",
-     "Copyright",
-     "Credit",
-     "DateCreated",
-     "Headline",
-     "Keywords",
-     "ProvinceState",
-     "Source",
-     "Urgency",
-     "Writer",
-     "-1"
+    "Caption",
+    "City",
+    "Contact",
+    "Copyright",
+    "Credit",
+    "DateCreated",
+    "Headline",
+    "Keywords",
+    "ProvinceState",
+    "Source",
+    "Urgency",
+    "Writer",
+    "-1"
 };
 
 static const char* XmpHumanList[] =
 {
-     "Description",
-     "City",
-     "Relation",
-     "Rights",
-     "Publisher",
-     "CreateDate",
-     "Title",
-     "Identifier",
-     "State",
-     "Source",
-     "Rating",
-     "Advisory",
-     "-1"
+    "Description",
+    "City",
+    "Relation",
+    "Rights",
+    "Publisher",
+    "CreateDate",
+    "Title",
+    "Identifier",
+    "State",
+    "Source",
+    "Rating",
+    "Advisory",
+    "-1"
 };
 
 class MetadataPanel::MetadataPanelPriv
@@ -190,7 +190,9 @@ public:
     void setDefaultFilter(const char** list, QStringList& filter)
     {
         for (int i=0 ; QString(list[i]) != QString("-1") ; ++i)
+        {
             filter << QString(list[i]);
+        }
     };
 
     KTabWidget*           tab;
@@ -207,7 +209,7 @@ public:
 };
 
 MetadataPanel::MetadataPanel(KTabWidget* tab)
-             : QObject(tab), d(new MetadataPanelPriv)
+    : QObject(tab), d(new MetadataPanelPriv)
 {
     d->tab = tab;
 
@@ -277,16 +279,24 @@ void MetadataPanel::applySettings()
     KConfigGroup group        = config->group("Image Properties SideBar");
 
     if (d->exifViewerConfig->itemsCount())
+    {
         group.writeEntry("EXIF Tags Filter", d->exifViewerConfig->checkedTagsList());
+    }
 
     if (d->mknoteViewerConfig->itemsCount())
+    {
         group.writeEntry("MAKERNOTE Tags Filter", d->mknoteViewerConfig->checkedTagsList());
+    }
 
     if (d->iptcViewerConfig->itemsCount())
+    {
         group.writeEntry("IPTC Tags Filter", d->iptcViewerConfig->checkedTagsList());
+    }
 
     if (d->xmpViewerConfig->itemsCount())
+    {
         group.writeEntry("XMP Tags Filter", d->xmpViewerConfig->checkedTagsList());
+    }
 
     config->sync();
 #endif
@@ -300,9 +310,10 @@ void MetadataPanel::slotTabChanged(int)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
-    QWidget *tab = 0;
+    QWidget* tab = 0;
     tab          = d->tab->currentWidget();
 #if KEXIV2_VERSION >= 0x010000
+
     if (tab == d->exifViewerConfig)
     {
         if (!d->exifViewerConfig->itemsCount())
@@ -335,6 +346,7 @@ void MetadataPanel::slotTabChanged(int)
             d->xmpViewerConfig->setcheckedTagsList(group.readEntry("XMP Tags Filter", d->xmpViewerConfig->defaultFilter()));
         }
     }
+
 #endif
     kapp->restoreOverrideCursor();
 }
@@ -343,11 +355,11 @@ QStringList MetadataPanel::getAllCheckedTags()
 {
     QStringList checkedTags;
     checkedTags
-        << d->exifViewerConfig->checkedTagsList()
-        << d->iptcViewerConfig->checkedTagsList()
-        << d->mknoteViewerConfig->checkedTagsList()
-        << d->xmpViewerConfig->checkedTagsList()
-    ;
+            << d->exifViewerConfig->checkedTagsList()
+            << d->iptcViewerConfig->checkedTagsList()
+            << d->mknoteViewerConfig->checkedTagsList()
+            << d->xmpViewerConfig->checkedTagsList()
+            ;
 
     return checkedTags;
 }
@@ -356,11 +368,11 @@ QList<MetadataSelectorView*> MetadataPanel::viewers()
 {
     QList<MetadataSelectorView*> viewers;
     viewers
-        << d->exifViewerConfig
-        << d->iptcViewerConfig
-        << d->mknoteViewerConfig
-        << d->xmpViewerConfig
-    ;
+            << d->exifViewerConfig
+            << d->iptcViewerConfig
+            << d->mknoteViewerConfig
+            << d->xmpViewerConfig
+            ;
 
     return viewers;
 }

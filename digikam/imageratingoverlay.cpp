@@ -44,17 +44,17 @@
 namespace Digikam
 {
 
-ImageRatingOverlay::ImageRatingOverlay(QObject *parent)
-                  : AbstractWidgetDelegateOverlay(parent)
+ImageRatingOverlay::ImageRatingOverlay(QObject* parent)
+    : AbstractWidgetDelegateOverlay(parent)
 {
 }
 
-RatingWidget *ImageRatingOverlay::ratingWidget() const
+RatingWidget* ImageRatingOverlay::ratingWidget() const
 {
     return static_cast<RatingWidget*>(m_widget);
 }
 
-QWidget *ImageRatingOverlay::createWidget()
+QWidget* ImageRatingOverlay::createWidget()
 {
     const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     RatingWidget* w    = new RatingWidget(parentWidget());
@@ -73,15 +73,17 @@ void ImageRatingOverlay::setActive(bool active)
                 this, SLOT(slotRatingChanged(int)));
 
         if (view()->model())
-            connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-                    this, SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
+            connect(view()->model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+                    this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
     }
 }
 
 void ImageRatingOverlay::visualChange()
 {
     if (m_widget && m_widget->isVisible())
+    {
         updatePosition();
+    }
 }
 
 void ImageRatingOverlay::hide()
@@ -93,14 +95,18 @@ void ImageRatingOverlay::hide()
 void ImageRatingOverlay::updatePosition()
 {
     if (!m_index.isValid())
+    {
         return;
+    }
 
     QRect rect = delegate()->ratingRect();
+
     if (rect.width() > ratingWidget()->maximumVisibleWidth())
     {
         int offset = (rect.width() - ratingWidget()->maximumVisibleWidth()) / 2;
         rect.adjust(offset, 0, -offset, 0);
     }
+
     QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 
@@ -111,7 +117,10 @@ void ImageRatingOverlay::updatePosition()
 void ImageRatingOverlay::updateRating()
 {
     if (!m_index.isValid())
+    {
         return;
+    }
+
     ImageInfo info = ImageModel::retrieveImageInfo(m_index);
     ratingWidget()->setRating(info.rating());
 }
@@ -119,7 +128,9 @@ void ImageRatingOverlay::updateRating()
 void ImageRatingOverlay::slotRatingChanged(int rating)
 {
     if (m_widget && m_widget->isVisible() && m_index.isValid())
+    {
         emit ratingEdited(m_index, rating);
+    }
 }
 
 void ImageRatingOverlay::slotEntered(const QModelIndex& index)
@@ -128,7 +139,9 @@ void ImageRatingOverlay::slotEntered(const QModelIndex& index)
 
     // see bug 228810, this is a small workaround
     if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
+    {
         ratingWidget()->setVisibleImmediately();
+    }
 
     m_index = index;
 
@@ -142,7 +155,9 @@ void ImageRatingOverlay::slotEntered(const QModelIndex& index)
 void ImageRatingOverlay::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
+    {
         updateRating();
+    }
 }
 
 } // namespace Digikam

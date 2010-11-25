@@ -52,25 +52,28 @@ namespace Digikam
 {
 
 MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* parent)
-               : QObject(parent), m_parent(parent)
+    : QObject(parent), m_parent(parent)
 {
 }
 
-bool MediaPlayerMouseClickFilter::eventFilter(QObject *obj, QEvent *event)
+bool MediaPlayerMouseClickFilter::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonPress)
     {
-        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+        QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
+
         if (mouseEvent && mouseEvent->button() == Qt::LeftButton)
         {
             if (m_parent)
             {
                 MediaPlayerView* mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
+
                 if (mplayer)
                 {
                     mplayer->slotEscapePressed();
                 }
             }
+
             return true;
         }
         else
@@ -128,7 +131,7 @@ public:
 };
 
 MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
-               : QStackedWidget(parent), d(new MediaPlayerViewPriv)
+    : QStackedWidget(parent), d(new MediaPlayerViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -137,19 +140,19 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
     d->nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 
     d->errorView        = new QFrame(this);
-    QLabel *errorMsg    = new QLabel(i18n("An error has occurred with the media player...."), this);
+    QLabel* errorMsg    = new QLabel(i18n("An error has occurred with the media player...."), this);
 
     errorMsg->setAlignment(Qt::AlignCenter);
     d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->errorView->setLineWidth(1);
 
-    QGridLayout *grid = new QGridLayout;
+    QGridLayout* grid = new QGridLayout;
     grid->addWidget(errorMsg, 1, 0, 1, 3 );
     grid->setColumnStretch(0, 10),
-    grid->setColumnStretch(2, 10),
-    grid->setRowStretch(0, 10),
-    grid->setRowStretch(2, 10),
-    grid->setMargin(KDialog::spacingHint());
+         grid->setColumnStretch(2, 10),
+         grid->setRowStretch(0, 10),
+         grid->setRowStretch(2, 10),
+         grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
     d->errorView->setLayout(grid);
 
@@ -171,9 +174,9 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
     d->grid->addWidget(d->player->videoWidget(), 0, 0, 1, 3);
     d->grid->addWidget(d->slider,                1, 0, 1, 3);
     d->grid->setColumnStretch(0, 10),
-    d->grid->setColumnStretch(2, 10),
-    d->grid->setRowStretch(0, 10),
-    d->grid->setMargin(KDialog::spacingHint());
+      d->grid->setColumnStretch(2, 10),
+      d->grid->setRowStretch(0, 10),
+      d->grid->setMargin(KDialog::spacingHint());
     d->grid->setSpacing(KDialog::spacingHint());
     d->mediaPlayerView->setLayout(d->grid);
 
@@ -237,13 +240,17 @@ void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previ
 void MediaPlayerView::slotPlayerFinished()
 {
     if (d->player->mediaObject()->errorType() == Phonon::FatalError)
+    {
         setPreviewMode(MediaPlayerViewPriv::ErrorView);
+    }
 }
 
 void MediaPlayerView::slotPlayerstateChanged(Phonon::State newState, Phonon::State /*oldState*/)
 {
     if (newState == Phonon::ErrorState)
+    {
         setPreviewMode(MediaPlayerViewPriv::ErrorView);
+    }
 }
 
 void MediaPlayerView::escapePreview()
@@ -276,7 +283,9 @@ int MediaPlayerView::previewMode()
 void MediaPlayerView::setPreviewMode(int mode)
 {
     if (mode != MediaPlayerViewPriv::ErrorView && mode != MediaPlayerViewPriv::PlayerView)
+    {
         return;
+    }
 
     setCurrentIndex(mode);
     d->toolBar->raise();

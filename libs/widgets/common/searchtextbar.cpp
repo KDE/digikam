@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-bool operator==(const SearchTextSettings &a, const SearchTextSettings &b)
+bool operator==(const SearchTextSettings& a, const SearchTextSettings& b)
 {
     return a.caseSensitive == b.caseSensitive && a.text == b.text;
 }
@@ -80,16 +80,16 @@ public:
     QColor             hasResultColor;
     QColor             hasNoResultColor;
 
-    ModelCompletion   *completion;
+    ModelCompletion*   completion;
 
     QPointer<AlbumFilterModel>   filterModel;
 
     SearchTextSettings settings;
 };
 
-SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& msg)
-             : KLineEdit(parent), StateSavingObject(this),
-               d(new SearchTextBarPriv)
+SearchTextBar::SearchTextBar(QWidget* parent, const char* name, const QString& msg)
+    : KLineEdit(parent), StateSavingObject(this),
+      d(new SearchTextBarPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setClearButtonShown(true);
@@ -121,17 +121,23 @@ void SearchTextBar::doLoadState()
     setCompletionMode((KGlobalSettings::Completion)group.readEntry(entryName(d->optionAutoCompletionModeEntry),
                       (int)KGlobalSettings::completionMode()));
     d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry(entryName(d->optionCaseSensitiveEntry),
-                                                                     (int)Qt::CaseInsensitive);
+                                (int)Qt::CaseInsensitive);
     setIgnoreCase(d->settings.caseSensitive == Qt::CaseInsensitive);
 }
 
 void SearchTextBar::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
+
     if (completionMode() != KGlobalSettings::completionMode())
+    {
         group.writeEntry(entryName(d->optionAutoCompletionModeEntry), (int)completionMode());
+    }
     else
+    {
         group.deleteEntry(entryName(d->optionAutoCompletionModeEntry));
+    }
+
     group.writeEntry(entryName(d->optionCaseSensitiveEntry), (int)d->settings.caseSensitive);
     group.sync();
 }
@@ -149,6 +155,7 @@ bool SearchTextBar::hasTextQueryCompletion() const
 void SearchTextBar::setHighlightOnResult(bool highlight)
 {
     d->highlightOnResult = highlight;
+
     if (!highlight)
     {
         setPalette(QPalette());
@@ -165,7 +172,7 @@ void SearchTextBar::setModel(AbstractAlbumModel* model)
     d->completion->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 }
 
-void SearchTextBar::setFilterModel(AlbumFilterModel *filterModel)
+void SearchTextBar::setFilterModel(AlbumFilterModel* filterModel)
 {
 
     // if there already was a model, disconnect from this model
@@ -245,7 +252,9 @@ SearchTextSettings SearchTextBar::searchTextSettings() const
 void SearchTextBar::slotTextChanged(const QString& text)
 {
     if (text.isEmpty())
+    {
         setPalette(QPalette());
+    }
 
     d->settings.text = text;
 
@@ -273,8 +282,8 @@ void SearchTextBar::slotSearchResult(bool match)
 
 void SearchTextBar::contextMenuEvent(QContextMenuEvent* e)
 {
-    QAction *cs = 0;
-    QMenu *menu = createStandardContextMenu();
+    QAction* cs = 0;
+    QMenu* menu = createStandardContextMenu();
 
     if (d->hasCaseSensitive)
     {

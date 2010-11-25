@@ -48,7 +48,7 @@ public:
         convertJpeg       = false;
     };
 
-    ~DownloadSettingsContainer(){};
+    ~DownloadSettingsContainer() {};
 
 public:
 

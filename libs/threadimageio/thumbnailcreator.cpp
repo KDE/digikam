@@ -82,14 +82,14 @@ ThumbnailInfo::ThumbnailInfo()
 }
 
 ThumbnailCreator::ThumbnailCreator(StorageMethod method)
-                : d(new ThumbnailCreatorPriv)
+    : d(new ThumbnailCreatorPriv)
 {
     d->thumbnailStorage = method;
     initialize();
 }
 
 ThumbnailCreator::ThumbnailCreator(int thumbnailSize, StorageMethod method)
-                : d(new ThumbnailCreatorPriv)
+    : d(new ThumbnailCreatorPriv)
 {
     setThumbnailSize(thumbnailSize);
     d->thumbnailStorage = method;
@@ -104,17 +104,24 @@ ThumbnailCreator::~ThumbnailCreator()
 void ThumbnailCreator::initialize()
 {
     if (d->thumbnailStorage == FreeDesktopStandard)
+    {
         initThumbnailDirs();
+    }
 }
 
 void ThumbnailCreator::setThumbnailSize(int thumbnailSize)
 {
     d->thumbnailSize = thumbnailSize;
+
     // on-disk thumbnail sizes according to spec
     if (d->onlyLargeThumbnails)
+    {
         d->cachedSize = 256;
+    }
     else
+    {
         d->cachedSize = (thumbnailSize <= 128) ? 128 : 256;
+    }
 }
 
 void ThumbnailCreator::setExifRotate(bool rotate)
@@ -132,13 +139,13 @@ void ThumbnailCreator::setRemoveAlphaChannel(bool removeAlpha)
     d->removeAlphaChannel = removeAlpha;
 }
 
-void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, const DRawDecoding& settings)
+void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver* observer, const DRawDecoding& settings)
 {
     d->observer    = observer;
     d->rawSettings = settings;
 }
 
-void ThumbnailCreator::setThumbnailInfoProvider(ThumbnailInfoProvider *provider)
+void ThumbnailCreator::setThumbnailInfoProvider(ThumbnailInfoProvider* provider)
 {
     d->infoProvider = provider;
 }
@@ -168,17 +175,25 @@ QImage ThumbnailCreator::load(const QString& path)
     }
 
     if (d->thumbnailStorage == ThumbnailDatabase)
-        d->dbIdForReplacement = -1; // just to prevent bugs
+    {
+        d->dbIdForReplacement = -1;    // just to prevent bugs
+    }
 
     // get info about path
     ThumbnailInfo info;
+
     if (d->infoProvider)
+    {
         info = d->infoProvider->thumbnailInfo(path);
+    }
     else
+    {
         info = fileThumbnailInfo(path);
+    }
 
     // load pregenerated thumbnail
     ThumbnailImage image;
+
     switch (d->thumbnailStorage)
     {
         case ThumbnailDatabase:
@@ -193,6 +208,7 @@ QImage ThumbnailCreator::load(const QString& path)
     if (image.isNull())
     {
         image = createThumbnail(info);
+
         if (!image.isNull())
         {
             switch (d->thumbnailStorage)
@@ -201,9 +217,13 @@ QImage ThumbnailCreator::load(const QString& path)
                     storeInDatabase(info, image);
                     break;
                 case FreeDesktopStandard:
+
                     // image is stored rotated
                     if (d->exifRotate)
+                    {
                         image.qimage = exifRotate(image.qimage, image.exifOrientation);
+                    }
+
                     storeFreedesktop(info, image);
                     break;
             }
@@ -225,7 +245,9 @@ QImage ThumbnailCreator::load(const QString& path)
     {
         // image is stored, or created, unrotated, and is now rotated for display
         if (d->exifRotate)
+        {
             image.qimage = exifRotate(image.qimage, image.exifOrientation);
+        }
     }
 
     return image.qimage;
@@ -234,8 +256,12 @@ QImage ThumbnailCreator::load(const QString& path)
 void ThumbnailCreator::store(const QString& path, const QImage& i)
 {
     QImage qimage(i);
+
     if (qimage.isNull())
+    {
         return;
+    }
+
     if (qimage.width() > d->cachedSize || qimage.height() > d->cachedSize)
     {
         qimage = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -243,13 +269,19 @@ void ThumbnailCreator::store(const QString& path, const QImage& i)
 
     // get info about path
     ThumbnailInfo info;
+
     if (d->infoProvider)
+    {
         info = d->infoProvider->thumbnailInfo(path);
+    }
     else
+    {
         info = fileThumbnailInfo(path);
+    }
 
     ThumbnailImage image;
     image.qimage = qimage;
+
     switch (d->thumbnailStorage)
     {
         case ThumbnailDatabase:
@@ -271,10 +303,16 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath)
         case ThumbnailDatabase:
         {
             ThumbnailInfo info;
+
             if (d->infoProvider)
+            {
                 info = d->infoProvider->thumbnailInfo(filePath);
+            }
             else
+            {
                 info = fileThumbnailInfo(filePath);
+            }
+
             deleteFromDatabase(info);
             break;
         }
@@ -288,6 +326,7 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath)
 ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info)
 {
     QString path = info.filePath;
+
     if (!info.isAccessible)
     {
         d->error = i18n("File does not exist");
@@ -318,15 +357,20 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info)
         if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
         {
             if (colorManage)
+            {
                 qimage = loadWithDImg(path, &profile);
+            }
             else
-            // use jpegutils
+                // use jpegutils
+            {
                 loadJPEGScaled(qimage, path, d->cachedSize);
+            }
+
             failedAtJPEGScaled = qimage.isNull();
         }
         else if (ext == QString("PNG")  ||
-            ext == QString("TIFF") ||
-            ext == QString("TIF"))
+                 ext == QString("TIFF") ||
+                 ext == QString("TIF"))
         {
             qimage       = loadWithDImg(path, &profile);
             failedAtDImg = qimage.isNull();
@@ -383,6 +427,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info)
     }
 
     int maxSize = qMax(qimage.width(), qimage.height());
+
     if (maxSize != d->cachedSize)
     {
         /*
@@ -393,6 +438,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info)
         */
         qimage        = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
+
     if (colorManage && !profile.isNull())
     {
         IccManager::transformToSRGB(qimage, profile);
@@ -416,10 +462,11 @@ QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile)
 QImage ThumbnailCreator::loadImagePreview(const DMetadata& metadata)
 {
     QImage image;
+
     if (metadata.getImagePreview(image))
     {
         kDebug() << "Use Exif/IPTC preview extraction. Size of image: "
-                      << image.width() << "x" << image.height();
+                 << image.width() << "x" << image.height();
     }
 
     return image;
@@ -444,6 +491,7 @@ QImage ThumbnailCreator::handleAlphaChannel(const QImage& qimage)
                 p.drawImage(0, 0, qimage);
                 return newImage;
             }
+
             break;
         }
         default: // indexed and monochrome formats
@@ -451,6 +499,7 @@ QImage ThumbnailCreator::handleAlphaChannel(const QImage& qimage)
             return qimage.convertToFormat(QImage::Format_RGB32);
         }
     }
+
     return qimage;
 }
 
@@ -459,7 +508,9 @@ int ThumbnailCreator::exifOrientation(const QString& filePath, const DMetadata& 
     // Keep in sync with main version in loadsavethread.cpp
 
     if (DImg::fileFormat(filePath) == DImg::RAW && !fromEmbeddedPreview )
+    {
         return DMetadata::ORIENTATION_NORMAL;
+    }
 
     return metadata.getImageOrientation();
 }
@@ -468,7 +519,9 @@ QImage ThumbnailCreator::exifRotate(const QImage& thumb, int orientation)
 {
     if (orientation == DMetadata::ORIENTATION_NORMAL ||
         orientation == DMetadata::ORIENTATION_UNSPECIFIED)
+    {
         return thumb;
+    }
 
     QMatrix matrix;
 
@@ -544,6 +597,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::WriteOnly);
         image.qimage.save(&buffer, "JPEG", 90);  // Here we will use JPEG quality = 90 to reduce artifacts.
+
         if (dbInfo.data.isNull())
         {
             kWarning() << "Cannot save JPEG thumb in DB";
@@ -555,6 +609,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::WriteOnly);
         image.qimage.save(&buffer, "JP2");
+
         if (dbInfo.data.isNull())
         {
             kWarning() << "Cannot save JPEG2000 thumb in DB";
@@ -566,6 +621,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::WriteOnly);
         image.qimage.save(&buffer, "PNG", 0);
+
         if (dbInfo.data.isNull())
         {
             kWarning() << "Cannot save JPEG2000 thumb in DB";
@@ -576,9 +632,11 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     ThumbnailDatabaseAccess access;
 
     DatabaseCoreBackend::QueryState lastQueryState = DatabaseCoreBackend::ConnectionError;
-    while(lastQueryState == DatabaseCoreBackend::ConnectionError)
+
+    while (lastQueryState == DatabaseCoreBackend::ConnectionError)
     {
         lastQueryState = access.backend()->beginTransaction();
+
         if (DatabaseCoreBackend::NoErrors != lastQueryState)
         {
             continue;
@@ -589,6 +647,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         {
             QVariant id;
             lastQueryState = access.db()->insertThumbnail(dbInfo, &id);
+
             if (DatabaseCoreBackend::NoErrors != lastQueryState)
             {
                 continue;
@@ -601,6 +660,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         else
         {
             lastQueryState = access.db()->replaceThumbnail(dbInfo);
+
             if (DatabaseCoreBackend::NoErrors != lastQueryState)
             {
                 continue;
@@ -611,14 +671,17 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         if (!info.uniqueHash.isNull())
         {
             lastQueryState = access.db()->insertUniqueHash(info.uniqueHash, info.fileSize, dbInfo.id);
+
             if (DatabaseCoreBackend::NoErrors != lastQueryState)
             {
                 continue;
             }
         }
+
         if (!info.filePath.isNull())
         {
             lastQueryState = access.db()->insertFilePath(info.filePath, dbInfo.id);
+
             if (DatabaseCoreBackend::NoErrors != lastQueryState)
             {
                 continue;
@@ -644,6 +707,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
     {
         dbInfo = access.db()->findByHash(info.uniqueHash, info.fileSize);
     }
+
     if (dbInfo.data.isNull() && !info.filePath.isNull())
     {
         dbInfo = access.db()->findByFilePath(info.filePath);
@@ -653,12 +717,17 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
     d->dbIdForReplacement = dbInfo.id;
 
     ThumbnailImage image;
+
     if (dbInfo.data.isNull())
+    {
         return ThumbnailImage();
+    }
 
     // check modification date
     if (dbInfo.modificationDate < info.modificationDate)
+    {
         return ThumbnailImage();
+    }
 
     // Read QImage from data blob
     if (dbInfo.type == DatabaseThumbnail::PGF)
@@ -674,6 +743,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::ReadOnly);
         image.qimage.load(&buffer, "JPEG");
+
         if (dbInfo.data.isNull())
         {
             kWarning() << "Cannot load JPEG thumb from DB";
@@ -685,6 +755,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::ReadOnly);
         image.qimage.load(&buffer, "JP2");
+
         if (dbInfo.data.isNull())
         {
             kWarning() << "Cannot load JPEG2000 thumb from DB";
@@ -696,6 +767,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::ReadOnly);
         image.qimage.load(&buffer, "PNG");
+
         if (dbInfo.data.isNull())
         {
             kWarning() << "Cannot load PNG thumb from DB";
@@ -712,30 +784,38 @@ void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info)
 {
     ThumbnailDatabaseAccess access;
     DatabaseCoreBackend::QueryState lastQueryState=DatabaseCoreBackend::ConnectionError;
-    while(DatabaseCoreBackend::ConnectionError==lastQueryState)
+
+    while (DatabaseCoreBackend::ConnectionError==lastQueryState)
     {
         lastQueryState = access.backend()->beginTransaction();
+
         if (DatabaseCoreBackend::NoErrors!=lastQueryState)
         {
             continue;
         }
+
         if (!info.uniqueHash.isNull())
         {
             lastQueryState=access.db()->removeByUniqueHash(info.uniqueHash, info.fileSize);
+
             if (DatabaseCoreBackend::NoErrors!=lastQueryState)
             {
                 continue;
             }
         }
+
         if (!info.filePath.isNull())
         {
             lastQueryState=access.db()->removeByFilePath(info.filePath);
+
             if (DatabaseCoreBackend::NoErrors!=lastQueryState)
             {
                 continue;
             }
         }
+
         lastQueryState = access.backend()->commitTransaction();
+
         if (DatabaseCoreBackend::NoErrors!=lastQueryState)
         {
             continue;
@@ -746,14 +826,18 @@ void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info)
 // --------------- Freedesktop.org standard implementation -----------------------
 
 
-ThumbnailInfo ThumbnailCreator::fileThumbnailInfo(const QString &path)
+ThumbnailInfo ThumbnailCreator::fileThumbnailInfo(const QString& path)
 {
     ThumbnailInfo info;
     info.filePath          = path;
     QFileInfo fileInfo(path);
     info.isAccessible     = fileInfo.exists();
+
     if (!info.isAccessible)
+    {
         return info;
+    }
+
     info.modificationDate = fileInfo.lastModified();
     return info;
 }
@@ -779,6 +863,7 @@ ThumbnailImage ThumbnailCreator::loadFreedesktop(const ThumbnailInfo& info)
             return info;
         }
     }
+
     return ThumbnailImage();
 }
 
@@ -792,7 +877,9 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
     // required by spec
     if (qimage.format() != QImage::Format_ARGB32)
+    {
         qimage = qimage.convertToFormat(QImage::Format_ARGB32);
+    }
 
     qimage.setText(QString("Thumb::URI").toLatin1(),   0, uri);
     qimage.setText(QString("Thumb::MTime").toLatin1(), 0, QString::number(info.modificationDate.toTime_t()));
@@ -802,9 +889,11 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
     temp.setPrefix(thumbPath + "-digikam-");
     temp.setSuffix(".png");
     temp.setAutoRemove(false);
+
     if (temp.open())
     {
         QString tempFileName   = temp.fileName();
+
         if (qimage.save(tempFileName, "PNG", 0))
         {
             int ret = 0;
@@ -812,15 +901,15 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
             temp.close();
 
-            #if KDE_IS_VERSION(4,2,85)
+#if KDE_IS_VERSION(4,2,85)
             // KDE 4.3.0
             ret = KDE::rename(QFile::encodeName(tempFileName),
                               QFile::encodeName(thumbPath));
-            #else
+#else
             // KDE 4.2.x or 4.1.x
             ret = KDE_rename(QFile::encodeName(tempFileName),
                              QFile::encodeName(thumbPath));
-            #endif
+#endif
 
             if (ret != 0)
             {

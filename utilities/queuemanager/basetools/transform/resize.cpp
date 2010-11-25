@@ -46,7 +46,7 @@ namespace Digikam
 {
 
 Resize::Resize(QObject* parent)
-      : BatchTool("Resize", TransformTool, parent)
+    : BatchTool("Resize", TransformTool, parent)
 {
     setToolTitle(i18n("Resize"));
     setToolDescription(i18n("A tool to resize images with a customized length."));
@@ -119,7 +119,7 @@ int Resize::presetLengthValue(WidthPreset preset)
 {
     int length;
 
-    switch(preset)
+    switch (preset)
     {
         case Tiny:
             length = 480;
@@ -149,15 +149,24 @@ bool Resize::toolOperations()
     bool useCustom     = settings()["UseCustom"].toBool();
     WidthPreset preset = (WidthPreset)(settings()["LengthPreset"].toInt());
     int length         = settings()["LengthCustom"].toInt();
-    if (!useCustom)
-        length = presetLengthValue(preset);
 
-    if (!loadToDImg()) return false;
+    if (!useCustom)
+    {
+        length = presetLengthValue(preset);
+    }
+
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     QSize newSize(image().size());
     newSize.scale(QSize(length, length), Qt::KeepAspectRatio);
+
     if (!newSize.isValid())
+    {
         return false;
+    }
 
     image().resize(newSize.width(), newSize.height());
 

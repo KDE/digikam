@@ -73,8 +73,8 @@ public:
 };
 
 CollectionPage::CollectionPage(KAssistantDialog* dlg)
-              : AssistantDlgPage(dlg, i18n("<b>Configure where images and metadata are stored</b>")),
-                d(new CollectionPagePriv)
+    : AssistantDlgPage(dlg, i18n("<b>Configure where images and metadata are stored</b>")),
+      d(new CollectionPagePriv)
 {
     QWidget* widget      = new QWidget(this);
     QVBoxLayout* vlayout = new QVBoxLayout(widget);
@@ -88,6 +88,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
 #endif
 #endif
     kDebug() << picturesPath;
+
     if (picturesPath.isEmpty())
     {
         picturesPath = QDir::homePath() + i18nc("This is a path name so you should "
@@ -177,12 +178,18 @@ void CollectionPage::saveSettings()
 bool CollectionPage::checkSettings()
 {
     QString rootAlbumFolder;
+
     if (!checkRootAlbum(rootAlbumFolder))
+    {
         return false;
+    }
 
     QString dbFolder;
+
     if (!checkDatabase(dbFolder))
+    {
         return false;
+    }
 
     d->rootAlbum = rootAlbumFolder;
     d->dbPath    = dbFolder;
@@ -203,10 +210,12 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
     }
 
 #ifndef _WIN32
+
     if (!QDir::isAbsolutePath(rootAlbumFolder))
     {
         rootAlbumFolder.prepend(QDir::homePath());
     }
+
 #endif
 
     /*
@@ -223,11 +232,11 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
-                                   i18n("<p>The folder to use as the root album path does not exist:</p>"
-                                        "<p><b>%1</b></p>"
-                                        "Would you like digiKam to create it for you?",
-                                        rootAlbumFolder),
-                                   i18n("Create Root Album Folder?"));
+                                            i18n("<p>The folder to use as the root album path does not exist:</p>"
+                                                    "<p><b>%1</b></p>"
+                                                    "Would you like digiKam to create it for you?",
+                                                    rootAlbumFolder),
+                                            i18n("Create Root Album Folder?"));
 
         if (rc == KMessageBox::No)
         {
@@ -278,10 +287,12 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     }
 
 #ifndef _WIN32
+
     if (!QDir::isAbsolutePath(dbFolder))
     {
         dbFolder.prepend(QDir::homePath());
     }
+
 #endif
 
     /*
@@ -298,11 +309,11 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
-                                   i18n("<p>The folder to put your database in does not seem to exist:</p>"
-                                        "<p><b>%1</b></p>"
-                                        "Would you like digiKam to create it for you?",
-                                        dbFolder),
-                                   i18n("Create Database Folder?"));
+                                            i18n("<p>The folder to put your database in does not seem to exist:</p>"
+                                                    "<p><b>%1</b></p>"
+                                                    "Would you like digiKam to create it for you?",
+                                                    dbFolder),
+                                            i18n("Create Database Folder?"));
 
         if (rc == KMessageBox::No)
         {
@@ -346,7 +357,9 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
 void CollectionPage::slotAlbumRootChanged(const KUrl& url)
 {
     if (!d->dbPathEdited)
+    {
         d->dbPathRequester->setUrl(url);
+    }
 }
 
 void CollectionPage::slotDbPathChanged(const KUrl&)

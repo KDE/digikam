@@ -52,9 +52,9 @@ public:
         led          = 0;
     }
 
-/* NOTE: There is a problem with Qt4.3 and KDE < 4.1.0 if statusbar host a KLineEdit:
-         digiKam crash. Text Filter bar is replaced by a simple QLineEdit in this case.
- */
+    /* NOTE: There is a problem with Qt4.3 and KDE < 4.1.0 if statusbar host a KLineEdit:
+             digiKam crash. Text Filter bar is replaced by a simple QLineEdit in this case.
+     */
 #if KDE_IS_VERSION(4,1,0)
     SearchTextBar*       textFilter;
 #else
@@ -68,7 +68,7 @@ public:
 };
 
 AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
-                   : KHBox(parent), d(new AlbumIconViewFilterPriv)
+    : KHBox(parent), d(new AlbumIconViewFilterPriv)
 {
     d->led = new StatusLed(this);
     d->led->installEventFilter(this);
@@ -116,9 +116,9 @@ AlbumIconViewFilter::~AlbumIconViewFilter()
 
 void AlbumIconViewFilter::readSettings()
 {
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::instance();
     d->ratingFilter->setRatingFilterCondition((Digikam::ImageFilterSettings::RatingCondition)
-                                              (settings->getRatingFilterCond()));
+            (settings->getRatingFilterCond()));
     /*
     Bug 181705: always enable filters
     d->ratingFilter->setEnabled(settings->getIconShowRating());
@@ -139,21 +139,33 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
     QString     message;
 
     if (!d->textFilter->text().isEmpty())
+    {
         filtersList.append(i18n("<br/><nobr><i>Text</i></nobr>"));
+    }
 
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
+    {
         filtersList.append(i18n("<br/><nobr><i>Mime Type</i></nobr>"));
+    }
 
     if (d->ratingFilter->rating() != 0 || d->ratingFilter->ratingFilterCondition() != ImageFilterSettings::GreaterEqualCondition)
+    {
         filtersList.append(i18n("<br/><nobr><i>Rating</i></nobr>"));
+    }
 
     if (d->settings.isFilteringByTags())
+    {
         filtersList.append(i18n("<br/><nobr><i>Tags</i></nobr>"));
+    }
 
     if (filtersList.count() > 1)
+    {
         message = i18n("<nobr><b>Active filters:</b></nobr>");
+    }
     else
+    {
         message = i18n("<nobr><b>Active filter:</b></nobr>");
+    }
 
     message.append(filtersList.join(QString()));
 
@@ -176,18 +188,19 @@ void AlbumIconViewFilter::slotFilterMatchesForText(bool match)
 #endif
 }
 
-void AlbumIconViewFilter::slotFilterSettingsChanged(const ImageFilterSettings &settings)
+void AlbumIconViewFilter::slotFilterSettingsChanged(const ImageFilterSettings& settings)
 {
     d->settings = settings;
 }
 
-bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
+bool AlbumIconViewFilter::eventFilter(QObject* object, QEvent* e)
 {
-    QWidget *widget = static_cast<QWidget*>(object);
+    QWidget* widget = static_cast<QWidget*>(object);
 
     if (e->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent* event = static_cast<QMouseEvent*>(e);
+
         if ( widget->rect().contains(event->pos()) && d->led->ledColor() != StatusLed::Gray)
         {
             // Reset all filters settings.

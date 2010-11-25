@@ -56,8 +56,8 @@ class ClusterUserData
 {
 public:
     ClusterUserData()
-      : thumbnailMarkerIndex(-1),
-        thumbnailSettingsHash(0)
+        : thumbnailMarkerIndex(-1),
+          thumbnailSettingsHash(0)
     {
     }
 
@@ -101,23 +101,23 @@ class WorldMapWidgetPriv
 public:
 
     WorldMapWidgetPriv()
-    : list(),
-      mapTheme(WorldMapWidget::AtlasMap),
-      focusOnAddedItems(true),
-      multiMarkerShowSingleImages(false),
-      multiMarkerShowGroupImages(false),
-      multiMarkerShowHighestRatingFirst(false),
-      multiMarkerShowOldestFirst(false),
-      multiMarkerShowNumbers(false),
-      actionZoomIn(0),
-      actionZoomOut(0),
+        : list(),
+          mapTheme(WorldMapWidget::AtlasMap),
+          focusOnAddedItems(true),
+          multiMarkerShowSingleImages(false),
+          multiMarkerShowGroupImages(false),
+          multiMarkerShowHighestRatingFirst(false),
+          multiMarkerShowOldestFirst(false),
+          multiMarkerShowNumbers(false),
+          actionZoomIn(0),
+          actionZoomOut(0),
 #ifdef HAVE_MARBLEWIDGET
-      marbleWidget(0),
-      markerClusterHolder(0),
-      thumbnailLoadThread(0),
-      thumbnailLoadThreadBuncher(0)
+          marbleWidget(0),
+          markerClusterHolder(0),
+          thumbnailLoadThread(0),
+          thumbnailLoadThreadBuncher(0)
 #else
-      marbleWidget(0)
+          marbleWidget(0)
 #endif // HAVE_MARBLEWIDGET
     {
     };
@@ -143,8 +143,8 @@ public:
 
 };
 
-WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
-              : QFrame(parent), d(new WorldMapWidgetPriv)
+WorldMapWidget::WorldMapWidget(int w, int h, QWidget* parent)
+    : QFrame(parent), d(new WorldMapWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setMinimumWidth(w);
@@ -203,7 +203,7 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     slotZoomChanged(0);
 #endif // HAVE_MARBLEWIDGET
 
-    QVBoxLayout *vlay = new QVBoxLayout(this);
+    QVBoxLayout* vlay = new QVBoxLayout(this);
     vlay->addWidget(d->marbleWidget);
     vlay->setMargin(0);
     vlay->setSpacing(0);
@@ -260,6 +260,7 @@ void WorldMapWidget::addGPSPositions(const GPSInfoList& list)
     d->list << list;
 
 #ifdef HAVE_MARBLEWIDGET
+
     // center on the first item in the list:
     if ( d->focusOnAddedItems && !list.isEmpty() )
     {
@@ -275,6 +276,7 @@ void WorldMapWidget::addGPSPositions(const GPSInfoList& list)
         const MarkerClusterHolder::MarkerInfo marker = MarkerClusterHolder::MarkerInfo::fromData<GPSInfo>(*it);
         d->markerClusterHolder->addMarker(marker);
     }
+
 #endif // HAVE_MARBLEWIDGET
 }
 
@@ -400,7 +402,8 @@ void WorldMapWidget::setMapTheme(MapTheme theme)
 #ifdef HAVE_MARBLEWIDGET
 
 #ifdef MARBLE_VERSION
-    switch(theme)
+
+    switch (theme)
     {
         case OpenStreetMap:
             d->marbleWidget->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
@@ -409,6 +412,7 @@ void WorldMapWidget::setMapTheme(MapTheme theme)
             d->marbleWidget->setMapThemeId("earth/srtm/srtm.dgml");
             break;
     }
+
 #endif // MARBLE_VERSION
 
     d->marbleWidget->setShowCompass(false);
@@ -416,25 +420,28 @@ void WorldMapWidget::setMapTheme(MapTheme theme)
 #endif // HAVE_MARBLEWIDGET
 }
 
-void WorldMapWidget::slotSetSelectedImages(const GPSInfoList &infoList)
+void WorldMapWidget::slotSetSelectedImages(const GPSInfoList& infoList)
 {
 #ifdef HAVE_MARBLEWIDGET
-  if (infoList.isEmpty())
-  {
-      // clear any selections:
-      d->markerClusterHolder->clearSelection();
-      return;
-  }
 
-  QList<MarkerClusterHolder::MarkerInfo> markers;
-  for (GPSInfoList::const_iterator it = infoList.constBegin(); it!=infoList.constEnd(); ++it)
-  {
-      const MarkerClusterHolder::MarkerInfo marker = MarkerClusterHolder::MarkerInfo::fromData<GPSInfo>(*it);
-      markers << marker;
-  }
-  d->markerClusterHolder->setSelectedMarkers(markers, true, true);
+    if (infoList.isEmpty())
+    {
+        // clear any selections:
+        d->markerClusterHolder->clearSelection();
+        return;
+    }
+
+    QList<MarkerClusterHolder::MarkerInfo> markers;
+
+    for (GPSInfoList::const_iterator it = infoList.constBegin(); it!=infoList.constEnd(); ++it)
+    {
+        const MarkerClusterHolder::MarkerInfo marker = MarkerClusterHolder::MarkerInfo::fromData<GPSInfo>(*it);
+        markers << marker;
+    }
+
+    d->markerClusterHolder->setSelectedMarkers(markers, true, true);
 #else
-  Q_UNUSED(infoList)
+    Q_UNUSED(infoList)
 #endif // HAVE_MARBLEWIDGET
 }
 
@@ -444,10 +451,12 @@ void WorldMapWidget::slotMapMarkerSelectionChanged()
     const MarkerClusterHolder::MarkerInfo::List markerList = d->markerClusterHolder->selectedMarkers();
 
     GPSInfoList gpsList;
+
     for (MarkerClusterHolder::MarkerInfoList::const_iterator it = markerList.constBegin(); it!=markerList.constEnd(); ++it)
     {
         gpsList << it->data<GPSInfo>();
     }
+
     emit(signalSelectedItems(gpsList));
 #endif // HAVE_MARBLEWIDGET
 }
@@ -457,10 +466,12 @@ void WorldMapWidget::slotMapMarkerSoloChanged()
 #ifdef HAVE_MARBLEWIDGET
     const MarkerClusterHolder::MarkerInfo::List markerList = d->markerClusterHolder->soloMarkers();
     GPSInfoList gpsList;
+
     for (MarkerClusterHolder::MarkerInfoList::const_iterator it = markerList.constBegin(); it!=markerList.constEnd(); ++it)
     {
         gpsList << it->data<GPSInfo>();
     }
+
     emit(signalSoloItems(gpsList));
 #endif // HAVE_MARBLEWIDGET
 }
@@ -486,26 +497,33 @@ void WorldMapWidget::slotSetAllowItemFiltering(const bool allow)
 #ifdef HAVE_MARBLEWIDGET
 QString MarkerClusterHolderToolTipFunction(const int clusterIndex, MarkerClusterHolder* const mch, void* const yourdata)
 {
-  Q_UNUSED(yourdata)
+    Q_UNUSED(yourdata)
 
-  const MarkerClusterHolder::ClusterInfo& cluster = mch->cluster(clusterIndex);
-  const int nMarkers = cluster.markerCount();
-  if (nMarkers>3)
-      return QString();
+    const MarkerClusterHolder::ClusterInfo& cluster = mch->cluster(clusterIndex);
+    const int nMarkers = cluster.markerCount();
 
-  QString toolText;
-  for (int i=0; i<cluster.markerIndices.size(); ++i)
-  {
-      const GPSInfo info = mch->marker(cluster.markerIndices.at(i)).data<GPSInfo>();
+    if (nMarkers>3)
+    {
+        return QString();
+    }
 
-      QString currentText = info.url.fileName();
-      if (i>0)
-      {
-          toolText+='\n';
-      }
-      toolText+=currentText;
-  }
-  return toolText;
+    QString toolText;
+
+    for (int i=0; i<cluster.markerIndices.size(); ++i)
+    {
+        const GPSInfo info = mch->marker(cluster.markerIndices.at(i)).data<GPSInfo>();
+
+        QString currentText = info.url.fileName();
+
+        if (i>0)
+        {
+            toolText+='\n';
+        }
+
+        toolText+=currentText;
+    }
+
+    return toolText;
 }
 #endif // HAVE_MARBLEWIDGET
 
@@ -546,14 +564,19 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
 
     // do we show multiple images?
     if ((cluster.markerCount()>1)&&!me->d->multiMarkerShowGroupImages)
+    {
         return MarkerClusterHolder::PixmapInvalid;
+    }
 
     // do we show single images?
     if ((cluster.markerCount()==1)&&!me->d->multiMarkerShowSingleImages)
+    {
         return MarkerClusterHolder::PixmapInvalid;
+    }
 
     MarkerClusterHolder::MarkerInfo markerInfo;
     MarkerClusterHolder::PixmapOperations pixmapOperations = MarkerClusterHolder::PixmapInvalid;
+
     if (cluster.markerCount()==1)
     {
         markerInfo = mch->marker(cluster.markerIndices.first());
@@ -563,6 +586,7 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
     {
         // the index of the thumbnail-marker is cached
         markerInfo = mch->marker(clusterUserData.thumbnailMarkerIndex);
+
         if (!me->d->multiMarkerShowNumbers)
         {
             pixmapOperations|= MarkerClusterHolder::PixmapNoAddNumber;
@@ -576,11 +600,13 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
         // find the oldest/youngest image respecting the rating:
         QDateTime maxDate[6];
         int maxIndex[6];
+
         for (int i = 0; i<=5; ++i)
         {
             maxDate[i] = QDateTime();
             maxIndex[i] = -1;
         }
+
         for (QList<int>::const_iterator it = markerIndices.constBegin(); it!=markerIndices.constEnd(); ++it)
         {
             const GPSInfo thisInfo = mch->marker(*it).data<GPSInfo>();
@@ -590,6 +616,7 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
             const int thisRating = qMin(qMax(0, thisInfo.rating), 5);
 
             bool isBetter = maxIndex[thisRating]<0;
+
             if ( !isBetter )
             {
                 if (me->d->multiMarkerShowOldestFirst)
@@ -601,6 +628,7 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
                     isBetter = maxDate[thisRating] < thisDate;
                 }
             }
+
             if (isBetter)
             {
                 maxIndex[thisRating] = *it;
@@ -608,14 +636,15 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
             }
         }
 
-//         kDebug()<<QString("nMarkers=%1").arg(markerList->count());
-//         for (int i=0; i<=5; ++i)
-//         {
-//             kDebug()<<QString("rating: %1, bestdate: %2, index: %3").arg(i).arg(maxDate[i].toString()).arg(maxIndex[i]);
-//         }
+        //         kDebug()<<QString("nMarkers=%1").arg(markerList->count());
+        //         for (int i=0; i<=5; ++i)
+        //         {
+        //             kDebug()<<QString("rating: %1, bestdate: %2, index: %3").arg(i).arg(maxDate[i].toString()).arg(maxIndex[i]);
+        //         }
 
         // now pick the best match:
         int bestIndex = -1;
+
         if (me->d->multiMarkerShowHighestRatingFirst)
         {
             for (int i=5; i>=0; --i)
@@ -630,12 +659,16 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
         else
         {
             QDateTime bestDate;
+
             for (int i = 0; i<=5; ++i)
             {
                 if (maxIndex[i]<0)
+                {
                     continue;
+                }
 
                 bool isBetter = bestIndex < 0;
+
                 if (!isBetter)
                 {
                     if (me->d->multiMarkerShowOldestFirst)
@@ -647,6 +680,7 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
                         isBetter = maxDate[i] < bestDate;
                     }
                 }
+
                 if (isBetter)
                 {
                     bestDate = maxDate[i];
@@ -655,14 +689,16 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
             }
         }
 
-//         kDebug()<<QString("bestIndex: %1").arg(bestIndex);
+        //         kDebug()<<QString("bestIndex: %1").arg(bestIndex);
         if (bestIndex>=0)
         {
             markerInfo = mch->marker(bestIndex);
+
             if (!me->d->multiMarkerShowNumbers)
             {
                 pixmapOperations|= MarkerClusterHolder::PixmapNoAddNumber;
             }
+
             clusterUserData.thumbnailMarkerIndex = bestIndex;
             clusterUserData.thumbnailSettingsHash = thumbnailSettingsHash;
             cluster.userData.setValue(clusterUserData);
@@ -674,21 +710,26 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
             return MarkerClusterHolder::PixmapInvalid;
         }
     }
+
     const GPSInfo gpsInfo = markerInfo.data<GPSInfo>();
 
     // determine the maximum size of the pixmap:
     QSize imageSize = gpsInfo.dimensions;
+
     int maxOfWidths = qMin(maxSize.width(), maxSize.height());
+
     // size returned for the image can be 0,0. in that case be conservative about the size:
     // TODO: why is 0,0 returned in some cases? maybe the image has never been loaded before?
     if (!imageSize.isNull())
     {
-//         kDebug()<<imageSize;
+        //         kDebug()<<imageSize;
         imageSize.scale(maxSize, Qt::KeepAspectRatio);
         maxOfWidths = qMax(imageSize.width(), imageSize.height());
-//         kDebug()<<maxSize<<imageSize<<maxOfWidths;
+        //         kDebug()<<maxSize<<imageSize<<maxOfWidths;
     }
+
     bool havePixmap = me->d->thumbnailLoadThread->find(gpsInfo.url.path() , *clusterPixmap, maxOfWidths);
+
     if (havePixmap)
     {
         pixmapOperations|= MarkerClusterHolder::PixmapValid;
@@ -708,12 +749,14 @@ void WorldMapWidget::slotThumbnailLoaded(const LoadingDescription& loadingDescri
     Q_UNUSED(pix)
 
 #ifdef HAVE_MARBLEWIDGET
+
     // tell the map to redraw itself, but only after 200ms in case more
     // thumbnails come in
     if (!d->thumbnailLoadThreadBuncher->isActive())
     {
         d->thumbnailLoadThreadBuncher->start(200);
     }
+
 #endif // HAVE_MARBLEWIDGET
 }
 
@@ -760,6 +803,7 @@ WorldMapWidget::MapTheme WorldMapWidget::getMapTheme()
 QAction* WorldMapWidget::getMouseModeAction(const MarkerClusterHolder::MouseMode mouseMode)
 {
     QAction* const action = d->markerClusterHolder->getMouseModeAction(mouseMode);
+
     switch (mouseMode)
     {
         case MarkerClusterHolder::MouseModePan:
@@ -782,6 +826,7 @@ QAction* WorldMapWidget::getMouseModeAction(const MarkerClusterHolder::MouseMode
             action->setIcon(SmallIcon("page-zoom"));
             break;
     }
+
     return action;
 }
 #endif // MARBLE_VERSION >= 0x000800
@@ -793,16 +838,16 @@ class WorldMapThemeBtnPriv
 public:
 
     WorldMapThemeBtnPriv()
-    : atlasMapAction(0),
-      openStreetMapAction(0),
-      multiMarkerShowSingleImagesAction(0),
-      multiMarkerShowGroupImagesAction(0),
-      multiMarkerShowHighestRatingFirstAction(0),
-      multiMarkerShowYoungestFirstAction(0),
-      multiMarkerShowOldestFirstAction(0),
-      multiMarkerShowNumbersAction(0),
-      mapThemeMenu(0),
-      map(0)
+        : atlasMapAction(0),
+          openStreetMapAction(0),
+          multiMarkerShowSingleImagesAction(0),
+          multiMarkerShowGroupImagesAction(0),
+          multiMarkerShowHighestRatingFirstAction(0),
+          multiMarkerShowYoungestFirstAction(0),
+          multiMarkerShowOldestFirstAction(0),
+          multiMarkerShowNumbersAction(0),
+          mapThemeMenu(0),
+          map(0)
     {
     };
 
@@ -821,8 +866,8 @@ public:
     WorldMapWidget* map;
 };
 
-WorldMapThemeBtn::WorldMapThemeBtn(WorldMapWidget *map, QWidget *parent)
-                : QToolButton(parent), d(new WorldMapThemeBtnPriv)
+WorldMapThemeBtn::WorldMapThemeBtn(WorldMapWidget* map, QWidget* parent)
+    : QToolButton(parent), d(new WorldMapThemeBtnPriv)
 {
     d->map          = map;
     d->mapThemeMenu = new KMenu(this);
@@ -882,7 +927,7 @@ WorldMapThemeBtn::~WorldMapThemeBtn()
     delete d;
 }
 
-void WorldMapThemeBtn::slotMapThemeChanged(QAction *action)
+void WorldMapThemeBtn::slotMapThemeChanged(QAction* action)
 {
     if (action == d->atlasMapAction)
     {
@@ -893,11 +938,11 @@ void WorldMapThemeBtn::slotMapThemeChanged(QAction *action)
         d->map->setMapTheme(WorldMapWidget::OpenStreetMap);
     }
     else if (  (action == d->multiMarkerShowSingleImagesAction)
-            || (action == d->multiMarkerShowGroupImagesAction)
-            || (action == d->multiMarkerShowHighestRatingFirstAction)
-            || (action == d->multiMarkerShowYoungestFirstAction)
-            || (action == d->multiMarkerShowOldestFirstAction)
-            || (action == d->multiMarkerShowNumbersAction)
+               || (action == d->multiMarkerShowGroupImagesAction)
+               || (action == d->multiMarkerShowHighestRatingFirstAction)
+               || (action == d->multiMarkerShowYoungestFirstAction)
+               || (action == d->multiMarkerShowOldestFirstAction)
+               || (action == d->multiMarkerShowNumbersAction)
             )
 
     {
@@ -907,8 +952,9 @@ void WorldMapThemeBtn::slotMapThemeChanged(QAction *action)
             d->multiMarkerShowHighestRatingFirstAction->isChecked(),
             d->multiMarkerShowOldestFirstAction->isChecked(),
             d->multiMarkerShowNumbersAction->isChecked()
-          );
+        );
     }
+
     slotUpdateMenu();
 }
 
@@ -926,23 +972,23 @@ void WorldMapThemeBtn::slotUpdateMenu()
     bool multiMarkerShowOldestFirst(false);
     bool multiMarkerShowNumbers(false);
     d->map->getMultiMarkerSettings(
-          &multiMarkerShowSingleImages,
-          &multiMarkerShowGroupImages,
-          &multiMarkerShowHighestRatingFirst,
-          &multiMarkerShowOldestFirst,
-          &multiMarkerShowNumbers
-        );
-   d->multiMarkerShowSingleImagesAction->setChecked(multiMarkerShowSingleImages);
-   d->multiMarkerShowGroupImagesAction->setChecked(multiMarkerShowGroupImages);
-   d->multiMarkerShowHighestRatingFirstAction->setChecked(multiMarkerShowHighestRatingFirst);
-   d->multiMarkerShowYoungestFirstAction->setChecked(!multiMarkerShowOldestFirst);
-   d->multiMarkerShowOldestFirstAction->setChecked(multiMarkerShowOldestFirst);
-   d->multiMarkerShowNumbersAction->setChecked(multiMarkerShowNumbers);
+        &multiMarkerShowSingleImages,
+        &multiMarkerShowGroupImages,
+        &multiMarkerShowHighestRatingFirst,
+        &multiMarkerShowOldestFirst,
+        &multiMarkerShowNumbers
+    );
+    d->multiMarkerShowSingleImagesAction->setChecked(multiMarkerShowSingleImages);
+    d->multiMarkerShowGroupImagesAction->setChecked(multiMarkerShowGroupImages);
+    d->multiMarkerShowHighestRatingFirstAction->setChecked(multiMarkerShowHighestRatingFirst);
+    d->multiMarkerShowYoungestFirstAction->setChecked(!multiMarkerShowOldestFirst);
+    d->multiMarkerShowOldestFirstAction->setChecked(multiMarkerShowOldestFirst);
+    d->multiMarkerShowNumbersAction->setChecked(multiMarkerShowNumbers);
 
-   d->multiMarkerShowHighestRatingFirstAction->setEnabled(multiMarkerShowGroupImages);
-   d->multiMarkerShowYoungestFirstAction->setEnabled(multiMarkerShowGroupImages);
-   d->multiMarkerShowOldestFirstAction->setEnabled(multiMarkerShowGroupImages);
-   d->multiMarkerShowNumbersAction->setEnabled(multiMarkerShowGroupImages);
+    d->multiMarkerShowHighestRatingFirstAction->setEnabled(multiMarkerShowGroupImages);
+    d->multiMarkerShowYoungestFirstAction->setEnabled(multiMarkerShowGroupImages);
+    d->multiMarkerShowOldestFirstAction->setEnabled(multiMarkerShowGroupImages);
+    d->multiMarkerShowNumbersAction->setEnabled(multiMarkerShowGroupImages);
 }
 
 }  // namespace Digikam

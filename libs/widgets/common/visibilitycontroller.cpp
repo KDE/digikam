@@ -37,7 +37,7 @@ public:
     }
 
     VisibilityController::Status  status;
-    QList<VisibilityObject *>     objects;
+    QList<VisibilityObject*>     objects;
     QWidget*                      containerWidget;
 };
 
@@ -45,7 +45,7 @@ class VisibilityWidgetWrapper : public QObject, public VisibilityObject
 {
 public:
 
-    VisibilityWidgetWrapper(VisibilityController *parent, QWidget *widget)
+    VisibilityWidgetWrapper(VisibilityController* parent, QWidget* widget)
         : QObject(parent), m_widget(widget)
     {
     }
@@ -63,12 +63,12 @@ public:
     QWidget* m_widget;
 };
 
-VisibilityController::VisibilityController(QObject *parent)
-                    : QObject(parent), d(new VisibilityControllerPriv)
+VisibilityController::VisibilityController(QObject* parent)
+    : QObject(parent), d(new VisibilityControllerPriv)
 {
 }
 
-void VisibilityController::addObject(VisibilityObject *object)
+void VisibilityController::addObject(VisibilityObject* object)
 {
     d->objects << object;
 
@@ -76,24 +76,32 @@ void VisibilityController::addObject(VisibilityObject *object)
     if (d->status == Unknown)
     {
         if (object->isVisible())
+        {
             d->status = Shown;
+        }
         else
+        {
             d->status = Hidden;
+        }
     }
 
     // set state on object
     if (d->status == Shown || d->status == Showing)
+    {
         object->setVisible(true);
+    }
     else
+    {
         object->setVisible(false);
+    }
 }
 
-void VisibilityController::addWidget(QWidget *widget)
+void VisibilityController::addWidget(QWidget* widget)
 {
     addObject(new VisibilityWidgetWrapper(this, widget));
 }
 
-void VisibilityController::setContainerWidget(QWidget *widget)
+void VisibilityController::setContainerWidget(QWidget* widget)
 {
     d->containerWidget = widget;
 }
@@ -103,14 +111,20 @@ void VisibilityController::setVisible(bool shallBeVisible)
     if (shallBeVisible)
     {
         if (d->status == Shown || d->status == Showing)
+        {
             return;
+        }
+
         d->status = Showing;
         beginStatusChange();
     }
     else
     {
         if (d->status == Hidden || d->status == Hiding)
+        {
             return;
+        }
+
         d->status = Hiding;
         beginStatusChange();
     }
@@ -129,17 +143,25 @@ void VisibilityController::hide()
 void VisibilityController::triggerVisibility()
 {
     if (d->status == Shown || d->status == Showing || d->status == Unknown)
+    {
         setVisible(false);
+    }
     else
+    {
         setVisible(true);
+    }
 }
 
 bool VisibilityController::isVisible() const
 {
     if (d->status == Shown || d->status == Showing)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 void VisibilityController::beginStatusChange()
@@ -151,7 +173,7 @@ void VisibilityController::step()
 {
     if (d->status == Showing)
     {
-        foreach(VisibilityObject *o, d->objects)
+        foreach (VisibilityObject* o, d->objects)
         {
             if (!o->isVisible())
             {
@@ -162,7 +184,7 @@ void VisibilityController::step()
     }
     else if (d->status == Hiding)
     {
-        foreach(VisibilityObject *o, d->objects)
+        foreach (VisibilityObject* o, d->objects)
         {
             if (o->isVisible())
             {
@@ -181,10 +203,12 @@ void VisibilityController::allSteps()
         {
             d->containerWidget->setUpdatesEnabled(false);
         }
-        foreach(VisibilityObject *o, d->objects)
+
+        foreach (VisibilityObject* o, d->objects)
         {
             o->setVisible(true);
         }
+
         if (d->containerWidget)
         {
             d->containerWidget->setUpdatesEnabled(true);
@@ -196,10 +220,12 @@ void VisibilityController::allSteps()
         {
             d->containerWidget->setUpdatesEnabled(false);
         }
-        foreach(VisibilityObject *o, d->objects)
+
+        foreach (VisibilityObject* o, d->objects)
         {
             o->setVisible(false);
         }
+
         if (d->containerWidget)
         {
             d->containerWidget->setUpdatesEnabled(true);

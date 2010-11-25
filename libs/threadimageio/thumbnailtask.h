@@ -53,7 +53,7 @@ private:
     virtual void setResult(const LoadingDescription&, const DImg&) {};
 
     QImage            m_qimage;
-    ThumbnailCreator *m_creator;
+    ThumbnailCreator* m_creator;
 };
 
 } // namespace Digikam

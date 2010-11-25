@@ -6,7 +6,7 @@
  * Date        : 2008-03-13
  * Description : image files selector dialog.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ImageDialogPreview : public KPreviewWidgetBase
 
 public:
 
-    ImageDialogPreview(QWidget *parent=0);
+    ImageDialogPreview(QWidget* parent=0);
     ~ImageDialogPreview();
 
     QSize sizeHint() const;
@@ -63,7 +63,7 @@ private Q_SLOTS:
 
 private:
 
-    void resizeEvent(QResizeEvent *e);
+    void resizeEvent(QResizeEvent* e);
 
 private:
 

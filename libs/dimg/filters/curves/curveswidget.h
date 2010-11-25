@@ -61,7 +61,7 @@ public:
                  bool i_sixteenBits,                   // 8 or 16 bits image.
                  QWidget* parent=0,                    // Parent widget instance.
                  bool readOnly=false);                 // If true : widget with full edition mode capabilities.
-                                                       // If false : display curve data only without edition.
+    // If false : display curve data only without edition.
 
     ~CurvesWidget();
 

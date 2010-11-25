@@ -82,13 +82,13 @@ public:
      * Returned is a joint result of main and user settings.
      * If you are not interested in a specific value, pass 0.
      */
-    void getFilterSettings(QStringList *imageFilter, QStringList *videoFilter, QStringList *audioFilter);
+    void getFilterSettings(QStringList* imageFilter, QStringList* videoFilter, QStringList* audioFilter);
 
     /**
      * Returns the user-configurable filter settings.
      * If you are not interested in a specific value, pass 0.
      */
-    void getUserFilterSettings(QString *imageFilterString, QString *videoFilterString, QString *audioFilterString);
+    void getUserFilterSettings(QString* imageFilterString, QString* videoFilterString, QString* audioFilterString);
 
     /**
      * Sets the main filter settings of the database. Should only be called at schema update.
@@ -312,7 +312,7 @@ public:
      * @param iconAlbumRelativePath Returns the path below the album root of the image
      * @returns true if there is an icon set.
      */
-    bool getAlbumIcon(int albumID, int *iconAlbumRootId, QString *iconAlbumRelativePath);
+    bool getAlbumIcon(int albumID, int* iconAlbumRootId, QString* iconAlbumRelativePath);
 
     /**
      * Given an albumid, this returns the album root id for that album
@@ -393,7 +393,7 @@ public:
     void deleteTag(int tagID);
 
     /**
-     * Set a new name for the tag. 
+     * Set a new name for the tag.
      * @param tagID the id of the tag
      * @param name  the new name for the tag
      */
@@ -419,7 +419,7 @@ public:
      * @param icon an icon name that can be loaded by the system iconloader
      * @returns true if there is an icon set.
      */
-    bool getTagIcon(int tagID, int *iconAlbumRootId, QString *iconAlbumRelativePath, QString *icon);
+    bool getTagIcon(int tagID, int* iconAlbumRootId, QString* iconAlbumRelativePath, QString* icon);
 
     /**
      * Set the parent tagid for the tag. This is equivalent to reparenting
@@ -716,12 +716,12 @@ public:
      * 12) Int       WhiteBalanceColorTemperature
      * 13) Int       meteringMode
      * 14) Double    subjectDistance
-     * 15) Double    subjectDistanceCategory  
+     * 15) Double    subjectDistanceCategory
      * You can leave out entries from this list. Indicate the values that you have
      * passed in the ImageMetadata flag in the third parameters.
      */
     void addImageMetadata(qlonglong imageID, const QVariantList& infos,
-                           DatabaseFields::ImageMetadata fields = DatabaseFields::ImageMetadataAll);
+                          DatabaseFields::ImageMetadata fields = DatabaseFields::ImageMetadataAll);
 
     /**
      * Change the indicated fields of the image information for the specified item.
@@ -755,7 +755,7 @@ public:
      * passed in the ImageInfo flag in the third parameters.
      */
     void addImagePosition(qlonglong imageID, const QVariantList& infos,
-                           DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
+                          DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
 
     /**
      * Change the indicated fields of the image information for the specified item.
@@ -930,7 +930,7 @@ public:
      * @return It will always return true. Maybe that will change.
      */
     //bool setItemDate(int albumID, const QString& name,
-      //               const QDateTime& datetime);
+    //               const QDateTime& datetime);
 
     /**
      * Get the caption for the item
@@ -1114,7 +1114,7 @@ public:
     /**
      * Constructor
      */
-    AlbumDB(DatabaseBackend *backend);
+    AlbumDB(DatabaseBackend* backend);
 
     /**
      * Destructor

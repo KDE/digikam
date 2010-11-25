@@ -92,8 +92,8 @@ public:
     QPixmap pixmap;
 };
 
-PanIconWidget::PanIconWidget(QWidget *parent, Qt::WidgetAttribute attribute)
-             : QWidget(parent), d(new PanIconWidgetPriv)
+PanIconWidget::PanIconWidget(QWidget* parent, Qt::WidgetAttribute attribute)
+    : QWidget(parent), d(new PanIconWidgetPriv)
 {
     d->timer = new QTimer(this);
     d->timer->setInterval(800);
@@ -157,7 +157,11 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const DImg& im
 
 void PanIconWidget::slotZoomFactorChanged(double factor)
 {
-    if (d->zoomFactor == factor) return;
+    if (d->zoomFactor == factor)
+    {
+        return;
+    }
+
     d->zoomFactor      = factor;
     d->zoomedOrgWidth  = (int)(d->orgWidth  * factor);
     d->zoomedOrgHeight = (int)(d->orgHeight * factor);
@@ -168,16 +172,16 @@ void PanIconWidget::setRegionSelection(const QRect& regionSelection)
 {
     d->regionSelection = regionSelection;
     d->localRegionSelection.setX( d->rect.x() + (int)((float)d->regionSelection.x() *
-                                 ((float)d->width / (float)d->zoomedOrgWidth)) );
+                                  ((float)d->width / (float)d->zoomedOrgWidth)) );
 
     d->localRegionSelection.setY( d->rect.y() + (int)((float)d->regionSelection.y() *
-                                 ((float)d->height / (float)d->zoomedOrgHeight)) );
+                                  ((float)d->height / (float)d->zoomedOrgHeight)) );
 
     d->localRegionSelection.setWidth( (int)((float)d->regionSelection.width() *
-                                     ((float)d->width / (float)d->zoomedOrgWidth)) );
+                                            ((float)d->width / (float)d->zoomedOrgWidth)) );
 
     d->localRegionSelection.setHeight( (int)((float)d->regionSelection.height() *
-                                      ((float)d->height / (float)d->zoomedOrgHeight)) );
+                                       ((float)d->height / (float)d->zoomedOrgHeight)) );
 
     update();
 }
@@ -195,16 +199,18 @@ void PanIconWidget::setCursorToLocalRegionSelectionCenter()
 void PanIconWidget::setCenterSelection()
 {
     setRegionSelection(QRect(
-             (int)(((float)d->zoomedOrgWidth  / 2.0) - ((float)d->regionSelection.width()  / 2.0)),
-             (int)(((float)d->zoomedOrgHeight / 2.0) - ((float)d->regionSelection.height() / 2.0)),
-             d->regionSelection.width(),
-             d->regionSelection.height()));
+                           (int)(((float)d->zoomedOrgWidth  / 2.0) - ((float)d->regionSelection.width()  / 2.0)),
+                           (int)(((float)d->zoomedOrgHeight / 2.0) - ((float)d->regionSelection.height() / 2.0)),
+                           d->regionSelection.width(),
+                           d->regionSelection.height()));
 }
 
 void PanIconWidget::regionSelectionMoved(bool targetDone)
 {
     if (targetDone)
+    {
         update();
+    }
 
     int x = (int)lround( ((float)d->localRegionSelection.x() - (float)d->rect.x() ) *
                          ((float)d->zoomedOrgWidth / (float)d->width) );
@@ -235,23 +241,47 @@ void PanIconWidget::paintEvent(QPaintEvent*)
     // Drawing selection border
 
     if (d->flicker)
+    {
         p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+    }
     else
+    {
         p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+    }
 
     QRect r(d->localRegionSelection);
+
     // Clamp to widget size. Selection area must always be visible
-    if (r.left() < 0)            r.setLeft(0);
-    if (r.top() < 0)             r.setTop(0);
-    if (r.right() > width()-2)   r.setRight(width()-2);
-    if (r.bottom() > height()-2) r.setBottom(height()-2);
+    if (r.left() < 0)
+    {
+        r.setLeft(0);
+    }
+
+    if (r.top() < 0)
+    {
+        r.setTop(0);
+    }
+
+    if (r.right() > width()-2)
+    {
+        r.setRight(width()-2);
+    }
+
+    if (r.bottom() > height()-2)
+    {
+        r.setBottom(height()-2);
+    }
 
     p.drawRect(r.x(), r.y(), r.width(), r.height());
 
     if (d->flicker)
+    {
         p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+    }
     else
+    {
         p.setPen(QPen(Qt::white, 1, Qt::DotLine));
+    }
 
     p.drawRect(r.x(), r.y(), r.width(), r.height());
 }
@@ -266,14 +296,14 @@ void PanIconWidget::setMouseFocus()
     emit signalSelectionTakeFocus();
 }
 
-void PanIconWidget::showEvent(QShowEvent *e)
+void PanIconWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
 
     d->timer->start();
 }
 
-void PanIconWidget::hideEvent(QHideEvent *e)
+void PanIconWidget::hideEvent(QHideEvent* e)
 {
     QWidget::hideEvent(e);
 
@@ -287,7 +317,7 @@ void PanIconWidget::hideEvent(QHideEvent *e)
     }
 }
 
-void PanIconWidget::mousePressEvent ( QMouseEvent * e )
+void PanIconWidget::mousePressEvent ( QMouseEvent* e )
 {
     if ( (e->button() == Qt::LeftButton || e->button() == Qt::MidButton) &&
          d->localRegionSelection.contains( e->x(), e->y() ) )
@@ -300,7 +330,7 @@ void PanIconWidget::mousePressEvent ( QMouseEvent * e )
     }
 }
 
-void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
+void PanIconWidget::mouseMoveEvent ( QMouseEvent* e )
 {
     if ( d->moveSelection &&
          (e->buttons() == Qt::LeftButton || e->buttons() == Qt::MidButton) )
@@ -316,16 +346,24 @@ void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
         // Perform normalization of selection area.
 
         if (d->localRegionSelection.left() < d->rect.left())
+        {
             d->localRegionSelection.moveLeft(d->rect.left());
+        }
 
         if (d->localRegionSelection.top() < d->rect.top())
+        {
             d->localRegionSelection.moveTop(d->rect.top());
+        }
 
         if (d->localRegionSelection.right() > d->rect.right())
+        {
             d->localRegionSelection.moveRight(d->rect.right());
+        }
 
         if (d->localRegionSelection.bottom() > d->rect.bottom())
+        {
             d->localRegionSelection.moveBottom(d->rect.bottom());
+        }
 
         update();
         regionSelectionMoved(false);
@@ -334,13 +372,17 @@ void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
     else
     {
         if ( d->localRegionSelection.contains( e->x(), e->y() ) )
+        {
             setCursor( Qt::PointingHandCursor );
+        }
         else
+        {
             setCursor( Qt::ArrowCursor );
+        }
     }
 }
 
-void PanIconWidget::mouseReleaseEvent ( QMouseEvent * )
+void PanIconWidget::mouseReleaseEvent ( QMouseEvent* )
 {
     if ( d->moveSelection )
     {

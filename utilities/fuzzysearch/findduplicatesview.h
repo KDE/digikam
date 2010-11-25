@@ -52,7 +52,7 @@ class FindDuplicatesView : public QWidget
 
 public:
 
-    FindDuplicatesView(QWidget *parent=0);
+    FindDuplicatesView(QWidget* parent=0);
     ~FindDuplicatesView();
 
     SAlbum* currentFindDuplicatesAlbum() const;

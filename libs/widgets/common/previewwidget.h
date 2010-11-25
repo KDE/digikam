@@ -126,7 +126,7 @@ protected:
     void   finishPanning();
 
     virtual void setContentsSize();
-    virtual void viewportPaintExtraData(){};
+    virtual void viewportPaintExtraData() {};
     virtual int  previewWidth()=0;
     virtual int  previewHeight()=0;
     virtual bool previewIsNull()=0;

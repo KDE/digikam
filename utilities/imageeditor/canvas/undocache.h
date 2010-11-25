@@ -44,7 +44,7 @@ public:
 
     void   clear();
     bool   putData(int level, int w, int h, int bytesDepth, uchar* data);
-    uchar *getData(int level, int& w, int& h, int& bytesDepth, bool del=true);
+    uchar* getData(int level, int& w, int& h, int& bytesDepth, bool del=true);
 
     void   erase(int level);
 

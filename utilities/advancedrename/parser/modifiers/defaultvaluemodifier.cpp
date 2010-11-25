@@ -39,8 +39,8 @@ namespace Digikam
 {
 
 DefaultValueDialog::DefaultValueDialog(Parseable* parent)
-                  : ParseableDialog(parent),
-                    valueInput(0)
+    : ParseableDialog(parent),
+      valueInput(0)
 {
     QString defaultValueStr = i18n("Default Value");
 
@@ -71,9 +71,9 @@ DefaultValueDialog::~DefaultValueDialog()
 // --------------------------------------------------------
 
 DefaultValueModifier::DefaultValueModifier()
-                    : Modifier(i18nc("default value for empty strings", "Default Value..."),
-                               i18n("Set a default value for empty strings"),
-                               SmallIcon("edit-undo"))
+    : Modifier(i18nc("default value for empty strings", "Default Value..."),
+               i18n("Set a default value for empty strings"),
+               SmallIcon("edit-undo"))
 {
     addToken("{default:\"||value||\"}", description());
 
@@ -89,14 +89,17 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
     QString result;
 
     QPointer<DefaultValueDialog> dlg = new DefaultValueDialog(this);
+
     if (dlg->exec() == KDialog::Accepted)
     {
         QString valueStr = dlg->valueInput->text();
+
         if (!valueStr.isEmpty())
         {
             result = QString("{default:\"%1\"}").arg(valueStr);
         }
     }
+
     delete dlg;
 
     emit signalTokenTriggered(result);
@@ -112,7 +115,9 @@ QString DefaultValueModifier::parseOperation(ParseSettings& settings)
     }
 
     const QRegExp& reg = regExp();
+
     QString defaultStr = reg.cap(1).isEmpty() ? QString() : reg.cap(1);
+
     return defaultStr;
 }
 

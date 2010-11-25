@@ -85,14 +85,14 @@ DImg::DImg()
 {
 }
 
-DImg::DImg(const QByteArray& filePath, DImgLoaderObserver *observer,
+DImg::DImg(const QByteArray& filePath, DImgLoaderObserver* observer,
            DRawDecoding rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
     load(filePath, observer, rawDecodingSettings);
 }
 
-DImg::DImg(const QString& filePath, DImgLoaderObserver *observer,
+DImg::DImg(const QString& filePath, DImgLoaderObserver* observer,
            DRawDecoding rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
@@ -128,10 +128,15 @@ DImg::DImg(const QImage& image)
     if (!image.isNull())
     {
         QImage target;
+
         if (image.format() == QImage::Format_RGB32 || image.format() == QImage::Format_ARGB32)
+        {
             target = image;
+        }
         else
+        {
             target = image.convertToFormat(QImage::Format_ARGB32);
+        }
 
         setImageData(true, image.width(), image.height(), false, image.hasAlphaChannel());
 
@@ -212,6 +217,7 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
 
     // replace data
     delete [] m_priv->data;
+
     if (null)
     {
         // image is null - no data
@@ -220,8 +226,11 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
     else if (copyData)
     {
         int size = allocateData();
+
         if (data)
+        {
             memcpy(m_priv->data, data, size);
+        }
     }
     else
     {
@@ -231,7 +240,9 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
             m_priv->null = false;
         }
         else
+        {
             allocateData();
+        }
     }
 }
 
@@ -262,7 +273,7 @@ void DImg::resetMetaData()
 
 uchar* DImg::stripImageData()
 {
-    uchar *data  = m_priv->data;
+    uchar* data  = m_priv->data;
     m_priv->data = 0;
     m_priv->null = true;
     return data;
@@ -285,6 +296,7 @@ void DImg::copyImageData(const DImgPrivate* src)
 int DImg::allocateData()
 {
     int size = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
+
     try
     {
         m_priv->data = new uchar[size];
@@ -295,6 +307,7 @@ int DImg::allocateData()
         m_priv->null = true;
         return 0;
     }
+
     m_priv->null = false;
     return size;
 }
@@ -321,37 +334,55 @@ void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, boo
 bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash)
 {
     DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo;
+
     if (loadMetadata)
+    {
         loadFlags |= DImgLoader::LoadMetadata;
+    }
+
     if (loadICCData)
+    {
         loadFlags |= DImgLoader::LoadICCData;
+    }
+
     if (loadUniqueHash)
+    {
         loadFlags |= DImgLoader::LoadUniqueHash;
+    }
 
     return load(filePath, loadFlags, 0, DRawDecoding());
 }
 
-bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
+bool DImg::load(const QString& filePath, DImgLoaderObserver* observer,
                 DRawDecoding rawDecodingSettings)
 {
     return load(filePath, DImgLoader::LoadAll, observer, rawDecodingSettings);
 }
 
 bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash,
-                DImgLoaderObserver *observer, DRawDecoding rawDecodingSettings)
+                DImgLoaderObserver* observer, DRawDecoding rawDecodingSettings)
 {
     DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo | DImgLoader::LoadImageData;
+
     if (loadMetadata)
+    {
         loadFlags |= DImgLoader::LoadMetadata;
+    }
+
     if (loadICCData)
+    {
         loadFlags |= DImgLoader::LoadICCData;
+    }
+
     if (loadUniqueHash)
+    {
         loadFlags |= DImgLoader::LoadUniqueHash;
+    }
 
     return load(filePath, loadFlags, observer, rawDecodingSettings);
 }
 
-bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *observer,
+bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* observer,
                 DRawDecoding rawDecodingSettings)
 {
     FORMAT format = fileFormat(filePath);
@@ -373,6 +404,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             kDebug() << filePath << " : JPEG file identified";
             JPEGLoader loader(this);
             loader.setLoadFlags(loadFlags);
+
             if (loader.load(filePath, observer))
             {
                 m_priv->null       = !loader.hasLoadedData();
@@ -381,6 +413,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
+
             break;
         }
         case(TIFF):
@@ -388,6 +421,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             kDebug() << filePath << " : TIFF file identified";
             TIFFLoader loader(this);
             loader.setLoadFlags(loadFlags);
+
             if (loader.load(filePath, observer))
             {
                 m_priv->null       = !loader.hasLoadedData();
@@ -396,6 +430,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
+
             break;
         }
         case(PNG):
@@ -403,6 +438,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             kDebug() << filePath << " : PNG file identified";
             PNGLoader loader(this);
             loader.setLoadFlags(loadFlags);
+
             if (loader.load(filePath, observer))
             {
                 m_priv->null       = !loader.hasLoadedData();
@@ -411,6 +447,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
+
             break;
         }
         case(PPM):
@@ -418,6 +455,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             kDebug() << filePath << " : PPM file identified";
             PPMLoader loader(this);
             loader.setLoadFlags(loadFlags);
+
             if (loader.load(filePath, observer))
             {
                 m_priv->null       = !loader.hasLoadedData();
@@ -426,6 +464,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
+
             break;
         }
         case(RAW):
@@ -433,6 +472,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             kDebug() << filePath << " : RAW file identified";
             RAWLoader loader(this, rawDecodingSettings);
             loader.setLoadFlags(loadFlags);
+
             if (loader.load(filePath, observer))
             {
                 m_priv->null       = !loader.hasLoadedData();
@@ -442,6 +482,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 loader.postProcess(observer);
                 return true;
             }
+
             break;
         }
         case(JP2K):
@@ -449,6 +490,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             kDebug() << filePath << " : JPEG2000 file identified";
             JP2KLoader loader(this);
             loader.setLoadFlags(loadFlags);
+
             if (loader.load(filePath, observer))
             {
                 m_priv->null       = !loader.hasLoadedData();
@@ -457,6 +499,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
+
             break;
         }
         case(PGF):
@@ -464,6 +507,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             kDebug() << filePath << " : PGF file identified";
             PGFLoader loader(this);
             loader.setLoadFlags(loadFlags);
+
             if (loader.load(filePath, observer))
             {
                 m_priv->null       = !loader.hasLoadedData();
@@ -472,6 +516,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
+
             break;
         }
         default:
@@ -479,6 +524,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             kDebug() << filePath << " : QIMAGE file identified";
             QImageLoader loader(this);
             loader.setLoadFlags(loadFlags);
+
             if (loader.load(filePath, observer))
             {
                 m_priv->null       = !loader.hasLoadedData();
@@ -487,6 +533,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
+
             break;
         }
     }
@@ -541,24 +588,31 @@ QString DImg::formatToMimeType(FORMAT frm)
             break;
         }
     }
+
     return format;
 }
 
-bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver *observer)
+bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver* observer)
 {
     if (isNull())
+    {
         return false;
+    }
 
     return( save(filePath, formatToMimeType(frm), observer) );
 }
 
-bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver *observer)
+bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver* observer)
 {
     if (isNull())
+    {
         return false;
+    }
 
     if (format.isEmpty())
+    {
         return false;
+    }
 
     QString frm = format.toUpper();
 
@@ -586,12 +640,14 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
         setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
+
     if (frm == "JP2" || frm == "J2K" || frm == "JPX" || frm == "JPC" || frm == "PGX")
     {
         JP2KLoader loader(this);
         setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
+
     if (frm == "PGF")
     {
         PGFLoader loader(this);
@@ -612,12 +668,15 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
 DImg::FORMAT DImg::fileFormat(const QString& filePath)
 {
     if ( filePath.isNull() )
+    {
         return NONE;
+    }
 
     // In first we trying to check the file extension. This is mandatory because
     // some tiff files are detected like RAW files by dcraw::identify method.
 
     QFileInfo fileInfo(filePath);
+
     if (!fileInfo.exists())
     {
         kDebug() << "File \"" << filePath << "\" does not exist";
@@ -630,19 +689,32 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     if (!ext.isEmpty())
     {
         if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+        {
             return JPEG;
+        }
         else if (ext == QString("PNG"))
+        {
             return PNG;
+        }
         else if (ext == QString("TIFF") || ext == QString("TIF"))
+        {
             return TIFF;
+        }
         else if (rawFilesExt.toUpper().contains(ext))
+        {
             return RAW;
+        }
+
         if (ext == QString("JP2") || ext == QString("JPX") || // JPEG2000 file format
             ext == QString("JPC") || ext == QString("J2K") || // JPEG2000 code stream
             ext == QString("PGX"))                            // JPEG2000 WM format
+        {
             return JP2K;
+        }
         else if (ext == QString("PGF"))
+        {
             return PGF;
+        }
     }
 
     // In second, we trying to parse file header.
@@ -656,6 +728,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     }
 
     const int headerLen = 9;
+
     unsigned char header[headerLen];
 
     if (fread(&header, headerLen, 1, f) != 1)
@@ -689,7 +762,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     {
         int width, height, rgbmax;
         char nl;
-        FILE *file = fopen(QFile::encodeName(filePath), "rb");
+        FILE* file = fopen(QFile::encodeName(filePath), "rb");
 
         if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4)
         {
@@ -703,7 +776,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         fclose (file);
     }
     else if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath)
-              && dcrawIdentify.isDecodable)
+             && dcrawIdentify.isDecodable)
     {
         // RAW File test using dcraw::identify method.
         // Need to test it before TIFF because any RAW file
@@ -769,9 +842,11 @@ uchar* DImg::copyBits() const
 uchar* DImg::scanLine(uint i) const
 {
     if ( i >= height() )
+    {
         return 0;
+    }
 
-    uchar *data = bits() + (width() * bytesDepth() * i);
+    uchar* data = bits() + (width() * bytesDepth() * i);
     return data;
 }
 
@@ -793,9 +868,13 @@ bool DImg::isReadOnly() const
 DImg::COLORMODEL DImg::originalColorModel() const
 {
     if (m_priv->attributes.contains("originalColorModel"))
+    {
         return (COLORMODEL)m_priv->attributes.value("originalColorModel").toInt();
+    }
     else
+    {
         return COLORMODELUNKNOWN;
+    }
 }
 
 int DImg::originalBitDepth() const
@@ -808,18 +887,26 @@ QSize DImg::originalSize() const
     if (m_priv->attributes.contains("originalSize"))
     {
         QSize size = m_priv->attributes.value("originalSize").toSize();
+
         if (size.isValid() && !size.isNull())
+        {
             return size;
+        }
     }
+
     return size();
 }
 
 DImg::FORMAT DImg::detectedFormat() const
 {
     if (m_priv->attributes.contains("detectedFileFormat"))
+    {
         return (FORMAT)m_priv->attributes.value("detectedFileFormat").toInt();
+    }
     else
+    {
         return NONE;
+    }
 }
 
 QString DImg::format() const
@@ -835,9 +922,13 @@ QString DImg::savedFormat() const
 DRawDecoding DImg::rawDecodingSettings() const
 {
     if (m_priv->attributes.contains("rawDecodingSettings"))
+    {
         return m_priv->attributes.value("rawDecodingSettings").value<DRawDecoding>();
+    }
     else
+    {
         return DRawDecoding();
+    }
 }
 
 IccProfile DImg::getIccProfile() const
@@ -873,7 +964,9 @@ uint DImg::numPixels() const
 int DImg::bytesDepth() const
 {
     if (m_priv->sixteenBit)
-       return 8;
+    {
+        return 8;
+    }
 
     return 4;
 }
@@ -881,7 +974,9 @@ int DImg::bytesDepth() const
 int DImg::bitsDepth() const
 {
     if (m_priv->sixteenBit)
-       return 16;
+    {
+        return 16;
+    }
 
     return 8;
 }
@@ -894,7 +989,9 @@ void DImg::setAttribute(const QString& key, const QVariant& value)
 QVariant DImg::attribute(const QString& key) const
 {
     if (m_priv->attributes.contains(key))
+    {
         return m_priv->attributes[key];
+    }
 
     return QVariant();
 }
@@ -917,7 +1014,9 @@ void DImg::setEmbeddedText(const QString& key, const QString& text)
 QString DImg::embeddedText(const QString& key) const
 {
     if (m_priv->embeddedText.contains(key))
+    {
         return m_priv->embeddedText[key];
+    }
 
     return QString();
 }
@@ -925,12 +1024,18 @@ QString DImg::embeddedText(const QString& key) const
 void DImg::switchOriginToLastSaved()
 {
     QVariant savedformat = attribute("savedformat");
+
     if (!savedformat.isNull())
+    {
         setAttribute("format", savedformat);
+    }
 
     QVariant readonly = attribute("savedformat-isreadonly");
+
     if (!readonly.isNull())
+    {
         setAttribute("isreadonly", readonly);
+    }
 
     removeAttribute("rawDecodingSettings");
 }
@@ -951,10 +1056,13 @@ DColor DImg::getPixelColor(uint x, uint y) const
 void DImg::prepareSubPixelAccess()
 {
     if (m_priv->lanczos_func)
+    {
         return;
+    }
 
     /* Precompute the Lanczos kernel */
-    LANCZOS_DATA_TYPE *lanczos_func = new LANCZOS_DATA_TYPE[LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES];
+    LANCZOS_DATA_TYPE* lanczos_func = new LANCZOS_DATA_TYPE[LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES];
+
     for (int i = 0; i < LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES; i++)
     {
         if (i == 0)
@@ -965,8 +1073,8 @@ void DImg::prepareSubPixelAccess()
         {
             float d = sqrt (((float)i) / LANCZOS_TABLE_RES);
             lanczos_func [i] = (LANCZOS_DATA_TYPE)((LANCZOS_DATA_ONE * LANCZOS_SUPPORT *
-                               sin (M_PI * d) * sin ((M_PI / LANCZOS_SUPPORT) * d)) /
-                               (M_PI * M_PI * d * d));
+                                                    sin (M_PI * d) * sin ((M_PI / LANCZOS_SUPPORT) * d)) /
+                                                   (M_PI * M_PI * d * d));
         }
     }
 
@@ -980,11 +1088,19 @@ static inline int normalizeAndClamp(float norm, int sum, int max)
     int r = 0;
 
     if (norm != 0.0)
+    {
         r = sum / norm;
+    }
+
     if (r < 0)
+    {
         r = 0;
+    }
     else if (r > max)
+    {
         r = max;
+    }
+
     return r;
 }
 
@@ -995,11 +1111,19 @@ static inline int normalizeAndClamp(int norm, int sum, int max)
     int r = 0;
 
     if (norm != 0)
+    {
         r = sum / norm;
+    }
+
     if (r < 0)
+    {
         r = 0;
+    }
     else if (r > max)
+    {
         r = max;
+    }
+
     return r;
 }
 
@@ -1013,8 +1137,11 @@ DColor DImg::getSubPixelColor(float x, float y) const
     }
 
     const LANCZOS_DATA_TYPE* lanczos_func = m_priv->lanczos_func;
+
     if (lanczos_func == 0)
+    {
         return DColor();
+    }
 
     Digikam::DColor col(0, 0, 0, 0xFFFF, sixteenBit());
 
@@ -1024,6 +1151,7 @@ DColor DImg::getSubPixelColor(float x, float y) const
     float xe = ::floorf (x) + LANCZOS_SUPPORT;
     float ys = ::ceilf  (y) - LANCZOS_SUPPORT;
     float ye = ::floorf (y) + LANCZOS_SUPPORT;
+
     if (xs >= 0 && ys >= 0 && xe < width() && ye < height())
     {
         float norm = 0.0;
@@ -1036,14 +1164,18 @@ DColor DImg::getSubPixelColor(float x, float y) const
         for (; ys <= ye; ys += 1.0, dy -= 1.0)
         {
             float xc, dx = _dx;
+
             for (xc = xs; xc <= xe; xc += 1.0, dx -= 1.0)
             {
-                uchar *data = bits() + (int)(xs*bytesDepth()) + (int)(width()*ys*bytesDepth());
+                uchar* data = bits() + (int)(xs*bytesDepth()) + (int)(width()*ys*bytesDepth());
                 DColor src = DColor(data, sixteenBit());
 
                 float d = dx * dx + dy * dy;
+
                 if (d >= LANCZOS_SUPPORT * LANCZOS_SUPPORT)
+                {
                     continue;
+                }
 
                 d    = lanczos_func [(int)(d * LANCZOS_TABLE_RES)];
                 norm += d;
@@ -1078,18 +1210,23 @@ DColor DImg::getSubPixelColor(float x, float y) const
     for (; ys <= ye; ++ys, dy -= 4096)
     {
         int xc, dx = _dx;
+
         for (xc = xs; xc <= xe; ++xc, dx -= 4096)
         {
             DColor src(0, 0, 0, 0xFFFF, sixteenBit());
+
             if (xc >= 0 && ys >= 0 && xc < (int)width() && ys < (int)height())
             {
-                uchar *data = bits() + xc*bytesDepth() + width()*ys*bytesDepth();
+                uchar* data = bits() + xc*bytesDepth() + width()*ys*bytesDepth();
                 src.setColor(data, sixteenBit());
             }
 
             int d = (dx * dx + dy * dy) >> 12;
+
             if (d >= 4096 * LANCZOS_SUPPORT * LANCZOS_SUPPORT)
+            {
                 continue;
+            }
 
             d    = lanczos_func [(d * LANCZOS_TABLE_RES) >> 12];
             norm += d;
@@ -1115,23 +1252,26 @@ DColor DImg::getSubPixelColorFast(float x, float y) const
     int yy    = (int)y;
     float d_x = x - (int)x;
     float d_y = y - (int)y;
-    uchar *data;
+    uchar* data;
 
     DColor d00, d01, d10, d11;
     DColor col;
 
     data = bits() + xx*bytesDepth() + yy*width()*bytesDepth();
     d00.setColor(data, sixteenBit());
+
     if ((xx+1) < (int)width())
     {
         data = bits() + (xx+1)*bytesDepth() + yy*width()*bytesDepth();
         d10.setColor(data, sixteenBit());
     }
+
     if ((yy+1) < (int)height())
     {
         data = bits() + xx*bytesDepth() + (yy+1)*width()*bytesDepth();
         d01.setColor(data, sixteenBit());
     }
+
     if ((xx+1) < (int)width() && (yy+1) < (int)height())
     {
         data = bits() + (xx+1)*bytesDepth() + (yy+1)*width()*bytesDepth();
@@ -1156,9 +1296,13 @@ DColor DImg::getSubPixelColorFast(float x, float y) const
     col.blendAdd(d11);
 
     if (sixteenBit())
+    {
         col.blendClamp16();
+    }
     else
+    {
         col.blendClamp8();
+    }
 
     return col;
 }
@@ -1247,7 +1391,9 @@ void DImg::bitBltImage(const DImg* src, int sx, int sy, int dx, int dy)
 void DImg::bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, int dy)
 {
     if (isNull())
-       return;
+    {
+        return;
+    }
 
     if (src->sixteenBit() != sixteenBit())
     {
@@ -1269,7 +1415,9 @@ void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, i
                        uint swidth, uint sheight, int sdepth)
 {
     if (isNull())
+    {
         return;
+    }
 
     if (bytesDepth() != sdepth)
     {
@@ -1340,38 +1488,50 @@ bool DImg::normalizeRegionArguments(int& sx, int& sy, int& w, int& h, int& dx, i
 
     // Nothing left to copy
     if (w <= 0 || h <= 0)
+    {
         return false;
+    }
 
     return true;
 }
 
-void DImg::bitBlt (const uchar *src, uchar *dest,
-                         int sx, int sy, int w, int h, int dx, int dy,
-                         uint swidth, uint sheight, uint dwidth, uint dheight,
-                         bool /*sixteenBit*/, int sdepth, int ddepth)
+void DImg::bitBlt (const uchar* src, uchar* dest,
+                   int sx, int sy, int w, int h, int dx, int dy,
+                   uint swidth, uint sheight, uint dwidth, uint dheight,
+                   bool /*sixteenBit*/, int sdepth, int ddepth)
 {
     // Normalize
     if (!normalizeRegionArguments(sx, sy, w, h, dx, dy, swidth, sheight, dwidth, dheight))
+    {
         return;
+    }
 
     // Same pixels
     if (src == dest && dx==sx && dy==sy)
+    {
         return;
+    }
 
-    const uchar *sptr;
-    uchar *dptr;
+    const uchar* sptr;
+
+    uchar* dptr;
+
     uint   slinelength = swidth * sdepth;
+
     uint   dlinelength = dwidth * ddepth;
 
     int scurY        = sy;
+
     int dcurY        = dy;
+
     int sdepthlength = w * sdepth;
+
     for (int j = 0 ; j < h ; ++j, ++scurY, ++dcurY)
     {
         sptr  = &src [ scurY * slinelength ] + sx * sdepth;
         dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
 
-            // plain and simple bitBlt
+        // plain and simple bitBlt
         for (int i = 0; i < sdepthlength ; ++i, ++sptr, ++dptr)
         {
             *dptr = *sptr;
@@ -1379,12 +1539,14 @@ void DImg::bitBlt (const uchar *src, uchar *dest,
     }
 }
 
-void DImg::bitBlendImage(DColorComposer *composer, const DImg* src,
+void DImg::bitBlendImage(DColorComposer* composer, const DImg* src,
                          int sx, int sy, int w, int h, int dx, int dy,
                          DColorComposer::MultiplicationFlags multiplicationFlags)
 {
     if (isNull())
+    {
         return;
+    }
 
     if (src->sixteenBit() != sixteenBit())
     {
@@ -1397,7 +1559,7 @@ void DImg::bitBlendImage(DColorComposer *composer, const DImg* src,
              src->bytesDepth(), bytesDepth(), multiplicationFlags);
 }
 
-void DImg::bitBlend (DColorComposer *composer, const uchar *src, uchar *dest,
+void DImg::bitBlend (DColorComposer* composer, const uchar* src, uchar* dest,
                      int sx, int sy, int w, int h, int dx, int dy,
                      uint swidth, uint sheight, uint dwidth, uint dheight,
                      bool sixteenBit, int sdepth, int ddepth,
@@ -1405,15 +1567,22 @@ void DImg::bitBlend (DColorComposer *composer, const uchar *src, uchar *dest,
 {
     // Normalize
     if (!normalizeRegionArguments(sx, sy, w, h, dx, dy, swidth, sheight, dwidth, dheight))
+    {
         return;
+    }
 
-    const uchar *sptr;
-    uchar *dptr;
+    const uchar* sptr;
+
+    uchar* dptr;
+
     uint   slinelength = swidth * sdepth;
+
     uint   dlinelength = dwidth * ddepth;
 
     int scurY = sy;
+
     int dcurY = dy;
+
     for (int j = 0 ; j < h ; ++j, ++scurY, ++dcurY)
     {
         sptr  = &src [ scurY * slinelength ] + sx * sdepth;
@@ -1441,7 +1610,9 @@ void DImg::bitBlend (DColorComposer *composer, const uchar *src, uchar *dest,
 QImage DImg::copyQImage()
 {
     if (isNull())
+    {
         return QImage();
+    }
 
     if (sixteenBit())
     {
@@ -1482,12 +1653,16 @@ QImage DImg::copyQImage(const QRect& rect)
 QImage DImg::copyQImage(int x, int y, int w, int h)
 {
     if (isNull())
+    {
         return QImage();
+    }
 
     DImg img = copy(x, y, w, h);
 
     if (img.sixteenBit())
+    {
         img.convertDepth(32);
+    }
 
     return img.copyQImage();
 }
@@ -1495,7 +1670,9 @@ QImage DImg::copyQImage(int x, int y, int w, int h)
 QPixmap DImg::convertToPixmap()
 {
     if (isNull())
+    {
         return QPixmap();
+    }
 
     if (sixteenBit())
     {
@@ -1511,6 +1688,7 @@ QPixmap DImg::convertToPixmap()
         uint*  dptr = (uint*)img.bits();
 
         uint dim = width() * height();
+
         for (uint i = 0; i < dim; ++i)
         {
             *dptr++ = qRgba(sptr[2], sptr[1], sptr[0], sptr[3]);
@@ -1536,10 +1714,14 @@ QPixmap DImg::convertToPixmap()
 QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans)
 {
     if (isNull())
+    {
         return QPixmap();
+    }
 
     if (monitorICCtrans.outputProfile().isNull())
+    {
         return convertToPixmap();
+    }
 
     DImg img = copy();
     monitorICCtrans.apply(img);
@@ -1550,7 +1732,9 @@ QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans)
 QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
 {
     if (isNull() || (!expoSettings->underExposureIndicator && !expoSettings->overExposureIndicator))
+    {
         return QImage();
+    }
 
     QImage img(size(), QImage::Format_ARGB32);
     img.fill(0x00000000);      // Full transparent.
@@ -1563,9 +1747,9 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
     // NOTE: Using DImgScale before to compute Mask clamp to 65534 | 254. Why ?
 
     int    max  = lround(sixteenBit() ? 65535.0 - (65535.0 * expoSettings->overExposurePercent  / 100.0)
-                                      : 255.0   - (255.0   * expoSettings->overExposurePercent  / 100.0));
+                         : 255.0   - (255.0   * expoSettings->overExposurePercent  / 100.0));
     int    min  = lround(sixteenBit() ? 0.0     + (65535.0 * expoSettings->underExposurePercent / 100.0)
-                                      : 0.0     + (255.0   * expoSettings->underExposurePercent / 100.0));
+                         : 0.0     + (255.0   * expoSettings->underExposurePercent / 100.0));
 
     // --------------------------------------------------------
 
@@ -1600,7 +1784,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
             s_red   = *sptr++;
             sptr++;
             match = pure ? (s_red <= min) && (s_green <= min) && (s_blue <= min)
-                         : (s_red <= min) || (s_green <= min) || (s_blue <= min);
+                    : (s_red <= min) || (s_green <= min) || (s_blue <= min);
 
             if (under && match)
             {
@@ -1621,7 +1805,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
             }
 
             match = pure ? (s_red >= max) && (s_green >= max) && (s_blue >= max)
-                         : (s_red >= max) || (s_green >= max) || (s_blue >= max);
+                    : (s_red >= max) || (s_green >= max) || (s_blue >= max);
 
             if (over && match)
             {
@@ -1646,16 +1830,16 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
     }
     else
     {
-       uchar* sptr = m_priv->data;
+        uchar* sptr = m_priv->data;
 
-       for (uint i = 0; i < dim; ++i)
+        for (uint i = 0; i < dim; ++i)
         {
             s_blue  = *sptr++;
             s_green = *sptr++;
             s_red   = *sptr++;
             sptr++;
             match = pure ? (s_red <= min) && (s_green <= min) && (s_blue <= min)
-                         : (s_red <= min) || (s_green <= min) || (s_blue <= min);
+                    : (s_red <= min) || (s_green <= min) || (s_blue <= min);
 
             if (under && match)
             {
@@ -1676,7 +1860,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
             }
 
             match = pure ? (s_red >= max) && (s_green >= max) && (s_blue >= max)
-                         : (s_red >= max) || (s_green >= max) || (s_blue >= max);
+                    : (s_red >= max) || (s_green >= max) || (s_blue >= max);
 
             if (over && match)
             {
@@ -1699,6 +1883,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings)
             dptr += 4;
         }
     }
+
     return img;
 }
 
@@ -1714,11 +1899,13 @@ void DImg::crop(const QRect& rect)
 void DImg::crop(int x, int y, int w, int h)
 {
     if ( isNull() || w <= 0 || h <= 0)
+    {
         return;
+    }
 
     uint  oldw = width();
     uint  oldh = height();
-    uchar *old = stripImageData();
+    uchar* old = stripImageData();
 
     // set new image data, bits(), width(), height() change
     setImageDimension(w, h);
@@ -1732,7 +1919,9 @@ void DImg::crop(int x, int y, int w, int h)
 void DImg::resize(int w, int h)
 {
     if ( w <= 0 || h <= 0)
+    {
         return;
+    }
 
     DImg image = smoothScale(w, h);
 
@@ -1744,187 +1933,201 @@ void DImg::resize(int w, int h)
 void DImg::rotate(ANGLE angle)
 {
     if (isNull())
+    {
         return;
+    }
 
     switch (angle)
     {
-    case(ROT90):
-    {
-        uint w  = height();
-        uint h  = width();
-
-        if (sixteenBit())
+        case(ROT90):
         {
-            ullong* newData = new ullong[w*h];
+            uint w  = height();
+            uint h  = width();
 
-            ullong *from = (ullong*) m_priv->data;
-            ullong *to;
-
-            for (int y = w-1; y >=0; --y)
+            if (sixteenBit())
             {
-                to = newData + y;
+                ullong* newData = new ullong[w*h];
 
-                for (uint x=0; x < h; ++x)
+                ullong* from = (ullong*) m_priv->data;
+                ullong* to;
+
+                for (int y = w-1; y >=0; --y)
                 {
-                    *to = *from++;
-                    to += w;
+                    to = newData + y;
+
+                    for (uint x=0; x < h; ++x)
+                    {
+                        *to = *from++;
+                        to += w;
+                    }
+                }
+
+                setImageDimension(w, h);
+
+                delete [] m_priv->data;
+                m_priv->data = (uchar*)newData;
+            }
+            else
+            {
+                uint* newData = new uint[w*h];
+
+                uint* from = (uint*) m_priv->data;
+                uint* to;
+
+                for (int y = w-1; y >=0; --y)
+                {
+                    to = newData + y;
+
+                    for (uint x=0; x < h; ++x)
+                    {
+                        *to = *from++;
+                        to += w;
+                    }
+                }
+
+                setImageDimension(w, h);
+
+                delete [] m_priv->data;
+                m_priv->data = (uchar*)newData;
+            }
+
+            break;
+        }
+        case(ROT180):
+        {
+            uint w  = width();
+            uint h  = height();
+
+            int middle_line = -1;
+
+            if (h % 2)
+            {
+                middle_line = h / 2;
+            }
+
+            if (sixteenBit())
+            {
+                ullong* line1;
+                ullong* line2;
+
+                ullong* data = (ullong*) bits();
+                ullong  tmp;
+
+                // can be done inplace
+                uint ymax = (h + 1) / 2;
+
+                for (uint y = 0; y < ymax; ++y)
+                {
+                    line1 = data + y * w;
+                    line2 = data + (h-y) * w;
+
+                    for (uint x=0; x < w; ++x)
+                    {
+                        tmp    = *line1;
+                        *line1 = *line2;
+                        *line2 = tmp;
+
+                        ++line1;
+                        --line2;
+
+                        if ((int)y == middle_line && x * 2 >= w)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                uint* line1;
+                uint* line2;
+
+                uint* data = (uint*) bits();
+                uint  tmp;
+
+                // can be done inplace
+                uint ymax = (h + 1) / 2;
+
+                for (uint y = 0; y < ymax; ++y)
+                {
+                    line1 = data + y * w;
+                    line2 = data + (h-y) * w;
+
+                    for (uint x=0; x < w; ++x)
+                    {
+                        tmp    = *line1;
+                        *line1 = *line2;
+                        *line2 = tmp;
+
+                        ++line1;
+                        --line2;
+
+                        if ((int)y == middle_line && x * 2 >= w)
+                        {
+                            break;
+                        }
+                    }
                 }
             }
 
-            setImageDimension(w, h);
-
-            delete [] m_priv->data;
-            m_priv->data = (uchar*)newData;
+            break;
         }
-        else
+        case(ROT270):
         {
-            uint* newData = new uint[w*h];
+            uint w  = height();
+            uint h  = width();
 
-            uint *from = (uint*) m_priv->data;
-            uint *to;
-
-            for (int y = w-1; y >=0; --y)
+            if (sixteenBit())
             {
-                to = newData + y;
+                ullong* newData = new ullong[w*h];
 
-                for (uint x=0; x < h; ++x)
+                ullong* from = (ullong*) m_priv->data;
+                ullong* to;
+
+                for (uint y = 0; y < w; ++y)
                 {
-                    *to = *from++;
-                    to += w;
+                    to = newData + y + w*(h-1);
+
+                    for (uint x=0; x < h; ++x)
+                    {
+                        *to = *from++;
+                        to -= w;
+                    }
                 }
+
+                setImageDimension(w, h);
+
+                delete [] m_priv->data;
+                m_priv->data = (uchar*)newData;
+            }
+            else
+            {
+                uint* newData = new uint[w*h];
+
+                uint* from = (uint*) m_priv->data;
+                uint* to;
+
+                for (uint y = 0; y < w; ++y)
+                {
+                    to = newData + y + w*(h-1);
+
+                    for (uint x=0; x < h; ++x)
+                    {
+                        *to = *from++;
+                        to -= w;
+                    }
+                }
+
+                setImageDimension(w, h);
+
+                delete [] m_priv->data;
+                m_priv->data = (uchar*)newData;
             }
 
-            setImageDimension(w, h);
-
-            delete [] m_priv->data;
-            m_priv->data = (uchar*)newData;
+            break;
         }
-
-        break;
-    }
-    case(ROT180):
-    {
-        uint w  = width();
-        uint h  = height();
-
-        int middle_line = -1;
-        if (h % 2)
-           middle_line = h / 2;
-
-        if (sixteenBit())
-        {
-            ullong *line1;
-            ullong *line2;
-
-            ullong* data = (ullong*) bits();
-            ullong  tmp;
-
-            // can be done inplace
-            uint ymax = (h + 1) / 2;
-            for (uint y = 0; y < ymax; ++y)
-            {
-                line1 = data + y * w;
-                line2 = data + (h-y) * w;
-                for (uint x=0; x < w; ++x)
-                {
-                    tmp    = *line1;
-                    *line1 = *line2;
-                    *line2 = tmp;
-
-                    ++line1;
-                    --line2;
-                    if ((int)y == middle_line && x * 2 >= w)
-                        break;
-                }
-            }
-        }
-        else
-        {
-            uint *line1;
-            uint *line2;
-
-            uint* data = (uint*) bits();
-            uint  tmp;
-
-            // can be done inplace
-            uint ymax = (h + 1) / 2;
-            for (uint y = 0; y < ymax; ++y)
-            {
-                line1 = data + y * w;
-                line2 = data + (h-y) * w;
-
-                for (uint x=0; x < w; ++x)
-                {
-                    tmp    = *line1;
-                    *line1 = *line2;
-                    *line2 = tmp;
-
-                    ++line1;
-                    --line2;
-                    if ((int)y == middle_line && x * 2 >= w)
-                        break;
-                }
-            }
-        }
-
-        break;
-    }
-    case(ROT270):
-    {
-        uint w  = height();
-        uint h  = width();
-
-        if (sixteenBit())
-        {
-            ullong* newData = new ullong[w*h];
-
-            ullong *from = (ullong*) m_priv->data;
-            ullong *to;
-
-            for (uint y = 0; y < w; ++y)
-            {
-                to = newData + y + w*(h-1);
-
-                for (uint x=0; x < h; ++x)
-                {
-                    *to = *from++;
-                    to -= w;
-                }
-            }
-
-            setImageDimension(w, h);
-
-            delete [] m_priv->data;
-            m_priv->data = (uchar*)newData;
-        }
-        else
-        {
-            uint* newData = new uint[w*h];
-
-            uint *from = (uint*) m_priv->data;
-            uint *to;
-
-            for (uint y = 0; y < w; ++y)
-            {
-                to = newData + y + w*(h-1);
-
-                for (uint x=0; x < h; ++x)
-                {
-                    *to = *from++;
-                    to -= w;
-                }
-            }
-
-            setImageDimension(w, h);
-
-            delete [] m_priv->data;
-            m_priv->data = (uchar*)newData;
-        }
-
-        break;
-    }
-    default:
-        break;
+        default:
+            break;
     }
 }
 
@@ -1933,7 +2136,9 @@ void DImg::rotate(ANGLE angle)
 void DImg::flip(FLIP direction)
 {
     if (isNull())
+    {
         return;
+    }
 
     switch (direction)
     {
@@ -1945,13 +2150,14 @@ void DImg::flip(FLIP direction)
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
-                unsigned short *beg;
-                unsigned short *end;
+                unsigned short* beg;
+                unsigned short* end;
 
-                unsigned short * data = (unsigned short *)bits();
+                unsigned short* data = (unsigned short*)bits();
 
                 // can be done inplace
                 uint wHalf = (w / 2);
+
                 for (uint y = 0 ; y < h ; ++y)
                 {
                     beg = data + y * w * 4;
@@ -1971,13 +2177,14 @@ void DImg::flip(FLIP direction)
             else
             {
                 uchar  tmp[4];
-                uchar *beg;
-                uchar *end;
+                uchar* beg;
+                uchar* end;
 
                 uchar* data = bits();
 
                 // can be done inplace
                 uint wHalf = (w / 2);
+
                 for (uint y = 0 ; y < h ; ++y)
                 {
                     beg = data + y * w * 4;
@@ -2005,13 +2212,14 @@ void DImg::flip(FLIP direction)
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
-                unsigned short *line1;
-                unsigned short *line2;
+                unsigned short* line1;
+                unsigned short* line2;
 
                 unsigned short* data = (unsigned short*) bits();
 
                 // can be done inplace
                 uint hHalf = (h / 2);
+
                 for (uint y = 0 ; y < hHalf ; ++y)
                 {
                     line1 = data + y * w * 4;
@@ -2031,13 +2239,14 @@ void DImg::flip(FLIP direction)
             else
             {
                 uchar  tmp[4];
-                uchar *line1;
-                uchar *line2;
+                uchar* line1;
+                uchar* line2;
 
                 uchar* data = bits();
 
                 // can be done inplace
                 uint hHalf = (h / 2);
+
                 for (uint y = 0 ; y < hHalf ; ++y)
                 {
                     line1 = data + y * w * 4;
@@ -2072,18 +2281,24 @@ void DImg::convertToEightBit()
     convertDepth(32);
 }
 
-void DImg::convertToDepthOfImage(const DImg *otherImage)
+void DImg::convertToDepthOfImage(const DImg* otherImage)
 {
     if (otherImage->sixteenBit())
+    {
         convertToSixteenBit();
+    }
     else
+    {
         convertToEightBit();
+    }
 }
 
 void DImg::convertDepth(int depth)
 {
     if (isNull())
+    {
         return;
+    }
 
     if (depth != 32 && depth != 64)
     {
@@ -2093,7 +2308,9 @@ void DImg::convertDepth(int depth)
 
     if (((depth == 32) && !sixteenBit()) ||
         ((depth == 64) && sixteenBit()))
+    {
         return;
+    }
 
     if (depth == 32)
     {
@@ -2104,6 +2321,7 @@ void DImg::convertDepth(int depth)
         ushort* sptr = (ushort*)bits();
 
         uint dim = width() * height() * 4;
+
         for (uint i = 0; i < dim; ++i)
         {
             *dptr++ = (*sptr++ * 256UL) / 65536UL;
@@ -2130,6 +2348,7 @@ void DImg::convertDepth(int depth)
         ushort noise = 0;
 
         uint dim = width() * height() * 4;
+
         for (uint i = 0; i < dim; ++i)
         {
             if (i % 4 < 3)
@@ -2157,14 +2376,16 @@ void DImg::convertDepth(int depth)
 void DImg::fill(const DColor& color)
 {
     if (isNull())
+    {
         return;
+    }
 
     // caching
     uint dim = width() * height() * 4;
 
     if (sixteenBit())
     {
-        unsigned short *imgData16 = (unsigned short *)m_priv->data;
+        unsigned short* imgData16 = (unsigned short*)m_priv->data;
         unsigned short red        = (unsigned short)color.red();
         unsigned short green      = (unsigned short)color.green();
         unsigned short blue       = (unsigned short)color.blue();
@@ -2180,7 +2401,7 @@ void DImg::fill(const DColor& color)
     }
     else
     {
-        uchar *imgData = m_priv->data;
+        uchar* imgData = m_priv->data;
         uchar red      = (uchar)color.red();
         uchar green    = (uchar)color.green();
         uchar blue     = (uchar)color.blue();
@@ -2199,7 +2420,9 @@ void DImg::fill(const DColor& color)
 QByteArray DImg::getUniqueHash()
 {
     if (m_priv->attributes.contains("uniqueHash"))
+    {
         return m_priv->attributes["uniqueHash"].toByteArray();
+    }
 
     if (!m_priv->attributes.contains("originalFilePath"))
     {
@@ -2210,12 +2433,16 @@ QByteArray DImg::getUniqueHash()
     QString filePath = m_priv->attributes.value("originalFilePath").toString();
 
     if (filePath.isEmpty())
+    {
         return QByteArray();
+    }
 
     QByteArray hash = DImgLoader::uniqueHash(filePath, *this, false);
 
     if (!hash.isNull())
+    {
         setAttribute("uniqueHash", hash);
+    }
 
     return hash;
 }
@@ -2244,18 +2471,23 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     QSize previewSize = size();
     previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
     QImage preview;
+
     // Ensure that preview is not upscaled
     if (previewSize.width() >= (int)width())
+    {
         preview = copyQImage();
+    }
     else
+    {
         preview = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
+    }
 
     // With JPEG file, we don't store IPTC preview.
     // NOTE: only store preview if pixel number is at least two times bigger
     if (/* (2*(previewSize.width() * previewSize.height()) < (int)(d->image.width() * d->image.height())) &&*/
         (destMimeType.toUpper() != QString("JPG") && destMimeType.toUpper() != QString("JPEG") &&
          destMimeType.toUpper() != QString("JPE"))
-       )
+    )
     {
         // Non JPEG file, we update IPTC preview
         meta.setImagePreview(preview);
@@ -2280,11 +2512,15 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
 
     // Update Exif Document Name tag with the original file name.
     if (!originalFileName.isEmpty())
+    {
         meta.setExifTagString("Exif.Image.DocumentName", originalFileName);
+    }
 
     // Update Exif Orientation tag if necessary.
-    if(resetExifOrientationTag)
+    if (resetExifOrientationTag)
+    {
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+    }
 
     // Store new Exif/IPTC/XMP data into image.
     setMetadata(meta.data());

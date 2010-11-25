@@ -184,12 +184,14 @@ public:
      */
     bool                isPreviewImage() const;
 
-   /**
-     * Returns whether the other loading task equals this one
-     */
+    /**
+      * Returns whether the other loading task equals this one
+      */
     bool operator==(const LoadingDescription& other) const;
     bool operator!=(const LoadingDescription& other) const
-        { return !operator==(other); }
+    {
+        return !operator==(other);
+    }
     /**
      * Returns whether the other loading task equals this one
      * ignoring parameters used to specify a reduced version.

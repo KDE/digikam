@@ -65,11 +65,12 @@ public:
 };
 
 DFontSelect::DFontSelect(const QString& text=QString(), QWidget* parent=0)
-           : KHBox(parent), d(new DFontSelectPriv)
+    : KHBox(parent), d(new DFontSelectPriv)
 {
     d->label     = new QLabel(this);
     d->label->setText(text);
     d->space     = new QLabel(this);
+
     if (text.isEmpty())
     {
         d->label->hide();
@@ -121,10 +122,15 @@ QFont DFontSelect::font() const
 void DFontSelect::setFont(const QFont& font)
 {
     d->font = font;
+
     if (d->font == KGlobalSettings::generalFont())
+    {
         setMode(SystemFont);
+    }
     else
+    {
         setMode(CustomFont);
+    }
 }
 
 bool DFontSelect::event(QEvent* e)
@@ -133,6 +139,7 @@ bool DFontSelect::event(QEvent* e)
     {
         d->modeCombo->setFont(font());
     }
+
     return KHBox::event(e);
 }
 
@@ -140,6 +147,7 @@ void DFontSelect::slotOpenFontDialog()
 {
     QFont f = font();
     const int result = KFontDialog::getFont(f, KFontChooser::NoDisplayFlags, this);
+
     if (result == KFontDialog::Accepted)
     {
         d->font = f;

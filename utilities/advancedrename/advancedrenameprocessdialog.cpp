@@ -58,7 +58,7 @@ public:
 };
 
 AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& list)
-                           : DProgressDlg(0), d(new AdvancedRenameProcessDialogPriv)
+    : DProgressDlg(0), d(new AdvancedRenameProcessDialogPriv)
 {
     d->newNameList     = list;
     d->utilities       = new ImageViewUtilities(this);
@@ -98,8 +98,8 @@ void AdvancedRenameProcessDialog::slotRenameImages()
 
     if (d->newNameList.isEmpty())
     {
-       slotCancel();
-       return;
+        slotCancel();
+        return;
     }
 
     processOne();

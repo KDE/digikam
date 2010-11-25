@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 Convert2JPEG::Convert2JPEG(QObject* parent)
-            : BatchTool("Convert2JPEG", ConvertTool, parent)
+    : BatchTool("Convert2JPEG", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To JPEG"));
     setToolDescription(i18n("A tool to convert images to JPEG format."));
@@ -94,7 +94,10 @@ QString Convert2JPEG::outputSuffix() const
 
 bool Convert2JPEG::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     int JPEGCompression = JPEGSettings::convertCompressionForLibJpeg(settings()["Quality"].toInt());
     image().setAttribute("quality",     JPEGCompression);

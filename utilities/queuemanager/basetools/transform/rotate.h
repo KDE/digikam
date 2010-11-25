@@ -32,7 +32,7 @@ using namespace KDcrawIface;
 
 namespace Digikam
 {
-  
+
 class RotatePriv;
 
 class Rotate : public BatchTool

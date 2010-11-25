@@ -119,7 +119,7 @@ public:
         curvesPrm   = container;
     };
 
-    ~BWSepiaContainer(){};
+    ~BWSepiaContainer() {};
 
 public:
 

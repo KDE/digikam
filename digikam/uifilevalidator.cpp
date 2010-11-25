@@ -44,11 +44,11 @@ class ToolbarNameHandler : public QXmlDefaultHandler
 public:
 
     virtual bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName,
-                              const QXmlAttributes & atts);
+                              const QXmlAttributes& atts);
 };
 
 bool ToolbarNameHandler::startElement(const QString& namespaceURI, const QString& localName, const QString& qName,
-                                      const QXmlAttributes & atts)
+                                      const QXmlAttributes& atts)
 {
     Q_UNUSED(namespaceURI);
     Q_UNUSED(localName);
@@ -57,6 +57,7 @@ bool ToolbarNameHandler::startElement(const QString& namespaceURI, const QString
     {
         return false;
     }
+
     return true;
 }
 
@@ -76,7 +77,7 @@ public:
 // --------------------------------------------------------
 
 UiFileValidator::UiFileValidator(const QString& filename)
-               : d(new UiFileValidatorPriv(filename))
+    : d(new UiFileValidatorPriv(filename))
 {
 }
 
@@ -91,6 +92,7 @@ bool UiFileValidator::isReadable(QFile& file) const
     {
         return false;
     }
+
     return true;
 }
 
@@ -100,12 +102,14 @@ bool UiFileValidator::isWritable(QFile& file) const
     {
         return false;
     }
+
     return true;
 }
 
 bool UiFileValidator::isValid() const
 {
     QFile fi(d->filename);
+
     if (!isReadable(fi))
     {
         // We want to return true if the file is not readable,
@@ -131,16 +135,19 @@ bool UiFileValidator::fixConfigFile()
 bool UiFileValidator::fixConfigFile(const QString& destination)
 {
     QFile fw(destination);
+
     if (!isWritable(fw))
     {
         return false;
     }
 
     QByteArray result = getFixedContent();
+
     if (result.isEmpty())
     {
         return false;
     }
+
     fw.write(result);
     fw.close();
 
@@ -150,25 +157,30 @@ bool UiFileValidator::fixConfigFile(const QString& destination)
 QByteArray UiFileValidator::getFixedContent()
 {
     QFile fr(d->filename);
+
     if (!isReadable(fr))
     {
         return QByteArray();
     }
+
     QByteArray xmlContent = fr.readAll();
 
     if (xmlContent.isEmpty())
     {
         return QByteArray();
     }
+
     fr.close();
 
     QByteArray xmlDest;
 
     QXmlStreamReader reader(xmlContent);
     QXmlStreamWriter writer(&xmlDest);
+
     while (!reader.atEnd())
     {
         reader.readNext();
+
         if (reader.isStartElement())
         {
             if (reader.qualifiedName() == toolbarKey)
@@ -177,6 +189,7 @@ QByteArray UiFileValidator::getFixedContent()
 
                 QXmlStreamAttributes attrs;
                 QXmlStreamAttributes _a = reader.attributes();
+
                 for (QXmlStreamAttributes::iterator it = _a.begin(); it != _a.end(); ++it)
                 {
                     if (it->qualifiedName() == toolbarAttribute && it->value() != toolbarValue)
@@ -188,10 +201,12 @@ QByteArray UiFileValidator::getFixedContent()
                         attrs.append((*it));
                     }
                 }
+
                 writer.writeAttributes(attrs);
                 continue;
             }
         }
+
         writer.writeCurrentToken(reader);
     }
 

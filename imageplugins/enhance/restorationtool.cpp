@@ -68,7 +68,7 @@ public:
         settingsWidget(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     static const QString    configGroupName;
     static const QString    configPresetEntry;
@@ -113,8 +113,8 @@ const QString RestorationTool::RestorationToolPriv::configBTileEntry("BTile");
 // --------------------------------------------------------
 
 RestorationTool::RestorationTool(QObject* parent)
-               : EditorToolThreaded(parent),
-                 d(new RestorationToolPriv)
+    : EditorToolThreaded(parent),
+      d(new RestorationToolPriv)
 {
     setObjectName("restoration");
     setToolName(i18n("Restoration"));
@@ -228,10 +228,15 @@ void RestorationTool::readSettings()
 
     int p = group.readEntry(d->configPresetEntry, (int)NoPreset);
     d->restorationTypeCB->setCurrentIndex(p);
+
     if (p == NoPreset)
+    {
         d->settingsWidget->setEnabled(true);
+    }
     else
+    {
         d->settingsWidget->setEnabled(false);
+    }
 }
 
 void RestorationTool::writeSettings()
@@ -260,9 +265,13 @@ void RestorationTool::writeSettings()
 void RestorationTool::slotResetValues(int i)
 {
     if (i == NoPreset)
+    {
         d->settingsWidget->setEnabled(true);
+    }
     else
+    {
         d->settingsWidget->setEnabled(false);
+    }
 
     slotResetSettings();
 }
@@ -272,7 +281,7 @@ void RestorationTool::slotResetSettings()
     GreycstorationContainer settings;
     settings.setRestorationDefaultSettings();
 
-    switch(d->restorationTypeCB->currentIndex())
+    switch (d->restorationTypeCB->currentIndex())
     {
         case ReduceUniformNoise:
         {
@@ -324,8 +333,8 @@ void RestorationTool::prepareFinal()
                        iface.originalSixteenBit(), iface.originalHasAlpha(), data);
 
     setFilter(new GreycstorationFilter(&originalImage,
-              d->settingsWidget->settings(), GreycstorationFilter::Restore,
-              0, 0, QImage(), this));
+                                       d->settingsWidget->settings(), GreycstorationFilter::Restore,
+                                       0, 0, QImage(), this));
 
     delete [] data;
 }
@@ -345,10 +354,13 @@ void RestorationTool::putFinalData()
 void RestorationTool::slotLoadSettings()
 {
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                            QString( "*" ), kapp->activeWindow(),
-                                            QString( i18n("Photograph Restoration Settings File to Load")) );
+                               QString( "*" ), kapp->activeWindow(),
+                               QString( i18n("Photograph Restoration Settings File to Load")) );
+
     if ( loadRestorationFile.isEmpty() )
-       return;
+    {
+        return;
+    }
 
     QFile file(loadRestorationFile.toLocalFile());
 
@@ -356,11 +368,11 @@ void RestorationTool::slotLoadSettings()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
         {
-           KMessageBox::error(kapp->activeWindow(),
-                        i18n("\"%1\" is not a Photograph Restoration settings text file.",
-                             loadRestorationFile.fileName()));
-           file.close();
-           return;
+            KMessageBox::error(kapp->activeWindow(),
+                               i18n("\"%1\" is not a Photograph Restoration settings text file.",
+                                    loadRestorationFile.fileName()));
+            file.close();
+            return;
         }
 
         slotEffect();
@@ -380,17 +392,24 @@ void RestorationTool::slotLoadSettings()
 void RestorationTool::slotSaveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                            QString( "*" ), kapp->activeWindow(),
-                                            QString( i18n("Photograph Restoration Settings File to Save")) );
+                               QString( "*" ), kapp->activeWindow(),
+                               QString( i18n("Photograph Restoration Settings File to Save")) );
+
     if ( saveRestorationFile.isEmpty() )
-       return;
+    {
+        return;
+    }
 
     QFile file(saveRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
+    {
         d->settingsWidget->saveSettings(file, QString("# Photograph Restoration Configuration File V2"));
+    }
     else
+    {
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Restoration text file."));
+    }
 
     file.close();
 }

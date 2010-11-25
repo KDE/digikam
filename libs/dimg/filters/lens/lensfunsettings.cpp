@@ -48,7 +48,7 @@ public:
         filterCCI(0),
         filterDST(0),
         filterGEO(0)
-        {}
+    {}
 
     static const QString configCCAEntry;
     static const QString configVignettingEntry;
@@ -71,8 +71,8 @@ const QString LensFunSettings::LensFunSettingsPriv::configGeometryEntry("Geometr
 // --------------------------------------------------------
 
 LensFunSettings::LensFunSettings(QWidget* parent)
-               : QWidget(parent),
-                 d(new LensFunSettingsPriv)
+    : QWidget(parent),
+      d(new LensFunSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(this);
 
@@ -91,11 +91,11 @@ LensFunSettings::LensFunSettings(QWidget* parent)
                                     "The tinge can be canceled when the respective data is known for the lens."));
     d->filterDST = new QCheckBox(i18n("Distortion"));
     d->filterDST->setWhatsThis(i18n("Distortion refers to an image deformation, which is most pronounced "
-                                     "towards the corners. These Seidel aberrations are known as pincushion "
-                                     "and barrel distortions."));
+                                    "towards the corners. These Seidel aberrations are known as pincushion "
+                                    "and barrel distortions."));
     d->filterGEO = new QCheckBox(i18n("Geometry"));
     d->filterGEO->setWhatsThis(i18n("Four geometries are handled here: Rectilinear (99 percent of all lenses), "
-                                     "Fisheye, Cylindrical, Equirectangular."));
+                                    "Fisheye, Cylindrical, Equirectangular."));
     QLabel* note  = new QLabel(i18n("<b>Note: lens correction options depend of filters available in LensFun library. "
                                     "See <a href='http://lensfun.berlios.de'>LensFun project web site</a> "
                                     "for more information.</b>"), this);
@@ -207,11 +207,31 @@ void LensFunSettings::writeSettings(KConfigGroup& group)
 {
     LensFunContainer prm;
     assignFilterSettings(prm);
-    if ( d->filterCCA->isEnabled() ) group.writeEntry(d->configCCAEntry,        (prm.filterCCA));
-    if ( d->filterVIG->isEnabled() ) group.writeEntry(d->configVignettingEntry, (prm.filterVIG));
-    if ( d->filterCCI->isEnabled() ) group.writeEntry(d->configCCIEntry,        (prm.filterCCI));
-    if ( d->filterDST->isEnabled() ) group.writeEntry(d->configDistortionEntry, (prm.filterDST));
-    if ( d->filterGEO->isEnabled() ) group.writeEntry(d->configGeometryEntry,   (prm.filterGEO));
+
+    if ( d->filterCCA->isEnabled() )
+    {
+        group.writeEntry(d->configCCAEntry,        (prm.filterCCA));
+    }
+
+    if ( d->filterVIG->isEnabled() )
+    {
+        group.writeEntry(d->configVignettingEntry, (prm.filterVIG));
+    }
+
+    if ( d->filterCCI->isEnabled() )
+    {
+        group.writeEntry(d->configCCIEntry,        (prm.filterCCI));
+    }
+
+    if ( d->filterDST->isEnabled() )
+    {
+        group.writeEntry(d->configDistortionEntry, (prm.filterDST));
+    }
+
+    if ( d->filterGEO->isEnabled() )
+    {
+        group.writeEntry(d->configGeometryEntry,   (prm.filterGEO));
+    }
 }
 
 }  // namespace Digikam

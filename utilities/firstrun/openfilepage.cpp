@@ -64,8 +64,8 @@ public:
 };
 
 OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
-            : AssistantDlgPage(dlg, i18n("<b>Configure Open File Behavior</b>")), 
-              d(new OpenFilePagePriv)
+    : AssistantDlgPage(dlg, i18n("<b>Configure Open File Behavior</b>")),
+      d(new OpenFilePagePriv)
 {
     KVBox* vbox    = new KVBox(this);
     QLabel* label1 = new QLabel(vbox);
@@ -105,7 +105,7 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
     setPageWidget(vbox);
 
     QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-openfile.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
+    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 }
 
 OpenFilePage::~OpenFilePage()
@@ -117,8 +117,8 @@ void OpenFilePage::saveSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Album Settings");
-    group.writeEntry("Item Left Click Action", (int)(d->openInEditor->isChecked() ? 
-                                               AlbumSettings::StartEditor : AlbumSettings::ShowPreview));
+    group.writeEntry("Item Left Click Action", (int)(d->openInEditor->isChecked() ?
+                     AlbumSettings::StartEditor : AlbumSettings::ShowPreview));
 
     config->sync();
 }

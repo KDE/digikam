@@ -121,8 +121,8 @@ public:
 };
 
 WaterMark::WaterMark(QObject* parent)
-         : BatchTool("WaterMark", DecorateTool, parent),
-           d(new WaterMarkPriv)
+    : BatchTool("WaterMark", DecorateTool, parent),
+      d(new WaterMarkPriv)
 {
     setToolTitle(i18n("Add Watermark"));
     setToolDescription(i18n("A tool to overlay an image or a text as a visible watermark"));
@@ -399,7 +399,10 @@ void WaterMark::slotSettingsChanged()
 bool WaterMark::toolOperations()
 {
 
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     QString fileName        = settings()["Watermark image"].toString();
     int placement           = settings()["Placement"].toInt();
@@ -428,7 +431,7 @@ bool WaterMark::toolOperations()
 
         if (watermarkImage.isNull())
         {
-          return false;
+            return false;
         }
 
         DImg tempImage = watermarkImage.smoothScale(image().width() * size / 100, image().height() * size / 100, Qt::KeepAspectRatio);
@@ -439,12 +442,19 @@ bool WaterMark::toolOperations()
         int alignMode;
         const int radius = 10;
 
-        if (text.isEmpty()) return false;
+        if (text.isEmpty())
+        {
+            return false;
+        }
 
         int fontSize = queryFontSize(text, font, size);
-        if (fontSize == 0) return false;
 
-        switch(placement)
+        if (fontSize == 0)
+        {
+            return false;
+        }
+
+        switch (placement)
         {
             case WaterMarkPriv::TopLeft:
                 alignMode = Qt::AlignLeft;
@@ -473,7 +483,12 @@ bool WaterMark::toolOperations()
         DImg backgroundLayer(backgroundRect.width(), backgroundRect.height(), image().sixteenBit(), true);
         DColor transparent(QColor(0, 0, 0));
         transparent.setAlpha(0);
-        if (image().sixteenBit()) transparent.convertToSixteenBit();
+
+        if (image().sixteenBit())
+        {
+            transparent.convertToSixteenBit();
+        }
+
         backgroundLayer.fill(transparent);
 
         DImg grayTransLayer(fontRect.width(), fontRect.height(), image().sixteenBit(), true);
@@ -482,7 +497,12 @@ bool WaterMark::toolOperations()
         {
             DColor grayTrans(backgroundColor);
             grayTrans.setAlpha(backgroundOpacity * 255 / 100);
-            if (image().sixteenBit()) grayTrans.convertToSixteenBit();
+
+            if (image().sixteenBit())
+            {
+                grayTrans.convertToSixteenBit();
+            }
+
             grayTransLayer.fill(grayTrans);
             backgroundLayer.bitBlendImage(composer, &grayTransLayer, 0, 0,
                                           grayTransLayer.width(), grayTransLayer.height(),
@@ -511,7 +531,7 @@ bool WaterMark::toolOperations()
 
     QRect watermarkRect(0,0,watermarkImage.width(), watermarkImage.height());
 
-    switch(placement)
+    switch (placement)
     {
         case WaterMarkPriv::TopLeft:
             watermarkRect.moveTopLeft(QPoint(marginW, marginH));
@@ -544,14 +564,19 @@ int WaterMark::queryFontSize(const QString& text, const QFont& font, int length)
     // Find font size using relative length compared to image width.
     QFont fnt = font;
     QRect fontRect;
+
     for (int i = 1 ; i <= 1000 ; ++i)
     {
         fnt.setPointSizeF(i);
         QFontMetrics fontMt(fnt);
         fontRect = fontMt.boundingRect(0, 0, image().width(), image().height(), 0, text);
+
         if (fontRect.width() > lround((image().width() * length)/100.0))
+        {
             return (i-1);
+        }
     }
+
     return 0;
 }
 

@@ -117,16 +117,23 @@ bool DKCamera::captureImageSupport()
 
 QString DKCamera::mimeType(const QString& fileext) const
 {
-    if (fileext.isEmpty()) return QString();
+    if (fileext.isEmpty())
+    {
+        return QString();
+    }
 
     QString ext = fileext;
     QString mime;
 
     // Massage known variations of known mimetypes into KDE specific ones
     if (ext == "jpg" || ext == "jpe")
+    {
         ext = "jpeg";
+    }
     else if (ext == "tif")
+    {
         ext = "tiff";
+    }
 
     if (m_rawFilter.contains(ext))
     {

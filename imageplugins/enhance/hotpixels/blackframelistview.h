@@ -55,7 +55,7 @@ class BlackFrameListView : public QTreeWidget
 public:
 
     BlackFrameListView(QWidget* parent=0);
-    ~BlackFrameListView(){};
+    ~BlackFrameListView() {};
 
 Q_SIGNALS:
 
@@ -65,7 +65,7 @@ private Q_SLOTS:
 
     void slotParsed(const QList<HotPixel>& hotPixels, const KUrl& blackFrameURL)
     {
-       emit signalBlackFrameSelected(hotPixels, blackFrameURL);
+        emit signalBlackFrameSelected(hotPixels, blackFrameURL);
     };
 };
 
@@ -73,12 +73,12 @@ private Q_SLOTS:
 
 class BlackFrameListViewItem : public QObject, QTreeWidgetItem
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
     BlackFrameListViewItem(BlackFrameListView* parent, const KUrl& url);
-    ~BlackFrameListViewItem(){};
+    ~BlackFrameListViewItem() {};
 
 Q_SIGNALS:
 

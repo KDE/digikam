@@ -112,7 +112,7 @@ public:
 };
 
 BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* parent)
-         : QObject(parent), d(new BatchToolPriv)
+    : QObject(parent), d(new BatchToolPriv)
 {
     d->observer  = new BatchToolObserver(d);
     d->toolGroup = group;
@@ -340,19 +340,26 @@ void BatchTool::setOutputUrlFromInputUrl()
 
 bool BatchTool::loadToDImg() const
 {
-    if (!d->image.isNull()) return true;
+    if (!d->image.isNull())
+    {
+        return true;
+    }
 
     return d->image.load(inputUrl().toLocalFile(), d->observer, getRawDecodingSettings());
 }
 
 bool BatchTool::savefromDImg() const
 {
-    if (!isLastChainedTool() && outputSuffix().isEmpty()) return true;
+    if (!isLastChainedTool() && outputSuffix().isEmpty())
+    {
+        return true;
+    }
 
     DImg::FORMAT detectedFormat = d->image.detectedFormat();
     QString frm                 = outputSuffix().toUpper();
     bool resetOrientation       = getResetExifOrientationAllowed() &&
                                   (getNeedResetExifOrientation() || detectedFormat == DImg::RAW);
+
     if (frm.isEmpty())
     {
         // In case of output support is not set for ex. with all tool which do not convert to new format.
@@ -381,6 +388,7 @@ bool BatchTool::apply()
     kDebug() << "Settings:   ";
 
     BatchToolSettings prm = settings();
+
     for (BatchToolSettings::const_iterator it = prm.constBegin() ; it != prm.constEnd() ; ++it)
     {
         if (it.value().canConvert<QPolygon>())

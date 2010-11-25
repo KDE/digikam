@@ -48,7 +48,7 @@ public:
         ChildrenAndParents
     };
 
-    TagCheckView(QWidget *parent, TagModel *tagModel);
+    TagCheckView(QWidget* parent, TagModel* tagModel);
     virtual ~TagCheckView();
 
     virtual void doLoadState();
@@ -84,8 +84,8 @@ public Q_SLOTS:
     void slotResetCheckState();
 
 protected:
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
-    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
+    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 private Q_SLOTS:
 
@@ -93,12 +93,12 @@ private Q_SLOTS:
      * Called if the check state of a single item changes. Wraps this to an
      * event that is more useful for filtering tags.
      */
-    void slotCheckStateChange(Album *album, Qt::CheckState state);
+    void slotCheckStateChange(Album* album, Qt::CheckState state);
 
-    void slotCreatedNewTagByContextMenu(TAlbum *tag);
+    void slotCreatedNewTagByContextMenu(TAlbum* tag);
 
 private:
-    TagCheckViewPriv *d;
+    TagCheckViewPriv* d;
 
 };
 

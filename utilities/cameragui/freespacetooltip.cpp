@@ -6,7 +6,7 @@
  * Date        : 2009-01-19
  * Description : free space widget tool tip
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,11 +43,11 @@ public:
 
     QString  tip;
 
-    QWidget *parent;
+    QWidget* parent;
 };
 
 FreeSpaceToolTip::FreeSpaceToolTip(QWidget* parent)
-                : DItemToolTip(), d(new FreeSpaceToolTipPriv)
+    : DItemToolTip(), d(new FreeSpaceToolTipPriv)
 {
     d->parent = parent;
 }
@@ -66,13 +66,19 @@ void FreeSpaceToolTip::show()
 {
     updateToolTip();
     reposition();
+
     if (isHidden() && !toolTipIsEmpty())
+    {
         DItemToolTip::show();
+    }
 }
 
 QRect FreeSpaceToolTip::repositionRect()
 {
-    if (!d->parent) return QRect();
+    if (!d->parent)
+    {
+        return QRect();
+    }
 
     QRect rect = d->parent->rect();
     rect.moveTopLeft(d->parent->mapToGlobal(rect.topLeft()));

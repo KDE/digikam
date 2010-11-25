@@ -40,7 +40,7 @@
 class KJob;
 namespace KIO
 {
-    class Job;
+class Job;
 }
 
 namespace Digikam
@@ -82,7 +82,7 @@ Q_SIGNALS:
 protected Q_SLOTS:
 
     void slotDIOResult(KJob* kjob);
-    void slotRenamed(KIO::Job*, const KUrl &, const KUrl& newURL);
+    void slotRenamed(KIO::Job*, const KUrl&, const KUrl& newURL);
 
 protected:
 

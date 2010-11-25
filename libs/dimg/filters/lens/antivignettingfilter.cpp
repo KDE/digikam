@@ -46,8 +46,8 @@ namespace Digikam
 {
 
 AntiVignettingFilter::AntiVignettingFilter(DImg* orgImage, QObject* parent,
-                                           const AntiVignettingContainer& settings)
-                    : DImgThreadedFilter(orgImage, parent, "AntiVignettingFilter")
+        const AntiVignettingContainer& settings)
+    : DImgThreadedFilter(orgImage, parent, "AntiVignettingFilter")
 {
     m_settings = settings;
     initFilter();
@@ -124,8 +124,11 @@ void AntiVignettingFilter::filterImage()
 
         // Update the progress bar in dialog.
         progress = (int)(((double)row * 100.0) / Width);
+
         if (progress%5 == 0)
+        {
             postProgress( progress );
+        }
     }
 }
 
@@ -137,39 +140,61 @@ inline double AntiVignettingFilter::hypothenuse(double x, double y)
 double AntiVignettingFilter::attenuation(double r1, double r2, double dist_center)
 {
     if (dist_center < r1)
-       return 1.0;
+    {
+        return 1.0;
+    }
     else if (dist_center > r2)
-       return 1.0+m_settings.density;
+    {
+        return 1.0+m_settings.density;
+    }
     else
-       return (1.0+m_settings.density*(pow ((dist_center-r1)/(r2-r1), m_settings.power)));
+    {
+        return (1.0+m_settings.density*(pow ((dist_center-r1)/(r2-r1), m_settings.power)));
+    }
 }
 
 double AntiVignettingFilter::real_attenuation(double r1, double r2, double dist_center)
 {
     if (!m_settings.addvignetting)
-       return (attenuation(r1, r2, dist_center));
+    {
+        return (attenuation(r1, r2, dist_center));
+    }
     else
-       return (1.0 / attenuation(r1, r2, dist_center));
+    {
+        return (1.0 / attenuation(r1, r2, dist_center));
+    }
 }
 
 uchar AntiVignettingFilter::clamp8bits(double x)
 {
     if (x < 0)
+    {
         return 0;
+    }
     else if (x > 255)
+    {
         return 255;
+    }
     else
+    {
         return ((uchar) x);
+    }
 }
 
 unsigned short  AntiVignettingFilter::clamp16bits(double x)
 {
     if (x < 0)
+    {
         return 0;
+    }
     else if (x > 65535)
+    {
         return 65535;
+    }
     else
+    {
         return ((unsigned short) x);
+    }
 }
 
 }  // namespace Digikam

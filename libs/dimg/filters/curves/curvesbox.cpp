@@ -77,35 +77,35 @@ public:
     }
     bool                 sixteenBit;
     ChannelType          channel;
-    
+
     QToolButton*         curveFree;
     QToolButton*         curveSmooth;
     QToolButton*         pickBlack;
     QToolButton*         pickGray;
     QToolButton*         pickWhite;
-    
+
     QButtonGroup*        curveType;
     QButtonGroup*        pickerType;
-    
+
     QWidget*             pickerBox;
-    
+
     QPushButton*         resetButton;
-    
+
     CurvesWidget*        curvesWidget;
     ColorGradientWidget* hGradient;
     ColorGradientWidget* vGradient;
 };
 
-CurvesBox::CurvesBox(int w, int h, QWidget *parent, bool readOnly)
-         : QWidget(parent), d(new CurvesBoxPriv)
+CurvesBox::CurvesBox(int w, int h, QWidget* parent, bool readOnly)
+    : QWidget(parent), d(new CurvesBoxPriv)
 {
     d->curvesWidget = new CurvesWidget(w, h, this, readOnly);
     setup();
 }
 
-CurvesBox::CurvesBox(int w, int h, uchar *i_data, uint i_w, uint i_h,
-                     bool i_sixteenBits, QWidget *parent, bool readOnly)
-         : QWidget(parent), d(new CurvesBoxPriv)
+CurvesBox::CurvesBox(int w, int h, uchar* i_data, uint i_w, uint i_h,
+                     bool i_sixteenBits, QWidget* parent, bool readOnly)
+    : QWidget(parent), d(new CurvesBoxPriv)
 {
     d->sixteenBit     = i_sixteenBits;
     d->curvesWidget   = new CurvesWidget(w, h, i_data, i_w, i_h, i_sixteenBits, this, readOnly);
@@ -115,7 +115,7 @@ CurvesBox::CurvesBox(int w, int h, uchar *i_data, uint i_w, uint i_h,
 
 void CurvesBox::setup()
 {
-    QWidget *curveBox = new QWidget();
+    QWidget* curveBox = new QWidget();
 
     d->vGradient = new ColorGradientWidget(Qt::Vertical, 10);
     d->vGradient->setColors(QColor("white"), QColor("black"));
@@ -158,7 +158,7 @@ void CurvesBox::setup()
     d->curveType->setExclusive(true);
     d->curveSmooth->setChecked(true);
 
-    QHBoxLayout *typeBoxLayout = new QHBoxLayout;
+    QHBoxLayout* typeBoxLayout = new QHBoxLayout;
     typeBoxLayout->addWidget(d->curveFree);
     typeBoxLayout->addWidget(d->curveSmooth);
     typeBoxLayout->setMargin(0);
@@ -198,7 +198,7 @@ void CurvesBox::setup()
     d->pickerType->addButton(d->pickGray, GrayTonal);
     d->pickerType->addButton(d->pickWhite, WhiteTonal);
 
-    QHBoxLayout *pickerBoxLayout = new QHBoxLayout;
+    QHBoxLayout* pickerBoxLayout = new QHBoxLayout;
     pickerBoxLayout->addWidget(d->pickBlack);
     pickerBoxLayout->addWidget(d->pickGray);
     pickerBoxLayout->addWidget(d->pickWhite);
@@ -301,21 +301,21 @@ void CurvesBox::enableControlWidgets(bool enable)
 
 void CurvesBox::slotCurveTypeChanged(int type)
 {
-    switch(type)
+    switch (type)
     {
-       case SmoothDrawing:
-       {
-          d->curvesWidget->curves()->setCurveType(d->channel, ImageCurves::CURVE_SMOOTH);
-          d->pickerBox->setEnabled(true);
-          break;
-       }
+        case SmoothDrawing:
+        {
+            d->curvesWidget->curves()->setCurveType(d->channel, ImageCurves::CURVE_SMOOTH);
+            d->pickerBox->setEnabled(true);
+            break;
+        }
 
-       case FreeDrawing:
-       {
-          d->curvesWidget->curves()->setCurveType(d->channel, ImageCurves::CURVE_FREE);
-          d->pickerBox->setEnabled(false);
-          break;
-       }
+        case FreeDrawing:
+        {
+            d->curvesWidget->curves()->setCurveType(d->channel, ImageCurves::CURVE_FREE);
+            d->pickerBox->setEnabled(false);
+            break;
+        }
     }
 
     d->curvesWidget->curveTypeChanged();
@@ -401,6 +401,7 @@ void CurvesBox::resetChannels()
     {
         d->curvesWidget->curves()->curvesChannelReset(channel);
     }
+
     reset();
 }
 
@@ -434,10 +435,12 @@ int CurvesBox::curvesLeftOffset() const
 {
     // width of spacer column between gradient and curves
     int offset = 2;
+
     if (!d->vGradient->isHidden())
     {
         offset += d->vGradient->width();
     }
+
     return offset;
 }
 

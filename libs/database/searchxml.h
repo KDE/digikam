@@ -43,65 +43,87 @@ namespace Digikam
 namespace SearchXml
 {
 
-    enum Operator
-    {
-        And,
-        Or,
-        AndNot,
-        OrNot
-    };
+enum Operator
+{
+    And,
+    Or,
+    AndNot,
+    OrNot
+};
 
-    enum Element
-    {
-        Search,
-        Group,
-        GroupEnd,
-        Field,
-        FieldEnd,
-        End
-    };
+enum Element
+{
+    Search,
+    Group,
+    GroupEnd,
+    Field,
+    FieldEnd,
+    End
+};
 
-    enum Relation
-    {
-        Equal,
-        Unequal,
-        Like,
-        NotLike,
-        LessThan,
-        GreaterThan,
-        LessThanOrEqual,
-        GreaterThanOrEqual,
-        Interval, // [a,b]
-        IntervalOpen, // (a,b)
-        OneOf,
-        InTree,
-        NotInTree,
-        Near,
-        Inside
-    };
+enum Relation
+{
+    Equal,
+    Unequal,
+    Like,
+    NotLike,
+    LessThan,
+    GreaterThan,
+    LessThanOrEqual,
+    GreaterThanOrEqual,
+    Interval, // [a,b]
+    IntervalOpen, // (a,b)
+    OneOf,
+    InTree,
+    NotInTree,
+    Near,
+    Inside
+};
 
-    template <typename T>
-    bool testRelation(T v1, T v2, Relation rel)
+template <typename T>
+bool testRelation(T v1, T v2, Relation rel)
+{
+    if (rel == Equal)
     {
-        if (rel == Equal)
-            return v1 == v2;
-        else if (rel == Unequal)
-            return v1 != v2;
-        else if (rel == LessThan)
-            return v1 < v2;
-        else if (rel == LessThanOrEqual)
-            return v1 <= v2;
-        else if (rel == GreaterThan)
-            return v1 > v2;
-        else if (rel == GreaterThanOrEqual)
-            return v1 >= v2;
-        return false;
+        return v1 == v2;
+    }
+    else if (rel == Unequal)
+    {
+        return v1 != v2;
+    }
+    else if (rel == LessThan)
+    {
+        return v1 < v2;
+    }
+    else if (rel == LessThanOrEqual)
+    {
+        return v1 <= v2;
+    }
+    else if (rel == GreaterThan)
+    {
+        return v1 > v2;
+    }
+    else if (rel == GreaterThanOrEqual)
+    {
+        return v1 >= v2;
     }
 
-    /** General default values for groupOperator() and defaultFieldOperator() */
-    inline SearchXml::Operator standardGroupOperator() { return SearchXml::Or; }
-    inline SearchXml::Operator standardFieldOperator() { return SearchXml::And; }
-    inline SearchXml::Relation standardFieldRelation() { return SearchXml::Equal; }
+    return false;
+}
+
+/** General default values for groupOperator() and defaultFieldOperator() */
+inline SearchXml::Operator standardGroupOperator()
+{
+    return SearchXml::Or;
+}
+inline SearchXml::Operator standardFieldOperator()
+{
+    return SearchXml::And;
+}
+inline SearchXml::Relation standardFieldRelation()
+{
+    return SearchXml::Equal;
+}
 }
 
 class DIGIKAM_DATABASE_EXPORT SearchXmlReader : public QXmlStreamReader
@@ -163,8 +185,8 @@ public:
 
 protected:
 
-    SearchXml::Operator readOperator(const QString &, SearchXml::Operator) const;
-    SearchXml::Relation readRelation(const QString &, SearchXml::Relation) const;
+    SearchXml::Operator readOperator(const QString&, SearchXml::Operator) const;
+    SearchXml::Relation readRelation(const QString&, SearchXml::Relation) const;
     SearchXml::Operator m_defaultFieldOperator;
 };
 
@@ -240,8 +262,8 @@ public:
 
 protected:
 
-    void writeOperator(const QString &, SearchXml::Operator);
-    void writeRelation(const QString &, SearchXml::Relation);
+    void writeOperator(const QString&, SearchXml::Operator);
+    void writeRelation(const QString&, SearchXml::Relation);
 
     QString m_xml;
 };
@@ -249,20 +271,20 @@ protected:
 namespace KeywordSearch
 {
 
-    /** Splits a given string to a list of keywords.
-        Splits at whitespace, but recognizes quotation marks
-        to group words in a single keyword */
-    DIGIKAM_DATABASE_EXPORT QStringList split(const QString& string);
+/** Splits a given string to a list of keywords.
+    Splits at whitespace, but recognizes quotation marks
+    to group words in a single keyword */
+DIGIKAM_DATABASE_EXPORT QStringList split(const QString& string);
 
-    /** Reverse of split().
-        From a list of keywords, gives a single string for a text entry field. */
-    DIGIKAM_DATABASE_EXPORT QString merge(const QStringList& keywordList);
+/** Reverse of split().
+    From a list of keywords, gives a single string for a text entry field. */
+DIGIKAM_DATABASE_EXPORT QString merge(const QStringList& keywordList);
 
-    /** Assuming previousContent is a string
-        as accepted by split and returned by merge,
-        adds newEntry as another (single) keyword to the string,
-        returning the combined result. */
-    DIGIKAM_DATABASE_EXPORT QString merge(const QString& previousContent, const QString& newEntry);
+/** Assuming previousContent is a string
+    as accepted by split and returned by merge,
+    adds newEntry as another (single) keyword to the string,
+    returning the combined result. */
+DIGIKAM_DATABASE_EXPORT QString merge(const QString& previousContent, const QString& newEntry);
 }
 
 class DIGIKAM_DATABASE_EXPORT KeywordSearchReader : public SearchXmlReader

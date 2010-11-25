@@ -63,7 +63,7 @@ public:
         rInput(0),
         gInput(0),
         bInput(0)
-        {}
+    {}
 
     static const QString configRedAdjustmentEntry;
     static const QString configGreenAdjustmentEntry;
@@ -80,8 +80,8 @@ const QString CBSettingsPriv::configBlueAdjustmentEntry("BlueAdjustment");
 // --------------------------------------------------------
 
 CBSettings::CBSettings(QWidget* parent)
-          : QWidget(parent),
-            d(new CBSettingsPriv)
+    : QWidget(parent),
+      d(new CBSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -94,12 +94,12 @@ CBSettings::CBSettings(QWidget* parent)
     d->rInput->setDefaultValue(0);
     d->rInput->setWhatsThis(i18n("Set here the cyan/red color adjustment of the image."));
 
-    QLabel *labelRed = new QLabel(i18n("Red"));
+    QLabel* labelRed = new QLabel(i18n("Red"));
     labelRed->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     // -------------------------------------------------------------
 
-    QLabel *labelMagenta = new QLabel(i18n("Magenta"));
+    QLabel* labelMagenta = new QLabel(i18n("Magenta"));
     labelMagenta->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     d->gInput = new RIntNumInput();
@@ -108,15 +108,15 @@ CBSettings::CBSettings(QWidget* parent)
     d->gInput->setDefaultValue(0);
     d->gInput->setWhatsThis(i18n("Set here the magenta/green color adjustment of the image."));
 
-    QLabel *labelGreen = new QLabel(i18n("Green"));
+    QLabel* labelGreen = new QLabel(i18n("Green"));
     labelGreen->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     // -------------------------------------------------------------
 
-    QLabel *labelYellow = new QLabel(i18n("Yellow"));
+    QLabel* labelYellow = new QLabel(i18n("Yellow"));
     labelYellow->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    QLabel *labelBlue = new QLabel(i18n("Blue"));
+    QLabel* labelBlue = new QLabel(i18n("Blue"));
     labelBlue->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     d->bInput = new RIntNumInput();

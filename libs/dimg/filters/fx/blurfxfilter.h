@@ -43,8 +43,8 @@ class DIGIKAM_EXPORT BlurFXFilter : public DImgThreadedFilter
 public:
 
     explicit BlurFXFilter(DImg* orgImage, QObject* parent=0, int blurFXType=ZoomBlur,
-                    int distance=100, int level=45);
-    ~BlurFXFilter(){};
+                          int distance=100, int level=45);
+    ~BlurFXFilter() {};
 
 public:
 
@@ -67,37 +67,42 @@ private:
     void filterImage();
 
     // Backported from ImageProcessing version 1
-    void softenerBlur(DImg *orgImage, DImg *destImage);
-    void shakeBlur(DImg *orgImage, DImg *destImage, int Distance);
-    void frostGlass(DImg *orgImage, DImg *destImage, int Frost);
+    void softenerBlur(DImg* orgImage, DImg* destImage);
+    void shakeBlur(DImg* orgImage, DImg* destImage, int Distance);
+    void frostGlass(DImg* orgImage, DImg* destImage, int Frost);
 
     // Backported from ImageProcessing version 2
-    void zoomBlur(DImg *orgImage, DImg *destImage,
+    void zoomBlur(DImg* orgImage, DImg* destImage,
                   int X, int Y, int Distance, QRect pArea=QRect());
-    void radialBlur(DImg *orgImage, DImg *destImage,
+    void radialBlur(DImg* orgImage, DImg* destImage,
                     int X, int Y, int Distance, QRect pArea=QRect());
-    void focusBlur(DImg *orgImage, DImg *destImage,
+    void focusBlur(DImg* orgImage, DImg* destImage,
                    int X, int Y, int BlurRadius, int BlendRadius,
                    bool bInversed=false, QRect pArea=QRect());
-    void farBlur(DImg *orgImage, DImg *destImage, int Distance);
-    void motionBlur(DImg *orgImage, DImg *destImage, int Distance, double Angle=0.0);
-    void smartBlur(DImg *orgImage, DImg *destImage, int Radius, int Strength);
-    void mosaic(DImg *orgImage, DImg *destImage, int SizeW, int SizeH);
+    void farBlur(DImg* orgImage, DImg* destImage, int Distance);
+    void motionBlur(DImg* orgImage, DImg* destImage, int Distance, double Angle=0.0);
+    void smartBlur(DImg* orgImage, DImg* destImage, int Radius, int Strength);
+    void mosaic(DImg* orgImage, DImg* destImage, int SizeW, int SizeH);
 
 private:
 
-    void MakeConvolution(DImg *orgImage, DImg *destImage, int Radius, int Kernel[]);
+    void MakeConvolution(DImg* orgImage, DImg* destImage, int Radius, int Kernel[]);
 
-    DColor RandomColor(uchar *Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
+    DColor RandomColor(uchar* Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                        int X, int Y, int Radius,
-                       int alpha, uint *randomSeed, int range, uchar *IntensityCount,
-                       uint *AverageColorR, uint *AverageColorG, uint *AverageColorB);
+                       int alpha, uint* randomSeed, int range, uchar* IntensityCount,
+                       uint* AverageColorR, uint* AverageColorG, uint* AverageColorB);
 
     // Return the limit defined the max and min values.
     inline int Lim_Max(int Now, int Up, int Max)
     {
         --Max;
-        while (Now > Max - Up) --Up;
+
+        while (Now > Max - Up)
+        {
+            --Up;
+        }
+
         return (Up);
     };
 
@@ -110,14 +115,16 @@ private:
     // function to allocate a 2d array
     inline int** Alloc2DArray (int Columns, int Rows)
     {
-       // First, we declare our future 2d array to be returned
+        // First, we declare our future 2d array to be returned
         int** lpcArray = NULL;
 
-       // Now, we alloc the main pointer with Columns
+        // Now, we alloc the main pointer with Columns
         lpcArray = new int*[Columns];
 
         for (int i = 0; i < Columns; ++i)
+        {
             lpcArray[i] = new int[Rows];
+        }
 
         return (lpcArray);
     }
@@ -125,11 +132,13 @@ private:
     // Function to deallocates the 2d array previously created
     inline void Free2DArray (int** lpcArray, int Columns)
     {
-       // loop to dealocate the columns
+        // loop to dealocate the columns
         for (int i = 0; i < Columns; ++i)
+        {
             delete [] lpcArray[i];
+        }
 
-       // now, we delete the main pointer
+        // now, we delete the main pointer
         delete [] lpcArray;
     }
 
@@ -142,16 +151,32 @@ private:
 
     inline uchar LimitValues8(int ColorValue)
     {
-        if (ColorValue > 255) ColorValue = 255;
-        if (ColorValue < 0) ColorValue = 0;
+        if (ColorValue > 255)
+        {
+            ColorValue = 255;
+        }
+
+        if (ColorValue < 0)
+        {
+            ColorValue = 0;
+        }
+
         return ((uchar) ColorValue);
     };
 
 
     inline int LimitValues16(int ColorValue)
     {
-        if (ColorValue > 65535) ColorValue = 65535;
-        if (ColorValue < 0) ColorValue = 0;
+        if (ColorValue > 65535)
+        {
+            ColorValue = 65535;
+        }
+
+        if (ColorValue < 0)
+        {
+            ColorValue = 0;
+        }
+
         return ColorValue;
     };
 
@@ -174,7 +199,9 @@ private:
         if ((nR >= cR - Range) && (nR <= cR + Range))
             if ((nG >= cG - Range) && (nG <= cG + Range))
                 if ((nB >= cB - Range) && (nB <= cB + Range))
+                {
                     return (true);
+                }
 
         return (false);
     };

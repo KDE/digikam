@@ -57,13 +57,13 @@ public:
 };
 
 Parseable::Parseable(const QString& name)
-           : QObject(0), d(new ParseablePriv)
+    : QObject(0), d(new ParseablePriv)
 {
     setObjectName(name);
 }
 
 Parseable::Parseable(const QString& name, const QPixmap& icon)
-           : QObject(0), d(new ParseablePriv)
+    : QObject(0), d(new ParseablePriv)
 {
     setObjectName(name);
     setIcon(icon);
@@ -146,6 +146,7 @@ QPushButton* Parseable::registerButton(QWidget* parent)
                 token, SLOT(slotTriggered()));
 
     }
+
     button->setParent(parent);
 
     return button;
@@ -191,6 +192,7 @@ bool Parseable::addToken(const QString& id, const QString& description, const QS
     }
 
     Token* token = new Token(id, description);
+
     if (!token)
     {
         return false;
@@ -247,6 +249,7 @@ bool Parseable::tokenAtPosition(ParseResults& results, int pos, int& start, int&
     {
         found = true;
     }
+
     return found;
 }
 

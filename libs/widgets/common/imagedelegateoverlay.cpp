@@ -36,15 +36,17 @@
 namespace Digikam
 {
 
-ImageDelegateOverlay::ImageDelegateOverlay(QObject *parent)
-                    : QObject(parent), m_view(0), m_delegate(0)
+ImageDelegateOverlay::ImageDelegateOverlay(QObject* parent)
+    : QObject(parent), m_view(0), m_delegate(0)
 {
 }
 
 ImageDelegateOverlay::~ImageDelegateOverlay()
 {
     if (m_delegate)
+    {
         m_delegate->removeOverlay(this);
+    }
 }
 
 void ImageDelegateOverlay::setActive(bool)
@@ -55,15 +57,15 @@ void ImageDelegateOverlay::visualChange()
 {
 }
 
-void ImageDelegateOverlay::mouseMoved(QMouseEvent *, const QRect&, const QModelIndex&)
+void ImageDelegateOverlay::mouseMoved(QMouseEvent*, const QRect&, const QModelIndex&)
 {
 }
 
-void ImageDelegateOverlay::paint(QPainter *, const QStyleOptionViewItem&, const QModelIndex&)
+void ImageDelegateOverlay::paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&)
 {
 }
 
-void ImageDelegateOverlay::setView(QAbstractItemView *view)
+void ImageDelegateOverlay::setView(QAbstractItemView* view)
 {
     if (!view && m_view)
     {
@@ -75,17 +77,17 @@ void ImageDelegateOverlay::setView(QAbstractItemView *view)
 
     if (m_view)
     {
-        connect(this, SIGNAL(update(const QModelIndex &)),
-                m_view, SLOT(update(const QModelIndex &)));
+        connect(this, SIGNAL(update(const QModelIndex&)),
+                m_view, SLOT(update(const QModelIndex&)));
     }
 }
 
-QAbstractItemView *ImageDelegateOverlay::view() const
+QAbstractItemView* ImageDelegateOverlay::view() const
 {
     return m_view;
 }
 
-void ImageDelegateOverlay::setDelegate(ItemViewImageDelegate *delegate)
+void ImageDelegateOverlay::setDelegate(ItemViewImageDelegate* delegate)
 {
     if (!delegate && m_delegate)
     {
@@ -102,17 +104,17 @@ void ImageDelegateOverlay::setDelegate(ItemViewImageDelegate *delegate)
     }
 }
 
-ItemViewImageDelegate *ImageDelegateOverlay::delegate() const
+ItemViewImageDelegate* ImageDelegateOverlay::delegate() const
 {
     return m_delegate;
 }
 
 // -----------------------------
 
-AbstractWidgetDelegateOverlay::AbstractWidgetDelegateOverlay(QObject *parent)
-                          : ImageDelegateOverlay(parent),
-                            m_widget(0),
-                            m_mouseButtonPressedOnWidget(false)
+AbstractWidgetDelegateOverlay::AbstractWidgetDelegateOverlay(QObject* parent)
+    : ImageDelegateOverlay(parent),
+      m_widget(0),
+      m_mouseButtonPressedOnWidget(false)
 {
 }
 
@@ -121,7 +123,10 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
     if (active)
     {
         if (m_widget)
+        {
             delete m_widget;
+        }
+
         m_widget = createWidget();
 
         m_widget->setFocusPolicy(Qt::NoFocus);
@@ -142,8 +147,8 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
                     this, SLOT(slotReset()));
         }
 
-        connect(m_view, SIGNAL(entered(const QModelIndex &)),
-                this, SLOT(slotEntered(const QModelIndex &)));
+        connect(m_view, SIGNAL(entered(const QModelIndex&)),
+                this, SLOT(slotEntered(const QModelIndex&)));
 
         connect(m_view, SIGNAL(viewportEntered()),
                 this, SLOT(slotViewportEntered()));
@@ -153,8 +158,12 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
         delete m_widget;
         m_widget = 0;
         m_view->viewport()->removeEventFilter(this);
+
         if (view()->model())
+        {
             disconnect(m_view->model(), 0, this, 0);
+        }
+
         disconnect(m_view, 0, this, 0);
     }
 }
@@ -162,10 +171,12 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
 void AbstractWidgetDelegateOverlay::hide()
 {
     if (m_widget)
+    {
         m_widget->hide();
+    }
 }
 
-QWidget *AbstractWidgetDelegateOverlay::parentWidget() const
+QWidget* AbstractWidgetDelegateOverlay::parentWidget() const
 {
     return m_view->viewport();
 }
@@ -178,8 +189,11 @@ void AbstractWidgetDelegateOverlay::slotReset()
 void AbstractWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
 {
     hide();
+
     if (index.isValid() && checkIndex(index))
+    {
         m_widget->show();
+    }
 }
 
 bool AbstractWidgetDelegateOverlay::checkIndex(const QModelIndex& index) const
@@ -193,7 +207,7 @@ void AbstractWidgetDelegateOverlay::slotViewportEntered()
     hide();
 }
 
-void AbstractWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex &, int, int)
+void AbstractWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex&, int, int)
 {
     hide();
 }
@@ -205,20 +219,25 @@ void AbstractWidgetDelegateOverlay::slotLayoutChanged()
 
 bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
 {
-    if (obj == m_widget->parent()) { // events on view's viewport
-        switch (event->type()) {
+    if (obj == m_widget->parent())   // events on view's viewport
+    {
+        switch (event->type())
+        {
             case QEvent::Leave:
                 hide();
                 break;
 
             case QEvent::MouseMove:
-                if (m_mouseButtonPressedOnWidget) {
+
+                if (m_mouseButtonPressedOnWidget)
+                {
                     // Don't forward mouse move events to the viewport,
                     // otherwise a rubberband selection will be shown when
                     // clicking on the selection toggle and moving the mouse
                     // above the viewport.
                     return true;
                 }
+
                 break;
             case QEvent::MouseButtonRelease:
                 m_mouseButtonPressedOnWidget = false;
@@ -229,10 +248,15 @@ bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
     }
     else if (obj == m_widget)
     {
-        switch (event->type()) {
+        switch (event->type())
+        {
             case QEvent::MouseButtonPress:
+
                 if (static_cast<QMouseEvent*>(event)->buttons() & Qt::LeftButton)
+                {
                     m_mouseButtonPressedOnWidget = true;
+                }
+
                 break;
             case QEvent::MouseButtonRelease:
                 m_mouseButtonPressedOnWidget = false;
@@ -247,12 +271,12 @@ bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
 
 // -----------------------------
 
-HoverButtonDelegateOverlay::HoverButtonDelegateOverlay(QObject *parent)
-                          : AbstractWidgetDelegateOverlay(parent)
+HoverButtonDelegateOverlay::HoverButtonDelegateOverlay(QObject* parent)
+    : AbstractWidgetDelegateOverlay(parent)
 {
 }
 
-ItemViewHoverButton *HoverButtonDelegateOverlay::button() const
+ItemViewHoverButton* HoverButtonDelegateOverlay::button() const
 {
     return static_cast<ItemViewHoverButton*>(m_widget);
 }
@@ -260,11 +284,14 @@ ItemViewHoverButton *HoverButtonDelegateOverlay::button() const
 void HoverButtonDelegateOverlay::setActive(bool active)
 {
     AbstractWidgetDelegateOverlay::setActive(active);
+
     if (active)
+    {
         button()->initIcon();
+    }
 }
 
-QWidget *HoverButtonDelegateOverlay::createWidget()
+QWidget* HoverButtonDelegateOverlay::createWidget()
 {
     return createButton();
 }
@@ -272,7 +299,9 @@ QWidget *HoverButtonDelegateOverlay::createWidget()
 void HoverButtonDelegateOverlay::visualChange()
 {
     if (m_widget && m_widget->isVisible())
+    {
         updateButton(button()->index());
+    }
 }
 
 void HoverButtonDelegateOverlay::slotReset()

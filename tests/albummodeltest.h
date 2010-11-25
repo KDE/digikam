@@ -40,7 +40,7 @@ class AlbumModel;
 class AlbumModelTest: public QObject
 {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     AlbumModelTest();
@@ -64,13 +64,13 @@ private Q_SLOTS:
     void testSAlbumModel();
     void testStartAlbumModel();
 
-    void deletePAlbum(Digikam::PAlbum *album);
+    void deletePAlbum(Digikam::PAlbum* album);
 
     void setLastPAlbumCountMap(const QMap<int, int> &map);
 
     // slots for ensuring signal order while scanning albums
-    void slotStartModelRowsInserted(const QModelIndex &parent, int start, int end);
-    void slotStartModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void slotStartModelRowsInserted(const QModelIndex& parent, int start, int end);
+    void slotStartModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
 private:
 
@@ -81,21 +81,21 @@ private:
 
     const QString albumCategory;
 
-    Digikam::PAlbum *palbumRoot0;
-    Digikam::PAlbum *palbumRoot1;
-    Digikam::PAlbum *palbumRoot2;
-    Digikam::PAlbum *palbumChild0Root0;
-    Digikam::PAlbum *palbumChild1Root0;
-    Digikam::PAlbum *palbumChild2Root0;
-    Digikam::PAlbum *palbumChild0Root1;
+    Digikam::PAlbum* palbumRoot0;
+    Digikam::PAlbum* palbumRoot1;
+    Digikam::PAlbum* palbumRoot2;
+    Digikam::PAlbum* palbumChild0Root0;
+    Digikam::PAlbum* palbumChild1Root0;
+    Digikam::PAlbum* palbumChild2Root0;
+    Digikam::PAlbum* palbumChild0Root1;
 
-    Digikam::TAlbum *rootTag;
-    Digikam::TAlbum *talbumRoot0;
-    Digikam::TAlbum *talbumRoot1;
-    Digikam::TAlbum *talbumChild0Root0;
-    Digikam::TAlbum *talbumChild1Root0;
-    Digikam::TAlbum *talbumChild0Child1Root0;
-    Digikam::TAlbum *talbumChild0Root1;
+    Digikam::TAlbum* rootTag;
+    Digikam::TAlbum* talbumRoot0;
+    Digikam::TAlbum* talbumRoot1;
+    Digikam::TAlbum* talbumChild0Root0;
+    Digikam::TAlbum* talbumChild1Root0;
+    Digikam::TAlbum* talbumChild0Child1Root0;
+    Digikam::TAlbum* talbumChild0Root1;
 
     QMap<int, int> palbumCountMap;
 
@@ -103,7 +103,7 @@ private:
      * This model is used to ensure that adding and changing signals are emitted
      * correctly if the model is created beorre the scanning starts.
      */
-    Digikam::AlbumModel *startModel;
+    Digikam::AlbumModel* startModel;
     QList<int> addedIds;
 
 };

@@ -94,12 +94,13 @@ int ParseResults::offset(const ResultsKey& key)
         ResultsKey key = keyAtApproximatePosition(pos);
         return ((key.first + key.second) - pos);
     }
+
     return INVALID_KEY_ID;
 }
 
 ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
 {
-    foreach (const ResultsKey &key, m_results.keys())
+    foreach (const ResultsKey& key, m_results.keys())
     {
         if (pos == key.first)
         {
@@ -118,10 +119,11 @@ bool ParseResults::hasKeyAtPosition(int pos)
 
 ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
 {
-    foreach (const ResultsKey &key, m_results.keys())
+    foreach (const ResultsKey& key, m_results.keys())
     {
         int start  = key.first;
         int length = key.second;
+
         if ((pos >= start) && (pos <= start + length))
         {
             return key;
@@ -180,12 +182,13 @@ QString ParseResults::replaceTokens(const QString& markedString)
             ++i;
         }
     }
+
     return result;
 }
 
 void ParseResults::debug()
 {
-    foreach (const ResultsKey &key, m_results.keys())
+    foreach (const ResultsKey& key, m_results.keys())
     {
         QString _token  = token(key);
         QString _result = result(key);

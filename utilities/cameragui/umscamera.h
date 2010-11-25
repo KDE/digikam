@@ -7,7 +7,7 @@
  * Description : USB Mass Storage camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,18 +67,27 @@ public:
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
 
     // Methods not supported by UMS camera.
-    bool getPreview(QImage& /*preview*/){ return false; };
-    bool capture(GPItemInfo& /*itemInfo*/){ return false; };
+    bool getPreview(QImage& /*preview*/)
+    {
+        return false;
+    };
+    bool capture(GPItemInfo& /*itemInfo*/)
+    {
+        return false;
+    };
 
-    DKCamera::CameraDriverType cameraDriverType(){ return DKCamera::UMSDriver; };
+    DKCamera::CameraDriverType cameraDriverType()
+    {
+        return DKCamera::UMSDriver;
+    };
 
 private:
 
     void listFolders(const QString& folder, QStringList& subFolderList);
 
-    /** Try to find UUID of UMS camera media using Solid interface. 
-        Search use mount path as reference. Return UUID as string 
-        else an empty string 
+    /** Try to find UUID of UMS camera media using Solid interface.
+        Search use mount path as reference. Return UUID as string
+        else an empty string
      */
     void getUUIDFromSolid();
 

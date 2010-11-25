@@ -100,8 +100,8 @@ public:
      * This is for the purpose of presenting to the user, there are no guarantees on precision.
      * Returns true if the values have been changed.
      */
-    bool latitudeUserPresentableNumbers(int *degrees, int *minutes, double *seconds, char *directionReference);
-    bool longitudeUserPresentableNumbers(int *degrees, int *minutes, double *seconds, char *directionReference);
+    bool latitudeUserPresentableNumbers(int* degrees, int* minutes, double* seconds, char* directionReference);
+    bool longitudeUserPresentableNumbers(int* degrees, int* minutes, double* seconds, char* directionReference);
     /** The altitude in meters */
     double altitude() const;
     /**

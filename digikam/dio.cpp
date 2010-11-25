@@ -131,8 +131,11 @@ KIO::CopyJob* rename(const ImageInfo& info, const QString& newName)
     newUrl.setFileName(newName);
 
     PAlbum* album = AlbumManager::instance()->findPAlbum(info.albumId());
+
     if (album)
+    {
         ScanController::instance()->hintAtMoveOrCopyOfItem(info.id(), album, newName);
+    }
 
     return KIO::move(oldUrl, newUrl, KIO::HideProgressInfo);
 }

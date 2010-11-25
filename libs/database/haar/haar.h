@@ -48,30 +48,32 @@ class DImg;
 namespace Haar
 {
 
- /** Weights for the Haar coefficients. Straight from the referenced paper
-     "Fast Multiresolution Image Querying"
-     by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
-     http://www.cs.washington.edu/homes/salesin/abstracts.html
- */
+/** Weights for the Haar coefficients. Straight from the referenced paper
+    "Fast Multiresolution Image Querying"
+    by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
+    http://www.cs.washington.edu/homes/salesin/abstracts.html
+*/
 static const float s_haar_weights[2][6][3] =
 {
     // For scanned picture (sketch=0):
     //    Y      I      Q         idx    total       occurs
-    {{ 5.00F, 19.21F, 34.37F },   // 0   58.58       1 (`DC' component)
-     { 0.83F,  1.26F,  0.36F },   // 1    2.45       3
-     { 1.01F,  0.44F,  0.45F },   // 2    1.90       5
-     { 0.52F,  0.53F,  0.14F },   // 3    1.19       7
-     { 0.47F,  0.28F,  0.18F },   // 4    0.93       9
-     { 0.30F,  0.14F,  0.27F }},  // 5    0.71       16384-25=16359
+    {   { 5.00F, 19.21F, 34.37F },   // 0   58.58       1 (`DC' component)
+        { 0.83F,  1.26F,  0.36F },   // 1    2.45       3
+        { 1.01F,  0.44F,  0.45F },   // 2    1.90       5
+        { 0.52F,  0.53F,  0.14F },   // 3    1.19       7
+        { 0.47F,  0.28F,  0.18F },   // 4    0.93       9
+        { 0.30F,  0.14F,  0.27F }
+    },  // 5    0.71       16384-25=16359
 
     // For handdrawn/painted sketch (sketch=1):
     //    Y      I      Q
-    {{ 4.04F, 15.14F, 22.62F },
-     { 0.78F,  0.92F,  0.40F },
-     { 0.46F,  0.53F,  0.63F },
-     { 0.42F,  0.26F,  0.25F },
-     { 0.41F,  0.14F,  0.15F },
-     { 0.32F,  0.07F,  0.38F }}
+    {   { 4.04F, 15.14F, 22.62F },
+        { 0.78F,  0.92F,  0.40F },
+        { 0.46F,  0.53F,  0.63F },
+        { 0.42F,  0.26F,  0.25F },
+        { 0.41F,  0.14F,  0.15F },
+        { 0.32F,  0.07F,  0.38F }
+    }
 };
 
 /** Number of pixels on one side of image; required to be a power of 2.
@@ -147,6 +149,7 @@ public:
         // All values or false, only 2*40 are true.
         memset(m_indexList, 0, sizeof(MapIndexType[2 * Haar::NumberOfPixelsSquared]));
         int x;
+
         for (int i=0; i < Haar::NumberOfCoefficients; ++i)
         {
             x              = coefs[i] + Haar::NumberOfPixelsSquared;
@@ -181,8 +184,14 @@ public:
     */
     unsigned char m_bin[16384];
 
-    unsigned char bin(int index)    const { return m_bin[index];                               }
-    unsigned char binAbs(int index) const { return (index > 0) ? m_bin[index] : m_bin[-index]; }
+    unsigned char bin(int index)    const
+    {
+        return m_bin[index];
+    }
+    unsigned char binAbs(int index) const
+    {
+        return (index > 0) ? m_bin[index] : m_bin[-index];
+    }
 };
 
 // ---------------------------------------------------------------------------------
@@ -202,8 +211,14 @@ public:
     {
     }
 
-    float weight(int weight, int channel) const { return s_haar_weights[(int)m_type][weight][channel]; }
-    float weightForAverage(int channel)   const { return s_haar_weights[(int)m_type][0][channel];      }
+    float weight(int weight, int channel) const
+    {
+        return s_haar_weights[(int)m_type][weight][channel];
+    }
+    float weightForAverage(int channel)   const
+    {
+        return s_haar_weights[(int)m_type][0][channel];
+    }
 
 private:
 

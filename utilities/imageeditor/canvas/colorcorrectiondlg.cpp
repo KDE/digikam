@@ -110,8 +110,8 @@ public:
 };
 
 ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
-                                       const QString& file, QWidget *parent)
-                  : KDialog(parent), d(new ColorCorrectionDlgPriv)
+                                       const QString& file, QWidget* parent)
+    : KDialog(parent), d(new ColorCorrectionDlgPriv)
 {
     d->mode = mode;
     d->preview = preview;
@@ -120,17 +120,26 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
     d->workspaceProfile = IccProfile(iccSettings.workspaceProfile);
 
     QString caption;
+
     if (d->mode == ProfileMismatch)
+    {
         caption = i18n("Color Profile Mismatch");
+    }
     else if (d->mode == MissingProfile)
+    {
         caption = i18n("Missing Color Profile");
+    }
     else if (d->mode == UncalibratedColor)
+    {
         caption = i18n("Image with Uncalibrated Color");
+    }
+
     if (!file.isNull())
     {
         QFileInfo fi(file);
         caption = i18nc("<Problem> - <filename>", "%1 - %2", caption, fi.fileName());
     }
+
     setCaption(caption);
 
     setButtons(Help|Ok|Cancel);
@@ -141,7 +150,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
     setButtonText(Cancel,    i18n("Don't know"));
     setButtonToolTip(Cancel, i18n("Take the safest and most appropriate action"));
 
-    QWidget *page     = new QWidget(this);
+    QWidget* page     = new QWidget(this);
     QGridLayout* grid = new QGridLayout(page);
     setMainWidget(page);
 
@@ -155,7 +164,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
     }
     else if (d->mode == MissingProfile)
     {
-        QVBoxLayout *vbox = new QVBoxLayout;
+        QVBoxLayout* vbox = new QVBoxLayout;
         vbox->addWidget(createAssumeOptions());
         vbox->addLayout(createProfilesInfo());
         vbox->addStretch(1);
@@ -188,12 +197,13 @@ ColorCorrectionDlg::~ColorCorrectionDlg()
     delete d;
 }
 
-QLayout *ColorCorrectionDlg::createHeading()
+QLayout* ColorCorrectionDlg::createHeading()
 {
-    QLabel *icon = new QLabel;
+    QLabel* icon = new QLabel;
     icon->setPixmap(SmallIcon("fill-color", KIconLoader::SizeMedium));
 
-    QLabel *message = new QLabel;
+    QLabel* message = new QLabel;
+
     if (d->mode == ProfileMismatch)
     {
         message->setText(i18n("<p>This image has an <b>embedded color profile</b><br/> "
@@ -212,15 +222,16 @@ QLayout *ColorCorrectionDlg::createHeading()
         message->setText(i18n("<p>The color information of this image is uncalibrated.<br/>"
                               "How do you want to proceed?</p>"));
     }
+
     message->setWordWrap(true);
 
-    QLabel *logo    = new QLabel;
+    QLabel* logo    = new QLabel;
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                            .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                    .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    KSeparator *line              = new KSeparator(Qt::Horizontal);
+    KSeparator* line              = new KSeparator(Qt::Horizontal);
 
-    QGridLayout *grid = new QGridLayout;
+    QGridLayout* grid = new QGridLayout;
     grid->addWidget(icon,    0, 0);
     grid->addWidget(message, 0, 1);
     grid->addWidget(logo,    0, 2);
@@ -229,23 +240,28 @@ QLayout *ColorCorrectionDlg::createHeading()
     return grid;
 }
 
-QLayout *ColorCorrectionDlg::createProfilesInfo()
+QLayout* ColorCorrectionDlg::createProfilesInfo()
 {
-    QVBoxLayout *vbox = new QVBoxLayout;
+    QVBoxLayout* vbox = new QVBoxLayout;
 
     if (d->mode == ProfileMismatch || d->mode == UncalibratedColor)
     {
         d->imageProfileTitle     = new QLabel;
+
         if (d->mode ==  ProfileMismatch)
+        {
             d->imageProfileTitle->setText(i18n("Embedded Color Profile:"));
+        }
         //else if (d->mode == MissingProfile)
         //  d->imageProfileTitle->setText(i18n("Image Color Profile:"));
         else if (d->mode == UncalibratedColor)
+        {
             d->imageProfileTitle->setText(i18n("Input Color Profile:"));
+        }
 
         d->imageProfileDesc   = new QLabel;
 
-        QPushButton *imageProfInfo = new QPushButton(i18n("Info..."));
+        QPushButton* imageProfInfo = new QPushButton(i18n("Info..."));
         //d->imageProfileTitle->setWordWrap(true);
         d->imageProfileDesc->setWordWrap(true);
 
@@ -257,9 +273,9 @@ QLayout *ColorCorrectionDlg::createProfilesInfo()
                 this, SLOT(slotImageProfInfo()) );
     }
 
-    QLabel *workspaceProfileTitle   = new QLabel(i18n("Working Color Space:"));
-    QLabel *workspaceProfileDesc    = new QLabel(QString("<b>%1</b>").arg(d->workspaceProfile.description()));
-    QPushButton *workspaceProfInfo  = new QPushButton(i18n("Info..."));
+    QLabel* workspaceProfileTitle   = new QLabel(i18n("Working Color Space:"));
+    QLabel* workspaceProfileDesc    = new QLabel(QString("<b>%1</b>").arg(d->workspaceProfile.description()));
+    QPushButton* workspaceProfInfo  = new QPushButton(i18n("Info..."));
     //workspaceProfileTitle->setWordWrap(true);
     workspaceProfileDesc->setWordWrap(true);
 
@@ -273,32 +289,48 @@ QLayout *ColorCorrectionDlg::createProfilesInfo()
     return vbox;
 }
 
-QLayout *ColorCorrectionDlg::createPreviews()
+QLayout* ColorCorrectionDlg::createPreviews()
 {
-    QGridLayout *grid = new QGridLayout;
+    QGridLayout* grid = new QGridLayout;
 
-    QLabel *originalTitle         = new QLabel;
+    QLabel* originalTitle         = new QLabel;
+
     if (d->mode == ProfileMismatch)
+    {
         originalTitle->setText(i18n("Original Colors:"));
+    }
     else if (d->mode == MissingProfile)
+    {
         originalTitle->setText(i18n("Uncorrected Colors:"));
+    }
     else if (d->mode == UncalibratedColor)
+    {
         originalTitle->setText(i18n("Raw Colors:"));
+    }
+
     originalTitle->setWordWrap(true);
 
-    QLabel *previewOriginal       = new QLabel;
+    QLabel* previewOriginal       = new QLabel;
     DImg copyOriginal = d->preview.copy();
     IccManager manager(copyOriginal);
     manager.transformForDisplay();
     previewOriginal->setPixmap(copyOriginal.convertToPixmap());
 
-    QLabel *targetTitle           = new QLabel;
+    QLabel* targetTitle           = new QLabel;
+
     if (d->mode == ProfileMismatch)
+    {
         targetTitle->setText(i18n("Resulting Colors:"));
+    }
     else if (d->mode == MissingProfile)
+    {
         targetTitle->setText(i18n("Correction Applied:"));
+    }
     else if (d->mode == UncalibratedColor)
+    {
         targetTitle->setText(i18n("Corrected Colors:"));
+    }
+
     targetTitle->setWordWrap(true);
 
     d->previewTarget              = new QLabel;
@@ -321,10 +353,10 @@ QLayout *ColorCorrectionDlg::createPreviews()
     return grid;
 }
 
-QWidget *ColorCorrectionDlg::createOptions()
+QWidget* ColorCorrectionDlg::createOptions()
 {
-    QGroupBox *box    = new QGroupBox;
-    QVBoxLayout *vbox = new QVBoxLayout(box);
+    QGroupBox* box    = new QGroupBox;
+    QVBoxLayout* vbox = new QVBoxLayout(box);
 
     if (d->mode == ProfileMismatch)
     {
@@ -338,6 +370,7 @@ QWidget *ColorCorrectionDlg::createOptions()
         d->keepProfile->setChecked(true);
         d->otherProfileBox->setCurrentProfile(IccProfile::adobeRGB());
         d->otherProfileBox->setNoProfileIfEmpty(i18n("No Profile Available"));
+
         if (d->otherProfileBox->count() == 0) // disable if empty
         {
             d->thirdOption->setEnabled(false);
@@ -409,10 +442,10 @@ QWidget *ColorCorrectionDlg::createOptions()
     return box;
 }
 
-QWidget *ColorCorrectionDlg::createAssumeOptions()
+QWidget* ColorCorrectionDlg::createAssumeOptions()
 {
-    QGroupBox   *box  = new QGroupBox;
-    QGridLayout *grid = new QGridLayout(box);
+    QGroupBox*   box  = new QGroupBox;
+    QGridLayout* grid = new QGridLayout(box);
 
     if (d->mode == ProfileMismatch)
     {
@@ -420,7 +453,7 @@ QWidget *ColorCorrectionDlg::createAssumeOptions()
     }
     else if (d->mode == MissingProfile)
     {
-        QLabel *label = new QLabel(i18n("Which color space shall be used to interpret the colors of this image?"));
+        QLabel* label = new QLabel(i18n("Which color space shall be used to interpret the colors of this image?"));
         label->setWordWrap(true);
 
         d->imageSRGB         = new QRadioButton(i18n("sRGB (Internet standard)"));
@@ -429,11 +462,12 @@ QWidget *ColorCorrectionDlg::createAssumeOptions()
         d->imageProfileBox   = new IccProfilesComboBox;
         d->imageProfileBox->addProfilesSqueezed(IccSettings::instance()->workspaceProfiles()
                                                 << IccSettings::instance()->inputProfiles());
-        QPushButton *usedProfInfo = new QPushButton(i18n("Info..."));
+        QPushButton* usedProfInfo = new QPushButton(i18n("Info..."));
 
         d->imageSRGB->setChecked(true);
         d->imageProfileBox->setCurrentProfile(IccProfile::adobeRGB());
         d->imageProfileBox->setNoProfileIfEmpty(i18n("No Profile Available"));
+
         if (d->imageProfileBox->count() == 0) // disable if empty
         {
             d->imageOtherSpace->setEnabled(false);
@@ -466,7 +500,7 @@ QWidget *ColorCorrectionDlg::createAssumeOptions()
     }
     else if (d->mode == UncalibratedColor)
     {
-        QLabel *label = new QLabel(i18n("Please select the input color profile of the device (camera) used to create this image:"));
+        QLabel* label = new QLabel(i18n("Please select the input color profile of the device (camera) used to create this image:"));
         label->setWordWrap(true);
 
         d->imageProfileBox  = new IccProfilesComboBox;
@@ -487,7 +521,10 @@ QWidget *ColorCorrectionDlg::createAssumeOptions()
 void ColorCorrectionDlg::imageProfileToggled(bool on)
 {
     if (!on)
+    {
         return;
+    }
+
     imageProfileChanged();
 }
 
@@ -500,15 +537,23 @@ void ColorCorrectionDlg::imageProfileChanged()
 void ColorCorrectionDlg::updateImageProfileUI()
 {
     if (d->otherProfileBox)
+    {
         d->otherProfileBox->setEnabled(d->thirdOption->isChecked());
+    }
+
     if (d->thirdCheckBox)
+    {
         d->thirdCheckBox->setEnabled(d->thirdOption->isChecked());
+    }
 }
 
 void ColorCorrectionDlg::missingProfileToggled(bool on)
 {
     if (!on)
+    {
         return;
+    }
+
     missingProfileChanged();
 }
 
@@ -520,7 +565,10 @@ void ColorCorrectionDlg::missingProfileChanged()
 void ColorCorrectionDlg::usedProfileToggled(bool on)
 {
     if (!on)
+    {
         return;
+    }
+
     usedProfileChanged();
 }
 
@@ -533,7 +581,9 @@ void ColorCorrectionDlg::usedProfileChanged()
 void ColorCorrectionDlg::updateUsedProfileUI()
 {
     if (d->imageProfileBox && d->imageOtherSpace)
+    {
         d->imageProfileBox->setEnabled(d->imageOtherSpace->isChecked());
+    }
 }
 
 void ColorCorrectionDlg::inputProfileChanged()
@@ -553,18 +603,27 @@ void ColorCorrectionDlg::updateInfo()
     if (d->mode == ProfileMismatch)
     {
         if (b & ICCSettingsContainer::UseSpecifiedProfile)
+        {
             d->imageProfileTitle->setText(i18n("Assigned Color Profile:"));
+        }
         else
+        {
             d->imageProfileTitle->setText(i18n("Embedded Color Profile:"));
+        }
     }
 
     if (d->mode == ProfileMismatch || d->mode == UncalibratedColor)
     {
         QString description = d->imageProfile.description();
+
         if (description.isEmpty())
+        {
             d->imageProfileDesc->setText(i18n("<b>No Profile</b>"));
+        }
         else
+        {
             d->imageProfileDesc->setText(QString("<b>%1</b>").arg(description));
+        }
     }
 
     manager.transform(currentBehavior(), specifiedProfile());
@@ -583,7 +642,9 @@ void ColorCorrectionDlg::slotWorkspaceProfInfo()
 void ColorCorrectionDlg::slotImageProfInfo()
 {
     if (d->imageProfile.isNull())
+    {
         return;
+    }
 
     ICCProfileInfoDlg infoDlg(parentWidget(), QString(), d->imageProfile);
     infoDlg.exec();
@@ -592,7 +653,10 @@ void ColorCorrectionDlg::slotImageProfInfo()
 ICCSettingsContainer::Behavior ColorCorrectionDlg::behavior() const
 {
     if (result() == QDialog::Rejected)
+    {
         return ICCSettingsContainer::SafestBestAction;
+    }
+
     return currentBehavior();
 }
 
@@ -601,34 +665,55 @@ ICCSettingsContainer::Behavior ColorCorrectionDlg::currentBehavior() const
     if (d->mode == ProfileMismatch)
     {
         if (d->keepProfile->isChecked())
+        {
             return ICCSettingsContainer::PreserveEmbeddedProfile;
+        }
         else if (d->convertToWorkingSpace->isChecked())
+        {
             return ICCSettingsContainer::EmbeddedToWorkspace;
+        }
         else if (d->thirdOption->isChecked())
         {
             if (d->thirdCheckBox->isChecked())
+            {
                 return ICCSettingsContainer::UseSpecifiedProfile | ICCSettingsContainer::ConvertToWorkspace;
+            }
             else
+            {
                 return ICCSettingsContainer::UseSpecifiedProfile | ICCSettingsContainer::KeepProfile;
+            }
         }
     }
     else if (d->mode == MissingProfile)
     {
         if (d->thirdOption->isChecked())
+        {
             return ICCSettingsContainer::NoColorManagement;
+        }
 
         ICCSettingsContainer::Behavior behavior;
+
         if (d->keepProfile->isChecked())
+        {
             behavior |= ICCSettingsContainer::KeepProfile;
+        }
         else if (d->convertToWorkingSpace->isChecked())
+        {
             behavior |= ICCSettingsContainer::ConvertToWorkspace;
+        }
 
         if (d->imageSRGB->isChecked())
+        {
             behavior |= ICCSettingsContainer::UseSRGB;
+        }
         else if (d->imageWorkingSpace->isChecked())
+        {
             behavior |= ICCSettingsContainer::UseWorkspace;
+        }
         else if (d->imageOtherSpace->isChecked())
+        {
             behavior |= ICCSettingsContainer::UseSpecifiedProfile;
+        }
 
         return behavior;
     }
@@ -643,9 +728,14 @@ ICCSettingsContainer::Behavior ColorCorrectionDlg::currentBehavior() const
 IccProfile ColorCorrectionDlg::specifiedProfile() const
 {
     if (d->mode == ProfileMismatch)
+    {
         return d->otherProfileBox->currentProfile();
+    }
     else if (d->mode == MissingProfile || d->mode == UncalibratedColor)
+    {
         return d->imageProfileBox->currentProfile();
+    }
+
     return IccProfile();
 }
 
@@ -675,8 +765,11 @@ void ColorCorrectionDlg::readSettings()
                 d->convertToWorkingSpace->setFocus();
             }
         }
+
         if (!settings.lastSpecifiedAssignProfile.isEmpty())
+        {
             d->otherProfileBox->setCurrentProfile(settings.lastSpecifiedAssignProfile);
+        }
     }
     else if (d->mode == MissingProfile)
     {
@@ -700,15 +793,26 @@ void ColorCorrectionDlg::readSettings()
             }
 
             if (settings.lastMissingProfileBehavior & ICCSettingsContainer::UseSRGB)
+            {
                 d->imageSRGB->setChecked(true);
+            }
+
             if (settings.lastMissingProfileBehavior & ICCSettingsContainer::UseWorkspace)
+            {
                 d->imageWorkingSpace->setChecked(true);
+            }
+
             if ((settings.lastMissingProfileBehavior & ICCSettingsContainer::UseSpecifiedProfile)
                 && d->imageProfileBox->count() > 0)
+            {
                 d->imageOtherSpace->setChecked(true);
+            }
         }
+
         if (!settings.lastSpecifiedInputProfile.isEmpty())
+        {
             d->imageProfileBox->setCurrentProfile(settings.lastSpecifiedInputProfile);
+        }
     }
     else if (d->mode == UncalibratedColor)
     {

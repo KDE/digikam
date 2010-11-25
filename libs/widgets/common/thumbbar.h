@@ -68,7 +68,7 @@ public:
 
     void setOrientation(int orientation);
     int  getOrientation();
-    void setToolTip(ThumbBarToolTip *toolTip);
+    void setToolTip(ThumbBarToolTip* toolTip);
 
     int countItems();
     KUrl::List itemsUrls();
@@ -118,8 +118,8 @@ protected:
     int  getMargin();
     int  getRadius();
 
-    bool pixmapForItem(ThumbBarItem *item, QPixmap& pix) const;
-    void preloadPixmapForItem(ThumbBarItem *item) const;
+    bool pixmapForItem(ThumbBarItem* item, QPixmap& pix) const;
+    void preloadPixmapForItem(ThumbBarItem* item) const;
 
     void insertItem(ThumbBarItem* item);
     void repaintItem(ThumbBarItem* item);
@@ -145,7 +145,7 @@ protected Q_SLOTS:
 
 protected:
 
-    ThumbBarToolTip *m_toolTip;
+    ThumbBarToolTip* m_toolTip;
 
 private Q_SLOTS:
 
@@ -165,7 +165,7 @@ class DIGIKAM_EXPORT ThumbBarItem
 {
 public:
 
-    ThumbBarItem(ThumbBarView *view, const KUrl& url);
+    ThumbBarItem(ThumbBarView* view, const KUrl& url);
     virtual ~ThumbBarItem();
 
     KUrl          url() const;

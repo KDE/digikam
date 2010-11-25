@@ -54,15 +54,19 @@ public:
     QSet<int>                     idsToRemove;
     ImageComments::UniqueBehavior unique;
 
-    void init(DatabaseAccess &access, qlonglong imageId)
+    void init(DatabaseAccess& access, qlonglong imageId)
     {
         id = imageId;
         infos = access.db()->getImageComments(id);
+
         for (int i=0; i<infos.size(); i++)
         {
-            CommentInfo &info = infos[i];
+            CommentInfo& info = infos[i];
+
             if (info.language.isNull())
+            {
                 info.language = "x-default";
+            }
         }
     }
 
@@ -94,6 +98,7 @@ public:
         for (int i=0; i<infos.size(); ++i)
         {
             const CommentInfo& info = infos[i];
+
             if (info.type == DatabaseComment::Comment)
             {
                 if (info.language == fullCode)
@@ -119,9 +124,14 @@ public:
         foreach (int index, set)
         {
             if (index > removedIndex)
+            {
                 newSet << index - 1;
+            }
             else if (index < removedIndex)
+            {
                 newSet << index;
+            }
+
             // drop index == removedIndex
         }
         set = newSet;
@@ -135,19 +145,19 @@ public:
 };
 
 ImageComments::ImageComments()
-             : d(0)
+    : d(0)
 {
 }
 
 ImageComments::ImageComments(qlonglong imageid)
-             : d(new ImageCommentsPriv)
+    : d(new ImageCommentsPriv)
 {
     DatabaseAccess access;
     d->init(access, imageid);
 }
 
 ImageComments::ImageComments(DatabaseAccess& access, qlonglong imageid)
-             : d(new ImageCommentsPriv)
+    : d(new ImageCommentsPriv)
 {
     d->init(access, imageid);
 }
@@ -173,12 +183,14 @@ bool ImageComments::isNull() const
     return !d;
 }
 
-QString ImageComments::defaultComment(int *index) const
+QString ImageComments::defaultComment(int* index) const
 {
     if (!d)
+    {
         return QString();
+    }
 
-    KLocale *locale  = KGlobal::locale();
+    KLocale* locale  = KGlobal::locale();
     QString langCode = locale->language().toLower() + '-';
     QString fullCode = langCode + locale->country().toLower();
 
@@ -187,62 +199,99 @@ QString ImageComments::defaultComment(int *index) const
     d->languageMatch(fullCode, langCode, fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch);
 
     int chosen = fullCodeMatch;
+
     if (chosen == -1)
+    {
         chosen = langCodeMatch;
+    }
+
     if (chosen == -1)
+    {
         chosen = defaultCodeMatch;
+    }
+
     if (chosen == -1)
+    {
         chosen = firstMatch;
+    }
 
     if (index)
+    {
         *index = chosen;
+    }
 
     if (chosen == -1)
+    {
         return QString();
+    }
     else
+    {
         return d->infos[chosen].comment;
+    }
 }
 
-QString ImageComments::commentForLanguage(const QString& languageCode, int *index,
-                                          LanguageChoiceBehavior behavior) const
+QString ImageComments::commentForLanguage(const QString& languageCode, int* index,
+        LanguageChoiceBehavior behavior) const
 {
     if (!d)
+    {
         return QString();
+    }
 
     int fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch;
 
     // en-us => en-
     QString firstPart;
+
     if (languageCode == "x-default")
+    {
         firstPart = languageCode;
+    }
     else
+    {
         firstPart = languageCode.section('-', 0, 0, QString::SectionIncludeTrailingSep);
+    }
 
     d->languageMatch(languageCode, firstPart, fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch);
 
     int chosen = fullCodeMatch;
+
     if (chosen == -1)
+    {
         chosen = langCodeMatch;
+    }
+
     if (chosen == -1 && behavior > ReturnMatchingLanguageOnly)
     {
         chosen = defaultCodeMatch;
+
         if (chosen == -1 && behavior == ReturnMatchingDefaultOrFirstLanguage)
+        {
             chosen = firstMatch;
+        }
     }
 
     if (index)
+    {
         *index = chosen;
+    }
 
     if (chosen == -1)
+    {
         return QString();
+    }
     else
+    {
         return d->infos[chosen].comment;
+    }
 }
 
 int ImageComments::numberOfComments() const
 {
     if (!d)
+    {
         return 0;
+    }
 
     return d->infos.size();
 }
@@ -250,7 +299,9 @@ int ImageComments::numberOfComments() const
 DatabaseComment::Type ImageComments::type(int index) const
 {
     if (!d)
+    {
         return DatabaseComment::UndefinedType;
+    }
 
     return d->infos[index].type;
 }
@@ -258,7 +309,9 @@ DatabaseComment::Type ImageComments::type(int index) const
 QString ImageComments::language(int index) const
 {
     if (!d)
+    {
         return QString();
+    }
 
     return d->infos[index].language;
 }
@@ -266,7 +319,9 @@ QString ImageComments::language(int index) const
 QString ImageComments::author(int index) const
 {
     if (!d)
+    {
         return QString();
+    }
 
     return d->infos[index].author;
 }
@@ -274,7 +329,9 @@ QString ImageComments::author(int index) const
 QDateTime ImageComments::date(int index) const
 {
     if (!d)
+    {
         return QDateTime();
+    }
 
     return d->infos[index].date;
 }
@@ -282,7 +339,9 @@ QDateTime ImageComments::date(int index) const
 QString ImageComments::comment(int index) const
 {
     if (!d)
+    {
         return QString();
+    }
 
     return d->infos[index].comment;
 }
@@ -290,7 +349,9 @@ QString ImageComments::comment(int index) const
 void ImageComments::setUniqueBehavior(UniqueBehavior behavior)
 {
     if (!d)
+    {
         return;
+    }
 
     d->unique = behavior;
 }
@@ -299,15 +360,24 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
                                const QDateTime& date, DatabaseComment::Type type)
 {
     if (!d)
+    {
         return;
+    }
 
     bool multipleCommentsPerLanguage = (d->unique == UniquePerLanguageAndAuthor);
     QString language = lang;
+
     if (language.isEmpty())
+    {
         language = "x-default";
+    }
+
     QString author = author_;
+
     if (author.isEmpty())
+    {
         author = QString();
+    }
 
     for (int i=0; i<d->infos.size(); ++i)
     {
@@ -357,7 +427,9 @@ void ImageComments::addTitle(const QString& comment, const QString& lang,
 void ImageComments::replaceComments(const CaptionsMap& map, DatabaseComment::Type type)
 {
     if (!d)
+    {
         return;
+    }
 
     d->dirtyIndices.clear();
 
@@ -371,16 +443,22 @@ void ImageComments::replaceComments(const CaptionsMap& map, DatabaseComment::Typ
     for (int i=0; i<d->infos.size() /* changing! */; )
     {
         if (!d->dirtyIndices.contains(i) && !d->newIndices.contains(i))
+        {
             remove(i);
+        }
         else
+        {
             ++i;
+        }
     }
 }
 
 void ImageComments::replaceFrom(const ImageComments& source)
 {
     if (!d)
+    {
         return;
+    }
 
     if (!source.d)
     {
@@ -397,9 +475,13 @@ void ImageComments::replaceFrom(const ImageComments& source)
     for (int i=0; i<d->infos.size() /* changing! */; )
     {
         if (!d->dirtyIndices.contains(i) && !d->newIndices.contains(i))
+        {
             remove(i);
+        }
         else
+        {
             ++i;
+        }
     }
 }
 
@@ -420,7 +502,9 @@ void ImageComments::addCommentDirectly(const QString& comment, const QString& la
 void ImageComments::remove(int index)
 {
     if (!d)
+    {
         return;
+    }
 
     d->idsToRemove << d->infos[index].id;
     d->infos.removeAt(index);
@@ -430,14 +514,20 @@ void ImageComments::remove(int index)
 void ImageComments::removeAll(DatabaseComment::Type type)
 {
     if (!d)
+    {
         return;
+    }
 
     for (int i=0; i<d->infos.size() /* changing! */; )
     {
         if (d->infos[i].type == type)
+        {
             remove(i);
+        }
         else
+        {
             ++i;
+        }
     }
 }
 
@@ -449,9 +539,11 @@ void ImageComments::removeAllComments()
 void ImageComments::removeAll()
 {
     if (!d)
+    {
         return;
+    }
 
-    foreach (const CommentInfo &info, d->infos)
+    foreach (const CommentInfo& info, d->infos)
     {
         d->idsToRemove << info.id;
     }
@@ -463,7 +555,9 @@ void ImageComments::removeAll()
 void ImageComments::changeComment(int index, const QString& comment)
 {
     if (!d)
+    {
         return;
+    }
 
     d->infos[index].comment = comment;
     d->dirtyIndices << index;
@@ -471,8 +565,10 @@ void ImageComments::changeComment(int index, const QString& comment)
 
 void ImageComments::changeLanguage(int index, const QString& language)
 {
-     if (!d)
+    if (!d)
+    {
         return;
+    }
 
     d->infos[index].language = language;
     d->dirtyIndices << index;
@@ -481,7 +577,9 @@ void ImageComments::changeLanguage(int index, const QString& language)
 void ImageComments::changeAuthor(int index, const QString& author)
 {
     if (!d)
+    {
         return;
+    }
 
     d->infos[index].author = author;
     d->dirtyIndices << index;
@@ -490,7 +588,9 @@ void ImageComments::changeAuthor(int index, const QString& author)
 void ImageComments::changeDate(int index, const QDateTime& date)
 {
     if (!d)
+    {
         return;
+    }
 
     d->infos[index].date = date;
     d->dirtyIndices << index;
@@ -499,7 +599,9 @@ void ImageComments::changeDate(int index, const QDateTime& date)
 void ImageComments::changeType(int index, DatabaseComment::Type type)
 {
     if (!d)
+    {
         return;
+    }
 
     d->infos[index].type = type;
     d->dirtyIndices << index;
@@ -508,7 +610,9 @@ void ImageComments::changeType(int index, DatabaseComment::Type type)
 void ImageComments::apply()
 {
     if (!d)
+    {
         return;
+    }
 
     DatabaseAccess access;
     apply(access);
@@ -517,7 +621,9 @@ void ImageComments::apply()
 void ImageComments::apply(DatabaseAccess& access)
 {
     if (!d)
+    {
         return;
+    }
 
     foreach(int commentId, d->idsToRemove)
     {
@@ -549,7 +655,7 @@ CaptionsMap ImageComments::toCaptionsMap(DatabaseComment::Type type) const
 
     if (d)
     {
-        foreach (const CommentInfo &info, d->infos)
+        foreach (const CommentInfo& info, d->infos)
         {
             if (info.type == type)
             {

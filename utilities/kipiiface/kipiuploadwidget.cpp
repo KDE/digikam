@@ -61,17 +61,17 @@ public:
         iface    = 0;
     }
 
-    AlbumSelectWidget *albumSel;
+    AlbumSelectWidget* albumSel;
 
-    KipiInterface     *iface;
+    KipiInterface*     iface;
 };
 
-KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
-                : KIPI::UploadWidget(parent),
-                  d(new KipiUploadWidgetPriv)
+KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget* parent)
+    : KIPI::UploadWidget(parent),
+      d(new KipiUploadWidgetPriv)
 {
     d->iface          = iface;
-    QVBoxLayout *vlay = new QVBoxLayout(this);
+    QVBoxLayout* vlay = new QVBoxLayout(this);
     d->albumSel       = new AlbumSelectWidget(this);
     vlay->addWidget(d->albumSel);
     vlay->setMargin(0);
@@ -89,6 +89,7 @@ KipiUploadWidget::~KipiUploadWidget()
 KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 {
     KIPI::ImageCollection collection;
+
     if (d->iface)
     {
 #if KIPI_VERSION >= 0x000300
@@ -97,18 +98,20 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
         QString ext = d->iface->fileExtensions();
 #endif
 
-        PAlbum *currentAlbum = d->albumSel->currentAlbum();
+        PAlbum* currentAlbum = d->albumSel->currentAlbum();
+
         if (currentAlbum)
         {
             collection = new KipiImageCollection(KipiImageCollection::AllItems, currentAlbum, ext);
         }
     }
+
     return collection;
 }
 
 void KipiUploadWidget::slotSelectionChanged()
 {
-    PAlbum *currentAlbum = d->albumSel->currentAlbum();
+    PAlbum* currentAlbum = d->albumSel->currentAlbum();
 
     // TODO is this the desired semantic?
     if (!currentAlbum || (currentAlbum->isRoot()))

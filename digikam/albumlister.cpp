@@ -123,7 +123,9 @@ AlbumLister* AlbumLister::m_instance = 0;
 AlbumLister* AlbumLister::instance()
 {
     if (!m_instance)
+    {
         new AlbumLister();
+    }
 
     return m_instance;
 }
@@ -134,7 +136,7 @@ void AlbumLister::cleanUp()
 }
 
 AlbumLister::AlbumLister()
-           : d(new AlbumListerPriv)
+    : d(new AlbumListerPriv)
 {
     m_instance = this;
 
@@ -151,17 +153,17 @@ AlbumLister::AlbumLister()
     connect(d->refreshTimer, SIGNAL(timeout()),
             this, SLOT(slotNextRefresh()));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
-            this, SLOT(slotImageChange(const ImageChangeset &)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
+            this, SLOT(slotImageChange(const ImageChangeset&)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset &)),
-            this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
+            this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
+            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset &)),
-            this, SLOT(slotSearchChange(const SearchChangeset &)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset&)),
+            this, SLOT(slotSearchChange(const SearchChangeset&)));
 }
 
 AlbumLister::~AlbumLister()
@@ -176,7 +178,7 @@ AlbumLister::~AlbumLister()
     m_instance = 0;
 }
 
-void AlbumLister::openAlbum(Album *album)
+void AlbumLister::openAlbum(Album* album)
 {
     d->currAlbum = album;
     d->filterTimer->stop();
@@ -192,7 +194,9 @@ void AlbumLister::openAlbum(Album *album)
     }
 
     if (!album)
+    {
         return;
+    }
 
     startListJob(album->databaseUrl());
 }
@@ -200,7 +204,9 @@ void AlbumLister::openAlbum(Album *album)
 void AlbumLister::refresh()
 {
     if (!d->currAlbum)
+    {
         return;
+    }
 
     d->filterTimer->stop();
 
@@ -211,6 +217,7 @@ void AlbumLister::refresh()
     }
 
     d->itemMap.clear();
+
     for (ImageInfoList::const_iterator it = d->itemList.constBegin(); it != d->itemList.constEnd(); ++it)
     {
         d->itemMap.insert(it->id(), *it);
@@ -224,9 +231,13 @@ void AlbumLister::slotNextRefresh()
     // Refresh, unless job is running, then postpone restart until job is finished
     // Rationale: Let the job run, don't stop it possibly several times
     if (d->job)
+    {
         d->refreshTimer->start(50);
+    }
     else
+    {
         refresh();
+    }
 }
 
 void AlbumLister::startListJob(const KUrl& url)
@@ -259,16 +270,22 @@ void AlbumLister::setDayFilter(const QList<QDateTime>& days)
     d->dayFilter.clear();
 
     for (QList<QDateTime>::const_iterator it = days.constBegin(); it != days.constEnd(); ++it)
+    {
         d->dayFilter.insert(*it, true);
+    }
 
     if (!d->filterTimer->isActive())
+    {
         d->filterTimer->start();
+    }
 }
 
 bool AlbumLister::tagFiltersIsActive()
 {
     if (!d->tagFilter.isEmpty() || d->untaggedFilter)
+    {
         return true;
+    }
 
     return false;
 }
@@ -276,7 +293,7 @@ bool AlbumLister::tagFiltersIsActive()
 bool AlbumLister::filterIsActive()
 {
     return !d->dayFilter.isEmpty() || !d->tagFilter.isEmpty() || !d->textFilterSettings.text.isEmpty()
-            || d->untaggedFilter || d->ratingFilter!=-1;
+           || d->untaggedFilter || d->ratingFilter!=-1;
 }
 
 void AlbumLister::setTagFilter(const QList<int>& tags, const MatchingCondition& matchingCond,
@@ -285,36 +302,50 @@ void AlbumLister::setTagFilter(const QList<int>& tags, const MatchingCondition& 
     d->tagFilter      = tags;
     d->matchingCond   = matchingCond;
     d->untaggedFilter = showUnTagged;
+
     if (!d->filterTimer->isActive())
+    {
         d->filterTimer->start();
+    }
 }
 
 void AlbumLister::setRatingFilter(int rating, const RatingCondition& ratingCond)
 {
     d->ratingFilter = rating;
     d->ratingCond   = ratingCond;
+
     if (!d->filterTimer->isActive())
+    {
         d->filterTimer->start();
+    }
 }
 
 void AlbumLister::setMimeTypeFilter(int mimeTypeFilter)
 {
     d->mimeTypeFilter = (MimeFilter::TypeMimeFilter)mimeTypeFilter;
+
     if (!d->filterTimer->isActive())
+    {
         d->filterTimer->start();
+    }
 }
 
 void AlbumLister::setTextFilter(const SearchTextSettings& settings)
 {
     d->textFilterSettings = settings;
+
     if (!d->filterTimer->isActive())
+    {
         d->filterTimer->start();
+    }
 }
 
 bool AlbumLister::matchesFilter(const ImageInfo& info, bool& foundText)
 {
     if (!filterIsActive())
+    {
         return true;
+    }
 
     bool match = false;
 
@@ -341,11 +372,15 @@ bool AlbumLister::matchesFilter(const ImageInfo& info, bool& foundText)
             for (it = d->tagFilter.begin(); it != d->tagFilter.end(); ++it)
             {
                 if (!tagIds.contains(*it))
+                {
                     break;
+                }
             }
 
             if (it == d->tagFilter.end())
+            {
                 match = true;
+            }
         }
 
         match |= (d->untaggedFilter && tagIds.isEmpty());
@@ -370,8 +405,11 @@ bool AlbumLister::matchesFilter(const ImageInfo& info, bool& foundText)
     {
         // for now we treat -1 (no rating) just like a rating of 0.
         int rating = info.rating();
+
         if (rating == -1)
+        {
             rating = 0;
+        }
 
         if (d->ratingCond == GreaterEqualCondition)
         {
@@ -401,61 +439,88 @@ bool AlbumLister::matchesFilter(const ImageInfo& info, bool& foundText)
 
     // -- Filter by mime type -----------------------------------------------------
 
-    switch(d->mimeTypeFilter)
+    switch (d->mimeTypeFilter)
     {
-        // info.format is a standardized string: Only one possibility per mime type
+            // info.format is a standardized string: Only one possibility per mime type
         case MimeFilter::ImageFiles:
         {
             if (info.category() != DatabaseItem::Image)
+            {
                 match = false;
+            }
+
             break;
         }
         case MimeFilter::JPGFiles:
         {
             if (info.format() != "JPG")
+            {
                 match = false;
+            }
+
             break;
         }
         case MimeFilter::PNGFiles:
         {
             if (info.format() != "PNG")
+            {
                 match = false;
+            }
+
             break;
         }
         case MimeFilter::TIFFiles:
         {
             if (info.format() != "TIFF")
+            {
                 match = false;
+            }
+
             break;
         }
         case MimeFilter::DNGFiles:
         {
             if (info.format() != "RAW-DNG")
+            {
                 match = false;
+            }
+
             break;
         }
         case MimeFilter::NoRAWFiles:
         {
             if (info.format().startsWith(QLatin1String("RAW")))
+            {
                 match = false;
+            }
+
             break;
         }
         case MimeFilter::RAWFiles:
         {
             if (!info.format().startsWith(QLatin1String("RAW")))
+            {
                 match = false;
+            }
+
             break;
         }
         case MimeFilter::MoviesFiles:
         {
             if (info.category() != DatabaseItem::Video)
+            {
                 match = false;
+            }
+
             break;
         }
         case MimeFilter::AudioFiles:
         {
             if (info.category() != DatabaseItem::Audio)
+            {
                 match = false;
+            }
+
             break;
         }
         default:        // All Files: do nothing...
@@ -467,24 +532,35 @@ bool AlbumLister::matchesFilter(const ImageInfo& info, bool& foundText)
     if (!d->textFilterSettings.text.isEmpty())
     {
         foundText = false;
+
         if (info.name().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
         {
             foundText = true;
         }
+
         if (info.comment().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
+        {
             foundText = true;
+        }
+
         QStringList tags = AlbumManager::instance()->tagNames(info.tagIds());
+
         for (QStringList::const_iterator it = tags.constBegin() ; it != tags.constEnd() ; ++it)
         {
             if ((*it).contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
+            {
                 foundText = true;
+            }
         }
+
         // check for folder names
         PAlbum* palbum = AlbumManager::instance()->findPAlbum(info.albumId());
+
         if ((palbum && palbum->title().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive)))
         {
             foundText = true;
         }
+
         match &= foundText;
     }
 
@@ -530,6 +606,7 @@ void AlbumLister::slotFilterItems()
          it != d->itemList.end(); ++it)
     {
         bool foundText = false;
+
         if (matchesFilter(*it, foundText))
         {
             match = true;
@@ -541,13 +618,18 @@ void AlbumLister::slotFilterItems()
         }
 
         if (foundText)
+        {
             matchForText = true;
+        }
     }
 
     // This takes linear time - and deleting seems to take longer. Set wait cursor for large numbers.
     bool setCursor = (3*deleteFilteredItemsList.count() + newFilteredItemsList.count()) > 1500;
+
     if (setCursor)
+    {
         kapp->setOverrideCursor(Qt::WaitCursor);
+    }
 
     emit signalItemsTextFilterMatch(matchForText);
     emit signalItemsFilterMatch(match);
@@ -562,13 +644,16 @@ void AlbumLister::slotFilterItems()
         */
         emit signalClear();
     }
+
     if (!newFilteredItemsList.isEmpty())
     {
         emit signalNewFilteredItems(newFilteredItemsList);
     }
 
     if (setCursor)
+    {
         kapp->restoreOverrideCursor();
+    }
 }
 
 void AlbumLister::slotResult(KJob* job)
@@ -601,7 +686,9 @@ void AlbumLister::slotResult(KJob* job)
 void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 {
     if (data.isEmpty())
+    {
         return;
+    }
 
     ImageInfoList newItemsList;
     ImageInfoList newFilteredItemsList;
@@ -633,6 +720,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
                 {
                     emit signalDeleteFilteredItem(info);
                 }
+
                 continue;
             }
         }
@@ -640,7 +728,9 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
         ImageInfo info(record);
 
         if (matchesFilter(info, foundText))
+        {
             newFilteredItemsList.append(info);
+        }
 
         newItemsList.append(info);
         d->itemList.append(info);
@@ -648,10 +738,14 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     }
 
     if (!newFilteredItemsList.isEmpty())
+    {
         emit signalNewFilteredItems(newFilteredItemsList);
+    }
 
     if (!newItemsList.isEmpty())
+    {
         emit signalNewItems(newItemsList);
+    }
 
     slotFilterItems();
 }
@@ -659,11 +753,15 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 void AlbumLister::slotImageChange(const ImageChangeset& changeset)
 {
     if (!d->currAlbum)
+    {
         return;
+    }
 
     // already scheduled to refresh?
     if (d->refreshTimer->isActive())
+    {
         return;
+    }
 
     if (d->currAlbum->type() == Album::SEARCH)
     {
@@ -682,18 +780,25 @@ void AlbumLister::slotImageChange(const ImageChangeset& changeset)
 
     // already scheduled to re-filter?
     if (d->filterTimer->isActive())
+    {
         return;
+    }
 
     // do we filter at all?
     if (!filterIsActive())
+    {
         return;
+    }
 
     // is one of the values affected that we filter by?
     DatabaseFields::Set set = changeset.changes();
+
     if (!(set & DatabaseFields::CreationDate) && !(set & DatabaseFields::Rating)
         && !(set & DatabaseFields::Category) && !(set & DatabaseFields::Format)
         && !(set & DatabaseFields::Name) && !(set & DatabaseFields::Comment))
+    {
         return;
+    }
 
     // is one of our images affected?
     foreach (const qlonglong& id, changeset.ids())
@@ -710,19 +815,27 @@ void AlbumLister::slotImageChange(const ImageChangeset& changeset)
 void AlbumLister::slotImageTagChange(const ImageTagChangeset& changeset)
 {
     if (!d->currAlbum)
+    {
         return;
+    }
 
     // already scheduled to refresh?
     if (d->refreshTimer->isActive())
+    {
         return;
+    }
 
     // already scheduled to re-filter?
     if (d->filterTimer->isActive())
+    {
         return;
+    }
 
     // do we filter at all?
     if (!tagFiltersIsActive())
+    {
         return;
+    }
 
     // is one of our images affected?
     foreach (const qlonglong& id, changeset.ids())
@@ -739,18 +852,23 @@ void AlbumLister::slotImageTagChange(const ImageTagChangeset& changeset)
 void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
     if (!d->currAlbum)
+    {
         return;
+    }
 
     // already scheduled to refresh?
     if (d->refreshTimer->isActive())
+    {
         return;
+    }
 
     bool doRefresh = false;
 
     switch (changeset.operation())
     {
         case CollectionImageChangeset::Added:
-            switch(d->currAlbum->type())
+
+            switch (d->currAlbum->type())
             {
                 case Album::PHYSICAL:
                     // that's easy: try if our album is affected
@@ -784,24 +902,32 @@ void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset& chan
     {
         // use timer: there may be several signals in a row
         if (!d->refreshTimer->isActive())
+        {
             d->refreshTimer->start(100);
+        }
     }
 }
 
 void AlbumLister::slotSearchChange(const SearchChangeset& changeset)
 {
     if (!d->currAlbum)
+    {
         return;
+    }
 
     if (changeset.operation() != SearchChangeset::Changed)
+    {
         return;
+    }
 
-    SAlbum *album = AlbumManager::instance()->findSAlbum(changeset.searchId());
+    SAlbum* album = AlbumManager::instance()->findSAlbum(changeset.searchId());
 
     if (album && d->currAlbum == album)
     {
         if (!d->refreshTimer->isActive())
+        {
             d->refreshTimer->start(100);
+        }
     }
 }
 

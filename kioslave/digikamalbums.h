@@ -69,36 +69,36 @@ private:
     void createDigikamPropsUDSEntry(KIO::UDSEntry& entry);
     bool createUDSEntry(const QString& path, KIO::UDSEntry& entry);
 
-    void connectJob(KIO::Job *job);
-    void connectSimpleJob(KIO::SimpleJob *job);
-    void connectListJob(KIO::ListJob *job);
-    void connectTransferJob(KIO::TransferJob *job);
+    void connectJob(KIO::Job* job);
+    void connectSimpleJob(KIO::SimpleJob* job);
+    void connectListJob(KIO::ListJob* job);
+    void connectTransferJob(KIO::TransferJob* job);
 
 private Q_SLOTS:
 
     // KIO::Job
-    void slotResult(KJob *job);
-    void slotWarning(KJob *job, const QString& msg);
-    void slotInfoMessage(KJob *job, const QString& msg);
-    void slotTotalSize(KJob *job, qulonglong size);
-    void slotProcessedSize(KJob *job, qulonglong size);
-    void slotSpeed(KJob *job, unsigned long bytesPerSecond);
+    void slotResult(KJob* job);
+    void slotWarning(KJob* job, const QString& msg);
+    void slotInfoMessage(KJob* job, const QString& msg);
+    void slotTotalSize(KJob* job, qulonglong size);
+    void slotProcessedSize(KJob* job, qulonglong size);
+    void slotSpeed(KJob* job, unsigned long bytesPerSecond);
 
     // KIO::SimpleJob subclasses
-    void slotRedirection(KIO::Job *job, const KUrl& url);
+    void slotRedirection(KIO::Job* job, const KUrl& url);
 
     // KIO::ListJob
-    void slotEntries(KIO::Job *job, const KIO::UDSEntryList& entries);
+    void slotEntries(KIO::Job* job, const KIO::UDSEntryList& entries);
 
     // KIO::TransferJob
-    void slotData(KIO::Job *job, const QByteArray& data);
-    void slotDataReq(KIO::Job *job, QByteArray& data);
-    void slotMimetype (KIO::Job *job, const QString& type);
-    void slotCanResume (KIO::Job *job, KIO::filesize_t offset);
+    void slotData(KIO::Job* job, const QByteArray& data);
+    void slotDataReq(KIO::Job* job, QByteArray& data);
+    void slotMimetype (KIO::Job* job, const QString& type);
+    void slotCanResume (KIO::Job* job, KIO::filesize_t offset);
 
 private:
 
-    QEventLoop *m_eventLoop;
+    QEventLoop* m_eventLoop;
 };
 
 #endif /* DIGIKAMALBUMS_H */

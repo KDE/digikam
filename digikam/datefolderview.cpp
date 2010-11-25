@@ -77,8 +77,8 @@ public:
 };
 
 DateFolderView::DateFolderView(QWidget* parent, DateAlbumModel* dateAlbumModel)
-              : KVBox(parent), StateSavingObject(this),
-                d(new DateFolderViewPriv)
+    : KVBox(parent), StateSavingObject(this),
+      d(new DateFolderViewPriv)
 {
     setObjectName("DateFolderView");
 
@@ -104,7 +104,7 @@ DateFolderView::~DateFolderView()
     delete d;
 }
 
-void DateFolderView::setImageModel(ImageFilterModel *model)
+void DateFolderView::setImageModel(ImageFilterModel* model)
 {
     d->monthview->setImageModel(model);
 }
@@ -112,13 +112,16 @@ void DateFolderView::setImageModel(ImageFilterModel *model)
 void DateFolderView::setActive(bool val)
 {
     if (d->active == val)
+    {
         return;
+    }
 
     d->active = val;
+
     if (d->active)
     {
         AlbumManager::instance()->setCurrentAlbum(
-                        d->dateTreeView->currentAlbum());
+            d->dateTreeView->currentAlbum());
         slotSelectionChanged(d->dateTreeView->currentAlbum());
     }
     else
@@ -137,7 +140,8 @@ void DateFolderView::slotSelectionChanged(Album* selectedAlbum)
 
     d->monthview->setActive(false);
 
-    DAlbum *dalbum = dynamic_cast<DAlbum *> (selectedAlbum);
+    DAlbum* dalbum = dynamic_cast<DAlbum*> (selectedAlbum);
+
     if (!dalbum)
     {
         return;
@@ -152,10 +156,12 @@ void DateFolderView::slotSelectionChanged(Album* selectedAlbum)
     }
 }
 
-void DateFolderView::slotAllAlbumsLoaded() {
-    if (d->active) {
+void DateFolderView::slotAllAlbumsLoaded()
+{
+    if (d->active)
+    {
         AlbumManager::instance()->setCurrentAlbum(
-                        d->dateTreeView->currentAlbum());
+            d->dateTreeView->currentAlbum());
         slotSelectionChanged(d->dateTreeView->currentAlbum());
     }
 }
@@ -182,13 +188,15 @@ void DateFolderView::gotoDate(const QDate& dt)
     kDebug() << "Going to date " << dt;
 
     QModelIndex dateIndex = d->dateTreeView->albumModel()->monthIndexForDate(dt);
+
     if (!dateIndex.isValid())
     {
         kDebug() << "Cannot find an album for date " << dt;
         return;
     }
 
-    DAlbum *dateAlbum = d->dateTreeView->albumModel()->albumForIndex(dateIndex);
+    DAlbum* dateAlbum = d->dateTreeView->albumModel()->albumForIndex(dateIndex);
+
     if (!dateAlbum)
     {
         kWarning() << "Could not retrieve an album for index " << dateIndex;

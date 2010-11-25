@@ -69,7 +69,7 @@ public:
 };
 
 EditorTool::EditorTool(QObject* parent)
-          : QObject(parent), d(new EditorToolPriv)
+    : QObject(parent), d(new EditorToolPriv)
 {
     d->timer = new QTimer(this);
 
@@ -128,6 +128,7 @@ void EditorTool::setToolView(QWidget* view)
     d->view->blockSignals(true);
 
     ImageGuideWidget* wgt = dynamic_cast<ImageGuideWidget*>(d->view);
+
     if (wgt)
     {
         connect(d->view, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
@@ -196,7 +197,9 @@ void EditorTool::setToolHelp(const QString& anchor)
 QString EditorTool::toolHelp() const
 {
     if (d->helpAnchor.isEmpty())
+    {
         return (objectName() + QString(".anchor"));
+    }
 
     return d->helpAnchor;
 }
@@ -258,23 +261,35 @@ void EditorTool::slotPreviewModeChanged()
 void EditorTool::ICCSettingsChanged()
 {
     ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);
+
     if (view)
+    {
         view->ICCSettingsChanged();
+    }
 
     ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
+
     if (view2)
+    {
         view2->ICCSettingsChanged();
+    }
 }
 
 void EditorTool::exposureSettingsChanged()
 {
     ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);
+
     if (view)
+    {
         view->exposureSettingsChanged();
+    }
 
     ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
+
     if (view2)
+    {
         view2->exposureSettingsChanged();
+    }
 }
 
 void EditorTool::setToolInfoMessage(const QString& txt)
@@ -315,7 +330,7 @@ public:
 };
 
 EditorToolThreaded::EditorToolThreaded(QObject* parent)
-                  : EditorTool(parent), d(new EditorToolThreadedPriv)
+    : EditorTool(parent), d(new EditorToolThreadedPriv)
 {
 }
 
@@ -343,7 +358,10 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
 void EditorToolThreaded::setFilter(DImgThreadedFilter* filter)
 {
     if (d->threadedFilter)
+    {
         delete d->threadedFilter;
+    }
+
     d->threadedFilter = filter;
 
     connect(d->threadedFilter, SIGNAL(started()),
@@ -362,13 +380,15 @@ void EditorToolThreaded::slotResized()
 {
     if (d->currentRenderingMode == EditorToolThreaded::FinalRendering)
     {
-       toolView()->update();
-       return;
+        toolView()->update();
+        return;
     }
     else if (d->currentRenderingMode == EditorToolThreaded::PreviewRendering)
     {
-       if (filter())
-          filter()->cancelFilter();
+        if (filter())
+        {
+            filter()->cancelFilter();
+        }
     }
 
     QTimer::singleShot(0, this, SLOT(slotEffect()));
@@ -379,7 +399,9 @@ void EditorToolThreaded::slotAbort()
     d->currentRenderingMode = EditorToolThreaded::NoneRendering;
 
     if (filter())
+    {
         filter()->cancelFilter();
+    }
 
     EditorToolIface::editorToolIface()->setToolStopProgress();
 
@@ -450,7 +472,7 @@ void EditorToolThreaded::slotFilterProgress(int progress)
     EditorToolIface::editorToolIface()->setToolProgress(progress);
 }
 
-void EditorToolThreaded::setToolView(QWidget *view)
+void EditorToolThreaded::setToolView(QWidget* view)
 {
     EditorTool::setToolView(view);
 
@@ -491,7 +513,9 @@ void EditorToolThreaded::slotEffect()
 {
     // Computation already in process.
     if (d->currentRenderingMode != EditorToolThreaded::NoneRendering)
+    {
         return;
+    }
 
     d->currentRenderingMode = EditorToolThreaded::PreviewRendering;
     kDebug() << "Preview " << toolName() << " started...";

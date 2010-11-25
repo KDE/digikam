@@ -58,13 +58,16 @@ class BlackFrameParser: public QObject
 
 public:
 
-    BlackFrameParser(QObject *parent);
+    BlackFrameParser(QObject* parent);
     ~BlackFrameParser();
 
     void parseHotPixels(const QString& file);
     void parseBlackFrame(const KUrl& url);
     void parseBlackFrame(QImage& img);
-    QImage image(){return m_Image;}
+    QImage image()
+    {
+        return m_Image;
+    }
 
 Q_SIGNALS:
 
@@ -81,7 +84,7 @@ private:
 
     void blackFrameParsing();
     void consolidatePixels (QList<HotPixel>& list);
-    void validateAndConsolidate(HotPixel *a, HotPixel *b);
+    void validateAndConsolidate(HotPixel* a, HotPixel* b);
 
 private:
 

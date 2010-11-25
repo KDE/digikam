@@ -45,9 +45,9 @@ class ImageRatingOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    ImageRatingOverlay(QObject *parent);
+    ImageRatingOverlay(QObject* parent);
 
-    RatingWidget *ratingWidget() const;
+    RatingWidget* ratingWidget() const;
 
 Q_SIGNALS:
 
@@ -60,7 +60,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual QWidget *createWidget();
+    virtual QWidget* createWidget();
     virtual void setActive(bool);
     virtual void visualChange();
     virtual void hide();

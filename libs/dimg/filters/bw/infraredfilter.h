@@ -46,7 +46,7 @@ public:
         sensibility = 200;
     };
 
-    ~InfraredContainer(){};
+    ~InfraredContainer() {};
 
 public:
 

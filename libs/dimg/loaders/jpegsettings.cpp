@@ -67,8 +67,8 @@ public:
     KIntNumInput* JPEGcompression;
 };
 
-JPEGSettings::JPEGSettings(QWidget *parent)
-            : QWidget(parent), d(new JPEGSettingsPriv)
+JPEGSettings::JPEGSettings(QWidget* parent)
+    : QWidget(parent), d(new JPEGSettingsPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -88,9 +88,9 @@ JPEGSettings::JPEGSettings(QWidget *parent)
                                           "<p><b>Note: JPEG always uses lossy compression.</b></p>"));
 
     d->labelWarning = new QLabel(i18n("<font size='-1' color='red'><i>"
-                          "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a "
-                          "lossy image compression format."
-                          "</i></font>"), this);
+                                      "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a "
+                                      "lossy image compression format."
+                                      "</i></font>"), this);
 
     d->labelWarning->setOpenExternalLinks(true);
     d->labelWarning->setFrameStyle(QFrame::Box | QFrame::Plain);

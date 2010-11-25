@@ -58,7 +58,7 @@ public:
         setRestorationDefaultSettings();
     };
 
-    ~GreycstorationContainer(){};
+    ~GreycstorationContainer() {};
 
     void setRestorationDefaultSettings()
     {
@@ -108,7 +108,7 @@ public:
         btile      = 4;
 
         nbIter     = 3;
-        interp     = NearestNeighbor; 
+        interp     = NearestNeighbor;
 
         amplitude  = 20.0;
         sharpness  = 0.2F;
@@ -158,7 +158,7 @@ public:
 public:
 
     /** Contructor without argument. Before to use it,
-        you need to call in order: setSettings(), setMode(), optionally setInPaintingMask(), 
+        you need to call in order: setSettings(), setMode(), optionally setInPaintingMask(),
         setOriginalImage(), and necessary setup() at end.
      */
     GreycstorationFilter(QObject* parent=0);
@@ -166,11 +166,11 @@ public:
     /** Contructor with all arguments. Ready to use.
      */
     GreycstorationFilter(DImg* orgImage,
-                        const GreycstorationContainer& settings,
-                        int mode=Restore,
-                        int newWidth=0, int newHeight=0,
-                        const QImage& inPaintingMask=QImage(),
-                        QObject* parent=0);
+                         const GreycstorationContainer& settings,
+                         int mode=Restore,
+                         int newWidth=0, int newHeight=0,
+                         const QImage& inPaintingMask=QImage(),
+                         QObject* parent=0);
 
     ~GreycstorationFilter();
 

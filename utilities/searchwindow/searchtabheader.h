@@ -46,19 +46,19 @@ class SearchTabHeader : public QWidget
 
 public:
 
-    SearchTabHeader(QWidget *parent);
+    SearchTabHeader(QWidget* parent);
     ~SearchTabHeader();
 
 public Q_SLOTS:
 
-    void selectedSearchChanged(Album *album);
-    void editSearch(SAlbum *album);
+    void selectedSearchChanged(Album* album);
+    void editSearch(SAlbum* album);
     void newKeywordSearch();
     void newAdvancedSearch();
 
 Q_SIGNALS:
 
-    void searchShallBeSelected(SAlbum *album);
+    void searchShallBeSelected(SAlbum* album);
 
 private Q_SLOTS:
 
@@ -74,7 +74,7 @@ private:
     void setCurrentSearch(DatabaseSearch::Type type, const QString& query, bool selectCurrentAlbum = true);
     QString queryFromKeywords(const QString& keywords);
     QString keywordsFromQuery(const QString& query);
-    SearchWindow *searchWindow();
+    SearchWindow* searchWindow();
 
 private:
 

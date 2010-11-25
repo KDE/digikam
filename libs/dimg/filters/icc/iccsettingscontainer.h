@@ -47,7 +47,7 @@ public:
 
     ICCSettingsContainer();
 
-    ~ICCSettingsContainer(){};
+    ~ICCSettingsContainer() {};
 
 public:
 

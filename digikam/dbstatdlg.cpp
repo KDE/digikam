@@ -51,7 +51,7 @@ namespace Digikam
 {
 
 DBStatDlg::DBStatDlg(QWidget* parent)
-         : InfoDlg(parent)
+    : InfoDlg(parent)
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
 
@@ -72,8 +72,8 @@ DBStatDlg::DBStatDlg(QWidget* parent)
     setInfoMap(map);
 
     // To see total count of items at end of list.
-    QTreeWidgetItem* ti = new QTreeWidgetItem(listView(), QStringList() 
-                                              << i18n("Total Items") << QString::number(total));
+    QTreeWidgetItem* ti = new QTreeWidgetItem(listView(), QStringList()
+            << i18n("Total Items") << QString::number(total));
     QFont ft = ti->font(0);
     ft.setBold(true);
     ti->setFont(0, ft);
@@ -99,7 +99,7 @@ DBStatDlg::DBStatDlg(QWidget* parent)
 
     QString dbBe = AlbumSettings::instance()->getDatabaseType();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Database backend")
-                                                  << dbBe);
+                        << dbBe);
 
     if (dbBe != QString("QSQLITE"))
     {

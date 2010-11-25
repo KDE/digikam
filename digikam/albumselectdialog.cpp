@@ -74,7 +74,7 @@ public:
 AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
                                      const QString& header,
                                      const QString& newAlbumString)
-                 : KDialog(parent), d(new AlbumSelectDialogPrivate)
+    : KDialog(parent), d(new AlbumSelectDialogPrivate)
 {
     d->newAlbumString = newAlbumString;
 
@@ -92,12 +92,15 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     QGridLayout* grid = new QGridLayout(page);
     QLabel* logo      = new QLabel(page);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                            .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                    .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* message   = new QLabel(page);
     message->setWordWrap(true);
+
     if (!header.isEmpty())
+    {
         message->setText(header);
+    }
 
     d->albumSel = new AlbumSelectWidget(page, albumToSelect);
 
@@ -152,6 +155,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
     }
 
     PAlbum* selectedAlbum = dlg->d->albumSel->currentAlbum();
+
     if (!selectedAlbum || (selectedAlbum->isRoot()))
     {
         delete dlg;

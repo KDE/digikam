@@ -68,11 +68,12 @@ public:
         {
             return preloadThumbSize.size();
         }
+
         return thumbSize.size();
     }
 };
 
-ImageThumbnailModel::ImageThumbnailModel(QObject *parent)
+ImageThumbnailModel::ImageThumbnailModel(QObject* parent)
     : ImageModel(parent), d(new ImageThumbnailModelPriv)
 {
     setKeepsFilePathCache(true);
@@ -84,15 +85,15 @@ ImageThumbnailModel::~ImageThumbnailModel()
     delete d;
 }
 
-void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread *thread)
+void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* thread)
 {
     d->thread = thread;
 
-    connect(d->thread, SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QPixmap&)));
+    connect(d->thread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 }
 
-ThumbnailLoadThread *ImageThumbnailModel::thumbnailLoadThread() const
+ThumbnailLoadThread* ImageThumbnailModel::thumbnailLoadThread() const
 {
     return d->thread;
 }
@@ -129,6 +130,7 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
             d->preloadThread->setExifRotate(d->exifRotate);
             d->preloadThread->setPriority(QThread::LowPriority);
         }
+
         connect(this, SIGNAL(allRefreshingFinished()),
                 this, SLOT(preloadAllThumbnails()));
     }
@@ -144,10 +146,12 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
 void ImageThumbnailModel::setExifRotate(bool rotate)
 {
     d->exifRotate = rotate;
+
     if (d->thread)
     {
         d->thread->setExifRotate(rotate);
     }
+
     if (d->preloadThread)
     {
         d->preloadThread->setExifRotate(rotate);
@@ -226,6 +230,7 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         QPixmap thumbnail;
         ImageInfo info = imageInfoRef(index);
         QString path = info.filePath();
+
         if (d->thread->find(path, thumbnail, d->thumbSize.size()))
         {
             return thumbnail;
@@ -235,6 +240,7 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
             return QVariant(QVariant::Pixmap);
         }
     }
+
     return ImageModel::data(index, role);
 }
 
@@ -243,10 +249,15 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
     if (role == ThumbnailRole && d->thread)
     {
         if (value.isNull())
+        {
             d->thumbSize = d->lastGlobalThumbSize;
+        }
         else
+        {
             d->thumbSize = value.toInt();
+        }
     }
+
     return ImageModel::setData(index, value, role);
 }
 
@@ -256,10 +267,13 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
     {
         return;
     }
+
     QModelIndex changed = indexForPath(loadingDescription.filePath);
+
     if (changed.isValid())
     {
         emit thumbnailAvailable(changed, loadingDescription.previewParameters.size);
+
         if (d->emitDataChanged)
         {
             emit dataChanged(changed, changed);

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : image properties side bar using data from 
+ * Description : image properties side bar using data from
  *               digiKam database.
  *
  * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef IMAGEPROPERTIESSIDEBARDB_H
 #define IMAGEPROPERTIESSIDEBARDB_H
 
@@ -54,15 +54,15 @@ class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 
 public:
 
-    ImagePropertiesSideBarDB(QWidget* parent, SidebarSplitter *splitter,
+    ImagePropertiesSideBarDB(QWidget* parent, SidebarSplitter* splitter,
                              KMultiTabBarPosition side=KMultiTabBar::Left,
                              bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarDB();
 
-    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg *img = 0);
+    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* img = 0);
 
-    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(), DImg *img = 0);
+    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(), DImg* img = 0);
     virtual void itemChanged(const ImageInfoList& infos);
 
     void populateTags(void);
@@ -97,8 +97,8 @@ private Q_SLOTS:
 
 private:
 
-    void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg *img);
-    void itemChanged(const ImageInfoList infos, const QRect& rect, DImg *img);
+    void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg* img);
+    void itemChanged(const ImageInfoList infos, const QRect& rect, DImg* img);
     void setImagePropertiesInformation(const KUrl& url);
 
 private:

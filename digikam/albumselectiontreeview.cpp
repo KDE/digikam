@@ -49,12 +49,12 @@ namespace Digikam
 class AlbumViewToolTip: public ItemViewToolTip
 {
 public:
-    AlbumViewToolTip(AlbumSelectionTreeView *view) :
+    AlbumViewToolTip(AlbumSelectionTreeView* view) :
         ItemViewToolTip(view)
     {
     }
 
-    AlbumSelectionTreeView *view() const
+    AlbumSelectionTreeView* view() const
     {
         return static_cast<AlbumSelectionTreeView*>(ItemViewToolTip::view());
     }
@@ -63,9 +63,9 @@ protected:
 
     virtual QString tipContents()
     {
-        PAlbum *album = view()->albumForIndex(currentIndex());
+        PAlbum* album = view()->albumForIndex(currentIndex());
         return ToolTipFiller::albumTipContents(album,
-                        view()->albumModel()->albumCount(album));
+                                               view()->albumModel()->albumCount(album));
     }
 
 };
@@ -84,18 +84,18 @@ public:
     {
     }
 
-    AlbumModificationHelper *albumModificationHelper;
+    AlbumModificationHelper* albumModificationHelper;
     bool enableToolTips;
-    AlbumViewToolTip *toolTip;
+    AlbumViewToolTip* toolTip;
 
-    QAction *renameAction;
-    QAction *resetIconAction;
-    QAction *findDuplAction;
+    QAction* renameAction;
+    QAction* resetIconAction;
+    QAction* findDuplAction;
 
 };
 
-AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget *parent, AlbumModel *model,
-                AlbumModificationHelper *albumModificationHelper) :
+AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* model,
+        AlbumModificationHelper* albumModificationHelper) :
     AlbumTreeView(model, parent), d(new AlbumSelectionTreeViewPriv)
 {
 
@@ -128,10 +128,11 @@ QString AlbumSelectionTreeView::contextMenuTitle() const
     return i18n("My Albums");
 }
 
-void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a)
+void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a)
 {
 
-    PAlbum *album = dynamic_cast<PAlbum*> (a);
+    PAlbum* album = dynamic_cast<PAlbum*> (a);
+
     if (!a)
     {
         return;
@@ -162,11 +163,11 @@ void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh,
 
 }
 
-void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> a)
+void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> a)
 {
 
-    Album *alb = a;
-    PAlbum *album = dynamic_cast<PAlbum*> (alb);
+    Album* alb = a;
+    PAlbum* album = dynamic_cast<PAlbum*> (alb);
 
     if (!action || !album)
     {
@@ -190,7 +191,7 @@ void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction *action, Albu
 
 }
 
-bool AlbumSelectionTreeView::viewportEvent(QEvent *event)
+bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
 {
 
     // let the base class handle the event if it is not a tool tip request
@@ -206,7 +207,8 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent *event)
     }
 
     // check that we got a correct event
-    QHelpEvent *helpEvent = dynamic_cast<QHelpEvent*> (event);
+    QHelpEvent* helpEvent = dynamic_cast<QHelpEvent*> (event);
+
     if (!helpEvent)
     {
         kError() << "Unable to determine the correct type of the event. "
@@ -216,12 +218,14 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent *event)
 
     // find the item this tool tip belongs to
     QModelIndex index = indexAt(helpEvent->pos());
+
     if (!index.isValid())
     {
         return true;
     }
 
-    PAlbum *album = albumForIndex(index);
+    PAlbum* album = albumForIndex(index);
+
     if (!album || album->isRoot() || album->isAlbumRoot())
     {
         // there was no album so we really don't want to show a tooltip.
@@ -229,8 +233,12 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent *event)
     }
 
     QRect itemRect = visualRect(index);
+
     if (!itemRect.contains(helpEvent->pos()))
+    {
         return true;
+    }
+
     QStyleOptionViewItem option = viewOptions();
     option.rect = itemRect;
     // visualRect can be larger than viewport, intersect with viewport rect

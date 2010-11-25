@@ -51,7 +51,7 @@ class LoadingDescription;
 class LightTablePreview : public PreviewWidget
 {
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 

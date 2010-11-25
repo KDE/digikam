@@ -66,7 +66,7 @@ public:
 };
 
 RawImport::RawImport(const KUrl& url, QObject* parent)
-         : EditorToolThreaded(parent), d(new RawImportPriv)
+    : EditorToolThreaded(parent), d(new RawImportPriv)
 {
     d->previewWidget = new RawPreview(url, 0);
     d->settingsBox   = new RawSettingsBox(url, 0);
@@ -122,8 +122,15 @@ void RawImport::slotInit()
 
 void RawImport::setBusy(bool val)
 {
-    if (val) d->previewWidget->setCursor(Qt::WaitCursor);
-    else d->previewWidget->unsetCursor();
+    if (val)
+    {
+        d->previewWidget->setCursor(Qt::WaitCursor);
+    }
+    else
+    {
+        d->previewWidget->unsetCursor();
+    }
+
     d->settingsBox->setBusy(val);
 }
 
@@ -211,7 +218,9 @@ void RawImport::slotOk()
 {
     // NOTE: work around B.K.O #211810
     if (d->settingsBox->curvesWidget()->isSixteenBits() != d->settingsBox->settings().sixteenBitsImage)
+    {
         d->settingsBox->curvesWidget()->updateData(0, 0, 0, d->settingsBox->settings().sixteenBitsImage);
+    }
 
     EditorTool::slotOk();
 }

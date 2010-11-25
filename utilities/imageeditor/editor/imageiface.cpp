@@ -78,7 +78,7 @@ public:
 };
 
 ImageIface::ImageIface(int w, int h)
-          : d(new ImageIfacePriv)
+    : d(new ImageIfacePriv)
 {
     d->constrainWidth     = w;
     d->constrainHeight    = h;
@@ -165,8 +165,11 @@ uchar* ImageIface::getPreviewImage() const
         if (!d->usePreviewSelection)
         {
             im = DImgInterface::defaultInterface()->getImg();
+
             if (!im || im->isNull())
+            {
                 return 0;
+            }
         }
         else
         {
@@ -180,7 +183,9 @@ uchar* ImageIface::getPreviewImage() const
             delete [] data;
 
             if (!im)
+            {
                 return 0;
+            }
 
             if (im->isNull())
             {
@@ -200,7 +205,9 @@ uchar* ImageIface::getPreviewImage() const
         d->targetPreviewImage = d->previewImage;
 
         if (d->usePreviewSelection)
+        {
             delete im;
+        }
     }
 
     DImg previewData = d->previewImage.copyImageData();
@@ -218,7 +225,9 @@ uchar* ImageIface::getOriginalImage() const
     DImg* im = DImgInterface::defaultInterface()->getImg();
 
     if (!im || im->isNull())
+    {
         return 0;
+    }
 
     DImg origData = im->copyImageData();
     return origData.stripImageData();
@@ -237,7 +246,9 @@ uchar* ImageIface::getImageSelection() const
 void ImageIface::putPreviewImage(uchar* data)
 {
     if (!data)
+    {
         return;
+    }
 
     d->targetPreviewImage.detach();
     d->targetPreviewImage.putImageData(data);
@@ -252,7 +263,9 @@ void ImageIface::putPreviewIccProfile(const IccProfile& profile)
 void ImageIface::putOriginalImage(const QString& caller, uchar* data, int w, int h)
 {
     if (!data)
+    {
         return;
+    }
 
     DImgInterface::defaultInterface()->putImage(caller, data, w, h);
 }
@@ -265,7 +278,9 @@ void ImageIface::putOriginalIccProfile(const IccProfile& profile)
 void ImageIface::putImageSelection(const QString& caller, uchar* data)
 {
     if (!data)
+    {
         return;
+    }
 
     DImgInterface::defaultInterface()->putImageSelection(caller, data);
 }
@@ -413,6 +428,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
         // Show the Over/Under exposure pixels indicators
 
         ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
+
         if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
         {
             ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
@@ -423,7 +439,9 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
     }
 
     if (!painter)
+    {
         p->end();
+    }
 }
 
 }   // namespace Digikam

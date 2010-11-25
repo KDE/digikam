@@ -49,7 +49,7 @@ public:
         blueMask  = 0;
     };
 
-    ~TonalityContainer(){};
+    ~TonalityContainer() {};
 
 public:
 

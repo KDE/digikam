@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 BWConvert::BWConvert(QObject* parent)
-         : BatchTool("BWConvert", ColorTool, parent)
+    : BatchTool("BWConvert", ColorTool, parent)
 {
     setToolTitle(i18n("B&W Convert"));
     setToolDescription(i18n("A tool to convert to black and white."));
@@ -117,7 +117,10 @@ void BWConvert::slotSettingsChanged()
 
 bool BWConvert::toolOperations()
 {
-    if (!loadToDImg()) return false;
+    if (!loadToDImg())
+    {
+        return false;
+    }
 
     BWSepiaContainer prm;
 

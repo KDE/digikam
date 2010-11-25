@@ -61,6 +61,7 @@ bool ImageFilterSettings::isFilteringByTags() const
     {
         return true;
     }
+
     return false;
 }
 
@@ -70,13 +71,14 @@ bool ImageFilterSettings::isFilteringByText() const
     {
         return true;
     }
+
     return false;
 }
 
 bool ImageFilterSettings::isFiltering() const
 {
     return !dayFilter.isEmpty() || !includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() || !textFilterSettings.text.isEmpty()
-            || untaggedFilter || ratingFilter >= 0 || mimeTypeFilter != MimeFilter::AllFiles;
+           || untaggedFilter || ratingFilter >= 0 || mimeTypeFilter != MimeFilter::AllFiles;
 }
 
 void ImageFilterSettings::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, MatchingCondition matchingCondition,
@@ -126,7 +128,7 @@ void ImageFilterSettings::setUrlWhitelist(const KUrl::List& urlList, const QStri
     }
 }
 
-bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
+bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 {
     if (foundText)
     {
@@ -212,6 +214,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
     {
         // for now we treat -1 (no rating) just like a rating of 0.
         int rating = info.rating();
+
         if (rating == -1)
         {
             rating = 0;
@@ -245,15 +248,16 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
 
     // -- Filter by mime type -----------------------------------------------------
 
-    switch(mimeTypeFilter)
+    switch (mimeTypeFilter)
     {
-        // info.format is a standardized string: Only one possibility per mime type
+            // info.format is a standardized string: Only one possibility per mime type
         case MimeFilter::ImageFiles:
         {
             if (info.category() != DatabaseItem::Image)
             {
                 match = false;
             }
+
             break;
         }
         case MimeFilter::JPGFiles:
@@ -262,6 +266,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
             {
                 match = false;
             }
+
             break;
         }
         case MimeFilter::PNGFiles:
@@ -270,6 +275,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
             {
                 match = false;
             }
+
             break;
         }
         case MimeFilter::TIFFiles:
@@ -278,6 +284,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
             {
                 match = false;
             }
+
             break;
         }
         case MimeFilter::DNGFiles:
@@ -286,6 +293,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
             {
                 match = false;
             }
+
             break;
         }
         case MimeFilter::NoRAWFiles:
@@ -294,6 +302,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
             {
                 match = false;
             }
+
             break;
         }
         case MimeFilter::RAWFiles:
@@ -302,6 +311,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
             {
                 match = false;
             }
+
             break;
         }
         case MimeFilter::MoviesFiles:
@@ -310,6 +320,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
             {
                 match = false;
             }
+
             break;
         }
         case MimeFilter::AudioFiles:
@@ -318,6 +329,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
             {
                 match = false;
             }
+
             break;
         }
         default:        // All Files: do nothing...
@@ -358,6 +370,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
         }
 
         match &= textMatch;
+
         if (foundText)
         {
             *foundText = textMatch;
@@ -369,9 +382,11 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
     if (match)
     {
         const KUrl url = info.fileUrl();
+
         for (QHash<QString, KUrl::List>::const_iterator it = urlWhitelists.constBegin(); it!=urlWhitelists.constEnd(); ++it)
         {
             match = it->contains(url);
+
             if (!match)
             {
                 break;

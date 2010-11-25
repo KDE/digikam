@@ -36,7 +36,7 @@ class KConfigGroup;
 
 class StateSavingObjectTest: public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 private Q_SLOTS:
 
@@ -53,9 +53,9 @@ private Q_SLOTS:
 class StubStateSaverPriv;
 class StubStateSaver: public QObject, public Digikam::StateSavingObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    StubStateSaver(QObject *parent = 0);
+    StubStateSaver(QObject* parent = 0);
     virtual ~StubStateSaver();
 
     KConfigGroup getGroup();
@@ -71,7 +71,7 @@ public:
     unsigned int numSaveCalls();
 
 private:
-    StubStateSaverPriv *d;
+    StubStateSaverPriv* d;
 
 };
 

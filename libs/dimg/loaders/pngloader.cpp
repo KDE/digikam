@@ -63,7 +63,7 @@ extern "C"
 #include "dimgloaderobserver.h"
 
 #ifdef Q_CC_MSVC
-void _ReadProc(struct png_struct_def *png_ptr, unsigned char *data, unsigned int size)
+void _ReadProc(struct png_struct_def* png_ptr, unsigned char* data, unsigned int size)
 {
     FILE* file_handle = (FILE*)png_get_io_ptr(png_ptr);
     fread(data, size, 1, file_handle);
@@ -74,17 +74,17 @@ namespace Digikam
 {
 
 PNGLoader::PNGLoader(DImg* image)
-         : DImgLoader(image)
+    : DImgLoader(image)
 {
     m_hasAlpha   = false;
     m_sixteenBit = false;
 }
 
-bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
+bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 {
     png_uint_32  w32, h32;
     int          width, height;
-    FILE        *f;
+    FILE*        f;
     int          bit_depth, color_type, interlace_type;
     png_structp  png_ptr  = NULL;
     png_infop    info_ptr = NULL;
@@ -96,6 +96,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // Open the file
 
     f = fopen(QFile::encodeName(filePath), "rb");
+
     if ( !f )
     {
         kDebug() << "Cannot open image file.";
@@ -107,6 +108,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     size_t membersRead = fread(buf, 1, PNG_BYTES_TO_CHECK, f);
 #if PNG_LIBPNG_VER >= 10400
+
     if ((membersRead != PNG_BYTES_TO_CHECK) || png_sig_cmp(buf, 0, PNG_BYTES_TO_CHECK))
 #else
     if ((membersRead != PNG_BYTES_TO_CHECK) || !png_check_sig(buf, PNG_BYTES_TO_CHECK))
@@ -117,12 +119,14 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         loadingFailed();
         return false;
     }
+
     rewind(f);
 
     // -------------------------------------------------------------------
     // Initialize the internal structures
 
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
     if (!png_ptr)
     {
         kDebug() << "Invalid PNG image file structure.";
@@ -132,6 +136,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     info_ptr = png_create_info_struct(png_ptr);
+
     if (!info_ptr)
     {
         kDebug() << "Cannot reading PNG image file structure.";
@@ -159,21 +164,46 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             delete [] data;
             freeLines();
-            if (f) fclose(f);
+
+            if (f)
+            {
+                fclose(f);
+            }
         }
-        void setData(uchar *d)   { data = d; }
-        void setLines(uchar **l) { lines = l; }
-        void setFile(FILE *file) { f = file; }
-        void takeData()  { data = 0; }
-        void freeLines() { if (lines) free(lines); lines = 0; }
-        uchar *data;
-        uchar **lines;
-        FILE  *f;
+        void setData(uchar* d)
+        {
+            data = d;
+        }
+        void setLines(uchar** l)
+        {
+            lines = l;
+        }
+        void setFile(FILE* file)
+        {
+            f = file;
+        }
+        void takeData()
+        {
+            data = 0;
+        }
+        void freeLines()
+        {
+            if (lines)
+            {
+                free(lines);
+            }
+
+            lines = 0;
+        }
+        uchar* data;
+        uchar** lines;
+        FILE*  f;
     };
-    CleanupData *cleanupData = new CleanupData;
+    CleanupData* cleanupData = new CleanupData;
     cleanupData->setFile(f);
 
 #if PNG_LIBPNG_VER >= 10400
+
     if (setjmp(png_jmpbuf(png_ptr)))
 #else
     if (setjmp(png_ptr->jmpbuf))
@@ -197,8 +227,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     png_read_info(png_ptr, info_ptr);
 
-    png_get_IHDR(png_ptr, info_ptr, (png_uint_32 *) (&w32),
-                 (png_uint_32 *) (&h32), &bit_depth, &color_type,
+    png_get_IHDR(png_ptr, info_ptr, (png_uint_32*) (&w32),
+                 (png_uint_32*) (&h32), &bit_depth, &color_type,
                  &interlace_type, NULL, NULL);
 
     width  = (int)w32;
@@ -230,7 +260,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             break;
     }
 
-    uchar *data  = 0;
+    uchar* data  = 0;
 
     if (m_loadFlags & LoadImageData)
     {
@@ -244,16 +274,22 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #ifdef ENABLE_DEBUG_MESSAGES
             kDebug() << "PNG in 16 bits/color/pixel.";
 #endif
+
             switch (color_type)
             {
                 case PNG_COLOR_TYPE_RGB :            // RGB
 #ifdef ENABLE_DEBUG_MESSAGES
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
+
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                    {
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    }
                     else                                                         // PPC
+                    {
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    }
 
                     break;
 
@@ -270,9 +306,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     png_set_gray_to_rgb(png_ptr);
 
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                    {
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    }
                     else                                                         // PPC
+                    {
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    }
 
                     break;
 
@@ -291,9 +331,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     png_set_palette_to_rgb(png_ptr);
 
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                    {
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    }
                     else                                                         // PPC
+                    {
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    }
 
                     break;
 
@@ -319,10 +363,15 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #ifdef ENABLE_DEBUG_MESSAGES
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
+
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                    {
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                    }
                     else                                                         // PPC
+                    {
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                    }
 
                     break;
 
@@ -344,9 +393,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     png_set_gray_to_rgb(png_ptr);
 
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                    {
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                    }
                     else                                                         // PPC
+                    {
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                    }
 
                     break;
 
@@ -365,9 +418,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     png_set_palette_to_rgb(png_ptr);
 
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                    {
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                    }
                     else                                                         // PPC
+                    {
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                    }
 
                     break;
 
@@ -381,17 +438,26 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             }
         }
 
-        if(png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+        if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+        {
             png_set_tRNS_to_alpha(png_ptr);
+        }
 
         if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)      // Intel
+        {
             png_set_bgr(png_ptr);
+        }
         else                                                    // PPC
+        {
             png_set_bgr(png_ptr);
-            //png_set_swap_alpha(png_ptr);
+        }
+
+        //png_set_swap_alpha(png_ptr);
 
         if (observer)
+        {
             observer->progressInfo(m_image, 0.1F);
+        }
 
         // -------------------------------------------------------------------
         // Get image data.
@@ -403,13 +469,18 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         png_read_update_info(png_ptr, info_ptr);
 
         if (m_sixteenBit)
-            data = new_failureTolerant(width*height*8);  // 16 bits/color/pixel
+        {
+            data = new_failureTolerant(width*height*8);    // 16 bits/color/pixel
+        }
         else
-            data = new_failureTolerant(width*height*4);  // 8 bits/color/pixel
+        {
+            data = new_failureTolerant(width*height*4);    // 8 bits/color/pixel
+        }
+
         cleanupData->setData(data);
 
-        uchar **lines = 0;
-        lines = (uchar **)malloc(height * sizeof(uchar *));
+        uchar** lines = 0;
+        lines = (uchar**)malloc(height * sizeof(uchar*));
         cleanupData->setLines(lines);
 
         if (!data || !lines)
@@ -425,9 +496,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         for (int i = 0; i < height; ++i)
         {
             if (m_sixteenBit)
+            {
                 lines[i] = data + (i * width * 8);
+            }
             else
+            {
                 lines[i] = data + (i * width * 4);
+            }
         }
 
         // The easy way to read the whole image
@@ -439,11 +514,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             int y;
             int checkPoint = 0;
+
             for (y = 0; y < height; ++y)
             {
                 if (observer && y == checkPoint)
                 {
                     checkPoint += granularity(observer, height, 0.7F);
+
                     if (!observer->continueQuery(m_image))
                     {
                         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
@@ -451,6 +528,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                         loadingFailed();
                         return false;
                     }
+
                     // use 10% - 80% for progress while reading rows
                     observer->progressInfo(m_image, 0.1 + (0.7 * ( ((float)y)/((float)height) )) );
                 }
@@ -487,7 +565,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     if (observer)
+    {
         observer->progressInfo(m_image, 0.9F);
+    }
 
     // -------------------------------------------------------------------
     // Read image ICC profile
@@ -552,7 +632,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
 #ifdef ENABLE_DEBUG_MESSAGES
                 kDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key
-                              << " text=" << text_ptr[i].text;
+                         << " text=" << text_ptr[i].text;
 #endif
             }
         }
@@ -561,13 +641,18 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
 
     if (m_loadFlags & LoadImageData)
+    {
         png_read_end(png_ptr, info_ptr);
+    }
+
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
     cleanupData->takeData();
     delete cleanupData;
 
     if (observer)
+    {
         observer->progressInfo(m_image, 1.0);
+    }
 
     imageWidth()  = width;
     imageHeight() = height;
@@ -579,12 +664,12 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     return true;
 }
 
-bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
+bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 {
-    FILE          *f;
+    FILE*          f;
     png_structp    png_ptr;
     png_infop      info_ptr;
-    uchar         *ptr, *data = 0;
+    uchar*         ptr, *data = 0;
     uint           x, y, j;
     png_bytep      row_ptr;
     png_color_8    sig_bit;
@@ -595,6 +680,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // Open the file
 
     f = fopen(QFile::encodeName(filePath), "wb");
+
     if ( !f )
     {
         kDebug() << "Cannot open target image file.";
@@ -605,6 +691,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // Initialize the internal structures
 
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
     if (!png_ptr)
     {
         kDebug() << "Invalid target PNG image file structure.";
@@ -613,6 +700,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     info_ptr = png_create_info_struct(png_ptr);
+
     if (info_ptr == NULL)
     {
         kDebug() << "Cannot create PNG image file structure.";
@@ -637,21 +725,32 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         ~CleanupData()
         {
             delete [] data;
-            if (f) fclose(f);
-        }
-        void setData(uchar *d)   { data = d; }
-        void setFile(FILE *file) { f = file; }
 
-        uchar *data;
-        FILE  *f;
+            if (f)
+            {
+                fclose(f);
+            }
+        }
+        void setData(uchar* d)
+        {
+            data = d;
+        }
+        void setFile(FILE* file)
+        {
+            f = file;
+        }
+
+        uchar* data;
+        FILE*  f;
     };
-    CleanupData *cleanupData = new CleanupData;
+    CleanupData* cleanupData = new CleanupData;
     cleanupData->setFile(f);
 
 #if PNG_LIBPNG_VER >= 10400
+
     if (setjmp(png_jmpbuf(png_ptr)))
 #else
-     if (setjmp(png_ptr->jmpbuf))
+    if (setjmp(png_ptr->jmpbuf))
 #endif
     {
         kDebug() << "Internal libPNG error during writing file. Process aborted!";
@@ -664,10 +763,15 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     png_init_io(png_ptr, f);
 
     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)      // Intel
+    {
         png_set_bgr(png_ptr);
+    }
     else                                                    // PPC
+    {
         png_set_bgr(png_ptr);
-        //png_set_swap_alpha(png_ptr);
+    }
+
+    //png_set_swap_alpha(png_ptr);
 
     if (imageHasAlpha())
     {
@@ -676,9 +780,13 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                      PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
         if (imageSixteenBit())
+        {
             data = new uchar[imageWidth() * 8 * sizeof(uchar)];
+        }
         else
+        {
             data = new uchar[imageWidth() * 4 * sizeof(uchar)];
+        }
     }
     else
     {
@@ -687,10 +795,15 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                      PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
         if (imageSixteenBit())
+        {
             data = new uchar[imageWidth() * 6 * sizeof(uchar)];
+        }
         else
+        {
             data = new uchar[imageWidth() * 3 * sizeof(uchar)];
+        }
     }
+
     cleanupData->setData(data);
 
     sig_bit.red   = imageBitsDepth();
@@ -708,17 +821,27 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     kDebug() << "DImg quality level: " << quality;
 
     if (quality < 1)
+    {
         quality = 1;
+    }
+
     if (quality > 99)
+    {
         quality = 99;
+    }
 
     quality     = quality / 10;
     compression = 9 - quality;
 
     if (compression < 0)
+    {
         compression = 0;
+    }
+
     if (compression > 9)
+    {
         compression = 9;
+    }
 
     kDebug() << "PNG compression level: " << compression;
     png_set_compression_level(png_ptr, compression);
@@ -772,90 +895,92 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     text.compression = PNG_TEXT_COMPRESSION_zTXt;
     png_set_text(png_ptr, info_ptr, &(text), 1);
 
-/*
-    // There is an unsolved problem in the following code block, see bug #151552.
-    // If exiv2 supports writing to PNG, which it does since 0.18, this code is not needed
-    // and should not be used therefore.
-    if (KExiv2Iface::KExiv2::supportMetadataWritting("image/png"))
-    {
-        // Write embedded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technique.
-        // Write digiKam comment like an iTXt chunk using UTF8 encoding.
-        // NOTE: iTXt will be enable by default with libpng >= 1.3.0.
-
-        typedef QMap<int, QByteArray> MetaDataMap;
-        MetaDataMap metaDataMap = imageMetaData();
-
-        for (MetaDataMap::const_iterator it = metaDataMap.constBegin();
-             it != metaDataMap.constEnd(); ++it)
+    /*
+        // There is an unsolved problem in the following code block, see bug #151552.
+        // If exiv2 supports writing to PNG, which it does since 0.18, this code is not needed
+        // and should not be used therefore.
+        if (KExiv2Iface::KExiv2::supportMetadataWritting("image/png"))
         {
-            QByteArray ba = it.value();
+            // Write embedded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technique.
+            // Write digiKam comment like an iTXt chunk using UTF8 encoding.
+            // NOTE: iTXt will be enable by default with libpng >= 1.3.0.
 
-            switch (it.key())
+            typedef QMap<int, QByteArray> MetaDataMap;
+            MetaDataMap metaDataMap = imageMetaData();
+
+            for (MetaDataMap::const_iterator it = metaDataMap.constBegin();
+                 it != metaDataMap.constEnd(); ++it)
             {
+                QByteArray ba = it.value();
 
-/  *
-#ifdef PNG_iTXt_SUPPORTED
-                // TODO : this code requires libpng 1.3.0, it is not yet tested and crashes. See bug #229340.
-
-                case(DImg::COM):
+                switch (it.key())
                 {
-                    png_text comment;
-                    comment.key         = const_cast<char*> ("Comment");
-                    comment.text        = ba.data();
-                    comment.itxt_length = ba.size();
-                    comment.compression = PNG_ITXT_COMPRESSION_zTXt;
-                    png_set_text(png_ptr, info_ptr, &(comment), 1);
 
-                    kDebug() << "Writing digiKam comment into iTXt PNG chunk : " << ba;
-                    break;
-                }
-#endif
-* /
+    /  *
+    #ifdef PNG_iTXt_SUPPORTED
+                    // TODO : this code requires libpng 1.3.0, it is not yet tested and crashes. See bug #229340.
 
-                case(DImg::EXIF):
-                {
-                    const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
-                    QByteArray profile;
-
-                    // If bytes array do not start with ImageMagick header, Exif metadata have been created from
-                    // scratch using Exiv2. In this case, we need to add Exif header from start.
-                    if (memcmp(ba.data(), "exif",    4) != 0 &&
-                        memcmp(ba.data(), "iptc",    4) != 0 &&
-                        memcmp(ba.data(), "xmp",     3) != 0 &&
-                        memcmp(ba.data(), "profile", 7) != 0)
+                    case(DImg::COM):
                     {
-                        profile = QByteArray();
-                        profile.resize(ba.size() + sizeof(ExifHeader));
-                        memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
-                        memcpy(profile.data() + sizeof(ExifHeader), ba.data(), ba.size());
-                    }
-                    else
-                    {
-                        profile = ba;
-                    }
+                        png_text comment;
+                        comment.key         = const_cast<char*> ("Comment");
+                        comment.text        = ba.data();
+                        comment.itxt_length = ba.size();
+                        comment.compression = PNG_ITXT_COMPRESSION_zTXt;
+                        png_set_text(png_ptr, info_ptr, &(comment), 1);
 
-                    writeRawProfile(png_ptr, info_ptr, (png_charp)("exif"), profile.data(), (png_uint_32) profile.size());
-                    break;
+                        kDebug() << "Writing digiKam comment into iTXt PNG chunk : " << ba;
+                        break;
+                    }
+    #endif
+    * /
+
+                    case(DImg::EXIF):
+                    {
+                        const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
+                        QByteArray profile;
+
+                        // If bytes array do not start with ImageMagick header, Exif metadata have been created from
+                        // scratch using Exiv2. In this case, we need to add Exif header from start.
+                        if (memcmp(ba.data(), "exif",    4) != 0 &&
+                            memcmp(ba.data(), "iptc",    4) != 0 &&
+                            memcmp(ba.data(), "xmp",     3) != 0 &&
+                            memcmp(ba.data(), "profile", 7) != 0)
+                        {
+                            profile = QByteArray();
+                            profile.resize(ba.size() + sizeof(ExifHeader));
+                            memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
+                            memcpy(profile.data() + sizeof(ExifHeader), ba.data(), ba.size());
+                        }
+                        else
+                        {
+                            profile = ba;
+                        }
+
+                        writeRawProfile(png_ptr, info_ptr, (png_charp)("exif"), profile.data(), (png_uint_32) profile.size());
+                        break;
+                    }
+                    case(DImg::IPTC):
+                    {
+                        writeRawProfile(png_ptr, info_ptr, (png_charp)("iptc"), ba.data(), (png_uint_32) ba.size());
+                        break;
+                    }
+                    case(DImg::XMP):
+                    {
+                        writeRawProfile(png_ptr, info_ptr, (png_charp)("xmp"), ba.data(), (png_uint_32) ba.size());
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                case(DImg::IPTC):
-                {
-                    writeRawProfile(png_ptr, info_ptr, (png_charp)("iptc"), ba.data(), (png_uint_32) ba.size());
-                    break;
-                }
-                case(DImg::XMP):
-                {
-                    writeRawProfile(png_ptr, info_ptr, (png_charp)("xmp"), ba.data(), (png_uint_32) ba.size());
-                    break;
-                }
-                default:
-                    break;
             }
         }
-    }
-*/
+    */
 
     if (observer)
+    {
         observer->progressInfo(m_image, 0.2F);
+    }
 
     // -------------------------------------------------------------------
     // Write image data
@@ -866,12 +991,14 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     ptr = imageData();
 
     uint checkPoint = 0;
+
     for (y = 0; y < imageHeight(); ++y)
     {
 
         if (observer && y == checkPoint)
         {
             checkPoint += granularity(observer, imageHeight(), 0.8F);
+
             if (!observer->continueQuery(m_image))
             {
                 png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
@@ -879,6 +1006,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                 delete cleanupData;
                 return false;
             }
+
             observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)y)/((float)imageHeight()) )));
         }
 
@@ -971,14 +1099,14 @@ bool PNGLoader::sixteenBit() const
     return m_sixteenBit;
 }
 
-void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *profile_type,
-                                char *profile_data, png_uint_32 length)
+void PNGLoader::writeRawProfile(png_struct* ping, png_info* ping_info, char* profile_type,
+                                char* profile_data, png_uint_32 length)
 {
     png_textp      text;
 
     register long  i;
 
-    uchar         *sp;
+    uchar*         sp;
 
     png_charp      dp;
 
@@ -989,7 +1117,7 @@ void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *pro
     kDebug() << "Writing Raw profile: type=" << profile_type << ", length=" << length;
 
     text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
-    description_length = strlen((const char *) profile_type);
+    description_length = strlen((const char*) profile_type);
     allocated_length   = (png_uint_32) (length*2 + (length >> 5) + 20 + description_length);
 
     text[0].text   = (png_charp) png_malloc(ping, allocated_length);
@@ -997,13 +1125,13 @@ void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *pro
     text[0].key[0] = '\0';
 
     concatenateString(text[0].key, "Raw profile type ", 4096);
-    concatenateString(text[0].key, (const char *) profile_type, 62);
+    concatenateString(text[0].key, (const char*) profile_type, 62);
 
     sp = (uchar*)profile_data;
     dp = text[0].text;
     *dp++='\n';
 
-    copyString(dp, (const char *) profile_type, allocated_length);
+    copyString(dp, (const char*) profile_type, allocated_length);
 
     dp += description_length;
     *dp++='\n';
@@ -1015,7 +1143,9 @@ void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *pro
     for (i=0; i < (long) length; ++i)
     {
         if (i%36 == 0)
+        {
             *dp++='\n';
+        }
 
         *(dp++)=(char) hex[((*sp >> 4) & 0x0f)];
         *(dp++)=(char) hex[((*sp++ ) & 0x0f)];
@@ -1027,38 +1157,46 @@ void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *pro
     text[0].compression = -1;
 
     if (text[0].text_length <= allocated_length)
+    {
         png_set_text(ping, ping_info,text, 1);
+    }
 
     png_free(ping, text[0].text);
     png_free(ping, text[0].key);
     png_free(ping, text);
 }
 
-size_t PNGLoader::concatenateString(char *destination, const char *source, const size_t length)
+size_t PNGLoader::concatenateString(char* destination, const char* source, const size_t length)
 {
-    register char       *q;
+    register char*       q;
 
-    register const char *p;
+    register const char* p;
 
     register size_t      i;
 
     size_t               count;
 
     if ( !destination || !source || length == 0 )
+    {
         return 0;
+    }
 
     p = source;
     q = destination;
     i = length;
 
     while ((i-- != 0) && (*q != '\0'))
+    {
         ++q;
+    }
 
     count = (size_t) (q-destination);
     i     = length-count;
 
     if (i == 0)
+    {
         return(count+strlen(p));
+    }
 
     while (*p != '\0')
     {
@@ -1067,6 +1205,7 @@ size_t PNGLoader::concatenateString(char *destination, const char *source, const
             *q++=(*p);
             --i;
         }
+
         ++p;
     }
 
@@ -1075,16 +1214,18 @@ size_t PNGLoader::concatenateString(char *destination, const char *source, const
     return(count+(p-source));
 }
 
-size_t PNGLoader::copyString(char *destination, const char *source, const size_t length)
+size_t PNGLoader::copyString(char* destination, const char* source, const size_t length)
 {
-    register char       *q;
+    register char*       q;
 
-    register const char *p;
+    register const char* p;
 
     register size_t      i;
 
     if ( !destination || !source || length == 0 )
+    {
         return 0;
+    }
 
     p = source;
     q = destination;
@@ -1095,7 +1236,9 @@ size_t PNGLoader::copyString(char *destination, const char *source, const size_t
         do
         {
             if ((*q++=(*p++)) == '\0')
+            {
                 break;
+            }
         }
         while (--i != 0);
     }
@@ -1103,7 +1246,9 @@ size_t PNGLoader::copyString(char *destination, const char *source, const size_t
     if (i == 0)
     {
         if (length != 0)
+        {
             *q='\0';
+        }
 
         do
         {
@@ -1114,7 +1259,7 @@ size_t PNGLoader::copyString(char *destination, const char *source, const size_t
     return((size_t) (p-source-1));
 }
 
-long PNGLoader::formatString(char *string, const size_t length, const char *format,...)
+long PNGLoader::formatString(char* string, const size_t length, const char* format,...)
 {
     long n;
 
@@ -1126,12 +1271,14 @@ long PNGLoader::formatString(char *string, const size_t length, const char *form
     return(n);
 }
 
-long PNGLoader::formatStringList(char *string, const size_t length, const char *format, va_list operands)
+long PNGLoader::formatStringList(char* string, const size_t length, const char* format, va_list operands)
 {
     int n = vsnprintf(string, length, format, operands);
 
     if (n < 0)
+    {
         string[length-1] = '\0';
+    }
 
     return((long) n);
 }

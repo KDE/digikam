@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-08-02
- * Description : a stack of widgets to set image file save 
+ * Description : a stack of widgets to set image file save
  *               options into image editor.
  *
  * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -55,7 +55,7 @@ public:
      *
      * @param parent parent for Qt's parent child mechanism
      */
-    FileSaveOptionsBox(QWidget *parent=0);
+    FileSaveOptionsBox(QWidget* parent=0);
 
     /**
      * Destructor.
@@ -74,8 +74,8 @@ public:
      * @return file format guessed from the file name or the given fallback
      *         format if no format could be guessed based on the file name
      */
-    DImg::FORMAT discoverFormat(const QString &filename,
-    		                    DImg::FORMAT fallback = DImg::NONE);
+    DImg::FORMAT discoverFormat(const QString& filename,
+                                DImg::FORMAT fallback = DImg::NONE);
 
     /**
      * Call this method immediately after creation of the file dialog with this
@@ -83,7 +83,7 @@ public:
      *
      * @param dialog the file dialog this options widget is used for.
      */
-    void setDialog(KFileDialog *dialog);
+    void setDialog(KFileDialog* dialog);
 
     /**
      * Sets a filter used for the dialog that is used to automatically select
@@ -93,11 +93,11 @@ public:
      * @param autoFilter filter string like it is used in the filter drop down
      *                   of the host dialog
      */
-    void setAutoFilter(const QString &autoFilter);
+    void setAutoFilter(const QString& autoFilter);
 
 public Q_SLOTS:
 
-    void slotFilterChanged(const QString &newFilter);
+    void slotFilterChanged(const QString& newFilter);
     void slotImageFileFormatChanged(const QString&);
     void slotImageFileSelected(const QString&);
 

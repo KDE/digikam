@@ -110,19 +110,19 @@ public:
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent)
-             : QScrollArea(parent), d(new SetupMetadataPriv)
+    : QScrollArea(parent), d(new SetupMetadataPriv)
 {
     d->tab = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget *panel          = new QWidget(d->tab);
-    QVBoxLayout *mainLayout = new QVBoxLayout(panel);
+    QWidget* panel          = new QWidget(d->tab);
+    QVBoxLayout* mainLayout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *ExifGroup     = new QGroupBox(i18n("EXIF Actions"), panel);
-    QVBoxLayout *gLayout1    = new QVBoxLayout(ExifGroup);
+    QGroupBox* ExifGroup     = new QGroupBox(i18n("EXIF Actions"), panel);
+    QVBoxLayout* gLayout1    = new QVBoxLayout(ExifGroup);
 
     d->exifRotateBox         = new QCheckBox(ExifGroup);
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
@@ -137,8 +137,8 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), panel);
-    QVBoxLayout *gLayout2  = new QVBoxLayout(commonGroup);
+    QGroupBox* commonGroup = new QGroupBox(i18n("Common Metadata Actions"), panel);
+    QVBoxLayout* gLayout2  = new QVBoxLayout(commonGroup);
 
     d->saveTagsBox = new QCheckBox(commonGroup);
     d->saveTagsBox->setText(i18n("&Save image tags as \"Keywords\" tags in metadata embedded in files"));
@@ -196,11 +196,11 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QFrame      *box  = new QFrame(panel);
-    QGridLayout *grid = new QGridLayout(box);
+    QFrame*      box  = new QFrame(panel);
+    QGridLayout* grid = new QGridLayout(box);
     box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    KUrlLabel *exiv2LogoLabel = new KUrlLabel(box);
+    KUrlLabel* exiv2LogoLabel = new KUrlLabel(box);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setUrl("http://www.exiv2.org");
     exiv2LogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-exiv2.png")));
@@ -249,11 +249,11 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
 #ifdef HAVE_NEPOMUK
 
-    QWidget *nepoPanel      = new QWidget(d->tab);
-    QVBoxLayout *nepoLayout = new QVBoxLayout(nepoPanel);
+    QWidget* nepoPanel      = new QWidget(d->tab);
+    QVBoxLayout* nepoLayout = new QVBoxLayout(nepoPanel);
 
-    QGroupBox *nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
-    QVBoxLayout *gLayout3   = new QVBoxLayout(nepoGroup);
+    QGroupBox* nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
+    QVBoxLayout* gLayout3   = new QVBoxLayout(nepoGroup);
 
     d->saveToNepomukBox     = new QCheckBox;
     d->saveToNepomukBox->setText(i18n("Store metadata from digiKam in Nepomuk"));
@@ -263,8 +263,8 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->readFromNepomukBox   = new QCheckBox;
     d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
     d->readFromNepomukBox->setWhatsThis( i18n("Turn on this option if you want to apply changes to "
-                                              "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
-                                              "Please note that image metadata will not be edited automatically."));
+                                         "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
+                                         "Please note that image metadata will not be edited automatically."));
 
     gLayout3->addWidget(d->saveToNepomukBox);
     gLayout3->addWidget(d->readFromNepomukBox);
@@ -285,11 +285,11 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QFrame      *nepoBox  = new QFrame(nepoPanel);
-    QGridLayout *nepoGrid = new QGridLayout(nepoBox);
+    QFrame*      nepoBox  = new QFrame(nepoPanel);
+    QGridLayout* nepoGrid = new QGridLayout(nepoBox);
     nepoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    QLabel *nepoLogoLabel = new QLabel;
+    QLabel* nepoLogoLabel = new QLabel;
     nepoLogoLabel->setPixmap(KIconLoader::global()->loadIcon("nepomuk", KIconLoader::NoGroup, KIconLoader::SizeLarge));
 
     QLabel* nepoExplanation = new QLabel(nepoBox);
@@ -298,12 +298,12 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     QString nepotxt;
 
     nepotxt.append(i18n("<p><a href='http://nepomuk.kde.org'>Nepomuk</a> "
-                    "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
-                    "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
-                    "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
-                    "Nepomuk Semantic Desktop.</p> "
-                    "<p>If you have enabled writing of metadata to files, please note that changes done through Nepomuk "
-                    "are not automatically applied to the image's metadata when read into digiKam's database.</p> "));
+                        "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
+                        "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
+                        "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
+                        "Nepomuk Semantic Desktop.</p> "
+                        "<p>If you have enabled writing of metadata to files, please note that changes done through Nepomuk "
+                        "are not automatically applied to the image's metadata when read into digiKam's database.</p> "));
 
     nepoExplanation->setText(nepotxt);
     nepoExplanation->setFont(KGlobalSettings::smallestReadableFont());
@@ -361,7 +361,11 @@ void SetupMetadata::slotProcessExiv2Url(const QString& url)
 void SetupMetadata::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+
+    if (!settings)
+    {
+        return;
+    }
 
     settings->setExifRotate(d->exifRotateBox->isChecked());
     settings->setExifSetOrientation(d->exifSetOrientationBox->isChecked());
@@ -375,8 +379,12 @@ void SetupMetadata::applySettings()
 #ifdef HAVE_NEPOMUK
     settings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
     settings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
+
     if (d->resyncButton->isEnabled() && d->resyncButton->isChecked())
+    {
         settings->triggerResyncWithNepomuk();
+    }
+
 #endif
     settings->saveSettings();
 
@@ -386,7 +394,11 @@ void SetupMetadata::applySettings()
 void SetupMetadata::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+
+    if (!settings)
+    {
+        return;
+    }
 
     d->exifAutoRotateOrg = settings->getExifRotate();
     d->exifRotateBox->setChecked(d->exifAutoRotateOrg);
@@ -413,9 +425,13 @@ bool SetupMetadata::exifAutoRotateAsChanged()
 void SetupMetadata::slotExifAutoRotateToggled(bool b)
 {
     if ( b != d->exifAutoRotateOrg)
+    {
         d->exifAutoRotateAsChanged = true;
+    }
     else
+    {
         d->exifAutoRotateAsChanged = false;
+    }
 }
 
 void SetupMetadata::slotNepomukToggled()

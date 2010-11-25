@@ -72,7 +72,7 @@ public:
         levelInput(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
 
     static const QString configGroupName;
@@ -101,8 +101,8 @@ const QString BlurFXTool::BlurFXToolPriv::configLevelAdjustmentEntry("LevelAdjus
 // --------------------------------------------------------
 
 BlurFXTool::BlurFXTool(QObject* parent)
-          : EditorToolThreaded(parent),
-            d(new BlurFXToolPriv)
+    : EditorToolThreaded(parent),
+      d(new BlurFXToolPriv)
 {
     setObjectName("blurfx");
     setToolName(i18n("Blur Effects"));
@@ -255,59 +255,59 @@ void BlurFXTool::slotEffectTypeChanged(int type)
 
     switch (type)
     {
-       case BlurFXFilter::ZoomBlur:
-          break;
+        case BlurFXFilter::ZoomBlur:
+            break;
 
-       case BlurFXFilter::RadialBlur:
-       case BlurFXFilter::FrostGlass:
-          d->distanceInput->setRange(0, 10, 1);
-          d->distanceInput->setSliderEnabled(true);
-          d->distanceInput->setValue(3);
-          break;
+        case BlurFXFilter::RadialBlur:
+        case BlurFXFilter::FrostGlass:
+            d->distanceInput->setRange(0, 10, 1);
+            d->distanceInput->setSliderEnabled(true);
+            d->distanceInput->setValue(3);
+            break;
 
-       case BlurFXFilter::FarBlur:
-          d->distanceInput->setRange(0, 20, 1);
-          d->distanceInput->setSliderEnabled(true);
-          d->distanceInput->input()->setMaximum(20);
-          d->distanceInput->setValue(10);
-          break;
+        case BlurFXFilter::FarBlur:
+            d->distanceInput->setRange(0, 20, 1);
+            d->distanceInput->setSliderEnabled(true);
+            d->distanceInput->input()->setMaximum(20);
+            d->distanceInput->setValue(10);
+            break;
 
-       case BlurFXFilter::MotionBlur:
-       case BlurFXFilter::FocusBlur:
-          d->distanceInput->setRange(0, 100, 1);
-          d->distanceInput->setSliderEnabled(true);
-          d->distanceInput->setValue(20);
-          d->levelInput->setEnabled(true);
-          d->levelLabel->setEnabled(true);
-          break;
+        case BlurFXFilter::MotionBlur:
+        case BlurFXFilter::FocusBlur:
+            d->distanceInput->setRange(0, 100, 1);
+            d->distanceInput->setSliderEnabled(true);
+            d->distanceInput->setValue(20);
+            d->levelInput->setEnabled(true);
+            d->levelLabel->setEnabled(true);
+            break;
 
-       case BlurFXFilter::SoftenerBlur:
-          d->distanceInput->setEnabled(false);
-          d->distanceLabel->setEnabled(false);
-          break;
+        case BlurFXFilter::SoftenerBlur:
+            d->distanceInput->setEnabled(false);
+            d->distanceLabel->setEnabled(false);
+            break;
 
-       case BlurFXFilter::ShakeBlur:
-          d->distanceInput->setRange(0, 100, 1);
-          d->distanceInput->setSliderEnabled(true);
-          d->distanceInput->setValue(20);
-          break;
+        case BlurFXFilter::ShakeBlur:
+            d->distanceInput->setRange(0, 100, 1);
+            d->distanceInput->setSliderEnabled(true);
+            d->distanceInput->setValue(20);
+            break;
 
-       case BlurFXFilter::SmartBlur:
-          d->distanceInput->setRange(0, 20, 1);
-          d->distanceInput->setSliderEnabled(true);
-          d->distanceInput->setValue(3);
-          d->levelInput->setEnabled(true);
-          d->levelLabel->setEnabled(true);
-          d->levelInput->setRange(0, 255, 1);
-          d->levelInput->setSliderEnabled(true);
-          d->levelInput->setValue(128);
-          break;
+        case BlurFXFilter::SmartBlur:
+            d->distanceInput->setRange(0, 20, 1);
+            d->distanceInput->setSliderEnabled(true);
+            d->distanceInput->setValue(3);
+            d->levelInput->setEnabled(true);
+            d->levelLabel->setEnabled(true);
+            d->levelInput->setRange(0, 255, 1);
+            d->levelInput->setSliderEnabled(true);
+            d->levelInput->setValue(128);
+            break;
 
-       case BlurFXFilter::Mosaic:
-          d->distanceInput->setRange(0, 50, 1);
-          d->distanceInput->setSliderEnabled(true);
-          d->distanceInput->setValue(3);
-          break;
+        case BlurFXFilter::Mosaic:
+            d->distanceInput->setRange(0, 50, 1);
+            d->distanceInput->setSliderEnabled(true);
+            d->distanceInput->setValue(3);
+            break;
     }
 
     blockWidgetSignals(false);
@@ -328,24 +328,24 @@ void BlurFXTool::prepareEffect()
 
     switch (d->effectType->currentIndex())
     {
-       case BlurFXFilter::ZoomBlur:
-       case BlurFXFilter::RadialBlur:
-       case BlurFXFilter::FocusBlur:
-       {
+        case BlurFXFilter::ZoomBlur:
+        case BlurFXFilter::RadialBlur:
+        case BlurFXFilter::FocusBlur:
+        {
             ImageIface iface(0, 0);
             image = *iface.getOriginalImg();
             break;
-       }
+        }
 
-       case BlurFXFilter::FarBlur:
-       case BlurFXFilter::MotionBlur:
-       case BlurFXFilter::SoftenerBlur:
-       case BlurFXFilter::ShakeBlur:
-       case BlurFXFilter::SmartBlur:
-       case BlurFXFilter::FrostGlass:
-       case BlurFXFilter::Mosaic:
-           image = d->previewWidget->getOriginalRegionImage();
-           break;
+        case BlurFXFilter::FarBlur:
+        case BlurFXFilter::MotionBlur:
+        case BlurFXFilter::SoftenerBlur:
+        case BlurFXFilter::ShakeBlur:
+        case BlurFXFilter::SmartBlur:
+        case BlurFXFilter::FrostGlass:
+        case BlurFXFilter::Mosaic:
+            image = d->previewWidget->getOriginalRegionImage();
+            break;
     }
 
     int type  = d->effectType->currentIndex();
@@ -412,25 +412,25 @@ void BlurFXTool::renderingFinished()
 
     switch (d->effectType->currentIndex())
     {
-       case BlurFXFilter::ZoomBlur:
-       case BlurFXFilter::RadialBlur:
-       case BlurFXFilter::FarBlur:
-       case BlurFXFilter::ShakeBlur:
-       case BlurFXFilter::FrostGlass:
-       case BlurFXFilter::Mosaic:
-          break;
+        case BlurFXFilter::ZoomBlur:
+        case BlurFXFilter::RadialBlur:
+        case BlurFXFilter::FarBlur:
+        case BlurFXFilter::ShakeBlur:
+        case BlurFXFilter::FrostGlass:
+        case BlurFXFilter::Mosaic:
+            break;
 
-       case BlurFXFilter::MotionBlur:
-       case BlurFXFilter::FocusBlur:
-       case BlurFXFilter::SmartBlur:
-          d->levelInput->setEnabled(true);
-          d->levelLabel->setEnabled(true);
-          break;
+        case BlurFXFilter::MotionBlur:
+        case BlurFXFilter::FocusBlur:
+        case BlurFXFilter::SmartBlur:
+            d->levelInput->setEnabled(true);
+            d->levelLabel->setEnabled(true);
+            break;
 
-       case BlurFXFilter::SoftenerBlur:
-          d->distanceInput->setEnabled(false);
-          d->distanceLabel->setEnabled(false);
-          break;
+        case BlurFXFilter::SoftenerBlur:
+            d->distanceInput->setEnabled(false);
+            d->distanceLabel->setEnabled(false);
+            break;
     }
 }
 

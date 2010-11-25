@@ -64,7 +64,7 @@ public:
 
 CaptureDlg::CaptureDlg(QWidget* parent, CameraController* controller,
                        const QString& cameraTitle)
-          : KDialog(parent), d(new CaptureDlgPriv)
+    : KDialog(parent), d(new CaptureDlgPriv)
 {
     d->controller = controller;
     setCaption(i18n("Capture from %1", cameraTitle));
@@ -105,7 +105,7 @@ CaptureDlg::~CaptureDlg()
     delete d;
 }
 
-void CaptureDlg::closeEvent(QCloseEvent *e)
+void CaptureDlg::closeEvent(QCloseEvent* e)
 {
     d->stopPreview = true;
     d->timer->stop();
@@ -143,8 +143,11 @@ void CaptureDlg::slotCapture()
 void CaptureDlg::slotPreviewDone(const QImage& preview)
 {
     d->captureWidget->setPreview(preview);
+
     if (!d->stopPreview)
+    {
         d->timer->start(0);
+    }
 }
 
 }  // namespace Digikam

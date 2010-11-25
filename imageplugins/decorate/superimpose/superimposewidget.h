@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-01-04
- * Description : a Digikam image editor plugin for superimpose a 
+ * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -106,7 +106,7 @@ private:
 
     QRect    m_rect;              // For mouse drag position.
     QRect    m_currentSelection;  // Region selection in image displayed in the widget.
- 
+
     DImg     m_template;          // Full template data.
     DImg     m_templateScaled;    // Template scaled to preview widget
 };

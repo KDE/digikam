@@ -140,7 +140,7 @@ QString TooltipCreator::markOption(const QString& str)
     optionsRegExp.setMinimal(true);
 
     result.replace(optionsRegExp, QString("<i><font color=\"%1\">\\1</font></i>")
-                                          .arg(ThemeEngine::instance()->textSpecialRegColor().name()));
+                   .arg(ThemeEngine::instance()->textSpecialRegColor().name()));
     return result;
 }
 
@@ -150,8 +150,8 @@ QString TooltipCreator::createHeader(const QString& str)
     QString templateStr = QString("<tr><td style=\"background-color: %1; padding:0.25em;\" colspan=\"2\">"
                                   "<nobr><font color=\"%2\"><center><b>%3"
                                   "</b></center></font></nobr></td></tr>")
-                                  .arg(ThemeEngine::instance()->thumbSelColor().name())
-                                  .arg(ThemeEngine::instance()->textSelColor().name());
+                          .arg(ThemeEngine::instance()->thumbSelColor().name())
+                          .arg(ThemeEngine::instance()->textSelColor().name());
 
     result += templateStr.arg(str);
     return result;
@@ -170,10 +170,10 @@ QString TooltipCreator::createEntries(const QList<T*> &data)
                               "<td style=\"background-color: %1;\">"
                               "<font color=\"%2\"><b>&nbsp;%3&nbsp;</b></font></td>"
                               "<td>&nbsp;%4&nbsp;</td></tr>")
-                              .arg(ThemeEngine::instance()->baseColor().name())
-                              .arg(ThemeEngine::instance()->textRegColor().name())
-                              .arg(markOption(token->id()))
-                              .arg(markOption(token->description()));
+                      .arg(ThemeEngine::instance()->baseColor().name())
+                      .arg(ThemeEngine::instance()->textRegColor().name())
+                      .arg(markOption(token->id()))
+                      .arg(markOption(token->description()));
         }
     }
 

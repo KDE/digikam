@@ -40,8 +40,8 @@
 namespace Digikam
 {
 
-AlbumSelectComboBox::AlbumSelectComboBox(QWidget *parent)
-            : TreeViewLineEditComboBox(parent)
+AlbumSelectComboBox::AlbumSelectComboBox(QWidget* parent)
+    : TreeViewLineEditComboBox(parent)
 {
     m_noSelectionText = i18n("No Album Selected");
     m_model           = 0;
@@ -67,7 +67,7 @@ void AlbumSelectComboBox::setDefaultTagModels()
               new QSortFilterProxyModel(this));
 }
 
-void AlbumSelectComboBox::setModels(AbstractCheckableAlbumModel *model, QSortFilterProxyModel *filterModel)
+void AlbumSelectComboBox::setModels(AbstractCheckableAlbumModel* model, QSortFilterProxyModel* filterModel)
 {
     m_model = model;
     m_filterModel = filterModel;
@@ -94,20 +94,20 @@ void AlbumSelectComboBox::setNoSelectionText(const QString& text)
     updateText();
 }
 
-AbstractCheckableAlbumModel *AlbumSelectComboBox::model() const
+AbstractCheckableAlbumModel* AlbumSelectComboBox::model() const
 {
     return m_model;
 }
 
-QSortFilterProxyModel *AlbumSelectComboBox::filterModel() const
+QSortFilterProxyModel* AlbumSelectComboBox::filterModel() const
 {
     return m_filterModel;
 }
 
 void AlbumSelectComboBox::updateText()
 {
-    QList<Album *> checkedAlbums = m_model->checkedAlbums();
-    QList<Album *> partiallyCheckedAlbums = m_model->partiallyCheckedAlbums();
+    QList<Album*> checkedAlbums = m_model->checkedAlbums();
+    QList<Album*> partiallyCheckedAlbums = m_model->partiallyCheckedAlbums();
     QString newIncludeText;
     QString newExcludeText;
 

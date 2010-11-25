@@ -63,17 +63,19 @@ namespace Digikam
 const QString renameFileProperty("AdvancedRename source file");
 
 ImageViewUtilities::ImageViewUtilities(QWidget* parentWidget)
-                  : QObject(parentWidget)
+    : QObject(parentWidget)
 {
     m_widget = parentWidget;
 }
 
 void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo)
 {
-    if(!album)
+    if (!album)
+    {
         return;
+    }
 
-    if(album->type() == Album::PHYSICAL)
+    if (album->type() == Album::PHYSICAL)
     {
         PAlbum* palbum = static_cast<PAlbum*>(album);
 
@@ -82,7 +84,7 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imag
     }
     else if (album->type() == Album::TAG)
     {
-        TAlbum *talbum = static_cast<TAlbum*>(album);
+        TAlbum* talbum = static_cast<TAlbum*>(album);
 
         QString err;
         AlbumManager::instance()->updateTAlbumIcon(talbum, QString(), imageInfo.id(), err);
@@ -92,7 +94,9 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imag
 void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
 {
     if (imageUrl.isEmpty() || !imageUrl.isLocalFile() || newName.isEmpty())
+    {
         return;
+    }
 
     ImageInfo info(imageUrl.toLocalFile());
 
@@ -102,11 +106,11 @@ void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
 
-    connect(job, SIGNAL(copyingDone(KIO::Job *, const KUrl &, const KUrl &, time_t, bool, bool)),
-            this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
+    connect(job, SIGNAL(copyingDone(KIO::Job*, const KUrl&, const KUrl&, time_t, bool, bool)),
+            this, SLOT(slotRenamed(KIO::Job*, const KUrl&, const KUrl&)));
 }
 
-void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl &, const KUrl&newURL)
+void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl&, const KUrl& newURL)
 {
     // reconstruct file path from digikamalbums:// URL
     KUrl fileURL;
@@ -199,11 +203,13 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, boo
 void ImageViewUtilities::slotDIOResult(KJob* kjob)
 {
     KIO::Job* job = static_cast<KIO::Job*>(kjob);
+
     if (job->error())
     {
         // this slot can be used by others, too.
         // check if image renaming property is set.
         QVariant v = job->property(renameFileProperty.toAscii());
+
         if (!v.isNull())
         {
             if (job->error() == KIO::Job::KilledJobError)
@@ -245,17 +251,24 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, A
     }
 
     if (kioURLs.isEmpty() || imageIDs.isEmpty())
+    {
         return;
+    }
 
     if (currentAlbum && currentAlbum->type() != Album::PHYSICAL)
+    {
         currentAlbum = 0;
+    }
 
     QString header(i18n("<p>Please select the destination album from the digiKam library to "
                         "move the selected images into.</p>"));
 
     Album* album = AlbumSelectDialog::selectAlbum(m_widget, static_cast<PAlbum*>(currentAlbum), header);
+
     if (!album)
+    {
         return;
+    }
 
     KIO::Job* job = DIO::move(kioURLs, imageIDs, (PAlbum*)album);
     connect(job, SIGNAL(result(KJob*)),
@@ -272,10 +285,15 @@ void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const 
     ltview->setLeftRightItems(list, addTo);
 
     if (ltview->isHidden())
+    {
         ltview->show();
+    }
 
     if (ltview->isMinimized())
+    {
         KWindowSystem::unminimizeWindow(ltview->winId());
+    }
+
     KWindowSystem::activateWindow(ltview->winId());
 }
 
@@ -284,14 +302,21 @@ void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, cons
     QueueMgrWindow* bqmview = QueueMgrWindow::queueManagerWindow();
 
     if (bqmview->isHidden())
+    {
         bqmview->show();
+    }
 
     if (bqmview->isMinimized())
+    {
         KWindowSystem::unminimizeWindow(bqmview->winId());
+    }
+
     KWindowSystem::activateWindow(bqmview->winId());
 
     if (newQueue)
+    {
         bqmview->addNewQueue();
+    }
 
     bqmview->loadImageInfos(list, bqmview->currentQueueId());
 }
@@ -302,10 +327,12 @@ void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list
     bqmview->loadImageInfos(list, queueid);
 }
 
-void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album *currentAlbum)
+void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum)
 {
     if (info.isNull())
+    {
         return;
+    }
 
     QFileInfo fi(info.filePath());
     QString imagefilter = AlbumSettings::instance()->getImageFileFilter();
@@ -318,7 +345,9 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
         const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
 
         if (offers.isEmpty())
+        {
             return;
+        }
 
         KService::Ptr ptr = offers.first();
         // Run the dedicated app to show the item.
@@ -332,16 +361,22 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
 
     imview->disconnect(this);
     connect(imview, SIGNAL(signalURLChanged(const KUrl&)),
-            this, SIGNAL(editorCurrentUrlChanged(const KUrl &)));
+            this, SIGNAL(editorCurrentUrlChanged(const KUrl&)));
 
     imview->loadImageInfos(allInfosToOpen, info,
                            currentAlbum ? i18n("Album \"%1\"", currentAlbum->title()) : QString(),
                            true);
 
     if (imview->isHidden())
+    {
         imview->show();
+    }
+
     if (imview->isMinimized())
+    {
         KWindowSystem::unminimizeWindow(imview->winId());
+    }
+
     KWindowSystem::activateWindow(imview->winId());
 }
 

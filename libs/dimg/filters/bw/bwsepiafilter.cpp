@@ -69,8 +69,8 @@ public:
 };
 
 BWSepiaFilter::BWSepiaFilter(DImg* orgImage, QObject* parent, const BWSepiaContainer& settings)
-             : DImgThreadedFilter(orgImage, parent, "BWSepiaFilter"),
-               d(new BWSepiaFilterPriv)
+    : DImgThreadedFilter(orgImage, parent, "BWSepiaFilter"),
+      d(new BWSepiaFilterPriv)
 {
     d->settings = settings;
     initFilter();

@@ -52,14 +52,14 @@ public:
         preserve_skin_tones = false;
         width               = 0;
         height              = 0;
-        step                = 1; 
-        side_switch_freq    = 4; 
+        step                = 1;
+        side_switch_freq    = 4;
         rigidity            = 0.0;
         func                = LQR_EF_GRAD_XABS;
         resize_order        = LQR_RES_ORDER_HOR;
     };
 
-    ~ContentAwareContainer(){};
+    ~ContentAwareContainer() {};
 
 public:
 
@@ -67,18 +67,18 @@ public:
 
     uint                     width;
     uint                     height;
-    
-    int                      step; 
+
+    int                      step;
     int                      side_switch_freq;
 
     double                   rigidity;
 
-    QImage                   mask; 
+    QImage                   mask;
 
     LqrEnergyFuncBuiltinType func;
     LqrResizeOrder           resize_order;
-};  
-  
+};
+
 class ContentAwareFilterPriv;
 
 class DIGIKAM_EXPORT ContentAwareFilter : public DImgThreadedFilter
@@ -100,7 +100,7 @@ private:
     void buildSkinToneBias();
     inline bool isSkinTone(const DColor& c);
     void getEnergyImage();
-    
+
 private:
 
     ContentAwareFilterPriv* const d;

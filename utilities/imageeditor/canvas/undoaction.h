@@ -53,7 +53,7 @@ public:
 
 protected:
 
-    DImgInterface *m_iface;
+    DImgInterface* m_iface;
     QString        m_title;
 };
 

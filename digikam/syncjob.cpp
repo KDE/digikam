@@ -83,7 +83,7 @@ public:
 };
 
 SyncJob::SyncJob()
-       : d(new SyncJobPriv)
+    : d(new SyncJobPriv)
 {
     d->waitingLoop = new QEventLoop(this);
 }
@@ -101,14 +101,18 @@ SyncJobResult SyncJob::del(const KUrl::List& urls, bool useTrash)
     SyncJob sj;
 
     if (useTrash)
+    {
         sj.trashPriv(urls);
+    }
     else
+    {
         sj.delPriv(urls);
+    }
 
     return sj.d->result;
 }
 
-QPixmap SyncJob::getTagThumbnail(TAlbum *album)
+QPixmap SyncJob::getTagThumbnail(TAlbum* album)
 {
     SyncJob sj;
     return sj.getTagThumbnailPriv(album);
@@ -134,30 +138,32 @@ bool SyncJob::trashPriv(const KUrl::List& urls)
     return d->result;
 }
 
-void SyncJob::slotResult( KJob *job )
+void SyncJob::slotResult( KJob* job )
 {
     d->result.success = !(job->error());
+
     if ( !d->result )
     {
         d->result.errorString = job->errorString();
     }
+
     quitWaitingLoop();
 }
 
-QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
+QPixmap SyncJob::getTagThumbnailPriv(TAlbum* album)
 {
     delete d->thumbnail;
 
     d->thumbnail = new QPixmap();
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
 
-    connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
-            this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)),
+    connect(loader, SIGNAL(signalThumbnail(Album*, const QPixmap&)),
+            this, SLOT(slotGotThumbnailFromIcon(Album*, const QPixmap&)),
             Qt::QueuedConnection);
 
-    connect(loader, SIGNAL(signalFailed(Album *)),
-            this, SLOT(slotLoadThumbnailFailed(Album *)),
+    connect(loader, SIGNAL(signalFailed(Album*)),
+            this, SLOT(slotLoadThumbnailFailed(Album*)),
             Qt::QueuedConnection);
 
     if (!loader->getTagThumbnail(album, *d->thumbnail))
@@ -176,10 +182,11 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
         d->album = album;
         enterWaitingLoop();
     }
+
     return *d->thumbnail;
 }
 
-void SyncJob::slotLoadThumbnailFailed(Album *album)
+void SyncJob::slotLoadThumbnailFailed(Album* album)
 {
     if (album == d->album)
     {
@@ -187,7 +194,7 @@ void SyncJob::slotLoadThumbnailFailed(Album *album)
     }
 }
 
-void SyncJob::slotGotThumbnailFromIcon(Album *album, const QPixmap& pix)
+void SyncJob::slotGotThumbnailFromIcon(Album* album, const QPixmap& pix)
 {
     if (album == d->album)
     {

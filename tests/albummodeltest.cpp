@@ -91,21 +91,21 @@ void AlbumModelTest::initTestCase()
             this, SLOT(setLastPAlbumCountMap(const QMap<int, int>&)));
 
     AlbumManager::checkDatabaseDirsAfterFirstRun(QDir::temp().absoluteFilePath(
-                    tempSuffix), QDir::temp().absoluteFilePath(tempSuffix));
+                tempSuffix), QDir::temp().absoluteFilePath(tempSuffix));
     DatabaseParameters params("QSQLITE", QDir::temp().absoluteFilePath(tempSuffix),
-                    QString(), QString(), -1, false, QString(), QString());
+                              QString(), QString(), -1, false, QString(), QString());
     bool dbChangeGood = AlbumManager::instance()->setDatabase(params, false,
-                    QDir::temp().absoluteFilePath(tempSuffix));
+                        QDir::temp().absoluteFilePath(tempSuffix));
     QVERIFY2(dbChangeGood, "Could not set temp album db");
     QList<CollectionLocation> locs =
-                    CollectionManager::instance()->allAvailableLocations();
+        CollectionManager::instance()->allAvailableLocations();
     QVERIFY2(locs.size(), "Failed to auto-create one collection in setDatabase");
 
     ScanController::instance()->completeCollectionScan();
     AlbumManager::instance()->startScan();
 
     QVERIFY2(AlbumManager::instance()->allPAlbums().size() == 2,
-                    "Failed to scan empty directory and have one root and one album root album");
+             "Failed to scan empty directory and have one root and one album root album");
 }
 
 void AlbumModelTest::cleanupTestCase()
@@ -153,8 +153,8 @@ void AlbumModelTest::init()
     startModel->setShowCount(true);
     connect(startModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
             this, SLOT(slotStartModelRowsInserted(const QModelIndex&, int, int)));
-    connect(startModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex &)),
-            this, SLOT(slotStartModelDataChanged(const QModelIndex&, const QModelIndex &)));
+    connect(startModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+            this, SLOT(slotStartModelDataChanged(const QModelIndex&, const QModelIndex&)));
     kDebug() << "Created startModel" << startModel;
 
     // ensure that this model is empty in the beginning except for the root
@@ -181,15 +181,15 @@ void AlbumModelTest::init()
 
     QString error;
     palbumRoot0 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath
-                    + "/root0"));
+                  + "/root0"));
     QVERIFY2(palbumRoot0, "Error having PAlbum root0 in AlbumManager");
     palbumRoot1 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath
-                    + "/root1"));
+                  + "/root1"));
     QVERIFY2(palbumRoot1, "Error having PAlbum root1 in AlbumManager");
 
     // Create some more through AlbumManager
     palbumRoot2 = AlbumManager::instance()->createPAlbum(dbPath, "root2",
-                    "root album 2", QDate::currentDate(), albumCategory, error);
+                  "root album 2", QDate::currentDate(), albumCategory, error);
     QVERIFY2(palbumRoot2, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
 
     safeCreatePAlbum(palbumRoot0, "root0child0", palbumChild0Root0);
@@ -200,9 +200,9 @@ void AlbumModelTest::init()
     safeCreatePAlbum(palbumRoot1, sameName, palbumChild0Root1);
 
     kDebug() << "AlbumManager now knows these PAlbums:";
-    foreach(Album *a, AlbumManager::instance()->allPAlbums())
+    foreach (Album* a, AlbumManager::instance()->allPAlbums())
     {
-    	kDebug() << "\t" << a->title();
+        kDebug() << "\t" << a->title();
     }
 
     // tags
@@ -231,7 +231,7 @@ void AlbumModelTest::init()
     kDebug() << "copying images " << imageFiles << " to "
              << palbumChild0Root0->fileUrl();
 
-    foreach (const QString &imageFile, imageFiles)
+    foreach (const QString& imageFile, imageFiles)
     {
         QString src = IMAGE_PATH + "/" + imageFile;
         QString dst = palbumChild0Root0->fileUrl().toLocalFile() + "/" + imageFile;
@@ -242,20 +242,23 @@ void AlbumModelTest::init()
     ScanController::instance()->completeCollectionScan();
 
     if (AlbumManager::instance()->allDAlbums().count() <= 1)
+    {
         ensureItemCounts();
+    }
 
     kDebug() << "date albums: " << AlbumManager::instance()->allDAlbums();
 
     // root + 2 years + 2 and 3 months per year + (1997 as test year for date ordering with 12 months) = 21
     QCOMPARE(AlbumManager::instance()->allDAlbums().size(), 21);
     // ensure that there is a root date album
-    DAlbum *rootFromAlbumManager = AlbumManager::instance()->findDAlbum(0);
+    DAlbum* rootFromAlbumManager = AlbumManager::instance()->findDAlbum(0);
     QVERIFY(rootFromAlbumManager);
-    DAlbum *rootFromList = 0;
-    foreach(Album *album, AlbumManager::instance()->allDAlbums())
+    DAlbum* rootFromList = 0;
+    foreach (Album* album, AlbumManager::instance()->allDAlbums())
     {
-        DAlbum *dAlbum = dynamic_cast<DAlbum*> (album);
+        DAlbum* dAlbum = dynamic_cast<DAlbum*> (album);
         QVERIFY(dAlbum);
+
         if (dAlbum->isRoot())
         {
             rootFromList = dAlbum;
@@ -297,6 +300,7 @@ void AlbumModelTest::ensureItemCounts()
     kDebug() << "Waiting for AlbumManager and the IOSlave to create DAlbums...";
     dAlbumLoop.exec();
     kDebug() << "DAlbums were created";
+
     while (palbumCountMap.size() < 8)
     {
         QEventLoop pAlbumLoop;
@@ -309,32 +313,34 @@ void AlbumModelTest::ensureItemCounts()
 }
 
 
-void AlbumModelTest::slotStartModelRowsInserted(const QModelIndex &parent, int start, int end)
+void AlbumModelTest::slotStartModelRowsInserted(const QModelIndex& parent, int start, int end)
 {
-	kDebug() << "called, parent:" << parent << ", start:" << start << ", end:" << end;
-	for (int row = start; row <= end; ++row)
-	{
-		QModelIndex child = startModel->index(row, 0, parent);
-		QVERIFY(child.isValid());
-		Album *album = startModel->albumForIndex(child);
-		const int id = child.data(AbstractAlbumModel::AlbumIdRole).toInt();
-		QVERIFY(album);
-		kDebug() << "added album with id"
-				 << id
-				 << "and name" << album->title();
-		addedIds << id;
-	}
+    kDebug() << "called, parent:" << parent << ", start:" << start << ", end:" << end;
+
+    for (int row = start; row <= end; ++row)
+    {
+        QModelIndex child = startModel->index(row, 0, parent);
+        QVERIFY(child.isValid());
+        Album* album = startModel->albumForIndex(child);
+        const int id = child.data(AbstractAlbumModel::AlbumIdRole).toInt();
+        QVERIFY(album);
+        kDebug() << "added album with id"
+                 << id
+                 << "and name" << album->title();
+        addedIds << id;
+    }
 }
 
-void AlbumModelTest::slotStartModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void AlbumModelTest::slotStartModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
     {
 
         QModelIndex index = startModel->index(row, topLeft.column(), topLeft.parent());
+
         if (!index.isValid())
         {
-        	QFAIL("Illegal index received");
+            QFAIL("Illegal index received");
             continue;
         }
 
@@ -342,17 +348,17 @@ void AlbumModelTest::slotStartModelDataChanged(const QModelIndex &topLeft, const
 
         if (!addedIds.contains(albumId))
         {
-        	QString message = "Album id " + QString::number(albumId)
-					        + " was changed before adding signal was received";
-			QFAIL(message.toAscii().data());
-			kError() << message;
+            QString message = "Album id " + QString::number(albumId)
+                              + " was changed before adding signal was received";
+            QFAIL(message.toAscii().data());
+            kError() << message;
         }
 
     }
 
 }
 
-void AlbumModelTest::deletePAlbum(PAlbum *album)
+void AlbumModelTest::deletePAlbum(PAlbum* album)
 {
     KUrl u;
     u.setProtocol("file");
@@ -369,12 +375,13 @@ void AlbumModelTest::setLastPAlbumCountMap(const QMap<int, int> &map)
 void AlbumModelTest::cleanup()
 {
 
-	if (startModel)
-	{
-		disconnect(startModel);
-	}
-	delete startModel;
-	addedIds.clear();
+    if (startModel)
+    {
+        disconnect(startModel);
+    }
+
+    delete startModel;
+    addedIds.clear();
 
     // remove all test data
 
@@ -409,8 +416,8 @@ void AlbumModelTest::cleanup()
 void AlbumModelTest::testPAlbumModel()
 {
 
-    AlbumModel *albumModel = new AlbumModel();
-    ModelTest *test = new ModelTest(albumModel, 0);
+    AlbumModel* albumModel = new AlbumModel();
+    ModelTest* test = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
 
@@ -441,6 +448,7 @@ void AlbumModelTest::testDisablePAlbumCount()
     QModelIndex rootIndex = albumModel.index(0, 0, QModelIndex());
     QString rootTitle = albumModel.data(rootIndex, Qt::DisplayRole).toString();
     QVERIFY(!countRegEx.exactMatch(rootTitle));
+
     for (int collectionRow = 0; collectionRow < albumModel.rowCount(rootIndex); ++collectionRow)
     {
         QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
@@ -462,6 +470,7 @@ void AlbumModelTest::testDisablePAlbumCount()
     // ensure that no album has a count attached
     rootTitle = albumModel.data(rootIndex, Qt::DisplayRole).toString();
     QVERIFY(!countRegEx.exactMatch(rootTitle));
+
     for (int collectionRow = 0; collectionRow < albumModel.rowCount(rootIndex); ++collectionRow)
     {
         QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
@@ -481,9 +490,9 @@ void AlbumModelTest::testDisablePAlbumCount()
 
 void AlbumModelTest::testDAlbumModel()
 {
-    DateAlbumModel *albumModel = new DateAlbumModel();
+    DateAlbumModel* albumModel = new DateAlbumModel();
     ensureItemCounts();
-    ModelTest *test = new ModelTest(albumModel, 0);
+    ModelTest* test = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
 }
@@ -491,20 +500,21 @@ void AlbumModelTest::testDAlbumModel()
 void AlbumModelTest::testDAlbumContainsAlbums()
 {
 
-    DateAlbumModel *albumModel = new DateAlbumModel();
+    DateAlbumModel* albumModel = new DateAlbumModel();
     ensureItemCounts();
 
     QVERIFY(albumModel->rootAlbum());
 
-    foreach (Album *album, AlbumManager::instance()->allDAlbums())
+    foreach (Album* album, AlbumManager::instance()->allDAlbums())
     {
 
-        DAlbum *dAlbum = dynamic_cast<DAlbum*> (album);
+        DAlbum* dAlbum = dynamic_cast<DAlbum*> (album);
         QVERIFY(dAlbum);
 
         kDebug() << "checking album for date " << dAlbum->date() << ", range = " << dAlbum->range();
 
         QModelIndex index = albumModel->indexForAlbum(dAlbum);
+
         if (!dAlbum->isRoot())
         {
             QVERIFY(index.isValid());
@@ -571,22 +581,24 @@ void AlbumModelTest::testDAlbumSorting()
     // first check ascending order
     albumModel.sort(0, Qt::AscendingOrder);
     int previousYear = 0;
+
     for (int yearRow = 0; yearRow < albumModel.rowCount(); ++yearRow)
     {
 
         QModelIndex yearIndex = albumModel.index(yearRow, 0);
-        DAlbum *yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
+        DAlbum* yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
         QVERIFY(yearAlbum);
 
         QVERIFY(yearAlbum->date().year() > previousYear);
         previousYear = yearAlbum->date().year();
 
         int previousMonth = 0;
+
         for (int monthRow = 0; monthRow < albumModel.rowCount(yearIndex); ++monthRow)
         {
 
             QModelIndex monthIndex = albumModel.index(monthRow, 0, yearIndex);
-            DAlbum *monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
+            DAlbum* monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
             QVERIFY(monthAlbum);
 
             QVERIFY(monthAlbum->date().month() > previousMonth);
@@ -599,22 +611,24 @@ void AlbumModelTest::testDAlbumSorting()
     // then check descending order
     albumModel.sort(0, Qt::DescendingOrder);
     previousYear = 1000000;
+
     for (int yearRow = 0; yearRow < albumModel.rowCount(); ++yearRow)
     {
 
         QModelIndex yearIndex = albumModel.index(yearRow, 0);
-        DAlbum *yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
+        DAlbum* yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
         QVERIFY(yearAlbum);
 
         QVERIFY(yearAlbum->date().year() < previousYear);
         previousYear = yearAlbum->date().year();
 
         int previousMonth = 13;
+
         for (int monthRow = 0; monthRow < albumModel.rowCount(yearIndex); ++monthRow)
         {
 
             QModelIndex monthIndex = albumModel.index(monthRow, 0, yearIndex);
-            DAlbum *monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
+            DAlbum* monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
             QVERIFY(monthAlbum);
 
             QVERIFY(monthAlbum->date().month() < previousMonth);
@@ -628,17 +642,18 @@ void AlbumModelTest::testDAlbumSorting()
 
 void AlbumModelTest::testDAlbumCount()
 {
-    DateAlbumModel *albumModel = new DateAlbumModel();
+    DateAlbumModel* albumModel = new DateAlbumModel();
     albumModel->setShowCount(true);
     ensureItemCounts();
 
     kDebug() << "iterating over root indices";
 
     // check year albums
-    for (int yearRow = 0; yearRow < albumModel->rowCount(albumModel->rootAlbumIndex()); ++yearRow) {
+    for (int yearRow = 0; yearRow < albumModel->rowCount(albumModel->rootAlbumIndex()); ++yearRow)
+    {
 
         QModelIndex yearIndex = albumModel->index(yearRow, 0);
-        DAlbum *yearDAlbum = albumModel->albumForIndex(yearIndex);
+        DAlbum* yearDAlbum = albumModel->albumForIndex(yearIndex);
         QVERIFY(yearDAlbum);
 
         QVERIFY(yearDAlbum->range() == DAlbum::Year);
@@ -658,7 +673,7 @@ void AlbumModelTest::testDAlbumCount()
             {
 
                 QModelIndex monthIndex = albumModel->index(monthRow, 0, yearIndex);
-                DAlbum *monthDAlbum = albumModel->albumForIndex(monthIndex);
+                DAlbum* monthDAlbum = albumModel->albumForIndex(monthIndex);
                 QVERIFY(monthDAlbum);
 
                 QVERIFY(monthDAlbum->range() == DAlbum::Month);
@@ -674,7 +689,7 @@ void AlbumModelTest::testDAlbumCount()
                     albumModel->includeChildrenCount(monthIndex);
                     QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
                 }
-                else if(monthDAlbum->date().month() == 4)
+                else if (monthDAlbum->date().month() == 4)
                 {
                     const int imagesInMonth = 4;
                     albumModel->includeChildrenCount(monthIndex);
@@ -707,7 +722,7 @@ void AlbumModelTest::testDAlbumCount()
             {
 
                 QModelIndex monthIndex = albumModel->index(monthRow, 0, yearIndex);
-                DAlbum *monthDAlbum = albumModel->albumForIndex(monthIndex);
+                DAlbum* monthDAlbum = albumModel->albumForIndex(monthIndex);
                 QVERIFY(monthDAlbum);
 
                 QVERIFY(monthDAlbum->range() == DAlbum::Month);
@@ -723,7 +738,7 @@ void AlbumModelTest::testDAlbumCount()
                     albumModel->includeChildrenCount(monthIndex);
                     QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
                 }
-                else if(monthDAlbum->date().month() == 4)
+                else if (monthDAlbum->date().month() == 4)
                 {
                     const int imagesInMonth = 2;
                     albumModel->includeChildrenCount(monthIndex);
@@ -733,7 +748,7 @@ void AlbumModelTest::testDAlbumCount()
                     albumModel->includeChildrenCount(monthIndex);
                     QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
                 }
-                else if(monthDAlbum->date().month() == 5)
+                else if (monthDAlbum->date().month() == 5)
                 {
                     const int imagesInMonth = 1;
                     albumModel->includeChildrenCount(monthIndex);
@@ -768,8 +783,8 @@ void AlbumModelTest::testDAlbumCount()
 void AlbumModelTest::testTAlbumModel()
 {
 
-    TagModel *albumModel = new TagModel();
-    ModelTest *test = new ModelTest(albumModel, 0);
+    TagModel* albumModel = new TagModel();
+    ModelTest* test = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
 
@@ -782,8 +797,8 @@ void AlbumModelTest::testTAlbumModel()
 
 void AlbumModelTest::testSAlbumModel()
 {
-    SearchModel *albumModel = new SearchModel();
-    ModelTest *test = new ModelTest(albumModel, 0);
+    SearchModel* albumModel = new SearchModel();
+    ModelTest* test = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
 }

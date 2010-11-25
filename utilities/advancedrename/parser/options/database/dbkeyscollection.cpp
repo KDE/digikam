@@ -51,6 +51,7 @@ void DbKeysCollection::addId(const QString& id, const QString& description)
     {
         return;
     }
+
     idsMap.insert(id, description);
 }
 

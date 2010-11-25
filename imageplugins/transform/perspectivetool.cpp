@@ -75,7 +75,7 @@ public:
         inverseTransformation(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     static const QString configGroupName;
     static const QString configDrawWhileMovingEntry;
@@ -104,8 +104,8 @@ const QString PerspectiveTool::PerspectiveToolPriv::configInverseTransformationE
 // --------------------------------------------------------
 
 PerspectiveTool::PerspectiveTool(QObject* parent)
-               : EditorTool(parent),
-                 d(new PerspectiveToolPriv)
+    : EditorTool(parent),
+      d(new PerspectiveToolPriv)
 {
     setObjectName("perspective");
     setToolName(i18n("Perspective"));
@@ -113,7 +113,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QFrame *frame    = new QFrame(0);
+    QFrame* frame    = new QFrame(0);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l   = new QVBoxLayout(frame);
     d->previewWidget = new PerspectiveWidget(525, 350, frame);

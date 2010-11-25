@@ -48,7 +48,7 @@ public:
         yshift        = 0.0;
     };
 
-    ~AntiVignettingContainer(){};
+    ~AntiVignettingContainer() {};
 
 public:
 

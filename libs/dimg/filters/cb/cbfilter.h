@@ -52,7 +52,7 @@ public:
         gamma = 1.0;
     };
 
-    ~CBContainer(){};
+    ~CBContainer() {};
 
 public:
 

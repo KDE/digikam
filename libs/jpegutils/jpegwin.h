@@ -24,7 +24,7 @@
 #ifndef JPEGWIN_H
 #define JPEGWIN_H
 
-namespace Digikam 
+namespace Digikam
 {
 
 typedef struct

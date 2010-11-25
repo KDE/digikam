@@ -155,7 +155,7 @@ public:
 
 ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
                            ThumbBarToolTipSettings settings)
-            : Q3ScrollView(parent), d(new ThumbBarViewPriv)
+    : Q3ScrollView(parent), d(new ThumbBarViewPriv)
 {
     d->toolTipSettings = settings;
     d->timer           = new QTimer(this);
@@ -194,7 +194,7 @@ ThumbBarView::~ThumbBarView()
     // Delete all hash items
     while (!d->itemHash.isEmpty())
     {
-        ThumbBarItem *value = *d->itemHash.begin();
+        ThumbBarItem* value = *d->itemHash.begin();
         d->itemHash.erase(d->itemHash.begin());
         delete value;
     }
@@ -235,14 +235,17 @@ void ThumbBarView::setOrientation(int orientation)
     }
 }
 
-void ThumbBarView::setToolTip(ThumbBarToolTip *toolTip)
+void ThumbBarView::setToolTip(ThumbBarToolTip* toolTip)
 {
     d->toolTip = toolTip;
 }
 
 void ThumbBarView::resizeEvent(QResizeEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     Q3ScrollView::resizeEvent(e);
 
@@ -266,12 +269,16 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 void ThumbBarView::setExifRotate(bool exifRotate)
 {
     if (d->thumbLoadThread->exifRotate() == exifRotate)
+    {
         return;
+    }
 
     d->thumbLoadThread->setExifRotate(exifRotate);
 
-    for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
+    for (ThumbBarItem* item = d->firstItem; item; item = item->d->next)
+    {
         invalidateThumb(item);
+    }
 
     triggerUpdate();
 }
@@ -319,11 +326,16 @@ int ThumbBarView::countItems()
 KUrl::List ThumbBarView::itemsUrls()
 {
     KUrl::List urlList;
-    if (!countItems())
-        return urlList;
 
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    if (!countItems())
+    {
+        return urlList;
+    }
+
+    for (ThumbBarItem* item = firstItem(); item; item = item->next())
+    {
         urlList.append(item->url());
+    }
 
     return urlList;
 }
@@ -359,11 +371,15 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
     int itemPos;
 
     if (d->orientation == Qt::Vertical)
+    {
         itemPos = pos.y();
+    }
     else
+    {
         itemPos = pos.x();
+    }
 
-    for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
+    for (ThumbBarItem* item = d->firstItem; item; item = item->d->next)
     {
         if (itemPos >= item->d->pos && itemPos <= (item->d->pos+d->tileSize+2*d->margin+2*d->radius))
         {
@@ -376,7 +392,7 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
 
 ThumbBarItem* ThumbBarView::findItemByUrl(const KUrl& url) const
 {
-    for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
+    for (ThumbBarItem* item = d->firstItem; item; item = item->d->next)
     {
         if (item->url().equals(url))
         {
@@ -389,13 +405,19 @@ ThumbBarItem* ThumbBarView::findItemByUrl(const KUrl& url) const
 
 void ThumbBarView::setSelected(ThumbBarItem* item)
 {
-    if (!item) return;
+    if (!item)
+    {
+        return;
+    }
 
     ensureItemVisible(item);
     emit signalUrlSelected(item->url());
     emit signalItemSelected(item);
 
-    if (d->currItem == item) return;
+    if (d->currItem == item)
+    {
+        return;
+    }
 
     if (d->currItem)
     {
@@ -405,8 +427,11 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
     }
 
     d->currItem = item;
+
     if (d->currItem)
+    {
         item->repaint();
+    }
 }
 
 void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
@@ -414,7 +439,9 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
     if (item)
     {
         if (d->highlightedItem)
+        {
             d->highlightedItem = 0;
+        }
 
         d->toolTipItem = 0;
         d->toolTipTimer->stop();
@@ -426,9 +453,13 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
         // find the middle of the image and give a margin of 1,5 image
         // When changed, watch regression for bug 104031
         if (d->orientation == Qt::Vertical)
+        {
             ensureVisible(0, pos, 0, viewport()->height());
+        }
         else
+        {
             ensureVisible(pos, 0, viewport()->width(), 0);
+        }
     }
 }
 
@@ -436,7 +467,8 @@ void ThumbBarView::refreshThumbs(const KUrl::List& urls)
 {
     for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
     {
-        ThumbBarItem *item = findItemByUrl(*it);
+        ThumbBarItem* item = findItemByUrl(*it);
+
         if (item)
         {
             invalidateThumb(item);
@@ -446,7 +478,10 @@ void ThumbBarView::refreshThumbs(const KUrl::List& urls)
 
 void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 {
-    if (!item) return;
+    if (!item)
+    {
+        return;
+    }
 
     d->thumbLoadThread->deleteThumbnail(item->url().toLocalFile());
     d->thumbLoadThread->find(item->url().toLocalFile(), d->tileSize);
@@ -457,7 +492,8 @@ void ThumbBarView::reloadThumbs(const KUrl::List& urls)
     // This one does not delete the thumbnail file on disk
     for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
     {
-        ThumbBarItem *item = findItemByUrl(*it);
+        ThumbBarItem* item = findItemByUrl(*it);
+
         if (item)
         {
             reloadThumb(item);
@@ -467,22 +503,26 @@ void ThumbBarView::reloadThumbs(const KUrl::List& urls)
 
 void ThumbBarView::reloadThumb(ThumbBarItem* item)
 {
-    if (!item) return;
+    if (!item)
+    {
+        return;
+    }
 
     d->thumbLoadThread->find(item->url().toLocalFile(), d->tileSize);
 }
 
-bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap& pix) const
+bool ThumbBarView::pixmapForItem(ThumbBarItem* item, QPixmap& pix) const
 {
     if (d->tileSize > d->maxTileSize)
     {
         //TODO: Install a widget maximum size to prevent this situation
         bool hasPixmap = d->thumbLoadThread->find(item->url().toLocalFile(), pix, d->maxTileSize);
+
         if (hasPixmap)
         {
             kWarning() << "Thumbbar: Requested thumbnail size" << d->tileSize
-                            << "is larger than the maximum thumbnail size" << d->maxTileSize
-                            << ". Returning a scaled-up image.";
+                       << "is larger than the maximum thumbnail size" << d->maxTileSize
+                       << ". Returning a scaled-up image.";
             pix = pix.scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             return true;
         }
@@ -497,7 +537,7 @@ bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap& pix) const
     }
 }
 
-void ThumbBarView::preloadPixmapForItem(ThumbBarItem *item) const
+void ThumbBarView::preloadPixmapForItem(ThumbBarItem* item) const
 {
     d->thumbLoadThread->preload(item->url().toLocalFile(), qMin(d->tileSize, d->maxTileSize));
 }
@@ -510,19 +550,19 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
     if (d->orientation == Qt::Vertical)
     {
-       ts   = d->tileSize + 2*d->margin + 2*d->radius;
-       tile = QRect(0, 0, visibleWidth()-1, ts-1);
+        ts   = d->tileSize + 2*d->margin + 2*d->radius;
+        tile = QRect(0, 0, visibleWidth()-1, ts-1);
     }
     else
     {
-       ts   = d->tileSize + 2*d->margin + 2*d->radius;
-       tile = QRect(0, 0, ts-1, visibleHeight()-1);
+        ts   = d->tileSize + 2*d->margin + 2*d->radius;
+        tile = QRect(0, 0, ts-1, visibleHeight()-1);
     }
 
     QPainter p(viewport());
     p.fillRect(e->rect(), palette().color(QPalette::Background));
 
-    for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
+    for (ThumbBarItem* item = d->firstItem; item; item = item->d->next)
     {
         if (d->orientation == Qt::Vertical)
         {
@@ -532,10 +572,15 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 p.translate(0, translate);
 
                 p.setPen(Qt::white);
+
                 if (item == d->currItem)
+                {
                     p.setBrush(palette().highlight().color());
+                }
                 else
+                {
                     p.setBrush(palette().background().color());
+                }
 
                 p.drawRect(tile);
 
@@ -547,6 +592,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 }
 
                 QPixmap pix;
+
                 if (pixmapForItem(item, pix))
                 {
                     int x = (tile.width()  - pix.width())/2;
@@ -570,10 +616,15 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 p.translate(translate, 0);
 
                 p.setPen(Qt::white);
+
                 if (item == d->currItem)
+                {
                     p.setBrush(palette().highlight().color());
+                }
                 else
+                {
                     p.setBrush(palette().background().color());
+                }
 
                 p.drawRect(tile);
 
@@ -585,14 +636,15 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 }
 
                 QPixmap pix;
+
                 if (pixmapForItem(item, pix))
                 {
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
                     p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6,
-                                                                   pix.height()+6),
-                                                             QColor(0, 0, 0, 128), 3));
+                                 pix.height()+6),
+                                 QColor(0, 0, 0, 128), 3));
                     item->setTooltipRect(QRect(x+item->position(), y, pix.width(), pix.height()));
                 }
 
@@ -689,7 +741,9 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     d->dragStartPos       = e->pos();
 
     if (!barItem || barItem == d->currItem)
+    {
         return;
+    }
 
     if (d->currItem)
     {
@@ -702,15 +756,18 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     barItem->repaint();
 }
 
-void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
+void ThumbBarView::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    if (!e) return;
+    if (!e)
+    {
+        return;
+    }
 
     if (e->buttons() == Qt::NoButton)
     {
         ThumbBarItem* item = findItem(e->pos());
 
-        if(d->toolTipSettings.showToolTips)
+        if (d->toolTipSettings.showToolTips)
         {
             if (!isActiveWindow())
             {
@@ -726,7 +783,7 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
                 d->toolTipTimer->stop();
                 slotToolTip();
 
-                if(acceptToolTip(item, e->pos()))
+                if (acceptToolTip(item, e->pos()))
                 {
                     d->toolTipItem = item;
                     d->toolTipTimer->setSingleShot(true);
@@ -734,7 +791,7 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
                 }
             }
 
-            if(item == d->toolTipItem && !acceptToolTip(item, e->pos()))
+            if (item == d->toolTipItem && !acceptToolTip(item, e->pos()))
             {
                 d->toolTipItem = 0;
                 d->toolTipTimer->stop();
@@ -764,14 +821,16 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
         {
             startDrag();
         }
+
         return;
     }
 }
 
-void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent *e)
+void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     d->dragging = false;
-    ThumbBarItem *item = findItem(e->pos());
+    ThumbBarItem* item = findItem(e->pos());
+
     if (e->button() == Qt::LeftButton && item)
     {
         emit signalUrlSelected(item->url());
@@ -779,12 +838,14 @@ void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
+void ThumbBarView::contentsWheelEvent(QWheelEvent* e)
 {
     e->accept();
 
     if (d->highlightedItem)
+    {
         d->highlightedItem = 0;
+    }
 
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
@@ -795,16 +856,24 @@ void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
         if (e->modifiers() & Qt::ShiftModifier)
         {
             if (d->orientation == Qt::Vertical)
+            {
                 scrollBy(0, verticalScrollBar()->pageStep());
+            }
             else
+            {
                 scrollBy(horizontalScrollBar()->pageStep(), 0);
+            }
         }
         else
         {
             if (d->orientation == Qt::Vertical)
+            {
                 scrollBy(0, verticalScrollBar()->singleStep());
+            }
             else
+            {
                 scrollBy(horizontalScrollBar()->singleStep(), 0);
+            }
         }
     }
 
@@ -813,24 +882,34 @@ void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
         if (e->modifiers() & Qt::ShiftModifier)
         {
             if (d->orientation == Qt::Vertical)
+            {
                 scrollBy(0, (-1)*verticalScrollBar()->pageStep());
+            }
             else
+            {
                 scrollBy((-1)*horizontalScrollBar()->pageStep(), 0);
+            }
         }
         else
         {
             if (d->orientation == Qt::Vertical)
+            {
                 scrollBy(0, (-1)*verticalScrollBar()->singleStep());
+            }
             else
+            {
                 scrollBy((-1)*horizontalScrollBar()->singleStep(), 0);
+            }
         }
     }
 }
 
-void ThumbBarView::leaveEvent(QEvent *e)
+void ThumbBarView::leaveEvent(QEvent* e)
 {
     if (d->highlightedItem)
+    {
         d->highlightedItem = 0;
+    }
 
     // hide tooltip
     d->toolTipItem = 0;
@@ -843,7 +922,9 @@ void ThumbBarView::leaveEvent(QEvent *e)
 void ThumbBarView::focusOutEvent(QFocusEvent* e)
 {
     if (d->highlightedItem)
+    {
         d->highlightedItem = 0;
+    }
 
     // hide tooltip
     d->toolTipItem = 0;
@@ -856,7 +937,9 @@ void ThumbBarView::focusOutEvent(QFocusEvent* e)
 void ThumbBarView::slotToolTip()
 {
     if (d->toolTip)
+    {
         d->toolTip->setItem(d->toolTipItem);
+    }
 }
 
 void ThumbBarView::startDrag()
@@ -871,10 +954,11 @@ void ThumbBarView::clear(bool updateView)
     d->toolTipTimer->stop();
     slotToolTip();
 
-    ThumbBarItem *item = d->firstItem;
+    ThumbBarItem* item = d->firstItem;
+
     while (item)
     {
-        ThumbBarItem *tmp = item->d->next;
+        ThumbBarItem* tmp = item->d->next;
         delete item;
         item = tmp;
     }
@@ -885,7 +969,9 @@ void ThumbBarView::clear(bool updateView)
     d->currItem  = 0;
 
     if (updateView)
+    {
         slotUpdate();
+    }
 
     d->clearing = false;
 
@@ -894,7 +980,10 @@ void ThumbBarView::clear(bool updateView)
 
 void ThumbBarView::insertItem(ThumbBarItem* item)
 {
-    if (!item) return;
+    if (!item)
+    {
+        return;
+    }
 
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
@@ -932,7 +1021,10 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
 
 void ThumbBarView::takeItem(ThumbBarItem* item)
 {
-    if (!item) return;
+    if (!item)
+    {
+        return;
+    }
 
     if (d->toolTipItem == item)
     {
@@ -942,35 +1034,49 @@ void ThumbBarView::takeItem(ThumbBarItem* item)
     }
 
     if (d->highlightedItem == item)
+    {
         d->highlightedItem = 0;
+    }
 
     d->count--;
 
     if (item == d->firstItem)
     {
         d->firstItem = d->currItem = d->firstItem->d->next;
+
         if (d->firstItem)
+        {
             d->firstItem->d->prev = 0;
+        }
         else
+        {
             d->firstItem = d->lastItem = d->currItem = 0;
+        }
     }
     else if (item == d->lastItem)
     {
         d->lastItem = d->currItem = d->lastItem->d->prev;
+
         if ( d->lastItem )
-           d->lastItem->d->next = 0;
+        {
+            d->lastItem->d->next = 0;
+        }
         else
+        {
             d->firstItem = d->lastItem = d->currItem = 0;
+        }
     }
     else
     {
-        ThumbBarItem *i = item;
+        ThumbBarItem* i = item;
+
         if (i)
         {
             if (i->d->prev )
             {
                 i->d->prev->d->next = d->currItem = i->d->next;
             }
+
             if ( i->d->next )
             {
                 i->d->next->d->prev = d->currItem = i->d->prev;
@@ -981,15 +1087,22 @@ void ThumbBarView::takeItem(ThumbBarItem* item)
     d->itemHash.remove(item->url());
 
     if (!d->clearing)
+    {
         triggerUpdate();
+    }
 
     if (d->count == 0)
+    {
         emit signalItemSelected(0);
+    }
 }
 
 void ThumbBarView::removeItem(ThumbBarItem* item)
 {
-    if (!item) return;
+    if (!item)
+    {
+        return;
+    }
 
     if (d->toolTipItem == item)
     {
@@ -999,7 +1112,9 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
     }
 
     if (d->highlightedItem == item)
+    {
         d->highlightedItem = 0;
+    }
 
     delete item;
 }
@@ -1013,7 +1128,7 @@ void ThumbBarView::rearrangeItems()
     slotToolTip();
 
     int pos            = 0;
-    ThumbBarItem *item = d->firstItem;
+    ThumbBarItem* item = d->firstItem;
 
     while (item)
     {
@@ -1023,23 +1138,33 @@ void ThumbBarView::rearrangeItems()
     }
 
     if (d->orientation == Qt::Vertical)
+    {
         resizeContents(visibleWidth(), d->count*(d->tileSize+2*d->margin+2*d->radius));
+    }
     else
+    {
         resizeContents(d->count*(d->tileSize+2*d->margin+2*d->radius), visibleHeight());
+    }
 
     // only trigger preload if we have valid arranged items
     if (d->count)
+    {
         d->needPreload = true;
+    }
 }
 
 void ThumbBarView::repaintItem(ThumbBarItem* item)
 {
     if (item)
     {
-       if (d->orientation == Qt::Vertical)
-           repaintContents(0, item->d->pos, visibleWidth(), d->tileSize+2*d->margin+2*d->radius);
-       else
-           repaintContents(item->d->pos, 0, d->tileSize+2*d->margin+2*d->radius, visibleHeight());
+        if (d->orientation == Qt::Vertical)
+        {
+            repaintContents(0, item->d->pos, visibleWidth(), d->tileSize+2*d->margin+2*d->radius);
+        }
+        else
+        {
+            repaintContents(item->d->pos, 0, d->tileSize+2*d->margin+2*d->radius, visibleHeight());
+        }
     }
 }
 
@@ -1052,7 +1177,9 @@ void ThumbBarView::slotUpdate()
 void ThumbBarView::checkPreload()
 {
     if (d->needPreload && !d->preloadTimer->isActive())
+    {
         d->preloadTimer->start(50);
+    }
 }
 
 void ThumbBarView::slotContentsMoved()
@@ -1073,17 +1200,22 @@ void ThumbBarView::slotPreload()
         int y3 = contentsY() + visibleHeight();
         int y4 = contentsY() + 2* visibleHeight();
 
-        for (ThumbBarItem *item = firstItem(); item; item = item->next())
+        for (ThumbBarItem* item = firstItem(); item; item = item->next())
         {
             int pos = item->position();
+
             if ( (y1 <= pos && pos <= y2) || (y3 <= pos && pos <= y4))
             {
                 if (!item->rect().intersects(visibleArea))
+                {
                     preloadPixmapForItem(item);
+                }
             }
 
             if (pos > y4)
+            {
                 break;
+            }
         }
     }
     else
@@ -1093,17 +1225,22 @@ void ThumbBarView::slotPreload()
         int x3 = contentsX() + visibleWidth();
         int x4 = contentsX() + 2* visibleWidth();
 
-        for (ThumbBarItem *item = firstItem(); item; item = item->next())
+        for (ThumbBarItem* item = firstItem(); item; item = item->next())
         {
             int pos = item->position();
+
             if ( (x1 <= pos && pos <= x2) || (x3 <= pos && pos <= x4))
             {
                 if (!item->rect().intersects(visibleArea))
+                {
                     preloadPixmapForItem(item);
+                }
             }
 
             if (pos > x4)
+            {
                 break;
+            }
         }
     }
 }
@@ -1113,8 +1250,11 @@ void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixma
     if (!pix.isNull())
     {
         QHash<KUrl, ThumbBarItem*>::const_iterator it = d->itemHash.constFind(KUrl(desc.filePath));
+
         if (it == d->itemHash.constEnd())
+        {
             return;
+        }
 
         ThumbBarItem* item = *it;
         item->repaint();
@@ -1124,7 +1264,9 @@ void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixma
 bool ThumbBarView::acceptToolTip(ThumbBarItem* item, const QPoint& p)
 {
     if (item && item->tooltipRect().contains(p))
+    {
         return true;
+    }
 
     return false;
 }
@@ -1132,7 +1274,7 @@ bool ThumbBarView::acceptToolTip(ThumbBarItem* item, const QPoint& p)
 // -------------------------------------------------------------------------
 
 ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KUrl& url)
-            : d(new ThumbBarItemPriv)
+    : d(new ThumbBarItemPriv)
 {
     d->url  = url;
     d->view = view;

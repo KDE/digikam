@@ -72,7 +72,7 @@ public:
         cameraSelector(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     const QString          configGroupName;
     const QString          configShowGrid;
@@ -89,8 +89,8 @@ public:
 };
 
 LensAutoFixTool::LensAutoFixTool(QObject* parent)
-               : EditorToolThreaded(parent),
-                 d(new LensAutoFixToolPriv)
+    : EditorToolThreaded(parent),
+      d(new LensAutoFixToolPriv)
 {
     setObjectName("lensautocorrection");
     setToolName(i18n("Lens Auto-Correction"));

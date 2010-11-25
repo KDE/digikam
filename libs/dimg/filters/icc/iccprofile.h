@@ -72,7 +72,7 @@ public:
     IccProfile(const IccProfile& other);
     ~IccProfile();
 
-    IccProfile &operator=(const IccProfile& other);
+    IccProfile& operator=(const IccProfile& other);
 
     bool isNull() const;
 
@@ -82,7 +82,10 @@ public:
      *  Note: This will not ensure that the data is loaded. Use isSameProfile().
      */
     bool operator==(const IccProfile& other) const;
-    bool operator!=(const IccProfile& other) const { return !operator==(other); }
+    bool operator!=(const IccProfile& other) const
+    {
+        return !operator==(other);
+    }
     /**
      * This method compares the actual profile data bit by bit.
      */
@@ -146,8 +149,11 @@ public:
     bool writeToFile(const QString& filePath);
 
     /// Access to the LCMS cmsHPROFILE handle
-    void *handle() const;
-    operator void*() const { return handle(); }
+    void* handle() const;
+    operator void*() const
+    {
+        return handle();
+    }
 
     /**
      * Returns the default search paths for ICC profiles.
@@ -160,7 +166,7 @@ public:
 
 private:
 
-    IccProfile(const char *location, const QString& relativePath);
+    IccProfile(const char* location, const QString& relativePath);
 
 private:
 

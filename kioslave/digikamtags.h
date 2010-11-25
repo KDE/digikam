@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-07-09
- * Description : a kio-slave to process tag query on 
+ * Description : a kio-slave to process tag query on
  *               digiKam albums.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>

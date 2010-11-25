@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 ToolListViewGroup::ToolListViewGroup(QTreeWidget* parent, BatchTool::BatchToolGroup group)
-                 : QTreeWidgetItem(parent)
+    : QTreeWidgetItem(parent)
 {
     setFlags(Qt::ItemIsEnabled);
 
@@ -52,7 +52,7 @@ ToolListViewGroup::ToolListViewGroup(QTreeWidget* parent, BatchTool::BatchToolGr
 
     m_group = group;
 
-    switch(m_group)
+    switch (m_group)
     {
         case BatchTool::ColorTool:
             setIcon(0, SmallIcon("digikam"));
@@ -105,12 +105,13 @@ BatchTool::BatchToolGroup ToolListViewGroup::toolGroup() const
 // ---------------------------------------------------------------------------
 
 ToolListViewItem::ToolListViewItem(ToolListViewGroup* parent, BatchTool* tool)
-                : QTreeWidgetItem(parent)
+    : QTreeWidgetItem(parent)
 {
     setDisabled(false);
     setSelected(false);
 
     m_tool = tool;
+
     if (m_tool)
     {
         setIcon(0, m_tool->toolIcon());
@@ -131,7 +132,7 @@ BatchTool* ToolListViewItem::tool() const
 // ---------------------------------------------------------------------------
 
 ToolsListView::ToolsListView(QWidget* parent)
-             : QTreeWidget(parent)
+    : QTreeWidget(parent)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setIconSize(QSize(22, 22));
@@ -157,11 +158,15 @@ BatchToolsList ToolsListView::toolsList()
     BatchToolsList list;
 
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
+
         if (item)
+        {
             list.append(item->tool());
+        }
 
         ++it;
     }
@@ -171,37 +176,51 @@ BatchToolsList ToolsListView::toolsList()
 
 void ToolsListView::addTool(BatchTool* tool)
 {
-    if (!tool) return;
+    if (!tool)
+    {
+        return;
+    }
 
     ToolListViewGroup* parent = findToolGroup(tool->toolGroup());
+
     if (parent)
+    {
         new ToolListViewItem(parent, tool);
+    }
 }
 
 bool ToolsListView::removeTool(BatchTool* tool)
 {
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
+
         if (item && item->tool() == tool)
         {
             delete item;
             return true;
         }
+
         ++it;
     }
+
     return false;
 }
 
 ToolListViewGroup* ToolsListView::findToolGroup(BatchTool::BatchToolGroup group)
 {
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         ToolListViewGroup* item = dynamic_cast<ToolListViewGroup*>(*it);
+
         if (item && item->toolGroup() == group)
+        {
             return item;
+        }
 
         ++it;
     }
@@ -212,11 +231,15 @@ ToolListViewGroup* ToolsListView::findToolGroup(BatchTool::BatchToolGroup group)
 bool ToolsListView::findTool(BatchTool* tool)
 {
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
+
         if (item && item->tool() == tool)
+        {
             return true;
+        }
 
         ++it;
     }
@@ -227,8 +250,11 @@ bool ToolsListView::findTool(BatchTool* tool)
 void ToolsListView::startDrag(Qt::DropActions /*supportedActions*/)
 {
     QList<QTreeWidgetItem*> items = selectedItems();
+
     if (items.isEmpty())
+    {
         return;
+    }
 
     QPixmap icon(DesktopIcon("system-run", 48));
     int w = icon.width();
@@ -269,14 +295,19 @@ QStringList ToolsListView::mimeTypes() const
 void ToolsListView::mouseDoubleClickEvent(QMouseEvent*)
 {
     if (viewport()->isEnabled())
+    {
         slotAssignTools();
+    }
 }
 
 void ToolsListView::slotAssignTools()
 {
     QList<QTreeWidgetItem*> items = selectedItems();
+
     if (items.isEmpty())
+    {
         return;
+    }
 
     QMap<int, QString> map = itemsToMap(items);
     emit signalAssignTools(map);
@@ -302,8 +333,11 @@ QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items
     foreach(QTreeWidgetItem* itm, items)
     {
         ToolListViewItem* tlwi = dynamic_cast<ToolListViewItem*>(itm);
+
         if (tlwi)
+        {
             map.insertMulti((int)(tlwi->tool()->toolGroup()), tlwi->tool()->objectName());
+        }
     }
     return map;
 }

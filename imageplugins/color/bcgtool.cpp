@@ -69,7 +69,7 @@ public:
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
@@ -88,8 +88,8 @@ const QString BCGTool::BCGToolPriv::configHistogramScaleEntry("Histogram Scale")
 // --------------------------------------------------------
 
 BCGTool::BCGTool(QObject* parent)
-       : EditorToolThreaded(parent),
-         d(new BCGToolPriv)
+    : EditorToolThreaded(parent),
+      d(new BCGToolPriv)
 {
     setObjectName("bcgadjust");
     setToolName(i18n("Brightness / Contrast / Gamma"));
@@ -107,7 +107,7 @@ BCGTool::BCGTool(QObject* parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-//                                EditorToolSettings::Try);
+    //                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
@@ -129,7 +129,9 @@ BCGTool::BCGTool(QObject* parent)
 BCGTool::~BCGTool()
 {
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     delete d;
 }
@@ -180,12 +182,14 @@ void BCGTool::putPreviewData()
     // Update histogram.
 
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-                                                             preview.width(), preview.height(), preview.sixteenBit(),
-                                                             0, 0, 0, false);
+            preview.width(), preview.height(), preview.sixteenBit(),
+            0, 0, 0, false);
 }
 
 void BCGTool::prepareFinal()

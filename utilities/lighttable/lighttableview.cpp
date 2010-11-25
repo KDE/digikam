@@ -67,7 +67,7 @@ public:
 };
 
 LightTableView::LightTableView(QWidget* parent)
-              : QFrame(parent), d(new LightTableViewPriv)
+    : QFrame(parent), d(new LightTableViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle(QFrame::NoFrame);
@@ -82,13 +82,13 @@ LightTableView::LightTableView(QWidget* parent)
     d->grid->addWidget(d->rightPreview, 0, 1, 1, 1);
 
     d->grid->setColumnStretch(0, 10),
-    d->grid->setColumnStretch(1, 10),
-    d->grid->setRowStretch(0, 10),
+      d->grid->setColumnStretch(1, 10),
+      d->grid->setRowStretch(0, 10),
 
-    // Left panel connections ------------------------------------------------
+      // Left panel connections ------------------------------------------------
 
-    connect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
-            this, SIGNAL(signalLeftZoomFactorChanged(double)));
+      connect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
+              this, SIGNAL(signalLeftZoomFactorChanged(double)));
 
     connect(d->leftPreview, SIGNAL(contentsMoving(int, int)),
             this, SLOT(slotLeftContentsMoved(int, int)));
@@ -155,7 +155,9 @@ void LightTableView::setSyncPreview(bool sync)
 
     // Left panel like a reference to resync preview.
     if (d->syncPreview)
+    {
         slotLeftContentsMoved(d->leftPreview->contentsX(), d->leftPreview->contentsY());
+    }
 }
 
 void LightTableView::setNavigateByPair(bool b)

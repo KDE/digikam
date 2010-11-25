@@ -44,8 +44,8 @@ namespace Digikam
 {
 
 MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem* parent, const QString& key,
-                                           const QString& title, const QString& desc)
-                    : QTreeWidgetItem(parent), m_key(key), m_parent(parent)
+        const QString& title, const QString& desc)
+    : QTreeWidgetItem(parent), m_key(key), m_parent(parent)
 {
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
@@ -54,6 +54,7 @@ MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem* parent, const QStr
     setText(0, title);
 
     QString descVal = desc.simplified();
+
     if (descVal.length() > 512)
     {
         descVal.truncate(512);
@@ -83,7 +84,7 @@ QString MetadataSelectorItem::mdKeyTitle() const
 // ------------------------------------------------------------------------------------
 
 MetadataSelector::MetadataSelector(QWidget* parent)
-                : QTreeWidget(parent)
+    : QTreeWidget(parent)
 {
     setRootIsDecorated(false);
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -124,7 +125,9 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
 
             // Check if the current IfD have any items. If no remove it before to toggle to the next IfD.
             if ( subItems == 0 && parentifDItem)
+            {
                 delete parentifDItem;
+            }
 
             parentifDItem = new MdKeyListViewItem(this, currentIfDName);
             subItems = 0;
@@ -144,11 +147,15 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
 void MetadataSelector::setcheckedTagsList(const QStringList& list)
 {
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+
         if (item && list.contains(item->key()))
+        {
             item->setCheckState(0, Qt::Checked);
+        }
 
         ++it;
     }
@@ -158,25 +165,34 @@ QStringList MetadataSelector::checkedTagsList()
 {
     QStringList list;
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
+
     while (*it)
     {
         MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+
         if (item)
+        {
             list.append(item->key());
+        }
 
         ++it;
     }
+
     return list;
 }
 
 void MetadataSelector::clearSelection()
 {
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
+
     while (*it)
     {
         MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+
         if (item)
+        {
             item->setCheckState(0, Qt::Unchecked);
+        }
 
         ++it;
     }
@@ -185,11 +201,15 @@ void MetadataSelector::clearSelection()
 void MetadataSelector::selectAll()
 {
     QTreeWidgetItemIterator it(this);
+
     while (*it)
     {
         MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+
         if (item)
+        {
             item->setCheckState(0, Qt::Checked);
+        }
 
         ++it;
     }
@@ -222,7 +242,7 @@ public:
 };
 
 MetadataSelectorView::MetadataSelectorView(QWidget* parent)
-                    : QWidget(parent), d(new MetadataSelectorViewPriv)
+    : QWidget(parent), d(new MetadataSelectorViewPriv)
 {
     QGridLayout* grid      = new QGridLayout(this);
     d->selector            = new MetadataSelector(this);
@@ -303,22 +323,30 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
 
     // Restore all MdKey items.
     QTreeWidgetItemIterator it2(d->selector);
+
     while (*it2)
     {
         MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it2);
+
         if (item)
+        {
             item->setHidden(false);
+        }
+
         ++it2;
     }
 
     QTreeWidgetItemIterator it(d->selector);
+
     while (*it)
     {
         MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+
         if (item)
         {
             bool match = item->text(0).contains(search, settings.caseSensitive) ||
                          item->mdKeyTitle().contains(search, settings.caseSensitive);
+
             if (match)
             {
                 atleastOneMatch = true;
@@ -329,6 +357,7 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
                 item->setHidden(true);
             }
         }
+
         ++it;
     }
 
@@ -341,22 +370,32 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
 void MetadataSelectorView::cleanUpMdKeyItem()
 {
     QTreeWidgetItemIterator it(d->selector);
+
     while (*it)
     {
         MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it);
+
         if (item)
         {
             int children   = item->childCount();
             int visibles = 0;
+
             for (int i = 0 ; i < children; ++i)
             {
                 QTreeWidgetItem* citem = (*it)->child(i);
+
                 if (!citem->isHidden())
+                {
                     ++visibles;
+                }
             }
+
             if (!children || !visibles)
+            {
                 item->setHidden(true);
+            }
         }
+
         ++it;
     }
 }
@@ -365,14 +404,19 @@ void MetadataSelectorView::slotDeflautSelection()
 {
     slotClearSelection();
     QTreeWidgetItemIterator it(d->selector);
+
     while (*it)
     {
         MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+
         if (item)
         {
             if (d->defaultFilter.contains(item->text(0)))
+            {
                 item->setCheckState(0, Qt::Checked);
+            }
         }
+
         ++it;
     }
 }

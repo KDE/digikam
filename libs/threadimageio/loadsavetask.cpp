@@ -44,7 +44,10 @@ namespace Digikam
 void LoadingTask::execute()
 {
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
+    {
         return;
+    }
+
     DImg img(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
     m_thread->taskHasFinished();
     m_thread->imageLoaded(m_loadingDescription, img);
@@ -55,16 +58,18 @@ LoadingTask::TaskType LoadingTask::type()
     return TaskTypeLoading;
 }
 
-void LoadingTask::progressInfo(const DImg *, float progress)
+void LoadingTask::progressInfo(const DImg*, float progress)
 {
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
         if (m_thread->querySendNotifyEvent())
+        {
             m_thread->loadingProgress(m_loadingDescription, progress);
+        }
     }
 }
 
-bool LoadingTask::continueQuery(const DImg *)
+bool LoadingTask::continueQuery(const DImg*)
 {
     return m_loadingTaskStatus != LoadingTaskStatusStopping;
 }
@@ -78,26 +83,31 @@ void LoadingTask::setStatus(LoadingTaskStatus status)
 
 SharedLoadingTask::SharedLoadingTask(LoadSaveThread* thread, LoadingDescription description,
                                      LoadSaveThread::AccessMode mode, LoadingTaskStatus loadingTaskStatus)
-                  : LoadingTask(thread, description, loadingTaskStatus),
-                   m_completed(false), m_accessMode(mode), m_usedProcess(0), m_resultLoadingDescription(description)
+    : LoadingTask(thread, description, loadingTaskStatus),
+      m_completed(false), m_accessMode(mode), m_usedProcess(0), m_resultLoadingDescription(description)
 {
     if (m_accessMode == LoadSaveThread::AccessModeRead && needsPostProcessing())
+    {
         m_accessMode = LoadSaveThread::AccessModeReadWrite;
+    }
 }
 
 void SharedLoadingTask::execute()
 {
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
+    {
         return;
+    }
+
     // send StartedLoadingEvent from each single Task, not via LoadingProcess list
     m_thread->imageStartedLoading(m_loadingDescription);
 
-    LoadingCache *cache = LoadingCache::cache();
+    LoadingCache* cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
 
         // find possible cached images
-        DImg *cachedImg = 0;
+        DImg* cachedImg = 0;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
         foreach (const QString& key, lookupKeys)
         {
@@ -106,9 +116,13 @@ void SharedLoadingTask::execute()
                 if (m_loadingDescription.needCheckRawDecoding())
                 {
                     if (cachedImg->rawDecodingSettings() == m_loadingDescription.rawDecodingSettings)
+                    {
                         break;
+                    }
                     else
+                    {
                         cachedImg = 0;
+                    }
                 }
                 else
                 {
@@ -121,15 +135,21 @@ void SharedLoadingTask::execute()
         {
             // image is found in image cache, loading is successful
             m_img = *cachedImg;
+
             if (accessMode() == LoadSaveThread::AccessModeReadWrite)
+            {
                 m_img = m_img.copy();
+            }
+
             // continues after else clause...
         }
         else
         {
             // find possible running loading process
             m_usedProcess = 0;
-            for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it ) {
+
+            for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it )
+            {
                 if ( (m_usedProcess = cache->retrieveLoadingProcess(*it)) )
                 {
                     break;
@@ -143,12 +163,19 @@ void SharedLoadingTask::execute()
                 // attach this thread to the other thread, wait until loading
                 // has finished.
                 m_usedProcess->addListener(this);
+
                 // break loop when either the loading has completed, or this task is being stopped
                 while ( m_loadingTaskStatus != LoadingTaskStatusStopping && m_usedProcess && !m_usedProcess->completed() )
+                {
                     lock.timedWait();
+                }
+
                 // remove listener from process
                 if (m_usedProcess)
+                {
                     m_usedProcess->removeListener(this);
+                }
+
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
@@ -187,9 +214,13 @@ void SharedLoadingTask::execute()
     bool isCached = false;
     {
         LoadingCache::CacheLock lock(cache);
+
         // put (valid) image into cache of loaded images
         if (!m_img.isNull())
+        {
             isCached = cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img), m_loadingDescription.filePath);
+        }
+
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
     }
@@ -203,7 +234,8 @@ void SharedLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i=0; i<m_listeners.count(); ++i)
         {
-            LoadingProcessListener *l = m_listeners[i];
+            LoadingProcessListener* l = m_listeners[i];
+
             if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
             {
                 // If a listener requested ReadWrite access, it gets a deep copy.
@@ -221,9 +253,13 @@ void SharedLoadingTask::execute()
         removeListener(this);
         // wake all listeners waiting on cache condVar, so that they remove themselves
         lock.wakeAll();
+
         // wait until all listeners have removed themselves
         while (m_listeners.count() != 0)
+        {
             lock.timedWait();
+        }
+
         // set to 0, as checked in setStatus
         m_usedProcess = 0;
     }
@@ -296,23 +332,26 @@ void SharedLoadingTask::postProcess()
     removeListener(this);
 }
 
-void SharedLoadingTask::progressInfo(const DImg *, float progress)
+void SharedLoadingTask::progressInfo(const DImg*, float progress)
 {
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
-        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
 
         for (int i=0; i<m_listeners.size(); ++i)
         {
-            LoadingProcessListener *l = m_listeners[i];
+            LoadingProcessListener* l = m_listeners[i];
+
             if (l->querySendNotifyEvent())
+            {
                 l->loadSaveNotifier()->loadingProgress(m_loadingDescription, progress);
+            }
         }
     }
 }
 
-bool SharedLoadingTask::continueQuery(const DImg *)
+bool SharedLoadingTask::continueQuery(const DImg*)
 {
     // If this is called, the thread is currently loading an image.
     // In shared loading, we cannot stop until all listeners have been removed as well
@@ -322,9 +361,10 @@ bool SharedLoadingTask::continueQuery(const DImg *)
 void SharedLoadingTask::setStatus(LoadingTaskStatus status)
 {
     m_loadingTaskStatus = status;
+
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
     {
-        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
 
         // check for m_usedProcess, to avoid race condition that it has finished before
@@ -355,17 +395,17 @@ QString SharedLoadingTask::cacheKey()
     return m_loadingDescription.cacheKey();
 }
 
-void SharedLoadingTask::addListener(LoadingProcessListener *listener)
+void SharedLoadingTask::addListener(LoadingProcessListener* listener)
 {
     m_listeners << listener;
 }
 
-void SharedLoadingTask::removeListener(LoadingProcessListener *listener)
+void SharedLoadingTask::removeListener(LoadingProcessListener* listener)
 {
     m_listeners.removeAll(listener);
 }
 
-void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description)
+void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description)
 {
     // Ok, we are notified that another task has been started in another thread.
     // We are of course only interested if the task loads the same file,
@@ -391,7 +431,7 @@ bool SharedLoadingTask::querySendNotifyEvent()
     return m_thread->querySendNotifyEvent();
 }
 
-LoadSaveNotifier *SharedLoadingTask::loadSaveNotifier()
+LoadSaveNotifier* SharedLoadingTask::loadSaveNotifier()
 {
     return m_thread;
 }
@@ -416,13 +456,15 @@ LoadingTask::TaskType SavingTask::type()
     return TaskTypeSaving;
 }
 
-void SavingTask::progressInfo(const DImg *, float progress)
+void SavingTask::progressInfo(const DImg*, float progress)
 {
     if (m_thread->querySendNotifyEvent())
+    {
         m_thread->savingProgress(m_filePath, progress);
+    }
 }
 
-bool SavingTask::continueQuery(const DImg *)
+bool SavingTask::continueQuery(const DImg*)
 {
     return m_savingTaskStatus != SavingTaskStatusStopping;
 }

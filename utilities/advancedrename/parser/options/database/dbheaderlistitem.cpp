@@ -40,8 +40,8 @@
 namespace Digikam
 {
 
-DbHeaderListItem::DbHeaderListItem(QTreeWidget *parent, const QString& key)
-                 : QObject(parent), QTreeWidgetItem(parent)
+DbHeaderListItem::DbHeaderListItem(QTreeWidget* parent, const QString& key)
+    : QObject(parent), QTreeWidgetItem(parent)
 {
     // Reset all item flags: item is not selectable.
     setFlags(Qt::ItemIsEnabled);

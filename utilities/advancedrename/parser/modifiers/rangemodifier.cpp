@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 RangeDialog::RangeDialog(Parseable* parent)
-           : ParseableDialog(parent), ui(new Ui::RangeModifierDialogWidget())
+    : ParseableDialog(parent), ui(new Ui::RangeModifierDialogWidget())
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
@@ -69,8 +69,8 @@ void RangeDialog::slotToTheEndChecked(bool checked)
 // --------------------------------------------------------
 
 RangeModifier::RangeModifier()
-             : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"),
-                        SmallIcon("measure"))
+    : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"),
+               SmallIcon("measure"))
 {
     addToken("{range:||from||,||to||}", i18n("Extract a specific range (if '||to||' is omitted, go to the end of string)"));
 
@@ -86,6 +86,7 @@ void RangeModifier::slotTokenTriggered(const QString& token)
     QString result;
 
     QPointer<RangeDialog> dlg = new RangeDialog(this);
+
     if (dlg->exec() == KDialog::Accepted)
     {
         int start = dlg->ui->startInput->value();
@@ -98,9 +99,10 @@ void RangeModifier::slotTokenTriggered(const QString& token)
         else
         {
             result = QString("{range:%1,%2}").arg(QString::number(start))
-                                       .arg(QString::number(stop));
+                     .arg(QString::number(stop));
         }
     }
+
     delete dlg;
 
     emit signalTokenTriggered(result);
@@ -120,6 +122,7 @@ QString RangeModifier::parseOperation(ParseSettings& settings)
 
     // if the start parameter can not be extracted, set it to 1
     int start = reg.cap(2).simplified().toInt(&ok);
+
     if (!ok)
     {
         start = 1;
@@ -129,6 +132,7 @@ QString RangeModifier::parseOperation(ParseSettings& settings)
     // If the stop parameter is omitted ({start-}), set stop = -1 (end of string)
     ok = false;
     int stop;
+
     if (!reg.cap(3).isEmpty())
     {
         ok   = true;
@@ -161,6 +165,7 @@ QString RangeModifier::parseOperation(ParseSettings& settings)
     }
 
     --start;
+
     if (stop != -1)
     {
         --stop;
@@ -177,10 +182,12 @@ QString RangeModifier::parseOperation(ParseSettings& settings)
     }
 
     QString result;
+
     for (int i = start; i <= stop; ++i)
     {
         result.append(settings.str2Modify.at(i));
     }
+
     return result;
 }
 

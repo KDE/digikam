@@ -47,7 +47,7 @@ namespace Digikam
 {
 
 Sharpen::Sharpen(QObject* parent)
-       : BatchTool("Sharpen", EnhanceTool, parent)
+    : BatchTool("Sharpen", EnhanceTool, parent)
 {
     setToolTitle(i18n("Sharpen Image"));
     setToolDescription(i18n("A tool to sharpen images"));
@@ -145,7 +145,9 @@ void Sharpen::slotSettingsChanged()
 bool Sharpen::toolOperations()
 {
     if (!loadToDImg())
+    {
         return false;
+    }
 
     int filterType  = settings()["SharpenFilterType"].toInt();
 
@@ -157,9 +159,13 @@ bool Sharpen::toolOperations()
             double sigma;
 
             if (radius < 1.0)
+            {
                 sigma = radius;
+            }
             else
+            {
                 sigma = sqrt(radius);
+            }
 
             SharpenFilter filter(&image(), 0L, radius, sigma);
             filter.startFilterDirectly();

@@ -38,7 +38,7 @@
 
 namespace Marble
 {
-    class GeoPainter;
+class GeoPainter;
 }
 
 namespace Digikam
@@ -216,7 +216,7 @@ public:
     class ClusterInfo
     {
 
-        public:
+    public:
 
         //! latitude of the center of this cluster
         qreal lat;
@@ -283,7 +283,7 @@ public:
             markerIndices << markerIndexList;
         }
 
-        void getColorInfos(const bool haveAnySolo, QColor *fillColor, QColor *strokeColor, Qt::PenStyle *strokeStyle, QString *labelText, QColor *labelColor) const;
+        void getColorInfos(const bool haveAnySolo, QColor* fillColor, QColor* strokeColor, Qt::PenStyle* strokeStyle, QString* labelText, QColor* labelColor) const;
 
         QString getLabelText() const;
 
@@ -399,14 +399,14 @@ public:
 
 protected:
 
-     bool eventFilter(QObject *obj, QEvent *event);
-     bool markersEqual(const MarkerInfo& one, const MarkerInfo& two);
+    bool eventFilter(QObject* obj, QEvent* event);
+    bool markersEqual(const MarkerInfo& one, const MarkerInfo& two);
 
     void reorderClustersPixelGrid();
     void redrawIfNecessary(const bool force = false);
     void updateClusterStates();
     void paintOnMarbleInternal(Marble::GeoPainter* const painter);
-    static void ExternalDrawCallback(Marble::GeoPainter *painter, void* yourdata);
+    static void ExternalDrawCallback(Marble::GeoPainter* painter, void* yourdata);
     void computeClusterDistances();
 
 Q_SIGNALS:
@@ -419,11 +419,11 @@ public Q_SLOTS:
     void setAutoRedrowOnMarkerAdd(const bool doRedraw);
     void clearSelection();
     void clearFiltering();
-    void setSoloMarkers(const QIntList &markerIndicesList, const bool setAsSolo = true, const bool resetOthers = true);
-    void setSoloMarkers(const MarkerClusterHolder::MarkerInfoList &markerList, const bool setAsSolo = true, const bool resetOthers = true);
-    void setSelectedMarkers(const QIntList &markerIndicesList, const bool setAsSelected = true, const bool resetOthers = true);
-    void setSelectedMarkers(const MarkerClusterHolder::MarkerInfoList &markerList, const bool setAsSelected = true, const
-    bool resetOthers = true);
+    void setSoloMarkers(const QIntList& markerIndicesList, const bool setAsSolo = true, const bool resetOthers = true);
+    void setSoloMarkers(const MarkerClusterHolder::MarkerInfoList& markerList, const bool setAsSolo = true, const bool resetOthers = true);
+    void setSelectedMarkers(const QIntList& markerIndicesList, const bool setAsSelected = true, const bool resetOthers = true);
+    void setSelectedMarkers(const MarkerClusterHolder::MarkerInfoList& markerList, const bool setAsSelected = true, const
+                            bool resetOthers = true);
     void setAllowFiltering(const bool allow);
     void setAllowSelection(const bool allow);
     void setTooltipFunction(TooltipFunction newTooltipFunction, void* const yourdata);

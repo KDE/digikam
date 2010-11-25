@@ -66,7 +66,7 @@ class DIGIKAM_EXPORT Canvas : public Q3ScrollView
 
 public:
 
-    Canvas(QWidget *parent=0);
+    Canvas(QWidget* parent=0);
     ~Canvas();
 
     void    load(const QString& filename, IOFileSettingsContainer* IOFileSettings);
@@ -87,7 +87,7 @@ public:
     QString currentImageFileFormat();
     QString currentImageFilePath();
 
-    DImgInterface *interface() const;
+    DImgInterface* interface() const;
     void makeDefaultEditingCanvas();
 
     double snapZoom(double z);

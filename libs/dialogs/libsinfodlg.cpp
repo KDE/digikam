@@ -62,7 +62,7 @@ extern "C"
 #include <tiffvers.h>
 #include <lcms.h>
 
-// Avoid Warnings under Win32
+    // Avoid Warnings under Win32
 #undef HAVE_STDLIB_H
 #undef HAVE_STDDEF_H
 #include <jpeglib.h>
@@ -85,8 +85,8 @@ extern "C"
 namespace Digikam
 {
 
-LibsInfoDlg::LibsInfoDlg(QWidget *parent)
-           : InfoDlg(parent)
+LibsInfoDlg::LibsInfoDlg(QWidget* parent)
+    : InfoDlg(parent)
 {
     setCaption(i18n("Shared Libraries and Components Information"));
     // --------------------------------------------------------
@@ -100,30 +100,30 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
 
 #if KDCRAW_VERSION >= 0x000500
     list.insert(i18n("Parallelized demosaicing"),    KDcrawIface::KDcraw::librawUseGomp() ?
-                                                     i18n("Yes") : i18n("No"));
+                i18n("Yes") : i18n("No"));
 #endif
     list.insert(i18n("LibKExiv2"),                   KExiv2Iface::KExiv2::version());
     list.insert(i18n("LibExiv2"),                    KExiv2Iface::KExiv2::Exiv2Version());
     list.insert(i18n("Exiv2 supports XMP metadata"), KExiv2Iface::KExiv2::supportXmp() ?
-                                                     i18n("Yes") : i18n("No"));
+                i18n("Yes") : i18n("No"));
     list.insert(i18n("Exiv2 can write to Jpeg"),     KExiv2Iface::KExiv2::supportMetadataWritting("image/jpeg") ?
-                                                     i18n("Yes") : i18n("No"));
+                i18n("Yes") : i18n("No"));
     list.insert(i18n("Exiv2 can write to Tiff"),     KExiv2Iface::KExiv2::supportMetadataWritting("image/tiff") ?
-                                                     i18n("Yes") : i18n("No"));
+                i18n("Yes") : i18n("No"));
     list.insert(i18n("Exiv2 can write to Png"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/png") ?
-                                                     i18n("Yes") : i18n("No"));
+                i18n("Yes") : i18n("No"));
     list.insert(i18n("Exiv2 can write to Jp2"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/jp2") ?
-                                                     i18n("Yes") : i18n("No"));
+                i18n("Yes") : i18n("No"));
     list.insert(i18n("Exiv2 can write to Pgf"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/pgf") ?
-                                                     i18n("Yes") : i18n("No"));
+                i18n("Yes") : i18n("No"));
 
 #ifndef USE_EXT_LIBLENSFUN
 #   ifdef HAVE_GLIB2
     list.insert(i18n("LibLensFun"),                  i18n("%1.%2.%3-%4 - internal library",
-                                                          LF_VERSION_MAJOR,
-                                                          LF_VERSION_MINOR,
-                                                          LF_VERSION_MICRO,
-                                                          LF_VERSION_BUGFIX));
+                LF_VERSION_MAJOR,
+                LF_VERSION_MINOR,
+                LF_VERSION_MICRO,
+                LF_VERSION_BUGFIX));
 #   endif // HAVE_GLIB2
 #else
     list.insert(i18n("LibLensFun"),                  i18n("external shared library"));

@@ -82,13 +82,13 @@ public:
 
     /// Fills only the copyright values in the template. Use getMetadataTemplate() usually.
     /// Returns true if valid fields were read.
-    bool getCopyrightInformation(Template &t) const;
+    bool getCopyrightInformation(Template& t) const;
 
     IptcCoreContactInfo getCreatorContactInfo() const;
-    bool setCreatorContactInfo(const IptcCoreContactInfo &info) const;
+    bool setCreatorContactInfo(const IptcCoreContactInfo& info) const;
 
     IptcCoreLocationInfo getIptcCoreLocation() const;
-    bool setIptcCoreLocation(const IptcCoreLocationInfo &location) const;
+    bool setIptcCoreLocation(const IptcCoreLocationInfo& location) const;
 
     QStringList getIptcCoreSubjects() const;
 
@@ -132,7 +132,7 @@ public:
     static double apexApertureToFNumber(double aperture);
     static double apexShutterSpeedToExposureTime(double shutterSpeed);
 
-    static KExiv2::AltLangMap toAltLangMap(const QVariant &var);
+    static KExiv2::AltLangMap toAltLangMap(const QVariant& var);
 
     //------------------------------------------------------------------------------------------------
     // Pushed to libkexiv2 for KDE4.4
@@ -142,14 +142,14 @@ public:
         all new with all already existing entries to prevent duplicates in the image.
         Return true if the entries have been added to metadata.
      */
-    bool addToXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToAdd,
+    bool addToXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToAdd,
                               bool setProgramName) const;
 
     /** Remove those Xmp tag entries that are listed in entriesToRemove from the entries in metadata.
         Return true if tag entries are no longer contained in metadata.
         All other entries are preserved.
      */
-    bool removeFromXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToRemove,
+    bool removeFromXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToRemove,
                                    bool setProgramName) const;
 
     /** Return a strings list of Xmp keywords from image. Return an empty list if no keyword are set.
@@ -206,11 +206,14 @@ public:
 
     //------------------------------------------------------------------------------------------------
     // Compatibility for < KDE 4.4.
-    #if KEXIV2_VERSION < 0x010000
+#if KEXIV2_VERSION < 0x010000
     KExiv2Data data() const;
     void setData(const KExiv2Data& data);
-    QByteArray getExifEncoded(bool addExifHeader=false) const { return getExif(addExifHeader); }
-    #endif
+    QByteArray getExifEncoded(bool addExifHeader=false) const
+    {
+        return getExif(addExifHeader);
+    }
+#endif
     // End: Compatibility for < KDE 4.4
     //------------------------------------------------------------------------------------------------
 
@@ -218,13 +221,13 @@ private:
 
     bool setProgramId(bool on=true) const;
     bool setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) const;
-    QVariant fromExifOrXmp(const char *exifTagName, const char *xmpTagName) const;
-    QVariant fromIptcOrXmp(const char *iptcTagName, const char *xmpTagName) const;
-    QVariant fromXmpList(const char *xmpTagName) const;
-    QVariant fromIptcEmulateList(const char *iptcTagName) const;
-    QVariant fromXmpLangAlt(const char *xmpTagName) const;
-    QVariant fromIptcEmulateLangAlt(const char *iptcTagName) const;
-    QVariant toStringListVariant(const QStringList &list) const;
+    QVariant fromExifOrXmp(const char* exifTagName, const char* xmpTagName) const;
+    QVariant fromIptcOrXmp(const char* iptcTagName, const char* xmpTagName) const;
+    QVariant fromXmpList(const char* xmpTagName) const;
+    QVariant fromIptcEmulateList(const char* iptcTagName) const;
+    QVariant fromXmpLangAlt(const char* xmpTagName) const;
+    QVariant fromIptcEmulateLangAlt(const char* iptcTagName) const;
+    QVariant toStringListVariant(const QStringList& list) const;
 };
 
 }  // namespace Digikam

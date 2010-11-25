@@ -63,7 +63,7 @@ public:
         bInput(0),
         cInput(0),
         gInput(0)
-        {}
+    {}
 
     static const QString configBrightnessAdjustmentEntry;
     static const QString configContrastAdjustmentEntry;
@@ -81,26 +81,26 @@ const QString BCGSettingsPriv::configGammaAdjustmentEntry("GammaAdjustment");
 // --------------------------------------------------------
 
 BCGSettings::BCGSettings(QWidget* parent)
-           : QWidget(parent),
-             d(new BCGSettingsPriv)
+    : QWidget(parent),
+      d(new BCGSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
-    QLabel *label2 = new QLabel(i18n("Brightness:"));
+    QLabel* label2 = new QLabel(i18n("Brightness:"));
     d->bInput      = new RIntNumInput();
     d->bInput->setRange(-100, 100, 1);
     d->bInput->setSliderEnabled(true);
     d->bInput->setDefaultValue(0);
     d->bInput->setWhatsThis( i18n("Set here the brightness adjustment of the image."));
 
-    QLabel *label3 = new QLabel(i18n("Contrast:"));
+    QLabel* label3 = new QLabel(i18n("Contrast:"));
     d->cInput      = new RIntNumInput();
     d->cInput->setRange(-100, 100, 1);
     d->cInput->setSliderEnabled(true);
     d->cInput->setDefaultValue(0);
     d->cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
 
-    QLabel *label4 = new QLabel(i18n("Gamma:"));
+    QLabel* label4 = new QLabel(i18n("Gamma:"));
     d->gInput      = new RDoubleNumInput();
     d->gInput->setDecimals(2);
     d->gInput->input()->setRange(0.1, 3.0, 0.01, true);

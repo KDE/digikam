@@ -51,13 +51,13 @@ namespace Digikam
 {
 
 MetadataOptionDialog::MetadataOptionDialog(Parseable* parent)
-                    : ParseableDialog(parent),
-                      metadataPanel(0), separatorLineEdit(0)
+    : ParseableDialog(parent),
+      metadataPanel(0), separatorLineEdit(0)
 {
     QWidget* mainWidget  = new QWidget(this);
     KTabWidget* tab      = new KTabWidget(this);
     metadataPanel        = new MetadataPanel(tab);
-    QLabel *customLabel  = new QLabel(i18n("Keyword separator:"));
+    QLabel* customLabel  = new QLabel(i18n("Keyword separator:"));
     separatorLineEdit    = new KLineEdit(this);
     separatorLineEdit->setText("_");
 
@@ -103,15 +103,17 @@ MetadataOptionDialog::~MetadataOptionDialog()
 // --------------------------------------------------------
 
 MetadataOption::MetadataOption()
-              : Option(i18n("Metadata..."), i18n("Add metadata information"))
+    : Option(i18n("Metadata..."), i18n("Add metadata information"))
 {
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
     QPixmap icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
-                                                   KIconLoader::DefaultState, QStringList(), 0L, true);
+                   KIconLoader::DefaultState, QStringList(), 0L, true);
+
     if (icon.isNull())
     {
         icon = SmallIcon("editimage");
     }
+
     setIcon(icon);
 
     // --------------------------------------------------------
@@ -171,15 +173,18 @@ QString MetadataOption::parseMetadata(const QString& token, ParseSettings& setti
     }
 
     QString keyword = token.toLower();
+
     if (keyword.isEmpty())
     {
         return result;
     }
 
     DMetadata meta(settings.fileUrl.toLocalFile());
+
     if (!meta.isEmpty())
     {
         KExiv2::MetaDataMap dataMap;
+
         if (keyword.startsWith(QLatin1String("exif.")))
         {
             dataMap = meta.getExifTagsDataList(QStringList(), true);
@@ -193,7 +198,7 @@ QString MetadataOption::parseMetadata(const QString& token, ParseSettings& setti
             dataMap = meta.getXmpTagsDataList(QStringList(), true);
         }
 
-        foreach (const QString &key, dataMap.keys())
+        foreach (const QString& key, dataMap.keys())
         {
             if (key.toLower().contains(keyword))
             {
@@ -202,6 +207,7 @@ QString MetadataOption::parseMetadata(const QString& token, ParseSettings& setti
             }
         }
     }
+
     return result;
 }
 

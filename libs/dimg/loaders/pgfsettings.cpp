@@ -53,17 +53,17 @@ public:
         PGFLossLess         = 0;
     }
 
-    QGridLayout  *PGFGrid;
+    QGridLayout*  PGFGrid;
 
-    QLabel       *labelPGFcompression;
+    QLabel*       labelPGFcompression;
 
-    QCheckBox    *PGFLossLess;
+    QCheckBox*    PGFLossLess;
 
-    KIntNumInput *PGFcompression;
+    KIntNumInput* PGFcompression;
 };
 
-PGFSettings::PGFSettings(QWidget *parent)
-           : QWidget(parent), d(new PGFSettingsPriv)
+PGFSettings::PGFSettings(QWidget* parent)
+    : QWidget(parent), d(new PGFSettingsPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 

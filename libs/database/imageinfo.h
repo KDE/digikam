@@ -98,7 +98,10 @@ public:
     ImageInfo& operator=(const ImageInfo& info);
 
     bool operator==(const ImageInfo& info) const;
-    bool operator!=(const ImageInfo& info) const { return !operator==(info); }
+    bool operator!=(const ImageInfo& info) const
+    {
+        return !operator==(info);
+    }
     bool operator<(const ImageInfo& info) const;
     uint hash() const;
 
@@ -301,7 +304,10 @@ private:
     DSharedDataPointer<ImageInfoData> m_data;
 };
 
-inline uint qHash(const ImageInfo& info) { return info.hash(); }
+inline uint qHash(const ImageInfo& info)
+{
+    return info.hash();
+}
 
 DIGIKAM_DATABASE_EXPORT QDebug& operator<<(QDebug& stream, const ImageInfo& info);
 

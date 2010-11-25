@@ -50,40 +50,50 @@
 namespace Digikam
 {
 
-AlbumDragDropHandler::AlbumDragDropHandler(AlbumModel *model)
-                    : AlbumModelDragDropHandler(model)
+AlbumDragDropHandler::AlbumDragDropHandler(AlbumModel* model)
+    : AlbumModelDragDropHandler(model)
 {
 }
 
-bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex& droppedOn)
+bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn)
 {
     if (accepts(e, droppedOn) == Qt::IgnoreAction)
+    {
         return false;
+    }
 
-    PAlbum *destAlbum = model()->albumForIndex(droppedOn);
+    PAlbum* destAlbum = model()->albumForIndex(droppedOn);
 
     if (!destAlbum)
+    {
         return false;
+    }
 
     if (DAlbumDrag::canDecode(e->mimeData()))
     {
         KUrl::List urls;
         int albumId;
-        if (!DAlbumDrag::decode(e->mimeData(), urls, albumId))
-            return false;
 
-        PAlbum *droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
-        if (!droppedAlbum)
+        if (!DAlbumDrag::decode(e->mimeData(), urls, albumId))
+        {
             return false;
+        }
+
+        PAlbum* droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
+
+        if (!droppedAlbum)
+        {
+            return false;
+        }
 
         // TODO Copy?
         KMenu popMenu(view);
         popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-        QAction *moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
+        QAction* moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
-        QAction *choice = popMenu.exec(QCursor::pos());
+        QAction* choice = popMenu.exec(QCursor::pos());
 
         if (choice == moveAction)
         {
@@ -103,19 +113,25 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
         QList<int> imageIDs;
 
         if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+        {
             return false;
+        }
 
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+        {
             return false;
+        }
 
         // Check if items dropped come from outside current album.
         // This can be the case with recursive content album mode.
         KUrl::List extUrls;
         ImageInfoList extImgInfList;
         QList<qlonglong> extImageIDs;
+
         for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
+
             if (info.albumId() != destAlbum->id())
             {
                 extUrls.append(info.databaseUrl());
@@ -130,6 +146,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
             // If the ctrl key is pressed, when dropping the image, the
             // thumbnail is set without a popup menu
             bool set = false;
+
             if (e->keyboardModifiers() == Qt::ControlModifier)
             {
                 set = true;
@@ -138,13 +155,17 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
             {
                 KMenu popMenu(view);
                 popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-                QAction *setAction = 0;
+                QAction* setAction = 0;
+
                 if (imageIDs.count() == 1)
+                {
                     setAction = popMenu.addAction(i18n("Set as Album Thumbnail"));
+                }
+
                 popMenu.addSeparator();
                 popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
                 popMenu.setMouseTracking(true);
-                QAction *choice = popMenu.exec(QCursor::pos());
+                QAction* choice = popMenu.exec(QCursor::pos());
                 set = (setAction == choice);
             }
 
@@ -153,12 +174,14 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
                 QString errMsg;
                 AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
+
             return true;
         }
 
         // If shift key is pressed while dragging, move the drag object without
         // displaying popup menu -> move
         bool move = false, copy = false, setThumbnail = false;
+
         if (e->keyboardModifiers() == Qt::ShiftModifier)
         {
             move = true;
@@ -173,23 +196,34 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
         {
             KMenu popMenu(view);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction *moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
-            QAction *copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
-            QAction *thumbnailAction = 0;
+            QAction* moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
+            QAction* copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
+            QAction* thumbnailAction = 0;
+
             if (imageIDs.count() == 1)
+            {
                 thumbnailAction = popMenu.addAction(i18n("Set as Album Thumbnail"));
+            }
+
             popMenu.addSeparator();
             popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
-            QAction *choice = popMenu.exec(QCursor::pos());
+            QAction* choice = popMenu.exec(QCursor::pos());
+
             if (choice)
             {
                 if (choice == moveAction)
+                {
                     move = true;
+                }
                 else if (choice == copyAction)
+                {
                     copy = true;
+                }
                 else if (choice == thumbnailAction)
+                {
                     setThumbnail = true;
+                }
             }
         }
 
@@ -216,25 +250,31 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
     // -- DnD from Camera GUI ----------------------------
     else if (DCameraItemListDrag::canDecode(e->mimeData()))
     {
-        CameraUI *ui = dynamic_cast<CameraUI*>(e->source());
+        CameraUI* ui = dynamic_cast<CameraUI*>(e->source());
+
         if (ui)
         {
             KMenu popMenu(view);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction *downAction    = popMenu.addAction(SmallIcon("file-export"),
-                                                       i18n("Download From Camera"));
-            QAction *downDelAction = popMenu.addAction(SmallIcon("file-export"),
-                                                       i18n("Download && Delete From Camera"));
+            QAction* downAction    = popMenu.addAction(SmallIcon("file-export"),
+                                     i18n("Download From Camera"));
+            QAction* downDelAction = popMenu.addAction(SmallIcon("file-export"),
+                                     i18n("Download && Delete From Camera"));
             popMenu.addSeparator();
             popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
-            QAction *choice = popMenu.exec(QCursor::pos());
+            QAction* choice = popMenu.exec(QCursor::pos());
+
             if (choice)
             {
                 if (choice == downAction)
+                {
                     ui->slotDownload(true, false, destAlbum);
+                }
                 else if (choice == downDelAction)
+                {
                     ui->slotDownload(true, true, destAlbum);
+                }
             }
         }
     }
@@ -246,6 +286,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
         KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
         bool move = false, copy = false;
+
         // If shift key is pressed while dropping, move the drag object without
         // displaying popup menu -> move
         if (e->keyboardModifiers() == Qt::ShiftModifier)
@@ -262,16 +303,21 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
         {
             KMenu popMenu(view);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction *moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
-            QAction *copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
+            QAction* moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
+            QAction* copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
             popMenu.addSeparator();
             popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
-            QAction *choice = popMenu.exec(QCursor::pos());
+            QAction* choice = popMenu.exec(QCursor::pos());
+
             if (choice == copyAction)
+            {
                 copy = true;
+            }
             else if (choice == moveAction)
+            {
                 move = true;
+            }
         }
 
         if (move)
@@ -293,35 +339,49 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
     return false;
 }
 
-Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent *e, const QModelIndex& dropIndex)
+Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& dropIndex)
 {
-    PAlbum *destAlbum = model()->albumForIndex(dropIndex);
+    PAlbum* destAlbum = model()->albumForIndex(dropIndex);
 
     if (DAlbumDrag::canDecode(e->mimeData()))
     {
         // do not allow to drop on root
         if (dropIndex == model()->rootAlbumIndex())
+        {
             return Qt::IgnoreAction;
+        }
 
         if (!destAlbum)
+        {
             return Qt::IgnoreAction;
+        }
 
         KUrl::List urls;
         int albumId;
-        if (!DAlbumDrag::decode(e->mimeData(), urls, albumId))
-            return Qt::IgnoreAction;
 
-        PAlbum *droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
-        if (!droppedAlbum)
+        if (!DAlbumDrag::decode(e->mimeData(), urls, albumId))
+        {
             return Qt::IgnoreAction;
+        }
+
+        PAlbum* droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
+
+        if (!droppedAlbum)
+        {
+            return Qt::IgnoreAction;
+        }
 
         // Dragging an item on itself makes no sense
         if (droppedAlbum == destAlbum)
+        {
             return Qt::IgnoreAction;
+        }
 
         // Dragging a parent on its child makes no sense
         if (droppedAlbum->isAncestorOf(destAlbum))
+        {
             return Qt::IgnoreAction;
+        }
 
         return Qt::MoveAction;
     }
@@ -331,7 +391,9 @@ Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent *e, const QModelIn
     {
         // Do not allow drop images on album root
         if (destAlbum && !destAlbum->isRoot())
+        {
             return Qt::MoveAction;
+        }
     }
 
     return Qt::IgnoreAction;
@@ -347,15 +409,19 @@ QStringList AlbumDragDropHandler::mimeTypes() const
     return mimeTypes;
 }
 
-QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
+QMimeData* AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
 {
     if (albums.isEmpty())
+    {
         return 0;
+    }
 
     if (albums.size() > 1)
+    {
         kWarning() << "Dragging multiple albums is not implemented";
+    }
 
-    PAlbum *palbum = dynamic_cast<PAlbum*>(albums.first());
+    PAlbum* palbum = dynamic_cast<PAlbum*>(albums.first());
     return new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id(),
                           palbum ? palbum->fileUrl() : KUrl());
 }

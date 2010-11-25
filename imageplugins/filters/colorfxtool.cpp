@@ -101,7 +101,7 @@ public:
         iterationInput(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
@@ -134,8 +134,8 @@ const QString ColorFxTool::ColorFxToolPriv::configIterationAdjustmentEntry("Iter
 // --------------------------------------------------------
 
 ColorFxTool::ColorFxTool(QObject* parent)
-           : EditorTool(parent),
-             d(new ColorFxToolPriv)
+    : EditorTool(parent),
+      d(new ColorFxToolPriv)
 {
     setObjectName("coloreffects");
     setToolName(i18n("Color Effects"));
@@ -225,7 +225,9 @@ ColorFxTool::ColorFxTool(QObject* parent)
 ColorFxTool::~ColorFxTool()
 {
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     delete d;
 }
@@ -236,9 +238,9 @@ void ColorFxTool::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                        (int)LuminosityChannel));
+            (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                        (int)LogScaleHistogram));
+            (int)LogScaleHistogram));
 
     d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       d->effectType->defaultIndex()));
     d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         d->levelInput->defaultValue()));
@@ -338,7 +340,9 @@ void ColorFxTool::slotEffect()
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    {
+        delete [] d->destinationPreviewData;
+    }
 
     ImageIface* iface         = d->previewWidget->imageIface();
     d->destinationPreviewData = iface->getPreviewImage();
@@ -362,7 +366,7 @@ void ColorFxTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getOriginalImage();
+    uchar* data       = iface->getOriginalImage();
     int w             = iface->originalWidth();
     int h             = iface->originalHeight();
     bool sb           = iface->originalSixteenBit();
@@ -428,7 +432,7 @@ void ColorFxTool::solarize(int factor, uchar* data, int w, int h, bool sb)
     {
         uint threshold = (uint)((100-factor)*(255+1)/100);
         threshold      = qMax((uint)1, threshold);
-        uchar *ptr     = data;
+        uchar* ptr     = data;
         uchar  a, r, g, b;
 
         for (int x=0 ; x < w*h ; ++x)
@@ -447,11 +451,19 @@ void ColorFxTool::solarize(int factor, uchar* data, int w, int h, bool sb)
             else
             {
                 if (r > threshold)
+                {
                     r = (255-r);
+                }
+
                 if (g > threshold)
+                {
                     g = (255-g);
+                }
+
                 if (b > threshold)
+                {
                     b = (255-b);
+                }
             }
 
             ptr[0] = b;
@@ -466,7 +478,7 @@ void ColorFxTool::solarize(int factor, uchar* data, int w, int h, bool sb)
     {
         uint threshold      = (uint)((100-factor)*(65535+1)/100);
         threshold           = qMax((uint)1, threshold);
-        unsigned short* ptr = (unsigned short *)data;
+        unsigned short* ptr = (unsigned short*)data;
         unsigned short  a, r, g, b;
 
         for (int x=0 ; x < w*h ; ++x)
@@ -485,11 +497,19 @@ void ColorFxTool::solarize(int factor, uchar* data, int w, int h, bool sb)
             else
             {
                 if (r > threshold)
+                {
                     r = (65535-r);
+                }
+
                 if (g > threshold)
+                {
                     g = (65535-g);
+                }
+
                 if (b > threshold)
+                {
                     b = (65535-b);
+                }
             }
 
             ptr[0] = b;
@@ -598,7 +618,7 @@ void ColorFxTool::neonFindEdges(uchar* data, int w, int h, bool sb, bool neon, i
     Intensity = (Intensity < 0) ? 0 : (Intensity > 5) ? 5 : Intensity;
     BW        = (BW < 1) ? 1 : (BW > 5) ? 5 : BW;
 
-    uchar *ptr, *ptr1, *ptr2;
+    uchar* ptr, *ptr1, *ptr2;
 
     // these must be uint, we need full 2^32 range for 16 bit
     uint color_1, color_2, colorPoint, colorOther1, colorOther2;
@@ -620,9 +640,9 @@ void ColorFxTool::neonFindEdges(uchar* data, int w, int h, bool sb, bool neon, i
             {
                 for (int k = 0; k <= 2; ++k)
                 {
-                    colorPoint  = ((unsigned short *)ptr)[k];
-                    colorOther1 = ((unsigned short *)ptr1)[k];
-                    colorOther2 = ((unsigned short *)ptr2)[k];
+                    colorPoint  = ((unsigned short*)ptr)[k];
+                    colorOther1 = ((unsigned short*)ptr1)[k];
+                    colorOther2 = ((unsigned short*)ptr2)[k];
                     color_1     = (colorPoint - colorOther1) * (colorPoint - colorOther1);
                     color_2     = (colorPoint - colorOther2) * (colorPoint - colorOther2);
 
@@ -631,9 +651,13 @@ void ColorFxTool::neonFindEdges(uchar* data, int w, int h, bool sb, bool neon, i
                     // As (a << I) = a * (1 << I) = a * (2^I), and we can split the square root
 
                     if (neon)
-                        ((unsigned short *)ptr)[k] = CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    {
+                        ((unsigned short*)ptr)[k] = CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    }
                     else
-                        ((unsigned short *)ptr)[k] = 65535 - CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    {
+                        ((unsigned short*)ptr)[k] = 65535 - CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    }
                 }
             }
             else
@@ -647,9 +671,13 @@ void ColorFxTool::neonFindEdges(uchar* data, int w, int h, bool sb, bool neon, i
                     color_2     = (colorPoint - colorOther2) * (colorPoint - colorOther2);
 
                     if (neon)
+                    {
                         ptr[k] = CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    }
                     else
+                    {
                         ptr[k] = 255 - CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                    }
                 }
             }
         }
@@ -667,7 +695,12 @@ int ColorFxTool::getOffset(int Width, int X, int Y, int bytesDepth)
 inline int ColorFxTool::Lim_Max(int Now, int Up, int Max)
 {
     --Max;
-    while (Now > Max - Up) --Up;
+
+    while (Now > Max - Up)
+    {
+        --Up;
+    }
+
     return (Up);
 }
 

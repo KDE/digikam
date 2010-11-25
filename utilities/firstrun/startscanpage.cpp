@@ -37,7 +37,7 @@ namespace Digikam
 {
 
 StartScanPage::StartScanPage(KAssistantDialog* dlg)
-             : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
+    : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
 {
     KVBox* vbox  = new KVBox(this);
     QLabel* text = new QLabel(vbox);

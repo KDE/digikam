@@ -51,7 +51,7 @@ namespace Digikam
 {
 
 PollThread::PollThread(QObject* parent)
-          : QThread(parent), stop(false), waitTime(10)
+    : QThread(parent), stop(false), waitTime(10)
 {
 }
 
@@ -70,29 +70,30 @@ void PollThread::run()
 
 bool PollThread::checkDigikamInstancesRunning()
 {
-   QSystemSemaphore sem("DigikamDBSrvAccess", 1, QSystemSemaphore::Open);
-   sem.acquire();
-   QDBusConnectionInterface *interface = QDBusConnection::sessionBus().interface();
-   QDBusReply<QStringList> reply = interface->registeredServiceNames();
+    QSystemSemaphore sem("DigikamDBSrvAccess", 1, QSystemSemaphore::Open);
+    sem.acquire();
+    QDBusConnectionInterface* interface = QDBusConnection::sessionBus().interface();
+    QDBusReply<QStringList> reply = interface->registeredServiceNames();
 
-   if (reply.isValid())
-   {
-       QStringList serviceNames = reply.value();
-       QLatin1String digikamService("org.kde.digikam-");
-       QLatin1String digikamKioService("org.kde.digikam.KIO-");
-       foreach (const QString &service, serviceNames)
-       {
-           if (service.startsWith(digikamService) || service.startsWith(digikamKioService))
-           {
-               kDebug() << "At least service ["<< service <<"] is using the database server";
-               // At least one digikam/kio service was found
-               sem.release(1);
-               return true;
-           }
-       }
-   }
-   sem.release(1);
-   return false;
+    if (reply.isValid())
+    {
+        QStringList serviceNames = reply.value();
+        QLatin1String digikamService("org.kde.digikam-");
+        QLatin1String digikamKioService("org.kde.digikam.KIO-");
+        foreach (const QString& service, serviceNames)
+        {
+            if (service.startsWith(digikamService) || service.startsWith(digikamKioService))
+            {
+                kDebug() << "At least service ["<< service <<"] is using the database server";
+                // At least one digikam/kio service was found
+                sem.release(1);
+                return true;
+            }
+        }
+    }
+
+    sem.release(1);
+    return false;
 }
 
 } // namespace Digikam

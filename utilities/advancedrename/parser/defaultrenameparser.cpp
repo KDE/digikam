@@ -28,7 +28,7 @@ namespace Digikam
 {
 
 DefaultRenameParser::DefaultRenameParser()
-                   : Parser()
+    : Parser()
 {
 }
 

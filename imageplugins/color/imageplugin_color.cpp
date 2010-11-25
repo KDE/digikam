@@ -79,7 +79,7 @@ public:
         curvesAction(0),
         levelsAction(0),
         profileMenuAction(0)
-        {}
+    {}
 
     KAction*               BCGAction;
     KAction*               HSLAction;
@@ -98,8 +98,8 @@ public:
 };
 
 ImagePlugin_Color::ImagePlugin_Color(QObject* parent, const QVariantList&)
-                 : ImagePlugin(parent, "ImagePlugin_Color"),
-                   d(new ImagePlugin_ColorPriv)
+    : ImagePlugin(parent, "ImagePlugin_Color"),
+      d(new ImagePlugin_ColorPriv)
 {
     //-------------------------------
     // Colors menu actions
@@ -236,18 +236,20 @@ void ImagePlugin_Color::slotConvertTo8Bits()
 
     if (!iface.originalSixteenBit())
     {
-       KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 8 bits / color / pixel."));
-       return;
+        KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 8 bits / color / pixel."));
+        return;
     }
     else
     {
-       if (KMessageBox::warningContinueCancel(
-                        kapp->activeWindow(),
-                        i18n("Performing this operation will reduce image color quality. "
-                             "Do you want to continue?"), QString(),
-                        KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
-                        QString("ImagePluginColor16To8Bits")) == KMessageBox::Cancel)
-           return;
+        if (KMessageBox::warningContinueCancel(
+                kapp->activeWindow(),
+                i18n("Performing this operation will reduce image color quality. "
+                     "Do you want to continue?"), QString(),
+                KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
+                QString("ImagePluginColor16To8Bits")) == KMessageBox::Cancel)
+        {
+            return;
+        }
     }
 
     kapp->setOverrideCursor(Qt::WaitCursor);
@@ -261,8 +263,8 @@ void ImagePlugin_Color::slotConvertTo16Bits()
 
     if (iface.originalSixteenBit())
     {
-       KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 16 bits / color / pixel."));
-       return;
+        KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 16 bits / color / pixel."));
+        return;
     }
 
     kapp->setOverrideCursor(Qt::WaitCursor);
@@ -294,8 +296,8 @@ void ImagePlugin_Color::slotConvertToColorSpace(const IccProfile& profile)
 
     if (iface.getOriginalIccProfile().isNull())
     {
-       KMessageBox::error(kapp->activeWindow(), i18n("This image is not color managed."));
-       return;
+        KMessageBox::error(kapp->activeWindow(), i18n("This image is not color managed."));
+        return;
     }
 
     kapp->setOverrideCursor(Qt::WaitCursor);
@@ -336,7 +338,7 @@ void ImagePlugin_Color::slotUpdateColorSpaceMenu()
 
     favoriteProfilePaths = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
     favoriteProfilePaths -= standardProfilePaths;
-    foreach (const QString &path, favoriteProfilePaths)
+    foreach (const QString& path, favoriteProfilePaths)
     {
         favoriteProfiles << path;
     }

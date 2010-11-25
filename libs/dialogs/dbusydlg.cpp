@@ -47,12 +47,12 @@ public:
     DBusyThread* thread;
 };
 
-DBusyDlg::DBusyDlg(const QString& txt, QWidget *parent)
-        : KProgressDialog(parent, QString(), txt, Qt::FramelessWindowHint), 
-          d(new DBusyDlgPriv)
+DBusyDlg::DBusyDlg(const QString& txt, QWidget* parent)
+    : KProgressDialog(parent, QString(), txt, Qt::FramelessWindowHint),
+      d(new DBusyDlgPriv)
 {
     setAllowCancel(false);
-    setMinimumDuration(0);      
+    setMinimumDuration(0);
     setModal(true);
     setAutoClose(false);
 
@@ -69,6 +69,7 @@ DBusyDlg::~DBusyDlg()
 void DBusyDlg::setBusyThread(DBusyThread* thread)
 {
     d->thread = thread;
+
     if (d->thread)
     {
         connect(d->thread, SIGNAL(signalComplete()),
@@ -87,8 +88,8 @@ void DBusyDlg::slotComplete()
 
 // ----------------------------------------------------------------------------------
 
-DBusyThread::DBusyThread(QObject *parent)
-           : QThread(parent)
+DBusyThread::DBusyThread(QObject* parent)
+    : QThread(parent)
 {
 }
 

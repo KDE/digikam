@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-26-02
- * Description : a widget to select image collections using 
+ * Description : a widget to select image collections using
  *               digiKam album folder views
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -51,7 +51,7 @@ class KipiImageCollectionSelector : public KIPI::ImageCollectionSelector
 
 public:
 
-    explicit KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent=0);
+    explicit KipiImageCollectionSelector(KipiInterface* iface, QWidget* parent=0);
     ~KipiImageCollectionSelector();
 
     QList<KIPI::ImageCollection> selectedImageCollections() const;

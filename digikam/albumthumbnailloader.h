@@ -50,7 +50,7 @@ class AlbumThumbnailLoader : public QObject
 
 public:
 
-    static AlbumThumbnailLoader *instance();
+    static AlbumThumbnailLoader* instance();
 
     void cleanUp();
 
@@ -88,7 +88,7 @@ public:
      * no action will be taken, and false is returned.
      *
     */
-    bool getAlbumThumbnail(PAlbum *album);
+    bool getAlbumThumbnail(PAlbum* album);
 
     /**
       * Request thumbnail for given album,
@@ -99,7 +99,7 @@ public:
       * by the signals, and a default icon is returned here.
       * If no icon is associated, the default icon is returned.
     */
-    QPixmap getAlbumThumbnailDirectly(PAlbum *album);
+    QPixmap getAlbumThumbnailDirectly(PAlbum* album);
 
     /**
       * Behaves similar to the above method.
@@ -118,7 +118,7 @@ public:
       * obtained below, or used as is when SmallerSize is requested anyway.
       * @return Returns true if icon is loaded asynchronously.
       */
-    bool getTagThumbnail(TAlbum *album, QPixmap& icon);
+    bool getTagThumbnail(TAlbum* album, QPixmap& icon);
 
     /**
       * Loads tag thumbnail,
@@ -129,7 +129,7 @@ public:
       * by the signals (unblended), and a default icon is returned here.
       * If no icon is associated, the default icon is returned.
       */
-    QPixmap getTagThumbnailDirectly(TAlbum *album, bool blendIcons = true);
+    QPixmap getTagThumbnailDirectly(TAlbum* album, bool blendIcons = true);
 
     /**
      * Return standard tag and album icons.
@@ -138,12 +138,12 @@ public:
      */
     QPixmap getStandardTagIcon(RelativeSize size = NormalSize);
     QPixmap getStandardTagRootIcon(RelativeSize size = NormalSize);
-    QPixmap getStandardTagIcon(TAlbum *album, RelativeSize size = NormalSize);
+    QPixmap getStandardTagIcon(TAlbum* album, RelativeSize size = NormalSize);
     QPixmap getNewTagIcon(RelativeSize size = NormalSize);
 
     QPixmap getStandardAlbumIcon(RelativeSize size = NormalSize);
     QPixmap getStandardAlbumRootIcon(RelativeSize size = NormalSize);
-    QPixmap getStandardAlbumIcon(PAlbum *album, RelativeSize size = NormalSize);
+    QPixmap getStandardAlbumIcon(PAlbum* album, RelativeSize size = NormalSize);
 
     /**
      * Blend tagIcon centered on dstIcon, where dstIcon is a standard
@@ -160,12 +160,12 @@ Q_SIGNALS:
      * This class is a singleton, so any object connected to this
      * signal might not actually have requested a thumbnail for given url
      */
-    void signalThumbnail(Album *album, const QPixmap&);
+    void signalThumbnail(Album* album, const QPixmap&);
 
     /** This signal is emitted if thumbnail generation for given album failed.
      *  Same considerations as above.
      */
-    void signalFailed(Album *album);
+    void signalFailed(Album* album);
 
     /**
      * Indicates that all album and tag thumbnails need to be reloaded.
@@ -188,7 +188,7 @@ private:
     ~AlbumThumbnailLoader();
     AlbumThumbnailLoaderPrivate* const d;
 
-    void    addUrl(Album *album, const KUrl& url);
+    void    addUrl(Album* album, const KUrl& url);
     QPixmap loadIcon(const QString& name, int size = 0);
     QPixmap createTagThumbnail(const QPixmap& albumThumbnail);
     int     computeIconSize(RelativeSize size);

@@ -78,6 +78,7 @@ void ImageData::fillPixelData(const QImage& im)
 {
     QImage image = im.scaled(Haar::NumberOfPixels, Haar::NumberOfPixels, Qt::IgnoreAspectRatio);
     int cn = 0;
+
     for (int h = 0; h < Haar::NumberOfPixels; ++h)
     {
         // Get a scanline:
@@ -106,6 +107,7 @@ void ImageData::fillPixelData(const DImg& im)
 
     uchar* ptr = image.bits();
     int cn = 0;
+
     for (int h = 0; h < Haar::NumberOfPixels; ++h)
     {
         for (int w = 0; w < Haar::NumberOfPixels; ++w)
@@ -190,15 +192,18 @@ void Calculator::haar2D(Unit a[])
 
             h1 = h >> 1;        // h = 2*h1
             C *= 0.7071;        // 1/sqrt(2)
+
             for (k = 0, j1 = j2 = i; k < h1; ++k, ++j1, j2 += 2)
             {
                 int j21 = j2+1;
                 t[k]    = (a[j2] - a[j21]) * C;
                 a[j1]   = (a[j2] + a[j21]);
             }
+
             // Write back subtraction results:
             memcpy(a+i+h1, t, h1*sizeof(a[0]));
         }
+
         // Fix first element of each row:
         a[i] *= C;  // C = 1/sqrt(NUM_PIXELS)
     }
@@ -221,6 +226,7 @@ void Calculator::haar2D(Unit a[])
 
             h1 = h >> 1;
             C *= 0.7071;       // 1/sqrt(2) = 0.7071
+
             for (k = 0, j1 = j2 = i; k < h1; ++k, j1 += NumberOfPixels, j2 += 2*NumberOfPixels)
             {
                 int j21 = j2+NumberOfPixels;
@@ -234,6 +240,7 @@ void Calculator::haar2D(Unit a[])
                 a[j1] = t[k];
             }
         }
+
         // Fix first element of each column:
         a[i] *= C;
     }
@@ -245,7 +252,7 @@ void Calculator::haar2D(Unit a[])
     Fully inplace calculation; order of result is interleaved though,
     but we don't care about that.
 */
-void Calculator::transform(ImageData *data)
+void Calculator::transform(ImageData* data)
 {
     // RGB -> YIQ colorspace conversion; Y luminance, I,Q chrominance.
     // If RGB in [0..255] then Y in [0..255] and I,Q in [-127..127].
@@ -294,6 +301,7 @@ void Calculator::getmLargests(Unit* cdata, Idx* sig)
         val.d = fabs(cdata[i]);
         vq.push(val);
     }
+
     // Queue is full (size is NUM_COEFS)
 
     for (/*i = NUM_COEFS+1*/; i < NumberOfPixelsSquared; ++i)
@@ -308,11 +316,13 @@ void Calculator::getmLargests(Unit* cdata, Idx* sig)
             val.i = i;
             vq.push(val);
         }
+
         // else discard: do nothing
     }
 
     // Empty the (non-empty) queue and fill-in sig:
     cnt=0;
+
     do
     {
         int t;
@@ -323,7 +333,7 @@ void Calculator::getmLargests(Unit* cdata, Idx* sig)
         sig[cnt++] = (val.i - t) ^ -t;   // never 0
         vq.pop();
     }
-    while(!vq.empty());
+    while (!vq.empty());
 
     // Must have cnt==NUM_COEFS here.
 }
@@ -334,7 +344,7 @@ void Calculator::getmLargests(Unit* cdata, Idx* sig)
     The order of occurrence of the coordinates in sig doesn't matter.
     Complexity is 3 x NUM_PIXELS^2 x 2log(NUM_COEFS).
 */
-int Calculator::calcHaar(ImageData *data, SignatureData *sigData)
+int Calculator::calcHaar(ImageData* data, SignatureData* sigData)
 {
     sigData->avg[0]=data->data1[0];
     sigData->avg[1]=data->data2[0];

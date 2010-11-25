@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT DBusyDlg : public KProgressDialog
 
 public:
 
-    explicit DBusyDlg(const QString& txt, QWidget *parent=0);
+    explicit DBusyDlg(const QString& txt, QWidget* parent=0);
     virtual ~DBusyDlg();
 
     void setBusyThread(DBusyThread* thread);
@@ -71,7 +71,7 @@ class DIGIKAM_EXPORT DBusyThread : public QThread
 
 public:
 
-    DBusyThread(QObject *parent);
+    DBusyThread(QObject* parent);
     virtual ~DBusyThread();
 
 Q_SIGNALS:

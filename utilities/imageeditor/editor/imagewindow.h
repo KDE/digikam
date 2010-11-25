@@ -88,8 +88,8 @@ private:
     void closeEvent(QCloseEvent* e);
     void showEvent(QShowEvent*);
 
-    void dragMoveEvent(QDragMoveEvent *e);
-    void dropEvent(QDropEvent *e);
+    void dragMoveEvent(QDragMoveEvent* e);
+    void dropEvent(QDropEvent* e);
 
     void setupActions();
     void setupConnections();
@@ -110,8 +110,8 @@ private:
 
     void assignRating(const ImageInfo& info, int rating);
 
-    ThumbBarDock *thumbBar() const;
-    Sidebar *rightSideBar() const;
+    ThumbBarDock* thumbBar() const;
+    Sidebar* rightSideBar() const;
 
     ImageWindow();
 
@@ -162,7 +162,7 @@ private:
 
     ImageWindowPriv* const d;
 
-    static ImageWindow *m_instance;
+    static ImageWindow* m_instance;
 };
 
 }  // namespace Digikam

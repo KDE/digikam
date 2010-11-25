@@ -83,7 +83,7 @@ public:
         textEdit(0),
         previewWidget(0),
         gboxSettings(0)
-        {}
+    {}
 
     static const QString configGroupName;
     static const QString configTextRotationEntry;
@@ -125,8 +125,8 @@ const QString InsertTextTool::InsertTextToolPriv::configPositionHintEntry("Posit
 // --------------------------------------------------------
 
 InsertTextTool::InsertTextTool(QObject* parent)
-              : EditorTool(parent),
-                d(new InsertTextToolPriv)
+    : EditorTool(parent),
+      d(new InsertTextToolPriv)
 {
     setObjectName("inserttext");
     setToolName(i18n("Insert Text"));
@@ -134,7 +134,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QFrame *frame = new QFrame(0);
+    QFrame* frame = new QFrame(0);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QVBoxLayout* l   = new QVBoxLayout(frame);
@@ -164,30 +164,30 @@ InsertTextTool::InsertTextTool(QObject* parent)
     // -------------------------------------------------------------
 
     KIconLoader icon;
-    QWidget *alignBox   = new QWidget();
-    QHBoxLayout *hlay   = new QHBoxLayout(alignBox);
+    QWidget* alignBox   = new QWidget();
+    QHBoxLayout* hlay   = new QHBoxLayout(alignBox);
     d->alignButtonGroup = new QButtonGroup(alignBox);
     d->alignButtonGroup->setExclusive(true);
 
-    QToolButton *alignLeft = new QToolButton(alignBox);
+    QToolButton* alignLeft = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignLeft, InsertTextWidget::ALIGN_LEFT);
     alignLeft->setIcon(SmallIcon("format-justify-left"));
     alignLeft->setCheckable(true);
     alignLeft->setToolTip(i18n("Align text to the left"));
 
-    QToolButton *alignRight = new QToolButton(alignBox);
+    QToolButton* alignRight = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignRight, InsertTextWidget::ALIGN_RIGHT);
     alignRight->setIcon(SmallIcon("format-justify-right"));
     alignRight->setCheckable(true);
     alignRight->setToolTip(i18n("Align text to the right"));
 
-    QToolButton *alignCenter = new QToolButton(alignBox);
+    QToolButton* alignCenter = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignCenter, InsertTextWidget::ALIGN_CENTER);
     alignCenter->setIcon(SmallIcon("format-justify-center"));
     alignCenter->setCheckable(true);
     alignCenter->setToolTip(i18n("Align text to center"));
 
-    QToolButton *alignBlock = new QToolButton(alignBox);
+    QToolButton* alignBlock = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignBlock, InsertTextWidget::ALIGN_BLOCK);
     alignBlock->setIcon(SmallIcon("format-justify-fill"));
     alignBlock->setCheckable(true);
@@ -202,7 +202,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1  = new QLabel(i18n("Rotation:"));
+    QLabel* label1  = new QLabel(i18n("Rotation:"));
     d->textRotation = new KComboBox();
     d->textRotation->addItem(i18nc("no rotation", "None"));
     d->textRotation->addItem(i18n("90 Degrees"));
@@ -212,7 +212,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2     = new QLabel(i18nc("font color", "Color:"));
+    QLabel* label2     = new QLabel(i18nc("font color", "Color:"));
     d->fontColorButton = new KColorButton(Qt::black);
     d->fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
 
@@ -226,7 +226,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout *mainLayout = new QGridLayout();
+    QGridLayout* mainLayout = new QGridLayout();
     mainLayout->addWidget(d->textEdit,             0, 0, 3,-1);
     mainLayout->addWidget(d->fontChooserWidget,    3, 0, 1,-1);
     mainLayout->addWidget(alignBox,                4, 0, 1,-1);
@@ -293,8 +293,14 @@ void InsertTextTool::readSettings()
     int orgW = d->previewWidget->imageIface()->originalWidth();
     int orgH = d->previewWidget->imageIface()->originalHeight();
 
-    if ( orgW > orgH ) d->defaultSizeFont = (int)(orgH / 8.0);
-    else d->defaultSizeFont = (int)(orgW / 8.0);
+    if ( orgW > orgH )
+    {
+        d->defaultSizeFont = (int)(orgH / 8.0);
+    }
+    else
+    {
+        d->defaultSizeFont = (int)(orgW / 8.0);
+    }
 
     defaultFont.setPointSize(d->defaultSizeFont);
 
@@ -388,7 +394,7 @@ void InsertTextTool::slotFontPropertiesChanged(const QFont& font)
 
 void InsertTextTool::slotUpdatePreview()
 {
-    d->previewWidget->setText(d->textEdit->document()->toPlainText(), d->textFont, d->fontColorButton->color(), 
+    d->previewWidget->setText(d->textEdit->document()->toPlainText(), d->textFont, d->fontColorButton->color(),
                               d->alignTextMode,
                               d->borderText->isChecked(), d->transparentText->isChecked(),
                               d->textRotation->currentIndex());

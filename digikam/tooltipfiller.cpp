@@ -109,6 +109,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
                             commonInfo.width, commonInfo.height, mpixels);
             }
+
             tip += cnt.cellBeg + i18n("Dimensions:") + cnt.cellMid + str + cnt.cellEnd;
         }
     }
@@ -131,8 +132,13 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             if (settings->getToolTipsShowPhotoMake())
             {
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
-                                        .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+                      .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
@@ -141,7 +147,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 if (commonInfo.creationDate.isValid())
                 {
                     str = KGlobal::locale()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
-                    if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+
+                    if (str.length() > cnt.maxStringLength)
+                    {
+                        str = str.left(cnt.maxStringLength-3) + "...";
+                    }
+
                     metaStr += cnt.cellBeg + i18nc("creation date of the image",
                                                    "Created:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
                 }
@@ -157,40 +168,71 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 str = photoInfo.aperture.isEmpty() ? cnt.unavailable : photoInfo.aperture;
 
                 if (photoInfo.focalLength35.isEmpty())
+                {
                     str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? cnt.unavailable : photoInfo.focalLength);
+                }
                 else
+                {
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35));
+                }
 
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoExpo())
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? cnt.unavailable : photoInfo.exposureTime)
-                                        .arg(photoInfo.sensitivity.isEmpty() ? cnt.unavailable : i18n("%1 ISO",photoInfo.sensitivity));
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+                      .arg(photoInfo.sensitivity.isEmpty() ? cnt.unavailable : i18n("%1 ISO",photoInfo.sensitivity));
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoMode())
             {
                 if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                {
                     str = cnt.unavailable;
+                }
                 else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                {
                     str = photoInfo.exposureMode;
+                }
                 else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+                {
                     str = photoInfo.exposureProgram;
+                }
                 else
+                {
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("Mode/Program:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoFlash())
             {
                 str = photoInfo.flashMode.isEmpty() ? cnt.unavailable : photoInfo.flashMode;
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18nc("camera flash settings",
                                                "Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
@@ -198,7 +240,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             if (settings->getToolTipsShowPhotoWB())
             {
                 str = photoInfo.whiteBalance.isEmpty() ? cnt.unavailable : photoInfo.whiteBalance;
-                if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
                 metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
@@ -218,14 +265,22 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         if (settings->getToolTipsShowAlbumName())
         {
             PAlbum* album = AlbumManager::instance()->findPAlbum(info.albumId());
+
             if (album)
+            {
                 tip += cnt.cellSpecBeg + i18n("Album:") + cnt.cellSpecMid + album->albumPath().remove(0, 1) + cnt.cellSpecEnd;
+            }
         }
 
         if (settings->getToolTipsShowComments())
         {
             str = info.comment();
-            if (str.isEmpty()) str = QString("---");
+
+            if (str.isEmpty())
+            {
+                str = QString("---");
+            }
+
             tip += cnt.cellSpecBeg + i18nc("caption of the file",
                                            "Caption:") + cnt.cellSpecMid +
                    cnt.breakString(str) + cnt.cellSpecEnd;
@@ -238,18 +293,28 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             QString tags(i18n("Tags:"));
 
             if (tagPaths.isEmpty())
+            {
                 tip += cnt.cellSpecBeg + tags + cnt.cellSpecMid + "---" + cnt.cellSpecEnd;
+            }
             else
             {
                 QString title = tags;
                 QString tagText;
+
                 for (int i = 0; i<tagPaths.size(); i++)
                 {
                     tagText = tagPaths[i];
+
                     if (tagText.size() > cnt.maxStringLength)
+                    {
                         tagText = tagNames[i];
+                    }
+
                     if (tagText.size() > cnt.maxStringLength)
+                    {
                         tagText = cnt.elidedText(tagPaths[i], Qt::ElideLeft);
+                    }
+
                     tip += cnt.cellSpecBeg + title + cnt.cellSpecMid + tagText + cnt.cellSpecEnd;
                     title.clear();
                 }
@@ -259,10 +324,16 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         if (settings->getToolTipsShowRating())
         {
             int rating = info.rating();
+
             if (rating <= 0)
+            {
                 str = QString("---");
+            }
             else
+            {
                 str.fill( 'X', info.rating() );
+            }
+
             tip += cnt.cellSpecBeg + i18n("Rating:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
         }
     }
@@ -272,9 +343,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
     return tip;
 }
 
-QString ToolTipFiller::albumTipContents(PAlbum *album, int count)
+QString ToolTipFiller::albumTipContents(PAlbum* album, int count)
 {
-    if (!album) return QString();
+    if (!album)
+    {
+        return QString();
+    }
 
     QString            str;
     AlbumSettings*     settings = AlbumSettings::instance();
@@ -304,7 +378,7 @@ QString ToolTipFiller::albumTipContents(PAlbum *album, int count)
         if (settings->getToolTipsShowAlbumCollection())
         {
             tip += cnt.cellBeg + i18n("Collection:") + cnt.cellMid;
-            Album *col = AlbumManager::instance()->findAlbum(album->albumRootId());
+            Album* col = AlbumManager::instance()->findAlbum(album->albumRootId());
             tip += col ? col->title() : QString() + cnt.cellEnd;
         }
 
@@ -318,7 +392,12 @@ QString ToolTipFiller::albumTipContents(PAlbum *album, int count)
         if (settings->getToolTipsShowAlbumCategory())
         {
             str = album->category();
-            if (str.isEmpty()) str = QString("---");
+
+            if (str.isEmpty())
+            {
+                str = QString("---");
+            }
+
             tip += cnt.cellSpecBeg + i18n("Category:") + cnt.cellSpecMid +
                    cnt.breakString(str) + cnt.cellSpecEnd;
         }
@@ -326,7 +405,12 @@ QString ToolTipFiller::albumTipContents(PAlbum *album, int count)
         if (settings->getToolTipsShowAlbumCaption())
         {
             str = album->caption();
-            if (str.isEmpty()) str = QString("---");
+
+            if (str.isEmpty())
+            {
+                str = QString("---");
+            }
+
             tip += cnt.cellSpecBeg + i18n("Caption:") + cnt.cellSpecMid +
                    cnt.breakString(str) + cnt.cellSpecEnd;
         }

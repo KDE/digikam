@@ -47,7 +47,10 @@
 
 class KAction;
 
-namespace Solid { class Device; }
+namespace Solid
+{
+class Device;
+}
 
 namespace Digikam
 {
@@ -92,8 +95,8 @@ public:
     void startInternalDatabase();
     void stopInternalDatabase();
 
-    DigikamView *view() const;
-    AlbumIconViewFilter *iconViewFilter() const;
+    DigikamView* view() const;
+    AlbumIconViewFilter* iconViewFilter() const;
 
 Q_SIGNALS:
 
@@ -115,7 +118,7 @@ Q_SIGNALS:
 protected:
 
     bool queryClose();
-    void moveEvent(QMoveEvent *e);
+    void moveEvent(QMoveEvent* e);
 
 private:
 
@@ -168,9 +171,9 @@ private Q_SLOTS:
 
     void slotKipiPluginPlug();
 
-    void slotOpenSolidCamera(QAction *);
-    void slotOpenManualCamera(QAction *);
-    void slotOpenSolidUsmDevice(QAction *);
+    void slotOpenSolidCamera(QAction*);
+    void slotOpenManualCamera(QAction*);
+    void slotOpenSolidUsmDevice(QAction*);
     void slotOpenSolidDevice(const QString& udi);
     void slotOpenCameraUiFromPath(const QString& path);
     void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& udi);
@@ -215,7 +218,7 @@ private:
 
     DigikamAppPriv* const d;
 
-    static DigikamApp *m_instance;
+    static DigikamApp* m_instance;
 };
 
 }  // namespace Digikam

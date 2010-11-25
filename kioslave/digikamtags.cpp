@@ -53,8 +53,8 @@
 #include "imagelisterreceiver.h"
 
 kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray& pool_socket,
-                                                 const QByteArray& app_socket)
-                       : SlaveBase("kio_digikamtags", pool_socket, app_socket)
+        const QByteArray& app_socket)
+    : SlaveBase("kio_digikamtags", pool_socket, app_socket)
 {
 }
 
@@ -97,6 +97,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
         // send rest
         receiver.sendData();
     }
+
     finished();
 }
 
@@ -104,7 +105,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
 
 extern "C"
 {
-    KDE_EXPORT int kdemain(int argc, char **argv)
+    KDE_EXPORT int kdemain(int argc, char** argv)
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);
@@ -115,7 +116,8 @@ extern "C"
 
         kDebug() << "*** kio_digikamtag started ***";
 
-        if (argc != 4) {
+        if (argc != 4)
+        {
             kDebug() << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
