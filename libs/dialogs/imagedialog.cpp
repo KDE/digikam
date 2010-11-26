@@ -6,7 +6,7 @@
  * Date        : 2008-03-13
  * Description : image files selector dialog.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class ImageDialogPreviewPrivate
+class ImageDialogPreview::ImageDialogPreviewPrivate
 {
 
 public:
@@ -76,7 +76,7 @@ public:
 };
 
 ImageDialogPreview::ImageDialogPreview(QWidget* parent)
-    : KPreviewWidgetBase(parent),
+                  : KPreviewWidgetBase(parent),
       d(new ImageDialogPreviewPrivate)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
@@ -93,6 +93,7 @@ ImageDialogPreview::ImageDialogPreview(QWidget* parent)
     vlay->setSpacing(KDialog::spacingHint());
     vlay->addWidget(d->imageLabel);
     vlay->addWidget(d->infoLabel);
+    vlay->addStretch();
 
     setSupportedMimeTypes(KImageIO::mimeTypes());
 
@@ -256,7 +257,7 @@ void ImageDialogPreview::clearPreview()
 
 // ------------------------------------------------------------------------
 
-class ImageDialogPrivate
+class ImageDialog::ImageDialogPrivate
 {
 
 public:
@@ -275,7 +276,7 @@ public:
 };
 
 ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, const QString& caption)
-    : d(new ImageDialogPrivate)
+           : d(new ImageDialogPrivate)
 {
     d->singleSelect = singleSelect;
 
@@ -376,7 +377,6 @@ KUrl::List ImageDialog::getImageURLs(QWidget* parent, const KUrl& url, const QSt
         return KUrl::List();
     }
 }
-
 
 KUrl ImageDialog::getImageURL(QWidget* parent, const KUrl& url, const QString& caption)
 {
