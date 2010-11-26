@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 235678 : No startup dialog but error dialogs(s).
 016 ==> 257898 : Allow displaying folders recursively.
 017 ==> 257897 : Amount of duplicate images list is sorted the wrong way round.
-018 ==> 
+018 ==> 234534 : digiKam not synchronizing legacy tags with new nepomuk database.
+019 ==> 
 
 
 
