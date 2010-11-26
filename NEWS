@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 1.7.0 - Release date: 2010-??-??
+digiKam 1.7.0 - Release date: 2010-12-18
 
 NEW FEATURES:
 
@@ -21,7 +21,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 257744 : digiKam crash on importing large collection.
 014 ==> 242439 : Crash when going to next picture in picture editor.
 015 ==> 235678 : No startup dialog but error dialogs(s).
-016 ==> 
+016 ==> 257898 : Allow displaying folders recursively.
+017 ==> 257897 : Amount of duplicate images list is sorted the wrong way round.
+018 ==> 
+
 
 
 
