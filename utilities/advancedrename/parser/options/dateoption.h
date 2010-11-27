@@ -64,7 +64,7 @@ public:
     QString  identifier(Type type);
 
     QVariant formatType(Type type);
-    QVariant formatType(QString identifier);
+    QVariant formatType(const QString& identifier);
 
     DateFormatMap& map()
     {

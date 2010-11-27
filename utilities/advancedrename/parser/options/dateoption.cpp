@@ -68,7 +68,7 @@ QVariant DateFormat::formatType(Type type)
     return m_map.at((int)type).second;
 }
 
-QVariant DateFormat::formatType(QString identifier)
+QVariant DateFormat::formatType(const QString& identifier)
 {
     QVariant v;
     foreach (const DateFormatDescriptor& desc, m_map)
