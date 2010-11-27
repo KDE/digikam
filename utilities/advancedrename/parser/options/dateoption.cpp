@@ -51,8 +51,6 @@ static const QString dateFormatLink =
 
 DateFormat::DateFormat()
 {
-    m_map.clear();
-
     m_map.insert(Standard, DateFormatDescriptor(QString("Standard"), QString("yyyyMMddThhmmss")));
     m_map.insert(ISO,      DateFormatDescriptor(QString("ISO"),      Qt::ISODate));
     m_map.insert(FullText, DateFormatDescriptor(QString("Text"),     Qt::TextDate));
