@@ -26,12 +26,12 @@
 
 // Qt includes
 
+#include <QTextEdit>
 #include <QWidget>
 
 // KDE includes
 
 #include <kcombobox.h>
-#include <ktextedit.h>
 
 // Local includes
 
@@ -63,7 +63,7 @@ protected:
 
 // --------------------------------------------------------
 
-class AdvancedRenameLineEdit : public KTextEdit
+class AdvancedRenameLineEdit : public QTextEdit
 {
     Q_OBJECT
 
@@ -76,13 +76,6 @@ public:
     Parser* parser() const;
 
     void setAllowDirectoryCreation(bool allow);
-
-    /**
-     * This function needs to be implemented with an empty body, to avoid
-     * setting a default highlighter object by the base class when "spell checking"
-     * is enabled.
-     */
-    virtual void createHighlighter();
 
 public Q_SLOTS:
 

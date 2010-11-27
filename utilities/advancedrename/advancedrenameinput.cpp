@@ -114,9 +114,9 @@ public:
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
-    : KTextEdit(parent), d(new AdvancedRenameLineEditPriv)
+    : QTextEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
-    setLineWrapMode(KTextEdit::NoWrap);
+    setLineWrapMode(QTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -167,10 +167,6 @@ void AdvancedRenameLineEdit::setAllowDirectoryCreation(bool allow)
     d->allowDirectoryCreation = allow;
 }
 
-void AdvancedRenameLineEdit::createHighlighter()
-{
-}
-
 void AdvancedRenameLineEdit::setParser(Parser* parser)
 {
     if (parser)
@@ -204,7 +200,7 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
     }
     else
     {
-        KTextEdit::keyPressEvent(e);
+        QTextEdit::keyPressEvent(e);
     }
 }
 
