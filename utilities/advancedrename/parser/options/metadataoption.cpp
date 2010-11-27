@@ -76,6 +76,7 @@ MetadataOptionDialog::MetadataOptionDialog(Parseable* parent) :
 
     // remove "Viewer" string from tabs
     int tabs = tab->count();
+
     for (int i = 0; i < tabs; ++i)
     {
         QString text = tab->tabText(i);
