@@ -60,14 +60,12 @@ DateFormat::DateFormat()
 
 QString DateFormat::identifier(Type type)
 {
-    DateFormatDescriptor desc = m_map.at((int)type);
-    return desc.first;
+    return m_map.at((int)type).first;
 }
 
 QVariant DateFormat::formatType(Type type)
 {
-    DateFormatDescriptor desc = m_map.at((int)type);
-    return desc.second;
+    return m_map.at((int)type).second;
 }
 
 QVariant DateFormat::formatType(QString identifier)
