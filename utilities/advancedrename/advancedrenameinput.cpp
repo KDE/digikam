@@ -167,6 +167,10 @@ void AdvancedRenameLineEdit::setAllowDirectoryCreation(bool allow)
     d->allowDirectoryCreation = allow;
 }
 
+void AdvancedRenameLineEdit::createHighlighter()
+{
+}
+
 void AdvancedRenameLineEdit::setParser(Parser* parser)
 {
     if (parser)
@@ -398,7 +402,8 @@ void AdvancedRenameInput::enableHighlighter(bool enable)
         delete d->highlighter;
     }
 
-    d->highlighter = enable ? new Highlighter(d->lineEdit, d->lineEdit->parser())
+    d->highlighter = enable
+                     ? new Highlighter(d->lineEdit, d->lineEdit->parser())
                      : 0;
 }
 
