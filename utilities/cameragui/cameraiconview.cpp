@@ -76,7 +76,7 @@ public:
     CameraIconViewPriv() :
         thumbSize(ThumbnailSize::Large),
         pixmapNewPicture(SmallIcon("get-hot-new-stuff")),
-        pixmapDownloadUnknow(SmallIcon("status_unknown")),
+        pixmapDownloadUnknown(SmallIcon("status_unknown")),
         progressPix(SmallIcon("process-working", 22)),
         pixmapLocked(SmallIcon("object-locked")),
         pixmapDownloaded(SmallIcon("dialog-ok")),
@@ -97,7 +97,7 @@ public:
     QPixmap                          itemRegPixmap;
     QPixmap                          itemSelPixmap;
     QPixmap                          pixmapNewPicture;
-    QPixmap                          pixmapDownloadUnknow;
+    QPixmap                          pixmapDownloadUnknown;
     QPixmap                          progressPix;
     QPixmap                          pixmapLocked;
     QPixmap                          pixmapDownloaded;
@@ -181,9 +181,9 @@ QPixmap CameraIconView::newPicturePixmap() const
     return d->pixmapNewPicture;
 }
 
-QPixmap CameraIconView::downloadUnknowPixmap() const
+QPixmap CameraIconView::downloadUnknownPixmap() const
 {
-    return d->pixmapDownloadUnknow;
+    return d->pixmapDownloadUnknown;
 }
 
 QPixmap CameraIconView::lockedPixmap() const

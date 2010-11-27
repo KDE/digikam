@@ -325,7 +325,7 @@ void CameraIconItem::paintItem(QPainter* p)
         }
         case GPItemInfo::DownloadUnknown:
         {
-            downloaded = view->downloadUnknowPixmap();
+            downloaded = view->downloadUnknownPixmap();
             break;
         }
     }
