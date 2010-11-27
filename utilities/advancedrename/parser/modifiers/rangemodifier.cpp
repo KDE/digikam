@@ -117,7 +117,6 @@ QString RangeModifier::parseOperation(ParseSettings& settings)
     /*
      * extract range parameters
      */
-
     bool ok = false;
 
     // if the start parameter can not be extracted, set it to 1
@@ -153,7 +152,6 @@ QString RangeModifier::parseOperation(ParseSettings& settings)
     /*
      * replace the string according to the given range
      */
-
     if (start > settings.str2Modify.count())
     {
         return QString();
