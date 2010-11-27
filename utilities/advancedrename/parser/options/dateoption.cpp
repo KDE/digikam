@@ -156,7 +156,7 @@ DateOptionDialog::DateSource DateOptionDialog::dateSource()
     bool ok    = true;
     int choice = v.toInt(&ok);
 
-    return (DateSource)choice;
+    return static_cast<DateSource>(choice);
 }
 
 QString DateOptionDialog::formattedDateTime(const QDateTime& date)

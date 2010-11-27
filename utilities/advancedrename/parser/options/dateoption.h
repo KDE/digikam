@@ -50,7 +50,7 @@ public:
     DateFormat();
     ~DateFormat() {};
 
-    typedef QPair<QString, QVariant> DateFormatDescriptor;
+    typedef QPair<QString, QVariant>    DateFormatDescriptor;
     typedef QList<DateFormatDescriptor> DateFormatMap;
     enum Type
     {
