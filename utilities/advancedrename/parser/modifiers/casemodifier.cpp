@@ -85,10 +85,10 @@ QString CaseModifier::firstupper(const QString& str2Modify)
 
     for (int i = 0; i < result.length(); ++i)
     {
-        if ( result[i + 1].isLetter()  &&
-             !result[i].isLetter()      &&
-             result[i] != '\''         &&
-             result[i] != '?'          &&
+        if ( result[i + 1].isLetter() &&
+             !result[i].isLetter()    &&
+             result[i] != '\''        &&
+             result[i] != '?'         &&
              result[i] != '`'
            )
         {
