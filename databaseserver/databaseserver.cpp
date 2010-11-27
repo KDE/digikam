@@ -121,7 +121,7 @@ bool DatabaseServer::startDatabaseProcess(QDBusVariant& error)
  * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
  * Maybe this can be done by DBUS communication or an PID file.
  */
-bool DatabaseServer::startDatabaseProcess(const QString dbType, QDBusVariant& error)
+bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& error)
 {
     if (dbType == DatabaseParameters::MySQLDatabaseType())
     {
