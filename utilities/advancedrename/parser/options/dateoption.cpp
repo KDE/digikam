@@ -230,9 +230,6 @@ DateOption::DateOption()
 
 QString DateOption::parseOperation(ParseSettings& settings)
 {
-    QString result;
-    DateFormat df;
-
     const QRegExp& reg = regExp();
 
     QString token = reg.cap(2);
@@ -276,7 +273,9 @@ QString DateOption::parseOperation(ParseSettings& settings)
         return QString();
     }
 
-    QVariant v = df.formatType(token);
+    QString    result;
+    DateFormat df;
+    QVariant   v = df.formatType(token);
 
     if (v.isNull())
     {
