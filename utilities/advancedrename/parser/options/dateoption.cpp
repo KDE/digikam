@@ -70,13 +70,11 @@ QVariant DateFormat::formatType(Type type)
 
 QVariant DateFormat::formatType(const QString& identifier)
 {
-    QVariant v;
     foreach (const DateFormatDescriptor& desc, m_map)
     {
         if (desc.first == identifier)
         {
-            v = desc.second;
-            break;
+            return desc.second;
         }
     }
 
@@ -85,7 +83,7 @@ QVariant DateFormat::formatType(const QString& identifier)
         return m_map.at(Standard).second;
     }
 
-    return v;
+    return QVariant();
 }
 
 // --------------------------------------------------------
