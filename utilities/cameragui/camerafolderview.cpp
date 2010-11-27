@@ -41,11 +41,11 @@ class CameraFolderViewPriv
 {
 public:
 
-    CameraFolderViewPriv()
+    CameraFolderViewPriv() :
+        cameraName("Camera"),
+        virtualFolder(0),
+        rootFolder(0)
     {
-        virtualFolder = 0;
-        rootFolder    = 0;
-        cameraName = QString("Camera");
     }
 
     QString           cameraName;

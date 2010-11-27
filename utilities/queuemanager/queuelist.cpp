@@ -61,9 +61,9 @@ class QueueListViewItem::QueueListViewItemPriv
 
 public:
 
-    QueueListViewItemPriv()
+    QueueListViewItemPriv() :
+        done(false)
     {
-        done = false;
     }
 
     bool      done;

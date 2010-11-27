@@ -78,7 +78,7 @@ QString MetadataKeys::getDbValue(const QString& key, ParseSettings& settings)
     ImageMetadataContainer container = info.imageMetadataContainer();
     QString result;
 
-    if      (key == KEY_MAKE)
+    if (key == KEY_MAKE)
     {
         result = container.make;
     }

@@ -73,17 +73,17 @@ class LightTablePreview::LightTablePreviewPriv
 {
 public:
 
-    LightTablePreviewPriv()
+    LightTablePreviewPriv() :
+        isLoaded(false),
+        hasPrev(false),
+        hasNext(false),
+        selected(false),
+        dragAndDropEnabled(true),
+        loadFullImageSize(false),
+        previewSize(1024),
+        previewThread(0),
+        previewPreloadThread(0)
     {
-        previewThread        = 0;
-        previewPreloadThread = 0;
-        hasPrev              = false;
-        hasNext              = false;
-        selected             = false;
-        dragAndDropEnabled   = true;
-        loadFullImageSize    = false;
-        previewSize          = 1024;
-        isLoaded             = false;
     }
 
     bool               isLoaded;

@@ -77,75 +77,75 @@ public:
         LocalDateFormat
     };
 
-    CameraUIPriv()
+    CameraUIPriv() :
+        deleteAfter(false),
+        busy(false),
+        closed(false),
+        fullScreen(false),
+        removeFullScreenButton(false),
+        fullScreenHideToolBar(false),
+        autoRotateCheck(0),
+        autoAlbumDateCheck(0),
+        autoAlbumExtCheck(0),
+        fixDateTimeCheck(0),
+        convertJpegCheck(0),
+        formatLabel(0),
+        folderDateLabel(0),
+        refreshIconViewTimer(0),
+        downloadMenu(0),
+        deleteMenu(0),
+        imageMenu(0),
+        cameraCancelAction(0),
+        cameraCaptureAction(0),
+        cameraInfoAction(0),
+        contributeAction(0),
+        decreaseThumbsAction(0),
+        deleteAllAction(0),
+        deleteSelectedAction(0),
+        donateMoneyAction(0),
+        downloadAllAction(0),
+        downloadDelAllAction(0),
+        downloadDelSelectedAction(0),
+        downloadSelectedAction(0),
+        fullScreenAction(0),
+        imageViewAction(0),
+        increaseThumbsAction(0),
+        rawCameraListAction(0),
+        libsInfoAction(0),
+        dbStatAction(0),
+        lockAction(0),
+        selectAllAction(0),
+        selectInvertAction(0),
+        selectLockedItemsAction(0),
+        selectNewItemsAction(0),
+        selectNoneAction(0),
+        uploadAction(0),
+        markAsDownloadedAction(0),
+        lastPhotoFirstAction(0),
+        showMenuBarAction(0),
+        showLogAction(0),
+        losslessFormat(0),
+        folderDateFormat(0),
+        themeMenuAction(0),
+        helpMenu(0),
+        dateTimeEdit(0),
+        kdeJob(0),
+        advBox(0),
+        splitter(0),
+        controller(0),
+        historyUpdater(0),
+        view(0),
+        renameCustomizer(0),
+        anim(0),
+        templateSelector(0),
+        rightSideBar(0),
+        zoomBar(0),
+        statusProgressBar(0),
+        statusNavigateBar(0),
+        albumLibraryFreeSpace(0),
+        cameraFreeSpace(0),
+        historyView(0)
     {
-        deleteAfter               = false;
-        busy                      = false;
-        closed                    = false;
-        fullScreen                = false;
-        removeFullScreenButton    = false;
-        fullScreenHideToolBar     = false;
-        helpMenu                  = 0;
-        advBox                    = 0;
-        downloadMenu              = 0;
-        deleteMenu                = 0;
-        imageMenu                 = 0;
-        splitter                  = 0;
-        rightSideBar              = 0;
-        fixDateTimeCheck          = 0;
-        autoRotateCheck           = 0;
-        autoAlbumDateCheck        = 0;
-        autoAlbumExtCheck         = 0;
-        controller                = 0;
-        historyUpdater            = 0;
-        view                      = 0;
-        renameCustomizer          = 0;
-        anim                      = 0;
-        dateTimeEdit              = 0;
-        templateSelector          = 0;
-        losslessFormat            = 0;
-        convertJpegCheck          = 0;
-        formatLabel               = 0;
-        folderDateLabel           = 0;
-        folderDateFormat          = 0;
-        fullScreenAction          = 0;
-        increaseThumbsAction      = 0;
-        decreaseThumbsAction      = 0;
-        downloadSelectedAction    = 0;
-        downloadDelSelectedAction = 0;
-        downloadAllAction         = 0;
-        downloadDelAllAction      = 0;
-        deleteSelectedAction      = 0;
-        deleteAllAction           = 0;
-        cameraInfoAction          = 0;
-        cameraCaptureAction       = 0;
-        statusProgressBar         = 0;
-        statusNavigateBar         = 0;
-        zoomBar                   = 0;
-        selectAllAction           = 0;
-        selectNoneAction          = 0;
-        selectInvertAction        = 0;
-        selectNewItemsAction      = 0;
-        selectLockedItemsAction   = 0;
-        uploadAction              = 0;
-        markAsDownloadedAction    = 0;
-        lockAction                = 0;
-        donateMoneyAction         = 0;
-        cameraCancelAction        = 0;
-        imageViewAction           = 0;
-        albumLibraryFreeSpace     = 0;
-        cameraFreeSpace           = 0;
-        rawCameraListAction       = 0;
-        libsInfoAction            = 0;
-        dbStatAction              = 0;
-        themeMenuAction           = 0;
-        contributeAction          = 0;
-        showMenuBarAction         = 0;
-        showLogAction             = 0;
-        kdeJob                    = 0;
-        historyView               = 0;
-        lastPhotoFirstAction      = 0;
-        refreshIconViewTimer      = 0;
     }
 
     bool                          deleteAfter;

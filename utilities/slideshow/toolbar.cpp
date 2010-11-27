@@ -43,13 +43,13 @@ class ToolBar::ToolBarPriv
 {
 public:
 
-    ToolBarPriv()
+    ToolBarPriv() :
+        canHide(true),
+        playBtn(0),
+        stopBtn(0),
+        nextBtn(0),
+        prevBtn(0)
     {
-        playBtn = 0;
-        stopBtn = 0;
-        nextBtn = 0;
-        prevBtn = 0;
-        canHide = true;
     }
 
     bool         canHide;

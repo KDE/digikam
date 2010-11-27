@@ -59,23 +59,23 @@ public :
 
 public:
 
-    TimeLineWidgetPriv()
+    TimeLineWidgetPriv() :
+        validMouseEvent(false),
+        selMouseEvent(false),
+        flicker(false),
+        maxCountByDay(1),
+        maxCountByWeek(1),
+        maxCountByMonth(1),
+        maxCountByYear(1),
+        topMargin(3),
+        bottomMargin(20),
+        barWidth(20),
+        nbItems(10),
+        startPos(96),
+        calendar(KGlobal::locale()->calendar()),
+        timeUnit(TimeLineWidget::Month),
+        scaleMode(TimeLineWidget::LinScale)
     {
-        validMouseEvent = false;
-        selMouseEvent   = false;
-        flicker         = false;
-        maxCountByDay   = 1;
-        maxCountByWeek  = 1;
-        maxCountByMonth = 1;
-        maxCountByYear  = 1;
-        topMargin       = 3;
-        bottomMargin    = 20;
-        barWidth        = 20;
-        startPos        = 96;
-        nbItems         = 10;
-        timeUnit        = TimeLineWidget::Month;
-        scaleMode       = TimeLineWidget::LinScale;
-        calendar        = KGlobal::locale()->calendar();
     }
 
     bool                         validMouseEvent;   // Current mouse enter event is valid to set cursor position or selection.

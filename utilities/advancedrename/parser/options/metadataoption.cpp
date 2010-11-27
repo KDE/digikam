@@ -50,9 +50,10 @@
 namespace Digikam
 {
 
-MetadataOptionDialog::MetadataOptionDialog(Parseable* parent)
-    : ParseableDialog(parent),
-      metadataPanel(0), separatorLineEdit(0)
+MetadataOptionDialog::MetadataOptionDialog(Parseable* parent) :
+    ParseableDialog(parent),
+    metadataPanel(0),
+    separatorLineEdit(0)
 {
     QWidget* mainWidget  = new QWidget(this);
     KTabWidget* tab      = new KTabWidget(this);

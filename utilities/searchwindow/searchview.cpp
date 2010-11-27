@@ -146,12 +146,12 @@ class SearchViewPrivate
 {
 public:
 
-    SearchViewPrivate()
+    SearchViewPrivate() :
+        needAnimationForReadIn(false),
+        layout(0),
+        timeline(0),
+        bar(0)
     {
-        layout                 = 0;
-        bar                    = 0;
-        timeline               = 0;
-        needAnimationForReadIn = false;
     }
 
     bool                     needAnimationForReadIn;

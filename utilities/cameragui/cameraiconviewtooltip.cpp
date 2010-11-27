@@ -52,10 +52,10 @@ class CameraIconViewToolTipPriv
 {
 public:
 
-    CameraIconViewToolTipPriv()
+    CameraIconViewToolTipPriv() :
+        view(0),
+        iconItem(0)
     {
-        view     = 0;
-        iconItem = 0;
     }
 
     CameraIconView* view;

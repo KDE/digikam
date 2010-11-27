@@ -60,15 +60,18 @@ class QueueSettingsView::QueueSettingsViewPriv
 
 public:
 
-    QueueSettingsViewPriv()
+    QueueSettingsViewPriv() :
+        conflictLabel(0),
+        renamingButtonGroup(0),
+        conflictButtonGroup(0),
+        renameOriginal(0),
+        renameManual(0),
+        overwriteButton(0),
+        promptButton(0),
+        albumSel(0),
+        advancedRenameManager(0),
+        advancedRenameWidget(0)
     {
-        conflictLabel         = 0;
-        conflictButtonGroup   = 0;
-        overwriteButton       = 0;
-        promptButton          = 0;
-        albumSel              = 0;
-        advancedRenameWidget  = 0;
-        advancedRenameManager = 0;
     }
 
     QLabel*                conflictLabel;

@@ -58,9 +58,9 @@ class CameraListPrivate
 {
 public:
 
-    CameraListPrivate()
+    CameraListPrivate() :
+        modified(false)
     {
-        modified = false;
     }
 
     bool               modified;

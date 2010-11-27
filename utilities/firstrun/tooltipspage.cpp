@@ -46,11 +46,11 @@ class TooltipsPagePriv
 {
 public:
 
-    TooltipsPagePriv()
+    TooltipsPagePriv() :
+        showTooltips(0),
+        hideTooltips(0),
+        tooltipsBehavour(0)
     {
-        showTooltips     = 0;
-        hideTooltips     = 0;
-        tooltipsBehavour = 0;
     }
 
     QRadioButton* showTooltips;

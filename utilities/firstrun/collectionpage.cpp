@@ -56,11 +56,11 @@ class CollectionPagePriv
 {
 public:
 
-    CollectionPagePriv()
+    CollectionPagePriv() :
+        dbPathEdited(false),
+        rootAlbumPathRequester(0),
+        dbPathRequester(0)
     {
-        rootAlbumPathRequester = 0;
-        dbPathRequester        = 0;
-        dbPathEdited           = false;
     }
 
     bool           dbPathEdited;

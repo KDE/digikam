@@ -44,12 +44,12 @@ class AssistantDlgPagePriv
 {
 public:
 
-    AssistantDlgPagePriv()
+    AssistantDlgPagePriv() :
+        logo(0),
+        leftBottomPix(0),
+        hlay(0),
+        page(0)
     {
-        hlay          = 0;
-        page          = 0;
-        logo          = 0;
-        leftBottomPix = 0;
     }
 
     QLabel*          logo;

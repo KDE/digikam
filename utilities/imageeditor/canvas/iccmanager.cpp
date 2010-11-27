@@ -46,10 +46,10 @@ class IccManagerPriv
 {
 public:
 
-    IccManagerPriv()
+    IccManagerPriv() :
+        profileMismatch(false),
+        observer(0)
     {
-        profileMismatch = false;
-        observer        = 0;
     }
 
     DImg                 image;

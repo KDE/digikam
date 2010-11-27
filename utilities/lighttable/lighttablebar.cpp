@@ -71,9 +71,9 @@ class LightTableBar::LightTableBarPriv
 
 public:
 
-    LightTableBarPriv()
+    LightTableBarPriv() :
+        navigateByPair(false)
     {
-        navigateByPair = false;
     }
 
     bool navigateByPair;
@@ -576,10 +576,10 @@ class LightTableBarItem::LightTableBarItemPriv
 
 public:
 
-    LightTableBarItemPriv()
+    LightTableBarItemPriv() :
+        onLeftPanel(false),
+        onRightPanel(false)
     {
-        onLeftPanel  = false;
-        onRightPanel = false;
     }
 
     bool onLeftPanel;

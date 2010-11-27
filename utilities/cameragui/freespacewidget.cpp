@@ -79,17 +79,17 @@ class FreeSpaceWidgetPriv
 {
 public:
 
-    FreeSpaceWidgetPriv()
+    FreeSpaceWidgetPriv() :
+        isValid(false),
+        percentUsed(0),
+        dSizeKb(0),
+        kBSize(0),
+        kBUsed(0),
+        kBAvail(0),
+        timer(0),
+        toolTip(0),
+        mode(FreeSpaceWidget::AlbumLibrary)
     {
-        toolTip      = 0;
-        timer        = 0;
-        isValid      = false;
-        percentUsed  = 0;
-        kBSize       = 0;
-        kBUsed       = 0;
-        kBAvail      = 0;
-        dSizeKb      = 0;
-        mode         = FreeSpaceWidget::AlbumLibrary;
     }
 
     bool                            isValid;

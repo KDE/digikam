@@ -55,10 +55,10 @@ class RawImport::RawImportPriv
 {
 public:
 
-    RawImportPriv()
+    RawImportPriv() :
+        settingsBox(0),
+        previewWidget(0)
     {
-        previewWidget = 0;
-        settingsBox   = 0;
     }
 
     RawSettingsBox* settingsBox;

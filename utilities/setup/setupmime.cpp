@@ -54,17 +54,17 @@ class SetupMimePriv
 {
 public:
 
-    SetupMimePriv()
+    SetupMimePriv() :
+        imageFileFilterLabel(0),
+        movieFileFilterLabel(0),
+        audioFileFilterLabel(0),
+        revertImageFileFilterBtn(0),
+        revertMovieFileFilterBtn(0),
+        revertAudioFileFilterBtn(0),
+        imageFileFilterEdit(0),
+        movieFileFilterEdit(0),
+        audioFileFilterEdit(0)
     {
-        imageFileFilterLabel     = 0;
-        movieFileFilterLabel     = 0;
-        audioFileFilterLabel     = 0;
-        imageFileFilterEdit      = 0;
-        movieFileFilterEdit      = 0;
-        audioFileFilterEdit      = 0;
-        revertImageFileFilterBtn = 0;
-        revertMovieFileFilterBtn = 0;
-        revertAudioFileFilterBtn = 0;
     }
 
     QLabel*      imageFileFilterLabel;

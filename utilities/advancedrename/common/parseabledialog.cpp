@@ -52,7 +52,8 @@ public:
         dialogDescription(0),
         dialogIcon(0),
         settingsWidget(0)
-    {}
+    {
+    }
 
     QLabel*  dialogTitle;
     QLabel*  dialogDescription;

@@ -48,16 +48,16 @@ class PreviewToolBar::PreviewToolBarPriv
 
 public:
 
-    PreviewToolBarPriv()
+    PreviewToolBarPriv() :
+        previewOriginalButton(0),
+        previewBothButtonVert(0),
+        previewBothButtonHorz(0),
+        previewDuplicateBothButtonVert(0),
+        previewDupplicateBothButtonHorz(0),
+        previewtargetButton(0),
+        previewToggleMouseOverButton(0),
+        previewButtons(0)
     {
-        previewButtons                  = 0;
-        previewOriginalButton           = 0;
-        previewBothButtonVert           = 0;
-        previewBothButtonHorz           = 0;
-        previewDuplicateBothButtonVert  = 0;
-        previewDupplicateBothButtonHorz = 0;
-        previewtargetButton             = 0;
-        previewToggleMouseOverButton    = 0;
     }
 
     QToolButton*  previewOriginalButton;

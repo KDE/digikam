@@ -45,16 +45,16 @@ class AssistantDlgPriv
 {
 public:
 
-    AssistantDlgPriv()
+    AssistantDlgPriv() :
+        welcomePage(0),
+        collectionPage(0),
+        rawPage(0),
+        metadataPage(0),
+        previewPage(0),
+        openFilePage(0),
+        tooltipsPage(0),
+        startScanPage(0)
     {
-        welcomePage    = 0;
-        collectionPage = 0;
-        rawPage        = 0;
-        metadataPage   = 0;
-        previewPage    = 0;
-        openFilePage   = 0;
-        tooltipsPage   = 0;
-        startScanPage  = 0;
     }
 
     WelcomePage*    welcomePage;

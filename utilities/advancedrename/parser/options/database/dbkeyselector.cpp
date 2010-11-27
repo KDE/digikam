@@ -155,10 +155,10 @@ class DbKeySelectorViewPriv
 {
 public:
 
-    DbKeySelectorViewPriv()
+    DbKeySelectorViewPriv() :
+        selector(0),
+        searchBar(0)
     {
-        selector  = 0;
-        searchBar = 0;
     }
 
     DbKeySelector* selector;

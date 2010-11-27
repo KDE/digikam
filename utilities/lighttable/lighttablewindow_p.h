@@ -52,63 +52,63 @@ class LightTableWindow::LightTableWindowPriv
 
 public:
 
-    LightTableWindowPriv()
+    LightTableWindowPriv() :
+        autoLoadOnRightPanel(true),
+        autoSyncPreview(true),
+        fullScreenHideToolBar(false),
+        fullScreen(false),
+        removeFullScreenButton(false),
+        cancelSlideShow(false),
+        setItemLeftAction(0),
+        setItemRightAction(0),
+        clearListAction(0),
+        editItemAction(0),
+        removeItemAction(0),
+        fileDeleteAction(0),
+        fileDeleteFinalAction(0),
+        slideShowAction(0),
+        fullScreenAction(0),
+        leftZoomPlusAction(0),
+        leftZoomMinusAction(0),
+        leftZoomTo100percents(0),
+        leftZoomFitToWindowAction(0),
+        rightZoomPlusAction(0),
+        rightZoomMinusAction(0),
+        rightZoomTo100percents(0),
+        rightZoomFitToWindowAction(0),
+        star0(0),
+        star1(0),
+        star2(0),
+        star3(0),
+        star4(0),
+        star5(0),
+        forwardAction(0),
+        backwardAction(0),
+        firstAction(0),
+        lastAction(0),
+        donateMoneyAction(0),
+        contributeAction(0),
+        rawCameraListAction(0),
+        libsInfoAction(0),
+        dbStatAction(0),
+        themeMenuAction(0),
+        showThumbBarAction(0),
+        syncPreviewAction(0),
+        navigateByPairAction(0),
+        showMenuBarAction(0),
+        clearOnCloseAction(0),
+        leftFileName(0),
+        rightFileName(0),
+        hSplitter(0),
+        barViewDock(0),
+        barView(0),
+        previewView(0),
+        leftZoomBar(0),
+        rightZoomBar(0),
+        statusProgressBar(0),
+        leftSideBar(0),
+        rightSideBar(0)
     {
-        autoLoadOnRightPanel       = true;
-        autoSyncPreview            = true;
-        fullScreenHideToolBar      = false;
-        fullScreen                 = false;
-        removeFullScreenButton     = false;
-        cancelSlideShow            = false;
-        star0                      = 0;
-        star1                      = 0;
-        star2                      = 0;
-        star3                      = 0;
-        star4                      = 0;
-        star5                      = 0;
-        leftSideBar                = 0;
-        rightSideBar               = 0;
-        previewView                = 0;
-        barView                    = 0;
-        hSplitter                  = 0;
-        barViewDock                = 0;
-        syncPreviewAction          = 0;
-        clearListAction            = 0;
-        setItemLeftAction          = 0;
-        setItemRightAction         = 0;
-        editItemAction             = 0;
-        removeItemAction           = 0;
-        fileDeleteAction           = 0;
-        fileDeleteFinalAction      = 0;
-        slideShowAction            = 0;
-        fullScreenAction           = 0;
-        donateMoneyAction          = 0;
-        showThumbBarAction         = 0;
-        statusProgressBar          = 0;
-        forwardAction              = 0;
-        backwardAction             = 0;
-        firstAction                = 0;
-        lastAction                 = 0;
-        navigateByPairAction       = 0;
-        rawCameraListAction        = 0;
-        libsInfoAction             = 0;
-        dbStatAction               = 0;
-        themeMenuAction            = 0;
-        contributeAction           = 0;
-        showMenuBarAction          = 0;
-        clearOnCloseAction         = 0;
-        leftZoomBar                = 0;
-        leftFileName               = 0;
-        leftZoomFitToWindowAction  = 0;
-        leftZoomTo100percents      = 0;
-        leftZoomPlusAction         = 0;
-        leftZoomMinusAction        = 0;
-        rightZoomBar               = 0;
-        rightFileName              = 0;
-        rightZoomFitToWindowAction = 0;
-        rightZoomTo100percents     = 0;
-        rightZoomPlusAction        = 0;
-        rightZoomMinusAction       = 0;
     }
 
     bool                      autoLoadOnRightPanel;

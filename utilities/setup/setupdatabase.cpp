@@ -66,10 +66,10 @@ class SetupDatabasePriv
 {
 public:
 
-    SetupDatabasePriv()
+    SetupDatabasePriv() :
+        mainDialog(0),
+        databaseWidget(0)
     {
-        mainDialog     = 0;
-        databaseWidget = 0;
     }
 
     KPageDialog*    mainDialog;

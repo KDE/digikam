@@ -78,24 +78,24 @@ public:
 
 public:
 
-    WaterMarkPriv()
+    WaterMarkPriv() :
+        textSettingsGroupBox(0),
+        imageSettingsGroupBox(0),
+        useImageRadioButton(0),
+        useTextRadioButton(0),
+        useBackgroundCheckBox(0),
+        imageFileUrlRequester(0),
+        textEdit(0),
+        comboBox(0),
+        fontChooserWidget(0),
+        fontColorButton(0),
+        backgroundColorButton(0),
+        textOpacity(0),
+        backgroundOpacity(0),
+        xMarginInput(0),
+        yMarginInput(0),
+        waterMarkSizePercent(0)
     {
-        textSettingsGroupBox  = 0;
-        imageSettingsGroupBox = 0;
-        useImageRadioButton   = 0;
-        useTextRadioButton    = 0;
-        imageFileUrlRequester = 0;
-        textEdit              = 0;
-        fontChooserWidget     = 0;
-        fontColorButton       = 0;
-        useBackgroundCheckBox = 0;
-        backgroundColorButton = 0;
-        textOpacity           = 0;
-        backgroundOpacity     = 0;
-        comboBox              = 0;
-        xMarginInput          = 0;
-        yMarginInput          = 0;
-        waterMarkSizePercent  = 0;
     }
 
     QGroupBox*     textSettingsGroupBox;

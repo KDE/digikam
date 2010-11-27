@@ -46,14 +46,14 @@ class LightTableView::LightTableViewPriv
 {
 public:
 
-    LightTableViewPriv()
+    LightTableViewPriv() :
+        syncPreview(false),
+        leftLoading(false),
+        rightLoading(false),
+        grid(0),
+        leftPreview(0),
+        rightPreview(0)
     {
-        syncPreview  = false;
-        leftLoading  = false;
-        rightLoading = false;
-        leftPreview  = 0;
-        rightPreview = 0;
-        grid         = 0;
     }
 
     bool               syncPreview;

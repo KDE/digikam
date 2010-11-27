@@ -63,12 +63,12 @@ class SetupCollectionsPriv
 {
 public:
 
-    SetupCollectionsPriv()
+    SetupCollectionsPriv() :
+        rootsPathChanged(false),
+        collectionView(0),
+        collectionModel(0),
+        mainDialog(0)
     {
-        mainDialog       = 0;
-        collectionView   = 0;
-        collectionModel  = 0;
-        rootsPathChanged = false;
     }
 
     bool                     rootsPathChanged;

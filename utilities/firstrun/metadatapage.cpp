@@ -46,11 +46,11 @@ class MetadataPagePriv
 {
 public:
 
-    MetadataPagePriv()
+    MetadataPagePriv() :
+        doNothing(0),
+        storeInFiles(0),
+        metadataStorage(0)
     {
-        doNothing       = 0;
-        storeInFiles    = 0;
-        metadataStorage = 0;
     }
 
     QRadioButton* doNothing;

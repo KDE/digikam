@@ -48,9 +48,9 @@
 namespace Digikam
 {
 
-DatabaseOptionDialog::DatabaseOptionDialog(Parseable* parent)
-    : ParseableDialog(parent),
-      dbkeySelectorView(0), separatorLineEdit(0)
+DatabaseOptionDialog::DatabaseOptionDialog(Parseable* parent) :
+    ParseableDialog(parent),
+    dbkeySelectorView(0), separatorLineEdit(0)
 {
     QWidget* mainWidget  = new QWidget(this);
     dbkeySelectorView    = new DbKeySelectorView(this);

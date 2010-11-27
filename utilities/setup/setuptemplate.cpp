@@ -57,14 +57,14 @@ class SetupTemplatePriv
 {
 public:
 
-    SetupTemplatePriv()
+    SetupTemplatePriv() :
+        addButton(0),
+        delButton(0),
+        repButton(0),
+        titleEdit(0),
+        listView(0),
+        tview(0)
     {
-        addButton = 0;
-        delButton = 0;
-        repButton = 0;
-        listView  = 0;
-        tview     = 0;
-        titleEdit = 0;
     }
 
     QPushButton*   addButton;

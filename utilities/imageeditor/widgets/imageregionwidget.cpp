@@ -57,13 +57,15 @@ class ImageRegionWidget::ImageRegionWidgetPriv
 
 public:
 
-    ImageRegionWidgetPriv()
+    ImageRegionWidgetPriv() :
+        onMouseMovePreviewToggled(true),
+        capturePtMode(false),
+        renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
+        oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
+        xpos(0),
+        ypos(0),
+        iface(0)
     {
-        capturePtMode             = false;
-        onMouseMovePreviewToggled = true;
-        iface                     = 0;
-        renderingPreviewMode      = PreviewToolBar::PreviewBothImagesVertCont;
-        oldRenderingPreviewMode   = PreviewToolBar::PreviewBothImagesVertCont;
     }
 
     bool        onMouseMovePreviewToggled;

@@ -47,11 +47,11 @@ class ToolsView::ToolsViewPriv
 
 public:
 
-    ToolsViewPriv()
-    {
-        baseTools   = 0;
+    ToolsViewPriv() :
+        baseTools(0),
         //        customTools = 0;
-        historyView = 0;
+        historyView(0)
+    {
     }
 
     ToolsListView* baseTools;

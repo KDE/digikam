@@ -114,12 +114,12 @@ class GPCameraPrivate
 public:
 
     GPCameraPrivate()
-    {
 #ifdef HAVE_GPHOTO2
-        status            = 0;
-        camera            = 0;
-        cameraInitialized = false;
+    : cameraInitialized(false),
+      camera(0),
+      status(0)
 #endif /* HAVE_GPHOTO2 */
+    {
     }
 
 #ifdef HAVE_GPHOTO2

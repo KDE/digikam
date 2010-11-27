@@ -150,10 +150,10 @@ class PreviewListItem::PreviewListItemPriv
 
 public:
 
-    PreviewListItemPriv()
+    PreviewListItemPriv() :
+        busy(false),
+        id(0)
     {
-        busy = false;
-        id   = 0;
     }
 
     bool busy;
@@ -210,12 +210,12 @@ class PreviewList::PreviewListPriv
 
 public:
 
-    PreviewListPriv()
+    PreviewListPriv() :
+        progressCount(0),
+        progressTimer(0),
+        progressPix(SmallIcon("process-working", 22)),
+        wrapper(0)
     {
-        wrapper       = 0;
-        progressCount = 0;
-        progressTimer = 0;
-        progressPix   = SmallIcon("process-working", 22);
     }
 
     int                   progressCount;

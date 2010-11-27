@@ -62,25 +62,21 @@ class ColorCorrectionDlgPriv
 {
 public:
 
-    ColorCorrectionDlgPriv()
+    ColorCorrectionDlgPriv() :
+        imageProfileTitle(0),
+        imageProfileDesc(0),
+        previewTarget(0),
+        keepProfile(0),
+        convertToWorkingSpace(0),
+        thirdOption(0),
+        thirdCheckBox(0),
+        imageSRGB(0),
+        imageWorkingSpace(0),
+        imageOtherSpace(0),
+        otherProfileBox(0),
+        imageProfileBox(0),
+        mode(ColorCorrectionDlg::ProfileMismatch)
     {
-        imageProfileTitle     = 0;
-        imageProfileDesc      = 0;
-        previewTarget         = 0;
-
-        keepProfile           = 0;
-        convertToWorkingSpace = 0;
-        thirdOption           = 0;
-        thirdCheckBox         = 0;
-
-        imageSRGB             = 0;
-        imageWorkingSpace     = 0;
-        imageOtherSpace       = 0;
-
-        otherProfileBox       = 0;
-        imageProfileBox       = 0;
-
-        mode                  = ColorCorrectionDlg::ProfileMismatch;
     }
 
     DImg                     preview;

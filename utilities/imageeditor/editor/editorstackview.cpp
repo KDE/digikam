@@ -38,10 +38,10 @@ class EditorStackView::EditorStackViewPriv
 
 public:
 
-    EditorStackViewPriv()
+    EditorStackViewPriv() :
+        toolView(0),
+        canvas(0)
     {
-        canvas   = 0;
-        toolView = 0;
     }
 
     QWidget* toolView;
