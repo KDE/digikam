@@ -300,15 +300,12 @@ void DateOption::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
-    QVariant v;
-    DateFormat df;
-    QString dateString;
-
-    QString tokenStr               = QString("[date:%1]");
     QPointer<DateOptionDialog> dlg = new DateOptionDialog(this);
 
+    QString dateString;
     if (dlg->exec() == KDialog::Accepted)
     {
+        DateFormat df;
         int index = dlg->ui->dateFormatPicker->currentIndex();
 
         // use custom date format?
@@ -318,7 +315,7 @@ void DateOption::slotTokenTriggered(const QString& token)
             date.setDate(dlg->ui->datePicker->date());
             date.setTime(dlg->ui->timePicker->time());
 
-            v = (index == DateFormat::Custom) ? dlg->ui->customFormatInput->text()
+            QVariant v = (index == DateFormat::Custom) ? dlg->ui->customFormatInput->text()
                 : df.formatType((DateFormat::Type)index);
 
             if (v.type() == QVariant::String)
@@ -330,8 +327,10 @@ void DateOption::slotTokenTriggered(const QString& token)
                 dateString = date.toString((Qt::DateFormat)v.toInt());
             }
         }
-        else        // use predefined keywords for date formatting
+        // use predefined keywords for date formatting
+        else
         {
+            QString tokenStr = QString("[date:%1]");
             switch (index)
             {
                 case DateFormat::Standard:
