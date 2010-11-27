@@ -69,14 +69,14 @@ MetadataOptionDialog::MetadataOptionDialog(Parseable* parent) :
     foreach (MetadataSelectorView* viewer, metadataPanel->viewers())
     {
         viewer->setControlElements(MetadataSelectorView::SearchBar);
-
         viewer->clearSelection();
     }
 
     // --------------------------------------------------------
 
     // remove "Viewer" string from tabs
-    for (int i = 0; i < tab->count(); ++i)
+    int tabs = tab->count();
+    for (int i = 0; i < tabs; ++i)
     {
         QString text = tab->tabText(i);
         text.remove("viewer", Qt::CaseInsensitive);
@@ -140,8 +140,7 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 
         foreach (const QString& tag, checkedTags)
         {
-            QString tagStr = QString("[meta:%1]").arg(tag);
-            tags << tagStr;
+            tags << QString("[meta:%1]").arg(tag);
         }
     }
 
@@ -156,11 +155,9 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 
 QString MetadataOption::parseOperation(ParseSettings& settings)
 {
-    QString result;
     const QRegExp& reg  = regExp();
     QString keyword     = reg.cap(2);
-    result = parseMetadata(keyword, settings);
-
+    QString result      = parseMetadata(keyword, settings);
     return result;
 }
 
