@@ -42,7 +42,6 @@ DRawDecoding::DRawDecoding(const RawDecodingSettings& prm)
     RGBInterpolate4Colors   = prm.RGBInterpolate4Colors;
     unclipColors            = prm.unclipColors;
     DontStretchPixels       = prm.DontStretchPixels;
-    enableNoiseReduction    = prm.enableNoiseReduction;
     medianFilterPasses      = prm.medianFilterPasses;
     NRThreshold             = prm.NRThreshold;
     enableCACorrection      = prm.enableCACorrection;
@@ -59,10 +58,12 @@ DRawDecoding::DRawDecoding(const RawDecodingSettings& prm)
 #if KDCRAW_VERSION>=0x010300
     dcbIterations           = prm.dcbIterations;
     dcbEnhanceFl            = prm.dcbEnhanceFl;
-    fbddNR                  = prm.fbddNR;
     eeciRefine              = prm.eeciRefine;
     esMedPasses             = prm.esMedPasses;
     amazeCARefine           = prm.amazeCARefine;
+    NRType                  = prm.NRType;
+#else
+    enableNoiseReduction    = prm.enableNoiseReduction;
 #endif
 
     resetPostProcessingSettings();
@@ -93,6 +94,7 @@ bool DRawDecoding::postProcessingSettingsIsDirty()
     return (lightness    != 0.0    ||
             contrast     != 1.0    ||
             gamma        != 1.0    ||
+            
             saturation   != 1.0    ||
             exposureComp != 0.0    ||
             !curveAdjust.isEmpty());
