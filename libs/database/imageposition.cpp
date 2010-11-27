@@ -39,18 +39,18 @@ class ImagePositionPriv : public QSharedData
 
 public:
 
-    ImagePositionPriv()
+    ImagePositionPriv() :
+        empty(true),
+        latitudeNumber(0),
+        longitudeNumber(0),
+        altitude(0),
+        orientation(0),
+        tilt(0),
+        roll(0),
+        accuracy(0),
+        imageId(-1),
+        dirtyFields(DatabaseFields::ImagePositionsNone)
     {
-        imageId         = -1;
-        latitudeNumber  = 0;
-        longitudeNumber = 0;
-        altitude        = 0;
-        orientation     = 0;
-        tilt            = 0;
-        roll            = 0;
-        accuracy        = 0;
-        empty           = true;
-        dirtyFields     = DatabaseFields::ImagePositionsNone;
     }
 
     void resetData()

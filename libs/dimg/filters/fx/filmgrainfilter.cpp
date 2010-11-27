@@ -46,11 +46,12 @@ class FilmGrainFilterPriv
 {
 public:
 
-    FilmGrainFilterPriv()
+    FilmGrainFilterPriv() :
+        div(0.0),
+        leadLumaNoise(1.0),
+        leadChromaBlueNoise(1.0),
+        leadChromaRedNoise(1.0)
     {
-        leadLumaNoise       = 1.0;
-        leadChromaBlueNoise = 1.0;
-        leadChromaRedNoise  = 1.0;
     }
 
     enum YUVChannel

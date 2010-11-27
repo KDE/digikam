@@ -56,21 +56,21 @@ class InsertTextWidget::InsertTextWidgetPriv
 {
 public:
 
-    InsertTextWidgetPriv()
+    InsertTextWidgetPriv() :
+        data(0),
+        currentMoving(false),
+        textBorder(false),
+        textTransparent(false),
+        alignMode(0),
+        h(0),
+        textRotation(0),
+        transparency(0),
+        w(0),
+        xpos(0),
+        ypos(0),
+        pixmap(0),
+        iface(0)
     {
-        data              = 0;
-        currentMoving     = false;
-        textBorder        = false;
-        textTransparent   = false;
-        alignMode         = 0;
-        h                 = 0;
-        textRotation      = 0;
-        transparency      = 0;
-        w                 = 0;
-        xpos              = 0;
-        ypos              = 0;
-        pixmap            = 0;
-        iface             = 0;
     }
 
     uchar*      data;

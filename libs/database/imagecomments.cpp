@@ -41,10 +41,10 @@ class ImageCommentsPriv : public QSharedData
 {
 public:
 
-    ImageCommentsPriv()
+    ImageCommentsPriv() :
+        id(-1),
+        unique(ImageComments::UniquePerLanguage)
     {
-        id     = -1;
-        unique = ImageComments::UniquePerLanguage;
     }
 
     qlonglong                     id;

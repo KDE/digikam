@@ -65,13 +65,13 @@ class AlbumDBPriv
 
 public:
 
-    AlbumDBPriv()
+    AlbumDBPriv() :
+        db(0)
     {
-        db = 0;
     }
 
     DatabaseBackend* db;
-    QList<int>  recentlyAssignedTags;
+    QList<int>       recentlyAssignedTags;
 };
 
 AlbumDB::AlbumDB(DatabaseBackend* backend)

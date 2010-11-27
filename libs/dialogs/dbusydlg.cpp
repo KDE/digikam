@@ -39,9 +39,9 @@ class DBusyDlgPriv
 {
 public:
 
-    DBusyDlgPriv()
+    DBusyDlgPriv() :
+        thread(0)
     {
-        thread = 0;
     }
 
     DBusyThread* thread;

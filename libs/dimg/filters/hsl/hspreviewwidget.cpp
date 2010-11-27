@@ -50,10 +50,11 @@ class HSPreviewWidgetPrivate
 
 public:
 
-    HSPreviewWidgetPrivate()
+    HSPreviewWidgetPrivate() :
+        xBorder(0),
+        hue(0.0),
+        sat(0.0)
     {
-        hue     = 0.0;
-        sat     = 0.0;
     }
 
     int     xBorder;

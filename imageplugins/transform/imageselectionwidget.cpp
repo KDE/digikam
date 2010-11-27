@@ -88,12 +88,27 @@ public:
         ResizingBottomRight
     };
 
-    ImageSelectionWidgetPriv()
+    ImageSelectionWidgetPriv() :
+        drawGoldenSection(false),
+        drawGoldenSpiralSection(false),
+        drawGoldenSpiral(false),
+        drawGoldenTriangle(false),
+        flipHorGoldenGuide(false),
+        flipVerGoldenGuide(false),
+        moving(false),
+        autoOrientation(false),
+        preciseCrop(false),
+        isDrawingSelection(false),
+        guideLinesType(0),
+        guideSize(1),
+        currentAspectRatioType(0),
+        currentResizing(ResizingNone),
+        currentOrientation(0),
+        currentWidthRatioValue(0),
+        currentHeightRatioValue(0),
+        pixmap(0),
+        iface(0)
     {
-        currentResizing = ResizingNone;
-        iface           = 0;
-        pixmap          = 0;
-        guideSize       = 1;
     }
 
     // Golden guide types.

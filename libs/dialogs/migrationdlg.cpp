@@ -94,16 +94,16 @@ class MigrationDlgPriv
 
 public:
 
-    MigrationDlgPriv()
+    MigrationDlgPriv() :
+        fromDatabaseWidget(0),
+        toDatabaseWidget(0),
+        migrateButton(0),
+        cancelButton(0),
+        overallStepTitle(0),
+        progressBar(0),
+        progressBarSmallStep(0),
+        copyThread(0)
     {
-        fromDatabaseWidget   = 0;
-        toDatabaseWidget     = 0;
-        migrateButton        = 0;
-        cancelButton         = 0;
-        overallStepTitle     = 0;
-        progressBar          = 0;
-        progressBarSmallStep = 0;
-        copyThread           = 0;
     }
 
     DatabaseWidget*     fromDatabaseWidget;

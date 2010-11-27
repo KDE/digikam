@@ -74,18 +74,23 @@ public:
         ResizingBottomRight
     };
 
-    PerspectiveWidgetPriv()
+    PerspectiveWidgetPriv() :
+        antiAliasing(false),
+        drawWhileMoving(true),
+        drawGrid(false),
+        inverseTransformation(false),
+        validPerspective(true),
+        data(0),
+        width(0),
+        height(0),
+        origW(0),
+        origH(0),
+        currentResizing(ResizingNone),
+        guideSize(1),
+        guideColor(Qt::red),
+        pixmap(0),
+        iface(0)
     {
-        drawGrid              = false;
-        drawWhileMoving       = true;
-        inverseTransformation = false;
-        validPerspective      = true;
-        currentResizing       = ResizingNone;
-        guideColor            = Qt::red;
-        guideSize             = 1;
-        data                  = 0;
-        pixmap                = 0;
-        iface                 = 0;
     }
 
     bool        antiAliasing;

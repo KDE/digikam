@@ -55,12 +55,12 @@ class TagsCache::TagsCachePriv
 {
 public:
 
-    TagsCachePriv()
+    TagsCachePriv() :
+        initialized(false),
+        needUpdateInfos(true),
+        needUpdateHash(true),
+        changingDB(false)
     {
-        initialized     = false;
-        needUpdateInfos = true;
-        needUpdateHash  = true;
-        changingDB      = false;
     }
 
     bool                     initialized;

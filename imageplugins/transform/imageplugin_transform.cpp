@@ -56,14 +56,14 @@ class ImagePlugin_Transform::ImagePlugin_TransformPriv
 {
 public:
 
-    ImagePlugin_TransformPriv()
+    ImagePlugin_TransformPriv() :
+        aspectRatioCropAction(0),
+        resizeAction(0),
+        contentAwareResizingAction(0),
+        sheartoolAction(0),
+        freerotationAction(0),
+        perspectiveAction(0)
     {
-        aspectRatioCropAction      = 0;
-        resizeAction               = 0;
-        contentAwareResizingAction = 0;
-        sheartoolAction            = 0;
-        freerotationAction         = 0;
-        perspectiveAction          = 0;
     }
 
     KAction* aspectRatioCropAction;

@@ -62,19 +62,19 @@ class ImagePlugin_Enhance::ImagePlugin_EnhancePriv
 {
 public:
 
-    ImagePlugin_EnhancePriv()
+    ImagePlugin_EnhancePriv() :
+        hotpixelsAction(0),
+        lensdistortionAction(0),
+        antivignettingAction(0),
+        lensAutoFixAction(0),
+        redeyeAction(0),
+        restorationAction(0),
+        blurAction(0),
+        sharpenAction(0),
+        noiseReductionAction(0),
+        localContrastAction(0),
+        inPaintingAction(0)
     {
-        hotpixelsAction      = 0;
-        lensdistortionAction = 0;
-        antivignettingAction = 0;
-        lensAutoFixAction    = 0;
-        redeyeAction         = 0;
-        restorationAction    = 0;
-        blurAction           = 0;
-        sharpenAction        = 0;
-        noiseReductionAction = 0;
-        localContrastAction  = 0;
-        inPaintingAction     = 0;
     }
 
     KAction* hotpixelsAction;
