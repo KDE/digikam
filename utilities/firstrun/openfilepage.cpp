@@ -53,14 +53,14 @@ public:
     OpenFilePagePriv() :
         openAsPreview(0),
         openInEditor(0),
-        openFileBehavour(0)
+        openFileBehavior(0)
     {
     }
 
     QRadioButton* openAsPreview;
     QRadioButton* openInEditor;
 
-    QButtonGroup* openFileBehavour;
+    QButtonGroup* openFileBehavior;
 };
 
 OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
@@ -77,15 +77,15 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
     QWidget* btns       = new QWidget(vbox);
     QVBoxLayout* vlay   = new QVBoxLayout(btns);
 
-    d->openFileBehavour = new QButtonGroup(btns);
+    d->openFileBehavior = new QButtonGroup(btns);
     d->openAsPreview    = new QRadioButton(btns);
     d->openAsPreview->setText(i18n("Open a preview"));
     d->openAsPreview->setChecked(true);
-    d->openFileBehavour->addButton(d->openAsPreview);
+    d->openFileBehavior->addButton(d->openAsPreview);
 
     d->openInEditor = new QRadioButton(btns);
     d->openInEditor->setText(i18n("Open in the editor"));
-    d->openFileBehavour->addButton(d->openInEditor);
+    d->openFileBehavior->addButton(d->openInEditor);
 
     vlay->addWidget(d->openAsPreview);
     vlay->addWidget(d->openInEditor);

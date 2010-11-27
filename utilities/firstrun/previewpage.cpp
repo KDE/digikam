@@ -49,14 +49,14 @@ public:
     PreviewPagePriv() :
         loadReduced(0),
         loadimage(0),
-        previewBehavour(0)
+        previewBehavior(0)
     {
     }
 
     QRadioButton* loadReduced;
     QRadioButton* loadimage;
 
-    QButtonGroup* previewBehavour;
+    QButtonGroup* previewBehavior;
 };
 
 PreviewPage::PreviewPage(KAssistantDialog* dlg)
@@ -73,15 +73,15 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
     QWidget* btns      = new QWidget(vbox);
     QVBoxLayout* vlay  = new QVBoxLayout(btns);
 
-    d->previewBehavour = new QButtonGroup(btns);
+    d->previewBehavior = new QButtonGroup(btns);
     d->loadReduced     = new QRadioButton(btns);
     d->loadReduced->setText(i18n("Load reduced version of image"));
     d->loadReduced->setChecked(true);
-    d->previewBehavour->addButton(d->loadReduced);
+    d->previewBehavior->addButton(d->loadReduced);
 
     d->loadimage = new QRadioButton(btns);
     d->loadimage->setText(i18n("Load image"));
-    d->previewBehavour->addButton(d->loadimage);
+    d->previewBehavior->addButton(d->loadimage);
 
     vlay->addWidget(d->loadReduced);
     vlay->addWidget(d->loadimage);
