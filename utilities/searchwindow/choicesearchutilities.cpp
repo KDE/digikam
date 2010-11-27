@@ -93,7 +93,7 @@ void ChoiceSearchModel::setChoice(QVariantList data)
     }
 }
 
-void ChoiceSearchModel::setChoice(QStringList data)
+void ChoiceSearchModel::setChoice(const QStringList& data)
 {
     if (m_entries.size())
     {

@@ -70,7 +70,7 @@ KConfigGroup StubStateSaver::getGroup()
     return getConfigGroup();
 }
 
-QString StubStateSaver::getEntryKey(QString base)
+QString StubStateSaver::getEntryKey(const QString& base)
 {
     return entryName(base);
 }

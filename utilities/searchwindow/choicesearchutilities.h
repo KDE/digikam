@@ -67,7 +67,7 @@ public:
 
     /** Sets the data from the given list,
      *  taking every first entry as the key, every second as the user displayable value */
-    void setChoice(QStringList data);
+    void setChoice(const QStringList& data);
 
     /** Returns the keys of all entries that are selected (checked) */
     QVariantList checkedKeys() const;

@@ -245,7 +245,7 @@ void MigrationDlg::handleFinish(int finishState, QString errorMsg)
     }
 }
 
-void MigrationDlg::handleStepStarted(QString stepName)
+void MigrationDlg::handleStepStarted(const QString& stepName)
 {
     int progressBarValue = d->progressBar->value();
     d->overallStepTitle->setText(i18n("Step Progress (%1)", stepName));

@@ -59,7 +59,7 @@ public:
     virtual ~StubStateSaver();
 
     KConfigGroup getGroup();
-    QString getEntryKey(QString base);
+    QString getEntryKey(const QString& base);
 
     void doLoadState();
     void doSaveState();
