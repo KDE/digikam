@@ -167,9 +167,9 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
     }
 
     DateFormat df;
-    QVariant v;
+    QVariant   v;
 
-    v = df.formatType((DateFormat::Type)ui->dateFormatPicker->currentIndex());
+    v = df.formatType(static_cast<DateFormat::Type>(ui->dateFormatPicker->currentIndex()));
     QString result;
 
     if (v.type() == QVariant::String)
@@ -187,17 +187,13 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
 void DateOptionDialog::slotDateSourceChanged(int index)
 {
     Q_UNUSED(index)
-
-    DateSource choice = dateSource();
-    ui->fixedDateContainer->setEnabled( (choice == FixedDateTime) );
+    ui->fixedDateContainer->setEnabled(dateSource() == FixedDateTime);
 }
 
 void DateOptionDialog::slotDateFormatChanged(int index)
 {
     bool custom = (index == DateFormat::Custom);
-
     ui->customFormatInput->setEnabled(custom);
-
     ui->dateFormatLink->setEnabled(custom);
     ui->dateFormatLink->setVisible(custom);
 
