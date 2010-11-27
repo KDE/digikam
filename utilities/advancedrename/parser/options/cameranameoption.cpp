@@ -39,7 +39,7 @@ namespace Digikam
 CameraNameOption::CameraNameOption()
     : Option(i18n("Camera"), i18n("Add the camera name"), SmallIcon("camera-photo"))
 {
-    QString token = "[cam]";
+    QString token("[cam]");
     addToken(token, i18n("Camera name"));
 
     QRegExp reg(escapeToken(token));
