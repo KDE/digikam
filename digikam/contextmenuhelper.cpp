@@ -724,7 +724,7 @@ void ContextMenuHelper::addQueueManagerMenu()
         // when the list is changed
         QMap<int, QString> qmwMap = qmw->queuesMap();
 
-        for (QMap<int, QString>::iterator it = qmwMap.begin(); it != qmwMap.end(); ++it)
+        for (QMap<int, QString>::const_iterator it = qmwMap.constBegin(); it != qmwMap.constEnd(); ++it)
         {
             QAction* action = new QAction(it.value(), this);
             queueList << action;
