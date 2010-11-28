@@ -701,12 +701,8 @@ void ContextMenuHelper::addQueueManagerMenu()
 {
     KMenu* bqmMenu = new KMenu(i18n("Batch Queue Manager"), d->parent);
     bqmMenu->menuAction()->setIcon(KIcon("bqm-diff"));
-
-    QStringList queueActions;
-    queueActions << QString("image_add_to_current_queue")
-                 << QString("image_add_to_new_queue");
-    bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(0)));
-    bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(1)));
+    bqmMenu->addAction(d->stdActionCollection->action("image_add_to_current_queue"));
+    bqmMenu->addAction(d->stdActionCollection->action("image_add_to_new_queue"));
 
     // if queue list is empty, do not display the queue submenu
     if (QueueMgrWindow::queueManagerWindowCreated() &&
@@ -811,7 +807,7 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
             if (choice == it.value())
             {
                 emit signalAddToExistingQueue(it.key());
-                break;
+                return choice;
             }
         }
     }
