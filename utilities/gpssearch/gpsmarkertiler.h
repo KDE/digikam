@@ -121,9 +121,9 @@ public:
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey);
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size);
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
-    virtual KMap::WMWSelectionState getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
+    virtual KMap::KMapSelectionState getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
 
-    virtual void onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::WMWSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode);
+    virtual void onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::KMapSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode);
 
     virtual void setActive(const bool state);
     GPSImageInfo gpsData(qlonglong id, KMap::GeoCoordinates coordinate, int rating, QDateTime creationDate);

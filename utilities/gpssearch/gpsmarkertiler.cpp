@@ -599,11 +599,11 @@ bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
     return false;
 }
 
-KMap::WMWSelectionState GPSMarkerTiler::getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
+KMap::KMapSelectionState GPSMarkerTiler::getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
 {
     Q_UNUSED(tileIndex)
 
-    return KMap::WMWSelectionState();
+    return KMap::KMapSelectionState();
 }
 
 /**
@@ -1031,7 +1031,7 @@ void GPSMarkerTiler::removeCurrentSelection()
     }
 }
 
-void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::WMWSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode)
+void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::KMapSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode)
 {
     QList<qlonglong> clickedImagesId;
 
@@ -1043,7 +1043,7 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex
 
     if (currentMouseMode == KMap::MouseModeSelectThumbnail)
     {
-        const bool doSelect = groupSelectionState != KMap::WMWSelectedAll;
+        const bool doSelect = groupSelectionState != KMap::KMapSelectedAll;
 
         if (d->selectionModel)
         {
@@ -1062,7 +1062,7 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex
             }
         }
     }
-    else if (currentMouseMode == KMap::MouseModeFilterModel)
+    else if (currentMouseMode == KMap::MouseModeFilter)
     {
         emit signalModelFilteredImages(clickedImagesId);
     }
