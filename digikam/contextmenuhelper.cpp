@@ -215,7 +215,7 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
 {
     setSelectedItems(selectedItems);
 
-    // This code is inspired from KonqMenuActions:
+    // This code is inspired by KonqMenuActions:
     // kdebase/apps/lib/konq/konq_menuactions.cpp
 
     QStringList mimeTypes;
