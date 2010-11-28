@@ -786,7 +786,7 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
 
     if (choice)
     {
-        if (!d->selectedIds.isEmpty())
+        if (d->selectedIds.count() == 1)
         {
             ImageInfo selectedItem(d->selectedIds.first());
 
