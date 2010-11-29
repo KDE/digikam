@@ -339,6 +339,7 @@ public:
 protected Q_SLOTS:
 
     void slotTagDeleted(int tagId);
+    void slotInvalidate();
 
 private:
 

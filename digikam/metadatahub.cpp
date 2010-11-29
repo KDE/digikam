@@ -40,6 +40,8 @@
 
 // Local includes
 
+#include "databaseaccess.h"
+#include "databasewatch.h"
 #include "imageinfo.h"
 #include "imagecomments.h"
 #include "template.h"
@@ -944,10 +946,12 @@ public:
 
     MetadataHubOnTheRoadPriv()
     {
+        invalid = false;
     }
 
     QMutex     mutex;
     QList<int> tagIds;
+    bool       invalid;
 };
 
 MetadataHubOnTheRoad::MetadataHubOnTheRoad(QObject* parent)
@@ -956,6 +960,9 @@ MetadataHubOnTheRoad::MetadataHubOnTheRoad(QObject* parent)
     connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
             this, SLOT(slotTagDeleted(int)),
             Qt::DirectConnection);
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(databaseChanged()),
+            this, SLOT(slotInvalidate()));
 }
 
 MetadataHubOnTheRoad::~MetadataHubOnTheRoad()
@@ -982,6 +989,11 @@ MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHubOnTheRoad& other, QO
 
 void MetadataHubOnTheRoad::applyChangeNotifications()
 {
+    if (d->invalid)
+    {
+        reset();
+    }
+
     QList<int> tagIds;
     {
         QMutexLocker locker(&d->mutex);
@@ -999,6 +1011,12 @@ void MetadataHubOnTheRoad::slotTagDeleted(int tagId)
 {
     QMutexLocker locker(&d->mutex);
     d->tagIds << tagId;
+}
+
+void MetadataHubOnTheRoad::slotInvalidate()
+{
+    QMutexLocker locker(&d->mutex);
+    d->invalid = true;
 }
 
 } // namespace Digikam

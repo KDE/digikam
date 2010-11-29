@@ -226,6 +226,11 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
         }
     }
 
+    if (!d->infoCache)
+    {
+        d->infoCache = new ImageInfoCache();
+    }
+
     if (!d->backend || !d->backend->isCompatible(parameters))
     {
         delete d->db;
@@ -236,8 +241,9 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
         TagsCache::instance()->initialize();
     }
 
-    delete d->infoCache;
-    d->infoCache = new ImageInfoCache();
+    d->databaseWatch->sendDatabaseChanged();
+    d->infoCache->invalidate();
+    TagsCache::instance()->invalidate();
     d->databaseWatch->setDatabaseIdentifier(QString());
     CollectionManager::instance()->clear_locked();
 }

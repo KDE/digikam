@@ -84,6 +84,8 @@ public:
     bool       imageSizeCached        : 1;
     bool       tagIdsCached           : 1;
     bool       positionsCached        : 1;
+
+    bool       invalid                : 1;
 };
 
 }  // namespace Digikam

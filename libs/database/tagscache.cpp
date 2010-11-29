@@ -249,6 +249,13 @@ void TagsCache::initialize()
     d->initialized = true;
 }
 
+void TagsCache::invalidate()
+{
+    d->needUpdateInfos      = true;
+    d->needUpdateHash       = true;
+    d->needUpdateProperties = true;
+}
+
 QLatin1String TagsCache::tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy)
 {
     if (slashPolicy == IncludeLeadingSlash)

@@ -72,6 +72,8 @@ public:
 
     QString albumName(DatabaseAccess& access, int albumId);
 
+    void invalidate();
+
 private Q_SLOTS:
 
     void slotImageChanged(const ImageChangeset& changeset);

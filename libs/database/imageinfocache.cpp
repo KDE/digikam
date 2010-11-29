@@ -86,7 +86,7 @@ void ImageInfoCache::dropInfo(ImageInfoData* infodata)
         return;
     }
 
-    if (m_infos.remove(infodata->id))
+    if (infodata->invalid || m_infos.remove(infodata->id))
     {
         delete infodata;
     }
@@ -104,6 +104,26 @@ QString ImageInfoCache::albumName(DatabaseAccess& access, int albumId)
     }
 
     return (*it);
+}
+
+void ImageInfoCache::invalidate()
+{
+    QHash<qlonglong, ImageInfoData*>::iterator it;
+    for (it = m_infos.begin(); it != m_infos.end(); ++it)
+    {
+        if ((*it)->isReferenced())
+        {
+            (*it)->invalid = true;
+            (*it)->id = -1;
+        }
+        else
+        {
+            delete *it;
+        }
+    }
+
+    m_infos.clear();
+    m_albums.clear();
 }
 
 void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)

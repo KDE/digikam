@@ -210,6 +210,7 @@ private:
     TagsCache();
     ~TagsCache();
     void initialize();
+    void invalidate();
 
     class TagsCachePriv;
     TagsCachePriv* const d;

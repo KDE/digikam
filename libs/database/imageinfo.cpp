@@ -88,6 +88,8 @@ ImageInfoData::ImageInfoData()
     imageSizeCached        = false;
     tagIdsCached           = false;
     positionsCached        = false;
+
+    invalid                = false;
 }
 
 ImageInfo::ImageInfo()

@@ -230,6 +230,11 @@ void DatabaseWatch::setApplicationIdentifier(const QString& identifier)
     d->applicationId = identifier;
 }
 
+void DatabaseWatch::sendDatabaseChanged()
+{
+    // Note: This is not dispatched by DBus!
+    emit databaseChanged();
+}
 
 // --- methods to dispatch changes from database to listeners (local and remote) ---
 
