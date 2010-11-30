@@ -46,7 +46,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DRawDecoding : public RawDecodingSettings
+class DIGIKAM_EXPORT DRawDecoding
 {
 
 public:
@@ -79,7 +79,17 @@ public:
      */
     bool operator==(const DRawDecoding& other) const;
 
+    /** Equivalent to the copy constructor
+     */
+    DRawDecoding& operator=(const DRawDecoding& prm);
+
 public:
+
+    /** All Raw decoding settings provided by libkdcraw.
+     */
+    RawDecodingSettings rawPrm;
+
+    /// Post Processing settings ----------------------------------------------------
 
     /** Lightness correction value.
     */

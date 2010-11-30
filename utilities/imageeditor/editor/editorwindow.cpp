@@ -952,7 +952,7 @@ void EditorWindow::applyStandardSettings()
     // -- RAW images decoding settings ------------------------------------------------------
 
     m_IOFileSettings->useRAWImport = group.readEntry(d->configUseRawImportToolEntry, false);
-    m_IOFileSettings->rawDecodingSettings.readSettings(group);
+    m_IOFileSettings->rawDecodingSettings.rawPrm.readSettings(group);
 
     // -- Color Management settings ---------------------------------------------------------
 
@@ -963,17 +963,17 @@ void EditorWindow::applyStandardSettings()
     {
         if (d->ICCSettings->defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
         {
-            m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::CUSTOMOUTPUTCS;
-            m_IOFileSettings->rawDecodingSettings.outputProfile    = d->ICCSettings->workspaceProfile;
+            m_IOFileSettings->rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::CUSTOMOUTPUTCS;
+            m_IOFileSettings->rawDecodingSettings.rawPrm.outputProfile    = d->ICCSettings->workspaceProfile;
         }
         else
         {
-            m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::RAWCOLOR;
+            m_IOFileSettings->rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::RAWCOLOR;
         }
     }
     else
     {
-        m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
+        m_IOFileSettings->rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::SRGB;
     }
 
     d->toolIface->updateICCSettings();

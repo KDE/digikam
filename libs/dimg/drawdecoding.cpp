@@ -35,36 +35,7 @@ DRawDecoding::DRawDecoding()
 
 DRawDecoding::DRawDecoding(const RawDecodingSettings& prm)
 {
-    sixteenBitsImage        = prm.sixteenBitsImage;
-    whiteBalance            = prm.whiteBalance;
-    customWhiteBalance      = prm.customWhiteBalance;
-    customWhiteBalanceGreen = prm.customWhiteBalanceGreen;
-    RGBInterpolate4Colors   = prm.RGBInterpolate4Colors;
-    unclipColors            = prm.unclipColors;
-    DontStretchPixels       = prm.DontStretchPixels;
-    medianFilterPasses      = prm.medianFilterPasses;
-    NRThreshold             = prm.NRThreshold;
-    enableCACorrection      = prm.enableCACorrection;
-    caMultiplier[0]         = prm.caMultiplier[0];
-    caMultiplier[1]         = prm.caMultiplier[1];
-    RAWQuality              = prm.RAWQuality;
-    inputColorSpace         = prm.inputColorSpace;
-    outputColorSpace        = prm.outputColorSpace;
-    inputProfile            = prm.inputProfile;
-    outputProfile           = prm.outputProfile;
-    autoBrightness          = prm.autoBrightness;
-    fixColorsHighlights     = prm.fixColorsHighlights;
-
-#if KDCRAW_VERSION>=0x010300
-    dcbIterations           = prm.dcbIterations;
-    dcbEnhanceFl            = prm.dcbEnhanceFl;
-    eeciRefine              = prm.eeciRefine;
-    esMedPasses             = prm.esMedPasses;
-    amazeCARefine           = prm.amazeCARefine;
-    NRType                  = prm.NRType;
-#else
-    enableNoiseReduction    = prm.enableNoiseReduction;
-#endif
+    rawPrm = prm;
 
     resetPostProcessingSettings();
 }
@@ -75,7 +46,7 @@ DRawDecoding::~DRawDecoding()
 
 void DRawDecoding::optimizeTimeLoading()
 {
-    RawDecodingSettings::optimizeTimeLoading();
+    rawPrm.optimizeTimeLoading();
     resetPostProcessingSettings();
 }
 
@@ -94,7 +65,6 @@ bool DRawDecoding::postProcessingSettingsIsDirty()
     return (lightness    != 0.0    ||
             contrast     != 1.0    ||
             gamma        != 1.0    ||
-            
             saturation   != 1.0    ||
             exposureComp != 0.0    ||
             !curveAdjust.isEmpty());
@@ -102,12 +72,25 @@ bool DRawDecoding::postProcessingSettingsIsDirty()
 
 bool DRawDecoding::operator==(const DRawDecoding& other) const
 {
-    return lightness     == other.lightness    &&
-           contrast      == other.contrast     &&
-           gamma         == other.gamma        &&
-           saturation    == other.saturation   &&
-           exposureComp  == other.exposureComp &&
-           curveAdjust   == other.curveAdjust;
+    return rawPrm       == other.rawPrm       &&
+           lightness    == other.lightness    &&
+           contrast     == other.contrast     &&
+           gamma        == other.gamma        &&
+           saturation   == other.saturation   &&
+           exposureComp == other.exposureComp &&
+           curveAdjust  == other.curveAdjust;
+}
+
+DRawDecoding& DRawDecoding::operator=(const DRawDecoding& o)
+{
+    rawPrm       = o.rawPrm;
+    lightness    = o.lightness;
+    contrast     = o.contrast;
+    gamma        = o.gamma;
+    saturation   = o.saturation;
+    exposureComp = o.exposureComp;
+    curveAdjust  = o.curveAdjust;
+    return *this;
 }
 
 }  // namespace Digikam
