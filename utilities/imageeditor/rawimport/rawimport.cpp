@@ -143,7 +143,7 @@ void RawImport::slotUpdatePreview()
 {
     DRawDecoding settings = rawDecodingSettings();
     // We will load an half size image to speed up preview computing.
-    settings.halfSizeColorImage = true;
+    //settings.halfSizeColorImage = true;
 
     d->previewWidget->setDecodingSettings(settings);
 }
