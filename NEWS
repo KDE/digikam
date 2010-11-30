@@ -25,4 +25,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 257897 : Amount of duplicate images list is sorted the wrong way round.
 018 ==> 234534 : digiKam not synchronizing legacy tags with new nepomuk database.
 019 ==> 237642 : digiKam crashes while renaming several files. 
-020 ==> 
+020 ==> 258308 : Crash when starting Free Rotation in Image Editor.
+021 ==> 
