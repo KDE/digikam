@@ -6,7 +6,7 @@
  * Date        : 2009-10-22
  * Description : a dynamic layout manager
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,25 +62,27 @@ public:
 // --------------------------------------------------------
 
 DynamicLayout::DynamicLayout(QWidget* parent, int margin, int hSpacing, int vSpacing)
-    : QLayout(parent), d(new DynamicLayoutPriv(hSpacing,vSpacing))
+    : QLayout(parent), d(new DynamicLayoutPriv(hSpacing, vSpacing))
 {
     setContentsMargins(margin, margin, margin, margin);
 }
 
 DynamicLayout::DynamicLayout(int margin, int hSpacing, int vSpacing)
-    : d(new DynamicLayoutPriv(hSpacing,vSpacing))
+    : d(new DynamicLayoutPriv(hSpacing, vSpacing))
 {
     setContentsMargins(margin, margin, margin, margin);
 }
 
 DynamicLayout::~DynamicLayout()
 {
-    QLayoutItem* item;
+    QLayoutItem* item = 0;
 
     while ((item = takeAt(0)))
     {
         delete item;
     }
+
+    delete d;
 }
 
 void DynamicLayout::addItem(QLayoutItem* item)
