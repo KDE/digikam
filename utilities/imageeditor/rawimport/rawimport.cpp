@@ -139,6 +139,11 @@ DRawDecoding RawImport::rawDecodingSettings() const
     return d->settingsBox->settings();
 }
 
+DImg& RawImport::postProcessedImage() const
+{
+    return d->previewWidget->postProcessedImage();
+}
+
 void RawImport::slotUpdatePreview()
 {
     DRawDecoding settings = rawDecodingSettings();

@@ -51,6 +51,7 @@ public:
     ~RawImport();
 
     DRawDecoding rawDecodingSettings() const;
+    DImg& postProcessedImage() const;
 
 private:
 
