@@ -218,9 +218,9 @@ DigikamApp::DigikamApp()
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
-    d->cameraMenu               = new KActionMenu(this);
-    d->usbMediaMenu             = new KActionMenu(this);
-    d->cardReaderMenu           = new KActionMenu(this);
+    d->cameraMenu     = new KActionMenu(this);
+    d->usbMediaMenu   = new KActionMenu(this);
+    d->cardReaderMenu = new KActionMenu(this);
 
     d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
 
