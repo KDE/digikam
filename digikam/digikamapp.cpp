@@ -263,9 +263,7 @@ DigikamApp::DigikamApp()
     populateThemes();
 
     // preload additional windows
-    QueueMgrWindow::queueManagerWindow();
-    ImageWindow::imageWindow();
-    LightTableWindow::lightTableWindow();
+    preloadWindows();
 
     setAutoSaveSettings("General Settings", true);
 }
@@ -2665,6 +2663,18 @@ void DigikamApp::populateThemes()
     d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
     slotThemeChanged();
     ThemeEngine::instance()->slotChangeTheme(d->themeMenuAction->currentText());
+}
+
+void DigikamApp::preloadWindows()
+{
+    if (d->splashScreen)
+    {
+        d->splashScreen->message(i18n("Loading tools"));
+    }
+
+    QueueMgrWindow::queueManagerWindow();
+    ImageWindow::imageWindow();
+    LightTableWindow::lightTableWindow();
 }
 
 void DigikamApp::slotChangeTheme(const QString& theme)
