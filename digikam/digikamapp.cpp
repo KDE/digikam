@@ -211,6 +211,9 @@ DigikamApp::DigikamApp()
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
     ThumbnailLoadThread::setDisplayingWidget(this);
+    QueueMgrWindow::queueManagerWindow();
+    ImageWindow::imageWindow();
+    LightTableWindow::lightTableWindow();
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
