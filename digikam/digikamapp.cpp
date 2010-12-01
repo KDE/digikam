@@ -274,14 +274,14 @@ DigikamApp::~DigikamApp()
 
     // Close and delete image editor instance.
 
-    if (ImageWindow::imagewindowCreated())
+    if (ImageWindow::imageWindowCreated())
     {
         // Delete after close
-        ImageWindow::imagewindow()->setAttribute(Qt::WA_DeleteOnClose, true);
+        ImageWindow::imageWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
         // pass ownership of object - needed by ImageWindow destructor
-        d->imagePluginsLoader->setParent(ImageWindow::imagewindow());
+        d->imagePluginsLoader->setParent(ImageWindow::imageWindow());
         // close the window
-        ImageWindow::imagewindow()->close();
+        ImageWindow::imageWindow()->close();
     }
 
     // Close and delete light table instance.
@@ -492,9 +492,9 @@ bool DigikamApp::queryClose()
 {
     bool ret = true;
 
-    if (ImageWindow::imagewindowCreated())
+    if (ImageWindow::imageWindowCreated())
     {
-        ret &= ImageWindow::imagewindow()->queryClose();
+        ret &= ImageWindow::imageWindow()->queryClose();
     }
 
     if (QueueMgrWindow::queueManagerWindowCreated())
@@ -2330,9 +2330,9 @@ void DigikamApp::slotSetupChanged()
 
     AlbumThumbnailLoader::instance()->setThumbnailSize(AlbumSettings::instance()->getTreeViewIconSize());
 
-    if (ImageWindow::imagewindowCreated())
+    if (ImageWindow::imageWindowCreated())
     {
-        ImageWindow::imagewindow()->applySettings();
+        ImageWindow::imageWindow()->applySettings();
     }
 
     if (LightTableWindow::lightTableWindowCreated())
@@ -2699,9 +2699,9 @@ void DigikamApp::slotDatabaseRescan()
 
     d->view->refreshView();
 
-    if (ImageWindow::imagewindowCreated())
+    if (ImageWindow::imageWindowCreated())
     {
-        ImageWindow::imagewindow()->refreshView();
+        ImageWindow::imageWindow()->refreshView();
     }
 
     if (LightTableWindow::lightTableWindowCreated())

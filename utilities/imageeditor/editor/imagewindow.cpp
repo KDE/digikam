@@ -180,7 +180,7 @@ const QString ImageWindowPriv::configHorizontalThumbbarEntry("HorizontalThumbbar
 
 ImageWindow* ImageWindow::m_instance = 0;
 
-ImageWindow* ImageWindow::imagewindow()
+ImageWindow* ImageWindow::imageWindow()
 {
     if (!m_instance)
     {
@@ -190,7 +190,7 @@ ImageWindow* ImageWindow::imagewindow()
     return m_instance;
 }
 
-bool ImageWindow::imagewindowCreated()
+bool ImageWindow::imageWindowCreated()
 {
     return m_instance;
 }

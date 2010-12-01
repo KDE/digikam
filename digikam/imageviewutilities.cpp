@@ -357,7 +357,7 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
 
     // Run digiKam ImageEditor with all image from current Album.
 
-    ImageWindow* imview = ImageWindow::imagewindow();
+    ImageWindow* imview = ImageWindow::imageWindow();
 
     imview->disconnect(this);
     connect(imview, SIGNAL(signalURLChanged(const KUrl&)),

@@ -1392,7 +1392,7 @@ void LightTableWindow::slotEditItem()
 
 void LightTableWindow::slotEditItem(const ImageInfo& info)
 {
-    ImageWindow* im    = ImageWindow::imagewindow();
+    ImageWindow* im    = ImageWindow::imageWindow();
     ImageInfoList list = d->barView->itemsImageInfoList();
 
     im->loadImageInfos(list, info, i18n("Light Table"), true);
