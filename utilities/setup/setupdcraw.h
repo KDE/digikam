@@ -35,8 +35,6 @@
 namespace Digikam
 {
 
-class SetupDcrawPriv;
-
 class SetupDcraw : public QScrollArea
 {
     Q_OBJECT
@@ -52,13 +50,14 @@ private:
 
     void readSettings();
 
-
 private Q_SLOTS:
 
     void slotSixteenBitsImageToggled(bool);
+    void slotBehaviorChanged();
 
 private:
 
+    class SetupDcrawPriv;
     SetupDcrawPriv* const d;
 };
 
