@@ -6,7 +6,7 @@
  ; Date        : 2010-11-08
  ; Description : Null Soft windows installer based for digiKam
  ;
- ; Copyright (C) 2010 by Julien Narboux <joern.ahrens@kdemail.net>
+ ; Copyright (C) 2010 by Julien Narboux <julien at narboux dot fr>
  ; Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  ;
  ; Script arguments:
@@ -112,7 +112,7 @@ Section "digiKam" SecDigiKam
   SetOutPath "$INSTDIR"
 
   ;Whole kde4 directory including digiKam & co
-  File /r "${KDE4PATH}"
+   File /r "${KDE4PATH}"
 
   ;Store installation folder
   WriteRegStr HKCU "Software\${MY_PRODUCT}" "" $INSTDIR
@@ -127,6 +127,8 @@ Section "digiKam" SecDigiKam
           "UninstallString" '"$INSTDIR\Uninstall.exe"'
   WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
           "DisplayVersion" "${VERSION}"
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
+          "Publisher" "The digiKam team"
   WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
           "NoModify" "1"
   WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
@@ -175,7 +177,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\Uninstall.exe"
 
-  RMDir /r "$INSTDIR\${MY_PRODUCT}"
+  RMDir /r "$INSTDIR\kde4"
 
   RMDir "$INSTDIR"
 
@@ -185,6 +187,9 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\${MY_PRODUCT}.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\Showfoto.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\DNGConverter.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\ExpoBlending.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\ScanGui.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
