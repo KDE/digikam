@@ -386,11 +386,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 
     if (!d->image.isNull())
     {
-        d->origWidth  = d->image.width();
-        d->origHeight = d->image.height();
         d->valid      = true;
-        d->width      = d->origWidth;
-        d->height     = d->origHeight;
         valRet        = true;
         d->imageHistoryWhenLoaded = d->image.getImageHistory();
         d->resolvedInitialHistory = d->image.getImageHistory();
@@ -415,6 +411,12 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
                 d->rotatedOrFlipped = d->image.rotateAndFlip(metadata.getImageOrientation());
             }
         }
+
+        // set after rotation
+        d->origWidth  = d->image.width();
+        d->origHeight = d->image.height();
+        d->width      = d->origWidth;
+        d->height     = d->origHeight;
 
         updateColorManagement();
     }
