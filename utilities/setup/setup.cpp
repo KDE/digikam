@@ -109,7 +109,7 @@ public:
         cameraPage        = 0;
         pluginsPage       = 0;
         scriptManagerPage = 0;
-        faceTagsPage      = 0;
+        //faceTagsPage      = 0;
         miscPage          = 0;
         versioningPage    = 0;
     }
@@ -153,7 +153,7 @@ public:
     SetupMisc*          miscPage;
     SetupPlugins*       pluginsPage;
     SetupScriptManager* scriptManagerPage;
-    SetupFaceTags*      faceTagsPage;
+    //SetupFaceTags*      faceTagsPage;
     SetupVersioning*    versioningPage;
 
 public:
@@ -189,30 +189,6 @@ Setup::Setup(QWidget* parent)
                                       "<i>Customize the look of the albums list</i></qt>"));
     d->page_albumView->setIcon(KIcon("view-list-icons"));
 
-    d->categoryPage  = new SetupCategory();
-    d->page_category = addPage(d->categoryPage, i18n("Album Category"));
-    d->page_category->setHeader(i18n("<qt>Album Category Settings<br/>"
-                                     "<i>Assign categories to albums used to sort them</i></qt>"));
-    d->page_category->setIcon(KIcon("view-calendar-list"));
-
-    d->tooltipPage  = new SetupToolTip();
-    d->page_tooltip = addPage(d->tooltipPage, i18n("Tool-Tip"));
-    d->page_tooltip->setHeader(i18n("<qt>Album Items Tool-Tip Settings<br/>"
-                                    "<i>Customize information in tool-tips</i></qt>"));
-    d->page_tooltip->setIcon(KIcon("dialog-information"));
-
-    d->faceTagsPage  = new SetupFaceTags();
-    d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
-    d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
-                                     "<i>Configure digiKam's face detection and recognition</i></qt>"));
-    d->page_facetags->setIcon(KIcon("face-smile"));
-
-    d->versioningPage  = new SetupVersioning();
-    d->page_versioning = addPage(d->versioningPage, i18n("Image Versioning"));
-    d->page_versioning->setHeader(i18n("<qt>Image Versioning<br/>"
-                                       "<i>Configure non-destructive editing</i></qt>"));
-    d->page_versioning->setIcon(KIcon("view-catalog"));
-
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
@@ -225,11 +201,35 @@ Setup::Setup(QWidget* parent)
                                      "<i>Manage your collection of metadata templates</i></qt>"));
     d->page_template->setIcon(KIcon("user-identity"));
 
-    d->mimePage  = new SetupMime();
-    d->page_mime = addPage(d->mimePage, i18n("MIME Types"));
-    d->page_mime->setHeader(i18n("<qt>Supported File Settings<br/>"
-                                 "<i>Add new file types to show as album items</i></qt>"));
-    d->page_mime->setIcon(KIcon("system-file-manager"));
+    d->editorPage  = new SetupEditor();
+    d->page_editor = addPage(d->editorPage, i18n("Editor Window"));
+    d->page_editor->setHeader(i18n("<qt>Image Editor Window Settings<br/>"
+                                   "<i>Customize the image editor window</i></qt>"));
+    d->page_editor->setIcon(KIcon("editimage"));
+
+    d->versioningPage  = new SetupVersioning();
+    d->page_versioning = addPage(d->versioningPage, i18n("Editing Images"));
+    d->page_versioning->setHeader(i18n("<qt>Editing Images<br/>"
+                                       "<i>Configure non-destructive editing and versioning</i></qt>"));
+    d->page_versioning->setIcon(KIcon("view-catalog"));
+
+    d->dcrawPage = new SetupDcraw();
+    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
+    d->page_dcraw->setHeader(i18n("<qt>Image Editor: RAW File Decoding<br/>"
+                                  "<i>Configure RAW decoding settings of the image editor</i></qt>"));
+    d->page_dcraw->setIcon(KIcon("kdcraw"));
+
+    d->iofilesPage  = new SetupIOFiles();
+    d->page_iofiles = addPage(d->iofilesPage, i18n("Saving Images"));
+    d->page_iofiles->setHeader(i18n("<qt>Image Editor: Settings for Saving Image Files<br/>"
+                                    "<i>Set default configuration used to save images with the image editor</i></qt>"));
+    d->page_iofiles->setIcon(KIcon("document-save-all"));
+
+    d->iccPage  = new SetupICC(0, this);
+    d->page_icc = addPage(d->iccPage, i18n("Color Management"));
+    d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
+                                "<i>Customize the color management settings</i></qt>"));
+    d->page_icc->setIcon(KIcon("colormanagement"));
 
     d->lighttablePage  = new SetupLightTable();
     d->page_lighttable = addPage(d->lighttablePage, i18n("Light Table"));
@@ -237,41 +237,29 @@ Setup::Setup(QWidget* parent)
                                        "<i>Customize tool used to compare images</i></qt>"));
     d->page_lighttable->setIcon(KIcon("lighttable"));
 
-    d->editorPage  = new SetupEditor();
-    d->page_editor = addPage(d->editorPage, i18n("Image Editor"));
-    d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
-                                   "<i>Customize image editor behavior</i></qt>"));
-    d->page_editor->setIcon(KIcon("editimage"));
-
-    d->iofilesPage  = new SetupIOFiles();
-    d->page_iofiles = addPage(d->iofilesPage, i18n("Save Images"));
-    d->page_iofiles->setHeader(i18n("<qt>Image Editor: Settings for Saving Image Files<br/>"
-                                    "<i>Set default configuration used to save images with the image editor</i></qt>"));
-    d->page_iofiles->setIcon(KIcon("document-save-all"));
-
-    d->dcrawPage = new SetupDcraw();
-    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
-    d->page_dcraw->setHeader(i18n("<qt>Image Editor: RAW Files Decoding Settings<br/>"
-                                  "<i>Customize the default RAW decoding settings of the image editor</i></qt>"));
-    d->page_dcraw->setIcon(KIcon("kdcraw"));
-
-    d->iccPage  = new SetupICC(0, this);
-    d->page_icc = addPage(d->iccPage, i18n("Color Management"));
-    d->page_icc->setHeader(i18n("<qt>Image Editor: Settings for Color Management<br/>"
-                                "<i>Customize the color management settings of the image editor</i></qt>"));
-    d->page_icc->setIcon(KIcon("colormanagement"));
-
-    d->pluginsPage  = new SetupPlugins();
-    d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
-    d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
-                                    "<i>Set which plugins will be accessible from the main interface</i></qt>"));
-    d->page_plugins->setIcon(KIcon("kipi"));
-
     d->slideshowPage  = new SetupSlideShow();
     d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));
     d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
                                       "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
+
+    d->tooltipPage  = new SetupToolTip();
+    d->page_tooltip = addPage(d->tooltipPage, i18n("Tool-Tip"));
+    d->page_tooltip->setHeader(i18n("<qt>Album Items Tool-Tip Settings<br/>"
+                                    "<i>Customize information in tool-tips</i></qt>"));
+    d->page_tooltip->setIcon(KIcon("dialog-information"));
+
+    d->mimePage  = new SetupMime();
+    d->page_mime = addPage(d->mimePage, i18n("MIME Types"));
+    d->page_mime->setHeader(i18n("<qt>Supported File Settings<br/>"
+                                 "<i>Add new file types to show as album items</i></qt>"));
+    d->page_mime->setIcon(KIcon("system-file-manager"));
+
+    d->miscPage  = new SetupMisc();
+    d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
+    d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
+                                 "<i>Customize behavior of the other parts of digiKam</i></qt>"));
+    d->page_misc->setIcon(KIcon("preferences-other"));
 
     d->cameraPage  = new SetupCamera();
     d->page_camera = addPage(d->cameraPage, i18n("Cameras"));
@@ -279,17 +267,29 @@ Setup::Setup(QWidget* parent)
                                    "<i>Manage your camera devices</i></qt>"));
     d->page_camera->setIcon(KIcon("camera-photo"));
 
+    d->pluginsPage  = new SetupPlugins();
+    d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
+    d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
+                                    "<i>Set which plugins will be accessible from the main interface</i></qt>"));
+    d->page_plugins->setIcon(KIcon("kipi"));
+
     d->scriptManagerPage  = new SetupScriptManager();
     d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
     d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
                                           "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
     d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
 
-    d->miscPage  = new SetupMisc();
-    d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
-    d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
-                                 "<i>Customize behavior of the other parts of digiKam</i></qt>"));
-    d->page_misc->setIcon(KIcon("preferences-other"));
+    d->categoryPage  = new SetupCategory();
+    d->page_category = addPage(d->categoryPage, i18n("Album Category"));
+    d->page_category->setHeader(i18n("<qt>Album Category Settings<br/>"
+                                     "<i>Assign categories to albums used to sort them</i></qt>"));
+    d->page_category->setIcon(KIcon("view-calendar-list"));
+
+    /*d->faceTagsPage  = new SetupFaceTags();
+    d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
+    d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
+                                     "<i>Configure digiKam's face detection and recognition</i></qt>"));
+    d->page_facetags->setIcon(KIcon("face-smile"));*/
 
     for (int i = 0; i != SetupPageEnumLast; ++i)
     {
@@ -450,7 +450,7 @@ void Setup::slotOkClicked()
     d->miscPage->applySettings();
     d->pluginsPage->applyPlugins();
     //     d->scriptManagerPage->applySettings();
-    d->faceTagsPage->applySettings();
+    //d->faceTagsPage->applySettings();
     d->versioningPage->applySettings();
 
     AlbumSettings::instance()->emitSetupChanged();
