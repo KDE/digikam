@@ -144,6 +144,11 @@ DImg& RawImport::postProcessedImage() const
     return d->previewWidget->postProcessedImage();
 }
 
+bool RawImport::demosaicingSettingsDirty()
+{
+    return d->settingsBox->updateBtnEnabled();
+}
+
 void RawImport::slotUpdatePreview()
 {
     DRawDecoding settings = rawDecodingSettings();
@@ -202,11 +207,6 @@ void RawImport::slotLoadingFailed()
     d->settingsBox->histogramBox()->histogram()->setLoadingFailed();
     EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
-}
-
-void RawImport::slotDemosaicingChanged()
-{
-    d->settingsBox->enableUpdateBtn(true);
 }
 
 void RawImport::slotLoadingProgress(float v)

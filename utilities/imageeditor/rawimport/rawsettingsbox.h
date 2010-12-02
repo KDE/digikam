@@ -58,19 +58,20 @@ public:
     void setDemosaicedImage(DImg& img);
     void setPostProcessedImage(DImg& img);
 
-    void enableUpdateBtn(bool b);
-
     void resetSettings();
+
+    void enableUpdateBtn(bool b);
+    bool updateBtnEnabled();
 
 Q_SIGNALS:
 
     void signalUpdatePreview();
     void signalAbortPreview();
-    void signalDemosaicingChanged();
     void signalPostProcessingChanged();
 
 private Q_SLOTS:
 
+    void slotDemosaicingChanged();
     void slotResetCurve();
 
 private:
