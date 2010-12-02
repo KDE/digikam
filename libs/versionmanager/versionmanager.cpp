@@ -43,29 +43,70 @@
 namespace Digikam
 {
 
+class VersionManagerSettingsConfig
+{
+public:
+    static const QString configEnabled;
+    static const QString configIntermediateAfterEachSession;
+    static const QString configIntermediateAfterRawConversion;
+    static const QString configIntermediateWhenNotReproducible;
+    static const QString configViewShowIntermediates;
+    static const QString configViewShowOriginal;
+    static const QString configAutoSaveWhenClosingEditor;
+    static const QString configVersionStorageFormat;
+};
+const QString VersionManagerSettingsConfig::configEnabled("Non-Destructive Editing Enabled");
+const QString VersionManagerSettingsConfig::configIntermediateAfterEachSession("Save Intermediate After Each Session");
+const QString VersionManagerSettingsConfig::configIntermediateAfterRawConversion("Save Intermediate After Raw Conversion");
+const QString VersionManagerSettingsConfig::configIntermediateWhenNotReproducible("Save Intermediate When Not Reproducible");
+const QString VersionManagerSettingsConfig::configViewShowIntermediates("Show Intermediates in View");
+const QString VersionManagerSettingsConfig::configViewShowOriginal("Show Original in View");
+const QString VersionManagerSettingsConfig::configAutoSaveWhenClosingEditor("Auto-Save When Closing Editor");
+const QString VersionManagerSettingsConfig::configVersionStorageFormat("Saving Format for Versions");
+
 VersionManagerSettings::VersionManagerSettings()
 {
-    showAllVersions             = true;
+    enabled                     = true;
     saveIntermediateVersions    = NoIntermediates;
-    formatForStoringRAW         = "JPG";
-    formatForStoringSubversions = "JPG";
+    showInViewFlags             = OnlyShowCurrent;
+    editorClosingMode           = AlwaysAsk;
+    format                      = "JPG";
 }
 
 void VersionManagerSettings::readFromConfig(KConfigGroup& group)
 {
-    showAllVersions             = group.readEntry("Show All Available Versions", true);
-    int save                    = group.readEntry("Save Intermediate Versions", (int)NoIntermediates);
-    saveIntermediateVersions    = IntermediateBehavior(save);
-    formatForStoringRAW         = group.readEntry("Format For Storing Versions Of RAW Images", QString("JPG"));
-    formatForStoringSubversions = group.readEntry("Format For Storing Other Versions Of Files", QString("JPG"));
+    enabled                     = group.readEntry(VersionManagerSettingsConfig::configEnabled, true);
+
+    saveIntermediateVersions    = NoIntermediates;
+    if (group.readEntry(VersionManagerSettingsConfig::configIntermediateAfterEachSession, false))
+        saveIntermediateVersions |= AfterEachSession;
+    if (group.readEntry(VersionManagerSettingsConfig::configIntermediateAfterRawConversion, false))
+        saveIntermediateVersions |= AfterRawConversion;
+    if (group.readEntry(VersionManagerSettingsConfig::configIntermediateWhenNotReproducible, false))
+        saveIntermediateVersions |= WhenNotReproducible;
+
+    showInViewFlags             = OnlyShowCurrent;
+    if (group.readEntry(VersionManagerSettingsConfig::configViewShowOriginal, false))
+        showInViewFlags |= ShowOriginal;
+    if (group.readEntry(VersionManagerSettingsConfig::configViewShowIntermediates, false))
+        showInViewFlags |= ShowIntermediates;
+
+    bool autoSave               = group.readEntry(VersionManagerSettingsConfig::configAutoSaveWhenClosingEditor, false);
+    editorClosingMode = autoSave ? AutoSave : AlwaysAsk;
+
+    format                      = group.readEntry(VersionManagerSettingsConfig::configVersionStorageFormat, "JPG");
 }
 
 void VersionManagerSettings::writeToConfig(KConfigGroup& group) const
 {
-    group.writeEntry("Show All Available Versions", showAllVersions);
-    group.writeEntry("Save Intermediate Versions", (int)saveIntermediateVersions);
-    group.writeEntry("Format For Storing Versions Of RAW Images", formatForStoringRAW);
-    group.writeEntry("Format For Storing Other Versions Of Files", formatForStoringSubversions);
+    group.writeEntry(VersionManagerSettingsConfig::configEnabled, enabled);
+    group.writeEntry(VersionManagerSettingsConfig::configIntermediateAfterEachSession, bool(saveIntermediateVersions & AfterEachSession));
+    group.writeEntry(VersionManagerSettingsConfig::configIntermediateAfterRawConversion, bool(saveIntermediateVersions & AfterRawConversion));
+    group.writeEntry(VersionManagerSettingsConfig::configIntermediateWhenNotReproducible, bool(saveIntermediateVersions & WhenNotReproducible));
+    group.writeEntry(VersionManagerSettingsConfig::configViewShowIntermediates, bool(showInViewFlags & ShowIntermediates));
+    group.writeEntry(VersionManagerSettingsConfig::configViewShowOriginal, bool(showInViewFlags & ShowOriginal));
+    group.writeEntry(VersionManagerSettingsConfig::configAutoSaveWhenClosingEditor, bool(editorClosingMode == AutoSave));
+    group.writeEntry(VersionManagerSettingsConfig::configVersionStorageFormat, format);
 }
 
 // --------------
@@ -238,14 +279,15 @@ void VersionNameCreator::setSaveDirectory()
 
 void VersionNameCreator::setSaveFormat()
 {
-    if (m_fromRaw)
+    m_result.format = q->settings().format;
+    /*if (m_fromRaw)
     {
         m_result.format = q->settings().formatForStoringRAW;
     }
     else
     {
         m_result.format = q->settings().formatForStoringSubversions;
-    }
+    }*/
 }
 
 void VersionNameCreator::setSaveFileName()
@@ -443,19 +485,19 @@ QStringList VersionManager::workspaceFileFormats() const
 {
     QStringList formats;
     formats << "JPEG" << "PNG" << "TIFF" << "PGF";
-    QString f = d->settings.formatForStoringRAW.toUpper();
+    QString f = d->settings.format.toUpper();
 
     if (!formats.contains(f))
     {
         formats << f;
     }
 
-    f = d->settings.formatForStoringSubversions.toUpper();
+    /*f = d->settings.formatForStoringSubversions.toUpper();
 
     if (!formats.contains(f))
     {
         formats << f;
-    }
+    }*/
 
     return formats;
 }

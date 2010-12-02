@@ -51,18 +51,36 @@ public:
     void readFromConfig(KConfigGroup& group);
     void writeToConfig(KConfigGroup& group) const;
 
-    enum IntermediateSavepoints
+    enum IntermediateSavepoint
     {
-        NoIntermediates  = 0,
-        AfterEachSession = 1 << 0,
-        WhenNecessary    = 1 << 1
+        NoIntermediates        = 0,
+        AfterEachSession       = 1 << 0,
+        AfterRawConversion     = 1 << 1,
+        WhenNotReproducible    = 1 << 2
     };
-    Q_DECLARE_FLAGS(IntermediateBehavior, IntermediateSavepoints)
+    Q_DECLARE_FLAGS(IntermediateBehavior, IntermediateSavepoint)
 
-    bool                 showAllVersions;
+    enum ShowInViewFlag
+    {
+        OnlyShowCurrent        = 0,
+        ShowOriginal           = 1 << 0,
+        ShowIntermediates      = 1 << 1
+    };
+    Q_DECLARE_FLAGS(ShowInViewFlags, ShowInViewFlag)
+
+    enum EditorClosingMode
+    {
+        AlwaysAsk,
+        AutoSave
+    };
+
+    bool                 enabled;
+
     IntermediateBehavior saveIntermediateVersions;
-    QString              formatForStoringRAW;
-    QString              formatForStoringSubversions;
+    ShowInViewFlags      showInViewFlags;
+    EditorClosingMode    editorClosingMode;
+    /// Image format string as defined for database
+    QString              format;
 };
 
 class DIGIKAM_EXPORT VersionNamingScheme
@@ -174,6 +192,7 @@ private:
 } // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::VersionManagerSettings::IntermediateBehavior)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::VersionManagerSettings::ShowInViewFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::VersionFileOperation::Tasks)
 
 #endif // VERSIONMANAGER_H
