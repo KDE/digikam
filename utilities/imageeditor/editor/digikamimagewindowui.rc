@@ -118,9 +118,13 @@
      <Action name="editorwindow_redo" />
      <Action name="editorwindow_revert" />
      <Separator/>
+     <Action name="editorwindow_applytool" />
+     <Action name="editorwindow_closetool" />
+     <!--
      <Action name="editorwindow_rotate_left" />
      <Action name="editorwindow_rotate_right" />
      <Action name="editorwindow_crop" />
+     -->
      <Merge />
      <WeakSeparator/>
      <Action name="logo_action" />

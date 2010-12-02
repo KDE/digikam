@@ -179,6 +179,8 @@ EditorWindow::EditorWindow(const char* name)
     m_backwardAction         = 0;
     m_firstAction            = 0;
     m_lastAction             = 0;
+    m_applyToolAction        = 0;
+    m_closeToolAction        = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
     m_showBarAction          = 0;
@@ -400,9 +402,10 @@ void EditorWindow::setupStandardActions()
     m_saveAsAction = KStandardAction::saveAs(this, SLOT(slotSaveAs()), this);
     actionCollection()->addAction("editorwindow_saveas", m_saveAsAction);
 
-    m_exportAction = new KAction(KIcon("document-save-as"),//"document-export"),
+    // This also triggers slotSaveAs, but in the context of non-destructive we want a slightly different appearance
+    m_exportAction = new KAction(KIcon("document-export"),//"document-save-as"),
                                  i18nc("@action", "Export"), this);
-    m_exportAction->setToolTip(i18nc("@info:tooltip", "Save the file outside your collection"));
+    m_exportAction->setToolTip(i18nc("@info:tooltip", "Save the file in a folder outside your collection"));
     connect(m_exportAction, SIGNAL(triggered()), this, SLOT(slotSaveAs()));
     actionCollection()->addAction("editorwindow_export", m_exportAction);
 
@@ -640,25 +643,29 @@ void EditorWindow::setupStandardActions()
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    KAction* closeToolAction = new KAction(i18n("Close Tool"), this);
-    actionCollection()->addAction("editorwindow_closetool", closeToolAction);
-    closeToolAction->setShortcut(KShortcut(Qt::Key_Escape) );
-    connect(closeToolAction, SIGNAL(triggered()), this, SLOT(slotCloseTool()));
-
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("editorwindow_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
-    KAction* applyToolAction = new KAction(i18n("Apply Tool"), this);
-    actionCollection()->addAction("editorwindow_apply_enter", applyToolAction);
-    applyToolAction->setShortcut( KShortcut(Qt::Key_Return) );
-    connect(applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));
+    // -- Tool control actions ------------------------------
+
+    m_applyToolAction = new KAction(KStandardGuiItem::ok().icon(), i18n("Ok"), this);
+    actionCollection()->addAction("editorwindow_applytool", m_applyToolAction);
+    m_applyToolAction->setShortcut( KShortcut(Qt::Key_Return) );
+    connect(m_applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));
+
+    m_closeToolAction = new KAction(KStandardGuiItem::cancel().icon(), i18n("Cancel"), this);
+    actionCollection()->addAction("editorwindow_closetool", m_closeToolAction);
+    m_closeToolAction->setShortcut(KShortcut(Qt::Key_Escape) );
+    connect(m_closeToolAction, SIGNAL(triggered()), this, SLOT(slotCloseTool()));
+
 
     m_animLogo = new DLogoAction(this);
     actionCollection()->addAction("logo_action", m_animLogo);
 
     toggleNonDestructiveActions();
+    toggleToolActions(false);
 }
 
 void EditorWindow::setupStatusBar()
@@ -1109,6 +1116,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->filePrintAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
+    m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
     d->slideShowAction->setEnabled(val);
@@ -1124,10 +1132,12 @@ void EditorWindow::toggleStandardActions(bool val)
     }
     else
     {
+        m_openVersionAction->setEnabled(false);
         m_revertAction->setEnabled(false);
         m_saveAction->setEnabled(false);
         m_saveCurrentVersionAction->setEnabled(false);
         m_saveNewVersionAction->setEnabled(false);
+        m_discardChangesAction->setEnabled(false);
         m_undoAction->setEnabled(false);
         m_redoAction->setEnabled(false);
     }
@@ -1154,6 +1164,12 @@ void EditorWindow::toggleNonDestructiveActions()
     m_saveNewVersionAction->setVisible(m_nonDestructive);
     m_exportAction->setVisible(m_nonDestructive);
     m_discardChangesAction->setVisible(m_nonDestructive);
+}
+
+void EditorWindow::toggleToolActions(bool hasTool)
+{
+    m_applyToolAction->setVisible(hasTool);
+    m_closeToolAction->setVisible(hasTool);
 }
 
 void EditorWindow::slotToggleFullScreen()
@@ -2426,6 +2442,16 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url)
     return startingSaveVersion(url, true);
 }
 
+VersionFileOperation EditorWindow::savingVersionFileInfo(const KUrl& url, bool fork)
+{
+    DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
+    DImageHistory history = m_canvas->interface()->getImageHistory();
+
+    VersionFileInfo currentName(url.directory(), url.fileName(), m_canvas->currentImageFileFormat());
+    return versionManager()->operation(fork ? VersionManager::NewVersionName : VersionManager::CurrentVersionName,
+                                       currentName, resolvedHistory, history);
+}
+
 bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
 {
     kDebug() << "Saving image non-destructive, new version:" << fork;
@@ -2436,14 +2462,7 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
     }
 
     m_savingContext = SavingContextContainer();
-
-    DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
-    DImageHistory history = m_canvas->interface()->getImageHistory();
-
-    VersionFileInfo currentName(url.directory(), url.fileName(), m_canvas->currentImageFileFormat());
-    m_savingContext.versionFileOperation
-    = versionManager()->operation(fork ? VersionManager::NewVersionName : VersionManager::CurrentVersionName,
-                                  currentName, resolvedHistory, history);
+    m_savingContext.versionFileOperation = savingVersionFileInfo(url, fork);
 
     KUrl newURL = KUrl::fromPath(m_savingContext.versionFileOperation.saveFile.path);
     newURL.addPath(m_savingContext.versionFileOperation.saveFile.fileName);

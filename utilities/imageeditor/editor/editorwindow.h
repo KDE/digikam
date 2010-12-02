@@ -72,6 +72,7 @@ class SlideShowSettings;
 class StatusProgressBar;
 class ThumbBarView;
 class VersionManager;
+class VersionFileOperation;
 
 class DIGIKAM_EXPORT EditorWindow : public KXmlGuiWindow
 {
@@ -128,6 +129,9 @@ protected:
     KAction*                 m_lastAction;
     KAction*                 m_firstAction;
 
+    KAction*                 m_applyToolAction;
+    KAction*                 m_closeToolAction;
+
     KSelectAction*           m_themeMenuAction;
 
     KToggleAction*           m_showBarAction;
@@ -162,6 +166,7 @@ protected:
     void toggleStandardActions(bool val);
     void toggleZoomActions(bool val);
     void toggleNonDestructiveActions();
+    void toggleToolActions(bool val);
 
     void printImage(const KUrl& url);
 
@@ -220,6 +225,7 @@ protected:
     virtual bool saveCurrentVersion()=0;
 
     virtual VersionManager* versionManager();
+    VersionFileOperation savingVersionFileInfo(const KUrl& url, bool fork);
 
     /**
      * Hook method that subclasses must implement to return the destination url

@@ -536,12 +536,15 @@ void ImageWindow::setupActions()
 void ImageWindow::slotSetupChanged()
 {
     applyStandardSettings();
-    toggleNonDestructiveActions();
 
     MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
     m_setExifOrientationTag                 = writeSettings.exifSetOrientation;
     m_canvas->setExifOrient(writeSettings.exifRotate);
-    d->versionManager.setSettings(AlbumSettings::instance()->getVersionManagerSettings());
+
+    VersionManagerSettings versionSettings = AlbumSettings::instance()->getVersionManagerSettings();
+    d->versionManager.setSettings(versionSettings);
+    m_nonDestructive = versionSettings.enabled;
+    toggleNonDestructiveActions();
 
     d->thumbBar->applySettings();
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
