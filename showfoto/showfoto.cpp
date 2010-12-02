@@ -1246,11 +1246,11 @@ void ShowFoto::slotRevert()
 bool ShowFoto::saveNewVersion()
 {
     return false;
-};
+}
 
 bool ShowFoto::saveCurrentVersion()
 {
     return false;
-};
+}
 
 }   // namespace ShowFoto
