@@ -33,6 +33,8 @@ namespace Digikam
 
 class SetupVersioning : public QScrollArea
 {
+    Q_OBJECT
+
 public:
 
     SetupVersioning(QWidget* parent = 0);
@@ -43,6 +45,14 @@ public:
 private:
 
     void readSettings();
+
+private Q_SLOTS:
+
+    void showNonDestructiveInformation();
+    void showFormatInformation();
+    void showSnapshotInformation();
+    void showViewInformation();
+    void enableToggled(bool);
 
 private:
 
