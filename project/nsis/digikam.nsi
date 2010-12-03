@@ -121,20 +121,13 @@ Section "digiKam" SecDigiKam
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   ;Register uninstaller in windows registery with only the option to uninstall (no repair nor modify)
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "DisplayName" "${MY_PRODUCT} Version ${VERSION}"
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "UninstallString" '"$INSTDIR\Uninstall.exe"'
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "DisplayVersion" "${VERSION}"
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "Publisher" "The digiKam team"
-  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "NoModify" "1"
-  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "NoRepair" "1"
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "URLInfoAbout" "${PRODUCT_HOMEPAGE}"
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "DisplayName" "${MY_PRODUCT} Version ${VERSION}"
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "DisplayVersion" "${VERSION}"
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "Publisher" "The digiKam team"
+  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "NoModify" "1"
+  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "NoRepair" "1"
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "URLInfoAbout" "${PRODUCT_HOMEPAGE}"
 
  ;Add start menu
  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -147,6 +140,7 @@ Section "digiKam" SecDigiKam
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\DNGConverter.lnk" "$INSTDIR\kde4\bin\dngconverter.exe"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\ExpoBlending.lnk" "$INSTDIR\kde4\bin\expoblending.exe"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\ScanGui.lnk" "$INSTDIR\kde4\bin\scangui.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SystemSettings.lnk" "$INSTDIR\kde4\bin\systemsettings.exe"
     WriteINIStr "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url" "InternetShortcut" "URL" "${PRODUCT_HOMEPAGE}"
 
  !insertmacro MUI_STARTMENU_WRITE_END
@@ -190,6 +184,7 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$StartMenuFolder\DNGConverter.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\ExpoBlending.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\ScanGui.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\SystemSettings.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
