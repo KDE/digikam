@@ -75,6 +75,16 @@ SetCompressorDictSize 96
 ;Variable for the folder of the start menu
 Var StartMenuFolder
 
+!define MUI_FINISHPAGE_TEXT "Thank you for installing digiKam!$\n$\n\
+We would like to inform you that this port of digiKam under windows is not as stable as the linux version.$\n$\n\
+DigiKam works  mostly fine under windows, but some features are broken due to some bugs \
+in the underlying KDE libraries, such as for example if you want to send items to the trash:$\n\
+https://bugs.kde.org/show_bug.cgi?id=229465 $\n$\n\
+Also, camera auto detection doesn't work under windows.$\n$\n\
+To report new bugs, please use this url:$\n\
+http://www.digikam.org/support"
+
+
 ;-------------------------------------------------------------------------------
 ;Pages
 
@@ -90,6 +100,7 @@ Var StartMenuFolder
 
   !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
   !insertmacro MUI_PAGE_INSTFILES
+  !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_WELCOME
   !insertmacro MUI_UNPAGE_CONFIRM
@@ -112,7 +123,7 @@ Section "digiKam" SecDigiKam
   SetOutPath "$INSTDIR"
 
   ;Whole kde4 directory including digiKam & co
-   File /r "${KDE4PATH}"
+  File /r "${KDE4PATH}"
 
   ;Store installation folder
   WriteRegStr HKCU "Software\${MY_PRODUCT}" "" $INSTDIR
