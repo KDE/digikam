@@ -64,11 +64,11 @@ LensAutoFix::LensAutoFix(QObject* parent)
       d(new LensAutoFixPriv)
 {
     setToolTitle(i18n("Lens Auto-Correction"));
-    setToolDescription(i18n("A tool to fix automatically lens distorsions"));
+    setToolDescription(i18n("A tool to fix automatically lens distortions"));
     setToolIcon(KIcon(SmallIcon("lensautofix")));
 
     QWidget* box      = new QWidget;
-    QLabel* note      = new QLabel(i18n("<b>Use Metadata</b> option will parse images information at "
+    QLabel* note      = new QLabel(i18n("<b>Use Metadata</b> option will parse images' information at "
                                         "queue run-time to find relevant lens features."));
     note->setWordWrap(true);
     note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);

@@ -209,10 +209,10 @@ SetupEditor::SetupEditor(QWidget* parent)
                                         "which will be used to check over exposed pixels."));
 
     d->expoIndicatorMode       = new QCheckBox(i18n("Indicate exposure as pure color"), exposureOptionsGroup);
-    d->overExposureColor->setWhatsThis(i18n("If this option is enabled, over and under exposure indicators will be displayed "
+    d->overExposureColor->setWhatsThis(i18n("If this option is enabled, over- and under-exposure indicators will be displayed "
                                             "only when pure white and pure black color matches, as all color components match "
                                             "the condition in the same time. "
-                                            "Else indicators are turn on when one of color components match the condition."));
+                                            "Otherwise, indicators are turned on when one of the color components matches the condition."));
 
     QLabel* exampleLabel = new QLabel(i18n("Example:"), exposureOptionsGroup);
     d->preview           = DImg(KStandardDirs::locate("data","digikam/data/sample-aix.png"));
