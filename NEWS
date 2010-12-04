@@ -29,5 +29,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 248882 : digiKam crashes when renaming using date/time info.
 022 ==> 217555 : "Cannot display preview" error when browsing.
 023 ==> 258600 : "transupp.cpp" fails to compile on emerged kde.
-024 ==> 
-
+024 ==> 233572 : showfoto crashed on change hue value. 
+025 ==> 
