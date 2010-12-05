@@ -33,5 +33,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 258828 : Crash when I use auto-colors correction tool from image editor.
 026 ==> 195561 : Implement a selective saturation filter [patch].
 027 ==> 258931 : Linking broken when using -Wl, --no-copy-dt-needed-entries.
-028 ==> 
+028 ==> 258300 : digiKam won't build.
+029 ==> 
 
