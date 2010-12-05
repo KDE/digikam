@@ -238,12 +238,14 @@ TARGET_LINK_LIBRARIES(digikam
         ${QT_QT3SUPPORT_LIBRARY}
         ${STRIGI_LIBRARIES}
         ${LCMS_LIBRARIES}
-        ${GPHOTO2_LIBRARIES}
+
         digikamcore
         digikamdatabase
         advancedrename
         queuemanager
         cameragui
+
+        ${GPHOTO2_LIBRARIES}
 )
 
 IF(KDEPIMLIBS_FOUND)
