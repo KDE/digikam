@@ -20,7 +20,7 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "kcategorizedview.h"
+#include "digikamkcategorizedview.h"
 #include "kcategorizedview_p.h"
 
 #include <math.h>     // trunc on C99 compliant systems
@@ -37,12 +37,12 @@
 #include "kcategorizedsortfilterproxymodel.h"
 
 // By defining DOLPHIN_DRAGANDDROP the custom drag and drop implementation of
-// KCategorizedView is bypassed to have a consistent drag and drop look for all
+// DigikamKCategorizedView is bypassed to have a consistent drag and drop look for all
 // views. Hopefully transparent pixmaps for drag objects will be supported in
 // Qt 4.4, so that this workaround can be skipped.
 #define DOLPHIN_DRAGANDDROP
 
-KCategorizedView::Private::Private(KCategorizedView* listView)
+DigikamKCategorizedView::Private::Private(DigikamKCategorizedView* listView)
     : listView(listView)
     , categoryDrawer(0)
     , biggestItemSize(QSize(0, 0))
@@ -54,11 +54,11 @@ KCategorizedView::Private::Private(KCategorizedView* listView)
 {
 }
 
-KCategorizedView::Private::~Private()
+DigikamKCategorizedView::Private::~Private()
 {
 }
 
-const QModelIndexList& KCategorizedView::Private::intersectionSet(const QRect& rect)
+const QModelIndexList& DigikamKCategorizedView::Private::intersectionSet(const QRect& rect)
 {
     QModelIndex index;
     QRect indexVisualRect;
@@ -125,7 +125,7 @@ const QModelIndexList& KCategorizedView::Private::intersectionSet(const QRect& r
     return intersectedIndexes;
 }
 
-QRect KCategorizedView::Private::visualRectInViewport(const QModelIndex& index) const
+QRect DigikamKCategorizedView::Private::visualRectInViewport(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
@@ -288,7 +288,7 @@ QRect KCategorizedView::Private::visualRectInViewport(const QModelIndex& index) 
     return retRect;
 }
 
-QRect KCategorizedView::Private::visualCategoryRectInViewport(const QString& category) const
+QRect DigikamKCategorizedView::Private::visualCategoryRectInViewport(const QString& category) const
 {
     QRect retRect(listView->spacing(),
                   listView->spacing(),
@@ -365,7 +365,7 @@ QRect KCategorizedView::Private::visualCategoryRectInViewport(const QString& cat
 }
 
 // We're sure elementsPosition doesn't contain index
-const QRect& KCategorizedView::Private::cacheIndex(const QModelIndex& index)
+const QRect& DigikamKCategorizedView::Private::cacheIndex(const QModelIndex& index)
 {
     QRect rect = visualRectInViewport(index);
     QHash<int, QRect>::iterator it = elementsPosition.insert(index.row(), rect);
@@ -374,7 +374,7 @@ const QRect& KCategorizedView::Private::cacheIndex(const QModelIndex& index)
 }
 
 // We're sure categoriesPosition doesn't contain category
-const QRect& KCategorizedView::Private::cacheCategory(const QString& category)
+const QRect& DigikamKCategorizedView::Private::cacheCategory(const QString& category)
 {
     QRect rect = visualCategoryRectInViewport(category);
     QHash<QString, QRect>::iterator it = categoriesPosition.insert(category, rect);
@@ -382,7 +382,7 @@ const QRect& KCategorizedView::Private::cacheCategory(const QString& category)
     return *it;
 }
 
-const QRect& KCategorizedView::Private::cachedRectIndex(const QModelIndex& index)
+const QRect& DigikamKCategorizedView::Private::cachedRectIndex(const QModelIndex& index)
 {
     QHash<int, QRect>::const_iterator it = elementsPosition.constFind(index.row());
 
@@ -398,7 +398,7 @@ const QRect& KCategorizedView::Private::cachedRectIndex(const QModelIndex& index
     }
 }
 
-const QRect& KCategorizedView::Private::cachedRectCategory(const QString& category)
+const QRect& DigikamKCategorizedView::Private::cachedRectCategory(const QString& category)
 {
     QHash<QString, QRect>::const_iterator it = categoriesPosition.constFind(category);
 
@@ -414,7 +414,7 @@ const QRect& KCategorizedView::Private::cachedRectCategory(const QString& catego
     }
 }
 
-QRect KCategorizedView::Private::visualRect(const QModelIndex& index)
+QRect DigikamKCategorizedView::Private::visualRect(const QModelIndex& index)
 {
     QRect retRect = cachedRectIndex(index);
     int dx = -listView->horizontalOffset();
@@ -424,7 +424,7 @@ QRect KCategorizedView::Private::visualRect(const QModelIndex& index)
     return retRect;
 }
 
-QRect KCategorizedView::Private::categoryVisualRect(const QString& category)
+QRect DigikamKCategorizedView::Private::categoryVisualRect(const QString& category)
 {
     QRect retRect = cachedRectCategory(category);
     int dx = -listView->horizontalOffset();
@@ -434,7 +434,7 @@ QRect KCategorizedView::Private::categoryVisualRect(const QString& category)
     return retRect;
 }
 
-QSize KCategorizedView::Private::contentsSize()
+QSize DigikamKCategorizedView::Private::contentsSize()
 {
     // find the last index in the last category
     QModelIndex lastIndex = categoriesIndexes.isEmpty() ? QModelIndex() :
@@ -446,7 +446,7 @@ QSize KCategorizedView::Private::contentsSize()
     return QSize(listView->viewport()->width(), lastItemBottom);
 }
 
-void KCategorizedView::Private::drawNewCategory(const QModelIndex& index,
+void DigikamKCategorizedView::Private::drawNewCategory(const QModelIndex& index,
         int sortRole,
         const QStyleOption& option,
         QPainter* painter)
@@ -487,7 +487,7 @@ void KCategorizedView::Private::drawNewCategory(const QModelIndex& index,
 }
 
 
-void KCategorizedView::Private::updateScrollbars()
+void DigikamKCategorizedView::Private::updateScrollbars()
 {
     listView->horizontalScrollBar()->setRange(0, 0);
 
@@ -506,7 +506,7 @@ void KCategorizedView::Private::updateScrollbars()
     listView->verticalScrollBar()->setRange(0, contentsSize().height());
 }
 
-void KCategorizedView::Private::drawDraggedItems(QPainter* painter)
+void DigikamKCategorizedView::Private::drawDraggedItems(QPainter* painter)
 {
     QStyleOptionViewItemV4 option = listView->viewOptions();
     option.state &= ~QStyle::State_MouseOver;
@@ -525,7 +525,7 @@ void KCategorizedView::Private::drawDraggedItems(QPainter* painter)
     }
 }
 
-void KCategorizedView::Private::drawDraggedItems()
+void DigikamKCategorizedView::Private::drawDraggedItems()
 {
     QRect rectToUpdate;
     QRect currentRect;
@@ -552,25 +552,25 @@ void KCategorizedView::Private::drawDraggedItems()
 //==============================================================================
 
 
-KCategorizedView::KCategorizedView(QWidget* parent)
+DigikamKCategorizedView::DigikamKCategorizedView(QWidget* parent)
     : QListView(parent)
     , d(new Private(this))
 {
 }
 
-KCategorizedView::~KCategorizedView()
+DigikamKCategorizedView::~DigikamKCategorizedView()
 {
     delete d;
 }
 
-void KCategorizedView::setGridSize(const QSize& size)
+void DigikamKCategorizedView::setGridSize(const QSize& size)
 {
     QListView::setGridSize(size);
 
     slotLayoutChanged();
 }
 
-void KCategorizedView::setModel(QAbstractItemModel* model)
+void DigikamKCategorizedView::setModel(QAbstractItemModel* model)
 {
     d->lastSelection = QItemSelection();
     d->forcedSelectionPosition = 0;
@@ -616,7 +616,7 @@ void KCategorizedView::setModel(QAbstractItemModel* model)
     }
 }
 
-QRect KCategorizedView::visualRect(const QModelIndex& index) const
+QRect DigikamKCategorizedView::visualRect(const QModelIndex& index) const
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -631,7 +631,7 @@ QRect KCategorizedView::visualRect(const QModelIndex& index) const
     return d->visualRect(index);
 }
 
-QRect KCategorizedView::categoryVisualRect(const QModelIndex& index) const
+QRect DigikamKCategorizedView::categoryVisualRect(const QModelIndex& index) const
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -647,7 +647,7 @@ QRect KCategorizedView::categoryVisualRect(const QModelIndex& index) const
     return d->categoryVisualRect(category);
 }
 
-QModelIndex KCategorizedView::categoryAt(const QPoint& point) const
+QModelIndex DigikamKCategorizedView::categoryAt(const QPoint& point) const
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -680,7 +680,7 @@ QModelIndex KCategorizedView::categoryAt(const QPoint& point) const
     return QModelIndex();
 }
 
-QItemSelectionRange KCategorizedView::categoryRange(const QModelIndex& index) const
+QItemSelectionRange DigikamKCategorizedView::categoryRange(const QModelIndex& index) const
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -698,12 +698,12 @@ QItemSelectionRange KCategorizedView::categoryRange(const QModelIndex& index) co
     return QItemSelectionRange(first, last);
 }
 
-KCategoryDrawer* KCategorizedView::categoryDrawer() const
+KCategoryDrawer* DigikamKCategorizedView::categoryDrawer() const
 {
     return d->categoryDrawer;
 }
 
-void KCategorizedView::setCategoryDrawer(KCategoryDrawer* categoryDrawer)
+void DigikamKCategorizedView::setCategoryDrawer(KCategoryDrawer* categoryDrawer)
 {
     d->lastSelection = QItemSelection();
     d->forcedSelectionPosition = 0;
@@ -756,12 +756,12 @@ void KCategorizedView::setCategoryDrawer(KCategoryDrawer* categoryDrawer)
     }
 }
 
-void KCategorizedView::setDrawDraggedItems(bool drawDraggedItems)
+void DigikamKCategorizedView::setDrawDraggedItems(bool drawDraggedItems)
 {
     d->drawItemsWhileDragging = drawDraggedItems;
 }
 
-QModelIndex KCategorizedView::indexAt(const QPoint& point) const
+QModelIndex DigikamKCategorizedView::indexAt(const QPoint& point) const
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -780,7 +780,7 @@ QModelIndex KCategorizedView::indexAt(const QPoint& point) const
     return index;
 }
 
-QModelIndexList KCategorizedView::categorizedIndexesIn(const QRect& rect) const
+QModelIndexList DigikamKCategorizedView::categorizedIndexesIn(const QRect& rect) const
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -790,7 +790,7 @@ QModelIndexList KCategorizedView::categorizedIndexesIn(const QRect& rect) const
     return d->intersectionSet(rect);
 }
 
-void KCategorizedView::reset()
+void DigikamKCategorizedView::reset()
 {
     QListView::reset();
 
@@ -808,7 +808,7 @@ void KCategorizedView::reset()
     d->rightMouseButtonPressed = false;
 }
 
-void KCategorizedView::paintEvent(QPaintEvent* event)
+void DigikamKCategorizedView::paintEvent(QPaintEvent* event)
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -971,7 +971,7 @@ void KCategorizedView::paintEvent(QPaintEvent* event)
     painter.restore();
 }
 
-void KCategorizedView::resizeEvent(QResizeEvent* event)
+void DigikamKCategorizedView::resizeEvent(QResizeEvent* event)
 {
     QListView::resizeEvent(event);
 
@@ -988,7 +988,7 @@ void KCategorizedView::resizeEvent(QResizeEvent* event)
     d->updateScrollbars();
 }
 
-QItemSelection KCategorizedView::Private::selectionForRect(const QRect& rect)
+QItemSelection DigikamKCategorizedView::Private::selectionForRect(const QRect& rect)
 {
     QItemSelection selection;
     QModelIndex tl, br;
@@ -1032,7 +1032,7 @@ QItemSelection KCategorizedView::Private::selectionForRect(const QRect& rect)
     return selection;
 }
 
-void KCategorizedView::setSelection(const QRect& rect,
+void DigikamKCategorizedView::setSelection(const QRect& rect,
                                     QItemSelectionModel::SelectionFlags command)
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
@@ -1238,7 +1238,7 @@ void KCategorizedView::setSelection(const QRect& rect,
     selectionModel()->select(selection, command);
 }
 
-void KCategorizedView::mouseMoveEvent(QMouseEvent* event)
+void DigikamKCategorizedView::mouseMoveEvent(QMouseEvent* event)
 {
     QListView::mouseMoveEvent(event);
 
@@ -1321,7 +1321,7 @@ void KCategorizedView::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-void KCategorizedView::mousePressEvent(QMouseEvent* event)
+void DigikamKCategorizedView::mousePressEvent(QMouseEvent* event)
 {
     d->dragLeftViewport = false;
 
@@ -1350,7 +1350,7 @@ void KCategorizedView::mousePressEvent(QMouseEvent* event)
     viewport()->update(d->categoryVisualRect(d->hoveredCategory));
 }
 
-void KCategorizedView::mouseReleaseEvent(QMouseEvent* event)
+void DigikamKCategorizedView::mouseReleaseEvent(QMouseEvent* event)
 {
     d->mouseButtonPressed = false;
     d->rightMouseButtonPressed = false;
@@ -1430,7 +1430,7 @@ void KCategorizedView::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-void KCategorizedView::leaveEvent(QEvent* event)
+void DigikamKCategorizedView::leaveEvent(QEvent* event)
 {
     d->hovered = QModelIndex();
     d->hoveredCategory.clear();
@@ -1438,7 +1438,7 @@ void KCategorizedView::leaveEvent(QEvent* event)
     QListView::leaveEvent(event);
 }
 
-void KCategorizedView::startDrag(Qt::DropActions supportedActions)
+void DigikamKCategorizedView::startDrag(Qt::DropActions supportedActions)
 {
     // FIXME: QAbstractItemView does far better here since it sets the
     //        pixmap of selected icons to the dragging cursor, but it sets a non
@@ -1452,7 +1452,7 @@ void KCategorizedView::startDrag(Qt::DropActions supportedActions)
 #endif
 }
 
-void KCategorizedView::dragMoveEvent(QDragMoveEvent* event)
+void DigikamKCategorizedView::dragMoveEvent(QDragMoveEvent* event)
 {
     d->mousePosition = event->pos();
 
@@ -1476,7 +1476,7 @@ void KCategorizedView::dragMoveEvent(QDragMoveEvent* event)
 #endif
 }
 
-void KCategorizedView::dragLeaveEvent(QDragLeaveEvent* event)
+void DigikamKCategorizedView::dragLeaveEvent(QDragLeaveEvent* event)
 {
     d->dragLeftViewport = true;
 
@@ -1487,7 +1487,7 @@ void KCategorizedView::dragLeaveEvent(QDragLeaveEvent* event)
 #endif
 }
 
-void KCategorizedView::dropEvent(QDropEvent* event)
+void DigikamKCategorizedView::dropEvent(QDropEvent* event)
 {
 #if defined(DOLPHIN_DRAGANDDROP)
     QAbstractItemView::dropEvent(event);
@@ -1496,10 +1496,10 @@ void KCategorizedView::dropEvent(QDropEvent* event)
 #endif
 }
 
-QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
+QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
         Qt::KeyboardModifiers modifiers)
 {
-    if ((viewMode() != KCategorizedView::IconMode) ||
+    if ((viewMode() != DigikamKCategorizedView::IconMode) ||
         !d->proxyModel ||
         !d->categoryDrawer ||
         d->categories.isEmpty() ||
@@ -1729,7 +1729,7 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
     return QListView::moveCursor(cursorAction, modifiers);
 }
 
-void KCategorizedView::rowsInserted(const QModelIndex& parent,
+void DigikamKCategorizedView::rowsInserted(const QModelIndex& parent,
                                     int start,
                                     int end)
 {
@@ -1755,7 +1755,7 @@ void KCategorizedView::rowsInserted(const QModelIndex& parent,
     rowsInsertedArtifficial(parent, start, end);
 }
 
-int KCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelIndexList, int begin, int averageSize)
+int DigikamKCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelIndexList, int begin, int averageSize)
 {
     int end = modelIndexList.size();
     QString category = proxyModel->data(modelIndexList[begin],
@@ -1828,7 +1828,7 @@ int KCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelI
     return begin;
 }
 
-void KCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent,
+void DigikamKCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent,
         int start,
         int end)
 {
@@ -1916,7 +1916,7 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent,
     //selectionModel()->clear();
 }
 
-void KCategorizedView::rowsRemoved(const QModelIndex& parent,
+void DigikamKCategorizedView::rowsRemoved(const QModelIndex& parent,
                                    int start,
                                    int end)
 {
@@ -1931,7 +1931,7 @@ void KCategorizedView::rowsRemoved(const QModelIndex& parent,
     }
 }
 
-void KCategorizedView::updateGeometries()
+void DigikamKCategorizedView::updateGeometries()
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -1944,7 +1944,7 @@ void KCategorizedView::updateGeometries()
     QAbstractItemView::updateGeometries();
 }
 
-void KCategorizedView::slotLayoutChanged()
+void DigikamKCategorizedView::slotLayoutChanged()
 {
     if (d->proxyModel && d->categoryDrawer && d->proxyModel->isCategorizedModel())
     {
@@ -1953,7 +1953,7 @@ void KCategorizedView::slotLayoutChanged()
     }
 }
 
-void KCategorizedView::currentChanged(const QModelIndex& current,
+void DigikamKCategorizedView::currentChanged(const QModelIndex& current,
                                       const QModelIndex& previous)
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
@@ -2004,4 +2004,4 @@ void KCategorizedView::currentChanged(const QModelIndex& current,
 }
 
 
-#include "kcategorizedview.moc"
+#include "digikamkcategorizedview.moc"

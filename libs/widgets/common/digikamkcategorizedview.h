@@ -30,21 +30,21 @@ class KCategoryDrawer;
 /**
  * @short Item view for listing items
  *
- * KCategorizedView allows you to use it as it were a QListView.
+ * DigikamKCategorizedView allows you to use it as it were a QListView.
  * Subclass KCategorizedSortFilterProxyModel to provide category information for items.
  *
  * @see KCategorizedSortFilterProxyModel
  *
  * @author Rafael Fernández López <ereslibre@kde.org>
  */
-class /*KDEUI_EXPORT*/ DIGIKAM_EXPORT KCategorizedView: public QListView
+class DIGIKAM_EXPORT DigikamKCategorizedView : public QListView
 {
     Q_OBJECT
 
 public:
-    KCategorizedView(QWidget* parent = 0);
+    DigikamKCategorizedView(QWidget* parent = 0);
 
-    ~KCategorizedView();
+    ~DigikamKCategorizedView();
 
     virtual void setModel(QAbstractItemModel* model);
 

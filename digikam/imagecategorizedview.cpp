@@ -494,7 +494,7 @@ void ImageCategorizedView::slotDelayedEnter()
 
     if (mouseIndex.isValid())
     {
-        emit KCategorizedView::entered(mouseIndex);
+        emit DigikamKCategorizedView::entered(mouseIndex);
     }
 }
 

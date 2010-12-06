@@ -85,7 +85,7 @@ public:
 // -------------------------------------------------------------------------------
 
 DCategorizedView::DCategorizedView(QWidget* parent)
-    : KCategorizedView(parent), d(new DCategorizedViewPriv)
+    : DigikamKCategorizedView(parent), d(new DCategorizedViewPriv)
 {
     setViewMode(QListView::IconMode);
     setLayoutDirection(Qt::LeftToRight);
@@ -95,7 +95,7 @@ DCategorizedView::DCategorizedView(QWidget* parent)
     setWrapping(true);
     // important optimization for layouting
     setUniformItemSizes(true);
-    // disable "feature" from KCategorizedView
+    // disable "feature" from DigikamKCategorizedView
     setDrawDraggedItems(false);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -142,7 +142,7 @@ void DCategorizedView::setItemDelegate(DItemDelegate* delegate)
     }
 
     d->delegate = delegate;
-    KCategorizedView::setItemDelegate(d->delegate);
+    DigikamKCategorizedView::setItemDelegate(d->delegate);
 
     connect(d->delegate, SIGNAL(gridSizeChanged(const QSize&)),
             this, SLOT(slotGridSizeChanged(const QSize&)));
@@ -361,7 +361,7 @@ void DCategorizedView::slotEntered(const QModelIndex& index)
 
 void DCategorizedView::reset()
 {
-    KCategorizedView::reset();
+    DigikamKCategorizedView::reset();
 
     emit selectionChanged();
     emit selectionCleared();
@@ -371,7 +371,7 @@ void DCategorizedView::reset()
 
 void DCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
 {
-    KCategorizedView::selectionChanged(selectedItems, deselectedItems);
+    DigikamKCategorizedView::selectionChanged(selectedItems, deselectedItems);
 
     emit selectionChanged();
 
@@ -385,7 +385,7 @@ void DCategorizedView::selectionChanged(const QItemSelection& selectedItems, con
 
 void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int end)
 {
-    KCategorizedView::rowsInserted(parent, start, end);
+    DigikamKCategorizedView::rowsInserted(parent, start, end);
 
     if (start == 0)
     {
@@ -395,7 +395,7 @@ void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int en
 
 void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
-    KCategorizedView::rowsAboutToBeRemoved(parent, start, end);
+    DigikamKCategorizedView::rowsAboutToBeRemoved(parent, start, end);
 
     // Ensure one selected item
     int totalToRemove = end - start + 1;
@@ -544,7 +544,7 @@ QModelIndex DCategorizedView::moveCursor(CursorAction cursorAction, Qt::Keyboard
 
     if (!current.isValid())
     {
-        return KCategorizedView::moveCursor(cursorAction, modifiers);
+        return DigikamKCategorizedView::moveCursor(cursorAction, modifiers);
     }
 
     // We want a simple wrapping navigation.
@@ -587,7 +587,7 @@ QModelIndex DCategorizedView::moveCursor(CursorAction cursorAction, Qt::Keyboard
             break;
     }
 
-    return KCategorizedView::moveCursor(cursorAction, modifiers);
+    return DigikamKCategorizedView::moveCursor(cursorAction, modifiers);
 }
 
 
@@ -647,7 +647,7 @@ void DCategorizedView::mousePressEvent(QMouseEvent* event)
         d->currentMouseEvent = 0;
     }
 
-    KCategorizedView::mousePressEvent(event);
+    DigikamKCategorizedView::mousePressEvent(event);
     d->currentMouseEvent = 0;
 }
 
@@ -655,7 +655,7 @@ void DCategorizedView::mouseReleaseEvent(QMouseEvent* event)
 {
     userInteraction();
     d->currentMouseEvent = event;
-    KCategorizedView::mouseReleaseEvent(event);
+    DigikamKCategorizedView::mouseReleaseEvent(event);
     d->currentMouseEvent = 0;
 }
 
@@ -685,7 +685,7 @@ void DCategorizedView::mouseMoveEvent(QMouseEvent* event)
     }
 
     d->currentMouseEvent = event;
-    KCategorizedView::mouseMoveEvent(event);
+    DigikamKCategorizedView::mouseMoveEvent(event);
     d->currentMouseEvent = 0;
 
     d->delegate->mouseMoved(event, indexVisualRect, index);
@@ -693,7 +693,7 @@ void DCategorizedView::mouseMoveEvent(QMouseEvent* event)
 
 void DCategorizedView::wheelEvent(QWheelEvent* event)
 {
-    // KCategorizedView updates the single step at some occasions in a private methody
+    // DigikamKCategorizedView updates the single step at some occasions in a private methody
     horizontalScrollBar()->setSingleStep(d->delegate->gridSize().height() / d->scrollStepFactor);
     verticalScrollBar()->setSingleStep(d->delegate->gridSize().width() / d->scrollStepFactor);
 
@@ -723,7 +723,7 @@ void DCategorizedView::wheelEvent(QWheelEvent* event)
     }
     else
     {
-        KCategorizedView::wheelEvent(event);
+        DigikamKCategorizedView::wheelEvent(event);
     }
 }
 
@@ -760,14 +760,14 @@ void DCategorizedView::keyPressEvent(QKeyEvent* event)
         }
     }
     */
-    KCategorizedView::keyPressEvent(event);
+    DigikamKCategorizedView::keyPressEvent(event);
 
     emit keyPressed(event);
 }
 
 void DCategorizedView::resizeEvent(QResizeEvent* e)
 {
-    KCategorizedView::resizeEvent(e);
+    DigikamKCategorizedView::resizeEvent(e);
     updateDelegateSizes();
 }
 
@@ -816,7 +816,7 @@ bool DCategorizedView::viewportEvent(QEvent* event)
             break;
     }
 
-    return KCategorizedView::viewportEvent(event);
+    return DigikamKCategorizedView::viewportEvent(event);
 }
 
 void DCategorizedView::cut()
@@ -912,7 +912,7 @@ void DCategorizedView::dragEnterEvent(QDragEnterEvent* e)
 
 void DCategorizedView::dragMoveEvent(QDragMoveEvent* e)
 {
-    KCategorizedView::dragMoveEvent(e);
+    DigikamKCategorizedView::dragMoveEvent(e);
     ImageModelDragDropHandler* handler = dragDropHandler();
 
     if (handler)
@@ -934,7 +934,7 @@ void DCategorizedView::dragMoveEvent(QDragMoveEvent* e)
 
 void DCategorizedView::dropEvent(QDropEvent* e)
 {
-    KCategorizedView::dropEvent(e);
+    DigikamKCategorizedView::dropEvent(e);
     ImageModelDragDropHandler* handler = dragDropHandler();
 
     if (handler)

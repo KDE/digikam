@@ -27,7 +27,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "kcategorizedview.h"
+#include "digikamkcategorizedview.h"
 
 class QSortFilterProxyModel;
 
@@ -39,7 +39,7 @@ class DCategorizedViewPriv;
 class ImageModelDragDropHandler;
 class ItemViewToolTip;
 
-class DIGIKAM_EXPORT DCategorizedView : public KCategorizedView
+class DIGIKAM_EXPORT DCategorizedView : public DigikamKCategorizedView
 {
     Q_OBJECT
 

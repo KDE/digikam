@@ -835,7 +835,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewhoverbutton.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/kcategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/digikamkcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/modelcompletion.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
@@ -1184,6 +1184,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libhaar_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haariface.cpp
+       )
+
+    SET(libgenericmodels_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/categorizeditemmodel.cpp
        )
 
     SET(libdatabasemodels_SRCS

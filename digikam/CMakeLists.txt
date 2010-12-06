@@ -42,7 +42,8 @@ SET(digikamcore_LIB_SRCS
         ${libmetadatawidgets_SRCS}
         ${libdialogs_SRCS}
         ${libimageproperties_SRCS}
-                        ${libgraphicsviewwidgets_SRCS}
+        ${libgraphicsviewwidgets_SRCS}
+        ${libgenericmodels_SRCS}
 
         # utilities
         ${libslideshow_SRCS}
