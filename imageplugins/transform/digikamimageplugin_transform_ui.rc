@@ -1,15 +1,16 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="12" name="digikamimageplugin_transform" >
+<gui version="13" name="digikamimageplugin_transform" >
 
  <MenuBar>
 
   <Menu name="Transform" ><text>Tra&amp;nsform</text>
+   <Action name="imageplugin_ratiocrop" />
    <Action name="imageplugin_resize" />
+   <Separator />
    <Action name="imageplugin_perspective" />
    <Action name="imageplugin_freerotation" />
    <Action name="imageplugin_sheartool" />
    <Action name="imageplugin_contentawareresizing" />   
-   <Action name="imageplugin_ratiocrop" />   
   </Menu>
 
  </MenuBar>

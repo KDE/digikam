@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="34" name="digikamimageplugin_color" >
+<gui version="35" name="digikamimageplugin_color" >
 
  <MenuBar>
 
@@ -9,17 +9,18 @@
       <Action name="imageplugin_hsl" />
       <Action name="imageplugin_rgb" />
       <Separator />
+      <Action name="imageplugin_adjustlevels" />
+      <Action name="imageplugin_adjustcurves" />
+      <Separator />
       <Action name="imageplugin_invert" />
       <Action name="imageplugin_blackwhite" />
-      <Action name="imageplugin_whitebalance" />
       <Action name="imageplugin_channelmixer" />
-      <Action name="imageplugin_adjustcurves" />
-      <Action name="imageplugin_adjustlevels" />
+      <Action name="imageplugin_whitebalance" />
+      <Separator />
       <Menu name="Depth"><text>&amp;Depth</text>
           <Action name="imageplugin_convertto8bits" />
           <Action name="imageplugin_convertto16bits" />
       </Menu>
-      <Separator />
       <Action name="imageplugin_colormanagement" />
       <Separator />
    </Menu>

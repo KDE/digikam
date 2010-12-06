@@ -657,7 +657,8 @@ void EditorWindow::setupStandardActions()
 
     // -- Tool control actions ------------------------------
 
-    m_selectToolsAction = new KActionMenu(KIcon("applications-graphics"), i18nc("@action", "Select Tool"), this);
+    m_selectToolsAction = new KActionMenu(KIcon("applications-graphics"),
+                                          i18nc("@action Select image editor tool/filter", "Select Tool"), this);
     m_selectToolsAction->setDelayed(false);
     m_selectToolsAction->setVisible(false);
     actionCollection()->addAction("editorwindow_selecttool", m_selectToolsAction);
