@@ -99,6 +99,7 @@ private:
 private Q_SLOTS:
 
     void slotApplyAllChanges();
+    void slotApplyChangesToAllVersions();
     void slotRevertAllChanges();
     void slotChangingItems();
     void slotTagsSearchChanged(const SearchTextSettings& settings);

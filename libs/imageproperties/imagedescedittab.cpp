@@ -65,6 +65,8 @@
 #include "statusprogressbar.h"
 #include "tagmodificationhelper.h"
 #include "template.h"
+#include "imageinfolist.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -94,6 +96,7 @@ public:
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
         revertBtn                  = 0;
+        applyToAllVersionsButton   = 0;
         recentTagsMapper           = 0;
         newTagEdit                 = 0;
         lastSelectedWidget         = 0;
@@ -118,6 +121,7 @@ public:
 
     QPushButton*         applyBtn;
     QPushButton*         moreButton;
+    QPushButton*         applyToAllVersionsButton;
 
     QWidget*             lastSelectedWidget;
 
@@ -224,7 +228,16 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->recentTagsMapper = new QSignalMapper(this);
 
     // Buttons -----------------------------------------
-
+    
+    KHBox* applyButtonBox = new KHBox(this);
+    applyButtonBox->setSpacing(KDialog::spacingHint());
+    
+    d->applyBtn = new QPushButton(i18n("Apply"), applyButtonBox);
+    d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
+    d->applyBtn->setEnabled(false);
+    d->applyBtn->setToolTip( i18n("Apply all changes to images"));
+    //buttonsBox->setStretchFactor(d->applyBtn, 10);
+    
     KHBox* buttonsBox = new KHBox(this);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
@@ -232,12 +245,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->revertBtn->setIcon(SmallIcon("document-revert"));
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
-
-    d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
-    d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
-    d->applyBtn->setEnabled(false);
-    d->applyBtn->setToolTip( i18n("Apply all changes to images"));
-    buttonsBox->setStretchFactor(d->applyBtn, 10);
+    
+    d->applyToAllVersionsButton = new QPushButton(i18n("Apply to all versions"), buttonsBox);
+    d->applyToAllVersionsButton->setIcon(SmallIcon("dialog-ok-apply"));
+    d->applyToAllVersionsButton->setEnabled(false);
+    d->applyToAllVersionsButton->setToolTip(i18n("Apply all changes to all versions of this image"));
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
     d->moreMenu   = new KMenu(captionTagsArea);
@@ -308,6 +320,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     connect(d->applyBtn, SIGNAL(clicked()),
             this, SLOT(slotApplyAllChanges()));
+    
+    connect(d->applyToAllVersionsButton, SIGNAL(clicked()),
+            this, SLOT(slotApplyChangesToAllVersions()));
 
     connect(d->revertBtn, SIGNAL(clicked()),
             this, SLOT(slotRevertAllChanges()));
@@ -530,6 +545,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     d->hub.resetChanged();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
+    d->applyToAllVersionsButton->setEnabled(false);
 }
 
 void ImageDescEditTab::slotRevertAllChanges()
@@ -755,6 +771,11 @@ void ImageDescEditTab::slotModified()
     d->modified = true;
     d->applyBtn->setEnabled(true);
     d->revertBtn->setEnabled(true);
+    
+    if(d->currInfos.size() == 1)
+    {
+        d->applyToAllVersionsButton->setEnabled(true);
+    }
 }
 
 void ImageDescEditTab::slotCreateNewTag()
@@ -1157,5 +1178,43 @@ void ImageDescEditTab::focusLastSelectedWidget()
 
     d->lastSelectedWidget = 0;
 }
+
+void ImageDescEditTab::slotApplyChangesToAllVersions()
+{
+    if (!d->modified)
+    {
+        return;
+    }
+    
+    if (d->currInfos.isEmpty())
+    {
+        return;
+    }
+
+    QSet<qlonglong> tmpSet;
+    QList<QPair<qlonglong, qlonglong> > relations;
+    
+    foreach(const ImageInfo& info, d->currInfos)
+    {
+        // Collect all ids in all image's relations
+        relations.append(info.relationCloud());
+    }
+    
+    for(int i = 0; i < relations.size(); i++)
+    {
+        // Use QSet to prevent duplicates
+        tmpSet.insert(relations.at(i).first);
+        tmpSet.insert(relations.at(i).second);
+    }
+    
+    MetadataManager::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
+    
+    d->modified = false;
+    d->hub.resetChanged();
+    d->applyBtn->setEnabled(false);
+    d->revertBtn->setEnabled(false);   
+    d->applyToAllVersionsButton->setEnabled(false);
+}
+
 
 }  // namespace Digikam
