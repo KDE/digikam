@@ -7,7 +7,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 253785 : GoogleMaps should be available in "Search Map".
 002 ==> 258436 : Traceability.
-003 ==> 
+003 ==> 258082 : Libkface doesn't increment ids' while saving hash database.
+004 ==> 
+
 
 
 
