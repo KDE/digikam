@@ -34,5 +34,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 195561 : Implement a selective saturation filter [patch].
 027 ==> 258931 : Linking broken when using -Wl, --no-copy-dt-needed-entries.
 028 ==> 258300 : digiKam won't build.
-029 ==> 
+029 ==> 256023 : Cannot work with Sigma-RAW-files (X3F).
+030 ==> 
+
 
