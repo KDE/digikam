@@ -55,6 +55,7 @@ class KToggleAction;
 namespace Digikam
 {
 
+class ActionCategorizedView;
 class DZoomBar;
 class EditorToolIface;
 class ExposureSettingsContainer;
@@ -110,6 +111,8 @@ public:
         viewUnderExpoAction(0),
         viewOverExpoAction(0),
         showMenuBarAction(0),
+
+        selectToolsActionView(0),
 
         ICCSettings(0),
 
@@ -205,6 +208,8 @@ public:
     KToggleAction*             viewUnderExpoAction;
     KToggleAction*             viewOverExpoAction;
     KToggleAction*             showMenuBarAction;
+
+    ActionCategorizedView*     selectToolsActionView;
 
     QList<int>                 fullscreenSizeBackup;
 

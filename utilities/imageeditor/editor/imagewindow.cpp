@@ -48,6 +48,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
+#include <kcategorizedview.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kdeversion.h>
@@ -255,6 +256,10 @@ ImageWindow::ImageWindow()
 
     m_imagePluginLoader = ImagePluginLoader::instance();
     loadImagePlugins();
+
+    // Create tool selection view
+
+    setupSelectToolsAction();
 
     // Create context menu.
 

@@ -50,6 +50,8 @@ class QSplitter;
 class QLabel;
 
 class KAction;
+class KActionMenu;
+class KCategorizedView;
 class KSelectAction;
 class KToggleAction;
 class KToolBarPopupAction;
@@ -139,6 +141,8 @@ protected:
     KToolBarPopupAction*     m_undoAction;
     KToolBarPopupAction*     m_redoAction;
 
+    KActionMenu*             m_selectToolsAction;
+
     DLogoAction*             m_animLogo;
     DPopupMenu*              m_contextMenu;
     EditorStackView*         m_stackView;
@@ -163,6 +167,7 @@ protected:
     void setupStandardActions();
     void setupStatusBar();
     void setupContextMenu();
+    void setupSelectToolsAction();
     void toggleStandardActions(bool val);
     void toggleZoomActions(bool val);
     void toggleNonDestructiveActions();
@@ -240,6 +245,8 @@ protected:
     virtual void saveIsComplete()=0;
     virtual void saveAsIsComplete()=0;
     virtual void saveVersionIsComplete()=0;
+
+    KCategorizedView* createToolSelectionView();
 
 protected Q_SLOTS:
 
@@ -322,6 +329,7 @@ private Q_SLOTS:
     void slotApplyTool();
     void slotKioMoveFinished(KJob* job);
     void slotUndoStateChanged(bool, bool, bool);
+    void slotSelectToolsMenuAboutToShow();
 
 private:
 

@@ -34,6 +34,7 @@
 #include <QByteArray>
 #include <QCursor>
 #include <QDir>
+#include <QEasingCurve>
 #include <QEventLoop>
 #include <QFile>
 #include <QFileInfo>
@@ -45,6 +46,7 @@
 #include <QLayout>
 #include <QPointer>
 #include <QProgressBar>
+#include <QPropertyAnimation>
 #include <QSignalMapper>
 #include <QSplitter>
 #include <QTimer>
@@ -64,12 +66,15 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
+#include <kcategorizedview.h>
+#include <kcategorydrawer.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kdialog.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
+#include <kfileitemdelegate.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -114,6 +119,7 @@
 #include "albumsettings.h"
 #include "buttonicondisabler.h"
 #include "canvas.h"
+#include "categorizeditemmodel.h"
 #include "colorcorrectiondlg.h"
 #include "dimginterface.h"
 #include "dlogoaction.h"
@@ -183,6 +189,7 @@ EditorWindow::EditorWindow(const char* name)
     m_closeToolAction        = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
+    m_selectToolsAction      = 0;
     m_showBarAction          = 0;
     m_splitter               = 0;
     m_vSplitter              = 0;
@@ -650,6 +657,12 @@ void EditorWindow::setupStandardActions()
 
     // -- Tool control actions ------------------------------
 
+    m_selectToolsAction = new KActionMenu(KIcon("applications-graphics"), i18nc("@action", "Select Tool"), this);
+    m_selectToolsAction->setDelayed(false);
+    m_selectToolsAction->setVisible(false);
+    actionCollection()->addAction("editorwindow_selecttool", m_selectToolsAction);
+    // setup is done after image plugins are loaded
+
     m_applyToolAction = new KAction(KStandardGuiItem::ok().icon(), i18n("Ok"), this);
     actionCollection()->addAction("editorwindow_applytool", m_applyToolAction);
     m_applyToolAction->setShortcut( KShortcut(Qt::Key_Return) );
@@ -889,7 +902,6 @@ void EditorWindow::loadImagePlugins()
             plugin->setEnabledSelectionActions(false);
 
             // add actions to imagepluginsActionCollection
-#if KDE_IS_VERSION(4,1,68)
             QString categoryStr = plugin->actionCategory();
 
             if (categoryStr != QString("__INVALID__") && !categoryStr.isEmpty())
@@ -902,15 +914,11 @@ void EditorWindow::loadImagePlugins()
             }
             else
             {
-#endif
                 foreach (QAction* action, plugin->actionCollection()->actions())
                 {
                     d->imagepluginsActionCollection->addAction(action->objectName(), action);
                 }
-#if KDE_IS_VERSION(4,1,68)
             }
-
-#endif
         }
         else
         {
@@ -1114,6 +1122,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->flipHorizAction->setEnabled(val);
     d->flipVertAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
+    m_selectToolsAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
     m_exportAction->setEnabled(val);
@@ -2930,6 +2939,163 @@ void EditorWindow::setToolInfoMessage(const QString& txt)
 VersionManager* EditorWindow::versionManager()
 {
     return &d->defaultVersionManager;
+}
+
+class ActionCategorizedView : public KCategorizedView
+{
+public:
+
+    ActionCategorizedView(QWidget *parent = 0)
+        : KCategorizedView(parent)
+    {
+        m_horizontalScrollAnimation = new QPropertyAnimation(horizontalScrollBar(), "value", this);
+        m_verticalScrollAnimation   = new QPropertyAnimation(verticalScrollBar(), "value", this);
+    }
+
+    void setupIconMode()
+    {
+        setViewMode(QListView::IconMode);
+        setMovement(QListView::Static);
+        setCategoryDrawer(new KCategoryDrawerV2); // deprecated, but needed for KDE 4.4 compatibility
+        setSelectionMode( QAbstractItemView::SingleSelection );
+
+        setMouseTracking( true );
+        viewport()->setAttribute( Qt::WA_Hover );
+
+        setFrameShape( QFrame::NoFrame );
+    }
+
+    void adjustGridSize()
+    {
+        // Find a suitable grid size. The delegate's size hint does never word-wrap.
+        // To keep a suitable width, we want to word wrap.
+        setWordWrap(true);
+        int maxSize = viewOptions().decorationSize.width() * 4;
+        QFontMetrics fm(viewOptions().font);
+        QSize grid;
+        for (int i = 0; i < model()->rowCount(); ++i)
+        {
+            const QModelIndex index = model()->index(i, 0);
+            const QSize size = sizeHintForIndex( index );
+            if (size.width() > maxSize)
+            {
+                QString text = index.data(Qt::DisplayRole).toString();
+                QRect unwrappedRect = fm.boundingRect(QRect(0, 0, size.width(), size.height()), Qt::AlignLeft, text);
+                QRect wrappedRect   = fm.boundingRect(QRect(0, 0, maxSize, maxSize), Qt::AlignLeft | Qt::TextWordWrap, text);
+                grid = grid.expandedTo(QSize(maxSize, size.height() + wrappedRect.height() - unwrappedRect.height()));
+            }
+            else
+            {
+                grid = grid.expandedTo(size);
+            }
+        }
+        //grid += QSize(KDialog::spacingHint(), KDialog::spacingHint());
+        setGridSize(grid);
+    }
+
+protected:
+
+    int autoScrollDuration(float relativeDifference, QPropertyAnimation* animation)
+    {
+        const int minimumTime    = 1000;
+        const int maxPixelPerSecond = 1000;
+
+        int pixelToScroll = qAbs(animation->startValue().toInt() - animation->endValue().toInt());
+        int factor = qMax(1.0f, relativeDifference * 100); // in [1;15]
+
+        int duration = 1000 * pixelToScroll / maxPixelPerSecond;
+        duration *= factor;
+
+        return qMax(minimumTime, duration);
+    }
+
+    void autoScroll(float relativePos, QScrollBar *scrollBar, QPropertyAnimation* animation)
+    {
+        const float lowerPart = 0.15;
+        const float upperPart = 0.85;
+
+        if (scrollBar->minimum() != scrollBar->maximum())
+        {
+            if (relativePos > upperPart && scrollBar->value() !=  scrollBar->maximum())
+            {
+                animation->stop();
+                animation->setStartValue(scrollBar->value());
+                animation->setEndValue(scrollBar->maximum());
+                animation->setDuration(autoScrollDuration(1 - relativePos, animation));
+                animation->start();
+            }
+            else if (relativePos < lowerPart && scrollBar->value() !=  scrollBar->minimum())
+            {
+                animation->stop();
+                animation->setStartValue(scrollBar->value());
+                animation->setEndValue(scrollBar->minimum());
+                animation->setDuration(autoScrollDuration(relativePos, animation));
+                animation->start();
+            }
+            else
+            {
+                animation->stop();
+            }
+        }
+    }
+
+    void mouseMoveEvent(QMouseEvent *e)
+    {
+        KCategorizedView::mouseMoveEvent(e);
+        autoScroll(float(e->pos().x()) / viewport()->width(), horizontalScrollBar(), m_horizontalScrollAnimation);
+        autoScroll(float(e->pos().y()) / viewport()->height(), verticalScrollBar(), m_verticalScrollAnimation);
+    }
+
+    void leaveEvent(QEvent *e)
+    {
+        KCategorizedView::leaveEvent(e);
+        m_horizontalScrollAnimation->stop();
+        m_verticalScrollAnimation->stop();
+    }
+
+    QPropertyAnimation* m_verticalScrollAnimation;
+    QPropertyAnimation* m_horizontalScrollAnimation;
+};
+
+KCategorizedView* EditorWindow::createToolSelectionView()
+{
+    if (d->selectToolsActionView)
+        return d->selectToolsActionView;
+
+    ActionItemModel *actionModel = new ActionItemModel(this);
+    actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());
+
+    KCategorizedSortFilterProxyModel* filterModel = actionModel->createFilterModel();
+
+    d->selectToolsActionView = new ActionCategorizedView;
+    d->selectToolsActionView->setupIconMode();
+    d->selectToolsActionView->setModel(filterModel);
+    d->selectToolsActionView->adjustGridSize();
+
+    connect(d->selectToolsActionView, SIGNAL(activated(const QModelIndex&)),
+            actionModel, SLOT(trigger(const QModelIndex&)));
+
+    return d->selectToolsActionView;
+}
+
+void EditorWindow::setupSelectToolsAction()
+{
+    QWidgetAction *viewAction = new QWidgetAction(this);
+    viewAction->setDefaultWidget(createToolSelectionView());
+    d->selectToolsActionView->setMinimumSize(QSize(400, 400));
+    m_selectToolsAction->addAction(viewAction);
+    m_selectToolsAction->setVisible(true);
+    connect(m_selectToolsAction->menu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotSelectToolsMenuAboutToShow()));
+}
+
+void EditorWindow::slotSelectToolsMenuAboutToShow()
+{
+    // adjust to window size
+    QSize s = size();
+    s *= 2;
+    s /= 3;
+    d->selectToolsActionView->setMinimumSize(s);
 }
 
 }  // namespace Digikam
