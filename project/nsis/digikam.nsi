@@ -72,18 +72,10 @@ SetCompressorDictSize 96
   !define MUI_WELCOMEFINISHPAGE_BITMAP "digikam_welcome.bmp"
   !define MUI_ABORTWARNING
 
+  !define MUI_FINISHPAGE_SHOWREADME "RELEASENOTES.txt"
+
 ;Variable for the folder of the start menu
 Var StartMenuFolder
-
-!define MUI_FINISHPAGE_TEXT "Thank you for installing digiKam!$\n$\n\
-We would like to inform you that this port of digiKam under windows is not as stable as the linux version.$\n$\n\
-DigiKam works  mostly fine under windows, but some features are broken due to some bugs \
-in the underlying KDE libraries, such as for example if you want to send items to the trash:$\n\
-https://bugs.kde.org/show_bug.cgi?id=229465 $\n$\n\
-Also, camera auto detection doesn't work under windows.$\n$\n\
-To report new bugs, please use this url:$\n\
-http://www.digikam.org/support"
-
 
 ;-------------------------------------------------------------------------------
 ;Pages
@@ -122,6 +114,7 @@ Section "digiKam" SecDigiKam
 
   SetOutPath "$INSTDIR"
 
+  File "RELEASENOTES.txt"
   ;Whole kde4 directory including digiKam & co
   File /r "${KDE4PATH}"
 
