@@ -49,14 +49,14 @@ public:
     TooltipsPagePriv() :
         showTooltips(0),
         hideTooltips(0),
-        tooltipsBehavour(0)
+        tooltipsBehavior(0)
     {
     }
 
     QRadioButton* showTooltips;
     QRadioButton* hideTooltips;
 
-    QButtonGroup* tooltipsBehavour;
+    QButtonGroup* tooltipsBehavior;
 };
 
 TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
@@ -73,15 +73,15 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
     QWidget* btns       = new QWidget(vbox);
     QVBoxLayout* vlay   = new QVBoxLayout(btns);
 
-    d->tooltipsBehavour = new QButtonGroup(btns);
+    d->tooltipsBehavior = new QButtonGroup(btns);
     d->hideTooltips     = new QRadioButton(btns);
     d->hideTooltips->setText(i18n("Do not show tooltips"));
     d->hideTooltips->setChecked(true);
-    d->tooltipsBehavour->addButton(d->hideTooltips);
+    d->tooltipsBehavior->addButton(d->hideTooltips);
 
     d->showTooltips     = new QRadioButton(btns);
     d->showTooltips->setText(i18n("Use Tooltips"));
-    d->tooltipsBehavour->addButton(d->showTooltips);
+    d->tooltipsBehavior->addButton(d->showTooltips);
 
     vlay->addWidget(d->hideTooltips);
     vlay->addWidget(d->showTooltips);

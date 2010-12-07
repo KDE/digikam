@@ -106,7 +106,7 @@ bool Flip::toolOperations()
                 return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipVertical));
                 break;
             default:
-                kDebug() << "Unknow flip action";
+                kDebug() << "Unknown flip action";
                 return false;
                 break;
         }
