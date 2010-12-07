@@ -5,7 +5,8 @@
 - Add digiKam's icon modified with an arrow to the installer.
 - Add digiKam's icon modifier with an arrow in the opposite direction to the uninstaller.
 - Add digiKam's logo in the uninstaller welcome page.
-- Add RELEASENOTES list on installer.
+
+Remark: To fix the warning when running the installer/uninstaller one need to sign the .exe, this would require to buy a 900$ certificate !
 
 -------------------------------------------------------------------------------------------------------------------------
 
