@@ -35,6 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 258931 : Linking broken when using -Wl, --no-copy-dt-needed-entries.
 028 ==> 258300 : digiKam won't build.
 029 ==> 256023 : Cannot work with Sigma-RAW-files (X3F).
-030 ==> 
+030 ==> 257904 : digiKam not reading metadata from foreign images.
+031 ==> 
+
 
 
