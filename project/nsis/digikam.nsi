@@ -174,6 +174,7 @@ Section "Uninstall"
   ;ADD YOUR OWN FILES HERE...
 
   Delete "$INSTDIR\Uninstall.exe"
+  Delete "$INSTDIR\RELEASENOTES.txt"
 
   RMDir /r "$INSTDIR\kde4"
 
