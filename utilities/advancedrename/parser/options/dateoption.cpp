@@ -6,7 +6,7 @@
  * Date        : 2009-08-08
  * Description : an option to provide date information to the parser
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,9 +43,9 @@
 namespace Digikam
 {
 
-const QString dateFormatLinkDescr = i18nc("date format settings", "format settings");
-const QString dateFormatLink      = QString("<a href='http://doc.trolltech.com/latest/qdatetime.html#toString'>%1</a>")
-                                    .arg(dateFormatLinkDescr);
+static const QString dateFormatLinkDescr = i18nc("date format settings", "format settings");
+static const QString dateFormatLink =
+    QString("<a href='http://doc.trolltech.com/latest/qdatetime.html#toString'>%1</a>").arg(dateFormatLinkDescr);
 
 // --------------------------------------------------------
 

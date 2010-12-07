@@ -6,7 +6,7 @@
  * Date        : 2008-03-13
  * Description : image files selector dialog.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,8 +37,6 @@ namespace Digikam
 {
 
 class LoadingDescription;
-class ImageDialogPrivate;
-class ImageDialogPreviewPrivate;
 
 class DIGIKAM_EXPORT ImageDialogPreview : public KPreviewWidgetBase
 {
@@ -67,6 +65,7 @@ private:
 
 private:
 
+    class ImageDialogPreviewPrivate;
     ImageDialogPreviewPrivate* const d;
 };
 
@@ -91,6 +90,7 @@ public:
 
 private:
 
+    class ImageDialogPrivate;
     ImageDialogPrivate* const d;
 };
 
