@@ -240,33 +240,29 @@ KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam
-                      ${QT_QT3SUPPORT_LIBRARY}
-                      ${QT_QTSQL_LIBRARY}
-                      ${QT_QTSCRIPT_LIBRARY}
+        ${KDE4_KPARTS_LIBS}
+        ${KDE4_PHONON_LIBS}
+        ${KDE4_KHTML_LIBS}
+        ${KDE4_KUTILS_LIBS}
+        ${KDE4_KNOTIFYCONFIG_LIBRARY}
+        ${KDE4_SOLID_LIBS}
+        ${KIPI_LIBRARIES}
+        ${KEXIV2_LIBRARIES}
+        ${KDCRAW_LIBRARIES}
+        ${QT_QTSQL_LIBRARY}
+        ${QT_QTSCRIPT_LIBRARY}
+        ${QT_QT3SUPPORT_LIBRARY}
+        ${STRIGI_LIBRARIES}
+        ${LCMS_LIBRARIES}
 
-                      ${KDE4_KPARTS_LIBS}
-                      ${KDE4_PHONON_LIBS}
-                      ${KDE4_KHTML_LIBS}
-                      ${KDE4_KUTILS_LIBS}
-                      ${KDE4_KNOTIFYCONFIG_LIBRARY}
-                      ${KDE4_SOLID_LIBS}
+        digikamcore
+        digikamdatabase
+        advancedrename
+        queuemanager
+        cameragui
 
-                      ${KIPI_LIBRARIES}
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
-                      ${KFACE_LIBRARIES}
-                      ${KMAP_LIBRARIES}
-
-                      ${GPHOTO2_LIBRARIES}
-                      ${STRIGI_LIBRARIES}
-                      ${LCMS_LIBRARIES}
-
-                      digikamcore
-                      digikamdatabase
-                      advancedrename
-                      queuemanager
-                      cameragui
-                     )
+        ${GPHOTO2_LIBRARIES}
+)
 
 IF(KDEPIMLIBS_FOUND)
   TARGET_LINK_LIBRARIES(digikam ${KDE4_KABC_LIBS})

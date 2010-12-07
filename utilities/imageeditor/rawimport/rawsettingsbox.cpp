@@ -358,7 +358,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
             this, SIGNAL(signalAbortPreview()));
 
     connect(d->decodingSettingsBox, SIGNAL(signalSettingsChanged()),
-            this, SIGNAL(signalDemosaicingChanged()));
+            this, SLOT(slotDemosaicingChanged()));
 
     connect(d->curveWidget, SIGNAL(signalCurvesChanged()),
             this, SIGNAL(signalPostProcessingChanged()));
@@ -385,9 +385,19 @@ RawSettingsBox::~RawSettingsBox()
     delete d;
 }
 
+void RawSettingsBox::slotDemosaicingChanged()
+{
+    enableUpdateBtn(true);
+}
+
 void RawSettingsBox::enableUpdateBtn(bool b)
 {
     d->updateBtn->setEnabled(b);
+}
+
+bool RawSettingsBox::updateBtnEnabled()
+{
+    return d->updateBtn->isEnabled();
 }
 
 void RawSettingsBox::setBusy(bool b)

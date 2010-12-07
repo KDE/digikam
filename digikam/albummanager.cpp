@@ -1309,9 +1309,7 @@ void AlbumManager::scanPAlbums()
 
     foreach (PAlbum* album, topMostOldAlbums)
     {
-        // this might look like there is memory leak here, since removePAlbum
-        // doesn't delete albums and looks like child Albums don't get deleted.
-        // But when the parent album gets deleted, the children are also deleted.
+        // recursively removes all children and the album
         removePAlbum(album);
     }
 
@@ -2955,6 +2953,11 @@ void AlbumManager::removePAlbum(PAlbum* album)
     {
         d->currentAlbum = 0;
         emit signalAlbumCurrentChanged(0);
+    }
+
+    if (album->isAlbumRoot())
+    {
+        d->albumRootAlbumHash.remove(album->albumRootId());
     }
 
     emit signalAlbumDeleted(album);

@@ -155,11 +155,11 @@ QPushButton* Parseable::registerButton(QWidget* parent)
 QAction* Parseable::registerMenu(QMenu* parent)
 {
     QAction* action = 0;
-    QList<QAction*> actions;
 
     if (d->tokens.count() > 1 && d->useTokenMenu)
     {
         QMenu* menu = new QMenu(parent);
+        QList<QAction*> actions;
 
         foreach (Token* token, d->tokens)
         {

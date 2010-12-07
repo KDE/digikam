@@ -65,8 +65,8 @@ public:
                         const ImageInfo& imageInfoCurrent,
                         const QString& caption, bool allowSaving);
 
-    static ImageWindow* imagewindow();
-    static bool         imagewindowCreated();
+    static ImageWindow* imageWindow();
+    static bool         imageWindowCreated();
 
     bool setup();
     bool setupICC();

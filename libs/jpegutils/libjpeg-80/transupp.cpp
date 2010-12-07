@@ -12,6 +12,14 @@
  * interfaces.
  */
 
+/*
+ * Define libjpeg_EXPORTS: kde-win emerged jpeg lib uses this define to 
+ * decide wether to make dllimport (by default) or dllexport. We need to 
+ * export. 
+ */
+
+#define libjpeg_EXPORTS
+
 /* Although this file really shouldn't have access to the library internals,
  * it's helpful to let it call jround_up() and jcopy_block_row().
  */

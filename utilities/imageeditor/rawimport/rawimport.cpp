@@ -144,12 +144,15 @@ DImg& RawImport::postProcessedImage() const
     return d->previewWidget->postProcessedImage();
 }
 
+bool RawImport::demosaicingSettingsDirty()
+{
+    return d->settingsBox->updateBtnEnabled();
+}
+
 void RawImport::slotUpdatePreview()
 {
     DRawDecoding settings = rawDecodingSettings();
-    // We will load an half size image to speed up preview computing.
-    //settings.halfSizeColorImage = true;
-
+    // NOTE: we will NOT use Half Size raw extraction here, because we cannot check effects of demosaicing options in this mode.
     d->previewWidget->setDecodingSettings(settings);
 }
 
@@ -202,11 +205,6 @@ void RawImport::slotLoadingFailed()
     d->settingsBox->histogramBox()->histogram()->setLoadingFailed();
     EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
-}
-
-void RawImport::slotDemosaicingChanged()
-{
-    d->settingsBox->enableUpdateBtn(true);
 }
 
 void RawImport::slotLoadingProgress(float v)

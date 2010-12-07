@@ -6,7 +6,7 @@
  ; Date        : 2010-11-08
  ; Description : Null Soft windows installer based for digiKam
  ;
- ; Copyright (C) 2010 by Julien Narboux <joern.ahrens@kdemail.net>
+ ; Copyright (C) 2010 by Julien Narboux <julien at narboux dot fr>
  ; Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  ;
  ; Script arguments:
@@ -75,6 +75,16 @@ SetCompressorDictSize 96
 ;Variable for the folder of the start menu
 Var StartMenuFolder
 
+!define MUI_FINISHPAGE_TEXT "Thank you for installing digiKam!$\n$\n\
+We would like to inform you that this port of digiKam under windows is not as stable as the linux version.$\n$\n\
+DigiKam works  mostly fine under windows, but some features are broken due to some bugs \
+in the underlying KDE libraries, such as for example if you want to send items to the trash:$\n\
+https://bugs.kde.org/show_bug.cgi?id=229465 $\n$\n\
+Also, camera auto detection doesn't work under windows.$\n$\n\
+To report new bugs, please use this url:$\n\
+http://www.digikam.org/support"
+
+
 ;-------------------------------------------------------------------------------
 ;Pages
 
@@ -90,6 +100,7 @@ Var StartMenuFolder
 
   !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
   !insertmacro MUI_PAGE_INSTFILES
+  !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_WELCOME
   !insertmacro MUI_UNPAGE_CONFIRM
@@ -121,18 +132,13 @@ Section "digiKam" SecDigiKam
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   ;Register uninstaller in windows registery with only the option to uninstall (no repair nor modify)
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "DisplayName" "${MY_PRODUCT} Version ${VERSION}"
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "UninstallString" '"$INSTDIR\Uninstall.exe"'
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "DisplayVersion" "${VERSION}"
-  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "NoModify" "1"
-  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "NoRepair" "1"
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" \
-          "URLInfoAbout" "${PRODUCT_HOMEPAGE}"
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "DisplayName" "${MY_PRODUCT} Version ${VERSION}"
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "DisplayVersion" "${VERSION}"
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "Publisher" "The digiKam team"
+  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "NoModify" "1"
+  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "NoRepair" "1"
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "URLInfoAbout" "${PRODUCT_HOMEPAGE}"
 
  ;Add start menu
  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -145,6 +151,7 @@ Section "digiKam" SecDigiKam
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\DNGConverter.lnk" "$INSTDIR\kde4\bin\dngconverter.exe"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\ExpoBlending.lnk" "$INSTDIR\kde4\bin\expoblending.exe"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\ScanGui.lnk" "$INSTDIR\kde4\bin\scangui.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SystemSettings.lnk" "$INSTDIR\kde4\bin\systemsettings.exe"
     WriteINIStr "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url" "InternetShortcut" "URL" "${PRODUCT_HOMEPAGE}"
 
  !insertmacro MUI_STARTMENU_WRITE_END
@@ -175,7 +182,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\Uninstall.exe"
 
-  RMDir /r "$INSTDIR\${MY_PRODUCT}"
+  RMDir /r "$INSTDIR\kde4"
 
   RMDir "$INSTDIR"
 
@@ -185,6 +192,10 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\${MY_PRODUCT}.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\Showfoto.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\DNGConverter.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\ExpoBlending.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\ScanGui.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\SystemSettings.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 

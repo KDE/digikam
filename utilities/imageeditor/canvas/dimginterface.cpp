@@ -248,9 +248,25 @@ void DImgInterface::slotLoadRawFromTool()
             d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
             d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
         }
-    }
 
-    slotLoadRaw();
+        if (!rawImport->demosaicingSettingsDirty())
+        {
+            resetValues();
+            d->currentDescription = d->nextRawDescription;
+            d->filename           = d->currentDescription.filePath;
+
+            d->nextRawDescription = LoadingDescription();
+
+            emit signalLoadingStarted(d->filename);
+            slotImageLoaded(d->currentDescription, rawImport->postProcessedImage());
+            EditorToolIface::editorToolIface()->unLoadTool();
+            emit signalImageLoaded(d->filename, true);
+        }
+        else
+        {
+            slotLoadRaw();
+        }
+    }
 }
 
 void DImgInterface::slotLoadRaw()

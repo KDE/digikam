@@ -52,6 +52,7 @@ public:
 
     DRawDecoding rawDecodingSettings() const;
     DImg& postProcessedImage() const;
+    bool demosaicingSettingsDirty();
 
 private:
 
@@ -73,8 +74,6 @@ private Q_SLOTS:
 
     void slotUpdatePreview();
     void slotAbort();
-
-    void slotDemosaicingChanged();
 
     void slotOk();
     void slotCancel();

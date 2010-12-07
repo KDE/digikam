@@ -213,16 +213,13 @@ DigikamApp::DigikamApp()
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
     ThumbnailLoadThread::setDisplayingWidget(this);
-    QueueMgrWindow::queueManagerWindow();
-    ImageWindow::imageWindow();
-    LightTableWindow::lightTableWindow();
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
-    d->cameraMenu               = new KActionMenu(this);
-    d->usbMediaMenu             = new KActionMenu(this);
-    d->cardReaderMenu           = new KActionMenu(this);
+    d->cameraMenu     = new KActionMenu(this);
+    d->usbMediaMenu   = new KActionMenu(this);
+    d->cardReaderMenu = new KActionMenu(this);
 
     d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
 
@@ -267,6 +264,9 @@ DigikamApp::DigikamApp()
     // Load Themes
     populateThemes();
 
+    // preload additional windows
+    preloadWindows();
+
     setAutoSaveSettings("General Settings", true);
 }
 
@@ -276,14 +276,14 @@ DigikamApp::~DigikamApp()
 
     // Close and delete image editor instance.
 
-    if (ImageWindow::imagewindowCreated())
+    if (ImageWindow::imageWindowCreated())
     {
         // Delete after close
-        ImageWindow::imagewindow()->setAttribute(Qt::WA_DeleteOnClose, true);
+        ImageWindow::imageWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
         // pass ownership of object - needed by ImageWindow destructor
-        d->imagePluginsLoader->setParent(ImageWindow::imagewindow());
+        d->imagePluginsLoader->setParent(ImageWindow::imageWindow());
         // close the window
-        ImageWindow::imagewindow()->close();
+        ImageWindow::imageWindow()->close();
     }
 
     // Close and delete light table instance.
@@ -494,9 +494,9 @@ bool DigikamApp::queryClose()
 {
     bool ret = true;
 
-    if (ImageWindow::imagewindowCreated())
+    if (ImageWindow::imageWindowCreated())
     {
-        ret &= ImageWindow::imagewindow()->queryClose();
+        ret &= ImageWindow::imageWindow()->queryClose();
     }
 
     if (QueueMgrWindow::queueManagerWindowCreated())
@@ -2685,6 +2685,18 @@ void DigikamApp::populateThemes()
     d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
     slotThemeChanged();
     ThemeEngine::instance()->slotChangeTheme(d->themeMenuAction->currentText());
+}
+
+void DigikamApp::preloadWindows()
+{
+    if (d->splashScreen)
+    {
+        d->splashScreen->message(i18n("Loading tools"));
+    }
+
+    QueueMgrWindow::queueManagerWindow();
+    ImageWindow::imageWindow();
+    LightTableWindow::lightTableWindow();
 }
 
 void DigikamApp::slotChangeTheme(const QString& theme)

@@ -125,7 +125,7 @@ WaterMark::WaterMark(QObject* parent)
       d(new WaterMarkPriv)
 {
     setToolTitle(i18n("Add Watermark"));
-    setToolDescription(i18n("A tool to overlay an image or a text as a visible watermark"));
+    setToolDescription(i18n("A tool to overlay an image or text as a visible watermark"));
     setToolIcon(KIcon(SmallIcon("insert-text")));
 
     KVBox* vbox = new KVBox;
@@ -250,7 +250,7 @@ WaterMark::WaterMark(QObject* parent)
     d->waterMarkSizePercent->setRange(0, 100);
     d->waterMarkSizePercent->setValue(30);
     d->waterMarkSizePercent->setSliderEnabled(true);
-    d->waterMarkSizePercent->setWhatsThis(i18n("Size of watermark in percent of the marked image."));
+    d->waterMarkSizePercent->setWhatsThis(i18n("Size of watermark, as a percentage of the marked image."));
     label5->setText(i18n("Size (%):"));
 
     QLabel* label6  = new QLabel(vbox);
@@ -258,7 +258,7 @@ WaterMark::WaterMark(QObject* parent)
     d->xMarginInput->setRange(0, 100);
     d->xMarginInput->setValue(2);
     d->xMarginInput->setSliderEnabled(true);
-    d->xMarginInput->setWhatsThis(i18n("Margin from edge in X direction in percent of the marked image"));
+    d->xMarginInput->setWhatsThis(i18n("Margin from edge in X direction, as a percentage of the marked image"));
     label6->setText(i18n("X margin (%):"));
 
     QLabel* label7  = new QLabel(vbox);
@@ -266,7 +266,7 @@ WaterMark::WaterMark(QObject* parent)
     d->yMarginInput->setRange(0, 100);
     d->yMarginInput->setValue(2);
     d->yMarginInput->setSliderEnabled(true);
-    d->yMarginInput->setWhatsThis(i18n("Margin from edge in Y direction in percent of the marked image"));
+    d->yMarginInput->setWhatsThis(i18n("Margin from edge in Y direction, as a percentage of the marked image"));
     label7->setText(i18n("Y margin (%):"));
 
     QLabel* space = new QLabel(vbox);

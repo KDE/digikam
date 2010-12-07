@@ -134,6 +134,7 @@ private:
     void loadPlugins();
     void loadCameras();
     void populateThemes();
+    void preloadWindows();
     void fillSolidMenus();
     bool checkSolidCamera(const Solid::Device& cameraDevice);
     QString labelForSolidCamera(const Solid::Device& cameraDevice);

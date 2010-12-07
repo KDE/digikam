@@ -71,8 +71,8 @@ public:
         digiKamFingerPrint  = QString("Digikam Thumbnail Generator");
 
         fastRawSettings.optimizeTimeLoading();
-        fastRawSettings.halfSizeColorImage = true;
-        fastRawSettings.sixteenBitsImage   = false;
+        fastRawSettings.rawPrm.halfSizeColorImage = true;
+        fastRawSettings.rawPrm.sixteenBitsImage   = false;
 
     }
 

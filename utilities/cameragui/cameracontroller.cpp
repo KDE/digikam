@@ -994,7 +994,7 @@ void CameraController::slotOpen(const QString& folder, const QString& file, cons
     KUrl::List urlList;
     urlList << url;
 
-    ImageWindow* im = ImageWindow::imagewindow();
+    ImageWindow* im = ImageWindow::imageWindow();
     im->loadURL(urlList, url, i18n("Camera \"%1\"",d->camera->model()), false);
 
     if (im->isHidden())
