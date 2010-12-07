@@ -530,23 +530,23 @@ void QueueMgrWindow::applySettings()
     DRawDecoding         rawDecodingSettings;
     ICCSettingsContainer ICCSettings = IccSettings::instance()->settings();
 
-    rawDecodingSettings.readSettings(group);
+    rawDecodingSettings.rawPrm.readSettings(group);
 
     if (ICCSettings.enableCM)
     {
         if (ICCSettings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
         {
-            rawDecodingSettings.outputColorSpace = DRawDecoding::CUSTOMOUTPUTCS;
-            rawDecodingSettings.outputProfile    = ICCSettings.workspaceProfile;
+            rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::CUSTOMOUTPUTCS;
+            rawDecodingSettings.rawPrm.outputProfile    = ICCSettings.workspaceProfile;
         }
         else
         {
-            rawDecodingSettings.outputColorSpace = DRawDecoding::RAWCOLOR;
+            rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::RAWCOLOR;
         }
     }
     else
     {
-        rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
+        rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::SRGB;
     }
 
     d->thread->setRawDecodingSettings(rawDecodingSettings);

@@ -726,6 +726,7 @@ CollectionManager::CollectionManager()
 
 CollectionManager::~CollectionManager()
 {
+    qDeleteAll(d->locations.values());
     delete d;
 }
 

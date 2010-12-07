@@ -144,7 +144,7 @@ void FingerPrintsGenerator::processOne()
     LoadingDescription description(path, HaarIface::preferredSize(),
                                    MetadataSettings::instance()->settings().exifRotate,
                                    LoadingDescription::ConvertToSRGB);
-    description.rawDecodingSettings.sixteenBitsImage = false;
+    description.rawDecodingSettings.rawPrm.sixteenBitsImage = false;
     d->previewLoadThread->load(description);
 }
 

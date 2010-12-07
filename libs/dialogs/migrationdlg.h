@@ -85,7 +85,7 @@ private Q_SLOTS:
     void lockInputFields();
 
     void handleFinish(int finishState, QString errorMsg);
-    void handleStepStarted(QString stepName);
+    void handleStepStarted(const QString& stepName);
     void handleSmallStepStarted(int currValue, int maxValue);
 
 

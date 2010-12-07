@@ -50,24 +50,24 @@ class Setup::SetupPrivate
 {
 public:
 
-    SetupPrivate()
+    SetupPrivate() :
+        page_editor(0),
+        page_metadata(0),
+        page_tooltip(0),
+        page_dcraw(0),
+        page_iofiles(0),
+        page_slideshow(0),
+        page_icc(0),
+        page_misc(0),
+        metadataPage(0),
+        toolTipPage(0),
+        miscPage(0),
+        editorPage(0),
+        dcrawPage(0),
+        iofilesPage(0),
+        slideshowPage(0),
+        iccPage(0)
     {
-        editorPage     = 0;
-        metadataPage   = 0;
-        toolTipPage    = 0;
-        dcrawPage      = 0;
-        iofilesPage    = 0;
-        slideshowPage  = 0;
-        iccPage        = 0;
-        miscPage       = 0;
-        page_editor    = 0;
-        page_metadata  = 0;
-        page_tooltip   = 0;
-        page_dcraw     = 0;
-        page_iofiles   = 0;
-        page_slideshow = 0;
-        page_icc       = 0;
-        page_misc      = 0;
     }
 
     KPageWidgetItem*         page_editor;

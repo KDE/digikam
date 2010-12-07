@@ -76,11 +76,11 @@ class GreycstorationFilter::GreycstorationFilterPriv
 
 public:
 
-    GreycstorationFilterPriv()
+    GreycstorationFilterPriv() :
+        gfact(1.0),
+        computationThreads(2),
+        mode(GreycstorationFilter::Restore)
     {
-        mode               = GreycstorationFilter::Restore;
-        gfact              = 1.0;
-        computationThreads = 2;
     }
 
     float                   gfact;

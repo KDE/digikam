@@ -332,12 +332,9 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     QAction* choice = cmhelper.exec(event->globalPos());
 
-    if (choice)
+    if (choice && (choice == viewAction))
     {
-        if (choice == viewAction)
-        {
-            emit previewRequested(info);
-        }
+        emit previewRequested(info);
     }
 }
 

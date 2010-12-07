@@ -94,16 +94,16 @@ class MigrationDlgPriv
 
 public:
 
-    MigrationDlgPriv()
+    MigrationDlgPriv() :
+        fromDatabaseWidget(0),
+        toDatabaseWidget(0),
+        migrateButton(0),
+        cancelButton(0),
+        overallStepTitle(0),
+        progressBar(0),
+        progressBarSmallStep(0),
+        copyThread(0)
     {
-        fromDatabaseWidget   = 0;
-        toDatabaseWidget     = 0;
-        migrateButton        = 0;
-        cancelButton         = 0;
-        overallStepTitle     = 0;
-        progressBar          = 0;
-        progressBarSmallStep = 0;
-        copyThread           = 0;
     }
 
     DatabaseWidget*     fromDatabaseWidget;
@@ -245,7 +245,7 @@ void MigrationDlg::handleFinish(int finishState, QString errorMsg)
     }
 }
 
-void MigrationDlg::handleStepStarted(QString stepName)
+void MigrationDlg::handleStepStarted(const QString& stepName)
 {
     int progressBarValue = d->progressBar->value();
     d->overallStepTitle->setText(i18n("Step Progress (%1)", stepName));

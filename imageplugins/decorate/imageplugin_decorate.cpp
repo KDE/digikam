@@ -50,12 +50,12 @@ class ImagePlugin_Decorate::ImagePlugin_DecoratePriv
 {
 public:
 
-    ImagePlugin_DecoratePriv()
+    ImagePlugin_DecoratePriv() :
+        superimposeAction(0),
+        textureAction(0),
+        borderAction(0),
+        insertTextAction(0)
     {
-        superimposeAction = 0;
-        textureAction     = 0;
-        borderAction      = 0;
-        insertTextAction  = 0;
     }
 
     KAction* superimposeAction;

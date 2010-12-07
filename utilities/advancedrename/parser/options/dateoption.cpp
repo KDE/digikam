@@ -51,8 +51,6 @@ static const QString dateFormatLink =
 
 DateFormat::DateFormat()
 {
-    m_map.clear();
-
     m_map.insert(Standard, DateFormatDescriptor(QString("Standard"), QString("yyyyMMddThhmmss")));
     m_map.insert(ISO,      DateFormatDescriptor(QString("ISO"),      Qt::ISODate));
     m_map.insert(FullText, DateFormatDescriptor(QString("Text"),     Qt::TextDate));
@@ -62,34 +60,29 @@ DateFormat::DateFormat()
 
 QString DateFormat::identifier(Type type)
 {
-    DateFormatDescriptor desc = m_map.at((int)type);
-    return desc.first;
+    return m_map.at((int)type).first;
 }
 
 QVariant DateFormat::formatType(Type type)
 {
-    DateFormatDescriptor desc = m_map.at((int)type);
-    return desc.second;
+    return m_map.at((int)type).second;
 }
 
-QVariant DateFormat::formatType(QString identifier)
+QVariant DateFormat::formatType(const QString& identifier)
 {
-    QVariant v;
-    foreach (const DateFormatDescriptor& desc, m_map)
-    {
-        if (desc.first == identifier)
-        {
-            v = desc.second;
-            break;
-        }
-    }
-
     if (identifier.isEmpty())
     {
         return m_map.at(Standard).second;
     }
 
-    return v;
+    foreach (const DateFormatDescriptor& desc, m_map)
+    {
+        if (desc.first == identifier)
+        {
+            return desc.second;
+        }
+    }
+    return QVariant();
 }
 
 // --------------------------------------------------------
@@ -163,7 +156,7 @@ DateOptionDialog::DateSource DateOptionDialog::dateSource()
     bool ok    = true;
     int choice = v.toInt(&ok);
 
-    return (DateSource)choice;
+    return static_cast<DateSource>(choice);
 }
 
 QString DateOptionDialog::formattedDateTime(const QDateTime& date)
@@ -174,9 +167,9 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
     }
 
     DateFormat df;
-    QVariant v;
+    QVariant   v;
 
-    v = df.formatType((DateFormat::Type)ui->dateFormatPicker->currentIndex());
+    v = df.formatType(static_cast<DateFormat::Type>(ui->dateFormatPicker->currentIndex()));
     QString result;
 
     if (v.type() == QVariant::String)
@@ -194,17 +187,13 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
 void DateOptionDialog::slotDateSourceChanged(int index)
 {
     Q_UNUSED(index)
-
-    DateSource choice = dateSource();
-    ui->fixedDateContainer->setEnabled( (choice == FixedDateTime) );
+    ui->fixedDateContainer->setEnabled(dateSource() == FixedDateTime);
 }
 
 void DateOptionDialog::slotDateFormatChanged(int index)
 {
     bool custom = (index == DateFormat::Custom);
-
     ui->customFormatInput->setEnabled(custom);
-
     ui->dateFormatLink->setEnabled(custom);
     ui->dateFormatLink->setVisible(custom);
 
@@ -241,9 +230,6 @@ DateOption::DateOption()
 
 QString DateOption::parseOperation(ParseSettings& settings)
 {
-    QString result;
-    DateFormat df;
-
     const QRegExp& reg = regExp();
 
     QString token = reg.cap(2);
@@ -287,7 +273,9 @@ QString DateOption::parseOperation(ParseSettings& settings)
         return QString();
     }
 
-    QVariant v = df.formatType(token);
+    QString    result;
+    DateFormat df;
+    QVariant   v = df.formatType(token);
 
     if (v.isNull())
     {
@@ -312,15 +300,13 @@ void DateOption::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
-    QVariant v;
-    DateFormat df;
-    QString dateString;
-
-    QString tokenStr               = QString("[date:%1]");
     QPointer<DateOptionDialog> dlg = new DateOptionDialog(this);
+
+    QString dateString;
 
     if (dlg->exec() == KDialog::Accepted)
     {
+        DateFormat df;
         int index = dlg->ui->dateFormatPicker->currentIndex();
 
         // use custom date format?
@@ -330,8 +316,9 @@ void DateOption::slotTokenTriggered(const QString& token)
             date.setDate(dlg->ui->datePicker->date());
             date.setTime(dlg->ui->timePicker->time());
 
-            v = (index == DateFormat::Custom) ? dlg->ui->customFormatInput->text()
-                : df.formatType((DateFormat::Type)index);
+            QVariant v = (index == DateFormat::Custom)
+                         ? dlg->ui->customFormatInput->text()
+                         : df.formatType((DateFormat::Type)index);
 
             if (v.type() == QVariant::String)
             {
@@ -342,8 +329,11 @@ void DateOption::slotTokenTriggered(const QString& token)
                 dateString = date.toString((Qt::DateFormat)v.toInt());
             }
         }
-        else        // use predefined keywords for date formatting
+        // use predefined keywords for date formatting
+        else
         {
+            QString tokenStr = QString("[date:%1]");
+
             switch (index)
             {
                 case DateFormat::Standard:

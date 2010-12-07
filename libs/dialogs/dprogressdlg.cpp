@@ -50,16 +50,16 @@ class DProgressDlgPriv
 {
 public:
 
-    DProgressDlgPriv()
+    DProgressDlgPriv() :
+        allowCancel(true),
+        cancelled(false),
+        logo(0),
+        title(0),
+        label(0),
+        actionPix(0),
+        actionLabel(0),
+        progress(0)
     {
-        progress    = 0;
-        actionLabel = 0;
-        actionPix   = 0;
-        logo        = 0;
-        title       = 0;
-        label       = 0;
-        allowCancel = true;
-        cancelled   = false;
     }
 
     bool                allowCancel;

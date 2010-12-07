@@ -49,9 +49,9 @@ class ThumbnailDBPriv
 
 public:
 
-    ThumbnailDBPriv()
+    ThumbnailDBPriv() :
+        db(0)
     {
-        db = 0;
     }
 
     DatabaseCoreBackend* db;

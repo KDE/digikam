@@ -56,7 +56,7 @@ namespace Digikam
 RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
     : DImgLoader(image)
 {
-    m_rawDecodingSettings = rawDecodingSettings;
+    m_rawDecodingSettings = rawDecodingSettings.rawPrm;
     m_customRawSettings   = rawDecodingSettings;
     m_observer            = 0;
 }
@@ -83,23 +83,23 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders,
         // because RAW file are always in linear mode.
 
-        if (m_rawDecodingSettings.outputColorSpace == DRawDecoding::CUSTOMOUTPUTCS)
+        if (m_rawDecodingSettings.outputColorSpace == RawDecodingSettings::CUSTOMOUTPUTCS)
         {
             if (m_rawDecodingSettings.outputProfile == IccProfile::sRGB().filePath())
             {
-                m_rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
+                m_rawDecodingSettings.outputColorSpace = RawDecodingSettings::SRGB;
             }
             else if (m_rawDecodingSettings.outputProfile == IccProfile::adobeRGB().filePath())
             {
-                m_rawDecodingSettings.outputColorSpace = DRawDecoding::ADOBERGB;
+                m_rawDecodingSettings.outputColorSpace = RawDecodingSettings::ADOBERGB;
             }
             else if (m_rawDecodingSettings.outputProfile == IccProfile::wideGamutRGB().filePath())
             {
-                m_rawDecodingSettings.outputColorSpace = DRawDecoding::WIDEGAMMUT;
+                m_rawDecodingSettings.outputColorSpace = RawDecodingSettings::WIDEGAMMUT;
             }
             else if (m_rawDecodingSettings.outputProfile == IccProfile::proPhotoRGB().filePath())
             {
-                m_rawDecodingSettings.outputColorSpace = DRawDecoding::PROPHOTO;
+                m_rawDecodingSettings.outputColorSpace = RawDecodingSettings::PROPHOTO;
             }
             else
             {
@@ -109,11 +109,11 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                 if (m_rawDecodingSettings.sixteenBitsImage)
                 {
-                    m_rawDecodingSettings.outputColorSpace = DRawDecoding::PROPHOTO;
+                    m_rawDecodingSettings.outputColorSpace = RawDecodingSettings::PROPHOTO;
                 }
                 else
                 {
-                    m_rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
+                    m_rawDecodingSettings.outputColorSpace = RawDecodingSettings::SRGB;
                 }
             }
         }
@@ -273,32 +273,32 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     switch (m_rawDecodingSettings.outputColorSpace)
     {
-        case DRawDecoding::SRGB:
+        case RawDecodingSettings::SRGB:
         {
             imageSetIccProfile(IccProfile::sRGB());
             break;
         }
-        case DRawDecoding::ADOBERGB:
+        case RawDecodingSettings::ADOBERGB:
         {
             imageSetIccProfile(IccProfile::adobeRGB());
             break;
         }
-        case DRawDecoding::WIDEGAMMUT:
+        case RawDecodingSettings::WIDEGAMMUT:
         {
             imageSetIccProfile(IccProfile::wideGamutRGB());
             break;
         }
-        case DRawDecoding::PROPHOTO:
+        case RawDecodingSettings::PROPHOTO:
         {
             imageSetIccProfile(IccProfile::proPhotoRGB());
             break;
         }
-        case DRawDecoding::CUSTOMOUTPUTCS:
+        case RawDecodingSettings::CUSTOMOUTPUTCS:
         {
             imageSetIccProfile(m_rawDecodingSettings.outputProfile);
             break;
         }
-        case DRawDecoding::RAWCOLOR:
+        case RawDecodingSettings::RAWCOLOR:
         {
             // No icc color-space profile to assign in RAW color mode.
             imageSetAttribute("uncalibratedColor", true);

@@ -54,9 +54,9 @@ class InfoDlgPriv
 {
 public:
 
-    InfoDlgPriv()
+    InfoDlgPriv() :
+        listView(0)
     {
-        listView = 0;
     }
 
     QTreeWidget* listView;

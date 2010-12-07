@@ -58,11 +58,11 @@ class ImageDialogPreview::ImageDialogPreviewPrivate
 
 public:
 
-    ImageDialogPreviewPrivate()
+    ImageDialogPreviewPrivate() :
+        imageLabel(0),
+        infoLabel(0),
+        thumbLoadThread(0)
     {
-        imageLabel      = 0;
-        infoLabel       = 0;
-        thumbLoadThread = 0;
     }
 
     QLabel*              imageLabel;
@@ -262,9 +262,9 @@ class ImageDialog::ImageDialogPrivate
 
 public:
 
-    ImageDialogPrivate()
+    ImageDialogPrivate() :
+        singleSelect(false)
     {
-        singleSelect = false;
     }
 
     bool       singleSelect;

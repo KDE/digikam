@@ -26,9 +26,9 @@
 
 // Qt includes
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QCheckBox>
 
 // KDE includes
 
@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class TagFilterViewPriv
+class TagFilterView::TagFilterViewPriv
 {
 public:
 
@@ -59,23 +59,21 @@ public:
     {
     }
 
-    QAction*        onRestoreTagFiltersAction;
-    QAction*        offRestoreTagFiltersAction;
-    QAction*        ignoreTagAction;
-    QAction*        includeTagAction;
-    QAction*        excludeTagAction;
+    QAction*       onRestoreTagFiltersAction;
+    QAction*       offRestoreTagFiltersAction;
+    QAction*       ignoreTagAction;
+    QAction*       includeTagAction;
+    QAction*       excludeTagAction;
 
-    KSelectAction*  restoreTagFiltersAction;
-    KSelectAction*  tagFilterModeAction;
+    KSelectAction* restoreTagFiltersAction;
+    KSelectAction* tagFilterModeAction;
 
-    TagModel*       tagFilterModel;
+    TagModel*      tagFilterModel;
 };
 
-TagFilterView::TagFilterView(QWidget* parent, TagModel* tagFilterModel) :
-    TagCheckView(parent, tagFilterModel),
-    d(new TagFilterViewPriv)
+TagFilterView::TagFilterView(QWidget* parent, TagModel* tagFilterModel)
+             : TagCheckView(parent, tagFilterModel), d(new TagFilterViewPriv)
 {
-
     d->tagFilterModel             = tagFilterModel;
 
     d->restoreTagFiltersAction    = new KSelectAction(i18n("Restore Tag Filters"), this);
@@ -119,7 +117,6 @@ void TagFilterView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
 
     d->onRestoreTagFiltersAction->setChecked(isRestoreCheckState());
     d->offRestoreTagFiltersAction->setChecked(!isRestoreCheckState());
-
 }
 
 void TagFilterView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
@@ -151,12 +148,11 @@ void TagFilterView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
     {
         albumModel()->setCheckState(album, Qt::PartiallyChecked);
     }
-
 }
 
-// -----------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
-class TagFilterSideBarWidgetPriv
+class TagFilterSideBarWidget::TagFilterSideBarWidgetPriv
 {
 public:
 
@@ -181,16 +177,15 @@ public:
     KComboBox*           matchingConditionComboBox;
 
 };
-const QString TagFilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
-const QString TagFilterSideBarWidgetPriv::configMatchingConditionEntry("Matching Condition");
 
-// --------------------------------------------------------
+const QString TagFilterSideBarWidget::TagFilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
+const QString TagFilterSideBarWidget::TagFilterSideBarWidgetPriv::configMatchingConditionEntry("Matching Condition");
 
-TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent,
-        TagModel* tagFilterModel) :
-    QWidget(parent), StateSavingObject(this), d(new TagFilterSideBarWidgetPriv)
+// ---------------------------------------------------------------------------------------------------
+
+TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFilterModel)
+                      : QWidget(parent), StateSavingObject(this), d(new TagFilterSideBarWidgetPriv)
 {
-
     setObjectName("TagFilter Sidebar");
 
     d->tagFilterModel = tagFilterModel;
@@ -234,11 +229,11 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent,
 
     connect(d->matchingConditionComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotMatchingConditionChanged(int)));
-
 }
 
 TagFilterSideBarWidget::~TagFilterSideBarWidget()
 {
+    delete d;
 }
 
 void TagFilterSideBarWidget::slotResetTagFilters()
@@ -253,7 +248,8 @@ void TagFilterSideBarWidget::slotMatchingConditionChanged(int index)
     filterChanged();
 }
 
-void TagFilterSideBarWidget::slotCheckedTagsChanged(const QList<TAlbum*> &includedTags, const QList<TAlbum*> &excludedTags)
+void TagFilterSideBarWidget::slotCheckedTagsChanged(const QList<TAlbum*>& includedTags, 
+                                                    const QList<TAlbum*>& excludedTags)
 {
     Q_UNUSED(includedTags);
     Q_UNUSED(excludedTags);
@@ -328,4 +324,4 @@ void TagFilterSideBarWidget::doSaveState()
     getConfigGroup().sync();
 }
 
-}
+} // namespace Digikam

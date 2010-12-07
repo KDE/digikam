@@ -65,9 +65,9 @@ class AlbumDB::AlbumDBPriv
 
 public:
 
-    AlbumDBPriv()
+    AlbumDBPriv() :
+        db(0)
     {
-        db = 0;
     }
 
     DatabaseBackend* db;

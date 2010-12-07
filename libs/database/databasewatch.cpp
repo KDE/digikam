@@ -56,11 +56,11 @@ class DatabaseWatchPriv
 {
 public:
 
-    DatabaseWatchPriv()
+    DatabaseWatchPriv() :
+        mode(DatabaseWatch::DatabaseSlave),
+        adaptor(0),
+        slaveThread(0)
     {
-        mode    = DatabaseWatch::DatabaseSlave;
-        adaptor = 0;
-        slaveThread = 0;
     }
 
     DatabaseWatch::DatabaseMode   mode;

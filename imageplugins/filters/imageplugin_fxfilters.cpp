@@ -53,16 +53,16 @@ class ImagePlugin_FxFilters::ImagePlugin_FxFiltersPriv
 {
 public:
 
-    ImagePlugin_FxFiltersPriv()
+    ImagePlugin_FxFiltersPriv() :
+        filmgrainAction(0),
+        raindropAction(0),
+        distortionfxAction(0),
+        blurfxAction(0),
+        oilpaintAction(0),
+        embossAction(0),
+        charcoalAction(0),
+        colorEffectsAction(0)
     {
-        filmgrainAction    = 0;
-        raindropAction     = 0;
-        distortionfxAction = 0;
-        blurfxAction       = 0;
-        oilpaintAction     = 0;
-        embossAction       = 0;
-        charcoalAction     = 0;
-        colorEffectsAction = 0;
     }
 
     KAction* filmgrainAction;

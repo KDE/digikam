@@ -46,14 +46,15 @@ class BWSepiaFilter::BWSepiaFilterPriv
 {
 public:
 
-    BWSepiaFilterPriv() : settings(false)
+    BWSepiaFilterPriv() :
+        redAttn(0.0),
+        greenAttn(0.0),
+        blueAttn(0.0),
+        redMult(0.0),
+        greenMult(0.0),
+        blueMult(0.0),
+        settings(false)
     {
-        redAttn   = 0.0;
-        greenAttn = 0.0;
-        blueAttn  = 0.0;
-        redMult   = 0.0;
-        greenMult = 0.0;
-        blueMult  = 0.0;
     }
 
     // Color filter attenuation in percents.

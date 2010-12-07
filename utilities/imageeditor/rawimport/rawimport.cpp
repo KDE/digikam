@@ -139,11 +139,16 @@ DRawDecoding RawImport::rawDecodingSettings() const
     return d->settingsBox->settings();
 }
 
+DImg& RawImport::postProcessedImage() const
+{
+    return d->previewWidget->postProcessedImage();
+}
+
 void RawImport::slotUpdatePreview()
 {
     DRawDecoding settings = rawDecodingSettings();
     // We will load an half size image to speed up preview computing.
-    settings.halfSizeColorImage = true;
+    //settings.halfSizeColorImage = true;
 
     d->previewWidget->setDecodingSettings(settings);
 }
@@ -217,9 +222,9 @@ void RawImport::slotScaleChanged()
 void RawImport::slotOk()
 {
     // NOTE: work around B.K.O #211810
-    if (d->settingsBox->curvesWidget()->isSixteenBits() != d->settingsBox->settings().sixteenBitsImage)
+    if (d->settingsBox->curvesWidget()->isSixteenBits() != d->settingsBox->settings().rawPrm.sixteenBitsImage)
     {
-        d->settingsBox->curvesWidget()->updateData(0, 0, 0, d->settingsBox->settings().sixteenBitsImage);
+        d->settingsBox->curvesWidget()->updateData(0, 0, 0, d->settingsBox->settings().rawPrm.sixteenBitsImage);
     }
 
     EditorTool::slotOk();

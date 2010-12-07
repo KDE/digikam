@@ -66,6 +66,9 @@ PreviewThreadWrapper::PreviewThreadWrapper(QObject* parent)
 
 PreviewThreadWrapper::~PreviewThreadWrapper()
 {
+    foreach (DImgThreadedFilter* filter, d->map.values())
+        delete filter;
+
     delete d;
 }
 

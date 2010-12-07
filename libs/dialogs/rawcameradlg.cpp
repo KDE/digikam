@@ -53,9 +53,9 @@ class RawCameraDlgPriv
 {
 public:
 
-    RawCameraDlgPriv()
+    RawCameraDlgPriv() :
+        searchBar(0)
     {
-        searchBar = 0;
     }
     SearchTextBar* searchBar;
 };

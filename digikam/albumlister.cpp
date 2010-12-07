@@ -89,8 +89,8 @@ public:
     bool                            untaggedFilter;
 
     int                             ratingFilter;
-    int                             recurseAlbums;
-    int                             recurseTags;
+    bool                            recurseAlbums;
+    bool                            recurseTags;
 
     QMap<qlonglong, ImageInfo>      itemMap;
     QMap<QDateTime, bool>           dayFilter;

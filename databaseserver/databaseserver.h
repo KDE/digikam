@@ -56,7 +56,7 @@ public:
     DatabaseServerError startMYSQLDatabaseProcess();
 
 public Q_SLOTS:
-    bool startDatabaseProcess(QString dbType, QDBusVariant& error);
+    bool startDatabaseProcess(const QString& dbType, QDBusVariant& error);
     bool startDatabaseProcess(QDBusVariant& error);
     void stopDatabaseProcess();
     bool isRunning();

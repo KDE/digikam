@@ -53,10 +53,10 @@ class IccProfilePriv : public QSharedData
 {
 public:
 
-    IccProfilePriv()
+    IccProfilePriv() :
+        type(IccProfile::InvalidType),
+        handle(0)
     {
-        handle      = 0;
-        type        = IccProfile::InvalidType;
     }
 
     IccProfilePriv(const IccProfilePriv& other)

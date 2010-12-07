@@ -37,9 +37,9 @@ class ThemedIconViewPriv
 {
 public:
 
-    ThemedIconViewPriv()
+    ThemedIconViewPriv() :
+        thumbSize(128)
     {
-        thumbSize = 128;
     }
 
     int     thumbSize;

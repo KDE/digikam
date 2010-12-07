@@ -125,22 +125,20 @@ class ShowFoto::ShowFotoPriv
 {
 public:
 
-    ShowFotoPriv()
+    ShowFotoPriv() :
+        deleteItem2Trash(true),
+        validIccPath(true),
+        itemsNb(0),
+        vSplitter(0),
+        fileOpenAction(0),
+        openFilesInFolderAction(0),
+        thumbLoadThread(0),
+        thumbBar(0),
+        thumbBarDock(0),
+        currentItem(0),
+        rightSideBar(0),
+        splash(0)
     {
-        thumbLoadThread         = 0;
-        currentItem             = 0;
-        itemsNb                 = 0;
-        splash                  = 0;
-        openFilesInFolderAction = 0;
-        fileOpenAction          = 0;
-        thumbBar                = 0;
-        thumbBarDock            = 0;
-        rightSideBar            = 0;
-        splash                  = 0;
-        itemsNb                 = 0;
-        vSplitter               = 0;
-        deleteItem2Trash        = true;
-        validIccPath            = true;
     }
 
     bool                             deleteItem2Trash;

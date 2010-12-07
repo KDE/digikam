@@ -52,11 +52,11 @@ class BorderFilterPriv
 {
 public:
 
-    BorderFilterPriv()
+    BorderFilterPriv() :
+        borderMainWidth(0),
+        border2ndWidth(0),
+        orgRatio(0.0f)
     {
-        borderMainWidth = 0;
-        border2ndWidth  = 0;
-        orgRatio        = 0.0f;
     }
 
     int             borderMainWidth;
@@ -64,13 +64,13 @@ public:
 
     float           orgRatio;
 
-    DColor  solidColor;
-    DColor  niepceBorderColor;
-    DColor  niepceLineColor;
-    DColor  bevelUpperLeftColor;
-    DColor  bevelLowerRightColor;
-    DColor  decorativeFirstColor;
-    DColor  decorativeSecondColor;
+    DColor          solidColor;
+    DColor          niepceBorderColor;
+    DColor          niepceLineColor;
+    DColor          bevelUpperLeftColor;
+    DColor          bevelLowerRightColor;
+    DColor          decorativeFirstColor;
+    DColor          decorativeSecondColor;
 
     BorderContainer settings;
 

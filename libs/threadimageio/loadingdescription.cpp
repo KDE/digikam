@@ -6,7 +6,7 @@
  * Date        : 2007-02-03
  * Description : Loading parameters for multithreaded loading
  *
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -164,16 +164,15 @@ QString LoadingDescription::cacheKey() const
         // Assumption: With time-optimized, we can have 8 or 16bit and halfSize or demosaiced.
         suffix += "-timeoptimized";
 
-        if (!rawDecodingSettings.sixteenBitsImage)
+        if (!rawDecodingSettings.rawPrm.sixteenBitsImage)
         {
             suffix += "-8";
         }
 
-        if (rawDecodingSettings.halfSizeColorImage)
+        if (rawDecodingSettings.rawPrm.halfSizeColorImage)
         {
             suffix += "-halfSize";
         }
-
     }
 
     return filePath + suffix;
@@ -224,11 +223,11 @@ QStringList LoadingDescription::lookupCacheKeys() const
 
     if (rawDecodingHint == RawDecodingTimeOptimized)
     {
-        if (rawDecodingSettings.sixteenBitsImage)
+        if (rawDecodingSettings.rawPrm.sixteenBitsImage)
         {
             cacheKeys << filePath + "-timeoptimized";
 
-            if (rawDecodingSettings.halfSizeColorImage)
+            if (rawDecodingSettings.rawPrm.halfSizeColorImage)
             {
                 cacheKeys << filePath + "-timeoptimized-halfSize";
             }
@@ -237,12 +236,11 @@ QStringList LoadingDescription::lookupCacheKeys() const
         {
             cacheKeys << filePath + "-timeoptimized-8";
 
-            if (rawDecodingSettings.halfSizeColorImage)
+            if (rawDecodingSettings.rawPrm.halfSizeColorImage)
             {
                 cacheKeys << filePath + "-timeoptimized-8-halfSize";
             }
         }
-
     }
 
     if (rawDecodingHint == RawDecodingGlobalSettings)
@@ -266,15 +264,15 @@ bool LoadingDescription::needCheckRawDecoding() const
 bool LoadingDescription::isReducedVersion() const
 {
     // return true if this loads anything but the full version
-    return rawDecodingSettings.halfSizeColorImage
+    return rawDecodingSettings.rawPrm.halfSizeColorImage
            || previewParameters.type != PreviewParameters::NoPreview;
 }
 
 bool LoadingDescription::operator==(const LoadingDescription& other) const
 {
-    return filePath == other.filePath &&
-           rawDecodingSettings == other.rawDecodingSettings &&
-           previewParameters == other.previewParameters &&
+    return filePath                 == other.filePath                   &&
+           rawDecodingSettings      == other.rawDecodingSettings.rawPrm &&
+           previewParameters        == other.previewParameters          &&
            postProcessingParameters == other.postProcessingParameters;
 }
 

@@ -26,9 +26,11 @@
 #define TAGFILTERSIDEBARWIDGET_H
 
 // Qt includes
-#include <qwidget.h>
+
+#include <QWidget>
 
 // Local includes
+
 #include "imagefiltersettings.h"
 #include "statesavingobject.h"
 #include "tagcheckview.h"
@@ -37,8 +39,6 @@ namespace Digikam
 {
 
 class TagModel;
-
-class TagFilterViewPriv;
 
 /**
  * A view to filter the currently displayed album by tags.
@@ -64,15 +64,18 @@ public:
     virtual ~TagFilterView();
 
 protected:
+
     virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
     virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 private:
-    TagFilterViewPriv* d;
+
+    class TagFilterViewPriv;
+    TagFilterViewPriv* const d;
 
 };
 
-class TagFilterSideBarWidgetPriv;
+// ----------------------------------------------------------------------------------------------------------
 
 /**
  * Sidebar widget containing the tag filtering.
@@ -126,17 +129,20 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotMatchingConditionChanged(int index);
-    void slotCheckedTagsChanged(const QList<TAlbum*> &includedTags, const QList<TAlbum*> &excludedTags);
+    void slotCheckedTagsChanged(const QList<TAlbum*>& includedTags, const QList<TAlbum*>& excludedTags);
     void slotWithoutTagChanged(int newState);
 
 private:
+
     void filterChanged();
 
 private:
+
+    class TagFilterSideBarWidgetPriv;
     TagFilterSideBarWidgetPriv* d;
 
 };
 
-}
+} // nameSpace Digikam
 
 #endif /* TAGFILTERSIDEBARWIDGET_H*/

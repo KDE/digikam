@@ -125,9 +125,11 @@ ContextMenuHelper::~ContextMenuHelper()
 
 void ContextMenuHelper::addAction(const char* name, bool addDisabled)
 {
-    QAction* action = 0;
-    action = d->stdActionCollection->action(name);
-    addAction(action, addDisabled);
+    QAction* action = d->stdActionCollection->action(name);
+    if (action)
+    {
+        addAction(action, addDisabled);
+    }
 }
 
 void ContextMenuHelper::addAction(QAction* action, bool addDisabled)
@@ -213,7 +215,7 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
 {
     setSelectedItems(selectedItems);
 
-    // This code is inspired from KonqMenuActions:
+    // This code is inspired by KonqMenuActions:
     // kdebase/apps/lib/konq/konq_menuactions.cpp
 
     QStringList mimeTypes;
@@ -699,12 +701,8 @@ void ContextMenuHelper::addQueueManagerMenu()
 {
     KMenu* bqmMenu = new KMenu(i18n("Batch Queue Manager"), d->parent);
     bqmMenu->menuAction()->setIcon(KIcon("bqm-diff"));
-
-    QStringList queueActions;
-    queueActions << QString("image_add_to_current_queue")
-                 << QString("image_add_to_new_queue");
-    bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(0)));
-    bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(1)));
+    bqmMenu->addAction(d->stdActionCollection->action("image_add_to_current_queue"));
+    bqmMenu->addAction(d->stdActionCollection->action("image_add_to_new_queue"));
 
     // if queue list is empty, do not display the queue submenu
     if (QueueMgrWindow::queueManagerWindowCreated() &&
@@ -726,7 +724,7 @@ void ContextMenuHelper::addQueueManagerMenu()
         // when the list is changed
         QMap<int, QString> qmwMap = qmw->queuesMap();
 
-        for (QMap<int, QString>::iterator it = qmwMap.begin(); it != qmwMap.end(); ++it)
+        for (QMap<int, QString>::const_iterator it = qmwMap.constBegin(); it != qmwMap.constEnd(); ++it)
         {
             QAction* action = new QAction(it.value(), this);
             queueList << action;
@@ -784,7 +782,7 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
 
     if (choice)
     {
-        if (!d->selectedIds.isEmpty())
+        if (d->selectedIds.count() == 1)
         {
             ImageInfo selectedItem(d->selectedIds.first());
 
@@ -809,7 +807,7 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
             if (choice == it.value())
             {
                 emit signalAddToExistingQueue(it.key());
-                break;
+                return choice;
             }
         }
     }

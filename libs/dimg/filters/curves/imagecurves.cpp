@@ -122,11 +122,12 @@ public:
 
 public:
 
-    ImageCurvesPriv()
+    ImageCurvesPriv() :
+        curves(0),
+        lut(0),
+        segmentMax(0),
+        dirty(false)
     {
-        curves = 0;
-        lut    = 0;
-        dirty  = false;
     }
 
     ~ImageCurvesPriv()

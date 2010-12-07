@@ -114,9 +114,9 @@ public:
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
-    : KTextEdit(parent), d(new AdvancedRenameLineEditPriv)
+    : QTextEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
-    setLineWrapMode(KTextEdit::NoWrap);
+    setLineWrapMode(QTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -200,7 +200,7 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
     }
     else
     {
-        KTextEdit::keyPressEvent(e);
+        QTextEdit::keyPressEvent(e);
     }
 }
 
@@ -398,7 +398,8 @@ void AdvancedRenameInput::enableHighlighter(bool enable)
         delete d->highlighter;
     }
 
-    d->highlighter = enable ? new Highlighter(d->lineEdit, d->lineEdit->parser())
+    d->highlighter = enable
+                     ? new Highlighter(d->lineEdit, d->lineEdit->parser())
                      : 0;
 }
 
