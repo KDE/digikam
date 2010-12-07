@@ -52,11 +52,11 @@ class EditorTool::EditorToolPriv
 
 public:
 
-    EditorToolPriv()
+    EditorToolPriv() :
+        view(0),
+        timer(0),
+        settings(0)
     {
-        timer    = 0;
-        view     = 0;
-        settings = 0;
         version  = 0;
     }
 
@@ -339,11 +339,11 @@ class EditorToolThreaded::EditorToolThreadedPriv
 
 public:
 
-    EditorToolThreadedPriv()
+    EditorToolThreadedPriv() :
+        delFilter(true),
+        currentRenderingMode(EditorToolThreaded::NoneRendering),
+        threadedFilter(0)
     {
-        delFilter            = true;
-        threadedFilter       = 0;
-        currentRenderingMode = EditorToolThreaded::NoneRendering;
     }
 
     bool                              delFilter;

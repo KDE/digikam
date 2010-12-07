@@ -47,10 +47,10 @@ class EditorToolIface::EditorToolIfacePriv
 
 public:
 
-    EditorToolIfacePriv()
+    EditorToolIfacePriv() :
+        tool(0),
+        editor(0)
     {
-        editor = 0;
-        tool   = 0;
     }
 
     EditorTool*   tool;

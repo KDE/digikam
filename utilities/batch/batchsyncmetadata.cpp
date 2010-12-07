@@ -48,16 +48,16 @@ class BatchSyncMetadataPriv
 {
 public:
 
-    BatchSyncMetadataPriv()
+    BatchSyncMetadataPriv() :
+        cancel(false),
+        everStarted(false),
+        running(false),
+        count(0),
+        imageInfoIndex(0),
+        album(0),
+        imageInfoJob(0),
+        direction(BatchSyncMetadata::WriteFromDatabaseToFile)
     {
-        cancel         = false;
-        running        = false;
-        everStarted    = false;
-        imageInfoJob   = 0;
-        album          = 0;
-        count          = 0;
-        imageInfoIndex = 0;
-        direction      = BatchSyncMetadata::WriteFromDatabaseToFile;
     }
 
     bool           cancel;

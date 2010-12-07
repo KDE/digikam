@@ -51,11 +51,11 @@ class CameraIconItemPriv
 
 public:
 
-    CameraIconItemPriv()
+    CameraIconItemPriv() :
+        progressCount(0),
+        progressTimer(0),
+        itemInfo(0)
     {
-        itemInfo      = 0;
-        progressCount = 0;
-        progressTimer = 0;
     }
 
     int         progressCount;         // Position of animation during downloading.

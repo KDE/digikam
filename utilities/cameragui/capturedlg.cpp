@@ -45,12 +45,12 @@ class CaptureDlgPriv
 {
 public:
 
-    CaptureDlgPriv()
+    CaptureDlgPriv() :
+        stopPreview(false),
+        timer(0),
+        controller(0),
+        captureWidget(0)
     {
-        stopPreview   = false;
-        captureWidget = 0;
-        controller    = 0;
-        timer         = 0;
     }
 
     bool              stopPreview;

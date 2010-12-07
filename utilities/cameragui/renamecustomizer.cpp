@@ -57,19 +57,19 @@ class RenameCustomizerPriv
 {
 public:
 
-    RenameCustomizerPriv()
+    RenameCustomizerPriv() :
+        startIndex(1),
+        buttonGroup(0),
+        renameDefaultCase(0),
+        renameDefault(0),
+        renameCustom(0),
+        changedTimer(0),
+        focusedWidget(0),
+        renameDefaultBox(0),
+        renameDefaultCaseType(0),
+        advancedRenameWidget(0),
+        advancedRenameManager(0)
     {
-        buttonGroup           = 0;
-        changedTimer          = 0;
-        focusedWidget         = 0;
-        advancedRenameWidget  = 0;
-        advancedRenameManager = 0;
-        renameDefault         = 0;
-        renameDefaultBox      = 0;
-        renameDefaultCase     = 0;
-        renameDefaultCaseType = 0;
-        renameCustom          = 0;
-        startIndex            = 1;
     }
 
     int                    startIndex;

@@ -84,16 +84,16 @@ class NepomukService::NepomukServicePriv
 {
 public:
 
-    NepomukServicePriv()
+    NepomukServicePriv() :
+        syncToDigikam(false),
+        syncToNepomuk(false),
+        isConnected(false),
+        changingDB(false),
+        changingNepomuk(false),
+        fullSyncJobs(0),
+        nepomukChangeTimer(0),
+        cleanIgnoreListTimer(0)
     {
-        syncToDigikam        = false;
-        syncToNepomuk        = false;
-        isConnected          = false;
-        nepomukChangeTimer   = 0;
-        cleanIgnoreListTimer = 0;
-        fullSyncJobs         = 0;
-        changingDB           = false;
-        changingNepomuk      = false;
     }
 
     bool                                     syncToDigikam;

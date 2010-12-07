@@ -36,9 +36,9 @@ class FreeSpaceToolTipPriv
 {
 public:
 
-    FreeSpaceToolTipPriv()
+    FreeSpaceToolTipPriv() :
+        parent(0)
     {
-        parent = 0;
     }
 
     QString  tip;

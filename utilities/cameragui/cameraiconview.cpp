@@ -74,19 +74,19 @@ class CameraIconViewPriv
 
 public:
 
-    CameraIconViewPriv()
+    CameraIconViewPriv() :
+        thumbSize(ThumbnailSize::Large),
+        pixmapNewPicture(SmallIcon("get-hot-new-stuff")),
+        pixmapDownloadUnknow(SmallIcon("status_unknown")),
+        progressPix(KPixmapSequence("process-working", KIconLoader::SizeSmallMedium)),
+        pixmapLocked(SmallIcon("object-locked")),
+        pixmapDownloaded(SmallIcon("dialog-ok")),
+        pixmapDownloadFailed(SmallIcon("dialog-cancel")),
+        renamer(0),
+        groupItem(0),
+        cameraUI(0),
+        toolTip(0)
     {
-        renamer              = 0;
-        groupItem            = 0;
-        cameraUI             = 0;
-        toolTip              = 0;
-        thumbSize            = ThumbnailSize::Large;
-        pixmapLocked         = SmallIcon("object-locked");
-        pixmapDownloaded     = SmallIcon("dialog-ok");
-        pixmapDownloadFailed = SmallIcon("dialog-cancel");
-        pixmapNewPicture     = SmallIcon("get-hot-new-stuff");
-        pixmapDownloadUnknow = SmallIcon("status_unknown");
-        progressPix          = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
     int                              thumbSize;

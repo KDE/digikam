@@ -128,25 +128,25 @@ class SearchTabHeaderPriv
 {
 public:
 
-    SearchTabHeaderPriv()
+    SearchTabHeaderPriv() :
+        newSearchWidget(0),
+        saveAsWidget(0),
+        editSimpleWidget(0),
+        editAdvancedWidget(0),
+        lowerArea(0),
+        keywordEdit(0),
+        advancedEditLabel(0),
+        saveNameEdit(0),
+        saveButton(0),
+        storedKeywordEditName(0),
+        storedKeywordEdit(0),
+        storedAdvancedEditName(0),
+        storedAdvancedEditLabel(0),
+        keywordEditTimer(0),
+        storedKeywordEditTimer(0),
+        searchWindow(0),
+        currentAlbum(0)
     {
-        newSearchWidget         = 0;
-        saveAsWidget            = 0;
-        editSimpleWidget        = 0;
-        editAdvancedWidget      = 0;
-        lowerArea               = 0;
-        keywordEdit             = 0;
-        advancedEditLabel       = 0;
-        saveNameEdit            = 0;
-        saveButton              = 0;
-        storedKeywordEditName   = 0;
-        storedKeywordEdit       = 0;
-        storedAdvancedEditName  = 0;
-        storedAdvancedEditLabel = 0;
-        keywordEditTimer        = 0;
-        storedKeywordEditTimer  = 0;
-        searchWindow            = 0;
-        currentAlbum            = 0;
     }
 
     QGroupBox*          newSearchWidget;

@@ -142,13 +142,13 @@ class SetupCameraPriv
 {
 public:
 
-    SetupCameraPriv()
+    SetupCameraPriv() :
+        addButton(0),
+        removeButton(0),
+        editButton(0),
+        autoDetectButton(0),
+        listView(0)
     {
-        listView         = 0;
-        addButton        = 0;
-        removeButton     = 0;
-        editButton       = 0;
-        autoDetectButton = 0;
     }
 
     QPushButton*         addButton;

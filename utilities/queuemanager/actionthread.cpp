@@ -54,12 +54,12 @@ class ActionThread::ActionThreadPriv
 {
 public:
 
-    ActionThreadPriv()
+    ActionThreadPriv() :
+        running(false),
+        cancel(false),
+        exifSetOrientation(true),
+        tool(0)
     {
-        tool               = 0;
-        running            = false;
-        cancel             = false;
-        exifSetOrientation = true;
     }
 
     class Task

@@ -50,11 +50,11 @@ class OpenFilePagePriv
 {
 public:
 
-    OpenFilePagePriv()
+    OpenFilePagePriv() :
+        openAsPreview(0),
+        openInEditor(0),
+        openFileBehavour(0)
     {
-        openAsPreview    = 0;
-        openInEditor     = 0;
-        openFileBehavour = 0;
     }
 
     QRadioButton* openAsPreview;

@@ -47,10 +47,10 @@ class QueueToolTip::QueueToolTipPriv
 {
 public:
 
-    QueueToolTipPriv()
+    QueueToolTipPriv() :
+        view(0),
+        item(0)
     {
-        view = 0;
-        item = 0;
     }
 
     QueueListView*     view;

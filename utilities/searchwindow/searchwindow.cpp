@@ -46,13 +46,13 @@ class SearchWindowPriv
 {
 public:
 
-    SearchWindowPriv()
+    SearchWindowPriv() :
+        scrollArea(0),
+        searchView(0),
+        bottomBar(0),
+        currentId(-1),
+        hasTouchedXml(false)
     {
-        scrollArea      = 0;
-        searchView      = 0;
-        bottomBar       = 0;
-        currentId       = -1;
-        hasTouchedXml   = false;
     }
 
     QScrollArea*         scrollArea;

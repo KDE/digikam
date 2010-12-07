@@ -59,17 +59,17 @@ class CameraSelectionPriv
 {
 public:
 
-    CameraSelectionPriv()
+    CameraSelectionPriv() :
+        portButtonGroup(0),
+        usbButton(0),
+        serialButton(0),
+        portPathLabel(0),
+        portPathComboBox(0),
+        listView(0),
+        titleEdit(0),
+        umsMountURL(0),
+        searchBar(0)
     {
-        listView         = 0;
-        titleEdit        = 0;
-        portButtonGroup  = 0;
-        usbButton        = 0;
-        serialButton     = 0;
-        portPathLabel    = 0;
-        portPathComboBox = 0;
-        umsMountURL      = 0;
-        searchBar        = 0;
     }
 
     QButtonGroup*  portButtonGroup;

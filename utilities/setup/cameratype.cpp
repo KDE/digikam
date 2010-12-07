@@ -39,11 +39,11 @@ class CameraTypePrivate
 {
 public:
 
-    CameraTypePrivate()
+    CameraTypePrivate() :
+        valid(false),
+        startingNumber(1),
+        action(0)
     {
-        valid          = false;
-        action         = 0;
-        startingNumber = 1;
     }
 
     bool                valid;

@@ -59,11 +59,11 @@ class FingerPrintsGenerator::FingerPrintsGeneratorPriv
 {
 public:
 
-    FingerPrintsGeneratorPriv()
+    FingerPrintsGeneratorPriv() :
+        cancel(false),
+        rebuildAll(true),
+        previewLoadThread(0)
     {
-        cancel            = false;
-        rebuildAll        = true;
-        previewLoadThread = 0;
         duration.start();
     }
 

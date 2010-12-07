@@ -48,10 +48,10 @@ class SetupPluginsPriv
 {
 public:
 
-    SetupPluginsPriv()
+    SetupPluginsPriv() :
+        pluginsNumber(0),
+        kipiConfig(0)
     {
-        pluginsNumber = 0;
-        kipiConfig    = 0;
     }
 
     QLabel*             pluginsNumber;

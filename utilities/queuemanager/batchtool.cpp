@@ -51,14 +51,14 @@ class BatchTool::BatchToolPriv
 
 public:
 
-    BatchToolPriv()
+    BatchToolPriv() :
+        exifResetOrientation(false),
+        exifCanEditOrientation(true),
+        cancel(false),
+        last(false),
+        settingsWidget(0),
+        observer(0)
     {
-        settingsWidget         = 0;
-        exifResetOrientation   = false;
-        exifCanEditOrientation = true;
-        cancel                 = false;
-        last                   = false;
-        observer               = 0;
     }
 
     bool                      exifResetOrientation;

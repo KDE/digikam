@@ -69,49 +69,48 @@ class Setup::SetupPrivate
 {
 public:
 
-    SetupPrivate()
+    SetupPrivate() :
+        page_database(0),
+        page_collections(0),
+        page_albumView(0),
+        page_tooltip(0),
+        page_metadata(0),
+        page_template(0),
+        page_category(0),
+        page_mime(0),
+        page_lighttable(0),
+        page_editor(0),
+        page_dcraw(0),
+        page_iofiles(0),
+        page_slideshow(0),
+        page_icc(0),
+        page_camera(0),
+        page_misc(0),
+        page_plugins(0),
+        page_scriptmanager(0),
+        page_facetags(0),
+        page_versioning(0),
+        databasePage(0),
+        collectionsPage(0),
+        albumViewPage(0),
+        tooltipPage(0),
+        metadataPage(0),
+        templatePage(0),
+        categoryPage(0),
+        mimePage(0),
+        lighttablePage(0),
+        editorPage(0),
+        dcrawPage(0),
+        iofilesPage(0),
+        slideshowPage(0),
+        iccPage(0),
+        cameraPage(0),
+        //faceTagsPage(0),
+        miscPage(0),
+        pluginsPage(0),
+        scriptManagerPage(0),
+        versioningPage(0)
     {
-        page_database      = 0;
-        page_collections   = 0;
-        page_albumView     = 0;
-        page_tooltip       = 0;
-        page_metadata      = 0;
-        page_template      = 0;
-        page_category      = 0;
-        page_mime          = 0;
-        page_lighttable    = 0;
-        page_editor        = 0;
-        page_dcraw         = 0;
-        page_iofiles       = 0;
-        page_slideshow     = 0;
-        page_icc           = 0;
-        page_plugins       = 0;
-        page_camera        = 0;
-        page_scriptmanager = 0;
-        page_facetags      = 0;
-        page_misc          = 0;
-        page_versioning    = 0;
-
-        databasePage      = 0;
-        collectionsPage   = 0;
-        albumViewPage     = 0;
-        tooltipPage       = 0;
-        metadataPage      = 0;
-        templatePage      = 0;
-        categoryPage      = 0;
-        mimePage          = 0;
-        lighttablePage    = 0;
-        editorPage        = 0;
-        dcrawPage         = 0;
-        iofilesPage       = 0;
-        slideshowPage     = 0;
-        iccPage           = 0;
-        cameraPage        = 0;
-        pluginsPage       = 0;
-        scriptManagerPage = 0;
-        //faceTagsPage      = 0;
-        miscPage          = 0;
-        versioningPage    = 0;
     }
 
     KPageWidgetItem*    page_database;
@@ -128,9 +127,9 @@ public:
     KPageWidgetItem*    page_iofiles;
     KPageWidgetItem*    page_slideshow;
     KPageWidgetItem*    page_icc;
-    KPageWidgetItem*    page_plugins;
     KPageWidgetItem*    page_camera;
     KPageWidgetItem*    page_misc;
+    KPageWidgetItem*    page_plugins;
     KPageWidgetItem*    page_scriptmanager;
     KPageWidgetItem*    page_facetags;
     KPageWidgetItem*    page_versioning;

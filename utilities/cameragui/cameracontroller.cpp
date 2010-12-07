@@ -103,17 +103,17 @@ class CameraController::CameraControllerPriv
 {
 public:
 
-    CameraControllerPriv()
+    CameraControllerPriv() :
+        close(false),
+        overwriteAll(false),
+        skipAll(false),
+        canceled(false),
+        running(false),
+        downloadTotal(0),
+        parent(0),
+        timer(0),
+        camera(0)
     {
-        close         = false;
-        overwriteAll  = false;
-        skipAll       = false;
-        canceled      = false;
-        running       = false;
-        downloadTotal = 0;
-        parent        = 0;
-        timer         = 0;
-        camera        = 0;
     }
 
     bool                  close;

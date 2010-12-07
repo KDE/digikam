@@ -49,17 +49,17 @@ class SetupMisc::SetupMiscPriv
 {
 public:
 
-    SetupMiscPriv()
+    SetupMiscPriv() :
+        sidebarTypeLabel(0),
+        stringComparisonTypeLabel(0),
+        showSplashCheck(0),
+        showTrashDeleteDialogCheck(0),
+        showPermanentDeleteDialogCheck(0),
+        sidebarApplyDirectlyCheck(0),
+        scanAtStart(0),
+        sidebarType(0),
+        stringComparisonType(0)
     {
-        showSplashCheck                = 0;
-        showTrashDeleteDialogCheck     = 0;
-        showPermanentDeleteDialogCheck = 0;
-        sidebarApplyDirectlyCheck      = 0;
-        scanAtStart                    = 0;
-        sidebarTypeLabel               = 0;
-        sidebarType                    = 0;
-        stringComparisonTypeLabel      = 0;
-        stringComparisonType           = 0;
     }
 
     QLabel*    sidebarTypeLabel;

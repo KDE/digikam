@@ -50,15 +50,15 @@ class SoftProofDialogPriv
 {
 public:
 
-    SoftProofDialogPriv()
+    SoftProofDialogPriv() :
+        switchOn(false),
+        deviceProfileBox(0),
+        infoProofProfiles(0),
+        gamutCheckBox(0),
+        maskColorLabel(0),
+        maskColorButton(0),
+        proofingIntentBox(0)
     {
-        switchOn          = false;
-        deviceProfileBox  = 0;
-        infoProofProfiles = 0;
-        gamutCheckBox     = 0;
-        maskColorLabel    = 0;
-        maskColorButton   = 0;
-        proofingIntentBox = 0;
     }
 
     bool                        switchOn;

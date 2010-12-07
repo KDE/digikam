@@ -46,11 +46,11 @@ class PreviewPagePriv
 {
 public:
 
-    PreviewPagePriv()
+    PreviewPagePriv() :
+        loadReduced(0),
+        loadimage(0),
+        previewBehavour(0)
     {
-        loadReduced     = 0;
-        loadimage       = 0;
-        previewBehavour = 0;
     }
 
     QRadioButton* loadReduced;

@@ -52,11 +52,16 @@ class ImageIface::ImageIfacePriv
 {
 public:
 
-    ImageIfacePriv()
+    ImageIfacePriv() :
+       usePreviewSelection(false),
+       originalWidth(0),
+       originalHeight(0),
+       originalBytesDepth(0),
+       constrainWidth(0),
+       constrainHeight(0),
+       previewWidth(0),
+       previewHeight(0)
     {
-        usePreviewSelection = false;
-        previewWidth        = 0;
-        previewHeight       = 0;
     }
 
     QPixmap checkPixmap();

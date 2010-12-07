@@ -70,15 +70,11 @@ public:
     EditorWindowPriv() :
         removeFullScreenButton(false),
         fullScreenHideToolBar(false),
-
         cmViewIndicator(0),
         underExposureIndicator(0),
         overExposureIndicator(0),
-
         infoLabel(0),
-
         imagepluginsActionCollection(0),
-
         contributeAction(0),
         copyAction(0),
         cropAction(0),
@@ -98,29 +94,22 @@ public:
         zoomMinusAction(0),
         zoomPlusAction(0),
         zoomTo100percents(0),
-
         undoSignalMapper(0),
         redoSignalMapper(0),
-
         waitingLoop(0),
         currentWindowModalDialog(0),
-
         zoomFitToWindowAction(0),
         viewCMViewAction(0),
         viewSoftProofAction(0),
         viewUnderExpoAction(0),
         viewOverExpoAction(0),
         showMenuBarAction(0),
-
         selectToolsActionView(0),
 
         ICCSettings(0),
-
         zoomBar(0),
         previewToolBar(0),
-
         exposureSettings(0),
-
         toolIface(0)
     {
     }

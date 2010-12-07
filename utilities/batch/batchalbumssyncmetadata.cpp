@@ -62,11 +62,11 @@ class BatchAlbumsSyncMetadataPriv
 {
 public:
 
-    BatchAlbumsSyncMetadataPriv()
+    BatchAlbumsSyncMetadataPriv() :
+        cancel(false),
+        imageInfoJob(0),
+        status(NotRunning)
     {
-        cancel       = false;
-        imageInfoJob = 0;
-        status       = NotRunning;
     }
 
     bool                 cancel;

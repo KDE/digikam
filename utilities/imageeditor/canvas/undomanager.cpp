@@ -52,11 +52,11 @@ class UndoManagerPriv
 
 public:
 
-    UndoManagerPriv()
+    UndoManagerPriv() :
+        origin(0),
+        undoCache(0),
+        dimgiface(0)
     {
-        dimgiface   = 0;
-        undoCache   = 0;
-        origin      = 0;
     }
 
     QList<UndoAction*>    undoActions;

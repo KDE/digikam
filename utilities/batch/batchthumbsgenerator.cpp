@@ -62,11 +62,11 @@ class BatchThumbsGeneratorPriv
 {
 public:
 
-    BatchThumbsGeneratorPriv()
+    BatchThumbsGeneratorPriv() :
+        cancel(false),
+        rebuildAll(true),
+        thumbLoadThread(0)
     {
-        cancel          = false;
-        rebuildAll      = true;
-        thumbLoadThread = 0;
         duration.start();
     }
 

@@ -55,10 +55,10 @@ class KipiUploadWidget::KipiUploadWidgetPriv
 {
 public:
 
-    KipiUploadWidgetPriv()
+    KipiUploadWidgetPriv() :
+        albumSel(0),
+        iface(0)
     {
-        albumSel = 0;
-        iface    = 0;
     }
 
     AlbumSelectWidget* albumSel;

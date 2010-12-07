@@ -50,9 +50,9 @@ class CameraFolderDialog::CameraFolderDialogPriv
 {
 public:
 
-    CameraFolderDialogPriv()
+    CameraFolderDialogPriv() :
+        folderView(0)
     {
-        folderView = 0;
     }
 
     QString           rootPath;

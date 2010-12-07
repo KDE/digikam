@@ -49,9 +49,9 @@ class ImageInfoJobPriv
 {
 public:
 
-    ImageInfoJobPriv()
+    ImageInfoJobPriv() :
+        job(0)
     {
-        job         = 0;
     }
 
     KIO::TransferJob*  job;

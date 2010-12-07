@@ -45,9 +45,9 @@ class FindDuplicatesAlbumItem::FindDuplicatesAlbumItemPriv
 
 public:
 
-    FindDuplicatesAlbumItemPriv()
+    FindDuplicatesAlbumItemPriv() :
+        album(0)
     {
-        album = 0;
     }
 
     SAlbum*   album;

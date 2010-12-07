@@ -151,10 +151,10 @@ class PreviewListItem::PreviewListItemPriv
 
 public:
 
-    PreviewListItemPriv()
+    PreviewListItemPriv() :
+        busy(false),
+        id(0)
     {
-        busy = false;
-        id   = 0;
     }
 
     bool busy;
@@ -211,12 +211,12 @@ class PreviewList::PreviewListPriv
 
 public:
 
-    PreviewListPriv()
+    PreviewListPriv() :
+        progressCount(0),
+        progressTimer(0),
+        progressPix(KPixmapSequence("process-working", KIconLoader::SizeSmallMedium)),
+        wrapper(0)
     {
-        wrapper       = 0;
-        progressCount = 0;
-        progressTimer = 0;
-        progressPix   = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
     int                   progressCount;

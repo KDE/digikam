@@ -53,24 +53,24 @@ class SetupAlbumViewPriv
 {
 public:
 
-    SetupAlbumViewPriv()
+    SetupAlbumViewPriv() :
+        iconTreeThumbLabel(0),
+        iconShowNameBox(0),
+        iconShowSizeBox(0),
+        iconShowDateBox(0),
+        iconShowModDateBox(0),
+        iconShowResolutionBox(0),
+        iconShowCommentsBox(0),
+        iconShowTagsBox(0),
+        iconShowRatingBox(0),
+        iconShowOverlaysBox(0),
+        previewLoadFullImageSize(0),
+        showFolderTreeViewItemsCount(0),
+        iconTreeThumbSize(0),
+        leftClickActionComboBox(0),
+        iconViewFontSelect(0),
+        treeViewFontSelect(0)
     {
-        iconTreeThumbSize            = 0;
-        iconTreeThumbLabel           = 0;
-        iconShowNameBox              = 0;
-        iconShowSizeBox              = 0;
-        iconShowDateBox              = 0;
-        iconShowModDateBox           = 0;
-        iconShowResolutionBox        = 0;
-        iconShowCommentsBox          = 0;
-        iconShowTagsBox              = 0;
-        iconShowRatingBox            = 0;
-        iconShowOverlaysBox          = 0;
-        leftClickActionComboBox      = 0;
-        previewLoadFullImageSize     = 0;
-        showFolderTreeViewItemsCount = 0;
-        treeViewFontSelect           = 0;
-        iconViewFontSelect           = 0;
     }
 
     QLabel*      iconTreeThumbLabel;

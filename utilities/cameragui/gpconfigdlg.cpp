@@ -52,11 +52,11 @@ class GPConfigDlgPrivate
 
 public:
 
-    GPConfigDlgPrivate()
+    GPConfigDlgPrivate() :
+        tabWidget(0),
+        camera(0),
+        widgetRoot(0)
     {
-        tabWidget  = 0;
-        widgetRoot = 0;
-        camera     = 0;
     }
 
     QMap<CameraWidget*, QWidget*>  wmap;

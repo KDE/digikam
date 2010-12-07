@@ -48,42 +48,37 @@ class SetupToolTipPriv
 {
 public:
 
-    SetupToolTipPriv()
+    SetupToolTipPriv() :
+        showToolTipsBox(0),
+        showFileNameBox(0),
+        showFileDateBox(0),
+        showFileSizeBox(0),
+        showImageTypeBox(0),
+        showImageDimBox(0),
+        showPhotoMakeBox(0),
+        showPhotoDateBox(0),
+        showPhotoFocalBox(0),
+        showPhotoExpoBox(0),
+        showPhotoModeBox(0),
+        showPhotoFlashBox(0),
+        showPhotoWbBox(0),
+        showAlbumNameBox(0),
+        showCommentsBox(0),
+        showTagsBox(0),
+        showRatingBox(0),
+        showAlbumToolTipsBox(0),
+        showAlbumTitleBox(0),
+        showAlbumDateBox(0),
+        showAlbumCollectionBox(0),
+        showAlbumCategoryBox(0),
+        showAlbumCaptionBox(0),
+        fileSettingBox(0),
+        photoSettingBox(0),
+        digikamSettingBox(0),
+        albumSettingBox(0),
+        tab(0),
+        fontSelect(0)
     {
-        showToolTipsBox        = 0;
-        fontSelect             = 0;
-        tab                    = 0;
-
-        showFileNameBox        = 0;
-        showFileDateBox        = 0;
-        showFileSizeBox        = 0;
-        showImageTypeBox       = 0;
-        showImageDimBox        = 0;
-
-        showPhotoMakeBox       = 0;
-        showPhotoDateBox       = 0;
-        showPhotoFocalBox      = 0;
-        showPhotoExpoBox       = 0;
-        showPhotoModeBox       = 0;
-        showPhotoFlashBox      = 0;
-        showPhotoWbBox         = 0;
-
-        showAlbumNameBox       = 0;
-        showCommentsBox        = 0;
-        showTagsBox            = 0;
-        showRatingBox          = 0;
-
-        fileSettingBox         = 0;
-        photoSettingBox        = 0;
-        digikamSettingBox      = 0;
-        albumSettingBox        = 0;
-
-        showAlbumToolTipsBox   = 0;
-        showAlbumTitleBox      = 0;
-        showAlbumDateBox       = 0;
-        showAlbumCollectionBox = 0;
-        showAlbumCategoryBox   = 0;
-        showAlbumCaptionBox    = 0;
     }
 
     QCheckBox*   showToolTipsBox;

@@ -48,7 +48,6 @@ public:
     }
 
     QPixmap  pixmap;
-
     QImage   preview;
 };
 

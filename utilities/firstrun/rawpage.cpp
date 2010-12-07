@@ -46,11 +46,11 @@ class RawPagePriv
 {
 public:
 
-    RawPagePriv()
+    RawPagePriv() :
+        openDirectly(0),
+        useRawImport(0),
+        rawHandling(0)
     {
-        openDirectly = 0;
-        useRawImport = 0;
-        rawHandling  = 0;
     }
 
     QRadioButton* openDirectly;

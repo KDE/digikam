@@ -75,7 +75,7 @@ QString PositionKeys::getDbValue(const QString& key, ParseSettings& settings)
 
     QString result;
 
-    if      (key == KEY_LATITUDE)
+    if (key == KEY_LATITUDE)
     {
         result = position.latitude().simplified();
     }

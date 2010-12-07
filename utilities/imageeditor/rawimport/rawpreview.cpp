@@ -56,11 +56,10 @@ class RawPreview::RawPreviewPriv
 {
 public:
 
-    RawPreviewPriv()
+    RawPreviewPriv() :
+        currentFitWindowZoom(0.0),
+        thread(0)
     {
-        thread               = 0;
-        url                  = 0;
-        currentFitWindowZoom = 0;
     }
 
     double                 currentFitWindowZoom;

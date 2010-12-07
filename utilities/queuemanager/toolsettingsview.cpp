@@ -58,14 +58,14 @@ public:
 
 public:
 
-    ToolSettingsViewPriv()
+    ToolSettingsViewPriv() :
+        messageView(0),
+        settingsViewIcon(0),
+        settingsViewTitle(0),
+        settingsViewReset(0),
+        settingsView(0),
+        tool(0)
     {
-        messageView       = 0;
-        settingsView      = 0;
-        settingsViewIcon  = 0;
-        settingsViewTitle = 0;
-        settingsViewReset = 0;
-        tool              = 0;
     }
 
     QLabel*      messageView;
