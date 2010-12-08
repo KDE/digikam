@@ -89,15 +89,6 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget* parent)
 
     setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
 
-    d->duplicatesFilter = new NoDuplicatesImageFilterModel(this);
-
-    // rating overlay
-    ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
-    addOverlay(ratingOverlay);
-
-    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex&, int)),
-            this, SLOT(assignRating(const QModelIndex&, int)));
-
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
@@ -109,10 +100,25 @@ ImageThumbnailBar::~ImageThumbnailBar()
     delete d;
 }
 
-void ImageThumbnailBar::setModels(ImageModel* model, ImageSortFilterModel* filterModel)
+void ImageThumbnailBar::setModelsFiltered(ImageModel* model, ImageSortFilterModel* filterModel)
 {
+    if (!d->duplicatesFilter)
+    {
+        d->duplicatesFilter = new NoDuplicatesImageFilterModel(this);
+    }
+
     d->duplicatesFilter->setSourceFilterModel(filterModel);
     ImageCategorizedView::setModels(model, d->duplicatesFilter);
+}
+
+void ImageThumbnailBar::installRatingOverlay()
+{
+    ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
+    addOverlay(ratingOverlay);
+
+    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex&, int)),
+            this, SLOT(assignRating(const QModelIndex&, int)));
+
 }
 
 void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
@@ -185,18 +191,6 @@ void ImageThumbnailBar::slotSetupChanged()
     setFont(AlbumSettings::instance()->getIconViewFont());
 
     ImageCategorizedView::slotSetupChanged();
-}
-
-void ImageThumbnailBar::activated(const ImageInfo& info)
-{
-    kDebug() << info.filePath();
-
-    if (info.isNull())
-    {
-        return;
-    }
-
-    emit imageActivated(info);
 }
 
 void ImageThumbnailBar::assignRating(const QModelIndex& index, int rating)

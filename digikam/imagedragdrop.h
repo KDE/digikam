@@ -24,6 +24,10 @@
 #ifndef IMAGEDRAGDROP_H
 #define IMAGEDRAGDROP_H
 
+// KDE includes
+
+#include <KUrl>
+
 // Local includes
 
 #include "imageinfo.h"
@@ -49,6 +53,13 @@ public:
     }
     ImageAlbumModel* albumModel() const;
 
+    /**
+     * Enables a mode in which dropping will never start an operation
+     * which copies or moves files on disk.
+     * Only the signals are emitted.
+     */
+    void setReadOnlyDrop(bool readOnly);
+
     virtual bool dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);
     virtual QStringList mimeTypes() const;
@@ -56,8 +67,14 @@ public:
 
 Q_SIGNALS:
 
+    void imageInfosDropped(const QList<ImageInfo>& infos);
+    void urlsDropped(const KUrl::List& urls);
     void assignTags(const QList<ImageInfo>& list, const QList<int>& tagIDs);
     void dioResult(KJob*);
+
+protected:
+
+    bool m_readOnly;
 };
 
 } // namespace Digikam

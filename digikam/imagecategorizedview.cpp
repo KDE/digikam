@@ -542,6 +542,7 @@ void ImageCategorizedView::indexActivated(const QModelIndex& index)
     if (!info.isNull())
     {
         activated(info);
+        emit imageActivated(info);
     }
 }
 

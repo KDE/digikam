@@ -101,7 +101,8 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
     d->imagePreviewView = new ImagePreviewView(this);
     d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
-    d->thumbBar->setModels(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
+    d->thumbBar->setModelsFiltered(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
+    d->thumbBar->installRatingOverlay();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("mainwindow_thumbbar");
 

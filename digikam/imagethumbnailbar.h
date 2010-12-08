@@ -50,20 +50,21 @@ public:
     void setScrollBarPolicy(Qt::ScrollBarPolicy policy);
     void setFlow(QListView::Flow newFlow);
 
-    void setModels(ImageModel* model, ImageSortFilterModel* filterModel);
+    void installRatingOverlay();
+
+    /**
+     * This installs a duplicate filter model, if the ImageModel may contain duplicates.
+     * Otherwise, just use setModels().
+     */
+    void setModelsFiltered(ImageModel* model, ImageSortFilterModel* filterModel);
 
 public Q_SLOTS:
 
     void assignRating(const QModelIndex& index, int rating);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
 
-Q_SIGNALS:
-
-    void imageActivated(const ImageInfo& info);
-
 protected:
 
-    virtual void activated(const ImageInfo& info);
     virtual void slotSetupChanged();
     virtual bool event(QEvent*);
 

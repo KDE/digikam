@@ -52,13 +52,19 @@ namespace Digikam
 {
 
 ImageDragDropHandler::ImageDragDropHandler(ImageModel* model)
-    : ImageModelDragDropHandler(model)
+    : ImageModelDragDropHandler(model),
+      m_readOnly(false)
 {
 }
 
 ImageAlbumModel* ImageDragDropHandler::albumModel() const
 {
     return qobject_cast<ImageAlbumModel*>(model());
+}
+
+void ImageDragDropHandler::setReadOnlyDrop(bool readOnly)
+{
+    m_readOnly = readOnly;
 }
 
 static Qt::DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool showMenu = true)
@@ -103,32 +109,37 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     ImageCategorizedView* view = static_cast<ImageCategorizedView*>(abstractview);
     Album* album = view->albumAt(e->pos());
 
-    if (!album || album->isRoot())
+    // unless we are readonly anyway, we always want an album
+    if (!m_readOnly && (!album || album->isRoot()) )
     {
         return false;
     }
 
     PAlbum* palbum = 0;
-    Album* currentAlbum = albumModel() ? albumModel()->currentAlbum() : 0;
-
-    if (album->type() == Album::PHYSICAL)
-    {
-        palbum = static_cast<PAlbum*>(album);
-    }
-    else if (currentAlbum && currentAlbum->type() == Album::PHYSICAL)
-    {
-        palbum = static_cast<PAlbum*>(currentAlbum);
-    }
-
     TAlbum* talbum = 0;
 
-    if (album->type() == Album::TAG)
+    if (album)
     {
-        talbum = static_cast<TAlbum*>(album);
-    }
-    else if (currentAlbum && currentAlbum->type() == Album::TAG)
-    {
-        talbum = static_cast<TAlbum*>(currentAlbum);
+        Album* currentAlbum = albumModel() ? albumModel()->currentAlbum() : 0;
+
+        if (album->type() == Album::PHYSICAL)
+        {
+            palbum = static_cast<PAlbum*>(album);
+        }
+        else if (currentAlbum && currentAlbum->type() == Album::PHYSICAL)
+        {
+            palbum = static_cast<PAlbum*>(currentAlbum);
+        }
+
+
+        if (album->type() == Album::TAG)
+        {
+            talbum = static_cast<TAlbum*>(album);
+        }
+        else if (currentAlbum && currentAlbum->type() == Album::TAG)
+        {
+            talbum = static_cast<TAlbum*>(currentAlbum);
+        }
     }
 
     if (DItemDrag::canDecode(e->mimeData()))
@@ -149,7 +160,17 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             return false;
         }
 
-        if (palbum)
+        if (m_readOnly)
+        {
+            QList<ImageInfo> infos;
+            foreach (int id, imageIDs)
+            {
+                infos << ImageInfo(id);
+            }
+            emit imageInfosDropped(infos);
+            return true;
+        }
+        else if (palbum)
         {
             // Check if items dropped come from outside current album.
             KUrl::List extUrls, intUrls;
@@ -256,7 +277,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     }
     else if (KUrl::List::canDecode(e->mimeData()))
     {
-        if (!palbum)
+        if (!palbum && !m_readOnly)
         {
             return false;
         }
@@ -264,6 +285,12 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         // Drag & drop outside of digiKam
 
         KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
+
+        if (m_readOnly)
+        {
+            emit urlsDropped(srcURLs);
+            return true;
+        }
 
         Qt::DropAction action = copyOrMove(e, view);
 

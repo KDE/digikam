@@ -139,6 +139,8 @@ Q_SIGNALS:
     /// Emitted when items are deselected. There may be other selected infos left.
     /// This signal is not emitted when the model is reset; then only selectionCleared is emitted.
     void deselected(const QList<ImageInfo>& nowDeselectedInfos);
+    /// Emitted when the given image is activated. Info is never null.
+    void imageActivated(const ImageInfo& info);
 
     /// Emitted when a new model is set
     void modelChanged();
