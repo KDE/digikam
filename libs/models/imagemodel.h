@@ -111,7 +111,9 @@ public:
     qlonglong imageId(int row) const;
     /** Return the index for the given ImageInfo or id, if contained in this model. */
     QModelIndex indexForImageInfo(const ImageInfo& info) const;
+    QModelIndex indexForImageInfo(const ImageInfo& info, const QVariant& extraValue) const;
     QModelIndex indexForImageId(qlonglong id) const;
+    QModelIndex indexForImageId(qlonglong id, const QVariant& extraValue) const;
     QList<QModelIndex> indexesForImageInfo(const ImageInfo& info) const;
     QList<QModelIndex> indexesForImageId(qlonglong id) const;
     /** Returns the index or ImageInfo object from the underlying data
@@ -131,14 +133,28 @@ public:
 
     /** Main entry point for subclasses adding image infos to the model.
      *  If you list entries not unique per image id, you must add an extraValue
-     *  so that every entry is unique by imageId and extraValues. */
+     *  so that every entry is unique by imageId and extraValues.
+     *  Please note that these methods do not prevent addition of duplicate entries.
+     */
+    void addImageInfo(const ImageInfo& info);
     void addImageInfos(const QList<ImageInfo>& infos);
     void addImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     /** Clears image infos and resets model. */
     void clearImageInfos();
+    /** Clears and adds the infos */
+    void setImageInfos(const QList<ImageInfo>& infos);
+    /**
+     * Directly remove the given indexes or infos from the model.
+     */
+    void removeIndex(const QModelIndex& indexes);
+    void removeIndexes(const QList<QModelIndex>& indexes);
+    void removeImageInfo(const ImageInfo& info);
+    void removeImageInfos(const QList<ImageInfo>& infos);
+    void removeImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
 
     QList<ImageInfo> imageInfos() const;
     QList<qlonglong> imageIds()    const;
+    QList<ImageInfo> uniqueImageInfos() const;
 
     bool hasImage(qlonglong id) const;
     bool hasImage(const ImageInfo& info) const;
@@ -183,6 +199,12 @@ public:
      */
     bool isRefreshing() const;
 
+    /**
+     * Enable sending of imageInfosAboutToBeRemoved and imageInfosRemoved signals.
+     * Default: false
+     */
+    void setSendRemovalSignals(bool send);
+
 Q_SIGNALS:
 
     /** Informs that ImageInfos will be added to the model.
@@ -191,6 +213,19 @@ Q_SIGNALS:
     /** Informs that ImageInfos have been added to the model.
      *  This signal is sent after the model data is changed and views are informed. */
     void imageInfosAdded(const QList<ImageInfo>& infos);
+
+    /** Informs that ImageInfos will be removed from the model.
+     *  This signal is sent before the model data is changed and views are informed.
+     *  Note: You need to explicitly enable sending of this signal. It is not sent
+     *  in clearImageInfos().
+     */
+    void imageInfosAboutToBeRemoved(const QList<ImageInfo>& infos);
+    /** Informs that ImageInfos have been removed from the model.
+     *  This signal is sent after the model data is changed and views are informed. *
+     *  Note: You need to explicitly enable sending of this signal. It is not sent
+     *  in clearImageInfos().
+     */
+    void imageInfosRemoved(const QList<ImageInfo>& infos);
 
     /** Connect to this signal only if you are the current preprocessor */
     void preprocess(const QList<ImageInfo>& infos, const QList<QVariant>&);
@@ -254,6 +289,7 @@ private:
     void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void cleanSituationChecks();
+    void removeRowPairs(const QList<QPair<int,int> >& toRemove);
 
     ImageModelPriv* const d;
 };
