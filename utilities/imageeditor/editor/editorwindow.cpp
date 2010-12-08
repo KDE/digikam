@@ -196,7 +196,6 @@ EditorWindow::EditorWindow(const char* name)
     m_stackView              = 0;
     m_animLogo               = 0;
     m_fullScreen             = false;
-    m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
     m_cancelSlideShow        = false;
     m_fullScreenHideThumbBar = true;
@@ -331,20 +330,6 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_canvas, SIGNAL(signalSelectionChanged(const QRect&)),
             this, SLOT(slotSelectionChanged(const QRect&)));
-
-    // -- if rotating/flipping set the rotatedflipped flag to true -----------
-
-    connect(d->rotateLeftAction, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
-
-    connect(d->rotateRightAction, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
-
-    connect(d->flipHorizAction, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
-
-    connect(d->flipVertAction, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
 
     // -- status bar connections --------------------------------------
 
@@ -1258,11 +1243,6 @@ void EditorWindow::slotToggleFullScreen()
     }
 }
 
-void EditorWindow::slotRotatedOrFlipped()
-{
-    m_rotatedOrFlipped = true;
-}
-
 void EditorWindow::slotLoadingProgress(const QString&, float progress)
 {
     m_nameLabel->setProgressValue((int)(progress*100.0));
@@ -1339,11 +1319,6 @@ void EditorWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSa
     m_discardChangesAction->setEnabled(hasChanges);
 
     m_openVersionAction->setEnabled(hasOriginalToRestore());
-
-    if (!moreUndo)
-    {
-        m_rotatedOrFlipped = false;
-    }
 }
 
 bool EditorWindow::hasChangesToSave()
@@ -2068,7 +2043,7 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext.executedOperation  = SavingContextContainer::SavingStateNone;
 
     m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
-                     m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()));
+                     m_setExifOrientationTag && m_canvas->exifRotated());
 }
 
 QStringList EditorWindow::getWritingFilters()
@@ -2436,7 +2411,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     m_savingContext.abortingSaving = false;
 
     m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
-                     m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()),
+                     m_setExifOrientationTag && m_canvas->exifRotated(),
                      m_savingContext.format.toLower());
 
     return true;
@@ -2509,7 +2484,7 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
     m_savingContext.executedOperation  = SavingContextContainer::SavingStateNone;
 
     m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
-                     m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()),
+                     m_setExifOrientationTag && m_canvas->exifRotated(),
                      m_savingContext.format.toLower());
 
     return true;

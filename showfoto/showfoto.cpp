@@ -699,7 +699,6 @@ void ShowFoto::slotUpdateItemInfo()
 {
     d->itemsNb = d->thumbBar->countItems();
 
-    m_rotatedOrFlipped = false;
     int index = 0;
     QString text;
 

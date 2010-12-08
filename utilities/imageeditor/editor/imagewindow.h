@@ -57,13 +57,8 @@ public:
 
     ~ImageWindow();
 
-    void loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
-                 const QString& caption=QString(),
-                 bool allowSaving=true);
-
     void loadImageInfos(const ImageInfoList& imageInfoList,
-                        const ImageInfo& imageInfoCurrent,
-                        const QString& caption, bool allowSaving);
+                        const ImageInfo& imageInfoCurrent, const QString& caption);
 
     static ImageWindow* imageWindow();
     static bool         imageWindowCreated();
@@ -82,7 +77,7 @@ Q_SIGNALS:
 
 private:
 
-    void loadCurrentList(const QString& caption, bool allowSaving);
+    void loadIndex(const QModelIndex& index);
     void closeEvent(QCloseEvent* e);
     void showEvent(QShowEvent*);
 
@@ -109,7 +104,7 @@ private:
     void saveVersionIsComplete();
     void setViewToURL(const KUrl& url);
     void deleteCurrentItem(bool ask, bool permanently);
-    bool removeItem(int index);
+    void removeCurrent();
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
@@ -119,6 +114,10 @@ private:
     Sidebar* rightSideBar() const;
 
     ImageWindow();
+
+Q_SIGNALS: // private signals
+
+    void loadCurrentLater();
 
 private Q_SLOTS:
 
@@ -130,7 +129,7 @@ private Q_SLOTS:
 
     void slotToMainWindow();
 
-    void slotThumbBarItemSelected(const KUrl&);
+    void slotThumbBarImageSelected(const ImageInfo&);
     void slotLoadCurrent();
     void slotDeleteCurrentItem();
     void slotDeleteCurrentItemPermanently();
@@ -157,7 +156,9 @@ private Q_SLOTS:
     void slotRatingChanged(const KUrl& url, int rating);
 
     void slotFileMetadataChanged(const KUrl&);
-    void slotCollectionImageChange(const CollectionImageChangeset&);
+    //void slotCollectionImageChange(const CollectionImageChangeset&);
+    //void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    void slotDroppedOnThumbbar(const QList<ImageInfo>& infos);
 
     void slotChangeTheme(const QString& theme);
 

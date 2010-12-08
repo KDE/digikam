@@ -364,8 +364,7 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
             this, SIGNAL(editorCurrentUrlChanged(const KUrl&)));
 
     imview->loadImageInfos(allInfosToOpen, info,
-                           currentAlbum ? i18n("Album \"%1\"", currentAlbum->title()) : QString(),
-                           true);
+                           currentAlbum ? i18n("Album \"%1\"", currentAlbum->title()) : QString());
 
     if (imview->isHidden())
     {

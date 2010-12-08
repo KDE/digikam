@@ -38,6 +38,7 @@
 #include <QImage>
 #include <QLabel>
 #include <QPainter>
+#include <QPersistentModelIndex>
 #include <QPixmap>
 #include <QProgressBar>
 #include <QSplitter>
@@ -99,13 +100,16 @@
 #include "globals.h"
 #include "iccsettingscontainer.h"
 #include "imageattributeswatch.h"
+#include "imagefiltermodel.h"
+#include "imagedragdrop.h"
 #include "imageinfo.h"
+#include "imagelistmodel.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
-#include "imagepreviewbar.h"
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiesversionstab.h"
 #include "imagescanner.h"
+#include "imagethumbnailbar.h"
 #include "iofilesettingscontainer.h"
 #include "knotificationwrapper.h"
 #include "loadingcacheinterface.h"
@@ -122,6 +126,7 @@
 #include "tagspopupmenu.h"
 #include "themeengine.h"
 #include "thumbbardock.h"
+#include "thumbnailloadthread.h"
 #include "uifilevalidator.h"
 #include "versionmanager.h"
 
@@ -150,7 +155,7 @@ class ImageWindowPriv
 public:
 
     ImageWindowPriv() :
-        allowSaving(true),
+        viewContainer(0),
         toMainWindowAction(0),
         star0(0),
         star1(0),
@@ -162,6 +167,9 @@ public:
         fileDeletePermanentlyDirectlyAction(0),
         fileTrashDirectlyAction(0),
         dbStatAction(0),
+        imageInfoModel(0),
+        imageFilterModel(0),
+        dragDropHandler(0),
         thumbBar(0),
         thumbBarDock(0),
         rightSideBar(0)
@@ -171,12 +179,7 @@ public:
     static const QString      configShowThumbbarEntry;
     static const QString      configHorizontalThumbbarEntry;
 
-    // If image editor is launched by camera interface, current
-    // image cannot be saved.
-    bool                      allowSaving;
-
-    KUrl::List                urlList;
-    KUrl                      urlCurrent;
+    KMainWindow*              viewContainer;
 
     KAction*                  toMainWindowAction;
 
@@ -195,16 +198,76 @@ public:
 
     KAction*                  dbStatAction;
 
-    ImageInfoList             imageInfoList;
-    ImageInfo                 imageInfoCurrent;
+    ImageInfo                 currentImageInfo;
+    ImageListModel*           imageInfoModel;
+    ImageFilterModel*         imageFilterModel;
+    ImageDragDropHandler*     dragDropHandler;
 
-    ImagePreviewBar*          thumbBar;
+    ImageThumbnailBar*        thumbBar;
     ThumbBarDock*             thumbBarDock;
 
     ImagePropertiesSideBarDB* rightSideBar;
 
     DatabaseVersionManager    versionManager;
+
+public:
+
+    QModelIndex currentIndex() const
+    {
+        return imageFilterModel->indexForImageInfo(currentImageInfo);
+    }
+
+    QModelIndex currentSourceIndex() const
+    {
+        return imageInfoModel->indexForImageInfo(currentImageInfo);
+    }
+
+    bool currentIsValid() const
+    {
+        return !currentImageInfo.isNull();
+    }
+
+    KUrl currentUrl() const
+    {
+        return currentImageInfo.fileUrl();
+    }
+
+    QModelIndex nextIndex() const
+    {
+        return imageFilterModel->index(currentIndex().row() + 1, 0);
+    }
+
+    QModelIndex previousIndex() const
+    {
+        return imageFilterModel->index(currentIndex().row() - 1, 0);
+    }
+
+    QModelIndex firstIndex() const
+    {
+        return imageFilterModel->index(0, 0);
+    }
+
+    QModelIndex lastIndex() const
+    {
+        return imageFilterModel->index(imageFilterModel->rowCount() - 1, 0);
+    }
+
+    ImageInfo imageInfo(const QModelIndex& index) const
+    {
+        return imageFilterModel->imageInfo(index);
+    }
+
+    void setThumbBarToCurrent()
+    {
+        QModelIndex index = imageFilterModel->indexForImageInfo(currentImageInfo);
+        if (index.isValid())
+            thumbBar->setCurrentIndex(index);
+        else
+            thumbBar->setCurrentWhenAvailable(currentImageInfo.id());
+    }
+
 };
+
 const QString ImageWindowPriv::configShowThumbbarEntry("Show Thumbbar");
 const QString ImageWindowPriv::configHorizontalThumbbarEntry("HorizontalThumbbar");
 
@@ -277,6 +340,7 @@ ImageWindow::ImageWindow()
     applyMainWindowSettings(group);
     d->thumbBarDock->setShouldBeVisible(group.readEntry(d->configShowThumbbarEntry, false));
     setAutoSaveSettings(EditorWindow::CONFIG_GROUP_NAME, true);
+    d->viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
 
     //-------------------------------------------------------------
 
@@ -348,44 +412,7 @@ bool ImageWindow::queryClose()
         return false;
     }
 
-    return promptUserSave(d->urlCurrent);
-}
-
-void ImageWindow::setupConnections()
-{
-    setupStandardConnections();
-
-    // To toggle properly keyboards shortcuts from comments & tags side bar tab.
-
-    connect(d->rightSideBar, SIGNAL(signalNextItem()),
-            this, SLOT(slotForward()));
-
-    connect(d->rightSideBar, SIGNAL(signalPrevItem()),
-            this, SLOT(slotBackward()));
-
-    connect(this, SIGNAL(signalSelectionChanged( const QRect&)),
-            d->rightSideBar, SLOT(slotImageSelectionChanged( const QRect&)));
-
-    connect(this, SIGNAL(signalNoCurrentItem()),
-            d->rightSideBar, SLOT(slotNoCurrentItem()));
-
-    ImageAttributesWatch* watch = ImageAttributesWatch::instance();
-
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl&)),
-            this, SLOT(slotFileMetadataChanged(const KUrl&)));
-
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
-            Qt::QueuedConnection);
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
-
-    connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
-            this, SLOT(slotThumbBarItemSelected(const KUrl&)));
-
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSetupChanged()));
+    return promptUserSave(d->currentUrl());
 }
 
 void ImageWindow::setupUserArea()
@@ -397,11 +424,11 @@ void ImageWindow::setupUserArea()
     QHBoxLayout* hlay = new QHBoxLayout(widget);
     m_splitter        = new SidebarSplitter(widget);
 
-    KMainWindow* viewContainer = new KMainWindow(widget, Qt::Widget);
-    m_splitter->addWidget(viewContainer);
-    m_stackView = new Digikam::EditorStackView(viewContainer);
+    d->viewContainer = new KMainWindow(widget, Qt::Widget);
+    m_splitter->addWidget(d->viewContainer);
+    m_stackView = new Digikam::EditorStackView(d->viewContainer);
     m_canvas    = new Digikam::Canvas(m_stackView);
-    viewContainer->setCentralWidget(m_stackView);
+    d->viewContainer->setCentralWidget(m_stackView);
 
     m_splitter->setStretchFactor(0, 10);      // set Canvas default size to max.
 
@@ -424,9 +451,8 @@ void ImageWindow::setupUserArea()
 
     // Code to check for the now depreciated HorizontalThumbar directive. It
     // is found, it is honored and deleted. The state will from than on be saved
-    // by viewContainers built-in mechanism.
+    // by d->viewContainers built-in mechanism.
     Qt::DockWidgetArea dockArea    = Qt::LeftDockWidgetArea;
-    Qt::Orientation    orientation = Qt::Vertical;
 
     if (group.hasKey(d->configHorizontalThumbbarEntry))
     {
@@ -434,24 +460,89 @@ void ImageWindow::setupUserArea()
         {
             // Horizontal thumbbar layout
             dockArea    = Qt::TopDockWidgetArea;
-            orientation = Qt::Horizontal;
         }
 
         group.deleteEntry(d->configHorizontalThumbbarEntry);
     }
 
-    // The thumb bar is placed in a detachable/dockable widget.
-    d->thumbBarDock = new ThumbBarDock(viewContainer, Qt::Tool);
-    d->thumbBarDock->setObjectName("editor_thumbbar");
-    d->thumbBar = new ImagePreviewBar(d->thumbBarDock, orientation);
-    d->thumbBarDock->setWidget(d->thumbBar);
-    viewContainer->addDockWidget(dockArea, d->thumbBarDock);
-    d->thumbBarDock->setFloating(false);
+    d->imageInfoModel   = new ImageListModel(this);
 
-    viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
-    d->thumbBarDock->reInitialize();
+    d->imageFilterModel = new ImageFilterModel(this);
+    d->imageFilterModel->setSourceImageModel(d->imageInfoModel);
+
+    d->imageInfoModel->setWatchFlags(d->imageFilterModel->suggestedWatchFlags());
+    d->imageInfoModel->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
+
+    d->imageFilterModel->setCategorizationMode(ImageSortSettings::NoCategories);
+    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
+    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
+
+    d->dragDropHandler = new ImageDragDropHandler(d->imageInfoModel);
+    d->dragDropHandler->setReadOnlyDrop(true);
+    d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
+
+    // The thumb bar is placed in a detachable/dockable widget.
+    d->thumbBarDock = new ThumbBarDock(d->viewContainer, Qt::Tool);
+    d->thumbBarDock->setObjectName("editor_thumbbar");
+
+    d->thumbBar = new ImageThumbnailBar(d->thumbBarDock);
+    d->thumbBar->setModels(d->imageInfoModel, d->imageFilterModel);
+
+    d->thumbBarDock->setWidget(d->thumbBar);
+    d->viewContainer->addDockWidget(dockArea, d->thumbBarDock);
+    d->thumbBarDock->setFloating(false);
+    //d->thumbBar->slotDockLocationChanged(dockArea);
 
     setCentralWidget(widget);
+}
+
+void ImageWindow::setupConnections()
+{
+    setupStandardConnections();
+
+    connect(this, SIGNAL(loadCurrentLater()),
+            this, SLOT(slotLoadCurrent()), Qt::QueuedConnection);
+
+    // To toggle properly keyboards shortcuts from comments & tags side bar tab.
+
+    connect(d->rightSideBar, SIGNAL(signalNextItem()),
+            this, SLOT(slotForward()));
+
+    connect(d->rightSideBar, SIGNAL(signalPrevItem()),
+            this, SLOT(slotBackward()));
+
+    connect(this, SIGNAL(signalSelectionChanged( const QRect&)),
+            d->rightSideBar, SLOT(slotImageSelectionChanged( const QRect&)));
+
+    connect(this, SIGNAL(signalNoCurrentItem()),
+            d->rightSideBar, SLOT(slotNoCurrentItem()));
+
+    ImageAttributesWatch* watch = ImageAttributesWatch::instance();
+
+    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl&)),
+            this, SLOT(slotFileMetadataChanged(const KUrl&)));
+
+    /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
+            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
+            Qt::QueuedConnection);*/
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
+    /*connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+            this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));*/
+
+    connect(d->thumbBar, SIGNAL(currentChanged(const ImageInfo&)),
+            this, SLOT(slotThumbBarImageSelected(const ImageInfo&)));
+
+    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(const QList<ImageInfo>&)),
+            this, SLOT(slotDroppedOnThumbbar(const QList<ImageInfo>&)));
+
+    connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
+
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSetupChanged()));
 }
 
 void ImageWindow::setupActions()
@@ -551,103 +642,25 @@ void ImageWindow::slotSetupChanged()
     m_nonDestructive = versionSettings.enabled;
     toggleNonDestructiveActions();
 
-    d->thumbBar->applySettings();
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->applySettings();
 }
 
-void ImageWindow::slotThumbBarItemSelected(const KUrl& url)
-{
-    if (d->urlCurrent == url)
-    {
-        return;
-    }
-
-    if (!promptUserSave(d->urlCurrent, AskIfNeeded, false))
-    {
-        return;
-    }
-
-    int index = d->urlList.indexOf(url);
-
-    if (index == -1)
-    {
-        return;
-    }
-
-    d->urlCurrent = url;
-
-    if (!d->imageInfoList.isEmpty())
-    {
-        d->imageInfoCurrent = d->imageInfoList[index];
-    }
-
-    m_saveAction->setEnabled(false);
-    m_revertAction->setEnabled(false);
-    m_undoAction->setEnabled(false);
-    m_redoAction->setEnabled(false);
-
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
-}
-
-void ImageWindow::loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
-                          const QString& caption, bool allowSaving)
-{
-    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
-    {
-        return;
-    }
-
-    d->urlList          = urlList;
-    d->urlCurrent       = urlCurrent;
-    d->imageInfoList    = ImageInfoList();
-    d->imageInfoCurrent = ImageInfo();
-
-    loadCurrentList(caption, allowSaving);
-}
-
 void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const ImageInfo& imageInfoCurrent,
-                                 const QString& caption, bool allowSaving)
+                                 const QString& caption)
 {
     // imageInfoCurrent is contained in imageInfoList.
 
     // Very first thing is to check for changes, user may choose to cancel operation
-    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
+    if (!promptUserSave(d->currentUrl(), AskIfNeeded))
     {
         return;
     }
 
-    // take over ImageInfo list
-    d->imageInfoList    = imageInfoList;
-    d->imageInfoCurrent = imageInfoCurrent;
-
-    // create URL list
-    d->urlList = KUrl::List();
-    d->thumbBar->clear();
-
-    d->thumbBar->blockSignals(true);
-
-    for (ImageInfoList::iterator it = d->imageInfoList.begin(); it != d->imageInfoList.end(); ++it)
-    {
-        d->urlList.append(it->fileUrl());
-        ImagePreviewBarItem* item = new ImagePreviewBarItem(d->thumbBar, *it);
-
-        if (imageInfoCurrent == *it)
-        {
-            d->thumbBar->setSelectedItem(item);
-        }
-    }
-
-    d->thumbBar->blockSignals(false);
-
-    d->urlCurrent = d->imageInfoCurrent.fileUrl();
-
-    loadCurrentList(caption, allowSaving);
-}
-
-void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
-{
-    // this method contains the code shared by loadURL and loadImageInfos
+    d->currentImageInfo = ImageInfo();
+    d->imageInfoModel->setImageInfos(imageInfoList);
+    d->currentImageInfo = imageInfoCurrent;
+    d->setThumbBarToCurrent();
 
     // if window is minimized, show it
     if (isMinimized())
@@ -664,38 +677,28 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
         setCaption(i18n("Image Editor"));
     }
 
-    d->allowSaving = allowSaving;
-
-    m_saveAction->setEnabled(false);
-
-    m_undoAction->setEnabled(false);
-    m_redoAction->setEnabled(false);
-
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+    slotLoadCurrent();
 }
 
 void ImageWindow::slotLoadCurrent()
 {
-    int index = d->urlList.indexOf(d->urlCurrent);
+    if (!d->currentIsValid())
+        return;
 
-    if (index != -1)
+    m_canvas->load(d->currentImageInfo.filePath(), m_IOFileSettings);
+
+    QModelIndex next = d->nextIndex();
+    if (next.isValid())
     {
-        m_canvas->load(d->urlCurrent.toLocalFile(), m_IOFileSettings);
-
-        if (++index != d->urlList.size())
-        {
-            m_canvas->preload(d->urlList[index].toLocalFile());
-        }
+        m_canvas->preload(d->imageInfo(next).filePath());
     }
 
-    d->thumbBar->blockSignals(true);
-    d->thumbBar->setSelected(d->thumbBar->findItemByUrl(d->urlCurrent));
-    d->thumbBar->blockSignals(false);
+    d->setThumbBarToCurrent();
 
     // Do this _after_ the canvas->load(), so that the main view histogram does not load
     // a smaller version if a raw image, and after that the DImgInterface loads the full version.
     // So first let DImgInterface create its loading task, only then any external objects.
-    setViewToURL(d->urlCurrent);
+    setViewToURL(d->currentUrl());
 }
 
 void ImageWindow::setViewToURL(const KUrl& url)
@@ -703,90 +706,63 @@ void ImageWindow::setViewToURL(const KUrl& url)
     emit signalURLChanged(url);
 }
 
-void ImageWindow::slotForward()
+void ImageWindow::slotThumbBarImageSelected(const ImageInfo& info)
 {
-    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
+    if (d->currentImageInfo == info)
     {
         return;
     }
 
-    int index = d->urlList.indexOf(d->urlCurrent);
-
-    if (index != -1)
+    if (!promptUserSave(d->currentUrl(), AskIfNeeded, false))
     {
-        ++index;
-
-        if (index != d->urlList.size())
-        {
-            if (!d->imageInfoList.isEmpty())
-            {
-                d->imageInfoCurrent = d->imageInfoList[index];
-            }
-
-            d->urlCurrent = d->urlList[index];
-            slotLoadCurrent();
-        }
+        return;
     }
+
+    d->currentImageInfo = info;
+    slotLoadCurrent();
+}
+
+void ImageWindow::slotDroppedOnThumbbar(const QList<ImageInfo>& infos)
+{
+    if (infos.isEmpty())
+    {
+        return;
+    }
+
+    loadImageInfos(infos, infos.first(), QString());
+}
+
+void ImageWindow::loadIndex(const QModelIndex& index)
+{
+    if (!promptUserSave(d->currentUrl(), AskIfNeeded))
+    {
+        return;
+    }
+
+    if (!index.isValid())
+        return;
+    d->currentImageInfo = d->imageFilterModel->imageInfo(index);
+    slotLoadCurrent();
+}
+
+void ImageWindow::slotForward()
+{
+    loadIndex(d->nextIndex());
 }
 
 void ImageWindow::slotBackward()
 {
-    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
-    {
-        return;
-    }
-
-    int index = d->urlList.indexOf(d->urlCurrent);
-
-    if (index != -1)
-    {
-        --index;
-
-        if (index >= 0)
-        {
-            if (!d->imageInfoList.isEmpty())
-            {
-                d->imageInfoCurrent = d->imageInfoList[index];
-            }
-
-            d->urlCurrent = d->urlList[index];
-            slotLoadCurrent();
-        }
-    }
+    loadIndex(d->previousIndex());
 }
 
 void ImageWindow::slotFirst()
 {
-    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
-    {
-        return;
-    }
-
-    d->urlCurrent = d->urlList.first();
-
-    if (!d->imageInfoList.isEmpty())
-    {
-        d->imageInfoCurrent = d->imageInfoList.first();
-    }
-
-    slotLoadCurrent();
+    loadIndex(d->firstIndex());
 }
 
 void ImageWindow::slotLast()
 {
-    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
-    {
-        return;
-    }
-
-    d->urlCurrent = d->urlList.last();
-
-    if (!d->imageInfoList.isEmpty())
-    {
-        d->imageInfoCurrent = d->imageInfoList.last();
-    }
-
-    slotLoadCurrent();
+    loadIndex(d->lastIndex());
 }
 
 void ImageWindow::slotContextMenu()
@@ -797,46 +773,43 @@ void ImageWindow::slotContextMenu()
         TagsPopupMenu*   assignTagsMenu = 0;
         TagsPopupMenu*   removeTagsMenu = 0;
 
-        if (!d->imageInfoCurrent.isNull())
+        // Bulk assignment/removal of tags --------------------------
+
+        QList<qlonglong> idList;
+        idList << d->currentImageInfo.id();
+
+        assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN, this);
+        removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);
+        assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
+        removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
+
+        m_contextMenu->addSeparator();
+
+        m_contextMenu->addMenu(assignTagsMenu);
+        m_contextMenu->addMenu(removeTagsMenu);
+
+        connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
+                this, SLOT(slotAssignTag(int)));
+
+        connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
+                this, SLOT(slotRemoveTag(int)));
+
+        if (!DatabaseAccess().db()->hasTags( idList ))
         {
-            // Bulk assignment/removal of tags --------------------------
-
-            QList<qlonglong> idList;
-            idList << d->imageInfoCurrent.id();
-
-            assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN, this);
-            removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);
-            assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
-            removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
-
-            m_contextMenu->addSeparator();
-
-            m_contextMenu->addMenu(assignTagsMenu);
-            m_contextMenu->addMenu(removeTagsMenu);
-
-            connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
-                    this, SLOT(slotAssignTag(int)));
-
-            connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
-                    this, SLOT(slotRemoveTag(int)));
-
-            if (!DatabaseAccess().db()->hasTags( idList ))
-            {
-                m_contextMenu->menuAction()->setEnabled(false);
-            }
-
-            m_contextMenu->addSeparator();
-
-            // Assign Star Rating -------------------------------------------
-
-            ratingMenu = new RatingPopupMenu();
-            ratingMenu->menuAction()->setText(i18n("Assign Rating"));
-
-            connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
-                    this, SLOT(slotAssignRating(int)));
-
-            m_contextMenu->addMenu(ratingMenu);
+            m_contextMenu->menuAction()->setEnabled(false);
         }
+
+        m_contextMenu->addSeparator();
+
+        // Assign Star Rating -------------------------------------------
+
+        ratingMenu = new RatingPopupMenu();
+        ratingMenu->menuAction()->setText(i18n("Assign Rating"));
+
+        connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
+                this, SLOT(slotAssignRating(int)));
+
+        m_contextMenu->addMenu(ratingMenu);
 
         m_contextMenu->exec(QCursor::pos());
 
@@ -856,57 +829,56 @@ void ImageWindow::slotChanged()
 
     m_resLabel->setText(str);
 
-    if (d->urlCurrent.isValid())
-    {
-        KUrl u(d->urlCurrent.directory());
+    if (!d->currentIsValid())
+        return;
 
-        DImg* img = m_canvas->interface()->getImg();
 
-        if (!d->imageInfoCurrent.isNull())
+    DImg* img = m_canvas->interface()->getImg();
+
+    DImageHistory history     = m_canvas->interface()->getImageHistory();
+    DImageHistory redoHistory = m_canvas->interface()->getImageHistoryOfFullRedo();
+
+    d->rightSideBar->itemChanged(d->currentImageInfo, m_canvas->getSelectedArea(), img, redoHistory);
+
+    // Filters for redo will be greyed out
+    d->rightSideBar->getFiltersHistoryTab()->setEnabledEntries(history.actionCount());
+
+    /*if (!d->currentImageInfo.isNull())
         {
-            DImageHistory history     = m_canvas->interface()->getImageHistory();
-            DImageHistory redoHistory = m_canvas->interface()->getImageHistoryOfFullRedo();
-            kDebug() << "Current history:" << history.actionCount() << "full redo:" << redoHistory.actionCount();
-
-            d->rightSideBar->itemChanged(d->imageInfoCurrent, m_canvas->getSelectedArea(),
-                                         img, redoHistory);
-
-            // Filters for redo will be greyed out
-            d->rightSideBar->getFiltersHistoryTab()->setEnabledEntries(history.actionCount());
         }
         else
         {
-            d->rightSideBar->itemChanged(d->urlCurrent, m_canvas->getSelectedArea(), img);
+            d->rightSideBar->itemChanged(d->currentUrl(), m_canvas->getSelectedArea(), img);
         }
-    }
+    }*/
 }
 
 bool ImageWindow::hasChangesToSave()
 {
-    return EditorWindow::hasChangesToSave() && d->allowSaving;
+    return EditorWindow::hasChangesToSave();// && d->allowSaving;
 }
 
 void ImageWindow::slotAssignTag(int tagID)
 {
-    if (!d->imageInfoCurrent.isNull())
+    if (!d->currentImageInfo.isNull())
     {
         MetadataHub hub;
-        hub.load(d->imageInfoCurrent);
+        hub.load(d->currentImageInfo);
         hub.setTag(tagID, true);
-        hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
-        hub.write(d->imageInfoCurrent.filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(d->currentImageInfo, MetadataHub::PartialWrite);
+        hub.write(d->currentImageInfo.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
 void ImageWindow::slotRemoveTag(int tagID)
 {
-    if (!d->imageInfoCurrent.isNull())
+    if (!d->currentImageInfo.isNull())
     {
         MetadataHub hub;
-        hub.load(d->imageInfoCurrent);
+        hub.load(d->currentImageInfo);
         hub.setTag(tagID, false);
-        hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
-        hub.write(d->imageInfoCurrent.filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(d->currentImageInfo, MetadataHub::PartialWrite);
+        hub.write(d->currentImageInfo.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
@@ -942,7 +914,7 @@ void ImageWindow::slotAssignRatingFiveStar()
 
 void ImageWindow::slotAssignRating(int rating)
 {
-    assignRating(d->imageInfoCurrent, rating);
+    assignRating(d->currentImageInfo, rating);
 }
 
 void ImageWindow::assignRating(const ImageInfo& info, int rating)
@@ -966,17 +938,13 @@ void ImageWindow::slotRatingChanged(const KUrl& url, int rating)
 
 void ImageWindow::slotUpdateItemInfo()
 {
-    int index = d->urlList.indexOf(d->urlCurrent);
-
-    m_rotatedOrFlipped = false;
-
     QString text = i18nc("<Image file name> (<Image number> of <Images in album>)",
-                         "%1 (%2 of %3)", d->urlCurrent.fileName(),
-                         QString::number(index+1),
-                         QString::number(d->urlList.count()));
+                         "%1 (%2 of %3)", d->currentImageInfo.name(),
+                         QString::number(d->currentIndex().row()),
+                         QString::number(d->imageFilterModel->rowCount()));
     m_nameLabel->setText(text);
 
-    if (d->urlList.count() == 1)
+    if (d->imageInfoModel->rowCount() == 1)
     {
         m_backwardAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
@@ -991,23 +959,24 @@ void ImageWindow::slotUpdateItemInfo()
         m_lastAction->setEnabled(true);
     }
 
-    if (index == 0)
+    if (d->currentIndex() == d->firstIndex())
     {
         m_backwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
     }
 
-    if (index == d->urlList.count()-1)
+    if (d->currentIndex() == d->lastIndex())
     {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
 
+    /*
     // Disable some menu actions if the current root image URL
     // is not include in the digiKam Albums library database.
     // This is necessary when ImageEditor is opened from cameraclient.
 
-    KUrl u(d->urlCurrent.directory());
+    KUrl u(d->currentUrl().directory());
     PAlbum* palbum = AlbumManager::instance()->findPAlbum(u);
 
     if (!palbum)
@@ -1018,6 +987,7 @@ void ImageWindow::slotUpdateItemInfo()
     {
         m_fileDeleteAction->setEnabled(true);
     }
+    */
 }
 
 bool ImageWindow::setup()
@@ -1043,25 +1013,19 @@ void ImageWindow::saveIsComplete()
 
     // put image in cache, the LoadingCacheInterface cares for the details
     LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
-    d->thumbBar->refreshThumbs(KUrl::List() << d->urlCurrent);
     ScanController::instance()->scanFileDirectly(m_savingContext.destinationURL.toLocalFile());
 
     // Pop-up a message to bring user when save is done.
     KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
                          this, windowTitle());
 
-    // all that is done in slotLoadCurrent, except for loading
-    int index = d->urlList.indexOf(d->urlCurrent);
-
-    if (index != -1)
+    QModelIndex next = d->nextIndex();
+    if (next.isValid())
     {
-        if (++index != d->urlList.size())
-        {
-            m_canvas->preload(d->urlList[index].toLocalFile());
-        }
+        m_canvas->preload(d->imageInfo(next).filePath());
     }
 
-    setViewToURL(d->urlCurrent);
+    setViewToURL(d->currentImageInfo.fileUrl());
 }
 
 void ImageWindow::saveVersionIsComplete()
@@ -1075,7 +1039,7 @@ void ImageWindow::saveAsIsComplete()
     kDebug() << "Saved" << m_savingContext.srcURL << "to" << m_savingContext.destinationURL;
 
     // Nothing to be done if operating without database
-    if (d->imageInfoCurrent.isNull())
+    if (d->currentImageInfo.isNull())
     {
         return;
     }
@@ -1087,37 +1051,18 @@ void ImageWindow::saveAsIsComplete()
         return;
     }
 
-    // Now copy the metadata of the original file to the new file ------------
+    // copy the metadata of the original file to the new file
+    ScanController::instance()->
+        scanFileDirectlyCopyAttributes(m_savingContext.destinationURL.toLocalFile(), d->currentImageInfo.id());
 
-    ScanController::instance()->scanFileDirectlyCopyAttributes(m_savingContext.destinationURL.toLocalFile(),
-            d->imageInfoCurrent.id());
-    ImageInfo newInfo(m_savingContext.destinationURL.toLocalFile());
-
-    if (!d->urlList.contains(m_savingContext.destinationURL) )
+    // Set new current index
+    d->currentImageInfo = ImageInfo(m_savingContext.destinationURL.toLocalFile());
+    if (!d->imageInfoModel->hasImage(d->currentImageInfo))
     {
-        // The image file did not exist in the list.
-        int index = d->urlList.indexOf(m_savingContext.srcURL);
-        d->urlList.insert(index, m_savingContext.destinationURL);
-        d->imageInfoCurrent = newInfo;
-        d->imageInfoList.insert(index, d->imageInfoCurrent);
-    }
-    else if (d->urlCurrent != m_savingContext.destinationURL)
-    {
-        for (int i=0; i<d->imageInfoList.count(); ++i)
-        {
-            ImageInfo info = d->imageInfoList[i];
-
-            if (info.fileUrl() == m_savingContext.destinationURL)
-            {
-                d->imageInfoCurrent = newInfo;
-                // setAutoDelete is true
-                d->imageInfoList.replace(i, d->imageInfoCurrent);
-                break;
-            }
-        }
+        d->imageInfoModel->addImageInfo(d->currentImageInfo);
     }
 
-    d->urlCurrent = m_savingContext.destinationURL;
+    // set origin of DImgInterface: "As if" the last saved image was loaded directly
     m_canvas->switchToLastSaved(m_savingContext.destinationURL.toLocalFile());
 
     // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
@@ -1129,30 +1074,13 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // all that is done in slotLoadCurrent, except for loading
-    int index = d->urlList.indexOf(d->urlCurrent);
-
-    if (index != -1)
+    QModelIndex next = d->nextIndex();
+    if (next.isValid())
     {
-        setViewToURL(d->urlCurrent);
-
-        if (++index != d->urlList.count())
-        {
-            m_canvas->preload(d->urlList[index].toLocalFile());
-        }
+        m_canvas->preload(d->imageInfo(next).filePath());
     }
 
-    // Add the file to the list of thumbbar images if it's not there already
-    ImagePreviewBarItem* foundItem = d->thumbBar->findItemByInfo(d->imageInfoCurrent);
-    d->thumbBar->reloadThumb(foundItem);
-
-    if (!foundItem)
-    {
-        foundItem = new ImagePreviewBarItem(d->thumbBar, d->imageInfoCurrent);
-    }
-
-    d->thumbBar->blockSignals(true);
-    d->thumbBar->setSelected(foundItem);
-    d->thumbBar->blockSignals(false);
+    setViewToURL(d->currentImageInfo.fileUrl());
 
     slotUpdateItemInfo();
 
@@ -1163,20 +1091,20 @@ void ImageWindow::saveAsIsComplete()
 
 void ImageWindow::prepareImageToSave()
 {
-    if (!d->imageInfoCurrent.isNull())
+    if (!d->currentImageInfo.isNull())
     {
         // Write metadata from database to DImg
         MetadataHub hub;
-        hub.load(d->imageInfoCurrent);
+        hub.load(d->currentImageInfo);
         DImg image(m_canvas->currentImage());
         hub.write(image, MetadataHub::FullWrite);
 
         // Ensure there is a UUID for the source image in the database,
         // even if not in the source image's metadata
-        if (d->imageInfoCurrent.uuid().isNull())
+        if (d->currentImageInfo.uuid().isNull())
         {
             QString uuid = m_canvas->ensureHasCurrentUuid();
-            d->imageInfoCurrent.setUuid(uuid);
+            d->currentImageInfo.setUuid(uuid);
         }
     }
 }
@@ -1189,31 +1117,31 @@ VersionManager* ImageWindow::versionManager()
 bool ImageWindow::save()
 {
     prepareImageToSave();
-    startingSave(d->urlCurrent);
+    startingSave(d->currentUrl());
     return true;
 }
 
 bool ImageWindow::saveAs()
 {
     prepareImageToSave();
-    return startingSaveAs(d->urlCurrent);
+    return startingSaveAs(d->currentUrl());
 }
 
 bool ImageWindow::saveNewVersion()
 {
     prepareImageToSave();
-    return startingSaveNewVersion(d->urlCurrent);
+    return startingSaveNewVersion(d->currentUrl());
 }
 
 bool ImageWindow::saveCurrentVersion()
 {
     prepareImageToSave();
-    return startingSaveCurrentVersion(d->urlCurrent);
+    return startingSaveCurrentVersion(d->currentUrl());
 }
 
 KUrl ImageWindow::saveDestinationUrl()
 {
-    return d->urlCurrent;
+    return d->currentUrl();
 }
 
 void ImageWindow::slotDeleteCurrentItem()
@@ -1241,28 +1169,14 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     // This function implements all four of the above slots.
     // The meaning of permanently differs depending on the value of ask
 
-    KUrl u;
-    u.setPath(d->urlCurrent.directory());
-    PAlbum* palbum = AlbumManager::instance()->findPAlbum(u);
-
-    // if available, provide a digikamalbums:// URL to KIO
-    KUrl kioURL;
-
-    if (!d->imageInfoCurrent.isNull())
-    {
-        kioURL = d->imageInfoCurrent.databaseUrl();
-    }
-    else
-    {
-        kioURL = d->urlCurrent;
-    }
-
-    KUrl fileURL = d->urlCurrent;
-
-    if (!palbum)
-    {
+    if (d->currentImageInfo.isNull())
         return;
-    }
+
+    //PAlbum* palbum = AlbumManager::instance()->findPAlbum(d->currentImageInfo.albumId());
+
+    // provide a digikamalbums:// URL to KIO
+    KUrl kioURL = d->currentImageInfo.databaseUrl();
+    KUrl fileURL = d->currentUrl();
 
     bool useTrash;
 
@@ -1273,7 +1187,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         DeleteDialog dialog(this);
 
         KUrl::List urlList;
-        urlList.append(d->urlCurrent);
+        urlList.append(fileURL);
 
         if (!dialog.confirmDeleteList(urlList,
                                       DeleteDialogMode::Files,
@@ -1299,9 +1213,9 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         kioURL = fileURL;
     }
 
-    int index = d->urlList.indexOf(d->urlCurrent);
+    /*int index = d->urlList.indexOf(d->currentUrl());
 
-    if (d->imageInfoCurrent.isNull())
+    if (d->currentImageInfo.isNull())
     {
         // no database information: Do it the old way
 
@@ -1313,96 +1227,102 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
             return;
         }
 
-        emit signalFileDeleted(d->urlCurrent);
+        emit signalFileDeleted(d->currentUrl());
 
     }
     else
     {
-        // We have database information, which means information will get through
-        // everywhere. Just do it asynchronously.
+    }*/
 
-        KIO::Job* job = DIO::del(kioURL, useTrash);
-        job->ui()->setWindow(this);
-        job->ui()->setAutoErrorHandlingEnabled(true);
-    }
+    // We have database information, which means information will get through
+    // everywhere. Just do it asynchronously.
 
-    if (removeItem(index))
-    {
-        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
-    }
+    KIO::Job* job = DIO::del(kioURL, useTrash);
+    job->ui()->setWindow(this);
+    job->ui()->setAutoErrorHandlingEnabled(true);
+
+    removeCurrent();
 }
 
-bool ImageWindow::removeItem(int index)
+void ImageWindow::removeCurrent()
 {
-    if (index == -1 || index >= d->urlList.size())
+    if (!d->currentIsValid())
     {
-        return false;
+        return;
     }
 
-    KUrl url = d->urlList[index];
+    QModelIndex next = d->nextIndex();
+    QModelIndex prev = d->previousIndex();
 
-    // Remove item from Thumbbar.
-    d->thumbBar->blockSignals(true);
-    d->thumbBar->removeItem(d->thumbBar->findItemByUrl(url));
-    d->thumbBar->blockSignals(false);
+    d->imageInfoModel->removeImageInfo(d->currentImageInfo);
 
-    // remove from internal lists
-    d->urlList.removeAt(index);
+    QModelIndex newCurrent;
+    if (next.isValid())
+        newCurrent = next;
+    else if (prev.isValid())
+        newCurrent = prev;
 
-    if (!d->imageInfoList.isEmpty())
+    if (newCurrent.isValid())
     {
-        d->imageInfoList.removeAt(index);
+        loadIndex(newCurrent);
     }
-
-    // Remember: index now points to the next item in the list
-
-    if (url != d->urlCurrent)
+    else
     {
-        return true;
+        // No image in the current Album -> Quit ImageEditor...
+
+        KMessageBox::information(this,
+                                i18n("There is no image to show in the current album.\n"
+                                    "The image editor will be closed."),
+                                i18n("No Image in Current Album"));
+
+        close();
     }
-
-    if (index < d->urlList.size())
-    {
-        // Try to get the next image in the current Album...
-        d->urlCurrent       = d->urlList[index];
-        d->imageInfoCurrent = d->imageInfoList[index];
-        return true;
-    }
-    else if (index - 1 >= 0)
-    {
-        // Try to get the previous image in the current Album.
-        --index;
-        d->urlCurrent       = d->urlList[index];
-        d->imageInfoCurrent = d->imageInfoList[index];
-        return true;
-    }
-
-    // No image in the current Album -> Quit ImageEditor...
-
-    KMessageBox::information(this,
-                             i18n("There is no image to show in the current album.\n"
-                                  "The image editor will be closed."),
-                             i18n("No Image in Current Album"));
-
-    close();
-    return false;
 }
 
 void ImageWindow::slotFileMetadataChanged(const KUrl& url)
 {
-    if (url == d->urlCurrent)
+    if (url == d->currentUrl())
     {
         m_canvas->readMetadataFromFile(url.toLocalFile());
     }
 }
 
-void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& changeset)
+    /*
+     * Should all be done by DCategorizedView
+     *
+void ImageWindow::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
+
     // ignore when closed
-    if (!isVisible())
+    if (!isVisible() || !d->currentIsValid())
     {
         return;
     }
+
+    QModelIndex currentIndex = d->currentIndex();
+    if (currentIndex.row() >= start && currentIndex.row() <= end)
+    {
+        promptUserSave(d->currentUrl(), AlwaysNewVersion, false);
+
+        // ensure selection
+        int totalToRemove = end - start + 1;
+        if (d->imageFilterModel->rowCount(parent) > totalToRemove)
+        {
+            if (end == d->imageFilterModel->rowCount(parent) - 1)
+            {
+                loadIndex(d->imageFilterModel->index(start - 1, 0));    // last remaining, no next one left
+            }
+            else
+            {
+                loadIndex(d->imageFilterModel->index(end + 1, 0));    // next remaining
+            }
+        }
+    }
+}*/
+
+/*
+void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& changeset)
+{
 
     bool needLoadCurrent = false;
 
@@ -1414,9 +1334,9 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
             {
                 if (changeset.containsImage(d->imageInfoList[i].id()))
                 {
-                    if (d->imageInfoCurrent == d->imageInfoList[i])
+                    if (d->currentImageInfo == d->imageInfoList[i])
                     {
-                        promptUserSave(d->urlCurrent, AlwaysNewVersion, false);
+                        promptUserSave(d->currentUrl(), AlwaysNewVersion, false);
 
                         if (removeItem(i))
                         {
@@ -1439,9 +1359,9 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
             {
                 if (changeset.containsAlbum(d->imageInfoList[i].albumId()))
                 {
-                    if (d->imageInfoCurrent == d->imageInfoList[i])
+                    if (d->currentImageInfo == d->imageInfoList[i])
                     {
-                        promptUserSave(d->urlCurrent, AlwaysNewVersion, false);
+                        promptUserSave(d->currentUrl(), AlwaysNewVersion, false);
 
                         if (removeItem(i))
                         {
@@ -1467,10 +1387,11 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
         QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
     }
 }
+*/
 
 void ImageWindow::slotFilePrint()
 {
-    printImage(d->urlCurrent);
+    printImage(d->currentUrl());
 }
 
 void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
@@ -1481,29 +1402,29 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     settings.exifRotate  = MetadataSettings::instance()->settings().exifRotate;
     settings.ratingColor = ThemeEngine::instance()->textSpecialRegColor();
 
-    if (!d->imageInfoList.isEmpty())
+    if (!d->imageInfoModel->isEmpty())
     {
         // We have started image editor from Album GUI. we get picture comments from database.
 
         m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
                                      i18n("Preparing slideshow. Please wait..."));
 
-        cnt = (float)d->imageInfoList.count();
+        cnt = (float)d->imageInfoModel->rowCount();
 
-        for (ImageInfoList::iterator it = d->imageInfoList.begin();
-             !m_cancelSlideShow && it != d->imageInfoList.end(); ++it)
+        foreach (const ImageInfo& info, d->imageInfoModel->imageInfos())
         {
             SlidePictureInfo pictInfo;
-            pictInfo.comment   = it->comment();
-            pictInfo.rating    = it->rating();
-            pictInfo.photoInfo = it->photoInfoContainer();
-            settings.pictInfoMap.insert(it->fileUrl(), pictInfo);
+            pictInfo.comment   = info.comment();
+            pictInfo.rating    = info.rating();
+            pictInfo.photoInfo = info.photoInfoContainer();
+            settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
+            settings.fileList << info.fileUrl();
 
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
             kapp->processEvents();
         }
     }
-    else
+    /*else
     {
         // We have started image editor from Camera GUI. we get picture comments from metadata.
 
@@ -1512,6 +1433,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 
         cnt = (float)d->urlList.count();
         DMetadata meta;
+        settings.fileList   = d->urlList;
 
         for (KUrl::List::Iterator it = d->urlList.begin() ;
              !m_cancelSlideShow && (it != d->urlList.end()) ; ++it)
@@ -1525,20 +1447,19 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
             kapp->processEvents();
         }
-    }
+    }*/
 
     m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());
 
     if (!m_cancelSlideShow)
     {
         settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
-        settings.fileList   = d->urlList;
 
         SlideShow* slide = new SlideShow(settings);
 
         if (startWithCurrent)
         {
-            slide->setCurrent(d->urlCurrent);
+            slide->setCurrent(d->currentUrl());
         }
 
         connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
@@ -1601,15 +1522,8 @@ void ImageWindow::dropEvent(QDropEvent* e)
             ATitle = palbum->title();
         }
 
-        TAlbum* talbum     = man->findTAlbum(albumIDs.first());
-
-        if (talbum)
-        {
-            ATitle = talbum->title();
-        }
-
         loadImageInfos(imageInfoList, imageInfoList.first(),
-                       i18n("Album \"%1\"",ATitle), true);
+                       i18n("Album \"%1\"",ATitle));
         e->accept();
     }
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
@@ -1640,7 +1554,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         loadImageInfos(imageInfoList, imageInfoList.first(),
-                       i18n("Album \"%1\"",ATitle), true);
+                       i18n("Album \"%1\"",ATitle));
         e->accept();
     }
     else if (DTagDrag::canDecode(e->mimeData()))
@@ -1678,7 +1592,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         loadImageInfos(imageInfoList, imageInfoList.first(),
-                       i18n("Album \"%1\"",ATitle), true);
+                       i18n("Album \"%1\"",ATitle));
         e->accept();
     }
     else
@@ -1689,7 +1603,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
 
 void ImageWindow::slotRevert()
 {
-    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
+    if (!promptUserSave(d->currentUrl(), AskIfNeeded))
     {
         return;
     }
@@ -1707,7 +1621,7 @@ void ImageWindow::slotOpenOriginal()
         return;
     }
 
-    if (!promptUserSave(d->urlCurrent, AskIfNeeded))
+    if (!promptUserSave(d->currentUrl(), AskIfNeeded))
     {
         return;
     }
@@ -1738,12 +1652,12 @@ void ImageWindow::slotOpenOriginal()
         url.addPath(id.m_fileName);
         imageInfos << ImageInfo(url);
     }
-    ImageScanner::sortByProximity(imageInfos, d->imageInfoCurrent);
+    ImageScanner::sortByProximity(imageInfos, d->currentImageInfo);
 
     if (!imageInfos.isEmpty() && !imageInfos.first().isNull())
     {
-        d->imageInfoCurrent = imageInfos.first();
-        d->urlCurrent       = d->imageInfoCurrent.fileUrl();
+        d->currentImageInfo = imageInfos.first();
+        d->currentUrl()       = d->currentImageInfo.fileUrl();
         slotLoadCurrent();
     }
 }
@@ -1751,7 +1665,7 @@ void ImageWindow::slotOpenOriginal()
 bool ImageWindow::hasOriginalToRestore()
 {
     // not implemented for db-less situation, so check for ImageInfo
-    return !d->imageInfoCurrent.isNull() && EditorWindow::hasOriginalToRestore();
+    return !d->currentImageInfo.isNull() && EditorWindow::hasOriginalToRestore();
 }
 
 DImageHistory ImageWindow::resolvedImageHistory(const DImageHistory& history)

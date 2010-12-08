@@ -104,7 +104,6 @@ protected:
     bool                     m_fullScreenHideThumbBar;
     bool                     m_cancelSlideShow;
     bool                     m_fullScreen;
-    bool                     m_rotatedOrFlipped;
     bool                     m_setExifOrientationTag;
     bool                     m_editingOriginalImage;
 
@@ -310,7 +309,6 @@ private Q_SLOTS:
     void slotToggleColorManagedView();
     void slotSoftProofingOptions();
     void slotUpdateSoftProofingState();
-    void slotRotatedOrFlipped();
     void slotSavingFinished(const QString& filename, bool success);
     void slotDonateMoney();
     void slotContribute();
