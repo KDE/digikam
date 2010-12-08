@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KCATEGORIZEDVIEW_H
-#define KCATEGORIZEDVIEW_H
+#ifndef DIGIKAMKCATEGORIZEDVIEW_H
+#define DIGIKAMKCATEGORIZEDVIEW_H
 
 #include <QtGui/QListView>
 
@@ -146,4 +146,4 @@ private:
     Private* const d;
 };
 
-#endif // KCATEGORIZEDVIEW_H
+#endif // DIGIKAMKCATEGORIZEDVIEW_H
