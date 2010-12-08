@@ -53,6 +53,8 @@ SetCompressorDictSize 96
 
   ;Name and file
   Name "digiKam"
+  Icon "digikam-installer.ico"
+  UninstallIcon "digikam-uninstaller.ico"
   OutFile "${OUTFILE}"
 
   ;Default installation folder
