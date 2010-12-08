@@ -73,7 +73,8 @@ SetCompressorDictSize 96
   !define MUI_HEADERIMAGE_BITMAP "digikam_header.bmp" 
   !define MUI_WELCOMEFINISHPAGE_BITMAP "digikam_welcome.bmp"
   !define MUI_ABORTWARNING
-
+  !define MUI_ICON "digikam-installer.ico"
+  !define MUI_UNICON "digikam-uninstaller.ico"
   !define MUI_FINISHPAGE_SHOWREADME "RELEASENOTES.txt"
 
 ;Variable for the folder of the start menu
@@ -117,6 +118,8 @@ Section "digiKam" SecDigiKam
   SetOutPath "$INSTDIR"
 
   File "RELEASENOTES.txt"
+  File "digikam-uninstaller.ico"
+
   ;Whole kde4 directory including digiKam & co
   File /r "${KDE4PATH}"
 
@@ -177,6 +180,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\Uninstall.exe"
   Delete "$INSTDIR\RELEASENOTES.txt"
+  Delete "$INSTDIR\digikam-uninstaller.ico"
 
   RMDir /r "$INSTDIR\kde4"
 
