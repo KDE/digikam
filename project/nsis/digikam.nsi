@@ -179,10 +179,10 @@ Section "Uninstall"
   ;ADD YOUR OWN FILES HERE...
 
   Delete "$INSTDIR\Uninstall.exe"
-  Delete "$INSTDIR\RELEASENOTES.txt"
-  Delete "$INSTDIR\digikam-uninstaller.ico"
+  Delete /REBOOTOK "$INSTDIR\RELEASENOTES.txt"
+  Delete /REBOOTOK "$INSTDIR\digikam-uninstaller.ico"
 
-  RMDir /r "$INSTDIR\kde4"
+  RMDir /r /REBOOTOK "$INSTDIR\kde4"
 
   RMDir "$INSTDIR"
 
