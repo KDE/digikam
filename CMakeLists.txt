@@ -1194,6 +1194,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagelistmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodeldragdrophandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagesortsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagethumbnailmodel.cpp
