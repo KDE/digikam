@@ -36,7 +36,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 258300 : digiKam won't build.
 029 ==> 256023 : Cannot work with Sigma-RAW-files (X3F).
 030 ==> 257904 : digiKam not reading metadata from foreign images.
-031 ==> 
+031 ==> 256897 : Crash upon unmounting of USB drive.
+032 ==> 
 
 
 
