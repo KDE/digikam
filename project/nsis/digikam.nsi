@@ -46,7 +46,7 @@ SetCompressorDictSize 96
 !include "MUI2.nsh"
 !define MY_PRODUCT "digiKam"
 !define PRODUCT_HOMEPAGE "http://www.digikam.org"
-!define OUTFILE "${MY_PRODUCT}-installer-${VERSION}.exe"
+!define OUTFILE "${MY_PRODUCT}-installer-${VERSION}-win32.exe"
 
 ;-------------------------------------------------------------------------------
 ;General
@@ -164,6 +164,18 @@ Var StartMenuFolder
 ;Installer Sections
 
 Section "digiKam" SecDigiKam
+
+  ;First we kill the running process.
+  StrCpy $0 "dbus-daemon.exe"
+  KillProc::KillProcesses
+  StrCpy $0 "kded4.exe"
+  KillProc::KillProcesses
+  StrCpy $0 "kioslave.exe"
+  KillProc::KillProcesses
+  StrCpy $0 "klauncher.exe"
+  KillProc::KillProcesses
+  StrCpy $0 "digikam.exe"
+  KillProc::KillProcesses
 
   SetOutPath "$INSTDIR"
 
