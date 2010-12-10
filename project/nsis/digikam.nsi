@@ -166,6 +166,10 @@ Var StartMenuFolder
 Section "digiKam" SecDigiKam
 
   ;First we kill the running process.
+  ;We use the following plugin:
+  ;http://nsis.sourceforge.net/KillProc_plug-in
+  ;To use this copy the dll in the Plugins directory of nsis.
+
   StrCpy $0 "dbus-daemon.exe"
   KillProc::KillProcesses
   StrCpy $0 "kded4.exe"
