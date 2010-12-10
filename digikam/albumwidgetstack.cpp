@@ -110,7 +110,6 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
     d->mediaPlayerView = new MediaPlayerView(this);
     d->mapWidgetView = new MapWidgetView(d->imageIconView->getSelectionModel(),d->imageIconView->imageFilterModel(), this);
 
-
     insertWidget(PreviewAlbumMode, d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
@@ -253,7 +252,6 @@ MapWidgetView* AlbumWidgetStack::mapWidgetView()
 
 void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
-
     if (previewMode() == MapWidgetMode)
     {
         return;
@@ -320,12 +318,10 @@ int AlbumWidgetStack::previewMode()
     return indexOf(currentWidget());
 }
 
-
 void AlbumWidgetStack::setMapViewMode()
 {
     setCurrentIndex(MapWidgetMode);
 }
-
 
 void AlbumWidgetStack::setIconViewMode()
 {
@@ -342,7 +338,6 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     {
         return;
     }
-
 
     if (mode == PreviewImageMode)
     {
