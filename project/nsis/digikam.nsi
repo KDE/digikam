@@ -85,7 +85,6 @@ Var StartMenuFolder
 
   !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE "COPYING"
-  !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
 
   ;Start Menu Folder Page Configuration
@@ -155,21 +154,6 @@ Section "digiKam" SecDigiKam
  !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
-
-;-------------------------------------------------------------------------------
-;Descriptions
-
-  ;Language strings
-  LangString DESC_SecDigiKam ${LANG_ENGLISH} "This is the digiKam for Windows including kipi-plugins and KDE 4.4."
-  LangString DESC_SecDigiKam ${LANG_FRENCH} "digiKam pour Windows incluant les greffons kipi et KDE 4.4."
-  LangString DESC_SecDigiKam ${LANG_GERMAN} "Dies ist die digiKam für Windows einschließlich kipi-Plugins und KDE 4.4."
-  LangString DESC_SecDigiKam ${LANG_SPANISH} "Este es el digiKam para Windows, incluyendo kipi-plugins y KDE 4.4."
-  LangString DESC_SecDigiKam ${LANG_ITALIAN} "Questo è il digiKam per Windows, inclusi Kipi-plugins e KDE 4.4."
-
-  ;Assign language strings to sections
-  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecDigiKam} $(DESC_SecDigiKam)
-  !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;-------------------------------------------------------------------------------
 ;Uninstaller Section
