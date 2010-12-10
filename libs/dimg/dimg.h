@@ -497,6 +497,21 @@ public:
     QByteArray getUniqueHash() const;
     static QByteArray getUniqueHash(const QString& filePath);
 
+    /** This methods return a 128-bit MD5 hex digest which is meant to uniquely identify
+        the file. The hash is calculated on parts of the file.
+        It cannot be used to find similar images. It is not calculated from the image data.
+        The hash will be returned as a 32-byte hexadecimal string.
+
+        If you already have a DImg object loaded from the file, use the member method.
+        If the image has been loaded with loadUniqueHash = true, the hash will already
+        be available.
+
+        You do not need a DImg object of the file to retrieve the unique hash;
+        Use the static method and pass just the file path.
+     */
+    QByteArray getUniqueHashV2() const;
+    static QByteArray getUniqueHashV2(const QString& filePath);
+
     /** This method creates a new 256-bit UUID meant to be globally unique.
      *  The UUID will be returned as a 64-byte hexadecimal string.
      *  At least 128bits of the UUID will be created by the platform random number

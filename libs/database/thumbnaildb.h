@@ -108,6 +108,8 @@ public:
 
     QHash<QString, int> getFilePathsWithThumbnail();
 
+    void replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize, const QString& newUniqueHash, int newFileSize);
+
     //QStringList getAllThumbnailPaths();
 
 private:

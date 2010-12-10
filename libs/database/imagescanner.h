@@ -120,6 +120,12 @@ public:
     bool hasHistoryToResolve() const;
 
     /**
+     * Provides access to the information retrieved by scanning.
+     * The validity depends on the previously executed scan.
+     */
+    const ItemScanInfo& itemScanInfo() const;
+
+    /**
      * Copy all relevant attributes like comments, tags, rating from source to destination.
      */
     static void copyProperties(qlonglong source, qlonglong destination);

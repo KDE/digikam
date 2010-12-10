@@ -118,6 +118,16 @@ public:
      */
     QUuid databaseUuid();
 
+    /**
+     * Returns the version used for the unique hash in this database.
+     * The value is cached.
+     */
+    int getUniqueHashVersion();
+
+    void setUniqueHashVersion(int version);
+
+    bool isUniqueHashV2();
+
     // ----------- AlbumRoot operations -----------
 
     /**

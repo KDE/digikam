@@ -80,6 +80,14 @@ public:
     void completeCollectionScan(SplashScreen* splash=0);
 
     /**
+     * Carries out a complete collection scan, at the same time updating
+     * the unique hash in the database and thumbnail database.
+     * Synchronous, returns when ready.
+     * The database will be locked while the scan is running.
+     */
+    void updateUniqueHash();
+
+    /**
      * Schedules a scan of the specified part of the collection.
      * Asynchronous, returns immediately.
      */

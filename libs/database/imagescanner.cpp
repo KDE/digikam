@@ -137,6 +137,11 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
         }
 }
 
+const ItemScanInfo& ImageScanner::itemScanInfo() const
+{
+    return m_scanInfo;
+}
+
 bool ImageScanner::hasHistoryToResolve() const
 {
     return m_hasHistoryToResolve;
@@ -797,7 +802,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     }
 
     // Second: uniqueHash + fileSize. Sufficient to assume that a file is identical, but subject to frequent change.
-    if (historyId.hasUniqueHashIdentifier())
+    if (historyId.hasUniqueHashIdentifier() && DatabaseAccess().db()->isUniqueHashV2())
     {
         QList<ItemScanInfo> infos = DatabaseAccess().db()->getIdenticalFiles(historyId.m_uniqueHash, historyId.m_fileSize);
 
@@ -1087,11 +1092,17 @@ QString ImageScanner::uniqueHash()
     // the QByteArray is an ASCII hex string
     if (m_scanInfo.category == DatabaseItem::Image)
     {
-        return QString(m_img.getUniqueHash());
+        if (DatabaseAccess().db()->isUniqueHashV2())
+            return QString(m_img.getUniqueHashV2());
+        else
+            return QString(m_img.getUniqueHash());
     }
     else
     {
-        return QString(DImg::getUniqueHash(m_fileInfo.filePath()));
+        if (DatabaseAccess().db()->isUniqueHashV2())
+            return QString(DImg::getUniqueHashV2(m_fileInfo.filePath()));
+        else
+            return QString(DImg::getUniqueHash(m_fileInfo.filePath()));
     }
 }
 

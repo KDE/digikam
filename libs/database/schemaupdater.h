@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QString>
+#include <QVariant>
 
 // Local includes
 #include "albumdb.h"
@@ -48,7 +49,10 @@ public:
 
     static int schemaVersion();
     static int filterSettingsVersion();
+    static int uniqueHashVersion();
+    static bool isUniqueHashUpToDate();
     bool update();
+    bool updateUniqueHash();
     void setObserver(InitializationObserver* observer);
     const QString getLastErrorMessage();
     void setDatabaseAccess(DatabaseAccess* access);
@@ -73,6 +77,8 @@ private:
     bool updateV4toV6();
     bool updateV2toV4(const QString& sqlite2DBPath);
     void setLegacySettingEntries();
+    void readVersionSettings();
+    void setVersionSettings();
 
 private:
 
@@ -87,8 +93,8 @@ private:
 
     bool                    m_setError;
 
-    int                     m_currentVersion;
-    int                     m_currentRequiredVersion;
+    QVariant                m_currentVersion;
+    QVariant                m_currentRequiredVersion;
 
     DatabaseBackend*        m_Backend;
     AlbumDB*                m_AlbumDB;

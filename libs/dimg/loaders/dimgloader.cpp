@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QCryptographicHash>
 #include <QFile>
 #include <QFileInfo>
 
@@ -252,7 +253,7 @@ HistoryImageId DImgLoader::createHistoryImageId(const QString& filePath, const D
     id.setCreationDate(dt);
     id.setFileName(file.fileName());
     id.setPathOnDisk(file.path());
-    id.setUniqueHash(uniqueHash(filePath, image, false), file.size());
+    id.setUniqueHash(uniqueHashV2(filePath, &image), file.size());
 
     return id;
 }
@@ -277,6 +278,49 @@ bool DImgLoader::checkExifWorkingColorSpace()
 
     return false;
 }
+
+static void updateFromFile(QFile& file, QCryptographicHash& hash, const int size)
+{
+    char databuf[size];
+    int readlen = 0;
+
+    if ( ( readlen = file.read( databuf, size ) ) > 0 )
+    {
+        hash.addData( databuf, readlen );
+    }
+}
+
+
+QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
+{
+    QFile file( filePath );
+    if (!file.open( QIODevice::Unbuffered | QIODevice::ReadOnly ))
+    {
+        return QByteArray();
+    }
+
+    QCryptographicHash md5(QCryptographicHash::Md5);
+
+    // Specified size: 100 kB; but limit to file size
+    const qint64 specifiedSize = 100 * 1024; // 100 kB
+    qint64 size = qMin(file.size(), specifiedSize);
+
+    // Read first 100 kB
+    updateFromFile(file, md5, size);
+    // Read last 100 kB
+    file.seek(file.size() - size);
+    updateFromFile(file, md5, size);
+
+    QByteArray hash = md5.result().toHex();
+
+    if (img && !hash.isNull())
+    {
+        const_cast<DImg*>(img)->setAttribute("uniqueHashV2", hash);
+    }
+
+    return hash;
+}
+
 
 QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata)
 {
@@ -323,7 +367,7 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
         {
             md5.update( databuf, readlen );
             md5.update( size.setNum( qfile.size() ) );
-            return md5.hexDigest();
+            hash = md5.hexDigest();
         }
     }
 

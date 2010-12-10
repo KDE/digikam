@@ -66,12 +66,15 @@ class AlbumDB::AlbumDBPriv
 public:
 
     AlbumDBPriv() :
-        db(0)
+        db(0),
+        uniqueHashVersion(-1)
     {
     }
 
     DatabaseBackend* db;
     QList<int>       recentlyAssignedTags;
+
+    int              uniqueHashVersion;
 };
 
 AlbumDB::AlbumDB(DatabaseBackend* backend)
@@ -1052,6 +1055,34 @@ QUuid AlbumDB::databaseUuid()
     }
 
     return uuid;
+}
+
+int AlbumDB::getUniqueHashVersion()
+{
+    if (d->uniqueHashVersion == -1)
+    {
+        QString v = getSetting("uniqueHashVersion");
+        if (v.isEmpty())
+        {
+            d->uniqueHashVersion = 1;
+        }
+        else
+        {
+            d->uniqueHashVersion = v.toInt();
+        }
+    }
+    return d->uniqueHashVersion;
+}
+
+bool AlbumDB::isUniqueHashV2()
+{
+    return getUniqueHashVersion() == 2;
+}
+
+void AlbumDB::setUniqueHashVersion(int version)
+{
+    d->uniqueHashVersion = version;
+    setSetting("uniqueHashVersion", QString::number(d->uniqueHashVersion));
 }
 
 /*

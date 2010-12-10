@@ -68,6 +68,16 @@ int SchemaUpdater::filterSettingsVersion()
     return 3;
 }
 
+int SchemaUpdater::uniqueHashVersion()
+{
+    return 2;
+}
+
+bool SchemaUpdater::isUniqueHashUpToDate()
+{
+    return DatabaseAccess().db()->getUniqueHashVersion() >= uniqueHashVersion();
+}
+
 const QString SchemaUpdater::getLastErrorMessage()
 {
     return m_LastErrorMessage;
@@ -83,10 +93,8 @@ SchemaUpdater::SchemaUpdater(AlbumDB* albumDB, DatabaseBackend* backend, Databas
     m_Backend         = backend;
     m_AlbumDB         = albumDB;
     m_Parameters      = parameters;
-    m_currentVersion         = 0;
-    m_currentRequiredVersion = 0;
-    m_observer       = 0;
-    m_setError       = false;
+    m_observer        = 0;
+    m_setError        = false;
 }
 
 bool SchemaUpdater::update()
@@ -101,15 +109,7 @@ bool SchemaUpdater::update()
     }
 
     // even on failure, try to set current version - it may have incremented
-    if (m_currentVersion)
-    {
-        m_AlbumDB->setSetting("DBVersion", QString::number(m_currentVersion));
-    }
-
-    if (m_currentRequiredVersion)
-    {
-        m_AlbumDB->setSetting("DBVersionRequired", QString::number(m_currentRequiredVersion));
-    }
+    setVersionSettings();
 
     if (!success)
     {
@@ -124,6 +124,37 @@ bool SchemaUpdater::update()
     }
 
     return success;
+}
+
+void SchemaUpdater::setVersionSettings()
+{
+    if (m_currentVersion.isValid())
+    {
+        m_AlbumDB->setSetting("DBVersion", QString::number(m_currentVersion.toInt()));
+    }
+
+    if (m_currentRequiredVersion.isValid())
+    {
+        m_AlbumDB->setSetting("DBVersionRequired", QString::number(m_currentRequiredVersion.toInt()));
+    }
+}
+
+static QVariant safeToVariant(const QString& s)
+{
+    if (s.isEmpty())
+    {
+        return QVariant();
+    }
+    else
+    {
+        return s.toInt();
+    }
+}
+
+void SchemaUpdater::readVersionSettings()
+{
+    m_currentVersion         = safeToVariant(m_AlbumDB->getSetting("DBVersion"));
+    m_currentRequiredVersion = safeToVariant(m_AlbumDB->getSetting("DBVersionRequired"));
 }
 
 void SchemaUpdater::setObserver(InitializationObserver* observer)
@@ -168,12 +199,11 @@ bool SchemaUpdater::startUpdates()
     if (tables.contains("Albums"))
     {
         // Find out schema version of db file
-        QString version = m_AlbumDB->getSetting("DBVersion");
-        QString versionRequired = m_AlbumDB->getSetting("DBVersionRequired");
-        kDebug() << "Have a database structure version " << version;
+        readVersionSettings();
+        kDebug() << "Have a database structure version " << m_currentVersion.toInt();
 
         // We absolutely require the DBVersion setting
-        if (version.isEmpty())
+        if (!m_currentVersion.isValid())
         {
             // Something is damaged. Give up.
             kError() << "DBVersion not available! Giving up schema upgrading.";
@@ -196,12 +226,10 @@ bool SchemaUpdater::startUpdates()
 
         // current version describes the current state of the schema in the db,
         // schemaVersion is the version required by the program.
-        m_currentVersion = version.toInt();
-
-        if (m_currentVersion > schemaVersion())
+        if (m_currentVersion.toInt() > schemaVersion())
         {
             // trying to open a database with a more advanced than this SchemaUpdater supports
-            if (!versionRequired.isEmpty() && versionRequired.toInt() <= schemaVersion())
+            if (m_currentRequiredVersion.isValid() && m_currentRequiredVersion.toInt() <= schemaVersion())
             {
                 // version required may be less than current version
                 return true;
@@ -347,11 +375,11 @@ bool SchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, const QSt
 
 bool SchemaUpdater::makeUpdates()
 {
-    kDebug() << "makeUpdates " << m_currentVersion << " to " << schemaVersion();
+    kDebug() << "makeUpdates " << m_currentVersion.toInt() << " to " << schemaVersion();
 
-    if (m_currentVersion < schemaVersion())
+    if (m_currentVersion.toInt() < schemaVersion())
     {
-        if (m_currentVersion < 5)
+        if (m_currentVersion.toInt() < 5)
         {
             if (!beginWrapSchemaUpdateStep())
             {
@@ -380,7 +408,7 @@ bool SchemaUpdater::makeUpdates()
             setLegacySettingEntries();
         }
 
-        if (m_currentVersion < 6)
+        if (m_currentVersion.toInt() < 6)
         {
             //updateV5toV6();
             if (!beginWrapSchemaUpdateStep())
@@ -465,8 +493,14 @@ bool SchemaUpdater::createDatabase()
         setLegacySettingEntries();
 
         m_currentVersion = schemaVersion();
+
+        // if we start with the V2 hash, version 6 is required
+        m_AlbumDB->setUniqueHashVersion(uniqueHashVersion());
+        m_currentRequiredVersion = schemaVersion();
+        /*
         // Digikam for database version 5 can work with version 6, though not using the new features
         m_currentRequiredVersion = 5;
+        */
         return true;
     }
     else
@@ -490,6 +524,40 @@ bool SchemaUpdater::createIndices()
 bool SchemaUpdater::createTriggers()
 {
     return m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggers")));
+}
+
+bool SchemaUpdater::updateUniqueHash()
+{
+    if (isUniqueHashUpToDate())
+    {
+        return true;
+    }
+
+    readVersionSettings();
+
+    {
+        DatabaseTransaction transaction;
+
+        DatabaseAccess().db()->setUniqueHashVersion(uniqueHashVersion());
+
+        CollectionScanner scanner;
+        scanner.setNeedFileCount(true);
+        scanner.setUpdateHashHint();
+        if (m_observer)
+        {
+            m_observer->connectCollectionScanner(&scanner);
+            scanner.setObserver(m_observer);
+        }
+        scanner.completeScan();
+
+        // earlier digikam does not know about the hash
+        if (m_currentRequiredVersion.toInt() < 6)
+        {
+            m_currentRequiredVersion = 6;
+            setVersionSettings();
+        }
+    }
+    return true;
 }
 
 bool SchemaUpdater::updateV5toV6()
@@ -523,6 +591,7 @@ bool SchemaUpdater::updateV5toV6()
 
     m_currentVersion = 6;
     // Digikam for database version 5 can work with version 6, though not using the new features
+    // Note: We dont upgrade the uniqueHash
     m_currentRequiredVersion = 5;
     return true;
 }

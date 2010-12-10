@@ -1099,8 +1099,11 @@ HistoryImageId ImageInfo::historyImageId() const
     id.setFileName(name());
     id.setPathOnDisk(filePath());
 
-    ItemScanInfo info = DatabaseAccess().db()->getItemScanInfo(m_data->id);
-    id.setUniqueHash(info.uniqueHash, info.fileSize);
+    if (DatabaseAccess().db()->isUniqueHashV2())
+    {
+        ItemScanInfo info = DatabaseAccess().db()->getItemScanInfo(m_data->id);
+        id.setUniqueHash(info.uniqueHash, info.fileSize);
+    }
 
     return id;
 }

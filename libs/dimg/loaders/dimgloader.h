@@ -71,6 +71,7 @@ public:
     virtual bool isReadOnly()    const = 0;
     virtual bool hasLoadedData() const;
 
+    static QByteArray uniqueHashV2(const QString& filePath, const DImg* img = 0);
     static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
     static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
 

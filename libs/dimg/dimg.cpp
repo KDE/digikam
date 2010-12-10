@@ -2545,6 +2545,34 @@ QByteArray DImg::getUniqueHash(const QString& filePath)
     return DImgLoader::uniqueHash(filePath, DImg(), true);
 }
 
+QByteArray DImg::getUniqueHashV2() const
+{
+    if (m_priv->attributes.contains("uniqueHashV2"))
+    {
+        return m_priv->attributes["uniqueHashV2"].toByteArray();
+    }
+
+    if (!m_priv->attributes.contains("originalFilePath"))
+    {
+        kWarning() << "DImg::getUniqueHash called without originalFilePath property set!";
+        return QByteArray();
+    }
+
+    QString filePath = m_priv->attributes.value("originalFilePath").toString();
+
+    if (filePath.isEmpty())
+    {
+        return QByteArray();
+    }
+
+    return DImgLoader::uniqueHashV2(filePath, this);
+}
+
+QByteArray DImg::getUniqueHashV2(const QString& filePath)
+{
+    return DImgLoader::uniqueHashV2(filePath);
+}
+
 QByteArray DImg::createImageUniqueId() const
 {
     NonDeterministicRandomData randomData(16);

@@ -141,6 +141,7 @@ public:
     void recordHints(const QList<AlbumCopyMoveHint>& hint);
     void recordHints(const QList<ItemCopyMoveHint>& hint);
     void recordHints(const QList<ItemChangeHint>& hint);
+    void setUpdateHashHint(bool hint = true);
 
     /**
      * Utility method:
@@ -175,6 +176,7 @@ protected:
     qlonglong scanNewFile(const QFileInfo& info, int albumId);
     qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
     void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    QString scanFileUpdateHash(const QFileInfo& info, const ItemScanInfo& scanInfo);
     void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
     void itemsWereRemoved(const QList<qlonglong> &removedIds);
     void completeHistoryScanning();

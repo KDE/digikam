@@ -65,6 +65,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "album.h"
+#include "schemaupdater.h"
 #include "splashscreen.h"
 
 namespace Digikam
@@ -95,6 +96,7 @@ public:
         running(false),
         needsInitialization(false),
         needsCompleteScan(false),
+        needsUpdateUniqueHash(false),
         idle(false),
         scanSuspended(0),
         continueInitialization(false),
@@ -114,6 +116,7 @@ public:
     bool                      running;
     bool                      needsInitialization;
     bool                      needsCompleteScan;
+    bool                      needsUpdateUniqueHash;
     bool                      idle;
 
     int                       scanSuspended;
@@ -421,6 +424,26 @@ void ScanController::completeCollectionScan(SplashScreen* splash)
     d->needTotalFiles = false;
 }
 
+void ScanController::updateUniqueHash()
+{
+    createProgressDialog();
+    // we only need to count the files in advance
+    //if we show a progress percentage in progress dialog
+    d->needTotalFiles = true;
+
+    {
+        QMutexLocker lock(&d->mutex);
+        d->needsUpdateUniqueHash = true;
+        d->condVar.wakeAll();
+    }
+    // loop is quit by signal
+    d->eventLoop->exec();
+
+    delete d->progressDialog;
+    d->progressDialog = 0;
+    d->needTotalFiles = false;
+}
+
 void ScanController::scheduleCollectionScan(const QString& path)
 {
     QMutexLocker lock(&d->mutex);
@@ -545,7 +568,7 @@ void ScanController::run()
 {
     while (d->running)
     {
-        bool doInit = false, doScan = false, doPartialScan = false;
+        bool doInit = false, doScan = false, doPartialScan = false, doUpdateUniqueHash = false;
         QString task;
         {
             QMutexLocker lock(&d->mutex);
@@ -559,6 +582,11 @@ void ScanController::run()
             {
                 d->needsCompleteScan = false;
                 doScan               = true;
+            }
+            else if (d->needsUpdateUniqueHash)
+            {
+                d->needsUpdateUniqueHash = false;
+                doUpdateUniqueHash       = true;
             }
             else if (!d->scanTasks.isEmpty() && !d->scanSuspended)
             {
@@ -610,6 +638,15 @@ void ScanController::run()
             SimpleCollectionScannerObserver observer(&d->continuePartialScan);
             scanner.setObserver(&observer);
             scanner.partialScan(task);
+        }
+        else if (doUpdateUniqueHash)
+        {
+            DatabaseAccess access;
+            SchemaUpdater updater(access.db(), access.backend(), access.parameters());
+            updater.setDatabaseAccess(&access);
+            updater.setObserver(this);
+            updater.updateUniqueHash();
+            emit completeScanDone();
         }
     }
 }

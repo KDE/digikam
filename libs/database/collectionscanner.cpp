@@ -61,6 +61,8 @@
 #include "imageinfo.h"
 #include "imagescanner.h"
 #include "tagscache.h"
+#include "thumbnaildatabaseaccess.h"
+#include "thumbnaildb.h"
 
 namespace Digikam
 {
@@ -96,6 +98,7 @@ public:
     CollectionScannerPriv() :
         wantSignals(false),
         needTotalFiles(false),
+        updatingHashHint(false),
         recordHistoryIds(false),
         observer(0)
     {
@@ -118,6 +121,7 @@ public:
     QHash<int,int>    establishedSourceAlbums;
     QSet<int>         modifiedItemHints;
     QSet<int>         rescanItemHints;
+    bool              updatingHashHint;
 
     bool              recordHistoryIds;
     QSet<qlonglong>   needResolveHistorySet;
@@ -208,6 +212,11 @@ void CollectionScanner::recordHints(const QList<ItemChangeHint>& hints)
             }
         }
     }
+}
+
+void CollectionScanner::setUpdateHashHint(bool hint)
+{
+    d->updatingHashHint = hint;
 }
 
 void CollectionScanner::loadNameFilters()
@@ -791,6 +800,22 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     }
 }
 
+static bool modificationDateEquals(const QDateTime& a, const QDateTime& b)
+{
+    if (a != b)
+    {
+        // allow a "modify window" of one second.
+        // FAT filesystems store the modify date in 2-second resolution.
+        int diff = a.secsTo(b);
+
+        if (abs(diff) > 1)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& scanInfo)
 {
     // if the date is null, this signals a full rescan
@@ -798,33 +823,35 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     {
         d->rescanItemHints.remove(scanInfo.id);
         rescanFile(fi, scanInfo);
+        return;
     }
     else if (d->modifiedItemHints.contains(scanInfo.id))
     {
         d->modifiedItemHints.remove(scanInfo.id);
         scanModifiedFile(fi, scanInfo);
+        return;
     }
-    else
+    else if (d->updatingHashHint)
     {
-        // compare modification date
-        QDateTime fiModifyDate = fi.lastModified();
-
-        if (fiModifyDate != scanInfo.modificationDate)
+        // if the file need not be scanned because of modification, update the hash
+        if (modificationDateEquals(fi.lastModified(), scanInfo.modificationDate)
+            && (int)fi.size() == scanInfo.fileSize)
         {
-            // allow a "modify window" of one second.
-            // FAT filesystems store the modify date in 2-second resolution.
-            int diff = fiModifyDate.secsTo(scanInfo.modificationDate);
-
-            if (abs(diff) > 1)
+            QString oldHash = scanInfo.uniqueHash;
+            QString newHash = scanFileUpdateHash(fi, scanInfo);
+            if (ThumbnailDatabaseAccess::isInitialized())
             {
-                // file has been modified
-                scanModifiedFile(fi, scanInfo);
+                ThumbnailDatabaseAccess().db()->replaceUniqueHash(oldHash, scanInfo.fileSize,
+                                                                  newHash, scanInfo.fileSize);
             }
+            return;
         }
-        else if ((int)fi.size() != scanInfo.fileSize)
-        {
-            scanModifiedFile(fi, scanInfo);
-        }
+    }
+
+    if (!modificationDateEquals(fi.lastModified(), scanInfo.modificationDate)
+        || (int)fi.size() != scanInfo.fileSize)
+    {
+        scanModifiedFile(fi, scanInfo);
     }
 }
 
@@ -892,6 +919,17 @@ void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanIn
     scanner.setCategory(category(info));
     scanner.fileModified();
     d->finishScanner(scanner);
+}
+
+QString CollectionScanner::scanFileUpdateHash(const QFileInfo& info, const ItemScanInfo& scanInfo)
+{
+    // same code as scanModifiedFile
+    DatabaseOperationGroup group;
+    ImageScanner scanner(info, scanInfo);
+    scanner.setCategory(category(info));
+    scanner.fileModified();
+    d->finishScanner(scanner);
+    return scanner.itemScanInfo().uniqueHash;
 }
 
 void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo)

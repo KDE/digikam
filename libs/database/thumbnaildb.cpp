@@ -243,4 +243,11 @@ DatabaseCoreBackend::QueryState ThumbnailDB::replaceThumbnail(const DatabaseThum
                           QList<QVariant>() << info.id << info.type << info.modificationDate << info.orientationHint << info.data);
 }
 
+void ThumbnailDB::replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize,
+                                    const QString& newUniqueHash, int newFileSize)
+{
+    d->db->execSql("UPDATE UniqueHashes SET uniqueHash=?, fileSize=? WHERE uniqueHash=? AND fileSize=?",
+                   newUniqueHash, newFileSize, oldUniqueHash, oldFileSize);
+}
+
 }  // namespace Digikam
