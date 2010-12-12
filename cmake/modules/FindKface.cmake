@@ -1,4 +1,8 @@
 # - Try to find the KFace library
+#
+# If you have put a local version of libkface into your source tree,
+# set KFACE_LOCAL_DIR to the relative path to the local directory.
+#
 # Once done this will define
 #
 #  KFACE_FOUND - system has libkface
@@ -12,34 +16,44 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-IF (KFACE_INCLUDE_DIR AND KFACE_LIBRARIES)
+IF (KFACE_INCLUDE_DIR AND KFACE_LIBRARIES AND KFACE_DEFINITIONS)
 
   MESSAGE(STATUS "Found Kface library in cache: ${KFACE_LIBRARIES}")
 
   # in cache already
   SET(KFACE_FOUND TRUE)
 
-ELSE (KFACE_INCLUDE_DIR AND KFACE_LIBRARIES)
+ELSE (KFACE_INCLUDE_DIR AND KFACE_LIBRARIES AND KFACE_DEFINITIONS)
 
   MESSAGE(STATUS "Check Kface library in local sub-folder...")
 
   # Check if library is not in local sub-folder
 
-  FIND_FILE(KFACE_LOCAL_FOUND libkface/version.h.cmake ${CMAKE_SOURCE_DIR}/libkface ${CMAKE_SOURCE_DIR}/libs/libkface NO_DEFAULT_PATH)
+  IF (KFACE_LOCAL_DIR)
+    SET(KFACE_LOCAL_FOUND TRUE)
+  ELSE (KFACE_LOCAL_DIR)
+    FIND_FILE(KFACE_LOCAL_FOUND libkface/version.h.cmake ${CMAKE_SOURCE_DIR}/libkface ${CMAKE_SOURCE_DIR}/libs/libkface NO_DEFAULT_PATH)
+
+    IF (KFACE_LOCAL_FOUND)
+      FIND_FILE(KFACE_LOCAL_FOUND_IN_LIBS libkface/version.h.cmake ${CMAKE_SOURCE_DIR}/libs/libkface NO_DEFAULT_PATH)
+      IF (KFACE_LOCAL_FOUND_IN_LIBS)
+        SET(KFACE_LOCAL_DIR libs/libkface)
+      ELSE (KFACE_LOCAL_FOUND_IN_LIBS)
+        SET(KFACE_LOCAL_DIR libkface)
+      ENDIF (KFACE_LOCAL_FOUND_IN_LIBS)
+    ENDIF (KFACE_LOCAL_FOUND)
+  ENDIF (KFACE_LOCAL_DIR)
 
   IF (KFACE_LOCAL_FOUND)
 
-    FIND_FILE(KFACE_LOCAL_FOUND_IN_LIBS libkface/version.h.cmake ${CMAKE_SOURCE_DIR}/libs/libkface NO_DEFAULT_PATH)
-    IF (KFACE_LOCAL_FOUND_IN_LIBS)
-      SET(KFACE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/libkface)
-    ELSE (KFACE_LOCAL_FOUND_IN_LIBS)
-      SET(KFACE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libkface)
-    ENDIF (KFACE_LOCAL_FOUND_IN_LIBS)
-    SET(KFACE_DEFINITIONS "-I${KFACE_INCLUDE_DIR}")
+    # we need two include directories: because the version.h file is put into the build directory
+    # TODO KFACE_INCLUDE_DIR sounds like it should contain only one directory...
+    SET(KFACE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/${KFACE_LOCAL_DIR} ${CMAKE_BUILD_DIR}/${KFACE_LOCAL_DIR})
+    SET(KFACE_DEFINITIONS "-I${CMAKE_SOURCE_DIR}/${KFACE_LOCAL_DIR}" "-I${CMAKE_BUILD_DIR}/${KFACE_LOCAL_DIR}")
     SET(KFACE_LIBRARIES kface)
-    MESSAGE(STATUS "Found Kface library in local sub-folder: ${KFACE_INCLUDE_DIR}")
+    MESSAGE(STATUS "Found Kface library in local sub-folder: ${CMAKE_SOURCE_DIR}/${KFACE_LOCAL_DIR}")
     SET(KFACE_FOUND TRUE)
-    MARK_AS_ADVANCED(KFACE_INCLUDE_DIR KFACE_LIBRARIES)
+    MARK_AS_ADVANCED(KFACE_INCLUDE_DIR KFACE_LIBRARIES KFACE_DEFINITIONS)
 
   ELSE(KFACE_LOCAL_FOUND)
     IF(NOT WIN32) 
@@ -101,8 +115,8 @@ ELSE (KFACE_INCLUDE_DIR AND KFACE_LIBRARIES)
           ENDIF (Kface_FIND_REQUIRED)
       ENDIF (KFACE_FOUND)
 
-    MARK_AS_ADVANCED(KFACE_INCLUDE_DIR KFACE_LIBRARIES)
+    MARK_AS_ADVANCED(KFACE_INCLUDE_DIR KFACE_LIBRARIES KFACE_DEFINITIONS)
 
   ENDIF(KFACE_LOCAL_FOUND)
 
-ENDIF (KFACE_INCLUDE_DIR AND KFACE_LIBRARIES)
+ENDIF (KFACE_INCLUDE_DIR AND KFACE_LIBRARIES AND KFACE_DEFINITIONS)
