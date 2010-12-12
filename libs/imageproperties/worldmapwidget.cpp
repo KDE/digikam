@@ -211,6 +211,10 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget* parent)
 
 WorldMapWidget::~WorldMapWidget()
 {
+#ifdef HAVE_MARBLEWIDGET
+    delete d->thumbnailLoadThread;
+#endif
+
     delete d;
 }
 

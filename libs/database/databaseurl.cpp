@@ -105,7 +105,7 @@ DatabaseUrl DatabaseUrl::fromTagIds(const QList<int>& tagIds,
 
     for (QList<int>::const_iterator it = tagIds.constBegin(); it != tagIds.constEnd(); ++it)
     {
-        url.addPath('/' + QString::number(*it));
+        url.addPath(QChar('/') + QString::number(*it));
     }
 
     url.setParameters(parameters);
