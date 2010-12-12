@@ -345,8 +345,8 @@ void AdvancedRenameWidget::setupWidgets()
     QString modifiersStr     = i18n("Modifiers");
     QPixmap modifiersIcon    = SmallIcon("document-edit");
     QString modifiersTooltip = i18n("<p>Add a modifier to a renaming option. "
-            "To activate this button, place the cursor behind a renaming option "
-            "or an already assigned modifier.</p>");
+                                    "To activate this button, place the cursor behind a renaming option "
+                                    "or an already assigned modifier.</p>");
 
     // --------------------------------------------------------
 
@@ -469,8 +469,8 @@ void AdvancedRenameWidget::writeSettings()
     if (d->layoutStyle == LayoutNormal)
     {
         group.writeEntry(d->configExpandedStateEntry, d->optionsLabel
-                        ? d->optionsLabel->isExpanded()
-                        : d->configExpandedStateDefault);
+                         ? d->optionsLabel->isExpanded()
+                         : d->configExpandedStateDefault);
     }
 }
 
