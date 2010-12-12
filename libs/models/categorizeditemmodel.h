@@ -83,19 +83,27 @@ public:
 
     ActionItemModel(QObject* parent = 0);
 
-    QStandardItem *addAction(QAction *action, const QString& category);
+    QStandardItem *addAction(QAction *action, const QString& category, const QVariant& categorySorting = QVariant());
 
-    enum MenuCategoryMode
+    enum MenuCategoryFlag
     {
         /// The toplevel menu's text is used as category
-        ToplevelMenuCategory,
+        ToplevelMenuCategory = 1 << 0,
         /// If the action is in a submenu, this menu's text is taken as category
-        ParentMenuCategory
-    };
+        ParentMenuCategory   = 1 << 1,
 
-    void addActions(QWidget* widget, MenuCategoryMode mode = ToplevelMenuCategory);
-    void addActions(QWidget* widget, const QList<QAction*>& actionWhiteList,
-                    MenuCategoryMode mode = ToplevelMenuCategory);
+        /// Sort categories alphabetically by category name
+        SortCategoriesAlphabetically   = 1 << 10,
+        /// Sort categories by the order they are added (found in the scanned menu)
+        SortCategoriesByInsertionOrder = 1 << 11
+    };
+    Q_DECLARE_FLAGS(MenuCategoryMode, MenuCategoryFlag)
+
+    void setMode(MenuCategoryMode mode);
+    MenuCategoryMode mode() const;
+
+    void addActions(QWidget* widget);
+    void addActions(QWidget* widget, const QList<QAction*>& actionWhiteList);
 
     /**
      * Returns the action for the given index.
@@ -127,9 +135,13 @@ protected Q_SLOTS:
 protected:
 
     void setPropertiesFromAction(QStandardItem *item, QAction* action);
+
+    MenuCategoryMode m_mode;
 };
 
 } // namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ActionItemModel::MenuCategoryMode)
 
 #endif // CATEGORIZEDITEMMODEL_H
 

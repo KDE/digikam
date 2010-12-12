@@ -111,10 +111,11 @@ public:
 
     void addTo(ActionItemModel *model, ActionItemModel::MenuCategoryMode mode)
     {
+        int categorySortStartIndex = model->rowCount();
         foreach (QAction* a, actions)
         {
             QAction *categoryAction;
-            if (mode == ActionItemModel::ToplevelMenuCategory)
+            if (mode & ActionItemModel::ToplevelMenuCategory)
             {
                 for (QAction* p = a; p; p = parents.value(p))
                     categoryAction = p;
@@ -127,7 +128,12 @@ public:
             if (!categoryAction)
                 continue;
 
-            model->addAction(a, adjustedActionText(categoryAction));
+            QVariant categorySortValue;
+            if (mode & ActionItemModel::SortCategoriesByInsertionOrder)
+            {
+                categorySortValue = categorySortStartIndex++;
+            }
+            model->addAction(a, adjustedActionText(categoryAction), categorySortValue);
         }
     }
 
@@ -136,6 +142,7 @@ protected:
     const QList<QAction*>&   whitelist;
     QList<QAction*>          actions;
     QMap<QAction*, QAction*> parents;
+    QList<QAction*>          parentsInOrder;
 
     void enumerateActions(const QWidget* w, QAction* widgetAction)
     {
@@ -150,18 +157,33 @@ protected:
                 actions << a;
             }
             parents[a] = widgetAction;
+            if (!parentsInOrder.contains(widgetAction))
+            {
+                parentsInOrder << widgetAction;
+            }
         }
     }
 };
 
 ActionItemModel::ActionItemModel(QObject* parent)
-    : CategorizedItemModel(parent)
+    : CategorizedItemModel(parent),
+      m_mode(ToplevelMenuCategory | SortCategoriesAlphabetically)
 {
 }
 
-QStandardItem *ActionItemModel::addAction(QAction *action, const QString& category)
+void ActionItemModel::setMode(MenuCategoryMode mode)
 {
-    QStandardItem *item = addItem(QString(), category);
+    m_mode = mode;
+}
+
+ActionItemModel::MenuCategoryMode ActionItemModel::mode() const
+{
+    return m_mode;
+}
+
+QStandardItem *ActionItemModel::addAction(QAction *action, const QString& category, const QVariant& categorySorting)
+{
+    QStandardItem *item = addItem(QString(), category, categorySorting);
     item->setEditable(false);
     setPropertiesFromAction(item, action);
     connect(action, SIGNAL(changed()),
@@ -181,16 +203,16 @@ void ActionItemModel::setPropertiesFromAction(QStandardItem *item, QAction* acti
     item->setData(QVariant::fromValue(static_cast<QObject*>(action)), ItemActionRole);
 }
 
-void ActionItemModel::addActions(QWidget *w, MenuCategoryMode mode)
+void ActionItemModel::addActions(QWidget *w)
 {
-    addActions(w, QList<QAction*>(), mode);
+    addActions(w, QList<QAction*>());
 }
 
-void ActionItemModel::addActions(QWidget *w, const QList<QAction*>& actionWhiteList, MenuCategoryMode mode)
+void ActionItemModel::addActions(QWidget *w, const QList<QAction*>& actionWhiteList)
 {
     ActionEnumerator enumerator(actionWhiteList);
     enumerator.enumerate(w);
-    enumerator.addTo(this, mode);
+    enumerator.addTo(this, m_mode);
 }
 
 QAction *ActionItemModel::actionForIndex(const QModelIndex& index)

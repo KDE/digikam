@@ -558,7 +558,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
-    d->cropAction = new KAction(KIcon("transform-crop-and-resize"), i18n("Crop"), this);
+    d->cropAction = new KAction(KIcon("transform-crop-and-resize"), i18nc("@action", "Crop to Selection"), this);
     d->cropAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_X));
     connect(d->cropAction, SIGNAL(triggered()), m_canvas, SLOT(slotCrop()));
     actionCollection()->addAction("editorwindow_crop", d->cropAction);
@@ -3038,9 +3038,22 @@ KCategorizedView* EditorWindow::createToolSelectionView()
     if (d->selectToolsActionView)
         return d->selectToolsActionView;
 
+    // Create action model
     ActionItemModel *actionModel = new ActionItemModel(this);
+    actionModel->setMode(ActionItemModel::ToplevelMenuCategory | ActionItemModel::SortCategoriesByInsertionOrder);
+    QString basicTransformCategory = i18nc("@title Image transformations", "Basic Transformations");
+
+    // builtin actions
+    actionModel->addAction(d->rotateLeftAction, basicTransformCategory);
+    actionModel->addAction(d->rotateRightAction, basicTransformCategory);
+    actionModel->addAction(d->flipHorizAction, basicTransformCategory);
+    actionModel->addAction(d->flipVertAction, basicTransformCategory);
+    actionModel->addAction(d->cropAction, basicTransformCategory);
+
+    // parse menus for image plugin actions
     actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());
 
+    // setup categorized view
     KCategorizedSortFilterProxyModel* filterModel = actionModel->createFilterModel();
 
     d->selectToolsActionView = new ActionCategorizedView;
