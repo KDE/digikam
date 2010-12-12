@@ -193,18 +193,24 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
     d->tooltipToggleButton->setVisible(enable && (mask & ToolTipButton));
 
     // layout specific
-    d->optionsLabel->setVisible(enable && (mask & TokenButtons) && (d->layoutStyle == LayoutNormal));
-    d->optionsButton->setVisible(enableModBtn && (mask & TokenButtons) && (d->layoutStyle == LayoutCompact));
-    d->modifiersButton->setVisible(enableModBtn && (mask & ModifierToolButton) && (d->layoutStyle == LayoutCompact));
-    d->modifiersToolButton->setVisible(enableModBtn && (mask & ModifierToolButton) && (d->layoutStyle == LayoutNormal));
+    if (d->layoutStyle == LayoutNormal)
+    {
+        d->optionsLabel->setVisible(enable && (mask & TokenButtons) && (d->layoutStyle == LayoutNormal));
+        d->modifiersToolButton->setVisible(enableModBtn && (mask & ModifierToolButton) && (d->layoutStyle == LayoutNormal));
+    }
+    else
+    {
+        d->optionsButton->setVisible(enableModBtn && (mask & TokenButtons) && (d->layoutStyle == LayoutCompact));
+        d->modifiersButton->setVisible(enableModBtn && (mask & ModifierToolButton) && (d->layoutStyle == LayoutCompact));
+    }
 
     d->controlWidgetsMask = mask;
 }
 
 template<class T>
-QMenu* AdvancedRenameWidget::createControlsMenu(QList<T*>& list)
+QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, QList<T*>& list)
 {
-    QMenu* menu     = new QMenu();
+    QMenu* menu     = new QMenu(parent);
     QAction* action = 0;
 
     foreach (T* ctrl, list)
@@ -232,49 +238,44 @@ void AdvancedRenameWidget::registerParserControls()
         QList<Option*> optionsList     = d->parser->options();
         QList<Modifier*> modifiersList = d->parser->modifiers();
 
-        switch (d->layoutStyle)
+        if (d->layoutStyle == LayoutNormal)
         {
-            case LayoutCompact:
+            // register options
+            QPushButton* btn      = 0;
+            DynamicLayout* layout = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
+            foreach (Option* option, d->parser->options())
             {
-                // register options
-                QMenu* optionsMenu   = createControlsMenu(optionsList);
-                d->optionsButton->setMenu(optionsMenu);
+                btn = option->registerButton(this);
 
-                // register modifiers
-                QMenu* modifiersMenu = createControlsMenu(modifiersList);
-                d->modifiersButton->setMenu(modifiersMenu);
-                break;
-            }
-            default:
-            {
-                // register options
-                QPushButton* btn      = 0;
-                DynamicLayout* layout = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
-                foreach (Option* option, d->parser->options())
+                if (!btn)
                 {
-                    btn = option->registerButton(this);
-
-                    if (!btn)
-                    {
-                        continue;
-                    }
-
-                    // set button tooltip
-                    btn->setToolTip(option->description());
-
-                    layout->addWidget(btn);
-
-                    connect(option, SIGNAL(signalTokenTriggered(const QString&)),
-                            d->renameInput, SLOT(slotAddToken(const QString&)));
+                    continue;
                 }
-                d->btnContainer->setLayout(layout);
-                setMinimumWidth(d->btnContainer->layout()->sizeHint().width());
 
-                // register modifiers
-                QMenu* modifiersMenu = createControlsMenu(modifiersList);
-                d->modifiersToolButton->setMenu(modifiersMenu);
-                break;
+                // set button tooltip
+                btn->setToolTip(option->description());
+
+                layout->addWidget(btn);
+
+                connect(option, SIGNAL(signalTokenTriggered(const QString&)),
+                        d->renameInput, SLOT(slotAddToken(const QString&)));
             }
+            d->btnContainer->setLayout(layout);
+            setMinimumWidth(d->btnContainer->layout()->sizeHint().width());
+
+            // register modifiers
+            QMenu* modifiersMenu = createControlsMenu(d->modifiersToolButton, modifiersList);
+            d->modifiersToolButton->setMenu(modifiersMenu);
+        }
+        else    // LayoutCompact
+        {
+            // register options
+            QMenu* optionsMenu   = createControlsMenu(d->optionsButton, optionsList);
+            d->optionsButton->setMenu(optionsMenu);
+
+            // register modifiers
+            QMenu* modifiersMenu = createControlsMenu(d->modifiersButton, modifiersList);
+            d->modifiersButton->setMenu(modifiersMenu);
         }
 
         // --------------------------------------------------------
@@ -316,82 +317,82 @@ void AdvancedRenameWidget::setupWidgets()
      * duplicate signal/slot connections.
      */
     delete d->tooltipDialog;
+    delete d->renameInput;
+    delete d->tooltipToggleButton;
+    delete d->optionsButton;
+    delete d->modifiersButton;
+    delete d->btnContainer;
+    delete d->optionsLabel;
+    delete d->modifiersToolButton;
+
+    // --------------------------------------------------------
+
     d->tooltipDialog = new TooltipDialog(this);
     d->tooltipDialog->resize(650, 530);
 
-    delete d->renameInput;
     d->renameInput = new AdvancedRenameInput;
     d->renameInput->setToolTip(i18n("<p>Enter your renaming pattern here. Use the access buttons to quickly add renaming "
                                     "options and modifiers. For further explanations, use the information toolbutton.</p>"));
 
     // --------------------------------------------------------
 
-    delete d->tooltipToggleButton;
     d->tooltipToggleButton = new QToolButton;
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
     // --------------------------------------------------------
 
-    delete d->btnContainer;
-    d->btnContainer = new QWidget(this);
-
-    delete d->optionsLabel;
-    d->optionsLabel = new RLabelExpander(this);
-    d->optionsLabel->setText(i18n("Renaming Options"));
-    d->optionsLabel->setWidget(d->btnContainer);
-    d->optionsLabel->setLineVisible(false);
-
-    // --------------------------------------------------------
-
-    delete d->optionsButton;
-    d->optionsButton = new QPushButton;
-    d->optionsButton->setText(i18n("Options"));
-    d->optionsButton->setIcon(SmallIcon("configure"));
-    d->optionsButton->setToolTip(i18n("<p>Add renaming options to the parse string.</p>"));
-
-    // --------------------------------------------------------
-
     QString modifiersStr     = i18n("Modifiers");
-    QString modifiersTooltip = i18n("<p>Add a modifier to a renaming option. "
-                                    "To activate this button, place the cursor behind a renaming option "
-                                    "or an already assigned modifier.</p>");
     QPixmap modifiersIcon    = SmallIcon("document-edit");
-
-    delete d->modifiersButton;
-    d->modifiersButton = new QPushButton;
-    d->modifiersButton->setText(modifiersStr);
-    d->modifiersButton->setIcon(modifiersIcon);
-    d->modifiersButton->setToolTip(modifiersTooltip);
-
-    delete d->modifiersToolButton;
-    d->modifiersToolButton = new QToolButton;
-    d->modifiersToolButton->setPopupMode(QToolButton::InstantPopup);
-    d->modifiersToolButton->setText(modifiersStr);
-    d->modifiersToolButton->setIcon(modifiersIcon);
-    d->modifiersToolButton->setToolTip(modifiersTooltip);
+    QString modifiersTooltip = i18n("<p>Add a modifier to a renaming option. "
+            "To activate this button, place the cursor behind a renaming option "
+            "or an already assigned modifier.</p>");
 
     // --------------------------------------------------------
 
     delete layout();
     QGridLayout* mainLayout = new QGridLayout;
 
-    switch (d->layoutStyle)
+    if (d->layoutStyle == LayoutNormal)
     {
-        case LayoutCompact:
-            mainLayout->addWidget(d->renameInput,           0, 0, 1,-1);
-            mainLayout->addWidget(d->optionsButton,         1, 0, 1, 1);
-            mainLayout->addWidget(d->modifiersButton,       1, 1, 1, 1);
-            mainLayout->addWidget(d->tooltipToggleButton,   1, 3, 1, 1);
-            mainLayout->setColumnStretch(2, 10);
-            break;
-        default:
-            mainLayout->addWidget(d->renameInput,           0, 0, 1, 1);
-            mainLayout->addWidget(d->modifiersToolButton,   0, 1, 1, 1);
-            mainLayout->addWidget(d->tooltipToggleButton,   0, 2, 1, 1);
-            mainLayout->addWidget(d->optionsLabel,          1, 0, 1,-1);
-            mainLayout->setColumnStretch(0, 10);
-            break;
+        d->btnContainer = new QWidget(this);
+
+        d->optionsLabel = new RLabelExpander(this);
+        d->optionsLabel->setText(i18n("Renaming Options"));
+        d->optionsLabel->setWidget(d->btnContainer);
+        d->optionsLabel->setLineVisible(false);
+
+        d->modifiersToolButton = new QToolButton;
+        d->modifiersToolButton->setPopupMode(QToolButton::InstantPopup);
+        d->modifiersToolButton->setText(modifiersStr);
+        d->modifiersToolButton->setIcon(modifiersIcon);
+        d->modifiersToolButton->setToolTip(modifiersTooltip);
+
+        mainLayout->addWidget(d->renameInput,           0, 0, 1, 1);
+        mainLayout->addWidget(d->modifiersToolButton,   0, 1, 1, 1);
+        mainLayout->addWidget(d->tooltipToggleButton,   0, 2, 1, 1);
+        mainLayout->addWidget(d->optionsLabel,          1, 0, 1,-1);
+        mainLayout->setColumnStretch(0, 10);
+    }
+    else
+    {
+        d->optionsButton = new QPushButton;
+        d->optionsButton->setText(i18n("Options"));
+        d->optionsButton->setIcon(SmallIcon("configure"));
+        d->optionsButton->setToolTip(i18n("<p>Add renaming options to the parse string.</p>"));
+
+        // --------------------------------------------------------
+
+        d->modifiersButton = new QPushButton;
+        d->modifiersButton->setText(modifiersStr);
+        d->modifiersButton->setIcon(modifiersIcon);
+        d->modifiersButton->setToolTip(modifiersTooltip);
+
+        mainLayout->addWidget(d->renameInput,           0, 0, 1,-1);
+        mainLayout->addWidget(d->optionsButton,         1, 0, 1, 1);
+        mainLayout->addWidget(d->modifiersButton,       1, 1, 1, 1);
+        mainLayout->addWidget(d->tooltipToggleButton,   1, 3, 1, 1);
+        mainLayout->setColumnStretch(2, 10);
     }
 
     mainLayout->setMargin(0);
@@ -420,8 +421,15 @@ void AdvancedRenameWidget::slotTokenMarked(bool marked)
 {
     bool enable    = marked && d->parser;
     bool enableMod = enable && !(d->parser->modifiers().isEmpty());
-    d->modifiersButton->setEnabled(enableMod);
-    d->modifiersToolButton->setEnabled(enableMod);
+
+    if (d->layoutStyle == LayoutNormal)
+    {
+        d->modifiersToolButton->setEnabled(enableMod);
+    }
+    else
+    {
+        d->modifiersButton->setEnabled(enableMod);
+    }
 }
 
 void AdvancedRenameWidget::focusLineEdit()
@@ -443,7 +451,11 @@ void AdvancedRenameWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->optionsLabel->setExpanded(group.readEntry(d->configExpandedStateEntry, d->configExpandedStateDefault));
+
+    if (d->layoutStyle == LayoutNormal)
+    {
+        d->optionsLabel->setExpanded(group.readEntry(d->configExpandedStateEntry, d->configExpandedStateDefault));
+    }
 }
 
 void AdvancedRenameWidget::writeSettings()
@@ -453,9 +465,13 @@ void AdvancedRenameWidget::writeSettings()
 
     // remove duplicate entries and save pattern history, omit empty strings
     QString pattern = d->renameInput->text();
-    group.writeEntry(d->configExpandedStateEntry, d->optionsLabel
-                     ? d->optionsLabel->isExpanded()
-                     : d->configExpandedStateDefault);
+
+    if (d->layoutStyle == LayoutNormal)
+    {
+        group.writeEntry(d->configExpandedStateEntry, d->optionsLabel
+                        ? d->optionsLabel->isExpanded()
+                        : d->configExpandedStateDefault);
+    }
 }
 
 }  // namespace Digikam
