@@ -113,6 +113,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void thumbnailAvailable(const QModelIndex& index, int requestedSize);
+    void thumbnailFailed(const QModelIndex& index, int requestedSize);
 
 protected:
 

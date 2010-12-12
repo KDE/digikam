@@ -330,13 +330,20 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
     }
 
     // In case of multiple occurrence, we currently dont know which thumbnail is this. Signal change on all.
-    foreach (const QModelIndex& changed, indexesForPath(loadingDescription.filePath))
+    foreach (const QModelIndex& index, indexesForPath(loadingDescription.filePath))
     {
-        emit thumbnailAvailable(changed, loadingDescription.previewParameters.size);
-
-        if (d->emitDataChanged)
+        if (thumb.isNull())
         {
-            emit dataChanged(changed, changed);
+            emit thumbnailFailed(index, loadingDescription.previewParameters.size);
+        }
+        else
+        {
+            emit thumbnailAvailable(index, loadingDescription.previewParameters.size);
+
+            if (d->emitDataChanged)
+            {
+                emit dataChanged(index, index);
+            }
         }
     }
 }
