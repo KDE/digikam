@@ -32,6 +32,7 @@
 // Local includes
 
 #include "imagedelegateoverlay.h"
+#include "itemviewimagedelegate.h"
 
 namespace Digikam
 {
@@ -44,6 +45,7 @@ class TaggingAction;
 class AssignNameOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
+    REQUIRE_DELEGATE(ItemViewImageDelegate)
 
 public:
 
