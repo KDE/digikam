@@ -270,7 +270,7 @@ void AdvancedRenameWidget::registerParserControls()
         else    // LayoutCompact
         {
             // register options
-            QMenu* optionsMenu   = createControlsMenu(d->optionsButton, optionsList);
+            QMenu* optionsMenu = createControlsMenu(d->optionsButton, optionsList);
             d->optionsButton->setMenu(optionsMenu);
 
             // register modifiers
