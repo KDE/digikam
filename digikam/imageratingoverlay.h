@@ -33,6 +33,7 @@
 // Local includes
 
 #include "imagedelegateoverlay.h"
+#include "itemviewimagedelegate.h"
 
 namespace Digikam
 {
@@ -42,6 +43,7 @@ class RatingWidget;
 class ImageRatingOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
+    REQUIRE_DELEGATE(ItemViewImageDelegate)
 
 public:
 

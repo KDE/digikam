@@ -40,6 +40,7 @@
 namespace Digikam
 {
 
+
 ImageDelegateOverlay::ImageDelegateOverlay(QObject* parent)
     : QObject(parent), m_view(0), m_delegate(0)
 {
@@ -47,10 +48,6 @@ ImageDelegateOverlay::ImageDelegateOverlay(QObject* parent)
 
 ImageDelegateOverlay::~ImageDelegateOverlay()
 {
-    if (m_delegate)
-    {
-        m_delegate->removeOverlay(this);
-    }
 }
 
 void ImageDelegateOverlay::setActive(bool)
@@ -91,7 +88,7 @@ QAbstractItemView* ImageDelegateOverlay::view() const
     return m_view;
 }
 
-void ImageDelegateOverlay::setDelegate(ItemViewImageDelegate* delegate)
+void ImageDelegateOverlay::setDelegate(QAbstractItemDelegate* delegate)
 {
     if (m_delegate)
     {
@@ -108,7 +105,7 @@ void ImageDelegateOverlay::setDelegate(ItemViewImageDelegate* delegate)
     }
 }
 
-ItemViewImageDelegate* ImageDelegateOverlay::delegate() const
+QAbstractItemDelegate* ImageDelegateOverlay::delegate() const
 {
     return m_delegate;
 }
@@ -343,5 +340,87 @@ void HoverButtonDelegateOverlay::slotEntered(const QModelIndex& index)
         button()->setIndex(index);
     }
 }
+
+// -----------------------------
+
+ImageDelegateOverlayContainer::~ImageDelegateOverlayContainer()
+{
+}
+
+void ImageDelegateOverlayContainer::installOverlay(ImageDelegateOverlay* overlay)
+{
+    if (!overlay->acceptsDelegate(asDelegate()))
+    {
+        kError() << "Cannot accept delegate" << asDelegate() << "for installing" << overlay;
+        return;
+    }
+
+    overlay->setDelegate(asDelegate());
+    m_overlays << overlay;
+    // let the view call setActive
+
+    QObject::connect(overlay, SIGNAL(destroyed(QObject*)),
+                     asDelegate(), SLOT(overlayDestroyed(QObject*)));
+}
+
+void ImageDelegateOverlayContainer::removeOverlay(ImageDelegateOverlay* overlay)
+{
+    overlay->setActive(false);
+    overlay->setDelegate(0);
+    m_overlays.removeAll(overlay);
+}
+
+void ImageDelegateOverlayContainer::setAllOverlaysActive(bool active)
+{
+    foreach (ImageDelegateOverlay* overlay, m_overlays)
+    {
+        overlay->setActive(active);
+    }
+}
+
+void ImageDelegateOverlayContainer::setViewOnAllOverlays(QAbstractItemView* view)
+{
+    foreach (ImageDelegateOverlay* overlay, m_overlays)
+    {
+        overlay->setView(view);
+    }
+}
+
+void ImageDelegateOverlayContainer::removeAllOverlays()
+{
+    foreach (ImageDelegateOverlay* overlay, m_overlays)
+    {
+        overlay->setActive(false);
+        overlay->setDelegate(0);
+        overlay->setView(0);
+    }
+    m_overlays.clear();
+}
+
+void ImageDelegateOverlayContainer::overlayDestroyed(QObject* o)
+{
+    ImageDelegateOverlay* overlay = qobject_cast<ImageDelegateOverlay*>(o);
+    if (overlay)
+    {
+        removeOverlay(overlay);
+    }
+}
+
+void ImageDelegateOverlayContainer::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
+{
+    foreach (ImageDelegateOverlay* overlay, m_overlays)
+    {
+        overlay->mouseMoved(e, visualRect, index);
+    }
+}
+
+void ImageDelegateOverlayContainer::drawDelegates(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    foreach (ImageDelegateOverlay* overlay, m_overlays)
+    {
+        overlay->paint(p, option, index);
+    }
+}
+
 
 } // namespace Digikam

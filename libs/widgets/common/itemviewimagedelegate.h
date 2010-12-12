@@ -29,6 +29,7 @@
 // Local includes
 
 #include "ditemdelegate.h"
+#include "imagedelegateoverlay.h"
 #include "thumbnailsize.h"
 #include "digikam_export.h"
 
@@ -37,12 +38,11 @@ namespace Digikam
 
 class ImageCategoryDrawer;
 class ImageCategorizedView;
-class ImageDelegateOverlay;
 class ImageFilterModel;
 class ImageModel;
 class ItemViewImageDelegatePrivate;
 
-class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate
+class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate, public ImageDelegateOverlayContainer
 {
     Q_OBJECT
 
@@ -87,20 +87,18 @@ public:
      *  or a null rectangle if not supported. */
     virtual QRect ratingRect() const;
 
-    /** Support for overlays. To be called by the item view only. */
-    void installOverlay(ImageDelegateOverlay* overlay);
-    void removeOverlay(ImageDelegateOverlay* overlay);
-    void setAllOverlaysActive(bool active);
-    void setViewOnAllOverlays(QAbstractItemView* view);
-    void removeAllOverlays();
-    void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
+    virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
 
 protected Q_SLOTS:
 
     void slotThemeChanged();
     void slotSetupChanged();
 
+    virtual void overlayDestroyed(QObject* o);
+
 protected:
+
+    virtual QAbstractItemDelegate* asDelegate();
 
     /// Use the tool methods for painting in subclasses
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
@@ -114,7 +112,6 @@ protected:
     void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const;
     void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const;
     void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const;
-    void drawDelegates(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void prepareFonts();
     void prepareMetrics(int maxWidth);
     void prepareBackground();

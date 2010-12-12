@@ -152,52 +152,6 @@ int ItemViewImageDelegate::spacing() const
     return d->spacing;
 }
 
-void ItemViewImageDelegate::installOverlay(ImageDelegateOverlay* overlay)
-{
-    Q_D(ItemViewImageDelegate);
-    overlay->setDelegate(this);
-    d->overlays << overlay;
-    // let the view call setActive
-}
-
-void ItemViewImageDelegate::removeOverlay(ImageDelegateOverlay* overlay)
-{
-    Q_D(ItemViewImageDelegate);
-    overlay->setActive(false);
-    overlay->setDelegate(0);
-    d->overlays.removeAll(overlay);
-}
-
-void ItemViewImageDelegate::setAllOverlaysActive(bool active)
-{
-    Q_D(ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay* overlay, d->overlays)
-    {
-        overlay->setActive(active);
-    }
-}
-
-void ItemViewImageDelegate::setViewOnAllOverlays(QAbstractItemView* view)
-{
-    Q_D(ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay* overlay, d->overlays)
-    {
-        overlay->setView(view);
-    }
-}
-
-void ItemViewImageDelegate::removeAllOverlays()
-{
-    Q_D(ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay* overlay, d->overlays)
-    {
-        overlay->setActive(false);
-        overlay->setDelegate(0);
-        overlay->setView(0);
-    }
-    d->overlays.clear();
-}
-
 QRect ItemViewImageDelegate::rect() const
 {
     Q_D(const ItemViewImageDelegate);
@@ -224,15 +178,6 @@ void ItemViewImageDelegate::setRatingEdited(const QModelIndex& index)
 {
     Q_D(ItemViewImageDelegate);
     d->editingRating = index;
-}
-
-void ItemViewImageDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
-{
-    Q_D(ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay* overlay, d->overlays)
-    {
-        overlay->mouseMoved(e, visualRect, index);
-    }
 }
 
 QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
@@ -265,6 +210,22 @@ bool ItemViewImageDelegate::acceptsActivation(const QPoint& , const QRect& visua
     }
 
     return true;
+}
+
+QAbstractItemDelegate* ItemViewImageDelegate::asDelegate()
+{
+    return this;
+}
+
+void ItemViewImageDelegate::overlayDestroyed(QObject* o)
+{
+    ImageDelegateOverlayContainer::overlayDestroyed(o);
+}
+
+void ItemViewImageDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
+{
+    // 3-way indirection DItemDelegate -> ItemViewImageDelegate -> ImageDelegateOverlayContainer
+    ImageDelegateOverlayContainer::mouseMoved(e, visualRect, index);
 }
 
 void ItemViewImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
@@ -437,15 +398,6 @@ void ItemViewImageDelegate::drawMouseOverRect(QPainter* p, const QStyleOptionVie
     {
         p->setPen(QPen(option.palette.color(QPalette::Highlight), 3, Qt::SolidLine));
         p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);
-    }
-}
-
-void ItemViewImageDelegate::drawDelegates(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-    Q_D(const ItemViewImageDelegate);
-    foreach (ImageDelegateOverlay* overlay, d->overlays)
-    {
-        overlay->paint(p, option, index);
     }
 }
 

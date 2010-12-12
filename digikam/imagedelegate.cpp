@@ -195,19 +195,24 @@ void ImageDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel, const QLi
     thumbModel->prepareThumbnails(indexes, thumbnailSize());
 }
 
-QPixmap ImageDelegate::thumbnailPixmap(const QModelIndex& index) const
+QPixmap ImageDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
-    Q_D(const ImageDelegate);
     // work around constness
     QAbstractItemModel* model = const_cast<QAbstractItemModel*>(index.model());
     // set requested thumbnail size
-    model->setData(index, d->thumbSize.size(), ImageModel::ThumbnailRole);
+    model->setData(index, thumbnailSize, ImageModel::ThumbnailRole);
     // get data from model
     QVariant thumbData = index.data(ImageModel::ThumbnailRole);
     // reset to default thumbnail size
     model->setData(index, QVariant(), ImageModel::ThumbnailRole);
 
     return thumbData.value<QPixmap>();
+}
+
+QPixmap ImageDelegate::thumbnailPixmap(const QModelIndex& index) const
+{
+    Q_D(const ImageDelegate);
+    return retrieveThumbnailPixmap(index, d->thumbSize.size());
 }
 
 void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const

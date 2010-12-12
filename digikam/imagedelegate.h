@@ -72,6 +72,12 @@ public:
      *  so that thumbnails become available in order. */
     virtual void prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
 
+    /**
+     * Retrieve the thumbnail pixmap in given size for the ImageModel::ThumbnailRole for
+     * the given index from the given index, which must adhere to ImageThumbnailModel semantics.
+     */
+    static QPixmap retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize);
+
 public:
 
     // Declared as public because of use in DigikamImageDelegate class.
