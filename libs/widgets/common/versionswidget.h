@@ -37,10 +37,13 @@
 
 #include "digikam_export.h"
 
+class KConfigGroup;
+
 namespace Digikam
 {
 
 class ImageVersionsModel;
+class ImageInfo;
 class ImageInfoList;
 
 class VersionsWidget : public QWidget
@@ -51,17 +54,22 @@ public:
 
     VersionsWidget(QWidget* parent = 0);
     ~VersionsWidget();
-    void setupModelData(QList< QPair< QString, int > >& list) const;
-    void setCurrentSelectedImage(const QString& path) const;
+
+    void readSettings(const KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
 
 public Q_SLOTS:
 
-    void slotDigikamViewNoCurrentItem();
-    void slotViewItemSelected(QModelIndex index);
+    void setCurrentItem(const ImageInfo& info);
 
 Q_SIGNALS:
 
-    void newVersionSelected(KUrl url);
+    void imageSelected(const ImageInfo& info);
+
+protected Q_SLOTS:
+
+    void slotViewItemSelected(const QModelIndex& index);
+    void slotViewModeChanged(int mode);
 
 private:
 

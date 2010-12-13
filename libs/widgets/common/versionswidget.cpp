@@ -25,13 +25,17 @@
 
 // Qt includes
 
-#include <QListView>
+#include <QButtonGroup>
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QLabel>
+#include <QPaintEvent>
 #include <QToolButton>
+#include <QTreeView>
 
 // KDE includes
 
+#include <KConfigGroup>
 #include <KLocale>
 #include <KIconLoader>
 #include <KUrl>
@@ -39,11 +43,13 @@
 
 // Local includes
 
-#include "imageversionsmodel.h"
+#include "imagehistorygraphmodel.h"
 #include "imagepropertiesversionsdelegate.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
+#include "imagelistmodel.h"
 #include "dimagehistory.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -53,75 +59,107 @@ class VersionsWidget::VersionsWidgetPriv
 public:
 
     VersionsWidgetPriv()
+        : view(0),
+          model(0),
+          delegate(0),
+          viewButtonGroup(0),
+          listModeButton(0),
+          treeModeButton(0),
+          combinedModeButton(0)
     {
-        view     = 0;
-        model    = 0;
-        layout   = 0;
-        delegate = 0;
     }
 
-    QListView*                       view;
-    ImageVersionsModel*              model;
-    QGridLayout*                     layout;
-    QHBoxLayout*                     iconTextLayout;
-    QLabel*                          headerText;
-    QLabel*                          headerTextIcon;
-    QToolButton*                     treeSwitchButton;
+    QTreeView*                       view;
+    ImageHistoryGraphModel*          model;
     ImagePropertiesVersionsDelegate* delegate;
+
+    QButtonGroup*                    viewButtonGroup;
+    QToolButton*                     listModeButton;
+    QToolButton*                     treeModeButton;
+    QToolButton*                     combinedModeButton;
+
+    static const QString             configCurrentMode;
+};
+const QString VersionsWidget::VersionsWidgetPriv::configCurrentMode("Version Properties View Mode");
+
+class VersionsWidgetListView : public QTreeView
+{
+public:
+
+    VersionsWidgetListView() : QTreeView() {}
+
+    virtual void paintEvent(QPaintEvent *e)
+    {
+        static_cast<ImagePropertiesVersionsDelegate*>(itemDelegate())->beginPainting();
+        QTreeView::paintEvent(e);
+        static_cast<ImagePropertiesVersionsDelegate*>(itemDelegate())->finishPainting();
+    }
+
+    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
+    {
+        // TODO: Need to find a solution to skip non-vertex items in CombinedTreeMode. Not easy.
+        return QTreeView::moveCursor(cursorAction, modifiers);
+    }
+
 };
 
 VersionsWidget::VersionsWidget(QWidget* parent)
     : QWidget(parent), d(new VersionsWidgetPriv)
 {
-    d->view                 = new QListView(this);
-    d->layout               = new QGridLayout(this);
-    d->model                = new ImageVersionsModel();
-    d->delegate             = new ImagePropertiesVersionsDelegate();
-    d->headerText           = new QLabel(this);
-    d->headerTextIcon       = new QLabel(this);
-    d->iconTextLayout       = new QHBoxLayout();
-    d->treeSwitchButton     = new QToolButton(this);
+    QGridLayout* layout      = new QGridLayout;
 
-    KIconLoader* iconLoader = KIconLoader::global();
+    d->viewButtonGroup    = new QButtonGroup(this);
+    d->listModeButton     = new QToolButton;
+    d->listModeButton->setIcon(SmallIcon("view-list-icons"));
+    d->listModeButton->setCheckable(true);
+    d->listModeButton->setToolTip(i18n("Show available versions in a list"));
+    d->viewButtonGroup->addButton(d->listModeButton, ImageHistoryGraphModel::ImagesListMode);
 
-    setLayout(d->layout);
+    d->treeModeButton     = new QToolButton;
+    d->treeModeButton->setIcon(SmallIcon("view-list-tree"));
+    d->treeModeButton->setCheckable(true);
+    d->treeModeButton->setToolTip(i18n("Show available versions as a tree"));
+    d->viewButtonGroup->addButton(d->treeModeButton, ImageHistoryGraphModel::ImagesTreeMode);
 
-    d->headerText->setText(i18n("Available versions"));
-    d->headerTextIcon->setPixmap(SmallIcon("image-x-generic"));
-    d->headerTextIcon->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    d->combinedModeButton = new QToolButton;
+    d->combinedModeButton->setIcon(SmallIcon("view-list-details"));
+    d->combinedModeButton->setCheckable(true);
+    d->combinedModeButton->setToolTip(i18n("Show available version and the applied filters in a combined list"));
+    d->viewButtonGroup->addButton(d->combinedModeButton, ImageHistoryGraphModel::CombinedTreeMode);
 
-    d->treeSwitchButton->setIcon(iconLoader->loadIcon("view-list-tree", (KIconLoader::Group)KIconLoader::Toolbar));
-    d->treeSwitchButton->setCheckable(true);
-    d->treeSwitchButton->setToolTip(i18n("Switch between list view and tree view"));
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(d->listModeButton);
+    buttonLayout->addWidget(d->treeModeButton);
+    buttonLayout->addWidget(d->combinedModeButton);
 
+    d->model                = new ImageHistoryGraphModel(this);
+    d->model->imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
+    d->delegate             = new ImagePropertiesVersionsDelegate(this);
+
+    d->view                 = new VersionsWidgetListView;
     d->view->setItemDelegate(d->delegate);
     d->view->setModel(d->model);
-    d->view->setSelectionRectVisible(true);
+    d->view->setWordWrap(true);
+    d->view->setRootIsDecorated(false);
+    d->view->setHeaderHidden(true);
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->view->setSelectionBehavior(QAbstractItemView::SelectItems);
+    //d->view->setFrameShape(QFrame::NoFrame);
+    d->view->setFrameShadow(QFrame::Plain);
 
-    d->iconTextLayout->addWidget(d->headerTextIcon);
-    d->iconTextLayout->addWidget(d->headerText);
-    d->iconTextLayout->addWidget(d->treeSwitchButton);
+    layout->addLayout(buttonLayout,   0, 1);
+    layout->addWidget(d->view,        1, 0, 1, 2);
+    layout->setColumnStretch(0, 1);
+    layout->setRowStretch(1, 1);
+    setLayout(layout);
 
-    d->layout->addLayout(d->iconTextLayout, 0, 0, 1, 1);
-    d->layout->addWidget(d->view,           1, 0, 1, 1);
+    connect(d->delegate, SIGNAL(animationStateChanged()),
+            d->view->viewport(), SLOT(update()));
 
-    connect(d->delegate, SIGNAL(throbberUpdated()),
-            d->model, SLOT(slotAnimationStep()));
+    connect(d->view, SIGNAL(clicked(const QModelIndex&)),
+            this, SLOT(slotViewItemSelected(const QModelIndex&)));
 
-    connect(d->view, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(slotViewItemSelected(QModelIndex)));
-
-    connect(d->treeSwitchButton, SIGNAL(toggled(bool)),
-            d->model, SLOT(setPaintTree(bool)));
-
-    connect(d->treeSwitchButton, SIGNAL(pressed()),
-            d->view->viewport(), SLOT(repaint()));
-
-    //make sure the view gets repainted in all cases
-    connect(d->treeSwitchButton, SIGNAL(pressed()),
-            d->model, SLOT(slotAnimationStep()));
+    connect(d->viewButtonGroup, SIGNAL(buttonClicked(int)),
+            this, SLOT(slotViewModeChanged(int)));
 }
 
 VersionsWidget::~VersionsWidget()
@@ -131,28 +169,56 @@ VersionsWidget::~VersionsWidget()
     delete d;
 }
 
-void VersionsWidget::setupModelData(QList<QPair<QString, int> >& list) const
+void VersionsWidget::readSettings(const KConfigGroup& group)
 {
-    d->model->setupModelData(list);
-    d->delegate->resetThumbsCounter();
+    int mode = group.readEntry(d->configCurrentMode, (int)ImageHistoryGraphModel::CombinedTreeMode);
+    kDebug() << "Read settings:" << mode;
+    switch (mode)
+    {
+        case ImageHistoryGraphModel::ImagesListMode:
+            d->listModeButton->setChecked(true);
+            break;
+        case ImageHistoryGraphModel::ImagesTreeMode:
+            d->treeModeButton->setChecked(true);
+            break;
+        default:
+        case ImageHistoryGraphModel::CombinedTreeMode:
+            d->combinedModeButton->setChecked(true);
+            break;
+    }
+    slotViewModeChanged(mode);
 }
 
-void VersionsWidget::slotDigikamViewNoCurrentItem()
+void VersionsWidget::writeSettings(KConfigGroup& group)
 {
-    d->model->clearModelData();
-    d->delegate->resetThumbsCounter();
+    kDebug() << "Write settings:" << d->viewButtonGroup->checkedId();
+    group.writeEntry(d->configCurrentMode, d->viewButtonGroup->checkedId());
 }
 
-void VersionsWidget::slotViewItemSelected(QModelIndex index)
+void VersionsWidget::setCurrentItem(const ImageInfo& info)
 {
-    KUrl url(index.data(Qt::DisplayRole).toString());
-    emit newVersionSelected(url);
+    d->model->setHistory(info);
 }
 
-void VersionsWidget::setCurrentSelectedImage(const QString& path) const
+void VersionsWidget::slotViewItemSelected(const QModelIndex& index)
 {
-    d->model->setCurrentSelectedImage(path);
-    d->view->selectionModel()->select(d->model->currentSelectedImageIndex(), QItemSelectionModel::SelectCurrent);
+    ImageInfo info = d->model->imageInfo(index);
+    if (!info.isNull())
+    {
+        emit imageSelected(info);
+    }
+}
+
+void VersionsWidget::slotViewModeChanged(int mode)
+{
+    d->model->setMode((ImageHistoryGraphModel::Mode)mode);
+
+    if (mode == ImageHistoryGraphModel::ImagesTreeMode)
+        d->view->expandAll();
+
+    QModelIndex subjectIndex = d->model->indexForInfo(d->model->subject());
+    d->view->scrollTo(subjectIndex, QAbstractItemView::PositionAtCenter);
+    d->view->setCurrentIndex(subjectIndex);
 }
 
 } // namespace Digikam
