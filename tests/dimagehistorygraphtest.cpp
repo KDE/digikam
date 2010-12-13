@@ -249,6 +249,22 @@ void DImageHistoryGraphTest::testHistory()
     QCOMPARE(graph.data().edges().size(), 2);
 }
 
+class lessThanById
+{
+public:
+    lessThanById(const QMap<HistoryGraph::Vertex, qlonglong>& vertexToId)
+        : vertexToId(vertexToId)
+    {
+    }
+
+    bool operator()(const HistoryGraph::Vertex& a, const HistoryGraph::Vertex& b)
+    {
+        return vertexToId.value(a) < vertexToId.value(b);
+    }
+
+    QMap<HistoryGraph::Vertex, qlonglong> vertexToId;
+};
+
 void DImageHistoryGraphTest::testGraph()
 {
     /*
@@ -295,8 +311,17 @@ void DImageHistoryGraphTest::testGraph()
     QList<qlonglong> controlSubgraphTwo;
     controlSubgraphTwo << 2 << 8 << 9 << 10 << 19 << 20 << 21;
 
+    QList<qlonglong> controlSubgraphTwoSorted;
+    controlSubgraphTwoSorted << 2 << 8 << 9 << 19 << 20 << 21 << 10;
+
     QList<qlonglong> controlSubgraphFour;
     controlSubgraphFour << 4 << 11 << 12 << 13 << 22 << 23 << 24;
+
+    QList<qlonglong> controlRootsOfEighteen;
+    controlRootsOfEighteen << 1;
+
+    QList<qlonglong> controlLeavesFromTwo;
+    controlLeavesFromTwo << 8 << 10 << 19 << 20 << 21;
 
     typedef QPair<qlonglong, qlonglong> IdPair;
     QList<IdPair> pairs;
@@ -416,7 +441,6 @@ void DImageHistoryGraphTest::testGraph()
     QList<qlonglong> subgraphTwo = mapList(graph.data().verticesDominatedBy(idToVertex.value(2), idToVertex.value(1),
                                            HistoryGraph::DepthFirstOrder), vertexToId);
     qSort(subgraphTwo);
-    qDebug() << subgraphTwo;
     QVERIFY(subgraphTwo == controlSubgraphTwo);
 
     // breadth-first
@@ -425,18 +449,38 @@ void DImageHistoryGraphTest::testGraph()
     qSort(subgraphFour);
     QVERIFY(subgraphFour == controlSubgraphFour);
 
+    // depth-first
+    QList<qlonglong> subgraphTwoSorted = mapList(
+        graph.data().verticesDominatedByDepthFirstSorted(idToVertex.value(2), idToVertex.value(1),lessThanById(vertexToId)),
+                                                 vertexToId);
+    // no sorting this time
+    QVERIFY(subgraphTwoSorted == controlSubgraphTwoSorted);
+
+    QList<qlonglong> rootsOfEighteen = mapList(graph.data().rootsOf(idToVertex.value(18)), vertexToId);
+    qSort(rootsOfEighteen);
+    QVERIFY(rootsOfEighteen == controlRootsOfEighteen);
+    QList<qlonglong> leavesFromTwo   = mapList(graph.data().leavesFrom(idToVertex.value(2)), vertexToId);
+    qSort(leavesFromTwo);
+    QVERIFY(leavesFromTwo == controlLeavesFromTwo);
+
+    qDebug() << graph.data().shortestDistancesFrom(idToVertex.value(1));
+    qDebug() << graph.data().shortestDistancesFrom(idToVertex.value(2));
+
     ImageHistoryGraphModel model;
     ModelTest test(&model);
+    model.setMode(ImageHistoryGraphModel::CombinedTreeMode);
     model.setHistory(ImageInfo(16), graph);
 
     // main path 1 - 7 - 16
     QCOMPARE(model.rowCount(), 3);
 
-    /*QTreeView view;
+    model.setMode(ImageHistoryGraphModel::ImagesTreeMode);
+    model.setMode(ImageHistoryGraphModel::ImagesListMode);
+    QTreeView view;
     view.setModel(&model);
     view.show();
     QTest::qWaitForWindowShown(&view);
-    QTest::qWait(10000);*/
+    QTest::qWait(25000);
 }
 
 void DImageHistoryGraphTest::slotImageLoaded(const QString& fileName, bool success)

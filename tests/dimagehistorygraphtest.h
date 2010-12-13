@@ -49,12 +49,12 @@ private Q_SLOTS:
     void cleanupTestCase();
 
     void testGraph();
-    void testEditing();
     void testHistory();
 
 private:
 
     void rescan();
+    void testEditing();
 
     QDir        collectionDir;
     QString     dbFile;
