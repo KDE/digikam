@@ -38,6 +38,7 @@ namespace Digikam
 
 class ImageHistoryGraph;
 class ImageInfo;
+class ImageListModel;
 
 class DIGIKAM_DATABASE_EXPORT ImageHistoryGraphModel : public QAbstractItemModel
 {
@@ -47,17 +48,40 @@ public:
 
     enum Mode
     {
-        PathMode
+        ImagesListMode,
+        ImagesTreeMode,
+        CombinedTreeMode
+    };
+
+    enum ExtraRoles
+    {
+        IsImageItemRole        = Qt::UserRole + 1000,
+        IsFilterActionItemRole = Qt::UserRole + 1001,
+        IsHeaderItemRole       = Qt::UserRole + 1002,
+        IsCategoryItemRole     = Qt::UserRole + 1003,
+        IsSeparatorItemRole    = Qt::UserRole + 1004,
+
+        IsSubjectImageRole     = Qt::UserRole + 1010
     };
 
     ImageHistoryGraphModel(QObject* parent = 0);
     ~ImageHistoryGraphModel();
+
+    void setMode(Mode mode);
+    Mode mode() const;
 
     /**
      *  Set the history subject and the history graph.
      *  Per default, the subject's history graph is read.
      */
     void setHistory(const ImageInfo& subject, const ImageHistoryGraph& graph = ImageHistoryGraph());
+
+    ImageInfo subject() const;
+
+    bool hasImage(const ImageInfo& info);
+    ImageInfo imageInfo(const QModelIndex& index) const;
+    /// Note: There may be multiple indexes for an info. The index found first is returned.
+    QModelIndex indexForInfo(const ImageInfo& info) const;
 
     // QAbstractItemModel implementation
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -68,6 +92,19 @@ public:
     virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex& index) const;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
+
+    /**
+     * Returns an internal image model used for entries representing images.
+     * Note: Set a thumbnail thread on this model if you need thumbnails.
+     */
+    ImageListModel* imageModel() const;
+    /**
+     * If the given index is represented by the internal image model,
+     * return the image model's index.
+     * Otherwise an invalid index is returned.
+     */
+    QModelIndex imageModelIndex(const QModelIndex& index) const;
 
 private:
 
