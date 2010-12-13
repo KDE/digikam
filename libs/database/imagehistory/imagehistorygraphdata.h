@@ -127,6 +127,8 @@ public:
 
     void addHistory(const DImageHistory& givenHistory, qlonglong extraCurrent = 0);
 
+    int removeNextUnresolvedVertex(int begin);
+
     inline QList<ImageInfo> toInfoList(const QList<Vertex>& vertices) const
     {
         QList<ImageInfo> infos;
@@ -136,6 +138,8 @@ public:
         }
         return infos;
     }
+
+    QHash<Vertex, HistoryImageId::Type> categorize() const;
 
 protected:
 

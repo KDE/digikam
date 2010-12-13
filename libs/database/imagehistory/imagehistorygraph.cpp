@@ -239,7 +239,7 @@ ImageHistoryGraphData::addVertex(const HistoryImageId& imageId)
 
     Vertex v;
     QList<ImageInfo> infos;
-    //kDebug() << "Adding vertex" << imageId.m_uuid.left(6);
+    //kDebug() << "Adding vertex" << imageId.m_uuid.left(6) << imageId.fileName();
 
     // find by UUID
 
@@ -335,6 +335,70 @@ void ImageHistoryGraphData::applyProperties(Vertex& v, const QList<ImageInfo>& i
     {
         props += id;
     }
+}
+
+int ImageHistoryGraphData::removeNextUnresolvedVertex(int index)
+{
+    QList<Vertex> vs = vertices();
+    for (; index<vs.size(); index++)
+    {
+        Vertex& v = vs[index];
+        const HistoryVertexProperties& props = properties(v);
+
+        if (props.infos.isEmpty())
+        {
+            foreach (const HistoryGraph::Edge& upperEdge, edges(v, HistoryGraph::EdgesToRoot))
+            {
+                foreach (const HistoryGraph::Edge& lowerEdge, edges(v, HistoryGraph::EdgesToLeaf))
+                {
+                    HistoryEdgeProperties combinedProps;
+                    combinedProps.actions += properties(upperEdge).actions;
+                    combinedProps.actions += properties(lowerEdge).actions;
+                    HistoryGraph::Edge connection = addEdge(source(lowerEdge), target(upperEdge));
+                    setProperties(connection, combinedProps);
+                }
+            }
+            remove(v);
+            return index;
+        }
+    }
+    return index;
+}
+
+QHash<HistoryGraph::Vertex, HistoryImageId::Type> ImageHistoryGraphData::categorize() const
+{
+    QHash<Vertex, HistoryImageId::Type> types;
+    foreach (const Vertex& v, vertices())
+    {
+        const HistoryVertexProperties& props = properties(v);
+
+        HistoryImageId::Type type = HistoryImageId::InvalidType;
+
+        if (props.alwaysMarkedAs(HistoryImageId::Source))
+        {
+            type = HistoryImageId::Source;
+        }
+        else if (isLeaf(v))
+        {
+            // Leaf: Assume current version
+            type = HistoryImageId::Current;
+        }
+        else if (isRoot(v))
+        {
+            // Root: Assume original if at least once marked as such
+            if (props.markedAs(HistoryImageId::Original))
+            {
+                type = HistoryImageId::Original;
+            }
+        }
+        else
+        {
+            type = HistoryImageId::Intermediate;
+        }
+
+        types[v] = type;
+    }
+    return types;
 }
 
 // -----------------------------------------------------------------------------------------------
@@ -572,28 +636,13 @@ bool ImageHistoryGraph::hasUnresolvedEntries() const
 void ImageHistoryGraph::dropUnresolvedEntries()
 {
     // Remove nodes which could not be resolved into image infos
-    QList<HistoryGraph::Vertex> toRemove;
-    foreach (const HistoryGraph::Vertex& v, d->vertices())
-    {
-        const HistoryVertexProperties& props = d->properties(v);
 
-        if (props.infos.isEmpty())
-        {
-            foreach (const HistoryGraph::Edge& upperEdge, d->edges(v, HistoryGraph::EdgesToRoot))
-            {
-                foreach (const HistoryGraph::Edge& lowerEdge, d->edges(v, HistoryGraph::EdgesToLeaf))
-                {
-                    HistoryEdgeProperties combinedProps;
-                    combinedProps.actions += d->properties(upperEdge).actions;
-                    combinedProps.actions += d->properties(lowerEdge).actions;
-                    HistoryGraph::Edge connection = d->addEdge(d->source(lowerEdge), d->target(upperEdge));
-                    d->setProperties(connection, combinedProps);
-                }
-            }
-            toRemove << v;
-        }
+    // The problem is that with each removable, the vertex list is invalidated,
+    // so we cannot do one loop over d->vertices
+    for (int i=0; i<d->vertexCount(); )
+    {
+        i = d->removeNextUnresolvedVertex(i);
     }
-    d->remove(toRemove);
 }
 
 void ImageHistoryGraph::sortForInfo(const ImageInfo& subject)
@@ -681,40 +730,18 @@ QList<ImageInfo> ImageHistoryGraph::leafImages() const
 
 QHash<ImageInfo, HistoryImageId::Type> ImageHistoryGraph::categorize() const
 {
+    QHash<HistoryGraph::Vertex, HistoryImageId::Type> vertexType = d->categorize();
+
     QHash<ImageInfo, HistoryImageId::Type> types;
     foreach (const HistoryGraph::Vertex& v, d->vertices())
     {
         const HistoryVertexProperties& props = d->properties(v);
-
         if (props.infos.isEmpty())
         {
             continue;
         }
 
-        HistoryImageId::Type type = HistoryImageId::InvalidType;
-
-        if (props.alwaysMarkedAs(HistoryImageId::Source))
-        {
-            type = HistoryImageId::Source;
-        }
-        else if (d->isLeaf(v))
-        {
-            // Leaf: Assume current version
-            type = HistoryImageId::Current;
-        }
-        else if (d->isRoot(v))
-        {
-            // Root: Assume original if at least once marked as such
-            if (props.markedAs(HistoryImageId::Original))
-            {
-                type = HistoryImageId::Original;
-            }
-        }
-        else
-        {
-            type = HistoryImageId::Intermediate;
-        }
-
+        HistoryImageId::Type type = vertexType.value(v);
         foreach (const ImageInfo& info, props.infos)
         {
             types[info] = type;
