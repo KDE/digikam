@@ -276,39 +276,11 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
 
         d->filterStack.append(entries.at(i).action);
 
-        if (entries.at(i).action.displayableName().isEmpty() && entries.at(i).action.identifier().isEmpty())
-        {
-            itemData.append("Unknown filter");
-        }
-        else
-        {
-            QString i18nDispName = DImgFilterManager::instance()->i18nDisplayableName(entries.at(i).action.identifier());
-            QString metadataDispName = entries.at(i).action.displayableName();
+        itemData.append(DImgFilterManager::instance()->i18nDisplayableName(entries.at(i).action));
 
-            if (!i18nDispName.isEmpty())
-            {
-                itemData.append(i18nDispName);
-            }
-            else if (!metadataDispName.isEmpty())
-            {
-                itemData.append(metadataDispName);
-            }
-            else
-            {
-                itemData.append(entries.at(i).action.identifier());
-            }
-
-            QString iconName = DImgFilterManager::instance()->filterIcon(entries.at(i).action.identifier());
-
-            if (iconName.isNull())
-            {
-                iconName = "document-edit";
-            }
-
-            QPixmap icon = SmallIcon(iconName, KIconLoader::SizeSmallMedium);
-            //(flags & Qt::ItemIsEnabled) ? KIconLoader::DefaultState : KIconLoader::DisabledState);
-            itemData.append(icon);
-        }
+        QString iconName = DImgFilterManager::instance()->filterIcon(entries.at(i).action);
+        QPixmap icon     = SmallIcon(iconName, KIconLoader::SizeSmallMedium);
+        itemData.append(icon);
 
         kDebug() << "Adding an entry: " << itemData;
         parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));

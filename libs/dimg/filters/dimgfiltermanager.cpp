@@ -41,6 +41,7 @@
 #include "config-digikam.h"
 #include "dimgfiltergenerator.h"
 #include "dimgbuiltinfilter.h"
+#include "filteraction.h"
 
 // Filter includes
 
@@ -332,6 +333,17 @@ QString DImgFilterManager::filterIcon(const QString& filterIdentifier)
     return d->filterIcons.value(filterIdentifier);
 }
 
+QString DImgFilterManager::filterIcon(const FilterAction& action)
+{
+    QString iconName = filterIcon(action.identifier());
+
+    if (!iconName.isNull())
+    {
+        return iconName;
+    }
+    return "document-edit";
+}
+
 QString DImgFilterManager::i18nDisplayableName(const QString& filterIdentifier)
 {
     QMutexLocker lock(&d->mutex);
@@ -370,6 +382,31 @@ QString DImgFilterManager::i18nDisplayableName(const QString& filterIdentifier)
     }
 
     return filterIdentifier;
+}
+
+QString DImgFilterManager::i18nDisplayableName(const FilterAction& action)
+{
+    if (action.displayableName().isEmpty() && action.identifier().isEmpty())
+    {
+        return i18n("Unknown filter");
+    }
+    else
+    {
+        QString i18nDispName = i18nDisplayableName(action.identifier());
+        QString metadataDispName = action.displayableName();
+        if (!i18nDispName.isEmpty())
+        {
+            return i18nDispName;
+        }
+        else if (!metadataDispName.isEmpty())
+        {
+            return metadataDispName;
+        }
+        else
+        {
+            return action.identifier();
+        }
+    }
 }
 
 bool DImgFilterManager::isSupported(const QString& filterIdentifier)

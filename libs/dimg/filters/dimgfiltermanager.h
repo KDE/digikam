@@ -35,6 +35,8 @@
 namespace Digikam
 {
 
+class FilterAction;
+
 class DIGIKAM_EXPORT DImgFilterManager : public DImgFilterGenerator
 {
 public:
@@ -55,12 +57,14 @@ public:
      * Returns the translated displayable name
      */
     QString i18nDisplayableName(const QString& filterIdentifier);
+    QString i18nDisplayableName(const FilterAction& action);
 
     /**
      * Returns an icon for the given filter.
      * If no icon is known, returns a null string.
      */
     QString filterIcon(const QString& filterIdentifier);
+    QString filterIcon(const FilterAction& action);
 
     /**
      * Returns true if the given filter, or, more specifically,
