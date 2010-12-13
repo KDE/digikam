@@ -290,14 +290,6 @@ public:
         boost::remove_vertex(v, graph);
     }
 
-    void remove(const QList<Vertex>& vertices)
-    {
-        foreach (const Vertex& v, vertices)
-        {
-            remove(v);
-        }
-    }
-
     Edge addEdge(const Vertex& v1, const Vertex& v2)
     {
         Edge e = edge(v1, v2);
@@ -677,6 +669,16 @@ public:
     }
 
     /**
+     * Returns all roots of vertex v. Subset of roots().
+     * I case any leaves have roots that are not roots of v,
+     * they will not be contained in this list.
+     */
+    QList<Vertex> rootsOf(const Vertex& v) const
+    {
+        return findZeroDegreeFrom(v, direction == ParentToChild ? true : false);
+    }
+
+    /**
      * Returns all leaves, i.e. vertices with no children
      * Takes the graph direction into account.
      */
@@ -685,12 +687,24 @@ public:
         return findZeroDegree(direction == ParentToChild ? false : true);
     }
 
+    QList<Vertex> leavesFrom(const Vertex& v) const
+    {
+        return findZeroDegreeFrom(v, direction == ParentToChild ? false : true);
+    }
+
+    template <typename T> static bool alwaysFalse(const T&, const T&) { return false; }
     /**
      * Returns the longest path through the graph, starting from a vertex in roots(),
      * ending on a vertex in leaves(), and passing vertex v.
      * The returned list is given in that order, root - v - leave.
+     * If there is more than one candidate for root or leave, lessThan is used to determine the first candidate.
      */
     QList<Vertex> longestPathTouching(const Vertex& v) const
+    {
+        return longestPathTouching(v, alwaysFalse<Vertex>);
+    }
+    template <typename LessThan>
+    QList<Vertex> longestPathTouching(const Vertex& v, LessThan lessThan) const
     {
         if (v.isNull())
         {
@@ -707,7 +721,7 @@ public:
 
         if (!rootCandidates.isEmpty())
         {
-            // any good criteria if there is more than one candidate?
+            qStableSort(rootCandidates.begin(), rootCandidates.end(), lessThan);
             Vertex root = rootCandidates.first();
             fromRoot << listPath(root, v, path.predecessors, ChildToParent);
         }
@@ -718,7 +732,7 @@ public:
 
         if (!leaveCandidates.isEmpty())
         {
-            // any good criteria if there is more than one candidate?
+            qStableSort(leaveCandidates.begin(), leaveCandidates.end(), lessThan);
             Vertex leave = leaveCandidates.first();
             toLeave << listPath(leave, v, path.predecessors);
         }
@@ -771,6 +785,35 @@ public:
         return vertices;
     }
 
+    /**
+     * Returns the shortest distances from Vertex to all vertices in the graph.
+     * If the value is -1, a vertex is not reachable from v.
+     */
+    QMap<Vertex, int> shortestDistancesFrom(const Vertex& v) const
+    {
+        QList<Vertex> vertices;
+
+        Path path;
+        if (direction == ParentToChild)
+        {
+            path.shortestPath(graph, v);
+        }
+        else
+        {
+            path.shortestPath(boost::make_reverse_graph(graph), v);
+        }
+
+        // change 2147483647 to -1
+        typename QMap<Vertex, int>::iterator it;
+        for (it = path.distances.begin(); it != path.distances.end(); ++it)
+        {
+            if (it.value() == std::numeric_limits<int>::max())
+                it.value() = -1;
+        }
+
+        return path.distances;
+    }
+
     enum ReturnOrder
     {
         BreadthFirstOrder,
@@ -784,7 +827,7 @@ public:
      */
     QList<Vertex> verticesDominatedBy(const Vertex& v, const Vertex& root, ReturnOrder order = BreadthFirstOrder) const
     {
-        if (v.isNull())
+        if (v.isNull() || isEmpty())
         {
             return QList<Vertex>();
         }
@@ -793,11 +836,39 @@ public:
 
         if (order == BreadthFirstOrder)
         {
-            search.breadthFirstSearch(graph, root, direction);
+            search.breadthFirstSearch(graph, root, direction == ChildToParent);
         }
         else
         {
-            search.depthFirstSearch(graph, root, direction);
+            search.depthFirstSearch(graph, root, direction == ChildToParent);
+        }
+
+        return verticesDominatedBy(v, root, search.vertices);
+    }
+
+    /**
+     * For a vertex v reachable from a vertex root all vertices dominated by v starting from root.
+     * The returned list is in depth-first order, using root as starting point, and
+     * when discovering a vertex, sorting the adjacent vertices with the given lessThan.
+     */
+    template <typename LessThan>
+    QList<Vertex> verticesDominatedByDepthFirstSorted(const Vertex& v, const Vertex& root, LessThan lessThan) const
+    {
+        return verticesDominatedBy(v, root, verticesDepthFirstSorted(root, lessThan));
+    }
+
+    /**
+     * For a vertex v reachable from a vertex root returns
+     * all vertices dominated by v starting from root.
+     * The order is the same as in the given, sorted list of all vertices in this graph
+     * (or all vertices expected to be returned. The returned list is the intersection
+     *  of the dominated vertices and presortedVertices, in order of presortedVertices)
+     */
+    QList<Vertex> verticesDominatedBy(const Vertex& v, const Vertex& root, const QList<Vertex> presortedVertices) const
+    {
+        if (v.isNull() || isEmpty())
+        {
+            return QList<Vertex>();
         }
 
         DominatorTree tree;
@@ -806,16 +877,123 @@ public:
         QList<Vertex> dominatedTree = treeFromPredecessors(v, tree.predecessors);
 
         // remove all vertices from the DFS of v that are not in the dominated tree
-        QList<Vertex> orderedVertices;
-        foreach (const Vertex& v, search.vertices)
+        QList<Vertex> orderedTree;
+        foreach (const Vertex& v, presortedVertices)
         {
             if (dominatedTree.contains(v))
             {
-                orderedVertices << v;
+                orderedTree << v;
             }
         }
 
-        return orderedVertices;
+        return orderedTree;
+    }
+
+    /**
+     * Orders all vertices of the graph in a breadth-first manner.
+     * A single vertex is taken as reference to distinguish main root and side paths.
+     * Otherwise the first root is taken as reference.
+     */
+    QList<Vertex> verticesBreadthFirst(const Vertex& givenRef = Vertex()) const
+    {
+        if (isEmpty())
+        {
+            return QList<Vertex>();
+        }
+
+        Vertex ref(givenRef);
+        if (ref.isNull())
+            ref = roots().first();
+
+        QList<Vertex> vertices;
+
+        vertices << rootsOf(ref);
+
+        if (vertices.size() == vertexCount())
+            return vertices;
+
+        GraphSearch search;
+        search.breadthFirstSearch(graph, vertices.first(), direction == ChildToParent);
+        QList<Vertex> bfs = search.vertices;
+        foreach (const Vertex& v, vertices)
+        {
+            bfs.removeOne(v);
+        }
+        vertices << bfs;
+
+        if (vertices.size() == vertexCount())
+            return vertices;
+
+        // sort in any so far unreachable nodes
+        vertex_range_t range = boost::vertices(graph);
+        for (vertex_iter it = range.first; it != range.second; ++it)
+        {
+            if (!vertices.contains(*it))
+            {
+                GraphSearch childSearch;
+                childSearch.breadthFirstSearch(graph, *it, direction == ChildToParent);
+                QList<Vertex> childBfs = childSearch.vertices;
+                QList<Vertex> toInsert;
+
+                // any item reachable from *it should come after it
+                int minIndex = vertices.size();
+                foreach (const Vertex& c, childBfs)
+                {
+                    int foundAt = vertices.indexOf(c);
+                    if (foundAt == -1)
+                    {
+                        toInsert << c;
+                    }
+                    else
+                    {
+                        minIndex = qMin(foundAt, minIndex);
+                    }
+                }
+                foreach (const Vertex& c, toInsert)
+                {
+                    vertices.insert(minIndex++, c);
+                }
+            }
+        }
+
+        return vertices;
+    }
+
+    /**
+     * Orders all vertices of the graph in a depth-first manner.
+     * When discovering a vertex, the adjacent vertices are sorted with the given lessThan.
+     * A single vertex is taken as starting point.
+     * If null, the first root is taken as reference.
+     */
+    template <typename LessThan>
+    QList<Vertex> verticesDepthFirstSorted(const Vertex& givenRef, LessThan lessThan) const
+    {
+        if (isEmpty())
+        {
+            return QList<Vertex>();
+        }
+
+        Vertex ref(givenRef);
+        if (ref.isNull())
+            ref = roots().first();
+
+        QList<Vertex> vertices;
+
+        vertices = rootsOf(ref);
+
+        if (vertices.size() == vertexCount() || vertices.isEmpty())
+            return vertices;
+
+        GraphSearch search;
+        search.depthFirstSearchSorted(graph, vertices.first(), direction == ChildToParent, lessThan);
+        QList<Vertex> dfs = search.vertices;
+        foreach (const Vertex& v, vertices)
+        {
+            dfs.removeOne(v);
+        }
+        vertices << dfs;
+
+        return search.vertices;
     }
 
 protected:
@@ -842,7 +1020,7 @@ protected:
      * Returns a list of vertex ids of vertices in the given range
      */
     template <typename Value, typename range_t>
-    QList<Value> toList(const range_t& range) const
+    static QList<Value> toList(const range_t& range)
     {
         typedef typename range_t::first_type iterator_t;
         QList<Value> list;
@@ -855,18 +1033,18 @@ protected:
         return list;
     }
 
-    template <typename range_t> QList<Vertex> toVertexList(const range_t& range) const
+    template <typename range_t> static QList<Vertex> toVertexList(const range_t& range)
     {
         return toList<Vertex, range_t>(range);
     }
 
-    template <typename range_t> QList<Edge> toEdgeList(const range_t& range) const
+    template <typename range_t> static QList<Edge> toEdgeList(const range_t& range)
     {
         return toList<Edge, range_t>(range);
     }
 
     template <typename range_t>
-    bool isEmptyRange(const range_t& range) const
+    static bool isEmptyRange(const range_t& range)
     {
         return range.first == range.second;
     }
@@ -966,13 +1144,36 @@ protected:
         vertex_range_t range = boost::vertices(graph);
 
         for (vertex_iter it = range.first; it != range.second; ++it)
+        {
             if ( (inOrOut ? in_degree(*it, graph) : out_degree(*it, graph)) == 0)
             {
                 vertices << *it;
             }
+        }
 
         return vertices;
     }
+
+    QList<Vertex> findZeroDegreeFrom(const Vertex& v, bool inOrOut) const
+    {
+        bool invertGraph = (direction == ChildToParent);
+        if (!inOrOut)
+            invertGraph = !invertGraph;
+
+        GraphSearch search;
+        search.breadthFirstSearch(graph, v, invertGraph);
+
+        QList<Vertex> vertices;
+        foreach (const Vertex& candidate, search.vertices)
+        {
+            if ( (inOrOut ? in_degree(candidate, graph) : out_degree(candidate, graph)) == 0)
+            {
+                vertices << candidate;
+            }
+        }
+        return vertices;
+     }
+
 
     /**
      * Helper class to find paths through the graph.
@@ -1067,20 +1268,46 @@ protected:
     public:
 
         template <class GraphType>
-        void depthFirstSearch(const GraphType& graph, const Vertex& v, MeaningOfDirection direction = ParentToChild)
+        void depthFirstSearch(const GraphType& graph, const Vertex& v, bool invertGraph)
         {
             // remember that the visitor is passed by value
             DepthFirstSearchVisitor vis(this);
 
             try
             {
-                if (direction == ParentToChild)
+                if (invertGraph)
                 {
-                    boost::depth_first_search(graph, visitor(vis).root_vertex(v));
+                    boost::depth_first_search(boost::make_reverse_graph(graph), visitor(vis).root_vertex(v));
                 }
                 else
                 {
-                    boost::depth_first_search(boost::make_reverse_graph(graph), visitor(vis).root_vertex(v));
+                    boost::depth_first_search(graph, visitor(vis).root_vertex(v));
+                }
+            }
+            catch (boost::bad_graph& e)
+            {
+                kDebug() << e.what();
+            }
+        }
+
+        template <class GraphType, typename LessThan>
+        void depthFirstSearchSorted(const GraphType& graph, const Vertex& v, bool invertGraph, LessThan lessThan)
+        {
+            // remember that the visitor is passed by value
+            DepthFirstSearchVisitor vis(this);
+            std::vector<boost::default_color_type> color_vec(boost::num_vertices(graph), boost::white_color);
+
+            try
+            {
+                if (invertGraph)
+                {
+                    depth_first_search_sorted(boost::make_reverse_graph(graph), v, vis,
+                                make_iterator_property_map(color_vec.begin(), get(boost::vertex_index, graph)), lessThan);
+                }
+                else
+                {
+                    depth_first_search_sorted(graph, v, vis,
+                                make_iterator_property_map(color_vec.begin(), get(boost::vertex_index, graph)), lessThan);
                 }
             }
             catch (boost::bad_graph& e)
@@ -1090,19 +1317,19 @@ protected:
         }
 
         template <class GraphType>
-        void breadthFirstSearch(const GraphType& graph, const Vertex& v, MeaningOfDirection direction = ParentToChild)
+        void breadthFirstSearch(const GraphType& graph, const Vertex& v, bool invertGraph)
         {
             BreadthFirstSearchVisitor vis(this);
 
             try
             {
-                if (direction == ParentToChild)
+                if (invertGraph)
                 {
-                    boost::breadth_first_search(graph, v, visitor(vis));
+                    boost::breadth_first_search(boost::make_reverse_graph(graph), v, visitor(vis));
                 }
                 else
                 {
-                    boost::breadth_first_search(boost::make_reverse_graph(graph), v, visitor(vis));
+                    boost::breadth_first_search(graph, v, visitor(vis));
                 }
             }
             catch (boost::bad_graph& e)
@@ -1145,6 +1372,63 @@ protected:
         };
 
         QList<Vertex> vertices;
+
+    protected:
+
+        template <class GraphType, typename VertexLessThan>
+        class lessThanMapEdgeToTarget
+        {
+        public:
+            lessThanMapEdgeToTarget(const GraphType& g, VertexLessThan vertexLessThan)
+                : g(g), vertexLessThan(vertexLessThan) {}
+            const GraphType& g;
+            VertexLessThan vertexLessThan;
+            bool operator()(const Edge& a, const Edge b)
+            {
+                return vertexLessThan(boost::target(a.toEdge(), g), boost::target(b.toEdge(), g));
+            }
+        };
+
+        // This is boost's simple, old, recursive DFS algorithm adapted with lessThan
+        template <class IncidenceGraph, class DFSVisitor, class ColorMap, typename LessThan>
+        void depth_first_search_sorted(const IncidenceGraph& g, Vertex u,
+                                       DFSVisitor& vis, ColorMap color, LessThan lessThan)
+        {
+            typedef std::pair<Vertex, QList<Edge> > VertexInfo;
+
+            QList<Edge> outEdges;
+            std::vector<VertexInfo> stack;
+
+            boost::put(color, u, boost::gray_color);
+            vis.discover_vertex(u, g);
+
+            outEdges = toEdgeList(boost::out_edges(u, g));
+            // Sort edges. The lessThan we have takes vertices, so we use a lessThan which
+            // maps the given edges to their targets, and calls our vertex lessThan.
+            qSort(outEdges.begin(), outEdges.end(), lessThanMapEdgeToTarget<IncidenceGraph, LessThan>(g, lessThan));
+
+            foreach (const Edge& e, outEdges)
+            {
+                Vertex v = boost::target(e.toEdge(), g);
+                vis.examine_edge(e, g);
+                boost::default_color_type v_color = boost::get(color, v);
+                if (v_color == boost::white_color)
+                {
+                    vis.tree_edge(e, g);
+                    depth_first_search_sorted(g, v, vis, color, lessThan);
+                }
+                else if (v_color == boost::white_color)
+                {
+                    vis.back_edge(e, g);
+                }
+                else
+                {
+                    vis.forward_or_cross_edge(e, g);
+                }
+            }
+            put(color, u, boost::black_color);
+            vis.finish_vertex(u, g);
+        }
     };
 
     /** Get the list of vertices with the largest value in the given distance map */
