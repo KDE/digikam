@@ -40,6 +40,7 @@ class WorkingWidget;
 class ImagePropertiesVersionsDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
+    Q_PROPERTY(int animationState READ animationState WRITE setAnimationState NOTIFY animationStateChanged)
 
 public:
 
@@ -48,17 +49,23 @@ public:
 
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    WorkingWidget* getWidget() const;
-    void           resetThumbsCounter();
-    void           delayedAnimationTimerStop() const;
 
-public Q_SLOTS:
+    void beginPainting();
+    void finishPainting();
 
-    void slotAnimationStep();
+    int animationState() const;
+    void setAnimationState(int animationState);
+
+    void setThumbnailSize(int size) const;
+    int  thumbnailSize() const;
 
 Q_SIGNALS:
 
-    void throbberUpdated();
+    void animationStateChanged();
+
+protected:
+
+    void initStyleOption(QStyleOptionViewItem * option, const QModelIndex& index) const;
 
 private:
 
