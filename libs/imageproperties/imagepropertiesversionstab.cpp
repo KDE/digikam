@@ -32,6 +32,9 @@
 
 // KDE includes
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KGlobal>
 #include <KDebug>
 #include <KLocale>
 #include <KIconLoader>
@@ -73,7 +76,12 @@ public:
     QString                        currentSelectedImagePath;
     int                            currentSelectedImageListPosition;
     qlonglong                      currentSelectedImageId;
+
+    static const QString           configGroup;
+    static const QString           configActiveTab;
 };
+const QString ImagePropertiesVersionsTab::ImagePropertiesVersionsTabPriv::configGroup("Image Properties SideBar");
+const QString ImagePropertiesVersionsTab::ImagePropertiesVersionsTabPriv::configActiveTab("Version Properties Tab");
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
     : KTabWidget(parent), d(new ImagePropertiesVersionsTabPriv)
@@ -84,20 +92,44 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
     d->filtersHistoryWidget = new FiltersHistoryWidget(this);
     insertTab(1, d->filtersHistoryWidget, i18n("Used Filters"));
 
-    connect(d->versionsWidget, SIGNAL(newVersionSelected(KUrl)),
-            this, SLOT(slotNewVersionSelected(KUrl)));
+    connect(d->versionsWidget, SIGNAL(imageSelected(const ImageInfo&)),
+            this, SLOT(slotImageSelected(const ImageInfo&)));
+
+    readSettings(KGlobal::config()->group(d->configGroup));
 }
 
 ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
 {
+    KConfigGroup group = KGlobal::config()->group(d->configGroup);
+    writeSettings(group);
+
     delete d;
+}
+
+void ImagePropertiesVersionsTab::readSettings(const KConfigGroup& group)
+{
+    QString tab = group.readEntry(d->configActiveTab, "versions");
+    if (tab == "versions")
+        setCurrentWidget(d->versionsWidget);
+    else
+        setCurrentWidget(d->filtersHistoryWidget);
+
+    d->versionsWidget->readSettings(group);
+}
+
+void ImagePropertiesVersionsTab::writeSettings(KConfigGroup& group)
+{
+    kDebug() << currentWidget() << d->versionsWidget << d->filtersHistoryWidget;
+    group.writeEntry(d->configActiveTab, currentWidget() == d->versionsWidget ? "versions" : "filters");
+
+    d->versionsWidget->writeSettings(group);
 }
 
 void ImagePropertiesVersionsTab::clear()
 {
     d->versionsList.clear();
     d->filtersHistoryWidget->clearData();
-    d->versionsWidget->slotDigikamViewNoCurrentItem();
+    d->versionsWidget->setCurrentItem(ImageInfo());
 }
 
 /*
@@ -129,53 +161,9 @@ void ImagePropertiesVersionsTab::setItem(const ImageInfo& info, const DImageHist
     }
 
     d->info = info;
-    d->currentSelectedImagePath = info.filePath();
-    d->currentSelectedImageId   = info.id();
 
-    if (!hasImage(info.id()))
-    {
-        QList<QPair<qlonglong, int> > infoList = info.allAvailableVersions();
-
-        if (infoList.isEmpty())
-        {
-            d->versionsList.append(qMakePair(info.id(),0));
-        }
-        else
-        {
-            d->versionsList.append(infoList);
-            d->currentSelectedImageListPosition = findImagePositionInList(info.id());
-        }
-
-        setupVersionsData();
-    }
-
+    d->versionsWidget->setCurrentItem(info);
     d->filtersHistoryWidget->setHistory(d->history);
-}
-
-int ImagePropertiesVersionsTab::findImagePositionInList(qlonglong id) const
-{
-    for (int i = 0; i < d->versionsList.size(); i++)
-    {
-        if (d->versionsList.at(i).first == id)
-        {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-bool ImagePropertiesVersionsTab::hasImage(qlonglong id) const
-{
-    for (int i = 0; i < d->versionsList.size(); i++)
-    {
-        if (d->versionsList.at(i).first == id)
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 void ImagePropertiesVersionsTab::setEnabledEntries(int count)
@@ -188,6 +176,7 @@ void ImagePropertiesVersionsTab::showCustomContextMenu(const QPoint& position)
     d->filtersHistoryWidget->showCustomContextMenu(position);
 }
 
+/*
 void ImagePropertiesVersionsTab::setupVersionsData() const
 {
     if (!d->versionsList.isEmpty())
@@ -203,7 +192,9 @@ void ImagePropertiesVersionsTab::setupVersionsData() const
         d->versionsWidget->setCurrentSelectedImage(d->currentSelectedImagePath);
     }
 }
+*/
 
+/*
 void ImagePropertiesVersionsTab::setupFiltersData() const
 {
     if (!d->versionsList.isEmpty()
@@ -218,9 +209,12 @@ void ImagePropertiesVersionsTab::setupFiltersData() const
         d->filtersHistoryWidget->setHistory(DImageHistory());
     }
 }
+*/
 
-void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
+void ImagePropertiesVersionsTab::slotImageSelected(const ImageInfo& info)
 {
+    // TODO: solve by dynamic filtering in view
+    /*
     qlonglong selectedImage = ImageInfo(url).id();
     qlonglong current = 0;
     qlonglong newOne = 0;
@@ -240,7 +234,7 @@ void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
 
     ImageInfo newOneInfo(newOne);
 
-    /*
+    / *
      * TODO
     if(!AlbumSettings::instance()->getShowAllVersions())
     {
@@ -251,7 +245,7 @@ void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
     {
         newOneInfo.setVisible(true);
     }
-    */
+    * /
 
     d->currentSelectedImagePath = url.path();
     d->currentSelectedImageId = newOne;
@@ -259,6 +253,7 @@ void ImagePropertiesVersionsTab::slotNewVersionSelected(KUrl url)
     emit setCurrentIdSignal(newOne);
     //emit updateMainViewSignal();
     emit setCurrentUrlSignal(url);
+    */
 }
 
 } // namespace Digikam

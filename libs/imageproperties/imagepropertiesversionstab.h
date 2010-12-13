@@ -40,6 +40,8 @@
 #include "digikam_export.h"
 #include "dimagehistory.h"
 
+class KConfigGroup;
+
 namespace Digikam
 {
 
@@ -55,25 +57,19 @@ public:
     ImagePropertiesVersionsTab(QWidget* parent);
     ~ImagePropertiesVersionsTab();
 
-    void setupVersionsData() const;
-    void setupFiltersData() const;
-    int findImagePositionInList(qlonglong id) const;
-    bool hasImage(qlonglong id) const;
+    void readSettings(const KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
 
     void clear();
     void setItem(const ImageInfo& info, const DImageHistory& history);
 
 public Q_SLOTS:
 
-    void slotNewVersionSelected(KUrl url);
+    void slotImageSelected(const ImageInfo& info);
     void showCustomContextMenu(const QPoint& position);
     void setEnabledEntries(int count);
 
 Q_SIGNALS:
-
-    void setCurrentUrlSignal(const KUrl& url);
-    void updateMainViewSignal();
-    void setCurrentIdSignal(qlonglong id);
 
 private:
 
