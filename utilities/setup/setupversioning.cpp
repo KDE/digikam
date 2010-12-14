@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "setupversioning.moc"
+
 // Qt includes
 
 #include <QApplication>
@@ -43,7 +45,6 @@
 
 // Local includes
 
-#include "setupversioning.h"
 #include "albumsettings.h"
 #include "versionmanager.h"
 

@@ -306,4 +306,3 @@ protected:
 } // namespace Digikam
 
 #endif // ITEMVISIBILITYCONTROLLER_H
-

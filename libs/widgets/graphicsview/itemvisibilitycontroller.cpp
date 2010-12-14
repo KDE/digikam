@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "itemvisibilitycontroller.h"
+#include "itemvisibilitycontroller.moc"
 
 // Qt includes
 
@@ -894,5 +894,3 @@ void ItemVisibilityController::objectDestroyed(QObject* item)
 }
 
 } // namespace Digikam
-
-
