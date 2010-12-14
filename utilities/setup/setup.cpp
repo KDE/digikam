@@ -188,6 +188,26 @@ Setup::Setup(QWidget* parent)
                                       "<i>Customize the look of the albums list</i></qt>"));
     d->page_albumView->setIcon(KIcon("view-list-icons"));
 
+    d->categoryPage  = new SetupCategory();
+    d->page_category = addPage(d->categoryPage, i18n("Album Category"));
+    d->page_category->setHeader(i18n("<qt>Album Category Settings<br/>"
+                                     "<i>Assign categories to albums used to sort them</i></qt>"));
+    d->page_category->setIcon(KIcon("view-calendar-list"));
+
+    d->tooltipPage  = new SetupToolTip();
+    d->page_tooltip = addPage(d->tooltipPage, i18n("Tool-Tip"));
+    d->page_tooltip->setHeader(i18n("<qt>Album Items Tool-Tip Settings<br/>"
+                                    "<i>Customize information in tool-tips</i></qt>"));
+    d->page_tooltip->setIcon(KIcon("dialog-information"));
+
+/*
+    d->faceTagsPage  = new SetupFaceTags();
+    d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
+    d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
+                                     "<i>Configure digiKam's face detection and recognition</i></qt>"));
+    d->page_facetags->setIcon(KIcon("face-smile"));
+*/
+
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
@@ -199,6 +219,12 @@ Setup::Setup(QWidget* parent)
     d->page_template->setHeader(i18n("<qt>Metadata templates<br/>"
                                      "<i>Manage your collection of metadata templates</i></qt>"));
     d->page_template->setIcon(KIcon("user-identity"));
+
+    d->mimePage  = new SetupMime();
+    d->page_mime = addPage(d->mimePage, i18n("MIME Types"));
+    d->page_mime->setHeader(i18n("<qt>Supported File Settings<br/>"
+                                 "<i>Add new file types to show as album items</i></qt>"));
+    d->page_mime->setIcon(KIcon("system-file-manager"));
 
     d->editorPage  = new SetupEditor();
     d->page_editor = addPage(d->editorPage, i18n("Editor Window"));
@@ -212,7 +238,7 @@ Setup::Setup(QWidget* parent)
                                        "<i>Configure non-destructive editing and versioning</i></qt>"));
     d->page_versioning->setIcon(KIcon("view-catalog"));
 
-    d->dcrawPage = new SetupDcraw();
+    d->dcrawPage  = new SetupDcraw();
     d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
     d->page_dcraw->setHeader(i18n("<qt>Image Editor: RAW File Decoding<br/>"
                                   "<i>Configure RAW decoding settings of the image editor</i></qt>"));
@@ -242,24 +268,6 @@ Setup::Setup(QWidget* parent)
                                       "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
 
-    d->tooltipPage  = new SetupToolTip();
-    d->page_tooltip = addPage(d->tooltipPage, i18n("Tool-Tip"));
-    d->page_tooltip->setHeader(i18n("<qt>Album Items Tool-Tip Settings<br/>"
-                                    "<i>Customize information in tool-tips</i></qt>"));
-    d->page_tooltip->setIcon(KIcon("dialog-information"));
-
-    d->mimePage  = new SetupMime();
-    d->page_mime = addPage(d->mimePage, i18n("MIME Types"));
-    d->page_mime->setHeader(i18n("<qt>Supported File Settings<br/>"
-                                 "<i>Add new file types to show as album items</i></qt>"));
-    d->page_mime->setIcon(KIcon("system-file-manager"));
-
-    d->miscPage  = new SetupMisc();
-    d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
-    d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
-                                 "<i>Customize behavior of the other parts of digiKam</i></qt>"));
-    d->page_misc->setIcon(KIcon("preferences-other"));
-
     d->cameraPage  = new SetupCamera();
     d->page_camera = addPage(d->cameraPage, i18n("Cameras"));
     d->page_camera->setHeader(i18n("<qt>Camera Settings<br/>"
@@ -278,17 +286,11 @@ Setup::Setup(QWidget* parent)
                                           "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
     d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
 
-    d->categoryPage  = new SetupCategory();
-    d->page_category = addPage(d->categoryPage, i18n("Album Category"));
-    d->page_category->setHeader(i18n("<qt>Album Category Settings<br/>"
-                                     "<i>Assign categories to albums used to sort them</i></qt>"));
-    d->page_category->setIcon(KIcon("view-calendar-list"));
-
-    /*d->faceTagsPage  = new SetupFaceTags();
-    d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
-    d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
-                                     "<i>Configure digiKam's face detection and recognition</i></qt>"));
-    d->page_facetags->setIcon(KIcon("face-smile"));*/
+    d->miscPage  = new SetupMisc();
+    d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
+    d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
+                                 "<i>Customize behavior of the other parts of digiKam</i></qt>"));
+    d->page_misc->setIcon(KIcon("preferences-other"));
 
     for (int i = 0; i != SetupPageEnumLast; ++i)
     {
