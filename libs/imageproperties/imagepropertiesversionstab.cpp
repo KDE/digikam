@@ -211,7 +211,7 @@ void ImagePropertiesVersionsTab::setupFiltersData() const
 }
 */
 
-void ImagePropertiesVersionsTab::slotImageSelected(const ImageInfo& info)
+void ImagePropertiesVersionsTab::slotImageSelected(const ImageInfo& /*info*/)
 {
     // TODO: solve by dynamic filtering in view
     /*
