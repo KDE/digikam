@@ -446,7 +446,7 @@ TransformDescription IccTransform::getDescription(const DImg& image)
     // our image data has 4 bytes per pixel with the fourth byte filled with 0xFF.
     if (image.sixteenBit())
     {
-        switch (cmsGetColorSpace(description.inputProfile))
+        /*switch (cmsGetColorSpace(description.inputProfile))
         {
             case icSigGrayData:
                 description.inputFormat = TYPE_GRAYA_16;
@@ -456,24 +456,15 @@ TransformDescription IccTransform::getDescription(const DImg& image)
                 break;
             default:
                 description.inputFormat = TYPE_BGRA_16;
-        }
+        }*/
 
+        // A Dimg is always BGRA, converted by the loader
+        description.inputFormat = TYPE_BGRA_16;
         description.outputFormat = TYPE_BGRA_16;
     }
     else
     {
-        switch (cmsGetColorSpace(description.inputProfile))
-        {
-            case icSigGrayData:
-                description.inputFormat = TYPE_GRAYA_8;
-                break;
-            case icSigCmykData:
-                description.inputFormat = TYPE_CMYK_8;
-                break;
-            default:
-                description.inputFormat = TYPE_BGRA_8;
-        }
-
+        description.inputFormat = TYPE_BGRA_8;
         description.outputFormat = TYPE_BGRA_8;
     }
 
