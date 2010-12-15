@@ -36,7 +36,7 @@ Comment[tr]=digiKam
 Comment[uk]=digiKam
 Comment[x-test]=xxdigiKamxx
 Comment[zh_CN]=digiKam
-Comment[zh_TW]=digiKam
+Comment[zh_TW]=digiKam 圖像管理
 
 [Event/cameradownloaded]
 Name=Download complete
