@@ -31,8 +31,6 @@
 #include <QString>
 #include <QByteArray>
 #include <QVariant>
-#include <QFile>
-#include <QCryptographicHash>
 
 // Local includes
 
@@ -76,7 +74,6 @@ public:
     static QByteArray uniqueHashV2(const QString& filePath, const DImg* img = 0);
     static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
     static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
-    static void updateFromFile(QFile& file, QCryptographicHash& hash, const int size);
 
 protected:
 

@@ -26,6 +26,8 @@
 
 // Qt includes
 
+#include <QCryptographicHash>
+#include <QFile>
 #include <QFileInfo>
 
 // KDE includes
@@ -277,18 +279,6 @@ bool DImgLoader::checkExifWorkingColorSpace()
     return false;
 }
 
-void DImgLoader::updateFromFile(QFile& file, QCryptographicHash& hash, const int size)
-{
-    char databuf[size];
-    int readlen = 0;
-
-    if ( ( readlen = file.read( databuf, size ) ) > 0 )
-    {
-        hash.addData( databuf, readlen );
-    }
-}
-
-
 QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
 {
     QFile file( filePath );
@@ -303,11 +293,26 @@ QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
     const qint64 specifiedSize = 100 * 1024; // 100 kB
     qint64 size = qMin(file.size(), specifiedSize);
 
-    // Read first 100 kB
-    updateFromFile(file, md5, size);
-    // Read last 100 kB
-    file.seek(file.size() - size);
-    updateFromFile(file, md5, size);
+    if (size)
+    {
+        char *databuf = new char[size];
+        int   read;
+
+        // Read first 100 kB
+        if ((read = file.read(databuf, size)) > 0 )
+        {
+            md5.addData(databuf, read);
+        }
+
+        // Read last 100 kB
+        file.seek(file.size() - size);
+        if ((read = file.read(databuf, size)) > 0 )
+        {
+            md5.addData(databuf, read);
+        }
+
+        delete [] databuf;
+    }
 
     QByteArray hash = md5.result().toHex();
 
