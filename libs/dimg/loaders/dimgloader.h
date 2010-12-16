@@ -31,6 +31,8 @@
 #include <QString>
 #include <QByteArray>
 #include <QVariant>
+#include <QFile>
+#include <QCryptographicHash>
 
 // Local includes
 
@@ -49,13 +51,13 @@ public:
 
     enum LoadFlag
     {
-        LoadImageInfo  = 1,
-        LoadMetadata   = 2,
-        LoadICCData    = 4,
-        LoadImageData  = 8,
-        LoadUniqueHash = 16,
+        LoadImageInfo    = 1,
+        LoadMetadata     = 2,
+        LoadICCData      = 4,
+        LoadImageData    = 8,
+        LoadUniqueHash   = 16,
         LoadImageHistory = 32,
-        LoadAll        = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData | LoadImageHistory
+        LoadAll          = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData | LoadImageHistory
     };
     Q_DECLARE_FLAGS(LoadFlags, LoadFlag)
 
@@ -74,6 +76,7 @@ public:
     static QByteArray uniqueHashV2(const QString& filePath, const DImg* img = 0);
     static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
     static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
+    static void updateFromFile(QFile& file, QCryptographicHash& hash, const int size);
 
 protected:
 

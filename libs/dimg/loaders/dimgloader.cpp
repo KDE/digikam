@@ -26,8 +26,6 @@
 
 // Qt includes
 
-#include <QCryptographicHash>
-#include <QFile>
 #include <QFileInfo>
 
 // KDE includes
@@ -279,7 +277,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
     return false;
 }
 
-static void updateFromFile(QFile& file, QCryptographicHash& hash, const int size)
+void DImgLoader::updateFromFile(QFile& file, QCryptographicHash& hash, const int size)
 {
     char databuf[size];
     int readlen = 0;
