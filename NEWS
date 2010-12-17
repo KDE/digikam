@@ -39,7 +39,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 256897 : Crash upon unmounting of USB drive.
 032 ==> 259257 : Too small font size.
 033 ==> 210353 : digiKam duplicates icons for TIFF files.
-034 ==> 
+034 ==> 260299 : X Axis Color Graduation in Curves Window mirrored.
+035 ==> 
+
 
 
 
