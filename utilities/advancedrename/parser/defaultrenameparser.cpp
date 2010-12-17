@@ -33,3 +33,4 @@ DefaultRenameParser::DefaultRenameParser()
 }
 
 }  // namespace Digikam
+
