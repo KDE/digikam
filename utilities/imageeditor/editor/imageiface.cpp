@@ -184,7 +184,6 @@ uchar* ImageIface::getPreviewImage() const
             uchar* data = DImgInterface::defaultInterface()->getImageSelection();
             DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
             im          = new DImg(w, h, s, a, data, true);
-            im->setIccProfile(DImgInterface::defaultInterface()->getEmbeddedICC());
             delete [] data;
 
             if (!im)
@@ -197,6 +196,8 @@ uchar* ImageIface::getPreviewImage() const
                 delete im;
                 return 0;
             }
+
+            im->setIccProfile(DImgInterface::defaultInterface()->getEmbeddedICC());
         }
 
         QSize sz(im->width(), im->height());
