@@ -40,8 +40,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 259257 : Too small font size.
 033 ==> 210353 : digiKam duplicates icons for TIFF files.
 034 ==> 260299 : X Axis Color Graduation in Curves Window mirrored.
-035 ==> 
-
+035 ==> 242021 : digiKam crashes during file save.
+036 ==> 
 
 
 
