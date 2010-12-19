@@ -45,7 +45,10 @@
 
 // const variables
 
+namespace
+{
 const int INVALID = -1;
+}
 
 namespace Digikam
 {
