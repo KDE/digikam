@@ -357,7 +357,7 @@ private Q_SLOTS:
 
     void slotOpenWith();
     void slotOpenWith(QAction* action);
-//    void slotABCContextMenu();
+    //    void slotABCContextMenu();
     void slotABCMenuTriggered(QAction*);
     void slotDeselectAllAlbumItems();
 

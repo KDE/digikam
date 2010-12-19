@@ -198,6 +198,7 @@ bool Rotate::toolOperations()
                     return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate270));
                     break;
                 default:      // Custom value
+
                     // there is no loss less methode to turn JPEG image with a custom angle.
                     if (!loadToDImg())
                     {

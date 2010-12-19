@@ -209,7 +209,7 @@ void ItemViewImageDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, 
     }
 }
 
-QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
+QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
     Q_D(const ItemViewImageDelegate);
     return d->rect.size();

@@ -72,7 +72,7 @@ public:
 };
 
 TagFilterView::TagFilterView(QWidget* parent, TagModel* tagFilterModel)
-             : TagCheckView(parent, tagFilterModel), d(new TagFilterViewPriv)
+    : TagCheckView(parent, tagFilterModel), d(new TagFilterViewPriv)
 {
     d->tagFilterModel             = tagFilterModel;
 
@@ -184,7 +184,7 @@ const QString TagFilterSideBarWidget::TagFilterSideBarWidgetPriv::configMatching
 // ---------------------------------------------------------------------------------------------------
 
 TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFilterModel)
-                      : QWidget(parent), StateSavingObject(this), d(new TagFilterSideBarWidgetPriv)
+    : QWidget(parent), StateSavingObject(this), d(new TagFilterSideBarWidgetPriv)
 {
     setObjectName("TagFilter Sidebar");
 

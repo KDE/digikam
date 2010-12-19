@@ -126,6 +126,7 @@ ContextMenuHelper::~ContextMenuHelper()
 void ContextMenuHelper::addAction(const char* name, bool addDisabled)
 {
     QAction* action = d->stdActionCollection->action(name);
+
     if (action)
     {
         addAction(action, addDisabled);

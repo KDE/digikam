@@ -434,7 +434,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     return false;
 }
 
-Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent* e, const QModelIndex &/*dropIndex*/)
+Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& /*dropIndex*/)
 {
     if (albumModel() && !albumModel()->currentAlbum())
     {

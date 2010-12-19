@@ -104,11 +104,11 @@ public:
     {
         return d;
     }
-    inline operator T *()
+    inline operator T* ()
     {
         return d;
     }
-    inline operator const T *() const
+    inline operator const T* () const
     {
         return d;
     }
