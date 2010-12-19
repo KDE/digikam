@@ -182,25 +182,41 @@ Parser* AdvancedRenameLineEdit::parser() const
 
 void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
 {
-    // avoid newline
-    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
+    switch (e->key())
     {
-        emit signalReturnPressed();
-    }
-    // the keys "Up, Down, PageUp, PageDown" should be send to the QComboBox
-    else if (e->key() == Qt::Key_Up     || e->key() == Qt::Key_Down    ||
-             e->key() == Qt::Key_PageUp || e->key() == Qt::Key_PageDown)
-    {
-        e->setAccepted(false);
-    }
-    // the key "/" should not be allowed (QTextEdit is not able to use a QValidator, so we must do it in here)
-    else if (!d->allowDirectoryCreation && e->key() == Qt::Key_Slash)
-    {
-        // do nothing
-    }
-    else
-    {
-        QTextEdit::keyPressEvent(e);
+        // avoid newlines in the new name
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        {
+            emit signalReturnPressed();
+            break;
+        }
+
+        // the keys "Up, Down, PageUp, PageDown" should be send to the QComboBox
+        case Qt::Key_Up:
+        case Qt::Key_PageUp:
+        case Qt::Key_Down:
+        case Qt::Key_PageDown:
+        {
+            e->setAccepted(false);
+            break;
+        }
+
+        // the key "/" should not be allowed (QTextEdit is not able to use a QValidator, so we must do it in here)
+        case Qt::Key_Slash:
+        {
+            if (!d->allowDirectoryCreation)
+            {
+                // do nothing
+            }
+            break;
+        }
+
+        default:
+        {
+            QTextEdit::keyPressEvent(e);
+            break;
+        }
     }
 }
 
