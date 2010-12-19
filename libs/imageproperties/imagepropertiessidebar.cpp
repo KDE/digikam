@@ -180,6 +180,8 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
         m_dirtyGpsTab = true;
     }
 
+    m_gpsTab->setActive(tab==m_gpsTab);
+
     unsetCursor();
 }
 

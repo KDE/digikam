@@ -137,7 +137,6 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->gpsModelHelper   = new ImageGPSModelHelper(d->itemModel, this);
     d->itemMarkerTiler  = new KMap::ItemMarkerTiler(d->gpsModelHelper, this);
     d->map->setGroupedModel(d->itemMarkerTiler);
-    d->map->setActive(true);
 
     d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);
     d->latLabel         = new QLabel(i18n("<b>Latitude</b>:"),  this);
@@ -191,9 +190,6 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     layout->setMargin(0);
 
     readConfig();
-
-    // TODO: actually, do this only if the tab is visible!
-    d->map->setActive(true);
 
     // --------------------------------------------------------
 
@@ -411,6 +407,11 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
         //       otherwise remember to call this function later!
         d->map->adjustBoundariesToGroupedMarkers();
     }
+}
+
+void ImagePropertiesGPSTab::setActive(const bool state)
+{
+    d->map->setActive(state);
 }
 
 }  // namespace Digikam

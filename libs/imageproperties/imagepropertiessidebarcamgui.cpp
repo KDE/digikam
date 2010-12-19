@@ -192,6 +192,8 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
         d->dirtyGpsTab = true;
     }
 
+    d->gpsTab->setActive(tab==d->gpsTab);
+
     unsetCursor();
 }
 

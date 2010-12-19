@@ -386,6 +386,8 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
     }
 
+    m_gpsTab->setActive(tab==m_gpsTab);
+
     unsetCursor();
 }
 
