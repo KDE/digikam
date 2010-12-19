@@ -156,6 +156,7 @@ typedef struct Namelist Namelist;
 
 #ifndef _MSC_VER
 #define abs(x) ((x) >= 0 ? (x) : -(x))
+#define _CRT_ABS_DEFINED
 #endif
 #define dabs(x) (doublereal)abs(x)
 #define min(a,b) ((a) <= (b) ? (a) : (b))
