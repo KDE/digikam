@@ -47,7 +47,7 @@
 
 namespace
 {
-const int INVALID = -1;
+static const short INVALID = -1;
 }
 
 namespace Digikam

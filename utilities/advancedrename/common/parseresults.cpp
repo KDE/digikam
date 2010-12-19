@@ -27,11 +27,13 @@
 
 #include <kdebug.h>
 
+namespace
+{
+static const short INVALID_KEY_ID = -1;
+}
+
 namespace Digikam
 {
-// const variables
-
-const int INVALID_KEY_ID = -1;
 
 void ParseResults::addEntry(const ResultsKey& key, const ResultsValue& value)
 {
