@@ -11,7 +11,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 259146 : Libface doesn't learn new faces (patch).
 005 ==> 146288 : Face detection / recognition for digiKam.
 006 ==> 252964 : Please remove libs from kdegraphics and make independant.
-007 ==> 
+007 ==> 260619 : digiKam crash when raw format is being converted.
+008 ==> 
+
 
 
 
