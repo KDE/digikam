@@ -42,6 +42,58 @@
 namespace Digikam
 {
 
+WBContainer::WBContainer()
+{
+    // Neutral color temperature settings.
+    black       = 0.0;
+    exposition  = 0.0;
+    temperature = 6500.0;
+    green       = 1.0;
+    dark        = 0.5;
+    gamma       = 1.0;
+    saturation  = 1.0;
+};
+
+bool WBContainer::isDefault() const
+{
+    return *this == WBContainer();
+}
+
+bool WBContainer::operator==(const WBContainer& other) const
+{
+    return black       == other.black &&
+           exposition  == other.exposition &&
+           temperature == other.temperature &&
+           green       == other.green &&
+           dark        == other.dark  &&
+           gamma       == other.gamma &&
+           saturation  == other.saturation;
+}
+
+void WBContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
+{
+    action.addParameter(prefix + "black", black);
+    action.addParameter(prefix + "exposition", exposition);
+    action.addParameter(prefix + "temperature", temperature);
+    action.addParameter(prefix + "green", green);
+    action.addParameter(prefix + "dark", dark);
+    action.addParameter(prefix + "gamma", gamma);
+    action.addParameter(prefix + "saturation", saturation);
+}
+
+WBContainer WBContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
+{
+    WBContainer settings;
+    settings.black       = action.parameter(prefix + "black", settings.black);
+    settings.exposition  = action.parameter(prefix + "exposition", settings.exposition);
+    settings.temperature = action.parameter(prefix + "temperature", settings.temperature);
+    settings.green       = action.parameter(prefix + "green", settings.green);
+    settings.dark        = action.parameter(prefix + "dark", settings.dark);
+    settings.gamma       = action.parameter(prefix + "gamma", settings.gamma);
+    settings.saturation  = action.parameter(prefix + "saturation", settings.saturation);
+    return settings;
+}
+
 class WBFilterPriv
 {
 public:
@@ -74,6 +126,7 @@ public:
     float mg;
     float mb;
 };
+
 WBFilter::WBFilter(QObject* parent)
     : DImgThreadedFilter(parent),
       d(new WBFilterPriv)
@@ -84,6 +137,15 @@ WBFilter::WBFilter(QObject* parent)
 
 WBFilter::WBFilter(DImg* orgImage, QObject* parent, const WBContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "WBFilter"),
+      d(new WBFilterPriv)
+{
+    m_settings = settings;
+    initFilter();
+}
+
+WBFilter::WBFilter(const WBContainer& settings, DImgThreadedFilter* master,
+                   const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "WBFilter"),
       d(new WBFilterPriv)
 {
     m_settings = settings;
@@ -428,26 +490,14 @@ FilterAction WBFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("black", m_settings.black);
-    action.addParameter("exposition", m_settings.exposition);
-    action.addParameter("temperature", m_settings.temperature);
-    action.addParameter("green", m_settings.green);
-    action.addParameter("dark", m_settings.dark);
-    action.addParameter("gamma", m_settings.gamma);
-    action.addParameter("saturation", m_settings.saturation);
+    m_settings.writeToFilterAction(action);
 
     return action;
 }
 
 void WBFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_settings.black = action.parameter("black").toDouble();
-    m_settings.exposition = action.parameter("exposition").toDouble();
-    m_settings.temperature = action.parameter("temperature").toDouble();
-    m_settings.green = action.parameter("green").toDouble();
-    m_settings.dark = action.parameter("dark").toDouble();
-    m_settings.gamma = action.parameter("gamma").toDouble();
-    m_settings.saturation = action.parameter("saturation").toDouble();
+    m_settings = WBContainer::fromFilterAction(action);
 }
 
 
