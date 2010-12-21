@@ -246,6 +246,9 @@ public:
     void buildImagesList();
     void buildImagesTree();
     void buildCombinedTree(const HistoryGraph::Vertex& ref);
+    void addCombinedItemCategory(HistoryTreeItem* parentItem, QList<HistoryGraph::Vertex>& vertices,
+                                 const QString& title, const HistoryGraph::Vertex& showActionsFrom,
+                                 QList<HistoryGraph::Vertex>& added);
     void addItemSubgroup(VertexItem* parent, const QList<HistoryGraph::Vertex>& vertices, const QString& title);
 
     VertexItem* createVertexItem(const HistoryGraph::Vertex& v);
@@ -379,10 +382,15 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildImagesTree()
 void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const HistoryGraph::Vertex& ref)
 {
     VertexItem* item = 0;
-    QList<HistoryGraph::Vertex> added;
 
     CategoryItem *categoryItem = new CategoryItem(i18nc("@title", "Image History"));
     rootItem->addItem(categoryItem);
+
+    QList<HistoryGraph::Vertex> added;
+    QList<HistoryGraph::Vertex> currentVersions = categories.keys(HistoryImageId::Current);
+    QList<HistoryGraph::Vertex> leavesFromRef   = graph().leavesFrom(ref);
+
+    bool onePath = leavesFromRef.size() <= 1;
 
     for (int i=0; i<path.size(); i++)
     {
@@ -430,11 +438,21 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
         rootItem->addItem(item);
         added << v;
 
-        if (v == ref)
+        // If there are multiple derived images, we display them in the next section
+        if (v == ref && !onePath)
             break;
     }
 
-    QList<HistoryGraph::Vertex> currentVersions = categories.keys(HistoryImageId::Current);
+    foreach (const HistoryGraph::Vertex& v, added)
+    {
+        leavesFromRef.removeOne(v);
+    }
+
+    if (!leavesFromRef.isEmpty())
+    {
+        addCombinedItemCategory(rootItem, leavesFromRef, i18nc("@title", "Derived Images"), ref, added);
+    }
+
     foreach (const HistoryGraph::Vertex& v, added)
     {
         currentVersions.removeOne(v);
@@ -442,52 +460,57 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
 
     if (!currentVersions.isEmpty())
     {
-        if (graph().isLeaf(ref))
-            categoryItem = new CategoryItem(i18nc("@title", "Related Images"));
-        else
-            categoryItem = new CategoryItem(i18nc("@title", "Derived Images"));
-        rootItem->addItem(categoryItem);
+        addCombinedItemCategory(rootItem, currentVersions, i18nc("@title", "Related Images"), path.first(), added);
+    }
+}
 
-        qSort(currentVersions.begin(), currentVersions.end(), sortBy(oldestInfoFirst));
-        bool isFirst = true;
+void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
+     addCombinedItemCategory(HistoryTreeItem* parentItem, QList<HistoryGraph::Vertex>& vertices,
+                             const QString& title, const HistoryGraph::Vertex& showActionsFrom,
+                             QList<HistoryGraph::Vertex>& added)
+{
+    parentItem->addItem(new CategoryItem(title));
 
-        foreach (const HistoryGraph::Vertex& v, currentVersions)
+    qSort(vertices.begin(), vertices.end(), sortBy(oldestInfoFirst));
+    bool isFirst = true;
+    VertexItem* item = 0;
+
+    foreach (const HistoryGraph::Vertex& v, vertices)
+    {
+        if (isFirst)
         {
-            if (isFirst)
-            {
-                isFirst = false;
-            }
-            else
-            {
-                rootItem->addItem(new SeparatorItem);
-            }
-
-            item = createVertexItem(v);
-
-            HistoryGraph::Vertex showActionsFrom = graph().isLeaf(ref) ? path.first() : ref;
-            QList<HistoryGraph::Vertex> shortestPath = graph().shortestPath(showActionsFrom, v);
-
-            // add all filter actions ref -> v above item
-            for (int i=1; i<shortestPath.size(); i++)
-            {
-                HistoryEdgeProperties props = graph().properties(shortestPath[i], shortestPath[i-1]);
-                foreach (const FilterAction& action, props.actions)
-                {
-                    rootItem->addItem(createFilterActionItem(action));
-                }
-            }
-
-            rootItem->addItem(item);
-
-            // Provide access to intermediates
-            shortestPath.removeOne(ref);
-            shortestPath.removeOne(v);
-            foreach (const HistoryGraph::Vertex& addedVertex, added)
-            {
-                shortestPath.removeOne(addedVertex);
-            }
-            addItemSubgroup(item, shortestPath, i18nc("@title", "Intermediate Steps..."));
+            isFirst = false;
         }
+        else
+        {
+            parentItem->addItem(new SeparatorItem);
+        }
+
+        item = createVertexItem(v);
+
+        QList<HistoryGraph::Vertex> shortestPath = graph().shortestPath(showActionsFrom, v);
+
+        // add all filter actions showActionsFrom -> v above item
+        for (int i=1; i<shortestPath.size(); i++)
+        {
+            HistoryEdgeProperties props = graph().properties(shortestPath[i], shortestPath[i-1]);
+            foreach (const FilterAction& action, props.actions)
+            {
+                parentItem->addItem(createFilterActionItem(action));
+            }
+        }
+
+        parentItem->addItem(item);
+        added << v;
+
+        // Provide access to intermediates
+        shortestPath.removeOne(showActionsFrom);
+        shortestPath.removeOne(v);
+        foreach (const HistoryGraph::Vertex& addedVertex, added)
+        {
+            shortestPath.removeOne(addedVertex);
+        }
+        addItemSubgroup(item, shortestPath, i18nc("@title", "Intermediate Steps..."));
     }
 }
 
