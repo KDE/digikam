@@ -93,6 +93,13 @@ public:
     DatabaseThumbnailInfo findByFilePath(const QString& path);
     DatabaseThumbnailInfo findByCustomIdentifier(const QString& id);
 
+    /** This is findByFilePath with extra security: Pass the uniqueHash which you have.
+     *  If an entry is found by file path, and the entry is referenced by any uniqueHash,
+     *  which is different from the given hash, a null info is returned.
+     *  If uniqueHash is null, equivalent to the simple findByFilePath.
+     */
+    DatabaseThumbnailInfo findByFilePath(const QString& path, const QString& uniqueHash);
+
     DatabaseCoreBackend::QueryState insertUniqueHash(const QString& uniqueHash, int fileSize, int thumbId);
     DatabaseCoreBackend::QueryState insertFilePath(const QString& path, int thumbId);
     DatabaseCoreBackend::QueryState insertCustomIdentifier(const QString& id, int thumbId);

@@ -135,6 +135,42 @@ DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString& path)
     return info;
 }
 
+DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString& path, const QString& uniqueHash)
+{
+    DatabaseThumbnailInfo info = findByFilePath(path);
+
+    if (uniqueHash.isNull())
+    {
+        return info;
+    }
+
+    if (info.data.isNull())
+    {
+        return info;
+    }
+
+    // double check that thumbnail is not referenced by a different hash
+    QList<QVariant> values;
+    d->db->execSql("SELECT uniqueHash FROM UniqueHashes WHERE thumbId=?;",
+                info.id, &values);
+
+    if (values.isEmpty())
+    {
+        return info;
+    }
+    else
+    {
+        foreach (const QVariant& hash, values)
+        {
+            if (hash == uniqueHash)
+            {
+                return info;
+            }
+        }
+        return DatabaseThumbnailInfo();
+    }
+}
+
 DatabaseThumbnailInfo ThumbnailDB::findByCustomIdentifier(const QString& id)
 {
     QList<QVariant> values;

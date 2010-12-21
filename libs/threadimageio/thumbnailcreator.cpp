@@ -835,7 +835,7 @@ DatabaseThumbnailInfo ThumbnailCreator::loadDatabaseThumbnailInfo(const Thumbnai
 
         if (dbInfo.data.isNull() && !info.filePath.isNull())
         {
-            dbInfo = access.db()->findByFilePath(info.filePath);
+            dbInfo = access.db()->findByFilePath(info.filePath, info.uniqueHash);
         }
     }
 
