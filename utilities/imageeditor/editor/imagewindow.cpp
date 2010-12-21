@@ -940,7 +940,7 @@ void ImageWindow::slotUpdateItemInfo()
 {
     QString text = i18nc("<Image file name> (<Image number> of <Images in album>)",
                          "%1 (%2 of %3)", d->currentImageInfo.name(),
-                         QString::number(d->currentIndex().row()),
+                         QString::number(d->currentIndex().row() + 1),
                          QString::number(d->imageFilterModel->rowCount()));
     m_nameLabel->setText(text);
 
@@ -1052,18 +1052,33 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // copy the metadata of the original file to the new file
-    ScanController::instance()->
+    if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
+    {
+        foreach (const QString& path, m_savingContext.versionFileOperation.allFilePaths())
+        {
+            ScanController::instance()->scanFileDirectlyCopyAttributes(path, d->currentImageInfo.id());
+        }
+    }
+    else
+    {
+        ScanController::instance()->
         scanFileDirectlyCopyAttributes(m_savingContext.destinationURL.toLocalFile(), d->currentImageInfo.id());
+    }
 
     // Set new current index
     d->currentImageInfo = ImageInfo(m_savingContext.destinationURL.toLocalFile());
     if (!d->imageInfoModel->hasImage(d->currentImageInfo))
     {
-        d->imageInfoModel->addImageInfo(d->currentImageInfo);
+        d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
+        // Note: Due to the asynchronous process, we dont yet have an index for the just added info!
+        //d->imageInfoModel->addImageInfo(d->currentImageInfo);
     }
 
     // set origin of DImgInterface: "As if" the last saved image was loaded directly
     m_canvas->switchToLastSaved(m_savingContext.destinationURL.toLocalFile());
+    // and set again a resolved history
+    DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getInitialImageHistory());
+    m_canvas->interface()->setResolvedInitialHistory(resolved);
 
     // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
     // This may irritate users who want to check for quality loss in lossy formats.
@@ -1074,6 +1089,9 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // all that is done in slotLoadCurrent, except for loading
+
+    d->thumbBar->setCurrentIndex(d->currentIndex());
+
     QModelIndex next = d->nextIndex();
     if (next.isValid())
     {

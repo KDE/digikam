@@ -37,7 +37,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "versionmanager.h"
+#include "versionfileoperation.h"
 
 namespace Digikam
 {

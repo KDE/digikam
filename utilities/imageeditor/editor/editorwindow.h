@@ -229,7 +229,7 @@ protected:
     virtual bool saveCurrentVersion()=0;
 
     virtual VersionManager* versionManager();
-    VersionFileOperation savingVersionFileInfo(const KUrl& url, bool fork);
+    VersionFileOperation savingVersionFileOperation(const KUrl& url, bool fork);
 
     /**
      * Hook method that subclasses must implement to return the destination url

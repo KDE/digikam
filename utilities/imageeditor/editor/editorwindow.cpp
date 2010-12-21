@@ -152,6 +152,7 @@
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "thumbnailsize.h"
+#include "thumbnailloadthread.h"
 #include "versionmanager.h"
 
 namespace Digikam
@@ -1519,17 +1520,24 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
         {
             if (m_nonDestructive)
             {
-                QPointer<VersioningPromptUserSaveDialog> dialog = new VersioningPromptUserSaveDialog(this);
-                dialog->exec();
-
-                if (!dialog)
+                if (versionManager()->settings().editorClosingMode == VersionManagerSettings::AutoSave)
                 {
-                    return false;
+                    shallSave = true;
                 }
+                else
+                {
+                    QPointer<VersioningPromptUserSaveDialog> dialog = new VersioningPromptUserSaveDialog(this);
+                    dialog->exec();
 
-                shallSave    = dialog->shallSave();
-                shallDiscard = dialog->shallDiscard();
-                newVersion   = dialog->newVersion();
+                    if (!dialog)
+                    {
+                        return false;
+                    }
+
+                    shallSave    = dialog->shallSave();
+                    shallDiscard = dialog->shallDiscard();
+                    newVersion   = dialog->newVersion();
+                }
             }
             else
             {
@@ -1778,6 +1786,8 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
 
         // Set a history which contains all available files as referredImages
         DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getInitialImageHistory());
+        kDebug() << "initial history" << m_canvas->interface()->getInitialImageHistory().size()
+        << "resolved initial history" << resolved.size();
         m_canvas->interface()->setResolvedInitialHistory(resolved);
     }
 }
@@ -1872,6 +1882,46 @@ void EditorWindow::slotSavingStarted(const QString& /*filename*/)
     m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, i18n("Saving: "));
 }
 
+void EditorWindow::slotSavingFinished(const QString& filename, bool success)
+{
+    Q_UNUSED(filename);
+    kDebug() << filename << success << (m_savingContext.savingState != SavingContextContainer::SavingStateNone);
+
+    // only handle this if we really wanted to save a file...
+    if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    {
+        m_savingContext.executedOperation = m_savingContext.savingState;
+        m_savingContext.savingState = SavingContextContainer::SavingStateNone;
+
+        if (!success)
+        {
+            if (!m_savingContext.abortingSaving)
+            {
+                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
+                                              m_savingContext.destinationURL.fileName(),
+                                              m_savingContext.destinationURL.toLocalFile()));
+            }
+
+            finishSaving(false);
+            return;
+        }
+
+        /*
+         *            / -> moveLocalFile()                    \
+         * moveFile()                                           ->     movingSaveFileFinished()
+         *            \ -> KIO::move() -> slotKioMoveFinished /        |              |
+         *
+         *                                                    finishSaving(true)  save...IsComplete()
+         */
+        moveFile();
+
+    }
+    else
+    {
+        kWarning() << "Why was slotSavingFinished called if we did not want to save a file?";
+    }
+}
+
 void EditorWindow::movingSaveFileFinished(bool successful)
 {
     if (!successful)
@@ -1887,6 +1937,7 @@ void EditorWindow::movingSaveFileFinished(bool successful)
 
     // remove image from cache since it has changed
     LoadingCacheInterface::fileChanged(m_savingContext.destinationURL.toLocalFile());
+    ThumbnailLoadThread::deleteThumbnail(m_savingContext.destinationURL.toLocalFile());
 
     // restore state of disabled actions. saveIsComplete can start any other task
     // (loading!) which might itself in turn change states
@@ -1909,38 +1960,6 @@ void EditorWindow::movingSaveFileFinished(bool successful)
 
     // Take all actions necessary to update information and re-enable sidebar
     slotChanged();
-}
-
-void EditorWindow::slotSavingFinished(const QString& filename, bool success)
-{
-    Q_UNUSED(filename);
-
-    // only handle this if we really wanted to save a file...
-    if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
-    {
-        m_savingContext.executedOperation = m_savingContext.savingState;
-        m_savingContext.savingState = SavingContextContainer::SavingStateNone;
-
-        if (!success)
-        {
-            if (!m_savingContext.abortingSaving)
-            {
-                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
-                                              m_savingContext.destinationURL.fileName(),
-                                              m_savingContext.destinationURL.toLocalFile()));
-            }
-
-            finishSaving(false);
-            return;
-        }
-
-        moveFile();
-
-    }
-    else
-    {
-        kWarning() << "Why was slotSavingFinished called if we did not want to save a file?";
-    }
 }
 
 void EditorWindow::finishSaving(bool success)
@@ -2427,7 +2446,7 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url)
     return startingSaveVersion(url, true);
 }
 
-VersionFileOperation EditorWindow::savingVersionFileInfo(const KUrl& url, bool fork)
+VersionFileOperation EditorWindow::savingVersionFileOperation(const KUrl& url, bool fork)
 {
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history = m_canvas->interface()->getImageHistory();
@@ -2439,7 +2458,7 @@ VersionFileOperation EditorWindow::savingVersionFileInfo(const KUrl& url, bool f
 
 bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
 {
-    kDebug() << "Saving image non-destructive, new version:" << fork;
+    kDebug() << "Saving image" << url << "non-destructive, new version:" << fork;
 
     if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
     {
@@ -2447,10 +2466,9 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
     }
 
     m_savingContext = SavingContextContainer();
-    m_savingContext.versionFileOperation = savingVersionFileInfo(url, fork);
+    m_savingContext.versionFileOperation = savingVersionFileOperation(url, fork);
 
-    KUrl newURL = KUrl::fromPath(m_savingContext.versionFileOperation.saveFile.path);
-    newURL.addPath(m_savingContext.versionFileOperation.saveFile.fileName);
+    KUrl newURL = m_savingContext.versionFileOperation.saveFile.fileUrl();
 
     kDebug() << "Writing file to " << newURL;
 
@@ -2483,9 +2501,10 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
     m_savingContext.savingState        = SavingContextContainer::SavingStateVersion;
     m_savingContext.executedOperation  = SavingContextContainer::SavingStateNone;
 
-    m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
-                     m_setExifOrientationTag && m_canvas->exifRotated(),
-                     m_savingContext.format.toLower());
+    m_canvas->interface()->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
+                                  m_setExifOrientationTag && m_canvas->exifRotated(),
+                                  m_savingContext.format.toLower(),
+                                  m_savingContext.versionFileOperation);
 
     return true;
 }
@@ -2568,7 +2587,6 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& destPath, bo
     {
         KMessageBox::error(this, i18n("Failed to overwrite original file"),
                            i18n("Error Saving File"));
-        movingSaveFileFinished(false);
         return false;
     }
 
@@ -2587,6 +2605,7 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& destPath, bo
 
 void EditorWindow::moveFile()
 {
+    kDebug() << m_savingContext.destinationURL << m_savingContext.destinationURL.isLocalFile();
     // how to move a file depends on if the file is on a local system or not.
     if (m_savingContext.destinationURL.isLocalFile())
     {
@@ -2597,30 +2616,40 @@ void EditorWindow::moveFile()
             // check if we need to move the current file to an intermediate name
             if (m_savingContext.versionFileOperation.tasks & VersionFileOperation::MoveToIntermediate)
             {
+                kDebug() << "MoveToIntermediate: Moving " << m_savingContext.srcURL.toLocalFile() << "to" <<
+                m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath() <<
                 moveLocalFile(m_savingContext.srcURL.toLocalFile(),
                               m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath(),
                               false);
+                LoadingCacheInterface::fileChanged(m_savingContext.destinationURL.toLocalFile());
+                ThumbnailLoadThread::deleteThumbnail(m_savingContext.destinationURL.toLocalFile());
             }
         }
 
-        if (!moveLocalFile(m_savingContext.saveTempFileName,
-                           m_savingContext.destinationURL.toLocalFile(),
-                           m_savingContext.destinationExisted))
+        bool moveSuccessful = moveLocalFile(m_savingContext.saveTempFileName,
+                                            m_savingContext.destinationURL.toLocalFile(),
+                                            m_savingContext.destinationExisted);
+
+        if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
         {
-            return;
+            if (moveSuccessful &&
+                m_savingContext.versionFileOperation.tasks & VersionFileOperation::SaveAndDelete)
+            {
+                QFile file(m_savingContext.versionFileOperation.loadedFile.filePath());
+                file.remove();
+            }
         }
 
-        movingSaveFileFinished(true);
+        movingSaveFileFinished(moveSuccessful);
     }
     else
     {
         // for remote destinations use kio to move the temp file over there
-        // dont care for versioning here, not supported
+        // dont care for versioning here, atm not supported
 
         kDebug() << "moving a remote file via KIO";
 
-        KIO::CopyJob* moveJob = KIO::move(KUrl(
-                                              m_savingContext.saveTempFileName),
+        KIO::CopyJob* moveJob = KIO::move(KUrl(m_savingContext.saveTempFileName),
                                           m_savingContext.destinationURL);
         connect(moveJob, SIGNAL(result(KJob*)),
                 this, SLOT(slotKioMoveFinished(KJob*)));
