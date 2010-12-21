@@ -207,6 +207,7 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
         history << id;
 
         m_image->setImageHistory(history);
+        imageSetAttribute("originalImageHistory", QVariant::fromValue(history));
     }
 
     return true;

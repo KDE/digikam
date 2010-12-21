@@ -54,11 +54,14 @@ namespace Digikam
 {
 
 RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
-    : DImgLoader(image)
+    : DImgLoader(image),
+      m_observer(0),
+      m_filter(0)
 {
     m_rawDecodingSettings = rawDecodingSettings.rawPrm;
-    m_customRawSettings   = rawDecodingSettings;
-    m_observer            = 0;
+
+    m_filter = new RawProcessingFilter(this);
+    m_filter->setSettings(rawDecodingSettings);
 }
 
 bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
@@ -105,7 +108,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             {
                 // Specifying a custom output is broken somewhere. We use the extremely
                 // wide gamut pro photo profile for 16bit (sRGB for 8bit) and convert afterwards.
-                m_customOutputProfile = m_rawDecodingSettings.outputProfile;
+                m_filter->setOutputProfile(m_rawDecodingSettings.outputProfile);
 
                 if (m_rawDecodingSettings.sixteenBitsImage)
                 {
@@ -310,7 +313,8 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     imageWidth()  = width;
     imageHeight() = height;
-    imageSetAttribute("rawDecodingSettings", QVariant::fromValue(m_customRawSettings));
+    imageSetAttribute("rawDecodingSettings", QVariant::fromValue(m_filter->settings()));
+    imageSetAttribute("rawDecodingFilterAction", QVariant::fromValue(m_filter->filterAction()));
     // other attributes are set above
 
     return true;
@@ -318,74 +322,8 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
 void RAWLoader::postProcess(DImgLoaderObserver* observer)
 {
-    // emulate LibRaw custom output profile
-    if (!m_customOutputProfile.isNull())
-    {
-        // Note the m_image is not yet ready in load()!
-        IccTransform trans;
-        trans.setIntent(IccTransform::Perceptual);
-        trans.setEmbeddedProfile(*m_image);
-        trans.setOutputProfile(m_customOutputProfile);
-        trans.apply(*m_image, observer);
-        imageSetIccProfile(m_customOutputProfile);
-    }
-
-    if (!m_customRawSettings.postProcessingSettingsIsDirty())
-    {
-        return;
-    }
-
-    if (m_customRawSettings.exposureComp != 0.0 || m_customRawSettings.saturation != 1.0)
-    {
-        WBContainer settings;
-        settings.temperature  = 6500.0;
-        settings.dark         = 0.5;
-        settings.black        = 0.0;
-        settings.exposition   = m_customRawSettings.exposureComp;
-        settings.gamma        = 1.0;
-        settings.saturation   = m_customRawSettings.saturation;
-        settings.green        = 1.0;
-        WBFilter wb(m_image, 0L, settings);
-        wb.startFilterDirectly();
-        m_image->putImageData(wb.getTargetImage().bits());
-    }
-
-    if (observer)
-    {
-        observer->progressInfo(m_image, 0.92F);
-    }
-
-    if (m_customRawSettings.lightness != 0.0 ||
-        m_customRawSettings.contrast  != 1.0 ||
-        m_customRawSettings.gamma     != 1.0)
-    {
-        BCGContainer settings;
-        settings.brightness = m_customRawSettings.lightness;
-        settings.contrast   = m_customRawSettings.contrast;
-        settings.gamma      = m_customRawSettings.gamma;
-        BCGFilter bcg(m_image, 0L, settings);
-        bcg.startFilterDirectly();
-        m_image->putImageData(bcg.getTargetImage().bits());
-    }
-
-    if (observer)
-    {
-        observer->progressInfo(m_image, 0.94F);
-    }
-
-    if (!m_customRawSettings.curveAdjust.isEmpty())
-    {
-        CurvesContainer settings(ImageCurves::CURVE_SMOOTH, m_image->sixteenBit());
-        settings.values[LuminosityChannel] = m_customRawSettings.curveAdjust;
-        CurvesFilter curves(m_image, 0L, settings);
-        curves.startFilterDirectly();
-        m_image->putImageData(curves.getTargetImage().bits());
-    }
-
-    if (observer)
-    {
-        observer->progressInfo(m_image, 0.96F);
-    }
+    m_filter->setObserver(observer, 90, 100);
+    m_filter->startFilterDirectly();
 }
 
 }  // namespace Digikam

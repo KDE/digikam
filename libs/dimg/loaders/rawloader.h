@@ -37,10 +37,13 @@
 #include "drawdecoding.h"
 #include "digikam_export.h"
 #include "iccprofile.h"
+#include "rawprocessingfilter.h"
 
 namespace Digikam
 {
+
 class DImg;
+class RawProcessingFilter;
 
 class DIGIKAM_EXPORT RAWLoader : public KDcrawIface::KDcraw, public DImgLoader
 {
@@ -84,9 +87,8 @@ private:
 
 private:
 
-    DImgLoaderObserver* m_observer;
-    DRawDecoding        m_customRawSettings;
-    IccProfile          m_customOutputProfile;
+    DImgLoaderObserver*  m_observer;
+    RawProcessingFilter* m_filter;
 };
 
 }  // namespace Digikam
