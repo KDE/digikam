@@ -48,6 +48,14 @@ CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const CurvesContaine
     initFilter();
 }
 
+CurvesFilter::CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* master,
+                           const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "CurvesFilter")
+{
+    m_settings = settings;
+    initFilter();
+}
+
 CurvesFilter::~CurvesFilter()
 {
     cancelFilter();
@@ -76,59 +84,18 @@ void CurvesFilter::filterImage()
     postProgress(100);
 }
 
-bool CurvesFilter::isStoredLosslessly(const CurvesContainer& settings)
-{
-    return !(settings.sixteenBit && settings.curvesType == ImageCurves::CURVE_FREE);
-}
-
-void CurvesFilter::addCurvesParameters(FilterAction& action, const CurvesContainer& settings)
-{
-    ImageCurves curves(settings);
-
-    // Convert to 8bit: 16 bits curves takes 85kb, 8 bits only 400 bytes.
-    if (curves.isSixteenBits())
-    {
-        ImageCurves depthCurve(false);
-        depthCurve.fillFromOtherCurves(&curves);
-        curves = depthCurve;
-    }
-
-    action.addParameter("curveBitDepth", 8);
-
-    for (int i=0; i<ColorChannels; i++)
-    {
-        action.addParameter(QString("curveData[%1]").arg(i), curves.channelToBase64(i));
-    }
-}
-
-CurvesContainer CurvesFilter::readCurvesParameters(const FilterAction& action)
-{
-    ImageCurves curves(action.parameter("curveBitDepth").toInt() == 16);
-
-    for (int i=0; i<ColorChannels; i++)
-    {
-        QByteArray base64 = action.parameter(QString("curveData[%1]").arg(i)).toByteArray();
-        // check return value and set readParametersError?
-        curves.setChannelFromBase64(i, base64);
-    }
-
-    return curves.getContainer();
-}
-
 FilterAction CurvesFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion(),
-                        isStoredLosslessly(m_settings) ? FilterAction::ReproducibleFilter : FilterAction::ComplexFilter);
-    action.setDisplayableName(DisplayableName());
+    DefaultFilterAction<CurvesFilter> action(m_settings.isStoredLosslessly());
 
-    addCurvesParameters(action, m_settings);
+    m_settings.writeToFilterAction(action);
 
     return action;
 }
 
 void CurvesFilter::readParameters(const FilterAction& action)
 {
-    m_settings = readCurvesParameters(action);
+    m_settings = CurvesContainer::fromFilterAction(action);
 }
 
 }  // namespace Digikam

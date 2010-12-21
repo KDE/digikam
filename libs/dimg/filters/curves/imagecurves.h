@@ -36,6 +36,7 @@
 
 // Local includes
 
+#include "curvescontainer.h"
 #include "globals.h"
 #include "digikam_export.h"
 
@@ -138,9 +139,10 @@ public:
     CurvesContainer getContainer(int channel) const;
 
     /**
-     * Returns true if the curve is linear for the given channel.
+     * Returns true if the curve is linear for the given channel, or all channels.
      */
     bool isLinear(int channel) const;
+    bool isLinear() const;
 
     /**
      * Writes the given channel to a base64 representation.
@@ -173,31 +175,6 @@ private:
     class ImageCurvesPriv;
     QSharedDataPointer<ImageCurvesPriv> d;
 };
-
-// --------------------------------------------------------------------------------
-
-class DIGIKAM_EXPORT CurvesContainer
-{
-
-public:
-
-    /** Provides a convenient storage for a curve */
-
-    CurvesContainer(ImageCurves::CurveType type = ImageCurves::CURVE_SMOOTH,
-                    bool sixteenBit = false);
-
-public:
-
-    /**
-     *  Smooth : QPolygon have size of 18 points.
-     *  Free   : QPolygon have size of 255 or 65535 values.
-     */
-    ImageCurves::CurveType  curvesType;
-    QPolygon                values[ColorChannels];
-
-    bool                    sixteenBit;
-};
-
 
 }  // namespace Digikam
 

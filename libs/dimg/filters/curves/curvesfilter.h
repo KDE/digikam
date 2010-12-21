@@ -50,6 +50,8 @@ public:
 
     explicit CurvesFilter(QObject* parent = 0);
     explicit CurvesFilter(DImg* orgImage, QObject* parent=0, const CurvesContainer& settings=CurvesContainer());
+    explicit CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* master,
+                          const DImg& orgImage, const DImg& destImage, int progressBegin=0, int progressEnd=100);
     virtual ~CurvesFilter();
 
     static QString          FilterIdentifier()
@@ -75,11 +77,6 @@ public:
     }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
-
-    /// Useful code to store a CurvesContainer in a FilterAction
-    static bool isStoredLosslessly(const CurvesContainer& settings);
-    static void addCurvesParameters(FilterAction& action, const CurvesContainer& settings);
-    static CurvesContainer readCurvesParameters(const FilterAction& action);
 
 private:
 
