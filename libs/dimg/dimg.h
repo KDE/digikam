@@ -46,7 +46,7 @@
 #include "drawdecoding.h"
 #include "dcolor.h"
 #include "dcolorcomposer.h"
-#include "dimagehistory.h"
+#include "historyimageid.h"
 #include "iccprofile.h"
 
 
@@ -58,7 +58,9 @@ namespace Digikam
 typedef KExiv2Iface::KExiv2Data KExiv2Data;
 
 class ExposureSettingsContainer;
+class DImageHistory;
 class DImgPrivate;
+class FilterAction;
 class IccTransform;
 class DImgLoaderObserver;
 
@@ -310,9 +312,11 @@ public:
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;
 
-    DImageHistory getImageHistory() const;
+    const DImageHistory& getImageHistory() const;
+    DImageHistory&       getImageHistory();
     void          setImageHistory(const DImageHistory& history);
     bool          hasImageHistory() const;
+    DImageHistory getOriginalImageHistory() const;
     void          addFilterAction(const FilterAction& action);
 
     /** Use this method to update lead metadata after image transformations.
@@ -325,15 +329,23 @@ public:
     void       updateMetadata(const QString& destMimeType, const QString& originalFileName,
                               bool resetExifOrientationTag, bool updateImageHistory);
 
+    /** Create a HistoryImageId for _this_ image _already_ saved at the given file path.*/
+    HistoryImageId createHistoryImageId(const QString& filePath, HistoryImageId::Type type) const;
+
     /** If you have saved this DImg to filePath, and want to continue using this DImg object
      *  to add further changes to the image history, you can call this method to add to the image history
      *  a reference to the just saved image.
      *  First call updateMetadata(), then call save(), then call addAsReferredImage().
-     *  Do not call this directly after loading, before applying any changes,
-     *  the history is correctly initialized when loading.
+     *  Do not call this directly after loading, before applying any changes:
+     *  The history is correctly initialized when loading.
+     *  If you need to insert the referred file to an entry which is not the last entry,
+     *  which may happen if the added image was saved after this image's history was created,
+     *  you can use insertAsReferredImage.
+     *  The added id is returned.
      */
-    void       addAsReferredImage(const QString& filePath, HistoryImageId::Type type = HistoryImageId::Intermediate);
-    void       addAsReferredImage(const HistoryImageId& id);
+    HistoryImageId addAsReferredImage(const QString& filePath, HistoryImageId::Type type = HistoryImageId::Intermediate);
+    void           addAsReferredImage(const HistoryImageId& id);
+    void           insertAsReferredImage(int afterHistoryStep, const HistoryImageId& otherImagesId);
 
 
     /** In the history, adjusts the UUID of the ImageHistoryId of the current file.

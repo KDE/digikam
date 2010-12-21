@@ -63,6 +63,7 @@ extern "C"
 
 // Local includes
 
+#include "dimagehistory.h"
 #include "pngloader.h"
 #include "tiffloader.h"
 #include "ppmloader.h"
@@ -633,6 +634,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     }
 
     QString frm = format.toUpper();
+    setAttribute("savedFilePath", filePath);
 
     if (frm == "JPEG" || frm == "JPG" || frm == "JPE")
     {
@@ -1042,20 +1044,28 @@ QString DImg::embeddedText(const QString& key) const
 void DImg::switchOriginToLastSaved()
 {
     QVariant savedformat = attribute("savedformat");
-
     if (!savedformat.isNull())
     {
         setAttribute("format", savedformat);
     }
 
     QVariant readonly = attribute("savedformat-isreadonly");
-
     if (!readonly.isNull())
     {
         setAttribute("isreadonly", readonly);
     }
 
+    QVariant filePath = attribute("savedFilePath");
+    if (!filePath.isNull())
+    {
+        setAttribute("originalFilePath", filePath);
+    }
+
     removeAttribute("rawDecodingSettings");
+    removeAttribute("rawDecodingFilterAction");
+    removeAttribute("originalSize");
+    removeAttribute("uniqueHash");
+    removeAttribute("uniqueHashV2");
 }
 
 void DImg::switchHistoryOriginToLastReferredImage()
@@ -1068,6 +1078,7 @@ void DImg::switchHistoryOriginToLastReferredImage()
         {
             m_priv->imageHistory.entries().last().referredImages.last().setType(HistoryImageId::Current);
         }
+        setAttribute("originalImageHistory", QVariant::fromValue(m_priv->imageHistory));
     }
 }
 
@@ -2577,7 +2588,7 @@ QByteArray DImg::createImageUniqueId() const
 {
     NonDeterministicRandomData randomData(16);
     QByteArray imageUUID = randomData.toHex();
-    imageUUID += getUniqueHash();
+    imageUUID += getUniqueHashV2();
     return imageUUID;
 }
 
@@ -2690,17 +2701,29 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     setMetadata(meta.data());
 }
 
-void DImg::addAsReferredImage(const QString& filePath, HistoryImageId::Type type)
+HistoryImageId DImg::createHistoryImageId(const QString& filePath, HistoryImageId::Type type) const
 {
     HistoryImageId id = DImgLoader::createHistoryImageId(filePath, *this, DMetadata(getMetadata()));
-    m_priv->imageHistory.purgePathFromReferredImages(id.filePath(), id.fileName());
     id.setType(type);
+    return id;
+}
+
+HistoryImageId DImg::addAsReferredImage(const QString& filePath, HistoryImageId::Type type)
+{
+    HistoryImageId id = createHistoryImageId(filePath, type);
+    m_priv->imageHistory.purgePathFromReferredImages(id.path(), id.fileName());
     addAsReferredImage(id);
+    return id;
 }
 
 void DImg::addAsReferredImage(const HistoryImageId& id)
 {
     m_priv->imageHistory << id;
+}
+
+void DImg::insertAsReferredImage(int afterHistoryStep, const HistoryImageId& id)
+{
+    m_priv->imageHistory.insertReferredImage(afterHistoryStep, id);
 }
 
 void DImg::addCurrentUniqueImageId(const QString& uuid)
@@ -2713,7 +2736,12 @@ void DImg::addFilterAction(const Digikam::FilterAction& action)
     m_priv->imageHistory << action;
 }
 
-DImageHistory DImg::getImageHistory() const
+const DImageHistory& DImg::getImageHistory() const
+{
+    return m_priv->imageHistory;
+}
+
+DImageHistory& DImg::getImageHistory()
 {
     return m_priv->imageHistory;
 }
@@ -2734,6 +2762,11 @@ bool DImg::hasImageHistory() const
     {
         return true;
     }
+}
+
+DImageHistory DImg::getOriginalImageHistory() const
+{
+    return attribute("originalImageHistory").value<DImageHistory>();
 }
 
 
