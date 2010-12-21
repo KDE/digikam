@@ -250,34 +250,6 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         return QVariant(QVariant::Pixmap);
     }
 
-    if (role == ThumbnailSetRole && d->thread && index.isValid())
-    {
-        //FIXME: Usecase? Clean implementation
-        QPixmap thumbnail;
-        QList<QVariant> thumbnailSet;
-        ImageInfo info = imageInfoRef(index);
-        QString path = info.filePath();
-        QString originalPath = info.imageHistory().originalFilePath() + "/" + info.imageHistory().originalFileName();
-
-        if (d->thread->find(path, thumbnail, d->thumbSize.size()))
-        {
-            thumbnailSet.append(thumbnail);
-        }
-
-        if (d->thread->find(originalPath, thumbnail, d->thumbSize.size()))
-        {
-            thumbnailSet.append(thumbnail);
-        }
-
-        return QVariant(thumbnailSet);
-        /*
-                else
-                {
-                    return QVariant(QVariant::Pixmap);
-                }
-        */
-    }
-
     return ImageModel::data(index, role);
 }
 

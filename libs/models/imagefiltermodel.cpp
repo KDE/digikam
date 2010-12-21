@@ -310,6 +310,9 @@ void ImageFilterModel::setDirectSourceImageModel(ImageModel* sourceModel)
         connect(d->imageModel, SIGNAL(preprocess(const QList<ImageInfo>&, const QList<QVariant>&)),
                 d, SLOT(preprocessInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
 
+        connect(d->imageModel, SIGNAL(processAdded(const QList<ImageInfo>&, const QList<QVariant>&)),
+                d, SLOT(processAddedInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
+
         connect(d, SIGNAL(reAddImageInfos(const QList<ImageInfo>&, const QList<QVariant>&)),
                 d->imageModel, SLOT(reAddImageInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
 
@@ -576,6 +579,12 @@ void ImageFilterModel::removePrepareHook(ImageFilterModelPrepareHook* hook)
 void ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
 {
     infosToProcess(infos, extraValues, true);
+}
+
+void ImageFilterModelPrivate::processAddedInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+{
+    // These have already been added, we just process them afterwards
+    infosToProcess(infos, extraValues, false);
 }
 
 void ImageFilterModelPrivate::setupWorkers()

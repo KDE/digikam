@@ -422,6 +422,27 @@ void ImageModel::addImageInfos(const QList<ImageInfo>& infos, const QList<QVaria
     }
 }
 
+void ImageModel::addImageInfoSynchronously(const ImageInfo& info)
+{
+    addImageInfosSynchronously(QList<ImageInfo>() << info, QList<QVariant>());
+}
+
+void ImageModel::addImageInfosSynchronously(const QList<ImageInfo>& infos)
+{
+    addImageInfos(infos, QList<QVariant>());
+}
+
+void ImageModel::addImageInfosSynchronously(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+{
+    if (infos.isEmpty())
+    {
+        return;
+    }
+
+    publiciseInfos(infos, extraValues);
+    emit processAdded(infos, extraValues);
+}
+
 void ImageModel::clearImageInfos()
 {
     d->infos.clear();

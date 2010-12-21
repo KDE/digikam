@@ -61,7 +61,7 @@ public:
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
         ThumbnailRole         = Qt::UserRole + 2,
-        ThumbnailSetRole      = Qt::UserRole + 4,
+
         /// Returns a QDateTime with the creation date
         CreationDateRole      = Qt::UserRole + 3,
         /// Return (optional) extraData field
@@ -151,6 +151,15 @@ public:
     void removeImageInfo(const ImageInfo& info);
     void removeImageInfos(const QList<ImageInfo>& infos);
     void removeImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    /**
+     * addImageInfo() is asynchronous if a prepocessor is set.
+     * This method first adds the info, synchronously.
+     * Only afterwards, the preprocessor will have the opportunity to process it.
+     * This method also bypasses any incremental updates.
+     */
+    void addImageInfoSynchronously(const ImageInfo& info);
+    void addImageInfosSynchronously(const QList<ImageInfo>& infos);
+    void addImageInfosSynchronously(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
 
     QList<ImageInfo> imageInfos() const;
     QList<qlonglong> imageIds()    const;
@@ -229,6 +238,7 @@ Q_SIGNALS:
 
     /** Connect to this signal only if you are the current preprocessor */
     void preprocess(const QList<ImageInfo>& infos, const QList<QVariant>&);
+    void processAdded(const QList<ImageInfo>& infos, const QList<QVariant>&);
 
     /** If an ImageChangeset affected indexes of this model with changes as set in watchFlags(),
      *  this signal contains the changeset and the affected indexes. */

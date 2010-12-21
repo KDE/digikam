@@ -127,6 +127,7 @@ public:
 public Q_SLOTS:
 
     void preprocessInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void processAddedInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void packageFinished(const ImageFilterModelTodoPackage& package);
     void packageDiscarded(const ImageFilterModelTodoPackage& package);
 
