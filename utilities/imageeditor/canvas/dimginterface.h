@@ -36,6 +36,7 @@
 #include "digikam_export.h"
 #include "dimg.h"
 #include "dimagehistory.h"
+#include "versionmanager.h"
 
 class QWidget;
 class QPixmap;
@@ -50,6 +51,7 @@ class LoadingDescription;
 class DImgInterfacePrivate;
 class DImgBuiltinFilter;
 class UndoAction;
+class VersionFileOperation;
 
 class DIGIKAM_EXPORT DImgInterface : public QObject
 {
@@ -84,6 +86,9 @@ public:
 
     void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
                   bool setExifOrientationTag, const QString& mimeType=QString());
+    void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
+                  bool setExifOrientationTag, const QString& mimeType,
+                  const VersionFileOperation& operation);
 
     void   addLastSavedToHistory(const QString& filename);
     void   switchToLastSaved(const QString& newFilename);
@@ -204,6 +209,8 @@ private:
     void   load(const LoadingDescription& description);
     void   loadCurrent();
     void   resetValues();
+    void   saveNext();
+    QMap<QString,QVariant> ioAttributes(IOFileSettingsContainer* iofileSettings, const QString& givenMimeType);
 
 private:
 
