@@ -43,8 +43,8 @@ public:
     ~UndoCache();
 
     void   clear();
-    bool   putData(int level, int w, int h, int bytesDepth, uchar* data);
-    uchar* getData(int level, int& w, int& h, int& bytesDepth, bool del=true);
+    bool   putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* data);
+    uchar* getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha, bool del);
 
     void   erase(int level);
 

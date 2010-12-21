@@ -38,6 +38,7 @@ namespace Digikam
 {
 
 class DImageHistory;
+class DImg;
 class DImgInterface;
 class UndoManagerPriv;
 class UndoAction;
@@ -54,6 +55,7 @@ public:
     void undo();
     void redo();
     void rollbackToOrigin();
+    bool putImageDataAndHistory(DImg *img, int stepsBack);
 
     void clear(bool clearCache=true);
 
@@ -77,6 +79,7 @@ private:
     void redoStep(bool execute, bool flyingRollback);
     void makeSnapshot(int index);
     void restoreSnapshot(int index, const DImageHistory& history);
+    void getSnapshot(int index, DImg* img);
 
 private:
 
