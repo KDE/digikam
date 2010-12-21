@@ -41,6 +41,47 @@
 namespace Digikam
 {
 
+BCGContainer::BCGContainer()
+{
+    channel    = LuminosityChannel;
+    brightness = 0.0;
+    contrast   = 0.0;
+    gamma      = 1.0;
+}
+
+bool BCGContainer::isDefault() const
+{
+    return *this == BCGContainer();
+}
+
+bool BCGContainer::operator==(const BCGContainer& other) const
+{
+    return channel    == other.channel &&
+           brightness == other.brightness &&
+           contrast   == other.contrast &&
+           gamma      == other.gamma;
+}
+
+void BCGContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
+{
+    action.addParameter(prefix + "channel",    channel);
+    action.addParameter(prefix + "brightness", brightness);
+    action.addParameter(prefix + "contrast",   contrast);
+    action.addParameter(prefix + "gamma",      gamma);
+}
+
+BCGContainer BCGContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
+{
+    BCGContainer settings;
+    settings.channel =    action.parameter(prefix + "channel", settings.channel);
+    settings.brightness = action.parameter(prefix + "brightness", settings.brightness);
+    settings.contrast =   action.parameter(prefix + "contrast", settings.contrast);
+    settings.gamma =      action.parameter(prefix + "gamma", settings.gamma);
+    return settings;
+}
+
+// ---
+
 class BCGFilterPriv
 {
 public:
@@ -70,40 +111,32 @@ BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settin
     initFilter();
 }
 
+BCGFilter::BCGFilter(const BCGContainer& settings, DImgThreadedFilter* master,
+                     const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "WBFilter"),
+      d(new BCGFilterPriv)
+{
+    d->settings = settings;
+    reset();
+    initFilter();
+}
+
 BCGFilter::~BCGFilter()
 {
     cancelFilter();
     delete d;
 }
 
-void BCGFilter::addBCGParameters(FilterAction& action, const BCGContainer& settings)
-{
-    action.addParameter("channel", settings.channel);
-    action.addParameter("brightness", settings.brightness);
-    action.addParameter("contrast", settings.contrast);
-    action.addParameter("gamma", settings.gamma);
-}
-
-BCGContainer BCGFilter::readBCGParameters(const FilterAction& action)
-{
-    BCGContainer settings;
-    settings.channel = action.parameter("channel").toInt();
-    settings.brightness = action.parameter("brightness").toDouble();
-    settings.contrast = action.parameter("contrast").toDouble();
-    settings.gamma = action.parameter("gamma").toDouble();
-    return settings;
-}
-
 FilterAction BCGFilter::filterAction()
 {
     DefaultFilterAction<BCGFilter> action;
-    addBCGParameters(action, d->settings);
+    d->settings.writeToFilterAction(action);
     return action;
 }
 
 void BCGFilter::readParameters(const FilterAction& action)
 {
-    d->settings = readBCGParameters(action);
+    d->settings = BCGContainer::fromFilterAction(action);
 }
 
 void BCGFilter::filterImage()
