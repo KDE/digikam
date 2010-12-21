@@ -42,6 +42,7 @@
 #include "dimgfiltergenerator.h"
 #include "dimgbuiltinfilter.h"
 #include "filteraction.h"
+#include "rawprocessingfilter.h"
 
 // Filter includes
 
@@ -164,7 +165,9 @@ void DImgFilterManager::DImgFilterManagerPriv::setupCoreGenerators()
             << new BasicDImgFilterGenerator<TextureFilter>()
             << new BasicDImgFilterGenerator<TonalityFilter>()
             << new BasicDImgFilterGenerator<UnsharpMaskFilter>()
-            << new BasicDImgFilterGenerator<WBFilter>();
+            << new BasicDImgFilterGenerator<WBFilter>()
+
+            << new BasicDImgFilterGenerator<RawProcessingFilter>();
 }
 
 void DImgFilterManager::DImgFilterManagerPriv::setupFilterIcons()
@@ -212,10 +215,13 @@ void DImgFilterManager::DImgFilterManagerPriv::setupFilterIcons()
     filterIcons.insert("digikam:TonalityFilter",       "tonemap");
     filterIcons.insert("digikam:UnsharpMaskFilter",    "sharpenimage");
     filterIcons.insert("digikam:WhiteBalanceFilter",   "whitebalance");
+
+    filterIcons.insert("digikam:RawConverter",         "kdcraw");
 }
 
 void DImgFilterManager::DImgFilterManagerPriv::setupI18nStrings()
 {
+    // i18nFilterNames.insert("someIdentifier", i18n("display name"));
 }
 
 // -----------------------------------------------------------------------------------------
@@ -438,6 +444,11 @@ bool DImgFilterManager::isSupported(const QString& filterIdentifier, int version
     }
 
     return false;
+}
+
+bool DImgFilterManager::isRawConversion(const QString& filterIdentifier)
+{
+    return filterIdentifier == RawProcessingFilter::FilterIdentifier();
 }
 
 DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentifier, int version)

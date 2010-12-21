@@ -74,6 +74,12 @@ public:
     bool isSupported(const QString& filterIdentifier, int version);
 
     /**
+     * Returns true if the given filter is to be considered
+     * as a step converting a RAW image to a normal image.
+     */
+    bool isRawConversion(const QString& filterIdentifier);
+
+    /**
      * Create a filter from an installed manager.
      * Returns 0 if no filter could be created. This is true
      * if identifier/version is not supported, or the filter is builtin.

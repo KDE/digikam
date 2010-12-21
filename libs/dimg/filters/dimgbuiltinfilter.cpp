@@ -179,16 +179,17 @@ void DImgBuiltinFilter::apply(DImg& image) const
 
 FilterAction DImgBuiltinFilter::filterAction() const
 {
+    FilterAction action;
     switch (m_type)
     {
         case NoOperation:
         default:
-            return FilterAction();
+            return action;
         case Rotate90:
         case Rotate180:
         case Rotate270:
         {
-            FilterAction action("transform:rotate", 1);
+            action = FilterAction("transform:rotate", 1);
             int angle;
 
             if (m_type == Rotate90)
@@ -205,41 +206,44 @@ FilterAction DImgBuiltinFilter::filterAction() const
             }
 
             action.addParameter("angle", angle);
-            return action;
+            break;
         }
         case FlipHorizontally:
         case FlipVertically:
         {
-            FilterAction action("transform:flip", 1);
+            action = FilterAction("transform:flip", 1);
             action.addParameter("direction", m_type == FlipHorizontally ? "horizontal" : "vertical");
-            return action;
+            break;
         }
         case Crop:
         {
-            FilterAction action("transform:crop", 1);
+            action = FilterAction("transform:crop", 1);
             QRect r = m_arg.toRect();
             action.addParameter("x", r.x());
             action.addParameter("y", r.y());
             action.addParameter("width", r.width());
             action.addParameter("height", r.height());
-            return action;
+            break;
         }
         case Resize:
         {
-            FilterAction action("transform:resize", 1);
+            action = FilterAction("transform:resize", 1);
             QSize s = m_arg.toSize();
             action.addParameter("width", s.width());
             action.addParameter("height", s.height());
-            return action;
+            break;;
         }
         case ConvertTo8Bit:
         case ConvertTo16Bit:
         {
-            FilterAction action("transform:convertDepth", 1);
+            action = FilterAction("transform:convertDepth", 1);
             action.addParameter("depth", m_type == ConvertTo8Bit ? 8 : 16);
-            return action;
+            break;
         }
     }
+
+    action.setDisplayableName(displayableName());
+    return action;
 }
 
 DImgBuiltinFilter DImgBuiltinFilter::reverseFilter() const

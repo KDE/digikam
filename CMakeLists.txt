@@ -654,6 +654,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltergenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/filteractionfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/randomnumbergenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/rawprocessingfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/borderfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/bordersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/texturefilter.cpp
@@ -932,7 +933,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(librawimport_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpostprocessing.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawimport.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpreview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawsettingsbox.cpp
