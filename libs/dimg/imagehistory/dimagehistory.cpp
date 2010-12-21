@@ -47,12 +47,8 @@ public:
 
     ImageHistoryPriv()
     {
-        imageid = -1;
     }
 
-    QString                     originalFile;
-    QString                     originalPath;
-    qlonglong                   imageid;
     QList<DImageHistory::Entry> entries;
 };
 
@@ -113,19 +109,6 @@ bool DImageHistory::isEmpty() const
     }
 }
 
-bool DImageHistory::hasFilters() const
-{
-    for (int i = 0; i < d->entries.size(); i++)
-    {
-        if (!d->entries.at(i).action.isNull())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 int DImageHistory::size() const
 {
     return d->entries.size();
@@ -140,6 +123,46 @@ static bool operator==(const DImageHistory::Entry& e1, const DImageHistory::Entr
 bool DImageHistory::operator==(const DImageHistory& other) const
 {
     return d->entries == other.d->entries;
+}
+
+bool DImageHistory::operator<(const Digikam::DImageHistory& other)
+{
+    if (d->entries.size() < other.size())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool DImageHistory::operator>(const Digikam::DImageHistory& other)
+{
+    if (d->entries.size() > other.size())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+QList<DImageHistory::Entry> &DImageHistory::entries()
+{
+    return d->entries;
+}
+
+const QList<DImageHistory::Entry> &DImageHistory::entries() const
+{
+    return d->entries;
+}
+
+DImageHistory::Entry& DImageHistory::operator[](int i)
+{
+    return d->entries[i];
+}
+
+const DImageHistory::Entry& DImageHistory::operator[](int i) const
+{
+    return d->entries[i];
 }
 
 DImageHistory& DImageHistory::operator<<(const FilterAction& action)
@@ -158,11 +181,24 @@ DImageHistory& DImageHistory::operator<<(const FilterAction& action)
 
 DImageHistory& DImageHistory::operator<<(const HistoryImageId& id)
 {
+    appendReferredImage(id);
+    return *this;
+}
+
+void DImageHistory::appendReferredImage(const HistoryImageId& id)
+{
+    insertReferredImage(d->entries.size() - 1, id);
+}
+
+void DImageHistory::insertReferredImage(int index, const HistoryImageId& id)
+{
     if (!id.isValid())
     {
         kWarning() << "Attempt to add an invalid HistoryImageId";
-        return *this;
+        return;
     }
+
+    index = qBound(0, index, d->entries.size() - 1);
 
     if (id.isCurrentFile())
     {
@@ -175,8 +211,7 @@ DImageHistory& DImageHistory::operator<<(const HistoryImageId& id)
         d->entries << Entry();
     }
 
-    d->entries.last().referredImages << id;
-    return *this;
+    d->entries[index].referredImages << id;
 }
 
 void DImageHistory::removeLast()
@@ -187,71 +222,82 @@ void DImageHistory::removeLast()
     }
 }
 
-void DImageHistory::clearReferredImages()
+const FilterAction& DImageHistory::action(int i) const
 {
-    for (int i=0; i<d->entries.size(); ++i)
-    {
-        d->entries[i].referredImages.clear();
-    }
+    return d->entries[i].action;
 }
 
-void DImageHistory::adjustReferredImages()
+QList<FilterAction> DImageHistory::allActions() const
 {
-    for (int i=0; i<d->entries.size(); ++i)
+    QList<FilterAction> actions;
+    foreach (const Entry& entry, d->entries)
     {
-        Entry& entry = d->entries[i];
-
-        for (int e=0; e<entry.referredImages.size(); ++e)
+        if (!entry.action.isNull())
         {
-            HistoryImageId& id = entry.referredImages[e];
-
-            if (id.isCurrentFile())
-            {
-                id.m_type = i==0 ? HistoryImageId::Original : HistoryImageId::Intermediate;
-            }
+            actions << entry.action;
         }
     }
+    return actions;
 }
 
-void DImageHistory::adjustCurrentUuid(const QString& uuid)
+int DImageHistory::actionCount() const
 {
-    for (int i=0; i<d->entries.size(); ++i)
+    int count = 0;
+    foreach (const Entry& entry, d->entries)
     {
-        Entry& entry = d->entries[i];
-
-        for (int e=0; e<entry.referredImages.size(); ++e)
+        if (!entry.action.isNull())
         {
-            HistoryImageId& id = entry.referredImages[e];
-
-            if (id.isCurrentFile())
-            {
-                if (id.m_uuid.isNull())
-                {
-                    id.m_uuid = uuid;
-                }
-            }
+            count++;
         }
     }
+
+    return count;
 }
 
-void DImageHistory::purgePathFromReferredImages(const QString& path, const QString& fileName)
+bool DImageHistory::hasActions() const
 {
-    for (int i=0; i<d->entries.size(); ++i)
+    foreach (const Entry& entry, d->entries)
     {
-        Entry& entry = d->entries[i];
-
-        for (int e=0; e<entry.referredImages.size(); ++e)
+        if (!entry.action.isNull())
         {
-            HistoryImageId& id = entry.referredImages[e];
-            {
-                if (id.m_filePath == path && id.m_fileName == fileName)
-                {
-                    id.m_filePath = QString();
-                    id.m_fileName = QString();
-                }
-            }
+            return true;
         }
     }
+
+    return false;
+}
+
+QList<HistoryImageId> &DImageHistory::referredImages(int i)
+{
+    return d->entries[i].referredImages;
+}
+
+const QList<HistoryImageId> &DImageHistory::referredImages(int i) const
+{
+    return d->entries[i].referredImages;
+}
+
+QList<HistoryImageId> DImageHistory::allReferredImages() const
+{
+    QList<HistoryImageId> ids;
+    foreach (const Entry& entry, d->entries)
+    {
+        ids << entry.referredImages;
+    }
+    return ids;
+}
+
+bool DImageHistory::hasReferredImages() const
+{
+    foreach (const Entry& entry, d->entries)
+    {
+        if (!entry.referredImages.isEmpty())
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool DImageHistory::hasReferredImageOfType(HistoryImageId::Type type) const
@@ -325,110 +371,90 @@ HistoryImageId DImageHistory::originalReferredImage() const
     return HistoryImageId();
 }
 
-bool DImageHistory::operator<(const Digikam::DImageHistory& other)
+void DImageHistory::clearReferredImages()
 {
-    if (d->entries.size() < other.size())
+    for (int i=0; i<d->entries.size(); ++i)
     {
-        return true;
+        d->entries[i].referredImages.clear();
     }
-
-    return false;
 }
 
-bool DImageHistory::operator>(const Digikam::DImageHistory& other)
+void DImageHistory::adjustReferredImages()
 {
-    if (d->entries.size() > other.size())
+    for (int i=0; i<d->entries.size(); ++i)
     {
-        return true;
-    }
+        Entry& entry = d->entries[i];
 
-    return false;
-}
-
-
-QList<DImageHistory::Entry> &DImageHistory::entries()
-{
-    return d->entries;
-}
-
-const QList<DImageHistory::Entry> &DImageHistory::entries() const
-{
-    return d->entries;
-}
-
-const FilterAction& DImageHistory::action(int i) const
-{
-    return d->entries[i].action;
-}
-
-QList<HistoryImageId> &DImageHistory::referredImages(int i)
-{
-    return d->entries[i].referredImages;
-}
-
-const QList<HistoryImageId> &DImageHistory::referredImages(int i) const
-{
-    return d->entries[i].referredImages;
-}
-
-QList<FilterAction> DImageHistory::allActions() const
-{
-    QList<FilterAction> actions;
-    foreach (const Entry& entry, d->entries)
-    {
-        if (!entry.action.isNull())
+        for (int e=0; e<entry.referredImages.size(); ++e)
         {
-            actions << entry.action;
+            HistoryImageId& id = entry.referredImages[e];
+
+            if (id.isCurrentFile())
+            {
+                id.m_type = i==0 ? HistoryImageId::Original : HistoryImageId::Intermediate;
+            }
         }
     }
-    return actions;
 }
 
-int DImageHistory::actionCount() const
+void DImageHistory::adjustCurrentUuid(const QString& uuid)
 {
-    int count = 0;
-    foreach (const Entry& entry, d->entries)
-
-    if (!entry.action.isNull())
+    for (int i=0; i<d->entries.size(); ++i)
     {
-        count++;
-    }
+        Entry& entry = d->entries[i];
 
-    return count;
+        for (int e=0; e<entry.referredImages.size(); ++e)
+        {
+            HistoryImageId& id = entry.referredImages[e];
+
+            if (id.isCurrentFile())
+            {
+                if (id.m_uuid.isNull())
+                {
+                    id.m_uuid = uuid;
+                }
+            }
+        }
+    }
 }
 
-bool DImageHistory::hasActions() const
+void DImageHistory::purgePathFromReferredImages(const QString& path, const QString& fileName)
 {
-    foreach (const Entry& entry, d->entries)
-
-    if (!entry.action.isNull())
+    for (int i=0; i<d->entries.size(); ++i)
     {
-        return true;
-    }
+        Entry& entry = d->entries[i];
 
-    return false;
+        for (int e=0; e<entry.referredImages.size(); ++e)
+        {
+            HistoryImageId& id = entry.referredImages[e];
+            {
+                if (id.m_filePath == path && id.m_fileName == fileName)
+                {
+                    id.m_filePath = QString();
+                    id.m_fileName = QString();
+                }
+            }
+        }
+    }
 }
 
-QList<HistoryImageId> DImageHistory::allReferredImages() const
+void DImageHistory::moveCurrentReferredImage(const QString& newPath, const QString& newFileName)
 {
-    QList<HistoryImageId> ids;
-    foreach (const Entry& entry, d->entries)
+    for (int i=0; i<d->entries.size(); ++i)
     {
-        ids << entry.referredImages;
+        Entry& entry = d->entries[i];
+
+        for (int e=0; e<entry.referredImages.size(); ++e)
+        {
+            HistoryImageId& id = entry.referredImages[e];
+
+            if (id.isCurrentFile())
+            {
+                id.setPath(newPath);
+                id.setFileName(newFileName);
+            }
+        }
     }
-    return ids;
-}
-
-bool DImageHistory::hasReferredImages() const
-{
-    foreach (const Entry& entry, d->entries)
-
-    if (!entry.referredImages.isEmpty())
-    {
-        return true;
-    }
-
-    return false;
 }
 
 QString DImageHistory::toXml() const
@@ -642,8 +668,6 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 
             if (imageId.isOriginalFile())
             {
-                h.setOriginalFileName(imageId.m_fileName);
-                h.setOriginalFilePath(imageId.m_filePath);
                 originalUUID = imageId.m_uuid;
                 originalCreationDate = imageId.m_creationDate;
             }
@@ -727,45 +751,6 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 
     //kDebug() << "Parsing done";
     return h;
-}
-
-QString DImageHistory::originalFileName()
-{
-    return d->originalFile;
-}
-
-void DImageHistory::setOriginalFileName(const QString& fileName)
-{
-    d->originalFile = fileName;
-}
-
-QString DImageHistory::originalFilePath()
-{
-    return d->originalPath;
-}
-
-void DImageHistory::setOriginalFilePath(const QString& filePath)
-{
-    d->originalPath = filePath;
-}
-
-QString DImageHistory::originalUUID() const
-{
-    for (int i = 0; i < entries().count(); i++)
-    {
-        if (!entries().at(i).referredImages.isEmpty())
-        {
-            for (int j = 0; j < entries().at(i).referredImages.size(); j++)
-            {
-                if (entries().at(i).referredImages.at(j).isOriginalFile())
-                {
-                    return entries().at(i).referredImages.at(j).m_uuid;
-                }
-            }
-        }
-    }
-
-    return QString();
 }
 
 } // namespace digikam

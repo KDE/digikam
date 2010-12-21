@@ -45,21 +45,31 @@ public:
     enum Type
     {
         InvalidType,
-        /// The original file (typically created by a camera)
+        /**
+         * The original file (typically created by a camera)
+         */
         Original,
-        /// A file created in the history from the original file to the current file
+
+        /**
+         * A file created during the editing the history,
+         * between the original file and the current file.
+         */
         Intermediate,
+
         /**
          * When a file is created from multiple files, there can be no direct
-         * original (panorama) or one direct original and some other source files.
-         * To record source files out of the direct history, this type is used.
+         * original (panorama) but multiple sources, or one direct original
+         * and some other, additional source files.
+         * To record source files outside of the direct history, this type is used.
          */
         Source,
-        /** The "current" file. This is a special entry: It refers to the file from
-         *  which this history was read. It need not be written to the file,
-         *  because it describes the file itself. There is typically
-         *  exactly one current entry if the history is associated with an image;
-         *  there can be no current entry.
+
+        /**
+         * The "current" file. This is a special entry: It refers to the file from
+         * which this history was read. It need not be written to the file,
+         * because it describes the file itself. There is typically
+         * exactly one current entry if the history is associated with an image;
+         * there can be no current entry.
          */
         Current
     };

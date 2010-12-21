@@ -27,9 +27,9 @@
 
 // Qt includes
 
-#include <QVariant>
 #include <QHash>
 #include <QString>
+#include <QVariant>
 
 // Local includes
 
@@ -53,14 +53,14 @@ public:
          *  but the identical result cannot be reproduced.
          *  It may be possible to produce a sufficiently similar result.
          */
-        ComplexFilter = 1,
+        ComplexFilter      = 1,
         /** The source images are known, a textual description may be added,
          *  but there is no way to automatically replay
          */
-        DocumentedHistory = 2,
+        DocumentedHistory  = 2,
 
-        CategoryFirst = ReproducibleFilter,
-        CategoryLast  = DocumentedHistory
+        CategoryFirst      = ReproducibleFilter,
+        CategoryLast       = DocumentedHistory
     };
 
 public:
@@ -74,18 +74,22 @@ public:
 
     Category category() const;
 
-    /** Returns a technical identifier for the filter used to produce this action.
-     *  Can include a namespace. Example: digikam:charcoal */
+    /**
+     * Returns a technical identifier for the filter used to produce this action.
+     * Can include a namespace. Example: digikam:charcoal
+     */
     QString  identifier() const;
 
-    /** Returns the version (>= 1) of the filter used to produce this action.
-     *  When a filter / plugin is found by the identifier, it can decide
-     *  by the version if it supports this action and which parameters it expects.
+    /**
+     * Returns the version (>= 1) of the filter used to produce this action.
+     * When a filter / plugin is found by the identifier, it can decide
+     * by the version if it supports this action and which parameters it expects.
      */
     int      version() const;
 
-    /** Returns a description / comment for this action.
-     *  In the case of DocumentedHistory, this may be the most useful value.
+    /**
+     * Returns a description / comment for this action.
+     * In the case of DocumentedHistory, this may be the most useful value.
      */
     QString  description() const;
     void setDescription(const QString& description);
@@ -93,15 +97,39 @@ public:
     QString displayableName() const;
     void setDisplayableName(const QString& displayableName);
 
-    bool hasParameter(const QString& key) const;
+    /**
+     * Access parameters.
+     * A parameters is a key -> value pair.
+     * Keys need not be unique, but you can decide to use unique keys.
+     * There are accessors for both contexts.
+     */
 
+    bool hasParameters() const;
+    const QHash<QString,QVariant>& parameters() const;
+    QHash<QString, QVariant>& parameters();
+
+    bool hasParameter(const QString& key) const;
     const QVariant parameter(const QString& key) const;
     QVariant& parameter(const QString& key);
 
+    /// Returns parameter converted from QVariant to given type
     template <typename T>
     T parameter(const QString& key) const
     {
         return parameter(key).value<T>();
+    }
+
+    /**
+     * Read parameter with a default value:
+     * If there is a parameter for the given key, return it converted
+     *  from QVariant to the template type.
+     * If there is no parameter, return the given default value.
+     */
+    template <typename T>
+    T parameter(const QString& key, const T& defaultValue) const
+    {
+        QVariant var = parameter(key);
+        return (var.isValid()) ? var.value<T>() : defaultValue;
     }
 
     /// Sets parameter, removing all other values for the same key
@@ -113,15 +141,13 @@ public:
     /// Clear all parameters
     void clearParameters();
     /// Adds a set of parameters
-    void addSetOfParameters(const QHash<QString, QVariant>& values);
-
-    const QHash<QString,QVariant>& parameters() const;
-    QHash<QString, QVariant>& parameters();
-
-    bool isEmpty() const;
+    void addParameters(const QHash<QString, QVariant>& params);
+    /// Replaces parameters
+    void setParameters(const QHash<QString, QVariant>& params);
 
 protected:
 
+    // Note: Value class, do not create a d-pointer
     Category                 m_category;
     QString                  m_identifier;
     int                      m_version;
@@ -131,5 +157,6 @@ protected:
 };
 
 } // namespace Digikam
+Q_DECLARE_METATYPE(Digikam::FilterAction)
 
 #endif // FILTERACTION_H

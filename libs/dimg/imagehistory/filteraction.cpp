@@ -88,6 +88,21 @@ void FilterAction::setDisplayableName(const QString& displayableName)
     m_displayableName = displayableName;
 }
 
+bool FilterAction::hasParameters() const
+{
+    return !m_params.isEmpty();
+}
+
+const QHash<QString,QVariant> &FilterAction::parameters() const
+{
+    return m_params;
+}
+
+QHash<QString, QVariant> &FilterAction::parameters()
+{
+    return m_params;
+}
+
 bool FilterAction::hasParameter(const QString& key) const
 {
     return m_params.contains(key);
@@ -113,6 +128,16 @@ void FilterAction::addParameter(const QString& key, const QVariant& value)
     m_params.insertMulti(key, value);
 }
 
+void FilterAction::addParameters(const QHash<QString, QVariant>& params)
+{
+    m_params = m_params.unite(params);
+}
+
+void FilterAction::setParameters(const QHash<QString, QVariant>& params)
+{
+    m_params = params;
+}
+
 void FilterAction::removeParameters(const QString& key)
 {
     m_params.remove(key);
@@ -121,26 +146,6 @@ void FilterAction::removeParameters(const QString& key)
 void FilterAction::clearParameters()
 {
     m_params.clear();
-}
-
-const QHash<QString,QVariant> &FilterAction::parameters() const
-{
-    return m_params;
-}
-
-QHash<QString, QVariant> &FilterAction::parameters()
-{
-    return m_params;
-}
-
-void Digikam::FilterAction::addSetOfParameters(const QHash<QString, QVariant>& values)
-{
-    m_params = values;
-}
-
-bool FilterAction::isEmpty() const
-{
-    return m_params.isEmpty();
 }
 
 } // namespace Digikam

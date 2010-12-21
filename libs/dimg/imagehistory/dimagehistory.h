@@ -53,6 +53,18 @@ public:
     {
     public:
 
+        /**
+         * A DImageHistory is a list of entries.
+         *
+         * Each entry has one action. The action can be null,
+         * but it shall be null only if it is the action of the first
+         * entry, with the "Original" as referred image,
+         * representing the action of digitization.
+         * 
+         * There can be zero, one or any number
+         * of referred images per entry.
+         * A referred image is a file in the state after the action is applied.
+         */
         FilterAction          action;
         QList<HistoryImageId> referredImages;
     };
@@ -66,45 +78,69 @@ public:
     DImageHistory& operator=(const DImageHistory& other);
 
     bool isNull() const;
-    bool isEmpty() const;
-    bool hasFilters() const;
 
+    /**
+     * A history is considered empty if there are no entries,
+     * or only the "Current" entry as referred file,
+     * with no actions or other referred images.
+     */
+    bool isEmpty() const;
+
+    /// Returns the number of entries
     int size() const;
 
     bool operator==(const DImageHistory& other) const;
+    bool operator!=(const DImageHistory& other) const { return !operator==(other); }
+    bool operator<(const DImageHistory& other);
+    bool operator>(const DImageHistory& other);
 
     /**
      * Appends a new filter action to the history.
      */
     DImageHistory& operator<<(const FilterAction& action);
+
     /**
      * Appends a new referred image, representing the current state
      * of the history.
      * If you add an id of type Current, adjustReferredImages() will be called.
      */
     DImageHistory& operator<<(const HistoryImageId& imageId);
+    void appendReferredImage(const HistoryImageId& id);
+    void insertReferredImage(int entryIndex, const HistoryImageId& id);
 
     /// Removes the last entry from the history
     void removeLast();
-    /// Remove all referredImages, leaving the entries list untouched
-    void clearReferredImages();
 
-    bool operator<(const DImageHistory& other);
-    bool operator>(const DImageHistory& other);
 
+    /**
+     * Access entries.
+     * There are size() entries.
+     */
     QList<DImageHistory::Entry>& entries();
     const QList<DImageHistory::Entry>& entries() const;
+    Entry& operator[](int i);
+    const Entry& operator[](int i) const;
 
+    /**
+     * Access actions.
+     *
+     * There is one action per entry,
+     * but the action may be null.
+     */
+    /// Returns if there is any non-null action
+    bool hasActions() const;
+    bool hasFilters() const { return hasActions(); }
+    /// Returns the number of non-null actions
+    int actionCount() const;
     /// Gets all actions which are not null
     QList<FilterAction> allActions() const;
-    int actionCount() const;
-    /// Returns if there is any not-null action
-    bool hasActions() const;
-
     const FilterAction& action(int i) const;
+
+    /**
+     * Access referred images
+     */
     QList<HistoryImageId>& referredImages(int i);
     const QList<HistoryImageId>& referredImages(int i) const;
-
     QList<HistoryImageId> allReferredImages() const;
     HistoryImageId currentReferredImage() const;
     HistoryImageId originalReferredImage() const;
@@ -114,17 +150,12 @@ public:
     bool hasCurrentReferredImage() const;
     bool hasOriginalReferredImage() const;
 
-    void setOriginalFileName(const QString& fileName);
-    QString originalFileName();
+    /**
+     * Edit referred images
+     */
 
-    void setOriginalFilePath(const QString& filePath);
-    QString originalFilePath();
-
-    QString originalUUID() const;
-
-    QString toXml() const;
-    static DImageHistory fromXml(const QString& xml);
-
+    /// Remove all referredImages, leaving the entries list untouched
+    void clearReferredImages();
     /**
      * Adjusts the type of a Current HistoryImageId:
      * If it is the first entry, it becomes Original,
@@ -132,10 +163,8 @@ public:
      * if in the last entry, it stays current.
      */
     void adjustReferredImages();
-
     /// Changes the UUID of the current (last added current) referred image
     void adjustCurrentUuid(const QString& uuid);
-
     /**
      * Remove file path entries pointing to the given absolute path
      * from any referred images. This is useful when said file
@@ -144,6 +173,20 @@ public:
      * path: directory path, without filename.
      */
     void purgePathFromReferredImages(const QString& path, const QString& fileName);
+    /**
+     * Change file path entries of the current referred image
+     */
+    void moveCurrentReferredImage(const QString& newPath, const QString& newFileName);
+
+    /**
+     * Serialize to and from XML.
+     *
+     * Note: The "Current" entry is skipped when writing to XML,
+     * so make sure the file into the metadata of which you write the XML,
+     * is the file marked as "Current" in this history.
+     */
+    QString toXml() const;
+    static DImageHistory fromXml(const QString& xml);
 
 public:
 
