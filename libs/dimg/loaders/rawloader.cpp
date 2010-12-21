@@ -326,4 +326,9 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
     m_filter->startFilterDirectly();
 }
 
+FilterAction RAWLoader::filterAction() const
+{
+    return m_filter->filterAction();
+}
+
 }  // namespace Digikam

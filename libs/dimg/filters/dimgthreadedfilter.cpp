@@ -85,7 +85,10 @@ void DImgThreadedFilter::initSlave(DImgThreadedFilter* master, int progressBegin
     m_progressSpan    = progressEnd - progressBegin;
     m_progressCurrent = 0;
 
-    m_master->setSlave(this);
+    if (m_master)
+    {
+        m_master->setSlave(this);
+    }
 }
 
 void DImgThreadedFilter::initMaster()

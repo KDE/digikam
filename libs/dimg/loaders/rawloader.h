@@ -75,6 +75,8 @@ public:
         return m_rawDecodingSettings.sixteenBitsImage;
     };
 
+    FilterAction filterAction() const;
+
 private:
 
     // Methods to load RAW image using external dcraw instance.

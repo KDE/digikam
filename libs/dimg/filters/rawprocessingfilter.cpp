@@ -51,7 +51,8 @@ RawProcessingFilter::RawProcessingFilter(QObject* parent)
 
 RawProcessingFilter::RawProcessingFilter(DImg* orgImage, QObject* parent,
                                          const DRawDecoding& settings, const QString& name)
-    : DImgThreadedFilter(orgImage, parent, name)
+    : DImgThreadedFilter(orgImage, parent, name),
+      m_observer(0)
 {
     setSettings(settings);
     initFilter();
