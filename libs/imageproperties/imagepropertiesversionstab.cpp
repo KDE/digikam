@@ -119,7 +119,6 @@ void ImagePropertiesVersionsTab::readSettings(const KConfigGroup& group)
 
 void ImagePropertiesVersionsTab::writeSettings(KConfigGroup& group)
 {
-    kDebug() << currentWidget() << d->versionsWidget << d->filtersHistoryWidget;
     group.writeEntry(d->configActiveTab, currentWidget() == d->versionsWidget ? "versions" : "filters");
 
     d->versionsWidget->writeSettings(group);

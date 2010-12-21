@@ -66,7 +66,7 @@ ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& 
 
     if (!url.isEmpty())
     {
-        kDebug() << "Creating model with url" << url.toLocalFile();
+        //kDebug() << "Creating model with url" << url.toLocalFile();
         d->rootItem = new ImageFiltersHistoryTreeItem(url.fileName());
         d->lastUrl = url;
 
@@ -258,7 +258,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         }
     }
 
-    kDebug() << "Initializing model data, got" << entries.count() << "entries";
+    //kDebug() << "Initializing model data, got" << entries.count() << "entries";
     QList<ImageFiltersHistoryTreeItem*> parents;
     QList<ImageFiltersHistoryTreeItem*> filters;
     parents << parent;
@@ -282,7 +282,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         QPixmap icon     = SmallIcon(iconName, KIconLoader::SizeSmallMedium);
         itemData.append(icon);
 
-        kDebug() << "Adding an entry: " << itemData;
+        //kDebug() << "Adding an entry: " << itemData;
         parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
         filters << parents.last()->child(parents.last()->childCount()-1);
 

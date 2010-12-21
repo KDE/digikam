@@ -172,7 +172,6 @@ VersionsWidget::~VersionsWidget()
 void VersionsWidget::readSettings(const KConfigGroup& group)
 {
     int mode = group.readEntry(d->configCurrentMode, (int)ImageHistoryGraphModel::CombinedTreeMode);
-    kDebug() << "Read settings:" << mode;
     switch (mode)
     {
         case ImageHistoryGraphModel::ImagesListMode:
@@ -191,7 +190,6 @@ void VersionsWidget::readSettings(const KConfigGroup& group)
 
 void VersionsWidget::writeSettings(KConfigGroup& group)
 {
-    kDebug() << "Write settings:" << d->viewButtonGroup->checkedId();
     group.writeEntry(d->configCurrentMode, d->viewButtonGroup->checkedId());
 }
 

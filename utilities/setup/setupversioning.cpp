@@ -156,6 +156,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     workIcon->setPixmap(SmallIcon("document-save-as", KIconLoader::SizeMedium));
     QLabel* formatLabel = new QLabel(i18nc("@label", "Save files as"));
 
+    // keep in sync with VersionManager::workspaceFileFormats()
     d->formatBox = new QComboBox;
     d->formatBox->addItem(i18nc("@label:listbox", "JPEG"), "JPG");
     d->formatBox->addItem(i18nc("@label:listbox", "TIFF"), "TIFF");

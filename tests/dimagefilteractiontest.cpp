@@ -37,6 +37,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dimagehistory.h"
 #include "filteractionfilter.h"
 
 using namespace Digikam;
