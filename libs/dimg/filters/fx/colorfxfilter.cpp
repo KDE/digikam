@@ -209,6 +209,7 @@ void ColorFXFilter::vivid(DImg* orgImage, DImg* destImage, int factor)
     // And now apply the curve correction.
 
     CurvesContainer prm(ImageCurves::CURVE_SMOOTH, orgImage->sixteenBit());
+    prm.initialize();
 
     if (!orgImage->sixteenBit())        // 8 bits image.
     {

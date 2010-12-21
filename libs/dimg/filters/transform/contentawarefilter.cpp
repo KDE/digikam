@@ -323,8 +323,8 @@ void ContentAwareFilter::buildBias(const QImage& mask)
 
 FilterAction ContentAwareFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
+    bool isReproducible = d->settings.mask.isNull();
+    DefaultFilterAction<ContentAwareFilter> action(isReproducible);
 
     action.addParameter("height", d->settings.height);
     action.addParameter("preserve_skin_tones", d->settings.preserve_skin_tones);

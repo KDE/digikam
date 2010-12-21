@@ -494,9 +494,7 @@ void BWSepiaFilter::applyToneFilter(DImg& img, TonalityContainer& settings)
 
 FilterAction BWSepiaFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion(),
-                        CurvesFilter::isStoredLosslessly(d->settings.curvesPrm)
-                        ? FilterAction::ComplexFilter : FilterAction::ReproducibleFilter);
+    DefaultFilterAction<BWSepiaFilter> action(d->settings.curvesPrm.isStoredLosslessly());
     action.setDisplayableName(DisplayableName());
 
     action.addParameter("filmType", d->settings.filmType);
@@ -506,8 +504,8 @@ FilterAction BWSepiaFilter::filterAction()
     action.addParameter("strength", d->settings.strength);
     action.addParameter("toneType", d->settings.toneType);
 
-    CurvesFilter::addCurvesParameters(action, d->settings.curvesPrm);
-    BCGFilter::addBCGParameters(action, d->settings.bcgPrm);
+    d->settings.curvesPrm.writeToFilterAction(action);
+    d->settings.bcgPrm.writeToFilterAction(action);
 
     return action;
 }
@@ -521,8 +519,8 @@ void BWSepiaFilter::readParameters(const FilterAction& action)
     d->settings.strength = action.parameter("strength").toDouble();
     d->settings.toneType = action.parameter("toneType").toInt();
 
-    d->settings.curvesPrm = CurvesFilter::readCurvesParameters(action);
-    d->settings.bcgPrm    = BCGFilter::readBCGParameters(action);
+    d->settings.curvesPrm = CurvesContainer::fromFilterAction(action);
+    d->settings.bcgPrm    = BCGContainer::fromFilterAction(action);
 }
 
 
