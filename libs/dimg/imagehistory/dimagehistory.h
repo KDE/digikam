@@ -77,14 +77,21 @@ public:
 
     DImageHistory& operator=(const DImageHistory& other);
 
-    bool isNull() const;
-
     /**
-     * A history is considered empty if there are no entries,
-     * or only the "Current" entry as referred file,
-     * with no actions or other referred images.
+     * A history is null if it is constructed with the default constructor
+     */
+    bool isNull() const;
+    /**
+     * A history is considered empty if there are no entries.
      */
     bool isEmpty() const;
+    /**
+     * A history is a valid history (telling something about the past),
+     * if the history is not empty, and there is at least one
+     * referred image other than the "Current" entry,
+     * or there is a valid action.
+     */
+    bool isValid() const;
 
     /// Returns the number of entries
     int size() const;

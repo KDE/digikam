@@ -93,20 +93,39 @@ bool DImageHistory::isNull() const
 
 bool DImageHistory::isEmpty() const
 {
+    return d->entries.isEmpty();
+}
+
+bool DImageHistory::isValid() const
+{
     if (d->entries.isEmpty())
     {
-        return true;
+        return false;
     }
     else if (d->entries.count() == 1
              && d->entries.first().referredImages.count() == 1
              && d->entries.first().referredImages.first().isCurrentFile())
     {
-        return true;
+        return false;
     }
     else
     {
-        return false;
+        foreach (const Entry& e, d->entries)
+        {
+            if (!e.action.isNull())
+            {
+                return true;
+            }
+            foreach (const HistoryImageId& id, e.referredImages)
+            {
+                if (id.isValid() && !id.isCurrentFile())
+                {
+                    return true;
+                }
+            }
+        }
     }
+    return false;
 }
 
 int DImageHistory::size() const
