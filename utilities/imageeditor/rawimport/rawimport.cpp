@@ -44,7 +44,7 @@
 #include "curveswidget.h"
 #include "imagehistogram.h"
 #include "rawsettingsbox.h"
-#include "rawpostprocessing.h"
+#include "rawprocessingfilter.h"
 #include "editortooliface.h"
 #include "rawpreview.h"
 
@@ -189,7 +189,7 @@ void RawImport::slotDemosaicedImage()
 void RawImport::prepareEffect()
 {
     DImg postImg = d->previewWidget->demosaicedImage();
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new RawPostProcessing(&postImg, this, rawDecodingSettings())));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new RawProcessingFilter(&postImg, this, rawDecodingSettings())));
 }
 
 void RawImport::putPreviewData()

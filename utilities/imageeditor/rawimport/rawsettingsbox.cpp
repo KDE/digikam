@@ -493,15 +493,15 @@ DRawDecoding RawSettingsBox::settings() const
 {
     DRawDecoding settings(d->decodingSettingsBox->settings());
 
-    settings.lightness    = (double)d->brightnessInput->value()/250.0;
-    settings.contrast     = (double)(d->contrastInput->value()/100.0) + 1.00;
-    settings.gamma        = d->gammaInput->value();
-    settings.saturation   = d->saturationInput->value();
-    settings.exposureComp = d->fineExposureInput->value();
+    settings.bcg.brightness   = (double)d->brightnessInput->value()/250.0;
+    settings.bcg.contrast     = (double)(d->contrastInput->value()/100.0) + 1.00;
+    settings.bcg.gamma        = d->gammaInput->value();
+    settings.wb.saturation    = d->saturationInput->value();
+    settings.wb.exposition    = d->fineExposureInput->value();
 
     if (d->curveWidget->curves()->isDirty())
     {
-        settings.curveAdjust = d->curveWidget->curves()->getCurvePoints(LuminosityChannel);
+        settings.curvesAdjust = d->curveWidget->curves()->getContainer();
     }
 
     return settings;
