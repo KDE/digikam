@@ -28,7 +28,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 258308 : Crash when starting Free Rotation in Image Editor.
 021 ==> 248882 : digiKam crashes when renaming using date/time info.
 022 ==> 217555 : "Cannot display preview" error when browsing.
-023 ==> 258600 : "transupp.cpp" fails to compile on emerged kde.
+023 ==> 258600 : "transupp.cpp" fails to compile on emerged KDE.
 024 ==> 233572 : Showfoto crashed on change hue value.
 025 ==> 258828 : Crash when I use auto-colors correction tool from image editor.
 026 ==> 195561 : Implement a selective saturation filter [patch].
@@ -41,7 +41,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 210353 : digiKam duplicates icons for TIFF files.
 034 ==> 260299 : X Axis Color Graduation in Curves Window mirrored.
 035 ==> 242021 : digiKam crashes during file save.
-036 ==> 
-
-
-
