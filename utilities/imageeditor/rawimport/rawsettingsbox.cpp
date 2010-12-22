@@ -180,11 +180,9 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
             DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
     d->decodingSettingsBox->setObjectName("RawSettingsBox Expander");
 
-    KFileDialog* inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
-    inputDlg->setPreviewWidget(new ICCPreviewWidget(inputDlg));
-
-    KFileDialog* outputDlg = d->decodingSettingsBox->outputProfileUrlEdit()->fileDialog();
-    outputDlg->setPreviewWidget(new ICCPreviewWidget(outputDlg));
+    // Note: dont touch the url edit's fileDialog() here.
+    // This creates the file dialog, which involved an event loop, which is evil.
+    // Adjust file dialog in fileDialogAboutToOpen
 
     d->abortBtn = new QPushButton(d->rawdecodingBox);
     d->abortBtn->setText(i18n("Abort"));
@@ -377,6 +375,12 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
 
     connect(d->fineExposureInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalPostProcessingChanged()));
+
+    connect(d->decodingSettingsBox->inputProfileUrlEdit(), SIGNAL(openFileDialog(KUrlRequester*)),
+            this, SLOT(fileDialogAboutToOpen(KUrlRequester*)));
+
+    connect(d->decodingSettingsBox->outputProfileUrlEdit(), SIGNAL(openFileDialog(KUrlRequester*)),
+            this, SLOT(fileDialogAboutToOpen(KUrlRequester*)));
 }
 
 RawSettingsBox::~RawSettingsBox()
@@ -505,6 +509,11 @@ DRawDecoding RawSettingsBox::settings() const
     }
 
     return settings;
+}
+
+void RawSettingsBox::fileDialogAboutToOpen(KUrlRequester *requester)
+{
+    requester->fileDialog()->setPreviewWidget(new ICCPreviewWidget(requester));
 }
 
 } // namespace Digikam
