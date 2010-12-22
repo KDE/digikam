@@ -255,12 +255,15 @@ void RawDecodingSettingsWriter::write()
 
     AddParameterIfNotDefault(deadPixelMap);
 
-    if (!settings.whiteBalanceArea.isNull())
+    if (settings.whiteBalance == KDcrawIface::RawDecodingSettings::AERA /*sic*/)
     {
-        action.addParameter(prefix + "whiteBalanceAreaX", settings.whiteBalanceArea.x());
-        action.addParameter(prefix + "whiteBalanceAreaY", settings.whiteBalanceArea.y());
-        action.addParameter(prefix + "whiteBalanceAreaWidth", settings.whiteBalanceArea.width());
-        action.addParameter(prefix + "whiteBalanceAreaHeight", settings.whiteBalanceArea.height());
+        if (!settings.whiteBalanceArea.isNull())
+        {
+            action.addParameter(prefix + "whiteBalanceAreaX", settings.whiteBalanceArea.x());
+            action.addParameter(prefix + "whiteBalanceAreaY", settings.whiteBalanceArea.y());
+            action.addParameter(prefix + "whiteBalanceAreaWidth", settings.whiteBalanceArea.width());
+            action.addParameter(prefix + "whiteBalanceAreaHeight", settings.whiteBalanceArea.height());
+        }
     }
 
     AddParameterIfNotDefault(dcbIterations);

@@ -50,6 +50,7 @@
 #include "wbfilter.h"
 #include "globals.h"
 
+#include "dimagehistory.h"
 namespace Digikam
 {
 
@@ -311,10 +312,13 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     //----------------------------------------------------------
 
+    FilterAction action = m_filter->filterAction();
+    m_image->addFilterAction(action);
+
     imageWidth()  = width;
     imageHeight() = height;
     imageSetAttribute("rawDecodingSettings", QVariant::fromValue(m_filter->settings()));
-    imageSetAttribute("rawDecodingFilterAction", QVariant::fromValue(m_filter->filterAction()));
+    imageSetAttribute("rawDecodingFilterAction", QVariant::fromValue(action));
     // other attributes are set above
 
     return true;
@@ -322,8 +326,12 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
 void RAWLoader::postProcess(DImgLoaderObserver* observer)
 {
-    m_filter->setObserver(observer, 90, 100);
-    m_filter->startFilterDirectly();
+    if (m_filter->settings().postProcessingSettingsIsDirty())
+    {
+        m_filter->setObserver(observer, 90, 100);
+        m_filter->setupFilter(*m_image);
+        m_filter->startFilterDirectly();
+    }
 }
 
 FilterAction RAWLoader::filterAction() const

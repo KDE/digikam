@@ -26,6 +26,10 @@
 
 // Qt includes
 
+// KDE includes
+
+#include <kdebug.h>
+
 // KDcraw includes
 
 #include <libkdcraw/kdcraw.h>
@@ -65,7 +69,7 @@ RawProcessingFilter::RawProcessingFilter(const DRawDecoding& settings,
       m_observer(0)
 {
     setSettings(settings);
-    startFilterDirectly();
+    filterImage();
 }
 
 void RawProcessingFilter::setSettings(const DRawDecoding& settings)
@@ -131,7 +135,7 @@ void RawProcessingFilter::filterImage()
         trans.setIntent(IccTransform::Perceptual);
         trans.setEmbeddedProfile(m_destImage);
         trans.setOutputProfile(m_customOutputProfile);
-        trans.apply(m_destImage, m_observer);
+        trans.apply(m_orgImage, m_observer);
         m_destImage.setIccProfile(m_customOutputProfile);
     }
 
