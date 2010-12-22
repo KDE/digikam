@@ -649,8 +649,6 @@ void ImageWindow::slotSetupChanged()
 void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const ImageInfo& imageInfoCurrent,
                                  const QString& caption)
 {
-    // imageInfoCurrent is contained in imageInfoList.
-
     // Very first thing is to check for changes, user may choose to cancel operation
     if (!promptUserSave(d->currentUrl(), AskIfNeeded))
     {
@@ -658,15 +656,10 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
     }
 
     d->currentImageInfo = ImageInfo();
-    d->imageInfoModel->setImageInfos(imageInfoList);
     d->currentImageInfo = imageInfoCurrent;
+    // Note: Addition is asynchronous, index not yet available
+    d->imageInfoModel->setImageInfos(imageInfoList);
     d->setThumbBarToCurrent();
-
-    // if window is minimized, show it
-    if (isMinimized())
-    {
-        KWindowSystem::unminimizeWindow(winId());
-    }
 
     if (!caption.isEmpty())
     {
@@ -675,6 +668,18 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
     else
     {
         setCaption(i18n("Image Editor"));
+    }
+
+    // it can slightly improve the responsiveness when inserting an event loop run here
+    QTimer::singleShot(0, this, SLOT(slotLoadImageInfosStage2()));
+}
+
+void ImageWindow::slotLoadImageInfosStage2()
+{
+    // if window is minimized, show it
+    if (isMinimized())
+    {
+        KWindowSystem::unminimizeWindow(winId());
     }
 
     slotLoadCurrent();

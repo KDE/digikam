@@ -121,6 +121,8 @@ Q_SIGNALS: // private signals
 
 private Q_SLOTS:
 
+    void slotLoadImageInfosStage2();
+
     void slotForward();
     void slotBackward();
     void slotFirst();
