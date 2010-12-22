@@ -39,6 +39,7 @@ namespace Digikam
 
 ManagedLoadSaveThread::ManagedLoadSaveThread()
 {
+    m_loadingPolicy     = LoadingPolicyAppend;
     m_terminationPolicy = TerminationPolicyTerminateLoading;
 }
 
@@ -150,9 +151,35 @@ void ManagedLoadSaveThread::setTerminationPolicy(TerminationPolicy terminationPo
     m_terminationPolicy = terminationPolicy;
 }
 
-void ManagedLoadSaveThread::load(const LoadingDescription description, LoadingPolicy policy)
+ManagedLoadSaveThread::TerminationPolicy ManagedLoadSaveThread::terminationPolicy() const
+{
+    return m_terminationPolicy;
+}
+
+void ManagedLoadSaveThread::setLoadingPolicy(LoadingPolicy policy)
+{
+    m_loadingPolicy = policy;
+}
+
+ManagedLoadSaveThread::LoadingPolicy ManagedLoadSaveThread::loadingPolicy() const
+{
+    return m_loadingPolicy;
+}
+
+void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingPolicy policy)
 {
     load(description, LoadingModeNormal, policy);
+}
+
+void ManagedLoadSaveThread::load(const LoadingDescription& description)
+{
+    load(description, LoadingModeNormal, m_loadingPolicy);
+}
+
+void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingMode loadingMode,
+                                 AccessMode accessMode)
+{
+    load(description, loadingMode, m_loadingPolicy, accessMode);
 }
 
 void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingMode loadingMode,

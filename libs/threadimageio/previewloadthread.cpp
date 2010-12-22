@@ -89,9 +89,4 @@ void PreviewLoadThread::setDisplayingWidget(QWidget* widget)
     m_displayingWidget = widget;
 }
 
-void PreviewLoadThread::setLoadingPolicy(LoadingPolicy policy)
-{
-    m_loadingPolicy = policy;
-}
-
 }   // namespace Digikam

@@ -104,7 +104,8 @@ public:
     /// but no second task will be added.
     /// Only loading tasks will - if required by the policy - be stopped or removed,
     /// saving tasks will not be touched.
-    void load(LoadingDescription description, LoadingPolicy policy = LoadingPolicyAppend);
+    void load(const LoadingDescription& description);
+    void load(const LoadingDescription& description, LoadingPolicy policy);
 
     /// Stop and remove tasks filtered by filePath and policy.
     /// If filePath isNull, applies to all file paths.
@@ -123,18 +124,32 @@ public:
     void save(DImg& image, const QString& filePath, const QString& format);
 
     void setTerminationPolicy(TerminationPolicy terminationPolicy);
+    TerminationPolicy terminationPolicy() const;
+
+    /**
+     * Set the loading policy.
+     * Default is LoadingPolicyAppend.
+     * You can override the default value for each operation.
+     */
+    void setLoadingPolicy(LoadingPolicy policy);
+    LoadingPolicy loadingPolicy() const;
 
 protected:
 
     void shutDown();
 
     void load(const LoadingDescription& description, LoadingMode loadingMode,
-              LoadingPolicy policy = LoadingPolicyAppend, AccessMode mode = AccessModeReadWrite);
-    void loadPreview(const LoadingDescription& description, LoadingPolicy policy = LoadingPolicyFirstRemovePrevious);
+              AccessMode mode = AccessModeReadWrite);
+    void load(const LoadingDescription& description, LoadingMode loadingMode,
+              LoadingPolicy policy, AccessMode mode = AccessModeReadWrite);
+    void loadPreview(const LoadingDescription& description, LoadingPolicy policy);
     void loadThumbnail(const LoadingDescription& description);
     void preloadThumbnail(const LoadingDescription& description);
     void preloadThumbnailGroup(const QList<LoadingDescription>& descriptions);
     void prependThumbnailGroup(const QList<LoadingDescription>& descriptions);
+
+    LoadingPolicy     m_loadingPolicy;
+    TerminationPolicy m_terminationPolicy;
 
 private:
 
@@ -144,7 +159,6 @@ private:
                                    LoadingMode loadingMode, AccessMode accessMode);
     void removeLoadingTasks(const LoadingDescription& description, LoadingTaskFilter filter);
 
-    TerminationPolicy m_terminationPolicy;
 };
 
 }  // namespace Digikam

@@ -37,6 +37,12 @@ class DIGIKAM_EXPORT PreviewLoadThread : public ManagedLoadSaveThread
 
 public:
 
+    /**
+     * Creates a preview load thread.
+     * Provides three flavors of preview loading.
+     * The default loading policy, for the typical usage in a preview widget,
+     * always stops any previous tasks and loads the new task as soon as possible.
+     */
     PreviewLoadThread();
 
     /**
@@ -67,18 +73,10 @@ public:
     /// Optionally, set the displaying widget for color management
     void setDisplayingWidget(QWidget* widget);
 
-    /**
-     * Set the loading policy (see ManagedLoadSaveThread for details).
-     * The default mode, for the typical usage in a preview widget,
-     * always stops any previous tasks and loads the new task as soon as possible.
-     */
-    void setLoadingPolicy(LoadingPolicy policy);
-
 protected:
 
     LoadingDescription createLoadingDescription(const QString& filePath, int size, bool exifRotate);
     QWidget*      m_displayingWidget;
-    LoadingPolicy m_loadingPolicy;
 };
 
 }   // namespace Digikam
