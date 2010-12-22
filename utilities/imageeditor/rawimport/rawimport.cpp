@@ -194,8 +194,13 @@ void RawImport::prepareEffect()
 
 void RawImport::putPreviewData()
 {
-    d->previewWidget->setPostProcessedImage(filter()->getTargetImage());
-    d->settingsBox->setPostProcessedImage(d->previewWidget->postProcessedImage());
+    // Preserve metadata from loaded image, and take post-processed image data
+    DImg processed = d->previewWidget->demosaicedImage().copyMetaData();
+    DImg data = filter()->getTargetImage();
+    processed.putImageData(data.width(), data.height(), data.sixteenBit(), data.hasAlpha(),
+                           data.stripImageData(), false);
+    d->previewWidget->setPostProcessedImage(processed);
+    d->settingsBox->setPostProcessedImage(processed);
     EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
 }

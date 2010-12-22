@@ -77,6 +77,7 @@ RawPreview::RawPreview(const KUrl& url, QWidget* parent)
     : PreviewWidget(parent), d(new RawPreviewPriv)
 {
     d->thread = new ManagedLoadSaveThread;
+    d->thread->setLoadingPolicy(ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     d->url    = url;
 
     setMinimumWidth(500);
@@ -125,6 +126,11 @@ DImg& RawPreview::demosaicedImage() const
 
 void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 {
+    if (d->settings == settings && d->thread->isRunning())
+    {
+        return;
+    }
+
     // Save post processing settings.
     d->settings = settings;
 
@@ -190,7 +196,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
     {
         d->demosaicedImg = image;
         emit signalDemosaicedImage();
-        // NOTE: we will apply all Raw post processing corrections into RawImport class.
+        // NOTE: we will apply all Raw post processing corrections in RawImport class.
     }
 }
 
