@@ -49,11 +49,14 @@ CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const CurvesContaine
 }
 
 CurvesFilter::CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* master,
-                           const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
+                           const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "CurvesFilter")
 {
     m_settings = settings;
+
+    // cannot operate in-place, so allocate dest image
     initFilter();
+    destImage = m_destImage;
 }
 
 CurvesFilter::~CurvesFilter()

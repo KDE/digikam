@@ -51,7 +51,7 @@ public:
     explicit CurvesFilter(QObject* parent = 0);
     explicit CurvesFilter(DImg* orgImage, QObject* parent=0, const CurvesContainer& settings=CurvesContainer());
     explicit CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* master,
-                          const DImg& orgImage, const DImg& destImage, int progressBegin=0, int progressEnd=100);
+                          const DImg& orgImage, DImg& destImage, int progressBegin=0, int progressEnd=100);
     virtual ~CurvesFilter();
 
     static QString          FilterIdentifier()

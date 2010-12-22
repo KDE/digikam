@@ -118,7 +118,7 @@ BCGFilter::BCGFilter(const BCGContainer& settings, DImgThreadedFilter* master,
 {
     d->settings = settings;
     reset();
-    initFilter();
+    filterImage();
 }
 
 BCGFilter::~BCGFilter()

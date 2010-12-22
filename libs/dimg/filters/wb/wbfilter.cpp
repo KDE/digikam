@@ -149,7 +149,7 @@ WBFilter::WBFilter(const WBContainer& settings, DImgThreadedFilter* master,
       d(new WBFilterPriv)
 {
     m_settings = settings;
-    initFilter();
+    filterImage();
 }
 
 WBFilter::~WBFilter()
