@@ -38,12 +38,34 @@
 
 #include "dimg.h"
 #include "dimagehistory.h"
+#include "drawdecoding.h"
 #include "filteractionfilter.h"
 
 using namespace Digikam;
 
 QTEST_KDEMAIN(DImageFilterActionTest, /*No*/GUI)
 //QTEST_MAIN(DImageFilterActionTest)
+
+void DImageFilterActionTest::testDRawDecoding()
+{
+    DRawDecoding params;
+
+    params.rawPrm.sixteenBitsImage = true;
+    params.rawPrm.autoBrightness  = true;
+    params.rawPrm.whiteBalance = KDcrawIface::RawDecodingSettings::AERA;
+    params.rawPrm.RGBInterpolate4Colors = true;
+    params.rawPrm.RAWQuality = KDcrawIface::RawDecodingSettings::AMAZE;
+    params.rawPrm.NRType = KDcrawIface::RawDecodingSettings::WAVELETSNR;
+    params.rawPrm.outputColorSpace = KDcrawIface::RawDecodingSettings::ADOBERGB;
+
+    FilterAction action;
+    params.writeToFilterAction(action);
+
+    qDebug() << action.parameters();
+
+    DRawDecoding params2 = DRawDecoding::fromFilterAction(action);
+    QVERIFY(params == params2);
+}
 
 void DImageFilterActionTest::testActions()
 {

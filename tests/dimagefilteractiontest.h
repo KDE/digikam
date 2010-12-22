@@ -49,6 +49,7 @@ public:
 
 private Q_SLOTS:
 
+    void testDRawDecoding();
     void testActions();
 
     void initTestCase();
