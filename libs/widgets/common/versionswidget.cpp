@@ -97,8 +97,8 @@ protected:
             }
             case FilterActionMode:
             {
-                // TODO
-                return QString();
+                FilterAction action = currentIndex().data(ImageHistoryGraphModel::FilterActionRole).value<FilterAction>();
+                return ToolTipFiller::filterActionTipContents(action);
             }
         }
     }
@@ -185,7 +185,7 @@ bool VersionsWidgetTreeView::viewportEvent(QEvent* event)
             {
                 mode = VersionsWidgetToolTip::ImageMode;
             }
-            else if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
+            else if (index.data(ImageHistoryGraphModel::IsFilterActionItemRole).toBool())
             {
                 mode = VersionsWidgetToolTip::FilterActionMode;
             }

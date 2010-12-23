@@ -249,7 +249,7 @@ public:
     void addCombinedItemCategory(HistoryTreeItem* parentItem, QList<HistoryGraph::Vertex>& vertices,
                                  const QString& title, const HistoryGraph::Vertex& showActionsFrom,
                                  QList<HistoryGraph::Vertex>& added);
-    void addItemSubgroup(VertexItem* parent, const QList<HistoryGraph::Vertex>& vertices, const QString& title);
+    void addItemSubgroup(VertexItem* parent, const QList<HistoryGraph::Vertex>& vertices, const QString& title, bool flat = false);
 
     VertexItem* createVertexItem(const HistoryGraph::Vertex& v);
     FilterActionItem* createFilterActionItem(const FilterAction& action);
@@ -510,20 +510,21 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
         {
             shortestPath.removeOne(addedVertex);
         }
-        addItemSubgroup(item, shortestPath, i18nc("@title", "Intermediate Steps..."));
+        addItemSubgroup(item, shortestPath, i18nc("@title", "Intermediate Steps:"), true);
     }
 }
 
 void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
-     addItemSubgroup(VertexItem* parent, const QList<HistoryGraph::Vertex>& vertices, const QString& title)
+     addItemSubgroup(VertexItem* parent, const QList<HistoryGraph::Vertex>& vertices, const QString& title, bool flat)
 {
     if (vertices.isEmpty())
         return;
     HeaderItem* header = new HeaderItem(title);
     parent->addItem(header);
+    HistoryTreeItem* addToItem = flat ? static_cast<HistoryTreeItem*>(parent) : static_cast<HistoryTreeItem*>(header);
     foreach (const HistoryGraph::Vertex& v, vertices)
     {
-        header->addItem(createVertexItem(v));
+        addToItem->addItem(createVertexItem(v));
     }
 }
 
@@ -656,13 +657,14 @@ QVariant ImageHistoryGraphModel::data(const QModelIndex& index, int role) const
             case IsFilterActionItemRole:
                 return true;
             case Qt::DisplayRole:
-            //case Qt::ToolTipRole:
                 return DImgFilterManager::instance()->i18nDisplayableName(filterActionItem->action);
             case Qt::DecorationRole:
             {
                 QString iconName = DImgFilterManager::instance()->filterIcon(filterActionItem->action);
                 return KIcon(iconName);
             }
+            case FilterActionRole:
+                return QVariant::fromValue(filterActionItem->action);
             default:
                 break;
         }

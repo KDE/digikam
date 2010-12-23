@@ -31,13 +31,15 @@
 namespace Digikam
 {
 
+class FilterAction;
 class ImageInfo;
 class PAlbum;
 
 namespace ToolTipFiller
 {
-QString imageInfoTipContents(const ImageInfo& info);
-QString albumTipContents(PAlbum* album, int count);
+    QString imageInfoTipContents(const ImageInfo& info);
+    QString albumTipContents(PAlbum* album, int count);
+    QString filterActionTipContents(const FilterAction& action);
 }
 
 }  // namespace Digikam

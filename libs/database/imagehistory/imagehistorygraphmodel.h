@@ -61,7 +61,9 @@ public:
         IsCategoryItemRole     = Qt::UserRole + 1003,
         IsSeparatorItemRole    = Qt::UserRole + 1004,
 
-        IsSubjectImageRole     = Qt::UserRole + 1010
+        IsSubjectImageRole     = Qt::UserRole + 1010,
+
+        FilterActionRole       = Qt::UserRole + 1020
     };
 
     ImageHistoryGraphModel(QObject* parent = 0);
