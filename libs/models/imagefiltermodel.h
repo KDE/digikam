@@ -136,6 +136,7 @@ public:
     DatabaseFields::Set suggestedWatchFlags() const;
 
     ImageFilterSettings imageFilterSettings() const;
+    VersionImageFilterSettings versionImageFilterSettings() const;
     ImageSortSettings   imageSortSettings() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -148,6 +149,8 @@ public Q_SLOTS:
 
     /** Changes the current image filter settings and refilters. */
     virtual void setImageFilterSettings(const ImageFilterSettings& settings);
+    /** Changes the current version image filter settings and refilters. */
+    void setVersionImageFilterSettings(const VersionImageFilterSettings& settings);
     /** Changes the current image sort settings and resorts. */
     virtual void setImageSortSettings(const ImageSortSettings& settings);
 
@@ -169,6 +172,9 @@ public Q_SLOTS:
     void setSortOrder(ImageSortSettings::SortOrder order);
     void setUrlWhitelist(const KUrl::List urlList, const QString& id);
     void setIdWhitelist(const QList<qlonglong>& idList, const QString& id);
+
+    void setVersionManagerSettings(const VersionManagerSettings& settings);
+    void setExceptionList(const QList<qlonglong>& idlist, const QString& id);
 
 Q_SIGNALS:
 

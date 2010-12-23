@@ -125,11 +125,11 @@ public:
 
     /// --- URL whitelist filter
     QHash<QString,KUrl::List> urlWhitelists;
-    void setUrlWhitelist(const KUrl::List& urlList, const QString id);
+    void setUrlWhitelist(const KUrl::List& urlList, const QString& id);
 
     /// --- ID whitelist filter
     QHash<QString,QList<qlonglong> > idWhitelists;
-    void setIdWhitelist(const QList<qlonglong> idList, const QString id);
+    void setIdWhitelist(const QList<qlonglong>& idList, const QString& id);
 
     /// --- Change notification ---
 
@@ -138,6 +138,43 @@ public:
      *  The text filter will also be affected by changes in tags and album names.
      */
     DatabaseFields::Set watchFlags() const;
+};
+
+class VersionManagerSettings;
+class DIGIKAM_DATABASE_EXPORT VersionImageFilterSettings
+{
+public:
+
+    VersionImageFilterSettings();
+    VersionImageFilterSettings(const VersionManagerSettings& settings);
+
+    bool operator==(const VersionImageFilterSettings& other) const;
+
+    /**
+     *  Returns true if the given ImageInfo matches the filter criteria.
+     */
+    bool matches(const ImageInfo& info) const;
+
+    /// --- Tags filter ---
+
+    void setVersionManagerSettings(const VersionManagerSettings& settings);
+
+    /**
+     * Add list with exceptions: These images will be exempted from filtering by this filter
+     */
+    void setExceptionList(const QList<qlonglong>& idlist, const QString& id);
+
+    /// Returns if images will be filtered by these criteria at all
+    bool isFiltering() const;
+    /// Returns if the tag is a filter criteria
+    bool isFilteringByTags() const;
+
+    /// DatabaseFields::Set watchFlags() const: Would return 0
+
+protected:
+
+    QList<int>                       excludeTagFilter;
+    QHash<QString,QList<qlonglong> > exceptionLists;
 };
 
 } // namespace Digikam

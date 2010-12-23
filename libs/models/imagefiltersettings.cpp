@@ -32,6 +32,8 @@
 
 #include "databasefields.h"
 #include "imageinfo.h"
+#include "tagscache.h"
+#include "versionmanagersettings.h"
 
 namespace Digikam
 {
@@ -116,7 +118,7 @@ void ImageFilterSettings::setAlbumNames(const QHash<int, QString>& hash)
     albumNameHash = hash;
 }
 
-void ImageFilterSettings::setUrlWhitelist(const KUrl::List& urlList, const QString id)
+void ImageFilterSettings::setUrlWhitelist(const KUrl::List& urlList, const QString& id)
 {
     if (urlList.isEmpty())
     {
@@ -128,7 +130,7 @@ void ImageFilterSettings::setUrlWhitelist(const KUrl::List& urlList, const QStri
     }
 }
 
-void ImageFilterSettings::setIdWhitelist(const QList<qlonglong> idList, const QString id)
+void ImageFilterSettings::setIdWhitelist(const QList<qlonglong>& idList, const QString& id)
 {
     if (idList.isEmpty())
     {
@@ -452,5 +454,91 @@ DatabaseFields::Set ImageFilterSettings::watchFlags() const
 
     return set;
 }
+
+// -----------------
+
+VersionImageFilterSettings::VersionImageFilterSettings()
+{
+}
+
+VersionImageFilterSettings::VersionImageFilterSettings(const VersionManagerSettings& settings)
+{
+    setVersionManagerSettings(settings);
+}
+
+bool VersionImageFilterSettings::operator==(const VersionImageFilterSettings& other) const
+{
+    return excludeTagFilter == other.excludeTagFilter
+        && exceptionLists == other.exceptionLists;
+}
+
+bool VersionImageFilterSettings::matches(const ImageInfo& info) const
+{
+    if (!isFiltering())
+    {
+        return true;
+    }
+
+    const qlonglong id = info.id();
+    for (QHash<QString, QList<qlonglong> >::const_iterator it = exceptionLists.constBegin();
+         it != exceptionLists.constEnd(); ++it)
+    {
+        if (it->contains(id))
+        {
+            return true;
+        }
+    }
+
+    QList<int> tagIds = info.tagIds();
+    for (QList<int>::const_iterator it = excludeTagFilter.begin();
+         it != excludeTagFilter.end(); ++it)
+    {
+        if (tagIds.contains(*it))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void VersionImageFilterSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
+{
+    excludeTagFilter.clear();
+
+    if (!(settings.showInViewFlags & VersionManagerSettings::ShowOriginal))
+    {
+        excludeTagFilter << TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
+    }
+
+    if (!(settings.showInViewFlags & VersionManagerSettings::ShowIntermediates))
+    {
+        excludeTagFilter << TagsCache::instance()->getOrCreateInternalTag(InternalTagName::intermediateVersion());
+    }
+}
+
+void VersionImageFilterSettings::setExceptionList(const QList<qlonglong>& idList, const QString& id)
+{
+    if (idList.isEmpty())
+    {
+        exceptionLists.remove(id);
+    }
+    else
+    {
+        exceptionLists.insert(id, idList);
+    }
+}
+
+bool VersionImageFilterSettings::isFiltering() const
+{
+    return !excludeTagFilter.isEmpty();
+}
+
+bool VersionImageFilterSettings::isFilteringByTags() const
+{
+    return isFiltering();
+}
+
+
 
 } // namespace Digikam

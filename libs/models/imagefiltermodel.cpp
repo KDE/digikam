@@ -440,6 +440,7 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
         d->version++;
         d->filter              = settings;
         d->filterCopy          = settings;
+        d->versionFilterCopy   = d->versionFilter;
 
         d->needPrepareComments = settings.isFilteringByText();
         d->needPrepareTags     = settings.isFilteringByTags();
@@ -461,6 +462,33 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
     emit filterSettingsChanged(settings);
 }
 
+void ImageFilterModel::setVersionManagerSettings(const VersionManagerSettings& settings)
+{
+    Q_D(ImageFilterModel);
+    d->versionFilter.setVersionManagerSettings(settings);
+    setVersionImageFilterSettings(d->versionFilter);
+}
+
+void ImageFilterModel::setExceptionList(const QList<qlonglong>& idList, const QString& id)
+{
+    Q_D(ImageFilterModel);
+    d->versionFilter.setExceptionList(idList, id);
+    setVersionImageFilterSettings(d->versionFilter);
+}
+
+void ImageFilterModel::setVersionImageFilterSettings(const VersionImageFilterSettings& settings)
+{
+    Q_D(ImageFilterModel);
+    if (d->versionFilter == settings)
+    {
+        return;
+    }
+
+    d->versionFilter = settings;
+
+    slotUpdateFilter();
+}
+
 void ImageFilterModel::slotUpdateFilter()
 {
     Q_D(ImageFilterModel);
@@ -477,6 +505,12 @@ ImageSortSettings ImageFilterModel::imageSortSettings() const
 {
     Q_D(const ImageFilterModel);
     return d->sorter;
+}
+
+VersionImageFilterSettings ImageFilterModel::versionImageFilterSettings() const
+{
+    Q_D(const ImageFilterModel);
+    return d->versionFilter;
 }
 
 void ImageFilterModel::slotModelReset()
@@ -515,7 +549,9 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
     }
 
     // usually done in thread and cache, unless source model changed
-    return d->filter.matches(d->imageModel->imageInfo(source_row));
+    ImageInfo info = d->imageModel->imageInfo(source_row);
+    bool match = d->filter.matches(info);
+    return match ? d->versionFilter.matches(info) : false;
 }
 
 void ImageFilterModel::setSendImageInfoSignals(bool sendSignals)
@@ -806,11 +842,13 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
 
     // get thread-local copy
     ImageFilterSettings localFilter;
+    VersionImageFilterSettings localVersionFilter;
     bool hasOneMatch;
     bool hasOneMatchForText;
     {
         QMutexLocker lock(&d->mutex);
         localFilter        = d->filterCopy;
+        localVersionFilter = d->versionFilterCopy;
         hasOneMatch        = d->hasOneMatch;
         hasOneMatchForText = d->hasOneMatchForText;
     }
@@ -820,7 +858,8 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     {
         foreach (const ImageInfo& info, package.infos)
         {
-            package.filterResults[info.id()] = localFilter.matches(info);
+            package.filterResults[info.id()] = localFilter.matches(info)
+                                                && localVersionFilter.matches(info);
         }
     }
     else if (hasOneMatch)
@@ -828,7 +867,8 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         bool matchForText;
         foreach (const ImageInfo& info, package.infos)
         {
-            package.filterResults[info.id()] = localFilter.matches(info, &matchForText);
+            package.filterResults[info.id()] = localFilter.matches(info, &matchForText)
+                                                && localVersionFilter.matches(info);
 
             if (matchForText)
             {
@@ -841,7 +881,8 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         bool result, matchForText;
         foreach (const ImageInfo& info, package.infos)
         {
-            result                           = localFilter.matches(info, &matchForText);
+            result                           = localFilter.matches(info, &matchForText)
+                                                && localVersionFilter.matches(info);
             package.filterResults[info.id()] = result;
 
             if (result)
@@ -1006,7 +1047,9 @@ void ImageFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
     }
 
     // do we filter at all?
-    if (!d->filter.isFilteringByTags() && !d->filter.isFilteringByText())
+    if (!d->versionFilter.isFilteringByTags()
+        && !d->filter.isFilteringByTags()
+        && !d->filter.isFilteringByText())
     {
         return;
     }

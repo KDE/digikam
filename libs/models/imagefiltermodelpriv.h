@@ -88,6 +88,7 @@ public:
 
     ImageFilterSettings        filter;
     ImageSortSettings          sorter;
+    VersionImageFilterSettings versionFilter;
 
     volatile unsigned int      version;
     unsigned int               lastDiscardVersion;
@@ -103,6 +104,7 @@ public:
 
     QMutex                     mutex;
     ImageFilterSettings        filterCopy;
+    VersionImageFilterSettings versionFilterCopy;
     ImageFilterModelPreparer*  preparer;
     ImageFilterModelFilterer*  filterer;
 

@@ -68,6 +68,7 @@
 #include "tagscache.h"
 #include "searchxml.h"
 #include "faceiface.h"
+#include "versionmanagersettings.h"
 
 namespace Digikam
 {
@@ -292,6 +293,8 @@ void DigikamView::applySettings()
     {
         sidebarWidget->applySettings();
     }
+
+    d->iconView->imageFilterModel()->setVersionImageFilterSettings(AlbumSettings::instance()->getVersionManagerSettings());
 
     refreshView();
 }
