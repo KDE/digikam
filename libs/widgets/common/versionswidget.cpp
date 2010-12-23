@@ -43,16 +43,173 @@
 
 // Local includes
 
+#include "albumsettings.h"
+#include "dimagehistory.h"
 #include "imagehistorygraphmodel.h"
 #include "imagepropertiesversionsdelegate.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imagelistmodel.h"
-#include "dimagehistory.h"
+#include "itemviewtooltip.h"
 #include "thumbnailloadthread.h"
+#include "tooltipfiller.h"
 
 namespace Digikam
 {
+
+class VersionsWidgetToolTip : public ItemViewToolTip
+{
+public:
+
+    VersionsWidgetToolTip(QAbstractItemView* view)
+        : ItemViewToolTip(view),
+          m_mode(InvalidMode)
+    {
+    }
+
+    enum Mode
+    {
+        InvalidMode,
+        ImageMode,
+        FilterActionMode
+    };
+
+    void show(QHelpEvent* event, const QStyleOptionViewItem& option, const QModelIndex& index, Mode mode)
+    {
+        m_mode = mode;
+        ItemViewToolTip::show(event, option, index);
+        m_mode = InvalidMode;
+    }
+
+protected:
+
+    virtual QString tipContents()
+    {
+        switch (m_mode)
+        {
+            default:
+            case InvalidMode:
+                return QString();
+            case ImageMode:
+            {
+                ImageInfo info = ImageModel::retrieveImageInfo(currentIndex());
+                return ToolTipFiller::imageInfoTipContents(info);
+            }
+            case FilterActionMode:
+            {
+                // TODO
+                return QString();
+            }
+        }
+    }
+
+protected:
+
+    Mode m_mode;
+};
+
+// ----
+
+class VersionsWidgetTreeView : public QTreeView
+{
+public:
+
+    VersionsWidgetTreeView(QWidget *parent = 0);
+
+    void setToolTipEnabled(bool on);
+
+    virtual void paintEvent(QPaintEvent *e);
+    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
+    virtual bool viewportEvent(QEvent* event);
+
+public:
+
+    bool m_showToolTip;
+    VersionsWidgetToolTip* m_toolTip;
+};
+
+VersionsWidgetTreeView::VersionsWidgetTreeView(QWidget *parent)
+    : QTreeView(parent),
+      m_showToolTip(false),
+      m_toolTip(0)
+{
+}
+
+void VersionsWidgetTreeView::setToolTipEnabled(bool on)
+{
+    if (on == m_showToolTip)
+        return;
+
+    m_showToolTip = on;
+
+    if (m_showToolTip && !m_toolTip)
+    {
+        m_toolTip = new VersionsWidgetToolTip(this);
+    }
+}
+
+void VersionsWidgetTreeView::paintEvent(QPaintEvent *e)
+{
+    static_cast<ImagePropertiesVersionsDelegate*>(itemDelegate())->beginPainting();
+    QTreeView::paintEvent(e);
+    static_cast<ImagePropertiesVersionsDelegate*>(itemDelegate())->finishPainting();
+}
+
+QModelIndex VersionsWidgetTreeView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
+{
+    // TODO: Need to find a solution to skip non-vertex items in CombinedTreeMode. Not easy.
+    return QTreeView::moveCursor(cursorAction, modifiers);
+}
+
+bool VersionsWidgetTreeView::viewportEvent(QEvent* event)
+{
+    switch (event->type())
+    {
+        case QEvent::ToolTip:
+        {
+            if (!m_showToolTip)
+            {
+                break;
+            }
+
+            QHelpEvent* he = static_cast<QHelpEvent*>(event);
+            const QModelIndex index = indexAt(he->pos());
+
+            if (!index.isValid())
+            {
+                break;
+            }
+
+            VersionsWidgetToolTip::Mode mode;
+            if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
+            {
+                mode = VersionsWidgetToolTip::ImageMode;
+            }
+            else if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
+            {
+                mode = VersionsWidgetToolTip::FilterActionMode;
+            }
+            else
+            {
+                break;
+            }
+
+            QStyleOptionViewItem option = viewOptions();
+            option.rect = visualRect(index);
+            option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
+
+            m_toolTip->show(he, option, index, mode);
+
+            return true;
+        }
+        default:
+            break;
+    }
+
+    return QTreeView::viewportEvent(event);
+}
+
+// ----
 
 class VersionsWidget::VersionsWidgetPriv
 {
@@ -69,7 +226,7 @@ public:
     {
     }
 
-    QTreeView*                       view;
+    VersionsWidgetTreeView*          view;
     ImageHistoryGraphModel*          model;
     ImagePropertiesVersionsDelegate* delegate;
 
@@ -82,26 +239,6 @@ public:
 };
 const QString VersionsWidget::VersionsWidgetPriv::configCurrentMode("Version Properties View Mode");
 
-class VersionsWidgetListView : public QTreeView
-{
-public:
-
-    VersionsWidgetListView() : QTreeView() {}
-
-    virtual void paintEvent(QPaintEvent *e)
-    {
-        static_cast<ImagePropertiesVersionsDelegate*>(itemDelegate())->beginPainting();
-        QTreeView::paintEvent(e);
-        static_cast<ImagePropertiesVersionsDelegate*>(itemDelegate())->finishPainting();
-    }
-
-    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
-    {
-        // TODO: Need to find a solution to skip non-vertex items in CombinedTreeMode. Not easy.
-        return QTreeView::moveCursor(cursorAction, modifiers);
-    }
-
-};
 
 VersionsWidget::VersionsWidget(QWidget* parent)
     : QWidget(parent), d(new VersionsWidgetPriv)
@@ -136,7 +273,7 @@ VersionsWidget::VersionsWidget(QWidget* parent)
     d->model->imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
     d->delegate             = new ImagePropertiesVersionsDelegate(this);
 
-    d->view                 = new VersionsWidgetListView;
+    d->view                 = new VersionsWidgetTreeView;
     d->view->setItemDelegate(d->delegate);
     d->view->setModel(d->model);
     d->view->setWordWrap(true);
@@ -160,6 +297,11 @@ VersionsWidget::VersionsWidget(QWidget* parent)
 
     connect(d->viewButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotViewModeChanged(int)));
+
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSetupChanged()));
+
+    slotSetupChanged();
 }
 
 VersionsWidget::~VersionsWidget()
@@ -217,6 +359,11 @@ void VersionsWidget::slotViewModeChanged(int mode)
     QModelIndex subjectIndex = d->model->indexForInfo(d->model->subject());
     d->view->scrollTo(subjectIndex, QAbstractItemView::PositionAtCenter);
     d->view->setCurrentIndex(subjectIndex);
+}
+
+void VersionsWidget::slotSetupChanged()
+{
+    d->view->setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
 }
 
 } // namespace Digikam

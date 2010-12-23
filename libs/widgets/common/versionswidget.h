@@ -70,6 +70,7 @@ protected Q_SLOTS:
 
     void slotViewItemSelected(const QModelIndex& index);
     void slotViewModeChanged(int mode);
+    void slotSetupChanged();
 
 private:
 

@@ -46,6 +46,7 @@ public:
     ~ItemViewToolTip();
 
     QAbstractItemView* view() const;
+    QAbstractItemModel* model() const;
     QModelIndex currentIndex() const;
 
     void show(QHelpEvent* event, const QStyleOptionViewItem& option, const QModelIndex& index);
