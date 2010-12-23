@@ -1,10 +1,12 @@
 *********************************************************************************************************
-digiKam 1.7.0 - Release date: 2010-12-19
+digiKam 1.7.0 - Release date: 2011-01-xx
 
 NEW FEATURES:
 
+General        : digiKam has now a stand alone installer for Microsoft Windows based on Null Soft Installer.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 256372 : Add a DigiKam installer based on nsis.
-002 ==> 
+001 ==> 256372 : Add a digiKam installer based on nsis.
+002 ==> 261086 : Crash at startup.
+003 ==> 
