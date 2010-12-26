@@ -45,8 +45,11 @@ class KConfigGroup;
 namespace Digikam
 {
 
+class FiltersHistoryWidget;
 class ImageInfoList;
 class ImageInfo;
+class ImageModel;
+class VersionsWidget;
 
 class ImagePropertiesVersionsTab : public KTabWidget
 {
@@ -63,13 +66,21 @@ public:
     void clear();
     void setItem(const ImageInfo& info, const DImageHistory& history);
 
+    VersionsWidget* versionsWidget() const;
+    FiltersHistoryWidget* filtersHistoryWidget() const;
+
+    void addShowHideOverlay();
+    void addOpenImageAction();
+    void addOpenAlbumAction(const ImageModel* referenceModel);
+
 public Q_SLOTS:
 
-    void slotImageSelected(const ImageInfo& info);
-    void showCustomContextMenu(const QPoint& position);
-    void setEnabledEntries(int count);
+    void setEnabledHistorySteps(int count);
 
 Q_SIGNALS:
+
+    void imageSelected(const ImageInfo& info);
+    void actionTriggered(const ImageInfo& info);
 
 private:
 

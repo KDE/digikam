@@ -154,7 +154,6 @@ public:
     ImagePropertiesSideBarDB*     rightSideBar;
 
     TagFilterSideBarWidget*       tagFilterWidget;
-    ImagePropertiesVersionsTab*   versionsTabWidget;
 
     QString                       optionAlbumViewPrefix;
 
@@ -265,6 +264,10 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     // Tags Filter sidebar tab contents.
     d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
     d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("tag-assigned"), i18n("Tag Filters"));
+
+    // Versions sidebar overlays
+    d->rightSideBar->getFiltersHistoryTab()->addOpenAlbumAction(d->iconView->imageModel());
+    d->rightSideBar->getFiltersHistoryTab()->addShowHideOverlay();
 
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);
@@ -562,21 +565,12 @@ void DigikamView::setupConnections()
             d->albumHistory, SLOT(slotAlbumDeleted(Album*)));
 
     // -- Image versions ----------------
-    /*    connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
-                d->rightSideBar->getFiltersHistoryTab(), SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
 
-        connect(this, SIGNAL(signalNoCurrentItem()),
-                d->rightSideBar->getFiltersHistoryTab(), SLOT(slotDigikamViewNoCurrentItem()));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(imageSelected(const ImageInfo&)),
+            d->iconView, SLOT(hintAtItem(const ImageInfo&)));
 
-        connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(setCurrentUrlSignal(KUrl)),
-                d->iconView, SLOT(setCurrentUrl(KUrl)));
-
-        connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(updateMainViewSignal()),
-                d->iconView->imageAlbumModel(), SLOT(refresh()));
-                */
-
-    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(setCurrentIdSignal(qlonglong)),
-            d->iconView, SLOT(setCurrentWhenAvailable(qlonglong)));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(const ImageInfo&)),
+            this, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
 }
 
 void DigikamView::connectIconViewFilter(AlbumIconViewFilter* filter)

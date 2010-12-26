@@ -434,6 +434,7 @@ void ImageWindow::setupUserArea()
 
     d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
+    d->rightSideBar->getFiltersHistoryTab()->addOpenImageAction();
 
     hlay->addWidget(m_splitter);
     hlay->addWidget(d->rightSideBar);
@@ -510,6 +511,9 @@ void ImageWindow::setupConnections()
 
     connect(d->rightSideBar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
+
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(const ImageInfo&)),
+            this, SLOT(openImage(const ImageInfo&)));
 
     connect(this, SIGNAL(signalSelectionChanged( const QRect&)),
             d->rightSideBar, SLOT(slotImageSelectionChanged( const QRect&)));
@@ -672,6 +676,22 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
 
     // it can slightly improve the responsiveness when inserting an event loop run here
     QTimer::singleShot(0, this, SLOT(slotLoadImageInfosStage2()));
+}
+
+void ImageWindow::openImage(const ImageInfo& info)
+{
+    if (d->currentImageInfo == info)
+    {
+        return;
+    }
+
+    d->currentImageInfo = info;
+    if (!d->imageInfoModel->hasImage(d->currentImageInfo))
+    {
+        d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
+    }
+
+    slotLoadCurrent();
 }
 
 void ImageWindow::slotLoadImageInfosStage2()
@@ -846,7 +866,7 @@ void ImageWindow::slotChanged()
     d->rightSideBar->itemChanged(d->currentImageInfo, m_canvas->getSelectedArea(), img, redoHistory);
 
     // Filters for redo will be greyed out
-    d->rightSideBar->getFiltersHistoryTab()->setEnabledEntries(history.actionCount());
+    d->rightSideBar->getFiltersHistoryTab()->setEnabledHistorySteps(history.actionCount());
 
     /*if (!d->currentImageInfo.isNull())
         {

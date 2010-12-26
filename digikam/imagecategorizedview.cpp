@@ -246,7 +246,7 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
     if (oldDelegate)
     {
         d->delegate->setAllOverlaysActive(false);
-        d->delegate->setView(0);
+        d->delegate->setViewOnAllOverlays(0);
     }
 
     d->delegate = delegate;
@@ -261,7 +261,7 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
     setCategoryDrawer(d->delegate->categoryDrawer());
     updateDelegateSizes();
 
-    d->delegate->setView(this);
+    d->delegate->setViewOnAllOverlays(this);
     d->delegate->setAllOverlaysActive(true);
 }
 

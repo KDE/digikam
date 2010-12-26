@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiesversionsdelegate.moc"
+#include "versionsdelegate.moc"
 
 // Qt includes
 
@@ -44,18 +44,17 @@
 
 #include "imagedelegate.h"
 #include "imagehistorygraphmodel.h"
-#include "imagepropertiesversionsdelegate.h"
 #include "imageversionsmodel.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
 {
 
-class ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegatePriv
+class VersionsDelegate::VersionsDelegatePriv
 {
 public:
 
-    ImagePropertiesVersionsDelegatePriv()
+    VersionsDelegatePriv()
         : categoryExtraSpacing(6),
           filterItemExtraSpacing(4),
           animationState(0),
@@ -93,8 +92,8 @@ public:
 
 };
 
-ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegate(QObject* parent)
-    : QStyledItemDelegate(parent), d(new ImagePropertiesVersionsDelegatePriv)
+VersionsDelegate::VersionsDelegate(QObject* parent)
+    : QStyledItemDelegate(parent), d(new VersionsDelegatePriv)
 {
     d->workingPixmap = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
 
@@ -107,18 +106,18 @@ ImagePropertiesVersionsDelegate::ImagePropertiesVersionsDelegate(QObject* parent
     d->categoryDrawer = new KCategoryDrawerV2;
 }
 
-ImagePropertiesVersionsDelegate::~ImagePropertiesVersionsDelegate()
+VersionsDelegate::~VersionsDelegate()
 {
     delete d->categoryDrawer;
     delete d;
 }
 
-int ImagePropertiesVersionsDelegate::animationState() const
+int VersionsDelegate::animationState() const
 {
     return d->animationState;
 }
 
-void ImagePropertiesVersionsDelegate::setAnimationState(int animationState)
+void VersionsDelegate::setAnimationState(int animationState)
 {
     if (d->animationState == animationState)
         return;
@@ -126,22 +125,22 @@ void ImagePropertiesVersionsDelegate::setAnimationState(int animationState)
     emit animationStateChanged();
 }
 
-void ImagePropertiesVersionsDelegate::setThumbnailSize(int size) const
+void VersionsDelegate::setThumbnailSize(int size) const
 {
     d->thumbnailSize = size;
 }
 
-int ImagePropertiesVersionsDelegate::thumbnailSize() const
+int VersionsDelegate::thumbnailSize() const
 {
     return d->thumbnailSize;
 }
 
-void ImagePropertiesVersionsDelegate::beginPainting()
+void VersionsDelegate::beginPainting()
 {
     d->thumbsWaitingFor = 0;
 }
 
-void ImagePropertiesVersionsDelegate::finishPainting()
+void VersionsDelegate::finishPainting()
 {
     //kDebug() << "painting finished" << d->thumbsWaitingFor;
     if (d->thumbsWaitingFor)
@@ -154,7 +153,7 @@ void ImagePropertiesVersionsDelegate::finishPainting()
     }
 }
 
-QSize ImagePropertiesVersionsDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize VersionsDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
     {
@@ -188,7 +187,7 @@ QSize ImagePropertiesVersionsDelegate::sizeHint(const QStyleOptionViewItem &opti
     }
 }
 
-void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     if (index.data(ImageHistoryGraphModel::IsCategoryItemRole).toBool())
     {
@@ -217,7 +216,7 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
     }
 }
 
-void ImagePropertiesVersionsDelegate::initStyleOption(QStyleOptionViewItem * option, const QModelIndex& index) const
+void VersionsDelegate::initStyleOption(QStyleOptionViewItem * option, const QModelIndex& index) const
 {
     QStyledItemDelegate::initStyleOption(option, index);
 
@@ -254,7 +253,7 @@ void ImagePropertiesVersionsDelegate::initStyleOption(QStyleOptionViewItem * opt
 }
 
 /*
-void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
@@ -276,7 +275,7 @@ void ImagePropertiesVersionsDelegate::paint(QPainter* painter, const QStyleOptio
         if (!thumbnail.isNull())
         {
             thumbnail = thumbnail.scaled(64, 48, Qt::KeepAspectRatio);
-            const_cast<ImagePropertiesVersionsDelegate*>(this)->d->thumbsPainted++;
+            const_cast<VersionsDelegate*>(this)->d->thumbsPainted++;
         }
         else
         {

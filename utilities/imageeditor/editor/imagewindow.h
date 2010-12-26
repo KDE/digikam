@@ -57,9 +57,6 @@ public:
 
     ~ImageWindow();
 
-    void loadImageInfos(const ImageInfoList& imageInfoList,
-                        const ImageInfo& imageInfoCurrent, const QString& caption);
-
     static ImageWindow* imageWindow();
     static bool         imageWindowCreated();
 
@@ -68,6 +65,12 @@ public:
 
     bool queryClose();
     virtual VersionManager* versionManager();
+
+public Q_SLOTS:
+
+    void loadImageInfos(const ImageInfoList& imageInfoList,
+                        const ImageInfo& imageInfoCurrent, const QString& caption);
+    void openImage(const ImageInfo& info);
 
 Q_SIGNALS:
 

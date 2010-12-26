@@ -38,13 +38,18 @@
 #include "digikam_export.h"
 
 class KConfigGroup;
+class KGuiItem;
 
 namespace Digikam
 {
 
+class ActionVersionsOverlay;
 class ImageVersionsModel;
 class ImageInfo;
 class ImageInfoList;
+class ShowHideVersionsOverlay;
+class VersionsDelegate;
+class VersionsTreeView;
 
 class VersionsWidget : public QWidget
 {
@@ -57,6 +62,12 @@ public:
 
     void readSettings(const KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
+
+    VersionsTreeView *view() const;
+    VersionsDelegate *delegate() const;
+
+    ActionVersionsOverlay* addActionOverlay(const KGuiItem& gui);
+    ShowHideVersionsOverlay* addShowHideOverlay();
 
 public Q_SLOTS:
 

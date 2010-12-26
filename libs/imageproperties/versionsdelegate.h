@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESVERSIONSDELEGATE_H
-#define IMAGEPROPERTIESVERSIONSDELEGATE_H
+#ifndef VERSIONSDELEGATE_H
+#define VERSIONSDELEGATE_H
 
 // Qt includes
 
@@ -31,21 +31,22 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "imagedelegateoverlay.h"
 
 namespace Digikam
 {
 
 class WorkingWidget;
 
-class ImagePropertiesVersionsDelegate : public QStyledItemDelegate
+class VersionsDelegate : public QStyledItemDelegate, public ImageDelegateOverlayContainer
 {
     Q_OBJECT
     Q_PROPERTY(int animationState READ animationState WRITE setAnimationState NOTIFY animationStateChanged)
 
 public:
 
-    ImagePropertiesVersionsDelegate(QObject* parent = 0);
-    ~ImagePropertiesVersionsDelegate();
+    VersionsDelegate(QObject* parent = 0);
+    ~VersionsDelegate();
 
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -62,17 +63,26 @@ public:
 Q_SIGNALS:
 
     void animationStateChanged();
+    void visualChange(); // for ImageDelegateOverlayContainer
+
+protected Q_SLOTS:
+
+    virtual void overlayDestroyed(QObject* o) { ImageDelegateOverlayContainer::overlayDestroyed(o); }
 
 protected:
 
     void initStyleOption(QStyleOptionViewItem * option, const QModelIndex& index) const;
 
+
+    /// Returns the delegate, typically, the derived class
+    virtual QAbstractItemDelegate* asDelegate() { return this; }
+
 private:
 
-    class ImagePropertiesVersionsDelegatePriv;
-    ImagePropertiesVersionsDelegatePriv* const d;
+    class VersionsDelegatePriv;
+    VersionsDelegatePriv* const d;
 };
 
 } // namespace Digikam
 
-#endif // IMAGEPROPERTIESVERSIONSDELEGATE_H
+#endif // VERSIONSDELEGATE_H

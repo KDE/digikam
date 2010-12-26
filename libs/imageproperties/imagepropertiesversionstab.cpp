@@ -38,6 +38,7 @@
 #include <KDebug>
 #include <KLocale>
 #include <KIconLoader>
+#include <KStandardGuiItem>
 #include <KUrl>
 
 // Local includes
@@ -48,12 +49,10 @@
 #include "dimagehistory.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
-#include "imagepropertiesversionsdelegate.h"
-#include "thumbnaildatabaseaccess.h"
-#include "thumbnailloadthread.h"
 #include "versionswidget.h"
 #include "filtershistorywidget.h"
 #include "albumsettings.h"
+#include "versionsoverlays.h"
 
 namespace Digikam
 {
@@ -70,7 +69,6 @@ public:
 
     VersionsWidget*                versionsWidget;
     FiltersHistoryWidget*          filtersHistoryWidget;
-    QList<QPair<qlonglong, int> >  versionsList;
     DImageHistory                  history;
     ImageInfo                      info;
     QString                        currentSelectedImagePath;
@@ -93,7 +91,7 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
     insertTab(1, d->filtersHistoryWidget, i18n("Used Filters"));
 
     connect(d->versionsWidget, SIGNAL(imageSelected(const ImageInfo&)),
-            this, SLOT(slotImageSelected(const ImageInfo&)));
+            this, SIGNAL(imageSelected(const ImageInfo&)));
 
     readSettings(KGlobal::config()->group(d->configGroup));
 }
@@ -124,24 +122,21 @@ void ImagePropertiesVersionsTab::writeSettings(KConfigGroup& group)
     d->versionsWidget->writeSettings(group);
 }
 
+VersionsWidget* ImagePropertiesVersionsTab::versionsWidget() const
+{
+    return d->versionsWidget;
+}
+
+FiltersHistoryWidget* ImagePropertiesVersionsTab::filtersHistoryWidget() const
+{
+    return d->filtersHistoryWidget;
+}
+
 void ImagePropertiesVersionsTab::clear()
 {
-    d->versionsList.clear();
     d->filtersHistoryWidget->clearData();
     d->versionsWidget->setCurrentItem(ImageInfo());
 }
-
-/*
- * TODO: Database-less support?
-void ImagePropertiesMetaDataTab::setCurrentURL(const KUrl& url)
-{
-    if (url.isEmpty())
-    {
-        clear();
-        return;
-    }
-}
-*/
 
 void ImagePropertiesVersionsTab::setItem(const ImageInfo& info, const DImageHistory& history)
 {
@@ -165,94 +160,33 @@ void ImagePropertiesVersionsTab::setItem(const ImageInfo& info, const DImageHist
     d->filtersHistoryWidget->setHistory(d->history);
 }
 
-void ImagePropertiesVersionsTab::setEnabledEntries(int count)
+void ImagePropertiesVersionsTab::addShowHideOverlay()
+{
+    d->versionsWidget->addShowHideOverlay();
+}
+
+void ImagePropertiesVersionsTab::addOpenImageAction()
+{
+    ActionVersionsOverlay* overlay = d->versionsWidget->addActionOverlay(KStandardGuiItem::open());
+
+    connect(overlay, SIGNAL(activated(const ImageInfo&)),
+            this, SIGNAL(actionTriggered(const ImageInfo&)));
+}
+
+void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceModel)
+{
+    KGuiItem gui(i18n("Go To Albums"), "folder-image",
+                 i18nc("@info:tooltip", "Go to the album of this image"));
+    ActionVersionsOverlay* overlay = d->versionsWidget->addActionOverlay(gui);
+    overlay->setReferenceModel(referenceModel);
+
+    connect(overlay, SIGNAL(activated(const ImageInfo&)),
+            this, SIGNAL(actionTriggered(const ImageInfo&)));
+}
+
+void ImagePropertiesVersionsTab::setEnabledHistorySteps(int count)
 {
     d->filtersHistoryWidget->setEnabledEntries(count);
-}
-
-void ImagePropertiesVersionsTab::showCustomContextMenu(const QPoint& position)
-{
-    d->filtersHistoryWidget->showCustomContextMenu(position);
-}
-
-/*
-void ImagePropertiesVersionsTab::setupVersionsData() const
-{
-    if (!d->versionsList.isEmpty())
-    {
-        QList<QPair<QString, int> > l;
-
-        for (int i = 0; i < d->versionsList.size(); i++)
-        {
-            l.append(qMakePair(ImageInfo(d->versionsList.at(i).first).filePath(), d->versionsList.at(i).second));
-        }
-
-        d->versionsWidget->setupModelData(l);
-        d->versionsWidget->setCurrentSelectedImage(d->currentSelectedImagePath);
-    }
-}
-*/
-
-/*
-void ImagePropertiesVersionsTab::setupFiltersData() const
-{
-    if (!d->versionsList.isEmpty()
-        && d->currentSelectedImageListPosition > -1
-        && d->currentSelectedImageListPosition < d->versionsList.size())
-    {
-        ImageInfo info(d->versionsList.at(d->currentSelectedImageListPosition).first);
-        d->filtersHistoryWidget->setHistory(info.imageHistory());
-    }
-    else
-    {
-        d->filtersHistoryWidget->setHistory(DImageHistory());
-    }
-}
-*/
-
-void ImagePropertiesVersionsTab::slotImageSelected(const ImageInfo& /*info*/)
-{
-    // TODO: solve by dynamic filtering in view
-    /*
-    qlonglong selectedImage = ImageInfo(url).id();
-    qlonglong current = 0;
-    qlonglong newOne = 0;
-
-    for (int i = 0; i < d->versionsList.size(); i++)
-    {
-        if (d->versionsList.at(i).first == selectedImage)
-        {
-            newOne = d->versionsList.at(i).first;
-            d->currentSelectedImageListPosition = i;
-        }
-        else if (d->versionsList.at(i).first == d->currentSelectedImageId)
-        {
-            current = d->versionsList.at(i).first;
-        }
-    }
-
-    ImageInfo newOneInfo(newOne);
-
-    / *
-     * TODO
-    if(!AlbumSettings::instance()->getShowAllVersions())
-    {
-        newOneInfo.setVisible(true);
-        ImageInfo(current).setVisible(false);
-    }
-    else if(!newOneInfo.isVisible())
-    {
-        newOneInfo.setVisible(true);
-    }
-    * /
-
-    d->currentSelectedImagePath = url.path();
-    d->currentSelectedImageId = newOne;
-
-    emit setCurrentIdSignal(newOne);
-    //emit updateMainViewSignal();
-    emit setCurrentUrlSignal(url);
-    */
 }
 
 } // namespace Digikam
