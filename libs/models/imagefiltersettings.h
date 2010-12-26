@@ -155,6 +155,9 @@ public:
      */
     bool matches(const ImageInfo& info) const;
 
+    bool isHiddenBySettings(const ImageInfo& info) const;
+    bool isExemptedBySettings(const ImageInfo& info) const;
+
     /// --- Tags filter ---
 
     void setVersionManagerSettings(const VersionManagerSettings& settings);
@@ -174,6 +177,7 @@ public:
 protected:
 
     QList<int>                       excludeTagFilter;
+    int                              exceptionTagFilter;
     QHash<QString,QList<qlonglong> > exceptionLists;
 };
 

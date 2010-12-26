@@ -58,6 +58,11 @@ QLatin1String InternalTagName::intermediateVersion()
     return QLatin1String("Intermediate Version");
 }
 
+QLatin1String InternalTagName::versionAlwaysVisible()
+{
+    return QLatin1String("Version Always Visible");
+}
+
 QLatin1String TagPropertyName::person()
 {
     return QLatin1String("person");

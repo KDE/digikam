@@ -135,6 +135,7 @@ public:
     static QLatin1String originalVersion();
     static QLatin1String currentVersion();
     static QLatin1String intermediateVersion();
+    static QLatin1String versionAlwaysVisible();
 };
 
 class DIGIKAM_DATABASE_EXPORT TagPropertyName

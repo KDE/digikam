@@ -489,17 +489,46 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
         }
     }
 
+    bool match = true;
+
     QList<int> tagIds = info.tagIds();
     for (QList<int>::const_iterator it = excludeTagFilter.begin();
          it != excludeTagFilter.end(); ++it)
     {
         if (tagIds.contains(*it))
         {
-            return false;
+            match = false;
+            break;
         }
     }
 
-    return true;
+    if (!match)
+    {
+        if (tagIds.contains(exceptionTagFilter))
+        {
+            match = true;
+        }
+    }
+
+    return match;
+}
+
+bool VersionImageFilterSettings::isHiddenBySettings(const ImageInfo& info) const
+{
+    QList<int> tagIds = info.tagIds();
+    foreach (int tagId, excludeTagFilter)
+    {
+        if (tagIds.contains(tagId))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VersionImageFilterSettings::isExemptedBySettings(const ImageInfo& info) const
+{
+    return info.tagIds().contains(exceptionTagFilter);
 }
 
 void VersionImageFilterSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
@@ -515,6 +544,8 @@ void VersionImageFilterSettings::setVersionManagerSettings(const VersionManagerS
     {
         excludeTagFilter << TagsCache::instance()->getOrCreateInternalTag(InternalTagName::intermediateVersion());
     }
+
+    exceptionTagFilter = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::versionAlwaysVisible());
 }
 
 void VersionImageFilterSettings::setExceptionList(const QList<qlonglong>& idList, const QString& id)
