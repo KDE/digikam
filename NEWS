@@ -12,7 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 146288 : Face detection / recognition for digiKam.
 006 ==> 252964 : Please remove libs from kdegraphics and make independant.
 007 ==> 260619 : digiKam crash when raw format is being converted.
-008 ==> 
+008 ==> 261140 : FindKdcraw.cmake is installed both by kdelibs and kdegraphics.
+009 ==> 
 
 
 
