@@ -80,10 +80,14 @@ public:
 
     ImageInfo subject() const;
 
+    bool isImage(const QModelIndex& index) const;
     bool hasImage(const ImageInfo& info);
     ImageInfo imageInfo(const QModelIndex& index) const;
     /// Note: There may be multiple indexes for an info. The index found first is returned.
     QModelIndex indexForInfo(const ImageInfo& info) const;
+
+    bool isFilterAction(const QModelIndex& index) const;
+    FilterAction filterAction(const QModelIndex& index) const;
 
     // QAbstractItemModel implementation
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

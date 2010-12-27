@@ -64,12 +64,19 @@ public:
     {
         return UnspecifiedType;
     }
+
+    bool isType(HistoryTreeItemType t) const
+    {
+        return type() == t;
+    }
+
     void addItem(HistoryTreeItem* child);
 
     int childCount() const
     {
         return children.size();
     }
+
     HistoryTreeItem* child(int index) const
     {
         return children[index];
@@ -583,6 +590,28 @@ void ImageHistoryGraphModel::setHistory(const ImageInfo& subject, const ImageHis
 ImageInfo ImageHistoryGraphModel::subject() const
 {
     return d->info;
+}
+
+bool ImageHistoryGraphModel::isImage(const QModelIndex& index) const
+{
+    HistoryTreeItem* item = d->item(index);
+    return item && item->isType(HistoryTreeItem::VertexItemType);
+}
+
+bool ImageHistoryGraphModel::isFilterAction(const QModelIndex& index) const
+{
+    HistoryTreeItem* item = d->item(index);
+    return item && item->isType(HistoryTreeItem::FilterActionItemType);
+}
+
+FilterAction ImageHistoryGraphModel::filterAction(const QModelIndex& index) const
+{
+    HistoryTreeItem* item = d->item(index);
+    if_isItem(FilterActionItem, filterActionItem, item)
+    {
+        return filterActionItem->action;
+    }
+    return FilterAction();
 }
 
 bool ImageHistoryGraphModel::hasImage(const ImageInfo& info)

@@ -139,8 +139,8 @@ VersionsWidget::VersionsWidget(QWidget* parent)
     connect(d->view->delegate(), SIGNAL(animationStateChanged()),
             d->view->viewport(), SLOT(update()));
 
-    connect(d->view, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(slotViewItemSelected(const QModelIndex&)));
+    connect(d->view->selectionModel(), SIGNAL(currentChanged(const QModelIndex&,const QModelIndex&)),
+            this, SLOT(slotViewCurrentChanged(const QModelIndex&,const QModelIndex&)));
 
     connect(d->viewButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotViewModeChanged(int)));
@@ -210,12 +210,30 @@ void VersionsWidget::setCurrentItem(const ImageInfo& info)
     d->model->setHistory(info);
 }
 
-void VersionsWidget::slotViewItemSelected(const QModelIndex& index)
+void VersionsWidget::slotViewCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
-    ImageInfo info = d->model->imageInfo(index);
+    ImageInfo info = d->model->imageInfo(current);
     if (!info.isNull())
     {
         emit imageSelected(info);
+    }
+
+    switch (d->model->mode())
+    {
+        case ImageHistoryGraphModel::ImagesListMode:
+        case ImageHistoryGraphModel::ImagesTreeMode:
+            break;
+        case ImageHistoryGraphModel::CombinedTreeMode:
+            // toplevel image index
+            if (!info.isNull() && !current.parent().isValid())
+            {
+                d->view->expand(current);
+            }
+            if (previous.isValid() && d->model->isImage(previous) && !previous.parent().isValid())
+            {
+                d->view->collapse(previous);
+            }
+            break;
     }
 }
 
@@ -223,8 +241,17 @@ void VersionsWidget::slotViewModeChanged(int mode)
 {
     d->model->setMode((ImageHistoryGraphModel::Mode)mode);
 
-    if (mode == ImageHistoryGraphModel::ImagesTreeMode)
-        d->view->expandAll();
+    switch (mode)
+    {
+        case ImageHistoryGraphModel::ImagesListMode:
+            break;
+        case ImageHistoryGraphModel::ImagesTreeMode:
+            d->view->expandAll();
+            break;
+        case ImageHistoryGraphModel::CombinedTreeMode:
+            d->view->collapseAll();
+            break;
+    }
 
     QModelIndex subjectIndex = d->model->indexForInfo(d->model->subject());
     d->view->scrollTo(subjectIndex, QAbstractItemView::PositionAtCenter);

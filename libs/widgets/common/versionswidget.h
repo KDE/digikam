@@ -79,7 +79,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotViewItemSelected(const QModelIndex& index);
+    void slotViewCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
     void slotViewModeChanged(int mode);
     void slotSetupChanged();
 
