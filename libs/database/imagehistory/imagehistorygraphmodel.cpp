@@ -257,8 +257,10 @@ public:
                                  const QString& title, const HistoryGraph::Vertex& showActionsFrom,
                                  QList<HistoryGraph::Vertex>& added);
     void addItemSubgroup(VertexItem* parent, const QList<HistoryGraph::Vertex>& vertices, const QString& title, bool flat = false);
+    void addIdenticalItems(HistoryTreeItem* parentItem, const HistoryGraph::Vertex& vertex,
+                           const QList<ImageInfo>& infos, const QString& title);
 
-    VertexItem* createVertexItem(const HistoryGraph::Vertex& v);
+    VertexItem* createVertexItem(const HistoryGraph::Vertex& v, const ImageInfo& info = ImageInfo());
     FilterActionItem* createFilterActionItem(const FilterAction& action);
 
     template <typename ImageInfoLessThan> LessThanOnVertexImageInfo<ImageInfoLessThan>
@@ -269,9 +271,11 @@ public:
 };
 
 
-VertexItem* ImageHistoryGraphModel::ImageHistoryGraphModelPriv::createVertexItem(const HistoryGraph::Vertex& v)
+VertexItem* ImageHistoryGraphModel::ImageHistoryGraphModelPriv::createVertexItem(const HistoryGraph::Vertex& v,
+                                                                                 const ImageInfo& givenInfo)
 {
-    ImageInfo info = graph().properties(v).firstImageInfo();
+    const HistoryVertexProperties& props = graph().properties(v);
+    ImageInfo info    = givenInfo.isNull() ? props.firstImageInfo() : givenInfo;
     QModelIndex index = imageModel.indexForImageInfo(info);
     //kDebug() << "Added" << info.id() << index;
     VertexItem* item  = new VertexItem(v);
@@ -469,6 +473,12 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
     {
         addCombinedItemCategory(rootItem, currentVersions, i18nc("@title", "Related Images"), path.first(), added);
     }
+
+    QList<ImageInfo> allInfos = graph().properties(ref).infos;
+    if (allInfos.size() > 1)
+    {
+        addIdenticalItems(rootItem, ref, allInfos, i18nc("@title", "Identical Images"));
+    }
 }
 
 void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
@@ -532,6 +542,31 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
     foreach (const HistoryGraph::Vertex& v, vertices)
     {
         addToItem->addItem(createVertexItem(v));
+    }
+}
+
+void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
+     addIdenticalItems(HistoryTreeItem* parentItem, const HistoryGraph::Vertex& vertex,
+                       const QList<ImageInfo>& infos, const QString& title)
+{
+    parentItem->addItem(new CategoryItem(title));
+
+    // the properties image info list is already sorted by proximity to subject
+    VertexItem* item;
+    bool isFirst = true;
+    for (int i=1; i<infos.size(); i++)
+    {
+        if (isFirst)
+        {
+            isFirst = false;
+        }
+        else
+        {
+            parentItem->addItem(new SeparatorItem);
+        }
+
+        item = createVertexItem(vertex, infos[i]);
+        parentItem->addItem(item);
     }
 }
 
@@ -631,6 +666,15 @@ QModelIndex ImageHistoryGraphModel::indexForInfo(const ImageInfo& info) const
     {
         return QModelIndex();
     }
+    // try with primary info
+    foreach (VertexItem* item, d->vertexItems)
+    {
+        if (ImageModel::retrieveImageInfo(item->index) == info)
+        {
+            return createIndex(item->parent->children.indexOf(item), 0, item);
+        }
+    }
+    // try all associated infos
     foreach (VertexItem* item, d->vertexItems)
     {
         if (d->graph().properties(item->vertex).infos.contains(info))
