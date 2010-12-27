@@ -453,6 +453,24 @@ void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
     selectionModel()->select(mySelection, QItemSelectionModel::Select);
 }
 
+void ImageCategorizedView::hintAt(const ImageInfo& info)
+{
+    if (info.isNull())
+    {
+        return;
+    }
+
+    QModelIndex index = d->filterModel->indexForImageInfo(info);
+
+    if (!index.isValid())
+    {
+        return;
+    }
+
+    selectionModel()->setCurrentIndex(index, QItemSelectionModel::NoUpdate);
+    scrollTo(index);
+}
+
 void ImageCategorizedView::addOverlay(ImageDelegateOverlay* overlay, ImageDelegate* delegate)
 {
     if (!delegate)

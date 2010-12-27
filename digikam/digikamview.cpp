@@ -567,7 +567,7 @@ void DigikamView::setupConnections()
     // -- Image versions ----------------
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(imageSelected(const ImageInfo&)),
-            d->iconView, SLOT(hintAtItem(const ImageInfo&)));
+            d->iconView, SLOT(hintAt(const ImageInfo&)));
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(const ImageInfo&)),
             this, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
