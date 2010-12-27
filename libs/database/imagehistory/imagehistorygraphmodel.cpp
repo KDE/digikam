@@ -101,9 +101,9 @@ public:
         return VertexItemType;
     }
 
-    HistoryGraph::Vertex vertex;
-    QModelIndex          index;
-    HistoryImageId::Type category;
+    HistoryGraph::Vertex  vertex;
+    QModelIndex           index;
+    HistoryImageId::Types category;
 };
 
 // ------------------------------------------------------------------------
@@ -237,7 +237,7 @@ public:
     QList<VertexItem*> vertexItems;
     ImageListModel     imageModel;
     QList<HistoryGraph::Vertex> path;
-    QHash<HistoryGraph::Vertex, HistoryImageId::Type> categories;
+    QHash<HistoryGraph::Vertex, HistoryImageId::Types> categories;
 
     inline const ImageHistoryGraphData& graph() const
     {
@@ -707,14 +707,13 @@ QVariant ImageHistoryGraphModel::data(const QModelIndex& index, int role) const
                     return (bool)d->graph().properties(vertexItem->vertex).infos.contains(d->info);
                 case Qt::DisplayRole:
                 {
-                    switch (vertexItem->category)
+                    if (vertexItem->category & HistoryImageId::Original)
                     {
-                        case HistoryImageId::Original:
-                            return i18nc("@item filename", "%1<nl/>(Original Image)", data.toString());
-                        case HistoryImageId::Source:
-                            return i18nc("@item filename", "%1<nl/>(Source Image)", data.toString());
-                        default:
-                            break;
+                        return i18nc("@item filename", "%1<nl/>(Original Image)", data.toString());
+                    }
+                    if (vertexItem->category & HistoryImageId::Source)
+                    {
+                        return i18nc("@item filename", "%1<nl/>(Source Image)", data.toString());
                     }
                 }
             }

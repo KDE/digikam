@@ -139,7 +139,7 @@ public:
         return infos;
     }
 
-    QHash<Vertex, HistoryImageId::Type> categorize() const;
+    QHash<Vertex, HistoryImageId::Types> categorize() const;
 
 protected:
 

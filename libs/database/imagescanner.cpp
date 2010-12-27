@@ -632,12 +632,12 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     /** Stage 3 of history scanning */
 
     ImageInfo info(id);
-    kDebug() << "tagImageHistoryGraph" << id;
 
     if (info.isNull())
     {
         return;
     }
+    //kDebug() << "tagImageHistoryGraph" << id;
 
     // Load relation cloud, history of info and of all leaves of the tree into the graph, fully resolved
     ImageHistoryGraph graph = ImageHistoryGraph::fromInfo(info, ImageHistoryGraph::LoadAll, ImageHistoryGraph::NoProcessing);
@@ -660,27 +660,25 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
 
     // get category info
     QList<qlonglong> originals, intermediates, currents;
-    QHash<ImageInfo, HistoryImageId::Type> types = graph.categorize();
-    QHash<ImageInfo, HistoryImageId::Type>::iterator it;
+    QHash<ImageInfo, HistoryImageId::Types> types = graph.categorize();
+    QHash<ImageInfo, HistoryImageId::Types>::iterator it;
 
     for (it = types.begin(); it != types.end(); ++it)
     {
         kDebug() << "Image" << it.key().id() << "type" << it.value();
+        HistoryImageId::Types types = it.value();
 
-        switch (it.value())
+        if (types & HistoryImageId::Original)
         {
-            case HistoryImageId::Original:
-                originals << it.key().id();
-                break;
-            case HistoryImageId::Intermediate:
-                intermediates << it.key().id();
-                break;
-            case HistoryImageId::Current:
-                currents << it.key().id();
-                break;
-            case HistoryImageId::Source:
-            case HistoryImageId::InvalidType:
-                break;
+            originals << it.key().id();
+        }
+        if (types & HistoryImageId::Intermediate)
+        {
+            intermediates << it.key().id();
+        }
+        if (types & HistoryImageId::Current)
+        {
+            currents << it.key().id();
         }
     }
 
@@ -1025,6 +1023,7 @@ void ImageScanner::scanAudioFile()
 
 void ImageScanner::copyProperties(qlonglong source, qlonglong dest)
 {
+    kDebug() << "Copying properties from" << source << "to" << dest;
     DatabaseAccess access;
 
     DatabaseFields::ImageInformation imageInfoFields =

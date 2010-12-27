@@ -365,35 +365,64 @@ int ImageHistoryGraphData::removeNextUnresolvedVertex(int index)
     return index;
 }
 
-QHash<HistoryGraph::Vertex, HistoryImageId::Type> ImageHistoryGraphData::categorize() const
+QHash<HistoryGraph::Vertex, HistoryImageId::Types> ImageHistoryGraphData::categorize() const
 {
-    QHash<Vertex, HistoryImageId::Type> types;
+    QHash<Vertex, HistoryImageId::Types> types;
     foreach (const Vertex& v, vertices())
     {
         const HistoryVertexProperties& props = properties(v);
 
-        HistoryImageId::Type type = HistoryImageId::InvalidType;
+        HistoryImageId::Types type;
 
         if (props.alwaysMarkedAs(HistoryImageId::Source))
         {
-            type = HistoryImageId::Source;
+            type |= HistoryImageId::Source;
         }
         else if (isLeaf(v))
         {
             // Leaf: Assume current version
-            type = HistoryImageId::Current;
+            type |= HistoryImageId::Current;
         }
         else if (isRoot(v))
         {
             // Root: Assume original if at least once marked as such
             if (props.markedAs(HistoryImageId::Original))
             {
-                type = HistoryImageId::Original;
+                type |= HistoryImageId::Original;
             }
         }
         else
         {
             type = HistoryImageId::Intermediate;
+        }
+
+        /*
+         * There is one situation which cannot be deduced from the graph structure:
+         * When there is a derived image, but the parent image shall be kept as visible "Current".
+         * In this case, the ExplicitBranch flag can be set on the next action.
+         */
+        if (!(type & HistoryImageId::Current) && hasEdges(v, EdgesToLeaf))
+        {
+            // We check if all immediate actions set the ExplicitBranch flag
+            bool allBranches = true;
+            foreach (const Edge& e, edges(v, EdgesToLeaf))
+            {
+                const HistoryEdgeProperties& props = properties(e);
+                if (props.actions.isEmpty())
+                {
+                    continue; // unclear situation, ignore
+                }
+
+                if (!(props.actions.first().flags() & FilterAction::ExplicitBranch))
+                {
+                    allBranches = false;
+                    break;
+                }
+            }
+            if (allBranches)
+            {
+                type |= HistoryImageId::Current;
+            }
         }
 
         types[v] = type;
@@ -728,11 +757,11 @@ QList<ImageInfo> ImageHistoryGraph::leafImages() const
     return d->toInfoList(d->leaves());
 }
 
-QHash<ImageInfo, HistoryImageId::Type> ImageHistoryGraph::categorize() const
+QHash<ImageInfo, HistoryImageId::Types> ImageHistoryGraph::categorize() const
 {
-    QHash<HistoryGraph::Vertex, HistoryImageId::Type> vertexType = d->categorize();
+    QHash<HistoryGraph::Vertex, HistoryImageId::Types> vertexType = d->categorize();
 
-    QHash<ImageInfo, HistoryImageId::Type> types;
+    QHash<ImageInfo, HistoryImageId::Types> types;
     foreach (const HistoryGraph::Vertex& v, d->vertices())
     {
         const HistoryVertexProperties& props = d->properties(v);
@@ -741,7 +770,7 @@ QHash<ImageInfo, HistoryImageId::Type> ImageHistoryGraph::categorize() const
             continue;
         }
 
-        HistoryImageId::Type type = vertexType.value(v);
+        HistoryImageId::Types type = vertexType.value(v);
         foreach (const ImageInfo& info, props.infos)
         {
             types[info] = type;

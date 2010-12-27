@@ -181,7 +181,7 @@ public:
      * into the types defined by HistoryImageId.
      * The type will be invalid if no decision can be made due to conflicting data.
      */
-    QHash<ImageInfo, HistoryImageId::Type> categorize() const;
+    QHash<ImageInfo, HistoryImageId::Types> categorize() const;
 
 private:
 
