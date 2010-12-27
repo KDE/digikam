@@ -707,25 +707,38 @@ void ImageModel::removeIndexes(const QList<QModelIndex>& indexes)
 
 void ImageModel::removeImageInfo(const ImageInfo& info)
 {
-    removeImageInfos(QList<ImageInfo>() << info, QList<QVariant>());
+    removeImageInfos(QList<ImageInfo>() << info);
 }
 
 void ImageModel::removeImageInfos(const QList<ImageInfo>& infos)
 {
-    removeImageInfos(infos, QList<QVariant>());
+    QList<int> listIndexes;
+    foreach (const ImageInfo& info, infos)
+    {
+        QModelIndex index = indexForImageId(info.id());
+        if (index.isValid())
+            listIndexes << index.row();
+    }
+    removeRowPairs(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
 void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
 {
+    if (extraValues.isEmpty())
+    {
+        removeImageInfos(infos);
+        return;
+    }
+
     QList<int> listIndexes;
-    const bool extraValue = !extraValues.isEmpty();
 
     for (int i=0; i<infos.size(); i++)
     {
-        QModelIndex index = extraValue ? indexForImageInfo(infos[i]) : indexForImageInfo(infos[i], extraValues[i]);
+        QModelIndex index = indexForImageId(infos[i].id(), extraValues[i]);
         if (index.isValid())
             listIndexes << index.row();
     }
+
     removeRowPairs(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
@@ -763,6 +776,10 @@ static bool pairsContain(const List& list, T value)
 
 void ImageModel::removeRowPairs(const QList<QPair<int,int> >& toRemove)
 {
+    if (toRemove.isEmpty())
+    {
+        return;
+    }
     // Remove old indexes
     // Keep in mind that when calling beginRemoveRows all structures announced to be removed
     // must still be valid, and this includes our hashes as well, which limits what we can optimize
