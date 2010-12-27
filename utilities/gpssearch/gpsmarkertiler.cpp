@@ -140,6 +140,10 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* imageFil
  */
 GPSMarkerTiler::~GPSMarkerTiler()
 {
+    // WARNING: we have to call clear! By the time AbstractMarkerTiler calls clear,
+    // this object does not exist any more, and thus the tiles are not correctly destroyed!
+    clear();
+
     delete d;
 }
 

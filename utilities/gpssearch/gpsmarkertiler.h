@@ -106,7 +106,7 @@ public:
     };
 
     GPSMarkerTiler(QObject* const parent = 0, ImageFilterModel* imageFilterModel = 0, QItemSelectionModel* selectionModel = 0);
-    ~GPSMarkerTiler();
+    virtual ~GPSMarkerTiler();
 
     virtual Tile* tileNew();
     virtual void tileDelete(Tile* const tile);
