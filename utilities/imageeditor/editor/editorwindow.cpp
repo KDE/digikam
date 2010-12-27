@@ -2467,6 +2467,7 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork)
 
     m_savingContext = SavingContextContainer();
     m_savingContext.versionFileOperation = savingVersionFileOperation(url, fork);
+    m_canvas->interface()->setHistoryIsBranch(fork);
 
     KUrl newURL = m_savingContext.versionFileOperation.saveFile.fileUrl();
 

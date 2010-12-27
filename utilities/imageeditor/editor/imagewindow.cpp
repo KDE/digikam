@@ -1077,6 +1077,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // copy the metadata of the original file to the new file
+    kDebug() << "Copying properties" << (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion) << m_savingContext.versionFileOperation.allFilePaths();
     if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
     {
         foreach (const QString& path, m_savingContext.versionFileOperation.allFilePaths())
@@ -1146,8 +1147,12 @@ void ImageWindow::prepareImageToSave()
         // even if not in the source image's metadata
         if (d->currentImageInfo.uuid().isNull())
         {
-            QString uuid = m_canvas->ensureHasCurrentUuid();
+            QString uuid = m_canvas->interface()->ensureHasCurrentUuid();
             d->currentImageInfo.setUuid(uuid);
+        }
+        else
+        {
+            m_canvas->interface()->provideCurrentUuid(d->currentImageInfo.uuid());
         }
     }
 }

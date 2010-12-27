@@ -90,6 +90,7 @@ public:
                   bool setExifOrientationTag, const QString& mimeType,
                   const VersionFileOperation& operation);
 
+    void   setHistoryIsBranch(bool isBranching);
     void   addLastSavedToHistory(const QString& filename);
     void   switchToLastSaved(const QString& newFilename);
     void   abortSaving();
@@ -101,6 +102,7 @@ public:
     void   resetImage();
     bool   hasChangesToSave();
     QString ensureHasCurrentUuid();
+    void   provideCurrentUuid(const QString& uuid);
 
     void   zoom(double val);
 

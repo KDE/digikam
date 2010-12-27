@@ -768,14 +768,22 @@ QString DImgInterface::ensureHasCurrentUuid()
      * 4) When the image is saved, DImg::updateMetadata will create a new UUID for the saved
      *    image, which is then of course written to the newly saved file.
      */
-    if (d->image.getImageHistory().currentReferredImage().m_uuid.isNull())
+    if (!d->image.getImageHistory().currentReferredImage().hasUuid())
     {
         // if there is no uuid in the image, we create one.
         QString uuid = d->image.createImageUniqueId();
         d->image.addCurrentUniqueImageId(uuid);
     }
 
-    return d->image.getImageHistory().currentReferredImage().m_uuid;
+    return d->image.getImageHistory().currentReferredImage().uuid();
+}
+
+void DImgInterface::provideCurrentUuid(const QString& uuid)
+{
+    if (!d->image.getImageHistory().currentReferredImage().hasUuid())
+    {
+        d->image.addCurrentUniqueImageId(uuid);
+    }
 }
 
 void DImgInterface::addLastSavedToHistory(const QString& filePath)
@@ -792,7 +800,26 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
     d->filePath = newFilename;
     d->image.switchOriginToLastSaved();
     d->image.switchHistoryOriginToLastReferredImage();
-    // Higher level shall set resolvedInitialHistory
+    // Higher level shall set correct resolvedInitialHistory
+    d->resolvedInitialHistory = d->image.getOriginalImageHistory();
+    d->resolvedInitialHistory.clearReferredImages();
+}
+
+void DImgInterface::setHistoryIsBranch(bool isBranching)
+{
+    int firstStep = d->resolvedInitialHistory.size();
+    DImageHistory &history = d->image.getImageHistory();
+    if (firstStep < history.size())
+    {
+        if (isBranching)
+        {
+            history[firstStep].action.addFlag(FilterAction::ExplicitBranch);
+        }
+        else
+        {
+            history[firstStep].action.removeFlag(FilterAction::ExplicitBranch);
+        }
+    }
 }
 
 void DImgInterface::setModified()
