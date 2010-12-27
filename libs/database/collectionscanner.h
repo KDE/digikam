@@ -170,7 +170,7 @@ protected:
     void scanAlbumRoot(const CollectionLocation& location);
     void scanAlbum(const CollectionLocation& location, const QString& album);
     int checkAlbum(const CollectionLocation& location, const QString& album);
-    void scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
+    qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
     void scanExistingFile(const QFileInfo& fi, qlonglong id);
     void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
     qlonglong scanNewFile(const QFileInfo& info, int albumId);

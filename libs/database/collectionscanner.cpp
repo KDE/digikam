@@ -456,7 +456,7 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
     int albumId       = checkAlbum(location, album);
     qlonglong imageId = DatabaseAccess().db()->getImageId(albumId, fileName);
 
-    scanFile(fi, albumId, imageId, mode);
+    imageId = scanFile(fi, albumId, imageId, mode);
     return imageId;
 }
 
@@ -471,7 +471,7 @@ void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
     scanFile(fi, info.albumId(), info.id(), mode);
 }
 
-void CollectionScanner::scanFile(const QFileInfo& fi, int albumId, qlonglong imageId, FileScanMode mode)
+qlonglong CollectionScanner::scanFile(const QFileInfo& fi, int albumId, qlonglong imageId, FileScanMode mode)
 {
     mainEntryPoint(false);
 
@@ -507,6 +507,7 @@ void CollectionScanner::scanFile(const QFileInfo& fi, int albumId, qlonglong ima
     }
 
     finishHistoryScanning();
+    return imageId;
 }
 
 void CollectionScanner::mainEntryPoint(bool complete)
