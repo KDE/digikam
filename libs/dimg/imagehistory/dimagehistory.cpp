@@ -511,6 +511,11 @@ QString DImageHistory::toXml() const
                     break;
             }
 
+            if (step.action.flags() & FilterAction::ExplicitBranch)
+            {
+                stream.writeAttribute("branch", "true");
+            }
+
             stream.writeStartElement("params");
 
             const QHash<QString,QVariant>& params = step.action.parameters();
@@ -728,6 +733,11 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             FilterAction action(stream.attributes().value("filterName").toString(),
                                 stream.attributes().value("filterVersion").toString().toInt(), c);
             action.setDisplayableName(stream.attributes().value("filterDisplayName").toString());
+
+            if (stream.attributes().value("branch") == "true")
+            {
+                action.addFlag(FilterAction::ExplicitBranch);
+            }
 
             while (stream.readNextStartElement())
             {

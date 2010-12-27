@@ -44,17 +44,17 @@ public:
 
     enum Type
     {
-        InvalidType,
+        InvalidType    = 0,
         /**
          * The original file (typically created by a camera)
          */
-        Original,
+        Original       = 1 << 0,
 
         /**
          * A file created during the editing the history,
          * between the original file and the current file.
          */
-        Intermediate,
+        Intermediate   = 1 << 1,
 
         /**
          * When a file is created from multiple files, there can be no direct
@@ -62,7 +62,7 @@ public:
          * and some other, additional source files.
          * To record source files outside of the direct history, this type is used.
          */
-        Source,
+        Source         = 1 << 2,
 
         /**
          * The "current" file. This is a special entry: It refers to the file from
@@ -71,8 +71,14 @@ public:
          * exactly one current entry if the history is associated with an image;
          * there can be no current entry.
          */
-        Current
+        Current        = 1 << 3
     };
+
+    /**
+     * Note: In this class, the Type is used as a simple enum,
+     * but it is also prepared for usage as flags.
+     */
+    Q_DECLARE_FLAGS(Types, Type)
 
 public:
 
@@ -162,5 +168,6 @@ public:
 } // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::HistoryImageId)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::HistoryImageId::Types)
 
 #endif // HISTORYIMAGEID_H

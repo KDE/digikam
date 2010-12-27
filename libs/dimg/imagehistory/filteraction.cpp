@@ -28,14 +28,16 @@ namespace Digikam
 {
 
 FilterAction::FilterAction()
+    : m_category(ReproducibleFilter),
+      m_version(0)
 {
 }
 
 FilterAction::FilterAction(const QString& identifier, int version, FilterAction::Category category)
+    : m_category(category),
+      m_identifier(identifier),
+      m_version(version)
 {
-    m_identifier = identifier;
-    m_version    = version;
-    m_category   = category;
 }
 
 bool FilterAction::isNull() const
@@ -86,6 +88,26 @@ QString FilterAction::displayableName() const
 void FilterAction::setDisplayableName(const QString& displayableName)
 {
     m_displayableName = displayableName;
+}
+
+FilterAction::Flags FilterAction::flags() const
+{
+    return m_flags;
+}
+
+void FilterAction::setFlags(Flags flags)
+{
+    m_flags = flags;
+}
+
+void FilterAction::addFlag(Flags flags)
+{
+    m_flags |= flags;
+}
+
+void FilterAction::removeFlag(Flags flags)
+{
+    m_flags &= ~flags;
 }
 
 bool FilterAction::hasParameters() const

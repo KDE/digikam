@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QFlags>
 #include <QHash>
 #include <QString>
 #include <QVariant>
@@ -63,6 +64,15 @@ public:
         CategoryLast       = DocumentedHistory
     };
 
+    enum Flag
+    {
+        /** The editing step of this filter action explicitly branches from the parent.
+         *  This is an optional hint that the result is meant as a new version.
+         */
+        ExplicitBranch     = 1 << 0
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
 public:
 
     FilterAction();
@@ -96,6 +106,11 @@ public:
 
     QString displayableName() const;
     void setDisplayableName(const QString& displayableName);
+
+    Flags    flags() const;
+    void setFlags(Flags flags);
+    void addFlag(Flags flags);
+    void removeFlag(Flags flags);
 
     /**
      * Access parameters.
@@ -149,6 +164,7 @@ protected:
 
     // Note: Value class, do not create a d-pointer
     Category                 m_category;
+    Flags                    m_flags;
     QString                  m_identifier;
     int                      m_version;
     QString                  m_description;
@@ -158,5 +174,6 @@ protected:
 
 } // namespace Digikam
 Q_DECLARE_METATYPE(Digikam::FilterAction)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FilterAction::Flags)
 
 #endif // FILTERACTION_H
