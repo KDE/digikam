@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,14 +27,10 @@
 
 // Qt includes
 
-#include <QFrame>
-#include <QHBoxLayout>
-#include <QImage>
 #include <QLabel>
 #include <QLayout>
 #include <QPushButton>
 #include <QSplitter>
-#include <QStyle>
 #include <QToolButton>
 #include <QTimer>
 #include <QMenu>
@@ -43,34 +40,22 @@
 // KDE includes
 
 #include <kaction.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
-#include <kiconloader.h>
 #include <kinputdialog.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 
 // libkmap includes
 
-//#include <libkmap/kmap_widget.h>
-#include <libkmap/itemmarkertiler.h>
+// #include <libkmap/itemmarkertiler.h>
 
 // Local includes
 
-#include "album.h"
-#include "albummanager.h"
 #include "editablesearchtreeview.h"
-#include "imageinfo.h"
 #include "imageinfojob.h"
-#include "imageposition.h"
-#include "searchtextbar.h"
 #include "searchxml.h"
 #include "gpsmarkertiler.h"
-#include "mapwidgetview.h"
 
 namespace Digikam
 {
@@ -87,10 +72,15 @@ public:
         searchGPSBar(0),
         searchTreeView(0),
         splitter(0),
-        sortActionOldestFirst(),
-        sortActionYoungestFirst(),
-        sortActionRating(),
-        currentMouseMode(),
+        mapSearchWidget(0),
+        gpsMarkerTiler(0),
+        imageAlbumModel(0),
+        imageFilterModel(0),
+        selectionModel(0),
+        searchModel(0),
+        sortActionOldestFirst(0),
+        sortActionYoungestFirst(0),
+        sortActionRating(0),
         existsFilterDatabaseBased(false),
         existsFilterModelBased(false)
     {}
@@ -107,14 +97,10 @@ public:
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
-    MapViewModelHelper*         mapViewModelHelper;
-    KMap::ItemMarkerTiler*      markerTilerModelBased;
-    bool                        existsSelection;
     SearchModel*                searchModel;
     KAction*                    sortActionOldestFirst;
     KAction*                    sortActionYoungestFirst;
     KAction*                    sortActionRating;
-    KMap::MouseMode             currentMouseMode;
     bool                        existsFilterDatabaseBased;
     bool                        existsFilterModelBased;
 };
@@ -140,9 +126,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->selectionModel        = itemSelectionModel;
     d->imageFilterModel      = imageFilterModel;
     d->searchModel           = searchModel;
-
-    d->mapViewModelHelper    = new MapViewModelHelper(d->selectionModel, d->imageFilterModel, this);
-    d->markerTilerModelBased = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
 
     // ---------------------------------------------------------------
 
@@ -228,8 +211,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->mapSearchWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeSelectionFromIcon|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
     d->mapSearchWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeSelectionFromIcon|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
 
-    d->existsSelection              = false;
-
     vlayTop->addWidget(hbox);
     vlayTop->setStretchFactor(mapPanel, 10);
     vlayTop->setMargin(0);
@@ -294,9 +275,6 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     slotCheckNameEditGPSConditions();
 }
 
-/**
- * @brief Destructor
- */
 GPSSearchView::~GPSSearchView()
 {
     delete d;
@@ -355,7 +333,6 @@ void GPSSearchView::doSaveState()
  */
 void GPSSearchView::setActive(bool val)
 {
-
     //TODO: when val == false, and a selection exists, remove the current selection
     if (!val)
     {
@@ -403,8 +380,7 @@ void GPSSearchView::slotSaveGPSSAlbum()
  */
 void GPSSearchView::slotSelectionChanged()
 {
-    d->existsSelection = true;
-    d->mapSearchWidget->setSelectionStatus(d->existsSelection);
+    d->mapSearchWidget->setSelectionStatus(true);
     slotCheckNameEditGPSConditions();
     createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
     slotRefreshMap();
@@ -423,7 +399,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
         return;
     }
 
-    // We query database here
+    // We query the database here
 
     const KMap::GeoCoordinates::Pair coordinates = d->mapSearchWidget->getSelectionRectangle();
     d->gpsMarkerTiler->newSelectionFromMap(coordinates);
@@ -444,7 +420,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     writer.finishField();
     writer.finishGroup();
 
-    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
+    SAlbum* const salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
     d->searchTreeView->setCurrentAlbum(salbum);
@@ -457,7 +433,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
  */
 void GPSSearchView::slotAlbumSelected(Album* a)
 {
-    SAlbum* salbum = dynamic_cast<SAlbum*> (a);
+    SAlbum* const salbum = dynamic_cast<SAlbum*> (a);
 
     if (!salbum)
     {
@@ -472,8 +448,10 @@ void GPSSearchView::slotAlbumSelected(Album* a)
     {
         const QList<double> list = reader.valueToDoubleList();
 
-        const KMap::GeoCoordinates::Pair coordinates(KMap::GeoCoordinates(list.at(1), list.at(0)),
-                KMap::GeoCoordinates(list.at(3), list.at(2)));
+        const KMap::GeoCoordinates::Pair coordinates(
+                KMap::GeoCoordinates(list.at(1), list.at(0)),
+                KMap::GeoCoordinates(list.at(3), list.at(2))
+            );
 
         d->mapSearchWidget->setSelectionStatus(true);
         d->mapSearchWidget->setSelectionCoordinates(coordinates);
@@ -520,7 +498,7 @@ bool GPSSearchView::checkAlbum(const QString& name) const
 
     for (AlbumList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
-        SAlbum* album = (SAlbum*)(*it);
+        const SAlbum* const album = (SAlbum*)(*it);
 
         if ( album->title() == name )
         {
@@ -536,8 +514,7 @@ bool GPSSearchView::checkAlbum(const QString& name) const
  */
 void GPSSearchView::slotRemoveCurrentSelection()
 {
-    d->existsSelection = false;
-    d->mapSearchWidget->setSelectionStatus(d->existsSelection);
+    d->mapSearchWidget->setSelectionStatus(false);
     d->gpsMarkerTiler->removeCurrentSelection();
     d->searchTreeView->clearSelection();
     slotClearImages();
@@ -555,7 +532,7 @@ void GPSSearchView::slotRemoveCurrentSelection()
  */
 void GPSSearchView::slotRemoveCurrentFilter()
 {
-    QList<qlonglong> emptyIdList;
+    const QList<qlonglong> emptyIdList;
     emit signalMapSoloItems(emptyIdList, "gpssearch");
     d->existsFilterModelBased = false;
     slotRefreshMap();
@@ -620,8 +597,10 @@ void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
     emit(signalMapSoloItems(idList, "gpssearch"));
 }
 
-void GPSSearchView::slotSortOptionTriggered(QAction* /*action*/)
+void GPSSearchView::slotSortOptionTriggered(QAction* action)
 {
+    Q_UNUSED(action)
+
     /// @todo This should rather be youngest/oldest | rating
     int newSortKey = GPSMarkerTiler::SortYoungestFirst;
 
@@ -643,7 +622,6 @@ void GPSSearchView::slotSortOptionTriggered(QAction* /*action*/)
 
 void GPSSearchView::slotMouseModeChanged(const KMap::MouseMode& currentMouseMode)
 {
-    d->currentMouseMode = currentMouseMode;
     d->gpsMarkerTiler->mouseModeChanged(currentMouseMode);
 }
 

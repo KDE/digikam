@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-20
- * Description : GPS searck marker tiler
+ * Description : GPS search marker tiler
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
@@ -105,7 +105,7 @@ public:
         QDateTime            creationDate;
     };
 
-    GPSMarkerTiler(QObject* const parent = 0, ImageFilterModel* imageFilterModel = 0, QItemSelectionModel* selectionModel = 0);
+    GPSMarkerTiler(QObject* const parent = 0, ImageFilterModel* const imageFilterModel = 0, QItemSelectionModel* const selectionModel = 0);
     virtual ~GPSMarkerTiler();
 
     virtual Tile* tileNew();
@@ -126,20 +126,22 @@ public:
     virtual void onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::KMapSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode);
 
     virtual void setActive(const bool state);
-    GPSImageInfo gpsData(qlonglong id, KMap::GeoCoordinates coordinate, int rating, QDateTime creationDate);
-    void mouseModeChanged(KMap::MouseMode currentMouseMode);
+    GPSImageInfo gpsData(const qlonglong id, const KMap::GeoCoordinates& coordinates, const int rating, const QDateTime& creationDate);
+    void mouseModeChanged(const KMap::MouseMode currentMouseMode);
     void newSelectionFromMap(const KMap::GeoCoordinates::Pair& sel);
     void removeCurrentSelection();
     void newMapFilter(const KMap::FilterMode& newFilter);
     void removeCurrentMapFilter(const KMap::FilterMode& removedFilter);
 
 Q_SIGNALS:
+
     void signalModelFilteredImages(const QList<qlonglong>& imagesId);
     void signalRefreshMap();
     void signalClearImages();
     void signalRemoveCurrentSelection();
 
 public Q_SLOTS:
+
     void slotNewModelData(const QList<ImageInfo>& infos);
 
 private Q_SLOTS:
@@ -158,8 +160,5 @@ private:
 };
 
 } // namespace Digikam
-
-typedef QPair<KMap::AbstractMarkerTiler::TileIndex,int> MapPair;
-Q_DECLARE_METATYPE(MapPair)
 
 #endif //GPSMARKERTILER_H

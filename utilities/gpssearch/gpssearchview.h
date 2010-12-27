@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,31 +34,18 @@
 
 #include <libkmap/kmap_modelhelper.h>
 #include <libkmap/kmap_widget.h>
-#include <libkmap/kmap_primitives.h>
 
 // local includes
 
 #include "statesavingobject.h"
-#include "digikam_export.h"
-#include "imagealbummodel.h"
 #include "imagefiltermodel.h"
 #include "imagegpsitem.h"
-
-
-class QDragEnterEvent;
-class QDropEvent;
-class QItemSelectionModel;
-class QPixmap;
 
 namespace Digikam
 {
 
 class Album;
 class SAlbum;
-class ImageInfo;
-class ImageInfoList;
-class SearchTextBar;
-class GPSSearchFolderView;
 class SearchModel;
 class SearchModificationHelper;
 
@@ -125,4 +113,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* FUZZYSEARCHVIEW_H */
+#endif /* GPSSEARCHVIEW_H */

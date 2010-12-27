@@ -30,6 +30,10 @@
 #include <QPair>
 #include <QRectF>
 
+/// @todo Actually use this definition!
+typedef QPair<KMap::AbstractMarkerTiler::TileIndex, int> MapPair;
+Q_DECLARE_METATYPE(MapPair)
+
 namespace Digikam
 {
 
@@ -70,8 +74,7 @@ public:
     };
 
     GPSMarkerTilerPrivate()
-        : levelList(),
-          jobsList(),
+        : mapImagesJob(0),
           dataFromDatabaseList(),
           activeState(true),
           imagesHash(),
@@ -85,12 +88,9 @@ public:
           selectedImagesCoordinates(),
           modelDataProgStart(false)
     {
-        mapImagesJob = 0;
     }
 
     KIO::TransferJob*                      mapImagesJob;
-    QList<int>                             levelList;
-    QList<KIO::Job*>                       jobsList;
     QList<QList<QVariant> >                dataFromDatabaseList;
     QList<InternalJobs>                    jobs;
     ThumbnailLoadThread*                   thumbnailLoadThread;
@@ -99,7 +99,7 @@ public:
     QList<int>                             rectLevel;
     bool                                   activeState;
     QHash<qlonglong, GPSImageInfo>         imagesHash;
-    ImageFilterModel*                      imageFilterModel;
+    ImageFilterModel*                      imageFilterModel; // unused???
     ImageAlbumModel*                       imageAlbumModel;
     QItemSelectionModel*                   selectionModel;
     KMap::MouseMode                        currentMouseMode;
@@ -115,7 +115,7 @@ public:
  * @brief Constructor
  * @param parent Parent object
  */
-GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* imageFilterModel, QItemSelectionModel* selectionModel)
+GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel)
     : KMap::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
 {
     resetRootTile();
@@ -156,13 +156,17 @@ void GPSMarkerTiler::regenerateTiles()
 }
 
 /**
- * @brief This function calls the database for the images found inside a rectangle defined by upperLeft and lowerRight points. The images
- * are returned from database in batches.
+ * @brief Requests all images inside a given rectangle from the database.
+ *
+ * This function calls the database for the images found inside a rectangle
+ * defined by upperLeft and lowerRight points. The images are returned from
+ * the database in batches.
+ *
  * @param upperLeft The North-West point.
  * @param lowerRight The South-East point.
  * @param level The requested tiling level.
  */
-void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft,const KMap::GeoCoordinates& lowerRight, int level)
+void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft, const KMap::GeoCoordinates& lowerRight, int level)
 {
     qreal lat1 = upperLeft.lat();
     qreal lng1 = upperLeft.lon();
@@ -325,10 +329,6 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::AbstractMar
     return tile;
 }
 
-/**
- * @param tileIndex The index of the current tile.
- * @return The number of markers found inside a tile.
- */
 int GPSMarkerTiler::getTileMarkerCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
 {
     MyTile* tile = static_cast<MyTile*>(getTile(tileIndex));
@@ -667,7 +667,6 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     KIO::Job* currentJob = qobject_cast<KIO::Job*>(job);
     QList<GPSImageInfo> returnedImageInfo;
 
-
     int foundIndex = -1;
 
     for (int i=0; i<d->jobs.count(); ++i)
@@ -769,13 +768,13 @@ void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescri
 {
     QVariant index = d->thumbnailMap.value(loadingDescription.filePath);
     QPair<KMap::AbstractMarkerTiler::TileIndex, int> indexForPixmap =
-        index.value<QPair<KMap::AbstractMarkerTiler::TileIndex,int> >();
+        index.value<QPair<KMap::AbstractMarkerTiler::TileIndex, int> >();
     emit signalThumbnailAvailableForIndex(index, thumbnail);
 }
 
 /**
  * @brief Sets the map active/inactive
- * @param state When is true, the map is active.
+ * @param state New state of the map, true means active.
  */
 void GPSMarkerTiler::setActive(const bool state)
 {
@@ -800,13 +799,12 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
     const DatabaseFields::Set changes = changeset.changes();
     const DatabaseFields::ImagePositions imagePositionChanges = changes;
 
-    if (   (changes & DatabaseFields::LatitudeNumber )
-           || (changes & DatabaseFields::LongitudeNumber )
-           || (changes & DatabaseFields::Altitude ) )
+    if (   ( changes & DatabaseFields::LatitudeNumber )
+        || ( changes & DatabaseFields::LongitudeNumber )
+        || ( changes & DatabaseFields::Altitude ) )
     {
         foreach (const qlonglong& id, changeset.ids())
         {
-
             ImageInfo newImageInfo(id);
 
             if (!newImageInfo.hasCoordinates())
@@ -905,8 +903,9 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
                             if (currentTileNew->children.isEmpty())
                             {
-                                currentTileNew->prepareForChildren(KMap::QIntPair(TileIndex::Tiling,
-                                                                   TileIndex::Tiling));
+                                currentTileNew->prepareForChildren(
+                                        KMap::QIntPair(TileIndex::Tiling, TileIndex::Tiling)
+                                    );
                             }
 
                             const int newTileIndex = newTileIndexList.at(level);
@@ -927,11 +926,10 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                         }
                     }
                 }
-
             }
             else
             {
-                //code that adds the image
+                // code that adds the image
 
                 GPSImageInfo currentImageInfo = gpsData(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
                 d->imagesHash.insert(id, currentImageInfo);
@@ -940,7 +938,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
                 for (int currentLevel = 0; currentLevel <= TileIndex::MaxLevel; ++currentLevel)
                 {
-                    bool found = currentTile->imagesId.contains(currentImageInfo.id);
+                    const bool found = currentTile->imagesId.contains(currentImageInfo.id);
 
                     if (!found)
                     {
@@ -949,8 +947,9 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
                     if (currentTile->children.isEmpty())
                     {
-                        currentTile->prepareForChildren(KMap::QIntPair(TileIndex::Tiling,
-                                                        TileIndex::Tiling));
+                        currentTile->prepareForChildren(
+                                KMap::QIntPair(TileIndex::Tiling, TileIndex::Tiling)
+                            );
                     }
 
                     const TileIndex markerTileIndex = TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
@@ -971,13 +970,13 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                     }
                 }
             }
-
         }
     }
 }
 
-GPSMarkerTiler::GPSImageInfo GPSMarkerTiler::gpsData(qlonglong id, KMap::GeoCoordinates coordinates, int rating, QDateTime creationDate)
+GPSMarkerTiler::GPSImageInfo GPSMarkerTiler::gpsData(const qlonglong id, const KMap::GeoCoordinates& coordinates, const int rating, const QDateTime& creationDate)
 {
+    /// @todo This function could be a constructor of GPSImageInfo?
     GPSImageInfo currentImageInfo;
     currentImageInfo.id           = id;
     currentImageInfo.coordinate   = coordinates;
@@ -986,7 +985,7 @@ GPSMarkerTiler::GPSImageInfo GPSMarkerTiler::gpsData(qlonglong id, KMap::GeoCoor
     return currentImageInfo;
 }
 
-void GPSMarkerTiler::mouseModeChanged(KMap::MouseMode currentMouseMode)
+void GPSMarkerTiler::mouseModeChanged(const KMap::MouseMode currentMouseMode)
 {
     d->currentMouseMode = currentMouseMode;
 }
@@ -1098,9 +1097,8 @@ void GPSMarkerTiler::removeCurrentMapFilter(const KMap::FilterMode& removedFilte
 
 QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
 {
-
     KMAP_ASSERT(tileIndex.level() <= KMap::AbstractMarkerTiler::TileIndex::MaxLevel);
-    MyTile* const myTile = static_cast<MyTile*>(getTile(tileIndex, true));
+    const MyTile* const myTile = static_cast<MyTile*>(getTile(tileIndex, true));
 
     if (!myTile)
     {
@@ -1108,7 +1106,6 @@ QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KMap::AbstractMarkerTile
     }
 
     return myTile->imagesId;
-
 }
 
 } // namespace Digikam
