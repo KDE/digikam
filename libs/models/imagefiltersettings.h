@@ -177,6 +177,7 @@ public:
 protected:
 
     QList<int>                       excludeTagFilter;
+    int                              includeTagFilter;
     int                              exceptionTagFilter;
     QHash<QString,QList<qlonglong> > exceptionLists;
 };

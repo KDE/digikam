@@ -492,13 +492,17 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
     bool match = true;
 
     QList<int> tagIds = info.tagIds();
-    for (QList<int>::const_iterator it = excludeTagFilter.begin();
-         it != excludeTagFilter.end(); ++it)
+
+    if (!tagIds.contains(includeTagFilter))
     {
-        if (tagIds.contains(*it))
+        for (QList<int>::const_iterator it = excludeTagFilter.begin();
+            it != excludeTagFilter.end(); ++it)
         {
-            match = false;
-            break;
+            if (tagIds.contains(*it))
+            {
+                match = false;
+                break;
+            }
         }
     }
 
@@ -545,6 +549,7 @@ void VersionImageFilterSettings::setVersionManagerSettings(const VersionManagerS
         excludeTagFilter << TagsCache::instance()->getOrCreateInternalTag(InternalTagName::intermediateVersion());
     }
 
+    includeTagFilter = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::currentVersion());
     exceptionTagFilter = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::versionAlwaysVisible());
 }
 
