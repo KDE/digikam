@@ -569,13 +569,6 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
     {
-        if ((d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) ) && !d->selectedImagesCoordinates.contains(info.id()))
-        {
-            QPixmap alphaPixmap(thumbnail.size());
-            alphaPixmap.fill(QColor::fromRgb(0x80, 0x80, 0x80));
-            thumbnail.setAlphaChannel(alphaPixmap);
-        }
-
         return thumbnail;
     }
     else
