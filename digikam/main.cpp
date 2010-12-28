@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
     // Add a connection to the destroyed() signal when the digiKam mainwindow has been
     // closed. This should prevent digiKam from staying open in the background.
     //
-    // Right now this is the easiest and cleanest fix for the described problem, but me might re-think the
+    // Right now this is the easiest and cleanest fix for the described problem, but we might re-think the
     // solution later on, just in case there are better ways to do it.
     QObject::connect(digikam, SIGNAL(destroyed(QObject*)), &app, SLOT(quit()));
 

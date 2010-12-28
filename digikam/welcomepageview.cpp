@@ -230,7 +230,7 @@ void WelcomePageView::slotThemeChanged()
     begin(KUrl(locationHtml).toLocalFile());
 
     QString content = fileToString(locationHtml);
-    content         = content.arg(infoPageCss)        // %1
+    content         = content.arg(infoPageCss) // %1
                       .arg(rtl)                // %2
                       .arg(fontSize)           // %3
                       .arg(appTitle)           // %4

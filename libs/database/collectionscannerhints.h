@@ -146,11 +146,11 @@ public:
     AlbumCopyMoveHint& operator<<(const QDBusArgument& argument);
     const AlbumCopyMoveHint& operator>>(QDBusArgument& argument) const;
 
-    operator const CollectionScannerHints::Album &() const
+    operator const CollectionScannerHints::Album& () const
     {
         return m_src;
     }
-    operator const CollectionScannerHints::DstPath &() const
+    operator const CollectionScannerHints::DstPath& () const
     {
         return m_dst;
     }
@@ -196,7 +196,7 @@ public:
     ItemCopyMoveHint& operator<<(const QDBusArgument& argument);
     const ItemCopyMoveHint& operator>>(QDBusArgument& argument) const;
 
-    operator const CollectionScannerHints::Album&() const
+    operator const CollectionScannerHints::Album& () const
     {
         return m_dst;
     }

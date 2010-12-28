@@ -145,7 +145,7 @@ private:
 
     void   registerParserControls();
     template<class T>
-    QMenu* createControlsMenu(QList<T*>& list);
+    QMenu* createControlsMenu(QWidget* parent, QList<T*>& list);
 
     void calculateLayout();
 

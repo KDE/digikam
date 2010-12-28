@@ -1,0 +1,12 @@
+Thank you for installing digiKam!
+
+We would like to inform you that this port of digiKam under windows is not as stable as the linux version.
+DigiKam works mostly fine under windows, but some features are still broken due to some bugs in the underlying KDE libraries.
+For example:
+ - Sending items to the trash is currently broken:
+   https://bugs.kde.org/show_bug.cgi?id=229465
+ - Camera auto detection doesn't work under windows.
+
+To report new bugs, please use this url:
+
+http://www.digikam.org/support

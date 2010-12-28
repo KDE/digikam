@@ -6,7 +6,8 @@
  * Date        : 2009-06-14
  * Description : a curves widget with additional control elements
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +55,7 @@
 namespace Digikam
 {
 
-class CurvesBoxPriv
+class CurvesBox::CurvesBoxPriv
 {
 public:
 
@@ -108,8 +109,8 @@ CurvesBox::CurvesBox(int w, int h, uchar* i_data, uint i_w, uint i_h,
                      bool i_sixteenBits, QWidget* parent, bool readOnly)
     : QWidget(parent), d(new CurvesBoxPriv)
 {
-    d->sixteenBit     = i_sixteenBits;
-    d->curvesWidget   = new CurvesWidget(w, h, i_data, i_w, i_h, i_sixteenBits, this, readOnly);
+    d->sixteenBit   = i_sixteenBits;
+    d->curvesWidget = new CurvesWidget(w, h, i_data, i_w, i_h, i_sixteenBits, this, readOnly);
     d->curvesWidget->setChannelType(d->channel);
     setup();
 }
@@ -125,9 +126,9 @@ void CurvesBox::setup()
     d->hGradient->setColors(QColor("black"), QColor("white"));
 
     QGridLayout* curveBoxLayout = new QGridLayout;
-    curveBoxLayout->addWidget(d->vGradient,     0, 0, 1, 1);
-    curveBoxLayout->addWidget(d->curvesWidget,  0, 2, 1, 1);
-    curveBoxLayout->addWidget(d->hGradient,     2, 2, 1, 1);
+    curveBoxLayout->addWidget(d->vGradient,    0, 0, 1, 1);
+    curveBoxLayout->addWidget(d->curvesWidget, 0, 2, 1, 1);
+    curveBoxLayout->addWidget(d->hGradient,    2, 2, 1, 1);
     curveBoxLayout->setRowMinimumHeight(1, 2);
     curveBoxLayout->setColumnMinimumWidth(1, 2);
     curveBoxLayout->setMargin(0);
@@ -153,7 +154,7 @@ void CurvesBox::setup()
                                        "be a smooth line with tension."));
 
     d->curveType = new QButtonGroup(typeBox);
-    d->curveType->addButton(d->curveFree, FreeDrawing);
+    d->curveType->addButton(d->curveFree,   FreeDrawing);
     d->curveType->addButton(d->curveSmooth, SmoothDrawing);
 
     d->curveType->setExclusive(true);
@@ -196,7 +197,7 @@ void CurvesBox::setup()
 
     d->pickerType = new QButtonGroup(d->pickerBox);
     d->pickerType->addButton(d->pickBlack, BlackTonal);
-    d->pickerType->addButton(d->pickGray, GrayTonal);
+    d->pickerType->addButton(d->pickGray,  GrayTonal);
     d->pickerType->addButton(d->pickWhite, WhiteTonal);
 
     QHBoxLayout* pickerBoxLayout = new QHBoxLayout;
@@ -227,8 +228,8 @@ void CurvesBox::setup()
     // -------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(curveBox,   0, 0, 1, 1);
-    mainLayout->addLayout(l3,         1, 0, 1, 1);
+    mainLayout->addWidget(curveBox, 0, 0, 1, 1);
+    mainLayout->addLayout(l3,       1, 0, 1, 1);
     mainLayout->setRowStretch(2, 10);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::spacingHint());
@@ -336,22 +337,22 @@ void CurvesBox::setChannel(ChannelType channel)
     switch (channel)
     {
         case RedChannel:
-            d->hGradient->setColors(QColor("red"), QColor("black"));
+            d->hGradient->setColors(QColor("black"), QColor("red"));
             d->vGradient->setColors(QColor("red"), QColor("black"));
             break;
 
         case GreenChannel:
-            d->hGradient->setColors(QColor("green"), QColor("black"));
+            d->hGradient->setColors(QColor("black"), QColor("green"));
             d->vGradient->setColors(QColor("green"), QColor("black"));
             break;
 
         case BlueChannel:
-            d->hGradient->setColors(QColor("blue"), QColor("black"));
+            d->hGradient->setColors(QColor("black"), QColor("blue"));
             d->vGradient->setColors(QColor("blue"), QColor("black"));
             break;
 
         default:
-            d->hGradient->setColors(QColor("white"), QColor("black"));
+            d->hGradient->setColors(QColor("black"), QColor("white"));
             d->vGradient->setColors(QColor("white"), QColor("black"));
             break;
     }
@@ -412,12 +413,12 @@ void CurvesBox::reset()
     d->curvesWidget->reset();
 }
 
-void CurvesBox::readCurveSettings(KConfigGroup& group, QString prefix)
+void CurvesBox::readCurveSettings(KConfigGroup& group, const QString& prefix)
 {
     d->curvesWidget->restoreCurve(group, prefix);
 }
 
-void CurvesBox::writeCurveSettings(KConfigGroup& group, QString prefix)
+void CurvesBox::writeCurveSettings(KConfigGroup& group, const QString& prefix)
 {
     d->curvesWidget->saveCurve(group, prefix);
 }

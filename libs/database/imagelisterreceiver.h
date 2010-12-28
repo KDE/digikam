@@ -50,7 +50,7 @@ public:
 
     virtual ~ImageListerReceiver() {};
     virtual void receive(const ImageListerRecord& record) = 0;
-    virtual void error(const QString &/*errMsg*/) {};
+    virtual void error(const QString& /*errMsg*/) {};
 };
 
 class DIGIKAM_DATABASE_EXPORT ImageListerValueListReceiver

@@ -1902,7 +1902,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
     }
 }
 
-void DigikamApp::slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString &/*udi*/)
+void DigikamApp::slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& /*udi*/)
 {
     if (!d->eventLoop)
     {

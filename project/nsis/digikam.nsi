@@ -46,13 +46,15 @@ SetCompressorDictSize 96
 !include "MUI2.nsh"
 !define MY_PRODUCT "digiKam"
 !define PRODUCT_HOMEPAGE "http://www.digikam.org"
-!define OUTFILE "${MY_PRODUCT}-installer-${VERSION}.exe"
+!define OUTFILE "${MY_PRODUCT}-installer-${VERSION}-win32.exe"
 
 ;-------------------------------------------------------------------------------
 ;General
 
   ;Name and file
   Name "digiKam"
+  Icon "digikam-installer.ico"
+  UninstallIcon "digikam-uninstaller.ico"
   OutFile "${OUTFILE}"
 
   ;Default installation folder
@@ -71,26 +73,18 @@ SetCompressorDictSize 96
   !define MUI_HEADERIMAGE_BITMAP "digikam_header.bmp" 
   !define MUI_WELCOMEFINISHPAGE_BITMAP "digikam_welcome.bmp"
   !define MUI_ABORTWARNING
+  !define MUI_ICON "digikam-installer.ico"
+  !define MUI_UNICON "digikam-uninstaller.ico"
+  !define MUI_FINISHPAGE_SHOWREADME "RELEASENOTES.txt"
 
 ;Variable for the folder of the start menu
 Var StartMenuFolder
-
-!define MUI_FINISHPAGE_TEXT "Thank you for installing digiKam!$\n$\n\
-We would like to inform you that this port of digiKam under windows is not as stable as the linux version.$\n$\n\
-DigiKam works  mostly fine under windows, but some features are broken due to some bugs \
-in the underlying KDE libraries, such as for example if you want to send items to the trash:$\n\
-https://bugs.kde.org/show_bug.cgi?id=229465 $\n$\n\
-Also, camera auto detection doesn't work under windows.$\n$\n\
-To report new bugs, please use this url:$\n\
-http://www.digikam.org/support"
-
 
 ;-------------------------------------------------------------------------------
 ;Pages
 
   !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE "COPYING"
-  !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
 
   ;Start Menu Folder Page Configuration
@@ -113,14 +107,84 @@ http://www.digikam.org/support"
   !insertmacro MUI_LANGUAGE "French"
   !insertmacro MUI_LANGUAGE "German"
   !insertmacro MUI_LANGUAGE "Spanish"
+  !insertmacro MUI_LANGUAGE "SpanishInternational"
+  !insertmacro MUI_LANGUAGE "SimpChinese"
+  !insertmacro MUI_LANGUAGE "TradChinese"
+  !insertmacro MUI_LANGUAGE "Japanese"
+  !insertmacro MUI_LANGUAGE "Korean"
   !insertmacro MUI_LANGUAGE "Italian"
+  !insertmacro MUI_LANGUAGE "Dutch"
+  !insertmacro MUI_LANGUAGE "Danish"
+  !insertmacro MUI_LANGUAGE "Swedish"
+  !insertmacro MUI_LANGUAGE "Norwegian"
+  !insertmacro MUI_LANGUAGE "NorwegianNynorsk"
+  !insertmacro MUI_LANGUAGE "Finnish"
+  !insertmacro MUI_LANGUAGE "Greek"
+  !insertmacro MUI_LANGUAGE "Russian"
+  !insertmacro MUI_LANGUAGE "Portuguese"
+  !insertmacro MUI_LANGUAGE "PortugueseBR"
+  !insertmacro MUI_LANGUAGE "Polish"
+  !insertmacro MUI_LANGUAGE "Ukrainian"
+  !insertmacro MUI_LANGUAGE "Czech"
+  !insertmacro MUI_LANGUAGE "Slovak"
+  !insertmacro MUI_LANGUAGE "Croatian"
+  !insertmacro MUI_LANGUAGE "Bulgarian"
+  !insertmacro MUI_LANGUAGE "Hungarian"
+  !insertmacro MUI_LANGUAGE "Thai"
+  !insertmacro MUI_LANGUAGE "Romanian"
+  !insertmacro MUI_LANGUAGE "Latvian"
+  !insertmacro MUI_LANGUAGE "Macedonian"
+  !insertmacro MUI_LANGUAGE "Estonian"
+  !insertmacro MUI_LANGUAGE "Turkish"
+  !insertmacro MUI_LANGUAGE "Lithuanian"
+  !insertmacro MUI_LANGUAGE "Slovenian"
+  !insertmacro MUI_LANGUAGE "Serbian"
+  !insertmacro MUI_LANGUAGE "SerbianLatin"
+  !insertmacro MUI_LANGUAGE "Arabic"
+  !insertmacro MUI_LANGUAGE "Farsi"
+  !insertmacro MUI_LANGUAGE "Hebrew"
+  !insertmacro MUI_LANGUAGE "Indonesian"
+  !insertmacro MUI_LANGUAGE "Mongolian"
+  !insertmacro MUI_LANGUAGE "Luxembourgish"
+  !insertmacro MUI_LANGUAGE "Albanian"
+  !insertmacro MUI_LANGUAGE "Breton"
+  !insertmacro MUI_LANGUAGE "Belarusian"
+  !insertmacro MUI_LANGUAGE "Icelandic"
+  !insertmacro MUI_LANGUAGE "Malay"
+  !insertmacro MUI_LANGUAGE "Bosnian"
+  !insertmacro MUI_LANGUAGE "Kurdish"
+  !insertmacro MUI_LANGUAGE "Irish"
+  !insertmacro MUI_LANGUAGE "Uzbek"
+  !insertmacro MUI_LANGUAGE "Galician"
+  !insertmacro MUI_LANGUAGE "Afrikaans"
+  !insertmacro MUI_LANGUAGE "Catalan"
+  !insertmacro MUI_LANGUAGE "Esperanto"
 
 ;-------------------------------------------------------------------------------
 ;Installer Sections
 
 Section "digiKam" SecDigiKam
 
+  ;First we kill the running process.
+  ;We use the following plugin:
+  ;http://nsis.sourceforge.net/KillProc_plug-in
+  ;To use this copy the dll in the Plugins directory of nsis.
+
+  StrCpy $0 "dbus-daemon.exe"
+  KillProc::KillProcesses
+  StrCpy $0 "kded4.exe"
+  KillProc::KillProcesses
+  StrCpy $0 "kioslave.exe"
+  KillProc::KillProcesses
+  StrCpy $0 "klauncher.exe"
+  KillProc::KillProcesses
+  StrCpy $0 "digikam.exe"
+  KillProc::KillProcesses
+
   SetOutPath "$INSTDIR"
+
+  File "RELEASENOTES.txt"
+  File "digikam-uninstaller.ico"
 
   ;Whole kde4 directory including digiKam & co
   File /r "${KDE4PATH}"
@@ -159,21 +223,6 @@ Section "digiKam" SecDigiKam
 SectionEnd
 
 ;-------------------------------------------------------------------------------
-;Descriptions
-
-  ;Language strings
-  LangString DESC_SecDigiKam ${LANG_ENGLISH} "This is the digiKam for Windows including kipi-plugins and KDE 4.4."
-  LangString DESC_SecDigiKam ${LANG_FRENCH} "digiKam pour Windows incluant les greffons kipi et KDE 4.4."
-  LangString DESC_SecDigiKam ${LANG_GERMAN} "Dies ist die digiKam für Windows einschließlich kipi-Plugins und KDE 4.4."
-  LangString DESC_SecDigiKam ${LANG_SPANISH} "Este es el digiKam para Windows, incluyendo kipi-plugins y KDE 4.4."
-  LangString DESC_SecDigiKam ${LANG_ITALIAN} "Questo è il digiKam per Windows, inclusi Kipi-plugins e KDE 4.4."
-
-  ;Assign language strings to sections
-  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecDigiKam} $(DESC_SecDigiKam)
-  !insertmacro MUI_FUNCTION_DESCRIPTION_END
-
-;-------------------------------------------------------------------------------
 ;Uninstaller Section
 
 Section "Uninstall"
@@ -181,8 +230,10 @@ Section "Uninstall"
   ;ADD YOUR OWN FILES HERE...
 
   Delete "$INSTDIR\Uninstall.exe"
+  Delete /REBOOTOK "$INSTDIR\RELEASENOTES.txt"
+  Delete /REBOOTOK "$INSTDIR\digikam-uninstaller.ico"
 
-  RMDir /r "$INSTDIR\kde4"
+  RMDir /r /REBOOTOK "$INSTDIR\kde4"
 
   RMDir "$INSTDIR"
 

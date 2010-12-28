@@ -76,7 +76,7 @@ public:
 };
 
 ImageDialogPreview::ImageDialogPreview(QWidget* parent)
-                  : KPreviewWidgetBase(parent),
+    : KPreviewWidgetBase(parent),
       d(new ImageDialogPreviewPrivate)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
@@ -276,7 +276,7 @@ public:
 };
 
 ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, const QString& caption)
-           : d(new ImageDialogPrivate)
+    : d(new ImageDialogPrivate)
 {
     d->singleSelect = singleSelect;
 

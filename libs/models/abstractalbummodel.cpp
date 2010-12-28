@@ -158,7 +158,7 @@ int AbstractAlbumModel::rowCount(const QModelIndex& parent) const
     }
 }
 
-int AbstractAlbumModel::columnCount(const QModelIndex &/*parent*/) const
+int AbstractAlbumModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return 1;
 }

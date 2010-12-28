@@ -180,7 +180,7 @@ void ItemViewImageDelegate::setRatingEdited(const QModelIndex& index)
     d->editingRating = index;
 }
 
-QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
+QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
     Q_D(const ItemViewImageDelegate);
     return d->rect.size();

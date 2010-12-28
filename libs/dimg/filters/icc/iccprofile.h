@@ -150,7 +150,7 @@ public:
 
     /// Access to the LCMS cmsHPROFILE handle
     void* handle() const;
-    operator void*() const
+    operator void* () const
     {
         return handle();
     }
