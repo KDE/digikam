@@ -1041,45 +1041,103 @@ QString DImg::embeddedText(const QString& key) const
     return QString();
 }
 
-void DImg::switchOriginToLastSaved()
+void DImg::imageSavedAs(const QString& savePath)
 {
+    setAttribute("savedFilePath", savePath);
+    addAsReferredImage(savePath);
+}
+
+QString DImg::originalFilePath() const
+{
+    return attribute("originalFilePath").toString();
+}
+
+QString DImg::lastSavedFilePath() const
+{
+    return attribute("savedFilePath").toString();
+}
+
+QStringList DImgPrivate::fileOriginAttributes()
+{
+    QStringList list;
+    list << "format"
+         << "isreadonly"
+         << "originalFilePath"
+         << "originalSize"
+         << "originalImageHistory"
+         << "rawDecodingSettings"
+         << "rawDecodingFilterAction"
+         << "uniqueHash"
+         << "uniqueHashV2";
+    return list;
+}
+
+QVariant DImg::fileOriginData() const
+{
+    QVariantMap map;
+    foreach (const QString& key, m_priv->fileOriginAttributes())
+    {
+        QVariant attr = attribute(key);
+        if (!attr.isNull())
+        {
+            map.insert(key, attr);
+        }
+    }
+    return map;
+}
+
+QVariant DImg::lastSavedFileOriginData() const
+{
+    QVariantMap map;
     QVariant savedformat = attribute("savedformat");
     if (!savedformat.isNull())
     {
-        setAttribute("format", savedformat);
+        map.insert("format", savedformat);
     }
 
     QVariant readonly = attribute("savedformat-isreadonly");
     if (!readonly.isNull())
     {
-        setAttribute("isreadonly", readonly);
+        map.insert("isreadonly", readonly);
     }
 
     QVariant filePath = attribute("savedFilePath");
     if (!filePath.isNull())
     {
-        setAttribute("originalFilePath", filePath);
+        map.insert("originalFilePath", filePath);
     }
 
-    removeAttribute("rawDecodingSettings");
-    removeAttribute("rawDecodingFilterAction");
-    removeAttribute("originalSize");
-    removeAttribute("uniqueHash");
-    removeAttribute("uniqueHashV2");
+    DImageHistory history = m_priv->imageHistory;
+    if (!history.isEmpty())
+    {
+        history.adjustReferredImages();
+
+        if (!history.entries().last().referredImages.isEmpty())
+        {
+            history.entries().last().referredImages.last().setType(HistoryImageId::Current);
+        }
+        map.insert("originalImageHistory", QVariant::fromValue(history));
+    }
+    return map;
 }
 
-void DImg::switchHistoryOriginToLastReferredImage()
+void DImg::setFileOriginData(const QVariant& data)
 {
-    if (!m_priv->imageHistory.isEmpty())
+    QVariantMap map = data.toMap();
+    foreach (const QString& key, m_priv->fileOriginAttributes())
     {
-        m_priv->imageHistory.adjustReferredImages();
-
-        if (!m_priv->imageHistory.entries().last().referredImages.isEmpty())
+        removeAttribute(key);
+        QVariant attr = map.value(key);
+        if (!attr.isNull())
         {
-            m_priv->imageHistory.entries().last().referredImages.last().setType(HistoryImageId::Current);
+            setAttribute(key, attr);
         }
-        setAttribute("originalImageHistory", QVariant::fromValue(m_priv->imageHistory));
     }
+}
+
+void DImg::switchOriginToLastSaved()
+{
+    setFileOriginData(lastSavedFileOriginData());
 }
 
 DColor DImg::getPixelColor(uint x, uint y) const

@@ -208,6 +208,15 @@ public:
     bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver* observer = 0);
     bool        save(const QString& filePath, const QString& format, DImgLoaderObserver* observer = 0);
 
+    /**
+     * It is common that images are not directly saved to the destination path.
+     * For this reason, save() does not call addAsReferredImage(), and the stored
+     * save path may be wrong.
+     * Call this method after save() with the final destination path.
+     * This path will be stored in the image history as well.
+     */
+    void        imageSavedAs(const QString& savePath);
+
     /** Loads most parts of the meta information, but never the image data.
         If loadMetadata is true, the metadata will be available with getComments, getExif, getIptc, getXmp .
         If loadICCData is true, the ICC profile will be available with getICCProfile.
@@ -235,6 +244,17 @@ public:
     /** Return the number of bits depth of one color component for one pixel : 8 (non sixteenBit) or 16 (sixteen)
      */
     int         bitsDepth()  const;
+
+    /** Returns the file path from which this DImg was originally loaded.
+     *  Returns a null string if the DImg was not loaded from a file.
+     */
+    QString     originalFilePath() const;
+
+    /** Returns the file path to which this DImg was saved.
+     *  Returns the file path set with imageSavedAs(), if that was not called,
+     *  save(), if that was not called, a null string.
+     */
+    QString     lastSavedFilePath() const;
 
     /** Returns the color model in which the image was stored in the file.
         The color space of the loaded image data is always RGB.
@@ -354,20 +374,25 @@ public:
      */
     void       addCurrentUniqueImageId(const QString& uuid);
 
-    /** This method makes the last referred image that was added (as intermediate)
-     *  the new Current image. Use in conjunction with switchOriginToLastSaved(),
-     *  If you have added the saved image with addAsReferredImage(path),
-     *  which is not done automatically at save().
-     */
-    void       switchHistoryOriginToLastReferredImage();
-
     /** When loaded from a file, some attributes like format and isReadOnly still depend on this
         originating file. When saving in a different format to a different file,
         you may wish to switch these attributes to the new file.
+        - fileOriginData() returns the current origin data, bundled in the returned QVariant.
+        - setFileOriginData() takes such a variant and adjusts the properties
+        - lastSavedFileOriginData() returns the origin data as if the image was loaded from
+          the last saved image.
+        - switchOriginToLastSaved is equivalent to setting origin data returned from lastSavedFileOriginData()
+
         Example: an image loaded from a RAW and saved to PNG will be read-only and format RAW.
-        After calling this method, it will not be read-only, format will be PNG,
+        After calling switchOriginToLastSaved, it will not be read-only, format will be PNG,
         and rawDecodingSettings will be null. detectedFormat() will not change.
+        In the history, the last referred image that was added (as intermediate) is made
+        the new Current image.
+        NOTE: Set the saved image path with imageSavedAs() before!
     */
+    QVariant    fileOriginData() const;
+    void        setFileOriginData(const QVariant& data);
+    QVariant    lastSavedFileOriginData() const;
     void        switchOriginToLastSaved();
 
     /** Return a deep copy of full image

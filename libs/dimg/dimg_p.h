@@ -104,6 +104,8 @@ public:
     IccProfile              iccProfile;
     DImageHistory           imageHistory;
 
+    static QStringList      fileOriginAttributes();
+
     /**
      * x,y, w x h is a section of the image. The image size is width x height.
      * Clips the section to the bounds of the image.
