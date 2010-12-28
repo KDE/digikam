@@ -29,10 +29,11 @@
 
 #include <QPair>
 #include <QRectF>
+#include <QTimer>
 
 /// @todo Actually use this definition!
 typedef QPair<KMap::AbstractMarkerTiler::TileIndex, int> MapPair;
-Q_DECLARE_METATYPE(MapPair)
+Q_DECLARE_METATYPE(MapPair);
 
 namespace Digikam
 {
@@ -96,7 +97,7 @@ public:
     QList<int>                             rectLevel;
     bool                                   activeState;
     QHash<qlonglong, GPSImageInfo>         imagesHash;
-    ImageFilterModel*                      imageFilterModel; // unused???
+    ImageFilterModel*                      imageFilterModel;
     ImageAlbumModel*                       imageAlbumModel;
     QItemSelectionModel*                   selectionModel;
     KMap::GeoCoordinates::Pair             currentRegionSelection;
@@ -125,8 +126,11 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const im
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
             this, SLOT(slotImageChange(const ImageChangeset&)), Qt::QueuedConnection);
 
-    connect(d->imageAlbumModel, SIGNAL(imageInfosAdded(const QList<ImageInfo>& )),
-            this, SLOT(slotNewModelData(const QList<ImageInfo>& )));
+    connect(d->imageAlbumModel, SIGNAL(imageInfosAdded(const QList<ImageInfo>&)),
+            this, SLOT(slotNewModelData(const QList<ImageInfo>&)));
+
+    connect(d->selectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+                this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
 }
 
 /**
@@ -612,15 +616,9 @@ KMap::KMapGroupState GPSMarkerTiler::getTileGroupState(const KMap::AbstractMarke
     KMap::KMapGroupStateComputer tileStateComputer;
     for (int i=0; i<tile->imagesId.count(); ++i)
     {
-        const bool isContained = d->selectedImagesCoordinates.contains(tile->imagesId.at(i));
-        if (isContained)
-        {
-            tileStateComputer.addRegionSelectedState(KMap::KMapRegionSelectedAll);
-        }
-        else
-        {
-            tileStateComputer.addRegionSelectedState(KMap::KMapRegionSelectedNone);
-        }
+        const KMap::KMapGroupState imageState = getImageState(tile->imagesId.at(i));
+
+        tileStateComputer.addState(imageState);
     }
 
     return tileStateComputer.getState();
@@ -1082,6 +1080,7 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex
     }
     else if (currentMouseMode == KMap::MouseModeFilter)
     {
+        setPositiveFilterIsActive(true);
         emit signalModelFilteredImages(clickedImagesId);
     }
 }
@@ -1102,6 +1101,58 @@ QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KMap::AbstractMarkerTile
 KMap::KMapGroupState GPSMarkerTiler::getGlobalGroupState()
 {
     return d->mapGlobalGroupState;
+}
+
+KMap::KMapGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
+{
+    KMap::KMapGroupState imageState;
+
+    // is the image inside the region selection?
+    if (d->selectedImagesCoordinates.contains(imageId))
+    {
+        imageState|= KMap::KMapRegionSelectedAll;
+    }
+
+    // is the image positively filtered?
+    const QModelIndex imageIndexInFilterModel = d->imageFilterModel->indexForImageId(imageId);
+    if (imageIndexInFilterModel.isValid())
+    {
+        imageState|= KMap::KMapFilteredPositiveAll;
+    }
+
+    // is the image selected?
+    const QModelIndex imageIndexInAlbumModel = d->imageAlbumModel->indexForImageId(imageId);
+    if (d->selectionModel->isSelected(imageIndexInFilterModel))
+    {
+        imageState|= KMap::KMapSelectedAll;
+    }
+
+    return imageState;
+}
+
+void GPSMarkerTiler::setPositiveFilterIsActive(const bool state)
+{
+    if (state)
+    {
+        d->mapGlobalGroupState|= KMap::KMapFilteredPositiveMask;
+    }
+    else
+    {
+        d->mapGlobalGroupState&= ~KMap::KMapFilteredPositiveMask;
+    }
+
+    /// @todo Somehow, a delay is necessary before emitting this signal - probably the order in which the filtering is propagated to other parts of digikam is wrong or just takes too long
+    QTimer::singleShot(100, this, SIGNAL(signalTilesOrSelectionChanged()));
+//     emit(signalTilesOrSelectionChanged());
+}
+
+void GPSMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    /// @todo Buffer this information, update the tiles, etc.
+    Q_UNUSED(selected);
+    Q_UNUSED(deselected);
+
+    emit(signalTilesOrSelectionChanged());
 }
 
 } // namespace Digikam

@@ -116,7 +116,6 @@ public:
     virtual int getTileMarkerCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
     virtual int getTileSelectedCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
 
-
     virtual QVariant getTileRepresentativeMarker(const KMap::AbstractMarkerTiler::TileIndex& tileIndex, const int sortKey);
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey);
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size);
@@ -128,11 +127,11 @@ public:
 
     virtual void setActive(const bool state);
 
-
     GPSImageInfo gpsData(const qlonglong id, const KMap::GeoCoordinates& coordinates, const int rating, const QDateTime& creationDate);
 
     void setRegionSelection(const KMap::GeoCoordinates::Pair& sel);
     void removeCurrentRegionSelection();
+    void setPositiveFilterIsActive(const bool state);
 
 Q_SIGNALS:
 
@@ -145,14 +144,17 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
+    /// @todo Do we monitor all signals of the source models?
     void slotMapImagesJobResult(KJob* job);
     void slotMapImagesJobData(KIO::Job* job, const QByteArray& data);
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
     void slotImageChange(const ImageChangeset& changeset);
+    void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 private:
 
     QList<qlonglong> getTileMarkerIds(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
+    KMap::KMapGroupState getImageState(const qlonglong imageId);
 
     class GPSMarkerTilerPrivate;
     GPSMarkerTilerPrivate* const d;

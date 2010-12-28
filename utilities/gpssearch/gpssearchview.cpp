@@ -46,10 +46,6 @@
 #include <khbox.h>
 #include <kinputdialog.h>
 
-// libkmap includes
-
-// #include <libkmap/itemmarkertiler.h>
-
 // Local includes
 
 #include "editablesearchtreeview.h"
@@ -82,7 +78,6 @@ public:
         sortActionYoungestFirst(0),
         sortActionRating(0)
     {
-
     }
 
     static const QString        configSplitterStateEntry;
@@ -527,6 +522,7 @@ bool GPSSearchView::checkAlbum(const QString& name) const
  */
 void GPSSearchView::slotRemoveCurrentFilter()
 {
+    d->gpsMarkerTiler->setPositiveFilterIsActive(false);
     const QList<qlonglong> emptyIdList;
     emit signalMapSoloItems(emptyIdList, "gpssearch");
     slotRefreshMap();
