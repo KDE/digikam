@@ -493,7 +493,7 @@ void DImageHistoryGraphTest::slotImageLoaded(const QString& fileName, bool succe
 void DImageHistoryGraphTest::slotImageSaved(const QString& fileName, bool success)
 {
     QVERIFY(success);
-    m_im->addLastSavedToHistory(fileName);
+    m_im->setLastSaved(fileName);
     qDebug() << "Saved to" << fileName;
     m_loop.quit();
 }

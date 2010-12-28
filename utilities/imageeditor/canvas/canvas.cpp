@@ -345,16 +345,6 @@ void Canvas::slotImageSaved(const QString& filePath, bool success)
     emit signalSavingFinished(filePath, success);
 }
 
-void Canvas::addLastSavedToHistory(const QString& filename)
-{
-    d->im->addLastSavedToHistory(filename);
-}
-
-void Canvas::switchToLastSaved(const QString& newFilename)
-{
-    d->im->switchToLastSaved(newFilename);
-}
-
 void Canvas::abortSaving()
 {
     d->im->abortSaving();

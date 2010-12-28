@@ -85,10 +85,12 @@ public:
     EditorWindow(const char* name);
     ~EditorWindow();
 
-    virtual bool setup()=0;
-    virtual bool setupICC()=0;
-
     const static QString CONFIG_GROUP_NAME;
+
+public Q_SLOTS:
+
+    virtual bool setup() = 0;
+    virtual bool setupICC() = 0;
 
 Q_SIGNALS:
 
@@ -227,6 +229,7 @@ protected:
     virtual bool save()=0;
     virtual bool saveNewVersion()=0;
     virtual bool saveCurrentVersion()=0;
+    void setOriginAfterSave();
 
     virtual VersionManager* versionManager();
     VersionFileOperation savingVersionFileOperation(const KUrl& url, bool fork);
@@ -279,11 +282,8 @@ protected Q_SLOTS:
     virtual void slotLoadingStarted(const QString& filename);
     virtual void slotLoadingFinished(const QString& filename, bool success);
     virtual void slotSavingStarted(const QString& filename);
+    virtual void slotFileOriginChanged(const QString& filePath);
 
-    virtual void slotSetup()
-    {
-        setup();
-    };
     virtual void slotChangeTheme(const QString& theme);
 
     virtual void slotComponentsInfo();

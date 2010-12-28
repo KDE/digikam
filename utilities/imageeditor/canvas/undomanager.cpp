@@ -106,6 +106,14 @@ void UndoManager::addAction(UndoAction* action)
         makeSnapshot(d->undoActions.size() - 1);
     }
 
+    if (isAtOrigin())
+    {
+        QVariant      originDataBeforeStep = d->dimgiface->getImg()->fileOriginData();
+        DImageHistory originHistoryBeforeStep = d->dimgiface->getResolvedInitialHistory();
+        kDebug() << "recording origin" << originDataBeforeStep;
+        action->setFileOriginData(originDataBeforeStep, originHistoryBeforeStep);
+    }
+
     // if origin is at one of the redo action that are now invalid,
     // it is no longer reachable
     if (d->origin < 0)
@@ -116,6 +124,7 @@ void UndoManager::addAction(UndoAction* action)
     {
         d->origin++;
     }
+    kDebug() << "addAction: d->origin++" << d->origin;
 }
 
 void UndoManager::undo()
@@ -199,6 +208,28 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
     UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
     UndoActionReversible*   reversible   = dynamic_cast<UndoActionReversible*>(action);
 
+    QVariant originDataAfterStep  = d->dimgiface->getImg()->fileOriginData();
+    QVariant originDataBeforeStep; // only needed if isAtOrigin()
+
+    DImageHistory originHistoryAfterStep = d->dimgiface->getResolvedInitialHistory();
+    DImageHistory originHistoryBeforeStep;
+
+    int lastOrigin = 0;
+    if (isAtOrigin())
+    {
+        // undoing from an origin: need to switch to previous origin?
+        for (lastOrigin = d->undoActions.size() - 1; lastOrigin >= 0; lastOrigin--)
+        {
+            if (d->undoActions[lastOrigin]->hasFileOriginData())
+            {
+                kDebug() << "found last origin at" << lastOrigin;
+                originDataBeforeStep    = d->undoActions[lastOrigin]->fileOriginData();
+                originHistoryBeforeStep = d->undoActions[lastOrigin]->fileOriginResolvedHistory();
+                break;
+            }
+        }
+    }
+
     if (saveRedo)
     {
         bool needSnapshot = false;
@@ -242,10 +273,30 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
         d->dimgiface->imageUndoChanged(historyBeforeStep);
     }
 
-    d->undoActions.removeLast();
+    // Record history and origin for redo
     action->setHistory(historyAfterStep);
+    if (isAtOrigin())
+        action->setFileOriginData(originDataAfterStep, originHistoryAfterStep);
+    else
+        action->setFileOriginData(QVariant(), DImageHistory());
+    kDebug() << "recording origin to redo action" << action->fileOriginData();
+
+    d->undoActions.removeLast();
     d->redoActions << action;
-    d->origin--;
+
+    if (!originDataBeforeStep.isNull())
+    {
+        d->origin = d->undoActions.size() - lastOrigin;
+        d->dimgiface->setFileOriginData(originDataBeforeStep);
+        d->dimgiface->setResolvedInitialHistory(originHistoryBeforeStep);
+        kDebug() << "setting origin" << originDataBeforeStep << "origin" << d->origin;
+    }
+    else
+    {
+        d->origin--;
+        kDebug() << "undo: origin--" << d->origin;
+    }
+
 }
 
 void UndoManager::redoStep(bool execute, bool flyingRollback)
@@ -254,6 +305,12 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
 
     DImageHistory historyBeforeStep = d->dimgiface->getImageHistory();
     DImageHistory historyAfterStep  = action->getHistory();
+
+    QVariant      originDataBeforeStep = d->dimgiface->getImg()->fileOriginData();
+    QVariant      originDataAfterStep  = action->fileOriginData();
+
+    DImageHistory originHistoryBeforeStep = d->dimgiface->getResolvedInitialHistory();
+    DImageHistory originHistoryAfterStep  = action->fileOriginResolvedHistory();
 
     UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
     UndoActionReversible*   reversible   = dynamic_cast<UndoActionReversible*>(action);
@@ -276,10 +333,28 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
         d->dimgiface->imageUndoChanged(historyAfterStep);
     }
 
-    d->redoActions.removeLast();
     action->setHistory(historyBeforeStep);
+    if (isAtOrigin())
+        action->setFileOriginData(originDataBeforeStep, originHistoryBeforeStep);
+    else
+        action->setFileOriginData(QVariant(), DImageHistory());
+    kDebug() << "recording origin to undo action" << action->fileOriginData();
+
+    d->redoActions.removeLast();
     d->undoActions << action;
-    d->origin++;
+
+    if (!originDataAfterStep.isNull())
+    {
+        d->origin = 0;
+        d->dimgiface->setFileOriginData(originDataAfterStep);
+        d->dimgiface->setResolvedInitialHistory(originHistoryAfterStep);
+        kDebug() << "redo: setting origin" << originDataAfterStep << "origin" << d->origin;
+    }
+    else
+    {
+        d->origin++;
+        kDebug() << "redo: origin++" << d->origin;
+   }
 }
 
 void UndoManager::makeSnapshot(int index)
@@ -314,7 +389,19 @@ void UndoManager::getSnapshot(int index, DImg* img)
 
     // Pass ownership of buffer. If newData is null, img will be null
     img->putImageData(newW, newH, sixteenBit, hasAlpha, newData, false);
-    kDebug() << "getting snapshot" << newW << newH << newData;
+}
+
+void UndoManager::clearPreviousOriginData()
+{
+    for (int i = d->undoActions.size() - 1; i >= 0; i--)
+    {
+        UndoAction *action = d->undoActions[i];
+        if (action->hasFileOriginData())
+        {
+            action->setFileOriginData(QVariant(), DImageHistory());
+            return;
+        }
+    }
 }
 
 bool UndoManager::putImageDataAndHistory(DImg *img, int stepsBack)
@@ -341,7 +428,6 @@ bool UndoManager::putImageDataAndHistory(DImg *img, int stepsBack)
             break;
         }
     }
-    kDebug() << "Want to have image" << stepsBack << "steps back. Undo step is" << step << ", next snapshot" << snapshot;
 
     if (snapshot == step)
     {
@@ -360,14 +446,12 @@ bool UndoManager::putImageDataAndHistory(DImg *img, int stepsBack)
         {
             reverting = d->dimgiface->getImg()->copyImageData();
         }
-        kDebug() << "reverting" << reverting.size() << reverting.isNull();
 
         // revert reversible actions, until reaching desired step
         for (; snapshot > step; snapshot--)
         {
             UndoActionReversible *reversible = dynamic_cast<UndoActionReversible*>(d->undoActions[snapshot - 1]);
             reversible->getReverseFilter().apply(reverting);
-            kDebug() << "Reverted" << reverting.size();
         }
 
         img->putImageData(reverting.width(), reverting.height(), reverting.sixteenBit(),

@@ -60,6 +60,27 @@ DImageHistory UndoAction::getHistory() const
     return m_history;
 }
 
+bool UndoAction::hasFileOriginData()
+{
+    return !m_fileOrigin.isNull();
+}
+
+void UndoAction::setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory)
+{
+    m_fileOrigin = data;
+    m_fileOriginResolvedHistory = resolvedInitialHistory;
+}
+
+QVariant UndoAction::fileOriginData() const
+{
+    return m_fileOrigin;
+}
+
+DImageHistory UndoAction::fileOriginResolvedHistory() const
+{
+    return m_fileOriginResolvedHistory;
+}
+
 // ---------------------------------------------------------------------------------------------
 
 UndoActionReversible::UndoActionReversible(DImgInterface* iface, const DImgBuiltinFilter& reversibleFilter)

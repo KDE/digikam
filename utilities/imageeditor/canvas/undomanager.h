@@ -68,6 +68,8 @@ public:
     bool isAtOrigin() const;
     void setOrigin() const;
 
+    void clearPreviousOriginData();
+
     /// The history if all available redo steps are redone
     DImageHistory getImageHistoryOfFullRedo() const;
 

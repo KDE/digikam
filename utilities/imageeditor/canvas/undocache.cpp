@@ -115,7 +115,6 @@ bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha,
     ds << ba;
 
     file.close();
-    kDebug() << "Stored undo data" << level << "image" << w << h <<  w*h*(sixteenBit ? 8 : 4)<< "file size" << file.size();
 
     d->cacheFilenames.append(cacheFile);
 
@@ -161,7 +160,6 @@ uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& has
     memcpy (data, ba.data(), ba.size());
 
     file.close();
-    kDebug() << "Got undo data" << level << "image" << w << h <<  w*h*(sixteenBit ? 8 : 4) << ba.size() << "file size" << file.size();
 
     if (del)
     {

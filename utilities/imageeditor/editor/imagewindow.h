@@ -108,6 +108,7 @@ private:
     void setViewToURL(const KUrl& url);
     void deleteCurrentItem(bool ask, bool permanently);
     void removeCurrent();
+    void slotFileOriginChanged(const QString&);
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 

@@ -99,7 +99,7 @@ void DImageHistoryTest::testDImg()
     QCOMPARE(history.entries().last().referredImages.size(), 1);
     QCOMPARE(history.entries().last().referredImages.first().m_type, HistoryImageId::Intermediate);
 
-    m_im->switchToLastSaved(m_tempFile);
+    m_im->switchToLastSaved();
 
     history = m_im->getImg()->getImageHistory();
     QCOMPARE(history.size(), 3);
@@ -135,7 +135,7 @@ void DImageHistoryTest::slotImageSaved(const QString& fileName, bool success)
 {
     QVERIFY(success);
 
-    m_im->addLastSavedToHistory(fileName);
+    m_im->setLastSaved(fileName);
 
     DImg img(fileName);
     DImageHistory history = img.getImageHistory();

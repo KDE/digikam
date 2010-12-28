@@ -53,11 +53,18 @@ public:
     void setHistory(const DImageHistory& history);
     DImageHistory getHistory() const;
 
+    bool hasFileOriginData();
+    void setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory);
+    QVariant fileOriginData() const;
+    DImageHistory fileOriginResolvedHistory() const;
+
 protected:
 
     DImgInterface* m_iface;
     QString        m_title;
     DImageHistory  m_history;
+    QVariant       m_fileOrigin;
+    DImageHistory  m_fileOriginResolvedHistory;
 };
 
 // --------------------------------------------------------------------

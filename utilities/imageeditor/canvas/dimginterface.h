@@ -91,8 +91,8 @@ public:
                   const VersionFileOperation& operation);
 
     void   setHistoryIsBranch(bool isBranching);
-    void   addLastSavedToHistory(const QString& filename);
-    void   switchToLastSaved(const QString& newFilename);
+    void   setLastSaved(const QString& filePath);
+    void   switchToLastSaved(const DImageHistory& resolvedCurrentHistory = DImageHistory());
     void   abortSaving();
     void   setModified();
     void   readMetadataFromFile(const QString& file);
@@ -162,6 +162,7 @@ public:
     /// For internal usage by UndoManager
     void   setUndoImageData(const DImageHistory& history, uchar* data, int w, int h, bool sixteenBit);
     void   imageUndoChanged(const DImageHistory& history);
+    void   setFileOriginData(const QVariant& data);
 
     /** Convert a DImg image to a pixmap for screen using color
         managed view if necessary */
@@ -190,6 +191,7 @@ Q_SIGNALS:
 
     void   signalModified();
     void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
+    void   signalFileOriginChanged(const QString& filePath);
 
     void   signalLoadingStarted(const QString& filename);
     void   signalLoadingProgress(const QString& filePath, float progress);

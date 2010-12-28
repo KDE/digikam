@@ -678,6 +678,17 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
     QTimer::singleShot(0, this, SLOT(slotLoadImageInfosStage2()));
 }
 
+void ImageWindow::slotLoadImageInfosStage2()
+{
+    // if window is minimized, show it
+    if (isMinimized())
+    {
+        KWindowSystem::unminimizeWindow(winId());
+    }
+
+    slotLoadCurrent();
+}
+
 void ImageWindow::openImage(const ImageInfo& info)
 {
     if (d->currentImageInfo == info)
@@ -689,17 +700,6 @@ void ImageWindow::openImage(const ImageInfo& info)
     if (!d->imageInfoModel->hasImage(d->currentImageInfo))
     {
         d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
-    }
-
-    slotLoadCurrent();
-}
-
-void ImageWindow::slotLoadImageInfosStage2()
-{
-    // if window is minimized, show it
-    if (isMinimized())
-    {
-        KWindowSystem::unminimizeWindow(winId());
     }
 
     slotLoadCurrent();
@@ -755,6 +755,21 @@ void ImageWindow::slotDroppedOnThumbbar(const QList<ImageInfo>& infos)
     }
 
     loadImageInfos(infos, infos.first(), QString());
+}
+
+void ImageWindow::slotFileOriginChanged(const QString& filePath)
+{
+    // By redo or undo, we have virtually switched to a new image.
+    // So we do _not_ load anything!
+    ImageInfo newCurrent(filePath);
+    if (newCurrent.isNull() || !d->imageInfoModel->hasImage(newCurrent))
+    {
+        return;
+    }
+
+    d->currentImageInfo = newCurrent;
+    d->setThumbBarToCurrent();
+    setViewToURL(d->currentUrl());
 }
 
 void ImageWindow::loadIndex(const QModelIndex& index)
@@ -1077,7 +1092,6 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // copy the metadata of the original file to the new file
-    kDebug() << "Copying properties" << (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion) << m_savingContext.versionFileOperation.allFilePaths();
     if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
     {
         foreach (const QString& path, m_savingContext.versionFileOperation.allFilePaths())
@@ -1101,10 +1115,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // set origin of DImgInterface: "As if" the last saved image was loaded directly
-    m_canvas->switchToLastSaved(m_savingContext.destinationURL.toLocalFile());
-    // and set again a resolved history
-    DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getInitialImageHistory());
-    m_canvas->interface()->setResolvedInitialHistory(resolved);
+    setOriginAfterSave();
 
     // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
     // This may irritate users who want to check for quality loss in lossy formats.
@@ -1704,9 +1715,7 @@ void ImageWindow::slotOpenOriginal()
 
     if (!imageInfos.isEmpty() && !imageInfos.first().isNull())
     {
-        d->currentImageInfo = imageInfos.first();
-        d->currentUrl()       = d->currentImageInfo.fileUrl();
-        slotLoadCurrent();
+        openImage(imageInfos.first());
     }
 }
 

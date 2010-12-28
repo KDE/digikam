@@ -147,8 +147,6 @@ public:
 
     QWidget*                   displayingWidget;
 
-    QString                    filePath;
-
     QList<FileToSave>          filesToSave;
     int                        currentFileToSave;
 
@@ -268,14 +266,12 @@ void DImgInterface::slotLoadRawFromTool()
         {
             resetValues();
             d->currentDescription = d->nextRawDescription;
-            d->filePath           = d->currentDescription.filePath;
-
             d->nextRawDescription = LoadingDescription();
 
-            emit signalLoadingStarted(d->filePath);
+            emit signalLoadingStarted(d->currentDescription.filePath);
             slotImageLoaded(d->currentDescription, rawImport->postProcessedImage());
             EditorToolIface::editorToolIface()->unLoadTool();
-            emit signalImageLoaded(d->filePath, true);
+            emit signalImageLoaded(d->currentDescription.filePath, true);
         }
         else
         {
@@ -302,14 +298,12 @@ void DImgInterface::load(const LoadingDescription& description)
     {
         resetValues();
         d->currentDescription = description;
-        d->filePath           = d->currentDescription.filePath;
-
         loadCurrent();
     }
     else
     {
-        emit signalLoadingStarted(d->filePath);
-        emit signalImageLoaded(d->filePath, true);
+        emit signalLoadingStarted(d->currentDescription.filePath);
+        emit signalImageLoaded(d->currentDescription.filePath, true);
     }
 }
 
@@ -335,7 +329,7 @@ void DImgInterface::loadCurrent()
     d->thread->load(d->currentDescription,
                     SharedLoadSaveThread::AccessModeReadWrite,
                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    emit signalLoadingStarted(d->filePath);
+    emit signalLoadingStarted(d->currentDescription.filePath);
 }
 
 void DImgInterface::restore()
@@ -359,7 +353,6 @@ void DImgInterface::resetImage()
 void DImgInterface::resetValues()
 {
     d->valid          = false;
-    d->filePath.clear();
     d->currentDescription = LoadingDescription();
     d->width          = 0;
     d->height         = 0;
@@ -398,9 +391,7 @@ ExposureSettingsContainer* DImgInterface::getExposureSettings()
 
 void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
 {
-    const QString& filePath = loadingDescription.filePath;
-
-    if (filePath != d->filePath)
+    if (loadingDescription != d->currentDescription)
     {
         return;
     }
@@ -454,7 +445,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
         valRet = false;
     }
 
-    emit signalImageLoaded(d->filePath, valRet);
+    emit signalImageLoaded(d->currentDescription.filePath, valRet);
     setModified();
 
     /*
@@ -496,7 +487,7 @@ void DImgInterface::setSoftProofingEnabled(bool enabled)
 
 void DImgInterface::slotLoadingProgress(const LoadingDescription& loadingDescription, float progress)
 {
-    if (loadingDescription.filePath == d->filePath)
+    if (loadingDescription == d->currentDescription)
     {
         emit signalLoadingProgress(loadingDescription.filePath, progress);
     }
@@ -786,23 +777,34 @@ void DImgInterface::provideCurrentUuid(const QString& uuid)
     }
 }
 
-void DImgInterface::addLastSavedToHistory(const QString& filePath)
+void DImgInterface::setLastSaved(const QString& filePath)
 {
-    // add reference, as Intermediate for now. In switchToLastSaved, it may become Current
+    if (getImageFilePath() == filePath)
+    {
+        // if the file was overwritten, a complete undo, to the state of original loading,
+        // does not return to a real image anymore - it's overwritten
+        d->undoMan->clearPreviousOriginData();
+    }
     // We cannot do it in slotImageSaved because we may operate on a temporary filePath.
-    d->image.addAsReferredImage(filePath);
+    d->image.imageSavedAs(filePath);
 }
 
-void DImgInterface::switchToLastSaved(const QString& newFilename)
+void DImgInterface::switchToLastSaved(const DImageHistory& resolvedCurrentHistory)
 {
     // Higher level wants to use the current DImg object to represent the file
     // it has previously been saved to.
-    d->filePath = newFilename;
+    // setLastSaved shall have been called before.
     d->image.switchOriginToLastSaved();
-    d->image.switchHistoryOriginToLastReferredImage();
-    // Higher level shall set correct resolvedInitialHistory
-    d->resolvedInitialHistory = d->image.getOriginalImageHistory();
-    d->resolvedInitialHistory.clearReferredImages();
+    if (resolvedCurrentHistory.isNull())
+    {
+        d->resolvedInitialHistory = d->image.getOriginalImageHistory();
+        d->resolvedInitialHistory.clearReferredImages();
+    }
+    else
+    {
+        d->resolvedInitialHistory = resolvedCurrentHistory;
+    }
+    setUndoManagerOrigin();
 }
 
 void DImgInterface::setHistoryIsBranch(bool isBranching)
@@ -851,6 +853,7 @@ void DImgInterface::setUndoManagerOrigin()
 {
     d->undoMan->setOrigin();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+    emit signalFileOriginChanged(getImageFilePath());
 }
 
 void DImgInterface::updateUndoState()
@@ -1205,6 +1208,12 @@ void DImgInterface::imageUndoChanged(const DImageHistory& history)
     d->image.setImageHistory(history);
 }
 
+void DImgInterface::setFileOriginData(const QVariant& data)
+{
+    d->image.setFileOriginData(data);
+    emit signalFileOriginChanged(getImageFilePath());
+}
+
 uchar* DImgInterface::getImageSelection()
 {
     if (!d->selW || !d->selH)
@@ -1282,12 +1291,12 @@ KExiv2Data DImgInterface::getMetadata()
 
 QString DImgInterface::getImageFilePath()
 {
-    return d->filePath;
+    return d->image.originalFilePath();
 }
 
 QString DImgInterface::getImageFileName()
 {
-    return d->filePath.section( '/', -1 );
+    return getImageFilePath().section( '/', -1 );
 }
 
 QString DImgInterface::getImageFormat()
@@ -1303,7 +1312,7 @@ QString DImgInterface::getImageFormat()
     if (mimeType.isEmpty())
     {
         kWarning() << "DImg object does not contain attribute \"format\"";
-        mimeType = QImageReader::imageFormat(d->filePath);
+        mimeType = QImageReader::imageFormat(getImageFilePath());
     }
 
     return mimeType;

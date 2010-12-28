@@ -332,6 +332,9 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalSelectionChanged(const QRect&)),
             this, SLOT(slotSelectionChanged(const QRect&)));
 
+    connect(m_canvas->interface(), SIGNAL(signalFileOriginChanged(const QString&)),
+            this, SLOT(slotFileOriginChanged(const QString&)));
+
     // -- status bar connections --------------------------------------
 
     connect(m_nameLabel, SIGNAL(signalCancelButtonPressed()),
@@ -603,7 +606,7 @@ void EditorWindow::setupStandardActions()
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
-    KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
+    KStandardAction::preferences(this,            SLOT(setup()),             actionCollection());
 
     // ---------------------------------------------------------------------------------
 
@@ -1786,10 +1789,14 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
 
         // Set a history which contains all available files as referredImages
         DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getInitialImageHistory());
-        kDebug() << "initial history" << m_canvas->interface()->getInitialImageHistory().size()
-        << "resolved initial history" << resolved.size();
         m_canvas->interface()->setResolvedInitialHistory(resolved);
     }
+}
+
+void EditorWindow::setOriginAfterSave()
+{
+    DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getImageHistory());
+    m_canvas->interface()->switchToLastSaved(resolved);
 }
 
 void EditorWindow::colorManage()
@@ -1841,6 +1848,11 @@ void EditorWindow::slotNameLabelCancelButtonPressed()
 
     // If we preparing SlideShow...
     m_cancelSlideShow = true;
+}
+
+void EditorWindow::slotFileOriginChanged(const QString&)
+{
+    // implemented in subclass
 }
 
 void EditorWindow::slotSave()
@@ -1930,10 +1942,8 @@ void EditorWindow::movingSaveFileFinished(bool successful)
         return;
     }
 
-    m_canvas->setUndoHistoryOrigin();
-
     // now that we know the real destination file name, pass it to be recorded in image history
-    m_canvas->addLastSavedToHistory(m_savingContext.destinationURL.toLocalFile());
+    m_canvas->interface()->setLastSaved(m_savingContext.destinationURL.toLocalFile());
 
     // remove image from cache since it has changed
     LoadingCacheInterface::fileChanged(m_savingContext.destinationURL.toLocalFile());
