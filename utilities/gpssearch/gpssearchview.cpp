@@ -80,10 +80,10 @@ public:
         searchModel(0),
         sortActionOldestFirst(0),
         sortActionYoungestFirst(0),
-        sortActionRating(0),
-        existsFilterDatabaseBased(false),
-        existsFilterModelBased(false)
-    {}
+        sortActionRating(0)
+    {
+
+    }
 
     static const QString        configSplitterStateEntry;
     QToolButton*                saveBtn;
@@ -101,8 +101,6 @@ public:
     KAction*                    sortActionOldestFirst;
     KAction*                    sortActionYoungestFirst;
     KAction*                    sortActionRating;
-    bool                        existsFilterDatabaseBased;
-    bool                        existsFilterModelBased;
 };
 const QString GPSSearchView::GPSSearchViewPriv::configSplitterStateEntry("SplitterState");
 
@@ -120,6 +118,8 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
       d(new GPSSearchViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
+
+    /// @todo Really?
     setAcceptDrops(true);
 
     d->imageAlbumModel       = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
@@ -243,32 +243,17 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
             d->saveBtn, SLOT(animateClick()));
 
-    connect(d->mapSearchWidget, SIGNAL(signalNewSelectionFromMap()),
-            this, SLOT(slotSelectionChanged()));
-
-    connect(d->mapSearchWidget, SIGNAL(signalNewMapFilter(const KMap::FilterMode&)),
-            this, SLOT(slotNewMapFilter(const KMap::FilterMode&)));
-
-    connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentSelection()),
-            this, SLOT(slotRemoveCurrentSelection()));
+    connect(d->mapSearchWidget, SIGNAL(signalRegionSelectionChanged()),
+            this, SLOT(slotRegionSelectionChanged()));
 
     connect(d->gpsMarkerTiler, SIGNAL(signalModelFilteredImages(const QList<qlonglong>&)),
             this, SLOT(slotMapSoloItems(const QList<qlonglong>&)));
 
-    connect(d->gpsMarkerTiler, SIGNAL(signalRefreshMap()),
-            this, SLOT(slotRefreshMap()));
-
     connect(d->gpsMarkerTiler, SIGNAL(signalClearImages()),
             this, SLOT(slotClearImages()));
 
-    /*connect(d->gpsMarkerTiler, SIGNAL(signalRemoveCurrentSelection()),
-            this, SLOT(slotRemoveCurrentSelection()));*/
-
     connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentFilter()),
             this, SLOT(slotRemoveCurrentFilter()));
-
-    connect(d->mapSearchWidget, SIGNAL(signalMouseModeChanged(const KMap::MouseMode&)),
-            this, SLOT(slotMouseModeChanged(const KMap::MouseMode&)));
 
     // ---------------------------------------------------------------
 
@@ -333,6 +318,8 @@ void GPSSearchView::doSaveState()
  */
 void GPSSearchView::setActive(bool val)
 {
+    /// @todo Review this code
+
     //TODO: when val == false, and a selection exists, remove the current selection
     if (!val)
     {
@@ -378,11 +365,25 @@ void GPSSearchView::slotSaveGPSSAlbum()
 /**
  * This slot is called when a new selection is made. It creates a new Search Album.
  */
-void GPSSearchView::slotSelectionChanged()
+void GPSSearchView::slotRegionSelectionChanged()
 {
-    d->mapSearchWidget->setSelectionStatus(true);
-    slotCheckNameEditGPSConditions();
-    createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
+    const KMap::GeoCoordinates::Pair newRegionSelection = d->mapSearchWidget->getRegionSelection();
+    const bool haveRegionSelection = newRegionSelection.first.hasCoordinates();
+
+    if (haveRegionSelection)
+    {
+        slotCheckNameEditGPSConditions();
+        createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
+    }
+    else
+    {
+        // reset the search rectangle of the temporary album:
+        createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
+        d->gpsMarkerTiler->removeCurrentRegionSelection();
+        d->searchTreeView->clearSelection();
+        slotClearImages();
+    }
+
     slotRefreshMap();
 }
 
@@ -394,21 +395,28 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
     //AlbumManager::instance()->setCurrentAlbum(0);
 
-    if (!d->mapSearchWidget->getSelectionStatus())
-    {
-        return;
-    }
-
     // We query the database here
 
-    const KMap::GeoCoordinates::Pair coordinates = d->mapSearchWidget->getSelectionRectangle();
-    d->gpsMarkerTiler->newSelectionFromMap(coordinates);
+    const KMap::GeoCoordinates::Pair coordinates = d->mapSearchWidget->getRegionSelection();
+    const bool haveCoordinates = coordinates.first.hasCoordinates();
+
+    if (haveCoordinates)
+    {
+        d->gpsMarkerTiler->setRegionSelection(coordinates);
+    }
 
     // NOTE: coordinates as lon1, lat1, lon2, lat2 (or West, North, East, South)
     // as left/top, right/bottom rectangle.
-    const QList<qreal> coordinatesList = QList<qreal>() <<
+    QList<qreal> coordinatesList = QList<qreal>() <<
                                          coordinates.first.lon() << coordinates.first.lat() <<
                                          coordinates.second.lon() << coordinates.second.lat();
+
+    if (!haveCoordinates)
+    {
+        /// @todo We need to create a search album with invalid coordinates
+        coordinatesList.clear();
+        coordinatesList << -200 << -200 << -200 << -200;
+    }
 
     kDebug() << "West, North, East, South: " << coordinatesList;
 
@@ -433,6 +441,8 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
  */
 void GPSSearchView::slotAlbumSelected(Album* a)
 {
+    /// @todo This re-sets the region selection unwantedly...
+
     SAlbum* const salbum = dynamic_cast<SAlbum*> (a);
 
     if (!salbum)
@@ -453,8 +463,11 @@ void GPSSearchView::slotAlbumSelected(Album* a)
                 KMap::GeoCoordinates(list.at(3), list.at(2))
             );
 
-        d->mapSearchWidget->setSelectionStatus(true);
-        d->mapSearchWidget->setSelectionCoordinates(coordinates);
+        /// @todo Currently, invalid coordinates are stored as -200:
+        if (list.at(1)!=-200)
+        {
+            d->mapSearchWidget->setRegionSelection(coordinates);
+        }
         slotCheckNameEditGPSConditions();
     }
 
@@ -510,31 +523,12 @@ bool GPSSearchView::checkAlbum(const QString& name) const
 }
 
 /**
- * Remove the current selection rectangle and clear the selection made by it.
- */
-void GPSSearchView::slotRemoveCurrentSelection()
-{
-    d->mapSearchWidget->setSelectionStatus(false);
-    d->gpsMarkerTiler->removeCurrentSelection();
-    d->searchTreeView->clearSelection();
-    slotClearImages();
-
-    if (d->existsFilterDatabaseBased)
-    {
-        d->existsFilterDatabaseBased = false;
-    }
-
-    slotRefreshMap();
-}
-
-/**
  * @brief Remove the current filter.
  */
 void GPSSearchView::slotRemoveCurrentFilter()
 {
     const QList<qlonglong> emptyIdList;
     emit signalMapSoloItems(emptyIdList, "gpssearch");
-    d->existsFilterModelBased = false;
     slotRefreshMap();
 }
 
@@ -543,7 +537,7 @@ void GPSSearchView::slotRemoveCurrentFilter()
  */
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
-    if (d->mapSearchWidget->getSelectionStatus())
+    if (d->mapSearchWidget->getRegionSelection().first.hasCoordinates())
     {
         d->nameEdit->setEnabled(true);
 
@@ -618,27 +612,6 @@ void GPSSearchView::slotSortOptionTriggered(QAction* action)
     }
 
     d->mapSearchWidget->setSortKey(newSortKey);
-}
-
-void GPSSearchView::slotMouseModeChanged(const KMap::MouseMode& currentMouseMode)
-{
-    d->gpsMarkerTiler->mouseModeChanged(currentMouseMode);
-}
-
-void GPSSearchView::slotNewMapFilter(const KMap::FilterMode& newFilter)
-{
-    if (newFilter == KMap::DatabaseFilter)
-    {
-        d->existsFilterDatabaseBased = true;
-        d->gpsMarkerTiler->newMapFilter(newFilter);
-    }
-    else
-    {
-        d->existsFilterModelBased    = true;
-        d->gpsMarkerTiler->newMapFilter(newFilter);
-    }
-
-    slotRefreshMap();
 }
 
 void GPSSearchView::slotRefreshMap()

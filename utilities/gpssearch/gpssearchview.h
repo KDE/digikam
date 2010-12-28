@@ -73,11 +73,8 @@ public Q_SLOTS:
     void slotDigikamViewNoCurrentItem();
     void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext,
                                       const ImageInfoList& allImages);
-    void slotRemoveCurrentSelection();
     void slotRemoveCurrentFilter();
     void slotSortOptionTriggered(QAction* );
-    void slotMouseModeChanged(const KMap::MouseMode& currentMouseMode);
-    void slotNewMapFilter(const KMap::FilterMode& newFilter);
     void slotRefreshMap();
     void slotClearImages();
 
@@ -95,7 +92,7 @@ private Q_SLOTS:
     void slotSaveGPSSAlbum();
     void slotCheckNameEditGPSConditions();
 
-    void slotSelectionChanged();
+    void slotRegionSelectionChanged();
 
     void slotMapSelectedItems(const GPSInfoList& gpsList);
     void slotMapSoloItems(const QList<qlonglong>& idList);

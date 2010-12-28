@@ -80,11 +80,8 @@ public:
           imagesHash(),
           imageFilterModel(),
           imageAlbumModel(),
-          currentMouseMode(KMap::MouseModePan),
-          currentSelection(),
-          selectionExists(false),
-          existsFilterDatabaseBased(false),
-          existsFilterModelBased(false),
+          currentRegionSelection(),
+          mapGlobalGroupState(),
           selectedImagesCoordinates(),
           modelDataProgStart(false)
     {
@@ -102,11 +99,8 @@ public:
     ImageFilterModel*                      imageFilterModel; // unused???
     ImageAlbumModel*                       imageAlbumModel;
     QItemSelectionModel*                   selectionModel;
-    KMap::MouseMode                        currentMouseMode;
-    KMap::GeoCoordinates::Pair             currentSelection;
-    bool                                   selectionExists;
-    bool                                   existsFilterDatabaseBased;
-    bool                                   existsFilterModelBased;
+    KMap::GeoCoordinates::Pair             currentRegionSelection;
+    KMap::KMapGroupState                   mapGlobalGroupState;
     QHash<qlonglong, KMap::GeoCoordinates> selectedImagesCoordinates;
     bool                                   modelDataProgStart;
 };
@@ -376,7 +370,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
 
             if (sortKey == SortYoungestFirst)
             {
-                if (d->existsFilterDatabaseBased || d->existsFilterModelBased || d->selectionExists)
+                if (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) )
                 {
                     if (d->selectedImagesCoordinates.contains(currentMarkerInfo.id))
                     {
@@ -408,7 +402,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
             }
             else if (sortKey == SortOldestFirst)
             {
-                if (d->existsFilterDatabaseBased || d->existsFilterModelBased)
+                if (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) )
                 {
                     if (d->selectedImagesCoordinates.contains(currentMarkerInfo.id))
                     {
@@ -456,7 +450,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::AbstractMarkerT
 
         bestRep.first                              = tileIndex;
 
-        if (d->existsFilterModelBased || d->existsFilterDatabaseBased || d->selectionExists)
+        if (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) )
         {
             if (bestFilteredMarkerInfo.id != -2)
             {
@@ -512,6 +506,8 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
 
         MyTile* tile                   = static_cast<MyTile*>(getTile(currentIndex.first, true));
         GPSImageInfo currentMarkerInfo = d->imagesHash.value(currentIndex.second);
+
+        /// @todo ???
         Q_UNUSED(tile);
 
         if (sortKey == SortYoungestFirst)
@@ -569,7 +565,7 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
     {
-        if ((d->existsFilterDatabaseBased || d->selectionExists) && !d->selectedImagesCoordinates.contains(info.id()))
+        if ((d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) ) && !d->selectedImagesCoordinates.contains(info.id()))
         {
             QPixmap alphaPixmap(thumbnail.size());
             alphaPixmap.fill(QColor::fromRgb(0x80, 0x80, 0x80));
@@ -603,11 +599,31 @@ bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
     return false;
 }
 
-KMap::KMapSelectionState GPSMarkerTiler::getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
+KMap::KMapGroupState GPSMarkerTiler::getTileGroupState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
 {
-    Q_UNUSED(tileIndex)
+    const bool haveGlobalSelection = (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) );
+    if (!haveGlobalSelection)
+    {
+        return KMap::KMapSelectedNone;
+    }
 
-    return KMap::KMapSelectionState();
+    /// @todo Store this state in the tiles!
+    MyTile* tile = static_cast<MyTile*>(getTile(tileIndex, true));
+    KMap::KMapGroupStateComputer tileStateComputer;
+    for (int i=0; i<tile->imagesId.count(); ++i)
+    {
+        const bool isContained = d->selectedImagesCoordinates.contains(tile->imagesId.at(i));
+        if (isContained)
+        {
+            tileStateComputer.addRegionSelectedState(KMap::KMapRegionSelectedAll);
+        }
+        else
+        {
+            tileStateComputer.addRegionSelectedState(KMap::KMapRegionSelectedNone);
+        }
+    }
+
+    return tileStateComputer.getState();
 }
 
 /**
@@ -985,18 +1001,11 @@ GPSMarkerTiler::GPSImageInfo GPSMarkerTiler::gpsData(const qlonglong id, const K
     return currentImageInfo;
 }
 
-void GPSMarkerTiler::mouseModeChanged(const KMap::MouseMode currentMouseMode)
-{
-    d->currentMouseMode = currentMouseMode;
-}
-
 void GPSMarkerTiler::slotNewModelData(const QList<ImageInfo>& infos)
 {
     if (!d->modelDataProgStart)
     {
         d->modelDataProgStart = true;
-        //slotRemoveCurrentSelection();
-        //emit signalRemoveCurrentSelection();
         emit signalClearImages();
         return;
     }
@@ -1010,31 +1019,37 @@ void GPSMarkerTiler::slotNewModelData(const QList<ImageInfo>& infos)
         }
     }
 
-    emit signalRefreshMap();
+    emit(signalTilesOrSelectionChanged());
 }
 
-void GPSMarkerTiler::newSelectionFromMap(const KMap::GeoCoordinates::Pair& sel)
+void GPSMarkerTiler::setRegionSelection(const KMap::GeoCoordinates::Pair& sel)
 {
-    d->currentSelection = sel;
-    d->selectionExists  = true;
+    d->currentRegionSelection = sel;
+
+    if (sel.first.hasCoordinates())
+    {
+        d->mapGlobalGroupState|= KMap::KMapRegionSelectedMask;
+    }
+    else
+    {
+        d->mapGlobalGroupState&= ~KMap::KMapRegionSelectedMask;
+    }
+
+    emit(signalTilesOrSelectionChanged());
 }
 
-void GPSMarkerTiler::removeCurrentSelection()
+void GPSMarkerTiler::removeCurrentRegionSelection()
 {
+    d->currentRegionSelection.first.clear();
+
     d->selectedImagesCoordinates.clear();
 
-    if (d->selectionExists)
-    {
-        d->selectionExists           = false;
-    }
+    d->mapGlobalGroupState&= ~KMap::KMapRegionSelectedMask;
 
-    if (d->existsFilterDatabaseBased)
-    {
-        d->existsFilterDatabaseBased = false;
-    }
+    emit(signalTilesOrSelectionChanged());
 }
 
-void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::KMapSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode)
+void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::KMapGroupState& groupSelectionState, KMap::MouseMode currentMouseMode)
 {
     QList<qlonglong> clickedImagesId;
 
@@ -1071,30 +1086,6 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex
     }
 }
 
-void GPSMarkerTiler::newMapFilter(const KMap::FilterMode& newFilter)
-{
-    if (newFilter == KMap::DatabaseFilter)
-    {
-        d->existsFilterDatabaseBased = true;
-    }
-    else
-    {
-        d->existsFilterModelBased    = true;
-    }
-}
-
-void GPSMarkerTiler::removeCurrentMapFilter(const KMap::FilterMode& removedFilter)
-{
-    if (removedFilter == KMap::DatabaseFilter)
-    {
-        d->existsFilterDatabaseBased = false;
-    }
-    else
-    {
-        d->existsFilterModelBased    = false;
-    }
-}
-
 QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KMap::AbstractMarkerTiler::TileIndex& tileIndex)
 {
     KMAP_ASSERT(tileIndex.level() <= KMap::AbstractMarkerTiler::TileIndex::MaxLevel);
@@ -1106,6 +1097,11 @@ QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KMap::AbstractMarkerTile
     }
 
     return myTile->imagesId;
+}
+
+KMap::KMapGroupState GPSMarkerTiler::getGlobalGroupState()
+{
+    return d->mapGlobalGroupState;
 }
 
 } // namespace Digikam

@@ -121,24 +121,23 @@ public:
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey);
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size);
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
-    virtual KMap::KMapSelectionState getTileSelectedState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
+    virtual KMap::KMapGroupState getTileGroupState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
+    virtual KMap::KMapGroupState getGlobalGroupState();
 
-    virtual void onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::KMapSelectionState& groupSelectionState, KMap::MouseMode currentMouseMode);
+    virtual void onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::KMapGroupState& groupSelectionState, KMap::MouseMode currentMouseMode);
 
     virtual void setActive(const bool state);
+
+
     GPSImageInfo gpsData(const qlonglong id, const KMap::GeoCoordinates& coordinates, const int rating, const QDateTime& creationDate);
-    void mouseModeChanged(const KMap::MouseMode currentMouseMode);
-    void newSelectionFromMap(const KMap::GeoCoordinates::Pair& sel);
-    void removeCurrentSelection();
-    void newMapFilter(const KMap::FilterMode& newFilter);
-    void removeCurrentMapFilter(const KMap::FilterMode& removedFilter);
+
+    void setRegionSelection(const KMap::GeoCoordinates::Pair& sel);
+    void removeCurrentRegionSelection();
 
 Q_SIGNALS:
 
     void signalModelFilteredImages(const QList<qlonglong>& imagesId);
-    void signalRefreshMap();
     void signalClearImages();
-    void signalRemoveCurrentSelection();
 
 public Q_SLOTS:
 
