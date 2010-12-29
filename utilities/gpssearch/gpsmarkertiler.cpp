@@ -1101,23 +1101,55 @@ KMap::KMapGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
     KMap::KMapGroupState imageState;
 
     // is the image inside the region selection?
-    if (d->selectedImagesCoordinates.contains(imageId))
+    if (d->mapGlobalGroupState&KMap::KMapRegionSelectedMask)
     {
-        imageState|= KMap::KMapRegionSelectedAll;
+        if (d->selectedImagesCoordinates.contains(imageId))
+        {
+            imageState|= KMap::KMapRegionSelectedAll;
+        }
+        else
+        {
+            // not inside region selection, therefore
+            // no other flags can apply
+            return KMap::KMapRegionSelectedNone;
+        }
     }
 
     // is the image positively filtered?
-    const QModelIndex imageIndexInFilterModel = d->imageFilterModel->indexForImageId(imageId);
-    if (imageIndexInFilterModel.isValid())
+    if (d->mapGlobalGroupState&KMap::KMapFilteredPositiveMask)
     {
-        imageState|= KMap::KMapFilteredPositiveAll;
-    }
+        const QModelIndex imageIndexInFilterModel = d->imageFilterModel->indexForImageId(imageId);
+        if (imageIndexInFilterModel.isValid())
+        {
+            imageState|= KMap::KMapFilteredPositiveAll;
 
-    // is the image selected?
-    const QModelIndex imageIndexInAlbumModel = d->imageAlbumModel->indexForImageId(imageId);
-    if (d->selectionModel->isSelected(imageIndexInFilterModel))
+            // is the image selected?
+            if (d->selectionModel->hasSelection())
+            {
+                if (d->selectionModel->isSelected(imageIndexInFilterModel))
+                {
+                    imageState|= KMap::KMapSelectedAll;
+                }
+            }
+        }
+        else
+        {
+            // the image is not positively filtered, therefore it can
+            // not be selected
+            return imageState;
+        }
+    }
+    else
     {
-        imageState|= KMap::KMapSelectedAll;
+        // is the image selected?
+        if (d->selectionModel->hasSelection())
+        {
+            const QModelIndex imageIndexInFilterModel = d->imageFilterModel->indexForImageId(imageId);
+            if (d->selectionModel->isSelected(imageIndexInFilterModel))
+            {
+                imageState|= KMap::KMapSelectedAll;
+            }
+        }
     }
 
     return imageState;
