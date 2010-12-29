@@ -203,8 +203,8 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
-    d->mapSearchWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeSelectionFromIcon|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
-    d->mapSearchWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeSelection|KMap::MouseModeZoom|KMap::MouseModeSelectionFromIcon|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
+    d->mapSearchWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeRegionSelection|KMap::MouseModeZoomIntoGroup|KMap::MouseModeRegionSelectionFromIcon|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
+    d->mapSearchWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeRegionSelection|KMap::MouseModeZoomIntoGroup|KMap::MouseModeRegionSelectionFromIcon|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
 
     vlayTop->addWidget(hbox);
     vlayTop->setStretchFactor(mapPanel, 10);

@@ -105,8 +105,8 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterMode
     QVBoxLayout* vBoxLayout = new QVBoxLayout(this);
 
     d->mapWidget = new KMap::KMapWidget(this);
-    d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
-    d->mapWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
+    d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
+    d->mapWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
     KMap::ItemMarkerTiler* const kmapMarkerModel = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
     d->mapWidget->setBackend("marble");

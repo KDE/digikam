@@ -123,8 +123,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
     d->map                    = new KMap::KMapWidget(mapPanel);
-    d->map->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
-    d->map->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoom);
+    d->map->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
+    d->map->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
     d->map->setEnabledExtraActions(KMap::ExtraActionSticky);
     d->map->setVisibleExtraActions(KMap::ExtraActionSticky);
     vlay2->addWidget(d->map);
