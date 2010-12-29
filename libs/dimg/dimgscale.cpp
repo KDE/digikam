@@ -186,7 +186,7 @@ DImg DImg::smoothScale(const QSize& destSize, Qt::AspectRatioMode aspectRatioMod
     QSize scaleSize = size();
     scaleSize.scale(destSize, aspectRatioMode);
 
-    if (!scaleSize.isValid())
+    if (scaleSize.isEmpty())
     {
         return DImg();
     }
