@@ -119,7 +119,7 @@ DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode)
     QSize newSize(w, h);
     newSize.scale( QSize(dw, dh), aspectRatioMode );
 
-    if (!newSize.isValid())
+    if (newSize.isEmpty())
     {
         return DImg();
     }
