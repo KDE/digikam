@@ -1058,7 +1058,7 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex
         {
             for (int i=0; i<clickedImagesId.count(); ++i)
             {
-                QModelIndex currentIndex = d->imageAlbumModel->indexForImageId(clickedImagesId.at(i));
+                const QModelIndex currentIndex = d->imageFilterModel->indexForImageId(clickedImagesId.at(i));
 
                 if (d->selectionModel->isSelected(currentIndex) != doSelect)
                 {
