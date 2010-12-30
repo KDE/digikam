@@ -70,8 +70,8 @@ public:
     void   updateColorManagement();
     void   setSoftProofingEnabled(bool enabled);
 
-    void   setICCSettings(ICCSettingsContainer* cmSettings);
-    ICCSettingsContainer* getICCSettings();
+    void   setICCSettings(const ICCSettingsContainer& cmSettings);
+    ICCSettingsContainer getICCSettings();
 
     void   setExposureSettings(ExposureSettingsContainer* expoSettings);
     ExposureSettingsContainer* getExposureSettings();

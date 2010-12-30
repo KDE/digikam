@@ -1198,6 +1198,18 @@ bool ImageWindow::saveCurrentVersion()
     return startingSaveCurrentVersion(d->currentUrl());
 }
 
+bool ImageWindow::saveNewVersionAs()
+{
+    prepareImageToSave();
+    return startingSaveNewVersionAs(d->currentUrl());
+}
+
+bool ImageWindow::saveNewVersionInFormat(const QString& format)
+{
+    prepareImageToSave();
+    return startingSaveNewVersionInFormat(d->currentUrl(), format);
+}
+
 KUrl ImageWindow::saveDestinationUrl()
 {
     return d->currentUrl();

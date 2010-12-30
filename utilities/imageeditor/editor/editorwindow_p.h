@@ -96,6 +96,7 @@ public:
         zoomTo100percents(0),
         undoSignalMapper(0),
         redoSignalMapper(0),
+        formatMenuActionMapper(0),
         waitingLoop(0),
         currentWindowModalDialog(0),
         zoomFitToWindowAction(0),
@@ -187,6 +188,7 @@ public:
 
     QSignalMapper*             undoSignalMapper;
     QSignalMapper*             redoSignalMapper;
+    QSignalMapper*             formatMenuActionMapper;
 
     QEventLoop*                waitingLoop;
     QDialog*                   currentWindowModalDialog;
@@ -267,6 +269,7 @@ public:
 
     }
 
+    void plugNewVersionInFormatAction(EditorWindow *q, KActionMenu* menuAction, const QString& text, const QString& format);
 };
 const QString EditorWindow::EditorWindowPriv::configAutoZoomEntry("AutoZoom");
 const QString EditorWindow::EditorWindowPriv::configBackgroundColorEntry("BackgroundColor");

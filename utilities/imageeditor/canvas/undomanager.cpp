@@ -110,7 +110,6 @@ void UndoManager::addAction(UndoAction* action)
     {
         QVariant      originDataBeforeStep = d->dimgiface->getImg()->fileOriginData();
         DImageHistory originHistoryBeforeStep = d->dimgiface->getResolvedInitialHistory();
-        kDebug() << "recording origin" << originDataBeforeStep;
         action->setFileOriginData(originDataBeforeStep, originHistoryBeforeStep);
     }
 
@@ -124,7 +123,6 @@ void UndoManager::addAction(UndoAction* action)
     {
         d->origin++;
     }
-    kDebug() << "addAction: d->origin++" << d->origin;
 }
 
 void UndoManager::undo()
@@ -222,7 +220,6 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
         {
             if (d->undoActions[lastOrigin]->hasFileOriginData())
             {
-                kDebug() << "found last origin at" << lastOrigin;
                 originDataBeforeStep    = d->undoActions[lastOrigin]->fileOriginData();
                 originHistoryBeforeStep = d->undoActions[lastOrigin]->fileOriginResolvedHistory();
                 break;
@@ -279,7 +276,6 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
         action->setFileOriginData(originDataAfterStep, originHistoryAfterStep);
     else
         action->setFileOriginData(QVariant(), DImageHistory());
-    kDebug() << "recording origin to redo action" << action->fileOriginData();
 
     d->undoActions.removeLast();
     d->redoActions << action;
@@ -289,12 +285,10 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
         d->origin = d->undoActions.size() - lastOrigin;
         d->dimgiface->setFileOriginData(originDataBeforeStep);
         d->dimgiface->setResolvedInitialHistory(originHistoryBeforeStep);
-        kDebug() << "setting origin" << originDataBeforeStep << "origin" << d->origin;
     }
     else
     {
         d->origin--;
-        kDebug() << "undo: origin--" << d->origin;
     }
 
 }
@@ -338,7 +332,6 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
         action->setFileOriginData(originDataBeforeStep, originHistoryBeforeStep);
     else
         action->setFileOriginData(QVariant(), DImageHistory());
-    kDebug() << "recording origin to undo action" << action->fileOriginData();
 
     d->redoActions.removeLast();
     d->undoActions << action;
@@ -348,12 +341,10 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
         d->origin = 0;
         d->dimgiface->setFileOriginData(originDataAfterStep);
         d->dimgiface->setResolvedInitialHistory(originHistoryAfterStep);
-        kDebug() << "redo: setting origin" << originDataAfterStep << "origin" << d->origin;
     }
     else
     {
         d->origin++;
-        kDebug() << "redo: origin++" << d->origin;
    }
 }
 

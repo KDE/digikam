@@ -268,9 +268,9 @@ void RawPreview::paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)
 
     QPixmap pixImage;
 
-    ICCSettingsContainer* iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+    ICCSettingsContainer iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
-    if (iccSettings && iccSettings->enableCM && iccSettings->useManagedView)
+    if (iccSettings.enableCM && iccSettings.useManagedView)
     {
         IccManager manager(img);
         IccTransform monitorICCtrans = manager.displayTransform(this);

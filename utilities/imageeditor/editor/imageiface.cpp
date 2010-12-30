@@ -428,9 +428,9 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
         }
 
         QPixmap pixImage;
-        ICCSettingsContainer* iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+        ICCSettingsContainer iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
-        if (iccSettings && iccSettings->enableCM && iccSettings->useManagedView)
+        if (iccSettings.enableCM && iccSettings.useManagedView)
         {
             IccManager manager(d->targetPreviewImage);
             IccTransform monitorICCtrans = manager.displayTransform();

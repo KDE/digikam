@@ -1250,4 +1250,14 @@ bool ShowFoto::saveCurrentVersion()
     return false;
 }
 
+bool ShowFoto::saveNewVersionAs()
+{
+    return false;
+}
+bool ShowFoto::saveNewVersionInFormat(const QString&)
+{
+    return false;
+}
+
+
 }   // namespace ShowFoto

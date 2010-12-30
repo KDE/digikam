@@ -84,6 +84,8 @@ private:
     KUrl saveDestinationUrl();
     bool saveNewVersion();
     bool saveCurrentVersion();
+    bool saveNewVersionAs();
+    bool saveNewVersionInFormat(const QString&);
 
     void saveIsComplete();
     void saveAsIsComplete();

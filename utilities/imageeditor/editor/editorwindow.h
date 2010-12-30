@@ -121,6 +121,8 @@ protected:
     KAction*                 m_saveAsAction;
     KAction*                 m_saveNewVersionAction;
     KAction*                 m_saveCurrentVersionAction;
+    KAction*                 m_saveNewVersionAsAction;
+    KActionMenu*             m_saveNewVersionInFormatAction;
     KAction*                 m_exportAction;
     KAction*                 m_revertAction;
     KAction*                 m_discardChangesAction;
@@ -163,6 +165,8 @@ protected:
     void saveStandardSettings();
     void readStandardSettings();
     void applyStandardSettings();
+    void applyIOSettings();
+    void applyColorManagementSettings();
 
     void setupStandardConnections();
     void setupStandardActions();
@@ -199,7 +203,10 @@ protected:
     bool startingSaveAs(const KUrl& url);
     bool startingSaveCurrentVersion(const KUrl& url);
     bool startingSaveNewVersion(const KUrl& url);
+    bool startingSaveNewVersionAs(const KUrl& url);
+    bool startingSaveNewVersionInFormat(const KUrl& url, const QString& format);
     bool checkPermissions(const KUrl& url);
+    bool checkOverwrite(const KUrl& url);
     bool moveLocalFile(const QString& src, const QString& dest, bool destinationExisted);
     void moveFile();
     void colorManage();
@@ -207,7 +214,6 @@ protected:
 
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
-    ICCSettingsContainer*      cmSettings()       const;
 
     virtual void finishSaving(bool success);
 
@@ -225,14 +231,12 @@ protected:
     virtual void setupConnections()=0;
     virtual void setupActions()=0;
     virtual void setupUserArea()=0;
-    virtual bool saveAs()=0;
-    virtual bool save()=0;
-    virtual bool saveNewVersion()=0;
-    virtual bool saveCurrentVersion()=0;
-    void setOriginAfterSave();
 
+    void setOriginAfterSave();
     virtual VersionManager* versionManager();
-    VersionFileOperation savingVersionFileOperation(const KUrl& url, bool fork);
+    VersionFileOperation saveVersionFileOperation(const KUrl& url, bool fork);
+    VersionFileOperation saveAsVersionFileOperation(const KUrl& url, const KUrl& saveLocation, const QString& format);
+    VersionFileOperation saveInFormatVersionFileOperation(const KUrl& url, const QString& format);
 
     /**
      * Hook method that subclasses must implement to return the destination url
@@ -252,10 +256,13 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotSave();
-    void slotSaveAs();
-    void slotSaveCurrentVersion();
-    void slotSaveNewVersion();
+    virtual bool saveOrSaveAs();
+    virtual bool saveAs()=0;
+    virtual bool save()=0;
+    virtual bool saveNewVersion()=0;
+    virtual bool saveCurrentVersion()=0;
+    virtual bool saveNewVersionAs()=0;
+    virtual bool saveNewVersionInFormat(const QString&)=0;
 
     void slotEditKeys();
 
@@ -345,10 +352,12 @@ private:
 
     void setToolInfoMessage(const QString& txt);
 
-    bool startingSaveVersion(const KUrl& url, bool subversion);
+    bool startingSaveVersion(const KUrl& url, bool subversion, bool saveAs, const QString& format);
 
     void setPreviewModeMask(int mask);
     PreviewToolBar::PreviewMode previewMode();
+
+    bool showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL);
 
     /**
      * Sets up a temp file to save image contents to and updates the saving
@@ -392,11 +401,11 @@ private:
      * @param filter filter selected in the dialog
      * @param targetUrl target url selected for the file to save
      * @param autoFilter filter that indicates automatic format selection
-     * @return true if a valid extension could be found, else false
+     * @return The valid extension which could be found, or a null string
      */
-    bool selectValidSavingFormat(const QString& filter,
-                                 const KUrl& targetUrl,
-                                 const QString& autoFilter);
+    QString selectValidSavingFormat(const QString& filter,
+                                    const KUrl& targetUrl,
+                                    const QString& autoFilter);
 
     void movingSaveFileFinished(bool successful);
 

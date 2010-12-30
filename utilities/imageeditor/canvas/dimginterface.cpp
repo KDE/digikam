@@ -118,7 +118,6 @@ public:
         displayingWidget(0),
         currentFileToSave(0),
         undoMan(0),
-        cmSettings(0),
         expoSettings(0),
         thread(0)
 
@@ -154,7 +153,7 @@ public:
     DImageHistory              resolvedInitialHistory;
     UndoManager*               undoMan;
 
-    ICCSettingsContainer*      cmSettings;
+    ICCSettingsContainer       cmSettings;
 
     ExposureSettingsContainer* expoSettings;
 
@@ -369,12 +368,12 @@ void DImgInterface::resetValues()
     d->undoMan->clear();
 }
 
-void DImgInterface::setICCSettings(ICCSettingsContainer* cmSettings)
+void DImgInterface::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
     d->cmSettings = cmSettings;
 }
 
-ICCSettingsContainer* DImgInterface::getICCSettings()
+ICCSettingsContainer DImgInterface::getICCSettings()
 {
     return d->cmSettings;
 }
@@ -471,7 +470,7 @@ void DImgInterface::updateColorManagement()
 
     if (d->doSoftProofing)
     {
-        d->monitorICCtrans = manager.displaySoftProofingTransform(d->cmSettings->defaultProofProfile, d->displayingWidget);
+        d->monitorICCtrans = manager.displaySoftProofingTransform(d->cmSettings.defaultProofProfile, d->displayingWidget);
     }
     else
     {
@@ -943,7 +942,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     img.convertDepth(32);
     QPainter painter(p);
 
-    if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
+    if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
     {
         QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
@@ -1007,7 +1006,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         }
     }
 
-    if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
+    if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
     {
         QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
@@ -1322,7 +1321,7 @@ QPixmap DImgInterface::convertToPixmap(DImg& img)
 {
     QPixmap pix;
 
-    if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
+    if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
     {
         // dont use d->monitorICCtrans here, because img may have a different embedded profile
         IccManager manager(img);
@@ -1330,7 +1329,7 @@ QPixmap DImgInterface::convertToPixmap(DImg& img)
 
         if (d->doSoftProofing)
         {
-            transform = manager.displaySoftProofingTransform(d->cmSettings->defaultProofProfile, d->displayingWidget);
+            transform = manager.displaySoftProofingTransform(d->cmSettings.defaultProofProfile, d->displayingWidget);
         }
         else
         {

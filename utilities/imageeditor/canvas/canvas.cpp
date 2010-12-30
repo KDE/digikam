@@ -1355,8 +1355,9 @@ void Canvas::setBackgroundColor(const QColor& color)
     viewport()->update();
 }
 
-void Canvas::setICCSettings(ICCSettingsContainer* cmSettings)
+void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
+    ICCSettingsContainer old = d->im->getICCSettings();
     d->im->setICCSettings(cmSettings);
     d->tileCache.clear();
     viewport()->update();

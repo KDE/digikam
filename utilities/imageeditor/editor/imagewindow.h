@@ -95,6 +95,9 @@ private:
     bool saveAs();
     bool saveNewVersion();
     bool saveCurrentVersion();
+    bool saveNewVersionAs();
+    bool saveNewVersionInFormat(const QString& format);
+
     KUrl saveDestinationUrl();
     bool hasChangesToSave();
     bool hasOriginalToRestore();

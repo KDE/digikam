@@ -243,10 +243,7 @@ void EditorToolIface::setupICC()
 
 void EditorToolIface::updateICCSettings()
 {
-    ICCSettingsContainer* cmSettings = d->editor->cmSettings();
-    d->editor->editorStackView()->canvas()->setICCSettings(cmSettings);
     EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
-
     if (tool)
     {
         tool->ICCSettingsChanged();
