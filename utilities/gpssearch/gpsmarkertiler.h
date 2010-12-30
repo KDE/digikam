@@ -112,18 +112,18 @@ public:
     virtual void tileDelete(Tile* const tile);
     virtual void prepareTiles(const KMap::GeoCoordinates& upperLeft,const KMap::GeoCoordinates& lowerRight, int level);
     virtual void regenerateTiles();
-    virtual KMap::AbstractMarkerTiler::Tile* getTile(const KMap::AbstractMarkerTiler::TileIndex& tileIndex, const bool stopIfEmpty = false);
-    virtual int getTileMarkerCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
-    virtual int getTileSelectedCount(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
+    virtual KMap::AbstractMarkerTiler::Tile* getTile(const KMap::TileIndex& tileIndex, const bool stopIfEmpty = false);
+    virtual int getTileMarkerCount(const KMap::TileIndex& tileIndex);
+    virtual int getTileSelectedCount(const KMap::TileIndex& tileIndex);
 
-    virtual QVariant getTileRepresentativeMarker(const KMap::AbstractMarkerTiler::TileIndex& tileIndex, const int sortKey);
+    virtual QVariant getTileRepresentativeMarker(const KMap::TileIndex& tileIndex, const int sortKey);
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey);
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size);
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
-    virtual KMap::KMapGroupState getTileGroupState(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
+    virtual KMap::KMapGroupState getTileGroupState(const KMap::TileIndex& tileIndex);
     virtual KMap::KMapGroupState getGlobalGroupState();
 
-    virtual void onIndicesClicked(const KMap::AbstractMarkerTiler::TileIndex::List& tileIndicesList, const KMap::KMapGroupState& groupSelectionState, KMap::MouseMode currentMouseMode);
+    virtual void onIndicesClicked(const KMap::TileIndex::List& tileIndicesList, const KMap::KMapGroupState& groupSelectionState, KMap::MouseMode currentMouseMode);
 
     virtual void setActive(const bool state);
 
@@ -153,7 +153,7 @@ private Q_SLOTS:
 
 private:
 
-    QList<qlonglong> getTileMarkerIds(const KMap::AbstractMarkerTiler::TileIndex& tileIndex);
+    QList<qlonglong> getTileMarkerIds(const KMap::TileIndex& tileIndex);
     KMap::KMapGroupState getImageState(const qlonglong imageId);
 
     class GPSMarkerTilerPrivate;
