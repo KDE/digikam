@@ -65,6 +65,16 @@ public:
                                    const DImageHistory& initialResolvedHistory,
                                    const DImageHistory& currentHistory);
 
+    VersionFileOperation operationNewVersionInFormat(const VersionFileInfo& loadedFile,
+                                   const QString& format,
+                                   const DImageHistory& initialResolvedHistory,
+                                   const DImageHistory& currentHistory);
+
+    VersionFileOperation operationNewVersionAs(const VersionFileInfo& loadedFile,
+                                               const VersionFileInfo& saveLocation,
+                                               const DImageHistory& initialResolvedHistory,
+                                               const DImageHistory& currentHistory);
+
     virtual QString toplevelDirectory(const QString& path);
 
     virtual QStringList workspaceFileFormats() const;

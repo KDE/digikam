@@ -220,6 +220,9 @@ public:
     void setSaveDirectory();
     void setSaveFormat();
     void setSaveFileName();
+    void setSaveDirectory(const QString& path);
+    void setSaveFormat(const QString& format);
+    void setSaveFileName(const QString& name);
     void initOperation();
     void checkIntermediates();
 
@@ -302,6 +305,12 @@ void VersionNameCreator::setSaveDirectory()
     m_intermediatePath = q->namingScheme()->directory(m_loadedFile.path, m_loadedFile.fileName);
 }
 
+void VersionNameCreator::setSaveDirectory(const QString& path)
+{
+    m_result.path = path;
+    m_intermediatePath = path;
+}
+
 void VersionNameCreator::setSaveFormat()
 {
     m_result.format = m_settings.format;
@@ -313,6 +322,11 @@ void VersionNameCreator::setSaveFormat()
     {
         m_result.format = m_settings.formatForStoringSubversions;
     }*/
+}
+
+void VersionNameCreator::setSaveFormat(const QString& override)
+{
+    m_result.format = override;
 }
 
 void VersionNameCreator::setSaveFileName()
@@ -355,6 +369,13 @@ void VersionNameCreator::setSaveFileName()
             m_version = scheme->incrementedCounter(m_version);
         }
     }
+}
+
+void VersionNameCreator::setSaveFileName(const QString& fileName)
+{
+    m_result.fileName = fileName;
+    m_baseName = fileName.section(QLatin1Char('.'), 0, 0);
+    // m_version remains unknown
 }
 
 void VersionNameCreator::initOperation()
@@ -642,6 +663,40 @@ VersionFileOperation VersionManager::operation(FileNameType request, const Versi
     name.setSaveDirectory();
     name.setSaveFormat();
     name.setSaveFileName();
+    name.initOperation();
+    name.checkIntermediates();
+
+    return name.m_operation;
+}
+
+VersionFileOperation VersionManager::operationNewVersionInFormat(const VersionFileInfo& loadedFile,
+                                                                 const QString& format,
+                                                                 const DImageHistory& initialResolvedHistory,
+                                                                 const DImageHistory& currentHistory)
+{
+    VersionNameCreator name(loadedFile, initialResolvedHistory, currentHistory, this);
+
+    name.fork();
+    name.setSaveDirectory();
+    name.setSaveFormat(format);
+    name.setSaveFileName();
+    name.initOperation();
+    name.checkIntermediates();
+
+    return name.m_operation;
+}
+
+VersionFileOperation VersionManager::operationNewVersionAs(
+        const VersionFileInfo& loadedFile, const VersionFileInfo& saveLocation,
+        const DImageHistory& initialResolvedHistory,
+        const DImageHistory& currentHistory)
+{
+    VersionNameCreator name(loadedFile, initialResolvedHistory, currentHistory, this);
+
+    name.fork();
+    name.setSaveDirectory(saveLocation.path);
+    name.setSaveFormat(saveLocation.format);
+    name.setSaveFileName(saveLocation.fileName);
     name.initOperation();
     name.checkIntermediates();
 
