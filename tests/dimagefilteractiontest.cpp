@@ -34,6 +34,10 @@
 
 #include <qtest_kde.h>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/kexiv2.h>
+
 // Local includes
 
 #include "dimg.h"
@@ -142,10 +146,14 @@ void DImageFilterActionTest::showDiff(const Digikam::DImg& orig, const Digikam::
 
 void DImageFilterActionTest::initTestCase()
 {
+    // initialize kexiv2 before doing any multitasking
+    KExiv2Iface::KExiv2::initializeExiv2();
 }
 
 void DImageFilterActionTest::cleanupTestCase()
 {
+    // clean up the kexiv2 memory:
+    KExiv2Iface::KExiv2::cleanupExiv2();
 }
 
 QString DImageFilterActionTest::originalImage()
