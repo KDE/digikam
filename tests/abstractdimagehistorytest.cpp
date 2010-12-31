@@ -30,6 +30,10 @@
 #include <QFileInfo>
 #include <QTime>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/kexiv2.h>
+
 // Local includes
 
 #include "config-digikam.h"
@@ -193,6 +197,9 @@ QString AbstractDImageHistoryTest::tempFilePath(const QString& purpose) const
 
 void AbstractDImageHistoryTest::initBaseTestCase()
 {
+    // initialize kexiv2 before doing any multitasking
+    KExiv2Iface::KExiv2::initializeExiv2();
+
     ICCSettingsContainer c = IccSettings::instance()->settings();
     c.enableCM = false;
     IccSettings::instance()->setSettings(c);
@@ -213,6 +220,9 @@ void AbstractDImageHistoryTest::cleanupBaseTestCase()
     delete m_im;
     QFile file(m_tempFile);
     file.remove();
+
+    // clean up the kexiv2 memory:
+    KExiv2Iface::KExiv2::cleanupExiv2();
 }
 
 void AbstractDImageHistoryTest::slotImageLoaded(const QString&, bool)
