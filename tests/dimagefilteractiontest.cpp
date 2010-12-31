@@ -156,6 +156,6 @@ QString DImageFilterActionTest::originalImage()
 
 QString DImageFilterActionTest::imagePath()
 {
-    return QString(KDESRCDIR) + "filteractiontestimages";
+    return QString(KDESRCDIR) + "filteractiontestimages/";
 }
 
