@@ -14,5 +14,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 237639 : Wish: All thumbs created in a folder automatically.
 006 ==> 189585 : Thumbnails do not display.
 007 ==> 255852 : digiKam crashed when browsing/rating images.
-008 ==> 
+008 ==> 184635 : Empty menu when right clicking on an image.
+009 ==> 
 
