@@ -567,13 +567,9 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
     QString path = info.filePath();
     d->thumbnailMap.insert(path, index);
 
-//     if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
-//     {
-//         return thumbnail;
-//     }
-
     if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()+2, size.height()+2)))
     {
+        // digikam returns thumbnails with a border around them, but libkmap expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
     }
     else

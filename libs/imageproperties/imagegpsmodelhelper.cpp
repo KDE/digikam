@@ -111,7 +111,8 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
 
     if (d->thumbnailLoadThread->find(currentGPSInfo.url.path(), thumbnail, qMax(size.width(), size.height())))
     {
-        return thumbnail;
+        // digikam returns thumbnails with a border around them, but libkmap expects them without a border
+        return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
     }
     else
     {
