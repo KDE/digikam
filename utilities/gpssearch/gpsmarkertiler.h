@@ -75,35 +75,9 @@ public:
         SortRating        = 2
     };
 
-    class MyTile : public Tile
-    {
-    public:
-        MyTile()
-            : Tile()
-        {
-        }
+    class MyTile;
 
-        QList<qlonglong> imagesId;
-    };
-
-    class GPSImageInfo
-    {
-    public:
-
-        GPSImageInfo()
-            : id(-2),
-              coordinate(),
-              rating(),
-              creationDate()
-        {
-        }
-        ~GPSImageInfo();
-
-        qlonglong            id;
-        KMap::GeoCoordinates coordinate;
-        int                  rating;
-        QDateTime            creationDate;
-    };
+    class GPSImageInfo;
 
     GPSMarkerTiler(QObject* const parent = 0, ImageFilterModel* const imageFilterModel = 0, QItemSelectionModel* const selectionModel = 0);
     virtual ~GPSMarkerTiler();

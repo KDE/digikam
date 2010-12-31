@@ -44,6 +44,36 @@ namespace Digikam
  * @brief Marker model for storing data needed to display markers on the map. The data is retrieved from Digikam's database.
  */
 
+class GPSMarkerTiler::MyTile : public Tile
+{
+public:
+    MyTile()
+        : Tile()
+    {
+    }
+
+    QList<qlonglong> imagesId;
+};
+
+class GPSMarkerTiler::GPSImageInfo
+{
+public:
+
+    GPSImageInfo()
+        : id(-2),
+            coordinate(),
+            rating(),
+            creationDate()
+    {
+    }
+    ~GPSImageInfo();
+
+    qlonglong            id;
+    KMap::GeoCoordinates coordinate;
+    int                  rating;
+    QDateTime            creationDate;
+};
+
 class GPSMarkerTiler::GPSMarkerTilerPrivate
 {
 public:
@@ -666,106 +696,114 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
  */
 void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 {
+    KIO::Job* const currentJob = qobject_cast<KIO::Job*>(job);
+
+    int foundIndex = -1;
+    for (int i=0; i<d->jobs.count(); ++i)
+    {
+        if (currentJob == d->jobs.at(i).kioJob)
+        {
+            foundIndex = i;
+            break;
+        }
+    }
+
+    if (foundIndex<0)
+    {
+        // this should not happen, but ok...
+        return;
+    }
+
     if (job->error())
     {
         kWarning() << "Failed to list images in selected area:" << job->errorString();
         return;
     }
 
-    KIO::Job* currentJob = qobject_cast<KIO::Job*>(job);
     QList<GPSImageInfo> returnedImageInfo;
-
-    int foundIndex = -1;
-
-    for (int i=0; i<d->jobs.count(); ++i)
+    foreach (const GPSMarkerTilerPrivate::EntryFromDatabase& entry, d->jobs.at(foundIndex).dataFromDatabase)
     {
-        if (currentJob == d->jobs.at(i).kioJob)
+        /// @todo What if image coordinates have changed?
+        if (d->imagesHash.contains(entry.id))
         {
-            foundIndex = i;
-
-            foreach (const GPSMarkerTilerPrivate::EntryFromDatabase& entry, d->jobs.at(i).dataFromDatabase)
-            {
-                //TODO: What if image coordinates have changed?
-                if (d->imagesHash.contains(entry.id))
-                {
-                    continue;
-                }
-
-                GPSImageInfo info;
-
-                info.id               = entry.id;
-                info.rating           = entry.rating;
-                info.creationDate     = entry.creationDate;
-                info.coordinate       = entry.coordinate;
-
-                returnedImageInfo << info;
-                d->imagesHash.insert(entry.id, info);
-            }
+            continue;
         }
+
+        GPSImageInfo info;
+
+        info.id               = entry.id;
+        info.rating           = entry.rating;
+        info.creationDate     = entry.creationDate;
+        info.coordinate       = entry.coordinate;
+
+        returnedImageInfo << info;
+        d->imagesHash.insert(entry.id, info);
     }
 
-    if (foundIndex != -1 && !returnedImageInfo.isEmpty())
+    const int wantedLevel = d->jobs.at(foundIndex).level;
+    d->jobs[foundIndex].kioJob->kill();
+    d->jobs[foundIndex].kioJob = 0;
+    d->jobs.removeAt(foundIndex);
+
+    if (returnedImageInfo.isEmpty())
     {
-        int wantedLevel = d->jobs.at(foundIndex).level;
+        return;
+    }
 
-        for (int i=0; i<returnedImageInfo.count(); ++i)
+    for (int i=0; i<returnedImageInfo.count(); ++i)
+    {
+        MyTile* currentTile = static_cast<MyTile*>(rootTile());
+
+        GPSImageInfo currentImageInfo = returnedImageInfo.at(i);
+
+        for (int currentLevel = 0; currentLevel <= wantedLevel+1; ++currentLevel)
         {
-            MyTile* currentTile = static_cast<MyTile*>(rootTile());
+            bool found = false;
 
-            GPSImageInfo currentImageInfo = returnedImageInfo.at(i);
-
-            for (int currentLevel = 0; currentLevel <= wantedLevel+1; ++currentLevel)
+            for (int counter = 0; counter < currentTile->imagesId.count(); ++counter)
             {
-                bool found = false;
-
-                for (int counter = 0; counter < currentTile->imagesId.count(); ++counter)
+                if (currentImageInfo.id == currentTile->imagesId.at(counter))
                 {
-                    if (currentImageInfo.id == currentTile->imagesId.at(counter))
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                {
-                    currentTile->imagesId.append(currentImageInfo.id);
-                }
-
-                if (currentTile->children.isEmpty())
-                {
-                    currentTile->prepareForChildren(KMap::QIntPair(KMap::TileIndex::Tiling,
-                                                    KMap::TileIndex::Tiling));
-                }
-
-                const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
-
-                const int newTileIndex          = markerTileIndex.toIntList().last();
-
-                MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
-
-                if (newTile == 0)
-                {
-                    newTile = static_cast<MyTile*>(tileNew());
-
-                    if (currentLevel == wantedLevel+1)
-                    {
-                        newTile->imagesId.append(currentImageInfo.id);
-                    }
-
-                    currentTile->addChild(newTileIndex, newTile);
-                    currentTile = newTile;
-                }
-                else
-                {
-                    currentTile = newTile;
+                    found = true;
+                    break;
                 }
             }
-        }
 
-        d->jobs[foundIndex].kioJob->kill();
-        d->jobs[foundIndex].kioJob = 0;
-        d->jobs.removeAt(foundIndex);
+            if (!found)
+            {
+                currentTile->imagesId.append(currentImageInfo.id);
+            }
+
+            if (currentTile->children.isEmpty())
+            {
+                currentTile->prepareForChildren(KMap::QIntPair(KMap::TileIndex::Tiling,
+                                                KMap::TileIndex::Tiling));
+            }
+
+            const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
+
+            const int newTileIndex          = markerTileIndex.toIntList().last();
+
+            /// @todo This line sometimes crashes due to newTileIndex=32697, probably caused by an image without coordinates. Be sure to implement checks against images without/with invalid coordinates.
+            MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
+
+            if (newTile == 0)
+            {
+                newTile = static_cast<MyTile*>(tileNew());
+
+                if (currentLevel == wantedLevel+1)
+                {
+                    newTile->imagesId.append(currentImageInfo.id);
+                }
+
+                currentTile->addChild(newTileIndex, newTile);
+                currentTile = newTile;
+            }
+            else
+            {
+                currentTile = newTile;
+            }
+        }
     }
 }
 
