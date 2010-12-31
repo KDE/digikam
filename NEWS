@@ -13,5 +13,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 261015 : digiKam Fingerprinter crashes.
 005 ==> 237639 : Wish: All thumbs created in a folder automatically.
 006 ==> 189585 : Thumbnails do not display.
-007 ==> 
+007 ==> 255852 : digiKam crashed when browsing/rating images.
+008 ==> 
 
