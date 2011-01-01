@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
- * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010, 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,11 +61,20 @@ public:
 
     GPSImageInfo()
         : id(-2),
-            coordinate(),
-            rating(),
-            creationDate()
+          coordinate(),
+          rating(),
+          creationDate()
     {
     }
+
+    GPSImageInfo(const qlonglong p_id, const KMap::GeoCoordinates& p_coordinates, const int p_rating, const QDateTime& p_creationDate)
+        : id(p_id),
+          coordinate(p_coordinates),
+          rating(p_rating),
+          creationDate(p_creationDate)
+    {
+    }
+
     ~GPSImageInfo();
 
     qlonglong            id;
@@ -78,30 +87,21 @@ class GPSMarkerTiler::GPSMarkerTilerPrivate
 {
 public:
 
-    class EntryFromDatabase
-    {
-    public:
-        qlonglong            id;
-        int                  rating;
-        QDateTime            creationDate;
-        KMap::GeoCoordinates coordinate;
-    };
-
     class InternalJobs
     {
     public:
 
         InternalJobs()
-            : dataFromDatabase()
+            : level(0),
+              kioJob(0),
+              dataFromDatabase()
         {
-            kioJob = 0;
-            level = 0;
         }
 
         int                      level;
         KIO::Job*                kioJob;
 
-        QList<EntryFromDatabase> dataFromDatabase;
+        QList<GPSImageInfo> dataFromDatabase;
     };
 
     GPSMarkerTilerPrivate()
@@ -112,9 +112,7 @@ public:
           imageFilterModel(),
           imageAlbumModel(),
           currentRegionSelection(),
-          mapGlobalGroupState(),
-          selectedImagesCoordinates(),
-          modelDataProgStart(false)
+          mapGlobalGroupState()
     {
     }
 
@@ -132,8 +130,6 @@ public:
     QItemSelectionModel*                   selectionModel;
     KMap::GeoCoordinates::Pair             currentRegionSelection;
     KMap::KMapGroupState                   mapGlobalGroupState;
-    QHash<qlonglong, KMap::GeoCoordinates> selectedImagesCoordinates;
-    bool                                   modelDataProgStart;
 };
 
 /**
@@ -406,7 +402,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tile
             {
                 if (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) )
                 {
-                    if (d->selectedImagesCoordinates.contains(currentMarkerInfo.id))
+                    if (getImageState(currentMarkerInfo.id) & KMap::KMapRegionSelectedMask)
                     {
                         if (bestFilteredMarkerInfo.id == -2)
                         {
@@ -438,7 +434,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tile
             {
                 if (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) )
                 {
-                    if (d->selectedImagesCoordinates.contains(currentMarkerInfo.id))
+                    if (getImageState(currentMarkerInfo.id) & KMap::KMapRegionSelectedMask)
                     {
                         if (bestFilteredMarkerInfo.id == -2)
                         {
@@ -661,33 +657,42 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
     QByteArray  di(data);
     QDataStream ds(&di, QIODevice::ReadOnly);
 
-    QList<GPSMarkerTilerPrivate::EntryFromDatabase> newEntries;
+    GPSMarkerTilerPrivate::InternalJobs* internalJob = 0;
+    for (int i=0; i<d->jobs.count(); ++i)
+    {
+        if (job == d->jobs.at(i).kioJob)
+        {
+            /// @todo Is this really safe?
+            internalJob = &d->jobs[i];
+            break;
+        }
+    }
+    if (!internalJob)
+    {
+        return;
+    }
+
+    QList<GPSImageInfo> newEntries;
 
     while (!ds.atEnd())
     {
         ImageListerRecord record(ImageListerRecord::ExtraValueFormat);
         ds >> record;
 
-        GPSMarkerTilerPrivate::EntryFromDatabase entry;
+        if (record.extraValues.count() < 2)
+        {
+            // skip info without coordinates
+            continue;
+        }
+
+        GPSImageInfo entry;
 
         entry.id           = record.imageID;
         entry.rating       = record.rating;
         entry.creationDate = record.creationDate;
+        entry.coordinate.setLatLon(record.extraValues.first().toDouble(), record.extraValues.last().toDouble());
 
-        if (!record.extraValues.count() < 2)
-        {
-            entry.coordinate.setLatLon(record.extraValues.first().toDouble(), record.extraValues.last().toDouble());
-        }
-
-        newEntries << entry;
-    }
-
-    for (int i=0; i<d->jobs.count(); ++i)
-    {
-        if (job == d->jobs.at(i).kioJob)
-        {
-            d->jobs[i].dataFromDatabase << newEntries;
-        }
+        internalJob->dataFromDatabase << entry;
     }
 }
 
@@ -717,30 +722,13 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     if (job->error())
     {
         kWarning() << "Failed to list images in selected area:" << job->errorString();
-        return;
     }
 
-    QList<GPSImageInfo> returnedImageInfo;
-    foreach (const GPSMarkerTilerPrivate::EntryFromDatabase& entry, d->jobs.at(foundIndex).dataFromDatabase)
-    {
-        /// @todo What if image coordinates have changed?
-        if (d->imagesHash.contains(entry.id))
-        {
-            continue;
-        }
-
-        GPSImageInfo info;
-
-        info.id               = entry.id;
-        info.rating           = entry.rating;
-        info.creationDate     = entry.creationDate;
-        info.coordinate       = entry.coordinate;
-
-        returnedImageInfo << info;
-        d->imagesHash.insert(entry.id, info);
-    }
-
+    // get the results from the job:
+    const QList<GPSImageInfo> returnedImageInfo = d->jobs.at(foundIndex).dataFromDatabase;
     const int wantedLevel = d->jobs.at(foundIndex).level;
+
+    // remove the finished job
     d->jobs[foundIndex].kioJob->kill();
     d->jobs[foundIndex].kioJob = 0;
     d->jobs.removeAt(foundIndex);
@@ -752,24 +740,20 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
     for (int i=0; i<returnedImageInfo.count(); ++i)
     {
+        GPSImageInfo currentImageInfo = returnedImageInfo.at(i);
+        if (!currentImageInfo.coordinate.hasCoordinates())
+        {
+            continue;
+        }
+
         MyTile* currentTile = static_cast<MyTile*>(rootTile());
 
-        GPSImageInfo currentImageInfo = returnedImageInfo.at(i);
+        d->imagesHash.insert(currentImageInfo.id, currentImageInfo);
 
         for (int currentLevel = 0; currentLevel <= wantedLevel+1; ++currentLevel)
         {
-            bool found = false;
-
-            for (int counter = 0; counter < currentTile->imagesId.count(); ++counter)
-            {
-                if (currentImageInfo.id == currentTile->imagesId.at(counter))
-                {
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found)
+            const bool foundImageIdInTile = currentTile->imagesId.contains(currentImageInfo.id);
+            if (!foundImageIdInTile)
             {
                 currentTile->imagesId.append(currentImageInfo.id);
             }
@@ -782,7 +766,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
             const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
 
-            const int newTileIndex          = markerTileIndex.toIntList().last();
+            const int newTileIndex = markerTileIndex.toIntList().last();
 
             /// @todo This line sometimes crashes due to newTileIndex=32697, probably caused by an image without coordinates. Be sure to implement checks against images without/with invalid coordinates.
             MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
@@ -871,7 +855,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                 GPSImageInfo oldInfo = d->imagesHash.value(id);
                 KMap::GeoCoordinates oldCoordinates = oldInfo.coordinate;
 
-                GPSImageInfo currentImageInfo = gpsData(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
+                GPSImageInfo currentImageInfo(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
                 d->imagesHash.insert(id, currentImageInfo);
 
                 KMap::TileIndex oldTileIndex = KMap::TileIndex::fromCoordinates(oldCoordinates, KMap::TileIndex::MaxLevel);
@@ -977,7 +961,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             {
                 // code that adds the image
 
-                GPSImageInfo currentImageInfo = gpsData(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
+                GPSImageInfo currentImageInfo(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
                 d->imagesHash.insert(id, currentImageInfo);
 
                 MyTile* currentTile = static_cast<MyTile*>(rootTile());
@@ -1020,34 +1004,12 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
     }
 }
 
-GPSMarkerTiler::GPSImageInfo GPSMarkerTiler::gpsData(const qlonglong id, const KMap::GeoCoordinates& coordinates, const int rating, const QDateTime& creationDate)
-{
-    /// @todo This function could be a constructor of GPSImageInfo?
-    GPSImageInfo currentImageInfo;
-    currentImageInfo.id           = id;
-    currentImageInfo.coordinate   = coordinates;
-    currentImageInfo.rating       = rating;
-    currentImageInfo.creationDate = creationDate;
-    return currentImageInfo;
-}
-
 void GPSMarkerTiler::slotNewModelData(const QList<ImageInfo>& infos)
 {
-    if (!d->modelDataProgStart)
-    {
-        d->modelDataProgStart = true;
-        emit signalClearImages();
-        return;
-    }
-
-    if (d->activeState)
-    {
-        for (int i=0; i<infos.length(); ++i)
-        {
-            qlonglong currentImageId = infos.at(i).id();
-            d->selectedImagesCoordinates.insert(currentImageId, d->imagesHash.value(currentImageId).coordinate);
-        }
-    }
+    // We do not actually store the data from the model, we just want
+    // to know that something was changed.
+    /// @todo Also monitor removed, reset, etc. signals
+    Q_UNUSED(infos);
 
     emit(signalTilesOrSelectionChanged());
 }
@@ -1071,8 +1033,6 @@ void GPSMarkerTiler::setRegionSelection(const KMap::GeoCoordinates::Pair& sel)
 void GPSMarkerTiler::removeCurrentRegionSelection()
 {
     d->currentRegionSelection.first.clear();
-
-    d->selectedImagesCoordinates.clear();
 
     d->mapGlobalGroupState&= ~KMap::KMapRegionSelectedMask;
 
@@ -1142,7 +1102,8 @@ KMap::KMapGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
     // is the image inside the region selection?
     if (d->mapGlobalGroupState&KMap::KMapRegionSelectedMask)
     {
-        if (d->selectedImagesCoordinates.contains(imageId))
+        const QModelIndex imageAlbumModelIndex = d->imageAlbumModel->indexForImageId(imageId);
+        if (imageAlbumModelIndex.isValid())
         {
             imageState|= KMap::KMapRegionSelectedAll;
         }
