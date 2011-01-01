@@ -60,7 +60,7 @@ public:
                   ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel);
     ~GPSSearchView();
 
-    void setActive(bool val);
+    void setActive(bool state);
 
     void changeAlbumFromHistory(SAlbum* album);
 
@@ -70,9 +70,6 @@ public:
 
 public Q_SLOTS:
 
-    void slotDigikamViewNoCurrentItem();
-    void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext,
-                                      const ImageInfoList& allImages);
     void slotRefreshMap();
     void slotClearImages();
 
@@ -92,13 +89,11 @@ private Q_SLOTS:
 
     void slotRegionSelectionChanged();
     void slotRemoveCurrentFilter();
-    void slotMapSelectedItems(const GPSInfoList& gpsList);
     void slotMapSoloItems(const QList<qlonglong>& idList);
     void slotSortOptionTriggered();
     
 Q_SIGNALS:
 
-    void signalMapSelectedItems(const KUrl::List url);
     void signalMapSoloItems(const QList<qlonglong>& idList, const QString& id);
 
 private:

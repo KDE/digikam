@@ -1033,9 +1033,6 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* parent, SearchModel* sea
 
     layout->addWidget(d->gpsSearchView);
 
-    connect(d->gpsSearchView, SIGNAL(signalMapSelectedItems(const KUrl::List)),
-            this, SIGNAL(signalMapSelectedItems(const KUrl::List&)));
-
     connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)),
             this, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)));
 }
@@ -1077,16 +1074,6 @@ QPixmap GPSSearchSideBarWidget::getIcon()
 QString GPSSearchSideBarWidget::getCaption()
 {
     return i18n("Map Searches");
-}
-
-void GPSSearchSideBarWidget::slotDigikamViewNoCurrentItem()
-{
-    d->gpsSearchView->slotDigikamViewNoCurrentItem();
-}
-
-void GPSSearchSideBarWidget::slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList& allImages)
-{
-    d->gpsSearchView->slotDigikamViewImageSelected(selectedImage, hasPrevious, hasNext, allImages);
 }
 
 // -----------------------------------------------------------------------------

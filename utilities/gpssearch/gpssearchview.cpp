@@ -317,32 +317,28 @@ void GPSSearchView::doSaveState()
 /**
  * @brief Sets the widget active or inactive.
  *
- * This function is called when the GPSSearch widget is switched with another widget.
+ * Called when the GPSSearch tab becomes the current/not current tab.
  *
- * @param val When true, the widget is enabled.
+ * @param state When true, the widget is enabled.
  */
-void GPSSearchView::setActive(bool val)
+void GPSSearchView::setActive(bool state)
 {
-    /// @todo Review this code
-
-    //TODO: when val == false, and a selection exists, remove the current selection
-    if (!val)
+    if (!state)
     {
-        // make sure we reset the custom filters set by the MarkerClusterer:
-        //   emit(signalMapSoloItems(KUrl::List(), "gpssearch"));
+        // make sure we reset the custom filters set by the map:
+        emit(signalMapSoloItems(QList<qlonglong>(), "gpssearch"));
         d->mapSearchWidget->setActive(false);
     }
+    else
+    {
+        d->mapSearchWidget->setActive(true);
 
-    if (val && d->searchTreeView->currentAlbum())
-    {
-        d->mapSearchWidget->setActive(true);
-        //    AlbumManager::instance()->setCurrentAlbum(
-        //                    d->searchTreeView->currentAlbum());
-        slotClearImages();
-    }
-    else if (val)
-    {
-        d->mapSearchWidget->setActive(true);
+        if (d->searchTreeView->currentAlbum())
+        {
+           AlbumManager::instance()->setCurrentAlbum(
+                           d->searchTreeView->currentAlbum());
+        }
+
         slotClearImages();
     }
 }
@@ -563,35 +559,6 @@ void GPSSearchView::slotCheckNameEditGPSConditions()
         d->nameEdit->setEnabled(false);
         d->saveBtn->setEnabled(false);
     }
-}
-
-/**
- * @brief Slot which gets called when no item is selected in the icon view
- */
-void GPSSearchView::slotDigikamViewNoCurrentItem()
-{
-    //    d->gpsSearchWidget->slotSetSelectedImages(GPSInfoList());
-}
-
-/**
- * @brief Slot which gets called when the user selects images in the icon view
- * @param selectedImage List of selected images
- */
-void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext,
-        const ImageInfoList& allImages)
-{
-    Q_UNUSED(selectedImage)
-    Q_UNUSED(hasPrevious)
-    Q_UNUSED(hasNext)
-    Q_UNUSED(allImages)
-}
-
-/**
- * @brief Slot which gets called when the user selected items on the map
- * @param gpsList List of GPSInfos of selected items
- */
-void GPSSearchView::slotMapSelectedItems(const GPSInfoList& /*gpsList*/)
-{
 }
 
 /**

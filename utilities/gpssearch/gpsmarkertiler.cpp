@@ -718,6 +718,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
             const int newTileIndex = markerTileIndex.toIntList().last();
 
             /// @todo This line sometimes crashes due to newTileIndex=32697, probably caused by an image without coordinates. Be sure to implement checks against images without/with invalid coordinates.
+            kDebug()<<currentLevel<<currentImageInfo.coordinate<<markerTileIndex<<newTileIndex;
             MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
 
             if (newTile == 0)
