@@ -415,7 +415,12 @@ bool GPSMarkerTiler::isBetterRepresentativeMarker(const GPSMarkerTiler::GPSImage
             return newHasRating;
         }
 
-        return oldMarker.rating < newMarker.rating;
+        if ( (oldHasRating && newHasRating) && (oldMarker.rating != newMarker.rating) )
+        {
+            return oldMarker.rating < newMarker.rating;
+        }
+
+        // ratings are equal or both have no rating, therefore fall through to the next level
     }
 
     // finally, decide by date:
@@ -426,31 +431,34 @@ bool GPSMarkerTiler::isBetterRepresentativeMarker(const GPSMarkerTiler::GPSImage
         return newHasDate;
     }
 
-    // if both markers have no valid creation date, sort by the image id
-    if (!oldHasDate && !newHasDate)
+    if (oldHasDate && newHasDate)
     {
-        return oldMarker.id > newMarker.id;
+        if (oldMarker.creationDate != newMarker.creationDate)
+        {
+            if (sortKey & SortOldestFirst)
+            {
+                return oldMarker.creationDate > newMarker.creationDate;
+            }
+            else
+            {
+                return oldMarker.creationDate < newMarker.creationDate;
+            }
+        }
     }
 
-    if (sortKey & SortYoungestFirst)
-    {
-        return oldMarker.creationDate > newMarker.creationDate;
-    }
-    else
-    {
-        return oldMarker.creationDate < newMarker.creationDate;
-    }
+    // last resort: use the image id for reproducibility
+    return oldMarker.id > newMarker.id;
 }
 
 /**
- @brief This function finds the best representative marker from a group of markers. This is needed to display a thumbnail for a marker group.
- * @param indices A list containing markers.
- * @param sortKey Sets the criteria for selecting the representative thumbnail. When sortKey == 0 the most youngest thumbnail is chosen, when sortKey == 1 the most oldest thumbnail is chosen and when sortKey == 2 the thumbnail with the highest rating is chosen(if 2 thumbnails have the same rating, the youngest one is chosen).
- * @return Returns the index of the marker.
+ @brief This function finds the best representative marker from a tile of markers.
+ * @param tileIndex Index of the tile from which the best marker should be found.
+ * @param sortKey Sets the criteria for selecting the representative thumbnail, a combination of the SortOptions bits.
+ * @return Returns the internally used index of the marker.
  */
 QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tileIndex, const int sortKey)
 {
-    MyTile* tile = static_cast<MyTile*>(getTile(tileIndex, true));
+    MyTile* const tile = static_cast<MyTile*>(getTile(tileIndex, true));
     if (!tile)
     {
         return QVariant();
@@ -482,10 +490,10 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tile
 }
 
 /**
- * @brief This function finds the best representative marker from a group of markers. This is needed to display a thumbnail for a marker group.
- * @param indices A list containing markers.
- * @param sortKey Sets the criteria for selecting the representative thumbnail. When sortKey == 0 the most youngest thumbnail is chosen, when sortKey == 1 the most oldest thumbnail is chosen and when sortKey == 2 the thumbnail with the highest rating is chosen(if 2 thumbnails have the same rating, the youngest one is chosen).
- * @return Returns the index of the marker.
+ @brief This function finds the best representative marker from a group of markers. This is needed to display a thumbnail for a marker group.
+ * @param indices A list containing markers, obtained by getTileRepresentativeMarker.
+ * @param sortKey Sets the criteria for selecting the representative thumbnail, a combination of the SortOptions bits.
+ * @return Returns the internally used index of the marker.
  */
 QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey)
 {

@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010, 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,8 +73,6 @@ public Q_SLOTS:
     void slotDigikamViewNoCurrentItem();
     void slotDigikamViewImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext,
                                       const ImageInfoList& allImages);
-    void slotRemoveCurrentFilter();
-    void slotSortOptionTriggered(QAction* );
     void slotRefreshMap();
     void slotClearImages();
 
@@ -93,10 +91,11 @@ private Q_SLOTS:
     void slotCheckNameEditGPSConditions();
 
     void slotRegionSelectionChanged();
-
+    void slotRemoveCurrentFilter();
     void slotMapSelectedItems(const GPSInfoList& gpsList);
     void slotMapSoloItems(const QList<qlonglong>& idList);
-
+    void slotSortOptionTriggered();
+    
 Q_SIGNALS:
 
     void signalMapSelectedItems(const KUrl::List url);

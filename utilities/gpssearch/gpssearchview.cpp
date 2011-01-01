@@ -74,6 +74,7 @@ public:
         imageFilterModel(0),
         selectionModel(0),
         searchModel(0),
+        sortOrder(GPSMarkerTiler::SortYoungestFirst),
         sortActionOldestFirst(0),
         sortActionYoungestFirst(0),
         sortActionRating(0)
@@ -93,6 +94,7 @@ public:
     ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     SearchModel*                searchModel;
+    GPSMarkerTiler::SortOptions sortOrder;
     KAction*                    sortActionOldestFirst;
     KAction*                    sortActionYoungestFirst;
     KAction*                    sortActionRating;
@@ -143,8 +145,9 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     sortMenu->setTitle(i18n("Sorting"));
     QActionGroup* const sortOrderExclusive = new QActionGroup(sortMenu);
     sortOrderExclusive->setExclusive(true);
+
     connect(sortOrderExclusive, SIGNAL(triggered(QAction*)),
-            this, SLOT(slotSortOptionTriggered(QAction*)));
+            this, SLOT(slotSortOptionTriggered()));
 
     d->sortActionOldestFirst = new KAction(i18n("Show oldest first"), sortOrderExclusive);
     d->sortActionOldestFirst->setCheckable(true);
@@ -154,9 +157,12 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->sortActionYoungestFirst->setCheckable(true);
     sortMenu->addAction(d->sortActionYoungestFirst);
 
-    d->sortActionRating = new KAction(i18n("Sort by rating"), sortOrderExclusive);
+    d->sortActionRating = new KAction(i18n("Sort by rating"), this);
     d->sortActionRating->setCheckable(true);
     sortMenu->addAction(d->sortActionRating);
+
+    connect(d->sortActionRating, SIGNAL(triggered(bool)),
+            this, SLOT(slotSortOptionTriggered()));
 
     d->mapSearchWidget->setSortOptionsMenu(sortMenu);
 
@@ -277,6 +283,12 @@ void GPSSearchView::doLoadState()
         }
     }
 
+    d->sortOrder = GPSMarkerTiler::SortOptions(group.readEntry("Sort Order", int(GPSMarkerTiler::SortYoungestFirst)));
+    d->mapSearchWidget->setSortKey(d->sortOrder);
+    d->sortActionRating->setChecked(d->sortOrder & GPSMarkerTiler::SortRating);
+    d->sortActionOldestFirst->setChecked(d->sortOrder & GPSMarkerTiler::SortOldestFirst);
+    d->sortActionYoungestFirst->setChecked(!(d->sortOrder & GPSMarkerTiler::SortOldestFirst));
+
     const KConfigGroup groupMapWidget = KConfigGroup(&group, "GPSSearch Map Widget");
 
     d->mapSearchWidget->readSettingsFromGroup(&groupMapWidget);
@@ -293,6 +305,7 @@ void GPSSearchView::doSaveState()
     KConfigGroup group = getConfigGroup();
 
     group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
+    group.writeEntry("Sort Order", int(d->sortOrder));
 
     KConfigGroup groupMapWidget = KConfigGroup(&group, "GPSSearch Map Widget");
     d->mapSearchWidget->saveSettingsToGroup(&groupMapWidget);
@@ -584,26 +597,21 @@ void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
     emit(signalMapSoloItems(idList, "gpssearch"));
 }
 
-void GPSSearchView::slotSortOptionTriggered(QAction* action)
+void GPSSearchView::slotSortOptionTriggered()
 {
-    Q_UNUSED(action)
-
-    /// @todo This should rather be youngest/oldest | rating
     int newSortKey = GPSMarkerTiler::SortYoungestFirst;
 
-    if (d->sortActionYoungestFirst->isChecked())
-    {
-        newSortKey = GPSMarkerTiler::SortYoungestFirst;
-    }
-    else if (d->sortActionOldestFirst->isChecked())
+    if (d->sortActionOldestFirst->isChecked())
     {
         newSortKey = GPSMarkerTiler::SortOldestFirst;
     }
-    else
+
+    if (d->sortActionRating->isChecked())
     {
-        newSortKey = GPSMarkerTiler::SortRating;
+        newSortKey|= GPSMarkerTiler::SortRating;
     }
 
+    d->sortOrder = GPSMarkerTiler::SortOptions(newSortKey);
     d->mapSearchWidget->setSortKey(newSortKey);
 }
 
