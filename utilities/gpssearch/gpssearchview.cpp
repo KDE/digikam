@@ -472,6 +472,12 @@ void GPSSearchView::slotAlbumSelected(Album* a)
         if (list.at(1)!=-200)
         {
             d->mapSearchWidget->setRegionSelection(coordinates);
+            d->gpsMarkerTiler->setRegionSelection(coordinates);
+        }
+        else
+        {
+            d->mapSearchWidget->clearRegionSelection();
+            d->gpsMarkerTiler->removeCurrentRegionSelection();
         }
         slotCheckNameEditGPSConditions();
     }
