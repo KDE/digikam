@@ -426,6 +426,12 @@ bool GPSMarkerTiler::isBetterRepresentativeMarker(const GPSMarkerTiler::GPSImage
         return newHasDate;
     }
 
+    // if both markers have no valid creation date, sort by the image id
+    if (!oldHasDate && !newHasDate)
+    {
+        return oldMarker.id > newMarker.id;
+    }
+
     if (sortKey & SortYoungestFirst)
     {
         return oldMarker.creationDate > newMarker.creationDate;
