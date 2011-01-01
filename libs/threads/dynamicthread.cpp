@@ -53,11 +53,13 @@ public:
         assignedThread   = 0;
         emitSignals      = false;
         inDestruction    = false;
+        threadRequested  = false;
         priority         = QThread::InheritPriority;
         previousPriority = QThread::InheritPriority;
     };
 
     virtual void run();
+    void takingThread();
     bool transitionToRunning();
     void transitionToInactive();
 
@@ -69,6 +71,7 @@ public:
     volatile bool                 running;
     volatile bool                 emitSignals;
     bool                          inDestruction;
+    bool                          threadRequested;
 
     volatile DynamicThread::State state;
 
@@ -190,9 +193,15 @@ void DynamicThread::start(QMutexLocker& locker)
         }
     }
 
-    locker.unlock();
-    ThreadManager::instance()->schedule(d);
-    locker.relock();
+    if (!d->threadRequested)
+    {
+        // avoid issueing multiple thread requests after very fast start/stop/start calls
+        d->threadRequested = true;
+
+        locker.unlock();
+        ThreadManager::instance()->schedule(d);
+        locker.relock();
+    }
 }
 
 void DynamicThread::stop(QMutexLocker& locker)
@@ -214,6 +223,13 @@ void DynamicThread::stop(QMutexLocker& locker)
             break;
         }
     }
+}
+
+void DynamicThread::DynamicThreadPriv::takingThread()
+{
+    QMutexLocker locker(&mutex);
+    // The thread we requested from the pool has now "arrived"
+    threadRequested = false;
 }
 
 bool DynamicThread::DynamicThreadPriv::transitionToRunning()
@@ -250,7 +266,7 @@ bool DynamicThread::DynamicThreadPriv::transitionToRunning()
         case DynamicThread::Running:
         {
             kDebug() << "Transition to Running: Invalid Running state" << q;
-            return true;
+            return false;
         }
         case DynamicThread::Inactive:
         {
@@ -296,6 +312,8 @@ void DynamicThread::DynamicThreadPriv::transitionToInactive()
 
 void DynamicThread::DynamicThreadPriv::run()
 {
+    takingThread();
+
     if (emitSignals)
     {
         emit q->started();
