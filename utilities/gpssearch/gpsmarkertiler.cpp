@@ -372,6 +372,70 @@ int GPSMarkerTiler::getTileSelectedCount(const KMap::TileIndex& tileIndex)
     return 0;
 }
 
+bool GPSMarkerTiler::isBetterRepresentativeMarker(const GPSMarkerTiler::GPSImageInfo& oldMarker, const KMap::KMapGroupState oldState, const GPSMarkerTiler::GPSImageInfo& newMarker, const KMap::KMapGroupState newState, const int sortKey)
+{
+    // the best index for a tile is determined like this:
+    // region selected? -> prefer region selected markers
+    // positive filtering on? - > prefer positively filtered markers
+    // next -> depending on sortkey, prefer better rated ones
+    // next -> depending on sortkey, prefer older or younger ones
+
+    // region selection part:
+    if (d->mapGlobalGroupState & KMap::KMapRegionSelectedMask)
+    {
+        const bool oldIsRegionSelected = oldState & KMap::KMapRegionSelectedMask;
+        const bool newIsRegionSelected = newState & KMap::KMapRegionSelectedMask;
+
+        if (oldIsRegionSelected != newIsRegionSelected)
+        {
+            return newIsRegionSelected;
+        }
+    }
+
+    // positive filtering part:
+    if (d->mapGlobalGroupState & KMap::KMapFilteredPositiveMask)
+    {
+        const bool oldIsFilteredPositive = oldState & KMap::KMapFilteredPositiveMask;
+        const bool newIsFilteredPositive = newState & KMap::KMapFilteredPositiveMask;
+
+        if (oldIsFilteredPositive != newIsFilteredPositive)
+        {
+            return newIsFilteredPositive;
+        }
+    }
+
+    // care about rating, if requested
+    if (sortKey & SortRating)
+    {
+        const bool oldHasRating = oldMarker.rating > 0;
+        const bool newHasRating = newMarker.rating > 0;
+
+        if (oldHasRating != newHasRating)
+        {
+            return newHasRating;
+        }
+
+        return oldMarker.rating < newMarker.rating;
+    }
+
+    // finally, decide by date:
+    const bool oldHasDate = oldMarker.creationDate.isValid();
+    const bool newHasDate = newMarker.creationDate.isValid();
+    if (oldHasDate != newHasDate)
+    {
+        return newHasDate;
+    }
+
+    if (sortKey & SortYoungestFirst)
+    {
+        return oldMarker.creationDate > newMarker.creationDate;
+    }
+    else
+    {
+        return oldMarker.creationDate < newMarker.creationDate;
+    }
+}
+
 /**
  @brief This function finds the best representative marker from a group of markers. This is needed to display a thumbnail for a marker group.
  * @param indices A list containing markers.
@@ -380,134 +444,35 @@ int GPSMarkerTiler::getTileSelectedCount(const KMap::TileIndex& tileIndex)
  */
 QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tileIndex, const int sortKey)
 {
-    MyTile*                                          tile = static_cast<MyTile*>(getTile(tileIndex, true));
-    QPair<KMap::TileIndex, int> bestRep;
-    QVariant                                         v;
-
-    if (tile != NULL)
+    MyTile* tile = static_cast<MyTile*>(getTile(tileIndex, true));
+    if (!tile)
     {
-        if (tile->imagesId.isEmpty())
-        {
-            return QVariant();
-        }
-
-        GPSImageInfo bestMarkerInfo = d->imagesHash.value(tile->imagesId.first());
-        GPSImageInfo bestFilteredMarkerInfo, bestUnFilteredMarkerInfo;
-
-        for (int i=0; i<tile->imagesId.count(); ++i)
-        {
-            GPSImageInfo currentMarkerInfo = d->imagesHash.value(tile->imagesId.at(i));
-
-            if (sortKey == SortYoungestFirst)
-            {
-                if (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) )
-                {
-                    if (getImageState(currentMarkerInfo.id) & KMap::KMapRegionSelectedMask)
-                    {
-                        if (bestFilteredMarkerInfo.id == -2)
-                        {
-                            bestFilteredMarkerInfo = currentMarkerInfo;
-                        }
-                        else if (currentMarkerInfo.creationDate < bestFilteredMarkerInfo.creationDate)
-                        {
-                            bestFilteredMarkerInfo = currentMarkerInfo;
-                        }
-                    }
-                    else
-                    {
-                        if ( bestUnFilteredMarkerInfo.id == -2)
-                        {
-                            bestUnFilteredMarkerInfo = currentMarkerInfo;
-                        }
-                        else if (currentMarkerInfo.creationDate < bestUnFilteredMarkerInfo.creationDate)
-                        {
-                            bestUnFilteredMarkerInfo = currentMarkerInfo;
-                        }
-                    }
-                }
-                else if (currentMarkerInfo.creationDate < bestMarkerInfo.creationDate)
-                {
-                    bestMarkerInfo = currentMarkerInfo;
-                }
-            }
-            else if (sortKey == SortOldestFirst)
-            {
-                if (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) )
-                {
-                    if (getImageState(currentMarkerInfo.id) & KMap::KMapRegionSelectedMask)
-                    {
-                        if (bestFilteredMarkerInfo.id == -2)
-                        {
-                            bestFilteredMarkerInfo = currentMarkerInfo;
-                        }
-                        else if (currentMarkerInfo.creationDate > bestFilteredMarkerInfo.creationDate)
-                        {
-                            bestFilteredMarkerInfo = currentMarkerInfo;
-                        }
-                    }
-                    else
-                    {
-                        if (bestUnFilteredMarkerInfo.id == -2)
-                        {
-                            bestUnFilteredMarkerInfo = currentMarkerInfo;
-                        }
-                        else if (currentMarkerInfo.creationDate > bestUnFilteredMarkerInfo.creationDate)
-                        {
-                            bestUnFilteredMarkerInfo = currentMarkerInfo;
-                        }
-                    }
-                }
-                else if (currentMarkerInfo.creationDate > bestMarkerInfo.creationDate)
-                {
-                    bestMarkerInfo = currentMarkerInfo;
-                }
-            }
-            else
-            {
-                if (currentMarkerInfo.rating > bestMarkerInfo.rating)
-                {
-                    bestMarkerInfo = currentMarkerInfo;
-                }
-                else if (currentMarkerInfo.rating == bestMarkerInfo.rating)
-                {
-                    if (currentMarkerInfo.creationDate < bestMarkerInfo.creationDate)
-                    {
-                        bestMarkerInfo = currentMarkerInfo;
-                    }
-                }
-            }
-        }
-
-        bestRep.first                              = tileIndex;
-
-        if (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) )
-        {
-            if (bestFilteredMarkerInfo.id != -2)
-            {
-                bestRep.second = bestFilteredMarkerInfo.id;
-            }
-            else if (bestUnFilteredMarkerInfo.id != -2)
-            {
-                bestRep.second = bestUnFilteredMarkerInfo.id;
-            }
-            else
-            {
-                return QVariant();
-            }
-        }
-        else
-        {
-            bestRep.second                             = bestMarkerInfo.id;
-        }
-
-        const QPair<KMap::TileIndex, int> returnedMarker = bestRep;
-
-        v.setValue(bestRep);
-
-        return v;
+        return QVariant();
     }
 
-    return QVariant();
+    if (tile->imagesId.isEmpty())
+    {
+        return QVariant();
+    }
+
+    GPSImageInfo bestMarkerInfo = d->imagesHash.value(tile->imagesId.first());
+    KMap::KMapGroupState bestMarkerGroupState = getImageState(bestMarkerInfo.id);
+
+    for (int i=1; i<tile->imagesId.count(); ++i)
+    {
+        const GPSImageInfo currentMarkerInfo = d->imagesHash.value(tile->imagesId.at(i));
+        const KMap::KMapGroupState currentMarkerGroupState = getImageState(currentMarkerInfo.id);
+
+        if (isBetterRepresentativeMarker(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, sortKey))
+        {
+            bestMarkerInfo = currentMarkerInfo;
+            bestMarkerGroupState = currentMarkerGroupState;
+        }
+    }
+
+    const QPair<KMap::TileIndex, int> returnedMarker(tileIndex, bestMarkerInfo.id);
+
+    return QVariant::fromValue(returnedMarker);
 }
 
 /**
@@ -518,64 +483,34 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tile
  */
 QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey)
 {
-    QVariant              v;
-    QPair<KMap::TileIndex, int> bestRep;
-
-    if (indices.count() == 0)
+    if (indices.isEmpty())
     {
         return QVariant();
     }
 
-    QPair<KMap::TileIndex, int> currentIndex = indices.first().value<QPair<KMap::TileIndex, int> >();
-    bestRep                            = currentIndex;
-    GPSImageInfo bestMarkerInfo        = d->imagesHash.value(currentIndex.second);
-
+    const QPair<KMap::TileIndex, int> firstIndex = indices.first().value<QPair<KMap::TileIndex, int> >();
+    GPSImageInfo bestMarkerInfo = d->imagesHash.value(firstIndex.second);
+    KMap::KMapGroupState bestMarkerGroupState = getImageState(firstIndex.second);
+    KMap::TileIndex bestMarkerTileIndex = firstIndex.first;
+    
     for (int i=1; i<indices.count(); ++i)
     {
-        QPair<KMap::TileIndex, int> currentIndex = indices.at(i).value<QPair<KMap::TileIndex, int> >();
+        const QPair<KMap::TileIndex, int> currentIndex = indices.at(i).value<QPair<KMap::TileIndex, int> >();
 
-        MyTile* tile                   = static_cast<MyTile*>(getTile(currentIndex.first, true));
         GPSImageInfo currentMarkerInfo = d->imagesHash.value(currentIndex.second);
+        KMap::KMapGroupState currentMarkerGroupState = getImageState(currentIndex.second);
 
-        /// @todo ???
-        Q_UNUSED(tile);
-
-        if (sortKey == SortYoungestFirst)
+        if (isBetterRepresentativeMarker(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, sortKey))
         {
-            if (currentMarkerInfo.creationDate < bestMarkerInfo.creationDate)
-            {
-                bestRep        = currentIndex;
-                bestMarkerInfo = currentMarkerInfo;
-            }
-        }
-        else if (sortKey == SortOldestFirst)
-        {
-            if (currentMarkerInfo.creationDate > bestMarkerInfo.creationDate)
-            {
-                bestRep        = currentIndex;
-                bestMarkerInfo = currentMarkerInfo;
-            }
-        }
-        else
-        {
-            if (currentMarkerInfo.rating > bestMarkerInfo.rating)
-            {
-                bestRep        = currentIndex;
-                bestMarkerInfo = currentMarkerInfo;
-            }
-            else if (currentMarkerInfo.rating == bestMarkerInfo.rating)
-            {
-                if (currentMarkerInfo.creationDate < bestMarkerInfo.creationDate)
-                {
-                    bestRep        = currentIndex;
-                    bestMarkerInfo = currentMarkerInfo;
-                }
-            }
+            bestMarkerInfo = currentMarkerInfo;
+            bestMarkerGroupState = currentMarkerGroupState;
+            bestMarkerTileIndex = currentIndex.first;
         }
     }
 
-    v.setValue(bestRep);
-    return QVariant(v);
+    const QPair<KMap::TileIndex, int> returnedMarker(bestMarkerTileIndex, bestMarkerInfo.id);
+
+    return QVariant::fromValue(returnedMarker);
 }
 
 /**
