@@ -15,5 +15,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 189585 : Thumbnails do not display.
 007 ==> 255852 : digiKam crashed when browsing/rating images.
 008 ==> 184635 : Empty menu when right clicking on an image.
-009 ==> 
+009 ==> 261868 : Provide a progress indicator for "rename".
+010 ==> 
 
