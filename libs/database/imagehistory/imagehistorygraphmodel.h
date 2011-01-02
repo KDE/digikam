@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "dragdropimplementations.h"
 #include "imagehistorygraph.h"
 #include "digikam_export.h"
 
@@ -40,7 +41,7 @@ class ImageHistoryGraph;
 class ImageInfo;
 class ImageListModel;
 
-class DIGIKAM_DATABASE_EXPORT ImageHistoryGraphModel : public QAbstractItemModel
+class DIGIKAM_DATABASE_EXPORT ImageHistoryGraphModel : public QAbstractItemModel, public DragDropModelImplementation
 {
     Q_OBJECT
 
@@ -99,6 +100,8 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex& index) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
+
+    DECLARE_MODEL_DRAG_DROP_METHODS
 
     /**
      * Returns an internal image model used for entries representing images.

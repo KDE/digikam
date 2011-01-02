@@ -820,6 +820,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libcommonwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/abstractitemdragdrophandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/buttonicondisabler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
@@ -832,6 +833,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/drubberband.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dzoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
@@ -1198,7 +1200,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagelistmodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodeldragdrophandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagesortsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagethumbnailmodel.cpp
        )

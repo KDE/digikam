@@ -42,6 +42,7 @@
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imagelistmodel.h"
+#include "ditemdelegate.h"
 #include "itemviewtooltip.h"
 #include "tooltipfiller.h"
 
@@ -104,6 +105,7 @@ protected:
 VersionsTreeView::VersionsTreeView(QWidget *parent)
     : QTreeView(parent),
       m_delegate(0),
+      m_dragDropHandler(0),
       m_showToolTip(false),
       m_toolTip(0)
 {
@@ -176,6 +178,33 @@ void VersionsTreeView::mouseMoveEvent(QMouseEvent* event)
     }
 
     m_delegate->mouseMoved(event, indexVisualRect, index);
+}
+
+void VersionsTreeView::setDragDropHandler(AbstractItemDragDropHandler* handler)
+{
+    m_dragDropHandler = handler;
+}
+
+AbstractItemDragDropHandler* VersionsTreeView::dragDropHandler() const
+{
+    return m_dragDropHandler;
+}
+
+QModelIndex VersionsTreeView::mapIndexForDragDrop(const QModelIndex& index) const
+{
+    return index; // no filter model involved
+}
+
+QPixmap VersionsTreeView::pixmapForDrag(const QList<QModelIndex>& indexes) const
+{
+    QStyleOptionViewItem option = viewOptions();
+    option.rect = viewport()->rect();
+    QPixmap pix;
+    if (indexes.count() == 1)
+    {
+        pix = indexes.first().data(Qt::DecorationRole).value<QPixmap>();
+    }
+    return DItemDelegate::makeDragPixmap(option, indexes, pix);
 }
 
 bool VersionsTreeView::viewportEvent(QEvent* event)

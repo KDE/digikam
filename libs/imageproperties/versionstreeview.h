@@ -34,6 +34,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dragdropimplementations.h"
 
 
 namespace Digikam
@@ -42,7 +43,7 @@ namespace Digikam
 class VersionsDelegate;
 class ImageDelegateOverlay;
 
-class VersionsTreeView : public QTreeView
+class VersionsTreeView : public QTreeView, public DragDropViewImplementation
 {
     Q_OBJECT
 
@@ -65,11 +66,20 @@ protected:
     virtual bool viewportEvent(QEvent* event);
     virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
 
-    VersionsDelegate* m_delegate;
-    bool              m_showToolTip;
+    DECLARE_VIEW_DRAG_DROP_METHODS(QTreeView)
+    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
+    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
+    virtual AbstractItemDragDropHandler* dragDropHandler() const;
+    virtual void setDragDropHandler(AbstractItemDragDropHandler* handler);
+
+protected:
 
     class ToolTip;
-    ToolTip*          m_toolTip;
+
+    VersionsDelegate*            m_delegate;
+    AbstractItemDragDropHandler* m_dragDropHandler;
+    bool                         m_showToolTip;
+    ToolTip*                     m_toolTip;
 };
 
 
