@@ -220,7 +220,7 @@ void VersionsDelegate::initStyleOption(QStyleOptionViewItem * option, const QMod
 {
     QStyledItemDelegate::initStyleOption(option, index);
 
-    // Dont show the separator-like focus indicator
+    // Don't show the separator-like focus indicator
     option->state &= ~QStyle::State_HasFocus;
 
     if (!index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())

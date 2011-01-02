@@ -48,7 +48,7 @@ class ImageGPSModelHelper : public KMap::ModelHelper
 
 public:
 
-    ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent = 0);
+    explicit ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent = 0);
     virtual ~ImageGPSModelHelper();
 
     virtual QAbstractItemModel* model() const;

@@ -150,3 +150,4 @@ void ImagePropertiesHistoryTab::disableEntry(bool disable)
 }
 
 } // namespace Digikam
+

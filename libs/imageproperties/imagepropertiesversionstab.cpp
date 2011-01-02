@@ -43,7 +43,6 @@
 
 // Local includes
 
-#include "imagepropertiesversionstab.h"
 #include "imageversionsmodel.h"
 #include "dmetadata.h"
 #include "dimagehistory.h"
