@@ -291,18 +291,19 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
 
     AdvancedRenameListItem* item = 0;
 
-    int itemCount = 0;
+    int itemCount = d->advancedRenameManager->fileList().size();
+    d->singleFileMode = itemCount == 1;
+
     foreach (const QString& file, d->advancedRenameManager->fileList())
     {
         item = new AdvancedRenameListItem(d->listView);
         KUrl url(file);
         item->setImageUrl(url);
-        ++itemCount;
     }
 
     // set current filename if only one image has been added
     // be paranoid, although urls.count() should be the same as itemCount, check for an empty list here
-    if (itemCount == 1 && !urls.isEmpty())
+    if (d->singleFileMode && !urls.isEmpty())
     {
         QFileInfo info(urls.first().toLocalFile());
         d->advancedRenameWidget->setParseString(info.fileName());
@@ -310,8 +311,6 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
         d->advancedRenameWidget->highlightLineEdit(info.completeBaseName());
         d->singleFileModeOldFilename = info.fileName();
     }
-
-    d->singleFileMode = (itemCount <= 1);
 
     enableButton(Ok, checkNewNames());
     initDialog(itemCount);
