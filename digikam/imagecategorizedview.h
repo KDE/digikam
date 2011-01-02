@@ -169,7 +169,7 @@ protected:
     void paintEvent(QPaintEvent* e);
     void selectionChanged(const QItemSelection&, const QItemSelection&);
     void updateGeometries();
-    ImageModelDragDropHandler* dragDropHandler() const;
+    AbstractItemDragDropHandler* dragDropHandler() const;
 
 private Q_SLOTS:
 

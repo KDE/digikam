@@ -320,14 +320,9 @@ QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const Q
 {
     QPixmap icon;
 
-    if (indexes.count() == 1)
+    if (!indexes.isEmpty())
     {
-        QVariant thumbData = indexes.first().data(ImageModel::ThumbnailRole);
-
-        if (!thumbData.isNull())
-        {
-            icon = thumbData.value<QPixmap>();
-        }
+        icon = thumbnailPixmap(indexes.first());
     }
 
     return makeDragPixmap(option, indexes, icon);

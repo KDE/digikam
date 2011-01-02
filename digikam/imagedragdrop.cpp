@@ -52,7 +52,7 @@ namespace Digikam
 {
 
 ImageDragDropHandler::ImageDragDropHandler(ImageModel* model)
-    : ImageModelDragDropHandler(model),
+    : AbstractItemDragDropHandler(model),
       m_readOnly(false)
 {
 }

@@ -21,29 +21,29 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEMODELDRAGDROPHANDLER_H
-#define IMAGEMODELDRAGDROPHANDLER_H
+#ifndef ABSTRACTITEMDRAGDROPHANDLER_H
+#define ABSTRACTITEMDRAGDROPHANDLER_H
 
 // Qt includes
 
 #include <QAbstractItemModel>
-#include <QAbstractItemView>
 
 // Local includes
 
 #include "digikam_export.h"
 
+class QAbstractItemView;
+class QDropEvent;
+
 namespace Digikam
 {
 
-class Album;
-
-class DIGIKAM_DATABASE_EXPORT ImageModelDragDropHandler : public QObject
+class DIGIKAM_EXPORT AbstractItemDragDropHandler : public QObject
 {
 public:
 
-    ImageModelDragDropHandler(QAbstractItemModel* model);
-    virtual ~ImageModelDragDropHandler() {}
+    AbstractItemDragDropHandler(QAbstractItemModel* model);
+    virtual ~AbstractItemDragDropHandler() {}
 
     QAbstractItemModel* model() const;
 
@@ -79,4 +79,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGEMODELDRAGDROPHANDLER_H
+#endif // ABSTRACTITEMDRAGDROPHANDLER_H

@@ -41,7 +41,7 @@
 
 #include "albumsettings.h"
 #include "ditemdelegate.h"
-#include "imagemodeldragdrophandler.h"
+#include "abstractitemdragdrophandler.h"
 #include "itemviewtooltip.h"
 
 namespace Digikam
@@ -62,8 +62,7 @@ public:
         currentMouseEvent(0),
         ensureOneSelectedItem(false),
         ensureInitialSelectedItem(false),
-        hintAtSelectionRow(-1),
-        mimeTypeCutSelection("application/x-kde-cutselection")
+        hintAtSelectionRow(-1)
     {
     }
 
@@ -78,8 +77,6 @@ public:
     bool                  ensureInitialSelectedItem;
     QPersistentModelIndex hintAtSelectionIndex;
     int                   hintAtSelectionRow;
-
-    const QString         mimeTypeCutSelection;
 };
 
 // -------------------------------------------------------------------------------
@@ -819,151 +816,21 @@ bool DCategorizedView::viewportEvent(QEvent* event)
     return DigikamKCategorizedView::viewportEvent(event);
 }
 
-void DCategorizedView::cut()
-{
-    QMimeData* data = model()->mimeData(selectedIndexes());
+/**
+ * cut(), copy(), paste(), dragEnterEvent(), dragMoveEvent(), dropEvent(), startDrag()
+ *  are implemented by DragDropViewImplementation
+ */
 
-    if (data)
-    {
-        encodeIsCutSelection(data, true);
-        kapp->clipboard()->setMimeData(data);
-    }
+QModelIndex DCategorizedView::mapIndexForDragDrop(const QModelIndex& index) const
+{
+    return filterModel()->mapToSource(index);
 }
 
-void DCategorizedView::copy()
+QPixmap DCategorizedView::pixmapForDrag(const QList<QModelIndex>& indexes) const
 {
-    QMimeData* data = model()->mimeData(selectedIndexes());
-
-    if (data)
-    {
-        encodeIsCutSelection(data, false);
-        kapp->clipboard()->setMimeData(data);
-    }
-}
-
-void DCategorizedView::paste()
-{
-    const QMimeData* data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
-
-    if (!data)
-    {
-        return;
-    }
-
-    // We need to have a real (context menu action) or fake (Ctrl+V shortcut) mouse position
-    QPoint eventPos = mapFromGlobal(QCursor::pos());
-
-    if (!rect().contains(eventPos))
-    {
-        eventPos = QPoint(0, 0);
-    }
-
-    bool cutAction = decodeIsCutSelection(data);
-    QDropEvent event(eventPos,
-                     cutAction ? Qt::MoveAction : Qt::CopyAction,
-                     data, Qt::NoButton,
-                     cutAction ? Qt::ShiftModifier : Qt::ControlModifier);
-    QModelIndex index = indexAt(event.pos());
-
-    if (!dragDropHandler()->accepts(&event, index))
-    {
-        return;
-    }
-
-    dragDropHandler()->dropEvent(this, &event, index);
-}
-
-void DCategorizedView::startDrag(Qt::DropActions supportedActions)
-{
-    QModelIndexList indexes = selectedIndexes();
-
-    if (indexes.count() > 0)
-    {
-        QMimeData* data = model()->mimeData(indexes);
-
-        if (!data)
-        {
-            return;
-        }
-
-        QStyleOptionViewItem option = viewOptions();
-        option.rect = viewport()->rect();
-        QPixmap pixmap = d->delegate->pixmapForDrag(option, indexes);
-        QDrag* drag = new QDrag(this);
-        drag->setPixmap(pixmap);
-        drag->setMimeData(data);
-        drag->exec(supportedActions, Qt::IgnoreAction);
-    }
-}
-
-void DCategorizedView::dragEnterEvent(QDragEnterEvent* e)
-{
-    ImageModelDragDropHandler* handler = dragDropHandler();
-
-    if (handler && handler->acceptsMimeData(e->mimeData()))
-    {
-        e->accept();
-    }
-    else
-    {
-        e->ignore();
-    }
-}
-
-void DCategorizedView::dragMoveEvent(QDragMoveEvent* e)
-{
-    DigikamKCategorizedView::dragMoveEvent(e);
-    ImageModelDragDropHandler* handler = dragDropHandler();
-
-    if (handler)
-    {
-        QModelIndex index = indexAt(e->pos());
-        Qt::DropAction action = handler->accepts(e, filterModel()->mapToSource(index));
-
-        if (action == Qt::IgnoreAction)
-        {
-            e->ignore();
-        }
-        else
-        {
-            e->setDropAction(action);
-            e->accept();
-        }
-    }
-}
-
-void DCategorizedView::dropEvent(QDropEvent* e)
-{
-    DigikamKCategorizedView::dropEvent(e);
-    ImageModelDragDropHandler* handler = dragDropHandler();
-
-    if (handler)
-    {
-        QModelIndex index = indexAt(e->pos());
-
-        if (handler->dropEvent(this, e, filterModel()->mapToSource(index)))
-        {
-            e->accept();
-        }
-    }
-}
-
-void DCategorizedView::encodeIsCutSelection(QMimeData* mime, bool cut)
-{
-    const QByteArray cutSelection = cut ? "1" : "0";
-    mime->setData(d->mimeTypeCutSelection, cutSelection);
-}
-
-bool DCategorizedView::decodeIsCutSelection(const QMimeData* mime)
-{
-    QByteArray a = mime->data(d->mimeTypeCutSelection);
-
-    if (a.isEmpty())
-    {
-        return false;
-    }
-
-    return (a.at(0) == '1'); // true if 1
+    QStyleOptionViewItem option = viewOptions();
+    option.rect = viewport()->rect();
+    return d->delegate->pixmapForDrag(option, indexes);
 }
 
 } // namespace Digikam

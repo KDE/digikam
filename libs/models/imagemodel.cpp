@@ -39,7 +39,7 @@
 #include "databasewatch.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
-#include "imagemodeldragdrophandler.h"
+#include "abstractitemdragdrophandler.h"
 
 namespace Digikam
 {
@@ -52,10 +52,7 @@ public:
     {
         preprocessor       = 0;
         keepFilePathCache  = false;
-        itemDrag           = true;
-        itemDrop           = true;
         sendRemovalSignals = false;
-        dragDropHandler    = 0;
         incrementalUpdater = 0;
         refreshing         = false;
         reAdding           = false;
@@ -65,11 +62,6 @@ public:
     ImageInfoList         infos;
     QList<QVariant>       extraValues;
     QHash<qlonglong, int> idHash;
-
-    bool                  itemDrag;
-    bool                  itemDrop;
-    ImageModelDragDropHandler
-    *dragDropHandler;
 
     bool                  keepFilePathCache;
     QHash<QString, qlonglong>
@@ -1041,15 +1033,7 @@ Qt::ItemFlags ImageModel::flags(const QModelIndex& index) const
 
     Qt::ItemFlags f = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
-    if (d->itemDrag)
-    {
-        f |= Qt::ItemIsDragEnabled;
-    }
-
-    if (d->itemDrop)
-    {
-        f |= Qt::ItemIsDropEnabled;
-    }
+    f |= dragDropFlags(index);
 
     return f;
 }
@@ -1062,59 +1046,6 @@ QModelIndex ImageModel::index(int row, int column, const QModelIndex& parent) co
     }
 
     return createIndex(row, 0);
-}
-
-// ------------ Drag and Drop -------------
-
-Qt::DropActions ImageModel::supportedDropActions() const
-{
-    return Qt::CopyAction|Qt::MoveAction;
-}
-
-QStringList ImageModel::mimeTypes() const
-{
-    if (d->dragDropHandler)
-    {
-        return d->dragDropHandler->mimeTypes();
-    }
-
-    return QStringList();
-}
-
-bool ImageModel::dropMimeData(const QMimeData*, Qt::DropAction, int, int, const QModelIndex&)
-{
-    // we require custom solutions
-    return false;
-}
-
-QMimeData* ImageModel::mimeData(const QModelIndexList& indexes) const
-{
-    if (!d->dragDropHandler)
-    {
-        return 0;
-    }
-
-    return d->dragDropHandler->createMimeData(indexes);
-}
-
-void ImageModel::setEnableDrag(bool enable)
-{
-    d->itemDrag = enable;
-}
-
-void ImageModel::setEnableDrop(bool enable)
-{
-    d->itemDrop = enable;
-}
-
-void ImageModel::setDragDropHandler(ImageModelDragDropHandler* handler)
-{
-    d->dragDropHandler = handler;
-}
-
-ImageModelDragDropHandler* ImageModel::dragDropHandler() const
-{
-    return d->dragDropHandler;
 }
 
 // ------------ Database watch -------------

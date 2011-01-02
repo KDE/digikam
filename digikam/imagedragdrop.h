@@ -31,7 +31,7 @@
 // Local includes
 
 #include "imageinfo.h"
-#include "imagemodeldragdrophandler.h"
+#include "abstractitemdragdrophandler.h"
 #include "imagealbummodel.h"
 
 class KJob;
@@ -39,7 +39,7 @@ class KJob;
 namespace Digikam
 {
 
-class ImageDragDropHandler : public ImageModelDragDropHandler
+class ImageDragDropHandler : public AbstractItemDragDropHandler
 {
     Q_OBJECT
 

@@ -21,11 +21,12 @@
  *
  * ============================================================ */
 
-#include "imagemodeldragdrophandler.h"
+#include "abstractitemdragdrophandler.h"
 
 // Qt includes
 
 #include <QMimeData>
+#include <QStringList>
 
 // Local includes
 
@@ -33,37 +34,37 @@
 namespace Digikam
 {
 
-ImageModelDragDropHandler::ImageModelDragDropHandler(QAbstractItemModel* model)
+AbstractItemDragDropHandler::AbstractItemDragDropHandler(QAbstractItemModel* model)
     : QObject(model), m_model(model)
 {
 }
 
-QAbstractItemModel* ImageModelDragDropHandler::model() const
+QAbstractItemModel* AbstractItemDragDropHandler::model() const
 {
     return m_model;
 }
 
-bool ImageModelDragDropHandler::dropEvent(QAbstractItemView*, const QDropEvent*, const QModelIndex&)
+bool AbstractItemDragDropHandler::dropEvent(QAbstractItemView*, const QDropEvent*, const QModelIndex&)
 {
     return false;
 }
 
-Qt::DropAction ImageModelDragDropHandler::accepts(const QDropEvent*, const QModelIndex&)
+Qt::DropAction AbstractItemDragDropHandler::accepts(const QDropEvent*, const QModelIndex&)
 {
     return Qt::IgnoreAction;
 }
 
-QStringList ImageModelDragDropHandler::mimeTypes() const
+QStringList AbstractItemDragDropHandler::mimeTypes() const
 {
     return QStringList();
 }
 
-QMimeData* ImageModelDragDropHandler::createMimeData(const QList<QModelIndex> &)
+QMimeData* AbstractItemDragDropHandler::createMimeData(const QList<QModelIndex> &)
 {
     return 0;
 }
 
-bool ImageModelDragDropHandler::acceptsMimeData(const QMimeData* mime)
+bool AbstractItemDragDropHandler::acceptsMimeData(const QMimeData* mime)
 {
     QStringList modelTypes = mimeTypes();
 

@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "dragdropimplementations.h"
 #include "imageinfo.h"
 #include "digikam_export.h"
 
@@ -44,10 +45,10 @@ namespace DatabaseFields
 {
 class Set;
 }
-class ImageModelDragDropHandler;
+class AbstractItemDragDropHandler;
 class ImageModelPriv;
 
-class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel
+class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel, public DragDropModelImplementation
 {
     Q_OBJECT
 
@@ -171,20 +172,7 @@ public:
     bool isEmpty() const;
 
     // Drag and Drop
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual QStringList mimeTypes() const;
-    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
-    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
-
-    /// Set a drag drop handler.
-    void setDragDropHandler(ImageModelDragDropHandler* handler);
-    /// Returns the drag drop handler, or 0 if none is installed
-    ImageModelDragDropHandler* dragDropHandler() const;
-
-    /** Switch on drag and drop globally for all items. Default is true.
-     *  For per-item cases reimplement flags(). */
-    void setEnableDrag(bool enable);
-    void setEnableDrop(bool enable);
+    DECLARE_MODEL_DRAG_DROP_METHODS
 
     /**
      * Install an object as a preprocessor for ImageInfos added to this model.

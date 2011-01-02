@@ -46,7 +46,6 @@
 #include "imagecategorydrawer.h"
 #include "imagedelegate.h"
 #include "imagedelegateoverlay.h"
-#include "imagemodeldragdrophandler.h"
 #include "imagethumbnailmodel.h"
 #include "imageselectionoverlay.h"
 #include "itemviewtooltip.h"
@@ -637,7 +636,7 @@ QItemSelectionModel* ImageCategorizedView::getSelectionModel()
     return selectionModel();
 }
 
-ImageModelDragDropHandler* ImageCategorizedView::dragDropHandler() const
+AbstractItemDragDropHandler* ImageCategorizedView::dragDropHandler() const
 {
     return d->model->dragDropHandler();
 }
