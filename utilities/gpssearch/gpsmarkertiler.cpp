@@ -531,7 +531,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
  * @brief This function retrieves the thumbnail for an index.
  * @param index The marker's index.
  * @param size The size of the thumbnail.
- * @return If the thumbnail has been loaded in the ThumbnailLoadThread instance, it is returned. If not, a QPixmap is returned and ThumbnailLoadThread's signal named signalThumbnailLoaded is emited when the thumbnail becomes available.
+ * @return If the thumbnail has been loaded in the ThumbnailLoadThread instance, it is returned. If not, a QPixmap is returned and ThumbnailLoadThread's signal named signalThumbnailLoaded is emitted when the thumbnail becomes available.
  */
 QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size)
 {
@@ -954,12 +954,12 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
     }
 }
 
-void GPSMarkerTiler::slotNewModelData(const QList<ImageInfo>& infos)
+void GPSMarkerTiler::slotNewModelData(const QList<ImageInfo>& infoList)
 {
     // We do not actually store the data from the model, we just want
     // to know that something was changed.
     /// @todo Also monitor removed, reset, etc. signals
-    Q_UNUSED(infos);
+    Q_UNUSED(infoList);
 
     emit(signalTilesOrSelectionChanged());
 }

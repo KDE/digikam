@@ -79,7 +79,7 @@ public:
 
     class GPSImageInfo;
 
-    GPSMarkerTiler(QObject* const parent = 0, ImageFilterModel* const imageFilterModel = 0, QItemSelectionModel* const selectionModel = 0);
+    explicit GPSMarkerTiler(QObject* const parent, ImageFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel);
     virtual ~GPSMarkerTiler();
 
     virtual Tile* tileNew();
@@ -111,7 +111,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotNewModelData(const QList<ImageInfo>& infos);
+    void slotNewModelData(const QList<ImageInfo>& infoList);
 
 private Q_SLOTS:
 
