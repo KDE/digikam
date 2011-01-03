@@ -297,7 +297,7 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::TileIndex& 
 
         if (tile->children.isEmpty())
         {
-            tile->prepareForChildren(KMap::QIntPair(KMap::TileIndex::Tiling, KMap::TileIndex::Tiling));
+            tile->prepareForChildren();
 
             for (int i=0; i<tile->imagesId.count(); ++i)
             {
@@ -712,8 +712,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
             if (currentTile->children.isEmpty())
             {
-                currentTile->prepareForChildren(KMap::QIntPair(KMap::TileIndex::Tiling,
-                                                KMap::TileIndex::Tiling));
+                currentTile->prepareForChildren();
             }
 
             const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
@@ -886,9 +885,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
                             if (currentTileNew->children.isEmpty())
                             {
-                                currentTileNew->prepareForChildren(
-                                        KMap::QIntPair(KMap::TileIndex::Tiling, KMap::TileIndex::Tiling)
-                                    );
+                                currentTileNew->prepareForChildren();
                             }
 
                             const int newTileIndex = newTileIndexList.at(level);
@@ -930,9 +927,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
                     if (currentTile->children.isEmpty())
                     {
-                        currentTile->prepareForChildren(
-                                KMap::QIntPair(KMap::TileIndex::Tiling, KMap::TileIndex::Tiling)
-                            );
+                        currentTile->prepareForChildren();
                     }
 
                     const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
