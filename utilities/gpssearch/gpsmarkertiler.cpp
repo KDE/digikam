@@ -297,8 +297,6 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::TileIndex& 
 
         if (tile->childrenEmpty())
         {
-            tile->prepareForChildren();
-
             for (int i=0; i<tile->imagesId.count(); ++i)
             {
                 int currentImageId = tile->imagesId.at(i);
@@ -710,11 +708,6 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
                 currentTile->imagesId.append(currentImageInfo.id);
             }
 
-            if (currentTile->childrenEmpty())
-            {
-                currentTile->prepareForChildren();
-            }
-
             const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
 
             const int newTileIndex = markerTileIndex.toIntList().last();
@@ -883,11 +876,6 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                                 currentTileNew->imagesId.append(currentImageInfo.id);
                             }
 
-                            if (currentTileNew->childrenEmpty())
-                            {
-                                currentTileNew->prepareForChildren();
-                            }
-
                             const int newTileIndex = newTileIndexList.at(level);
 
                             MyTile* childTileNew = static_cast<MyTile*>(currentTileNew->getChild(newTileIndex));
@@ -923,11 +911,6 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                     if (!found)
                     {
                         currentTile->imagesId.append(currentImageInfo.id);
-                    }
-
-                    if (currentTile->childrenEmpty())
-                    {
-                        currentTile->prepareForChildren();
                     }
 
                     const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, currentLevel);
