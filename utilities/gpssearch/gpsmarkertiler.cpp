@@ -295,7 +295,7 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::TileIndex& 
         const int currentIndex = tileIndex.linearIndex(level);
         MyTile* childTile = 0;
 
-        if (tile->children.isEmpty())
+        if (tile->childrenEmpty())
         {
             tile->prepareForChildren();
 
@@ -306,7 +306,7 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::TileIndex& 
                 const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, level);
                 const int newTileIndex = markerTileIndex.toIntList().last();
 
-                MyTile* newTile = static_cast<MyTile*>(tile->children.at(newTileIndex));
+                MyTile* newTile = static_cast<MyTile*>(tile->getChild(newTileIndex));
 
                 if (newTile == 0)
                 {
@@ -336,7 +336,7 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::TileIndex& 
             //return 0;
         }
 
-        childTile = static_cast<MyTile*>(tile->children.at(currentIndex));
+        childTile = static_cast<MyTile*>(tile->getChild(currentIndex));
 
         if (childTile==0)
         {
@@ -710,7 +710,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
                 currentTile->imagesId.append(currentImageInfo.id);
             }
 
-            if (currentTile->children.isEmpty())
+            if (currentTile->childrenEmpty())
             {
                 currentTile->prepareForChildren();
             }
@@ -721,7 +721,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
             /// @todo This line sometimes crashes due to newTileIndex=32697, probably caused by an image without coordinates. Be sure to implement checks against images without/with invalid coordinates.
 //             kDebug()<<currentLevel<<currentImageInfo.coordinate<<markerTileIndex<<newTileIndex;
-            MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
+            MyTile* newTile = static_cast<MyTile*>(currentTile->getChild(newTileIndex));
 
             if (newTile == 0)
             {
@@ -836,12 +836,12 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                     {
                         const int tileIndex = oldTileIndexList.at(level);
 
-                        if (currentTileOld->children.isEmpty())
+                        if (currentTileOld->childrenEmpty())
                         {
                             break;
                         }
 
-                        MyTile* childTileOld = static_cast<MyTile*>(currentTileOld->children.at(tileIndex));
+                        MyTile* childTileOld = static_cast<MyTile*>(currentTileOld->getChild(tileIndex));
 
                         if (childTileOld == 0)
                         {
@@ -868,7 +868,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
                                 if (childTileListIndex != -1)
                                 {
-                                    currentTileOld->children[childTileListIndex] = 0;
+                                    currentTileOld->clearChild(childTileListIndex);
                                 }
                             }
 
@@ -883,14 +883,14 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                                 currentTileNew->imagesId.append(currentImageInfo.id);
                             }
 
-                            if (currentTileNew->children.isEmpty())
+                            if (currentTileNew->childrenEmpty())
                             {
                                 currentTileNew->prepareForChildren();
                             }
 
                             const int newTileIndex = newTileIndexList.at(level);
 
-                            MyTile* childTileNew = static_cast<MyTile*>(currentTileNew->children.at(newTileIndex));
+                            MyTile* childTileNew = static_cast<MyTile*>(currentTileNew->getChild(newTileIndex));
 
                             if (childTileNew == 0)
                             {
@@ -925,7 +925,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                         currentTile->imagesId.append(currentImageInfo.id);
                     }
 
-                    if (currentTile->children.isEmpty())
+                    if (currentTile->childrenEmpty())
                     {
                         currentTile->prepareForChildren();
                     }
@@ -934,7 +934,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
                     const int newTileIndex          = markerTileIndex.toIntList().last();
 
-                    MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
+                    MyTile* newTile = static_cast<MyTile*>(currentTile->getChild(newTileIndex));
 
                     if (newTile == 0)
                     {
