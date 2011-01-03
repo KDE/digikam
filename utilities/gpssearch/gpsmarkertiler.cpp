@@ -52,6 +52,10 @@ public:
     {
     }
 
+    ~MyTile()
+    {
+    }
+
     QList<qlonglong> imagesId;
 };
 
@@ -75,7 +79,9 @@ public:
     {
     }
 
-    ~GPSImageInfo();
+    ~GPSImageInfo()
+    {
+    }
 
     qlonglong            id;
     KMap::GeoCoordinates coordinate;
@@ -100,24 +106,25 @@ public:
 
         int                      level;
         KIO::Job*                kioJob;
-
         QList<GPSImageInfo> dataFromDatabase;
     };
 
     GPSMarkerTilerPrivate()
-        : mapImagesJob(0),
-          dataFromDatabaseList(),
+        : jobs(),
+          thumbnailLoadThread(0),
+          thumbnailMap(),
+          rectList(),
+          rectLevel(),
           activeState(true),
           imagesHash(),
           imageFilterModel(),
           imageAlbumModel(),
+          selectionModel(),
           currentRegionSelection(),
           mapGlobalGroupState()
     {
     }
 
-    KIO::TransferJob*                      mapImagesJob;
-    QList<QList<QVariant> >                dataFromDatabaseList;
     QList<InternalJobs>                    jobs;
     ThumbnailLoadThread*                   thumbnailLoadThread;
     QHash<QString, QVariant>               thumbnailMap;
@@ -169,10 +176,6 @@ GPSMarkerTiler::~GPSMarkerTiler()
     clear();
 
     delete d;
-}
-
-GPSMarkerTiler::GPSImageInfo::~GPSImageInfo()
-{
 }
 
 void GPSMarkerTiler::regenerateTiles()
@@ -227,7 +230,7 @@ void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft, const K
         {
             if (currentRect.contains(lat2, lng2))
             {
-                lat2 = rectLng1;
+                lat2 = rectLat1;
                 break;
             }
         }
@@ -718,7 +721,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
             const int newTileIndex = markerTileIndex.toIntList().last();
 
             /// @todo This line sometimes crashes due to newTileIndex=32697, probably caused by an image without coordinates. Be sure to implement checks against images without/with invalid coordinates.
-            kDebug()<<currentLevel<<currentImageInfo.coordinate<<markerTileIndex<<newTileIndex;
+//             kDebug()<<currentLevel<<currentImageInfo.coordinate<<markerTileIndex<<newTileIndex;
             MyTile* newTile = static_cast<MyTile*>(currentTile->children.at(newTileIndex));
 
             if (newTile == 0)
