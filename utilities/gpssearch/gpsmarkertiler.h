@@ -127,6 +127,8 @@ private:
     QList<qlonglong> getTileMarkerIds(const KMap::TileIndex& tileIndex);
     KMap::KMapGroupState getImageState(const qlonglong imageId);
     bool isBetterRepresentativeMarker(const GPSImageInfo& oldMarker, const KMap::KMapGroupState oldState, const GPSImageInfo& newMarker, const KMap::KMapGroupState newState, const int sortKey);
+    void removeMarkerFromTileAndChildren(const qlonglong imageId, const KMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile);
+    void addMarkerToTileAndChildren(const qlonglong imageId, const KMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel);
 
     class GPSMarkerTilerPrivate;
     GPSMarkerTilerPrivate* const d;
