@@ -16,5 +16,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 255852 : digiKam crashed when browsing/rating images.
 008 ==> 184635 : Empty menu when right clicking on an image.
 009 ==> 261868 : Provide a progress indicator for "rename".
-010 ==> 
-
+010 ==> 244560 : digiKam crash while viewing photos.
+011 ==> 
