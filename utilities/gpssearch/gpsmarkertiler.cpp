@@ -199,7 +199,7 @@ void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft, const K
     qreal lng1 = upperLeft.lon();
     qreal lat2 = lowerRight.lat();
     qreal lng2 = lowerRight.lon();
-    QRect requestedRect(lat1, lng1, lat2-lat1, lng2-lng1);
+    const QRectF requestedRect(lat1, lng1, lat2-lat1, lng2-lng1);
 
     for (int i=0; i<d->rectList.count(); ++i)
     {
@@ -209,7 +209,7 @@ void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft, const K
         }
 
         qreal rectLat1, rectLng1, rectLat2, rectLng2;
-        QRectF currentRect = d->rectList.at(i);
+        const QRectF currentRect = d->rectList.at(i);
         currentRect.getCoords(&rectLat1, &rectLng1, &rectLat2, &rectLng2);
 
         //do nothing if this rectangle was already requested
@@ -252,7 +252,7 @@ void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft, const K
         }
     }
 
-    QRectF newRect(lat1, lng1, lat2-lat1, lng2-lng1);
+    const QRectF newRect(lat1, lng1, lat2-lat1, lng2-lng1);
     d->rectList.append(newRect);
     d->rectLevel.append(level);
 
