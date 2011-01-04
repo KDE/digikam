@@ -212,6 +212,7 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
             {
                 // do nothing
             }
+
             break;
         }
 

@@ -110,7 +110,7 @@ private Q_SLOTS:
 
 private:
 
-    void initDialog(int count = 1);
+    void initDialog();
     void readSettings();
     void writeSettings();
     bool checkNewNames();

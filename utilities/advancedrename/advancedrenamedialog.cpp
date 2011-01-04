@@ -278,6 +278,11 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 
 void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
 {
+    if (urls.isEmpty())
+    {
+        return;
+    }
+
     d->listView->clear();
     d->advancedRenameManager->reset();
     QList<ParseSettings> files;
@@ -289,39 +294,44 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
     }
     d->advancedRenameManager->addFiles(files, AdvancedRenameManager::SortAscending);
 
-    AdvancedRenameListItem* item = 0;
+    initDialog();
+    slotParseStringChanged(d->advancedRenameWidget->parseString());
+}
 
-    int itemCount = 0;
+void AdvancedRenameDialog::initDialog()
+{
+    int count = d->advancedRenameManager->fileList().size();
+
+    QString title = i18np("Rename", "Rename (%1 images)", count);
+    setWindowTitle(title);
+
+    if (count < 1)
+    {
+        d->listView->clear();
+        return;
+    }
+
+    d->singleFileMode = count == 1;
+
+    AdvancedRenameListItem* item = 0;
     foreach (const QString& file, d->advancedRenameManager->fileList())
     {
         item = new AdvancedRenameListItem(d->listView);
         KUrl url(file);
         item->setImageUrl(url);
-        ++itemCount;
     }
 
     // set current filename if only one image has been added
-    // be paranoid, although urls.count() should be the same as itemCount, check for an empty list here
-    if (itemCount == 1 && !urls.isEmpty())
+    if (d->singleFileMode)
     {
-        QFileInfo info(urls.first().toLocalFile());
+        QFileInfo info(d->advancedRenameManager->fileList().first());
         d->advancedRenameWidget->setParseString(info.fileName());
         d->advancedRenameWidget->focusLineEdit();
         d->advancedRenameWidget->highlightLineEdit(info.completeBaseName());
         d->singleFileModeOldFilename = info.fileName();
     }
 
-    d->singleFileMode = (itemCount <= 1);
-
     enableButton(Ok, checkNewNames());
-    initDialog(itemCount);
-    slotParseStringChanged(d->advancedRenameWidget->parseString());
-}
-
-void AdvancedRenameDialog::initDialog(int count)
-{
-    QString title = i18np("Rename", "Rename (%1 images)", count);
-    setWindowTitle(title);
 }
 
 NewNamesList AdvancedRenameDialog::newNames()
