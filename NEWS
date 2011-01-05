@@ -19,4 +19,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 244560 : digiKam crash while viewing photos.
 011 ==> 261582 : Default filename for renamed imports: remove the colon character.
 012 ==> 262065 : Linking issue with Marble library.
-013 ==> 
+013 ==> 261879 : Ubuntu unity compatibility bugs: export menu disappeared.
+014 ==> 
+
