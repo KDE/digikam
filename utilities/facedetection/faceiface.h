@@ -6,8 +6,8 @@
  * Date        : 2010-08-08
  * Description : libkface interface, also allowing easy manipulation of face tags
  *
- * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -77,9 +77,9 @@ public:
     /**
      * Returns a boolean value indicating whether the given tagId represents a person
      */
-    bool         isPerson(int tagId) const;
+    bool                isPerson(int tagId) const;
 
-    bool         isTheUnknownPerson(int tagId) const;
+    bool                isTheUnknownPerson(int tagId) const;
 
     /**
      * A method to return a list of all person tags in the DB
@@ -265,7 +265,7 @@ public:
      * If appropriate, the tag is also removed.
      */
     void                removeFace(const DatabaseFace& face);
-    void                removeFaces(const QList<DatabaseFace> &faces);
+    void                removeFaces(const QList<DatabaseFace>& faces);
 
     /**
      * Unassigns all face tags from the image and sets it's scanned property to false.

@@ -6,8 +6,8 @@
  * Date        : 2010-08-08
  * Description : database interface, also allowing easy manipulation of face tags
  *
- * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -87,7 +87,7 @@ public:
 
 private:
 
-    FaceIface* const     q;
+    FaceIface* const q;
 };
 
 // --- Private methods, face tag utility methods --------------------------------------------------------
@@ -125,7 +125,7 @@ void FaceIface::FaceIfacePriv::setupTags()
     // Unknown people tag
     if (!unknownPeopleTagId())
     {
-        int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(tagPath(i18n("Unknown"), peopleTagId()));
+        int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(tagPath(i18n("Unknowns"), peopleTagId()));
         TagProperties props(unknownPeopleTagId);
         props.setProperty(TagPropertyName::person(), QString()); // no name associated
         props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property
@@ -164,7 +164,7 @@ void FaceIface::FaceIfacePriv::makeFaceTag(int tagId, const QString& fullName) c
 }
 
 int FaceIface::FaceIfacePriv::tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName,
-        bool convert, bool create) const
+                                         bool convert, bool create) const
 {
     if (name.isEmpty() && givenFullName.isEmpty() && !tagId)
     {
@@ -636,7 +636,8 @@ void FaceIface::storeThumbnails(ThumbnailLoadThread* thread, const QString& file
 
 // --- Face detection: merging results ------------------------------------------------------------------------------------
 
-QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList)
+QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid, 
+                                                       const QList<KFaceIface::Face>& faceList)
 {
     QList<DatabaseFace> newFaces;
 
