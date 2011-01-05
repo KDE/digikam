@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 260619 : digiKam crash when raw format is being converted.
 008 ==> 261140 : FindKdcraw.cmake is installed both by kdelibs and kdegraphics.
 009 ==> 261946 : Unable to compile beta1 of digikam.
-010 ==> 
+010 ==> 262172 : The unknown tag should be plural.
+011 ==> 
 
 
 
