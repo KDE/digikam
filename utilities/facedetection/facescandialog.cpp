@@ -6,7 +6,7 @@
  * Date        : 2010-10-09
  * Description : Dialog to choose options for face scanning
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -316,7 +316,7 @@ void FaceScanDialog::setupUi()
 
     QLabel* introduction = new QLabel;
     introduction->setText(i18nc("@info",
-                                "DigiKam can search for faces in your photos.<nl/> "
+                                "digiKam can search for faces in your photos.<nl/> "
                                 "When you have identified your friends on a number of photos,<nl/> "
                                 "it can also recognize the people shown on your photos."));
     //introduction->setWordWrap(true);
