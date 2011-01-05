@@ -125,7 +125,7 @@ void FaceIface::FaceIfacePriv::setupTags()
     // Unknown people tag
     if (!unknownPeopleTagId())
     {
-        int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(tagPath(i18n("Unknowns"), peopleTagId()));
+        int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(tagPath(i18n("Unknown"), peopleTagId()));
         TagProperties props(unknownPeopleTagId);
         props.setProperty(TagPropertyName::person(), QString()); // no name associated
         props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property
