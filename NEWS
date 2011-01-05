@@ -15,7 +15,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 261140 : FindKdcraw.cmake is installed both by kdelibs and kdegraphics.
 009 ==> 261946 : Unable to compile beta1 of digikam.
 010 ==> 262172 : The unknown tag should be plural.
-011 ==> 
+011 ==> 262067 : Crash when closing 2.0.0 beta 1.
+012 ==> 
 
 
 
