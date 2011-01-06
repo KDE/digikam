@@ -586,6 +586,8 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
         const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, KMap::TileIndex::MaxLevel);
         addMarkerToTileAndChildren(currentImageInfo.id, markerTileIndex, static_cast<MyTile*>(rootTile()), 0);
     }
+
+    emit(signalTilesOrSelectionChanged());
 }
 
 /**
