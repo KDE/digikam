@@ -83,7 +83,8 @@ public:
         map(0),
         itemMarkerTiler(0),
         itemModel(0),
-        gpsModelHelper(0)
+        gpsModelHelper(0),
+        gpsImageInfoSorter(0)
     {
     }
 
@@ -106,6 +107,7 @@ public:
 
     QStandardItemModel*    itemModel;
     ImageGPSModelHelper*   gpsModelHelper;
+    GPSImageInfoSorter*    gpsImageInfoSorter;
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
@@ -127,6 +129,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->map->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
     d->map->setEnabledExtraActions(KMap::ExtraActionSticky);
     d->map->setVisibleExtraActions(KMap::ExtraActionSticky);
+    d->gpsImageInfoSorter = new GPSImageInfoSorter(this);
+    d->gpsImageInfoSorter->addToKMapWidget(d->map);
     vlay2->addWidget(d->map);
     vlay2->setMargin(0);
     vlay2->setSpacing(0);
