@@ -271,7 +271,7 @@ bool LoadingDescription::isReducedVersion() const
 bool LoadingDescription::operator==(const LoadingDescription& other) const
 {
     return filePath                 == other.filePath                   &&
-           rawDecodingSettings      == other.rawDecodingSettings.rawPrm &&
+           rawDecodingSettings      == other.rawDecodingSettings        &&
            previewParameters        == other.previewParameters          &&
            postProcessingParameters == other.postProcessingParameters;
 }
