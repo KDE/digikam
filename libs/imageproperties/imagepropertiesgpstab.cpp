@@ -7,6 +7,7 @@
  * Description : a tab widget to display GPS info
  *
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,7 +59,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // local includes
 
-#include "imagegpsitem.h"
 #include "imagegpsmodelhelper.h"
 
 namespace Digikam
@@ -102,7 +102,7 @@ public:
 
     KMap::KMapWidget*      map;
     KMap::ItemMarkerTiler* itemMarkerTiler;
-    GPSInfoList            gpsInfoList;
+    GPSImageInfo::List     gpsInfoList;
 
     QStandardItemModel*    itemModel;
     ImageGPSModelHelper*   gpsModelHelper;
@@ -242,6 +242,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
         return;
     }
 
+    const GPSImageInfo info = d->gpsInfoList.first();
     switch ( getWebGPSLocator() )
     {
         case MapQuest:
@@ -249,18 +250,18 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             url.append("http://www.mapquest.com/maps/map.adp?searchtype=address"
                        "&formtype=address&latlongtype=decimal");
             url.append("&latitude=");
-            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lat(), 'g', 12));
             url.append("&longitude=");
-            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lon(), 'g', 12));
             break;
         }
 
         case GoogleMaps:
         {
             url.append("http://maps.google.com/?q=");
-            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lat(), 'g', 12));
             url.append(",");
-            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lon(), 'g', 12));
             url.append("&spn=0.05,0.05&t=h&om=1");
             break;
         }
@@ -269,9 +270,9 @@ void ImagePropertiesGPSTab::slotGPSDetails()
         {
             url.append("http://maps.msn.com/map.aspx?");
             url.append("&lats1=");
-            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lat(), 'g', 12));
             url.append("&lons1=");
-            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lon(), 'g', 12));
             url.append("&name=HERE");
             url.append("&alts1=7");
             break;
@@ -281,9 +282,9 @@ void ImagePropertiesGPSTab::slotGPSDetails()
         {
             url.append("http://www.multimap.com/map/browse.cgi?");
             url.append("lat=");
-            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lat(), 'g', 12));
             url.append("&lon=");
-            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lon(), 'g', 12));
             url.append("&scale=10000");
             url.append("&icon=x");
             break;
@@ -294,9 +295,9 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             // lat and lon would also work, but wouldn't show a marker
             url.append("http://www.openstreetmap.org/?");
             url.append("mlat=");
-            url.append(val.setNum(d->gpsInfoList.first().latitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lat(), 'g', 12));
             url.append("&mlon=");
-            url.append(val.setNum(d->gpsInfoList.first().longitude, 'g', 12));
+            url.append(val.setNum(info.coordinates.lon(), 'g', 12));
             url.append("&zoom=15");
             break;
         }
@@ -311,7 +312,7 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
 {
     if (url.isEmpty())
     {
-        setGPSInfo();
+        clearGPSInfo();
         return;
     }
 
@@ -322,72 +323,71 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
 
 void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
 {
-    const QDateTime dt         = meta.getImageDateTime();
     double lat, lng;
     const bool haveCoordinates = meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
 
     if (haveCoordinates)
     {
+        
         double alt;
         const bool haveAlt = meta.getGPSAltitude(&alt);
 
-        GPSInfo gpsInfo;
-        gpsInfo.longitude   = lng;
-        gpsInfo.latitude    = lat;
-        gpsInfo.altitude    = alt;
-        gpsInfo.hasAltitude = haveAlt;
-        gpsInfo.dateTime    = dt;
+        KMap::GeoCoordinates coordinates(lat, lng);
+        if (haveAlt)
+        {
+            coordinates.setAlt(alt);
+        }
+        
+        GPSImageInfo gpsInfo;
+        gpsInfo.coordinates = coordinates;
+        gpsInfo.dateTime    = meta.getImageDateTime();
         gpsInfo.url         = url;
-        setGPSInfoList(GPSInfoList() << gpsInfo);
+        setGPSInfoList(GPSImageInfo::List() << gpsInfo);
     }
     else
     {
-        setGPSInfo();
+        clearGPSInfo();
     }
 }
 
-void ImagePropertiesGPSTab::setGPSInfo()
+void ImagePropertiesGPSTab::clearGPSInfo()
 {
-    d->altitude->setText(QString());
-    d->latitude->setText(QString());
-    d->longitude->setText(QString());
-    d->date->setText(QString());
+    d->altitude->clear();
+    d->latitude->clear();
+    d->longitude->clear();
+    d->date->clear();
     d->itemModel->clear();
     setEnabled(false);
 }
 
-void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
+void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 {
     // Clear info label
-    d->altitude->setText(QString());
-    d->latitude->setText(QString());
-    d->longitude->setText(QString());
-    d->date->setText(QString());
+    d->altitude->clear();
+    d->latitude->clear();
+    d->longitude->clear();
+    d->date->clear();
 
-    if (list.count() == 0)
+    setEnabled(!list.isEmpty());
+
+    if (list.count() == 1)
     {
-        setEnabled(false);
-    }
-    else if (list.count() == 1)
-    {
-        if (!list.first().hasAltitude)
+        const GPSImageInfo info = list.first();
+        const KMap::GeoCoordinates& coordinates = info.coordinates;
+
+        if (!coordinates.hasAltitude())
         {
             d->altitude->setText("Undefined");
         }
         else
         {
-            d->altitude->setText(QString("%1 m").arg(QString::number(list.first().altitude)));
+            d->altitude->setText(QString("%1 m").arg(QString::number(coordinates.alt())));
         }
 
-        d->latitude->setText(QString::number(list.first().latitude));
-        d->longitude->setText(QString::number(list.first().longitude));
-        d->date->setText(KGlobal::locale()->formatDateTime(list.first().dateTime,
+        d->latitude->setText(QString::number(coordinates.lat()));
+        d->longitude->setText(QString::number(coordinates.lon()));
+        d->date->setText(KGlobal::locale()->formatDateTime(info.dateTime,
                          KLocale::ShortDate, true));
-        setEnabled(true);
-    }
-    else if (list.count() > 1)
-    {
-        setEnabled(true);
     }
 
     d->gpsInfoList.clear();
@@ -397,7 +397,8 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
 
     for (int i=0; i<d->gpsInfoList.count(); ++i)
     {
-        ImageGPSItem* const currentImageGPSItem = new ImageGPSItem(d->gpsInfoList.at(i));
+        QStandardItem* const currentImageGPSItem = new QStandardItem();
+        currentImageGPSItem->setData(QVariant::fromValue(d->gpsInfoList.at(i)), RoleGPSImageInfo);
         d->itemModel->appendRow(currentImageGPSItem);
     }
 

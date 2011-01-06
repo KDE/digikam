@@ -34,6 +34,7 @@ SET(digikamcore_LIB_SRCS
         ${libdigikamhelpers_SRCS}
         ${libtthread_SRCS}
         ${libversionmanager_SRCS}
+        ${libkmaphelper_SRCS}
 
         # widgets and dialogs
         ${libcommonwidgets_SRCS}

@@ -9,6 +9,7 @@
  *
  * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -301,14 +302,15 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             }
             else
             {
-                GPSInfo info;
-                info.latitude  = pos.latitudeNumber();
-                info.longitude = pos.longitudeNumber();
-                info.altitude  = pos.altitude();
-                info.hasAltitude = pos.hasAltitude();
+                GPSImageInfo info;
+                info.coordinates.setLatLon(pos.latitudeNumber(), pos.longitudeNumber());
+                if (pos.hasAltitude())
+                {
+                    info.coordinates.setAlt(pos.altitude());
+                }
                 info.dateTime  = d->currentInfos.first().dateTime();
                 info.url       = d->currentInfos.first().fileUrl();
-                m_gpsTab->setGPSInfoList(GPSInfoList() << info);
+                m_gpsTab->setGPSInfoList(GPSImageInfo::List() << info);
             }
 
             m_dirtyGpsTab = true;
@@ -346,7 +348,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
-            GPSInfoList list;
+            GPSImageInfo::List list;
 
             for (ImageInfoList::const_iterator it = d->currentInfos.constBegin();
                  it != d->currentInfos.constEnd(); ++it)
@@ -355,14 +357,15 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
                 if (!pos.isEmpty())
                 {
-                    GPSInfo info;
-                    info.latitude  = pos.latitudeNumber();
-                    info.longitude = pos.longitudeNumber();
-                    info.altitude  = pos.altitude();
+                    GPSImageInfo info;
+                    info.coordinates.setLatLon(pos.latitudeNumber(), pos.longitudeNumber());
+                    if (pos.hasAltitude())
+                    {
+                        info.coordinates.setAlt(pos.altitude());
+                    }
                     info.dateTime  = (*it).dateTime();
                     info.url       = (*it).fileUrl();
                     info.id        = (*it).id();
-                    info.hasAltitude = pos.hasAltitude();
                     list.append(info);
                 }
             }

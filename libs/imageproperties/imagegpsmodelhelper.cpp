@@ -7,7 +7,7 @@
  * Description : central Map view
  *
  * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
- * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010, 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +25,7 @@
 
 // local includes
 
-#include "imagegpsitem.h"
+#include "digikam2kmap.h"
 
 namespace Digikam
 {
@@ -78,14 +78,11 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
 
 bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates* const coordinates) const
 {
-    ImageGPSItem* item     = static_cast<ImageGPSItem*>(d->itemModel->itemFromIndex(index));
-    QVariant var           = item->data(RoleGPSInfo);
-    GPSInfo currentGPSInfo = var.value<GPSInfo>();
+    const GPSImageInfo currentGPSImageInfo = index.data(RoleGPSImageInfo).value<GPSImageInfo>();
 
-    KMap::GeoCoordinates currentCoordinates(currentGPSInfo.latitude, currentGPSInfo.longitude);
-    *coordinates = currentCoordinates;
+    *coordinates = currentGPSImageInfo.coordinates;
 
-    if (currentCoordinates.hasCoordinates())
+    if (currentGPSImageInfo.coordinates.hasCoordinates())
     {
         return true;
     }
@@ -97,19 +94,16 @@ bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoo
 
 QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
 {
-    if (index == QPersistentModelIndex())
+    if (!index.isValid())
     {
         return QPixmap();
     }
 
-    QPixmap     thumbnail;
-    QModelIndex currentIndex(index);
+    const QModelIndex currentIndex(index);
+    const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
 
-    ImageGPSItem* item     = static_cast<ImageGPSItem*>(d->itemModel->itemFromIndex(currentIndex));
-    QVariant var           = item->data(RoleGPSInfo);
-    GPSInfo currentGPSInfo = var.value<GPSInfo>();
-
-    if (d->thumbnailLoadThread->find(currentGPSInfo.url.path(), thumbnail, qMax(size.width(), size.height())))
+    QPixmap thumbnail;
+    if (d->thumbnailLoadThread->find(currentGPSImageInfo.url.path(), thumbnail, qMax(size.width(), size.height())))
     {
         // digikam returns thumbnails with a border around them, but libkmap expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
@@ -122,65 +116,40 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
 
 QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
 {
-    const bool lowestRatedFirst = sortKey & 1;
-    QModelIndex bestIndex;
-    GPSInfo     bestGPSInfo;
+    QModelIndex bestIndex = list.first();
+    GPSImageInfo bestGPSImageInfo = bestIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
 
-    for (int i=0; i<list.count(); ++i)
+    for (int i=1; i<list.count(); ++i)
     {
-        QModelIndex currentIndex(list.at(i));
+        const QModelIndex currentIndex(list.at(i));
+        const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
 
-        ImageGPSItem* item     = static_cast<ImageGPSItem*>(d->itemModel->itemFromIndex(currentIndex));
-        QVariant var           = item->data(RoleGPSInfo);
-        GPSInfo currentGPSInfo = var.value<GPSInfo>();
-        bool takeThisIndex     = (bestGPSInfo.id == -1);
+        const bool currentFitsBetter = GPSImageInfoSorter::fitsBetter(
+                bestGPSImageInfo, KMap::KMapSelectedNone,
+                currentGPSImageInfo, KMap::KMapSelectedNone,
+                KMap::KMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)
+            );
 
-        if (!takeThisIndex)
+        if (currentFitsBetter)
         {
-            if (lowestRatedFirst)
-            {
-                takeThisIndex = currentGPSInfo.rating < bestGPSInfo.rating;
-
-                if (takeThisIndex)
-                {
-                    bestGPSInfo = currentGPSInfo;
-                    bestIndex   = currentIndex;
-                }
-            }
-            else
-            {
-                takeThisIndex = bestGPSInfo.rating < currentGPSInfo.rating;
-
-                if (takeThisIndex)
-                {
-                    bestGPSInfo = currentGPSInfo;
-                    bestIndex   = currentIndex;
-                }
-            }
-        }
-        else
-        {
-            bestGPSInfo = currentGPSInfo;
-            bestIndex   = currentIndex;
+            bestGPSImageInfo = currentGPSImageInfo;
+            bestIndex = currentIndex;
         }
     }
 
-    QPersistentModelIndex returnedIndex(bestIndex);
-    return returnedIndex;
+    return QPersistentModelIndex(bestIndex);
 }
 
 void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
-
     for (int i=0; i<d->itemModel->rowCount(); ++i)
     {
-        ImageGPSItem* item     = static_cast<ImageGPSItem*>(d->itemModel->item(i));
-        QVariant var           = item->data(RoleGPSInfo);
-        GPSInfo currentGPSInfo = var.value<GPSInfo>();
+        const QStandardItem* const item     = static_cast<QStandardItem*>(d->itemModel->item(i));
+        const GPSImageInfo currentGPSImageInfo = item->data(RoleGPSImageInfo).value<GPSImageInfo>();
 
-        if (currentGPSInfo.url.path() == loadingDescription.filePath)
+        if (currentGPSImageInfo.url.path() == loadingDescription.filePath)
         {
-            QPersistentModelIndex goodIndex(d->itemModel->index(i,0));
+            const QPersistentModelIndex goodIndex(d->itemModel->index(i,0));
             emit(signalThumbnailAvailableForIndex(goodIndex, thumb));
         }
     }

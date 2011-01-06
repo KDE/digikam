@@ -39,7 +39,6 @@
 
 #include "statesavingobject.h"
 #include "imagefiltermodel.h"
-#include "imagegpsitem.h"
 
 namespace Digikam
 {
