@@ -57,8 +57,7 @@ public:
        coordinates(),
        rating(-1),
        dateTime(),
-       url(),
-       dimensions()
+       url()
     {
     }
 
@@ -82,8 +81,6 @@ public:
     int                     rating;
     QDateTime               dateTime;
     KUrl                    url;
-    /// @todo What are these used for?
-    QSize                   dimensions;
 
     typedef QList<GPSImageInfo> List;
 };
