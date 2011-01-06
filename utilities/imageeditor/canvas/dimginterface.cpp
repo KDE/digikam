@@ -266,7 +266,10 @@ void DImgInterface::slotLoadRaw()
 
 void DImgInterface::load(const LoadingDescription& description)
 {
-    EditorToolIface::editorToolIface()->unLoadTool();
+    if (EditorToolIface::editorToolIface())
+    {
+        EditorToolIface::editorToolIface()->unLoadTool();
+    }
 
     if (description != d->currentDescription)
     {
