@@ -21,10 +21,48 @@
  *
  * ============================================================ */
 
-#include "digikam2kmap.h"
+#include "digikam2kmap.moc"
+
+// Qt includes
+
+#include <QList>
+#include <QMenu>
+#include <QPointer>
+
+// KDE includes
+
+#include <kaction.h>
+#include <klocale.h>
+
+// libkmap includes
+
+#include <libkmap/kmap_widget.h>
 
 namespace Digikam
 {
+
+class GPSImageInfoSorter::Private
+{
+public:
+
+    Private()
+      : mapWidgets(),
+        sortOrder(GPSImageInfoSorter::SortYoungestFirst),
+        sortMenu(0),
+        sortActionOldestFirst(0),
+        sortActionYoungestFirst(0),
+        sortActionRating(0)
+    {
+    }
+
+    QList<QPointer<KMap::KMapWidget> > mapWidgets;
+    GPSImageInfoSorter::SortOptions sortOrder;
+    QPointer<QMenu>                 sortMenu;
+    KAction*                        sortActionOldestFirst;
+    KAction*                        sortActionYoungestFirst;
+    KAction*                        sortActionRating;
+
+};
 
 bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMapGroupState oldState,
                                     const GPSImageInfo& newInfo, const KMap::KMapGroupState newState,
@@ -112,6 +150,108 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMa
 
     // last resort: use the image id for reproducibility
     return oldInfo.id > newInfo.id;
+}
+
+GPSImageInfoSorter::GPSImageInfoSorter(QObject* const parent)
+ : QObject(parent), d(new Private())
+{
+}
+
+GPSImageInfoSorter::~GPSImageInfoSorter()
+{
+    if (d->sortMenu)
+    {
+        delete d->sortMenu;
+    }
+
+    delete d;
+}
+
+void GPSImageInfoSorter::addToKMapWidget(KMap::KMapWidget* const mapWidget)
+{
+    initializeSortMenu();
+
+    d->mapWidgets << QPointer<KMap::KMapWidget>(mapWidget);
+    mapWidget->setSortOptionsMenu(d->sortMenu);
+}
+
+void GPSImageInfoSorter::initializeSortMenu()
+{
+    if (d->sortMenu)
+    {
+        return;
+    }
+
+    d->sortMenu = new QMenu();
+    d->sortMenu->setTitle(i18n("Sorting"));
+    QActionGroup* const sortOrderExclusive = new QActionGroup(d->sortMenu);
+    sortOrderExclusive->setExclusive(true);
+
+    connect(sortOrderExclusive, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotSortOptionTriggered()));
+
+    d->sortActionOldestFirst = new KAction(i18n("Show oldest first"), sortOrderExclusive);
+    d->sortActionOldestFirst->setCheckable(true);
+    d->sortMenu->addAction(d->sortActionOldestFirst);
+
+    d->sortActionYoungestFirst = new KAction(i18n("Show youngest first"), sortOrderExclusive);
+    d->sortActionYoungestFirst->setCheckable(true);
+    d->sortMenu->addAction(d->sortActionYoungestFirst);
+
+    d->sortActionRating = new KAction(i18n("Sort by rating"), this);
+    d->sortActionRating->setCheckable(true);
+    d->sortMenu->addAction(d->sortActionRating);
+
+    connect(d->sortActionRating, SIGNAL(triggered(bool)),
+            this, SLOT(slotSortOptionTriggered()));
+
+    /// @todo Should we initialize the checked state already or wait for a call to setSortOptions?
+}
+
+void GPSImageInfoSorter::setSortOptions(const SortOptions sortOptions)
+{
+    d->sortOrder = sortOptions;
+
+    for (int i=0; i<d->mapWidgets.count(); ++i)
+    {
+        if (d->mapWidgets.at(i))
+        {
+            d->mapWidgets.at(i)->setSortKey(d->sortOrder);
+        }
+    }
+
+    d->sortActionRating->setChecked(d->sortOrder & GPSImageInfoSorter::SortRating);
+    d->sortActionOldestFirst->setChecked(d->sortOrder & GPSImageInfoSorter::SortOldestFirst);
+    d->sortActionYoungestFirst->setChecked(!(d->sortOrder & GPSImageInfoSorter::SortOldestFirst));
+}
+
+GPSImageInfoSorter::SortOptions GPSImageInfoSorter::getSortOptions() const
+{
+    return d->sortOrder;
+}
+
+void GPSImageInfoSorter::slotSortOptionTriggered()
+{
+    SortOptions newSortKey = SortYoungestFirst;
+
+    if (d->sortActionOldestFirst->isChecked())
+    {
+        newSortKey = SortOldestFirst;
+    }
+
+    if (d->sortActionRating->isChecked())
+    {
+        newSortKey|= SortRating;
+    }
+
+    d->sortOrder = newSortKey;
+    for (int i=0; i<d->mapWidgets.count(); ++i)
+    {
+        if (d->mapWidgets.at(i))
+        {
+            d->mapWidgets.at(i)->setSortKey(d->sortOrder);
+        }
+    }
 }
 
 } /* Digikam */

@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QObject>
 #include <QSize>
 
 // KDE includes
@@ -37,12 +38,19 @@
 
 #include <libkmap/kmap_primitives.h>
 
+namespace KMap
+{
+    class KMapWidget;
+}
+
 namespace Digikam
 {
 
 class GPSImageInfo
 {
 public:
+
+    /// @todo De-inline these functions?
 
     GPSImageInfo()
      : id(-2),
@@ -80,24 +88,46 @@ public:
     typedef QList<GPSImageInfo> List;
 };
 
-class GPSImageInfoSorter
+class GPSImageInfoSorter : public QObject
 {
+Q_OBJECT
+
 public:
-    enum SortOptions
+    enum SortOption
     {
         SortYoungestFirst = 0,
         SortOldestFirst   = 1,
         SortRating        = 2
     };
+    Q_DECLARE_FLAGS(SortOptions, SortOption);
+
+    GPSImageInfoSorter(QObject* const parent);
+    ~GPSImageInfoSorter();
+
+    void addToKMapWidget(KMap::KMapWidget* const mapWidget);
+    void setSortOptions(const SortOptions sortOptions);
+    SortOptions getSortOptions() const;
 
     static bool fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMapGroupState oldState,
                            const GPSImageInfo& newInfo, const KMap::KMapGroupState newState,
                            const KMap::KMapGroupState globalGroupState, const SortOptions sortOptions);
+
+private Q_SLOTS:
+
+    void slotSortOptionTriggered();
+
+private:
+
+    void initializeSortMenu();
+
+    class Private;
+    Private* const d;
 };
 
 } /* Digikam */
 
-Q_DECLARE_METATYPE(Digikam::GPSImageInfo)
+Q_DECLARE_METATYPE(Digikam::GPSImageInfo);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions);
 
 #endif /* DIGIKAM2KMAP_H */
 

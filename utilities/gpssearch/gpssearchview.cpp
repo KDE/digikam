@@ -75,10 +75,7 @@ public:
         imageFilterModel(0),
         selectionModel(0),
         searchModel(0),
-        sortOrder(GPSImageInfoSorter::SortYoungestFirst),
-        sortActionOldestFirst(0),
-        sortActionYoungestFirst(0),
-        sortActionRating(0)
+        sortOrderOptionsHelper(0)
     {
     }
 
@@ -95,10 +92,7 @@ public:
     ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     SearchModel*                searchModel;
-    GPSImageInfoSorter::SortOptions sortOrder;
-    KAction*                    sortActionOldestFirst;
-    KAction*                    sortActionYoungestFirst;
-    KAction*                    sortActionRating;
+    GPSImageInfoSorter*         sortOrderOptionsHelper;
 };
 const QString GPSSearchView::GPSSearchViewPriv::configSplitterStateEntry("SplitterState");
 
@@ -142,30 +136,8 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
-    QMenu* const sortMenu = new QMenu(this);
-    sortMenu->setTitle(i18n("Sorting"));
-    QActionGroup* const sortOrderExclusive = new QActionGroup(sortMenu);
-    sortOrderExclusive->setExclusive(true);
-
-    connect(sortOrderExclusive, SIGNAL(triggered(QAction*)),
-            this, SLOT(slotSortOptionTriggered()));
-
-    d->sortActionOldestFirst = new KAction(i18n("Show oldest first"), sortOrderExclusive);
-    d->sortActionOldestFirst->setCheckable(true);
-    sortMenu->addAction(d->sortActionOldestFirst);
-
-    d->sortActionYoungestFirst = new KAction(i18n("Show youngest first"), sortOrderExclusive);
-    d->sortActionYoungestFirst->setCheckable(true);
-    sortMenu->addAction(d->sortActionYoungestFirst);
-
-    d->sortActionRating = new KAction(i18n("Sort by rating"), this);
-    d->sortActionRating->setCheckable(true);
-    sortMenu->addAction(d->sortActionRating);
-
-    connect(d->sortActionRating, SIGNAL(triggered(bool)),
-            this, SLOT(slotSortOptionTriggered()));
-
-    d->mapSearchWidget->setSortOptionsMenu(sortMenu);
+    d->sortOrderOptionsHelper = new GPSImageInfoSorter(this);
+    d->sortOrderOptionsHelper->addToKMapWidget(d->mapSearchWidget);
 
     vlay2->addWidget(d->mapSearchWidget);
     vlay2->setMargin(0);
@@ -284,11 +256,9 @@ void GPSSearchView::doLoadState()
         }
     }
 
-    d->sortOrder = GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(GPSImageInfoSorter::SortYoungestFirst)));
-    d->mapSearchWidget->setSortKey(d->sortOrder);
-    d->sortActionRating->setChecked(d->sortOrder & GPSImageInfoSorter::SortRating);
-    d->sortActionOldestFirst->setChecked(d->sortOrder & GPSImageInfoSorter::SortOldestFirst);
-    d->sortActionYoungestFirst->setChecked(!(d->sortOrder & GPSImageInfoSorter::SortOldestFirst));
+    d->sortOrderOptionsHelper->setSortOptions(
+            GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(d->sortOrderOptionsHelper->getSortOptions())))
+        );
 
     const KConfigGroup groupMapWidget = KConfigGroup(&group, "GPSSearch Map Widget");
 
@@ -306,7 +276,7 @@ void GPSSearchView::doSaveState()
     KConfigGroup group = getConfigGroup();
 
     group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
-    group.writeEntry("Sort Order", int(d->sortOrder));
+    group.writeEntry("Sort Order", int(d->sortOrderOptionsHelper->getSortOptions()));
 
     KConfigGroup groupMapWidget = KConfigGroup(&group, "GPSSearch Map Widget");
     d->mapSearchWidget->saveSettingsToGroup(&groupMapWidget);
@@ -571,23 +541,6 @@ void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
     emit(signalMapSoloItems(idList, "gpssearch"));
 }
 
-void GPSSearchView::slotSortOptionTriggered()
-{
-    int newSortKey = GPSImageInfoSorter::SortYoungestFirst;
-
-    if (d->sortActionOldestFirst->isChecked())
-    {
-        newSortKey = GPSImageInfoSorter::SortOldestFirst;
-    }
-
-    if (d->sortActionRating->isChecked())
-    {
-        newSortKey|= GPSImageInfoSorter::SortRating;
-    }
-
-    d->sortOrder = GPSImageInfoSorter::SortOptions(newSortKey);
-    d->mapSearchWidget->setSortKey(newSortKey);
-}
 
 void GPSSearchView::slotRefreshMap()
 {

@@ -89,8 +89,7 @@ private Q_SLOTS:
     void slotRegionSelectionChanged();
     void slotRemoveCurrentFilter();
     void slotMapSoloItems(const QList<qlonglong>& idList);
-    void slotSortOptionTriggered();
-    
+
 Q_SIGNALS:
 
     void signalMapSoloItems(const QList<qlonglong>& idList, const QString& id);
