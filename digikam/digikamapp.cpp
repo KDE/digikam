@@ -1790,9 +1790,16 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
             return;
         }
 
-        int vendorId = list[1].toInt();
+        // NOTE: See B.K.O #262296: With KDE 4.6, Solid API return device vendor id 
+        // and product id in hexadecimal strings.
+#if KDE_IS_VERSION(4,5,90)
+        bool ok;
+        int vendorId  = list[1].toString().toInt(&ok, 16);
+        int productId = list[2].toString().toInt(&ok, 16);
+#else
+        int vendorId  = list[1].toInt();
         int productId = list[2].toInt();
-
+#endif
         QString model, port;
 
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
