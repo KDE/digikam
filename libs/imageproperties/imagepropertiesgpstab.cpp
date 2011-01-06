@@ -340,7 +340,6 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
 
     if (haveCoordinates)
     {
-        
         double alt;
         const bool haveAlt = meta.getGPSAltitude(&alt);
 
@@ -349,10 +348,11 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
         {
             coordinates.setAlt(alt);
         }
-        
+
         GPSImageInfo gpsInfo;
         gpsInfo.coordinates = coordinates;
         gpsInfo.dateTime    = meta.getImageDateTime();
+        gpsInfo.rating      = meta.getImageRating();
         gpsInfo.url         = url;
         setGPSInfoList(GPSImageInfo::List() << gpsInfo);
     }

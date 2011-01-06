@@ -309,6 +309,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                     info.coordinates.setAlt(pos.altitude());
                 }
                 info.dateTime  = d->currentInfos.first().dateTime();
+                info.rating    = d->currentInfos.first().rating();
                 info.url       = d->currentInfos.first().fileUrl();
                 m_gpsTab->setGPSInfoList(GPSImageInfo::List() << info);
             }
@@ -364,6 +365,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                         info.coordinates.setAlt(pos.altitude());
                     }
                     info.dateTime  = (*it).dateTime();
+                    info.rating    = (*it).rating();
                     info.url       = (*it).fileUrl();
                     info.id        = (*it).id();
                     list.append(info);
