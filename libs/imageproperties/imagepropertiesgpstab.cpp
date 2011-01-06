@@ -212,6 +212,11 @@ void ImagePropertiesGPSTab::readConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
 
+    d->gpsImageInfoSorter->setSortOptions(
+            GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions())))
+        );
+    setWebGPSLocator(group.readEntry("Web GPS Locator", getWebGPSLocator()));
+
     KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
     d->map->readSettingsFromGroup(&groupMapWidget);
 }
@@ -220,6 +225,9 @@ void ImagePropertiesGPSTab::writeConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
+
+    group.writeEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions()));
+    group.writeEntry("Web GPS Locator", getWebGPSLocator());
 
     KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
     d->map->saveSettingsToGroup(&groupMapWidget);
