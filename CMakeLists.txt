@@ -769,6 +769,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
        )
 
+    SET(libkmaphelper_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kmaphelper/digikam2kmap.cpp
+       )
+
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
     # digikam: camera download: auto-rotated images lose EXIF info ...
     # So make sure nofinal is always used here!
@@ -1390,7 +1394,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholderplugin
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kmaphelper
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models

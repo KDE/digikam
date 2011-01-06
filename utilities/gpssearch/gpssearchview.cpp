@@ -52,6 +52,7 @@
 #include "imageinfojob.h"
 #include "searchxml.h"
 #include "gpsmarkertiler.h"
+#include "digikam2kmap.h"
 
 namespace Digikam
 {
@@ -74,7 +75,7 @@ public:
         imageFilterModel(0),
         selectionModel(0),
         searchModel(0),
-        sortOrder(GPSMarkerTiler::SortYoungestFirst),
+        sortOrder(GPSImageInfoSorter::SortYoungestFirst),
         sortActionOldestFirst(0),
         sortActionYoungestFirst(0),
         sortActionRating(0)
@@ -94,7 +95,7 @@ public:
     ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     SearchModel*                searchModel;
-    GPSMarkerTiler::SortOptions sortOrder;
+    GPSImageInfoSorter::SortOptions sortOrder;
     KAction*                    sortActionOldestFirst;
     KAction*                    sortActionYoungestFirst;
     KAction*                    sortActionRating;
@@ -283,11 +284,11 @@ void GPSSearchView::doLoadState()
         }
     }
 
-    d->sortOrder = GPSMarkerTiler::SortOptions(group.readEntry("Sort Order", int(GPSMarkerTiler::SortYoungestFirst)));
+    d->sortOrder = GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(GPSImageInfoSorter::SortYoungestFirst)));
     d->mapSearchWidget->setSortKey(d->sortOrder);
-    d->sortActionRating->setChecked(d->sortOrder & GPSMarkerTiler::SortRating);
-    d->sortActionOldestFirst->setChecked(d->sortOrder & GPSMarkerTiler::SortOldestFirst);
-    d->sortActionYoungestFirst->setChecked(!(d->sortOrder & GPSMarkerTiler::SortOldestFirst));
+    d->sortActionRating->setChecked(d->sortOrder & GPSImageInfoSorter::SortRating);
+    d->sortActionOldestFirst->setChecked(d->sortOrder & GPSImageInfoSorter::SortOldestFirst);
+    d->sortActionYoungestFirst->setChecked(!(d->sortOrder & GPSImageInfoSorter::SortOldestFirst));
 
     const KConfigGroup groupMapWidget = KConfigGroup(&group, "GPSSearch Map Widget");
 
@@ -572,19 +573,19 @@ void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
 
 void GPSSearchView::slotSortOptionTriggered()
 {
-    int newSortKey = GPSMarkerTiler::SortYoungestFirst;
+    int newSortKey = GPSImageInfoSorter::SortYoungestFirst;
 
     if (d->sortActionOldestFirst->isChecked())
     {
-        newSortKey = GPSMarkerTiler::SortOldestFirst;
+        newSortKey = GPSImageInfoSorter::SortOldestFirst;
     }
 
     if (d->sortActionRating->isChecked())
     {
-        newSortKey|= GPSMarkerTiler::SortRating;
+        newSortKey|= GPSImageInfoSorter::SortRating;
     }
 
-    d->sortOrder = GPSMarkerTiler::SortOptions(newSortKey);
+    d->sortOrder = GPSImageInfoSorter::SortOptions(newSortKey);
     d->mapSearchWidget->setSortKey(newSortKey);
 }
 

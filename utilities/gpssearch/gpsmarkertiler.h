@@ -62,22 +62,15 @@
 namespace Digikam
 {
 
+class GPSImageInfo;
+
 class GPSMarkerTiler : public KMap::AbstractMarkerTiler
 {
     Q_OBJECT
 
 public:
 
-    enum SortOptions
-    {
-        SortYoungestFirst = 0,
-        SortOldestFirst   = 1,
-        SortRating        = 2
-    };
-
     class MyTile;
-
-    class GPSImageInfo;
 
     explicit GPSMarkerTiler(QObject* const parent, ImageFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel);
     virtual ~GPSMarkerTiler();
@@ -126,7 +119,6 @@ private:
 
     QList<qlonglong> getTileMarkerIds(const KMap::TileIndex& tileIndex);
     KMap::KMapGroupState getImageState(const qlonglong imageId);
-    bool isBetterRepresentativeMarker(const GPSImageInfo& oldMarker, const KMap::KMapGroupState oldState, const GPSImageInfo& newMarker, const KMap::KMapGroupState newState, const int sortKey);
     void removeMarkerFromTileAndChildren(const qlonglong imageId, const KMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile);
     void addMarkerToTileAndChildren(const qlonglong imageId, const KMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel);
 

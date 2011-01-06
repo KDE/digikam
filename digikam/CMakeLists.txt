@@ -33,7 +33,7 @@ SET(digikamcore_LIB_SRCS
         ${pgfutils_SRCS}
         ${libdigikamhelpers_SRCS}
         ${libtthread_SRCS}
-                        ${libversionmanager_SRCS}
+        ${libversionmanager_SRCS}
 
         # widgets and dialogs
         ${libcommonwidgets_SRCS}
@@ -221,6 +221,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libsearchwindow_SRCS}
                  ${libfuzzysearch_SRCS}
                  ${libgpssearch_SRCS}
+                 ${libkmaphelper_SRCS}
                  ${libtimeline_SRCS}
                  ${libqueuemanager_SRCS}
                  ${libalbummodels_SRCS}

@@ -31,6 +31,10 @@
 #include <QRectF>
 #include <QTimer>
 
+// local includes
+
+#include "digikam2kmap.h"
+
 /// @todo Actually use this definition!
 typedef QPair<KMap::TileIndex, int> MapPair;
 Q_DECLARE_METATYPE(MapPair);
@@ -57,36 +61,6 @@ public:
     }
 
     QList<qlonglong> imagesId;
-};
-
-class GPSMarkerTiler::GPSImageInfo
-{
-public:
-
-    GPSImageInfo()
-        : id(-2),
-          coordinate(),
-          rating(),
-          creationDate()
-    {
-    }
-
-    GPSImageInfo(const qlonglong p_id, const KMap::GeoCoordinates& p_coordinates, const int p_rating, const QDateTime& p_creationDate)
-        : id(p_id),
-          coordinate(p_coordinates),
-          rating(p_rating),
-          creationDate(p_creationDate)
-    {
-    }
-
-    ~GPSImageInfo()
-    {
-    }
-
-    qlonglong            id;
-    KMap::GeoCoordinates coordinate;
-    int                  rating;
-    QDateTime            creationDate;
 };
 
 class GPSMarkerTiler::GPSMarkerTilerPrivate
@@ -301,7 +275,7 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::TileIndex& 
             {
                 const int currentImageId = tile->imagesId.at(i);
                 const GPSImageInfo currentImageInfo = d->imagesHash[currentImageId];
-                const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, level);
+                const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, level);
                 const int newTileIndex = markerTileIndex.lastIndex();
 
                 MyTile* newTile = static_cast<MyTile*>(tile->getChild(newTileIndex));
@@ -361,84 +335,6 @@ int GPSMarkerTiler::getTileSelectedCount(const KMap::TileIndex& tileIndex)
     return 0;
 }
 
-bool GPSMarkerTiler::isBetterRepresentativeMarker(const GPSMarkerTiler::GPSImageInfo& oldMarker, const KMap::KMapGroupState oldState, const GPSMarkerTiler::GPSImageInfo& newMarker, const KMap::KMapGroupState newState, const int sortKey)
-{
-    // the best index for a tile is determined like this:
-    // region selected? -> prefer region selected markers
-    // positive filtering on? - > prefer positively filtered markers
-    // next -> depending on sortkey, prefer better rated ones
-    // next -> depending on sortkey, prefer older or younger ones
-
-    // region selection part:
-    if (d->mapGlobalGroupState & KMap::KMapRegionSelectedMask)
-    {
-        const bool oldIsRegionSelected = oldState & KMap::KMapRegionSelectedMask;
-        const bool newIsRegionSelected = newState & KMap::KMapRegionSelectedMask;
-
-        if (oldIsRegionSelected != newIsRegionSelected)
-        {
-            return newIsRegionSelected;
-        }
-    }
-
-    // positive filtering part:
-    if (d->mapGlobalGroupState & KMap::KMapFilteredPositiveMask)
-    {
-        const bool oldIsFilteredPositive = oldState & KMap::KMapFilteredPositiveMask;
-        const bool newIsFilteredPositive = newState & KMap::KMapFilteredPositiveMask;
-
-        if (oldIsFilteredPositive != newIsFilteredPositive)
-        {
-            return newIsFilteredPositive;
-        }
-    }
-
-    // care about rating, if requested
-    if (sortKey & SortRating)
-    {
-        const bool oldHasRating = oldMarker.rating > 0;
-        const bool newHasRating = newMarker.rating > 0;
-
-        if (oldHasRating != newHasRating)
-        {
-            return newHasRating;
-        }
-
-        if ( (oldHasRating && newHasRating) && (oldMarker.rating != newMarker.rating) )
-        {
-            return oldMarker.rating < newMarker.rating;
-        }
-
-        // ratings are equal or both have no rating, therefore fall through to the next level
-    }
-
-    // finally, decide by date:
-    const bool oldHasDate = oldMarker.creationDate.isValid();
-    const bool newHasDate = newMarker.creationDate.isValid();
-    if (oldHasDate != newHasDate)
-    {
-        return newHasDate;
-    }
-
-    if (oldHasDate && newHasDate)
-    {
-        if (oldMarker.creationDate != newMarker.creationDate)
-        {
-            if (sortKey & SortOldestFirst)
-            {
-                return oldMarker.creationDate > newMarker.creationDate;
-            }
-            else
-            {
-                return oldMarker.creationDate < newMarker.creationDate;
-            }
-        }
-    }
-
-    // last resort: use the image id for reproducibility
-    return oldMarker.id > newMarker.id;
-}
-
 /**
  @brief This function finds the best representative marker from a tile of markers.
  * @param tileIndex Index of the tile from which the best marker should be found.
@@ -466,7 +362,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tile
         const GPSImageInfo currentMarkerInfo = d->imagesHash.value(tile->imagesId.at(i));
         const KMap::KMapGroupState currentMarkerGroupState = getImageState(currentMarkerInfo.id);
 
-        if (isBetterRepresentativeMarker(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, sortKey))
+        if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
         {
             bestMarkerInfo = currentMarkerInfo;
             bestMarkerGroupState = currentMarkerGroupState;
@@ -503,7 +399,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
         GPSImageInfo currentMarkerInfo = d->imagesHash.value(currentIndex.second);
         KMap::KMapGroupState currentMarkerGroupState = getImageState(currentIndex.second);
 
-        if (isBetterRepresentativeMarker(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, sortKey))
+        if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
         {
             bestMarkerInfo = currentMarkerInfo;
             bestMarkerGroupState = currentMarkerGroupState;
@@ -610,7 +506,7 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
         return;
     }
 
-    QList<GPSImageInfo> newEntries;
+    GPSImageInfo::List newEntries;
 
     while (!ds.atEnd())
     {
@@ -627,8 +523,8 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 
         entry.id           = record.imageID;
         entry.rating       = record.rating;
-        entry.creationDate = record.creationDate;
-        entry.coordinate.setLatLon(record.extraValues.first().toDouble(), record.extraValues.last().toDouble());
+        entry.dateTime     = record.creationDate;
+        entry.coordinates.setLatLon(record.extraValues.first().toDouble(), record.extraValues.last().toDouble());
 
         internalJob->dataFromDatabase << entry;
     }
@@ -680,14 +576,14 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     for (int i=0; i<returnedImageInfo.count(); ++i)
     {
         const GPSImageInfo currentImageInfo = returnedImageInfo.at(i);
-        if (!currentImageInfo.coordinate.hasCoordinates())
+        if (!currentImageInfo.coordinates.hasCoordinates())
         {
             continue;
         }
 
         d->imagesHash.insert(currentImageInfo.id, currentImageInfo);
 
-        const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, KMap::TileIndex::MaxLevel);
+        const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, KMap::TileIndex::MaxLevel);
         addMarkerToTileAndChildren(currentImageInfo.id, markerTileIndex, static_cast<MyTile*>(rootTile()), 0);
     }
 }
@@ -749,7 +645,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             // the image has no coordinates any more
             // remove it from the tiles and the image list
             const GPSImageInfo oldInfo = d->imagesHash.value(id);
-            const KMap::GeoCoordinates oldCoordinates = oldInfo.coordinate;
+            const KMap::GeoCoordinates oldCoordinates = oldInfo.coordinates;
             const KMap::TileIndex oldTileIndex = KMap::TileIndex::fromCoordinates(oldCoordinates, KMap::TileIndex::MaxLevel);
 
             removeMarkerFromTileAndChildren(id, oldTileIndex, static_cast<MyTile*>(rootTile()), 0, 0);
@@ -771,9 +667,9 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             // We assume that the coordinates of the image have changed.
 
             const GPSImageInfo oldInfo = d->imagesHash.value(id);
-            const KMap::GeoCoordinates oldCoordinates = oldInfo.coordinate;
+            const KMap::GeoCoordinates oldCoordinates = oldInfo.coordinates;
 
-            const GPSImageInfo currentImageInfo(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
+            const GPSImageInfo currentImageInfo = GPSImageInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
             d->imagesHash.insert(id, currentImageInfo);
 
             const KMap::TileIndex oldTileIndex = KMap::TileIndex::fromCoordinates(oldCoordinates, KMap::TileIndex::MaxLevel);
@@ -833,10 +729,10 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
         else
         {
             // the image is new, add it to the existing tiles
-            const GPSImageInfo currentImageInfo(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
+            const GPSImageInfo currentImageInfo = GPSImageInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
             d->imagesHash.insert(id, currentImageInfo);
 
-            const KMap::TileIndex newMarkerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinate, KMap::TileIndex::MaxLevel);
+            const KMap::TileIndex newMarkerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, KMap::TileIndex::MaxLevel);
 
             addMarkerToTileAndChildren(id, newMarkerTileIndex, static_cast<MyTile*>(rootTile()), 0);
         }
