@@ -145,6 +145,8 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 {
     if (!m_currentURL.isValid())
     {
+        m_gpsTab->setActive(tab==m_gpsTab);
+
         return;
     }
 
