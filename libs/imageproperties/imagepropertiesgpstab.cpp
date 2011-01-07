@@ -84,7 +84,8 @@ public:
         itemMarkerTiler(0),
         itemModel(0),
         gpsModelHelper(0),
-        gpsImageInfoSorter(0)
+        gpsImageInfoSorter(0),
+        boundariesShouldBeAdjusted(false)
     {
     }
 
@@ -108,6 +109,7 @@ public:
     QStandardItemModel*    itemModel;
     ImageGPSModelHelper*   gpsModelHelper;
     GPSImageInfoSorter*    gpsImageInfoSorter;
+    bool                   boundariesShouldBeAdjusted;
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
@@ -368,8 +370,16 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
     d->latitude->clear();
     d->longitude->clear();
     d->date->clear();
+    d->gpsInfoList.clear();
+    d->itemModel->clear();
+    d->gpsInfoList = list;
 
     setEnabled(!list.isEmpty());
+
+    if (list.isEmpty())
+    {
+        return;
+    }
 
     if (list.count() == 1)
     {
@@ -391,11 +401,6 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
                          KLocale::ShortDate, true));
     }
 
-    d->gpsInfoList.clear();
-    d->itemModel->clear();
-
-    d->gpsInfoList = list;
-
     for (int i=0; i<d->gpsInfoList.count(); ++i)
     {
         QStandardItem* const currentImageGPSItem = new QStandardItem();
@@ -405,15 +410,27 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 
     if (!d->map->getStickyModeState())
     {
-        // TODO: check whether the widget is currently active,
-        //       otherwise remember to call this function later!
-        d->map->adjustBoundariesToGroupedMarkers();
+        if (!d->map->getActiveState())
+        {
+            d->boundariesShouldBeAdjusted = true;
+        }
+        else
+        {
+            d->boundariesShouldBeAdjusted = false;
+            d->map->adjustBoundariesToGroupedMarkers();
+        }
     }
 }
 
 void ImagePropertiesGPSTab::setActive(const bool state)
 {
     d->map->setActive(state);
+
+    if (state && d->boundariesShouldBeAdjusted)
+    {
+        d->boundariesShouldBeAdjusted = false;
+        d->map->adjustBoundariesToGroupedMarkers();
+    }
 }
 
 }  // namespace Digikam
