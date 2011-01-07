@@ -39,6 +39,8 @@ public:
 
     StateSavingObjectPriv() :
         host(0),
+        group(),
+        prefix(),
         groupSet(false),
         depth(StateSavingObject::INSTANCE)
     {
@@ -63,14 +65,14 @@ public:
         return config->group(host->objectName());
     }
 
-    void recurse(QObjectList children, bool save)
+    void recurse(const QObjectList& children, const bool save)
     {
 
         for (QObjectList::const_iterator childIt = children.constBegin(); childIt
              != children.constEnd(); ++childIt)
         {
 
-            StateSavingObject* statefulChild =
+            StateSavingObject* const statefulChild =
                 dynamic_cast<StateSavingObject*> (*childIt);
 
             if (statefulChild)
@@ -81,7 +83,7 @@ public:
 
                 // but before invoking these actions, avoid duplicate calls to
                 // the methods of deeper children
-                StateSavingObject::StateSavingDepth oldState = statefulChild->getStateSavingDepth();
+                const StateSavingObject::StateSavingDepth oldState = statefulChild->getStateSavingDepth();
                 statefulChild->setStateSavingDepth(StateSavingObject::INSTANCE);
 
                 // decide which action to invoke
@@ -106,7 +108,7 @@ public:
 
     }
 
-    void recurseOperation(bool save)
+    void recurseOperation(const bool save)
     {
 
         QString action("loading");
@@ -122,7 +124,7 @@ public:
             for (QObjectList::const_iterator childIt = host->children().begin(); childIt
                  != host->children().end(); ++childIt)
             {
-                StateSavingObject* statefulChild =
+                StateSavingObject* const statefulChild =
                     dynamic_cast<StateSavingObject*> (*childIt);
 
                 if (statefulChild)
@@ -148,7 +150,7 @@ public:
 
 };
 
-StateSavingObject::StateSavingObject(QObject* host) :
+StateSavingObject::StateSavingObject(QObject* const host) :
     d(new StateSavingObjectPriv)
 {
     d->host = host;
@@ -167,7 +169,7 @@ StateSavingObject::StateSavingDepth StateSavingObject::getStateSavingDepth() con
     return d->depth;
 }
 
-void StateSavingObject::setStateSavingDepth(StateSavingObject::StateSavingDepth depth)
+void StateSavingObject::setStateSavingDepth(const StateSavingObject::StateSavingDepth depth)
 {
     d->depth = depth;
 }

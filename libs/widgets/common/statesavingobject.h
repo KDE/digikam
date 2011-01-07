@@ -47,7 +47,7 @@ class StateSavingObjectPriv;
  * as a Mixin.
  *
  * The public interface for loading and saving state is implemented designed as
- * template methods. To store ore restore the state of a class, inherit from
+ * template methods. To store or restore the state of a class, inherit from
  * this class via multiple inheritance and implement doLoadState() and
  * doSaveState(). In these methods always use the protected method
  * getConfigGroup() to access a config group. Also always use the entryName()
@@ -70,7 +70,7 @@ class StateSavingObjectPriv;
  * This class also supports recursive saving / loading invocations based on the
  * QT object hierarchy. As default, calls to loadState() or saveState() only
  * invoke the doLoadState() or doStateSave() method of the called instance.
- * This behavoiur can be changed with setStateSavingDepth() to automatically
+ * This behaviour can be changed with setStateSavingDepth() to automatically
  * call children of the instance. Various modes are supported as documented in
  * StateSavingDepth.
  *
@@ -113,7 +113,7 @@ public:
      * @param host self-reference to access the object name, simply pass "this"
      *             as argument
      */
-    StateSavingObject(QObject* host);
+    StateSavingObject(QObject* const host);
 
     /**
      * Destructor.
@@ -133,7 +133,7 @@ public:
      *
      * @param depth new depth to use
      */
-    void setStateSavingDepth(StateSavingDepth depth);
+    void setStateSavingDepth(const StateSavingDepth depth);
 
     /**
      * Sets a dedicated config group that will be used to store and reload
@@ -199,7 +199,7 @@ protected:
     QString entryName(const QString& base);
 
 private:
-    StateSavingObjectPriv* d;
+    StateSavingObjectPriv* const d;
 
 };
 
