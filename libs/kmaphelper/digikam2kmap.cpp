@@ -38,6 +38,11 @@
 
 #include <libkmap/kmap_widget.h>
 
+// digiKam includes
+
+#include <imageinfo.h>
+#include <imageposition.h>
+
 namespace Digikam
 {
 

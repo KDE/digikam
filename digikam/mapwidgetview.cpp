@@ -50,6 +50,7 @@
 #include "imagemodel.h"
 #include "databasewatch.h"
 #include "databasefields.h"
+#include "digikam2kmap_database.h"
 
 namespace Digikam
 {
@@ -68,18 +69,14 @@ class MapWidgetView::MapWidgetViewPriv
 public:
 
     MapWidgetViewPriv()
-        :vbox(),
-         mapWidget(),
-         imageModel(),
-         selectionModel(),
-         mapViewModelHelper(),
+        :vbox(0),
+         mapWidget(0),
+         imageModel(0),
+         selectionModel(0),
+         mapViewModelHelper(0),
+         gpsImageInfoSorter(0),
          activeState(false)
     {
-        mapWidget          = 0;
-        vbox               = 0;
-        imageModel         = 0;
-        selectionModel     = 0;
-        mapViewModelHelper = 0;
     }
 
     KVBox*               vbox;
@@ -87,6 +84,7 @@ public:
     ImageAlbumModel*     imageModel;
     QItemSelectionModel* selectionModel;
     MapViewModelHelper*  mapViewModelHelper;
+    GPSImageInfoSorter*  gpsImageInfoSorter;
     bool                 activeState;
 };
 
@@ -96,13 +94,14 @@ public:
  * @param imageFilterModel digikam's filter model
  * @param parent Parent object
  */
-MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterModel* imageFilterModel, QWidget* parent)
-    : QWidget(parent), StateSavingObject(this), d(new MapWidgetViewPriv)
+MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
+                             ImageFilterModel* const imageFilterModel, QWidget* const parent)
+    : QWidget(parent), StateSavingObject(this), d(new MapWidgetViewPriv())
 {
     d->imageModel           = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel       = selectionModel;
     d->mapViewModelHelper   = new MapViewModelHelper(d->selectionModel, imageFilterModel, this);
-    QVBoxLayout* vBoxLayout = new QVBoxLayout(this);
+    QVBoxLayout* const vBoxLayout = new QVBoxLayout(this);
 
     d->mapWidget = new KMap::KMapWidget(this);
     d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
@@ -110,6 +109,8 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* selectionModel,ImageFilterMode
     KMap::ItemMarkerTiler* const kmapMarkerModel = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
     d->mapWidget->setBackend("marble");
+    d->gpsImageInfoSorter = new GPSImageInfoSorter(this);
+    d->gpsImageInfoSorter->addToKMapWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget->getControlWidget());
 }
@@ -126,7 +127,10 @@ void MapWidgetView::doLoadState()
 {
     KConfigGroup group = getConfigGroup();
 
-    // we store the settings for the widget in a group to be more flexible later
+    d->gpsImageInfoSorter->setSortOptions(
+            GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions())))
+        );
+
     const KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
     d->mapWidget->readSettingsFromGroup(&groupCentralMap);
 }
@@ -134,6 +138,8 @@ void MapWidgetView::doLoadState()
 void MapWidgetView::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
+
+    group.writeEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions()));
 
     KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
     d->mapWidget->saveSettingsToGroup(&groupCentralMap);
@@ -145,7 +151,7 @@ void MapWidgetView::doSaveState()
  * @brief Switch that opens the current album.
  * @param album Current album.
  */
-void MapWidgetView::openAlbum(Album* album)
+void MapWidgetView::openAlbum(Album* const album)
 {
     d->imageModel->openAlbum(album);
 }
@@ -174,9 +180,10 @@ class MapViewModelHelper::MapViewModelHelperPrivate
 {
 public:
     MapViewModelHelperPrivate()
+      : model(0),
+        selectionModel(0),
+        thumbnailLoadThread(0)
     {
-        model          = 0;
-        selectionModel = 0;
     }
 
     ImageFilterModel*    model;
@@ -188,20 +195,19 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
                                        ImageFilterModel* const filterModel, QObject* const parent)
     : KMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
-
     d->model               = filterModel;
     d->selectionModel      = selection;
+    /// @todo Who owns this guy?
     d->thumbnailLoadThread = new ThumbnailLoadThread();
 
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
+    // Note: Here we only monitor changes to the database, because changes to the model
+    //       are also sent when thumbnails are generated, and we don't want to update
+    //       the marker tiler for that!
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
             this, SLOT(slotImageChange(const ImageChangeset&)), Qt::QueuedConnection);
-
-    // TODO: disable this connection and rely only on the database based one above
-    //     connect(d->model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-    //             this, SLOT(signalModelChangedDrastically()));
 }
 
 /**
@@ -236,16 +242,14 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
  */
 bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates* const coordinates) const
 {
-    ImageInfo info = d->model->imageInfo(index);
+    const ImageInfo info = d->model->imageInfo(index);
 
     if (info.isNull() || !info.hasCoordinates())
     {
         return false;
     }
 
-    const KMap::GeoCoordinates gpsCoordinates(info.latitudeNumber(), info.longitudeNumber());
-
-    *coordinates = gpsCoordinates;
+    *coordinates = KMap::GeoCoordinates(info.latitudeNumber(), info.longitudeNumber());
 
     return true;
 }
@@ -264,13 +268,13 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
     }
 
     QPixmap thumbnail;
-    ImageInfo info = d->model->imageInfo(index);
+    const ImageInfo info = d->model->imageInfo(index);
 
     if (!info.isNull())
     {
-        QString path   = info.filePath();
+        const QString path   = info.filePath();
 
-        if (d->thumbnailLoadThread->find(path, thumbnail,qMax(size.width(), size.height())))
+        if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
         {
             return thumbnail;
         }
@@ -286,65 +290,60 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
 /**
  * @brief This function finds the best representative marker from a group of markers. This is needed to display a thumbnail for a marker group.
  * @param indices A list containing markers.
- * @param sortKey Sets the criteria for selecting the representative thumbnail. When sortKey == 0 the most youngest thumbnail is chosen, when sortKey == 1 the most oldest thumbnail is chosen and when sortKey == 2 the thumbnail with the highest rating is chosen(if 2 thumbnails have the same rating, the youngest one is chosen).
+ * @param sortKey Determines the sorting options and is actually of type GPSImageInfoSorter::SortOptions
  * @return Returns the index of the marker.
  */
 QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
         const int sortKey)
 {
-    const bool oldestFirst = sortKey & 1;
-    QList<QModelIndex> indexList;
-
     if (list.isEmpty())
     {
         return QPersistentModelIndex();
     }
 
+    // first convert from QPersistentModelIndex to QModelIndex
+    QList<QModelIndex> indexList;
     for (int i=0; i<list.count(); ++i)
     {
-        QModelIndex newIndex(list[i]);
+        const QModelIndex newIndex(list.at(i));
         indexList.append(newIndex);
     }
 
-    QModelIndex bestIndex;
-    ImageInfo bestImageInfo;
-    QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
-
-    for (int i=0; i<imageInfoList.count(); ++i)
+    // now get the ImageInfos and convert them to GPSImageInfos
+    const QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
+    GPSImageInfo::List gpsImageInfoList;
+    foreach (const ImageInfo& imageInfo, imageInfoList)
     {
-        ImageInfo currentInfo = imageInfoList.at(i);
-        bool takeThisIndex    = (bestImageInfo.id() == -1);
-
-        if (!takeThisIndex)
+        GPSImageInfo gpsImageInfo;
+        if (GPSImageInfo::fromImageInfo(imageInfo, &gpsImageInfo))
         {
-            if (oldestFirst)
-            {
-                takeThisIndex = currentInfo < bestImageInfo;
-
-                if (takeThisIndex)
-                {
-                    bestImageInfo = currentInfo;
-                }
-            }
-            else
-            {
-                takeThisIndex = bestImageInfo < currentInfo;
-
-                if (takeThisIndex)
-                {
-                    bestImageInfo = currentInfo;
-                }
-            }
-        }
-        else
-        {
-            bestImageInfo = currentInfo;
+            gpsImageInfoList << gpsImageInfo;
         }
     }
 
-    bestIndex = d->model->indexForImageInfo(bestImageInfo);
-    QPersistentModelIndex returnedIndex(bestIndex);
-    return returnedIndex;
+    if (gpsImageInfoList.size()!=indexList.size())
+    {
+        // this is a problem, and unexpected
+        return indexList.first();
+    }
+
+    // now determine the best available index
+    QModelIndex bestIndex = indexList.first();
+    GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
+    for (int i=1; i<gpsImageInfoList.count(); ++i)
+    {
+        const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
+        if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KMap::KMapSelectedNone,
+                                           currentInfo, KMap::KMapSelectedNone,
+                                           KMap::KMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+        {
+            bestIndex = indexList.at(i);
+            bestGPSImageInfo = currentInfo;
+        }
+    }
+
+    // and return the index
+    return QPersistentModelIndex(bestIndex);
 }
 
 /**
@@ -357,7 +356,7 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
         return;
     }
 
-    QModelIndex currentIndex = d->model->indexForPath(loadingDescription.filePath);
+    const QModelIndex currentIndex = d->model->indexForPath(loadingDescription.filePath);
 
     if (currentIndex.isValid())
     {
@@ -368,20 +367,21 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
 
 /**
  * This functions is called when one clicks on a thumbnail.
- * @param A list containing the marker indices belonging the group whose thumbnail has been clicked.
+ * @param clickedIndices A list containing the marker indices belonging the group whose thumbnail has been clicked.
  */
 void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices)
 {
-    //TODO: there isn't another way to convert QPersistentModelIndex to QModelIndex?
-    QList<QModelIndex> indexList;
+    /// @todo What do we do when an image is clicked?
 
+#if 0
+    QList<QModelIndex> indexList;
     for (int i=0; i<clickedIndices.count(); ++i)
     {
-        QModelIndex newIndex(clickedIndices[i]);
+        const QModelIndex newIndex(clickedIndices.at(i));
         indexList.append(newIndex);
     }
 
-    QList<ImageInfo> imageInfoList = d->model->imageInfos(indexList);
+    const QList<ImageInfo> imageInfoList = d->model->imageInfos(indexList);
     QList<qlonglong> imagesIdList;
 
     for (int i=0; i<imageInfoList.count(); ++i)
@@ -390,6 +390,7 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
     }
 
     emit signalFilteredImages(imagesIdList);
+#endif
 }
 
 void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
@@ -400,14 +401,14 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 
     // TODO: more detailed check
     if (   ( changes & DatabaseFields::LatitudeNumber )
-           || ( changes & DatabaseFields::LongitudeNumber )
-           || ( changes & DatabaseFields::Altitude ) )
+        || ( changes & DatabaseFields::LongitudeNumber )
+        || ( changes & DatabaseFields::Altitude ) )
     {
         kDebug() << "changes!";
 
         foreach (const qlonglong& id, changeset.ids())
         {
-            QModelIndex index = d->model->indexForImageId(id);
+            const QModelIndex index = d->model->indexForImageId(id);
             kDebug()<<id<<index;
 
             if (index.isValid())

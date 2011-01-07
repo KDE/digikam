@@ -33,7 +33,7 @@
 
 // local includes
 
-#include "digikam2kmap.h"
+#include "digikam2kmap_database.h"
 
 /// @todo Actually use this definition!
 typedef QPair<KMap::TileIndex, int> MapPair;

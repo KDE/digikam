@@ -46,6 +46,8 @@ namespace KMap
 namespace Digikam
 {
 
+class ImageInfo;
+
 class GPSImageInfo
 {
 public:
@@ -75,6 +77,8 @@ public:
 
         return info;
     }
+
+    static bool fromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo);
 
     qlonglong               id;
     KMap::GeoCoordinates    coordinates;

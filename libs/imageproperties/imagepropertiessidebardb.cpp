@@ -45,6 +45,7 @@
 
 // Local includes
 
+#include "digikam2kmap_database.h"
 #include "dimg.h"
 #include "imageinfo.h"
 #include "databasewatch.h"
@@ -294,23 +295,13 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
-            ImagePosition pos = d->currentInfos.first().imagePosition();
-
-            if (pos.isEmpty())
+            GPSImageInfo info;
+            if (!GPSImageInfo::fromImageInfo(d->currentInfos.first(), &info))
             {
                 m_gpsTab->setCurrentURL();
             }
             else
             {
-                GPSImageInfo info;
-                info.coordinates.setLatLon(pos.latitudeNumber(), pos.longitudeNumber());
-                if (pos.hasAltitude())
-                {
-                    info.coordinates.setAlt(pos.altitude());
-                }
-                info.dateTime  = d->currentInfos.first().dateTime();
-                info.rating    = d->currentInfos.first().rating();
-                info.url       = d->currentInfos.first().fileUrl();
                 m_gpsTab->setGPSInfoList(GPSImageInfo::List() << info);
             }
 
@@ -354,21 +345,10 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             for (ImageInfoList::const_iterator it = d->currentInfos.constBegin();
                  it != d->currentInfos.constEnd(); ++it)
             {
-                ImagePosition pos = (*it).imagePosition();
-
-                if (!pos.isEmpty())
+                GPSImageInfo info;
+                if (GPSImageInfo::fromImageInfo(*it, &info))
                 {
-                    GPSImageInfo info;
-                    info.coordinates.setLatLon(pos.latitudeNumber(), pos.longitudeNumber());
-                    if (pos.hasAltitude())
-                    {
-                        info.coordinates.setAlt(pos.altitude());
-                    }
-                    info.dateTime  = (*it).dateTime();
-                    info.rating    = (*it).rating();
-                    info.url       = (*it).fileUrl();
-                    info.id        = (*it).id();
-                    list.append(info);
+                    list << info;
                 }
             }
 
