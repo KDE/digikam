@@ -122,24 +122,20 @@ MapWidgetView::~MapWidgetView()
     delete d;
 }
 
-void MapWidgetView::setConfigGroup(KConfigGroup group)
-{
-    StateSavingObject::setConfigGroup(group);
-}
-
 void MapWidgetView::doLoadState()
 {
     KConfigGroup group = getConfigGroup();
-    const KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
 
+    // we store the settings for the widget in a group to be more flexible later
+    const KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
     d->mapWidget->readSettingsFromGroup(&groupCentralMap);
 }
 
 void MapWidgetView::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
-    KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
 
+    KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
     d->mapWidget->saveSettingsToGroup(&groupCentralMap);
 
     group.sync();

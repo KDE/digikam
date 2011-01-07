@@ -109,6 +109,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
     d->welcomePageView = new WelcomePageView(this);
     d->mediaPlayerView = new MediaPlayerView(this);
     d->mapWidgetView = new MapWidgetView(d->imageIconView->getSelectionModel(),d->imageIconView->imageFilterModel(), this);
+    d->mapWidgetView->setObjectName("mainwindow_mapwidgetview");
 
     insertWidget(PreviewAlbumMode, d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);

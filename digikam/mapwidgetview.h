@@ -99,7 +99,9 @@ public:
     void openAlbum(Album* album);
     void setActive(const bool state);
     bool getActiveState() const;
-    void setConfigGroup(KConfigGroup group);
+
+protected:
+
     void doLoadState();
     void doSaveState();
 

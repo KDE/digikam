@@ -610,9 +610,7 @@ void DigikamView::loadViewState()
 
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
 
-    MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
-    mapView->doLoadState();
-
+    d->mapView->loadState();
     d->rightSideBar->loadState();
 }
 
@@ -649,8 +647,7 @@ void DigikamView::saveViewState()
         group.writeEntry("InitialAlbumID", 0);
     }
 
-    MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
-    mapView->doSaveState();
+    d->mapView->saveState();
 
     d->rightSideBar->saveState();
 }
@@ -1405,8 +1402,7 @@ void DigikamView::slotMapWidgetView()
         slotIconView();
     }
 
-    MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
-    mapView->setActive(true);
+    d->mapView->setActive(true);
     d->albumWidgetStack->setMapViewMode();
 }
 
@@ -1419,12 +1415,7 @@ void DigikamView::slotIconView()
         emit signalTogglePreview(false);
     }
 
-    MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
-
-    if (mapView->getActiveState())
-    {
-        mapView->setActive(false);
-    }
+    d->mapView->setActive(false);
 
     //and switch to icon view
     d->albumWidgetStack->setIconViewMode();
