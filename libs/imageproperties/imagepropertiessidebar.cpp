@@ -86,18 +86,10 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* parent,
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
-
-    m_propertiesTab->setObjectName("Image Properties SideBar Expander");
-    m_propertiesTab->readSettings();
 }
 
 ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
-}
-
-void ImagePropertiesSideBar::applySettings()
-{
-    m_metadataTab->applySettings();
 }
 
 void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg* img)
@@ -365,6 +357,36 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 
     m_propertiesTab->setPhotoFlash(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
     m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
+}
+
+void ImagePropertiesSideBar::doLoadState()
+{
+    Sidebar::doLoadState();
+
+    /// @todo m_propertiesTab should load its settings from our group
+    m_propertiesTab->setObjectName("Image Properties SideBar Expander");
+    m_propertiesTab->readSettings();
+
+    KConfigGroup group = getConfigGroup();
+
+    const KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    m_gpsTab->readSettings(groupGPSTab);
+
+    const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    m_metadataTab->readSettings(groupMetadataTab);
+}
+
+void ImagePropertiesSideBar::doSaveState()
+{
+    Sidebar::doSaveState();
+
+    KConfigGroup group = getConfigGroup();
+
+    KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    m_gpsTab->writeSettings(groupGPSTab);
+
+    KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    m_metadataTab->writeSettings(groupMetadataTab);
 }
 
 }  // namespace Digikam

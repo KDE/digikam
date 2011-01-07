@@ -57,8 +57,6 @@ public:
                            KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
     ~ImagePropertiesSideBar();
 
-    void applySettings();
-
     virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* img = 0);
 
 public Q_SLOTS:
@@ -73,6 +71,16 @@ protected Q_SLOTS:
 protected:
 
     virtual void setImagePropertiesInformation(const KUrl& url);
+
+    /**
+     * load the last view state from disk - called by StateSavingObject#loadState()
+     */
+    void doLoadState();
+
+    /**
+     * save the view state to disk - called by StateSavingObject#saveState()
+     */
+    void doSaveState();
 
 protected:
 

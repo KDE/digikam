@@ -27,8 +27,6 @@
 
 // Qt includes
 
-#include <QDateTime>
-#include <QString>
 #include <QWidget>
 
 // KDE includes
@@ -43,8 +41,6 @@
 
 namespace Digikam
 {
-
-class ImagePropertiesGPSTabPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesGPSTab : public QWidget
 {
@@ -77,17 +73,16 @@ public:
 
     void setActive(const bool state);
 
+    void readSettings(const KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
 private Q_SLOTS:
 
     void slotGPSDetails();
 
 private:
 
-    void readConfig();
-    void writeConfig();
-
-private:
-
+    class ImagePropertiesGPSTabPriv;
     ImagePropertiesGPSTabPriv* const d;
 };
 

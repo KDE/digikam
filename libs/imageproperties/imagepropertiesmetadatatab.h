@@ -52,16 +52,12 @@ public:
     ImagePropertiesMetaDataTab(QWidget* parent);
     ~ImagePropertiesMetaDataTab();
 
-    void applySettings();
-
     void setCurrentURL(const KUrl& url=KUrl());
     void setCurrentData(const DMetadata& metadata=DMetadata(),
                         const QString& filename=QString());
 
-private:
-
-    void readSettings();
-    void writeSettings();
+    void readSettings(const KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
 
 private:
 

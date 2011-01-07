@@ -64,7 +64,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 namespace Digikam
 {
 
-class ImagePropertiesGPSTabPriv
+class ImagePropertiesGPSTab::ImagePropertiesGPSTabPriv
 {
 
 public:
@@ -193,8 +193,6 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    readConfig();
-
     // --------------------------------------------------------
 
     connect(d->detailsBtn, SIGNAL(clicked()),
@@ -203,15 +201,11 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
 ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
 {
-    writeConfig();
     delete d;
 }
 
-void ImagePropertiesGPSTab::readConfig()
+void ImagePropertiesGPSTab::readSettings(const KConfigGroup& group)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
-
     d->gpsImageInfoSorter->setSortOptions(
             GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions())))
         );
@@ -219,25 +213,20 @@ void ImagePropertiesGPSTab::readConfig()
 
     KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
     d->map->readSettingsFromGroup(&groupMapWidget);
+
 }
-
-void ImagePropertiesGPSTab::writeConfig()
+void ImagePropertiesGPSTab::writeSettings(KConfigGroup& group)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
-
     group.writeEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions()));
     group.writeEntry("Web GPS Locator", getWebGPSLocator());
 
     KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
     d->map->saveSettingsToGroup(&groupMapWidget);
-
-    config->sync();
 }
 
 int ImagePropertiesGPSTab::getWebGPSLocator()
 {
-    return ( d->detailsCombo->currentIndex() );
+    return d->detailsCombo->currentIndex();
 }
 
 void ImagePropertiesGPSTab::setWebGPSLocator(int locator)

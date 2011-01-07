@@ -507,6 +507,8 @@ void ShowFoto::readSettings()
 
     d->lastOpenedDirectory.setPath(defaultDir);
 
+    d->rightSideBar->loadState();
+
     Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18nc("default theme name", "Default")));
 }
 
@@ -520,6 +522,8 @@ void ShowFoto::saveSettings()
     group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.toLocalFile() );
     group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
 
+    d->rightSideBar->saveState();
+
     config->sync();
 }
 
@@ -532,7 +536,6 @@ void ShowFoto::applySettings()
 
     d->rightSideBar->setStyle(group.readEntry("Sidebar Title Style", 0) == 0 ?
                               KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
-    d->rightSideBar->applySettings();
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);

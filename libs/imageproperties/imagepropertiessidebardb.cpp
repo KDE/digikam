@@ -607,4 +607,24 @@ ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
     return d->versionsHistoryTab;
 }
 
+void ImagePropertiesSideBarDB::doLoadState()
+{
+    ImagePropertiesSideBar::doLoadState();
+
+    KConfigGroup group = getConfigGroup();
+
+    const KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
+    d->versionsHistoryTab->readSettings(groupVersionTab);
+}
+
+void ImagePropertiesSideBarDB::doSaveState()
+{
+    ImagePropertiesSideBar::doSaveState();
+
+    KConfigGroup group = getConfigGroup();
+
+    KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
+    d->versionsHistoryTab->writeSettings(groupVersionTab);
+}
+
 }  // namespace Digikam

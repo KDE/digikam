@@ -108,6 +108,17 @@ private:
     void itemChanged(const ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history);
     void setImagePropertiesInformation(const KUrl& url);
 
+protected:
+    /**
+     * load the last view state from disk - called by StateSavingObject#loadState()
+     */
+    void doLoadState();
+
+    /**
+     * save the view state to disk - called by StateSavingObject#saveState()
+     */
+    void doSaveState();
+
 private:
 
     ImagePropertiesSideBarDBPriv* const d;

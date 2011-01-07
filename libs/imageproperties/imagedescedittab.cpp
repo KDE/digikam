@@ -366,6 +366,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     // -- read config ---------------------------------------------------------
 
+    /// @todo Implement read/writeSettings functions with externally supplied groups
+
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group2       = config->group("Image Properties SideBar");
     d->tabWidget->setCurrentIndex(group2.readEntry("ImageDescEditTab Tab",

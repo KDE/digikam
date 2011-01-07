@@ -115,7 +115,9 @@ ImagePropertiesSideBarCamGui::~ImagePropertiesSideBarCamGui()
 
 void ImagePropertiesSideBarCamGui::applySettings()
 {
-    d->metadataTab->applySettings();
+    /// @todo Still needed?
+
+    /// @todo Are load/saveState called by the creator?
 }
 
 void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl& url,

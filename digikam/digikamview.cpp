@@ -612,6 +612,8 @@ void DigikamView::loadViewState()
 
     MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
     mapView->doLoadState();
+
+    d->rightSideBar->loadState();
 }
 
 void DigikamView::saveViewState()
@@ -649,6 +651,8 @@ void DigikamView::saveViewState()
 
     MapWidgetView* mapView = d->albumWidgetStack->mapWidgetView();
     mapView->doSaveState();
+
+    d->rightSideBar->saveState();
 }
 
 KUrl::List DigikamView::allUrls() const
@@ -1855,7 +1859,9 @@ void DigikamView::slotSidebarTabTitleStyleChanged()
 {
     d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->applySettings();
+
+    /// @todo Which settings actually have to be reloaded?
+//     d->rightSideBar->applySettings();
 }
 
 void DigikamView::slotProgressMessageChanged(const QString& descriptionOfAction)

@@ -135,13 +135,13 @@ LightTableWindow::LightTableWindow()
 
     //-------------------------------------------------------------
 
-    d->leftSideBar->loadState();
-    d->rightSideBar->loadState();
-    d->leftSideBar->populateTags();
-    d->rightSideBar->populateTags();
     slotSidebarTabTitleStyleChanged();
 
     readSettings();
+
+    d->leftSideBar->populateTags();
+    d->rightSideBar->populateTags();
+
     applySettings();
     setAutoSaveSettings("LightTable Settings", true);
 }
@@ -165,6 +165,11 @@ void LightTableWindow::readSettings()
     d->barViewDock->setShouldBeVisible(group.readEntry("Show Thumbbar", true));
     d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
     slotToggleNavigateByPair();
+
+    d->leftSideBar->setConfigGroup(KConfigGroup(&group, "Left Sidebar"));
+    d->leftSideBar->loadState();
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->loadState();
 }
 
 void LightTableWindow::writeSettings()
@@ -175,6 +180,11 @@ void LightTableWindow::writeSettings()
     group.writeEntry("Show Thumbbar", d->barViewDock->shouldBeVisible());
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     group.writeEntry("Clear On Close", d->clearOnCloseAction->isChecked());
+
+    d->leftSideBar->setConfigGroup(KConfigGroup(&group, "Left Sidebar"));
+    d->leftSideBar->saveState();
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->saveState();
     config->sync();
 }
 
@@ -1773,7 +1783,9 @@ void LightTableWindow::slotSidebarTabTitleStyleChanged()
 {
     d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->applySettings();
+
+    /// @todo Which part of the settings has to be reloaded?
+//     d->rightSideBar->applySettings();
 }
 
 void LightTableWindow::moveEvent(QMoveEvent* e)

@@ -74,10 +74,8 @@ public:
     int                            currentSelectedImageListPosition;
     qlonglong                      currentSelectedImageId;
 
-    static const QString           configGroup;
     static const QString           configActiveTab;
 };
-const QString ImagePropertiesVersionsTab::ImagePropertiesVersionsTabPriv::configGroup("Image Properties SideBar");
 const QString ImagePropertiesVersionsTab::ImagePropertiesVersionsTabPriv::configActiveTab("Version Properties Tab");
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
@@ -91,15 +89,10 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
 
     connect(d->versionsWidget, SIGNAL(imageSelected(const ImageInfo&)),
             this, SIGNAL(imageSelected(const ImageInfo&)));
-
-    readSettings(KGlobal::config()->group(d->configGroup));
 }
 
 ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
 {
-    KConfigGroup group = KGlobal::config()->group(d->configGroup);
-    writeSettings(group);
-
     delete d;
 }
 

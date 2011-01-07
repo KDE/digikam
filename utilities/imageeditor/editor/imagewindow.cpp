@@ -647,7 +647,6 @@ void ImageWindow::slotSetupChanged()
     toggleNonDestructiveActions();
 
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->applySettings();
 }
 
 void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const ImageInfo& imageInfoCurrent,

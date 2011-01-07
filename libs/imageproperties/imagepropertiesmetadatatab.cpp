@@ -108,25 +108,15 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent)
     {
         d->xmpWidget->hide();
     }
-
-    readSettings();
 }
 
 ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
 {
-    writeSettings();
     delete d;
 }
 
-void ImagePropertiesMetaDataTab::applySettings()
+void ImagePropertiesMetaDataTab::readSettings(const KConfigGroup& group)
 {
-    readSettings();
-}
-
-void ImagePropertiesMetaDataTab::readSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Image Properties SideBar");
     setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
                                     (int)ImagePropertiesMetadataTabPriv::EXIF));
     d->exifWidget->setMode(group.readEntry("EXIF Level",                              (int)ExifWidget::CUSTOM));
@@ -143,10 +133,8 @@ void ImagePropertiesMetaDataTab::readSettings()
     d->xmpWidget->setTagsFilter(group.readEntry("XMP Tags Filter",                    MetadataPanel::defaultXmpFilter()));
 }
 
-void ImagePropertiesMetaDataTab::writeSettings()
+void ImagePropertiesMetaDataTab::writeSettings(KConfigGroup& group)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Image Properties SideBar");
     group.writeEntry("ImagePropertiesMetaData Tab", currentIndex());
     group.writeEntry("EXIF Level",                  d->exifWidget->getMode());
     group.writeEntry("MAKERNOTE Level",             d->makernoteWidget->getMode());
@@ -156,7 +144,6 @@ void ImagePropertiesMetaDataTab::writeSettings()
     group.writeEntry("Current MAKERNOTE Item",      d->makernoteWidget->getCurrentItemKey());
     group.writeEntry("Current IPTC Item",           d->iptcWidget->getCurrentItemKey());
     group.writeEntry("Current XMP Item",            d->xmpWidget->getCurrentItemKey());
-    config->sync();
 }
 
 void ImagePropertiesMetaDataTab::setCurrentURL(const KUrl& url)
