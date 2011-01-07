@@ -6,7 +6,7 @@
  * Date        : 2007-02-03
  * Description : Loading parameters for multithreaded loading
  *
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,9 +32,9 @@ namespace Digikam
 
 bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters& other) const
 {
-    return type          == other.type
-           && size       == other.size
-           && exifRotate == other.exifRotate;
+    return type       == other.type &&
+           size       == other.size &&
+           exifRotate == other.exifRotate;
 }
 
 bool LoadingDescription::PostProcessingParameters::operator==(const PostProcessingParameters& other) const
@@ -80,8 +80,8 @@ IccProfile LoadingDescription::PostProcessingParameters::profile() const
 LoadingDescription::LoadingDescription(const QString& filePath, ColorManagementSettings cm)
     : filePath(filePath)
 {
-    rawDecodingSettings = DRawDecoding();
-    rawDecodingHint     = RawDecodingDefaultSettings;
+    rawDecodingSettings                      = DRawDecoding();
+    rawDecodingHint                          = RawDecodingDefaultSettings;
     postProcessingParameters.colorManagement = cm;
 }
 
@@ -97,11 +97,11 @@ LoadingDescription::LoadingDescription(const QString& filePath, int size, bool e
                                        LoadingDescription::PreviewParameters::PreviewType type)
     : filePath(filePath)
 {
-    rawDecodingSettings          = DRawDecoding();
-    rawDecodingHint              = RawDecodingDefaultSettings;
-    previewParameters.type       = type;
-    previewParameters.size       = size;
-    previewParameters.exifRotate = exifRotate;
+    rawDecodingSettings                      = DRawDecoding();
+    rawDecodingHint                          = RawDecodingDefaultSettings;
+    previewParameters.type                   = type;
+    previewParameters.size                   = size;
+    previewParameters.exifRotate             = exifRotate;
     postProcessingParameters.colorManagement = cm;
 }
 
@@ -252,8 +252,8 @@ bool LoadingDescription::needCheckRawDecoding() const
 bool LoadingDescription::isReducedVersion() const
 {
     // return true if this loads anything but the full version
-    return rawDecodingSettings.rawPrm.halfSizeColorImage
-           || previewParameters.type != PreviewParameters::NoPreview;
+    return rawDecodingSettings.rawPrm.halfSizeColorImage ||
+           previewParameters.type != PreviewParameters::NoPreview;
 }
 
 bool LoadingDescription::operator==(const LoadingDescription& other) const
