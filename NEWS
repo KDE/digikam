@@ -21,6 +21,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 262065 : Linking issue with Marble library.
 013 ==> 261879 : Ubuntu unity compatibility bugs: export menu disappeared.
 014 ==> 262296 : Camera GUI does not open [patch].
-015 ==> 
-
+015 ==> 201788 : Picture navigation problems and disambiguation.
+016 ==> 
 
