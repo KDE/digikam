@@ -41,14 +41,10 @@
 
 #include "digikam_export.h"
 
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 
-class ImagePropertiesTabPriv;
-
-class DIGIKAM_EXPORT ImagePropertiesTab : public RExpanderBox
+class DIGIKAM_EXPORT ImagePropertiesTab : public KDcrawIface::RExpanderBox
 {
     Q_OBJECT
 
@@ -59,7 +55,7 @@ public:
 
     void setCurrentURL(const KUrl& url=KUrl());
 
-    void setPhotoInfoDisable(bool b);
+    void setPhotoInfoDisable(const bool b);
 
     void setFileModifiedDate(const QString& str);
     void setFileSize(const QString& str);
@@ -86,6 +82,8 @@ public:
     void setPhotoWhiteBalance(const QString& str);
 
 private:
+
+    class ImagePropertiesTabPriv;
 
     ImagePropertiesTabPriv* const d;
 };

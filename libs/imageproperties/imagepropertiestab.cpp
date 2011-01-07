@@ -32,7 +32,6 @@
 
 // KDE includes
 
-
 #include <klocale.h>
 #include <kdialog.h>
 
@@ -43,7 +42,7 @@
 namespace Digikam
 {
 
-class ImagePropertiesTabPriv
+class ImagePropertiesTab::ImagePropertiesTabPriv
 {
 public:
 
@@ -154,8 +153,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget* w1               = new QWidget(this);
-    QGridLayout* glay1        = new QGridLayout(w1);
+    QWidget* const w1         = new QWidget(this);
+    QGridLayout* const glay1  = new QGridLayout(w1);
 
     d->file                   = new DTextLabelName(i18n("File: "),        w1);
     d->folder                 = new DTextLabelName(i18n("Folder: "),      w1);
@@ -192,8 +191,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget* w2               = new QWidget(this);
-    QGridLayout* glay2        = new QGridLayout(w2);
+    QWidget* const w2         = new QWidget(this);
+    QGridLayout* const glay2  = new QGridLayout(w2);
 
     d->mime                   = new DTextLabelName(i18n("Type: "),        w2);
     d->dimensions             = new DTextLabelName(i18n("Dimensions: "),  w2);
@@ -226,8 +225,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget* w3               = new QWidget(this);
-    QGridLayout* glay3        = new QGridLayout(w3);
+    QWidget* const w3         = new QWidget(this);
+    QGridLayout* const glay3  = new QGridLayout(w3);
 
     d->make                   = new DTextLabelName(i18n("Make: "),          w3);
     d->model                  = new DTextLabelName(i18n("Model: "),         w3);
@@ -294,30 +293,30 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 {
     if (url.isEmpty())
     {
-        d->labelFile->setText(QString());
-        d->labelFolder->setText(QString());
-        d->labelFileModifiedDate->setText(QString());
-        d->labelFileSize->setText(QString());
-        d->labelFileOwner->setText(QString());
-        d->labelFilePermissions->setText(QString());
+        d->labelFile->clear();
+        d->labelFolder->clear();
+        d->labelFileModifiedDate->clear();
+        d->labelFileSize->clear();
+        d->labelFileOwner->clear();
+        d->labelFilePermissions->clear();
 
-        d->labelImageMime->setText(QString());
-        d->labelImageDimensions->setText(QString());
-        d->labelImageCompression->setText(QString());
-        d->labelImageBitDepth->setText(QString());
-        d->labelImageColorMode->setText(QString());
+        d->labelImageMime->clear();
+        d->labelImageDimensions->clear();
+        d->labelImageCompression->clear();
+        d->labelImageBitDepth->clear();
+        d->labelImageColorMode->clear();
 
-        d->labelPhotoMake->setText(QString());
-        d->labelPhotoModel->setText(QString());
-        d->labelPhotoDateTime->setText(QString());
-        d->labelPhotoLens->setText(QString());
-        d->labelPhotoAperture->setText(QString());
-        d->labelPhotoFocalLength->setText(QString());
-        d->labelPhotoExposureTime->setText(QString());
-        d->labelPhotoSensitivity->setText(QString());
-        d->labelPhotoExposureMode->setText(QString());
-        d->labelPhotoFlash->setText(QString());
-        d->labelPhotoWhiteBalance->setText(QString());
+        d->labelPhotoMake->clear();
+        d->labelPhotoModel->clear();
+        d->labelPhotoDateTime->clear();
+        d->labelPhotoLens->clear();
+        d->labelPhotoAperture->clear();
+        d->labelPhotoFocalLength->clear();
+        d->labelPhotoExposureTime->clear();
+        d->labelPhotoSensitivity->clear();
+        d->labelPhotoExposureMode->clear();
+        d->labelPhotoFlash->clear();
+        d->labelPhotoWhiteBalance->clear();
 
         setEnabled(false);
         return;
@@ -329,7 +328,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
     d->labelFolder->setText(url.directory());
 }
 
-void ImagePropertiesTab::setPhotoInfoDisable(bool b)
+void ImagePropertiesTab::setPhotoInfoDisable(const bool b)
 {
     if (b)
     {
