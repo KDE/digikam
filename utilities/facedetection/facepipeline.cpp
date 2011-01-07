@@ -6,7 +6,7 @@
  * Date        : 2010-09-03
  * Description : Integrated, multithread face detection / recognition
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -828,9 +828,10 @@ void FacePipeline::FacePipelinePriv::stop()
         previewThread->cancel();
     }
 
-    WorkerObject*  workerObject;
-    ParallelPipes* pipes;
-    DynamicThread* thread;
+    WorkerObject* workerObject = 0;
+    ParallelPipes* pipes       = 0;
+    DynamicThread* thread      = 0;
+
     foreach (QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
@@ -1084,9 +1085,9 @@ DatabaseFace FacePipeline::confirm(const ImageInfo& info, const DatabaseFace& da
                                    const DImg& image, int assignedTagId, const TagRegion& assignedRegion)
 {
     FacePipelineDatabaseFace face = databaseFace;
-    face.assignedTagId  = assignedTagId;
-    face.assignedRegion = assignedRegion;
-    face.roles |= FacePipelineDatabaseFace::ForConfirmation;
+    face.assignedTagId            = assignedTagId;
+    face.assignedRegion           = assignedRegion;
+    face.roles                    |= FacePipelineDatabaseFace::ForConfirmation;
 
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, face, image);
     d->send(package);

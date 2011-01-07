@@ -6,7 +6,7 @@
  * Date        : 2010-09-03
  * Description : Integrated, multithread face detection / recognition
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,13 +54,14 @@ public:
 
     QString filePath;
     DImg    detectionImage; // image scaled to about 0.5 Mpx
+    typedef QExplicitlySharedDataPointer<FacePipelineExtendedPackage> Ptr;
+
+public:
 
     bool operator==(const LoadingDescription& description) const
     {
         return filePath == description.filePath;
     }
-
-    typedef QExplicitlySharedDataPointer<FacePipelineExtendedPackage> Ptr;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -88,6 +89,8 @@ public:
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals);
 
     void add(WorkerObject* worker);
+
+public:
 
     QList<WorkerObject*> m_workers;
 
@@ -138,10 +141,11 @@ protected:
 
     virtual void run();
 
-    QList<ImageInfo> toFilter;
+protected:
 
+    QList<ImageInfo>                        toFilter;
     QList<FacePipelineExtendedPackage::Ptr> toSend;
-    QList<ImageInfo> toBeSkipped;
+    QList<ImageInfo>                        toBeSkipped;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -169,10 +173,9 @@ Q_SIGNALS:
 
 protected:
 
-    PackageLoadingDescriptionList scheduledPackages;
-    int                           maximumSentOutPackages;
-
-    FacePipeline::FacePipelinePriv* const   d;
+    PackageLoadingDescriptionList         scheduledPackages;
+    int                                   maximumSentOutPackages;
+    FacePipeline::FacePipelinePriv* const d;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -323,21 +326,21 @@ public:
 
 public:
 
-    ScanStateFilter*   databaseFilter;
-    PreviewLoader*     previewThread;
-    DetectionWorker*   detectionWorker;
-    ParallelPipes*     parallelDetectors;
-    RecognitionWorker* recognitionWorker;
-    DatabaseWriter*    databaseWriter;
-    Trainer*           trainer;
+    ScanStateFilter*     databaseFilter;
+    PreviewLoader*       previewThread;
+    DetectionWorker*     detectionWorker;
+    ParallelPipes*       parallelDetectors;
+    RecognitionWorker*   recognitionWorker;
+    DatabaseWriter*      databaseWriter;
+    Trainer*             trainer;
 
-    QList<QObject*>    pipeline;
+    QList<QObject*>      pipeline;
 
-    FaceIface*         iface;
+    FaceIface*           iface;
     ThumbnailLoadThread* thumbnailLoadThread;
-    bool               started;
-    int                infosForFiltering;
-    int                packagesOnTheRoad;
+    bool                 started;
+    int                  infosForFiltering;
+    int                  packagesOnTheRoad;
 
 public Q_SLOTS:
 

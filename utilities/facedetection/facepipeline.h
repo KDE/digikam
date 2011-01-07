@@ -6,7 +6,7 @@
  * Date        : 2010-09-03
  * Description : Integrated, multithread face detection / recognition
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,12 +72,16 @@ public:
     };
     Q_DECLARE_FLAGS(Roles, Role)
 
+public:
+
     FacePipelineDatabaseFace();
     FacePipelineDatabaseFace(const DatabaseFace& face);
 
-    Roles                 roles;
-    int                   assignedTagId;
-    TagRegion             assignedRegion;
+public:
+
+    Roles     roles;
+    int       assignedTagId;
+    TagRegion assignedRegion;
 };
 
 class FacePipelineDatabaseFaceList : public QList<FacePipelineDatabaseFace>
@@ -119,6 +123,8 @@ public:
         : processFlags(NotProcessed)
     {
     }
+
+public:
 
     ImageInfo                    info;
     DImg                         image;
