@@ -111,11 +111,6 @@ public:
     void expand();
 
     /**
-     * load the last view state from disk
-     */
-    void doLoadState();
-
-    /**
      * hide sidebar and backup minimized state.
      */
     void backup();
@@ -143,8 +138,15 @@ public:
      */
     bool isExpanded();
 
+protected:
+
     /**
-     * save the view state to disk
+     * load the last view state from disk - called by StateSavingObject#loadState()
+     */
+    void doLoadState();
+
+    /**
+     * save the view state to disk - called by StateSavingObject#saveState()
      */
     void doSaveState();
 
