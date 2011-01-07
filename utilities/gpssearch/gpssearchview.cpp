@@ -257,10 +257,10 @@ void GPSSearchView::doLoadState()
     }
 
     d->sortOrderOptionsHelper->setSortOptions(
-            GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(d->sortOrderOptionsHelper->getSortOptions())))
+            GPSImageInfoSorter::SortOptions(group.readEntry(entryName("Sort Order"), int(d->sortOrderOptionsHelper->getSortOptions())))
         );
 
-    const KConfigGroup groupMapWidget = KConfigGroup(&group, "GPSSearch Map Widget");
+    const KConfigGroup groupMapWidget = KConfigGroup(&group, entryName("GPSSearch Map Widget"));
 
     d->mapSearchWidget->readSettingsFromGroup(&groupMapWidget);
 
@@ -276,9 +276,9 @@ void GPSSearchView::doSaveState()
     KConfigGroup group = getConfigGroup();
 
     group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
-    group.writeEntry("Sort Order", int(d->sortOrderOptionsHelper->getSortOptions()));
+    group.writeEntry(entryName("Sort Order"), int(d->sortOrderOptionsHelper->getSortOptions()));
 
-    KConfigGroup groupMapWidget = KConfigGroup(&group, "GPSSearch Map Widget");
+    KConfigGroup groupMapWidget = KConfigGroup(&group, entryName("GPSSearch Map Widget"));
     d->mapSearchWidget->saveSettingsToGroup(&groupMapWidget);
     d->searchTreeView->saveState();
 
