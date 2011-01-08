@@ -71,6 +71,7 @@ public:
     MapWidgetViewPriv()
         :vbox(0),
          mapWidget(0),
+         imageFilterModel(0),
          imageModel(0),
          selectionModel(0),
          mapViewModelHelper(0),
@@ -81,6 +82,7 @@ public:
 
     KVBox*               vbox;
     KMap::KMapWidget*    mapWidget;
+    ImageFilterModel*   imageFilterModel;
     ImageAlbumModel*     imageModel;
     QItemSelectionModel* selectionModel;
     MapViewModelHelper*  mapViewModelHelper;
@@ -98,14 +100,15 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
                              ImageFilterModel* const imageFilterModel, QWidget* const parent)
     : QWidget(parent), StateSavingObject(this), d(new MapWidgetViewPriv())
 {
+    d->imageFilterModel     = imageFilterModel;
     d->imageModel           = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel       = selectionModel;
     d->mapViewModelHelper   = new MapViewModelHelper(d->selectionModel, imageFilterModel, this);
     QVBoxLayout* const vBoxLayout = new QVBoxLayout(this);
 
     d->mapWidget = new KMap::KMapWidget(this);
-    d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
-    d->mapWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
+    d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup|KMap::MouseModeSelectThumbnail);
+    d->mapWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup|KMap::MouseModeSelectThumbnail);
     KMap::ItemMarkerTiler* const kmapMarkerModel = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
     d->mapWidget->setBackend("marble");
@@ -421,6 +424,28 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
     }
 
     kDebug() << "---------------------------------------------------------------";
+}
+
+/**
+ * @brief Returns the ImageInfo for the current image
+ */
+ImageInfo MapWidgetView::currentInfo()
+{
+   /// @todo Have kmapwidget honor the 'current index'
+    QModelIndex currentIndex = d->selectionModel->currentIndex();
+    kDebug()<<currentIndex;
+    if (!currentIndex.isValid())
+    {
+        /// @todo This is temporary until kmapwidget marks a 'current index'
+        if (!d->selectionModel->hasSelection())
+        {
+            return ImageInfo();
+        }
+
+        currentIndex = d->selectionModel->selectedIndexes().first();
+    }
+    kDebug()<<currentIndex;
+    return d->imageFilterModel->imageInfo(currentIndex);
 }
 
 } //namespace Digikam

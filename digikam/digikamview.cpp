@@ -99,6 +99,7 @@ public:
         albumManager(0),
         albumHistory(0),
         albumWidgetStack(0),
+        lastPreviewMode(AlbumWidgetStack::PreviewAlbumMode),
         albumModificationHelper(0),
         tagModificationHelper(0),
         searchModificationHelper(0),
@@ -145,6 +146,7 @@ public:
     AlbumManager*                 albumManager;
     AlbumHistory*                 albumHistory;
     AlbumWidgetStack*             albumWidgetStack;
+    int                           lastPreviewMode;
 
     AlbumModificationHelper*      albumModificationHelper;
     TagModificationHelper*        tagModificationHelper;
@@ -1421,54 +1423,60 @@ void DigikamView::slotIconView()
     d->albumWidgetStack->setIconViewMode();
 }
 
+
 void DigikamView::slotImagePreview()
 {
-    ImageInfo info = d->iconView->currentInfo();
-
-    if (!info.isNull() && (d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode))
+    const int currentPreviewMode = d->albumWidgetStack->previewMode();
+    ImageInfo currentInfo;
+    if (currentPreviewMode == AlbumWidgetStack::PreviewAlbumMode)
     {
-        slotTogglePreviewMode(info);
+        currentInfo = d->iconView->currentInfo();
     }
+    else if (currentPreviewMode == AlbumWidgetStack::MapWidgetMode)
+    {
+        currentInfo = d->mapView->currentInfo();
+    }
+
+    slotTogglePreviewMode(currentInfo);
 }
 
-// This method toggle between AlbumView and ImagePreview Modes, depending of context.
+/**
+ * @brief This method toggles between AlbumView and ImagePreview modes, depending on the context.
+ */
 void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
 {
-    if (d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
+    if (  (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode
+        || d->albumWidgetStack->previewMode() == AlbumWidgetStack::MapWidgetMode)
+        && !info.isNull())
     {
+        d->lastPreviewMode = d->albumWidgetStack->previewMode();
 
-        if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode && !info.isNull())
-        {
-            d->albumWidgetStack->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
-        }
-        else
-        {
-            // We go back to AlbumView Mode.
-            d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
-        }
+        /// @todo What about next/previous in map widget mode?
+        d->albumWidgetStack->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+    }
+    else
+    {
+        // go back to either AlbumViewMode or MapWidgetMode
+        d->albumWidgetStack->setPreviewMode( d->lastPreviewMode );
     }
 }
 
 void DigikamView::slotToggledToPreviewMode(bool b)
 {
+    /// @todo What do we have to do in the map widget mode???
 
-    if (d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
+    toggleZoomActions();
+
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-
-        toggleZoomActions();
-
-        if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
-        {
-            emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
-        }
-        else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
-        {
-            slotZoomFactorChanged(d->albumWidgetStack->zoomFactor());
-        }
-
-        emit signalTogglePreview(b);
+        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
+    }
+    else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+    {
+        slotZoomFactorChanged(d->albumWidgetStack->zoomFactor());
     }
 
+    emit signalTogglePreview(b);
 }
 
 void DigikamView::slotImageEdit()
@@ -1504,6 +1512,7 @@ void DigikamView::slotQueueMgr()
 
 void DigikamView::slotImageLightTable()
 {
+    /// @todo Care about MapWidgetMode
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
         // put images into an emptied light table
@@ -1521,6 +1530,7 @@ void DigikamView::slotImageLightTable()
 
 void DigikamView::slotImageAddToLightTable()
 {
+    /// @todo Care about MapWidgetMode
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
         // add images to the existing images in the light table
@@ -1538,6 +1548,7 @@ void DigikamView::slotImageAddToLightTable()
 
 void DigikamView::slotImageAddToCurrentQueue()
 {
+    /// @todo Care about MapWidgetMode
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
         d->iconView->insertSelectedToCurrentQueue();
@@ -1553,6 +1564,7 @@ void DigikamView::slotImageAddToCurrentQueue()
 
 void DigikamView::slotImageAddToNewQueue()
 {
+    /// @todo Care about MapWidgetMode
     bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
                     !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty();
 

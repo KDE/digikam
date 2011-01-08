@@ -100,6 +100,7 @@ public:
     void openAlbum(Album* const album);
     void setActive(const bool state);
     bool getActiveState() const;
+    ImageInfo currentInfo();
 
 protected:
 

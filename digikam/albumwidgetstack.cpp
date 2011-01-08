@@ -108,7 +108,8 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
 
     d->welcomePageView = new WelcomePageView(this);
     d->mediaPlayerView = new MediaPlayerView(this);
-    d->mapWidgetView = new MapWidgetView(d->imageIconView->getSelectionModel(),d->imageIconView->imageFilterModel(), this);
+    d->mapWidgetView = new MapWidgetView(d->imageIconView->getSelectionModel(),
+                                         d->imageIconView->imageFilterModel(), this);
     d->mapWidgetView->setObjectName("mainwindow_mapwidgetview");
 
     insertWidget(PreviewAlbumMode, d->imageIconView);
@@ -253,11 +254,6 @@ MapWidgetView* AlbumWidgetStack::mapWidgetView()
 
 void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
-    if (previewMode() == MapWidgetMode)
-    {
-        return;
-    }
-
     if (info.isNull())
     {
         if (previewMode() == MediaPlayerMode)
@@ -321,6 +317,7 @@ int AlbumWidgetStack::previewMode()
 
 void AlbumWidgetStack::setMapViewMode()
 {
+    /// @todo What about the other things done in setIconViewMode?
     setCurrentIndex(MapWidgetMode);
 }
 
@@ -365,11 +362,6 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 
 void AlbumWidgetStack::previewLoaded()
 {
-    if (previewMode() == MapWidgetMode)
-    {
-        return;
-    }
-
     emit signalToggledToPreviewMode(true);
 }
 

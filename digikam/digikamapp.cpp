@@ -1497,6 +1497,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
 
 void DigikamApp::slotSelectionChanged(int selectionCount)
 {
+    /// @todo In the map view, it is hard to select only one image - here, the current image should be taken instead
     d->imageViewAction->setEnabled(selectionCount == 1);
     d->imagePreviewAction->setEnabled(selectionCount == 1);
     d->imageFindSimilarAction->setEnabled(selectionCount == 1);
