@@ -22,5 +22,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 261879 : Ubuntu unity compatibility bugs: export menu disappeared.
 014 ==> 262296 : Camera GUI does not open [patch].
 015 ==> 201788 : Picture navigation problems and disambiguation.
-016 ==> 
+016 ==> 261415 : digiKam crashes when adding lens data to ~/.local.
+017 ==> 
 
