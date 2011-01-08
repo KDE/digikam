@@ -3,7 +3,7 @@
     Copyright (C) 2007 by Andrew Zabolotny
 */
 
-#include "config-lensfun.h"
+#include "config.h"
 #include "lensfun.h"
 #include "lensfunprv.h"
 #include <fcntl.h>
@@ -89,6 +89,7 @@ lfError lfDatabase::Load (const char *filename)
         return lfError (err->code == G_FILE_ERROR_ACCES ? -EACCES : -ENOENT);
 
     lfError e = Load (filename, contents, length);
+
     g_free (contents);
 
     return e;
@@ -151,27 +152,28 @@ static void _xml_start_element (GMarkupParseContext *context,
     }
     else if (!strcmp (element_name, "mount"))
     {
-        if (!strcmp (ctx, "lensdatabase"))
+        if (ctx && !strcmp (ctx, "lensdatabase"))
         {
             pd->mount = new lfMount ();
             goto chk_no_attrs;
         }
-        else if (!strcmp (ctx, "camera") ||
-                 !strcmp (ctx, "lens"))
+        else if (ctx &&
+                 (!strcmp (ctx, "camera") ||
+                  !strcmp (ctx, "lens")))
             goto chk_no_attrs;
         else
             goto bad_ctx;
     }
     else if (!strcmp (element_name, "camera"))
     {
-        if (strcmp (ctx, "lensdatabase"))
+        if (!ctx || strcmp (ctx, "lensdatabase"))
             goto bad_ctx;
         pd->camera = new lfCamera ();
         goto chk_no_attrs;
     }
     else if (!strcmp (element_name, "lens"))
     {
-        if (strcmp (ctx, "lensdatabase"))
+        if (!ctx || strcmp (ctx, "lensdatabase"))
             goto bad_ctx;
         pd->lens = new lfLens ();
         pd->lens->Type = LF_RECTILINEAR;
@@ -179,7 +181,7 @@ static void _xml_start_element (GMarkupParseContext *context,
     }
     else if (!strcmp (element_name, "focal"))
     {
-        if (strcmp (ctx, "lens") || !pd->lens)
+        if (!ctx || strcmp (ctx, "lens") || !pd->lens)
             goto bad_ctx;
 
         for (i = 0; attribute_names [i]; i++)
@@ -194,7 +196,7 @@ static void _xml_start_element (GMarkupParseContext *context,
     }
     else if (!strcmp (element_name, "aperture"))
     {
-        if (strcmp (ctx, "lens") || !pd->lens)
+        if (!ctx || strcmp (ctx, "lens") || !pd->lens)
             goto bad_ctx;
 
         for (i = 0; attribute_names [i]; i++)
@@ -209,7 +211,7 @@ static void _xml_start_element (GMarkupParseContext *context,
     }
     else if (!strcmp (element_name, "center"))
     {
-        if (strcmp (ctx, "lens") || !pd->lens)
+        if (!ctx || strcmp (ctx, "lens") || !pd->lens)
             goto bad_ctx;
 
         for (i = 0; attribute_names [i]; i++)
@@ -222,7 +224,7 @@ static void _xml_start_element (GMarkupParseContext *context,
     }
     else if (!strcmp (element_name, "cci"))
     {
-        if (strcmp (ctx, "lens") || !pd->lens)
+        if (!ctx || strcmp (ctx, "lens") || !pd->lens)
             goto bad_ctx;
 
         for (i = 0; attribute_names [i]; i++)
@@ -237,19 +239,19 @@ static void _xml_start_element (GMarkupParseContext *context,
     }
     else if (!strcmp (element_name, "type"))
     {
-        if (strcmp (ctx, "lens") || !pd->lens)
+        if (!ctx || strcmp (ctx, "lens") || !pd->lens)
             goto bad_ctx;
         goto chk_no_attrs;
     }
     else if (!strcmp (element_name, "calibration"))
     {
-        if (strcmp (ctx, "lens"))
+        if (!ctx || strcmp (ctx, "lens"))
             goto bad_ctx;
         goto chk_no_attrs;
     }
     else if (!strcmp (element_name, "distortion"))
     {
-        if (strcmp (ctx, "calibration"))
+        if (!ctx || strcmp (ctx, "calibration"))
             goto bad_ctx;
 
         lfLensCalibDistortion dc;
@@ -300,7 +302,7 @@ static void _xml_start_element (GMarkupParseContext *context,
     }
     else if (!strcmp (element_name, "tca"))
     {
-        if (strcmp (ctx, "calibration"))
+        if (!ctx || strcmp (ctx, "calibration"))
             goto bad_ctx;
 
         lfLensCalibTCA tcac;
@@ -341,7 +343,7 @@ static void _xml_start_element (GMarkupParseContext *context,
     }
     else if (!strcmp (element_name, "vignetting"))
     {
-        if (strcmp (ctx, "calibration"))
+        if (!ctx || strcmp (ctx, "calibration"))
             goto bad_ctx;
 
         lfLensCalibVignetting vc;
