@@ -129,6 +129,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     QVBoxLayout* vlay2 = new QVBoxLayout(mapPanel);
     d->mapSearchWidget = new KMap::KMapWidget(mapPanel);
     d->mapSearchWidget->setBackend("marble");
+    d->mapSearchWidget->setShowThumbnails(true);
 
     d->gpsMarkerTiler = new GPSMarkerTiler(this, d->imageFilterModel, d->selectionModel);
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
