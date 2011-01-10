@@ -270,7 +270,6 @@ void RawDecodingSettingsWriter::write()
     AddParameterIfNotDefault(dcbEnhanceFl);
     AddParameterIfNotDefault(eeciRefine);
     AddParameterIfNotDefault(esMedPasses);
-    AddParameterIfNotDefault(amazeCARefine);
 }
 
 void RawDecodingSettingsReader::read()
@@ -354,7 +353,6 @@ void RawDecodingSettingsReader::read()
     ReadParameter(dcbEnhanceFl);
     ReadParameter(eeciRefine);
     ReadParameter(esMedPasses);
-    ReadParameter(amazeCARefine);
 }
 
 }  // namespace Digikam
