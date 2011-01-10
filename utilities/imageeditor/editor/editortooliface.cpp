@@ -99,7 +99,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
     d->editor->rightSideBar()->appendTab(d->tool->toolSettings(), d->tool->toolIcon(), d->tool->toolName());
     d->editor->rightSideBar()->setActiveTab(d->tool->toolSettings());
     d->editor->toggleActions(false);
-    d->editor->toggleToolActions(true);
+    d->editor->toggleToolActions(d->tool);
 
     // If editor tool has zoomable preview, switch on zoom actions.
     if (d->editor->editorStackView()->previewWidget())
@@ -160,7 +160,7 @@ void EditorToolIface::unLoadTool()
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
     d->editor->toggleActions(true);
-    d->editor->toggleToolActions(false);
+    d->editor->toggleToolActions();
     d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
 
     // To restore canvas zoom level in zoom combobox.

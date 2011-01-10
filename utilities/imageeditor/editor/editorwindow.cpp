@@ -126,6 +126,8 @@
 #include "dpopupmenu.h"
 #include "dzoombar.h"
 #include "editorstackview.h"
+#include "editortool.h"
+#include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "exposurecontainer.h"
 #include "filesaveoptionsbox.h"
@@ -681,7 +683,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("logo_action", m_animLogo);
 
     toggleNonDestructiveActions();
-    toggleToolActions(false);
+    toggleToolActions();
 }
 
 void EditorWindow::EditorWindowPriv::plugNewVersionInFormatAction(EditorWindow *q, KActionMenu* menuAction,
@@ -1216,10 +1218,20 @@ void EditorWindow::toggleNonDestructiveActions()
     m_discardChangesAction->setVisible(m_nonDestructive);
 }
 
-void EditorWindow::toggleToolActions(bool hasTool)
+void EditorWindow::toggleToolActions(EditorTool* tool)
 {
-    m_applyToolAction->setVisible(hasTool);
-    m_closeToolAction->setVisible(hasTool);
+    if (tool)
+    {
+        m_applyToolAction->setText(tool->toolSettings()->button(EditorToolSettings::Ok)->text());
+        m_applyToolAction->setIcon(tool->toolSettings()->button(EditorToolSettings::Ok)->icon());
+        m_applyToolAction->setToolTip(tool->toolSettings()->button(EditorToolSettings::Ok)->toolTip());
+
+        m_closeToolAction->setText(tool->toolSettings()->button(EditorToolSettings::Cancel)->text());
+        m_closeToolAction->setIcon(tool->toolSettings()->button(EditorToolSettings::Cancel)->icon());
+        m_closeToolAction->setToolTip(tool->toolSettings()->button(EditorToolSettings::Cancel)->toolTip());
+    }
+    m_applyToolAction->setVisible(tool);
+    m_closeToolAction->setVisible(tool);
 }
 
 void EditorWindow::slotToggleFullScreen()

@@ -63,6 +63,7 @@ class Canvas;
 class DImageHistory;
 class DPopupMenu;
 class DLogoAction;
+class EditorTool;
 class EditorStackView;
 class ExposureSettingsContainer;
 class IOFileSettingsContainer;
@@ -176,7 +177,7 @@ protected:
     void toggleStandardActions(bool val);
     void toggleZoomActions(bool val);
     void toggleNonDestructiveActions();
-    void toggleToolActions(bool val);
+    void toggleToolActions(EditorTool* tool=0);
 
     void printImage(const KUrl& url);
 
