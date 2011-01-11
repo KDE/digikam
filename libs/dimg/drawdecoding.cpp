@@ -8,7 +8,7 @@
  *               standard libkdcraw parameters plus
  *               few customized for post processing.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +35,84 @@
 
 namespace Digikam
 {
+
+class RawDecodingSettingsWriter
+{
+public:
+
+    RawDecodingSettingsWriter(const RawDecodingSettings& settings, FilterAction& action, const QString& prefix = QString())
+        : settings(settings), action(action), prefix(prefix)
+    {
+        timeOptimizedSettings.optimizeTimeLoading();
+    }
+
+    const RawDecodingSettings& settings;
+    FilterAction&              action;
+    QString                    prefix;
+
+    RawDecodingSettings        defaultSettings;
+    RawDecodingSettings        timeOptimizedSettings;
+
+    inline QString combinedKey(const QString& key)
+    {
+        return prefix + key;
+    }
+
+    template <typename T>
+    void addParameterIfNotDefault(const QString& key, const T& value, const T& defaultValue)
+    {
+        if (value != defaultValue)
+        {
+            action.addParameter(key, value);
+        }
+    }
+#define AddParameterIfNotDefault(name) AddParameterIfNotDefaultWithValue(name, name)
+#define AddParameterIfNotDefaultWithValue(name, value) \
+        addParameterIfNotDefault(prefix + #name, settings.value, defaultSettings.value)
+
+#define AddParameterIfNotDefaultEnum(name) AddParameterIfNotDefaultEnumWithValue(name, name)
+#define AddParameterIfNotDefaultEnumWithValue(name, value) \
+        addParameterIfNotDefault<int>(prefix + #name, settings.value, defaultSettings.value)
+
+#define AddParameter(name) action.addParameter(prefix + #name, settings.name)
+#define AddParameterEnum(name) action.addParameter(prefix + #name, static_cast<int>(settings.name))
+
+    void write();
+};
+
+// --------------------------------------------------------------------------------------------
+
+class RawDecodingSettingsReader
+{
+public:
+
+    RawDecodingSettingsReader(const FilterAction& action, const QString& prefix = QString())
+        : action(action), prefix(prefix)
+    {
+    }
+
+    const FilterAction& action;
+    QString             prefix;
+    RawDecodingSettings settings;
+
+    template <typename enumType, typename variantType>
+    void readParameter(const QString& key, enumType& setting, const variantType& defaultValue)
+    {
+        setting = static_cast<enumType>(action.parameter(key, defaultValue));
+    }
+
+#define ReadParameter(name) ReadParameterWithValue(name, name)
+#define ReadParameterWithValue(name, value) \
+        settings.value = action.parameter(prefix + #name, settings.value)
+
+#define ReadParameterEnum(name) ReadParameterEnumWithValue(name, name)
+#define ReadParameterEnumWithValue(name, value) \
+        readParameter(prefix + #name, settings.value, static_cast<int>(settings.value))
+
+    void read();
+};
+
+// --------------------------------------------------------------------------------------------
 
 DRawDecoding::DRawDecoding()
 {
@@ -79,80 +157,6 @@ bool DRawDecoding::operator==(const DRawDecoding& other) const
            wb           == other.wb           &&
            curvesAdjust == other.curvesAdjust;
 }
-
-class RawDecodingSettingsWriter
-{
-public:
-
-    RawDecodingSettingsWriter(const RawDecodingSettings& settings, FilterAction& action, const QString& prefix = QString())
-        : settings(settings), action(action), prefix(prefix)
-    {
-        timeOptimizedSettings.optimizeTimeLoading();
-    }
-
-    const RawDecodingSettings& settings;
-    FilterAction&              action;
-    QString                    prefix;
-
-    RawDecodingSettings        defaultSettings;
-    RawDecodingSettings        timeOptimizedSettings;
-
-    inline QString combinedKey(const QString& key)
-    {
-        return prefix + key;
-    }
-
-    template <typename T>
-    void addParameterIfNotDefault(const QString& key, const T& value, const T& defaultValue)
-    {
-        if (value != defaultValue)
-        {
-            action.addParameter(key, value);
-        }
-    }
-    #define AddParameterIfNotDefault(name) AddParameterIfNotDefaultWithValue(name, name)
-    #define AddParameterIfNotDefaultWithValue(name, value) \
-        addParameterIfNotDefault(prefix + #name, settings.value, defaultSettings.value)
-
-    #define AddParameterIfNotDefaultEnum(name) AddParameterIfNotDefaultEnumWithValue(name, name)
-    #define AddParameterIfNotDefaultEnumWithValue(name, value) \
-        addParameterIfNotDefault<int>(prefix + #name, settings.value, defaultSettings.value)
-
-    #define AddParameter(name) action.addParameter(prefix + #name, settings.name)
-    #define AddParameterEnum(name) action.addParameter(prefix + #name, static_cast<int>(settings.name))
-
-    void write();
-};
-
-class RawDecodingSettingsReader
-{
-public:
-
-    RawDecodingSettingsReader(const FilterAction& action, const QString& prefix = QString())
-        : action(action), prefix(prefix)
-    {
-    }
-
-    const FilterAction& action;
-    QString             prefix;
-    RawDecodingSettings settings;
-
-    template <typename enumType, typename variantType>
-    void readParameter(const QString& key, enumType& setting, const variantType& defaultValue)
-    {
-        setting = static_cast<enumType>(action.parameter(key, defaultValue));
-    }
-
-    #define ReadParameter(name) ReadParameterWithValue(name, name)
-    #define ReadParameterWithValue(name, value) \
-        settings.value = action.parameter(prefix + #name, settings.value)
-
-    #define ReadParameterEnum(name) ReadParameterEnumWithValue(name, name)
-    #define ReadParameterEnumWithValue(name, value) \
-        readParameter(prefix + #name, settings.value, static_cast<int>(settings.value))
-
-    void read();
-};
 
 void DRawDecoding::writeToFilterAction(FilterAction& action, const QString& prefix) const
 {
@@ -259,9 +263,9 @@ void RawDecodingSettingsWriter::write()
     {
         if (!settings.whiteBalanceArea.isNull())
         {
-            action.addParameter(prefix + "whiteBalanceAreaX", settings.whiteBalanceArea.x());
-            action.addParameter(prefix + "whiteBalanceAreaY", settings.whiteBalanceArea.y());
-            action.addParameter(prefix + "whiteBalanceAreaWidth", settings.whiteBalanceArea.width());
+            action.addParameter(prefix + "whiteBalanceAreaX",      settings.whiteBalanceArea.x());
+            action.addParameter(prefix + "whiteBalanceAreaY",      settings.whiteBalanceArea.y());
+            action.addParameter(prefix + "whiteBalanceAreaWidth",  settings.whiteBalanceArea.width());
             action.addParameter(prefix + "whiteBalanceAreaHeight", settings.whiteBalanceArea.height());
         }
     }
@@ -338,9 +342,9 @@ void RawDecodingSettingsReader::read()
 
     if (!action.hasParameter("whiteBalanceAreaX"))
     {
-        int x = action.parameter(prefix + "whiteBalanceAreaX", 0);
-        int y = action.parameter(prefix + "whiteBalanceAreaY", 0);
-        int width = action.parameter(prefix + "whiteBalanceAreaWidth", 0);
+        int x      = action.parameter(prefix + "whiteBalanceAreaX", 0);
+        int y      = action.parameter(prefix + "whiteBalanceAreaY", 0);
+        int width  = action.parameter(prefix + "whiteBalanceAreaWidth", 0);
         int height = action.parameter(prefix + "whiteBalanceAreaHeight", 0);
         QRect rect(x, y, width, height);
         if (rect.isValid())
