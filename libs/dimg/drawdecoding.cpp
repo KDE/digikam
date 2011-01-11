@@ -274,6 +274,7 @@ void RawDecodingSettingsWriter::write()
     AddParameterIfNotDefault(dcbEnhanceFl);
     AddParameterIfNotDefault(eeciRefine);
     AddParameterIfNotDefault(esMedPasses);
+    AddParameterIfNotDefaultWithValue(noiseReductionChrominanceThreshold, NRChroThreshold);
 }
 
 void RawDecodingSettingsReader::read()
@@ -357,6 +358,7 @@ void RawDecodingSettingsReader::read()
     ReadParameter(dcbEnhanceFl);
     ReadParameter(eeciRefine);
     ReadParameter(esMedPasses);
+    ReadParameterWithValue(noiseReductionChrominanceThreshold, NRChroThreshold);
 }
 
 }  // namespace Digikam
