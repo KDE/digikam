@@ -620,10 +620,7 @@ void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler* handler)
 {
     Q_D(DatabaseCoreBackend);
 
-    if (d->errorHandler)
-    {
-        delete d->errorHandler;
-    }
+    delete d->errorHandler;
 
     d->errorHandler = handler;
 }

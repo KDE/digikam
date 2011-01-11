@@ -86,10 +86,7 @@ LoadingCache* LoadingCache::cache()
 
 void LoadingCache::cleanUp()
 {
-    if (m_instance)
-    {
-        delete m_instance;
-    }
+    delete m_instance;
 }
 
 LoadingCache::LoadingCache()

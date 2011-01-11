@@ -192,12 +192,8 @@ bool GPCamera::doConnect()
 
     gp_camera_new(&d->camera);
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
+    d->status = 0;
     d->status = new GPStatus();
 
     gp_abilities_list_new(&abilList);
@@ -331,12 +327,8 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
     int                       nrofsinfos;
     CameraStorageInformation* sinfos;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
+    d->status = 0;
     d->status = new GPStatus();
 
     int errorCode = gp_camera_get_storageinfo (d->camera, &sinfos, &nrofsinfos, d->status->context);
@@ -470,12 +462,8 @@ bool GPCamera::getPreview(QImage& preview)
 
     gp_file_new(&cfile);
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_capture_preview(d->camera, cfile, d->status->context);
@@ -519,11 +507,8 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     int            errorCode;
     CameraFilePath path;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
+    delete d->status;
+    d->status = 0;
 
     d->status = new GPStatus;
 

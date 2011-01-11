@@ -351,15 +351,8 @@ CurvesWidget::~CurvesWidget()
 {
     d->progressTimer->stop();
 
-    if (d->imageHistogram)
-    {
-        delete d->imageHistogram;
-    }
-
-    if (d->curves)
-    {
-        delete d->curves;
-    }
+    delete d->imageHistogram;
+    delete d->curves;
 
     delete d;
 }
@@ -453,11 +446,7 @@ void CurvesWidget::updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenB
     stopHistogramComputation();
 
     // Remove old histogram data from memory.
-    if (d->imageHistogram)
-    {
-        delete d->imageHistogram;
-    }
-
+    delete d->imageHistogram;
     d->imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
 
     connect(d->imageHistogram, SIGNAL(calculationStarted(const ImageHistogram*)),

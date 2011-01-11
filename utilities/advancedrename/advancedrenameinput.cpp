@@ -61,15 +61,8 @@ AdvancedRenameLineEditProxy::AdvancedRenameLineEditProxy(QWidget* parent)
 
 void AdvancedRenameLineEditProxy::setWidget(QWidget* widget)
 {
-    if (m_widget)
-    {
-        delete m_widget;
-    }
-
-    if (m_layout)
-    {
-        delete m_layout;
-    }
+    delete m_widget;
+    delete m_layout;
 
     m_widget = widget;
     m_widget->setParent(this);

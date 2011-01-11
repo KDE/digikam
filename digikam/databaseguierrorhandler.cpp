@@ -179,10 +179,7 @@ bool DatabaseGUIErrorHandler::checkDatabaseConnection()
     d->checker->start();
     loop.exec();
 
-    if (d->dialog)
-    {
-        delete d->dialog;
-    }
+    delete d->dialog;
 
     // ensure that the connection thread is closed
     d->checker->wait();

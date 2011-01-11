@@ -135,11 +135,7 @@ ImageCurves::~ImageCurves()
         delete d->lut;
     }
 
-    if (d->curves)
-    {
-        delete d->curves;
-    }
-
+    delete d->curves;
     delete d;
 }
 

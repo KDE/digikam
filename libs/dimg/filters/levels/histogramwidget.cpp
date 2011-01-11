@@ -183,15 +183,8 @@ HistogramWidget::~HistogramWidget()
 {
     d->progressTimer->stop();
 
-    if (d->imageHistogram)
-    {
-        delete d->imageHistogram;
-    }
-
-    if (d->selectionHistogram)
-    {
-        delete d->selectionHistogram;
-    }
+    delete d->imageHistogram;
+    delete d->selectionHistogram;
 
     delete d;
 }
@@ -379,18 +372,10 @@ void HistogramWidget::slotCalculationFinished(const ImageHistogram* histogram, b
         setCursor( Qt::ArrowCursor );
 
         // Remove old histogram data from memory.
-        if (d->imageHistogram)
-        {
-            delete d->imageHistogram;
-            d->imageHistogram = 0;
-        }
-
-        if (d->selectionHistogram)
-        {
-            delete d->selectionHistogram;
-            d->selectionHistogram = 0;
-        }
-
+        delete d->imageHistogram;
+        d->imageHistogram = 0;
+        delete d->selectionHistogram;
+        d->selectionHistogram = 0;
         emit signalHistogramComputationFailed();
     }
 }
@@ -495,11 +480,7 @@ void HistogramWidget::updateSelectionData(uchar* s_data, uint s_w, uint s_h,
 
     // Remove old histogram data from memory.
 
-    if (d->selectionHistogram)
-    {
-        delete d->selectionHistogram;
-    }
-
+    delete d->selectionHistogram;
     // Calc new histogram data
     d->selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
     connectHistogram(d->selectionHistogram);

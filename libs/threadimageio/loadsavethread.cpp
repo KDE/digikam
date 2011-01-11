@@ -89,18 +89,10 @@ void LoadSaveThread::run()
         {
             QMutexLocker lock(threadMutex());
 
-            if (d->lastTask)
-            {
-                delete d->lastTask;
-                d->lastTask = 0;
-            }
-
-            if (m_currentTask)
-            {
-                delete m_currentTask;
-                m_currentTask = 0;
-            }
-
+            delete d->lastTask;
+            d->lastTask = 0;
+            delete m_currentTask;
+            m_currentTask = 0;
             if (!m_todo.isEmpty())
             {
                 m_currentTask = m_todo.takeFirst();

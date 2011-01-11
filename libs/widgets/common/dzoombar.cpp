@@ -165,11 +165,7 @@ DZoomBar::DZoomBar(QWidget* parent)
 
 DZoomBar::~DZoomBar()
 {
-    if (d->zoomTimer)
-    {
-        delete d->zoomTimer;
-    }
-
+    delete d->zoomTimer;
     delete d;
 }
 

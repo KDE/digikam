@@ -91,11 +91,7 @@ void EqualizeFilter::equalizeImage()
 
     if ( !histogram || !map || !equalize_map )
     {
-        if (histogram)
-        {
-            delete histogram;
-        }
-
+        delete histogram;
         if (map)
         {
             delete [] map;

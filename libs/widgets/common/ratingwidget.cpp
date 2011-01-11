@@ -110,11 +110,7 @@ RatingWidget::~RatingWidget()
 
 void RatingWidget::setupTimeLine()
 {
-    if (d->fadingTimeLine)
-    {
-        delete d->fadingTimeLine;
-    }
-
+    delete d->fadingTimeLine;
     d->fadingTimeLine = new QTimeLine(d->duration, this);
     d->fadingTimeLine->setFrameRange(0, 255);
 
