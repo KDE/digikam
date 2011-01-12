@@ -23,5 +23,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 262296 : Camera GUI does not open [patch].
 015 ==> 201788 : Picture navigation problems and disambiguation.
 016 ==> 261415 : digiKam crashes when adding lens data to ~/.local.
-017 ==> 
+017 ==> 253062 : Database of 80,000+ images wiped out.
+018 ==> 
+
 
