@@ -125,10 +125,7 @@ void ParseableDialog::setDialogIcon(const QPixmap& icon)
 
 void ParseableDialog::setSettingsWidget(QWidget* settingsWidget)
 {
-    if (d->settingsWidget)
-    {
-        delete d->settingsWidget;
-    }
+    delete d->settingsWidget;
 
     d->settingsWidget = new QWidget(this);
     QGridLayout* l    = new QGridLayout(this);

@@ -302,10 +302,7 @@ DigikamApp::~DigikamApp()
         QueueMgrWindow::queueManagerWindow()->close();
     }
 
-    if (d->view)
-    {
-        delete d->view;
-    }
+    delete d->view;
 
     d->albumIconViewFilter->saveSettings();
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());

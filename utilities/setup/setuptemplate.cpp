@@ -266,11 +266,7 @@ void SetupTemplate::slotAddTemplate()
 void SetupTemplate::slotDelTemplate()
 {
     TemplateListItem* item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
-
-    if (item)
-    {
-        delete item;
-    }
+    delete item;
 }
 
 void SetupTemplate::slotRepTemplate()

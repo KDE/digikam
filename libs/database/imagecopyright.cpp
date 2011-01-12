@@ -82,20 +82,14 @@ ImageCopyright::ImageCopyright(const ImageCopyright& other)
 
 ImageCopyright::~ImageCopyright()
 {
-    if (m_cache)
-    {
-        delete m_cache;
-        m_cache = 0;
-    }
+    delete m_cache;
+    m_cache = 0;
 }
 
 ImageCopyright& ImageCopyright::operator=(const ImageCopyright& other)
 {
-    if (m_cache)
-    {
-        delete m_cache;
-        m_cache = 0;
-    }
+    delete m_cache;
+    m_cache = 0;
 
     m_id = other.m_id;
     return *this;

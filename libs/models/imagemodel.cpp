@@ -653,10 +653,7 @@ bool ImageModel::hasIncrementalRefreshPending() const
 
 void ImageModel::startIncrementalRefresh()
 {
-    if (d->incrementalUpdater)
-    {
-        delete d->incrementalUpdater;
-    }
+    delete d->incrementalUpdater;
 
     d->incrementalUpdater = new ImageModelIncrementalUpdater(d);
 }

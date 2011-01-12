@@ -475,10 +475,7 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 {
 #ifdef HAVE_KDEPIMLIBS
 
-    if (d->ABCmenu)
-    {
-        delete d->ABCmenu;
-    }
+    delete d->ABCmenu;
 
     d->ABCmenu = new QMenu(d->parent);
 
