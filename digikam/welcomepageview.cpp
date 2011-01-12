@@ -7,8 +7,8 @@
  * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -98,10 +98,13 @@ QString WelcomePageView::infoPage() const
 {
     QStringList newFeatures;
     newFeatures << i18n("XMP metadata sidecar support;");
-    newFeatures << i18n("Reverse geocoding support;");
+    newFeatures << i18n("Reverse geo-coding support;");
     newFeatures << i18n("Image versionning support;");
-    newFeatures << i18n("Face detection support;");
-    newFeatures << i18n("Supports the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>;");
+    newFeatures << i18n("Face detection and recognition support;");
+    newFeatures << i18n("Supports the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>, "
+                        "as Foveon sensor based camera, Nikon D7000, Canon 60D, Pentax K5, Olympus E5, Sony A450 "
+                        "(see full list of RAW camera supported on Help menu);");
+    newFeatures << i18n("New advanced RAW decoding settings backported from RawTherapee project;");
     newFeatures << i18n("...and much more.");
 
     QString featureItems;
