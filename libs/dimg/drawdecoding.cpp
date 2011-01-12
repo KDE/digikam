@@ -275,6 +275,9 @@ void RawDecodingSettingsWriter::write()
     AddParameterIfNotDefault(eeciRefine);
     AddParameterIfNotDefault(esMedPasses);
     AddParameterIfNotDefaultWithValue(noiseReductionChrominanceThreshold, NRChroThreshold);
+    AddParameterIfNotDefault(expoCorrection);
+    AddParameterIfNotDefaultWithValue(exposureCorrectionShift,     expoCorrectionShift);
+    AddParameterIfNotDefaultWithValue(exposureCorrectionHighlight, expoCorrectionHighlight);
 }
 
 void RawDecodingSettingsReader::read()
@@ -359,6 +362,9 @@ void RawDecodingSettingsReader::read()
     ReadParameter(eeciRefine);
     ReadParameter(esMedPasses);
     ReadParameterWithValue(noiseReductionChrominanceThreshold, NRChroThreshold);
+    ReadParameter(expoCorrection);
+    ReadParameterWithValue(exposureCorrectionShift,     expoCorrectionShift);
+    ReadParameterWithValue(exposureCorrectionHighlight, expoCorrectionHighlight);    
 }
 
 }  // namespace Digikam
