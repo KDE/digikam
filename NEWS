@@ -1,0 +1,32 @@
+*********************************************************************************************************
+digiKam 2.0.0-beta2 - Release date: 2011-01-30
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 253785 : GoogleMaps should be available in "Search Map".
+002 ==> 258436 : Traceability.
+003 ==> 258082 : Libkface doesn't increment ids' while saving hash database.
+004 ==> 259146 : Libface doesn't learn new faces (patch).
+005 ==> 146288 : Face detection / recognition for digiKam.
+006 ==> 252964 : Please remove libs from kdegraphics and make independant.
+007 ==> 260619 : digiKam crash when raw format is being converted.
+008 ==> 261140 : FindKdcraw.cmake is installed both by kdelibs and kdegraphics.
+009 ==> 261946 : Unable to compile beta1 of digikam.
+010 ==> 262172 : The unknown tag should be plural.
+011 ==> 262067 : Crash when closing 2.0.0 beta1.
+012 ==> 262074 : No face are detected.
+013 ==> 261964 : digiKam 2.0.0 crashes when trying to open configure dialog.
+014 ==> 262303 : Importing a RAW picture results in empty view.
+015 ==> 
+
+
+
+
+
+
+
+
+
+
