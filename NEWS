@@ -7,7 +7,7 @@ General        : digiKam has now a stand alone installer for Microsoft Windows b
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 256372 : Add a digiKam installer based on nsis.
+001 ==> 256372 : Add a digiKam installer based on NSIS.
 002 ==> 261086 : Crash at startup.
 003 ==> 212947 : digiKan crashes upon import of large photo collection.
 004 ==> 261015 : digiKam Fingerprinter crashes.
@@ -24,6 +24,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 201788 : Picture navigation problems and disambiguation.
 016 ==> 261415 : digiKam crashes when adding lens data to ~/.local.
 017 ==> 253062 : Database of 80,000+ images wiped out.
-018 ==> 
+018 ==> 263083 : digiKam editor crashes on "save" and "save as" (KFileDialog relevant).
+019 ==> 
 
 
