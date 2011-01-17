@@ -25,6 +25,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 261415 : digiKam crashes when adding lens data to ~/.local.
 017 ==> 253062 : Database of 80,000+ images wiped out.
 018 ==> 263083 : digiKam editor crashes on "save" and "save as" (KFileDialog relevant).
-019 ==> 
+019 ==> 252404 : digiKam crashes when modifying caption.
+020 ==> 
 
 
