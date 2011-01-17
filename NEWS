@@ -26,6 +26,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 253062 : Database of 80,000+ images wiped out.
 018 ==> 263083 : digiKam editor crashes on "save" and "save as" (KFileDialog relevant).
 019 ==> 252404 : digiKam crashes when modifying caption.
-020 ==> 
+020 ==> 262720 : Rebuild thumbnails or 'scan for new images' should work on just current folder.
+021 ==> 
 
 
