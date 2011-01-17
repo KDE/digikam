@@ -51,6 +51,7 @@ class BatchThumbsGenerator : public DProgressDlg
 public:
 
     explicit BatchThumbsGenerator(QWidget* parent, bool rebuildAll=true);
+    BatchThumbsGenerator(QWidget* parent, int albumId);
     ~BatchThumbsGenerator();
 
 Q_SIGNALS:

@@ -194,6 +194,7 @@ private Q_SLOTS:
 
     void slotDatabaseMigration();
     void slotDatabaseRescan();
+    void slotRebuildAlbumThumbnails();
     void slotRebuildThumbnails();
     void slotWriteMetadataToAllImages();
     void slotGenerateFingerPrintsFirstTime();

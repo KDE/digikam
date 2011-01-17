@@ -42,6 +42,7 @@
 #include "contextmenuhelper.h"
 #include "itemviewtooltip.h"
 #include "tooltipfiller.h"
+#include "batchthumbsgenerator.h"
 
 namespace Digikam
 {
@@ -80,7 +81,8 @@ public:
         toolTip(0),
         renameAction(0),
         resetIconAction(0),
-        findDuplAction(0)
+        findDuplAction(0),
+        rebuildThumbsAction(0)
     {
     }
 
@@ -91,6 +93,7 @@ public:
     QAction* renameAction;
     QAction* resetIconAction;
     QAction* findDuplAction;
+    QAction* rebuildThumbsAction;
 
 };
 
@@ -106,6 +109,7 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* mode
     d->renameAction    = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
     d->resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
     d->findDuplAction  = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
+    d->rebuildThumbsAction   = new QAction(SmallIcon("view-process-all"), i18n("Rebuild Thumbnails..."), this);
 
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
@@ -150,6 +154,7 @@ void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
     cmh.addSeparator();
     // --------------------------------------------------------
     cmh.addAction(d->findDuplAction);
+    cmh.addAction(d->rebuildThumbsAction);
     cmh.addImportMenu();
     cmh.addExportMenu();
     cmh.addBatchMenu();
@@ -187,6 +192,11 @@ void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction* action, Albu
     {
         kDebug() << "emitting signal for finding duplicates";
         emit signalFindDuplicatesInAlbum(album);
+    }
+    else if (action == d->rebuildThumbsAction)
+    {
+        BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, album->id());
+        thumbsGenerator->show();    
     }
 
 }
