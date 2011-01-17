@@ -217,6 +217,9 @@ Canvas::Canvas(QWidget* parent)
     connect(d->im, SIGNAL(signalLoadingProgress(const QString&, float)),
             this, SIGNAL(signalLoadingProgress(const QString&, float)));
 
+    connect(d->im, SIGNAL(signalSavingStarted(const QString&)),
+            this, SIGNAL(signalSavingStarted(const QString&)));
+
     connect(d->im, SIGNAL(signalSavingProgress(const QString&, float)),
             this, SIGNAL(signalSavingProgress(const QString&, float)));
 
@@ -337,7 +340,6 @@ void Canvas::saveAs(const QString& filename, IOFileSettingsContainer* IOFileSett
                     bool setExifOrientationTag, const QString& mimeType)
 {
     d->im->saveAs(filename, IOFileSettings, setExifOrientationTag, mimeType);
-    emit signalSavingStarted(filename);
 }
 
 void Canvas::slotImageSaved(const QString& filePath, bool success)

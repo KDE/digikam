@@ -261,7 +261,7 @@ void DImgInterface::slotLoadRawFromTool()
             d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
         }
 
-        if (!rawImport->demosaicingSettingsDirty())
+        if (rawImport->hasPostProcessedImage())
         {
             resetValues();
             d->currentDescription = d->nextRawDescription;
@@ -599,6 +599,8 @@ void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iof
 {
     // No need to toggle off undo, redo or save action during saving using
     // signalUndoStateChanged(), this is will done by GUI implementation directly.
+
+    emit signalSavingStarted(filePath);
 
     d->filesToSave.clear();
     d->currentFileToSave = 0;

@@ -196,6 +196,7 @@ Q_SIGNALS:
     void   signalLoadingStarted(const QString& filename);
     void   signalLoadingProgress(const QString& filePath, float progress);
     void   signalImageLoaded(const QString& filePath, bool success);
+    void   signalSavingStarted(const QString& filename);
     void   signalSavingProgress(const QString& filePath, float progress);
     void   signalImageSaved(const QString& filePath, bool success);
 
