@@ -287,7 +287,7 @@ void SearchTextBar::contextMenuEvent(QContextMenuEvent* e)
 
     if (d->hasCaseSensitive)
     {
-        cs = menu->addAction(tr("Case sensitive"));
+        cs = menu->addAction(i18n("Case sensitive"));
         cs->setCheckable(true);
         cs->setChecked(d->settings.caseSensitive == Qt::CaseInsensitive ? false : true);
     }

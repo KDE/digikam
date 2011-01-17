@@ -29,7 +29,7 @@
 #include <marble/MarbleDirs.h>
 #include <marble/GeoPainter.h>
 #include <marble/GeoDataCoordinates.h>
-
+#include <KLocale>
 namespace Marble
 {
 
@@ -56,12 +56,12 @@ QStringList ExternalDrawPlugin::renderPosition() const
 
 QString ExternalDrawPlugin::name() const
 {
-    return tr( "ExternalDraw" );
+    return i18n( "ExternalDraw" );
 }
 
 QString ExternalDrawPlugin::guiString() const
 {
-    return tr( "ExternalDraw" );
+    return i18n( "ExternalDraw" );
 }
 
 QString ExternalDrawPlugin::nameId() const
@@ -71,7 +71,7 @@ QString ExternalDrawPlugin::nameId() const
 
 QString ExternalDrawPlugin::description() const
 {
-    return tr( "Plugin to allow client applications to draw in layers. Used by Digikam." );
+    return i18n( "Plugin to allow client applications to draw in layers. Used by Digikam." );
 }
 
 QIcon ExternalDrawPlugin::icon() const
