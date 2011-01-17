@@ -72,6 +72,8 @@ public:
 
     bool                 cancel;
     bool                 rebuildAll;
+    
+    int                  albumId;
 
     QTime                duration;
 
@@ -85,6 +87,7 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, bool rebuildAll)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->rebuildAll      = rebuildAll;
+    d->albumId         = -1;
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
@@ -98,6 +101,25 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, bool rebuildAll)
     QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
 }
 
+BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, int albumId)
+: DProgressDlg(0), d(new BatchThumbsGeneratorPriv)
+{
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+    d->rebuildAll      = true;
+    d->albumId         = albumId;
+    
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
+    
+    setModal(false);
+    setValue(0);
+    setCaption(i18n("Rebuild Current Album Thumbnails"));
+    setLabel(i18n("<b>Updating thumbnails database. Please wait...</b>"));
+    setButtonText(i18n("&Abort"));
+    
+    QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
+}
+
 BatchThumbsGenerator::~BatchThumbsGenerator()
 {
     delete d;
@@ -108,8 +130,16 @@ void BatchThumbsGenerator::slotRebuildThumbs()
     setTitle(i18n("Processing..."));
 
     // Get all digiKam albums collection pictures path.
+    AlbumList palbumList;
 
-    AlbumList palbumList  = AlbumManager::instance()->allPAlbums();
+    if(d->albumId == -1)
+    {
+        palbumList  = AlbumManager::instance()->allPAlbums();
+    }
+    else 
+    {
+        palbumList.append(AlbumManager::instance()->findPAlbum(d->albumId));
+    }
 
     for (AlbumList::Iterator it = palbumList.begin();
          !d->cancel && (it != palbumList.end()); ++it )

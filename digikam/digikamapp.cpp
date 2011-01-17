@@ -739,6 +739,13 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("album_refresh", d->refreshAlbumAction);
 
     // -----------------------------------------------------------------
+    
+    d->rebuildAlbumThumbsAction = new KAction(KIcon("view-process-all"), i18n("Rebuild Thumbnails In Current Album"), this);
+    d->rebuildAlbumThumbsAction->setWhatsThis(i18n("Rebuilds all thumbnails for the current selected album"));
+    connect(d->rebuildAlbumThumbsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAlbumThumbnails()));
+    actionCollection()->addAction("album_rebuild_thumbs", d->rebuildAlbumThumbsAction);
+    
+    // -----------------------------------------------------------------
 
     d->writeAlbumMetadataAction = new KAction(KIcon("document-edit"), i18n("Write Metadata to Images"), this);
     d->writeAlbumMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
@@ -1248,7 +1255,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction* rebuildThumbnailsAction = new KAction(KIcon("view-process-all"), i18n("Rebuild Thumbnails..."), this);
+    KAction* rebuildThumbnailsAction = new KAction(KIcon("view-process-all"), i18n("Rebuild All Thumbnails..."), this);
     connect(rebuildThumbnailsAction, SIGNAL(triggered()), this, SLOT(slotRebuildThumbnails()));
     actionCollection()->addAction("thumbnails_rebuild", rebuildThumbnailsAction);
 
@@ -2767,13 +2774,13 @@ void DigikamApp::slotWriteMetadataToAllImages()
 void DigikamApp::slotRebuildThumbnails()
 {
     QString msg = i18n("Image thumbnailing can take some time.\n"
-                       "Which would you prefer?\n"
-                       "- Scan for missing thumbnails (quick)\n"
-                       "- Rebuild all thumbnails (takes a long time)");
+                    "Which would you prefer?\n"
+                    "- Scan for missing thumbnails (quick)\n"
+                    "- Rebuild all thumbnails (takes a long time)");
     int result = KMessageBox::questionYesNoCancel(this, msg,
-                 i18n("Warning"),
-                 KGuiItem(i18n("Scan")),
-                 KGuiItem(i18n("Rebuild All")));
+                i18n("Warning"),
+                KGuiItem(i18n("Scan")),
+                KGuiItem(i18n("Rebuild All")));
 
     if (result == KMessageBox::Cancel)
     {
@@ -2786,7 +2793,13 @@ void DigikamApp::slotRebuildThumbnails()
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
     BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, rebuildAll);
-    thumbsGenerator->show();
+    thumbsGenerator->show();       
+}
+
+void DigikamApp::slotRebuildAlbumThumbnails()
+{
+    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, AlbumManager::instance()->currentAlbum()->id());
+    thumbsGenerator->show();       
 }
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()

@@ -105,6 +105,7 @@ public:
         openInFileManagerAction(0),
         openInTerminalAction(0),
         refreshAlbumAction(0),
+        rebuildAlbumThumbsAction(0),
         writeAlbumMetadataAction(0),
         readAlbumMetadataAction(0),
         newTagAction(0),
@@ -227,6 +228,7 @@ public:
     KAction*                            openInFileManagerAction;
     KAction*                            openInTerminalAction;
     KAction*                            refreshAlbumAction;
+    KAction*                            rebuildAlbumThumbsAction;
     KAction*                            writeAlbumMetadataAction;
     KAction*                            readAlbumMetadataAction;
 
