@@ -155,6 +155,7 @@
 #include "thumbbar.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
+#include "triplechoicedialog.h"
 #include "versionmanager.h"
 
 namespace Digikam
@@ -1427,27 +1428,19 @@ DImageHistory EditorWindow::resolvedImageHistory(const DImageHistory& history)
     return r;
 }
 
-class VersioningPromptUserSaveDialog : public KDialog
+class VersioningPromptUserSaveDialog : public TripleChoiceDialog
 {
 public:
 
     VersioningPromptUserSaveDialog(QWidget* parent, bool allowCancel = true)
-        : KDialog(parent),
-          m_clicked(None)
+        : TripleChoiceDialog(parent)
     {
         setPlainCaption(i18nc("@title:window", "Save?"));
-        setButtons(Ok | Apply | Cancel);
-        showButtonSeparator(false);
-
-        button(Ok)->setVisible(false);
-        button(Apply)->setVisible(false);
-
-        if (!allowCancel)
-        {
-            button(Cancel)->setVisible(false);
-        }
+        setShowCancelButton(allowCancel);
 
         QWidget* mainWidget = new QWidget;
+
+        // -- Icon and Header --
 
         QLabel* warningIcon = new QLabel;
         warningIcon->setPixmap(SmallIcon("dialog-warning", KIconLoader::SizeHuge));
@@ -1461,106 +1454,47 @@ public:
         headerLayout->addWidget(question);
         headerLayout->addWidget(editIcon);
 
-        QGroupBox* buttonGroup = new QGroupBox;
-        QVBoxLayout* groupLayout = new QVBoxLayout;
+        // -- Central buttons --
 
-        QToolButton* saveCurrent = setupButton(Ok, "dialog-ok-apply",
-                                               i18nc("@action:button", "Save Changes"));
+        QToolButton* saveCurrent = addChoiceButton(Ok, "dialog-ok-apply",
+                                                   i18nc("@action:button", "Save Changes"));
         saveCurrent->setToolTip(i18nc("@info:tooltip",
                                       "Save the current changes. Note: The original image will never be overwritten."));
-        QToolButton* saveVersion = setupButton(Apply, "list-add",
-                                               i18nc("@action:button", "Save Changes as a New Version"));
+        QToolButton* saveVersion = addChoiceButton(Apply, "list-add",
+                                                   i18nc("@action:button", "Save Changes as a New Version"));
         saveVersion->setToolTip(i18nc("@info:tooltip",
                                       "Save the current changes as a new version. "
                                       "The loaded file will remain unchanged, a new file will be created."));
-        QToolButton* discard     = setupButton(User1, "task-reject",
-                                               i18nc("@action:button", "Discard Changes"));
+        QToolButton* discard     = addChoiceButton(User1, "task-reject",
+                                                   i18nc("@action:button", "Discard Changes"));
         discard->setToolTip(i18nc("@info:tooltip",
                                   "Discard the changes applied to the image during this editing session."));
 
-        /*QVBoxLayout *buttonLayout = new QVBoxLayout;
-        buttonLayout->addWidget(saveCurrent);
-        buttonLayout->addWidget(saveVersion);
-        buttonLayout->addWidget(discard);
-        */
-        QToolBar* bar = new QToolBar;
-        bar->setOrientation(Qt::Vertical);
-        bar->setIconSize(QSize(iconSize(), iconSize()));
-        bar->addSeparator();
-        bar->addWidget(saveCurrent);
-        bar->addWidget(saveVersion);
-        //bar->addSeparator();
-        bar->addWidget(discard);
-        bar->addSeparator();
-        bar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
-
-        groupLayout->addWidget(bar);
-        buttonGroup->setLayout(groupLayout);
+        // -- Layout --
 
         QGridLayout* mainLayout = new QGridLayout;
         mainLayout->addWidget(warningIcon, 0, 0, 2, 1, Qt::AlignTop);
         mainLayout->addLayout(headerLayout, 0, 1);
         //mainLayout->addLayout(buttonLayout);
-        mainLayout->addWidget(bar, 1, 1);
+        mainLayout->addWidget(buttonContainer(), 1, 1);
         //mainLayout->addWidget(new KSeparator(Qt::Horizontal));
 
         mainWidget->setLayout(mainLayout);
         setMainWidget(mainWidget);
-
-        connect(&m_mapper, SIGNAL(mapped(int)), this, SLOT(slotButtonClicked(int)));
     }
 
     bool shallSave() const
     {
-        return m_clicked == Ok;
+        return clickedButton() == Ok;
     }
     bool newVersion() const
     {
-        return m_clicked == Apply;
+        return clickedButton() == Apply;
     }
     bool shallDiscard() const
     {
-        return m_clicked == User1;
+        return clickedButton() == User1;
     }
-
-protected:
-
-    int iconSize() const
-    {
-        return KIconLoader::SizeMedium;
-    }
-
-    virtual void slotButtonClicked(int button)
-    {
-        m_clicked = button;
-
-        if (button == Cancel)
-        {
-            reject();
-        }
-        else
-        {
-            accept();
-        }
-
-        //KDialog::slotButtonClicked(button);
-    }
-
-    QToolButton* setupButton(int key, const QString& iconName, const QString& text)
-    {
-        QToolButton* button = new QToolButton;
-        button->setText(text);
-        button->setIcon(SmallIcon(iconName, iconSize()));
-        button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        button->setAutoRaise(true);
-        button->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-        m_mapper.setMapping(button, key);
-        connect(button, SIGNAL(clicked()), &m_mapper, SLOT(map()));
-        return button;
-    }
-
-    int m_clicked;
-    QSignalMapper m_mapper;
 };
 
 bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowCancel)
