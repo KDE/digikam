@@ -81,63 +81,6 @@ private:
     bool m_checkBoxHidden;
 };
 
-TagToggleAction::TagToggleAction(const QString& text, QObject* parent)
-    : QWidgetAction(parent),
-      m_checked(false),
-      m_checkBoxHidden(false)
-{
-    setText(text);
-    setCheckable(true);
-}
-
-TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject* parent)
-    : QWidgetAction(parent),
-      m_checked(false),
-      m_checkBoxHidden(false)
-{
-    setIcon(icon);
-    setText(text);
-    setCheckable(true);
-}
-
-QWidget* TagToggleAction::createWidget(QWidget* parent)
-{
-    KMenu* menu = qobject_cast<KMenu*>(parent);
-
-    if (menu)
-    {
-        return new TagToggleMenuWidget(menu, this);
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-void TagToggleAction::setSpecialChecked(bool checked)
-{
-    // something is resetting the checked property when there is a submenu.
-    // Use this to store "checked" anyway.
-    // Note: the method isChecked() is not virtual.
-    m_checked = checked;
-    setChecked(checked);
-}
-
-bool TagToggleAction::isChecked() const
-{
-    return m_checked || QWidgetAction::isChecked();
-}
-
-void TagToggleAction::setCheckBoxHidden(bool hidden)
-{
-    m_checkBoxHidden = hidden;
-}
-
-bool TagToggleAction::isCheckBoxHidden() const
-{
-    return m_checkBoxHidden;
-}
-
 // ------------------------------------------------------------------------
 
 class TagToggleMenuWidget : public QWidget
@@ -163,6 +106,8 @@ private:
     KMenu*           m_menu;
     TagToggleAction* m_action;
 };
+
+// ------------------------------------------------------------------------
 
 TagToggleMenuWidget::TagToggleMenuWidget(KMenu* parent, TagToggleAction* action)
     : QWidget(parent)
@@ -362,6 +307,65 @@ QRect TagToggleMenuWidget::checkIndicatorSize(QStyleOption* option) const
     opt.QStyleOption::operator=(*option);
     //opt.rect = bounding;
     return style()->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt, this);
+}
+
+// ------------------------------------------------------------------------
+
+TagToggleAction::TagToggleAction(const QString& text, QObject* parent)
+    : QWidgetAction(parent),
+      m_checked(false),
+      m_checkBoxHidden(false)
+{
+    setText(text);
+    setCheckable(true);
+}
+
+TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject* parent)
+    : QWidgetAction(parent),
+      m_checked(false),
+      m_checkBoxHidden(false)
+{
+    setIcon(icon);
+    setText(text);
+    setCheckable(true);
+}
+
+QWidget* TagToggleAction::createWidget(QWidget* parent)
+{
+    KMenu* menu = qobject_cast<KMenu*>(parent);
+
+    if (menu)
+    {
+        return new TagToggleMenuWidget(menu, this);
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void TagToggleAction::setSpecialChecked(bool checked)
+{
+    // something is resetting the checked property when there is a submenu.
+    // Use this to store "checked" anyway.
+    // Note: the method isChecked() is not virtual.
+    m_checked = checked;
+    setChecked(checked);
+}
+
+bool TagToggleAction::isChecked() const
+{
+    return m_checked || QWidgetAction::isChecked();
+}
+
+void TagToggleAction::setCheckBoxHidden(bool hidden)
+{
+    m_checkBoxHidden = hidden;
+}
+
+bool TagToggleAction::isCheckBoxHidden() const
+{
+    return m_checkBoxHidden;
 }
 
 // ------------------------------------------------------------------------
