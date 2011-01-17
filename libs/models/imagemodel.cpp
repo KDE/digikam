@@ -882,7 +882,8 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
 
             for (it = oldIds.find(info.id()); it != oldIds.end() && it.key() == info.id(); ++it)
             {
-                if (extraValues[i] == oldExtraValues[it.value()])
+                // first check is for bug #262596. Not sure if needed.
+                if (it.value() < oldExtraValues.size() && extraValues[i] == oldExtraValues[it.value()])
                 {
                     found = true;
                     break;
