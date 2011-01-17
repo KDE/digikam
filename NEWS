@@ -20,7 +20,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 261964 : digiKam 2.0.0 crashes when trying to open configure dialog.
 014 ==> 262303 : Importing a RAW picture results in empty view.
 015 ==> 263329 : Image preview windows always has a scrollbar.
-016 ==> 
+016 ==> 262882 : digiKam crashes when changing face rectangle.
+017 ==> 
 
 
 
