@@ -52,7 +52,8 @@ public:
 
     DRawDecoding rawDecodingSettings() const;
     DImg& postProcessedImage() const;
-    bool demosaicingSettingsDirty();
+    bool hasPostProcessedImage() const;
+    bool demosaicingSettingsDirty() const;
 
 private:
 

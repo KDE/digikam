@@ -399,7 +399,7 @@ void RawSettingsBox::enableUpdateBtn(bool b)
     d->updateBtn->setEnabled(b);
 }
 
-bool RawSettingsBox::updateBtnEnabled()
+bool RawSettingsBox::updateBtnEnabled() const
 {
     return d->updateBtn->isEnabled();
 }

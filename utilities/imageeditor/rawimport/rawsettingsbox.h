@@ -63,7 +63,7 @@ public:
     void resetSettings();
 
     void enableUpdateBtn(bool b);
-    bool updateBtnEnabled();
+    bool updateBtnEnabled() const;
 
 Q_SIGNALS:
 

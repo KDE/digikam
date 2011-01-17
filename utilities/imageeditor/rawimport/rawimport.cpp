@@ -63,6 +63,8 @@ public:
 
     RawSettingsBox* settingsBox;
     RawPreview*     previewWidget;
+
+    DImg            postProcessedImage;
 };
 
 RawImport::RawImport(const KUrl& url, QObject* parent)
@@ -141,7 +143,12 @@ DImg& RawImport::postProcessedImage() const
     return d->previewWidget->postProcessedImage();
 }
 
-bool RawImport::demosaicingSettingsDirty()
+bool RawImport::hasPostProcessedImage() const
+{
+    return !demosaicingSettingsDirty() && !d->postProcessedImage.isNull();
+}
+
+bool RawImport::demosaicingSettingsDirty() const
 {
     return d->settingsBox->updateBtnEnabled();
 }
@@ -170,6 +177,7 @@ void RawImport::slotAbort()
 
 void RawImport::slotLoadingStarted()
 {
+    d->postProcessedImage = DImg();
     d->settingsBox->enableUpdateBtn(false);
     d->settingsBox->histogramBox()->histogram()->setDataLoading();
     d->settingsBox->curvesWidget()->setDataLoading();
@@ -192,12 +200,12 @@ void RawImport::prepareEffect()
 void RawImport::putPreviewData()
 {
     // Preserve metadata from loaded image, and take post-processed image data
-    DImg processed = d->previewWidget->demosaicedImage().copyMetaData();
+    d->postProcessedImage = d->previewWidget->demosaicedImage().copyMetaData();
     DImg data = filter()->getTargetImage();
-    processed.putImageData(data.width(), data.height(), data.sixteenBit(), data.hasAlpha(),
+    d->postProcessedImage.putImageData(data.width(), data.height(), data.sixteenBit(), data.hasAlpha(),
                            data.stripImageData(), false);
-    d->previewWidget->setPostProcessedImage(processed);
-    d->settingsBox->setPostProcessedImage(processed);
+    d->previewWidget->setPostProcessedImage(d->postProcessedImage);
+    d->settingsBox->setPostProcessedImage(d->postProcessedImage);
     EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
 }
