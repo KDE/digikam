@@ -62,6 +62,12 @@ AlbumModificationHelper::~AlbumModificationHelper()
 
 PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
 {
+    if (!parent)
+    {
+        kWarning() << "No parent album given";
+        return 0;
+    }
+
     AlbumSettings* settings = AlbumSettings::instance();
 
     if (!settings)
