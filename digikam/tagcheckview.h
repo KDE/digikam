@@ -28,16 +28,17 @@
 #define TAGCHECKVIEW_H
 
 // Local includes
+
 #include "imagefiltersettings.h"
 #include "tagfolderview.h"
 
 namespace Digikam
 {
 
-class TagCheckViewPriv;
 class TagCheckView : public TagFolderView
 {
     Q_OBJECT
+
 public:
 
     enum ToggleAutoTags
@@ -74,7 +75,7 @@ Q_SIGNALS:
      *
      * @param tags a list of selected tag ids
      */
-    void checkedTagsChanged(const QList<TAlbum*> &includedTags, const QList<TAlbum*> &excludedTags);
+    void checkedTagsChanged(const QList<TAlbum*>& includedTags, const QList<TAlbum*>& excludedTags);
 
 public Q_SLOTS:
 
@@ -84,6 +85,7 @@ public Q_SLOTS:
     void slotResetCheckState();
 
 protected:
+
     virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
     virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
@@ -98,10 +100,11 @@ private Q_SLOTS:
     void slotCreatedNewTagByContextMenu(TAlbum* tag);
 
 private:
-    TagCheckViewPriv* d;
 
+    class TagCheckViewPriv;
+    TagCheckViewPriv* d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* TAGCHECKVIEW_H */
