@@ -30,7 +30,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 242036 : digiKam crashed when pressing 'Album -> New'.
 022 ==> 235597 : Disconnected usb passport external hard drive using "safely remove drive" option.
 023 ==> 237957 : Crash while looking at folder with 380 images for first time.
-024 ==> 
+024 ==> 253067 : Crash when viewing pictures.
+025 ==> 
 
 
 
