@@ -77,6 +77,7 @@ GraphicsDImgView::GraphicsDImgView(QWidget* parent)
     : QGraphicsView(parent), d(new GraphicsDImgViewPriv)
 {
     d->scene  = new QGraphicsScene(this);
+    d->scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
     setScene(d->scene);
     d->layout = new SinglePhotoPreviewLayout(this);
