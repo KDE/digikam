@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,6 @@ namespace Digikam
 {
 
 class LoadingDescription;
-class BatchThumbsGeneratorPriv;
 
 class BatchThumbsGenerator : public DProgressDlg
 {
@@ -51,7 +50,6 @@ class BatchThumbsGenerator : public DProgressDlg
 public:
 
     BatchThumbsGenerator(QWidget* parent, bool rebuildAll=true);
-    BatchThumbsGenerator(QWidget* parent, int albumId);
     BatchThumbsGenerator(QWidget* parent, int albumId);
     ~BatchThumbsGenerator();
 
@@ -80,6 +78,7 @@ private Q_SLOTS:
 
 private:
 
+    class BatchThumbsGeneratorPriv;
     BatchThumbsGeneratorPriv* const d;
 };
 
