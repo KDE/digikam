@@ -21,7 +21,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 262303 : Importing a RAW picture results in empty view.
 015 ==> 263329 : Image preview windows always has a scrollbar.
 016 ==> 262882 : digiKam crashes when changing face rectangle.
-017 ==> 
+017 ==> 263321 : digiKam crash when looking through photos.
+018 ==> 
 
 
 
