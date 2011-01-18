@@ -52,6 +52,7 @@ public:
 
     BatchThumbsGenerator(QWidget* parent, bool rebuildAll=true);
     BatchThumbsGenerator(QWidget* parent, int albumId);
+    BatchThumbsGenerator(QWidget* parent, int albumId);
     ~BatchThumbsGenerator();
 
 Q_SIGNALS:

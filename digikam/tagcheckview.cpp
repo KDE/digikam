@@ -28,7 +28,7 @@
 
 // Qt includes
 
-#include <qaction.h>
+#include <QAction>
 
 // KDE includes
 
@@ -44,9 +44,10 @@
 namespace Digikam
 {
 
-class TagCheckViewPriv
+class TagCheckView::TagCheckViewPriv
 {
 public:
+
     TagCheckViewPriv() :
         toggleAutoTags(TagCheckView::NoToggleAuto),
         checkNewTags(false),
@@ -87,36 +88,35 @@ public:
     QAction*                     toggleParentsAction;
     QAction*                     toggleBothAction;
 };
-const QString TagCheckViewPriv::configToggleAutoTagsEntry("Toggle Auto Tags");
+
+const QString TagCheckView::TagCheckViewPriv::configToggleAutoTagsEntry("Toggle Auto Tags");
 
 // --------------------------------------------------------
 
-TagCheckView::TagCheckView(QWidget* parent, TagModel* tagModel) :
-    TagFolderView(parent, tagModel),
-    d(new TagCheckViewPriv)
+TagCheckView::TagCheckView(QWidget* parent, TagModel* tagModel)
+    : TagFolderView(parent, tagModel),
+      d(new TagCheckViewPriv)
 {
     setSelectAlbumOnClick(false);
     setExpandOnSingleClick(false);
     setSelectOnContextMenu(false);
-
     setShowFindDuplicateAction(false);
 
     // prepare custom menu action
-    d->selectTagsMenu = new KMenu(i18nc("select tags menu", "Select"), this);
-    d->selectAllTagsAction = d->selectTagsMenu->addAction(i18n("All Tags"));
+    d->selectTagsMenu       = new KMenu(i18nc("select tags menu", "Select"), this);
+    d->selectAllTagsAction  = d->selectTagsMenu->addAction(i18n("All Tags"));
     d->selectTagsMenu->addSeparator();
     d->selectChildrenAction = d->selectTagsMenu->addAction(i18n("Children"));
     d->selectParentsAction  = d->selectTagsMenu->addAction(i18n("Parents"));
 
-    d->deselectTagsMenu = new KMenu(i18nc("deselect tags menu", "Deselect"), this);
-    d->deselectAllTagsAction = d->deselectTagsMenu->addAction(i18n("All Tags"));
+    d->deselectTagsMenu       = new KMenu(i18nc("deselect tags menu", "Deselect"), this);
+    d->deselectAllTagsAction  = d->deselectTagsMenu->addAction(i18n("All Tags"));
     d->deselectTagsMenu->addSeparator();
     d->deselectChildrenAction = d->deselectTagsMenu->addAction(i18n("Children"));
     d->deselectParentsAction  = d->deselectTagsMenu->addAction(i18n("Parents"));
 
-    d->invertAction = new QAction(i18n("Invert Selection"), this);
-
-    d->toggleAutoAction = new KSelectAction(i18n("Toggle Auto"), this);
+    d->invertAction         = new QAction(i18n("Invert Selection"), this);
+    d->toggleAutoAction     = new KSelectAction(i18n("Toggle Auto"), this);
     d->toggleNoneAction     = d->toggleAutoAction->addAction(i18nc("no auto toggle", "None"));
     d->toggleAutoAction->menu()->addSeparator();
     d->toggleChildrenAction = d->toggleAutoAction->addAction(i18nc("toggle child tags", "Children"));
@@ -125,7 +125,6 @@ TagCheckView::TagCheckView(QWidget* parent, TagModel* tagModel) :
 
     connect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
-
 }
 
 TagCheckView::~TagCheckView()
@@ -358,4 +357,5 @@ void TagCheckView::handleCustomContextMenuAction(QAction* action, AlbumPointer<A
 
     d->toggleAutoTags = toggleRestore;
 }
+
 } // namespace Digikam

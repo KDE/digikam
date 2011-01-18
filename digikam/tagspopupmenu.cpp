@@ -8,7 +8,8 @@
  *               hierarchical view of digiKam tags.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Parts of the drawing code are inspired by qmenu.cpp and qitemdelegate.cpp.
  * Copyright follows:
@@ -60,8 +61,6 @@
 namespace Digikam
 {
 
-// ------------------------------------------------------------------------
-
 class TagToggleAction : public QWidgetAction
 {
 public:
@@ -81,6 +80,8 @@ private:
     bool m_checked;
     bool m_checkBoxHidden;
 };
+
+// ------------------------------------------------------------------------
 
 class TagToggleMenuWidget : public QWidget
 {
@@ -123,9 +124,9 @@ QSize TagToggleMenuWidget::sizeHint() const
     initMenuStyleOption(&opt);
 
     // get the individual sizes
-    QSize menuSize = menuItemSize(&opt);
-    QRect checkRect = checkIndicatorSize(&opt);
-    const int margin      = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, this) + 1;
+    QSize menuSize   = menuItemSize(&opt);
+    QRect checkRect  = checkIndicatorSize(&opt);
+    const int margin = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, this) + 1;
 
     // return widget size
     int width = margin + checkRect.width() + menuSize.width() + margin;
@@ -144,7 +145,7 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent*)
     initViewStyleOption(&viewOpt);
 
     // get a suitable margin
-    const int margin      = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, this);
+    const int margin      = style()->pixelMetric(QStyle::PM_FocusFrameHMargin,     0, this);
     const int frameMargin = style()->pixelMetric(QStyle::PM_MenuDesktopFrameWidth, 0, this);
 
     // create painter
@@ -168,15 +169,15 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent*)
 
     // clear the background of the check indicator
     QStyleOptionMenuItem clearOpt(menuOpt);
-    clearOpt.state = QStyle::State_None;
+    clearOpt.state        = QStyle::State_None;
     clearOpt.menuItemType = QStyleOptionMenuItem::EmptyArea;
-    clearOpt.checkType = QStyleOptionMenuItem::NotCheckable;
-    clearOpt.rect = viewOpt.rect;
+    clearOpt.checkType    = QStyleOptionMenuItem::NotCheckable;
+    clearOpt.rect         = viewOpt.rect;
     style()->drawControl(QStyle::CE_MenuEmptyArea, &menuOpt, &p, this);
 
     // draw a check indicator like the one used in a treeview
     QRect checkRect = checkIndicatorSize(&menuOpt);
-    viewOpt.rect = checkRect;
+    viewOpt.rect    = checkRect;
 
     if (!m_action->isCheckBoxHidden())
     {
@@ -202,13 +203,13 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent*)
     if (frameMargin)
     {
         QRegion borderReg;
-        borderReg += QRect(width()-frameMargin, 0, frameMargin, height()); //right
+        borderReg += QRect( width() - frameMargin, 0, frameMargin, height() ); // right
         p.setClipRegion(borderReg);
         QStyleOptionFrame frame;
-        frame.rect = rect();
-        frame.palette = palette();
-        frame.state = QStyle::State_None;
-        frame.lineWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth);
+        frame.rect         = rect();
+        frame.palette      = palette();
+        frame.state        = QStyle::State_None;
+        frame.lineWidth    = style()->pixelMetric(QStyle::PM_MenuPanelWidth);
         frame.midLineWidth = 0;
         style()->drawPrimitive(QStyle::PE_FrameMenu, &frame, &p, this);
     }
@@ -245,9 +246,9 @@ void TagToggleMenuWidget::initMenuStyleOption(QStyleOptionMenuItem* option) cons
     option->text = m_action->text();
 
     // we do the check mark ourselves
-    option->checked = false;
+    option->checked               = false;
     option->menuHasCheckableItems = false;
-    option->checkType = QStyleOptionMenuItem::NotCheckable;
+    option->checkType             = QStyleOptionMenuItem::NotCheckable;
 
     // Don't forget the submenu indicator
     if (m_action->menu())
@@ -261,9 +262,8 @@ void TagToggleMenuWidget::initMenuStyleOption(QStyleOptionMenuItem* option) cons
 
     // seems KMenu does it like this
     option->maxIconWidth = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
-
-    option->rect     = rect();
-    option->menuRect = parentWidget()->rect();
+    option->rect         = rect();
+    option->menuRect     = parentWidget()->rect();
 }
 
 void TagToggleMenuWidget::initViewStyleOption(QStyleOptionViewItem* option) const
@@ -332,7 +332,7 @@ TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject
 
 QWidget* TagToggleAction::createWidget(QWidget* parent)
 {
-    KMenu* menu= qobject_cast<KMenu*>(parent);
+    KMenu* menu = qobject_cast<KMenu*>(parent);
 
     if (menu)
     {
@@ -370,7 +370,7 @@ bool TagToggleAction::isCheckBoxHidden() const
 
 // ------------------------------------------------------------------------
 
-class TagsPopupMenuPriv
+class TagsPopupMenu::TagsPopupMenuPriv
 {
 public:
 
@@ -407,13 +407,11 @@ TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode
 
 void TagsPopupMenu::setup(Mode mode)
 {
-    d->mode = mode;
-
+    d->mode                 = mode;
     KIconLoader* iconLoader = KIconLoader::global();
     d->addTagPix            = iconLoader->loadIcon("tag", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-
-    d->addTagActions    = new QActionGroup(this);
-    d->toggleTagActions = new QActionGroup(this);
+    d->addTagActions        = new QActionGroup(this);
+    d->toggleTagActions     = new QActionGroup(this);
 
     setSeparatorsCollapsible(true);
 
@@ -548,9 +546,9 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu* menu, TAlbum* album)
         }
 
         QString t = a->title();
-        t.replace('&',"&&");
+        t.replace('&', "&&");
 
-        TagToggleAction* action;
+        TagToggleAction* action = 0;
 
         if (d->mode == ASSIGN)
         {
@@ -670,8 +668,7 @@ void TagsPopupMenu::slotToggleTag(QAction* action)
 
 void TagsPopupMenu::slotAddTag(QAction* action)
 {
-    int tagID = action->data().toInt();
-
+    int tagID         = action->data().toInt();
     AlbumManager* man = AlbumManager::instance();
     TAlbum* parent    = man->findTAlbum(tagID);
 
