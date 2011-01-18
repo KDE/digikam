@@ -22,7 +22,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 263329 : Image preview windows always has a scrollbar.
 016 ==> 262882 : digiKam crashes when changing face rectangle.
 017 ==> 263321 : digiKam crash when looking through photos.
-018 ==> 
+018 ==> 182664 : Tag menu its bigger than screen.
+019 ==> 
+
 
 
 
