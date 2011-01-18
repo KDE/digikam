@@ -54,8 +54,8 @@ public:
         dialogParent = 0;
     }
 
-    TAlbum*  parentTag;
-    QWidget* dialogParent;
+    AlbumPointer<TAlbum>  parentTag;
+    QWidget*              dialogParent;
 };
 
 TagModificationHelper::TagModificationHelper(QObject* parent, QWidget* dialogParent)
