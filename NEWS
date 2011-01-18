@@ -33,7 +33,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 253067 : Crash when viewing pictures.
 025 ==> 255054 : Crash during picture import [KDirWatch::contains, Digikam::AlbumManager::addAlbumRoot, Digikam::AlbumManager::slotCollectionLocationStatusChanged].
 026 ==> 258106 : digiKam crahed on search Pictures on individal Album.
-027 ==> 
+027 ==> 261384 : Crash while scrolling the raw image preview.
+028 ==> 
+
+
 
 
 
