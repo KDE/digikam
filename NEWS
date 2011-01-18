@@ -27,6 +27,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 263083 : digiKam editor crashes on "save" and "save as" (KFileDialog relevant).
 019 ==> 252404 : digiKam crashes when modifying caption.
 020 ==> 262720 : Rebuild thumbnails or 'scan for new images' should work on just current folder.
-021 ==> 
+021 ==> 242036 : digiKam crashed when pressing 'Album -> New'.
+022 ==> 
 
 
