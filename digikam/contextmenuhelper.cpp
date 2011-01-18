@@ -541,25 +541,6 @@ void ContextMenuHelper::slotDeselectAllAlbumItems()
     QTimer::singleShot(75, selectNoneAction, SIGNAL(triggered()));
 }
 
-void ContextMenuHelper::addSelectTagsMenu(Q3ListViewItem* item)
-{
-    KMenu* selectTagsMenu         = new KMenu(i18nc("select tags menu", "Select"), d->parent);
-    QAction* selectChildrenAction = 0;
-    QAction* selectParentsAction  = 0;
-    QAction* selectAllTagsAction  = 0;
-    selectAllTagsAction           = selectTagsMenu->addAction(i18n("All Tags"));
-
-    if (item)
-    {
-        selectTagsMenu->addSeparator();
-        selectChildrenAction = selectTagsMenu->addAction(i18n("Children"));
-        selectParentsAction  = selectTagsMenu->addAction(i18n("Parents"));
-        // TODO: handle selectAllTagsAction
-    }
-
-    d->parent->addMenu(selectTagsMenu);
-}
-
 void ContextMenuHelper::addImportMenu()
 {
     KMenu* menuImport = new KMenu(i18n("Import"), d->parent);

@@ -36,7 +36,6 @@
 
 #include "albuminfo.h"
 
-class Q3ListViewItem;
 class QAction;
 class QMenu;
 class QPoint;
@@ -275,18 +274,6 @@ public:
      * Add a menu to create new tags from adressbook entries.
      */
     void addCreateTagFromAddressbookMenu();
-
-    /**
-     * Add a menu to select tags in a tag item based view.
-     *
-     * This method will add a menu that allows selecting tags by the following criteria:
-     * - All - select all tags
-     * - Children - select the highlighted item and its children
-     * - Parents - select the highlighted item and its parents
-     *
-     * @param item the highlighted item
-     */
-    void addSelectTagsMenu(Q3ListViewItem* item);
 
     /**
      * Add "Rating" menu.
