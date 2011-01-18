@@ -212,7 +212,7 @@ void ContextMenuHelper::addStandardActionThumbnail(imageIds& ids, Album* album)
     }
 }
 
-void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
+void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
 {
     setSelectedItems(selectedItems);
 
@@ -802,7 +802,7 @@ void ContextMenuHelper::setSelectedIds(imageIds& ids)
     }
 }
 
-void ContextMenuHelper::setSelectedItems(KUrl::List urls)
+void ContextMenuHelper::setSelectedItems(const KUrl::List& urls)
 {
     if (d->selectedItems.isEmpty())
     {

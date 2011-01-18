@@ -205,7 +205,7 @@ public:
      *
      * @param selectedItems the list of selected items
      */
-    void addServicesMenu(KUrl::List selectedItems);
+    void addServicesMenu(const KUrl::List& selectedItems);
 
     /**
      * Add the Goto menu.
@@ -351,7 +351,7 @@ private Q_SLOTS:
 private:
 
     void setSelectedIds(imageIds& ids);
-    void setSelectedItems(KUrl::List urls);
+    void setSelectedItems(const KUrl::List& urls);
     bool imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category);
 
 private:
