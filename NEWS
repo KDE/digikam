@@ -31,7 +31,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 235597 : Disconnected usb passport external hard drive using "safely remove drive" option.
 023 ==> 237957 : Crash while looking at folder with 380 images for first time.
 024 ==> 253067 : Crash when viewing pictures.
-025 ==> 
+025 ==> 255054 : Crash during picture import [KDirWatch::contains, Digikam::AlbumManager::addAlbumRoot, Digikam::AlbumManager::slotCollectionLocationStatusChanged].
+026 ==> 
+
 
 
 
