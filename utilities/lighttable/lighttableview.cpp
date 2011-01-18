@@ -7,7 +7,7 @@
  * Description : a widget to display 2 preview image on
  *               lightable to compare pictures.
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,13 +82,16 @@ LightTableView::LightTableView(QWidget* parent)
     d->grid->addWidget(d->rightPreview, 0, 1, 1, 1);
 
     d->grid->setColumnStretch(0, 10),
-      d->grid->setColumnStretch(1, 10),
-      d->grid->setRowStretch(0, 10),
+    d->grid->setColumnStretch(1, 10),
+    d->grid->setRowStretch(0, 10),
 
-      // Left panel connections ------------------------------------------------
+    // Left panel connections ------------------------------------------------
 
-      connect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
-              this, SIGNAL(signalLeftZoomFactorChanged(double)));
+    connect(d->leftPreview, SIGNAL(signalPopupTagsView()),
+            this, SIGNAL(signalLeftPopupTagsView()));
+
+    connect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
+            this, SIGNAL(signalLeftZoomFactorChanged(double)));
 
     connect(d->leftPreview, SIGNAL(contentsMoving(int, int)),
             this, SLOT(slotLeftContentsMoved(int, int)));
@@ -112,6 +115,9 @@ LightTableView::LightTableView(QWidget* parent)
             this, SIGNAL(signalLeftPanelLeftButtonClicked()));
 
     // Right panel connections ------------------------------------------------
+
+    connect(d->rightPreview, SIGNAL(signalPopupTagsView()),
+            this, SIGNAL(signalRightPopupTagsView()));
 
     connect(d->rightPreview, SIGNAL(signalZoomFactorChanged(double)),
             this, SIGNAL(signalRightZoomFactorChanged(double)));

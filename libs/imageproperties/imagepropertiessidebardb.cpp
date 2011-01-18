@@ -7,8 +7,8 @@
  * Description : image properties side bar using data from
  *               digiKam database.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -62,7 +62,7 @@
 namespace Digikam
 {
 
-class ImagePropertiesSideBarDBPriv
+class ImagePropertiesSideBarDB::ImagePropertiesSideBarDBPriv
 {
 public:
 
@@ -94,16 +94,16 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplit
     : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
       d(new ImagePropertiesSideBarDBPriv)
 {
-    d->desceditTab = new ImageDescEditTab(parent);
+    d->desceditTab        = new ImageDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
     appendTab(d->versionsHistoryTab, SmallIcon("view-catalog"), i18n("Image Versions/Used Filters"));
+
     // ----------------------------------------------------------
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
-
 
     connect(d->desceditTab, SIGNAL(signalProgressBarMode(int, const QString&)),
             this, SIGNAL(signalProgressBarMode(int, const QString&)));
@@ -175,8 +175,8 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
 
 void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history)
 {
-    m_currentRect = rect;
-    m_image       = img;
+    m_currentRect     = rect;
+    m_image           = img;
     d->currentHistory = history;
 
     d->currentInfos      = infos;
@@ -605,6 +605,12 @@ void ImagePropertiesSideBarDB::doSaveState()
 
     KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
     d->versionsHistoryTab->writeSettings(groupVersionTab);
+}
+
+void ImagePropertiesSideBarDB::slotPopupTagsView()
+{
+    setActiveTab(d->desceditTab);
+    d->desceditTab->setFocusToTagsView();
 }
 
 }  // namespace Digikam

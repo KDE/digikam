@@ -7,10 +7,10 @@
  * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -617,7 +617,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     updateTemplate();
     updateTagsView();
     updateRecentTags();
-    focusLastSelectedWidget();
+    setFocusToLastSelectedWidget();
 }
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
@@ -1171,7 +1171,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
     }
 }
 
-void ImageDescEditTab::focusLastSelectedWidget()
+void ImageDescEditTab::setFocusToLastSelectedWidget()
 {
     if (d->lastSelectedWidget)
     {
@@ -1181,13 +1181,19 @@ void ImageDescEditTab::focusLastSelectedWidget()
     d->lastSelectedWidget = 0;
 }
 
+void ImageDescEditTab::setFocusToTagsView()
+{
+    d->lastSelectedWidget = qobject_cast<QWidget*>(d->tagCheckView);
+    d->tagCheckView->setFocus();
+}
+
 void ImageDescEditTab::slotApplyChangesToAllVersions()
 {
     if (!d->modified)
     {
         return;
     }
-    
+
     if (d->currInfos.isEmpty())
     {
         return;
@@ -1195,22 +1201,22 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
 
     QSet<qlonglong> tmpSet;
     QList<QPair<qlonglong, qlonglong> > relations;
-    
+
     foreach(const ImageInfo& info, d->currInfos)
     {
         // Collect all ids in all image's relations
         relations.append(info.relationCloud());
     }
-    
+
     for(int i = 0; i < relations.size(); i++)
     {
         // Use QSet to prevent duplicates
         tmpSet.insert(relations.at(i).first);
         tmpSet.insert(relations.at(i).second);
     }
-    
+
     MetadataManager::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
-    
+
     d->modified = false;
     d->hub.resetChanged();
     d->applyBtn->setEnabled(false);

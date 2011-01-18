@@ -8,8 +8,8 @@
  *               hierarchical view of digiKam tags.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Parts of the drawing code are inspired by qmenu.cpp and qitemdelegate.cpp.
  * Copyright follows:
@@ -381,6 +381,8 @@ public:
     }
 
     QPixmap              addTagPix;
+    QPixmap              recentTagPix;
+    QPixmap              tagViewPix;
 
     QSet<int>            assignedTags;
     QList<qlonglong>     selectedImageIDs;
@@ -409,7 +411,9 @@ void TagsPopupMenu::setup(Mode mode)
 {
     d->mode                 = mode;
     KIconLoader* iconLoader = KIconLoader::global();
-    d->addTagPix            = iconLoader->loadIcon("tag", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    d->addTagPix            = iconLoader->loadIcon("tag",          KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    d->recentTagPix         = iconLoader->loadIcon("tag-assigned", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    d->tagViewPix           = iconLoader->loadIcon("imagecomment", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     d->addTagActions        = new QActionGroup(this);
     d->toggleTagActions     = new QActionGroup(this);
 
@@ -491,9 +495,47 @@ void TagsPopupMenu::slotAboutToShow()
             d->assignedTags = QSet<int>::fromList(DatabaseAccess().db()->getItemCommonTagIDs(d->selectedImageIDs));
         }
     }
+    else if (d->mode == RECENTLYASSIGNED)
+    {
+        AlbumList recentTags = man->getRecentlyAssignedTags();
+
+        if (recentTags.isEmpty())
+        {
+            addTitle(d->recentTagPix, i18n("No Recently Assigned Tags"));
+        }
+        else
+        {
+            addTitle(d->recentTagPix, i18n("Recently Assigned Tags"));
+
+            for (AlbumList::const_iterator it = recentTags.constBegin();
+                 it != recentTags.constEnd(); ++it)
+            {
+                TAlbum* album = static_cast<TAlbum*>(*it);
+
+                if (album)
+                {
+                    TAlbum* parent = dynamic_cast<TAlbum*> (album->parent());
+
+                    if (parent)
+                    {
+                        QString t = album->title() + " (" + parent->prettyUrl() + ')';
+                        t.replace('&', "&&");
+                        TagToggleAction* action = new TagToggleAction(t, d->toggleTagActions);
+                        action->setData(album->id());
+                        action->setCheckBoxHidden(true);
+                        setAlbumIcon(action, album);
+                        addAction(action);
+                    }
+                    else
+                    {
+                        kError() << "Tag" << album << "doesn't have a valid parent";
+                    }
+                }
+            }
+        }
+    }
 
     TAlbum* album = man->findTAlbum(0);
-
     if (!album)
     {
         return;
@@ -501,13 +543,19 @@ void TagsPopupMenu::slotAboutToShow()
 
     iterateAndBuildMenu(this, album);
 
-    if (d->mode == ASSIGN)
+    if (d->mode == ASSIGN || d->mode == RECENTLYASSIGNED)
     {
         addSeparator();
-        TagToggleAction* action = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
-        action->setData(0); // root id
-        action->setCheckBoxHidden(true);
-        addAction(action);
+        TagToggleAction* addTag = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
+        addTag->setData(0);   // root id
+        addTag->setCheckBoxHidden(true);
+        addAction(addTag);
+
+        addSeparator();
+        TagToggleAction* moreTag = new TagToggleAction(KIcon(d->tagViewPix), i18n("More Tags..."), d->addTagActions);
+        moreTag->setData(-1); // special id to query tag view
+        moreTag->setCheckBoxHidden(true);
+        addAction(moreTag);
     }
 }
 
@@ -537,7 +585,11 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu* menu, TAlbum* album)
             continue;
         }
 
-        if (d->mode == REMOVE || d->mode == DISPLAY)
+        if (d->mode == RECENTLYASSIGNED)
+        {
+            continue;
+        }
+        else if (d->mode == REMOVE || d->mode == DISPLAY)
         {
             if (!d->assignedTags.contains(a->id()))
             {
@@ -670,8 +722,14 @@ void TagsPopupMenu::slotAddTag(QAction* action)
 {
     int tagID         = action->data().toInt();
     AlbumManager* man = AlbumManager::instance();
-    TAlbum* parent    = man->findTAlbum(tagID);
 
+    if (tagID == -1)
+    {
+        emit signalPopupTagsView();
+        return;
+    }
+
+    TAlbum* parent    = man->findTAlbum(tagID);
     if (!parent)
     {
         kWarning() << "Failed to find album with id " << tagID;

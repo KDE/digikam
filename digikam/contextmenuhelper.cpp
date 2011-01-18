@@ -7,6 +7,7 @@
  * Description : contextmenu helper class
  *
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -212,14 +213,14 @@ void ContextMenuHelper::addStandardActionThumbnail(imageIds& ids, Album* album)
     }
 }
 
-void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
+void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
 {
     setSelectedItems(selectedItems);
 
     // This code is inspired by KonqMenuActions:
     // kdebase/apps/lib/konq/konq_menuactions.cpp
 
-    QStringList mimeTypes;
+    QStringList    mimeTypes;
     KService::List offers;
 
     foreach(const KUrl& item, d->selectedItems)
@@ -432,13 +433,16 @@ void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)
 {
     setSelectedIds(ids);
 
-    KMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::ASSIGN, d->parent);
+    KMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
     assignTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
     d->parent->addMenu(assignTagsPopup);
 
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SIGNAL(signalAssignTag(int)));
+
+    connect(assignTagsPopup, SIGNAL(signalPopupTagsView()),
+            this, SIGNAL(signalPopupTagsView()));
 }
 
 void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
@@ -802,7 +806,7 @@ void ContextMenuHelper::setSelectedIds(imageIds& ids)
     }
 }
 
-void ContextMenuHelper::setSelectedItems(KUrl::List urls)
+void ContextMenuHelper::setSelectedItems(const KUrl::List& urls)
 {
     if (d->selectedItems.isEmpty())
     {

@@ -6,8 +6,8 @@
  * Date        : 2009-04-24
  * Description : Qt item view for images
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -85,8 +85,7 @@ DigikamImageView::DigikamImageView(QWidget* parent)
 {
     installDefaultModels();
 
-    d->faceiface = new FaceIface;
-
+    d->faceiface      = new FaceIface;
     d->normalDelegate = new DigikamImageDelegate(this);
     d->faceDelegate   = new DigikamImageFaceDelegate(this);
     setItemDelegate(d->normalDelegate);
@@ -266,7 +265,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // Temporary actions --------------------------------------
 
-    QAction*  viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "View"),  this);
+    QAction* viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "View"), this);
     viewAction->setEnabled(selectedImageIDs.count() == 1);
 
     // --------------------------------------------------------
@@ -306,6 +305,9 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     connect(&cmhelper, SIGNAL(signalAssignTag(int)),
             this, SLOT(assignTagToSelected(int)));
+
+    connect(&cmhelper, SIGNAL(signalPopupTagsView()),
+            this, SIGNAL(signalPopupTagsView()));
 
     connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
             this, SLOT(removeTagFromSelected(int)));

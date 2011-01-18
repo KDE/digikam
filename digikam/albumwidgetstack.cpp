@@ -7,7 +7,7 @@
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class AlbumWidgetStackPriv
+class AlbumWidgetStack::AlbumWidgetStackPriv
 {
 
 public:
@@ -79,19 +79,19 @@ public:
         needUpdateBar      = false;
     }
 
-    bool              needUpdateBar;
+    bool               needUpdateBar;
 
-    QMainWindow*      dockArea;
-    QSplitter*        splitter;
-    QTimer*           thumbbarTimer;
+    QMainWindow*       dockArea;
+    QSplitter*         splitter;
+    QTimer*            thumbbarTimer;
 
-    DigikamImageView* imageIconView;
+    DigikamImageView*  imageIconView;
     ImageThumbnailBar* thumbBar;
-    ImagePreviewView* imagePreviewView;
-    MediaPlayerView*  mediaPlayerView;
-    ThumbBarDock*     thumbBarDock;
-    WelcomePageView*  welcomePageView;
-    MapWidgetView*    mapWidgetView;
+    ImagePreviewView*  imagePreviewView;
+    MediaPlayerView*   mediaPlayerView;
+    ThumbBarDock*      thumbBarDock;
+    WelcomePageView*   welcomePageView;
+    MapWidgetView*     mapWidgetView;
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
@@ -108,8 +108,8 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
 
     d->welcomePageView = new WelcomePageView(this);
     d->mediaPlayerView = new MediaPlayerView(this);
-    d->mapWidgetView = new MapWidgetView(d->imageIconView->getSelectionModel(),
-                                         d->imageIconView->imageFilterModel(), this);
+    d->mapWidgetView   = new MapWidgetView(d->imageIconView->getSelectionModel(),
+                                           d->imageIconView->imageFilterModel(), this);
     d->mapWidgetView->setObjectName("mainwindow_mapwidgetview");
 
     insertWidget(PreviewAlbumMode, d->imageIconView);
@@ -127,6 +127,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
     readSettings();
 
     // -----------------------------------------------------------------
+
+    connect(d->imagePreviewView, SIGNAL(signalPopupTagsView()),
+            d->imageIconView, SIGNAL(signalPopupTagsView()));
 
     connect(d->imagePreviewView, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)),
             this, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)));

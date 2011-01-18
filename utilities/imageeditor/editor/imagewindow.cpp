@@ -7,7 +7,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -817,7 +817,7 @@ void ImageWindow::slotContextMenu()
         QList<qlonglong> idList;
         idList << d->currentImageInfo.id();
 
-        assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN, this);
+        assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::RECENTLYASSIGNED, this);
         removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);
         assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
         removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
@@ -832,6 +832,9 @@ void ImageWindow::slotContextMenu()
 
         connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
                 this, SLOT(slotRemoveTag(int)));
+
+        connect(assignTagsMenu, SIGNAL(signalPopupTagsView()),
+                d->rightSideBar, SLOT(slotPopupTagsView()));
 
         if (!DatabaseAccess().db()->hasTags( idList ))
         {

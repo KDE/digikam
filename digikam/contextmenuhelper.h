@@ -7,6 +7,7 @@
  * Description : contextmenu helper class
  *
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -93,6 +94,7 @@ Q_SIGNALS:
     void signalAssignRating(int);
     void signalAddToExistingQueue(int);
     void signalAddNewTagFromABCMenu(const QString&);
+    void signalPopupTagsView();
 
 public:
 
@@ -205,7 +207,7 @@ public:
      *
      * @param selectedItems the list of selected items
      */
-    void addServicesMenu(KUrl::List selectedItems);
+    void addServicesMenu(const KUrl::List& selectedItems);
 
     /**
      * Add the Goto menu.
@@ -351,7 +353,7 @@ private Q_SLOTS:
 private:
 
     void setSelectedIds(imageIds& ids);
-    void setSelectedItems(KUrl::List urls);
+    void setSelectedItems(const KUrl::List& urls);
     bool imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category);
 
 private:
