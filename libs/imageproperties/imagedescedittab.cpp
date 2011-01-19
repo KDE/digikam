@@ -7,10 +7,10 @@
  * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -714,7 +714,6 @@ void ImageDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkSta
     }
 
     d->hub.setTag(tag->id(), isChecked);
-
     slotModified();
 }
 
@@ -961,7 +960,6 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
     {
         return;
     }
-
     metadataChange(imageId);
 }
 
@@ -978,7 +976,6 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
     {
         return;
     }
-
     setInfos(d->currInfos);
 }
 
@@ -988,7 +985,6 @@ void ImageDescEditTab::slotImageRatingChanged(qlonglong imageId)
     {
         return;
     }
-
     metadataChange(imageId);
 }
 
@@ -998,7 +994,6 @@ void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
     {
         return;
     }
-
     metadataChange(imageId);
 }
 
@@ -1152,7 +1147,6 @@ void ImageDescEditTab::focusLastSelectedWidget()
     {
         d->lastSelectedWidget->setFocus();
     }
-
     d->lastSelectedWidget = 0;
 }
 
