@@ -34,6 +34,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 246675 : Crash on startup/scanning folders.
 026 ==> 225471 : Change digiKam to follow usability guidelines.
 027 ==> 248549 : digiKam crash at startup (suse's backport repo).
-028 ==> 
 
 

@@ -7,7 +7,7 @@
  * Description : tags folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,8 @@
 #define TAGFOLDERVIEW_H
 
 // Qt includes
-#include <qtreeview.h>
+
+#include <QTreeView>
 
 // Local includes
 
@@ -37,7 +38,6 @@ namespace Digikam
 
 class ContextMenuHelper;
 
-class TagFolderViewPriv;
 class TagFolderView: public TagTreeView
 {
     Q_OBJECT
@@ -104,10 +104,11 @@ private Q_SLOTS:
     void slotTagNewFromABCMenu(const QString& personName);
 
 private:
-    TagFolderViewPriv* d;
 
+    class TagFolderViewPriv;
+    TagFolderViewPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif // TAGFOLDERVIEW_H

@@ -102,7 +102,7 @@ private Q_SLOTS:
 private:
 
     class TagCheckViewPriv;
-    TagCheckViewPriv* d;
+    TagCheckViewPriv* const d;
 };
 
 } // namespace Digikam

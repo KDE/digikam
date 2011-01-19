@@ -122,7 +122,6 @@ private:
 
     class TagModificationHelperPriv;
     TagModificationHelperPriv* const d;
-
 };
 
 } // namespace Digikam

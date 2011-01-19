@@ -734,7 +734,6 @@ void ImageDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkSta
     }
 
     d->hub.setTag(tag->id(), isChecked);
-
     slotModified();
 }
 
@@ -986,7 +985,6 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
     {
         return;
     }
-
     metadataChange(imageId);
 }
 
@@ -1003,7 +1001,6 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
     {
         return;
     }
-
     setInfos(d->currInfos);
 }
 
@@ -1013,7 +1010,6 @@ void ImageDescEditTab::slotImageRatingChanged(qlonglong imageId)
     {
         return;
     }
-
     metadataChange(imageId);
 }
 
@@ -1023,7 +1019,6 @@ void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
     {
         return;
     }
-
     metadataChange(imageId);
 }
 
@@ -1177,7 +1172,6 @@ void ImageDescEditTab::setFocusToLastSelectedWidget()
     {
         d->lastSelectedWidget->setFocus();
     }
-
     d->lastSelectedWidget = 0;
 }
 
