@@ -35,7 +35,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 258106 : digiKam crahed on search Pictures on individal Album.
 027 ==> 261384 : Crash while scrolling the raw image preview.
 028 ==> 258922 : digiKam crashed while scrolling through images in folder.
-029 ==> 
+029 ==> 263726 : Metadata lost when decoding a raw file.
+030 ==> 
+
 
 
 
