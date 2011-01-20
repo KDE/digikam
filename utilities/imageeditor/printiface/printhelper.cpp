@@ -5,7 +5,7 @@
  *
  * Date        : 2009-02-06
  * Description : image editor printing interface.
- *               inspired from  Gwenview code (Aurélien Gâteau).
+ *               inspired from  Gwenview code (Aurelien Gateau).
  *
  * Copyright (C) 2009 by Angelo Naselli <anaselli at linux dot it>
  *
@@ -30,6 +30,7 @@
 
 // Qt includes
 
+#include <QWidget>
 #include <QCheckBox>
 #include <QPainter>
 #include <QPrinter>
@@ -48,16 +49,25 @@
 namespace Digikam
 {
 
-class PrintHelperPrivate
+class PrintHelper::PrintHelperPrivate
 {
 
 public:
 
+public:
+
+    PrintHelperPrivate() :
+        mParent(0)
+    {
+    }
+
     QWidget* mParent;
+
+public:
 
     QSize adjustSize ( PrintOptionsPage* optionsPage, DImg& doc, int printerResolution, const QSize& viewportSize )
     {
-        QSize size = doc.size();
+        QSize size                            = doc.size();
         PrintOptionsPage::ScaleMode scaleMode = optionsPage->scaleMode();
 
         if ( scaleMode == PrintOptionsPage::ScaleToPage )
@@ -75,22 +85,22 @@ public:
         {
             double wImg = optionsPage->scaleWidth();
             double hImg = optionsPage->scaleHeight();
-            size.setWidth ( int ( wImg * printerResolution ) );
+            size.setWidth  ( int ( wImg * printerResolution ) );
             size.setHeight ( int ( hImg * printerResolution ) );
         }
         else
         {
             // No scale
             const double INCHES_PER_METER = 100. / 2.54;
-            QImage img = doc.copyQImage();
-            int dpmX = img.dotsPerMeterX();
-            int dpmY = img.dotsPerMeterY();
+            QImage img                    = doc.copyQImage();
+            int dpmX                      = img.dotsPerMeterX();
+            int dpmY                      = img.dotsPerMeterY();
 
             if ( dpmX > 0 && dpmY > 0 )
             {
-                double wImg = double ( size.width() ) / double ( dpmX ) * INCHES_PER_METER;
+                double wImg = double ( size.width()  ) / double ( dpmX ) * INCHES_PER_METER;
                 double hImg = double ( size.height() ) / double ( dpmY ) * INCHES_PER_METER;
-                size.setWidth ( int ( wImg * printerResolution ) );
+                size.setWidth  ( int ( wImg * printerResolution ) );
                 size.setHeight ( int ( hImg * printerResolution ) );
             }
         }
@@ -193,4 +203,4 @@ void PrintHelper::print ( DImg& doc )
     painter.drawImage ( 0, 0, image );
 }
 
-} // namespace
+} // namespace Digikam

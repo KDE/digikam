@@ -5,9 +5,9 @@
  *
  * Date        : 2009-02-06
  * Description : image editor printing interface.
- *               inspired from  Gwenview code (Aurélien Gâteau).
+ *               inspired from  Gwenview code (Aurelien Gateau).
  *
- * Copyright (C) 2009 by Angelo Naselli <anaselli at linux dot it>
+ * Copyright (C) 2009-2011 by Angelo Naselli <anaselli at linux dot it>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +58,6 @@ private:
     QObject* mObject;
 };
 
-} // namespace
+} // namespace Digikam
 
 #endif /* SIGNALBLOCKER_H */
