@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class BatchThumbsGeneratorPriv
+class BatchThumbsGenerator::BatchThumbsGeneratorPriv
 {
 public:
 
@@ -72,7 +72,7 @@ public:
 
     bool                 cancel;
     bool                 rebuildAll;
-    
+
     int                  albumId;
 
     QTime                duration;
@@ -107,16 +107,16 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, int albumId)
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->rebuildAll      = true;
     d->albumId         = albumId;
-    
+
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
-    
+
     setModal(false);
     setValue(0);
     setCaption(i18n("Rebuild Current Album Thumbnails"));
     setLabel(i18n("<b>Updating thumbnails database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
-    
+
     QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
 }
 
