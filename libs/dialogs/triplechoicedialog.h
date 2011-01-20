@@ -55,7 +55,7 @@ public:
      * Instead, add it to the layout when you setup the dialog's main widget.
      */
 
-    TripleChoiceDialog(QWidget *parent = 0);
+    TripleChoiceDialog(QWidget* parent = 0);
     ~TripleChoiceDialog();
 
     /**
@@ -103,14 +103,13 @@ protected:
      * Returns the widget that contains the buttons.
      * You must place this widget in your dialogs layout.
      */
-    QWidget *buttonContainer() const;
+    QWidget* buttonContainer() const;
 
 private:
 
     class TripleChoiceDialogPriv;
     TripleChoiceDialogPriv* const d;
 };
-
 
 } // namespace Digikam
 

@@ -153,12 +153,10 @@ void TripleChoiceDialog::slotButtonClicked(int button)
     }
 }
 
-QWidget *TripleChoiceDialog::buttonContainer() const
+QWidget* TripleChoiceDialog::buttonContainer() const
 {
     d->checkToolBar();
     return d->toolBar;
 }
 
-
 } // namespace Digikam
-
