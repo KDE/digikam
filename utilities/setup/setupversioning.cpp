@@ -131,8 +131,8 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                                "Enable support for non-destructive editing and image versioning"));
     d->enableNonDestructive->setWhatsThis(i18nc("@info:whatsthis",
                                                 "<para><interface>Non-Destructive Editing and Versioning</interface> "
-                                                "allows to create different versions of an image "
-                                                "while the original image is always preserved.</para> "
+                                                "allows different versions of an image to be created, "
+                                                "whilst always preserving the original image.</para> "
                                                 "<para> All steps of the editing history are recorded and can be accessed later.</para>"));
 
     QLabel *iconLabel = new QLabel;
@@ -293,7 +293,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
 
     d->snapshotAfterRaw = new QCheckBox(i18nc("@option:check", "After converting from a RAW image"));
     d->snapshotSession  = new QCheckBox(i18nc("@option:check", "After each editing session"));
-    d->snapshotComplex  = new QCheckBox(i18nc("@option:check", "After each not completely reproducible step"));
+    d->snapshotComplex  = new QCheckBox(i18nc("@option:check", "After each step that is not completely reproducible"));
 
     snapshotLayout->addWidget(snapshotIconLabel,   0, 0);
     snapshotLayout->addWidget(snapshotLabel,       0, 1);

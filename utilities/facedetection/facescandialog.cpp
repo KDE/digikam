@@ -450,7 +450,7 @@ void FaceScanDialog::setupUi()
                                   Qt::AlignTop | Qt::AlignHCenter);
     d->specificityInput->setToolTip(i18nc("@info:tooltip",
                                           "Adjust sensitivity versus specificity: If the value is high, most faces returned will "
-                                          "really be a face - few false positive. If the value is low, more faces will be found, "
+                                          "really be a face - few false positives. If the value is low, more faces will be found, "
                                           "but some returned faces will not really be faces."));
 
     parametersLayout->addWidget(detectionLabel, 0, 0);

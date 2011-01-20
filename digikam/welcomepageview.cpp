@@ -99,11 +99,11 @@ QString WelcomePageView::infoPage() const
     QStringList newFeatures;
     newFeatures << i18n("XMP metadata sidecar support;");
     newFeatures << i18n("Reverse geo-coding support;");
-    newFeatures << i18n("Image versionning support;");
+    newFeatures << i18n("Image versioning support;");
     newFeatures << i18n("Face detection and recognition support;");
-    newFeatures << i18n("Supports the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>, "
-                        "as Foveon sensor based camera, Nikon D7000, Canon 60D, Pentax K5, Olympus E5, Sony A450 "
-                        "(see full list of RAW camera supported on Help menu);");
+    newFeatures << i18n("Support for the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>, "
+                        "including Foveon-sensor-based cameras, Nikon D7000, Canon 60D, Pentax K5, Olympus E5 and Sony A450 "
+                        "(see the Help menu for the full list of RAW cameras supported);");
     newFeatures << i18n("New advanced RAW decoding settings backported from RawTherapee project;");
     newFeatures << i18n("...and much more.");
 

@@ -149,7 +149,7 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
         QString text;
 
         QString text1 = QString::number(indexes.count());
-        QString text2(i18n("%1 Images", indexes.count()));
+        QString text2(i18np("1 Image", "%1 Images", indexes.count()));
         QRect r1 = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text1).adjusted(0,0,1,1);
         QRect r2 = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text2).adjusted(0,0,1,1);
 

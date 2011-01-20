@@ -199,7 +199,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     KExiv2::WRITETOSIDECARONLY);
     d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                KExiv2::WRITETOSIDECARANDIMAGE);
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), KExiv2::WRITETOSIDECARONLY4READONLYFILES);
-    d->writingModeCombo->setToolTip(i18n("Choose there how to write metadata."));
+    d->writingModeCombo->setToolTip(i18n("Choose here how metadata should be stored."));
     d->writingModeCombo->setEnabled(KExiv2::supportXmp());
 
     gLayout2->addWidget(d->saveTagsBox);

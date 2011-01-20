@@ -88,7 +88,7 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
     d->detectionSliderLabel = new QLabel;
     d->detectionSliderLabel->setTextFormat(Qt::PlainText);
     d->detectionSliderLabel->setText(i18n("The accuracy of face detection.\n"
-                                          "If you have a weak computer, it is a good idea to choose a lower value.\n"
+                                          "If you have a slow computer, it is a good idea to choose a lower value.\n"
                                           "Choosing a higher value will increase the accuracy of face detection,\n"
                                           "but will be slow.\n"));
 
@@ -101,7 +101,7 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
     d->suggestionSliderLabel = new QLabel;
     d->suggestionSliderLabel->setTextFormat(Qt::PlainText);
     d->suggestionSliderLabel->setText(i18n("The threshold of face suggestions.\n"
-                                           "More suggestion threshold means that lesser suggestions will be presented,\n"
+                                           "A larger suggestion threshold means that fewer suggestions will be presented,\n"
                                            "however these will be more accurate.\n"));
 
     d->suggestionThresholdSlider = new QSlider(Qt::Horizontal, panel);
