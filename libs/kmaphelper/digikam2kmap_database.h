@@ -58,8 +58,6 @@ inline bool GPSImageInfo::fromImageInfo(const ImageInfo& imageInfo, GPSImageInfo
     return true;
 }
 
-
-} /* Digikam */
+} /* namespace Digikam */
 
 #endif /* DIGIKAM2KMAP_DATABASE_H */
-

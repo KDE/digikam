@@ -158,7 +158,7 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMa
 }
 
 GPSImageInfoSorter::GPSImageInfoSorter(QObject* const parent)
- : QObject(parent), d(new Private())
+    : QObject(parent), d(new Private())
 {
 }
 
@@ -259,6 +259,4 @@ void GPSImageInfoSorter::slotSortOptionTriggered()
     }
 }
 
-} /* Digikam */
-
-
+} /* namespace Digikam */

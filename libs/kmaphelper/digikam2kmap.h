@@ -67,13 +67,14 @@ public:
     {
     }
 
-    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id, const KMap::GeoCoordinates& p_coordinates, const int p_rating, const QDateTime& p_creationDate)
+    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id, const KMap::GeoCoordinates& p_coordinates,
+                                                        const int p_rating, const QDateTime& p_creationDate)
     {
         GPSImageInfo info;
-        info.id = p_id;
+        info.id          = p_id;
         info.coordinates = p_coordinates;
-        info.rating = p_rating;
-        info.dateTime = p_creationDate;
+        info.rating      = p_rating;
+        info.dateTime    = p_creationDate;
 
         return info;
     }
@@ -125,10 +126,9 @@ private:
     Private* const d;
 };
 
-} /* Digikam */
+} /* namespace Digikam */
 
 Q_DECLARE_METATYPE(Digikam::GPSImageInfo);
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions);
 
 #endif /* DIGIKAM2KMAP_H */
-
