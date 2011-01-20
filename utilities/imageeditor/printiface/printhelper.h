@@ -5,7 +5,7 @@
  *
  * Date        : 2009-02-06
  * Description : image editor printing interface.
- *               inspired from  Gwenview code (Aurélien Gâteau).
+ *               inspired from  Gwenview code (Aurelien Gateau).
  *
  * Copyright (C) 2009 by Angelo Naselli <anaselli at linux dot it>
  *
@@ -35,8 +35,6 @@ class QWidget;
 namespace Digikam
 {
 
-class PrintHelperPrivate;
-
 class DIGIKAM_EXPORT PrintHelper
 {
 
@@ -49,9 +47,10 @@ public:
 
 private:
 
+    class PrintHelperPrivate;
     PrintHelperPrivate* const d;
 };
 
-} // namespace
+} // namespace Digikam
 
 #endif /* PRINTHELPER_H */

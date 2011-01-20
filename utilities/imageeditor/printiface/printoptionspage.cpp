@@ -5,7 +5,7 @@
  *
  * Date        : 2009-02-06
  * Description : image editor printing interface.
- *               inspired from  Gwenview code (Aurélien Gâteau).
+ *               inspired from  Gwenview code (Aurelien Gateau).
  *
  * Copyright (C) 2009 by Angelo Naselli <anaselli at linux dot it>
  *
@@ -69,9 +69,17 @@ static inline double unitToInches ( PrintOptionsPage::Unit unit )
     }
 }
 
-class PrintOptionsPagePrivate : public Ui_PrintOptionsPage
+class PrintOptionsPage::PrintOptionsPagePrivate : public Ui_PrintOptionsPage
 {
 public:
+
+    PrintOptionsPagePrivate() :
+        mParent(0),
+        colorManaged(0),
+        cmPreferences(0),
+        cmEnabled(false)
+    {
+    }
 
     QWidget*              mParent;
     QSize                 mImageSize;
@@ -82,6 +90,8 @@ public:
     QCheckBox*            colorManaged;
     QPushButton*          cmPreferences;
     bool                  cmEnabled;
+
+public:
 
     void initColorManagement()
     {
@@ -165,9 +175,8 @@ PrintOptionsPage::PrintOptionsPage (QWidget* parent, const QSize& imageSize)
     : QWidget(), d ( new PrintOptionsPagePrivate )
 {
     d->setupUi ( this );
-    d->mParent   = parent;
-    d->cmEnabled = false;
-    d->mImageSize = imageSize;
+    d->mParent              = parent;
+    d->mImageSize           = imageSize;
     d->mConfigDialogManager = new KConfigDialogManager(this, DigikamConfig::self());
 
     d->initPositionFrame();
@@ -308,8 +317,8 @@ void PrintOptionsPage::loadConfig()
 
     d->colorManaged->setChecked (DigikamConfig::printColorManaged());
     ICCSettingsContainer settings = IccSettings::instance()->settings();
-    d->outputProfile = settings.defaultProofProfile;
-    d->cmEnabled     = settings.enableCM;
+    d->outputProfile              = settings.defaultProofProfile;
+    d->cmEnabled                  = settings.enableCM;
 }
 
 void PrintOptionsPage::saveConfig()
@@ -342,4 +351,4 @@ void PrintOptionsPage::slotSetupDlg()
     editor->setupICC();
 }
 
-} // namespace
+} // namespace DigiKam
