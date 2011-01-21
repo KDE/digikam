@@ -6,7 +6,7 @@
  * Date        : 2010-06-12
  * Description : Special line edit for adding or creatingtags
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 1997 Sven Radej (sven.radej@iname.com)
  * Copyright (c) 1999 Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
  * Copyright (c) 1999 Preston Brown <pbrown@kde.org>
@@ -224,10 +224,9 @@ void AddTagsLineEdit::makeSubstringCompletion(const QString&)
 void AddTagsLineEdit::makeCompletion(const QString& text)
 {
     // Need to reimplement already because setCompletedItems is not virtual
-    KCompletion* comp = compObj();
+    KCompletion* comp                = compObj();
     KGlobalSettings::Completion mode = completionMode();
-
-    d->currentTaggingAction = TaggingAction();
+    d->currentTaggingAction          = TaggingAction();
 
     if (text.isEmpty())
     {
@@ -380,7 +379,7 @@ void AddTagsLineEdit::slotTextChanged(const QString& text)
 TaggingAction AddTagsLineEdit::AddTagsLineEditPriv::makeTaggingAction(const QString& text)
 {
     TAlbum* parentTag = completionBox->parentTag();
-    int parentTagId = parentTag ? parentTag->id() : 0;
+    int parentTagId   = parentTag ? parentTag->id() : 0;
     return AddTagsCompletionBox::makeDefaultTaggingAction(text, parentTagId);
 }
 
