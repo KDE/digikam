@@ -43,24 +43,29 @@ namespace Digikam
 {
 
 BWConvert::BWConvert(QObject* parent)
-    : BatchTool("BWConvert", ColorTool, parent)
+    : BatchTool("BWConvert", ColorTool, parent),
+      m_settingsView(0)
 {
     setToolTitle(i18n("B&W Convert"));
     setToolDescription(i18n("A tool to convert to black and white."));
     setToolIcon(KIcon(SmallIcon("bwtonal")));
+}
 
+BWConvert::~BWConvert()
+{
+}
+
+QWidget* BWConvert::createSettingsWidget()
+{
     QWidget* box   = new QWidget;
     m_settingsView = new BWSepiaSettings(box, &m_preview);
-    setSettingsWidget(box);
 
     m_settingsView->startPreviewFilters();
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
-}
 
-BWConvert::~BWConvert()
-{
+    return box;
 }
 
 void BWConvert::slotResetSettingsToDefault()

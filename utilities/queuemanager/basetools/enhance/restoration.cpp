@@ -45,12 +45,21 @@ namespace Digikam
 {
 
 Restoration::Restoration(QObject* parent)
-    : BatchTool("Restoration", EnhanceTool, parent), m_cimgIface(0)
+    : BatchTool("Restoration", EnhanceTool, parent),
+      m_comboBox(0),
+      m_cimgIface(0)
 {
     setToolTitle(i18n("Restoration"));
     setToolDescription(i18n("A tool to restore photographs based on Greystoration."));
     setToolIcon(KIcon(SmallIcon("restoration")));
+}
 
+Restoration::~Restoration()
+{
+}
+
+QWidget* Restoration::createSettingsWidget()
+{
     KVBox* vbox   = new KVBox;
 
     KUrlLabel* cimgLogoLabel = new KUrlLabel(vbox);
@@ -74,14 +83,10 @@ Restoration::Restoration(QObject* parent)
     QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    setSettingsWidget(vbox);
-
     connect(m_comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
-}
 
-Restoration::~Restoration()
-{
+    return vbox;
 }
 
 BatchToolSettings Restoration::defaultSettings()

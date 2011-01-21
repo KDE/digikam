@@ -46,12 +46,21 @@ namespace Digikam
 {
 
 CurvesAdjust::CurvesAdjust(QObject* parent)
-    : BatchTool("CurvesAdjust", ColorTool, parent)
+    : BatchTool("CurvesAdjust", ColorTool, parent),
+      m_channelCB(0),
+      m_settingsView(0)
 {
     setToolTitle(i18n("Curves Adjust"));
     setToolDescription(i18n("A tool to perform curves adjustments."));
     setToolIcon(KIcon(SmallIcon("adjustcurves")));
+}
 
+CurvesAdjust::~CurvesAdjust()
+{
+}
+
+QWidget* CurvesAdjust::createSettingsWidget()
+{
     KVBox* vbox          = new KVBox;
     KHBox* hbox          = new KHBox(vbox);
     QLabel* channelLabel = new QLabel(hbox);
@@ -67,17 +76,13 @@ CurvesAdjust::CurvesAdjust(QObject* parent)
     QLabel* space  = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    setSettingsWidget(vbox);
-
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged()));
-}
 
-CurvesAdjust::~CurvesAdjust()
-{
+    return vbox;
 }
 
 void CurvesAdjust::slotChannelChanged()
