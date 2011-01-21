@@ -35,7 +35,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 244701 : Map search tool selects a whole hemisphere when trying to select large areas.
 020 ==> 225440 : Save dialog default file format from xpm to user wanted.
 021 ==> 218816 : Many Problem with Editor "Save As...".
-022 ==> 
+022 ==> 236730 : Collection path is interpreted differently.
+023 ==> 
+
 
 
 
