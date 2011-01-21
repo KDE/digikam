@@ -7,9 +7,9 @@
  * Description : Albums folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,18 +27,18 @@
 #ifndef ALBUMSELECTIONTREEVIEW_H
 #define ALBUMSELECTIONTREEVIEW_H
 
-// QT includes
-#include <qtreeview.h>
+// Qt includes
+
+#include <QTreeView>
 
 // Local includes
+
 #include "albummodel.h"
 #include "albumtreeview.h"
 #include "albummodificationhelper.h"
 
 namespace Digikam
 {
-
-class AlbumSelectionTreeViewPriv;
 
 /**
  * Album tree view used in the left sidebar to select PAlbums and perform
@@ -49,7 +49,9 @@ class AlbumSelectionTreeViewPriv;
 class AlbumSelectionTreeView: public AlbumTreeView
 {
     Q_OBJECT
+
 public:
+
     AlbumSelectionTreeView(QWidget* parent, AlbumModel* model, AlbumModificationHelper* albumModificationHelper);
     ~AlbumSelectionTreeView();
 
@@ -83,7 +85,9 @@ private:
     bool viewportEvent(QEvent* event);
 
 private:
-    AlbumSelectionTreeViewPriv* d;
+
+    class AlbumSelectionTreeViewPriv;
+    AlbumSelectionTreeViewPriv* const d;
 
 };
 
