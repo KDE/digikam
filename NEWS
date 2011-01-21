@@ -37,7 +37,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 258922 : digiKam crashed while scrolling through images in folder.
 029 ==> 263726 : Metadata lost when decoding a raw file.
 030 ==> 224047 : Thumbnails incorrectly rotated on certain images.*
-031 ==> 
+031 ==> 239902 : digiKam seems to find images that are not in the collection directory.
+032 ==> 
+
 
 
 
