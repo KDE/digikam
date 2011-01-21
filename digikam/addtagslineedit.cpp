@@ -6,7 +6,7 @@
  * Date        : 2010-06-12
  * Description : Special line edit for adding or creatingtags
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 1997 Sven Radej (sven.radej@iname.com)
  * Copyright (C) 1999 Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
  * Copyright (C) 1999 Preston Brown <pbrown@kde.org>
@@ -116,6 +116,8 @@ TagModel* TagModelCompletion::model() const
     return static_cast<TagModel*>(ModelCompletion::model());
 }
 
+// -------------------------------------------------------------------------------
+
 class AddTagsCompletionBoxItem : public QListWidgetItem
 {
 public:
@@ -144,7 +146,7 @@ protected:
 
 // ---------------------------------------------------------------------------------------
 
-class AddTagsCompletionBoxPriv
+class AddTagsCompletionBox::AddTagsCompletionBoxPriv
 {
 public:
 
@@ -164,6 +166,8 @@ public:
 
     TagModel*             model;
     AlbumPointer<TAlbum> parentTag;
+
+public:
 
     AddTagsCompletionBoxItem* createItemForExistingTag(TAlbum* talbum, bool uniqueName);
     AddTagsCompletionBoxItem* createItemForNewTag(const QString& newName, TAlbum* parent);
@@ -190,7 +194,7 @@ void AddTagsCompletionBox::setTagModel(TagModel* model)
     d->model = model;
 }
 
-AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum, bool uniqueName)
+AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum, bool uniqueName)
 {
     if (!talbum || talbum->isRoot())
     {
@@ -198,8 +202,7 @@ AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForExistingTag(TAl
     }
 
     AddTagsCompletionBoxItem* item = new AddTagsCompletionBoxItem;
-
-    TAlbum* parent = static_cast<TAlbum*>(talbum->parent());
+    TAlbum* parent                 = static_cast<TAlbum*>(talbum->parent());
 
     if (parent->isRoot() || uniqueName)
     {
@@ -223,7 +226,7 @@ AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForExistingTag(TAl
     return item;
 }
 
-AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForNewTag(const QString& newName, TAlbum* parent)
+AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForNewTag(const QString& newName, TAlbum* parent)
 {
     int parentTagId = parent ? parent->id() : 0;
 
@@ -246,7 +249,6 @@ AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForNewTag(const QS
     }
 
     item->setData(Qt::DecorationRole, AlbumThumbnailLoader::instance()->getNewTagIcon());
-
     item->setData(CompletionTextRole, newName);
     item->setAction(TaggingAction(newName, parentTagId));
 
@@ -328,9 +330,10 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
 }
 
 /*
-    /// If an item matches the given completion text exactly, it is made the current item
-    void setCurrentCompletionText(const QString& completionText);
-    QString currentCompletionText() const;
+
+/// If an item matches the given completion text exactly, it is made the current item
+void setCurrentCompletionText(const QString& completionText);
+QString currentCompletionText() const;
 
 void AddTagsCompletionBox::setCurrentCompletionText(const QString &completionText)
 {
@@ -407,9 +410,9 @@ void AddTagsCompletionBox::sizeAndPosition()
 void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
 {
     // Solution in kdelibs is suboptimal for our needs
-    int currentGeom = height();
+    int currentGeom   = height();
     QPoint currentPos = pos();
-    QRect geom = calculateGeometry();
+    QRect geom        = calculateGeometry();
     resize( geom.size() );
 
     int x = currentPos.x();
@@ -419,7 +422,7 @@ void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
     {
         if (!wasVisible)
         {
-            QPoint orig = globalPositionHint();
+            QPoint orig      = globalPositionHint();
             QRect screenSize = QApplication::desktop()->availableGeometry(orig);
 
             x = orig.x() + geom.x();
@@ -480,9 +483,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
     }
 
     const int frameHeight = 2*frameWidth();
-
     int maxHeight         = d->maximumAvailableScreenHeight(globalPositionHint());
-
     int suggestedHeight   = qMin(15, count()) * itemSizeHint.height();
 
     //kDebug() << itemSizeHint << maxHeight << suggestedHeight;
@@ -539,7 +540,7 @@ QSize AddTagsCompletionBox::sizeHint() const
     return calculateGeometry().size();
 }
 
-int AddTagsCompletionBoxPriv::maximumAvailableScreenHeight(const QPoint& orig)
+int AddTagsCompletionBox::AddTagsCompletionBoxPriv::maximumAvailableScreenHeight(const QPoint& orig)
 {
     QRect screenSize = QApplication::desktop()->availableGeometry(orig);
 
@@ -552,7 +553,9 @@ int AddTagsCompletionBoxPriv::maximumAvailableScreenHeight(const QPoint& orig)
     return qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
 }
 
-class AddTagsLineEditPriv
+// ---------------------------------------------------------------------------------------
+
+class AddTagsLineEdit::AddTagsLineEditPriv
 {
 public:
 
@@ -678,7 +681,7 @@ void AddTagsLineEdit::makeSubstringCompletion(const QString&)
 void AddTagsLineEdit::makeCompletion(const QString& text)
 {
     // Need to reimplement already because setCompletedItems is not virtual
-    KCompletion* comp = compObj();
+    KCompletion* comp                = compObj();
     KGlobalSettings::Completion mode = completionMode();
 
     d->completionBoxAction = TaggingAction();
@@ -816,7 +819,7 @@ void AddTagsLineEdit::slotReturnPressed(const QString& text)
     }
 }
 
-TaggingAction AddTagsLineEditPriv::makeTaggingAction(const QString& text)
+TaggingAction AddTagsLineEdit::AddTagsLineEditPriv::makeTaggingAction(const QString& text)
 {
     TAlbum* parentTag = 0;
 

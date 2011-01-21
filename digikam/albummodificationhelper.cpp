@@ -6,7 +6,7 @@
  * Date        : 2000-12-05
  * Description : helper class used to modify physical albums in views
  *
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +24,7 @@
 #include "albummodificationhelper.moc"
 
 // KDE includes
+
 #include <kdebug.h>
 #include <kinputdialog.h>
 #include <kio/jobuidelegate.h>
@@ -32,6 +33,7 @@
 #include <kurl.h>
 
 // Local includes
+
 #include "albummanager.h"
 #include "albumpropsedit.h"
 #include "albumsettings.h"
@@ -42,15 +44,19 @@
 namespace Digikam
 {
 
-class AlbumModificationHelperPriv
+class AlbumModificationHelper::AlbumModificationHelperPriv
 {
 public:
+    AlbumModificationHelperPriv() :
+        dialogParent(0)
+    {
+    }
+
     QWidget* dialogParent;
 };
 
-AlbumModificationHelper::AlbumModificationHelper(QObject* parent,
-        QWidget* dialogParent) :
-    QObject(parent), d(new AlbumModificationHelperPriv)
+AlbumModificationHelper::AlbumModificationHelper(QObject* parent, QWidget* dialogParent)
+    : QObject(parent), d(new AlbumModificationHelperPriv)
 {
     d->dialogParent = dialogParent;
 }
@@ -112,7 +118,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     }
 
     QString errMsg;
-    PAlbum* album;
+    PAlbum* album = 0;
 
     if (parent->isRoot())
     {
@@ -132,12 +138,10 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     }
 
     return album;
-
 }
 
 void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
 {
-
     if (!album || album->isRoot() || album->isAlbumRoot())
     {
         return;
@@ -167,14 +171,13 @@ void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
     u.setProtocol("file");
     u.setPath(album->folderPath());
     KIO::Job* job = DIO::del(u, useTrash);
+
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
-
 }
 
 void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
 {
-
     if (!album)
     {
         return;
@@ -201,7 +204,6 @@ void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
             KMessageBox::error(0, errMsg);
         }
     }
-
 }
 
 void AlbumModificationHelper::addAlbumChildrenToList(KUrl::List& list, Album* album)
@@ -218,7 +220,6 @@ void AlbumModificationHelper::addAlbumChildrenToList(KUrl::List& list, Album* al
             ++it;
         }
     }
-
 }
 
 void AlbumModificationHelper::slotDIOResult(KJob* kjob)
@@ -234,7 +235,6 @@ void AlbumModificationHelper::slotDIOResult(KJob* kjob)
 
 void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
 {
-
     if (!album || album->isRoot() || album->isAlbumRoot())
     {
         return;
@@ -282,9 +282,7 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
                 KMessageBox::error(d->dialogParent, errMsg);
             }
         }
-
     }
-
 }
 
-}
+} // namespace Digikam

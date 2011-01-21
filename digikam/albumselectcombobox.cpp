@@ -6,8 +6,8 @@
  * Date        : 2009-05-09
  * Description : A combo box for selecting albums
  *
- * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,7 +69,7 @@ void AlbumSelectComboBox::setDefaultTagModels()
 
 void AlbumSelectComboBox::setModels(AbstractCheckableAlbumModel* model, QSortFilterProxyModel* filterModel)
 {
-    m_model = model;
+    m_model       = model;
     m_filterModel = filterModel;
 
     m_model->setCheckable(true);
@@ -106,7 +106,7 @@ QSortFilterProxyModel* AlbumSelectComboBox::filterModel() const
 
 void AlbumSelectComboBox::updateText()
 {
-    QList<Album*> checkedAlbums = m_model->checkedAlbums();
+    QList<Album*> checkedAlbums          = m_model->checkedAlbums();
     QList<Album*> partiallyCheckedAlbums = m_model->partiallyCheckedAlbums();
     QString newIncludeText;
     QString newExcludeText;
@@ -157,4 +157,3 @@ void AlbumSelectComboBox::updateText()
 }
 
 } // namespace Digikam
-

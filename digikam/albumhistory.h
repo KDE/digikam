@@ -7,7 +7,7 @@
  * Description : Albums history manager.
  *
  * Copyright (C) 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -98,11 +98,11 @@ private:
 
     typedef QList<HistoryItem*> AlbumStack;
 
-    bool            m_moving;
-    bool            m_blockSelection;
+    bool                          m_moving;
+    bool                          m_blockSelection;
 
-    AlbumStack*      m_backwardStack;
-    AlbumStack*      m_forwardStack;
+    AlbumStack*                   m_backwardStack;
+    AlbumStack*                   m_forwardStack;
     QMap<Album*, HistoryPosition> m_historyPos;
 };
 

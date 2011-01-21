@@ -6,7 +6,7 @@
  * Date        : 2010-06-12
  * Description : Special line edit for adding or creatingtags
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,8 +23,6 @@
 
 #ifndef ADDTAGSLINEEDIT_H
 #define ADDTAGSLINEEDIT_H
-
-// Qt includes
 
 // KDE includes
 
@@ -54,6 +52,8 @@ public:
     TagModel* model() const;
 };
 
+// -------------------------------------------------------------------------------
+
 class TaggingAction
 {
 public:
@@ -82,8 +82,8 @@ public:
 
     bool operator==(const TaggingAction& other)
     {
-        return m_type == other.m_type &&
-               m_tagId == other.m_tagId &&
+        return m_type    == other.m_type  &&
+               m_tagId   == other.m_tagId &&
                m_tagName == other.m_tagName;
     }
 
@@ -127,9 +127,7 @@ protected:
     QString m_tagName;
 };
 
-// ---------------------------------------------------------------------------------------
-
-class AddTagsCompletionBoxPriv;
+// -------------------------------------------------------------------------------
 
 class AddTagsCompletionBox : public KCompletionBox
 {
@@ -203,12 +201,11 @@ protected Q_SLOTS:
 
 private:
 
+    class AddTagsCompletionBoxPriv;
     AddTagsCompletionBoxPriv* const d;
 };
 
-// ---------------------------------------------------------------------------------------
-
-class AddTagsLineEditPriv;
+// -------------------------------------------------------------------------------
 
 class AddTagsLineEdit : public KLineEdit
 {
@@ -249,6 +246,7 @@ protected:
 
 private:
 
+    class AddTagsLineEditPriv;
     AddTagsLineEditPriv* const d;
 };
 

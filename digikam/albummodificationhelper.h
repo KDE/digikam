@@ -6,7 +6,7 @@
  * Date        : 2000-12-05
  * Description : helper class used to modify physical albums in views
  *
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,20 +24,21 @@
 #ifndef ALBUMMODIFICATIONHELPER_H
 #define ALBUMMODIFICATIONHELPER_H
 
-// QT includes
-#include <qobject.h>
-#include <qwidget.h>
+// Qt includes
+
+#include <QObject>
+#include <QWidget>
 
 // KDE includes
+
 #include <kjob.h>
 
 // Local includes
+
 #include "album.h"
 
 namespace Digikam
 {
-
-class AlbumModificationHelperPriv;
 
 /**
  * Utility class providing methods to modify physical albums (PAlbum) in a way
@@ -48,6 +49,7 @@ class AlbumModificationHelperPriv;
 class AlbumModificationHelper : public QObject
 {
     Q_OBJECT
+
 public:
 
     /**
@@ -97,15 +99,20 @@ public Q_SLOTS:
     void slotAlbumEdit(PAlbum* album);
 
 private Q_SLOTS:
+
     void slotDIOResult(KJob* kjob);
 
 private:
+
     void addAlbumChildrenToList(KUrl::List& list, Album* album);
 
-    AlbumModificationHelperPriv* d;
+private:
+
+    class AlbumModificationHelperPriv;
+    AlbumModificationHelperPriv* const d;
 
 };
 
-}
+} // namespace Digikam
 
 #endif /* ALBUMMODIFICATIONHELPER_H */

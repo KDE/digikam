@@ -7,7 +7,7 @@
  * Description : albums history manager.
  *
  * Copyright (C) 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,6 +67,8 @@ public:
     QWidget* widget;
 };
 
+// ---------------------------------------------------------------------
+
 class HistoryPosition
 {
 public:
@@ -91,12 +93,14 @@ public:
     KUrl::List select;
 };
 
+// ---------------------------------------------------------------------
+
 AlbumHistory::AlbumHistory()
 {
-    m_backwardStack = new AlbumStack;
-    m_forwardStack  = new AlbumStack;
-    m_moving        = false;
-    m_blockSelection  = false;
+    m_backwardStack  = new AlbumStack;
+    m_forwardStack   = new AlbumStack;
+    m_moving         = false;
+    m_blockSelection = false;
 }
 
 AlbumHistory::~AlbumHistory()
@@ -448,7 +452,7 @@ void AlbumHistory::slotAlbumCurrentChanged()
 
 void AlbumHistory::slotCurrentChange(const ImageInfo& info)
 {
-    Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+    Album* currentAlbum                = AlbumManager::instance()->currentAlbum();
     m_historyPos[currentAlbum].current = info;
 }
 
