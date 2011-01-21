@@ -36,7 +36,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 225440 : Save dialog default file format from xpm to user wanted.
 021 ==> 218816 : Many Problem with Editor "Save As...".
 022 ==> 236730 : Collection path is interpreted differently.
-023 ==> 
+023 ==> 245957 : digiKam shows pictures from PENTAX camera incorrectly in imageview.
+024 ==> 
 
 
 
