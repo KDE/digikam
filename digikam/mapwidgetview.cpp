@@ -393,6 +393,8 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
     }
 
     emit signalFilteredImages(imagesIdList);
+#else
+    Q_UNUSED(clickedIndices);
 #endif
 }
 
