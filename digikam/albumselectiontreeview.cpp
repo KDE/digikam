@@ -7,9 +7,9 @@
  * Description : Albums folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,18 +26,21 @@
 
 #include "albumselectiontreeview.moc"
 
-// QT includes
-#include <qaction.h>
-#include <qevent.h>
-#include <qsortfilterproxymodel.h>
-#include <qtooltip.h>
+// Qt includes
+
+#include <QAction>
+#include <QEvent>
+#include <QSortFilterProxyModel>
+#include <QToolTip>
 
 // KDE includes
+
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kmenu.h>
 
 // Local includes
+
 #include "albummanager.h"
 #include "contextmenuhelper.h"
 #include "itemviewtooltip.h"
@@ -50,6 +53,7 @@ namespace Digikam
 class AlbumViewToolTip: public ItemViewToolTip
 {
 public:
+
     AlbumViewToolTip(AlbumSelectionTreeView* view) :
         ItemViewToolTip(view)
     {
@@ -65,19 +69,18 @@ protected:
     virtual QString tipContents()
     {
         PAlbum* album = view()->albumForIndex(currentIndex());
-        return ToolTipFiller::albumTipContents(album,
-                                               view()->albumModel()->albumCount(album));
+        return ToolTipFiller::albumTipContents(album, view()->albumModel()->albumCount(album));
     }
-
 };
 
-class AlbumSelectionTreeViewPriv
+class AlbumSelectionTreeView::AlbumSelectionTreeViewPriv
 {
 
 public:
+
     AlbumSelectionTreeViewPriv() :
-        albumModificationHelper(0),
         enableToolTips(false),
+        albumModificationHelper(0),
         toolTip(0),
         renameAction(0),
         resetIconAction(0),
@@ -86,35 +89,31 @@ public:
     {
     }
 
+    bool                     enableToolTips;
+
     AlbumModificationHelper* albumModificationHelper;
-    bool enableToolTips;
-    AlbumViewToolTip* toolTip;
+    AlbumViewToolTip*        toolTip;
 
-    QAction* renameAction;
-    QAction* resetIconAction;
-    QAction* findDuplAction;
-    QAction* rebuildThumbsAction;
-
+    QAction*                 renameAction;
+    QAction*                 resetIconAction;
+    QAction*                 findDuplAction;
+    QAction*                 rebuildThumbsAction;
 };
 
-AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* model,
-        AlbumModificationHelper* albumModificationHelper) :
-    AlbumTreeView(model, parent), d(new AlbumSelectionTreeViewPriv)
+AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* model, 
+                                               AlbumModificationHelper* albumModificationHelper)
+    : AlbumTreeView(model, parent), d(new AlbumSelectionTreeViewPriv)
 {
-
     d->albumModificationHelper = albumModificationHelper;
-
-    d->toolTip = new AlbumViewToolTip(this);
-
-    d->renameAction    = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
-    d->resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
-    d->findDuplAction  = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
-    d->rebuildThumbsAction   = new QAction(SmallIcon("view-process-all"), i18n("Rebuild Thumbnails..."), this);
+    d->toolTip                 = new AlbumViewToolTip(this);
+    d->renameAction            = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
+    d->resetIconAction         = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
+    d->findDuplAction          = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
+    d->rebuildThumbsAction     = new QAction(SmallIcon("view-process-all"), i18n("Rebuild Thumbnails..."), this);
 
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
     setEnableContextMenu(true);
-
 }
 
 AlbumSelectionTreeView::~AlbumSelectionTreeView()
@@ -134,10 +133,8 @@ QString AlbumSelectionTreeView::contextMenuTitle() const
 
 void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a)
 {
-
     PAlbum* album = dynamic_cast<PAlbum*> (a);
-
-    if (!a)
+    if (!album)
     {
         return;
     }
@@ -165,13 +162,11 @@ void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
     cmh.addSeparator();
     // --------------------------------------------------------
     cmh.addAction("album_propsEdit");
-
 }
 
 void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> a)
 {
-
-    Album* alb = a;
+    Album* alb    = a;
     PAlbum* album = dynamic_cast<PAlbum*> (alb);
 
     if (!action || !album)
@@ -196,14 +191,12 @@ void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction* action, Albu
     else if (action == d->rebuildThumbsAction)
     {
         BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, album->id());
-        thumbsGenerator->show();    
+        thumbsGenerator->show();
     }
-
 }
 
 bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
 {
-
     // let the base class handle the event if it is not a tool tip request
     if (event->type() != QEvent::ToolTip)
     {
@@ -250,14 +243,13 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
     }
 
     QStyleOptionViewItem option = viewOptions();
-    option.rect = itemRect;
+    option.rect                 = itemRect;
     // visualRect can be larger than viewport, intersect with viewport rect
-    option.rect &= viewport()->rect();
-    option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
+    option.rect                 &= viewport()->rect();
+    option.state                |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
     d->toolTip->show(helpEvent, option, index);
 
     return true;
-
 }
 
-}
+} // namespace Digikam
