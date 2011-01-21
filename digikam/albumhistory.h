@@ -35,6 +35,7 @@
 #include <QStringList>
 
 //KDE includes
+
 #include <KUrl>
 
 namespace Digikam
@@ -96,14 +97,8 @@ private:
 
 private:
 
-    typedef QList<HistoryItem*> AlbumStack;
-
-    bool                          m_moving;
-    bool                          m_blockSelection;
-
-    AlbumStack*                   m_backwardStack;
-    AlbumStack*                   m_forwardStack;
-    QMap<Album*, HistoryPosition> m_historyPos;
+    class AlbumHistoryPriv;
+    AlbumHistoryPriv* const d;
 };
 
 }  // namespace Digikam
