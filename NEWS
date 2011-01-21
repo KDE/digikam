@@ -33,7 +33,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 263321 : digiKam crash when looking through photos.
 018 ==> 182664 : Tag menu its bigger than screen.
 019 ==> 244701 : Map search tool selects a whole hemisphere when trying to select large areas.
-020 ==> 
+020 ==> 225440 : Save dialog default file format from xpm to user wanted.
+021 ==> 
 
 
 
