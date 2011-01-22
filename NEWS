@@ -37,8 +37,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 218816 : Many Problem with Editor "Save As...".
 022 ==> 236730 : Collection path is interpreted differently.
 023 ==> 245957 : digiKam shows pictures from PENTAX camera incorrectly in imageview.
-024 ==> 
-
+024 ==> 263272 : Face Detection crashes on folders containing videos.
+025 ==> 
 
 
 
