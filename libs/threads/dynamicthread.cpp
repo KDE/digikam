@@ -312,16 +312,19 @@ void DynamicThread::DynamicThreadPriv::transitionToInactive()
 
 void DynamicThread::DynamicThreadPriv::run()
 {
-    takingThread();
-
     if (emitSignals)
     {
         emit q->started();
     }
 
     if (transitionToRunning())
-    {
+    {        
+        takingThread();                
         q->run();
+    }
+    else
+    {
+        takingThread();                
     }
 
     if (emitSignals)
