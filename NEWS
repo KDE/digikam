@@ -39,7 +39,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 224047 : Thumbnails incorrectly rotated on certain images.*
 031 ==> 239902 : digiKam seems to find images that are not in the collection directory.
 032 ==> 245958 : Some tags lost on batch color space conversion - import metadata does not work.
-033 ==> 
+033 ==> 246735 : Frame rate drops to around 5 fps when dragging & dropping.
+034 ==> 
 
 
 
