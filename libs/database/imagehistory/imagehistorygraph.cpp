@@ -6,7 +6,7 @@
  * Date        : 2010-10-23
  * Description : Graph data class for image history
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -275,8 +275,8 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(qlonglong id)
 
 HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
 {
-    Vertex v;
-    QString uuid;
+    Vertex         v;
+    QString        uuid;
     HistoryImageId id;
 
     // Simply find by image id
@@ -551,7 +551,7 @@ void ImageHistoryGraphData::addHistory(const DImageHistory& history, qlonglong e
         return;
     }
 
-    HistoryGraph::Vertex last;
+    HistoryGraph::Vertex  last;
     HistoryEdgeProperties edgeProps;
 
     foreach (const DImageHistory::Entry& entry, history.entries())
@@ -576,7 +576,7 @@ void ImageHistoryGraphData::addHistory(const DImageHistory& history, qlonglong e
                 {
                     HistoryGraph::Edge e = addEdge(v, last);
                     setProperties(e, edgeProps);
-                    edgeProps = HistoryEdgeProperties();
+                    edgeProps            = HistoryEdgeProperties();
                 }
                 else
                 {
@@ -695,7 +695,7 @@ void ImageHistoryGraph::prepareForDisplay(const ImageInfo& subject)
 QList<QPair<qlonglong, qlonglong> > ImageHistoryGraph::relationCloud() const
 {
     QList<QPair<qlonglong, qlonglong> > pairs;
-    ImageHistoryGraphData closure = d->transitiveClosure();
+    ImageHistoryGraphData closure         = d->transitiveClosure();
     QList<HistoryGraph::VertexPair> edges = closure.edgePairs();
     foreach (const HistoryGraph::VertexPair& edge, edges)
     {
@@ -713,7 +713,7 @@ QList<QPair<qlonglong, qlonglong> > ImageHistoryGraph::relationCloud() const
 QPair<QList<qlonglong>, QList<qlonglong> > ImageHistoryGraph::relationCloudParallel() const
 {
     QList<qlonglong> subjects, objects;
-    ImageHistoryGraphData closure = d->transitiveClosure();
+    ImageHistoryGraphData closure         = d->transitiveClosure();
     QList<HistoryGraph::VertexPair> edges = closure.edgePairs();
     foreach (const HistoryGraph::VertexPair& edge, edges)
     {
@@ -778,8 +778,6 @@ QHash<ImageInfo, HistoryImageId::Types> ImageHistoryGraph::categorize() const
     }
     return types;
 }
-
-
 
 static QString toString(const HistoryVertexProperties& props)
 {
@@ -856,6 +854,4 @@ QDebug operator<<(QDebug dbg, const ImageHistoryGraph& g)
     return dbg;
 }
 
-} // namespace
-
-
+} // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2010-10-27
  * Description : Model to an ImageHistoryGraph
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagehistorygraphmodel.h"
+#include "imagehistorygraphmodel.moc"
 
 // Qt includes
 
@@ -195,14 +195,16 @@ static bool oldestInfoFirst(const ImageInfo&a, const ImageInfo& b) { return a.mo
 static bool newestInfoFirst(const ImageInfo&a, const ImageInfo& b) { return a.modDateTime() > b.modDateTime(); }
 
 template <typename ImageInfoLessThan>
+
 class LessThanOnVertexImageInfo
 {
 public:
+
     LessThanOnVertexImageInfo(const HistoryGraph& graph, ImageInfoLessThan imageInfoLessThan)
         : graph(graph), imageInfoLessThan(imageInfoLessThan) {}
 
     const HistoryGraph& graph;
-    ImageInfoLessThan imageInfoLessThan;
+    ImageInfoLessThan   imageInfoLessThan;
 
     bool operator()(const HistoryGraph::Vertex& a, const HistoryGraph::Vertex b)
     {
@@ -228,16 +230,18 @@ public:
     {
     }
 
-    ImageHistoryGraphModel::Mode mode;
+    ImageHistoryGraphModel::Mode                       mode;
 
-    ImageHistoryGraph historyGraph;
-    ImageInfo         info;
+    ImageHistoryGraph                                  historyGraph;
+    ImageInfo                                          info;
 
-    HistoryTreeItem*   rootItem;
-    QList<VertexItem*> vertexItems;
-    ImageListModel     imageModel;
-    QList<HistoryGraph::Vertex> path;
+    HistoryTreeItem*                                   rootItem;
+    QList<VertexItem*>                                 vertexItems;
+    ImageListModel                                     imageModel;
+    QList<HistoryGraph::Vertex>                        path;
     QHash<HistoryGraph::Vertex, HistoryImageId::Types> categories;
+
+public:
 
     inline const ImageHistoryGraphData& graph() const
     {
@@ -264,23 +268,25 @@ public:
     FilterActionItem* createFilterActionItem(const FilterAction& action);
 
     template <typename ImageInfoLessThan> LessThanOnVertexImageInfo<ImageInfoLessThan>
+
     sortBy(ImageInfoLessThan imageInfoLessThan)
     {
         return LessThanOnVertexImageInfo<ImageInfoLessThan>(graph(), imageInfoLessThan);
     }
 };
 
+// ------------------------------------------------------------------------
 
 VertexItem* ImageHistoryGraphModel::ImageHistoryGraphModelPriv::createVertexItem(const HistoryGraph::Vertex& v,
                                                                                  const ImageInfo& givenInfo)
 {
     const HistoryVertexProperties& props = graph().properties(v);
-    ImageInfo info    = givenInfo.isNull() ? props.firstImageInfo() : givenInfo;
-    QModelIndex index = imageModel.indexForImageInfo(info);
+    ImageInfo info                       = givenInfo.isNull() ? props.firstImageInfo() : givenInfo;
+    QModelIndex index                    = imageModel.indexForImageInfo(info);
     //kDebug() << "Added" << info.id() << index;
-    VertexItem* item  = new VertexItem(v);
-    item->index       = index;
-    item->category    = categories.value(v);
+    VertexItem* item                     = new VertexItem(v);
+    item->index                          = index;
+    item->category                       = categories.value(v);
     vertexItems << item;
     //kDebug() << "Adding vertex item" << graph().properties(v).firstImageInfo().id() << index;
     return item;
@@ -301,8 +307,8 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::build()
     //kDebug() << historyGraph;
 
     HistoryGraph::Vertex ref = graph().findVertexByProperties(info);
-    path = graph().longestPathTouching(ref, sortBy(newestInfoFirst));
-    categories = graph().categorize();
+    path                     = graph().longestPathTouching(ref, sortBy(newestInfoFirst));
+    categories               = graph().categorize();
 
     if (path.isEmpty())
         return;
@@ -336,12 +342,13 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildImagesTree()
 {
     QList<HistoryGraph::Vertex> verticesOrdered = graph().verticesDepthFirstSorted(path.first(),
                                                                                    sortBy(oldestInfoFirst));
-    QMap<HistoryGraph::Vertex, int> distances = graph().shortestDistancesFrom(path.first());
+    QMap<HistoryGraph::Vertex, int> distances   = graph().shortestDistancesFrom(path.first());
 
     QList<HistoryGraph::Vertex> sources;
-    int previousLevel = 0;
-    HistoryTreeItem* parent = rootItem;
-    VertexItem*item = 0, * previousItem = 0;
+    int previousLevel        = 0;
+    HistoryTreeItem* parent  = rootItem;
+    VertexItem* item         = 0;
+    VertexItem* previousItem = 0;
 
     foreach (const HistoryGraph::Vertex& v, verticesOrdered)
     {
@@ -392,8 +399,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildImagesTree()
 
 void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const HistoryGraph::Vertex& ref)
 {
-    VertexItem* item = 0;
-
+    VertexItem* item           = 0;
     CategoryItem *categoryItem = new CategoryItem(i18nc("@title", "Image History"));
     rootItem->addItem(categoryItem);
 
@@ -489,7 +495,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
     parentItem->addItem(new CategoryItem(title));
 
     qSort(vertices.begin(), vertices.end(), sortBy(oldestInfoFirst));
-    bool isFirst = true;
+    bool isFirst     = true;
     VertexItem* item = 0;
 
     foreach (const HistoryGraph::Vertex& v, vertices)
@@ -503,8 +509,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
             parentItem->addItem(new SeparatorItem);
         }
 
-        item = createVertexItem(v);
-
+        item                                     = createVertexItem(v);
         QList<HistoryGraph::Vertex> shortestPath = graph().shortestPath(showActionsFrom, v);
 
         // add all filter actions showActionsFrom -> v above item
@@ -552,8 +557,9 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
     parentItem->addItem(new CategoryItem(title));
 
     // the properties image info list is already sorted by proximity to subject
-    VertexItem* item;
-    bool isFirst = true;
+    VertexItem* item = 0;
+    bool isFirst     = true;
+
     for (int i=1; i<infos.size(); i++)
     {
         if (isFirst)
@@ -702,9 +708,13 @@ QVariant ImageHistoryGraphModel::data(const QModelIndex& index, int role) const
             switch (role)
             {
                 case IsImageItemRole:
+                {
                     return true;
+                }
                 case IsSubjectImageRole:
+                {
                     return (bool)d->graph().properties(vertexItem->vertex).infos.contains(d->info);
+                }
                 case Qt::DisplayRole:
                 {
                     if (vertexItem->category & HistoryImageId::Original)
@@ -727,19 +737,27 @@ QVariant ImageHistoryGraphModel::data(const QModelIndex& index, int role) const
         switch (role)
         {
             case IsFilterActionItemRole:
+            {
                 return true;
+            }
             case Qt::DisplayRole:
+            {
                 return DImgFilterManager::instance()->i18nDisplayableName(filterActionItem->action);
+            }
             case Qt::DecorationRole:
             {
                 QString iconName = DImgFilterManager::instance()->filterIcon(filterActionItem->action);
                 return KIcon(iconName);
             }
             case FilterActionRole:
+            {
                 return QVariant::fromValue(filterActionItem->action);
+            }
             default:
+            {
                 break;
-        }
+            }
+    }
     }
     else if_isItem(HeaderItem, headerItem, item)
     {

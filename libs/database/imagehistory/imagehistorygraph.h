@@ -6,7 +6,7 @@
  * Date        : 2010-10-23
  * Description : Graph data class for image history
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -190,10 +190,8 @@ private:
 
 QDebug DIGIKAM_DATABASE_EXPORT operator<<(QDebug dbg, const ImageHistoryGraph& g);
 
-} // namespace
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ImageHistoryGraph::HistoryLoadingMode)
 
-
 #endif // IMAGEHISTORYGRAPHDATA_H
-

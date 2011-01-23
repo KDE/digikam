@@ -6,7 +6,7 @@
  * Date        : 2010-10-23
  * Description : Graph data class for image history
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,8 +27,6 @@
 // Qt includes
 
 #include <QSharedData>
-
-// KDE includes
 
 // Local includes
 
@@ -79,6 +77,7 @@ public:
 QDebug operator<<(QDebug dbg, const HistoryVertexProperties& props);
 QDebug operator<<(QDebug dbg, const HistoryImageId& id);
 
+// ------------------------------------------------------------------------------
 
 class HistoryEdgeProperties
 {
@@ -99,9 +98,9 @@ public:
 
 typedef Graph<HistoryVertexProperties, HistoryEdgeProperties> HistoryGraph;
 
-class ImageHistoryGraphData
-    : public HistoryGraph,
-  public QSharedData
+// ------------------------------------------------------------------------------
+
+class ImageHistoryGraphData : public HistoryGraph, public QSharedData
 {
 public:
 
@@ -146,7 +145,6 @@ protected:
     void applyProperties(Vertex& v, const QList<ImageInfo>& infos, const QList<HistoryImageId>& ids);
 };
 
-} // namespace
+} // namespace Digikam
 
 #endif // IMAGEHISTORYGRAPHDATA_H
-

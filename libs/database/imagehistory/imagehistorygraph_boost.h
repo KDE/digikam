@@ -6,7 +6,7 @@
  * Date        : 2010-10-22
  * Description : Boost Graph Library: a graph class
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +54,7 @@
 /** Install custom property ids, out-of-namespace */
 enum vertex_properties_t { vertex_properties };
 enum edge_properties_t { edge_properties };
+
 namespace boost
 {
 BOOST_INSTALL_PROPERTY(vertex, properties);
@@ -187,7 +188,7 @@ public:
 
         Edge& operator=(const edge_t& other)
         {
-            e = other;
+            e    = other;
             null = false;
             return *this;
         }
@@ -226,11 +227,11 @@ public:
         bool   null;
     };
 
-    typedef QPair<Vertex, Vertex> VertexPair;
-    typedef QPair<Edge, Edge> EdgePair;
+    typedef QPair<Vertex, Vertex>                            VertexPair;
+    typedef QPair<Edge, Edge>                                EdgePair;
 
-    typedef QMapForAdaptors<Vertex, Vertex>           VertexVertexMap;
-    typedef QMapForAdaptors<Vertex, int>              VertexIntMap;
+    typedef QMapForAdaptors<Vertex, Vertex>                  VertexVertexMap;
+    typedef QMapForAdaptors<Vertex, int>                     VertexIntMap;
 
     typedef boost::associative_property_map<VertexVertexMap> VertexVertexMapAdaptor;
     typedef boost::associative_property_map<VertexIntMap>    VertexIntMapAdaptor;
@@ -631,7 +632,7 @@ public:
      * Returns a copy of this graph, with edges removed so that the transitive reduction is formed.
      * Optionally, a list of edges of this graph that have been removed in the returned graph is given.
      */
-    Graph transitiveReduction(QList<Edge> *removedEdges = 0, GraphCopyFlags flags = CopyAllProperties) const
+    Graph transitiveReduction(QList<Edge>* removedEdges = 0, GraphCopyFlags flags = CopyAllProperties) const
     {
         std::vector<vertex_t> copiedVertices(vertexCount(), Vertex());
         Graph reduction;
@@ -703,7 +704,9 @@ public:
     {
         return longestPathTouching(v, alwaysFalse<Vertex>);
     }
+
     template <typename LessThan>
+
     QList<Vertex> longestPathTouching(const Vertex& v, LessThan lessThan) const
     {
         if (v.isNull())
@@ -713,8 +716,8 @@ public:
 
         QList<Vertex> fromRoot;
         QList<Vertex> toLeave;
+        Path          path;
 
-        Path path;
         path.longestPath(boost::make_reverse_graph(graph), v);
 
         QList<Vertex> rootCandidates = mostRemoteNodes(path.distances);
@@ -1396,7 +1399,7 @@ protected:
         {
             typedef std::pair<Vertex, QList<Edge> > VertexInfo;
 
-            QList<Edge> outEdges;
+            QList<Edge>             outEdges;
             std::vector<VertexInfo> stack;
 
             boost::put(color, u, boost::gray_color);
@@ -1498,12 +1501,11 @@ protected:
 
 protected:
 
-    GraphContainer          graph;
-    MeaningOfDirection      direction;
+    GraphContainer     graph;
+    MeaningOfDirection direction;
 };
 
-
-} // namespace
+} // namespace Digikam
 
 #endif // IMAGEHISTORYGRAPH_BOOST_H
 
