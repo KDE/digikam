@@ -318,21 +318,7 @@ int AlbumWidgetStack::previewMode()
     return indexOf(currentWidget());
 }
 
-void AlbumWidgetStack::setMapViewMode()
-{
-    /// @todo What about the other things done in setIconViewMode?
-    setCurrentIndex(MapWidgetMode);
-}
-
-void AlbumWidgetStack::setIconViewMode()
-{
-    setCurrentIndex(PreviewAlbumMode);
-    d->thumbBarDock->hide();
-    emit signalToggledToPreviewMode(false);
-    d->imageIconView->setFocus();
-}
-
-void AlbumWidgetStack::setPreviewMode(int mode)
+void AlbumWidgetStack::setPreviewMode(const int mode)
 {
     if (mode != PreviewAlbumMode && mode != PreviewImageMode &&
         mode != WelcomePageMode  && mode != MediaPlayerMode && mode != MapWidgetMode)
@@ -349,7 +335,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
         d->thumbBarDock->hide();
     }
 
-    if (mode == PreviewAlbumMode || mode == WelcomePageMode)
+    if (mode == PreviewAlbumMode || mode == WelcomePageMode || mode == MapWidgetMode)
     {
         setPreviewItem();
         setCurrentIndex(mode);
@@ -360,7 +346,16 @@ void AlbumWidgetStack::setPreviewMode(int mode)
         setCurrentIndex(mode);
     }
 
-    d->imageIconView->setFocus();
+    d->mapWidgetView->setActive(mode == MapWidgetMode);
+
+    if (mode == PreviewAlbumMode)
+    {
+        d->imageIconView->setFocus();
+    }
+    else if (mode == MapWidgetMode)
+    {
+        d->mapWidgetView->setFocus();
+    }
 }
 
 void AlbumWidgetStack::previewLoaded()

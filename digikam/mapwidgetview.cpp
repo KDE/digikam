@@ -75,19 +75,17 @@ public:
          imageModel(0),
          selectionModel(0),
          mapViewModelHelper(0),
-         gpsImageInfoSorter(0),
-         activeState(false)
+         gpsImageInfoSorter(0)
     {
     }
 
     KVBox*               vbox;
     KMap::KMapWidget*    mapWidget;
-    ImageFilterModel*   imageFilterModel;
+    ImageFilterModel*    imageFilterModel;
     ImageAlbumModel*     imageModel;
     QItemSelectionModel* selectionModel;
     MapViewModelHelper*  mapViewModelHelper;
     GPSImageInfoSorter*  gpsImageInfoSorter;
-    bool                 activeState;
 };
 
 /**
@@ -165,7 +163,6 @@ void MapWidgetView::openAlbum(Album* const album)
  */
 void MapWidgetView::setActive(const bool state)
 {
-    d->activeState = state;
     d->mapWidget->setActive(state);
 }
 
@@ -174,7 +171,7 @@ void MapWidgetView::setActive(const bool state)
  */
 bool MapWidgetView::getActiveState() const
 {
-    return d->activeState;
+    return d->mapWidget->getActiveState();
 }
 
 //-------------------------------------------------------------------------------------------------------------
@@ -404,7 +401,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
     const DatabaseFields::Set changes = changeset.changes();
     const DatabaseFields::ImagePositions imagePositionChanges = changes;
 
-    // TODO: more detailed check
+    /// @todo More detailed check
     if (   ( changes & DatabaseFields::LatitudeNumber )
         || ( changes & DatabaseFields::LongitudeNumber )
         || ( changes & DatabaseFields::Altitude ) )

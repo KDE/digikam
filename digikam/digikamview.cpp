@@ -1391,41 +1391,38 @@ void DigikamView::slotImageReadMetadata()
 void DigikamView::slotEscapePreview()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode ||
-        d->albumWidgetStack->previewMode() == AlbumWidgetStack::WelcomePageMode ||
-        d->albumWidgetStack->previewMode() == AlbumWidgetStack::MapWidgetMode)
+        d->albumWidgetStack->previewMode() == AlbumWidgetStack::WelcomePageMode)
     {
         return;
     }
 
-    slotTogglePreviewMode(d->iconView->currentInfo());
+    // pass a null image info, because we want to fall back to the old
+    // view mode
+    slotTogglePreviewMode(ImageInfo()/*d->iconView->currentInfo()*/);
 }
 
 void DigikamView::slotMapWidgetView()
 {
-    if (d->albumWidgetStack->previewMode() != AlbumWidgetStack::PreviewAlbumMode)
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
-        slotIconView();
+        emit signalTogglePreview(false);
     }
 
-    d->mapView->setActive(true);
-    d->albumWidgetStack->setMapViewMode();
+    d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::MapWidgetMode);
 }
 
 void DigikamView::slotIconView()
 {
-    //if it's PreviewImageMode, we close it first. Should I see if it's a movie preview or a welcome page?
+    // if it's PreviewImageMode, we close it first. Should I see if it's a movie preview or a welcome page?
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
         emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
         emit signalTogglePreview(false);
     }
 
-    d->mapView->setActive(false);
-
-    //and switch to icon view
-    d->albumWidgetStack->setIconViewMode();
+    // and switch to icon view
+    d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
 }
-
 
 void DigikamView::slotImagePreview()
 {

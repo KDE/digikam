@@ -76,15 +76,13 @@ public:
     ThumbBarDock*     thumbBarDock();
     DigikamImageView* imageIconView();
     ImagePreviewView* imagePreviewView();
-    MapWidgetView*      mapWidgetView();
+    MapWidgetView*    mapWidgetView();
 
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
                         const ImageInfo& previous = ImageInfo(),
                         const ImageInfo& next = ImageInfo());
     int  previewMode();
-    void setMapViewMode();
-    void setIconViewMode();
-    void setPreviewMode(int mode);
+    void setPreviewMode(const int mode);
     void previewLoaded();
 
     void   increaseZoom();
