@@ -8,11 +8,11 @@ OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "1")
-SET(DIGIKAM_MINOR_VERSION "8")
+SET(DIGIKAM_MINOR_VERSION "9")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2011-01-23")
+SET(DIGIKAM_RELEASE_DATE "2011-02-19")
 
 # Suffix to add at end of version string. Usual values are:
 # "-svn"   : alpha code unstable from svn. Do not use in production
