@@ -781,8 +781,11 @@ void GPSMarkerTiler::removeCurrentRegionSelection()
     emit(signalTilesOrSelectionChanged());
 }
 
-void GPSMarkerTiler::onIndicesClicked(const KMap::TileIndex::List& tileIndicesList, const KMap::KMapGroupState& groupSelectionState, KMap::MouseMode currentMouseMode)
+void GPSMarkerTiler::onIndicesClicked(const KMap::TileIndex::List& tileIndicesList, const QVariant& representativeIndex,
+                                      const KMap::KMapGroupState& groupSelectionState, const KMap::MouseModes currentMouseMode)
 {
+    /// @todo Also handle the representative index
+
     QList<qlonglong> clickedImagesId;
 
     for (int i=0; i<tileIndicesList.count(); ++i)
@@ -791,28 +794,40 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::TileIndex::List& tileIndicesLi
         clickedImagesId << getTileMarkerIds(tileIndex);
     }
 
-    if (currentMouseMode == KMap::MouseModeSelectThumbnail)
+    int repImageId = -1;
+    if (representativeIndex.canConvert<QPair<KMap::TileIndex, int> >())
+    {
+        repImageId = representativeIndex.value<QPair<KMap::TileIndex, int> >().second;
+    }
+
+    if (currentMouseMode == KMap::MouseModeSelectThumbnail && d->selectionModel)
     {
         /**
          * @todo This does not work properly, because not all images in a tile
          * may be selectable because some of them are outside of the region selection
          */
-        const bool doSelect = groupSelectionState != KMap::KMapSelectedAll;
+        const bool doSelect = (groupSelectionState & KMap::KMapSelectedMask) != KMap::KMapSelectedAll;
 
-        if (d->selectionModel)
+        const QItemSelectionModel::SelectionFlags selectionFlags =
+                  (doSelect ? QItemSelectionModel::Select : QItemSelectionModel::Deselect)
+                | QItemSelectionModel::Rows;
+
+        for (int i=0; i<clickedImagesId.count(); ++i)
         {
-            for (int i=0; i<clickedImagesId.count(); ++i)
-            {
-                const QModelIndex currentIndex = d->imageFilterModel->indexForImageId(clickedImagesId.at(i));
+            const QModelIndex currentIndex = d->imageFilterModel->indexForImageId(clickedImagesId.at(i));
 
-                if (d->selectionModel->isSelected(currentIndex) != doSelect)
-                {
-                    d->selectionModel->select(
-                        currentIndex,
-                        (doSelect ? QItemSelectionModel::Select : QItemSelectionModel::Deselect)
-                        | QItemSelectionModel::Rows
-                    );
-                }
+            if (d->selectionModel->isSelected(currentIndex) != doSelect)
+            {
+                d->selectionModel->select(currentIndex, selectionFlags);
+            }
+        }
+
+        if (repImageId>=0)
+        {
+            const QModelIndex repImageIndex = d->imageFilterModel->indexForImageId(repImageId);
+            if (repImageIndex.isValid())
+            {
+                d->selectionModel->setCurrentIndex(repImageIndex, selectionFlags);
             }
         }
     }
