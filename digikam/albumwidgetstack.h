@@ -47,6 +47,7 @@ namespace Digikam
 {
 
 class DigikamImageView;
+class ImageCategorizedView;
 class ImagePreviewView;
 class MapWidgetView;
 
@@ -111,7 +112,6 @@ Q_SIGNALS:
     void signalInsert2LightTable();
     void signalInsert2QueueMgr();
     void signalFindSimilar();
-    void signalImageSelected(const ImageInfo& info);
     void signalAddToExistingQueue(int);
 
     void signalGotoAlbumAndItem(const ImageInfo&);
@@ -125,10 +125,13 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotZoomFactorChanged(double);
+    void slotThumbBarSelectionChanged();
+    void slotIconViewSelectionChanged();
 
 private:
 
     void readSettings();
+    void syncSelection(ImageCategorizedView* from, ImageCategorizedView* to);
 
 private:
 

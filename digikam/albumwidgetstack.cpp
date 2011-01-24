@@ -33,12 +33,13 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <kapplication.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <khtmlview.h>
 #include <kglobal.h>
-#include <kapplication.h>
+#include <klinkitemselectionmodel.h>
+#include <kurl.h>
 
 // Local includes
 
@@ -77,9 +78,11 @@ public:
         mapWidgetView      = 0;
         thumbbarTimer      = 0;
         needUpdateBar      = false;
+        syncingSelection   = false;
     }
 
     bool               needUpdateBar;
+    bool               syncingSelection;
 
     QMainWindow*       dockArea;
     QSplitter*         splitter;
@@ -190,8 +193,14 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
             this, SLOT(updateThumbbar()));
     */
 
-    connect(d->thumbBar, SIGNAL(imageActivated(const ImageInfo&)),
-            this, SIGNAL(signalImageSelected(const ImageInfo&)));
+    //connect(d->thumbBar, SIGNAL(imageActivated(const ImageInfo&)),
+      //      d->imageIconView, SIGNAL(setCurrentInfo(const ImageInfo&)));
+
+    connect(d->thumbBar, SIGNAL(selectionChanged()),
+            this, SLOT(slotThumbBarSelectionChanged()));
+
+    connect(d->imageIconView, SIGNAL(selectionChanged()),
+            this, SLOT(slotIconViewSelectionChanged()));
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
@@ -309,7 +318,9 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
             // This will prevent a flicker effect with the old image preview loaded in stack.
         }
 
-        d->thumbBar->setCurrentInfo(info);
+        // dont touch the selection, only adjust current info
+        QModelIndex currentIndex = d->thumbBar->imageSortFilterModel()->indexForImageInfo(info);
+        d->thumbBar->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
     }
 }
 
@@ -329,6 +340,7 @@ void AlbumWidgetStack::setPreviewMode(const int mode)
     if (mode == PreviewImageMode)
     {
         d->thumbBarDock->restoreVisibility();
+        syncSelection(d->imageIconView, d->thumbBar);
     }
     else
     {
@@ -356,6 +368,54 @@ void AlbumWidgetStack::setPreviewMode(const int mode)
     {
         d->mapWidgetView->setFocus();
     }
+}
+
+void AlbumWidgetStack::syncSelection(ImageCategorizedView* from, ImageCategorizedView* to)
+{
+    ImageSortFilterModel* fromModel = from->imageSortFilterModel();
+    ImageSortFilterModel* toModel = to->imageSortFilterModel();
+    // set current info
+    QModelIndex currentIndex = toModel->indexForImageInfo(from->currentInfo());
+    to->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
+
+    // sync selection
+    QItemSelection selection = from->selectionModel()->selection();
+    QItemSelection newSelection;
+    foreach (const QItemSelectionRange& range, selection)
+    {
+        QModelIndex topLeft = toModel->indexForImageInfo(fromModel->imageInfo(range.topLeft()));
+        QModelIndex bottomRight = toModel->indexForImageInfo(fromModel->imageInfo(range.bottomRight()));
+        newSelection.select(topLeft, bottomRight);
+    }
+
+    d->syncingSelection = true;
+    to->selectionModel()->select(newSelection, QItemSelectionModel::ClearAndSelect);
+    d->syncingSelection = false;
+}
+
+void AlbumWidgetStack::slotThumbBarSelectionChanged()
+{
+    if (d->syncingSelection)
+    {
+        return;
+    }
+
+    syncSelection(d->thumbBar, d->imageIconView);
+}
+
+void AlbumWidgetStack::slotIconViewSelectionChanged()
+{
+    if (currentIndex() != PreviewImageMode)
+    {
+        return;
+    }
+
+    if (d->syncingSelection)
+    {
+        return;
+    }
+
+    syncSelection(d->imageIconView, d->thumbBar);
 }
 
 void AlbumWidgetStack::previewLoaded()

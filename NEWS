@@ -38,7 +38,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 236730 : Collection path is interpreted differently.
 023 ==> 245957 : digiKam shows pictures from PENTAX camera incorrectly in imageview.
 024 ==> 263272 : Face Detection crashes on folders containing videos.
-025 ==> 
+025 ==> 241015 : Unexpected behavior when deleting a file while several are selected.
+026 ==>
 
 
 
