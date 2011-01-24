@@ -488,9 +488,6 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalFindSimilar()),
             this, SLOT(slotImageFindSimilar()));
 
-    connect(d->albumWidgetStack, SIGNAL(signalImageSelected(const ImageInfo&)),
-            d->iconView, SLOT(setCurrentInfo(const ImageInfo&)));
-
     connect(d->albumWidgetStack, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(slotImageAddToExistingQueue(int)));
 
@@ -552,8 +549,8 @@ void DigikamView::setupConnections()
     connect(d->albumHistory, SIGNAL(signalSetCurrent(qlonglong)),
             d->iconView, SLOT(setCurrentWhenAvailable(qlonglong)));
 
-    connect(d->albumHistory, SIGNAL(signalSetSelectedUrls(KUrl::List)),
-            d->iconView, SLOT(setSelectedUrls(KUrl::List)));
+    connect(d->albumHistory, SIGNAL(signalSetSelectedInfos(const QList<ImageInfo>&)),
+            d->iconView, SLOT(setSelectedImageInfos(const QList<ImageInfo>&)));
 
     connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
             d->albumHistory, SLOT(slotAlbumDeleted(Album*)));

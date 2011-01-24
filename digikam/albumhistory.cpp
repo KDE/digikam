@@ -78,7 +78,7 @@ public:
 
     };
 
-    HistoryPosition(const ImageInfo& c, const KUrl::List& s)
+    HistoryPosition(const ImageInfo& c, const QList<ImageInfo>& s)
     {
         current = c;
         select  = s;
@@ -90,7 +90,7 @@ public:
     }
 
     ImageInfo  current;
-    KUrl::List select;
+    QList<ImageInfo> select;
 };
 
 // ---------------------------------------------------------------------
@@ -464,7 +464,7 @@ void AlbumHistory::slotAlbumCurrentChanged()
         {
             if (d->historyPos[currentAlbum].select.size())
             {
-                emit signalSetSelectedUrls(d->historyPos[currentAlbum].select);
+                emit signalSetSelectedInfos(d->historyPos[currentAlbum].select);
             }
         }
     }
@@ -478,7 +478,7 @@ void AlbumHistory::slotCurrentChange(const ImageInfo& info)
     d->historyPos[currentAlbum].current = info;
 }
 
-void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImage)
+void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
 {
     if (d->blockSelection)
     {
@@ -489,15 +489,7 @@ void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImage)
 
     if (d->historyPos.contains(currentAlbum))
     {
-        d->historyPos[currentAlbum].select.clear();
-    }
-
-    for (int i = 0; i < selectedImage.count(); i++)
-    {
-        if (!d->historyPos[currentAlbum].select.contains(selectedImage[i].fileUrl()))
-        {
-            d->historyPos[currentAlbum].select.insert(0, selectedImage[i].fileUrl());
-        }
+        d->historyPos[currentAlbum].select = selectedImages;
     }
 }
 

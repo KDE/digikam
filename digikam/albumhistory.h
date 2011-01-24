@@ -78,7 +78,7 @@ public:
 Q_SIGNALS:
 
     void            signalSetCurrent(qlonglong imageId);
-    void            signalSetSelectedUrls(const KUrl::List&);
+    void            signalSetSelectedInfos(const QList<ImageInfo>&);
 
 public Q_SLOTS:
 
