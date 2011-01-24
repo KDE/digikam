@@ -183,8 +183,47 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
-    d->mapSearchWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeRegionSelection|KMap::MouseModeZoomIntoGroup|KMap::MouseModeRegionSelectionFromIcon|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
-    d->mapSearchWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeRegionSelection|KMap::MouseModeZoomIntoGroup|KMap::MouseModeRegionSelectionFromIcon|KMap::MouseModeFilter|KMap::MouseModeSelectThumbnail);
+    d->mapSearchWidget->setAvailableMouseModes(
+                KMap::MouseModePan |
+                KMap::MouseModeRegionSelection |
+                KMap::MouseModeZoomIntoGroup |
+                KMap::MouseModeRegionSelectionFromIcon |
+                KMap::MouseModeFilter |
+                KMap::MouseModeSelectThumbnail
+            );
+    d->mapSearchWidget->setVisibleMouseModes(
+                KMap::MouseModePan |
+                KMap::MouseModeZoomIntoGroup |
+                KMap::MouseModeFilter |
+                KMap::MouseModeSelectThumbnail
+            );
+
+    // construct a second row of control actions below the control widget
+    /// @todo Should we still replace the icons of the actions with text as discussed during the sprint?
+    QWidget* const secondActionRow = new QWidget();
+    QHBoxLayout* const secondActionRowHBox = new QHBoxLayout();
+    secondActionRowHBox->setMargin(0);
+    secondActionRow->setLayout(secondActionRowHBox);
+
+    QLabel* const secondActionRowLabel = new QLabel(i18n("Search by area:"));
+    secondActionRowHBox->addWidget(secondActionRowLabel);
+
+    QToolButton* const tbRegionSelection = new QToolButton(secondActionRow);
+    tbRegionSelection->setDefaultAction(d->mapSearchWidget->getControlAction("mousemode-regionselectionmode"));
+    secondActionRowHBox->addWidget(tbRegionSelection);
+
+    QToolButton* const tbRegionFromIcon = new QToolButton(secondActionRow);
+    tbRegionFromIcon->setDefaultAction(d->mapSearchWidget->getControlAction("mousemode-regionselectionfromiconmode"));
+    secondActionRowHBox->addWidget(tbRegionFromIcon);
+
+    QToolButton* const tbClearRegionSelection = new QToolButton(secondActionRow);
+    tbClearRegionSelection->setDefaultAction(d->mapSearchWidget->getControlAction("mousemode-removecurrentregionselection"));
+    secondActionRowHBox->addWidget(tbClearRegionSelection);
+
+    secondActionRowHBox->addStretch(10);
+    vlayTop->addWidget(secondActionRow);
+
+    // end of the second action row
 
     vlayTop->addWidget(hbox);
     vlayTop->setStretchFactor(mapPanel, 10);
