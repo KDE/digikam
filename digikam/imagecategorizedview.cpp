@@ -452,6 +452,19 @@ void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
     selectionModel()->select(mySelection, QItemSelectionModel::Select);
 }
 
+void ImageCategorizedView::setSelectedImageInfos(const QList<ImageInfo> infos)
+{
+    QItemSelection mySelection;
+
+    foreach (const ImageInfo& info, infos)
+    {
+        QModelIndex index = d->filterModel->indexForImageInfo(info);
+        mySelection.select(index, index);
+    }
+
+    selectionModel()->select(mySelection, QItemSelectionModel::ClearAndSelect);
+}
+
 void ImageCategorizedView::hintAt(const ImageInfo& info)
 {
     if (info.isNull())

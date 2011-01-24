@@ -129,6 +129,8 @@ public Q_SLOTS:
     void setCurrentInfo(const ImageInfo& info);
     /** Set selected items identified by their file urls */
     void setSelectedUrls(const KUrl::List& urlList);
+    /** Set selected items */
+    void setSelectedImageInfos(const QList<ImageInfo> infos);
     /** Does something to gain attention for info, but not changing current selection */
     void hintAt(const ImageInfo& info);
 
