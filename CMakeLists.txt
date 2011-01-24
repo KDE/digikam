@@ -616,7 +616,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Common targets parts
 
-
     SET(libdimg_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/drawdecoding.cpp
@@ -1345,6 +1344,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsactionmngr.cpp
        )
 
     SET(libdigikamhelpers_SRCS
@@ -1354,6 +1354,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     INCLUDE_DIRECTORIES(
         ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
