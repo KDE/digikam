@@ -6,7 +6,7 @@
  * Date        : 2010-08-26
  * Description : Tag region formatting
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,8 +82,8 @@ bool TagRegion::isValid() const
 
 bool TagRegion::operator==(const TagRegion& other) const
 {
-    return m_type == other.m_type
-           && m_value == other.m_value;
+    return m_type  == other.m_type &&
+           m_value == other.m_value;
 }
 
 QString TagRegion::toXml() const
@@ -182,7 +182,7 @@ QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& redu
         return reducedSizeDetail;
     }
 
-    double ratio =  double(fullImageSize.width()) / double(reducedImageSize.width());
+    double ratio = double(fullImageSize.width()) / double(reducedImageSize.width());
     return QRectF(reducedSizeDetail.x() * ratio,
                   reducedSizeDetail.y() * ratio,
                   reducedSizeDetail.width() * ratio,
