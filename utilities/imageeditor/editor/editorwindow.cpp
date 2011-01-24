@@ -2076,11 +2076,11 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
     KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
     const QString optionLastExtension = "LastSavedImageExtension";
     QString ext               = group.readEntry(optionLastExtension, "png");
-    QString fileName;
 
-    if (initialUrl.protocol() == "file")
+    // adjust extension of proposed filename
+    QString fileName = initialUrl.fileName(KUrl::ObeyTrailingSlash);
+    if (!fileName.isNull())
     {
-        QString fileName = initialUrl.fileName();
         int lastDot = fileName.lastIndexOf(QLatin1Char('.'));
         QString completeBaseName = (lastDot == -1) ? fileName : fileName.left(lastDot);
         fileName = completeBaseName + QLatin1Char('.') + ext;
@@ -2279,7 +2279,7 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
         const KUrl& targetUrl, const QString& autoFilter)
 {
     kDebug() << "Trying to find a saving format with filter = "
-             << filter << ", targetUrl = " << targetUrl;
+             << filter << ", targetUrl = " << targetUrl << ", autoFilter" << autoFilter;
 
     // build a list of valid types
     QStringList validTypes = KImageIO::types(KImageIO::Writing);
@@ -2297,7 +2297,7 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
     kDebug() << "Writable formats: " << validTypes;
 
     // if the auto filter is used, use the format provided in the filename
-    if (filter == autoFilter)
+    if (filter == autoFilter || filter == autoFilter.section('|', 0, 0))
     {
         QString suffix;
 
@@ -2378,6 +2378,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     if (m_nonDestructive)
     {
         suggested = KUrl("kfiledialog:///digikam-image-export");
+        suggested.addPath(url.fileName());
     }
     else
     {
@@ -2388,6 +2389,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         else
         {
             suggested = KUrl("kfiledialog:///digikam-image-saveas");
+            suggested.addPath(url.fileName());
         }
     }
 
