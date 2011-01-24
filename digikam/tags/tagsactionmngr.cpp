@@ -97,6 +97,8 @@ void TagsActionMngr::createActions()
 
             connect(action, SIGNAL(triggered()), 
                     d->view, SLOT(slotAssignTagsFromShortcut(int)));
+
+            d->tagsActionMap[(*it).id] = action;
         }
     }
 
@@ -116,6 +118,13 @@ void TagsActionMngr::createActions()
 
 void TagsActionMngr::updateShortcutsForTag(int tagId, const QString& ks)
 {
+    TagProperties tprop(tagId);
+    setProperty("KEYBOARD_SHORTCUT", ks);
+
+    KAction* action = d->tagsActionMap.value(tagId);
+    if (action)
+        action->setShortcut(ks);
+
 /*    QAbstractItemModel* model = KernelIf->collectionModel();
     for ( int i = start; i <= end; i++ )
     {
