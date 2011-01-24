@@ -198,6 +198,9 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
     connect(d->item, SIGNAL(loadingFailed()),
             this, SLOT(imageLoadingFailed()));
 
+    // set default zoom
+    layout()->fitToWindow();
+
     // ------------------------------------------------------------
 
     installPanIcon();
