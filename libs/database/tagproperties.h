@@ -6,7 +6,7 @@
  * Date        : 2009-07-05
  * Description : Access to the properties of a tag in the database
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,8 +38,6 @@
 namespace Digikam
 {
 
-class TagPropertiesPriv;
-
 class DIGIKAM_DATABASE_EXPORT TagProperties
 {
 public:
@@ -50,7 +48,8 @@ public:
      */
 
     TagProperties();
-    /** Access the properties of the given tag */
+    /** Access the properties of the given tag 
+     */
     TagProperties(int tagId);
 
     ~TagProperties();
@@ -93,12 +92,16 @@ public:
     /// Remove all occurrences of the property
     void removeProperties(const QString& key);
 
+public:
+
+    // Declared as public cause it's used by TagPropertiesPrivSharedNull class.
+    class TagPropertiesPriv;
+
 private:
 
     QExplicitlySharedDataPointer<TagPropertiesPriv> d;
 };
 
-} // namespace
+} // namespace Digikam
 
 #endif // TAGPROPERTIES_H
-

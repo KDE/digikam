@@ -6,7 +6,7 @@
  * Date        : 2009-07-05
  * Description : Access to the properties of a tag in the database
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class TagPropertiesPriv : public QSharedData
+class TagProperties::TagPropertiesPriv : public QSharedData
 {
 public:
 
@@ -46,16 +46,25 @@ public:
         tagId = -1;
     }
 
-    int tagId;
+    int                         tagId;
     QMultiMap<QString, QString> properties;
 };
 
-class TagPropertiesPrivSharedNull : public QSharedDataPointer<TagPropertiesPriv>
+// ------------------------------------------------------------------------------------------------
+
+class TagPropertiesPrivSharedNull : public QSharedDataPointer<TagProperties::TagPropertiesPriv>
 {
 public:
-    TagPropertiesPrivSharedNull() : QSharedDataPointer<TagPropertiesPriv>(new TagPropertiesPriv) {}
+
+    TagPropertiesPrivSharedNull() 
+        : QSharedDataPointer<TagProperties::TagPropertiesPriv>(new TagProperties::TagPropertiesPriv)
+    {
+    }
 };
+
 K_GLOBAL_STATIC(TagPropertiesPrivSharedNull, tagPropertiesPrivSharedNull)
+
+// ------------------------------------------------------------------------------------------------
 
 TagProperties::TagProperties()
     : d(*tagPropertiesPrivSharedNull)
@@ -65,7 +74,7 @@ TagProperties::TagProperties()
 TagProperties::TagProperties(int tagId)
     : d(new TagPropertiesPriv)
 {
-    d->tagId = tagId;
+    d->tagId                      = tagId;
     QList<TagProperty> properties = DatabaseAccess().db()->getTagProperties(tagId);
     foreach (const TagProperty& p, properties)
     {
@@ -171,6 +180,4 @@ void TagProperties::removeProperties(const QString& key)
     }
 }
 
-}
-
-
+} // namespace Digikam
