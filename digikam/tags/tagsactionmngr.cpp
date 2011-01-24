@@ -60,9 +60,9 @@ public:
         view             = 0;
     }
 
-    QMap<int tagId, KAction* action> tagsActionMap;
-    QWidget*                         view;
-    KActionCollection*               actionCollection;
+    QMap<int, KAction*> tagsActionMap;
+    QWidget*            view;
+    KActionCollection*  actionCollection;
 };
 
 // -------------------------------------------------------------------------------------------------

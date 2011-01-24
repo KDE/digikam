@@ -50,6 +50,8 @@ public:
 
       void createActions();
 
+      static TagsActionMngr* defaultManager();
+
 public Q_SLOTS:
 
       /**
