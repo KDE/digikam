@@ -36,11 +36,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 261384 : Crash while scrolling the raw image preview.
 028 ==> 258922 : digiKam crashed while scrolling through images in folder.
 029 ==> 263726 : Metadata lost when decoding a raw file.
-030 ==> 224047 : Thumbnails incorrectly rotated on certain images.*
+030 ==> 224047 : Thumbnails incorrectly rotated on certain images.
 031 ==> 239902 : digiKam seems to find images that are not in the collection directory.
 032 ==> 245958 : Some tags lost on batch color space conversion - import metadata does not work.
 033 ==> 246735 : Frame rate drops to around 5 fps when dragging & dropping.
-034 ==> 
 
 
 
