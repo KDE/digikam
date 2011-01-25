@@ -452,7 +452,7 @@ void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
     selectionModel()->select(mySelection, QItemSelectionModel::Select);
 }
 
-void ImageCategorizedView::setSelectedImageInfos(const QList<ImageInfo> infos)
+void ImageCategorizedView::setSelectedImageInfos(const QList<ImageInfo>& infos)
 {
     QItemSelection mySelection;
 
