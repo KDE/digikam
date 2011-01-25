@@ -80,6 +80,8 @@ public Q_SLOTS:
        */
       void slotTagRemoved(int tagId);
 
+      void slotAssignTagsFromShortcut();
+
 private:
 
       bool createTagActionShortcut(int tagId);

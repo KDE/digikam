@@ -40,6 +40,7 @@
 #include "metadatahub.h"
 #include "scancontroller.h"
 #include "statusprogressbar.h"
+#include "tagsactionmngr.h"
 #include "tageditdlg.h"
 
 namespace Digikam
@@ -167,6 +168,11 @@ void TagModificationHelper::slotTagEdit(TAlbum* tag)
         {
             KMessageBox::error(0, errMsg);
         }
+    }
+
+    if (tag->property(TagPropertyName::tagKeyboardShortcut()) != ks.toString())
+    {
+        TagsActionMngr::defaultManager()->slotUpdateTagShortcut(tag->id(), ks);
     }
 
     emit tagEdited(tag);

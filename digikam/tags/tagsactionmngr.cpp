@@ -131,13 +131,15 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
     action->setShortcut(KShortcut(tprop.value(TagPropertyName::tagKeyboardShortcut())));
     action->setShortcutConfigurable(false);
     action->setIcon(KIcon(tinfo.icon));
+    action->setData(tinfo.id);
 
     connect(action, SIGNAL(triggered()), 
-            this, SIGNAL(signalAssignTagsFromShortcut(int)));
+            this, SLOT(slotAssignTagsFromShortcut()));
 
     d->tagsActionMap[tinfo.id] = action;
 
-    kDebug() << "Create Shortcut " << action->shortcut() << " to Tag " << tinfo.name << " (" << tinfo.id << ")";
+    kDebug() << "Create Shortcut " << action->shortcut().toString()
+             << " to Tag " << tinfo.name << " (" << tinfo.id << ")";
 }
 
 void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QKeySequence& ks)
@@ -162,6 +164,17 @@ void TagsActionMngr::slotTagRemoved(int tagId)
         d->actionCollection->removeAction(action);
         delete d->tagsActionMap.take(tagId);
     }
+}
+
+void TagsActionMngr::slotAssignTagsFromShortcut()
+{
+    KAction* action = dynamic_cast<KAction*>(sender());
+    if (!action) return;
+
+    int tagId = action->data().toInt();
+    kDebug() << "Fired Tag Shortcut " << tagId;
+
+    emit signalAssignTagsFromShortcut(tagId);
 }
 
 } // namespace Digikam
