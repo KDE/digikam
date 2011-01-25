@@ -7,7 +7,7 @@
  * Description : tag filter view for the right sidebar
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +48,7 @@ class TagModel;
 class TagFilterView : public TagCheckView
 {
     Q_OBJECT
+
 public:
 
     /**
@@ -85,6 +86,7 @@ private:
 class TagFilterSideBarWidget : public QWidget, public StateSavingObject
 {
     Q_OBJECT
+
 public:
 
     /**
@@ -139,8 +141,7 @@ private:
 private:
 
     class TagFilterSideBarWidgetPriv;
-    TagFilterSideBarWidgetPriv* d;
-
+    TagFilterSideBarWidgetPriv* const d;
 };
 
 } // nameSpace Digikam

@@ -7,7 +7,7 @@
  * Description : tag filter view for the right sidebar
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -132,7 +132,7 @@ void TagFilterView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
     {
         setRestoreCheckState(true);
     }
-    else if (action == d->offRestoreTagFiltersAction)        // Restore TagFilters OFF.
+    else if (action == d->offRestoreTagFiltersAction)  // Restore TagFilters OFF.
     {
         setRestoreCheckState(false);
     }
@@ -190,14 +190,14 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
 
     d->tagFilterModel = tagFilterModel;
 
-    d->tagFilterView      = new TagFilterView(this, tagFilterModel);
+    d->tagFilterView  = new TagFilterView(this, tagFilterModel);
     d->tagFilterView->setObjectName("DigikamViewTagFilterView");
     d->tagFilterSearchBar = new SearchTextBar(this, "DigikamViewTagFilterSearchBar");
     d->tagFilterSearchBar->setModel(tagFilterModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
     const QString notTaggedTitle = i18n("Images Without Tags");
-    d->withoutTagCheckBox = new QCheckBox(notTaggedTitle, this);
+    d->withoutTagCheckBox        = new QCheckBox(notTaggedTitle, this);
     d->withoutTagCheckBox->setWhatsThis(i18n("Show images without a tag."));
 
     QLabel* matchingConditionLabel = new QLabel(i18n("Matching Condition:"), this);
