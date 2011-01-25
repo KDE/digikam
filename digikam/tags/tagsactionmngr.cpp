@@ -32,12 +32,11 @@
 #include <KAction>
 #include <KActionCollection>
 #include <KLocale>
+#include <KIcon>
 
 // Local includes
 
-#include "tagproperties.h"
 #include "albumdb.h"
-#include "albuminfo.h"
 #include "databaseaccess.h"
 
 namespace Digikam
@@ -70,6 +69,11 @@ public:
 TagsActionMngr::TagsActionMngr(QWidget* parent, KActionCollection* actionCollection)
     : QObject(parent), d(new TagsActionMngrPrivate)
 {
+    if (!m_defaultManager)
+    {
+        m_defaultManager = this;
+    }
+
     d->actionCollection = actionCollection;
     d->view             = parent;
 }
@@ -77,6 +81,11 @@ TagsActionMngr::TagsActionMngr(QWidget* parent, KActionCollection* actionCollect
 TagsActionMngr::~TagsActionMngr()
 {
     delete d;
+
+    if (m_defaultManager == this)
+    {
+        m_defaultManager = 0;
+    }
 }
 
 void TagsActionMngr::createActions()
@@ -89,100 +98,60 @@ void TagsActionMngr::createActions()
 
         if (tprop.hasProperty("KEYBOARD_SHORTCUT"))
         {
-            // Create action relevant of tag which have a keyboard shortcut.
-
-            KAction* action = new KAction(i18n("Assign Tag \"%1\"", (*it).name), this);
-            action->setShortcut(KShortcut(tprop.value("KEYBOARD_SHORTCUT")));
-            d->actionCollection->addAction(QString("tagshortcut-%1").arg((*it).id), action);
-
-            connect(action, SIGNAL(triggered()), 
-                    d->view, SLOT(slotAssignTagsFromShortcut(int)));
-
-            d->tagsActionMap[(*it).id] = action;
+            createTagActionShortcut(*it, tprop);
         }
     }
-
-/*
-    const QAbstractItemModel* model = KernelIf->collectionModel();
-
-    connect(model, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-            this, SLOT( slotRowsInserted( const QModelIndex&, int, int ) ), Qt::UniqueConnection );
-
-    connect(KernelIf->folderCollectionMonitor(), SIGNAL( collectionRemoved( const Akonadi::Collection& ) ),
-            this, SLOT( slotCollectionRemoved( const Akonadi::Collection& ) ), Qt::UniqueConnection );
-
-    if ( model->rowCount() > 0 )
-        updateShortcutsForIndex( QModelIndex(), 0, model->rowCount() - 1 );
-*/
 }
 
-void TagsActionMngr::updateShortcutsForTag(int tagId, const QString& ks)
+bool TagsActionMngr::createTagActionShortcut(int tagId)
 {
+    if (!tagId) return false;
+
+    TagInfo tinfo = DatabaseAccess().db()->getTagInfo(tagId);
+    if (tinfo.isNull()) return false;
+
+    TagProperties tprop(tinfo.id);
+    if (!tprop.hasProperty("KEYBOARD_SHORTCUT")) return false;
+
+    createTagActionShortcut(tinfo, tprop);
+    return true;
+}
+
+void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProperties& tprop)
+{
+    KAction* action = d->actionCollection->addAction(QString("tagshortcut-%1").arg(tinfo.id));
+    action->setText(i18n("Assign Tag \"%1\"", tinfo.name));
+    action->setShortcut(KShortcut(tprop.value("KEYBOARD_SHORTCUT")));
+    action->setShortcutConfigurable(false);
+    action->setIcon(KIcon(tinfo.icon));
+
+    connect(action, SIGNAL(triggered()), 
+            this, SIGNAL(signalAssignTagsFromShortcut(int)));
+
+    d->tagsActionMap[tinfo.id] = action;
+}
+
+void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QString& ks)
+{
+    if (!tagId) return;
+
+    slotTagRemoved(tagId);
+
     TagProperties tprop(tagId);
-    setProperty("KEYBOARD_SHORTCUT", ks);
+    tprop.setProperty("KEYBOARD_SHORTCUT", ks);
 
-    KAction* action = d->tagsActionMap.value(tagId);
-    if (action)
-        action->setShortcut(ks);
-
-/*    QAbstractItemModel* model = KernelIf->collectionModel();
-    for ( int i = start; i <= end; i++ )
-    {
-        const QModelIndex child = model->index( i, 0, parent );
-        Akonadi::Collection collection =
-            model->data( child, Akonadi::EntityTreeModel::CollectionRole ).value<Akonadi::Collection>();
-        if ( collection.isValid() )
-        {
-            shortcutChanged( collection );
-        }
-        if ( model->rowCount( child ) > 0 )
-        {
-            updateShortcutsForIndex( child, 0, model->rowCount( child ) - 1 );
-        }
-    }*/
+    createTagActionShortcut(tagId);
 }
 
 void TagsActionMngr::slotTagRemoved(int tagId)
 {
-    delete d->tagsActionMap.take(tagId);
-}
-
-void TagsActionMngr::shortcutChanged(int tagId)
-{
-    // remove the old one, no autodelete in Qt4
-    slotTagRemoved(tagId);
-/*
-    QSharedPointer<FolderCollection> folderCollection( FolderCollection::forCollection( col ) );
-    if ( folderCollection->shortcut().isEmpty() )
-        return;
-
-    FolderShortcutCommand* command = new FolderShortcutCommand( mParent, col );
-    mFolderShortcutCommands.insert( col.id(), command );
-
-    KIcon icon( "folder" );
-    if ( col.hasAttribute<Akonadi::EntityDisplayAttribute>() &&
-        !col.attribute<Akonadi::EntityDisplayAttribute>()->iconName().isEmpty() )
+    KAction* action = d->tagsActionMap[tagId];
+    if (action)
     {
-        icon = KIcon( col.attribute<Akonadi::EntityDisplayAttribute>()->iconName() );
+        // NOTE: Action is deleted by KActionCollection
+        d->actionCollection->removeAction(action);
+        delete d->tagsActionMap.take(tagId);
     }
-
-    const QString actionLabel = i18n( "Folder Shortcut %1", col.name() );
-    QString actionName = i18n( "Folder Shortcut %1", folderCollection->idString() );
-    actionName.replace( ' ', '_' );
-    KAction *action = mActionCollection->addAction( actionName );
-    // The folder shortcut is set in the folder shortcut dialog.
-    // The shortcut set in the shortcut dialog would not be saved back to
-    // the folder settings correctly.
-    action->setShortcutConfigurable( false );
-    action->setText( actionLabel );
-    action->setShortcuts( folderCollection->shortcut() );
-    action->setIcon( icon );
-
-    connect(action, SIGNAL( triggered( bool ) ), 
-            command, SLOT( start() ) );
-
-    command->setAction( action ); // will be deleted along with the command
-*/
 }
 
 } // namespace Digikam

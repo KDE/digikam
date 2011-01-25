@@ -34,6 +34,11 @@
 
 #include <ksharedconfig.h>
 
+// Local includes
+
+#include "tagproperties.h"
+#include "albuminfo.h"
+
 class KActionCollection;
 
 namespace Digikam
@@ -48,9 +53,15 @@ public:
       TagsActionMngr(QWidget* parent, KActionCollection* actionCollection);
       ~TagsActionMngr();
 
+      /** Create all actions relevant of tags from DB which have a keyboard shortcut.
+       */
       void createActions();
 
       static TagsActionMngr* defaultManager();
+
+Q_SIGNALS:
+
+      void signalAssignTagsFromShortcut(int);
 
 public Q_SLOTS:
 
@@ -58,9 +69,7 @@ public Q_SLOTS:
        * Updates the shortcut action for this collection. Call this when a shortcut was
        * added, removed or changed.
        */
-      void shortcutChanged(int tagId);
-
-private Q_SLOTS:
+      void slotUpdateTagShortcut(int tagId, const QString& ks);
 
       /**
        * Removes the shortcut actions associated with a folder.
@@ -69,7 +78,8 @@ private Q_SLOTS:
 
 private:
 
-      void updateShortcutsForTag(int tagId, const QString& ks);
+      bool createTagActionShortcut(int tagId);
+      void createTagActionShortcut(const TagInfo& tinfo, const TagProperties& tprop);
 
 private:
 
