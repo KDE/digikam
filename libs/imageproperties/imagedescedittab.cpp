@@ -87,6 +87,7 @@ public:
         modified                   = false;
         ignoreImageAttributesWatch = false;
         ignoreTagChanges           = false;
+        togglingSearchSettings     = false;
         recentTagsBtn              = 0;
         captionsEdit               = 0;
         tagsSearchBar              = 0;
@@ -110,6 +111,7 @@ public:
     bool                 modified;
     bool                 ignoreImageAttributesWatch;
     bool                 ignoreTagChanges;
+    bool                 togglingSearchSettings;
 
     QToolButton*         recentTagsBtn;
     QToolButton*         assignedTagsBtn;
@@ -1151,8 +1153,12 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
     Q_UNUSED(settings);
 
     // if we filter, we should reset the assignedTagsBtn again
-    d->assignedTagsBtn->setChecked(false);
-    slotAssignedTagsToggled(false);
+    if (d->assignedTagsBtn->isChecked() && !d->togglingSearchSettings)
+    {
+        d->togglingSearchSettings = true;
+        d->assignedTagsBtn->setChecked(false);
+        d->togglingSearchSettings = false;
+    }
 }
 
 void ImageDescEditTab::slotAssignedTagsToggled(bool t)
@@ -1162,8 +1168,17 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 
     if (t)
     {
+        // if we filter by assigned, we should initially clear the normal search
+        if (!d->togglingSearchSettings)
+        {
+            d->togglingSearchSettings = true;
+            d->tagsSearchBar->clear();
+            d->togglingSearchSettings = false;
+        }
+
+        // Only after above change, do this
         d->tagCheckView->expandMatches(d->tagCheckView->rootIndex());
-    }
+   }
 }
 
 void ImageDescEditTab::setFocusToLastSelectedWidget()

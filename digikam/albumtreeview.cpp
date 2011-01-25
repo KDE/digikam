@@ -412,27 +412,45 @@ void AbstractAlbumTreeView::slotRootAlbumAvailable()
 
 bool AbstractAlbumTreeView::expandMatches(const QModelIndex& index)
 {
-    bool anyMatch = false;
+    bool anyMatch        = false;
 
     // expand index if a child matches
     QModelIndex source_index = m_albumFilterModel->mapToSource(index);
     AlbumFilterModel::MatchResult result = m_albumFilterModel->matchResult(source_index);
 
-    if (result == AlbumFilterModel::ChildMatch || result == AlbumFilterModel::SpecialMatch)
+    switch (result)
     {
-        expand(index);
+        case AlbumFilterModel::NoMatch:
+            if (index != rootIndex())
+                return false;
+        case AlbumFilterModel::ParentMatch:
+            // Does not rule out additional child match, return value is unknown
+            break;
+        case AlbumFilterModel::DirectMatch:
+            // Does not rule out additional child match, but we know we will return true
+            anyMatch = true;
+            break;
+        case AlbumFilterModel::ChildMatch:
+        case AlbumFilterModel::SpecialMatch:
+            // We know already to expand, and we know already we will return true.
+            anyMatch = true;
+            expand(index);
+            break;
     }
 
-    anyMatch = result;
-
-    // expand children if they have a (indirect) match
-    int rows = m_albumFilterModel->rowCount(index);
-
+    // Recurse. Expand if children if have an (indirect) match
+    const int rows = m_albumFilterModel->rowCount(index);
     for (int i = 0; i < rows; ++i)
     {
         QModelIndex child = m_albumFilterModel->index(i, 0, index);
-        bool childResult = expandMatches(child);
-        anyMatch = anyMatch || childResult;
+        bool childResult  = expandMatches(child);
+
+        if (childResult)
+        {
+            anyMatch = true;
+            // if there is a direct match _and_ a child match, dont forget to expand the parent
+            expand(index);
+        }
     }
 
     return anyMatch;
