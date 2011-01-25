@@ -37,7 +37,9 @@
 
 // Local includes
 
+#include "album.h"
 #include "albumdb.h"
+#include "albummanager.h"
 #include "databaseaccess.h"
 #include "databaseconstants.h"
 
@@ -78,6 +80,9 @@ TagsActionMngr::TagsActionMngr(QWidget* parent, KActionCollection* actionCollect
 
     d->actionCollection = actionCollection;
     d->view             = parent;
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotAlbumDeleted(Album*)));
 }
 
 TagsActionMngr::~TagsActionMngr()
@@ -147,7 +152,7 @@ void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QKeySequence& ks)
     kDebug() << tagId;
     if (!tagId) return;
 
-    slotTagRemoved(tagId);
+    tagRemoved(tagId);
 
     TagProperties tprop(tagId);
     tprop.setProperty(TagPropertyName::tagKeyboardShortcut(), ks.toString());
@@ -155,7 +160,15 @@ void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QKeySequence& ks)
     createTagActionShortcut(tagId);
 }
 
-void TagsActionMngr::slotTagRemoved(int tagId)
+void TagsActionMngr::slotAlbumDeleted(Album* album)
+{
+    TAlbum* talbum = dynamic_cast<TAlbum*>(album);
+    if (!talbum) return;
+
+    tagRemoved(talbum->id());
+}
+
+void TagsActionMngr::tagRemoved(int tagId)
 {
     KAction* action = d->tagsActionMap[tagId];
     if (action)

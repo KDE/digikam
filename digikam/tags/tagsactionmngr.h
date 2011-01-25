@@ -44,55 +44,60 @@ class KActionCollection;
 namespace Digikam
 {
 
+class Album;
+
 class TagsActionMngr : public QObject
 {
     Q_OBJECT
 
 public:
 
-      TagsActionMngr(QWidget* parent, KActionCollection* actionCollection);
-      ~TagsActionMngr();
+    TagsActionMngr(QWidget* parent, KActionCollection* actionCollection);
+    ~TagsActionMngr();
 
-      /** Create all actions relevant of whole tags from DB which have a keyboard shortcut.
-       */
-      void createActions();
+    /** Create all actions relevant of whole tags from DB which have a keyboard shortcut.
+      */
+    void createActions();
 
-      /** Return the instance of whole action collections.
-       */
-      KActionCollection* actionCollection() const;
+    /** Return the instance of whole action collections.
+      */
+    KActionCollection* actionCollection() const;
 
-      static TagsActionMngr* defaultManager();
+    static TagsActionMngr* defaultManager();
 
 Q_SIGNALS:
 
-      void signalAssignTagsFromShortcut(int);
+    void signalAssignTagsFromShortcut(int);
 
 public Q_SLOTS:
 
-      /**
-       * Updates the shortcut action for a tag. Call this when a shortcut was
-       * added, removed or changed.
-       */
-      void slotUpdateTagShortcut(int tagId, const QKeySequence& ks);
+    /**
+      * Updates the shortcut action for a tag. Call this when a shortcut was
+      * added, removed or changed.
+      */
+    void slotUpdateTagShortcut(int tagId, const QKeySequence& ks);
 
-      /**
-       * Removes the shortcut actions associated with a tag.
-       */
-      void slotTagRemoved(int tagId);
+private Q_SLOTS:
 
-      void slotAssignTagsFromShortcut();
+    /**
+      * Removes the shortcut actions associated with a tag.
+      */
+    void slotAlbumDeleted(Album*);
 
-private:
-
-      bool createTagActionShortcut(int tagId);
-      void createTagActionShortcut(const TagInfo& tinfo, const TagProperties& tprop);
+    void slotAssignTagsFromShortcut();
 
 private:
 
-      static TagsActionMngr* m_defaultManager;
+    void tagRemoved(int tagId);
+    bool createTagActionShortcut(int tagId);
+    void createTagActionShortcut(const TagInfo& tinfo, const TagProperties& tprop);
 
-      class TagsActionMngrPrivate;
-      TagsActionMngrPrivate* const d;
+private:
+
+    static TagsActionMngr* m_defaultManager;
+
+    class TagsActionMngrPrivate;
+    TagsActionMngrPrivate* const d;
 };
 
 } // namespace Digikam
