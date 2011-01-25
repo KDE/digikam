@@ -29,7 +29,8 @@
 
 // KDE includes
 
-#include <KAction>
+#include <kaction.h>
+#include <kapplication.h>
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <kicon.h>
@@ -42,6 +43,9 @@
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "databaseconstants.h"
+#include "digikamapp.h"
+#include "imagewindow.h"
+#include "lighttablewindow.h"
 
 namespace Digikam
 {
@@ -138,7 +142,7 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
     action->setIcon(KIcon(tinfo.icon));
     action->setData(tinfo.id);
 
-    connect(action, SIGNAL(triggered()), 
+    connect(action, SIGNAL(triggered()),
             this, SLOT(slotAssignTagsFromShortcut()));
 
     d->tagsActionMap[tinfo.id] = action;
@@ -186,6 +190,28 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
 
     int tagId = action->data().toInt();
     kDebug() << "Fired Tag Shortcut " << tagId;
+
+    QWidget* w      = kapp->activeWindow();
+    DigikamApp* lw1 = dynamic_cast<DigikamApp*>(w);
+    if (lw1)
+    {
+        kDebug() << "Handling by DigikamApp";
+        return;
+    }
+
+    ImageWindow* lw2 = dynamic_cast<ImageWindow*>(w);
+    if (lw2)
+    {
+        kDebug() << "Handling by ImageWindow";
+        return;
+    }
+
+    LightTableWindow* lw3 = dynamic_cast<LightTableWindow*>(w);
+    if (lw3)
+    {
+        kDebug() << "Handling by LightTableWindow";
+        return;
+    }
 
     emit signalAssignTagsFromShortcut(tagId);
 }
