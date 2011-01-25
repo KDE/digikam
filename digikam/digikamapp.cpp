@@ -1501,9 +1501,14 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
 
 void DigikamApp::slotSelectionChanged(int selectionCount)
 {
-    /// @todo In the map view, it is hard to select only one image - here, the current image should be taken instead
+    // The preview can either be activated when only one image is selected,
+    // or if multiple images are selected, but one image is the 'current image'.
+    d->imagePreviewAction->setEnabled(
+               (selectionCount == 1)
+            || ( (selectionCount > 0) && d->view->hasCurrentItem())
+        );
+
     d->imageViewAction->setEnabled(selectionCount == 1);
-    d->imagePreviewAction->setEnabled(selectionCount == 1);
     d->imageFindSimilarAction->setEnabled(selectionCount == 1);
     d->imageRenameAction->setEnabled(selectionCount > 0);
     d->imageLightTableAction->setEnabled(selectionCount > 0);

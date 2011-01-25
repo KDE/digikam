@@ -1392,7 +1392,7 @@ void DigikamView::slotEscapePreview()
 
     // pass a null image info, because we want to fall back to the old
     // view mode
-    slotTogglePreviewMode(ImageInfo()/*d->iconView->currentInfo()*/);
+    slotTogglePreviewMode(ImageInfo());
 }
 
 void DigikamView::slotMapWidgetView()
@@ -1913,6 +1913,13 @@ void DigikamView::slotRatingChanged(const KUrl& url, int rating)
         hub.write(info, MetadataHub::PartialWrite);
         hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
     }
+}
+
+bool DigikamView::hasCurrentItem() const
+{
+    // We should actually get this directly from the selection model,
+    // but the iconView is fine for now.
+    return !d->iconView->currentInfo().isNull();
 }
 
 }  // namespace Digikam

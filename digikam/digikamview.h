@@ -78,6 +78,7 @@ public:
 
     KUrl::List allUrls() const;
     KUrl::List selectedUrls() const;
+    bool hasCurrentItem() const;
 
     double zoomMin();
     double zoomMax();
