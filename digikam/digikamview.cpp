@@ -1163,8 +1163,14 @@ void DigikamView::slotDispatchImageSelected()
         {
             d->rightSideBar->itemChanged(list);
 
-            const ImageInfo previousInfo = d->iconView->previousInfo(list.first());
-            const ImageInfo nextInfo = d->iconView->nextInfo(list.first());
+            ImageInfo previousInfo;
+            ImageInfo nextInfo;
+
+            if (d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
+            {
+                previousInfo = d->iconView->previousInfo(list.first());
+                nextInfo = d->iconView->nextInfo(list.first());
+            }
 
             if (   (d->albumWidgetStack->previewMode() != AlbumWidgetStack::PreviewAlbumMode)
                 && (d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode) )
@@ -1267,6 +1273,11 @@ void DigikamView::toggleZoomActions()
         {
             d->parent->enableZoomMinusAction(false);
         }
+    }
+    else
+    {
+        d->parent->enableZoomMinusAction(false);
+        d->parent->enableZoomPlusAction(false);
     }
 }
 
@@ -1407,7 +1418,6 @@ void DigikamView::slotMapWidgetView()
 
 void DigikamView::slotIconView()
 {
-    // if it's PreviewImageMode, we close it first. Should I see if it's a movie preview or a welcome page?
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
         emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
@@ -1416,6 +1426,9 @@ void DigikamView::slotIconView()
 
     // and switch to icon view
     d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
+
+    // make sure the next/previous buttons are updated
+    slotImageSelected();
 }
 
 void DigikamView::slotImagePreview()
@@ -1435,24 +1448,33 @@ void DigikamView::slotImagePreview()
 }
 
 /**
- * @brief This method toggles between AlbumView and ImagePreview modes, depending on the context.
+ * @brief This method toggles between AlbumView/MapWidgetView and ImagePreview modes, depending on the context.
  */
 void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
 {
     if (  (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode
-        || d->albumWidgetStack->previewMode() == AlbumWidgetStack::MapWidgetMode)
-        && !info.isNull())
+           || d->albumWidgetStack->previewMode() == AlbumWidgetStack::MapWidgetMode)
+        && !info.isNull() )
     {
         d->lastPreviewMode = d->albumWidgetStack->previewMode();
 
-        /// @todo What about next/previous in map widget mode?
-        d->albumWidgetStack->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+        if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+        {
+            d->albumWidgetStack->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+        }
+        else
+        {
+            d->albumWidgetStack->setPreviewItem(info, ImageInfo(), ImageInfo());
+        }
     }
     else
     {
         // go back to either AlbumViewMode or MapWidgetMode
         d->albumWidgetStack->setPreviewMode( d->lastPreviewMode );
     }
+
+    // make sure the next/previous buttons are updated
+    slotImageSelected();
 }
 
 void DigikamView::slotToggledToPreviewMode(bool b)
