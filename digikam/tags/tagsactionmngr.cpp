@@ -30,9 +30,10 @@
 // KDE includes
 
 #include <KAction>
-#include <KActionCollection>
-#include <KLocale>
-#include <KIcon>
+#include <kactioncollection.h>
+#include <klocale.h>
+#include <kicon.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -111,15 +112,15 @@ void TagsActionMngr::createActions()
 
 bool TagsActionMngr::createTagActionShortcut(int tagId)
 {
+    kDebug() << tagId;
     if (!tagId) return false;
 
     TagInfo tinfo = DatabaseAccess().db()->getTagInfo(tagId);
     if (tinfo.isNull()) return false;
 
     TagProperties tprop(tinfo.id);
-    if (!tprop.hasProperty(TagPropertyName::tagKeyboardShortcut())) return false;
-
     createTagActionShortcut(tinfo, tprop);
+
     return true;
 }
 
@@ -135,10 +136,13 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
             this, SIGNAL(signalAssignTagsFromShortcut(int)));
 
     d->tagsActionMap[tinfo.id] = action;
+
+    kDebug() << "Create Shortcut " << action->shortcut() << " to Tag " << tinfo.name << " (" << tinfo.id << ")";
 }
 
 void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QKeySequence& ks)
 {
+    kDebug() << tagId;
     if (!tagId) return;
 
     slotTagRemoved(tagId);
