@@ -1144,18 +1144,14 @@ void DigikamView::slotImageSelected()
 
 void DigikamView::slotDispatchImageSelected()
 {
-
-    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::MapWidgetMode)
-    {
-        return;
-    }
-
     if (d->needDispatchSelection)
     {
         // the list of ImageInfos of currently selected items, currentItem first
-        ImageInfoList list = d->iconView->selectedImageInfosCurrentFirst();
+        // since the iconView tracks the changes also while we are in map widget mode,
+        // we can still pull the data from the iconView
+        const ImageInfoList list = d->iconView->selectedImageInfosCurrentFirst();
 
-        ImageInfoList allImages = d->iconView->imageInfos();
+        const ImageInfoList allImages = d->iconView->imageInfos();
 
         if (list.isEmpty())
         {
@@ -1167,10 +1163,11 @@ void DigikamView::slotDispatchImageSelected()
         {
             d->rightSideBar->itemChanged(list);
 
-            ImageInfo previousInfo = d->iconView->previousInfo(list.first());
-            ImageInfo nextInfo = d->iconView->nextInfo(list.first());
+            const ImageInfo previousInfo = d->iconView->previousInfo(list.first());
+            const ImageInfo nextInfo = d->iconView->nextInfo(list.first());
 
-            if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+            if (   (d->albumWidgetStack->previewMode() != AlbumWidgetStack::PreviewAlbumMode)
+                && (d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode) )
             {
                 d->albumWidgetStack->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
