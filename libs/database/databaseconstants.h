@@ -6,7 +6,8 @@
  * Date        : 2007-04-21
  * Description : Structures for use in AlbumDB
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -38,6 +39,7 @@ namespace Digikam
 
 namespace AlbumRoot
 {
+
 enum Type
 {
     // Keep values constant
@@ -46,10 +48,12 @@ enum Type
     VolumeRemovable = 2,
     Network         = 3
 };
-}
+
+} // namespace AlbumRoot
 
 namespace DatabaseSearch
 {
+
 enum Type
 {
     UndefinedType,
@@ -68,10 +72,12 @@ enum HaarSearchType
     HaarImageSearch,
     HaarSketchSearch
 };
-}
+
+} // namespace DatabaseSearch
 
 namespace DatabaseItem
 {
+
 enum Status
 {
     // Keep values constant
@@ -90,20 +96,24 @@ enum Category
     Audio             = 3,
     Other             = 4
 };
-}
+
+} // namespace DatabaseItem
 
 namespace DatabaseRelation
 {
+
 enum Type
 {
     UndefinedType = 0,
     /** The subject is a derivative of the object */
     DerivedFrom   = 1
 };
-}
+
+} // namespace DatabaseRelation
 
 namespace DatabaseComment
 {
+
 enum Type
 {
     // Keep values constant
@@ -123,11 +133,13 @@ enum Type
     Title           = 3
     // Feel free to add here any more types that you need!
 };
-}
+
+} // namespace DatabaseComment
 
 class DIGIKAM_DATABASE_EXPORT InternalTagName
 {
 public:
+
     static QLatin1String scannedForFaces();
     static QLatin1String needResolvingHistory();
     static QLatin1String needTaggingHistoryGraph();
@@ -141,22 +153,22 @@ public:
 class DIGIKAM_DATABASE_EXPORT TagPropertyName
 {
 public:
+
     static QLatin1String person();
     static QLatin1String unknownPerson();
     static QLatin1String kfaceId();
+    static QLatin1String tagKeyboardShortcut();
 };
 
 class DIGIKAM_DATABASE_EXPORT ImageTagPropertyName
 {
 public:
+
     static QLatin1String tagRegion();
     static QLatin1String autodetectedFace();
     static QLatin1String faceToTrain();
 };
 
-}
+} // namespace Digikam
 
-
-#endif
-
-
+#endif // DATABASE_CONSTANTS_H

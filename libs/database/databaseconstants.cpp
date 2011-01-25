@@ -6,7 +6,8 @@
  * Date        : 2007-08-26
  * Description : Constants in the database
  *
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,9 +22,9 @@
  *
  * ============================================================ */
 
-#include "databaseconstants.h"
+// Local includes
 
-// Qt includes
+#include "databaseconstants.h"
 
 namespace Digikam
 {
@@ -78,6 +79,11 @@ QLatin1String TagPropertyName::kfaceId()
     return QLatin1String("kfaceId");
 }
 
+QLatin1String TagPropertyName::tagKeyboardShortcut()
+{
+    return QLatin1String("tagKeyboardShortcut");
+}
+
 QLatin1String ImageTagPropertyName::tagRegion()
 {
     return QLatin1String("tagRegion");
@@ -93,7 +99,4 @@ QLatin1String ImageTagPropertyName::faceToTrain()
     return QLatin1String("faceToTrain");
 }
 
-}
-
-
-
+} // namespace DigiKam
