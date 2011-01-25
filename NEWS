@@ -7,8 +7,8 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 264181 : png-1.5 compatibility fix.
-002 ==>
-
+002 ==> 263697 : digiKam 1.8.0 (svn) crashes on startup most times.
+003 ==> 
 
 
 
