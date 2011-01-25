@@ -1,4 +1,4 @@
-*********************************************************************************************************
+*****************************************************************************************************
 digiKam 2.0.0-beta2 - Release date: 2011-01-30
 
 NEW FEATURES:
@@ -41,16 +41,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 241015 : Unexpected behavior when deleting a file while several are selected.
 026 ==> 264093 : Preview zoom is set to 1:1, should be "fit to window".
 027 ==> 263994 : Left-hand side bar too big and cannot be made smaller.
-028 ==> 
-
-
-
-
-
-
-
-
-
-
-
-
+028 ==> 261779 : digiKam crashes in Digikam::DynamicThread::DynamicThreadPriv::transitionToRunning while scanning faces.
+029 ==> 
