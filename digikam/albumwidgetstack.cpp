@@ -33,13 +33,13 @@
 
 // KDE includes
 
+#include <kurl.h>
 #include <kapplication.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <khtmlview.h>
 #include <kglobal.h>
-#include <klinkitemselectionmodel.h>
-#include <kurl.h>
+//#include <klinkitemselectionmodel.h>
 
 // Local includes
 
