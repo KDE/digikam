@@ -28,6 +28,6 @@
 #define CONF_LENSFUN_STATIC 1
 
 /* Define path where are installed lens database XML files */
-#define CONF_DATADIR "${KDE4_DATA_INSTALL_DIR}/digikam/lensfun"
+#define CONF_DATADIR "${DATA_INSTALL_DIR}/digikam/lensfun"
 
 #endif // CONFIG_LENSFUN_H
