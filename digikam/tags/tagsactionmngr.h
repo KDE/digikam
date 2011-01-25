@@ -53,7 +53,7 @@ public:
       TagsActionMngr(QWidget* parent, KActionCollection* actionCollection);
       ~TagsActionMngr();
 
-      /** Create all actions relevant of tags from DB which have a keyboard shortcut.
+      /** Create all actions relevant of whole tags from DB which have a keyboard shortcut.
        */
       void createActions();
 
@@ -66,13 +66,13 @@ Q_SIGNALS:
 public Q_SLOTS:
 
       /**
-       * Updates the shortcut action for this collection. Call this when a shortcut was
+       * Updates the shortcut action for a tag. Call this when a shortcut was
        * added, removed or changed.
        */
       void slotUpdateTagShortcut(int tagId, const QString& ks);
 
       /**
-       * Removes the shortcut actions associated with a folder.
+       * Removes the shortcut actions associated with a tag.
        */
       void slotTagRemoved(int tagId);
 
