@@ -41,13 +41,7 @@ public:
 
     ImagePositionPriv() :
         empty(true),
-        latitudeNumber(0),
-        longitudeNumber(0),
-        altitude(0),
-        orientation(0),
-        tilt(0),
-        roll(0),
-        accuracy(0),
+        //Note: Do not initialize the QVariants here, they are expected to be null
         imageId(-1),
         dirtyFields(DatabaseFields::ImagePositionsNone)
     {
@@ -58,12 +52,12 @@ public:
         description.clear();
         latitude.clear();
         longitude.clear();
-        latitudeNumber  = 0;
-        longitudeNumber = 0;
-        altitude        = 0;
-        orientation     = 0;
-        tilt            = 0;
-        roll            = 0;
+        latitudeNumber  = QVariant();
+        longitudeNumber = QVariant();
+        altitude        = QVariant();
+        orientation     = QVariant();
+        tilt            = QVariant();
+        roll            = QVariant();
         empty           = true;
         dirtyFields     = DatabaseFields::ImagePositionsNone;
     }
