@@ -73,6 +73,12 @@ void _ReadProc(struct png_struct_def* png_ptr, unsigned char* data, unsigned int
 namespace Digikam
 {
 
+#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
+typedef png_bytep iCCP_data;
+#else 
+typedef png_charp iCCP_data;
+#endif
+
 PNGLoader::PNGLoader(DImg* image)
     : DImgLoader(image)
 {
@@ -574,7 +580,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     if (m_loadFlags & LoadICCData)
     {
-        png_charp   profile_name, profile_data=NULL;
+        png_charp   profile_name;
+        iCCP_data   profile_data=NULL;
         png_uint_32 profile_size;
         int         compression_type;
 
@@ -853,7 +860,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     if (!profile_rawdata.isEmpty())
     {
-        png_set_iCCP(png_ptr, info_ptr, (png_charp)("icc"), PNG_COMPRESSION_TYPE_BASE, profile_rawdata.data(), profile_rawdata.size());
+        png_set_iCCP(png_ptr, info_ptr, (png_charp)("icc"), PNG_COMPRESSION_TYPE_BASE, (iCCP_data)profile_rawdata.data(), profile_rawdata.size());
     }
 
     // -------------------------------------------------------------------
